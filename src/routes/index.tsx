@@ -97,9 +97,10 @@ const KPIS = [
 function HomePage() {
   const navigate = useNavigate();
   const [q, setQ] = useState("");
-  const [now, setNow] = useState<string>(() => formatTime(new Date()));
+  const [now, setNow] = useState<string>("");
 
   useEffect(() => {
+    setNow(formatTime(new Date()));
     const t = setInterval(() => setNow(formatTime(new Date())), 1000);
     return () => clearInterval(t);
   }, []);
