@@ -76,7 +76,7 @@ export const Route = createFileRoute("/")({
       { property: "og:title", content: "PreçoCerto — Consulte o preço antes de comprar" },
       {
         property: "og:description",
-        content: "Preços em tempo real de mercados perto de você. Digite, escaneie e compare.",
+        content: "Busca em tempo real de preços por nome do produto em mercados perto de você. Escaneie códigos e economize a cada compra.",
       },
     ],
     links: [

@@ -82,24 +82,24 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" },
-      { title: "PreçoCerto — Compare preços, economize de verdade" },
+      { title: "PreçoCerto — Consulte o preço antes de comprar" },
       {
         name: "description",
         content:
-          "A plataforma feijoense que compara preços em tempo real nos mercados perto de você. Descubra onde comprar mais barato e economize em cada compra.",
+          "Busca em tempo real de preços por nome do produto em mercados perto de você. Escaneie códigos e economize a cada compra.",
       },
       { name: "author", content: "PreçoCerto" },
       { name: "theme-color", content: "#0b1220" },
-      { property: "og:title", content: "PreçoCerto — Compare preços, economize de verdade" },
+      { property: "og:title", content: "PreçoCerto — Consulte o preço antes de comprar" },
       {
         property: "og:description",
         content:
-          "A plataforma feijoense que compara preços em tempo real nos mercados perto de você. Descubra onde comprar mais barato e economize em cada compra.",
+          "Busca em tempo real de preços por nome do produto em mercados perto de você. Escaneie códigos e economize a cada compra.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "PreçoCerto — Compare preços, economize de verdade" },
-      { name: "twitter:description", content: "A plataforma feijoense que compara preços em tempo real nos mercados perto de você. Descubra onde comprar mais barato e economize em cada compra." },
+      { name: "twitter:title", content: "PreçoCerto — Consulte o preço antes de comprar" },
+      { name: "twitter:description", content: "Busca em tempo real de preços por nome do produto em mercados perto de você. Escaneie códigos e economize a cada compra." },
       { property: "og:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/QspkZx5RoJdpHvZTsLjUo0lBWOv2/social-images/social-1783878109027-ChatGPT_Image_12_de_jul._de_2026,_09_41_39.webp" },
       { name: "twitter:image", content: "https://storage.googleapis.com/gpt-engineer-file-uploads/QspkZx5RoJdpHvZTsLjUo0lBWOv2/social-images/social-1783878109027-ChatGPT_Image_12_de_jul._de_2026,_09_41_39.webp" },
     ],
