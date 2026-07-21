@@ -1,0 +1,1 @@
+UPDATE public.catalog_image_jobs SET status='pending', last_error=NULL, started_at=NULL, finished_at=NULL WHERE status='failed';

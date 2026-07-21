@@ -1,0 +1,1 @@
+ALTER TABLE public.establishments ADD COLUMN IF NOT EXISTS brand_color TEXT CHECK (brand_color IS NULL OR brand_color ~ '^#[0-9A-Fa-f]{6}$');

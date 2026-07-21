@@ -1,0 +1,298 @@
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
+import { Link } from "@tanstack/react-router";
+import {
+  ArrowRight,
+  Crown,
+  Layers,
+  Loader2,
+  Medal,
+  Percent,
+  Sparkles,
+  Store,
+  Trophy,
+} from "lucide-react";
+
+import { SectionKicker } from "@/components/dashboard/SectionKicker";
+import { getCheapestStoresRanking } from "@/lib/stores-public.functions";
+import { cn } from "@/lib/utils";
+
+const CATEGORY_LABEL: Record<string, string> = {
+  laticinios: "Laticínios",
+  higiene: "Higiene",
+  limpeza: "Limpeza",
+  mercearia: "Mercearia",
+  biscoitos: "Biscoitos",
+  bebidas: "Bebidas",
+  bebidas_em_po: "Bebidas em pó",
+  doces: "Doces",
+  carnes: "Carnes",
+  padaria: "Padaria",
+  congelados: "Congelados",
+  outros: "Outros",
+};
+
+const rankAccent = (idx: number) => {
+  if (idx === 0) return "bg-amber-500/10 text-amber-700 dark:text-amber-300 ring-amber-500/40";
+  if (idx === 1) return "bg-slate-500/10 text-slate-700 dark:text-slate-200 ring-slate-500/40";
+  if (idx === 2) return "bg-orange-500/10 text-orange-700 dark:text-orange-300 ring-orange-500/40";
+  return "bg-muted text-muted-foreground ring-border";
+};
+
+const rankIcon = (idx: number) => {
+  if (idx === 0) return Crown;
+  if (idx === 1) return Trophy;
+  if (idx === 2) return Medal;
+  return Store;
+};
+
+const brl = (n: number) =>
+  n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
+/**
+ * Ranking dos mercados que aparecem com menor preço em produtos comparáveis
+ * nos últimos 7 dias, agora com cruzamento por categoria, economia média,
+ * itens exclusivos e ticket médio das vitórias.
+ */
+export function CheapestStoresRanking() {
+  const fetchRanking = useServerFn(getCheapestStoresRanking);
+  const rankingQ = useQuery({
+    queryKey: ["app-cheapest-stores-ranking", "v2"],
+    queryFn: () => fetchRanking(),
+    staleTime: 5 * 60_000,
+  });
+
+  const rows = (rankingQ.data?.rows ?? []).slice(0, 6);
+  const summary = rankingQ.data?.summary;
+  const topWins = rows[0]?.wins ?? 0;
+
+  return (
+    <section aria-label="Ranking de mercados mais baratos" className="space-y-3">
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-3">
+        <div className="min-w-0">
+          <SectionKicker eyebrow="Radar de preços" title="Mercados mais baratos" />
+          <p className="mt-1 truncate text-[11.5px] text-muted-foreground md:text-xs">
+            Últimos 7 dias — cruzamento por categoria, economia média e cobertura.
+          </p>
+        </div>
+        {summary && summary.totalProductsCompared > 0 && (
+          <Link
+            to="/melhores-precos"
+            className="shrink-0 rounded-full border border-border bg-background px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-primary hover:border-primary/40 hover:bg-primary/5"
+          >
+            Ver todos
+          </Link>
+        )}
+      </div>
+
+      {/* Summary strip: cruzamento agregado */}
+      {summary && summary.totalProductsCompared > 0 && (
+        <dl className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+          <SummaryTile
+            icon={Layers}
+            label="Produtos comparados"
+            value={String(summary.totalProductsCompared)}
+            hint={`em ${summary.categoriesCovered} categorias`}
+          />
+          <SummaryTile
+            icon={Store}
+            label="Mercados no ranking"
+            value={String(summary.totalStores)}
+            hint="ativos nesta janela"
+          />
+          <SummaryTile
+            icon={Percent}
+            label="Economia média"
+            value={`${summary.avgSavingsPct.toFixed(1)}%`}
+            hint="menor vs. média dos concorrentes"
+          />
+          <SummaryTile
+            icon={Sparkles}
+            label="Janela"
+            value={`${summary.windowDays}d`}
+            hint="atualizado agora"
+          />
+        </dl>
+      )}
+
+      <div className="overflow-hidden rounded-2xl border border-border/60 bg-card">
+        {rankingQ.isLoading ? (
+          <div className="flex items-center gap-2 p-5 text-sm text-muted-foreground">
+            <Loader2 className="h-4 w-4 animate-spin" aria-hidden="true" />
+            Cruzando preços dos últimos 7 dias…
+          </div>
+        ) : rows.length === 0 ? (
+          <p className="p-5 text-sm text-muted-foreground">
+            Ainda não temos comparações suficientes nesta região. Volte em breve.
+          </p>
+        ) : (
+          <ol className="divide-y divide-border/60">
+            {rows.map((r, idx) => {
+              const RankIcon = rankIcon(idx);
+              const winRate =
+                r.productsCompared > 0
+                  ? Math.round((r.wins / r.productsCompared) * 100)
+                  : 0;
+              const relative = topWins > 0 ? Math.round((r.wins / topWins) * 100) : 0;
+
+              return (
+                <li key={r.establishmentId} className="group relative">
+                  <Link
+                    to="/loja/$id"
+                    params={{ id: r.establishmentId }}
+                    search={{ q: "", from: "ranking" }}
+                    className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-muted/40 focus-visible:bg-muted/60 focus-visible:outline-none md:gap-4 md:px-4 md:py-3"
+                    aria-label={`Abrir catálogo de ${r.storeName}. ${r.wins} vitórias em ${r.productsCompared} produtos comparados, economia média ${r.avgSavingsPct}%`}
+                  >
+                    <div
+                      className={cn(
+                        "relative grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-xl ring-1 md:h-11 md:w-11",
+                        rankAccent(idx),
+                      )}
+                      aria-hidden="true"
+                    >
+                      {r.logoUrl ? (
+                        <img
+                          src={r.logoUrl}
+                          alt=""
+                          className="h-full w-full object-contain p-1"
+                          loading="lazy"
+                        />
+                      ) : (
+                        <RankIcon className="h-4 w-4" />
+                      )}
+                      <span className="absolute -bottom-1 -right-1 grid h-4.5 min-w-4.5 place-items-center rounded-full border border-background bg-foreground px-1 text-[9.5px] font-bold leading-none text-background">
+                        {idx + 1}
+                      </span>
+                    </div>
+
+                    <div className="min-w-0">
+                      <div className="flex items-baseline gap-1.5">
+                        <p className="truncate font-display text-[13.5px] font-semibold md:text-sm">
+                          {r.storeName}
+                        </p>
+                        <p className="truncate text-[10px] text-muted-foreground">
+                          {r.city}
+                          {r.state ? ` · ${r.state}` : ""}
+                        </p>
+                      </div>
+
+                      {/* progress bar of relative wins */}
+                      <div className="mt-1 flex items-center gap-2">
+                        <div className="relative h-1 flex-1 overflow-hidden rounded-full bg-muted">
+                          <div
+                            className={cn(
+                              "absolute inset-y-0 left-0 rounded-full",
+                              idx === 0 ? "bg-amber-500" : "bg-primary",
+                            )}
+                            style={{ width: `${relative}%` }}
+                            aria-hidden="true"
+                          />
+                        </div>
+                        <span className="shrink-0 font-mono text-[10px] tabular-nums text-muted-foreground">
+                          {r.wins}/{r.productsCompared}
+                        </span>
+                      </div>
+
+                      {/* Category chips + secondary metrics */}
+                      <div className="mt-1.5 flex flex-wrap items-center gap-1">
+                        {r.topCategories.slice(0, 3).map((c) => (
+                          <span
+                            key={c.category}
+                            className="inline-flex items-center gap-1 rounded-full bg-muted px-1.5 py-0.5 font-mono text-[9.5px] uppercase tracking-[0.12em] text-muted-foreground"
+                            title={`${c.wins} vitórias em ${c.appearances} disputas`}
+                          >
+                            {CATEGORY_LABEL[c.category] ?? c.category}
+                            <span className="font-bold text-foreground/80">{c.wins}</span>
+                          </span>
+                        ))}
+                        {r.exclusiveProducts > 0 && (
+                          <span
+                            className="inline-flex items-center gap-1 rounded-full border border-primary/25 bg-primary/5 px-1.5 py-0.5 font-mono text-[9.5px] uppercase tracking-[0.12em] text-primary"
+                            title="Produtos que só este mercado tem cadastrados"
+                          >
+                            <Sparkles className="h-2.5 w-2.5" />
+                            {r.exclusiveProducts} exclusivos
+                          </span>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 gap-0.5 text-right md:grid-cols-[auto_auto] md:items-center md:gap-x-3">
+                      <div className="hidden md:block">
+                        <p className="font-display text-lg font-bold leading-none tabular-nums text-foreground md:text-xl">
+                          {winRate}
+                          <span className="ml-0.5 text-xs font-semibold text-muted-foreground">%</span>
+                        </p>
+                        <p className="mt-0.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                          vitórias
+                        </p>
+                      </div>
+                      <div className="flex flex-col items-end justify-center">
+                        {r.avgSavingsPct > 0 && (
+                          <p className="inline-flex items-center gap-0.5 font-mono text-[10.5px] font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
+                            <ArrowRight className="h-2.5 w-2.5 rotate-45" />
+                            −{r.avgSavingsPct.toFixed(1)}%
+                          </p>
+                        )}
+                        {r.avgTicketWins > 0 && (
+                          <p className="font-mono text-[9.5px] tabular-nums text-muted-foreground">
+                            ticket ~{brl(r.avgTicketWins)}
+                          </p>
+                        )}
+                        <p className="md:hidden font-mono text-[9.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                          {winRate}% vit.
+                        </p>
+                      </div>
+                    </div>
+                  </Link>
+                </li>
+              );
+            })}
+          </ol>
+        )}
+
+        {rows.length > 0 && (
+          <div className="border-t border-border/60 bg-muted/30 px-4 py-2 text-right md:px-5">
+            <Link
+              to="/cesta-basica"
+              search={{ mode: "compare" }}
+              className="inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:underline"
+            >
+              Comparar cesta completa <ArrowRight className="h-3 w-3" />
+            </Link>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+function SummaryTile({
+  icon: Icon,
+  label,
+  value,
+  hint,
+}: {
+  icon: typeof Store;
+  label: string;
+  value: string;
+  hint: string;
+}) {
+  return (
+    <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-2 rounded-xl border border-border/60 bg-card px-2.5 py-2">
+      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary/10 text-primary">
+        <Icon className="h-3.5 w-3.5" aria-hidden />
+      </span>
+      <div className="min-w-0">
+        <p className="truncate font-mono text-[8.5px] uppercase tracking-[0.16em] text-muted-foreground">
+          {label}
+        </p>
+        <p className="truncate font-display text-[15px] font-bold leading-tight text-foreground">
+          {value}
+        </p>
+        <p className="truncate text-[9.5px] leading-tight text-muted-foreground">{hint}</p>
+      </div>
+    </div>
+  );
+}

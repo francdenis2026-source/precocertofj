@@ -1,0 +1,1 @@
+UPDATE public.product_catalog SET image_url = NULL, image_search_attempted_at = NULL, image_search_found = NULL WHERE image_search_found = true;

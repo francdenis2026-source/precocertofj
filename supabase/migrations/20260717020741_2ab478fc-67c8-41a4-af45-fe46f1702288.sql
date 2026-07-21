@@ -1,0 +1,6 @@
+UPDATE public.product_catalog SET image_url='/__l5e/assets-v1/170a8db4-b2e5-4527-bf97-d35dd4f1530a/aji-sal.png', image_source='upload' WHERE id='5ce0c745-42c5-4381-aaba-bf1130f19229';
+UPDATE public.product_catalog SET image_url='/__l5e/assets-v1/25433e59-5069-4592-9297-69d0c93cebb7/anglo.png', image_source='upload' WHERE id='bf5b2568-e14f-49ae-8546-dc4b88c1745a';
+UPDATE public.product_catalog SET image_url='/__l5e/assets-v1/a6e0c758-5566-4c43-8dc5-69785615556f/palatare.png', image_source='upload' WHERE id='6866ab6e-3345-43da-ad5b-c42255e30042';
+UPDATE public.product_catalog SET image_url='/__l5e/assets-v1/8f6a742a-ca39-4fd7-96a6-753d62c2fffb/mandy.png', image_source='upload' WHERE id='ac9bdefb-c4c0-4788-9bb8-c6070cf8c78f';
+UPDATE public.product_catalog SET image_url='/__l5e/assets-v1/35d915be-a3cf-4c53-9ba1-cad1ce650bb1/heinz.png', image_source='upload' WHERE id='e7039b49-f3b7-4b00-98e6-b453c0cd705e';
+UPDATE public.product_catalog SET image_url='/__l5e/assets-v1/6ae87b68-d71f-49dc-8439-e221edf152b0/soya.png', image_source='upload' WHERE id='3b595383-bd41-4c1a-a398-e5e5b968169a';

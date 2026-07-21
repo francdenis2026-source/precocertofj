@@ -1,0 +1,844 @@
+import { createFileRoute, useNavigate, Link, retainSearchParams } from "@tanstack/react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useMemo } from "react";
+import { zodValidator, fallback } from "@tanstack/zod-adapter";
+import { z } from "zod";
+import { Nav } from "@/components/brand/Nav";
+import { Footer } from "@/components/brand/Footer";
+import { Breadcrumbs } from "@/components/nav/Breadcrumbs";
+import { supabase } from "@/integrations/supabase/client";
+import { useSignedLogoUrls } from "@/hooks/use-signed-logo-urls";
+import { SlidersHorizontal, PackageSearch, Share2, TrendingDown, Trophy, Store as StoreIcon, ArrowRight, Clock, AlertTriangle, RefreshCw } from "lucide-react";
+import { toast } from "sonner";
+import { formatRelative } from "@/components/product/TrustIndicator";
+import { shortenStoreName } from "@/lib/store-name";
+import { TeaserCard } from "@/components/paywall/TeaserGate";
+import { FreeQuotaBadge } from "@/components/paywall/FreeQuotaBadge";
+import { PaywallInline } from "@/components/paywall/PaywallInline";
+import { useTeaserQuota } from "@/hooks/use-teaser-quota";
+
+import { QuickFilterBar } from "@/components/search/QuickFilterBar";
+import { ErrorState, EmptyState as FeedbackEmptyState, LoadingList } from "@/components/feedback";
+
+import { ProductImage } from "@/components/product/ProductImage";
+import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
+import { computeUnitPrice } from "@/lib/unit-price";
+import { useMyRoles } from "@/hooks/useMyRoles";
+import { ProtectedGate } from "@/components/auth/ProtectedGate";
+
+
+
+
+
+
+const searchSchema = z.object({
+  cat: fallback(z.string(), "").default(""),
+  sort: fallback(z.string(), "savings").default("savings"),
+  min: fallback(z.number(), 0).default(0),
+  max: fallback(z.number(), 0).default(0),
+  stores: fallback(z.number().int(), 1).default(1),
+});
+
+
+export const Route = createFileRoute("/melhores-precos")({
+  validateSearch: zodValidator(searchSchema),
+  search: {
+    middlewares: [retainSearchParams(["cat", "sort", "min", "max", "stores"])],
+  },
+  head: () => ({
+    meta: [
+      { title: "Melhores preços por produto — PreçoCerto" },
+      {
+        name: "description",
+        content:
+          "Descubra onde cada produto está mais barato, por categoria, e a diferença percentual em relação à média entre os mercados cadastrados.",
+      },
+      { property: "og:title", content: "Melhores preços por produto — PreçoCerto" },
+      {
+        property: "og:description",
+        content:
+          "Ranking automático de melhores preços entre mercados, com filtro por categoria e validação de tamanho e unidade.",
+      },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://precocerto-fj.lovable.app/melhores-precos" },
+      { property: "og:site_name", content: "PreçoCerto" },
+      { property: "og:locale", content: "pt_BR" },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Melhores preços por produto — PreçoCerto" },
+      {
+        name: "twitter:description",
+        content: "Ranking automático de melhores preços entre mercados cadastrados.",
+      },
+    ],
+    links: [
+      { rel: "canonical", href: "https://precocerto-fj.lovable.app/melhores-precos" },
+    ],
+    scripts: [
+      {
+        type: "application/ld+json",
+        children: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: "Melhores preços por produto — PreçoCerto",
+          description:
+            "Ranking automático de melhores preços entre mercados, com filtro por categoria e validação de tamanho e unidade.",
+          url: "https://precocerto-fj.lovable.app/melhores-precos",
+          inLanguage: "pt-BR",
+          isPartOf: {
+            "@type": "WebSite",
+            name: "PreçoCerto",
+            url: "https://precocerto-fj.lovable.app",
+          },
+          breadcrumb: {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Início",
+                item: "https://precocerto-fj.lovable.app/",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: "Melhores preços",
+                item: "https://precocerto-fj.lovable.app/melhores-precos",
+              },
+            ],
+          },
+        }),
+      },
+    ],
+  }),
+  component: () => (
+    <ProtectedGate>
+      <MelhoresPrecosPage />
+    </ProtectedGate>
+  ),
+});
+
+
+type StoreEntry = {
+  establishment_id: string;
+  store_name: string;
+  price: number;
+  product_name: string;
+  last_seen_at?: string | null;
+  scans_count?: number | null;
+};
+
+
+type Comparison = {
+  product_key: string;
+  display_name: string;
+  category: string;
+  size_value: number | null;
+  size_unit: string;
+  store_count: number;
+  min_price: number;
+  avg_price: number;
+  max_price: number;
+  savings_pct: number;
+  cheapest_store: string;
+  cheapest_establishment_id: string;
+  image_url: string | null;
+  catalog_slug: string | null;
+  stores: StoreEntry[];
+  last_seen_at: string | null;
+  total_scans: number | null;
+};
+
+
+const CATEGORY_LABELS: Record<string, string> = {
+  mercearia: "Mercearia",
+  bebidas: "Bebidas",
+  bebidas_em_po: "Bebidas em pó",
+  laticinios: "Laticínios",
+  carnes: "Carnes",
+  padaria: "Padaria",
+  hortifruti: "Hortifruti",
+  biscoitos: "Biscoitos",
+  doces: "Doces",
+  congelados: "Congelados",
+  higiene: "Higiene",
+  limpeza: "Limpeza",
+  outros: "Outros",
+};
+
+function formatBRL(n: number): string {
+  return n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+function formatSize(size_value: number | null, size_unit: string): string | null {
+  if (size_value == null) return null;
+  if (size_unit === "g" && size_value >= 1000)
+    return `${(size_value / 1000).toLocaleString("pt-BR")} kg`;
+  if (size_unit === "ml" && size_value >= 1000)
+    return `${(size_value / 1000).toLocaleString("pt-BR")} L`;
+  return `${size_value.toLocaleString("pt-BR")} ${size_unit}`;
+}
+
+function MelhoresPrecosPage() {
+  const search = Route.useSearch();
+  const navigate = useNavigate({ from: "/melhores-precos" });
+  const activeCategory = search.cat || null;
+  const sortBy: "savings" | "price" | "trend" | "unit" =
+    search.sort === "price"
+      ? "price"
+      : search.sort === "trend"
+        ? "trend"
+        : search.sort === "unit"
+          ? "unit"
+          : "savings";
+  const minStores = Math.max(1, search.stores || 1);
+  const minPrice = search.min || 0;
+  const maxPrice = search.max || 0;
+
+  const setSearch = (patch: Partial<{ cat: string; sort: string; min: number; max: number; stores: number }>) => {
+    navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, ...patch }) });
+  };
+
+  const queryClient = useQueryClient();
+  const { isAdmin } = useMyRoles();
+  const { data, isLoading, isFetching, error, dataUpdatedAt } = useQuery({
+    queryKey: ["price-comparisons"],
+    queryFn: async (): Promise<Comparison[]> => {
+      const { data, error } = await supabase.rpc("get_price_comparisons");
+      if (error) throw error;
+      return (data as unknown as Comparison[]) ?? [];
+    },
+    staleTime: 60_000,
+  });
+
+  const handleRefresh = async () => {
+    try {
+      await queryClient.invalidateQueries({ queryKey: ["price-comparisons"] });
+      toast.success("Preços atualizados");
+    } catch {
+      toast.error("Não foi possível atualizar agora.");
+    }
+  };
+
+  const allRows = data ?? [];
+
+  const categoryCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const r of allRows) counts.set(r.category, (counts.get(r.category) ?? 0) + 1);
+    return counts;
+  }, [allRows]);
+
+  const priceBounds = useMemo(() => {
+    if (allRows.length === 0) return { min: 0, max: 0 };
+    let lo = Infinity, hi = 0;
+    for (const r of allRows) {
+      const p = Number(r.min_price);
+      if (p < lo) lo = p;
+      if (p > hi) hi = p;
+    }
+    return { min: Math.floor(lo), max: Math.ceil(hi) };
+  }, [allRows]);
+
+  const rows = useMemo(() => {
+    const filtered = allRows.filter((r) => {
+      if (activeCategory && r.category !== activeCategory) return false;
+      if (Number(r.store_count) < minStores) return false;
+      const p = Number(r.min_price);
+      if (minPrice > 0 && p < minPrice) return false;
+      if (maxPrice > 0 && p > maxPrice) return false;
+      return true;
+    });
+    return [...filtered].sort((a, b) => {
+      if (sortBy === "price") return Number(a.min_price) - Number(b.min_price);
+      if (sortBy === "unit") {
+        const ua = computeUnitPrice(Number(a.min_price), a.display_name, {
+          sizeValue: a.size_value,
+          sizeUnit: a.size_unit,
+        });
+        const ub = computeUnitPrice(Number(b.min_price), b.display_name, {
+          sizeValue: b.size_value,
+          sizeUnit: b.size_unit,
+        });
+        // items sem tamanho vão para o fim
+        if (ua && ub) return ua.perBase - ub.perBase;
+        if (ua) return -1;
+        if (ub) return 1;
+        return Number(a.min_price) - Number(b.min_price);
+      }
+      if (sortBy === "trend") {
+        const spreadA = Number(a.min_price) > 0
+          ? (Number(a.max_price) - Number(a.min_price)) / Number(a.min_price)
+          : 0;
+        const spreadB = Number(b.min_price) > 0
+          ? (Number(b.max_price) - Number(b.min_price)) / Number(b.min_price)
+          : 0;
+        return spreadB - spreadA;
+      }
+      return Number(b.savings_pct) - Number(a.savings_pct);
+    });
+  }, [allRows, activeCategory, sortBy, minStores, minPrice, maxPrice]);
+
+  const totalSavings = rows.reduce(
+    (acc, r) => acc + (Number(r.avg_price) - Number(r.min_price)),
+    0,
+  );
+
+  const maxStoreCount = useMemo(
+    () => allRows.reduce((m, r) => Math.max(m, Number(r.store_count) || 0), 2),
+    [allRows],
+  );
+
+  const hasFilters =
+    !!activeCategory || minStores > 1 || minPrice > 0 || maxPrice > 0 || sortBy !== "savings";
+
+  return (
+    <div className="min-h-screen">
+      <Nav />
+      <Breadcrumbs items={[{ label: "Melhores preços" }]} />
+
+      {/* Compact header */}
+      <section className="border-b border-border bg-card/40">
+        <div className="mx-auto max-w-7xl px-6 py-6 md:py-8">
+          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+            <div className="min-w-0 max-w-3xl">
+              <p className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.22em] text-primary">
+                Comparativo entre lojas
+              </p>
+              <h1 className="mt-1.5 font-display text-2xl leading-[1.1] tracking-tight text-foreground md:text-[32px]">
+                Onde cada produto está{" "}
+                <em className="italic text-primary">mais barato</em>
+              </h1>
+              <div aria-hidden className="mt-2 h-[2px] w-10 rounded-full bg-primary" />
+              <p className="mt-3 max-w-2xl text-[13px] leading-relaxed text-muted-foreground">
+                Comparamos itens com o mesmo tamanho e unidade (ml, g, un). A economia é calculada em relação à média entre os mercados que vendem o item.
+              </p>
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                <FreeQuotaBadge variant="inline" />
+              </div>
+            </div>
+
+            <div className="flex shrink-0 flex-wrap items-center gap-2 md:justify-end">
+              {isAdmin && (
+                <button
+                  type="button"
+                  onClick={handleRefresh}
+                  disabled={isFetching}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-background px-3 py-1.5 font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-foreground transition hover:border-accent hover:bg-accent/5 disabled:cursor-not-allowed disabled:opacity-60"
+                  aria-label="Atualizar preços"
+                  title={dataUpdatedAt ? `Atualizado ${formatRelative(new Date(dataUpdatedAt).toISOString())}` : undefined}
+                >
+                  <RefreshCw className={`h-3.5 w-3.5 ${isFetching ? "animate-spin" : ""}`} strokeWidth={2} />
+                  {isFetching ? "Atualizando" : "Atualizar"}
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={async () => {
+                  if (typeof window === "undefined") return;
+                  const url = window.location.href;
+                  try {
+                    const nav = window.navigator as Navigator & {
+                      share?: (data: { url?: string; title?: string; text?: string }) => Promise<void>;
+                    };
+                    if (nav.share) {
+                      await nav.share({ url, title: "Melhores preços — PreçoCerto" });
+                      return;
+                    }
+                    await window.navigator.clipboard.writeText(url);
+                    toast.success("Link copiado");
+                  } catch {
+                    try {
+                      await window.navigator.clipboard.writeText(url);
+                      toast.success("Link copiado");
+                    } catch {
+                      toast.error("Não foi possível copiar o link.");
+                    }
+                  }
+                }}
+                className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-background px-3 py-1.5 font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-primary transition hover:border-primary hover:bg-primary/5"
+                aria-label="Compartilhar"
+              >
+                <Share2 className="h-3.5 w-3.5" strokeWidth={2} />
+                Compartilhar
+              </button>
+            </div>
+          </div>
+
+          {/* Stat strip compacto */}
+          <div className="mt-5 grid gap-2 sm:grid-cols-3">
+            <StatCard label="Produtos comparados" value={rows.length.toString()} />
+            <StatCard
+              label="Economia acumulada"
+              value={formatBRL(totalSavings)}
+              hint="soma do mais barato vs média"
+            />
+            <StatCard
+              label="Melhor economia"
+              value={rows[0] ? `${rows[0].savings_pct.toFixed(1)}%` : "—"}
+              hint={rows[0]?.display_name}
+            />
+          </div>
+        </div>
+      </section>
+
+      {/* Filtros — categoria + avançados */}
+      <section className="mx-auto max-w-7xl px-6 pt-5">
+        <CategoryTabs
+          active={activeCategory}
+          counts={categoryCounts}
+          total={allRows.length}
+          onChange={(c) => setSearch({ cat: c ?? "" })}
+        />
+
+        <details className="group mt-3 rounded-xl border border-border bg-card/40">
+          <summary className="flex cursor-pointer list-none items-center gap-2 px-3.5 py-2.5 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground [&::-webkit-details-marker]:hidden">
+            <SlidersHorizontal className="h-3.5 w-3.5" />
+            Filtros avançados
+            {hasFilters && (
+              <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold tracking-wide text-primary">
+                ativos
+              </span>
+            )}
+            <span className="ml-auto flex items-center gap-2">
+              {hasFilters && (
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    navigate({ search: {} });
+                  }}
+                  className="rounded-full border border-border bg-background px-2.5 py-0.5 text-[10px] font-medium text-muted-foreground hover:text-foreground"
+                >
+                  Limpar
+                </button>
+              )}
+              <span className="text-muted-foreground transition-transform group-open:rotate-180" aria-hidden>
+                ▾
+              </span>
+            </span>
+          </summary>
+
+          <div className="grid gap-4 border-t border-border px-3.5 py-3 md:grid-cols-3">
+            <div>
+              <QuickFilterBar<"savings" | "price" | "trend" | "unit">
+                label="Ordenar"
+                ariaLabel="Ordenar por"
+                value={sortBy}
+                onChange={(next) => setSearch({ sort: next ?? "savings" })}
+                options={[
+                  { value: "savings", label: "Maior economia %" },
+                  { value: "price", label: "Menor preço" },
+                  { value: "unit", label: "Menor R$/kg ou R$/L" },
+                  { value: "trend", label: "Maior variação" },
+                ]}
+              />
+            </div>
+
+            <div>
+              <label className="mb-1 block text-[11px] font-medium text-muted-foreground">
+                Mínimo de lojas com preço:{" "}
+                <span className="font-mono text-foreground">{minStores}</span>
+              </label>
+              <input
+                type="range"
+                min={1}
+                max={Math.max(2, maxStoreCount)}
+                step={1}
+                value={minStores}
+                onChange={(e) => setSearch({ stores: Number(e.target.value) })}
+                className="w-full accent-primary"
+                aria-label="Número mínimo de lojas com preço"
+              />
+              <div className="flex justify-between text-[10px] text-muted-foreground">
+                <span>1</span>
+                <span>{Math.max(2, maxStoreCount)}</span>
+              </div>
+            </div>
+
+            <div>
+              <label className="mb-1 block text-[11px] font-medium text-muted-foreground">
+                Faixa de preço (R$)
+              </label>
+              <div className="flex items-center gap-2">
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  min={0}
+                  step="0.01"
+                  value={minPrice || ""}
+                  placeholder={priceBounds.min ? String(priceBounds.min) : "min"}
+                  onChange={(e) => setSearch({ min: Number(e.target.value) || 0 })}
+                  className="w-full rounded-lg border border-border bg-background px-2 py-1 text-xs text-foreground focus:border-primary focus:outline-none"
+                  aria-label="Preço mínimo"
+                />
+                <span className="text-xs text-muted-foreground">até</span>
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  min={0}
+                  step="0.01"
+                  value={maxPrice || ""}
+                  placeholder={priceBounds.max ? String(priceBounds.max) : "max"}
+                  onChange={(e) => setSearch({ max: Number(e.target.value) || 0 })}
+                  className="w-full rounded-lg border border-border bg-background px-2 py-1 text-xs text-foreground focus:border-primary focus:outline-none"
+                  aria-label="Preço máximo"
+                />
+              </div>
+            </div>
+          </div>
+        </details>
+      </section>
+
+
+
+
+      <section className="mx-auto max-w-7xl px-6 py-6" aria-live="polite">
+        {isLoading && (
+          <LoadingList count={5} itemClassName="h-24" />
+        )}
+
+        {error && (
+          <ErrorState
+            title="Não foi possível carregar as comparações"
+            message={(error as Error).message}
+            onRetry={() => window.location.reload()}
+          />
+        )}
+
+        {!isLoading && !error && rows.length === 0 && <EmptyState hasCategory={!!activeCategory} />}
+
+        {!isLoading && !error && rows.length > 0 && (
+          <MelhoresList rows={rows} />
+        )}
+      </section>
+
+      <Footer />
+    </div>
+  );
+}
+
+function MelhoresList({ rows }: { rows: Comparison[] }) {
+  const signedImages = useSignedLogoUrls(useMemo(() => rows.map((r) => r.image_url), [rows]));
+  return (
+    <>
+      <ul className="grid animate-in fade-in gap-2.5 duration-300 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+        {rows.map((row, idx) => (
+          <li key={row.product_key} className="relative h-full">
+            <TeaserCard
+              id={row.product_key}
+              index={idx}
+              variant="full"
+              reason="Os melhores preços por loja aparecem apenas para contas cadastradas. Crie sua conta grátis (30 dias) para ver o ranking completo."
+              trackEventName="visitor_click_unlock_melhores_precos"
+              trackPayload={{ product_key: row.product_key, rank: idx + 1 }}
+            >
+              <ComparisonCard
+                row={row}
+                rank={idx + 1}
+                imageOverride={row.image_url ? signedImages[row.image_url] : undefined}
+              />
+            </TeaserCard>
+          </li>
+        ))}
+      </ul>
+      <VisitorFooterCta />
+    </>
+  );
+}
+
+function VisitorFooterCta() {
+  const { isVisitor, loading } = useTeaserQuota();
+  if (loading || !isVisitor) return null;
+  return (
+    <div className="pt-4">
+      <PaywallInline
+        title="Veja todos os preços e ative alertas"
+        subtitle="Crie sua conta grátis para desbloquear todos os itens desta lista e ser avisado quando os favoritos abaixarem."
+      />
+    </div>
+  );
+}
+
+
+
+
+
+function CategoryTabs({
+  active,
+  counts,
+  total,
+  onChange,
+}: {
+  active: string | null;
+  counts: Map<string, number>;
+  total: number;
+  onChange: (c: string | null) => void;
+}) {
+  const entries = Array.from(counts.entries()).sort((a, b) => b[1] - a[1]);
+  const ALL = "__all";
+  const options = [
+    { value: ALL, label: "Todas", count: total },
+    ...entries.map(([cat, n]) => ({
+      value: cat,
+      label: CATEGORY_LABELS[cat] ?? cat,
+      count: n,
+    })),
+  ];
+  return (
+    <QuickFilterBar<string>
+      label="Categoria"
+      ariaLabel="Filtrar por categoria"
+      value={active ?? ALL}
+      onChange={(next) => onChange(!next || next === ALL ? null : next)}
+      options={options}
+    />
+  );
+}
+
+function StatCard({ label, value, hint }: { label: string; value: string; hint?: string }) {
+  return (
+    <div className="hairline-gold rounded-xl border border-border bg-card px-4 py-3">
+      <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+        {label}
+      </p>
+      <p className="mt-1 font-display text-[20px] font-bold leading-tight tracking-tight text-foreground">
+        {value}
+      </p>
+      {hint && <p className="mt-0.5 truncate text-[11px] text-muted-foreground">{hint}</p>}
+    </div>
+  );
+}
+
+
+const STALE_THRESHOLD_DAYS = 30;
+
+function formatFreshness(iso: string | null | undefined): { label: string; days: number; stale: boolean } | null {
+  if (!iso) return null;
+  const then = new Date(iso).getTime();
+  if (!Number.isFinite(then)) return null;
+  const days = Math.max(0, Math.floor((Date.now() - then) / 86_400_000));
+  const stale = days > STALE_THRESHOLD_DAYS;
+  const label =
+    days <= 0
+      ? "hoje"
+      : days === 1
+        ? "ontem"
+        : days < 30
+          ? `${days}d`
+          : days < 60
+            ? "+1 mês"
+            : `${Math.floor(days / 30)} meses`;
+  return { label, days, stale };
+}
+
+function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: number; imageOverride?: string }) {
+  const size = formatSize(row.size_value, row.size_unit);
+  const stores = Array.isArray(row.stores) ? row.stores : [];
+  const catLabel = CATEGORY_LABELS[row.category] ?? row.category;
+  const detailSlug = row.catalog_slug ?? row.display_name;
+  const isMulti = Number(row.store_count) > 1;
+
+  const bestPrice = Number(row.min_price);
+  const avgPrice = Number(row.avg_price);
+
+  // Frescor agregado do card: usa o preço mais recente entre as lojas
+  const latestIso = stores.reduce<string | null>((acc, s) => {
+    if (!s.last_seen_at) return acc;
+    if (!acc) return s.last_seen_at;
+    return new Date(s.last_seen_at).getTime() > new Date(acc).getTime() ? s.last_seen_at : acc;
+  }, row.last_seen_at ?? null);
+  const cardFreshness = formatFreshness(latestIso);
+
+  return (
+    <Link
+      to="/produto-publico/$slug"
+      params={{ slug: detailSlug }}
+      aria-label={`${row.display_name}${size ? ` (${size})` : ""} — abrir comparativo`}
+      className="hairline-gold group relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card shadow-[0_1px_2px_color-mix(in_oklab,var(--color-foreground)_8%,transparent)] transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-[0_12px_28px_-18px_color-mix(in_oklab,var(--color-primary)_35%,transparent)]"
+    >
+      {/* Rank ribbon */}
+      <span
+        aria-label={`Posição ${rank}`}
+        className="absolute left-2 top-2 z-10 inline-flex h-5 min-w-[1.75rem] items-center justify-center rounded-full border border-accent/60 bg-background/95 px-1.5 font-mono text-[10px] font-bold leading-none text-accent shadow-sm backdrop-blur"
+      >
+        {rank.toString().padStart(2, "0")}
+      </span>
+
+      {/* Media */}
+      <div className="relative aspect-[3/2] w-full overflow-hidden bg-gradient-to-br from-muted/60 to-background">
+        <ProductImage
+          src={imageOverride ?? row.image_url}
+          alt={row.display_name}
+          className="absolute inset-0 h-full w-full"
+          imageClassName="h-full w-full"
+          fit="contain"
+          loading="lazy"
+          width={320}
+          sizes="(min-width: 1536px) 16vw, (min-width: 1280px) 20vw, (min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
+        />
+        {isMulti ? (
+          <span className="absolute right-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-savings px-1.5 py-0.5 font-mono text-[9px] font-bold leading-none text-savings-foreground shadow-sm">
+            <TrendingDown className="h-2.5 w-2.5" strokeWidth={2.4} />
+            −{Number(row.savings_pct).toFixed(0)}%
+          </span>
+        ) : (
+          <span className="absolute right-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-background/90 px-1.5 py-0.5 font-mono text-[9px] font-semibold leading-none text-muted-foreground shadow-sm">
+            <Trophy className="h-2.5 w-2.5 text-accent" strokeWidth={2.4} />
+            único
+          </span>
+        )}
+        <span className="absolute right-1.5 bottom-1.5 inline-flex items-center gap-1 rounded-sm border border-accent/40 bg-background/90 px-1 py-0.5 font-display text-[9px] italic text-foreground backdrop-blur">
+          <StoreIcon className="h-2.5 w-2.5 text-accent" /> {row.store_count}
+        </span>
+        {cardFreshness && (
+          <span
+            className={
+              "absolute left-1.5 bottom-1.5 inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 font-mono text-[9px] font-semibold leading-none shadow-sm backdrop-blur " +
+              (cardFreshness.stale
+                ? "bg-destructive/90 text-destructive-foreground"
+                : "bg-background/90 text-muted-foreground border border-accent/30")
+            }
+            title={latestIso ? `Preço mais recente: ${formatRelative(latestIso)}` : undefined}
+            aria-label={`Preços atualizados há ${cardFreshness.label}`}
+          >
+            {cardFreshness.stale ? (
+              <AlertTriangle className="h-2.5 w-2.5" strokeWidth={2.4} aria-hidden />
+            ) : (
+              <Clock className="h-2.5 w-2.5" strokeWidth={2.4} aria-hidden />
+            )}
+            {cardFreshness.stale ? "defasado" : `há ${cardFreshness.label}`}
+          </span>
+        )}
+      </div>
+
+      {/* Header — alturas fixas */}
+      <div className="flex flex-col gap-0.5 px-2.5 pt-2 sm:px-3 sm:pt-2.5">
+        <span className="h-3 truncate font-sans text-[8.5px] font-semibold uppercase leading-none tracking-[0.2em] text-accent">
+          {catLabel || "\u00A0"}
+        </span>
+        <h2 className="line-clamp-2 h-[2.4em] font-display text-[12px] font-semibold leading-[1.2] tracking-tight text-foreground sm:text-[12.5px]">
+          {row.display_name}
+        </h2>
+        <span className="h-3 truncate font-display text-[10px] italic leading-none text-muted-foreground">
+          {size ?? "\u00A0"}
+        </span>
+      </div>
+
+      {/* Price hero */}
+      <div className="mt-1.5 border-y border-accent/25 bg-background/40 px-2.5 py-2 sm:px-3">
+        <span className="mb-0.5 block font-sans text-[8.5px] font-semibold uppercase leading-none tracking-[0.2em] text-muted-foreground">
+          Menor preço
+        </span>
+        <div className="flex items-baseline justify-between gap-2">
+          <span className="num font-display text-[15px] font-extrabold leading-none tabular-nums text-primary sm:text-[16px]">
+            {formatBRL(bestPrice)}
+          </span>
+          {isMulti && avgPrice > 0 && (
+            <span className="num font-display text-[10px] italic leading-none text-muted-foreground line-through">
+              {formatBRL(avgPrice)}
+            </span>
+          )}
+        </div>
+        <div className="mt-1 h-4 flex items-center">
+          <UnitPriceBadge
+            price={bestPrice}
+            productName={row.display_name}
+            sizeValue={row.size_value}
+            sizeUnit={row.size_unit}
+          />
+        </div>
+      </div>
+
+      {/* Store list — sempre 2 slots */}
+      <ul className="flex-1 divide-y divide-accent/15">
+        {Array.from({ length: 2 }).map((_, idx) => {
+          const s = stores[idx];
+          const isBest = idx === 0;
+          if (!s) {
+            return (
+              <li
+                key={`empty-${idx}`}
+                className="flex h-7 items-center px-2.5 sm:h-8 sm:px-3"
+                aria-hidden
+              >
+                <span className="text-[10.5px] italic text-muted-foreground/50">—</span>
+              </li>
+            );
+          }
+          const freshness = formatFreshness(s.last_seen_at);
+          return (
+            <li
+              key={s.establishment_id}
+              className={
+                "flex h-7 items-center justify-between gap-2 px-2.5 sm:h-8 sm:px-3 " +
+                (freshness?.stale ? "bg-destructive/5 " : isBest ? "bg-savings/[0.06]" : "")
+              }
+            >
+              <div className="flex min-w-0 items-center gap-1.5">
+                {isBest ? (
+                  <Trophy className="h-2.5 w-2.5 shrink-0 text-accent" strokeWidth={2.25} />
+                ) : (
+                  <span className="h-1 w-1 shrink-0 rounded-full bg-accent/40" />
+                )}
+                <span
+                  className="truncate font-display text-[10.5px] font-medium leading-none text-foreground sm:text-[11px]"
+                  title={s.store_name}
+                >
+                  {shortenStoreName(s.store_name)}
+                </span>
+                {freshness ? (
+                  <span
+                    className={
+                      "inline-flex shrink-0 items-center gap-0.5 rounded-full px-1 py-0.5 text-[8.5px] font-medium leading-none " +
+                      (freshness.stale
+                        ? "bg-destructive/10 text-destructive"
+                        : "bg-muted/60 text-muted-foreground")
+                    }
+                    title={s.last_seen_at ? formatRelative(s.last_seen_at) : undefined}
+                  >
+                    {freshness.stale ? (
+                      <AlertTriangle className="h-2 w-2" aria-hidden />
+                    ) : (
+                      <Clock className="h-2 w-2" aria-hidden />
+                    )}
+                    {freshness.label}
+                  </span>
+                ) : null}
+              </div>
+              <span
+                className={
+                  "num shrink-0 tabular-nums leading-none " +
+                  (freshness?.stale
+                    ? "font-display text-[10.5px] text-muted-foreground line-through decoration-destructive/60 sm:text-[11px]"
+                    : isBest
+                      ? "font-display text-[11px] font-semibold text-savings sm:text-[11.5px]"
+                      : "font-display text-[10px] text-muted-foreground sm:text-[10.5px]")
+                }
+                title={s.last_seen_at ? formatRelative(s.last_seen_at) : undefined}
+              >
+                {formatBRL(Number(s.price))}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+
+      {/* Footer CTA */}
+      <div className="flex h-7 items-center justify-between border-t border-accent/30 px-2.5 font-display text-[10.5px] italic leading-none text-primary sm:h-8 sm:px-3 sm:text-[11px]">
+        <span>Ver detalhes</span>
+        <ArrowRight className="h-3 w-3 shrink-0 transition-transform group-hover:translate-x-0.5" />
+      </div>
+    </Link>
+  );
+}
+
+
+function EmptyState({ hasCategory }: { hasCategory: boolean }) {
+  return (
+    <FeedbackEmptyState
+      icon={PackageSearch}
+      title={hasCategory ? "Nenhum produto nesta categoria ainda" : "Ainda não há produtos cadastrados"}
+      message="Cadastre produtos com preço em algum mercado para vê-los aqui. Quando o mesmo item aparecer em mais de uma loja, mostramos automaticamente o comparativo e a economia."
+    />
+  );
+}

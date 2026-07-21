@@ -1,0 +1,1 @@
+UPDATE public.scans SET quantity=50, unit='g' WHERE id='981dcdde-6e1b-41f2-95a0-0d4f7bf7a897';

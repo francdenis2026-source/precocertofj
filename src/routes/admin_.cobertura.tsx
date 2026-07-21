@@ -1,0 +1,365 @@
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { adminBeforeLoad } from "@/lib/route-guards";
+import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
+import { useMemo, useState } from "react";
+import { AppShell } from "@/components/brand/AppShell";
+import { AdminOnly } from "@/components/auth/AdminOnly";
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { ArrowLeft, ChevronRight, Download, Loader2, Search, Store, PackageX, PackageCheck } from "lucide-react";
+import { getCoverageOverview, getMissingProducts, getPresentProducts, type EstablishmentCoverage } from "@/lib/coverage.functions";
+
+export const Route = createFileRoute("/admin_/cobertura")({
+  ssr: false,
+  beforeLoad: adminBeforeLoad,
+  head: () => ({
+    meta: [
+      { title: "Cobertura por estabelecimento — Admin" },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
+  }),
+  component: () => (
+    <AdminOnly>
+      <CoveragePage />
+    </AdminOnly>
+  ),
+});
+
+const CATEGORIES = [
+  "todos",
+  "laticinios",
+  "carnes",
+  "padaria",
+  "biscoitos",
+  "doces",
+  "bebidas",
+  "bebidas_em_po",
+  "limpeza",
+  "higiene",
+  "mercearia",
+  "congelados",
+  "outros",
+];
+
+function CoveragePage() {
+  const overviewFn = useServerFn(getCoverageOverview);
+  const missingFn = useServerFn(getMissingProducts);
+  const presentFn = useServerFn(getPresentProducts);
+
+  const [selected, setSelected] = useState<string | null>(null);
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState("todos");
+  const [tab, setTab] = useState<"faltando" | "cadastrados">("faltando");
+
+  const overview = useQuery({
+    queryKey: ["coverage-overview"],
+    queryFn: () => overviewFn(),
+  });
+
+  const rows = overview.data ?? [];
+  const selectedRow = useMemo(() => rows.find((r) => r.establishment_id === selected), [rows, selected]);
+
+  const missing = useQuery({
+    enabled: !!selected && tab === "faltando",
+    queryKey: ["coverage-missing", selected, search, category],
+    queryFn: () =>
+      missingFn({
+        data: {
+          establishmentId: selected!,
+          search: search.trim() || undefined,
+          category: category === "todos" ? undefined : category,
+          limit: 800,
+        },
+      }),
+  });
+
+  const present = useQuery({
+    enabled: !!selected && tab === "cadastrados",
+    queryKey: ["coverage-present", selected, search, category],
+    queryFn: () =>
+      presentFn({
+        data: {
+          establishmentId: selected!,
+          search: search.trim() || undefined,
+          category: category === "todos" ? undefined : category,
+          limit: 800,
+        },
+      }),
+  });
+
+  const exportCsv = () => {
+    const data = tab === "faltando" ? missing.data : present.data;
+    if (!data || data.length === 0) return;
+    const header =
+      tab === "faltando"
+        ? ["produto", "categoria", "lojas_com_ele", "preco_min", "preco_medio", "preco_max"]
+        : ["produto", "categoria", "preco_local", "preco_min_mercado", "preco_medio_mercado", "ultima_vez"];
+    const lines = [header.join(";")];
+    for (const r of data) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const row: any = r;
+      if (tab === "faltando") {
+        lines.push([r.display_name, r.category ?? "", row.stores_count, row.min_price ?? "", row.avg_price ?? "", row.max_price ?? ""].join(";"));
+      } else {
+        lines.push([r.display_name, r.category ?? "", row.local_price ?? "", row.min_price ?? "", row.avg_price ?? "", row.last_seen_at ?? ""].join(";"));
+      }
+    }
+    const blob = new Blob(["\uFEFF" + lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `cobertura-${selectedRow?.name ?? "loja"}-${tab}.csv`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  return (
+    <AppShell>
+      <section className="mx-auto max-w-7xl px-6 py-10">
+        <div className="mb-6 flex items-center gap-3">
+          <Button asChild variant="ghost" size="sm">
+            <Link to="/admin"><ArrowLeft className="mr-2 h-4 w-4" />Voltar ao painel</Link>
+          </Button>
+        </div>
+
+        <header className="mb-8">
+          <p className="text-xs uppercase tracking-widest text-muted-foreground">Cobertura de produtos</p>
+          <h1 className="mt-1 font-serif text-4xl">Onde falta cadastrar?</h1>
+          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
+            Veja quais produtos já estão cadastrados em cada estabelecimento e quais ainda faltam, comparando com o catálogo total da plataforma.
+          </p>
+        </header>
+
+        {overview.isLoading ? (
+          <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Carregando…</div>
+        ) : (
+          <OverviewTable rows={rows} onSelect={(id) => { setSelected(id); setSearch(""); setCategory("todos"); }} selected={selected} />
+        )}
+
+        {selected && selectedRow && (
+          <Card className="mt-8">
+            <CardHeader>
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div>
+                  <CardTitle className="font-serif text-2xl flex items-center gap-2">
+                    <Store className="h-5 w-5" />
+                    {selectedRow.name}
+                  </CardTitle>
+                  <CardDescription>
+                    {selectedRow.produtos} produtos cadastrados · {selectedRow.faltando} faltando ({selectedRow.cobertura_pct}% de cobertura)
+                  </CardDescription>
+                </div>
+                <Button variant="outline" size="sm" onClick={exportCsv}>
+                  <Download className="mr-2 h-4 w-4" />Exportar CSV
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent>
+              <Tabs value={tab} onValueChange={(v) => setTab(v as "faltando" | "cadastrados")}>
+                <TabsList className="mb-4">
+                  <TabsTrigger value="faltando"><PackageX className="mr-2 h-4 w-4" />Faltando ({selectedRow.faltando})</TabsTrigger>
+                  <TabsTrigger value="cadastrados"><PackageCheck className="mr-2 h-4 w-4" />Cadastrados ({selectedRow.produtos})</TabsTrigger>
+                </TabsList>
+
+                <div className="mb-4 flex flex-wrap gap-3">
+                  <div className="relative flex-1 min-w-[220px]">
+                    <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      className="pl-9"
+                      placeholder="Buscar produto…"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
+                    />
+                  </div>
+                  <Select value={category} onValueChange={setCategory}>
+                    <SelectTrigger className="w-[220px]">
+                      <SelectValue placeholder="Categoria" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {CATEGORIES.map((c) => (
+                        <SelectItem key={c} value={c}>{c === "todos" ? "Todas as categorias" : c}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <TabsContent value="faltando">
+                  {missing.isLoading ? (
+                    <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Carregando produtos faltantes…</div>
+                  ) : (
+                    <MissingTable rows={missing.data ?? []} />
+                  )}
+                </TabsContent>
+                <TabsContent value="cadastrados">
+                  {present.isLoading ? (
+                    <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Carregando produtos cadastrados…</div>
+                  ) : (
+                    <PresentTable rows={present.data ?? []} />
+                  )}
+                </TabsContent>
+              </Tabs>
+            </CardContent>
+          </Card>
+        )}
+      </section>
+    </AppShell>
+  );
+}
+
+function OverviewTable({
+  rows,
+  onSelect,
+  selected,
+}: {
+  rows: EstablishmentCoverage[];
+  onSelect: (id: string) => void;
+  selected: string | null;
+}) {
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle className="font-serif text-xl">Ranking de cobertura</CardTitle>
+        <CardDescription>Clique em uma loja para ver o que está faltando cadastrar.</CardDescription>
+      </CardHeader>
+      <CardContent className="p-0">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Estabelecimento</TableHead>
+              <TableHead className="text-right">Cadastrados</TableHead>
+              <TableHead className="text-right">Faltando</TableHead>
+              <TableHead className="w-[240px]">Cobertura</TableHead>
+              <TableHead />
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {rows.map((r) => {
+              const isSelected = r.establishment_id === selected;
+              return (
+                <TableRow
+                  key={r.establishment_id}
+                  className={`cursor-pointer ${isSelected ? "bg-accent/50" : ""}`}
+                  onClick={() => onSelect(r.establishment_id)}
+                >
+                  <TableCell className="font-medium">{r.name}</TableCell>
+                  <TableCell className="text-right tabular-nums">{r.produtos}</TableCell>
+                  <TableCell className="text-right tabular-nums">
+                    <Badge variant={r.faltando > 500 ? "destructive" : "secondary"}>{r.faltando}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Progress value={Number(r.cobertura_pct)} className="h-2" />
+                      <span className="w-12 text-right text-xs tabular-nums text-muted-foreground">{r.cobertura_pct}%</span>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-right" onClick={(e) => e.stopPropagation()}>
+                    <Button asChild size="sm" variant="outline">
+                      <Link to="/admin_/cobertura/$id" params={{ id: r.establishment_id }}>
+                        Ver detalhes
+                        <ChevronRight className="ml-1 h-4 w-4" />
+                      </Link>
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
+  );
+}
+
+function fmt(v: number | null | undefined) {
+  if (v == null) return "—";
+  return Number(v).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+function MissingTable({ rows }: { rows: Array<{ product_key: string; display_name: string; category: string | null; stores_count: number; min_price: number | null; avg_price: number | null; max_price: number | null }> }) {
+  if (rows.length === 0) {
+    return <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">Nada faltando com esses filtros. 🎉</div>;
+  }
+  return (
+    <div className="overflow-x-auto">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Produto</TableHead>
+            <TableHead>Categoria</TableHead>
+            <TableHead className="text-right">Lojas com ele</TableHead>
+            <TableHead className="text-right">Menor</TableHead>
+            <TableHead className="text-right">Médio</TableHead>
+            <TableHead className="text-right">Maior</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rows.map((r) => (
+            <TableRow key={r.product_key}>
+              <TableCell className="font-medium">{r.display_name}</TableCell>
+              <TableCell><Badge variant="outline" className="text-xs">{r.category ?? "—"}</Badge></TableCell>
+              <TableCell className="text-right tabular-nums">{r.stores_count}</TableCell>
+              <TableCell className="text-right tabular-nums">{fmt(r.min_price)}</TableCell>
+              <TableCell className="text-right tabular-nums">{fmt(r.avg_price)}</TableCell>
+              <TableCell className="text-right tabular-nums">{fmt(r.max_price)}</TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
+}
+
+function PresentTable({ rows }: { rows: Array<{ product_key: string; display_name: string; category: string | null; local_price: number | null; min_price: number | null; avg_price: number | null; last_seen_at: string | null }> }) {
+  if (rows.length === 0) {
+    return <div className="rounded-lg border border-dashed p-8 text-center text-sm text-muted-foreground">Nenhum produto cadastrado com esses filtros.</div>;
+  }
+  return (
+    <div className="overflow-x-auto">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Produto</TableHead>
+            <TableHead>Categoria</TableHead>
+            <TableHead className="text-right">Preço na loja</TableHead>
+            <TableHead className="text-right">Menor no mercado</TableHead>
+            <TableHead className="text-right">Média mercado</TableHead>
+            <TableHead>Última coleta</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rows.map((r) => {
+            const local = r.local_price;
+            const min = r.min_price;
+            const diff = local != null && min != null && min > 0 ? ((local - min) / min) * 100 : null;
+            return (
+              <TableRow key={r.product_key}>
+                <TableCell className="font-medium">{r.display_name}</TableCell>
+                <TableCell><Badge variant="outline" className="text-xs">{r.category ?? "—"}</Badge></TableCell>
+                <TableCell className="text-right tabular-nums">
+                  {fmt(local)}
+                  {diff != null && Math.abs(diff) > 0.5 && (
+                    <span className={`ml-2 text-xs ${diff > 0 ? "text-destructive" : "text-emerald-600"}`}>
+                      {diff > 0 ? "+" : ""}{diff.toFixed(1)}%
+                    </span>
+                  )}
+                </TableCell>
+                <TableCell className="text-right tabular-nums">{fmt(min)}</TableCell>
+                <TableCell className="text-right tabular-nums">{fmt(r.avg_price)}</TableCell>
+                <TableCell className="text-xs text-muted-foreground">
+                  {r.last_seen_at ? new Date(r.last_seen_at).toLocaleDateString("pt-BR") : "—"}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
+  );
+}
