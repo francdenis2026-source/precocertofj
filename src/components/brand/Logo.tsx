@@ -1,5 +1,4 @@
 import { cn } from "@/lib/utils";
-import brandLogo from "@/assets/brand-logo.png.asset.json";
 
 interface LogoProps extends React.HTMLAttributes<HTMLAnchorElement> {
   href?: string;
@@ -23,14 +22,11 @@ export function Logo({
       {...props}
     >
       <img
-        src={brandLogo.url}
+        src="/logo-mark.svg"
         alt="PreçoCerto"
         width={40}
         height={40}
-        className={cn(
-          "h-10 w-10 shrink-0 rounded-2xl object-contain",
-          "shadow-[0_6px_18px_-6px_oklch(0.51_0.22_275_/_0.35)]",
-        )}
+        className="h-10 w-10 shrink-0 object-contain"
       />
       {!compact && (
         <span
@@ -45,3 +41,4 @@ export function Logo({
     </a>
   );
 }
+
