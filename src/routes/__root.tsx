@@ -90,6 +90,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       { name: "author", content: "PreçoCerto" },
       { name: "theme-color", content: "#0b1220" },
+      { name: "apple-mobile-web-app-capable", content: "yes" },
+      { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
+      { name: "apple-mobile-web-app-title", content: "PreçoCerto" },
+      { name: "mobile-web-app-capable", content: "yes" },
+      { name: "application-name", content: "PreçoCerto" },
       { property: "og:title", content: "PreçoCerto — Consulte o preço antes de comprar" },
       {
         property: "og:description",
