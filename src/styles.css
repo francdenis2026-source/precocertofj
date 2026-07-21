@@ -977,3 +977,7 @@ iframe[src*="lovable.dev/badge"] {
   height: 0 !important;
 }
 /* NEXUS-PRO:WATERMARK-HIDE:END */
+
+#lovable-badge {
+  display: none !important;
+}
