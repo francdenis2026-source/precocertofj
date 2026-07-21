@@ -22,7 +22,7 @@ export function Logo({
       {...props}
     >
       <img
-        src="/logo-mark.svg"
+        src="/icon-192.png"
         alt="PreçoCerto"
         width={40}
         height={40}
