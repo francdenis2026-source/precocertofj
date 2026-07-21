@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 128" role="img" aria-label="PreçoCerto">
+  <title>PreçoCerto</title>
+  <g>
+    <path d="M64 12a52 52 0 1 0 46.5 76" fill="none" stroke="#22a45d" stroke-width="12" stroke-linecap="round"/>
+    <g fill="none" stroke="#12294a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M30 46h10l10 34h44"/>
+      <path d="M46 62h48l6-16H50"/>
+    </g>
+    <circle cx="58" cy="94" r="6" fill="#12294a"/>
+    <circle cx="88" cy="94" r="6" fill="#12294a"/>
+    <g transform="translate(70 22) rotate(18)">
+      <path d="M0 6a6 6 0 0 1 6-6h22l18 18-24 24-22-22z" fill="#22a45d"/>
+      <circle cx="10" cy="10" r="3.2" fill="#ffffff"/>
+      <text x="22" y="30" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="20" fill="#ffffff" text-anchor="middle">%</text>
+    </g>
+  </g>
+  <g font-family="Inter, 'Segoe UI', Arial, sans-serif" font-weight="800" font-size="58" letter-spacing="-1">
+    <text x="150" y="82" fill="#12294a">Preço</text>
+    <text x="330" y="82" fill="#22a45d">Certo</text>
+  </g>
+</svg>
