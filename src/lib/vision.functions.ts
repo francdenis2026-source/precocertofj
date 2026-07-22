@@ -30,15 +30,17 @@ Nunca invente — se um campo não estiver legível, use null.
 Responda EXCLUSIVAMENTE em JSON válido:
 {
   "products": [
-    {"productName": string|null, "brand": string|null, "unit": string|null, "price": number|null, "barcode": string|null}
+    {"productName": string|null, "brand": string|null, "unit": string|null, "price": number|null, "barcode": string|null, "category": string|null}
   ],
   "confidence": "low"|"medium"|"high"
 }
 
 Regras:
 - price em reais como número (ex.: 12.90). "R$ 12,90" vira 12.90.
-- barcode apenas se o EAN/UPC estiver legível.
+- barcode apenas se o EAN/UPC estiver legível (só dígitos, 8 a 14 caracteres).
 - unit: ex. "1L", "500g", "pacote 5kg".
+- category: uma destas quando possível — "laticinios", "carnes", "padaria", "biscoitos", "doces", "bebidas", "bebidas_em_po", "limpeza", "higiene", "mercearia", "congelados", "outros". Se não souber, use null.
+- brand: marca visível (ex.: "Nestlé", "Ypê"). Sem marca visível → null.
 - Se só houver 1 produto, retorne um array de 1 item.
 - Se nada legível, retorne { "products": [], "confidence": "low" }.`;
 
