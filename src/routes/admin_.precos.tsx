@@ -486,6 +486,8 @@ function AdminPrecosPage() {
           await updateMut.mutateAsync(args);
         }}
       />
-    </div>
+      </div>
+    </>
   );
 }
+
