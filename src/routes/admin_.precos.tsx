@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { AdminOnly } from "@/components/auth/AdminOnly";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
