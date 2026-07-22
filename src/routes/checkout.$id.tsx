@@ -8,7 +8,10 @@ import {
   validatePromoCoupon,
   approveCheckoutOrder,
 } from "@/lib/checkout.functions";
-import { createMercadoPagoPreference } from "@/lib/mercadopago.functions";
+import {
+  createMercadoPagoPreference,
+  simulateCheckoutApproval,
+} from "@/lib/mercadopago.functions";
 import { AppShell } from "@/components/brand/AppShell";
 import { PageHeader } from "@/components/brand/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -42,6 +45,7 @@ function CheckoutPage() {
   const validate = useServerFn(validatePromoCoupon);
   const approve = useServerFn(approveCheckoutOrder);
   const createPref = useServerFn(createMercadoPagoPreference);
+  const simulate = useServerFn(simulateCheckoutApproval);
   const { isAdmin } = useMyRoles();
 
   const [couponInput, setCouponInput] = useState("");
@@ -84,6 +88,16 @@ function CheckoutPage() {
       if (r?.licenseCode) navigator.clipboard?.writeText(r.licenseCode).catch(() => {});
     },
     onError: (e: any) => toast.error(e?.message ?? "Falha ao aprovar"),
+  });
+
+  const simulateMutation = useMutation({
+    mutationFn: () => simulate({ data: { orderId: id } }),
+    onSuccess: (r) => {
+      toast.success(`Pagamento simulado · código ${r?.licenseCode ?? "gerado"}`);
+      qc.invalidateQueries({ queryKey: ["checkout-order", id] });
+      if (r?.licenseCode) navigator.clipboard?.writeText(r.licenseCode).catch(() => {});
+    },
+    onError: (e: any) => toast.error(e?.message ?? "Falha ao simular pagamento"),
   });
 
   async function applyCoupon() {
@@ -274,7 +288,7 @@ function CheckoutPage() {
                       Marca este pedido como pago e gera o código de licença agora.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="space-y-2">
                     <Button
                       variant="gold"
                       className="w-full"
@@ -283,6 +297,18 @@ function CheckoutPage() {
                     >
                       {approveMutation.isPending ? "Aprovando…" : "Aprovar e gerar código"}
                     </Button>
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => simulateMutation.mutate()}
+                      disabled={simulateMutation.isPending}
+                      title="Aprova o pedido sem chamar o Mercado Pago (uso interno em dev)"
+                    >
+                      {simulateMutation.isPending ? "Simulando…" : "Simular pagamento (dev)"}
+                    </Button>
+                    <p className="text-[11px] text-muted-foreground">
+                      A simulação não passa pelo Mercado Pago — útil quando o token de teste ainda não está pronto.
+                    </p>
                   </CardContent>
                 </Card>
               )}
