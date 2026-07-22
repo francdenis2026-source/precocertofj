@@ -539,8 +539,10 @@ function ItemsPanel() {
         error={error}
         onRetry={load}
         pageSize={15}
+        pageSizeOptions={[15, 25, 50, 100]}
         rowKey={(r) => r.id}
         defaultSort={{ key: "updated", dir: "desc" }}
+        persistKey={`admin.catalog.items:${user?.id ?? "anon"}`}
         emptyTitle="Nenhum produto encontrado"
         emptyDescription="Ajuste os filtros ou aguarde novas leituras chegarem ao catálogo."
         emptyIcon={<Package className="h-5 w-5 text-muted-foreground" />}
