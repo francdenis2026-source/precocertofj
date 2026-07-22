@@ -65,6 +65,7 @@ export function CheapestStoresRanking() {
   const fetchRanking = useServerFn(getCheapestStoresRanking);
   const [category, setCategory] = useState<string | null>(null);
   const [type, setType] = useState<string | null>(null);
+  const [sort, setSort] = useState<"wins" | "savings" | "ticket">("wins");
 
   const rankingQ = useQuery({
     queryKey: ["app-cheapest-stores-ranking", "v4", category ?? "all", type ?? "all"],
@@ -72,7 +73,17 @@ export function CheapestStoresRanking() {
     staleTime: 5 * 60_000,
   });
 
-  const rows = (rankingQ.data?.rows ?? []).slice(0, 6);
+  const allRows = rankingQ.data?.rows ?? [];
+  const sortedRows = [...allRows].sort((a, b) => {
+    if (sort === "savings") return b.avgSavingsPct - a.avgSavingsPct;
+    if (sort === "ticket") {
+      const at = a.avgTicketWins || Infinity;
+      const bt = b.avgTicketWins || Infinity;
+      return at - bt;
+    }
+    return b.wins - a.wins;
+  });
+  const rows = sortedRows.slice(0, 6);
   const summary = rankingQ.data?.summary;
   const topWins = rows[0]?.wins ?? 0;
 
@@ -91,6 +102,7 @@ export function CheapestStoresRanking() {
       label: PRODUCT_TYPE_LABEL[t.key as keyof typeof PRODUCT_TYPE_LABEL] ?? t.key,
       count: t.count,
     }));
+
 
 
   return (
