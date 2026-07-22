@@ -446,14 +446,14 @@ function normRank(s: string): string {
 }
 
 // Conta vitórias por estabelecimento numa janela (usado p/ janela anterior).
-function tallyWins(scans: ScanRowRank[], filterCategory: string | null): Map<string, number> {
+function tallyWins(scans: ScanRowRank[], keep: (name: string) => boolean): Map<string, number> {
   const perProduct = new Map<string, Map<string, number>>();
   for (const s of scans) {
     const name = (s.product_name ?? "").trim();
     const p = Number(s.price_captured);
     const est = s.establishment_id;
     if (!name || !est || !Number.isFinite(p) || p <= 0) continue;
-    if (filterCategory && classifyRank(name) !== filterCategory) continue;
+    if (!keep(name)) continue;
     const key = normRank(name);
     if (!key) continue;
     const m = perProduct.get(key) ?? new Map<string, number>();
@@ -478,6 +478,7 @@ function tallyWins(scans: ScanRowRank[], filterCategory: string | null): Map<str
   }
   return wins;
 }
+
 
 export const getCheapestStoresRanking = createServerFn({ method: "GET" })
   .inputValidator(
