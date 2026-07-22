@@ -333,3 +333,207 @@ export const approveAndApplySuggestion = createServerFn({ method: "POST" })
 
     return { ok: true, catalog_id: catalogId };
   });
+
+/** Reclassifica um nome de produto usando IA (Lovable AI Gateway). */
+async function classifyNameWithAi(name: string): Promise<{
+  brand: string | null;
+  type: string | null;
+  pkg: string | null;
+  confidence: number;
+}> {
+  const apiKey = process.env.LOVABLE_API_KEY;
+  if (!apiKey) throw new Error("LOVABLE_API_KEY ausente");
+
+  const res = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: "google/gemini-3.6-flash",
+      messages: [
+        {
+          role: "system",
+          content:
+            "Você é um categorizador de produtos de supermercado brasileiro. Devolva SEMPRE JSON puro com chaves: brand (marca, título capitalizado ou null), type (categoria em português, ex.: 'Arroz', 'Detergente', 'Sabonete em barra', 'Biscoito', 'Amaciante', 'Creme dental', 'Refrigerante', 'Leite em pó', ou null), pkg (embalagem compacta ex.: '500ml', '1kg', '4un', ou null), confidence (0..1). Não invente marca. Se incerto, use null.",
+        },
+        { role: "user", content: `Nome do produto: "${name}"` },
+      ],
+      response_format: { type: "json_object" },
+    }),
+  });
+  if (!res.ok) {
+    const body = await res.text();
+    if (res.status === 429) throw new Error("Limite de IA atingido. Tente em 1 min.");
+    if (res.status === 402) throw new Error("Créditos de IA esgotados.");
+    throw new Error(`IA falhou [${res.status}]: ${body.slice(0, 200)}`);
+  }
+  const json = (await res.json()) as { choices?: Array<{ message?: { content?: string } }> };
+  const raw = json.choices?.[0]?.message?.content ?? "{}";
+  let parsed: { brand?: unknown; type?: unknown; pkg?: unknown; confidence?: unknown } = {};
+  try { parsed = JSON.parse(raw); } catch { /* noop */ }
+  const str = (v: unknown) =>
+    typeof v === "string" && v.trim() && v.trim().toLowerCase() !== "null" ? v.trim() : null;
+  const num = (v: unknown) => {
+    const n = typeof v === "number" ? v : Number(v);
+    return Number.isFinite(n) ? Math.max(0, Math.min(1, n)) : 0.5;
+  };
+  return {
+    brand: str(parsed.brand),
+    type: str(parsed.type),
+    pkg: str(parsed.pkg),
+    confidence: num(parsed.confidence),
+  };
+}
+
+export const reclassifySuggestionWithAi = createServerFn({ method: "POST" })
+  .middleware([requireAdmin])
+  .inputValidator((input: { id: string }) => {
+    if (!input?.id) throw new Error("id obrigatório");
+    return input;
+  })
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: sug, error } = await supabaseAdmin
+      .from("catalog_suggestions")
+      .select("id, source_name")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!sug) throw new Error("Sugestão não encontrada");
+    const ai = await classifyNameWithAi(sug.source_name);
+    const { error: uErr } = await supabaseAdmin
+      .from("catalog_suggestions")
+      .update({
+        suggested_brand: ai.brand,
+        suggested_type: ai.type,
+        suggested_package: ai.pkg,
+        confidence: ai.confidence,
+      })
+      .eq("id", data.id);
+    if (uErr) throw new Error(uErr.message);
+    return { ok: true, ...ai };
+  });
+
+export const reclassifyLowConfidenceBatch = createServerFn({ method: "POST" })
+  .middleware([requireAdmin])
+  .inputValidator((input?: { threshold?: number; limit?: number }) => ({
+    threshold: Math.max(0, Math.min(1, input?.threshold ?? 0.7)),
+    limit: Math.max(1, Math.min(100, input?.limit ?? 30)),
+  }))
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: rows, error } = await supabaseAdmin
+      .from("catalog_suggestions")
+      .select("id, source_name, confidence")
+      .eq("status", "pending")
+      .lt("confidence", data.threshold)
+      .order("confidence", { ascending: true })
+      .limit(data.limit);
+    if (error) throw new Error(error.message);
+    let updated = 0;
+    const errors: string[] = [];
+    for (const r of rows ?? []) {
+      try {
+        const ai = await classifyNameWithAi(r.source_name);
+        const { error: uErr } = await supabaseAdmin
+          .from("catalog_suggestions")
+          .update({
+            suggested_brand: ai.brand,
+            suggested_type: ai.type,
+            suggested_package: ai.pkg,
+            confidence: ai.confidence,
+          })
+          .eq("id", r.id);
+        if (uErr) errors.push(uErr.message);
+        else updated++;
+      } catch (e) {
+        errors.push(e instanceof Error ? e.message : String(e));
+      }
+      await new Promise((r) => setTimeout(r, 120));
+    }
+    return { updated, scanned: rows?.length ?? 0, errors };
+  });
+
+export const approveHighConfidenceBatch = createServerFn({ method: "POST" })
+  .middleware([requireAdmin])
+  .inputValidator((input?: { threshold?: number; limit?: number }) => ({
+    threshold: Math.max(0, Math.min(1, input?.threshold ?? 0.85)),
+    limit: Math.max(1, Math.min(200, input?.limit ?? 100)),
+  }))
+  .handler(async ({ data, context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: rows, error } = await supabaseAdmin
+      .from("catalog_suggestions")
+      .select("*")
+      .eq("status", "pending")
+      .gte("confidence", data.threshold)
+      .not("suggested_type", "is", null)
+      .order("confidence", { ascending: false })
+      .limit(data.limit);
+    if (error) throw new Error(error.message);
+
+    let applied = 0;
+    const errors: string[] = [];
+    for (const sug of rows ?? []) {
+      try {
+        const normalized = (sug.suggested_normalized_name || normalizeName(sug.source_name)).toLowerCase();
+        const { data: existing } = await supabaseAdmin
+          .from("product_catalog")
+          .select("id")
+          .eq("normalized_name", normalized)
+          .maybeSingle();
+        let catalogId: string;
+        if (existing) {
+          await supabaseAdmin
+            .from("product_catalog")
+            .update({
+              brand: sug.suggested_brand,
+              category: sug.suggested_type,
+              display_name: sug.source_name,
+            })
+            .eq("id", existing.id);
+          catalogId = existing.id;
+        } else {
+          const { data: ins, error: iErr } = await supabaseAdmin
+            .from("product_catalog")
+            .insert({
+              normalized_name: normalized,
+              display_name: sug.source_name,
+              brand: sug.suggested_brand,
+              category: sug.suggested_type,
+            })
+            .select("id")
+            .single();
+          if (iErr) throw new Error(iErr.message);
+          catalogId = ins.id;
+        }
+        await supabaseAdmin
+          .from("catalog_suggestions")
+          .update({
+            status: "applied",
+            product_catalog_id: catalogId,
+            reviewed_at: new Date().toISOString(),
+            reviewed_by: context.userId,
+            applied_at: new Date().toISOString(),
+          })
+          .eq("id", sug.id);
+        applied++;
+      } catch (e) {
+        errors.push(e instanceof Error ? e.message : String(e));
+      }
+    }
+    return { applied, scanned: rows?.length ?? 0, errors };
+  });
+
+export const CATEGORY_PRESETS = [
+  "Arroz","Feijão","Açúcar","Sal","Farinha","Óleo","Café","Leite","Leite em pó","Leite condensado",
+  "Creme de leite","Manteiga","Margarina","Queijo","Iogurte","Biscoito","Bolacha","Wafer","Pão","Torrada",
+  "Macarrão","Miojo","Molho de tomate","Maionese","Mostarda","Ketchup","Vinagre","Azeite","Chá","Achocolatado",
+  "Cereal","Aveia","Canjica","Refrigerante","Suco","Suco em pó","Água","Cerveja","Energético",
+  "Feijoada enlatada","Sardinha","Atum","Salsicha","Presunto","Mortadela",
+  "Detergente","Sabão em pó","Sabão em barra","Amaciante","Água sanitária","Desinfetante","Multiuso","Limpa vidros","Pinho","Esponja","Palha de aço",
+  "Sabonete em barra","Sabonete líquido","Shampoo","Condicionador","Creme dental","Enxaguante bucal","Desodorante","Papel higiênico","Papel toalha","Absorvente","Fralda",
+  "Inseticida","Repelente","Vela","Fósforo","Isqueiro",
+] as const;
