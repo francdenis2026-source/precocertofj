@@ -70,6 +70,7 @@ import { Route as AdminCatalogoRouteImport } from './routes/admin_.catalogo'
 import { Route as AdminAuditoriaRouteImport } from './routes/admin_.auditoria'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin_.analytics'
 import { Route as AdminGestaoRouteImport } from './routes/admin/gestao'
+import { Route as ApiPublicMpWebhookRouteImport } from './routes/api/public/mp-webhook'
 import { Route as ApiAdminCatalogImageRouteImport } from './routes/api/admin/catalog-image'
 import { Route as AdminCoberturaIdRouteImport } from './routes/admin_.cobertura.$id'
 import { Route as LojaIdProdutoSlugRouteImport } from './routes/loja.$id.produto.$slug'
@@ -383,6 +384,11 @@ const AdminGestaoRoute = AdminGestaoRouteImport.update({
   path: '/gestao',
   getParentRoute: () => AdminRoute,
 } as any)
+const ApiPublicMpWebhookRoute = ApiPublicMpWebhookRouteImport.update({
+  id: '/api/public/mp-webhook',
+  path: '/api/public/mp-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiAdminCatalogImageRoute = ApiAdminCatalogImageRouteImport.update({
   id: '/api/admin/catalog-image',
   path: '/api/admin/catalog-image',
@@ -487,6 +493,7 @@ export interface FileRoutesByFullPath {
   '/produto/$id': typeof ProdutoIdRoute
   '/admin/cobertura/$id': typeof AdminCoberturaIdRoute
   '/api/admin/catalog-image': typeof ApiAdminCatalogImageRoute
+  '/api/public/mp-webhook': typeof ApiPublicMpWebhookRoute
   '/api/public/hooks/collab-inbound': typeof ApiPublicHooksCollabInboundRoute
   '/api/public/hooks/drain-catalog-images': typeof ApiPublicHooksDrainCatalogImagesRoute
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
@@ -557,6 +564,7 @@ export interface FileRoutesByTo {
   '/produto/$id': typeof ProdutoIdRoute
   '/admin/cobertura/$id': typeof AdminCoberturaIdRoute
   '/api/admin/catalog-image': typeof ApiAdminCatalogImageRoute
+  '/api/public/mp-webhook': typeof ApiPublicMpWebhookRoute
   '/api/public/hooks/collab-inbound': typeof ApiPublicHooksCollabInboundRoute
   '/api/public/hooks/drain-catalog-images': typeof ApiPublicHooksDrainCatalogImagesRoute
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
@@ -628,6 +636,7 @@ export interface FileRoutesById {
   '/produto/$id': typeof ProdutoIdRoute
   '/admin_/cobertura/$id': typeof AdminCoberturaIdRoute
   '/api/admin/catalog-image': typeof ApiAdminCatalogImageRoute
+  '/api/public/mp-webhook': typeof ApiPublicMpWebhookRoute
   '/api/public/hooks/collab-inbound': typeof ApiPublicHooksCollabInboundRoute
   '/api/public/hooks/drain-catalog-images': typeof ApiPublicHooksDrainCatalogImagesRoute
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
@@ -700,6 +709,7 @@ export interface FileRouteTypes {
     | '/produto/$id'
     | '/admin/cobertura/$id'
     | '/api/admin/catalog-image'
+    | '/api/public/mp-webhook'
     | '/api/public/hooks/collab-inbound'
     | '/api/public/hooks/drain-catalog-images'
     | '/api/public/hooks/refresh-catalog-images'
@@ -770,6 +780,7 @@ export interface FileRouteTypes {
     | '/produto/$id'
     | '/admin/cobertura/$id'
     | '/api/admin/catalog-image'
+    | '/api/public/mp-webhook'
     | '/api/public/hooks/collab-inbound'
     | '/api/public/hooks/drain-catalog-images'
     | '/api/public/hooks/refresh-catalog-images'
@@ -840,6 +851,7 @@ export interface FileRouteTypes {
     | '/produto/$id'
     | '/admin_/cobertura/$id'
     | '/api/admin/catalog-image'
+    | '/api/public/mp-webhook'
     | '/api/public/hooks/collab-inbound'
     | '/api/public/hooks/drain-catalog-images'
     | '/api/public/hooks/refresh-catalog-images'
@@ -906,6 +918,7 @@ export interface RootRouteChildren {
   ProdutoPublicoSlugRoute: typeof ProdutoPublicoSlugRoute
   ProdutoIdRoute: typeof ProdutoIdRoute
   ApiAdminCatalogImageRoute: typeof ApiAdminCatalogImageRoute
+  ApiPublicMpWebhookRoute: typeof ApiPublicMpWebhookRoute
   ApiPublicHooksCollabInboundRoute: typeof ApiPublicHooksCollabInboundRoute
   ApiPublicHooksDrainCatalogImagesRoute: typeof ApiPublicHooksDrainCatalogImagesRoute
   ApiPublicHooksRefreshCatalogImagesRoute: typeof ApiPublicHooksRefreshCatalogImagesRoute
@@ -1341,6 +1354,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminGestaoRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/api/public/mp-webhook': {
+      id: '/api/public/mp-webhook'
+      path: '/api/public/mp-webhook'
+      fullPath: '/api/public/mp-webhook'
+      preLoaderRoute: typeof ApiPublicMpWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/admin/catalog-image': {
       id: '/api/admin/catalog-image'
       path: '/api/admin/catalog-image'
@@ -1501,6 +1521,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProdutoPublicoSlugRoute: ProdutoPublicoSlugRoute,
   ProdutoIdRoute: ProdutoIdRoute,
   ApiAdminCatalogImageRoute: ApiAdminCatalogImageRoute,
+  ApiPublicMpWebhookRoute: ApiPublicMpWebhookRoute,
   ApiPublicHooksCollabInboundRoute: ApiPublicHooksCollabInboundRoute,
   ApiPublicHooksDrainCatalogImagesRoute: ApiPublicHooksDrainCatalogImagesRoute,
   ApiPublicHooksRefreshCatalogImagesRoute:

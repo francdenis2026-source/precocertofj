@@ -8,13 +8,14 @@ import {
   validatePromoCoupon,
   approveCheckoutOrder,
 } from "@/lib/checkout.functions";
+import { createMercadoPagoPreference } from "@/lib/mercadopago.functions";
 import { AppShell } from "@/components/brand/AppShell";
 import { PageHeader } from "@/components/brand/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Ticket, Copy, CheckCircle2, ArrowRight, CreditCard, Loader2, ShieldAlert } from "lucide-react";
+import { Ticket, Copy, CheckCircle2, ArrowRight, CreditCard, Loader2, ShieldAlert, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { useMyRoles } from "@/hooks/useMyRoles";
 
