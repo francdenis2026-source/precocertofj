@@ -606,7 +606,7 @@ function MelhoresPrecosPage() {
 
           <div className="grid gap-4 border-t border-border px-3.5 py-3 md:grid-cols-3">
             <div>
-              <QuickFilterBar<"savings" | "price" | "trend" | "unit">
+              <QuickFilterBar<"savings" | "price" | "trend" | "unit" | "ticket">
                 label="Ordenar"
                 ariaLabel="Ordenar por"
                 value={sortBy}
@@ -614,10 +614,12 @@ function MelhoresPrecosPage() {
                 options={[
                   { value: "savings", label: "Maior economia %" },
                   { value: "price", label: "Menor preço" },
+                  { value: "ticket", label: "Menor ticket médio" },
                   { value: "unit", label: "Menor R$/kg ou R$/L" },
                   { value: "trend", label: "Maior variação" },
                 ]}
               />
+
             </div>
 
             <div>
