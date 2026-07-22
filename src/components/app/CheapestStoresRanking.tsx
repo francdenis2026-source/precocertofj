@@ -325,33 +325,52 @@ export function CheapestStoresRanking() {
                       </div>
                     </div>
 
-                    <div className="grid grid-cols-1 gap-0.5 text-right md:grid-cols-[auto_auto] md:items-center md:gap-x-3">
-                      <div className="hidden md:block">
-                        <p className="font-display text-lg font-bold leading-none tabular-nums text-foreground md:text-xl">
+                    <div className="flex flex-col items-end gap-0.5 text-right">
+                      <div
+                        className={cn(
+                          "rounded-md px-1.5 py-0.5 leading-tight",
+                          sort === "wins" && "bg-primary/10 ring-1 ring-primary/30",
+                        )}
+                        title="Vitórias / Comparações"
+                      >
+                        <p className="font-display text-[15px] font-bold tabular-nums text-foreground md:text-lg">
                           {winRate}
-                          <span className="ml-0.5 text-xs font-semibold text-muted-foreground">%</span>
+                          <span className="ml-0.5 text-[10px] font-semibold text-muted-foreground">%</span>
                         </p>
-                        <p className="mt-0.5 text-[9px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                        <p className="text-[8.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                           vitórias
                         </p>
                       </div>
-                      <div className="flex flex-col items-end justify-center">
-                        {r.avgSavingsPct > 0 && (
-                          <p className="inline-flex items-center gap-0.5 font-mono text-[10.5px] font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
-                            <ArrowRight className="h-2.5 w-2.5 rotate-45" />
-                            −{r.avgSavingsPct.toFixed(1)}%
-                          </p>
+                      <div
+                        className={cn(
+                          "rounded-md px-1.5 py-0.5 leading-tight",
+                          sort === "savings" && "bg-emerald-500/10 ring-1 ring-emerald-500/30",
                         )}
-                        {r.avgTicketWins > 0 && (
-                          <p className="font-mono text-[9.5px] tabular-nums text-muted-foreground">
-                            ticket ~{brl(r.avgTicketWins)}
-                          </p>
+                        title="Economia média vs. concorrentes"
+                      >
+                        <p className="font-mono text-[10.5px] font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
+                          {r.avgSavingsPct > 0 ? `−${r.avgSavingsPct.toFixed(1)}%` : "—"}
+                        </p>
+                        <p className="text-[8.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                          economia
+                        </p>
+                      </div>
+                      <div
+                        className={cn(
+                          "rounded-md px-1.5 py-0.5 leading-tight",
+                          sort === "ticket" && "bg-primary/10 ring-1 ring-primary/30",
                         )}
-                        <p className="md:hidden font-mono text-[9.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                          {winRate}% vit.
+                        title="Ticket médio das vitórias"
+                      >
+                        <p className="font-mono text-[10.5px] font-bold tabular-nums text-foreground">
+                          {r.avgTicketWins > 0 ? brl(r.avgTicketWins) : "—"}
+                        </p>
+                        <p className="text-[8.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                          ticket médio
                         </p>
                       </div>
                     </div>
+
                   </Link>
                 </li>
               );
