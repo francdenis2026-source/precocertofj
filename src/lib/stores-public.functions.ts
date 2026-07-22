@@ -680,6 +680,9 @@ export const getCheapestStoresRanking = createServerFn({ method: "GET" })
     const availableCategories = Array.from(availableCatCount.entries())
       .map(([key, count]) => ({ key, count }))
       .sort((a, b) => b.count - a.count);
+    const availableTypes = Array.from(availableTypeCount.entries())
+      .map(([key, count]) => ({ key, count }))
+      .sort((a, b) => b.count - a.count);
 
     if (estIds.length === 0) {
       return {
@@ -691,10 +694,13 @@ export const getCheapestStoresRanking = createServerFn({ method: "GET" })
           avgSavingsPct: 0,
           windowDays: 7,
           filterCategory,
+          filterType,
           availableCategories,
+          availableTypes,
         },
       };
     }
+
 
 
     const estabsClient = supabaseAdmin as unknown as {
