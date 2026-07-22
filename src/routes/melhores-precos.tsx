@@ -384,7 +384,7 @@ function MelhoresPrecosPage() {
       }
       return Number(b.savings_pct) - Number(a.savings_pct);
     });
-  }, [allRows, activeCategory, sortBy, minStores, minPrice, maxPrice, qNorm, estabsMap]);
+  }, [allRows, activeCategory, activeType, sortBy, minStores, minPrice, maxPrice, qNorm, estabsMap]);
 
   const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
