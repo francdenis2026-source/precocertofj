@@ -372,19 +372,25 @@ export const getPlatformStats = createServerFn({ method: "GET" }).handler(
 
 export type CategoryWins = { category: string; wins: number; appearances: number };
 
+export type RankTrend = "up" | "down" | "flat" | "new";
+
 export type CheapestStoreRank = {
   establishmentId: string;
   storeName: string;
   city: string;
   state: string;
   logoUrl: string | null;
-  wins: number; // número de produtos onde este mercado teve o menor preço
-  productsCompared: number; // total de produtos disputados nos quais aparece
-  avgSavingsPct: number; // % médio abaixo da média dos concorrentes nas vitórias
-  avgTicketWins: number; // ticket médio dos produtos onde ganhou
-  exclusiveProducts: number; // produtos que só este mercado tem cadastrado
-  topCategories: CategoryWins[]; // até 3 categorias com mais vitórias
-  distinctCategories: number; // quantas categorias este mercado disputa
+  wins: number; // vitórias na janela atual (7d)
+  winsPrev: number; // vitórias na janela anterior (7-14d)
+  deltaWins: number; // diferença absoluta (wins - winsPrev)
+  deltaPct: number; // variação percentual vs janela anterior
+  trend: RankTrend;
+  productsCompared: number;
+  avgSavingsPct: number;
+  avgTicketWins: number;
+  exclusiveProducts: number;
+  topCategories: CategoryWins[];
+  distinctCategories: number;
 };
 
 export type CheapestRankingResponse = {
@@ -393,8 +399,10 @@ export type CheapestRankingResponse = {
     totalProductsCompared: number;
     totalStores: number;
     categoriesCovered: number;
-    avgSavingsPct: number; // média geral do maior vs média dos concorrentes
+    avgSavingsPct: number;
     windowDays: number;
+    filterCategory: string | null;
+    availableCategories: { key: string; count: number }[];
   };
 };
 
@@ -402,23 +410,89 @@ type ScanRowRank = {
   product_name: string | null;
   price_captured: number | string | null;
   establishment_id: string | null;
+  created_at: string;
 };
 
-export const getCheapestStoresRanking = createServerFn({ method: "GET" }).handler(
-  async (): Promise<CheapestRankingResponse> => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const since = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString();
+// Classificação de categoria (leve, para não pagar RPC por linha).
+function classifyRank(name: string): string {
+  const n = name
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+  if (/\b(leite|queijo|manteiga|margarina|iogurte|requeij|nata|coalh|danone|batavo|italac|itamb|qualy|vigor|piracanjuba|ninho)\b/.test(n)) return "laticinios";
+  if (/\b(shampoo|sabonete|creme dental|pasta de dente|desodorante|absorvente|papel higienic|fralda|escova|higiene|higiê|antisseptic)\b/.test(n)) return "higiene";
+  if (/\b(sabao|detergente|amaciante|agua sanit|desinfetante|multiuso|limp|lava roup|veja|omo|ariel|ype|ypê)\b/.test(n)) return "limpeza";
+  if (/\b(cafe|café|arroz|feijao|feijão|acucar|açúcar|oleo|óleo|macarr|farinha|sal|molho|extrato|azeite|vinagre|tempero|milho|ervilha|sardinha|atum|maionese|mostarda|ketchup)\b/.test(n)) return "mercearia";
+  if (/\b(biscoit|bolach|wafer|cookie|cracker)\b/.test(n)) return "biscoitos";
+  if (/\b(refrigerante|suco|agua mineral|cerveja|energetic|energético|isotonic|coca|guarana|pepsi|amstel|skol|brahma|heineken)\b/.test(n)) return "bebidas";
+  if (/\b(nescau|toddy|achocolatado|leite em po|leite po|nan|milkshake|cappuc|nescafe)\b/.test(n)) return "bebidas_em_po";
+  if (/\b(chocolate|bala|pirulito|goma|bombom|doce|geleia|marmelada|gelatina|pudim|creme de leite|leite condens)\b/.test(n)) return "doces";
+  if (/\b(carne|frango|peito|coxa|linguic|linguiç|salsich|bacon|hamburguer|hambúrguer|patinho|coxão|contra file|contra filé|picanha|acém|acem)\b/.test(n)) return "carnes";
+  if (/\b(pao|pão|panetone|torrada|bolo|croissant|rosca)\b/.test(n)) return "padaria";
+  if (/\b(congelado|nugget|batata palha|batata frita|pizza congel|acai|açaí)\b/.test(n)) return "congelados";
+  return "outros";
+}
 
+function normRank(s: string): string {
+  return s
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim();
+}
+
+// Conta vitórias por estabelecimento numa janela (usado p/ janela anterior).
+function tallyWins(scans: ScanRowRank[], filterCategory: string | null): Map<string, number> {
+  const perProduct = new Map<string, Map<string, number>>();
+  for (const s of scans) {
+    const name = (s.product_name ?? "").trim();
+    const p = Number(s.price_captured);
+    const est = s.establishment_id;
+    if (!name || !est || !Number.isFinite(p) || p <= 0) continue;
+    if (filterCategory && classifyRank(name) !== filterCategory) continue;
+    const key = normRank(name);
+    if (!key) continue;
+    const m = perProduct.get(key) ?? new Map<string, number>();
+    const cur = m.get(est);
+    if (cur == null || p < cur) m.set(est, p);
+    perProduct.set(key, m);
+  }
+  const wins = new Map<string, number>();
+  for (const [, m] of perProduct) {
+    if (m.size < 2) continue;
+    let minP = Infinity;
+    let winners: string[] = [];
+    for (const [est, p] of m) {
+      if (p < minP) {
+        minP = p;
+        winners = [est];
+      } else if (p === minP) {
+        winners.push(est);
+      }
+    }
+    for (const w of winners) wins.set(w, (wins.get(w) ?? 0) + 1);
+  }
+  return wins;
+}
+
+export const getCheapestStoresRanking = createServerFn({ method: "GET" })
+  .inputValidator((input: { category?: string | null } | undefined) => input ?? {})
+  .handler(async ({ data }): Promise<CheapestRankingResponse> => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const now = Date.now();
+    const since7 = new Date(now - 7 * 86_400_000).toISOString();
+    const since14 = new Date(now - 14 * 86_400_000).toISOString();
+    const filterCategory = data?.category?.trim() || null;
+
+    // Buscamos 14 dias em uma query só; separamos as janelas em memória.
     const scansClient = supabaseAdmin as unknown as {
       from: (t: string) => {
         select: (s: string) => {
           eq: (c: string, v: string) => {
             is: (c: string, v: null) => {
               not: (c: string, op: string, v: unknown) => {
-                gte: (
-                  c: string,
-                  v: string,
-                ) => Promise<{
+                gte: (c: string, v: string) => Promise<{
                   data: ScanRowRank[] | null;
                   error: { message: string } | null;
                 }>;
@@ -428,14 +502,37 @@ export const getCheapestStoresRanking = createServerFn({ method: "GET" }).handle
         };
       };
     };
-    const { data: scans, error } = await scansClient
+    const { data: allScans, error } = await scansClient
       .from("scans")
-      .select("product_name, price_captured, establishment_id")
+      .select("product_name, price_captured, establishment_id, created_at")
       .eq("status", "salvo")
       .is("user_id", null)
       .not("establishment_id", "is", null)
-      .gte("created_at", since);
+      .gte("created_at", since14);
     if (error) throw new Error(error.message);
+
+    const current: ScanRowRank[] = [];
+    const prior: ScanRowRank[] = [];
+    for (const s of allScans ?? []) {
+      if (s.created_at >= since7) current.push(s);
+      else prior.push(s);
+    }
+    const priorWins = tallyWins(prior, filterCategory);
+
+    // Categorias disponíveis (baseadas nos scans atuais, ignorando filtro).
+    const availableCatCount = new Map<string, number>();
+    for (const s of current) {
+      const name = (s.product_name ?? "").trim();
+      if (!name) continue;
+      const c = classifyRank(name);
+      availableCatCount.set(c, (availableCatCount.get(c) ?? 0) + 1);
+    }
+
+    // Trabalha somente com scans atuais (opcionalmente filtrados por categoria).
+    const scans = filterCategory
+      ? current.filter((s) => s.product_name && classifyRank(s.product_name) === filterCategory)
+      : current;
+
 
     // Normalização leve; para agrupar produtos "iguais"
     const norm = (s: string) =>
@@ -558,6 +655,10 @@ export const getCheapestStoresRanking = createServerFn({ method: "GET" }).handle
         ...exclusiveByStore.keys(),
       ]),
     );
+    const availableCategories = Array.from(availableCatCount.entries())
+      .map(([key, count]) => ({ key, count }))
+      .sort((a, b) => b.count - a.count);
+
     if (estIds.length === 0) {
       return {
         rows: [],
@@ -567,9 +668,12 @@ export const getCheapestStoresRanking = createServerFn({ method: "GET" }).handle
           categoriesCovered: globalCategories.size,
           avgSavingsPct: 0,
           windowDays: 7,
+          filterCategory,
+          availableCategories,
         },
       };
     }
+
 
     const estabsClient = supabaseAdmin as unknown as {
       from: (t: string) => {
@@ -596,6 +700,7 @@ export const getCheapestStoresRanking = createServerFn({ method: "GET" }).handle
         const e = byId.get(id);
         if (!e || !e.active) return null;
         const w = wins.get(id) ?? 0;
+        const wPrev = priorWins.get(id) ?? 0;
         const app = appearances.get(id) ?? 0;
         const sSum = savingsSum.get(id) ?? 0;
         const sN = savingsCount.get(id) ?? 0;
@@ -604,6 +709,10 @@ export const getCheapestStoresRanking = createServerFn({ method: "GET" }).handle
           .map(([category, v]) => ({ category, wins: v.wins, appearances: v.appearances }))
           .sort((a, b) => b.wins - a.wins || b.appearances - a.appearances)
           .slice(0, 3);
+        const deltaWins = w - wPrev;
+        const deltaPct = wPrev > 0 ? Number((((w - wPrev) / wPrev) * 100).toFixed(1)) : (w > 0 ? 100 : 0);
+        const trend: RankTrend =
+          wPrev === 0 && w > 0 ? "new" : deltaWins > 0 ? "up" : deltaWins < 0 ? "down" : "flat";
         return {
           establishmentId: id,
           storeName: e.name,
@@ -611,6 +720,10 @@ export const getCheapestStoresRanking = createServerFn({ method: "GET" }).handle
           state: e.state,
           logoUrl: e.logo_url,
           wins: w,
+          winsPrev: wPrev,
+          deltaWins,
+          deltaPct,
+          trend,
           productsCompared: app,
           avgSavingsPct: sN > 0 ? Number((sSum / sN).toFixed(1)) : 0,
           avgTicketWins: w > 0 ? Number(((winTicketSum.get(id) ?? 0) / w).toFixed(2)) : 0,
@@ -634,10 +747,13 @@ export const getCheapestStoresRanking = createServerFn({ method: "GET" }).handle
             ? Number((globalSavingsSum / globalSavingsCount).toFixed(1))
             : 0,
         windowDays: 7,
+        filterCategory,
+        availableCategories,
       },
     };
   },
 );
+
 
 
 
