@@ -163,27 +163,23 @@ function AdminPrecosPage() {
   const storeOptions = useMemo(() => stores.data ?? [], [stores.data]);
 
   return (
-    <div className="mx-auto max-w-7xl px-4 py-6 md:py-8">
-      {/* Header */}
-      <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <Link
-            to="/admin"
-            className="mb-2 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Voltar ao painel
-          </Link>
-          <h1 className="text-2xl font-bold tracking-tight">Gestão de preços</h1>
-          <p className="text-sm text-muted-foreground">
-            Atualização, verificação e invalidação de cache — cada ação fica na trilha de auditoria.
-          </p>
-        </div>
-        <Badge variant="outline" className="gap-1.5">
-          <ShieldCheck className="h-3 w-3" />
-          Área restrita
-        </Badge>
-      </div>
+    <>
+      <PageHeader
+        eyebrow="Painel · Preços"
+        title="Gestão de preços"
+        description="Atualização, verificação e invalidação de cache — cada ação fica na trilha de auditoria."
+        breadcrumbs={[{ label: "Admin", to: "/admin" }, { label: "Preços" }]}
+        icon={<DollarSign className="h-5 w-5" />}
+        goldRule
+        actions={
+          <Badge variant="outline" className="gap-1.5">
+            <ShieldCheck className="h-3 w-3" />
+            Área restrita
+          </Badge>
+        }
+      />
+      <div className="mx-auto max-w-7xl px-4 py-6 md:py-8">
+
 
       <Tabs defaultValue="scans" className="space-y-6">
         <TabsList>
