@@ -284,7 +284,8 @@ function Page() {
                     Evolução ({series.data.length} pontos)
                   </div>
                   <Sparkline
-                    values={series.data.map((s) => s.price)}
+                    points={series.data.map((s) => ({ date: s.capturedAt, price: s.price }))}
+                    width={480}
                     height={80}
                     className="w-full"
                   />
