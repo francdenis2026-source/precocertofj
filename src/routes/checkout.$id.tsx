@@ -288,7 +288,7 @@ function CheckoutPage() {
                       Marca este pedido como pago e gera o código de licença agora.
                     </CardDescription>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="space-y-2">
                     <Button
                       variant="gold"
                       className="w-full"
@@ -297,6 +297,18 @@ function CheckoutPage() {
                     >
                       {approveMutation.isPending ? "Aprovando…" : "Aprovar e gerar código"}
                     </Button>
+                    <Button
+                      variant="outline"
+                      className="w-full"
+                      onClick={() => simulateMutation.mutate()}
+                      disabled={simulateMutation.isPending}
+                      title="Aprova o pedido sem chamar o Mercado Pago (uso interno em dev)"
+                    >
+                      {simulateMutation.isPending ? "Simulando…" : "Simular pagamento (dev)"}
+                    </Button>
+                    <p className="text-[11px] text-muted-foreground">
+                      A simulação não passa pelo Mercado Pago — útil quando o token de teste ainda não está pronto.
+                    </p>
                   </CardContent>
                 </Card>
               )}
