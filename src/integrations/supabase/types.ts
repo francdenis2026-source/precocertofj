@@ -277,6 +277,82 @@ export type Database = {
         }
         Relationships: []
       }
+      checkout_orders: {
+        Row: {
+          approved_at: string | null
+          coupon_code: string | null
+          coupon_id: string | null
+          created_at: string
+          discount_cents: number
+          final_cents: number
+          id: string
+          license_code_id: string | null
+          original_cents: number
+          plan_id: string
+          provider: string
+          provider_ref: string | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          approved_at?: string | null
+          coupon_code?: string | null
+          coupon_id?: string | null
+          created_at?: string
+          discount_cents?: number
+          final_cents: number
+          id?: string
+          license_code_id?: string | null
+          original_cents: number
+          plan_id: string
+          provider?: string
+          provider_ref?: string | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          approved_at?: string | null
+          coupon_code?: string | null
+          coupon_id?: string | null
+          created_at?: string
+          discount_cents?: number
+          final_cents?: number
+          id?: string
+          license_code_id?: string | null
+          original_cents?: number
+          plan_id?: string
+          provider?: string
+          provider_ref?: string | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "checkout_orders_coupon_id_fkey"
+            columns: ["coupon_id"]
+            isOneToOne: false
+            referencedRelation: "promo_coupons"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "checkout_orders_license_code_id_fkey"
+            columns: ["license_code_id"]
+            isOneToOne: false
+            referencedRelation: "license_codes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "checkout_orders_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "license_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       collaborator_submissions: {
         Row: {
           admin_notes: string | null
@@ -1605,6 +1681,39 @@ export type Database = {
         }
         Relationships: []
       }
+      promo_coupons: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          description: string | null
+          id: string
+          percent_off: number
+          redemptions: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          percent_off: number
+          redemptions?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          percent_off?: number
+          redemptions?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       receipt_jobs: {
         Row: {
           created_at: string
@@ -2369,6 +2478,13 @@ export type Database = {
           success: boolean
         }[]
       }
+      approve_checkout_order: {
+        Args: { _order_id: string; _provider_ref?: string }
+        Returns: {
+          license_code: string
+          order_id: string
+        }[]
+      }
       attach_collab_submissions_to_user: {
         Args: { _email: string; _user_id: string }
         Returns: number
@@ -2506,6 +2622,7 @@ export type Database = {
           similarity: number
         }[]
       }
+      generate_license_code_string: { Args: never; Returns: string }
       get_coverage_overview: {
         Args: never
         Returns: {
@@ -2630,6 +2747,22 @@ export type Database = {
       is_product_blocked: { Args: { p_name: string }; Returns: boolean }
       normalize_product_key: { Args: { name: string }; Returns: string }
       normalize_product_name: { Args: { p_name: string }; Returns: string }
+      plan_conversion_metrics: {
+        Args: never
+        Returns: {
+          conversion_pct: number
+          discount_cents: number
+          gross_cents: number
+          net_cents: number
+          orders_approved: number
+          orders_pending: number
+          orders_total: number
+          plan_id: string
+          plan_name: string
+          plan_slug: string
+          price_cents: number
+        }[]
+      }
       platform_public_stats: {
         Args: never
         Returns: {
@@ -2691,6 +2824,14 @@ export type Database = {
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
       unaccent: { Args: { "": string }; Returns: string }
+      validate_promo_coupon: {
+        Args: { _code: string }
+        Returns: {
+          code: string
+          id: string
+          percent_off: number
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
