@@ -173,11 +173,50 @@ function KpiCard({ label, value, tone }: { label: string; value: number; tone?: 
   );
 }
 
+function BatchReclassifyButton() {
+  const qc = useQueryClient();
+  const fn = useServerFn(reclassifyLowConfidenceBatch);
+  const m = useMutation({
+    mutationFn: () => fn({ data: { threshold: 0.7, limit: 30 } }),
+    onSuccess: (r) => {
+      toast.success(`IA reclassificou ${r.updated}/${r.scanned} pendentes`);
+      qc.invalidateQueries({ queryKey: ["catalog-suggestions"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+  return (
+    <Button size="sm" variant="ghost-navy" onClick={() => m.mutate()} disabled={m.isPending}>
+      {m.isPending ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <Wand2 className="h-4 w-4 mr-1.5" />}
+      Reclassificar baixa confiança (IA)
+    </Button>
+  );
+}
+
+function BatchApproveButton() {
+  const qc = useQueryClient();
+  const fn = useServerFn(approveHighConfidenceBatch);
+  const m = useMutation({
+    mutationFn: () => fn({ data: { threshold: 0.85, limit: 100 } }),
+    onSuccess: (r) => {
+      toast.success(`Aplicadas ${r.applied}/${r.scanned} de alta confiança`);
+      qc.invalidateQueries({ queryKey: ["catalog-suggestions"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+  return (
+    <Button size="sm" variant="executive" onClick={() => m.mutate()} disabled={m.isPending}>
+      {m.isPending ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <Zap className="h-4 w-4 mr-1.5" />}
+      Aprovar alta confiança
+    </Button>
+  );
+}
+
 function SuggestionRow({ suggestion, editable }: { suggestion: CatalogSuggestion; editable: boolean }) {
   const qc = useQueryClient();
   const updateFn = useServerFn(updateSuggestion);
   const approveFn = useServerFn(approveAndApplySuggestion);
   const rejectFn = useServerFn(rejectSuggestion);
+  const aiFn = useServerFn(reclassifySuggestionWithAi);
 
   const [brand, setBrand] = useState(suggestion.suggested_brand ?? "");
   const [type, setType] = useState(suggestion.suggested_type ?? "");
@@ -185,8 +224,7 @@ function SuggestionRow({ suggestion, editable }: { suggestion: CatalogSuggestion
   const [dirty, setDirty] = useState(false);
 
   const saveM = useMutation({
-    mutationFn: () =>
-      updateFn({ data: { id: suggestion.id, brand, type, pkg } }),
+    mutationFn: () => updateFn({ data: { id: suggestion.id, brand, type, pkg } }),
     onSuccess: () => {
       toast.success("Sugestão atualizada.");
       setDirty(false);
@@ -197,9 +235,7 @@ function SuggestionRow({ suggestion, editable }: { suggestion: CatalogSuggestion
 
   const approveM = useMutation({
     mutationFn: async () => {
-      if (dirty) {
-        await updateFn({ data: { id: suggestion.id, brand, type, pkg } });
-      }
+      if (dirty) await updateFn({ data: { id: suggestion.id, brand, type, pkg } });
       return approveFn({ data: { id: suggestion.id } });
     },
     onSuccess: () => {
@@ -218,25 +254,65 @@ function SuggestionRow({ suggestion, editable }: { suggestion: CatalogSuggestion
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const aiM = useMutation({
+    mutationFn: () => aiFn({ data: { id: suggestion.id } }),
+    onSuccess: (r) => {
+      setBrand(r.brand ?? "");
+      setType(r.type ?? "");
+      setPkg(r.pkg ?? "");
+      setDirty(false);
+      toast.success(`IA sugeriu (${Math.round((r.confidence ?? 0) * 100)}%)`);
+      qc.invalidateQueries({ queryKey: ["catalog-suggestions"] });
+    },
+    onError: (e: Error) => toast.error(e.message),
+  });
+
   return (
     <TableRow>
-      <TableCell className="text-sm max-w-xs">{suggestion.source_name}</TableCell>
+      <TableCell className="text-sm max-w-xs align-top">
+        <div>{suggestion.source_name}</div>
+        {editable && (
+          <button
+            type="button"
+            onClick={() => aiM.mutate()}
+            disabled={aiM.isPending}
+            className="mt-1 inline-flex items-center gap-1 text-[11px] text-primary hover:underline disabled:opacity-50"
+          >
+            {aiM.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <Wand2 className="h-3 w-3" />}
+            Reclassificar com IA
+          </button>
+        )}
+      </TableCell>
       <TableCell>
         {editable ? (
           <Input
             value={brand}
             onChange={(e) => { setBrand(e.target.value); setDirty(true); }}
+            placeholder="—"
             className="h-8 min-w-[7rem]"
           />
         ) : (<span className="text-sm">{suggestion.suggested_brand ?? "—"}</span>)}
       </TableCell>
       <TableCell>
         {editable ? (
-          <Input
-            value={type}
-            onChange={(e) => { setType(e.target.value); setDirty(true); }}
-            className="h-8 min-w-[8rem]"
-          />
+          <div className="flex items-center gap-1">
+            <Input
+              value={type}
+              onChange={(e) => { setType(e.target.value); setDirty(true); }}
+              placeholder="—"
+              className="h-8 min-w-[8rem]"
+            />
+            <Select value="" onValueChange={(v) => { setType(v); setDirty(true); }}>
+              <SelectTrigger className="h-8 w-9 px-2" aria-label="Preset de categoria">
+                <SelectValue placeholder="•" />
+              </SelectTrigger>
+              <SelectContent className="max-h-72">
+                {CATEGORY_PRESETS.map((c) => (
+                  <SelectItem key={c} value={c}>{c}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         ) : (<span className="text-sm">{suggestion.suggested_type ?? "—"}</span>)}
       </TableCell>
       <TableCell>
@@ -244,6 +320,7 @@ function SuggestionRow({ suggestion, editable }: { suggestion: CatalogSuggestion
           <Input
             value={pkg}
             onChange={(e) => { setPkg(e.target.value); setDirty(true); }}
+            placeholder="—"
             className="h-8 w-24"
           />
         ) : (<span className="text-sm">{suggestion.suggested_package ?? "—"}</span>)}
@@ -272,3 +349,4 @@ function SuggestionRow({ suggestion, editable }: { suggestion: CatalogSuggestion
     </TableRow>
   );
 }
+
