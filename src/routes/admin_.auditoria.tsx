@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
@@ -23,13 +23,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  ArrowLeft,
   RefreshCw,
   History,
   Loader2,
   Search,
   ShieldAlert,
 } from "lucide-react";
+import { PageHeader } from "@/components/brand/PageHeader";
 import { listCatalogAudit, type AuditLogEntry } from "@/lib/catalog-audit.functions";
 import { AdminOnly } from "@/components/auth/AdminOnly";
 
@@ -136,27 +136,22 @@ function AuditoriaPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-7xl px-4 py-8">
-        <div className="mb-6 flex items-center justify-between gap-3">
-          <div>
-            <Link
-              to="/admin"
-              className="mb-2 inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
-            >
-              <ArrowLeft className="h-3 w-3" /> Voltar ao Admin
-            </Link>
-            <h1 className="font-display text-2xl font-bold text-foreground md:text-3xl">
-              Auditoria do catálogo
-            </h1>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Histórico completo de alterações em produtos, fotos e mesclagens.
-            </p>
-          </div>
-          <Button variant="outline" size="sm" onClick={() => refetch()} disabled={isFetching}>
+      <PageHeader
+        eyebrow="Painel · Catálogo"
+        title="Auditoria do catálogo"
+        description="Histórico completo de alterações em produtos, fotos e mesclagens."
+        breadcrumbs={[{ label: "Admin", to: "/admin" }, { label: "Auditoria" }]}
+        icon={<History className="h-5 w-5" />}
+        goldRule
+        actions={
+          <Button variant="ghost-navy" size="sm" onClick={() => refetch()} disabled={isFetching}>
             <RefreshCw className={"mr-2 h-4 w-4 " + (isFetching ? "animate-spin" : "")} />
             Atualizar
           </Button>
-        </div>
+        }
+      />
+      <div className="mx-auto max-w-7xl px-4 py-8">
+
 
         <div className="mb-6 grid gap-3 md:grid-cols-4">
           <SummaryCard label="Total de eventos" value={rows.length} />

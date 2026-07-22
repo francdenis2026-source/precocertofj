@@ -45,6 +45,8 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProdutoIdRouteImport } from './routes/produto.$id'
 import { Route as ProdutoPublicoSlugRouteImport } from './routes/produto-publico.$slug'
 import { Route as LojaIdRouteImport } from './routes/loja.$id'
+import { Route as HistoricoScansRouteImport } from './routes/historico.scans'
+import { Route as HistoricoProdutosRouteImport } from './routes/historico.produtos'
 import { Route as HistoricoIdRouteImport } from './routes/historico.$id'
 import { Route as CotacaoIdRouteImport } from './routes/cotacao.$id'
 import { Route as ComprovanteIdRouteImport } from './routes/comprovante.$id'
@@ -253,6 +255,16 @@ const LojaIdRoute = LojaIdRouteImport.update({
   path: '/loja/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HistoricoScansRoute = HistoricoScansRouteImport.update({
+  id: '/scans',
+  path: '/scans',
+  getParentRoute: () => HistoricoRoute,
+} as any)
+const HistoricoProdutosRoute = HistoricoProdutosRouteImport.update({
+  id: '/produtos',
+  path: '/produtos',
+  getParentRoute: () => HistoricoRoute,
+} as any)
 const HistoricoIdRoute = HistoricoIdRouteImport.update({
   id: '/$id',
   path: '/$id',
@@ -447,6 +459,8 @@ export interface FileRoutesByFullPath {
   '/comprovante/$id': typeof ComprovanteIdRoute
   '/cotacao/$id': typeof CotacaoIdRoute
   '/historico/$id': typeof HistoricoIdRoute
+  '/historico/produtos': typeof HistoricoProdutosRoute
+  '/historico/scans': typeof HistoricoScansRoute
   '/loja/$id': typeof LojaIdRouteWithChildren
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
@@ -512,6 +526,8 @@ export interface FileRoutesByTo {
   '/comprovante/$id': typeof ComprovanteIdRoute
   '/cotacao/$id': typeof CotacaoIdRoute
   '/historico/$id': typeof HistoricoIdRoute
+  '/historico/produtos': typeof HistoricoProdutosRoute
+  '/historico/scans': typeof HistoricoScansRoute
   '/loja/$id': typeof LojaIdRouteWithChildren
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
@@ -578,6 +594,8 @@ export interface FileRoutesById {
   '/comprovante/$id': typeof ComprovanteIdRoute
   '/cotacao/$id': typeof CotacaoIdRoute
   '/historico/$id': typeof HistoricoIdRoute
+  '/historico/produtos': typeof HistoricoProdutosRoute
+  '/historico/scans': typeof HistoricoScansRoute
   '/loja/$id': typeof LojaIdRouteWithChildren
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
@@ -645,6 +663,8 @@ export interface FileRouteTypes {
     | '/comprovante/$id'
     | '/cotacao/$id'
     | '/historico/$id'
+    | '/historico/produtos'
+    | '/historico/scans'
     | '/loja/$id'
     | '/produto-publico/$slug'
     | '/produto/$id'
@@ -710,6 +730,8 @@ export interface FileRouteTypes {
     | '/comprovante/$id'
     | '/cotacao/$id'
     | '/historico/$id'
+    | '/historico/produtos'
+    | '/historico/scans'
     | '/loja/$id'
     | '/produto-publico/$slug'
     | '/produto/$id'
@@ -775,6 +797,8 @@ export interface FileRouteTypes {
     | '/comprovante/$id'
     | '/cotacao/$id'
     | '/historico/$id'
+    | '/historico/produtos'
+    | '/historico/scans'
     | '/loja/$id'
     | '/produto-publico/$slug'
     | '/produto/$id'
@@ -1103,6 +1127,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LojaIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/historico/scans': {
+      id: '/historico/scans'
+      path: '/scans'
+      fullPath: '/historico/scans'
+      preLoaderRoute: typeof HistoricoScansRouteImport
+      parentRoute: typeof HistoricoRoute
+    }
+    '/historico/produtos': {
+      id: '/historico/produtos'
+      path: '/produtos'
+      fullPath: '/historico/produtos'
+      preLoaderRoute: typeof HistoricoProdutosRouteImport
+      parentRoute: typeof HistoricoRoute
+    }
     '/historico/$id': {
       id: '/historico/$id'
       path: '/$id'
@@ -1307,10 +1345,14 @@ const AdminRouteWithChildren = AdminRoute._addFileChildren(AdminRouteChildren)
 
 interface HistoricoRouteChildren {
   HistoricoIdRoute: typeof HistoricoIdRoute
+  HistoricoProdutosRoute: typeof HistoricoProdutosRoute
+  HistoricoScansRoute: typeof HistoricoScansRoute
 }
 
 const HistoricoRouteChildren: HistoricoRouteChildren = {
   HistoricoIdRoute: HistoricoIdRoute,
+  HistoricoProdutosRoute: HistoricoProdutosRoute,
+  HistoricoScansRoute: HistoricoScansRoute,
 }
 
 const HistoricoRouteWithChildren = HistoricoRoute._addFileChildren(

@@ -99,7 +99,7 @@ function ProductDetailPage() {
       <div className="mx-auto max-w-xl px-4 pt-4 sm:px-6">
         <header className="mb-5 flex items-center justify-between">
           <Link
-            to="/historico"
+            to="/historico/scans"
             aria-label="Voltar"
             className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-border bg-surface text-foreground transition hover:bg-secondary"
           >

@@ -62,7 +62,7 @@ function DetailPage() {
       <div className="mx-auto max-w-md px-3 py-4 sm:px-4">
         <header className="mb-4 flex items-center gap-3">
           <Link
-            to="/historico"
+            to="/historico/scans"
             aria-label="Voltar"
             className="rounded-full border border-primary/20 p-1.5 text-primary hover:bg-primary/10"
           >
