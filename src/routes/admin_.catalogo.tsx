@@ -1470,6 +1470,7 @@ function ReviewPanel() {
 
 function AuditPanel() {
   const fetchAudit = useServerFn(listCatalogAudit);
+  const { user } = useSession();
   const [rows, setRows] = useState<AuditLogEntry[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
