@@ -140,8 +140,10 @@ export const generateSuggestionsFromScans = createServerFn({ method: "POST" })
 
     const uniqNames = new Map<string, { scan_id: string; name: string }>();
     for (const s of scans ?? []) {
-      const key = normalizeName(s.product_name);
-      if (!uniqNames.has(key)) uniqNames.set(key, { scan_id: s.id, name: s.product_name });
+      if (!s.product_name) continue;
+      const name = s.product_name;
+      const key = normalizeName(name);
+      if (!uniqNames.has(key)) uniqNames.set(key, { scan_id: s.id, name });
     }
 
     // Skip names that already have a matching product_catalog by normalized name
