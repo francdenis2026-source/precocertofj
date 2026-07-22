@@ -59,6 +59,17 @@ const emptyAddress: Address = {
   state: "",
 };
 
+// Emerald Prestige tokens — scoped to login page.
+const PC_EMERALD_DEEP = "#043a2c";
+const PC_EMERALD = "#064e3b";
+const PC_EMERALD_LIGHT = "#0d7a5f";
+const PC_GOLD = "#c9a84c";
+const PC_GOLD_DARK = "#a88c3d";
+const PC_CREAM = "#f5f0e0";
+const PC_DISPLAY = "'Outfit', system-ui, sans-serif";
+const PC_BODY = "'Figtree', system-ui, sans-serif";
+
+
 function LoginPage() {
   const [mode, setModeState] = useState<"login" | "signup">(() => {
     if (typeof window === "undefined") return "login";
