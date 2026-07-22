@@ -20,6 +20,8 @@ import {
 import { SectionKicker } from "@/components/dashboard/SectionKicker";
 import { QuickFilterBar } from "@/components/search/QuickFilterBar";
 import { getCheapestStoresRanking } from "@/lib/stores-public.functions";
+import { PRODUCT_TYPE_LABEL } from "@/lib/product-type";
+
 import { cn } from "@/lib/utils";
 
 const CATEGORY_LABEL: Record<string, string> = {
