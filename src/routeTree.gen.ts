@@ -63,6 +63,7 @@ import { Route as AdminImageJobsRouteImport } from './routes/admin_.image-jobs'
 import { Route as AdminIconesCategoriaRouteImport } from './routes/admin_.icones-categoria'
 import { Route as AdminCupomLoteRouteImport } from './routes/admin_.cupom-lote'
 import { Route as AdminCupomRouteImport } from './routes/admin_.cupom'
+import { Route as AdminConversoesRouteImport } from './routes/admin_.conversoes'
 import { Route as AdminConsistenciaRouteImport } from './routes/admin_.consistencia'
 import { Route as AdminCoberturaRouteImport } from './routes/admin_.cobertura'
 import { Route as AdminCatalogoRouteImport } from './routes/admin_.catalogo'
@@ -347,6 +348,11 @@ const AdminCupomRoute = AdminCupomRouteImport.update({
   path: '/admin/cupom',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminConversoesRoute = AdminConversoesRouteImport.update({
+  id: '/admin_/conversoes',
+  path: '/admin/conversoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminConsistenciaRoute = AdminConsistenciaRouteImport.update({
   id: '/admin_/consistencia',
   path: '/admin/consistencia',
@@ -457,6 +463,7 @@ export interface FileRoutesByFullPath {
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin/consistencia': typeof AdminConsistenciaRoute
+  '/admin/conversoes': typeof AdminConversoesRoute
   '/admin/cupom': typeof AdminCupomRoute
   '/admin/cupom-lote': typeof AdminCupomLoteRoute
   '/admin/icones-categoria': typeof AdminIconesCategoriaRoute
@@ -526,6 +533,7 @@ export interface FileRoutesByTo {
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin/consistencia': typeof AdminConsistenciaRoute
+  '/admin/conversoes': typeof AdminConversoesRoute
   '/admin/cupom': typeof AdminCupomRoute
   '/admin/cupom-lote': typeof AdminCupomLoteRoute
   '/admin/icones-categoria': typeof AdminIconesCategoriaRoute
@@ -596,6 +604,7 @@ export interface FileRoutesById {
   '/admin_/catalogo': typeof AdminCatalogoRoute
   '/admin_/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin_/consistencia': typeof AdminConsistenciaRoute
+  '/admin_/conversoes': typeof AdminConversoesRoute
   '/admin_/cupom': typeof AdminCupomRoute
   '/admin_/cupom-lote': typeof AdminCupomLoteRoute
   '/admin_/icones-categoria': typeof AdminIconesCategoriaRoute
@@ -667,6 +676,7 @@ export interface FileRouteTypes {
     | '/admin/catalogo'
     | '/admin/cobertura'
     | '/admin/consistencia'
+    | '/admin/conversoes'
     | '/admin/cupom'
     | '/admin/cupom-lote'
     | '/admin/icones-categoria'
@@ -736,6 +746,7 @@ export interface FileRouteTypes {
     | '/admin/catalogo'
     | '/admin/cobertura'
     | '/admin/consistencia'
+    | '/admin/conversoes'
     | '/admin/cupom'
     | '/admin/cupom-lote'
     | '/admin/icones-categoria'
@@ -805,6 +816,7 @@ export interface FileRouteTypes {
     | '/admin_/catalogo'
     | '/admin_/cobertura'
     | '/admin_/consistencia'
+    | '/admin_/conversoes'
     | '/admin_/cupom'
     | '/admin_/cupom-lote'
     | '/admin_/icones-categoria'
@@ -874,6 +886,7 @@ export interface RootRouteChildren {
   AdminCatalogoRoute: typeof AdminCatalogoRoute
   AdminCoberturaRoute: typeof AdminCoberturaRouteWithChildren
   AdminConsistenciaRoute: typeof AdminConsistenciaRoute
+  AdminConversoesRoute: typeof AdminConversoesRoute
   AdminCupomRoute: typeof AdminCupomRoute
   AdminCupomLoteRoute: typeof AdminCupomLoteRoute
   AdminIconesCategoriaRoute: typeof AdminIconesCategoriaRoute
@@ -1279,6 +1292,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCupomRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin_/conversoes': {
+      id: '/admin_/conversoes'
+      path: '/admin/conversoes'
+      fullPath: '/admin/conversoes'
+      preLoaderRoute: typeof AdminConversoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin_/consistencia': {
       id: '/admin_/consistencia'
       path: '/admin/consistencia'
@@ -1461,6 +1481,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminCatalogoRoute: AdminCatalogoRoute,
   AdminCoberturaRoute: AdminCoberturaRouteWithChildren,
   AdminConsistenciaRoute: AdminConsistenciaRoute,
+  AdminConversoesRoute: AdminConversoesRoute,
   AdminCupomRoute: AdminCupomRoute,
   AdminCupomLoteRoute: AdminCupomLoteRoute,
   AdminIconesCategoriaRoute: AdminIconesCategoriaRoute,
