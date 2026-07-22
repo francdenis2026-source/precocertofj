@@ -50,6 +50,7 @@ import { Route as HistoricoProdutosRouteImport } from './routes/historico.produt
 import { Route as HistoricoIdRouteImport } from './routes/historico.$id'
 import { Route as CotacaoIdRouteImport } from './routes/cotacao.$id'
 import { Route as ComprovanteIdRouteImport } from './routes/comprovante.$id'
+import { Route as CheckoutIdRouteImport } from './routes/checkout.$id'
 import { Route as CShareIdRouteImport } from './routes/c.$shareId'
 import { Route as AdminSinonimosRouteImport } from './routes/admin_.sinonimos'
 import { Route as AdminReportsRouteImport } from './routes/admin_.reports'
@@ -280,6 +281,11 @@ const ComprovanteIdRoute = ComprovanteIdRouteImport.update({
   path: '/comprovante/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckoutIdRoute = CheckoutIdRouteImport.update({
+  id: '/checkout/$id',
+  path: '/checkout/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CShareIdRoute = CShareIdRouteImport.update({
   id: '/c/$shareId',
   path: '/c/$shareId',
@@ -456,6 +462,7 @@ export interface FileRoutesByFullPath {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/sinonimos': typeof AdminSinonimosRoute
   '/c/$shareId': typeof CShareIdRoute
+  '/checkout/$id': typeof CheckoutIdRoute
   '/comprovante/$id': typeof ComprovanteIdRoute
   '/cotacao/$id': typeof CotacaoIdRoute
   '/historico/$id': typeof HistoricoIdRoute
@@ -523,6 +530,7 @@ export interface FileRoutesByTo {
   '/admin/reports': typeof AdminReportsRoute
   '/admin/sinonimos': typeof AdminSinonimosRoute
   '/c/$shareId': typeof CShareIdRoute
+  '/checkout/$id': typeof CheckoutIdRoute
   '/comprovante/$id': typeof ComprovanteIdRoute
   '/cotacao/$id': typeof CotacaoIdRoute
   '/historico/$id': typeof HistoricoIdRoute
@@ -591,6 +599,7 @@ export interface FileRoutesById {
   '/admin_/reports': typeof AdminReportsRoute
   '/admin_/sinonimos': typeof AdminSinonimosRoute
   '/c/$shareId': typeof CShareIdRoute
+  '/checkout/$id': typeof CheckoutIdRoute
   '/comprovante/$id': typeof ComprovanteIdRoute
   '/cotacao/$id': typeof CotacaoIdRoute
   '/historico/$id': typeof HistoricoIdRoute
@@ -660,6 +669,7 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/sinonimos'
     | '/c/$shareId'
+    | '/checkout/$id'
     | '/comprovante/$id'
     | '/cotacao/$id'
     | '/historico/$id'
@@ -727,6 +737,7 @@ export interface FileRouteTypes {
     | '/admin/reports'
     | '/admin/sinonimos'
     | '/c/$shareId'
+    | '/checkout/$id'
     | '/comprovante/$id'
     | '/cotacao/$id'
     | '/historico/$id'
@@ -794,6 +805,7 @@ export interface FileRouteTypes {
     | '/admin_/reports'
     | '/admin_/sinonimos'
     | '/c/$shareId'
+    | '/checkout/$id'
     | '/comprovante/$id'
     | '/cotacao/$id'
     | '/historico/$id'
@@ -861,6 +873,7 @@ export interface RootRouteChildren {
   AdminReportsRoute: typeof AdminReportsRoute
   AdminSinonimosRoute: typeof AdminSinonimosRoute
   CShareIdRoute: typeof CShareIdRoute
+  CheckoutIdRoute: typeof CheckoutIdRoute
   ComprovanteIdRoute: typeof ComprovanteIdRoute
   CotacaoIdRoute: typeof CotacaoIdRoute
   LojaIdRoute: typeof LojaIdRouteWithChildren
@@ -1162,6 +1175,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComprovanteIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checkout/$id': {
+      id: '/checkout/$id'
+      path: '/checkout/$id'
+      fullPath: '/checkout/$id'
+      preLoaderRoute: typeof CheckoutIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/c/$shareId': {
       id: '/c/$shareId'
       path: '/c/$shareId'
@@ -1432,6 +1452,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminReportsRoute: AdminReportsRoute,
   AdminSinonimosRoute: AdminSinonimosRoute,
   CShareIdRoute: CShareIdRoute,
+  CheckoutIdRoute: CheckoutIdRoute,
   ComprovanteIdRoute: ComprovanteIdRoute,
   CotacaoIdRoute: CotacaoIdRoute,
   LojaIdRoute: LojaIdRouteWithChildren,
