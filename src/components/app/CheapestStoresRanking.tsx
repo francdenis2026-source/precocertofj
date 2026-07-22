@@ -119,10 +119,26 @@ export function CheapestStoresRanking() {
           ariaLabel="Filtrar ranking por categoria"
           options={categoryOptions}
           value={category}
-          onChange={(next) => setCategory(next)}
+          onChange={(next) => {
+            setCategory(next);
+            setType(null); // troca de categoria zera o tipo, para evitar combos vazios
+          }}
           size="sm"
         />
       )}
+
+      {/* Filtros por tipo de produto (subcategoria) */}
+      {typeOptions.length > 1 && (
+        <QuickFilterBar
+          label="Tipo"
+          ariaLabel="Filtrar ranking por tipo de produto"
+          options={typeOptions}
+          value={type}
+          onChange={(next) => setType(next)}
+          size="sm"
+        />
+      )}
+
 
       {/* Summary strip: cruzamento agregado */}
       {summary && summary.totalProductsCompared > 0 && (
