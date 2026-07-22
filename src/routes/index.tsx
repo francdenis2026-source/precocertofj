@@ -621,16 +621,17 @@ function HomePage() {
 
               <div className="mt-4 space-y-2.5">
                 <PlanCard
-                  name="Passe Semanal"
-                  price="R$ 4,90"
-                  desc="7 dias · alertas WhatsApp"
+                  name="Plano Mensal"
+                  price="R$ 29,90"
+                  desc="30 dias · acesso completo"
                 />
                 <PlanCard
-                  name="Plano Mensal"
-                  price="R$ 14,90"
-                  desc="30 dias · alertas + cesta ideal"
+                  name="Plano Anual"
+                  price="R$ 239,00"
+                  desc="12 meses · economia de 33%"
                   highlight
                 />
+
 
               </div>
 
