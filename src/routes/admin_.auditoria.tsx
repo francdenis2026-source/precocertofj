@@ -23,13 +23,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  ArrowLeft,
   RefreshCw,
   History,
   Loader2,
   Search,
   ShieldAlert,
 } from "lucide-react";
+import { PageHeader } from "@/components/brand/PageHeader";
 import { listCatalogAudit, type AuditLogEntry } from "@/lib/catalog-audit.functions";
 import { AdminOnly } from "@/components/auth/AdminOnly";
 
