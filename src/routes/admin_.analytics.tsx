@@ -94,29 +94,19 @@ function AnalyticsPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <div className="flex items-center gap-2">
-            <Button asChild variant="ghost" size="sm">
-              <Link to="/admin">
-                <ArrowLeft className="mr-1 h-4 w-4" /> Admin
-              </Link>
-            </Button>
-            <div>
-              <h1 className="text-xl font-semibold tracking-tight">
-                Analytics de visitantes
-              </h1>
-              <p className="text-sm text-muted-foreground">
-                Visitantes vs cadastrados e taxa de clique em &quot;desbloquear&quot;
-                por rota nos últimos {days} dias.
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
+      <PageHeader
+        eyebrow="Painel · Analytics"
+        title="Analytics de visitantes"
+        description={`Visitantes vs cadastrados e taxa de clique em "desbloquear" por rota nos últimos ${days} dias.`}
+        breadcrumbs={[{ label: "Admin", to: "/admin" }, { label: "Analytics" }]}
+        icon={<BarChart3 className="h-5 w-5" />}
+        goldRule
+        actions={
+          <>
             {[7, 14, 30, 90].map((d) => (
               <Button
                 key={d}
-                variant={days === d ? "default" : "outline"}
+                variant={days === d ? "executive" : "outline"}
                 size="sm"
                 onClick={() => setDays(d)}
               >
@@ -124,7 +114,7 @@ function AnalyticsPage() {
               </Button>
             ))}
             <Button
-              variant="outline"
+              variant="ghost-navy"
               size="icon"
               onClick={() => {
                 dailyQ.refetch();
@@ -134,8 +124,11 @@ function AnalyticsPage() {
             >
               <RefreshCw className="h-4 w-4" />
             </Button>
-          </div>
-        </div>
+          </>
+        }
+      />
+      <div className="mx-auto max-w-6xl space-y-6 p-4 sm:p-6">
+
 
         <div className="grid gap-4 md:grid-cols-3">
           <StatCard
