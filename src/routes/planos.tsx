@@ -56,7 +56,7 @@ function planHighlights(slug: string): string[] {
 const FAQ = [
   {
     q: "Como funciona o pagamento?",
-    a: "Após escolher o plano, você é levado à tela de checkout. Em breve integramos Mercado Pago para pagamento com Pix, cartão e boleto. Enquanto isso, códigos de licença podem ser gerados manualmente por administradores.",
+    a: "Escolha o plano, entre com sua conta e vá para o checkout. O pagamento é processado pelo Mercado Pago com Pix (aprovação em segundos), cartão de crédito ou boleto. Assim que o pagamento é aprovado, seu código de licença é gerado automaticamente.",
   },
   {
     q: "Posso usar um cupom de desconto?",
