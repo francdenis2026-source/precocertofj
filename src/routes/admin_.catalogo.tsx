@@ -75,7 +75,7 @@ import {
   markImageSearch,
   markAllMissingAsUnmatched,
   listRecentImageChanges,
-  searchWebImageForCatalog,
+  searchWebImageForCatalog, // still used by other panels below
   suggestWebImagesForCatalog,
   applyCatalogImageUrl,
   listCatalogImageHistory,
