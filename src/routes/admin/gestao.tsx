@@ -6,6 +6,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   listLicensePlans, generateLicenseCodes, listLicenseCodes, revokeLicenseCode,
+  reactivateLicenseCode, deleteLicenseCode, updateLicenseCodeExpiry, reissueLicenseCode,
+  upsertLicensePlan,
   listAccounts, adminResetUserPin, adminExtendUserAccess,
   listLoginEvents, getAdminMetrics,
 } from "@/lib/licenses.functions";
@@ -18,7 +20,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { KeyRound, Users, Ticket, Activity, Copy, RefreshCcw, Shield, Loader2, Wallet, Gift } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
+import { Switch } from "@/components/ui/switch";
+import { KeyRound, Users, Ticket, Activity, Copy, RefreshCcw, Shield, Loader2, Wallet, Gift, Pencil, Trash2, RotateCcw, CalendarClock, Send, Plus } from "lucide-react";
 import { useConfirm } from "@/components/ui/confirm-provider";
 import { PaymentsTab } from "@/components/admin/PaymentsTab";
 import { CollaboratorsTab } from "@/components/admin/CollaboratorsTab";
