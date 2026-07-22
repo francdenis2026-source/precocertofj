@@ -26,6 +26,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ListaRouteImport } from './routes/lista'
 import { Route as HistoricoRouteImport } from './routes/historico'
 import { Route as FinancasRouteImport } from './routes/financas'
+import { Route as EstabelecimentosRouteImport } from './routes/estabelecimentos'
 import { Route as ComprarLicencaRouteImport } from './routes/comprar-licenca'
 import { Route as CompararRouteImport } from './routes/comparar'
 import { Route as ComparadorRouteImport } from './routes/comparador'
@@ -166,6 +167,11 @@ const HistoricoRoute = HistoricoRouteImport.update({
 const FinancasRoute = FinancasRouteImport.update({
   id: '/financas',
   path: '/financas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EstabelecimentosRoute = EstabelecimentosRouteImport.update({
+  id: '/estabelecimentos',
+  path: '/estabelecimentos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComprarLicencaRoute = ComprarLicencaRouteImport.update({
@@ -470,6 +476,7 @@ export interface FileRoutesByFullPath {
   '/comparador': typeof ComparadorRoute
   '/comparar': typeof CompararRoute
   '/comprar-licenca': typeof ComprarLicencaRoute
+  '/estabelecimentos': typeof EstabelecimentosRoute
   '/financas': typeof FinancasRoute
   '/historico': typeof HistoricoRouteWithChildren
   '/lista': typeof ListaRoute
@@ -545,6 +552,7 @@ export interface FileRoutesByTo {
   '/comparador': typeof ComparadorRoute
   '/comparar': typeof CompararRoute
   '/comprar-licenca': typeof ComprarLicencaRoute
+  '/estabelecimentos': typeof EstabelecimentosRoute
   '/financas': typeof FinancasRoute
   '/historico': typeof HistoricoRouteWithChildren
   '/lista': typeof ListaRoute
@@ -621,6 +629,7 @@ export interface FileRoutesById {
   '/comparador': typeof ComparadorRoute
   '/comparar': typeof CompararRoute
   '/comprar-licenca': typeof ComprarLicencaRoute
+  '/estabelecimentos': typeof EstabelecimentosRoute
   '/financas': typeof FinancasRoute
   '/historico': typeof HistoricoRouteWithChildren
   '/lista': typeof ListaRoute
@@ -698,6 +707,7 @@ export interface FileRouteTypes {
     | '/comparador'
     | '/comparar'
     | '/comprar-licenca'
+    | '/estabelecimentos'
     | '/financas'
     | '/historico'
     | '/lista'
@@ -773,6 +783,7 @@ export interface FileRouteTypes {
     | '/comparador'
     | '/comparar'
     | '/comprar-licenca'
+    | '/estabelecimentos'
     | '/financas'
     | '/historico'
     | '/lista'
@@ -848,6 +859,7 @@ export interface FileRouteTypes {
     | '/comparador'
     | '/comparar'
     | '/comprar-licenca'
+    | '/estabelecimentos'
     | '/financas'
     | '/historico'
     | '/lista'
@@ -924,6 +936,7 @@ export interface RootRouteChildren {
   ComparadorRoute: typeof ComparadorRoute
   CompararRoute: typeof CompararRoute
   ComprarLicencaRoute: typeof ComprarLicencaRoute
+  EstabelecimentosRoute: typeof EstabelecimentosRoute
   FinancasRoute: typeof FinancasRoute
   HistoricoRoute: typeof HistoricoRouteWithChildren
   ListaRoute: typeof ListaRoute
@@ -1096,6 +1109,13 @@ declare module '@tanstack/react-router' {
       path: '/financas'
       fullPath: '/financas'
       preLoaderRoute: typeof FinancasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/estabelecimentos': {
+      id: '/estabelecimentos'
+      path: '/estabelecimentos'
+      fullPath: '/estabelecimentos'
+      preLoaderRoute: typeof EstabelecimentosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/comprar-licenca': {
@@ -1559,6 +1579,7 @@ const rootRouteChildren: RootRouteChildren = {
   ComparadorRoute: ComparadorRoute,
   CompararRoute: CompararRoute,
   ComprarLicencaRoute: ComprarLicencaRoute,
+  EstabelecimentosRoute: EstabelecimentosRoute,
   FinancasRoute: FinancasRoute,
   HistoricoRoute: HistoricoRouteWithChildren,
   ListaRoute: ListaRoute,
