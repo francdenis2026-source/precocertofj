@@ -526,21 +526,34 @@ export const getCheapestStoresRanking = createServerFn({ method: "GET" })
       if (s.created_at >= since7) current.push(s);
       else prior.push(s);
     }
-    const priorWins = tallyWins(prior, filterCategory);
+    const keep = (name: string): boolean => {
+      if (filterCategory && classifyRank(name) !== filterCategory) return false;
+      if (filterType && classifyProductType(name) !== filterType) return false;
+      return true;
+    };
+    const priorWins = tallyWins(prior, keep);
 
     // Categorias disponíveis (baseadas nos scans atuais, ignorando filtro).
     const availableCatCount = new Map<string, number>();
+    // Tipos disponíveis (respeitam filtro de categoria — se houver — para que
+    // o usuário só veja tipos que fazem sentido na categoria escolhida).
+    const availableTypeCount = new Map<string, number>();
     for (const s of current) {
       const name = (s.product_name ?? "").trim();
       if (!name) continue;
       const c = classifyRank(name);
       availableCatCount.set(c, (availableCatCount.get(c) ?? 0) + 1);
+      if (!filterCategory || c === filterCategory) {
+        const t = classifyProductType(name);
+        if (t !== "outros") {
+          availableTypeCount.set(t, (availableTypeCount.get(t) ?? 0) + 1);
+        }
+      }
     }
 
-    // Trabalha somente com scans atuais (opcionalmente filtrados por categoria).
-    const scans = filterCategory
-      ? current.filter((s) => s.product_name && classifyRank(s.product_name) === filterCategory)
-      : current;
+    // Trabalha somente com scans atuais (opcionalmente filtrados por cat/tipo).
+    const scans = current.filter((s) => s.product_name && keep(s.product_name));
+
 
 
     // Normalização leve; para agrupar produtos "iguais"
