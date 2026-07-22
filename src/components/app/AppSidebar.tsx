@@ -41,6 +41,7 @@ const primary = [
 
 const secondary = [
   { to: "/perfil", label: "Perfil", icon: User },
+  { to: "/minhas-licencas", label: "Minhas licenças", icon: Wallet },
   { to: "/melhores-precos", label: "Melhores preços", icon: Store },
   { to: "/admin", label: "Admin", icon: Shield },
 ] as const;

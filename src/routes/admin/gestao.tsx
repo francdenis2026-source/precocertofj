@@ -6,6 +6,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   listLicensePlans, generateLicenseCodes, listLicenseCodes, revokeLicenseCode,
+  reactivateLicenseCode, deleteLicenseCode, updateLicenseCodeExpiry, reissueLicenseCode,
+  upsertLicensePlan,
   listAccounts, adminResetUserPin, adminExtendUserAccess,
   listLoginEvents, getAdminMetrics,
 } from "@/lib/licenses.functions";
@@ -18,7 +20,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { KeyRound, Users, Ticket, Activity, Copy, RefreshCcw, Shield, Loader2, Wallet, Gift } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogTrigger } from "@/components/ui/dialog";
+import { Switch } from "@/components/ui/switch";
+import { KeyRound, Users, Ticket, Activity, Copy, RefreshCcw, Shield, Loader2, Wallet, Gift, Pencil, Trash2, RotateCcw, CalendarClock, Send, Plus } from "lucide-react";
 import { useConfirm } from "@/components/ui/confirm-provider";
 import { PaymentsTab } from "@/components/admin/PaymentsTab";
 import { CollaboratorsTab } from "@/components/admin/CollaboratorsTab";
@@ -86,11 +90,29 @@ function MetricsCards() {
 }
 
 function PlansTab() {
+  const qc = useQueryClient();
   const fetchPlans = useServerFn(listLicensePlans);
+  const upsertFn = useServerFn(upsertLicensePlan);
   const { data: plans } = useQuery({ queryKey: ["license-plans"], queryFn: () => fetchPlans() });
+  const [editing, setEditing] = useState<any | null>(null);
+  const [creating, setCreating] = useState(false);
+
+  const save = useMutation({
+    mutationFn: async (p: any) => upsertFn({ data: p }),
+    onSuccess: () => {
+      toast.success("Plano salvo");
+      qc.invalidateQueries({ queryKey: ["license-plans"] });
+      setEditing(null); setCreating(false);
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Falha ao salvar"),
+  });
+
   return (
     <Card className="p-4">
-      <h2 className="font-semibold mb-3">Planos disponíveis</h2>
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="font-semibold">Planos disponíveis</h2>
+        <Button size="sm" onClick={() => setCreating(true)}><Plus className="w-3.5 h-3.5 mr-1" />Novo plano</Button>
+      </div>
       <div className="space-y-2">
         {(plans ?? []).map((p) => (
           <div key={p.id} className="flex items-center justify-between p-2 border rounded">
@@ -101,14 +123,96 @@ function PlansTab() {
             <div className="flex items-center gap-2">
               <Badge variant={p.active ? "default" : "secondary"}>{p.active ? "Ativo" : "Inativo"}</Badge>
               <span className="font-semibold">{brl(p.price_cents)}</span>
+              <Button size="sm" variant="ghost" onClick={() => setEditing(p)}><Pencil className="w-3.5 h-3.5" /></Button>
+              <Button size="sm" variant="ghost" onClick={() =>
+                save.mutate({ ...p, active: !p.active })
+              }>{p.active ? "Desativar" : "Ativar"}</Button>
             </div>
           </div>
         ))}
+        {(plans ?? []).length === 0 && (
+          <div className="text-sm text-muted-foreground text-center py-4">Nenhum plano cadastrado</div>
+        )}
       </div>
-      <p className="text-xs text-muted-foreground mt-3">
-        Edição de valores e ativação estão disponíveis via SQL / próxima versão do painel.
-      </p>
+
+      <PlanEditDialog
+        open={!!editing || creating}
+        onOpenChange={(v) => { if (!v) { setEditing(null); setCreating(false); } }}
+        plan={editing}
+        onSave={(p) => save.mutate(p)}
+        saving={save.isPending}
+      />
     </Card>
+  );
+}
+
+function PlanEditDialog({ open, onOpenChange, plan, onSave, saving }: {
+  open: boolean; onOpenChange: (v: boolean) => void;
+  plan: any | null; onSave: (p: any) => void; saving: boolean;
+}) {
+  const [name, setName] = useState(plan?.name ?? "");
+  const [slug, setSlug] = useState(plan?.slug ?? "");
+  const [days, setDays] = useState<number>(plan?.days ?? 30);
+  const [priceReais, setPriceReais] = useState<string>(((plan?.price_cents ?? 0) / 100).toFixed(2));
+  const [active, setActive] = useState<boolean>(plan?.active ?? true);
+  const [sortOrder, setSortOrder] = useState<number>(plan?.sort_order ?? 100);
+  const [description, setDescription] = useState<string>(plan?.description ?? "");
+
+  // Reset ao abrir
+  useState(() => {
+    setName(plan?.name ?? ""); setSlug(plan?.slug ?? "");
+    setDays(plan?.days ?? 30);
+    setPriceReais(((plan?.price_cents ?? 0) / 100).toFixed(2));
+    setActive(plan?.active ?? true);
+    setSortOrder(plan?.sort_order ?? 100);
+    setDescription(plan?.description ?? "");
+  });
+
+  function submit() {
+    const cents = Math.round(parseFloat(priceReais.replace(",", ".")) * 100);
+    if (!name.trim() || !slug.trim() || !days || Number.isNaN(cents)) {
+      toast.error("Preencha nome, slug, dias e preço"); return;
+    }
+    onSave({
+      id: plan?.id, name: name.trim(), slug: slug.trim().toLowerCase(),
+      days: Math.floor(days), price_cents: cents, active,
+      sort_order: sortOrder, description: description.trim() || null,
+    });
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{plan?.id ? "Editar plano" : "Novo plano"}</DialogTitle>
+        </DialogHeader>
+        <div className="grid gap-3">
+          <div className="grid grid-cols-2 gap-2">
+            <div><Label>Nome</Label><Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Mensal" /></div>
+            <div><Label>Slug</Label><Input value={slug} onChange={(e) => setSlug(e.target.value)} placeholder="mensal" /></div>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            <div><Label>Dias</Label><Input type="number" min={1} value={days} onChange={(e) => setDays(Number(e.target.value) || 0)} /></div>
+            <div><Label>Preço (R$)</Label><Input value={priceReais} onChange={(e) => setPriceReais(e.target.value)} placeholder="19,90" /></div>
+            <div><Label>Ordem</Label><Input type="number" value={sortOrder} onChange={(e) => setSortOrder(Number(e.target.value) || 0)} /></div>
+          </div>
+          <div><Label>Descrição</Label><Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Acesso premium por 30 dias" /></div>
+          <div className="flex items-center justify-between border rounded p-2">
+            <div>
+              <div className="text-sm font-medium">Plano ativo</div>
+              <div className="text-xs text-muted-foreground">Se desativado, não aparece no checkout.</div>
+            </div>
+            <Switch checked={active} onCheckedChange={setActive} />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="ghost" onClick={() => onOpenChange(false)}>Cancelar</Button>
+          <Button onClick={submit} disabled={saving}>
+            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : "Salvar"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
@@ -118,12 +222,18 @@ function LicensesTab() {
   const listFn = useServerFn(listLicenseCodes);
   const genFn = useServerFn(generateLicenseCodes);
   const revokeFn = useServerFn(revokeLicenseCode);
+  const reactivateFn = useServerFn(reactivateLicenseCode);
+  const deleteFn = useServerFn(deleteLicenseCode);
+  const updateExpiryFn = useServerFn(updateLicenseCodeExpiry);
+  const reissueFn = useServerFn(reissueLicenseCode);
   const { confirm } = useConfirm();
   const [status, setStatus] = useState<string>("all");
   const [search, setSearch] = useState("");
   const [planId, setPlanId] = useState<string>("");
   const [qty, setQty] = useState(10);
   const [expDays, setExpDays] = useState(180);
+  const [expiryEdit, setExpiryEdit] = useState<{ id: string; code: string; iso: string } | null>(null);
+  const [reissueDlg, setReissueDlg] = useState<{ id: string; code: string; days: number; notify: boolean } | null>(null);
 
   const { data: plans } = useQuery({ queryKey: ["license-plans"], queryFn: () => fetchPlans() });
   const { data: codes, isLoading } = useQuery({
@@ -131,11 +241,13 @@ function LicensesTab() {
     queryFn: () => listFn({ data: { status: status === "all" ? undefined : status, search, limit: 200 } }),
   });
 
+  const invalidate = () => qc.invalidateQueries({ queryKey: ["license-codes"] });
+
   const generate = useMutation({
     mutationFn: async () => genFn({ data: { planId, quantity: qty, expiresInDays: expDays } }),
     onSuccess: (r) => {
       toast.success(`${r.codes.length} códigos gerados`);
-      qc.invalidateQueries({ queryKey: ["license-codes"] });
+      invalidate();
       qc.invalidateQueries({ queryKey: ["admin-metrics"] });
     },
     onError: (e) => toast.error(e instanceof Error ? e.message : "Falha"),
@@ -143,10 +255,32 @@ function LicensesTab() {
 
   const revoke = useMutation({
     mutationFn: async (id: string) => revokeFn({ data: { id } }),
-    onSuccess: () => {
-      toast.success("Código revogado");
-      qc.invalidateQueries({ queryKey: ["license-codes"] });
+    onSuccess: () => { toast.success("Código revogado"); invalidate(); },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Falha"),
+  });
+  const reactivate = useMutation({
+    mutationFn: async (v: { id: string; addDays: number }) => reactivateFn({ data: v }),
+    onSuccess: () => { toast.success("Código reativado"); invalidate(); },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Falha"),
+  });
+  const del = useMutation({
+    mutationFn: async (id: string) => deleteFn({ data: { id } }),
+    onSuccess: () => { toast.success("Código excluído permanentemente"); invalidate(); qc.invalidateQueries({ queryKey: ["admin-metrics"] }); },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Falha"),
+  });
+  const updateExpiry = useMutation({
+    mutationFn: async (v: { id: string; expiresAt: string }) => updateExpiryFn({ data: v }),
+    onSuccess: () => { toast.success("Validade atualizada"); setExpiryEdit(null); invalidate(); },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Falha"),
+  });
+  const reissue = useMutation({
+    mutationFn: async (v: { id: string; expiresInDays: number; notifyBuyer: boolean }) => reissueFn({ data: v }),
+    onSuccess: (r) => {
+      toast.success(`Novo código: ${r.newCode}`, { duration: 15000 });
+      setReissueDlg(null);
+      invalidate();
     },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Falha"),
   });
 
   return (
@@ -219,29 +353,60 @@ function LicensesTab() {
                 </tr>
               </thead>
               <tbody>
-                {(codes ?? []).map((c: any) => (
-                  <tr key={c.id} className="border-b hover:bg-muted/40">
-                    <td className="py-2 px-2 font-mono">{c.code}</td>
-                    <td className="py-2 px-2">{brl(c.price_cents)}</td>
-                    <td className="py-2 px-2">
-                      <Badge variant={c.status === "paid" ? "default" : "secondary"}>{c.status}</Badge>
-                    </td>
-                    <td className="py-2 px-2 text-xs">{new Date(c.expires_at).toLocaleDateString("pt-BR")}</td>
-                    <td className="py-2 px-2 flex gap-1">
-                      <Button size="sm" variant="ghost" onClick={() => {
-                        navigator.clipboard.writeText(c.code);
-                        toast.success("Código copiado");
-                      }}><Copy className="w-3.5 h-3.5" /></Button>
-                      {c.status !== "redeemed" && c.status !== "revoked" && (
-                        <Button size="sm" variant="ghost" onClick={async () => {
-                          if (await confirm({ title: "Revogar código?", description: c.code, tone: "danger" })) {
-                            revoke.mutate(c.id);
-                          }
-                        }}>Revogar</Button>
-                      )}
-                    </td>
-                  </tr>
-                ))}
+                {(codes ?? []).map((c: any) => {
+                  const isRedeemed = c.status === "redeemed";
+                  const isRevoked = c.status === "revoked";
+                  return (
+                    <tr key={c.id} className="border-b hover:bg-muted/40">
+                      <td className="py-2 px-2 font-mono">{c.code}</td>
+                      <td className="py-2 px-2">{brl(c.price_cents)}</td>
+                      <td className="py-2 px-2">
+                        <Badge variant={c.status === "paid" ? "default" : "secondary"}>{c.status}</Badge>
+                      </td>
+                      <td className="py-2 px-2 text-xs">{new Date(c.expires_at).toLocaleDateString("pt-BR")}</td>
+                      <td className="py-2 px-2 flex flex-wrap gap-1">
+                        <Button size="sm" variant="ghost" title="Copiar" onClick={() => {
+                          navigator.clipboard.writeText(c.code);
+                          toast.success("Código copiado");
+                        }}><Copy className="w-3.5 h-3.5" /></Button>
+                        <Button size="sm" variant="ghost" title="Editar validade" onClick={() =>
+                          setExpiryEdit({ id: c.id, code: c.code, iso: c.expires_at?.slice(0, 10) ?? "" })
+                        }><CalendarClock className="w-3.5 h-3.5" /></Button>
+                        {!isRedeemed && (
+                          <Button size="sm" variant="ghost" title="Reemitir código" onClick={() =>
+                            setReissueDlg({ id: c.id, code: c.code, days: 180, notify: true })
+                          }><Send className="w-3.5 h-3.5" /></Button>
+                        )}
+                        {isRevoked && (
+                          <Button size="sm" variant="ghost" title="Reativar" onClick={async () => {
+                            if (await confirm({ title: "Reativar código?", description: `${c.code} — volta ao status disponível.`, tone: "warning" })) {
+                              reactivate.mutate({ id: c.id, addDays: 0 });
+                            }
+                          }}><RotateCcw className="w-3.5 h-3.5" /></Button>
+                        )}
+                        {!isRedeemed && !isRevoked && (
+                          <Button size="sm" variant="ghost" title="Revogar" onClick={async () => {
+                            if (await confirm({ title: "Revogar código?", description: c.code, tone: "danger" })) {
+                              revoke.mutate(c.id);
+                            }
+                          }}>Revogar</Button>
+                        )}
+                        {!isRedeemed && (
+                          <Button size="sm" variant="ghost" title="Excluir permanentemente" onClick={async () => {
+                            if (await confirm({
+                              title: "Excluir código permanentemente?",
+                              description: `${c.code} será removido do banco. Esta ação não pode ser desfeita.`,
+                              tone: "danger",
+                              confirmLabel: "Excluir",
+                            })) {
+                              del.mutate(c.id);
+                            }
+                          }}><Trash2 className="w-3.5 h-3.5 text-destructive" /></Button>
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })}
                 {(codes ?? []).length === 0 && (
                   <tr><td colSpan={5} className="py-6 text-center text-muted-foreground">Nenhum código encontrado</td></tr>
                 )}
@@ -250,9 +415,78 @@ function LicensesTab() {
           </div>
         )}
       </Card>
+
+      {/* Diálogo: editar validade */}
+      <Dialog open={!!expiryEdit} onOpenChange={(v) => !v && setExpiryEdit(null)}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Editar validade</DialogTitle></DialogHeader>
+          {expiryEdit && (
+            <div className="space-y-3">
+              <div className="text-xs text-muted-foreground">Código: <span className="font-mono">{expiryEdit.code}</span></div>
+              <div>
+                <Label>Nova data de expiração</Label>
+                <Input
+                  type="date"
+                  value={expiryEdit.iso}
+                  onChange={(e) => setExpiryEdit({ ...expiryEdit, iso: e.target.value })}
+                />
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setExpiryEdit(null)}>Cancelar</Button>
+            <Button
+              disabled={!expiryEdit?.iso || updateExpiry.isPending}
+              onClick={() => expiryEdit && updateExpiry.mutate({
+                id: expiryEdit.id,
+                expiresAt: new Date(expiryEdit.iso + "T23:59:59Z").toISOString(),
+              })}
+            >{updateExpiry.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Salvar"}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Diálogo: reemitir código */}
+      <Dialog open={!!reissueDlg} onOpenChange={(v) => !v && setReissueDlg(null)}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Reemitir código</DialogTitle></DialogHeader>
+          {reissueDlg && (
+            <div className="space-y-3">
+              <p className="text-xs text-muted-foreground">
+                Um novo código será gerado para o mesmo plano.
+                O código antigo <span className="font-mono">{reissueDlg.code}</span> será revogado.
+                Se o comprador estiver identificado, ele receberá o novo código como notificação no app.
+              </p>
+              <div>
+                <Label>Validade do novo código (dias)</Label>
+                <Input
+                  type="number" min={1} max={730}
+                  value={reissueDlg.days}
+                  onChange={(e) => setReissueDlg({ ...reissueDlg, days: Number(e.target.value) || 180 })}
+                />
+              </div>
+              <div className="flex items-center justify-between border rounded p-2">
+                <div className="text-sm">Notificar comprador no app</div>
+                <Switch checked={reissueDlg.notify} onCheckedChange={(v) => setReissueDlg({ ...reissueDlg, notify: v })} />
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setReissueDlg(null)}>Cancelar</Button>
+            <Button
+              disabled={reissue.isPending}
+              onClick={() => reissueDlg && reissue.mutate({
+                id: reissueDlg.id, expiresInDays: reissueDlg.days, notifyBuyer: reissueDlg.notify,
+              })}
+            >{reissue.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : "Reemitir"}</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
+
+
 
 function AccountsTab() {
   const qc = useQueryClient();
