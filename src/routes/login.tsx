@@ -1057,3 +1057,100 @@ function Field({
   );
 }
 
+
+/** 6-digit PIN input with individual boxes; syncs to a single string value. */
+function PinField({
+  value,
+  onChange,
+  hasError,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  hasError?: boolean;
+}) {
+  const refs = useRef<Array<HTMLInputElement | null>>([]);
+  const digits = value.padEnd(6, " ").slice(0, 6).split("");
+
+  function setAt(i: number, d: string) {
+    const clean = d.replace(/\D/g, "").slice(-1);
+    const next = value.split("");
+    next[i] = clean;
+    // trim trailing empties
+    const merged = next.slice(0, 6).join("").slice(0, 6);
+    onChange(merged);
+    if (clean && i < 5) refs.current[i + 1]?.focus();
+  }
+
+  function handleKey(i: number, e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Backspace" && !digits[i].trim() && i > 0) {
+      refs.current[i - 1]?.focus();
+    } else if (e.key === "ArrowLeft" && i > 0) {
+      refs.current[i - 1]?.focus();
+    } else if (e.key === "ArrowRight" && i < 5) {
+      refs.current[i + 1]?.focus();
+    }
+  }
+
+  function handlePaste(e: React.ClipboardEvent<HTMLInputElement>) {
+    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    if (!pasted) return;
+    e.preventDefault();
+    onChange(pasted);
+    const focusIdx = Math.min(pasted.length, 5);
+    refs.current[focusIdx]?.focus();
+  }
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-end justify-between">
+        <label
+          className="text-[10.5px] font-bold uppercase tracking-[0.2em]"
+          style={{ color: PC_EMERALD }}
+        >
+          PIN de 6 dígitos
+        </label>
+      </div>
+      <div className="grid grid-cols-6 gap-2">
+        {digits.map((d, i) => (
+          <input
+            key={i}
+            ref={(el) => {
+              refs.current[i] = el;
+            }}
+            type="password"
+            inputMode="numeric"
+            autoComplete="one-time-code"
+            maxLength={1}
+            value={d.trim()}
+            onChange={(e) => setAt(i, e.target.value)}
+            onKeyDown={(e) => handleKey(i, e)}
+            onPaste={handlePaste}
+            aria-label={`Dígito ${i + 1} do PIN`}
+            className="h-12 w-full rounded-lg border-2 bg-[#faf7ec] text-center text-xl font-bold outline-none transition"
+            style={{
+              borderColor: hasError
+                ? "#dc2626"
+                : d.trim()
+                  ? PC_GOLD
+                  : "rgba(6,78,59,0.14)",
+              color: PC_EMERALD_DEEP,
+              fontFamily: PC_DISPLAY,
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = PC_GOLD;
+              e.currentTarget.style.boxShadow = `0 0 0 3px ${PC_GOLD}33`;
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.boxShadow = "none";
+              e.currentTarget.style.borderColor = hasError
+                ? "#dc2626"
+                : d.trim()
+                  ? PC_GOLD
+                  : "rgba(6,78,59,0.14)";
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
