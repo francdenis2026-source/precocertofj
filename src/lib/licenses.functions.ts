@@ -187,7 +187,7 @@ export const updateLicenseCodeExpiry = createServerFn({ method: "POST" })
     const { data: cur } = await supabaseAdmin
       .from("license_codes").select("id, status, expires_at").eq("id", data.id).maybeSingle();
     if (!cur) throw new Error("Código não encontrado");
-    const patch: Record<string, unknown> = { expires_at: iso.toISOString() };
+    const patch: { expires_at: string; status?: string } = { expires_at: iso.toISOString() };
     // Se estava expirado e nova data é no futuro, volta para 'paid'
     if (cur.status === "expired" && iso.getTime() > Date.now()) patch.status = "paid";
     const { error } = await supabaseAdmin.from("license_codes").update(patch).eq("id", data.id);
