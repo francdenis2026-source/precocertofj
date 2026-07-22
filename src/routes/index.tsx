@@ -566,12 +566,22 @@ function HomePage() {
                     className="flex items-center justify-between gap-3 px-5 py-3.5 transition-colors hover:bg-[color:var(--nt-paper)]"
                   >
                     <div className="flex min-w-0 items-center gap-3">
-                      <div
-                        className={`${sans} grid h-10 w-10 shrink-0 place-items-center rounded-full text-[13px] font-bold`}
-                        style={{ background: `${PALETTE.navy}0d`, color: PALETTE.navy }}
-                      >
-                        {initials(s.name ?? s.label ?? "MC")}
-                      </div>
+                      {s.logoUrl ? (
+                        <img
+                          src={s.logoUrl}
+                          alt={s.name ?? "logo"}
+                          className="h-10 w-10 shrink-0 rounded-full object-cover ring-1"
+                          style={{ background: "#fff", boxShadow: `inset 0 0 0 1px ${PALETTE.line}` }}
+                          loading="lazy"
+                        />
+                      ) : (
+                        <div
+                          className={`${sans} grid h-10 w-10 shrink-0 place-items-center rounded-full text-[13px] font-bold`}
+                          style={{ background: `${PALETTE.navy}0d`, color: PALETTE.navy }}
+                        >
+                          {initials(s.name ?? s.label ?? "MC")}
+                        </div>
+                      )}
                       <div className="min-w-0">
                         <div className="truncate text-[14px] font-semibold" style={{ color: PALETTE.ink }}>
                           {s.name ?? s.label}
