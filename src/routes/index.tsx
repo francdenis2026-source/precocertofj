@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+import heroMarket from "@/assets/hero-market.jpg";
 import {
   Search,
   MapPin,
@@ -14,6 +15,7 @@ import {
   Sparkles,
   ArrowRight,
 } from "lucide-react";
+
 import {
   listPublicStores,
   getPlatformStats,
