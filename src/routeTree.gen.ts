@@ -26,6 +26,8 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ListaRouteImport } from './routes/lista'
 import { Route as HistoricoRouteImport } from './routes/historico'
 import { Route as FinancasRouteImport } from './routes/financas'
+import { Route as EstabelecimentosRouteImport } from './routes/estabelecimentos'
+import { Route as EconomiaRouteImport } from './routes/economia'
 import { Route as ComprarLicencaRouteImport } from './routes/comprar-licenca'
 import { Route as CompararRouteImport } from './routes/comparar'
 import { Route as ComparadorRouteImport } from './routes/comparador'
@@ -71,6 +73,7 @@ import { Route as AdminConsistenciaRouteImport } from './routes/admin_.consisten
 import { Route as AdminCoberturaRouteImport } from './routes/admin_.cobertura'
 import { Route as AdminCategorizacaoRouteImport } from './routes/admin_.categorizacao'
 import { Route as AdminCatalogoRouteImport } from './routes/admin_.catalogo'
+import { Route as AdminCadastroFotoRouteImport } from './routes/admin_.cadastro-foto'
 import { Route as AdminAuditoriaRouteImport } from './routes/admin_.auditoria'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin_.analytics'
 import { Route as AdminGestaoRouteImport } from './routes/admin/gestao'
@@ -166,6 +169,16 @@ const HistoricoRoute = HistoricoRouteImport.update({
 const FinancasRoute = FinancasRouteImport.update({
   id: '/financas',
   path: '/financas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EstabelecimentosRoute = EstabelecimentosRouteImport.update({
+  id: '/estabelecimentos',
+  path: '/estabelecimentos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EconomiaRoute = EconomiaRouteImport.update({
+  id: '/economia',
+  path: '/economia',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComprarLicencaRoute = ComprarLicencaRouteImport.update({
@@ -393,6 +406,11 @@ const AdminCatalogoRoute = AdminCatalogoRouteImport.update({
   path: '/admin/catalogo',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminCadastroFotoRoute = AdminCadastroFotoRouteImport.update({
+  id: '/admin_/cadastro-foto',
+  path: '/admin/cadastro-foto',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminAuditoriaRoute = AdminAuditoriaRouteImport.update({
   id: '/admin_/auditoria',
   path: '/admin/auditoria',
@@ -470,6 +488,8 @@ export interface FileRoutesByFullPath {
   '/comparador': typeof ComparadorRoute
   '/comparar': typeof CompararRoute
   '/comprar-licenca': typeof ComprarLicencaRoute
+  '/economia': typeof EconomiaRoute
+  '/estabelecimentos': typeof EstabelecimentosRoute
   '/financas': typeof FinancasRoute
   '/historico': typeof HistoricoRouteWithChildren
   '/lista': typeof ListaRoute
@@ -490,6 +510,7 @@ export interface FileRoutesByFullPath {
   '/admin/gestao': typeof AdminGestaoRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
+  '/admin/cadastro-foto': typeof AdminCadastroFotoRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorizacao': typeof AdminCategorizacaoRoute
   '/admin/cobertura': typeof AdminCoberturaRouteWithChildren
@@ -545,6 +566,8 @@ export interface FileRoutesByTo {
   '/comparador': typeof ComparadorRoute
   '/comparar': typeof CompararRoute
   '/comprar-licenca': typeof ComprarLicencaRoute
+  '/economia': typeof EconomiaRoute
+  '/estabelecimentos': typeof EstabelecimentosRoute
   '/financas': typeof FinancasRoute
   '/historico': typeof HistoricoRouteWithChildren
   '/lista': typeof ListaRoute
@@ -565,6 +588,7 @@ export interface FileRoutesByTo {
   '/admin/gestao': typeof AdminGestaoRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
+  '/admin/cadastro-foto': typeof AdminCadastroFotoRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorizacao': typeof AdminCategorizacaoRoute
   '/admin/cobertura': typeof AdminCoberturaRouteWithChildren
@@ -621,6 +645,8 @@ export interface FileRoutesById {
   '/comparador': typeof ComparadorRoute
   '/comparar': typeof CompararRoute
   '/comprar-licenca': typeof ComprarLicencaRoute
+  '/economia': typeof EconomiaRoute
+  '/estabelecimentos': typeof EstabelecimentosRoute
   '/financas': typeof FinancasRoute
   '/historico': typeof HistoricoRouteWithChildren
   '/lista': typeof ListaRoute
@@ -641,6 +667,7 @@ export interface FileRoutesById {
   '/admin/gestao': typeof AdminGestaoRoute
   '/admin_/analytics': typeof AdminAnalyticsRoute
   '/admin_/auditoria': typeof AdminAuditoriaRoute
+  '/admin_/cadastro-foto': typeof AdminCadastroFotoRoute
   '/admin_/catalogo': typeof AdminCatalogoRoute
   '/admin_/categorizacao': typeof AdminCategorizacaoRoute
   '/admin_/cobertura': typeof AdminCoberturaRouteWithChildren
@@ -698,6 +725,8 @@ export interface FileRouteTypes {
     | '/comparador'
     | '/comparar'
     | '/comprar-licenca'
+    | '/economia'
+    | '/estabelecimentos'
     | '/financas'
     | '/historico'
     | '/lista'
@@ -718,6 +747,7 @@ export interface FileRouteTypes {
     | '/admin/gestao'
     | '/admin/analytics'
     | '/admin/auditoria'
+    | '/admin/cadastro-foto'
     | '/admin/catalogo'
     | '/admin/categorizacao'
     | '/admin/cobertura'
@@ -773,6 +803,8 @@ export interface FileRouteTypes {
     | '/comparador'
     | '/comparar'
     | '/comprar-licenca'
+    | '/economia'
+    | '/estabelecimentos'
     | '/financas'
     | '/historico'
     | '/lista'
@@ -793,6 +825,7 @@ export interface FileRouteTypes {
     | '/admin/gestao'
     | '/admin/analytics'
     | '/admin/auditoria'
+    | '/admin/cadastro-foto'
     | '/admin/catalogo'
     | '/admin/categorizacao'
     | '/admin/cobertura'
@@ -848,6 +881,8 @@ export interface FileRouteTypes {
     | '/comparador'
     | '/comparar'
     | '/comprar-licenca'
+    | '/economia'
+    | '/estabelecimentos'
     | '/financas'
     | '/historico'
     | '/lista'
@@ -868,6 +903,7 @@ export interface FileRouteTypes {
     | '/admin/gestao'
     | '/admin_/analytics'
     | '/admin_/auditoria'
+    | '/admin_/cadastro-foto'
     | '/admin_/catalogo'
     | '/admin_/categorizacao'
     | '/admin_/cobertura'
@@ -924,6 +960,8 @@ export interface RootRouteChildren {
   ComparadorRoute: typeof ComparadorRoute
   CompararRoute: typeof CompararRoute
   ComprarLicencaRoute: typeof ComprarLicencaRoute
+  EconomiaRoute: typeof EconomiaRoute
+  EstabelecimentosRoute: typeof EstabelecimentosRoute
   FinancasRoute: typeof FinancasRoute
   HistoricoRoute: typeof HistoricoRouteWithChildren
   ListaRoute: typeof ListaRoute
@@ -943,6 +981,7 @@ export interface RootRouteChildren {
   SemPermissaoRoute: typeof SemPermissaoRoute
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
   AdminAuditoriaRoute: typeof AdminAuditoriaRoute
+  AdminCadastroFotoRoute: typeof AdminCadastroFotoRoute
   AdminCatalogoRoute: typeof AdminCatalogoRoute
   AdminCategorizacaoRoute: typeof AdminCategorizacaoRoute
   AdminCoberturaRoute: typeof AdminCoberturaRouteWithChildren
@@ -1096,6 +1135,20 @@ declare module '@tanstack/react-router' {
       path: '/financas'
       fullPath: '/financas'
       preLoaderRoute: typeof FinancasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/estabelecimentos': {
+      id: '/estabelecimentos'
+      path: '/estabelecimentos'
+      fullPath: '/estabelecimentos'
+      preLoaderRoute: typeof EstabelecimentosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/economia': {
+      id: '/economia'
+      path: '/economia'
+      fullPath: '/economia'
+      preLoaderRoute: typeof EconomiaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/comprar-licenca': {
@@ -1413,6 +1466,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCatalogoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin_/cadastro-foto': {
+      id: '/admin_/cadastro-foto'
+      path: '/admin/cadastro-foto'
+      fullPath: '/admin/cadastro-foto'
+      preLoaderRoute: typeof AdminCadastroFotoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin_/auditoria': {
       id: '/admin_/auditoria'
       path: '/admin/auditoria'
@@ -1559,6 +1619,8 @@ const rootRouteChildren: RootRouteChildren = {
   ComparadorRoute: ComparadorRoute,
   CompararRoute: CompararRoute,
   ComprarLicencaRoute: ComprarLicencaRoute,
+  EconomiaRoute: EconomiaRoute,
+  EstabelecimentosRoute: EstabelecimentosRoute,
   FinancasRoute: FinancasRoute,
   HistoricoRoute: HistoricoRouteWithChildren,
   ListaRoute: ListaRoute,
@@ -1578,6 +1640,7 @@ const rootRouteChildren: RootRouteChildren = {
   SemPermissaoRoute: SemPermissaoRoute,
   AdminAnalyticsRoute: AdminAnalyticsRoute,
   AdminAuditoriaRoute: AdminAuditoriaRoute,
+  AdminCadastroFotoRoute: AdminCadastroFotoRoute,
   AdminCatalogoRoute: AdminCatalogoRoute,
   AdminCategorizacaoRoute: AdminCategorizacaoRoute,
   AdminCoberturaRoute: AdminCoberturaRouteWithChildren,

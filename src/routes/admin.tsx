@@ -261,6 +261,7 @@ function AdminPage() {
             { to: "/admin/consistencia", label: "Consistência", icon: AlertTriangle },
             { to: "/admin/cobertura", label: "Cobertura por loja", icon: Store },
             { to: "/admin/lote-inserir", label: "Scan Inteligente", icon: Plus },
+            { to: "/admin/cadastro-foto", label: "Cadastro por foto (IA)", icon: Sparkles },
             { to: "/admin/historico-precos", label: "Histórico de preços", icon: Gauge },
             { to: "/admin/analytics", label: "Analytics", icon: Gauge },
           ].map((item) => (
