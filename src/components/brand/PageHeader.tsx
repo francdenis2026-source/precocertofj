@@ -106,7 +106,7 @@ export function PageHeader({
               )}
               <h1
                 className={cn(
-                  "mt-1 truncate text-[22px] font-bold leading-tight tracking-tight text-foreground md:text-[26px]",
+                  "mt-1 text-[22px] font-bold leading-tight tracking-tight text-foreground md:text-[26px]",
                   editorial &&
                     "font-normal font-['Instrument_Serif',ui-serif,serif] text-[28px] tracking-normal md:text-[34px]",
                 )}
@@ -118,6 +118,7 @@ export function PageHeader({
                   {description}
                 </p>
               )}
+              {meta && <div className="mt-2 flex flex-wrap items-center gap-2">{meta}</div>}
             </div>
           </div>
         </div>
