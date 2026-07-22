@@ -362,35 +362,43 @@ function MelhoresPrecosPage() {
       return true;
     });
     return [...filtered].sort((a, b) => {
-      if (sortBy === "price") return Number(a.min_price) - Number(b.min_price);
-      if (sortBy === "ticket") return Number(a.avg_price) - Number(b.avg_price);
+      const priceA = Number(a.min_price);
+      const priceB = Number(b.min_price);
+      const avgA = Number(a.avg_price);
+      const avgB = Number(b.avg_price);
+      const savA = Number(a.savings_pct);
+      const savB = Number(b.savings_pct);
 
-      if (sortBy === "unit") {
-        const ua = computeUnitPrice(Number(a.min_price), a.display_name, {
+      let primary = 0;
+      if (sortBy === "price") primary = priceA - priceB;
+      else if (sortBy === "ticket") primary = avgA - avgB;
+      else if (sortBy === "unit") {
+        const ua = computeUnitPrice(priceA, a.display_name, {
           sizeValue: a.size_value,
           sizeUnit: a.size_unit,
         });
-        const ub = computeUnitPrice(Number(b.min_price), b.display_name, {
+        const ub = computeUnitPrice(priceB, b.display_name, {
           sizeValue: b.size_value,
           sizeUnit: b.size_unit,
         });
-        // items sem tamanho vão para o fim
-        if (ua && ub) return ua.perBase - ub.perBase;
-        if (ua) return -1;
-        if (ub) return 1;
-        return Number(a.min_price) - Number(b.min_price);
+        if (ua && ub) primary = ua.perBase - ub.perBase;
+        else if (ua) primary = -1;
+        else if (ub) primary = 1;
+        else primary = priceA - priceB;
+      } else if (sortBy === "trend") {
+        const spreadA = priceA > 0 ? (Number(a.max_price) - priceA) / priceA : 0;
+        const spreadB = priceB > 0 ? (Number(b.max_price) - priceB) / priceB : 0;
+        primary = spreadB - spreadA;
+      } else {
+        primary = savB - savA;
       }
-      if (sortBy === "trend") {
-        const spreadA = Number(a.min_price) > 0
-          ? (Number(a.max_price) - Number(a.min_price)) / Number(a.min_price)
-          : 0;
-        const spreadB = Number(b.min_price) > 0
-          ? (Number(b.max_price) - Number(b.min_price)) / Number(b.min_price)
-          : 0;
-        return spreadB - spreadA;
-      }
-      return Number(b.savings_pct) - Number(a.savings_pct);
+      if (primary !== 0) return primary;
+      // Desempates: menor preço → maior economia % → alfabético
+      if (priceA !== priceB) return priceA - priceB;
+      if (savA !== savB) return savB - savA;
+      return a.display_name.localeCompare(b.display_name, "pt-BR");
     });
+
   }, [allRows, activeCategory, activeType, sortBy, minStores, minPrice, maxPrice, qNorm, estabsMap]);
 
   const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
@@ -1053,7 +1061,29 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
             sizeUnit={row.size_unit}
           />
         </div>
+        {/* Métricas de ordenação — visíveis em todos os cards */}
+        <dl className="mt-1.5 grid grid-cols-3 gap-1 border-t border-accent/15 pt-1.5 font-mono text-[8.5px] uppercase tracking-[0.12em] text-muted-foreground">
+          <div className="min-w-0">
+            <dt className="truncate">Menor</dt>
+            <dd className="num truncate font-display text-[10px] font-bold not-italic tabular-nums text-primary">
+              {formatBRL(bestPrice)}
+            </dd>
+          </div>
+          <div className="min-w-0">
+            <dt className="truncate">Ticket médio</dt>
+            <dd className="num truncate font-display text-[10px] font-semibold not-italic tabular-nums text-foreground">
+              {avgPrice > 0 ? formatBRL(avgPrice) : "—"}
+            </dd>
+          </div>
+          <div className="min-w-0">
+            <dt className="truncate">Economia</dt>
+            <dd className="num truncate font-display text-[10px] font-bold not-italic tabular-nums text-savings">
+              {isMulti ? `−${Number(row.savings_pct).toFixed(1)}%` : "—"}
+            </dd>
+          </div>
+        </dl>
       </div>
+
 
       {/* Store list — sempre 2 slots */}
       <ul className="flex-1 divide-y divide-accent/15">
