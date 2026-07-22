@@ -1061,7 +1061,29 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
             sizeUnit={row.size_unit}
           />
         </div>
+        {/* Métricas de ordenação — visíveis em todos os cards */}
+        <dl className="mt-1.5 grid grid-cols-3 gap-1 border-t border-accent/15 pt-1.5 font-mono text-[8.5px] uppercase tracking-[0.12em] text-muted-foreground">
+          <div className="min-w-0">
+            <dt className="truncate">Menor</dt>
+            <dd className="num truncate font-display text-[10px] font-bold not-italic tabular-nums text-primary">
+              {formatBRL(bestPrice)}
+            </dd>
+          </div>
+          <div className="min-w-0">
+            <dt className="truncate">Ticket médio</dt>
+            <dd className="num truncate font-display text-[10px] font-semibold not-italic tabular-nums text-foreground">
+              {avgPrice > 0 ? formatBRL(avgPrice) : "—"}
+            </dd>
+          </div>
+          <div className="min-w-0">
+            <dt className="truncate">Economia</dt>
+            <dd className="num truncate font-display text-[10px] font-bold not-italic tabular-nums text-savings">
+              {isMulti ? `−${Number(row.savings_pct).toFixed(1)}%` : "—"}
+            </dd>
+          </div>
+        </dl>
       </div>
+
 
       {/* Store list — sempre 2 slots */}
       <ul className="flex-1 divide-y divide-accent/15">
