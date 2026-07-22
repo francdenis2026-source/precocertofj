@@ -39,6 +39,7 @@ import {
   MoreHorizontal,
 } from "lucide-react";
 import { DataTable, type DataTableColumn } from "@/components/data/DataTable";
+import { useSession } from "@/hooks/useSession";
 import {
   Sheet,
   SheetContent,
