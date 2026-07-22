@@ -193,6 +193,7 @@ function MelhoresPrecosPage() {
   const search = Route.useSearch();
   const navigate = useNavigate({ from: "/melhores-precos" });
   const activeCategory = search.cat || null;
+  const activeType = search.type || null;
   const sortBy: "savings" | "price" | "trend" | "unit" =
     search.sort === "price"
       ? "price"
@@ -208,8 +209,9 @@ function MelhoresPrecosPage() {
   const page = Math.max(1, search.page || 1);
 
   const setSearch = (
-    patch: Partial<{ cat: string; sort: string; min: number; max: number; stores: number; q: string; page: number }>,
+    patch: Partial<{ cat: string; type: string; sort: string; min: number; max: number; stores: number; q: string; page: number }>,
   ) => {
+
     navigate({
       search: (prev: Record<string, unknown>) => {
         const next = { ...prev, ...patch };
