@@ -198,14 +198,17 @@ function MelhoresPrecosPage() {
   const navigate = useNavigate({ from: "/melhores-precos" });
   const activeCategory = search.cat || null;
   const activeType = search.type || null;
-  const sortBy: "savings" | "price" | "trend" | "unit" =
+  const sortBy: "savings" | "price" | "trend" | "unit" | "ticket" =
     search.sort === "price"
       ? "price"
       : search.sort === "trend"
         ? "trend"
         : search.sort === "unit"
           ? "unit"
-          : "savings";
+          : search.sort === "ticket"
+            ? "ticket"
+            : "savings";
+
   const minStores = Math.max(1, search.stores || 1);
   const minPrice = search.min || 0;
   const maxPrice = search.max || 0;
@@ -360,6 +363,8 @@ function MelhoresPrecosPage() {
     });
     return [...filtered].sort((a, b) => {
       if (sortBy === "price") return Number(a.min_price) - Number(b.min_price);
+      if (sortBy === "ticket") return Number(a.avg_price) - Number(b.avg_price);
+
       if (sortBy === "unit") {
         const ua = computeUnitPrice(Number(a.min_price), a.display_name, {
           sizeValue: a.size_value,
@@ -603,7 +608,7 @@ function MelhoresPrecosPage() {
 
           <div className="grid gap-4 border-t border-border px-3.5 py-3 md:grid-cols-3">
             <div>
-              <QuickFilterBar<"savings" | "price" | "trend" | "unit">
+              <QuickFilterBar<"savings" | "price" | "trend" | "unit" | "ticket">
                 label="Ordenar"
                 ariaLabel="Ordenar por"
                 value={sortBy}
@@ -611,10 +616,12 @@ function MelhoresPrecosPage() {
                 options={[
                   { value: "savings", label: "Maior economia %" },
                   { value: "price", label: "Menor preço" },
+                  { value: "ticket", label: "Menor ticket médio" },
                   { value: "unit", label: "Menor R$/kg ou R$/L" },
                   { value: "trend", label: "Maior variação" },
                 ]}
               />
+
             </div>
 
             <div>
