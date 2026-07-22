@@ -1,14 +1,16 @@
 import { createFileRoute, useNavigate, Link, retainSearchParams } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
+import { useServerFn } from "@tanstack/react-start";
+
 import { Nav } from "@/components/brand/Nav";
 import { Footer } from "@/components/brand/Footer";
 import { Breadcrumbs } from "@/components/nav/Breadcrumbs";
 import { supabase } from "@/integrations/supabase/client";
 import { useSignedLogoUrls } from "@/hooks/use-signed-logo-urls";
-import { SlidersHorizontal, PackageSearch, Share2, TrendingDown, Trophy, Store as StoreIcon, ArrowRight, Clock, AlertTriangle, RefreshCw } from "lucide-react";
+import { SlidersHorizontal, PackageSearch, Share2, TrendingDown, Trophy, Store as StoreIcon, ArrowRight, Clock, AlertTriangle, RefreshCw, Search as SearchIcon, ChevronLeft, ChevronRight, Flag, X } from "lucide-react";
 import { toast } from "sonner";
 import { formatRelative } from "@/components/product/TrustIndicator";
 import { shortenStoreName } from "@/lib/store-name";
@@ -25,6 +27,10 @@ import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
 import { computeUnitPrice } from "@/lib/unit-price";
 import { useMyRoles } from "@/hooks/useMyRoles";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
+import { submitPriceReport } from "@/lib/stores-public.functions";
+
+const PAGE_SIZE = 24;
+
 
 
 
@@ -37,13 +43,16 @@ const searchSchema = z.object({
   min: fallback(z.number(), 0).default(0),
   max: fallback(z.number(), 0).default(0),
   stores: fallback(z.number().int(), 1).default(1),
+  q: fallback(z.string(), "").default(""),
+  page: fallback(z.number().int(), 1).default(1),
 });
+
 
 
 export const Route = createFileRoute("/melhores-precos")({
   validateSearch: zodValidator(searchSchema),
   search: {
-    middlewares: [retainSearchParams(["cat", "sort", "min", "max", "stores"])],
+    middlewares: [retainSearchParams(["cat", "sort", "min", "max", "stores", "q", "page"])],
   },
   head: () => ({
     meta: [
@@ -193,10 +202,23 @@ function MelhoresPrecosPage() {
   const minStores = Math.max(1, search.stores || 1);
   const minPrice = search.min || 0;
   const maxPrice = search.max || 0;
+  const q = (search.q || "").trim();
+  const page = Math.max(1, search.page || 1);
 
-  const setSearch = (patch: Partial<{ cat: string; sort: string; min: number; max: number; stores: number }>) => {
-    navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, ...patch }) });
+  const setSearch = (
+    patch: Partial<{ cat: string; sort: string; min: number; max: number; stores: number; q: string; page: number }>,
+  ) => {
+    navigate({
+      search: (prev: Record<string, unknown>) => {
+        const next = { ...prev, ...patch };
+        // Qualquer filtro que muda o conjunto reseta a página, exceto quando a própria mudança é de página.
+        const changingFilter = Object.keys(patch).some((k) => k !== "page");
+        if (changingFilter) next.page = 1;
+        return next;
+      },
+    });
   };
+
 
   const queryClient = useQueryClient();
   const { isAdmin } = useMyRoles();
@@ -209,6 +231,43 @@ function MelhoresPrecosPage() {
     },
     staleTime: 60_000,
   });
+
+  // Locais de todos os mercados ativos — usados para permitir busca por cidade/bairro.
+  const estabsQ = useQuery({
+    queryKey: ["estabs-basics-for-melhores"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("establishments")
+        .select("id, name, city, neighborhood, state")
+        .eq("active", true);
+      if (error) throw error;
+      return (data ?? []) as Array<{
+        id: string;
+        name: string;
+        city: string | null;
+        neighborhood: string | null;
+        state: string | null;
+      }>;
+    },
+    staleTime: 10 * 60_000,
+  });
+
+  const estabsMap = useMemo(() => {
+    const m = new Map<string, { name: string; city: string | null; neighborhood: string | null; state: string | null }>();
+    for (const e of estabsQ.data ?? []) m.set(e.id, e);
+    return m;
+  }, [estabsQ.data]);
+
+  const availableLocations = useMemo(() => {
+    const set = new Set<string>();
+    for (const e of estabsQ.data ?? []) {
+      if (e.city) set.add(e.city);
+      if (e.neighborhood) set.add(e.neighborhood);
+    }
+    return Array.from(set).sort();
+  }, [estabsQ.data]);
+
+
 
   const handleRefresh = async () => {
     try {
@@ -238,6 +297,16 @@ function MelhoresPrecosPage() {
     return { min: Math.floor(lo), max: Math.ceil(hi) };
   }, [allRows]);
 
+  const qNorm = useMemo(
+    () =>
+      q
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim(),
+    [q],
+  );
+
   const rows = useMemo(() => {
     const filtered = allRows.filter((r) => {
       if (activeCategory && r.category !== activeCategory) return false;
@@ -245,6 +314,24 @@ function MelhoresPrecosPage() {
       const p = Number(r.min_price);
       if (minPrice > 0 && p < minPrice) return false;
       if (maxPrice > 0 && p > maxPrice) return false;
+      if (qNorm) {
+        const stores = Array.isArray(r.stores) ? r.stores : [];
+        const hit = stores.some((s) => {
+          const e = estabsMap.get(s.establishment_id);
+          const hay = [
+            s.store_name,
+            e?.city ?? "",
+            e?.neighborhood ?? "",
+            e?.state ?? "",
+          ]
+            .join(" ")
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
+          return hay.includes(qNorm);
+        });
+        if (!hit) return false;
+      }
       return true;
     });
     return [...filtered].sort((a, b) => {
@@ -275,7 +362,14 @@ function MelhoresPrecosPage() {
       }
       return Number(b.savings_pct) - Number(a.savings_pct);
     });
-  }, [allRows, activeCategory, sortBy, minStores, minPrice, maxPrice]);
+  }, [allRows, activeCategory, sortBy, minStores, minPrice, maxPrice, qNorm, estabsMap]);
+
+  const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+  const currentPage = Math.min(page, totalPages);
+  const pagedRows = useMemo(
+    () => rows.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),
+    [rows, currentPage],
+  );
 
   const totalSavings = rows.reduce(
     (acc, r) => acc + (Number(r.avg_price) - Number(r.min_price)),
@@ -288,7 +382,8 @@ function MelhoresPrecosPage() {
   );
 
   const hasFilters =
-    !!activeCategory || minStores > 1 || minPrice > 0 || maxPrice > 0 || sortBy !== "savings";
+    !!activeCategory || minStores > 1 || minPrice > 0 || maxPrice > 0 || sortBy !== "savings" || !!q;
+
 
   return (
     <div className="min-h-screen">
@@ -380,14 +475,55 @@ function MelhoresPrecosPage() {
         </div>
       </section>
 
-      {/* Filtros — categoria + avançados */}
-      <section className="mx-auto max-w-7xl px-6 pt-5">
+      {/* Filtros — categoria + busca por cidade/bairro + avançados */}
+      <section className="mx-auto max-w-7xl px-6 pt-5 space-y-3">
         <CategoryTabs
           active={activeCategory}
           counts={categoryCounts}
           total={allRows.length}
           onChange={(c) => setSearch({ cat: c ?? "" })}
         />
+
+        {/* Busca por cidade / bairro / mercado */}
+        <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center">
+          <div className="relative flex-1">
+            <SearchIcon
+              className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
+              aria-hidden
+            />
+            <input
+              type="search"
+              inputMode="search"
+              autoComplete="off"
+              list="melhores-precos-locations"
+              value={q}
+              onChange={(e) => setSearch({ q: e.target.value })}
+              placeholder="Buscar por cidade, bairro ou mercado"
+              className="w-full rounded-full border border-border bg-background py-2 pl-8 pr-9 text-[12.5px] text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/25"
+              aria-label="Buscar por cidade, bairro ou mercado"
+            />
+            {q && (
+              <button
+                type="button"
+                onClick={() => setSearch({ q: "" })}
+                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground hover:bg-muted"
+                aria-label="Limpar busca"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            )}
+          </div>
+          <datalist id="melhores-precos-locations">
+            {availableLocations.map((loc) => (
+              <option key={loc} value={loc} />
+            ))}
+          </datalist>
+          <p className="shrink-0 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground sm:pl-2">
+            {rows.length} {rows.length === 1 ? "produto" : "produtos"}
+            {q && ` • filtrado por “${q}”`}
+          </p>
+        </div>
+
 
         <details className="group mt-3 rounded-xl border border-border bg-card/40">
           <summary className="flex cursor-pointer list-none items-center gap-2 px-3.5 py-2.5 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground [&::-webkit-details-marker]:hidden">
@@ -508,8 +644,22 @@ function MelhoresPrecosPage() {
         {!isLoading && !error && rows.length === 0 && <EmptyState hasCategory={!!activeCategory} />}
 
         {!isLoading && !error && rows.length > 0 && (
-          <MelhoresList rows={rows} />
+          <>
+            <MelhoresList
+              rows={pagedRows}
+              startIndex={(currentPage - 1) * PAGE_SIZE}
+            />
+            {totalPages > 1 && (
+              <Pagination
+                page={currentPage}
+                totalPages={totalPages}
+                total={rows.length}
+                onChange={(p) => setSearch({ page: p })}
+              />
+            )}
+          </>
         )}
+
       </section>
 
       <Footer />
@@ -517,32 +667,131 @@ function MelhoresPrecosPage() {
   );
 }
 
-function MelhoresList({ rows }: { rows: Comparison[] }) {
+function MelhoresList({ rows, startIndex = 0 }: { rows: Comparison[]; startIndex?: number }) {
   const signedImages = useSignedLogoUrls(useMemo(() => rows.map((r) => r.image_url), [rows]));
   return (
     <>
       <ul className="grid animate-in fade-in gap-2.5 duration-300 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
-        {rows.map((row, idx) => (
-          <li key={row.product_key} className="relative h-full">
-            <TeaserCard
-              id={row.product_key}
-              index={idx}
-              variant="full"
-              reason="Os melhores preços por loja aparecem apenas para contas cadastradas. Crie sua conta grátis (30 dias) para ver o ranking completo."
-              trackEventName="visitor_click_unlock_melhores_precos"
-              trackPayload={{ product_key: row.product_key, rank: idx + 1 }}
-            >
-              <ComparisonCard
-                row={row}
-                rank={idx + 1}
-                imageOverride={row.image_url ? signedImages[row.image_url] : undefined}
-              />
-            </TeaserCard>
-          </li>
-        ))}
+        {rows.map((row, idx) => {
+          const globalIdx = startIndex + idx;
+          return (
+            <li key={row.product_key} className="relative h-full">
+              <TeaserCard
+                id={row.product_key}
+                index={globalIdx}
+                variant="full"
+                reason="Os melhores preços por loja aparecem apenas para contas cadastradas. Crie sua conta grátis (30 dias) para ver o ranking completo."
+                trackEventName="visitor_click_unlock_melhores_precos"
+                trackPayload={{ product_key: row.product_key, rank: globalIdx + 1 }}
+              >
+                <ComparisonCard
+                  row={row}
+                  rank={globalIdx + 1}
+                  imageOverride={row.image_url ? signedImages[row.image_url] : undefined}
+                />
+              </TeaserCard>
+            </li>
+          );
+        })}
       </ul>
       <VisitorFooterCta />
     </>
+  );
+}
+
+function Pagination({
+  page,
+  totalPages,
+  total,
+  onChange,
+}: {
+  page: number;
+  totalPages: number;
+  total: number;
+  onChange: (page: number) => void;
+}) {
+  const canPrev = page > 1;
+  const canNext = page < totalPages;
+  const from = (page - 1) * PAGE_SIZE + 1;
+  const to = Math.min(page * PAGE_SIZE, total);
+  const windowStart = Math.max(1, page - 2);
+  const windowEnd = Math.min(totalPages, windowStart + 4);
+  const pages: number[] = [];
+  for (let i = windowStart; i <= windowEnd; i++) pages.push(i);
+
+  return (
+    <nav
+      role="navigation"
+      aria-label="Paginação"
+      className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card/60 px-4 py-3"
+    >
+      <p className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted-foreground">
+        {from}–{to} de {total}
+      </p>
+      <div className="flex items-center gap-1">
+        <button
+          type="button"
+          onClick={() => canPrev && onChange(page - 1)}
+          disabled={!canPrev}
+          className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-1 text-[11px] font-semibold text-foreground transition hover:border-primary/40 hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+          aria-label="Página anterior"
+        >
+          <ChevronLeft className="h-3 w-3" />
+          Anterior
+        </button>
+        {windowStart > 1 && (
+          <>
+            <PageButton page={1} active={false} onClick={onChange} />
+            {windowStart > 2 && <span className="px-1 text-xs text-muted-foreground">…</span>}
+          </>
+        )}
+        {pages.map((p) => (
+          <PageButton key={p} page={p} active={p === page} onClick={onChange} />
+        ))}
+        {windowEnd < totalPages && (
+          <>
+            {windowEnd < totalPages - 1 && <span className="px-1 text-xs text-muted-foreground">…</span>}
+            <PageButton page={totalPages} active={false} onClick={onChange} />
+          </>
+        )}
+        <button
+          type="button"
+          onClick={() => canNext && onChange(page + 1)}
+          disabled={!canNext}
+          className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-1 text-[11px] font-semibold text-foreground transition hover:border-primary/40 hover:text-primary disabled:cursor-not-allowed disabled:opacity-40"
+          aria-label="Próxima página"
+        >
+          Próxima
+          <ChevronRight className="h-3 w-3" />
+        </button>
+      </div>
+    </nav>
+  );
+}
+
+function PageButton({
+  page,
+  active,
+  onClick,
+}: {
+  page: number;
+  active: boolean;
+  onClick: (page: number) => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={() => onClick(page)}
+      aria-current={active ? "page" : undefined}
+      className={
+        "min-w-[2rem] rounded-full border px-2 py-1 font-mono text-[11px] font-semibold tabular-nums transition " +
+        (active
+          ? "border-primary bg-primary text-primary-foreground"
+          : "border-border bg-background text-muted-foreground hover:border-primary/40 hover:text-foreground")
+      }
+    >
+      {page}
+    </button>
   );
 }
 
@@ -558,6 +807,7 @@ function VisitorFooterCta() {
     </div>
   );
 }
+
 
 
 
@@ -650,12 +900,14 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
   const cardFreshness = formatFreshness(latestIso);
 
   return (
+    <div className="relative flex h-full flex-col">
     <Link
       to="/produto-publico/$slug"
       params={{ slug: detailSlug }}
       aria-label={`${row.display_name}${size ? ` (${size})` : ""} — abrir comparativo`}
       className="hairline-gold group relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card shadow-[0_1px_2px_color-mix(in_oklab,var(--color-foreground)_8%,transparent)] transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-[0_12px_28px_-18px_color-mix(in_oklab,var(--color-primary)_35%,transparent)]"
     >
+
       {/* Rank ribbon */}
       <span
         aria-label={`Posição ${rank}`}
@@ -829,6 +1081,180 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
         <ArrowRight className="h-3 w-3 shrink-0 transition-transform group-hover:translate-x-0.5" />
       </div>
     </Link>
+    <PriceReportInlineButton
+      establishmentId={stores[0]?.establishment_id ?? row.cheapest_establishment_id}
+      storeName={stores[0]?.store_name ?? row.cheapest_store}
+      productName={row.display_name}
+      productSlug={row.catalog_slug ?? null}
+      currentPrice={bestPrice}
+    />
+    </div>
+  );
+}
+
+/**
+ * Botão inline embaixo do card que permite ao usuário logado denunciar um
+ * preço incorreto ou desatualizado. Mantido leve — modal simples, sem
+ * upload de comprovante (o fluxo completo mora em /loja/... /produto/...).
+ */
+function PriceReportInlineButton({
+  establishmentId,
+  storeName,
+  productName,
+  productSlug,
+  currentPrice,
+}: {
+  establishmentId: string;
+  storeName: string;
+  productName: string;
+  productSlug: string | null;
+  currentPrice: number;
+}) {
+  const [open, setOpen] = useState(false);
+  const [reason, setReason] = useState<"outdated" | "incorrect" | "wrong_product" | "other">("outdated");
+  const [correctPrice, setCorrectPrice] = useState("");
+  const [notes, setNotes] = useState("");
+  const [busy, setBusy] = useState(false);
+  const submit = useServerFn(submitPriceReport);
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setOpen(true)}
+        className="mt-1 inline-flex w-full items-center justify-center gap-1 rounded-md border border-border bg-background/70 px-2 py-1 font-mono text-[9.5px] font-semibold uppercase tracking-[0.16em] text-muted-foreground transition hover:border-destructive/40 hover:bg-destructive/5 hover:text-destructive"
+        aria-label={`Denunciar preço de ${productName} em ${storeName}`}
+      >
+        <Flag className="h-2.5 w-2.5" aria-hidden />
+        Denunciar preço
+      </button>
+
+      {open && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="report-dialog-title"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setOpen(false);
+          }}
+        >
+          <div className="w-full max-w-md rounded-xl border border-border bg-card p-4 shadow-xl">
+            <div className="flex items-start justify-between gap-2">
+              <div>
+                <h3
+                  id="report-dialog-title"
+                  className="font-display text-base font-bold text-foreground"
+                >
+                  Denunciar preço
+                </h3>
+                <p className="mt-0.5 text-[12px] text-muted-foreground">
+                  {productName} em <strong className="text-foreground">{storeName}</strong> — preço atual{" "}
+                  <span className="font-mono tabular-nums">{formatBRL(currentPrice)}</span>
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="rounded-full p-1 text-muted-foreground hover:bg-muted"
+                aria-label="Fechar"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <div className="mt-3 space-y-3">
+              <div>
+                <label className="mb-1 block text-[11px] font-semibold text-muted-foreground">Motivo</label>
+                <select
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value as typeof reason)}
+                  className="w-full rounded-lg border border-border bg-background px-2 py-1.5 text-sm text-foreground focus:border-primary focus:outline-none"
+                >
+                  <option value="outdated">Preço desatualizado</option>
+                  <option value="incorrect">Preço incorreto</option>
+                  <option value="wrong_product">Produto errado</option>
+                  <option value="other">Outro</option>
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-[11px] font-semibold text-muted-foreground">
+                  Preço correto (opcional)
+                </label>
+                <input
+                  type="number"
+                  inputMode="decimal"
+                  step="0.01"
+                  min={0}
+                  value={correctPrice}
+                  onChange={(e) => setCorrectPrice(e.target.value)}
+                  placeholder="Ex.: 6,49"
+                  className="w-full rounded-lg border border-border bg-background px-2 py-1.5 text-sm text-foreground focus:border-primary focus:outline-none"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-[11px] font-semibold text-muted-foreground">
+                  Observação (opcional)
+                </label>
+                <textarea
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  rows={2}
+                  className="w-full rounded-lg border border-border bg-background px-2 py-1.5 text-sm text-foreground focus:border-primary focus:outline-none"
+                  placeholder="Ex.: vi outro preço na gôndola…"
+                />
+              </div>
+            </div>
+
+            <div className="mt-4 flex items-center justify-end gap-2">
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                disabled={busy}
+                className="rounded-full border border-border bg-background px-3 py-1.5 text-[12px] font-semibold text-muted-foreground hover:text-foreground"
+              >
+                Cancelar
+              </button>
+              <button
+                type="button"
+                disabled={busy}
+                onClick={async () => {
+                  setBusy(true);
+                  try {
+                    const priceNum = correctPrice.trim() ? Number(correctPrice.replace(",", ".")) : null;
+                    await submit({
+                      data: {
+                        establishmentId,
+                        productName,
+                        productSlug,
+                        barcode: null,
+                        reportedPrice: currentPrice,
+                        correctPrice: priceNum && Number.isFinite(priceNum) ? priceNum : null,
+                        reason,
+                        notes: notes.trim() || null,
+                        evidenceUrl: null,
+                      },
+                    });
+                    toast.success("Denúncia enviada. Obrigado por ajudar!");
+                    setOpen(false);
+                    setNotes("");
+                    setCorrectPrice("");
+                  } catch (err) {
+                    toast.error((err as Error).message ?? "Não foi possível enviar.");
+                  } finally {
+                    setBusy(false);
+                  }
+                }}
+                className="inline-flex items-center gap-1 rounded-full bg-destructive px-3 py-1.5 text-[12px] font-semibold text-destructive-foreground hover:bg-destructive/90 disabled:opacity-50"
+              >
+                <Flag className="h-3 w-3" />
+                {busy ? "Enviando…" : "Enviar denúncia"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 }
 

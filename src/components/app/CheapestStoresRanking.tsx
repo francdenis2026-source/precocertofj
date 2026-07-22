@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
@@ -7,13 +8,17 @@ import {
   Layers,
   Loader2,
   Medal,
+  Minus,
   Percent,
   Sparkles,
   Store,
+  TrendingDown,
+  TrendingUp,
   Trophy,
 } from "lucide-react";
 
 import { SectionKicker } from "@/components/dashboard/SectionKicker";
+import { QuickFilterBar } from "@/components/search/QuickFilterBar";
 import { getCheapestStoresRanking } from "@/lib/stores-public.functions";
 import { cn } from "@/lib/utils";
 
@@ -50,15 +55,17 @@ const brl = (n: number) =>
   n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
 /**
- * Ranking dos mercados que aparecem com menor preço em produtos comparáveis
- * nos últimos 7 dias, agora com cruzamento por categoria, economia média,
- * itens exclusivos e ticket médio das vitórias.
+ * Ranking dos mercados mais baratos — agora com filtro por categoria e
+ * evolução (hoje vs. semana anterior) para o usuário entender rapidamente
+ * quem está melhorando ou piorando na disputa.
  */
 export function CheapestStoresRanking() {
   const fetchRanking = useServerFn(getCheapestStoresRanking);
+  const [category, setCategory] = useState<string | null>(null);
+
   const rankingQ = useQuery({
-    queryKey: ["app-cheapest-stores-ranking", "v2"],
-    queryFn: () => fetchRanking(),
+    queryKey: ["app-cheapest-stores-ranking", "v3", category ?? "all"],
+    queryFn: () => fetchRanking({ data: { category } }),
     staleTime: 5 * 60_000,
   });
 
@@ -66,13 +73,21 @@ export function CheapestStoresRanking() {
   const summary = rankingQ.data?.summary;
   const topWins = rows[0]?.wins ?? 0;
 
+  const categoryOptions = (summary?.availableCategories ?? [])
+    .slice(0, 8)
+    .map((c) => ({
+      value: c.key,
+      label: CATEGORY_LABEL[c.key] ?? c.key,
+      count: c.count,
+    }));
+
   return (
     <section aria-label="Ranking de mercados mais baratos" className="space-y-3">
       <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-3">
         <div className="min-w-0">
           <SectionKicker eyebrow="Radar de preços" title="Mercados mais baratos" />
           <p className="mt-1 truncate text-[11.5px] text-muted-foreground md:text-xs">
-            Últimos 7 dias — cruzamento por categoria, economia média e cobertura.
+            Últimos 7 dias — cruzamento por categoria, economia média e evolução.
           </p>
         </div>
         {summary && summary.totalProductsCompared > 0 && (
@@ -84,6 +99,18 @@ export function CheapestStoresRanking() {
           </Link>
         )}
       </div>
+
+      {/* Filtros por categoria */}
+      {categoryOptions.length > 1 && (
+        <QuickFilterBar
+          label="Categoria"
+          ariaLabel="Filtrar ranking por categoria"
+          options={categoryOptions}
+          value={category}
+          onChange={(next) => setCategory(next)}
+          size="sm"
+        />
+      )}
 
       {/* Summary strip: cruzamento agregado */}
       {summary && summary.totalProductsCompared > 0 && (
@@ -110,7 +137,7 @@ export function CheapestStoresRanking() {
             icon={Sparkles}
             label="Janela"
             value={`${summary.windowDays}d`}
-            hint="atualizado agora"
+            hint={category ? "categoria filtrada" : "atualizado agora"}
           />
         </dl>
       )}
@@ -123,7 +150,9 @@ export function CheapestStoresRanking() {
           </div>
         ) : rows.length === 0 ? (
           <p className="p-5 text-sm text-muted-foreground">
-            Ainda não temos comparações suficientes nesta região. Volte em breve.
+            {category
+              ? "Nenhum mercado com disputas suficientes nessa categoria."
+              : "Ainda não temos comparações suficientes nesta região. Volte em breve."}
           </p>
         ) : (
           <ol className="divide-y divide-border/60">
@@ -142,7 +171,7 @@ export function CheapestStoresRanking() {
                     params={{ id: r.establishmentId }}
                     search={{ q: "", from: "ranking" }}
                     className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-3 py-2.5 text-left transition-colors hover:bg-muted/40 focus-visible:bg-muted/60 focus-visible:outline-none md:gap-4 md:px-4 md:py-3"
-                    aria-label={`Abrir catálogo de ${r.storeName}. ${r.wins} vitórias em ${r.productsCompared} produtos comparados, economia média ${r.avgSavingsPct}%`}
+                    aria-label={`Abrir catálogo de ${r.storeName}. ${r.wins} vitórias em ${r.productsCompared} produtos comparados, tendência ${r.trend}.`}
                   >
                     <div
                       className={cn(
@@ -175,9 +204,9 @@ export function CheapestStoresRanking() {
                           {r.city}
                           {r.state ? ` · ${r.state}` : ""}
                         </p>
+                        <TrendChip trend={r.trend} deltaPct={r.deltaPct} deltaWins={r.deltaWins} />
                       </div>
 
-                      {/* progress bar of relative wins */}
                       <div className="mt-1 flex items-center gap-2">
                         <div className="relative h-1 flex-1 overflow-hidden rounded-full bg-muted">
                           <div
@@ -194,7 +223,6 @@ export function CheapestStoresRanking() {
                         </span>
                       </div>
 
-                      {/* Category chips + secondary metrics */}
                       <div className="mt-1.5 flex flex-wrap items-center gap-1">
                         {r.topCategories.slice(0, 3).map((c) => (
                           <span
@@ -255,11 +283,11 @@ export function CheapestStoresRanking() {
         {rows.length > 0 && (
           <div className="border-t border-border/60 bg-muted/30 px-4 py-2 text-right md:px-5">
             <Link
-              to="/cesta-basica"
-              search={{ mode: "compare" }}
+              to="/melhores-precos"
+              search={{ cat: category ?? undefined }}
               className="inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:underline"
             >
-              Comparar cesta completa <ArrowRight className="h-3 w-3" />
+              Ver ranking completo <ArrowRight className="h-3 w-3" />
             </Link>
           </div>
         )}
@@ -267,6 +295,47 @@ export function CheapestStoresRanking() {
     </section>
   );
 }
+
+function TrendChip({
+  trend,
+  deltaPct,
+  deltaWins,
+}: {
+  trend: "up" | "down" | "flat" | "new";
+  deltaPct: number;
+  deltaWins: number;
+}) {
+  if (trend === "flat") return null;
+  const isUp = trend === "up" || trend === "new";
+  const Icon = trend === "new" ? Sparkles : isUp ? TrendingUp : TrendingDown;
+  const tone = isUp
+    ? "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 ring-emerald-500/30"
+    : "bg-rose-500/10 text-rose-700 dark:text-rose-300 ring-rose-500/30";
+  const label =
+    trend === "new"
+      ? "novo"
+      : `${isUp ? "+" : ""}${deltaWins} vit · ${isUp ? "+" : ""}${deltaPct.toFixed(0)}%`;
+  return (
+    <span
+      className={cn(
+        "ml-auto inline-flex shrink-0 items-center gap-0.5 rounded-full px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.12em] ring-1",
+        tone,
+      )}
+      title={
+        trend === "new"
+          ? "Entrou no ranking nesta semana"
+          : `Comparado à semana anterior (${deltaWins > 0 ? "+" : ""}${deltaWins} vitórias)`
+      }
+    >
+      <Icon className="h-2.5 w-2.5" aria-hidden />
+      {label}
+    </span>
+  );
+}
+
+// Mantém uso do ícone Minus pra tree-shaking previsível em edições futuras.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const _MinusIcon = Minus;
 
 function SummaryTile({
   icon: Icon,
