@@ -8,13 +8,14 @@ import {
   validatePromoCoupon,
   approveCheckoutOrder,
 } from "@/lib/checkout.functions";
+import { createMercadoPagoPreference } from "@/lib/mercadopago.functions";
 import { AppShell } from "@/components/brand/AppShell";
 import { PageHeader } from "@/components/brand/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { Ticket, Copy, CheckCircle2, ArrowRight, CreditCard, Loader2, ShieldAlert } from "lucide-react";
+import { Ticket, Copy, CheckCircle2, ArrowRight, CreditCard, Loader2, ShieldAlert, Clock } from "lucide-react";
 import { toast } from "sonner";
 import { useMyRoles } from "@/hooks/useMyRoles";
 
@@ -40,6 +41,7 @@ function CheckoutPage() {
   const fetchOrder = useServerFn(getCheckoutOrder);
   const validate = useServerFn(validatePromoCoupon);
   const approve = useServerFn(approveCheckoutOrder);
+  const createPref = useServerFn(createMercadoPagoPreference);
   const { isAdmin } = useMyRoles();
 
   const [couponInput, setCouponInput] = useState("");
@@ -51,10 +53,27 @@ function CheckoutPage() {
     });
   }, [id, navigate]);
 
+  // Show a toast if user came back from MP
+  useEffect(() => {
+    const status = new URLSearchParams(window.location.search).get("status");
+    if (status === "success") toast.success("Pagamento aprovado! Gerando seu código…");
+    else if (status === "pending") toast.info("Pagamento pendente. Assim que o MP confirmar, seu código aparece aqui.");
+    else if (status === "failure") toast.error("Pagamento não concluído. Tente novamente.");
+  }, []);
+
   const { data: order, isLoading } = useQuery({
     queryKey: ["checkout-order", id],
     queryFn: () => fetchOrder({ data: { id } }),
-    refetchInterval: (q) => (q.state.data?.status === "pending" ? 5000 : false),
+    refetchInterval: (q) => (q.state.data?.status === "pending" ? 4000 : false),
+  });
+
+  const payMutation = useMutation({
+    mutationFn: () => createPref({ data: { orderId: id } }),
+    onSuccess: (r) => {
+      if (r?.url) window.location.href = r.url;
+      else toast.error("URL do Mercado Pago não retornada");
+    },
+    onError: (e: any) => toast.error(e?.message ?? "Falha ao iniciar pagamento"),
   });
 
   const approveMutation = useMutation({
@@ -190,17 +209,33 @@ function CheckoutPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="text-base">Pagamento</CardTitle>
+                  <CardDescription className="text-xs">
+                    Você será redirecionado ao Mercado Pago para concluir com Pix, cartão ou boleto.
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <Button className="w-full" variant="executive" disabled>
-                    <CreditCard className="mr-1 h-4 w-4" /> Pagar com Mercado Pago
+                  <Button
+                    className="w-full"
+                    variant="executive"
+                    onClick={() => payMutation.mutate()}
+                    disabled={payMutation.isPending}
+                  >
+                    {payMutation.isPending ? (
+                      <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+                    ) : (
+                      <CreditCard className="mr-1 h-4 w-4" />
+                    )}
+                    Pagar com Mercado Pago
                   </Button>
-                  <p className="text-xs text-muted-foreground">
-                    Integração com Mercado Pago em breve. Por enquanto, entre em contato pelo email de suporte
-                    para confirmação manual do pagamento.
-                  </p>
+                  {order.status === "pending" && (
+                    <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Clock className="h-3 w-3" />
+                      A confirmação chega automaticamente após o pagamento.
+                    </p>
+                  )}
                 </CardContent>
               </Card>
+
 
               {order.discount_cents === 0 && (
                 <Card>
