@@ -121,7 +121,7 @@ function CheckoutPage() {
     <AppShell>
       <PageHeader
         title="Checkout"
-        subtitle={`Pedido #${String(order.id).slice(0, 8)}`}
+        description={`Pedido #${String(order.id).slice(0, 8)}`}
         breadcrumbs={[{ label: "Planos", to: "/planos" }, { label: "Checkout" }]}
       />
       <div className="mx-auto grid max-w-4xl gap-4 p-4 md:grid-cols-[1fr_360px]">
