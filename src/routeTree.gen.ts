@@ -50,10 +50,12 @@ import { Route as HistoricoProdutosRouteImport } from './routes/historico.produt
 import { Route as HistoricoIdRouteImport } from './routes/historico.$id'
 import { Route as CotacaoIdRouteImport } from './routes/cotacao.$id'
 import { Route as ComprovanteIdRouteImport } from './routes/comprovante.$id'
+import { Route as CheckoutIdRouteImport } from './routes/checkout.$id'
 import { Route as CShareIdRouteImport } from './routes/c.$shareId'
 import { Route as AdminSinonimosRouteImport } from './routes/admin_.sinonimos'
 import { Route as AdminReportsRouteImport } from './routes/admin_.reports'
 import { Route as AdminRankCheckRouteImport } from './routes/admin_.rank-check'
+import { Route as AdminPromocoesRouteImport } from './routes/admin_.promocoes'
 import { Route as AdminPrecosRouteImport } from './routes/admin_.precos'
 import { Route as AdminMetricasRouteImport } from './routes/admin_.metricas'
 import { Route as AdminLoteInserirRouteImport } from './routes/admin_.lote-inserir'
@@ -61,6 +63,7 @@ import { Route as AdminImageJobsRouteImport } from './routes/admin_.image-jobs'
 import { Route as AdminIconesCategoriaRouteImport } from './routes/admin_.icones-categoria'
 import { Route as AdminCupomLoteRouteImport } from './routes/admin_.cupom-lote'
 import { Route as AdminCupomRouteImport } from './routes/admin_.cupom'
+import { Route as AdminConversoesRouteImport } from './routes/admin_.conversoes'
 import { Route as AdminConsistenciaRouteImport } from './routes/admin_.consistencia'
 import { Route as AdminCoberturaRouteImport } from './routes/admin_.cobertura'
 import { Route as AdminCatalogoRouteImport } from './routes/admin_.catalogo'
@@ -280,6 +283,11 @@ const ComprovanteIdRoute = ComprovanteIdRouteImport.update({
   path: '/comprovante/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CheckoutIdRoute = CheckoutIdRouteImport.update({
+  id: '/checkout/$id',
+  path: '/checkout/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CShareIdRoute = CShareIdRouteImport.update({
   id: '/c/$shareId',
   path: '/c/$shareId',
@@ -298,6 +306,11 @@ const AdminReportsRoute = AdminReportsRouteImport.update({
 const AdminRankCheckRoute = AdminRankCheckRouteImport.update({
   id: '/admin_/rank-check',
   path: '/admin/rank-check',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminPromocoesRoute = AdminPromocoesRouteImport.update({
+  id: '/admin_/promocoes',
+  path: '/admin/promocoes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminPrecosRoute = AdminPrecosRouteImport.update({
@@ -333,6 +346,11 @@ const AdminCupomLoteRoute = AdminCupomLoteRouteImport.update({
 const AdminCupomRoute = AdminCupomRouteImport.update({
   id: '/admin_/cupom',
   path: '/admin/cupom',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminConversoesRoute = AdminConversoesRouteImport.update({
+  id: '/admin_/conversoes',
+  path: '/admin/conversoes',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminConsistenciaRoute = AdminConsistenciaRouteImport.update({
@@ -445,6 +463,7 @@ export interface FileRoutesByFullPath {
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin/consistencia': typeof AdminConsistenciaRoute
+  '/admin/conversoes': typeof AdminConversoesRoute
   '/admin/cupom': typeof AdminCupomRoute
   '/admin/cupom-lote': typeof AdminCupomLoteRoute
   '/admin/icones-categoria': typeof AdminIconesCategoriaRoute
@@ -452,10 +471,12 @@ export interface FileRoutesByFullPath {
   '/admin/lote-inserir': typeof AdminLoteInserirRoute
   '/admin/metricas': typeof AdminMetricasRoute
   '/admin/precos': typeof AdminPrecosRoute
+  '/admin/promocoes': typeof AdminPromocoesRoute
   '/admin/rank-check': typeof AdminRankCheckRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/sinonimos': typeof AdminSinonimosRoute
   '/c/$shareId': typeof CShareIdRoute
+  '/checkout/$id': typeof CheckoutIdRoute
   '/comprovante/$id': typeof ComprovanteIdRoute
   '/cotacao/$id': typeof CotacaoIdRoute
   '/historico/$id': typeof HistoricoIdRoute
@@ -512,6 +533,7 @@ export interface FileRoutesByTo {
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin/consistencia': typeof AdminConsistenciaRoute
+  '/admin/conversoes': typeof AdminConversoesRoute
   '/admin/cupom': typeof AdminCupomRoute
   '/admin/cupom-lote': typeof AdminCupomLoteRoute
   '/admin/icones-categoria': typeof AdminIconesCategoriaRoute
@@ -519,10 +541,12 @@ export interface FileRoutesByTo {
   '/admin/lote-inserir': typeof AdminLoteInserirRoute
   '/admin/metricas': typeof AdminMetricasRoute
   '/admin/precos': typeof AdminPrecosRoute
+  '/admin/promocoes': typeof AdminPromocoesRoute
   '/admin/rank-check': typeof AdminRankCheckRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/sinonimos': typeof AdminSinonimosRoute
   '/c/$shareId': typeof CShareIdRoute
+  '/checkout/$id': typeof CheckoutIdRoute
   '/comprovante/$id': typeof ComprovanteIdRoute
   '/cotacao/$id': typeof CotacaoIdRoute
   '/historico/$id': typeof HistoricoIdRoute
@@ -580,6 +604,7 @@ export interface FileRoutesById {
   '/admin_/catalogo': typeof AdminCatalogoRoute
   '/admin_/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin_/consistencia': typeof AdminConsistenciaRoute
+  '/admin_/conversoes': typeof AdminConversoesRoute
   '/admin_/cupom': typeof AdminCupomRoute
   '/admin_/cupom-lote': typeof AdminCupomLoteRoute
   '/admin_/icones-categoria': typeof AdminIconesCategoriaRoute
@@ -587,10 +612,12 @@ export interface FileRoutesById {
   '/admin_/lote-inserir': typeof AdminLoteInserirRoute
   '/admin_/metricas': typeof AdminMetricasRoute
   '/admin_/precos': typeof AdminPrecosRoute
+  '/admin_/promocoes': typeof AdminPromocoesRoute
   '/admin_/rank-check': typeof AdminRankCheckRoute
   '/admin_/reports': typeof AdminReportsRoute
   '/admin_/sinonimos': typeof AdminSinonimosRoute
   '/c/$shareId': typeof CShareIdRoute
+  '/checkout/$id': typeof CheckoutIdRoute
   '/comprovante/$id': typeof ComprovanteIdRoute
   '/cotacao/$id': typeof CotacaoIdRoute
   '/historico/$id': typeof HistoricoIdRoute
@@ -649,6 +676,7 @@ export interface FileRouteTypes {
     | '/admin/catalogo'
     | '/admin/cobertura'
     | '/admin/consistencia'
+    | '/admin/conversoes'
     | '/admin/cupom'
     | '/admin/cupom-lote'
     | '/admin/icones-categoria'
@@ -656,10 +684,12 @@ export interface FileRouteTypes {
     | '/admin/lote-inserir'
     | '/admin/metricas'
     | '/admin/precos'
+    | '/admin/promocoes'
     | '/admin/rank-check'
     | '/admin/reports'
     | '/admin/sinonimos'
     | '/c/$shareId'
+    | '/checkout/$id'
     | '/comprovante/$id'
     | '/cotacao/$id'
     | '/historico/$id'
@@ -716,6 +746,7 @@ export interface FileRouteTypes {
     | '/admin/catalogo'
     | '/admin/cobertura'
     | '/admin/consistencia'
+    | '/admin/conversoes'
     | '/admin/cupom'
     | '/admin/cupom-lote'
     | '/admin/icones-categoria'
@@ -723,10 +754,12 @@ export interface FileRouteTypes {
     | '/admin/lote-inserir'
     | '/admin/metricas'
     | '/admin/precos'
+    | '/admin/promocoes'
     | '/admin/rank-check'
     | '/admin/reports'
     | '/admin/sinonimos'
     | '/c/$shareId'
+    | '/checkout/$id'
     | '/comprovante/$id'
     | '/cotacao/$id'
     | '/historico/$id'
@@ -783,6 +816,7 @@ export interface FileRouteTypes {
     | '/admin_/catalogo'
     | '/admin_/cobertura'
     | '/admin_/consistencia'
+    | '/admin_/conversoes'
     | '/admin_/cupom'
     | '/admin_/cupom-lote'
     | '/admin_/icones-categoria'
@@ -790,10 +824,12 @@ export interface FileRouteTypes {
     | '/admin_/lote-inserir'
     | '/admin_/metricas'
     | '/admin_/precos'
+    | '/admin_/promocoes'
     | '/admin_/rank-check'
     | '/admin_/reports'
     | '/admin_/sinonimos'
     | '/c/$shareId'
+    | '/checkout/$id'
     | '/comprovante/$id'
     | '/cotacao/$id'
     | '/historico/$id'
@@ -850,6 +886,7 @@ export interface RootRouteChildren {
   AdminCatalogoRoute: typeof AdminCatalogoRoute
   AdminCoberturaRoute: typeof AdminCoberturaRouteWithChildren
   AdminConsistenciaRoute: typeof AdminConsistenciaRoute
+  AdminConversoesRoute: typeof AdminConversoesRoute
   AdminCupomRoute: typeof AdminCupomRoute
   AdminCupomLoteRoute: typeof AdminCupomLoteRoute
   AdminIconesCategoriaRoute: typeof AdminIconesCategoriaRoute
@@ -857,10 +894,12 @@ export interface RootRouteChildren {
   AdminLoteInserirRoute: typeof AdminLoteInserirRoute
   AdminMetricasRoute: typeof AdminMetricasRoute
   AdminPrecosRoute: typeof AdminPrecosRoute
+  AdminPromocoesRoute: typeof AdminPromocoesRoute
   AdminRankCheckRoute: typeof AdminRankCheckRoute
   AdminReportsRoute: typeof AdminReportsRoute
   AdminSinonimosRoute: typeof AdminSinonimosRoute
   CShareIdRoute: typeof CShareIdRoute
+  CheckoutIdRoute: typeof CheckoutIdRoute
   ComprovanteIdRoute: typeof ComprovanteIdRoute
   CotacaoIdRoute: typeof CotacaoIdRoute
   LojaIdRoute: typeof LojaIdRouteWithChildren
@@ -1162,6 +1201,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ComprovanteIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/checkout/$id': {
+      id: '/checkout/$id'
+      path: '/checkout/$id'
+      fullPath: '/checkout/$id'
+      preLoaderRoute: typeof CheckoutIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/c/$shareId': {
       id: '/c/$shareId'
       path: '/c/$shareId'
@@ -1188,6 +1234,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/rank-check'
       fullPath: '/admin/rank-check'
       preLoaderRoute: typeof AdminRankCheckRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin_/promocoes': {
+      id: '/admin_/promocoes'
+      path: '/admin/promocoes'
+      fullPath: '/admin/promocoes'
+      preLoaderRoute: typeof AdminPromocoesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin_/precos': {
@@ -1237,6 +1290,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/cupom'
       fullPath: '/admin/cupom'
       preLoaderRoute: typeof AdminCupomRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin_/conversoes': {
+      id: '/admin_/conversoes'
+      path: '/admin/conversoes'
+      fullPath: '/admin/conversoes'
+      preLoaderRoute: typeof AdminConversoesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin_/consistencia': {
@@ -1421,6 +1481,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminCatalogoRoute: AdminCatalogoRoute,
   AdminCoberturaRoute: AdminCoberturaRouteWithChildren,
   AdminConsistenciaRoute: AdminConsistenciaRoute,
+  AdminConversoesRoute: AdminConversoesRoute,
   AdminCupomRoute: AdminCupomRoute,
   AdminCupomLoteRoute: AdminCupomLoteRoute,
   AdminIconesCategoriaRoute: AdminIconesCategoriaRoute,
@@ -1428,10 +1489,12 @@ const rootRouteChildren: RootRouteChildren = {
   AdminLoteInserirRoute: AdminLoteInserirRoute,
   AdminMetricasRoute: AdminMetricasRoute,
   AdminPrecosRoute: AdminPrecosRoute,
+  AdminPromocoesRoute: AdminPromocoesRoute,
   AdminRankCheckRoute: AdminRankCheckRoute,
   AdminReportsRoute: AdminReportsRoute,
   AdminSinonimosRoute: AdminSinonimosRoute,
   CShareIdRoute: CShareIdRoute,
+  CheckoutIdRoute: CheckoutIdRoute,
   ComprovanteIdRoute: ComprovanteIdRoute,
   CotacaoIdRoute: CotacaoIdRoute,
   LojaIdRoute: LojaIdRouteWithChildren,
