@@ -12,6 +12,7 @@ import {
   Store,
   LogOut,
   Wallet,
+  KeyRound,
 } from "lucide-react";
 import {
   Sidebar,
@@ -25,7 +26,6 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Logo } from "@/components/brand/Logo";
 import { useSignOut } from "@/hooks/use-sign-out";
 
 const primary = [
@@ -39,11 +39,14 @@ const primary = [
   { to: "/historico", label: "Histórico", icon: History, exact: false as boolean },
 ] as const;
 
-const secondary = [
+const account = [
   { to: "/perfil", label: "Perfil", icon: User },
-  { to: "/minhas-licencas", label: "Minhas licenças", icon: Wallet },
+  { to: "/minhas-licencas", label: "Minhas licenças", icon: KeyRound },
   { to: "/melhores-precos", label: "Melhores preços", icon: Store },
-  { to: "/admin", label: "Admin", icon: Shield },
+] as const;
+
+const admin = [
+  { to: "/admin", label: "Painel Admin", icon: Shield },
 ] as const;
 
 export function AppSidebar() {
@@ -54,25 +57,46 @@ export function AppSidebar() {
     exact ? pathname === to : pathname === to || pathname.startsWith(to + "/");
 
   return (
-    <Sidebar collapsible="icon" className="border-r border-sidebar-border">
+    <Sidebar
+      collapsible="icon"
+      className="border-r border-sidebar-border"
+    >
+      {/* Brand */}
       <SidebarHeader className="border-b border-sidebar-border/60 px-3 py-4">
         <Link
           to="/"
           className="flex items-center gap-2.5 group-data-[collapsible=icon]:justify-center"
         >
-          <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-[0_6px_18px_-6px_oklch(0.51_0.22_275_/_0.7)]">
-            <span className="font-display text-[19px] font-bold leading-none">P</span>
-            <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-accent ring-2 ring-sidebar" />
+          <span
+            className="relative grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
+            aria-hidden
+          >
+            <span className="text-[13px] font-bold leading-none">P</span>
+            <span
+              className="absolute -right-1 -top-1 h-2 w-2 rounded-full ring-2 ring-sidebar"
+              style={{ background: "#e6d6a8" }}
+            />
           </span>
-          <span className="font-display text-[19px] font-semibold leading-none tracking-tight text-sidebar-foreground group-data-[collapsible=icon]:hidden">
-            Preço<span className="text-accent">Certo</span>
+          <span className="flex flex-col leading-none group-data-[collapsible=icon]:hidden">
+            <span className="font-['Instrument_Serif',ui-serif,serif] text-[18px] font-normal tracking-tight text-sidebar-foreground">
+              Preço<span className="italic text-sidebar-primary-foreground/90" style={{ color: "#e6d6a8" }}>Certo</span>
+            </span>
+            <span
+              className="mt-0.5 text-[9px] font-semibold uppercase tracking-[0.18em]"
+              style={{ color: "rgba(230, 214, 168, 0.7)" }}
+            >
+              Executive
+            </span>
           </span>
         </Link>
       </SidebarHeader>
 
       <SidebarContent>
+        {/* Primary nav */}
         <SidebarGroup>
-          <SidebarGroupLabel>Navegação</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-[10px] uppercase tracking-[0.16em] text-sidebar-foreground/50">
+            Navegação
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {primary.map((n) => {
@@ -84,9 +108,18 @@ export function AppSidebar() {
                       isActive={active}
                       tooltip={n.label}
                     >
-                      <Link to={n.to} className="flex items-center gap-2">
-                        <n.icon className="h-4 w-4" strokeWidth={active ? 2.4 : 1.9} />
-                        <span>{n.label}</span>
+                      <Link to={n.to} className="flex items-center gap-2.5">
+                        <n.icon
+                          className="h-4 w-4"
+                          strokeWidth={active ? 2.4 : 1.9}
+                        />
+                        <span className="text-[13px] font-medium">{n.label}</span>
+                        {active && (
+                          <span
+                            className="ml-auto h-1.5 w-1.5 rounded-full"
+                            style={{ background: "#e6d6a8" }}
+                          />
+                        )}
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -96,11 +129,14 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
+        {/* Account */}
         <SidebarGroup>
-          <SidebarGroupLabel>Conta</SidebarGroupLabel>
+          <SidebarGroupLabel className="text-[10px] uppercase tracking-[0.16em] text-sidebar-foreground/50">
+            Conta
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {secondary.map((n) => {
+              {account.map((n) => {
                 const active = isActive(n.to);
                 return (
                   <SidebarMenuItem key={n.to}>
@@ -109,9 +145,43 @@ export function AppSidebar() {
                       isActive={active}
                       tooltip={n.label}
                     >
-                      <Link to={n.to} className="flex items-center gap-2">
-                        <n.icon className="h-4 w-4" strokeWidth={active ? 2.4 : 1.9} />
-                        <span>{n.label}</span>
+                      <Link to={n.to} className="flex items-center gap-2.5">
+                        <n.icon
+                          className="h-4 w-4"
+                          strokeWidth={active ? 2.4 : 1.9}
+                        />
+                        <span className="text-[13px] font-medium">{n.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        {/* Admin */}
+        <SidebarGroup>
+          <SidebarGroupLabel className="text-[10px] uppercase tracking-[0.16em] text-sidebar-foreground/50">
+            Admin
+          </SidebarGroupLabel>
+          <SidebarGroupContent>
+            <SidebarMenu>
+              {admin.map((n) => {
+                const active = isActive(n.to);
+                return (
+                  <SidebarMenuItem key={n.to}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={active}
+                      tooltip={n.label}
+                    >
+                      <Link to={n.to} className="flex items-center gap-2.5">
+                        <n.icon
+                          className="h-4 w-4"
+                          strokeWidth={active ? 2.4 : 1.9}
+                        />
+                        <span className="text-[13px] font-medium">{n.label}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -129,10 +199,12 @@ export function AppSidebar() {
               onClick={signOut}
               disabled={signingOut}
               tooltip="Sair"
-              className="text-sidebar-foreground hover:text-destructive"
+              className="text-sidebar-foreground/80 hover:text-destructive"
             >
               <LogOut className="h-4 w-4" />
-              <span>{signingOut ? "Saindo..." : "Sair"}</span>
+              <span className="text-[13px] font-medium">
+                {signingOut ? "Saindo..." : "Sair"}
+              </span>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
@@ -140,6 +212,3 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
-
-// Suppress unused Logo import (kept for potential future use)
-void Logo;
