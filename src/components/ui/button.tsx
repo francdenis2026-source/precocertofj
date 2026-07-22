@@ -16,6 +16,16 @@ const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        // ===== Navy Trust Executive — variantes oficiais =====
+        /** Botão principal executivo: navy sólido, texto claro, sombra sutil. */
+        executive:
+          "bg-primary text-primary-foreground shadow-elev-1 hover:bg-primary/92 hover:shadow-elev-2 focus-visible:ring-2 focus-visible:ring-primary/40",
+        /** Ação de destaque editorial: dourado brushed com tinta navy. */
+        gold:
+          "btn-signal text-accent-foreground hover:brightness-105 active:brightness-95 focus-visible:ring-2 focus-visible:ring-accent/60",
+        /** Ghost navy: transparente, hover navy translúcido — para toolbars/tabs. */
+        "ghost-navy":
+          "text-primary hover:bg-primary/8 hover:text-primary focus-visible:ring-2 focus-visible:ring-primary/30 dark:text-foreground dark:hover:bg-foreground/8",
       },
       size: {
         default: "h-9 px-4 py-2",
