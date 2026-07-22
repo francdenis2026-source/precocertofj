@@ -141,6 +141,24 @@ function HomePage() {
   const stores: PublicStore[] = (storesQ.data as any) ?? [];
   const displayStores = stores.length ? stores.slice(0, 4) : PLACEHOLDER_STORES;
 
+  const stats: any = statsQ.data ?? {};
+  const KPIS = [
+    FALLBACK_KPIS[0],
+    FALLBACK_KPIS[1],
+    {
+      label: "Mercados ativos",
+      value: String(stats.establishments ?? 0),
+      delta: 0,
+      sub: "no catálogo",
+    },
+    {
+      label: "Produtos catalogados",
+      value: String(stats.products ?? 0),
+      delta: 0,
+      sub: "verificados",
+    },
+  ];
+
   const submitSearch = (e?: React.FormEvent) => {
     e?.preventDefault();
     const query = q.trim();
