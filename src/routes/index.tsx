@@ -190,41 +190,41 @@ function HomePage() {
 
       {/* ============== HEADER (glass over hero) ============== */}
       <header className="absolute inset-x-0 top-0 z-30">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-5 md:px-8">
-          <Link to="/" className="flex items-center gap-3">
+        <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-4 md:flex md:justify-between md:px-8 md:py-6">
+          <Link to="/" className="flex min-w-0 items-center gap-3">
             <span
-              className="grid h-10 w-10 place-items-center rounded-lg text-[15px] font-bold text-white shadow-lg"
+              className="grid h-11 w-11 shrink-0 place-items-center rounded-lg text-[16px] font-bold shadow-lg md:h-12 md:w-12"
               style={{ background: PALETTE.gold, color: PALETTE.navy }}
             >
               P
             </span>
-            <div className="flex flex-col leading-none">
-              <span className={`${serif} text-[22px] font-normal text-white`}>
+            <div className="flex min-w-0 flex-col leading-none">
+              <span className={`${serif} truncate text-[22px] font-normal text-white md:text-[26px]`}>
                 Preço<span className="italic" style={{ color: PALETTE.goldSoft }}>Certo</span>
               </span>
-              <span className="mt-1 text-[9px] font-semibold uppercase tracking-[0.22em] text-white/60">
+              <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/70">
                 Feijó · Acre
               </span>
             </div>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-9 text-[13px] font-medium text-white/80">
+          <nav className="hidden lg:flex items-center gap-9 text-[14px] font-medium text-white/85">
             <Link to="/buscar" className="hover:text-white transition-colors">Buscar</Link>
             <Link to="/melhores-precos" className="hover:text-white transition-colors">Rankings</Link>
             <Link to="/colaborar" className="hover:text-white transition-colors">Colaborar</Link>
             <Link to="/planos" className="hover:text-white transition-colors">Planos</Link>
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <Link
               to="/login"
-              className="hidden sm:inline-block rounded-lg px-4 py-2.5 text-[13px] font-medium text-white/90 hover:text-white transition-colors"
+              className="hidden sm:inline-flex items-center rounded-lg px-4 py-2.5 text-[14px] font-medium text-white/90 hover:text-white transition-colors"
             >
               Entrar
             </Link>
             <Link
               to="/cadastro"
-              className="rounded-lg px-4 py-2.5 text-[13px] font-semibold transition-all hover:opacity-90"
+              className="inline-flex items-center rounded-lg px-4 py-2.5 text-[14px] font-semibold shadow-md transition-all hover:opacity-90 md:px-5 md:py-3"
               style={{ background: PALETTE.gold, color: PALETTE.navy }}
             >
               Criar conta
@@ -261,10 +261,11 @@ function HomePage() {
           }}
         />
 
-        <div className="relative z-10 mx-auto flex max-w-7xl flex-col justify-end px-4 pb-14 pt-40 md:px-8 md:pt-44 md:pb-20" style={{ minHeight: "min(92vh, 880px)" }}>
+        <div className="relative z-10 mx-auto flex max-w-7xl flex-col justify-end px-4 pb-14 pt-32 md:px-8 md:pt-44 md:pb-20" style={{ minHeight: "min(92vh, 880px)" }}>
           <div className="max-w-4xl">
+            {/* Eyebrow */}
             <div
-              className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-white/85 backdrop-blur"
+              className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-white backdrop-blur md:text-[12px]"
             >
               <span
                 className="h-1.5 w-1.5 animate-pulse rounded-full"
@@ -273,10 +274,11 @@ function HomePage() {
               {today || "atualizado agora"} · edição diária
             </div>
 
+            {/* Título — responsivo grande */}
             <h1
-              className={`${serif} mt-8 font-normal text-white`}
+              className={`${serif} mt-6 font-normal text-white md:mt-8`}
               style={{
-                fontSize: "clamp(3rem, 8.5vw, 7.5rem)",
+                fontSize: "clamp(2.75rem, 9vw, 7.5rem)",
                 lineHeight: 0.94,
                 letterSpacing: "-0.035em",
               }}
@@ -288,40 +290,70 @@ function HomePage() {
               </span>
             </h1>
 
+            {/* Subtítulo — legível em mobile */}
             <p
-              className="mt-8 max-w-2xl text-white/75"
-              style={{ fontSize: "clamp(1.05rem, 1.4vw, 1.25rem)", lineHeight: 1.55 }}
+              className="mt-6 max-w-2xl text-white/85 md:mt-8"
+              style={{ fontSize: "clamp(1.15rem, 1.6vw, 1.375rem)", lineHeight: 1.5 }}
             >
-              Compare mercados de Feijó em tempo real, acompanhe as quedas do dia
-              e descubra em qual loja sua cesta sai mais barata — com dados
+              Compare mercados de Feijó em tempo real, acompanhe as quedas do
+              dia e descubra em qual loja sua cesta sai mais barata — com dados
               atualizados pela própria comunidade.
             </p>
 
-            <form onSubmit={submitSearch} className="relative mt-10 max-w-2xl">
-              <Search className="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-white/60" />
+            {/* Busca */}
+            <form onSubmit={submitSearch} className="relative mt-8 max-w-2xl md:mt-10">
+              <Search className="pointer-events-none absolute left-5 top-1/2 h-5 w-5 -translate-y-1/2 text-white/70" />
               <input
                 value={q}
                 onChange={(e) => setQ(e.target.value)}
                 type="text"
-                placeholder="Buscar produto: arroz 5 kg, café, leite…"
-                className={`${sans} w-full rounded-2xl border border-white/15 bg-white/10 py-5 pl-14 pr-40 text-[16px] text-white outline-none backdrop-blur-xl transition-all placeholder:text-white/50 focus:border-white/40 focus:bg-white/15`}
+                placeholder="Buscar produto: arroz, café, leite…"
+                aria-label="Buscar produto"
+                className={`${sans} w-full rounded-2xl border border-white/20 bg-white/10 py-4 pl-14 pr-4 text-[16px] text-white outline-none backdrop-blur-xl transition-all placeholder:text-white/60 focus:border-white/50 focus:bg-white/15 sm:py-5 sm:pr-40`}
               />
               <button
                 type="submit"
-                className="absolute right-2 top-1/2 flex -translate-y-1/2 items-center gap-2 rounded-xl px-6 py-3 text-[14px] font-semibold transition-transform hover:scale-[1.02]"
+                aria-label="Buscar"
+                className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-[15px] font-semibold shadow-lg transition-transform hover:scale-[1.02] sm:absolute sm:right-2 sm:top-1/2 sm:mt-0 sm:w-auto sm:-translate-y-1/2 sm:py-3"
                 style={{ background: PALETTE.gold, color: PALETTE.navy }}
               >
                 Buscar <ArrowRight className="h-4 w-4" />
               </button>
             </form>
 
-            <div className="mt-6 flex flex-wrap items-center gap-2 text-[13px]">
-              <span className="text-white/55 uppercase tracking-wider text-[11px] font-semibold mr-1">Populares:</span>
+            {/* CTA principal + secundário — bloco marcante */}
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center md:mt-10">
+              <Link
+                to="/cadastro"
+                className="group inline-flex items-center justify-center gap-2 rounded-xl px-6 py-4 text-[15px] font-bold shadow-xl transition-all hover:scale-[1.02] hover:shadow-2xl sm:px-7 sm:text-[16px]"
+                style={{ background: PALETTE.gold, color: PALETTE.navy }}
+              >
+                Começar grátis
+                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+              <Link
+                to="/melhores-precos"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-white/40 bg-white/5 px-6 py-4 text-[15px] font-semibold text-white backdrop-blur transition-all hover:border-white hover:bg-white/15 sm:px-7 sm:text-[16px]"
+              >
+                <TrendingDown className="h-4 w-4" />
+                Ver rankings do dia
+              </Link>
+              <div className="hidden items-center gap-1.5 pl-2 text-[12.5px] font-medium text-white/70 sm:inline-flex">
+                <ShieldCheck className="h-3.5 w-3.5" style={{ color: PALETTE.goldSoft }} />
+                Sem cartão · Cancela quando quiser
+              </div>
+            </div>
+
+            {/* Buscas populares */}
+            <div className="mt-6 flex flex-wrap items-center gap-2">
+              <span className="mr-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/65">
+                Populares:
+              </span>
               {["arroz", "feijão", "leite", "óleo", "café", "açúcar"].map((t) => (
                 <button
                   key={t}
                   onClick={() => navigate({ to: "/buscar", search: { q: t } as any })}
-                  className="rounded-full border border-white/15 bg-white/5 px-3.5 py-1.5 text-[12px] font-medium text-white/85 backdrop-blur transition-colors hover:bg-white/15 hover:text-white"
+                  className="rounded-full border border-white/20 bg-white/5 px-3.5 py-1.5 text-[12.5px] font-medium text-white/90 backdrop-blur transition-colors hover:bg-white/15 hover:text-white"
                 >
                   {t}
                 </button>
@@ -329,7 +361,7 @@ function HomePage() {
             </div>
 
             {/* Hero mini stats */}
-            <div className="mt-14 grid max-w-3xl grid-cols-3 gap-6 border-t border-white/10 pt-8">
+            <div className="mt-12 grid max-w-3xl grid-cols-3 gap-4 border-t border-white/15 pt-8 sm:gap-6 md:mt-14">
               {[
                 { k: String(stats.establishments ?? 0), l: "Mercados ativos" },
                 { k: String(stats.products ?? 0), l: "Produtos catalogados" },
@@ -338,11 +370,11 @@ function HomePage() {
                 <div key={s.l}>
                   <div
                     className={`${serif} text-white`}
-                    style={{ fontSize: "clamp(1.8rem, 3.2vw, 2.75rem)", letterSpacing: "-0.02em", lineHeight: 1 }}
+                    style={{ fontSize: "clamp(1.75rem, 3.5vw, 2.75rem)", letterSpacing: "-0.02em", lineHeight: 1 }}
                   >
                     {s.k}
                   </div>
-                  <div className="mt-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/55">
+                  <div className="mt-2 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-white/70 sm:text-[11px]">
                     {s.l}
                   </div>
                 </div>
@@ -352,7 +384,7 @@ function HomePage() {
         </div>
 
         {/* Scroll cue */}
-        <div className="absolute bottom-6 left-1/2 z-10 hidden -translate-x-1/2 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/50 md:block">
+        <div className="absolute bottom-6 left-1/2 z-10 hidden -translate-x-1/2 text-[10px] font-semibold uppercase tracking-[0.3em] text-white/60 md:block">
           role para explorar ↓
         </div>
       </section>
