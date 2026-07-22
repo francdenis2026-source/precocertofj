@@ -90,6 +90,16 @@ function CheckoutPage() {
     onError: (e: any) => toast.error(e?.message ?? "Falha ao aprovar"),
   });
 
+  const simulateMutation = useMutation({
+    mutationFn: () => simulate({ data: { orderId: id } }),
+    onSuccess: (r) => {
+      toast.success(`Pagamento simulado · código ${r?.licenseCode ?? "gerado"}`);
+      qc.invalidateQueries({ queryKey: ["checkout-order", id] });
+      if (r?.licenseCode) navigator.clipboard?.writeText(r.licenseCode).catch(() => {});
+    },
+    onError: (e: any) => toast.error(e?.message ?? "Falha ao simular pagamento"),
+  });
+
   async function applyCoupon() {
     if (!couponInput.trim()) return;
     setApplying(true);
