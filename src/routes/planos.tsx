@@ -177,9 +177,12 @@ function PlansPage() {
                 >
                   {isRecommended && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <Badge className="bg-primary text-primary-foreground">Mais vantajoso</Badge>
+                      <Badge className="bg-primary text-primary-foreground shadow-md">
+                        ⭐ MAIS ESCOLHIDO
+                      </Badge>
                     </div>
                   )}
+
                   {isFounder && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                       <Badge className="bg-[hsl(var(--gold))] text-[hsl(var(--gold-foreground))]">Edição limitada</Badge>
