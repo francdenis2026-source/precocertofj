@@ -4,10 +4,11 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { AppShell } from "@/components/brand/AppShell";
-import { Card } from "@/components/ui/card";
+import { PageHeader } from "@/components/brand/PageHeader";
+import { DataTable, type DataTableColumn } from "@/components/data/DataTable";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Copy, Send, Ticket, ArrowRight } from "lucide-react";
+import { Copy, Send, Ticket, ArrowRight, KeyRound } from "lucide-react";
 import { toast } from "sonner";
 import { listMyLicenses, requestMyLicenseResend } from "@/lib/licenses.functions";
 
@@ -22,16 +23,21 @@ export const Route = createFileRoute("/minhas-licencas")({
   component: MinhasLicencas,
 });
 
+type LicenseRow = Awaited<ReturnType<typeof listMyLicenses>>[number];
+
 function brl(cents: number | null | undefined) {
   return ((cents ?? 0) / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
-function statusLabel(s: string) {
-  const map: Record<string, string> = {
-    paid: "Disponível", redeemed: "Ativa", pending: "Aguardando pgto.",
-    revoked: "Revogada", expired: "Expirada",
+function statusMeta(s: string): { label: string; variant: "default" | "secondary" | "outline" | "destructive" } {
+  const map: Record<string, { label: string; variant: "default" | "secondary" | "outline" | "destructive" }> = {
+    paid: { label: "Disponível", variant: "default" },
+    redeemed: { label: "Ativa", variant: "default" },
+    pending: { label: "Aguardando", variant: "secondary" },
+    revoked: { label: "Revogada", variant: "destructive" },
+    expired: { label: "Expirada", variant: "outline" },
   };
-  return map[s] ?? s;
+  return map[s] ?? { label: s, variant: "secondary" };
 }
 
 function MinhasLicencas() {
@@ -45,13 +51,14 @@ function MinhasLicencas() {
     queryFn: async () => (await supabase.auth.getSession()).data.session,
   });
   const hasSession = !!sessionQuery.data;
+  const userId = sessionQuery.data?.user.id;
 
   useEffect(() => {
     if (sessionQuery.isPending) return;
-    if (!hasSession) navigate({ to: "/login", search: { redirect: "/minhas-licencas" } as any });
+    if (!hasSession) navigate({ to: "/login", search: { redirect: "/minhas-licencas" } as never });
   }, [sessionQuery.isPending, hasSession, navigate]);
 
-  const { data: list, isLoading } = useQuery({
+  const { data: list, isLoading, error, refetch } = useQuery({
     queryKey: ["my-licenses"],
     queryFn: () => fetchList(),
     enabled: hasSession,
@@ -66,93 +73,140 @@ function MinhasLicencas() {
     onError: (e) => toast.error(e instanceof Error ? e.message : "Falha ao solicitar"),
   });
 
+  const columns: DataTableColumn<LicenseRow>[] = [
+    {
+      key: "code",
+      header: "Código",
+      sortable: true,
+      accessor: (r) => r.code,
+      cell: (r) => (
+        <span className="font-mono text-[12.5px] font-semibold tracking-tight text-foreground">
+          {r.code}
+        </span>
+      ),
+    },
+    {
+      key: "plan",
+      header: "Plano",
+      sortable: true,
+      accessor: (r) => r.plan_name ?? "",
+      cell: (r) => (
+        <div className="min-w-0">
+          <div className="truncate text-[13px] font-medium text-foreground">
+            {r.plan_name ?? "—"}
+          </div>
+          <div className="text-[11px] text-muted-foreground">
+            {r.plan_days ? `${r.plan_days} dias` : "—"} · {brl(r.price_cents)}
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: "status",
+      header: "Status",
+      sortable: true,
+      accessor: (r) => r.status,
+      cell: (r) => {
+        const m = statusMeta(r.status);
+        return <Badge variant={m.variant}>{m.label}</Badge>;
+      },
+    },
+    {
+      key: "expires",
+      header: "Validade",
+      align: "right",
+      sortable: true,
+      accessor: (r) => new Date(r.expires_at),
+      cell: (r) => {
+        const d = new Date(r.expires_at);
+        const active = r.status === "redeemed" && d.getTime() > Date.now();
+        return (
+          <div className="text-right">
+            <div className="font-mono text-[12.5px] text-foreground">
+              {d.toLocaleDateString("pt-BR")}
+            </div>
+            <div className="text-[10.5px] text-muted-foreground">
+              {active ? "válida" : "expira"}
+              {r.redeemed_at && ` · resg. ${new Date(r.redeemed_at).toLocaleDateString("pt-BR")}`}
+            </div>
+          </div>
+        );
+      },
+    },
+    {
+      key: "actions",
+      header: "",
+      align: "right",
+      width: "160px",
+      cell: (r) => (
+        <div className="flex justify-end gap-1.5">
+          <Button
+            size="sm"
+            variant="ghost-navy"
+            onClick={() => {
+              navigator.clipboard.writeText(r.code);
+              toast.success("Código copiado");
+            }}
+            aria-label="Copiar código"
+          >
+            <Copy className="h-3.5 w-3.5" />
+          </Button>
+          <Button
+            size="sm"
+            variant="ghost-navy"
+            disabled={resend.isPending}
+            onClick={() => resend.mutate(r.id)}
+            aria-label="Reenviar código por e-mail"
+          >
+            <Send className="h-3.5 w-3.5" />
+          </Button>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <AppShell>
-      <div className="mx-auto max-w-4xl px-4 py-8 space-y-6">
-        <header className="flex items-center justify-between gap-3">
-          <div>
-            <h1 className="font-display text-2xl font-semibold tracking-tight">Minhas licenças</h1>
-            <p className="text-sm text-muted-foreground">
-              Códigos que você comprou ou resgatou, plano contratado e validade.
-            </p>
-          </div>
-          <Button asChild variant="outline">
+      <PageHeader
+        eyebrow="Conta · Licenças"
+        title="Minhas licenças"
+        description="Códigos que você comprou ou resgatou, plano contratado e validade."
+        breadcrumbs={[{ label: "Minhas licenças" }]}
+        icon={<KeyRound className="h-4 w-4" />}
+        goldRule
+        actions={
+          <Button asChild variant="executive" size="sm">
             <Link to="/resgatar">
-              <Ticket className="w-4 h-4 mr-1.5" /> Resgatar código
+              <Ticket className="mr-1.5 h-4 w-4" /> Resgatar código
             </Link>
           </Button>
-        </header>
+        }
+      />
 
-        {isLoading ? (
-          <div className="text-center py-16"><Loader2 className="w-6 h-6 animate-spin inline text-muted-foreground" /></div>
-        ) : (list ?? []).length === 0 ? (
-          <Card className="p-10 text-center space-y-3">
-            <div className="mx-auto w-12 h-12 rounded-full bg-muted flex items-center justify-center">
-              <Ticket className="w-5 h-5 text-muted-foreground" />
-            </div>
-            <div className="font-medium">Você ainda não tem licenças</div>
-            <p className="text-sm text-muted-foreground">
-              Ao comprar ou resgatar um plano, seu histórico aparece aqui.
-            </p>
-            <Button asChild size="sm" className="mt-2">
+      <div className="mx-auto w-full max-w-5xl px-4 py-6 md:px-6 md:py-8">
+        <DataTable<LicenseRow>
+          data={list}
+          columns={columns}
+          rowKey={(r) => r.id}
+          loading={isLoading}
+          error={error as Error | null}
+          onRetry={() => refetch()}
+          pageSize={10}
+          pageSizeOptions={[10, 25, 50]}
+          defaultSort={{ key: "expires", dir: "desc" }}
+          persistKey={`my-licenses:${userId ?? "anon"}`}
+          density="regular"
+          emptyIcon={<Ticket className="h-5 w-5" />}
+          emptyTitle="Você ainda não tem licenças"
+          emptyDescription="Ao comprar ou resgatar um plano, seu histórico aparece aqui."
+          emptyAction={
+            <Button asChild variant="executive" size="sm">
               <Link to="/resgatar">
-                Tenho um código <ArrowRight className="w-3.5 h-3.5 ml-1" />
+                Tenho um código <ArrowRight className="ml-1 h-3.5 w-3.5" />
               </Link>
             </Button>
-          </Card>
-        ) : (
-          <div className="grid gap-3">
-            {(list ?? []).map((l) => {
-              const expDate = new Date(l.expires_at);
-              const active = l.status === "redeemed" && expDate.getTime() > Date.now();
-              const available = l.status === "paid";
-              return (
-                <Card key={l.id} className="p-4">
-                  <div className="flex flex-wrap items-start justify-between gap-3">
-                    <div className="min-w-0 space-y-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-sm font-semibold">{l.code}</span>
-                        <Badge variant={active || available ? "default" : "secondary"}>
-                          {statusLabel(l.status)}
-                        </Badge>
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        Plano: <span className="font-medium text-foreground">{l.plan_name ?? "—"}</span>
-                        {l.plan_days ? ` · ${l.plan_days} dias` : ""} · {brl(l.price_cents)}
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        {active ? "Válida até " : "Expira em "}
-                        <span className="font-medium text-foreground">
-                          {expDate.toLocaleDateString("pt-BR")}
-                        </span>
-                        {l.redeemed_at && (
-                          <> · Resgatada em {new Date(l.redeemed_at).toLocaleDateString("pt-BR")}</>
-                        )}
-                      </div>
-                    </div>
-                    <div className="flex gap-2">
-                      <Button size="sm" variant="outline" onClick={() => {
-                        navigator.clipboard.writeText(l.code);
-                        toast.success("Código copiado");
-                      }}>
-                        <Copy className="w-3.5 h-3.5 mr-1.5" /> Copiar
-                      </Button>
-                      <Button
-                        size="sm"
-                        variant="ghost"
-                        disabled={resend.isPending}
-                        onClick={() => resend.mutate(l.id)}
-                        title="Receber o código por notificação"
-                      >
-                        <Send className="w-3.5 h-3.5 mr-1.5" /> Reenviar
-                      </Button>
-                    </div>
-                  </div>
-                </Card>
-              );
-            })}
-          </div>
-        )}
+          }
+        />
       </div>
     </AppShell>
   );
