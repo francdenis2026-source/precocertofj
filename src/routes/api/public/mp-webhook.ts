@@ -4,45 +4,84 @@ import { createHmac, timingSafeEqual } from "crypto";
 const MP_API = "https://api.mercadopago.com";
 
 /**
- * Mercado Pago Webhook (IPN v2)
+ * Mercado Pago Webhook (IPN v2) — logs every event to public.webhook_events
+ * and applies idempotency so the same payment id can never approve an order twice.
  *
- * MP posts events like { type: "payment", data: { id: "1234" } }.
- * We fetch the payment, and if status=approved, call approve_checkout_order
- * using the external_reference (our checkout_orders.id).
- *
- * Signature: MP sends `x-signature` and `x-request-id`. Header format:
- *   ts=1704908010,v1=<hmacsha256hex>
- * The signed string is: id:<data.id>;request-id:<x-request-id>;ts:<ts>;
- * HMAC key = MP_WEBHOOK_SECRET (configured in the MP dashboard).
+ * MP posts { type: "payment", data: { id: "1234" } }.
+ * Signature header format:  ts=1704908010,v1=<hmacsha256hex>
+ * Signed string:            id:<data.id>;request-id:<x-request-id>;ts:<ts>;
+ * HMAC key = MP_WEBHOOK_SECRET.
  */
 export const Route = createFileRoute("/api/public/mp-webhook")({
   server: {
     handlers: {
+      GET: async () => new Response("ok", { status: 200 }),
       POST: async ({ request }) => {
         const raw = await request.text();
-        let body: any;
+        let body: any = {};
         try {
-          body = JSON.parse(raw);
+          body = raw ? JSON.parse(raw) : {};
         } catch {
-          return new Response("Invalid JSON", { status: 400 });
+          // keep empty; will log as invalid_json
         }
 
-        const type = body?.type ?? body?.action ?? "";
-        const dataId = String(body?.data?.id ?? "");
-        if (!dataId) {
-          return new Response("Missing data.id", { status: 400 });
-        }
-
-        // Only payment events are relevant for order approval.
-        // (merchant_order events are ignored — we settle on the payment record.)
-        if (!String(type).includes("payment")) {
-          return new Response("ignored", { status: 200 });
-        }
-
-        // Verify signature when secret is configured
-        const secret = process.env.MP_WEBHOOK_SECRET;
+        const url = new URL(request.url);
+        const type: string =
+          body?.type ?? body?.action ?? url.searchParams.get("type") ?? "unknown";
+        const dataId: string =
+          String(body?.data?.id ?? "") || (url.searchParams.get("data.id") ?? "");
         const sigHeader = request.headers.get("x-signature") ?? "";
         const requestId = request.headers.get("x-request-id") ?? "";
+
+        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+        // Persist a log row up-front so admins see every hit — even malformed ones.
+        const { data: logRow } = await supabaseAdmin
+          .from("webhook_events")
+          .insert({
+            provider: "mercadopago",
+            event_type: String(type),
+            external_id: dataId || null,
+            payload: (body ?? {}) as never,
+            headers: {
+              "x-signature": sigHeader || null,
+              "x-request-id": requestId || null,
+            } as never,
+            signature_valid: false,
+            status: "received",
+            attempts: 0,
+          })
+          .select("id")
+          .single();
+
+        const finish = async (
+          status: string,
+          error: string | null,
+          httpStatus = 200,
+          extra?: Record<string, unknown>,
+        ) => {
+          if (logRow) {
+            await supabaseAdmin
+              .from("webhook_events")
+              .update({
+                status,
+                error,
+                attempts: 1,
+                last_processed_at: new Date().toISOString(),
+                ...(extra ?? {}),
+              })
+              .eq("id", logRow.id);
+          }
+          return new Response(error ?? "ok", { status: httpStatus });
+        };
+
+        if (!dataId) return finish("skipped", "sem data.id", 200);
+        if (!String(type).includes("payment"))
+          return finish("skipped", "não é evento de pagamento", 200);
+
+        // Signature validation
+        const secret = process.env.MP_WEBHOOK_SECRET;
+        let signatureValid = false;
         if (secret) {
           const parts = Object.fromEntries(
             sigHeader.split(",").map((p) => {
@@ -52,72 +91,94 @@ export const Route = createFileRoute("/api/public/mp-webhook")({
           );
           const ts = parts["ts"];
           const v1 = parts["v1"];
-          if (!ts || !v1) {
-            console.warn("[mp-webhook] missing ts/v1 in x-signature");
-            return new Response("Invalid signature", { status: 401 });
-          }
+          if (!ts || !v1) return finish("failed", "assinatura ausente (ts/v1)", 401);
           const manifest = `id:${dataId};request-id:${requestId};ts:${ts};`;
           const expected = createHmac("sha256", secret).update(manifest).digest("hex");
-          const a = Buffer.from(v1, "hex");
-          const b = Buffer.from(expected, "hex");
-          if (a.length !== b.length || !timingSafeEqual(a, b)) {
-            console.warn("[mp-webhook] signature mismatch");
-            return new Response("Invalid signature", { status: 401 });
+          try {
+            const a = Buffer.from(v1, "hex");
+            const b = Buffer.from(expected, "hex");
+            signatureValid = a.length === b.length && timingSafeEqual(a, b);
+          } catch {
+            signatureValid = false;
           }
+          if (!signatureValid) return finish("failed", "assinatura inválida", 401);
+          if (logRow) {
+            await supabaseAdmin
+              .from("webhook_events")
+              .update({ signature_valid: true })
+              .eq("id", logRow.id);
+          }
+        } else {
+          // No secret configured: mark as insecure but continue (dev-only path).
+          console.warn("[mp-webhook] MP_WEBHOOK_SECRET não configurado — validação desativada");
+        }
+
+        // Idempotency: if we already processed this payment id successfully, short-circuit.
+        const { data: prior } = await supabaseAdmin
+          .from("webhook_events")
+          .select("id")
+          .eq("provider", "mercadopago")
+          .eq("external_id", dataId)
+          .eq("status", "processed")
+          .neq("id", logRow?.id ?? "00000000-0000-0000-0000-000000000000")
+          .limit(1);
+        if (prior && prior.length > 0) {
+          return finish("skipped_duplicate", "pagamento já processado", 200);
         }
 
         const token = process.env.MP_ACCESS_TOKEN;
-        if (!token) {
-          console.error("[mp-webhook] MP_ACCESS_TOKEN not configured");
-          return new Response("Server misconfigured", { status: 500 });
-        }
+        if (!token) return finish("failed", "MP_ACCESS_TOKEN não configurado", 500);
 
-        // Fetch payment from MP to confirm status and grab external_reference
+        // Fetch payment from MP to confirm status and get external_reference
         const payResp = await fetch(`${MP_API}/v1/payments/${dataId}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!payResp.ok) {
           const errBody = await payResp.text();
           console.error(`[mp-webhook] payment fetch failed [${payResp.status}]: ${errBody}`);
-          // Return 200 to prevent MP retries on 4xx from our side; 5xx will retry.
-          if (payResp.status >= 500) return new Response("upstream error", { status: 502 });
-          return new Response("payment not found", { status: 200 });
+          if (payResp.status >= 500) return finish("failed", `upstream ${payResp.status}`, 502);
+          return finish("skipped", `pagamento não encontrado (${payResp.status})`, 200);
         }
         const payment: any = await payResp.json();
         const status = String(payment?.status ?? "");
         const externalRef = String(payment?.external_reference ?? "");
 
-        if (!externalRef) {
-          console.warn(`[mp-webhook] payment ${dataId} without external_reference`);
-          return new Response("no external_reference", { status: 200 });
+        if (!externalRef) return finish("skipped", "sem external_reference", 200);
+
+        // Idempotency guard #2: check order state — never re-approve.
+        const { data: order } = await supabaseAdmin
+          .from("checkout_orders")
+          .select("id, status")
+          .eq("id", externalRef)
+          .maybeSingle();
+        if (!order) return finish("failed", "pedido não encontrado", 200);
+
+        if (order.status === "approved" && status === "approved") {
+          return finish("skipped_duplicate", "pedido já aprovado", 200);
         }
 
-        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
-        // Log the webhook (best-effort; ignore errors)
+        // Always keep provider_ref in sync
         await supabaseAdmin
           .from("checkout_orders")
           .update({ provider_ref: String(dataId) })
           .eq("id", externalRef);
 
         if (status === "approved") {
-          const { data, error } = await supabaseAdmin.rpc("approve_checkout_order", {
+          const { data: rpcData, error } = await supabaseAdmin.rpc("approve_checkout_order", {
             _order_id: externalRef,
             _provider_ref: String(dataId),
           });
           if (error) {
-            // If already approved, RPC may error — treat as idempotent success
             if (String(error.message).toLowerCase().includes("already")) {
-              return new Response("already approved", { status: 200 });
+              return finish("skipped_duplicate", "já aprovado (rpc)", 200);
             }
-            console.error(`[mp-webhook] approve rpc failed: ${error.message}`);
-            return new Response("approve failed", { status: 500 });
+            return finish("failed", `rpc: ${error.message}`, 500);
           }
-          const row = Array.isArray(data) ? data[0] : data;
+          const row = Array.isArray(rpcData) ? rpcData[0] : rpcData;
           console.log(
-            `[mp-webhook] order ${externalRef} approved, license ${row?.license_code ?? "?"}`,
+            `[mp-webhook] order ${externalRef} approved · license ${row?.license_code ?? "?"}`,
           );
-          return new Response("ok", { status: 200 });
+          return finish("processed", null, 200);
         }
 
         if (status === "rejected" || status === "cancelled") {
@@ -126,11 +187,11 @@ export const Route = createFileRoute("/api/public/mp-webhook")({
             .update({ status: status === "cancelled" ? "cancelled" : "failed" })
             .eq("id", externalRef)
             .eq("status", "pending");
+          return finish("processed", `pagamento ${status}`, 200);
         }
 
-        return new Response("ok", { status: 200 });
+        return finish("processed", `status ${status}`, 200);
       },
-      GET: async () => new Response("ok", { status: 200 }),
     },
   },
 });
