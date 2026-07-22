@@ -152,3 +152,98 @@ export const createMercadoPagoPreference = createServerFn({ method: "POST" })
 
     return { url: redirectUrl, preferenceId: pref.id, sandbox: isSandbox };
   });
+
+/** Admin: list webhook events for the Mercado Pago provider. */
+export const listMercadoPagoWebhookEvents = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { limit?: number } | undefined) => ({
+    limit: Math.min(Math.max(Number(data?.limit ?? 100), 1), 500),
+  }))
+  .handler(async ({ data, context }) => {
+    const { data: isAdmin } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (!isAdmin) throw new Error("Acesso negado");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: rows, error } = await supabaseAdmin
+      .from("webhook_events")
+      .select(
+        "id, provider, event_type, external_id, status, error, signature_valid, attempts, created_at, last_processed_at, payload",
+      )
+      .eq("provider", "mercadopago")
+      .order("created_at", { ascending: false })
+      .limit(data.limit);
+    if (error) throw new Error(error.message);
+    return (rows ?? []).map((r: any) => ({
+      ...r,
+      payload_summary: summarizePayload(r.payload),
+    }));
+  });
+
+function summarizePayload(payload: unknown): string {
+  try {
+    const p = payload as Record<string, unknown>;
+    const type = (p?.type ?? p?.action ?? "") as string;
+    const data = (p?.data ?? {}) as Record<string, unknown>;
+    const id = data?.id ?? "";
+    return `${type || "evento"} · id=${id || "—"}`;
+  } catch {
+    return "—";
+  }
+}
+
+/**
+ * Dev/admin helper: simulate an approved payment without going through Mercado Pago.
+ * Marks the order as approved via the RPC and generates the license code.
+ */
+export const simulateCheckoutApproval = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { orderId: string }) => ({ orderId: String(data?.orderId ?? "") }))
+  .handler(async ({ data, context }) => {
+    const { data: isAdmin } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (!isAdmin) throw new Error("Acesso negado — apenas admins podem simular pagamento");
+    if (!data.orderId) throw new Error("orderId obrigatório");
+
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: order } = await supabaseAdmin
+      .from("checkout_orders")
+      .select("id, status")
+      .eq("id", data.orderId)
+      .maybeSingle();
+    if (!order) throw new Error("Pedido não encontrado");
+    if (order.status === "approved")
+      throw new Error("Pedido já foi aprovado — código já emitido");
+
+    const providerRef = `sim-${Date.now()}`;
+    const { data: rows, error } = await supabaseAdmin.rpc("approve_checkout_order", {
+      _order_id: data.orderId,
+      _provider_ref: providerRef,
+    });
+    if (error) throw new Error(error.message);
+    const row = Array.isArray(rows) ? rows[0] : rows;
+
+    // Register a synthetic webhook_events row for the audit log
+    await supabaseAdmin.from("webhook_events").insert({
+      provider: "mercadopago",
+      event_type: "simulated.payment",
+      external_id: providerRef,
+      payload: { simulated: true, orderId: data.orderId } as never,
+      headers: { source: "admin-simulate" } as never,
+      signature_valid: true,
+      status: "processed",
+      attempts: 1,
+      last_processed_at: new Date().toISOString(),
+    });
+
+    return {
+      orderId: row?.order_id as string,
+      licenseCode: row?.license_code as string,
+      providerRef,
+    };
+  });
+
