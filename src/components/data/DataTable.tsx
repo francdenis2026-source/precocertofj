@@ -53,6 +53,8 @@ export type DataTableProps<T> = {
   emptyAction?: React.ReactNode;
   /** Paginação client-side. 0 ou undefined = sem paginação. */
   pageSize?: number;
+  /** Opções de tamanho de página exibidas em seletor. */
+  pageSizeOptions?: number[];
   /** Sort inicial. */
   defaultSort?: { key: string; dir: SortDir };
   onRowClick?: (row: T, index: number) => void;
@@ -61,6 +63,11 @@ export type DataTableProps<T> = {
   density?: "compact" | "regular";
   /** Caption/legend opcional abaixo do rodapé. */
   caption?: React.ReactNode;
+  /**
+   * Chave para persistir preferências (sort, page, pageSize) em localStorage.
+   * Inclua o id do usuário para escopo por conta, ex.: `admin.catalog.items:${userId}`.
+   */
+  persistKey?: string;
 };
 
 export function DataTable<T>({
