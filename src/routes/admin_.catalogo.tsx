@@ -1587,9 +1587,11 @@ function AuditPanel() {
           error={error}
           onRetry={load}
           pageSize={25}
+          pageSizeOptions={[25, 50, 100, 200]}
           rowKey={(r) => r.id}
           defaultSort={{ key: "when", dir: "desc" }}
           density="compact"
+          persistKey={`admin.catalog.audit:${user?.id ?? "anon"}`}
           emptyTitle="Nenhum evento registrado"
           emptyDescription="Ações de edição do catálogo aparecerão aqui."
           emptyIcon={<History className="h-5 w-5 text-muted-foreground" />}
