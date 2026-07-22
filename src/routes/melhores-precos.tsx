@@ -290,6 +290,20 @@ function MelhoresPrecosPage() {
     return counts;
   }, [allRows]);
 
+  // Tipos disponíveis são recalculados após o filtro de categoria — assim o
+  // usuário só vê tipos que existem dentro do escopo escolhido.
+  const typeCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const r of allRows) {
+      if (activeCategory && r.category !== activeCategory) continue;
+      const t = classifyProductType(r.display_name);
+      if (t === "outros") continue;
+      counts.set(t, (counts.get(t) ?? 0) + 1);
+    }
+    return counts;
+  }, [allRows, activeCategory]);
+
+
   const priceBounds = useMemo(() => {
     if (allRows.length === 0) return { min: 0, max: 0 };
     let lo = Infinity, hi = 0;
