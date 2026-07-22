@@ -60,12 +60,12 @@ const emptyAddress: Address = {
 };
 
 // Emerald Prestige tokens — scoped to login page.
-const PC_EMERALD_DEEP = "#043a2c";
-const PC_EMERALD = "#064e3b";
-const PC_EMERALD_LIGHT = "#0d7a5f";
-const PC_GOLD = "#c9a84c";
-const PC_GOLD_DARK = "#a88c3d";
-const PC_CREAM = "#f5f0e0";
+const PC_EMERALD_DEEP = "#0a1631";
+const PC_EMERALD = "#0f1b3d";
+const PC_EMERALD_LIGHT = "#1e3a5f";
+const PC_GOLD = "#b58a3c";
+const PC_GOLD_DARK = "#8a6b2c";
+const PC_CREAM = "#f4f6fb";
 const PC_DISPLAY = "'Outfit', system-ui, sans-serif";
 const PC_BODY = "'Figtree', system-ui, sans-serif";
 
