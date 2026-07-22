@@ -461,27 +461,12 @@ function LoginPage() {
 
             {(() => {
               const pinOk = /^\d{6}$/.test(password);
-              const status: FieldStatus =
-                password.length === 0 ? "idle" : pinOk ? "success" : password.length < 6 ? "idle" : "error";
-              const hint =
-                password.length === 0
-                  ? null
-                  : pinOk
-                    ? "✓ PIN completo"
-                    : `Faltam ${6 - password.length} dígito${6 - password.length > 1 ? "s" : ""}`;
+              const errored = password.length === 6 && !pinOk;
               return (
-                <Field
-                  label="PIN de acesso (6 dígitos)"
-                  type="password"
-                  placeholder="••••••"
-                  icon={Lock}
+                <PinField
                   value={password}
                   onChange={(v) => setPassword(v.replace(/\D/g, "").slice(0, 6))}
-                  status={status}
-                  hint={hint}
-                  required
-                  minLength={6}
-                  inputMode="numeric"
+                  hasError={errored || (mode === "login" && !!blockStatus?.blocked)}
                 />
               );
             })()}
