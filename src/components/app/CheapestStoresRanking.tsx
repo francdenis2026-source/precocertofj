@@ -149,19 +149,32 @@ export function CheapestStoresRanking() {
         />
       )}
 
-      {/* Ordenação */}
-      <QuickFilterBar<"wins" | "savings" | "ticket">
-        label="Ordenar"
-        ariaLabel="Ordenar ranking"
-        options={[
-          { value: "wins", label: "Mais vitórias" },
-          { value: "savings", label: "Maior economia %" },
-          { value: "ticket", label: "Menor ticket médio" },
-        ]}
-        value={sort}
-        onChange={(next) => setSort(next ?? "wins")}
-        size="sm"
-      />
+      {/* Ordenação — clicar em "Padrão" restaura ordem original por vitórias */}
+      <div className="flex items-center gap-2">
+        <QuickFilterBar<"wins" | "savings" | "ticket">
+          label="Ordenar"
+          ariaLabel="Ordenar ranking"
+          options={[
+            { value: "wins", label: "Padrão · mais vitórias" },
+            { value: "savings", label: "Maior economia %" },
+            { value: "ticket", label: "Menor ticket médio" },
+          ]}
+          value={sort}
+          onChange={(next) => setSort(next ?? "wins")}
+          size="sm"
+        />
+        {sort !== "wins" && (
+          <button
+            type="button"
+            onClick={() => setSort("wins")}
+            className="shrink-0 rounded-full border border-border bg-background px-2 py-0.5 font-mono text-[9.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground hover:border-primary/40 hover:text-foreground"
+            aria-label="Voltar à ordenação padrão"
+          >
+            Padrão
+          </button>
+        )}
+      </div>
+
 
 
 
