@@ -142,7 +142,7 @@ export const createMercadoPagoPreference = createServerFn({ method: "POST" })
       sandbox_init_point: string;
     };
 
-    const isSandbox = token.startsWith("TEST-");
+    const isSandbox = tokenInfo.env === "test";
     const redirectUrl = isSandbox ? pref.sandbox_init_point : pref.init_point;
 
     await supabaseAdmin
