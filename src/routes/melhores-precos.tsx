@@ -363,6 +363,8 @@ function MelhoresPrecosPage() {
     });
     return [...filtered].sort((a, b) => {
       if (sortBy === "price") return Number(a.min_price) - Number(b.min_price);
+      if (sortBy === "ticket") return Number(a.avg_price) - Number(b.avg_price);
+
       if (sortBy === "unit") {
         const ua = computeUnitPrice(Number(a.min_price), a.display_name, {
           sizeValue: a.size_value,
