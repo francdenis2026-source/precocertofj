@@ -62,10 +62,11 @@ const brl = (n: number) =>
 export function CheapestStoresRanking() {
   const fetchRanking = useServerFn(getCheapestStoresRanking);
   const [category, setCategory] = useState<string | null>(null);
+  const [type, setType] = useState<string | null>(null);
 
   const rankingQ = useQuery({
-    queryKey: ["app-cheapest-stores-ranking", "v3", category ?? "all"],
-    queryFn: () => fetchRanking({ data: { category } }),
+    queryKey: ["app-cheapest-stores-ranking", "v4", category ?? "all", type ?? "all"],
+    queryFn: () => fetchRanking({ data: { category, type } }),
     staleTime: 5 * 60_000,
   });
 
@@ -80,6 +81,15 @@ export function CheapestStoresRanking() {
       label: CATEGORY_LABEL[c.key] ?? c.key,
       count: c.count,
     }));
+
+  const typeOptions = (summary?.availableTypes ?? [])
+    .slice(0, 10)
+    .map((t) => ({
+      value: t.key,
+      label: PRODUCT_TYPE_LABEL[t.key as keyof typeof PRODUCT_TYPE_LABEL] ?? t.key,
+      count: t.count,
+    }));
+
 
   return (
     <section aria-label="Ranking de mercados mais baratos" className="space-y-3">
