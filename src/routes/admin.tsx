@@ -20,6 +20,7 @@ import {
 import { uploadImageDataUrl } from "@/lib/storage.functions";
 import { claimFirstAdmin, listUsersWithRoles, grantRole, revokeRole, listRoleAuditLog, OWNER_EMAIL, type UserWithRoles, type RoleAuditEntry } from "@/lib/roles.functions";
 import { AppShell } from "@/components/brand/AppShell";
+import { PageHeader } from "@/components/brand/PageHeader";
 import { StoreBadge, getStoreColor } from "@/components/brand/StoreBadge";
 import { admin, useAdmin } from "@/lib/admin-store";
 import {
