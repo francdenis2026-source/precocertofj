@@ -209,17 +209,33 @@ function CheckoutPage() {
               <Card>
                 <CardHeader>
                   <CardTitle className="text-base">Pagamento</CardTitle>
+                  <CardDescription className="text-xs">
+                    Você será redirecionado ao Mercado Pago para concluir com Pix, cartão ou boleto.
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
-                  <Button className="w-full" variant="executive" disabled>
-                    <CreditCard className="mr-1 h-4 w-4" /> Pagar com Mercado Pago
+                  <Button
+                    className="w-full"
+                    variant="executive"
+                    onClick={() => payMutation.mutate()}
+                    disabled={payMutation.isPending}
+                  >
+                    {payMutation.isPending ? (
+                      <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+                    ) : (
+                      <CreditCard className="mr-1 h-4 w-4" />
+                    )}
+                    Pagar com Mercado Pago
                   </Button>
-                  <p className="text-xs text-muted-foreground">
-                    Integração com Mercado Pago em breve. Por enquanto, entre em contato pelo email de suporte
-                    para confirmação manual do pagamento.
-                  </p>
+                  {order.status === "pending" && (
+                    <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <Clock className="h-3 w-3" />
+                      A confirmação chega automaticamente após o pagamento.
+                    </p>
+                  )}
                 </CardContent>
               </Card>
+
 
               {order.discount_cents === 0 && (
                 <Card>
