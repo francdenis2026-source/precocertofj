@@ -10,16 +10,18 @@ export type PageHeaderCrumb = {
 type PageHeaderProps = {
   /** Eyebrow / kicker acima do título — ex: "Painel · Licenças". */
   eyebrow?: string;
-  /** Título principal. */
-  title: string;
+  /** Título principal. Aceita string ou ReactNode (para <em>/<span> inline). */
+  title: React.ReactNode;
   /** Descrição curta abaixo do título. */
   description?: React.ReactNode;
-  /** Migalhas de pão à la Executive. Ex: [{label:"Admin", to:"/admin"}, {label:"Licenças"}]. */
+  /** Migalhas de pão à la Executive. */
   breadcrumbs?: PageHeaderCrumb[];
   /** Ícone opcional exibido em círculo à esquerda. */
   icon?: React.ReactNode;
   /** Elementos alinhados à direita — botões, filtros, badges. */
   actions?: React.ReactNode;
+  /** Meta info inline (badges, contadores) — exibido logo abaixo do título. */
+  meta?: React.ReactNode;
   /** Torna o título editorial (Instrument Serif) em vez do padrão UI. */
   editorial?: boolean;
   className?: string;
