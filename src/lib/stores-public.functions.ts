@@ -402,9 +402,12 @@ export type CheapestRankingResponse = {
     avgSavingsPct: number;
     windowDays: number;
     filterCategory: string | null;
+    filterType: string | null;
     availableCategories: { key: string; count: number }[];
+    availableTypes: { key: string; count: number }[];
   };
 };
+
 
 type ScanRowRank = {
   product_name: string | null;
