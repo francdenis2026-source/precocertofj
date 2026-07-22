@@ -40,6 +40,7 @@ export function PageHeader({
   breadcrumbs,
   icon,
   actions,
+  meta,
   editorial = false,
   goldRule = false,
   className,
