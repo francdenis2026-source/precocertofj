@@ -98,8 +98,15 @@ function AppHomeContent() {
 
   return (
     <AppShell>
+      <PageHeader
+        breadcrumbs={[{ label: "Meu painel" }]}
+        eyebrow="PreçoCerto · Executive"
+        title={`Olá, ${firstName}`}
+        description={statusLine}
+      />
       <div className="mx-auto max-w-7xl px-4 py-5 md:px-6 md:py-7">
         <AppHero firstName={firstName} statusLine={statusLine} />
+
 
         {loading && (
           <div className="mt-6 flex items-center gap-2 text-sm text-muted-foreground">
