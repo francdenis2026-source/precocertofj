@@ -668,7 +668,8 @@ function HomePage() {
               >
                 <Stat label="Lojas" value={statsQ.data ? String((statsQ.data as any).stores ?? 0) : "0"} />
                 <Stat label="Colab." value={statsQ.data ? String((statsQ.data as any).collaborators ?? 0) : "0"} />
-                <Stat label="Uptime" value="99.9%" />
+                <Stat label="No ar" value="99,9%" />
+
               </div>
             </div>
           </aside>
