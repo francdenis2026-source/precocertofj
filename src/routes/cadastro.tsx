@@ -281,62 +281,75 @@ function CadastroPage() {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
               <Field
                 label="Nome completo"
                 value={name}
                 onChange={setName}
-                placeholder="Como quer ser chamado?"
+                onBlur={() => markTouched("name")}
+                placeholder="Nome e sobrenome"
                 autoComplete="name"
+                state={vName}
+                showState={touched.name}
               />
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <Field
                   label="CPF"
                   value={cpf}
                   onChange={(v) => setCpf(maskCpf(v))}
+                  onBlur={() => markTouched("cpf")}
                   placeholder="000.000.000-00"
                   inputMode="numeric"
                   autoComplete="username"
+                  state={vCpf}
+                  showState={touched.cpf}
                 />
                 <Field
                   label="Celular (opcional)"
                   value={phone}
                   onChange={(v) => setPhone(maskPhone(v))}
+                  onBlur={() => markTouched("phone")}
                   placeholder="(00) 00000-0000"
                   inputMode="tel"
                   autoComplete="tel"
+                  state={vPhone}
+                  showState={touched.phone}
                 />
               </div>
 
               <div>
-                <label
-                  className="mb-2 block text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500"
-                >
-                  PIN de acesso (6 dígitos)
-                </label>
+                <div className="mb-2 flex items-center justify-between">
+                  <label className="block text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                    PIN de acesso (6 dígitos)
+                  </label>
+                  <FieldStatus state={vPin} show={touched.password} />
+                </div>
                 <PinField
                   value={password}
                   onChange={(v) => setPassword(v.replace(/\D/g, "").slice(0, 6))}
+                  onComplete={() => markTouched("password")}
+                  hasError={touched.password && !vPin.valid}
                 />
               </div>
 
               {error && (
                 <p
-                  className="rounded-xl border px-3 py-2 text-xs"
+                  className="flex items-start gap-2 rounded-xl border px-3 py-2 text-xs"
                   style={{
                     borderColor: "rgba(220,38,38,0.25)",
                     background: "rgba(254,226,226,0.6)",
                     color: "#991b1b",
                   }}
                 >
-                  {error}
+                  <AlertCircle className="mt-0.5 h-3.5 w-3.5 flex-none" />
+                  <span>{error}</span>
                 </p>
               )}
 
               <button
                 type="submit"
-                disabled={loading}
-                className="mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold text-white shadow-lg transition disabled:opacity-60"
+                disabled={loading || !allValid}
+                className="mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold text-white shadow-lg transition disabled:cursor-not-allowed disabled:opacity-50"
                 style={{
                   background: `linear-gradient(135deg, ${PC_EMERALD_LIGHT}, ${PC_EMERALD})`,
                   boxShadow: "0 10px 30px -12px rgba(6,78,59,0.55)",
@@ -351,6 +364,7 @@ function CadastroPage() {
                   </>
                 )}
               </button>
+
 
               <div className="flex items-center justify-between pt-1 text-xs">
                 <span className="inline-flex items-center gap-1.5 text-slate-500">
