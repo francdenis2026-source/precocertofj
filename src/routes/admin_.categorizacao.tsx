@@ -91,22 +91,14 @@ function CategorizacaoPage() {
         ]}
         title="Revisão de categorização"
         description="Confirme ou corrija marca, tipo e embalagem antes de aplicar no catálogo."
-        actions={
-          <Button
-            variant="executive"
-            onClick={() => genM.mutate()}
-            disabled={genM.isPending}
-          >
-            {genM.isPending ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <Sparkles className="h-4 w-4 mr-1.5" />}
-            Gerar sugestões (últimos scans)
-          </Button>
-        }
+        actions={<HeaderActions />}
       />
       <section className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8 space-y-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <KpiCard label="Pendentes na lista" value={counts.pending} />
           <KpiCard label="Baixa confiança (<50%)" value={counts.lowConf} tone="destructive" />
         </div>
+
 
         <Card>
           <CardHeader className="pb-3">
