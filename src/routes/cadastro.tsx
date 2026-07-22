@@ -85,6 +85,17 @@ function CadastroPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [touched, setTouched] = useState({
+    name: false, cpf: false, phone: false, password: false,
+  });
+  const markTouched = (k: keyof typeof touched) =>
+    setTouched((t) => (t[k] ? t : { ...t, [k]: true }));
+
+  const vName = useMemo(() => validateName(name), [name]);
+  const vCpf = useMemo(() => validateCpfField(cpf), [cpf]);
+  const vPhone = useMemo(() => validatePhone(phone), [phone]);
+  const vPin = useMemo(() => validatePin(password), [password]);
+  const allValid = vName.valid && vCpf.valid && vPhone.valid && vPin.valid;
 
   useEffect(() => {
     let mounted = true;
@@ -99,32 +110,20 @@ function CadastroPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    if (!name.trim() || name.trim().length < 3) {
-      setError("Informe seu nome completo.");
-      return;
-    }
-    const cpfCheck = validateCpfDetailed(cpf);
-    if (!cpfCheck.valid) {
-      setError(cpfCheck.message);
-      return;
-    }
-    if (!/^\d{6}$/.test(password)) {
-      setError("O PIN precisa ter exatamente 6 dígitos.");
-      return;
-    }
-    const phoneDigits = phone.replace(/\D/g, "");
-    if (phoneDigits && phoneDigits.length < 10) {
-      setError("Informe um celular válido com DDD ou deixe em branco.");
-      return;
-    }
+    setTouched({ name: true, cpf: true, phone: true, password: true });
+    if (!vName.valid) return setError(vName.msg ?? "Informe seu nome completo.");
+    if (!vCpf.valid) return setError(vCpf.msg ?? "CPF inválido.");
+    if (!vPin.valid) return setError(vPin.msg ?? "PIN de 6 dígitos.");
+    if (!vPhone.valid) return setError(vPhone.msg ?? "Celular inválido.");
+
     setLoading(true);
     try {
       const res = await signUp({
         data: {
-          cpf: cpfCheck.digits,
+          cpf: cpf.replace(/\D/g, ""),
           password,
           fullName: name.trim(),
-          phone: phoneDigits,
+          phone: phone.replace(/\D/g, ""),
           address: {},
         },
       });
