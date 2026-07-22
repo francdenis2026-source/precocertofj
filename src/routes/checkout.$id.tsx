@@ -8,7 +8,10 @@ import {
   validatePromoCoupon,
   approveCheckoutOrder,
 } from "@/lib/checkout.functions";
-import { createMercadoPagoPreference } from "@/lib/mercadopago.functions";
+import {
+  createMercadoPagoPreference,
+  simulateCheckoutApproval,
+} from "@/lib/mercadopago.functions";
 import { AppShell } from "@/components/brand/AppShell";
 import { PageHeader } from "@/components/brand/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
