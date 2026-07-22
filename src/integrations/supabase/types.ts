@@ -1719,6 +1719,65 @@ export type Database = {
         }
         Relationships: []
       }
+      product_price_history: {
+        Row: {
+          brand: string | null
+          captured_at: string
+          change_pct: number | null
+          created_at: string
+          establishment_id: string
+          id: string
+          previous_price: number | null
+          price: number
+          product_key: string
+          product_name: string
+          scan_id: string | null
+          size_unit: string | null
+          size_value: number | null
+          source: string
+        }
+        Insert: {
+          brand?: string | null
+          captured_at?: string
+          change_pct?: number | null
+          created_at?: string
+          establishment_id: string
+          id?: string
+          previous_price?: number | null
+          price: number
+          product_key: string
+          product_name: string
+          scan_id?: string | null
+          size_unit?: string | null
+          size_value?: number | null
+          source?: string
+        }
+        Update: {
+          brand?: string | null
+          captured_at?: string
+          change_pct?: number | null
+          created_at?: string
+          establishment_id?: string
+          id?: string
+          previous_price?: number | null
+          price?: number
+          product_key?: string
+          product_name?: string
+          scan_id?: string | null
+          size_unit?: string | null
+          size_value?: number | null
+          source?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_price_history_establishment_id_fkey"
+            columns: ["establishment_id"]
+            isOneToOne: false
+            referencedRelation: "establishments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       product_price_stats: {
         Row: {
           avg_price: number

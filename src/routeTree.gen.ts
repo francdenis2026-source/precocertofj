@@ -63,6 +63,7 @@ import { Route as AdminLoteInserirRouteImport } from './routes/admin_.lote-inser
 import { Route as AdminImportacoesRouteImport } from './routes/admin_.importacoes'
 import { Route as AdminImageJobsRouteImport } from './routes/admin_.image-jobs'
 import { Route as AdminIconesCategoriaRouteImport } from './routes/admin_.icones-categoria'
+import { Route as AdminHistoricoPrecosRouteImport } from './routes/admin_.historico-precos'
 import { Route as AdminCupomLoteRouteImport } from './routes/admin_.cupom-lote'
 import { Route as AdminCupomRouteImport } from './routes/admin_.cupom'
 import { Route as AdminConversoesRouteImport } from './routes/admin_.conversoes'
@@ -352,6 +353,11 @@ const AdminIconesCategoriaRoute = AdminIconesCategoriaRouteImport.update({
   path: '/admin/icones-categoria',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminHistoricoPrecosRoute = AdminHistoricoPrecosRouteImport.update({
+  id: '/admin_/historico-precos',
+  path: '/admin/historico-precos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminCupomLoteRoute = AdminCupomLoteRouteImport.update({
   id: '/admin_/cupom-lote',
   path: '/admin/cupom-lote',
@@ -491,6 +497,7 @@ export interface FileRoutesByFullPath {
   '/admin/conversoes': typeof AdminConversoesRoute
   '/admin/cupom': typeof AdminCupomRoute
   '/admin/cupom-lote': typeof AdminCupomLoteRoute
+  '/admin/historico-precos': typeof AdminHistoricoPrecosRoute
   '/admin/icones-categoria': typeof AdminIconesCategoriaRoute
   '/admin/image-jobs': typeof AdminImageJobsRoute
   '/admin/importacoes': typeof AdminImportacoesRoute
@@ -565,6 +572,7 @@ export interface FileRoutesByTo {
   '/admin/conversoes': typeof AdminConversoesRoute
   '/admin/cupom': typeof AdminCupomRoute
   '/admin/cupom-lote': typeof AdminCupomLoteRoute
+  '/admin/historico-precos': typeof AdminHistoricoPrecosRoute
   '/admin/icones-categoria': typeof AdminIconesCategoriaRoute
   '/admin/image-jobs': typeof AdminImageJobsRoute
   '/admin/importacoes': typeof AdminImportacoesRoute
@@ -640,6 +648,7 @@ export interface FileRoutesById {
   '/admin_/conversoes': typeof AdminConversoesRoute
   '/admin_/cupom': typeof AdminCupomRoute
   '/admin_/cupom-lote': typeof AdminCupomLoteRoute
+  '/admin_/historico-precos': typeof AdminHistoricoPrecosRoute
   '/admin_/icones-categoria': typeof AdminIconesCategoriaRoute
   '/admin_/image-jobs': typeof AdminImageJobsRoute
   '/admin_/importacoes': typeof AdminImportacoesRoute
@@ -716,6 +725,7 @@ export interface FileRouteTypes {
     | '/admin/conversoes'
     | '/admin/cupom'
     | '/admin/cupom-lote'
+    | '/admin/historico-precos'
     | '/admin/icones-categoria'
     | '/admin/image-jobs'
     | '/admin/importacoes'
@@ -790,6 +800,7 @@ export interface FileRouteTypes {
     | '/admin/conversoes'
     | '/admin/cupom'
     | '/admin/cupom-lote'
+    | '/admin/historico-precos'
     | '/admin/icones-categoria'
     | '/admin/image-jobs'
     | '/admin/importacoes'
@@ -864,6 +875,7 @@ export interface FileRouteTypes {
     | '/admin_/conversoes'
     | '/admin_/cupom'
     | '/admin_/cupom-lote'
+    | '/admin_/historico-precos'
     | '/admin_/icones-categoria'
     | '/admin_/image-jobs'
     | '/admin_/importacoes'
@@ -938,6 +950,7 @@ export interface RootRouteChildren {
   AdminConversoesRoute: typeof AdminConversoesRoute
   AdminCupomRoute: typeof AdminCupomRoute
   AdminCupomLoteRoute: typeof AdminCupomLoteRoute
+  AdminHistoricoPrecosRoute: typeof AdminHistoricoPrecosRoute
   AdminIconesCategoriaRoute: typeof AdminIconesCategoriaRoute
   AdminImageJobsRoute: typeof AdminImageJobsRoute
   AdminImportacoesRoute: typeof AdminImportacoesRoute
@@ -1344,6 +1357,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIconesCategoriaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin_/historico-precos': {
+      id: '/admin_/historico-precos'
+      path: '/admin/historico-precos'
+      fullPath: '/admin/historico-precos'
+      preLoaderRoute: typeof AdminHistoricoPrecosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin_/cupom-lote': {
       id: '/admin_/cupom-lote'
       path: '/admin/cupom-lote'
@@ -1565,6 +1585,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminConversoesRoute: AdminConversoesRoute,
   AdminCupomRoute: AdminCupomRoute,
   AdminCupomLoteRoute: AdminCupomLoteRoute,
+  AdminHistoricoPrecosRoute: AdminHistoricoPrecosRoute,
   AdminIconesCategoriaRoute: AdminIconesCategoriaRoute,
   AdminImageJobsRoute: AdminImageJobsRoute,
   AdminImportacoesRoute: AdminImportacoesRoute,
@@ -1594,13 +1615,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

@@ -260,7 +260,8 @@ function AdminPage() {
             { to: "/admin/precos", label: "Gestão de preços", icon: ShieldCheck },
             { to: "/admin/consistencia", label: "Consistência", icon: AlertTriangle },
             { to: "/admin/cobertura", label: "Cobertura por loja", icon: Store },
-            { to: "/admin/lote-inserir", label: "Inserção em lote", icon: Plus },
+            { to: "/admin/lote-inserir", label: "Scan Inteligente", icon: Plus },
+            { to: "/admin/historico-precos", label: "Histórico de preços", icon: Gauge },
             { to: "/admin/analytics", label: "Analytics", icon: Gauge },
           ].map((item) => (
             <Link
