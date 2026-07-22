@@ -28,6 +28,8 @@ import { computeUnitPrice } from "@/lib/unit-price";
 import { useMyRoles } from "@/hooks/useMyRoles";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { submitPriceReport } from "@/lib/stores-public.functions";
+import { classifyProductType, PRODUCT_TYPE_LABEL } from "@/lib/product-type";
+
 
 const PAGE_SIZE = 24;
 
@@ -39,6 +41,7 @@ const PAGE_SIZE = 24;
 
 const searchSchema = z.object({
   cat: fallback(z.string(), "").default(""),
+  type: fallback(z.string(), "").default(""),
   sort: fallback(z.string(), "savings").default("savings"),
   min: fallback(z.number(), 0).default(0),
   max: fallback(z.number(), 0).default(0),
@@ -52,7 +55,8 @@ const searchSchema = z.object({
 export const Route = createFileRoute("/melhores-precos")({
   validateSearch: zodValidator(searchSchema),
   search: {
-    middlewares: [retainSearchParams(["cat", "sort", "min", "max", "stores", "q", "page"])],
+    middlewares: [retainSearchParams(["cat", "type", "sort", "min", "max", "stores", "q", "page"])],
+
   },
   head: () => ({
     meta: [
@@ -191,6 +195,7 @@ function MelhoresPrecosPage() {
   const search = Route.useSearch();
   const navigate = useNavigate({ from: "/melhores-precos" });
   const activeCategory = search.cat || null;
+  const activeType = search.type || null;
   const sortBy: "savings" | "price" | "trend" | "unit" =
     search.sort === "price"
       ? "price"
@@ -206,8 +211,9 @@ function MelhoresPrecosPage() {
   const page = Math.max(1, search.page || 1);
 
   const setSearch = (
-    patch: Partial<{ cat: string; sort: string; min: number; max: number; stores: number; q: string; page: number }>,
+    patch: Partial<{ cat: string; type: string; sort: string; min: number; max: number; stores: number; q: string; page: number }>,
   ) => {
+
     navigate({
       search: (prev: Record<string, unknown>) => {
         const next = { ...prev, ...patch };
@@ -286,6 +292,20 @@ function MelhoresPrecosPage() {
     return counts;
   }, [allRows]);
 
+  // Tipos disponíveis são recalculados após o filtro de categoria — assim o
+  // usuário só vê tipos que existem dentro do escopo escolhido.
+  const typeCounts = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const r of allRows) {
+      if (activeCategory && r.category !== activeCategory) continue;
+      const t = classifyProductType(r.display_name);
+      if (t === "outros") continue;
+      counts.set(t, (counts.get(t) ?? 0) + 1);
+    }
+    return counts;
+  }, [allRows, activeCategory]);
+
+
   const priceBounds = useMemo(() => {
     if (allRows.length === 0) return { min: 0, max: 0 };
     let lo = Infinity, hi = 0;
@@ -310,6 +330,8 @@ function MelhoresPrecosPage() {
   const rows = useMemo(() => {
     const filtered = allRows.filter((r) => {
       if (activeCategory && r.category !== activeCategory) return false;
+      if (activeType && classifyProductType(r.display_name) !== activeType) return false;
+
       if (Number(r.store_count) < minStores) return false;
       const p = Number(r.min_price);
       if (minPrice > 0 && p < minPrice) return false;
@@ -362,7 +384,7 @@ function MelhoresPrecosPage() {
       }
       return Number(b.savings_pct) - Number(a.savings_pct);
     });
-  }, [allRows, activeCategory, sortBy, minStores, minPrice, maxPrice, qNorm, estabsMap]);
+  }, [allRows, activeCategory, activeType, sortBy, minStores, minPrice, maxPrice, qNorm, estabsMap]);
 
   const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
@@ -382,7 +404,8 @@ function MelhoresPrecosPage() {
   );
 
   const hasFilters =
-    !!activeCategory || minStores > 1 || minPrice > 0 || maxPrice > 0 || sortBy !== "savings" || !!q;
+    !!activeCategory || !!activeType || minStores > 1 || minPrice > 0 || maxPrice > 0 || sortBy !== "savings" || !!q;
+
 
 
   return (
@@ -481,8 +504,30 @@ function MelhoresPrecosPage() {
           active={activeCategory}
           counts={categoryCounts}
           total={allRows.length}
-          onChange={(c) => setSearch({ cat: c ?? "" })}
+          onChange={(c) => setSearch({ cat: c ?? "", type: "" })}
         />
+
+        {/* Filtro por tipo de produto (subcategoria) — só aparece se houver
+            pelo menos 2 tipos disponíveis no escopo atual (respeita categoria). */}
+        {typeCounts.size > 1 && (
+          <QuickFilterBar
+            label="Tipo"
+            ariaLabel="Filtrar por tipo de produto"
+            options={Array.from(typeCounts.entries())
+              .sort((a, b) => b[1] - a[1])
+              .slice(0, 12)
+              .map(([key, count]) => ({
+                value: key,
+                label:
+                  PRODUCT_TYPE_LABEL[key as keyof typeof PRODUCT_TYPE_LABEL] ?? key,
+                count,
+              }))}
+            value={activeType}
+            onChange={(next) => setSearch({ type: next ?? "" })}
+            size="sm"
+          />
+        )}
+
 
         {/* Busca por cidade / bairro / mercado */}
         <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center">

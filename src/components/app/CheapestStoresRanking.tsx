@@ -20,6 +20,8 @@ import {
 import { SectionKicker } from "@/components/dashboard/SectionKicker";
 import { QuickFilterBar } from "@/components/search/QuickFilterBar";
 import { getCheapestStoresRanking } from "@/lib/stores-public.functions";
+import { PRODUCT_TYPE_LABEL } from "@/lib/product-type";
+
 import { cn } from "@/lib/utils";
 
 const CATEGORY_LABEL: Record<string, string> = {
@@ -62,10 +64,11 @@ const brl = (n: number) =>
 export function CheapestStoresRanking() {
   const fetchRanking = useServerFn(getCheapestStoresRanking);
   const [category, setCategory] = useState<string | null>(null);
+  const [type, setType] = useState<string | null>(null);
 
   const rankingQ = useQuery({
-    queryKey: ["app-cheapest-stores-ranking", "v3", category ?? "all"],
-    queryFn: () => fetchRanking({ data: { category } }),
+    queryKey: ["app-cheapest-stores-ranking", "v4", category ?? "all", type ?? "all"],
+    queryFn: () => fetchRanking({ data: { category, type } }),
     staleTime: 5 * 60_000,
   });
 
@@ -80,6 +83,15 @@ export function CheapestStoresRanking() {
       label: CATEGORY_LABEL[c.key] ?? c.key,
       count: c.count,
     }));
+
+  const typeOptions = (summary?.availableTypes ?? [])
+    .slice(0, 10)
+    .map((t) => ({
+      value: t.key,
+      label: PRODUCT_TYPE_LABEL[t.key as keyof typeof PRODUCT_TYPE_LABEL] ?? t.key,
+      count: t.count,
+    }));
+
 
   return (
     <section aria-label="Ranking de mercados mais baratos" className="space-y-3">
@@ -107,10 +119,26 @@ export function CheapestStoresRanking() {
           ariaLabel="Filtrar ranking por categoria"
           options={categoryOptions}
           value={category}
-          onChange={(next) => setCategory(next)}
+          onChange={(next) => {
+            setCategory(next);
+            setType(null); // troca de categoria zera o tipo, para evitar combos vazios
+          }}
           size="sm"
         />
       )}
+
+      {/* Filtros por tipo de produto (subcategoria) */}
+      {typeOptions.length > 1 && (
+        <QuickFilterBar
+          label="Tipo"
+          ariaLabel="Filtrar ranking por tipo de produto"
+          options={typeOptions}
+          value={type}
+          onChange={(next) => setType(next)}
+          size="sm"
+        />
+      )}
+
 
       {/* Summary strip: cruzamento agregado */}
       {summary && summary.totalProductsCompared > 0 && (

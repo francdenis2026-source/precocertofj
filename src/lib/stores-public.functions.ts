@@ -402,9 +402,12 @@ export type CheapestRankingResponse = {
     avgSavingsPct: number;
     windowDays: number;
     filterCategory: string | null;
+    filterType: string | null;
     availableCategories: { key: string; count: number }[];
+    availableTypes: { key: string; count: number }[];
   };
 };
+
 
 type ScanRowRank = {
   product_name: string | null;
@@ -443,14 +446,14 @@ function normRank(s: string): string {
 }
 
 // Conta vitórias por estabelecimento numa janela (usado p/ janela anterior).
-function tallyWins(scans: ScanRowRank[], filterCategory: string | null): Map<string, number> {
+function tallyWins(scans: ScanRowRank[], keep: (name: string) => boolean): Map<string, number> {
   const perProduct = new Map<string, Map<string, number>>();
   for (const s of scans) {
     const name = (s.product_name ?? "").trim();
     const p = Number(s.price_captured);
     const est = s.establishment_id;
     if (!name || !est || !Number.isFinite(p) || p <= 0) continue;
-    if (filterCategory && classifyRank(name) !== filterCategory) continue;
+    if (!keep(name)) continue;
     const key = normRank(name);
     if (!key) continue;
     const m = perProduct.get(key) ?? new Map<string, number>();
@@ -476,14 +479,20 @@ function tallyWins(scans: ScanRowRank[], filterCategory: string | null): Map<str
   return wins;
 }
 
+
 export const getCheapestStoresRanking = createServerFn({ method: "GET" })
-  .inputValidator((input: { category?: string | null } | undefined) => input ?? {})
+  .inputValidator(
+    (input: { category?: string | null; type?: string | null } | undefined) => input ?? {},
+  )
   .handler(async ({ data }): Promise<CheapestRankingResponse> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { classifyProductType } = await import("@/lib/product-type");
     const now = Date.now();
     const since7 = new Date(now - 7 * 86_400_000).toISOString();
     const since14 = new Date(now - 14 * 86_400_000).toISOString();
     const filterCategory = data?.category?.trim() || null;
+    const filterType = data?.type?.trim() || null;
+
 
     // Buscamos 14 dias em uma query só; separamos as janelas em memória.
     const scansClient = supabaseAdmin as unknown as {
@@ -517,21 +526,34 @@ export const getCheapestStoresRanking = createServerFn({ method: "GET" })
       if (s.created_at >= since7) current.push(s);
       else prior.push(s);
     }
-    const priorWins = tallyWins(prior, filterCategory);
+    const keep = (name: string): boolean => {
+      if (filterCategory && classifyRank(name) !== filterCategory) return false;
+      if (filterType && classifyProductType(name) !== filterType) return false;
+      return true;
+    };
+    const priorWins = tallyWins(prior, keep);
 
     // Categorias disponíveis (baseadas nos scans atuais, ignorando filtro).
     const availableCatCount = new Map<string, number>();
+    // Tipos disponíveis (respeitam filtro de categoria — se houver — para que
+    // o usuário só veja tipos que fazem sentido na categoria escolhida).
+    const availableTypeCount = new Map<string, number>();
     for (const s of current) {
       const name = (s.product_name ?? "").trim();
       if (!name) continue;
       const c = classifyRank(name);
       availableCatCount.set(c, (availableCatCount.get(c) ?? 0) + 1);
+      if (!filterCategory || c === filterCategory) {
+        const t = classifyProductType(name);
+        if (t !== "outros") {
+          availableTypeCount.set(t, (availableTypeCount.get(t) ?? 0) + 1);
+        }
+      }
     }
 
-    // Trabalha somente com scans atuais (opcionalmente filtrados por categoria).
-    const scans = filterCategory
-      ? current.filter((s) => s.product_name && classifyRank(s.product_name) === filterCategory)
-      : current;
+    // Trabalha somente com scans atuais (opcionalmente filtrados por cat/tipo).
+    const scans = current.filter((s) => s.product_name && keep(s.product_name));
+
 
 
     // Normalização leve; para agrupar produtos "iguais"
@@ -658,6 +680,9 @@ export const getCheapestStoresRanking = createServerFn({ method: "GET" })
     const availableCategories = Array.from(availableCatCount.entries())
       .map(([key, count]) => ({ key, count }))
       .sort((a, b) => b.count - a.count);
+    const availableTypes = Array.from(availableTypeCount.entries())
+      .map(([key, count]) => ({ key, count }))
+      .sort((a, b) => b.count - a.count);
 
     if (estIds.length === 0) {
       return {
@@ -669,10 +694,13 @@ export const getCheapestStoresRanking = createServerFn({ method: "GET" })
           avgSavingsPct: 0,
           windowDays: 7,
           filterCategory,
+          filterType,
           availableCategories,
+          availableTypes,
         },
       };
     }
+
 
 
     const estabsClient = supabaseAdmin as unknown as {
@@ -748,7 +776,10 @@ export const getCheapestStoresRanking = createServerFn({ method: "GET" })
             : 0,
         windowDays: 7,
         filterCategory,
+        filterType,
         availableCategories,
+        availableTypes,
+
       },
     };
   },
