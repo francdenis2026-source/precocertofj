@@ -123,20 +123,17 @@ function CoveragePage() {
 
   return (
     <AppShell>
+      <PageHeader
+        eyebrow="Painel · Catálogo"
+        title="Onde falta cadastrar?"
+        description="Veja quais produtos já estão cadastrados em cada estabelecimento e quais ainda faltam, comparando com o catálogo total da plataforma."
+        breadcrumbs={[{ label: "Admin", to: "/admin" }, { label: "Cobertura" }]}
+        icon={<MapPin className="h-5 w-5" />}
+        editorial
+        goldRule
+      />
       <section className="mx-auto max-w-7xl px-6 py-10">
-        <div className="mb-6 flex items-center gap-3">
-          <Button asChild variant="ghost" size="sm">
-            <Link to="/admin"><ArrowLeft className="mr-2 h-4 w-4" />Voltar ao painel</Link>
-          </Button>
-        </div>
 
-        <header className="mb-8">
-          <p className="text-xs uppercase tracking-widest text-muted-foreground">Cobertura de produtos</p>
-          <h1 className="mt-1 font-serif text-4xl">Onde falta cadastrar?</h1>
-          <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-            Veja quais produtos já estão cadastrados em cada estabelecimento e quais ainda faltam, comparando com o catálogo total da plataforma.
-          </p>
-        </header>
 
         {overview.isLoading ? (
           <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Carregando…</div>
