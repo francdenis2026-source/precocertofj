@@ -90,11 +90,29 @@ function MetricsCards() {
 }
 
 function PlansTab() {
+  const qc = useQueryClient();
   const fetchPlans = useServerFn(listLicensePlans);
+  const upsertFn = useServerFn(upsertLicensePlan);
   const { data: plans } = useQuery({ queryKey: ["license-plans"], queryFn: () => fetchPlans() });
+  const [editing, setEditing] = useState<any | null>(null);
+  const [creating, setCreating] = useState(false);
+
+  const save = useMutation({
+    mutationFn: async (p: any) => upsertFn({ data: p }),
+    onSuccess: () => {
+      toast.success("Plano salvo");
+      qc.invalidateQueries({ queryKey: ["license-plans"] });
+      setEditing(null); setCreating(false);
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Falha ao salvar"),
+  });
+
   return (
     <Card className="p-4">
-      <h2 className="font-semibold mb-3">Planos disponíveis</h2>
+      <div className="flex items-center justify-between mb-3">
+        <h2 className="font-semibold">Planos disponíveis</h2>
+        <Button size="sm" onClick={() => setCreating(true)}><Plus className="w-3.5 h-3.5 mr-1" />Novo plano</Button>
+      </div>
       <div className="space-y-2">
         {(plans ?? []).map((p) => (
           <div key={p.id} className="flex items-center justify-between p-2 border rounded">
@@ -105,14 +123,96 @@ function PlansTab() {
             <div className="flex items-center gap-2">
               <Badge variant={p.active ? "default" : "secondary"}>{p.active ? "Ativo" : "Inativo"}</Badge>
               <span className="font-semibold">{brl(p.price_cents)}</span>
+              <Button size="sm" variant="ghost" onClick={() => setEditing(p)}><Pencil className="w-3.5 h-3.5" /></Button>
+              <Button size="sm" variant="ghost" onClick={() =>
+                save.mutate({ ...p, active: !p.active })
+              }>{p.active ? "Desativar" : "Ativar"}</Button>
             </div>
           </div>
         ))}
+        {(plans ?? []).length === 0 && (
+          <div className="text-sm text-muted-foreground text-center py-4">Nenhum plano cadastrado</div>
+        )}
       </div>
-      <p className="text-xs text-muted-foreground mt-3">
-        Edição de valores e ativação estão disponíveis via SQL / próxima versão do painel.
-      </p>
+
+      <PlanEditDialog
+        open={!!editing || creating}
+        onOpenChange={(v) => { if (!v) { setEditing(null); setCreating(false); } }}
+        plan={editing}
+        onSave={(p) => save.mutate(p)}
+        saving={save.isPending}
+      />
     </Card>
+  );
+}
+
+function PlanEditDialog({ open, onOpenChange, plan, onSave, saving }: {
+  open: boolean; onOpenChange: (v: boolean) => void;
+  plan: any | null; onSave: (p: any) => void; saving: boolean;
+}) {
+  const [name, setName] = useState(plan?.name ?? "");
+  const [slug, setSlug] = useState(plan?.slug ?? "");
+  const [days, setDays] = useState<number>(plan?.days ?? 30);
+  const [priceReais, setPriceReais] = useState<string>(((plan?.price_cents ?? 0) / 100).toFixed(2));
+  const [active, setActive] = useState<boolean>(plan?.active ?? true);
+  const [sortOrder, setSortOrder] = useState<number>(plan?.sort_order ?? 100);
+  const [description, setDescription] = useState<string>(plan?.description ?? "");
+
+  // Reset ao abrir
+  useState(() => {
+    setName(plan?.name ?? ""); setSlug(plan?.slug ?? "");
+    setDays(plan?.days ?? 30);
+    setPriceReais(((plan?.price_cents ?? 0) / 100).toFixed(2));
+    setActive(plan?.active ?? true);
+    setSortOrder(plan?.sort_order ?? 100);
+    setDescription(plan?.description ?? "");
+  });
+
+  function submit() {
+    const cents = Math.round(parseFloat(priceReais.replace(",", ".")) * 100);
+    if (!name.trim() || !slug.trim() || !days || Number.isNaN(cents)) {
+      toast.error("Preencha nome, slug, dias e preço"); return;
+    }
+    onSave({
+      id: plan?.id, name: name.trim(), slug: slug.trim().toLowerCase(),
+      days: Math.floor(days), price_cents: cents, active,
+      sort_order: sortOrder, description: description.trim() || null,
+    });
+  }
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>{plan?.id ? "Editar plano" : "Novo plano"}</DialogTitle>
+        </DialogHeader>
+        <div className="grid gap-3">
+          <div className="grid grid-cols-2 gap-2">
+            <div><Label>Nome</Label><Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Mensal" /></div>
+            <div><Label>Slug</Label><Input value={slug} onChange={(e) => setSlug(e.target.value)} placeholder="mensal" /></div>
+          </div>
+          <div className="grid grid-cols-3 gap-2">
+            <div><Label>Dias</Label><Input type="number" min={1} value={days} onChange={(e) => setDays(Number(e.target.value) || 0)} /></div>
+            <div><Label>Preço (R$)</Label><Input value={priceReais} onChange={(e) => setPriceReais(e.target.value)} placeholder="19,90" /></div>
+            <div><Label>Ordem</Label><Input type="number" value={sortOrder} onChange={(e) => setSortOrder(Number(e.target.value) || 0)} /></div>
+          </div>
+          <div><Label>Descrição</Label><Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Acesso premium por 30 dias" /></div>
+          <div className="flex items-center justify-between border rounded p-2">
+            <div>
+              <div className="text-sm font-medium">Plano ativo</div>
+              <div className="text-xs text-muted-foreground">Se desativado, não aparece no checkout.</div>
+            </div>
+            <Switch checked={active} onCheckedChange={setActive} />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="ghost" onClick={() => onOpenChange(false)}>Cancelar</Button>
+          <Button onClick={submit} disabled={saving}>
+            {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : "Salvar"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
 
