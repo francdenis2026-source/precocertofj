@@ -1,14 +1,24 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Loader2, Lock, ShieldCheck, Sparkles, UserPlus } from "lucide-react";
+import { ArrowRight, Loader2, ShieldCheck, UserPlus, CheckCircle2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
 import { signUpWithCpf } from "@/lib/account.functions";
-import { maskCpf, maskPhone, stripCpf, validateCpfDetailed } from "@/lib/cpf";
+import { maskCpf, maskPhone, validateCpfDetailed } from "@/lib/cpf";
 import { safeInternalPath } from "@/lib/auth-redirect";
 import { Logo } from "@/components/brand/Logo";
+
+// Emerald Prestige tokens — mirror /login
+const PC_EMERALD_DEEP = "#043a2c";
+const PC_EMERALD = "#064e3b";
+const PC_EMERALD_LIGHT = "#0d7a5f";
+const PC_GOLD = "#c9a84c";
+const PC_GOLD_DARK = "#a88c3d";
+const PC_CREAM = "#f5f0e0";
+const PC_DISPLAY = "'Outfit', system-ui, sans-serif";
+const PC_BODY = "'Figtree', system-ui, sans-serif";
 
 export const Route = createFileRoute("/cadastro")({
   ssr: false,
@@ -40,7 +50,6 @@ function CadastroPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Se já estiver logado, mande direto para o destino.
   useEffect(() => {
     let mounted = true;
     supabase.auth.getSession().then(({ data }) => {
@@ -64,12 +73,12 @@ function CadastroPage() {
       return;
     }
     if (!/^\d{6}$/.test(password)) {
-      setError("A senha precisa ter exatamente 6 dígitos.");
+      setError("O PIN precisa ter exatamente 6 dígitos.");
       return;
     }
     const phoneDigits = phone.replace(/\D/g, "");
-    if (phoneDigits.length < 10) {
-      setError("Informe um celular válido com DDD.");
+    if (phoneDigits && phoneDigits.length < 10) {
+      setError("Informe um celular válido com DDD ou deixe em branco.");
       return;
     }
     setLoading(true);
@@ -91,7 +100,6 @@ function CadastroPage() {
       if (signInErr) throw signInErr;
       toast.success("Conta criada com sucesso!");
       navigate({ to: safeRedirect, replace: true });
-
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Falha ao criar conta.";
       setError(msg);
@@ -101,118 +109,236 @@ function CadastroPage() {
     }
   }
 
+  const perks = [
+    "Comparativo em tempo real entre mercados",
+    "Alertas de queda de preço da sua cesta",
+    "Rede colaborativa — envie sua nota e ganhe 30 dias",
+  ];
+
   return (
-    <div className="relative min-h-[100dvh] overflow-hidden bg-gradient-to-br from-emerald-950 via-slate-950 to-slate-900 text-white">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,theme(colors.emerald.500/25),transparent_45%),radial-gradient(circle_at_85%_85%,theme(colors.emerald.400/20),transparent_50%)]" />
+    <div
+      className="relative min-h-[100dvh] overflow-hidden"
+      style={{ background: PC_CREAM, fontFamily: PC_BODY, color: "#0f172a" }}
+    >
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(1200px 500px at 100% 0%, rgba(201,168,76,0.18), transparent 60%), radial-gradient(900px 500px at 0% 100%, rgba(6,78,59,0.10), transparent 55%)",
+        }}
+      />
 
-      <div className="relative mx-auto flex min-h-[100dvh] w-full max-w-md flex-col justify-center px-5 py-10">
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, ease: "easeOut" }}
-          className="mb-6 flex items-center gap-3"
+      <header className="relative z-10 flex items-center justify-between px-6 py-5 md:px-10">
+        <Logo className="h-8 w-auto" />
+        <Link
+          to="/"
+          className="rounded-full border border-black/10 bg-white/70 px-4 py-1.5 text-xs font-semibold text-slate-700 backdrop-blur hover:bg-white"
         >
-          <Logo className="h-9 w-auto" />
-          <span className="rounded-full border border-emerald-400/30 bg-emerald-400/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-widest text-emerald-200">
-            Cadastro gratuito
-          </span>
-        </motion.div>
+          ← Voltar ao site
+        </Link>
+      </header>
 
+      <main className="relative z-10 flex min-h-[calc(100dvh-88px)] items-center justify-center px-4 pb-10">
         <motion.div
-          initial={{ opacity: 0, y: 12 }}
+          initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, delay: 0.05, ease: "easeOut" }}
-          className="rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-xl shadow-2xl"
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          className="grid w-full max-w-5xl grid-cols-1 overflow-hidden rounded-3xl border border-black/10 bg-white shadow-2xl md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]"
         >
-          <div className="mb-5">
-            <div className="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-2xl bg-emerald-400/15 text-emerald-300">
-              <UserPlus className="h-5 w-5" />
+          {/* LEFT — Emerald panel */}
+          <div
+            className="relative flex flex-col justify-between p-8 text-white md:p-10"
+            style={{
+              background: `linear-gradient(160deg, ${PC_EMERALD_DEEP} 0%, ${PC_EMERALD} 55%, ${PC_EMERALD_LIGHT} 130%)`,
+            }}
+          >
+            <div
+              className="pointer-events-none absolute inset-0 opacity-40"
+              style={{
+                background:
+                  "radial-gradient(600px 300px at 100% 0%, rgba(201,168,76,0.25), transparent 60%)",
+              }}
+            />
+
+            <div className="relative">
+              <div className="flex items-center gap-2">
+                <div
+                  className="flex h-9 w-9 items-center justify-center rounded-xl"
+                  style={{ background: "rgba(201,168,76,0.18)", color: PC_GOLD }}
+                >
+                  <UserPlus className="h-4 w-4" />
+                </div>
+                <span
+                  className="text-[11px] font-bold uppercase tracking-[0.18em]"
+                  style={{ color: PC_GOLD }}
+                >
+                  Cadastro gratuito
+                </span>
+              </div>
+
+              <h1
+                className="mt-6 text-3xl leading-[1.05] tracking-tight md:text-[34px]"
+                style={{ fontFamily: PC_DISPLAY, fontWeight: 700 }}
+              >
+                Crie sua conta em{" "}
+                <span style={{ color: PC_GOLD }}>30 segundos</span>
+              </h1>
+              <p className="mt-3 max-w-sm text-sm leading-relaxed text-white/75">
+                Cadastre-se e volte automaticamente para o painel que estava
+                visitando. Sem cartão, sem letra miúda.
+              </p>
+
+              <ul className="mt-8 space-y-3">
+                {perks.map((p) => (
+                  <li key={p} className="flex items-start gap-3 text-sm text-white/85">
+                    <CheckCircle2
+                      className="mt-0.5 h-4 w-4 flex-none"
+                      style={{ color: PC_GOLD }}
+                    />
+                    <span>{p}</span>
+                  </li>
+                ))}
+              </ul>
             </div>
-            <h1 className="font-display text-2xl font-bold leading-tight">
-              Crie sua conta em <span className="text-emerald-300">30 segundos</span>
-            </h1>
-            <p className="mt-1 text-sm text-white/70">
-              Depois do cadastro você volta automaticamente para a página que estava visitando.
+
+            <div
+              className="relative mt-8 rounded-2xl border p-4"
+              style={{
+                borderColor: "rgba(201,168,76,0.3)",
+                background: "rgba(4,58,44,0.55)",
+              }}
+            >
+              <div
+                className="text-[10px] font-bold uppercase tracking-[0.2em]"
+                style={{ color: PC_GOLD }}
+              >
+                Oferta ativa
+              </div>
+              <div
+                className="mt-1 text-lg"
+                style={{ fontFamily: PC_DISPLAY, fontWeight: 700 }}
+              >
+                30 dias grátis
+              </div>
+              <p className="mt-1 text-xs leading-relaxed text-white/70">
+                Enviando sua primeira nota fiscal após o cadastro.
+              </p>
+            </div>
+          </div>
+
+          {/* RIGHT — Form */}
+          <div className="p-8 md:p-10">
+            <div className="mb-6">
+              <div
+                className="text-[11px] font-bold uppercase tracking-[0.18em]"
+                style={{ color: PC_GOLD_DARK }}
+              >
+                Novo assinante
+              </div>
+              <h2
+                className="mt-1 text-2xl tracking-tight text-slate-900"
+                style={{ fontFamily: PC_DISPLAY, fontWeight: 700 }}
+              >
+                Criar conta
+              </h2>
+              <p className="mt-1 text-sm text-slate-500">
+                CPF, PIN de 6 dígitos e pronto.
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <Field
+                label="Nome completo"
+                value={name}
+                onChange={setName}
+                placeholder="Como quer ser chamado?"
+                autoComplete="name"
+              />
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                <Field
+                  label="CPF"
+                  value={cpf}
+                  onChange={(v) => setCpf(maskCpf(v))}
+                  placeholder="000.000.000-00"
+                  inputMode="numeric"
+                  autoComplete="username"
+                />
+                <Field
+                  label="Celular (opcional)"
+                  value={phone}
+                  onChange={(v) => setPhone(maskPhone(v))}
+                  placeholder="(00) 00000-0000"
+                  inputMode="tel"
+                  autoComplete="tel"
+                />
+              </div>
+
+              <div>
+                <label
+                  className="mb-2 block text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500"
+                >
+                  PIN de acesso (6 dígitos)
+                </label>
+                <PinField
+                  value={password}
+                  onChange={(v) => setPassword(v.replace(/\D/g, "").slice(0, 6))}
+                />
+              </div>
+
+              {error && (
+                <p
+                  className="rounded-xl border px-3 py-2 text-xs"
+                  style={{
+                    borderColor: "rgba(220,38,38,0.25)",
+                    background: "rgba(254,226,226,0.6)",
+                    color: "#991b1b",
+                  }}
+                >
+                  {error}
+                </p>
+              )}
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold text-white shadow-lg transition disabled:opacity-60"
+                style={{
+                  background: `linear-gradient(135deg, ${PC_EMERALD_LIGHT}, ${PC_EMERALD})`,
+                  boxShadow: "0 10px 30px -12px rgba(6,78,59,0.55)",
+                  fontFamily: PC_DISPLAY,
+                }}
+              >
+                {loading ? (
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                ) : (
+                  <>
+                    Criar conta e continuar <ArrowRight className="h-4 w-4" />
+                  </>
+                )}
+              </button>
+
+              <div className="flex items-center justify-between pt-1 text-xs">
+                <span className="inline-flex items-center gap-1.5 text-slate-500">
+                  <ShieldCheck className="h-3.5 w-3.5" style={{ color: PC_EMERALD_LIGHT }} />
+                  Dados protegidos
+                </span>
+                <Link
+                  to={loginHref}
+                  className="font-semibold hover:underline"
+                  style={{ color: PC_EMERALD }}
+                >
+                  Já tenho conta →
+                </Link>
+              </div>
+            </form>
+
+            <p className="mt-6 flex items-center justify-center gap-2 text-[11px] text-slate-400">
+              <Sparkles className="h-3 w-3" style={{ color: PC_GOLD_DARK }} />
+              Ao continuar, você aceita nossos Termos e Privacidade.
             </p>
           </div>
-
-          <form onSubmit={handleSubmit} className="space-y-3">
-            <Field
-              label="Nome completo"
-              value={name}
-              onChange={setName}
-              placeholder="Como quer ser chamado?"
-              autoComplete="name"
-            />
-            <Field
-              label="CPF"
-              value={cpf}
-              onChange={(v) => setCpf(maskCpf(v))}
-              placeholder="000.000.000-00"
-              inputMode="numeric"
-              autoComplete="username"
-            />
-            <Field
-              label="Celular (opcional)"
-              value={phone}
-              onChange={(v) => setPhone(maskPhone(v))}
-              placeholder="(00) 00000-0000"
-              inputMode="tel"
-              autoComplete="tel"
-            />
-            <Field
-              label="Senha de 6 dígitos"
-              value={password}
-              onChange={(v) => setPassword(v.replace(/\D/g, "").slice(0, 6))}
-              placeholder="••••••"
-              type="password"
-              inputMode="numeric"
-              autoComplete="new-password"
-              icon={<Lock className="h-4 w-4 text-white/40" />}
-            />
-
-            {error && (
-              <p className="rounded-xl border border-red-500/30 bg-red-500/10 px-3 py-2 text-xs text-red-200">
-                {error}
-              </p>
-            )}
-
-            <button
-              type="submit"
-              disabled={loading}
-              className="mt-2 inline-flex h-12 w-full items-center justify-center gap-2 rounded-2xl bg-emerald-400 font-semibold text-emerald-950 shadow-lg shadow-emerald-500/25 transition hover:bg-emerald-300 disabled:opacity-60"
-            >
-              {loading ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                <>
-                  Criar conta e continuar <ArrowRight className="h-4 w-4" />
-                </>
-              )}
-            </button>
-          </form>
-
-          <div className="mt-5 flex items-center justify-between text-xs text-white/60">
-            <span className="inline-flex items-center gap-1.5">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-300" />
-              Seus dados ficam protegidos
-            </span>
-            <Link to={loginHref} className="font-semibold text-emerald-300 hover:underline">
-              Já tenho conta →
-            </Link>
-          </div>
         </motion.div>
-
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="mt-4 inline-flex items-center justify-center gap-2 self-center rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[11px] text-white/70"
-        >
-          <Sparkles className="h-3 w-3 text-emerald-300" />
-          Preços reais de mercados do Acre — 100% gratuito
-        </motion.p>
-      </div>
+      </main>
     </div>
   );
 }
@@ -225,7 +351,6 @@ function Field({
   type = "text",
   inputMode,
   autoComplete,
-  icon,
 }: {
   label: string;
   value: string;
@@ -234,25 +359,79 @@ function Field({
   type?: string;
   inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
   autoComplete?: string;
-  icon?: React.ReactNode;
 }) {
   return (
     <label className="block">
-      <span className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-white/60">
+      <span
+        className="mb-1.5 block text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500"
+      >
         {label}
       </span>
-      <div className="relative">
-        <input
-          type={type}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-          inputMode={inputMode}
-          autoComplete={autoComplete}
-          className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.06] px-3.5 pr-9 text-sm text-white placeholder:text-white/30 focus:border-emerald-400/50 focus:outline-none focus:ring-2 focus:ring-emerald-400/30"
-        />
-        {icon && <span className="absolute right-3 top-1/2 -translate-y-1/2">{icon}</span>}
-      </div>
+      <input
+        type={type}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        inputMode={inputMode}
+        autoComplete={autoComplete}
+        className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/15"
+      />
     </label>
+  );
+}
+
+function PinField({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  const refs = useRef<Array<HTMLInputElement | null>>([]);
+  const digits = value.padEnd(6, " ").slice(0, 6).split("");
+
+  function setAt(i: number, d: string) {
+    const clean = d.replace(/\D/g, "").slice(-1);
+    const next = value.split("");
+    while (next.length < 6) next.push("");
+    next[i] = clean;
+    onChange(next.slice(0, 6).join("").replace(/\s/g, ""));
+    if (clean && i < 5) refs.current[i + 1]?.focus();
+  }
+
+  function handleKey(i: number, e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Backspace" && !digits[i].trim() && i > 0) {
+      refs.current[i - 1]?.focus();
+    }
+  }
+
+  function handlePaste(e: React.ClipboardEvent<HTMLInputElement>) {
+    const txt = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    if (!txt) return;
+    e.preventDefault();
+    onChange(txt);
+    refs.current[Math.min(txt.length, 5)]?.focus();
+  }
+
+  return (
+    <div className="flex gap-2">
+      {digits.map((d, i) => (
+        <input
+          key={i}
+          ref={(el) => {
+            refs.current[i] = el;
+          }}
+          value={d.trim()}
+          onChange={(e) => setAt(i, e.target.value)}
+          onKeyDown={(e) => handleKey(i, e)}
+          onPaste={handlePaste}
+          inputMode="numeric"
+          maxLength={1}
+          type="password"
+          className="h-12 w-full min-w-0 rounded-xl border border-slate-200 bg-white text-center text-lg font-semibold text-slate-900 outline-none transition focus:border-[color:var(--pc-gold)] focus:ring-2 focus:ring-[color:var(--pc-gold)]/25"
+          style={{ ["--pc-gold" as string]: PC_GOLD } as React.CSSProperties}
+        />
+      ))}
+    </div>
   );
 }
