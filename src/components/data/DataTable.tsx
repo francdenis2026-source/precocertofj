@@ -210,7 +210,7 @@ export function DataTable<T>({
           {loading ? (
             <TableRow className="hover:bg-transparent">
               <TableCell colSpan={colCount} className="p-0">
-                <SkeletonRows rows={Math.min(pageSize || 6, 8)} cols={colCount} />
+                <SkeletonRows rows={Math.min(activePageSize || 6, 8)} cols={colCount} />
               </TableCell>
             </TableRow>
           ) : error ? (
