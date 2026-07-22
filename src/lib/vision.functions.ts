@@ -122,6 +122,7 @@ export const analyzeProductImage = createServerFn({ method: "POST" })
       unit: toStr(p.unit),
       price: toNum(p.price),
       barcode: toStr(p.barcode),
+      category: toStr(p.category),
     });
 
     let products: VisionProduct[] = [];
