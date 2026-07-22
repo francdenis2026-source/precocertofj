@@ -310,32 +310,39 @@
 
 /* ============= NEW TYPE SCALE ============= */
 @utility text-display {
-  font-family: var(--font-display);
+  font-family: var(--font-sans);
   font-weight: 700;
-  font-size: clamp(2.5rem, 5.5vw, 4.5rem);
-  line-height: 1.0;
-  letter-spacing: -0.038em;
-}
-@utility text-h1 {
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(2rem, 3.6vw, 2.75rem);
-  line-height: 1.05;
+  font-size: clamp(2.25rem, 5vw, 3.75rem);
+  line-height: 1.02;
   letter-spacing: -0.032em;
 }
-@utility text-h2 {
+@utility text-editorial {
   font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.4rem, 5.4vw, 4rem);
+  line-height: 1.02;
+  letter-spacing: -0.02em;
+}
+@utility text-h1 {
+  font-family: var(--font-sans);
   font-weight: 700;
-  font-size: clamp(1.5rem, 2.6vw, 2rem);
-  line-height: 1.1;
+  font-size: clamp(1.8rem, 3.2vw, 2.4rem);
+  line-height: 1.08;
   letter-spacing: -0.026em;
 }
-@utility text-h3 {
-  font-family: var(--font-display);
-  font-weight: 600;
-  font-size: 1.25rem;
-  line-height: 1.2;
+@utility text-h2 {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(1.375rem, 2.4vw, 1.75rem);
+  line-height: 1.12;
   letter-spacing: -0.02em;
+}
+@utility text-h3 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 1.15rem;
+  line-height: 1.22;
+  letter-spacing: -0.014em;
 }
 @utility text-title {
   font-family: var(--font-sans);
