@@ -198,14 +198,17 @@ function MelhoresPrecosPage() {
   const navigate = useNavigate({ from: "/melhores-precos" });
   const activeCategory = search.cat || null;
   const activeType = search.type || null;
-  const sortBy: "savings" | "price" | "trend" | "unit" =
+  const sortBy: "savings" | "price" | "trend" | "unit" | "ticket" =
     search.sort === "price"
       ? "price"
       : search.sort === "trend"
         ? "trend"
         : search.sort === "unit"
           ? "unit"
-          : "savings";
+          : search.sort === "ticket"
+            ? "ticket"
+            : "savings";
+
   const minStores = Math.max(1, search.stores || 1);
   const minPrice = search.min || 0;
   const maxPrice = search.max || 0;
