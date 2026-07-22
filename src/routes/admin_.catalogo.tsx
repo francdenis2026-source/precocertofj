@@ -209,7 +209,6 @@ function ItemsPanel() {
   const { prompt } = useConfirm();
   const fetchList = useServerFn(listCatalog);
   const doUpdate = useServerFn(updateCatalogEntry);
-  const doWebSearch = useServerFn(searchWebImageForCatalog);
   const doForceRefresh = useServerFn(forceRefreshCatalogImage);
   const doSuggest = useServerFn(suggestWebImagesForCatalog);
   const doApplyUrl = useServerFn(applyCatalogImageUrl);
@@ -217,25 +216,44 @@ function ItemsPanel() {
   const doHistory = useServerFn(listCatalogImageHistory);
 
   const [rows, setRows] = useState<CatalogEntry[] | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
   const [q, setQ] = useState("");
   const [photoFilter, setPhotoFilter] = useState<"all" | "with" | "without">("all");
   const [savingId, setSavingId] = useState<string | null>(null);
-  const [searchingId, setSearchingId] = useState<string | null>(null);
   const [refreshingId, setRefreshingId] = useState<string | null>(null);
   const [uploadDialogFor, setUploadDialogFor] = useState<CatalogEntry | null>(null);
   const [pickerFor, setPickerFor] = useState<CatalogEntry | null>(null);
+  const [editingFor, setEditingFor] = useState<CatalogEntry | null>(null);
+  const [draft, setDraft] = useState<Partial<CatalogEntry>>({});
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
-  const [drafts, setDrafts] = useState<Record<string, Partial<CatalogEntry>>>({});
-
+  const load = () => {
+    setLoading(true);
+    setError(null);
+    fetchList()
+      .then((r) => {
+        setRows(r);
+        setLoading(false);
+      })
+      .catch((e: unknown) => {
+        const err = e instanceof Error ? e : new Error("Falha ao carregar catálogo");
+        setError(err);
+        setLoading(false);
+        toast.error(err.message);
+      });
+  };
 
   useEffect(() => {
-    fetchList()
-      .then(setRows)
-      .catch((e: unknown) =>
-        toast.error(e instanceof Error ? e.message : "Falha ao carregar catálogo"),
-      );
-  }, [fetchList]);
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    void supabase.auth.getSession().then(({ data }) => {
+      setAccessToken(data.session?.access_token ?? null);
+    });
+  }, []);
 
   const counts = useMemo(() => {
     if (!rows) return { all: 0, with: 0, without: 0 };
@@ -245,7 +263,7 @@ function ItemsPanel() {
   }, [rows]);
 
   const filtered = useMemo(() => {
-    if (!rows) return null;
+    if (!rows) return [];
     const s = q.trim().toLowerCase();
     return rows.filter((r) => {
       if (photoFilter === "with" && !r.imageUrl) return false;
@@ -260,26 +278,37 @@ function ItemsPanel() {
     });
   }, [rows, q, photoFilter]);
 
-  const patchLocal = (id: string, patch: Partial<CatalogEntry>) =>
-    setDrafts((d) => ({ ...d, [id]: { ...d[id], ...patch } }));
-
   const applyRow = (updated: CatalogEntry) => {
     setRows((prev) => (prev ? prev.map((r) => (r.id === updated.id ? updated : r)) : prev));
-    setDrafts((d) => {
-      const next = { ...d };
-      delete next[updated.id];
-      return next;
+  };
+
+  const patchImageLocal = (rowId: string, imageUrl: string) => {
+    setRows((prev) =>
+      prev
+        ? prev.map((r) =>
+            r.id === rowId ? { ...r, imageUrl, updatedAt: new Date().toISOString() } : r,
+          )
+        : prev,
+    );
+  };
+
+  const openEdit = (row: CatalogEntry) => {
+    setEditingFor(row);
+    setDraft({
+      displayName: row.displayName,
+      brand: row.brand,
+      defaultUnit: row.defaultUnit,
+      barcode: row.barcode,
     });
   };
 
-  const saveRow = async (row: CatalogEntry) => {
-    const draft = drafts[row.id];
-    if (!draft) return;
-    setSavingId(row.id);
+  const saveEdit = async () => {
+    if (!editingFor) return;
+    setSavingId(editingFor.id);
     try {
       const updated = await doUpdate({
         data: {
-          id: row.id,
+          id: editingFor.id,
           displayName: draft.displayName,
           brand: draft.brand,
           defaultUnit: draft.defaultUnit,
@@ -288,53 +317,11 @@ function ItemsPanel() {
       });
       applyRow(updated);
       toast.success("Produto atualizado");
+      setEditingFor(null);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Erro ao salvar");
     } finally {
       setSavingId(null);
-    }
-  };
-
-  const patchImageLocal = (rowId: string, imageUrl: string) => {
-    setRows((prev) =>
-      prev
-        ? prev.map((r) =>
-            r.id === rowId
-              ? { ...r, imageUrl, updatedAt: new Date().toISOString() }
-              : r,
-          )
-        : prev,
-    );
-  };
-
-  // Carrega o access token do admin logado para o upload via server route
-  useEffect(() => {
-    void supabase.auth.getSession().then(({ data }) => {
-      setAccessToken(data.session?.access_token ?? null);
-    });
-  }, []);
-
-
-  const searchWeb = async (row: CatalogEntry) => {
-    setSearchingId(row.id);
-    try {
-      const res = await doWebSearch({ data: { id: row.id } });
-      if (res.found && res.imageUrl) {
-        setRows((prev) =>
-          prev
-            ? prev.map((r) =>
-                r.id === row.id ? { ...r, imageUrl: res.imageUrl, updatedAt: new Date().toISOString() } : r,
-              )
-            : prev,
-        );
-        toast.success("Nova imagem encontrada e aplicada");
-      } else {
-        toast.info("Nenhuma imagem confiável encontrada");
-      }
-    } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Erro na busca web");
-    } finally {
-      setSearchingId(null);
     }
   };
 
@@ -343,19 +330,9 @@ function ItemsPanel() {
     try {
       const res = await doForceRefresh({ data: { id: row.id } });
       if (res.imageUrl) {
-        setRows((prev) =>
-          prev
-            ? prev.map((r) =>
-                r.id === row.id
-                  ? { ...r, imageUrl: res.imageUrl, updatedAt: new Date().toISOString() }
-                  : r,
-              )
-            : prev,
-        );
+        patchImageLocal(row.id, res.imageUrl);
         toast.success(
-          res.source === "web"
-            ? "Imagem atualizada (web)"
-            : "Imagem atualizada (IA)",
+          res.source === "web" ? "Imagem atualizada (web)" : "Imagem atualizada (IA)",
         );
       } else {
         toast.info("Não foi possível atualizar a imagem");
@@ -367,15 +344,153 @@ function ItemsPanel() {
     }
   };
 
+  const applyUrlPrompt = async (row: CatalogEntry) => {
+    const url = await prompt({
+      title: `Colar URL da imagem`,
+      description: `Informe a URL para "${row.displayName}".`,
+      placeholder: "https://…",
+      defaultValue: row.imageUrl ?? "",
+      inputType: "url",
+      confirmLabel: "Aplicar",
+      validate: (v) =>
+        /^https?:\/\/.+/i.test(v.trim())
+          ? null
+          : "URL precisa começar com http:// ou https://",
+    });
+    if (!url) return;
+    try {
+      const res = await doApplyUrl({ data: { id: row.id, imageUrl: url.trim() } });
+      patchImageLocal(row.id, res.imageUrl);
+      toast.success("Foto aplicada da URL");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Falha ao aplicar URL");
+    }
+  };
 
-
+  const columns: DataTableColumn<CatalogEntry>[] = [
+    {
+      key: "photo",
+      header: "Foto",
+      width: "68px",
+      cell: (r) => (
+        <div className="h-11 w-11 overflow-hidden rounded-md border bg-muted">
+          {r.imageUrl ? (
+            <img
+              src={r.imageUrl}
+              alt={r.displayName}
+              width={44}
+              height={44}
+              loading="lazy"
+              className="h-full w-full object-cover"
+            />
+          ) : (
+            <div className="flex h-full w-full items-center justify-center text-[9px] text-muted-foreground">
+              sem
+            </div>
+          )}
+        </div>
+      ),
+    },
+    {
+      key: "name",
+      header: "Produto",
+      sortable: true,
+      accessor: (r) => r.displayName,
+      cell: (r) => (
+        <div className="min-w-0 max-w-[320px]">
+          <div className="truncate text-[13px] font-medium text-foreground">{r.displayName}</div>
+          <div className="truncate text-[11px] text-muted-foreground">{r.normalizedName}</div>
+        </div>
+      ),
+    },
+    {
+      key: "brand",
+      header: "Marca",
+      sortable: true,
+      accessor: (r) => r.brand ?? "",
+      cell: (r) => r.brand ?? <span className="text-muted-foreground">—</span>,
+    },
+    {
+      key: "barcode",
+      header: "Código",
+      sortable: true,
+      accessor: (r) => r.barcode ?? "",
+      cell: (r) =>
+        r.barcode ? (
+          <span className="font-mono text-[12px]">{r.barcode}</span>
+        ) : (
+          <span className="text-muted-foreground">—</span>
+        ),
+    },
+    {
+      key: "unit",
+      header: "Un.",
+      align: "center",
+      sortable: true,
+      accessor: (r) => r.defaultUnit ?? "",
+      cell: (r) => r.defaultUnit ?? <span className="text-muted-foreground">—</span>,
+    },
+    {
+      key: "updated",
+      header: "Atualizado",
+      sortable: true,
+      align: "right",
+      accessor: (r) => new Date(r.updatedAt),
+      cell: (r) => (
+        <span className="text-[11px] text-muted-foreground tabular-nums">
+          {new Date(r.updatedAt).toLocaleDateString("pt-BR")}
+        </span>
+      ),
+    },
+    {
+      key: "actions",
+      header: "",
+      align: "right",
+      width: "60px",
+      cell: (r) => (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+              {refreshingId === r.id ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <MoreHorizontal className="h-4 w-4" />
+              )}
+              <span className="sr-only">Ações</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-56">
+            <DropdownMenuItem onClick={() => openEdit(r)}>
+              <Save className="mr-2 h-3.5 w-3.5" /> Editar dados
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => setUploadDialogFor(r)}>
+              <Upload className="mr-2 h-3.5 w-3.5" /> Trocar foto (upload)
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setPickerFor(r)}>
+              <Globe className="mr-2 h-3.5 w-3.5" /> Buscar na web
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => void refreshImage(r)}
+              disabled={refreshingId === r.id}
+            >
+              <RefreshCw className="mr-2 h-3.5 w-3.5" /> Forçar atualização
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => void applyUrlPrompt(r)}>
+              <LinkIcon className="mr-2 h-3.5 w-3.5" /> Colar URL
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      ),
+    },
+  ];
 
   return (
     <>
       <Card className="mb-4">
         <CardHeader className="pb-3">
           <CardTitle className="text-base">
-            {filtered
+            {rows
               ? `${filtered.length} de ${counts.all} produto${counts.all === 1 ? "" : "s"}`
               : "Carregando…"}
           </CardTitle>
@@ -415,181 +530,84 @@ function ItemsPanel() {
         </CardHeader>
       </Card>
 
-      {rows === null && (
-        <div className="flex justify-center py-16">
-          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-        </div>
-      )}
+      <DataTable
+        data={filtered}
+        columns={columns}
+        loading={loading && rows === null}
+        error={error}
+        onRetry={load}
+        pageSize={15}
+        rowKey={(r) => r.id}
+        defaultSort={{ key: "updated", dir: "desc" }}
+        emptyTitle="Nenhum produto encontrado"
+        emptyDescription="Ajuste os filtros ou aguarde novas leituras chegarem ao catálogo."
+        emptyIcon={<Package className="h-5 w-5 text-muted-foreground" />}
+      />
 
-      {filtered && filtered.length === 0 && (
-        <Card>
-          <CardContent className="py-12 text-center text-sm text-muted-foreground">
-            Nenhum produto encontrado.
-          </CardContent>
-        </Card>
-      )}
-
-      <div className="grid gap-4">
-        {filtered?.map((row) => {
-          const d = drafts[row.id] ?? {};
-          const merged = { ...row, ...d };
-          const dirty = Object.keys(d).length > 0;
-          return (
-            <Card key={row.id}>
-              <CardContent className="flex flex-col gap-4 p-4 sm:flex-row sm:items-start">
-                <div className="flex flex-col items-center gap-2">
-                  <div className="h-28 w-28 flex-none overflow-hidden rounded-md border bg-muted">
-                    {merged.imageUrl ? (
-                      <img
-                        src={merged.imageUrl}
-                        alt={merged.displayName}
-                        width={112}
-                        height={112}
-                        loading="lazy"
-                        className="h-full w-full object-cover"
-                      />
-                    ) : (
-                      <div className="flex h-full w-full items-center justify-center text-[10px] text-muted-foreground">
-                        sem foto
-                      </div>
-                    )}
-                  </div>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="w-28 text-xs"
-                    onClick={() => setUploadDialogFor(row)}
-                    title="Abrir uploader com prévia, validação e retry"
-                  >
-                    <Upload className="mr-1 h-3 w-3" />
-                    Trocar foto
-                  </Button>
-
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="w-28 text-xs"
-                    onClick={() => setPickerFor(row)}
-                    disabled={searchingId === row.id}
-                    title="Abrir galeria de imagens sugeridas pela IA na web"
-                  >
-                    {searchingId === row.id ? (
-                      <Loader2 className="mr-1 h-3 w-3 animate-spin" />
-                    ) : (
-                      <Globe className="mr-1 h-3 w-3" />
-                    )}
-                    Buscar web
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="w-28 text-xs"
-                    onClick={() => void refreshImage(row)}
-                    disabled={refreshingId === row.id}
-                    title="Força re-busca da imagem (web + IA como fallback), mesmo se já houver foto"
-                  >
-                    {refreshingId === row.id ? (
-                      <Loader2 className="mr-1 h-3 w-3 animate-spin" />
-                    ) : (
-                      <RefreshCw className="mr-1 h-3 w-3" />
-                    )}
-                    Atualizar
-                  </Button>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    className="w-28 text-xs"
-                    onClick={async () => {
-                      const url = await prompt({
-                        title: `Colar URL da imagem`,
-                        description: `Informe a URL para "${row.displayName}".`,
-                        placeholder: "https://…",
-                        defaultValue: row.imageUrl ?? "",
-                        inputType: "url",
-                        confirmLabel: "Aplicar",
-                        validate: (v) =>
-                          /^https?:\/\/.+/i.test(v.trim())
-                            ? null
-                            : "URL precisa começar com http:// ou https://",
-                      });
-                      if (!url) return;
-                      const trimmed = url.trim();
-                      try {
-                        const res = await doApplyUrl({ data: { id: row.id, imageUrl: trimmed } });
-                        patchImageLocal(row.id, res.imageUrl);
-                        toast.success("Foto aplicada da URL");
-                      } catch (err) {
-                        toast.error(err instanceof Error ? err.message : "Falha ao aplicar URL");
-                      }
-                    }}
-                    title="Colar uma URL de imagem para usar como capa"
-                  >
-                    <LinkIcon className="mr-1 h-3 w-3" />
-                    Colar URL
-                  </Button>
-                </div>
-
-
-                <div className="grid flex-1 gap-3 sm:grid-cols-2">
-                  <div className="sm:col-span-2">
-                    <Label className="text-xs">Nome de exibição</Label>
-                    <Input
-                      value={merged.displayName}
-                      onChange={(e) => patchLocal(row.id, { displayName: e.target.value })}
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs">Marca</Label>
-                    <Input
-                      value={merged.brand ?? ""}
-                      onChange={(e) => patchLocal(row.id, { brand: e.target.value })}
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs">Unidade padrão</Label>
-                    <Input
-                      value={merged.defaultUnit ?? ""}
-                      onChange={(e) => patchLocal(row.id, { defaultUnit: e.target.value })}
-                      placeholder="UN, KG, L…"
-                    />
-                  </div>
-                  <div>
-                    <Label className="text-xs">Código de barras</Label>
-                    <Input
-                      value={merged.barcode ?? ""}
-                      onChange={(e) => patchLocal(row.id, { barcode: e.target.value })}
-                    />
-                  </div>
-                  <div className="flex items-end justify-between gap-2">
-                    <div className="text-[10px] text-muted-foreground">
-                      <Badge variant="outline" className="font-mono">
-                        {row.normalizedName.slice(0, 40)}
-                        {row.normalizedName.length > 40 ? "…" : ""}
-                      </Badge>
-                    </div>
-                    <Button
-                      size="sm"
-                      onClick={() => saveRow(row)}
-                      disabled={!dirty || savingId === row.id}
-                    >
-                      {savingId === row.id ? (
-                        <Loader2 className="mr-1 h-3 w-3 animate-spin" />
-                      ) : (
-                        <Save className="mr-1 h-3 w-3" />
-                      )}
-                      Salvar
-                    </Button>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          );
-        })}
-      </div>
+      <Sheet
+        open={editingFor !== null}
+        onOpenChange={(v) => {
+          if (!v) setEditingFor(null);
+        }}
+      >
+        <SheetContent className="w-full sm:max-w-md">
+          <SheetHeader>
+            <SheetTitle>Editar produto</SheetTitle>
+            <SheetDescription>Atualize os dados básicos do item.</SheetDescription>
+          </SheetHeader>
+          {editingFor && (
+            <div className="mt-6 grid gap-3 px-1">
+              <div>
+                <Label className="text-xs">Nome de exibição</Label>
+                <Input
+                  value={draft.displayName ?? ""}
+                  onChange={(e) => setDraft((d) => ({ ...d, displayName: e.target.value }))}
+                />
+              </div>
+              <div>
+                <Label className="text-xs">Marca</Label>
+                <Input
+                  value={draft.brand ?? ""}
+                  onChange={(e) => setDraft((d) => ({ ...d, brand: e.target.value }))}
+                />
+              </div>
+              <div>
+                <Label className="text-xs">Unidade padrão</Label>
+                <Input
+                  value={draft.defaultUnit ?? ""}
+                  onChange={(e) => setDraft((d) => ({ ...d, defaultUnit: e.target.value }))}
+                  placeholder="UN, KG, L…"
+                />
+              </div>
+              <div>
+                <Label className="text-xs">Código de barras</Label>
+                <Input
+                  value={draft.barcode ?? ""}
+                  onChange={(e) => setDraft((d) => ({ ...d, barcode: e.target.value }))}
+                />
+              </div>
+              <div className="flex items-center justify-between gap-2 pt-3">
+                <Badge variant="outline" className="max-w-[60%] truncate font-mono text-[10px]">
+                  {editingFor.normalizedName.slice(0, 40)}
+                  {editingFor.normalizedName.length > 40 ? "…" : ""}
+                </Badge>
+                <Button
+                  size="sm"
+                  onClick={() => void saveEdit()}
+                  disabled={savingId === editingFor.id}
+                >
+                  {savingId === editingFor.id ? (
+                    <Loader2 className="mr-1 h-3 w-3 animate-spin" />
+                  ) : (
+                    <Save className="mr-1 h-3 w-3" />
+                  )}
+                  Salvar
+                </Button>
+              </div>
+            </div>
+          )}
+        </SheetContent>
+      </Sheet>
 
       <PhotoUploadDialog
         open={uploadDialogFor !== null}
