@@ -392,38 +392,72 @@ function CadastroPage() {
   );
 }
 
+function FieldStatus({ state, show }: { state: FieldState; show: boolean }) {
+  if (!show) return null;
+  if (state.valid) {
+    return (
+      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700">
+        <CheckCircle2 className="h-3 w-3" /> ok
+      </span>
+    );
+  }
+  const text = state.msg ?? state.hint;
+  if (!text) return null;
+  return (
+    <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-rose-600">
+      <AlertCircle className="h-3 w-3" /> {text}
+    </span>
+  );
+}
+
 function Field({
   label,
   value,
   onChange,
+  onBlur,
   placeholder,
   type = "text",
   inputMode,
   autoComplete,
+  state,
+  showState,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
+  onBlur?: () => void;
   placeholder?: string;
   type?: string;
   inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
   autoComplete?: string;
+  state?: FieldState;
+  showState?: boolean;
 }) {
+  const invalid = !!(showState && state && !state.valid && (state.msg || state.hint));
+  const good = !!(showState && state?.valid && value);
+  const border = invalid
+    ? "border-rose-300 focus:border-rose-500 focus:ring-rose-500/15"
+    : good
+      ? "border-emerald-300 focus:border-emerald-600 focus:ring-emerald-600/15"
+      : "border-slate-200 focus:border-emerald-600 focus:ring-emerald-600/15";
   return (
     <label className="block">
-      <span
-        className="mb-1.5 block text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500"
-      >
-        {label}
-      </span>
+      <div className="mb-1.5 flex items-center justify-between">
+        <span className="block text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
+          {label}
+        </span>
+        {state && <FieldStatus state={state} show={!!showState} />}
+      </div>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onBlur={onBlur}
         placeholder={placeholder}
         inputMode={inputMode}
         autoComplete={autoComplete}
-        className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/15"
+        aria-invalid={invalid}
+        className={`h-11 w-full rounded-xl border ${border} bg-white px-3.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:ring-2`}
       />
     </label>
   );
@@ -432,9 +466,13 @@ function Field({
 function PinField({
   value,
   onChange,
+  onComplete,
+  hasError,
 }: {
   value: string;
   onChange: (v: string) => void;
+  onComplete?: () => void;
+  hasError?: boolean;
 }) {
   const refs = useRef<Array<HTMLInputElement | null>>([]);
   const digits = value.padEnd(6, " ").slice(0, 6).split("");
@@ -444,8 +482,10 @@ function PinField({
     const next = value.split("");
     while (next.length < 6) next.push("");
     next[i] = clean;
-    onChange(next.slice(0, 6).join("").replace(/\s/g, ""));
+    const merged = next.slice(0, 6).join("").replace(/\s/g, "");
+    onChange(merged);
     if (clean && i < 5) refs.current[i + 1]?.focus();
+    if (merged.length === 6) onComplete?.();
   }
 
   function handleKey(i: number, e: React.KeyboardEvent<HTMLInputElement>) {
@@ -460,7 +500,12 @@ function PinField({
     e.preventDefault();
     onChange(txt);
     refs.current[Math.min(txt.length, 5)]?.focus();
+    if (txt.length === 6) onComplete?.();
   }
+
+  const borderCls = hasError
+    ? "border-rose-300 focus:border-rose-500 focus:ring-rose-500/20"
+    : "border-slate-200 focus:border-[color:var(--pc-gold)] focus:ring-[color:var(--pc-gold)]/25";
 
   return (
     <div className="flex gap-2">
@@ -474,13 +519,16 @@ function PinField({
           onChange={(e) => setAt(i, e.target.value)}
           onKeyDown={(e) => handleKey(i, e)}
           onPaste={handlePaste}
+          onBlur={() => value.length === 6 && onComplete?.()}
           inputMode="numeric"
           maxLength={1}
           type="password"
-          className="h-12 w-full min-w-0 rounded-xl border border-slate-200 bg-white text-center text-lg font-semibold text-slate-900 outline-none transition focus:border-[color:var(--pc-gold)] focus:ring-2 focus:ring-[color:var(--pc-gold)]/25"
+          aria-invalid={hasError}
+          className={`h-12 w-full min-w-0 rounded-xl border ${borderCls} bg-white text-center text-lg font-semibold text-slate-900 outline-none transition focus:ring-2`}
           style={{ ["--pc-gold" as string]: PC_GOLD } as React.CSSProperties}
         />
       ))}
     </div>
   );
 }
+
