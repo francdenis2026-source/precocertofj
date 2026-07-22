@@ -50,7 +50,6 @@ import {
   DollarSign,
 } from "lucide-react";
 import { PageHeader } from "@/components/brand/PageHeader";
-import { Badge } from "@/components/ui/badge";
 import { ScanEditDialog } from "@/components/admin/ScanEditDialog";
 import { AuditLogTable } from "@/components/admin/AuditLogTable";
 
