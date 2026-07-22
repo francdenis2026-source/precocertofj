@@ -132,6 +132,7 @@ function HomePage() {
 
   const listStores = useServerFn(listPublicStores);
   const platformStats = useServerFn(getPlatformStats);
+  const cheapestRanking = useServerFn(getCheapestStoresRanking);
 
   const storesQ = useQuery({
     queryKey: ["home-stores"],
@@ -143,6 +144,13 @@ function HomePage() {
     queryFn: () => platformStats({} as any),
     staleTime: 60_000,
   });
+  const rankingQ = useQuery({
+    queryKey: ["home-ranking"],
+    queryFn: () => cheapestRanking({} as any),
+    staleTime: 60_000,
+  });
+  const rankingRows: CheapestStoreRank[] = ((rankingQ.data as any)?.rows ?? []).slice(0, 3);
+
 
   const stores: PublicStore[] = (storesQ.data as any) ?? [];
   const displayStores = stores.length ? stores.slice(0, 4) : PLACEHOLDER_STORES;
