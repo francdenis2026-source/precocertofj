@@ -1155,24 +1155,47 @@ function PriceReportInlineButton({
   productSlug: string | null;
   currentPrice: number;
 }) {
+  const { user, loading: sessionLoading } = useSession();
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState<"outdated" | "incorrect" | "wrong_product" | "other">("outdated");
   const [correctPrice, setCorrectPrice] = useState("");
   const [notes, setNotes] = useState("");
   const [busy, setBusy] = useState(false);
+  const [sent, setSent] = useState(false);
   const submit = useServerFn(submitPriceReport);
+  const navigate = useNavigate();
+
+  const handleOpen = () => {
+    if (sessionLoading) return;
+    if (!user) {
+      toast.info("Entre na sua conta para denunciar preços", {
+        description: "É rápido — leva menos de 1 minuto.",
+        action: {
+          label: "Entrar",
+          onClick: () =>
+            navigate({ to: "/login", search: { redirect: window.location.pathname } as never }),
+        },
+      });
+      return;
+    }
+    setSent(false);
+    setOpen(true);
+  };
 
   return (
     <>
       <button
         type="button"
-        onClick={() => setOpen(true)}
-        className="mt-1 inline-flex w-full items-center justify-center gap-1 rounded-md border border-border bg-background/70 px-2 py-1 font-mono text-[9.5px] font-semibold uppercase tracking-[0.16em] text-muted-foreground transition hover:border-destructive/40 hover:bg-destructive/5 hover:text-destructive"
-        aria-label={`Denunciar preço de ${productName} em ${storeName}`}
+        onClick={handleOpen}
+        disabled={sessionLoading}
+        className="mt-1 inline-flex w-full items-center justify-center gap-1 rounded-md border border-border bg-background/70 px-2 py-1 font-mono text-[9.5px] font-semibold uppercase tracking-[0.16em] text-muted-foreground transition hover:border-destructive/40 hover:bg-destructive/5 hover:text-destructive disabled:opacity-50"
+        aria-label={user ? `Denunciar preço de ${productName} em ${storeName}` : `Entrar para denunciar preço de ${productName}`}
+        title={user ? "Denunciar preço incorreto" : "É necessário entrar na conta para denunciar"}
       >
         <Flag className="h-2.5 w-2.5" aria-hidden />
-        Denunciar preço
+        {user ? "Denunciar preço" : "Entrar para denunciar"}
       </button>
+
 
       {open && (
         <div
