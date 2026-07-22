@@ -27,6 +27,7 @@ import { KeyRound, Users, Ticket, Activity, Copy, RefreshCcw, Shield, Loader2, W
 import { useConfirm } from "@/components/ui/confirm-provider";
 import { PaymentsTab } from "@/components/admin/PaymentsTab";
 import { CollaboratorsTab } from "@/components/admin/CollaboratorsTab";
+import { DataTable } from "@/components/data/DataTable";
 
 export const Route = createFileRoute("/admin/gestao")({
   ssr: false,
