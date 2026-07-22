@@ -1,9 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { AppShell } from "@/components/brand/AppShell";
+import { PageHeader } from "@/components/brand/PageHeader";
 import { AdminOnly } from "@/components/auth/AdminOnly";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,7 +14,7 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ArrowLeft, ChevronRight, Download, Loader2, Search, Store, PackageX, PackageCheck } from "lucide-react";
+import { ChevronRight, Download, Loader2, MapPin, Search, Store, PackageX, PackageCheck } from "lucide-react";
 import { getCoverageOverview, getMissingProducts, getPresentProducts, type EstablishmentCoverage } from "@/lib/coverage.functions";
 
 export const Route = createFileRoute("/admin_/cobertura")({
