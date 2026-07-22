@@ -152,6 +152,7 @@ export const analyzeProductImage = createServerFn({ method: "POST" })
       brand: null,
       unit: null,
       barcode: null,
+      category: null,
     };
 
     return {
