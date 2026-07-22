@@ -480,13 +480,18 @@ function tallyWins(scans: ScanRowRank[], filterCategory: string | null): Map<str
 }
 
 export const getCheapestStoresRanking = createServerFn({ method: "GET" })
-  .inputValidator((input: { category?: string | null } | undefined) => input ?? {})
+  .inputValidator(
+    (input: { category?: string | null; type?: string | null } | undefined) => input ?? {},
+  )
   .handler(async ({ data }): Promise<CheapestRankingResponse> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { classifyProductType } = await import("@/lib/product-type");
     const now = Date.now();
     const since7 = new Date(now - 7 * 86_400_000).toISOString();
     const since14 = new Date(now - 14 * 86_400_000).toISOString();
     const filterCategory = data?.category?.trim() || null;
+    const filterType = data?.type?.trim() || null;
+
 
     // Buscamos 14 dias em uma query só; separamos as janelas em memória.
     const scansClient = supabaseAdmin as unknown as {
