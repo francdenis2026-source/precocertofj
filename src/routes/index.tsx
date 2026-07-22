@@ -402,8 +402,150 @@ function HomePage() {
       </section>
 
       <div className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-16 space-y-8">
+        {/* ============== RANKINGS — mercados mais baratos ============== */}
+        <section aria-labelledby="rankings-title">
+          <div className="mb-5 flex items-end justify-between gap-4">
+            <div>
+              <div
+                className="text-[10px] font-semibold uppercase tracking-[0.16em]"
+                style={{ color: PALETTE.navy2 }}
+              >
+                Ranking da semana
+              </div>
+              <h2
+                id="rankings-title"
+                className={`${serif} mt-1 text-[26px] leading-tight md:text-[32px]`}
+                style={{ color: PALETTE.ink, letterSpacing: "-0.02em" }}
+              >
+                Mercados com os melhores preços
+              </h2>
+            </div>
+            <Link
+              to="/melhores-precos"
+              className="hidden sm:inline-flex items-center gap-1.5 rounded-lg border px-4 py-2 text-[13px] font-semibold transition-colors hover:opacity-80"
+              style={{ borderColor: PALETTE.line, color: PALETTE.navy, background: "white" }}
+            >
+              Ver ranking completo <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+
+          {rankingQ.isLoading ? (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              {[0, 1, 2].map((i) => (
+                <div
+                  key={i}
+                  className="h-40 animate-pulse rounded-2xl border bg-white"
+                  style={{ borderColor: PALETTE.line }}
+                />
+              ))}
+            </div>
+          ) : rankingRows.length === 0 ? (
+            <div
+              className="rounded-2xl border bg-white p-6 text-center text-[13px]"
+              style={{ borderColor: PALETTE.line, color: PALETTE.navy2 }}
+            >
+              Ainda coletando comparações. O ranking aparece quando houver produtos disputados entre mercados.
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+              {rankingRows.map((r, i) => {
+                const medal = ["#b58a3c", "#8a94a6", "#a97142"][i] ?? PALETTE.navy2;
+                return (
+                  <Link
+                    key={r.establishmentId}
+                    to="/melhores-precos"
+                    className="group relative overflow-hidden rounded-2xl border bg-white p-5 transition-all hover:-translate-y-0.5 hover:shadow-md"
+                    style={{ borderColor: PALETTE.line }}
+                  >
+                    <div
+                      className="absolute right-0 top-0 h-16 w-16"
+                      style={{
+                        background: `radial-gradient(circle at top right, ${medal}22 0%, transparent 70%)`,
+                      }}
+                    />
+                    <div className="flex items-start justify-between">
+                      <div
+                        className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider"
+                        style={{ background: `${medal}18`, color: medal }}
+                      >
+                        <Trophy className="h-3 w-3" /> #{i + 1} lugar
+                      </div>
+                      <span
+                        className={`${mono} text-[11px] font-semibold`}
+                        style={{ color: "#0f7a4f" }}
+                      >
+                        -{r.avgSavingsPct.toFixed(1)}%
+                      </span>
+                    </div>
+
+                    <div
+                      className={`${serif} mt-4 truncate text-[20px] leading-tight`}
+                      style={{ color: PALETTE.ink }}
+                      title={r.storeName}
+                    >
+                      {r.storeName}
+                    </div>
+                    <div
+                      className="mt-1 flex items-center gap-1 text-[12px]"
+                      style={{ color: PALETTE.navy2 }}
+                    >
+                      <MapPin className="h-3 w-3" />
+                      {r.city}
+                      {r.state ? ` · ${r.state}` : ""}
+                    </div>
+
+                    <div className="mt-4 flex items-end justify-between border-t pt-3" style={{ borderColor: PALETTE.line }}>
+                      <div>
+                        <div
+                          className={`${mono} text-[22px] font-semibold leading-none`}
+                          style={{ color: PALETTE.ink, letterSpacing: "-0.02em" }}
+                        >
+                          {r.wins}
+                        </div>
+                        <div
+                          className="mt-1 text-[10px] font-semibold uppercase tracking-[0.14em]"
+                          style={{ color: PALETTE.navy2 }}
+                        >
+                          menores preços
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div
+                          className={`${mono} text-[14px] font-semibold`}
+                          style={{ color: PALETTE.ink }}
+                        >
+                          R$ {r.avgTicketWins.toFixed(2)}
+                        </div>
+                        <div
+                          className="mt-1 text-[10px] font-semibold uppercase tracking-[0.14em]"
+                          style={{ color: PALETTE.navy2 }}
+                        >
+                          ticket médio
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="mt-4 inline-flex items-center gap-1 text-[12px] font-semibold" style={{ color: PALETTE.navy }}>
+                      Ver produtos <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+
+          <Link
+            to="/melhores-precos"
+            className="mt-4 flex items-center justify-center gap-1.5 rounded-xl border px-4 py-3 text-[14px] font-semibold sm:hidden"
+            style={{ borderColor: PALETTE.line, color: PALETTE.navy, background: "white" }}
+          >
+            Ver ranking completo <ArrowRight className="h-4 w-4" />
+          </Link>
+        </section>
+
         {/* ============== KPI STRIP ============== */}
         <section className="grid grid-cols-2 gap-3 md:grid-cols-4">
+
 
           {KPIS.map((k) => (
             <div
