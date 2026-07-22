@@ -139,6 +139,22 @@ export function CheapestStoresRanking() {
         />
       )}
 
+      {/* Ordenação */}
+      <QuickFilterBar<"wins" | "savings" | "ticket">
+        label="Ordenar"
+        ariaLabel="Ordenar ranking"
+        options={[
+          { value: "wins", label: "Mais vitórias" },
+          { value: "savings", label: "Maior economia %" },
+          { value: "ticket", label: "Menor ticket médio" },
+        ]}
+        value={sort}
+        onChange={(next) => setSort(next ?? "wins")}
+        size="sm"
+      />
+
+
+
       {/* Filtros por tipo de produto (subcategoria) */}
       {typeOptions.length > 1 && (
         <QuickFilterBar
