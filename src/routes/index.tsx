@@ -37,15 +37,15 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-/* Design tokens — Navy Trust */
+/* Design tokens — Navy Trust, contrastes reforçados */
 const PALETTE = {
-  paper: "#f6f7fb",
-  ink: "#0a1631",
+  paper: "#f5f6fa",
+  ink: "#08122a",       // ~19:1 sobre paper
   navy: "#0f1b3d",
-  navy2: "#1e3a5f",
+  navy2: "#324c73",     // ~7.4:1 sobre paper (AA large + body)
   gold: "#b58a3c",
-  goldSoft: "#e6d6a8",
-  line: "#e4e7ee",
+  goldSoft: "#f2dfa8",  // hero (fundo escuro)
+  line: "#dfe3ec",
 };
 
 const themeVars: React.CSSProperties = {
@@ -59,7 +59,6 @@ const themeVars: React.CSSProperties = {
 
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 const sans = "font-['Work_Sans',system-ui,sans-serif]";
-const mono = "font-['IBM_Plex_Mono',ui-monospace,monospace] tabular-nums";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -90,55 +89,55 @@ function HomePage() {
   };
 
   return (
-    <div style={themeVars} className="min-h-screen w-full">
+    <div style={themeVars} className="min-h-screen w-full antialiased">
       {/* Ambient paper background */}
       <div className="fixed inset-0 -z-10" style={{ background: PALETTE.paper }}>
         <div
-          className="absolute inset-0 opacity-[0.045]"
+          className="absolute inset-0 opacity-[0.05]"
           style={{
             backgroundImage: `radial-gradient(circle at 1px 1px, ${PALETTE.navy} 1px, transparent 0)`,
-            backgroundSize: "24px 24px",
+            backgroundSize: "22px 22px",
           }}
         />
       </div>
 
       {/* HEADER */}
       <header className="absolute inset-x-0 top-0 z-30">
-        <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-4 py-4 md:flex md:justify-between md:px-8 md:py-6">
-          <Link to="/" className="flex min-w-0 items-center gap-3">
+        <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-4 py-3 sm:gap-3 sm:py-4 md:flex md:justify-between md:px-8 md:py-6">
+          <Link to="/" className="flex min-w-0 items-center gap-2.5">
             <span
-              className="grid h-11 w-11 shrink-0 place-items-center rounded-lg text-[16px] font-bold shadow-lg md:h-12 md:w-12"
+              className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-[15px] font-bold shadow-md sm:h-10 sm:w-10 md:h-12 md:w-12 md:text-[16px]"
               style={{ background: PALETTE.gold, color: PALETTE.navy }}
             >
               P
             </span>
             <div className="flex min-w-0 flex-col leading-none">
-              <span className={`${serif} truncate text-[22px] font-normal text-white md:text-[26px]`}>
+              <span className={`${serif} truncate text-[19px] font-normal text-white sm:text-[22px] md:text-[26px]`}>
                 Preço<span className="italic" style={{ color: PALETTE.goldSoft }}>Certo</span>
               </span>
-              <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.22em] text-white/70">
+              <span className="mt-1 hidden text-[10px] font-semibold uppercase tracking-[0.22em] text-white/70 sm:block">
                 Feijó · Acre
               </span>
             </div>
           </Link>
 
-          <nav className="hidden lg:flex items-center gap-9 text-[14px] font-medium text-white/85">
+          <nav className="hidden lg:flex items-center gap-8 text-[14px] font-medium text-white/85">
             <Link to="/buscar" className="hover:text-white transition-colors">Buscar</Link>
             <Link to="/melhores-precos" className="hover:text-white transition-colors">Rankings</Link>
             <Link to="/estabelecimentos" className="hover:text-white transition-colors">Mercados</Link>
             <Link to="/planos" className="hover:text-white transition-colors">Planos</Link>
           </nav>
 
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
             <Link
               to="/login"
-              className="hidden sm:inline-flex items-center rounded-lg px-4 py-2.5 text-[14px] font-medium text-white/90 hover:text-white transition-colors"
+              className="hidden sm:inline-flex items-center rounded-lg px-3 py-2 text-[13.5px] font-medium text-white/90 transition-colors hover:text-white md:px-4 md:py-2.5 md:text-[14px]"
             >
               Entrar
             </Link>
             <Link
               to="/cadastro"
-              className="inline-flex items-center rounded-lg px-4 py-2.5 text-[14px] font-semibold shadow-md transition-all hover:opacity-90 md:px-5 md:py-3"
+              className="inline-flex items-center rounded-lg px-3 py-2 text-[13px] font-semibold shadow-md transition-all hover:opacity-90 sm:px-4 sm:py-2.5 sm:text-[14px] md:px-5 md:py-3"
               style={{ background: PALETTE.gold, color: PALETTE.navy }}
             >
               Criar conta
@@ -148,40 +147,47 @@ function HomePage() {
       </header>
 
       {/* HERO */}
-      <section className="relative isolate w-full overflow-hidden" style={{ minHeight: "min(94vh, 900px)" }}>
+      <section className="relative isolate w-full overflow-hidden" style={{ minHeight: "min(92vh, 880px)" }}>
         <img
           src={heroMarket}
           alt=""
           aria-hidden="true"
           className="absolute inset-0 h-full w-full object-cover"
-          style={{ filter: "saturate(0.9)" }}
+          style={{ filter: "saturate(0.85)" }}
         />
         <div
           className="absolute inset-0"
           style={{
             background:
-              `linear-gradient(180deg, ${PALETTE.navy}f2 0%, ${PALETTE.navy}cc 40%, ${PALETTE.navy}f5 100%),` +
+              `linear-gradient(180deg, ${PALETTE.navy}f5 0%, ${PALETTE.navy}d9 45%, ${PALETTE.navy}f7 100%),` +
               `radial-gradient(80% 60% at 15% 40%, ${PALETTE.gold}22 0%, transparent 60%)`,
           }}
         />
         <div
-          className="absolute inset-0 opacity-[0.08] mix-blend-overlay"
+          className="absolute inset-0 opacity-[0.07] mix-blend-overlay"
           style={{
             backgroundImage: `radial-gradient(circle at 1px 1px, #fff 1px, transparent 0)`,
             backgroundSize: "3px 3px",
           }}
         />
 
-        <div className="relative z-10 mx-auto flex max-w-7xl flex-col justify-end px-4 pb-14 pt-32 md:px-8 md:pt-44 md:pb-20" style={{ minHeight: "min(94vh, 900px)" }}>
+        <div
+          className="relative z-10 mx-auto flex max-w-7xl flex-col justify-end px-4 pb-12 pt-24 sm:pt-28 md:px-8 md:pt-40 md:pb-20"
+          style={{ minHeight: "min(92vh, 880px)" }}
+        >
           <div className="max-w-4xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.22em] text-white backdrop-blur md:text-[12px]">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[10.5px] font-semibold uppercase tracking-[0.2em] text-white backdrop-blur sm:px-4 sm:py-2 sm:text-[11.5px]">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full" style={{ background: PALETTE.gold }} />
-              {today || "atualizado agora"} · edição diária
+              <span className="truncate">{today || "atualizado agora"} · edição diária</span>
             </div>
 
             <h1
-              className={`${serif} mt-6 font-normal text-white md:mt-8`}
-              style={{ fontSize: "clamp(2.75rem, 9vw, 7.5rem)", lineHeight: 0.94, letterSpacing: "-0.035em" }}
+              className={`${serif} mt-5 font-normal text-white sm:mt-6 md:mt-8`}
+              style={{
+                fontSize: "clamp(2.25rem, 7.5vw, 7rem)",
+                lineHeight: 0.96,
+                letterSpacing: "-0.03em",
+              }}
             >
               O preço certo,
               <br />
@@ -191,42 +197,47 @@ function HomePage() {
             </h1>
 
             <p
-              className="mt-6 max-w-2xl text-white/85 md:mt-8"
-              style={{ fontSize: "clamp(1.05rem, 1.6vw, 1.375rem)", lineHeight: 1.5 }}
+              className="mt-5 max-w-2xl text-white/90 sm:mt-6 md:mt-8"
+              style={{ fontSize: "clamp(0.98rem, 1.4vw, 1.25rem)", lineHeight: 1.55 }}
             >
               Compare mercados de Feijó em tempo real e descubra em qual loja
               sua cesta sai mais barata — com dados atualizados pela própria
               comunidade.
             </p>
 
-            {/* Busca — lupa sempre visível */}
-            <form onSubmit={submitSearch} className="relative mt-8 max-w-2xl md:mt-10">
-              <span className="pointer-events-none absolute left-4 top-4 z-10 sm:left-5 sm:top-1/2 sm:-translate-y-1/2">
-                <Search className="h-5 w-5 text-white" strokeWidth={2.4} aria-hidden />
-              </span>
-              <input
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                type="search"
-                inputMode="search"
-                placeholder="Buscar: arroz, café, leite…"
-                aria-label="Buscar produto"
-                className={`${sans} w-full rounded-2xl border border-white/25 bg-white/10 py-4 pl-12 pr-4 text-[16px] text-white outline-none backdrop-blur-xl transition-all placeholder:text-white/60 focus:border-white/60 focus:bg-white/15 sm:py-5 sm:pl-14 sm:pr-40`}
-              />
-              <button
-                type="submit"
-                aria-label="Buscar"
-                className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl px-6 py-3 text-[15px] font-semibold shadow-lg transition-transform hover:scale-[1.02] sm:absolute sm:right-2 sm:top-1/2 sm:mt-0 sm:w-auto sm:-translate-y-1/2"
-                style={{ background: PALETTE.gold, color: PALETTE.navy }}
+            {/* Busca — pill unificado, botão embutido */}
+            <form onSubmit={submitSearch} className="mt-6 max-w-2xl sm:mt-8">
+              <div
+                className="flex items-center gap-2 rounded-2xl border border-white/25 bg-white/10 p-1.5 backdrop-blur-xl transition-all focus-within:border-white/60 focus-within:bg-white/15 sm:p-2"
               >
-                Buscar <ArrowRight className="h-4 w-4" />
-              </button>
+                <span className="pointer-events-none pl-3 sm:pl-4">
+                  <Search className="h-5 w-5 text-white/90" strokeWidth={2.4} aria-hidden />
+                </span>
+                <input
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  type="search"
+                  inputMode="search"
+                  placeholder="Buscar: arroz, café, leite…"
+                  aria-label="Buscar produto"
+                  className={`${sans} min-w-0 flex-1 bg-transparent py-2.5 pr-1 text-[15px] text-white outline-none placeholder:text-white/65 sm:py-3 sm:text-[16px]`}
+                />
+                <button
+                  type="submit"
+                  aria-label="Buscar"
+                  className="inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2.5 text-[13.5px] font-semibold shadow-md transition-transform hover:scale-[1.02] sm:px-5 sm:py-3 sm:text-[14.5px]"
+                  style={{ background: PALETTE.gold, color: PALETTE.navy }}
+                >
+                  <span className="hidden sm:inline">Buscar</span>
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
             </form>
 
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:items-center">
+            <div className="mt-5 flex flex-col gap-2.5 sm:mt-6 sm:flex-row sm:flex-wrap sm:items-center">
               <Link
                 to="/cadastro"
-                className="group inline-flex items-center justify-center gap-2 rounded-xl px-6 py-4 text-[15px] font-bold shadow-xl transition-all hover:scale-[1.02] sm:text-[16px]"
+                className="group inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3.5 text-[14.5px] font-bold shadow-xl transition-all hover:scale-[1.02] sm:px-6 sm:py-4 sm:text-[15.5px]"
                 style={{ background: PALETTE.gold, color: PALETTE.navy }}
               >
                 Começar grátis
@@ -234,42 +245,46 @@ function HomePage() {
               </Link>
               <Link
                 to="/melhores-precos"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-white/40 bg-white/5 px-6 py-4 text-[15px] font-semibold text-white backdrop-blur transition-all hover:border-white hover:bg-white/15 sm:text-[16px]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-white/40 bg-white/5 px-5 py-3.5 text-[14.5px] font-semibold text-white backdrop-blur transition-all hover:border-white hover:bg-white/15 sm:px-6 sm:py-4 sm:text-[15.5px]"
               >
                 <TrendingDown className="h-4 w-4" />
                 Ver rankings
               </Link>
             </div>
 
-            <div className="mt-6 flex flex-wrap items-center gap-2">
-              <span className="mr-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-white/65">
+            <div className="mt-6 flex flex-wrap items-center gap-1.5 sm:gap-2">
+              <span className="mr-1 w-full text-[10.5px] font-semibold uppercase tracking-[0.16em] text-white/70 sm:w-auto sm:text-[11px]">
                 Populares:
               </span>
               {["arroz", "feijão", "leite", "óleo", "café", "açúcar"].map((t) => (
                 <button
                   key={t}
                   onClick={() => navigate({ to: "/buscar", search: { q: t } as any })}
-                  className="rounded-full border border-white/20 bg-white/5 px-3.5 py-1.5 text-[12.5px] font-medium text-white/90 backdrop-blur transition-colors hover:bg-white/15 hover:text-white"
+                  className="rounded-full border border-white/25 bg-white/5 px-3 py-1.5 text-[12px] font-medium text-white/90 backdrop-blur transition-colors hover:bg-white/15 hover:text-white sm:text-[12.5px]"
                 >
                   {t}
                 </button>
               ))}
             </div>
 
-            <div className="mt-10 grid max-w-3xl grid-cols-3 gap-4 border-t border-white/15 pt-6 sm:gap-6 md:mt-14 md:pt-8">
+            <div className="mt-8 grid max-w-3xl grid-cols-3 gap-3 border-t border-white/15 pt-5 sm:gap-6 md:mt-12 md:pt-8">
               {[
                 { k: String(stats.establishments ?? 0), l: "Mercados ativos" },
                 { k: String(stats.products ?? 0), l: "Produtos catalogados" },
                 { k: "24h", l: "Preços atualizados" },
               ].map((s) => (
-                <div key={s.l}>
+                <div key={s.l} className="min-w-0">
                   <div
-                    className={`${serif} text-white`}
-                    style={{ fontSize: "clamp(1.75rem, 3.5vw, 2.75rem)", letterSpacing: "-0.02em", lineHeight: 1 }}
+                    className={`${serif} truncate text-white`}
+                    style={{
+                      fontSize: "clamp(1.5rem, 3.2vw, 2.75rem)",
+                      letterSpacing: "-0.02em",
+                      lineHeight: 1,
+                    }}
                   >
                     {s.k}
                   </div>
-                  <div className="mt-2 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-white/70 sm:text-[11px]">
+                  <div className="mt-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/75 sm:mt-2 sm:text-[11px]">
                     {s.l}
                   </div>
                 </div>
@@ -280,19 +295,24 @@ function HomePage() {
       </section>
 
       {/* EXPLORE — três atalhos compactos para páginas internas */}
-      <section className="mx-auto max-w-7xl px-4 py-12 md:px-8 md:py-16">
-        <div className="mb-6 flex items-end justify-between gap-4">
-          <div>
-            <div className="text-[10px] font-semibold uppercase tracking-[0.16em]" style={{ color: PALETTE.navy2 }}>
-              Explore
-            </div>
-            <h2 className={`${serif} mt-1 text-[26px] leading-tight md:text-[32px]`} style={{ color: PALETTE.ink, letterSpacing: "-0.02em" }}>
-              Tudo que você precisa, em três passos
-            </h2>
+      <section className="mx-auto max-w-7xl px-4 py-10 md:px-8 md:py-16">
+        <div className="mb-5 md:mb-6">
+          <div className="text-[10px] font-semibold uppercase tracking-[0.18em]" style={{ color: PALETTE.navy2 }}>
+            Explore
           </div>
+          <h2
+            className={`${serif} mt-1.5 leading-[1.05]`}
+            style={{
+              color: PALETTE.ink,
+              letterSpacing: "-0.02em",
+              fontSize: "clamp(1.6rem, 3.4vw, 2.25rem)",
+            }}
+          >
+            Tudo que você precisa, em três passos
+          </h2>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
           <ExploreCard
             icon={<Trophy className="h-4 w-4" />}
             eyebrow="01 — Ranking"
@@ -321,40 +341,46 @@ function HomePage() {
       </section>
 
       {/* CTA FINAL — compacto */}
-      <section className="mx-auto max-w-7xl px-4 pb-16 md:px-8">
+      <section className="mx-auto max-w-7xl px-4 pb-14 md:px-8 md:pb-20">
         <div
-          className="relative overflow-hidden rounded-2xl p-6 text-white md:p-10"
+          className="relative overflow-hidden rounded-2xl p-5 text-white sm:p-7 md:p-10"
           style={{ background: `linear-gradient(140deg, ${PALETTE.navy} 0%, ${PALETTE.navy2} 100%)` }}
         >
           <div
             className="pointer-events-none absolute -right-10 -bottom-10 h-52 w-52 rounded-full"
             style={{ background: `radial-gradient(circle, ${PALETTE.gold}55 0%, transparent 70%)` }}
           />
-          <div className="relative grid grid-cols-1 items-center gap-6 md:grid-cols-[1fr_auto]">
+          <div className="relative grid grid-cols-1 items-center gap-5 md:grid-cols-[1fr_auto] md:gap-8">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/20 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/80">
+              <div className="inline-flex items-center gap-2 rounded-full border border-white/25 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/85">
                 <ShieldCheck className="h-3 w-3" style={{ color: PALETTE.goldSoft }} />
                 Dados verificados por nota fiscal
               </div>
-              <h3 className={`${serif} mt-3 text-[clamp(1.6rem,3vw,2.2rem)] leading-tight`}>
+              <h3
+                className={`${serif} mt-3 leading-[1.08]`}
+                style={{
+                  fontSize: "clamp(1.45rem, 3vw, 2.2rem)",
+                  letterSpacing: "-0.015em",
+                }}
+              >
                 Nunca mais pague caro por{" "}
                 <span className="italic" style={{ color: PALETTE.goldSoft }}>arroz, feijão e café.</span>
               </h3>
-              <p className="mt-2 max-w-xl text-[13.5px] text-white/75">
+              <p className="mt-2 max-w-xl text-[13px] text-white/80 sm:text-[13.5px]">
                 Cadastro em 30 segundos. Sem cartão. Cancele quando quiser.
               </p>
             </div>
             <div className="flex flex-col gap-2 sm:flex-row md:flex-col">
               <Link
                 to="/cadastro"
-                className="inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-[14px] font-bold transition-transform hover:scale-[1.02]"
+                className="inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-[14px] font-bold transition-transform hover:scale-[1.02] sm:px-6 sm:py-3.5"
                 style={{ background: PALETTE.gold, color: PALETTE.navy }}
               >
                 Criar conta <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 to="/resgatar"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/30 px-6 py-3.5 text-[14px] font-semibold text-white hover:bg-white/10"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/35 px-5 py-3 text-[14px] font-semibold text-white transition-colors hover:bg-white/10 sm:px-6 sm:py-3.5"
               >
                 Tenho um código
               </Link>
@@ -365,18 +391,18 @@ function HomePage() {
 
       {/* FOOTER */}
       <footer
-        className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 border-t px-4 py-6 text-[12px] md:px-8"
+        className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-3 border-t px-4 py-6 text-[12px] sm:flex-row sm:flex-wrap sm:items-center md:px-8"
         style={{ borderColor: PALETTE.line, color: PALETTE.navy2 }}
       >
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2.5">
           <span className="grid h-6 w-6 place-items-center rounded text-[10px] font-bold text-white" style={{ background: PALETTE.navy }}>
             P
           </span>
           <span className={serif} style={{ color: PALETTE.ink }}>PreçoCerto</span>
-          <span>·</span>
+          <span aria-hidden>·</span>
           <span>Feito em Feijó · Acre</span>
         </div>
-        <div className="flex flex-wrap gap-4">
+        <div className="flex flex-wrap gap-x-4 gap-y-2">
           <Link to="/melhores-precos" className="hover:text-[color:var(--nt-ink)]">Rankings</Link>
           <Link to="/estabelecimentos" className="hover:text-[color:var(--nt-ink)]">Mercados</Link>
           <Link to="/planos" className="hover:text-[color:var(--nt-ink)]">Planos</Link>
@@ -414,7 +440,14 @@ function ExploreCard({
         </span>
         {eyebrow}
       </div>
-      <div className={`${serif} mt-3 text-[22px] leading-tight`} style={{ color: PALETTE.ink, letterSpacing: "-0.01em" }}>
+      <div
+        className={`${serif} mt-3 leading-[1.15]`}
+        style={{
+          color: PALETTE.ink,
+          letterSpacing: "-0.01em",
+          fontSize: "clamp(1.2rem, 2.2vw, 1.5rem)",
+        }}
+      >
         {title}
       </div>
       <p className="mt-2 flex-1 text-[13px] leading-relaxed" style={{ color: PALETTE.navy2 }}>
