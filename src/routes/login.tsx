@@ -1,8 +1,7 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { Logo } from "@/components/brand/Logo";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useMotionValue, useTransform, animate, AnimatePresence } from "framer-motion";
-import { ArrowRight, Lock, Loader2, User, Phone, MapPin, Hash, ShieldAlert, AlertCircle, Check } from "lucide-react";
+import { ArrowRight, Loader2, User, Phone, MapPin, Hash, ShieldAlert, AlertCircle, Check, ShoppingCart, Ticket } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
@@ -59,6 +58,17 @@ const emptyAddress: Address = {
   city: "",
   state: "",
 };
+
+// Emerald Prestige tokens — scoped to login page.
+const PC_EMERALD_DEEP = "#043a2c";
+const PC_EMERALD = "#064e3b";
+const PC_EMERALD_LIGHT = "#0d7a5f";
+const PC_GOLD = "#c9a84c";
+const PC_GOLD_DARK = "#a88c3d";
+const PC_CREAM = "#f5f0e0";
+const PC_DISPLAY = "'Outfit', system-ui, sans-serif";
+const PC_BODY = "'Figtree', system-ui, sans-serif";
+
 
 function LoginPage() {
   const [mode, setModeState] = useState<"login" | "signup">(() => {
@@ -262,36 +272,149 @@ function LoginPage() {
   }
 
   return (
-    <div className="grid min-h-dvh bg-background lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
-      {/* Left: form */}
-      <div className="flex flex-col justify-between px-6 py-6 sm:px-10 lg:px-14 lg:py-8">
-        <div className="flex items-center justify-between">
-          <Logo />
-          <Link
-            to="/"
-            className="hidden text-xs font-medium text-muted-foreground transition hover:text-foreground sm:inline-flex"
-          >
-            ← Voltar ao site
-          </Link>
-        </div>
+    <div
+      className="relative flex min-h-dvh w-full items-center justify-center px-4 py-8 sm:px-6"
+      style={{ background: PC_CREAM }}
+    >
+      {/* Ambient emerald glow */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 overflow-hidden"
+      >
+        <div
+          className="absolute -left-40 -top-40 h-[520px] w-[520px] rounded-full opacity-40 blur-3xl"
+          style={{ background: `radial-gradient(closest-side, ${PC_EMERALD}33, transparent)` }}
+        />
+        <div
+          className="absolute -bottom-40 -right-40 h-[520px] w-[520px] rounded-full opacity-30 blur-3xl"
+          style={{ background: `radial-gradient(closest-side, ${PC_GOLD}33, transparent)` }}
+        />
+      </div>
 
-        <div className="mx-auto w-full max-w-[400px] py-6">
-          <p className="text-[10.5px] font-semibold uppercase tracking-[0.22em] text-accent-strong">
+      {/* Top-right link */}
+      <Link
+        to="/"
+        className="absolute right-5 top-5 z-20 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white/70 px-3 py-1.5 text-[11px] font-semibold text-emerald-900 backdrop-blur transition hover:bg-white"
+        style={{ fontFamily: PC_BODY }}
+      >
+        ← Voltar ao site
+      </Link>
+
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        className="relative z-10 grid w-full max-w-[960px] overflow-hidden rounded-3xl border border-black/5 bg-white shadow-[0_30px_80px_-30px_rgba(6,78,59,0.35)] md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]"
+      >
+        {/* LEFT — Emerald benefit panel */}
+        <aside
+          className="relative hidden flex-col justify-between p-10 md:flex"
+          style={{ background: PC_EMERALD, color: PC_CREAM, fontFamily: PC_BODY }}
+        >
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full opacity-20 blur-3xl"
+            style={{ background: PC_EMERALD_LIGHT }}
+          />
+          <div className="relative z-10">
+            <div className="flex items-center gap-2.5" style={{ fontFamily: PC_DISPLAY }}>
+              <div
+                className="flex h-9 w-9 items-center justify-center rounded-lg"
+                style={{ background: PC_GOLD, color: PC_EMERALD }}
+              >
+                <ShoppingCart className="h-5 w-5" strokeWidth={2.5} />
+              </div>
+              <span className="text-[19px] font-bold tracking-tight text-white">PreçoCerto</span>
+            </div>
+
+            <h2
+              className="mt-10 text-[26px] font-bold leading-[1.12] tracking-tight text-white"
+              style={{ fontFamily: PC_DISPLAY }}
+            >
+              {mode === "login" ? "Acesse a inteligência da sua cidade" : "Comece a economizar em minutos"}
+            </h2>
+            <p className="mt-3 text-[13px] leading-relaxed text-white/70">
+              {mode === "login"
+                ? "Entre com CPF e PIN de 6 dígitos para ver o painel ao vivo."
+                : "Cadastro rápido. Sem cartão de crédito. 30 dias grátis ao enviar sua primeira nota."}
+            </p>
+
+            <ul className="mt-8 space-y-3.5 text-[13px]">
+              {[
+                "Acesso instantâneo aos preços do bairro",
+                "Comparativo em tempo real entre mercados",
+                "Rede colaborativa — quanto mais notas, melhor",
+              ].map((t) => (
+                <li key={t} className="flex items-start gap-3">
+                  <span
+                    className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold"
+                    style={{ background: PC_GOLD, color: PC_EMERALD }}
+                  >
+                    ✓
+                  </span>
+                  <span className="text-white/85">{t}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div
+            className="relative z-10 mt-10 rounded-xl border border-white/10 p-4"
+            style={{ background: "rgba(13,122,95,0.28)" }}
+          >
+            <p
+              className="text-[10px] font-bold uppercase tracking-[0.22em]"
+              style={{ color: PC_GOLD }}
+            >
+              Oferta ativa
+            </p>
+            <p
+              className="mt-1 text-[17px] font-bold text-white"
+              style={{ fontFamily: PC_DISPLAY }}
+            >
+              30 dias grátis
+            </p>
+            <p className="mt-0.5 text-[11px] text-white/60">
+              Enviando sua nota fiscal e liberando o painel completo.
+            </p>
+          </div>
+        </aside>
+
+        {/* RIGHT — Auth form */}
+        <div className="p-8 sm:p-10" style={{ fontFamily: PC_BODY }}>
+          {/* Mobile-only compact brand row */}
+          <div className="mb-6 flex items-center gap-2 md:hidden">
+            <div
+              className="flex h-8 w-8 items-center justify-center rounded-md"
+              style={{ background: PC_EMERALD, color: PC_GOLD }}
+            >
+              <ShoppingCart className="h-4 w-4" strokeWidth={2.5} />
+            </div>
+            <span
+              className="text-[16px] font-bold tracking-tight"
+              style={{ color: PC_EMERALD, fontFamily: PC_DISPLAY }}
+            >
+              PreçoCerto
+            </span>
+          </div>
+
+          <p
+            className="text-[10.5px] font-bold uppercase tracking-[0.22em]"
+            style={{ color: PC_EMERALD }}
+          >
             {mode === "login" ? "Área do assinante" : "Comece grátis"}
           </p>
-          <h1 className="mt-2 font-display text-[26px] leading-[1.08] tracking-tight text-foreground sm:text-[30px]">
-            {mode === "login" ? "Entre e economize" : "Crie sua conta"}
-            <span className="text-accent-strong">.</span>
+          <h1
+            className="mt-1.5 text-[26px] leading-[1.1] font-bold tracking-tight"
+            style={{ color: PC_EMERALD_DEEP, fontFamily: PC_DISPLAY }}
+          >
+            {mode === "login" ? "Entrar na plataforma" : "Criar sua conta"}
           </h1>
-          <p className="mt-1.5 text-[13px] text-muted-foreground">
-            {mode === "login"
-              ? "Acesse com CPF e PIN de 6 dígitos."
-              : "Menos de 1 minuto. Sem cartão de crédito."}
-          </p>
 
           <TabSwitch mode={mode} onChange={setMode} />
 
-          <form className="mt-4 space-y-3" onSubmit={handleSubmit}>
+          <form className="mt-5 space-y-4" onSubmit={handleSubmit}>
+
             {mode === "signup" && (() => {
               const trimmed = fullName.trim();
               const nameOk = trimmed.length >= 3 && /\s/.test(trimmed);
@@ -462,27 +585,12 @@ function LoginPage() {
 
             {(() => {
               const pinOk = /^\d{6}$/.test(password);
-              const status: FieldStatus =
-                password.length === 0 ? "idle" : pinOk ? "success" : password.length < 6 ? "idle" : "error";
-              const hint =
-                password.length === 0
-                  ? null
-                  : pinOk
-                    ? "✓ PIN completo"
-                    : `Faltam ${6 - password.length} dígito${6 - password.length > 1 ? "s" : ""}`;
+              const errored = password.length === 6 && !pinOk;
               return (
-                <Field
-                  label="PIN de acesso (6 dígitos)"
-                  type="password"
-                  placeholder="••••••"
-                  icon={Lock}
+                <PinField
                   value={password}
                   onChange={(v) => setPassword(v.replace(/\D/g, "").slice(0, 6))}
-                  status={status}
-                  hint={hint}
-                  required
-                  minLength={6}
-                  inputMode="numeric"
+                  hasError={errored || (mode === "login" && !!blockStatus?.blocked)}
                 />
               );
             })()}
@@ -508,108 +616,55 @@ function LoginPage() {
                 (mode === "signup" &&
                   (fullName.trim().length < 3 || phone.replace(/\D/g, "").length < 10))
               }
-              className="mt-1.5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-foreground text-sm font-semibold text-background shadow-sm transition hover:bg-foreground/90 disabled:cursor-not-allowed disabled:opacity-40"
+              className="mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl text-[14px] font-bold text-white shadow-lg transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40"
+              style={{
+                background: `linear-gradient(135deg, ${PC_EMERALD_DEEP}, ${PC_EMERALD})`,
+                boxShadow: `0 12px 24px -10px ${PC_EMERALD}66`,
+                fontFamily: PC_DISPLAY,
+              }}
             >
               {loading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 <>
-                  {mode === "login" ? "Entrar na conta" : "Criar conta grátis"}
+                  {mode === "login" ? "Acessar plataforma" : "Criar conta grátis"}
                   <ArrowRight className="h-4 w-4" />
                 </>
               )}
             </button>
 
-            {mode === "login" && (
-              <p className="text-center text-[11.5px] text-muted-foreground">
-                Esqueceu o PIN?{" "}
+            <div className="flex flex-col items-center gap-2 pt-1 text-[11.5px]" style={{ color: "#6b7280" }}>
+              {mode === "login" && (
                 <Link
                   to="/recuperar-pin"
-                  className="font-semibold text-foreground underline-offset-4 hover:underline"
+                  className="font-semibold transition hover:underline"
+                  style={{ color: PC_EMERALD }}
                 >
-                  Recuperar por SMS
+                  Esqueceu o PIN? Recuperar por SMS
                 </Link>
-              </p>
-            )}
-
-            <p className="text-center text-[11.5px] text-muted-foreground">
-              Tem um código promocional?{" "}
+              )}
               <Link
                 to="/resgatar"
-                className="font-semibold text-foreground underline-offset-4 hover:underline"
+                className="inline-flex items-center gap-1.5 font-semibold transition hover:underline"
+                style={{ color: PC_GOLD_DARK }}
               >
-                Resgatar código
+                <Ticket className="h-3.5 w-3.5" />
+                Tenho um código promocional
               </Link>
-            </p>
+            </div>
           </form>
+
+          <p className="mt-6 border-t border-black/5 pt-4 text-center text-[10.5px] text-gray-400">
+            Ao continuar, você concorda com nossos{" "}
+            <Link to="/termos" className="underline hover:text-gray-600">Termos</Link> e{" "}
+            <Link to="/privacidade" className="underline hover:text-gray-600">Privacidade</Link>.
+          </p>
         </div>
-      </div>
-
-      {/* Right: editorial panel */}
-      <aside className="relative hidden overflow-hidden lg:block">
-        {/* Rotating professional market photo — varies by local hour. */}
-        <img
-          src={editorialBg.src}
-          alt=""
-          aria-hidden
-          className="absolute inset-0 h-full w-full object-cover"
-          loading="lazy"
-          width={1280}
-          height={1600}
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{ background: editorialBg.overlay }}
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-            maskImage:
-              "radial-gradient(ellipse at 60% 40%, black 30%, transparent 75%)",
-          }}
-        />
-        <div
-          aria-hidden
-          className="absolute -right-24 -top-24 h-[420px] w-[420px] rounded-full opacity-30 blur-3xl"
-          style={{ background: "radial-gradient(closest-side, color-mix(in oklab, var(--accent-strong) 55%, transparent), transparent)" }}
-        />
-
-        <div className="relative flex h-full flex-col justify-between p-12 text-white xl:p-14">
-          {/* Header row */}
-          <div className="flex items-center justify-between">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-white/90 backdrop-blur">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              </span>
-              Índice PreçoCerto · ao vivo
-            </span>
-            <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/50">
-              Feijó · Acre
-            </span>
-          </div>
-
-          {/* Editorial content */}
-          <EditorialPanel region={region} />
-
-          {/* Colaborativo — envio de notas fiscais */}
-          <CollaborativeCTA variant="dark" compact className="mt-2" />
-          <SocialProofStrip variant="dark" className="mt-3" />
-
-          {/* City selector — enxuto */}
-          <div className="mt-6">
-            <RegionSelector value={region} onChange={setRegion} />
-          </div>
-        </div>
-      </aside>
+      </motion.div>
     </div>
   );
 }
+
 
 
 function EditorialPanel({ region }: { region: SelectedRegion | null }) {
@@ -1002,3 +1057,100 @@ function Field({
   );
 }
 
+
+/** 6-digit PIN input with individual boxes; syncs to a single string value. */
+function PinField({
+  value,
+  onChange,
+  hasError,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  hasError?: boolean;
+}) {
+  const refs = useRef<Array<HTMLInputElement | null>>([]);
+  const digits = value.padEnd(6, " ").slice(0, 6).split("");
+
+  function setAt(i: number, d: string) {
+    const clean = d.replace(/\D/g, "").slice(-1);
+    const next = value.split("");
+    next[i] = clean;
+    // trim trailing empties
+    const merged = next.slice(0, 6).join("").slice(0, 6);
+    onChange(merged);
+    if (clean && i < 5) refs.current[i + 1]?.focus();
+  }
+
+  function handleKey(i: number, e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "Backspace" && !digits[i].trim() && i > 0) {
+      refs.current[i - 1]?.focus();
+    } else if (e.key === "ArrowLeft" && i > 0) {
+      refs.current[i - 1]?.focus();
+    } else if (e.key === "ArrowRight" && i < 5) {
+      refs.current[i + 1]?.focus();
+    }
+  }
+
+  function handlePaste(e: React.ClipboardEvent<HTMLInputElement>) {
+    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
+    if (!pasted) return;
+    e.preventDefault();
+    onChange(pasted);
+    const focusIdx = Math.min(pasted.length, 5);
+    refs.current[focusIdx]?.focus();
+  }
+
+  return (
+    <div className="space-y-2">
+      <div className="flex items-end justify-between">
+        <label
+          className="text-[10.5px] font-bold uppercase tracking-[0.2em]"
+          style={{ color: PC_EMERALD }}
+        >
+          PIN de 6 dígitos
+        </label>
+      </div>
+      <div className="grid grid-cols-6 gap-2">
+        {digits.map((d, i) => (
+          <input
+            key={i}
+            ref={(el) => {
+              refs.current[i] = el;
+            }}
+            type="password"
+            inputMode="numeric"
+            autoComplete="one-time-code"
+            maxLength={1}
+            value={d.trim()}
+            onChange={(e) => setAt(i, e.target.value)}
+            onKeyDown={(e) => handleKey(i, e)}
+            onPaste={handlePaste}
+            aria-label={`Dígito ${i + 1} do PIN`}
+            className="h-12 w-full rounded-lg border-2 bg-[#faf7ec] text-center text-xl font-bold outline-none transition"
+            style={{
+              borderColor: hasError
+                ? "#dc2626"
+                : d.trim()
+                  ? PC_GOLD
+                  : "rgba(6,78,59,0.14)",
+              color: PC_EMERALD_DEEP,
+              fontFamily: PC_DISPLAY,
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.borderColor = PC_GOLD;
+              e.currentTarget.style.boxShadow = `0 0 0 3px ${PC_GOLD}33`;
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.boxShadow = "none";
+              e.currentTarget.style.borderColor = hasError
+                ? "#dc2626"
+                : d.trim()
+                  ? PC_GOLD
+                  : "rgba(6,78,59,0.14)";
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
