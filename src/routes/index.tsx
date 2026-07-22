@@ -19,8 +19,12 @@ import {
 import {
   listPublicStores,
   getPlatformStats,
+  getCheapestStoresRanking,
   type PublicStore,
+  type CheapestStoreRank,
 } from "@/lib/stores-public.functions";
+import { Trophy } from "lucide-react";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
