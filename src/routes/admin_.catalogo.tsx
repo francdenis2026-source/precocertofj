@@ -39,6 +39,7 @@ import {
   MoreHorizontal,
 } from "lucide-react";
 import { DataTable, type DataTableColumn } from "@/components/data/DataTable";
+import { useSession } from "@/hooks/useSession";
 import {
   Sheet,
   SheetContent,
@@ -207,6 +208,7 @@ function CatalogoAdminPage() {
 
 function ItemsPanel() {
   const { prompt } = useConfirm();
+  const { user } = useSession();
   const fetchList = useServerFn(listCatalog);
   const doUpdate = useServerFn(updateCatalogEntry);
   const doForceRefresh = useServerFn(forceRefreshCatalogImage);
@@ -537,8 +539,10 @@ function ItemsPanel() {
         error={error}
         onRetry={load}
         pageSize={15}
+        pageSizeOptions={[15, 25, 50, 100]}
         rowKey={(r) => r.id}
         defaultSort={{ key: "updated", dir: "desc" }}
+        persistKey={`admin.catalog.items:${user?.id ?? "anon"}`}
         emptyTitle="Nenhum produto encontrado"
         emptyDescription="Ajuste os filtros ou aguarde novas leituras chegarem ao catálogo."
         emptyIcon={<Package className="h-5 w-5 text-muted-foreground" />}
@@ -1466,6 +1470,7 @@ function ReviewPanel() {
 
 function AuditPanel() {
   const fetchAudit = useServerFn(listCatalogAudit);
+  const { user } = useSession();
   const [rows, setRows] = useState<AuditLogEntry[] | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
@@ -1582,9 +1587,11 @@ function AuditPanel() {
           error={error}
           onRetry={load}
           pageSize={25}
+          pageSizeOptions={[25, 50, 100, 200]}
           rowKey={(r) => r.id}
           defaultSort={{ key: "when", dir: "desc" }}
           density="compact"
+          persistKey={`admin.catalog.audit:${user?.id ?? "anon"}`}
           emptyTitle="Nenhum evento registrado"
           emptyDescription="Ações de edição do catálogo aparecerão aqui."
           emptyIcon={<History className="h-5 w-5 text-muted-foreground" />}

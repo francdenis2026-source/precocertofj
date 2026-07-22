@@ -53,6 +53,8 @@ export type DataTableProps<T> = {
   emptyAction?: React.ReactNode;
   /** Paginação client-side. 0 ou undefined = sem paginação. */
   pageSize?: number;
+  /** Opções de tamanho de página exibidas em seletor. */
+  pageSizeOptions?: number[];
   /** Sort inicial. */
   defaultSort?: { key: string; dir: SortDir };
   onRowClick?: (row: T, index: number) => void;
@@ -61,6 +63,11 @@ export type DataTableProps<T> = {
   density?: "compact" | "regular";
   /** Caption/legend opcional abaixo do rodapé. */
   caption?: React.ReactNode;
+  /**
+   * Chave para persistir preferências (sort, page, pageSize) em localStorage.
+   * Inclua o id do usuário para escopo por conta, ex.: `admin.catalog.items:${userId}`.
+   */
+  persistKey?: string;
 };
 
 export function DataTable<T>({
@@ -75,16 +82,33 @@ export function DataTable<T>({
   emptyIcon,
   emptyAction,
   pageSize,
+  pageSizeOptions,
   defaultSort,
   onRowClick,
   className,
   density = "regular",
   caption,
+  persistKey,
 }: DataTableProps<T>) {
-  const [sort, setSort] = React.useState<{ key: string; dir: SortDir } | null>(
-    defaultSort ?? null,
+  const persisted = React.useMemo(
+    () => (persistKey ? loadPrefs(persistKey) : null),
+    [persistKey],
   );
-  const [page, setPage] = React.useState(0);
+  const [sort, setSort] = React.useState<{ key: string; dir: SortDir } | null>(
+    persisted?.sort ?? defaultSort ?? null,
+  );
+  const [page, setPage] = React.useState(persisted?.page ?? 0);
+  const [pageSizeState, setPageSizeState] = React.useState<number | undefined>(
+    persisted?.pageSize ?? pageSize,
+  );
+  const activePageSize = pageSizeState ?? pageSize;
+
+  // Persist on change
+  React.useEffect(() => {
+    if (!persistKey) return;
+    savePrefs(persistKey, { sort, page, pageSize: activePageSize });
+  }, [persistKey, sort, page, activePageSize]);
+
 
   const sorted = React.useMemo(() => {
     if (!data || !sort) return data ?? [];
@@ -108,13 +132,13 @@ export function DataTable<T>({
   }, [data, sort, columns]);
 
   const total = sorted.length;
-  const pageCount = pageSize && pageSize > 0 ? Math.max(1, Math.ceil(total / pageSize)) : 1;
+  const pageCount = activePageSize && activePageSize > 0 ? Math.max(1, Math.ceil(total / activePageSize)) : 1;
   const safePage = Math.min(page, pageCount - 1);
   const paged = React.useMemo(() => {
-    if (!pageSize || pageSize <= 0) return sorted;
-    const start = safePage * pageSize;
-    return sorted.slice(start, start + pageSize);
-  }, [sorted, safePage, pageSize]);
+    if (!activePageSize || activePageSize <= 0) return sorted;
+    const start = safePage * activePageSize;
+    return sorted.slice(start, start + activePageSize);
+  }, [sorted, safePage, activePageSize]);
 
   React.useEffect(() => {
     // Reset page when data shrinks
@@ -186,7 +210,7 @@ export function DataTable<T>({
           {loading ? (
             <TableRow className="hover:bg-transparent">
               <TableCell colSpan={colCount} className="p-0">
-                <SkeletonRows rows={Math.min(pageSize || 6, 8)} cols={colCount} />
+                <SkeletonRows rows={Math.min(activePageSize || 6, 8)} cols={colCount} />
               </TableCell>
             </TableRow>
           ) : error ? (
@@ -254,24 +278,47 @@ export function DataTable<T>({
         </TableBody>
       </Table>
 
-      {(pageSize && pageSize > 0 && total > pageSize) || caption ? (
+      {(activePageSize && activePageSize > 0 && total > activePageSize) ||
+      (pageSizeOptions && pageSizeOptions.length > 1) ||
+      caption ? (
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border bg-muted/20 px-3 py-2">
-          <div className="text-[11px] text-muted-foreground">
-            {caption ??
-              (total > 0
-                ? `Mostrando ${safePage * (pageSize || 0) + 1}–${Math.min(
-                    (safePage + 1) * (pageSize || 0),
-                    total,
-                  )} de ${total}`
-                : null)}
+          <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
+            <span>
+              {caption ??
+                (total > 0 && activePageSize
+                  ? `Mostrando ${safePage * activePageSize + 1}–${Math.min(
+                      (safePage + 1) * activePageSize,
+                      total,
+                    )} de ${total}`
+                  : null)}
+            </span>
+            {pageSizeOptions && pageSizeOptions.length > 1 ? (
+              <label className="flex items-center gap-1.5">
+                <span className="uppercase tracking-[0.12em]">por página</span>
+                <select
+                  value={activePageSize ?? ""}
+                  onChange={(e) => {
+                    setPageSizeState(Number(e.target.value));
+                    setPage(0);
+                  }}
+                  className="h-6 rounded border border-border bg-background px-1.5 text-[11px] font-medium tabular-nums text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+                >
+                  {pageSizeOptions.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            ) : null}
           </div>
-          {pageSize && pageSize > 0 && total > pageSize ? (
+          {activePageSize && activePageSize > 0 && total > activePageSize ? (
             <div className="flex items-center gap-1">
               <Button
                 variant="outline"
                 size="sm"
                 className="h-7 px-2"
-                onClick={() => setPage((p) => Math.max(0, p - 1))}
+                onClick={() => setPage((p: number) => Math.max(0, p - 1))}
                 disabled={safePage === 0}
               >
                 <ChevronLeft className="h-3.5 w-3.5" />
@@ -283,7 +330,7 @@ export function DataTable<T>({
                 variant="outline"
                 size="sm"
                 className="h-7 px-2"
-                onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
+                onClick={() => setPage((p: number) => Math.min(pageCount - 1, p + 1))}
                 disabled={safePage >= pageCount - 1}
               >
                 <ChevronRight className="h-3.5 w-3.5" />
@@ -350,4 +397,34 @@ export function TableLoading({ label = "Carregando…" }: { label?: string }) {
       {label}
     </div>
   );
+}
+
+/* ---------- persistência ---------- */
+
+type PersistedPrefs = {
+  sort?: { key: string; dir: SortDir } | null;
+  page?: number;
+  pageSize?: number;
+};
+
+const PREFS_PREFIX = "dt.prefs:";
+
+function loadPrefs(key: string): PersistedPrefs | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(PREFS_PREFIX + key);
+    if (!raw) return null;
+    return JSON.parse(raw) as PersistedPrefs;
+  } catch {
+    return null;
+  }
+}
+
+function savePrefs(key: string, prefs: PersistedPrefs) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(PREFS_PREFIX + key, JSON.stringify(prefs));
+  } catch {
+    /* quota / private mode */
+  }
 }
