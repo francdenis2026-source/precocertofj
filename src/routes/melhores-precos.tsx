@@ -28,6 +28,8 @@ import { computeUnitPrice } from "@/lib/unit-price";
 import { useMyRoles } from "@/hooks/useMyRoles";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { submitPriceReport } from "@/lib/stores-public.functions";
+import { classifyProductType, PRODUCT_TYPE_LABEL } from "@/lib/product-type";
+
 
 const PAGE_SIZE = 24;
 
