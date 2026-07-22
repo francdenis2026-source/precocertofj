@@ -6,6 +6,7 @@ export type VisionProduct = {
   brand: string | null;
   unit: string | null;
   barcode: string | null;
+  category: string | null;
 };
 
 export type VisionExtract = {
