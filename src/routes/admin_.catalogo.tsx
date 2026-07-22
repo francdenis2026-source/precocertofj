@@ -1467,65 +1467,128 @@ function ReviewPanel() {
 function AuditPanel() {
   const fetchAudit = useServerFn(listCatalogAudit);
   const [rows, setRows] = useState<AuditLogEntry[] | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  const load = () => {
+    setLoading(true);
+    setError(null);
+    fetchAudit({ data: { limit: 200 } })
+      .then((r) => {
+        setRows(r);
+        setLoading(false);
+      })
+      .catch((e: unknown) => {
+        const err = e instanceof Error ? e : new Error("Falha ao carregar auditoria");
+        setError(err);
+        setLoading(false);
+        toast.error(err.message);
+      });
+  };
 
   useEffect(() => {
-    fetchAudit({ data: { limit: 200 } })
-      .then(setRows)
-      .catch((e) => toast.error(e instanceof Error ? e.message : "Falha ao carregar auditoria"));
-  }, [fetchAudit]);
+    load();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  if (rows === null)
-    return (
-      <div className="flex justify-center py-16">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-      </div>
-    );
-
-  if (rows.length === 0)
-    return (
-      <Card>
-        <CardContent className="py-12 text-center text-sm text-muted-foreground">
-          Nenhum evento de auditoria registrado ainda.
-        </CardContent>
-      </Card>
-    );
+  const columns: DataTableColumn<AuditLogEntry>[] = [
+    {
+      key: "when",
+      header: "Quando",
+      sortable: true,
+      width: "170px",
+      accessor: (r) => new Date(r.createdAt),
+      cell: (r) => (
+        <span className="text-[11px] text-muted-foreground tabular-nums">
+          {new Date(r.createdAt).toLocaleString("pt-BR")}
+        </span>
+      ),
+    },
+    {
+      key: "action",
+      header: "Ação",
+      sortable: true,
+      width: "110px",
+      accessor: (r) => r.action,
+      cell: (r) => (
+        <Badge variant="outline" className="text-[10px] uppercase">
+          {r.action}
+        </Badge>
+      ),
+    },
+    {
+      key: "field",
+      header: "Campo",
+      width: "130px",
+      cell: (r) =>
+        r.field ? (
+          <span className="font-mono text-[11px]">{r.field}</span>
+        ) : (
+          <span className="text-muted-foreground">—</span>
+        ),
+    },
+    {
+      key: "product",
+      header: "Produto",
+      sortable: true,
+      accessor: (r) => r.catalogDisplayName ?? "",
+      cell: (r) =>
+        r.catalogDisplayName ? (
+          <span className="text-[12px]">{r.catalogDisplayName}</span>
+        ) : (
+          <span className="text-muted-foreground">—</span>
+        ),
+    },
+    {
+      key: "change",
+      header: "Alteração",
+      cell: (r) =>
+        r.oldValue !== null || r.newValue !== null ? (
+          <span className="text-[11px] text-muted-foreground">
+            <span className="line-through">{r.oldValue ?? "—"}</span>
+            {" → "}
+            <span className="text-foreground">{r.newValue ?? "—"}</span>
+          </span>
+        ) : (
+          <span className="text-muted-foreground">—</span>
+        ),
+    },
+    {
+      key: "actor",
+      header: "Ator",
+      sortable: true,
+      align: "right",
+      width: "190px",
+      accessor: (r) => r.actorEmail ?? r.actorUserId ?? "sistema",
+      cell: (r) => (
+        <span className="text-[11px] text-muted-foreground">
+          {r.actorEmail ?? r.actorUserId ?? "sistema"}
+        </span>
+      ),
+    },
+  ];
 
   return (
     <Card>
       <CardHeader className="pb-3">
         <CardTitle className="text-base">Log de auditoria</CardTitle>
-        <CardDescription>Últimas alterações no catálogo (200 registros).</CardDescription>
+        <CardDescription>Últimas alterações no catálogo (até 200 registros).</CardDescription>
       </CardHeader>
-      <CardContent className="grid gap-2">
-        {rows.map((r) => (
-          <div
-            key={r.id}
-            className="flex flex-wrap items-start justify-between gap-3 rounded-md border p-3 text-sm"
-          >
-            <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-center gap-2">
-                <Badge variant="outline" className="uppercase">
-                  {r.action}
-                </Badge>
-                {r.field && <span className="font-mono text-xs">{r.field}</span>}
-                {r.catalogDisplayName && (
-                  <span className="text-xs text-muted-foreground">· {r.catalogDisplayName}</span>
-                )}
-              </div>
-              {(r.oldValue !== null || r.newValue !== null) && (
-                <div className="mt-1 text-xs text-muted-foreground">
-                  <span className="line-through">{r.oldValue ?? "—"}</span>
-                  {" → "}
-                  <span className="text-foreground">{r.newValue ?? "—"}</span>
-                </div>
-              )}
-            </div>
-            <div className="text-right text-[11px] text-muted-foreground">
-              <div>{new Date(r.createdAt).toLocaleString("pt-BR")}</div>
-              <div>{r.actorEmail ?? r.actorUserId ?? "sistema"}</div>
-            </div>
-          </div>
-        ))}
+      <CardContent>
+        <DataTable
+          data={rows ?? []}
+          columns={columns}
+          loading={loading && rows === null}
+          error={error}
+          onRetry={load}
+          pageSize={25}
+          rowKey={(r) => r.id}
+          defaultSort={{ key: "when", dir: "desc" }}
+          density="compact"
+          emptyTitle="Nenhum evento registrado"
+          emptyDescription="Ações de edição do catálogo aparecerão aqui."
+          emptyIcon={<History className="h-5 w-5 text-muted-foreground" />}
+        />
       </CardContent>
     </Card>
   );
