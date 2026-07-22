@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Loader2, ShoppingCart, Star, TrendingDown } from "lucide-react";
 
 import { AppShell } from "@/components/brand/AppShell";
+import { PageHeader } from "@/components/brand/PageHeader";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { StoreDetailsDrawer } from "@/components/stores/StoreDetailsDrawer";
 import type { PublicStore } from "@/lib/stores-public.functions";
