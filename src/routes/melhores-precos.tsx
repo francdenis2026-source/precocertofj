@@ -330,6 +330,8 @@ function MelhoresPrecosPage() {
   const rows = useMemo(() => {
     const filtered = allRows.filter((r) => {
       if (activeCategory && r.category !== activeCategory) return false;
+      if (activeType && classifyProductType(r.display_name) !== activeType) return false;
+
       if (Number(r.store_count) < minStores) return false;
       const p = Number(r.min_price);
       if (minPrice > 0 && p < minPrice) return false;
