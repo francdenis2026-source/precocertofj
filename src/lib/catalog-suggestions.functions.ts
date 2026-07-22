@@ -223,7 +223,13 @@ export const updateSuggestion = createServerFn({ method: "POST" })
   })
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const patch: Record<string, any> = {};
+    const patch: {
+      suggested_brand?: string | null;
+      suggested_type?: string | null;
+      suggested_package?: string | null;
+      suggested_normalized_name?: string | null;
+      reviewer_notes?: string | null;
+    } = {};
     if (data.brand !== undefined) patch.suggested_brand = data.brand;
     if (data.type !== undefined) patch.suggested_type = data.type;
     if (data.pkg !== undefined) patch.suggested_package = data.pkg;
