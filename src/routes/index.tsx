@@ -94,11 +94,11 @@ const SECTORS = [
   { label: "Bebidas", slug: "bebidas", delta: 0 },
 ];
 
-const KPIS = [
-  { label: "Cesta básica", value: "R$ 412,50", delta: -2.4, sub: "vs. ontem" },
-  { label: "Maior queda 7 d", value: "-42%", delta: -42, sub: "Higiene pessoal" },
-  { label: "Mercados ativos", value: "18", delta: 0, sub: "coletando agora" },
-  { label: "Economia média", value: "R$ 87", delta: 0, sub: "por família / mês" },
+const FALLBACK_KPIS = [
+  { label: "Cesta básica", value: "—", delta: 0, sub: "aguardando dados" },
+  { label: "Maior queda 7 d", value: "—", delta: 0, sub: "aguardando dados" },
+  { label: "Mercados ativos", value: "0", delta: 0, sub: "coletando agora" },
+  { label: "Produtos catalogados", value: "0", delta: 0, sub: "no catálogo" },
 ];
 
 const PLACEHOLDER_STORES = [
