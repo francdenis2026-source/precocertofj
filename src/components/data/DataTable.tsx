@@ -278,24 +278,47 @@ export function DataTable<T>({
         </TableBody>
       </Table>
 
-      {(pageSize && pageSize > 0 && total > pageSize) || caption ? (
+      {(activePageSize && activePageSize > 0 && total > activePageSize) ||
+      (pageSizeOptions && pageSizeOptions.length > 1) ||
+      caption ? (
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-border bg-muted/20 px-3 py-2">
-          <div className="text-[11px] text-muted-foreground">
-            {caption ??
-              (total > 0
-                ? `Mostrando ${safePage * (pageSize || 0) + 1}–${Math.min(
-                    (safePage + 1) * (pageSize || 0),
-                    total,
-                  )} de ${total}`
-                : null)}
+          <div className="flex items-center gap-3 text-[11px] text-muted-foreground">
+            <span>
+              {caption ??
+                (total > 0 && activePageSize
+                  ? `Mostrando ${safePage * activePageSize + 1}–${Math.min(
+                      (safePage + 1) * activePageSize,
+                      total,
+                    )} de ${total}`
+                  : null)}
+            </span>
+            {pageSizeOptions && pageSizeOptions.length > 1 ? (
+              <label className="flex items-center gap-1.5">
+                <span className="uppercase tracking-[0.12em]">por página</span>
+                <select
+                  value={activePageSize ?? ""}
+                  onChange={(e) => {
+                    setPageSizeState(Number(e.target.value));
+                    setPage(0);
+                  }}
+                  className="h-6 rounded border border-border bg-background px-1.5 text-[11px] font-medium tabular-nums text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
+                >
+                  {pageSizeOptions.map((opt) => (
+                    <option key={opt} value={opt}>
+                      {opt}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            ) : null}
           </div>
-          {pageSize && pageSize > 0 && total > pageSize ? (
+          {activePageSize && activePageSize > 0 && total > activePageSize ? (
             <div className="flex items-center gap-1">
               <Button
                 variant="outline"
                 size="sm"
                 className="h-7 px-2"
-                onClick={() => setPage((p) => Math.max(0, p - 1))}
+                onClick={() => setPage((p: number) => Math.max(0, p - 1))}
                 disabled={safePage === 0}
               >
                 <ChevronLeft className="h-3.5 w-3.5" />
@@ -307,7 +330,7 @@ export function DataTable<T>({
                 variant="outline"
                 size="sm"
                 className="h-7 px-2"
-                onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
+                onClick={() => setPage((p: number) => Math.min(pageCount - 1, p + 1))}
                 disabled={safePage >= pageCount - 1}
               >
                 <ChevronRight className="h-3.5 w-3.5" />
