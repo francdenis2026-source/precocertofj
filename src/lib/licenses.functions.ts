@@ -119,6 +119,204 @@ export const revokeLicenseCode = createServerFn({ method: "POST" })
     return { ok: true };
   });
 
+/** Admin: reativa código revogado (volta para 'paid') e opcionalmente estende validade. */
+export const reactivateLicenseCode = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { id: string; addDays?: number }) => ({
+    id: String(data?.id ?? ""),
+    addDays: Math.max(0, Math.min(730, Math.floor(Number(data?.addDays) || 0))),
+  }))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: cur, error: gErr } = await supabaseAdmin
+      .from("license_codes").select("id, status, expires_at").eq("id", data.id).maybeSingle();
+    if (gErr || !cur) throw new Error("Código não encontrado");
+    if (cur.status === "redeemed") throw new Error("Código já resgatado — não pode ser reativado");
+    const baseMs = cur.expires_at && Date.parse(cur.expires_at) > Date.now()
+      ? Date.parse(cur.expires_at) : Date.now();
+    const nextExp = data.addDays > 0
+      ? new Date(baseMs + data.addDays * 86400_000).toISOString()
+      : (cur.expires_at ?? new Date(Date.now() + 180 * 86400_000).toISOString());
+    const { error } = await supabaseAdmin.from("license_codes")
+      .update({ status: "paid", expires_at: nextExp }).eq("id", data.id);
+    if (error) throw new Error(error.message);
+    await supabaseAdmin.from("admin_audit_log").insert({
+      admin_user_id: context.userId, action: "reactivate_license",
+      target_type: "license_code", target_id: data.id,
+      before: { status: cur.status, expires_at: cur.expires_at } as any,
+      after: { status: "paid", expires_at: nextExp } as any,
+    });
+    return { ok: true, expiresAt: nextExp };
+  });
+
+/** Admin: deleta permanentemente código que ainda não foi resgatado. */
+export const deleteLicenseCode = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { id: string }) => ({ id: String(data?.id ?? "") }))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: cur } = await supabaseAdmin
+      .from("license_codes").select("id, status, code").eq("id", data.id).maybeSingle();
+    if (!cur) throw new Error("Código não encontrado");
+    if (cur.status === "redeemed") throw new Error("Não é possível excluir um código já resgatado. Use revogar.");
+    const { error } = await supabaseAdmin.from("license_codes")
+      .delete().eq("id", data.id).neq("status", "redeemed");
+    if (error) throw new Error(error.message);
+    await supabaseAdmin.from("admin_audit_log").insert({
+      admin_user_id: context.userId, action: "delete_license",
+      target_type: "license_code", target_id: data.id,
+      before: { status: cur.status, code: cur.code } as any,
+    });
+    return { ok: true };
+  });
+
+/** Admin: altera data de expiração de um código. */
+export const updateLicenseCodeExpiry = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { id: string; expiresAt: string }) => ({
+    id: String(data?.id ?? ""),
+    expiresAt: String(data?.expiresAt ?? ""),
+  }))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const iso = new Date(data.expiresAt);
+    if (Number.isNaN(iso.getTime())) throw new Error("Data inválida");
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: cur } = await supabaseAdmin
+      .from("license_codes").select("id, status, expires_at").eq("id", data.id).maybeSingle();
+    if (!cur) throw new Error("Código não encontrado");
+    const patch: Record<string, unknown> = { expires_at: iso.toISOString() };
+    // Se estava expirado e nova data é no futuro, volta para 'paid'
+    if (cur.status === "expired" && iso.getTime() > Date.now()) patch.status = "paid";
+    const { error } = await supabaseAdmin.from("license_codes").update(patch).eq("id", data.id);
+    if (error) throw new Error(error.message);
+    await supabaseAdmin.from("admin_audit_log").insert({
+      admin_user_id: context.userId, action: "update_license_expiry",
+      target_type: "license_code", target_id: data.id,
+      before: { expires_at: cur.expires_at, status: cur.status } as any,
+      after: patch as any,
+    });
+    return { ok: true, expiresAt: iso.toISOString() };
+  });
+
+/** Admin: reemite código — revoga o antigo (se não resgatado) e cria um novo com mesmo plano. Notifica o comprador. */
+export const reissueLicenseCode = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { id: string; expiresInDays?: number; notifyBuyer?: boolean }) => ({
+    id: String(data?.id ?? ""),
+    expiresInDays: Math.max(1, Math.min(730, Math.floor(Number(data?.expiresInDays) || 180))),
+    notifyBuyer: data?.notifyBuyer !== false,
+  }))
+  .handler(async ({ data, context }) => {
+    await assertAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: old, error: gErr } = await supabaseAdmin
+      .from("license_codes")
+      .select("id, code, plan_id, price_cents, status, buyer_user_id, redeemed_by, notes")
+      .eq("id", data.id).maybeSingle();
+    if (gErr || !old) throw new Error("Código não encontrado");
+    if (old.status === "redeemed") {
+      throw new Error("Este código já foi resgatado — a assinatura correspondente já está aplicada.");
+    }
+    const expiresAt = new Date(Date.now() + data.expiresInDays * 86400_000).toISOString();
+    const newCodeStr = newCode();
+    const { data: ins, error: iErr } = await supabaseAdmin.from("license_codes")
+      .insert({
+        code: newCodeStr, plan_id: old.plan_id, price_cents: old.price_cents,
+        status: "paid", expires_at: expiresAt,
+        buyer_user_id: old.buyer_user_id, created_by: context.userId,
+        notes: `Reemitido de ${old.code}`,
+      }).select("id, code, expires_at").single();
+    if (iErr) throw new Error(iErr.message);
+
+    // Revoga o antigo para evitar dois códigos válidos ao mesmo tempo
+    await supabaseAdmin.from("license_codes")
+      .update({ status: "revoked", notes: `Substituído por ${newCodeStr}` })
+      .eq("id", old.id);
+
+    // Notifica o comprador (in-app) se possível
+    const target = old.buyer_user_id ?? old.redeemed_by;
+    if (data.notifyBuyer && target) {
+      await supabaseAdmin.from("user_notifications").insert({
+        user_id: target,
+        kind: "license_reissued",
+        title: "Novo código de licença enviado 🎟️",
+        body: `Seu código foi reemitido. Novo código: ${newCodeStr}. Acesse "Minhas licenças" para copiar e ativar.`,
+        link: "/minhas-licencas",
+        metadata: { old_code: old.code, new_code: newCodeStr, license_id: ins!.id } as any,
+      });
+    }
+
+    await supabaseAdmin.from("admin_audit_log").insert({
+      admin_user_id: context.userId, action: "reissue_license",
+      target_type: "license_code", target_id: old.id,
+      before: { code: old.code, status: old.status } as any,
+      after: { new_code: newCodeStr, new_id: ins!.id, expires_at: expiresAt } as any,
+    });
+
+    return { ok: true, newCode: newCodeStr, newId: ins!.id, expiresAt };
+  });
+
+/** Usuário: lista as próprias licenças (compradas ou resgatadas). */
+export type MyLicense = {
+  id: string; code: string; status: string; price_cents: number;
+  expires_at: string; redeemed_at: string | null; created_at: string;
+  plan_name: string | null; plan_days: number | null;
+  is_mine_redeemed: boolean; is_mine_buyer: boolean;
+};
+
+export const listMyLicenses = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<MyLicense[]> => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data, error } = await supabaseAdmin
+      .from("license_codes")
+      .select("id, code, status, price_cents, expires_at, redeemed_at, redeemed_by, buyer_user_id, created_at, license_plans!inner(name, days)")
+      .or(`buyer_user_id.eq.${context.userId},redeemed_by.eq.${context.userId}`)
+      .order("created_at", { ascending: false })
+      .limit(200);
+    if (error) throw new Error(error.message);
+    return (data ?? []).map((r: any) => ({
+      id: r.id, code: r.code, status: r.status, price_cents: r.price_cents,
+      expires_at: r.expires_at, redeemed_at: r.redeemed_at, created_at: r.created_at,
+      plan_name: r.license_plans?.name ?? null, plan_days: r.license_plans?.days ?? null,
+      is_mine_redeemed: r.redeemed_by === context.userId,
+      is_mine_buyer: r.buyer_user_id === context.userId,
+    }));
+  });
+
+/** Usuário: solicita reenvio do próprio código (cria notificação in-app e alerta admin). */
+export const requestMyLicenseResend = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { licenseId: string }) => ({ licenseId: String(data?.licenseId ?? "") }))
+  .handler(async ({ data, context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: lic, error } = await supabaseAdmin
+      .from("license_codes")
+      .select("id, code, status, buyer_user_id, redeemed_by")
+      .eq("id", data.licenseId).maybeSingle();
+    if (error || !lic) throw new Error("Licença não encontrada");
+    if (lic.buyer_user_id !== context.userId && lic.redeemed_by !== context.userId) {
+      throw new Response("Acesso negado", { status: 403 });
+    }
+    await supabaseAdmin.from("user_notifications").insert({
+      user_id: context.userId,
+      kind: "license_resend",
+      title: "Seu código de licença 🎟️",
+      body: `Aqui está o código solicitado: ${lic.code}`,
+      link: "/minhas-licencas",
+      metadata: { license_id: lic.id, code: lic.code } as any,
+    });
+    await supabaseAdmin.from("admin_audit_log").insert({
+      admin_user_id: context.userId, action: "user_resend_request",
+      target_type: "license_code", target_id: lic.id,
+      notes: "Cliente solicitou reenvio do próprio código",
+    });
+    return { ok: true, code: lic.code };
+  });
+
 /** Cliente resgata código de licença. */
 export const redeemMyLicenseCode = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
