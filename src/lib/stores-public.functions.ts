@@ -776,7 +776,10 @@ export const getCheapestStoresRanking = createServerFn({ method: "GET" })
             : 0,
         windowDays: 7,
         filterCategory,
+        filterType,
         availableCategories,
+        availableTypes,
+
       },
     };
   },
