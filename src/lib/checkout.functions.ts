@@ -157,7 +157,7 @@ export const approveCheckoutOrder = createServerFn({ method: "POST" })
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: rows, error } = await supabaseAdmin.rpc("approve_checkout_order", {
       _order_id: data.id,
-      _provider_ref: data.providerRef,
+      _provider_ref: data.providerRef ?? undefined,
     });
     if (error) throw new Error(error.message);
     const row = Array.isArray(rows) ? rows[0] : rows;
