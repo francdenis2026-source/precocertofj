@@ -45,6 +45,7 @@ function CheckoutPage() {
   const validate = useServerFn(validatePromoCoupon);
   const approve = useServerFn(approveCheckoutOrder);
   const createPref = useServerFn(createMercadoPagoPreference);
+  const simulate = useServerFn(simulateCheckoutApproval);
   const { isAdmin } = useMyRoles();
 
   const [couponInput, setCouponInput] = useState("");
