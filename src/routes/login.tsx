@@ -605,108 +605,55 @@ function LoginPage() {
                 (mode === "signup" &&
                   (fullName.trim().length < 3 || phone.replace(/\D/g, "").length < 10))
               }
-              className="mt-1.5 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl bg-foreground text-sm font-semibold text-background shadow-sm transition hover:bg-foreground/90 disabled:cursor-not-allowed disabled:opacity-40"
+              className="mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl text-[14px] font-bold text-white shadow-lg transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40"
+              style={{
+                background: `linear-gradient(135deg, ${PC_EMERALD_DEEP}, ${PC_EMERALD})`,
+                boxShadow: `0 12px 24px -10px ${PC_EMERALD}66`,
+                fontFamily: PC_DISPLAY,
+              }}
             >
               {loading ? (
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : (
                 <>
-                  {mode === "login" ? "Entrar na conta" : "Criar conta grátis"}
+                  {mode === "login" ? "Acessar plataforma" : "Criar conta grátis"}
                   <ArrowRight className="h-4 w-4" />
                 </>
               )}
             </button>
 
-            {mode === "login" && (
-              <p className="text-center text-[11.5px] text-muted-foreground">
-                Esqueceu o PIN?{" "}
+            <div className="flex flex-col items-center gap-2 pt-1 text-[11.5px]" style={{ color: "#6b7280" }}>
+              {mode === "login" && (
                 <Link
                   to="/recuperar-pin"
-                  className="font-semibold text-foreground underline-offset-4 hover:underline"
+                  className="font-semibold transition hover:underline"
+                  style={{ color: PC_EMERALD }}
                 >
-                  Recuperar por SMS
+                  Esqueceu o PIN? Recuperar por SMS
                 </Link>
-              </p>
-            )}
-
-            <p className="text-center text-[11.5px] text-muted-foreground">
-              Tem um código promocional?{" "}
+              )}
               <Link
                 to="/resgatar"
-                className="font-semibold text-foreground underline-offset-4 hover:underline"
+                className="inline-flex items-center gap-1.5 font-semibold transition hover:underline"
+                style={{ color: PC_GOLD_DARK }}
               >
-                Resgatar código
+                <Ticket className="h-3.5 w-3.5" />
+                Tenho um código promocional
               </Link>
-            </p>
+            </div>
           </form>
+
+          <p className="mt-6 border-t border-black/5 pt-4 text-center text-[10.5px] text-gray-400">
+            Ao continuar, você concorda com nossos{" "}
+            <Link to="/termos" className="underline hover:text-gray-600">Termos</Link> e{" "}
+            <Link to="/privacidade" className="underline hover:text-gray-600">Privacidade</Link>.
+          </p>
         </div>
-      </div>
-
-      {/* Right: editorial panel */}
-      <aside className="relative hidden overflow-hidden lg:block">
-        {/* Rotating professional market photo — varies by local hour. */}
-        <img
-          src={editorialBg.src}
-          alt=""
-          aria-hidden
-          className="absolute inset-0 h-full w-full object-cover"
-          loading="lazy"
-          width={1280}
-          height={1600}
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{ background: editorialBg.overlay }}
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 opacity-[0.04]"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-            maskImage:
-              "radial-gradient(ellipse at 60% 40%, black 30%, transparent 75%)",
-          }}
-        />
-        <div
-          aria-hidden
-          className="absolute -right-24 -top-24 h-[420px] w-[420px] rounded-full opacity-30 blur-3xl"
-          style={{ background: "radial-gradient(closest-side, color-mix(in oklab, var(--accent-strong) 55%, transparent), transparent)" }}
-        />
-
-        <div className="relative flex h-full flex-col justify-between p-12 text-white xl:p-14">
-          {/* Header row */}
-          <div className="flex items-center justify-between">
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/[0.06] px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.24em] text-white/90 backdrop-blur">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-70" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
-              </span>
-              Índice PreçoCerto · ao vivo
-            </span>
-            <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-white/50">
-              Feijó · Acre
-            </span>
-          </div>
-
-          {/* Editorial content */}
-          <EditorialPanel region={region} />
-
-          {/* Colaborativo — envio de notas fiscais */}
-          <CollaborativeCTA variant="dark" compact className="mt-2" />
-          <SocialProofStrip variant="dark" className="mt-3" />
-
-          {/* City selector — enxuto */}
-          <div className="mt-6">
-            <RegionSelector value={region} onChange={setRegion} />
-          </div>
-        </div>
-      </aside>
+      </motion.div>
     </div>
   );
 }
+
 
 
 function EditorialPanel({ region }: { region: SelectedRegion | null }) {
