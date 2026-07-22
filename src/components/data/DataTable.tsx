@@ -82,16 +82,33 @@ export function DataTable<T>({
   emptyIcon,
   emptyAction,
   pageSize,
+  pageSizeOptions,
   defaultSort,
   onRowClick,
   className,
   density = "regular",
   caption,
+  persistKey,
 }: DataTableProps<T>) {
-  const [sort, setSort] = React.useState<{ key: string; dir: SortDir } | null>(
-    defaultSort ?? null,
+  const persisted = React.useMemo(
+    () => (persistKey ? loadPrefs(persistKey) : null),
+    [persistKey],
   );
-  const [page, setPage] = React.useState(0);
+  const [sort, setSort] = React.useState<{ key: string; dir: SortDir } | null>(
+    persisted?.sort ?? defaultSort ?? null,
+  );
+  const [page, setPage] = React.useState(persisted?.page ?? 0);
+  const [pageSizeState, setPageSizeState] = React.useState<number | undefined>(
+    persisted?.pageSize ?? pageSize,
+  );
+  const activePageSize = pageSizeState ?? pageSize;
+
+  // Persist on change
+  React.useEffect(() => {
+    if (!persistKey) return;
+    savePrefs(persistKey, { sort, page, pageSize: activePageSize });
+  }, [persistKey, sort, page, activePageSize]);
+
 
   const sorted = React.useMemo(() => {
     if (!data || !sort) return data ?? [];
