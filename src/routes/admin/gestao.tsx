@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { AppShell } from "@/components/brand/AppShell";
+import { PageHeader } from "@/components/brand/PageHeader";
 import { AdminOnly } from "@/components/auth/AdminOnly";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
