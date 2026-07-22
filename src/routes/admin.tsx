@@ -20,6 +20,7 @@ import {
 import { uploadImageDataUrl } from "@/lib/storage.functions";
 import { claimFirstAdmin, listUsersWithRoles, grantRole, revokeRole, listRoleAuditLog, OWNER_EMAIL, type UserWithRoles, type RoleAuditEntry } from "@/lib/roles.functions";
 import { AppShell } from "@/components/brand/AppShell";
+import { PageHeader } from "@/components/brand/PageHeader";
 import { StoreBadge, getStoreColor } from "@/components/brand/StoreBadge";
 import { admin, useAdmin } from "@/lib/admin-store";
 import {
@@ -213,20 +214,20 @@ function AdminPage() {
 
   return (
     <AppShell>
-      <section className="mx-auto max-w-7xl px-6 py-10">
-        <header className="mb-8 flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="text-xs uppercase tracking-widest text-muted-foreground">Painel do administrador</p>
-            <h1 className="mt-1 font-serif text-4xl">Gestão do PreçoCerto</h1>
-            <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-              Configure planos, integrações (Mercado Pago, Gemini, ChatGPT), assinantes e o envio automático dos códigos de ativação por e-mail.
-            </p>
-          </div>
+      <PageHeader
+        breadcrumbs={[{ label: "Admin" }]}
+        eyebrow="Painel Executive"
+        title="Gestão do PreçoCerto"
+        description="Configure planos, integrações (Mercado Pago, Gemini, ChatGPT), assinantes e o envio automático dos códigos de ativação por e-mail."
+        icon={<ShieldCheck className="h-5 w-5" style={{ color: "#b58a3c" }} />}
+        goldRule
+        actions={
           <Button
             variant="outline"
             size="sm"
             onClick={handleSignOut}
             disabled={signingOut}
+            className="h-9"
           >
             {signingOut ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -235,10 +236,13 @@ function AdminPage() {
             )}
             Sair da sessão
           </Button>
-        </header>
-
-        <nav className="mb-8 flex flex-wrap gap-2">
+        }
+      />
+      <section className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8 space-y-6">
+        {/* Quick nav — subtelas admin */}
+        <nav aria-label="Atalhos do painel" className="flex flex-wrap gap-1.5">
           {[
+            { to: "/admin/gestao", label: "Gestão (licenças)", icon: Key },
             { to: "/admin/catalogo", label: "Catálogo de produtos", icon: Package },
             { to: "/admin/image-jobs", label: "Fotos dos produtos", icon: ImageIcon },
             { to: "/admin/auditoria", label: "Auditoria do catálogo", icon: History },
@@ -249,26 +253,24 @@ function AdminPage() {
             { to: "/admin/rank-check", label: "Validar ranking", icon: Trophy },
             { to: "/admin/metricas", label: "Métricas & cache", icon: Gauge },
             { to: "/admin/precos", label: "Gestão de preços", icon: ShieldCheck },
-            { to: "/admin/consistencia", label: "Consistência de contagens", icon: AlertTriangle },
+            { to: "/admin/consistencia", label: "Consistência", icon: AlertTriangle },
             { to: "/admin/cobertura", label: "Cobertura por loja", icon: Store },
             { to: "/admin/lote-inserir", label: "Inserção em lote", icon: Plus },
-            { to: "/admin/analytics", label: "Analytics de visitantes", icon: Gauge },
-
-
-
+            { to: "/admin/analytics", label: "Analytics", icon: Gauge },
           ].map((item) => (
             <Link
               key={item.to}
               to={item.to}
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-[12px] font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary"
             >
-              <item.icon className="h-4 w-4" />
+              <item.icon className="h-3.5 w-3.5" />
               {item.label}
             </Link>
           ))}
         </nav>
 
-        <div className="mb-8 grid gap-4 md:grid-cols-4">
+        {/* KPIs */}
+        <div className="grid gap-3 md:grid-cols-4">
           <Kpi icon={<Users className="h-4 w-4" />} label="Assinantes ativos" value={kpis.active.toString()} />
           <Kpi icon={<CreditCard className="h-4 w-4" />} label="MRR estimado" value={kpis.mrr.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} />
           <Kpi icon={<Gauge className="h-4 w-4" />} label="Total histórico" value={kpis.total.toString()} />
@@ -276,16 +278,16 @@ function AdminPage() {
         </div>
 
         <Tabs defaultValue="plans" className="w-full">
-          <TabsList className="mb-6 flex-wrap">
-            <TabsTrigger value="plans">Planos & Preços</TabsTrigger>
-            <TabsTrigger value="establishments">Estabelecimentos</TabsTrigger>
-            <TabsTrigger value="status">Status assinaturas</TabsTrigger>
-            <TabsTrigger value="integrations">Integrações & IA</TabsTrigger>
-            <TabsTrigger value="subscribers">Assinantes</TabsTrigger>
-            <TabsTrigger value="webhooks">Pagamentos & Webhooks</TabsTrigger>
-            <TabsTrigger value="emails">E-mails enviados</TabsTrigger>
-            <TabsTrigger value="users">Usuários & Papéis</TabsTrigger>
-            <TabsTrigger value="audit">Auditoria</TabsTrigger>
+          <TabsList className="mb-5 flex-wrap gap-1 rounded-xl border border-border bg-card p-1">
+            <TabsTrigger value="plans" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Planos & Preços</TabsTrigger>
+            <TabsTrigger value="establishments" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Estabelecimentos</TabsTrigger>
+            <TabsTrigger value="status" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Status</TabsTrigger>
+            <TabsTrigger value="integrations" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Integrações & IA</TabsTrigger>
+            <TabsTrigger value="subscribers" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Assinantes</TabsTrigger>
+            <TabsTrigger value="webhooks" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Webhooks</TabsTrigger>
+            <TabsTrigger value="emails" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">E-mails</TabsTrigger>
+            <TabsTrigger value="users" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Usuários & Papéis</TabsTrigger>
+            <TabsTrigger value="audit" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Auditoria</TabsTrigger>
           </TabsList>
 
           <TabsContent value="plans"><PlansTab /></TabsContent>
@@ -298,7 +300,6 @@ function AdminPage() {
           <TabsContent value="users"><UsersTab /></TabsContent>
           <TabsContent value="audit"><AuditTab /></TabsContent>
         </Tabs>
-
       </section>
     </AppShell>
   );
@@ -306,10 +307,12 @@ function AdminPage() {
 
 function Kpi({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <Card>
-      <CardContent className="pt-6">
-        <div className="mb-2 flex items-center gap-2 text-xs text-muted-foreground">{icon}{label}</div>
-        <div className="font-serif text-2xl">{value}</div>
+    <Card className="rounded-xl border-border">
+      <CardContent className="pt-5">
+        <div className="mb-2 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          {icon}{label}
+        </div>
+        <div className="font-mono text-[22px] font-semibold tabular-nums tracking-tight">{value}</div>
       </CardContent>
     </Card>
   );

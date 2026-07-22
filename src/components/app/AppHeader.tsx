@@ -5,21 +5,28 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { AuthNavToggle } from "@/components/nav/AuthNavToggle";
 import { useMyProfile } from "@/hooks/useMyProfile";
 
+/**
+ * AppHeader — Navy Trust Executive
+ * Sticky top bar with location, profile chip, quick actions.
+ */
 export function AppHeader() {
-  const { firstName, fullName, initials, avatarUrl, session, loading } = useMyProfile();
+  const { firstName, fullName, initials, avatarUrl, session, loading } =
+    useMyProfile();
+
   return (
-    <header className="sticky top-0 z-30 flex h-12 items-center gap-3 border-b border-border/70 bg-background/85 px-3 backdrop-blur-xl md:h-14 md:px-6">
+    <header className="sticky top-0 z-30 flex h-12 items-center gap-2 border-b border-border/70 bg-background/85 px-3 backdrop-blur-xl md:h-14 md:px-6">
       <SidebarTrigger className="text-foreground" />
       <div className="hidden h-5 w-px bg-border md:block" />
 
-      <div className="flex min-w-0 flex-1 items-center gap-3">
+      <div className="flex min-w-0 flex-1 items-center gap-2">
         <span
-          className="hidden items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-0.5 text-[10.5px] font-semibold text-foreground md:inline-flex"
+          className="hidden items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-[0.12em] text-foreground md:inline-flex"
           aria-label="Localização atual"
         >
-          <MapPin className="h-3 w-3 text-primary" strokeWidth={2.2} />
+          <MapPin className="h-3 w-3" style={{ color: "#b58a3c" }} strokeWidth={2.4} />
           Feijó · AC
         </span>
+
         {session && (
           <Link
             to="/perfil"
@@ -34,7 +41,10 @@ export function AppHeader() {
                 className="h-6 w-6 rounded-full object-cover"
               />
             ) : (
-              <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
+              <span
+                className="inline-flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold"
+                style={{ background: "#0f1b3d0d", color: "#0f1b3d" }}
+              >
                 {initials ?? <User className="h-3 w-3" />}
               </span>
             )}
