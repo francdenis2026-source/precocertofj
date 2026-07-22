@@ -8,6 +8,10 @@ import {
   updateSuggestion,
   approveAndApplySuggestion,
   rejectSuggestion,
+  reclassifySuggestionWithAi,
+  reclassifyLowConfidenceBatch,
+  approveHighConfidenceBatch,
+  CATEGORY_PRESETS,
   type CatalogSuggestion,
 } from "@/lib/catalog-suggestions.functions";
 import { AppShell } from "@/components/brand/AppShell";
@@ -16,7 +20,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import {
+  Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
+} from "@/components/ui/select";
 import {
   Table,
   TableBody,
@@ -27,7 +33,8 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Loader2, Sparkles, Check, X, Save } from "lucide-react";
+import { Loader2, Sparkles, Check, X, Save, Wand2, Zap } from "lucide-react";
+
 
 export const Route = createFileRoute("/admin_/categorizacao")({
   head: () => ({
