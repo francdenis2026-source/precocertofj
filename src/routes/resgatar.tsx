@@ -120,8 +120,11 @@ function RedeemPage() {
         newPaidUntil: res.newPaidUntil,
         code: clean,
       });
-      if (res.success) toast.success(res.message);
-      else toast.error(res.message);
+      if (res.success) {
+        toast.success(res.message);
+        // Auto-redireciona pro app após 2.5s
+        setTimeout(() => navigate({ to: "/app" }), 2500);
+      } else toast.error(res.message);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Falha ao resgatar";
       toast.error(msg);
