@@ -250,6 +250,78 @@ export type Database = {
           },
         ]
       }
+      catalog_suggestions: {
+        Row: {
+          applied_at: string | null
+          confidence: number | null
+          created_at: string
+          id: string
+          product_catalog_id: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          reviewer_notes: string | null
+          scan_id: string | null
+          source_name: string
+          status: string
+          suggested_brand: string | null
+          suggested_normalized_name: string | null
+          suggested_package: string | null
+          suggested_type: string | null
+          updated_at: string
+        }
+        Insert: {
+          applied_at?: string | null
+          confidence?: number | null
+          created_at?: string
+          id?: string
+          product_catalog_id?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          scan_id?: string | null
+          source_name: string
+          status?: string
+          suggested_brand?: string | null
+          suggested_normalized_name?: string | null
+          suggested_package?: string | null
+          suggested_type?: string | null
+          updated_at?: string
+        }
+        Update: {
+          applied_at?: string | null
+          confidence?: number | null
+          created_at?: string
+          id?: string
+          product_catalog_id?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          reviewer_notes?: string | null
+          scan_id?: string | null
+          source_name?: string
+          status?: string
+          suggested_brand?: string | null
+          suggested_normalized_name?: string | null
+          suggested_package?: string | null
+          suggested_type?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "catalog_suggestions_product_catalog_id_fkey"
+            columns: ["product_catalog_id"]
+            isOneToOne: false
+            referencedRelation: "product_catalog"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "catalog_suggestions_scan_id_fkey"
+            columns: ["scan_id"]
+            isOneToOne: false
+            referencedRelation: "scans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       category_icon_overrides: {
         Row: {
           created_at: string
@@ -785,6 +857,122 @@ export type Database = {
             columns: ["establishment_id"]
             isOneToOne: false
             referencedRelation: "establishments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      import_batches: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          created_count: number
+          error_count: number
+          establishment_id: string | null
+          id: string
+          market_name: string | null
+          note: string | null
+          skipped_count: number
+          source: string
+          status: string
+          total_count: number
+          updated_at: string
+          updated_count: number
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          created_count?: number
+          error_count?: number
+          establishment_id?: string | null
+          id?: string
+          market_name?: string | null
+          note?: string | null
+          skipped_count?: number
+          source: string
+          status?: string
+          total_count?: number
+          updated_at?: string
+          updated_count?: number
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          created_count?: number
+          error_count?: number
+          establishment_id?: string | null
+          id?: string
+          market_name?: string | null
+          note?: string | null
+          skipped_count?: number
+          source?: string
+          status?: string
+          total_count?: number
+          updated_at?: string
+          updated_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "import_batches_establishment_id_fkey"
+            columns: ["establishment_id"]
+            isOneToOne: false
+            referencedRelation: "establishments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      import_items: {
+        Row: {
+          batch_id: string
+          confidence: number | null
+          created_at: string
+          id: string
+          log: string | null
+          price: number | null
+          product_name: string
+          quantity: number | null
+          scan_id: string | null
+          status: string
+          unit: string | null
+        }
+        Insert: {
+          batch_id: string
+          confidence?: number | null
+          created_at?: string
+          id?: string
+          log?: string | null
+          price?: number | null
+          product_name: string
+          quantity?: number | null
+          scan_id?: string | null
+          status: string
+          unit?: string | null
+        }
+        Update: {
+          batch_id?: string
+          confidence?: number | null
+          created_at?: string
+          id?: string
+          log?: string | null
+          price?: number | null
+          product_name?: string
+          quantity?: number | null
+          scan_id?: string | null
+          status?: string
+          unit?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "import_items_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "import_batches"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "import_items_scan_id_fkey"
+            columns: ["scan_id"]
+            isOneToOne: false
+            referencedRelation: "scans"
             referencedColumns: ["id"]
           },
         ]

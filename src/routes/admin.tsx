@@ -251,6 +251,8 @@ function AdminPage() {
             { to: "/admin/promocoes", label: "Cupons promocionais", icon: Ticket },
             { to: "/admin/conversoes", label: "Conversão de planos", icon: Gauge },
             { to: "/admin/webhooks", label: "Webhooks MP", icon: ShieldCheck },
+            { to: "/admin/importacoes", label: "Importações", icon: Package },
+            { to: "/admin/categorizacao", label: "Categorização (revisão)", icon: Sparkles },
             { to: "/admin/reports", label: "Denúncias", icon: FileText },
             { to: "/admin/sinonimos", label: "Sinônimos da busca", icon: Languages },
             { to: "/admin/rank-check", label: "Validar ranking", icon: Trophy },

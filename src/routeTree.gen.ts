@@ -60,6 +60,7 @@ import { Route as AdminPromocoesRouteImport } from './routes/admin_.promocoes'
 import { Route as AdminPrecosRouteImport } from './routes/admin_.precos'
 import { Route as AdminMetricasRouteImport } from './routes/admin_.metricas'
 import { Route as AdminLoteInserirRouteImport } from './routes/admin_.lote-inserir'
+import { Route as AdminImportacoesRouteImport } from './routes/admin_.importacoes'
 import { Route as AdminImageJobsRouteImport } from './routes/admin_.image-jobs'
 import { Route as AdminIconesCategoriaRouteImport } from './routes/admin_.icones-categoria'
 import { Route as AdminCupomLoteRouteImport } from './routes/admin_.cupom-lote'
@@ -67,6 +68,7 @@ import { Route as AdminCupomRouteImport } from './routes/admin_.cupom'
 import { Route as AdminConversoesRouteImport } from './routes/admin_.conversoes'
 import { Route as AdminConsistenciaRouteImport } from './routes/admin_.consistencia'
 import { Route as AdminCoberturaRouteImport } from './routes/admin_.cobertura'
+import { Route as AdminCategorizacaoRouteImport } from './routes/admin_.categorizacao'
 import { Route as AdminCatalogoRouteImport } from './routes/admin_.catalogo'
 import { Route as AdminAuditoriaRouteImport } from './routes/admin_.auditoria'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin_.analytics'
@@ -335,6 +337,11 @@ const AdminLoteInserirRoute = AdminLoteInserirRouteImport.update({
   path: '/admin/lote-inserir',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminImportacoesRoute = AdminImportacoesRouteImport.update({
+  id: '/admin_/importacoes',
+  path: '/admin/importacoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminImageJobsRoute = AdminImageJobsRouteImport.update({
   id: '/admin_/image-jobs',
   path: '/admin/image-jobs',
@@ -368,6 +375,11 @@ const AdminConsistenciaRoute = AdminConsistenciaRouteImport.update({
 const AdminCoberturaRoute = AdminCoberturaRouteImport.update({
   id: '/admin_/cobertura',
   path: '/admin/cobertura',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminCategorizacaoRoute = AdminCategorizacaoRouteImport.update({
+  id: '/admin_/categorizacao',
+  path: '/admin/categorizacao',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminCatalogoRoute = AdminCatalogoRouteImport.update({
@@ -473,6 +485,7 @@ export interface FileRoutesByFullPath {
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
+  '/admin/categorizacao': typeof AdminCategorizacaoRoute
   '/admin/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin/consistencia': typeof AdminConsistenciaRoute
   '/admin/conversoes': typeof AdminConversoesRoute
@@ -480,6 +493,7 @@ export interface FileRoutesByFullPath {
   '/admin/cupom-lote': typeof AdminCupomLoteRoute
   '/admin/icones-categoria': typeof AdminIconesCategoriaRoute
   '/admin/image-jobs': typeof AdminImageJobsRoute
+  '/admin/importacoes': typeof AdminImportacoesRoute
   '/admin/lote-inserir': typeof AdminLoteInserirRoute
   '/admin/metricas': typeof AdminMetricasRoute
   '/admin/precos': typeof AdminPrecosRoute
@@ -545,6 +559,7 @@ export interface FileRoutesByTo {
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
+  '/admin/categorizacao': typeof AdminCategorizacaoRoute
   '/admin/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin/consistencia': typeof AdminConsistenciaRoute
   '/admin/conversoes': typeof AdminConversoesRoute
@@ -552,6 +567,7 @@ export interface FileRoutesByTo {
   '/admin/cupom-lote': typeof AdminCupomLoteRoute
   '/admin/icones-categoria': typeof AdminIconesCategoriaRoute
   '/admin/image-jobs': typeof AdminImageJobsRoute
+  '/admin/importacoes': typeof AdminImportacoesRoute
   '/admin/lote-inserir': typeof AdminLoteInserirRoute
   '/admin/metricas': typeof AdminMetricasRoute
   '/admin/precos': typeof AdminPrecosRoute
@@ -618,6 +634,7 @@ export interface FileRoutesById {
   '/admin_/analytics': typeof AdminAnalyticsRoute
   '/admin_/auditoria': typeof AdminAuditoriaRoute
   '/admin_/catalogo': typeof AdminCatalogoRoute
+  '/admin_/categorizacao': typeof AdminCategorizacaoRoute
   '/admin_/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin_/consistencia': typeof AdminConsistenciaRoute
   '/admin_/conversoes': typeof AdminConversoesRoute
@@ -625,6 +642,7 @@ export interface FileRoutesById {
   '/admin_/cupom-lote': typeof AdminCupomLoteRoute
   '/admin_/icones-categoria': typeof AdminIconesCategoriaRoute
   '/admin_/image-jobs': typeof AdminImageJobsRoute
+  '/admin_/importacoes': typeof AdminImportacoesRoute
   '/admin_/lote-inserir': typeof AdminLoteInserirRoute
   '/admin_/metricas': typeof AdminMetricasRoute
   '/admin_/precos': typeof AdminPrecosRoute
@@ -692,6 +710,7 @@ export interface FileRouteTypes {
     | '/admin/analytics'
     | '/admin/auditoria'
     | '/admin/catalogo'
+    | '/admin/categorizacao'
     | '/admin/cobertura'
     | '/admin/consistencia'
     | '/admin/conversoes'
@@ -699,6 +718,7 @@ export interface FileRouteTypes {
     | '/admin/cupom-lote'
     | '/admin/icones-categoria'
     | '/admin/image-jobs'
+    | '/admin/importacoes'
     | '/admin/lote-inserir'
     | '/admin/metricas'
     | '/admin/precos'
@@ -764,6 +784,7 @@ export interface FileRouteTypes {
     | '/admin/analytics'
     | '/admin/auditoria'
     | '/admin/catalogo'
+    | '/admin/categorizacao'
     | '/admin/cobertura'
     | '/admin/consistencia'
     | '/admin/conversoes'
@@ -771,6 +792,7 @@ export interface FileRouteTypes {
     | '/admin/cupom-lote'
     | '/admin/icones-categoria'
     | '/admin/image-jobs'
+    | '/admin/importacoes'
     | '/admin/lote-inserir'
     | '/admin/metricas'
     | '/admin/precos'
@@ -836,6 +858,7 @@ export interface FileRouteTypes {
     | '/admin_/analytics'
     | '/admin_/auditoria'
     | '/admin_/catalogo'
+    | '/admin_/categorizacao'
     | '/admin_/cobertura'
     | '/admin_/consistencia'
     | '/admin_/conversoes'
@@ -843,6 +866,7 @@ export interface FileRouteTypes {
     | '/admin_/cupom-lote'
     | '/admin_/icones-categoria'
     | '/admin_/image-jobs'
+    | '/admin_/importacoes'
     | '/admin_/lote-inserir'
     | '/admin_/metricas'
     | '/admin_/precos'
@@ -908,6 +932,7 @@ export interface RootRouteChildren {
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
   AdminAuditoriaRoute: typeof AdminAuditoriaRoute
   AdminCatalogoRoute: typeof AdminCatalogoRoute
+  AdminCategorizacaoRoute: typeof AdminCategorizacaoRoute
   AdminCoberturaRoute: typeof AdminCoberturaRouteWithChildren
   AdminConsistenciaRoute: typeof AdminConsistenciaRoute
   AdminConversoesRoute: typeof AdminConversoesRoute
@@ -915,6 +940,7 @@ export interface RootRouteChildren {
   AdminCupomLoteRoute: typeof AdminCupomLoteRoute
   AdminIconesCategoriaRoute: typeof AdminIconesCategoriaRoute
   AdminImageJobsRoute: typeof AdminImageJobsRoute
+  AdminImportacoesRoute: typeof AdminImportacoesRoute
   AdminLoteInserirRoute: typeof AdminLoteInserirRoute
   AdminMetricasRoute: typeof AdminMetricasRoute
   AdminPrecosRoute: typeof AdminPrecosRoute
@@ -1297,6 +1323,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminLoteInserirRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin_/importacoes': {
+      id: '/admin_/importacoes'
+      path: '/admin/importacoes'
+      fullPath: '/admin/importacoes'
+      preLoaderRoute: typeof AdminImportacoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin_/image-jobs': {
       id: '/admin_/image-jobs'
       path: '/admin/image-jobs'
@@ -1344,6 +1377,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/cobertura'
       fullPath: '/admin/cobertura'
       preLoaderRoute: typeof AdminCoberturaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin_/categorizacao': {
+      id: '/admin_/categorizacao'
+      path: '/admin/categorizacao'
+      fullPath: '/admin/categorizacao'
+      preLoaderRoute: typeof AdminCategorizacaoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin_/catalogo': {
@@ -1519,6 +1559,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminAnalyticsRoute: AdminAnalyticsRoute,
   AdminAuditoriaRoute: AdminAuditoriaRoute,
   AdminCatalogoRoute: AdminCatalogoRoute,
+  AdminCategorizacaoRoute: AdminCategorizacaoRoute,
   AdminCoberturaRoute: AdminCoberturaRouteWithChildren,
   AdminConsistenciaRoute: AdminConsistenciaRoute,
   AdminConversoesRoute: AdminConversoesRoute,
@@ -1526,6 +1567,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminCupomLoteRoute: AdminCupomLoteRoute,
   AdminIconesCategoriaRoute: AdminIconesCategoriaRoute,
   AdminImageJobsRoute: AdminImageJobsRoute,
+  AdminImportacoesRoute: AdminImportacoesRoute,
   AdminLoteInserirRoute: AdminLoteInserirRoute,
   AdminMetricasRoute: AdminMetricasRoute,
   AdminPrecosRoute: AdminPrecosRoute,
