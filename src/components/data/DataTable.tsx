@@ -132,13 +132,13 @@ export function DataTable<T>({
   }, [data, sort, columns]);
 
   const total = sorted.length;
-  const pageCount = pageSize && pageSize > 0 ? Math.max(1, Math.ceil(total / pageSize)) : 1;
+  const pageCount = activePageSize && activePageSize > 0 ? Math.max(1, Math.ceil(total / activePageSize)) : 1;
   const safePage = Math.min(page, pageCount - 1);
   const paged = React.useMemo(() => {
-    if (!pageSize || pageSize <= 0) return sorted;
-    const start = safePage * pageSize;
-    return sorted.slice(start, start + pageSize);
-  }, [sorted, safePage, pageSize]);
+    if (!activePageSize || activePageSize <= 0) return sorted;
+    const start = safePage * activePageSize;
+    return sorted.slice(start, start + activePageSize);
+  }, [sorted, safePage, activePageSize]);
 
   React.useEffect(() => {
     // Reset page when data shrinks
