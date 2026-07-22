@@ -240,7 +240,7 @@ function FinancasPage() {
 
         <Tabs value={tab} onValueChange={setTab}>
           <TabsList className="mb-5 flex w-full flex-wrap gap-1 rounded-xl bg-muted/40 p-1 md:w-auto md:inline-flex">
-            <TabsTrigger value="dashboard" className="gap-1.5 rounded-lg text-xs md:text-sm"><PieChart className="h-4 w-4" /> Dashboard</TabsTrigger>
+            <TabsTrigger value="dashboard" className="gap-1.5 rounded-lg text-xs md:text-sm"><PieChart className="h-4 w-4" /> Resumo</TabsTrigger>
             <TabsTrigger value="medidores" className="gap-1.5 rounded-lg text-xs md:text-sm"><Gauge className="h-4 w-4" /> Medidores</TabsTrigger>
             <TabsTrigger value="gastos" className="gap-1.5 rounded-lg text-xs md:text-sm"><Receipt className="h-4 w-4" /> Lançamentos</TabsTrigger>
             <TabsTrigger value="categorias" className="gap-1.5 rounded-lg text-xs md:text-sm"><Target className="h-4 w-4" /> Categorias</TabsTrigger>

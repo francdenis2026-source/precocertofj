@@ -180,3 +180,92 @@ export const listNearbyMarkets = createServerFn({ method: "GET" }).handler(
     }));
   },
 );
+
+export type NeighborhoodEstablishment = {
+  id: string;
+  name: string;
+  logoUrl: string | null;
+  brandColor: string | null;
+  address: string | null;
+  productsCount: number;
+};
+
+export type NeighborhoodGroup = {
+  neighborhood: string;
+  city: string | null;
+  establishments: NeighborhoodEstablishment[];
+};
+
+/** Público: lista estabelecimentos ativos agrupados por bairro. */
+export const listEstablishmentsByNeighborhood = createServerFn({ method: "GET" }).handler(
+  async (): Promise<NeighborhoodGroup[]> => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: estRows, error: estErr } = await supabaseAdmin
+      .from("establishments")
+      .select("id, name, logo_url, brand_color, neighborhood, city, address")
+      .eq("active", true)
+      .order("name", { ascending: true });
+    if (estErr) throw new Error(estErr.message);
+
+    const ids = (estRows ?? []).map((r) => r.id as string);
+    const counts = new Map<string, number>();
+    if (ids.length > 0) {
+      const { data: scanRows } = await supabaseAdmin
+        .from("scans")
+        .select("establishment_id")
+        .in("establishment_id", ids)
+        .eq("status", "salvo")
+        .is("user_id", null)
+        .not("product_name", "is", null);
+      for (const row of (scanRows ?? []) as Array<{ establishment_id: string | null }>) {
+        if (!row.establishment_id) continue;
+        counts.set(row.establishment_id, (counts.get(row.establishment_id) ?? 0) + 1);
+      }
+    }
+
+    const normalizeName = (s: string | null | undefined): string => {
+      if (!s) return "Não informado";
+      const trimmed = s.trim();
+      if (!trimmed) return "Não informado";
+      // Title-case per word, respecting Portuguese
+      return trimmed
+        .toLocaleLowerCase("pt-BR")
+        .split(/\s+/)
+        .map((w) => w.charAt(0).toLocaleUpperCase("pt-BR") + w.slice(1))
+        .join(" ");
+    };
+
+    const grouped = new Map<string, NeighborhoodGroup>();
+    for (const r of (estRows ?? []) as Array<{
+      id: string;
+      name: string;
+      logo_url: string | null;
+      brand_color: string | null;
+      neighborhood: string | null;
+      city: string | null;
+      address: string | null;
+    }>) {
+      const key = normalizeName(r.neighborhood);
+      const cityNorm = r.city ? normalizeName(r.city) : null;
+      const g = grouped.get(key) ?? { neighborhood: key, city: cityNorm, establishments: [] };
+      g.establishments.push({
+        id: r.id,
+        name: r.name,
+        logoUrl: r.logo_url,
+        brandColor: r.brand_color,
+        address: r.address,
+        productsCount: counts.get(r.id) ?? 0,
+      });
+      grouped.set(key, g);
+    }
+
+    return Array.from(grouped.values())
+      .map((g) => ({
+        ...g,
+        establishments: g.establishments.sort((a, b) => b.productsCount - a.productsCount),
+      }))
+      .sort((a, b) => b.establishments.length - a.establishments.length);
+  },
+);
+
