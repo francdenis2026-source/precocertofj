@@ -252,10 +252,12 @@ function LicensesTab() {
   const [reissueDlg, setReissueDlg] = useState<{ id: string; code: string; days: number; notify: boolean } | null>(null);
 
   const { data: plans } = useQuery({ queryKey: ["license-plans"], queryFn: () => fetchPlans() });
-  const { data: codes, isLoading } = useQuery({
+  const codesQuery = useQuery({
     queryKey: ["license-codes", status, search],
     queryFn: () => listFn({ data: { status: status === "all" ? undefined : status, search, limit: 200 } }),
   });
+  const codes = codesQuery.data;
+  const isLoading = codesQuery.isLoading;
 
   const invalidate = () => qc.invalidateQueries({ queryKey: ["license-codes"] });
 
