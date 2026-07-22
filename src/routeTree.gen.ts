@@ -18,6 +18,7 @@ import { Route as PlanosRouteImport } from './routes/planos'
 import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as NotificacoesRouteImport } from './routes/notificacoes'
+import { Route as MinhasLicencasRouteImport } from './routes/minhas-licencas'
 import { Route as MelhoresPrecosRouteImport } from './routes/melhores-precos'
 import { Route as MapaRouteImport } from './routes/mapa'
 import { Route as LojistaRouteImport } from './routes/lojista'
@@ -115,6 +116,11 @@ const OnboardingRoute = OnboardingRouteImport.update({
 const NotificacoesRoute = NotificacoesRouteImport.update({
   id: '/notificacoes',
   path: '/notificacoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MinhasLicencasRoute = MinhasLicencasRouteImport.update({
+  id: '/minhas-licencas',
+  path: '/minhas-licencas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MelhoresPrecosRoute = MelhoresPrecosRouteImport.update({
@@ -411,6 +417,7 @@ export interface FileRoutesByFullPath {
   '/lojista': typeof LojistaRoute
   '/mapa': typeof MapaRoute
   '/melhores-precos': typeof MelhoresPrecosRoute
+  '/minhas-licencas': typeof MinhasLicencasRoute
   '/notificacoes': typeof NotificacoesRoute
   '/onboarding': typeof OnboardingRoute
   '/perfil': typeof PerfilRoute
@@ -475,6 +482,7 @@ export interface FileRoutesByTo {
   '/lojista': typeof LojistaRoute
   '/mapa': typeof MapaRoute
   '/melhores-precos': typeof MelhoresPrecosRoute
+  '/minhas-licencas': typeof MinhasLicencasRoute
   '/notificacoes': typeof NotificacoesRoute
   '/onboarding': typeof OnboardingRoute
   '/perfil': typeof PerfilRoute
@@ -540,6 +548,7 @@ export interface FileRoutesById {
   '/lojista': typeof LojistaRoute
   '/mapa': typeof MapaRoute
   '/melhores-precos': typeof MelhoresPrecosRoute
+  '/minhas-licencas': typeof MinhasLicencasRoute
   '/notificacoes': typeof NotificacoesRoute
   '/onboarding': typeof OnboardingRoute
   '/perfil': typeof PerfilRoute
@@ -606,6 +615,7 @@ export interface FileRouteTypes {
     | '/lojista'
     | '/mapa'
     | '/melhores-precos'
+    | '/minhas-licencas'
     | '/notificacoes'
     | '/onboarding'
     | '/perfil'
@@ -670,6 +680,7 @@ export interface FileRouteTypes {
     | '/lojista'
     | '/mapa'
     | '/melhores-precos'
+    | '/minhas-licencas'
     | '/notificacoes'
     | '/onboarding'
     | '/perfil'
@@ -734,6 +745,7 @@ export interface FileRouteTypes {
     | '/lojista'
     | '/mapa'
     | '/melhores-precos'
+    | '/minhas-licencas'
     | '/notificacoes'
     | '/onboarding'
     | '/perfil'
@@ -799,6 +811,7 @@ export interface RootRouteChildren {
   LojistaRoute: typeof LojistaRoute
   MapaRoute: typeof MapaRoute
   MelhoresPrecosRoute: typeof MelhoresPrecosRoute
+  MinhasLicencasRoute: typeof MinhasLicencasRoute
   NotificacoesRoute: typeof NotificacoesRoute
   OnboardingRoute: typeof OnboardingRoute
   PerfilRoute: typeof PerfilRoute
@@ -899,6 +912,13 @@ declare module '@tanstack/react-router' {
       path: '/notificacoes'
       fullPath: '/notificacoes'
       preLoaderRoute: typeof NotificacoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/minhas-licencas': {
+      id: '/minhas-licencas'
+      path: '/minhas-licencas'
+      fullPath: '/minhas-licencas'
+      preLoaderRoute: typeof MinhasLicencasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/melhores-precos': {
@@ -1344,6 +1364,7 @@ const rootRouteChildren: RootRouteChildren = {
   LojistaRoute: LojistaRoute,
   MapaRoute: MapaRoute,
   MelhoresPrecosRoute: MelhoresPrecosRoute,
+  MinhasLicencasRoute: MinhasLicencasRoute,
   NotificacoesRoute: NotificacoesRoute,
   OnboardingRoute: OnboardingRoute,
   PerfilRoute: PerfilRoute,
