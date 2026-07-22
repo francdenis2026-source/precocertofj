@@ -75,17 +75,27 @@ export function CheapestStoresRanking() {
 
   const allRows = rankingQ.data?.rows ?? [];
   const sortedRows = [...allRows].sort((a, b) => {
-    if (sort === "savings") return b.avgSavingsPct - a.avgSavingsPct;
-    if (sort === "ticket") {
+    // Critério primário
+    let primary = 0;
+    if (sort === "savings") primary = b.avgSavingsPct - a.avgSavingsPct;
+    else if (sort === "ticket") {
       const at = a.avgTicketWins || Infinity;
       const bt = b.avgTicketWins || Infinity;
-      return at - bt;
-    }
-    return b.wins - a.wins;
+      primary = at - bt;
+    } else primary = b.wins - a.wins;
+    if (primary !== 0) return primary;
+    // Desempates: menor ticket → maior economia → mais vitórias → nome
+    const tA = a.avgTicketWins || Infinity;
+    const tB = b.avgTicketWins || Infinity;
+    if (tA !== tB) return tA - tB;
+    if (a.avgSavingsPct !== b.avgSavingsPct) return b.avgSavingsPct - a.avgSavingsPct;
+    if (a.wins !== b.wins) return b.wins - a.wins;
+    return a.storeName.localeCompare(b.storeName, "pt-BR");
   });
   const rows = sortedRows.slice(0, 6);
   const summary = rankingQ.data?.summary;
   const topWins = rows[0]?.wins ?? 0;
+
 
   const categoryOptions = (summary?.availableCategories ?? [])
     .slice(0, 8)
