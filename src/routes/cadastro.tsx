@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Loader2, ShieldCheck, UserPlus, CheckCircle2, Sparkles } from "lucide-react";
+import { ArrowRight, Loader2, ShieldCheck, UserPlus, CheckCircle2, Sparkles, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
@@ -9,6 +9,42 @@ import { signUpWithCpf } from "@/lib/account.functions";
 import { maskCpf, maskPhone, validateCpfDetailed } from "@/lib/cpf";
 import { safeInternalPath } from "@/lib/auth-redirect";
 import { Logo } from "@/components/brand/Logo";
+
+// ---------- Field validators ----------
+type FieldState = { valid: boolean; msg?: string; hint?: string };
+
+function validateName(v: string): FieldState {
+  const t = v.trim();
+  if (!t) return { valid: false };
+  if (t.length < 3) return { valid: false, msg: "Muito curto — mínimo 3 letras." };
+  if (t.length > 80) return { valid: false, msg: "Máximo 80 caracteres." };
+  if (!t.includes(" ")) return { valid: false, msg: "Informe nome e sobrenome." };
+  if (!/^[\p{L}\s'.-]+$/u.test(t)) return { valid: false, msg: "Use apenas letras." };
+  return { valid: true };
+}
+function validateCpfField(v: string): FieldState {
+  const digits = v.replace(/\D/g, "");
+  if (!digits) return { valid: false };
+  if (digits.length < 11) return { valid: false, hint: `${digits.length}/11 dígitos` };
+  const r = validateCpfDetailed(v);
+  return r.valid ? { valid: true } : { valid: false, msg: r.message };
+}
+function validatePhone(v: string): FieldState {
+  const d = v.replace(/\D/g, "");
+  if (!d) return { valid: true, hint: "Opcional" };
+  if (d.length < 10) return { valid: false, hint: `${d.length}/10 dígitos` };
+  if (d.length > 11) return { valid: false, msg: "Número inválido." };
+  if (!/^\d{2}9?\d{8}$/.test(d)) return { valid: false, msg: "DDD + celular." };
+  return { valid: true };
+}
+function validatePin(v: string): FieldState {
+  const d = v.replace(/\D/g, "");
+  if (!d) return { valid: false };
+  if (d.length < 6) return { valid: false, hint: `${d.length}/6 dígitos` };
+  if (/^(\d)\1{5}$/.test(d)) return { valid: false, msg: "Evite dígitos repetidos." };
+  if (d === "123456" || d === "654321" || d === "012345") return { valid: false, msg: "PIN muito previsível." };
+  return { valid: true };
+}
 
 // Emerald Prestige tokens — mirror /login
 const PC_EMERALD_DEEP = "#043a2c";
