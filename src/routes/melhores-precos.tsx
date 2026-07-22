@@ -504,8 +504,30 @@ function MelhoresPrecosPage() {
           active={activeCategory}
           counts={categoryCounts}
           total={allRows.length}
-          onChange={(c) => setSearch({ cat: c ?? "" })}
+          onChange={(c) => setSearch({ cat: c ?? "", type: "" })}
         />
+
+        {/* Filtro por tipo de produto (subcategoria) — só aparece se houver
+            pelo menos 2 tipos disponíveis no escopo atual (respeita categoria). */}
+        {typeCounts.size > 1 && (
+          <QuickFilterBar
+            label="Tipo"
+            ariaLabel="Filtrar por tipo de produto"
+            options={Array.from(typeCounts.entries())
+              .sort((a, b) => b[1] - a[1])
+              .slice(0, 12)
+              .map(([key, count]) => ({
+                value: key,
+                label:
+                  PRODUCT_TYPE_LABEL[key as keyof typeof PRODUCT_TYPE_LABEL] ?? key,
+                count,
+              }))}
+            value={activeType}
+            onChange={(next) => setSearch({ type: next ?? "" })}
+            size="sm"
+          />
+        )}
+
 
         {/* Busca por cidade / bairro / mercado */}
         <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center">
