@@ -36,7 +36,23 @@ import {
   RefreshCw,
   ImageIcon,
   Link as LinkIcon,
+  MoreHorizontal,
 } from "lucide-react";
+import { DataTable, type DataTableColumn } from "@/components/data/DataTable";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 import {
   listCatalog,
