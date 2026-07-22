@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -7,13 +7,12 @@ import {
   MapPin,
   ArrowUpRight,
   ArrowDownRight,
-  Zap,
-  Sparkles,
   Store,
   ReceiptText,
   TrendingDown,
-  Activity,
-  Circle,
+  ShieldCheck,
+  Sparkles,
+  ArrowRight,
 } from "lucide-react";
 import {
   listPublicStores,
@@ -24,17 +23,17 @@ import {
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "PreçoCerto — Terminal de preços em tempo real" },
+      { title: "PreçoCerto — Comparador inteligente de mercados em Feijó/AC" },
       {
         name: "description",
         content:
-          "Comparador de mercados em Feijó/AC estilo terminal financeiro. Acompanhe quedas de preço ao vivo, monte sua cesta e economize.",
+          "Compare preços de supermercados em Feijó em tempo real. Cesta básica, quedas do dia, mercados próximos e economia real por família — direto no seu celular.",
       },
-      { property: "og:title", content: "PreçoCerto — Terminal de preços em tempo real" },
+      { property: "og:title", content: "PreçoCerto — Comparador inteligente de mercados" },
       {
         property: "og:description",
         content:
-          "Comparador de mercados em Feijó/AC estilo terminal financeiro. Quedas ao vivo, cesta básica e economia real.",
+          "Cesta básica, quedas do dia e mercados próximos de Feijó/AC. Economize a cada compra com dados atualizados pela comunidade.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -44,65 +43,85 @@ export const Route = createFileRoute("/")({
 });
 
 /* ================================================================== */
-/*  DESIGN TOKENS — Emerald Prestige (escopo local)                    */
+/*  DESIGN TOKENS — Navy Trust (escopo local)                          */
 /* ================================================================== */
-const emeraldTheme: React.CSSProperties = {
-  // Locked palette
-  ["--pc-cream" as any]: "#f5f0e0",
-  ["--pc-emerald" as any]: "#064e3b",
-  ["--pc-emerald-2" as any]: "#0d7a5f",
-  ["--pc-gold" as any]: "#c9a84c",
-  ["--pc-ink" as any]: "#052e26",
-  fontFamily: "'Figtree', system-ui, sans-serif",
+const PALETTE = {
+  paper: "#f6f7fb",
+  ink: "#0a1631",
+  navy: "#0f1b3d",
+  navy2: "#1e3a5f",
+  azure: "#3b6fa0",
+  gold: "#b58a3c",
+  goldSoft: "#e6d6a8",
+  line: "#e4e7ee",
 };
 
-const outfit = "font-['Outfit',system-ui,sans-serif]";
-const mono = "font-['IBM_Plex_Mono',ui-monospace,monospace]";
+const themeVars: React.CSSProperties = {
+  ["--nt-paper" as any]: PALETTE.paper,
+  ["--nt-ink" as any]: PALETTE.ink,
+  ["--nt-navy" as any]: PALETTE.navy,
+  ["--nt-navy-2" as any]: PALETTE.navy2,
+  ["--nt-azure" as any]: PALETTE.azure,
+  ["--nt-gold" as any]: PALETTE.gold,
+  ["--nt-gold-soft" as any]: PALETTE.goldSoft,
+  ["--nt-line" as any]: PALETTE.line,
+  fontFamily: "'Work Sans', system-ui, -apple-system, sans-serif",
+  color: PALETTE.ink,
+};
+
+const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
+const sans = "font-['Work_Sans',system-ui,sans-serif]";
+const mono = "font-['IBM_Plex_Mono',ui-monospace,monospace] tabular-nums";
 
 /* ================================================================== */
-/*  MOCK LIVE DATA (banco vazio hoje — números plausíveis)             */
+/*  MOCK LIVE DATA (banco vazio hoje — placeholders realistas)         */
 /* ================================================================== */
 type Drop = { name: string; store: string; from: number; to: number; ago: string };
 const LIVE_DROPS: Drop[] = [
-  { name: "Arroz Tio Urbano 5kg", store: "Mercado Central", from: 32.9, to: 24.5, ago: "2m" },
-  { name: "Feijão Carioca 1kg", store: "Super Feijó", from: 9.2, to: 7.45, ago: "6m" },
-  { name: "Óleo de Soja 900ml", store: "Mercado Central", from: 8.1, to: 6.8, ago: "11m" },
-  { name: "Açúcar Refinado 1kg", store: "Mini Preço", store2: "", from: 5.9, to: 4.79, ago: "18m" } as Drop,
-  { name: "Leite Integral 1L", store: "Super Econômico", from: 6.5, to: 5.2, ago: "24m" },
-  { name: "Café Torrado 500g", store: "Mercado Central", from: 22.0, to: 18.9, ago: "32m" },
+  { name: "Arroz Tio Urbano 5kg", store: "Mercado Central", from: 32.9, to: 24.5, ago: "2 min" },
+  { name: "Feijão Carioca 1kg", store: "Super Feijó", from: 9.2, to: 7.45, ago: "6 min" },
+  { name: "Óleo de Soja 900ml", store: "Mercado Central", from: 8.1, to: 6.8, ago: "11 min" },
+  { name: "Leite Integral 1L", store: "Super Econômico", from: 6.5, to: 5.2, ago: "24 min" },
+  { name: "Café Torrado 500g", store: "Mercado Central", from: 22.0, to: 18.9, ago: "32 min" },
 ];
 
-type Sector = { label: string; slug: string; delta: number };
-const SECTORS: Sector[] = [
+const SECTORS = [
   { label: "Hortifruti", slug: "hortifruti", delta: -12 },
-  { label: "Açougue", slug: "carnes", delta: 4 },
   { label: "Mercearia", slug: "mercearia", delta: -6 },
   { label: "Laticínios", slug: "laticinios", delta: -3 },
-  { label: "Padaria", slug: "padaria", delta: 2 },
-  { label: "Bebidas", slug: "bebidas", delta: 0 },
   { label: "Limpeza", slug: "limpeza", delta: -8 },
   { label: "Higiene", slug: "higiene", delta: -5 },
+  { label: "Bebidas", slug: "bebidas", delta: 0 },
 ];
 
 const KPIS = [
-  { label: "Cesta Básica", value: "R$ 412,50", delta: "↓ 2.4%", tone: "gold" as const, sub: "vs. ontem" },
-  { label: "Maior Queda 7d", value: "-42%", delta: "Higiene Pessoal", tone: "gold" as const, sub: "" },
-  { label: "Mercados", value: "18", delta: "Ativos agora", tone: "emerald" as const, sub: "" },
-  { label: "Economia Média", value: "R$ 87", delta: "por família / mês", tone: "emerald" as const, sub: "" },
+  { label: "Cesta básica", value: "R$ 412,50", delta: -2.4, sub: "vs. ontem" },
+  { label: "Maior queda 7 d", value: "-42%", delta: -42, sub: "Higiene pessoal" },
+  { label: "Mercados ativos", value: "18", delta: 0, sub: "coletando agora" },
+  { label: "Economia média", value: "R$ 87", delta: 0, sub: "por família / mês" },
+];
+
+const PLACEHOLDER_STORES = [
+  { id: "demo-1", name: "Mercado Central", neighborhood: "Centro · 0.8 km", best_items: 142 },
+  { id: "demo-2", name: "Super Feijó", neighborhood: "Cidade Nova · 2.1 km", best_items: 98 },
+  { id: "demo-3", name: "Super Econômico", neighborhood: "Vila Nova · 1.4 km", best_items: 76 },
+  { id: "demo-4", name: "Mini Preço", neighborhood: "Centro · 0.5 km", best_items: 61 },
 ];
 
 /* ================================================================== */
-/*  HOMEPAGE — Terminal Dashboard                                      */
+/*  HOMEPAGE — Editorial Bento (Navy Trust)                            */
 /* ================================================================== */
 function HomePage() {
   const navigate = useNavigate();
   const [q, setQ] = useState("");
-  const [now, setNow] = useState<string>("");
+  const [today, setToday] = useState<string>("");
 
   useEffect(() => {
-    setNow(formatTime(new Date()));
-    const t = setInterval(() => setNow(formatTime(new Date())), 1000);
-    return () => clearInterval(t);
+    setToday(
+      new Date().toLocaleDateString("pt-BR", {
+        weekday: "long", day: "2-digit", month: "long",
+      }),
+    );
   }, []);
 
   const listStores = useServerFn(listPublicStores);
@@ -120,6 +139,7 @@ function HomePage() {
   });
 
   const stores: PublicStore[] = (storesQ.data as any) ?? [];
+  const displayStores = stores.length ? stores.slice(0, 4) : PLACEHOLDER_STORES;
 
   const submitSearch = (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -129,365 +149,594 @@ function HomePage() {
   };
 
   return (
-    <div
-      style={emeraldTheme}
-      className="min-h-screen w-full text-[color:var(--pc-emerald)]"
-    >
-      {/* Ambient background */}
-      <div className="fixed inset-0 -z-10 bg-[color:var(--pc-cream)]">
+    <div style={themeVars} className="min-h-screen w-full" >
+      {/* Ambient paper background */}
+      <div className="fixed inset-0 -z-10" style={{ background: PALETTE.paper }}>
         <div
-          className="absolute inset-0 opacity-[0.04]"
+          className="absolute inset-0 opacity-[0.045]"
           style={{
-            backgroundImage:
-              "radial-gradient(circle at 1px 1px, var(--pc-emerald) 1px, transparent 0)",
-            backgroundSize: "22px 22px",
+            backgroundImage: `radial-gradient(circle at 1px 1px, ${PALETTE.navy} 1px, transparent 0)`,
+            backgroundSize: "24px 24px",
+          }}
+        />
+        <div
+          className="absolute inset-x-0 top-0 h-[420px] opacity-70"
+          style={{
+            background:
+              `radial-gradient(80% 60% at 50% 0%, ${PALETTE.goldSoft}22 0%, transparent 65%)`,
           }}
         />
       </div>
 
-      <div className="mx-auto max-w-7xl px-3 py-3 md:px-4 md:py-4 space-y-4">
-        {/* ============== TOP COMMAND BAR ============== */}
-        <header className="flex items-center justify-between rounded-2xl border-b-2 border-[color:var(--pc-gold)] bg-[color:var(--pc-emerald)] px-4 py-3 text-white shadow-xl md:px-6">
-          <div className="flex items-center gap-3 md:gap-6 min-w-0">
-            <div className={`${outfit} flex shrink-0 items-center gap-2 text-lg md:text-xl font-bold tracking-tighter`}>
-              <div className="grid h-6 w-6 place-items-center rounded-[6px] bg-[color:var(--pc-gold)]">
-                <span className="text-[10px] font-black text-[color:var(--pc-emerald)]">P</span>
-              </div>
-              <span>PREÇO<span className="text-[color:var(--pc-gold)]">CERTO</span></span>
+      {/* ============== HEADER ============== */}
+      <header className="border-b" style={{ borderColor: PALETTE.line }}>
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-4 py-4 md:px-6">
+          <Link to="/" className="flex items-center gap-2.5">
+            <span
+              className="grid h-8 w-8 place-items-center rounded-md text-[13px] font-bold text-white"
+              style={{ background: PALETTE.navy }}
+            >
+              P
+            </span>
+            <div className="flex flex-col leading-none">
+              <span className={`${serif} text-[19px] font-normal`} style={{ color: PALETTE.ink }}>
+                Preço<span className="italic" style={{ color: PALETTE.gold }}>Certo</span>
+              </span>
+              <span
+                className="mt-0.5 text-[9px] font-semibold uppercase tracking-[0.18em]"
+                style={{ color: PALETTE.navy2 }}
+              >
+                Feijó · Acre
+              </span>
             </div>
-            <div className="hidden md:flex items-center gap-2 rounded-md bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-widest text-[color:var(--pc-gold)]">
-              <span className="h-2 w-2 animate-pulse rounded-full bg-emerald-400" />
-              Terminal: Feijó · AC
-            </div>
-            <div className={`${mono} hidden lg:block text-[11px] text-white/60 tabular-nums`}>
-              {now}
-            </div>
-          </div>
-          <div className="flex items-center gap-2 md:gap-4">
+          </Link>
+
+          <nav className="hidden md:flex items-center gap-8 text-[13px] font-medium" style={{ color: PALETTE.navy2 }}>
+            <Link to="/buscar" className="hover:text-[color:var(--nt-ink)] transition-colors">Buscar</Link>
+            <Link to="/melhores-precos" className="hover:text-[color:var(--nt-ink)] transition-colors">Rankings</Link>
+            <Link to="/colaborar" className="hover:text-[color:var(--nt-ink)] transition-colors">Colaborar</Link>
+            <Link to="/planos" className="hover:text-[color:var(--nt-ink)] transition-colors">Planos</Link>
+          </nav>
+
+          <div className="flex items-center gap-2">
             <Link
               to="/login"
-              className="text-[11px] font-semibold uppercase tracking-wider text-white/90 transition-colors hover:text-[color:var(--pc-gold)]"
+              className="hidden sm:inline-block rounded-md px-3.5 py-2 text-[13px] font-medium transition-colors"
+              style={{ color: PALETTE.navy }}
             >
               Entrar
             </Link>
             <Link
-              to="/lojista"
-              className="rounded-md bg-[color:var(--pc-gold)] px-3 py-1.5 text-[11px] font-bold uppercase tracking-wider text-[color:var(--pc-emerald)] transition-colors hover:bg-white"
+              to="/cadastro"
+              className="rounded-md px-3.5 py-2 text-[13px] font-semibold text-white transition-all hover:opacity-90"
+              style={{ background: PALETTE.navy }}
             >
-              Painel Lojista
+              Criar conta
             </Link>
           </div>
-        </header>
+        </div>
+      </header>
 
-        {/* ============== MAIN COMMAND GRID ============== */}
-        <main className="grid grid-cols-12 gap-3 md:gap-4">
-          {/* -------- LEFT COLUMN -------- */}
-          <aside className="col-span-12 space-y-3 md:space-y-4 lg:col-span-3">
-            {/* Setores */}
-            <div className="rounded-xl border border-[color:var(--pc-emerald)]/10 bg-white p-4 shadow-sm">
-              <h3 className={`${outfit} mb-3 text-[11px] font-bold uppercase tracking-widest text-[color:var(--pc-emerald-2)]`}>
-                Setores
-              </h3>
-              <nav className="space-y-0.5">
-                {SECTORS.map((s) => (
-                  <Link
-                    key={s.slug}
-                    to="/buscar"
-                    search={{ cat: s.slug } as any}
-                    className="group flex items-center justify-between rounded px-2 py-1.5 text-sm transition-all hover:bg-[color:var(--pc-emerald)] hover:text-white"
-                  >
-                    <span className="font-medium">{s.label}</span>
-                    <DeltaChip value={s.delta} />
-                  </Link>
-                ))}
-              </nav>
+      <div className="mx-auto max-w-6xl px-4 py-8 md:px-6 md:py-12 space-y-6">
+        {/* ============== HERO ============== */}
+        <section
+          className="relative overflow-hidden rounded-2xl border bg-white p-6 md:p-10"
+          style={{ borderColor: PALETTE.line }}
+        >
+          <div className="max-w-3xl">
+            <div
+              className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-medium uppercase tracking-[0.14em]"
+              style={{ borderColor: PALETTE.line, color: PALETTE.navy2 }}
+            >
+              <span
+                className="h-1.5 w-1.5 animate-pulse rounded-full"
+                style={{ background: PALETTE.gold }}
+              />
+              {today || "atualizado agora"}
             </div>
 
-            {/* Live drop feed */}
-            <div className="relative overflow-hidden rounded-xl bg-[color:var(--pc-emerald)] p-4 text-[color:var(--pc-cream)]">
-              <div className="relative z-10">
-                <div className="mb-3 flex items-center justify-between">
-                  <p className={`${outfit} text-[10px] font-bold uppercase tracking-widest text-[color:var(--pc-gold)]`}>
-                    Live Drop Feed
-                  </p>
-                  <span className="flex items-center gap-1 text-[9px] font-semibold uppercase tracking-wider text-white/60">
-                    <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-400" />
-                    ao vivo
-                  </span>
-                </div>
-                <div className="space-y-3">
-                  {LIVE_DROPS.slice(0, 4).map((d, i) => (
-                    <div
-                      key={i}
-                      className="border-l pl-3 py-0.5"
-                      style={{
-                        borderColor: i === 0 ? "var(--pc-gold)" : "var(--pc-emerald-2)",
-                        opacity: 1 - i * 0.18,
-                      }}
-                    >
-                      <p className="text-[11px] font-semibold leading-tight">{d.name}</p>
-                      <p className="text-[9px] opacity-70">
-                        {d.store} • {d.ago} atrás
-                      </p>
-                      <p className={`${mono} text-xs font-bold tabular-nums`}>
-                        <span className="opacity-50 line-through">R$ {d.from.toFixed(2)}</span>
-                        <span className="ml-2 text-[color:var(--pc-gold)]">
-                          R$ {d.to.toFixed(2)} ↓
-                        </span>
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div className="pointer-events-none absolute -bottom-6 -right-6 h-28 w-28 rounded-full border-4 border-[color:var(--pc-gold)] opacity-10" />
-              <div className="pointer-events-none absolute -top-4 -left-4 h-14 w-14 rounded-full border-2 border-[color:var(--pc-gold)] opacity-10" />
-            </div>
-          </aside>
+            <h1
+              className={`${serif} mt-5 text-[clamp(2.4rem,5.4vw,4rem)] font-normal leading-[1.02]`}
+              style={{ color: PALETTE.ink, letterSpacing: "-0.02em" }}
+            >
+              O preço certo,{" "}
+              <span className="italic" style={{ color: PALETTE.gold }}>onde você compra.</span>
+            </h1>
+            <p
+              className="mt-4 max-w-xl text-[15px] leading-relaxed"
+              style={{ color: PALETTE.navy2 }}
+            >
+              Compare mercados de Feijó em tempo real, acompanhe quedas do dia e
+              descubra em qual loja sua cesta sai mais barata — com dados atualizados
+              pela própria comunidade.
+            </p>
 
-          {/* -------- CENTER COLUMN -------- */}
-          <section className="col-span-12 space-y-3 md:space-y-4 lg:col-span-6">
-            {/* Hero + Busca */}
-            <div className="rounded-xl border-t-4 border-[color:var(--pc-emerald)] bg-white p-6 shadow-sm md:p-8">
-              <p className={`${outfit} mb-2 text-center text-[10px] font-bold uppercase tracking-[0.25em] text-[color:var(--pc-emerald-2)]`}>
-                <MapPin className="inline h-3 w-3 -mt-0.5" /> Preços ao vivo · Feijó · AC
-              </p>
-              <h1 className={`${outfit} text-center text-2xl md:text-4xl font-bold tracking-tight leading-tight`}>
-                Qual preço você busca hoje em{" "}
-                <span className="text-[color:var(--pc-gold)]">Feijó?</span>
-              </h1>
-              <p className="mx-auto mt-2 max-w-lg text-center text-sm text-[color:var(--pc-emerald)]/60">
-                Compare mercados em tempo real. Monte a cesta ideal. Economize a cada compra.
-              </p>
+            <form onSubmit={submitSearch} className="relative mt-7 max-w-xl">
+              <Search
+                className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2"
+                style={{ color: PALETTE.navy2 }}
+              />
+              <input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                type="text"
+                placeholder="Buscar produto: arroz 5 kg, café, leite…"
+                className={`${sans} w-full rounded-xl border bg-white py-3.5 pl-11 pr-32 text-[14px] outline-none transition-all placeholder:font-normal focus:border-[color:var(--nt-navy)] focus:ring-4`}
+                style={{
+                  borderColor: PALETTE.line,
+                  color: PALETTE.ink,
+                  ["--tw-ring-color" as any]: `${PALETTE.navy}15`,
+                }}
+              />
+              <button
+                type="submit"
+                className="absolute right-1.5 top-1/2 flex -translate-y-1/2 items-center gap-1.5 rounded-lg px-4 py-2 text-[12px] font-semibold text-white transition-transform hover:scale-[1.02]"
+                style={{ background: PALETTE.navy }}
+              >
+                Buscar <ArrowRight className="h-3.5 w-3.5" />
+              </button>
+            </form>
 
-              <form onSubmit={submitSearch} className="relative mt-5">
-                <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-[color:var(--pc-emerald)]/40" />
-                <input
-                  value={q}
-                  onChange={(e) => setQ(e.target.value)}
-                  type="text"
-                  placeholder="Ex.: arroz 5kg, café, leite..."
-                  className="w-full rounded-md border-none bg-[color:var(--pc-cream)] py-4 pl-11 pr-32 text-sm text-[color:var(--pc-emerald)] outline-none ring-0 placeholder:text-[color:var(--pc-emerald)]/40 focus:ring-2 focus:ring-[color:var(--pc-emerald)]"
-                />
+            <div className="mt-4 flex flex-wrap items-center gap-2 text-[12px]">
+              <span style={{ color: PALETTE.navy2 }}>Populares:</span>
+              {["arroz", "feijão", "leite", "óleo", "café", "açúcar"].map((t) => (
                 <button
-                  type="submit"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-md bg-[color:var(--pc-emerald)] px-4 py-2 text-xs font-bold uppercase tracking-wider text-white transition-all hover:bg-[color:var(--pc-emerald-2)]"
+                  key={t}
+                  onClick={() => navigate({ to: "/buscar", search: { q: t } as any })}
+                  className="rounded-full border bg-white px-2.5 py-1 text-[12px] font-medium transition-colors"
+                  style={{ borderColor: PALETTE.line, color: PALETTE.navy }}
                 >
-                  Buscar
+                  {t}
                 </button>
-              </form>
-
-              <div className="mt-3 flex flex-wrap items-center justify-center gap-1.5 text-[11px]">
-                <span className="text-[color:var(--pc-emerald)]/50">Popular:</span>
-                {["arroz", "feijão", "leite", "óleo", "café"].map((t) => (
-                  <button
-                    key={t}
-                    onClick={() => {
-                      setQ(t);
-                      navigate({ to: "/buscar", search: { q: t } as any });
-                    }}
-                    className="rounded-full border border-[color:var(--pc-emerald)]/15 bg-white px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[color:var(--pc-emerald)]/70 transition-colors hover:border-[color:var(--pc-gold)] hover:text-[color:var(--pc-emerald)]"
-                  >
-                    {t}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* KPI Row */}
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
-              {KPIS.map((k, i) => (
-                <div
-                  key={i}
-                  className="rounded-xl border border-[color:var(--pc-emerald)]/10 bg-white p-4 text-center shadow-sm transition-shadow hover:shadow-md"
-                >
-                  <p className={`${outfit} text-[10px] font-bold uppercase tracking-wider text-[color:var(--pc-emerald-2)]`}>
-                    {k.label}
-                  </p>
-                  <p
-                    className={`${outfit} ${mono} mt-1 text-xl md:text-2xl font-bold tabular-nums`}
-                    style={{
-                      color: k.tone === "gold" ? "var(--pc-gold)" : "var(--pc-emerald)",
-                    }}
-                  >
-                    {k.value}
-                  </p>
-                  <p className="mt-0.5 text-[9px] font-bold uppercase tracking-wider text-[color:var(--pc-emerald)]/60">
-                    {k.delta}
-                    {k.sub && <span className="ml-1 opacity-60">{k.sub}</span>}
-                  </p>
-                </div>
               ))}
             </div>
+          </div>
 
-            {/* Market list */}
-            <div className="overflow-hidden rounded-xl border border-[color:var(--pc-emerald)]/10 bg-white shadow-sm">
-              <div className="flex items-center justify-between border-b border-[color:var(--pc-cream)] p-4">
-                <div className="flex items-center gap-2">
-                  <Store className="h-4 w-4 text-[color:var(--pc-emerald-2)]" />
-                  <h3 className={`${outfit} text-sm font-bold uppercase tracking-wider`}>
-                    Mercados Próximos
-                  </h3>
-                </div>
-                <div className="flex items-center gap-3">
-                  <span className="flex items-center gap-1 text-[10px] font-semibold text-emerald-600">
-                    <Circle className="h-1.5 w-1.5 fill-emerald-500 text-emerald-500" />
-                    online
-                  </span>
-                  <Link
-                    to="/mapa"
-                    className="text-[10px] font-bold uppercase tracking-wider text-[color:var(--pc-emerald)]/70 hover:text-[color:var(--pc-emerald)]"
+          {/* Decorative gold rule */}
+          <div
+            className="pointer-events-none absolute -right-16 top-1/2 hidden h-[280px] w-[280px] -translate-y-1/2 rounded-full opacity-[0.08] lg:block"
+            style={{ background: `radial-gradient(circle, ${PALETTE.gold} 0%, transparent 70%)` }}
+          />
+        </section>
+
+        {/* ============== KPI STRIP ============== */}
+        <section className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          {KPIS.map((k) => (
+            <div
+              key={k.label}
+              className="rounded-xl border bg-white p-4 transition-shadow hover:shadow-sm"
+              style={{ borderColor: PALETTE.line }}
+            >
+              <div
+                className="text-[10px] font-semibold uppercase tracking-[0.14em]"
+                style={{ color: PALETTE.navy2 }}
+              >
+                {k.label}
+              </div>
+              <div
+                className={`${mono} mt-2 text-[26px] font-semibold leading-none`}
+                style={{ color: PALETTE.ink, letterSpacing: "-0.02em" }}
+              >
+                {k.value}
+              </div>
+              <div className="mt-2 flex items-center gap-1.5 text-[11px]">
+                {k.delta !== 0 && (
+                  <span
+                    className="inline-flex items-center gap-0.5 font-semibold"
+                    style={{ color: k.delta < 0 ? "#0f7a4f" : "#b3382c" }}
                   >
-                    Ver mapa →
-                  </Link>
+                    {k.delta < 0 ? (
+                      <ArrowDownRight className="h-3 w-3" />
+                    ) : (
+                      <ArrowUpRight className="h-3 w-3" />
+                    )}
+                    {Math.abs(k.delta)}%
+                  </span>
+                )}
+                <span style={{ color: PALETTE.navy2 }}>{k.sub}</span>
+              </div>
+            </div>
+          ))}
+        </section>
+
+        {/* ============== BENTO GRID ============== */}
+        <section className="grid grid-cols-12 gap-4">
+          {/* Live drops — 7/12 */}
+          <article
+            className="col-span-12 rounded-2xl border bg-white lg:col-span-7"
+            style={{ borderColor: PALETTE.line }}
+          >
+            <div
+              className="flex items-center justify-between border-b px-5 py-4"
+              style={{ borderColor: PALETTE.line }}
+            >
+              <div>
+                <div
+                  className="text-[10px] font-semibold uppercase tracking-[0.16em]"
+                  style={{ color: PALETTE.navy2 }}
+                >
+                  Live Drop Feed
+                </div>
+                <div className={`${serif} mt-1 text-[22px] leading-tight`} style={{ color: PALETTE.ink }}>
+                  Quedas de preço nas últimas horas
                 </div>
               </div>
-
-              <div className="divide-y divide-[color:var(--pc-cream)]">
-                {(stores.length ? stores.slice(0, 5) : PLACEHOLDER_STORES).map((s: any, i: number) => (
-                  <Link
-                    key={s.id ?? i}
-                    to="/loja/$id"
-                    params={{ id: String(s.id ?? "demo") }}
-                    className="flex items-center justify-between p-4 transition-colors hover:bg-[color:var(--pc-cream)]/50"
+              <span
+                className="hidden sm:flex items-center gap-1.5 text-[11px] font-medium"
+                style={{ color: PALETTE.navy2 }}
+              >
+                <span
+                  className="h-1.5 w-1.5 animate-pulse rounded-full"
+                  style={{ background: "#0f7a4f" }}
+                />
+                ao vivo
+              </span>
+            </div>
+            <ul className="divide-y" style={{ borderColor: PALETTE.line }}>
+              {LIVE_DROPS.map((d, i) => {
+                const pct = Math.round(((d.to - d.from) / d.from) * 100);
+                return (
+                  <li
+                    key={i}
+                    className="flex items-center justify-between gap-3 px-5 py-3.5"
+                    style={{ borderColor: PALETTE.line }}
                   >
-                    <div className="flex items-center gap-4 min-w-0">
-                      <div className={`${outfit} grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[color:var(--pc-emerald)]/5 text-sm font-bold text-[color:var(--pc-emerald)]`}>
-                        {initials(s.name ?? s.label ?? "MC")}
+                    <div className="min-w-0 flex-1">
+                      <div className={`${sans} truncate text-[14px] font-semibold`} style={{ color: PALETTE.ink }}>
+                        {d.name}
                       </div>
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-bold">{s.name ?? s.label}</p>
-                        <p className="truncate text-[11px] text-[color:var(--pc-emerald)]/60">
-                          {s.neighborhood ?? s.address ?? "Feijó · AC"}
-                          {s.distance_km ? ` · ${s.distance_km.toFixed(1)}km` : ""}
-                        </p>
+                      <div className="mt-0.5 text-[12px]" style={{ color: PALETTE.navy2 }}>
+                        {d.store} · {d.ago} atrás
                       </div>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className={`${mono} text-xs font-bold tabular-nums`}>
-                        {s.best_items ?? Math.floor(20 + Math.random() * 140)} itens
-                      </p>
-                      <div className="mt-1 flex justify-end">
-                        <div
-                          className="h-1 rounded-full"
-                          style={{
-                            width: `${28 + ((s.best_items ?? 60) % 60)}px`,
-                            background:
-                              i === 0 ? "var(--pc-gold)" : "var(--pc-emerald-2)",
-                          }}
-                        />
+                      <div className={`${mono} text-[11px] line-through`} style={{ color: PALETTE.navy2 }}>
+                        R$ {d.from.toFixed(2)}
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`${mono} text-[15px] font-semibold`}
+                          style={{ color: PALETTE.ink }}
+                        >
+                          R$ {d.to.toFixed(2)}
+                        </span>
+                        <span
+                          className={`${mono} rounded-md px-1.5 py-0.5 text-[10px] font-bold`}
+                          style={{ background: "#e7f4ee", color: "#0f7a4f" }}
+                        >
+                          {pct}%
+                        </span>
                       </div>
                     </div>
-                  </Link>
-                ))}
-              </div>
+                  </li>
+                );
+              })}
+            </ul>
+            <div
+              className="flex items-center justify-between border-t px-5 py-3 text-[12px]"
+              style={{ borderColor: PALETTE.line, color: PALETTE.navy2 }}
+            >
+              <span>Dados agregados pela comunidade.</span>
+              <Link
+                to="/melhores-precos"
+                className="font-semibold hover:underline"
+                style={{ color: PALETTE.navy }}
+              >
+                Ver ranking completo →
+              </Link>
             </div>
-          </section>
+          </article>
 
-          {/* -------- RIGHT COLUMN -------- */}
-          <aside className="col-span-12 space-y-3 md:space-y-4 lg:col-span-3">
-            {/* Nota fiscal CTA */}
-            <div className="relative overflow-hidden rounded-xl border-2 border-[color:var(--pc-emerald)] bg-[color:var(--pc-gold)] p-5 text-[color:var(--pc-emerald)] shadow-sm">
+          {/* Sectores + Colabora — 5/12 */}
+          <aside className="col-span-12 space-y-4 lg:col-span-5">
+            <div className="rounded-2xl border bg-white p-5" style={{ borderColor: PALETTE.line }}>
+              <div className="flex items-baseline justify-between">
+                <div
+                  className="text-[10px] font-semibold uppercase tracking-[0.16em]"
+                  style={{ color: PALETTE.navy2 }}
+                >
+                  Setores em movimento
+                </div>
+                <div className="text-[11px]" style={{ color: PALETTE.navy2 }}>
+                  Últimos 7 d
+                </div>
+              </div>
+              <ul className="mt-4 space-y-1">
+                {SECTORS.map((s) => (
+                  <li key={s.slug}>
+                    <Link
+                      to="/buscar"
+                      search={{ cat: s.slug } as any}
+                      className="group flex items-center justify-between rounded-md px-2.5 py-2 text-[13px] transition-colors hover:bg-[color:var(--nt-paper)]"
+                    >
+                      <span className="font-medium" style={{ color: PALETTE.ink }}>
+                        {s.label}
+                      </span>
+                      <span
+                        className={`${mono} inline-flex items-center gap-0.5 text-[12px] font-semibold`}
+                        style={{
+                          color:
+                            s.delta === 0 ? PALETTE.navy2 : s.delta < 0 ? "#0f7a4f" : "#b3382c",
+                        }}
+                      >
+                        {s.delta === 0 ? (
+                          "—"
+                        ) : (
+                          <>
+                            {s.delta < 0 ? (
+                              <ArrowDownRight className="h-3 w-3" />
+                            ) : (
+                              <ArrowUpRight className="h-3 w-3" />
+                            )}
+                            {Math.abs(s.delta)}%
+                          </>
+                        )}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Gold CTA — Colabora */}
+            <div
+              className="relative overflow-hidden rounded-2xl p-5 text-white"
+              style={{
+                background: `linear-gradient(140deg, ${PALETTE.navy} 0%, ${PALETTE.navy2} 100%)`,
+              }}
+            >
               <div className="relative z-10">
-                <div className="mb-2 flex items-center gap-2">
-                  <ReceiptText className="h-4 w-4" />
-                  <span className={`${outfit} text-[10px] font-bold uppercase tracking-widest`}>
-                    Rede Colaborativa
+                <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.16em]" style={{ color: PALETTE.goldSoft }}>
+                  <ReceiptText className="h-3 w-3" /> Rede colaborativa
+                </div>
+                <div className={`${serif} mt-2 text-[24px] leading-tight`}>
+                  Envie sua nota fiscal.<br />
+                  <span className="italic" style={{ color: PALETTE.goldSoft }}>
+                    Ganhe 30 dias grátis.
                   </span>
                 </div>
-                <h4 className={`${outfit} text-lg font-extrabold leading-tight`}>
-                  Envie sua Nota Fiscal
-                </h4>
-                <p className="mt-1.5 text-xs font-medium opacity-80">
-                  Ganhe <b>30 dias</b> Premium e ajude a monitorar Feijó.
+                <p className="mt-2 text-[13px] text-white/70">
+                  Uma nota validada = um mês de acesso premium para você e
+                  dados atualizados para toda Feijó.
                 </p>
                 <Link
                   to="/colaborar"
-                  className="mt-3 flex items-center justify-center gap-2 rounded-md bg-[color:var(--pc-emerald)] py-2 text-[11px] font-bold uppercase tracking-wider text-white transition-all hover:bg-[color:var(--pc-emerald-2)]"
+                  className="mt-4 inline-flex items-center gap-1.5 rounded-lg px-4 py-2.5 text-[13px] font-semibold transition-transform hover:scale-[1.02]"
+                  style={{ background: PALETTE.gold, color: PALETTE.ink }}
                 >
-                  Enviar agora <ArrowUpRight className="h-3 w-3" />
+                  Enviar nota agora <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>
-              <div className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rotate-45 border border-[color:var(--pc-emerald)]/20" />
-              <div className="pointer-events-none absolute -left-4 -bottom-4 h-12 w-12 rotate-12 border border-[color:var(--pc-emerald)]/20" />
+              <div
+                className="pointer-events-none absolute -right-10 -bottom-10 h-40 w-40 rounded-full"
+                style={{ background: `radial-gradient(circle, ${PALETTE.gold}55 0%, transparent 70%)` }}
+              />
+            </div>
+          </aside>
+        </section>
+
+        {/* ============== MERCADOS + PLANOS ============== */}
+        <section className="grid grid-cols-12 gap-4">
+          <article
+            className="col-span-12 rounded-2xl border bg-white lg:col-span-7"
+            style={{ borderColor: PALETTE.line }}
+          >
+            <div
+              className="flex items-center justify-between border-b px-5 py-4"
+              style={{ borderColor: PALETTE.line }}
+            >
+              <div className="flex items-center gap-2">
+                <Store className="h-4 w-4" style={{ color: PALETTE.navy2 }} />
+                <div className={`${serif} text-[20px]`} style={{ color: PALETTE.ink }}>
+                  Mercados próximos
+                </div>
+              </div>
+              <Link
+                to="/mapa"
+                className="text-[12px] font-semibold hover:underline"
+                style={{ color: PALETTE.navy }}
+              >
+                Ver no mapa →
+              </Link>
+            </div>
+            <ul className="divide-y" style={{ borderColor: PALETTE.line }}>
+              {displayStores.map((s: any, i: number) => (
+                <li key={s.id ?? i}>
+                  <Link
+                    to="/loja/$id"
+                    params={{ id: String(s.id ?? "demo") }}
+                    className="flex items-center justify-between gap-3 px-5 py-3.5 transition-colors hover:bg-[color:var(--nt-paper)]"
+                  >
+                    <div className="flex min-w-0 items-center gap-3">
+                      <div
+                        className={`${sans} grid h-10 w-10 shrink-0 place-items-center rounded-full text-[13px] font-bold`}
+                        style={{ background: `${PALETTE.navy}0d`, color: PALETTE.navy }}
+                      >
+                        {initials(s.name ?? s.label ?? "MC")}
+                      </div>
+                      <div className="min-w-0">
+                        <div className="truncate text-[14px] font-semibold" style={{ color: PALETTE.ink }}>
+                          {s.name ?? s.label}
+                        </div>
+                        <div className="mt-0.5 flex items-center gap-1 text-[12px]" style={{ color: PALETTE.navy2 }}>
+                          <MapPin className="h-3 w-3" />
+                          {s.neighborhood ?? s.address ?? "Feijó · AC"}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <div className={`${mono} text-[13px] font-semibold`} style={{ color: PALETTE.ink }}>
+                        {s.best_items ?? 60} itens
+                      </div>
+                      <div className="mt-0.5 text-[10px] font-medium uppercase tracking-wider" style={{ color: PALETTE.navy2 }}>
+                        {i === 0 ? "melhor preço" : "monitorado"}
+                      </div>
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </article>
+
+          {/* Planos */}
+          <aside className="col-span-12 space-y-4 lg:col-span-5">
+            <div className="rounded-2xl border bg-white p-5" style={{ borderColor: PALETTE.line }}>
+              <div
+                className="text-[10px] font-semibold uppercase tracking-[0.16em]"
+                style={{ color: PALETTE.navy2 }}
+              >
+                Planos flexíveis
+              </div>
+              <div className={`${serif} mt-1 text-[22px]`} style={{ color: PALETTE.ink }}>
+                Escolha o seu ritmo
+              </div>
+
+              <div className="mt-4 space-y-2.5">
+                <PlanCard
+                  name="Weekly Pass"
+                  price="R$ 4,90"
+                  desc="7 dias · alertas WhatsApp"
+                />
+                <PlanCard
+                  name="Monthly Pro"
+                  price="R$ 14,90"
+                  desc="30 dias · alertas + cesta ideal"
+                  highlight
+                />
+              </div>
+
+              <Link
+                to="/planos"
+                className="mt-3 inline-flex items-center gap-1 text-[12px] font-semibold"
+                style={{ color: PALETTE.navy }}
+              >
+                Ver todos os planos <ArrowRight className="h-3 w-3" />
+              </Link>
             </div>
 
-            {/* Planos */}
-            <div className="rounded-xl border border-[color:var(--pc-emerald)]/10 bg-white p-4 shadow-sm">
-              <h3 className={`${outfit} mb-3 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[color:var(--pc-emerald-2)]`}>
-                <Sparkles className="h-3 w-3" /> Planos Flexíveis
-              </h3>
-              <div className="space-y-2">
-                <Link
-                  to="/planos"
-                  className="block cursor-pointer rounded-md border border-[color:var(--pc-emerald-2)]/20 p-3 transition-colors hover:border-[color:var(--pc-gold)]"
+            {/* Trust box */}
+            <div className="rounded-2xl border bg-white p-5" style={{ borderColor: PALETTE.line }}>
+              <div className="flex items-start gap-3">
+                <div
+                  className="grid h-9 w-9 shrink-0 place-items-center rounded-full"
+                  style={{ background: `${PALETTE.gold}22`, color: PALETTE.gold }}
                 >
-                  <div className="flex items-start justify-between">
-                    <p className="text-sm font-bold">Weekly Pass</p>
-                    <p className={`${mono} text-xs font-bold tabular-nums`}>R$ 4,90</p>
+                  <ShieldCheck className="h-4 w-4" />
+                </div>
+                <div>
+                  <div className={`${serif} text-[17px]`} style={{ color: PALETTE.ink }}>
+                    Dados verificados
                   </div>
-                  <p className="mt-0.5 text-[10px] opacity-60">7 dias · alertas WhatsApp</p>
-                </Link>
-                <Link
-                  to="/planos"
-                  className="block cursor-pointer rounded-md bg-[color:var(--pc-emerald)] p-3 text-white shadow-md transition-transform hover:-translate-y-0.5"
-                >
-                  <div className="flex items-start justify-between">
-                    <p className="text-sm font-bold">Monthly Pro</p>
-                    <p className={`${mono} text-xs font-bold tabular-nums text-[color:var(--pc-gold)]`}>
-                      R$ 14,90
-                    </p>
-                  </div>
-                  <p className="mt-1 text-center text-[9px] font-bold uppercase tracking-wider text-[color:var(--pc-gold)]">
-                    Recomendado
+                  <p className="mt-1 text-[13px] leading-relaxed" style={{ color: PALETTE.navy2 }}>
+                    Cada preço é confirmado por nota fiscal enviada pela comunidade,
+                    revisada pela nossa equipe e datada com precisão.
                   </p>
-                </Link>
+                </div>
               </div>
-            </div>
-
-            {/* Signal */}
-            <div className="rounded-xl border border-[color:var(--pc-emerald)]/10 bg-white p-4 shadow-sm">
-              <h3 className={`${outfit} mb-3 flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-[color:var(--pc-emerald-2)]`}>
-                <Activity className="h-3 w-3" /> Sinal do mercado
-              </h3>
-              <div className="space-y-2 text-xs">
-                <SignalRow label="Volume 7d" value="+18%" up />
-                <SignalRow label="Volatilidade" value="Baixa" />
-                <SignalRow label="Cobertura" value={statsQ.data ? `${(statsQ.data as any).stores ?? 0} lojas` : "—"} />
-                <SignalRow label="Contribuidores" value={statsQ.data ? `${(statsQ.data as any).collaborators ?? 0}` : "0"} />
+              <div
+                className="mt-4 grid grid-cols-3 gap-2 border-t pt-4 text-center"
+                style={{ borderColor: PALETTE.line }}
+              >
+                <Stat label="Lojas" value={statsQ.data ? String((statsQ.data as any).stores ?? 0) : "0"} />
+                <Stat label="Colab." value={statsQ.data ? String((statsQ.data as any).collaborators ?? 0) : "0"} />
+                <Stat label="Uptime" value="99.9%" />
               </div>
             </div>
           </aside>
-        </main>
+        </section>
 
         {/* ============== TICKER ============== */}
-        <div className="overflow-hidden rounded-xl border border-[color:var(--pc-emerald)]/10 bg-[color:var(--pc-emerald)] py-2 text-[color:var(--pc-cream)] shadow-sm">
-          <div className="flex items-center gap-8 whitespace-nowrap animate-[ticker_45s_linear_infinite]">
-            {[...LIVE_DROPS, ...LIVE_DROPS].map((d, i) => (
-              <div key={i} className={`${mono} flex shrink-0 items-center gap-2 text-xs tabular-nums`}>
-                <TrendingDown className="h-3 w-3 text-[color:var(--pc-gold)]" />
-                <span className="font-semibold">{d.name}</span>
-                <span className="text-white/40 line-through">R${d.from.toFixed(2)}</span>
-                <span className="font-bold text-[color:var(--pc-gold)]">R${d.to.toFixed(2)}</span>
-                <span className="text-white/30">·</span>
+        <section
+          className="overflow-hidden rounded-xl border py-2"
+          style={{
+            background: PALETTE.navy,
+            borderColor: PALETTE.navy,
+          }}
+        >
+          <div className="flex items-center gap-10 whitespace-nowrap animate-[ticker_50s_linear_infinite]">
+            {[...LIVE_DROPS, ...LIVE_DROPS, ...LIVE_DROPS].map((d, i) => (
+              <div key={i} className={`${mono} flex shrink-0 items-center gap-2 text-[12px]`}>
+                <TrendingDown className="h-3 w-3" style={{ color: PALETTE.goldSoft }} />
+                <span className="font-medium text-white/90">{d.name}</span>
+                <span className="text-white/40 line-through">R$ {d.from.toFixed(2)}</span>
+                <span className="font-semibold" style={{ color: PALETTE.goldSoft }}>
+                  R$ {d.to.toFixed(2)}
+                </span>
+                <span className="text-white/25">·</span>
               </div>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* ============== STATUS FOOTER ============== */}
-        <footer className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-[color:var(--pc-emerald)]/10 bg-white/60 px-4 py-3 text-[10px] uppercase tracking-widest text-[color:var(--pc-emerald)]/60 backdrop-blur-sm">
-          <div className="flex flex-wrap gap-4 font-bold">
-            <span className="flex items-center gap-1.5">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-emerald-500" />
-              Sistema Nominal
-            </span>
-            <span className={mono}>Atualizado {now}</span>
-            <span>Feito em Feijó · AC</span>
+        {/* ============== FINAL CTA ============== */}
+        <section
+          className="rounded-2xl border bg-white p-8 md:p-10"
+          style={{ borderColor: PALETTE.line }}
+        >
+          <div className="grid grid-cols-1 items-center gap-6 md:grid-cols-[1fr_auto]">
+            <div>
+              <div
+                className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em]"
+                style={{ borderColor: PALETTE.line, color: PALETTE.navy2 }}
+              >
+                <Sparkles className="h-3 w-3" style={{ color: PALETTE.gold }} />
+                Comece grátis
+              </div>
+              <h2
+                className={`${serif} mt-4 text-[clamp(1.8rem,3.4vw,2.4rem)] leading-tight`}
+                style={{ color: PALETTE.ink }}
+              >
+                Nunca mais pague caro por{" "}
+                <span className="italic" style={{ color: PALETTE.gold }}>
+                  arroz, feijão e café.
+                </span>
+              </h2>
+              <p className="mt-3 max-w-xl text-[14px]" style={{ color: PALETTE.navy2 }}>
+                Cadastro em 30 segundos. Sem cartão de crédito. Cancele quando quiser.
+              </p>
+            </div>
+            <div className="flex flex-col gap-2 sm:flex-row md:flex-col">
+              <Link
+                to="/cadastro"
+                className="inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-[14px] font-semibold text-white transition-transform hover:scale-[1.02]"
+                style={{ background: PALETTE.navy }}
+              >
+                Criar minha conta <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link
+                to="/resgatar"
+                className="inline-flex items-center justify-center gap-2 rounded-xl border px-6 py-3.5 text-[14px] font-semibold transition-colors"
+                style={{ borderColor: PALETTE.line, color: PALETTE.navy }}
+              >
+                Tenho um código
+              </Link>
+            </div>
           </div>
-          <div className="flex gap-4 font-semibold">
-            <Link to="/privacidade" className="hover:text-[color:var(--pc-emerald)]">Privacidade</Link>
-            <Link to="/planos" className="hover:text-[color:var(--pc-emerald)]">Planos</Link>
-            <Link to="/colaborar" className="hover:text-[color:var(--pc-emerald)]">Colaborar</Link>
+        </section>
+
+        {/* ============== FOOTER ============== */}
+        <footer
+          className="flex flex-wrap items-center justify-between gap-3 border-t pt-6 text-[12px]"
+          style={{ borderColor: PALETTE.line, color: PALETTE.navy2 }}
+        >
+          <div className="flex items-center gap-3">
+            <span
+              className="grid h-6 w-6 place-items-center rounded text-[10px] font-bold text-white"
+              style={{ background: PALETTE.navy }}
+            >
+              P
+            </span>
+            <span className={serif} style={{ color: PALETTE.ink }}>
+              PreçoCerto
+            </span>
+            <span>·</span>
+            <span>Feito em Feijó · Acre</span>
+          </div>
+          <div className="flex gap-5">
+            <Link to="/privacidade" className="hover:text-[color:var(--nt-ink)]">Privacidade</Link>
+            <Link to="/planos" className="hover:text-[color:var(--nt-ink)]">Planos</Link>
+            <Link to="/colaborar" className="hover:text-[color:var(--nt-ink)]">Colaborar</Link>
+            <Link to="/lojista" className="hover:text-[color:var(--nt-ink)]">Lojistas</Link>
           </div>
         </footer>
       </div>
@@ -495,7 +744,7 @@ function HomePage() {
       <style>{`
         @keyframes ticker {
           0% { transform: translateX(0); }
-          100% { transform: translateX(-50%); }
+          100% { transform: translateX(-33.333%); }
         }
       `}</style>
     </div>
@@ -505,35 +754,50 @@ function HomePage() {
 /* ================================================================== */
 /*  Sub-components                                                     */
 /* ================================================================== */
-function DeltaChip({ value }: { value: number }) {
-  if (value === 0)
-    return (
-      <span className="text-[9px] font-bold uppercase tracking-wider text-[color:var(--pc-emerald)]/40 group-hover:text-white/60">
-        stable
-      </span>
-    );
-  const down = value < 0;
+function PlanCard({
+  name, price, desc, highlight,
+}: { name: string; price: string; desc: string; highlight?: boolean }) {
   return (
-    <span
-      className={`${mono} inline-flex items-center gap-0.5 text-[10px] font-bold tabular-nums group-hover:text-white`}
-      style={{ color: down ? "var(--pc-gold)" : "var(--pc-emerald-2)" }}
+    <Link
+      to="/planos"
+      className="block rounded-xl border p-3.5 transition-all hover:-translate-y-0.5"
+      style={{
+        borderColor: highlight ? PALETTE.gold : PALETTE.line,
+        background: highlight ? `${PALETTE.gold}0d` : "white",
+      }}
     >
-      {down ? <ArrowDownRight className="h-3 w-3" /> : <ArrowUpRight className="h-3 w-3" />}
-      {Math.abs(value)}%
-    </span>
+      <div className="flex items-center justify-between">
+        <div className={`${sans} text-[14px] font-semibold`} style={{ color: PALETTE.ink }}>
+          {name}
+          {highlight && (
+            <span
+              className="ml-2 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider"
+              style={{ background: PALETTE.gold, color: PALETTE.ink }}
+            >
+              Recomendado
+            </span>
+          )}
+        </div>
+        <div className={`${mono} text-[15px] font-semibold`} style={{ color: PALETTE.ink }}>
+          {price}
+        </div>
+      </div>
+      <div className="mt-1 text-[12px]" style={{ color: PALETTE.navy2 }}>
+        {desc}
+      </div>
+    </Link>
   );
 }
 
-function SignalRow({ label, value, up }: { label: string; value: string; up?: boolean }) {
+function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-center justify-between">
-      <span className="text-[color:var(--pc-emerald)]/60">{label}</span>
-      <span
-        className={`${mono} font-bold tabular-nums`}
-        style={{ color: up ? "var(--pc-emerald-2)" : "var(--pc-emerald)" }}
-      >
+    <div>
+      <div className={`${mono} text-[16px] font-semibold`} style={{ color: PALETTE.ink }}>
         {value}
-      </span>
+      </div>
+      <div className="mt-0.5 text-[10px] font-medium uppercase tracking-wider" style={{ color: PALETTE.navy2 }}>
+        {label}
+      </div>
     </div>
   );
 }
@@ -546,14 +810,3 @@ function initials(name: string) {
     .map((s) => s[0]?.toUpperCase())
     .join("");
 }
-
-function formatTime(d: Date) {
-  return d.toLocaleTimeString("pt-BR", { hour12: false });
-}
-
-const PLACEHOLDER_STORES = [
-  { id: "demo-1", name: "Mercado Central", neighborhood: "Centro · 0.8km", best_items: 142 },
-  { id: "demo-2", name: "Super Feijó", neighborhood: "Cidade Nova · 2.1km", best_items: 98 },
-  { id: "demo-3", name: "Super Econômico", neighborhood: "Vila Nova · 1.4km", best_items: 76 },
-  { id: "demo-4", name: "Mini Preço", neighborhood: "Centro · 0.5km", best_items: 61 },
-];
