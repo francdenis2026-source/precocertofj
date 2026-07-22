@@ -91,7 +91,16 @@ function CategorizacaoPage() {
         ]}
         title="Revisão de categorização"
         description="Confirme ou corrija marca, tipo e embalagem antes de aplicar no catálogo."
-        actions={<HeaderActions />}
+        actions={
+          <div className="flex flex-wrap items-center gap-2">
+            <Button variant="ghost-navy" size="sm" onClick={() => genM.mutate()} disabled={genM.isPending}>
+              {genM.isPending ? <Loader2 className="h-4 w-4 mr-1.5 animate-spin" /> : <Sparkles className="h-4 w-4 mr-1.5" />}
+              Gerar sugestões
+            </Button>
+            <BatchReclassifyButton />
+            <BatchApproveButton />
+          </div>
+        }
       />
       <section className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8 space-y-6">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
