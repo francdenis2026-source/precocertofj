@@ -39,6 +39,7 @@ const PAGE_SIZE = 24;
 
 const searchSchema = z.object({
   cat: fallback(z.string(), "").default(""),
+  type: fallback(z.string(), "").default(""),
   sort: fallback(z.string(), "savings").default("savings"),
   min: fallback(z.number(), 0).default(0),
   max: fallback(z.number(), 0).default(0),
@@ -52,7 +53,8 @@ const searchSchema = z.object({
 export const Route = createFileRoute("/melhores-precos")({
   validateSearch: zodValidator(searchSchema),
   search: {
-    middlewares: [retainSearchParams(["cat", "sort", "min", "max", "stores", "q", "page"])],
+    middlewares: [retainSearchParams(["cat", "type", "sort", "min", "max", "stores", "q", "page"])],
+
   },
   head: () => ({
     meta: [
