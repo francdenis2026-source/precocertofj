@@ -208,6 +208,7 @@ function CatalogoAdminPage() {
 
 function ItemsPanel() {
   const { prompt } = useConfirm();
+  const { user } = useSession();
   const fetchList = useServerFn(listCatalog);
   const doUpdate = useServerFn(updateCatalogEntry);
   const doForceRefresh = useServerFn(forceRefreshCatalogImage);
