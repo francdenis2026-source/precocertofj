@@ -398,3 +398,33 @@ export function TableLoading({ label = "Carregando…" }: { label?: string }) {
     </div>
   );
 }
+
+/* ---------- persistência ---------- */
+
+type PersistedPrefs = {
+  sort?: { key: string; dir: SortDir } | null;
+  page?: number;
+  pageSize?: number;
+};
+
+const PREFS_PREFIX = "dt.prefs:";
+
+function loadPrefs(key: string): PersistedPrefs | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(PREFS_PREFIX + key);
+    if (!raw) return null;
+    return JSON.parse(raw) as PersistedPrefs;
+  } catch {
+    return null;
+  }
+}
+
+function savePrefs(key: string, prefs: PersistedPrefs) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(PREFS_PREFIX + key, JSON.stringify(prefs));
+  } catch {
+    /* quota / private mode */
+  }
+}
