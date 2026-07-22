@@ -37,7 +37,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import {
-  ArrowLeft,
   ShieldCheck,
   Trash2,
   Pencil,
@@ -48,7 +47,10 @@ import {
   CheckCircle2,
   XCircle,
   History,
+  DollarSign,
 } from "lucide-react";
+import { PageHeader } from "@/components/brand/PageHeader";
+import { Badge } from "@/components/ui/badge";
 import { ScanEditDialog } from "@/components/admin/ScanEditDialog";
 import { AuditLogTable } from "@/components/admin/AuditLogTable";
 
