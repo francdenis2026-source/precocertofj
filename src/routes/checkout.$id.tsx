@@ -41,6 +41,7 @@ function CheckoutPage() {
   const fetchOrder = useServerFn(getCheckoutOrder);
   const validate = useServerFn(validatePromoCoupon);
   const approve = useServerFn(approveCheckoutOrder);
+  const createPref = useServerFn(createMercadoPagoPreference);
   const { isAdmin } = useMyRoles();
 
   const [couponInput, setCouponInput] = useState("");
@@ -52,10 +53,27 @@ function CheckoutPage() {
     });
   }, [id, navigate]);
 
+  // Show a toast if user came back from MP
+  useEffect(() => {
+    const status = new URLSearchParams(window.location.search).get("status");
+    if (status === "success") toast.success("Pagamento aprovado! Gerando seu código…");
+    else if (status === "pending") toast.info("Pagamento pendente. Assim que o MP confirmar, seu código aparece aqui.");
+    else if (status === "failure") toast.error("Pagamento não concluído. Tente novamente.");
+  }, []);
+
   const { data: order, isLoading } = useQuery({
     queryKey: ["checkout-order", id],
     queryFn: () => fetchOrder({ data: { id } }),
-    refetchInterval: (q) => (q.state.data?.status === "pending" ? 5000 : false),
+    refetchInterval: (q) => (q.state.data?.status === "pending" ? 4000 : false),
+  });
+
+  const payMutation = useMutation({
+    mutationFn: () => createPref({ data: { orderId: id } }),
+    onSuccess: (r) => {
+      if (r?.url) window.location.href = r.url;
+      else toast.error("URL do Mercado Pago não retornada");
+    },
+    onError: (e: any) => toast.error(e?.message ?? "Falha ao iniciar pagamento"),
   });
 
   const approveMutation = useMutation({
