@@ -404,7 +404,8 @@ function MelhoresPrecosPage() {
   );
 
   const hasFilters =
-    !!activeCategory || minStores > 1 || minPrice > 0 || maxPrice > 0 || sortBy !== "savings" || !!q;
+    !!activeCategory || !!activeType || minStores > 1 || minPrice > 0 || maxPrice > 0 || sortBy !== "savings" || !!q;
+
 
 
   return (
