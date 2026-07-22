@@ -683,6 +683,33 @@ export type Database = {
         }
         Relationships: []
       }
+      favorite_neighborhoods: {
+        Row: {
+          city: string | null
+          created_at: string
+          id: string
+          neighborhood_key: string
+          neighborhood_name: string
+          user_id: string
+        }
+        Insert: {
+          city?: string | null
+          created_at?: string
+          id?: string
+          neighborhood_key: string
+          neighborhood_name: string
+          user_id: string
+        }
+        Update: {
+          city?: string | null
+          created_at?: string
+          id?: string
+          neighborhood_key?: string
+          neighborhood_name?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       finance_categories: {
         Row: {
           alert_threshold: number | null

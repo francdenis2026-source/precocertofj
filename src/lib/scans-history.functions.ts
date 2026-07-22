@@ -190,13 +190,21 @@ export type NeighborhoodEstablishment = {
   productsCount: number;
 };
 
+export type NeighborhoodTopProduct = {
+  name: string;
+  count: number;
+  minPrice: number | null;
+};
+
 export type NeighborhoodGroup = {
   neighborhood: string;
   city: string | null;
   establishments: NeighborhoodEstablishment[];
+  topCategories: Array<{ name: string; count: number }>;
+  topProducts: NeighborhoodTopProduct[];
 };
 
-/** Público: lista estabelecimentos ativos agrupados por bairro. */
+/** Público: lista estabelecimentos ativos agrupados por bairro, com insights. */
 export const listEstablishmentsByNeighborhood = createServerFn({ method: "GET" }).handler(
   async (): Promise<NeighborhoodGroup[]> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
@@ -209,18 +217,48 @@ export const listEstablishmentsByNeighborhood = createServerFn({ method: "GET" }
     if (estErr) throw new Error(estErr.message);
 
     const ids = (estRows ?? []).map((r) => r.id as string);
-    const counts = new Map<string, number>();
+
+    type ScanRow = {
+      establishment_id: string | null;
+      product_name: string | null;
+      price_captured: number | null;
+    };
+    let scanRows: ScanRow[] = [];
     if (ids.length > 0) {
-      const { data: scanRows } = await supabaseAdmin
+      const { data } = await supabaseAdmin
         .from("scans")
-        .select("establishment_id")
+        .select("establishment_id, product_name, price_captured")
         .in("establishment_id", ids)
         .eq("status", "salvo")
         .is("user_id", null)
-        .not("product_name", "is", null);
-      for (const row of (scanRows ?? []) as Array<{ establishment_id: string | null }>) {
-        if (!row.establishment_id) continue;
-        counts.set(row.establishment_id, (counts.get(row.establishment_id) ?? 0) + 1);
+        .not("product_name", "is", null)
+        .limit(10000);
+      scanRows = (data ?? []) as ScanRow[];
+    }
+
+    // Map produto → categoria (via product_catalog.normalized_name)
+    const categoryByName = new Map<string, string>();
+    if (scanRows.length > 0) {
+      const uniqueNames = Array.from(
+        new Set(
+          scanRows
+            .map((s) => (s.product_name ?? "").trim().toUpperCase())
+            .filter((n) => n.length > 0),
+        ),
+      );
+      // Buscar em lotes de 200 para não estourar limite
+      for (let i = 0; i < uniqueNames.length; i += 200) {
+        const chunk = uniqueNames.slice(i, i + 200);
+        const { data: catRows } = await supabaseAdmin
+          .from("product_catalog")
+          .select("normalized_name, category")
+          .in("normalized_name", chunk);
+        for (const r of (catRows ?? []) as Array<{
+          normalized_name: string;
+          category: string | null;
+        }>) {
+          if (r.category) categoryByName.set(r.normalized_name, r.category);
+        }
       }
     }
 
@@ -228,7 +266,6 @@ export const listEstablishmentsByNeighborhood = createServerFn({ method: "GET" }
       if (!s) return "Não informado";
       const trimmed = s.trim();
       if (!trimmed) return "Não informado";
-      // Title-case per word, respecting Portuguese
       return trimmed
         .toLocaleLowerCase("pt-BR")
         .split(/\s+/)
@@ -236,7 +273,19 @@ export const listEstablishmentsByNeighborhood = createServerFn({ method: "GET" }
         .join(" ");
     };
 
-    const grouped = new Map<string, NeighborhoodGroup>();
+    // Estabelecimento → bairro (chave normalizada)
+    const estToNeighborhood = new Map<string, string>();
+    const estCount = new Map<string, number>();
+
+    type Bucket = {
+      key: string;
+      city: string | null;
+      establishments: NeighborhoodEstablishment[];
+      categoryCount: Map<string, number>;
+      productAgg: Map<string, { count: number; minPrice: number | null }>;
+    };
+    const grouped = new Map<string, Bucket>();
+
     for (const r of (estRows ?? []) as Array<{
       id: string;
       name: string;
@@ -248,24 +297,99 @@ export const listEstablishmentsByNeighborhood = createServerFn({ method: "GET" }
     }>) {
       const key = normalizeName(r.neighborhood);
       const cityNorm = r.city ? normalizeName(r.city) : null;
-      const g = grouped.get(key) ?? { neighborhood: key, city: cityNorm, establishments: [] };
+      estToNeighborhood.set(r.id, key);
+
+      const g =
+        grouped.get(key) ??
+        ({
+          key,
+          city: cityNorm,
+          establishments: [],
+          categoryCount: new Map(),
+          productAgg: new Map(),
+        } as Bucket);
       g.establishments.push({
         id: r.id,
         name: r.name,
         logoUrl: r.logo_url,
         brandColor: r.brand_color,
         address: r.address,
-        productsCount: counts.get(r.id) ?? 0,
+        productsCount: 0,
       });
       grouped.set(key, g);
     }
 
+    // Agregar scans por bairro
+    for (const s of scanRows) {
+      if (!s.establishment_id) continue;
+      const bairro = estToNeighborhood.get(s.establishment_id);
+      if (!bairro) continue;
+      const bucket = grouped.get(bairro);
+      if (!bucket) continue;
+
+      estCount.set(s.establishment_id, (estCount.get(s.establishment_id) ?? 0) + 1);
+
+      const rawName = (s.product_name ?? "").trim();
+      if (!rawName) continue;
+      const upper = rawName.toUpperCase();
+
+      const cat = categoryByName.get(upper);
+      if (cat) {
+        bucket.categoryCount.set(cat, (bucket.categoryCount.get(cat) ?? 0) + 1);
+      }
+
+      const prev = bucket.productAgg.get(upper);
+      const price = s.price_captured != null ? Number(s.price_captured) : null;
+      if (prev) {
+        prev.count += 1;
+        if (price != null && (prev.minPrice == null || price < prev.minPrice)) {
+          prev.minPrice = price;
+        }
+      } else {
+        bucket.productAgg.set(upper, { count: 1, minPrice: price });
+      }
+    }
+
+    // Preencher productsCount nos estabelecimentos
+    for (const bucket of grouped.values()) {
+      for (const est of bucket.establishments) {
+        est.productsCount = estCount.get(est.id) ?? 0;
+      }
+    }
+
+    const toTitle = (s: string): string =>
+      s
+        .toLocaleLowerCase("pt-BR")
+        .split(/\s+/)
+        .map((w) => w.charAt(0).toLocaleUpperCase("pt-BR") + w.slice(1))
+        .join(" ");
+
     return Array.from(grouped.values())
-      .map((g) => ({
-        ...g,
-        establishments: g.establishments.sort((a, b) => b.productsCount - a.productsCount),
-      }))
-      .sort((a, b) => b.establishments.length - a.establishments.length);
+      .map((b) => {
+        const topCategories = Array.from(b.categoryCount.entries())
+          .sort((a, z) => z[1] - a[1])
+          .slice(0, 3)
+          .map(([name, count]) => ({ name, count }));
+
+        const topProducts: NeighborhoodTopProduct[] = Array.from(b.productAgg.entries())
+          .sort((a, z) => z[1].count - a[1].count)
+          .slice(0, 3)
+          .map(([name, agg]) => ({
+            name: toTitle(name),
+            count: agg.count,
+            minPrice: agg.minPrice,
+          }));
+
+        return {
+          neighborhood: b.key,
+          city: b.city,
+          establishments: b.establishments.sort((a, z) => z.productsCount - a.productsCount),
+          topCategories,
+          topProducts,
+        };
+      })
+      .sort((a, z) => z.establishments.length - a.establishments.length);
   },
 );
+
 
