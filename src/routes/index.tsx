@@ -621,16 +621,17 @@ function HomePage() {
 
               <div className="mt-4 space-y-2.5">
                 <PlanCard
-                  name="Weekly Pass"
+                  name="Passe Semanal"
                   price="R$ 4,90"
                   desc="7 dias · alertas WhatsApp"
                 />
                 <PlanCard
-                  name="Monthly Pro"
+                  name="Plano Mensal"
                   price="R$ 14,90"
                   desc="30 dias · alertas + cesta ideal"
                   highlight
                 />
+
               </div>
 
               <Link
@@ -667,7 +668,8 @@ function HomePage() {
               >
                 <Stat label="Lojas" value={statsQ.data ? String((statsQ.data as any).stores ?? 0) : "0"} />
                 <Stat label="Colab." value={statsQ.data ? String((statsQ.data as any).collaborators ?? 0) : "0"} />
-                <Stat label="Uptime" value="99.9%" />
+                <Stat label="No ar" value="99,9%" />
+
               </div>
             </div>
           </aside>
