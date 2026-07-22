@@ -116,19 +116,23 @@ export const backfillBatchFromScans = createServerFn({ method: "POST" })
       .single();
     if (bErr) throw new Error(bErr.message);
 
-    const items = rows.map((s) => ({
-      batch_id: batch.id,
-      product_name: s.product_name,
-      price: s.price_captured,
-      quantity: s.quantity,
-      unit: s.unit,
-      scan_id: s.id,
-      status: "created",
-      confidence: null,
-      log: null,
-    }));
-    const { error: iErr } = await supabaseAdmin.from("import_items").insert(items);
-    if (iErr) throw new Error(iErr.message);
+    const items = rows
+      .filter((s) => !!s.product_name)
+      .map((s) => ({
+        batch_id: batch.id as string,
+        product_name: s.product_name as string,
+        price: s.price_captured,
+        quantity: s.quantity,
+        unit: s.unit,
+        scan_id: s.id,
+        status: "created",
+        confidence: null,
+        log: null,
+      }));
+    if (items.length > 0) {
+      const { error: iErr } = await supabaseAdmin.from("import_items").insert(items);
+      if (iErr) throw new Error(iErr.message);
+    }
 
     return { batch_id: batch.id as string, count: rows.length };
   });
