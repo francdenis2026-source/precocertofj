@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Loader2, ShieldCheck, UserPlus, CheckCircle2, Sparkles } from "lucide-react";
+import { ArrowRight, Loader2, ShieldCheck, UserPlus, CheckCircle2, Sparkles, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
@@ -9,6 +9,42 @@ import { signUpWithCpf } from "@/lib/account.functions";
 import { maskCpf, maskPhone, validateCpfDetailed } from "@/lib/cpf";
 import { safeInternalPath } from "@/lib/auth-redirect";
 import { Logo } from "@/components/brand/Logo";
+
+// ---------- Field validators ----------
+type FieldState = { valid: boolean; msg?: string; hint?: string };
+
+function validateName(v: string): FieldState {
+  const t = v.trim();
+  if (!t) return { valid: false };
+  if (t.length < 3) return { valid: false, msg: "Muito curto — mínimo 3 letras." };
+  if (t.length > 80) return { valid: false, msg: "Máximo 80 caracteres." };
+  if (!t.includes(" ")) return { valid: false, msg: "Informe nome e sobrenome." };
+  if (!/^[\p{L}\s'.-]+$/u.test(t)) return { valid: false, msg: "Use apenas letras." };
+  return { valid: true };
+}
+function validateCpfField(v: string): FieldState {
+  const digits = v.replace(/\D/g, "");
+  if (!digits) return { valid: false };
+  if (digits.length < 11) return { valid: false, hint: `${digits.length}/11 dígitos` };
+  const r = validateCpfDetailed(v);
+  return r.valid ? { valid: true } : { valid: false, msg: r.message };
+}
+function validatePhone(v: string): FieldState {
+  const d = v.replace(/\D/g, "");
+  if (!d) return { valid: true, hint: "Opcional" };
+  if (d.length < 10) return { valid: false, hint: `${d.length}/10 dígitos` };
+  if (d.length > 11) return { valid: false, msg: "Número inválido." };
+  if (!/^\d{2}9?\d{8}$/.test(d)) return { valid: false, msg: "DDD + celular." };
+  return { valid: true };
+}
+function validatePin(v: string): FieldState {
+  const d = v.replace(/\D/g, "");
+  if (!d) return { valid: false };
+  if (d.length < 6) return { valid: false, hint: `${d.length}/6 dígitos` };
+  if (/^(\d)\1{5}$/.test(d)) return { valid: false, msg: "Evite dígitos repetidos." };
+  if (d === "123456" || d === "654321" || d === "012345") return { valid: false, msg: "PIN muito previsível." };
+  return { valid: true };
+}
 
 // Emerald Prestige tokens — mirror /login
 const PC_EMERALD_DEEP = "#043a2c";
@@ -49,6 +85,17 @@ function CadastroPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [touched, setTouched] = useState({
+    name: false, cpf: false, phone: false, password: false,
+  });
+  const markTouched = (k: keyof typeof touched) =>
+    setTouched((t) => (t[k] ? t : { ...t, [k]: true }));
+
+  const vName = useMemo(() => validateName(name), [name]);
+  const vCpf = useMemo(() => validateCpfField(cpf), [cpf]);
+  const vPhone = useMemo(() => validatePhone(phone), [phone]);
+  const vPin = useMemo(() => validatePin(password), [password]);
+  const allValid = vName.valid && vCpf.valid && vPhone.valid && vPin.valid;
 
   useEffect(() => {
     let mounted = true;
@@ -63,32 +110,20 @@ function CadastroPage() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    if (!name.trim() || name.trim().length < 3) {
-      setError("Informe seu nome completo.");
-      return;
-    }
-    const cpfCheck = validateCpfDetailed(cpf);
-    if (!cpfCheck.valid) {
-      setError(cpfCheck.message);
-      return;
-    }
-    if (!/^\d{6}$/.test(password)) {
-      setError("O PIN precisa ter exatamente 6 dígitos.");
-      return;
-    }
-    const phoneDigits = phone.replace(/\D/g, "");
-    if (phoneDigits && phoneDigits.length < 10) {
-      setError("Informe um celular válido com DDD ou deixe em branco.");
-      return;
-    }
+    setTouched({ name: true, cpf: true, phone: true, password: true });
+    if (!vName.valid) return setError(vName.msg ?? "Informe seu nome completo.");
+    if (!vCpf.valid) return setError(vCpf.msg ?? "CPF inválido.");
+    if (!vPin.valid) return setError(vPin.msg ?? "PIN de 6 dígitos.");
+    if (!vPhone.valid) return setError(vPhone.msg ?? "Celular inválido.");
+
     setLoading(true);
     try {
       const res = await signUp({
         data: {
-          cpf: cpfCheck.digits,
+          cpf: cpf.replace(/\D/g, ""),
           password,
           fullName: name.trim(),
-          phone: phoneDigits,
+          phone: phone.replace(/\D/g, ""),
           address: {},
         },
       });
@@ -246,62 +281,75 @@ function CadastroPage() {
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
               <Field
                 label="Nome completo"
                 value={name}
                 onChange={setName}
-                placeholder="Como quer ser chamado?"
+                onBlur={() => markTouched("name")}
+                placeholder="Nome e sobrenome"
                 autoComplete="name"
+                state={vName}
+                showState={touched.name}
               />
               <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <Field
                   label="CPF"
                   value={cpf}
                   onChange={(v) => setCpf(maskCpf(v))}
+                  onBlur={() => markTouched("cpf")}
                   placeholder="000.000.000-00"
                   inputMode="numeric"
                   autoComplete="username"
+                  state={vCpf}
+                  showState={touched.cpf}
                 />
                 <Field
                   label="Celular (opcional)"
                   value={phone}
                   onChange={(v) => setPhone(maskPhone(v))}
+                  onBlur={() => markTouched("phone")}
                   placeholder="(00) 00000-0000"
                   inputMode="tel"
                   autoComplete="tel"
+                  state={vPhone}
+                  showState={touched.phone}
                 />
               </div>
 
               <div>
-                <label
-                  className="mb-2 block text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500"
-                >
-                  PIN de acesso (6 dígitos)
-                </label>
+                <div className="mb-2 flex items-center justify-between">
+                  <label className="block text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
+                    PIN de acesso (6 dígitos)
+                  </label>
+                  <FieldStatus state={vPin} show={touched.password} />
+                </div>
                 <PinField
                   value={password}
                   onChange={(v) => setPassword(v.replace(/\D/g, "").slice(0, 6))}
+                  onComplete={() => markTouched("password")}
+                  hasError={touched.password && !vPin.valid}
                 />
               </div>
 
               {error && (
                 <p
-                  className="rounded-xl border px-3 py-2 text-xs"
+                  className="flex items-start gap-2 rounded-xl border px-3 py-2 text-xs"
                   style={{
                     borderColor: "rgba(220,38,38,0.25)",
                     background: "rgba(254,226,226,0.6)",
                     color: "#991b1b",
                   }}
                 >
-                  {error}
+                  <AlertCircle className="mt-0.5 h-3.5 w-3.5 flex-none" />
+                  <span>{error}</span>
                 </p>
               )}
 
               <button
                 type="submit"
-                disabled={loading}
-                className="mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold text-white shadow-lg transition disabled:opacity-60"
+                disabled={loading || !allValid}
+                className="mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl text-sm font-semibold text-white shadow-lg transition disabled:cursor-not-allowed disabled:opacity-50"
                 style={{
                   background: `linear-gradient(135deg, ${PC_EMERALD_LIGHT}, ${PC_EMERALD})`,
                   boxShadow: "0 10px 30px -12px rgba(6,78,59,0.55)",
@@ -316,6 +364,7 @@ function CadastroPage() {
                   </>
                 )}
               </button>
+
 
               <div className="flex items-center justify-between pt-1 text-xs">
                 <span className="inline-flex items-center gap-1.5 text-slate-500">
@@ -343,38 +392,72 @@ function CadastroPage() {
   );
 }
 
+function FieldStatus({ state, show }: { state: FieldState; show: boolean }) {
+  if (!show) return null;
+  if (state.valid) {
+    return (
+      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700">
+        <CheckCircle2 className="h-3 w-3" /> ok
+      </span>
+    );
+  }
+  const text = state.msg ?? state.hint;
+  if (!text) return null;
+  return (
+    <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-rose-600">
+      <AlertCircle className="h-3 w-3" /> {text}
+    </span>
+  );
+}
+
 function Field({
   label,
   value,
   onChange,
+  onBlur,
   placeholder,
   type = "text",
   inputMode,
   autoComplete,
+  state,
+  showState,
 }: {
   label: string;
   value: string;
   onChange: (v: string) => void;
+  onBlur?: () => void;
   placeholder?: string;
   type?: string;
   inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
   autoComplete?: string;
+  state?: FieldState;
+  showState?: boolean;
 }) {
+  const invalid = !!(showState && state && !state.valid && (state.msg || state.hint));
+  const good = !!(showState && state?.valid && value);
+  const border = invalid
+    ? "border-rose-300 focus:border-rose-500 focus:ring-rose-500/15"
+    : good
+      ? "border-emerald-300 focus:border-emerald-600 focus:ring-emerald-600/15"
+      : "border-slate-200 focus:border-emerald-600 focus:ring-emerald-600/15";
   return (
     <label className="block">
-      <span
-        className="mb-1.5 block text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500"
-      >
-        {label}
-      </span>
+      <div className="mb-1.5 flex items-center justify-between">
+        <span className="block text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
+          {label}
+        </span>
+        {state && <FieldStatus state={state} show={!!showState} />}
+      </div>
       <input
         type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
+        onBlur={onBlur}
         placeholder={placeholder}
         inputMode={inputMode}
         autoComplete={autoComplete}
-        className="h-11 w-full rounded-xl border border-slate-200 bg-white px-3.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-emerald-600 focus:ring-2 focus:ring-emerald-600/15"
+        aria-invalid={invalid}
+        className={`h-11 w-full rounded-xl border ${border} bg-white px-3.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:ring-2`}
       />
     </label>
   );
@@ -383,9 +466,13 @@ function Field({
 function PinField({
   value,
   onChange,
+  onComplete,
+  hasError,
 }: {
   value: string;
   onChange: (v: string) => void;
+  onComplete?: () => void;
+  hasError?: boolean;
 }) {
   const refs = useRef<Array<HTMLInputElement | null>>([]);
   const digits = value.padEnd(6, " ").slice(0, 6).split("");
@@ -395,8 +482,10 @@ function PinField({
     const next = value.split("");
     while (next.length < 6) next.push("");
     next[i] = clean;
-    onChange(next.slice(0, 6).join("").replace(/\s/g, ""));
+    const merged = next.slice(0, 6).join("").replace(/\s/g, "");
+    onChange(merged);
     if (clean && i < 5) refs.current[i + 1]?.focus();
+    if (merged.length === 6) onComplete?.();
   }
 
   function handleKey(i: number, e: React.KeyboardEvent<HTMLInputElement>) {
@@ -411,7 +500,12 @@ function PinField({
     e.preventDefault();
     onChange(txt);
     refs.current[Math.min(txt.length, 5)]?.focus();
+    if (txt.length === 6) onComplete?.();
   }
+
+  const borderCls = hasError
+    ? "border-rose-300 focus:border-rose-500 focus:ring-rose-500/20"
+    : "border-slate-200 focus:border-[color:var(--pc-gold)] focus:ring-[color:var(--pc-gold)]/25";
 
   return (
     <div className="flex gap-2">
@@ -425,13 +519,16 @@ function PinField({
           onChange={(e) => setAt(i, e.target.value)}
           onKeyDown={(e) => handleKey(i, e)}
           onPaste={handlePaste}
+          onBlur={() => value.length === 6 && onComplete?.()}
           inputMode="numeric"
           maxLength={1}
           type="password"
-          className="h-12 w-full min-w-0 rounded-xl border border-slate-200 bg-white text-center text-lg font-semibold text-slate-900 outline-none transition focus:border-[color:var(--pc-gold)] focus:ring-2 focus:ring-[color:var(--pc-gold)]/25"
+          aria-invalid={hasError}
+          className={`h-12 w-full min-w-0 rounded-xl border ${borderCls} bg-white text-center text-lg font-semibold text-slate-900 outline-none transition focus:ring-2`}
           style={{ ["--pc-gold" as string]: PC_GOLD } as React.CSSProperties}
         />
       ))}
     </div>
   );
 }
+
