@@ -52,6 +52,7 @@ import { Route as CotacaoIdRouteImport } from './routes/cotacao.$id'
 import { Route as ComprovanteIdRouteImport } from './routes/comprovante.$id'
 import { Route as CheckoutIdRouteImport } from './routes/checkout.$id'
 import { Route as CShareIdRouteImport } from './routes/c.$shareId'
+import { Route as AdminWebhooksRouteImport } from './routes/admin_.webhooks'
 import { Route as AdminSinonimosRouteImport } from './routes/admin_.sinonimos'
 import { Route as AdminReportsRouteImport } from './routes/admin_.reports'
 import { Route as AdminRankCheckRouteImport } from './routes/admin_.rank-check'
@@ -294,6 +295,11 @@ const CShareIdRoute = CShareIdRouteImport.update({
   path: '/c/$shareId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminWebhooksRoute = AdminWebhooksRouteImport.update({
+  id: '/admin_/webhooks',
+  path: '/admin/webhooks',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminSinonimosRoute = AdminSinonimosRouteImport.update({
   id: '/admin_/sinonimos',
   path: '/admin/sinonimos',
@@ -481,6 +487,7 @@ export interface FileRoutesByFullPath {
   '/admin/rank-check': typeof AdminRankCheckRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/sinonimos': typeof AdminSinonimosRoute
+  '/admin/webhooks': typeof AdminWebhooksRoute
   '/c/$shareId': typeof CShareIdRoute
   '/checkout/$id': typeof CheckoutIdRoute
   '/comprovante/$id': typeof ComprovanteIdRoute
@@ -552,6 +559,7 @@ export interface FileRoutesByTo {
   '/admin/rank-check': typeof AdminRankCheckRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/sinonimos': typeof AdminSinonimosRoute
+  '/admin/webhooks': typeof AdminWebhooksRoute
   '/c/$shareId': typeof CShareIdRoute
   '/checkout/$id': typeof CheckoutIdRoute
   '/comprovante/$id': typeof ComprovanteIdRoute
@@ -624,6 +632,7 @@ export interface FileRoutesById {
   '/admin_/rank-check': typeof AdminRankCheckRoute
   '/admin_/reports': typeof AdminReportsRoute
   '/admin_/sinonimos': typeof AdminSinonimosRoute
+  '/admin_/webhooks': typeof AdminWebhooksRoute
   '/c/$shareId': typeof CShareIdRoute
   '/checkout/$id': typeof CheckoutIdRoute
   '/comprovante/$id': typeof ComprovanteIdRoute
@@ -697,6 +706,7 @@ export interface FileRouteTypes {
     | '/admin/rank-check'
     | '/admin/reports'
     | '/admin/sinonimos'
+    | '/admin/webhooks'
     | '/c/$shareId'
     | '/checkout/$id'
     | '/comprovante/$id'
@@ -768,6 +778,7 @@ export interface FileRouteTypes {
     | '/admin/rank-check'
     | '/admin/reports'
     | '/admin/sinonimos'
+    | '/admin/webhooks'
     | '/c/$shareId'
     | '/checkout/$id'
     | '/comprovante/$id'
@@ -839,6 +850,7 @@ export interface FileRouteTypes {
     | '/admin_/rank-check'
     | '/admin_/reports'
     | '/admin_/sinonimos'
+    | '/admin_/webhooks'
     | '/c/$shareId'
     | '/checkout/$id'
     | '/comprovante/$id'
@@ -910,6 +922,7 @@ export interface RootRouteChildren {
   AdminRankCheckRoute: typeof AdminRankCheckRoute
   AdminReportsRoute: typeof AdminReportsRoute
   AdminSinonimosRoute: typeof AdminSinonimosRoute
+  AdminWebhooksRoute: typeof AdminWebhooksRoute
   CShareIdRoute: typeof CShareIdRoute
   CheckoutIdRoute: typeof CheckoutIdRoute
   ComprovanteIdRoute: typeof ComprovanteIdRoute
@@ -1228,6 +1241,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CShareIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin_/webhooks': {
+      id: '/admin_/webhooks'
+      path: '/admin/webhooks'
+      fullPath: '/admin/webhooks'
+      preLoaderRoute: typeof AdminWebhooksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin_/sinonimos': {
       id: '/admin_/sinonimos'
       path: '/admin/sinonimos'
@@ -1513,6 +1533,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRankCheckRoute: AdminRankCheckRoute,
   AdminReportsRoute: AdminReportsRoute,
   AdminSinonimosRoute: AdminSinonimosRoute,
+  AdminWebhooksRoute: AdminWebhooksRoute,
   CShareIdRoute: CShareIdRoute,
   CheckoutIdRoute: CheckoutIdRoute,
   ComprovanteIdRoute: ComprovanteIdRoute,

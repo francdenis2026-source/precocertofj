@@ -28,7 +28,7 @@ import {
 } from "@/components/ui/dialog";
 import { Loader2, RefreshCw, ShieldCheck, ShieldAlert, Search } from "lucide-react";
 
-export const Route = createFileRoute("/admin/webhooks")({
+export const Route = createFileRoute("/admin_/webhooks")({
   head: () => ({
     meta: [
       { title: "Webhooks Mercado Pago — Admin" },
