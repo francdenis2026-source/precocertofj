@@ -39,20 +39,36 @@ const brl = (cents: number) => `R$ ${(cents / 100).toFixed(2).replace(".", ",")}
 function Gestao() {
   return (
     <AppShell>
-      <div className="max-w-6xl mx-auto p-4 space-y-4">
-        <header className="flex items-center gap-3">
-          <Shield className="w-6 h-6 text-primary" />
-          <h1 className="text-2xl font-bold">Gestão administrativa</h1>
-        </header>
+      <PageHeader
+        breadcrumbs={[{ label: "Admin", to: "/admin" }, { label: "Gestão" }]}
+        eyebrow="Painel Executive"
+        title="Gestão administrativa"
+        description="Licenças, contas, colaboradores, logins, planos e pagamentos — tudo em um só lugar."
+        icon={<Shield className="h-5 w-5" style={{ color: "#b58a3c" }} />}
+        goldRule
+      />
+      <div className="mx-auto max-w-6xl space-y-5 p-4 md:p-6">
         <MetricsCards />
         <Tabs defaultValue="licencas" className="space-y-4">
-          <TabsList className="grid grid-cols-3 md:grid-cols-6 w-full">
-            <TabsTrigger value="licencas"><Ticket className="w-4 h-4 mr-1" />Licenças</TabsTrigger>
-            <TabsTrigger value="contas"><Users className="w-4 h-4 mr-1" />Contas</TabsTrigger>
-            <TabsTrigger value="colaboradores"><Gift className="w-4 h-4 mr-1" />Colaboradores</TabsTrigger>
-            <TabsTrigger value="logins"><Activity className="w-4 h-4 mr-1" />Logins</TabsTrigger>
-            <TabsTrigger value="planos"><KeyRound className="w-4 h-4 mr-1" />Planos</TabsTrigger>
-            <TabsTrigger value="pagamentos"><Wallet className="w-4 h-4 mr-1" />Pagamentos</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-3 gap-1 rounded-xl border border-border bg-card p-1 md:grid-cols-6">
+            <TabsTrigger value="licencas" className="rounded-lg text-[12px] font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Ticket className="mr-1.5 h-3.5 w-3.5" />Licenças
+            </TabsTrigger>
+            <TabsTrigger value="contas" className="rounded-lg text-[12px] font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Users className="mr-1.5 h-3.5 w-3.5" />Contas
+            </TabsTrigger>
+            <TabsTrigger value="colaboradores" className="rounded-lg text-[12px] font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Gift className="mr-1.5 h-3.5 w-3.5" />Colaboradores
+            </TabsTrigger>
+            <TabsTrigger value="logins" className="rounded-lg text-[12px] font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Activity className="mr-1.5 h-3.5 w-3.5" />Logins
+            </TabsTrigger>
+            <TabsTrigger value="planos" className="rounded-lg text-[12px] font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <KeyRound className="mr-1.5 h-3.5 w-3.5" />Planos
+            </TabsTrigger>
+            <TabsTrigger value="pagamentos" className="rounded-lg text-[12px] font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
+              <Wallet className="mr-1.5 h-3.5 w-3.5" />Pagamentos
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="licencas"><LicensesTab /></TabsContent>
           <TabsContent value="contas"><AccountsTab /></TabsContent>
@@ -61,7 +77,6 @@ function Gestao() {
           <TabsContent value="planos"><PlansTab /></TabsContent>
           <TabsContent value="pagamentos"><PaymentsTab /></TabsContent>
         </Tabs>
-
       </div>
     </AppShell>
   );
