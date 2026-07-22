@@ -27,6 +27,7 @@ import { KeyRound, Users, Ticket, Activity, Copy, RefreshCcw, Shield, Loader2, W
 import { useConfirm } from "@/components/ui/confirm-provider";
 import { PaymentsTab } from "@/components/admin/PaymentsTab";
 import { CollaboratorsTab } from "@/components/admin/CollaboratorsTab";
+import { DataTable } from "@/components/data/DataTable";
 
 export const Route = createFileRoute("/admin/gestao")({
   ssr: false,
@@ -252,10 +253,12 @@ function LicensesTab() {
   const [reissueDlg, setReissueDlg] = useState<{ id: string; code: string; days: number; notify: boolean } | null>(null);
 
   const { data: plans } = useQuery({ queryKey: ["license-plans"], queryFn: () => fetchPlans() });
-  const { data: codes, isLoading } = useQuery({
+  const codesQuery = useQuery({
     queryKey: ["license-codes", status, search],
     queryFn: () => listFn({ data: { status: status === "all" ? undefined : status, search, limit: 200 } }),
   });
+  const codes = codesQuery.data;
+  const isLoading = codesQuery.isLoading;
 
   const invalidate = () => qc.invalidateQueries({ queryKey: ["license-codes"] });
 
@@ -356,81 +359,110 @@ function LicensesTab() {
             </Select>
           </div>
         </div>
-        {isLoading ? <div className="text-center py-6"><Loader2 className="w-5 h-5 animate-spin inline" /></div> : (
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="text-left text-xs text-muted-foreground border-b">
-                <tr>
-                  <th className="py-2 px-2">Código</th>
-                  <th className="py-2 px-2">Valor</th>
-                  <th className="py-2 px-2">Status</th>
-                  <th className="py-2 px-2">Expira em</th>
-                  <th className="py-2 px-2">Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                {(codes ?? []).map((c: any) => {
-                  const isRedeemed = c.status === "redeemed";
-                  const isRevoked = c.status === "revoked";
-                  return (
-                    <tr key={c.id} className="border-b hover:bg-muted/40">
-                      <td className="py-2 px-2 font-mono">{c.code}</td>
-                      <td className="py-2 px-2">{brl(c.price_cents)}</td>
-                      <td className="py-2 px-2">
-                        <Badge variant={c.status === "paid" ? "default" : "secondary"}>{c.status}</Badge>
-                      </td>
-                      <td className="py-2 px-2 text-xs">{new Date(c.expires_at).toLocaleDateString("pt-BR")}</td>
-                      <td className="py-2 px-2 flex flex-wrap gap-1">
-                        <Button size="sm" variant="ghost" title="Copiar" onClick={() => {
-                          navigator.clipboard.writeText(c.code);
-                          toast.success("Código copiado");
-                        }}><Copy className="w-3.5 h-3.5" /></Button>
-                        <Button size="sm" variant="ghost" title="Editar validade" onClick={() =>
-                          setExpiryEdit({ id: c.id, code: c.code, iso: c.expires_at?.slice(0, 10) ?? "" })
-                        }><CalendarClock className="w-3.5 h-3.5" /></Button>
-                        {!isRedeemed && (
-                          <Button size="sm" variant="ghost" title="Reemitir código" onClick={() =>
-                            setReissueDlg({ id: c.id, code: c.code, days: 180, notify: true })
-                          }><Send className="w-3.5 h-3.5" /></Button>
-                        )}
-                        {isRevoked && (
-                          <Button size="sm" variant="ghost" title="Reativar" onClick={async () => {
-                            if (await confirm({ title: "Reativar código?", description: `${c.code} — volta ao status disponível.`, tone: "warning" })) {
-                              reactivate.mutate({ id: c.id, addDays: 0 });
-                            }
-                          }}><RotateCcw className="w-3.5 h-3.5" /></Button>
-                        )}
-                        {!isRedeemed && !isRevoked && (
-                          <Button size="sm" variant="ghost" title="Revogar" onClick={async () => {
-                            if (await confirm({ title: "Revogar código?", description: c.code, tone: "danger" })) {
-                              revoke.mutate(c.id);
-                            }
-                          }}>Revogar</Button>
-                        )}
-                        {!isRedeemed && (
-                          <Button size="sm" variant="ghost" title="Excluir permanentemente" onClick={async () => {
-                            if (await confirm({
-                              title: "Excluir código permanentemente?",
-                              description: `${c.code} será removido do banco. Esta ação não pode ser desfeita.`,
-                              tone: "danger",
-                              confirmLabel: "Excluir",
-                            })) {
-                              del.mutate(c.id);
-                            }
-                          }}><Trash2 className="w-3.5 h-3.5 text-destructive" /></Button>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
-                {(codes ?? []).length === 0 && (
-                  <tr><td colSpan={5} className="py-6 text-center text-muted-foreground">Nenhum código encontrado</td></tr>
-                )}
-              </tbody>
-            </table>
-          </div>
-        )}
+        <DataTable
+          data={codes as any[] | undefined}
+          loading={isLoading}
+          error={codesQuery.error as Error | null}
+          onRetry={() => codesQuery.refetch()}
+          pageSize={20}
+          rowKey={(c: any) => c.id}
+          emptyTitle="Nenhum código encontrado"
+          emptyDescription="Ajuste os filtros ou gere novos códigos em lote acima."
+          emptyIcon={<Ticket className="h-5 w-5 text-muted-foreground" />}
+          defaultSort={{ key: "expires_at", dir: "desc" }}
+          columns={[
+            {
+              key: "code",
+              header: "Código",
+              sortable: true,
+              accessor: (c: any) => c.code,
+              cell: (c: any) => <span className="font-mono text-[12px]">{c.code}</span>,
+            },
+            {
+              key: "price_cents",
+              header: "Valor",
+              sortable: true,
+              align: "right",
+              accessor: (c: any) => c.price_cents,
+              cell: (c: any) => brl(c.price_cents),
+            },
+            {
+              key: "status",
+              header: "Status",
+              sortable: true,
+              accessor: (c: any) => c.status,
+              cell: (c: any) => (
+                <Badge variant={c.status === "paid" ? "default" : "secondary"} className="text-[10px]">
+                  {c.status}
+                </Badge>
+              ),
+            },
+            {
+              key: "expires_at",
+              header: "Expira em",
+              sortable: true,
+              accessor: (c: any) => (c.expires_at ? new Date(c.expires_at) : null),
+              cell: (c: any) => (
+                <span className="text-[12px] text-muted-foreground">
+                  {c.expires_at ? new Date(c.expires_at).toLocaleDateString("pt-BR") : "—"}
+                </span>
+              ),
+            },
+            {
+              key: "actions",
+              header: "Ações",
+              align: "right",
+              cell: (c: any) => {
+                const isRedeemed = c.status === "redeemed";
+                const isRevoked = c.status === "revoked";
+                return (
+                  <div className="flex flex-wrap justify-end gap-1">
+                    <Button size="sm" variant="ghost" title="Copiar" onClick={() => {
+                      navigator.clipboard.writeText(c.code);
+                      toast.success("Código copiado");
+                    }}><Copy className="w-3.5 h-3.5" /></Button>
+                    <Button size="sm" variant="ghost" title="Editar validade" onClick={() =>
+                      setExpiryEdit({ id: c.id, code: c.code, iso: c.expires_at?.slice(0, 10) ?? "" })
+                    }><CalendarClock className="w-3.5 h-3.5" /></Button>
+                    {!isRedeemed && (
+                      <Button size="sm" variant="ghost" title="Reemitir código" onClick={() =>
+                        setReissueDlg({ id: c.id, code: c.code, days: 180, notify: true })
+                      }><Send className="w-3.5 h-3.5" /></Button>
+                    )}
+                    {isRevoked && (
+                      <Button size="sm" variant="ghost" title="Reativar" onClick={async () => {
+                        if (await confirm({ title: "Reativar código?", description: `${c.code} — volta ao status disponível.`, tone: "warning" })) {
+                          reactivate.mutate({ id: c.id, addDays: 0 });
+                        }
+                      }}><RotateCcw className="w-3.5 h-3.5" /></Button>
+                    )}
+                    {!isRedeemed && !isRevoked && (
+                      <Button size="sm" variant="ghost" title="Revogar" onClick={async () => {
+                        if (await confirm({ title: "Revogar código?", description: c.code, tone: "danger" })) {
+                          revoke.mutate(c.id);
+                        }
+                      }}>Revogar</Button>
+                    )}
+                    {!isRedeemed && (
+                      <Button size="sm" variant="ghost" title="Excluir permanentemente" onClick={async () => {
+                        if (await confirm({
+                          title: "Excluir código permanentemente?",
+                          description: `${c.code} será removido do banco. Esta ação não pode ser desfeita.`,
+                          tone: "danger",
+                          confirmLabel: "Excluir",
+                        })) {
+                          del.mutate(c.id);
+                        }
+                      }}><Trash2 className="w-3.5 h-3.5 text-destructive" /></Button>
+                    )}
+                  </div>
+                );
+              },
+            },
+          ]}
+        />
       </Card>
+
 
       {/* Diálogo: editar validade */}
       <Dialog open={!!expiryEdit} onOpenChange={(v) => !v && setExpiryEdit(null)}>
