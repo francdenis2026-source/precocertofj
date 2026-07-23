@@ -385,6 +385,10 @@ function RedeemPage() {
                 </div>
               )}
 
+              {/* Preview em tempo real do código antes do envio */}
+              <CodePreviewPanel loading={previewLoading} data={previewData} enabled={canSubmit} />
+
+
               <button
                 type="submit"
                 disabled={submitting || !canSubmit}
