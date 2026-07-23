@@ -255,6 +255,8 @@
   --pc-home-gold: #d7ad54;
   --pc-home-gold-soft: #ffe3a0;
   --pc-home-line: oklch(0.31 0.045 258);
+  --pc-home-heading: #f5f6fa;
+  --pc-home-on-navy: #f5f6fa;
   --pc-home-dot-opacity: 0.10;
   --pc-home-hero-overlay: linear-gradient(180deg, rgb(7 17 38 / 0.66) 0%, rgb(7 17 38 / 0.42) 46%, rgb(7 17 38 / 0.82) 100%), radial-gradient(78% 58% at 16% 42%, rgb(7 17 38 / 0.44) 0%, rgb(7 17 38 / 0.18) 48%, transparent 72%), radial-gradient(65% 55% at 84% 28%, rgb(37 99 235 / 0.20) 0%, transparent 64%);
   --pc-home-explore-bg: #071126;
