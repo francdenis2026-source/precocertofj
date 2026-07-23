@@ -570,6 +570,12 @@
   .admin-scope th, .admin-scope td { padding-inline: 0.5rem; }
 }
 
+/* Piso de legibilidade — texto de leitura em qualquer <main> nunca abaixo de 13px.
+   Preserva badges/overlines dentro de <span>/<small> intencionalmente pequenos. */
+main :is(p, li, dt, dd, td, th, label, a, button, input, textarea, figcaption) {
+  font-size: max(13px, 1em);
+}
+
 /* Escopo do cliente — painel mais legível em desktop/tablet/mobile */
 .app-scope {
   font-size: clamp(15px, 0.45vw + 13.5px, 17px);
