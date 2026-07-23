@@ -134,7 +134,7 @@ function ProductsHistoryPage() {
               <EmptyState
                 icon={Package}
                 title="Nenhum produto cadastrado"
-                description="Cadastre seu primeiro produto para vê-lo aqui."
+                message="Cadastre seu primeiro produto para vê-lo aqui."
                 action={
                   <Button asChild variant="default" size="sm">
                     <Link to="/">Cadastrar produto</Link>

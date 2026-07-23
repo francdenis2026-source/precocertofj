@@ -156,7 +156,7 @@ function ScansHistoryPage() {
               <EmptyState
                 icon={History}
                 title="Nenhum scan ainda"
-                description="Faça seu primeiro scan para vê-lo aqui."
+                message="Faça seu primeiro scan para vê-lo aqui."
                 action={
                   <Button asChild variant="default" size="sm">
                     <Link to="/">Fazer scan</Link>
