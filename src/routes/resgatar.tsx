@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Logo } from "@/components/brand/Logo";
+import { AuthHero } from "@/components/auth/AuthHero";
 
 /* Ocean Modern — navy #0f2b52 + dourado #f5b301 (alinhado à homepage) */
 const NAVY = "#0f2b52";
@@ -336,12 +337,13 @@ function RedeemPage() {
         </Link>
       </header>
 
-      <main className="mx-auto w-full max-w-md px-4 pb-12">
-        {/* Card compacto branco — alto contraste */}
-        <div
-          className="overflow-hidden rounded-2xl border bg-white shadow-[0_16px_48px_-24px_rgba(15,27,61,0.35)]"
-          style={{ borderColor: LINE }}
-        >
+      <main className="mx-auto w-full max-w-4xl px-4 pb-12">
+        <div className="grid grid-cols-1 overflow-hidden rounded-2xl border bg-white shadow-[0_16px_48px_-24px_rgba(15,27,61,0.35)] md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]" style={{ borderColor: LINE }}>
+          {/* LEFT — Hero reutilizável */}
+          <AuthHero variant="redeem" />
+          {/* RIGHT — Card compacto branco */}
+          <div className="overflow-hidden bg-white">
+
           {/* Faixa navy topo */}
           <div
             className="flex items-center gap-3 px-5 py-3.5"
@@ -601,6 +603,9 @@ function RedeemPage() {
             </form>
           )}
         </div>
+        </div>
+
+
 
         {/* Nota fora do card */}
         <p className="mt-4 text-center text-[11px]" style={{ color: MUTED }}>
