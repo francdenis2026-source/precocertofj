@@ -1641,3 +1641,122 @@ iframe[src*="lovable.dev/badge"] {
 @keyframes skeleton-shimmer {
   100% { transform: translateX(100%); }
 }
+
+/* ============================================================
+   WAVE 5 — Responsividade & Microinterações
+   ============================================================ */
+
+/* Tipografia fluida — escala automática entre mobile e desktop */
+@utility text-fluid-xs   { font-size: clamp(0.75rem, 0.72rem + 0.15vw, 0.8125rem); line-height: 1.4; }
+@utility text-fluid-sm   { font-size: clamp(0.8125rem, 0.78rem + 0.2vw, 0.9375rem); line-height: 1.5; }
+@utility text-fluid-base { font-size: clamp(0.9375rem, 0.9rem + 0.25vw, 1.0625rem); line-height: 1.55; }
+@utility text-fluid-lg   { font-size: clamp(1.0625rem, 1rem + 0.4vw, 1.25rem); line-height: 1.5; }
+@utility text-fluid-xl   { font-size: clamp(1.25rem, 1.15rem + 0.6vw, 1.5rem); line-height: 1.4; letter-spacing: -0.01em; }
+@utility text-fluid-2xl  { font-size: clamp(1.5rem, 1.3rem + 1vw, 1.875rem); line-height: 1.25; letter-spacing: -0.015em; }
+@utility text-fluid-3xl  { font-size: clamp(1.875rem, 1.55rem + 1.6vw, 2.5rem); line-height: 1.15; letter-spacing: -0.02em; }
+@utility text-fluid-4xl  { font-size: clamp(2.25rem, 1.8rem + 2.4vw, 3.25rem); line-height: 1.1; letter-spacing: -0.025em; }
+@utility text-fluid-hero { font-size: clamp(2.5rem, 1.9rem + 3.2vw, 4rem); line-height: 1.05; letter-spacing: -0.03em; font-weight: 800; }
+
+/* Safe-area — respeita notch/gesture bar (iOS/Android) */
+@utility safe-top    { padding-top: max(env(safe-area-inset-top), 0px); }
+@utility safe-bottom { padding-bottom: max(env(safe-area-inset-bottom), 0px); }
+@utility safe-x      {
+  padding-left: max(env(safe-area-inset-left), 0px);
+  padding-right: max(env(safe-area-inset-right), 0px);
+}
+
+/* Press — feedback tátil unificado (botões, rows, cards clicáveis) */
+@utility press {
+  transition: transform var(--dur-base, 180ms) var(--ease-out-smooth, cubic-bezier(0.2, 0.7, 0.2, 1)),
+              background-color var(--dur-base, 180ms) ease;
+  &:active { transform: scale(0.97); }
+}
+@utility press-sm {
+  transition: transform 120ms var(--ease-out-smooth, cubic-bezier(0.2, 0.7, 0.2, 1));
+  &:active { transform: scale(0.98); }
+}
+
+/* Interactive-row — linhas de lista clicáveis com feedback consistente */
+@utility interactive-row {
+  transition: background-color var(--dur-base, 180ms) ease,
+              border-color var(--dur-base, 180ms) ease,
+              transform var(--dur-base, 180ms) var(--ease-out-smooth, cubic-bezier(0.2, 0.7, 0.2, 1));
+  &:hover { background: color-mix(in oklab, var(--color-primary) 4%, var(--color-card)); }
+  &:active { transform: scale(0.995); }
+  &:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--color-background),
+      0 0 0 4px color-mix(in oklab, var(--color-primary) 60%, transparent);
+  }
+}
+
+/* Reveal on scroll — usa scroll-timeline quando suportado */
+@utility reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: reveal-in 0.6s var(--ease-out-smooth, cubic-bezier(0.2, 0.7, 0.2, 1)) forwards;
+}
+@supports (animation-timeline: view()) {
+  .reveal-on-scroll {
+    opacity: 0;
+    transform: translateY(16px);
+    animation: reveal-in 0.7s var(--ease-out-smooth, cubic-bezier(0.2, 0.7, 0.2, 1)) both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 30%;
+  }
+}
+@keyframes reveal-in {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Stagger — filhos entram sequencialmente (use com .reveal em irmãos) */
+@utility stagger-children {
+  & > * { animation: reveal-in 0.55s var(--ease-out-smooth, cubic-bezier(0.2, 0.7, 0.2, 1)) both; }
+  & > *:nth-child(1) { animation-delay: 0ms; }
+  & > *:nth-child(2) { animation-delay: 60ms; }
+  & > *:nth-child(3) { animation-delay: 120ms; }
+  & > *:nth-child(4) { animation-delay: 180ms; }
+  & > *:nth-child(5) { animation-delay: 240ms; }
+  & > *:nth-child(6) { animation-delay: 300ms; }
+  & > *:nth-child(7) { animation-delay: 360ms; }
+  & > *:nth-child(8) { animation-delay: 420ms; }
+  & > *:nth-child(n+9) { animation-delay: 480ms; }
+}
+
+/* Icon-spin-on-hover — micro-interação para ícones em botões */
+@utility icon-nudge {
+  & > svg { transition: transform var(--dur-base, 180ms) var(--ease-out-smooth, cubic-bezier(0.2, 0.7, 0.2, 1)); }
+  &:hover > svg { transform: translateX(2px); }
+}
+
+/* Scroll-shadow — sombra de rolagem em containers overflow */
+@utility scroll-shadow {
+  background:
+    linear-gradient(var(--color-background) 30%, transparent) top / 100% 24px no-repeat,
+    linear-gradient(transparent, var(--color-background) 70%) bottom / 100% 24px no-repeat,
+    radial-gradient(farthest-side at 50% 0, oklch(0 0 0 / 0.08), transparent) top / 100% 8px no-repeat,
+    radial-gradient(farthest-side at 50% 100%, oklch(0 0 0 / 0.08), transparent) bottom / 100% 8px no-repeat;
+  background-attachment: local, local, scroll, scroll;
+}
+
+/* Container-page-narrow — variação para leitura (blogs, artigos) */
+@utility container-page-narrow {
+  width: 100%;
+  margin-inline: auto;
+  max-width: 48rem; /* 768px */
+  padding-inline: 1rem;
+}
+@media (min-width: 640px) { .container-page-narrow { padding-inline: 1.5rem; } }
+
+/* Grid auto-fit — colunas responsivas sem breakpoints manuais */
+@utility grid-auto-cards {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+}
+@utility grid-auto-tight {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 12rem), 1fr));
+}
