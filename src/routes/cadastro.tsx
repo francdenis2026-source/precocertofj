@@ -533,11 +533,11 @@ function PinField({
   }
 
   const borderCls = hasError
-    ? "border-rose-300 focus:border-rose-500 focus:ring-rose-500/20"
-    : "border-slate-200 focus:border-[color:var(--pc-gold)] focus:ring-[color:var(--pc-gold)]/25";
+    ? "border-rose-400 focus:border-rose-500 focus:ring-rose-500/20"
+    : "border-slate-300 hover:border-slate-400 focus:border-[color:var(--pc-navy)] focus:ring-[color:var(--pc-navy)]/20";
 
   return (
-    <div className="flex gap-2">
+    <div className="grid grid-cols-6 gap-2 sm:gap-2.5">
       {digits.map((d, i) => (
         <input
           key={i}
@@ -553,8 +553,11 @@ function PinField({
           maxLength={1}
           type="password"
           aria-invalid={hasError}
-          className={`h-12 w-full min-w-0 rounded-xl border ${borderCls} bg-white text-center text-lg font-semibold text-slate-900 outline-none transition focus:ring-2`}
-          style={{ ["--pc-gold" as string]: PC_GOLD } as React.CSSProperties}
+          className={`h-14 w-full min-w-0 rounded-xl border-2 ${borderCls} bg-slate-50/60 text-center text-2xl font-black text-slate-900 outline-none transition focus:bg-white focus:ring-4`}
+          style={{
+            ["--pc-navy" as string]: "#0f1b3d",
+            fontFeatureSettings: '"tnum" 1',
+          } as React.CSSProperties}
         />
       ))}
     </div>
