@@ -1986,6 +1986,8 @@ export type Database = {
           neighborhood: string | null
           paid_until: string | null
           phone: string
+          suspended_at: string | null
+          suspended_reason: string | null
           total_logins: number
           trial_ends_at: string
           trial_started_at: string
@@ -2009,6 +2011,8 @@ export type Database = {
           neighborhood?: string | null
           paid_until?: string | null
           phone: string
+          suspended_at?: string | null
+          suspended_reason?: string | null
           total_logins?: number
           trial_ends_at?: string
           trial_started_at?: string
@@ -2032,6 +2036,8 @@ export type Database = {
           neighborhood?: string | null
           paid_until?: string | null
           phone?: string
+          suspended_at?: string | null
+          suspended_reason?: string | null
           total_logins?: number
           trial_ends_at?: string
           trial_started_at?: string
