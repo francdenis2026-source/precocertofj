@@ -2019,6 +2019,7 @@ export type Database = {
           phone: string
           suspended_at: string | null
           suspended_reason: string | null
+          theme_preference: string
           total_logins: number
           trial_ends_at: string
           trial_started_at: string
@@ -2045,6 +2046,7 @@ export type Database = {
           phone: string
           suspended_at?: string | null
           suspended_reason?: string | null
+          theme_preference?: string
           total_logins?: number
           trial_ends_at?: string
           trial_started_at?: string
@@ -2071,6 +2073,7 @@ export type Database = {
           phone?: string
           suspended_at?: string | null
           suspended_reason?: string | null
+          theme_preference?: string
           total_logins?: number
           trial_ends_at?: string
           trial_started_at?: string
