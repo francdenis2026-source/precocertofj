@@ -166,12 +166,25 @@
   --pc-home-navy: #0f1b3d;
   --pc-home-navy-2: #324c73;
   --pc-home-gold: #b58a3c;
-  --pc-home-gold-soft: #f2dfa8;
+  --pc-home-gold-soft: #8a6218;
   --pc-home-line: #dfe3ec;
   --pc-home-dot-opacity: 0.05;
-  --pc-home-hero-overlay: linear-gradient(180deg, rgb(15 27 61 / 0.90) 0%, rgb(15 27 61 / 0.76) 46%, rgb(15 27 61 / 0.94) 100%), radial-gradient(80% 60% at 15% 40%, rgb(181 138 60 / 0.16) 0%, transparent 60%);
-  --pc-home-explore-overlay: linear-gradient(180deg, rgb(15 27 61 / 0.95) 0%, rgb(15 27 61 / 0.80) 45%, rgb(15 27 61 / 0.96) 100%);
-  --pc-home-cta-gradient: linear-gradient(140deg, #0f1b3d 0%, #324c73 100%);
+  /* LIGHT: overlay claro sobre a foto do hero — mantém legibilidade sem escurecer */
+  --pc-home-hero-overlay: linear-gradient(180deg, rgb(245 246 250 / 0.82) 0%, rgb(245 246 250 / 0.70) 46%, rgb(245 246 250 / 0.92) 100%), radial-gradient(80% 60% at 15% 40%, rgb(181 138 60 / 0.14) 0%, transparent 60%);
+  --pc-home-explore-bg: #eef1f7;
+  --pc-home-explore-overlay: linear-gradient(180deg, rgb(238 241 247 / 0.92) 0%, rgb(238 241 247 / 0.72) 45%, rgb(238 241 247 / 0.96) 100%);
+  --pc-home-cta-gradient: linear-gradient(140deg, #f7ecd1 0%, #e9d59a 100%);
+  /* "sobre hero/explore/cta": em light o fundo é claro, texto vira navy */
+  --pc-home-onhero-fg: #08122a;
+  --pc-home-onhero-fg-90: rgb(8 18 42 / 0.90);
+  --pc-home-onhero-fg-85: rgb(8 18 42 / 0.82);
+  --pc-home-onhero-fg-80: rgb(8 18 42 / 0.76);
+  --pc-home-onhero-glass-soft: rgb(15 27 61 / 0.05);
+  --pc-home-onhero-glass: rgb(15 27 61 / 0.08);
+  --pc-home-onhero-glass-hover: rgb(15 27 61 / 0.12);
+  --pc-home-onhero-border-soft: rgb(15 27 61 / 0.12);
+  --pc-home-onhero-border: rgb(15 27 61 / 0.22);
+  --pc-home-onhero-border-hover: rgb(15 27 61 / 0.38);
 
   color-scheme: light;
 }
