@@ -47,7 +47,7 @@ const listOptions = (search: string, sort: "recent" | "logins" | "name" | "last_
     staleTime: 15_000,
   });
 
-export const Route = createFileRoute("/admin/clientes")({
+export const Route = createFileRoute("/admin_/clientes")({
   beforeLoad: adminBeforeLoad,
   head: () => ({
     meta: [

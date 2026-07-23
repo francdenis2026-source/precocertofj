@@ -73,6 +73,7 @@ import { Route as AdminCupomRouteImport } from './routes/admin_.cupom'
 import { Route as AdminConversoesRouteImport } from './routes/admin_.conversoes'
 import { Route as AdminConsistenciaRouteImport } from './routes/admin_.consistencia'
 import { Route as AdminCoberturaRouteImport } from './routes/admin_.cobertura'
+import { Route as AdminClientesRouteImport } from './routes/admin_.clientes'
 import { Route as AdminCategorizacaoRouteImport } from './routes/admin_.categorizacao'
 import { Route as AdminCatalogoRouteImport } from './routes/admin_.catalogo'
 import { Route as AdminCadastroFotoRouteImport } from './routes/admin_.cadastro-foto'
@@ -409,6 +410,11 @@ const AdminCoberturaRoute = AdminCoberturaRouteImport.update({
   path: '/admin/cobertura',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminClientesRoute = AdminClientesRouteImport.update({
+  id: '/admin_/clientes',
+  path: '/admin/clientes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminCategorizacaoRoute = AdminCategorizacaoRouteImport.update({
   id: '/admin_/categorizacao',
   path: '/admin/categorizacao',
@@ -534,6 +540,7 @@ export interface FileRoutesByFullPath {
   '/admin/cadastro-foto': typeof AdminCadastroFotoRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorizacao': typeof AdminCategorizacaoRoute
+  '/admin/clientes': typeof AdminClientesRoute
   '/admin/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin/consistencia': typeof AdminConsistenciaRoute
   '/admin/conversoes': typeof AdminConversoesRoute
@@ -615,6 +622,7 @@ export interface FileRoutesByTo {
   '/admin/cadastro-foto': typeof AdminCadastroFotoRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorizacao': typeof AdminCategorizacaoRoute
+  '/admin/clientes': typeof AdminClientesRoute
   '/admin/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin/consistencia': typeof AdminConsistenciaRoute
   '/admin/conversoes': typeof AdminConversoesRoute
@@ -697,6 +705,7 @@ export interface FileRoutesById {
   '/admin_/cadastro-foto': typeof AdminCadastroFotoRoute
   '/admin_/catalogo': typeof AdminCatalogoRoute
   '/admin_/categorizacao': typeof AdminCategorizacaoRoute
+  '/admin_/clientes': typeof AdminClientesRoute
   '/admin_/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin_/consistencia': typeof AdminConsistenciaRoute
   '/admin_/conversoes': typeof AdminConversoesRoute
@@ -780,6 +789,7 @@ export interface FileRouteTypes {
     | '/admin/cadastro-foto'
     | '/admin/catalogo'
     | '/admin/categorizacao'
+    | '/admin/clientes'
     | '/admin/cobertura'
     | '/admin/consistencia'
     | '/admin/conversoes'
@@ -861,6 +871,7 @@ export interface FileRouteTypes {
     | '/admin/cadastro-foto'
     | '/admin/catalogo'
     | '/admin/categorizacao'
+    | '/admin/clientes'
     | '/admin/cobertura'
     | '/admin/consistencia'
     | '/admin/conversoes'
@@ -942,6 +953,7 @@ export interface FileRouteTypes {
     | '/admin_/cadastro-foto'
     | '/admin_/catalogo'
     | '/admin_/categorizacao'
+    | '/admin_/clientes'
     | '/admin_/cobertura'
     | '/admin_/consistencia'
     | '/admin_/conversoes'
@@ -1023,6 +1035,7 @@ export interface RootRouteChildren {
   AdminCadastroFotoRoute: typeof AdminCadastroFotoRoute
   AdminCatalogoRoute: typeof AdminCatalogoRoute
   AdminCategorizacaoRoute: typeof AdminCategorizacaoRoute
+  AdminClientesRoute: typeof AdminClientesRoute
   AdminCoberturaRoute: typeof AdminCoberturaRouteWithChildren
   AdminConsistenciaRoute: typeof AdminConsistenciaRoute
   AdminConversoesRoute: typeof AdminConversoesRoute
@@ -1506,6 +1519,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCoberturaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin_/clientes': {
+      id: '/admin_/clientes'
+      path: '/admin/clientes'
+      fullPath: '/admin/clientes'
+      preLoaderRoute: typeof AdminClientesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin_/categorizacao': {
       id: '/admin_/categorizacao'
       path: '/admin/categorizacao'
@@ -1706,6 +1726,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminCadastroFotoRoute: AdminCadastroFotoRoute,
   AdminCatalogoRoute: AdminCatalogoRoute,
   AdminCategorizacaoRoute: AdminCategorizacaoRoute,
+  AdminClientesRoute: AdminClientesRoute,
   AdminCoberturaRoute: AdminCoberturaRouteWithChildren,
   AdminConsistenciaRoute: AdminConsistenciaRoute,
   AdminConversoesRoute: AdminConversoesRoute,
