@@ -141,6 +141,7 @@ function ClientesPage() {
             <Button variant="ghost" size="sm" onClick={() => list.refetch()} className="gap-1.5">
               <RefreshCw className="h-3.5 w-3.5" /> Atualizar
             </Button>
+            <ExportButton search={search} sort={sort} />
           </div>
 
           <div className="overflow-x-auto rounded-md border">
