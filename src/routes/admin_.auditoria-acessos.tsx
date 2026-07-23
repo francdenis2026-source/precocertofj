@@ -6,13 +6,19 @@
  */
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
+import { toast } from "sonner";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import {
   adminGetLoginStats,
   adminListLoginEvents,
 } from "@/lib/admin-customers.functions";
+import {
+  adminBlockIp,
+  adminUnblockIp,
+  adminListBlockedIps,
+} from "@/lib/admin-security.functions";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -36,7 +42,7 @@ import {
   Legend,
   CartesianGrid,
 } from "recharts";
-import { ShieldAlert, Activity, RefreshCw, TrendingUp } from "lucide-react";
+import { ShieldAlert, Activity, RefreshCw, TrendingUp, Ban, Shield } from "lucide-react";
 
 export const Route = createFileRoute("/admin_/auditoria-acessos")({
   beforeLoad: adminBeforeLoad,
