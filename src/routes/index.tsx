@@ -433,7 +433,7 @@ function HomePage() {
                 <h2
                   className={`${serif} font-normal`}
                   style={{
-                    fontSize: "clamp(1.6rem, 3.6vw, 2.75rem)",
+                    fontSize: "clamp(1.5rem, 3.2vw, 2.35rem)",
                     lineHeight: 1,
                     letterSpacing: "-0.025em",
                     color: "#F5F6FA",
