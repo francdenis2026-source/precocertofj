@@ -51,7 +51,7 @@ export function PriceAlertSubscriptions() {
     <section className="mt-10">
       <header className="flex items-center gap-2">
         <Bell className="h-4 w-4 text-primary" />
-        <h2 className="font-serif text-lg">Assinaturas de variação</h2>
+        <h2 className="font-display text-lg font-semibold tracking-tight">Assinaturas de variação</h2>
       </header>
       <p className="mt-1 text-xs text-muted-foreground">
         Definimos alertas quando o preço destes produtos cair/subir acima do limite.
