@@ -131,6 +131,12 @@ export const Route = createFileRoute("/melhores-precos")({
       <MelhoresPrecosPage />
     </ProtectedGate>
   ),
+  errorComponent: ({ error, reset }) => (
+    <RouteError message={(error as Error)?.message} onRetry={reset} />
+  ),
+  notFoundComponent: () => (
+    <RouteError title="Página não encontrada" message="Volte para o início e tente novamente." />
+  ),
 });
 
 
