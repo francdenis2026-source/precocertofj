@@ -300,76 +300,122 @@
   }
 }
 
-/* ============= NEW TYPE SCALE ============= */
+/* ============= TYPOGRAPHY DESIGN TOKENS =============
+ * Fonte única para tamanhos, pesos e tracking. Utilities e componentes
+ * (SiteHeader, PageHeader, cards, admin) devem ler daqui para garantir
+ * consistência entre web e mobile.
+ */
+:root {
+  /* Font sizes (clamp) — escalam de mobile → desktop de forma legível */
+  --fs-display: clamp(2.5rem, 6vw, 4rem);
+  --fs-h1:      clamp(2rem, 3.6vw, 2.625rem);
+  --fs-h2:      clamp(1.5rem, 2.6vw, 1.875rem);
+  --fs-h3:      clamp(1.175rem, 1.6vw, 1.3125rem);
+  --fs-title:   clamp(1.0625rem, 1.2vw, 1.125rem);
+  --fs-subtitle: clamp(1rem, 1vw, 1.0625rem);
+  --fs-body:    clamp(0.9375rem, 1vw, 1rem);
+  --fs-body-sm: clamp(0.875rem, 0.95vw, 0.9375rem);
+  --fs-caption: 0.8125rem;
+  --fs-overline: 0.75rem;
+
+  /* Weights */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-semibold: 600;
+  --fw-bold: 700;
+  --fw-black: 800;
+
+  /* Tracking */
+  --tk-tight-xl: -0.032em;
+  --tk-tight-lg: -0.024em;
+  --tk-tight-md: -0.018em;
+  --tk-tight-sm: -0.012em;
+  --tk-normal: 0;
+  --tk-wide-sm: 0.06em;
+  --tk-wide-lg: 0.16em;
+
+  /* Leading */
+  --lh-display: 1.04;
+  --lh-heading: 1.12;
+  --lh-title: 1.28;
+  --lh-body: 1.6;
+}
+
 @utility text-display {
   font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: clamp(2.25rem, 5vw, 3.75rem);
-  line-height: 1.02;
-  letter-spacing: -0.032em;
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-display);
+  line-height: var(--lh-display);
+  letter-spacing: var(--tk-tight-xl);
 }
 @utility text-editorial {
   font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(2.4rem, 5.4vw, 4rem);
-  line-height: 1.02;
-  letter-spacing: -0.02em;
+  font-weight: var(--fw-regular);
+  font-size: clamp(2.6rem, 5.6vw, 4.25rem);
+  line-height: var(--lh-display);
+  letter-spacing: var(--tk-tight-md);
 }
 @utility text-h1 {
   font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: clamp(1.8rem, 3.2vw, 2.4rem);
-  line-height: 1.08;
-  letter-spacing: -0.026em;
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h1);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tk-tight-lg);
 }
 @utility text-h2 {
   font-family: var(--font-sans);
-  font-weight: 700;
-  font-size: clamp(1.375rem, 2.4vw, 1.75rem);
-  line-height: 1.12;
-  letter-spacing: -0.02em;
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h2);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--tk-tight-md);
 }
 @utility text-h3 {
   font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 1.15rem;
-  line-height: 1.22;
-  letter-spacing: -0.014em;
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h3);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tk-tight-sm);
 }
 @utility text-title {
   font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 1rem;
-  line-height: 1.35;
-  letter-spacing: -0.012em;
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-title);
+  line-height: var(--lh-title);
+  letter-spacing: var(--tk-tight-sm);
 }
 @utility text-subtitle {
   font-family: var(--font-sans);
-  font-weight: 500;
-  font-size: 0.9375rem;
-  line-height: 1.45;
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-subtitle);
+  line-height: 1.5;
   letter-spacing: -0.005em;
   color: var(--color-muted-foreground);
 }
 @utility text-body {
   font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: 0.9375rem;
-  line-height: 1.6;
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+}
+@utility text-body-sm {
+  font-family: var(--font-sans);
+  font-weight: var(--fw-regular);
+  font-size: var(--fs-body-sm);
+  line-height: 1.55;
 }
 @utility text-caption {
   font-family: var(--font-sans);
-  font-weight: 500;
-  font-size: 0.75rem;
-  line-height: 1.4;
+  font-weight: var(--fw-medium);
+  font-size: var(--fs-caption);
+  line-height: 1.45;
   color: var(--color-muted-foreground);
 }
 @utility text-overline {
   font-family: var(--font-sans);
-  font-weight: 600;
-  font-size: 0.6875rem;
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-overline);
   line-height: 1;
-  letter-spacing: 0.16em;
+  letter-spacing: var(--tk-wide-lg);
   text-transform: uppercase;
   color: var(--color-muted-foreground);
 }
@@ -379,9 +425,20 @@
   font-family: var(--font-mono);
   font-variant-numeric: tabular-nums;
   font-feature-settings: "tnum", "zero";
-  font-weight: 600;
+  font-weight: var(--fw-semibold);
   letter-spacing: -0.025em;
 }
+
+/* Escopo admin — aplica o DS tipográfico a headings/labels dentro
+ * de qualquer página /admin sem tocar 25+ arquivos. */
+main .admin-scope h1 { font-family: var(--font-sans); font-weight: var(--fw-bold); font-size: var(--fs-h1); line-height: var(--lh-heading); letter-spacing: var(--tk-tight-lg); }
+main .admin-scope h2 { font-family: var(--font-sans); font-weight: var(--fw-bold); font-size: var(--fs-h2); line-height: var(--lh-heading); letter-spacing: var(--tk-tight-md); }
+main .admin-scope h3 { font-family: var(--font-sans); font-weight: var(--fw-semibold); font-size: var(--fs-h3); line-height: var(--lh-title); letter-spacing: var(--tk-tight-sm); }
+main .admin-scope h4 { font-family: var(--font-sans); font-weight: var(--fw-semibold); font-size: var(--fs-title); line-height: var(--lh-title); letter-spacing: var(--tk-tight-sm); }
+main .admin-scope [data-slot="card-title"] { font-size: var(--fs-title); font-weight: var(--fw-semibold); letter-spacing: var(--tk-tight-sm); }
+main .admin-scope [data-slot="card-description"] { font-size: var(--fs-body-sm); line-height: 1.55; }
+main .admin-scope label { font-size: var(--fs-body-sm); font-weight: var(--fw-medium); letter-spacing: -0.005em; }
+main .admin-scope button { letter-spacing: -0.005em; }
 
 /* Sombras discretas — apenas 2 níveis (Stripe/Linear-like) */
 @utility shadow-elev-1 {
