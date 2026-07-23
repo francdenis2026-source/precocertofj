@@ -10,9 +10,8 @@ import {
   Search,
   ArrowRight,
   TrendingDown,
-  ShieldCheck,
-  Store,
   Sparkles,
+  Store,
   Trophy,
 } from "lucide-react";
 import { ds, dsx } from "@/lib/ds";
