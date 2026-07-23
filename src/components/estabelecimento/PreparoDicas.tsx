@@ -1,4 +1,10 @@
 import type { ReactNode } from "react";
+import imgCozidao from "@/assets/preparo/cozidao.jpg";
+import imgAssado from "@/assets/preparo/assado.jpg";
+import imgChurrasco from "@/assets/preparo/churrasco.jpg";
+import imgStrogonoff from "@/assets/preparo/strogonoff.jpg";
+import imgEnsopado from "@/assets/preparo/ensopado.jpg";
+import imgGrelhado from "@/assets/preparo/grelhado.jpg";
 
 type Dica = {
   key: string;
@@ -6,7 +12,9 @@ type Dica = {
   descricao: string;
   cortes: string[];
   icon: ReactNode;
+  foto: string;
 };
+
 
 const stroke = {
   fill: "none",
@@ -19,6 +27,7 @@ const stroke = {
 const DICAS: Dica[] = [
   {
     key: "cozidao",
+    foto: imgCozidao,
     titulo: "Cozidão",
     descricao:
       "Cortes com fibras longas e ossos que soltam colágeno. Cozinhe em fogo baixo, com bastante líquido, por tempo prolongado — ideal para caldos encorpados.",
@@ -45,6 +54,7 @@ const DICAS: Dica[] = [
   },
   {
     key: "assado",
+    foto: imgAssado,
     titulo: "Assado de Panela",
     descricao:
       "Peças magras e uniformes. Sele bem em gordura quente, depois cozinhe tampado com líquido curto até a carne desmanchar ao garfo.",
@@ -70,6 +80,7 @@ const DICAS: Dica[] = [
   },
   {
     key: "churrasco",
+    foto: imgChurrasco,
     titulo: "Churrasco",
     descricao:
       "Cortes com boa marmorização ou capa de gordura. Fogo forte e brasa firme — deixe descansar antes de fatiar para preservar os sucos.",
@@ -103,6 +114,7 @@ const DICAS: Dica[] = [
   },
   {
     key: "strogonoff",
+    foto: imgStrogonoff,
     titulo: "Strogonoff",
     descricao:
       "Cortes macios em tiras finas, no sentido contrário às fibras. Selar rapidamente em fogo alto e finalizar com o creme fora do fogo forte.",
@@ -121,6 +133,7 @@ const DICAS: Dica[] = [
   },
   {
     key: "ensopado",
+    foto: imgEnsopado,
     titulo: "Ensopado / Guisado",
     descricao:
       "Cortes ricos em colágeno ou moídos. Refogue bem os temperos, acrescente o líquido aos poucos e cozinhe até o molho encorpar.",
@@ -141,6 +154,7 @@ const DICAS: Dica[] = [
   },
   {
     key: "grelhado",
+    foto: imgGrelhado,
     titulo: "Grelhado",
     descricao:
       "Cortes macios em bifes de 2 a 3 cm. Grelha bem quente, sele por poucos minutos de cada lado e evite virar mais que uma vez.",
@@ -196,14 +210,25 @@ export function PreparoDicas() {
             className="flex h-full flex-col gap-3 rounded-xl border border-border/70 bg-background/60 p-4"
           >
             <div className="flex items-center gap-3">
-              <span
-                aria-hidden="true"
-                className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary"
-              >
-                {d.icon}
-              </span>
+              <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-border/70 bg-muted">
+                <img
+                  src={d.foto}
+                  alt={`Exemplo de ${d.titulo.toLowerCase()}`}
+                  loading="lazy"
+                  width={512}
+                  height={512}
+                  className="h-full w-full object-cover"
+                />
+                <span
+                  aria-hidden="true"
+                  className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground shadow-sm [&_svg]:h-4 [&_svg]:w-4"
+                >
+                  {d.icon}
+                </span>
+              </div>
               <h3 className="text-base font-semibold">{d.titulo}</h3>
             </div>
+
             <p className="text-sm text-muted-foreground">{d.descricao}</p>
             <div className="mt-auto flex flex-wrap gap-1.5 pt-1">
               {d.cortes.map((c) => (
