@@ -27,6 +27,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useSignOut } from "@/hooks/use-sign-out";
+import { useMyRoles } from "@/hooks/useMyRoles";
 
 const primary = [
   { to: "/app", label: "Início", icon: Home, exact: true as boolean },
