@@ -587,7 +587,7 @@ function ExploreCard({
   return (
     <Link
       to={to}
-      className="group block rounded-2xl border p-5 transition-all duration-500 hover:-translate-y-1 lg:p-6"
+      className="group block rounded-xl border p-3.5 transition-all duration-300 hover:-translate-y-0.5 sm:rounded-2xl sm:p-4 lg:p-5"
       style={{
         background: "rgb(255 255 255 / 0.05)",
         borderColor: "rgb(255 255 255 / 0.10)",
@@ -602,22 +602,23 @@ function ExploreCard({
       }}
     >
       <div
-        className={`${serif} mb-4 italic opacity-60 transition-opacity group-hover:opacity-100`}
+        className={`${serif} mb-2 italic opacity-60 transition-opacity group-hover:opacity-100 sm:mb-2.5`}
         style={{
           color: P.gold,
-          fontSize: "clamp(1.9rem, 3.4vw, 2.75rem)",
+          fontSize: "clamp(1.5rem, 2.6vw, 2.15rem)",
           lineHeight: 1,
           letterSpacing: "-0.03em",
         }}
       >
         {number}
       </div>
-      <h3 className="mb-2 text-lg font-bold text-white lg:text-[20px]">{title}</h3>
-      <p className="text-[13.5px] leading-relaxed text-white/60">{desc}</p>
-      <div className="mt-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.24em] text-white/80 transition-colors group-hover:text-[color:var(--pc-home-gold)]">
+      <h3 className="mb-1.5 text-[15px] font-bold text-white sm:text-base lg:text-[17px]">{title}</h3>
+      <p className="text-[12.5px] leading-snug text-white/60 sm:text-[13px]">{desc}</p>
+      <div className="mt-2.5 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-white/80 transition-colors group-hover:text-[color:var(--pc-home-gold)] sm:mt-3 sm:text-[10.5px]">
         {cta}
-        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
       </div>
     </Link>
   );
 }
+
