@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
-import { Clock, Download, Flame, Star, Trash2 } from "lucide-react";
+import { Clock, Download, Filter, Flame, Star, Trash2, X } from "lucide-react";
 import imgCozidao from "@/assets/preparo/cozidao.jpg";
 import imgAssado from "@/assets/preparo/assado.jpg";
 import imgChurrasco from "@/assets/preparo/churrasco.jpg";
@@ -14,8 +14,15 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { PREPARO_DICAS, favoriteKey, type Dica } from "@/lib/preparo-dicas-data";
+import { PREPARO_DICAS, favoriteKey } from "@/lib/preparo-dicas-data";
 import { gerarGuiaPreparoPDF } from "@/lib/preparo-dicas-pdf";
+import {
+  MODOS,
+  TEMPO_FAIXAS,
+  aplicarFiltros,
+  type ModoId,
+  type TempoFaixaId,
+} from "@/lib/preparo-dicas-filtros";
 
 const FOTOS: Record<string, string> = {
   cozidao: imgCozidao,
@@ -134,6 +141,35 @@ function useFavoritos() {
 export function PreparoDicas() {
   const { favs, toggle, clear } = useFavoritos();
   const [baixando, setBaixando] = useState(false);
+  const [temposSel, setTemposSel] = useState<Set<TempoFaixaId>>(() => new Set());
+  const [modosSel, setModosSel] = useState<Set<ModoId>>(() => new Set());
+
+  const toggleTempo = (id: TempoFaixaId) => {
+    setTemposSel((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+  const toggleModo = (id: ModoId) => {
+    setModosSel((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+  const limparFiltros = () => {
+    setTemposSel(new Set());
+    setModosSel(new Set());
+  };
+  const filtrosAtivos = temposSel.size + modosSel.size;
+
+  const dicasFiltradas = useMemo(
+    () => aplicarFiltros(PREPARO_DICAS, { tempos: temposSel, modos: modosSel }),
+    [temposSel, modosSel],
+  );
 
   const favoritosPorDica = useMemo(() => {
     const map = new Map<string, string[]>();
@@ -145,6 +181,7 @@ export function PreparoDicas() {
     });
     return map;
   }, [favs]);
+
 
   const handleBaixarPDF = async () => {
     try {
@@ -232,150 +269,265 @@ export function PreparoDicas() {
         </div>
       )}
 
-      <Accordion type="single" collapsible className="w-full">
-        {PREPARO_DICAS.map((d: Dica) => {
-          const favCount = favoritosPorDica.get(d.key)?.length ?? 0;
-          return (
-            <AccordionItem key={d.key} value={d.key} className="border-border/70">
-              <AccordionTrigger className="hover:no-underline">
-                <div className="flex flex-1 items-center gap-3 pr-3 text-left">
-                  <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-border/70 bg-muted">
-                    <img
-                      src={FOTOS[d.key]}
-                      alt={`Exemplo de ${d.titulo.toLowerCase()}`}
-                      loading="lazy"
-                      width={512}
-                      height={512}
-                      className="h-full w-full object-cover"
-                    />
-                    <span
-                      aria-hidden="true"
-                      className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-md bg-primary text-primary-foreground shadow-sm [&_svg]:h-3.5 [&_svg]:w-3.5"
-                    >
-                      {ICONS[d.key]}
-                    </span>
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <h3 className="text-base font-semibold leading-tight">
-                      {d.titulo}
-                    </h3>
-                    <p className="mt-0.5 text-[11px] text-muted-foreground">
-                      {d.cortes.length} cortes recomendados
-                      {d.variacoes?.length ? ` · ${d.variacoes.length} variações` : ""}
-                      {favCount > 0 && (
-                        <span className="ml-1.5 inline-flex items-center gap-0.5 rounded-full bg-primary/10 px-1.5 py-0.5 font-semibold text-primary">
-                          ★ {favCount}
-                        </span>
-                      )}
-                    </p>
-                  </div>
-                </div>
-              </AccordionTrigger>
-              <AccordionContent>
-                <div className="pl-[60px] pr-1">
-                  <p className="text-sm text-muted-foreground">{d.descricao}</p>
+      <div className="mb-5 rounded-xl border border-border bg-background/60 p-3 sm:p-4">
+        <div className="mb-2 flex items-center justify-between gap-2">
+          <p className="flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-wider text-foreground/70">
+            <Filter className="h-3.5 w-3.5 text-primary" />
+            Filtrar por tempo e modo
+            {filtrosAtivos > 0 && (
+              <span className="ml-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
+                {filtrosAtivos}
+              </span>
+            )}
+          </p>
+          {filtrosAtivos > 0 && (
+            <button
+              type="button"
+              onClick={limparFiltros}
+              className="inline-flex items-center gap-1 rounded-md border border-border bg-background px-2 py-1 text-[11px] text-muted-foreground hover:text-foreground"
+            >
+              <X className="h-3 w-3" /> Limpar
+            </button>
+          )}
+        </div>
 
-                  <div className="mt-3 flex flex-wrap gap-2">
-                    <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background/60 px-2 py-1 text-[11px] text-foreground/80">
-                      <Clock className="h-3 w-3 text-primary" />
-                      <span className="font-semibold text-foreground">Tempo:</span>
-                      {d.tempo}
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background/60 px-2 py-1 text-[11px] text-foreground/80">
-                      <Flame className="h-3 w-3 text-primary" />
-                      <span className="font-semibold text-foreground">Modo:</span>
-                      {d.modo}
-                    </span>
-                  </div>
+        <div className="space-y-2">
+          <div>
+            <p className="mb-1 flex items-center gap-1 text-[11px] text-muted-foreground">
+              <Clock className="h-3 w-3" /> Tempo estimado
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {TEMPO_FAIXAS.map((f) => {
+                const active = temposSel.has(f.id);
+                return (
+                  <button
+                    key={f.id}
+                    type="button"
+                    onClick={() => toggleTempo(f.id)}
+                    aria-pressed={active}
+                    className={`rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors ${
+                      active
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-background text-foreground/80 hover:border-primary/60 hover:text-foreground"
+                    }`}
+                  >
+                    {f.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          <div>
+            <p className="mb-1 flex items-center gap-1 text-[11px] text-muted-foreground">
+              <Flame className="h-3 w-3" /> Modo de cozimento
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {MODOS.map((m) => {
+                const active = modosSel.has(m.id);
+                return (
+                  <button
+                    key={m.id}
+                    type="button"
+                    onClick={() => toggleModo(m.id)}
+                    aria-pressed={active}
+                    className={`rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors ${
+                      active
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-background text-foreground/80 hover:border-primary/60 hover:text-foreground"
+                    }`}
+                  >
+                    {m.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
 
-                  <div className="mt-3">
-                    <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-foreground/70">
-                      Cortes recomendados
-                    </p>
-                    <ul className="space-y-1.5">
-                      {d.cortes.map((c) => {
-                        const fkey = favoriteKey(d.key, c.nome);
-                        const isFav = favs.has(fkey);
-                        return (
-                          <li
-                            key={c.nome}
-                            className={`flex items-start gap-2 rounded-md border px-2.5 py-1.5 transition-colors ${
-                              isFav
-                                ? "border-primary/40 bg-primary/5"
-                                : "border-border/60 bg-background/60"
-                            }`}
-                          >
-                            <button
-                              type="button"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                toggle(fkey);
-                              }}
-                              aria-pressed={isFav}
-                              aria-label={
-                                isFav
-                                  ? `Remover ${c.nome} dos favoritos`
-                                  : `Salvar ${c.nome} como favorito`
-                              }
-                              className="mt-0.5 shrink-0 rounded p-0.5 text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                            >
-                              <Star
-                                className={`h-4 w-4 ${
-                                  isFav ? "fill-primary text-primary" : ""
-                                }`}
-                              />
-                            </button>
-                            <div className="min-w-0">
-                              <span className="text-sm font-medium text-foreground">
-                                {c.nome}
-                              </span>
-                              {c.nota && (
-                                <span className="ml-1.5 text-[12px] text-muted-foreground">
-                                  — {c.nota}
-                                </span>
-                              )}
-                            </div>
-                          </li>
-                        );
-                      })}
-                    </ul>
-                  </div>
+        {filtrosAtivos > 0 && (
+          <p className="mt-2 text-[11px] text-muted-foreground">
+            Mostrando {dicasFiltradas.length} de {PREPARO_DICAS.length} preparos.
+          </p>
+        )}
+      </div>
 
-                  {d.variacoes && d.variacoes.length > 0 && (
+      {dicasFiltradas.length === 0 ? (
+        <div className="rounded-xl border border-dashed border-border bg-background/40 p-6 text-center">
+          <p className="text-sm font-medium text-foreground">Nenhum preparo encontrado.</p>
+          <p className="mt-1 text-[12px] text-muted-foreground">
+            Ajuste as faixas de tempo ou modos de cozimento selecionados.
+          </p>
+          <button
+            type="button"
+            onClick={limparFiltros}
+            className="mt-3 inline-flex items-center gap-1 rounded-md border border-border bg-background px-3 py-1.5 text-[12px] text-foreground hover:border-primary"
+          >
+            <X className="h-3 w-3" /> Limpar filtros
+          </button>
+        </div>
+      ) : (
+        <Accordion type="single" collapsible className="w-full">
+          {dicasFiltradas.map((d) => {
+            const favCount = favoritosPorDica.get(d.key)?.length ?? 0;
+            const variacoesRender = d.variacoesFiltradas;
+            const totalVariacoesOriginais = d.variacoes?.length ?? 0;
+            return (
+              <AccordionItem key={d.key} value={d.key} className="border-border/70">
+                <AccordionTrigger className="hover:no-underline">
+                  <div className="flex flex-1 items-center gap-3 pr-3 text-left">
+                    <div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg border border-border/70 bg-muted">
+                      <img
+                        src={FOTOS[d.key]}
+                        alt={`Exemplo de ${d.titulo.toLowerCase()}`}
+                        loading="lazy"
+                        width={512}
+                        height={512}
+                        className="h-full w-full object-cover"
+                      />
+                      <span
+                        aria-hidden="true"
+                        className="absolute -bottom-1 -right-1 flex h-5 w-5 items-center justify-center rounded-md bg-primary text-primary-foreground shadow-sm [&_svg]:h-3.5 [&_svg]:w-3.5"
+                      >
+                        {ICONS[d.key]}
+                      </span>
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-base font-semibold leading-tight">
+                        {d.titulo}
+                      </h3>
+                      <p className="mt-0.5 text-[11px] text-muted-foreground">
+                        {d.cortes.length} cortes recomendados
+                        {totalVariacoesOriginais > 0 &&
+                          (filtrosAtivos > 0
+                            ? ` · ${variacoesRender.length}/${totalVariacoesOriginais} variações`
+                            : ` · ${totalVariacoesOriginais} variações`)}
+                        {favCount > 0 && (
+                          <span className="ml-1.5 inline-flex items-center gap-0.5 rounded-full bg-primary/10 px-1.5 py-0.5 font-semibold text-primary">
+                            ★ {favCount}
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <div className="pl-[60px] pr-1">
+                    <p className="text-sm text-muted-foreground">{d.descricao}</p>
+
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background/60 px-2 py-1 text-[11px] text-foreground/80">
+                        <Clock className="h-3 w-3 text-primary" />
+                        <span className="font-semibold text-foreground">Tempo:</span>
+                        {d.tempo}
+                      </span>
+                      <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background/60 px-2 py-1 text-[11px] text-foreground/80">
+                        <Flame className="h-3 w-3 text-primary" />
+                        <span className="font-semibold text-foreground">Modo:</span>
+                        {d.modo}
+                      </span>
+                    </div>
+
+                    {filtrosAtivos > 0 && !d.matchesSelf && (
+                      <p className="mt-2 text-[11px] italic text-muted-foreground">
+                        O preparo principal não casa com os filtros — apenas as
+                        variações abaixo correspondem à sua busca.
+                      </p>
+                    )}
+
                     <div className="mt-3">
                       <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-foreground/70">
-                        Variações e opções especiais
+                        Cortes recomendados
                       </p>
                       <ul className="space-y-1.5">
-                        {d.variacoes.map((v) => (
-                          <li
-                            key={v.nome}
-                            className="rounded-md border border-border/60 bg-background/60 px-2.5 py-1.5"
-                          >
-                            <p className="text-sm font-medium text-foreground">
-                              {v.nome}
-                            </p>
-                            <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
-                              <span className="inline-flex items-center gap-1">
-                                <Clock className="h-3 w-3 text-primary" />
-                                {v.tempo}
-                              </span>
-                              <span className="inline-flex items-center gap-1">
-                                <Flame className="h-3 w-3 text-primary" />
-                                {v.modo}
-                              </span>
-                            </div>
-                          </li>
-                        ))}
+                        {d.cortes.map((c) => {
+                          const fkey = favoriteKey(d.key, c.nome);
+                          const isFav = favs.has(fkey);
+                          return (
+                            <li
+                              key={c.nome}
+                              className={`flex items-start gap-2 rounded-md border px-2.5 py-1.5 transition-colors ${
+                                isFav
+                                  ? "border-primary/40 bg-primary/5"
+                                  : "border-border/60 bg-background/60"
+                              }`}
+                            >
+                              <button
+                                type="button"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  toggle(fkey);
+                                }}
+                                aria-pressed={isFav}
+                                aria-label={
+                                  isFav
+                                    ? `Remover ${c.nome} dos favoritos`
+                                    : `Salvar ${c.nome} como favorito`
+                                }
+                                className="mt-0.5 shrink-0 rounded p-0.5 text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                              >
+                                <Star
+                                  className={`h-4 w-4 ${
+                                    isFav ? "fill-primary text-primary" : ""
+                                  }`}
+                                />
+                              </button>
+                              <div className="min-w-0">
+                                <span className="text-sm font-medium text-foreground">
+                                  {c.nome}
+                                </span>
+                                {c.nota && (
+                                  <span className="ml-1.5 text-[12px] text-muted-foreground">
+                                    — {c.nota}
+                                  </span>
+                                )}
+                              </div>
+                            </li>
+                          );
+                        })}
                       </ul>
                     </div>
-                  )}
-                </div>
-              </AccordionContent>
-            </AccordionItem>
-          );
-        })}
-      </Accordion>
+
+                    {variacoesRender.length > 0 && (
+                      <div className="mt-3">
+                        <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-foreground/70">
+                          Variações e opções especiais
+                          {filtrosAtivos > 0 && (
+                            <span className="ml-1.5 text-[10px] font-normal normal-case text-muted-foreground">
+                              (filtradas)
+                            </span>
+                          )}
+                        </p>
+                        <ul className="space-y-1.5">
+                          {variacoesRender.map((v) => (
+                            <li
+                              key={v.nome}
+                              className="rounded-md border border-border/60 bg-background/60 px-2.5 py-1.5"
+                            >
+                              <p className="text-sm font-medium text-foreground">
+                                {v.nome}
+                              </p>
+                              <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
+                                <span className="inline-flex items-center gap-1">
+                                  <Clock className="h-3 w-3 text-primary" />
+                                  {v.tempo}
+                                </span>
+                                <span className="inline-flex items-center gap-1">
+                                  <Flame className="h-3 w-3 text-primary" />
+                                  {v.modo}
+                                </span>
+                              </div>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </div>
+                </AccordionContent>
+              </AccordionItem>
+            );
+          })}
+        </Accordion>
+      )}
 
       <p className="mt-5 text-[11px] leading-relaxed text-muted-foreground">
         Conteúdo cedido por <strong className="text-foreground">Recanto da Carne</strong>.
