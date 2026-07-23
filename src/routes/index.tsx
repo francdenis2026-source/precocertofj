@@ -258,17 +258,16 @@ function HomePage() {
                   to="/melhores-precos"
                   className="inline-flex items-center gap-2 rounded-2xl border-2 px-8 py-4 text-base font-bold transition-colors hover:text-[color:var(--pc-home-card)] sm:px-10 sm:py-5 sm:text-lg"
                   style={{
-                    borderColor: P.navy,
-                    color: P.navy,
-                    // hover bg via inline event? use tailwind arbitrary
+                    borderColor: P.heading,
+                    color: P.heading,
                   }}
                   onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = P.navy;
-                    (e.currentTarget as HTMLElement).style.color = "#F5F6FA";
+                    (e.currentTarget as HTMLElement).style.background = P.heading;
+                    (e.currentTarget as HTMLElement).style.color = P.card;
                   }}
                   onMouseLeave={(e) => {
                     (e.currentTarget as HTMLElement).style.background = "transparent";
-                    (e.currentTarget as HTMLElement).style.color = P.navy;
+                    (e.currentTarget as HTMLElement).style.color = P.heading;
                   }}
                 >
                   <TrendingDown className="h-4 w-4" />
