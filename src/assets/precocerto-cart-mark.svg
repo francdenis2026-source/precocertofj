@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="PreçoCerto">
+  <defs>
+    <linearGradient id="pc-navy" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#132A57"/>
+      <stop offset="100%" stop-color="#0A1628"/>
+    </linearGradient>
+  </defs>
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#pc-navy)"/>
+  <rect x="2.5" y="2.5" width="59" height="59" rx="13.5" fill="none" stroke="#B58A3C" stroke-opacity="0.55" stroke-width="1"/>
+  <!-- Letter P -->
+  <path d="M20 46 V18 h13 a9 9 0 0 1 0 18 h-7" fill="none" stroke="#FFFFFF" stroke-width="6" stroke-linecap="square" stroke-linejoin="miter"/>
+  <!-- Gold cart accent (bottom-right) -->
+  <g transform="translate(38 38)">
+    <circle cx="4" cy="14" r="2.2" fill="#F2DFA8"/>
+    <circle cx="12" cy="14" r="2.2" fill="#F2DFA8"/>
+    <path d="M0 2 h3 l2.2 8 h10 l2.2 -6 h-10" fill="none" stroke="#F2DFA8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
