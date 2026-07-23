@@ -113,6 +113,18 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
               style={{ borderColor: P.line, background: P.card, color: P.heading }}
               aria-label={`Ver histórico de ${p.name} em ${p.marketName ?? "mercados de Feijó"}`}
             >
+              {(() => {
+                const f = freshness(p.when);
+                return (
+                  <div
+                    className={`mb-2 inline-flex items-center gap-1 rounded-full bg-background/60 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] ring-1 ${f.ringClass} ${f.textClass}`}
+                    title={`Status baseado na última coleta (${relative(p.when)})`}
+                  >
+                    <span className={`h-1.5 w-1.5 rounded-full ${f.dotClass}`} aria-hidden />
+                    {f.label}
+                  </div>
+                );
+              })()}
               <div
                 className="mb-2 line-clamp-2 text-[12.5px] font-semibold leading-tight sm:text-[13px]"
                 style={{ color: P.heading }}
@@ -142,7 +154,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                 style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
               >
                 <Clock className="h-3 w-3 shrink-0" />
-                {relative(p.when)}
+                <span>Coletado {relative(p.when)}</span>
                 {p.stores > 1 ? (
                   <span className="ml-auto rounded-full px-1.5 py-px text-[9px] font-bold uppercase tracking-wider" style={{ color: P.goldSoft }}>
                     {p.stores} mercados
@@ -156,3 +168,4 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
     </section>
   );
 }
+
