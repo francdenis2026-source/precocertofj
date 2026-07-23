@@ -333,16 +333,22 @@ export function PreparoDicas() {
             <div className="flex flex-wrap gap-1.5">
               {PROTEINAS.map((p) => {
                 const active = proteinasSel.has(p.id);
+                const disponivel = proteinasDisponiveis.has(p.id);
                 return (
                   <button
                     key={p.id}
                     type="button"
-                    onClick={() => toggleProteina(p.id)}
+                    onClick={() => disponivel && toggleProteina(p.id)}
                     aria-pressed={active}
+                    aria-disabled={!disponivel}
+                    disabled={!disponivel}
+                    title={disponivel ? p.label : `${p.label} — sem cortes cadastrados ainda`}
                     className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors ${
-                      active
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border bg-background text-foreground/80 hover:border-primary/60 hover:text-foreground"
+                      !disponivel
+                        ? "cursor-not-allowed border-dashed border-border/60 bg-background/40 text-muted-foreground/50 line-through"
+                        : active
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border bg-background text-foreground/80 hover:border-primary/60 hover:text-foreground"
                     }`}
                   >
                     <span aria-hidden="true">{p.emoji}</span>
