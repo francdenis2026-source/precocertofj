@@ -1,11 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import {
   listMercadoPagoWebhookEvents,
   getMercadoPagoStatus,
 } from "@/lib/mercadopago.functions";
+import { adminResendActivationForWebhook } from "@/lib/email-retry.functions";
 import { AppShell } from "@/components/brand/AppShell";
 import { PageHeader } from "@/components/brand/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,7 +27,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Loader2, RefreshCw, ShieldCheck, ShieldAlert, Search } from "lucide-react";
+import { Loader2, RefreshCw, ShieldCheck, ShieldAlert, Search, Send } from "lucide-react";
+import { toast } from "sonner";
+
 
 export const Route = createFileRoute("/admin_/webhooks")({
   head: () => ({
@@ -60,6 +63,8 @@ function statusBadge(status: string) {
 function WebhooksPage() {
   const list = useServerFn(listMercadoPagoWebhookEvents);
   const status = useServerFn(getMercadoPagoStatus);
+  const resendFn = useServerFn(adminResendActivationForWebhook);
+  const qc = useQueryClient();
   const [selected, setSelected] = useState<EventRow | null>(null);
   const [filter, setFilter] = useState("");
 
@@ -73,6 +78,17 @@ function WebhooksPage() {
     queryFn: () => list({ data: { limit: 200 } }),
     refetchInterval: 15000,
   });
+
+  const resend = useMutation({
+    mutationFn: (webhookEventId: string) => resendFn({ data: { webhookEventId } }),
+    onSuccess: (r) => {
+      if (r.sent) toast.success(`Código reenviado para ${r.to}`);
+      else toast.error(`Falha: ${r.error ?? "erro"} — enfileirado para retry`);
+      qc.invalidateQueries({ queryKey: ["mp-webhooks"] });
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Falha ao reenviar"),
+  });
+
 
   const filtered = useMemo(() => {
     const rows = eventsQ.data ?? [];
@@ -273,15 +289,42 @@ function WebhooksPage() {
                       </TableCell>
                       <TableCell>{statusBadge(r.status ?? "?")}</TableCell>
                       <TableCell className="max-w-[220px] truncate text-xs text-muted-foreground">
-                        {r.error ?? "—"}
+                        {(() => {
+                          const es = (r as any).email_status as
+                            | { email_error?: string; email_sent?: boolean }
+                            | null;
+                          if (es?.email_error) return `email: ${es.email_error}`;
+                          return r.error ?? "—";
+                        })()}
                       </TableCell>
                       <TableCell>
-                        <Button size="sm" variant="ghost-navy" onClick={() => setSelected(r)}>
-                          Ver
-                        </Button>
+                        <div className="flex justify-end gap-1.5">
+                          {(() => {
+                            const es = (r as any).email_status as
+                              | { email_error?: string; email_sent?: boolean }
+                              | null;
+                            const hasEmailError = !!es?.email_error;
+                            if (!hasEmailError) return null;
+                            return (
+                              <Button
+                                size="sm"
+                                variant="executive"
+                                disabled={resend.isPending}
+                                onClick={() => resend.mutate(r.id)}
+                                title="Reenviar código para o mesmo pagamento"
+                              >
+                                <Send className="mr-1 h-3.5 w-3.5" /> Reenviar
+                              </Button>
+                            );
+                          })()}
+                          <Button size="sm" variant="ghost-navy" onClick={() => setSelected(r)}>
+                            Ver
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))
+
                 )}
               </TableBody>
             </Table>

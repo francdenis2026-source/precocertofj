@@ -19,6 +19,7 @@ import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as NotificacoesRouteImport } from './routes/notificacoes'
 import { Route as MinhasLicencasRouteImport } from './routes/minhas-licencas'
+import { Route as MeusPedidosRouteImport } from './routes/meus-pedidos'
 import { Route as MelhoresPrecosRouteImport } from './routes/melhores-precos'
 import { Route as MapaRouteImport } from './routes/mapa'
 import { Route as LojistaRouteImport } from './routes/lojista'
@@ -82,6 +83,7 @@ import { Route as ApiAdminCatalogImageRouteImport } from './routes/api/admin/cat
 import { Route as AdminCoberturaIdRouteImport } from './routes/admin_.cobertura.$id'
 import { Route as LojaIdProdutoSlugRouteImport } from './routes/loja.$id.produto.$slug'
 import { Route as ApiPublicMercadopagoWebhookRouteImport } from './routes/api/public/mercadopago/webhook'
+import { Route as ApiPublicHooksRetryActivationEmailsRouteImport } from './routes/api/public/hooks/retry-activation-emails'
 import { Route as ApiPublicHooksRefreshCatalogImagesRouteImport } from './routes/api/public/hooks/refresh-catalog-images'
 import { Route as ApiPublicHooksDrainCatalogImagesRouteImport } from './routes/api/public/hooks/drain-catalog-images'
 import { Route as ApiPublicHooksCollabInboundRouteImport } from './routes/api/public/hooks/collab-inbound'
@@ -134,6 +136,11 @@ const NotificacoesRoute = NotificacoesRouteImport.update({
 const MinhasLicencasRoute = MinhasLicencasRouteImport.update({
   id: '/minhas-licencas',
   path: '/minhas-licencas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MeusPedidosRoute = MeusPedidosRouteImport.update({
+  id: '/meus-pedidos',
+  path: '/meus-pedidos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MelhoresPrecosRoute = MelhoresPrecosRouteImport.update({
@@ -452,6 +459,12 @@ const ApiPublicMercadopagoWebhookRoute =
     path: '/api/public/mercadopago/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksRetryActivationEmailsRoute =
+  ApiPublicHooksRetryActivationEmailsRouteImport.update({
+    id: '/api/public/hooks/retry-activation-emails',
+    path: '/api/public/hooks/retry-activation-emails',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksRefreshCatalogImagesRoute =
   ApiPublicHooksRefreshCatalogImagesRouteImport.update({
     id: '/api/public/hooks/refresh-catalog-images',
@@ -497,6 +510,7 @@ export interface FileRoutesByFullPath {
   '/lojista': typeof LojistaRoute
   '/mapa': typeof MapaRoute
   '/melhores-precos': typeof MelhoresPrecosRoute
+  '/meus-pedidos': typeof MeusPedidosRoute
   '/minhas-licencas': typeof MinhasLicencasRoute
   '/notificacoes': typeof NotificacoesRoute
   '/onboarding': typeof OnboardingRoute
@@ -546,6 +560,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/collab-inbound': typeof ApiPublicHooksCollabInboundRoute
   '/api/public/hooks/drain-catalog-images': typeof ApiPublicHooksDrainCatalogImagesRoute
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
+  '/api/public/hooks/retry-activation-emails': typeof ApiPublicHooksRetryActivationEmailsRoute
   '/api/public/mercadopago/webhook': typeof ApiPublicMercadopagoWebhookRoute
   '/loja/$id/produto/$slug': typeof LojaIdProdutoSlugRoute
 }
@@ -575,6 +590,7 @@ export interface FileRoutesByTo {
   '/lojista': typeof LojistaRoute
   '/mapa': typeof MapaRoute
   '/melhores-precos': typeof MelhoresPrecosRoute
+  '/meus-pedidos': typeof MeusPedidosRoute
   '/minhas-licencas': typeof MinhasLicencasRoute
   '/notificacoes': typeof NotificacoesRoute
   '/onboarding': typeof OnboardingRoute
@@ -624,6 +640,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/collab-inbound': typeof ApiPublicHooksCollabInboundRoute
   '/api/public/hooks/drain-catalog-images': typeof ApiPublicHooksDrainCatalogImagesRoute
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
+  '/api/public/hooks/retry-activation-emails': typeof ApiPublicHooksRetryActivationEmailsRoute
   '/api/public/mercadopago/webhook': typeof ApiPublicMercadopagoWebhookRoute
   '/loja/$id/produto/$slug': typeof LojaIdProdutoSlugRoute
 }
@@ -654,6 +671,7 @@ export interface FileRoutesById {
   '/lojista': typeof LojistaRoute
   '/mapa': typeof MapaRoute
   '/melhores-precos': typeof MelhoresPrecosRoute
+  '/meus-pedidos': typeof MeusPedidosRoute
   '/minhas-licencas': typeof MinhasLicencasRoute
   '/notificacoes': typeof NotificacoesRoute
   '/onboarding': typeof OnboardingRoute
@@ -703,6 +721,7 @@ export interface FileRoutesById {
   '/api/public/hooks/collab-inbound': typeof ApiPublicHooksCollabInboundRoute
   '/api/public/hooks/drain-catalog-images': typeof ApiPublicHooksDrainCatalogImagesRoute
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
+  '/api/public/hooks/retry-activation-emails': typeof ApiPublicHooksRetryActivationEmailsRoute
   '/api/public/mercadopago/webhook': typeof ApiPublicMercadopagoWebhookRoute
   '/loja/$id/produto/$slug': typeof LojaIdProdutoSlugRoute
 }
@@ -734,6 +753,7 @@ export interface FileRouteTypes {
     | '/lojista'
     | '/mapa'
     | '/melhores-precos'
+    | '/meus-pedidos'
     | '/minhas-licencas'
     | '/notificacoes'
     | '/onboarding'
@@ -783,6 +803,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/collab-inbound'
     | '/api/public/hooks/drain-catalog-images'
     | '/api/public/hooks/refresh-catalog-images'
+    | '/api/public/hooks/retry-activation-emails'
     | '/api/public/mercadopago/webhook'
     | '/loja/$id/produto/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -812,6 +833,7 @@ export interface FileRouteTypes {
     | '/lojista'
     | '/mapa'
     | '/melhores-precos'
+    | '/meus-pedidos'
     | '/minhas-licencas'
     | '/notificacoes'
     | '/onboarding'
@@ -861,6 +883,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/collab-inbound'
     | '/api/public/hooks/drain-catalog-images'
     | '/api/public/hooks/refresh-catalog-images'
+    | '/api/public/hooks/retry-activation-emails'
     | '/api/public/mercadopago/webhook'
     | '/loja/$id/produto/$slug'
   id:
@@ -890,6 +913,7 @@ export interface FileRouteTypes {
     | '/lojista'
     | '/mapa'
     | '/melhores-precos'
+    | '/meus-pedidos'
     | '/minhas-licencas'
     | '/notificacoes'
     | '/onboarding'
@@ -939,6 +963,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/collab-inbound'
     | '/api/public/hooks/drain-catalog-images'
     | '/api/public/hooks/refresh-catalog-images'
+    | '/api/public/hooks/retry-activation-emails'
     | '/api/public/mercadopago/webhook'
     | '/loja/$id/produto/$slug'
   fileRoutesById: FileRoutesById
@@ -969,6 +994,7 @@ export interface RootRouteChildren {
   LojistaRoute: typeof LojistaRoute
   MapaRoute: typeof MapaRoute
   MelhoresPrecosRoute: typeof MelhoresPrecosRoute
+  MeusPedidosRoute: typeof MeusPedidosRoute
   MinhasLicencasRoute: typeof MinhasLicencasRoute
   NotificacoesRoute: typeof NotificacoesRoute
   OnboardingRoute: typeof OnboardingRoute
@@ -1013,6 +1039,7 @@ export interface RootRouteChildren {
   ApiPublicHooksCollabInboundRoute: typeof ApiPublicHooksCollabInboundRoute
   ApiPublicHooksDrainCatalogImagesRoute: typeof ApiPublicHooksDrainCatalogImagesRoute
   ApiPublicHooksRefreshCatalogImagesRoute: typeof ApiPublicHooksRefreshCatalogImagesRoute
+  ApiPublicHooksRetryActivationEmailsRoute: typeof ApiPublicHooksRetryActivationEmailsRoute
   ApiPublicMercadopagoWebhookRoute: typeof ApiPublicMercadopagoWebhookRoute
 }
 
@@ -1086,6 +1113,13 @@ declare module '@tanstack/react-router' {
       path: '/minhas-licencas'
       fullPath: '/minhas-licencas'
       preLoaderRoute: typeof MinhasLicencasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/meus-pedidos': {
+      id: '/meus-pedidos'
+      path: '/meus-pedidos'
+      fullPath: '/meus-pedidos'
+      preLoaderRoute: typeof MeusPedidosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/melhores-precos': {
@@ -1529,6 +1563,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicMercadopagoWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/retry-activation-emails': {
+      id: '/api/public/hooks/retry-activation-emails'
+      path: '/api/public/hooks/retry-activation-emails'
+      fullPath: '/api/public/hooks/retry-activation-emails'
+      preLoaderRoute: typeof ApiPublicHooksRetryActivationEmailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/refresh-catalog-images': {
       id: '/api/public/hooks/refresh-catalog-images'
       path: '/api/public/hooks/refresh-catalog-images'
@@ -1628,6 +1669,7 @@ const rootRouteChildren: RootRouteChildren = {
   LojistaRoute: LojistaRoute,
   MapaRoute: MapaRoute,
   MelhoresPrecosRoute: MelhoresPrecosRoute,
+  MeusPedidosRoute: MeusPedidosRoute,
   MinhasLicencasRoute: MinhasLicencasRoute,
   NotificacoesRoute: NotificacoesRoute,
   OnboardingRoute: OnboardingRoute,
@@ -1673,6 +1715,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksDrainCatalogImagesRoute: ApiPublicHooksDrainCatalogImagesRoute,
   ApiPublicHooksRefreshCatalogImagesRoute:
     ApiPublicHooksRefreshCatalogImagesRoute,
+  ApiPublicHooksRetryActivationEmailsRoute:
+    ApiPublicHooksRetryActivationEmailsRoute,
   ApiPublicMercadopagoWebhookRoute: ApiPublicMercadopagoWebhookRoute,
 }
 export const routeTree = rootRouteImport
