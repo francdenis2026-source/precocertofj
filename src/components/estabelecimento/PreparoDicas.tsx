@@ -574,14 +574,30 @@ export function PreparoDicas() {
                           )}
                         </p>
                         <ul className="space-y-1.5">
-                          {variacoesRender.map((v) => (
+                          {variacoesRender.map((v) => {
+                            const vProts = (v.proteinas && v.proteinas.length > 0
+                              ? v.proteinas
+                              : ["boi" as ProteinaId]);
+                            return (
                             <li
                               key={v.nome}
                               className="rounded-md border border-border/60 bg-background/60 px-2.5 py-1.5"
                             >
-                              <p className="text-sm font-medium text-foreground">
-                                {v.nome}
-                              </p>
+                              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                                <p className="text-sm font-medium text-foreground">
+                                  {v.nome}
+                                </p>
+                                {vProts.map((pid) => (
+                                  <span
+                                    key={pid}
+                                    className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/5 px-1.5 py-0.5 text-[10px] font-semibold text-primary"
+                                    title={PROTEINA_LABEL[pid]}
+                                  >
+                                    <span aria-hidden="true">{PROTEINA_EMOJI[pid]}</span>
+                                    {PROTEINA_LABEL[pid]}
+                                  </span>
+                                ))}
+                              </div>
                               <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
                                 <span className="inline-flex items-center gap-1">
                                   <Clock className="h-3 w-3 text-primary" />
@@ -593,7 +609,8 @@ export function PreparoDicas() {
                                 </span>
                               </div>
                             </li>
-                          ))}
+                            );
+                          })}
                         </ul>
                       </div>
                     )}
