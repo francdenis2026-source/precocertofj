@@ -75,18 +75,43 @@ function AdminLoginPage() {
           Voltar para o site
         </Link>
 
-        <div className="rounded-2xl border border-border bg-card p-8 shadow-sm">
-          <div className="mb-6 flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 text-primary">
-              <Shield className="h-5 w-5" />
+        <div className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm">
+          {/* Hero navy — alinhado à homepage (Ocean Modern) */}
+          <div
+            className="relative px-8 py-6 text-white"
+            style={{
+              background: "linear-gradient(135deg, #081b3a 0%, #0f2b52 55%, #1e4a85 100%)",
+              fontFamily: "'Outfit', system-ui, sans-serif",
+            }}
+          >
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full opacity-25 blur-3xl"
+              style={{ background: "#f5b301" }}
+            />
+            <div className="relative flex items-center gap-3">
+              <div
+                className="flex h-11 w-11 items-center justify-center rounded-lg"
+                style={{ background: "#f5b301", color: "#0f2b52" }}
+              >
+                <Shield className="h-5 w-5" strokeWidth={2.5} />
+              </div>
+              <div>
+                <p className="text-[10.5px] font-bold uppercase tracking-[0.22em] text-white/70">
+                  PreçoCerto
+                </p>
+                <h1 className="text-lg font-bold leading-tight tracking-tight">
+                  Portal Interno
+                </h1>
+              </div>
             </div>
-            <div>
-              <h1 className="text-xl font-semibold text-foreground">Portal Interno</h1>
-              <p className="text-xs text-muted-foreground">Acesso protegido</p>
-            </div>
+            <p className="relative mt-3 text-[12.5px] leading-relaxed text-white/80">
+              Acesso protegido para a equipe. Suas ações ficam registradas na auditoria.
+            </p>
           </div>
 
-          <form onSubmit={onSubmit} className="space-y-4">
+          <div className="p-8">
+            <form onSubmit={onSubmit} className="space-y-4">
             <div className="space-y-1.5">
               <label htmlFor="admin-email" className="text-sm font-medium text-foreground">
                 E-mail
@@ -150,6 +175,7 @@ function AdminLoginPage() {
               Ir para o login de usuário
             </Link>
           </p>
+          </div>
         </div>
       </div>
     </div>

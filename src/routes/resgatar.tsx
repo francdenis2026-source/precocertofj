@@ -22,12 +22,12 @@ import {
 import { toast } from "sonner";
 import { Logo } from "@/components/brand/Logo";
 
-/* Tokens Navy Trust — alto contraste */
-const NAVY = "#0f1b3d";
-const NAVY2 = "#1a2a52";
-const INK = "#0a1226";
-const GOLD = "#b58a3c";
-const GOLD_SOFT = "#f2dfa8";
+/* Ocean Modern — navy #0f2b52 + dourado #f5b301 (alinhado à homepage) */
+const NAVY = "#0f2b52";
+const NAVY2 = "#1e4a85";
+const INK = "#081b3a";
+const GOLD = "#f5b301";
+const GOLD_SOFT = "#ffe08a";
 const LINE = "#e5e7ef";
 const MUTED = "#475569";
 
@@ -97,7 +97,7 @@ function classifyRedeemError(raw: string): RedeemErrorInfo {
   // paletas
   const RED = { borderColor: "#fca5a5", bgColor: "#fef2f2", textColor: "#991b1b" };
   const AMBER = { borderColor: "#fcd34d", bgColor: "#fffbeb", textColor: "#92400e" };
-  const SLATE = { borderColor: "#cbd5e1", bgColor: "#f8fafc", textColor: "#0f1b3d" };
+  const SLATE = { borderColor: "#cbd5e1", bgColor: "#f8fafc", textColor: NAVY };
 
   if (m.includes("já foi resgatado") || m.includes("ja foi resgatado") || m.includes("já utilizado")) {
     return {
@@ -709,7 +709,7 @@ function CodeVerifier({
               : c.state === "bad"
               ? { color: "#991b1b", bg: "#fee2e2", dot: "#dc2626" }
               : c.state === "loading"
-              ? { color: "#0f1b3d", bg: "#eef2ff", dot: "#6366f1" }
+              ? { color: NAVY, bg: "#eef2ff", dot: "#6366f1" }
               : { color: "#64748b", bg: "#f1f5f9", dot: "#cbd5e1" };
           return (
             <span
