@@ -65,52 +65,64 @@ function planHighlights(slug: string): string[] {
   switch (slug) {
     case "degustacao":
       return [
-        "Acesso completo por 7 dias",
+        "7 dias com tudo liberado",
         "Sem cartão de crédito",
-        "Cancelamento automático",
+        "Encerra sozinho — sem cobrança surpresa",
       ];
     case "mensal":
-      return ["Acesso completo", "Cancele quando quiser", "Ideal para testar"];
+      return [
+        "Acesso completo por 30 dias",
+        "Cancele quando quiser, sem multa",
+        "Ideal para testar antes de anual",
+      ];
     case "trimestral":
       return [
-        "3 meses de acesso",
-        "Economia sobre o mensal",
-        "Bom para famílias",
+        "3 meses de acesso contínuo",
+        "Economia sobre 3 mensais",
+        "Boa opção para famílias que fazem feira grande",
       ];
     case "anual":
       return [
-        "12 meses de acesso",
-        "Maior economia mensal",
-        "Recomendado",
+        "12 meses ininterruptos",
+        "O menor valor por mês da plataforma",
+        "A escolha da maioria dos assinantes",
       ];
     case "fundador-feijo":
     case "fundador":
-      return ["Acesso vitalício", "Edição limitada", "Apoie o projeto local"];
+      return [
+        "Acesso vitalício — pague uma única vez",
+        "Vagas limitadas para apoiadores locais",
+        "Seu nome ajuda o projeto a crescer em Feijó",
+      ];
     default:
       return [
         "Acesso completo à plataforma",
-        "Suporte por email",
-        "Atualizações incluídas",
+        "Suporte por e-mail em até 24h",
+        "Novas funcionalidades incluídas",
       ];
   }
 }
 
 const FAQ = [
   {
+    q: "Preciso de cartão de crédito para começar?",
+    a: "Não. O plano de degustação libera 7 dias sem cartão e encerra sozinho. Só cobramos se você escolher um plano pago depois.",
+  },
+  {
     q: "Como funciona o pagamento?",
-    a: "Escolha o plano, entre com sua conta e vá para o checkout. O pagamento é processado pelo Mercado Pago com Pix (aprovação em segundos), cartão de crédito ou boleto. Assim que o pagamento é aprovado, seu código de licença é gerado automaticamente.",
+    a: "Escolha o plano, entre com sua conta e pague pelo Mercado Pago — Pix aprova em segundos, também aceita cartão e boleto. Assim que o pagamento é confirmado, o código de licença aparece na tela e vai para o seu e-mail.",
   },
   {
-    q: "Posso usar um cupom de desconto?",
-    a: "Sim. Se você tem um código promocional, aplique no checkout. O desconto é calculado imediatamente sobre o preço do plano.",
+    q: "Tenho um cupom. Onde aplico?",
+    a: "Insira o código no checkout, antes de finalizar. O desconto aparece na hora e já entra no total.",
   },
   {
-    q: "Como recebo meu código de licença?",
-    a: "Assim que o pagamento é aprovado, o código aparece na tela de sucesso e fica salvo em Minhas Licenças. Você pode copiá-lo a qualquer momento.",
+    q: "E se eu quiser cancelar?",
+    a: "Pode cancelar quando quiser, direto no seu perfil. O acesso segue até o fim do período pago — sem multa, sem burocracia.",
   },
   {
     q: "Posso trocar de plano depois?",
-    a: "Sim. Basta ativar um novo código de licença a qualquer momento — o novo período é somado ao seu acesso atual.",
+    a: "Sim. Ative um novo código a qualquer momento e o novo período soma ao acesso atual.",
   },
 ];
 
