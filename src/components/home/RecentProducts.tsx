@@ -21,16 +21,6 @@ const relative = (iso: string) => {
   return m <= 1 ? "há 1 mês" : `há ${m} meses`;
 };
 
-export const recentProductsQuery = (
-  fn: (args: { data: { limit: number } }) => Promise<RecentProduct[]>,
-  limit = 6,
-) =>
-  queryOptions({
-    queryKey: ["home", "recent-products", limit],
-    queryFn: () => fn({ data: { limit } }),
-    staleTime: 60_000,
-  });
-
 type Palette = {
   card: string;
   line: string;
@@ -42,9 +32,14 @@ type Palette = {
 
 export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
   const fetchRecent = useServerFn(getRecentProducts);
-  const { data } = useSuspenseQuery(recentProductsQuery(fetchRecent, 6));
+  const { data } = useQuery({
+    queryKey: ["home", "recent-products", 6],
+    queryFn: () => fetchRecent({ data: { limit: 6 } }),
+    staleTime: 60_000,
+  });
 
   if (!data || data.length === 0) return null;
+
 
   return (
     <section
