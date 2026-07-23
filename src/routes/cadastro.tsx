@@ -220,17 +220,18 @@ function CadastroPage() {
               </span>
 
               <h1
-                className="mt-5 tracking-tight"
+                className="mt-5 tracking-tight !text-white"
                 style={{
                   fontFamily: PC_DISPLAY,
                   fontWeight: 700,
-                  fontSize: "clamp(1.75rem, 2.6vw, 2.25rem)",
+                  fontSize: "clamp(1.85rem, 2.8vw, 2.4rem)",
                   lineHeight: 1.05,
                   color: "#ffffff",
-                  textShadow: "0 1px 0 rgba(0,0,0,0.25)",
+                  textShadow: "0 1px 2px rgba(0,0,0,0.35)",
                 }}
               >
-                Compare preços<br />
+                <span className="!text-white">Compare preços</span>
+                <br />
                 <span style={{ color: "#F5D77A" }}>de verdade.</span>
               </h1>
 
