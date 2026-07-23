@@ -1,5 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 import { useServerFn } from "@tanstack/react-start";
 import {
   listPublicEstablishments,
