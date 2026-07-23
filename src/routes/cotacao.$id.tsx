@@ -102,7 +102,7 @@ function PublicQuotePage() {
             </div>
             <div className="rounded-xl border border-border bg-background/60 px-3 py-2">
               <p className="text-[9.5px] font-semibold uppercase tracking-wider text-muted-foreground">
-                Total nesta loja
+                Total nesta mercado
               </p>
               <p className="num mt-0.5 font-display text-[16px] font-bold text-primary">
                 {fmt(data.total)}

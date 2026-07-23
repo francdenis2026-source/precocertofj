@@ -169,7 +169,7 @@ export function RadarCategorySheet({
                               <TrendingDown className="h-3 w-3 text-emerald-300" />
                               economia {brl(savings)}
                             </span>
-                            <span>· {p.storeCount} lojas</span>
+                            <span>· {p.storeCount} mercados</span>
                             <span className="ml-auto font-semibold text-emerald-300/80">
                               -{p.savingsPct.toFixed(0)}%
                             </span>

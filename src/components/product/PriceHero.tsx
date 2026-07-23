@@ -10,7 +10,7 @@ function formatBRL(n: number): string {
  * Bloco unificado de "preço em destaque" — usado no ProductCard do
  * comparador e da rota /melhores-precos para garantir a mesma
  * hierarquia visual (eyebrow + numeral grande + subtítulo + badge de
- * economia à direita quando há mais de 1 loja).
+ * economia à direita quando há mais de 1 mercado).
  *
  * O componente é *apresentacional*: recebe dados já calculados e não
  * dispara mutações — mantém regras de negócio nas rotas.

@@ -412,7 +412,7 @@ function AdminPrecosPage() {
                 </div>
 
                 <div className="rounded-lg border border-border p-4">
-                  <h3 className="text-sm font-semibold">Rebuild por loja</h3>
+                  <h3 className="text-sm font-semibold">Rebuild por estabelecimento</h3>
                   <p className="mt-1 text-xs text-muted-foreground">
                     Reprocessa apenas os produtos vinculados ao estabelecimento selecionado.
                   </p>

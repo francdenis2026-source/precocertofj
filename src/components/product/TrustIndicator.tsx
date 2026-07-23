@@ -67,7 +67,7 @@ const CONFIG: Record<TrustLevel, {
     label: "Confiança baixa",
     color: "border-destructive/30 bg-destructive/10 text-destructive",
     icon: ShieldAlert,
-    description: "Última leitura antiga ou pouco frequente. Confirme na loja antes de decidir.",
+    description: "Última leitura antiga ou pouco frequente. Confirme na mercado antes de decidir.",
   },
 };
 

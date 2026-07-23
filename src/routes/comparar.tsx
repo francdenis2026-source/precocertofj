@@ -36,7 +36,7 @@ export const Route = createFileRoute("/comparar")({
       {
         name: "description",
         content:
-          "Compare até 3 variações de produtos e seus estabelecimentos lado a lado, com preço, economia e loja mais barata.",
+          "Compare até 3 variações de produtos e seus estabelecimentos lado a lado, com preço, economia e mercado mais barata.",
       },
       { property: "og:title", content: "Comparar produtos lado a lado — PreçoCerto" },
       {
@@ -440,7 +440,7 @@ function CompararPage() {
                     }))}
                   />
                   <MatrixRow
-                    label="Loja mais barata"
+                    label="Mercado mais barata"
                     values={selectedRows.map((r) => ({
                       key: r.product_key,
                       content: (
@@ -497,7 +497,7 @@ function CompararPage() {
                 <table className="w-full min-w-[600px] border-collapse text-sm">
                   <thead className="text-left text-[11px] uppercase tracking-widest text-muted-foreground">
                     <tr className="border-b border-border">
-                      <th className="px-4 py-2.5 font-semibold">Loja</th>
+                      <th className="px-4 py-2.5 font-semibold">Mercado</th>
                       {selectedRows.map((r) => (
                         <th
                           key={r.product_key}

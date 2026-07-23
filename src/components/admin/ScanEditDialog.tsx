@@ -101,7 +101,7 @@ export function ScanEditDialog({
                 id="notes"
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                placeholder="Ex.: correção conforme etiqueta atual da loja."
+                placeholder="Ex.: correção conforme etiqueta atual da estabelecimento."
                 rows={3}
               />
             </div>

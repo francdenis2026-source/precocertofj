@@ -247,7 +247,7 @@ function ResultView({ result }: { result: PriceSearchResult }) {
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-medium">{g.productName}</span>
                   <span className="text-muted-foreground">
-                    {fmtBRL(g.min)} · {g.samples} amostras · {g.prices.length} lojas
+                    {fmtBRL(g.min)} · {g.samples} amostras · {g.prices.length} estabelecimentos
                   </span>
                 </div>
               </div>

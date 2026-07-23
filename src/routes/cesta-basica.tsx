@@ -640,7 +640,7 @@ function CompareMode({
   const best = data.stores[0];
 
   /**
-   * Estimativas por loja:
+   * Estimativas por mercado:
    * - displayTotal: valor exibido conforme o modo escolhido
    * - minEstimate: soma apenas dos itens com preço (piso conhecido)
    * - maxEstimate: soma dos itens com preço + média dos ausentes (teto estimado)
@@ -1004,7 +1004,7 @@ function CompareMode({
                 <li key={m.key} className="flex flex-wrap items-baseline justify-between gap-2 border-b border-warning/20 py-1 font-mono text-[11px]">
                   <span className="font-semibold text-foreground">{m.label}</span>
                   <span className="text-muted-foreground">
-                    disponível em {m.availableStores} loja(s) · falta em {m.missingStores.slice(0, 3).join(", ")}
+                    disponível em {m.availableStores} mercado(s) · falta em {m.missingStores.slice(0, 3).join(", ")}
                     {m.missingStores.length > 3 && "…"}
                   </span>
                 </li>
@@ -1077,7 +1077,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
   const [pricesLoading, setPricesLoading] = useState(false);
   const listPricesFn = useServerFn(listEssentialPrices);
 
-  // Personalização: modo (global vs. loja específica) + loja + itens a considerar
+  // Personalização: modo (global vs. mercado específica) + mercado + itens a considerar
   const [scope, setScope] = useState<"global" | "store">("global");
   const [selectedStoreId, setSelectedStoreId] = useState<string | null>(null);
   const [options, setOptions] = useState<BasketBuilderOptions | null>(null);
@@ -1096,7 +1096,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
     enabled: !!session.user,
   });
 
-  // Carrega opções (lojas + essenciais) uma vez
+  // Carrega opções (mercados + essenciais) uma vez
   useEffect(() => {
     let cancelled = false;
     setOptionsLoading(true);
@@ -1340,7 +1340,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
       return;
     }
     if (scope === "store" && !selectedStoreId) {
-      setErr("Selecione uma loja para montar a cesta.");
+      setErr("Selecione uma mercado para montar a cesta.");
       return;
     }
     if (includedKeys && includedKeys.size === 0) {
@@ -1467,7 +1467,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
   }
 
   /**
-   * Duplicar cesta do histórico: aplica orçamento, loja e categorias no formulário
+   * Duplicar cesta do histórico: aplica orçamento, mercado e categorias no formulário
    * mas NÃO monta automaticamente — o usuário ajusta antes de rodar a varredura.
    */
   async function handleDuplicateSaved(id: string) {
@@ -1482,9 +1482,9 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
         toast.error("Só é possível duplicar cestas montadas por orçamento.");
         return;
       }
-      // Confirmação opcional — mostra loja e categorias pré-carregadas para
+      // Confirmação opcional — mostra mercado e categorias pré-carregadas para
       // o usuário revisar antes de aplicar no formulário.
-      const storeName = snap.result.restrictedTo?.establishmentName ?? "Todas as lojas";
+      const storeName = snap.result.restrictedTo?.establishmentName ?? "Todas as mercados";
       const includedKeysList = Array.isArray(snap.result.includedKeys)
         ? (snap.result.includedKeys as EssentialKey[])
         : [];
@@ -1501,7 +1501,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
       const budgetLabel = `R$ ${snap.result.budget.toFixed(2).replace(".", ",")}`;
       const ok = await confirm({
         title: `Duplicar "${detail.name}"?`,
-        description: `Orçamento ${budgetLabel} · Loja: ${storeName} · Categorias: ${categoryPreview}. Você poderá ajustar antes de rodar a varredura.`,
+        description: `Orçamento ${budgetLabel} · Mercado: ${storeName} · Categorias: ${categoryPreview}. Você poderá ajustar antes de rodar a varredura.`,
         confirmLabel: "Duplicar e ajustar",
         cancelLabel: "Cancelar",
         tone: "info",
@@ -1523,7 +1523,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
       }
       setShowCustomize(true);
       toast.success(
-        `Cesta "${detail.name}" duplicada. Ajuste loja/categorias e clique em Montar.`,
+        `Cesta "${detail.name}" duplicada. Ajuste mercado/categorias e clique em Montar.`,
       );
       if (typeof window !== "undefined") {
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1606,7 +1606,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
     const list = options.essentials
       .filter((e) => includedKeys?.has(e.key) ?? true)
       .map((e) => {
-        // Se há loja selecionada, priorize o preço mínimo local; senão, use o global.
+        // Se há mercado selecionada, priorize o preço mínimo local; senão, use o global.
         const storeMin =
           scope === "store" && selectedStoreId
             ? options.stores.find((s) => s.establishmentId === selectedStoreId)
@@ -1634,7 +1634,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
     };
   }, [options, includedKeys, scope, selectedStoreId]);
 
-  // Histórico de cestas salvas — filtra por loja quando escopo === 'store'.
+  // Histórico de cestas salvas — filtra por mercado quando escopo === 'store'.
   const savedFiltered = useMemo(() => {
     const rows = savedQuery.data ?? [];
     return rows
@@ -1653,7 +1653,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
         onSubmit={run}
         className="rounded-2xl border border-border bg-surface p-4"
       >
-        {/* Escopo: geral vs. loja */}
+        {/* Escopo: geral vs. mercado */}
         <div className="mb-3 grid grid-cols-2 gap-1 rounded-xl bg-background p-1 border border-border">
           <button
             type="button"
@@ -1665,7 +1665,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                 : "text-muted-foreground hover:text-foreground")
             }
           >
-            Melhor preço (todas as lojas)
+            Melhor preço (todas as mercados)
           </button>
           <button
             type="button"
@@ -1677,14 +1677,14 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                 : "text-muted-foreground hover:text-foreground")
             }
           >
-            Em uma loja específica
+            Em uma mercado específica
           </button>
         </div>
 
         {scope === "store" && (
           <div className="mb-3">
             <label htmlFor="basket-store" className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Loja
+              Mercado
             </label>
             <select
               id="basket-store"
@@ -1694,7 +1694,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
               className="mt-1 h-10 w-full rounded-xl border border-border bg-background px-3 font-display text-[13px] text-foreground outline-none focus:border-primary"
             >
               <option value="">
-                {optionsLoading ? "Carregando lojas..." : "Selecione uma loja"}
+                {optionsLoading ? "Carregando mercados..." : "Selecione uma mercado"}
               </option>
               {options?.stores.map((s) => (
                 <option key={s.establishmentId} value={s.establishmentId}>
@@ -1887,7 +1887,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                 Prévia da varredura
                 {scope === "store" && selectedStoreId && (
                   <span className="ml-1.5 rounded-full bg-primary/10 px-1.5 py-0.5 text-[9.5px] text-primary">
-                    loja selecionada
+                    mercado selecionada
                   </span>
                 )}
               </p>
@@ -1901,10 +1901,10 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                 )}
               </h3>
               <p className="mt-0.5 font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
-                {previewData.withPrice}/{previewData.count} com preço {scope === "store" ? "nesta loja" : "recente"}
+                {previewData.withPrice}/{previewData.count} com preço {scope === "store" ? "nesta mercado" : "recente"}
                 {previewData.count > 0 && (
                   <>
-                    {" "}· piso: menor preço · teto: média entre lojas
+                    {" "}· piso: menor preço · teto: média entre mercados
                   </>
                 )}
               </p>
@@ -1973,7 +1973,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
       )}
 
 
-      {/* Histórico de cestas salvas (filtra por loja quando aplicável). */}
+      {/* Histórico de cestas salvas (filtra por mercado quando aplicável). */}
       {session.user && savedFiltered.length > 0 && (
         <div className="rounded-2xl border border-border bg-surface p-3.5">
           <div className="flex items-baseline justify-between">
@@ -1981,7 +1981,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
               Histórico
               {scope === "store" && selectedStoreId && (
                 <span className="ml-1.5 rounded-full bg-primary/10 px-1.5 py-0.5 text-[9.5px] text-primary">
-                  desta loja
+                  desta mercado
                 </span>
               )}
             </p>
@@ -2049,7 +2049,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
             })}
           </ul>
           <p className="mt-2 font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
-            Duplique para variar loja/categorias sem perder a original. Use o painel abaixo para comparar duas cestas lado a lado.
+            Duplique para variar mercado/categorias sem perder a original. Use o painel abaixo para comparar duas cestas lado a lado.
           </p>
         </div>
       )}
@@ -2085,7 +2085,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
             </p>
             {visibleResult.restrictedTo && (
               <p className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 font-mono text-[9.5px] uppercase tracking-[0.16em] text-primary">
-                Loja: {visibleResult.restrictedTo.establishmentName}
+                Mercado: {visibleResult.restrictedTo.establishmentName}
               </p>
             )}
             <div className="mt-2.5 flex flex-wrap gap-1.5">
@@ -2131,7 +2131,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
               </h2>
               <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
                 {visibleResult.restrictedTo
-                  ? "Menor preço recente na loja selecionada"
+                  ? "Menor preço recente na mercado selecionada"
                   : "Menor preço recente em qualquer mercado"}
               </p>
             </div>
@@ -2197,7 +2197,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                           params={{ id: it.establishmentId }}
                           search={{ q: "" }}
                           className="block font-display text-[14px] font-semibold tabular-nums text-primary hover:underline"
-                          title="Ver na loja"
+                          title="Ver na mercado"
                         >
                           {fmt(it.price)}
                         </Link>
@@ -2224,7 +2224,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                         onClick={() => openBudgetPrices(it.key, it.label)}
                         className="inline-flex items-center gap-1 rounded-md border border-border bg-background px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground hover:border-primary/40 hover:text-primary"
                       >
-                        <Repeat className="h-2.5 w-2.5" /> Trocar loja
+                        <Repeat className="h-2.5 w-2.5" /> Trocar mercado
                       </button>
                       <Link
                         to="/buscar"
@@ -2316,7 +2316,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
         </section>
       )}
 
-      {/* Diálogo "trocar loja" no modo orçamento */}
+      {/* Diálogo "trocar mercado" no modo orçamento */}
       {pricesOpen && (
         <EssentialPricesDialog
           label={pricesOpen.label}
@@ -2548,7 +2548,7 @@ function ManualMode({
   }, [qty, cheapestMap, data]);
 
   // Custo total da cesta se comprada INTEIRAMENTE em cada estabelecimento.
-  // Itens não disponíveis na loja são estimados pela média (averagePrices) e sinalizados.
+  // Itens não disponíveis na mercado são estimados pela média (averagePrices) e sinalizados.
   const perStoreFull = useMemo(() => {
     if (!data) return [];
     const selectedKeys = data.essentials
@@ -2987,7 +2987,7 @@ function ManualMode({
       )}
 
       <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground px-1">
-        Toque para adicionar · digite ou use +/− para a quantidade · a loja mais barata é escolhida automaticamente
+        Toque para adicionar · digite ou use +/− para a quantidade · a mercado mais barata é escolhida automaticamente
       </p>
 
       {perStore.length > 0 && (
@@ -2997,10 +2997,10 @@ function ManualMode({
         >
           <div className="flex items-center justify-between gap-2 pb-2">
             <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              Total por loja (mais barata por item)
+              Total por mercado (mais barata por item)
             </p>
             <span className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
-              {perStore.length} loja(s)
+              {perStore.length} mercado(s)
             </span>
           </div>
           <ul className="divide-y divide-border/60">
@@ -3043,14 +3043,14 @@ function ManualMode({
           <div className="flex items-start justify-between gap-2 pb-2">
             <div>
               <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                Quanto ficaria comprando tudo em cada loja
+                Quanto ficaria comprando tudo em cada mercado
               </p>
               <p className="mt-0.5 font-mono text-[9.5px] tracking-[0.12em] text-muted-foreground/80">
-                Ordenado por cobertura da sua cesta e menor valor. Itens fora do estoque da loja usam preço médio (estimativa).
+                Ordenado por cobertura da sua cesta e menor valor. Itens fora do estoque da mercado usam preço médio (estimativa).
               </p>
             </div>
             <span className="shrink-0 font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
-              {perStoreFull.length} loja(s)
+              {perStoreFull.length} mercado(s)
             </span>
           </div>
           <ul className="divide-y divide-border/60">
@@ -3129,7 +3129,7 @@ function ManualMode({
                           )
                         }
                         className="mt-1 inline-flex items-center gap-1 rounded-full border border-border bg-background px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground hover:border-primary hover:text-primary"
-                        title={`Avisar quando a cesta ficar abaixo de ${fmt(Math.max(1, Math.floor(s.totalEstimated * 0.9)))} nesta loja`}
+                        title={`Avisar quando a cesta ficar abaixo de ${fmt(Math.max(1, Math.floor(s.totalEstimated * 0.9)))} nesta mercado`}
                       >
                         <AlertTriangle className="h-2.5 w-2.5" /> alerta -10%
                       </button>
@@ -3260,7 +3260,7 @@ function ManualMode({
                   type="button"
                   onClick={() => openPrices(ess.key, ess.label)}
                   className="inline-flex items-center gap-1 self-start rounded-md border border-border bg-background px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground hover:border-primary/40 hover:text-primary"
-                  aria-label={`Ver preços de ${ess.label} em outras lojas`}
+                  aria-label={`Ver preços de ${ess.label} em outras mercados`}
                 >
                   <Eye className="h-2.5 w-2.5" /> Ver preços
                 </button>
@@ -3294,7 +3294,7 @@ function EssentialPricesDialog({
   /**
    * Se informado, renderiza um botão "Escolher" em cada linha e devolve a
    * escolha do usuário para o componente pai (usado no modo cesta por
-   * orçamento para trocar a loja/preço de um item específico).
+   * orçamento para trocar a mercado/preço de um item específico).
    */
   onSelect?: (row: EssentialPricesResult["rows"][number]) => void;
 }) {
@@ -3313,7 +3313,7 @@ function EssentialPricesDialog({
         <div className="flex items-center justify-between border-b border-border px-4 py-3">
           <div>
             <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-              Preços em todas as lojas
+              Preços em todas as mercados
             </p>
             <p className="font-display text-[16px] font-bold text-foreground leading-tight">
               {label}
@@ -4223,7 +4223,7 @@ function BasketDetailDialog({
                   <tr>
                     <th className="px-3 py-2 font-semibold">Item</th>
                     <th className="px-3 py-2 font-semibold">Produto</th>
-                    <th className="px-3 py-2 font-semibold">Loja mais barata</th>
+                    <th className="px-3 py-2 font-semibold">Mercado mais barata</th>
                     <th className="px-3 py-2 text-right font-semibold">Preço</th>
                   </tr>
                 </thead>
@@ -4589,7 +4589,7 @@ function buildBasketSummary(
   });
   lines.push("");
 
-  lines.push("🛒 Itens (loja mais barata):");
+  lines.push("🛒 Itens (mercado mais barata):");
   best.items.forEach((it, i) => {
     const label = data.essentials[i].label;
     if (it) {
@@ -4597,7 +4597,7 @@ function buildBasketSummary(
     } else {
       const avg = data.averagePrices[data.essentials[i].key];
       lines.push(
-        `• ${label}: sem preço nesta loja${typeof avg === "number" ? ` (média R$ ${avg.toFixed(2).replace(".", ",")})` : ""}`,
+        `• ${label}: sem preço nesta mercado${typeof avg === "number" ? ` (média R$ ${avg.toFixed(2).replace(".", ",")})` : ""}`,
       );
     }
   });

@@ -65,7 +65,7 @@ export const Route = createFileRoute("/cadastro")({
   head: () => ({
     meta: [
       { title: "Criar conta — PreçoCerto" },
-      { name: "description", content: "Cadastre-se em 30 segundos para ver os preços de cada loja." },
+      { name: "description", content: "Cadastre-se em 30 segundos para ver os preços de cada mercado." },
       { name: "robots", content: "noindex" },
     ],
   }),

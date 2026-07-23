@@ -197,7 +197,7 @@ function HomePage() {
               className="mt-5 max-w-2xl text-white/90 sm:mt-6 md:mt-8"
               style={{ fontSize: "clamp(0.98rem, 1.4vw, 1.25rem)", lineHeight: 1.55 }}
             >
-              Compare mercados de Feijó em tempo real e descubra em qual loja
+              Compare mercados de Feijó em tempo real e descubra em qual mercado
               sua cesta sai mais barata — com dados atualizados pela própria
               comunidade.
             </p>

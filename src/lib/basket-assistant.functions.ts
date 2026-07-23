@@ -469,7 +469,7 @@ export const explainBasketSavings = createServerFn({ method: "POST" })
     const storeList = Array.from(perStore.values()).sort((a, b) => b.total - a.total);
 
     const lines: string[] = [];
-    lines.push(`💡 Sua cesta custa ${fmt(totalCheapest)} escolhendo a loja mais barata para cada item.`);
+    lines.push(`💡 Sua cesta custa ${fmt(totalCheapest)} escolhendo a mercado mais barata para cada item.`);
     if (savings > 0) {
       lines.push(
         `Comprando pela média do mercado, você pagaria ${fmt(totalAvg)} — economia de ${fmt(savings)} (${savingsPct}%).`,
@@ -482,7 +482,7 @@ export const explainBasketSavings = createServerFn({ method: "POST" })
     }
     if (storeList.length > 0) {
       lines.push("");
-      lines.push("🏪 Lojas usadas na sua cesta ideal:");
+      lines.push("🏪 Mercados usadas na sua cesta ideal:");
       for (const s of storeList.slice(0, 4)) {
         lines.push(`   ${s.name}: ${fmt(s.total)} (${s.items} item(ns))`);
       }

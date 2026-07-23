@@ -387,7 +387,7 @@ export const getBasketComparison = createServerFn({ method: "POST" })
 
     const cheapestBasketTotal = Number(cheapest.reduce((s, r) => s + r.price, 0).toFixed(2));
 
-    // Preço médio por essencial (média dos melhores preços por loja)
+    // Preço médio por essencial (média dos melhores preços por mercado)
     const averagePrices: Partial<Record<EssentialKey, number>> = {};
     for (const ess of ESSENTIALS) {
       let sum = 0;
@@ -431,7 +431,7 @@ export type BudgetBasketResult = {
   total: number;
   remaining: number;
   missing: Array<{ key: EssentialKey; label: string }>;
-  /** Loja usada quando o cálculo foi restrito a um único estabelecimento. */
+  /** Mercado usada quando o cálculo foi restrito a um único estabelecimento. */
   restrictedTo?: { establishmentId: string; establishmentName: string } | null;
   /** Chaves consideradas na montagem (após personalização). */
   includedKeys: EssentialKey[];
@@ -544,7 +544,7 @@ export type BasketStoreOption = {
   city: string | null;
   itemsCovered: number;
   totalEssentials: number;
-  /** Preço mínimo desta loja por essencial (para prévia). */
+  /** Preço mínimo desta mercado por essencial (para prévia). */
   minPricesByKey: Partial<Record<EssentialKey, number>>;
 };
 
@@ -552,11 +552,11 @@ export type EssentialOption = {
   key: EssentialKey;
   label: string;
   category: EssentialCategory;
-  /** Média entre os menores preços de cada loja para esse essencial (global). */
+  /** Média entre os menores preços de cada mercado para esse essencial (global). */
   avgPrice: number | null;
-  /** Menor preço encontrado em qualquer loja (global). */
+  /** Menor preço encontrado em qualquer mercado (global). */
   minPrice: number | null;
-  /** Nº de lojas com esse essencial (global). */
+  /** Nº de mercados com esse essencial (global). */
   storesCount: number;
 };
 
@@ -566,7 +566,7 @@ export type BasketBuilderOptions = {
   stores: BasketStoreOption[];
 };
 
-/** Lista lojas disponíveis para montagem por orçamento + catálogo de essenciais. */
+/** Lista mercados disponíveis para montagem por orçamento + catálogo de essenciais. */
 export const listBasketBuilderOptions = createServerFn({ method: "GET" }).handler(
   async (): Promise<BasketBuilderOptions> => {
     const matrix = await computeMatrix();
@@ -653,7 +653,7 @@ export type EssentialPricesResult = {
   avg: number | null;
 };
 
-/** Lista todas as lojas que vendem um essencial, ordenadas pelo menor preço. */
+/** Lista todas as mercados que vendem um essencial, ordenadas pelo menor preço. */
 export const listEssentialPrices = createServerFn({ method: "POST" })
   .inputValidator((data: { key: string }) => {
     const k = String(data?.key ?? "");

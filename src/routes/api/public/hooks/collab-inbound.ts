@@ -31,7 +31,7 @@ const InboundSchema = z.object({
   external_ref: z.string().max(200).optional().nullable(),
 });
 
-const EMAIL_META_RE = /(mercado|loja|supermercado)\s*[:\-]?\s*([^\n\r]{2,80})/i;
+const EMAIL_META_RE = /(mercado|mercado|supermercado)\s*[:\-]?\s*([^\n\r]{2,80})/i;
 const DATE_RE = /(\d{2}\/\d{2}\/\d{4})/;
 
 function tryExtractField(body: string | null | undefined, re: RegExp): string | null {

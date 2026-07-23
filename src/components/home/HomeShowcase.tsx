@@ -589,7 +589,7 @@ function CheapestComparisonsBlock({ rows }: { rows: Comparison[] }) {
                   onClick={() => setDetailRow(r)}
                   disabled={!isMulti}
                   className="inline-flex flex-1 items-center justify-center gap-0.5 rounded-full border border-accent-strong/40 bg-accent-strong/[0.08] px-1 py-0.5 text-[9.5px] font-semibold uppercase tracking-wider text-accent-strong transition hover:bg-accent-strong/15 disabled:opacity-40"
-                  title={isMulti ? "Comparar preços entre lojas" : "Único preço disponível"}
+                  title={isMulti ? "Comparar preços entre mercados" : "Único preço disponível"}
                 >
                   <GitCompare className="h-2 w-2" />
                   Comparar
@@ -707,7 +707,7 @@ function CompareDialog({
               </DialogTitle>
               <DialogDescription className="text-left text-xs">
                 Comparação lado a lado entre {row.store_count}{" "}
-                {row.store_count === 1 ? "loja" : "lojas"} · economia de até{" "}
+                {row.store_count === 1 ? "mercado" : "mercados"} · economia de até{" "}
                 {Number(row.savings_pct).toFixed(1)}%
               </DialogDescription>
             </DialogHeader>
@@ -800,7 +800,7 @@ function RankingDialog({
             Ranking de melhores preços
           </DialogTitle>
           <DialogDescription className="text-left text-xs">
-            {rows.length} produtos comparados — ordenados pela maior economia entre lojas.
+            {rows.length} produtos comparados — ordenados pela maior economia entre mercados.
           </DialogDescription>
         </DialogHeader>
 
@@ -824,7 +824,7 @@ function RankingDialog({
                 <p className="truncate text-[10.5px] text-muted-foreground">
                   <Trophy className="mr-0.5 inline h-2.5 w-2.5 text-savings" />
                   {shortenStoreName(r.cheapest_store)} · {r.store_count}{" "}
-                  {r.store_count === 1 ? "loja" : "lojas"}
+                  {r.store_count === 1 ? "mercado" : "mercados"}
                 </p>
               </div>
               <div className="text-right">

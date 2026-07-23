@@ -35,7 +35,7 @@ export function StorefrontMark({
       <path d="M8 4.2 V8.2" />
       <path d="M12 4.2 V8.2" />
       <path d="M16 4.2 V8.2" />
-      {/* Corpo da loja */}
+      {/* Corpo da mercado */}
       <path d="M4.8 8.2 V19.4 A0.6 0.6 0 0 0 5.4 20 H18.6 A0.6 0.6 0 0 0 19.2 19.4 V8.2" />
       {/* Porta arqueada */}
       <path d="M10 20 V14.2 A2 2 0 0 1 14 14.2 V20" />

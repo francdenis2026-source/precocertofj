@@ -434,7 +434,7 @@ function MelhoresPrecosPage() {
           <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
             <div className="min-w-0 max-w-3xl">
               <p className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.22em] text-primary">
-                Comparativo entre lojas
+                Comparativo entre mercados
               </p>
               <h1 className="mt-1.5 font-display text-2xl leading-[1.1] tracking-tight text-foreground md:text-[32px]">
                 Onde cada produto está{" "}
@@ -634,7 +634,7 @@ function MelhoresPrecosPage() {
 
             <div>
               <label className="mb-1 block text-[11px] font-medium text-muted-foreground">
-                Mínimo de lojas com preço:{" "}
+                Mínimo de mercados com preço:{" "}
                 <span className="font-mono text-foreground">{minStores}</span>
               </label>
               <input
@@ -645,7 +645,7 @@ function MelhoresPrecosPage() {
                 value={minStores}
                 onChange={(e) => setSearch({ stores: Number(e.target.value) })}
                 className="w-full accent-primary"
-                aria-label="Número mínimo de lojas com preço"
+                aria-label="Número mínimo de mercados com preço"
               />
               <div className="flex justify-between text-[10px] text-muted-foreground">
                 <span>1</span>
@@ -742,7 +742,7 @@ function MelhoresList({ rows, startIndex = 0 }: { rows: Comparison[]; startIndex
                 id={row.product_key}
                 index={globalIdx}
                 variant="full"
-                reason="Os melhores preços por loja aparecem apenas para contas cadastradas. Crie sua conta grátis (30 dias) para ver o ranking completo."
+                reason="Os melhores preços por mercado aparecem apenas para contas cadastradas. Crie sua conta grátis (30 dias) para ver o ranking completo."
                 trackEventName="visitor_click_unlock_melhores_precos"
                 trackPayload={{ product_key: row.product_key, rank: globalIdx + 1 }}
               >
@@ -953,7 +953,7 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
   const bestPrice = Number(row.min_price);
   const avgPrice = Number(row.avg_price);
 
-  // Frescor agregado do card: usa o preço mais recente entre as lojas
+  // Frescor agregado do card: usa o preço mais recente entre as mercados
   const latestIso = stores.reduce<string | null>((acc, s) => {
     if (!s.last_seen_at) return acc;
     if (!acc) return s.last_seen_at;
@@ -1402,7 +1402,7 @@ function EmptyState({ hasCategory }: { hasCategory: boolean }) {
     <FeedbackEmptyState
       icon={PackageSearch}
       title={hasCategory ? "Nenhum produto nesta categoria ainda" : "Ainda não há produtos cadastrados"}
-      message="Cadastre produtos com preço em algum mercado para vê-los aqui. Quando o mesmo item aparecer em mais de uma loja, mostramos automaticamente o comparativo e a economia."
+      message="Cadastre produtos com preço em algum mercado para vê-los aqui. Quando o mesmo item aparecer em mais de uma mercado, mostramos automaticamente o comparativo e a economia."
     />
   );
 }

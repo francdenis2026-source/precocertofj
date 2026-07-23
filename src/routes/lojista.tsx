@@ -211,7 +211,7 @@ function Overview() {
       <div className="grid gap-4 md:grid-cols-4">
         <KPI label="Visualizações do perfil" value="12.4k" delta="+18%" icon={Eye} />
         <KPI label="Cliques em produtos" value="3.2k" delta="+9%" icon={ArrowUpRight} />
-        <KPI label="Rota até a loja" value="847" delta="+22%" icon={Store} />
+        <KPI label="Rota até a mercado" value="847" delta="+22%" icon={Store} />
         <KPI label="Preços atualizados" value="1.129" delta="+4%" icon={TrendingUp} />
       </div>
 
@@ -292,7 +292,7 @@ function Overview() {
             <ShieldCheck className="h-5 w-5 text-savings" />
             <p className="mt-3 font-display text-xl">Selo Verificado</p>
             <p className="mt-1 text-sm text-primary-foreground/90">
-              Sua loja atualiza preços regularmente. Continue postando para manter o selo.
+              Sua mercado atualiza preços regularmente. Continue postando para manter o selo.
             </p>
           </div>
         </div>

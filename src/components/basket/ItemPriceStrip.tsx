@@ -4,7 +4,7 @@ import { Crown, Repeat } from "lucide-react";
 /**
  * Strip horizontal compacto de comparação lado a lado por item.
  *
- * Mostra as top-N lojas (padrão 5) para um mesmo essencial, com o menor
+ * Mostra as top-N mercados (padrão 5) para um mesmo essencial, com o menor
  * preço em destaque e a variação percentual em relação ao mínimo — sem
  * abrir modal/detalhes. Rolagem horizontal em telas pequenas.
  */
@@ -47,7 +47,7 @@ export function ItemPriceStrip({
     <div className={"relative " + className}>
       <div className="mb-1 flex items-center justify-between gap-2 px-0.5">
         <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground">
-          Comparar lojas · {rows.length}
+          Comparar mercados · {rows.length}
         </p>
         {spread > 0 ? (
           <span
