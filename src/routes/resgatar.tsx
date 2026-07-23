@@ -552,6 +552,12 @@ function RedeemPage() {
               >
                 {submitting ? (
                   <><Loader2 className="h-4 w-4 animate-spin" /> Ativando…</>
+                ) : verifyQuery.isFetching && formatOk ? (
+                  <><Loader2 className="h-4 w-4 animate-spin" /> Verificando código…</>
+                ) : serverRejected || serverNotFound ? (
+                  <><XCircle className="h-4 w-4" /> Código inválido</>
+                ) : !serverVerified && formatOk ? (
+                  <>Aguardando verificação…</>
                 ) : (
                   <>Ativar licença <ArrowRight className="h-4 w-4" /></>
                 )}
