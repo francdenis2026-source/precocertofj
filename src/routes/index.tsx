@@ -611,32 +611,22 @@ function HomePage() {
                   letterSpacing: "-0.02em",
                 }}
               >
-                Nunca mais pague caro por{" "}
+                Já tem um código?{" "}
                 <span className="font-bold" style={{ color: P.gold }}>
-                  arroz, feijão e café.
+                  Resgate seus benefícios.
                 </span>
               </h3>
               <p className="mt-1.5 text-[13.5px] text-white/85 sm:text-[14px]">
-                Cadastro em 30s · sem cartão.
+                Ative sua licença em segundos e desbloqueie os recursos exclusivos.
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
               <Link
-                to="/cadastro"
+                to="/resgatar"
                 className={dsx(ds.btn.base, ds.btn.sizes.md)}
                 style={{ background: P.gold, color: P.navy }}
               >
-                Criar conta <ArrowRight className="h-4 w-4" />
-              </Link>
-              <Link
-                to="/resgatar"
-                className={dsx(
-                  ds.btn.base,
-                  ds.btn.sizes.md,
-                  "border border-white/30 text-[color:#F5F6FA] hover:bg-white/10",
-                )}
-              >
-                Tenho um código
+                Resgatar código <ArrowRight className="h-4 w-4" />
               </Link>
             </div>
           </div>
