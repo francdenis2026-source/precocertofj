@@ -447,11 +447,11 @@
 @media (min-width: 768px) { .section-y-lg { padding-block: 5rem; } }
 
 /* Stack utilities — espaçamento vertical padrão entre filhos */
-@utility stack-xs > * + * { margin-top: 0.5rem; }
-@utility stack-sm > * + * { margin-top: 0.75rem; }
-@utility stack-md > * + * { margin-top: 1rem; }
-@utility stack-lg > * + * { margin-top: 1.5rem; }
-@utility stack-xl > * + * { margin-top: 2rem; }
+@utility stack-xs { & > * + * { margin-top: 0.5rem; } }
+@utility stack-sm { & > * + * { margin-top: 0.75rem; } }
+@utility stack-md { & > * + * { margin-top: 1rem; } }
+@utility stack-lg { & > * + * { margin-top: 1.5rem; } }
+@utility stack-xl { & > * + * { margin-top: 2rem; } }
 
 /* Card padrão do DS */
 @utility ds-card {
