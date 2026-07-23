@@ -121,6 +121,7 @@ export const Route = createFileRoute("/estabelecimento/$slug")({
 
 function EstablishmentPage() {
   const { storeId } = Route.useLoaderData();
+  const { slug } = Route.useParams();
   const { data } = useSuspenseQuery(storeQuery(storeId));
   const [q, setQ] = useState("");
   const [sort, setSort] = useState<SortKey>("price-asc");
