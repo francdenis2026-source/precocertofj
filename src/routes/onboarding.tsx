@@ -99,15 +99,15 @@ function OnboardingPage() {
 
         <div className="mt-6 flex items-center gap-2 rounded-full border border-[#e6c97740] bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.24em] text-[#e6c977]">
           <ShieldCheck className="h-3 w-3" />
-          Primeiro acesso
+          Falta menos de 1 minuto
         </div>
 
         <h1 className="mt-4 text-center font-display text-3xl font-semibold leading-tight text-white sm:text-4xl">
-          Vamos personalizar o seu PreçoCerto
+          Só mais alguns dados para começar
         </h1>
         <p className="mt-2 max-w-md text-center text-sm leading-relaxed text-white/85">
-          Só precisamos de alguns dados para exibir os mercados do seu bairro
-          e enviar alertas quando os preços caírem.
+          A gente usa seu bairro para mostrar os mercados perto de você e avisar
+          quando o preço dos seus produtos cair.
         </p>
 
         <form
@@ -117,11 +117,11 @@ function OnboardingPage() {
           }}
           className="mt-8 w-full space-y-4 rounded-2xl border border-white/10 bg-white/95 p-6 text-[#0a1631] shadow-2xl backdrop-blur"
         >
-          <FieldRow icon={<User className="h-4 w-4" />} label="Nome completo">
+          <FieldRow icon={<User className="h-4 w-4" />} label="Seu nome">
             <Input
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              placeholder="Como devemos te chamar"
+              placeholder="Ex.: Maria Silva"
               autoComplete="name"
               autoFocus
             />
@@ -131,7 +131,7 @@ function OnboardingPage() {
             <Input
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="(00) 00000-0000"
+              placeholder="(68) 90000-0000"
               inputMode="tel"
               autoComplete="tel"
             />
@@ -159,13 +159,13 @@ function OnboardingPage() {
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
               <>
-                Salvar e continuar <ArrowRight className="h-4 w-4" />
+                Entrar no painel <ArrowRight className="h-4 w-4" />
               </>
             )}
           </Button>
 
           <p className="text-center text-[11px] text-muted-foreground">
-            Você poderá editar essas informações no seu perfil a qualquer momento.
+            Você pode editar tudo depois no seu perfil. Nada é compartilhado.
           </p>
         </form>
       </div>
