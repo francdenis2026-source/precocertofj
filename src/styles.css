@@ -1578,3 +1578,16 @@ iframe[src*="lovable.dev/badge"] {
     transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
   }
 }
+
+/* Homepage live preview toggle: "Antes" (looser) vs "Depois" (compact default) */
+.pc-home[data-preview="before"] .p-4 { padding: 1.5rem; }
+.pc-home[data-preview="before"] [class*="sm:p-5"],
+.pc-home[data-preview="before"] [class*="sm:p-6"] { padding: 1.75rem; }
+.pc-home[data-preview="before"] [class*="lg:p-7"],
+.pc-home[data-preview="before"] [class*="lg:p-8"],
+.pc-home[data-preview="before"] [class*="lg:p-9"] { padding: 2.25rem; }
+.pc-home[data-preview="before"] .grid.gap-2\.5,
+.pc-home[data-preview="before"] .grid.sm\:gap-3,
+.pc-home[data-preview="before"] .grid.md\:gap-3\.5 { gap: 1.5rem; }
+.pc-home[data-preview="before"] h1 { font-size: clamp(2.25rem, 5.5vw, 4.5rem) !important; }
+.pc-home[data-preview="before"] h2 { font-size: clamp(1.75rem, 3.5vw, 2.5rem) !important; }

@@ -67,6 +67,7 @@ function HomePage() {
   const navigate = useNavigate();
   const [q, setQ] = useState("");
   const [today, setToday] = useState("");
+  const [previewMode, setPreviewMode] = useState<"before" | "after">("after");
 
   useEffect(() => {
     setToday(
@@ -95,7 +96,8 @@ function HomePage() {
 
   return (
     <div
-      className="min-h-screen w-full antialiased"
+      className="min-h-screen w-full antialiased pc-home"
+      data-preview={previewMode}
       style={{
         background: P.paper,
         color: P.ink,
@@ -103,6 +105,26 @@ function HomePage() {
       }}
     >
       <SiteHeader variant="solid" showThemeToggle />
+
+      {/* Live preview toggle: Antes/Depois */}
+      <button
+        type="button"
+        onClick={() => setPreviewMode((m) => (m === "after" ? "before" : "after"))}
+        aria-label="Alternar visualização entre layout Antes e Depois"
+        className="fixed bottom-4 right-4 z-50 inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-[11px] font-bold uppercase tracking-[0.18em] shadow-lg backdrop-blur transition-all hover:-translate-y-0.5 sm:bottom-6 sm:right-6"
+        style={{
+          background: "color-mix(in oklab, var(--pc-home-card) 92%, transparent)",
+          borderColor: P.line,
+          color: P.heading,
+        }}
+      >
+        <span
+          className="inline-block h-2 w-2 rounded-full"
+          style={{ background: previewMode === "after" ? P.gold : P.navy }}
+        />
+        {previewMode === "after" ? "Depois (compacto)" : "Antes (espaçado)"}
+      </button>
+
 
       {/* ============== EDITORIAL CARD ============== */}
       <div className="mx-auto w-full max-w-6xl px-4 pt-3 pb-4 sm:px-6 sm:pt-4 lg:px-8 lg:pt-5">
@@ -419,13 +441,13 @@ function HomePage() {
 
           {/* -------- EXPLORE (dark navy band inside card) -------- */}
           <div
-            className="p-6 sm:p-7 lg:p-9 xl:p-10"
+            className="p-4 sm:p-5 lg:p-7 xl:p-8"
             style={{ background: P.navy, color: "#F5F6FA" }}
           >
-            <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="mb-4 flex flex-col gap-2 sm:mb-5 md:flex-row md:items-end md:justify-between md:gap-6">
               <div className="max-w-xl">
                 <div
-                  className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em]"
+                  className="mb-2 text-[9.5px] font-bold uppercase tracking-[0.28em] sm:text-[10px]"
                   style={{ color: P.gold }}
                 >
                   Explore a plataforma
@@ -433,27 +455,25 @@ function HomePage() {
                 <h2
                   className={`${serif} font-normal`}
                   style={{
-                    fontSize: "clamp(1.5rem, 3.2vw, 2.35rem)",
+                    fontSize: "clamp(1.35rem, 2.6vw, 2rem)",
                     lineHeight: 1,
                     letterSpacing: "-0.025em",
                     color: "#F5F6FA",
                   }}
                 >
-                  Tudo em três passos,
-                  <br />
+                  Tudo em três passos,{" "}
                   <span className="italic" style={{ color: P.gold }}>
                     sem esforço.
                   </span>
                 </h2>
-                <p className="mt-3 max-w-md text-[14px] leading-relaxed text-white/60">
-                  Ferramentas exclusivas para que você nunca mais pague caro em
-                  itens essenciais.
+                <p className="mt-2 max-w-md text-[13px] leading-snug text-white/60 sm:text-[13.5px]">
+                  Ferramentas exclusivas para você nunca mais pagar caro em itens essenciais.
                 </p>
               </div>
-              <div className="hidden h-px flex-1 md:mx-10 md:mb-3 md:block" style={{ background: "rgb(255 255 255 / 0.08)" }} />
+              <div className="hidden h-px flex-1 md:mx-8 md:mb-3 md:block" style={{ background: "rgb(255 255 255 / 0.08)" }} />
             </div>
 
-            <div className="grid gap-4 md:grid-cols-3 md:gap-6">
+            <div className="grid gap-2.5 sm:gap-3 md:grid-cols-3 md:gap-3.5">
               <ExploreCard
                 to="/melhores-precos"
                 number="01"
@@ -477,6 +497,7 @@ function HomePage() {
               />
             </div>
           </div>
+
         </div>
       </div>
 
@@ -588,7 +609,7 @@ function ExploreCard({
   return (
     <Link
       to={to}
-      className="group block rounded-2xl border p-5 transition-all duration-500 hover:-translate-y-1 lg:p-6"
+      className="group block rounded-xl border p-3.5 transition-all duration-300 hover:-translate-y-0.5 sm:rounded-2xl sm:p-4 lg:p-5"
       style={{
         background: "rgb(255 255 255 / 0.05)",
         borderColor: "rgb(255 255 255 / 0.10)",
@@ -603,22 +624,23 @@ function ExploreCard({
       }}
     >
       <div
-        className={`${serif} mb-4 italic opacity-60 transition-opacity group-hover:opacity-100`}
+        className={`${serif} mb-2 italic opacity-60 transition-opacity group-hover:opacity-100 sm:mb-2.5`}
         style={{
           color: P.gold,
-          fontSize: "clamp(1.9rem, 3.4vw, 2.75rem)",
+          fontSize: "clamp(1.5rem, 2.6vw, 2.15rem)",
           lineHeight: 1,
           letterSpacing: "-0.03em",
         }}
       >
         {number}
       </div>
-      <h3 className="mb-2 text-lg font-bold text-white lg:text-[20px]">{title}</h3>
-      <p className="text-[13.5px] leading-relaxed text-white/60">{desc}</p>
-      <div className="mt-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.24em] text-white/80 transition-colors group-hover:text-[color:var(--pc-home-gold)]">
+      <h3 className="mb-1.5 text-[15px] font-bold text-white sm:text-base lg:text-[17px]">{title}</h3>
+      <p className="text-[12.5px] leading-snug text-white/60 sm:text-[13px]">{desc}</p>
+      <div className="mt-2.5 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-white/80 transition-colors group-hover:text-[color:var(--pc-home-gold)] sm:mt-3 sm:text-[10.5px]">
         {cta}
-        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
       </div>
     </Link>
   );
 }
+
