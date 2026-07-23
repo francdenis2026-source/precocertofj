@@ -143,10 +143,14 @@ function HomePage() {
           style={{ minHeight: "min(92vh, 880px)" }}
         >
           <div className="max-w-4xl">
-            <div className={dsx(ds.chip.onDark, "text-[10.5px] uppercase tracking-[0.2em] sm:text-[11.5px]")}>
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full" style={{ background: PALETTE.gold }} />
-              <span className="truncate">{today || "atualizado agora"} · edição diária</span>
+            <div className={dsx(ds.chip.onDark, "max-w-full text-[10.5px] uppercase tracking-[0.18em] sm:text-[11.5px]")}>
+              <span className="h-1.5 w-1.5 shrink-0 animate-pulse rounded-full" style={{ background: PALETTE.gold }} />
+              <span className="min-w-0 truncate">
+                <span className="sm:hidden">{todayShort || "hoje"} · edição diária</span>
+                <span className="hidden sm:inline">{today || "atualizado agora"} · edição diária</span>
+              </span>
             </div>
+
 
             <h1
               className={`${serif} mt-5 font-normal text-white sm:mt-6 md:mt-8`}
