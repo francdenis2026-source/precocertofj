@@ -145,25 +145,25 @@ export function SiteFooter() {
       </div>
 
       {/* Bottom — legal strip */}
-      <div style={{ borderTop: `1px solid ${PALETTE.line}` }}>
+      <div style={{ borderTop: `1px solid ${PALETTE.line}`, background: "#eef2f8" }}>
         <div
           className={dsx(
             ds.container,
-            "flex flex-col items-start justify-between gap-3 py-5 text-[11.5px] sm:flex-row sm:items-center",
+            "flex flex-col items-start justify-between gap-3 py-5 text-[13px] font-medium sm:flex-row sm:items-center",
           )}
-          style={{ color: PALETTE.muted }}
+          style={{ color: PALETTE.ink }}
         >
-          <div className="flex items-center gap-2">
-            <span>© {year} PreçoCerto</span>
-            <span aria-hidden>·</span>
-            <span>Feito com carinho em Feijó · Acre</span>
+          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span>© {year} <strong className="font-semibold">PreçoCerto</strong></span>
+            <span aria-hidden style={{ color: PALETTE.muted }}>·</span>
+            <span style={{ color: PALETTE.navy2 }}>Feito com carinho em Feijó · Acre</span>
           </div>
           <div className="flex items-center gap-4">
-            <Link to="/privacidade" className="hover:text-[color:var(--nt-ink)]">
+            <Link to="/privacidade" className="underline-offset-2 hover:underline" style={{ color: PALETTE.navy }}>
               Privacidade
             </Link>
-            <span aria-hidden>·</span>
-            <Link to="/colaborar" className="hover:text-[color:var(--nt-ink)]">
+            <span aria-hidden style={{ color: PALETTE.muted }}>·</span>
+            <Link to="/colaborar" className="underline-offset-2 hover:underline" style={{ color: PALETTE.navy }}>
               Termos
             </Link>
           </div>
