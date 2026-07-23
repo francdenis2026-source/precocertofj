@@ -1,12 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import {
-  ArrowLeft,
   MapPin,
   Store,
-  Loader2,
   Package,
   Search,
   Star,
@@ -22,6 +20,13 @@ import {
 import { MobileNav } from "@/components/nav/MobileNav";
 import { useSession } from "@/hooks/useSession";
 import { toast } from "sonner";
+import {
+  PageHeader,
+  SectionCard,
+  StatGrid,
+  EmptyState,
+  LoadingSkeleton,
+} from "@/components/layout";
 
 export const Route = createFileRoute("/mapa")({
   head: () => ({
@@ -161,36 +166,21 @@ function NeighborhoodsPage() {
 
   return (
     <div className="min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
-      <div className="mx-auto max-w-2xl px-3 py-4 sm:px-4">
-        <header className="mb-4 flex items-center gap-3">
-          <Link
-            to="/"
-            aria-label="Voltar"
-            className="rounded-full border border-border p-1.5 text-muted-foreground hover:text-foreground"
-          >
-            <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
-          </Link>
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
-              <MapPin className="h-4 w-4 text-primary" strokeWidth={1.5} />
-              <h1 className="text-base font-semibold text-foreground">
-                Mercados por bairro
-              </h1>
-            </div>
-            <p className="text-[11px] text-muted-foreground">
-              Encontre os mercados cadastrados na sua região
-            </p>
-          </div>
-        </header>
+      <main className="mx-auto w-full max-w-4xl px-4 md:px-6">
+        <PageHeader
+          breadcrumbs={[{ label: "Início", to: "/" }, { label: "Mercados por bairro" }]}
+          title="Mercados por bairro"
+          description="Encontre os mercados cadastrados na sua região e favorite os seus."
+        />
 
         {/* Barra de busca */}
-        <div className="mb-3 flex items-center gap-2 rounded-2xl border border-border bg-card px-3 py-2">
+        <div className="mb-4 flex items-center gap-2 rounded-xl border border-border/60 bg-card px-3 py-2 shadow-sm">
           <Search className="h-4 w-4 text-muted-foreground" strokeWidth={1.5} />
           <input
             value={term}
             onChange={(e) => setTerm(e.target.value)}
             placeholder="Buscar mercado por nome..."
-            className="min-w-0 flex-1 bg-transparent text-sm text-foreground placeholder:text-muted-foreground focus:outline-none"
+            className="min-w-0 flex-1 bg-transparent text-[14px] text-foreground placeholder:text-muted-foreground focus:outline-none"
             data-no-translate
           />
           {term && (
@@ -207,20 +197,20 @@ function NeighborhoodsPage() {
 
         {/* Seus bairros — atalho */}
         {isAuthed && favoriteGroups.length > 0 && !term && (
-          <section className="mb-4">
-            <h2 className="mb-2 flex items-center gap-1.5 px-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-              <Star className="h-3 w-3 fill-primary text-primary" /> Seus bairros
+          <section className="mb-5">
+            <h2 className="mb-2 flex items-center gap-1.5 px-1 text-[13px] font-semibold uppercase tracking-wide text-muted-foreground">
+              <Star className="h-3.5 w-3.5 fill-primary text-primary" /> Seus bairros
             </h2>
             <div className="flex gap-2 overflow-x-auto pb-1">
               {favoriteGroups.map((g) => (
                 <a
                   key={g.neighborhood}
                   href={`#bairro-${encodeURIComponent(g.neighborhood)}`}
-                  className="flex shrink-0 items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs font-semibold text-primary hover:bg-primary/10"
+                  className="flex shrink-0 items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5 text-[13px] font-semibold text-primary hover:bg-primary/10"
                 >
-                  <MapPin className="h-3 w-3" />
+                  <MapPin className="h-3.5 w-3.5" />
                   {g.neighborhood}
-                  <span className="rounded-full bg-primary/15 px-1.5 text-[10px]">
+                  <span className="rounded-full bg-primary/15 px-1.5 text-[13px]">
                     {g.establishments.length}
                   </span>
                 </a>
@@ -229,50 +219,40 @@ function NeighborhoodsPage() {
           </section>
         )}
 
-        {groups.isLoading && (
-          <div className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-card p-8 text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            Carregando bairros...
-          </div>
-        )}
+        {groups.isLoading && <LoadingSkeleton rows={4} />}
 
         {groups.error && (
-          <div className="rounded-2xl border border-destructive/40 bg-destructive/5 p-4 text-sm text-destructive">
+          <div className="rounded-xl border border-destructive/40 bg-destructive/5 p-4 text-[14px] text-destructive">
             Não foi possível carregar os bairros: {(groups.error as Error).message}
           </div>
         )}
 
         {groups.data && filteredGroups.length === 0 && !groups.isLoading && (
-          <div className="rounded-2xl border border-border bg-card p-8 text-center">
-            <MapPin className="mx-auto mb-2 h-8 w-8 text-muted-foreground" />
-            <p className="text-sm font-medium text-foreground">
-              {term ? "Nenhum mercado encontrado" : "Nenhum bairro cadastrado ainda"}
-            </p>
-            <p className="mt-1 text-xs text-muted-foreground">
-              {term
+          <EmptyState
+            icon={MapPin}
+            title={term ? "Nenhum mercado encontrado" : "Nenhum bairro cadastrado ainda"}
+            description={
+              term
                 ? `Nenhum resultado para "${term}". Tente outro nome.`
-                : "Assim que houver mercados cadastrados, eles aparecerão aqui."}
-            </p>
-          </div>
+                : "Assim que houver mercados cadastrados, eles aparecerão aqui."
+            }
+          />
         )}
 
         {filteredGroups.length > 0 && (
           <>
-            <div className="mb-3 flex items-center gap-3 rounded-2xl border border-border bg-card px-4 py-3">
-              <div className="flex-1">
-                <p className="text-lg font-bold text-foreground">{filteredGroups.length}</p>
-                <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
-                  {term ? "Bairros com resultado" : "Bairros"}
-                </p>
-              </div>
-              <div className="h-8 w-px bg-border" />
-              <div className="flex-1">
-                <p className="text-lg font-bold text-foreground">{totalMarkets}</p>
-                <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
-                  Mercados
-                </p>
-              </div>
-            </div>
+            <StatGrid
+              className="mb-4 sm:grid-cols-2 lg:grid-cols-2"
+              stats={[
+                {
+                  label: term ? "Bairros com resultado" : "Bairros",
+                  value: filteredGroups.length,
+                  icon: MapPin,
+                  tone: "primary",
+                },
+                { label: "Mercados", value: totalMarkets, icon: Store },
+              ]}
+            />
 
             <div className="space-y-4">
               {filteredGroups.map((group) => {
