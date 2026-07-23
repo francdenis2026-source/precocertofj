@@ -369,28 +369,23 @@ function RedeemPage() {
                 </div>
               )}
 
-              {/* Preview em tempo real do código antes do envio */}
-              <CodePreviewPanel loading={previewLoading} data={previewData} enabled={canSubmit} />
+              <button
+                type="submit"
+                disabled={submitting || !canSubmit}
+                className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg text-[13px] font-bold uppercase tracking-[0.14em] transition disabled:cursor-not-allowed disabled:opacity-45"
+                style={{
+                  background: canSubmit && !submitting ? NAVY : "#94a3b8",
+                  color: "#fff",
+                  boxShadow: canSubmit && !submitting ? `0 10px 24px -12px ${NAVY}` : undefined,
+                }}
+              >
+                {submitting ? (
+                  <><Loader2 className="h-4 w-4 animate-spin" /> Ativando…</>
+                ) : (
+                  <>Ativar licença <ArrowRight className="h-4 w-4" /></>
+                )}
+              </button>
 
-
-              {(() => {
-                const blockedByPreview = !!(previewData && previewData.found && !previewData.redeemable);
-                const enabled = canSubmit && !blockedByPreview && !previewLoading;
-                return (
-                  <button
-                    type="submit"
-                    disabled={submitting || !enabled}
-                    className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg text-[13px] font-bold uppercase tracking-[0.14em] transition disabled:cursor-not-allowed disabled:opacity-45"
-                    style={{
-                      background: enabled ? NAVY : "#94a3b8",
-                      color: "#fff",
-                      boxShadow: enabled ? `0 10px 24px -12px ${NAVY}` : undefined,
-                    }}
-                  >
-                    {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Ativar licença <ArrowRight className="h-4 w-4" /></>}
-                  </button>
-                );
-              })()}
 
 
               <div className="mt-2 text-right">
