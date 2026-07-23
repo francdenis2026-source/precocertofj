@@ -32,14 +32,50 @@ const MONO = "'JetBrains Mono', ui-monospace, monospace";
 /* Aceita 8–24 chars alfanuméricos (códigos PC-XXXX-XXXX-XXXX = 14) */
 const MIN_LEN = 8;
 const MAX_LEN = 24;
+const CANONICAL_LEN = 14; // PC + 12 alfanum
+
+type ValidationLevel = "empty" | "typing" | "warn" | "ok";
+type ValidationState = { level: ValidationLevel; message: string };
 
 function sanitize(v: string): string {
   return v.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, MAX_LEN);
 }
 function grouped(v: string): string {
   const s = sanitize(v);
-  // Agrupa de 4 em 4 com hífen
   return s.replace(/(.{4})(?=.)/g, "$1-");
+}
+function validateCode(rawInput: string): ValidationState {
+  const clean = sanitize(rawInput);
+  if (clean.length === 0) {
+    return { level: "empty", message: "Cole ou digite o código recebido no e-mail." };
+  }
+  const stripped = rawInput.replace(/[\s-]/g, "").toUpperCase();
+  if (stripped.length > 0 && /[^A-Z0-9]/.test(stripped)) {
+    return {
+      level: "warn",
+      message: "Caracteres inválidos foram removidos (use apenas letras e números).",
+    };
+  }
+  if (clean.length < MIN_LEN) {
+    const faltam = MIN_LEN - clean.length;
+    return {
+      level: "typing",
+      message: `Continue digitando… faltam ${faltam} caractere${faltam === 1 ? "" : "s"}.`,
+    };
+  }
+  if (clean.length === CANONICAL_LEN && !clean.startsWith("PC")) {
+    return { level: "warn", message: "O formato oficial começa com PC-. Verifique o código copiado." };
+  }
+  if (clean.length > CANONICAL_LEN) {
+    return {
+      level: "warn",
+      message: `Você digitou ${clean.length} caracteres. O padrão tem ${CANONICAL_LEN} (PC-XXXX-XXXX-XXXX).`,
+    };
+  }
+  if (clean.length === CANONICAL_LEN && clean.startsWith("PC")) {
+    return { level: "ok", message: "Formato válido. Pronto para ativar." };
+  }
+  return { level: "ok", message: "Pronto para tentar ativar." };
 }
 
 export const Route = createFileRoute("/resgatar")({
