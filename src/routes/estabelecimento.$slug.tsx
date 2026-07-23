@@ -127,14 +127,37 @@ function EstablishmentPage() {
   const { storeId } = Route.useLoaderData();
   const { slug } = Route.useParams();
   const { data } = useSuspenseQuery(storeQuery(storeId));
+  const navigate = useNavigate();
   const [q, setQ] = useState("");
   const [sort, setSort] = useState<SortKey>("price-asc");
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
+  const [priceMin, setPriceMin] = useState<string>("");
+  const [priceMax, setPriceMax] = useState<string>("");
+  const [showFilters, setShowFilters] = useState(false);
   const [historyFor, setHistoryFor] = useState<PublicStoreProduct | null>(null);
 
+  const brands = useMemo(() => {
+    const set = new Set<string>();
+    for (const p of data.products) if (p.brand) set.add(p.brand);
+    return Array.from(set).sort((a, b) => a.localeCompare(b, "pt-BR"));
+  }, [data.products]);
+
   const filtered = useMemo(() => {
-    const term = q.trim().toLowerCase();
+    const term = normalize(q);
+    const min = priceMin ? Number(priceMin.replace(",", ".")) : null;
+    const max = priceMax ? Number(priceMax.replace(",", ".")) : null;
     let list = data.products.slice();
-    if (term) list = list.filter((p) => p.productName.toLowerCase().includes(term));
+    if (selectedCategory) list = list.filter((p) => p.category === selectedCategory);
+    if (selectedBrand) list = list.filter((p) => p.brand === selectedBrand);
+    if (min != null && Number.isFinite(min)) list = list.filter((p) => p.price >= min);
+    if (max != null && Number.isFinite(max)) list = list.filter((p) => p.price <= max);
+    if (term) {
+      list = list.filter((p) => {
+        const hay = normalize(`${p.productName} ${p.brand ?? ""} ${p.category}`);
+        return hay.includes(term);
+      });
+    }
     switch (sort) {
       case "price-asc":
         list.sort((a, b) => a.price - b.price);
@@ -153,7 +176,7 @@ function EstablishmentPage() {
         list.sort((a, b) => a.productName.localeCompare(b.productName, "pt-BR"));
     }
     return list;
-  }, [data.products, q, sort]);
+  }, [data.products, q, sort, selectedCategory, selectedBrand, priceMin, priceMax]);
 
   const cheapest = useMemo(() => {
     if (!data.products.length) return null;
@@ -164,6 +187,29 @@ function EstablishmentPage() {
     data.store.address || data.store.neighborhood || data.store.city,
   );
 
+  const activeFiltersCount =
+    (selectedCategory ? 1 : 0) +
+    (selectedBrand ? 1 : 0) +
+    (priceMin ? 1 : 0) +
+    (priceMax ? 1 : 0);
+
+  const clearFilters = () => {
+    setSelectedCategory(null);
+    setSelectedBrand(null);
+    setPriceMin("");
+    setPriceMax("");
+  };
+
+  const createAlert = (p: PublicStoreProduct) => {
+    navigate({
+      to: "/alertas",
+      search: {
+        product: p.productName,
+        establishment: storeId,
+        price: String(p.price),
+      } as never,
+    });
+  };
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
@@ -215,24 +261,7 @@ function EstablishmentPage() {
                   <span>{data.store.address}</span>
                 </p>
               )}
-
-              {data.categories.length > 0 && (
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  {data.categories.slice(0, 6).map((c) => (
-                    <Link
-                      key={c.key}
-                      to="/estabelecimento/$slug/categoria/$category"
-                      params={{ slug, category: slugifyCategory(c.label) }}
-                    >
-                      <Badge variant="secondary" className="cursor-pointer text-[11px] hover:bg-primary/15">
-                        {c.label} <span className="ml-1 opacity-70">({c.count})</span>
-                      </Badge>
-                    </Link>
-                  ))}
-                </div>
-              )}
             </div>
-
           </CardHeader>
           {cheapest && (
             <CardContent className="border-t border-border/60 bg-muted/30 py-3">
@@ -247,17 +276,71 @@ function EstablishmentPage() {
           )}
         </Card>
 
-        <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+        {data.categories.length > 0 && (
+          <div className="mt-6" aria-label="Filtrar por categoria">
+            <div className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Categorias
+            </div>
+            <div className="flex flex-wrap gap-1.5">
+              <button
+                type="button"
+                onClick={() => setSelectedCategory(null)}
+                aria-pressed={selectedCategory === null}
+                className={
+                  selectedCategory === null
+                    ? "inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1 text-[12px] font-semibold text-primary-foreground shadow-xs"
+                    : "inline-flex items-center gap-1 rounded-full border border-border bg-card px-3 py-1 text-[12px] text-foreground hover:bg-muted"
+                }
+              >
+                Todas <span className="opacity-70">({data.products.length})</span>
+              </button>
+              {data.categories.map((c) => {
+                const active = selectedCategory === c.label;
+                return (
+                  <button
+                    key={c.key}
+                    type="button"
+                    onClick={() => setSelectedCategory(active ? null : c.label)}
+                    aria-pressed={active}
+                    className={
+                      active
+                        ? "inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1 text-[12px] font-semibold text-primary-foreground shadow-xs"
+                        : "inline-flex items-center gap-1 rounded-full border border-border bg-card px-3 py-1 text-[12px] text-foreground hover:bg-muted"
+                    }
+                  >
+                    {c.label} <span className="opacity-70">({c.count})</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        <div className="mt-4 flex flex-col gap-3 sm:flex-row">
           <div className="relative flex-1">
             <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Buscar produto"
+              placeholder="Buscar produto (ignora acentos e ç/c)"
               className="pl-9"
               inputMode="search"
             />
           </div>
+          <Button
+            type="button"
+            variant={showFilters || activeFiltersCount > 0 ? "default" : "outline"}
+            onClick={() => setShowFilters((v) => !v)}
+            className="sm:w-auto"
+          >
+            <SlidersHorizontal className="mr-1.5 h-4 w-4" />
+            Filtros
+            {activeFiltersCount > 0 && (
+              <span className="ml-1.5 rounded-full bg-primary-foreground/20 px-1.5 text-[10px] font-bold">
+                {activeFiltersCount}
+              </span>
+            )}
+          </Button>
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as SortKey)}
@@ -272,8 +355,72 @@ function EstablishmentPage() {
           </select>
         </div>
 
+        {showFilters && (
+          <div className="mt-3 rounded-lg border border-border bg-card p-3">
+            <div className="grid gap-3 sm:grid-cols-3">
+              <div>
+                <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Marca
+                </label>
+                <select
+                  value={selectedBrand ?? ""}
+                  onChange={(e) => setSelectedBrand(e.target.value || null)}
+                  className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm"
+                  disabled={brands.length === 0}
+                >
+                  <option value="">Todas as marcas</option>
+                  {brands.map((b) => (
+                    <option key={b} value={b}>
+                      {b}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Preço mínimo (R$)
+                </label>
+                <Input
+                  type="number"
+                  inputMode="decimal"
+                  min="0"
+                  step="0.01"
+                  value={priceMin}
+                  onChange={(e) => setPriceMin(e.target.value)}
+                  placeholder="0,00"
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Preço máximo (R$)
+                </label>
+                <Input
+                  type="number"
+                  inputMode="decimal"
+                  min="0"
+                  step="0.01"
+                  value={priceMax}
+                  onChange={(e) => setPriceMax(e.target.value)}
+                  placeholder="999,99"
+                />
+              </div>
+            </div>
+            {activeFiltersCount > 0 && (
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="mt-3 inline-flex items-center gap-1 text-[12px] text-muted-foreground hover:text-foreground"
+              >
+                <X className="h-3 w-3" /> Limpar filtros
+              </button>
+            )}
+          </div>
+        )}
+
         <div className="mt-4 text-xs text-muted-foreground">
           {filtered.length} de {data.products.length} produtos
+          {selectedCategory && <> · categoria <strong>{selectedCategory}</strong></>}
+          {selectedBrand && <> · marca <strong>{selectedBrand}</strong></>}
         </div>
 
         <ul className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
@@ -287,6 +434,9 @@ function EstablishmentPage() {
                       {p.category}
                     </Badge>
                   </div>
+                  {p.brand && (
+                    <div className="text-[11px] text-muted-foreground">{p.brand}</div>
+                  )}
                   <div className="mt-auto flex items-baseline justify-between gap-2 pt-2">
                     <span className="text-xl font-bold text-emerald-600 dark:text-emerald-400 tabular-nums">
                       {brl(p.price)}
@@ -299,13 +449,23 @@ function EstablishmentPage() {
                   </div>
                   <div className="flex items-center justify-between text-[11px] text-muted-foreground">
                     <span>Atualizado {new Date(p.lastDate).toLocaleDateString("pt-BR")}</span>
-                    <button
-                      type="button"
-                      onClick={() => setHistoryFor(p)}
-                      className="inline-flex items-center gap-1 rounded-md px-2 py-1 hover:bg-muted"
-                    >
-                      <History className="h-3 w-3" /> Histórico
-                    </button>
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => createAlert(p)}
+                        className="inline-flex items-center gap-1 rounded-md px-2 py-1 hover:bg-muted"
+                        title="Criar alerta de queda de preço"
+                      >
+                        <Bell className="h-3 w-3" /> Alerta
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setHistoryFor(p)}
+                        className="inline-flex items-center gap-1 rounded-md px-2 py-1 hover:bg-muted"
+                      >
+                        <History className="h-3 w-3" /> Histórico
+                      </button>
+                    </div>
                   </div>
                 </CardContent>
               </Card>
@@ -315,9 +475,18 @@ function EstablishmentPage() {
 
         {filtered.length === 0 && (
           <div className="mt-10 rounded-lg border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-            Nenhum produto encontrado{q ? ` para “${q}”` : ""}.
+            Nenhum produto encontrado{q ? ` para "${q}"` : ""}
+            {activeFiltersCount > 0 && " com os filtros atuais"}.
+            {activeFiltersCount > 0 && (
+              <div className="mt-3">
+                <Button variant="outline" size="sm" onClick={clearFilters}>
+                  Limpar filtros
+                </Button>
+              </div>
+            )}
           </div>
         )}
+
 
         {hasLocation && (
           <div className="mt-10 rounded-xl border border-border/60 bg-muted/30 p-4">
