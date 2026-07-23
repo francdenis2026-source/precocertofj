@@ -1,8 +1,11 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { useMyProfile } from "@/hooks/useMyProfile";
 import { safeInternalPath } from "@/lib/auth-redirect";
+import { getMyOnboardingStatus } from "@/lib/admin-security.functions";
 
 export const Route = createFileRoute("/bem-vindo")({
   head: () => ({

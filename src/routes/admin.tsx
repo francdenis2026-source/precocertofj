@@ -245,6 +245,7 @@ function AdminPage() {
             { to: "/admin/clientes", label: "Clientes", icon: Users },
             { to: "/admin/auditoria-acessos", label: "Auditoria de acessos", icon: ShieldCheck },
             { to: "/admin/gestao", label: "Gestão (licenças)", icon: Key },
+            { to: "/admin/promocoes-codigos", label: "Códigos de divulgação", icon: Ticket },
 
             { to: "/admin/catalogo", label: "Catálogo de produtos", icon: Package },
             { to: "/admin/image-jobs", label: "Fotos dos produtos", icon: ImageIcon },
