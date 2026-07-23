@@ -56,6 +56,8 @@ const P = {
   gold: "var(--pc-home-gold)",
   goldSoft: "var(--pc-home-gold-soft)",
   line: "var(--pc-home-line)",
+  heading: "var(--pc-home-heading)",
+  onNavy: "var(--pc-home-on-navy)",
 };
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 
