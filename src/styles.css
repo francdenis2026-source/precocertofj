@@ -170,7 +170,7 @@
   --pc-home-line: #dfe3ec;
   --pc-home-dot-opacity: 0.05;
   /* LIGHT: overlay claro sobre a foto do hero — mantém legibilidade sem escurecer */
-  --pc-home-hero-overlay: linear-gradient(180deg, rgb(10 18 36 / 0.55) 0%, rgb(10 18 36 / 0.32) 46%, rgb(10 18 36 / 0.70) 100%), radial-gradient(80% 60% at 15% 40%, rgb(181 138 60 / 0.18) 0%, transparent 60%);
+  --pc-home-hero-overlay: linear-gradient(180deg, rgb(245 246 250 / 0.62) 0%, rgb(245 246 250 / 0.42) 46%, rgb(245 246 250 / 0.78) 100%), radial-gradient(80% 60% at 15% 40%, rgb(181 138 60 / 0.16) 0%, transparent 60%);
   --pc-home-explore-bg: #eef1f7;
   --pc-home-explore-overlay: linear-gradient(180deg, rgb(238 241 247 / 0.92) 0%, rgb(238 241 247 / 0.72) 45%, rgb(238 241 247 / 0.96) 100%);
   --pc-home-cta-gradient: linear-gradient(140deg, #f7ecd1 0%, #e9d59a 100%);
