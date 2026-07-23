@@ -199,9 +199,15 @@ function EstablishmentPage() {
               {data.categories.length > 0 && (
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {data.categories.slice(0, 6).map((c) => (
-                    <Badge key={c.key} variant="secondary" className="text-[11px]">
-                      {c.label} <span className="ml-1 opacity-70">({c.count})</span>
-                    </Badge>
+                    <Link
+                      key={c.key}
+                      to="/estabelecimento/$slug/categoria/$category"
+                      params={{ slug: Route.useParams().slug, category: slugifyCategory(c.label) }}
+                    >
+                      <Badge variant="secondary" className="cursor-pointer text-[11px] hover:bg-primary/15">
+                        {c.label} <span className="ml-1 opacity-70">({c.count})</span>
+                      </Badge>
+                    </Link>
                   ))}
                 </div>
               )}

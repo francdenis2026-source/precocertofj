@@ -89,6 +89,7 @@ import { Route as ApiPublicMpWebhookRouteImport } from './routes/api/public/mp-w
 import { Route as ApiAdminCatalogImageRouteImport } from './routes/api/admin/catalog-image'
 import { Route as AdminCoberturaIdRouteImport } from './routes/admin_.cobertura.$id'
 import { Route as LojaIdProdutoSlugRouteImport } from './routes/loja.$id.produto.$slug'
+import { Route as EstabelecimentoSlugCategoriaCategoryRouteImport } from './routes/estabelecimento.$slug.categoria.$category'
 import { Route as ApiPublicMercadopagoWebhookRouteImport } from './routes/api/public/mercadopago/webhook'
 import { Route as ApiPublicHooksRetryActivationEmailsRouteImport } from './routes/api/public/hooks/retry-activation-emails'
 import { Route as ApiPublicHooksRefreshCatalogImagesRouteImport } from './routes/api/public/hooks/refresh-catalog-images'
@@ -496,6 +497,12 @@ const LojaIdProdutoSlugRoute = LojaIdProdutoSlugRouteImport.update({
   path: '/produto/$slug',
   getParentRoute: () => LojaIdRoute,
 } as any)
+const EstabelecimentoSlugCategoriaCategoryRoute =
+  EstabelecimentoSlugCategoriaCategoryRouteImport.update({
+    id: '/categoria/$category',
+    path: '/categoria/$category',
+    getParentRoute: () => EstabelecimentoSlugRoute,
+  } as any)
 const ApiPublicMercadopagoWebhookRoute =
   ApiPublicMercadopagoWebhookRouteImport.update({
     id: '/api/public/mercadopago/webhook',
@@ -596,7 +603,7 @@ export interface FileRoutesByFullPath {
   '/checkout/$id': typeof CheckoutIdRoute
   '/comprovante/$id': typeof ComprovanteIdRoute
   '/cotacao/$id': typeof CotacaoIdRoute
-  '/estabelecimento/$slug': typeof EstabelecimentoSlugRoute
+  '/estabelecimento/$slug': typeof EstabelecimentoSlugRouteWithChildren
   '/estabelecimento/recanto-da-carne': typeof EstabelecimentoRecantoDaCarneRoute
   '/historico/$id': typeof HistoricoIdRoute
   '/historico/produtos': typeof HistoricoProdutosRoute
@@ -612,6 +619,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
   '/api/public/hooks/retry-activation-emails': typeof ApiPublicHooksRetryActivationEmailsRoute
   '/api/public/mercadopago/webhook': typeof ApiPublicMercadopagoWebhookRoute
+  '/estabelecimento/$slug/categoria/$category': typeof EstabelecimentoSlugCategoriaCategoryRoute
   '/loja/$id/produto/$slug': typeof LojaIdProdutoSlugRoute
 }
 export interface FileRoutesByTo {
@@ -683,7 +691,7 @@ export interface FileRoutesByTo {
   '/checkout/$id': typeof CheckoutIdRoute
   '/comprovante/$id': typeof ComprovanteIdRoute
   '/cotacao/$id': typeof CotacaoIdRoute
-  '/estabelecimento/$slug': typeof EstabelecimentoSlugRoute
+  '/estabelecimento/$slug': typeof EstabelecimentoSlugRouteWithChildren
   '/estabelecimento/recanto-da-carne': typeof EstabelecimentoRecantoDaCarneRoute
   '/historico/$id': typeof HistoricoIdRoute
   '/historico/produtos': typeof HistoricoProdutosRoute
@@ -699,6 +707,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
   '/api/public/hooks/retry-activation-emails': typeof ApiPublicHooksRetryActivationEmailsRoute
   '/api/public/mercadopago/webhook': typeof ApiPublicMercadopagoWebhookRoute
+  '/estabelecimento/$slug/categoria/$category': typeof EstabelecimentoSlugCategoriaCategoryRoute
   '/loja/$id/produto/$slug': typeof LojaIdProdutoSlugRoute
 }
 export interface FileRoutesById {
@@ -771,7 +780,7 @@ export interface FileRoutesById {
   '/checkout/$id': typeof CheckoutIdRoute
   '/comprovante/$id': typeof ComprovanteIdRoute
   '/cotacao/$id': typeof CotacaoIdRoute
-  '/estabelecimento/$slug': typeof EstabelecimentoSlugRoute
+  '/estabelecimento/$slug': typeof EstabelecimentoSlugRouteWithChildren
   '/estabelecimento/recanto-da-carne': typeof EstabelecimentoRecantoDaCarneRoute
   '/historico/$id': typeof HistoricoIdRoute
   '/historico/produtos': typeof HistoricoProdutosRoute
@@ -787,6 +796,7 @@ export interface FileRoutesById {
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
   '/api/public/hooks/retry-activation-emails': typeof ApiPublicHooksRetryActivationEmailsRoute
   '/api/public/mercadopago/webhook': typeof ApiPublicMercadopagoWebhookRoute
+  '/estabelecimento/$slug/categoria/$category': typeof EstabelecimentoSlugCategoriaCategoryRoute
   '/loja/$id/produto/$slug': typeof LojaIdProdutoSlugRoute
 }
 export interface FileRouteTypes {
@@ -876,6 +886,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/refresh-catalog-images'
     | '/api/public/hooks/retry-activation-emails'
     | '/api/public/mercadopago/webhook'
+    | '/estabelecimento/$slug/categoria/$category'
     | '/loja/$id/produto/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -963,6 +974,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/refresh-catalog-images'
     | '/api/public/hooks/retry-activation-emails'
     | '/api/public/mercadopago/webhook'
+    | '/estabelecimento/$slug/categoria/$category'
     | '/loja/$id/produto/$slug'
   id:
     | '__root__'
@@ -1050,6 +1062,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/refresh-catalog-images'
     | '/api/public/hooks/retry-activation-emails'
     | '/api/public/mercadopago/webhook'
+    | '/estabelecimento/$slug/categoria/$category'
     | '/loja/$id/produto/$slug'
   fileRoutesById: FileRoutesById
 }
@@ -1121,7 +1134,7 @@ export interface RootRouteChildren {
   CheckoutIdRoute: typeof CheckoutIdRoute
   ComprovanteIdRoute: typeof ComprovanteIdRoute
   CotacaoIdRoute: typeof CotacaoIdRoute
-  EstabelecimentoSlugRoute: typeof EstabelecimentoSlugRoute
+  EstabelecimentoSlugRoute: typeof EstabelecimentoSlugRouteWithChildren
   EstabelecimentoRecantoDaCarneRoute: typeof EstabelecimentoRecantoDaCarneRoute
   LojaIdRoute: typeof LojaIdRouteWithChildren
   ProdutoPublicoSlugRoute: typeof ProdutoPublicoSlugRoute
@@ -1697,6 +1710,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LojaIdProdutoSlugRouteImport
       parentRoute: typeof LojaIdRoute
     }
+    '/estabelecimento/$slug/categoria/$category': {
+      id: '/estabelecimento/$slug/categoria/$category'
+      path: '/categoria/$category'
+      fullPath: '/estabelecimento/$slug/categoria/$category'
+      preLoaderRoute: typeof EstabelecimentoSlugCategoriaCategoryRouteImport
+      parentRoute: typeof EstabelecimentoSlugRoute
+    }
     '/api/public/mercadopago/webhook': {
       id: '/api/public/mercadopago/webhook'
       path: '/api/public/mercadopago/webhook'
@@ -1772,6 +1792,18 @@ const AdminCoberturaRouteChildren: AdminCoberturaRouteChildren = {
 const AdminCoberturaRouteWithChildren = AdminCoberturaRoute._addFileChildren(
   AdminCoberturaRouteChildren,
 )
+
+interface EstabelecimentoSlugRouteChildren {
+  EstabelecimentoSlugCategoriaCategoryRoute: typeof EstabelecimentoSlugCategoriaCategoryRoute
+}
+
+const EstabelecimentoSlugRouteChildren: EstabelecimentoSlugRouteChildren = {
+  EstabelecimentoSlugCategoriaCategoryRoute:
+    EstabelecimentoSlugCategoriaCategoryRoute,
+}
+
+const EstabelecimentoSlugRouteWithChildren =
+  EstabelecimentoSlugRoute._addFileChildren(EstabelecimentoSlugRouteChildren)
 
 interface LojaIdRouteChildren {
   LojaIdProdutoSlugRoute: typeof LojaIdProdutoSlugRoute
@@ -1852,7 +1884,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutIdRoute: CheckoutIdRoute,
   ComprovanteIdRoute: ComprovanteIdRoute,
   CotacaoIdRoute: CotacaoIdRoute,
-  EstabelecimentoSlugRoute: EstabelecimentoSlugRoute,
+  EstabelecimentoSlugRoute: EstabelecimentoSlugRouteWithChildren,
   EstabelecimentoRecantoDaCarneRoute: EstabelecimentoRecantoDaCarneRoute,
   LojaIdRoute: LojaIdRouteWithChildren,
   ProdutoPublicoSlugRoute: ProdutoPublicoSlugRoute,
