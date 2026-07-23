@@ -42,8 +42,17 @@ function PromoCodesPage() {
   });
 
   const codes = q.data ?? [];
-  const redeemed = codes.filter((c) => c.status === "redeemed").length;
+  const redeemedList = codes.filter((c) => c.status === "redeemed");
+  const redeemed = redeemedList.length;
   const available = codes.filter((c) => c.status === "paid").length;
+  const now = Date.now();
+  const activeRedeemed = redeemedList.filter((c) => c.expires_at && Date.parse(c.expires_at) > now).length;
+  const expiredRedeemed = redeemed - activeRedeemed;
+  const daysLeft = (iso: string | null | undefined) => {
+    if (!iso) return null;
+    const diff = Date.parse(iso) - now;
+    return Math.ceil(diff / 86_400_000);
+  };
 
   const copyAll = () => {
     const text = codes
@@ -81,10 +90,12 @@ function PromoCodesPage() {
         </div>
       </header>
 
-      <section className="grid gap-3 sm:grid-cols-3">
+      <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         <Kpi icon={<Ticket className="h-4 w-4" />} label="Total geradas" value={codes.length} />
         <Kpi icon={<Clock className="h-4 w-4" />} label="Disponíveis" value={available} accent="ok" />
-        <Kpi icon={<CheckCircle2 className="h-4 w-4" />} label="Resgatadas" value={redeemed} />
+        <Kpi icon={<CheckCircle2 className="h-4 w-4" />} label="Ativadas" value={redeemed} />
+        <Kpi icon={<CheckCircle2 className="h-4 w-4" />} label="Ativas agora" value={activeRedeemed} accent="ok" />
+        <Kpi icon={<Clock className="h-4 w-4" />} label="Expiradas" value={expiredRedeemed} />
       </section>
 
       <Card>
@@ -101,20 +112,22 @@ function PromoCodesPage() {
                 <TableRow>
                   <TableHead>Código</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead>Resgatado por</TableHead>
-                  <TableHead>Resgatado em</TableHead>
+                  <TableHead>Ativado por</TableHead>
+                  <TableHead>Ativado em</TableHead>
                   <TableHead>Expira em</TableHead>
+                  <TableHead className="text-right">Dias restantes</TableHead>
                   <TableHead className="text-right">Ação</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {q.isLoading ? (
-                  <TableRow><TableCell colSpan={6} className="py-8 text-center text-sm text-muted-foreground">Carregando…</TableCell></TableRow>
+                  <TableRow><TableCell colSpan={7} className="py-8 text-center text-sm text-muted-foreground">Carregando…</TableCell></TableRow>
                 ) : codes.length === 0 ? (
-                  <TableRow><TableCell colSpan={6} className="py-8 text-center text-sm text-muted-foreground">Nenhum código encontrado.</TableCell></TableRow>
+                  <TableRow><TableCell colSpan={7} className="py-8 text-center text-sm text-muted-foreground">Nenhum código encontrado.</TableCell></TableRow>
                 ) : (
                   codes.map((c) => {
                     const isRedeemed = c.status === "redeemed";
+                    const dLeft = daysLeft(c.expires_at);
                     return (
                       <TableRow key={c.id}>
                         <TableCell className="font-mono text-xs">{c.code}</TableCell>
@@ -139,6 +152,19 @@ function PromoCodesPage() {
                         </TableCell>
                         <TableCell className="text-xs">{fmt(c.redeemed_at)}</TableCell>
                         <TableCell className="text-xs">{fmt(c.expires_at)}</TableCell>
+                        <TableCell className="text-right text-xs tabular-nums">
+                          {!isRedeemed ? (
+                            <span className="text-muted-foreground">—</span>
+                          ) : dLeft === null ? (
+                            <span className="text-muted-foreground">—</span>
+                          ) : dLeft > 7 ? (
+                            <span className="font-semibold text-emerald-600">{dLeft} dias</span>
+                          ) : dLeft > 0 ? (
+                            <span className="font-semibold text-amber-600">{dLeft} dias</span>
+                          ) : (
+                            <span className="font-semibold text-destructive">expirado</span>
+                          )}
+                        </TableCell>
                         <TableCell className="text-right">
                           {!isRedeemed && (
                             <Button

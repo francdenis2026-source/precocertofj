@@ -11,6 +11,7 @@ import type { LucideIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { getMyAccount, updateMyCpf, updateMyProfile, updateMyAvatar } from "@/lib/account.functions";
+import { getMyProfileStats } from "@/lib/profile-stats.functions";
 import { SubscriptionStatusCard } from "@/components/account/SubscriptionStatusCard";
 import { CollaboratorStatusCard } from "@/components/collab/CollaboratorStatusCard";
 import { listMyPriceReports } from "@/lib/stores-public.functions";
@@ -40,6 +41,15 @@ function Perfil() {
   const updateCpfFn = useServerFn(updateMyCpf);
   const updateProfileFn = useServerFn(updateMyProfile);
   const updateAvatarFn = useServerFn(updateMyAvatar);
+  const statsFn = useServerFn(getMyProfileStats);
+  const statsQuery = useQuery({
+    queryKey: ["my-profile-stats"],
+    queryFn: () => statsFn(),
+    staleTime: 60_000,
+  });
+  const s = statsQuery.data;
+  const fmtBrl = (n: number) =>
+    n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
   const [cpf, setCpf] = useState("");
   const [cpfError, setCpfError] = useState<string | null>(null);
@@ -280,10 +290,7 @@ function Perfil() {
             <p className="text-sm text-muted-foreground">
               {digits ? maskCpf(digits) : "sem CPF cadastrado"}
             </p>
-            <span className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-accent/15 pl-1 pr-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-accent-foreground ring-1 ring-inset ring-accent/40">
-              <IconTile icon={Sparkles} size="xs" tone="accent" density="regular" />
-              <span className="text-foreground">Premium</span>
-            </span>
+            {/* status real de assinatura fica no SubscriptionStatusCard abaixo */}
             {(address.city || address.state) && (
               <p className="mt-6 flex items-center justify-center gap-1 text-xs text-muted-foreground">
                 <MapPin className="h-3 w-3" /> {address.city}
@@ -294,9 +301,33 @@ function Perfil() {
 
           <div className="space-y-4">
             <div className="grid grid-cols-3 gap-3">
-              <MetricBox icon={Award} label="Reputação" value="4.8" note="colaborador" />
-              <MetricBox icon={Heart} label="Favoritos" value="24" note="produtos" />
-              <MetricBox icon={Sparkles} label="Economia total" value="R$ 1.847" note="desde 2025" />
+              <MetricBox
+                icon={Award}
+                label="Contribuições"
+                value={s ? s.contributionsCount.toLocaleString("pt-BR") : "…"}
+                note={s ? (s.contributionsCount > 0 ? "scans + denúncias" : "envie sua 1ª nota") : "carregando"}
+              />
+              <MetricBox
+                icon={Heart}
+                label="Favoritos"
+                value={s ? s.favoritesCount.toLocaleString("pt-BR") : "…"}
+                note={s && s.favoritesCount > 0 ? "produtos salvos" : "nada favoritado"}
+              />
+              <MetricBox
+                icon={Sparkles}
+                label="Economia (90d)"
+                value={s ? fmtBrl(s.totalSavings) : "…"}
+                note={
+                  s
+                    ? s.totalSavings > 0
+                      ? "escolhendo o menor preço"
+                      : s.potentialSavings > 0
+                        ? `poderia poupar ${fmtBrl(s.potentialSavings)}`
+                        : "sem dados suficientes"
+                    : "carregando"
+                }
+              />
+
             </div>
 
             {/* CPF */}
