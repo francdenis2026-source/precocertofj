@@ -112,9 +112,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
+      { rel: "icon", href: "/logo-mark.svg", type: "image/svg+xml", sizes: "any" },
+      { rel: "icon", href: "/icon-512.png", type: "image/png", sizes: "512x512" },
+      { rel: "icon", href: "/icon-192.png", type: "image/png", sizes: "192x192" },
       { rel: "icon", href: "/favicon-32.png", type: "image/png", sizes: "32x32" },
       { rel: "icon", href: "/favicon-16.png", type: "image/png", sizes: "16x16" },
-      { rel: "shortcut icon", href: "/favicon-32.png", type: "image/png" },
+      { rel: "shortcut icon", href: "/icon-512.png", type: "image/png" },
       { rel: "apple-touch-icon", href: "/icon-180.png", sizes: "180x180" },
       { rel: "apple-touch-icon", href: "/icon-152.png", sizes: "152x152" },
       { rel: "apple-touch-icon", href: "/icon-167.png", sizes: "167x167" },
