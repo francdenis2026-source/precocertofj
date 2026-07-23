@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { redeemMyLicenseCode } from "@/lib/licenses.functions";
+import { redeemMyLicenseCode, previewLicenseCode } from "@/lib/licenses.functions";
 import { getMyAccount } from "@/lib/account.functions";
 import {
   Loader2,
@@ -14,6 +14,10 @@ import {
   Clipboard,
   AlertCircle,
   KeyRound,
+  CalendarClock,
+  BadgeCheck,
+  RefreshCcw,
+  XCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Logo } from "@/components/brand/Logo";
@@ -109,6 +113,7 @@ function RedeemPage() {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const redeem = useServerFn(redeemMyLicenseCode);
+  const preview = useServerFn(previewLicenseCode);
   const fetchAccount = useServerFn(getMyAccount);
 
   const clean = useMemo(() => sanitize(raw), [raw]);
@@ -131,6 +136,27 @@ function RedeemPage() {
     enabled: hasSession && !!result?.ok,
   });
 
+  // Debounce do valor limpo para consultar o preview
+  const [debouncedClean, setDebouncedClean] = useState("");
+  useEffect(() => {
+    const id = setTimeout(() => setDebouncedClean(clean), 350);
+    return () => clearTimeout(id);
+  }, [clean]);
+
+  const previewQuery = useQuery({
+    queryKey: ["license-preview", debouncedClean],
+    queryFn: () => preview({ data: { code: debouncedClean } }),
+    enabled:
+      hasSession &&
+      !result?.ok &&
+      debouncedClean.length >= MIN_LEN &&
+      validation.level !== "warn",
+    staleTime: 10_000,
+    retry: false,
+  });
+  const previewData = previewQuery.data ?? null;
+  const previewLoading = previewQuery.isFetching;
+
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
@@ -145,6 +171,10 @@ function RedeemPage() {
           ? `Digite ao menos ${MIN_LEN} caracteres do código.`
           : validation.message,
       );
+      return;
+    }
+    if (previewData && previewData.found && !previewData.redeemable) {
+      toast.error(previewData.message);
       return;
     }
     setSubmitting(true);
@@ -355,18 +385,29 @@ function RedeemPage() {
                 </div>
               )}
 
-              <button
-                type="submit"
-                disabled={submitting || !canSubmit}
-                className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg text-[13px] font-bold uppercase tracking-[0.14em] transition disabled:cursor-not-allowed disabled:opacity-45"
-                style={{
-                  background: canSubmit ? NAVY : "#94a3b8",
-                  color: "#fff",
-                  boxShadow: canSubmit ? `0 10px 24px -12px ${NAVY}` : undefined,
-                }}
-              >
-                {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Ativar licença <ArrowRight className="h-4 w-4" /></>}
-              </button>
+              {/* Preview em tempo real do código antes do envio */}
+              <CodePreviewPanel loading={previewLoading} data={previewData} enabled={canSubmit} />
+
+
+              {(() => {
+                const blockedByPreview = !!(previewData && previewData.found && !previewData.redeemable);
+                const enabled = canSubmit && !blockedByPreview && !previewLoading;
+                return (
+                  <button
+                    type="submit"
+                    disabled={submitting || !enabled}
+                    className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg text-[13px] font-bold uppercase tracking-[0.14em] transition disabled:cursor-not-allowed disabled:opacity-45"
+                    style={{
+                      background: enabled ? NAVY : "#94a3b8",
+                      color: "#fff",
+                      boxShadow: enabled ? `0 10px 24px -12px ${NAVY}` : undefined,
+                    }}
+                  >
+                    {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Ativar licença <ArrowRight className="h-4 w-4" /></>}
+                  </button>
+                );
+              })()}
+
 
               <div className="mt-2 text-right">
                 <Link to="/minhas-licencas" className="text-[11px] font-semibold hover:underline" style={{ color: NAVY }}>
@@ -496,6 +537,134 @@ function SuccessBody({
           Ativar outro
         </button>
       </div>
+    </div>
+  );
+}
+
+/* ------- Painel de detalhes do código (preview antes de enviar) ------- */
+function CodePreviewPanel({
+  loading,
+  data,
+  enabled,
+}: {
+  loading: boolean;
+  data: import("@/lib/licenses.functions").LicensePreview | null;
+  enabled: boolean;
+}) {
+  if (!enabled && !loading && !data) return null;
+
+  if (loading) {
+    return (
+      <div
+        className="mt-3 flex items-center gap-2 rounded-lg border px-3 py-2.5 text-[12px]"
+        style={{ borderColor: LINE, background: "#f8fafc", color: MUTED }}
+      >
+        <Loader2 className="h-3.5 w-3.5 animate-spin" style={{ color: NAVY }} />
+        Consultando código no sistema…
+      </div>
+    );
+  }
+  if (!data) return null;
+
+  if (!data.found) {
+    return (
+      <div
+        className="mt-3 flex items-start gap-2 rounded-lg border px-3 py-2.5 text-[12px]"
+        style={{ borderColor: "#fca5a5", background: "#fef2f2", color: "#991b1b" }}
+      >
+        <XCircle className="mt-0.5 h-4 w-4 flex-none" />
+        <span>{data.message}</span>
+      </div>
+    );
+  }
+
+  const good = data.redeemable;
+  const border = good ? "#bbf7d0" : "#fcd34d";
+  const bg = good ? "#f0fdf4" : "#fffbeb";
+  const ink = good ? "#166534" : "#92400e";
+  const badgeIcon = good ? <BadgeCheck className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />;
+
+  const expLabel = data.expiresAt
+    ? new Date(data.expiresAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" })
+    : "—";
+  const refundLabel = data.refundDeadline
+    ? new Date(data.refundDeadline).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })
+    : null;
+
+  return (
+    <div
+      className="mt-3 rounded-xl border p-3 text-[12px]"
+      style={{ borderColor: border, background: bg, color: INK }}
+    >
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em]" style={{ color: ink }}>
+          {badgeIcon}
+          {data.statusLabel}
+        </div>
+        {data.planName && (
+          <span
+            className="rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em]"
+            style={{ borderColor: border, color: ink, background: "#ffffff" }}
+          >
+            {data.planName}
+          </span>
+        )}
+      </div>
+
+      <dl className="mt-2.5 grid grid-cols-2 gap-2">
+        <div className="rounded-lg border bg-white px-2.5 py-1.5" style={{ borderColor: LINE }}>
+          <dt className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
+            <CalendarClock className="h-3 w-3" /> Validade
+          </dt>
+          <dd className="mt-0.5 text-[12.5px] font-bold" style={{ color: data.isExpired ? "#dc2626" : NAVY }}>
+            {expLabel}
+            {data.daysUntilExpiry != null && !data.isExpired && (
+              <span className="ml-1 text-[10.5px] font-normal" style={{ color: MUTED }}>
+                (em {data.daysUntilExpiry}d)
+              </span>
+            )}
+          </dd>
+        </div>
+        <div className="rounded-lg border bg-white px-2.5 py-1.5" style={{ borderColor: LINE }}>
+          <dt className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
+            <RefreshCcw className="h-3 w-3" /> Reembolso
+          </dt>
+          <dd
+            className="mt-0.5 text-[12.5px] font-bold"
+            style={{ color: data.refundable ? "#15803d" : "#991b1b" }}
+          >
+            {data.refundable
+              ? refundLabel
+                ? `Sim · até ${refundLabel}`
+                : "Sim"
+              : "Não disponível"}
+          </dd>
+        </div>
+        {data.planDays != null && (
+          <div className="rounded-lg border bg-white px-2.5 py-1.5" style={{ borderColor: LINE }}>
+            <dt className="text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
+              Duração
+            </dt>
+            <dd className="mt-0.5 text-[12.5px] font-bold" style={{ color: NAVY }}>
+              {data.planDays} dias
+            </dd>
+          </div>
+        )}
+        {data.priceCents != null && (
+          <div className="rounded-lg border bg-white px-2.5 py-1.5" style={{ borderColor: LINE }}>
+            <dt className="text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
+              Valor
+            </dt>
+            <dd className="mt-0.5 text-[12.5px] font-bold" style={{ color: NAVY }}>
+              R$ {(data.priceCents / 100).toFixed(2).replace(".", ",")}
+            </dd>
+          </div>
+        )}
+      </dl>
+
+      <p className="mt-2.5 text-[11.5px] leading-snug" style={{ color: ink }}>
+        {data.message}
+      </p>
     </div>
   );
 }
