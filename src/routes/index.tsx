@@ -10,9 +10,8 @@ import {
   Search,
   ArrowRight,
   TrendingDown,
-  ShieldCheck,
-  Store,
   Sparkles,
+  Store,
   Trophy,
 } from "lucide-react";
 import { ds, dsx } from "@/lib/ds";
@@ -402,25 +401,21 @@ function HomePage() {
 
 
       {/* CTA FINAL — compacto */}
-      <section className={dsx(ds.container, "pb-14 md:pb-20")}>
+      <section className={dsx(ds.container, "py-8 md:py-10")}>
         <div
-          className="relative overflow-hidden rounded-2xl p-5 text-white sm:p-7 md:p-10"
+          className="relative overflow-hidden rounded-2xl px-5 py-5 text-white sm:px-7 sm:py-6 md:px-9 md:py-7"
           style={{ background: `linear-gradient(140deg, ${PALETTE.navy} 0%, ${PALETTE.navy2} 100%)` }}
         >
           <div
-            className="pointer-events-none absolute -right-10 -bottom-10 h-52 w-52 rounded-full"
+            className="pointer-events-none absolute -right-10 -bottom-10 h-40 w-40 rounded-full"
             style={{ background: `radial-gradient(circle, ${PALETTE.gold}55 0%, transparent 70%)` }}
           />
-          <div className="relative grid grid-cols-1 items-center gap-5 md:grid-cols-[1fr_auto] md:gap-8">
-            <div>
-              <div className={dsx(ds.chip.onDark, "text-[10px] uppercase tracking-[0.16em]")}>
-                <ShieldCheck className="h-3 w-3" style={{ color: PALETTE.goldSoft }} />
-                Dados verificados por nota fiscal
-              </div>
+          <div className="relative grid grid-cols-1 items-center gap-4 md:grid-cols-[1fr_auto] md:gap-8">
+            <div className="min-w-0">
               <h3
-                className={`${serif} mt-3 leading-[1.08] text-white`}
+                className={`${serif} leading-[1.08] text-white`}
                 style={{
-                  fontSize: "clamp(1.55rem, 3.1vw, 2.35rem)",
+                  fontSize: "clamp(1.4rem, 2.6vw, 2rem)",
                   letterSpacing: "-0.015em",
                   textShadow: "0 1px 2px rgba(0,0,0,0.35)",
                 }}
@@ -428,11 +423,11 @@ function HomePage() {
                 Nunca mais pague caro por{" "}
                 <span className="italic font-semibold" style={{ color: "#F5D77A" }}>arroz, feijão e café.</span>
               </h3>
-              <p className="mt-2 max-w-xl text-[13.5px] text-white/95 sm:text-sm">
-                Cadastro em 30 segundos. Sem cartão. Cancele quando quiser.
+              <p className="mt-1.5 text-[13px] text-white/85 sm:text-[13.5px]">
+                Cadastro em 30 segundos · sem cartão · cancele quando quiser.
               </p>
             </div>
-            <div className="flex flex-col gap-2 sm:flex-row md:flex-col">
+            <div className="flex flex-col gap-2 sm:flex-row md:flex-col md:items-stretch">
               <Link
                 to="/cadastro"
                 className={dsx(ds.btn.base, ds.btn.sizes.md)}
