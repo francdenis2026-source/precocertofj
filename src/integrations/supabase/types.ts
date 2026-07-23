@@ -391,6 +391,10 @@ export type Database = {
           id: string
           license_code_id: string | null
           original_cents: number
+          pix_expires_at: string | null
+          pix_payment_id: string | null
+          pix_qr_code: string | null
+          pix_qr_code_base64: string | null
           plan_id: string
           provider: string
           provider_ref: string | null
@@ -409,6 +413,10 @@ export type Database = {
           id?: string
           license_code_id?: string | null
           original_cents: number
+          pix_expires_at?: string | null
+          pix_payment_id?: string | null
+          pix_qr_code?: string | null
+          pix_qr_code_base64?: string | null
           plan_id: string
           provider?: string
           provider_ref?: string | null
@@ -427,6 +435,10 @@ export type Database = {
           id?: string
           license_code_id?: string | null
           original_cents?: number
+          pix_expires_at?: string | null
+          pix_payment_id?: string | null
+          pix_qr_code?: string | null
+          pix_qr_code_base64?: string | null
           plan_id?: string
           provider?: string
           provider_ref?: string | null
