@@ -33,6 +33,8 @@ import { toast } from "sonner";
 
 
 export const Route = createFileRoute("/admin_/webhooks")({
+  ssr: false,
+  beforeLoad: adminBeforeLoad,
   head: () => ({
     meta: [
       { title: "Webhooks Mercado Pago — Admin" },
