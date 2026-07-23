@@ -2,7 +2,9 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import heroMarket from "@/assets/home-hero.jpg";
+import heroMarket from "@/assets/home-hero.jpg?w=640;960;1280;1600;1920&format=avif;webp;jpg&as=picture";
+// LCP preload usa a menor variante AVIF (mobile-first); o <picture> abaixo negocia o resto.
+import heroPreloadAvif from "@/assets/home-hero.jpg?w=1280&format=avif&url";
 import exploreBg from "@/assets/explore-bg.jpg";
 import {
   Search,
