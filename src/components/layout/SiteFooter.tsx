@@ -5,11 +5,11 @@ import { MapPin, Mail, ShieldCheck } from "lucide-react";
 const PALETTE = {
   ink: "#08122a",
   navy: "#0f1b3d",
-  navy2: "#324c73",
-  muted: "#5b6b86",
+  navy2: "#1f2f4d",
+  muted: "#334463",
   gold: "#b58a3c",
   goldSoft: "#f2dfa8",
-  line: "#e4e8f0",
+  line: "#d4dbe6",
   bgTint: "#f7f9fc",
 } as const;
 
