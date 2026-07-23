@@ -390,10 +390,10 @@ function RedeemPage() {
                 className="text-[18px] font-bold leading-tight"
                 style={{ color: INK, letterSpacing: "-0.01em" }}
               >
-                Digite o código de ativação
+                Ativar meu código
               </h1>
               <p className="mt-1 text-[12.5px]" style={{ color: MUTED }}>
-                Formato: <span className="font-mono font-semibold" style={{ color: NAVY }}>PC-XXXX-XXXX-XXXX</span>. Copiar e colar do e-mail funciona.
+                Cole o código que chegou no seu e-mail — formato <span className="font-mono font-semibold" style={{ color: NAVY }}>PC-XXXX-XXXX-XXXX</span>. O acesso libera na hora.
               </p>
 
               {/* Campo único grande — legível e compacto */}
