@@ -290,10 +290,7 @@ function Perfil() {
             <p className="text-sm text-muted-foreground">
               {digits ? maskCpf(digits) : "sem CPF cadastrado"}
             </p>
-            <span className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-accent/15 pl-1 pr-3 py-1 text-[10px] font-semibold uppercase tracking-widest text-accent-foreground ring-1 ring-inset ring-accent/40">
-              <IconTile icon={Sparkles} size="xs" tone="accent" density="regular" />
-              <span className="text-foreground">Premium</span>
-            </span>
+            {/* status real de assinatura fica no SubscriptionStatusCard abaixo */}
             {(address.city || address.state) && (
               <p className="mt-6 flex items-center justify-center gap-1 text-xs text-muted-foreground">
                 <MapPin className="h-3 w-3" /> {address.city}
