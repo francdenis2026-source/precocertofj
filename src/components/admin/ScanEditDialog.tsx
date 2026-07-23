@@ -34,11 +34,41 @@ export function ScanEditDialog({
   const [price, setPrice] = useState("");
   const [notes, setNotes] = useState("");
   const [saving, setSaving] = useState(false);
+  const [detecting, setDetecting] = useState(false);
+  const [detection, setDetection] = useState<PackageDetection | null>(null);
+  const detect = useServerFn(detectPackageFromImage);
 
   // Initialize when scan changes
   useState(() => {
     if (scan) setPrice((scan.price_captured ?? 0).toFixed(2).replace(".", ","));
   });
+
+  async function handleDetect() {
+    if (!scan?.image_url) return;
+    setDetecting(true);
+    setDetection(null);
+    try {
+      const parsedPrice = Number(price.replace(",", "."));
+      const res = await detect({
+        data: {
+          image: scan.image_url,
+          price: Number.isFinite(parsedPrice) && parsedPrice > 0 ? parsedPrice : null,
+        },
+      });
+      setDetection(res);
+      if (!res.size_value || !res.size_unit) {
+        toast.warning("Não foi possível detectar o tamanho na imagem.");
+      } else {
+        toast.success(
+          `Detectado: ${res.size_value}${res.size_unit}${res.confidence !== "high" ? " (confiança " + res.confidence + ")" : ""}`,
+        );
+      }
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Falha na IA");
+    } finally {
+      setDetecting(false);
+    }
+  }
 
   async function handleSave() {
     if (!scan) return;
