@@ -1470,6 +1470,8 @@ export type Database = {
           last_price: number | null
           last_triggered_at: string | null
           product_key: string
+          scope_city: string | null
+          scope_neighborhood: string | null
           target_price: number | null
           threshold_pct: number
           updated_at: string
@@ -1485,6 +1487,8 @@ export type Database = {
           last_price?: number | null
           last_triggered_at?: string | null
           product_key: string
+          scope_city?: string | null
+          scope_neighborhood?: string | null
           target_price?: number | null
           threshold_pct?: number
           updated_at?: string
@@ -1500,6 +1504,8 @@ export type Database = {
           last_price?: number | null
           last_triggered_at?: string | null
           product_key?: string
+          scope_city?: string | null
+          scope_neighborhood?: string | null
           target_price?: number | null
           threshold_pct?: number
           updated_at?: string
