@@ -304,9 +304,33 @@ function Perfil() {
 
           <div className="space-y-4">
             <div className="grid grid-cols-3 gap-3">
-              <MetricBox icon={Award} label="Reputação" value="4.8" note="colaborador" />
-              <MetricBox icon={Heart} label="Favoritos" value="24" note="produtos" />
-              <MetricBox icon={Sparkles} label="Economia total" value="R$ 1.847" note="desde 2025" />
+              <MetricBox
+                icon={Award}
+                label="Contribuições"
+                value={s ? s.contributionsCount.toLocaleString("pt-BR") : "…"}
+                note={s ? (s.contributionsCount > 0 ? "scans + denúncias" : "envie sua 1ª nota") : "carregando"}
+              />
+              <MetricBox
+                icon={Heart}
+                label="Favoritos"
+                value={s ? s.favoritesCount.toLocaleString("pt-BR") : "…"}
+                note={s && s.favoritesCount > 0 ? "produtos salvos" : "nada favoritado"}
+              />
+              <MetricBox
+                icon={Sparkles}
+                label="Economia (90d)"
+                value={s ? fmtBrl(s.totalSavings) : "…"}
+                note={
+                  s
+                    ? s.totalSavings > 0
+                      ? "escolhendo o menor preço"
+                      : s.potentialSavings > 0
+                        ? `poderia poupar ${fmtBrl(s.potentialSavings)}`
+                        : "sem dados suficientes"
+                    : "carregando"
+                }
+              />
+
             </div>
 
             {/* CPF */}
