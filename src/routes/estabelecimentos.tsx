@@ -51,6 +51,51 @@ function EstablishmentsPage() {
     staleTime: 60_000,
   });
 
+  const [q, setQ] = useState("");
+  const [neighborhood, setNeighborhood] = useState<string>("__all");
+  const [sort, setSort] = useState<"name" | "neighborhood" | "products">("neighborhood");
+
+  const neighborhoods = useMemo(() => {
+    if (!data) return [] as string[];
+    const set = new Set<string>();
+    for (const e of data.items) if (e.neighborhood) set.add(e.neighborhood);
+    return Array.from(set).sort((a, b) => a.localeCompare(b, "pt-BR"));
+  }, [data]);
+
+  const visibleItems = useMemo(() => {
+    if (!data) return [] as typeof data.items;
+    const term = q.trim().toLowerCase();
+    let list = data.items.slice();
+    if (neighborhood !== "__all") {
+      list = list.filter((e) => (e.neighborhood ?? "") === neighborhood);
+    }
+    if (term) {
+      list = list.filter((e) =>
+        [e.name, e.neighborhood ?? "", e.city ?? ""].some((v) =>
+          v.toLowerCase().includes(term),
+        ),
+      );
+    }
+    switch (sort) {
+      case "neighborhood":
+        list.sort((a, b) => {
+          const an = a.neighborhood ?? "\uffff";
+          const bn = b.neighborhood ?? "\uffff";
+          const cmp = an.localeCompare(bn, "pt-BR");
+          return cmp !== 0 ? cmp : a.name.localeCompare(b.name, "pt-BR");
+        });
+        break;
+      case "products":
+        list.sort((a, b) => b.productsCount - a.productsCount);
+        break;
+      case "name":
+      default:
+        list.sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
+    }
+    return list;
+  }, [data, q, neighborhood, sort]);
+
+
   return (
     <div className="min-h-dvh bg-background pb-24 md:pb-8">
       <SiteHeader variant="solid" />
