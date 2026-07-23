@@ -333,9 +333,9 @@ function HomePage() {
           style={{ background: `radial-gradient(circle, ${PALETTE.gold}33 0%, transparent 65%)` }}
         />
 
-        <div className={dsx(ds.container, "relative py-14 md:py-20")}>
+        <div className={dsx(ds.container, "relative py-10 md:py-20")}>
           {/* Cabeçalho editorial */}
-          <div className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
+          <div className="mx-auto mb-6 max-w-2xl text-center md:mb-14">
             <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1 backdrop-blur">
               <span
                 className="h-1.5 w-1.5 rounded-full"
@@ -349,10 +349,10 @@ function HomePage() {
               </span>
             </div>
             <h2
-              className={`${serif} mt-4 text-white leading-[0.98]`}
+              className={`${serif} mt-3 text-white leading-[0.98] md:mt-4`}
               style={{
                 letterSpacing: "-0.03em",
-                fontSize: "clamp(2rem, 5vw, 3.75rem)",
+                fontSize: "clamp(1.6rem, 5vw, 3.75rem)",
               }}
             >
               Tudo que você precisa,{" "}
@@ -360,13 +360,13 @@ function HomePage() {
                 em três passos.
               </span>
             </h2>
-            <p className="mx-auto mt-4 max-w-lg text-[13.5px] leading-relaxed text-white/75 sm:text-[15px]">
-              Ranking, mercados e planos — organizados como uma redação: enxuto,
-              tipografado e feito para decidir rápido.
+            <p className="mx-auto mt-3 max-w-lg text-[13px] leading-relaxed text-white/80 sm:text-[15px] md:mt-4">
+              Ranking, mercados e planos — enxuto, tipografado e feito para
+              decidir rápido.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
+          <div className="grid grid-cols-1 gap-2.5 md:grid-cols-3 md:gap-5">
             <ExploreCard
               number="01"
               kicker="Ranking"
