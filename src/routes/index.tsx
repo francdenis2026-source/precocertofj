@@ -1,23 +1,19 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import heroMarket from "@/assets/home-hero.jpg?w=640;960;1280;1600;1920&format=avif;webp;jpg&as=picture";
-// LCP preload usa a menor variante AVIF (mobile-first); o <picture> abaixo negocia o resto.
-import heroPreloadAvif from "@/assets/home-hero.jpg?w=1280&format=avif&url";
-import exploreBg from "@/assets/explore-bg.jpg";
+import heroMarket from "@/assets/home-hero.jpg?w=640;896;1280&format=avif;webp;jpg&as=picture";
+import heroPreloadAvif from "@/assets/home-hero.jpg?w=896&format=avif&url";
 import {
   Search,
   ArrowRight,
   TrendingDown,
   Sparkles,
-  Store,
-  Trophy,
+  ShieldCheck,
 } from "lucide-react";
 import { ds, dsx } from "@/lib/ds";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
-
 import { getPlatformStats } from "@/lib/stores-public.functions";
 
 export const Route = createFileRoute("/")({
@@ -51,122 +47,34 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-/* Design tokens — Navy Trust, contrastes reforçados, adaptáveis light/dark */
-const PALETTE = {
+/* ------- Tokens ------- */
+const P = {
   paper: "var(--pc-home-paper)",
   ink: "var(--pc-home-ink)",
   card: "var(--pc-home-card)",
   navy: "var(--pc-home-navy)",
-  navy2: "var(--pc-home-navy-2)",
   gold: "var(--pc-home-gold)",
   goldSoft: "var(--pc-home-gold-soft)",
   line: "var(--pc-home-line)",
-  heroOverlay: "var(--pc-home-hero-overlay)",
-  exploreBg: "var(--pc-home-explore-bg)",
-  exploreOverlay: "var(--pc-home-explore-overlay)",
-  ctaGradient: "var(--pc-home-cta-gradient)",
-  dotOpacity: "var(--pc-home-dot-opacity)",
-  onHero: "var(--pc-home-onhero-fg)",
+  heading: "var(--pc-home-heading)",
+  onNavy: "var(--pc-home-on-navy)",
 };
-
-const transparentize = (color: string, amount: number) =>
-  `color-mix(in oklab, ${color} ${amount}%, transparent)`;
-
-const themeVars: React.CSSProperties = {
-  ["--nt-paper" as any]: PALETTE.paper,
-  ["--nt-ink" as any]: PALETTE.ink,
-  ["--nt-navy" as any]: PALETTE.navy,
-  ["--nt-gold" as any]: PALETTE.gold,
-  fontFamily: "'Work Sans', system-ui, -apple-system, sans-serif",
-  color: PALETTE.ink,
-};
-
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
-const sans = "font-['Work_Sans',system-ui,sans-serif]";
-
-function HeroImage() {
-  const [status, setStatus] = useState<"loading" | "loaded" | "error">("loading");
-  const imageRef = useRef<HTMLImageElement | null>(null);
-
-  useEffect(() => {
-    const image = imageRef.current;
-    if (!image) return;
-
-    if (image.complete) {
-      setStatus(image.naturalWidth > 0 ? "loaded" : "error");
-    }
-  }, []);
-
-  return (
-    <>
-      {/* Skeleton/placeholder gradient — mantém contraste com o overlay dos temas */}
-      <div
-        aria-hidden="true"
-        className={`absolute inset-0 transition-opacity duration-500 ${status === "loaded" ? "opacity-0" : "opacity-100"}`}
-        style={{
-          background:
-            "linear-gradient(135deg, oklch(0.22 0.05 258) 0%, oklch(0.32 0.06 260) 40%, oklch(0.42 0.08 78) 100%)",
-        }}
-      >
-        {status === "loading" && (
-          <div
-            className="absolute inset-0 animate-pulse"
-            style={{
-              background:
-                "linear-gradient(90deg, transparent 0%, rgb(255 255 255 / 0.06) 50%, transparent 100%)",
-            }}
-          />
-        )}
-      </div>
-      {status !== "error" && (
-        <picture>
-          {Object.entries(heroMarket.sources).map(([type, srcset]) => (
-            <source
-              key={type}
-              type={`image/${type}`}
-              srcSet={srcset}
-              sizes="100vw"
-            />
-          ))}
-          <img
-            ref={imageRef}
-            src={heroMarket.img.src}
-            width={heroMarket.img.w}
-            height={heroMarket.img.h}
-            alt=""
-            aria-hidden="true"
-            fetchPriority="high"
-            decoding="async"
-            onLoad={() => setStatus("loaded")}
-            onError={() => setStatus("error")}
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${status === "loaded" ? "opacity-100" : "opacity-0"}`}
-            style={{ filter: "saturate(0.85)" }}
-          />
-        </picture>
-      )}
-    </>
-  );
-}
-
 
 function HomePage() {
   const navigate = useNavigate();
   const [q, setQ] = useState("");
-  const [today, setToday] = useState<string>("");
-  const [todayShort, setTodayShort] = useState<string>("");
+  const [today, setToday] = useState("");
 
   useEffect(() => {
-    const d = new Date();
     setToday(
-      d.toLocaleDateString("pt-BR", {
-        weekday: "long", day: "2-digit", month: "long",
+      new Date().toLocaleDateString("pt-BR", {
+        weekday: "long",
+        day: "2-digit",
+        month: "long",
       }),
     );
-    setTodayShort(
-      d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" }),
-    );
   }, []);
-
 
   const platformStats = useServerFn(getPlatformStats);
   const statsQ = useQuery({
@@ -184,327 +92,373 @@ function HomePage() {
   };
 
   return (
-    <div style={themeVars} className="min-h-screen w-full antialiased">
-      {/* Ambient paper background */}
-      <div className="fixed inset-0 -z-10" style={{ background: PALETTE.paper }}>
-        <div
-          className="absolute inset-0"
-          style={{
-            opacity: PALETTE.dotOpacity,
-            backgroundImage: `radial-gradient(circle at 1px 1px, ${PALETTE.navy} 1px, transparent 0)`,
-            backgroundSize: "22px 22px",
-          }}
-        />
-      </div>
+    <div
+      className="min-h-screen w-full antialiased"
+      style={{
+        background: P.paper,
+        color: P.ink,
+        fontFamily: "'Work Sans', system-ui, -apple-system, sans-serif",
+      }}
+    >
+      <SiteHeader variant="solid" showThemeToggle />
 
-      {/* HEADER */}
-      <SiteHeader variant="overlay" showThemeToggle />
-
-      {/* HERO */}
-      <section className="relative isolate w-full overflow-hidden" style={{ minHeight: "min(92vh, 880px)" }}>
-        <HeroImage />
+      {/* ============== EDITORIAL CARD ============== */}
+      <div className="mx-auto w-full max-w-7xl px-4 pt-6 pb-10 sm:px-6 sm:pt-10 lg:px-8 lg:pt-14">
         <div
-          className="absolute inset-0"
+          className="overflow-hidden rounded-[1.75rem] shadow-[0_30px_80px_-30px_rgb(11_29_58_/_0.25)] ring-1 lg:rounded-[2.5rem]"
           style={{
-            background: PALETTE.heroOverlay,
+            background: P.card,
+            borderColor: P.line,
+            // @ts-expect-error css var
+            "--tw-ring-color": P.line,
           }}
-        />
-        <div
-          className="absolute inset-0 opacity-[0.07] mix-blend-overlay"
-          style={{
-            backgroundImage: `radial-gradient(circle at 1px 1px, #fff 1px, transparent 0)`,
-            backgroundSize: "3px 3px",
-          }}
-        />
-
-        {/* AI ANNOUNCEMENT — absolute, não altera altura do hero */}
-        <div
-          className="pointer-events-none absolute left-1/2 top-[76px] z-20 -translate-x-1/2 sm:left-auto sm:right-6 sm:top-[84px] sm:translate-x-0 md:right-8 md:top-[96px]"
-          aria-live="polite"
         >
-          <div
-            className="pointer-events-auto group inline-flex max-w-[calc(100vw-1rem)] items-center gap-1.5 rounded-full border border-[color:var(--pc-home-onhero-border)] bg-[color:var(--pc-home-onhero-glass)] py-1 pl-1.5 pr-2.5 text-[color:var(--pc-home-onhero-fg)] shadow-[0_8px_24px_rgba(0,0,0,0.25)] backdrop-blur-xl transition-all hover:border-[color:var(--pc-home-onhero-border-hover)] hover:bg-[color:var(--pc-home-onhero-glass-hover)] sm:gap-2.5 sm:py-2 sm:pl-2.5 sm:pr-4"
-            title="Em breve: sugestões e categorização automática por IA"
-          >
-            <span
-              className="relative grid h-4 w-4 shrink-0 place-items-center rounded-full sm:h-6 sm:w-6"
-              style={{ background: `${PALETTE.gold}` }}
-            >
-              <span className="absolute inset-0 animate-ping rounded-full opacity-60" style={{ background: transparentize(PALETTE.gold, 50) }} />
-              <svg viewBox="0 0 24 24" className="relative h-2.5 w-2.5 sm:h-3.5 sm:w-3.5" fill="none" stroke={PALETTE.navy} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
-                <path d="M12 3l1.7 4.6L18 9l-4.3 1.4L12 15l-1.7-4.6L6 9l4.3-1.4L12 3z" />
-                <path d="M18 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2z" />
-              </svg>
-            </span>
-            <span className="flex min-w-0 items-center gap-1 text-[9.5px] font-semibold uppercase tracking-[0.14em] sm:gap-1.5 sm:text-[11.5px] sm:tracking-[0.16em]">
-              <span
-                className="rounded-full px-1.5 py-0.5 text-[8.5px] font-bold tracking-[0.18em] sm:text-[9.5px]"
-                style={{ background: PALETTE.gold, color: PALETTE.navy }}
-              >
-                EM BREVE
-              </span>
-              <span className="hidden truncate sm:inline">Inteligência artificial integrada</span>
-              <span className="truncate sm:hidden">IA integrada</span>
-            </span>
-          </div>
-        </div>
-
-        <div
-          className={dsx("relative z-10 flex flex-col justify-end pb-12 pt-32 sm:pt-28 md:pt-40 md:pb-20", ds.container)}
-          style={{ minHeight: "min(92vh, 880px)" }}
-
-        >
-          <div className="max-w-4xl">
-            <div className={dsx(ds.chip.onDark, "hidden max-w-full text-[10.5px] uppercase tracking-[0.18em] sm:inline-flex sm:text-[11.5px]")}>
-              <span className="h-1.5 w-1.5 shrink-0 animate-pulse rounded-full" style={{ background: PALETTE.gold }} />
-              <span className="min-w-0 truncate">
-                <span>{today || "atualizado agora"} · edição diária</span>
-              </span>
-            </div>
-
-
-
-            <h1
-              className={`${serif} mt-5 font-normal text-[color:var(--pc-home-onhero-fg)] sm:mt-6 md:mt-8`}
-              style={{
-                fontSize: "clamp(2.25rem, 7.5vw, 7rem)",
-                lineHeight: 0.96,
-                letterSpacing: "-0.03em",
-              }}
-            >
-              O preço certo,
-              <br />
-              <span className="italic" style={{ color: PALETTE.goldSoft }}>
-                onde você compra.
-              </span>
-            </h1>
-
-            <p
-              className="mt-5 max-w-2xl text-[color:var(--pc-home-onhero-fg-90)] sm:mt-6 md:mt-8"
-              style={{ fontSize: "clamp(0.98rem, 1.4vw, 1.25rem)", lineHeight: 1.55 }}
-            >
-              Compare mercados de Feijó em tempo real e descubra em qual mercado
-              sua cesta sai mais barata — com dados atualizados pela própria
-              comunidade.
-            </p>
-
-            {/* Busca — pill unificado, botão embutido */}
-            <form onSubmit={submitSearch} className="mt-6 max-w-2xl sm:mt-8">
+          {/* -------- HERO SPLIT -------- */}
+          <div className="flex flex-col lg:flex-row">
+            {/* LEFT — content */}
+            <div className="flex-[1.2] p-6 sm:p-10 lg:p-16 xl:p-20 flex flex-col justify-center">
+              {/* Badge EM BREVE */}
               <div
-                className="flex items-center gap-2 rounded-2xl border border-[color:var(--pc-home-onhero-border)] bg-[color:var(--pc-home-onhero-glass)] p-1.5 backdrop-blur-xl transition-all focus-within:border-[color:var(--pc-home-onhero-border-hover)] focus-within:bg-[color:var(--pc-home-onhero-glass-hover)] sm:p-2"
+                className="mb-8 inline-flex w-fit items-center gap-2.5 rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] sm:text-[11px]"
+                style={{ background: P.navy, color: "#F5F6FA" }}
               >
-                <span className="pointer-events-none pl-3 sm:pl-4">
-                  <Search className="h-5 w-5 text-[color:var(--pc-home-onhero-fg-90)]" strokeWidth={2.4} aria-hidden />
+                <span className="relative flex h-2 w-2">
+                  <span
+                    className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
+                    style={{ background: P.gold }}
+                  />
+                  <span
+                    className="relative inline-flex h-2 w-2 rounded-full"
+                    style={{ background: P.gold }}
+                  />
                 </span>
-                <input
-                  value={q}
-                  onChange={(e) => setQ(e.target.value)}
-                  type="search"
-                  inputMode="search"
-                  placeholder="Buscar: arroz, café, leite…"
-                  aria-label="Buscar produto"
-                  className={dsx(sans, ds.input.onDark)}
-                />
-                <button
-                  type="submit"
-                  aria-label="Buscar"
-                  className={dsx(ds.btn.base, ds.btn.sizes.md, "shrink-0 shadow-md")}
-                  style={{ background: PALETTE.gold, color: PALETTE.navy }}
+                <span
+                  className="rounded-full px-2 py-0.5 text-[9px] font-bold tracking-[0.2em] sm:text-[10px]"
+                  style={{ background: P.gold, color: P.navy }}
                 >
-                  <span className="hidden sm:inline">Buscar</span>
-                  <ArrowRight className="h-4 w-4" />
-                </button>
+                  EM BREVE
+                </span>
+                <span className="hidden sm:inline">Inteligência artificial integrada</span>
+                <span className="sm:hidden">IA integrada</span>
               </div>
-            </form>
 
-            <div className="mt-5 flex flex-col gap-2.5 sm:mt-6 sm:flex-row sm:flex-wrap sm:items-center">
-              <Link
-                to="/cadastro"
-                className={dsx("group", ds.btn.base, ds.btn.sizes.lg, "shadow-xl")}
-                style={{ background: PALETTE.gold, color: PALETTE.navy }}
-              >
-                Começar grátis
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
-              </Link>
-              <Link
-                to="/melhores-precos"
-                className={dsx(ds.btn.base, ds.btn.sizes.lg, ds.btn.variants.outlineOnDark)}
-              >
-                <TrendingDown className="h-4 w-4" />
-                Ver rankings
-              </Link>
-            </div>
-
-            <div className="mt-7 flex flex-wrap items-center gap-2 sm:gap-2.5">
-              <span className="mr-1 w-full text-[11px] font-bold uppercase tracking-[0.24em] text-[color:var(--pc-home-onhero-fg-80)] sm:w-auto">
-                Populares:
-              </span>
-              {["arroz", "feijão", "leite", "óleo", "café", "açúcar"].map((t) => (
-                <button
-                  key={t}
-                  onClick={() => navigate({ to: "/buscar", search: { q: t } as any })}
-                  className="inline-flex items-center rounded-full border border-[color:var(--pc-home-onhero-border)] bg-[color:var(--pc-home-onhero-glass)] px-4 py-2 text-[14px] font-semibold text-[color:var(--pc-home-onhero-fg)] backdrop-blur outline-none transition-all hover:-translate-y-0.5 hover:border-[color:var(--pc-home-onhero-border-hover)] hover:bg-[color:var(--pc-home-onhero-glass-hover)] focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-onhero-fg)]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-y-0 active:scale-[0.97]"
+              {today && (
+                <div
+                  className="mb-5 text-[10.5px] font-bold uppercase tracking-[0.24em]"
+                  style={{ color: P.goldSoft }}
                 >
-                  {t}
-                </button>
-              ))}
-            </div>
+                  {today} · edição diária
+                </div>
+              )}
 
+              {/* H1 */}
+              <h1
+                className={`${serif} font-normal`}
+                style={{
+                  color: P.heading,
+                  fontSize: "clamp(2.5rem, 7vw, 6.5rem)",
+                  lineHeight: 0.9,
+                  letterSpacing: "-0.03em",
+                }}
+              >
+                O preço certo,
+                <br />
+                <span className="italic" style={{ color: P.goldSoft }}>
+                  onde você compra.
+                </span>
+              </h1>
 
+              <p
+                className="mt-6 max-w-xl text-[15px] leading-relaxed sm:text-[17px]"
+                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 75%, transparent)" }}
+              >
+                Compare mercados de Feijó em tempo real e descubra em qual mercado
+                sua cesta sai mais barata — com dados atualizados pela própria
+                comunidade.
+              </p>
 
-            <div className="mt-10 grid max-w-3xl grid-cols-3 gap-4 border-t border-[color:var(--pc-home-onhero-border-soft)] pt-6 sm:gap-8 md:mt-14 md:pt-9">
-              {[
-                { k: String(stats.establishments ?? 0), l: "Estabelecimentos" },
-                { k: String(stats.products ?? 0), l: "Produtos catalogados" },
-                { k: "24h", l: "Preços atualizados" },
-              ].map((s) => (
-                <div key={s.l} className="min-w-0">
-                  <div
-                    className="truncate font-semibold text-[color:var(--pc-home-onhero-fg)] tabular-nums"
+              {/* Search */}
+              <form onSubmit={submitSearch} className="mt-8 max-w-xl">
+                <div
+                  className="flex items-center gap-2 rounded-2xl border p-1.5 transition-all focus-within:ring-2 sm:p-2"
+                  style={{
+                    background: P.paper,
+                    borderColor: P.line,
+                    // @ts-expect-error css var
+                    "--tw-ring-color": P.gold,
+                  }}
+                >
+                  <span className="pl-3 sm:pl-4">
+                    <Search
+                      className="h-5 w-5"
+                      style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
+                      strokeWidth={2.2}
+                    />
+                  </span>
+                  <input
+                    value={q}
+                    onChange={(e) => setQ(e.target.value)}
+                    type="search"
+                    inputMode="search"
+                    placeholder="Qual item você busca hoje?"
+                    aria-label="Buscar produto"
+                    className="flex-1 bg-transparent px-2 py-3 text-[15px] font-medium outline-none sm:text-base"
+                    style={{ color: P.ink }}
+                  />
+                  <button
+                    type="submit"
+                    aria-label="Buscar"
+                    className="inline-flex shrink-0 items-center gap-2 rounded-xl px-5 py-3 text-sm font-bold transition-transform active:scale-95 sm:px-8 sm:text-base"
+                    style={{ background: P.gold, color: P.navy }}
+                  >
+                    <span className="hidden sm:inline">Buscar</span>
+                    <ArrowRight className="h-4 w-4" />
+                  </button>
+                </div>
+              </form>
+
+              {/* Chips */}
+              <div className="mt-6 flex flex-wrap items-center gap-2">
+                <span
+                  className="mr-1 text-[10px] font-bold uppercase tracking-[0.24em]"
+                  style={{ color: "color-mix(in oklab, var(--pc-home-ink) 45%, transparent)" }}
+                >
+                  Populares:
+                </span>
+                {["arroz", "feijão", "leite", "óleo", "café", "açúcar"].map((t) => (
+                  <button
+                    key={t}
+                    onClick={() => navigate({ to: "/buscar", search: { q: t } as any })}
+                    className="inline-flex items-center rounded-full border px-4 py-1.5 text-[12px] font-semibold capitalize transition-all hover:-translate-y-0.5 hover:shadow-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
                     style={{
-                      fontSize: "clamp(2rem, 4.2vw, 3.25rem)",
-                      letterSpacing: "-0.035em",
-                      lineHeight: 0.95,
-                      fontFeatureSettings: '"tnum","lnum"',
+                      background: P.card,
+                      borderColor: P.line,
+                      color: P.heading,
+                      // @ts-expect-error css var
+                      "--tw-ring-color": P.gold,
+                      "--tw-ring-offset-color": P.card,
                     }}
                   >
-                    {s.k}
-                  </div>
-                  <div className="mt-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-[color:var(--pc-home-onhero-fg-85)] sm:mt-3 sm:text-[12px]">
-                    {s.l}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+                    {t}
+                  </button>
+                ))}
+              </div>
 
-      {/* EXPLORE — seção premium com fundo cinematográfico */}
-      <section
-        className="relative overflow-hidden"
-        style={{ background: PALETTE.exploreBg }}
-      >
-        {/* Imagem de fundo profissional */}
-        <img
-          src={exploreBg}
-          alt=""
-          aria-hidden
-          loading="lazy"
-          width={1920}
-          height={1080}
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-60"
-        />
-        {/* Overlays: gradiente + textura de grid sutil */}
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background: PALETTE.exploreOverlay,
-          }}
-        />
-        <svg
-          aria-hidden
-          className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.08]"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <defs>
-            <pattern id="explore-grid" width="48" height="48" patternUnits="userSpaceOnUse">
-              <path d="M48 0H0V48" fill="none" stroke={PALETTE.goldSoft} strokeWidth="0.5" />
-            </pattern>
-          </defs>
-          <rect width="100%" height="100%" fill="url(#explore-grid)" />
-        </svg>
-        {/* Halo dourado */}
-        <div
-          className="pointer-events-none absolute -top-32 left-1/2 h-[420px] w-[820px] -translate-x-1/2 rounded-full blur-3xl"
-          style={{ background: `radial-gradient(circle, ${transparentize(PALETTE.gold, 20)} 0%, transparent 65%)` }}
-        />
+              {/* CTAs */}
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link
+                  to="/cadastro"
+                  className="group inline-flex items-center gap-2 rounded-2xl px-8 py-4 text-base font-bold shadow-lg transition-all hover:shadow-xl sm:px-10 sm:py-5 sm:text-lg"
+                  style={{ background: P.navy, color: "#F5F6FA" }}
+                >
+                  Começar grátis
+                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                </Link>
+                <Link
+                  to="/melhores-precos"
+                  className="inline-flex items-center gap-2 rounded-2xl border-2 px-8 py-4 text-base font-bold transition-colors hover:text-[color:var(--pc-home-card)] sm:px-10 sm:py-5 sm:text-lg"
+                  style={{
+                    borderColor: P.heading,
+                    color: P.heading,
+                  }}
+                  onMouseEnter={(e) => {
+                    (e.currentTarget as HTMLElement).style.background = P.heading;
+                    (e.currentTarget as HTMLElement).style.color = P.card;
+                  }}
+                  onMouseLeave={(e) => {
+                    (e.currentTarget as HTMLElement).style.background = "transparent";
+                    (e.currentTarget as HTMLElement).style.color = P.heading;
+                  }}
+                >
+                  <TrendingDown className="h-4 w-4" />
+                  Ver rankings
+                </Link>
+              </div>
 
-        <div className={dsx(ds.container, "relative py-10 md:py-20")}>
-          {/* Cabeçalho editorial */}
-          <div className="mx-auto mb-6 max-w-2xl text-center md:mb-14">
-            <div className="inline-flex items-center gap-2 rounded-full border border-[color:var(--pc-home-onhero-border-soft)] bg-[color:var(--pc-home-onhero-glass-soft)] px-3 py-1 backdrop-blur">
-              <span
-                className="h-1.5 w-1.5 rounded-full"
-                style={{ background: PALETTE.gold, boxShadow: `0 0 12px ${PALETTE.gold}` }}
-              />
-              <span
-                className="text-[10px] font-semibold uppercase tracking-[0.24em]"
-                style={{ color: PALETTE.goldSoft }}
+              {/* Stats */}
+              <div
+                className="mt-14 grid grid-cols-3 gap-6 border-t pt-8 sm:gap-12"
+                style={{ borderColor: P.line }}
               >
-                Explore a plataforma
-              </span>
+                {[
+                  {
+                    k: String(stats.establishments ?? 8).padStart(2, "0"),
+                    l: "Estabelecimentos",
+                  },
+                  {
+                    k:
+                      stats.products != null
+                        ? `${stats.products.toLocaleString("pt-BR")}+`
+                        : "1.000+",
+                    l: "Produtos catalogados",
+                  },
+                  { k: "24h", l: "Preços atualizados" },
+                ].map((s) => (
+                  <div key={s.l}>
+                    <div
+                      className={`${serif} tabular-nums`}
+                      style={{
+                        color: P.heading,
+                        fontSize: "clamp(1.75rem, 3.6vw, 2.75rem)",
+                        lineHeight: 1,
+                        letterSpacing: "-0.03em",
+                      }}
+                    >
+                      {s.k}
+                    </div>
+                    <div
+                      className="mt-2 text-[10px] font-bold uppercase tracking-[0.2em] sm:text-[11px]"
+                      style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
+                    >
+                      {s.l}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <h2
-              className={`${serif} mt-3 text-[color:var(--pc-home-onhero-fg)] leading-[0.98] md:mt-4`}
-              style={{
-                letterSpacing: "-0.03em",
-                fontSize: "clamp(1.6rem, 5vw, 3.75rem)",
-              }}
+
+            {/* RIGHT — image + floating quote */}
+            <div
+              className="relative hidden flex-1 lg:block"
+              style={{ background: P.paper, minHeight: 720 }}
             >
-              Tudo que você precisa,{" "}
-              <span className="italic" style={{ color: PALETTE.goldSoft }}>
-                em três passos.
-              </span>
-            </h2>
-            <p className="mx-auto mt-3 max-w-lg text-[13px] leading-relaxed text-[color:var(--pc-home-onhero-fg-80)] sm:text-[15px] md:mt-4">
-              Ranking, mercados e planos — enxuto, tipografado e feito para
-              decidir rápido.
-            </p>
+              <picture>
+                {Object.entries(heroMarket.sources).map(([type, srcset]) => (
+                  <source key={type} type={`image/${type}`} srcSet={srcset} sizes="50vw" />
+                ))}
+                <img
+                  src={heroMarket.img.src}
+                  width={heroMarket.img.w}
+                  height={heroMarket.img.h}
+                  alt="Cesta com produtos frescos do mercado"
+                  fetchPriority="high"
+                  decoding="async"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              </picture>
+              {/* Subtle left fade so the frame reads clean against the panel */}
+              <div
+                aria-hidden
+                className="absolute inset-y-0 left-0 w-24"
+                style={{
+                  background: `linear-gradient(90deg, ${P.card} 0%, transparent 100%)`,
+                }}
+              />
+              {/* Quote card */}
+              <div
+                className="absolute inset-x-8 bottom-8 rounded-3xl p-7 shadow-2xl backdrop-blur-md xl:inset-x-12 xl:bottom-12 xl:p-8"
+                style={{
+                  background: "color-mix(in oklab, var(--pc-home-card) 92%, transparent)",
+                  borderWidth: 1,
+                  borderColor: P.line,
+                }}
+              >
+                <span
+                  className={`${serif} mb-2 block text-5xl leading-none`}
+                  style={{ color: P.gold }}
+                >
+                  “
+                </span>
+                <p
+                  className={`${serif} mb-4 text-xl italic leading-snug`}
+                  style={{ color: P.heading }}
+                >
+                  Comparar preços não é só gastar menos — é comprar com
+                  inteligência e liberdade.
+                </p>
+                <div
+                  className="text-[10px] font-bold uppercase tracking-[0.22em]"
+                  style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
+                >
+                  — Equipe PreçoCerto Feijó
+                </div>
+              </div>
+            </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-2.5 md:grid-cols-3 md:gap-5">
-            <ExploreCard
-              number="01"
-              kicker="Ranking"
-              title="Mercados mais baratos da semana"
-              desc="Quem tem os menores preços por categoria, com evolução semanal."
-              to="/melhores-precos"
-              cta="Ver rankings"
-              svg={<TrophyMark />}
-            />
-            <ExploreCard
-              number="02"
-              kicker="Mercados"
-              title="Todos os estabelecimentos de Feijó"
-              desc="Bairros, categorias mais comuns e produtos disponíveis."
-              to="/estabelecimentos"
-              cta="Ver mercados"
-              svg={<StoreMark />}
-            />
-            <ExploreCard
-              number="03"
-              kicker="Planos"
-              title="Assine e economize todo mês"
-              desc="Alertas de preço, listas ilimitadas e comparador premium."
-              to="/planos"
-              cta="Ver planos"
-              svg={<SparkleMark />}
-            />
+          {/* -------- EXPLORE (dark navy band inside card) -------- */}
+          <div
+            className="p-6 sm:p-10 lg:p-16 xl:p-20"
+            style={{ background: P.navy, color: "#F5F6FA" }}
+          >
+            <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+              <div className="max-w-xl">
+                <div
+                  className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em]"
+                  style={{ color: P.gold }}
+                >
+                  Explore a plataforma
+                </div>
+                <h2
+                  className={`${serif} font-normal`}
+                  style={{
+                    fontSize: "clamp(2rem, 4.8vw, 3.75rem)",
+                    lineHeight: 1,
+                    letterSpacing: "-0.025em",
+                    color: "#F5F6FA",
+                  }}
+                >
+                  Tudo em três passos,
+                  <br />
+                  <span className="italic" style={{ color: P.gold }}>
+                    sem esforço.
+                  </span>
+                </h2>
+                <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/60">
+                  Ferramentas exclusivas para que você nunca mais pague caro em
+                  itens essenciais.
+                </p>
+              </div>
+              <div className="hidden h-px flex-1 md:mx-10 md:mb-3 md:block" style={{ background: "rgb(255 255 255 / 0.08)" }} />
+            </div>
+
+            <div className="grid gap-5 md:grid-cols-3 md:gap-8">
+              <ExploreCard
+                to="/melhores-precos"
+                number="01"
+                title="Ranking Geral"
+                desc="Compare o valor total da cesta básica entre todos os estabelecimentos locais em segundos."
+                cta="Ver rankings"
+              />
+              <ExploreCard
+                to="/estabelecimentos"
+                number="02"
+                title="Todos os mercados"
+                desc="Bairros, categorias e produtos disponíveis em cada estabelecimento de Feijó."
+                cta="Ver mercados"
+              />
+              <ExploreCard
+                to="/planos"
+                number="03"
+                title="Planos & Alertas"
+                desc="Assine, receba alertas de queda e desbloqueie o histórico completo de preços."
+                cta="Ver planos"
+              />
+            </div>
           </div>
         </div>
-      </section>
+      </div>
 
-
-
-      {/* PROVA SOCIAL — mobile-first, compacta */}
-      <section className={dsx(ds.container, "pt-6 md:pt-10")}>
-        <div className="grid grid-cols-3 gap-2 md:gap-4">
+      {/* -------- SOCIAL PROOF (compact) -------- */}
+      <section className="mx-auto w-full max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-3 gap-3 sm:gap-5">
           {[
-            { k: "7", l: "mercados" },
-            { k: "500+", l: "preços/semana" },
-            { k: "100%", l: "notas fiscais" },
+            { k: "7", l: "mercados ativos", icon: <ShieldCheck className="h-4 w-4" /> },
+            { k: "500+", l: "preços por semana", icon: <TrendingDown className="h-4 w-4" /> },
+            { k: "100%", l: "notas fiscais", icon: <Sparkles className="h-4 w-4" /> },
           ].map((s) => (
             <div
               key={s.l}
-              className="rounded-xl border px-2.5 py-2.5 text-center md:px-4 md:py-3"
-              style={{ borderColor: PALETTE.line, background: PALETTE.card }}
+              className="rounded-2xl border px-4 py-4 text-center sm:py-5"
+              style={{ borderColor: P.line, background: P.card, color: P.heading }}
             >
+              <div className="mb-1 flex items-center justify-center" style={{ color: P.goldSoft }}>
+                {s.icon}
+              </div>
               <div
                 className={`${serif} tabular-nums`}
                 style={{
-                  color: PALETTE.navy,
-                  fontSize: "clamp(1.25rem, 3.6vw, 1.75rem)",
+                  fontSize: "clamp(1.25rem, 3vw, 1.75rem)",
                   lineHeight: 1,
                   letterSpacing: "-0.02em",
                 }}
@@ -512,8 +466,8 @@ function HomePage() {
                 {s.k}
               </div>
               <div
-                className="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] md:text-[11px]"
-                style={{ color: PALETTE.navy2 }}
+                className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.16em] sm:text-[11px]"
+                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
               >
                 {s.l}
               </div>
@@ -522,45 +476,46 @@ function HomePage() {
         </div>
       </section>
 
-      {/* CTA FINAL — hierarquia refinada no mobile */}
-      <section className={dsx(ds.container, "py-5 md:py-10")}>
+      {/* -------- FINAL CTA -------- */}
+      <section className="mx-auto w-full max-w-7xl px-4 pb-14 sm:px-6 lg:px-8">
         <div
-          className="relative overflow-hidden rounded-2xl px-4 py-4 text-[color:var(--pc-home-onhero-fg)] sm:px-7 sm:py-6 md:px-9 md:py-7"
-          style={{ background: PALETTE.ctaGradient }}
+          className="relative overflow-hidden rounded-2xl px-6 py-6 sm:px-10 sm:py-8"
+          style={{ background: P.navy, color: "#F5F6FA" }}
         >
-          <div
-            className="pointer-events-none absolute -right-10 -bottom-10 h-40 w-40 rounded-full"
-            style={{ background: `radial-gradient(circle, ${transparentize(PALETTE.gold, 34)} 0%, transparent 70%)` }}
-          />
-          <div className="relative grid grid-cols-1 items-start gap-3 md:grid-cols-[1fr_auto] md:items-center md:gap-8">
+          <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center md:gap-8">
             <div className="min-w-0">
               <h3
-                className={`${serif} text-[color:var(--pc-home-onhero-fg)]`}
+                className={`${serif}`}
                 style={{
-                  fontSize: "clamp(1.1rem, 2.6vw, 1.95rem)",
-                  lineHeight: 1.12,
+                  fontSize: "clamp(1.25rem, 2.6vw, 2rem)",
+                  lineHeight: 1.15,
                   letterSpacing: "-0.015em",
-                  textShadow: "0 1px 2px rgba(0,0,0,0.35)",
                 }}
               >
                 Nunca mais pague caro por{" "}
-                <span className="italic font-semibold" style={{ color: PALETTE.goldSoft }}>arroz, feijão e café.</span>
+                <span className="italic" style={{ color: P.gold }}>
+                  arroz, feijão e café.
+                </span>
               </h3>
-              <p className="mt-1 text-[11.5px] leading-tight text-[color:var(--pc-home-onhero-fg-85)] sm:text-[13px]">
+              <p className="mt-1 text-[13px] text-white/70 sm:text-[14px]">
                 Cadastro em 30s · sem cartão.
               </p>
             </div>
-            <div className="flex w-full flex-row gap-2 md:w-auto md:flex-col md:items-stretch">
+            <div className="flex flex-wrap gap-3">
               <Link
                 to="/cadastro"
-                className={dsx(ds.btn.base, ds.btn.sizes.sm, "flex-1 md:flex-none md:px-5 md:py-2.5 md:text-[15px]")}
-                style={{ background: PALETTE.gold, color: PALETTE.navy }}
+                className={dsx(ds.btn.base, ds.btn.sizes.md)}
+                style={{ background: P.gold, color: P.navy }}
               >
                 Criar conta <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 to="/resgatar"
-                className={dsx(ds.btn.base, ds.btn.sizes.sm, "flex-1 border border-[color:var(--pc-home-onhero-border)] text-[color:var(--pc-home-onhero-fg)] hover:bg-[color:var(--pc-home-onhero-glass)] md:flex-none md:px-5 md:py-2.5 md:text-[15px]")}
+                className={dsx(
+                  ds.btn.base,
+                  ds.btn.sizes.md,
+                  "border border-white/30 text-[color:#F5F6FA] hover:bg-white/10",
+                )}
               >
                 Tenho um código
               </Link>
@@ -569,130 +524,59 @@ function HomePage() {
         </div>
       </section>
 
-      {/* FOOTER */}
       <SiteFooter />
     </div>
   );
 }
 
-
+/* -------- ExploreCard (dark on navy) -------- */
 function ExploreCard({
-  number, kicker, title, desc, to, cta, svg,
+  to,
+  number,
+  title,
+  desc,
+  cta,
 }: {
+  to: string;
   number: string;
-  kicker: string;
   title: string;
   desc: string;
-  to: string;
   cta: string;
-  svg: React.ReactNode;
 }) {
   return (
     <Link
       to={to}
-      className="group relative flex items-center gap-3 overflow-hidden rounded-xl border border-[color:var(--pc-home-onhero-border-soft)] bg-[color:var(--pc-home-onhero-glass-soft)] p-3.5 backdrop-blur-md transition-all duration-300 hover:border-[color:var(--pc-home-onhero-border)] hover:bg-[color:var(--pc-home-onhero-glass)] md:flex-col md:items-stretch md:gap-0 md:rounded-2xl md:p-7 md:hover:-translate-y-1"
+      className="group block rounded-[1.75rem] border p-8 transition-all duration-500 hover:-translate-y-1 lg:p-10"
+      style={{
+        background: "rgb(255 255 255 / 0.05)",
+        borderColor: "rgb(255 255 255 / 0.10)",
+      }}
+      onMouseEnter={(e) => {
+        (e.currentTarget as HTMLElement).style.background = "rgb(255 255 255 / 0.10)";
+        (e.currentTarget as HTMLElement).style.borderColor = "color-mix(in oklab, var(--pc-home-gold) 40%, transparent)";
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLElement).style.background = "rgb(255 255 255 / 0.05)";
+        (e.currentTarget as HTMLElement).style.borderColor = "rgb(255 255 255 / 0.10)";
+      }}
     >
-      {/* Glow no hover (só desktop) */}
       <div
-        className="pointer-events-none absolute inset-x-0 -top-24 hidden h-40 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100 md:block"
-        style={{ background: `radial-gradient(60% 100% at 50% 100%, ${transparentize(PALETTE.gold, 27)} 0%, transparent 70%)` }}
-      />
-
-      {/* Selo — compacto no mobile, grande no desktop */}
-      <div
-        className="relative grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-[color:var(--pc-home-onhero-border-soft)] md:mb-6 md:h-14 md:w-14 md:rounded-xl"
+        className={`${serif} mb-8 italic opacity-60 transition-opacity group-hover:opacity-100`}
         style={{
-          background: `linear-gradient(135deg, ${transparentize(PALETTE.gold, 14)} 0%, ${transparentize(PALETTE.gold, 5)} 100%)`,
-          color: PALETTE.goldSoft,
+          color: P.gold,
+          fontSize: "clamp(3rem, 5vw, 4.5rem)",
+          lineHeight: 1,
+          letterSpacing: "-0.03em",
         }}
       >
-        {svg}
-      </div>
-
-      {/* Número decorativo — só desktop */}
-      <span
-        className={`${serif} absolute right-6 top-6 hidden text-[42px] leading-none md:block`}
-        style={{ color: transparentize(PALETTE.goldSoft, 33), letterSpacing: "-0.04em" }}
-      >
         {number}
-      </span>
-
-      {/* Conteúdo */}
-      <div className="min-w-0 flex-1 md:flex-none">
-        <div
-          className="text-[10px] font-bold uppercase tracking-[0.24em] md:mt-0 md:text-[11px] md:tracking-[0.28em]"
-          style={{ color: PALETTE.goldSoft }}
-        >
-          <span className={`${serif} mr-1.5 not-italic md:hidden`} style={{ color: transparentize(PALETTE.goldSoft, 60) }}>
-            {number}
-          </span>
-          {kicker}
-        </div>
-        <h3
-          className="mt-0.5 font-semibold text-[color:var(--pc-home-onhero-fg)] md:mt-2.5"
-          style={{
-            letterSpacing: "-0.02em",
-            fontSize: "clamp(0.98rem, 1.9vw, 1.65rem)",
-            lineHeight: 1.22,
-          }}
-        >
-          {title}
-        </h3>
-        <p className="mt-1 hidden text-[14px] leading-[1.6] text-[color:var(--pc-home-onhero-fg-85)] md:mt-3 md:block md:flex-1">
-          {desc}
-        </p>
       </div>
-
-      {/* Chevron — mobile */}
-      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-[color:var(--pc-home-onhero-border)] md:hidden">
-        <ArrowRight className="h-4 w-4 text-[color:var(--pc-home-onhero-fg)]" />
-      </span>
-
-      {/* Rodapé com CTA — desktop */}
-      <div className="mt-6 hidden items-center justify-between border-t border-[color:var(--pc-home-onhero-border-soft)] pt-4 md:flex">
-        <span className="text-[12px] font-bold uppercase tracking-[0.2em] text-[color:var(--pc-home-onhero-fg)]">
-          {cta}
-        </span>
-        <span
-          className="grid h-8 w-8 place-items-center rounded-full border border-[color:var(--pc-home-onhero-border)] transition-all duration-300 group-hover:border-transparent"
-          style={{ background: "transparent" }}
-        >
-          <ArrowRight className="h-4 w-4 text-[color:var(--pc-home-onhero-fg)] transition-transform duration-300 group-hover:translate-x-0.5" />
-        </span>
+      <h3 className="mb-4 text-2xl font-bold text-white lg:text-[26px]">{title}</h3>
+      <p className="text-[15px] leading-relaxed text-white/60">{desc}</p>
+      <div className="mt-8 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.24em] text-white/80 transition-colors group-hover:text-[color:var(--pc-home-gold)]">
+        {cta}
+        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
       </div>
     </Link>
   );
 }
-
-/* ------ SVG marks editoriais ------ */
-function TrophyMark() {
-  return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M6 4h12v4a6 6 0 0 1-12 0V4Z" />
-      <path d="M6 6H3v2a3 3 0 0 0 3 3" />
-      <path d="M18 6h3v2a3 3 0 0 1-3 3" />
-      <path d="M10 15h4v3h-4z" />
-      <path d="M8 21h8" />
-      <path d="M12 18v3" />
-    </svg>
-  );
-}
-function StoreMark() {
-  return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M3 9 5 4h14l2 5" />
-      <path d="M3 9v2a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0V9" />
-      <path d="M5 13v7h14v-7" />
-      <path d="M10 20v-4h4v4" />
-    </svg>
-  );
-}
-function SparkleMark() {
-  return (
-    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M12 3v4M12 17v4M3 12h4M17 12h4" />
-      <path d="M12 7c1 3 2 4 5 5-3 1-4 2-5 5-1-3-2-4-5-5 3-1 4-2 5-5Z" />
-    </svg>
-  );
-}
-
