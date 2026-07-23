@@ -481,7 +481,7 @@ function HomePage() {
       </div>
 
       {/* -------- SOCIAL PROOF (compact) -------- */}
-      <section className="mx-auto w-full max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-6xl px-4 pb-6 sm:px-6 lg:px-8">
         <div className="grid grid-cols-3 gap-3 sm:gap-5">
           {[
             { k: "7", l: "mercados ativos", icon: <ShieldCheck className="h-4 w-4" /> },
