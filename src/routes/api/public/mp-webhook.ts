@@ -236,7 +236,28 @@ export const Route = createFileRoute("/api/public/mp-webhook")({
               emailStatus = mail.sent
                 ? { email_sent: true, email_to: to, email_message_id: mail.messageId ?? null }
                 : { email_sent: false, email_to: to, email_error: mail.error ?? "erro" };
-              if (!mail.sent) console.warn("[mp-webhook] activation email não enviado:", mail.error);
+              if (!mail.sent) {
+                console.warn("[mp-webhook] activation email não enviado:", mail.error);
+                // Enfileira reenvio automático com backoff
+                await supabaseAdmin.from("email_send_queue").insert({
+                  kind: "activation",
+                  order_id: externalRef,
+                  license_code_id: orderFull!.license_code_id,
+                  webhook_event_id: logRow?.id ?? null,
+                  to_email: to,
+                  payload: {
+                    name: displayName,
+                    code: licenseCode,
+                    planName,
+                    days,
+                    expiresAt,
+                  } as never,
+                  attempts: 1,
+                  next_attempt_at: new Date(Date.now() + 60_000).toISOString(),
+                  last_error: mail.error ?? "erro",
+                  last_attempt_at: new Date().toISOString(),
+                });
+              }
             }
           } catch (e) {
             console.error("[mp-webhook] falha ao enviar e-mail:", e);
@@ -244,6 +265,7 @@ export const Route = createFileRoute("/api/public/mp-webhook")({
           }
 
           return finish("processed", null, 200, emailStatus);
+
         }
 
 

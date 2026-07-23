@@ -82,6 +82,7 @@ import { Route as ApiAdminCatalogImageRouteImport } from './routes/api/admin/cat
 import { Route as AdminCoberturaIdRouteImport } from './routes/admin_.cobertura.$id'
 import { Route as LojaIdProdutoSlugRouteImport } from './routes/loja.$id.produto.$slug'
 import { Route as ApiPublicMercadopagoWebhookRouteImport } from './routes/api/public/mercadopago/webhook'
+import { Route as ApiPublicHooksRetryActivationEmailsRouteImport } from './routes/api/public/hooks/retry-activation-emails'
 import { Route as ApiPublicHooksRefreshCatalogImagesRouteImport } from './routes/api/public/hooks/refresh-catalog-images'
 import { Route as ApiPublicHooksDrainCatalogImagesRouteImport } from './routes/api/public/hooks/drain-catalog-images'
 import { Route as ApiPublicHooksCollabInboundRouteImport } from './routes/api/public/hooks/collab-inbound'
@@ -452,6 +453,12 @@ const ApiPublicMercadopagoWebhookRoute =
     path: '/api/public/mercadopago/webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksRetryActivationEmailsRoute =
+  ApiPublicHooksRetryActivationEmailsRouteImport.update({
+    id: '/api/public/hooks/retry-activation-emails',
+    path: '/api/public/hooks/retry-activation-emails',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksRefreshCatalogImagesRoute =
   ApiPublicHooksRefreshCatalogImagesRouteImport.update({
     id: '/api/public/hooks/refresh-catalog-images',
@@ -546,6 +553,7 @@ export interface FileRoutesByFullPath {
   '/api/public/hooks/collab-inbound': typeof ApiPublicHooksCollabInboundRoute
   '/api/public/hooks/drain-catalog-images': typeof ApiPublicHooksDrainCatalogImagesRoute
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
+  '/api/public/hooks/retry-activation-emails': typeof ApiPublicHooksRetryActivationEmailsRoute
   '/api/public/mercadopago/webhook': typeof ApiPublicMercadopagoWebhookRoute
   '/loja/$id/produto/$slug': typeof LojaIdProdutoSlugRoute
 }
@@ -624,6 +632,7 @@ export interface FileRoutesByTo {
   '/api/public/hooks/collab-inbound': typeof ApiPublicHooksCollabInboundRoute
   '/api/public/hooks/drain-catalog-images': typeof ApiPublicHooksDrainCatalogImagesRoute
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
+  '/api/public/hooks/retry-activation-emails': typeof ApiPublicHooksRetryActivationEmailsRoute
   '/api/public/mercadopago/webhook': typeof ApiPublicMercadopagoWebhookRoute
   '/loja/$id/produto/$slug': typeof LojaIdProdutoSlugRoute
 }
@@ -703,6 +712,7 @@ export interface FileRoutesById {
   '/api/public/hooks/collab-inbound': typeof ApiPublicHooksCollabInboundRoute
   '/api/public/hooks/drain-catalog-images': typeof ApiPublicHooksDrainCatalogImagesRoute
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
+  '/api/public/hooks/retry-activation-emails': typeof ApiPublicHooksRetryActivationEmailsRoute
   '/api/public/mercadopago/webhook': typeof ApiPublicMercadopagoWebhookRoute
   '/loja/$id/produto/$slug': typeof LojaIdProdutoSlugRoute
 }
@@ -783,6 +793,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/collab-inbound'
     | '/api/public/hooks/drain-catalog-images'
     | '/api/public/hooks/refresh-catalog-images'
+    | '/api/public/hooks/retry-activation-emails'
     | '/api/public/mercadopago/webhook'
     | '/loja/$id/produto/$slug'
   fileRoutesByTo: FileRoutesByTo
@@ -861,6 +872,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/collab-inbound'
     | '/api/public/hooks/drain-catalog-images'
     | '/api/public/hooks/refresh-catalog-images'
+    | '/api/public/hooks/retry-activation-emails'
     | '/api/public/mercadopago/webhook'
     | '/loja/$id/produto/$slug'
   id:
@@ -939,6 +951,7 @@ export interface FileRouteTypes {
     | '/api/public/hooks/collab-inbound'
     | '/api/public/hooks/drain-catalog-images'
     | '/api/public/hooks/refresh-catalog-images'
+    | '/api/public/hooks/retry-activation-emails'
     | '/api/public/mercadopago/webhook'
     | '/loja/$id/produto/$slug'
   fileRoutesById: FileRoutesById
@@ -1013,6 +1026,7 @@ export interface RootRouteChildren {
   ApiPublicHooksCollabInboundRoute: typeof ApiPublicHooksCollabInboundRoute
   ApiPublicHooksDrainCatalogImagesRoute: typeof ApiPublicHooksDrainCatalogImagesRoute
   ApiPublicHooksRefreshCatalogImagesRoute: typeof ApiPublicHooksRefreshCatalogImagesRoute
+  ApiPublicHooksRetryActivationEmailsRoute: typeof ApiPublicHooksRetryActivationEmailsRoute
   ApiPublicMercadopagoWebhookRoute: typeof ApiPublicMercadopagoWebhookRoute
 }
 
@@ -1529,6 +1543,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicMercadopagoWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/retry-activation-emails': {
+      id: '/api/public/hooks/retry-activation-emails'
+      path: '/api/public/hooks/retry-activation-emails'
+      fullPath: '/api/public/hooks/retry-activation-emails'
+      preLoaderRoute: typeof ApiPublicHooksRetryActivationEmailsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/refresh-catalog-images': {
       id: '/api/public/hooks/refresh-catalog-images'
       path: '/api/public/hooks/refresh-catalog-images'
@@ -1673,6 +1694,8 @@ const rootRouteChildren: RootRouteChildren = {
   ApiPublicHooksDrainCatalogImagesRoute: ApiPublicHooksDrainCatalogImagesRoute,
   ApiPublicHooksRefreshCatalogImagesRoute:
     ApiPublicHooksRefreshCatalogImagesRoute,
+  ApiPublicHooksRetryActivationEmailsRoute:
+    ApiPublicHooksRetryActivationEmailsRoute,
   ApiPublicMercadopagoWebhookRoute: ApiPublicMercadopagoWebhookRoute,
 }
 export const routeTree = rootRouteImport
