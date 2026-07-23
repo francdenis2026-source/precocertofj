@@ -233,7 +233,7 @@ function HomePage() {
                     style={{
                       background: P.card,
                       borderColor: P.line,
-                      color: P.navy,
+                      color: P.heading,
                       // @ts-expect-error css var
                       "--tw-ring-color": P.gold,
                       "--tw-ring-offset-color": P.card,
