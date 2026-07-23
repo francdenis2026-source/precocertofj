@@ -400,3 +400,68 @@ export const listEstablishmentsByNeighborhood = createServerFn({ method: "GET" }
 );
 
 
+
+export type MyScansPage = {
+  items: MyScan[];
+  nextOffset: number | null;
+  total: number | null;
+};
+
+export const listMyScansPage = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { offset?: number; limit?: number }) => ({
+    offset: Math.max(0, Math.floor(input.offset ?? 0)),
+    limit: Math.min(100, Math.max(1, Math.floor(input.limit ?? 30))),
+  }))
+  .handler(async ({ data, context }): Promise<MyScansPage> => {
+    const from = data.offset;
+    const to = data.offset + data.limit - 1;
+    const { data: rows, error, count } = await context.supabase
+      .from("scans")
+      .select(
+        "id, product_name, price_captured, average_price, diff_pct, verdict, status, image_url, market_name, barcode, latitude, longitude, created_at",
+        { count: "exact" },
+      )
+      .eq("user_id", context.userId)
+      .order("created_at", { ascending: false })
+      .range(from, to);
+    if (error) throw new Error(error.message);
+    const items = (rows ?? []).map((r) => ({
+      id: r.id,
+      productName: r.product_name,
+      priceCaptured: r.price_captured !== null ? Number(r.price_captured) : null,
+      averagePrice: r.average_price !== null ? Number(r.average_price) : null,
+      diffPct: r.diff_pct !== null ? Number(r.diff_pct) : null,
+      verdict: r.verdict,
+      status: ((r as { status?: string }).status as ScanStatus) ?? "salvo",
+      imageUrl: r.image_url,
+      marketName: r.market_name,
+      barcode: r.barcode,
+      latitude: r.latitude !== null ? Number(r.latitude) : null,
+      longitude: r.longitude !== null ? Number(r.longitude) : null,
+      createdAt: r.created_at,
+    }));
+    if (items.length > 0) {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { data: catalog } = await supabaseAdmin
+        .from("product_catalog")
+        .select("display_name, normalized_name, image_url")
+        .not("image_url", "is", null)
+        .limit(500);
+      const candidates = (catalog ?? []).map((row) => ({
+        displayName: row.display_name,
+        normalizedName: row.normalized_name,
+        imageUrl: row.image_url,
+      }));
+      for (const scan of items) {
+        const matched =
+          scan.imageUrl ?? findCatalogImageForProduct(scan.productName ?? "", candidates);
+        scan.imageUrl = await signStorageImageUrl(matched, supabaseAdmin);
+      }
+    }
+    return {
+      items,
+      nextOffset: items.length === data.limit ? data.offset + data.limit : null,
+      total: typeof count === "number" ? count : null,
+    };
+  });
