@@ -468,9 +468,10 @@ function CadastroPage() {
 
               <div>
                 <div className="mb-2 flex items-center justify-between">
-                  <label className="block text-[10.5px] font-bold uppercase tracking-[0.22em] text-slate-700">
+                  <label className="block text-[10.5px] font-bold uppercase tracking-[0.22em] text-slate-900">
                     PIN de acesso · 6 dígitos
                   </label>
+
                   <FieldStatus state={vPin} show={touched.password} />
                 </div>
                 <PinField
