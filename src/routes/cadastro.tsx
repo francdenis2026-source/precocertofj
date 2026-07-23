@@ -464,14 +464,14 @@ function Field({
   const invalid = !!(showState && state && !state.valid && (state.msg || state.hint));
   const good = !!(showState && state?.valid && value);
   const border = invalid
-    ? "border-rose-300 focus:border-rose-500 focus:ring-rose-500/15"
+    ? "border-rose-400 focus:border-rose-500 focus:ring-rose-500/20"
     : good
-      ? "border-emerald-300 focus:border-emerald-600 focus:ring-emerald-600/15"
-      : "border-slate-200 focus:border-emerald-600 focus:ring-emerald-600/15";
+      ? "border-emerald-500 focus:border-emerald-600 focus:ring-emerald-600/20"
+      : "border-slate-300 hover:border-slate-400 focus:border-[color:var(--pc-navy)] focus:ring-[color:var(--pc-navy)]/15";
   return (
     <label className="block">
       <div className="mb-1.5 flex items-center justify-between">
-        <span className="block text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">
+        <span className="block text-[10.5px] font-bold uppercase tracking-[0.22em] text-slate-700">
           {label}
         </span>
         {state && <FieldStatus state={state} show={!!showState} />}
@@ -485,7 +485,8 @@ function Field({
         inputMode={inputMode}
         autoComplete={autoComplete}
         aria-invalid={invalid}
-        className={`h-11 w-full rounded-xl border ${border} bg-white px-3.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none transition focus:ring-2`}
+        className={`h-12 w-full rounded-xl border-2 ${border} bg-white px-4 text-[15px] font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-400 outline-none transition focus:ring-4`}
+        style={{ ["--pc-navy" as string]: PC_EMERALD } as React.CSSProperties}
       />
     </label>
   );
