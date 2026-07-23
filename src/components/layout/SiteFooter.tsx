@@ -33,7 +33,7 @@ const NAV_COLS: Array<{ title: string; links: Array<{ to: string; label: string 
   },
 ];
 
-// Flat link list for the compact mobile footer (no column headers)
+// Flat link list for the compact mobile footer (grouped by intent)
 const MOBILE_LINKS: Array<{ to: string; label: string }> = [
   { to: "/melhores-precos", label: "Rankings" },
   { to: "/estabelecimentos", label: "Mercados" },
@@ -49,39 +49,44 @@ export function SiteFooter() {
     <footer
       className="mt-4 border-t border-border bg-muted/45 text-foreground md:mt-8"
     >
-      {/* ============ MOBILE (compact) ============ */}
-      <div className={dsx(ds.container, "md:hidden py-2.5")}>
-        <div className="flex items-center justify-between gap-3">
-          <Link to="/" className="flex items-center gap-2 min-w-0">
-            <span className="grid h-7 w-7 shrink-0 place-items-center rounded-[8px] bg-brand text-[13px] font-black text-brand-foreground shadow-elev-2">
+      {/* ============ MOBILE (ultra compact + safe-area) ============ */}
+      <div
+        className={dsx(
+          ds.container,
+          "md:hidden pt-1.5 pb-[max(0.375rem,env(safe-area-inset-bottom))] px-[max(1rem,env(safe-area-inset-left))]",
+        )}
+      >
+        <div className="flex items-center justify-between gap-2">
+          <Link to="/" className="flex items-center gap-1.5 min-w-0" aria-label="PreçoCerto — início">
+            <span className="grid h-5 w-5 shrink-0 place-items-center rounded-[6px] bg-brand text-[10px] font-black text-brand-foreground shadow-elev-2">
               P
             </span>
-            <span className={dsx(serif, "truncate text-[16px] leading-none text-foreground")}>
+            <span className={dsx(serif, "truncate text-[13px] leading-none text-foreground")}>
               Preço<span className="italic text-brand">Certo</span>
             </span>
           </Link>
-          <a
-            href="mailto:precocerto-fj@proton.me"
-            aria-label="E-mail"
-            className="shrink-0 rounded-md p-1.5 text-muted-foreground hover:text-primary"
+          <nav
+            aria-label="Rodapé"
+            className="flex flex-wrap items-center justify-end gap-x-2 gap-y-0.5 text-[11px] font-medium leading-tight text-foreground/85"
           >
-            <Mail className="h-4 w-4" />
-          </a>
+            {MOBILE_LINKS.map((l) => (
+              <Link
+                key={l.to}
+                to={l.to}
+                className="rounded-sm px-0.5 py-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand hover:text-primary"
+              >
+                {l.label}
+              </Link>
+            ))}
+          </nav>
         </div>
 
-        <nav className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[12px] text-foreground/80">
-          {MOBILE_LINKS.map((l) => (
-            <Link key={l.to} to={l.to} className="hover:text-primary">
-              {l.label}
-            </Link>
-          ))}
-        </nav>
-
-        <div className="mt-2 flex items-center justify-between gap-2 border-t border-border pt-1.5 text-[10.5px] leading-tight text-muted-foreground">
+        <div className="mt-1 flex items-center justify-between gap-2 text-[10px] leading-tight text-muted-foreground">
           <span>© {year} PreçoCerto · Feijó/AC</span>
           <span className="font-mono">&lt;dev&gt; Franc D&apos;nis</span>
         </div>
       </div>
+
 
       {/* ============ DESKTOP / TABLET ============ */}
       <div
