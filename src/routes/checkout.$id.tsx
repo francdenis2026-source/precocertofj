@@ -257,6 +257,71 @@ function CheckoutPage() {
             <>
               <Card>
                 <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <Mail className="h-4 w-4" /> E-mail para receber o código
+                  </CardTitle>
+                  <CardDescription className="text-xs">
+                    Enviamos o código de ativação assim que o pagamento for confirmado.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <Label htmlFor="delivery-email" className="text-xs font-medium">
+                    Seu melhor e-mail
+                  </Label>
+                  <Input
+                    id="delivery-email"
+                    type="email"
+                    inputMode="email"
+                    autoComplete="email"
+                    placeholder="voce@exemplo.com"
+                    value={emailInput}
+                    onChange={(e) => {
+                      setEmailInput(e.target.value);
+                      setEmailTouched(true);
+                    }}
+                    onBlur={() => {
+                      setEmailTouched(true);
+                      if (emailValid && !emailSaved && !saveEmailMutation.isPending) {
+                        saveEmailMutation.mutate();
+                      }
+                    }}
+                    aria-invalid={emailTouched && !emailValid}
+                    className={
+                      emailTouched && !emailValid
+                        ? "border-destructive focus-visible:ring-destructive"
+                        : ""
+                    }
+                  />
+                  {emailTouched && emailInput.length > 0 && !emailValid && (
+                    <p className="flex items-center gap-1 text-xs text-destructive">
+                      <AlertCircle className="h-3 w-3" /> Digite um e-mail válido (ex.: nome@dominio.com).
+                    </p>
+                  )}
+                  {emailValid && emailSaved && (
+                    <p className="flex items-center gap-1 text-xs text-primary">
+                      <CheckCircle2 className="h-3 w-3" /> E-mail confirmado — o código será enviado para <strong className="ml-1">{emailNormalized}</strong>.
+                    </p>
+                  )}
+                  {emailValid && !emailSaved && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="w-full"
+                      onClick={() => saveEmailMutation.mutate()}
+                      disabled={saveEmailMutation.isPending}
+                    >
+                      {saveEmailMutation.isPending ? (
+                        <Loader2 className="mr-1 h-3 w-3 animate-spin" />
+                      ) : null}
+                      Confirmar e-mail
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
                   <CardTitle className="text-base">Pagamento</CardTitle>
                   <CardDescription className="text-xs">
                     Você será redirecionado ao Mercado Pago para concluir com Pix, cartão ou boleto.
@@ -267,7 +332,8 @@ function CheckoutPage() {
                     className="w-full"
                     variant="executive"
                     onClick={() => payMutation.mutate()}
-                    disabled={payMutation.isPending}
+                    disabled={payMutation.isPending || !emailValid}
+                    title={!emailValid ? "Informe um e-mail válido antes de pagar" : undefined}
                   >
                     {payMutation.isPending ? (
                       <Loader2 className="mr-1 h-4 w-4 animate-spin" />
@@ -276,6 +342,12 @@ function CheckoutPage() {
                     )}
                     Pagar com Mercado Pago
                   </Button>
+                  {!emailValid && (
+                    <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <AlertCircle className="h-3 w-3" />
+                      Informe seu e-mail acima para liberar o pagamento.
+                    </p>
+                  )}
                   {order.status === "pending" && (
                     <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
                       <Clock className="h-3 w-3" />
@@ -284,6 +356,7 @@ function CheckoutPage() {
                   )}
                 </CardContent>
               </Card>
+
 
 
               {order.discount_cents === 0 && (
