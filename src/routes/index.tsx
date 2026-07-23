@@ -105,7 +105,7 @@ function HomePage() {
       <SiteHeader variant="solid" showThemeToggle />
 
       {/* ============== EDITORIAL CARD ============== */}
-      <div className="mx-auto w-full max-w-6xl px-4 pt-4 pb-6 sm:px-6 sm:pt-6 lg:px-8 lg:pt-8">
+      <div className="mx-auto w-full max-w-6xl px-4 pt-3 pb-4 sm:px-6 sm:pt-4 lg:px-8 lg:pt-5">
         <div
           className="overflow-hidden rounded-[1.25rem] shadow-[0_20px_60px_-30px_rgb(11_29_58_/_0.22)] ring-1 lg:rounded-[1.75rem]"
           style={{
