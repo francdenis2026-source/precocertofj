@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import heroMarket from "@/assets/hero-market.jpg";
+import exploreBg from "@/assets/explore-bg.jpg";
 import {
   Search,
   ArrowRight,
@@ -267,51 +268,111 @@ function HomePage() {
         </div>
       </section>
 
-      {/* EXPLORE — três atalhos compactos para páginas internas */}
-      <section className={dsx(ds.container, ds.sectionY.md)}>
-        <div className="mb-5 md:mb-6">
-          <div className={dsx(ds.type.overline)} style={{ color: PALETTE.navy2 }}>
-            Explore
-          </div>
-          <h2
-            className={`${serif} mt-1.5 leading-[1.05]`}
-            style={{
-              color: PALETTE.ink,
-              letterSpacing: "-0.02em",
-              fontSize: "clamp(1.6rem, 3.4vw, 2.25rem)",
-            }}
-          >
-            Tudo que você precisa, em três passos
-          </h2>
-        </div>
+      {/* EXPLORE — seção premium com fundo cinematográfico */}
+      <section
+        className="relative overflow-hidden"
+        style={{ background: PALETTE.navy }}
+      >
+        {/* Imagem de fundo profissional */}
+        <img
+          src={exploreBg}
+          alt=""
+          aria-hidden
+          loading="lazy"
+          width={1920}
+          height={1080}
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-60"
+        />
+        {/* Overlays: gradiente + textura de grid sutil */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: `linear-gradient(180deg, ${PALETTE.navy}f2 0%, ${PALETTE.navy}cc 45%, ${PALETTE.navy}f5 100%)`,
+          }}
+        />
+        <svg
+          aria-hidden
+          className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.08]"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <pattern id="explore-grid" width="48" height="48" patternUnits="userSpaceOnUse">
+              <path d="M48 0H0V48" fill="none" stroke={PALETTE.goldSoft} strokeWidth="0.5" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#explore-grid)" />
+        </svg>
+        {/* Halo dourado */}
+        <div
+          className="pointer-events-none absolute -top-32 left-1/2 h-[420px] w-[820px] -translate-x-1/2 rounded-full blur-3xl"
+          style={{ background: `radial-gradient(circle, ${PALETTE.gold}33 0%, transparent 65%)` }}
+        />
 
-        <div className={ds.grid.cols3}>
-          <ExploreCard
-            icon={<Trophy className="h-4 w-4" />}
-            eyebrow="01 — Ranking"
-            title="Mercados mais baratos da semana"
-            desc="Veja quem está com os menores preços por categoria e produto."
-            to="/melhores-precos"
-            cta="Ver rankings"
-          />
-          <ExploreCard
-            icon={<Store className="h-4 w-4" />}
-            eyebrow="02 — Mercados"
-            title="Todos os estabelecimentos de Feijó"
-            desc="Mapa por bairro, categorias mais comuns e produtos disponíveis."
-            to="/estabelecimentos"
-            cta="Ver mercados"
-          />
-          <ExploreCard
-            icon={<Sparkles className="h-4 w-4" />}
-            eyebrow="03 — Planos"
-            title="Assine e economize todo mês"
-            desc="Alertas de preço, listas ilimitadas e ferramenta de comparação premium."
-            to="/planos"
-            cta="Ver planos"
-          />
+        <div className={dsx(ds.container, "relative py-14 md:py-20")}>
+          {/* Cabeçalho editorial */}
+          <div className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1 backdrop-blur">
+              <span
+                className="h-1.5 w-1.5 rounded-full"
+                style={{ background: PALETTE.gold, boxShadow: `0 0 12px ${PALETTE.gold}` }}
+              />
+              <span
+                className="text-[10px] font-semibold uppercase tracking-[0.24em]"
+                style={{ color: PALETTE.goldSoft }}
+              >
+                Explore a plataforma
+              </span>
+            </div>
+            <h2
+              className={`${serif} mt-4 text-white leading-[0.98]`}
+              style={{
+                letterSpacing: "-0.03em",
+                fontSize: "clamp(2rem, 5vw, 3.75rem)",
+              }}
+            >
+              Tudo que você precisa,{" "}
+              <span className="italic" style={{ color: PALETTE.goldSoft }}>
+                em três passos.
+              </span>
+            </h2>
+            <p className="mx-auto mt-4 max-w-lg text-[13.5px] leading-relaxed text-white/75 sm:text-[15px]">
+              Ranking, mercados e planos — organizados como uma redação: enxuto,
+              tipografado e feito para decidir rápido.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
+            <ExploreCard
+              number="01"
+              kicker="Ranking"
+              title="Mercados mais baratos da semana"
+              desc="Quem tem os menores preços por categoria, com evolução semanal."
+              to="/melhores-precos"
+              cta="Ver rankings"
+              svg={<TrophyMark />}
+            />
+            <ExploreCard
+              number="02"
+              kicker="Mercados"
+              title="Todos os estabelecimentos de Feijó"
+              desc="Bairros, categorias mais comuns e produtos disponíveis."
+              to="/estabelecimentos"
+              cta="Ver mercados"
+              svg={<StoreMark />}
+            />
+            <ExploreCard
+              number="03"
+              kicker="Planos"
+              title="Assine e economize todo mês"
+              desc="Alertas de preço, listas ilimitadas e comparador premium."
+              to="/planos"
+              cta="Ver planos"
+              svg={<SparkleMark />}
+            />
+          </div>
         </div>
       </section>
+
 
 
       {/* CTA FINAL — compacto */}
@@ -371,47 +432,109 @@ function HomePage() {
 
 
 function ExploreCard({
-  icon, eyebrow, title, desc, to, cta,
+  number, kicker, title, desc, to, cta, svg,
 }: {
-  icon: React.ReactNode;
-  eyebrow: string;
+  number: string;
+  kicker: string;
   title: string;
   desc: string;
   to: string;
   cta: string;
+  svg: React.ReactNode;
 }) {
   return (
     <Link
       to={to}
-      className={dsx("group relative flex flex-col overflow-hidden", ds.card.paddedHover)}
-      style={{ borderColor: PALETTE.line }}
+      className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/12 bg-white/[0.04] p-6 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-white/25 hover:bg-white/[0.07] sm:p-7"
     >
+      {/* Glow no hover */}
       <div
-        className="absolute right-0 top-0 h-16 w-16"
-        style={{ background: `radial-gradient(circle at top right, ${PALETTE.gold}22 0%, transparent 70%)` }}
+        className="pointer-events-none absolute inset-x-0 -top-24 h-40 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100"
+        style={{ background: `radial-gradient(60% 100% at 50% 100%, ${PALETTE.gold}44 0%, transparent 70%)` }}
       />
-      <div className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.16em]" style={{ color: PALETTE.navy2 }}>
-        <span className="grid h-6 w-6 place-items-center rounded-md" style={{ background: `${PALETTE.gold}22`, color: PALETTE.gold }}>
-          {icon}
+      {/* Selo SVG grande */}
+      <div className="mb-6 flex items-start justify-between">
+        <div
+          className="relative grid h-14 w-14 place-items-center rounded-xl border border-white/15"
+          style={{
+            background: `linear-gradient(135deg, ${PALETTE.gold}22 0%, ${PALETTE.gold}08 100%)`,
+            color: PALETTE.goldSoft,
+          }}
+        >
+          {svg}
+        </div>
+        <span
+          className={`${serif} text-[42px] leading-none`}
+          style={{ color: `${PALETTE.goldSoft}55`, letterSpacing: "-0.04em" }}
+        >
+          {number}
         </span>
-        {eyebrow}
       </div>
+
       <div
-        className={`${serif} mt-3 leading-[1.15]`}
+        className="text-[10px] font-semibold uppercase tracking-[0.24em]"
+        style={{ color: PALETTE.goldSoft }}
+      >
+        {kicker}
+      </div>
+      <h3
+        className={`${serif} mt-2 text-white leading-[1.1]`}
         style={{
-          color: PALETTE.ink,
-          letterSpacing: "-0.01em",
-          fontSize: "clamp(1.2rem, 2.2vw, 1.5rem)",
+          letterSpacing: "-0.015em",
+          fontSize: "clamp(1.25rem, 2vw, 1.55rem)",
         }}
       >
         {title}
-      </div>
-      <p className="mt-2 flex-1 text-[13px] leading-relaxed" style={{ color: PALETTE.navy2 }}>
+      </h3>
+      <p className="mt-2.5 flex-1 text-[13.5px] leading-relaxed text-white/75">
         {desc}
       </p>
-      <div className="mt-4 inline-flex items-center gap-1 text-[13px] font-semibold" style={{ color: PALETTE.navy }}>
-        {cta} <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" />
+
+      {/* Rodapé com CTA e linha */}
+      <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
+        <span className="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-white">
+          {cta}
+        </span>
+        <span
+          className="grid h-8 w-8 place-items-center rounded-full border border-white/25 transition-all duration-300 group-hover:border-transparent"
+          style={{ background: "transparent" }}
+        >
+          <ArrowRight className="h-4 w-4 text-white transition-transform duration-300 group-hover:translate-x-0.5" />
+        </span>
       </div>
     </Link>
   );
 }
+
+/* ------ SVG marks editoriais ------ */
+function TrophyMark() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M6 4h12v4a6 6 0 0 1-12 0V4Z" />
+      <path d="M6 6H3v2a3 3 0 0 0 3 3" />
+      <path d="M18 6h3v2a3 3 0 0 1-3 3" />
+      <path d="M10 15h4v3h-4z" />
+      <path d="M8 21h8" />
+      <path d="M12 18v3" />
+    </svg>
+  );
+}
+function StoreMark() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 9 5 4h14l2 5" />
+      <path d="M3 9v2a3 3 0 0 0 6 0 3 3 0 0 0 6 0 3 3 0 0 0 6 0V9" />
+      <path d="M5 13v7h14v-7" />
+      <path d="M10 20v-4h4v4" />
+    </svg>
+  );
+}
+function SparkleMark() {
+  return (
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 3v4M12 17v4M3 12h4M17 12h4" />
+      <path d="M12 7c1 3 2 4 5 5-3 1-4 2-5 5-1-3-2-4-5-5 3-1 4-2 5-5Z" />
+    </svg>
+  );
+}
+
