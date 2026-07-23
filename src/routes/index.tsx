@@ -118,13 +118,27 @@ function HomePage() {
 
       {/* HERO */}
       <section className="relative isolate w-full overflow-hidden" style={{ minHeight: "min(92vh, 880px)" }}>
-        <img
-          src={heroMarket}
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover"
-          style={{ filter: "saturate(0.85)" }}
-        />
+        <picture>
+          {Object.entries(heroMarket.sources).map(([type, srcset]) => (
+            <source
+              key={type}
+              type={`image/${type}`}
+              srcSet={srcset}
+              sizes="100vw"
+            />
+          ))}
+          <img
+            src={heroMarket.img.src}
+            width={heroMarket.img.w}
+            height={heroMarket.img.h}
+            alt=""
+            aria-hidden="true"
+            fetchPriority="high"
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover"
+            style={{ filter: "saturate(0.85)" }}
+          />
+        </picture>
         <div
           className="absolute inset-0"
           style={{
