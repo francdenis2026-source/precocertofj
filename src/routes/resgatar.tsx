@@ -113,14 +113,12 @@ function RedeemPage() {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const redeem = useServerFn(redeemMyLicenseCode);
-  const preview = useServerFn(previewLicenseCode);
   const fetchAccount = useServerFn(getMyAccount);
 
   const clean = useMemo(() => sanitize(raw), [raw]);
   const display = useMemo(() => grouped(clean), [clean]);
   const validation = useMemo(() => validateCode(raw), [raw]);
   const canSubmit = clean.length >= MIN_LEN && validation.level !== "warn";
-  const showState = touched || clean.length > 0;
 
   const sessionQuery = useQuery({
     queryKey: ["auth-session"],
@@ -136,30 +134,11 @@ function RedeemPage() {
     enabled: hasSession && !!result?.ok,
   });
 
-  // Debounce do valor limpo para consultar o preview
-  const [debouncedClean, setDebouncedClean] = useState("");
-  useEffect(() => {
-    const id = setTimeout(() => setDebouncedClean(clean), 350);
-    return () => clearTimeout(id);
-  }, [clean]);
-
-  const previewQuery = useQuery({
-    queryKey: ["license-preview", debouncedClean],
-    queryFn: () => preview({ data: { code: debouncedClean } }),
-    enabled:
-      hasSession &&
-      !result?.ok &&
-      debouncedClean.length >= MIN_LEN &&
-      validation.level !== "warn",
-    staleTime: 10_000,
-    retry: false,
-  });
-  const previewData = previewQuery.data ?? null;
-  const previewLoading = previewQuery.isFetching;
-
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+  const attemptedRef = useRef<string>("");
 
   async function handleSubmit(e?: React.FormEvent) {
     e?.preventDefault();
@@ -173,31 +152,35 @@ function RedeemPage() {
       );
       return;
     }
-    if (previewData && previewData.found && !previewData.redeemable) {
-      toast.error(previewData.message);
-      return;
-    }
+    attemptedRef.current = clean;
     setSubmitting(true);
     try {
       const res = await redeem({ data: { code: clean } });
-      setResult({
-        ok: res.success,
-        message: res.message,
-        addedDays: res.addedDays,
-        newPaidUntil: res.newPaidUntil,
-        code: clean,
-      });
       if (res.success) {
-        toast.success(res.message);
-        setTimeout(() => navigate({ to: "/app" }), 2200);
-      } else toast.error(res.message);
+        toast.success(res.message || "Licença ativada!");
+        navigate({ to: "/app" });
+        return;
+      }
+      setResult({ ok: false, message: res.message, code: clean });
+      toast.error(res.message);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Falha ao ativar";
       toast.error(msg);
-      setResult({ ok: false, message: msg });
+      setResult({ ok: false, message: msg, code: clean });
     } finally {
       setSubmitting(false);
     }
+  }
+
+  // Auto-envio: assim que o código atinge o formato oficial (14 chars começando com PC), tenta ativar
+  useEffect(() => {
+    if (!hasSession || submitting || result) return;
+    if (clean.length !== CANONICAL_LEN || !clean.startsWith("PC")) return;
+    if (attemptedRef.current === clean) return;
+    handleSubmit();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clean, hasSession, submitting, result]);
+
   }
 
   async function pasteFromClipboard() {
