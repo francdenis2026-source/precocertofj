@@ -66,10 +66,10 @@ function OnboardingPage() {
     mutationFn: () =>
       complete({ data: { fullName, phone, city, neighborhood } }),
     onSuccess: () => {
-      toast.success("Perfil salvo. Bem-vindo!");
+      toast.success("Tudo pronto — bora economizar!");
       navigate({ to: "/app", replace: true });
     },
-    onError: (e) => toast.error(e instanceof Error ? e.message : "Falha ao salvar"),
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Não deu para salvar. Tente de novo em instantes."),
   });
 
   const canSubmit =
