@@ -24,10 +24,12 @@ function apply(mode: Theme) {
 }
 
 function readStored(): Theme {
-  if (typeof window === "undefined") return "light";
+  if (typeof window === "undefined") return "dark";
   const raw = window.localStorage.getItem(STORAGE_KEY);
-  return raw === "dark" ? "dark" : "light";
+  if (raw === "light") return "light";
+  return "dark";
 }
+
 
 function writeStored(theme: Theme) {
   if (typeof window === "undefined") return;
