@@ -175,8 +175,11 @@ function AdminLoginPage() {
               Ir para o login de usuário
             </Link>
           </p>
+          </div>
         </div>
       </div>
     </div>
+  );
+}
   );
 }
