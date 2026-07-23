@@ -135,8 +135,16 @@ function RedeemPage() {
   });
 
   useEffect(() => {
+    try {
+      const pending = sessionStorage.getItem("pending_license_code");
+      if (pending) {
+        setRaw(pending);
+        sessionStorage.removeItem("pending_license_code");
+      }
+    } catch {}
     inputRef.current?.focus();
   }, []);
+
 
   const attemptedRef = useRef<string>("");
 
@@ -152,8 +160,15 @@ function RedeemPage() {
       );
       return;
     }
+    if (!hasSession) {
+      try { sessionStorage.setItem("pending_license_code", clean); } catch {}
+      toast.message("Entre na sua conta para concluir a ativação.");
+      navigate({ to: "/login", search: { redirect: "/resgatar" } as never });
+      return;
+    }
     attemptedRef.current = clean;
     setSubmitting(true);
+
     try {
       const res = await redeem({ data: { code: clean } });
       if (res.success) {
@@ -261,9 +276,8 @@ function RedeemPage() {
             <div className="flex items-center justify-center px-5 py-16">
               <Loader2 className="h-5 w-5 animate-spin" style={{ color: NAVY }} />
             </div>
-          ) : !hasSession ? (
-            <SignInGate />
           ) : result?.ok ? (
+
             <SuccessBody
               code={result.code ?? clean}
               addedDays={result.addedDays}
