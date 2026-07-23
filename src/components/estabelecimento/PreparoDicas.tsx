@@ -294,7 +294,7 @@ export function PreparoDicas() {
         <div className="mb-2 flex items-center justify-between gap-2">
           <p className="flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-wider text-foreground/70">
             <Filter className="h-3.5 w-3.5 text-primary" />
-            Filtrar por tempo e modo
+            Filtrar por tipo, tempo e modo
             {filtrosAtivos > 0 && (
               <span className="ml-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
                 {filtrosAtivos}
@@ -313,6 +313,32 @@ export function PreparoDicas() {
         </div>
 
         <div className="space-y-2">
+          <div>
+            <p className="mb-1 flex items-center gap-1 text-[11px] text-muted-foreground">
+              <Beef className="h-3 w-3" /> Tipo de corte
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {PROTEINAS.map((p) => {
+                const active = proteinasSel.has(p.id);
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => toggleProteina(p.id)}
+                    aria-pressed={active}
+                    className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors ${
+                      active
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-background text-foreground/80 hover:border-primary/60 hover:text-foreground"
+                    }`}
+                  >
+                    <span aria-hidden="true">{p.emoji}</span>
+                    {p.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
           <div>
             <p className="mb-1 flex items-center gap-1 text-[11px] text-muted-foreground">
               <Clock className="h-3 w-3" /> Tempo estimado
