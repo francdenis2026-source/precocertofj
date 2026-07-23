@@ -66,6 +66,28 @@ const P = {
 };
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 
+// Padrão único para citações e trechos serifados em destaque.
+// Mantém tamanhos fluidos, leading, letter-spacing e kerning consistentes
+// em qualquer bloco de citação/destaque na página.
+const quoteTypography = {
+  fontSize: "clamp(1.1875rem, 1.05rem + 0.6vw, 1.4375rem)", // 19 → 23px
+  lineHeight: 1.35,
+  letterSpacing: "-0.005em",
+  wordSpacing: "0.01em",
+  textWrap: "balance" as const,
+  WebkitFontSmoothing: "antialiased" as const,
+  MozOsxFontSmoothing: "grayscale" as const,
+  fontFeatureSettings: '"kern" 1, "liga" 1, "calt" 1, "dlig" 1',
+  textRendering: "optimizeLegibility" as const,
+  fontKerning: "normal" as const,
+};
+const captionTypography = {
+  letterSpacing: "0.22em",
+  WebkitFontSmoothing: "antialiased" as const,
+  MozOsxFontSmoothing: "grayscale" as const,
+  textRendering: "optimizeLegibility" as const,
+};
+
 function HomePage() {
   const navigate = useNavigate();
   const { user, loading: sessionLoading } = useSession();
