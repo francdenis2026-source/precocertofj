@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
-import { Clock, Download, Filter, Flame, Share2, Star, Trash2, X } from "lucide-react";
+import { Beef, Clock, Download, Filter, Flame, Share2, Star, Trash2, X } from "lucide-react";
 import imgCozidao from "@/assets/preparo/cozidao.jpg";
 import imgAssado from "@/assets/preparo/assado.jpg";
 import imgChurrasco from "@/assets/preparo/churrasco.jpg";
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { PREPARO_DICAS, favoriteKey } from "@/lib/preparo-dicas-data";
+import { PREPARO_DICAS, PROTEINAS, favoriteKey, type ProteinaId } from "@/lib/preparo-dicas-data";
 import { gerarGuiaPreparoPDF } from "@/lib/preparo-dicas-pdf";
 import { shareOrDownloadPreparoCard } from "@/lib/preparo-dicas-card";
 import {
@@ -24,6 +24,15 @@ import {
   type ModoId,
   type TempoFaixaId,
 } from "@/lib/preparo-dicas-filtros";
+
+const PROTEINA_LABEL: Record<ProteinaId, string> = PROTEINAS.reduce(
+  (acc, p) => ({ ...acc, [p.id]: p.label }),
+  {} as Record<ProteinaId, string>,
+);
+const PROTEINA_EMOJI: Record<ProteinaId, string> = PROTEINAS.reduce(
+  (acc, p) => ({ ...acc, [p.id]: p.emoji }),
+  {} as Record<ProteinaId, string>,
+);
 
 const FOTOS: Record<string, string> = {
   cozidao: imgCozidao,
@@ -145,6 +154,7 @@ export function PreparoDicas() {
   const [cardKey, setCardKey] = useState<string | null>(null);
   const [temposSel, setTemposSel] = useState<Set<TempoFaixaId>>(() => new Set());
   const [modosSel, setModosSel] = useState<Set<ModoId>>(() => new Set());
+  const [proteinasSel, setProteinasSel] = useState<Set<ProteinaId>>(() => new Set());
 
   const toggleTempo = (id: TempoFaixaId) => {
     setTemposSel((prev) => {
@@ -162,15 +172,24 @@ export function PreparoDicas() {
       return next;
     });
   };
+  const toggleProteina = (id: ProteinaId) => {
+    setProteinasSel((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
   const limparFiltros = () => {
     setTemposSel(new Set());
     setModosSel(new Set());
+    setProteinasSel(new Set());
   };
-  const filtrosAtivos = temposSel.size + modosSel.size;
+  const filtrosAtivos = temposSel.size + modosSel.size + proteinasSel.size;
 
   const dicasFiltradas = useMemo(
-    () => aplicarFiltros(PREPARO_DICAS, { tempos: temposSel, modos: modosSel }),
-    [temposSel, modosSel],
+    () => aplicarFiltros(PREPARO_DICAS, { tempos: temposSel, modos: modosSel, proteinas: proteinasSel }),
+    [temposSel, modosSel, proteinasSel],
   );
 
   const favoritosPorDica = useMemo(() => {
