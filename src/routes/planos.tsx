@@ -376,12 +376,12 @@ function PlansPage() {
           ))}
           <div className="mt-10 text-center">
             <p className={ds.type.caption}>
-              Já tem um código?{" "}
+              Já comprou e recebeu um código?{" "}
               <Link
                 to="/resgatar"
                 className="font-medium text-primary hover:underline"
               >
-                Ativar agora
+                Ativar meu código
               </Link>
             </p>
           </div>
