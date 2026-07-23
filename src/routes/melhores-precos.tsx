@@ -428,34 +428,25 @@ function MelhoresPrecosPage() {
       <Nav />
       <Breadcrumbs items={[{ label: "Melhores preços" }]} />
 
-      {/* Compact header */}
-      <section className="border-b border-border bg-card/40">
-        <div className="mx-auto max-w-7xl px-6 py-6 md:py-8">
-          <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
-            <div className="min-w-0 max-w-3xl">
-              <p className="font-mono text-[10.5px] font-semibold uppercase tracking-[0.22em] text-primary">
-                Comparativo entre mercados
-              </p>
-              <h1 className="mt-1.5 font-display text-2xl leading-[1.1] tracking-tight text-foreground md:text-[32px]">
-                Onde cada produto está{" "}
-                <em className="italic text-primary">mais barato</em>
-              </h1>
-              <div aria-hidden className="mt-2 h-[2px] w-10 rounded-full bg-primary" />
-              <p className="mt-3 max-w-2xl text-[13px] leading-relaxed text-muted-foreground">
-                Comparamos itens com o mesmo tamanho e unidade (ml, g, un). A economia é calculada em relação à média entre os mercados que vendem o item.
-              </p>
-              <div className="mt-3 flex flex-wrap items-center gap-2">
-                <FreeQuotaBadge variant="inline" />
-              </div>
-            </div>
-
-            <div className="flex shrink-0 flex-wrap items-center gap-2 md:justify-end">
+      <div className="mx-auto max-w-7xl px-4 md:px-6">
+        <PageHeader
+          breadcrumbs={[{ label: "Início", to: "/" }, { label: "Melhores preços" }]}
+          title={
+            <>
+              Onde cada produto está{" "}
+              <em className="italic text-primary">mais barato</em>
+            </>
+          }
+          description="Comparamos itens com o mesmo tamanho e unidade (ml, g, un). A economia é calculada em relação à média entre os mercados que vendem o item."
+          actions={
+            <>
+              <FreeQuotaBadge variant="inline" />
               {isAdmin && (
                 <button
                   type="button"
                   onClick={handleRefresh}
                   disabled={isFetching}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-background px-3 py-1.5 font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-foreground transition hover:border-accent hover:bg-accent/5 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-background px-3 py-1.5 text-[13px] font-semibold text-foreground transition hover:border-accent hover:bg-accent/5 disabled:cursor-not-allowed disabled:opacity-60"
                   aria-label="Atualizar preços"
                   title={dataUpdatedAt ? `Atualizado ${formatRelative(new Date(dataUpdatedAt).toISOString())}` : undefined}
                 >
@@ -487,31 +478,38 @@ function MelhoresPrecosPage() {
                     }
                   }
                 }}
-                className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-background px-3 py-1.5 font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-primary transition hover:border-primary hover:bg-primary/5"
+                className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-background px-3 py-1.5 text-[13px] font-semibold text-primary transition hover:border-primary hover:bg-primary/5"
                 aria-label="Compartilhar"
               >
                 <Share2 className="h-3.5 w-3.5" strokeWidth={2} />
                 Compartilhar
               </button>
-            </div>
-          </div>
+            </>
+          }
+        />
 
-          {/* Stat strip compacto */}
-          <div className="mt-5 grid gap-2 sm:grid-cols-3">
-            <StatCard label="Produtos comparados" value={rows.length.toString()} />
-            <StatCard
-              label="Economia acumulada"
-              value={formatBRL(totalSavings)}
-              hint="soma do mais barato vs média"
-            />
-            <StatCard
-              label="Melhor economia"
-              value={rows[0] ? `${rows[0].savings_pct.toFixed(1)}%` : "—"}
-              hint={rows[0]?.display_name}
-            />
-          </div>
-        </div>
-      </section>
+        {/* Stat strip compacto */}
+        <StatGrid
+          className="mb-4 lg:grid-cols-3"
+          stats={[
+            { label: "Produtos comparados", value: rows.length, icon: PackageSearch },
+            {
+              label: "Economia acumulada",
+              value: formatBRL(totalSavings),
+              icon: TrendingDown,
+              hint: "soma do mais barato vs média",
+              tone: "success",
+            },
+            {
+              label: "Melhor economia",
+              value: rows[0] ? `${rows[0].savings_pct.toFixed(1)}%` : "—",
+              icon: Trophy,
+              hint: rows[0]?.display_name,
+              tone: "primary",
+            },
+          ]}
+        />
+      </div>
 
       {/* Filtros — categoria + busca por cidade/bairro + avançados */}
       <section className="mx-auto max-w-7xl px-6 pt-5 space-y-3">
