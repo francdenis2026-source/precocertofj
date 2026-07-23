@@ -422,13 +422,13 @@ function HomePage() {
 
           {/* -------- EXPLORE (dark navy band inside card) -------- */}
           <div
-            className="p-4 sm:p-5 lg:p-7 xl:p-8"
+            className="p-3.5 sm:p-5 lg:p-6 xl:p-7"
             style={{ background: P.navy, color: "#F5F6FA" }}
           >
-            <div className="mb-4 flex flex-col gap-2 sm:mb-5 md:flex-row md:items-end md:justify-between md:gap-6">
+            <div className="mb-3 flex flex-col gap-1.5 sm:mb-4 md:flex-row md:items-end md:justify-between md:gap-6">
               <div className="max-w-xl">
                 <div
-                  className="mb-2 text-[9.5px] font-bold uppercase tracking-[0.28em] sm:text-[10px]"
+                  className="mb-1.5 text-[9px] font-bold uppercase tracking-[0.28em] sm:text-[10px]"
                   style={{ color: P.gold }}
                 >
                   Explore a plataforma
@@ -436,7 +436,7 @@ function HomePage() {
                 <h2
                   className={`${serif} font-normal`}
                   style={{
-                    fontSize: "clamp(1.35rem, 2.6vw, 2rem)",
+                    fontSize: "clamp(1.15rem, 2.4vw, 1.85rem)",
                     lineHeight: 1,
                     letterSpacing: "-0.025em",
                     color: "#F5F6FA",
@@ -447,37 +447,38 @@ function HomePage() {
                     sem esforço.
                   </span>
                 </h2>
-                <p className="mt-2 max-w-md text-[13.5px] leading-relaxed text-white/85 sm:text-sm">
+                <p className="mt-1.5 hidden max-w-md text-[13px] leading-snug text-white/80 sm:block sm:text-[13.5px]">
                   Ferramentas exclusivas para você nunca mais pagar caro em itens essenciais.
                 </p>
               </div>
               <div className="hidden h-px flex-1 md:mx-8 md:mb-3 md:block" style={{ background: "rgb(255 255 255 / 0.08)" }} />
             </div>
 
-            <div className="grid gap-2.5 sm:gap-3 md:grid-cols-3 md:gap-3.5">
+            <div className="grid gap-2 sm:gap-2.5 md:grid-cols-3 md:gap-3">
               <ExploreCard
                 to="/melhores-precos"
                 number="01"
                 title="Ranking Geral"
-                desc="Compare o valor total da cesta básica entre todos os estabelecimentos locais em segundos."
+                desc="Compare a cesta básica entre todos os mercados locais."
                 cta="Ver rankings"
               />
               <ExploreCard
                 to="/estabelecimentos"
                 number="02"
                 title="Todos os mercados"
-                desc="Bairros, categorias e produtos disponíveis em cada estabelecimento de Feijó."
+                desc="Bairros, categorias e produtos de cada estabelecimento."
                 cta="Ver mercados"
               />
               <ExploreCard
                 to="/planos"
                 number="03"
                 title="Planos & Alertas"
-                desc="Assine, receba alertas de queda e desbloqueie o histórico completo de preços."
+                desc="Assine e desbloqueie alertas e histórico completo."
                 cta="Ver planos"
               />
             </div>
           </div>
+
 
         </div>
       </div>
