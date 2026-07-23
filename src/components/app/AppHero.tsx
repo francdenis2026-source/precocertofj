@@ -53,7 +53,7 @@ export function AppHero({ firstName, statusLine }: AppHeroProps) {
         </div>
         <div className="flex flex-wrap gap-2">
           <Link
-            to="/lista"
+            to="/lista/nova"
             className="btn-signal inline-flex h-10 items-center gap-1.5 px-4 text-[13px]"
           >
             Criar minha lista <ArrowRight className="h-3.5 w-3.5" />
