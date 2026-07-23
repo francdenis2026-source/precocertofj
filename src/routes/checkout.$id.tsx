@@ -12,6 +12,7 @@ import {
 import {
   createMercadoPagoPreference,
   simulateCheckoutApproval,
+  createPixCharge,
 } from "@/lib/mercadopago.functions";
 import { AppShell } from "@/components/brand/AppShell";
 import { PageHeader } from "@/components/brand/PageHeader";
