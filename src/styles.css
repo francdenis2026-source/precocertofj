@@ -131,10 +131,10 @@
   --brand: oklch(0.68 0.125 78);
   --brand-foreground: oklch(0.17 0.045 258);
   --brand-soft: oklch(0.88 0.09 82);
-  --on-media: oklch(0.99 0.002 250);
-  --on-media-muted: oklch(0.90 0.018 248);
-  --on-media-border: oklch(0.99 0.002 250 / 0.24);
-  --on-media-surface: oklch(0.99 0.002 250 / 0.10);
+  --on-media: oklch(0.20 0.05 258);
+  --on-media-muted: oklch(0.36 0.05 258);
+  --on-media-border: oklch(0.20 0.05 258 / 0.28);
+  --on-media-surface: oklch(1 0 0 / 0.62);
 
   --neon: oklch(0.72 0.14 220);
   --savings: oklch(0.55 0.13 165);
