@@ -315,11 +315,38 @@ function EstablishmentPage() {
           </div>
         )}
 
-        <p className="mt-10 text-[11px] leading-relaxed text-muted-foreground">
+        {hasLocation && (
+          <div className="mt-10 rounded-xl border border-border/60 bg-muted/30 p-4">
+            <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Endereço do estabelecimento
+            </div>
+            <div className="mt-2 flex flex-wrap items-start gap-x-3 gap-y-1 text-sm">
+              {data.store.address && (
+                <span className="inline-flex items-start gap-1.5 font-medium text-foreground">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+                  {data.store.address}
+                </span>
+              )}
+              {data.store.neighborhood && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[12px] font-semibold text-primary">
+                  Bairro {data.store.neighborhood}
+                </span>
+              )}
+              {(data.store.city || data.store.state) && (
+                <span className="text-muted-foreground">
+                  {[data.store.city, data.store.state].filter(Boolean).join(" · ")}
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+
+        <p className="mt-6 text-[11px] leading-relaxed text-muted-foreground">
           Preços e informações exibidos pertencem ao estabelecimento{" "}
           <strong className="text-foreground">{data.store.name}</strong> e são
           publicados na plataforma PreçoCerto para consulta da comunidade.
         </p>
+
       </main>
 
       <PriceHistorySheet
