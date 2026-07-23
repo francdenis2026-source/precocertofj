@@ -1539,3 +1539,38 @@ iframe[src*="lovable.dev/badge"] {
   text-underline-offset: 3px;
   text-decoration-thickness: 1.5px;
 }
+
+/* ============= ANTI-TREMOR: hover / focus / loading =============
+ * Evita reflow tipográfico e "shimmer" em chips, botões e links quando
+ * hover/focus mudam transform, borda ou peso.
+ */
+@layer base {
+  button, [role="button"], a, .chip {
+    /* Nunca sintetizar bold no hover — mantém métrica estável */
+    font-synthesis-weight: none;
+    font-synthesis-style: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: geometricPrecision;
+  }
+  /* Interações com translate/scale ficam na GPU e não repintam texto */
+  button, [role="button"], a[href] {
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  /* Focus-visible nunca deve empurrar layout */
+  :focus-visible {
+    outline-offset: 2px;
+  }
+  /* Loading states: preserva altura da linha, remove tracking oscilante */
+  [aria-busy="true"], [data-loading="true"] {
+    letter-spacing: inherit !important;
+    font-weight: inherit !important;
+  }
+  /* Chips em geral: transição só em cor/borda/transform, nunca em font */
+  .chip, [data-chip] {
+    transition-property: background-color, border-color, color, transform, box-shadow;
+    transition-duration: 180ms;
+    transition-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+}
