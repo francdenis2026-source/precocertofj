@@ -383,25 +383,52 @@ function CadastroPage() {
           </aside>
 
           {/* RIGHT — Form */}
-          <section className="p-6 md:p-9">
-            {/* Header */}
-            <div className="mb-6 border-b border-slate-200/70 pb-5">
-              <div
-                className="text-[10.5px] font-bold uppercase tracking-[0.22em]"
-                style={{ color: PC_GOLD_DARK }}
-              >
-                Novo assinante
+          <section className="relative overflow-hidden p-6 md:p-9">
+            {/* Decorative SVG watermark */}
+            <svg
+              aria-hidden
+              className="pointer-events-none absolute -right-10 -top-10 h-56 w-56 opacity-[0.05]"
+              viewBox="0 0 200 200"
+              fill="none"
+            >
+              <circle cx="100" cy="100" r="80" stroke={PC_EMERALD} strokeWidth="1.2" strokeDasharray="3 4" />
+              <circle cx="100" cy="100" r="55" stroke={PC_EMERALD} strokeWidth="1.2" />
+              <path d="M60 110 L85 85 L105 100 L145 65" stroke={PC_EMERALD} strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              <circle cx="145" cy="65" r="4" fill={PC_EMERALD} />
+            </svg>
+
+            {/* Header with badge icon */}
+            <div className="relative mb-6 border-b border-slate-200 pb-5">
+              <div className="flex items-center gap-3">
+                <div
+                  className="flex h-11 w-11 flex-none items-center justify-center rounded-xl"
+                  style={{
+                    background: `linear-gradient(135deg, ${PC_EMERALD} 0%, ${PC_EMERALD_DEEP} 100%)`,
+                    boxShadow: `inset 0 0 0 1px ${PC_GOLD}66, 0 6px 14px -6px rgba(15,27,61,0.45)`,
+                  }}
+                >
+                  <UserPlus className="h-5 w-5 text-white" />
+                </div>
+                <div className="min-w-0">
+                  <div
+                    className="text-[10.5px] font-bold uppercase tracking-[0.22em]"
+                    style={{ color: PC_EMERALD }}
+                  >
+                    Novo assinante
+                  </div>
+                  <h2
+                    className="mt-0.5 text-[26px] leading-[1.05] tracking-tight md:text-[28px]"
+                    style={{ fontFamily: PC_DISPLAY, fontWeight: 700, color: "#0a1631" }}
+                  >
+                    Criar conta
+                  </h2>
+                </div>
               </div>
-              <h2
-                className="mt-1.5 text-[26px] leading-[1.05] tracking-tight md:text-[28px]"
-                style={{ fontFamily: PC_DISPLAY, fontWeight: 700, color: PC_EMERALD }}
-              >
-                Criar conta
-              </h2>
-              <p className="mt-1.5 text-[13.5px] text-slate-600">
+              <p className="mt-3 text-[13.5px] font-medium text-slate-700">
                 CPF, PIN de 6 dígitos e você entra direto no painel.
               </p>
             </div>
+
 
             <form onSubmit={handleSubmit} className="space-y-4" noValidate>
               <Field
@@ -441,9 +468,10 @@ function CadastroPage() {
 
               <div>
                 <div className="mb-2 flex items-center justify-between">
-                  <label className="block text-[10.5px] font-bold uppercase tracking-[0.22em] text-slate-700">
+                  <label className="block text-[10.5px] font-bold uppercase tracking-[0.22em] text-slate-900">
                     PIN de acesso · 6 dígitos
                   </label>
+
                   <FieldStatus state={vPin} show={touched.password} />
                 </div>
                 <PinField
@@ -575,11 +603,11 @@ function Field({
     ? "border-rose-400 focus:border-rose-500 focus:ring-rose-500/20"
     : good
       ? "border-emerald-500 focus:border-emerald-600 focus:ring-emerald-600/20"
-      : "border-slate-300 hover:border-slate-400 focus:border-[color:var(--pc-navy)] focus:ring-[color:var(--pc-navy)]/15";
+      : "border-slate-400 hover:border-slate-500 focus:border-[color:var(--pc-navy)] focus:ring-[color:var(--pc-navy)]/20";
   return (
     <label className="block">
       <div className="mb-1.5 flex items-center justify-between">
-        <span className="block text-[10.5px] font-bold uppercase tracking-[0.22em] text-slate-700">
+        <span className="block text-[10.5px] font-bold uppercase tracking-[0.22em] text-slate-900">
           {label}
         </span>
         {state && <FieldStatus state={state} show={!!showState} />}
@@ -593,11 +621,12 @@ function Field({
         inputMode={inputMode}
         autoComplete={autoComplete}
         aria-invalid={invalid}
-        className={`h-12 w-full rounded-xl border-2 ${border} bg-white px-4 text-[15px] font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-400 outline-none transition focus:ring-4`}
+        className={`h-12 w-full rounded-xl border-2 ${border} bg-white px-4 text-[15px] font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-500 outline-none transition focus:ring-4`}
         style={{ ["--pc-navy" as string]: PC_EMERALD } as React.CSSProperties}
       />
     </label>
   );
+
 }
 
 function PinField({
@@ -642,7 +671,8 @@ function PinField({
 
   const borderCls = hasError
     ? "border-rose-400 focus:border-rose-500 focus:ring-rose-500/20"
-    : "border-slate-300 hover:border-slate-400 focus:border-[color:var(--pc-navy)] focus:ring-[color:var(--pc-navy)]/20";
+    : "border-slate-400 hover:border-slate-500 focus:border-[color:var(--pc-navy)] focus:ring-[color:var(--pc-navy)]/25";
+
 
   return (
     <div className="grid grid-cols-6 gap-2 sm:gap-2.5">
@@ -661,7 +691,7 @@ function PinField({
           maxLength={1}
           type="password"
           aria-invalid={hasError}
-          className={`h-14 w-full min-w-0 rounded-xl border-2 ${borderCls} bg-slate-50/60 text-center text-2xl font-black text-slate-900 outline-none transition focus:bg-white focus:ring-4`}
+          className={`h-14 w-full min-w-0 rounded-xl border-2 ${borderCls} bg-white text-center text-2xl font-black text-slate-900 shadow-[inset_0_1px_0_rgba(15,27,61,0.04)] outline-none transition focus:ring-4`}
           style={{
             ["--pc-navy" as string]: "#0f1b3d",
             fontFeatureSettings: '"tnum" 1',
