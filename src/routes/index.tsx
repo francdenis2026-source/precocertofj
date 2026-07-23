@@ -591,7 +591,7 @@ function ExploreCard({
   return (
     <Link
       to={to}
-      className="group block rounded-xl border p-3.5 transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--pc-home-navy)] sm:rounded-2xl sm:p-4 lg:p-5"
+      className="group block rounded-xl border p-3 transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--pc-home-navy)] sm:rounded-2xl md:p-4"
       style={{
         background: "rgb(255 255 255 / 0.05)",
         borderColor: "rgb(255 255 255 / 0.10)",
@@ -605,25 +605,35 @@ function ExploreCard({
         (e.currentTarget as HTMLElement).style.borderColor = "rgb(255 255 255 / 0.10)";
       }}
     >
-      <div
-        className="mb-2 font-bold tabular-nums leading-none tracking-tight sm:mb-2.5"
-        style={{
-          color: P.gold,
-          fontSize: "clamp(1.25rem, 2.2vw, 1.65rem)",
-          letterSpacing: "-0.02em",
-        }}
-      >
-        {number}
-      </div>
-      <h3 className="mb-1.5 text-[16px] font-semibold leading-tight text-white sm:text-[17px] lg:text-[18px]">
-        {title}
-      </h3>
-      <p className="text-[13px] leading-snug text-white/75 sm:text-[13.5px]">{desc}</p>
-      <div className="mt-3 inline-flex items-center gap-1.5 text-[10.5px] font-semibold uppercase tracking-[0.18em] text-white/85 transition-colors group-hover:text-[color:var(--pc-home-gold)] sm:mt-3.5">
-        {cta}
-        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+      {/* Mobile: horizontal compact row · Desktop: stacked */}
+      <div className="flex items-start gap-3 md:block">
+        <div
+          className={`${serif} shrink-0 tabular-nums leading-none md:mb-2`}
+          style={{
+            color: P.gold,
+            fontSize: "clamp(1.4rem, 2.2vw, 1.7rem)",
+            letterSpacing: "-0.02em",
+          }}
+        >
+          {number}
+        </div>
+        <div className="min-w-0 flex-1">
+          <h3 className="mb-0.5 text-[14.5px] font-semibold leading-tight text-white md:mb-1 md:text-[16px] lg:text-[17px]">
+            {title}
+          </h3>
+          <p className="text-[12.5px] leading-snug text-white/70 md:text-[13px]">{desc}</p>
+          <div className="mt-2 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/80 transition-colors group-hover:text-[color:var(--pc-home-gold)] md:mt-2.5 md:text-[10.5px] md:tracking-[0.18em]">
+            {cta}
+            <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1 md:h-3.5 md:w-3.5" />
+          </div>
+        </div>
+        <ArrowRight
+          className="mt-1 h-4 w-4 shrink-0 text-white/40 transition-all group-hover:translate-x-0.5 group-hover:text-[color:var(--pc-home-gold)] md:hidden"
+          aria-hidden
+        />
       </div>
     </Link>
   );
 }
+
 
