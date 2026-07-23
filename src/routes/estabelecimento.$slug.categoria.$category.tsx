@@ -214,9 +214,11 @@ function CategoryPage() {
         <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((p) => (
             <li key={p.slug}>
-              <Card className="h-full">
+              <Card interactive tabIndex={0} className="group h-full">
                 <CardContent className="flex h-full flex-col gap-2 p-4">
-                  <h3 className="font-medium leading-tight">{p.productName}</h3>
+                  <h3 className="font-medium leading-tight transition-colors group-hover:text-primary">
+                    {p.productName}
+                  </h3>
                   <div className="mt-auto flex items-baseline justify-between gap-2 pt-2">
                     <span className="text-xl font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
                       {brl(p.price)}
@@ -231,8 +233,9 @@ function CategoryPage() {
                     <span>Atualizado {new Date(p.lastDate).toLocaleDateString("pt-BR")}</span>
                     <button
                       type="button"
-                      onClick={() => setHistoryFor(p)}
-                      className="inline-flex items-center gap-1 rounded-md px-2 py-1 hover:bg-muted"
+                      onClick={(e) => { e.stopPropagation(); setHistoryFor(p); }}
+                      className="inline-flex items-center gap-1 rounded-md px-2 py-1 transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                      aria-label={`Ver histórico de preço de ${p.productName}`}
                     >
                       <History className="h-3 w-3" /> Histórico
                     </button>
