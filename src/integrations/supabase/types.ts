@@ -355,6 +355,7 @@ export type Database = {
           coupon_code: string | null
           coupon_id: string | null
           created_at: string
+          delivery_email: string | null
           discount_cents: number
           final_cents: number
           id: string
@@ -372,6 +373,7 @@ export type Database = {
           coupon_code?: string | null
           coupon_id?: string | null
           created_at?: string
+          delivery_email?: string | null
           discount_cents?: number
           final_cents: number
           id?: string
@@ -389,6 +391,7 @@ export type Database = {
           coupon_code?: string | null
           coupon_id?: string | null
           created_at?: string
+          delivery_email?: string | null
           discount_cents?: number
           final_cents?: number
           id?: string

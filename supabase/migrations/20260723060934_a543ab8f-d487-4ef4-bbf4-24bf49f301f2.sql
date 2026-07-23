@@ -1,0 +1,1 @@
+ALTER TABLE public.checkout_orders ADD COLUMN IF NOT EXISTS delivery_email text;
