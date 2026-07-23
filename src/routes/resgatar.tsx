@@ -173,6 +173,10 @@ function RedeemPage() {
       );
       return;
     }
+    if (previewData && previewData.found && !previewData.redeemable) {
+      toast.error(previewData.message);
+      return;
+    }
     setSubmitting(true);
     try {
       const res = await redeem({ data: { code: clean } });
