@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { useMemo, useState } from "react";
 import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -17,7 +18,8 @@ import {
   LoadingSkeleton,
   CardSkeleton,
 } from "@/components/layout";
-import { MapPin, Package, Sparkles, Store, TrendingUp } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { MapPin, Package, Search, Sparkles, Store, TrendingUp } from "lucide-react";
 
 export const Route = createFileRoute("/estabelecimentos")({
   head: () => ({
