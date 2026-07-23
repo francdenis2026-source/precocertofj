@@ -63,7 +63,7 @@ function EstablishmentsPage() {
   }, [data]);
 
   const visibleItems = useMemo(() => {
-    if (!data) return [] as typeof data.items;
+    if (!data) return [] as EstablishmentsOverview["items"];
     const term = q.trim().toLowerCase();
     let list = data.items.slice();
     if (neighborhood !== "__all") {
