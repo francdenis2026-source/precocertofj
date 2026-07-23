@@ -12,13 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
-
-const PALETTE = {
-  navy: "#0f1b3d",
-  gold: "#b58a3c",
-  goldSoft: "#f2dfa8",
-  line: "#dfe3ec",
-} as const;
+import { Button } from "@/components/ui/button";
 
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 
@@ -51,13 +45,22 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
 
   const shellClass = isOverlay
     ? "absolute inset-x-0 top-0 z-30"
-    : "sticky top-0 z-40 border-b border-white/10";
-  const shellStyle: React.CSSProperties = isOverlay
-    ? {}
-    : { background: PALETTE.navy };
+    : "sticky top-0 z-40 border-b border-border bg-card/95 text-foreground shadow-elev-1 backdrop-blur-xl dark:bg-background/88";
+  const brandTextClass = isOverlay ? "text-on-media" : "text-foreground";
+  const brandAccentClass = isOverlay ? "text-brand-soft" : "text-brand";
+  const subTextClass = isOverlay ? "text-on-media-muted" : "text-muted-foreground";
+  const navClass = isOverlay
+    ? "text-on-media-muted hover:bg-on-media-surface hover:text-on-media focus-visible:ring-on-media/60 [&.active]:text-on-media"
+    : "text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-primary/40 [&.active]:bg-primary/10 [&.active]:text-primary";
+  const accountClass = isOverlay
+    ? "border-on-media-border bg-on-media-surface text-on-media hover:bg-on-media-surface"
+    : "border-border bg-card text-foreground hover:border-primary/40 hover:bg-muted";
+  const loginClass = isOverlay
+    ? "text-on-media-muted hover:bg-on-media-surface hover:text-on-media focus-visible:ring-on-media/60"
+    : "text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-primary/40";
 
   return (
-    <header className={shellClass} style={shellStyle}>
+    <header className={shellClass}>
       <div
         className={dsx(
           ds.container,
@@ -67,12 +70,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
         {/* Brand */}
         <Link to="/" className="flex min-w-0 items-center gap-3">
           <span
-            className="grid h-11 w-11 shrink-0 place-items-center rounded-[10px] text-[19px] font-black shadow-lg sm:h-12 sm:w-12 sm:text-[21px]"
-            style={{
-              background: PALETTE.gold,
-              color: PALETTE.navy,
-              boxShadow: `0 6px 16px ${PALETTE.gold}55`,
-            }}
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-[10px] bg-brand text-[19px] font-black text-brand-foreground shadow-elev-2 sm:h-12 sm:w-12 sm:text-[21px]"
           >
             P
           </span>
@@ -80,17 +78,17 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             <span
               className={dsx(
                 serif,
-                "truncate text-[24px] font-normal leading-none text-white sm:text-[26px] md:text-[28px]",
+                "truncate text-[24px] font-normal leading-none sm:text-[26px] md:text-[28px]",
+                brandTextClass,
               )}
-              style={{ letterSpacing: "-0.012em" }}
             >
               Preço
-              <span className="italic" style={{ color: PALETTE.goldSoft }}>
+              <span className={dsx("italic", brandAccentClass)}>
                 Certo
               </span>
             </span>
             <span
-              className="mt-1.5 hidden text-[10px] font-bold uppercase tracking-[0.24em] text-white/70 sm:block"
+              className={dsx("mt-1.5 hidden text-[10px] font-bold uppercase tracking-[0.24em] sm:block", subTextClass)}
             >
               Feijó · Acre
             </span>
@@ -104,8 +102,8 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
               <Link
                 key={l.to}
                 to={l.to}
-                className="rounded-lg px-4 py-2.5 text-[16px] font-semibold leading-[1.35] text-white/85 outline-none transition-colors hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-white/60 lg:text-[18px] xl:text-[19px] [&.active]:text-white"
-                activeProps={{ className: "text-white bg-white/5" }}
+                className={dsx("rounded-lg px-4 py-2.5 text-[16px] font-semibold leading-[1.35] outline-none transition-colors focus-visible:ring-2 lg:text-[18px] xl:text-[19px]", navClass)}
+                activeProps={{ className: isOverlay ? "text-on-media bg-on-media-surface" : "text-primary bg-primary/10" }}
               >
                 {l.label}
               </Link>
@@ -116,20 +114,20 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
 
         {/* CTAs */}
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-          {showThemeToggle && <ThemeToggle size="sm" tone="dark" />}
+          {showThemeToggle && <ThemeToggle size="sm" tone={isOverlay ? "dark" : "light"} />}
           {loading ? (
-            <div className="h-9 w-24 animate-pulse rounded-lg bg-white/10" />
+            <div className={dsx("h-9 w-24 animate-pulse rounded-lg", isOverlay ? "bg-on-media-surface" : "bg-muted")} />
           ) : session ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button
+                <Button
                   type="button"
-                  className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-2.5 py-1.5 text-[13px] font-medium text-white transition-colors hover:bg-white/10 sm:px-3 sm:py-2"
+                  variant="ghost"
+                  className={dsx("inline-flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-[13px] font-medium transition-colors sm:px-3 sm:py-2", accountClass)}
                   aria-label="Minha conta"
                 >
                   <span
-                    className="grid h-7 w-7 place-items-center rounded-full text-[11px] font-bold"
-                    style={{ background: PALETTE.gold, color: PALETTE.navy }}
+                    className="grid h-7 w-7 place-items-center rounded-full bg-brand text-[11px] font-bold text-brand-foreground"
                   >
                     {initials ?? <UserIcon className="h-3.5 w-3.5" />}
                   </span>
@@ -137,7 +135,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                     {firstName ?? "Minha conta"}
                   </span>
                   <ChevronDown className="h-3.5 w-3.5 opacity-70" />
-                </button>
+                </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel className="truncate">
@@ -171,19 +169,13 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             <>
               <Link
                 to="/login"
-                className="hidden items-center rounded-lg px-4 py-2.5 text-[15.5px] font-semibold leading-[1.35] text-white/90 outline-none transition-colors hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-white/60 sm:inline-flex md:px-5 md:py-3 md:text-[16px] lg:text-[18px] xl:text-[19px]"
+                className={dsx("hidden items-center rounded-lg px-4 py-2.5 text-[15.5px] font-semibold leading-[1.35] outline-none transition-colors focus-visible:ring-2 sm:inline-flex md:px-5 md:py-3 md:text-[16px] lg:text-[18px] xl:text-[19px]", loginClass)}
               >
                 Entrar
               </Link>
               <Link
                 to="/cadastro"
-                className="inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-[13px] font-bold leading-[1.2] tracking-wide shadow-md outline-none transition hover:brightness-105 focus-visible:ring-2 focus-visible:ring-white/70 active:scale-[0.98] sm:px-4 sm:py-2.5 sm:text-[13.5px] lg:px-5 lg:py-3 lg:text-[16px] xl:text-[17px]"
-                style={{
-                  background: PALETTE.gold,
-                  color: PALETTE.navy,
-                  boxShadow: `0 6px 16px ${PALETTE.gold}40`,
-                  letterSpacing: "0.01em",
-                }}
+                className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand px-3.5 py-2 text-[13px] font-bold leading-[1.2] text-brand-foreground shadow-elev-2 outline-none transition hover:brightness-105 focus-visible:ring-2 focus-visible:ring-brand/60 active:scale-[0.98] sm:px-4 sm:py-2.5 sm:text-[13.5px] lg:px-5 lg:py-3 lg:text-[16px] xl:text-[17px]"
               >
                 Criar conta
               </Link>

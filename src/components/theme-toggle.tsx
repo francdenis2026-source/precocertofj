@@ -1,6 +1,7 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "@/hooks/use-theme";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 interface ThemeToggleProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: "sm" | "md";
@@ -23,15 +24,17 @@ export function ThemeToggle({
 
   const toneClass =
     tone === "dark"
-      ? "border-white/25 bg-white/10 text-white hover:bg-white/20"
+      ? "border-on-media-border bg-on-media-surface text-on-media hover:bg-on-media-surface"
       : "border-border bg-surface text-muted-foreground hover:border-primary/40 hover:text-foreground";
 
   const showDarkIcon = mounted && isDark;
   const label = showDarkIcon ? "Ativar modo claro" : "Ativar modo escuro";
 
   return (
-    <button
+    <Button
       type="button"
+      variant="ghost"
+      size="icon"
       onClick={() => toggle()}
       aria-label={label}
       aria-pressed={showDarkIcon}
@@ -49,6 +52,6 @@ export function ThemeToggle({
       ) : (
         <Sun className={icon} strokeWidth={1.75} />
       )}
-    </button>
+    </Button>
   );
 }

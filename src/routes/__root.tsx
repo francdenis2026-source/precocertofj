@@ -17,6 +17,7 @@ import { IdleLogoutMonitor } from "@/components/auth/IdleLogoutMonitor";
 import { useAutoTranslate } from "@/lib/pt-terms";
 
 import { UnlockConversionTracker } from "@/components/analytics/UnlockConversionTracker";
+import { useTheme } from "@/hooks/use-theme";
 
 function NotFoundComponent() {
   return (
@@ -153,7 +154,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
@@ -169,6 +170,7 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
   useAutoTranslate();
+  useTheme();
 
 
   useEffect(() => {

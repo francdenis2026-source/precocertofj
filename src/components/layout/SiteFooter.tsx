@@ -2,17 +2,6 @@ import { Link } from "@tanstack/react-router";
 import { ds, dsx } from "@/lib/ds";
 import { MapPin, Mail, ShieldCheck } from "lucide-react";
 
-const PALETTE = {
-  ink: "#08122a",
-  navy: "#0f1b3d",
-  navy2: "#1f2f4d",
-  muted: "#334463",
-  gold: "#b58a3c",
-  goldSoft: "#f2dfa8",
-  line: "#d4dbe6",
-  bgTint: "#f7f9fc",
-} as const;
-
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 
 const NAV_COLS: Array<{ title: string; links: Array<{ to: string; label: string }> }> = [
@@ -49,8 +38,7 @@ export function SiteFooter() {
 
   return (
     <footer
-      className="mt-10 border-t md:mt-16"
-      style={{ background: PALETTE.bgTint, borderColor: PALETTE.line }}
+      className="mt-10 border-t border-border bg-muted/45 text-foreground md:mt-16"
     >
       {/* Top — brand + link columns */}
       <div
@@ -63,49 +51,41 @@ export function SiteFooter() {
         <div className="max-w-sm">
           <Link to="/" className="flex items-center gap-2.5">
             <span
-              className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-[15px] font-black shadow-sm md:h-10 md:w-10 md:text-[16px]"
-              style={{
-                background: PALETTE.navy,
-                color: PALETTE.goldSoft,
-                boxShadow: `0 4px 12px ${PALETTE.navy}30`,
-              }}
+              className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-primary text-[15px] font-black text-primary-foreground shadow-elev-1 md:h-10 md:w-10 md:text-[16px]"
             >
               P
             </span>
             <span
-              className={dsx(serif, "text-[22px] leading-none md:text-[26px]")}
-              style={{ color: PALETTE.ink, letterSpacing: "-0.012em" }}
+              className={dsx(serif, "text-[22px] leading-none text-foreground md:text-[26px]")}
             >
               Preço
-              <span className="italic" style={{ color: PALETTE.gold }}>
+              <span className="italic text-brand">
                 Certo
               </span>
             </span>
           </Link>
 
           <p
-            className="mt-3 text-[12.5px] leading-relaxed md:mt-4 md:text-[13.5px]"
-            style={{ color: PALETTE.muted }}
+            className="mt-3 text-[12.5px] leading-relaxed text-muted-foreground md:mt-4 md:text-[13.5px]"
           >
             Comparador colaborativo de preços dos mercados de Feijó — Acre.
           </p>
 
           <ul
-            className="mt-3.5 space-y-1.5 text-[12px] md:mt-5 md:space-y-2 md:text-[12.5px]"
-            style={{ color: PALETTE.navy2 }}
+            className="mt-3.5 space-y-1.5 text-[12px] text-foreground/80 md:mt-5 md:space-y-2 md:text-[12.5px]"
           >
             <li className="flex items-center gap-2">
-              <MapPin className="h-3.5 w-3.5" style={{ color: PALETTE.gold }} />
+              <MapPin className="h-3.5 w-3.5 text-brand" />
               Feijó · Acre · Brasil
             </li>
             <li className="flex items-center gap-2">
-              <Mail className="h-3.5 w-3.5" style={{ color: PALETTE.gold }} />
+              <Mail className="h-3.5 w-3.5 text-brand" />
               <a href="mailto:precocerto-fj@proton.me" className="hover:underline">
                 precocerto-fj@proton.me
               </a>
             </li>
             <li className="flex items-center gap-2">
-              <ShieldCheck className="h-3.5 w-3.5" style={{ color: PALETTE.gold }} />
+              <ShieldCheck className="h-3.5 w-3.5 text-brand" />
               Dados protegidos · LGPD
             </li>
           </ul>
@@ -116,8 +96,7 @@ export function SiteFooter() {
           {NAV_COLS.map((col) => (
             <div key={col.title}>
               <div
-                className="text-[10px] font-bold uppercase tracking-[0.2em] md:text-[11.5px] md:tracking-[0.22em] lg:text-[12.5px]"
-                style={{ color: PALETTE.gold }}
+                className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand md:text-[11.5px] md:tracking-[0.22em] lg:text-[12.5px]"
               >
                 {col.title}
               </div>
@@ -126,12 +105,9 @@ export function SiteFooter() {
                   <li key={l.to}>
                     <Link
                       to={l.to}
-                      className="text-[12.5px] leading-[1.5] transition-colors md:text-[14.5px] lg:text-[16px]"
-                      style={{ color: PALETTE.navy2 }}
+                      className="text-[12.5px] leading-[1.5] text-foreground/80 transition-colors hover:text-primary md:text-[14.5px] lg:text-[16px]"
                     >
-                      <span className="hover:text-[color:var(--nt-ink)]">
-                        {l.label}
-                      </span>
+                      <span>{l.label}</span>
                     </Link>
                   </li>
                 ))}
@@ -143,16 +119,15 @@ export function SiteFooter() {
       </div>
 
       {/* Bottom — legal strip (sem duplicar links do menu) */}
-      <div style={{ borderTop: `1px solid ${PALETTE.line}`, background: "#eef2f8" }}>
+      <div className="border-t border-border bg-muted">
         <div
           className={dsx(
             ds.container,
-            "flex flex-col items-start justify-between gap-1.5 py-3 text-[12px] font-medium leading-[1.5] sm:flex-row sm:items-center md:py-4 md:text-[13.5px] lg:text-[15px]",
+            "flex flex-col items-start justify-between gap-1.5 py-3 text-[12px] font-medium leading-[1.5] text-foreground sm:flex-row sm:items-center md:py-4 md:text-[13.5px] lg:text-[15px]",
           )}
-          style={{ color: PALETTE.ink }}
         >
           <span className="whitespace-normal">© {year} <strong className="font-semibold">PreçoCerto</strong> · Feijó · Acre</span>
-          <span className="whitespace-nowrap font-mono" style={{ color: PALETTE.navy2 }}>&lt;dev&gt; Franc D&apos;nis</span>
+          <span className="whitespace-nowrap font-mono text-muted-foreground">&lt;dev&gt; Franc D&apos;nis</span>
         </div>
 
       </div>
