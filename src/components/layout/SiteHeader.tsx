@@ -53,7 +53,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
     ? "text-on-media-muted hover:bg-on-media-surface hover:text-on-media focus-visible:ring-on-media/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:scale-[0.97] [&.active]:text-on-media [&.active]:bg-on-media-surface"
     : "text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.97] [&.active]:bg-primary/10 [&.active]:text-primary";
   const accountClass = isOverlay
-    ? "border-on-media-border bg-on-media-surface text-on-media hover:bg-on-media-surface-strong focus-visible:ring-2 focus-visible:ring-on-media/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:scale-[0.97]"
+    ? "border-on-media-border bg-on-media-surface text-on-media hover:bg-on-media hover:text-background focus-visible:ring-2 focus-visible:ring-on-media/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:scale-[0.97]"
     : "border-border bg-card text-foreground hover:border-primary/40 hover:bg-muted focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.97]";
   const loginClass = isOverlay
     ? "text-on-media-muted hover:bg-on-media-surface hover:text-on-media focus-visible:ring-2 focus-visible:ring-on-media/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:scale-[0.97]"
