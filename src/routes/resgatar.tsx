@@ -295,14 +295,15 @@ function RedeemPage() {
     }
   }
 
-  // Auto-envio: assim que o código atinge o formato oficial (14 chars começando com PC), tenta ativar
+  // Auto-envio: só depois do servidor confirmar que o código é resgatável
   useEffect(() => {
     if (!hasSession || submitting || result) return;
     if (clean.length !== CANONICAL_LEN || !clean.startsWith("PC")) return;
+    if (!serverVerified) return;
     if (attemptedRef.current === clean) return;
     handleSubmit();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clean, hasSession, submitting, result]);
+  }, [clean, hasSession, submitting, result, serverVerified]);
 
 
 
