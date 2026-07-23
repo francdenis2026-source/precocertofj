@@ -12,6 +12,7 @@ import {
   Sparkles,
   Trophy,
 } from "lucide-react";
+import { ds, dsx } from "@/lib/ds";
 
 import { getPlatformStats } from "@/lib/stores-public.functions";
 
