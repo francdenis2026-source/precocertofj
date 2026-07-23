@@ -49,7 +49,7 @@ function CheckoutPage() {
   const approve = useServerFn(approveCheckoutOrder);
   const createPref = useServerFn(createMercadoPagoPreference);
   const simulate = useServerFn(simulateCheckoutApproval);
-  const saveEmail = useServerFn(setCheckoutEmail);
+  const createPix = useServerFn(createPixCharge);
   const { isAdmin } = useMyRoles();
 
   const [couponInput, setCouponInput] = useState("");
