@@ -1,14 +1,26 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { MobileNav } from "@/components/nav/MobileNav";
 import { ProductImage } from "@/components/product/ProductImage";
-import { ShoppingBag, Trash2, Package, ArrowRight } from "lucide-react";
+import { ShoppingBag, Trash2, Package, ArrowRight, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { getCart, removeFromCart, type Cart } from "@/lib/cart.functions";
 import { PageHeader, SectionCard, EmptyState, LoadingSkeleton } from "@/components/layout";
 import { Button } from "@/components/ui/button";
+import { useIsMobile } from "@/hooks/use-mobile";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/cesta")({
   head: () => ({
@@ -28,12 +40,16 @@ export const Route = createFileRoute("/cesta")({
   ),
 });
 
+type PendingRemoval = { id: string; name: string } | null;
+
 function CestaPage() {
   const fetchCart = useServerFn(getCart);
   const removeFn = useServerFn(removeFromCart);
   const qc = useQueryClient();
+  const isMobile = useIsMobile();
+  const [pending, setPending] = useState<PendingRemoval>(null);
 
-  const { data, isLoading } = useQuery<Cart>({
+  const { data, isLoading, isFetching } = useQuery<Cart>({
     queryKey: ["cart"],
     queryFn: () => fetchCart(),
     staleTime: 30_000,
@@ -51,6 +67,31 @@ function CestaPage() {
     },
   });
 
+  const requestRemove = (id: string, name: string) => {
+    if (isMobile) {
+      setPending({ id, name });
+      return;
+    }
+    removeMutation.mutate(id);
+  };
+
+  const confirmRemove = () => {
+    if (!pending) return;
+    removeMutation.mutate(pending.id);
+    setPending(null);
+  };
+
+  const handleRefreshPrices = async () => {
+    const toastId = toast.loading("Atualizando preços da cesta...");
+    try {
+      await qc.invalidateQueries({ queryKey: ["cart"] });
+      await qc.refetchQueries({ queryKey: ["cart"] });
+      toast.success("Preços atualizados", { id: toastId });
+    } catch {
+      toast.error("Não foi possível atualizar agora", { id: toastId });
+    }
+  };
+
   const items = data?.items ?? [];
   const totalItems = items.reduce((s, it) => s + it.quantity, 0);
 
@@ -62,10 +103,25 @@ function CestaPage() {
           title="Minha cesta"
           description="Produtos selecionados para comparar entre mercados."
           actions={
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-[13px] font-semibold text-primary">
-              <ShoppingBag className="h-3.5 w-3.5" strokeWidth={2.2} />
-              {totalItems} {totalItems === 1 ? "item" : "itens"}
-            </span>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleRefreshPrices}
+                disabled={isFetching || items.length === 0}
+                aria-label="Atualizar preços da cesta"
+              >
+                <RefreshCw
+                  className={`mr-1.5 h-3.5 w-3.5 ${isFetching ? "animate-spin" : ""}`}
+                  strokeWidth={2.2}
+                />
+                Atualizar preços
+              </Button>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-[13px] font-semibold text-primary">
+                <ShoppingBag className="h-3.5 w-3.5" strokeWidth={2.2} />
+                {totalItems} {totalItems === 1 ? "item" : "itens"}
+              </span>
+            </div>
           }
         />
 
@@ -122,7 +178,7 @@ function CestaPage() {
                   </div>
                   <button
                     type="button"
-                    onClick={() => removeMutation.mutate(it.id)}
+                    onClick={() => requestRemove(it.id, it.displayName)}
                     disabled={removeMutation.isPending}
                     aria-label={`Remover ${it.displayName} da cesta`}
                     className="shrink-0 rounded-full border border-destructive/30 p-2 text-destructive transition hover:bg-destructive/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-destructive disabled:opacity-50"
@@ -150,6 +206,28 @@ function CestaPage() {
         )}
       </div>
       <MobileNav />
+
+      <AlertDialog open={!!pending} onOpenChange={(o) => !o && setPending(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Remover da cesta?</AlertDialogTitle>
+            <AlertDialogDescription>
+              {pending?.name
+                ? `“${pending.name}” será retirado da sua cesta.`
+                : "O item será retirado da sua cesta."}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmRemove}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Remover
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
