@@ -253,8 +253,6 @@ function RedeemPage() {
                       fontFamily: MONO,
                       color: INK,
                       borderColor: invalid ? "#dc2626" : LINE,
-                      // @ts-expect-error CSS var
-                      "--tw-ring-color": invalid ? "#fca5a5" : GOLD_SOFT,
                     } as React.CSSProperties}
                   />
                 </div>
