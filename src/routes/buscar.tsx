@@ -11,7 +11,8 @@ import { QuickFilterBar } from "@/components/search/QuickFilterBar";
 import { ShareButton, SignupCTA } from "@/components/ds";
 import { useSession } from "@/hooks/useSession";
 import { trackEvent } from "@/lib/analytics-events";
-import { PageHeader, DataToolbar, EmptyState } from "@/components/layout";
+import { PageHeader, ListingShell, ListingToolbar } from "@/components/layout";
+import { EmptyState, RouteError } from "@/components/feedback";
 import { Button } from "@/components/ui/button";
 import { Search as SearchIcon } from "lucide-react";
 
