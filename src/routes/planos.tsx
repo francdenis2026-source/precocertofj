@@ -169,17 +169,17 @@ function PlansPage() {
       <main>
         {/* Hero */}
         <section className={dsx(ds.container, ds.sectionY.md, "text-center")}>
-          <p className={ds.type.overline}>Planos para Feijó/AC</p>
+          <p className={ds.type.overline}>Planos · Feijó/AC</p>
           <h1 className={dsx(ds.type.h1, "mx-auto mt-3 max-w-3xl")}>
-            Preços justos para acompanhar o mercado local
+            Economize todo mês na sua feira
           </h1>
           <p className={dsx(ds.type.subtitle, "mx-auto mt-4 max-w-2xl")}>
-            Escolha o plano ideal para você, sua família ou o seu comércio.
-            Comece grátis por 7 dias.
+            Escolha o plano que combina com sua rotina. Comece grátis por 7 dias —
+            sem cartão, sem cobrança automática.
           </p>
           <div className="mt-6 inline-flex items-center gap-2 text-xs text-muted-foreground">
             <ShieldCheck className="h-4 w-4 text-primary" aria-hidden />
-            Ativação imediata após pagamento aprovado
+            Ativação imediata · Pix, cartão ou boleto
           </div>
         </section>
 
