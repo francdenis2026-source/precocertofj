@@ -367,16 +367,17 @@ function EstablishmentPage() {
         {filtered.length === 0 && (
           <div className="mt-10 rounded-lg border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
             Nenhum produto encontrado{q ? ` para "${q}"` : ""}
-            {activeFiltersCount > 0 && " com os filtros atuais"}.
-            {activeFiltersCount > 0 && (
+            {selectedCategory && " nessa categoria"}.
+            {selectedCategory && (
               <div className="mt-3">
-                <Button variant="outline" size="sm" onClick={clearFilters}>
-                  Limpar filtros
+                <Button variant="outline" size="sm" onClick={() => setSelectedCategory(null)}>
+                  Limpar categoria
                 </Button>
               </div>
             )}
           </div>
         )}
+
 
 
         {hasLocation && (
