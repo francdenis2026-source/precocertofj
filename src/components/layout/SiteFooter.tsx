@@ -99,8 +99,8 @@ export function SiteFooter() {
             </li>
             <li className="flex items-center gap-2">
               <Mail className="h-3.5 w-3.5" style={{ color: PALETTE.gold }} />
-              <a href="mailto:precofacil-fj@proton.me" className="hover:underline">
-                precofacil-fj@proton.me
+              <a href="mailto:precocerto-fj@proton.me" className="hover:underline">
+                precocerto-fj@proton.me
               </a>
             </li>
             <li className="flex items-center gap-2">

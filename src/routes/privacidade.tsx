@@ -216,10 +216,10 @@ function PrivacidadePage() {
       icon: Mail,
       body: (
         <a
-          href="mailto:precofacil-fj@proton.me"
+          href="mailto:precocerto-fj@proton.me"
           className="font-mono text-[12px] font-semibold text-primary underline underline-offset-2"
         >
-          precofacil-fj@proton.me
+          precocerto-fj@proton.me
         </a>
       ),
     },
