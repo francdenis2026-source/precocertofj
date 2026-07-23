@@ -477,11 +477,13 @@ function SortChip({
     <button
       type="button"
       onClick={onClick}
+      aria-pressed={active}
       className={
-        "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-semibold transition " +
+        "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-semibold transition-colors " +
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background " +
         (active
           ? "border-primary bg-primary text-primary-foreground"
-          : "border-border bg-card text-foreground hover:border-primary/40")
+          : "border-border bg-card text-foreground hover:border-primary/40 hover:bg-muted/50")
       }
     >
       {icon}
@@ -522,16 +524,16 @@ function MarketCard({
   return (
     <li
       className={
-        "relative overflow-hidden rounded-xl border transition-colors " +
+        "group relative overflow-hidden rounded-xl border transition-colors " +
         (isBest
           ? "border-savings/40 bg-savings/[0.06]"
-          : "border-border bg-card hover:bg-muted/30")
+          : "border-border bg-card hover:bg-muted/30 focus-within:border-primary/50")
       }
     >
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
-        className="relative w-full px-3 py-2.5 text-left"
+        className="relative w-full px-3 py-2.5 text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
         aria-expanded={open}
       >
         <span
