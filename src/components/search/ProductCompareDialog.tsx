@@ -147,15 +147,6 @@ export function ProductCompareDialog({
                 />
               </button>
             ) : null}
-            {shareUrl ? (
-              <ShareButton
-                url={shareUrl}
-                title={`Comparar ${entries.length} produtos`}
-                text={`Comparativo de preços de ${entries.map((e) => e.productName).join(", ")}`}
-                label="Compartilhar"
-                compact
-              />
-            ) : null}
             <button
               type="button"
               onClick={onClose}
