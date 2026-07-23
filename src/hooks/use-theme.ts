@@ -50,7 +50,7 @@ function notifyThemeChange(theme: Theme) {
  *   logado, sincronizada nas duas direções via server functions.
  */
 export function useTheme() {
-  const [theme, setThemeState] = useState<Theme>("light");
+  const [theme, setThemeState] = useState<Theme>("dark");
   const [mounted, setMounted] = useState(false);
 
   const fetchRemote = useServerFn(getMyThemePreference);
