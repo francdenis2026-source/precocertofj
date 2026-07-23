@@ -141,6 +141,35 @@ function useFavoritos() {
 export function PreparoDicas() {
   const { favs, toggle, clear } = useFavoritos();
   const [baixando, setBaixando] = useState(false);
+  const [temposSel, setTemposSel] = useState<Set<TempoFaixaId>>(() => new Set());
+  const [modosSel, setModosSel] = useState<Set<ModoId>>(() => new Set());
+
+  const toggleTempo = (id: TempoFaixaId) => {
+    setTemposSel((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+  const toggleModo = (id: ModoId) => {
+    setModosSel((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+  const limparFiltros = () => {
+    setTemposSel(new Set());
+    setModosSel(new Set());
+  };
+  const filtrosAtivos = temposSel.size + modosSel.size;
+
+  const dicasFiltradas = useMemo(
+    () => aplicarFiltros(PREPARO_DICAS, { tempos: temposSel, modos: modosSel }),
+    [temposSel, modosSel],
+  );
 
   const favoritosPorDica = useMemo(() => {
     const map = new Map<string, string[]>();
@@ -152,6 +181,7 @@ export function PreparoDicas() {
     });
     return map;
   }, [favs]);
+
 
   const handleBaixarPDF = async () => {
     try {
