@@ -433,6 +433,9 @@ function RedeemPage() {
                 </button>
               </div>
 
+              {/* Verificador compacto — checks em tempo real */}
+              <CodeVerifier clean={clean} submitting={submitting} />
+
               {/* Feedback em tempo real */}
               <div
                 id="license-code-help"
