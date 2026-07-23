@@ -1,10 +1,31 @@
 import { Link } from "@tanstack/react-router";
-import { Activity, Globe, MapPin, ShieldCheck, ShoppingBag, User } from "lucide-react";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Activity, Globe, MapPin, PanelLeftClose, PanelLeftOpen, ShieldCheck, ShoppingBag, User } from "lucide-react";
+import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { AuthNavToggle } from "@/components/nav/AuthNavToggle";
 import { useMyProfile } from "@/hooks/useMyProfile";
 import { useSignOut } from "@/hooks/use-sign-out";
+
+/** Trigger enriquecido para o console admin: rótulo + atalho ⌘/Ctrl+B. */
+function AdminSidebarToggle() {
+  const { state, toggleSidebar, isMobile } = useSidebar();
+  const collapsed = state === "collapsed";
+  const Icon = collapsed ? PanelLeftOpen : PanelLeftClose;
+  const label = collapsed ? "Expandir menu" : "Recolher menu";
+  return (
+    <button
+      type="button"
+      onClick={toggleSidebar}
+      aria-label={label}
+      aria-pressed={!collapsed}
+      title={`${label}${isMobile ? "" : " (⌘/Ctrl + B)"}`}
+      className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-2 text-[11.5px] font-semibold text-foreground transition hover:border-primary/40 hover:text-primary md:px-3"
+    >
+      <Icon className="h-4 w-4" strokeWidth={2.2} />
+      <span className="hidden md:inline">{label}</span>
+    </button>
+  );
+}
 
 /**
  * AppHeader — Navy Trust Executive
@@ -18,8 +39,9 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
 
   return (
     <header className="sticky top-0 z-30 flex h-12 items-center gap-2 border-b border-border/70 bg-background/88 px-3 backdrop-blur-xl md:h-14 md:px-6">
-      <SidebarTrigger className="text-foreground" />
+      {isAdminScope ? <AdminSidebarToggle /> : <SidebarTrigger className="text-foreground" />}
       <div className="hidden h-5 w-px bg-border md:block" />
+
 
       <div className="flex min-w-0 flex-1 items-center gap-2">
         <span
