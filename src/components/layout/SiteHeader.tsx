@@ -37,7 +37,7 @@ const NAV_LINKS = [
   { to: "/planos", label: "Planos" },
 ] as const;
 
-export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle = false }: Props) {
+export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle = true }: Props) {
   const isOverlay = variant === "overlay";
   const { session, firstName, initials, loading } = useMyProfile();
   const { signOut, loading: signingOut } = useSignOut();
