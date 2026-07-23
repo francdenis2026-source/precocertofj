@@ -2695,6 +2695,7 @@ export type Database = {
         Row: {
           attempts: number
           created_at: string
+          email_status: Json | null
           error: string | null
           event_type: string | null
           external_id: string | null
@@ -2710,6 +2711,7 @@ export type Database = {
         Insert: {
           attempts?: number
           created_at?: string
+          email_status?: Json | null
           error?: string | null
           event_type?: string | null
           external_id?: string | null
@@ -2725,6 +2727,7 @@ export type Database = {
         Update: {
           attempts?: number
           created_at?: string
+          email_status?: Json | null
           error?: string | null
           event_type?: string | null
           external_id?: string | null
