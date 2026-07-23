@@ -26,6 +26,7 @@ import { RegionSelector, readStoredRegion, type SelectedRegion } from "@/compone
 import { RadarCategorySheet } from "@/components/login/RadarCategorySheet";
 import { CollaborativeCTA } from "@/components/collab/CollaborativeCTA";
 import { SocialProofStrip } from "@/components/collab/SocialProofStrip";
+import { AuthHero } from "@/components/auth/AuthHero";
 
 export const Route = createFileRoute("/login")({
   head: () => ({
@@ -313,78 +314,8 @@ function LoginPage() {
         className="relative z-10 grid w-full max-w-[960px] overflow-hidden rounded-3xl border border-black/5 bg-white shadow-[0_30px_80px_-30px_rgba(6,78,59,0.35)] md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]"
       >
         {/* LEFT — Emerald benefit panel */}
-        <aside
-          className="relative hidden flex-col justify-between p-10 md:flex"
-          style={{ background: PC_EMERALD, color: PC_CREAM, fontFamily: PC_BODY }}
-        >
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full opacity-20 blur-3xl"
-            style={{ background: PC_EMERALD_LIGHT }}
-          />
-          <div className="relative z-10">
-            <div className="flex items-center gap-2.5" style={{ fontFamily: PC_DISPLAY }}>
-              <div
-                className="flex h-9 w-9 items-center justify-center rounded-lg"
-                style={{ background: PC_GOLD, color: PC_EMERALD }}
-              >
-                <ShoppingCart className="h-5 w-5" strokeWidth={2.5} />
-              </div>
-              <span className="text-[19px] font-bold tracking-tight text-white">PreçoCerto</span>
-            </div>
+        <AuthHero variant={mode === "signup" ? "signup" : "login"} />
 
-            <h2
-              className="mt-10 text-[26px] font-bold leading-[1.12] tracking-tight text-white"
-              style={{ fontFamily: PC_DISPLAY }}
-            >
-              {mode === "login" ? "Acesse a inteligência da sua cidade" : "Comece a economizar em minutos"}
-            </h2>
-            <p className="mt-3 text-[13.5px] leading-relaxed text-white/85">
-              {mode === "login"
-                ? "Entre com CPF e PIN de 6 dígitos para ver o painel ao vivo."
-                : "Cadastro rápido. Sem cartão de crédito. 30 dias grátis ao enviar sua primeira nota."}
-            </p>
-
-            <ul className="mt-8 space-y-3.5 text-[13px]">
-              {[
-                "Acesso instantâneo aos preços do bairro",
-                "Comparativo em tempo real entre mercados",
-                "Rede colaborativa — quanto mais notas, melhor",
-              ].map((t) => (
-                <li key={t} className="flex items-start gap-3">
-                  <span
-                    className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[10px] font-bold"
-                    style={{ background: PC_GOLD, color: PC_EMERALD }}
-                  >
-                    ✓
-                  </span>
-                  <span className="text-white/85">{t}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div
-            className="relative z-10 mt-10 rounded-xl border border-white/10 p-4"
-            style={{ background: "rgba(30,74,133,0.35)" }}
-          >
-            <p
-              className="text-[10px] font-bold uppercase tracking-[0.22em]"
-              style={{ color: PC_GOLD }}
-            >
-              Oferta ativa
-            </p>
-            <p
-              className="mt-1 text-[17px] font-bold text-white"
-              style={{ fontFamily: PC_DISPLAY }}
-            >
-              30 dias grátis
-            </p>
-            <p className="mt-0.5 text-[11px] text-white/85">
-              Enviando sua nota fiscal e liberando o painel completo.
-            </p>
-          </div>
-        </aside>
 
         {/* RIGHT — Auth form */}
         <div className="p-8 sm:p-10" style={{ fontFamily: PC_BODY }}>

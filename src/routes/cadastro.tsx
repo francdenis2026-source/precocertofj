@@ -10,6 +10,7 @@ import { maskCpf, maskPhone, validateCpfDetailed } from "@/lib/cpf";
 import { safeInternalPath } from "@/lib/auth-redirect";
 import { Logo } from "@/components/brand/Logo";
 import heroPhoto from "@/assets/cadastro-hero.jpg";
+import { AuthHero } from "@/components/auth/AuthHero";
 
 // ---------- Field validators ----------
 type FieldState = { valid: boolean; msg?: string; hint?: string };
