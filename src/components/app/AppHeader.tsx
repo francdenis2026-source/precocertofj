@@ -5,6 +5,7 @@ import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { AuthNavToggle } from "@/components/nav/AuthNavToggle";
 import { useMyProfile } from "@/hooks/useMyProfile";
 import { useSignOut } from "@/hooks/use-sign-out";
+import { Button } from "@/components/ui/button";
 
 /** Trigger enriquecido para o console admin: rótulo + atalho ⌘/Ctrl+B. */
 function AdminSidebarToggle() {
@@ -13,8 +14,9 @@ function AdminSidebarToggle() {
   const Icon = collapsed ? PanelLeftOpen : PanelLeftClose;
   const label = collapsed ? "Expandir menu" : "Recolher menu";
   return (
-    <button
+    <Button
       type="button"
+      variant="ghost"
       onClick={toggleSidebar}
       aria-label={label}
       aria-pressed={!collapsed}
@@ -23,7 +25,7 @@ function AdminSidebarToggle() {
     >
       <Icon className="h-4 w-4" strokeWidth={2.2} />
       <span className="hidden md:inline">{label}</span>
-    </button>
+    </Button>
   );
 }
 
@@ -78,8 +80,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
               />
             ) : (
               <span
-                className="inline-flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold"
-                style={{ background: "color-mix(in oklab, var(--primary) 12%, transparent)", color: "var(--primary)" }}
+                className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary"
               >
                 {initials ?? <User className="h-3 w-3" />}
               </span>
@@ -112,14 +113,15 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
         )}
         
         {isAdminScope ? (
-          <button
+          <Button
             type="button"
+            variant="ghost"
             onClick={signOut}
             disabled={signingOut}
             className="hidden h-8 items-center rounded-full border border-border bg-card px-3 text-[11.5px] font-semibold text-foreground transition hover:border-primary/40 hover:text-primary disabled:opacity-60 sm:inline-flex"
           >
             {signingOut ? "Saindo..." : "Sair"}
-          </button>
+          </Button>
         ) : (
           <AuthNavToggle size="sm" className="hidden sm:inline-flex" />
         )}

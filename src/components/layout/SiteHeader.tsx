@@ -12,6 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
 
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 
@@ -119,8 +120,9 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
           ) : session ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button
+                <Button
                   type="button"
+                  variant="ghost"
                   className={dsx("inline-flex items-center gap-2 rounded-lg border px-2.5 py-1.5 text-[13px] font-medium transition-colors sm:px-3 sm:py-2", accountClass)}
                   aria-label="Minha conta"
                 >
@@ -133,7 +135,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                     {firstName ?? "Minha conta"}
                   </span>
                   <ChevronDown className="h-3.5 w-3.5 opacity-70" />
-                </button>
+                </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <DropdownMenuLabel className="truncate">
