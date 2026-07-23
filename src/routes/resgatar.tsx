@@ -301,19 +301,20 @@ function RedeemPage() {
                     autoComplete="one-time-code"
                     spellCheck={false}
                     placeholder="PC-XXXX-XXXX-XXXX"
-                    aria-invalid={showState && validation.level === "warn"}
+                    aria-invalid={touched && validation.level === "warn"}
                     aria-describedby="license-code-help"
                     className="h-12 w-full rounded-lg border bg-white pl-9 pr-3 text-[15px] font-bold uppercase tracking-[0.14em] outline-none transition focus:ring-2"
                     style={{
                       fontFamily: MONO,
                       color: INK,
                       borderColor:
-                        showState && validation.level === "warn"
+                        touched && validation.level === "warn"
                           ? "#dc2626"
-                          : showState && validation.level === "ok"
+                          : validation.level === "ok"
                           ? "#16a34a"
                           : LINE,
                     } as React.CSSProperties}
+
                   />
                 </div>
                 <button
