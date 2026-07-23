@@ -7,6 +7,7 @@ import {
   getCheckoutOrder,
   validatePromoCoupon,
   approveCheckoutOrder,
+  setCheckoutEmail,
 } from "@/lib/checkout.functions";
 import {
   createMercadoPagoPreference,
@@ -17,8 +18,9 @@ import { PageHeader } from "@/components/brand/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Ticket, Copy, CheckCircle2, ArrowRight, CreditCard, Loader2, ShieldAlert, Clock } from "lucide-react";
+import { Ticket, Copy, CheckCircle2, ArrowRight, CreditCard, Loader2, ShieldAlert, Clock, Mail, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { useMyRoles } from "@/hooks/useMyRoles";
 
@@ -46,10 +48,13 @@ function CheckoutPage() {
   const approve = useServerFn(approveCheckoutOrder);
   const createPref = useServerFn(createMercadoPagoPreference);
   const simulate = useServerFn(simulateCheckoutApproval);
+  const saveEmail = useServerFn(setCheckoutEmail);
   const { isAdmin } = useMyRoles();
 
   const [couponInput, setCouponInput] = useState("");
   const [applying, setApplying] = useState(false);
+  const [emailInput, setEmailInput] = useState("");
+  const [emailTouched, setEmailTouched] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -71,8 +76,38 @@ function CheckoutPage() {
     refetchInterval: (q) => (q.state.data?.status === "pending" ? 4000 : false),
   });
 
+  // Hidrata o campo de e-mail com o valor já salvo no pedido, se houver.
+  useEffect(() => {
+    if (order?.delivery_email && !emailInput) {
+      setEmailInput(order.delivery_email as string);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order?.delivery_email]);
+
+  // Validação em tempo real do e-mail (mesma regex do server).
+  const EMAIL_RE = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+  const emailNormalized = emailInput.trim().toLowerCase();
+  const emailValid = EMAIL_RE.test(emailNormalized) && emailNormalized.length <= 254;
+  const emailSaved =
+    !!order?.delivery_email &&
+    (order.delivery_email as string).toLowerCase() === emailNormalized;
+
+  const saveEmailMutation = useMutation({
+    mutationFn: () => saveEmail({ data: { id, email: emailNormalized } }),
+    onSuccess: () => {
+      toast.success("E-mail confirmado");
+      qc.invalidateQueries({ queryKey: ["checkout-order", id] });
+    },
+    onError: (e: any) => toast.error(e?.message ?? "Não foi possível salvar o e-mail"),
+  });
+
   const payMutation = useMutation({
-    mutationFn: () => createPref({ data: { orderId: id } }),
+    mutationFn: async () => {
+      // Garante o e-mail salvo antes de gerar a cobrança
+      if (!emailValid) throw new Error("Informe um e-mail válido para receber o código.");
+      if (!emailSaved) await saveEmail({ data: { id, email: emailNormalized } });
+      return createPref({ data: { orderId: id } });
+    },
     onSuccess: (r) => {
       if (r?.url) window.location.href = r.url;
       else toast.error("URL do Mercado Pago não retornada");
@@ -222,6 +257,71 @@ function CheckoutPage() {
             <>
               <Card>
                 <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <Mail className="h-4 w-4" /> E-mail para receber o código
+                  </CardTitle>
+                  <CardDescription className="text-xs">
+                    Enviamos o código de ativação assim que o pagamento for confirmado.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                  <Label htmlFor="delivery-email" className="text-xs font-medium">
+                    Seu melhor e-mail
+                  </Label>
+                  <Input
+                    id="delivery-email"
+                    type="email"
+                    inputMode="email"
+                    autoComplete="email"
+                    placeholder="voce@exemplo.com"
+                    value={emailInput}
+                    onChange={(e) => {
+                      setEmailInput(e.target.value);
+                      setEmailTouched(true);
+                    }}
+                    onBlur={() => {
+                      setEmailTouched(true);
+                      if (emailValid && !emailSaved && !saveEmailMutation.isPending) {
+                        saveEmailMutation.mutate();
+                      }
+                    }}
+                    aria-invalid={emailTouched && !emailValid}
+                    className={
+                      emailTouched && !emailValid
+                        ? "border-destructive focus-visible:ring-destructive"
+                        : ""
+                    }
+                  />
+                  {emailTouched && emailInput.length > 0 && !emailValid && (
+                    <p className="flex items-center gap-1 text-xs text-destructive">
+                      <AlertCircle className="h-3 w-3" /> Digite um e-mail válido (ex.: nome@dominio.com).
+                    </p>
+                  )}
+                  {emailValid && emailSaved && (
+                    <p className="flex items-center gap-1 text-xs text-primary">
+                      <CheckCircle2 className="h-3 w-3" /> E-mail confirmado — o código será enviado para <strong className="ml-1">{emailNormalized}</strong>.
+                    </p>
+                  )}
+                  {emailValid && !emailSaved && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      className="w-full"
+                      onClick={() => saveEmailMutation.mutate()}
+                      disabled={saveEmailMutation.isPending}
+                    >
+                      {saveEmailMutation.isPending ? (
+                        <Loader2 className="mr-1 h-3 w-3 animate-spin" />
+                      ) : null}
+                      Confirmar e-mail
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
                   <CardTitle className="text-base">Pagamento</CardTitle>
                   <CardDescription className="text-xs">
                     Você será redirecionado ao Mercado Pago para concluir com Pix, cartão ou boleto.
@@ -232,7 +332,8 @@ function CheckoutPage() {
                     className="w-full"
                     variant="executive"
                     onClick={() => payMutation.mutate()}
-                    disabled={payMutation.isPending}
+                    disabled={payMutation.isPending || !emailValid}
+                    title={!emailValid ? "Informe um e-mail válido antes de pagar" : undefined}
                   >
                     {payMutation.isPending ? (
                       <Loader2 className="mr-1 h-4 w-4 animate-spin" />
@@ -241,6 +342,12 @@ function CheckoutPage() {
                     )}
                     Pagar com Mercado Pago
                   </Button>
+                  {!emailValid && (
+                    <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <AlertCircle className="h-3 w-3" />
+                      Informe seu e-mail acima para liberar o pagamento.
+                    </p>
+                  )}
                   {order.status === "pending" && (
                     <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
                       <Clock className="h-3 w-3" />
@@ -249,6 +356,7 @@ function CheckoutPage() {
                   )}
                 </CardContent>
               </Card>
+
 
 
               {order.discount_cents === 0 && (
