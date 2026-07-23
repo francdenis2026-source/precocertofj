@@ -79,7 +79,7 @@ function EstablishmentsPage() {
           <div className="space-y-6">
             <StatGrid
               stats={[
-                { label: "Mercados ativos", value: data.totalEstablishments, icon: MapPin, tone: "primary" },
+                { label: "Estabelecimentos", value: data.totalEstablishments, icon: MapPin, tone: "primary" },
                 { label: "Produtos monitorados", value: data.totalProducts, icon: Package, tone: "success" },
                 { label: "Categorias mapeadas", value: data.totalCategories, icon: Sparkles },
               ]}
