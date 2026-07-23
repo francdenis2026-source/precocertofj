@@ -98,7 +98,7 @@ export const ds = {
       "sm:text-[16px]",
     onDark:
       "min-w-0 flex-1 bg-transparent py-2.5 pr-1 text-[15px] text-white outline-none " +
-      "placeholder:text-white/65 sm:py-3 sm:text-[16px]",
+      "placeholder:text-white/85 sm:py-3 sm:text-[16px]",
   },
 
   /* ---------- Estados de foco / motion ---------- */

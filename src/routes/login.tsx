@@ -374,7 +374,7 @@ function LoginPage() {
             >
               30 dias grátis
             </p>
-            <p className="mt-0.5 text-[11px] text-white/60">
+            <p className="mt-0.5 text-[11px] text-white/85">
               Enviando sua nota fiscal e liberando o painel completo.
             </p>
           </div>
@@ -787,7 +787,7 @@ function EditorialPanel({ region }: { region: SelectedRegion | null }) {
             />
             <div className="relative flex items-end justify-between gap-6">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/50">
+                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/80">
                   Maior oscilação da semana
                 </p>
                 <p className="mt-2 font-display text-[22px] font-semibold leading-tight text-white">
@@ -797,7 +797,7 @@ function EditorialPanel({ region }: { region: SelectedRegion | null }) {
                     hottest.label
                   )}
                 </p>
-                <p className="mt-1 text-[12px] text-white/60">
+                <p className="mt-1 text-[12px] text-white/85">
                   variação registrada entre mercados monitorados
                 </p>
               </div>
@@ -814,14 +814,14 @@ function EditorialPanel({ region }: { region: SelectedRegion | null }) {
                     "—"
                   )}
                 </p>
-                <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/45">
+                <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/75">
                   oscilação da semana
 
                 </p>
               </div>
             </div>
             <div className="relative mt-5 flex items-center justify-between border-t border-white/10 pt-4">
-              <span className="text-[11px] text-white/55">Economia estimada por família</span>
+              <span className="text-[11px] text-white/80">Economia estimada por família</span>
               <span className="font-display text-[18px] font-bold tabular-nums text-white">
                 {isLoading ? (
                   <span className="inline-block h-4 w-24 animate-pulse rounded bg-white/10" />
@@ -859,10 +859,10 @@ function EditorialPanel({ region }: { region: SelectedRegion | null }) {
                     className={`absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r ${toneRing[b.tone]}`}
                   />
                   <div className="flex items-start justify-between gap-2">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/50">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/80">
                       {b.label}
                     </p>
-                    <span className="rounded-full bg-white/5 px-1.5 py-0.5 text-[9px] font-bold tabular-nums text-white/60">
+                    <span className="rounded-full bg-white/5 px-1.5 py-0.5 text-[9px] font-bold tabular-nums text-white/85">
                       #{idx + 1}
                     </span>
                   </div>
@@ -893,7 +893,7 @@ function EditorialPanel({ region }: { region: SelectedRegion | null }) {
                       )}
                     </AnimatePresence>
                   </div>
-                  <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-white/40 transition group-hover:text-emerald-300">
+                  <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-white/75 transition group-hover:text-emerald-300">
                     Ver produtos <ArrowRight className="h-3 w-3" />
                   </span>
                 </motion.button>
