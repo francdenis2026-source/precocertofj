@@ -51,7 +51,7 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-/* Design tokens — Navy Trust, contrastes reforçados */
+/* Design tokens — Navy Trust, contrastes reforçados, adaptáveis light/dark */
 const PALETTE = {
   paper: "var(--pc-home-paper)",
   ink: "var(--pc-home-ink)",
@@ -62,9 +62,11 @@ const PALETTE = {
   goldSoft: "var(--pc-home-gold-soft)",
   line: "var(--pc-home-line)",
   heroOverlay: "var(--pc-home-hero-overlay)",
+  exploreBg: "var(--pc-home-explore-bg)",
   exploreOverlay: "var(--pc-home-explore-overlay)",
   ctaGradient: "var(--pc-home-cta-gradient)",
   dotOpacity: "var(--pc-home-dot-opacity)",
+  onHero: "var(--pc-home-onhero-fg)",
 };
 
 const transparentize = (color: string, amount: number) =>
@@ -176,7 +178,7 @@ function HomePage() {
           aria-live="polite"
         >
           <div
-            className="pointer-events-auto group inline-flex max-w-[calc(100vw-1rem)] items-center gap-1.5 rounded-full border border-white/25 bg-white/10 py-1 pl-1.5 pr-2.5 text-white shadow-[0_8px_24px_rgba(0,0,0,0.25)] backdrop-blur-xl transition-all hover:border-white/45 hover:bg-white/15 sm:gap-2.5 sm:py-2 sm:pl-2.5 sm:pr-4"
+            className="pointer-events-auto group inline-flex max-w-[calc(100vw-1rem)] items-center gap-1.5 rounded-full border border-[color:var(--pc-home-onhero-border)] bg-[color:var(--pc-home-onhero-glass)] py-1 pl-1.5 pr-2.5 text-[color:var(--pc-home-onhero-fg)] shadow-[0_8px_24px_rgba(0,0,0,0.25)] backdrop-blur-xl transition-all hover:border-[color:var(--pc-home-onhero-border-hover)] hover:bg-[color:var(--pc-home-onhero-glass-hover)] sm:gap-2.5 sm:py-2 sm:pl-2.5 sm:pr-4"
             title="Em breve: sugestões e categorização automática por IA"
           >
             <span
@@ -218,7 +220,7 @@ function HomePage() {
 
 
             <h1
-              className={`${serif} mt-5 font-normal text-white sm:mt-6 md:mt-8`}
+              className={`${serif} mt-5 font-normal text-[color:var(--pc-home-onhero-fg)] sm:mt-6 md:mt-8`}
               style={{
                 fontSize: "clamp(2.25rem, 7.5vw, 7rem)",
                 lineHeight: 0.96,
@@ -233,7 +235,7 @@ function HomePage() {
             </h1>
 
             <p
-              className="mt-5 max-w-2xl text-white/90 sm:mt-6 md:mt-8"
+              className="mt-5 max-w-2xl text-[color:var(--pc-home-onhero-fg-90)] sm:mt-6 md:mt-8"
               style={{ fontSize: "clamp(0.98rem, 1.4vw, 1.25rem)", lineHeight: 1.55 }}
             >
               Compare mercados de Feijó em tempo real e descubra em qual mercado
@@ -244,10 +246,10 @@ function HomePage() {
             {/* Busca — pill unificado, botão embutido */}
             <form onSubmit={submitSearch} className="mt-6 max-w-2xl sm:mt-8">
               <div
-                className="flex items-center gap-2 rounded-2xl border border-white/25 bg-white/10 p-1.5 backdrop-blur-xl transition-all focus-within:border-white/60 focus-within:bg-white/15 sm:p-2"
+                className="flex items-center gap-2 rounded-2xl border border-[color:var(--pc-home-onhero-border)] bg-[color:var(--pc-home-onhero-glass)] p-1.5 backdrop-blur-xl transition-all focus-within:border-[color:var(--pc-home-onhero-border-hover)] focus-within:bg-[color:var(--pc-home-onhero-glass-hover)] sm:p-2"
               >
                 <span className="pointer-events-none pl-3 sm:pl-4">
-                  <Search className="h-5 w-5 text-white/90" strokeWidth={2.4} aria-hidden />
+                  <Search className="h-5 w-5 text-[color:var(--pc-home-onhero-fg-90)]" strokeWidth={2.4} aria-hidden />
                 </span>
                 <input
                   value={q}
@@ -289,14 +291,14 @@ function HomePage() {
             </div>
 
             <div className="mt-7 flex flex-wrap items-center gap-2 sm:gap-2.5">
-              <span className="mr-1 w-full text-[11px] font-bold uppercase tracking-[0.24em] text-white/80 sm:w-auto">
+              <span className="mr-1 w-full text-[11px] font-bold uppercase tracking-[0.24em] text-[color:var(--pc-home-onhero-fg-80)] sm:w-auto">
                 Populares:
               </span>
               {["arroz", "feijão", "leite", "óleo", "café", "açúcar"].map((t) => (
                 <button
                   key={t}
                   onClick={() => navigate({ to: "/buscar", search: { q: t } as any })}
-                  className="inline-flex items-center rounded-full border border-white/25 bg-white/10 px-4 py-2 text-[14px] font-semibold text-white backdrop-blur transition-all hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/15"
+                  className="inline-flex items-center rounded-full border border-[color:var(--pc-home-onhero-border)] bg-[color:var(--pc-home-onhero-glass)] px-4 py-2 text-[14px] font-semibold text-[color:var(--pc-home-onhero-fg)] backdrop-blur transition-all hover:-translate-y-0.5 hover:border-[color:var(--pc-home-onhero-border-hover)] hover:bg-[color:var(--pc-home-onhero-glass-hover)]"
                 >
                   {t}
                 </button>
@@ -305,7 +307,7 @@ function HomePage() {
 
 
 
-            <div className="mt-10 grid max-w-3xl grid-cols-3 gap-4 border-t border-white/15 pt-6 sm:gap-8 md:mt-14 md:pt-9">
+            <div className="mt-10 grid max-w-3xl grid-cols-3 gap-4 border-t border-[color:var(--pc-home-onhero-border-soft)] pt-6 sm:gap-8 md:mt-14 md:pt-9">
               {[
                 { k: String(stats.establishments ?? 0), l: "Estabelecimentos" },
                 { k: String(stats.products ?? 0), l: "Produtos catalogados" },
@@ -313,7 +315,7 @@ function HomePage() {
               ].map((s) => (
                 <div key={s.l} className="min-w-0">
                   <div
-                    className="truncate font-semibold text-white tabular-nums"
+                    className="truncate font-semibold text-[color:var(--pc-home-onhero-fg)] tabular-nums"
                     style={{
                       fontSize: "clamp(2rem, 4.2vw, 3.25rem)",
                       letterSpacing: "-0.035em",
@@ -323,7 +325,7 @@ function HomePage() {
                   >
                     {s.k}
                   </div>
-                  <div className="mt-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-white/85 sm:mt-3 sm:text-[12px]">
+                  <div className="mt-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-[color:var(--pc-home-onhero-fg-85)] sm:mt-3 sm:text-[12px]">
                     {s.l}
                   </div>
                 </div>
@@ -336,7 +338,7 @@ function HomePage() {
       {/* EXPLORE — seção premium com fundo cinematográfico */}
       <section
         className="relative overflow-hidden"
-        style={{ background: PALETTE.navy }}
+        style={{ background: PALETTE.exploreBg }}
       >
         {/* Imagem de fundo profissional */}
         <img
@@ -376,7 +378,7 @@ function HomePage() {
         <div className={dsx(ds.container, "relative py-10 md:py-20")}>
           {/* Cabeçalho editorial */}
           <div className="mx-auto mb-6 max-w-2xl text-center md:mb-14">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1 backdrop-blur">
+            <div className="inline-flex items-center gap-2 rounded-full border border-[color:var(--pc-home-onhero-border-soft)] bg-[color:var(--pc-home-onhero-glass-soft)] px-3 py-1 backdrop-blur">
               <span
                 className="h-1.5 w-1.5 rounded-full"
                 style={{ background: PALETTE.gold, boxShadow: `0 0 12px ${PALETTE.gold}` }}
@@ -389,7 +391,7 @@ function HomePage() {
               </span>
             </div>
             <h2
-              className={`${serif} mt-3 text-white leading-[0.98] md:mt-4`}
+              className={`${serif} mt-3 text-[color:var(--pc-home-onhero-fg)] leading-[0.98] md:mt-4`}
               style={{
                 letterSpacing: "-0.03em",
                 fontSize: "clamp(1.6rem, 5vw, 3.75rem)",
@@ -400,7 +402,7 @@ function HomePage() {
                 em três passos.
               </span>
             </h2>
-            <p className="mx-auto mt-3 max-w-lg text-[13px] leading-relaxed text-white/80 sm:text-[15px] md:mt-4">
+            <p className="mx-auto mt-3 max-w-lg text-[13px] leading-relaxed text-[color:var(--pc-home-onhero-fg-80)] sm:text-[15px] md:mt-4">
               Ranking, mercados e planos — enxuto, tipografado e feito para
               decidir rápido.
             </p>
@@ -478,7 +480,7 @@ function HomePage() {
       {/* CTA FINAL — hierarquia refinada no mobile */}
       <section className={dsx(ds.container, "py-5 md:py-10")}>
         <div
-          className="relative overflow-hidden rounded-2xl px-4 py-4 text-white sm:px-7 sm:py-6 md:px-9 md:py-7"
+          className="relative overflow-hidden rounded-2xl px-4 py-4 text-[color:var(--pc-home-onhero-fg)] sm:px-7 sm:py-6 md:px-9 md:py-7"
           style={{ background: PALETTE.ctaGradient }}
         >
           <div
@@ -488,7 +490,7 @@ function HomePage() {
           <div className="relative grid grid-cols-1 items-start gap-3 md:grid-cols-[1fr_auto] md:items-center md:gap-8">
             <div className="min-w-0">
               <h3
-                className={`${serif} text-white`}
+                className={`${serif} text-[color:var(--pc-home-onhero-fg)]`}
                 style={{
                   fontSize: "clamp(1.1rem, 2.6vw, 1.95rem)",
                   lineHeight: 1.12,
@@ -499,7 +501,7 @@ function HomePage() {
                 Nunca mais pague caro por{" "}
                 <span className="italic font-semibold" style={{ color: PALETTE.goldSoft }}>arroz, feijão e café.</span>
               </h3>
-              <p className="mt-1 text-[11.5px] leading-tight text-white/85 sm:text-[13px]">
+              <p className="mt-1 text-[11.5px] leading-tight text-[color:var(--pc-home-onhero-fg-85)] sm:text-[13px]">
                 Cadastro em 30s · sem cartão.
               </p>
             </div>
@@ -513,7 +515,7 @@ function HomePage() {
               </Link>
               <Link
                 to="/resgatar"
-                className={dsx(ds.btn.base, ds.btn.sizes.sm, "flex-1 border border-white/35 text-white hover:bg-white/10 md:flex-none md:px-5 md:py-2.5 md:text-[15px]")}
+                className={dsx(ds.btn.base, ds.btn.sizes.sm, "flex-1 border border-[color:var(--pc-home-onhero-border)] text-[color:var(--pc-home-onhero-fg)] hover:bg-[color:var(--pc-home-onhero-glass)] md:flex-none md:px-5 md:py-2.5 md:text-[15px]")}
               >
                 Tenho um código
               </Link>
@@ -543,7 +545,7 @@ function ExploreCard({
   return (
     <Link
       to={to}
-      className="group relative flex items-center gap-3 overflow-hidden rounded-xl border border-white/12 bg-white/[0.05] p-3.5 backdrop-blur-md transition-all duration-300 hover:border-white/25 hover:bg-white/[0.08] md:flex-col md:items-stretch md:gap-0 md:rounded-2xl md:p-7 md:hover:-translate-y-1"
+      className="group relative flex items-center gap-3 overflow-hidden rounded-xl border border-[color:var(--pc-home-onhero-border-soft)] bg-[color:var(--pc-home-onhero-glass-soft)] p-3.5 backdrop-blur-md transition-all duration-300 hover:border-[color:var(--pc-home-onhero-border)] hover:bg-[color:var(--pc-home-onhero-glass)] md:flex-col md:items-stretch md:gap-0 md:rounded-2xl md:p-7 md:hover:-translate-y-1"
     >
       {/* Glow no hover (só desktop) */}
       <div
@@ -553,7 +555,7 @@ function ExploreCard({
 
       {/* Selo — compacto no mobile, grande no desktop */}
       <div
-        className="relative grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-white/15 md:mb-6 md:h-14 md:w-14 md:rounded-xl"
+        className="relative grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-[color:var(--pc-home-onhero-border-soft)] md:mb-6 md:h-14 md:w-14 md:rounded-xl"
         style={{
           background: `linear-gradient(135deg, ${transparentize(PALETTE.gold, 14)} 0%, ${transparentize(PALETTE.gold, 5)} 100%)`,
           color: PALETTE.goldSoft,
@@ -582,7 +584,7 @@ function ExploreCard({
           {kicker}
         </div>
         <h3
-          className="mt-0.5 font-semibold text-white md:mt-2.5"
+          className="mt-0.5 font-semibold text-[color:var(--pc-home-onhero-fg)] md:mt-2.5"
           style={{
             letterSpacing: "-0.02em",
             fontSize: "clamp(0.98rem, 1.9vw, 1.65rem)",
@@ -591,26 +593,26 @@ function ExploreCard({
         >
           {title}
         </h3>
-        <p className="mt-1 hidden text-[14px] leading-[1.6] text-white/85 md:mt-3 md:block md:flex-1">
+        <p className="mt-1 hidden text-[14px] leading-[1.6] text-[color:var(--pc-home-onhero-fg-85)] md:mt-3 md:block md:flex-1">
           {desc}
         </p>
       </div>
 
       {/* Chevron — mobile */}
-      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/25 md:hidden">
-        <ArrowRight className="h-4 w-4 text-white" />
+      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-[color:var(--pc-home-onhero-border)] md:hidden">
+        <ArrowRight className="h-4 w-4 text-[color:var(--pc-home-onhero-fg)]" />
       </span>
 
       {/* Rodapé com CTA — desktop */}
-      <div className="mt-6 hidden items-center justify-between border-t border-white/10 pt-4 md:flex">
-        <span className="text-[12px] font-bold uppercase tracking-[0.2em] text-white">
+      <div className="mt-6 hidden items-center justify-between border-t border-[color:var(--pc-home-onhero-border-soft)] pt-4 md:flex">
+        <span className="text-[12px] font-bold uppercase tracking-[0.2em] text-[color:var(--pc-home-onhero-fg)]">
           {cta}
         </span>
         <span
-          className="grid h-8 w-8 place-items-center rounded-full border border-white/25 transition-all duration-300 group-hover:border-transparent"
+          className="grid h-8 w-8 place-items-center rounded-full border border-[color:var(--pc-home-onhero-border)] transition-all duration-300 group-hover:border-transparent"
           style={{ background: "transparent" }}
         >
-          <ArrowRight className="h-4 w-4 text-white transition-transform duration-300 group-hover:translate-x-0.5" />
+          <ArrowRight className="h-4 w-4 text-[color:var(--pc-home-onhero-fg)] transition-transform duration-300 group-hover:translate-x-0.5" />
         </span>
       </div>
     </Link>
