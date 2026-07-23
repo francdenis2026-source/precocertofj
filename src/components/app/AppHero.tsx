@@ -43,12 +43,12 @@ export function AppHero({ firstName, statusLine }: AppHeroProps) {
             Olá, {firstName}
           </p>
           <h1 className="font-display mt-1 text-[30px] font-extrabold leading-[0.98] tracking-tight text-foreground md:text-[42px]">
-            Seu carrinho,{" "}
-            <span className="text-signal-gradient">mais inteligente.</span>
+            Comece pela sua{" "}
+            <span className="text-signal-gradient">primeira lista.</span>
           </h1>
           <p className="mt-2 max-w-md text-[13px] leading-snug text-muted-foreground md:text-sm">
-            {statusLine}. Acompanhe favoritos, veja o melhor mercado e economize
-            em cada compra.
+            {statusLine}. Monte a lista em 1 minuto e a gente mostra o mercado
+            mais barato de Feijó para essa cesta.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -56,14 +56,14 @@ export function AppHero({ firstName, statusLine }: AppHeroProps) {
             to="/lista"
             className="btn-signal inline-flex h-10 items-center gap-1.5 px-4 text-[13px]"
           >
-            Nova lista <ArrowRight className="h-3.5 w-3.5" />
+            Criar minha lista <ArrowRight className="h-3.5 w-3.5" />
           </Link>
           <Link
             to="/alertas"
             className="inline-flex h-10 items-center gap-1.5 rounded-xl border border-border bg-surface px-4 text-[13px] font-semibold text-foreground transition hover:border-primary/40 hover:text-primary"
           >
             <Bell className="h-3.5 w-3.5" />
-            Alertas
+            Ativar alertas
           </Link>
         </div>
       </div>

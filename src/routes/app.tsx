@@ -79,12 +79,12 @@ function AppHomeContent() {
 
   const statusLine =
     status === "trial"
-      ? `Período de teste — ${trialDays} ${trialDays === 1 ? "dia restante" : "dias restantes"}`
+      ? `${trialDays} ${trialDays === 1 ? "dia" : "dias"} de teste grátis — aproveite`
       : status === "active"
-        ? `Assinatura ativa por mais ${paidDays} ${paidDays === 1 ? "dia" : "dias"}`
+        ? `Assinatura ativa · renova em ${paidDays} ${paidDays === 1 ? "dia" : "dias"}`
         : status === "expired"
-          ? "Assinatura vencida"
-          : "Bem-vindo(a) de volta";
+          ? "Sua assinatura venceu — reative para continuar economizando"
+          : "Que bom te ver de novo";
 
   const moveItem = (ids: string[], idx: number, dir: -1 | 1) => {
     const next = swap(ids, idx, dir);
@@ -114,14 +114,14 @@ function AppHomeContent() {
 
         {loading && (
           <div className="mt-6 flex items-center gap-2 text-[14px] text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" /> Carregando seu painel...
+            <Loader2 className="h-4 w-4 animate-spin" /> Puxando os preços mais recentes...
           </div>
         )}
 
         {summary && (
           <>
             <div className="mt-6 md:mt-8">
-              <SectionKicker eyebrow="Panorama" title="Sua semana em números" />
+              <SectionKicker eyebrow="Seu resumo" title="Como você está economizando" />
               <div className="mt-3 md:mt-4">
                 <StatGrid
                   className="lg:grid-cols-3"
@@ -130,7 +130,7 @@ function AppHomeContent() {
                       label: "Suas listas",
                       value: summary.totals.listsCount,
                       icon: ShoppingCart,
-                      hint: `${summary.totals.itemsCount} ${summary.totals.itemsCount === 1 ? "item" : "itens"} no total`,
+                      hint: `${summary.totals.itemsCount} ${summary.totals.itemsCount === 1 ? "item" : "itens"} para comprar`,
                     },
                     {
                       label: "Favoritos",
@@ -140,15 +140,15 @@ function AppHomeContent() {
                       tone: "primary",
                     },
                     {
-                      label: "Carrinho ideal",
+                      label: "Cesta mais barata",
                       value:
                         summary.totals.estimatedCartTotal !== null
                           ? brl(summary.totals.estimatedCartTotal)
                           : "—",
                       icon: TrendingDown,
                       hint: summary.totals.estimatedCartMarket
-                        ? `melhor em ${summary.totals.estimatedCartMarket}`
-                        : "cadastre favoritos para calcular",
+                        ? `hoje sai melhor em ${summary.totals.estimatedCartMarket}`
+                        : "favorite produtos para ver o melhor mercado",
                       tone: summary.totals.estimatedCartMarket ? "success" : "default",
                     },
                   ]}
