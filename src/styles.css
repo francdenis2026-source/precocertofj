@@ -255,8 +255,20 @@
   --pc-home-line: oklch(0.31 0.045 258);
   --pc-home-dot-opacity: 0.10;
   --pc-home-hero-overlay: linear-gradient(180deg, rgb(7 17 38 / 0.97) 0%, rgb(7 17 38 / 0.90) 46%, rgb(7 17 38 / 0.98) 100%), radial-gradient(80% 60% at 15% 40%, rgb(215 173 84 / 0.20) 0%, transparent 60%);
+  --pc-home-explore-bg: #071126;
   --pc-home-explore-overlay: linear-gradient(180deg, rgb(7 17 38 / 0.98) 0%, rgb(7 17 38 / 0.88) 45%, rgb(7 17 38 / 0.98) 100%);
   --pc-home-cta-gradient: linear-gradient(140deg, #071126 0%, #172a4b 100%);
+  /* "sobre hero/explore/cta": dark = branco sobre navy */
+  --pc-home-onhero-fg: #ffffff;
+  --pc-home-onhero-fg-90: rgb(255 255 255 / 0.90);
+  --pc-home-onhero-fg-85: rgb(255 255 255 / 0.85);
+  --pc-home-onhero-fg-80: rgb(255 255 255 / 0.80);
+  --pc-home-onhero-glass-soft: rgb(255 255 255 / 0.05);
+  --pc-home-onhero-glass: rgb(255 255 255 / 0.10);
+  --pc-home-onhero-glass-hover: rgb(255 255 255 / 0.15);
+  --pc-home-onhero-border-soft: rgb(255 255 255 / 0.12);
+  --pc-home-onhero-border: rgb(255 255 255 / 0.25);
+  --pc-home-onhero-border-hover: rgb(255 255 255 / 0.45);
 
   color-scheme: dark;
 }
