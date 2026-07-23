@@ -38,13 +38,13 @@ export function SiteFooter() {
 
   return (
     <footer
-      className="mt-8 border-t border-border bg-muted/45 text-foreground md:mt-12"
+      className="mt-6 border-t border-border bg-muted/45 text-foreground md:mt-8"
     >
       {/* Top — brand + link columns */}
       <div
         className={dsx(
           ds.container,
-          "grid gap-6 py-6 md:grid-cols-[1.2fr_2fr] md:gap-12 md:py-9",
+          "grid gap-5 py-4 md:grid-cols-[1.2fr_2fr] md:gap-10 md:py-5",
         )}
       >
         {/* Brand block */}
@@ -66,13 +66,13 @@ export function SiteFooter() {
           </Link>
 
           <p
-            className="mt-2.5 text-[12.5px] leading-relaxed text-muted-foreground md:mt-3 md:text-[13px]"
+            className="mt-2 text-[12.5px] leading-snug text-muted-foreground md:text-[13px]"
           >
             Comparador colaborativo de preços dos mercados de Feijó — Acre.
           </p>
 
           <ul
-            className="mt-3 space-y-1.5 text-[12px] text-foreground/80 md:mt-3.5 md:space-y-1.5 md:text-[12.5px]"
+            className="mt-2.5 space-y-1 text-[12px] text-foreground/80 md:text-[12.5px]"
           >
             <li className="flex items-center gap-2">
               <MapPin className="h-3.5 w-3.5 text-brand" />
@@ -100,7 +100,7 @@ export function SiteFooter() {
               >
                 {col.title}
               </div>
-              <ul className="mt-2 space-y-1.5 md:mt-2.5 md:space-y-2">
+              <ul className="mt-1.5 space-y-1 md:mt-2 md:space-y-1.5">
                 {col.links.map((l) => (
                   <li key={l.to}>
                     <Link
@@ -123,7 +123,7 @@ export function SiteFooter() {
         <div
           className={dsx(
             ds.container,
-            "flex flex-col items-start justify-between gap-1 py-2.5 text-[11.5px] font-medium leading-[1.5] text-foreground sm:flex-row sm:items-center md:py-3 md:text-[12.5px] lg:text-[13.5px]",
+            "flex flex-col items-start justify-between gap-1 py-2 text-[11.5px] font-medium leading-[1.4] text-foreground sm:flex-row sm:items-center md:py-2.5 md:text-[12.5px] lg:text-[13.5px]",
           )}
         >
           <span className="whitespace-normal">© {year} <strong className="font-semibold">PreçoCerto</strong> · Feijó · Acre</span>
