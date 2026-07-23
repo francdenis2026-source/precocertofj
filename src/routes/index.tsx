@@ -254,18 +254,21 @@ function HomePage() {
               <div className="mt-4 flex flex-wrap gap-2.5 sm:mt-5 sm:gap-3">
                 <Link
                   to="/cadastro"
-                  className="group inline-flex min-h-[44px] items-center gap-2 rounded-xl px-5 py-2.5 text-[14px] font-bold shadow-lg transition-all hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:rounded-2xl sm:px-7 sm:py-3 sm:text-[15px]"
+                  className="group relative inline-flex min-h-[44px] items-center gap-2 overflow-hidden rounded-xl px-5 py-2.5 text-[14.5px] font-semibold tracking-[-0.005em] antialiased transition-all duration-200 hover:-translate-y-[1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:translate-y-0 sm:rounded-2xl sm:px-6 sm:py-3 sm:text-[15px]"
                   style={{
-                    background: P.navy,
-                    color: "#F5F6FA",
+                    background: P.gold,
+                    color: P.navy,
+                    boxShadow:
+                      "0 1px 0 rgb(255 255 255 / 0.35) inset, 0 8px 20px -8px color-mix(in oklab, var(--pc-home-gold) 65%, transparent), 0 2px 4px rgb(0 0 0 / 0.08)",
                     // @ts-expect-error css var
-                    "--tw-ring-color": P.gold,
+                    "--tw-ring-color": P.navy,
                     "--tw-ring-offset-color": P.card,
                   }}
                 >
-                  Começar grátis
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
+                  <span className="relative">Começar grátis</span>
+                  <ArrowRight className="relative h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2.5} />
                 </Link>
+
                 <Link
                   to="/melhores-precos"
                   className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border-2 px-5 py-2.5 text-[14px] font-bold transition-colors hover:text-[color:var(--pc-home-card)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:rounded-2xl sm:px-7 sm:py-3 sm:text-[15px]"
