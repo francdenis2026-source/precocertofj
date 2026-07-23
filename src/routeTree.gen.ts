@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SemPermissaoRouteImport } from './routes/sem-permissao'
 import { Route as ResgatarRouteImport } from './routes/resgatar'
-import { Route as RecuperarPinRouteImport } from './routes/recuperar-pin'
 import { Route as PrivacidadeRouteImport } from './routes/privacidade'
 import { Route as PrecosRouteImport } from './routes/precos'
 import { Route as PlanosRouteImport } from './routes/planos'
@@ -105,11 +104,6 @@ const SemPermissaoRoute = SemPermissaoRouteImport.update({
 const ResgatarRoute = ResgatarRouteImport.update({
   id: '/resgatar',
   path: '/resgatar',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RecuperarPinRoute = RecuperarPinRouteImport.update({
-  id: '/recuperar-pin',
-  path: '/recuperar-pin',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrivacidadeRoute = PrivacidadeRouteImport.update({
@@ -575,7 +569,6 @@ export interface FileRoutesByFullPath {
   '/planos': typeof PlanosRoute
   '/precos': typeof PrecosRoute
   '/privacidade': typeof PrivacidadeRoute
-  '/recuperar-pin': typeof RecuperarPinRoute
   '/resgatar': typeof ResgatarRoute
   '/sem-permissao': typeof SemPermissaoRoute
   '/admin/gestao': typeof AdminGestaoRoute
@@ -664,7 +657,6 @@ export interface FileRoutesByTo {
   '/planos': typeof PlanosRoute
   '/precos': typeof PrecosRoute
   '/privacidade': typeof PrivacidadeRoute
-  '/recuperar-pin': typeof RecuperarPinRoute
   '/resgatar': typeof ResgatarRoute
   '/sem-permissao': typeof SemPermissaoRoute
   '/admin/gestao': typeof AdminGestaoRoute
@@ -754,7 +746,6 @@ export interface FileRoutesById {
   '/planos': typeof PlanosRoute
   '/precos': typeof PrecosRoute
   '/privacidade': typeof PrivacidadeRoute
-  '/recuperar-pin': typeof RecuperarPinRoute
   '/resgatar': typeof ResgatarRoute
   '/sem-permissao': typeof SemPermissaoRoute
   '/admin/gestao': typeof AdminGestaoRoute
@@ -845,7 +836,6 @@ export interface FileRouteTypes {
     | '/planos'
     | '/precos'
     | '/privacidade'
-    | '/recuperar-pin'
     | '/resgatar'
     | '/sem-permissao'
     | '/admin/gestao'
@@ -934,7 +924,6 @@ export interface FileRouteTypes {
     | '/planos'
     | '/precos'
     | '/privacidade'
-    | '/recuperar-pin'
     | '/resgatar'
     | '/sem-permissao'
     | '/admin/gestao'
@@ -1023,7 +1012,6 @@ export interface FileRouteTypes {
     | '/planos'
     | '/precos'
     | '/privacidade'
-    | '/recuperar-pin'
     | '/resgatar'
     | '/sem-permissao'
     | '/admin/gestao'
@@ -1113,7 +1101,6 @@ export interface RootRouteChildren {
   PlanosRoute: typeof PlanosRoute
   PrecosRoute: typeof PrecosRoute
   PrivacidadeRoute: typeof PrivacidadeRoute
-  RecuperarPinRoute: typeof RecuperarPinRoute
   ResgatarRoute: typeof ResgatarRoute
   SemPermissaoRoute: typeof SemPermissaoRoute
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
@@ -1175,13 +1162,6 @@ declare module '@tanstack/react-router' {
       path: '/resgatar'
       fullPath: '/resgatar'
       preLoaderRoute: typeof ResgatarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/recuperar-pin': {
-      id: '/recuperar-pin'
-      path: '/recuperar-pin'
-      fullPath: '/recuperar-pin'
-      preLoaderRoute: typeof RecuperarPinRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/privacidade': {
@@ -1871,7 +1851,6 @@ const rootRouteChildren: RootRouteChildren = {
   PlanosRoute: PlanosRoute,
   PrecosRoute: PrecosRoute,
   PrivacidadeRoute: PrivacidadeRoute,
-  RecuperarPinRoute: RecuperarPinRoute,
   ResgatarRoute: ResgatarRoute,
   SemPermissaoRoute: SemPermissaoRoute,
   AdminAnalyticsRoute: AdminAnalyticsRoute,

@@ -640,15 +640,6 @@ function LoginPage() {
             </button>
 
             <div className="flex flex-col items-center gap-2 pt-1 text-[11.5px]" style={{ color: "#6b7280" }}>
-              {mode === "login" && (
-                <Link
-                  to="/recuperar-pin"
-                  className="font-semibold transition hover:underline"
-                  style={{ color: PC_EMERALD }}
-                >
-                  Esqueceu o PIN? Recuperar por SMS
-                </Link>
-              )}
               <Link
                 to="/resgatar"
                 className="inline-flex items-center gap-1.5 font-semibold transition hover:underline"
