@@ -114,7 +114,7 @@ function AppHomeContent() {
 
         {loading && (
           <div className="mt-6 flex items-center gap-2 text-[14px] text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" /> Carregando seu painel...
+            <Loader2 className="h-4 w-4 animate-spin" /> Puxando os preços mais recentes...
           </div>
         )}
 
