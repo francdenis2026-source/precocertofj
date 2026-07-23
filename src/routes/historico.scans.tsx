@@ -3,13 +3,13 @@ import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useSession } from "@/hooks/useSession";
 import { listMyScans, type MyScan } from "@/lib/scans-history.functions";
-import { PageHeader } from "@/components/brand/PageHeader";
+import { PageHeader, SectionCard, StatGrid, type Stat } from "@/components/layout";
 import { DataTable, type DataTableColumn } from "@/components/data/DataTable";
 import { Button } from "@/components/ui/button";
 import { MobileNav } from "@/components/nav/MobileNav";
 import { ProductImage } from "@/components/product/ProductImage";
 import { verdictLabel } from "@/lib/scan-utils";
-import { History, ImageOff, Package } from "lucide-react";
+import { History, ImageOff, Package, CheckCircle2, Sparkles, Camera } from "lucide-react";
 
 export const Route = createFileRoute("/historico/scans")({
   head: () => ({
@@ -128,47 +128,64 @@ function ScansHistoryPage() {
     },
   ];
 
+  const total = scans?.length ?? 0;
+  const salvos = scans?.filter((s) => s.status === "salvo").length ?? 0;
+  const revisados = scans?.filter((s) => s.status === "revisado").length ?? 0;
+  const capturados = scans?.filter((s) => s.status === "capturado").length ?? 0;
+
+  const stats: Stat[] = [
+    { label: "Total", value: total, icon: History, tone: "primary" },
+    { label: "Salvos", value: salvos, icon: CheckCircle2, tone: "success" },
+    { label: "Revisados", value: revisados, icon: Sparkles },
+    { label: "Capturados", value: capturados, icon: Camera, tone: "warning" },
+  ];
+
   return (
     <div className="min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
-      <PageHeader
-        eyebrow="Meu histórico"
-        title="Meus scans"
-        description="Todos os scans capturados, revisados e salvos."
-        breadcrumbs={[
-          { label: "Histórico", to: "/historico/scans" },
-          { label: "Scans" },
-        ]}
-        icon={<History className="h-5 w-5" />}
-        goldRule
-        actions={
-          <Button asChild variant="ghost-navy" size="sm">
-            <Link to="/historico/produtos">
-              <Package className="mr-2 h-4 w-4" />
-              Meus produtos
-            </Link>
-          </Button>
-        }
-      />
-      <div className="mx-auto max-w-6xl px-3 py-4 sm:px-6">
-        <DataTable
-          data={scans ?? undefined}
-          columns={columns}
-          rowKey={(r) => r.id}
-          loading={!scans && !err}
-          error={err}
-          pageSize={20}
-          pageSizeOptions={[10, 20, 50, 100]}
-          defaultSort={{ key: "date", dir: "desc" }}
-          persistKey={`historico.scans:${user?.id ?? "anon"}`}
-          emptyTitle="Nenhum scan ainda"
-          emptyDescription="Faça seu primeiro scan para vê-lo aqui."
-          emptyIcon={<History className="h-6 w-6" />}
-          emptyAction={
-            <Button asChild variant="executive" size="sm">
-              <Link to="/">Fazer scan</Link>
+      <div className="mx-auto max-w-6xl px-4 md:px-6">
+        <PageHeader
+          breadcrumbs={[{ label: "Histórico", to: "/historico/scans" }, { label: "Scans" }]}
+          title="Meus scans"
+          description="Todos os scans capturados, revisados e salvos."
+          actions={
+            <Button asChild variant="outline" size="sm">
+              <Link to="/historico/produtos">
+                <Package className="mr-2 h-4 w-4" />
+                Meus produtos
+              </Link>
             </Button>
           }
         />
+
+        {scans && total > 0 && <StatGrid stats={stats} className="mb-6" />}
+
+        <SectionCard
+          title="Lista completa"
+          description="Ordene, filtre e pagine seus registros."
+          bodyClassName="p-0"
+        >
+          <div className="p-3 md:p-4">
+            <DataTable
+              data={scans ?? undefined}
+              columns={columns}
+              rowKey={(r) => r.id}
+              loading={!scans && !err}
+              error={err}
+              pageSize={20}
+              pageSizeOptions={[10, 20, 50, 100]}
+              defaultSort={{ key: "date", dir: "desc" }}
+              persistKey={`historico.scans:${user?.id ?? "anon"}`}
+              emptyTitle="Nenhum scan ainda"
+              emptyDescription="Faça seu primeiro scan para vê-lo aqui."
+              emptyIcon={<History className="h-6 w-6" />}
+              emptyAction={
+                <Button asChild variant="default" size="sm">
+                  <Link to="/">Fazer scan</Link>
+                </Button>
+              }
+            />
+          </div>
+        </SectionCard>
       </div>
       <MobileNav />
     </div>
