@@ -1,53 +1,42 @@
 import { useEffect, useState, useCallback } from "react";
 
-export type Theme = "light" | "dark" | "system";
+export type Theme = "light" | "dark";
 const STORAGE_KEY = "pc-theme";
-
-function resolvedIsDark(mode: Theme): boolean {
-  if (mode === "dark") return true;
-  if (mode === "light") return false;
-  if (typeof window === "undefined") return false;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches;
-}
 
 function apply(mode: Theme) {
   if (typeof document === "undefined") return;
-  document.documentElement.classList.toggle("dark", resolvedIsDark(mode));
+  document.documentElement.classList.toggle("dark", mode === "dark");
 }
 
 export function useTheme() {
-  const [theme, setThemeState] = useState<Theme>("system");
+  // Padrão sempre claro; só muda se o usuário tiver salvo preferência.
+  const [theme, setThemeState] = useState<Theme>("light");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const stored = (typeof window !== "undefined"
-      ? (localStorage.getItem(STORAGE_KEY) as Theme | null)
-      : null) ?? "system";
-    setThemeState(stored);
-    apply(stored);
+    const stored =
+      typeof window !== "undefined"
+        ? (localStorage.getItem(STORAGE_KEY) as Theme | null)
+        : null;
+    const initial: Theme = stored === "dark" || stored === "light" ? stored : "light";
+    setThemeState(initial);
+    apply(initial);
     setMounted(true);
-
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const handler = () => {
-      const current = (localStorage.getItem(STORAGE_KEY) as Theme | null) ?? "system";
-      if (current === "system") apply("system");
-    };
-
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
   }, []);
 
   const setTheme = useCallback((t: Theme) => {
-    localStorage.setItem(STORAGE_KEY, t);
+    try {
+      localStorage.setItem(STORAGE_KEY, t);
+    } catch {
+      /* ignore */
+    }
     setThemeState(t);
     apply(t);
   }, []);
 
-
   const toggle = useCallback(() => {
-    const isDark = resolvedIsDark(theme);
-    setTheme(isDark ? "light" : "dark");
+    setTheme(theme === "dark" ? "light" : "dark");
   }, [theme, setTheme]);
 
-  return { theme, setTheme, toggle, mounted, isDark: mounted && resolvedIsDark(theme) };
+  return { theme, setTheme, toggle, mounted, isDark: mounted && theme === "dark" };
 }

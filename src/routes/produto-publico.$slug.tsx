@@ -3,7 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
 import { MobileNav } from "@/components/nav/MobileNav";
-import { ThemeToggle } from "@/components/theme-toggle";
+
 import {
   ArrowLeft,
   ChevronDown,
@@ -209,7 +209,7 @@ function ProductPublicPage() {
               title={`PreçoCerto — ${data.displayName}`}
               text={`Veja onde ${data.displayName} está mais barato`}
             />
-            <ThemeToggle size="sm" />
+            
           </div>
         </div>
       </header>

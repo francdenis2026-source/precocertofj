@@ -122,7 +122,7 @@ function HomePage() {
       </div>
 
       {/* HEADER */}
-      <SiteHeader variant="overlay" />
+      <SiteHeader variant="overlay" showThemeToggle />
 
       {/* HERO */}
       <section className="relative isolate w-full overflow-hidden" style={{ minHeight: "min(92vh, 880px)" }}>
