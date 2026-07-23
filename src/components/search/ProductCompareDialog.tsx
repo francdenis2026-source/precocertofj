@@ -93,11 +93,9 @@ export function ProductCompareDialog({
       ? worstTotal - bestTotal
       : null;
 
-  const shareUrl = useMemo(() => {
-    const slugs = entries.map((e) => e.slug).filter((s): s is string => !!s);
-    if (slugs.length < 2) return null;
-    return `/comparar?produtos=${slugs.map(encodeURIComponent).join(",")}`;
-  }, [entries]);
+  // O compartilhamento externo por link foi removido junto com a rota /comparar.
+  // A comparação segue disponível apenas dentro do app.
+
 
   async function handleRefresh() {
     if (!onRefresh || refreshing) return;
