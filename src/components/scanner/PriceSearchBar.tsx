@@ -66,13 +66,20 @@ export function PriceSearchBar({
   initialQuery = "",
   mode = "strict",
   pureOnly = false,
+  brandFilter = "",
+  priceMin,
+  priceMax,
   onQueryChange,
 }: {
   initialQuery?: string;
   mode?: SearchMode;
   pureOnly?: boolean;
+  brandFilter?: string;
+  priceMin?: number;
+  priceMax?: number;
   onQueryChange?: (q: string) => void;
 }) {
+
   const runSearch = useServerFn(searchProductPrice);
   const runSuggest = useServerFn(suggestProducts);
 
