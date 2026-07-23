@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -37,6 +38,8 @@ import { Loader2, Sparkles, Check, X, Save, Wand2, Zap } from "lucide-react";
 
 
 export const Route = createFileRoute("/admin_/categorizacao")({
+  ssr: false,
+  beforeLoad: adminBeforeLoad,
   head: () => ({
     meta: [
       { title: "Revisão de categorização — Admin" },

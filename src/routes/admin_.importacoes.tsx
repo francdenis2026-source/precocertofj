@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -36,6 +37,8 @@ import { toast } from "sonner";
 import { Loader2, Plus, Trash2, PackagePlus, PackageCheck, PackageX, AlertTriangle } from "lucide-react";
 
 export const Route = createFileRoute("/admin_/importacoes")({
+  ssr: false,
+  beforeLoad: adminBeforeLoad,
   head: () => ({
     meta: [
       { title: "Importações — Admin" },
