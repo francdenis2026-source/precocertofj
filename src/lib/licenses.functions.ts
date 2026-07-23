@@ -317,6 +317,80 @@ export const requestMyLicenseResend = createServerFn({ method: "POST" })
     return { ok: true, code: lic.code };
   });
 
+/** Cliente: pré-visualiza detalhes do código antes de resgatar (validade, status, reembolsável). */
+export type LicensePreview = {
+  found: boolean;
+  status: string | null;
+  statusLabel: string;
+  expiresAt: string | null;
+  isExpired: boolean;
+  daysUntilExpiry: number | null;
+  planName: string | null;
+  planDays: number | null;
+  priceCents: number | null;
+  refundable: boolean;
+  refundDeadline: string | null;
+  message: string;
+  redeemable: boolean;
+};
+
+const REFUND_WINDOW_DAYS = 7;
+
+export const previewLicenseCode = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { code: string }) => ({ code: String(data?.code ?? "").toUpperCase().trim() }))
+  .handler(async ({ data }): Promise<LicensePreview> => {
+    const empty: LicensePreview = {
+      found: false, status: null, statusLabel: "—",
+      expiresAt: null, isExpired: false, daysUntilExpiry: null,
+      planName: null, planDays: null, priceCents: null,
+      refundable: false, refundDeadline: null,
+      message: "Código não encontrado. Verifique se digitou corretamente.",
+      redeemable: false,
+    };
+    if (data.code.length < 6) return empty;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: lic } = await supabaseAdmin
+      .from("license_codes")
+      .select("id, code, status, price_cents, expires_at, created_at, license_plans!inner(name, days)")
+      .eq("code", data.code).maybeSingle();
+    if (!lic) return empty;
+    const now = Date.now();
+    const expMs = lic.expires_at ? Date.parse(lic.expires_at) : null;
+    const isExpired = expMs != null && expMs < now;
+    const daysUntilExpiry = expMs != null ? Math.ceil((expMs - now) / 86400_000) : null;
+    const createdMs = lic.created_at ? Date.parse(lic.created_at) : now;
+    const refundDeadlineMs = createdMs + REFUND_WINDOW_DAYS * 86400_000;
+    const withinRefundWindow = now <= refundDeadlineMs;
+    const notRedeemed = lic.status !== "redeemed";
+    const refundable = notRedeemed && withinRefundWindow && lic.status !== "revoked";
+    const plan: any = lic.license_plans;
+    const effectiveStatus = isExpired && lic.status === "paid" ? "expired" : lic.status;
+    const statusLabel =
+      effectiveStatus === "paid" ? "Pronto para ativar"
+      : effectiveStatus === "redeemed" ? "Já resgatado"
+      : effectiveStatus === "revoked" ? "Revogado"
+      : effectiveStatus === "expired" ? "Expirado"
+      : effectiveStatus === "pending" ? "Aguardando pagamento"
+      : String(effectiveStatus ?? "—");
+    const redeemable = effectiveStatus === "paid";
+    const message =
+      effectiveStatus === "paid" ? "Código válido — clique em Ativar para vincular à sua conta."
+      : effectiveStatus === "redeemed" ? "Este código já foi utilizado."
+      : effectiveStatus === "revoked" ? "Código revogado pelo administrador."
+      : effectiveStatus === "expired" ? "Código expirou. Solicite reemissão à equipe."
+      : effectiveStatus === "pending" ? "Pagamento ainda não confirmado."
+      : "Status desconhecido.";
+    return {
+      found: true, status: effectiveStatus, statusLabel,
+      expiresAt: lic.expires_at ?? null, isExpired, daysUntilExpiry,
+      planName: plan?.name ?? null, planDays: plan?.days ?? null,
+      priceCents: lic.price_cents ?? null,
+      refundable, refundDeadline: new Date(refundDeadlineMs).toISOString(),
+      message, redeemable,
+    };
+  });
+
 /** Cliente resgata código de licença. */
 export const redeemMyLicenseCode = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
