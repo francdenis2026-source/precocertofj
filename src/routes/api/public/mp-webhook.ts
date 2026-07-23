@@ -270,16 +270,45 @@ export const Route = createFileRoute("/api/public/mp-webhook")({
         }
 
 
-        if (status === "rejected" || status === "cancelled") {
-          await supabaseAdmin
-            .from("checkout_orders")
-            .update({ status: status === "cancelled" ? "cancelled" : "failed" })
-            .eq("id", externalRef)
-            .eq("status", "pending");
+        // Statuses de cancelamento / estorno / recusa — atualiza pedido e revoga licença (se não resgatada)
+        if (status === "cancelled" || status === "refunded" || status === "charged_back" || status === "rejected") {
+          const mapped =
+            status === "refunded" ? "refunded"
+            : status === "charged_back" ? "charged_back"
+            : status === "cancelled" ? "cancelled"
+            : "rejected";
+          const { data: cancelRows, error: cancelErr } = await supabaseAdmin.rpc("cancel_checkout_order", {
+            _order_id: externalRef,
+            _new_status: mapped,
+            _provider_ref: String(dataId),
+          });
+          if (cancelErr) return finish("failed", `rpc cancel: ${cancelErr.message}`, 500);
+          const cRow = Array.isArray(cancelRows) ? cancelRows[0] : cancelRows;
+          console.log(
+            `[mp-webhook] order ${externalRef} → ${mapped} · license_revoked=${cRow?.revoked ?? false}`,
+          );
           return finish("processed", `pagamento ${status}`, 200);
         }
 
-        return finish("processed", `status ${status}`, 200);
+        // Reativação: estorno revertido → volta para aprovado (raro, mas cobre o caso)
+        if (status === "authorized" || status === "in_process" || status === "in_mediation") {
+          // Status intermediários: só registra, não muda estado do pedido
+          return finish("processed", `status intermediário ${status}`, 200);
+        }
+
+        // Se o pedido estava cancelado/reembolsado e o MP voltou para approved, reativa
+        if (status === "approved" && order.status !== "pending") {
+          const { data: reRows, error: reErr } = await supabaseAdmin.rpc("reactivate_checkout_order", {
+            _order_id: externalRef,
+            _provider_ref: String(dataId),
+          });
+          if (reErr) return finish("failed", `rpc reactivate: ${reErr.message}`, 500);
+          const rRow = Array.isArray(reRows) ? reRows[0] : reRows;
+          console.log(`[mp-webhook] order ${externalRef} reactivated · license_reactivated=${rRow?.reactivated ?? false}`);
+          return finish("processed", "pedido reativado", 200);
+        }
+
+        return finish("processed", `status ${status} (sem ação)`, 200);
       },
     },
   },
