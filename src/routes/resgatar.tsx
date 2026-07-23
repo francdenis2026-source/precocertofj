@@ -433,6 +433,9 @@ function RedeemPage() {
                 </button>
               </div>
 
+              {/* Verificador compacto — checks em tempo real */}
+              <CodeVerifier clean={clean} submitting={submitting} />
+
               {/* Feedback em tempo real */}
               <div
                 id="license-code-help"
@@ -549,6 +552,72 @@ function RedeemPage() {
 }
 
 /* ------- Sub-blocos ------- */
+
+/**
+ * Verificador compacto de código: mostra 3 checks em tempo real.
+ * Pequeno, profissional, sem ocupar espaço vertical.
+ */
+function CodeVerifier({ clean, submitting }: { clean: string; submitting: boolean }) {
+  const hasPrefix = clean.startsWith("PC");
+  const onlyAlphaNum = /^[A-Z0-9]*$/.test(clean);
+  const fullLength = clean.length === CANONICAL_LEN;
+  const checks: Array<{ label: string; ok: boolean; pending: boolean }> = [
+    { label: "Prefixo PC", ok: hasPrefix && clean.length >= 2, pending: clean.length < 2 },
+    { label: "Caracteres", ok: onlyAlphaNum && clean.length > 0, pending: clean.length === 0 },
+    { label: "14 dígitos", ok: fullLength, pending: clean.length < CANONICAL_LEN },
+  ];
+  const allOk = checks.every((c) => c.ok);
+
+  return (
+    <div
+      className="mt-2 flex items-center gap-1.5 rounded-md border px-2 py-1.5"
+      style={{
+        borderColor: allOk ? "#bbf7d0" : LINE,
+        background: allOk ? "#f0fdf4" : "#fafbfd",
+      }}
+      aria-label="Verificação do código"
+    >
+      <span
+        className="flex items-center gap-1 text-[9.5px] font-bold uppercase tracking-[0.14em]"
+        style={{ color: allOk ? "#15803d" : NAVY2 }}
+      >
+        {submitting ? (
+          <Loader2 className="h-3 w-3 animate-spin" />
+        ) : allOk ? (
+          <BadgeCheck className="h-3 w-3" />
+        ) : (
+          <ShieldCheck className="h-3 w-3" />
+        )}
+        {submitting ? "Verificando" : allOk ? "Verificado" : "Verificando"}
+      </span>
+      <span className="mx-1 h-3 w-px" style={{ background: LINE }} />
+      <div className="flex flex-1 items-center gap-1 overflow-hidden">
+        {checks.map((c) => {
+          const color = c.ok ? "#16a34a" : c.pending ? "#cbd5e1" : "#dc2626";
+          return (
+            <span
+              key={c.label}
+              className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9.5px] font-semibold"
+              style={{
+                color: c.ok ? "#166534" : c.pending ? "#64748b" : "#991b1b",
+                background: c.ok ? "#dcfce7" : c.pending ? "#f1f5f9" : "#fee2e2",
+              }}
+            >
+              <span
+                className="h-1.5 w-1.5 rounded-full"
+                style={{ background: color }}
+                aria-hidden
+              />
+              {c.label}
+            </span>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+
 
 function SignInGate() {
   return (
