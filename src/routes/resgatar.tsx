@@ -186,11 +186,32 @@ function RedeemPage() {
 
   const redeem = useServerFn(redeemMyLicenseCode);
   const fetchAccount = useServerFn(getMyAccount);
+  const checkCode = useServerFn(checkLicenseCodePublic);
 
   const clean = useMemo(() => sanitize(raw), [raw]);
   const display = useMemo(() => grouped(clean), [clean]);
   const validation = useMemo(() => validateCode(raw), [raw]);
-  const canSubmit = clean.length >= MIN_LEN && validation.level !== "warn";
+  const formatOk = clean.length >= MIN_LEN && validation.level !== "warn";
+
+  // Debounce do valor limpo para a verificação no servidor
+  const [debouncedCode, setDebouncedCode] = useState("");
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedCode(clean), 380);
+    return () => clearTimeout(t);
+  }, [clean]);
+
+  const verifyQuery = useQuery({
+    queryKey: ["license-check", debouncedCode],
+    queryFn: () => checkCode({ data: { code: debouncedCode } }),
+    enabled: debouncedCode.length >= MIN_LEN && validation.level !== "warn",
+    staleTime: 15_000,
+    retry: false,
+  });
+
+  const serverVerified = verifyQuery.data?.redeemable === true;
+  const serverRejected = verifyQuery.data && verifyQuery.data.found && !verifyQuery.data.redeemable;
+  const serverNotFound = verifyQuery.data && verifyQuery.data.valid && !verifyQuery.data.found;
+  const canSubmit = formatOk && serverVerified && !verifyQuery.isFetching;
 
   const sessionQuery = useQuery({
     queryKey: ["auth-session"],
