@@ -45,12 +45,12 @@ export function SiteHeader({ variant = "solid", showNav = true }: Props) {
       <div
         className={dsx(
           ds.container,
-          "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 py-3 sm:gap-3 sm:py-4 md:flex md:justify-between md:py-5",
+          "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-4 sm:gap-5 sm:py-5 md:flex md:justify-between md:py-6",
         )}
       >
-        <Link to="/" className="flex min-w-0 items-center gap-3">
+        <Link to="/" className="flex min-w-0 items-center gap-3.5 sm:gap-4">
           <span
-            className="grid h-11 w-11 shrink-0 place-items-center rounded-xl text-[18px] font-black shadow-lg sm:h-12 sm:w-12 md:h-[52px] md:w-[52px] md:text-[20px]"
+            className="grid h-12 w-12 shrink-0 place-items-center rounded-xl text-[20px] font-black shadow-lg sm:h-[52px] sm:w-[52px] sm:text-[22px] md:h-14 md:w-14 md:text-[24px]"
             style={{ background: PALETTE.gold, color: PALETTE.navy, boxShadow: `0 6px 18px ${PALETTE.gold}55` }}
           >
             P
@@ -59,9 +59,9 @@ export function SiteHeader({ variant = "solid", showNav = true }: Props) {
             <span
               className={dsx(
                 serif,
-                "truncate text-[24px] font-normal text-white sm:text-[27px] md:text-[30px]",
+                "truncate text-[26px] font-normal text-white sm:text-[30px] md:text-[34px]",
               )}
-              style={{ letterSpacing: "-0.01em" }}
+              style={{ letterSpacing: "-0.012em" }}
             >
               Preço
               <span className="italic" style={{ color: PALETTE.goldSoft }}>
@@ -69,7 +69,7 @@ export function SiteHeader({ variant = "solid", showNav = true }: Props) {
               </span>
             </span>
             <span
-              className="mt-1.5 hidden text-[10.5px] font-bold uppercase tracking-[0.22em] text-white/75 sm:block"
+              className="mt-2 hidden text-[11px] font-bold uppercase tracking-[0.22em] text-white/80 sm:block"
             >
               Feijó · Acre
             </span>
@@ -77,12 +77,12 @@ export function SiteHeader({ variant = "solid", showNav = true }: Props) {
         </Link>
 
         {showNav && (
-          <nav className="hidden items-center gap-9 text-[15px] font-semibold text-white/90 lg:flex">
+          <nav className="hidden items-center gap-10 text-[15.5px] font-semibold text-white/90 lg:flex">
             {NAV_LINKS.map((l) => (
               <Link
                 key={l.to}
                 to={l.to}
-                className="transition-colors hover:text-white"
+                className="rounded-md px-1 py-0.5 transition-colors hover:text-white"
               >
                 {l.label}
               </Link>
@@ -90,11 +90,11 @@ export function SiteHeader({ variant = "solid", showNav = true }: Props) {
           </nav>
         )}
 
-        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
           <HighContrastToggle tone="onDark" />
           <Link
             to="/login"
-            className="hidden items-center rounded-lg px-3 py-2 text-[13.5px] font-medium text-white/90 transition-colors hover:text-white sm:inline-flex md:px-4 md:py-2.5 md:text-[14px]"
+            className="hidden items-center rounded-lg px-3.5 py-2 text-[14px] font-semibold text-white/90 transition-colors hover:text-white sm:inline-flex md:px-4 md:py-2.5 md:text-[14.5px]"
           >
             Entrar
           </Link>
