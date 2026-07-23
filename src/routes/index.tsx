@@ -105,7 +105,7 @@ function HomePage() {
       <SiteHeader variant="solid" showThemeToggle />
 
       {/* ============== EDITORIAL CARD ============== */}
-      <div className="mx-auto w-full max-w-6xl px-4 pt-4 pb-6 sm:px-6 sm:pt-6 lg:px-8 lg:pt-8">
+      <div className="mx-auto w-full max-w-6xl px-4 pt-3 pb-4 sm:px-6 sm:pt-4 lg:px-8 lg:pt-5">
         <div
           className="overflow-hidden rounded-[1.25rem] shadow-[0_20px_60px_-30px_rgb(11_29_58_/_0.22)] ring-1 lg:rounded-[1.75rem]"
           style={{
@@ -118,7 +118,7 @@ function HomePage() {
           {/* -------- HERO SPLIT -------- */}
           <div className="flex flex-col lg:flex-row">
             {/* LEFT — content */}
-            <div className="flex-[1.2] p-5 sm:p-8 lg:p-10 xl:p-12 flex flex-col justify-center">
+            <div className="flex-[1.2] p-5 sm:p-6 lg:p-8 xl:p-10 flex flex-col justify-center">
               {/* Badge EM BREVE */}
               <div
                 className="mb-3 inline-flex w-fit items-center gap-2 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] sm:mb-5 sm:gap-2.5 sm:px-3.5 sm:py-1.5 sm:text-[11px]"
@@ -158,7 +158,7 @@ function HomePage() {
                 className={`${serif} font-normal`}
                 style={{
                   color: P.heading,
-                  fontSize: "clamp(1.9rem, 5.2vw, 4.5rem)",
+                  fontSize: "clamp(1.75rem, 4.6vw, 3.75rem)",
                   lineHeight: 0.95,
                   letterSpacing: "-0.03em",
                 }}
@@ -172,7 +172,7 @@ function HomePage() {
 
 
               <p
-                className="mt-4 max-w-xl text-[14px] leading-relaxed sm:text-[15px]"
+                className="mt-3 max-w-xl text-[13.5px] leading-relaxed sm:text-[14.5px]"
                 style={{ color: "color-mix(in oklab, var(--pc-home-ink) 75%, transparent)" }}
               >
                 Compare mercados de Feijó em tempo real e descubra em qual mercado
@@ -181,7 +181,7 @@ function HomePage() {
               </p>
 
               {/* Search */}
-              <form onSubmit={submitSearch} className="mt-5 max-w-xl">
+              <form onSubmit={submitSearch} className="mt-4 max-w-xl">
                 <div
                   className="flex items-center gap-2 rounded-2xl border p-1.5 transition-all focus-within:ring-2 sm:p-2"
                   style={{
@@ -221,7 +221,7 @@ function HomePage() {
               </form>
 
               {/* Chips */}
-              <div className="mt-4 flex flex-wrap items-center gap-2">
+              <div className="mt-3 flex flex-wrap items-center gap-2">
                 <span
                   className="mr-1 text-[10px] font-bold uppercase tracking-[0.24em]"
                   style={{ color: "color-mix(in oklab, var(--pc-home-ink) 45%, transparent)" }}
@@ -248,7 +248,7 @@ function HomePage() {
               </div>
 
               {/* CTAs */}
-              <div className="mt-5 flex flex-wrap gap-2.5 sm:mt-6 sm:gap-3">
+              <div className="mt-4 flex flex-wrap gap-2.5 sm:mt-5 sm:gap-3">
                 <Link
                   to="/cadastro"
                   className="group inline-flex min-h-[44px] items-center gap-2 rounded-xl px-5 py-2.5 text-[14px] font-bold shadow-lg transition-all hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:rounded-2xl sm:px-7 sm:py-3 sm:text-[15px]"
@@ -289,7 +289,7 @@ function HomePage() {
 
               {/* Stats */}
               <div
-                className="mt-7 grid grid-cols-3 gap-4 border-t pt-5 sm:mt-9 sm:gap-10 sm:pt-6"
+                className="mt-5 grid grid-cols-3 gap-4 border-t pt-4 sm:mt-6 sm:gap-10 sm:pt-5"
                 style={{ borderColor: P.line }}
               >
 
@@ -333,7 +333,7 @@ function HomePage() {
             {/* RIGHT — image + floating quote */}
             <div
               className="relative hidden flex-1 lg:block"
-              style={{ background: P.paper, minHeight: 520 }}
+              style={{ background: P.paper, minHeight: 440 }}
             >
               {/* Light theme image */}
               <picture className="dark:hidden">
@@ -419,10 +419,10 @@ function HomePage() {
 
           {/* -------- EXPLORE (dark navy band inside card) -------- */}
           <div
-            className="p-6 sm:p-8 lg:p-10 xl:p-12"
+            className="p-6 sm:p-7 lg:p-9 xl:p-10"
             style={{ background: P.navy, color: "#F5F6FA" }}
           >
-            <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div className="max-w-xl">
                 <div
                   className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em]"
@@ -433,7 +433,7 @@ function HomePage() {
                 <h2
                   className={`${serif} font-normal`}
                   style={{
-                    fontSize: "clamp(1.6rem, 3.6vw, 2.75rem)",
+                    fontSize: "clamp(1.5rem, 3.2vw, 2.35rem)",
                     lineHeight: 1,
                     letterSpacing: "-0.025em",
                     color: "#F5F6FA",
@@ -481,8 +481,8 @@ function HomePage() {
       </div>
 
       {/* -------- SOCIAL PROOF (compact) -------- */}
-      <section className="mx-auto w-full max-w-6xl px-4 pb-6 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-3 gap-3 sm:gap-5">
+      <section className="mx-auto w-full max-w-6xl px-4 pb-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-3 gap-3 sm:gap-4">
           {[
             { k: "7", l: "mercados ativos", icon: <ShieldCheck className="h-4 w-4" /> },
             { k: "500+", l: "preços por semana", icon: <TrendingDown className="h-4 w-4" /> },
@@ -490,7 +490,7 @@ function HomePage() {
           ].map((s) => (
             <div
               key={s.l}
-              className="rounded-2xl border px-4 py-4 text-center sm:py-5"
+              className="rounded-2xl border px-4 py-3 text-center sm:py-4"
               style={{ borderColor: P.line, background: P.card, color: P.heading }}
             >
               <div className="mb-1 flex items-center justify-center" style={{ color: P.goldSoft }}>
@@ -518,9 +518,9 @@ function HomePage() {
       </section>
 
       {/* -------- FINAL CTA -------- */}
-      <section className="mx-auto w-full max-w-6xl px-4 pb-10 sm:px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-6xl px-4 pb-8 sm:px-6 lg:px-8">
         <div
-          className="relative overflow-hidden rounded-2xl px-6 py-6 sm:px-10 sm:py-8"
+          className="relative overflow-hidden rounded-2xl px-6 py-5 sm:px-9 sm:py-6"
           style={{ background: P.navy, color: "#F5F6FA" }}
         >
           <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center md:gap-8">
@@ -587,7 +587,7 @@ function ExploreCard({
   return (
     <Link
       to={to}
-      className="group block rounded-2xl border p-6 transition-all duration-500 hover:-translate-y-1 lg:p-7"
+      className="group block rounded-2xl border p-5 transition-all duration-500 hover:-translate-y-1 lg:p-6"
       style={{
         background: "rgb(255 255 255 / 0.05)",
         borderColor: "rgb(255 255 255 / 0.10)",
@@ -602,19 +602,19 @@ function ExploreCard({
       }}
     >
       <div
-        className={`${serif} mb-5 italic opacity-60 transition-opacity group-hover:opacity-100`}
+        className={`${serif} mb-4 italic opacity-60 transition-opacity group-hover:opacity-100`}
         style={{
           color: P.gold,
-          fontSize: "clamp(2.25rem, 4vw, 3.25rem)",
+          fontSize: "clamp(1.9rem, 3.4vw, 2.75rem)",
           lineHeight: 1,
           letterSpacing: "-0.03em",
         }}
       >
         {number}
       </div>
-      <h3 className="mb-3 text-xl font-bold text-white lg:text-[22px]">{title}</h3>
-      <p className="text-[14px] leading-relaxed text-white/60">{desc}</p>
-      <div className="mt-5 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.24em] text-white/80 transition-colors group-hover:text-[color:var(--pc-home-gold)]">
+      <h3 className="mb-2 text-lg font-bold text-white lg:text-[20px]">{title}</h3>
+      <p className="text-[13.5px] leading-relaxed text-white/60">{desc}</p>
+      <div className="mt-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.24em] text-white/80 transition-colors group-hover:text-[color:var(--pc-home-gold)]">
         {cta}
         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
       </div>
