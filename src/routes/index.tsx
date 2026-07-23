@@ -12,7 +12,10 @@ import {
   TrendingDown,
   ShieldCheck,
   Clock,
+  Package,
+  LineChart,
 } from "lucide-react";
+
 import { ds, dsx } from "@/lib/ds";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
