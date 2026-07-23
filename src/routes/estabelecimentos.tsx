@@ -6,6 +6,7 @@ import { useServerFn } from "@tanstack/react-start";
 import {
   listPublicEstablishments,
   humanizeCategory,
+  type EstablishmentsOverview,
 } from "@/lib/establishments-public.functions";
 import { MobileNav } from "@/components/nav/MobileNav";
 import { SiteHeader } from "@/components/layout/SiteHeader";
