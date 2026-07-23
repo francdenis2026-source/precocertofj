@@ -671,7 +671,8 @@ function PinField({
 
   const borderCls = hasError
     ? "border-rose-400 focus:border-rose-500 focus:ring-rose-500/20"
-    : "border-slate-300 hover:border-slate-400 focus:border-[color:var(--pc-navy)] focus:ring-[color:var(--pc-navy)]/20";
+    : "border-slate-400 hover:border-slate-500 focus:border-[color:var(--pc-navy)] focus:ring-[color:var(--pc-navy)]/25";
+
 
   return (
     <div className="grid grid-cols-6 gap-2 sm:gap-2.5">
