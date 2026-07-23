@@ -200,16 +200,10 @@ function EstablishmentPage() {
     setPriceMax("");
   };
 
-  const createAlert = (p: PublicStoreProduct) => {
-    navigate({
-      to: "/alertas",
-      search: {
-        product: p.productName,
-        establishment: storeId,
-        price: String(p.price),
-      } as never,
-    });
+  const createAlert = (_p: PublicStoreProduct) => {
+    navigate({ to: "/alertas" });
   };
+
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
