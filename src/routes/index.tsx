@@ -518,7 +518,7 @@ function HomePage() {
       </section>
 
       {/* -------- FINAL CTA -------- */}
-      <section className="mx-auto w-full max-w-7xl px-4 pb-14 sm:px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-6xl px-4 pb-10 sm:px-6 lg:px-8">
         <div
           className="relative overflow-hidden rounded-2xl px-6 py-6 sm:px-10 sm:py-8"
           style={{ background: P.navy, color: "#F5F6FA" }}
