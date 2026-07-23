@@ -97,7 +97,7 @@ function classifyRedeemError(raw: string): RedeemErrorInfo {
   // paletas
   const RED = { borderColor: "#fca5a5", bgColor: "#fef2f2", textColor: "#991b1b" };
   const AMBER = { borderColor: "#fcd34d", bgColor: "#fffbeb", textColor: "#92400e" };
-  const SLATE = { borderColor: "#cbd5e1", bgColor: "#f8fafc", textColor: "#0f1b3d" };
+  const SLATE = { borderColor: "#cbd5e1", bgColor: "#f8fafc", textColor: NAVY };
 
   if (m.includes("já foi resgatado") || m.includes("ja foi resgatado") || m.includes("já utilizado")) {
     return {
