@@ -205,13 +205,13 @@ function HomePage() {
                     inputMode="search"
                     placeholder="Qual item você busca hoje?"
                     aria-label="Buscar produto"
-                    className="flex-1 bg-transparent px-2 py-3 text-[15px] font-medium outline-none sm:text-base"
+                    className="flex-1 bg-transparent px-2 py-2.5 text-[14px] font-medium outline-none sm:text-[15px]"
                     style={{ color: P.ink }}
                   />
                   <button
                     type="submit"
                     aria-label="Buscar"
-                    className="inline-flex shrink-0 items-center gap-2 rounded-xl px-5 py-3 text-sm font-bold transition-transform active:scale-95 sm:px-8 sm:text-base"
+                    className="inline-flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-transform active:scale-95 sm:px-6 sm:text-[15px]"
                     style={{ background: P.gold, color: P.navy }}
                   >
                     <span className="hidden sm:inline">Buscar</span>
