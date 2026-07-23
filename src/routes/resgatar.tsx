@@ -181,7 +181,7 @@ function RedeemPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clean, hasSession, submitting, result]);
 
-  }
+
 
   async function pasteFromClipboard() {
     try {
