@@ -275,6 +275,19 @@ export function PreparoDicas() {
                 <div className="pl-[60px] pr-1">
                   <p className="text-sm text-muted-foreground">{d.descricao}</p>
 
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background/60 px-2 py-1 text-[11px] text-foreground/80">
+                      <Clock className="h-3 w-3 text-primary" />
+                      <span className="font-semibold text-foreground">Tempo:</span>
+                      {d.tempo}
+                    </span>
+                    <span className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background/60 px-2 py-1 text-[11px] text-foreground/80">
+                      <Flame className="h-3 w-3 text-primary" />
+                      <span className="font-semibold text-foreground">Modo:</span>
+                      {d.modo}
+                    </span>
+                  </div>
+
                   <div className="mt-3">
                     <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-foreground/70">
                       Cortes recomendados
@@ -333,16 +346,28 @@ export function PreparoDicas() {
                       <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-foreground/70">
                         Variações e opções especiais
                       </p>
-                      <div className="flex flex-wrap gap-1.5">
+                      <ul className="space-y-1.5">
                         {d.variacoes.map((v) => (
-                          <span
-                            key={v}
-                            className="rounded-full border border-border bg-muted/40 px-2 py-0.5 text-[11px] text-foreground/80"
+                          <li
+                            key={v.nome}
+                            className="rounded-md border border-border/60 bg-background/60 px-2.5 py-1.5"
                           >
-                            {v}
-                          </span>
+                            <p className="text-sm font-medium text-foreground">
+                              {v.nome}
+                            </p>
+                            <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
+                              <span className="inline-flex items-center gap-1">
+                                <Clock className="h-3 w-3 text-primary" />
+                                {v.tempo}
+                              </span>
+                              <span className="inline-flex items-center gap-1">
+                                <Flame className="h-3 w-3 text-primary" />
+                                {v.modo}
+                              </span>
+                            </div>
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                     </div>
                   )}
                 </div>
