@@ -45,6 +45,7 @@ import { Route as AlertasRouteImport } from './routes/alertas'
 import { Route as AdminLoginRouteImport } from './routes/admin-login'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
 import { Route as ProdutoIdRouteImport } from './routes/produto.$id'
 import { Route as ProdutoPublicoSlugRouteImport } from './routes/produto-publico.$slug'
 import { Route as LojaIdRouteImport } from './routes/loja.$id'
@@ -274,6 +275,11 @@ const AdminRoute = AdminRouteImport.update({
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProdutoSlugRoute = ProdutoSlugRouteImport.update({
+  id: '/produto/$slug',
+  path: '/produto/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProdutoIdRoute = ProdutoIdRouteImport.update({
@@ -611,6 +617,7 @@ export interface FileRoutesByFullPath {
   '/loja/$id': typeof LojaIdRouteWithChildren
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
+  '/produto/$slug': typeof ProdutoSlugRoute
   '/admin/cobertura/$id': typeof AdminCoberturaIdRoute
   '/api/admin/catalog-image': typeof ApiAdminCatalogImageRoute
   '/api/public/mp-webhook': typeof ApiPublicMpWebhookRoute
@@ -699,6 +706,7 @@ export interface FileRoutesByTo {
   '/loja/$id': typeof LojaIdRouteWithChildren
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
+  '/produto/$slug': typeof ProdutoSlugRoute
   '/admin/cobertura/$id': typeof AdminCoberturaIdRoute
   '/api/admin/catalog-image': typeof ApiAdminCatalogImageRoute
   '/api/public/mp-webhook': typeof ApiPublicMpWebhookRoute
@@ -788,6 +796,7 @@ export interface FileRoutesById {
   '/loja/$id': typeof LojaIdRouteWithChildren
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
+  '/produto/$slug': typeof ProdutoSlugRoute
   '/admin_/cobertura/$id': typeof AdminCoberturaIdRoute
   '/api/admin/catalog-image': typeof ApiAdminCatalogImageRoute
   '/api/public/mp-webhook': typeof ApiPublicMpWebhookRoute
@@ -878,6 +887,7 @@ export interface FileRouteTypes {
     | '/loja/$id'
     | '/produto-publico/$slug'
     | '/produto/$id'
+    | '/produto/$slug'
     | '/admin/cobertura/$id'
     | '/api/admin/catalog-image'
     | '/api/public/mp-webhook'
@@ -966,6 +976,7 @@ export interface FileRouteTypes {
     | '/loja/$id'
     | '/produto-publico/$slug'
     | '/produto/$id'
+    | '/produto/$slug'
     | '/admin/cobertura/$id'
     | '/api/admin/catalog-image'
     | '/api/public/mp-webhook'
@@ -1054,6 +1065,7 @@ export interface FileRouteTypes {
     | '/loja/$id'
     | '/produto-publico/$slug'
     | '/produto/$id'
+    | '/produto/$slug'
     | '/admin_/cobertura/$id'
     | '/api/admin/catalog-image'
     | '/api/public/mp-webhook'
@@ -1139,6 +1151,7 @@ export interface RootRouteChildren {
   LojaIdRoute: typeof LojaIdRouteWithChildren
   ProdutoPublicoSlugRoute: typeof ProdutoPublicoSlugRoute
   ProdutoIdRoute: typeof ProdutoIdRoute
+  ProdutoSlugRoute: typeof ProdutoSlugRoute
   ApiAdminCatalogImageRoute: typeof ApiAdminCatalogImageRoute
   ApiPublicMpWebhookRoute: typeof ApiPublicMpWebhookRoute
   ApiPublicHooksCollabInboundRoute: typeof ApiPublicHooksCollabInboundRoute
@@ -1400,6 +1413,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/produto/$slug': {
+      id: '/produto/$slug'
+      path: '/produto/$slug'
+      fullPath: '/produto/$slug'
+      preLoaderRoute: typeof ProdutoSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/produto/$id': {
@@ -1889,6 +1909,7 @@ const rootRouteChildren: RootRouteChildren = {
   LojaIdRoute: LojaIdRouteWithChildren,
   ProdutoPublicoSlugRoute: ProdutoPublicoSlugRoute,
   ProdutoIdRoute: ProdutoIdRoute,
+  ProdutoSlugRoute: ProdutoSlugRoute,
   ApiAdminCatalogImageRoute: ApiAdminCatalogImageRoute,
   ApiPublicMpWebhookRoute: ApiPublicMpWebhookRoute,
   ApiPublicHooksCollabInboundRoute: ApiPublicHooksCollabInboundRoute,

@@ -13,16 +13,19 @@ import {
   ShieldCheck,
   Clock,
   Package,
-  LineChart,
+  
 } from "lucide-react";
 
 import { ds, dsx } from "@/lib/ds";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { getPlatformStats } from "@/lib/stores-public.functions";
+import { getEconomyStat } from "@/lib/products-public.functions";
+import { RecentProducts } from "@/components/home/RecentProducts";
 import { StartFreeDialog } from "@/components/home/StartFreeDialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useSession } from "@/hooks/useSession";
+
 
 
 export const Route = createFileRoute("/")({
@@ -119,6 +122,15 @@ function HomePage() {
     staleTime: 60_000,
   });
   const stats: any = statsQ.data ?? {};
+
+  const economyFn = useServerFn(getEconomyStat);
+  const economyQ = useQuery({
+    queryKey: ["home-economy"],
+    queryFn: () => economyFn({} as any),
+    staleTime: 5 * 60_000,
+  });
+  const economy = economyQ.data;
+
 
   const submitSearch = (e?: React.FormEvent) => {
     e?.preventDefault();
@@ -560,12 +572,18 @@ function HomePage() {
                 tip: "Mais de 1.500 produtos únicos cadastrados com preço, marca e categoria.",
               },
               {
-                k: "1.5k+",
-                l: "preços",
-                lFull: "preços colaborados",
-                icon: <LineChart className="h-4 w-4" />,
-                tip: "Histórico de preços enviados pela comunidade para você acompanhar a evolução.",
+                k: economy?.avgSavingsPct
+                  ? `${economy.avgSavingsPct}%`
+                  : "até 38%",
+                l: "economia",
+                lFull: "economia identificada",
+                icon: <TrendingDown className="h-4 w-4" />,
+                tip: economy?.productsWithComparison
+                  ? `Diferença média entre o melhor e o pior preço do mesmo produto, medida em ${economy.productsWithComparison.toLocaleString("pt-BR")} produtos com pelo menos 2 mercados. Melhor caso: ${economy.bestSavingsPct}%.`
+                  : "Diferença média entre o melhor e o pior preço encontrado para o mesmo produto em Feijó/AC nas últimas semanas.",
               },
+
+
 
             ].map((s) => (
               <Tooltip key={s.lFull}>
@@ -606,6 +624,11 @@ function HomePage() {
           </div>
         </TooltipProvider>
       </section>
+
+      {/* -------- RECENT PRODUCTS -------- */}
+      <RecentProducts P={P} serif={serif} />
+
+
 
 
       {/* -------- FINAL CTA -------- */}
