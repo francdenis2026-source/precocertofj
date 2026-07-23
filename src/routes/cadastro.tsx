@@ -48,12 +48,12 @@ function validatePin(v: string): FieldState {
 }
 
 // Emerald Prestige tokens — mirror /login
-const PC_EMERALD_DEEP = "#0a1631";
-const PC_EMERALD = "#0f1b3d";
-const PC_EMERALD_LIGHT = "#1e3a5f";
-const PC_GOLD = "#b58a3c";
-const PC_GOLD_DARK = "#8a6b2c";
-const PC_CREAM = "#f4f6fb";
+const PC_EMERALD_DEEP = "#081b3a";
+const PC_EMERALD = "#0f2b52";
+const PC_EMERALD_LIGHT = "#1e4a85";
+const PC_GOLD = "#f5b301";
+const PC_GOLD_DARK = "#c78d00";
+const PC_CREAM = "#f7f9fc";
 const PC_DISPLAY = "'Outfit', system-ui, sans-serif";
 const PC_BODY = "'Figtree', system-ui, sans-serif";
 
