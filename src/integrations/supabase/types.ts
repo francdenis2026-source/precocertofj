@@ -2905,6 +2905,14 @@ export type Database = {
         Args: { _email: string; _user_id: string }
         Returns: number
       }
+      cancel_checkout_order: {
+        Args: { _new_status: string; _order_id: string; _provider_ref?: string }
+        Returns: {
+          license_code_id: string
+          order_id: string
+          revoked: boolean
+        }[]
+      }
       catalog_image_job_provider_stats: {
         Args: never
         Returns: {
@@ -3186,6 +3194,14 @@ export type Database = {
           active_comparisons: number
           establishments: number
           price_drops_7d: number
+        }[]
+      }
+      reactivate_checkout_order: {
+        Args: { _order_id: string; _provider_ref?: string }
+        Returns: {
+          license_code_id: string
+          order_id: string
+          reactivated: boolean
         }[]
       }
       rebuild_comparison_cache_all: {
