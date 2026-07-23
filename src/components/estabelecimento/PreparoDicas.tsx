@@ -192,6 +192,19 @@ export function PreparoDicas() {
     [temposSel, modosSel, proteinasSel],
   );
 
+  // Proteínas efetivamente presentes nos dados (dicas + variações).
+  // Chips sem nenhum corte cadastrado são desabilitados.
+  const proteinasDisponiveis = useMemo(() => {
+    const s = new Set<ProteinaId>();
+    PREPARO_DICAS.forEach((d) => {
+      (d.proteinas && d.proteinas.length > 0 ? d.proteinas : (["boi"] as ProteinaId[])).forEach((p) => s.add(p));
+      (d.variacoes ?? []).forEach((v) => {
+        (v.proteinas && v.proteinas.length > 0 ? v.proteinas : (["boi"] as ProteinaId[])).forEach((p) => s.add(p));
+      });
+    });
+    return s;
+  }, []);
+
   const favoritosPorDica = useMemo(() => {
     const map = new Map<string, string[]>();
     PREPARO_DICAS.forEach((d) => {
