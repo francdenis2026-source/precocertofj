@@ -242,7 +242,9 @@ function AdminPage() {
         {/* Quick nav — subtelas admin */}
         <nav aria-label="Atalhos do painel" className="flex flex-wrap gap-1.5">
           {[
+            { to: "/admin/clientes", label: "Clientes", icon: Users },
             { to: "/admin/gestao", label: "Gestão (licenças)", icon: Key },
+
             { to: "/admin/catalogo", label: "Catálogo de produtos", icon: Package },
             { to: "/admin/image-jobs", label: "Fotos dos produtos", icon: ImageIcon },
             { to: "/admin/auditoria", label: "Auditoria do catálogo", icon: History },
