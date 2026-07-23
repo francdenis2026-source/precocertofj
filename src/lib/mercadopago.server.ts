@@ -77,7 +77,7 @@ export async function fetchMpPayment(
 }
 
 /** Send activation email via Lovable email; never throws — returns status. */
-async function sendActivationEmail(params: {
+export async function sendActivationEmail(params: {
   to: string;
   name: string;
   code: string;

@@ -175,11 +175,77 @@ export const Route = createFileRoute("/api/public/mp-webhook")({
             return finish("failed", `rpc: ${error.message}`, 500);
           }
           const row = Array.isArray(rpcData) ? rpcData[0] : rpcData;
+          const licenseCode = row?.license_code as string | undefined;
           console.log(
-            `[mp-webhook] order ${externalRef} approved · license ${row?.license_code ?? "?"}`,
+            `[mp-webhook] order ${externalRef} approved · license ${licenseCode ?? "?"}`,
           );
-          return finish("processed", null, 200);
+
+          // Envia código de ativação por e-mail (best-effort — nunca quebra o webhook)
+          let emailStatus: Record<string, unknown> = { email_sent: false };
+          try {
+            const { data: orderFull } = await supabaseAdmin
+              .from("checkout_orders")
+              .select("delivery_email, user_id, plan_id, license_code_id")
+              .eq("id", externalRef)
+              .maybeSingle();
+
+            const to = orderFull?.delivery_email ?? payment?.payer?.email ?? null;
+            if (!to || !licenseCode) {
+              emailStatus = { email_sent: false, email_error: "sem e-mail ou código" };
+            } else {
+              const [{ data: plan }, { data: license }, { data: profile }] = await Promise.all([
+                supabaseAdmin
+                  .from("license_plans")
+                  .select("name, days")
+                  .eq("id", orderFull!.plan_id)
+                  .maybeSingle(),
+                supabaseAdmin
+                  .from("license_codes")
+                  .select("expires_at")
+                  .eq("id", orderFull!.license_code_id!)
+                  .maybeSingle(),
+                supabaseAdmin
+                  .from("profiles")
+                  .select("full_name")
+                  .eq("id", orderFull!.user_id)
+                  .maybeSingle(),
+              ]);
+
+              const days = (plan?.days as number | undefined) ?? 30;
+              const planName = (plan?.name as string | undefined) ?? "PreçoCerto";
+              const expiresAt =
+                (license?.expires_at as string | undefined) ??
+                new Date(Date.now() + 90 * 86400_000).toISOString();
+              const displayName =
+                ((profile?.full_name as string | undefined)?.trim() ||
+                  [payment?.payer?.first_name, payment?.payer?.last_name]
+                    .filter(Boolean)
+                    .join(" ")
+                    .trim() ||
+                  "Assinante") as string;
+
+              const { sendActivationEmail } = await import("@/lib/mercadopago.server");
+              const mail = await sendActivationEmail({
+                to,
+                name: displayName,
+                code: licenseCode,
+                planName,
+                days,
+                expiresAt,
+              });
+              emailStatus = mail.sent
+                ? { email_sent: true, email_to: to, email_message_id: mail.messageId ?? null }
+                : { email_sent: false, email_to: to, email_error: mail.error ?? "erro" };
+              if (!mail.sent) console.warn("[mp-webhook] activation email não enviado:", mail.error);
+            }
+          } catch (e) {
+            console.error("[mp-webhook] falha ao enviar e-mail:", e);
+            emailStatus = { email_sent: false, email_error: (e as Error).message };
+          }
+
+          return finish("processed", null, 200, emailStatus);
         }
+
 
         if (status === "rejected" || status === "cancelled") {
           await supabaseAdmin
