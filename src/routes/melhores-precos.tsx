@@ -21,7 +21,7 @@ import { PaywallInline } from "@/components/paywall/PaywallInline";
 import { useTeaserQuota } from "@/hooks/use-teaser-quota";
 
 import { QuickFilterBar } from "@/components/search/QuickFilterBar";
-import { ErrorState, EmptyState as FeedbackEmptyState, LoadingList } from "@/components/feedback";
+import { ErrorState, EmptyState as FeedbackEmptyState, LoadingGrid, RouteError } from "@/components/feedback";
 
 import { ProductImage } from "@/components/product/ProductImage";
 import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
