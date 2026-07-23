@@ -502,15 +502,46 @@
   height: 2rem;
 }
 
+.admin-scope [data-collapsible="icon"] [data-sidebar="sidebar"] {
+  align-items: center;
+}
+.admin-scope [data-collapsible="icon"] [data-sidebar="header"],
+.admin-scope [data-collapsible="icon"] [data-sidebar="content"],
+.admin-scope [data-collapsible="icon"] [data-sidebar="footer"] {
+  width: 100%;
+  padding-inline: 0.7rem;
+}
+.admin-scope [data-collapsible="icon"] [data-sidebar="menu"] {
+  align-items: center;
+  gap: 0.45rem;
+}
+.admin-scope [data-collapsible="icon"] [data-sidebar="menu-button"] {
+  width: 3.05rem;
+  height: 3.05rem;
+  border-radius: 0.9rem;
+}
+.admin-scope [data-collapsible="icon"] [data-sidebar="menu-button"] span:first-child,
+.admin-scope [data-collapsible="icon"] [data-sidebar="header"] a > span:first-child {
+  width: 2.4rem;
+  height: 2.4rem;
+  border-radius: 0.85rem;
+}
+.admin-scope [data-collapsible="icon"] [data-sidebar="menu-button"] svg {
+  width: 1.35rem;
+  height: 1.35rem;
+}
+
 /* Web: largura da sidebar do admin */
 @media (min-width: 768px) {
   .admin-scope {
     --sidebar-width: 17rem;
+    --sidebar-width-icon: 4.5rem;
   }
 }
 @media (min-width: 1280px) {
   .admin-scope {
     --sidebar-width: 17.5rem;
+    --sidebar-width-icon: 4.75rem;
   }
 }
 
