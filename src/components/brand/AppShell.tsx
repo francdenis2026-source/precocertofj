@@ -19,7 +19,7 @@ export function AppShell({ children, scope }: { children: React.ReactNode; scope
   const resolvedScope = scope ?? (pathname.startsWith("/admin") ? "admin" : "app");
   return (
     <SidebarProvider defaultOpen={resolvedScope === "admin"}>
-      <div className={`contents ${resolvedScope === "admin" ? "admin-scope" : ""}`}>
+      <div className={`contents ${resolvedScope === "admin" ? "admin-scope" : "app-scope"}`}>
         <AppSidebar />
         <SidebarInset className={resolvedScope === "admin" ? "min-h-screen bg-muted/30" : "min-h-screen bg-background"}>
           <AppHeader scope={resolvedScope} />
