@@ -196,7 +196,7 @@ export const Route = createFileRoute("/api/public/mp-webhook")({
               const [{ data: plan }, { data: license }, { data: profile }] = await Promise.all([
                 supabaseAdmin
                   .from("license_plans")
-                  .select("name, duration_days")
+                  .select("name, days")
                   .eq("id", orderFull!.plan_id)
                   .maybeSingle(),
                 supabaseAdmin
@@ -211,7 +211,7 @@ export const Route = createFileRoute("/api/public/mp-webhook")({
                   .maybeSingle(),
               ]);
 
-              const days = (plan?.duration_days as number | undefined) ?? 30;
+              const days = (plan?.days as number | undefined) ?? 30;
               const planName = (plan?.name as string | undefined) ?? "PreçoCerto";
               const expiresAt =
                 (license?.expires_at as string | undefined) ??
