@@ -109,6 +109,49 @@ export const createCheckoutOrder = createServerFn({ method: "POST" })
     return { orderId: order.id as string };
   });
 
+/** Regex conservador para e-mail (RFC 5322 simplificado). */
+const EMAIL_RE = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+
+export function normalizeDeliveryEmail(raw: unknown): string {
+  const s = String(raw ?? "").trim().toLowerCase();
+  if (s.length < 5 || s.length > 254) throw new Error("E-mail inválido");
+  if (!EMAIL_RE.test(s)) throw new Error("E-mail inválido");
+  return s;
+}
+
+/**
+ * Salva o e-mail de entrega do código no pedido. É obrigatório antes de
+ * gerar a cobrança para garantir que o cliente vai receber a licença.
+ */
+export const setCheckoutEmail = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { id: string; email: string }) => ({
+    id: String(data?.id ?? ""),
+    email: normalizeDeliveryEmail(data?.email),
+  }))
+  .handler(async ({ data, context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: order, error: fErr } = await supabaseAdmin
+      .from("checkout_orders")
+      .select("id, user_id, status")
+      .eq("id", data.id)
+      .maybeSingle();
+    if (fErr) throw new Error(fErr.message);
+    if (!order) throw new Response("Pedido não encontrado", { status: 404 });
+    if (order.user_id !== context.userId) {
+      throw new Response("Acesso negado", { status: 403 });
+    }
+    if (order.status !== "pending") {
+      throw new Error("Pedido já processado — e-mail não pode ser alterado.");
+    }
+    const { error } = await supabaseAdmin
+      .from("checkout_orders")
+      .update({ delivery_email: data.email })
+      .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true, email: data.email };
+  });
+
 export const getCheckoutOrder = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .inputValidator((data: { id: string }) => ({ id: String(data?.id ?? "") }))
