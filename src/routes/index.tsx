@@ -333,7 +333,7 @@ function HomePage() {
             {/* RIGHT — image + floating quote */}
             <div
               className="relative hidden flex-1 lg:block"
-              style={{ background: P.paper, minHeight: 720 }}
+              style={{ background: P.paper, minHeight: 520 }}
             >
               {/* Light theme image */}
               <picture className="dark:hidden">
