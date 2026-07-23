@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useSession } from "@/hooks/useSession";
 import { listMyProducts, type MyProduct } from "@/lib/product-detail.functions";
-import { PageHeader } from "@/components/brand/PageHeader";
+import { PageHeader, SectionCard } from "@/components/layout";
 import { DataTable, type DataTableColumn } from "@/components/data/DataTable";
 import { Button } from "@/components/ui/button";
 import { MobileNav } from "@/components/nav/MobileNav";
@@ -91,45 +91,51 @@ function ProductsHistoryPage() {
 
   return (
     <div className="min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
-      <PageHeader
-        eyebrow="Meu histórico"
-        title="Meus produtos"
-        description="Produtos que você cadastrou no catálogo."
-        breadcrumbs={[
-          { label: "Histórico", to: "/historico/scans" },
-          { label: "Produtos" },
-        ]}
-        icon={<Package className="h-5 w-5" />}
-        goldRule
-        actions={
-          <Button asChild variant="ghost-navy" size="sm">
-            <Link to="/historico/scans">
-              <History className="mr-2 h-4 w-4" />
-              Meus scans
-            </Link>
-          </Button>
-        }
-      />
-      <div className="mx-auto max-w-6xl px-3 py-4 sm:px-6">
-        <DataTable
-          data={products ?? undefined}
-          columns={columns}
-          rowKey={(r) => r.id}
-          loading={!products && !err}
-          error={err}
-          pageSize={20}
-          pageSizeOptions={[10, 20, 50, 100]}
-          defaultSort={{ key: "name", dir: "asc" }}
-          persistKey={`historico.produtos:${user?.id ?? "anon"}`}
-          emptyTitle="Nenhum produto cadastrado"
-          emptyDescription="Cadastre seu primeiro produto para vê-lo aqui."
-          emptyIcon={<Package className="h-6 w-6" />}
-          emptyAction={
-            <Button asChild variant="executive" size="sm">
-              <Link to="/">Cadastrar produto</Link>
+      <div className="mx-auto max-w-6xl px-4 md:px-6">
+        <PageHeader
+          breadcrumbs={[
+            { label: "Histórico", to: "/historico/scans" },
+            { label: "Produtos" },
+          ]}
+          title="Meus produtos"
+          description="Produtos que você cadastrou no catálogo."
+          actions={
+            <Button asChild variant="outline" size="sm">
+              <Link to="/historico/scans">
+                <History className="mr-2 h-4 w-4" />
+                Meus scans
+              </Link>
             </Button>
           }
         />
+
+        <SectionCard
+          title="Lista completa"
+          description="Ordene, filtre e pagine seus produtos."
+          bodyClassName="p-0"
+        >
+          <div className="p-3 md:p-4">
+            <DataTable
+              data={products ?? undefined}
+              columns={columns}
+              rowKey={(r) => r.id}
+              loading={!products && !err}
+              error={err}
+              pageSize={20}
+              pageSizeOptions={[10, 20, 50, 100]}
+              defaultSort={{ key: "name", dir: "asc" }}
+              persistKey={`historico.produtos:${user?.id ?? "anon"}`}
+              emptyTitle="Nenhum produto cadastrado"
+              emptyDescription="Cadastre seu primeiro produto para vê-lo aqui."
+              emptyIcon={<Package className="h-6 w-6" />}
+              emptyAction={
+                <Button asChild variant="default" size="sm">
+                  <Link to="/">Cadastrar produto</Link>
+                </Button>
+              }
+            />
+          </div>
+        </SectionCard>
       </div>
       <MobileNav />
     </div>
