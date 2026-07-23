@@ -279,7 +279,12 @@
   --pc-home-onhero-border: rgb(255 255 255 / 0.25);
   --pc-home-onhero-border-hover: rgb(255 255 255 / 0.45);
 
+  /* Semantic — nome de estabelecimento (dark) */
+  --market-accent: #ffe3a0;
+  --market-accent-hover: #fff2cc;
+
   color-scheme: dark;
+
 }
 
 @layer base {
