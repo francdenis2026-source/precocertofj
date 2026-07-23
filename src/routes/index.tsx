@@ -587,7 +587,7 @@ function ExploreCard({
   return (
     <Link
       to={to}
-      className="group block rounded-[1.75rem] border p-8 transition-all duration-500 hover:-translate-y-1 lg:p-10"
+      className="group block rounded-2xl border p-6 transition-all duration-500 hover:-translate-y-1 lg:p-7"
       style={{
         background: "rgb(255 255 255 / 0.05)",
         borderColor: "rgb(255 255 255 / 0.10)",
