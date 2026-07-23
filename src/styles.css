@@ -169,8 +169,8 @@
   --pc-home-gold-soft: #8a6218;
   --pc-home-line: #dfe3ec;
   --pc-home-dot-opacity: 0.05;
-  /* LIGHT: scrim leve — deixa a foto visível, com vinheta suave nas bordas p/ manter contraste do texto navy */
-  --pc-home-hero-overlay: linear-gradient(180deg, rgb(245 246 250 / 0.42) 0%, rgb(245 246 250 / 0.10) 42%, rgb(245 246 250 / 0.62) 100%), radial-gradient(120% 80% at 18% 46%, rgb(245 246 250 / 0.30) 0%, rgb(245 246 250 / 0.06) 42%, transparent 68%), radial-gradient(75% 60% at 82% 24%, rgb(37 99 235 / 0.12) 0%, transparent 62%);
+  /* LIGHT: scrim horizontal — painel legível à esquerda (texto navy) e foto nítida à direita */
+  --pc-home-hero-overlay: linear-gradient(90deg, rgb(245 246 250 / 0.86) 0%, rgb(245 246 250 / 0.74) 28%, rgb(245 246 250 / 0.36) 52%, rgb(245 246 250 / 0.08) 72%, rgb(245 246 250 / 0.00) 100%), linear-gradient(180deg, rgb(245 246 250 / 0.28) 0%, rgb(245 246 250 / 0.10) 40%, rgb(245 246 250 / 0.55) 100%), radial-gradient(70% 55% at 84% 26%, rgb(37 99 235 / 0.10) 0%, transparent 62%);
   --pc-home-explore-bg: #eef1f7;
   --pc-home-explore-overlay: linear-gradient(180deg, rgb(238 241 247 / 0.92) 0%, rgb(238 241 247 / 0.72) 45%, rgb(238 241 247 / 0.96) 100%);
   --pc-home-cta-gradient: linear-gradient(140deg, #f7ecd1 0%, #e9d59a 100%);
