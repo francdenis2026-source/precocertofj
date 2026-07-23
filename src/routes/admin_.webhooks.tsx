@@ -1,11 +1,12 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import {
   listMercadoPagoWebhookEvents,
   getMercadoPagoStatus,
 } from "@/lib/mercadopago.functions";
+import { adminResendActivationForWebhook } from "@/lib/email-retry.functions";
 import { AppShell } from "@/components/brand/AppShell";
 import { PageHeader } from "@/components/brand/PageHeader";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -26,7 +27,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Loader2, RefreshCw, ShieldCheck, ShieldAlert, Search } from "lucide-react";
+import { Loader2, RefreshCw, ShieldCheck, ShieldAlert, Search, Send } from "lucide-react";
+import { toast } from "sonner";
+
 
 export const Route = createFileRoute("/admin_/webhooks")({
   head: () => ({
