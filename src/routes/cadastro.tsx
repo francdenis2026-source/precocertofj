@@ -150,6 +150,14 @@ function CadastroPage() {
     "Rede colaborativa — envie sua nota e ganhe 30 dias",
   ];
 
+  // Stores for the thematic illustration (economia + comparação + localização)
+  const compareStores = [
+    { label: "LOJA A", price: "R$ 76,10", val: 78, winner: false },
+    { label: "LOJA B", price: "R$ 68,40", val: 62, winner: false },
+    { label: "LOJA C", price: "R$ 59,30", val: 34, winner: true },
+  ];
+
+
   return (
     <div
       className="relative min-h-[100dvh] overflow-hidden"
@@ -185,7 +193,7 @@ function CadastroPage() {
         >
           {/* LEFT — Editorial navy panel */}
           <aside
-            className="relative flex flex-col justify-between overflow-hidden p-6 md:p-8"
+            className="relative flex flex-col justify-between overflow-hidden p-5 sm:p-6 md:p-8"
             style={{
               background: `linear-gradient(155deg, ${PC_EMERALD_DEEP} 0%, ${PC_EMERALD} 60%, ${PC_EMERALD_LIGHT} 130%)`,
               color: "#ffffff",
@@ -211,8 +219,8 @@ function CadastroPage() {
               <span
                 className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em]"
                 style={{
-                  borderColor: "rgba(245,215,122,0.35)",
-                  background: "rgba(245,215,122,0.08)",
+                  borderColor: "rgba(245,215,122,0.55)",
+                  background: "rgba(245,215,122,0.12)",
                   color: "#F5D77A",
                 }}
               >
@@ -235,14 +243,14 @@ function CadastroPage() {
                 <span style={{ color: "#F5D77A" }}>de verdade.</span>
               </h1>
 
-              <p className="mt-3 max-w-[36ch] text-[13.5px] leading-relaxed text-white/80">
+              <p className="mt-3 max-w-[36ch] text-[13.5px] leading-relaxed text-white/95">
                 Conta em 30 segundos. CPF, PIN e você já entra no comparador
                 dos mercados de Feijó.
               </p>
 
               <ul className="mt-6 space-y-2.5">
                 {perks.map((p) => (
-                  <li key={p} className="flex items-start gap-2.5 text-[13px] leading-snug text-white/85">
+                  <li key={p} className="flex items-start gap-2.5 text-[13px] leading-snug text-white/95">
                     <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none" style={{ color: "#F5D77A" }} />
                     <span>{p}</span>
                   </li>
@@ -250,112 +258,209 @@ function CadastroPage() {
               </ul>
             </div>
 
-            {/* Thematic illustration — receipt + price comparison */}
-            <div className="relative mt-8 hidden md:block" aria-hidden>
+            {/* Thematic illustration — localização + comparação + economia */}
+            <motion.div
+              className="relative mt-6 sm:mt-8"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.55, ease: "easeOut" }}
+              aria-hidden
+            >
               <svg
-                viewBox="0 0 320 180"
-                className="w-full"
+                viewBox="0 0 320 214"
+                className="w-full max-w-[420px] mx-auto"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                role="img"
+                aria-label="Ilustração de comparação de preços entre mercados"
               >
                 <defs>
-                  <linearGradient id="pcGold" x1="0" y1="0" x2="1" y2="1">
+                  <linearGradient id="pcGold" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="0%" stopColor="#F5D77A" />
-                    <stop offset="100%" stopColor="#b58a3c" />
+                    <stop offset="100%" stopColor="#c9a34a" />
                   </linearGradient>
-                  <linearGradient id="pcPaper" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="rgba(255,255,255,0.10)" />
-                    <stop offset="100%" stopColor="rgba(255,255,255,0.02)" />
+                  <linearGradient id="pcBar" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="rgba(255,255,255,0.32)" />
+                    <stop offset="100%" stopColor="rgba(255,255,255,0.10)" />
                   </linearGradient>
+                  <radialGradient id="pcGlow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stopColor="rgba(245,215,122,0.55)" />
+                    <stop offset="100%" stopColor="rgba(245,215,122,0)" />
+                  </radialGradient>
                 </defs>
 
-                {/* Left: receipt */}
-                <g transform="translate(8 12)">
-                  <path
-                    d="M0 6 Q0 0 6 0 L108 0 Q114 0 114 6 L114 148 L102 142 L90 148 L78 142 L66 148 L54 142 L42 148 L30 142 L18 148 L6 142 L0 148 Z"
-                    fill="url(#pcPaper)"
-                    stroke="rgba(245,215,122,0.55)"
-                    strokeWidth="1.2"
-                  />
-                  {/* Header */}
-                  <text x="12" y="20" fill="#F5D77A" fontSize="8" fontFamily="ui-monospace, monospace" letterSpacing="1.5">
-                    NOTA FISCAL
+                {/* Header */}
+                <g>
+                  <text x="4" y="12" fill="#F5D77A" fontSize="8.5" fontFamily="ui-sans-serif, system-ui" fontWeight="800" letterSpacing="1.8">
+                    COMPARATIVO · FEIJÓ/AC
                   </text>
-                  <line x1="12" y1="28" x2="102" y2="28" stroke="rgba(255,255,255,0.25)" strokeDasharray="2 2" />
-
-                  {/* Items */}
-                  {[
-                    { y: 42, name: "ARROZ 5KG", price: "R$ 28,90" },
-                    { y: 58, name: "FEIJÃO 1KG", price: "R$  8,50" },
-                    { y: 74, name: "ÓLEO 900ML", price: "R$  7,20" },
-                    { y: 90, name: "AÇÚCAR 1KG", price: "R$  4,80" },
-                    { y: 106, name: "CAFÉ 250G", price: "R$  9,90" },
-                  ].map((r) => (
-                    <g key={r.y}>
-                      <text x="12" y={r.y} fill="rgba(255,255,255,0.75)" fontSize="7" fontFamily="ui-monospace, monospace">
-                        {r.name}
-                      </text>
-                      <text x="102" y={r.y} textAnchor="end" fill="rgba(255,255,255,0.85)" fontSize="7" fontFamily="ui-monospace, monospace">
-                        {r.price}
-                      </text>
-                    </g>
-                  ))}
-
-                  <line x1="12" y1="118" x2="102" y2="118" stroke="rgba(255,255,255,0.25)" />
-                  <text x="12" y="132" fill="#F5D77A" fontSize="8" fontFamily="ui-monospace, monospace" fontWeight="700">
-                    TOTAL
-                  </text>
-                  <text x="102" y="132" textAnchor="end" fill="#F5D77A" fontSize="9" fontFamily="ui-monospace, monospace" fontWeight="700">
-                    R$ 59,30
-                  </text>
+                  <line x1="4" y1="20" x2="316" y2="20" stroke="rgba(245,215,122,0.35)" />
                 </g>
 
-                {/* Right: comparison bars */}
-                <g transform="translate(150 22)">
-                  <text x="0" y="0" fill="rgba(255,255,255,0.55)" fontSize="7" letterSpacing="1.4" fontFamily="ui-sans-serif, system-ui">
-                    COMPARATIVO
-                  </text>
+                {/* Store columns */}
+                {compareStores.map((s, i) => {
+                  const cx = 60 + i * 100;
+                  const barTop = 138 - s.val;
+                  return (
+                    <g key={s.label}>
+                      {/* store label */}
+                      <text
+                        x={cx}
+                        y={36}
+                        textAnchor="middle"
+                        fontSize="8"
+                        fontFamily="ui-sans-serif, system-ui"
+                        fontWeight="800"
+                        fill={s.winner ? "#F5D77A" : "rgba(255,255,255,0.9)"}
+                        letterSpacing="1.4"
+                      >
+                        {s.label}
+                      </text>
 
-                  {/* baseline */}
-                  <line x1="0" y1="118" x2="160" y2="118" stroke="rgba(255,255,255,0.18)" />
-
-                  {/* Bars */}
-                  {[
-                    { label: "Loja A", val: 78, price: "R$ 76,10", color: "rgba(255,255,255,0.25)", text: "rgba(255,255,255,0.7)" },
-                    { label: "Loja B", val: 62, price: "R$ 68,40", color: "rgba(255,255,255,0.35)", text: "rgba(255,255,255,0.8)" },
-                    { label: "Loja C", val: 34, price: "R$ 59,30", color: "url(#pcGold)", text: "#F5D77A", winner: true },
-                  ].map((b, i) => {
-                    const x = i * 54 + 6;
-                    const barTop = 118 - b.val;
-                    return (
-                      <g key={b.label}>
-                        <rect x={x} y={barTop} width="34" height={b.val} rx="4" fill={b.color} />
-                        <text x={x + 17} y="132" textAnchor="middle" fill={b.text as string} fontSize="7" fontFamily="ui-sans-serif, system-ui" fontWeight={b.winner ? 700 : 500}>
-                          {b.label}
-                        </text>
-                        <text x={x + 17} y={barTop - 5} textAnchor="middle" fill={b.text as string} fontSize="7" fontFamily="ui-monospace, monospace" fontWeight={b.winner ? 700 : 400}>
-                          {b.price}
-                        </text>
-                        {b.winner && (
-                          <g transform={`translate(${x + 17} ${barTop - 18})`}>
-                            <circle r="6" fill="#F5D77A" />
-                            <path d="M-2.5 0 L-0.5 2 L2.5 -2" stroke="#0a1631" strokeWidth="1.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                          </g>
+                      {/* location pin */}
+                      <g transform={`translate(${cx} 56)`}>
+                        {s.winner && (
+                          <>
+                            <circle r="18" fill="url(#pcGlow)" />
+                            <motion.circle
+                              r="14"
+                              fill="none"
+                              stroke="rgba(245,215,122,0.55)"
+                              strokeWidth="1"
+                              initial={{ scale: 0.6, opacity: 0.8 }}
+                              animate={{ scale: 1.6, opacity: 0 }}
+                              transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
+                              style={{ transformOrigin: "center", transformBox: "fill-box" }}
+                            />
+                          </>
                         )}
+                        <motion.g
+                          initial={{ y: -6, opacity: 0 }}
+                          animate={{ y: 0, opacity: 1 }}
+                          transition={{ delay: 0.25 + i * 0.12, duration: 0.4, ease: "easeOut" }}
+                        >
+                          <path
+                            d="M0 -11 C-6 -11 -10 -6.5 -10 -2.5 C-10 4 0 12 0 12 C0 12 10 4 10 -2.5 C10 -6.5 6 -11 0 -11 Z"
+                            fill={s.winner ? "url(#pcGold)" : "rgba(255,255,255,0.28)"}
+                            stroke={s.winner ? "rgba(255,255,255,0.45)" : "rgba(255,255,255,0.55)"}
+                            strokeWidth="1"
+                          />
+                          <circle r={s.winner ? 3.4 : 2.8} cy="-3.5" fill="#0a1631" />
+                        </motion.g>
                       </g>
-                    );
-                  })}
 
-                  {/* Savings arrow */}
-                  <g transform="translate(0 148)">
-                    <path d="M4 0 L156 0" stroke="rgba(245,215,122,0.35)" strokeDasharray="3 3" />
-                    <text x="80" y="12" textAnchor="middle" fill="#F5D77A" fontSize="7.5" letterSpacing="1.2" fontFamily="ui-sans-serif, system-ui" fontWeight="700">
-                      ECONOMIA DE 22%
-                    </text>
+                      {/* bar */}
+                      <motion.rect
+                        x={cx - 22}
+                        y={138}
+                        width="44"
+                        height={s.val}
+                        rx="6"
+                        fill={s.winner ? "url(#pcGold)" : "url(#pcBar)"}
+                        stroke={s.winner ? "rgba(245,215,122,0.7)" : "rgba(255,255,255,0.28)"}
+                        strokeWidth="1"
+                        initial={{ scaleY: 0, y: 138 }}
+                        animate={{ scaleY: 1, y: barTop }}
+                        transition={{ delay: 0.4 + i * 0.15, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+                        style={{ transformOrigin: `${cx}px 138px`, transformBox: "fill-box" }}
+                      />
+
+                      {/* price above bar */}
+                      <motion.text
+                        x={cx}
+                        y={barTop - 8}
+                        textAnchor="middle"
+                        fontSize="10.5"
+                        fontFamily="ui-monospace, 'SFMono-Regular', monospace"
+                        fontWeight={s.winner ? 800 : 600}
+                        fill={s.winner ? "#F5D77A" : "#ffffff"}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.85 + i * 0.1, duration: 0.4 }}
+                      >
+                        {s.price}
+                      </motion.text>
+
+                      {s.winner && (
+                        <motion.text
+                          x={cx}
+                          y={barTop - 22}
+                          textAnchor="middle"
+                          fontSize="6.5"
+                          fontFamily="ui-sans-serif, system-ui"
+                          fontWeight="900"
+                          fill="#F5D77A"
+                          letterSpacing="1.4"
+                          initial={{ opacity: 0, y: barTop - 16 }}
+                          animate={{ opacity: 1, y: barTop - 22 }}
+                          transition={{ delay: 1.05, duration: 0.4 }}
+                        >
+                          ★ MELHOR PREÇO
+                        </motion.text>
+                      )}
+                    </g>
+                  );
+                })}
+
+                {/* baseline */}
+                <line x1="20" y1="139" x2="300" y2="139" stroke="rgba(255,255,255,0.22)" strokeWidth="1" />
+
+                {/* Savings badge — hierarchy: big % + label + trend */}
+                <motion.g
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 1.15, duration: 0.5, ease: "easeOut" }}
+                >
+                  {/* soft shadow */}
+                  <ellipse cx="160" cy="204" rx="110" ry="4" fill="rgba(0,0,0,0.25)" />
+                  {/* pill */}
+                  <rect x="42" y="162" width="236" height="40" rx="20" fill="url(#pcGold)" />
+                  <rect x="42" y="162" width="236" height="40" rx="20" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1" />
+                  {/* big number */}
+                  <text
+                    x="72"
+                    y="190"
+                    fontSize="22"
+                    fontFamily="'Outfit', ui-sans-serif, system-ui"
+                    fontWeight="900"
+                    fill="#0a1631"
+                    letterSpacing="-0.8"
+                  >
+                    −22%
+                  </text>
+                  {/* label stack */}
+                  <text
+                    x="130"
+                    y="181"
+                    fontSize="8"
+                    fontFamily="ui-sans-serif, system-ui"
+                    fontWeight="900"
+                    fill="#0a1631"
+                    letterSpacing="1.6"
+                  >
+                    ECONOMIA MÉDIA
+                  </text>
+                  <text
+                    x="130"
+                    y="193"
+                    fontSize="7.5"
+                    fontFamily="ui-sans-serif, system-ui"
+                    fontWeight="600"
+                    fill="rgba(10,22,49,0.78)"
+                    letterSpacing="0.3"
+                  >
+                    na cesta comparada
+                  </text>
+                  {/* trend chip */}
+                  <g transform="translate(252 182)">
+                    <circle r="13" fill="rgba(10,22,49,0.14)" />
+                    <path d="M-4.5 -3 L0 3 L4.5 -3" stroke="#0a1631" strokeWidth="2.2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
                   </g>
-                </g>
+                </motion.g>
               </svg>
-            </div>
+            </motion.div>
+
+
 
 
             <div
@@ -434,7 +539,8 @@ function CadastroPage() {
               <Field
                 label="Nome completo"
                 value={name}
-                onChange={setName}
+                onChange={(v) => setName(v.toLocaleUpperCase("pt-BR"))}
+
                 onBlur={() => markTouched("name")}
                 placeholder="Nome e sobrenome"
                 autoComplete="name"
@@ -480,7 +586,7 @@ function CadastroPage() {
                   onComplete={() => markTouched("password")}
                   hasError={touched.password && !vPin.valid}
                 />
-                <p className="mt-2 text-[11.5px] text-slate-500">
+                <p className="mt-2 text-[11.5px] font-medium text-slate-600">
                   Use 6 números que só você lembra. Evite datas óbvias.
                 </p>
               </div>
@@ -543,7 +649,7 @@ function CadastroPage() {
               </div>
             </form>
 
-            <p className="mt-6 border-t border-slate-100 pt-4 text-center text-[11px] text-slate-500">
+            <p className="mt-6 border-t border-slate-200 pt-4 text-center text-[11.5px] font-medium text-slate-600">
               Ao continuar você aceita nossos{" "}
               <a className="font-semibold underline underline-offset-2 hover:text-slate-700" href="/termos">Termos</a>
               {" "}e a{" "}
