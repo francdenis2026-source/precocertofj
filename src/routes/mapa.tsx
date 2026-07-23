@@ -400,7 +400,7 @@ function NeighborhoodsPage() {
             </div>
           </>
         )}
-      </div>
+      </main>
       <MobileNav />
     </div>
   );
