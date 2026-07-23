@@ -42,8 +42,17 @@ function PromoCodesPage() {
   });
 
   const codes = q.data ?? [];
-  const redeemed = codes.filter((c) => c.status === "redeemed").length;
+  const redeemedList = codes.filter((c) => c.status === "redeemed");
+  const redeemed = redeemedList.length;
   const available = codes.filter((c) => c.status === "paid").length;
+  const now = Date.now();
+  const activeRedeemed = redeemedList.filter((c) => c.expires_at && Date.parse(c.expires_at) > now).length;
+  const expiredRedeemed = redeemed - activeRedeemed;
+  const daysLeft = (iso: string | null | undefined) => {
+    if (!iso) return null;
+    const diff = Date.parse(iso) - now;
+    return Math.ceil(diff / 86_400_000);
+  };
 
   const copyAll = () => {
     const text = codes
