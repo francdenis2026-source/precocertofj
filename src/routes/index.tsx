@@ -543,26 +543,27 @@ function HomePage() {
           <div className="grid grid-cols-3 gap-3 sm:gap-4">
             {[
               {
-                k: "7",
+                k: "8",
                 l: "mercados",
                 lFull: "mercados no ar",
                 icon: <ShieldCheck className="h-4 w-4" />,
                 tip: "Mercados de Feijó/AC ativos na plataforma com preços colaborativos.",
               },
               {
-                k: "< 24h",
-                l: "atualização",
-                lFull: "atualização de preços",
-                icon: <Clock className="h-4 w-4" />,
-                tip: "Novos preços aparecem em menos de 24h após a colaboração da comunidade.",
+                k: "1.5k+",
+                l: "produtos",
+                lFull: "produtos catalogados",
+                icon: <Package className="h-4 w-4" />,
+                tip: "Mais de 1.500 produtos únicos cadastrados com preço, marca e categoria.",
               },
               {
-                k: "LGPD",
-                l: "dados seguros",
-                lFull: "dados protegidos",
-                icon: <ShieldCheck className="h-4 w-4" />,
-                tip: "Tratamento de dados em conformidade com a Lei Geral de Proteção de Dados.",
+                k: "1.5k+",
+                l: "preços",
+                lFull: "preços colaborados",
+                icon: <LineChart className="h-4 w-4" />,
+                tip: "Histórico de preços enviados pela comunidade para você acompanhar a evolução.",
               },
+
             ].map((s) => (
               <Tooltip key={s.lFull}>
                 <TooltipTrigger asChild>
