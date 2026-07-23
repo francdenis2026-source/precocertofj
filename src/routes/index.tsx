@@ -13,7 +13,7 @@ import {
   ShieldCheck,
   Clock,
   Package,
-  LineChart,
+  TrendingDown as _TrendingDownDup,
 } from "lucide-react";
 
 import { ds, dsx } from "@/lib/ds";
