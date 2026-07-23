@@ -165,7 +165,7 @@ function HomePage() {
 
         {/* AI ANNOUNCEMENT — absolute, não altera altura do hero */}
         <div
-          className="pointer-events-none absolute left-1/2 top-3 z-20 -translate-x-1/2 sm:left-auto sm:right-6 sm:top-[84px] sm:translate-x-0 md:right-8 md:top-[96px]"
+          className="pointer-events-none absolute left-1/2 top-[76px] z-20 -translate-x-1/2 sm:left-auto sm:right-6 sm:top-[84px] sm:translate-x-0 md:right-8 md:top-[96px]"
           aria-live="polite"
         >
           <div
