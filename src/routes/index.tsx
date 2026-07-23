@@ -248,21 +248,30 @@ function HomePage() {
               </div>
 
               {/* CTAs */}
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="mt-6 flex flex-wrap gap-2.5 sm:mt-8 sm:gap-3">
                 <Link
                   to="/cadastro"
-                  className="group inline-flex items-center gap-2 rounded-2xl px-8 py-4 text-base font-bold shadow-lg transition-all hover:shadow-xl sm:px-10 sm:py-5 sm:text-lg"
-                  style={{ background: P.navy, color: "#F5F6FA" }}
+                  className="group inline-flex min-h-[44px] items-center gap-2 rounded-xl px-5 py-3 text-[15px] font-bold shadow-lg transition-all hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:rounded-2xl sm:px-10 sm:py-5 sm:text-lg"
+                  style={{
+                    background: P.navy,
+                    color: "#F5F6FA",
+                    // @ts-expect-error css var
+                    "--tw-ring-color": P.gold,
+                    "--tw-ring-offset-color": P.card,
+                  }}
                 >
                   Começar grátis
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
                 <Link
                   to="/melhores-precos"
-                  className="inline-flex items-center gap-2 rounded-2xl border-2 px-8 py-4 text-base font-bold transition-colors hover:text-[color:var(--pc-home-card)] sm:px-10 sm:py-5 sm:text-lg"
+                  className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border-2 px-5 py-3 text-[15px] font-bold transition-colors hover:text-[color:var(--pc-home-card)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:rounded-2xl sm:px-10 sm:py-5 sm:text-lg"
                   style={{
                     borderColor: P.heading,
                     color: P.heading,
+                    // @ts-expect-error css var
+                    "--tw-ring-color": P.gold,
+                    "--tw-ring-offset-color": P.card,
                   }}
                   onMouseEnter={(e) => {
                     (e.currentTarget as HTMLElement).style.background = P.heading;
@@ -280,9 +289,10 @@ function HomePage() {
 
               {/* Stats */}
               <div
-                className="mt-14 grid grid-cols-3 gap-6 border-t pt-8 sm:gap-12"
+                className="mt-10 grid grid-cols-3 gap-4 border-t pt-6 sm:mt-14 sm:gap-12 sm:pt-8"
                 style={{ borderColor: P.line }}
               >
+
                 {[
                   {
                     k: String(stats.establishments ?? 8).padStart(2, "0"),
