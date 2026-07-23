@@ -105,6 +105,27 @@ export function gerarGuiaPreparoPDF(opts: Options = {}): void {
     doc.text(desc, x, cursorY);
     cursorY += desc.length * 3.4 + 2;
 
+    // tempo & modo
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(7.5);
+    doc.setTextColor(...primary);
+    doc.text("TEMPO", x, cursorY);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(...ink);
+    const tempoLinhas = doc.splitTextToSize(d.tempo, colW - 14);
+    doc.text(tempoLinhas, x + 12, cursorY);
+    cursorY += Math.max(3.4, tempoLinhas.length * 3.2);
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(7.5);
+    doc.setTextColor(...primary);
+    doc.text("MODO", x, cursorY);
+    doc.setFont("helvetica", "normal");
+    doc.setTextColor(...ink);
+    const modoLinhas = doc.splitTextToSize(d.modo, colW - 14);
+    doc.text(modoLinhas, x + 12, cursorY);
+    cursorY += Math.max(3.4, modoLinhas.length * 3.2) + 2;
+
     // cortes
     doc.setFont("helvetica", "bold");
     doc.setFontSize(7.5);
@@ -140,12 +161,16 @@ export function gerarGuiaPreparoPDF(opts: Options = {}): void {
       doc.setTextColor(...muted);
       doc.text("VARIAÇÕES", x, cursorY);
       cursorY += 3.2;
-      doc.setFont("helvetica", "italic");
-      doc.setFontSize(8);
-      doc.setTextColor(...ink);
-      const vs = doc.splitTextToSize(d.variacoes.join(" · "), colW - 2);
-      doc.text(vs, x, cursorY);
-      cursorY += vs.length * 3.2;
+      d.variacoes.forEach((v) => {
+        const linha = `• ${v.nome} — ⏱ ${v.tempo} · 🔥 ${v.modo}`;
+        const wrap = doc.splitTextToSize(linha, colW - 3);
+        ensureSpace(wrap.length * 3.2 + 1);
+        doc.setFont("helvetica", "normal");
+        doc.setFontSize(8);
+        doc.setTextColor(...ink);
+        doc.text(wrap, x, cursorY);
+        cursorY += wrap.length * 3.2 + 0.4;
+      });
     }
 
     cursorY += 5;
