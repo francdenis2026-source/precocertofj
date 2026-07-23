@@ -8,9 +8,12 @@ import { ArrowLeft } from "lucide-react";
 import type { SearchMode } from "@/lib/search-tokens";
 import { FreeQuotaBadge } from "@/components/paywall/FreeQuotaBadge";
 import { QuickFilterBar } from "@/components/search/QuickFilterBar";
-import { Badge as DSBadge, ShareButton, SignupCTA } from "@/components/ds";
+import { ShareButton, SignupCTA } from "@/components/ds";
 import { useSession } from "@/hooks/useSession";
 import { trackEvent } from "@/lib/analytics-events";
+import { PageHeader, DataToolbar, EmptyState } from "@/components/layout";
+import { Button } from "@/components/ui/button";
+import { Search as SearchIcon } from "lucide-react";
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
@@ -40,15 +43,17 @@ export const Route = createFileRoute("/buscar")({
   }),
   component: SearchPage,
   errorComponent: ({ error, reset }) => (
-    <div className="mx-auto max-w-xl px-4 py-10 text-center">
-      <h1 className="text-lg font-semibold text-foreground">Erro na busca</h1>
-      <p className="mt-2 text-sm text-muted-foreground">{error.message}</p>
-      <button
-        onClick={reset}
-        className="mt-4 inline-flex h-9 items-center rounded-full bg-primary px-4 text-xs font-semibold text-primary-foreground"
-      >
-        Tentar novamente
-      </button>
+    <div className="mx-auto max-w-xl px-4 py-10">
+      <EmptyState
+        icon={SearchIcon}
+        title="Erro na busca"
+        description={error.message}
+        action={
+          <Button onClick={reset} variant="default" size="sm">
+            Tentar novamente
+          </Button>
+        }
+      />
     </div>
   ),
 });
@@ -84,8 +89,6 @@ function SearchPage() {
   const q = (search.q ?? "").slice(0, 80);
   const hasQuery = q.trim().length > 0;
 
-  // Telemetria: mede quantos visitantes vs. usuários chegam a resultados agregados
-  // (uma emissão por combinação de query/sessão de página).
   useEffect(() => {
     if (!hasQuery) return;
     if (user) {
@@ -95,9 +98,6 @@ function SearchPage() {
     }
   }, [hasQuery, user]);
 
-  // Ao montar sem parâmetros na URL, hidrata a partir do localStorage
-  // (preferências históricas do usuário) — mantém compartilhamento por URL
-  // e restauração via back/forward.
   const hydratedRef = useRef(false);
   useEffect(() => {
     if (hydratedRef.current) return;
@@ -147,9 +147,6 @@ function SearchPage() {
     });
   };
 
-  // Debounced sync of the typed query to the URL. Keeps share links and
-  // back/forward in sync WHILE typing without spamming history entries —
-  // always uses `replace` so back returns to the previous route.
   const urlSyncTimer = useRef<number | null>(null);
   const syncQueryToUrl = useCallback(
     (next: string) => {
@@ -176,87 +173,75 @@ function SearchPage() {
 
   return (
     <div className="min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
-      <div className="mx-auto max-w-3xl px-3 py-4 sm:px-4">
-        <header className="mb-3 flex items-center gap-2 sm:gap-3">
-          <button
-            type="button"
-            aria-label="Voltar para a seção anterior"
-            onClick={goBack}
-            className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-border bg-background pl-2 pr-3 text-xs font-medium text-muted-foreground transition hover:border-primary/40 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
-          >
-            <ArrowLeft className="h-4 w-4" strokeWidth={2} />
-            Voltar
-          </button>
-          <DSBadge variant="primary" size="sm">
-            Buscar
-          </DSBadge>
-          {hasQuery ? (
-            <ShareButton
-              className="ml-auto"
-              title={`PreçoCerto — ${q}`}
-              text={`Veja preços comparados de "${q}" no PreçoCerto`}
-            />
-          ) : (
-            <Link
-              to="/"
-              className="ml-auto font-mono text-[10px] uppercase tracking-widest text-muted-foreground hover:text-primary"
-            >
-              Início
-            </Link>
-          )}
-        </header>
+      <div className="mx-auto max-w-3xl px-4 md:px-6">
+        <PageHeader
+          breadcrumbs={[{ label: "Início", to: "/" }, { label: "Buscar" }]}
+          title="Buscar preço por nome"
+          description="Preço médio, mínimo e onde está mais barato — sem precisar tirar foto."
+          actions={
+            <>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={goBack}
+                aria-label="Voltar para a seção anterior"
+              >
+                <ArrowLeft className="mr-1.5 h-4 w-4" strokeWidth={2} />
+                Voltar
+              </Button>
+              {hasQuery ? (
+                <ShareButton
+                  title={`PreçoCerto — ${q}`}
+                  text={`Veja preços comparados de "${q}" no PreçoCerto`}
+                />
+              ) : null}
+              <FreeQuotaBadge variant="inline" />
+            </>
+          }
+        />
 
-        {/* Compact intro strip — replaces the oversized hero to keep results above the fold. */}
-        <div className="mb-3 flex items-center justify-between gap-3 rounded-xl border border-border/70 bg-card px-3 py-2 shadow-elev-1">
-          <div className="min-w-0">
-            <p className="truncate font-display text-sm font-semibold tracking-tight text-foreground">
-              Digite e <span className="text-primary">compare</span>
-            </p>
-            <p className="truncate font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
-              Preço médio · mínimo · onde está mais barato
-            </p>
-          </div>
-          <FreeQuotaBadge variant="inline" />
-        </div>
-
-
-        <div className="mb-3 flex flex-wrap gap-2">
-          <QuickFilterBar<SearchMode>
-            label="Match"
-            ariaLabel="Modo de correspondência"
-            value={mode}
-            onChange={(next) => chooseMode(next ?? "strict")}
-            size="sm"
-            options={[
-              {
-                value: "strict",
-                label: "Estrita",
-                hint: "Palavra inteira — evita falsos positivos em buscas curtas",
-              },
-              {
-                value: "loose",
-                label: "Parcial",
-                hint: "Permite prefixo (tokens ≥ 3 caracteres)",
-              },
-            ]}
-          />
-
-          <QuickFilterBar<"pure" | "all">
-            label="Filtro"
-            ariaLabel="Filtro de item puro"
-            value={pureOnly ? "pure" : "all"}
-            onChange={(next) => setPure(next === "pure")}
-            size="sm"
-            options={[
-              {
-                value: "pure",
-                label: "Somente item puro",
-                hint: "Remove itens em que a palavra aparece só como ingrediente",
-              },
-              { value: "all", label: "Incluir ingredientes" },
-            ]}
-          />
-        </div>
+        <DataToolbar
+          className="mb-4"
+          filters={
+            <>
+              <QuickFilterBar<SearchMode>
+                label="Match"
+                ariaLabel="Modo de correspondência"
+                value={mode}
+                onChange={(next) => chooseMode(next ?? "strict")}
+                size="sm"
+                options={[
+                  {
+                    value: "strict",
+                    label: "Estrita",
+                    hint: "Palavra inteira — evita falsos positivos em buscas curtas",
+                  },
+                  {
+                    value: "loose",
+                    label: "Parcial",
+                    hint: "Permite prefixo (tokens ≥ 3 caracteres)",
+                  },
+                ]}
+              />
+              <QuickFilterBar<"pure" | "all">
+                label="Filtro"
+                ariaLabel="Filtro de item puro"
+                value={pureOnly ? "pure" : "all"}
+                onChange={(next) => setPure(next === "pure")}
+                size="sm"
+                options={[
+                  {
+                    value: "pure",
+                    label: "Somente item puro",
+                    hint: "Remove itens em que a palavra aparece só como ingrediente",
+                  },
+                  { value: "all", label: "Incluir ingredientes" },
+                ]}
+              />
+            </>
+          }
+        />
 
         <PriceSearchBar
           initialQuery={q}
@@ -265,9 +250,27 @@ function SearchPage() {
           onQueryChange={syncQueryToUrl}
         />
 
+        {!hasQuery && (
+          <EmptyState
+            className="mt-6"
+            icon={SearchIcon}
+            title="Digite para começar"
+            description="Escreva o nome de um produto (arroz, feijão, café…) e veja os preços comparados nos mercados cadastrados."
+          />
+        )}
+
         {hasQuery && !user ? (
           <SignupCTA context="save-comparison" className="mt-6" />
-        ) : null}
+        ) : (
+          <div className="mt-6 text-center">
+            <Link
+              to="/"
+              className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground hover:text-primary"
+            >
+              Voltar ao início
+            </Link>
+          </div>
+        )}
       </div>
       <MobileNav />
     </div>
