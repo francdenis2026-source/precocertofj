@@ -77,8 +77,9 @@ export const ds = {
   card: {
     base: "ds-card",
     hover: "ds-card ds-card-hover",
-    padded: "ds-card p-5 md:p-6",
-    paddedHover: "ds-card ds-card-hover p-5 md:p-6",
+    padded: "ds-card p-6 md:p-7",
+    paddedHover: "ds-card ds-card-hover p-6 md:p-7",
+    paddedLg: "ds-card p-7 md:p-9",
   },
 
   /* ---------- Chips / Tags ---------- */
