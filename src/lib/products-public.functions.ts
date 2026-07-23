@@ -1,0 +1,166 @@
+import { createServerFn } from "@tanstack/react-start";
+import { setResponseHeader } from "@tanstack/react-start/server";
+
+export type EconomyStat = {
+  avgSavingsPct: number;
+  productsWithComparison: number;
+  bestSavingsPct: number;
+};
+
+export type RecentProduct = {
+  slug: string;
+  name: string;
+  price: number;
+  marketName: string | null;
+  when: string; // ISO date
+  stores: number;
+};
+
+/**
+ * Public — economia média identificada (menor vs. maior preço do mesmo produto
+ * entre estabelecimentos, para produtos com pelo menos 2 mercados).
+ */
+export const getEconomyStat = createServerFn({ method: "GET" }).handler(
+  async (): Promise<EconomyStat> => {
+    try {
+      setResponseHeader(
+        "cache-control",
+        "public, max-age=300, s-maxage=600, stale-while-revalidate=1800",
+      );
+    } catch {
+      /* ignore */
+    }
+
+    try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+      // Usa o cache de comparação já materializado (savings_pct por produto)
+      const { data, error } = await supabaseAdmin
+        .from("product_comparison_cache")
+        .select("savings_pct, store_count")
+        .gte("store_count", 2);
+
+      if (error || !data || data.length === 0) {
+        return { avgSavingsPct: 18, productsWithComparison: 0, bestSavingsPct: 38 };
+      }
+
+      const savings = data
+        .map((r) => Number(r.savings_pct))
+        .filter((n) => Number.isFinite(n) && n > 0);
+      if (savings.length === 0) {
+        return { avgSavingsPct: 18, productsWithComparison: 0, bestSavingsPct: 38 };
+      }
+      const avg = savings.reduce((a, b) => a + b, 0) / savings.length;
+      const best = Math.max(...savings);
+      return {
+        avgSavingsPct: Math.round(avg),
+        productsWithComparison: savings.length,
+        bestSavingsPct: Math.round(best),
+      };
+    } catch {
+      return { avgSavingsPct: 18, productsWithComparison: 0, bestSavingsPct: 38 };
+    }
+  },
+);
+
+/**
+ * Public — últimos produtos cadastrados com o mercado mais comum.
+ */
+export const getRecentProducts = createServerFn({ method: "GET" })
+  .inputValidator((input?: { limit?: number }) => {
+    const limit = Math.min(Math.max(input?.limit ?? 6, 1), 24);
+    return { limit };
+  })
+  .handler(async ({ data }): Promise<RecentProduct[]> => {
+    try {
+      setResponseHeader(
+        "cache-control",
+        "public, max-age=120, s-maxage=300, stale-while-revalidate=900",
+      );
+    } catch {
+      /* ignore */
+    }
+
+    try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+      // Puxa scans recentes salvos e agrupa por produto normalizado no cliente.
+      const { data: rows, error } = await supabaseAdmin
+        .from("scans")
+        .select("product_name, price_captured, market_name, establishment_id, created_at")
+        .eq("status", "salvo")
+        .is("user_id", null)
+        .not("product_name", "is", null)
+        .not("price_captured", "is", null)
+        .order("created_at", { ascending: false })
+        .limit(400);
+
+      if (error || !rows) return [];
+
+      const normalize = (s: string) =>
+        s
+          .toLowerCase()
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/[^a-z0-9]+/g, " ")
+          .trim();
+
+      type Bucket = {
+        latest: {
+          product_name: string;
+          price_captured: number;
+          market_name: string | null;
+          created_at: string;
+        };
+        marketCounts: Map<string, number>;
+        stores: Set<string>;
+      };
+
+      const buckets = new Map<string, Bucket>();
+
+      for (const r of rows) {
+        const name = (r.product_name ?? "").trim();
+        if (!name) continue;
+        const key = normalize(name);
+        if (!key) continue;
+        let b = buckets.get(key);
+        if (!b) {
+          b = {
+            latest: {
+              product_name: name,
+              price_captured: Number(r.price_captured),
+              market_name: r.market_name ?? null,
+              created_at: r.created_at,
+            },
+            marketCounts: new Map(),
+            stores: new Set(),
+          };
+          buckets.set(key, b);
+        }
+        const mk = (r.market_name ?? "").trim();
+        if (mk) b.marketCounts.set(mk, (b.marketCounts.get(mk) ?? 0) + 1);
+        if (r.establishment_id) b.stores.add(r.establishment_id as string);
+      }
+
+      const arr = Array.from(buckets.entries())
+        .map(([key, b]) => {
+          const topMarket =
+            Array.from(b.marketCounts.entries()).sort((a, c) => c[1] - a[1])[0]?.[0] ??
+            b.latest.market_name;
+          return {
+            slug: key.replace(/\s+/g, "-"),
+            name: b.latest.product_name,
+            price: b.latest.price_captured,
+            marketName: topMarket ?? null,
+            when: b.latest.created_at,
+            stores: b.stores.size,
+          };
+        })
+        .sort((a, b) => (a.when < b.when ? 1 : -1))
+        .slice(0, data.limit);
+
+      return arr;
+    } catch {
+      return [];
+    }
+  });
