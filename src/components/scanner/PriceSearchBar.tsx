@@ -370,7 +370,7 @@ export function PriceSearchBar({
 
 
   return (
-    <section className="hairline-gold relative overflow-hidden rounded-2xl border border-primary/20 bg-surface p-3 sm:rounded-3xl sm:p-4">
+    <section className="relative rounded-2xl border border-primary/20 bg-surface p-3 sm:rounded-3xl sm:p-4">
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[color-mix(in_oklab,var(--color-accent)_70%,transparent)] to-transparent"
