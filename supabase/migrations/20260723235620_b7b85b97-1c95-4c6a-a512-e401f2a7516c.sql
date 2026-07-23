@@ -1,0 +1,2 @@
+UPDATE public.establishments SET logo_url = '/__l5e/assets-v1/6ae5b5b2-6f0c-4140-93b9-00960cf621be/parceirao-logo.png', brand_color = '#0f2b52' WHERE name = 'COMERCIAL PARCEIRÃO';
+UPDATE public.establishments SET logo_url = '/__l5e/assets-v1/231f4be4-ed4e-49ae-bcab-84aa54059154/reboucas-logo.png', brand_color = '#0f2b52' WHERE name = 'MERCANTIL REBOUÇAS';
