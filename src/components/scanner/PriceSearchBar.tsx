@@ -720,7 +720,7 @@ export function PriceSearchBar({
                       isCheapest
                       cheapestReason={buildCheapestReason(result.cheapest.price, result.avg)}
                     />
-                    <span className="truncate not-italic font-medium text-foreground">{result.cheapest.marketName}</span>
+                    <span className="truncate not-italic font-semibold text-[var(--market-accent)] transition-colors group-hover:text-[var(--market-accent-hover)]">{result.cheapest.marketName}</span>
                   </p>
                   <p className="mt-0.5 font-display text-[26px] font-bold leading-tight tracking-tight tabular-nums text-accent-strong">
                     {fmt(result.cheapest.price)}
@@ -902,9 +902,10 @@ export function PriceSearchBar({
                             }
                           />
                           <div className="min-w-0 flex-1 self-center">
-                            <p className="truncate font-display text-[13px] font-medium tracking-tight text-foreground">
+                            <p className="truncate font-display text-[13px] font-semibold tracking-tight text-[var(--market-accent)] transition-colors group-hover:text-[var(--market-accent-hover)]">
                               {m.marketName}
                             </p>
+
                             <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground">
                               {m.samples} scan{m.samples > 1 ? "s" : ""}
                               <span aria-hidden="true" className="mx-1 text-accent-strong/50">·</span>
@@ -937,7 +938,7 @@ export function PriceSearchBar({
                           </div>
                         </>
                       );
-                      const rowClass = "flex items-stretch gap-2 bg-transparent pr-2 py-2 pl-0";
+                      const rowClass = "group flex items-stretch gap-2 bg-transparent pr-2 py-2 pl-0";
                       return (
                         <div key={m.marketName}>
                           {m.establishmentId ? (
@@ -1305,8 +1306,9 @@ function ProductGroupCard({
             <p className="mt-1 inline-flex max-w-full items-center gap-1 rounded-full border border-accent-strong/40 bg-accent/10 px-2 py-0.5 font-mono text-[9.5px] uppercase tracking-[0.16em] text-accent-strong">
               <Crown className="h-3 w-3 shrink-0" strokeWidth={2} aria-hidden="true" />
               <span className="truncate">
-                Mais barato em <span className="text-foreground">{cheapestInGroup.marketName}</span> · {fmt(cheapestInGroup.price)}
+                Mais barato em <span className="font-semibold text-[var(--market-accent)]">{cheapestInGroup.marketName}</span> · {fmt(cheapestInGroup.price)}
               </span>
+
             </p>
           ) : null}
           {matchReasons.length > 0 && (
@@ -1395,9 +1397,10 @@ function ProductGroupCard({
                 }
               />
               <div className="min-w-0 flex-1 self-center">
-                <p className="truncate font-display text-[13px] font-medium tracking-tight text-foreground">
+                <p className="truncate font-display text-[13px] font-semibold tracking-tight text-[var(--market-accent)] transition-colors hover:text-[var(--market-accent-hover)]">
                   {p.marketName}
                 </p>
+
                 <p className="truncate font-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground">
                   {(p.marketKind ?? "Estabelecimento")}
                   <span aria-hidden="true" className="mx-1 text-accent-strong/50">·</span>

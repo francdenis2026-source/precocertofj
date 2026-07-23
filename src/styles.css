@@ -188,7 +188,12 @@
   --pc-home-onhero-border: rgb(15 27 61 / 0.32);
   --pc-home-onhero-border-hover: rgb(15 27 61 / 0.50);
 
+  /* Semantic — nome de estabelecimento (unificado em todo o site) */
+  --market-accent: #8a6218;
+  --market-accent-hover: #6b4a10;
+
   color-scheme: light;
+
 }
 
 /* ============= DARK — Deep Ocean ============= */
@@ -274,7 +279,12 @@
   --pc-home-onhero-border: rgb(255 255 255 / 0.25);
   --pc-home-onhero-border-hover: rgb(255 255 255 / 0.45);
 
+  /* Semantic — nome de estabelecimento (dark) */
+  --market-accent: #ffe3a0;
+  --market-accent-hover: #fff2cc;
+
   color-scheme: dark;
+
 }
 
 @layer base {
