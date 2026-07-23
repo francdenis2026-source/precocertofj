@@ -139,8 +139,12 @@ function RedeemPage() {
     e?.preventDefault();
     if (submitting) return;
     setTouched(true);
-    if (!valid) {
-      toast.error("Digite ao menos 8 caracteres do código.");
+    if (!canSubmit) {
+      toast.error(
+        clean.length < MIN_LEN
+          ? `Digite ao menos ${MIN_LEN} caracteres do código.`
+          : validation.message,
+      );
       return;
     }
     setSubmitting(true);
