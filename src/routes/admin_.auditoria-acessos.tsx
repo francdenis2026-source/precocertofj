@@ -199,32 +199,9 @@ function AuditoriaAcessosPage() {
         </CardContent>
       </Card>
 
-      {/* Top IPs e Motivos */}
-      <section className="grid gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>IPs com mais falhas</CardTitle>
-            <CardDescription>Top 8 no período.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            {(stats.data?.topIps ?? []).length === 0 ? (
-              <p className="py-4 text-center text-sm text-muted-foreground">
-                Nenhuma falha registrada.
-              </p>
-            ) : (
-              (stats.data?.topIps ?? []).map((row) => (
-                <div
-                  key={row.ip}
-                  className="flex items-center justify-between rounded-md border bg-muted/20 px-3 py-2 text-sm"
-                >
-                  <span className="font-mono text-xs">{row.ip}</span>
-                  <Badge variant="destructive">{row.count}</Badge>
-                </div>
-              ))
-            )}
-          </CardContent>
-        </Card>
-
+      {/* Top IPs + Motivos + Bloqueados */}
+      <section className="grid gap-4 lg:grid-cols-3">
+        <TopIpsCard topIps={stats.data?.topIps ?? []} />
         <Card>
           <CardHeader>
             <CardTitle>Motivos de falha</CardTitle>
@@ -248,6 +225,7 @@ function AuditoriaAcessosPage() {
             )}
           </CardContent>
         </Card>
+        <BlockedIpsCard />
       </section>
 
       {/* Filtros + Tabela */}
