@@ -94,18 +94,7 @@ function HomePage() {
   const isLoggedOut = !sessionLoading && !user;
   const [q, setQ] = useState("");
   const [today, setToday] = useState("");
-  const [showStickyCta, setShowStickyCta] = useState(false);
 
-  useEffect(() => {
-    if (!isLoggedOut) {
-      setShowStickyCta(false);
-      return;
-    }
-    const onScroll = () => setShowStickyCta(window.scrollY > 720);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [isLoggedOut]);
 
   
 
