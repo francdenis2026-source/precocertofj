@@ -364,3 +364,124 @@ function KpiCard({
     </Card>
   );
 }
+
+function TopIpsCard({ topIps }: { topIps: { ip: string; count: number }[] }) {
+  const qc = useQueryClient();
+  const blockFn = useServerFn(adminBlockIp);
+  const [pending, setPending] = useState<string | null>(null);
+
+  async function block(ip: string) {
+    const ttlStr = prompt(`Bloquear ${ip} por quantos minutos? (padrão 60)`, "60");
+    if (ttlStr === null) return;
+    const ttl = Math.max(1, Math.min(60 * 24 * 30, Number(ttlStr) || 60));
+    const reason = prompt("Motivo do bloqueio (opcional):", "excesso de falhas") ?? "";
+    try {
+      setPending(ip);
+      await blockFn({ data: { ip, ttlMinutes: ttl, reason } });
+      toast.success(`IP ${ip} bloqueado por ${ttl} min.`);
+      qc.invalidateQueries({ queryKey: ["admin", "blocked-ips"] });
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Falha ao bloquear");
+    } finally {
+      setPending(null);
+    }
+  }
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>IPs com mais falhas</CardTitle>
+        <CardDescription>Top 8 no período. Clique em "Bloquear" para restringir.</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-2">
+        {topIps.length === 0 ? (
+          <p className="py-4 text-center text-sm text-muted-foreground">Nenhuma falha registrada.</p>
+        ) : (
+          topIps.map((row) => (
+            <div
+              key={row.ip}
+              className="flex items-center justify-between gap-2 rounded-md border bg-muted/20 px-3 py-2 text-sm"
+            >
+              <span className="font-mono text-xs">{row.ip}</span>
+              <div className="flex items-center gap-2">
+                <Badge variant="destructive">{row.count}</Badge>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-7 gap-1 px-2 text-xs"
+                  onClick={() => block(row.ip)}
+                  disabled={pending === row.ip || row.ip === "desconhecido"}
+                >
+                  <Ban className="h-3 w-3" />
+                  Bloquear
+                </Button>
+              </div>
+            </div>
+          ))
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+function BlockedIpsCard() {
+  const qc = useQueryClient();
+  const listFn = useServerFn(adminListBlockedIps);
+  const unblockFn = useServerFn(adminUnblockIp);
+  const q = useQuery({
+    queryKey: ["admin", "blocked-ips"],
+    queryFn: () => listFn(),
+    staleTime: 15_000,
+  });
+  const mut = useMutation({
+    mutationFn: (ip: string) => unblockFn({ data: { ip } }),
+    onSuccess: () => {
+      toast.success("IP desbloqueado.");
+      qc.invalidateQueries({ queryKey: ["admin", "blocked-ips"] });
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Falha ao desbloquear"),
+  });
+  return (
+    <Card className="border-destructive/30 bg-destructive/5">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-1.5">
+          <Shield className="h-4 w-4" /> Bloqueios ativos
+        </CardTitle>
+        <CardDescription>
+          IPs restritos temporariamente. Ações ficam registradas no log de auditoria.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-2">
+        {q.isLoading ? (
+          <p className="py-4 text-center text-xs text-muted-foreground">Carregando…</p>
+        ) : (q.data ?? []).length === 0 ? (
+          <p className="py-4 text-center text-xs text-muted-foreground">Nenhum IP bloqueado.</p>
+        ) : (
+          (q.data ?? []).map((row) => (
+            <div
+              key={row.id}
+              className="flex items-center justify-between gap-2 rounded-md border border-destructive/30 bg-background px-3 py-2 text-sm"
+            >
+              <div>
+                <p className="font-mono text-xs">{row.ip}</p>
+                <p className="text-[10px] text-muted-foreground">
+                  até {new Date(row.blocked_until).toLocaleString("pt-BR")}
+                  {row.reason ? ` · ${row.reason}` : ""}
+                </p>
+              </div>
+              <Button
+                size="sm"
+                variant="ghost"
+                className="h-7 px-2 text-xs"
+                onClick={() => mut.mutate(row.ip)}
+                disabled={mut.isPending}
+              >
+                Liberar
+              </Button>
+            </div>
+          ))
+        )}
+      </CardContent>
+    </Card>
+  );
+}
