@@ -10,7 +10,6 @@ import {
 } from "@/lib/checkout.functions";
 import {
   Check,
-  Sparkles,
   ShieldCheck,
   ArrowRight,
   ChevronDown,
@@ -18,7 +17,6 @@ import {
 import { toast } from "sonner";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
-import { SectionCard } from "@/components/layout";
 import { ds, dsx } from "@/lib/ds";
 
 const PALETTE = {
