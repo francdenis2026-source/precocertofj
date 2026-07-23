@@ -18,6 +18,7 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { getPlatformStats } from "@/lib/stores-public.functions";
 import { StartFreeDialog } from "@/components/home/StartFreeDialog";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useSession } from "@/hooks/useSession";
 
 
@@ -536,42 +537,72 @@ function HomePage() {
       </div>
 
 
-      {/* -------- SOCIAL PROOF (compact) -------- */}
+      {/* -------- SOCIAL PROOF (compact, with tooltips) -------- */}
       <section className="mx-auto w-full max-w-6xl px-4 pb-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-3 gap-3 sm:gap-4">
-          {[
-            { k: "7", l: "mercados no ar", icon: <ShieldCheck className="h-4 w-4" /> },
-            { k: "< 24h", l: "atualização de preços", icon: <Clock className="h-4 w-4" /> },
-            { k: "LGPD", l: "dados protegidos", icon: <ShieldCheck className="h-4 w-4" /> },
-          ].map((s) => (
-            <div
-              key={s.l}
-              className="rounded-2xl border px-4 py-3 text-center sm:py-4"
-              style={{ borderColor: P.line, background: P.card, color: P.heading }}
-            >
-              <div className="mb-1 flex items-center justify-center" style={{ color: P.goldSoft }}>
-                {s.icon}
-              </div>
-              <div
-                className={`${serif} tabular-nums`}
-                style={{
-                  fontSize: "clamp(1.25rem, 3vw, 1.75rem)",
-                  lineHeight: 1,
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                {s.k}
-              </div>
-              <div
-                className="mt-1.5 text-[10px] font-bold uppercase tracking-[0.16em] sm:text-[11px]"
-                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
-              >
-                {s.l}
-              </div>
-            </div>
-          ))}
-        </div>
+        <TooltipProvider delayDuration={150}>
+          <div className="grid grid-cols-3 gap-3 sm:gap-4">
+            {[
+              {
+                k: "7",
+                l: "mercados",
+                lFull: "mercados no ar",
+                icon: <ShieldCheck className="h-4 w-4" />,
+                tip: "Mercados de Feijó/AC ativos na plataforma com preços colaborativos.",
+              },
+              {
+                k: "< 24h",
+                l: "atualização",
+                lFull: "atualização de preços",
+                icon: <Clock className="h-4 w-4" />,
+                tip: "Novos preços aparecem em menos de 24h após a colaboração da comunidade.",
+              },
+              {
+                k: "LGPD",
+                l: "dados seguros",
+                lFull: "dados protegidos",
+                icon: <ShieldCheck className="h-4 w-4" />,
+                tip: "Tratamento de dados em conformidade com a Lei Geral de Proteção de Dados.",
+              },
+            ].map((s) => (
+              <Tooltip key={s.lFull}>
+                <TooltipTrigger asChild>
+                  <button
+                    type="button"
+                    aria-label={`${s.k} ${s.lFull}. ${s.tip}`}
+                    className="rounded-2xl border px-3 py-3 text-center transition-colors hover:bg-[color-mix(in_oklab,var(--pc-home-card)_92%,var(--pc-home-gold)_8%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:px-4 sm:py-4"
+                    style={{ borderColor: P.line, background: P.card, color: P.heading }}
+                  >
+                    <div className="mb-1 flex items-center justify-center" style={{ color: P.goldSoft }}>
+                      {s.icon}
+                    </div>
+                    <div
+                      className={`${serif} tabular-nums`}
+                      style={{
+                        fontSize: "clamp(1.15rem, 2.8vw, 1.75rem)",
+                        lineHeight: 1,
+                        letterSpacing: "-0.02em",
+                      }}
+                    >
+                      {s.k}
+                    </div>
+                    <div
+                      className="mt-1.5 truncate text-[9.5px] font-bold uppercase tracking-[0.14em] sm:text-[11px] sm:tracking-[0.16em]"
+                      style={{ color: "color-mix(in oklab, var(--pc-home-ink) 60%, transparent)" }}
+                    >
+                      <span className="sm:hidden">{s.l}</span>
+                      <span className="hidden sm:inline">{s.lFull}</span>
+                    </div>
+                  </button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className="max-w-[240px] text-[12px] leading-snug">
+                  {s.tip}
+                </TooltipContent>
+              </Tooltip>
+            ))}
+          </div>
+        </TooltipProvider>
       </section>
+
 
       {/* -------- FINAL CTA -------- */}
       <section className="mx-auto w-full max-w-6xl px-4 pb-8 sm:px-6 lg:px-8">
