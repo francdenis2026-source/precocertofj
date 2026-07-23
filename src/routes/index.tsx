@@ -345,7 +345,7 @@ function HomePage() {
 
 
       {/* CTA FINAL — compacto */}
-      <section className="mx-auto max-w-7xl px-4 pb-14 md:px-8 md:pb-20">
+      <section className={dsx(ds.container, "pb-14 md:pb-20")}>
         <div
           className="relative overflow-hidden rounded-2xl p-5 text-white sm:p-7 md:p-10"
           style={{ background: `linear-gradient(140deg, ${PALETTE.navy} 0%, ${PALETTE.navy2} 100%)` }}
@@ -356,7 +356,7 @@ function HomePage() {
           />
           <div className="relative grid grid-cols-1 items-center gap-5 md:grid-cols-[1fr_auto] md:gap-8">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full border border-white/25 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/85">
+              <div className={dsx(ds.chip.onDark, "text-[10px] uppercase tracking-[0.16em]")}>
                 <ShieldCheck className="h-3 w-3" style={{ color: PALETTE.goldSoft }} />
                 Dados verificados por nota fiscal
               </div>
@@ -377,14 +377,14 @@ function HomePage() {
             <div className="flex flex-col gap-2 sm:flex-row md:flex-col">
               <Link
                 to="/cadastro"
-                className="inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-[14px] font-bold transition-transform hover:scale-[1.02] sm:px-6 sm:py-3.5"
+                className={dsx(ds.btn.base, ds.btn.sizes.md)}
                 style={{ background: PALETTE.gold, color: PALETTE.navy }}
               >
                 Criar conta <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 to="/resgatar"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border border-white/35 px-5 py-3 text-[14px] font-semibold text-white transition-colors hover:bg-white/10 sm:px-6 sm:py-3.5"
+                className={dsx(ds.btn.base, ds.btn.sizes.md, "border border-white/35 text-white hover:bg-white/10")}
               >
                 Tenho um código
               </Link>
@@ -395,7 +395,7 @@ function HomePage() {
 
       {/* FOOTER */}
       <footer
-        className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-3 border-t px-4 py-6 text-[12px] sm:flex-row sm:flex-wrap sm:items-center md:px-8"
+        className={dsx(ds.container, "flex flex-col items-start justify-between gap-3 border-t py-6 text-[12px] sm:flex-row sm:flex-wrap sm:items-center")}
         style={{ borderColor: PALETTE.line, color: PALETTE.navy2 }}
       >
         <div className="flex items-center gap-2.5">
@@ -417,6 +417,7 @@ function HomePage() {
     </div>
   );
 }
+
 
 function ExploreCard({
   icon, eyebrow, title, desc, to, cta,
