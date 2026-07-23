@@ -311,8 +311,8 @@ function PlansPage() {
         {/* Comparativo simples */}
         <section className={dsx(ds.container, "pb-12 md:pb-16")}>
           <SectionCard
-            title="Comparativo rápido"
-            description="Compare duração, preço total e equivalente mensal por plano."
+            title="Quanto custa cada plano"
+            description="Duração, preço total e o quanto sai por mês em cada opção."
             bodyClassName="p-0"
           >
             <div className="overflow-x-auto">
