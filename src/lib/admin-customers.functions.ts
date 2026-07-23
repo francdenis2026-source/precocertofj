@@ -167,7 +167,7 @@ export const adminGetCustomer = createServerFn({ method: "POST" })
       supabaseAdmin.auth.admin.getUserById(data.userId),
     ]);
 
-    const authUser = "user" in authRes ? authRes.user : null;
+    const authUser = (authRes as { data?: { user?: { email?: string | null; email_confirmed_at?: string | null; last_sign_in_at?: string | null } } }).data?.user ?? null;
 
     return {
       profile: { ...profile, cpf_masked: maskCpf(profile.cpf) },
@@ -215,7 +215,7 @@ export const adminUpdateCustomer = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
 
     await supabaseAdmin.from("admin_audit_log").insert({
-      actor_id: context.userId,
+      admin_user_id: context.userId,
       action: "customer.update",
       target_type: "profile",
       target_id: data.userId,
@@ -258,7 +258,7 @@ export const adminResetCustomerPin = createServerFn({ method: "POST" })
     if (insErr) throw new Error(insErr.message);
 
     await supabaseAdmin.from("admin_audit_log").insert({
-      actor_id: context.userId,
+      admin_user_id: context.userId,
       action: "customer.reset_pin",
       target_type: "profile",
       target_id: data.userId,
