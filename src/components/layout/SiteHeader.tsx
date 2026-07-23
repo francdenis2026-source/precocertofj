@@ -81,27 +81,25 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             <span
               className={dsx(
                 serif,
-                "truncate text-[24px] font-normal leading-none sm:text-[26px] md:text-[28px]",
+                "truncate text-[26px] font-medium leading-[0.95] tracking-[-0.015em] antialiased sm:text-[30px] md:text-[32px]",
                 brandTextClass,
                 isOverlay && "[text-shadow:0_1px_2px_rgb(0_0_0/0.35),0_0_1px_rgb(0_0_0/0.25)]",
               )}
             >
-              Preço
-              <span className={dsx("italic", brandAccentClass)}>
-                Certo
-              </span>
+              Preço<span className={dsx("italic font-normal -ml-[0.06em] tracking-[-0.01em]", brandAccentClass)}>Certo</span>
             </span>
             <span
               className={dsx(
-                "mt-1.5 hidden text-[10px] font-extrabold uppercase tracking-[0.28em] sm:block",
+                "mt-1.5 hidden text-[11px] font-semibold uppercase tracking-[0.22em] antialiased sm:block",
                 subTextClass,
                 isOverlay && "[text-shadow:0_1px_2px_rgb(0_0_0/0.45)]",
               )}
             >
-              Feijó · Acre
+              Feijó <span className="mx-0.5 opacity-60">·</span> Acre
             </span>
           </div>
         </Link>
+
 
         {/* Primary nav */}
         {showNav && (
