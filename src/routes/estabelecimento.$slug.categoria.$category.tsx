@@ -15,6 +15,8 @@ import {
 import { getPublicStoreCatalog, type PublicStoreProduct } from "@/lib/stores-public.functions";
 import { getPublicPriceHistory } from "@/lib/store-public-history.functions";
 import { resolveEstablishmentBySlug } from "@/lib/establishment-slug.functions";
+import { normalize } from "@/lib/search-tokens";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -122,9 +124,12 @@ function CategoryPage() {
   const [historyFor, setHistoryFor] = useState<PublicStoreProduct | null>(null);
 
   const items = useMemo(() => {
-    const term = q.trim().toLowerCase();
+    const term = normalize(q);
     let list = data.products.filter((p) => p.category === categoryLabel);
-    if (term) list = list.filter((p) => p.productName.toLowerCase().includes(term));
+    if (term) {
+      list = list.filter((p) => normalize(`${p.productName} ${p.brand ?? ""}`).includes(term));
+    }
+
     switch (sort) {
       case "price-asc": list.sort((a, b) => a.price - b.price); break;
       case "price-desc": list.sort((a, b) => b.price - a.price); break;
