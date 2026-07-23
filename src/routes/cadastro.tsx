@@ -150,6 +150,14 @@ function CadastroPage() {
     "Rede colaborativa — envie sua nota e ganhe 30 dias",
   ];
 
+  // Stores for the thematic illustration (economia + comparação + localização)
+  const compareStores = [
+    { label: "LOJA A", price: "R$ 76,10", val: 78, winner: false },
+    { label: "LOJA B", price: "R$ 68,40", val: 62, winner: false },
+    { label: "LOJA C", price: "R$ 59,30", val: 34, winner: true },
+  ];
+
+
   return (
     <div
       className="relative min-h-[100dvh] overflow-hidden"
