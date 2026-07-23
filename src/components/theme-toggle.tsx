@@ -1,69 +1,50 @@
-import { Moon, Sun, Monitor, Check } from "lucide-react";
-import { useTheme, type Theme } from "@/hooks/use-theme";
+import { Moon, Sun } from "lucide-react";
+import { useTheme } from "@/hooks/use-theme";
 import { cn } from "@/lib/utils";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 
 interface ThemeToggleProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   size?: "sm" | "md";
+  tone?: "light" | "dark";
 }
 
-const OPTIONS: { value: Theme; label: string; Icon: typeof Sun }[] = [
-  { value: "light", label: "Claro", Icon: Sun },
-  { value: "dark", label: "Escuro", Icon: Moon },
-  { value: "system", label: "Sistema", Icon: Monitor },
-];
-
-export function ThemeToggle({ className, size = "md", ...props }: ThemeToggleProps) {
-  const { theme, setTheme, isDark, mounted } = useTheme();
+/**
+ * Botão único de alternância claro/escuro.
+ * - Padrão: modo claro.
+ * - Persistência: `localStorage["pc-theme"]`.
+ * - Uso restrito à homepage.
+ */
+export function ThemeToggle({
+  className,
+  size = "md",
+  tone = "dark",
+  ...props
+}: ThemeToggleProps) {
+  const { toggle, isDark, mounted } = useTheme();
   const dim = size === "sm" ? "h-8 w-8" : "h-9 w-9";
   const icon = size === "sm" ? "h-3.5 w-3.5" : "h-4 w-4";
+  const Icon = mounted && isDark ? Sun : Moon;
+  const label = mounted && isDark ? "Ativar modo claro" : "Ativar modo escuro";
 
-  const ActiveIcon = !mounted
-    ? Monitor
-    : theme === "system"
-      ? Monitor
-      : isDark
-        ? Sun
-        : Moon;
+  const toneClass =
+    tone === "dark"
+      ? "border-white/25 bg-white/10 text-white hover:bg-white/20"
+      : "border-border bg-surface text-muted-foreground hover:border-primary/40 hover:text-foreground";
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button
-          type="button"
-          aria-label="Selecionar tema"
-          className={cn(
-            "inline-flex items-center justify-center rounded-full border border-border bg-surface text-muted-foreground transition-colors hover:border-primary/40 hover:text-foreground",
-            dim,
-            className,
-          )}
-          {...props}
-        >
-          <ActiveIcon className={icon} strokeWidth={1.75} />
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="min-w-[9rem]">
-        {OPTIONS.map(({ value, label, Icon }) => (
-          <DropdownMenuItem
-            key={value}
-            onSelect={() => setTheme(value)}
-            className="flex items-center justify-between gap-3 text-sm"
-          >
-            <span className="inline-flex items-center gap-2">
-              <Icon className="h-3.5 w-3.5" strokeWidth={1.75} />
-              {label}
-            </span>
-            {theme === value && (
-              <Check className="h-3.5 w-3.5 text-primary" strokeWidth={2} />
-            )}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <button
+      type="button"
+      onClick={toggle}
+      aria-label={label}
+      title={label}
+      className={cn(
+        "inline-flex items-center justify-center rounded-full border transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
+        toneClass,
+        dim,
+        className,
+      )}
+      {...props}
+    >
+      <Icon className={icon} strokeWidth={1.75} />
+    </button>
   );
 }
