@@ -175,20 +175,16 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
               </DropdownMenuContent>
             </DropdownMenu>
           ) : (
-            <>
-              <Link
-                to="/login"
-                className={dsx("hidden items-center rounded-lg px-3.5 py-2 text-[15px] font-semibold leading-[1.35] outline-none transition-colors focus-visible:ring-2 sm:inline-flex md:px-4 md:py-2.5 md:text-[16px] lg:text-[17px]", loginClass)}
-              >
-                Entrar
-              </Link>
-              <Link
-                to="/cadastro"
-                className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand px-3 py-1.5 text-[12.5px] font-bold leading-[1.2] text-brand-foreground shadow-elev-2 outline-none transition hover:brightness-105 focus-visible:ring-2 focus-visible:ring-brand/60 active:scale-[0.98] sm:px-3.5 sm:py-2 sm:text-[13px] lg:px-4 lg:py-2.5 lg:text-[15px] xl:text-[16px]"
-              >
-                Criar conta
-              </Link>
-            </>
+            <Link
+              to="/login"
+              className={dsx(
+                "inline-flex items-center rounded-lg px-3 py-1.5 text-[13px] font-semibold leading-[1.2] outline-none transition-colors focus-visible:ring-2 sm:px-3.5 sm:py-2 sm:text-[14.5px] md:px-4 md:py-2.5 md:text-[15.5px]",
+                loginClass,
+              )}
+            >
+              Entrar
+            </Link>
+
 
           )}
 
