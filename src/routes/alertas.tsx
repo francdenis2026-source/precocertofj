@@ -556,17 +556,20 @@ function FavoritesSection({
       </div>
 
       {isLoading ? (
-        <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
-          <Loader2 className="h-4 w-4 animate-spin" /> Carregando favoritos...
+        <div className="mt-4">
+          <LoadingSkeleton rows={3} />
         </div>
       ) : favorites.length === 0 ? (
-        <div className="mt-4 rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
-          Você ainda não favoritou produtos. Toque no coração de um produto
-          para começar a monitorar.
+        <div className="mt-4">
+          <EmptyState
+            icon={Tag}
+            title="Nenhum favorito ainda"
+            description="Toque no coração de um produto para começar a monitorar."
+          />
         </div>
       ) : sorted.length === 0 ? (
-        <div className="mt-4 rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
-          Nenhum favorito nesse filtro.
+        <div className="mt-4">
+          <EmptyState icon={Tag} title="Nenhum favorito nesse filtro" />
         </div>
       ) : (
         <ul className="mt-4 divide-y divide-border">
