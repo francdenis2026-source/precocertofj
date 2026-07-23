@@ -649,7 +649,7 @@ function MyReportsPanel() {
   return (
     <section className="mt-6 rounded-2xl border border-border bg-card p-4">
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="font-serif text-base font-semibold text-foreground">
+        <h2 className="font-display text-base font-semibold tracking-tight text-foreground">
           Meus reportes de preço
         </h2>
         <span className="text-[11px] text-muted-foreground">{data.length} total</span>
@@ -740,7 +740,7 @@ function MyStoreQuotesPanel() {
   return (
     <section className="mt-6 rounded-2xl border border-border bg-card p-4">
       <div className="mb-3 flex items-center justify-between">
-        <h2 className="flex items-center gap-2 font-serif text-base font-semibold text-foreground">
+        <h2 className="flex items-center gap-2 font-display text-base font-semibold tracking-tight text-foreground">
           <ShoppingBag className="h-4 w-4 text-primary" /> Minhas cotações salvas
         </h2>
         <span className="text-[11px] text-muted-foreground">{data.length} total</span>

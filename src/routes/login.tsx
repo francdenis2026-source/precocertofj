@@ -339,7 +339,7 @@ function LoginPage() {
             >
               {mode === "login" ? "Acesse a inteligência da sua cidade" : "Comece a economizar em minutos"}
             </h2>
-            <p className="mt-3 text-[13px] leading-relaxed text-white/70">
+            <p className="mt-3 text-[13.5px] leading-relaxed text-white/85">
               {mode === "login"
                 ? "Entre com CPF e PIN de 6 dígitos para ver o painel ao vivo."
                 : "Cadastro rápido. Sem cartão de crédito. 30 dias grátis ao enviar sua primeira nota."}
@@ -755,7 +755,7 @@ function EditorialPanel({ region }: { region: SelectedRegion | null }) {
           {isLoading ? (
             <span className="inline-block h-[1em] w-[85%] animate-pulse rounded bg-white/10 align-middle" />
           ) : isError ? (
-            <span className="text-white/70">Sem dados do barômetro no momento.</span>
+            <span className="text-white/85">Sem dados do barômetro no momento.</span>
           ) : h ? (
             <>
               {h.title}{" "}

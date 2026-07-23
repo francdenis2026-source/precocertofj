@@ -105,7 +105,7 @@ function OnboardingPage() {
         <h1 className="mt-4 text-center font-display text-3xl font-semibold leading-tight text-white sm:text-4xl">
           Vamos personalizar o seu PreçoCerto
         </h1>
-        <p className="mt-2 max-w-md text-center text-sm text-white/70">
+        <p className="mt-2 max-w-md text-center text-sm leading-relaxed text-white/85">
           Só precisamos de alguns dados para exibir os mercados do seu bairro
           e enviar alertas quando os preços caírem.
         </p>

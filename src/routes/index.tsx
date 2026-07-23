@@ -466,7 +466,7 @@ function HomePage() {
                     sem esforço.
                   </span>
                 </h2>
-                <p className="mt-2 max-w-md text-[13px] leading-snug text-white/60 sm:text-[13.5px]">
+                <p className="mt-2 max-w-md text-[13.5px] leading-relaxed text-white/85 sm:text-sm">
                   Ferramentas exclusivas para você nunca mais pagar caro em itens essenciais.
                 </p>
               </div>

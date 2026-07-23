@@ -14,7 +14,7 @@ import { AppShell } from "@/components/brand/AppShell";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
-import { ArrowDownRight, ArrowUpRight, LineChart as LineChartIcon, Minus, Loader2 } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight, LineChart as LineChartIcon, Minus, PackageSearch, Search as SearchIcon } from "lucide-react";
 import {
   listPricedProducts,
   getProductPriceSeries,
@@ -23,6 +23,8 @@ import {
 } from "@/lib/price-history.functions";
 import { ProductImage } from "@/components/product/ProductImage";
 import { useMyRoles } from "@/hooks/useMyRoles";
+import { Spinner, ErrorState } from "@/components/feedback";
+import { EmptyState } from "@/components/layout";
 
 
 export const Route = createFileRoute("/precos")({
@@ -145,20 +147,33 @@ function PrecosPage() {
       <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
         <header className="mb-6 flex items-center gap-3">
           <div className="rounded-lg bg-primary/10 p-2 text-primary">
-            <LineChartIcon className="h-5 w-5" />
+            <LineChartIcon className="h-5 w-5" aria-hidden />
           </div>
           <div>
-            <h1 className="font-serif text-2xl sm:text-3xl">Histórico de preços</h1>
-            <p className="text-sm text-muted-foreground">
+            <h1 className="font-display text-2xl font-semibold tracking-tight sm:text-3xl">
+              Histórico de preços
+            </h1>
+            <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
               Cada cupom fiscal registrado alimenta a série. Compare leituras e veja a variação.
             </p>
           </div>
         </header>
 
         {err && (
-          <p className="mb-4 rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm text-destructive">
-            {err}
-          </p>
+          <ErrorState
+            className="mb-4"
+            title="Erro ao carregar histórico"
+            message={err}
+            onRetry={() => {
+              setErr(null);
+              fetchList()
+                .then((rows) => {
+                  setList(rows);
+                  if (rows[0] && !selected) setSelected(rows[0].productName);
+                })
+                .catch((e: unknown) => setErr(e instanceof Error ? e.message : String(e)));
+            }}
+          />
         )}
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
@@ -179,13 +194,17 @@ function PrecosPage() {
             <CardContent className="p-0">
               <ul className="max-h-[52vh] overflow-y-auto divide-y">
                 {list === null && (
-                  <li className="p-4 text-center">
-                    <Loader2 className="mx-auto h-4 w-4 animate-spin text-muted-foreground" />
+                  <li className="p-4 text-center text-muted-foreground">
+                    <Spinner size="sm" label="Carregando produtos" />
                   </li>
                 )}
                 {filtered && filtered.length === 0 && (
-                  <li className="p-4 text-center text-sm text-muted-foreground">
-                    Nenhum produto encontrado.
+                  <li className="p-4">
+                    <EmptyState
+                      icon={SearchIcon}
+                      title="Nenhum produto encontrado"
+                      description={query ? `Nenhum item para "${query}".` : "Ainda não há produtos monitorados."}
+                    />
                   </li>
                 )}
                 {filtered?.map((p) => {
@@ -229,13 +248,19 @@ function PrecosPage() {
           {/* Detalhe / gráfico */}
           <div className="space-y-4">
             {!selected && (
-              <Card>
-                <CardContent className="py-16 text-center text-sm text-muted-foreground">
-                  {list && list.length === 0
-                    ? "Nenhum cupom registrado ainda. Cadastre um em Admin > Registrar cupom fiscal."
-                    : "Selecione um produto para ver o histórico."}
-                </CardContent>
-              </Card>
+              <EmptyState
+                icon={list && list.length === 0 ? PackageSearch : LineChartIcon}
+                title={
+                  list && list.length === 0
+                    ? "Nenhum cupom registrado ainda"
+                    : "Selecione um produto"
+                }
+                description={
+                  list && list.length === 0
+                    ? "Cadastre um cupom fiscal em Admin > Registrar cupom fiscal para começar a monitorar."
+                    : "Escolha um item na lista ao lado para ver o histórico de preços."
+                }
+              />
             )}
 
             {selected && (
@@ -267,8 +292,8 @@ function PrecosPage() {
                       </CardHeader>
                   <CardContent>
                     {loadingSeries && (
-                      <div className="flex h-64 items-center justify-center">
-                        <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                      <div className="flex h-64 items-center justify-center text-muted-foreground">
+                        <Spinner size="md" label="Carregando série de preços" />
                       </div>
                     )}
                     {!loadingSeries && chartData.length > 0 && (
