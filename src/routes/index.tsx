@@ -53,14 +53,22 @@ export const Route = createFileRoute("/")({
 
 /* Design tokens — Navy Trust, contrastes reforçados */
 const PALETTE = {
-  paper: "#f5f6fa",
-  ink: "#08122a",       // ~19:1 sobre paper
-  navy: "#0f1b3d",
-  navy2: "#324c73",     // ~7.4:1 sobre paper (AA large + body)
-  gold: "#b58a3c",
-  goldSoft: "#f2dfa8",  // hero (fundo escuro)
-  line: "#dfe3ec",
+  paper: "var(--pc-home-paper)",
+  ink: "var(--pc-home-ink)",
+  card: "var(--pc-home-card)",
+  navy: "var(--pc-home-navy)",
+  navy2: "var(--pc-home-navy-2)",
+  gold: "var(--pc-home-gold)",
+  goldSoft: "var(--pc-home-gold-soft)",
+  line: "var(--pc-home-line)",
+  heroOverlay: "var(--pc-home-hero-overlay)",
+  exploreOverlay: "var(--pc-home-explore-overlay)",
+  ctaGradient: "var(--pc-home-cta-gradient)",
+  dotOpacity: "var(--pc-home-dot-opacity)",
 };
+
+const transparentize = (color: string, amount: number) =>
+  `color-mix(in oklab, ${color} ${amount}%, transparent)`;
 
 const themeVars: React.CSSProperties = {
   ["--nt-paper" as any]: PALETTE.paper,
@@ -113,8 +121,9 @@ function HomePage() {
       {/* Ambient paper background */}
       <div className="fixed inset-0 -z-10" style={{ background: PALETTE.paper }}>
         <div
-          className="absolute inset-0 opacity-[0.05]"
+          className="absolute inset-0"
           style={{
+            opacity: PALETTE.dotOpacity,
             backgroundImage: `radial-gradient(circle at 1px 1px, ${PALETTE.navy} 1px, transparent 0)`,
             backgroundSize: "22px 22px",
           }}
@@ -150,9 +159,7 @@ function HomePage() {
         <div
           className="absolute inset-0"
           style={{
-            background:
-              `linear-gradient(180deg, ${PALETTE.navy}f5 0%, ${PALETTE.navy}d9 45%, ${PALETTE.navy}f7 100%),` +
-              `radial-gradient(80% 60% at 15% 40%, ${PALETTE.gold}22 0%, transparent 60%)`,
+            background: PALETTE.heroOverlay,
           }}
         />
         <div
@@ -176,7 +183,7 @@ function HomePage() {
               className="relative grid h-4 w-4 shrink-0 place-items-center rounded-full sm:h-6 sm:w-6"
               style={{ background: `${PALETTE.gold}` }}
             >
-              <span className="absolute inset-0 animate-ping rounded-full opacity-60" style={{ background: `${PALETTE.gold}80` }} />
+              <span className="absolute inset-0 animate-ping rounded-full opacity-60" style={{ background: transparentize(PALETTE.gold, 50) }} />
               <svg viewBox="0 0 24 24" className="relative h-2.5 w-2.5 sm:h-3.5 sm:w-3.5" fill="none" stroke={PALETTE.navy} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                 <path d="M12 3l1.7 4.6L18 9l-4.3 1.4L12 15l-1.7-4.6L6 9l4.3-1.4L12 3z" />
                 <path d="M18 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2z" />
@@ -345,7 +352,7 @@ function HomePage() {
         <div
           className="pointer-events-none absolute inset-0"
           style={{
-            background: `linear-gradient(180deg, ${PALETTE.navy}f2 0%, ${PALETTE.navy}cc 45%, ${PALETTE.navy}f5 100%)`,
+            background: PALETTE.exploreOverlay,
           }}
         />
         <svg
@@ -363,7 +370,7 @@ function HomePage() {
         {/* Halo dourado */}
         <div
           className="pointer-events-none absolute -top-32 left-1/2 h-[420px] w-[820px] -translate-x-1/2 rounded-full blur-3xl"
-          style={{ background: `radial-gradient(circle, ${PALETTE.gold}33 0%, transparent 65%)` }}
+          style={{ background: `radial-gradient(circle, ${transparentize(PALETTE.gold, 20)} 0%, transparent 65%)` }}
         />
 
         <div className={dsx(ds.container, "relative py-10 md:py-20")}>
@@ -444,7 +451,7 @@ function HomePage() {
             <div
               key={s.l}
               className="rounded-xl border px-2.5 py-2.5 text-center md:px-4 md:py-3"
-              style={{ borderColor: PALETTE.line, background: "#ffffff" }}
+              style={{ borderColor: PALETTE.line, background: PALETTE.card }}
             >
               <div
                 className={`${serif} tabular-nums`}
@@ -472,11 +479,11 @@ function HomePage() {
       <section className={dsx(ds.container, "py-5 md:py-10")}>
         <div
           className="relative overflow-hidden rounded-2xl px-4 py-4 text-white sm:px-7 sm:py-6 md:px-9 md:py-7"
-          style={{ background: `linear-gradient(140deg, ${PALETTE.navy} 0%, ${PALETTE.navy2} 100%)` }}
+          style={{ background: PALETTE.ctaGradient }}
         >
           <div
             className="pointer-events-none absolute -right-10 -bottom-10 h-40 w-40 rounded-full"
-            style={{ background: `radial-gradient(circle, ${PALETTE.gold}55 0%, transparent 70%)` }}
+            style={{ background: `radial-gradient(circle, ${transparentize(PALETTE.gold, 34)} 0%, transparent 70%)` }}
           />
           <div className="relative grid grid-cols-1 items-start gap-3 md:grid-cols-[1fr_auto] md:items-center md:gap-8">
             <div className="min-w-0">
@@ -490,7 +497,7 @@ function HomePage() {
                 }}
               >
                 Nunca mais pague caro por{" "}
-                <span className="italic font-semibold" style={{ color: "#F5D77A" }}>arroz, feijão e café.</span>
+                <span className="italic font-semibold" style={{ color: PALETTE.goldSoft }}>arroz, feijão e café.</span>
               </h3>
               <p className="mt-1 text-[11.5px] leading-tight text-white/85 sm:text-[13px]">
                 Cadastro em 30s · sem cartão.
@@ -541,14 +548,14 @@ function ExploreCard({
       {/* Glow no hover (só desktop) */}
       <div
         className="pointer-events-none absolute inset-x-0 -top-24 hidden h-40 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100 md:block"
-        style={{ background: `radial-gradient(60% 100% at 50% 100%, ${PALETTE.gold}44 0%, transparent 70%)` }}
+        style={{ background: `radial-gradient(60% 100% at 50% 100%, ${transparentize(PALETTE.gold, 27)} 0%, transparent 70%)` }}
       />
 
       {/* Selo — compacto no mobile, grande no desktop */}
       <div
         className="relative grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-white/15 md:mb-6 md:h-14 md:w-14 md:rounded-xl"
         style={{
-          background: `linear-gradient(135deg, ${PALETTE.gold}22 0%, ${PALETTE.gold}08 100%)`,
+          background: `linear-gradient(135deg, ${transparentize(PALETTE.gold, 14)} 0%, ${transparentize(PALETTE.gold, 5)} 100%)`,
           color: PALETTE.goldSoft,
         }}
       >
@@ -558,7 +565,7 @@ function ExploreCard({
       {/* Número decorativo — só desktop */}
       <span
         className={`${serif} absolute right-6 top-6 hidden text-[42px] leading-none md:block`}
-        style={{ color: `${PALETTE.goldSoft}55`, letterSpacing: "-0.04em" }}
+        style={{ color: transparentize(PALETTE.goldSoft, 33), letterSpacing: "-0.04em" }}
       >
         {number}
       </span>
@@ -569,7 +576,7 @@ function ExploreCard({
           className="text-[10px] font-bold uppercase tracking-[0.24em] md:mt-0 md:text-[11px] md:tracking-[0.28em]"
           style={{ color: PALETTE.goldSoft }}
         >
-          <span className={`${serif} mr-1.5 not-italic md:hidden`} style={{ color: `${PALETTE.goldSoft}99` }}>
+          <span className={`${serif} mr-1.5 not-italic md:hidden`} style={{ color: transparentize(PALETTE.goldSoft, 60) }}>
             {number}
           </span>
           {kicker}

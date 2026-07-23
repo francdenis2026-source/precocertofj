@@ -139,11 +139,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     scripts: [
       {
         children:
-          "try{var s=localStorage.getItem('pc-theme');var t=(s==='dark'||s==='system'||s==='light')?s:'light';var d=t==='dark'||(t==='system'&&window.matchMedia('(prefers-color-scheme: dark)').matches);var r=document.documentElement;if(d){r.classList.add('dark')}else{r.classList.remove('dark')}r.style.colorScheme=d?'dark':'light';}catch(e){document.documentElement.classList.remove('dark');}",
-      },
-      {
-        children:
-          "(function(){try{var V='signal-white-2026-07-19';if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister()})}).catch(function(){})}if(window.caches&&caches.keys){caches.keys().then(function(ks){ks.forEach(function(k){caches.delete(k)})}).catch(function(){})}if(localStorage.getItem('pc-theme-version')!==V){localStorage.setItem('pc-theme-version',V);if(!sessionStorage.getItem('pc-theme-reloaded-sw')){sessionStorage.setItem('pc-theme-reloaded-sw','1');location.reload()}}}catch(e){}})();",
+          "try{var s=localStorage.getItem('pc-theme');var d=s==='dark';var r=document.documentElement;r.classList.toggle('dark',d);r.dataset.theme=d?'dark':'light';r.style.colorScheme=d?'dark':'light';}catch(e){var r=document.documentElement;r.classList.remove('dark');r.dataset.theme='light';r.style.colorScheme='light';}",
       },
     ],
 

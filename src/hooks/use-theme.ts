@@ -7,29 +7,36 @@ import {
   type ThemePreference,
 } from "@/lib/theme.functions";
 
-export type Theme = ThemePreference; // "light" | "dark" | "system"
+export type Theme = ThemePreference; // "light" | "dark"
 const STORAGE_KEY = "pc-theme";
-
-function systemPrefersDark(): boolean {
-  if (typeof window === "undefined") return false;
-  return window.matchMedia("(prefers-color-scheme: dark)").matches;
-}
 
 function resolveIsDark(mode: Theme): boolean {
   if (mode === "dark") return true;
-  if (mode === "light") return false;
-  return systemPrefersDark();
+  return false;
 }
 
 function apply(mode: Theme) {
   if (typeof document === "undefined") return;
-  document.documentElement.classList.toggle("dark", resolveIsDark(mode));
+  const isDark = resolveIsDark(mode);
+  document.documentElement.classList.toggle("dark", isDark);
+  document.documentElement.dataset.theme = isDark ? "dark" : "light";
+  document.documentElement.style.colorScheme = isDark ? "dark" : "light";
 }
 
 function readStored(): Theme {
   if (typeof window === "undefined") return "light";
   const raw = window.localStorage.getItem(STORAGE_KEY);
-  return raw === "dark" || raw === "system" ? raw : "light";
+  return raw === "dark" ? "dark" : "light";
+}
+
+function writeStored(theme: Theme) {
+  if (typeof window === "undefined") return;
+  window.localStorage.setItem(STORAGE_KEY, theme);
+}
+
+function notifyThemeChange(theme: Theme) {
+  if (typeof window === "undefined") return;
+  window.dispatchEvent(new CustomEvent<Theme>("pc-theme-change", { detail: theme }));
 }
 
 /**
@@ -48,20 +55,31 @@ export function useTheme() {
   const pushRemote = useServerFn(updateMyThemePreference);
   const hasHydratedFromRemoteRef = useRef(false);
 
-  // Boot local: aplica preferência salva no navegador e escuta mudanças do sistema.
+  // Boot local: aplica preferência salva no navegador antes de qualquer sync remoto.
   useEffect(() => {
     const initial = readStored();
     setThemeState(initial);
     apply(initial);
     setMounted(true);
 
-    const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const onSystemChange = () => {
-      const current = readStored();
-      if (current === "system") apply("system");
+    const syncFromBrowser = (nextTheme?: Theme) => {
+      const next = nextTheme ?? readStored();
+      setThemeState(next);
+      apply(next);
     };
-    mq.addEventListener("change", onSystemChange);
-    return () => mq.removeEventListener("change", onSystemChange);
+    const onStorage = (event: StorageEvent) => {
+      if (event.key === STORAGE_KEY) syncFromBrowser();
+    };
+    const onCustomChange = (event: Event) => {
+      const next = event instanceof CustomEvent ? event.detail : undefined;
+      syncFromBrowser(next === "dark" ? "dark" : "light");
+    };
+    window.addEventListener("storage", onStorage);
+    window.addEventListener("pc-theme-change", onCustomChange);
+    return () => {
+      window.removeEventListener("storage", onStorage);
+      window.removeEventListener("pc-theme-change", onCustomChange);
+    };
   }, []);
 
   // Boot remoto: quando o usuário estiver logado, puxa preferência do perfil.
@@ -74,10 +92,10 @@ export function useTheme() {
         if (!sessionRes.session) return;
         const res = await fetchRemote();
         if (cancelled) return;
-        const remote = res?.theme ?? "light";
+        const remote: Theme = res?.theme === "dark" ? "dark" : "light";
         hasHydratedFromRemoteRef.current = true;
         if (remote !== readStored()) {
-          window.localStorage.setItem(STORAGE_KEY, remote);
+          writeStored(remote);
         }
         setThemeState(remote);
         apply(remote);
@@ -100,12 +118,13 @@ export function useTheme() {
   const setTheme = useCallback(
     (t: Theme) => {
       try {
-        localStorage.setItem(STORAGE_KEY, t);
+        writeStored(t);
       } catch {
         /* ignore */
       }
       setThemeState(t);
       apply(t);
+      notifyThemeChange(t);
       // Persiste no backend (silencioso). Só tenta se houver sessão.
       void (async () => {
         try {
@@ -121,8 +140,10 @@ export function useTheme() {
   );
 
   const toggle = useCallback(() => {
-    // Alterna binário respeitando resolução do sistema.
-    const isDark = resolveIsDark(theme);
+    // Alterna binário usando o estado aplicado no DOM para evitar closures antigas.
+    const isDark = typeof document !== "undefined"
+      ? document.documentElement.classList.contains("dark")
+      : resolveIsDark(theme);
     setTheme(isDark ? "light" : "dark");
   }, [theme, setTheme]);
 
