@@ -450,7 +450,7 @@ function HomePage() {
             <div
               key={s.l}
               className="rounded-2xl border px-4 py-4 text-center sm:py-5"
-              style={{ borderColor: P.line, background: P.card, color: P.navy }}
+              style={{ borderColor: P.line, background: P.card, color: P.heading }}
             >
               <div className="mb-1 flex items-center justify-center" style={{ color: P.goldSoft }}>
                 {s.icon}
