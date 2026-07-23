@@ -26,7 +26,7 @@ export function Nav() {
   const { signOut, loading: signingOut } = useSignOut();
   const isAuthed = !loading && !!session;
   const { isAdmin } = useMyRoles();
-  const showAdminLink = !loading && (!isAuthed || isAdmin);
+  const showAdminLink = isAdmin;
   const fetchCart = useServerFn(getCart);
   const cartQuery = useQuery({
     queryKey: ["cart"],

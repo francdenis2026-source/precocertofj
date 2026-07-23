@@ -23,6 +23,7 @@ import {
   Layers3,
   FileText,
   TicketPercent,
+  BadgeCheck,
   Webhook,
   LineChart,
   Settings2,
