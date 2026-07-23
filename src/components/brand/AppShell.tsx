@@ -19,18 +19,18 @@ export function AppShell({ children, scope }: { children: React.ReactNode; scope
   const resolvedScope = scope ?? (pathname.startsWith("/admin") ? "admin" : "app");
   return (
     <SidebarProvider defaultOpen={resolvedScope === "admin"}>
-      <AppSidebar />
-      <SidebarInset className={resolvedScope === "admin" ? "min-h-screen bg-muted/30" : "min-h-screen bg-background"}>
-        <AppHeader scope={resolvedScope} />
-        <main
-          className={`flex-1 ${resolvedScope === "admin" ? "pb-0" : "pb-[calc(var(--mobile-nav-height)+1rem)] md:pb-0"} ${
-            resolvedScope === "admin" ? "admin-scope" : ""
-          }`}
-        >
-          {children}
-        </main>
-      </SidebarInset>
-      {resolvedScope !== "admin" && <MobileNav />}
+      <div className={`contents ${resolvedScope === "admin" ? "admin-scope" : ""}`}>
+        <AppSidebar />
+        <SidebarInset className={resolvedScope === "admin" ? "min-h-screen bg-muted/30" : "min-h-screen bg-background"}>
+          <AppHeader scope={resolvedScope} />
+          <main
+            className={`flex-1 ${resolvedScope === "admin" ? "pb-0" : "pb-[calc(var(--mobile-nav-height)+1rem)] md:pb-0"}`}
+          >
+            {children}
+          </main>
+        </SidebarInset>
+        {resolvedScope !== "admin" && <MobileNav />}
+      </div>
     </SidebarProvider>
   );
 }
