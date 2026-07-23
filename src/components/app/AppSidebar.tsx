@@ -162,36 +162,38 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Admin */}
-        <SidebarGroup>
-          <SidebarGroupLabel className="text-[10px] uppercase tracking-[0.16em] text-sidebar-foreground/50">
-            Admin
-          </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {admin.map((n) => {
-                const active = isActive(n.to);
-                return (
-                  <SidebarMenuItem key={n.to}>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={active}
-                      tooltip={n.label}
-                    >
-                      <Link to={n.to} className="flex items-center gap-2.5">
-                        <n.icon
-                          className="h-4 w-4"
-                          strokeWidth={active ? 2.4 : 1.9}
-                        />
-                        <span className="text-[13px] font-medium">{n.label}</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
+        {/* Admin — visível apenas para contas com papel admin */}
+        {isAdmin && (
+          <SidebarGroup>
+            <SidebarGroupLabel className="text-[10px] uppercase tracking-[0.16em] text-sidebar-foreground/50">
+              Admin
+            </SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                {admin.map((n) => {
+                  const active = isActive(n.to);
+                  return (
+                    <SidebarMenuItem key={n.to}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={active}
+                        tooltip={n.label}
+                      >
+                        <Link to={n.to} className="flex items-center gap-2.5">
+                          <n.icon
+                            className="h-4 w-4"
+                            strokeWidth={active ? 2.4 : 1.9}
+                          />
+                          <span className="text-[13px] font-medium">{n.label}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        )}
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border/60">
