@@ -137,3 +137,41 @@ export const listMyProducts = createServerFn({ method: "GET" })
       createdAt: r.created_at,
     }));
   });
+
+export type MyProductsPage = {
+  items: MyProduct[];
+  nextOffset: number | null;
+  total: number | null;
+};
+
+export const listMyProductsPage = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((input: { offset?: number; limit?: number }) => ({
+    offset: Math.max(0, Math.floor(input.offset ?? 0)),
+    limit: Math.min(100, Math.max(1, Math.floor(input.limit ?? 30))),
+  }))
+  .handler(async ({ data, context }): Promise<MyProductsPage> => {
+    const from = data.offset;
+    const to = data.offset + data.limit - 1;
+    const { data: rows, error, count } = await context.supabase
+      .from("products")
+      .select("id, name, ean, category, unit, current_price, created_at", { count: "exact" })
+      .eq("owner_id", context.userId)
+      .order("created_at", { ascending: false })
+      .range(from, to);
+    if (error) throw new Error(error.message);
+    const items = (rows ?? []).map((r) => ({
+      id: r.id,
+      name: r.name,
+      ean: r.ean,
+      category: r.category,
+      unit: r.unit,
+      currentPrice: Number(r.current_price),
+      createdAt: r.created_at,
+    }));
+    return {
+      items,
+      nextOffset: items.length === data.limit ? data.offset + data.limit : null,
+      total: typeof count === "number" ? count : null,
+    };
+  });
