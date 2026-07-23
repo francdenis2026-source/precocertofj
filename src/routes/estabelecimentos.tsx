@@ -169,14 +169,55 @@ function EstablishmentsPage() {
             ) : (
               <SectionCard
                 title="Rede de mercados"
-                description={`${data.items.length} ${data.items.length === 1 ? "estabelecimento" : "estabelecimentos"} monitorados.`}
+                description={`${visibleItems.length} de ${data.items.length} ${data.items.length === 1 ? "estabelecimento" : "estabelecimentos"} monitorados.`}
                 bodyClassName="p-0"
               >
+                <div className="flex flex-col gap-3 border-b border-border/60 p-4 md:flex-row md:items-center md:p-5">
+                  <div className="relative flex-1">
+                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      value={q}
+                      onChange={(ev) => setQ(ev.target.value)}
+                      placeholder="Buscar mercado, bairro ou cidade"
+                      className="pl-9"
+                      inputMode="search"
+                    />
+                  </div>
+                  <select
+                    value={neighborhood}
+                    onChange={(ev) => setNeighborhood(ev.target.value)}
+                    className="h-10 rounded-md border border-border bg-background px-3 text-sm"
+                    aria-label="Filtrar por bairro"
+                  >
+                    <option value="__all">Todos os bairros</option>
+                    {neighborhoods.map((n) => (
+                      <option key={n} value={n}>
+                        {n}
+                      </option>
+                    ))}
+                  </select>
+                  <select
+                    value={sort}
+                    onChange={(ev) => setSort(ev.target.value as typeof sort)}
+                    className="h-10 rounded-md border border-border bg-background px-3 text-sm"
+                    aria-label="Ordenar por"
+                  >
+                    <option value="neighborhood">Ordenar: bairro (A→Z)</option>
+                    <option value="name">Ordenar: nome (A→Z)</option>
+                    <option value="products">Ordenar: mais produtos</option>
+                  </select>
+                </div>
+
+                {visibleItems.length === 0 ? (
+                  <div className="p-6 text-center text-sm text-muted-foreground">
+                    Nenhum estabelecimento encontrado com esse filtro.
+                  </div>
+                ) : (
                 <ul
                   className="grid grid-cols-1 gap-3 p-4 md:grid-cols-2 md:p-5"
                   aria-label="Lista de estabelecimentos"
                 >
-                  {data.items.map((e) => (
+                  {visibleItems.map((e) => (
                     <li
                       key={e.id}
                       className="rounded-xl border border-border/60 bg-card shadow-sm transition-shadow hover:shadow-md"
@@ -207,9 +248,14 @@ function EstablishmentsPage() {
                           </div>
                           <div className="min-w-0 flex-1">
                             <h3 className="truncate text-[15px] font-semibold text-foreground">{e.name}</h3>
-                            <p className="mt-0.5 text-[13px] text-muted-foreground">
-                              {[e.neighborhood, e.city, e.state].filter(Boolean).join(" · ") ||
-                                "Localização não informada"}
+                            {e.neighborhood && (
+                              <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[12px] font-medium text-primary">
+                                <MapPin className="h-3 w-3" aria-hidden />
+                                {e.neighborhood}
+                              </span>
+                            )}
+                            <p className="mt-1 text-[13px] text-muted-foreground">
+                              {[e.city, e.state].filter(Boolean).join(" · ") || "Localização não informada"}
                             </p>
                             <p className="mt-2 text-[13.5px] font-medium text-foreground">
                               <span className="text-primary">{e.productsCount}</span>{" "}
@@ -237,8 +283,10 @@ function EstablishmentsPage() {
                     </li>
                   ))}
                 </ul>
+                )}
               </SectionCard>
             )}
+
           </div>
         )}
       </main>
