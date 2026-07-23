@@ -20,7 +20,7 @@ import {
 
 const searchSchema = z.object({ id: z.string().min(1) });
 
-export const Route = createFileRoute("/lista/pronta")({
+export const Route = createFileRoute("/lista_/pronta")({
   validateSearch: (s: Record<string, unknown>) => searchSchema.parse(s),
   head: () => ({
     meta: [

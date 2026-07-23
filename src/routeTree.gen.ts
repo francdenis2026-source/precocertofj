@@ -49,6 +49,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProdutoIdRouteImport } from './routes/produto.$id'
 import { Route as ProdutoPublicoSlugRouteImport } from './routes/produto-publico.$slug'
 import { Route as LojaIdRouteImport } from './routes/loja.$id'
+import { Route as ListaProntaRouteImport } from './routes/lista_.pronta'
 import { Route as ListaNovaRouteImport } from './routes/lista_.nova'
 import { Route as HistoricoScansRouteImport } from './routes/historico.scans'
 import { Route as HistoricoProdutosRouteImport } from './routes/historico.produtos'
@@ -294,6 +295,11 @@ const ProdutoPublicoSlugRoute = ProdutoPublicoSlugRouteImport.update({
 const LojaIdRoute = LojaIdRouteImport.update({
   id: '/loja/$id',
   path: '/loja/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ListaProntaRoute = ListaProntaRouteImport.update({
+  id: '/lista_/pronta',
+  path: '/lista/pronta',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ListaNovaRoute = ListaNovaRouteImport.update({
@@ -608,6 +614,7 @@ export interface FileRoutesByFullPath {
   '/historico/produtos': typeof HistoricoProdutosRoute
   '/historico/scans': typeof HistoricoScansRoute
   '/lista/nova': typeof ListaNovaRoute
+  '/lista/pronta': typeof ListaProntaRoute
   '/loja/$id': typeof LojaIdRouteWithChildren
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
@@ -696,6 +703,7 @@ export interface FileRoutesByTo {
   '/historico/produtos': typeof HistoricoProdutosRoute
   '/historico/scans': typeof HistoricoScansRoute
   '/lista/nova': typeof ListaNovaRoute
+  '/lista/pronta': typeof ListaProntaRoute
   '/loja/$id': typeof LojaIdRouteWithChildren
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
@@ -785,6 +793,7 @@ export interface FileRoutesById {
   '/historico/produtos': typeof HistoricoProdutosRoute
   '/historico/scans': typeof HistoricoScansRoute
   '/lista_/nova': typeof ListaNovaRoute
+  '/lista_/pronta': typeof ListaProntaRoute
   '/loja/$id': typeof LojaIdRouteWithChildren
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
@@ -875,6 +884,7 @@ export interface FileRouteTypes {
     | '/historico/produtos'
     | '/historico/scans'
     | '/lista/nova'
+    | '/lista/pronta'
     | '/loja/$id'
     | '/produto-publico/$slug'
     | '/produto/$id'
@@ -963,6 +973,7 @@ export interface FileRouteTypes {
     | '/historico/produtos'
     | '/historico/scans'
     | '/lista/nova'
+    | '/lista/pronta'
     | '/loja/$id'
     | '/produto-publico/$slug'
     | '/produto/$id'
@@ -1051,6 +1062,7 @@ export interface FileRouteTypes {
     | '/historico/produtos'
     | '/historico/scans'
     | '/lista_/nova'
+    | '/lista_/pronta'
     | '/loja/$id'
     | '/produto-publico/$slug'
     | '/produto/$id'
@@ -1136,6 +1148,7 @@ export interface RootRouteChildren {
   EstabelecimentoSlugRoute: typeof EstabelecimentoSlugRouteWithChildren
   EstabelecimentoRecantoDaCarneRoute: typeof EstabelecimentoRecantoDaCarneRoute
   ListaNovaRoute: typeof ListaNovaRoute
+  ListaProntaRoute: typeof ListaProntaRoute
   LojaIdRoute: typeof LojaIdRouteWithChildren
   ProdutoPublicoSlugRoute: typeof ProdutoPublicoSlugRoute
   ProdutoIdRoute: typeof ProdutoIdRoute
@@ -1428,6 +1441,13 @@ declare module '@tanstack/react-router' {
       path: '/loja/$id'
       fullPath: '/loja/$id'
       preLoaderRoute: typeof LojaIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/lista_/pronta': {
+      id: '/lista_/pronta'
+      path: '/lista/pronta'
+      fullPath: '/lista/pronta'
+      preLoaderRoute: typeof ListaProntaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/lista_/nova': {
@@ -1886,6 +1906,7 @@ const rootRouteChildren: RootRouteChildren = {
   EstabelecimentoSlugRoute: EstabelecimentoSlugRouteWithChildren,
   EstabelecimentoRecantoDaCarneRoute: EstabelecimentoRecantoDaCarneRoute,
   ListaNovaRoute: ListaNovaRoute,
+  ListaProntaRoute: ListaProntaRoute,
   LojaIdRoute: LojaIdRouteWithChildren,
   ProdutoPublicoSlugRoute: ProdutoPublicoSlugRoute,
   ProdutoIdRoute: ProdutoIdRoute,
