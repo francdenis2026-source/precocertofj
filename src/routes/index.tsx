@@ -163,6 +163,38 @@ function HomePage() {
           }}
         />
 
+        {/* AI ANNOUNCEMENT — absolute, não altera altura do hero */}
+        <div
+          className="pointer-events-none absolute right-3 top-[70px] z-20 sm:right-6 sm:top-[84px] md:right-8 md:top-[96px]"
+          aria-live="polite"
+        >
+          <div
+            className="pointer-events-auto group inline-flex max-w-[calc(100vw-1.5rem)] items-center gap-2 rounded-full border border-white/25 bg-white/10 py-1.5 pl-2 pr-3 text-white shadow-[0_8px_24px_rgba(0,0,0,0.25)] backdrop-blur-xl transition-all hover:border-white/45 hover:bg-white/15 sm:gap-2.5 sm:py-2 sm:pl-2.5 sm:pr-4"
+            title="Em breve: sugestões e categorização automática por IA"
+          >
+            <span
+              className="relative grid h-5 w-5 shrink-0 place-items-center rounded-full sm:h-6 sm:w-6"
+              style={{ background: `${PALETTE.gold}` }}
+            >
+              <span className="absolute inset-0 animate-ping rounded-full opacity-60" style={{ background: `${PALETTE.gold}80` }} />
+              <svg viewBox="0 0 24 24" className="relative h-3 w-3 sm:h-3.5 sm:w-3.5" fill="none" stroke={PALETTE.navy} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M12 3l1.7 4.6L18 9l-4.3 1.4L12 15l-1.7-4.6L6 9l4.3-1.4L12 3z" />
+                <path d="M18 15l.8 2 2 .8-2 .8-.8 2-.8-2-2-.8 2-.8.8-2z" />
+              </svg>
+            </span>
+            <span className="flex min-w-0 items-center gap-1.5 text-[10.5px] font-semibold uppercase tracking-[0.16em] sm:text-[11.5px]">
+              <span
+                className="rounded-full px-1.5 py-0.5 text-[9px] font-bold tracking-[0.2em] sm:text-[9.5px]"
+                style={{ background: PALETTE.gold, color: PALETTE.navy, letterSpacing: "0.18em" }}
+              >
+                EM BREVE
+              </span>
+              <span className="hidden truncate sm:inline">Inteligência artificial integrada</span>
+              <span className="truncate sm:hidden">IA integrada</span>
+            </span>
+          </div>
+        </div>
+
         <div
           className={dsx("relative z-10 flex flex-col justify-end pb-12 pt-24 sm:pt-28 md:pt-40 md:pb-20", ds.container)}
           style={{ minHeight: "min(92vh, 880px)" }}
