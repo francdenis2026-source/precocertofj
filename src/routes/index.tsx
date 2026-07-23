@@ -361,7 +361,7 @@ function HomePage() {
                 </span>
                 <p
                   className={`${serif} mb-4 text-xl italic leading-snug`}
-                  style={{ color: P.navy }}
+                  style={{ color: P.heading }}
                 >
                   Comparar preços não é só gastar menos — é comprar com
                   inteligência e liberdade.
