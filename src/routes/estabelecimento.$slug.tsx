@@ -204,7 +204,7 @@ function EstablishmentPage() {
                     <Link
                       key={c.key}
                       to="/estabelecimento/$slug/categoria/$category"
-                      params={{ slug: Route.useParams().slug, category: slugifyCategory(c.label) }}
+                      params={{ slug, category: slugifyCategory(c.label) }}
                     >
                       <Badge variant="secondary" className="cursor-pointer text-[11px] hover:bg-primary/15">
                         {c.label} <span className="ml-1 opacity-70">({c.count})</span>
