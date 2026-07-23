@@ -401,21 +401,21 @@ function HomePage() {
 
 
       {/* CTA FINAL — compacto */}
-      <section className={dsx(ds.container, "py-8 md:py-10")}>
+      <section className={dsx(ds.container, "py-6 md:py-10")}>
         <div
-          className="relative overflow-hidden rounded-2xl px-5 py-5 text-white sm:px-7 sm:py-6 md:px-9 md:py-7"
+          className="relative overflow-hidden rounded-2xl px-4 py-4 text-white sm:px-7 sm:py-6 md:px-9 md:py-7"
           style={{ background: `linear-gradient(140deg, ${PALETTE.navy} 0%, ${PALETTE.navy2} 100%)` }}
         >
           <div
             className="pointer-events-none absolute -right-10 -bottom-10 h-40 w-40 rounded-full"
             style={{ background: `radial-gradient(circle, ${PALETTE.gold}55 0%, transparent 70%)` }}
           />
-          <div className="relative grid grid-cols-1 items-center gap-4 md:grid-cols-[1fr_auto] md:gap-8">
+          <div className="relative grid grid-cols-1 items-center gap-3 md:grid-cols-[1fr_auto] md:gap-8">
             <div className="min-w-0">
               <h3
                 className={`${serif} leading-[1.08] text-white`}
                 style={{
-                  fontSize: "clamp(1.4rem, 2.6vw, 2rem)",
+                  fontSize: "clamp(1.15rem, 2.6vw, 2rem)",
                   letterSpacing: "-0.015em",
                   textShadow: "0 1px 2px rgba(0,0,0,0.35)",
                 }}
@@ -423,21 +423,21 @@ function HomePage() {
                 Nunca mais pague caro por{" "}
                 <span className="italic font-semibold" style={{ color: "#F5D77A" }}>arroz, feijão e café.</span>
               </h3>
-              <p className="mt-1.5 text-[13px] text-white/85 sm:text-[13.5px]">
-                Cadastro em 30 segundos · sem cartão · cancele quando quiser.
+              <p className="mt-1 text-[12px] text-white/85 sm:text-[13.5px]">
+                Cadastro em 30s · sem cartão.
               </p>
             </div>
-            <div className="flex flex-col gap-2 sm:flex-row md:flex-col md:items-stretch">
+            <div className="flex flex-row gap-2 sm:gap-2 md:flex-col md:items-stretch">
               <Link
                 to="/cadastro"
-                className={dsx(ds.btn.base, ds.btn.sizes.md)}
+                className={dsx(ds.btn.base, ds.btn.sizes.md, "flex-1 md:flex-none")}
                 style={{ background: PALETTE.gold, color: PALETTE.navy }}
               >
                 Criar conta <ArrowRight className="h-4 w-4" />
               </Link>
               <Link
                 to="/resgatar"
-                className={dsx(ds.btn.base, ds.btn.sizes.md, "border border-white/35 text-white hover:bg-white/10")}
+                className={dsx(ds.btn.base, ds.btn.sizes.md, "flex-1 border border-white/35 text-white hover:bg-white/10 md:flex-none")}
               >
                 Tenho um código
               </Link>
