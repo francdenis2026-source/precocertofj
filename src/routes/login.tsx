@@ -267,7 +267,7 @@ function LoginPage() {
         toast.success("Bem-vindo de volta!");
       }
       await router.invalidate();
-      goToPostAuthTarget();
+      goToWelcomeThen();
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Falha ao autenticar";
       setFormError(msg);
