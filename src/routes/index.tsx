@@ -473,27 +473,29 @@ function ExploreCard({
       </div>
 
       <div
-        className="text-[10px] font-semibold uppercase tracking-[0.24em]"
+        className="text-[11px] font-bold uppercase tracking-[0.28em]"
         style={{ color: PALETTE.goldSoft }}
       >
         {kicker}
       </div>
       <h3
-        className={`${serif} mt-2 text-white leading-[1.1]`}
+        className="mt-2.5 font-semibold text-white"
         style={{
-          letterSpacing: "-0.015em",
-          fontSize: "clamp(1.25rem, 2vw, 1.55rem)",
+          letterSpacing: "-0.022em",
+          fontSize: "clamp(1.35rem, 1.9vw, 1.65rem)",
+          lineHeight: 1.18,
+          fontFeatureSettings: '"ss01","cv11"',
         }}
       >
         {title}
       </h3>
-      <p className="mt-2.5 flex-1 text-[13.5px] leading-relaxed text-white/75">
+      <p className="mt-3 flex-1 text-[14px] leading-[1.6] text-white/85">
         {desc}
       </p>
 
       {/* Rodapé com CTA e linha */}
       <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
-        <span className="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-white">
+        <span className="text-[12px] font-bold uppercase tracking-[0.2em] text-white">
           {cta}
         </span>
         <span
