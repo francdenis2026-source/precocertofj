@@ -189,7 +189,7 @@ export function AppSidebar() {
                   <Link to={n.to} className="flex items-center gap-2.5">
                     <span
                       className={cn(
-                        "grid h-6 w-6 shrink-0 place-items-center rounded-md border border-sidebar-border/60 bg-sidebar/40 text-sidebar-foreground/75",
+                        "grid h-6 w-6 shrink-0 place-items-center rounded-md border border-sidebar-border/60 bg-sidebar-accent/70 text-sidebar-foreground/75",
                         active && "border-sidebar-primary/50 bg-sidebar-primary text-sidebar-primary-foreground",
                       )}
                     >
