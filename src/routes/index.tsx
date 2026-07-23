@@ -387,7 +387,7 @@ function HomePage() {
               />
               {/* Quote card */}
               <div
-                className="absolute inset-x-8 bottom-8 rounded-3xl p-7 shadow-2xl backdrop-blur-md xl:inset-x-12 xl:bottom-12 xl:p-8"
+                className="absolute inset-x-6 bottom-6 rounded-2xl p-5 shadow-2xl backdrop-blur-md xl:inset-x-8 xl:bottom-8 xl:p-6"
                 style={{
                   background: "color-mix(in oklab, var(--pc-home-card) 92%, transparent)",
                   borderWidth: 1,
@@ -395,13 +395,13 @@ function HomePage() {
                 }}
               >
                 <span
-                  className={`${serif} mb-2 block text-5xl leading-none`}
+                  className={`${serif} mb-1 block text-4xl leading-none`}
                   style={{ color: P.gold }}
                 >
                   “
                 </span>
                 <p
-                  className={`${serif} mb-4 text-xl italic leading-snug`}
+                  className={`${serif} mb-3 text-lg italic leading-snug`}
                   style={{ color: P.heading }}
                 >
                   Comparar preços não é só gastar menos — é comprar com
