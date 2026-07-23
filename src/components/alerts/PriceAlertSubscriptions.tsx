@@ -88,6 +88,8 @@ export function PriceAlertSubscriptions() {
                     : "Cair ou subir"}{" "}
                 • ±{s.thresholdPct}%
                 {s.targetPrice !== null && ` • alvo ${brl(s.targetPrice)}`}
+                {(s.scopeNeighborhood || s.scopeCity) &&
+                  ` • ${[s.scopeNeighborhood, s.scopeCity].filter(Boolean).join(" / ")}`}
                 {!s.active && " • pausado"}
               </p>
             </div>

@@ -14,6 +14,8 @@ export type PriceAlertSubscription = {
   productKey: string;
   displayName: string | null;
   establishmentId: string | null;
+  scopeNeighborhood: string | null;
+  scopeCity: string | null;
   direction: AlertDirection;
   thresholdPct: number;
   targetPrice: number | null;
@@ -28,6 +30,8 @@ type Row = {
   product_key: string;
   display_name: string | null;
   establishment_id: string | null;
+  scope_neighborhood: string | null;
+  scope_city: string | null;
   direction: AlertDirection;
   threshold_pct: number;
   target_price: number | null;
@@ -42,6 +46,8 @@ const mapRow = (r: Row): PriceAlertSubscription => ({
   productKey: r.product_key,
   displayName: r.display_name,
   establishmentId: r.establishment_id,
+  scopeNeighborhood: r.scope_neighborhood,
+  scopeCity: r.scope_city,
   direction: r.direction,
   thresholdPct: Number(r.threshold_pct),
   targetPrice: r.target_price !== null ? Number(r.target_price) : null,
@@ -70,6 +76,8 @@ export const createAlertSubscription = createServerFn({ method: "POST" })
       productName?: string;
       displayName?: string | null;
       establishmentId?: string | null;
+      scopeNeighborhood?: string | null;
+      scopeCity?: string | null;
       direction?: AlertDirection;
       thresholdPct?: number;
       targetPrice?: number | null;
@@ -94,11 +102,18 @@ export const createAlertSubscription = createServerFn({ method: "POST" })
     }
     if (!key) throw new Error("Não foi possível normalizar o produto");
 
+    const norm = (v: string | null | undefined) => {
+      const s = (v ?? "").trim();
+      return s.length ? s : null;
+    };
+
     const payload = {
       user_id: context.userId,
       product_key: key,
       display_name: data.displayName ?? data.productName ?? null,
       establishment_id: data.establishmentId ?? null,
+      scope_neighborhood: norm(data.scopeNeighborhood),
+      scope_city: norm(data.scopeCity),
       direction: data.direction ?? "both",
       threshold_pct: data.thresholdPct ?? 5,
       target_price: data.targetPrice ?? null,
