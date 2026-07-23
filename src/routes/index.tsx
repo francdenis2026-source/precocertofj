@@ -265,7 +265,7 @@ function HomePage() {
                 </Link>
                 <Link
                   to="/melhores-precos"
-                  className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border-2 px-5 py-3 text-[15px] font-bold transition-colors hover:text-[color:var(--pc-home-card)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:rounded-2xl sm:px-10 sm:py-5 sm:text-lg"
+                  className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border-2 px-5 py-2.5 text-[14px] font-bold transition-colors hover:text-[color:var(--pc-home-card)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:rounded-2xl sm:px-7 sm:py-3 sm:text-[15px]"
                   style={{
                     borderColor: P.heading,
                     color: P.heading,
