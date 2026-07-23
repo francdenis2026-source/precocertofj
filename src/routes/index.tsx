@@ -518,9 +518,9 @@ function HomePage() {
       </section>
 
       {/* -------- FINAL CTA -------- */}
-      <section className="mx-auto w-full max-w-6xl px-4 pb-10 sm:px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-6xl px-4 pb-8 sm:px-6 lg:px-8">
         <div
-          className="relative overflow-hidden rounded-2xl px-6 py-6 sm:px-10 sm:py-8"
+          className="relative overflow-hidden rounded-2xl px-6 py-5 sm:px-9 sm:py-6"
           style={{ background: P.navy, color: "#F5F6FA" }}
         >
           <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center md:gap-8">
