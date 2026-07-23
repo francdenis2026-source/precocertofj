@@ -116,13 +116,6 @@ function RedeemPage() {
   const preview = useServerFn(previewLicenseCode);
   const fetchAccount = useServerFn(getMyAccount);
 
-  // Debounce do valor limpo para consultar o preview
-  const [debouncedClean, setDebouncedClean] = useState("");
-  useEffect(() => {
-    const id = setTimeout(() => setDebouncedClean(clean), 350);
-    return () => clearTimeout(id);
-  }, [clean]);
-
   const clean = useMemo(() => sanitize(raw), [raw]);
   const display = useMemo(() => grouped(clean), [clean]);
   const validation = useMemo(() => validateCode(raw), [raw]);
