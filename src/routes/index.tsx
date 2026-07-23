@@ -67,6 +67,7 @@ function HomePage() {
   const navigate = useNavigate();
   const [q, setQ] = useState("");
   const [today, setToday] = useState("");
+  const [previewMode, setPreviewMode] = useState<"before" | "after">("after");
 
   useEffect(() => {
     setToday(
@@ -95,7 +96,8 @@ function HomePage() {
 
   return (
     <div
-      className="min-h-screen w-full antialiased"
+      className="min-h-screen w-full antialiased pc-home"
+      data-preview={previewMode}
       style={{
         background: P.paper,
         color: P.ink,
@@ -103,6 +105,26 @@ function HomePage() {
       }}
     >
       <SiteHeader variant="solid" showThemeToggle />
+
+      {/* Live preview toggle: Antes/Depois */}
+      <button
+        type="button"
+        onClick={() => setPreviewMode((m) => (m === "after" ? "before" : "after"))}
+        aria-label="Alternar visualização entre layout Antes e Depois"
+        className="fixed bottom-4 right-4 z-50 inline-flex items-center gap-2 rounded-full border px-3.5 py-2 text-[11px] font-bold uppercase tracking-[0.18em] shadow-lg backdrop-blur transition-all hover:-translate-y-0.5 sm:bottom-6 sm:right-6"
+        style={{
+          background: "color-mix(in oklab, var(--pc-home-card) 92%, transparent)",
+          borderColor: P.line,
+          color: P.heading,
+        }}
+      >
+        <span
+          className="inline-block h-2 w-2 rounded-full"
+          style={{ background: previewMode === "after" ? P.gold : P.navy }}
+        />
+        {previewMode === "after" ? "Depois (compacto)" : "Antes (espaçado)"}
+      </button>
+
 
       {/* ============== EDITORIAL CARD ============== */}
       <div className="mx-auto w-full max-w-6xl px-4 pt-3 pb-4 sm:px-6 sm:pt-4 lg:px-8 lg:pt-5">
