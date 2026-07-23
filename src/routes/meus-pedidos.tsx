@@ -4,7 +4,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { AppShell } from "@/components/brand/AppShell";
-import { PageHeader } from "@/components/brand/PageHeader";
+import { PageHeader, EmptyState, LoadingSkeleton } from "@/components/layout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -131,46 +131,39 @@ function MeusPedidos() {
 
   return (
     <AppShell>
-      <PageHeader
-        eyebrow="Conta · Pedidos"
-        title="Meus pedidos"
-        description="Status de pagamento, aprovação e entrega do código de ativação."
-        breadcrumbs={[{ label: "Meus pedidos" }]}
-        icon={<Receipt className="h-4 w-4" />}
-        goldRule
-        actions={
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => ordersQ.refetch()}
-            disabled={ordersQ.isFetching}
-          >
-            <RefreshCw className={`mr-1.5 h-3.5 w-3.5 ${ordersQ.isFetching ? "animate-spin" : ""}`} />
-            Atualizar
-          </Button>
-        }
-      />
+      <div className="mx-auto w-full max-w-4xl px-4 md:px-6">
+        <PageHeader
+          breadcrumbs={[{ label: "Início", to: "/app" }, { label: "Meus pedidos" }]}
+          title="Meus pedidos"
+          description="Status de pagamento, aprovação e entrega do código de ativação."
+          actions={
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => ordersQ.refetch()}
+              disabled={ordersQ.isFetching}
+            >
+              <RefreshCw className={`mr-1.5 h-3.5 w-3.5 ${ordersQ.isFetching ? "animate-spin" : ""}`} />
+              Atualizar
+            </Button>
+          }
+        />
 
-      <div className="mx-auto w-full max-w-4xl space-y-3 px-4 py-6 md:px-6 md:py-8">
-        {ordersQ.isLoading ? (
-          <Card>
-            <CardContent className="py-10 text-center text-sm text-muted-foreground">
-              Carregando pedidos…
-            </CardContent>
-          </Card>
-        ) : orders.length === 0 ? (
-          <Card>
-            <CardContent className="py-10 text-center">
-              <Receipt className="mx-auto mb-2 h-8 w-8 text-muted-foreground" />
-              <p className="text-sm text-muted-foreground">
-                Você ainda não tem pedidos. Assine um plano para começar.
-              </p>
-              <Button asChild size="sm" variant="executive" className="mt-4">
-                <Link to="/planos">Ver planos</Link>
-              </Button>
-            </CardContent>
-          </Card>
-        ) : (
+        <div className="space-y-3 pb-8">
+          {ordersQ.isLoading ? (
+            <LoadingSkeleton rows={4} />
+          ) : orders.length === 0 ? (
+            <EmptyState
+              icon={Receipt}
+              title="Você ainda não tem pedidos"
+              description="Assine um plano para começar a acompanhar seus códigos de ativação."
+              action={
+                <Button asChild size="sm" variant="executive">
+                  <Link to="/planos">Ver planos</Link>
+                </Button>
+              }
+            />
+          ) : (
           orders.map((o) => (
             <Card key={o.id}>
               <CardHeader className="flex-row items-start justify-between space-y-0 gap-3 pb-3">
