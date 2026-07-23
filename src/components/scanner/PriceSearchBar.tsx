@@ -902,9 +902,10 @@ export function PriceSearchBar({
                             }
                           />
                           <div className="min-w-0 flex-1 self-center">
-                            <p className="truncate font-display text-[13px] font-medium tracking-tight text-foreground">
+                            <p className="truncate font-display text-[13px] font-semibold tracking-tight text-[var(--market-accent)] transition-colors group-hover:text-[var(--market-accent-hover)]">
                               {m.marketName}
                             </p>
+
                             <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground">
                               {m.samples} scan{m.samples > 1 ? "s" : ""}
                               <span aria-hidden="true" className="mx-1 text-accent-strong/50">·</span>
