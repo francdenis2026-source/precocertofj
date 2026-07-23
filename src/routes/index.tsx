@@ -51,7 +51,7 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
-/* Design tokens — Navy Trust, contrastes reforçados */
+/* Design tokens — Navy Trust, contrastes reforçados, adaptáveis light/dark */
 const PALETTE = {
   paper: "var(--pc-home-paper)",
   ink: "var(--pc-home-ink)",
@@ -62,9 +62,11 @@ const PALETTE = {
   goldSoft: "var(--pc-home-gold-soft)",
   line: "var(--pc-home-line)",
   heroOverlay: "var(--pc-home-hero-overlay)",
+  exploreBg: "var(--pc-home-explore-bg)",
   exploreOverlay: "var(--pc-home-explore-overlay)",
   ctaGradient: "var(--pc-home-cta-gradient)",
   dotOpacity: "var(--pc-home-dot-opacity)",
+  onHero: "var(--pc-home-onhero-fg)",
 };
 
 const transparentize = (color: string, amount: number) =>
