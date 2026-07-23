@@ -160,7 +160,7 @@ function WelcomePage() {
         >
           <button
             type="button"
-            onClick={() => router.history.replace("/lista")}
+            onClick={() => router.history.replace("/lista/nova")}
             className="group inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-[14px] font-semibold shadow-lg transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
             style={{
               background: `linear-gradient(90deg, ${GOLD}, ${GOLD_SOFT})`,
