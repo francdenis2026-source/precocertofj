@@ -390,6 +390,59 @@ export const previewLicenseCode = createServerFn({ method: "POST" })
       message, redeemable,
     };
   });
+/**
+ * Verificação PÚBLICA em tempo real (sem login) para o campo de resgate.
+ * Retorna apenas o estado mínimo: se existe, se é resgatável, motivo curto.
+ * Nunca revela dados sensíveis (dono, e-mail, plano, valor).
+ */
+export type PublicLicenseCheck = {
+  valid: boolean;           // formato/comprimento OK
+  found: boolean;           // existe no banco
+  redeemable: boolean;      // pago e não expirado / não usado
+  status: string | null;    // 'paid' | 'redeemed' | 'revoked' | 'expired' | 'pending' | null
+  reason: string;           // mensagem curta para UI
+};
+
+export const checkLicenseCodePublic = createServerFn({ method: "POST" })
+  .inputValidator((data: { code: string }) => ({
+    code: String(data?.code ?? "").toUpperCase().replace(/[^A-Z0-9]/g, "").trim(),
+  }))
+  .handler(async ({ data }): Promise<PublicLicenseCheck> => {
+    const code = data.code;
+    if (code.length < 8) {
+      return { valid: false, found: false, redeemable: false, status: null, reason: "Código incompleto." };
+    }
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: lic, error } = await supabaseAdmin
+      .from("license_codes")
+      .select("status, expires_at")
+      .eq("code", code)
+      .maybeSingle();
+    if (error) {
+      return { valid: true, found: false, redeemable: false, status: null, reason: "Não foi possível verificar agora. Tente novamente." };
+    }
+    if (!lic) {
+      return { valid: true, found: false, redeemable: false, status: null, reason: "Código não reconhecido." };
+    }
+    const expMs = lic.expires_at ? Date.parse(lic.expires_at) : null;
+    const isExpired = expMs != null && expMs < Date.now();
+    const effective = isExpired && lic.status === "paid" ? "expired" : (lic.status as string);
+    const reason =
+      effective === "paid" ? "Código válido — pronto para ativar."
+      : effective === "redeemed" ? "Este código já foi utilizado."
+      : effective === "revoked" ? "Código revogado pelo administrador."
+      : effective === "expired" ? "Código expirado."
+      : effective === "pending" ? "Pagamento ainda não confirmado."
+      : "Status desconhecido.";
+    return {
+      valid: true,
+      found: true,
+      redeemable: effective === "paid",
+      status: effective,
+      reason,
+    };
+  });
+
 
 /** Cliente resgata código de licença. */
 export const redeemMyLicenseCode = createServerFn({ method: "POST" })
