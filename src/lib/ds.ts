@@ -69,7 +69,7 @@ export const ds = {
       accent: "bg-accent text-accent-foreground shadow-elev-1 hover:shadow-elev-2",
       ghost: "border border-border bg-card text-foreground hover:border-primary/40",
       outlineOnDark:
-        "border-2 border-white/40 bg-white/5 text-white backdrop-blur hover:border-white hover:bg-white/15",
+        "border-2 border-on-media-border bg-on-media-surface text-on-media backdrop-blur hover:border-on-media hover:bg-on-media-surface",
     },
   },
 
@@ -86,9 +86,9 @@ export const ds = {
   chip: {
     base: "ds-chip",
     onDark:
-      "inline-flex items-center gap-1.5 rounded-full border border-white/25 bg-white/10 " +
-      "px-3 py-1.5 text-[12px] font-medium text-white/90 backdrop-blur transition-colors " +
-      "hover:bg-white/15 hover:text-white",
+      "inline-flex items-center gap-1.5 rounded-full border border-on-media-border bg-on-media-surface " +
+      "px-3 py-1.5 text-[12px] font-medium text-on-media backdrop-blur transition-colors " +
+      "hover:bg-on-media-surface hover:text-on-media",
   },
 
   /* ---------- Inputs ---------- */
@@ -98,8 +98,8 @@ export const ds = {
       "text-foreground outline-none placeholder:text-muted-foreground focus-ring " +
       "sm:text-[16px]",
     onDark:
-      "min-w-0 flex-1 bg-transparent py-2.5 pr-1 text-[15px] text-white outline-none " +
-      "placeholder:text-white/85 sm:py-3 sm:text-[16px]",
+      "min-w-0 flex-1 bg-transparent py-2.5 pr-1 text-[15px] text-on-media outline-none " +
+      "placeholder:text-on-media-muted sm:py-3 sm:text-[16px]",
   },
 
   /* ---------- Estados de foco / motion ---------- */
