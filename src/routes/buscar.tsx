@@ -285,12 +285,80 @@ function SearchPage() {
             }
           />
 
+          {/* Filtros avançados: marca + faixa de preço (sincronizados na URL) */}
+          <div className="mb-3 flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card/60 px-3 py-2">
+            <span className="font-mono text-[9.5px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+              Filtros
+            </span>
+            <label className="inline-flex items-center gap-1.5">
+              <span className="sr-only">Marca</span>
+              <input
+                type="text"
+                inputMode="text"
+                maxLength={40}
+                placeholder="Marca (ex.: Camil)"
+                defaultValue={brandFilter}
+                onBlur={(e) => setBrand(e.currentTarget.value.trim())}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") setBrand(e.currentTarget.value.trim());
+                }}
+                className="h-8 w-36 rounded-md border border-border bg-background px-2 text-[12px] text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              />
+            </label>
+            <label className="inline-flex items-center gap-1.5">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">R$ min</span>
+              <input
+                type="number"
+                inputMode="decimal"
+                min={0}
+                step="0.01"
+                placeholder="0,00"
+                defaultValue={search.min}
+                onBlur={(e) => setMinPrice(e.currentTarget.value.trim())}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") setMinPrice(e.currentTarget.value.trim());
+                }}
+                className="h-8 w-20 rounded-md border border-border bg-background px-2 text-[12px] tabular-nums text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              />
+            </label>
+            <label className="inline-flex items-center gap-1.5">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">R$ max</span>
+              <input
+                type="number"
+                inputMode="decimal"
+                min={0}
+                step="0.01"
+                placeholder="99,90"
+                defaultValue={search.max}
+                onBlur={(e) => setMaxPrice(e.currentTarget.value.trim())}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") setMaxPrice(e.currentTarget.value.trim());
+                }}
+                className="h-8 w-20 rounded-md border border-border bg-background px-2 text-[12px] tabular-nums text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              />
+            </label>
+            {hasFilters ? (
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="ml-auto inline-flex items-center rounded-full border border-border bg-background px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                aria-label="Limpar filtros"
+              >
+                Limpar filtros
+              </button>
+            ) : null}
+          </div>
+
           <PriceSearchBar
             initialQuery={q}
             mode={mode}
             pureOnly={pureOnly}
+            brandFilter={brandFilter}
+            priceMin={Number.isFinite(priceMin) ? priceMin : undefined}
+            priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
             onQueryChange={syncQueryToUrl}
           />
+
 
           {!hasQuery && (
             <EmptyState
