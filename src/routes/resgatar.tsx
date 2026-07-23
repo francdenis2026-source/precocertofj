@@ -709,7 +709,7 @@ function CodeVerifier({
               : c.state === "bad"
               ? { color: "#991b1b", bg: "#fee2e2", dot: "#dc2626" }
               : c.state === "loading"
-              ? { color: "#0f1b3d", bg: "#eef2ff", dot: "#6366f1" }
+              ? { color: NAVY, bg: "#eef2ff", dot: "#6366f1" }
               : { color: "#64748b", bg: "#f1f5f9", dot: "#cbd5e1" };
           return (
             <span
