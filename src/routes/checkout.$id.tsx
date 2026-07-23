@@ -137,6 +137,35 @@ function CheckoutPage() {
     onError: (e: any) => toast.error(e?.message ?? "Falha ao simular pagamento"),
   });
 
+  const pixMutation = useMutation({
+    mutationFn: async () => {
+      if (!emailValid) throw new Error("Informe um e-mail válido para receber o código.");
+      if (!emailSaved) await saveEmail({ data: { id, email: emailNormalized } });
+      return createPix({ data: { orderId: id } });
+    },
+    onSuccess: () => {
+      toast.success("PIX gerado — escaneie o QR Code ou copie o código.");
+      qc.invalidateQueries({ queryKey: ["checkout-order", id] });
+    },
+    onError: (e: any) => toast.error(e?.message ?? "Falha ao gerar PIX"),
+  });
+
+  // Countdown para expiração do PIX (força re-render a cada segundo).
+  const [tick, setTick] = useState(0);
+  const pixExpiresAt: string | null = (order as any)?.pix_expires_at ?? null;
+  const pixQrCode: string | null = (order as any)?.pix_qr_code ?? null;
+  const pixQrBase64: string | null = (order as any)?.pix_qr_code_base64 ?? null;
+  const pixMsLeft = pixExpiresAt ? new Date(pixExpiresAt).getTime() - Date.now() : 0;
+  const pixActive = !!pixQrCode && pixMsLeft > 0;
+  useEffect(() => {
+    if (!pixActive) return;
+    const t = setInterval(() => setTick((n) => n + 1), 1000);
+    return () => clearInterval(t);
+  }, [pixActive]);
+  void tick;
+
+
+
   async function applyCoupon() {
     if (!couponInput.trim()) return;
     setApplying(true);
