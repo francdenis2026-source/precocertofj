@@ -602,19 +602,19 @@ function ExploreCard({
       }}
     >
       <div
-        className={`${serif} mb-8 italic opacity-60 transition-opacity group-hover:opacity-100`}
+        className={`${serif} mb-5 italic opacity-60 transition-opacity group-hover:opacity-100`}
         style={{
           color: P.gold,
-          fontSize: "clamp(3rem, 5vw, 4.5rem)",
+          fontSize: "clamp(2.25rem, 4vw, 3.25rem)",
           lineHeight: 1,
           letterSpacing: "-0.03em",
         }}
       >
         {number}
       </div>
-      <h3 className="mb-4 text-2xl font-bold text-white lg:text-[26px]">{title}</h3>
-      <p className="text-[15px] leading-relaxed text-white/60">{desc}</p>
-      <div className="mt-8 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.24em] text-white/80 transition-colors group-hover:text-[color:var(--pc-home-gold)]">
+      <h3 className="mb-3 text-xl font-bold text-white lg:text-[22px]">{title}</h3>
+      <p className="text-[14px] leading-relaxed text-white/60">{desc}</p>
+      <div className="mt-5 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.24em] text-white/80 transition-colors group-hover:text-[color:var(--pc-home-gold)]">
         {cta}
         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
       </div>
