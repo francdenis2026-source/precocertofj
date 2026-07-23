@@ -70,7 +70,7 @@ export const Route = createFileRoute("/api/public/mp-webhook")({
             if (extra && Object.keys(extra).length > 0) {
               update.email_status = extra;
             }
-            await supabaseAdmin.from("webhook_events").update(update).eq("id", logRow.id);
+            await supabaseAdmin.from("webhook_events").update(update as never).eq("id", logRow.id);
           }
           return new Response(error ?? "ok", { status: httpStatus });
         };
