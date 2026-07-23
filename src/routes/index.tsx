@@ -495,39 +495,29 @@ function HomePage() {
 
           {/* -------- EXPLORE (dark navy band inside card) -------- */}
           <div
-            className="p-3.5 sm:p-5 lg:p-6 xl:p-7"
+            className="p-4 sm:p-5 lg:p-6 xl:p-7"
             style={{ background: P.navy, color: "#F5F6FA" }}
           >
-            <div className="mb-3 flex flex-col gap-1.5 sm:mb-4 md:flex-row md:items-end md:justify-between md:gap-6">
-              <div className="max-w-xl">
-                <div
-                  className="mb-1.5 text-[9px] font-bold uppercase tracking-[0.28em] sm:text-[10px]"
-                  style={{ color: P.gold }}
-                >
-                  Por onde começar
-                </div>
-                <h2
-                  className={`${serif} font-normal`}
-                  style={{
-                    fontSize: "clamp(1.15rem, 2.4vw, 1.85rem)",
-                    lineHeight: 1,
-                    letterSpacing: "-0.025em",
-                    color: "#F5F6FA",
-                  }}
-                >
-                  Três caminhos,{" "}
-                  <span className="italic" style={{ color: P.gold }}>
-                    uma cesta mais barata.
-                  </span>
-                </h2>
-                <p className="mt-1.5 hidden max-w-md text-[13px] leading-snug text-white/80 sm:block sm:text-[13.5px]">
-                  Escolha por onde quer começar. Em cada rota, dados reais dos mercados de Feijó.
-                </p>
+            <div className="mb-3 sm:mb-4">
+              <div
+                className="mb-1.5 text-[9.5px] font-bold uppercase tracking-[0.24em] sm:text-[10.5px]"
+                style={{ color: P.goldSoft }}
+              >
+                Por onde começar
               </div>
-              <div className="hidden h-px flex-1 md:mx-8 md:mb-3 md:block" style={{ background: "rgb(255 255 255 / 0.08)" }} />
+              <h2
+                className="font-semibold text-white"
+                style={{
+                  fontSize: "clamp(1.05rem, 2vw, 1.5rem)",
+                  lineHeight: 1.15,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Três caminhos, uma cesta mais barata.
+              </h2>
             </div>
 
-            <div className="grid gap-2 sm:grid-cols-2 sm:gap-3 lg:grid-cols-3 lg:gap-3">
+            <div className="grid gap-2 sm:grid-cols-2 sm:gap-3 lg:grid-cols-3">
               <ExploreCard
                 to="/melhores-precos"
                 number="01"
@@ -555,6 +545,7 @@ function HomePage() {
 
         </div>
       </div>
+
 
       {/* -------- SOCIAL PROOF (compact) -------- */}
       <section className="mx-auto w-full max-w-6xl px-4 pb-4 sm:px-6 lg:px-8">
