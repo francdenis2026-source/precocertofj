@@ -19,7 +19,7 @@ export const Route = createFileRoute("/onboarding")({
   head: () => ({
     meta: [
       { title: "Complete seu cadastro — PreçoCerto" },
-      { name: "description", content: "Precisamos de alguns dados para personalizar sua experiência." },
+      { name: "description", content: "Menos de 1 minuto para liberar preços e alertas do seu bairro." },
       { name: "robots", content: "noindex" },
     ],
   }),
