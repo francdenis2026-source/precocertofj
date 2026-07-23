@@ -142,13 +142,16 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
               >
                 {brl(p.price)}
               </div>
-              <div
-                className="mt-2 flex items-center gap-1 text-[10.5px] font-medium"
-                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 65%, transparent)" }}
-              >
-                <Store className="h-3 w-3 shrink-0" />
-                <span className="truncate">{p.marketName ?? "Vários mercados"}</span>
+              <div className="mt-2 flex items-center gap-1.5 text-[11px]">
+                <Store className="h-3 w-3 shrink-0" style={{ color: P.goldSoft }} />
+                <span
+                  className="truncate font-semibold tracking-[-0.005em]"
+                  style={{ color: P.goldSoft }}
+                >
+                  {p.marketName ?? "Vários mercados"}
+                </span>
               </div>
+
               <div
                 className="mt-0.5 flex items-center gap-1 text-[10px]"
                 style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
