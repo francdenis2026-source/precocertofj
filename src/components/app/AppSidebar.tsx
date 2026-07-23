@@ -53,7 +53,7 @@ const admin = [
 export function AppSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { signOut, loading: signingOut } = useSignOut();
-  const { isAdmin } = useMyRoles();
+  const { isAdmin, loading: rolesLoading } = useMyRoles();
 
   const isActive = (to: string, exact?: boolean) =>
     exact ? pathname === to : pathname === to || pathname.startsWith(to + "/");
@@ -163,7 +163,7 @@ export function AppSidebar() {
         </SidebarGroup>
 
         {/* Admin — visível apenas para contas com papel admin */}
-        {isAdmin && (
+        {!rolesLoading && isAdmin && (
           <SidebarGroup>
             <SidebarGroupLabel className="text-[10px] uppercase tracking-[0.16em] text-sidebar-foreground/50">
               Admin
