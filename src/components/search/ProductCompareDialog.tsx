@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import { computeUnitPrice } from "@/lib/unit-price";
 import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
-import { ShareButton } from "@/components/ui/share-button";
 import { X, RefreshCw, Trophy, AlertTriangle, Clock } from "lucide-react";
 import { useMyRoles } from "@/hooks/useMyRoles";
+
 
 /**
  * Diálogo/painel de comparação lado-a-lado de 2+ produtos escolhidos
