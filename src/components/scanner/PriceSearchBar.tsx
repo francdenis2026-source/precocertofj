@@ -1306,8 +1306,9 @@ function ProductGroupCard({
             <p className="mt-1 inline-flex max-w-full items-center gap-1 rounded-full border border-accent-strong/40 bg-accent/10 px-2 py-0.5 font-mono text-[9.5px] uppercase tracking-[0.16em] text-accent-strong">
               <Crown className="h-3 w-3 shrink-0" strokeWidth={2} aria-hidden="true" />
               <span className="truncate">
-                Mais barato em <span className="text-foreground">{cheapestInGroup.marketName}</span> · {fmt(cheapestInGroup.price)}
+                Mais barato em <span className="font-semibold text-[var(--market-accent)]">{cheapestInGroup.marketName}</span> · {fmt(cheapestInGroup.price)}
               </span>
+
             </p>
           ) : null}
           {matchReasons.length > 0 && (
