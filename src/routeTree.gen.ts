@@ -77,6 +77,7 @@ import { Route as AdminClientesRouteImport } from './routes/admin_.clientes'
 import { Route as AdminCategorizacaoRouteImport } from './routes/admin_.categorizacao'
 import { Route as AdminCatalogoRouteImport } from './routes/admin_.catalogo'
 import { Route as AdminCadastroFotoRouteImport } from './routes/admin_.cadastro-foto'
+import { Route as AdminAuditoriaAcessosRouteImport } from './routes/admin_.auditoria-acessos'
 import { Route as AdminAuditoriaRouteImport } from './routes/admin_.auditoria'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin_.analytics'
 import { Route as AdminGestaoRouteImport } from './routes/admin/gestao'
@@ -430,6 +431,11 @@ const AdminCadastroFotoRoute = AdminCadastroFotoRouteImport.update({
   path: '/admin/cadastro-foto',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminAuditoriaAcessosRoute = AdminAuditoriaAcessosRouteImport.update({
+  id: '/admin_/auditoria-acessos',
+  path: '/admin/auditoria-acessos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminAuditoriaRoute = AdminAuditoriaRouteImport.update({
   id: '/admin_/auditoria',
   path: '/admin/auditoria',
@@ -537,6 +543,7 @@ export interface FileRoutesByFullPath {
   '/admin/gestao': typeof AdminGestaoRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
+  '/admin/auditoria-acessos': typeof AdminAuditoriaAcessosRoute
   '/admin/cadastro-foto': typeof AdminCadastroFotoRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorizacao': typeof AdminCategorizacaoRoute
@@ -619,6 +626,7 @@ export interface FileRoutesByTo {
   '/admin/gestao': typeof AdminGestaoRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
+  '/admin/auditoria-acessos': typeof AdminAuditoriaAcessosRoute
   '/admin/cadastro-foto': typeof AdminCadastroFotoRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorizacao': typeof AdminCategorizacaoRoute
@@ -702,6 +710,7 @@ export interface FileRoutesById {
   '/admin/gestao': typeof AdminGestaoRoute
   '/admin_/analytics': typeof AdminAnalyticsRoute
   '/admin_/auditoria': typeof AdminAuditoriaRoute
+  '/admin_/auditoria-acessos': typeof AdminAuditoriaAcessosRoute
   '/admin_/cadastro-foto': typeof AdminCadastroFotoRoute
   '/admin_/catalogo': typeof AdminCatalogoRoute
   '/admin_/categorizacao': typeof AdminCategorizacaoRoute
@@ -786,6 +795,7 @@ export interface FileRouteTypes {
     | '/admin/gestao'
     | '/admin/analytics'
     | '/admin/auditoria'
+    | '/admin/auditoria-acessos'
     | '/admin/cadastro-foto'
     | '/admin/catalogo'
     | '/admin/categorizacao'
@@ -868,6 +878,7 @@ export interface FileRouteTypes {
     | '/admin/gestao'
     | '/admin/analytics'
     | '/admin/auditoria'
+    | '/admin/auditoria-acessos'
     | '/admin/cadastro-foto'
     | '/admin/catalogo'
     | '/admin/categorizacao'
@@ -950,6 +961,7 @@ export interface FileRouteTypes {
     | '/admin/gestao'
     | '/admin_/analytics'
     | '/admin_/auditoria'
+    | '/admin_/auditoria-acessos'
     | '/admin_/cadastro-foto'
     | '/admin_/catalogo'
     | '/admin_/categorizacao'
@@ -1032,6 +1044,7 @@ export interface RootRouteChildren {
   SemPermissaoRoute: typeof SemPermissaoRoute
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
   AdminAuditoriaRoute: typeof AdminAuditoriaRoute
+  AdminAuditoriaAcessosRoute: typeof AdminAuditoriaAcessosRoute
   AdminCadastroFotoRoute: typeof AdminCadastroFotoRoute
   AdminCatalogoRoute: typeof AdminCatalogoRoute
   AdminCategorizacaoRoute: typeof AdminCategorizacaoRoute
@@ -1547,6 +1560,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCadastroFotoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin_/auditoria-acessos': {
+      id: '/admin_/auditoria-acessos'
+      path: '/admin/auditoria-acessos'
+      fullPath: '/admin/auditoria-acessos'
+      preLoaderRoute: typeof AdminAuditoriaAcessosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin_/auditoria': {
       id: '/admin_/auditoria'
       path: '/admin/auditoria'
@@ -1723,6 +1743,7 @@ const rootRouteChildren: RootRouteChildren = {
   SemPermissaoRoute: SemPermissaoRoute,
   AdminAnalyticsRoute: AdminAnalyticsRoute,
   AdminAuditoriaRoute: AdminAuditoriaRoute,
+  AdminAuditoriaAcessosRoute: AdminAuditoriaAcessosRoute,
   AdminCadastroFotoRoute: AdminCadastroFotoRoute,
   AdminCatalogoRoute: AdminCatalogoRoute,
   AdminCategorizacaoRoute: AdminCategorizacaoRoute,

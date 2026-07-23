@@ -16,6 +16,9 @@ import {
   adminGetCustomer,
   adminUpdateCustomer,
   adminResetCustomerPin,
+  adminSuspendCustomer,
+  adminReactivateCustomer,
+  adminExportCustomers,
 } from "@/lib/admin-customers.functions";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -38,7 +41,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Users, KeyRound, Copy, RefreshCw, Search, ShieldCheck } from "lucide-react";
+import { Users, KeyRound, Copy, RefreshCw, Search, ShieldCheck, Ban, CheckCircle2, Download } from "lucide-react";
 
 const listOptions = (search: string, sort: "recent" | "logins" | "name" | "last_seen", limit: number, offset: number) =>
   queryOptions({
