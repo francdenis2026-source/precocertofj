@@ -366,7 +366,7 @@ function LoginPage() {
 
           <div
             className="relative z-10 mt-10 rounded-xl border border-white/10 p-4"
-            style={{ background: "rgba(13,122,95,0.28)" }}
+            style={{ background: "rgba(30,74,133,0.35)" }}
           >
             <p
               className="text-[10px] font-bold uppercase tracking-[0.22em]"
