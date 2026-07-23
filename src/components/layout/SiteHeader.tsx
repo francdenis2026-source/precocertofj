@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ds, dsx } from "@/lib/ds";
-import { HighContrastToggle } from "@/components/HighContrastToggle";
+
 
 const PALETTE = {
   navy: "#0f1b3d",
@@ -91,7 +91,7 @@ export function SiteHeader({ variant = "solid", showNav = true }: Props) {
         )}
 
         <div className="flex shrink-0 items-center gap-2 sm:gap-3">
-          <HighContrastToggle tone="onDark" />
+          
           <Link
             to="/login"
             className="hidden items-center rounded-lg px-3.5 py-2 text-[14px] font-semibold text-white/90 transition-colors hover:text-white sm:inline-flex md:px-4 md:py-2.5 md:text-[14.5px]"
