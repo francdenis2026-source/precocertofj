@@ -150,7 +150,7 @@ export function SiteFooter() {
           style={{ color: PALETTE.ink }}
         >
           <span>© {year} <strong className="font-semibold">PreçoCerto</strong> · Feijó · Acre</span>
-          <span style={{ color: PALETTE.navy2 }}>Feito pela comunidade, para a comunidade.</span>
+          <span className="font-mono" style={{ color: PALETTE.navy2 }}>&lt;dev&gt; Franc D&apos;nis</span>
         </div>
       </div>
     </footer>
