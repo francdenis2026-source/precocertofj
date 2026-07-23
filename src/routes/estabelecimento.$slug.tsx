@@ -156,9 +156,10 @@ function EstablishmentPage() {
     return data.products.reduce((min, p) => (p.price < min.price ? p : min), data.products[0]);
   }, [data.products]);
 
-  const location = [data.store.neighborhood, data.store.city, data.store.state]
-    .filter(Boolean)
-    .join(" · ");
+  const hasLocation = Boolean(
+    data.store.address || data.store.neighborhood || data.store.city,
+  );
+
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
@@ -190,14 +191,27 @@ function EstablishmentPage() {
                 {data.products.length} produto{data.products.length === 1 ? "" : "s"} publicados
                 {data.categories.length > 0 && ` · ${data.categories.length} categorias`}
               </CardDescription>
-              {(location || data.store.address) && (
-                <div className="mt-3 flex flex-wrap gap-3 text-xs text-muted-foreground">
-                  <span className="inline-flex items-center gap-1">
-                    <MapPin className="h-3.5 w-3.5" />
-                    {data.store.address ? `${data.store.address} · ${location}` : location}
+
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                {data.store.neighborhood && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-[12px] font-semibold text-primary">
+                    <MapPin className="h-3.5 w-3.5" aria-hidden />
+                    Bairro {data.store.neighborhood}
                   </span>
-                </div>
+                )}
+                {(data.store.city || data.store.state) && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-1 text-[12px] font-medium text-foreground">
+                    {[data.store.city, data.store.state].filter(Boolean).join(" · ")}
+                  </span>
+                )}
+              </div>
+              {data.store.address && (
+                <p className="mt-2 flex items-start gap-1.5 text-sm font-medium text-foreground">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+                  <span>{data.store.address}</span>
+                </p>
               )}
+
               {data.categories.length > 0 && (
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {data.categories.slice(0, 6).map((c) => (
@@ -214,6 +228,7 @@ function EstablishmentPage() {
                 </div>
               )}
             </div>
+
           </CardHeader>
           {cheapest && (
             <CardContent className="border-t border-border/60 bg-muted/30 py-3">
@@ -300,11 +315,38 @@ function EstablishmentPage() {
           </div>
         )}
 
-        <p className="mt-10 text-[11px] leading-relaxed text-muted-foreground">
+        {hasLocation && (
+          <div className="mt-10 rounded-xl border border-border/60 bg-muted/30 p-4">
+            <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Endereço do estabelecimento
+            </div>
+            <div className="mt-2 flex flex-wrap items-start gap-x-3 gap-y-1 text-sm">
+              {data.store.address && (
+                <span className="inline-flex items-start gap-1.5 font-medium text-foreground">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+                  {data.store.address}
+                </span>
+              )}
+              {data.store.neighborhood && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[12px] font-semibold text-primary">
+                  Bairro {data.store.neighborhood}
+                </span>
+              )}
+              {(data.store.city || data.store.state) && (
+                <span className="text-muted-foreground">
+                  {[data.store.city, data.store.state].filter(Boolean).join(" · ")}
+                </span>
+              )}
+            </div>
+          </div>
+        )}
+
+        <p className="mt-6 text-[11px] leading-relaxed text-muted-foreground">
           Preços e informações exibidos pertencem ao estabelecimento{" "}
           <strong className="text-foreground">{data.store.name}</strong> e são
           publicados na plataforma PreçoCerto para consulta da comunidade.
         </p>
+
       </main>
 
       <PriceHistorySheet
