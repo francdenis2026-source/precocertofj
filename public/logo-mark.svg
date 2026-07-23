@@ -1,18 +1,9 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="PreçoCerto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="PreçoCerto">
   <title>PreçoCerto</title>
-  <!-- Green swoosh ring -->
-  <path d="M64 12a52 52 0 1 0 46.5 76" fill="none" stroke="#22a45d" stroke-width="12" stroke-linecap="round"/>
-  <!-- Shopping cart -->
-  <g fill="none" stroke="#12294a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M30 46h10l10 34h44"/>
-    <path d="M46 62h48l6-16H50"/>
-  </g>
-  <circle cx="58" cy="94" r="6" fill="#12294a"/>
-  <circle cx="88" cy="94" r="6" fill="#12294a"/>
-  <!-- Price tag with % -->
-  <g transform="translate(70 22) rotate(18)">
-    <path d="M0 6a6 6 0 0 1 6-6h22l18 18-24 24-22-22z" fill="#22a45d"/>
-    <circle cx="10" cy="10" r="3.2" fill="#ffffff"/>
-    <text x="22" y="30" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="20" fill="#ffffff" text-anchor="middle">%</text>
-  </g>
+  <!-- Full-bleed navy tile for maximum favicon legibility -->
+  <rect width="64" height="64" rx="12" fill="#0f2b52"/>
+  <!-- Bold P mark, sans-serif, tuned to occupy the tile -->
+  <path fill="#ffffff" d="M18 14h17.5c7.7 0 13 4.9 13 12.2 0 7.4-5.4 12.3-13.2 12.3H28V50h-10V14zm10 18.4h7c3 0 5-1.9 5-5.2s-2-5.2-5-5.2h-7v10.4z"/>
+  <!-- Gold accent dot: brand check + price emphasis -->
+  <circle cx="47" cy="46" r="6" fill="#f5b301"/>
 </svg>
