@@ -288,12 +288,18 @@ function RedeemPage() {
                     autoComplete="one-time-code"
                     spellCheck={false}
                     placeholder="PC-XXXX-XXXX-XXXX"
-                    aria-invalid={invalid}
+                    aria-invalid={showState && validation.level === "warn"}
+                    aria-describedby="license-code-help"
                     className="h-12 w-full rounded-lg border bg-white pl-9 pr-3 text-[15px] font-bold uppercase tracking-[0.14em] outline-none transition focus:ring-2"
                     style={{
                       fontFamily: MONO,
                       color: INK,
-                      borderColor: invalid ? "#dc2626" : LINE,
+                      borderColor:
+                        showState && validation.level === "warn"
+                          ? "#dc2626"
+                          : showState && validation.level === "ok"
+                          ? "#16a34a"
+                          : LINE,
                     } as React.CSSProperties}
                   />
                 </div>
@@ -309,15 +315,30 @@ function RedeemPage() {
                 </button>
               </div>
 
-              <div className="mt-1.5 flex items-center justify-between text-[11px]">
-                <span style={{ color: invalid ? "#dc2626" : MUTED }}>
-                  {invalid
-                    ? "Digite ao menos 8 caracteres"
-                    : `${clean.length} caractere${clean.length === 1 ? "" : "s"}`}
+              {/* Feedback em tempo real */}
+              <div
+                id="license-code-help"
+                aria-live="polite"
+                className="mt-1.5 flex items-start justify-between gap-3 text-[11px]"
+              >
+                <span
+                  className="flex items-center gap-1.5"
+                  style={{
+                    color:
+                      validation.level === "warn"
+                        ? "#dc2626"
+                        : validation.level === "ok"
+                        ? "#15803d"
+                        : MUTED,
+                  }}
+                >
+                  {validation.level === "warn" && <AlertCircle className="h-3 w-3 flex-none" />}
+                  {validation.level === "ok" && <CheckCircle2 className="h-3 w-3 flex-none" />}
+                  <span>{validation.message}</span>
                 </span>
-                <Link to="/minhas-licencas" className="font-semibold hover:underline" style={{ color: NAVY }}>
-                  Minhas licenças
-                </Link>
+                <span className="shrink-0 tabular-nums" style={{ color: MUTED }}>
+                  {clean.length}/{CANONICAL_LEN}
+                </span>
               </div>
 
               {result && !result.ok && (
@@ -336,16 +357,23 @@ function RedeemPage() {
 
               <button
                 type="submit"
-                disabled={submitting || !valid}
+                disabled={submitting || !canSubmit}
                 className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg text-[13px] font-bold uppercase tracking-[0.14em] transition disabled:cursor-not-allowed disabled:opacity-45"
                 style={{
-                  background: valid ? NAVY : "#94a3b8",
+                  background: canSubmit ? NAVY : "#94a3b8",
                   color: "#fff",
-                  boxShadow: valid ? `0 10px 24px -12px ${NAVY}` : undefined,
+                  boxShadow: canSubmit ? `0 10px 24px -12px ${NAVY}` : undefined,
                 }}
               >
                 {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Ativar licença <ArrowRight className="h-4 w-4" /></>}
               </button>
+
+              <div className="mt-2 text-right">
+                <Link to="/minhas-licencas" className="text-[11px] font-semibold hover:underline" style={{ color: NAVY }}>
+                  Minhas licenças →
+                </Link>
+              </div>
+
 
               {/* Garantias em linha compacta */}
               <ul className="mt-4 grid grid-cols-3 gap-2 border-t pt-3 text-[10.5px]" style={{ borderColor: LINE, color: MUTED }}>
