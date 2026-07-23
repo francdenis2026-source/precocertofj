@@ -135,8 +135,16 @@ function RedeemPage() {
   });
 
   useEffect(() => {
+    try {
+      const pending = sessionStorage.getItem("pending_license_code");
+      if (pending) {
+        setRaw(pending);
+        sessionStorage.removeItem("pending_license_code");
+      }
+    } catch {}
     inputRef.current?.focus();
   }, []);
+
 
   const attemptedRef = useRef<string>("");
 
