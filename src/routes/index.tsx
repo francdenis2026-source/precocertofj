@@ -17,6 +17,9 @@ import { ds, dsx } from "@/lib/ds";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { getPlatformStats } from "@/lib/stores-public.functions";
+import { StartFreeDialog } from "@/components/home/StartFreeDialog";
+import { useSession } from "@/hooks/useSession";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -65,8 +68,23 @@ const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 
 function HomePage() {
   const navigate = useNavigate();
+  const { user, loading: sessionLoading } = useSession();
+  const isLoggedOut = !sessionLoading && !user;
   const [q, setQ] = useState("");
   const [today, setToday] = useState("");
+  const [showStickyCta, setShowStickyCta] = useState(false);
+
+  useEffect(() => {
+    if (!isLoggedOut) {
+      setShowStickyCta(false);
+      return;
+    }
+    const onScroll = () => setShowStickyCta(window.scrollY > 720);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [isLoggedOut]);
+
   
 
   useEffect(() => {
@@ -252,21 +270,43 @@ function HomePage() {
 
               {/* CTAs */}
               <div className="mt-5 flex flex-wrap items-center gap-3 sm:mt-6 sm:gap-4">
-                <Link
-                  to="/cadastro"
-                  aria-label="Começar grátis — criar conta"
-                  className="group inline-flex min-h-[48px] items-center gap-2 rounded-xl px-6 py-3 text-[15px] font-semibold tracking-[-0.005em] antialiased shadow-sm transition-[transform,box-shadow,background-color] duration-150 hover:-translate-y-[1px] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:translate-y-0 active:shadow-sm sm:min-h-[52px] sm:rounded-2xl sm:px-7 sm:py-3.5 sm:text-[16px]"
-                  style={{
-                    background: P.gold,
-                    color: P.navy,
-                    // @ts-expect-error css var
-                    "--tw-ring-color": P.gold,
-                    "--tw-ring-offset-color": P.card,
-                  }}
-                >
-                  <span>Começar grátis</span>
-                  <ArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5" strokeWidth={2.5} />
-                </Link>
+                {isLoggedOut ? (
+                  <StartFreeDialog>
+                    <button
+                      type="button"
+                      aria-label="Começar grátis — abrir opções de cadastro e login"
+                      aria-haspopup="dialog"
+                      className="group inline-flex min-h-[48px] items-center gap-2 rounded-xl px-6 py-3 text-[15px] font-semibold tracking-[-0.005em] antialiased shadow-sm transition-[transform,box-shadow,background-color] duration-150 hover:-translate-y-[1px] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:translate-y-0 active:shadow-sm sm:min-h-[52px] sm:rounded-2xl sm:px-7 sm:py-3.5 sm:text-[16px]"
+                      style={{
+                        background: P.gold,
+                        color: P.navy,
+                        // @ts-expect-error css var
+                        "--tw-ring-color": P.gold,
+                        "--tw-ring-offset-color": P.card,
+                      }}
+                    >
+                      <span>Começar grátis</span>
+                      <ArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5" strokeWidth={2.5} />
+                    </button>
+                  </StartFreeDialog>
+                ) : (
+                  <Link
+                    to="/app"
+                    aria-label="Ir para o painel"
+                    className="group inline-flex min-h-[48px] items-center gap-2 rounded-xl px-6 py-3 text-[15px] font-semibold tracking-[-0.005em] antialiased shadow-sm transition-[transform,box-shadow,background-color] duration-150 hover:-translate-y-[1px] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:translate-y-0 active:shadow-sm sm:min-h-[52px] sm:rounded-2xl sm:px-7 sm:py-3.5 sm:text-[16px]"
+                    style={{
+                      background: P.gold,
+                      color: P.navy,
+                      // @ts-expect-error css var
+                      "--tw-ring-color": P.gold,
+                      "--tw-ring-offset-color": P.card,
+                    }}
+                  >
+                    <span>Ir para o painel</span>
+                    <ArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5" strokeWidth={2.5} />
+                  </Link>
+                )}
+
 
                 <Link
                   to="/melhores-precos"
@@ -573,6 +613,41 @@ function HomePage() {
       </section>
 
       <SiteFooter />
+
+      {/* Sticky floating CTA — logged-out only, appears after scroll */}
+      {isLoggedOut && (
+        <div
+          aria-hidden={!showStickyCta}
+          className={`pointer-events-none fixed inset-x-0 bottom-4 z-40 flex justify-center px-4 transition-all duration-300 sm:bottom-6 sm:justify-end sm:pr-6 ${
+            showStickyCta
+              ? "translate-y-0 opacity-100"
+              : "pointer-events-none translate-y-3 opacity-0"
+          }`}
+          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+        >
+          <StartFreeDialog>
+            <button
+              type="button"
+              tabIndex={showStickyCta ? 0 : -1}
+              aria-label="Começar grátis — abrir opções de cadastro e login"
+              aria-haspopup="dialog"
+              className="group pointer-events-auto inline-flex min-h-[48px] items-center gap-2 rounded-full px-5 py-3 text-[14.5px] font-semibold tracking-[-0.005em] antialiased shadow-md transition-[transform,box-shadow] duration-150 hover:-translate-y-[1px] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:translate-y-0 sm:text-[15px]"
+              style={{
+                background: P.gold,
+                color: P.navy,
+                // @ts-expect-error css var
+                "--tw-ring-color": P.gold,
+                "--tw-ring-offset-color": P.paper,
+              }}
+            >
+              <Sparkles className="h-4 w-4" strokeWidth={2.6} />
+              <span>Começar grátis</span>
+              <ArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5" strokeWidth={2.5} />
+            </button>
+          </StartFreeDialog>
+        </div>
+      )}
+
     </div>
   );
 }
