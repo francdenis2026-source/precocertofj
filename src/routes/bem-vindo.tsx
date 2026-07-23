@@ -111,7 +111,7 @@ function WelcomePage() {
           className="mt-8 text-[11px] font-bold uppercase tracking-[0.28em]"
           style={{ color: GOLD_SOFT }}
         >
-          Acesso confirmado
+          Tudo pronto
         </motion.p>
 
         <motion.h1
@@ -121,7 +121,7 @@ function WelcomePage() {
           className="mt-3 text-[34px] leading-[1.05] font-bold tracking-tight text-white sm:text-[42px]"
           style={{ fontFamily: DISPLAY }}
         >
-          Bem-vindo{loading ? "" : greetingName}
+          Bora economizar{loading ? "" : greetingName}
         </motion.h1>
 
         <motion.p
@@ -131,8 +131,8 @@ function WelcomePage() {
           className="mt-4 max-w-[420px] text-[14.5px] leading-relaxed"
           style={{ color: "rgba(244,246,251,0.78)" }}
         >
-          Sua área do assinante está pronta. Estamos preparando os preços,
-          rankings e alertas em tempo real da sua região.
+          Seu painel já está carregando com os preços mais recentes dos mercados
+          de Feijó. Em poucos segundos você vê onde a cesta sai mais barata hoje.
         </motion.p>
 
         {/* Progress bar */}
@@ -161,7 +161,7 @@ function WelcomePage() {
           className="mt-6 text-[12px] font-semibold underline-offset-4 transition hover:underline"
           style={{ color: GOLD_SOFT, fontFamily: BODY }}
         >
-          Entrar agora →
+          Ir agora para o painel →
         </motion.button>
       </motion.div>
     </div>
