@@ -339,6 +339,17 @@ function CustomerDrawer({ userId, onClose }: { userId: string | null; onClose: (
                 <Field label="CEP" value={form.address_zip} onChange={(v) => setForm((f) => ({ ...f, address_zip: v }))} />
               </div>
 
+              {p.suspended_at && (
+                <div className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm">
+                  <p className="flex items-center gap-1.5 font-semibold text-destructive">
+                    <Ban className="h-4 w-4" /> Conta suspensa
+                  </p>
+                  <p className="mt-1 text-xs text-destructive/90">
+                    Desde {fmtDate(p.suspended_at)}. Motivo: {p.suspended_reason || "—"}
+                  </p>
+                </div>
+              )}
+
               <div className="flex flex-wrap items-center gap-2 pt-2">
                 <Button onClick={submit} disabled={update.isPending}>
                   {update.isPending ? "Salvando…" : "Salvar alterações"}
@@ -352,6 +363,14 @@ function CustomerDrawer({ userId, onClose }: { userId: string | null; onClose: (
                   <KeyRound className="h-4 w-4" />
                   {resetMut.isPending ? "Gerando…" : "Gerar código de reset de PIN"}
                 </Button>
+                <SuspendToggleButton
+                  userId={userId!}
+                  suspended={!!p.suspended_at}
+                  onDone={() => {
+                    qc.invalidateQueries({ queryKey: ["admin", "customer", userId] });
+                    qc.invalidateQueries({ queryKey: ["admin", "customers"] });
+                  }}
+                />
               </div>
 
               {resetCode && (
