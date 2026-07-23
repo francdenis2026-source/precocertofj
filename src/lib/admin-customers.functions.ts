@@ -219,7 +219,7 @@ export const adminUpdateCustomer = createServerFn({ method: "POST" })
       action: "customer.update",
       target_type: "profile",
       target_id: data.userId,
-      metadata: { fields: Object.keys(data.patch) },
+      after: { fields: Object.keys(data.patch) },
     });
 
     return { ok: true };
