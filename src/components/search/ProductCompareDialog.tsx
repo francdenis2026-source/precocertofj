@@ -54,7 +54,7 @@ export function ProductCompareDialog({
   onRefresh?: () => void;
 }) {
   const [refreshing, setRefreshing] = useState(false);
-  const { isAdmin } = useMyRoles();
+  const { isAdmin, loading: rolesLoading } = useMyRoles();
 
   // market → productName index → cheapest match
   const rows = useMemo(() => {
@@ -134,7 +134,7 @@ export function ProductCompareDialog({
             </h2>
           </div>
           <div className="flex items-center gap-1.5">
-            {onRefresh && isAdmin ? (
+            {onRefresh && !rolesLoading && isAdmin ? (
               <button
                 type="button"
                 onClick={handleRefresh}

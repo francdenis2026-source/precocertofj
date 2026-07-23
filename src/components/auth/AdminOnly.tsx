@@ -21,8 +21,7 @@ export function AdminOnly({ children }: { children: React.ReactNode }) {
     }
     if (!isAdmin) {
       navigate({
-        to: "/sem-permissao",
-        search: { from: pathname },
+        to: "/app",
         replace: true,
       });
     }
