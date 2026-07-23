@@ -53,6 +53,7 @@ const admin = [
 export function AppSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { signOut, loading: signingOut } = useSignOut();
+  const { isAdmin } = useMyRoles();
 
   const isActive = (to: string, exact?: boolean) =>
     exact ? pathname === to : pathname === to || pathname.startsWith(to + "/");
