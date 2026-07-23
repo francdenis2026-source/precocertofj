@@ -383,25 +383,52 @@ function CadastroPage() {
           </aside>
 
           {/* RIGHT — Form */}
-          <section className="p-6 md:p-9">
-            {/* Header */}
-            <div className="mb-6 border-b border-slate-200/70 pb-5">
-              <div
-                className="text-[10.5px] font-bold uppercase tracking-[0.22em]"
-                style={{ color: PC_GOLD_DARK }}
-              >
-                Novo assinante
+          <section className="relative overflow-hidden p-6 md:p-9">
+            {/* Decorative SVG watermark */}
+            <svg
+              aria-hidden
+              className="pointer-events-none absolute -right-10 -top-10 h-56 w-56 opacity-[0.05]"
+              viewBox="0 0 200 200"
+              fill="none"
+            >
+              <circle cx="100" cy="100" r="80" stroke={PC_EMERALD} strokeWidth="1.2" strokeDasharray="3 4" />
+              <circle cx="100" cy="100" r="55" stroke={PC_EMERALD} strokeWidth="1.2" />
+              <path d="M60 110 L85 85 L105 100 L145 65" stroke={PC_EMERALD} strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+              <circle cx="145" cy="65" r="4" fill={PC_EMERALD} />
+            </svg>
+
+            {/* Header with badge icon */}
+            <div className="relative mb-6 border-b border-slate-200 pb-5">
+              <div className="flex items-center gap-3">
+                <div
+                  className="flex h-11 w-11 flex-none items-center justify-center rounded-xl"
+                  style={{
+                    background: `linear-gradient(135deg, ${PC_EMERALD} 0%, ${PC_EMERALD_DEEP} 100%)`,
+                    boxShadow: `inset 0 0 0 1px ${PC_GOLD}66, 0 6px 14px -6px rgba(15,27,61,0.45)`,
+                  }}
+                >
+                  <UserPlus className="h-5 w-5 text-white" />
+                </div>
+                <div className="min-w-0">
+                  <div
+                    className="text-[10.5px] font-bold uppercase tracking-[0.22em]"
+                    style={{ color: PC_EMERALD }}
+                  >
+                    Novo assinante
+                  </div>
+                  <h2
+                    className="mt-0.5 text-[26px] leading-[1.05] tracking-tight md:text-[28px]"
+                    style={{ fontFamily: PC_DISPLAY, fontWeight: 700, color: "#0a1631" }}
+                  >
+                    Criar conta
+                  </h2>
+                </div>
               </div>
-              <h2
-                className="mt-1.5 text-[26px] leading-[1.05] tracking-tight md:text-[28px]"
-                style={{ fontFamily: PC_DISPLAY, fontWeight: 700, color: PC_EMERALD }}
-              >
-                Criar conta
-              </h2>
-              <p className="mt-1.5 text-[13.5px] text-slate-600">
+              <p className="mt-3 text-[13.5px] font-medium text-slate-700">
                 CPF, PIN de 6 dígitos e você entra direto no painel.
               </p>
             </div>
+
 
             <form onSubmit={handleSubmit} className="space-y-4" noValidate>
               <Field
