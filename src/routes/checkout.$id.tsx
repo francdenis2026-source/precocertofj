@@ -76,8 +76,38 @@ function CheckoutPage() {
     refetchInterval: (q) => (q.state.data?.status === "pending" ? 4000 : false),
   });
 
+  // Hidrata o campo de e-mail com o valor já salvo no pedido, se houver.
+  useEffect(() => {
+    if (order?.delivery_email && !emailInput) {
+      setEmailInput(order.delivery_email as string);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [order?.delivery_email]);
+
+  // Validação em tempo real do e-mail (mesma regex do server).
+  const EMAIL_RE = /^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+  const emailNormalized = emailInput.trim().toLowerCase();
+  const emailValid = EMAIL_RE.test(emailNormalized) && emailNormalized.length <= 254;
+  const emailSaved =
+    !!order?.delivery_email &&
+    (order.delivery_email as string).toLowerCase() === emailNormalized;
+
+  const saveEmailMutation = useMutation({
+    mutationFn: () => saveEmail({ data: { id, email: emailNormalized } }),
+    onSuccess: () => {
+      toast.success("E-mail confirmado");
+      qc.invalidateQueries({ queryKey: ["checkout-order", id] });
+    },
+    onError: (e: any) => toast.error(e?.message ?? "Não foi possível salvar o e-mail"),
+  });
+
   const payMutation = useMutation({
-    mutationFn: () => createPref({ data: { orderId: id } }),
+    mutationFn: async () => {
+      // Garante o e-mail salvo antes de gerar a cobrança
+      if (!emailValid) throw new Error("Informe um e-mail válido para receber o código.");
+      if (!emailSaved) await saveEmail({ data: { id, email: emailNormalized } });
+      return createPref({ data: { orderId: id } });
+    },
     onSuccess: (r) => {
       if (r?.url) window.location.href = r.url;
       else toast.error("URL do Mercado Pago não retornada");
