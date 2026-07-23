@@ -20,13 +20,17 @@ const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
   mode: fallback(z.string(), "strict").default("strict"),
   pure: fallback(z.string(), "1").default("1"),
+  brand: fallback(z.string(), "").default(""),
+  min: fallback(z.string(), "").default(""),
+  max: fallback(z.string(), "").default(""),
 });
 
 export const Route = createFileRoute("/buscar")({
   validateSearch: zodValidator(searchSchema),
   search: {
-    middlewares: [retainSearchParams(["q", "mode", "pure"])],
+    middlewares: [retainSearchParams(["q", "mode", "pure", "brand", "min", "max"])],
   },
+
   head: () => ({
     meta: [
       { title: "Buscar preço por nome — PreçoCerto" },
