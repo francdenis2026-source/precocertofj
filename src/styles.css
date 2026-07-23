@@ -1636,3 +1636,8 @@ iframe[src*="lovable.dev/badge"] {
 .pc-home[data-preview="before"] .grid.md\:gap-3\.5 { gap: 1.5rem; }
 .pc-home[data-preview="before"] h1 { font-size: clamp(2.25rem, 5.5vw, 4.5rem) !important; }
 .pc-home[data-preview="before"] h2 { font-size: clamp(1.75rem, 3.5vw, 2.5rem) !important; }
+
+/* Skeleton shimmer (Wave 4: loading states) */
+@keyframes skeleton-shimmer {
+  100% { transform: translateX(100%); }
+}
