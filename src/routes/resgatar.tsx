@@ -306,7 +306,10 @@ function RedeemPage() {
                     id="license-code"
                     ref={inputRef}
                     value={display}
-                    onChange={(e) => setRaw(e.target.value)}
+                    onChange={(e) => {
+                      setRaw(e.target.value);
+                      if (result && !result.ok) setResult(null);
+                    }}
                     onBlur={() => setTouched(true)}
                     onPaste={(e) => {
                       e.preventDefault();
