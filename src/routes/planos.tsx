@@ -203,8 +203,8 @@ function PlansPage() {
                   <article
                     key={plan.id}
                     className={dsx(
-                      "relative flex flex-col rounded-xl border border-border/60 bg-card p-3.5 shadow-elev-1 transition-shadow hover:shadow-elev-2 sm:p-4",
-                      isRecommended && "border-primary/60 ring-1 ring-primary/25",
+                      "relative flex flex-col rounded-2xl border border-border/60 bg-card p-4 shadow-elev-1 transition-shadow hover:shadow-elev-2 sm:p-5",
+                      isRecommended && "border-primary/70 ring-1 ring-primary/30",
                       isFounder && "ring-1",
                     )}
                     style={
@@ -217,9 +217,9 @@ function PlansPage() {
                     }
                   >
                     {(isRecommended || isFounder) && (
-                      <div className="absolute -top-2 left-1/2 -translate-x-1/2">
+                      <div className="absolute -top-2.5 left-1/2 -translate-x-1/2">
                         <span
-                          className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] shadow-sm"
+                          className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.14em] shadow-sm"
                           style={
                             isRecommended
                               ? { background: "var(--color-primary)", color: "var(--color-primary-foreground)" }
@@ -231,24 +231,24 @@ function PlansPage() {
                       </div>
                     )}
 
-                    <header className="min-h-[38px]">
-                      <h2 className="font-display text-[15px] font-semibold tracking-tight text-foreground">
+                    <header>
+                      <h2 className="font-display text-[16px] font-semibold tracking-tight text-foreground">
                         {plan.name}
                       </h2>
                       {plan.description && (
-                        <p className="mt-0.5 line-clamp-2 text-[11px] leading-snug text-muted-foreground">
+                        <p className="mt-1 text-[12px] leading-snug text-muted-foreground">
                           {plan.description}
                         </p>
                       )}
                     </header>
 
-                    <div className="mt-2.5">
+                    <div className="mt-3">
                       <div className="flex items-baseline gap-1">
-                        <span className="font-display text-[22px] font-semibold leading-none tracking-tight text-foreground">
+                        <span className="font-display text-[26px] font-bold leading-none tracking-tight text-foreground">
                           {isFree ? "Grátis" : centsToBRL(plan.price_cents)}
                         </span>
                       </div>
-                      <p className="mt-1 text-[11px] leading-snug text-muted-foreground">
+                      <p className="mt-1.5 text-[11.5px] leading-snug text-muted-foreground">
                         {isFounder
                           ? "Pagamento único · vitalício"
                           : isFree
@@ -259,14 +259,14 @@ function PlansPage() {
                       </p>
                     </div>
 
-                    <ul className="mt-2.5 flex-1 space-y-1 text-[12px] leading-snug">
-                      {planHighlights(plan.slug).slice(0, 3).map((h) => (
+                    <ul className="mt-3 flex-1 space-y-1.5 text-[12.5px] leading-snug">
+                      {planHighlights(plan.slug).map((h) => (
                         <li key={h} className="flex items-start gap-1.5">
                           <Check
                             className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary"
                             aria-hidden
                           />
-                          <span className="text-foreground/85">{h}</span>
+                          <span className="text-foreground/90">{h}</span>
                         </li>
                       ))}
                     </ul>
@@ -277,7 +277,7 @@ function PlansPage() {
                       disabled={buying === plan.id}
                       className={dsx(
                         ds.btn.base,
-                        "mt-3 h-9 w-full px-3 text-[12.5px]",
+                        "mt-4 h-10 w-full px-3 text-[13px] font-semibold",
                         isRecommended
                           ? ds.btn.variants.primary
                           : isFounder
