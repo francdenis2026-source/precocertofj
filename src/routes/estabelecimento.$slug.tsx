@@ -16,6 +16,7 @@ import {
 import { getPublicStoreCatalog, type PublicStoreProduct } from "@/lib/stores-public.functions";
 import { getPublicPriceHistory } from "@/lib/store-public-history.functions";
 import { resolveEstablishmentBySlug } from "@/lib/establishment-slug.functions";
+import { slugifyCategory } from "./estabelecimento.$slug.categoria.$category";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
