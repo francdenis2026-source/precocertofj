@@ -225,15 +225,22 @@ export const listEstablishmentsByNeighborhood = createServerFn({ method: "GET" }
     };
     let scanRows: ScanRow[] = [];
     if (ids.length > 0) {
-      const { data } = await supabaseAdmin
-        .from("scans")
-        .select("establishment_id, product_name, price_captured")
-        .in("establishment_id", ids)
-        .eq("status", "salvo")
-        .is("user_id", null)
-        .not("product_name", "is", null)
-        .limit(10000);
-      scanRows = (data ?? []) as ScanRow[];
+      const pageSize = 1000;
+      for (let from = 0; from < 200_000; from += pageSize) {
+        const { data, error } = await supabaseAdmin
+          .from("scans")
+          .select("establishment_id, product_name, price_captured")
+          .in("establishment_id", ids)
+          .eq("status", "salvo")
+          .is("user_id", null)
+          .not("product_name", "is", null)
+          .range(from, from + pageSize - 1);
+        if (error) throw new Error(error.message);
+
+        const batch = (data ?? []) as ScanRow[];
+        scanRows.push(...batch);
+        if (batch.length < pageSize) break;
+      }
     }
 
     // Map produto → categoria (via product_catalog.normalized_name)
