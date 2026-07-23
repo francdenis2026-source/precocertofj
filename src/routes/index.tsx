@@ -324,7 +324,8 @@ function HomePage() {
               className="relative hidden flex-1 lg:block"
               style={{ background: P.paper, minHeight: 720 }}
             >
-              <picture>
+              {/* Light theme image */}
+              <picture className="dark:hidden">
                 {Object.entries(heroMarket.sources).map(([type, srcset]) => (
                   <source
                     key={type}
@@ -344,6 +345,27 @@ function HomePage() {
                   className="absolute inset-0 h-full w-full object-cover"
                 />
               </picture>
+              {/* Dark theme image — moody market scene */}
+              <picture className="hidden dark:block">
+                {Object.entries(heroMarketDark.sources).map(([type, srcset]) => (
+                  <source
+                    key={type}
+                    type={`image/${type}`}
+                    srcSet={srcset}
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                  />
+                ))}
+                <img
+                  src={heroMarketDark.img.src}
+                  width={heroMarketDark.img.w}
+                  height={heroMarketDark.img.h}
+                  alt="Mercado noturno com produtos em iluminação ambiente"
+                  decoding="async"
+                  loading="eager"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              </picture>
+
               {/* Subtle left fade so the frame reads clean against the panel */}
               <div
                 aria-hidden
