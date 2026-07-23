@@ -92,7 +92,7 @@ export function PriceSearchBar({
 
   const [query, setQuery] = useState(normalizeInput(initialQuery));
   const [rawResult, setResult] = useState<PriceSearchResult | null>(null);
-  const result = useMemo(() => {
+  const result = useMemo<PriceSearchResult | null>(() => {
     if (!rawResult) return rawResult;
     const brandNeedle = brandFilter.trim().toLowerCase();
     const hasMin = typeof priceMin === "number" && Number.isFinite(priceMin);
