@@ -195,7 +195,8 @@ function PrecosPage() {
                       <button
                         type="button"
                         onClick={() => setSelected(p.productName)}
-                        className={`flex w-full items-start gap-3 px-4 py-3 text-left transition ${
+                        aria-pressed={active}
+                        className={`flex w-full items-start gap-3 px-4 py-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-inset ${
                           active ? "bg-primary/10" : "hover:bg-muted/50"
                         }`}
                       >
