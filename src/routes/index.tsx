@@ -224,15 +224,15 @@ function HomePage() {
               </Link>
             </div>
 
-            <div className="mt-6 flex flex-wrap items-center gap-1.5 sm:gap-2">
-              <span className={dsx(ds.type.overline, "mr-1 w-full text-white/70 sm:w-auto")}>
+            <div className="mt-7 flex flex-wrap items-center gap-2 sm:gap-2.5">
+              <span className="mr-1 w-full text-[11px] font-bold uppercase tracking-[0.24em] text-white/80 sm:w-auto">
                 Populares:
               </span>
               {["arroz", "feijão", "leite", "óleo", "café", "açúcar"].map((t) => (
                 <button
                   key={t}
                   onClick={() => navigate({ to: "/buscar", search: { q: t } as any })}
-                  className={ds.chip.onDark}
+                  className="inline-flex items-center rounded-full border border-white/25 bg-white/10 px-4 py-2 text-[14px] font-semibold text-white backdrop-blur transition-all hover:-translate-y-0.5 hover:border-white/40 hover:bg-white/15"
                 >
                   {t}
                 </button>
@@ -241,7 +241,7 @@ function HomePage() {
 
 
 
-            <div className="mt-8 grid max-w-3xl grid-cols-3 gap-3 border-t border-white/15 pt-5 sm:gap-6 md:mt-12 md:pt-8">
+            <div className="mt-10 grid max-w-3xl grid-cols-3 gap-4 border-t border-white/15 pt-6 sm:gap-8 md:mt-14 md:pt-9">
               {[
                 { k: String(stats.establishments ?? 0), l: "Mercados ativos" },
                 { k: String(stats.products ?? 0), l: "Produtos catalogados" },
@@ -249,16 +249,17 @@ function HomePage() {
               ].map((s) => (
                 <div key={s.l} className="min-w-0">
                   <div
-                    className={`${serif} truncate text-white`}
+                    className="truncate font-semibold text-white tabular-nums"
                     style={{
-                      fontSize: "clamp(1.5rem, 3.2vw, 2.75rem)",
-                      letterSpacing: "-0.02em",
-                      lineHeight: 1,
+                      fontSize: "clamp(2rem, 4.2vw, 3.25rem)",
+                      letterSpacing: "-0.035em",
+                      lineHeight: 0.95,
+                      fontFeatureSettings: '"tnum","lnum"',
                     }}
                   >
                     {s.k}
                   </div>
-                  <div className="mt-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/75 sm:mt-2 sm:text-[11px]">
+                  <div className="mt-2.5 text-[11px] font-bold uppercase tracking-[0.2em] text-white/85 sm:mt-3 sm:text-[12px]">
                     {s.l}
                   </div>
                 </div>
