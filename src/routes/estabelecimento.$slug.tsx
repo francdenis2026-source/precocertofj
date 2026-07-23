@@ -156,9 +156,10 @@ function EstablishmentPage() {
     return data.products.reduce((min, p) => (p.price < min.price ? p : min), data.products[0]);
   }, [data.products]);
 
-  const location = [data.store.neighborhood, data.store.city, data.store.state]
-    .filter(Boolean)
-    .join(" · ");
+  const hasLocation = Boolean(
+    data.store.address || data.store.neighborhood || data.store.city,
+  );
+
 
   return (
     <div className="min-h-dvh bg-background text-foreground">
