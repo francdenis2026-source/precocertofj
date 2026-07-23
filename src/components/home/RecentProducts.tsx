@@ -146,11 +146,10 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                 <Store
                   className="h-3 w-3 shrink-0 text-[var(--market-accent)] transition-colors group-hover:text-[var(--market-accent-hover)]"
                 />
-                <span
-                  className="truncate font-semibold tracking-[-0.005em] text-[var(--market-accent)] underline-offset-[3px] decoration-[var(--market-accent)]/0 transition-colors group-hover:text-[var(--market-accent-hover)] group-hover:underline group-hover:decoration-[var(--market-accent-hover)]/60"
-                >
+                <span className="market-name truncate text-[11px]">
                   {p.marketName ?? "Vários mercados"}
                 </span>
+
 
               </div>
 
