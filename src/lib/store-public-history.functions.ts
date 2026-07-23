@@ -40,25 +40,32 @@ function makeClient() {
 
 export const getPublicPriceHistory = createServerFn({ method: "GET" })
   .inputValidator(
-    (input: { establishmentId: string; productKey: string; limit?: number }) => {
+    (input: { establishmentId: string; productName: string; limit?: number }) => {
       if (!input.establishmentId?.trim()) throw new Error("establishmentId obrigatório");
-      if (!input.productKey?.trim()) throw new Error("productKey obrigatório");
+      if (!input.productName?.trim()) throw new Error("productName obrigatório");
       return {
         establishmentId: input.establishmentId,
-        productKey: input.productKey,
+        productName: input.productName,
         limit: Math.min(Math.max(Number(input.limit ?? 30), 1), 200),
       };
     },
   )
   .handler(async ({ data }): Promise<PublicPriceHistoryPoint[]> => {
     const sb = makeClient();
+    const { data: keyData, error: keyErr } = await sb.rpc("normalize_product_key", {
+      name: data.productName,
+    });
+    if (keyErr) throw new Error(keyErr.message);
+    const key = `nm:${String(keyData ?? "")}`;
+    if (key === "nm:") return [];
+
     const { data: rows, error } = await sb
       .from("product_price_history")
       .select(
         "id, price, previous_price, change_pct, source, captured_at, changed_by_email, size_value, size_unit",
       )
       .eq("establishment_id", data.establishmentId)
-      .eq("product_key", data.productKey)
+      .eq("product_key", key)
       .order("captured_at", { ascending: false })
       .limit(data.limit);
     if (error) throw new Error(error.message);
