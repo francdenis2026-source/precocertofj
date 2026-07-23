@@ -477,16 +477,17 @@ function RedeemPage() {
                         </div>
                         {info.actions.length > 0 && (
                           <div className="mt-2 flex flex-wrap gap-2">
-                            {info.actions.map((a) => (
+                            {info.actions.map((a: { to: string; label: string }) => (
                               <Link
                                 key={a.to}
-                                to={a.to}
+                                to={a.to as never}
                                 className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-white"
                                 style={{ background: NAVY }}
                               >
                                 {a.label}
                               </Link>
                             ))}
+
                           </div>
                         )}
                       </div>
