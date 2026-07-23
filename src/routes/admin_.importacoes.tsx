@@ -37,6 +37,8 @@ import { toast } from "sonner";
 import { Loader2, Plus, Trash2, PackagePlus, PackageCheck, PackageX, AlertTriangle } from "lucide-react";
 
 export const Route = createFileRoute("/admin_/importacoes")({
+  ssr: false,
+  beforeLoad: adminBeforeLoad,
   head: () => ({
     meta: [
       { title: "Importações — Admin" },
