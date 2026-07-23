@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Loader2, ShieldCheck, UserPlus, CheckCircle2, Sparkles, AlertCircle, TrendingDown } from "lucide-react";
+import { ArrowRight, Loader2, ShieldCheck, UserPlus, CheckCircle2, Sparkles, AlertCircle } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
@@ -242,7 +242,7 @@ function CadastroPage() {
                 className="mt-2.5 max-w-[34ch] text-[13px] leading-relaxed text-white/95"
                 style={{ textShadow: "0 1px 6px rgba(0,0,0,0.5)" }}
               >
-                Conta em 30 segundos. CPF, PIN e você entra no comparador dos mercados de Feijó.
+                Crie sua conta com CPF e PIN em 30 segundos e comece a comparar os mercados de Feijó.
               </p>
             </div>
 
@@ -256,7 +256,7 @@ function CadastroPage() {
                 ))}
               </ul>
 
-              {/* Compact savings badge */}
+              {/* Trust badge — validação por nota fiscal */}
               <div
                 className="flex items-center gap-3 rounded-xl border px-3.5 py-2.5 backdrop-blur"
                 style={{
@@ -268,20 +268,18 @@ function CadastroPage() {
                   className="flex h-10 w-10 flex-none items-center justify-center rounded-lg"
                   style={{ background: "linear-gradient(135deg, #F5D77A, #c9a34a)", color: "#0a1631" }}
                 >
-                  <TrendingDown className="h-5 w-5" strokeWidth={2.5} />
+                  <ShieldCheck className="h-5 w-5" strokeWidth={2.5} />
                 </div>
                 <div className="min-w-0 leading-tight">
-                  <div className="flex items-baseline gap-1.5">
-                    <span
-                      style={{ fontFamily: PC_DISPLAY, color: "#F5D77A", fontWeight: 900, fontSize: 22, letterSpacing: "-0.02em" }}
-                    >
-                      −22%
-                    </span>
-                    <span className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-white/90">
-                      economia média
-                    </span>
+                  <div
+                    className="text-[13px] font-bold text-white"
+                    style={{ fontFamily: PC_DISPLAY, letterSpacing: "-0.01em" }}
+                  >
+                    Preços validados por nota fiscal
                   </div>
-                  <div className="text-[11.5px] text-white/85">na cesta comparada entre mercados</div>
+                  <div className="text-[11.5px] text-white/85">
+                    Rede colaborativa · atualizada diariamente
+                  </div>
                 </div>
               </div>
             </div>
