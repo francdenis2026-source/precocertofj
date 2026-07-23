@@ -2455,7 +2455,17 @@ function EstablishmentsTab() {
               <LogoUploadField
                 current={form.logoUrl}
                 onChange={(url) => setForm({ ...form, logoUrl: url })}
+                onExtracted={(ai) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    name: prev.name.trim() ? prev.name : ai.name ?? prev.name,
+                    kind: prev.kind !== "mercado" ? prev.kind : ai.kind ?? prev.kind,
+                    brandColor: prev.brandColor ? prev.brandColor : ai.brandColor ?? prev.brandColor,
+                    notes: prev.notes.trim() ? prev.notes : ai.notes ?? prev.notes,
+                  }))
+                }
               />
+
             </div>
             <div className="md:col-span-2">
               <Label>Cor de identificação da estabelecimento</Label>
