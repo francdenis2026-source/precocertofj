@@ -298,9 +298,9 @@ function HomePage() {
       </section>
 
       {/* EXPLORE — três atalhos compactos para páginas internas */}
-      <section className="mx-auto max-w-7xl px-4 py-10 md:px-8 md:py-16">
+      <section className={dsx(ds.container, ds.sectionY.md)}>
         <div className="mb-5 md:mb-6">
-          <div className="text-[10px] font-semibold uppercase tracking-[0.18em]" style={{ color: PALETTE.navy2 }}>
+          <div className={dsx(ds.type.overline)} style={{ color: PALETTE.navy2 }}>
             Explore
           </div>
           <h2
@@ -315,7 +315,7 @@ function HomePage() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 lg:grid-cols-3">
+        <div className={ds.grid.cols3}>
           <ExploreCard
             icon={<Trophy className="h-4 w-4" />}
             eyebrow="01 — Ranking"
@@ -342,6 +342,7 @@ function HomePage() {
           />
         </div>
       </section>
+
 
       {/* CTA FINAL — compacto */}
       <section className="mx-auto max-w-7xl px-4 pb-14 md:px-8 md:pb-20">
