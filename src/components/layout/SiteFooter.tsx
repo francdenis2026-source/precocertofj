@@ -33,6 +33,15 @@ const NAV_COLS: Array<{ title: string; links: Array<{ to: string; label: string 
   },
 ];
 
+// Flat link list for the compact mobile footer (no column headers)
+const MOBILE_LINKS: Array<{ to: string; label: string }> = [
+  { to: "/melhores-precos", label: "Rankings" },
+  { to: "/estabelecimentos", label: "Mercados" },
+  { to: "/planos", label: "Planos" },
+  { to: "/fale-conosco", label: "Contato" },
+  { to: "/privacidade", label: "Privacidade" },
+];
+
 export function SiteFooter() {
   const year = new Date().getFullYear();
 
@@ -40,11 +49,45 @@ export function SiteFooter() {
     <footer
       className="mt-4 border-t border-border bg-muted/45 text-foreground md:mt-8"
     >
-      {/* Top — brand + link columns */}
+      {/* ============ MOBILE (compact) ============ */}
+      <div className={dsx(ds.container, "md:hidden py-2.5")}>
+        <div className="flex items-center justify-between gap-3">
+          <Link to="/" className="flex items-center gap-2 min-w-0">
+            <span className="grid h-7 w-7 shrink-0 place-items-center rounded-[8px] bg-brand text-[13px] font-black text-brand-foreground shadow-elev-2">
+              P
+            </span>
+            <span className={dsx(serif, "truncate text-[16px] leading-none text-foreground")}>
+              Preço<span className="italic text-brand">Certo</span>
+            </span>
+          </Link>
+          <a
+            href="mailto:precocerto-fj@proton.me"
+            aria-label="E-mail"
+            className="shrink-0 rounded-md p-1.5 text-muted-foreground hover:text-primary"
+          >
+            <Mail className="h-4 w-4" />
+          </a>
+        </div>
+
+        <nav className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-[12px] text-foreground/80">
+          {MOBILE_LINKS.map((l) => (
+            <Link key={l.to} to={l.to} className="hover:text-primary">
+              {l.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="mt-2 flex items-center justify-between gap-2 border-t border-border pt-1.5 text-[10.5px] leading-tight text-muted-foreground">
+          <span>© {year} PreçoCerto · Feijó/AC</span>
+          <span className="font-mono">&lt;dev&gt; Franc D&apos;nis</span>
+        </div>
+      </div>
+
+      {/* ============ DESKTOP / TABLET ============ */}
       <div
         className={dsx(
           ds.container,
-          "grid gap-3.5 py-3.5 sm:gap-6 md:grid-cols-[1.2fr_2fr] md:gap-10 md:py-6",
+          "hidden md:grid gap-3.5 py-3.5 sm:gap-6 md:grid-cols-[1.2fr_2fr] md:gap-10 md:py-6",
         )}
       >
         {/* Brand block */}
@@ -58,23 +101,15 @@ export function SiteFooter() {
             <span
               className={dsx(serif, "text-[19px] leading-none text-foreground sm:text-[23px] md:text-[26px]")}
             >
-              Preço
-              <span className="italic text-brand">
-                Certo
-              </span>
+              Preço<span className="italic text-brand">Certo</span>
             </span>
           </Link>
 
-          <p
-            className="mt-2 text-[12px] leading-snug text-muted-foreground md:mt-2.5 md:text-[13px]"
-          >
+          <p className="mt-2 text-[12px] leading-snug text-muted-foreground md:mt-2.5 md:text-[13px]">
             Comparador colaborativo de preços dos mercados de Feijó — Acre.
           </p>
 
-
-          <ul
-            className="mt-3 space-y-1.5 text-[12px] text-foreground/80 md:text-[12.5px]"
-          >
+          <ul className="mt-3 space-y-1.5 text-[12px] text-foreground/80 md:text-[12.5px]">
             <li className="flex items-center gap-2">
               <MapPin className="h-3.5 w-3.5 shrink-0 text-brand" />
               Feijó · Acre · Brasil
@@ -96,9 +131,7 @@ export function SiteFooter() {
         <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 sm:gap-8">
           {NAV_COLS.map((col) => (
             <div key={col.title} className="min-w-0">
-              <div
-                className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand md:text-[11px] md:tracking-[0.22em] lg:text-[12px]"
-              >
+              <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand md:text-[11px] md:tracking-[0.22em] lg:text-[12px]">
                 {col.title}
               </div>
               <ul className="mt-2 space-y-1.5">
@@ -116,11 +149,10 @@ export function SiteFooter() {
             </div>
           ))}
         </div>
-
       </div>
 
-      {/* Bottom — legal strip (sem duplicar links do menu) */}
-      <div className="border-t border-border bg-muted">
+      {/* Bottom legal strip — desktop only (mobile has its own inline strip) */}
+      <div className="hidden md:block border-t border-border bg-muted">
         <div
           className={dsx(
             ds.container,
@@ -130,7 +162,6 @@ export function SiteFooter() {
           <span className="whitespace-normal">© {year} <strong className="font-semibold">PreçoCerto</strong> · Feijó · Acre</span>
           <span className="whitespace-nowrap font-mono text-muted-foreground">&lt;dev&gt; Franc D&apos;nis</span>
         </div>
-
       </div>
     </footer>
   );
