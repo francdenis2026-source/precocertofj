@@ -429,37 +429,79 @@
   letter-spacing: -0.025em;
 }
 
-/* Escopo admin — aplica o DS tipográfico a headings/labels dentro
- * de qualquer página /admin sem tocar 25+ arquivos. */
-main .admin-scope {
+/* Escopo admin — aplica o DS tipográfico a headings/labels/sidebar/header
+ * dentro de qualquer página /admin sem tocar 25+ arquivos.
+ * A classe é aplicada no wrapper que envolve sidebar + header + main,
+ * então os seletores aqui NÃO devem ser prefixados por `main`. */
+.admin-scope {
+  font-size: clamp(14px, 0.55vw + 12.5px, 16px);
+}
+.admin-scope main {
   background:
     linear-gradient(180deg, color-mix(in oklab, var(--muted) 55%, transparent), transparent 340px),
     var(--background);
 }
-main .admin-scope { font-size: 15px; }
-main .admin-scope h1 { font-family: var(--font-sans); font-weight: var(--fw-bold); font-size: clamp(1.9rem, 2.4vw, 2.6rem); line-height: 1.05; letter-spacing: 0; }
-main .admin-scope h2 { font-family: var(--font-sans); font-weight: var(--fw-bold); font-size: clamp(1.32rem, 1.6vw, 1.65rem); line-height: var(--lh-heading); letter-spacing: 0; }
-main .admin-scope h3 { font-family: var(--font-sans); font-weight: var(--fw-semibold); font-size: 1.12rem; line-height: var(--lh-title); letter-spacing: 0; }
-main .admin-scope h4 { font-family: var(--font-sans); font-weight: var(--fw-semibold); font-size: 1.02rem; line-height: var(--lh-title); letter-spacing: 0; }
-main .admin-scope p { font-size: .95rem; line-height: 1.55; }
-main .admin-scope [data-slot="card"] {
+.admin-scope h1 { font-family: var(--font-sans); font-weight: var(--fw-bold); font-size: clamp(1.6rem, 1.2vw + 1.1rem, 2.4rem); line-height: 1.08; letter-spacing: 0; }
+.admin-scope h2 { font-family: var(--font-sans); font-weight: var(--fw-bold); font-size: clamp(1.18rem, 0.7vw + 0.95rem, 1.6rem); line-height: var(--lh-heading); letter-spacing: 0; }
+.admin-scope h3 { font-family: var(--font-sans); font-weight: var(--fw-semibold); font-size: clamp(1.02rem, 0.35vw + 0.9rem, 1.18rem); line-height: var(--lh-title); letter-spacing: 0; }
+.admin-scope h4 { font-family: var(--font-sans); font-weight: var(--fw-semibold); font-size: clamp(0.95rem, 0.25vw + 0.85rem, 1.06rem); line-height: var(--lh-title); letter-spacing: 0; }
+.admin-scope p { font-size: clamp(0.9rem, 0.2vw + 0.82rem, 0.98rem); line-height: 1.55; }
+.admin-scope [data-slot="card"] {
   border-color: color-mix(in oklab, var(--border) 82%, var(--primary) 18%);
   box-shadow: 0 10px 28px -24px color-mix(in oklab, var(--foreground) 24%, transparent);
 }
-main .admin-scope [data-slot="card-header"] { padding-block: 1.1rem .8rem; }
-main .admin-scope [data-slot="card-content"] { padding-block: .95rem 1.1rem; }
-main .admin-scope [data-slot="card-title"] { font-size: 1.08rem; font-weight: var(--fw-semibold); letter-spacing: 0; }
-main .admin-scope [data-slot="card-description"] { font-size: .92rem; line-height: 1.55; color: var(--color-muted-foreground); }
-main .admin-scope label { font-size: .92rem; font-weight: var(--fw-medium); letter-spacing: 0; }
-main .admin-scope input,
-main .admin-scope select,
-main .admin-scope textarea { font-size: .95rem; }
-main .admin-scope button,
-main .admin-scope a { letter-spacing: 0; font-size: .95rem; }
-main .admin-scope table { font-size: .94rem; }
-main .admin-scope th { height: 2.75rem; font-size: .78rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--color-muted-foreground); }
-main .admin-scope td { padding-block: .72rem; }
-main .admin-scope svg { flex-shrink: 0; }
+.admin-scope [data-slot="card-header"] { padding-block: 1.1rem .8rem; }
+.admin-scope [data-slot="card-content"] { padding-block: .95rem 1.1rem; }
+.admin-scope [data-slot="card-title"] { font-size: clamp(0.98rem, 0.3vw + 0.88rem, 1.12rem); font-weight: var(--fw-semibold); letter-spacing: 0; }
+.admin-scope [data-slot="card-description"] { font-size: clamp(0.86rem, 0.2vw + 0.78rem, 0.95rem); line-height: 1.55; color: var(--color-muted-foreground); }
+.admin-scope label { font-size: clamp(0.86rem, 0.2vw + 0.78rem, 0.95rem); font-weight: var(--fw-medium); letter-spacing: 0; }
+.admin-scope input,
+.admin-scope select,
+.admin-scope textarea { font-size: clamp(0.9rem, 0.2vw + 0.82rem, 0.98rem); }
+.admin-scope button,
+.admin-scope a { letter-spacing: 0; font-size: clamp(0.88rem, 0.2vw + 0.8rem, 0.96rem); }
+.admin-scope table { font-size: clamp(0.88rem, 0.2vw + 0.8rem, 0.96rem); }
+.admin-scope th { height: 2.75rem; font-size: clamp(0.72rem, 0.1vw + 0.68rem, 0.8rem); font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--color-muted-foreground); }
+.admin-scope td { padding-block: .72rem; }
+.admin-scope svg { flex-shrink: 0; }
+
+/* Sidebar do admin — tipografia consistente com o restante do console */
+.admin-scope [data-slot="sidebar"],
+.admin-scope [data-slot="sidebar-inner"] { font-size: clamp(0.88rem, 0.2vw + 0.8rem, 0.96rem); }
+.admin-scope [data-sidebar="group-label"] {
+  font-size: clamp(0.68rem, 0.1vw + 0.64rem, 0.76rem);
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--color-muted-foreground);
+}
+.admin-scope [data-sidebar="menu-button"] {
+  font-size: clamp(0.9rem, 0.2vw + 0.82rem, 0.98rem);
+  font-weight: var(--fw-medium);
+  letter-spacing: 0;
+  height: 2.35rem;
+}
+.admin-scope [data-sidebar="menu-button"]:hover,
+.admin-scope [data-sidebar="menu-button"][data-active="true"] {
+  font-weight: var(--fw-semibold);
+}
+.admin-scope [data-sidebar="menu-sub-button"] {
+  font-size: clamp(0.84rem, 0.15vw + 0.78rem, 0.92rem);
+}
+
+/* Header do admin — títulos, breadcrumbs e ações */
+.admin-scope header [data-slot="breadcrumb"],
+.admin-scope header nav { font-size: clamp(0.84rem, 0.2vw + 0.76rem, 0.94rem); }
+.admin-scope header button,
+.admin-scope header a { font-size: clamp(0.86rem, 0.2vw + 0.78rem, 0.95rem); }
+
+/* Ajustes responsivos: em telas pequenas comprime paddings de cards
+ * para o texto maior não quebrar layouts densos. */
+@media (max-width: 640px) {
+  .admin-scope [data-slot="card-header"] { padding-inline: 0.9rem; padding-block: 0.9rem 0.65rem; }
+  .admin-scope [data-slot="card-content"] { padding-inline: 0.9rem; padding-block: 0.75rem 0.9rem; }
+  .admin-scope th, .admin-scope td { padding-inline: 0.5rem; }
+}
 
 /* Sombras discretas — apenas 2 níveis (Stripe/Linear-like) */
 @utility shadow-elev-1 {
