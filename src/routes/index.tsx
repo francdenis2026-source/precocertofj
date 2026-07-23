@@ -325,7 +325,12 @@ function HomePage() {
             >
               <picture>
                 {Object.entries(heroMarket.sources).map(([type, srcset]) => (
-                  <source key={type} type={`image/${type}`} srcSet={srcset} sizes="50vw" />
+                  <source
+                    key={type}
+                    type={`image/${type}`}
+                    srcSet={srcset}
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                  />
                 ))}
                 <img
                   src={heroMarket.img.src}
@@ -334,6 +339,7 @@ function HomePage() {
                   alt="Cesta com produtos frescos do mercado"
                   fetchPriority="high"
                   decoding="async"
+                  loading="eager"
                   className="absolute inset-0 h-full w-full object-cover"
                 />
               </picture>
