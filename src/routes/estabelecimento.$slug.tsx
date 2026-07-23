@@ -294,20 +294,6 @@ function EstablishmentPage() {
               inputMode="search"
             />
           </div>
-          <Button
-            type="button"
-            variant={showFilters || activeFiltersCount > 0 ? "default" : "outline"}
-            onClick={() => setShowFilters((v) => !v)}
-            className="sm:w-auto"
-          >
-            <SlidersHorizontal className="mr-1.5 h-4 w-4" />
-            Filtros
-            {activeFiltersCount > 0 && (
-              <span className="ml-1.5 rounded-full bg-primary-foreground/20 px-1.5 text-[10px] font-bold">
-                {activeFiltersCount}
-              </span>
-            )}
-          </Button>
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as SortKey)}
@@ -322,73 +308,11 @@ function EstablishmentPage() {
           </select>
         </div>
 
-        {showFilters && (
-          <div className="mt-3 rounded-lg border border-border bg-card p-3">
-            <div className="grid gap-3 sm:grid-cols-3">
-              <div>
-                <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                  Marca
-                </label>
-                <select
-                  value={selectedBrand ?? ""}
-                  onChange={(e) => setSelectedBrand(e.target.value || null)}
-                  className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm"
-                  disabled={brands.length === 0}
-                >
-                  <option value="">Todas as marcas</option>
-                  {brands.map((b) => (
-                    <option key={b} value={b}>
-                      {b}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                  Preço mínimo (R$)
-                </label>
-                <Input
-                  type="number"
-                  inputMode="decimal"
-                  min="0"
-                  step="0.01"
-                  value={priceMin}
-                  onChange={(e) => setPriceMin(e.target.value)}
-                  placeholder="0,00"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                  Preço máximo (R$)
-                </label>
-                <Input
-                  type="number"
-                  inputMode="decimal"
-                  min="0"
-                  step="0.01"
-                  value={priceMax}
-                  onChange={(e) => setPriceMax(e.target.value)}
-                  placeholder="999,99"
-                />
-              </div>
-            </div>
-            {activeFiltersCount > 0 && (
-              <button
-                type="button"
-                onClick={clearFilters}
-                className="mt-3 inline-flex items-center gap-1 text-[12px] text-muted-foreground hover:text-foreground"
-              >
-                <X className="h-3 w-3" /> Limpar filtros
-              </button>
-            )}
-          </div>
-        )}
-
         <div className="mt-4 text-xs text-muted-foreground">
           {filtered.length} de {data.products.length} produtos
           {selectedCategory && <> · categoria <strong>{selectedCategory}</strong></>}
-          {selectedBrand && <> · marca <strong>{selectedBrand}</strong></>}
         </div>
+
 
         <ul className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((p) => (
