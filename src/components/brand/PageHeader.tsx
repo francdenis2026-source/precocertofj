@@ -84,41 +84,41 @@ export function PageHeader({
         </nav>
       )}
 
-      <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+      <div className="flex flex-col gap-5 md:flex-row md:items-start md:justify-between md:gap-6">
         <div className="min-w-0 flex-1">
-          <div className="flex items-start gap-3">
+          <div className="flex items-start gap-4">
             {icon && (
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-border bg-card text-foreground">
+              <div className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border border-border bg-card text-foreground md:h-12 md:w-12">
                 {icon}
               </div>
             )}
             <div className="min-w-0 flex-1">
               {eyebrow && (
-                <div className="text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+                <div className="text-overline">
                   {eyebrow}
                 </div>
               )}
               {goldRule && (
                 <div
-                  className="mb-2 mt-1 h-[3px] w-8 rounded-full"
+                  className="mb-2 mt-1.5 h-[3px] w-10 rounded-full"
                   style={{ background: "#b58a3c" }}
                 />
               )}
               <h1
                 className={cn(
-                  "mt-1 text-[22px] font-bold leading-tight tracking-tight text-foreground md:text-[26px]",
+                  "mt-1.5 text-h1 text-foreground",
                   editorial &&
-                    "font-normal font-['Instrument_Serif',ui-serif,serif] text-[28px] tracking-normal md:text-[34px]",
+                    "font-normal font-['Instrument_Serif',ui-serif,serif] text-editorial tracking-normal",
                 )}
               >
                 {title}
               </h1>
               {description && (
-                <p className="mt-1.5 max-w-2xl text-[13.5px] leading-relaxed text-muted-foreground">
+                <p className="mt-2 max-w-2xl text-body text-muted-foreground">
                   {description}
                 </p>
               )}
-              {meta && <div className="mt-2 flex flex-wrap items-center gap-2">{meta}</div>}
+              {meta && <div className="mt-3 flex flex-wrap items-center gap-2">{meta}</div>}
             </div>
           </div>
         </div>
