@@ -92,15 +92,11 @@ export const Route = createFileRoute("/estabelecimento/$slug")({
     };
   },
   errorComponent: ({ error, reset }) => (
-    <div className="mx-auto flex min-h-[60dvh] max-w-md flex-col items-center justify-center px-4 text-center">
-      <h2 className="text-lg font-semibold">Não foi possível carregar</h2>
-      <p className="mt-2 text-sm text-muted-foreground">
-        {error instanceof Error ? error.message : "Tente novamente em instantes."}
-      </p>
-      <Button className="mt-4" onClick={() => reset()}>
-        Tentar de novo
-      </Button>
-    </div>
+    <RouteError
+      title="Não foi possível carregar"
+      message={error instanceof Error ? error.message : "Tente novamente em instantes."}
+      onRetry={() => reset()}
+    />
   ),
   notFoundComponent: () => (
     <div className="mx-auto flex min-h-[50dvh] max-w-md flex-col items-center justify-center px-4 text-center">
@@ -118,8 +114,8 @@ export const Route = createFileRoute("/estabelecimento/$slug")({
     </div>
   ),
   pendingComponent: () => (
-    <div className="flex min-h-[50dvh] items-center justify-center">
-      <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+    <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+      <LoadingGrid count={6} columns={3} />
     </div>
   ),
   component: EstablishmentPage,
