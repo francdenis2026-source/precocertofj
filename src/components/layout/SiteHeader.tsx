@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ds, dsx } from "@/lib/ds";
-import { HighContrastToggle } from "@/components/HighContrastToggle";
+
 
 const PALETTE = {
   navy: "#0f1b3d",
