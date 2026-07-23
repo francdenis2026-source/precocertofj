@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
-import { Clock, Download, Filter, Flame, Star, Trash2, X } from "lucide-react";
+import { Clock, Download, Filter, Flame, Share2, Star, Trash2, X } from "lucide-react";
 import imgCozidao from "@/assets/preparo/cozidao.jpg";
 import imgAssado from "@/assets/preparo/assado.jpg";
 import imgChurrasco from "@/assets/preparo/churrasco.jpg";
@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { PREPARO_DICAS, favoriteKey } from "@/lib/preparo-dicas-data";
 import { gerarGuiaPreparoPDF } from "@/lib/preparo-dicas-pdf";
+import { shareOrDownloadPreparoCard } from "@/lib/preparo-dicas-card";
 import {
   MODOS,
   TEMPO_FAIXAS,
@@ -141,6 +142,7 @@ function useFavoritos() {
 export function PreparoDicas() {
   const { favs, toggle, clear } = useFavoritos();
   const [baixando, setBaixando] = useState(false);
+  const [cardKey, setCardKey] = useState<string | null>(null);
   const [temposSel, setTemposSel] = useState<Set<TempoFaixaId>>(() => new Set());
   const [modosSel, setModosSel] = useState<Set<ModoId>>(() => new Set());
 
@@ -425,6 +427,35 @@ export function PreparoDicas() {
                         <span className="font-semibold text-foreground">Modo:</span>
                         {d.modo}
                       </span>
+                    </div>
+
+                    <div className="mt-3">
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        disabled={cardKey === d.key}
+                        onClick={async () => {
+                          try {
+                            setCardKey(d.key);
+                            const result = await shareOrDownloadPreparoCard(d);
+                            toast.success(
+                              result === "shared"
+                                ? "Card pronto para compartilhar."
+                                : "Card salvo em seus downloads.",
+                            );
+                          } catch (e) {
+                            console.error(e);
+                            toast.error("Não foi possível gerar o card.");
+                          } finally {
+                            setCardKey(null);
+                          }
+                        }}
+                        className="gap-1.5"
+                      >
+                        <Share2 className="h-4 w-4" />
+                        {cardKey === d.key ? "Gerando…" : "Compartilhar card (PNG)"}
+                      </Button>
                     </div>
 
                     {filtrosAtivos > 0 && !d.matchesSelf && (
