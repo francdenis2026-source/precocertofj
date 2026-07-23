@@ -21,6 +21,33 @@ const relative = (iso: string) => {
   return m <= 1 ? "há 1 mês" : `há ${m} meses`;
 };
 
+type Freshness = { label: string; dotClass: string; textClass: string; ringClass: string };
+
+function freshness(iso: string): Freshness {
+  const days = Math.floor((Date.now() - new Date(iso).getTime()) / (1000 * 60 * 60 * 24));
+  if (days <= 7)
+    return {
+      label: "Disponível",
+      dotClass: "bg-emerald-500",
+      textClass: "text-emerald-600 dark:text-emerald-400",
+      ringClass: "ring-emerald-500/30",
+    };
+  if (days <= 30)
+    return {
+      label: "Recente",
+      dotClass: "bg-amber-500",
+      textClass: "text-amber-600 dark:text-amber-400",
+      ringClass: "ring-amber-500/30",
+    };
+  return {
+    label: "Desatualizado",
+    dotClass: "bg-zinc-400",
+    textClass: "text-zinc-500 dark:text-zinc-400",
+    ringClass: "ring-zinc-400/30",
+  };
+}
+
+
 type Palette = {
   card: string;
   line: string;
