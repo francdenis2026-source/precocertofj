@@ -67,14 +67,20 @@ function HomePage() {
   const navigate = useNavigate();
   const [q, setQ] = useState("");
   const [today, setToday] = useState<string>("");
+  const [todayShort, setTodayShort] = useState<string>("");
 
   useEffect(() => {
+    const d = new Date();
     setToday(
-      new Date().toLocaleDateString("pt-BR", {
+      d.toLocaleDateString("pt-BR", {
         weekday: "long", day: "2-digit", month: "long",
       }),
     );
+    setTodayShort(
+      d.toLocaleDateString("pt-BR", { day: "2-digit", month: "short" }),
+    );
   }, []);
+
 
   const platformStats = useServerFn(getPlatformStats);
   const statsQ = useQuery({
