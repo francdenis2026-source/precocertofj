@@ -432,7 +432,7 @@ function ExploreCard({
   return (
     <Link
       to={to}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border bg-white p-5 transition-all hover:-translate-y-0.5 hover:shadow-md md:p-6"
+      className={dsx("group relative flex flex-col overflow-hidden", ds.card.paddedHover)}
       style={{ borderColor: PALETTE.line }}
     >
       <div
