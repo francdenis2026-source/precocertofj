@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
-import { Download, Star, Trash2 } from "lucide-react";
+import { Clock, Download, Flame, Star, Trash2 } from "lucide-react";
 import imgCozidao from "@/assets/preparo/cozidao.jpg";
 import imgAssado from "@/assets/preparo/assado.jpg";
 import imgChurrasco from "@/assets/preparo/churrasco.jpg";
