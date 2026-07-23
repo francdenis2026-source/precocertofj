@@ -101,7 +101,7 @@ export function SiteHeader({ variant = "solid", showNav = true }: Props) {
               <Link
                 key={l.to}
                 to={l.to}
-                className="rounded-lg px-4 py-2.5 text-[16px] font-semibold text-white/85 transition-colors hover:bg-white/10 hover:text-white [&.active]:text-white"
+                className="rounded-lg px-4 py-2.5 text-[16px] font-semibold text-white/85 transition-colors hover:bg-white/10 hover:text-white lg:text-[18px] xl:text-[19px] [&.active]:text-white"
                 activeProps={{ className: "text-white bg-white/5" }}
               >
                 {l.label}
