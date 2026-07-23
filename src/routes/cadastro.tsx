@@ -603,11 +603,11 @@ function Field({
     ? "border-rose-400 focus:border-rose-500 focus:ring-rose-500/20"
     : good
       ? "border-emerald-500 focus:border-emerald-600 focus:ring-emerald-600/20"
-      : "border-slate-300 hover:border-slate-400 focus:border-[color:var(--pc-navy)] focus:ring-[color:var(--pc-navy)]/15";
+      : "border-slate-400 hover:border-slate-500 focus:border-[color:var(--pc-navy)] focus:ring-[color:var(--pc-navy)]/20";
   return (
     <label className="block">
       <div className="mb-1.5 flex items-center justify-between">
-        <span className="block text-[10.5px] font-bold uppercase tracking-[0.22em] text-slate-700">
+        <span className="block text-[10.5px] font-bold uppercase tracking-[0.22em] text-slate-900">
           {label}
         </span>
         {state && <FieldStatus state={state} show={!!showState} />}
@@ -621,11 +621,12 @@ function Field({
         inputMode={inputMode}
         autoComplete={autoComplete}
         aria-invalid={invalid}
-        className={`h-12 w-full rounded-xl border-2 ${border} bg-white px-4 text-[15px] font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-400 outline-none transition focus:ring-4`}
+        className={`h-12 w-full rounded-xl border-2 ${border} bg-white px-4 text-[15px] font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-500 outline-none transition focus:ring-4`}
         style={{ ["--pc-navy" as string]: PC_EMERALD } as React.CSSProperties}
       />
     </label>
   );
+
 }
 
 function PinField({
