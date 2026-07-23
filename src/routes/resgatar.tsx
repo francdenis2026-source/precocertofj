@@ -578,57 +578,105 @@ function RedeemPage() {
  * Verificador compacto de código: mostra 3 checks em tempo real.
  * Pequeno, profissional, sem ocupar espaço vertical.
  */
-function CodeVerifier({ clean, submitting }: { clean: string; submitting: boolean }) {
+function CodeVerifier({
+  clean,
+  submitting,
+  serverStatus,
+}: {
+  clean: string;
+  submitting: boolean;
+  serverStatus: "idle" | "checking" | "ok" | "rejected" | "notfound" | "error";
+}) {
   const hasPrefix = clean.startsWith("PC");
   const onlyAlphaNum = /^[A-Z0-9]*$/.test(clean);
   const fullLength = clean.length === CANONICAL_LEN;
-  const checks: Array<{ label: string; ok: boolean; pending: boolean }> = [
-    { label: "Prefixo PC", ok: hasPrefix && clean.length >= 2, pending: clean.length < 2 },
-    { label: "Caracteres", ok: onlyAlphaNum && clean.length > 0, pending: clean.length === 0 },
-    { label: "14 dígitos", ok: fullLength, pending: clean.length < CANONICAL_LEN },
+  const serverOk = serverStatus === "ok";
+  const serverBad = serverStatus === "rejected" || serverStatus === "notfound";
+  const serverChecking = serverStatus === "checking";
+
+  const checks: Array<{ label: string; state: "ok" | "pending" | "bad" | "loading" }> = [
+    {
+      label: "Formato",
+      state:
+        clean.length === 0
+          ? "pending"
+          : hasPrefix && onlyAlphaNum && fullLength
+          ? "ok"
+          : clean.length < CANONICAL_LEN
+          ? "pending"
+          : "bad",
+    },
+    {
+      label: "Servidor",
+      state:
+        !fullLength && clean.length < MIN_LEN
+          ? "pending"
+          : serverChecking
+          ? "loading"
+          : serverOk
+          ? "ok"
+          : serverBad
+          ? "bad"
+          : "pending",
+    },
   ];
-  const allOk = checks.every((c) => c.ok);
+  const allOk = checks.every((c) => c.state === "ok");
 
   return (
     <div
       className="mt-2 flex items-center gap-1.5 rounded-md border px-2 py-1.5"
       style={{
-        borderColor: allOk ? "#bbf7d0" : LINE,
-        background: allOk ? "#f0fdf4" : "#fafbfd",
+        borderColor: allOk ? "#bbf7d0" : serverBad ? "#fecaca" : LINE,
+        background: allOk ? "#f0fdf4" : serverBad ? "#fef2f2" : "#fafbfd",
       }}
       aria-label="Verificação do código"
+      aria-live="polite"
     >
       <span
         className="flex items-center gap-1 text-[9.5px] font-bold uppercase tracking-[0.14em]"
-        style={{ color: allOk ? "#15803d" : NAVY2 }}
+        style={{ color: allOk ? "#15803d" : serverBad ? "#991b1b" : NAVY2 }}
       >
-        {submitting ? (
+        {submitting || serverChecking ? (
           <Loader2 className="h-3 w-3 animate-spin" />
         ) : allOk ? (
           <BadgeCheck className="h-3 w-3" />
+        ) : serverBad ? (
+          <XCircle className="h-3 w-3" />
         ) : (
           <ShieldCheck className="h-3 w-3" />
         )}
-        {submitting ? "Verificando" : allOk ? "Verificado" : "Verificando"}
+        {submitting
+          ? "Ativando"
+          : serverChecking
+          ? "Verificando"
+          : allOk
+          ? "Verificado"
+          : serverBad
+          ? "Inválido"
+          : "Aguardando"}
       </span>
       <span className="mx-1 h-3 w-px" style={{ background: LINE }} />
       <div className="flex flex-1 items-center gap-1 overflow-hidden">
         {checks.map((c) => {
-          const color = c.ok ? "#16a34a" : c.pending ? "#cbd5e1" : "#dc2626";
+          const palette =
+            c.state === "ok"
+              ? { color: "#166534", bg: "#dcfce7", dot: "#16a34a" }
+              : c.state === "bad"
+              ? { color: "#991b1b", bg: "#fee2e2", dot: "#dc2626" }
+              : c.state === "loading"
+              ? { color: "#0f1b3d", bg: "#eef2ff", dot: "#6366f1" }
+              : { color: "#64748b", bg: "#f1f5f9", dot: "#cbd5e1" };
           return (
             <span
               key={c.label}
               className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9.5px] font-semibold"
-              style={{
-                color: c.ok ? "#166534" : c.pending ? "#64748b" : "#991b1b",
-                background: c.ok ? "#dcfce7" : c.pending ? "#f1f5f9" : "#fee2e2",
-              }}
+              style={{ color: palette.color, background: palette.bg }}
             >
-              <span
-                className="h-1.5 w-1.5 rounded-full"
-                style={{ background: color }}
-                aria-hidden
-              />
+              {c.state === "loading" ? (
+                <Loader2 className="h-2.5 w-2.5 animate-spin" aria-hidden />
+              ) : (
+                <span className="h-1.5 w-1.5 rounded-full" style={{ background: palette.dot }} aria-hidden />
+              )}
               {c.label}
             </span>
           );
@@ -637,6 +685,7 @@ function CodeVerifier({ clean, submitting }: { clean: string; submitting: boolea
     </div>
   );
 }
+
 
 
 
