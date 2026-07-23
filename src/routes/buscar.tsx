@@ -44,18 +44,10 @@ export const Route = createFileRoute("/buscar")({
   }),
   component: SearchPage,
   errorComponent: ({ error, reset }) => (
-    <div className="mx-auto max-w-xl px-4 py-10">
-      <EmptyState
-        icon={SearchIcon}
-        title="Erro na busca"
-        description={error.message}
-        action={
-          <Button onClick={reset} variant="default" size="sm">
-            Tentar novamente
-          </Button>
-        }
-      />
-    </div>
+    <RouteError message={(error as Error)?.message} onRetry={reset} />
+  ),
+  notFoundComponent: () => (
+    <RouteError title="Página não encontrada" message="Volte para o início e tente novamente." />
   ),
 });
 
