@@ -17,6 +17,9 @@ import { ds, dsx } from "@/lib/ds";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { getPlatformStats } from "@/lib/stores-public.functions";
+import { StartFreeDialog } from "@/components/home/StartFreeDialog";
+import { useSession } from "@/hooks/useSession";
+
 
 export const Route = createFileRoute("/")({
   head: () => ({
