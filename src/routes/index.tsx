@@ -84,6 +84,59 @@ const themeVars: React.CSSProperties = {
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 const sans = "font-['Work_Sans',system-ui,sans-serif]";
 
+function HeroImage() {
+  const [status, setStatus] = useState<"loading" | "loaded" | "error">("loading");
+  return (
+    <>
+      {/* Skeleton/placeholder gradient — mantém contraste com o overlay dos temas */}
+      <div
+        aria-hidden="true"
+        className={`absolute inset-0 transition-opacity duration-500 ${status === "loaded" ? "opacity-0" : "opacity-100"}`}
+        style={{
+          background:
+            "linear-gradient(135deg, oklch(0.22 0.05 258) 0%, oklch(0.32 0.06 260) 40%, oklch(0.42 0.08 78) 100%)",
+        }}
+      >
+        {status === "loading" && (
+          <div
+            className="absolute inset-0 animate-pulse"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent 0%, rgb(255 255 255 / 0.06) 50%, transparent 100%)",
+            }}
+          />
+        )}
+      </div>
+      {status !== "error" && (
+        <picture>
+          {Object.entries(heroMarket.sources).map(([type, srcset]) => (
+            <source
+              key={type}
+              type={`image/${type}`}
+              srcSet={srcset}
+              sizes="100vw"
+            />
+          ))}
+          <img
+            src={heroMarket.img.src}
+            width={heroMarket.img.w}
+            height={heroMarket.img.h}
+            alt=""
+            aria-hidden="true"
+            fetchPriority="high"
+            decoding="async"
+            onLoad={() => setStatus("loaded")}
+            onError={() => setStatus("error")}
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${status === "loaded" ? "opacity-100" : "opacity-0"}`}
+            style={{ filter: "saturate(0.85)" }}
+          />
+        </picture>
+      )}
+    </>
+  );
+}
+
+
 function HomePage() {
   const navigate = useNavigate();
   const [q, setQ] = useState("");
