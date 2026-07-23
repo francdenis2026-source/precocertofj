@@ -6,7 +6,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useState } from "react";
 import {
   Bell,
-  Loader2,
+  BellRing,
   Mail,
   MapPin,
   Smartphone,
@@ -32,6 +32,16 @@ import {
 } from "@/lib/favorites.functions";
 import { listPublicStores } from "@/lib/stores-public.functions";
 import { PriceAlertSubscriptions } from "@/components/alerts/PriceAlertSubscriptions";
+import {
+  PageHeader,
+  SectionCard,
+  StatGrid,
+  DataToolbar,
+  EmptyState,
+  LoadingSkeleton,
+  type Stat,
+} from "@/components/layout";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/alertas")({
   head: () => ({
