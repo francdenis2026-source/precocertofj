@@ -2,7 +2,9 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import heroMarket from "@/assets/home-hero.jpg";
+import heroMarket from "@/assets/home-hero.jpg?w=640;960;1280;1600;1920&format=avif;webp;jpg&as=picture";
+// LCP preload usa a menor variante AVIF (mobile-first); o <picture> abaixo negocia o resto.
+import heroPreloadAvif from "@/assets/home-hero.jpg?w=1280&format=avif&url";
 import exploreBg from "@/assets/explore-bg.jpg";
 import {
   Search,
@@ -36,6 +38,15 @@ export const Route = createFileRoute("/")({
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [
+      {
+        rel: "preload",
+        as: "image",
+        href: heroPreloadAvif,
+        type: "image/avif",
+        fetchpriority: "high",
+      },
     ],
   }),
   component: HomePage,
@@ -116,13 +127,27 @@ function HomePage() {
 
       {/* HERO */}
       <section className="relative isolate w-full overflow-hidden" style={{ minHeight: "min(92vh, 880px)" }}>
-        <img
-          src={heroMarket}
-          alt=""
-          aria-hidden="true"
-          className="absolute inset-0 h-full w-full object-cover"
-          style={{ filter: "saturate(0.85)" }}
-        />
+        <picture>
+          {Object.entries(heroMarket.sources).map(([type, srcset]) => (
+            <source
+              key={type}
+              type={`image/${type}`}
+              srcSet={srcset}
+              sizes="100vw"
+            />
+          ))}
+          <img
+            src={heroMarket.img.src}
+            width={heroMarket.img.w}
+            height={heroMarket.img.h}
+            alt=""
+            aria-hidden="true"
+            fetchPriority="high"
+            decoding="async"
+            className="absolute inset-0 h-full w-full object-cover"
+            style={{ filter: "saturate(0.85)" }}
+          />
+        </picture>
         <div
           className="absolute inset-0"
           style={{
