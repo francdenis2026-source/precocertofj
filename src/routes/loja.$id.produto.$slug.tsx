@@ -323,7 +323,7 @@ function ProductDetailPage() {
           </section>
         )}
 
-        {/* Comparação entre lojas */}
+        {/* Comparação entre mercados */}
         <CompareSection
           offers={compareData ?? []}
           currentStoreId={id}
@@ -461,9 +461,9 @@ function CompareSection({
   const reason = best.bestReason;
 
   return (
-    <section aria-label="Comparação entre lojas" className="mt-5">
+    <section aria-label="Comparação entre mercados" className="mt-5">
       <h2 className="mb-2 font-display text-[13px] font-semibold text-foreground">
-        Comparação entre lojas ({offers.length})
+        Comparação entre mercados ({offers.length})
       </h2>
 
       {!currentIsBest && current && diff > 0 && (
@@ -531,7 +531,7 @@ function CompareSection({
                 </li>
               )}
               <li className="text-[10px] opacity-80">
-                Baseado em {reason.offersCount} lojas comparadas.
+                Baseado em {reason.offersCount} mercados comparadas.
               </li>
             </ul>
           )}

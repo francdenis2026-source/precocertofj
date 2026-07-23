@@ -61,7 +61,7 @@ function storeName(s: ProductStoreEntry): string {
 }
 
 /**
- * Confiança por loja no dialog: usamos apenas o preço vs. min/avg do próprio
+ * Confiança por mercado no dialog: usamos apenas o preço vs. min/avg do próprio
  * conjunto, sem precisar do payload completo do comparador.
  */
 function confidenceForStore(
@@ -79,7 +79,7 @@ function confidenceForStore(
 }
 
 /**
- * Dialog acionado ao clicar em um produto. Exibe a lista completa de lojas
+ * Dialog acionado ao clicar em um produto. Exibe a lista completa de mercados
  * cadastradas com o menor preço destacado, controles de ordenação/filtro
  * acessíveis e bloqueio profissional para visitantes anônimos.
  *
@@ -212,7 +212,7 @@ export function ProductStoresDialog({
               {(category || sizeLabel) && valid.length > 0 ? <span aria-hidden>·</span> : null}
               {valid.length > 0 ? (
                 <span>
-                  {valid.length} loja{valid.length > 1 ? "s" : ""} com preço
+                  {valid.length} mercado{valid.length > 1 ? "s" : ""} com preço
                 </span>
               ) : null}
             </DialogDescription>

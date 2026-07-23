@@ -26,7 +26,7 @@ export interface MarketCardProps extends HTMLMotionProps<"article"> {
 }
 
 /**
- * MarketCard — card de mercado/loja, focado em hierarquia visual limpa.
+ * MarketCard — card de mercado/mercado, focado em hierarquia visual limpa.
  */
 export const MarketCard = forwardRef<HTMLElement, MarketCardProps>(function MarketCard(
   {

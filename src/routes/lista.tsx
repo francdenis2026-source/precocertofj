@@ -1014,7 +1014,7 @@ function BestPricesPanel({
 }
 
 /* ============================================================ */
-/* Roteiro otimizado — dividir compra entre lojas               */
+/* Roteiro otimizado — dividir compra entre mercados               */
 /* ============================================================ */
 
 function SplitRoutePanel({
@@ -1138,7 +1138,7 @@ function SplitRoutePanel({
           {route.singleMarketTotal !== null && route.singleMarketName && (
             <div className="mt-4 border-t border-border pt-3">
               <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                Uma loja só
+                Uma mercado só
               </p>
               <p className="mt-1 num font-mono text-lg font-bold text-foreground">
                 {brl(route.singleMarketTotal)}

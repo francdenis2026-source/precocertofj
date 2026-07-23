@@ -1244,7 +1244,7 @@ function ProductGroupCard({
   canSelectCompare?: boolean;
   onToggleCompare?: () => void;
 }) {
-  // Loja mais barata dentro deste grupo — usada para destaque no cabeçalho.
+  // Mercado mais barata dentro deste grupo — usada para destaque no cabeçalho.
   const cheapestInGroup = useMemo(() => {
     if (prices.length === 0) return null;
     return prices.reduce((best, cur) => (cur.price < best.price ? cur : best), prices[0]);

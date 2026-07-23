@@ -4,9 +4,9 @@ import { AlertTriangle, ShieldCheck, HelpCircle } from "lucide-react";
  * Sinaliza o quanto se pode confiar no preço/comparação exibida.
  *
  * Heurísticas:
- * - `alta`   : ≥ 3 lojas, spread razoável, tamanho conhecido.
- * - `media`  : 2 lojas OU spread elevado (> 60%) OU tamanho ausente.
- * - `baixa`  : 1 única loja (sem comparação real) OU spread absurdo (> 150%)
+ * - `alta`   : ≥ 3 mercados, spread razoável, tamanho conhecido.
+ * - `media`  : 2 mercados OU spread elevado (> 60%) OU tamanho ausente.
+ * - `baixa`  : 1 única mercado (sem comparação real) OU spread absurdo (> 150%)
  *              OU dados divergentes (min > avg, etc.).
  *
  * O badge é intencionalmente discreto — pequeno, monoespaçado e com
@@ -36,9 +36,9 @@ export function computeConfidence(input: {
     avgPrice < minPrice - 0.01 ||
     maxPrice < minPrice - 0.01;
 
-  if (divergent) reasons.push("dados divergentes entre lojas");
-  if (storeCount <= 1) reasons.push("apenas 1 loja com preço");
-  else if (storeCount === 2) reasons.push("apenas 2 lojas comparadas");
+  if (divergent) reasons.push("dados divergentes entre mercados");
+  if (storeCount <= 1) reasons.push("apenas 1 mercado com preço");
+  else if (storeCount === 2) reasons.push("apenas 2 mercados comparadas");
   if (!hasSize) reasons.push("tamanho/peso não informado");
   if (spread > 1.5) reasons.push(`variação de preço muito alta (${Math.round(spread * 100)}%)`);
   else if (spread > 0.6) reasons.push(`variação de preço elevada (${Math.round(spread * 100)}%)`);

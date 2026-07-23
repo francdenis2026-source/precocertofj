@@ -82,7 +82,7 @@ export const Route = createFileRoute("/loja/$id")({
   },
   head: ({ params }) => ({
     meta: [
-      { title: `Catálogo da loja — PreçoCerto` },
+      { title: `Catálogo da mercado — PreçoCerto` },
       { name: "description", content: `Preços registrados no estabelecimento ${params.id}.` },
     ],
   }),
@@ -92,7 +92,7 @@ export const Route = createFileRoute("/loja/$id")({
       <div className="mb-4 grid h-14 w-14 place-items-center rounded-full bg-muted">
         <StoreIcon className="h-7 w-7 text-muted-foreground" />
       </div>
-      <h2 className="font-display text-lg font-semibold text-foreground">Loja não encontrada</h2>
+      <h2 className="font-display text-lg font-semibold text-foreground">Mercado não encontrada</h2>
       <p className="mt-1 text-sm text-muted-foreground">
         Este estabelecimento pode ter sido removido ou o link está incorreto.
       </p>
@@ -111,7 +111,7 @@ export const Route = createFileRoute("/loja/$id")({
         <AlertTriangle className="h-7 w-7" />
       </div>
       <h2 className="font-display text-lg font-semibold text-foreground">
-        Não conseguimos carregar a loja
+        Não conseguimos carregar a mercado
       </h2>
       <p className="mt-1 max-w-xs text-sm text-muted-foreground">
         Sua sessão pode ter expirado ou houve uma instabilidade momentânea. Entre novamente para
@@ -362,7 +362,7 @@ function StorePage() {
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,theme(colors.primary/30),transparent_60%)]" />
             <span className="absolute left-3 top-2 inline-flex items-center gap-1 rounded-full bg-background/85 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-primary shadow-sm backdrop-blur">
               <Check className="h-2.5 w-2.5" strokeWidth={3} />
-              Loja verificada
+              Mercado verificada
             </span>
           </div>
 
@@ -548,11 +548,11 @@ function StorePage() {
           <section aria-label="Destaques" className="mt-4">
             <div className="mb-2 flex items-baseline justify-between">
               <h2 className="font-display text-[13px] font-semibold text-foreground">
-                Melhores desta loja
+                Melhores desta mercado
               </h2>
               <span className="text-[10.5px] text-muted-foreground">arraste →</span>
             </div>
-            <SwipeRow ariaLabel="Destaques da loja">
+            <SwipeRow ariaLabel="Destaques da mercado">
               {featured.map((p) => (
                 <FeaturedCard
                   key={p.slug}

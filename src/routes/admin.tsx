@@ -259,7 +259,7 @@ function AdminPage() {
             { to: "/admin/metricas", label: "Métricas & cache", icon: Gauge },
             { to: "/admin/precos", label: "Gestão de preços", icon: ShieldCheck },
             { to: "/admin/consistencia", label: "Consistência", icon: AlertTriangle },
-            { to: "/admin/cobertura", label: "Cobertura por loja", icon: Store },
+            { to: "/admin/cobertura", label: "Cobertura por estabelecimento", icon: Store },
             { to: "/admin/lote-inserir", label: "Scan Inteligente", icon: Plus },
             { to: "/admin/cadastro-foto", label: "Cadastro por foto (IA)", icon: Sparkles },
             { to: "/admin/historico-precos", label: "Histórico de preços", icon: Gauge },
@@ -2276,7 +2276,7 @@ function EstablishmentsTab() {
         <div>
           <h2 className="font-serif text-2xl">Estabelecimentos da cidade</h2>
           <p className="text-sm text-muted-foreground">
-            Cadastre mercados, atacados e lojas. Os produtos são vinculados depois.
+            Cadastre mercados, atacados e estabelecimentos. Os produtos são vinculados depois.
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -2395,7 +2395,7 @@ function EstablishmentsTab() {
               />
             </div>
             <div className="md:col-span-2">
-              <Label>Cor de identificação da loja</Label>
+              <Label>Cor de identificação da estabelecimento</Label>
               <p className="mb-2 text-xs text-muted-foreground">
                 Usada para destacar o estabelecimento nas listas de comparação de preços.
                 Deixe em branco para gerar automaticamente a partir do nome.
@@ -2407,7 +2407,7 @@ function EstablishmentsTab() {
                   value={
                     form.brandColor && /^#[0-9A-Fa-f]{6}$/.test(form.brandColor)
                       ? form.brandColor
-                      : getStoreColor(form.name || "Loja", null)
+                      : getStoreColor(form.name || "Estabelecimento", null)
                   }
                   onChange={(e) => setForm({ ...form, brandColor: e.target.value })}
                   className="h-10 w-14 cursor-pointer rounded border border-border bg-background p-1"
@@ -2431,7 +2431,7 @@ function EstablishmentsTab() {
                 )}
                 <div className="flex items-center gap-2 rounded-full border border-border bg-background px-3 py-1">
                   <StoreBadge
-                    name={form.name || "Loja"}
+                    name={form.name || "Estabelecimento"}
                     logoUrl={form.logoUrl || null}
                     brandColor={form.brandColor || null}
                     size="md"

@@ -6,10 +6,10 @@
  *  • Senão → mostra a inicial em círculo colorido.
  *    – A cor vem de `brandColor` (hex) quando cadastrada no admin.
  *    – Caso contrário, é derivada de forma determinística do nome
- *      (mesma loja → sempre mesma cor).
+ *      (mesma mercado → sempre mesma cor).
  *
  * Também é usado para pintar uma faixa lateral de 3px na linha do
- * resultado (via `getStoreColor`) — assim mesmo com logo, cada loja
+ * resultado (via `getStoreColor`) — assim mesmo com logo, cada mercado
  * fica facilmente distinguível numa lista longa.
  */
 import { useEffect, useState } from "react";
@@ -164,7 +164,7 @@ export function StoreBadge({
 
 /**
  * Faixa lateral colorida (3px) para prefixar uma linha/li — reforça
- * a identificação da loja mesmo em listas densas.
+ * a identificação da mercado mesmo em listas densas.
  */
 export function StoreColorBar({
   name,

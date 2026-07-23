@@ -57,7 +57,7 @@ export function PriceHistoryDrawer({
             {state?.displayName ?? productName ?? "Histórico entre mercados"}
           </SheetTitle>
           <SheetDescription>
-            Comparação de preços do mesmo produto em diferentes lojas.
+            Comparação de preços do mesmo produto em diferentes mercados.
           </SheetDescription>
         </SheetHeader>
 

@@ -192,7 +192,7 @@ function StoreCoverageDetail() {
         toast.error(`Cadastro falhou: ${res.errors[0]}`);
         return;
       }
-      toast.success(`Produto cadastrado na loja${res.cacheRebuilt ? ` · cache atualizado` : ""}.`);
+      toast.success(`Produto cadastrado na estabelecimento${res.cacheRebuilt ? ` · cache atualizado` : ""}.`);
       setTarget(null);
       qc.invalidateQueries({ queryKey: ["coverage-overview"] });
       qc.invalidateQueries({ queryKey: ["coverage-missing", id] });
@@ -223,7 +223,7 @@ function StoreCoverageDetail() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `cobertura-${store?.name ?? "loja"}-${tab}.csv`;
+    a.download = `cobertura-${store?.name ?? "estabelecimento"}-${tab}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -240,10 +240,10 @@ function StoreCoverageDetail() {
         </div>
 
         <header className="mb-6">
-          <p className="text-xs uppercase tracking-widest text-muted-foreground">Detalhe da loja</p>
+          <p className="text-xs uppercase tracking-widest text-muted-foreground">Detalhe da estabelecimento</p>
           <h1 className="mt-1 flex items-center gap-3 font-serif text-4xl">
             <Store className="h-8 w-8 text-muted-foreground" aria-hidden />
-            {store?.name ?? (overview.isLoading ? "Carregando…" : "Loja não encontrada")}
+            {store?.name ?? (overview.isLoading ? "Carregando…" : "Estabelecimento não encontrada")}
           </h1>
           {store && (
             <div className="mt-3 grid gap-3 sm:grid-cols-3">
@@ -266,7 +266,7 @@ function StoreCoverageDetail() {
               <div>
                 <CardTitle className="font-serif text-2xl">Produtos</CardTitle>
                 <CardDescription>
-                  Pesquise, pagine e cadastre em lote. O botão “Cadastrar na loja” abre um formulário rápido com preço, quantidade e unidade.
+                  Pesquise, pagine e cadastre em lote. O botão “Cadastrar na estabelecimento” abre um formulário rápido com preço, quantidade e unidade.
                 </CardDescription>
               </div>
               <Button variant="outline" size="sm" onClick={exportCsv} disabled={rows.length === 0}>
@@ -399,7 +399,7 @@ function MissingTable({
           <TableRow>
             <TableHead>Produto</TableHead>
             <TableHead>Categoria</TableHead>
-            <TableHead className="text-right">Lojas</TableHead>
+            <TableHead className="text-right">Estabelecimentos</TableHead>
             <TableHead className="text-right">Menor</TableHead>
             <TableHead className="text-right">Médio</TableHead>
             <TableHead className="text-right">Maior</TableHead>
@@ -420,7 +420,7 @@ function MissingTable({
               <TableCell className="text-right">
                 <Button size="sm" onClick={() => onRegister(r)}>
                   <Plus className="mr-1.5 h-3.5 w-3.5" />
-                  Cadastrar na loja
+                  Cadastrar na estabelecimento
                 </Button>
               </TableCell>
             </TableRow>
@@ -439,7 +439,7 @@ function PresentTable({ rows }: { rows: PresentRow[] }) {
           <TableRow>
             <TableHead>Produto</TableHead>
             <TableHead>Categoria</TableHead>
-            <TableHead className="text-right">Preço na loja</TableHead>
+            <TableHead className="text-right">Preço na estabelecimento</TableHead>
             <TableHead className="text-right">Menor no mercado</TableHead>
             <TableHead className="text-right">Média mercado</TableHead>
             <TableHead>Última coleta</TableHead>
@@ -572,9 +572,9 @@ function RegisterDialog({
     <Dialog open={open} onOpenChange={(v) => (!v ? onClose() : undefined)}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Cadastrar na loja</DialogTitle>
+          <DialogTitle>Cadastrar na estabelecimento</DialogTitle>
           <DialogDescription>
-            {storeName ? <>Novo preço em <span className="font-medium">{storeName}</span>.</> : "Novo preço na loja."}
+            {storeName ? <>Novo preço em <span className="font-medium">{storeName}</span>.</> : "Novo preço na estabelecimento."}
             {row && (
               <div className="mt-2 rounded-md border bg-muted/40 p-2 text-xs text-foreground">
                 <span className="font-medium">{row.display_name}</span>

@@ -9,7 +9,7 @@ export type Crumb = {
 
 /**
  * Breadcrumbs simples + link rápido "Voltar para a pesquisa".
- * Uso em páginas de resultado/detalhe (produto, comparador, loja, etc.).
+ * Uso em páginas de resultado/detalhe (produto, comparador, mercado, etc.).
  *
  * Ex.:
  *  <Breadcrumbs

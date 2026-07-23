@@ -287,7 +287,7 @@ export type PlatformStats = {
   priceDrops7d: number;
   activeComparisons: number;
   products: number;
-  estimatedSavings: number; // soma de (avg - min) em produtos com >=2 lojas
+  estimatedSavings: number; // soma de (avg - min) em produtos com >=2 mercados
 };
 
 export const getPlatformStats = createServerFn({ method: "GET" }).handler(
@@ -807,7 +807,7 @@ async function loadStoreAndScans(id: string) {
     .eq("id", id)
     .maybeSingle();
   if (eErr) throw new Error(eErr.message);
-  if (!estab || !estab.active) throw new Error("Loja não encontrada");
+  if (!estab || !estab.active) throw new Error("Mercado não encontrada");
 
   const scansTable = supabaseAdmin.from("scans" as never) as unknown as {
     select: (s: string) => {
@@ -985,7 +985,7 @@ export const getPublicProductDetail = createServerFn({ method: "GET" })
     const resolveImage = await loadCatalogImageResolver();
     const products = aggregateProducts(scans, resolveImage);
     const target = products.find((p) => p.slug === data.slug);
-    if (!target) throw new Error("Produto não encontrado nesta loja");
+    if (!target) throw new Error("Produto não encontrado nesta mercado");
 
     // Full price history for this exact productName
     const history: PricePoint[] = [];
@@ -1224,7 +1224,7 @@ export type MyPriceReport = {
 export const submitPriceReport = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: PriceReportInput) => {
-    if (!input.establishmentId?.trim()) throw new Error("Loja obrigatória");
+    if (!input.establishmentId?.trim()) throw new Error("Mercado obrigatória");
     if (!input.productName?.trim()) throw new Error("Produto obrigatório");
     if (!["incorrect", "outdated", "wrong_product", "other"].includes(input.reason))
       throw new Error("Motivo inválido");

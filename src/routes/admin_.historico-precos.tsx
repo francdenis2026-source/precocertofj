@@ -213,7 +213,7 @@ function Page() {
                   <thead>
                     <tr className="border-b bg-muted/30 text-left text-xs uppercase tracking-wide text-muted-foreground">
                       <th className="p-3">Produto</th>
-                      <th className="p-3">Loja</th>
+                      <th className="p-3">Estabelecimento</th>
                       <th className="p-3 text-right">Anterior</th>
                       <th className="p-3 text-right">Atual</th>
                       <th className="p-3 text-right">Δ</th>

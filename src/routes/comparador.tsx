@@ -479,7 +479,7 @@ function ComparadorPage() {
       <PageHeader
         eyebrow="Preços reais dos mercados"
         title={<>Comparador de <em className="italic text-primary">preços</em></>}
-        description="Todos os produtos abaixo são preços reais capturados nos mercados cadastrados. Clique em um produto para ver a foto, a descrição e o preço em cada loja, do mais barato ao mais caro."
+        description="Todos os produtos abaixo são preços reais capturados nos mercados cadastrados. Clique em um produto para ver a foto, a descrição e o preço em cada mercado, do mais barato ao mais caro."
         meta={<FreeQuotaBadge variant="inline" />}
         actions={
           <button
@@ -581,9 +581,9 @@ function ComparadorPage() {
             value={confFilter || null}
             onChange={(next) => setConfFilter((next as ConfFilter) ?? "")}
             options={[
-              { value: "alta", label: "Alta", hint: "≥ 3 lojas, dados consistentes" },
-              { value: "media", label: "Parcial", hint: "2 lojas, variação elevada ou tamanho ausente" },
-              { value: "baixa", label: "Baixa", hint: "1 loja, dados divergentes ou variação muito alta" },
+              { value: "alta", label: "Alta", hint: "≥ 3 mercados, dados consistentes" },
+              { value: "media", label: "Parcial", hint: "2 mercados, variação elevada ou tamanho ausente" },
+              { value: "baixa", label: "Baixa", hint: "1 mercado, dados divergentes ou variação muito alta" },
             ]}
           />
           {lowQualityCount > 0 && !confFilter && (
@@ -603,7 +603,7 @@ function ComparadorPage() {
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           <StatCard label="Produtos encontrados" value={String(stats.productCount)} />
           <StatCard
-            label="Lojas com preço"
+            label="Mercados com preço"
             value={String(stats.storeCount)}
             hint="mercados cadastrados"
           />
@@ -823,7 +823,7 @@ function ComparisonTable({
                 </button>
               </th>
               <th scope="col" className="hidden px-4 py-3 text-right sm:table-cell">
-                <span className={headerBtn.replace("hover:text-foreground", "")}>Lojas</span>
+                <span className={headerBtn.replace("hover:text-foreground", "")}>Mercados</span>
               </th>
               <th scope="col" className="px-4 py-3 text-right">
                 <span className="sr-only">Ação</span>
@@ -1029,7 +1029,7 @@ function ProductCard({
         id={row.product_key}
         index={index}
         variant="full"
-        reason="Este card mostra menor preço, média e ranking de lojas — dados exclusivos para contas cadastradas. Entre grátis para comparar e abrir o drilldown por estabelecimento."
+        reason="Este card mostra menor preço, média e ranking de mercados — dados exclusivos para contas cadastradas. Entre grátis para comparar e abrir o drilldown por estabelecimento."
         trackEventName="visitor_click_unlock_comparador"
         trackPayload={{ product_key: row.product_key, rank: index + 1 }}
       >
@@ -1205,7 +1205,7 @@ function ProductCard({
 
         {/* Footer CTA */}
         <div className="flex h-7 items-center justify-between border-t border-accent/30 px-2.5 font-display text-[10.5px] italic leading-none text-primary sm:h-8 sm:px-3 sm:text-[11px]">
-          <span>Ver em todas as lojas</span>
+          <span>Ver em todas as mercados</span>
           <ArrowRight className="h-3 w-3 shrink-0 transition-transform group-hover:translate-x-0.5" />
         </div>
       </button>

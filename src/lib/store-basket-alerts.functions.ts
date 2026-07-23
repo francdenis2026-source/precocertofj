@@ -3,8 +3,8 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 /**
  * CRUD para alertas de custo total da cesta em um mercado específico.
- * O usuário salva um alvo (R$) para uma loja e, quando o custo total da cesta
- * naquela loja cair abaixo do alvo, o alerta pode ser exibido no painel /alertas.
+ * O usuário salva um alvo (R$) para uma mercado e, quando o custo total da cesta
+ * naquela mercado cair abaixo do alvo, o alerta pode ser exibido no painel /alertas.
  */
 
 export type StoreBasketAlert = {

@@ -24,7 +24,7 @@ const ACTION_LABEL: Record<AuditAction, { label: string; variant: "default" | "s
   price_unverify: { label: "Desverificado", variant: "outline" },
   cache_invalidate_global: { label: "Cache global", variant: "outline" },
   cache_invalidate_product: { label: "Cache produto", variant: "outline" },
-  cache_invalidate_store: { label: "Cache loja", variant: "outline" },
+  cache_invalidate_store: { label: "Cache estabelecimento", variant: "outline" },
 };
 
 export function AuditLogTable({ entries }: { entries: AuditEntry[] }) {

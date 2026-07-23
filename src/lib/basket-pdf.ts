@@ -108,7 +108,7 @@ export function exportManualBasketPdf(payload: {
     },
   });
 
-  // Ranking por estabelecimento (custo total se comprado inteiramente em cada loja)
+  // Ranking por estabelecimento (custo total se comprado inteiramente em cada mercado)
   if (payload.perStore && payload.perStore.length > 0) {
     const afterItems =
       (doc as unknown as { lastAutoTable?: { finalY: number } }).lastAutoTable?.finalY ?? 100;
@@ -128,7 +128,7 @@ export function exportManualBasketPdf(payload: {
     doc.setFontSize(8);
     doc.setTextColor(90, 90, 90);
     doc.text(
-      "Estimativa (est.) usa preço médio para itens sem estoque na loja.",
+      "Estimativa (est.) usa preço médio para itens sem estoque na mercado.",
       14,
       yr + 3,
     );
@@ -186,7 +186,7 @@ export function exportManualBasketPdf(payload: {
 export type BasketPdfOptions = {
   /** Como itens sem preço são tratados no total */
   missingMode?: "zero" | "ignore" | "estimate";
-  /** Cobertura mínima aplicada (0-100). Lojas abaixo são omitidas do PDF. */
+  /** Cobertura mínima aplicada (0-100). Mercados abaixo são omitidas do PDF. */
   minCoverage?: number;
 };
 
@@ -366,7 +366,7 @@ export function exportBasketPdf(
       head: [["Item", "Disponível em", "Faltando em"]],
       body: missingRows.map((m) => [
         m.label,
-        `${m.availableStores} loja(s)`,
+        `${m.availableStores} mercado(s)`,
         m.missingStores.slice(0, 4).join(", ") + (m.missingStores.length > 4 ? "…" : ""),
       ]),
       styles: { fontSize: 8, cellPadding: 3 },

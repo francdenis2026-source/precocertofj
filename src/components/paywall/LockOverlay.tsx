@@ -103,7 +103,7 @@ export function LockOverlay({
   subtitle?: string;
   /**
    * Mensagem contextual curta explicando por que o card está bloqueado
-   * (ex.: "Preços por loja aparecem só para cadastrados").
+   * (ex.: "Preços por mercado aparecem só para cadastrados").
    * Renderizada acima do CTA no variant "full".
    */
   reason?: string;

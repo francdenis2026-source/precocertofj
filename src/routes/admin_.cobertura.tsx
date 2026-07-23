@@ -116,7 +116,7 @@ function CoveragePage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `cobertura-${selectedRow?.name ?? "loja"}-${tab}.csv`;
+    a.download = `cobertura-${selectedRow?.name ?? "estabelecimento"}-${tab}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -224,7 +224,7 @@ function OverviewTable({
     <Card>
       <CardHeader>
         <CardTitle className="font-serif text-xl">Ranking de cobertura</CardTitle>
-        <CardDescription>Clique em uma loja para ver o que está faltando cadastrar.</CardDescription>
+        <CardDescription>Clique em uma estabelecimento para ver o que está faltando cadastrar.</CardDescription>
       </CardHeader>
       <CardContent className="p-0">
         <Table>
@@ -291,7 +291,7 @@ function MissingTable({ rows }: { rows: Array<{ product_key: string; display_nam
           <TableRow>
             <TableHead>Produto</TableHead>
             <TableHead>Categoria</TableHead>
-            <TableHead className="text-right">Lojas com ele</TableHead>
+            <TableHead className="text-right">Estabelecimentos com ele</TableHead>
             <TableHead className="text-right">Menor</TableHead>
             <TableHead className="text-right">Médio</TableHead>
             <TableHead className="text-right">Maior</TableHead>
@@ -325,7 +325,7 @@ function PresentTable({ rows }: { rows: Array<{ product_key: string; display_nam
           <TableRow>
             <TableHead>Produto</TableHead>
             <TableHead>Categoria</TableHead>
-            <TableHead className="text-right">Preço na loja</TableHead>
+            <TableHead className="text-right">Preço na estabelecimento</TableHead>
             <TableHead className="text-right">Menor no mercado</TableHead>
             <TableHead className="text-right">Média mercado</TableHead>
             <TableHead>Última coleta</TableHead>
