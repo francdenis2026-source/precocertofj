@@ -455,7 +455,25 @@ function RedeemPage() {
               </div>
 
               {/* Verificador compacto — checks em tempo real */}
-              <CodeVerifier clean={clean} submitting={submitting} />
+              <CodeVerifier
+                clean={clean}
+                submitting={submitting}
+                serverStatus={
+                  clean.length < MIN_LEN || validation.level === "warn"
+                    ? "idle"
+                    : verifyQuery.isFetching
+                    ? "checking"
+                    : verifyQuery.isError
+                    ? "error"
+                    : serverVerified
+                    ? "ok"
+                    : serverRejected
+                    ? "rejected"
+                    : serverNotFound
+                    ? "notfound"
+                    : "idle"
+                }
+              />
 
               {/* Feedback em tempo real */}
               <div
