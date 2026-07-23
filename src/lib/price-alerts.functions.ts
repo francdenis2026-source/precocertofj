@@ -76,6 +76,8 @@ export const createAlertSubscription = createServerFn({ method: "POST" })
       productName?: string;
       displayName?: string | null;
       establishmentId?: string | null;
+      scopeNeighborhood?: string | null;
+      scopeCity?: string | null;
       direction?: AlertDirection;
       thresholdPct?: number;
       targetPrice?: number | null;
@@ -100,11 +102,18 @@ export const createAlertSubscription = createServerFn({ method: "POST" })
     }
     if (!key) throw new Error("Não foi possível normalizar o produto");
 
+    const norm = (v: string | null | undefined) => {
+      const s = (v ?? "").trim();
+      return s.length ? s : null;
+    };
+
     const payload = {
       user_id: context.userId,
       product_key: key,
       display_name: data.displayName ?? data.productName ?? null,
       establishment_id: data.establishmentId ?? null,
+      scope_neighborhood: norm(data.scopeNeighborhood),
+      scope_city: norm(data.scopeCity),
       direction: data.direction ?? "both",
       threshold_pct: data.thresholdPct ?? 5,
       target_price: data.targetPrice ?? null,
