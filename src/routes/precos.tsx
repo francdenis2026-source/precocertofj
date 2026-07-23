@@ -248,13 +248,19 @@ function PrecosPage() {
           {/* Detalhe / gráfico */}
           <div className="space-y-4">
             {!selected && (
-              <Card>
-                <CardContent className="py-16 text-center text-sm text-muted-foreground">
-                  {list && list.length === 0
-                    ? "Nenhum cupom registrado ainda. Cadastre um em Admin > Registrar cupom fiscal."
-                    : "Selecione um produto para ver o histórico."}
-                </CardContent>
-              </Card>
+              <EmptyState
+                icon={list && list.length === 0 ? PackageSearch : LineChartIcon}
+                title={
+                  list && list.length === 0
+                    ? "Nenhum cupom registrado ainda"
+                    : "Selecione um produto"
+                }
+                description={
+                  list && list.length === 0
+                    ? "Cadastre um cupom fiscal em Admin > Registrar cupom fiscal para começar a monitorar."
+                    : "Escolha um item na lista ao lado para ver o histórico de preços."
+                }
+              />
             )}
 
             {selected && (
