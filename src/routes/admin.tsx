@@ -243,6 +243,7 @@ function AdminPage() {
         <nav aria-label="Atalhos do painel" className="flex flex-wrap gap-1.5">
           {[
             { to: "/admin/clientes", label: "Clientes", icon: Users },
+            { to: "/admin/auditoria-acessos", label: "Auditoria de acessos", icon: ShieldCheck },
             { to: "/admin/gestao", label: "Gestão (licenças)", icon: Key },
 
             { to: "/admin/catalogo", label: "Catálogo de produtos", icon: Package },
