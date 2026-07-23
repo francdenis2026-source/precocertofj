@@ -65,36 +65,50 @@ type NavGroup = {
 
 const appGroups: readonly NavGroup[] = [
   {
-    label: "Navegação",
+    label: "Início",
     items: [
-  { to: "/app", label: "Início", icon: Home, exact: true as boolean },
-  { to: "/buscar", label: "Buscar", icon: Search, exact: false as boolean },
-  { to: "/comparador", label: "Comparar", icon: BarChart3, exact: false as boolean },
-  { to: "/lista", label: "Minha lista", icon: ShoppingCart, exact: false as boolean },
-  { to: "/cesta", label: "Cesta", icon: ShoppingBag, exact: false as boolean },
-  { to: "/alertas", label: "Alertas", icon: Bell, exact: false as boolean },
-  { to: "/financas", label: "Finanças", icon: Wallet, exact: false as boolean },
-  { to: "/historico", label: "Histórico", icon: History, exact: false as boolean },
+      { to: "/app", label: "Painel", icon: Home, exact: true },
+      { to: "/bem-vindo", label: "Boas-vindas", icon: BadgeCheck },
     ],
   },
   {
-    label: "Conta",
+    label: "Comprar melhor",
     items: [
-  { to: "/perfil", label: "Perfil", icon: User },
-  { to: "/minhas-licencas", label: "Minhas licenças", icon: KeyRound },
-  { to: "/melhores-precos", label: "Melhores preços", icon: Store },
+      { to: "/melhores-precos", label: "Melhores preços", icon: Trophy },
+      { to: "/comparador", label: "Comparar mercados", icon: BarChart3 },
+      { to: "/estabelecimentos", label: "Mercados", icon: Store },
+      { to: "/mapa", label: "Bairros", icon: Boxes },
+      { to: "/economia", label: "Economia", icon: Wallet },
+    ],
+  },
+  {
+    label: "Minha conta",
+    items: [
+      { to: "/perfil", label: "Perfil", icon: User },
+      { to: "/meus-pedidos", label: "Meus pedidos", icon: ReceiptText },
+      { to: "/minhas-licencas", label: "Minhas licenças", icon: KeyRound },
+      { to: "/lista", label: "Minha lista", icon: ShoppingCart },
+      { to: "/alertas", label: "Alertas", icon: Bell },
+      { to: "/historico", label: "Histórico", icon: History },
+    ],
+  },
+  {
+    label: "Ajuda",
+    items: [
+      { to: "/planos", label: "Planos", icon: TicketPercent },
+      { to: "/resgatar", label: "Resgatar código", icon: BadgeCheck },
     ],
   },
 ] as const;
 
 const adminGroups: readonly NavGroup[] = [
   {
-    label: "Comando",
+    label: "Visão geral",
     items: [
-      { to: "/admin", label: "Visão geral", icon: Shield, exact: true },
-      { to: "/admin/clientes", label: "Clientes", icon: Users },
-      { to: "/admin/auditoria-acessos", label: "Acessos", icon: Activity },
-      { to: "/admin/auditoria", label: "Auditoria", icon: ClipboardCheck },
+      { to: "/admin", label: "Dashboard", icon: Shield, exact: true },
+      { to: "/admin/cobertura", label: "Cobertura", icon: Boxes },
+      { to: "/admin/metricas", label: "Estabelecimentos", icon: Store },
+      { to: "/admin/analytics", label: "Analytics", icon: BarChart3 },
     ],
   },
   {
@@ -102,39 +116,45 @@ const adminGroups: readonly NavGroup[] = [
     items: [
       { to: "/admin/catalogo", label: "Produtos", icon: Database },
       { to: "/admin/precos", label: "Preços", icon: Tags },
-      { to: "/admin/cobertura", label: "Cobertura", icon: Boxes },
-      { to: "/admin/categorizacao", label: "Categorias", icon: Layers3 },
+      { to: "/admin/categorizacao", label: "Categorização", icon: Layers3 },
+      { to: "/admin/cadastro-foto", label: "Cadastro por foto", icon: Camera },
       { to: "/admin/importacoes", label: "Importações", icon: UploadCloud },
       { to: "/admin/image-jobs", label: "Imagens", icon: ImageIcon },
-      { to: "/admin/cadastro-foto", label: "Foto + IA", icon: Camera },
       { to: "/admin/lote-inserir", label: "Inserção em lote", icon: ReceiptText },
-      { to: "/admin/historico-precos", label: "Histórico", icon: History },
+      { to: "/admin/historico-precos", label: "Histórico de preços", icon: History },
     ],
   },
   {
-    label: "Receita",
+    label: "Comercial",
     items: [
       { to: "/admin/gestao", label: "Licenças", icon: KeyRound },
-      { to: "/admin/promocoes-codigos", label: "Promo 30", icon: TicketPercent },
+      { to: "/admin/promocoes-codigos", label: "Promoções", icon: TicketPercent },
       { to: "/admin/promocoes", label: "Cupons", icon: BadgeCheck },
-      { to: "/admin/cupom", label: "Cupom fiscal", icon: ReceiptText },
       { to: "/admin/webhooks", label: "Webhooks", icon: Webhook },
       { to: "/admin/conversoes", label: "Conversões", icon: LineChart },
-      { to: "/admin/analytics", label: "Analytics", icon: BarChart3 },
+      { to: "/admin/cupom", label: "Cupom fiscal", icon: ReceiptText },
+    ],
+  },
+  {
+    label: "Clientes",
+    items: [
+      { to: "/admin/clientes", label: "Clientes", icon: Users },
+      { to: "/admin/auditoria-acessos", label: "Auditoria de acessos", icon: Activity },
+      { to: "/admin/auditoria", label: "Auditoria geral", icon: ClipboardCheck },
+      { to: "/admin/reports", label: "Denúncias", icon: FileText },
     ],
   },
   {
     label: "Sistema",
     items: [
-      { to: "/admin/metricas", label: "Estabelecimentos", icon: Store },
       { to: "/admin/consistencia", label: "Consistência", icon: Gauge },
       { to: "/admin/sinonimos", label: "Sinônimos", icon: Languages },
       { to: "/admin/rank-check", label: "Ranking", icon: Trophy },
       { to: "/admin/icones-categoria", label: "Ícones", icon: Settings2 },
-      { to: "/admin/reports", label: "Denúncias", icon: FileText },
     ],
   },
 ] as const;
+
 
 export function AppSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
