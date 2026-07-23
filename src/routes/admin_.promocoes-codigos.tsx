@@ -112,20 +112,22 @@ function PromoCodesPage() {
                 <TableRow>
                   <TableHead>Código</TableHead>
                   <TableHead>Status</TableHead>
-                  <TableHead>Resgatado por</TableHead>
-                  <TableHead>Resgatado em</TableHead>
+                  <TableHead>Ativado por</TableHead>
+                  <TableHead>Ativado em</TableHead>
                   <TableHead>Expira em</TableHead>
+                  <TableHead className="text-right">Dias restantes</TableHead>
                   <TableHead className="text-right">Ação</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {q.isLoading ? (
-                  <TableRow><TableCell colSpan={6} className="py-8 text-center text-sm text-muted-foreground">Carregando…</TableCell></TableRow>
+                  <TableRow><TableCell colSpan={7} className="py-8 text-center text-sm text-muted-foreground">Carregando…</TableCell></TableRow>
                 ) : codes.length === 0 ? (
-                  <TableRow><TableCell colSpan={6} className="py-8 text-center text-sm text-muted-foreground">Nenhum código encontrado.</TableCell></TableRow>
+                  <TableRow><TableCell colSpan={7} className="py-8 text-center text-sm text-muted-foreground">Nenhum código encontrado.</TableCell></TableRow>
                 ) : (
                   codes.map((c) => {
                     const isRedeemed = c.status === "redeemed";
+                    const dLeft = daysLeft(c.expires_at);
                     return (
                       <TableRow key={c.id}>
                         <TableCell className="font-mono text-xs">{c.code}</TableCell>
