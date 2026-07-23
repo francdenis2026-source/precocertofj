@@ -429,6 +429,35 @@ export function PreparoDicas() {
                       </span>
                     </div>
 
+                    <div className="mt-3">
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        disabled={cardKey === d.key}
+                        onClick={async () => {
+                          try {
+                            setCardKey(d.key);
+                            const result = await shareOrDownloadPreparoCard(d);
+                            toast.success(
+                              result === "shared"
+                                ? "Card pronto para compartilhar."
+                                : "Card salvo em seus downloads.",
+                            );
+                          } catch (e) {
+                            console.error(e);
+                            toast.error("Não foi possível gerar o card.");
+                          } finally {
+                            setCardKey(null);
+                          }
+                        }}
+                        className="gap-1.5"
+                      >
+                        <Share2 className="h-4 w-4" />
+                        {cardKey === d.key ? "Gerando…" : "Compartilhar card (PNG)"}
+                      </Button>
+                    </div>
+
                     {filtrosAtivos > 0 && !d.matchesSelf && (
                       <p className="mt-2 text-[11px] italic text-muted-foreground">
                         O preparo principal não casa com os filtros — apenas as
