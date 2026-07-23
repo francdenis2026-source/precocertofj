@@ -84,6 +84,59 @@ const themeVars: React.CSSProperties = {
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 const sans = "font-['Work_Sans',system-ui,sans-serif]";
 
+function HeroImage() {
+  const [status, setStatus] = useState<"loading" | "loaded" | "error">("loading");
+  return (
+    <>
+      {/* Skeleton/placeholder gradient — mantém contraste com o overlay dos temas */}
+      <div
+        aria-hidden="true"
+        className={`absolute inset-0 transition-opacity duration-500 ${status === "loaded" ? "opacity-0" : "opacity-100"}`}
+        style={{
+          background:
+            "linear-gradient(135deg, oklch(0.22 0.05 258) 0%, oklch(0.32 0.06 260) 40%, oklch(0.42 0.08 78) 100%)",
+        }}
+      >
+        {status === "loading" && (
+          <div
+            className="absolute inset-0 animate-pulse"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent 0%, rgb(255 255 255 / 0.06) 50%, transparent 100%)",
+            }}
+          />
+        )}
+      </div>
+      {status !== "error" && (
+        <picture>
+          {Object.entries(heroMarket.sources).map(([type, srcset]) => (
+            <source
+              key={type}
+              type={`image/${type}`}
+              srcSet={srcset}
+              sizes="100vw"
+            />
+          ))}
+          <img
+            src={heroMarket.img.src}
+            width={heroMarket.img.w}
+            height={heroMarket.img.h}
+            alt=""
+            aria-hidden="true"
+            fetchPriority="high"
+            decoding="async"
+            onLoad={() => setStatus("loaded")}
+            onError={() => setStatus("error")}
+            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${status === "loaded" ? "opacity-100" : "opacity-0"}`}
+            style={{ filter: "saturate(0.85)" }}
+          />
+        </picture>
+      )}
+    </>
+  );
+}
+
+
 function HomePage() {
   const navigate = useNavigate();
   const [q, setQ] = useState("");
@@ -137,27 +190,7 @@ function HomePage() {
 
       {/* HERO */}
       <section className="relative isolate w-full overflow-hidden" style={{ minHeight: "min(92vh, 880px)" }}>
-        <picture>
-          {Object.entries(heroMarket.sources).map(([type, srcset]) => (
-            <source
-              key={type}
-              type={`image/${type}`}
-              srcSet={srcset}
-              sizes="100vw"
-            />
-          ))}
-          <img
-            src={heroMarket.img.src}
-            width={heroMarket.img.w}
-            height={heroMarket.img.h}
-            alt=""
-            aria-hidden="true"
-            fetchPriority="high"
-            decoding="async"
-            className="absolute inset-0 h-full w-full object-cover"
-            style={{ filter: "saturate(0.85)" }}
-          />
-        </picture>
+        <HeroImage />
         <div
           className="absolute inset-0"
           style={{
@@ -298,7 +331,7 @@ function HomePage() {
                 <button
                   key={t}
                   onClick={() => navigate({ to: "/buscar", search: { q: t } as any })}
-                  className="inline-flex items-center rounded-full border border-[color:var(--pc-home-onhero-border)] bg-[color:var(--pc-home-onhero-glass)] px-4 py-2 text-[14px] font-semibold text-[color:var(--pc-home-onhero-fg)] backdrop-blur transition-all hover:-translate-y-0.5 hover:border-[color:var(--pc-home-onhero-border-hover)] hover:bg-[color:var(--pc-home-onhero-glass-hover)]"
+                  className="inline-flex items-center rounded-full border border-[color:var(--pc-home-onhero-border)] bg-[color:var(--pc-home-onhero-glass)] px-4 py-2 text-[14px] font-semibold text-[color:var(--pc-home-onhero-fg)] backdrop-blur outline-none transition-all hover:-translate-y-0.5 hover:border-[color:var(--pc-home-onhero-border-hover)] hover:bg-[color:var(--pc-home-onhero-glass-hover)] focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-onhero-fg)]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-y-0 active:scale-[0.97]"
                 >
                   {t}
                 </button>
