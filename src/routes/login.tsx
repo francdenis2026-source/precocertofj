@@ -142,6 +142,12 @@ function LoginPage() {
     router.history.replace(target);
   }
 
+  function goToWelcomeThen() {
+    const target = resolvePostAuthTarget();
+    const url = `/bem-vindo?next=${encodeURIComponent(target)}`;
+    router.history.replace(url);
+  }
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
       if (data.session) goToPostAuthTarget();
