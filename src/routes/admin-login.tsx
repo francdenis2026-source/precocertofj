@@ -181,5 +181,3 @@ function AdminLoginPage() {
     </div>
   );
 }
-  );
-}
