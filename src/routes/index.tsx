@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import heroMarket from "@/assets/home-hero.jpg?w=640;960;1280;1600;1920&format=avif;webp;jpg&as=picture";
@@ -86,6 +86,17 @@ const sans = "font-['Work_Sans',system-ui,sans-serif]";
 
 function HeroImage() {
   const [status, setStatus] = useState<"loading" | "loaded" | "error">("loading");
+  const imageRef = useRef<HTMLImageElement | null>(null);
+
+  useEffect(() => {
+    const image = imageRef.current;
+    if (!image) return;
+
+    if (image.complete) {
+      setStatus(image.naturalWidth > 0 ? "loaded" : "error");
+    }
+  }, []);
+
   return (
     <>
       {/* Skeleton/placeholder gradient — mantém contraste com o overlay dos temas */}
@@ -118,6 +129,7 @@ function HeroImage() {
             />
           ))}
           <img
+            ref={imageRef}
             src={heroMarket.img.src}
             width={heroMarket.img.w}
             height={heroMarket.img.h}
