@@ -155,7 +155,7 @@ function HomePage() {
               <h1
                 className={`${serif} font-normal`}
                 style={{
-                  color: P.navy,
+                  color: P.heading,
                   fontSize: "clamp(2.5rem, 7vw, 6.5rem)",
                   lineHeight: 0.9,
                   letterSpacing: "-0.03em",
