@@ -560,9 +560,9 @@ function HomePage() {
       <section className="mx-auto w-full max-w-6xl px-4 pb-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-3 gap-3 sm:gap-4">
           {[
-            { k: "7", l: "mercados ativos", icon: <ShieldCheck className="h-4 w-4" /> },
+            { k: "7", l: "mercados no ar", icon: <ShieldCheck className="h-4 w-4" /> },
             { k: "500+", l: "preços por semana", icon: <TrendingDown className="h-4 w-4" /> },
-            { k: "100%", l: "notas fiscais", icon: <Sparkles className="h-4 w-4" /> },
+            { k: "100%", l: "conferido por nota", icon: <Sparkles className="h-4 w-4" /> },
           ].map((s) => (
             <div
               key={s.l}
