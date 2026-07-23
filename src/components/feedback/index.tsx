@@ -263,31 +263,33 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center rounded-2xl border border-dashed border-border bg-card/40 text-center",
-        isSm ? "px-4 py-8" : "px-6 py-14",
+        "flex flex-col items-center justify-center rounded-xl border border-dashed border-border/70 bg-card/40 text-center",
+        isSm ? "px-4 py-5" : "px-5 py-7 sm:py-8",
         className,
       )}
     >
       <span
         className={cn(
-          "mb-4 grid place-items-center rounded-full bg-muted text-muted-foreground",
-          isSm ? "h-10 w-10" : "h-12 w-12",
+          "mb-2.5 grid place-items-center rounded-full bg-muted text-muted-foreground",
+          isSm ? "h-8 w-8" : "h-9 w-9",
         )}
       >
-        <Icon className={isSm ? "h-4 w-4" : "h-5 w-5"} strokeWidth={1.5} />
+        <Icon className={isSm ? "h-3.5 w-3.5" : "h-4 w-4"} strokeWidth={1.75} />
       </span>
       <p
         className={cn(
-          "font-display font-semibold text-foreground",
-          isSm ? "text-base" : "text-lg",
+          "font-display font-semibold tracking-tight text-foreground",
+          isSm ? "text-[14px]" : "text-[15px]",
         )}
       >
         {title}
       </p>
       {message && (
-        <p className="mt-2 max-w-md text-sm text-muted-foreground">{message}</p>
+        <p className="mt-1 max-w-md text-[13px] leading-snug text-muted-foreground">
+          {message}
+        </p>
       )}
-      {action && <div className="mt-5">{action}</div>}
+      {action && <div className="mt-3.5">{action}</div>}
     </div>
   );
 }
