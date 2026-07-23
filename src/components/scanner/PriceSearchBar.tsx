@@ -938,7 +938,7 @@ export function PriceSearchBar({
                           </div>
                         </>
                       );
-                      const rowClass = "flex items-stretch gap-2 bg-transparent pr-2 py-2 pl-0";
+                      const rowClass = "group flex items-stretch gap-2 bg-transparent pr-2 py-2 pl-0";
                       return (
                         <div key={m.marketName}>
                           {m.establishmentId ? (
