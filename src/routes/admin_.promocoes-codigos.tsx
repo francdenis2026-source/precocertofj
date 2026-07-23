@@ -152,7 +152,19 @@ function PromoCodesPage() {
                         </TableCell>
                         <TableCell className="text-xs">{fmt(c.redeemed_at)}</TableCell>
                         <TableCell className="text-xs">{fmt(c.expires_at)}</TableCell>
-                        <TableCell className="text-right">
+                        <TableCell className="text-right text-xs tabular-nums">
+                          {!isRedeemed ? (
+                            <span className="text-muted-foreground">—</span>
+                          ) : dLeft === null ? (
+                            <span className="text-muted-foreground">—</span>
+                          ) : dLeft > 7 ? (
+                            <span className="font-semibold text-emerald-600">{dLeft} dias</span>
+                          ) : dLeft > 0 ? (
+                            <span className="font-semibold text-amber-600">{dLeft} dias</span>
+                          ) : (
+                            <span className="font-semibold text-destructive">expirado</span>
+                          )}
+                        </TableCell>
                           {!isRedeemed && (
                             <Button
                               size="sm"
