@@ -165,6 +165,7 @@ function PromoCodesPage() {
                             <span className="font-semibold text-destructive">expirado</span>
                           )}
                         </TableCell>
+                        <TableCell className="text-right">
                           {!isRedeemed && (
                             <Button
                               size="sm"
