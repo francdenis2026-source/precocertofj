@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Clock, Store } from "lucide-react";
-import { getRecentProducts, type RecentProduct } from "@/lib/products-public.functions";
+import { getRecentProducts } from "@/lib/products-public.functions";
+
 
 const brl = (n: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n);
