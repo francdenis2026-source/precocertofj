@@ -3,11 +3,11 @@ import { useState } from "react";
 import { Loader2, ShoppingCart, Star, TrendingDown } from "lucide-react";
 
 import { AppShell } from "@/components/brand/AppShell";
-import { PageHeader } from "@/components/brand/PageHeader";
+import { PageHeader, StatGrid } from "@/components/layout";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { StoreDetailsDrawer } from "@/components/stores/StoreDetailsDrawer";
 import type { PublicStore } from "@/lib/stores-public.functions";
-import { StatCard } from "@/components/dashboard/StatCard";
+
 import { SectionKicker } from "@/components/dashboard/SectionKicker";
 import { AppHero } from "@/components/app/AppHero";
 import { ExperimentalBanner } from "@/components/app/ExperimentalBanner";
@@ -99,13 +99,12 @@ function AppHomeContent() {
 
   return (
     <AppShell>
-      <PageHeader
-        breadcrumbs={[{ label: "Meu painel" }]}
-        eyebrow="PreçoCerto · Executive"
-        title={`Olá, ${firstName}`}
-        description={statusLine}
-      />
-      <div className="mx-auto max-w-7xl px-4 py-5 md:px-6 md:py-7">
+      <div className="mx-auto w-full max-w-7xl px-4 md:px-6">
+        <PageHeader
+          breadcrumbs={[{ label: "Meu painel" }]}
+          title={`Olá, ${firstName}`}
+          description={statusLine}
+        />
         <AppHero firstName={firstName} statusLine={statusLine} />
 
         <div className="mt-5 md:mt-6">
@@ -114,7 +113,7 @@ function AppHomeContent() {
 
 
         {loading && (
-          <div className="mt-6 flex items-center gap-2 text-sm text-muted-foreground">
+          <div className="mt-6 flex items-center gap-2 text-[14px] text-muted-foreground">
             <Loader2 className="h-4 w-4 animate-spin" /> Carregando seu painel...
           </div>
         )}
@@ -123,38 +122,36 @@ function AppHomeContent() {
           <>
             <div className="mt-6 md:mt-8">
               <SectionKicker eyebrow="Panorama" title="Sua semana em números" />
-              <div className="mt-3 grid gap-3 sm:grid-cols-2 md:mt-4 md:grid-cols-3 md:gap-4">
-                <StatCard
-                  label="Suas listas"
-                  value={String(summary.totals.listsCount)}
-                  icon={ShoppingCart}
-                  hint={`${summary.totals.itemsCount} ${summary.totals.itemsCount === 1 ? "item" : "itens"} no total`}
-                />
-                <StatCard
-                  label="Favoritos"
-                  value={String(summary.totals.favoritesCount)}
-                  icon={Star}
-                  iconTone="accent"
-                  hint="produtos que você acompanha"
-                />
-                <StatCard
-                  label="Carrinho ideal"
-                  value={
-                    summary.totals.estimatedCartTotal !== null
-                      ? brl(summary.totals.estimatedCartTotal)
-                      : "—"
-                  }
-                  icon={TrendingDown}
-                  hint={
-                    summary.totals.estimatedCartMarket
-                      ? `melhor em ${summary.totals.estimatedCartMarket}`
-                      : "cadastre favoritos para calcular"
-                  }
-                  trend={
-                    summary.totals.estimatedCartMarket
-                      ? { value: "melhor preço", direction: "up" }
-                      : undefined
-                  }
+              <div className="mt-3 md:mt-4">
+                <StatGrid
+                  className="lg:grid-cols-3"
+                  stats={[
+                    {
+                      label: "Suas listas",
+                      value: summary.totals.listsCount,
+                      icon: ShoppingCart,
+                      hint: `${summary.totals.itemsCount} ${summary.totals.itemsCount === 1 ? "item" : "itens"} no total`,
+                    },
+                    {
+                      label: "Favoritos",
+                      value: summary.totals.favoritesCount,
+                      icon: Star,
+                      hint: "produtos que você acompanha",
+                      tone: "primary",
+                    },
+                    {
+                      label: "Carrinho ideal",
+                      value:
+                        summary.totals.estimatedCartTotal !== null
+                          ? brl(summary.totals.estimatedCartTotal)
+                          : "—",
+                      icon: TrendingDown,
+                      hint: summary.totals.estimatedCartMarket
+                        ? `melhor em ${summary.totals.estimatedCartMarket}`
+                        : "cadastre favoritos para calcular",
+                      tone: summary.totals.estimatedCartMarket ? "success" : "default",
+                    },
+                  ]}
                 />
               </div>
             </div>

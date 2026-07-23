@@ -2,6 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { useSignOut } from "@/hooks/use-sign-out";
 import { AppShell } from "@/components/brand/AppShell";
+import { PageHeader } from "@/components/layout";
 import { IconTile } from "@/components/ui/icon-tile";
 import {
   Award, MapPin, Settings, LogOut, Sparkles, Heart,
@@ -227,8 +228,13 @@ function Perfil() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-4xl px-6 py-10">
-        <div className="grid gap-6 md:grid-cols-[1fr_2fr]">
+      <div className="mx-auto max-w-5xl px-4 md:px-6">
+        <PageHeader
+          breadcrumbs={[{ label: "Início", to: "/app" }, { label: "Meu perfil" }]}
+          title="Meu perfil"
+          description="Atualize sua foto, dados pessoais e endereço de entrega."
+        />
+        <div className="grid gap-6 pb-10 md:grid-cols-[1fr_2fr]">
           <div className="rounded-2xl border border-border bg-card p-6 text-center">
             <div className="relative mx-auto h-24 w-24">
               <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-primary to-[oklch(0.36_0.11_255)] font-display text-4xl text-primary-foreground shadow-[0_10px_24px_-12px_oklch(0.44_0.12_252/0.55)] ring-1 ring-inset ring-accent/30">

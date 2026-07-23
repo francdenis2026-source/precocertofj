@@ -18,6 +18,7 @@ import {
 import { toast } from "sonner";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { SectionCard } from "@/components/layout";
 import { ds, dsx } from "@/lib/ds";
 
 const PALETTE = {
@@ -297,29 +298,32 @@ function PlansPage() {
 
         {/* Comparativo simples */}
         <section className={dsx(ds.container, "pb-12 md:pb-16")}>
-          <div className={ds.card.padded}>
-            <h2 className={ds.type.h3}>Comparativo rápido</h2>
-            <div className="mt-4 overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-border/60 text-left text-muted-foreground">
-                    <th className="py-2 pr-4 font-medium">Plano</th>
-                    <th className="py-2 pr-4 font-medium">Duração</th>
-                    <th className="py-2 pr-4 font-medium">Preço</th>
-                    <th className="py-2 pr-4 font-medium">Equivalente/mês</th>
+          <SectionCard
+            title="Comparativo rápido"
+            description="Compare duração, preço total e equivalente mensal por plano."
+            bodyClassName="p-0"
+          >
+            <div className="overflow-x-auto">
+              <table className="w-full text-[14px]">
+                <thead className="bg-muted/40 text-[13px] uppercase tracking-wide text-muted-foreground">
+                  <tr>
+                    <th className="px-4 py-2.5 text-left font-medium">Plano</th>
+                    <th className="px-4 py-2.5 text-left font-medium">Duração</th>
+                    <th className="px-4 py-2.5 text-left font-medium">Preço</th>
+                    <th className="px-4 py-2.5 text-left font-medium">Equivalente/mês</th>
                   </tr>
                 </thead>
                 <tbody>
                   {plans.map((p) => (
-                    <tr key={p.id} className="border-b border-border/40">
-                      <td className="py-2 pr-4 font-medium">{p.name}</td>
-                      <td className="py-2 pr-4">
+                    <tr key={p.id} className="border-t border-border/50">
+                      <td className="px-4 py-2.5 font-medium">{p.name}</td>
+                      <td className="px-4 py-2.5">
                         {p.days >= 365 * 5 ? "Vitalício" : `${p.days} dias`}
                       </td>
-                      <td className="py-2 pr-4">
+                      <td className="px-4 py-2.5">
                         {p.price_cents === 0 ? "Grátis" : centsToBRL(p.price_cents)}
                       </td>
-                      <td className="py-2 pr-4 text-muted-foreground">
+                      <td className="px-4 py-2.5 text-muted-foreground">
                         {pricePerMonth(p.price_cents, p.days) ?? "—"}
                       </td>
                     </tr>
@@ -327,7 +331,7 @@ function PlansPage() {
                 </tbody>
               </table>
             </div>
-          </div>
+          </SectionCard>
         </section>
 
         {/* FAQ */}
