@@ -51,7 +51,7 @@ export function SiteFooter() {
         <div className="max-w-sm">
           <Link to="/" className="flex items-center gap-2.5">
             <span
-              className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-primary text-[14px] font-black text-primary-foreground shadow-elev-1 md:h-9 md:w-9 md:text-[15px]"
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand text-[14px] font-black text-brand-foreground shadow-elev-1 md:h-9 md:w-9 md:text-[15px]"
             >
               P
             </span>
