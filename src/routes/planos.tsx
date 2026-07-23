@@ -108,7 +108,7 @@ const FAQ = [
   },
   {
     q: "Como funciona o pagamento?",
-    a: "Escolha o plano, entre com sua conta e pague pelo Mercado Pago — Pix aprova em segundos, também aceita cartão e boleto. Assim que o pagamento é confirmado, o código de licença aparece na tela e vai para o seu e-mail.",
+    a: "Escolha o plano, entre com sua conta e pague pelo Mercado Pago — Pix aprova em segundos e também aceitamos cartão de crédito. Assim que o pagamento é confirmado, o código de licença aparece na tela e vai para o seu e-mail.",
   },
   {
     q: "Tenho um cupom. Onde aplico?",
