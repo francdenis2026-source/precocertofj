@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
-import { Clock, Download, Flame, Star, Trash2 } from "lucide-react";
+import { Clock, Download, Filter, Flame, Star, Trash2, X } from "lucide-react";
 import imgCozidao from "@/assets/preparo/cozidao.jpg";
 import imgAssado from "@/assets/preparo/assado.jpg";
 import imgChurrasco from "@/assets/preparo/churrasco.jpg";
@@ -16,6 +16,13 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { PREPARO_DICAS, favoriteKey, type Dica } from "@/lib/preparo-dicas-data";
 import { gerarGuiaPreparoPDF } from "@/lib/preparo-dicas-pdf";
+import {
+  MODOS,
+  TEMPO_FAIXAS,
+  aplicarFiltros,
+  type ModoId,
+  type TempoFaixaId,
+} from "@/lib/preparo-dicas-filtros";
 
 const FOTOS: Record<string, string> = {
   cozidao: imgCozidao,
