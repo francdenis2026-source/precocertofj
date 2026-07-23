@@ -149,166 +149,168 @@ function Alertas() {
     return true;
   });
 
+  const totalAlerts = alertsQuery.data?.length ?? 0;
+  const naoLidos = alertsQuery.data?.filter((a) => !a.readAt).length ?? 0;
+  const totalFavoritos = favoritesQuery.data?.length ?? 0;
+  const monitorados = favoritesQuery.data?.filter((f) => !!f.preferredEstablishmentId).length ?? 0;
+
+  const stats: Stat[] = [
+    { label: "Alertas", value: totalAlerts, icon: BellRing, tone: "primary" },
+    { label: "Não lidos", value: naoLidos, icon: Bell, tone: naoLidos > 0 ? "warning" : "default" },
+    { label: "Favoritos", value: totalFavoritos, icon: Tag },
+    { label: "Monitorados", value: monitorados, icon: Store, tone: "success" },
+  ];
+
   return (
     <AppShell>
-      <div className="mx-auto max-w-3xl px-6 py-8 md:py-10">
-        {/* Editorial hero */}
-        <section className="relative overflow-hidden rounded-3xl bg-primary p-8 text-primary-foreground md:p-10">
-          <div
-            className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-accent"
-            aria-hidden
-          />
-          <div
-            className="absolute -right-24 top-20 h-32 w-32 rounded-full bg-white/10 blur-3xl"
-            aria-hidden
-          />
-          <div className="relative flex flex-wrap items-end justify-between gap-4">
-            <div>
-              <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] backdrop-blur">
-                <span className="live-dot" aria-hidden />
-                Central de alertas
-              </span>
-              <h1 className="mt-5 font-display text-[40px] font-extrabold leading-[0.95] md:text-5xl">
-                Ninguém compra<br />pagando a mais.
-              </h1>
-              <p className="mt-3 max-w-md text-sm leading-relaxed text-primary-foreground/85">
-                Notificações em tempo real quando um favorito seu cai de preço ou
-                bate a meta que você definiu.
-              </p>
-            </div>
-            <button
+      <div className="mx-auto max-w-4xl px-4 md:px-6">
+        <PageHeader
+          breadcrumbs={[{ label: "Início", to: "/app" }, { label: "Alertas" }]}
+          title="Central de alertas"
+          description="Notificações em tempo real quando um favorito cai de preço ou bate a meta."
+          actions={
+            <Button
+              variant="outline"
+              size="sm"
               onClick={() => markRead.mutate()}
-              className="inline-flex h-10 items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 text-xs font-semibold text-primary-foreground backdrop-blur transition hover:bg-white/20"
+              disabled={markRead.isPending || naoLidos === 0}
             >
-              marcar tudo como lido
-            </button>
-          </div>
-        </section>
-
-        {/* Filtros como pílulas */}
-        <div className="mt-8 flex flex-wrap gap-2">
-          {[
-            { key: "todos" as const, label: "Todos" },
-            { key: "nao-lidos" as const, label: "Não lidos" },
-            { key: "itens" as const, label: "Itens" },
-            { key: "mercados" as const, label: "Mercados" },
-          ].map((t) => (
-            <button
-              key={t.key}
-              onClick={() => setFilter(t.key)}
-              className={
-                "rounded-full border px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] transition " +
-                (filter === t.key
-                  ? "border-foreground bg-foreground text-background"
-                  : "border-border bg-card text-muted-foreground hover:border-foreground/40 hover:text-foreground")
-              }
-            >
-              {t.label}
-            </button>
-          ))}
-        </div>
-
-        <PriceAlertSubscriptions />
-
-
-
-        {alertsQuery.isLoading && (
-          <div className="mt-8 flex items-center gap-2 text-sm text-muted-foreground">
-            <Loader2 className="h-4 w-4 animate-spin" /> Carregando alertas...
-          </div>
-        )}
-
-
-        <ul className="mt-6 space-y-2">
-          {alerts.length === 0 && !alertsQuery.isLoading && (
-            <li className="rounded-2xl border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-              Nenhum alerta ainda. Favorite produtos e mercados para começar a
-              acompanhar quedas de preço.
-            </li>
-          )}
-          {alerts.map((a) => {
-            const icon =
-              a.kind === "market_price_drop"
-                ? MapPin
-                : a.kind === "item_target_hit"
-                  ? Target
-                  : TrendingDown;
-            const Icon = icon;
-            const title =
-              a.kind === "market_price_drop"
-                ? `${a.marketName} — carrinho mais barato`
-                : a.kind === "item_target_hit"
-                  ? `${a.displayName ?? "Item"} atingiu seu preço-alvo`
-                  : `${a.displayName ?? "Item"} caiu de preço`;
-            const body =
-              a.prevPrice !== null && a.newPrice !== null
-                ? `de ${brl(a.prevPrice)} para ${brl(a.newPrice)}${a.marketName ? ` no ${a.marketName}` : ""}${a.diffPct !== null ? ` (${a.diffPct.toFixed(1)}%)` : ""}`
-                : "";
-            return (
-              <li
-                key={a.id}
-                className={
-                  "flex gap-4 rounded-2xl border p-5 transition-colors " +
-                  (!a.readAt
-                    ? "border-savings/30 bg-savings/[0.06]"
-                    : "border-border bg-card")
-                }
-              >
-                <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-savings text-savings-foreground">
-                  <Icon className="h-4 w-4" />
-                </span>
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <p className="font-medium text-foreground">{title}</p>
-                    {!a.readAt && (
-                      <span className="h-1.5 w-1.5 rounded-full bg-savings" />
-                    )}
-                  </div>
-                  {body && (
-                    <p className="mt-1 text-sm text-muted-foreground">{body}</p>
-                  )}
-                  <p className="mt-2 font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
-                    {new Date(a.createdAt).toLocaleString("pt-BR")}
-                  </p>
-                </div>
-                <button
-                  onClick={() => remove.mutate(a.id)}
-                  className="rounded p-1.5 text-muted-foreground hover:bg-muted hover:text-destructive"
-                  aria-label="Descartar alerta"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-
-        {/* Produtos monitorados */}
-        <FavoritesSection
-          isLoading={favoritesQuery.isLoading}
-          favorites={favoritesQuery.data ?? []}
-          stores={storesQuery.data ?? []}
-          onStoreChange={(id, estabId) =>
-            setStore.mutate({ favoriteId: id, establishmentId: estabId })
+              Marcar tudo como lido
+            </Button>
           }
-          onTargetChange={(id, tp) =>
-            setTarget.mutate({ favoriteId: id, targetPrice: tp })
-          }
-          onRemove={(id) => removeFav.mutate(id)}
         />
 
-        {/* Preferências */}
-        <div className="mt-10 rounded-2xl border border-border bg-card p-6">
-          <p className="text-xs uppercase tracking-widest text-muted-foreground">
-            Preferências de notificação
-          </p>
+        <StatGrid stats={stats} className="mb-6" />
+
+        <SectionCard
+          title="Notificações recentes"
+          description="Filtre por status ou tipo para focar no que importa."
+          bodyClassName="p-0"
+        >
+          <div className="border-b border-border/50 p-3 md:p-4">
+            <DataToolbar
+              filters={[
+                { key: "todos" as const, label: "Todos" },
+                { key: "nao-lidos" as const, label: "Não lidos" },
+                { key: "itens" as const, label: "Itens" },
+                { key: "mercados" as const, label: "Mercados" },
+              ].map((t) => (
+                <button
+                  key={t.key}
+                  onClick={() => setFilter(t.key)}
+                  className={
+                    "rounded-full border px-3 py-1.5 text-[12.5px] font-semibold uppercase tracking-[0.14em] transition " +
+                    (filter === t.key
+                      ? "border-foreground bg-foreground text-background"
+                      : "border-border bg-card text-muted-foreground hover:border-foreground/40 hover:text-foreground")
+                  }
+                >
+                  {t.label}
+                </button>
+              ))}
+            />
+          </div>
+
+          <div className="p-3 md:p-4">
+            {alertsQuery.isLoading ? (
+              <LoadingSkeleton rows={4} />
+            ) : alerts.length === 0 ? (
+              <EmptyState
+                icon={BellRing}
+                title="Nenhum alerta ainda"
+                description="Favorite produtos e mercados para começar a acompanhar quedas de preço."
+              />
+            ) : (
+              <ul className="space-y-2">
+                {alerts.map((a) => {
+                  const icon =
+                    a.kind === "market_price_drop"
+                      ? MapPin
+                      : a.kind === "item_target_hit"
+                        ? Target
+                        : TrendingDown;
+                  const Icon = icon;
+                  const title =
+                    a.kind === "market_price_drop"
+                      ? `${a.marketName} — carrinho mais barato`
+                      : a.kind === "item_target_hit"
+                        ? `${a.displayName ?? "Item"} atingiu seu preço-alvo`
+                        : `${a.displayName ?? "Item"} caiu de preço`;
+                  const body =
+                    a.prevPrice !== null && a.newPrice !== null
+                      ? `de ${brl(a.prevPrice)} para ${brl(a.newPrice)}${a.marketName ? ` no ${a.marketName}` : ""}${a.diffPct !== null ? ` (${a.diffPct.toFixed(1)}%)` : ""}`
+                      : "";
+                  return (
+                    <li
+                      key={a.id}
+                      className={
+                        "flex gap-4 rounded-xl border p-4 transition-colors " +
+                        (!a.readAt
+                          ? "border-savings/30 bg-savings/[0.06]"
+                          : "border-border/60 bg-card")
+                      }
+                    >
+                      <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-savings text-savings-foreground">
+                        <Icon className="h-4 w-4" />
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          <p className="text-[14px] font-medium text-foreground">{title}</p>
+                          {!a.readAt && (
+                            <span className="h-1.5 w-1.5 rounded-full bg-savings" />
+                          )}
+                        </div>
+                        {body && (
+                          <p className="mt-1 text-[13.5px] text-muted-foreground">{body}</p>
+                        )}
+                        <p className="mt-2 font-mono text-[12px] uppercase tracking-widest text-muted-foreground">
+                          {new Date(a.createdAt).toLocaleString("pt-BR")}
+                        </p>
+                      </div>
+                      <button
+                        onClick={() => remove.mutate(a.id)}
+                        className="rounded p-1.5 text-muted-foreground hover:bg-muted hover:text-destructive"
+                        aria-label="Descartar alerta"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        </SectionCard>
+
+        <div className="mt-6">
+          <PriceAlertSubscriptions />
+        </div>
+
+        <div className="mt-6">
+          <FavoritesSection
+            isLoading={favoritesQuery.isLoading}
+            favorites={favoritesQuery.data ?? []}
+            stores={storesQuery.data ?? []}
+            onStoreChange={(id, estabId) =>
+              setStore.mutate({ favoriteId: id, establishmentId: estabId })
+            }
+            onTargetChange={(id, tp) =>
+              setTarget.mutate({ favoriteId: id, targetPrice: tp })
+            }
+            onRemove={(id) => removeFav.mutate(id)}
+          />
+        </div>
+
+        <SectionCard
+          className="mt-6"
+          title="Preferências de notificação"
+          description="Escolha por onde receber e defina os limites."
+        >
           {!prefs ? (
-            <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
-              <Loader2 className="h-4 w-4 animate-spin" /> Carregando...
-            </div>
+            <LoadingSkeleton rows={3} />
           ) : (
             <>
-              <ul className="mt-4 divide-y divide-border">
+              <ul className="divide-y divide-border">
                 <ChannelToggle
                   icon={Bell}
                   label="Notificações no app"
@@ -355,10 +357,10 @@ function Alertas() {
                   step={1}
                   onChange={(v) => update({ marketSavingsMin: v })}
                 />
-                <div className="flex items-center justify-between text-sm">
+                <div className="flex items-center justify-between text-[14px]">
                   <div>
                     <p className="text-foreground">Somente ao atingir preço-alvo</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="text-[13px] text-muted-foreground">
                       Ignora alertas de queda geral e só avisa quando o preço
                       encostar no seu alvo.
                     </p>
@@ -370,11 +372,11 @@ function Alertas() {
                 </div>
               </div>
               {savePrefs.isPending && (
-                <p className="mt-4 text-xs text-muted-foreground">Salvando...</p>
+                <p className="mt-4 text-[13px] text-muted-foreground">Salvando...</p>
               )}
             </>
           )}
-        </div>
+        </SectionCard>
       </div>
     </AppShell>
   );
