@@ -351,17 +351,67 @@ function CheckoutPage() {
                 </CardContent>
               </Card>
 
+              <Card className="border-primary/40">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <QrCode className="h-4 w-4 text-primary" /> Pagar com PIX
+                  </CardTitle>
+                  <CardDescription className="text-xs">
+                    Instantâneo — o código aparece aqui assim que o banco confirmar.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {!pixActive ? (
+                    <>
+                      <Button
+                        className="w-full"
+                        variant="executive"
+                        onClick={() => pixMutation.mutate()}
+                        disabled={pixMutation.isPending || !emailValid}
+                        title={!emailValid ? "Informe um e-mail válido antes de gerar o PIX" : undefined}
+                      >
+                        {pixMutation.isPending ? (
+                          <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+                        ) : (
+                          <QrCode className="mr-1 h-4 w-4" />
+                        )}
+                        Gerar QR Code do PIX
+                      </Button>
+                      <ul className="space-y-1 text-xs text-muted-foreground">
+                        <li>1. Abra o app do seu banco na área do PIX.</li>
+                        <li>2. Escaneie o QR Code ou cole o código copia-e-cola.</li>
+                        <li>3. Confirme o pagamento — a confirmação chega automaticamente.</li>
+                      </ul>
+                    </>
+                  ) : (
+                    <PixPanel
+                      qrCode={pixQrCode!}
+                      qrCodeBase64={pixQrBase64}
+                      expiresAt={pixExpiresAt!}
+                      onRegenerate={() => pixMutation.mutate()}
+                      regenerating={pixMutation.isPending}
+                    />
+                  )}
+                  {!emailValid && (
+                    <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <AlertCircle className="h-3 w-3" />
+                      Informe seu e-mail acima para liberar o PIX.
+                    </p>
+                  )}
+                </CardContent>
+              </Card>
+
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">Pagamento</CardTitle>
+                  <CardTitle className="text-base">Pagar com cartão de crédito</CardTitle>
                   <CardDescription className="text-xs">
-                    Você será redirecionado ao Mercado Pago para concluir com Pix, cartão ou boleto.
+                    Você é redirecionado ao Mercado Pago para concluir a compra em ambiente seguro.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <Button
                     className="w-full"
-                    variant="executive"
+                    variant="outline"
                     onClick={() => payMutation.mutate()}
                     disabled={payMutation.isPending || !emailValid}
                     title={!emailValid ? "Informe um e-mail válido antes de pagar" : undefined}
@@ -371,22 +421,17 @@ function CheckoutPage() {
                     ) : (
                       <CreditCard className="mr-1 h-4 w-4" />
                     )}
-                    Pagar com Mercado Pago
+                    Ir para pagamento com cartão
                   </Button>
-                  {!emailValid && (
-                    <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <AlertCircle className="h-3 w-3" />
-                      Informe seu e-mail acima para liberar o pagamento.
-                    </p>
-                  )}
                   {order.status === "pending" && (
                     <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
                       <Clock className="h-3 w-3" />
-                      A confirmação chega automaticamente após o pagamento.
+                      Verificando confirmação a cada poucos segundos…
                     </p>
                   )}
                 </CardContent>
               </Card>
+
 
 
 
