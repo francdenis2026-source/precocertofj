@@ -63,6 +63,8 @@ function statusBadge(status: string) {
 function WebhooksPage() {
   const list = useServerFn(listMercadoPagoWebhookEvents);
   const status = useServerFn(getMercadoPagoStatus);
+  const resendFn = useServerFn(adminResendActivationForWebhook);
+  const qc = useQueryClient();
   const [selected, setSelected] = useState<EventRow | null>(null);
   const [filter, setFilter] = useState("");
 
@@ -76,6 +78,17 @@ function WebhooksPage() {
     queryFn: () => list({ data: { limit: 200 } }),
     refetchInterval: 15000,
   });
+
+  const resend = useMutation({
+    mutationFn: (webhookEventId: string) => resendFn({ data: { webhookEventId } }),
+    onSuccess: (r) => {
+      if (r.sent) toast.success(`Código reenviado para ${r.to}`);
+      else toast.error(`Falha: ${r.error ?? "erro"} — enfileirado para retry`);
+      qc.invalidateQueries({ queryKey: ["mp-webhooks"] });
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Falha ao reenviar"),
+  });
+
 
   const filtered = useMemo(() => {
     const rows = eventsQ.data ?? [];
