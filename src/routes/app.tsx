@@ -7,7 +7,7 @@ import { PageHeader, StatGrid } from "@/components/layout";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { StoreDetailsDrawer } from "@/components/stores/StoreDetailsDrawer";
 import type { PublicStore } from "@/lib/stores-public.functions";
-import { StatCard } from "@/components/dashboard/StatCard";
+
 import { SectionKicker } from "@/components/dashboard/SectionKicker";
 import { AppHero } from "@/components/app/AppHero";
 import { ExperimentalBanner } from "@/components/app/ExperimentalBanner";
