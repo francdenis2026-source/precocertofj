@@ -20,7 +20,7 @@ import {
   X,
 } from "lucide-react";
 
-export const Route = createFileRoute("/lista/nova")({
+export const Route = createFileRoute("/lista_/nova")({
   head: () => ({
     meta: [
       { title: "Nova lista em 60s — PreçoCerto" },
