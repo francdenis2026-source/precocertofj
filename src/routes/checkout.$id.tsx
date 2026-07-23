@@ -528,3 +528,86 @@ function Row({
     </div>
   );
 }
+
+function PixPanel({
+  qrCode,
+  qrCodeBase64,
+  expiresAt,
+  onRegenerate,
+  regenerating,
+}: {
+  qrCode: string;
+  qrCodeBase64: string | null;
+  expiresAt: string;
+  onRegenerate: () => void;
+  regenerating: boolean;
+}) {
+  const msLeft = new Date(expiresAt).getTime() - Date.now();
+  const totalSec = Math.max(0, Math.floor(msLeft / 1000));
+  const mm = String(Math.floor(totalSec / 60)).padStart(2, "0");
+  const ss = String(totalSec % 60).padStart(2, "0");
+  const expired = totalSec === 0;
+
+  return (
+    <div className="space-y-3">
+      {qrCodeBase64 ? (
+        <div className="mx-auto w-fit rounded-lg border bg-white p-2">
+          <img
+            src={`data:image/png;base64,${qrCodeBase64}`}
+            alt="QR Code PIX"
+            className="h-48 w-48"
+          />
+        </div>
+      ) : null}
+      <div className="rounded-md border bg-muted/40 p-2">
+        <div className="mb-1 text-[11px] uppercase tracking-wider text-muted-foreground">
+          Código copia-e-cola
+        </div>
+        <div className="max-h-24 overflow-auto break-all font-mono text-[11px] leading-relaxed">
+          {qrCode}
+        </div>
+      </div>
+      <div className="flex gap-2">
+        <Button
+          variant="outline"
+          className="flex-1"
+          onClick={() => {
+            navigator.clipboard.writeText(qrCode);
+            toast.success("Código PIX copiado");
+          }}
+        >
+          <Copy className="mr-1 h-4 w-4" /> Copiar código
+        </Button>
+        <Button
+          variant="ghost-navy"
+          onClick={onRegenerate}
+          disabled={regenerating}
+          title="Gerar novo QR Code"
+        >
+          {regenerating ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <RefreshCw className="h-4 w-4" />
+          )}
+        </Button>
+      </div>
+      <div
+        className={`flex items-center justify-between rounded-md border px-3 py-2 text-xs ${
+          expired
+            ? "border-destructive/50 bg-destructive/5 text-destructive"
+            : "border-border bg-background text-muted-foreground"
+        }`}
+      >
+        <span className="flex items-center gap-1.5">
+          <Clock className="h-3.5 w-3.5" />
+          {expired ? "QR Code expirado — gere um novo" : "Expira em"}
+        </span>
+        {!expired && <span className="font-mono text-sm font-semibold text-foreground">{mm}:{ss}</span>}
+      </div>
+      <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+        <Loader2 className="h-3 w-3 animate-spin" />
+        Aguardando confirmação — a página atualiza sozinha.
+      </p>
+    </div>
+  );
+}
