@@ -118,10 +118,10 @@ function HomePage() {
           {/* -------- HERO SPLIT -------- */}
           <div className="flex flex-col lg:flex-row">
             {/* LEFT — content */}
-            <div className="flex-[1.2] p-6 sm:p-10 lg:p-16 xl:p-20 flex flex-col justify-center">
+            <div className="flex-[1.2] p-5 sm:p-10 lg:p-16 xl:p-20 flex flex-col justify-center">
               {/* Badge EM BREVE */}
               <div
-                className="mb-8 inline-flex w-fit items-center gap-2.5 rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] sm:text-[11px]"
+                className="mb-5 inline-flex w-fit items-center gap-2 rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] sm:mb-8 sm:gap-2.5 sm:px-4 sm:py-2 sm:text-[11px]"
                 style={{ background: P.navy, color: "#F5F6FA" }}
               >
                 <span className="relative flex h-2 w-2">
@@ -146,7 +146,7 @@ function HomePage() {
 
               {today && (
                 <div
-                  className="mb-5 text-[10.5px] font-bold uppercase tracking-[0.24em]"
+                  className="mb-3 text-[10px] font-bold uppercase tracking-[0.22em] sm:mb-5 sm:text-[10.5px] sm:tracking-[0.24em]"
                   style={{ color: P.goldSoft }}
                 >
                   {today} · edição diária
@@ -158,8 +158,8 @@ function HomePage() {
                 className={`${serif} font-normal`}
                 style={{
                   color: P.heading,
-                  fontSize: "clamp(2.5rem, 7vw, 6.5rem)",
-                  lineHeight: 0.9,
+                  fontSize: "clamp(2.15rem, 7vw, 6.5rem)",
+                  lineHeight: 0.92,
                   letterSpacing: "-0.03em",
                 }}
               >
@@ -169,6 +169,7 @@ function HomePage() {
                   onde você compra.
                 </span>
               </h1>
+
 
               <p
                 className="mt-6 max-w-xl text-[15px] leading-relaxed sm:text-[17px]"
