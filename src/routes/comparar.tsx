@@ -1,557 +1,366 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { zodValidator, fallback } from "@tanstack/zod-adapter";
-import { z } from "zod";
-import { supabase } from "@/integrations/supabase/client";
-import { Nav } from "@/components/brand/Nav";
-import { Footer } from "@/components/brand/Footer";
-import { Breadcrumbs } from "@/components/nav/Breadcrumbs";
-import { ProductImage } from "@/components/product/ProductImage";
-import { useSignedLogoUrls } from "@/hooks/use-signed-logo-urls";
-import { shortenStoreName } from "@/lib/store-name";
 import {
-  ErrorState,
-  EmptyState,
-  LoadingGrid,
-} from "@/components/feedback";
-import {
-  ArrowLeft,
-  Trophy,
-  X,
-  Store as StoreIcon,
-  Plus,
-  TrendingDown,
-} from "lucide-react";
-
-const searchSchema = z.object({
-  ids: fallback(z.string(), "").default(""),
-});
+  compareEstablishments,
+  listComparableEstablishments,
+  type CompareResult,
+  type PublicEstablishmentLite,
+} from "@/lib/compare-establishments.functions";
+import { PageHeader, SectionCard } from "@/components/layout";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
+import { MobileNav } from "@/components/nav/MobileNav";
+import { EmptyState, InlineError, Spinner } from "@/components/feedback";
+import { ExportMenu } from "@/components/data/ExportMenu";
+import type { ExportColumn } from "@/lib/export";
+import { Store, Scale, Trophy, TrendingDown, TrendingUp, Minus } from "lucide-react";
 
 export const Route = createFileRoute("/comparar")({
-  validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
-      { title: "Comparar produtos lado a lado — PreçoCerto" },
+      { title: "Comparar estabelecimentos — PreçoCerto" },
       {
         name: "description",
         content:
-          "Compare até 3 variações de produtos e seus estabelecimentos lado a lado, com preço, economia e mercado mais barata.",
+          "Compare preços lado a lado entre estabelecimentos de Feijó, veja o menor preço e a variação no tempo para cada item.",
       },
-      { property: "og:title", content: "Comparar produtos lado a lado — PreçoCerto" },
+      { property: "og:title", content: "Comparar estabelecimentos — PreçoCerto" },
       {
         property: "og:description",
-        content: "Escolha até 3 opções e veja preços e mercados na mesma tela.",
+        content: "Menor preço e variação no tempo entre estabelecimentos.",
       },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: CompararPage,
+  component: CompareRoute,
 });
 
-type StoreEntry = {
-  establishment_id: string;
-  store_name: string;
-  price: number;
-  product_name: string;
-};
+const MAX = 6;
+const DAYS_OPTIONS = [7, 30, 90] as const;
 
-type Comparison = {
-  product_key: string;
-  display_name: string;
-  category: string;
-  size_value: number | null;
-  size_unit: string;
-  store_count: number;
-  min_price: number;
-  avg_price: number;
-  max_price: number;
-  savings_pct: number;
-  cheapest_store: string;
-  cheapest_establishment_id: string;
-  image_url: string | null;
-  catalog_slug: string | null;
-  stores: StoreEntry[];
-};
+function CompareRoute() {
+  const fetchList = useServerFn(listComparableEstablishments);
+  const fetchCompare = useServerFn(compareEstablishments);
 
-const fmt = (n: number | null | undefined) =>
-  typeof n === "number"
-    ? n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })
-    : "—";
+  const stores = useQuery({
+    queryKey: ["comparable-establishments"],
+    queryFn: () => fetchList(),
+    staleTime: 5 * 60_000,
+  });
 
-function formatSize(size_value: number | null, size_unit: string): string | null {
-  if (size_value == null) return null;
-  if (size_unit === "g" && size_value >= 1000)
-    return `${(size_value / 1000).toLocaleString("pt-BR")} kg`;
-  if (size_unit === "ml" && size_value >= 1000)
-    return `${(size_value / 1000).toLocaleString("pt-BR")} L`;
-  return `${size_value.toLocaleString("pt-BR")} ${size_unit}`;
-}
+  const [selected, setSelected] = useState<string[]>([]);
+  const [productQuery, setProductQuery] = useState("");
+  const [days, setDays] = useState<number>(30);
+  const [runKey, setRunKey] = useState(0);
 
-const MAX = 3;
+  useEffect(() => {
+    if (selected.length === 0 && stores.data && stores.data.length >= 2) {
+      setSelected(stores.data.slice(0, Math.min(3, stores.data.length)).map((s) => s.id));
+    }
+  }, [stores.data, selected.length]);
 
-function CompararPage() {
-  const search = Route.useSearch();
-  const ids: string = (search as { ids?: string }).ids ?? "";
-  const navigate = useNavigate({ from: "/comparar" });
-
-  const selectedKeys = useMemo<string[]>(
-    () =>
-      ids
-        .split(",")
-        .map((s: string) => s.trim())
-        .filter(Boolean)
-        .slice(0, MAX),
-    [ids],
-  );
-
-
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["price-comparisons-all"],
-    queryFn: async (): Promise<Comparison[]> => {
-      const { data, error } = await supabase.rpc("get_price_comparisons");
-      if (error) throw error;
-      return (data as unknown as Comparison[]) ?? [];
-    },
+  const comparison = useQuery<CompareResult>({
+    queryKey: ["compare", selected.slice().sort().join(","), productQuery.trim(), days, runKey],
+    queryFn: () =>
+      fetchCompare({
+        data: {
+          establishmentIds: selected,
+          productQuery: productQuery.trim() || undefined,
+          days,
+        },
+      }),
+    enabled: selected.length >= 2,
     staleTime: 60_000,
   });
 
-  const allRows: Comparison[] = data ?? [];
+  const estById = useMemo(() => {
+    const map = new Map<string, PublicEstablishmentLite>();
+    for (const s of stores.data ?? []) map.set(s.id, s);
+    return map;
+  }, [stores.data]);
 
-  const selectedRows = useMemo(() => {
-    const map = new Map(allRows.map((r) => [r.product_key, r]));
-    return selectedKeys
-      .map((k) => map.get(k))
-      .filter((r): r is Comparison => !!r);
-  }, [allRows, selectedKeys]);
+  function toggleStore(id: string) {
+    setSelected((prev) => {
+      if (prev.includes(id)) return prev.filter((x) => x !== id);
+      if (prev.length >= MAX) return prev;
+      return [...prev, id];
+    });
+  }
 
-  const remove = (key: string) => {
-    const next = selectedKeys.filter((k) => k !== key);
-    navigate({ search: { ids: next.join(",") } });
-  };
+  const result = comparison.data;
+  const totalsByEst = useMemo(() => {
+    const map = new Map<string, { total: number; coverage: number }>();
+    for (const t of result?.basketTotals ?? []) map.set(t.establishmentId, t);
+    return map;
+  }, [result]);
 
-  const signedImages = useSignedLogoUrls(
-    useMemo(() => selectedRows.map((r) => r.image_url), [selectedRows]),
-  );
-
-  // Union of all stores across selected products, sorted by name.
-  const storeUnion = useMemo(() => {
-    const map = new Map<string, string>();
-    for (const r of selectedRows) {
-      for (const s of r.stores) {
-        map.set(s.establishment_id, s.store_name);
-      }
+  const exportColumns: ExportColumn<CompareResult["rows"][number]>[] = useMemo(() => {
+    const base: ExportColumn<CompareResult["rows"][number]>[] = [
+      { key: "product", header: "Produto", accessor: (r) => r.productName },
+      {
+        key: "avg",
+        header: "Média",
+        align: "right",
+        accessor: (r) => (r.avgPrice != null ? r.avgPrice.toFixed(2).replace(".", ",") : ""),
+      },
+    ];
+    for (const est of result?.establishments ?? []) {
+      base.push({
+        key: `est-${est.id}`,
+        header: est.name,
+        align: "right",
+        accessor: (r) => {
+          const c = r.cells.find((x) => x.establishmentId === est.id);
+          return c?.price != null ? c.price.toFixed(2).replace(".", ",") : "";
+        },
+      });
     }
-    return Array.from(map.entries())
-      .map(([id, name]) => ({ id, name }))
-      .sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
-  }, [selectedRows]);
-
-  // Best (lowest) price per store across the selected products.
-  const bestByStore = useMemo(() => {
-    const best = new Map<string, { key: string; price: number }>();
-    for (const r of selectedRows) {
-      for (const s of r.stores) {
-        const cur = best.get(s.establishment_id);
-        if (!cur || Number(s.price) < cur.price) {
-          best.set(s.establishment_id, {
-            key: r.product_key,
-            price: Number(s.price),
-          });
-        }
-      }
-    }
-    return best;
-  }, [selectedRows]);
-
-  // Absolute cheapest of the whole comparison
-  const absoluteMin = useMemo(() => {
-    let min = Infinity;
-    let key: string | null = null;
-    for (const r of selectedRows) {
-      const p = Number(r.min_price);
-      if (p < min) {
-        min = p;
-        key = r.product_key;
-      }
-    }
-    return { price: min === Infinity ? null : min, key };
-  }, [selectedRows]);
+    return base;
+  }, [result]);
 
   return (
-    <div className="min-h-screen">
-      <Nav />
-      <Breadcrumbs
-        items={[
-          { label: "Comparador", to: "/comparador" },
-          { label: "Lado a lado" },
-        ]}
-      />
+    <div className="min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
+      <div className="mx-auto max-w-7xl px-4 md:px-6">
+        <PageHeader
+          breadcrumbs={[{ label: "Comparar" }]}
+          title="Comparar estabelecimentos"
+          description="Selecione até 6 lojas e veja preços lado a lado, com variação no tempo e cesta total."
+        />
 
-      <section className="border-b border-border bg-card/40">
-        <div className="mx-auto max-w-7xl px-6 py-10">
-          <div className="flex flex-wrap items-start justify-between gap-4">
+        <SectionCard title="Filtros" description="Ajuste sua comparação." className="mb-6">
+          <div className="grid gap-4">
             <div>
-              <p className="text-xs uppercase tracking-widest text-muted-foreground">
-                Comparação lado a lado
-              </p>
-              <h1 className="mt-2 font-display text-3xl font-black tracking-tight text-foreground md:text-4xl">
-                {selectedRows.length}/{MAX} produtos comparados
-              </h1>
-              <p className="mt-2 max-w-2xl text-sm text-muted-foreground">
-                Escolha até {MAX} variações no comparador e veja preços,
-                estabelecimentos e economia lado a lado.
-              </p>
+              <Label className="mb-2 block text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                Estabelecimentos ({selected.length}/{MAX})
+              </Label>
+              {stores.isPending && <Spinner />}
+              {stores.isError && <InlineError message="Falha ao carregar estabelecimentos." />}
+              {stores.data && (
+                <div className="flex flex-wrap gap-2">
+                  {stores.data.map((s) => {
+                    const active = selected.includes(s.id);
+                    return (
+                      <button
+                        key={s.id}
+                        type="button"
+                        aria-pressed={active}
+                        onClick={() => toggleStore(s.id)}
+                        className={`press-sm tap-safe inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm font-medium focus-ring transition-colors ${
+                          active
+                            ? "border-primary bg-primary text-primary-foreground shadow-elev-1"
+                            : "border-border bg-card text-foreground hover:border-ring/40"
+                        }`}
+                      >
+                        <Store className="h-3.5 w-3.5" strokeWidth={1.8} />
+                        <span className="truncate max-w-[10rem]">{s.name}</span>
+                        {s.neighborhood && (
+                          <span className="text-[10px] uppercase tracking-wide opacity-70">
+                            {s.neighborhood}
+                          </span>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
-            <Link
-              to="/comparador"
-              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-4 py-2 text-xs font-semibold text-foreground transition hover:border-primary/40 hover:text-primary"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" />
-              Voltar ao comparador
-            </Link>
+            <div className="grid gap-4 sm:grid-cols-[1fr_auto_auto]">
+              <div>
+                <Label htmlFor="cmp-query" className="mb-1.5 block text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                  Buscar produto (opcional)
+                </Label>
+                <Input
+                  id="cmp-query"
+                  placeholder="ex: arroz, café, leite…"
+                  value={productQuery}
+                  onChange={(e) => setProductQuery(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label className="mb-1.5 block text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                  Período
+                </Label>
+                <div className="flex gap-1">
+                  {DAYS_OPTIONS.map((d) => (
+                    <Button
+                      key={d}
+                      type="button"
+                      variant={days === d ? "default" : "outline"}
+                      size="sm"
+                      className="press-sm"
+                      onClick={() => setDays(d)}
+                    >
+                      {d}d
+                    </Button>
+                  ))}
+                </div>
+              </div>
+              <div className="flex items-end gap-2">
+                <Button
+                  size="sm"
+                  className="press-sm"
+                  onClick={() => setRunKey((k) => k + 1)}
+                  disabled={selected.length < 2 || comparison.isFetching}
+                >
+                  <Scale className="mr-2 h-4 w-4 icon-nudge" />
+                  Comparar
+                </Button>
+                {result && result.rows.length > 0 && (
+                  <ExportMenu<CompareResult["rows"][number]>
+                    context="comparacao"
+                    columns={exportColumns}
+                    getRows={() => result.rows}
+                    meta={{
+                      title: "Comparação de estabelecimentos",
+                      subtitle: `${result.rows.length} produtos • últimos ${days} dias`,
+                      filters: [
+                        productQuery ? `Busca: ${productQuery}` : "Todos os produtos",
+                        `Lojas: ${result.establishments.map((e) => e.name).join(", ")}`,
+                      ],
+                    }}
+                  />
+                )}
+              </div>
+            </div>
           </div>
-        </div>
-      </section>
+        </SectionCard>
 
-      <section className="mx-auto max-w-7xl px-6 py-10">
-        {isLoading && <LoadingGrid count={3} columns={3} />}
-
-        {!isLoading && error && (
-          <ErrorState
-            title="Não foi possível carregar os produtos"
-            message={(error as Error).message}
-            onRetry={() => window.location.reload()}
+        {selected.length < 2 && (
+          <EmptyState
+            icon={Scale}
+            title="Selecione pelo menos 2 estabelecimentos"
+            message="Escolha até 6 lojas nos chips acima para começar a comparação."
           />
         )}
 
-        {!isLoading && !error && selectedRows.length === 0 && (
-          <EmptyState
-            icon={StoreIcon}
-            title="Nenhum produto selecionado"
-            message="Volte ao comparador e escolha até 3 produtos para colocar lado a lado."
-            action={
-              <Link
-                to="/comparador"
-                className="inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-xs font-bold text-primary-foreground transition hover:opacity-90"
-              >
-                Ir para o comparador
-              </Link>
+        {comparison.isPending && selected.length >= 2 && (
+          <div className="grid place-items-center py-12">
+            <Spinner />
+          </div>
+        )}
+        {comparison.isError && (
+          <InlineError
+            message={
+              comparison.error instanceof Error
+                ? comparison.error.message
+                : "Falha ao carregar comparação."
             }
           />
         )}
 
-        {!isLoading && !error && selectedRows.length > 0 && (
+        {result && result.rows.length === 0 && !comparison.isPending && (
+          <EmptyState
+            icon={Store}
+            title="Sem produtos em comum"
+            message="Nenhum histórico de preço encontrado no período para as lojas selecionadas."
+          />
+        )}
+
+        {result && result.rows.length > 0 && (
           <>
-            {/* Product cards row */}
-            <div
-              className="grid gap-4"
-              style={{
-                gridTemplateColumns: `repeat(${Math.max(selectedRows.length, 1)}, minmax(0, 1fr))`,
-              }}
-            >
-              {selectedRows.map((r, idx) => {
-                const isCheapest = r.product_key === absoluteMin.key;
-                const size = formatSize(r.size_value, r.size_unit);
-                const img = r.image_url ? signedImages[r.image_url] : undefined;
-                const ordinal = String(idx + 1).padStart(2, "0");
-                return (
-                  <article
-                    key={r.product_key}
-                    className={
-                      "relative flex flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition " +
-                      (isCheapest
-                        ? "border-savings/60 ring-2 ring-savings/25"
-                        : "border-border")
-                    }
-                  >
-                    <div className="hairline-gold h-[2px] w-full" aria-hidden />
-
-                    <button
-                      type="button"
-                      onClick={() => remove(r.product_key)}
-                      aria-label={`Remover ${r.display_name}`}
-                      className="absolute right-2 top-3 z-10 grid h-7 w-7 place-items-center rounded-full bg-background/90 text-muted-foreground shadow-sm backdrop-blur transition hover:text-destructive"
+            <SectionCard title="Cesta total" description="Soma dos menores preços por estabelecimento." className="mb-6">
+              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {result.establishments.map((est) => {
+                  const t = totalsByEst.get(est.id);
+                  const isWinner = result.cheapestBasket === est.id;
+                  const full = t && t.coverage === result.rows.length;
+                  return (
+                    <div
+                      key={est.id}
+                      className={`reveal rounded-xl border p-4 transition-all ${
+                        isWinner
+                          ? "border-neon bg-neon/5 shadow-elev-2"
+                          : "border-border bg-card shadow-elev-1"
+                      }`}
                     >
-                      <X className="h-3.5 w-3.5" strokeWidth={2.2} />
-                    </button>
-
-                    <div className="flex items-center justify-between px-4 pt-3">
-                      <span className="font-display text-[13px] italic tracking-tight text-accent">
-                        N.º {ordinal}
-                      </span>
-                      {isCheapest && (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-savings px-2 py-0.5 text-[10px] font-black uppercase tracking-widest text-savings-foreground shadow-sm">
-                          <Trophy className="h-3 w-3" strokeWidth={2.6} />
-                          Melhor
-                        </span>
-                      )}
-                    </div>
-
-                    <div className="aspect-[4/3] bg-gradient-to-br from-muted/60 to-background">
-                      <ProductImage
-                        src={img ?? r.image_url}
-                        alt={r.display_name}
-                        className="h-full w-full"
-                        imageClassName="h-full w-full"
-                        fit="contain"
-                        loading="lazy"
-                      />
-                    </div>
-
-                    <div className="flex flex-col gap-2 p-4">
-                      {r.category && (
-                        <p className="font-display text-[11px] italic tracking-wide text-accent">
-                          {r.category}
-                        </p>
-                      )}
-                      <h2 className="line-clamp-2 font-display text-[16px] font-semibold leading-snug tracking-tight text-foreground">
-                        {r.display_name}
-                        {size && (
-                          <span className="ml-1 font-display text-[13px] font-normal italic text-muted-foreground">
-                            · {size}
-                          </span>
-                        )}
-                      </h2>
-                      <div className="flex flex-wrap items-center gap-1.5 text-[10.5px] text-muted-foreground">
-                        <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5">
-                          <StoreIcon className="h-3 w-3" />
-                          {r.store_count} estabelecimento{Number(r.store_count) !== 1 ? "s" : ""}
-                        </span>
-                      </div>
-
-                      <div className="mt-1 pt-2">
-                        <div className="hairline-gold mb-2 h-px w-full" aria-hidden />
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-accent">
-                          Menor · preço
-                        </p>
-                        <p className="num font-display text-3xl font-extrabold tracking-tight text-primary">
-                          {fmt(Number(r.min_price))}
-                        </p>
-                        <p className="mt-0.5 truncate font-display text-[12px] italic text-muted-foreground">
-                          em{" "}
-                          <span className="font-medium not-italic text-foreground">
-                            {shortenStoreName(r.cheapest_store)}
-                          </span>
-                        </p>
-                        {Number(r.store_count) > 1 && (
-                          <p className="mt-1 flex items-center gap-1 text-[11px] text-muted-foreground">
-                            <TrendingDown className="h-3 w-3 text-savings" />
-                            até -{Number(r.savings_pct).toFixed(0)}% vs. mais caro
-                          </p>
-                        )}
-                      </div>
-
-                      <Link
-                        to="/produto-publico/$slug"
-                        params={{ slug: r.catalog_slug ?? r.display_name }}
-                        className="mt-1 inline-flex items-center justify-center rounded-full border border-border bg-background px-3 py-1.5 text-[11.5px] font-semibold text-foreground transition hover:border-accent/50 hover:text-accent"
-                      >
-                        Ver detalhes
-                      </Link>
-                    </div>
-                  </article>
-                );
-              })}
-
-              {selectedRows.length < MAX && (
-                <Link
-                  to="/comparador"
-                  className="flex min-h-[260px] flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed border-border bg-card/50 p-6 text-center text-muted-foreground transition hover:border-primary/40 hover:text-primary"
-                >
-                  <Plus className="h-6 w-6" strokeWidth={2} />
-                  <p className="text-[12.5px] font-semibold">
-                    Adicionar mais um produto
-                  </p>
-                  <p className="text-[11px]">
-                    {MAX - selectedRows.length} slot
-                    {MAX - selectedRows.length > 1 ? "s" : ""} restante
-                    {MAX - selectedRows.length > 1 ? "s" : ""}
-                  </p>
-                </Link>
-              )}
-            </div>
-
-            {/* Attribute matrix */}
-            <div className="mt-8 overflow-x-auto rounded-2xl border border-border bg-card">
-              <table className="w-full min-w-[600px] border-collapse text-sm">
-                <thead className="bg-muted/40 text-left text-[11px] uppercase tracking-widest text-muted-foreground">
-                  <tr>
-                    <th className="px-4 py-3 font-semibold">Atributo</th>
-                    {selectedRows.map((r) => (
-                      <th
-                        key={r.product_key}
-                        className="px-4 py-3 font-semibold text-foreground"
-                      >
-                        {r.display_name}
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  <MatrixRow
-                    label="Menor preço"
-                    values={selectedRows.map((r) => ({
-                      key: r.product_key,
-                      content: (
+                      <div className="flex items-center gap-2">
                         <span
-                          className={
-                            "num font-bold " +
-                            (r.product_key === absoluteMin.key
-                              ? "text-savings"
-                              : "text-foreground")
-                          }
+                          className="grid h-8 w-8 place-items-center rounded-md text-xs font-bold text-white"
+                          style={{ backgroundColor: est.brandColor ?? "hsl(var(--primary))" }}
                         >
-                          {fmt(Number(r.min_price))}
+                          {est.name.slice(0, 2).toUpperCase()}
                         </span>
-                      ),
-                    }))}
-                  />
-                  <MatrixRow
-                    label="Preço médio"
-                    values={selectedRows.map((r) => ({
-                      key: r.product_key,
-                      content: (
-                        <span className="num">{fmt(Number(r.avg_price))}</span>
-                      ),
-                    }))}
-                  />
-                  <MatrixRow
-                    label="Maior preço"
-                    values={selectedRows.map((r) => ({
-                      key: r.product_key,
-                      content: (
-                        <span className="num text-muted-foreground">
-                          {fmt(Number(r.max_price))}
-                        </span>
-                      ),
-                    }))}
-                  />
-                  <MatrixRow
-                    label="Economia máx."
-                    values={selectedRows.map((r) => ({
-                      key: r.product_key,
-                      content: (
-                        <span className="font-semibold text-savings">
-                          {Number(r.store_count) > 1
-                            ? `-${Number(r.savings_pct).toFixed(0)}%`
-                            : "—"}
-                        </span>
-                      ),
-                    }))}
-                  />
-                  <MatrixRow
-                    label="Mercado mais barata"
-                    values={selectedRows.map((r) => ({
-                      key: r.product_key,
-                      content: (
-                        <span className="truncate text-foreground" title={r.cheapest_store}>
-                          {shortenStoreName(r.cheapest_store)}
-                        </span>
-                      ),
-                    }))}
-                  />
-                  <MatrixRow
-                    label="Estabelecimentos"
-                    values={selectedRows.map((r) => ({
-                      key: r.product_key,
-                      content: (
-                        <span className="num">{r.store_count}</span>
-                      ),
-                    }))}
-                  />
-                  <MatrixRow
-                    label="Tamanho"
-                    values={selectedRows.map((r) => ({
-                      key: r.product_key,
-                      content: (
-                        <span className="text-foreground">
-                          {formatSize(r.size_value, r.size_unit) ?? "—"}
-                        </span>
-                      ),
-                    }))}
-                  />
-                  <MatrixRow
-                    label="Categoria"
-                    values={selectedRows.map((r) => ({
-                      key: r.product_key,
-                      content: (
-                        <span className="text-muted-foreground">
-                          {r.category || "—"}
-                        </span>
-                      ),
-                    }))}
-                  />
-                </tbody>
-              </table>
-            </div>
+                        <div className="min-w-0 flex-1">
+                          <div className="truncate text-sm font-semibold">{est.name}</div>
+                          <div className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                            {t?.coverage ?? 0}/{result.rows.length} itens
+                          </div>
+                        </div>
+                        {isWinner && (
+                          <Badge className="bg-neon text-neon-foreground">
+                            <Trophy className="mr-1 h-3 w-3" /> Mais barato
+                          </Badge>
+                        )}
+                      </div>
+                      <div className="mt-3 font-mono text-2xl font-bold tabular-nums">
+                        R$ {(t?.total ?? 0).toFixed(2).replace(".", ",")}
+                      </div>
+                      {!full && (
+                        <p className="mt-1 text-[11px] text-muted-foreground">
+                          Cesta parcial — nem todos os itens têm preço aqui.
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </SectionCard>
 
-            {/* Store-by-store matrix */}
-            {storeUnion.length > 0 && (
-              <div className="mt-8 overflow-x-auto rounded-2xl border border-border bg-card">
-                <div className="flex items-center gap-2 border-b border-border bg-muted/40 px-4 py-3">
-                  <StoreIcon className="h-4 w-4 text-primary" strokeWidth={2.2} />
-                  <p className="text-[11px] font-black uppercase tracking-widest text-foreground">
-                    Preço em cada estabelecimento
-                  </p>
-                </div>
-                <table className="w-full min-w-[600px] border-collapse text-sm">
-                  <thead className="text-left text-[11px] uppercase tracking-widest text-muted-foreground">
-                    <tr className="border-b border-border">
-                      <th className="px-4 py-2.5 font-semibold">Mercado</th>
-                      {selectedRows.map((r) => (
-                        <th
-                          key={r.product_key}
-                          className="px-4 py-2.5 font-semibold text-foreground"
-                        >
-                          <span className="line-clamp-1">{r.display_name}</span>
+            <SectionCard title="Comparação lado a lado" description="Menor preço destacado por linha." bodyClassName="p-0">
+              <div className="scroll-shadow overflow-x-auto">
+                <table className="w-full min-w-[720px] text-sm">
+                  <thead className="bg-muted/40 text-[11px] uppercase tracking-widest text-muted-foreground">
+                    <tr>
+                      <th className="px-3 py-3 text-left">Produto</th>
+                      <th className="px-3 py-3 text-right">Média</th>
+                      {result.establishments.map((est) => (
+                        <th key={est.id} className="px-3 py-3 text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            <span
+                              className="inline-block h-2.5 w-2.5 rounded-full"
+                              style={{ backgroundColor: est.brandColor ?? "hsl(var(--primary))" }}
+                            />
+                            <span className="max-w-[7rem] truncate">{est.name}</span>
+                          </div>
                         </th>
                       ))}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-border">
-                    {storeUnion.map((store) => (
-                      <tr key={store.id} className="hover:bg-muted/30">
-                        <td className="px-4 py-2.5 text-[13px] font-medium text-foreground">
-                          <span title={store.name}>
-                            {shortenStoreName(store.name)}
-                          </span>
+                    {result.rows.map((row) => (
+                      <tr key={row.productKey} className="interactive-row">
+                        <td className="px-3 py-3 font-medium">{row.productName}</td>
+                        <td className="px-3 py-3 text-right font-mono text-muted-foreground tabular-nums">
+                          {row.avgPrice != null
+                            ? `R$ ${row.avgPrice.toFixed(2).replace(".", ",")}`
+                            : "—"}
                         </td>
-                        {selectedRows.map((r) => {
-                          const entry = r.stores.find(
-                            (s) => s.establishment_id === store.id,
-                          );
-                          const isBest =
-                            !!entry &&
-                            bestByStore.get(store.id)?.key === r.product_key;
+                        {result.establishments.map((est) => {
+                          const cell = row.cells.find((c) => c.establishmentId === est.id);
                           return (
-                            <td
-                              key={r.product_key}
-                              className={
-                                "px-4 py-2.5 " +
-                                (isBest ? "bg-savings/[0.08]" : "")
-                              }
-                            >
-                              {entry ? (
-                                <span
-                                  className={
-                                    "num inline-flex items-center gap-1 text-[13px] " +
-                                    (isBest
-                                      ? "font-bold text-savings"
-                                      : "text-foreground")
-                                  }
-                                >
-                                  {isBest && (
-                                    <Trophy
-                                      className="h-3 w-3"
-                                      strokeWidth={2.6}
-                                    />
-                                  )}
-                                  {fmt(Number(entry.price))}
-                                </span>
+                            <td key={est.id} className="px-3 py-3 text-right">
+                              {cell?.price == null ? (
+                                <span className="text-xs text-muted-foreground">—</span>
                               ) : (
-                                <span className="text-[12px] text-muted-foreground">
-                                  —
-                                </span>
+                                <div className="flex flex-col items-end gap-0.5">
+                                  <span
+                                    className={`font-mono text-base font-bold tabular-nums ${
+                                      cell.isCheapest ? "text-neon" : "text-foreground"
+                                    }`}
+                                  >
+                                    R$ {cell.price.toFixed(2).replace(".", ",")}
+                                  </span>
+                                  <ChangeChip pct={cell.changePct} />
+                                  <Sparkline
+                                    series={cell.series}
+                                    color={est.brandColor ?? "hsl(var(--primary))"}
+                                  />
+                                </div>
                               )}
                             </td>
                           );
@@ -561,33 +370,66 @@ function CompararPage() {
                   </tbody>
                 </table>
               </div>
-            )}
+            </SectionCard>
           </>
         )}
-      </section>
 
-      <Footer />
+        {estById.size === 0 && stores.isPending && (
+          <div className="grid place-items-center py-16">
+            <Spinner />
+          </div>
+        )}
+      </div>
+      <MobileNav />
     </div>
   );
 }
 
-function MatrixRow({
-  label,
-  values,
-}: {
-  label: string;
-  values: Array<{ key: string; content: React.ReactNode }>;
-}) {
+function ChangeChip({ pct }: { pct: number | null }) {
+  if (pct == null) return null;
+  const Icon = pct < 0 ? TrendingDown : pct > 0 ? TrendingUp : Minus;
+  const tone =
+    pct < 0 ? "text-neon" : pct > 0 ? "text-destructive" : "text-muted-foreground";
   return (
-    <tr>
-      <td className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-        {label}
-      </td>
-      {values.map((v) => (
-        <td key={v.key} className="px-4 py-2.5 text-[13px]">
-          {v.content}
-        </td>
-      ))}
-    </tr>
+    <span className={`inline-flex items-center gap-0.5 font-mono text-[10px] font-semibold ${tone}`}>
+      <Icon className="h-3 w-3" strokeWidth={2} />
+      {pct > 0 ? "+" : ""}
+      {pct.toFixed(1)}%
+    </span>
+  );
+}
+
+function Sparkline({
+  series,
+  color,
+}: {
+  series: Array<{ t: string; p: number }>;
+  color: string;
+}) {
+  if (!series || series.length < 2) return null;
+  const w = 80;
+  const h = 20;
+  const prices = series.map((s) => s.p);
+  const min = Math.min(...prices);
+  const max = Math.max(...prices);
+  const range = max - min || 1;
+  const points = prices
+    .map((p, i) => {
+      const x = (i / (prices.length - 1)) * w;
+      const y = h - ((p - min) / range) * h;
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(" ");
+  return (
+    <svg width={w} height={h} viewBox={`0 0 ${w} ${h}`} aria-hidden="true">
+      <polyline
+        points={points}
+        fill="none"
+        stroke={color}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
   );
 }
