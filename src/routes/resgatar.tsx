@@ -113,8 +113,9 @@ function RedeemPage() {
 
   const clean = useMemo(() => sanitize(raw), [raw]);
   const display = useMemo(() => grouped(clean), [clean]);
-  const valid = clean.length >= MIN_LEN;
-  const invalid = touched && clean.length > 0 && !valid;
+  const validation = useMemo(() => validateCode(raw), [raw]);
+  const canSubmit = clean.length >= MIN_LEN && validation.level !== "warn";
+  const showState = touched || clean.length > 0;
 
   const sessionQuery = useQuery({
     queryKey: ["auth-session"],
