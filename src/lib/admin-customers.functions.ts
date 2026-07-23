@@ -275,20 +275,275 @@ export const adminListLoginEvents = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) =>
     z
       .object({
-        limit: z.number().int().min(1).max(500).optional().default(100),
+        limit: z.number().int().min(1).max(1000).optional().default(200),
         onlyFailures: z.boolean().optional().default(false),
+        sinceDays: z.number().int().min(1).max(365).optional().default(30),
+        ip: z.string().trim().optional().default(""),
+        reason: z.string().trim().optional().default(""),
+      })
+      .parse(data ?? {}),
+  )
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const since = new Date(Date.now() - data.sinceDays * 86400_000).toISOString();
+    let q = supabaseAdmin
+      .from("login_events")
+      .select("id, user_id, email, cpf_masked, ip_address, user_agent, success, reason, created_at")
+      .gte("created_at", since)
+      .order("created_at", { ascending: false })
+      .limit(data.limit);
+    if (data.onlyFailures) q = q.eq("success", false);
+    if (data.ip) q = q.ilike("ip_address", `%${data.ip}%`);
+    if (data.reason) q = q.ilike("reason", `%${data.reason}%`);
+    const { data: rows, error } = await q;
+    if (error) throw new Error(error.message);
+    return rows ?? [];
+  });
+
+// ============================================================================
+// adminGetLoginStats — agregados p/ gráficos (série temporal, top IPs, motivos)
+// ============================================================================
+export const adminGetLoginStats = createServerFn({ method: "POST" })
+  .middleware([requireAdmin])
+  .inputValidator((data: unknown) =>
+    z
+      .object({
+        sinceDays: z.number().int().min(1).max(90).optional().default(14),
+      })
+      .parse(data ?? {}),
+  )
+  .handler(async ({ data }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const since = new Date(Date.now() - data.sinceDays * 86400_000).toISOString();
+    const { data: rows, error } = await supabaseAdmin
+      .from("login_events")
+      .select("created_at, success, reason, ip_address")
+      .gte("created_at", since)
+      .order("created_at", { ascending: true })
+      .limit(10000);
+    if (error) throw new Error(error.message);
+
+    const buckets = new Map<string, { day: string; success: number; failure: number }>();
+    const ipMap = new Map<string, number>();
+    const reasonMap = new Map<string, number>();
+    let totalSuccess = 0;
+    let totalFailure = 0;
+
+    for (const r of rows ?? []) {
+      const day = (r.created_at ?? "").slice(0, 10);
+      if (day) {
+        const b = buckets.get(day) ?? { day, success: 0, failure: 0 };
+        if (r.success) b.success++; else b.failure++;
+        buckets.set(day, b);
+      }
+      if (r.success) totalSuccess++; else totalFailure++;
+      if (!r.success) {
+        const ip = r.ip_address ?? "desconhecido";
+        ipMap.set(ip, (ipMap.get(ip) ?? 0) + 1);
+        const reason = r.reason ?? "sem motivo";
+        reasonMap.set(reason, (reasonMap.get(reason) ?? 0) + 1);
+      }
+    }
+
+    // Preenche dias faltantes p/ eixo contínuo
+    const series: { day: string; success: number; failure: number }[] = [];
+    for (let i = data.sinceDays - 1; i >= 0; i--) {
+      const d = new Date(Date.now() - i * 86400_000).toISOString().slice(0, 10);
+      const b = buckets.get(d) ?? { day: d, success: 0, failure: 0 };
+      series.push(b);
+    }
+
+    return {
+      totalSuccess,
+      totalFailure,
+      total: totalSuccess + totalFailure,
+      series,
+      topIps: Array.from(ipMap.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 8)
+        .map(([ip, count]) => ({ ip, count })),
+      topReasons: Array.from(reasonMap.entries())
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 8)
+        .map(([reason, count]) => ({ reason, count })),
+    };
+  });
+
+// ============================================================================
+// adminSuspendCustomer / adminReactivateCustomer
+// ============================================================================
+export const adminSuspendCustomer = createServerFn({ method: "POST" })
+  .middleware([requireAdmin])
+  .inputValidator((data: unknown) =>
+    z
+      .object({
+        userId: z.string().uuid(),
+        reason: z.string().trim().min(3).max(300),
+      })
+      .parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const now = new Date().toISOString();
+    const { error } = await supabaseAdmin
+      .from("profiles")
+      .update({
+        suspended_at: now,
+        suspended_reason: data.reason,
+        updated_at: now,
+      })
+      .eq("id", data.userId);
+    if (error) throw new Error(error.message);
+
+    // Encerra sessões ativas do usuário no Auth (best-effort)
+    try {
+      await supabaseAdmin.auth.admin.signOut(data.userId);
+    } catch {
+      /* ignore */
+    }
+
+    await supabaseAdmin.from("admin_audit_log").insert({
+      admin_user_id: context.userId,
+      action: "customer.suspend",
+      target_type: "profile",
+      target_id: data.userId,
+      after: { reason: data.reason },
+    });
+
+    return { ok: true, suspendedAt: now };
+  });
+
+export const adminReactivateCustomer = createServerFn({ method: "POST" })
+  .middleware([requireAdmin])
+  .inputValidator((data: unknown) =>
+    z.object({ userId: z.string().uuid() }).parse(data),
+  )
+  .handler(async ({ data, context }) => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const now = new Date().toISOString();
+    const { error } = await supabaseAdmin
+      .from("profiles")
+      .update({
+        suspended_at: null,
+        suspended_reason: null,
+        updated_at: now,
+      })
+      .eq("id", data.userId);
+    if (error) throw new Error(error.message);
+
+    await supabaseAdmin.from("admin_audit_log").insert({
+      admin_user_id: context.userId,
+      action: "customer.reactivate",
+      target_type: "profile",
+      target_id: data.userId,
+    });
+
+    return { ok: true };
+  });
+
+// ============================================================================
+// adminExportCustomers — devolve CSV completo (aplica busca/sort atuais)
+// ============================================================================
+export const adminExportCustomers = createServerFn({ method: "POST" })
+  .middleware([requireAdmin])
+  .inputValidator((data: unknown) =>
+    z
+      .object({
+        search: z.string().trim().optional().default(""),
+        sort: z
+          .enum(["recent", "logins", "name", "last_seen"])
+          .optional()
+          .default("recent"),
+        limit: z.number().int().min(1).max(5000).optional().default(2000),
       })
       .parse(data ?? {}),
   )
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     let q = supabaseAdmin
-      .from("login_events")
-      .select("id, user_id, email, cpf_masked, ip_address, user_agent, success, reason, created_at")
-      .order("created_at", { ascending: false })
-      .limit(data.limit);
-    if (data.onlyFailures) q = q.eq("success", false);
-    const { data: rows, error } = await q;
+      .from("profiles")
+      .select(
+        "id, full_name, cpf, phone, city, neighborhood, address_street, address_number, address_district, address_city, address_state, address_zip, created_at, last_seen_at, total_logins, trial_ends_at, paid_until, suspended_at, suspended_reason",
+      );
+
+    const search = data.search?.trim();
+    if (search) {
+      const cpfDigits = stripCpf(search);
+      const orParts = [
+        `full_name.ilike.%${search}%`,
+        `city.ilike.%${search}%`,
+        `neighborhood.ilike.%${search}%`,
+      ];
+      if (cpfDigits) orParts.push(`cpf.ilike.%${cpfDigits}%`);
+      q = q.or(orParts.join(","));
+    }
+
+    switch (data.sort) {
+      case "logins":
+        q = q.order("total_logins", { ascending: false, nullsFirst: false });
+        break;
+      case "name":
+        q = q.order("full_name", { ascending: true, nullsFirst: false });
+        break;
+      case "last_seen":
+        q = q.order("last_seen_at", { ascending: false, nullsFirst: false });
+        break;
+      default:
+        q = q.order("created_at", { ascending: false });
+    }
+
+    const { data: rows, error } = await q.limit(data.limit);
     if (error) throw new Error(error.message);
-    return rows ?? [];
+
+    const headers = [
+      "Nome",
+      "CPF",
+      "Telefone",
+      "Cidade",
+      "Bairro",
+      "Endereço",
+      "Cadastro",
+      "Último acesso",
+      "Total de acessos",
+      "Trial até",
+      "Pago até",
+      "Suspenso em",
+      "Motivo suspensão",
+    ];
+
+    const esc = (v: unknown) => {
+      const s = v == null ? "" : String(v);
+      return `"${s.replace(/"/g, '""')}"`;
+    };
+    const fmt = (v: string | null | undefined) =>
+      v ? new Date(v).toLocaleString("pt-BR") : "";
+
+    const body = (rows ?? []).map((r) =>
+      [
+        r.full_name ?? "",
+        maskCpf(r.cpf),
+        r.phone ?? "",
+        r.city ?? "",
+        r.neighborhood ?? "",
+        [r.address_street, r.address_number, r.address_district, r.address_city, r.address_state, r.address_zip]
+          .filter(Boolean)
+          .join(", "),
+        fmt(r.created_at),
+        fmt(r.last_seen_at),
+        r.total_logins ?? 0,
+        fmt(r.trial_ends_at),
+        fmt(r.paid_until),
+        fmt(r.suspended_at),
+        r.suspended_reason ?? "",
+      ]
+        .map(esc)
+        .join(","),
+    );
+
+    const csv = [headers.map(esc).join(","), ...body].join("\r\n");
+    return {
+      csv,
+      count: rows?.length ?? 0,
+      filename: `clientes-${new Date().toISOString().slice(0, 10)}.csv`,
+    };
   });
