@@ -70,7 +70,10 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
         {/* Brand */}
         <Link to="/" className="flex min-w-0 items-center gap-3">
           <span
-            className="grid h-11 w-11 shrink-0 place-items-center rounded-[10px] bg-brand text-[19px] font-black text-brand-foreground shadow-elev-2 sm:h-12 sm:w-12 sm:text-[21px]"
+            className={dsx(
+              "grid h-11 w-11 shrink-0 place-items-center rounded-[10px] bg-brand text-[19px] font-black text-brand-foreground sm:h-12 sm:w-12 sm:text-[21px]",
+              isOverlay ? "shadow-[0_6px_18px_rgb(0_0_0/0.28)] ring-1 ring-black/10" : "shadow-elev-2",
+            )}
           >
             P
           </span>
@@ -80,6 +83,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                 serif,
                 "truncate text-[24px] font-normal leading-none sm:text-[26px] md:text-[28px]",
                 brandTextClass,
+                isOverlay && "[text-shadow:0_1px_2px_rgb(0_0_0/0.35),0_0_1px_rgb(0_0_0/0.25)]",
               )}
             >
               Preço
@@ -88,7 +92,11 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
               </span>
             </span>
             <span
-              className={dsx("mt-1.5 hidden text-[10px] font-bold uppercase tracking-[0.24em] sm:block", subTextClass)}
+              className={dsx(
+                "mt-1.5 hidden text-[10px] font-extrabold uppercase tracking-[0.28em] sm:block",
+                subTextClass,
+                isOverlay && "[text-shadow:0_1px_2px_rgb(0_0_0/0.45)]",
+              )}
             >
               Feijó · Acre
             </span>
