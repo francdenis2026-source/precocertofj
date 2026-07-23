@@ -298,7 +298,7 @@ function HomePage() {
                     <div
                       className={`${serif} tabular-nums`}
                       style={{
-                        color: P.navy,
+                        color: P.heading,
                         fontSize: "clamp(1.75rem, 3.6vw, 2.75rem)",
                         lineHeight: 1,
                         letterSpacing: "-0.03em",
