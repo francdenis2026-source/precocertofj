@@ -194,63 +194,65 @@ function SearchPage() {
           }
         />
 
-        <DataToolbar
-          className="mb-4"
-          filters={
-            <>
-              <QuickFilterBar<SearchMode>
-                label="Match"
-                ariaLabel="Modo de correspondência"
-                value={mode}
-                onChange={(next) => chooseMode(next ?? "strict")}
-                size="sm"
-                options={[
-                  {
-                    value: "strict",
-                    label: "Estrita",
-                    hint: "Palavra inteira — evita falsos positivos em buscas curtas",
-                  },
-                  {
-                    value: "loose",
-                    label: "Parcial",
-                    hint: "Permite prefixo (tokens ≥ 3 caracteres)",
-                  },
-                ]}
-              />
-              <QuickFilterBar<"pure" | "all">
-                label="Filtro"
-                ariaLabel="Filtro de item puro"
-                value={pureOnly ? "pure" : "all"}
-                onChange={(next) => setPure(next === "pure")}
-                size="sm"
-                options={[
-                  {
-                    value: "pure",
-                    label: "Somente item puro",
-                    hint: "Remove itens em que a palavra aparece só como ingrediente",
-                  },
-                  { value: "all", label: "Incluir ingredientes" },
-                ]}
-              />
-            </>
-          }
-        />
-
-        <PriceSearchBar
-          initialQuery={q}
-          mode={mode}
-          pureOnly={pureOnly}
-          onQueryChange={syncQueryToUrl}
-        />
-
-        {!hasQuery && (
-          <EmptyState
-            className="mt-6"
-            icon={SearchIcon}
-            title="Digite para começar"
-            description="Escreva o nome de um produto (arroz, feijão, café…) e veja os preços comparados nos mercados cadastrados."
+        <ListingShell density="md" className="mb-2">
+          <ListingToolbar
+            filters={
+              <>
+                <QuickFilterBar<SearchMode>
+                  label="Match"
+                  ariaLabel="Modo de correspondência"
+                  value={mode}
+                  onChange={(next) => chooseMode(next ?? "strict")}
+                  size="sm"
+                  options={[
+                    {
+                      value: "strict",
+                      label: "Estrita",
+                      hint: "Palavra inteira — evita falsos positivos em buscas curtas",
+                    },
+                    {
+                      value: "loose",
+                      label: "Parcial",
+                      hint: "Permite prefixo (tokens ≥ 3 caracteres)",
+                    },
+                  ]}
+                />
+                <QuickFilterBar<"pure" | "all">
+                  label="Filtro"
+                  ariaLabel="Filtro de item puro"
+                  value={pureOnly ? "pure" : "all"}
+                  onChange={(next) => setPure(next === "pure")}
+                  size="sm"
+                  options={[
+                    {
+                      value: "pure",
+                      label: "Somente item puro",
+                      hint: "Remove itens em que a palavra aparece só como ingrediente",
+                    },
+                    { value: "all", label: "Incluir ingredientes" },
+                  ]}
+                />
+              </>
+            }
           />
-        )}
+
+          <PriceSearchBar
+            initialQuery={q}
+            mode={mode}
+            pureOnly={pureOnly}
+            onQueryChange={syncQueryToUrl}
+          />
+
+          {!hasQuery && (
+            <EmptyState
+              className="mt-2"
+              icon={SearchIcon}
+              title="Digite para começar"
+              message="Escreva o nome de um produto (arroz, feijão, café…) e veja os preços comparados nos mercados cadastrados."
+            />
+          )}
+        </ListingShell>
+
 
         {hasQuery && !user ? (
           <SignupCTA context="save-comparison" className="mt-6" />
