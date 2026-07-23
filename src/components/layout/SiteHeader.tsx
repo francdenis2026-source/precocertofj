@@ -11,6 +11,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 const PALETTE = {
   navy: "#0f1b3d",
@@ -31,6 +32,8 @@ type Props = {
   variant?: Variant;
   /** Esconde a navegação principal (útil em fluxos de auth / checkout). */
   showNav?: boolean;
+  /** Mostra o botão de alternância claro/escuro (apenas na homepage). */
+  showThemeToggle?: boolean;
 };
 
 const NAV_LINKS = [
@@ -40,7 +43,7 @@ const NAV_LINKS = [
   { to: "/planos", label: "Planos" },
 ] as const;
 
-export function SiteHeader({ variant = "solid", showNav = true }: Props) {
+export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle = false }: Props) {
   const isOverlay = variant === "overlay";
   const { session, firstName, initials, loading } = useMyProfile();
   const { signOut, loading: signingOut } = useSignOut();
@@ -113,6 +116,7 @@ export function SiteHeader({ variant = "solid", showNav = true }: Props) {
 
         {/* CTAs */}
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+          {showThemeToggle && <ThemeToggle size="sm" tone="dark" />}
           {loading ? (
             <div className="h-9 w-24 animate-pulse rounded-lg bg-white/10" />
           ) : session ? (
