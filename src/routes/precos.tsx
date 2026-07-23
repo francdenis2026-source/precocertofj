@@ -194,13 +194,17 @@ function PrecosPage() {
             <CardContent className="p-0">
               <ul className="max-h-[52vh] overflow-y-auto divide-y">
                 {list === null && (
-                  <li className="p-4 text-center">
-                    <Loader2 className="mx-auto h-4 w-4 animate-spin text-muted-foreground" />
+                  <li className="p-4 text-center text-muted-foreground">
+                    <Spinner size="sm" label="Carregando produtos" />
                   </li>
                 )}
                 {filtered && filtered.length === 0 && (
-                  <li className="p-4 text-center text-sm text-muted-foreground">
-                    Nenhum produto encontrado.
+                  <li className="p-4">
+                    <EmptyState
+                      icon={SearchIcon}
+                      title="Nenhum produto encontrado"
+                      description={query ? `Nenhum item para "${query}".` : "Ainda não há produtos monitorados."}
+                    />
                   </li>
                 )}
                 {filtered?.map((p) => {
@@ -282,8 +286,8 @@ function PrecosPage() {
                       </CardHeader>
                   <CardContent>
                     {loadingSeries && (
-                      <div className="flex h-64 items-center justify-center">
-                        <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+                      <div className="flex h-64 items-center justify-center text-muted-foreground">
+                        <Spinner size="md" label="Carregando série de preços" />
                       </div>
                     )}
                     {!loadingSeries && chartData.length > 0 && (
