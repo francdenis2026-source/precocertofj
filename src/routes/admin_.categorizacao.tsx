@@ -38,6 +38,8 @@ import { Loader2, Sparkles, Check, X, Save, Wand2, Zap } from "lucide-react";
 
 
 export const Route = createFileRoute("/admin_/categorizacao")({
+  ssr: false,
+  beforeLoad: adminBeforeLoad,
   head: () => ({
     meta: [
       { title: "Revisão de categorização — Admin" },
