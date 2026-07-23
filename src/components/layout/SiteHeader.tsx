@@ -48,10 +48,10 @@ export function SiteHeader({ variant = "solid", showNav = true }: Props) {
           "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 py-3 sm:gap-3 sm:py-4 md:flex md:justify-between md:py-5",
         )}
       >
-        <Link to="/" className="flex min-w-0 items-center gap-2.5">
+        <Link to="/" className="flex min-w-0 items-center gap-3">
           <span
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-[15px] font-bold shadow-md sm:h-10 sm:w-10 md:h-11 md:w-11 md:text-[16px]"
-            style={{ background: PALETTE.gold, color: PALETTE.navy }}
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-xl text-[18px] font-black shadow-lg sm:h-12 sm:w-12 md:h-[52px] md:w-[52px] md:text-[20px]"
+            style={{ background: PALETTE.gold, color: PALETTE.navy, boxShadow: `0 6px 18px ${PALETTE.gold}55` }}
           >
             P
           </span>
@@ -59,8 +59,9 @@ export function SiteHeader({ variant = "solid", showNav = true }: Props) {
             <span
               className={dsx(
                 serif,
-                "truncate text-[19px] font-normal text-white sm:text-[22px] md:text-[24px]",
+                "truncate text-[24px] font-normal text-white sm:text-[27px] md:text-[30px]",
               )}
+              style={{ letterSpacing: "-0.01em" }}
             >
               Preço
               <span className="italic" style={{ color: PALETTE.goldSoft }}>
@@ -68,10 +69,7 @@ export function SiteHeader({ variant = "solid", showNav = true }: Props) {
               </span>
             </span>
             <span
-              className={dsx(
-                ds.type.overline,
-                "mt-1 hidden text-white/70 sm:block",
-              )}
+              className="mt-1.5 hidden text-[10.5px] font-bold uppercase tracking-[0.22em] text-white/75 sm:block"
             >
               Feijó · Acre
             </span>
@@ -79,7 +77,7 @@ export function SiteHeader({ variant = "solid", showNav = true }: Props) {
         </Link>
 
         {showNav && (
-          <nav className="hidden items-center gap-8 text-[14px] font-medium text-white/85 lg:flex">
+          <nav className="hidden items-center gap-9 text-[15px] font-semibold text-white/90 lg:flex">
             {NAV_LINKS.map((l) => (
               <Link
                 key={l.to}
