@@ -18,19 +18,19 @@ export function AppShell({ children, scope }: { children: React.ReactNode; scope
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const resolvedScope = scope ?? (pathname.startsWith("/admin") ? "admin" : "app");
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={resolvedScope === "admin"}>
       <AppSidebar />
-      <SidebarInset className="min-h-screen bg-background">
-        <AppHeader />
+      <SidebarInset className={resolvedScope === "admin" ? "min-h-screen bg-muted/30" : "min-h-screen bg-background"}>
+        <AppHeader scope={resolvedScope} />
         <main
-          className={`flex-1 pb-[calc(var(--mobile-nav-height)+1rem)] md:pb-0 ${
+          className={`flex-1 ${resolvedScope === "admin" ? "pb-0" : "pb-[calc(var(--mobile-nav-height)+1rem)] md:pb-0"} ${
             resolvedScope === "admin" ? "admin-scope" : ""
           }`}
         >
           {children}
         </main>
       </SidebarInset>
-      <MobileNav />
+      {resolvedScope !== "admin" && <MobileNav />}
     </SidebarProvider>
   );
 }

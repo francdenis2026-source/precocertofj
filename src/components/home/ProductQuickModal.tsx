@@ -79,7 +79,7 @@ export function ProductQuickModal({
   const [err, setErr] = useState<string | null>(null);
   const [reloadTick, setReloadTick] = useState(0);
   const [refreshedAt, setRefreshedAt] = useState<Date | null>(null);
-  const { isAdmin } = useMyRoles();
+  const { isAdmin, loading: rolesLoading } = useMyRoles();
 
   useEffect(() => {
     if (!open || !slug) return;
@@ -212,7 +212,7 @@ export function ProductQuickModal({
 
           {data?.slug && (
             <div className="absolute right-4 top-4 flex items-center gap-1.5">
-              {isAdmin && (
+              {!rolesLoading && isAdmin && (
                 <button
                   type="button"
                   onClick={() => setReloadTick((t) => t + 1)}

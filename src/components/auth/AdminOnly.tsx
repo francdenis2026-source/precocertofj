@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { useNavigate, useRouterState } from "@tanstack/react-router";
+import { useNavigate } from "@tanstack/react-router";
 import { Loader2 } from "lucide-react";
 import { useMyRoles } from "@/hooks/useMyRoles";
 
@@ -11,7 +11,6 @@ import { useMyRoles } from "@/hooks/useMyRoles";
 export function AdminOnly({ children }: { children: React.ReactNode }) {
   const { user, loading, isAdmin } = useMyRoles();
   const navigate = useNavigate();
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   useEffect(() => {
     if (loading) return;
@@ -21,12 +20,11 @@ export function AdminOnly({ children }: { children: React.ReactNode }) {
     }
     if (!isAdmin) {
       navigate({
-        to: "/sem-permissao",
-        search: { from: pathname },
+        to: "/app",
         replace: true,
       });
     }
-  }, [loading, user, isAdmin, navigate, pathname]);
+  }, [loading, user, isAdmin, navigate]);
 
   if (loading || !user || !isAdmin) {
     return (

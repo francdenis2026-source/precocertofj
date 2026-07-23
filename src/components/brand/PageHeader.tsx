@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { ChevronRight, Home } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -45,6 +45,9 @@ export function PageHeader({
   goldRule = false,
   className,
 }: PageHeaderProps) {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const isAdminArea = pathname.startsWith("/admin");
+
   return (
     <header
       className={cn(
@@ -58,11 +61,11 @@ export function PageHeader({
           className="mb-3 flex items-center gap-1.5 text-[11.5px] text-muted-foreground"
         >
           <Link
-            to="/app"
+            to={isAdminArea ? "/admin" : "/app"}
             className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 hover:text-foreground"
           >
             <Home className="h-3 w-3" />
-            <span className="hidden sm:inline">Início</span>
+            <span className="hidden sm:inline">{isAdminArea ? "Console" : "Início"}</span>
           </Link>
           {breadcrumbs.map((c, i) => (
             <span key={i} className="flex items-center gap-1.5">
