@@ -216,11 +216,10 @@ function HomePage() {
 
               <p
                 className="mt-3 max-w-xl text-[13.5px] leading-relaxed sm:text-[14.5px]"
-                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 75%, transparent)" }}
+                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 78%, transparent)" }}
               >
-                Compare mercados de Feijó em tempo real e descubra em qual mercado
-                sua cesta sai mais barata — com dados atualizados pela própria
-                comunidade.
+                Veja onde o arroz, o feijão e o café estão mais baratos hoje em Feijó.
+                Preços conferidos por nota fiscal, atualizados pelos próprios moradores.
               </p>
 
               {/* Search */}
