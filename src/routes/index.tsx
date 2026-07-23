@@ -268,7 +268,7 @@ function HomePage() {
                   className="mr-1 text-[10px] font-bold uppercase tracking-[0.24em]"
                   style={{ color: "color-mix(in oklab, var(--pc-home-ink) 45%, transparent)" }}
                 >
-                  Populares:
+                  Buscas do dia:
                 </span>
                 {["arroz", "feijão", "leite", "óleo", "café", "açúcar"].map((t) => (
                   <button
