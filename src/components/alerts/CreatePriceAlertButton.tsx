@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -20,17 +20,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Bell, Loader2 } from "lucide-react";
+import { Bell, Loader2, MapPin } from "lucide-react";
 import { toast } from "sonner";
 import {
   createAlertSubscription,
   type AlertDirection,
 } from "@/lib/price-alerts.functions";
 import { listPublicStores } from "@/lib/stores-public.functions";
+import { getMyAccount } from "@/lib/account.functions";
 
 /**
  * Botão que abre um diálogo para criar uma assinatura de alerta de variação
- * de preço para um produto (opcionalmente restrito a um mercado).
+ * de preço para um produto. Aceita restrição por mercado e/ou por bairro/cidade
+ * (por padrão, sugere o bairro e a cidade cadastrados no perfil).
  */
 export function CreatePriceAlertButton({
   productKey,
@@ -45,6 +47,7 @@ export function CreatePriceAlertButton({
 }) {
   const create = useServerFn(createAlertSubscription);
   const listStores = useServerFn(listPublicStores);
+  const getAccount = useServerFn(getMyAccount);
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
   const [direction, setDirection] = useState<AlertDirection>("drop");
@@ -53,6 +56,9 @@ export function CreatePriceAlertButton({
   const [establishmentId, setEstablishmentId] = useState<string>(
     defaultEstablishmentId ?? "any",
   );
+  const [scopeMode, setScopeMode] = useState<"any" | "area">("any");
+  const [neighborhood, setNeighborhood] = useState<string>("");
+  const [city, setCity] = useState<string>("");
 
   const storesQuery = useQuery({
     queryKey: ["public-stores"],
@@ -60,6 +66,21 @@ export function CreatePriceAlertButton({
     enabled: open,
     staleTime: 60_000,
   });
+
+  const accountQuery = useQuery({
+    queryKey: ["my-account-area"],
+    queryFn: () => getAccount(),
+    enabled: open,
+    staleTime: 5 * 60_000,
+  });
+
+  useEffect(() => {
+    if (!open) return;
+    const addr = accountQuery.data?.address;
+    if (!addr) return;
+    setNeighborhood((v) => v || addr.district || "");
+    setCity((v) => v || addr.city || "");
+  }, [open, accountQuery.data]);
 
   const mutation = useMutation({
     mutationFn: () =>
@@ -69,13 +90,17 @@ export function CreatePriceAlertButton({
           productName,
           displayName: displayName ?? productName ?? null,
           establishmentId: establishmentId === "any" ? null : establishmentId,
+          scopeNeighborhood:
+            scopeMode === "area" && neighborhood.trim() ? neighborhood.trim() : null,
+          scopeCity:
+            scopeMode === "area" && city.trim() ? city.trim() : null,
           direction,
           thresholdPct: Number(thresholdPct) || 5,
           targetPrice: targetPrice ? Number(targetPrice) : null,
         },
       }),
     onSuccess: () => {
-      toast.success("Alerta criado — você será avisado quando bater o limite");
+      toast.success("Alerta ativado — avisaremos quando o preço mudar");
       qc.invalidateQueries({ queryKey: ["price-alert-subs"] });
       setOpen(false);
     },
@@ -164,6 +189,51 @@ export function CreatePriceAlertButton({
               </SelectContent>
             </Select>
           </div>
+
+          <div className="rounded-xl border border-border/60 p-3">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 text-sm">
+                <MapPin className="h-3.5 w-3.5 text-primary" />
+                <span className="font-medium">Restringir à minha região</span>
+              </div>
+              <Select
+                value={scopeMode}
+                onValueChange={(v) => setScopeMode(v as "any" | "area")}
+              >
+                <SelectTrigger className="h-8 w-40">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="any">Qualquer região</SelectItem>
+                  <SelectItem value="area">Meu bairro/cidade</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            {scopeMode === "area" && (
+              <div className="mt-3 grid grid-cols-2 gap-2">
+                <div>
+                  <Label className="text-[11px] uppercase tracking-widest text-muted-foreground">
+                    Bairro
+                  </Label>
+                  <Input
+                    value={neighborhood}
+                    onChange={(e) => setNeighborhood(e.target.value)}
+                    placeholder="Ex.: Centro"
+                  />
+                </div>
+                <div>
+                  <Label className="text-[11px] uppercase tracking-widest text-muted-foreground">
+                    Cidade
+                  </Label>
+                  <Input
+                    value={city}
+                    onChange={(e) => setCity(e.target.value)}
+                    placeholder="Ex.: Feijó"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         <DialogFooter>
@@ -172,7 +242,7 @@ export function CreatePriceAlertButton({
           </Button>
           <Button onClick={() => mutation.mutate()} disabled={mutation.isPending}>
             {mutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            Criar alerta
+            Ativar alerta
           </Button>
         </DialogFooter>
       </DialogContent>
