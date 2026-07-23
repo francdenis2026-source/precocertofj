@@ -440,25 +440,37 @@ function HomePage() {
                   borderColor: P.line,
                 }}
               >
-                <span
-                  className={`${serif} mb-1 block text-4xl leading-none`}
-                  style={{ color: P.gold }}
-                >
-                  “
-                </span>
-                <p
-                  className={`${serif} mb-3 text-lg italic leading-snug`}
-                  style={{ color: P.heading }}
-                >
-                  Comparar preços não é só gastar menos — é comprar com
-                  inteligência e liberdade.
-                </p>
-                <div
-                  className="text-[10px] font-bold uppercase tracking-[0.22em]"
-                  style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
-                >
-                  — Equipe PreçoCerto Feijó
-                </div>
+                <figure className="m-0">
+                  <blockquote
+                    className={`${serif} m-0 text-[19px] italic sm:text-[21px] lg:text-[22px]`}
+                    style={{
+                      color: P.heading,
+                      lineHeight: 1.35,
+                      letterSpacing: "-0.005em",
+                      textWrap: "balance",
+                      WebkitFontSmoothing: "antialiased",
+                      MozOsxFontSmoothing: "grayscale",
+                      fontFeatureSettings: '"kern" 1, "liga" 1, "calt" 1',
+                      textRendering: "optimizeLegibility",
+                    }}
+                  >
+                    <span
+                      aria-hidden
+                      className={`${serif} mr-1 align-[-0.15em] text-[2.25em] leading-none`}
+                      style={{ color: P.gold }}
+                    >
+                      “
+                    </span>
+                    Comparar preços não é só gastar menos — é comprar com inteligência e liberdade.
+                  </blockquote>
+                  <figcaption
+                    className="mt-3 text-[10px] font-bold uppercase tracking-[0.22em]"
+                    style={{ color: "color-mix(in oklab, var(--pc-home-ink) 62%, transparent)" }}
+                  >
+                    — Equipe PreçoCerto Feijó
+                  </figcaption>
+                </figure>
+
               </div>
             </div>
           </div>
