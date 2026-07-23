@@ -27,6 +27,7 @@ const stroke = {
 const DICAS: Dica[] = [
   {
     key: "cozidao",
+    foto: imgCozidao,
     titulo: "Cozidão",
     descricao:
       "Cortes com fibras longas e ossos que soltam colágeno. Cozinhe em fogo baixo, com bastante líquido, por tempo prolongado — ideal para caldos encorpados.",
@@ -53,6 +54,7 @@ const DICAS: Dica[] = [
   },
   {
     key: "assado",
+    foto: imgAssado,
     titulo: "Assado de Panela",
     descricao:
       "Peças magras e uniformes. Sele bem em gordura quente, depois cozinhe tampado com líquido curto até a carne desmanchar ao garfo.",
@@ -78,6 +80,7 @@ const DICAS: Dica[] = [
   },
   {
     key: "churrasco",
+    foto: imgChurrasco,
     titulo: "Churrasco",
     descricao:
       "Cortes com boa marmorização ou capa de gordura. Fogo forte e brasa firme — deixe descansar antes de fatiar para preservar os sucos.",
@@ -111,6 +114,7 @@ const DICAS: Dica[] = [
   },
   {
     key: "strogonoff",
+    foto: imgStrogonoff,
     titulo: "Strogonoff",
     descricao:
       "Cortes macios em tiras finas, no sentido contrário às fibras. Selar rapidamente em fogo alto e finalizar com o creme fora do fogo forte.",
@@ -129,6 +133,7 @@ const DICAS: Dica[] = [
   },
   {
     key: "ensopado",
+    foto: imgEnsopado,
     titulo: "Ensopado / Guisado",
     descricao:
       "Cortes ricos em colágeno ou moídos. Refogue bem os temperos, acrescente o líquido aos poucos e cozinhe até o molho encorpar.",
@@ -149,6 +154,7 @@ const DICAS: Dica[] = [
   },
   {
     key: "grelhado",
+    foto: imgGrelhado,
     titulo: "Grelhado",
     descricao:
       "Cortes macios em bifes de 2 a 3 cm. Grelha bem quente, sele por poucos minutos de cada lado e evite virar mais que uma vez.",
