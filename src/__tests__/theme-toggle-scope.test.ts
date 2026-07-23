@@ -39,7 +39,9 @@ function read(p: string): string {
 }
 
 describe("ThemeToggle — visibilidade restrita à homepage", () => {
-  const files = ALL_FILES.map((p) => ({ path: p, rel: relative(process.cwd(), p), src: read(p) }));
+  const files = ALL_FILES.map((p) => ({ path: p, rel: relative(process.cwd(), p), src: read(p) }))
+    // Exclui os próprios testes para não contarem como uso em produção.
+    .filter((f) => !/__tests__\//.test(f.rel) && !/\.(test|spec)\.(t|j)sx?$/.test(f.rel));
 
   it("é importado apenas pelo SiteHeader", () => {
     const importers = files
