@@ -140,29 +140,17 @@ export function SiteFooter() {
         </div>
       </div>
 
-      {/* Bottom — legal strip */}
+      {/* Bottom — legal strip (sem duplicar links do menu) */}
       <div style={{ borderTop: `1px solid ${PALETTE.line}`, background: "#eef2f8" }}>
         <div
           className={dsx(
             ds.container,
-            "flex flex-col items-start justify-between gap-2 py-3.5 text-[12px] font-medium sm:flex-row sm:items-center md:py-5 md:text-[13px]",
+            "flex flex-col items-start justify-between gap-1.5 py-3 text-[12px] font-medium sm:flex-row sm:items-center md:py-4 md:text-[13px]",
           )}
           style={{ color: PALETTE.ink }}
         >
-          <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-            <span>© {year} <strong className="font-semibold">PreçoCerto</strong></span>
-            <span aria-hidden style={{ color: PALETTE.muted }}>·</span>
-            <span style={{ color: PALETTE.navy2 }}>Feijó · Acre</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <Link to="/privacidade" className="underline-offset-2 hover:underline" style={{ color: PALETTE.navy }}>
-              Privacidade
-            </Link>
-            <span aria-hidden style={{ color: PALETTE.muted }}>·</span>
-            <Link to="/colaborar" className="underline-offset-2 hover:underline" style={{ color: PALETTE.navy }}>
-              Termos
-            </Link>
-          </div>
+          <span>© {year} <strong className="font-semibold">PreçoCerto</strong> · Feijó · Acre</span>
+          <span style={{ color: PALETTE.navy2 }}>Feito pela comunidade, para a comunidade.</span>
         </div>
       </div>
     </footer>
