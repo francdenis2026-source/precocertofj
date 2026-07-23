@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { Logo } from "@/components/brand/Logo";
+import { AuthHero } from "@/components/auth/AuthHero";
 
 /* Ocean Modern — navy #0f2b52 + dourado #f5b301 (alinhado à homepage) */
 const NAVY = "#0f2b52";
@@ -602,6 +603,9 @@ function RedeemPage() {
             </form>
           )}
         </div>
+        </div>
+      </div>
+
 
         {/* Nota fora do card */}
         <p className="mt-4 text-center text-[11px]" style={{ color: MUTED }}>
