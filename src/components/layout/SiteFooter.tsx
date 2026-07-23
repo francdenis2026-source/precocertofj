@@ -44,19 +44,19 @@ export function SiteFooter() {
       <div
         className={dsx(
           ds.container,
-          "grid gap-5 py-4 md:grid-cols-[1.2fr_2fr] md:gap-10 md:py-5",
+          "grid gap-6 py-5 sm:gap-8 md:grid-cols-[1.2fr_2fr] md:gap-10 md:py-6",
         )}
       >
         {/* Brand block */}
         <div className="max-w-sm">
-          <Link to="/" className="flex items-center gap-2.5">
+          <Link to="/" className="flex items-center gap-2.5 sm:gap-3">
             <span
-              className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand text-[14px] font-black text-brand-foreground shadow-elev-1 md:h-9 md:w-9 md:text-[15px]"
+              className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] bg-brand text-[17px] font-black text-brand-foreground shadow-elev-2 sm:h-10 sm:w-10 sm:text-[19px]"
             >
               P
             </span>
             <span
-              className={dsx(serif, "text-[20px] leading-none text-foreground md:text-[23px]")}
+              className={dsx(serif, "text-[22px] leading-none text-foreground sm:text-[26px]")}
             >
               Preço
               <span className="italic text-brand">
@@ -66,41 +66,41 @@ export function SiteFooter() {
           </Link>
 
           <p
-            className="mt-2 text-[12.5px] leading-snug text-muted-foreground md:text-[13px]"
+            className="mt-2.5 text-[12.5px] leading-snug text-muted-foreground md:text-[13px]"
           >
             Comparador colaborativo de preços dos mercados de Feijó — Acre.
           </p>
 
           <ul
-            className="mt-2.5 space-y-1 text-[12px] text-foreground/80 md:text-[12.5px]"
+            className="mt-3 space-y-1.5 text-[12px] text-foreground/80 md:text-[12.5px]"
           >
             <li className="flex items-center gap-2">
-              <MapPin className="h-3.5 w-3.5 text-brand" />
+              <MapPin className="h-3.5 w-3.5 shrink-0 text-brand" />
               Feijó · Acre · Brasil
             </li>
             <li className="flex items-center gap-2">
-              <Mail className="h-3.5 w-3.5 text-brand" />
-              <a href="mailto:precocerto-fj@proton.me" className="hover:underline">
+              <Mail className="h-3.5 w-3.5 shrink-0 text-brand" />
+              <a href="mailto:precocerto-fj@proton.me" className="truncate hover:underline">
                 precocerto-fj@proton.me
               </a>
             </li>
             <li className="flex items-center gap-2">
-              <ShieldCheck className="h-3.5 w-3.5 text-brand" />
+              <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-brand" />
               Dados protegidos · LGPD
             </li>
           </ul>
         </div>
 
         {/* Link columns */}
-        <div className="grid grid-cols-3 gap-4 sm:gap-8">
+        <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 sm:gap-8">
           {NAV_COLS.map((col) => (
-            <div key={col.title}>
+            <div key={col.title} className="min-w-0">
               <div
                 className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand md:text-[11px] md:tracking-[0.22em] lg:text-[12px]"
               >
                 {col.title}
               </div>
-              <ul className="mt-1.5 space-y-1 md:mt-2 md:space-y-1.5">
+              <ul className="mt-2 space-y-1.5">
                 {col.links.map((l) => (
                   <li key={l.to}>
                     <Link
