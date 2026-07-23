@@ -433,7 +433,7 @@ function HomePage() {
                 <h2
                   className={`${serif} font-normal`}
                   style={{
-                    fontSize: "clamp(2rem, 4.8vw, 3.75rem)",
+                    fontSize: "clamp(1.6rem, 3.6vw, 2.75rem)",
                     lineHeight: 1,
                     letterSpacing: "-0.025em",
                     color: "#F5F6FA",
@@ -445,7 +445,7 @@ function HomePage() {
                     sem esforço.
                   </span>
                 </h2>
-                <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/60">
+                <p className="mt-3 max-w-md text-[14px] leading-relaxed text-white/60">
                   Ferramentas exclusivas para que você nunca mais pague caro em
                   itens essenciais.
                 </p>
