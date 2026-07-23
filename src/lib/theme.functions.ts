@@ -6,10 +6,10 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
-export type ThemePreference = "light" | "dark" | "system";
+export type ThemePreference = "light" | "dark";
 
 function normalize(value: unknown): ThemePreference {
-  return value === "dark" || value === "system" ? value : "light";
+  return value === "dark" ? "dark" : "light";
 }
 
 export const getMyThemePreference = createServerFn({ method: "GET" })

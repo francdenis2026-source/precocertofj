@@ -146,6 +146,19 @@
   --sidebar-border: oklch(0.30 0.045 258);
   --sidebar-ring: oklch(0.72 0.14 220);
 
+  --pc-home-paper: #f5f6fa;
+  --pc-home-ink: #08122a;
+  --pc-home-card: #ffffff;
+  --pc-home-navy: #0f1b3d;
+  --pc-home-navy-2: #324c73;
+  --pc-home-gold: #b58a3c;
+  --pc-home-gold-soft: #f2dfa8;
+  --pc-home-line: #dfe3ec;
+  --pc-home-dot-opacity: 0.05;
+  --pc-home-hero-overlay: linear-gradient(180deg, rgb(15 27 61 / 0.90) 0%, rgb(15 27 61 / 0.76) 46%, rgb(15 27 61 / 0.94) 100%), radial-gradient(80% 60% at 15% 40%, rgb(181 138 60 / 0.16) 0%, transparent 60%);
+  --pc-home-explore-overlay: linear-gradient(180deg, rgb(15 27 61 / 0.95) 0%, rgb(15 27 61 / 0.80) 45%, rgb(15 27 61 / 0.96) 100%);
+  --pc-home-cta-gradient: linear-gradient(140deg, #0f1b3d 0%, #324c73 100%);
+
   color-scheme: light;
 }
 
@@ -197,6 +210,19 @@
   --sidebar-accent-foreground: oklch(0.97 0.006 250);
   --sidebar-border: oklch(0.29 0.045 258);
   --sidebar-ring: oklch(0.75 0.12 210);
+
+  --pc-home-paper: oklch(0.14 0.034 258);
+  --pc-home-ink: oklch(0.97 0.006 250);
+  --pc-home-card: oklch(0.20 0.04 258);
+  --pc-home-navy: #071126;
+  --pc-home-navy-2: #172a4b;
+  --pc-home-gold: #d7ad54;
+  --pc-home-gold-soft: #ffe3a0;
+  --pc-home-line: oklch(0.31 0.045 258);
+  --pc-home-dot-opacity: 0.10;
+  --pc-home-hero-overlay: linear-gradient(180deg, rgb(7 17 38 / 0.97) 0%, rgb(7 17 38 / 0.90) 46%, rgb(7 17 38 / 0.98) 100%), radial-gradient(80% 60% at 15% 40%, rgb(215 173 84 / 0.20) 0%, transparent 60%);
+  --pc-home-explore-overlay: linear-gradient(180deg, rgb(7 17 38 / 0.98) 0%, rgb(7 17 38 / 0.88) 45%, rgb(7 17 38 / 0.98) 100%);
+  --pc-home-cta-gradient: linear-gradient(140deg, #071126 0%, #172a4b 100%);
 
   color-scheme: dark;
 }
