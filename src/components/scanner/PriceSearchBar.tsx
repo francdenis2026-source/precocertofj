@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
-import { searchProductPrice, type PriceSearchResult, type PriceSuggestion } from "@/lib/price-search.functions";
+import { searchProductPrice, type PriceSearchResult, type PriceSuggestion, type ProductGroup } from "@/lib/price-search.functions";
 import { suggestProducts, type ProductSuggestion } from "@/lib/product-suggest.functions";
 import {
   clearSearchHistory,
@@ -66,13 +66,20 @@ export function PriceSearchBar({
   initialQuery = "",
   mode = "strict",
   pureOnly = false,
+  brandFilter = "",
+  priceMin,
+  priceMax,
   onQueryChange,
 }: {
   initialQuery?: string;
   mode?: SearchMode;
   pureOnly?: boolean;
+  brandFilter?: string;
+  priceMin?: number;
+  priceMax?: number;
   onQueryChange?: (q: string) => void;
 }) {
+
   const runSearch = useServerFn(searchProductPrice);
   const runSuggest = useServerFn(suggestProducts);
 
@@ -84,7 +91,36 @@ export function PriceSearchBar({
   const [quotaBlocked, setQuotaBlocked] = useState(false);
 
   const [query, setQuery] = useState(normalizeInput(initialQuery));
-  const [result, setResult] = useState<PriceSearchResult | null>(null);
+  const [rawResult, setResult] = useState<PriceSearchResult | null>(null);
+  const result = useMemo<PriceSearchResult | null>(() => {
+    if (!rawResult) return rawResult;
+    const brandNeedle = brandFilter.trim().toLowerCase();
+    const hasMin = typeof priceMin === "number" && Number.isFinite(priceMin);
+    const hasMax = typeof priceMax === "number" && Number.isFinite(priceMax);
+    if (!brandNeedle && !hasMin && !hasMax) return rawResult;
+    const groups = rawResult.groups
+      .map((g) => {
+        const prices = (g.prices ?? []).filter((p) => {
+          if (hasMin && p.price < (priceMin as number)) return false;
+          if (hasMax && p.price > (priceMax as number)) return false;
+          if (brandNeedle) {
+            const hay = `${g.productName ?? ""} ${p.marketName ?? ""}`.toLowerCase();
+            if (!hay.includes(brandNeedle)) return false;
+          }
+          return true;
+        });
+        if (prices.length === 0) return null;
+        const nums = prices.map((p) => p.price);
+        const min = Math.min(...nums);
+        const max = Math.max(...nums);
+        const avg = nums.reduce((a, b) => a + b, 0) / nums.length;
+        return { ...g, prices, min, max, avg, samples: prices.length };
+      })
+      .filter(Boolean) as ProductGroup[];
+    return { ...rawResult, groups };
+  }, [rawResult, brandFilter, priceMin, priceMax]);
+
+
   const [err, setErr] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 

@@ -21,6 +21,33 @@ const relative = (iso: string) => {
   return m <= 1 ? "há 1 mês" : `há ${m} meses`;
 };
 
+type Freshness = { label: string; dotClass: string; textClass: string; ringClass: string };
+
+function freshness(iso: string): Freshness {
+  const days = Math.floor((Date.now() - new Date(iso).getTime()) / (1000 * 60 * 60 * 24));
+  if (days <= 7)
+    return {
+      label: "Disponível",
+      dotClass: "bg-emerald-500",
+      textClass: "text-emerald-600 dark:text-emerald-400",
+      ringClass: "ring-emerald-500/30",
+    };
+  if (days <= 30)
+    return {
+      label: "Recente",
+      dotClass: "bg-amber-500",
+      textClass: "text-amber-600 dark:text-amber-400",
+      ringClass: "ring-amber-500/30",
+    };
+  return {
+    label: "Desatualizado",
+    dotClass: "bg-zinc-400",
+    textClass: "text-zinc-500 dark:text-zinc-400",
+    ringClass: "ring-zinc-400/30",
+  };
+}
+
+
 type Palette = {
   card: string;
   line: string;
@@ -86,6 +113,18 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
               style={{ borderColor: P.line, background: P.card, color: P.heading }}
               aria-label={`Ver histórico de ${p.name} em ${p.marketName ?? "mercados de Feijó"}`}
             >
+              {(() => {
+                const f = freshness(p.when);
+                return (
+                  <div
+                    className={`mb-2 inline-flex items-center gap-1 rounded-full bg-background/60 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] ring-1 ${f.ringClass} ${f.textClass}`}
+                    title={`Status baseado na última coleta (${relative(p.when)})`}
+                  >
+                    <span className={`h-1.5 w-1.5 rounded-full ${f.dotClass}`} aria-hidden />
+                    {f.label}
+                  </div>
+                );
+              })()}
               <div
                 className="mb-2 line-clamp-2 text-[12.5px] font-semibold leading-tight sm:text-[13px]"
                 style={{ color: P.heading }}
@@ -115,7 +154,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                 style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
               >
                 <Clock className="h-3 w-3 shrink-0" />
-                {relative(p.when)}
+                <span>Coletado {relative(p.when)}</span>
                 {p.stores > 1 ? (
                   <span className="ml-auto rounded-full px-1.5 py-px text-[9px] font-bold uppercase tracking-wider" style={{ color: P.goldSoft }}>
                     {p.stores} mercados
@@ -129,3 +168,4 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
     </section>
   );
 }
+
