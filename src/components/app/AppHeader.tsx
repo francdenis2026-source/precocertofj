@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { Activity, Globe, MapPin, ShieldCheck, User } from "lucide-react";
+import { Activity, Globe, MapPin, ShieldCheck, ShoppingBag, User } from "lucide-react";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { AuthNavToggle } from "@/components/nav/AuthNavToggle";
@@ -85,7 +85,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
             aria-label="Cesta"
             className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border bg-card text-foreground transition hover:border-primary/40 hover:text-primary"
           >
-            <User className="h-3.5 w-3.5" strokeWidth={2} />
+            <ShoppingBag className="h-3.5 w-3.5" strokeWidth={2} />
           </Link>
         )}
         <ThemeToggle size="sm" />

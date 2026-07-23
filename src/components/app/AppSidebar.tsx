@@ -141,7 +141,7 @@ export function AppSidebar() {
   const { signOut, loading: signingOut } = useSignOut();
   const { isAdmin, loading: rolesLoading } = useMyRoles();
   const isAdminArea = pathname.startsWith("/admin");
-  const groups = isAdminArea ? adminGroups : appGroups;
+  const groups = isAdminArea ? (isAdmin ? adminGroups : []) : appGroups;
 
   const isActive = (to: string, exact?: boolean) =>
     exact ? pathname === to : pathname === to || pathname.startsWith(to + "/");
@@ -217,7 +217,7 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent className="px-2 py-3">
-        {isAdminArea && rolesLoading ? (
+        {isAdminArea && (rolesLoading || !isAdmin) ? (
           <SidebarGroup className="py-3">
             <div className="space-y-2 px-3">
               <div className="h-3 w-24 rounded-full bg-sidebar-accent" />
