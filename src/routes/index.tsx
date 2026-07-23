@@ -146,7 +146,7 @@ function HomePage() {
 
               {today && (
                 <div
-                  className="mb-3 text-[10px] font-bold uppercase tracking-[0.22em] sm:mb-5 sm:text-[10.5px] sm:tracking-[0.24em]"
+                  className="mb-2 text-[10px] font-bold uppercase tracking-[0.22em] sm:mb-3 sm:text-[10.5px] sm:tracking-[0.24em]"
                   style={{ color: P.goldSoft }}
                 >
                   {today} · edição diária
@@ -158,8 +158,8 @@ function HomePage() {
                 className={`${serif} font-normal`}
                 style={{
                   color: P.heading,
-                  fontSize: "clamp(2.15rem, 7vw, 6.5rem)",
-                  lineHeight: 0.92,
+                  fontSize: "clamp(1.9rem, 5.2vw, 4.5rem)",
+                  lineHeight: 0.95,
                   letterSpacing: "-0.03em",
                 }}
               >
