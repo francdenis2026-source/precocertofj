@@ -12,6 +12,7 @@ import {
 import {
   createMercadoPagoPreference,
   simulateCheckoutApproval,
+  createPixCharge,
 } from "@/lib/mercadopago.functions";
 import { AppShell } from "@/components/brand/AppShell";
 import { PageHeader } from "@/components/brand/PageHeader";
@@ -20,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
-import { Ticket, Copy, CheckCircle2, ArrowRight, CreditCard, Loader2, ShieldAlert, Clock, Mail, AlertCircle } from "lucide-react";
+import { Ticket, Copy, CheckCircle2, ArrowRight, CreditCard, Loader2, ShieldAlert, Clock, Mail, AlertCircle, QrCode, RefreshCw } from "lucide-react";
 import { toast } from "sonner";
 import { useMyRoles } from "@/hooks/useMyRoles";
 
@@ -49,6 +50,7 @@ function CheckoutPage() {
   const createPref = useServerFn(createMercadoPagoPreference);
   const simulate = useServerFn(simulateCheckoutApproval);
   const saveEmail = useServerFn(setCheckoutEmail);
+  const createPix = useServerFn(createPixCharge);
   const { isAdmin } = useMyRoles();
 
   const [couponInput, setCouponInput] = useState("");
@@ -134,6 +136,35 @@ function CheckoutPage() {
     },
     onError: (e: any) => toast.error(e?.message ?? "Falha ao simular pagamento"),
   });
+
+  const pixMutation = useMutation({
+    mutationFn: async () => {
+      if (!emailValid) throw new Error("Informe um e-mail válido para receber o código.");
+      if (!emailSaved) await saveEmail({ data: { id, email: emailNormalized } });
+      return createPix({ data: { orderId: id } });
+    },
+    onSuccess: () => {
+      toast.success("PIX gerado — escaneie o QR Code ou copie o código.");
+      qc.invalidateQueries({ queryKey: ["checkout-order", id] });
+    },
+    onError: (e: any) => toast.error(e?.message ?? "Falha ao gerar PIX"),
+  });
+
+  // Countdown para expiração do PIX (força re-render a cada segundo).
+  const [tick, setTick] = useState(0);
+  const pixExpiresAt: string | null = (order as any)?.pix_expires_at ?? null;
+  const pixQrCode: string | null = (order as any)?.pix_qr_code ?? null;
+  const pixQrBase64: string | null = (order as any)?.pix_qr_code_base64 ?? null;
+  const pixMsLeft = pixExpiresAt ? new Date(pixExpiresAt).getTime() - Date.now() : 0;
+  const pixActive = !!pixQrCode && pixMsLeft > 0;
+  useEffect(() => {
+    if (!pixActive) return;
+    const t = setInterval(() => setTick((n) => n + 1), 1000);
+    return () => clearInterval(t);
+  }, [pixActive]);
+  void tick;
+
+
 
   async function applyCoupon() {
     if (!couponInput.trim()) return;
@@ -320,17 +351,67 @@ function CheckoutPage() {
                 </CardContent>
               </Card>
 
+              <Card className="border-primary/40">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2 text-base">
+                    <QrCode className="h-4 w-4 text-primary" /> Pagar com PIX
+                  </CardTitle>
+                  <CardDescription className="text-xs">
+                    Instantâneo — o código aparece aqui assim que o banco confirmar.
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  {!pixActive ? (
+                    <>
+                      <Button
+                        className="w-full"
+                        variant="executive"
+                        onClick={() => pixMutation.mutate()}
+                        disabled={pixMutation.isPending || !emailValid}
+                        title={!emailValid ? "Informe um e-mail válido antes de gerar o PIX" : undefined}
+                      >
+                        {pixMutation.isPending ? (
+                          <Loader2 className="mr-1 h-4 w-4 animate-spin" />
+                        ) : (
+                          <QrCode className="mr-1 h-4 w-4" />
+                        )}
+                        Gerar QR Code do PIX
+                      </Button>
+                      <ul className="space-y-1 text-xs text-muted-foreground">
+                        <li>1. Abra o app do seu banco na área do PIX.</li>
+                        <li>2. Escaneie o QR Code ou cole o código copia-e-cola.</li>
+                        <li>3. Confirme o pagamento — a confirmação chega automaticamente.</li>
+                      </ul>
+                    </>
+                  ) : (
+                    <PixPanel
+                      qrCode={pixQrCode!}
+                      qrCodeBase64={pixQrBase64}
+                      expiresAt={pixExpiresAt!}
+                      onRegenerate={() => pixMutation.mutate()}
+                      regenerating={pixMutation.isPending}
+                    />
+                  )}
+                  {!emailValid && (
+                    <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                      <AlertCircle className="h-3 w-3" />
+                      Informe seu e-mail acima para liberar o PIX.
+                    </p>
+                  )}
+                </CardContent>
+              </Card>
+
               <Card>
                 <CardHeader>
-                  <CardTitle className="text-base">Pagamento</CardTitle>
+                  <CardTitle className="text-base">Pagar com cartão de crédito</CardTitle>
                   <CardDescription className="text-xs">
-                    Você será redirecionado ao Mercado Pago para concluir com Pix, cartão ou boleto.
+                    Você é redirecionado ao Mercado Pago para concluir a compra em ambiente seguro.
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-3">
                   <Button
                     className="w-full"
-                    variant="executive"
+                    variant="outline"
                     onClick={() => payMutation.mutate()}
                     disabled={payMutation.isPending || !emailValid}
                     title={!emailValid ? "Informe um e-mail válido antes de pagar" : undefined}
@@ -340,22 +421,17 @@ function CheckoutPage() {
                     ) : (
                       <CreditCard className="mr-1 h-4 w-4" />
                     )}
-                    Pagar com Mercado Pago
+                    Ir para pagamento com cartão
                   </Button>
-                  {!emailValid && (
-                    <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-                      <AlertCircle className="h-3 w-3" />
-                      Informe seu e-mail acima para liberar o pagamento.
-                    </p>
-                  )}
                   {order.status === "pending" && (
                     <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
                       <Clock className="h-3 w-3" />
-                      A confirmação chega automaticamente após o pagamento.
+                      Verificando confirmação a cada poucos segundos…
                     </p>
                   )}
                 </CardContent>
               </Card>
+
 
 
 
@@ -449,6 +525,89 @@ function Row({
       >
         {value}
       </span>
+    </div>
+  );
+}
+
+function PixPanel({
+  qrCode,
+  qrCodeBase64,
+  expiresAt,
+  onRegenerate,
+  regenerating,
+}: {
+  qrCode: string;
+  qrCodeBase64: string | null;
+  expiresAt: string;
+  onRegenerate: () => void;
+  regenerating: boolean;
+}) {
+  const msLeft = new Date(expiresAt).getTime() - Date.now();
+  const totalSec = Math.max(0, Math.floor(msLeft / 1000));
+  const mm = String(Math.floor(totalSec / 60)).padStart(2, "0");
+  const ss = String(totalSec % 60).padStart(2, "0");
+  const expired = totalSec === 0;
+
+  return (
+    <div className="space-y-3">
+      {qrCodeBase64 ? (
+        <div className="mx-auto w-fit rounded-lg border bg-white p-2">
+          <img
+            src={`data:image/png;base64,${qrCodeBase64}`}
+            alt="QR Code PIX"
+            className="h-48 w-48"
+          />
+        </div>
+      ) : null}
+      <div className="rounded-md border bg-muted/40 p-2">
+        <div className="mb-1 text-[11px] uppercase tracking-wider text-muted-foreground">
+          Código copia-e-cola
+        </div>
+        <div className="max-h-24 overflow-auto break-all font-mono text-[11px] leading-relaxed">
+          {qrCode}
+        </div>
+      </div>
+      <div className="flex gap-2">
+        <Button
+          variant="outline"
+          className="flex-1"
+          onClick={() => {
+            navigator.clipboard.writeText(qrCode);
+            toast.success("Código PIX copiado");
+          }}
+        >
+          <Copy className="mr-1 h-4 w-4" /> Copiar código
+        </Button>
+        <Button
+          variant="ghost-navy"
+          onClick={onRegenerate}
+          disabled={regenerating}
+          title="Gerar novo QR Code"
+        >
+          {regenerating ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <RefreshCw className="h-4 w-4" />
+          )}
+        </Button>
+      </div>
+      <div
+        className={`flex items-center justify-between rounded-md border px-3 py-2 text-xs ${
+          expired
+            ? "border-destructive/50 bg-destructive/5 text-destructive"
+            : "border-border bg-background text-muted-foreground"
+        }`}
+      >
+        <span className="flex items-center gap-1.5">
+          <Clock className="h-3.5 w-3.5" />
+          {expired ? "QR Code expirado — gere um novo" : "Expira em"}
+        </span>
+        {!expired && <span className="font-mono text-sm font-semibold text-foreground">{mm}:{ss}</span>}
+      </div>
+      <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
+        <Loader2 className="h-3 w-3 animate-spin" />
+        Aguardando confirmação — a página atualiza sozinha.
+      </p>
     </div>
   );
 }
