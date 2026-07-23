@@ -38,25 +38,25 @@ export function SiteFooter() {
 
   return (
     <footer
-      className="mt-6 border-t border-border bg-muted/45 text-foreground md:mt-8"
+      className="mt-5 border-t border-border bg-muted/45 text-foreground md:mt-8"
     >
       {/* Top — brand + link columns */}
       <div
         className={dsx(
           ds.container,
-          "grid gap-6 py-5 sm:gap-8 md:grid-cols-[1.2fr_2fr] md:gap-10 md:py-6",
+          "grid gap-4 py-4 sm:gap-6 md:grid-cols-[1.2fr_2fr] md:gap-10 md:py-6",
         )}
       >
         {/* Brand block */}
         <div className="max-w-sm">
-          <Link to="/" className="flex items-center gap-2.5 sm:gap-3">
+          <Link to="/" className="flex items-center gap-2 sm:gap-2.5">
             <span
-              className="grid h-9 w-9 shrink-0 place-items-center rounded-[10px] bg-brand text-[17px] font-black text-brand-foreground shadow-elev-2 sm:h-10 sm:w-10 sm:text-[19px]"
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-[9px] bg-brand text-[15px] font-black text-brand-foreground shadow-elev-2 sm:h-9 sm:w-9 sm:text-[17px] md:h-10 md:w-10 md:text-[19px]"
             >
               P
             </span>
             <span
-              className={dsx(serif, "text-[22px] leading-none text-foreground sm:text-[26px]")}
+              className={dsx(serif, "text-[19px] leading-none text-foreground sm:text-[23px] md:text-[26px]")}
             >
               Preço
               <span className="italic text-brand">
@@ -66,10 +66,11 @@ export function SiteFooter() {
           </Link>
 
           <p
-            className="mt-2.5 text-[12.5px] leading-snug text-muted-foreground md:text-[13px]"
+            className="mt-2 text-[12px] leading-snug text-muted-foreground md:mt-2.5 md:text-[13px]"
           >
             Comparador colaborativo de preços dos mercados de Feijó — Acre.
           </p>
+
 
           <ul
             className="mt-3 space-y-1.5 text-[12px] text-foreground/80 md:text-[12.5px]"

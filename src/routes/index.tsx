@@ -94,18 +94,7 @@ function HomePage() {
   const isLoggedOut = !sessionLoading && !user;
   const [q, setQ] = useState("");
   const [today, setToday] = useState("");
-  const [showStickyCta, setShowStickyCta] = useState(false);
 
-  useEffect(() => {
-    if (!isLoggedOut) {
-      setShowStickyCta(false);
-      return;
-    }
-    const onScroll = () => setShowStickyCta(window.scrollY > 720);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [isLoggedOut]);
 
   
 
@@ -495,39 +484,29 @@ function HomePage() {
 
           {/* -------- EXPLORE (dark navy band inside card) -------- */}
           <div
-            className="p-3.5 sm:p-5 lg:p-6 xl:p-7"
+            className="p-4 sm:p-5 lg:p-6 xl:p-7"
             style={{ background: P.navy, color: "#F5F6FA" }}
           >
-            <div className="mb-3 flex flex-col gap-1.5 sm:mb-4 md:flex-row md:items-end md:justify-between md:gap-6">
-              <div className="max-w-xl">
-                <div
-                  className="mb-1.5 text-[9px] font-bold uppercase tracking-[0.28em] sm:text-[10px]"
-                  style={{ color: P.gold }}
-                >
-                  Por onde começar
-                </div>
-                <h2
-                  className={`${serif} font-normal`}
-                  style={{
-                    fontSize: "clamp(1.15rem, 2.4vw, 1.85rem)",
-                    lineHeight: 1,
-                    letterSpacing: "-0.025em",
-                    color: "#F5F6FA",
-                  }}
-                >
-                  Três caminhos,{" "}
-                  <span className="italic" style={{ color: P.gold }}>
-                    uma cesta mais barata.
-                  </span>
-                </h2>
-                <p className="mt-1.5 hidden max-w-md text-[13px] leading-snug text-white/80 sm:block sm:text-[13.5px]">
-                  Escolha por onde quer começar. Em cada rota, dados reais dos mercados de Feijó.
-                </p>
+            <div className="mb-3 sm:mb-4">
+              <div
+                className="mb-1.5 text-[9.5px] font-bold uppercase tracking-[0.24em] sm:text-[10.5px]"
+                style={{ color: P.goldSoft }}
+              >
+                Por onde começar
               </div>
-              <div className="hidden h-px flex-1 md:mx-8 md:mb-3 md:block" style={{ background: "rgb(255 255 255 / 0.08)" }} />
+              <h2
+                className="font-semibold text-white"
+                style={{
+                  fontSize: "clamp(1.05rem, 2vw, 1.5rem)",
+                  lineHeight: 1.15,
+                  letterSpacing: "-0.02em",
+                }}
+              >
+                Três caminhos, uma cesta mais barata.
+              </h2>
             </div>
 
-            <div className="grid gap-2 sm:grid-cols-2 sm:gap-3 lg:grid-cols-3 lg:gap-3">
+            <div className="grid gap-2 sm:grid-cols-2 sm:gap-3 lg:grid-cols-3">
               <ExploreCard
                 to="/melhores-precos"
                 number="01"
@@ -555,6 +534,7 @@ function HomePage() {
 
         </div>
       </div>
+
 
       {/* -------- SOCIAL PROOF (compact) -------- */}
       <section className="mx-auto w-full max-w-6xl px-4 pb-4 sm:px-6 lg:px-8">
@@ -634,39 +614,8 @@ function HomePage() {
 
       <SiteFooter />
 
-      {/* Sticky floating CTA — logged-out only, appears after scroll */}
-      {isLoggedOut && (
-        <div
-          aria-hidden={!showStickyCta}
-          className={`pointer-events-none fixed inset-x-0 bottom-4 z-40 flex justify-center px-4 transition-all duration-300 sm:bottom-6 sm:justify-end sm:pr-6 ${
-            showStickyCta
-              ? "translate-y-0 opacity-100"
-              : "pointer-events-none translate-y-3 opacity-0"
-          }`}
-          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-        >
-          <StartFreeDialog>
-            <button
-              type="button"
-              tabIndex={showStickyCta ? 0 : -1}
-              aria-label="Começar grátis — abrir opções de cadastro e login"
-              aria-haspopup="dialog"
-              className="group pointer-events-auto inline-flex min-h-[48px] items-center gap-2 rounded-full px-5 py-3 text-[14.5px] font-semibold tracking-[-0.005em] antialiased shadow-md transition-[transform,box-shadow] duration-150 hover:-translate-y-[1px] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:translate-y-0 sm:text-[15px]"
-              style={{
-                background: P.gold,
-                color: P.navy,
-                // @ts-expect-error css var
-                "--tw-ring-color": P.gold,
-                "--tw-ring-offset-color": P.paper,
-              }}
-            >
-              <Sparkles className="h-4 w-4" strokeWidth={2.6} />
-              <span>Começar grátis</span>
-              <ArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5" strokeWidth={2.5} />
-            </button>
-          </StartFreeDialog>
-        </div>
-      )}
+
+
 
     </div>
   );
@@ -689,49 +638,37 @@ function ExploreCard({
   return (
     <Link
       to={to}
-      className="group block rounded-2xl border p-3.5 shadow-elev-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-elev-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--pc-home-navy)] sm:p-4"
-      style={{
-        background: "rgb(255 255 255 / 0.05)",
-        borderColor: "rgb(255 255 255 / 0.10)",
-      }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLElement).style.background = "rgb(255 255 255 / 0.10)";
-        (e.currentTarget as HTMLElement).style.borderColor = "color-mix(in oklab, var(--pc-home-gold) 40%, transparent)";
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLElement).style.background = "rgb(255 255 255 / 0.05)";
-        (e.currentTarget as HTMLElement).style.borderColor = "rgb(255 255 255 / 0.10)";
-      }}
+      className="group block rounded-xl border border-white/12 bg-white/[0.06] p-3.5 shadow-elev-1 transition-all duration-200 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[0.10] hover:shadow-elev-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--pc-home-navy)] sm:p-4"
     >
-      {/* Mobile: horizontal compact row · Tablet+Desktop: stacked */}
       <div className="flex items-start gap-3 sm:block">
         <div
-          className={`${serif} shrink-0 tabular-nums leading-none sm:mb-2`}
+          className="shrink-0 font-bold tabular-nums leading-none sm:mb-2"
           style={{
-            color: P.gold,
-            fontSize: "clamp(1.4rem, 2.4vw, 1.75rem)",
-            letterSpacing: "-0.02em",
+            color: P.goldSoft,
+            fontSize: "clamp(0.85rem, 1.2vw, 1rem)",
+            letterSpacing: "0.14em",
           }}
         >
           {number}
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="mb-0.5 text-[14.5px] font-semibold leading-tight text-white sm:mb-1 sm:text-[15.5px] lg:text-[17px]">
+          <h3 className="mb-1 text-[14.5px] font-semibold leading-tight text-white sm:text-[15.5px] lg:text-[16.5px]">
             {title}
           </h3>
-          <p className="text-[12.5px] leading-snug text-white/70 sm:text-[13px]">{desc}</p>
-          <div className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white/80 transition-colors group-hover:text-[color:var(--pc-home-gold)] sm:mt-2.5 sm:text-[10.5px] sm:tracking-[0.18em]">
+          <p className="text-[12.5px] leading-snug text-white/85 sm:text-[13px]">{desc}</p>
+          <div className="mt-2 inline-flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-[0.16em] text-[color:var(--pc-home-gold-soft)] transition-colors group-hover:text-[color:var(--pc-home-gold)] sm:mt-2.5">
             {cta}
             <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1 sm:h-3.5 sm:w-3.5" />
           </div>
         </div>
         <ArrowRight
-          className="mt-1 h-4 w-4 shrink-0 text-white/40 transition-all group-hover:translate-x-0.5 group-hover:text-[color:var(--pc-home-gold)] sm:hidden"
+          className="mt-1 h-4 w-4 shrink-0 text-white/50 transition-all group-hover:translate-x-0.5 group-hover:text-[color:var(--pc-home-gold)] sm:hidden"
           aria-hidden
         />
       </div>
     </Link>
   );
 }
+
 
 
