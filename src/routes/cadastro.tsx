@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Loader2, ShieldCheck, UserPlus, CheckCircle2, Sparkles, AlertCircle } from "lucide-react";
+import { ArrowRight, Loader2, ShieldCheck, UserPlus, CheckCircle2, Sparkles, AlertCircle, TrendingDown } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
@@ -9,6 +9,7 @@ import { signUpWithCpf } from "@/lib/account.functions";
 import { maskCpf, maskPhone, validateCpfDetailed } from "@/lib/cpf";
 import { safeInternalPath } from "@/lib/auth-redirect";
 import { Logo } from "@/components/brand/Logo";
+import heroPhoto from "@/assets/cadastro-hero.jpg";
 
 // ---------- Field validators ----------
 type FieldState = { valid: boolean; msg?: string; hint?: string };
@@ -146,33 +147,24 @@ function CadastroPage() {
 
   const perks = [
     "Comparativo em tempo real entre mercados",
-    "Alertas de queda de preço da sua cesta",
-    "Rede colaborativa — envie sua nota e ganhe 30 dias",
+    "Alertas de queda de preço",
+    "Bônus: 30 dias grátis ao enviar sua nota",
   ];
-
-  // Stores for the thematic illustration (economia + comparação + localização)
-  const compareStores = [
-    { label: "LOJA A", price: "R$ 76,10", val: 78, winner: false },
-    { label: "LOJA B", price: "R$ 68,40", val: 62, winner: false },
-    { label: "LOJA C", price: "R$ 59,30", val: 34, winner: true },
-  ];
-
 
   return (
     <div
       className="relative min-h-[100dvh] overflow-hidden"
       style={{ background: PC_CREAM, fontFamily: PC_BODY, color: "#0f172a" }}
     >
-      {/* Ambient background */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(1000px 420px at 90% -10%, rgba(181,138,60,0.12), transparent 60%), radial-gradient(700px 400px at -10% 110%, rgba(15,27,61,0.10), transparent 55%)",
+            "radial-gradient(900px 380px at 90% -10%, rgba(181,138,60,0.10), transparent 60%), radial-gradient(600px 340px at -10% 110%, rgba(15,27,61,0.08), transparent 55%)",
         }}
       />
 
-      <header className="relative z-10 mx-auto flex w-full max-w-6xl items-center justify-between px-5 py-4 md:px-8">
+      <header className="relative z-10 mx-auto flex w-full max-w-5xl items-center justify-between px-5 py-3.5 md:px-6">
         <Link to="/" className="flex items-center gap-2">
           <Logo className="h-7 w-auto" />
         </Link>
@@ -184,35 +176,37 @@ function CadastroPage() {
         </Link>
       </header>
 
-      <main className="relative z-10 flex min-h-[calc(100dvh-64px)] items-center justify-center px-4 py-6">
+      <main className="relative z-10 flex items-start justify-center px-4 pb-8 pt-2 md:items-center md:min-h-[calc(100dvh-72px)]">
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
+          initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.35, ease: "easeOut" }}
-          className="grid w-full max-w-5xl grid-cols-1 overflow-hidden rounded-3xl border border-slate-900/10 bg-white shadow-[0_30px_80px_-30px_rgba(15,27,61,0.35)] md:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]"
+          transition={{ duration: 0.3, ease: "easeOut" }}
+          className="grid w-full max-w-4xl grid-cols-1 overflow-hidden rounded-2xl border border-slate-900/10 bg-white shadow-[0_24px_60px_-24px_rgba(15,27,61,0.30)] md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]"
         >
-          {/* LEFT — Editorial navy panel */}
+          {/* LEFT — Hero photo panel */}
           <aside
-            className="relative flex flex-col justify-between overflow-hidden p-5 sm:p-6 md:p-8"
-            style={{
-              background: `linear-gradient(155deg, ${PC_EMERALD_DEEP} 0%, ${PC_EMERALD} 60%, ${PC_EMERALD_LIGHT} 130%)`,
-              color: "#ffffff",
-            }}
+            className="relative hidden min-h-[520px] flex-col justify-between overflow-hidden p-6 text-white md:flex"
+            style={{ color: "#ffffff" }}
           >
-            {/* Fine gold grid lines for editorial polish */}
+            {/* Photo */}
+            <img
+              src={heroPhoto}
+              alt=""
+              aria-hidden
+              className="absolute inset-0 h-full w-full object-cover"
+            />
+            {/* Overlay for legibility */}
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 opacity-[0.08]"
+              className="absolute inset-0"
               style={{
-                backgroundImage:
-                  "linear-gradient(#ffffff 1px, transparent 1px), linear-gradient(90deg, #ffffff 1px, transparent 1px)",
-                backgroundSize: "44px 44px",
+                background: `linear-gradient(165deg, ${PC_EMERALD_DEEP}f2 0%, ${PC_EMERALD}e6 55%, ${PC_EMERALD_LIGHT}cc 100%)`,
               }}
             />
             <div
               aria-hidden
-              className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full blur-3xl"
-              style={{ background: "rgba(181,138,60,0.35)" }}
+              className="absolute inset-x-0 bottom-0 h-40"
+              style={{ background: `linear-gradient(180deg, transparent, ${PC_EMERALD_DEEP}f2)` }}
             />
 
             <div className="relative">
@@ -220,22 +214,23 @@ function CadastroPage() {
                 className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em]"
                 style={{
                   borderColor: "rgba(245,215,122,0.55)",
-                  background: "rgba(245,215,122,0.12)",
+                  background: "rgba(10,22,49,0.35)",
                   color: "#F5D77A",
+                  backdropFilter: "blur(6px)",
                 }}
               >
                 <UserPlus className="h-3 w-3" /> Cadastro gratuito
               </span>
 
               <h1
-                className="mt-5 tracking-tight !text-white"
+                className="mt-4 tracking-tight !text-white"
                 style={{
                   fontFamily: PC_DISPLAY,
                   fontWeight: 700,
-                  fontSize: "clamp(1.85rem, 2.8vw, 2.4rem)",
+                  fontSize: "clamp(1.7rem, 2.6vw, 2.15rem)",
                   lineHeight: 1.05,
                   color: "#ffffff",
-                  textShadow: "0 1px 2px rgba(0,0,0,0.35)",
+                  textShadow: "0 2px 12px rgba(0,0,0,0.55)",
                 }}
               >
                 <span className="!text-white">Compare preços</span>
@@ -243,311 +238,98 @@ function CadastroPage() {
                 <span style={{ color: "#F5D77A" }}>de verdade.</span>
               </h1>
 
-              <p className="mt-3 max-w-[36ch] text-[13.5px] leading-relaxed text-white/95">
-                Conta em 30 segundos. CPF, PIN e você já entra no comparador
-                dos mercados de Feijó.
+              <p
+                className="mt-2.5 max-w-[34ch] text-[13px] leading-relaxed text-white/95"
+                style={{ textShadow: "0 1px 6px rgba(0,0,0,0.5)" }}
+              >
+                Conta em 30 segundos. CPF, PIN e você entra no comparador dos mercados de Feijó.
               </p>
+            </div>
 
-              <ul className="mt-6 space-y-2.5">
+            <div className="relative space-y-4">
+              <ul className="space-y-2">
                 {perks.map((p) => (
-                  <li key={p} className="flex items-start gap-2.5 text-[13px] leading-snug text-white/95">
+                  <li key={p} className="flex items-start gap-2 text-[12.5px] leading-snug text-white/95" style={{ textShadow: "0 1px 4px rgba(0,0,0,0.45)" }}>
                     <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none" style={{ color: "#F5D77A" }} />
                     <span>{p}</span>
                   </li>
                 ))}
               </ul>
-            </div>
 
-            {/* Thematic illustration — localização + comparação + economia */}
-            <motion.div
-              className="relative mt-6 sm:mt-8"
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2, duration: 0.55, ease: "easeOut" }}
-              aria-hidden
-            >
-              <svg
-                viewBox="0 0 320 214"
-                className="w-full max-w-[420px] mx-auto"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                role="img"
-                aria-label="Ilustração de comparação de preços entre mercados"
-              >
-                <defs>
-                  <linearGradient id="pcGold" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#F5D77A" />
-                    <stop offset="100%" stopColor="#c9a34a" />
-                  </linearGradient>
-                  <linearGradient id="pcBar" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="rgba(255,255,255,0.32)" />
-                    <stop offset="100%" stopColor="rgba(255,255,255,0.10)" />
-                  </linearGradient>
-                  <radialGradient id="pcGlow" cx="50%" cy="50%" r="50%">
-                    <stop offset="0%" stopColor="rgba(245,215,122,0.55)" />
-                    <stop offset="100%" stopColor="rgba(245,215,122,0)" />
-                  </radialGradient>
-                </defs>
-
-                {/* Header */}
-                <g>
-                  <text x="4" y="12" fill="#F5D77A" fontSize="8.5" fontFamily="ui-sans-serif, system-ui" fontWeight="800" letterSpacing="1.8">
-                    COMPARATIVO · FEIJÓ/AC
-                  </text>
-                  <line x1="4" y1="20" x2="316" y2="20" stroke="rgba(245,215,122,0.35)" />
-                </g>
-
-                {/* Store columns */}
-                {compareStores.map((s, i) => {
-                  const cx = 60 + i * 100;
-                  const barTop = 138 - s.val;
-                  return (
-                    <g key={s.label}>
-                      {/* store label */}
-                      <text
-                        x={cx}
-                        y={36}
-                        textAnchor="middle"
-                        fontSize="8"
-                        fontFamily="ui-sans-serif, system-ui"
-                        fontWeight="800"
-                        fill={s.winner ? "#F5D77A" : "rgba(255,255,255,0.9)"}
-                        letterSpacing="1.4"
-                      >
-                        {s.label}
-                      </text>
-
-                      {/* location pin */}
-                      <g transform={`translate(${cx} 56)`}>
-                        {s.winner && (
-                          <>
-                            <circle r="18" fill="url(#pcGlow)" />
-                            <motion.circle
-                              r="14"
-                              fill="none"
-                              stroke="rgba(245,215,122,0.55)"
-                              strokeWidth="1"
-                              initial={{ scale: 0.6, opacity: 0.8 }}
-                              animate={{ scale: 1.6, opacity: 0 }}
-                              transition={{ duration: 2, repeat: Infinity, ease: "easeOut" }}
-                              style={{ transformOrigin: "center", transformBox: "fill-box" }}
-                            />
-                          </>
-                        )}
-                        <motion.g
-                          initial={{ y: -6, opacity: 0 }}
-                          animate={{ y: 0, opacity: 1 }}
-                          transition={{ delay: 0.25 + i * 0.12, duration: 0.4, ease: "easeOut" }}
-                        >
-                          <path
-                            d="M0 -11 C-6 -11 -10 -6.5 -10 -2.5 C-10 4 0 12 0 12 C0 12 10 4 10 -2.5 C10 -6.5 6 -11 0 -11 Z"
-                            fill={s.winner ? "url(#pcGold)" : "rgba(255,255,255,0.28)"}
-                            stroke={s.winner ? "rgba(255,255,255,0.45)" : "rgba(255,255,255,0.55)"}
-                            strokeWidth="1"
-                          />
-                          <circle r={s.winner ? 3.4 : 2.8} cy="-3.5" fill="#0a1631" />
-                        </motion.g>
-                      </g>
-
-                      {/* bar */}
-                      <motion.rect
-                        x={cx - 22}
-                        y={138}
-                        width="44"
-                        height={s.val}
-                        rx="6"
-                        fill={s.winner ? "url(#pcGold)" : "url(#pcBar)"}
-                        stroke={s.winner ? "rgba(245,215,122,0.7)" : "rgba(255,255,255,0.28)"}
-                        strokeWidth="1"
-                        initial={{ scaleY: 0, y: 138 }}
-                        animate={{ scaleY: 1, y: barTop }}
-                        transition={{ delay: 0.4 + i * 0.15, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-                        style={{ transformOrigin: `${cx}px 138px`, transformBox: "fill-box" }}
-                      />
-
-                      {/* price above bar */}
-                      <motion.text
-                        x={cx}
-                        y={barTop - 8}
-                        textAnchor="middle"
-                        fontSize="10.5"
-                        fontFamily="ui-monospace, 'SFMono-Regular', monospace"
-                        fontWeight={s.winner ? 800 : 600}
-                        fill={s.winner ? "#F5D77A" : "#ffffff"}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.85 + i * 0.1, duration: 0.4 }}
-                      >
-                        {s.price}
-                      </motion.text>
-
-                      {s.winner && (
-                        <motion.text
-                          x={cx}
-                          y={barTop - 22}
-                          textAnchor="middle"
-                          fontSize="6.5"
-                          fontFamily="ui-sans-serif, system-ui"
-                          fontWeight="900"
-                          fill="#F5D77A"
-                          letterSpacing="1.4"
-                          initial={{ opacity: 0, y: barTop - 16 }}
-                          animate={{ opacity: 1, y: barTop - 22 }}
-                          transition={{ delay: 1.05, duration: 0.4 }}
-                        >
-                          ★ MELHOR PREÇO
-                        </motion.text>
-                      )}
-                    </g>
-                  );
-                })}
-
-                {/* baseline */}
-                <line x1="20" y1="139" x2="300" y2="139" stroke="rgba(255,255,255,0.22)" strokeWidth="1" />
-
-                {/* Savings badge — hierarchy: big % + label + trend */}
-                <motion.g
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 1.15, duration: 0.5, ease: "easeOut" }}
-                >
-                  {/* soft shadow */}
-                  <ellipse cx="160" cy="204" rx="110" ry="4" fill="rgba(0,0,0,0.25)" />
-                  {/* pill */}
-                  <rect x="42" y="162" width="236" height="40" rx="20" fill="url(#pcGold)" />
-                  <rect x="42" y="162" width="236" height="40" rx="20" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="1" />
-                  {/* big number */}
-                  <text
-                    x="72"
-                    y="190"
-                    fontSize="22"
-                    fontFamily="'Outfit', ui-sans-serif, system-ui"
-                    fontWeight="900"
-                    fill="#0a1631"
-                    letterSpacing="-0.8"
-                  >
-                    −22%
-                  </text>
-                  {/* label stack */}
-                  <text
-                    x="130"
-                    y="181"
-                    fontSize="8"
-                    fontFamily="ui-sans-serif, system-ui"
-                    fontWeight="900"
-                    fill="#0a1631"
-                    letterSpacing="1.6"
-                  >
-                    ECONOMIA MÉDIA
-                  </text>
-                  <text
-                    x="130"
-                    y="193"
-                    fontSize="7.5"
-                    fontFamily="ui-sans-serif, system-ui"
-                    fontWeight="600"
-                    fill="rgba(10,22,49,0.78)"
-                    letterSpacing="0.3"
-                  >
-                    na cesta comparada
-                  </text>
-                  {/* trend chip */}
-                  <g transform="translate(252 182)">
-                    <circle r="13" fill="rgba(10,22,49,0.14)" />
-                    <path d="M-4.5 -3 L0 3 L4.5 -3" stroke="#0a1631" strokeWidth="2.2" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-                  </g>
-                </motion.g>
-              </svg>
-            </motion.div>
-
-
-
-
-            <div
-              className="relative mt-6 flex items-center gap-3 rounded-xl border px-3.5 py-3"
-              style={{
-                borderColor: "rgba(245,215,122,0.28)",
-                background: "rgba(255,255,255,0.04)",
-              }}
-            >
+              {/* Compact savings badge */}
               <div
-                className="flex h-9 w-9 flex-none items-center justify-center rounded-lg"
-                style={{ background: "rgba(245,215,122,0.14)", color: "#F5D77A" }}
+                className="flex items-center gap-3 rounded-xl border px-3.5 py-2.5 backdrop-blur"
+                style={{
+                  borderColor: "rgba(245,215,122,0.55)",
+                  background: "rgba(245,215,122,0.14)",
+                }}
               >
-                <Sparkles className="h-4 w-4" />
-              </div>
-              <div className="min-w-0">
-                <div className="text-[10px] font-bold uppercase tracking-[0.2em]" style={{ color: "#F5D77A" }}>
-                  Bônus de boas-vindas
+                <div
+                  className="flex h-10 w-10 flex-none items-center justify-center rounded-lg"
+                  style={{ background: "linear-gradient(135deg, #F5D77A, #c9a34a)", color: "#0a1631" }}
+                >
+                  <TrendingDown className="h-5 w-5" strokeWidth={2.5} />
                 </div>
-                <div className="text-[13px] leading-snug text-white/90">
-                  <strong className="font-semibold">30 dias grátis</strong> ao enviar sua 1ª nota fiscal.
+                <div className="min-w-0 leading-tight">
+                  <div className="flex items-baseline gap-1.5">
+                    <span
+                      style={{ fontFamily: PC_DISPLAY, color: "#F5D77A", fontWeight: 900, fontSize: 22, letterSpacing: "-0.02em" }}
+                    >
+                      −22%
+                    </span>
+                    <span className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-white/90">
+                      economia média
+                    </span>
+                  </div>
+                  <div className="text-[11.5px] text-white/85">na cesta comparada entre mercados</div>
                 </div>
               </div>
             </div>
           </aside>
 
           {/* RIGHT — Form */}
-          <section className="relative overflow-hidden p-6 md:p-9">
-            {/* Decorative SVG watermark */}
-            <svg
-              aria-hidden
-              className="pointer-events-none absolute -right-10 -top-10 h-56 w-56 opacity-[0.05]"
-              viewBox="0 0 200 200"
-              fill="none"
-            >
-              <circle cx="100" cy="100" r="80" stroke={PC_EMERALD} strokeWidth="1.2" strokeDasharray="3 4" />
-              <circle cx="100" cy="100" r="55" stroke={PC_EMERALD} strokeWidth="1.2" />
-              <path d="M60 110 L85 85 L105 100 L145 65" stroke={PC_EMERALD} strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-              <circle cx="145" cy="65" r="4" fill={PC_EMERALD} />
-            </svg>
-
-            {/* Header with badge icon */}
-            <div className="relative mb-6 border-b border-slate-200 pb-5">
-              <div className="flex items-center gap-3">
-                <div
-                  className="flex h-11 w-11 flex-none items-center justify-center rounded-xl"
-                  style={{
-                    background: `linear-gradient(135deg, ${PC_EMERALD} 0%, ${PC_EMERALD_DEEP} 100%)`,
-                    boxShadow: `inset 0 0 0 1px ${PC_GOLD}66, 0 6px 14px -6px rgba(15,27,61,0.45)`,
-                  }}
-                >
-                  <UserPlus className="h-5 w-5 text-white" />
-                </div>
-                <div className="min-w-0">
-                  <div
-                    className="text-[10.5px] font-bold uppercase tracking-[0.22em]"
-                    style={{ color: PC_EMERALD }}
-                  >
-                    Novo assinante
-                  </div>
-                  <h2
-                    className="mt-0.5 text-[26px] leading-[1.05] tracking-tight md:text-[28px]"
-                    style={{ fontFamily: PC_DISPLAY, fontWeight: 700, color: "#0a1631" }}
-                  >
-                    Criar conta
-                  </h2>
-                </div>
+          <section className="relative overflow-hidden p-5 sm:p-7">
+            {/* Header */}
+            <div className="mb-5 flex items-center gap-3">
+              <div
+                className="flex h-11 w-11 flex-none items-center justify-center rounded-xl"
+                style={{
+                  background: `linear-gradient(135deg, ${PC_EMERALD} 0%, ${PC_EMERALD_DEEP} 100%)`,
+                  boxShadow: `inset 0 0 0 1px ${PC_GOLD}66, 0 6px 14px -6px rgba(15,27,61,0.45)`,
+                }}
+              >
+                <UserPlus className="h-5 w-5 text-white" />
               </div>
-              <p className="mt-3 text-[13.5px] font-medium text-slate-700">
-                CPF, PIN de 6 dígitos e você entra direto no painel.
-              </p>
+              <div className="min-w-0">
+                <div
+                  className="text-[10px] font-bold uppercase tracking-[0.22em]"
+                  style={{ color: PC_EMERALD }}
+                >
+                  Novo assinante
+                </div>
+                <h2
+                  className="mt-0.5 text-[22px] leading-[1.05] tracking-tight"
+                  style={{ fontFamily: PC_DISPLAY, fontWeight: 700, color: "#0a1631" }}
+                >
+                  Criar conta
+                </h2>
+              </div>
             </div>
 
 
-            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+
+            <form onSubmit={handleSubmit} className="space-y-3" noValidate>
               <Field
                 label="Nome completo"
                 value={name}
                 onChange={(v) => setName(v.toLocaleUpperCase("pt-BR"))}
-
                 onBlur={() => markTouched("name")}
                 placeholder="Nome e sobrenome"
                 autoComplete="name"
                 state={vName}
                 showState={touched.name}
               />
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <Field
                   label="CPF"
                   value={cpf}
@@ -649,7 +431,7 @@ function CadastroPage() {
               </div>
             </form>
 
-            <p className="mt-6 border-t border-slate-200 pt-4 text-center text-[11.5px] font-medium text-slate-600">
+            <p className="mt-4 border-t border-slate-200 pt-3 text-center text-[11px] font-medium text-slate-600">
               Ao continuar você aceita nossos{" "}
               <a className="font-semibold underline underline-offset-2 hover:text-slate-700" href="/termos">Termos</a>
               {" "}e a{" "}
@@ -727,7 +509,7 @@ function Field({
         inputMode={inputMode}
         autoComplete={autoComplete}
         aria-invalid={invalid}
-        className={`h-12 w-full rounded-xl border-2 ${border} bg-white px-4 text-[15px] font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-500 outline-none transition focus:ring-4`}
+        className={`h-11 w-full rounded-xl border-2 ${border} bg-white px-3.5 text-[14.5px] font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-500 outline-none transition focus:ring-4`}
         style={{ ["--pc-navy" as string]: PC_EMERALD } as React.CSSProperties}
       />
     </label>
@@ -797,7 +579,7 @@ function PinField({
           maxLength={1}
           type="password"
           aria-invalid={hasError}
-          className={`h-14 w-full min-w-0 rounded-xl border-2 ${borderCls} bg-white text-center text-2xl font-black text-slate-900 shadow-[inset_0_1px_0_rgba(15,27,61,0.04)] outline-none transition focus:ring-4`}
+          className={`h-12 w-full min-w-0 rounded-xl border-2 ${borderCls} bg-white text-center text-xl font-black text-slate-900 shadow-[inset_0_1px_0_rgba(15,27,61,0.04)] outline-none transition focus:ring-4`}
           style={{
             ["--pc-navy" as string]: "#0f1b3d",
             fontFeatureSettings: '"tnum" 1',
