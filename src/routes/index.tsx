@@ -104,7 +104,7 @@ function HomePage() {
 
       {/* HEADER */}
       <header className="absolute inset-x-0 top-0 z-30">
-        <div className="mx-auto grid max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-4 py-3 sm:gap-3 sm:py-4 md:flex md:justify-between md:px-8 md:py-6">
+        <div className={dsx(ds.container, "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 py-3 sm:gap-3 sm:py-4 md:flex md:justify-between md:py-6")}>
           <Link to="/" className="flex min-w-0 items-center gap-2.5">
             <span
               className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-[15px] font-bold shadow-md sm:h-10 sm:w-10 md:h-12 md:w-12 md:text-[16px]"
@@ -116,7 +116,7 @@ function HomePage() {
               <span className={`${serif} truncate text-[19px] font-normal text-white sm:text-[22px] md:text-[26px]`}>
                 Preço<span className="italic" style={{ color: PALETTE.goldSoft }}>Certo</span>
               </span>
-              <span className="mt-1 hidden text-[10px] font-semibold uppercase tracking-[0.22em] text-white/70 sm:block">
+              <span className={dsx(ds.type.overline, "mt-1 hidden text-white/70 sm:block")}>
                 Feijó · Acre
               </span>
             </div>
@@ -138,7 +138,7 @@ function HomePage() {
             </Link>
             <Link
               to="/cadastro"
-              className="inline-flex items-center rounded-lg px-3 py-2 text-[13px] font-semibold shadow-md transition-all hover:opacity-90 sm:px-4 sm:py-2.5 sm:text-[14px] md:px-5 md:py-3"
+              className={dsx(ds.btn.base, ds.btn.sizes.md, "shadow-md")}
               style={{ background: PALETTE.gold, color: PALETTE.navy }}
             >
               Criar conta
