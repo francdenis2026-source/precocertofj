@@ -9,22 +9,28 @@ export function useMyRoles() {
 
   const query = useQuery({
     queryKey: ["my-roles", user?.id],
-    enabled: !!user?.id,
-    queryFn: async (): Promise<AppRole[]> => {
-      const { data, error } = await supabase
-        .from("user_roles" as never)
-        .select("role")
-        .eq("user_id", user!.id);
+    enabled: !sessionLoading && !!user?.id,
+    queryFn: async (): Promise<boolean> => {
+      const { data: userData, error: userError } = await supabase.auth.getUser();
+      if (userError || !userData.user || userData.user.id !== user!.id) return false;
+
+      const { data, error } = await supabase.rpc("has_role", {
+        _user_id: userData.user.id,
+        _role: "admin",
+      });
       if (error) throw error;
-      return ((data ?? []) as Array<{ role: AppRole }>).map((r) => r.role);
+      return data === true;
     },
-    staleTime: 60_000,
+    retry: false,
+    staleTime: 10_000,
   });
 
+  const isAdmin = !!user && query.data === true;
+
   return {
-    roles: query.data ?? [],
-    loading: sessionLoading || query.isLoading,
-    isAdmin: (query.data ?? []).includes("admin"),
+    roles: isAdmin ? (["admin"] as AppRole[]) : [],
+    loading: sessionLoading || (!!user?.id && query.isLoading),
+    isAdmin,
     user,
   };
 }
