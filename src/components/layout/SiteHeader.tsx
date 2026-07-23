@@ -1,6 +1,16 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { LogOut, User as UserIcon, Key, Receipt, LayoutDashboard, ChevronDown } from "lucide-react";
 import { ds, dsx } from "@/lib/ds";
-
+import { useMyProfile } from "@/hooks/useMyProfile";
+import { useSignOut } from "@/hooks/use-sign-out";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const PALETTE = {
   navy: "#0f1b3d",
@@ -32,6 +42,9 @@ const NAV_LINKS = [
 
 export function SiteHeader({ variant = "solid", showNav = true }: Props) {
   const isOverlay = variant === "overlay";
+  const { session, firstName, initials, loading } = useMyProfile();
+  const { signOut, loading: signingOut } = useSignOut();
+  const navigate = useNavigate();
 
   const shellClass = isOverlay
     ? "absolute inset-x-0 top-0 z-30"
@@ -99,24 +112,78 @@ export function SiteHeader({ variant = "solid", showNav = true }: Props) {
 
         {/* CTAs */}
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-          <Link
-            to="/login"
-            className="hidden items-center rounded-lg px-3.5 py-2 text-[13.5px] font-semibold text-white/85 transition-colors hover:bg-white/5 hover:text-white sm:inline-flex md:px-4 md:py-2.5 md:text-[14px]"
-          >
-            Entrar
-          </Link>
-          <Link
-            to="/cadastro"
-            className="inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-[13px] font-bold tracking-wide shadow-md transition hover:brightness-105 active:scale-[0.98] sm:px-4 sm:py-2.5 sm:text-[13.5px]"
-            style={{
-              background: PALETTE.gold,
-              color: PALETTE.navy,
-              boxShadow: `0 6px 16px ${PALETTE.gold}40`,
-              letterSpacing: "0.01em",
-            }}
-          >
-            Criar conta
-          </Link>
+          {loading ? (
+            <div className="h-9 w-24 animate-pulse rounded-lg bg-white/10" />
+          ) : session ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  className="inline-flex items-center gap-2 rounded-lg border border-white/15 bg-white/5 px-2.5 py-1.5 text-[13px] font-medium text-white transition-colors hover:bg-white/10 sm:px-3 sm:py-2"
+                  aria-label="Minha conta"
+                >
+                  <span
+                    className="grid h-7 w-7 place-items-center rounded-full text-[11px] font-bold"
+                    style={{ background: PALETTE.gold, color: PALETTE.navy }}
+                  >
+                    {initials ?? <UserIcon className="h-3.5 w-3.5" />}
+                  </span>
+                  <span className="hidden max-w-[110px] truncate sm:inline">
+                    {firstName ?? "Minha conta"}
+                  </span>
+                  <ChevronDown className="h-3.5 w-3.5 opacity-70" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel className="truncate">
+                  {firstName ? `Olá, ${firstName}` : "Minha conta"}
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onSelect={() => navigate({ to: "/app" })}>
+                  <LayoutDashboard className="mr-2 h-4 w-4" /> Meu painel
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => navigate({ to: "/minhas-licencas" })}>
+                  <Key className="mr-2 h-4 w-4" /> Minhas licenças
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => navigate({ to: "/meus-pedidos" })}>
+                  <Receipt className="mr-2 h-4 w-4" /> Meus pedidos
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => navigate({ to: "/perfil" })}>
+                  <UserIcon className="mr-2 h-4 w-4" /> Meu perfil
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  onSelect={() => void signOut()}
+                  disabled={signingOut}
+                  className="text-destructive focus:text-destructive"
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  {signingOut ? "Saindo…" : "Sair da conta"}
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="hidden items-center rounded-lg px-3.5 py-2 text-[13.5px] font-semibold text-white/85 transition-colors hover:bg-white/5 hover:text-white sm:inline-flex md:px-4 md:py-2.5 md:text-[14px]"
+              >
+                Entrar
+              </Link>
+              <Link
+                to="/cadastro"
+                className="inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-[13px] font-bold tracking-wide shadow-md transition hover:brightness-105 active:scale-[0.98] sm:px-4 sm:py-2.5 sm:text-[13.5px]"
+                style={{
+                  background: PALETTE.gold,
+                  color: PALETTE.navy,
+                  boxShadow: `0 6px 16px ${PALETTE.gold}40`,
+                  letterSpacing: "0.01em",
+                }}
+              >
+                Criar conta
+              </Link>
+            </>
+          )}
         </div>
       </div>
     </header>
