@@ -289,7 +289,7 @@ function HomePage() {
 
               {/* Stats */}
               <div
-                className="mt-10 grid grid-cols-3 gap-4 border-t pt-6 sm:mt-14 sm:gap-12 sm:pt-8"
+                className="mt-7 grid grid-cols-3 gap-4 border-t pt-5 sm:mt-9 sm:gap-10 sm:pt-6"
                 style={{ borderColor: P.line }}
               >
 
