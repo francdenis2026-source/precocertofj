@@ -188,8 +188,8 @@ function CheckoutPage() {
   return (
     <AppShell>
       <PageHeader
-        title="Checkout"
-        description={`Pedido #${String(order.id).slice(0, 8)}`}
+        title="Finalizar assinatura"
+        description={`Pedido #${String(order.id).slice(0, 8)} · pagamento pelo Mercado Pago`}
         breadcrumbs={[{ label: "Planos", to: "/planos" }, { label: "Checkout" }]}
       />
       <div className="mx-auto grid max-w-4xl gap-4 p-4 md:grid-cols-[1fr_360px]">

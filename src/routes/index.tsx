@@ -216,11 +216,10 @@ function HomePage() {
 
               <p
                 className="mt-3 max-w-xl text-[13.5px] leading-relaxed sm:text-[14.5px]"
-                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 75%, transparent)" }}
+                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 78%, transparent)" }}
               >
-                Compare mercados de Feijó em tempo real e descubra em qual mercado
-                sua cesta sai mais barata — com dados atualizados pela própria
-                comunidade.
+                Veja onde o arroz, o feijão e o café estão mais baratos hoje em Feijó.
+                Preços conferidos por nota fiscal, atualizados pelos próprios moradores.
               </p>
 
               {/* Search */}
@@ -246,7 +245,7 @@ function HomePage() {
                     onChange={(e) => setQ(e.target.value)}
                     type="search"
                     inputMode="search"
-                    placeholder="Qual item você busca hoje?"
+                    placeholder="Ex.: Arroz Tio João 5kg"
                     aria-label="Buscar produto"
                     className="flex-1 bg-transparent px-2 py-2.5 text-[14px] font-medium outline-none sm:text-[15px]"
                     style={{ color: P.ink }}
@@ -269,7 +268,7 @@ function HomePage() {
                   className="mr-1 text-[10px] font-bold uppercase tracking-[0.24em]"
                   style={{ color: "color-mix(in oklab, var(--pc-home-ink) 45%, transparent)" }}
                 >
-                  Populares:
+                  Buscas do dia:
                 </span>
                 {["arroz", "feijão", "leite", "óleo", "café", "açúcar"].map((t) => (
                   <button
@@ -364,16 +363,16 @@ function HomePage() {
                 {[
                   {
                     k: String(stats.establishments ?? 8).padStart(2, "0"),
-                    l: "Estabelecimentos",
+                    l: "Mercados de Feijó",
                   },
                   {
                     k:
                       stats.products != null
                         ? `${stats.products.toLocaleString("pt-BR")}+`
                         : "1.000+",
-                    l: "Produtos catalogados",
+                    l: "Produtos com preço",
                   },
-                  { k: "24h", l: "Preços atualizados" },
+                  { k: "24h", l: "Preços conferidos" },
                 ].map((s) => (
                   <div key={s.l}>
                     <div
@@ -505,7 +504,7 @@ function HomePage() {
                   className="mb-1.5 text-[9px] font-bold uppercase tracking-[0.28em] sm:text-[10px]"
                   style={{ color: P.gold }}
                 >
-                  Explore a plataforma
+                  Por onde começar
                 </div>
                 <h2
                   className={`${serif} font-normal`}
@@ -516,13 +515,13 @@ function HomePage() {
                     color: "#F5F6FA",
                   }}
                 >
-                  Tudo em três passos,{" "}
+                  Três caminhos,{" "}
                   <span className="italic" style={{ color: P.gold }}>
-                    sem esforço.
+                    uma cesta mais barata.
                   </span>
                 </h2>
                 <p className="mt-1.5 hidden max-w-md text-[13px] leading-snug text-white/80 sm:block sm:text-[13.5px]">
-                  Ferramentas exclusivas para você nunca mais pagar caro em itens essenciais.
+                  Escolha por onde quer começar. Em cada rota, dados reais dos mercados de Feijó.
                 </p>
               </div>
               <div className="hidden h-px flex-1 md:mx-8 md:mb-3 md:block" style={{ background: "rgb(255 255 255 / 0.08)" }} />
@@ -532,22 +531,22 @@ function HomePage() {
               <ExploreCard
                 to="/melhores-precos"
                 number="01"
-                title="Ranking Geral"
-                desc="Compare a cesta básica entre todos os mercados locais."
-                cta="Ver rankings"
+                title="Ranking dos mercados"
+                desc="Veja qual mercado tem a cesta básica mais barata hoje."
+                cta="Ver ranking"
               />
               <ExploreCard
                 to="/estabelecimentos"
                 number="02"
-                title="Todos os mercados"
-                desc="Bairros, categorias e produtos de cada estabelecimento."
-                cta="Ver mercados"
+                title="Mercados por bairro"
+                desc="Endereço, horário e catálogo completo de cada mercado."
+                cta="Explorar mercados"
               />
               <ExploreCard
                 to="/planos"
                 number="03"
-                title="Planos & Alertas"
-                desc="Assine e desbloqueie alertas e histórico completo."
+                title="Alertas de preço"
+                desc="Assine e receba aviso quando o preço cair no seu bairro."
                 cta="Ver planos"
               />
             </div>
@@ -561,9 +560,9 @@ function HomePage() {
       <section className="mx-auto w-full max-w-6xl px-4 pb-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-3 gap-3 sm:gap-4">
           {[
-            { k: "7", l: "mercados ativos", icon: <ShieldCheck className="h-4 w-4" /> },
+            { k: "7", l: "mercados no ar", icon: <ShieldCheck className="h-4 w-4" /> },
             { k: "500+", l: "preços por semana", icon: <TrendingDown className="h-4 w-4" /> },
-            { k: "100%", l: "notas fiscais", icon: <Sparkles className="h-4 w-4" /> },
+            { k: "100%", l: "conferido por nota", icon: <Sparkles className="h-4 w-4" /> },
           ].map((s) => (
             <div
               key={s.l}

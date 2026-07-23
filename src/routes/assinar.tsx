@@ -188,14 +188,14 @@ function AssinarPage() {
       </p>
       <h1 className="mt-2 font-display text-4xl leading-tight text-foreground md:text-5xl">
         {isActive
-          ? "Sua assinatura está ativa."
+          ? "Sua assinatura está ativa"
           : isExpired
-            ? "Seu período grátis terminou."
-            : `Você tem ${trialLeft} ${trialLeft === 1 ? "dia" : "dias"} de teste grátis.`}
+            ? "Seu período grátis chegou ao fim"
+            : `Faltam ${trialLeft} ${trialLeft === 1 ? "dia" : "dias"} do seu teste grátis`}
       </h1>
       <p className="mt-3 text-sm text-muted-foreground">
-        Para continuar economizando sem interrupções, ative o PreçoCerto por{" "}
-        <strong className="text-foreground">{planPriceLabel}</strong>.
+        Ative agora e continue vendo os melhores preços de Feijó por{" "}
+        <strong className="text-foreground">{planPriceLabel}</strong>. Sem fidelidade.
       </p>
 
       {banner && (
