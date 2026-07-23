@@ -140,6 +140,53 @@ export function ScanEditDialog({
                 rows={3}
               />
             </div>
+            {scan.image_url && (
+              <div className="rounded-lg border border-dashed border-border p-3">
+                <div className="flex items-center justify-between gap-2">
+                  <div>
+                    <div className="text-sm font-medium">Detecção de embalagem (IA)</div>
+                    <div className="text-xs text-muted-foreground">
+                      Analisa a imagem e sugere peso/volume para preço por unidade.
+                    </div>
+                  </div>
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="secondary"
+                    onClick={handleDetect}
+                    disabled={detecting}
+                  >
+                    {detecting ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <>
+                        <Wand2 className="mr-1 h-3.5 w-3.5" /> Detectar
+                      </>
+                    )}
+                  </Button>
+                </div>
+                {detection && (
+                  <div className="mt-2 text-xs">
+                    <span className="font-medium">
+                      {detection.size_value != null && detection.size_unit
+                        ? `${detection.size_value}${detection.size_unit}`
+                        : "sem tamanho"}
+                    </span>
+                    {detection.brand && <span> · {detection.brand}</span>}
+                    {detection.packaging && <span> · {detection.packaging}</span>}
+                    {detection.price_per_unit != null && detection.unit_label && (
+                      <span className="ml-2 text-emerald-600 dark:text-emerald-400">
+                        {detection.unit_label} R${" "}
+                        {detection.price_per_unit.toFixed(2).replace(".", ",")}
+                      </span>
+                    )}
+                    <span className="ml-2 text-muted-foreground">
+                      (confiança {detection.confidence})
+                    </span>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
         <DialogFooter>
