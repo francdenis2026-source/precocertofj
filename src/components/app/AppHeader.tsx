@@ -1,7 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { Activity, Globe, MapPin, PanelLeftClose, PanelLeftOpen, ShieldCheck, ShoppingBag, User } from "lucide-react";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
-import { ThemeToggle } from "@/components/theme-toggle";
+
 import { AuthNavToggle } from "@/components/nav/AuthNavToggle";
 import { useMyProfile } from "@/hooks/useMyProfile";
 import { useSignOut } from "@/hooks/use-sign-out";
@@ -110,7 +110,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
             <ShoppingBag className="h-3.5 w-3.5" strokeWidth={2} />
           </Link>
         )}
-        <ThemeToggle size="sm" />
+        
         {isAdminScope ? (
           <button
             type="button"
