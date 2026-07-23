@@ -286,7 +286,7 @@ function CustomerDrawer({ userId, onClose }: { userId: string | null; onClose: (
 
   function submit() {
     if (!userId) return;
-    update.mutate({ data: { userId, patch: form as Parameters<typeof adminUpdateCustomer>[0]["data"]["patch"] } });
+    update.mutate({ data: { userId, patch: form } });
   }
 
   return (
