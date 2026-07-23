@@ -1,4 +1,4 @@
-import type { Dica, Variacao } from "./preparo-dicas-data";
+import type { Dica, ProteinaId, Variacao } from "./preparo-dicas-data";
 
 // ============================================================
 // Faixas de tempo
@@ -127,10 +127,23 @@ export function matchesModo(texto: string, modoId: ModoId): boolean {
 export type FiltrosPreparo = {
   tempos: Set<TempoFaixaId>;
   modos: Set<ModoId>;
+  proteinas: Set<ProteinaId>;
 };
 
+function itemProteinas(item: { proteinas?: ProteinaId[] }): ProteinaId[] {
+  return item.proteinas && item.proteinas.length > 0 ? item.proteinas : ["boi"];
+}
+
+export function matchesProteina(
+  item: { proteinas?: ProteinaId[] },
+  selecionadas: Set<ProteinaId>,
+): boolean {
+  if (selecionadas.size === 0) return true;
+  return itemProteinas(item).some((p) => selecionadas.has(p));
+}
+
 export function itemMatchesFiltros(
-  item: { tempo: string; modo: string },
+  item: { tempo: string; modo: string; proteinas?: ProteinaId[] },
   filtros: FiltrosPreparo,
 ): boolean {
   const okTempo =
@@ -139,7 +152,8 @@ export function itemMatchesFiltros(
   const okModo =
     filtros.modos.size === 0 ||
     [...filtros.modos].some((m) => matchesModo(item.modo, m));
-  return okTempo && okModo;
+  const okProt = matchesProteina(item, filtros.proteinas);
+  return okTempo && okModo && okProt;
 }
 
 export type DicaFiltrada = Dica & {
@@ -148,7 +162,8 @@ export type DicaFiltrada = Dica & {
 };
 
 export function aplicarFiltros(dicas: Dica[], filtros: FiltrosPreparo): DicaFiltrada[] {
-  const ativo = filtros.tempos.size > 0 || filtros.modos.size > 0;
+  const ativo =
+    filtros.tempos.size > 0 || filtros.modos.size > 0 || filtros.proteinas.size > 0;
   return dicas
     .map<DicaFiltrada>((d) => {
       const matchesSelf = itemMatchesFiltros(d, filtros);

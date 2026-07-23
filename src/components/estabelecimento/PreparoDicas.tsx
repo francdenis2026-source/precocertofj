@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
-import { Clock, Download, Filter, Flame, Share2, Star, Trash2, X } from "lucide-react";
+import { Beef, Clock, Download, Filter, Flame, Share2, Star, Trash2, X } from "lucide-react";
 import imgCozidao from "@/assets/preparo/cozidao.jpg";
 import imgAssado from "@/assets/preparo/assado.jpg";
 import imgChurrasco from "@/assets/preparo/churrasco.jpg";
@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import { PREPARO_DICAS, favoriteKey } from "@/lib/preparo-dicas-data";
+import { PREPARO_DICAS, PROTEINAS, favoriteKey, type ProteinaId } from "@/lib/preparo-dicas-data";
 import { gerarGuiaPreparoPDF } from "@/lib/preparo-dicas-pdf";
 import { shareOrDownloadPreparoCard } from "@/lib/preparo-dicas-card";
 import {
@@ -24,6 +24,15 @@ import {
   type ModoId,
   type TempoFaixaId,
 } from "@/lib/preparo-dicas-filtros";
+
+const PROTEINA_LABEL: Record<ProteinaId, string> = PROTEINAS.reduce(
+  (acc, p) => ({ ...acc, [p.id]: p.label }),
+  {} as Record<ProteinaId, string>,
+);
+const PROTEINA_EMOJI: Record<ProteinaId, string> = PROTEINAS.reduce(
+  (acc, p) => ({ ...acc, [p.id]: p.emoji }),
+  {} as Record<ProteinaId, string>,
+);
 
 const FOTOS: Record<string, string> = {
   cozidao: imgCozidao,
@@ -145,6 +154,7 @@ export function PreparoDicas() {
   const [cardKey, setCardKey] = useState<string | null>(null);
   const [temposSel, setTemposSel] = useState<Set<TempoFaixaId>>(() => new Set());
   const [modosSel, setModosSel] = useState<Set<ModoId>>(() => new Set());
+  const [proteinasSel, setProteinasSel] = useState<Set<ProteinaId>>(() => new Set());
 
   const toggleTempo = (id: TempoFaixaId) => {
     setTemposSel((prev) => {
@@ -162,15 +172,24 @@ export function PreparoDicas() {
       return next;
     });
   };
+  const toggleProteina = (id: ProteinaId) => {
+    setProteinasSel((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
   const limparFiltros = () => {
     setTemposSel(new Set());
     setModosSel(new Set());
+    setProteinasSel(new Set());
   };
-  const filtrosAtivos = temposSel.size + modosSel.size;
+  const filtrosAtivos = temposSel.size + modosSel.size + proteinasSel.size;
 
   const dicasFiltradas = useMemo(
-    () => aplicarFiltros(PREPARO_DICAS, { tempos: temposSel, modos: modosSel }),
-    [temposSel, modosSel],
+    () => aplicarFiltros(PREPARO_DICAS, { tempos: temposSel, modos: modosSel, proteinas: proteinasSel }),
+    [temposSel, modosSel, proteinasSel],
   );
 
   const favoritosPorDica = useMemo(() => {
@@ -275,7 +294,7 @@ export function PreparoDicas() {
         <div className="mb-2 flex items-center justify-between gap-2">
           <p className="flex items-center gap-1.5 text-[12px] font-semibold uppercase tracking-wider text-foreground/70">
             <Filter className="h-3.5 w-3.5 text-primary" />
-            Filtrar por tempo e modo
+            Filtrar por tipo, tempo e modo
             {filtrosAtivos > 0 && (
               <span className="ml-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[10px] font-semibold text-primary">
                 {filtrosAtivos}
@@ -294,6 +313,32 @@ export function PreparoDicas() {
         </div>
 
         <div className="space-y-2">
+          <div>
+            <p className="mb-1 flex items-center gap-1 text-[11px] text-muted-foreground">
+              <Beef className="h-3 w-3" /> Tipo de corte
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {PROTEINAS.map((p) => {
+                const active = proteinasSel.has(p.id);
+                return (
+                  <button
+                    key={p.id}
+                    type="button"
+                    onClick={() => toggleProteina(p.id)}
+                    aria-pressed={active}
+                    className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors ${
+                      active
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border bg-background text-foreground/80 hover:border-primary/60 hover:text-foreground"
+                    }`}
+                  >
+                    <span aria-hidden="true">{p.emoji}</span>
+                    {p.label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
           <div>
             <p className="mb-1 flex items-center gap-1 text-[11px] text-muted-foreground">
               <Clock className="h-3 w-3" /> Tempo estimado
@@ -529,14 +574,30 @@ export function PreparoDicas() {
                           )}
                         </p>
                         <ul className="space-y-1.5">
-                          {variacoesRender.map((v) => (
+                          {variacoesRender.map((v) => {
+                            const vProts = (v.proteinas && v.proteinas.length > 0
+                              ? v.proteinas
+                              : ["boi" as ProteinaId]);
+                            return (
                             <li
                               key={v.nome}
                               className="rounded-md border border-border/60 bg-background/60 px-2.5 py-1.5"
                             >
-                              <p className="text-sm font-medium text-foreground">
-                                {v.nome}
-                              </p>
+                              <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                                <p className="text-sm font-medium text-foreground">
+                                  {v.nome}
+                                </p>
+                                {vProts.map((pid) => (
+                                  <span
+                                    key={pid}
+                                    className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/5 px-1.5 py-0.5 text-[10px] font-semibold text-primary"
+                                    title={PROTEINA_LABEL[pid]}
+                                  >
+                                    <span aria-hidden="true">{PROTEINA_EMOJI[pid]}</span>
+                                    {PROTEINA_LABEL[pid]}
+                                  </span>
+                                ))}
+                              </div>
                               <div className="mt-1 flex flex-wrap gap-x-3 gap-y-1 text-[11px] text-muted-foreground">
                                 <span className="inline-flex items-center gap-1">
                                   <Clock className="h-3 w-3 text-primary" />
@@ -548,7 +609,8 @@ export function PreparoDicas() {
                                 </span>
                               </div>
                             </li>
-                          ))}
+                            );
+                          })}
                         </ul>
                       </div>
                     )}
