@@ -69,7 +69,7 @@ export const adminSearchScans = createServerFn({ method: "POST" })
     let q = context.supabase
       .from("scans")
       .select(
-        "id, product_name, price_captured, market_name, establishment_id, barcode, verified, verified_at, status, created_at",
+        "id, product_name, price_captured, market_name, establishment_id, barcode, verified, verified_at, status, created_at, image_url",
       )
       .eq("status", "salvo")
       .order("created_at", { ascending: false })
