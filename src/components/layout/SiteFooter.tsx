@@ -38,13 +38,13 @@ export function SiteFooter() {
 
   return (
     <footer
-      className="mt-5 border-t border-border bg-muted/45 text-foreground md:mt-8"
+      className="mt-4 border-t border-border bg-muted/45 text-foreground md:mt-8"
     >
       {/* Top — brand + link columns */}
       <div
         className={dsx(
           ds.container,
-          "grid gap-4 py-4 sm:gap-6 md:grid-cols-[1.2fr_2fr] md:gap-10 md:py-6",
+          "grid gap-3.5 py-3.5 sm:gap-6 md:grid-cols-[1.2fr_2fr] md:gap-10 md:py-6",
         )}
       >
         {/* Brand block */}
