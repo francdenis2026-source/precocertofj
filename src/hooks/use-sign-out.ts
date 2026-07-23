@@ -16,15 +16,18 @@ export function useSignOut() {
   const signOut = async () => {
     if (loading) return;
     setLoading(true);
+    // Redireciona imediatamente para a homepage — não faz o usuário
+    // esperar a chamada de rede terminar.
+    navigate({ to: "/", replace: true });
     try {
       await qc.cancelQueries();
       qc.clear();
       await supabase.auth.signOut();
       toast.success("Você saiu da sua conta.");
-      navigate({ to: "/login", replace: true });
     } catch (err) {
       console.error("[signOut]", err);
-      toast.error("Não foi possível sair. Tente novamente.");
+      toast.error("Não foi possível encerrar a sessão totalmente.");
+    } finally {
       setLoading(false);
     }
   };

@@ -307,7 +307,7 @@ function HomePage() {
 
             <div className="mt-10 grid max-w-3xl grid-cols-3 gap-4 border-t border-white/15 pt-6 sm:gap-8 md:mt-14 md:pt-9">
               {[
-                { k: String(stats.establishments ?? 0), l: "Mercados ativos" },
+                { k: String(stats.establishments ?? 0), l: "Estabelecimentos" },
                 { k: String(stats.products ?? 0), l: "Produtos catalogados" },
                 { k: "24h", l: "Preços atualizados" },
               ].map((s) => (
