@@ -528,6 +528,7 @@ function HomePage() {
               <h3
                 className={`${serif}`}
                 style={{
+                  color: "#F5F6FA",
                   fontSize: "clamp(1.25rem, 2.6vw, 2rem)",
                   lineHeight: 1.15,
                   letterSpacing: "-0.015em",
