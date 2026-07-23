@@ -41,6 +41,15 @@ function Perfil() {
   const updateCpfFn = useServerFn(updateMyCpf);
   const updateProfileFn = useServerFn(updateMyProfile);
   const updateAvatarFn = useServerFn(updateMyAvatar);
+  const statsFn = useServerFn(getMyProfileStats);
+  const statsQuery = useQuery({
+    queryKey: ["my-profile-stats"],
+    queryFn: () => statsFn(),
+    staleTime: 60_000,
+  });
+  const s = statsQuery.data;
+  const fmtBrl = (n: number) =>
+    n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
   const [cpf, setCpf] = useState("");
   const [cpfError, setCpfError] = useState<string | null>(null);
