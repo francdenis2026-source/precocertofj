@@ -1,8 +1,8 @@
-import { CheckCircle2, ShoppingCart, ShieldCheck, UserPlus, Ticket, Sparkles, type LucideIcon } from "lucide-react";
+import { CheckCircle2, ShoppingCart, ShieldCheck, UserPlus, Ticket, Sparkles, Shield, type LucideIcon } from "lucide-react";
 import heroPhoto from "@/assets/cadastro-hero.jpg";
 
 /**
- * AuthHero — painel esquerdo (split) reutilizável para telas de autenticação.
+ * AuthHero — painel (split no desktop, banner compacto no mobile) reutilizável para telas de autenticação.
  * Ocean Modern: navy #0f2b52 + dourado #f5b301.
  */
 
@@ -14,7 +14,7 @@ const PC_GOLD_SOFT = "#F5D77A";
 const PC_DISPLAY = "'Outfit', system-ui, sans-serif";
 const PC_BODY = "'Figtree', system-ui, sans-serif";
 
-export type AuthHeroVariant = "login" | "signup" | "redeem";
+export type AuthHeroVariant = "login" | "signup" | "redeem" | "admin";
 
 type Preset = {
   badge: { icon: LucideIcon; label: string };
@@ -84,6 +84,24 @@ const PRESETS: Record<AuthHeroVariant, Preset> = {
     brandIcon: ShoppingCart,
     photo: false,
   },
+  admin: {
+    badge: { icon: Shield, label: "Portal interno" },
+    title: "Acesso restrito",
+    highlight: "da equipe.",
+    subtitle: "Entre com suas credenciais internas. Todas as ações ficam registradas na auditoria.",
+    perks: [
+      "Gestão de licenças, mercados e catálogo",
+      "Auditoria completa de eventos e acessos",
+      "Ambiente segregado com MFA e RLS",
+    ],
+    trust: {
+      icon: ShieldCheck,
+      title: "Ambiente monitorado 24/7",
+      caption: "Sessões auditadas · acesso por função",
+    },
+    brandIcon: Shield,
+    photo: false,
+  },
 };
 
 export function AuthHero({
@@ -102,7 +120,7 @@ export function AuthHero({
 
   return (
     <aside
-      className={`relative hidden min-h-[520px] flex-col justify-between overflow-hidden p-6 text-white md:flex ${className}`}
+      className={`relative flex min-h-[220px] flex-col justify-between overflow-hidden p-5 text-white sm:p-6 md:min-h-[520px] ${className}`}
       style={{
         background: preset.photo
           ? undefined
@@ -142,11 +160,11 @@ export function AuthHero({
           >
             <BrandIcon className="h-5 w-5" strokeWidth={2.5} />
           </div>
-          <span className="text-[19px] font-bold tracking-tight text-white">PreçoCerto</span>
+          <span className="text-[18px] font-bold tracking-tight text-white sm:text-[19px]">PreçoCerto</span>
         </div>
 
         <span
-          className="mt-8 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em]"
+          className="mt-5 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] md:mt-8"
           style={{
             borderColor: "rgba(245,215,122,0.55)",
             background: "rgba(10,22,49,0.35)",
@@ -158,31 +176,34 @@ export function AuthHero({
         </span>
 
         <h2
-          className="mt-4 tracking-tight text-white"
+          className="mt-3 tracking-tight text-white md:mt-4"
           style={{
             fontFamily: PC_DISPLAY,
             fontWeight: 700,
-            fontSize: "clamp(1.55rem, 2.4vw, 2rem)",
-            lineHeight: 1.08,
+            fontSize: "clamp(1.35rem, 4.5vw, 2rem)",
+            lineHeight: 1.1,
             textShadow: preset.photo ? "0 2px 12px rgba(0,0,0,0.55)" : undefined,
           }}
         >
-          {preset.title}
-          <br />
-          <span style={{ color: PC_GOLD_SOFT }}>{preset.highlight}</span>
+          {preset.title}{" "}
+          <span className="md:hidden" style={{ color: PC_GOLD_SOFT }}>{preset.highlight}</span>
+          <span className="hidden md:inline">
+            <br />
+            <span style={{ color: PC_GOLD_SOFT }}>{preset.highlight}</span>
+          </span>
         </h2>
 
         <p
-          className="mt-2.5 max-w-[36ch] text-[13px] leading-relaxed text-white/90"
+          className="mt-2 max-w-[38ch] text-[12.5px] leading-relaxed text-white/90 sm:text-[13px] md:mt-2.5"
           style={{ textShadow: preset.photo ? "0 1px 6px rgba(0,0,0,0.5)" : undefined }}
         >
           {preset.subtitle}
         </p>
       </div>
 
-      {/* Bottom: perks + trust */}
+      {/* Bottom: perks + trust — ocultos no mobile para manter a rota compacta */}
       {!compact && (
-        <div className="relative space-y-4">
+        <div className="relative mt-5 hidden space-y-4 md:mt-0 md:block">
           <ul className="space-y-2">
             {preset.perks.map((p) => (
               <li
@@ -240,7 +261,7 @@ export function AuthHero({
   );
 }
 
-/** Wrapper split-shell para telas de auth: header slim + grid 2 colunas com AuthHero à esquerda. */
+/** Wrapper split-shell: banner topo no mobile, split 2 colunas no desktop. */
 export function AuthSplitShell({
   variant,
   children,
