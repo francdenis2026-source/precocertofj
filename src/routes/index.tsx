@@ -245,7 +245,7 @@ function HomePage() {
                     onChange={(e) => setQ(e.target.value)}
                     type="search"
                     inputMode="search"
-                    placeholder="Qual item você busca hoje?"
+                    placeholder="Ex.: Arroz Tio João 5kg"
                     aria-label="Buscar produto"
                     className="flex-1 bg-transparent px-2 py-2.5 text-[14px] font-medium outline-none sm:text-[15px]"
                     style={{ color: P.ink }}
