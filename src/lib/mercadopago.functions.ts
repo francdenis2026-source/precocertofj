@@ -176,11 +176,12 @@ export const listMercadoPagoWebhookEvents = createServerFn({ method: "GET" })
     const { data: rows, error } = await supabaseAdmin
       .from("webhook_events")
       .select(
-        "id, provider, event_type, external_id, status, error, signature_valid, attempts, created_at, last_processed_at, payload",
+        "id, provider, event_type, external_id, status, error, signature_valid, attempts, created_at, last_processed_at, payload, email_status",
       )
       .eq("provider", "mercadopago")
       .order("created_at", { ascending: false })
       .limit(data.limit);
+
     if (error) throw new Error(error.message);
     return (rows ?? []).map((r: any) => ({
       ...r,
