@@ -467,55 +467,66 @@ function ExploreCard({
   return (
     <Link
       to={to}
-      className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/12 bg-white/[0.04] p-6 backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-white/25 hover:bg-white/[0.07] sm:p-7"
+      className="group relative flex items-center gap-3 overflow-hidden rounded-xl border border-white/12 bg-white/[0.05] p-3.5 backdrop-blur-md transition-all duration-300 hover:border-white/25 hover:bg-white/[0.08] md:flex-col md:items-stretch md:gap-0 md:rounded-2xl md:p-7 md:hover:-translate-y-1"
     >
-      {/* Glow no hover */}
+      {/* Glow no hover (só desktop) */}
       <div
-        className="pointer-events-none absolute inset-x-0 -top-24 h-40 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100"
+        className="pointer-events-none absolute inset-x-0 -top-24 hidden h-40 opacity-0 blur-2xl transition-opacity duration-500 group-hover:opacity-100 md:block"
         style={{ background: `radial-gradient(60% 100% at 50% 100%, ${PALETTE.gold}44 0%, transparent 70%)` }}
       />
-      {/* Selo SVG grande */}
-      <div className="mb-6 flex items-start justify-between">
-        <div
-          className="relative grid h-14 w-14 place-items-center rounded-xl border border-white/15"
-          style={{
-            background: `linear-gradient(135deg, ${PALETTE.gold}22 0%, ${PALETTE.gold}08 100%)`,
-            color: PALETTE.goldSoft,
-          }}
-        >
-          {svg}
-        </div>
-        <span
-          className={`${serif} text-[42px] leading-none`}
-          style={{ color: `${PALETTE.goldSoft}55`, letterSpacing: "-0.04em" }}
-        >
-          {number}
-        </span>
-      </div>
 
+      {/* Selo — compacto no mobile, grande no desktop */}
       <div
-        className="text-[11px] font-bold uppercase tracking-[0.28em]"
-        style={{ color: PALETTE.goldSoft }}
-      >
-        {kicker}
-      </div>
-      <h3
-        className="mt-2.5 font-semibold text-white"
+        className="relative grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-white/15 md:mb-6 md:h-14 md:w-14 md:rounded-xl"
         style={{
-          letterSpacing: "-0.022em",
-          fontSize: "clamp(1.35rem, 1.9vw, 1.65rem)",
-          lineHeight: 1.18,
-          fontFeatureSettings: '"ss01","cv11"',
+          background: `linear-gradient(135deg, ${PALETTE.gold}22 0%, ${PALETTE.gold}08 100%)`,
+          color: PALETTE.goldSoft,
         }}
       >
-        {title}
-      </h3>
-      <p className="mt-3 flex-1 text-[14px] leading-[1.6] text-white/85">
-        {desc}
-      </p>
+        {svg}
+      </div>
 
-      {/* Rodapé com CTA e linha */}
-      <div className="mt-6 flex items-center justify-between border-t border-white/10 pt-4">
+      {/* Número decorativo — só desktop */}
+      <span
+        className={`${serif} absolute right-6 top-6 hidden text-[42px] leading-none md:block`}
+        style={{ color: `${PALETTE.goldSoft}55`, letterSpacing: "-0.04em" }}
+      >
+        {number}
+      </span>
+
+      {/* Conteúdo */}
+      <div className="min-w-0 flex-1 md:flex-none">
+        <div
+          className="text-[10px] font-bold uppercase tracking-[0.24em] md:mt-0 md:text-[11px] md:tracking-[0.28em]"
+          style={{ color: PALETTE.goldSoft }}
+        >
+          <span className={`${serif} mr-1.5 not-italic md:hidden`} style={{ color: `${PALETTE.goldSoft}99` }}>
+            {number}
+          </span>
+          {kicker}
+        </div>
+        <h3
+          className="mt-0.5 font-semibold text-white md:mt-2.5"
+          style={{
+            letterSpacing: "-0.02em",
+            fontSize: "clamp(0.98rem, 1.9vw, 1.65rem)",
+            lineHeight: 1.22,
+          }}
+        >
+          {title}
+        </h3>
+        <p className="mt-1 hidden text-[14px] leading-[1.6] text-white/85 md:mt-3 md:block md:flex-1">
+          {desc}
+        </p>
+      </div>
+
+      {/* Chevron — mobile */}
+      <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-white/25 md:hidden">
+        <ArrowRight className="h-4 w-4 text-white" />
+      </span>
+
+      {/* Rodapé com CTA — desktop */}
+      <div className="mt-6 hidden items-center justify-between border-t border-white/10 pt-4 md:flex">
         <span className="text-[12px] font-bold uppercase tracking-[0.2em] text-white">
           {cta}
         </span>
