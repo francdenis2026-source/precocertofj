@@ -49,6 +49,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProdutoIdRouteImport } from './routes/produto.$id'
 import { Route as ProdutoPublicoSlugRouteImport } from './routes/produto-publico.$slug'
 import { Route as LojaIdRouteImport } from './routes/loja.$id'
+import { Route as ListaNovaRouteImport } from './routes/lista.nova'
 import { Route as HistoricoScansRouteImport } from './routes/historico.scans'
 import { Route as HistoricoProdutosRouteImport } from './routes/historico.produtos'
 import { Route as HistoricoIdRouteImport } from './routes/historico.$id'
@@ -294,6 +295,11 @@ const LojaIdRoute = LojaIdRouteImport.update({
   id: '/loja/$id',
   path: '/loja/$id',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ListaNovaRoute = ListaNovaRouteImport.update({
+  id: '/nova',
+  path: '/nova',
+  getParentRoute: () => ListaRoute,
 } as any)
 const HistoricoScansRoute = HistoricoScansRouteImport.update({
   id: '/scans',
@@ -550,7 +556,7 @@ export interface FileRoutesByFullPath {
   '/fale-conosco': typeof FaleConoscoRoute
   '/financas': typeof FinancasRoute
   '/historico': typeof HistoricoRouteWithChildren
-  '/lista': typeof ListaRoute
+  '/lista': typeof ListaRouteWithChildren
   '/login': typeof LoginRoute
   '/lojista': typeof LojistaRoute
   '/mapa': typeof MapaRoute
@@ -601,6 +607,7 @@ export interface FileRoutesByFullPath {
   '/historico/$id': typeof HistoricoIdRoute
   '/historico/produtos': typeof HistoricoProdutosRoute
   '/historico/scans': typeof HistoricoScansRoute
+  '/lista/nova': typeof ListaNovaRoute
   '/loja/$id': typeof LojaIdRouteWithChildren
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
@@ -637,7 +644,7 @@ export interface FileRoutesByTo {
   '/fale-conosco': typeof FaleConoscoRoute
   '/financas': typeof FinancasRoute
   '/historico': typeof HistoricoRouteWithChildren
-  '/lista': typeof ListaRoute
+  '/lista': typeof ListaRouteWithChildren
   '/login': typeof LoginRoute
   '/lojista': typeof LojistaRoute
   '/mapa': typeof MapaRoute
@@ -688,6 +695,7 @@ export interface FileRoutesByTo {
   '/historico/$id': typeof HistoricoIdRoute
   '/historico/produtos': typeof HistoricoProdutosRoute
   '/historico/scans': typeof HistoricoScansRoute
+  '/lista/nova': typeof ListaNovaRoute
   '/loja/$id': typeof LojaIdRouteWithChildren
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
@@ -725,7 +733,7 @@ export interface FileRoutesById {
   '/fale-conosco': typeof FaleConoscoRoute
   '/financas': typeof FinancasRoute
   '/historico': typeof HistoricoRouteWithChildren
-  '/lista': typeof ListaRoute
+  '/lista': typeof ListaRouteWithChildren
   '/login': typeof LoginRoute
   '/lojista': typeof LojistaRoute
   '/mapa': typeof MapaRoute
@@ -776,6 +784,7 @@ export interface FileRoutesById {
   '/historico/$id': typeof HistoricoIdRoute
   '/historico/produtos': typeof HistoricoProdutosRoute
   '/historico/scans': typeof HistoricoScansRoute
+  '/lista/nova': typeof ListaNovaRoute
   '/loja/$id': typeof LojaIdRouteWithChildren
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
@@ -865,6 +874,7 @@ export interface FileRouteTypes {
     | '/historico/$id'
     | '/historico/produtos'
     | '/historico/scans'
+    | '/lista/nova'
     | '/loja/$id'
     | '/produto-publico/$slug'
     | '/produto/$id'
@@ -952,6 +962,7 @@ export interface FileRouteTypes {
     | '/historico/$id'
     | '/historico/produtos'
     | '/historico/scans'
+    | '/lista/nova'
     | '/loja/$id'
     | '/produto-publico/$slug'
     | '/produto/$id'
@@ -1039,6 +1050,7 @@ export interface FileRouteTypes {
     | '/historico/$id'
     | '/historico/produtos'
     | '/historico/scans'
+    | '/lista/nova'
     | '/loja/$id'
     | '/produto-publico/$slug'
     | '/produto/$id'
@@ -1076,7 +1088,7 @@ export interface RootRouteChildren {
   FaleConoscoRoute: typeof FaleConoscoRoute
   FinancasRoute: typeof FinancasRoute
   HistoricoRoute: typeof HistoricoRouteWithChildren
-  ListaRoute: typeof ListaRoute
+  ListaRoute: typeof ListaRouteWithChildren
   LoginRoute: typeof LoginRoute
   LojistaRoute: typeof LojistaRoute
   MapaRoute: typeof MapaRoute
@@ -1416,6 +1428,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/loja/$id'
       preLoaderRoute: typeof LojaIdRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/lista/nova': {
+      id: '/lista/nova'
+      path: '/nova'
+      fullPath: '/lista/nova'
+      preLoaderRoute: typeof ListaNovaRouteImport
+      parentRoute: typeof ListaRoute
     }
     '/historico/scans': {
       id: '/historico/scans'
@@ -1761,6 +1780,16 @@ const HistoricoRouteWithChildren = HistoricoRoute._addFileChildren(
   HistoricoRouteChildren,
 )
 
+interface ListaRouteChildren {
+  ListaNovaRoute: typeof ListaNovaRoute
+}
+
+const ListaRouteChildren: ListaRouteChildren = {
+  ListaNovaRoute: ListaNovaRoute,
+}
+
+const ListaRouteWithChildren = ListaRoute._addFileChildren(ListaRouteChildren)
+
 interface AdminCoberturaRouteChildren {
   AdminCoberturaIdRoute: typeof AdminCoberturaIdRoute
 }
@@ -1818,7 +1847,7 @@ const rootRouteChildren: RootRouteChildren = {
   FaleConoscoRoute: FaleConoscoRoute,
   FinancasRoute: FinancasRoute,
   HistoricoRoute: HistoricoRouteWithChildren,
-  ListaRoute: ListaRoute,
+  ListaRoute: ListaRouteWithChildren,
   LoginRoute: LoginRoute,
   LojistaRoute: LojistaRoute,
   MapaRoute: MapaRoute,
