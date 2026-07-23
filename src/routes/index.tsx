@@ -248,7 +248,7 @@ function HomePage() {
               </div>
 
               {/* CTAs */}
-              <div className="mt-5 flex flex-wrap gap-2.5 sm:mt-6 sm:gap-3">
+              <div className="mt-4 flex flex-wrap gap-2.5 sm:mt-5 sm:gap-3">
                 <Link
                   to="/cadastro"
                   className="group inline-flex min-h-[44px] items-center gap-2 rounded-xl px-5 py-2.5 text-[14px] font-bold shadow-lg transition-all hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:rounded-2xl sm:px-7 sm:py-3 sm:text-[15px]"
