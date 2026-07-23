@@ -13,6 +13,8 @@ import {
   Trophy,
 } from "lucide-react";
 import { ds, dsx } from "@/lib/ds";
+import { SiteHeader } from "@/components/layout/SiteHeader";
+import { SiteFooter } from "@/components/layout/SiteFooter";
 
 import { getPlatformStats } from "@/lib/stores-public.functions";
 
@@ -103,49 +105,7 @@ function HomePage() {
       </div>
 
       {/* HEADER */}
-      <header className="absolute inset-x-0 top-0 z-30">
-        <div className={dsx(ds.container, "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 py-3 sm:gap-3 sm:py-4 md:flex md:justify-between md:py-6")}>
-          <Link to="/" className="flex min-w-0 items-center gap-2.5">
-            <span
-              className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-[15px] font-bold shadow-md sm:h-10 sm:w-10 md:h-12 md:w-12 md:text-[16px]"
-              style={{ background: PALETTE.gold, color: PALETTE.navy }}
-            >
-              P
-            </span>
-            <div className="flex min-w-0 flex-col leading-none">
-              <span className={`${serif} truncate text-[19px] font-normal text-white sm:text-[22px] md:text-[26px]`}>
-                Preço<span className="italic" style={{ color: PALETTE.goldSoft }}>Certo</span>
-              </span>
-              <span className={dsx(ds.type.overline, "mt-1 hidden text-white/70 sm:block")}>
-                Feijó · Acre
-              </span>
-            </div>
-          </Link>
-
-          <nav className="hidden lg:flex items-center gap-8 text-[14px] font-medium text-white/85">
-            <Link to="/buscar" className="hover:text-white transition-colors">Buscar</Link>
-            <Link to="/melhores-precos" className="hover:text-white transition-colors">Rankings</Link>
-            <Link to="/estabelecimentos" className="hover:text-white transition-colors">Mercados</Link>
-            <Link to="/planos" className="hover:text-white transition-colors">Planos</Link>
-          </nav>
-
-          <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-            <Link
-              to="/login"
-              className="hidden sm:inline-flex items-center rounded-lg px-3 py-2 text-[13.5px] font-medium text-white/90 transition-colors hover:text-white md:px-4 md:py-2.5 md:text-[14px]"
-            >
-              Entrar
-            </Link>
-            <Link
-              to="/cadastro"
-              className={dsx(ds.btn.base, ds.btn.sizes.md, "shadow-md")}
-              style={{ background: PALETTE.gold, color: PALETTE.navy }}
-            >
-              Criar conta
-            </Link>
-          </div>
-        </div>
-      </header>
+      <SiteHeader variant="overlay" />
 
       {/* HERO */}
       <section className="relative isolate w-full overflow-hidden" style={{ minHeight: "min(92vh, 880px)" }}>
@@ -394,26 +354,7 @@ function HomePage() {
       </section>
 
       {/* FOOTER */}
-      <footer
-        className={dsx(ds.container, "flex flex-col items-start justify-between gap-3 border-t py-6 text-[12px] sm:flex-row sm:flex-wrap sm:items-center")}
-        style={{ borderColor: PALETTE.line, color: PALETTE.navy2 }}
-      >
-        <div className="flex items-center gap-2.5">
-          <span className="grid h-6 w-6 place-items-center rounded text-[10px] font-bold text-white" style={{ background: PALETTE.navy }}>
-            P
-          </span>
-          <span className={serif} style={{ color: PALETTE.ink }}>PreçoCerto</span>
-          <span aria-hidden>·</span>
-          <span>Feito em Feijó · Acre</span>
-        </div>
-        <div className="flex flex-wrap gap-x-4 gap-y-2">
-          <Link to="/melhores-precos" className="hover:text-[color:var(--nt-ink)]">Rankings</Link>
-          <Link to="/estabelecimentos" className="hover:text-[color:var(--nt-ink)]">Mercados</Link>
-          <Link to="/planos" className="hover:text-[color:var(--nt-ink)]">Planos</Link>
-          <Link to="/colaborar" className="hover:text-[color:var(--nt-ink)]">Colaborar</Link>
-          <Link to="/privacidade" className="hover:text-[color:var(--nt-ink)]">Privacidade</Link>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }
