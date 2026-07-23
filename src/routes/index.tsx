@@ -10,10 +10,8 @@ import {
   Search,
   ArrowRight,
   TrendingDown,
-  Sparkles,
   ShieldCheck,
   Clock,
-  Users,
 } from "lucide-react";
 import { ds, dsx } from "@/lib/ds";
 import { SiteHeader } from "@/components/layout/SiteHeader";
