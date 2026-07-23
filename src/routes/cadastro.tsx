@@ -275,26 +275,27 @@ function CadastroPage() {
           </aside>
 
           {/* RIGHT — Form */}
-          <section className="p-6 md:p-8">
-            <div className="mb-5">
+          <section className="p-6 md:p-9">
+            {/* Header */}
+            <div className="mb-6 border-b border-slate-200/70 pb-5">
               <div
-                className="text-[10px] font-bold uppercase tracking-[0.22em]"
+                className="text-[10.5px] font-bold uppercase tracking-[0.22em]"
                 style={{ color: PC_GOLD_DARK }}
               >
                 Novo assinante
               </div>
               <h2
-                className="mt-1 text-[22px] leading-tight tracking-tight text-slate-900 md:text-2xl"
-                style={{ fontFamily: PC_DISPLAY, fontWeight: 700 }}
+                className="mt-1.5 text-[26px] leading-[1.05] tracking-tight md:text-[28px]"
+                style={{ fontFamily: PC_DISPLAY, fontWeight: 700, color: PC_EMERALD }}
               >
                 Criar conta
               </h2>
-              <p className="mt-1 text-[13px] text-slate-500">
-                Preencha em menos de 30 segundos.
+              <p className="mt-1.5 text-[13.5px] text-slate-600">
+                CPF, PIN de 6 dígitos e você entra direto no painel.
               </p>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-3.5" noValidate>
+            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
               <Field
                 label="Nome completo"
                 value={name}
@@ -305,7 +306,7 @@ function CadastroPage() {
                 state={vName}
                 showState={touched.name}
               />
-              <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                 <Field
                   label="CPF"
                   value={cpf}
@@ -331,9 +332,9 @@ function CadastroPage() {
               </div>
 
               <div>
-                <div className="mb-1.5 flex items-center justify-between">
-                  <label className="block text-[10px] font-bold uppercase tracking-[0.22em] text-slate-500">
-                    PIN de acesso (6 dígitos)
+                <div className="mb-2 flex items-center justify-between">
+                  <label className="block text-[10.5px] font-bold uppercase tracking-[0.22em] text-slate-700">
+                    PIN de acesso · 6 dígitos
                   </label>
                   <FieldStatus state={vPin} show={touched.password} />
                 </div>
@@ -343,59 +344,74 @@ function CadastroPage() {
                   onComplete={() => markTouched("password")}
                   hasError={touched.password && !vPin.valid}
                 />
+                <p className="mt-2 text-[11.5px] text-slate-500">
+                  Use 6 números que só você lembra. Evite datas óbvias.
+                </p>
               </div>
 
               {error && (
                 <p
-                  className="flex items-start gap-2 rounded-lg border px-3 py-2 text-xs"
+                  className="flex items-start gap-2 rounded-lg border px-3 py-2.5 text-[12.5px] font-medium"
                   style={{
-                    borderColor: "rgba(220,38,38,0.25)",
-                    background: "rgba(254,226,226,0.6)",
+                    borderColor: "rgba(220,38,38,0.35)",
+                    background: "rgba(254,226,226,0.7)",
                     color: "#991b1b",
                   }}
                 >
-                  <AlertCircle className="mt-0.5 h-3.5 w-3.5 flex-none" />
+                  <AlertCircle className="mt-0.5 h-4 w-4 flex-none" />
                   <span>{error}</span>
                 </p>
               )}
 
+              {/* Primary CTA — navy with gold ring */}
               <button
                 type="submit"
                 disabled={loading || !allValid}
-                className="mt-1 inline-flex h-11 w-full items-center justify-center gap-2 rounded-xl text-[14px] font-semibold text-white shadow-lg transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
+                className="group relative mt-2 inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl text-[14.5px] font-bold !text-white shadow-xl transition hover:brightness-[1.08] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:brightness-100"
                 style={{
-                  background: `linear-gradient(135deg, ${PC_EMERALD_LIGHT}, ${PC_EMERALD})`,
-                  boxShadow: "0 12px 28px -14px rgba(15,27,61,0.55)",
+                  background: allValid && !loading
+                    ? `linear-gradient(135deg, ${PC_EMERALD_LIGHT} 0%, ${PC_EMERALD} 50%, ${PC_EMERALD_DEEP} 100%)`
+                    : `linear-gradient(135deg, #6b7896, #4a5670)`,
+                  boxShadow: allValid && !loading
+                    ? `0 14px 32px -12px rgba(15,27,61,0.55), inset 0 1px 0 rgba(255,255,255,0.14), inset 0 0 0 1px ${PC_GOLD}55`
+                    : "0 6px 16px -8px rgba(15,27,61,0.35)",
                   fontFamily: PC_DISPLAY,
                   letterSpacing: "0.01em",
                 }}
               >
                 {loading ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span>Criando conta…</span>
+                  </>
                 ) : (
                   <>
-                    Criar conta e continuar <ArrowRight className="h-4 w-4" />
+                    <span>Criar conta e continuar</span>
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                   </>
                 )}
               </button>
 
-              <div className="flex items-center justify-between pt-0.5 text-[11.5px]">
-                <span className="inline-flex items-center gap-1.5 text-slate-500">
-                  <ShieldCheck className="h-3.5 w-3.5" style={{ color: PC_EMERALD_LIGHT }} />
+              <div className="flex items-center justify-between pt-1 text-[12px]">
+                <span className="inline-flex items-center gap-1.5 font-medium text-slate-600">
+                  <ShieldCheck className="h-3.5 w-3.5" style={{ color: PC_EMERALD }} />
                   Dados protegidos
                 </span>
                 <Link
                   to={loginHref}
-                  className="font-semibold hover:underline"
+                  className="inline-flex items-center gap-1 font-semibold transition-colors hover:opacity-80"
                   style={{ color: PC_EMERALD }}
                 >
-                  Já tenho conta →
+                  Já tenho conta <span aria-hidden>→</span>
                 </Link>
               </div>
             </form>
 
-            <p className="mt-4 text-center text-[10.5px] text-slate-400">
-              Ao continuar você aceita nossos Termos e Política de Privacidade.
+            <p className="mt-6 border-t border-slate-100 pt-4 text-center text-[11px] text-slate-500">
+              Ao continuar você aceita nossos{" "}
+              <a className="font-semibold underline underline-offset-2 hover:text-slate-700" href="/termos">Termos</a>
+              {" "}e a{" "}
+              <a className="font-semibold underline underline-offset-2 hover:text-slate-700" href="/privacidade">Política de Privacidade</a>.
             </p>
           </section>
         </motion.div>
