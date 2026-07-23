@@ -533,6 +533,88 @@ export type Database = {
         }
         Relationships: []
       }
+      email_send_queue: {
+        Row: {
+          attempts: number
+          created_at: string
+          id: string
+          kind: string
+          last_attempt_at: string | null
+          last_error: string | null
+          license_code_id: string | null
+          max_attempts: number
+          message_id: string | null
+          next_attempt_at: string
+          order_id: string | null
+          payload: Json
+          sent_at: string | null
+          status: string
+          to_email: string
+          updated_at: string
+          webhook_event_id: string | null
+        }
+        Insert: {
+          attempts?: number
+          created_at?: string
+          id?: string
+          kind?: string
+          last_attempt_at?: string | null
+          last_error?: string | null
+          license_code_id?: string | null
+          max_attempts?: number
+          message_id?: string | null
+          next_attempt_at?: string
+          order_id?: string | null
+          payload?: Json
+          sent_at?: string | null
+          status?: string
+          to_email: string
+          updated_at?: string
+          webhook_event_id?: string | null
+        }
+        Update: {
+          attempts?: number
+          created_at?: string
+          id?: string
+          kind?: string
+          last_attempt_at?: string | null
+          last_error?: string | null
+          license_code_id?: string | null
+          max_attempts?: number
+          message_id?: string | null
+          next_attempt_at?: string
+          order_id?: string | null
+          payload?: Json
+          sent_at?: string | null
+          status?: string
+          to_email?: string
+          updated_at?: string
+          webhook_event_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_send_queue_license_code_id_fkey"
+            columns: ["license_code_id"]
+            isOneToOne: false
+            referencedRelation: "license_codes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_send_queue_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "checkout_orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "email_send_queue_webhook_event_id_fkey"
+            columns: ["webhook_event_id"]
+            isOneToOne: false
+            referencedRelation: "webhook_events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       establishments: {
         Row: {
           active: boolean
