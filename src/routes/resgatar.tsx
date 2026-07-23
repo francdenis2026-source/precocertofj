@@ -82,6 +82,78 @@ function validateCode(rawInput: string): ValidationState {
   return { level: "ok", message: "Pronto para tentar ativar." };
 }
 
+type RedeemErrorInfo = {
+  title: string;
+  detail: string;
+  nextStep: string;
+  borderColor: string;
+  bgColor: string;
+  textColor: string;
+  actions: Array<{ to: string; label: string }>;
+};
+
+function classifyRedeemError(raw: string): RedeemErrorInfo {
+  const m = (raw || "").toLowerCase();
+  // paletas
+  const RED = { borderColor: "#fca5a5", bgColor: "#fef2f2", textColor: "#991b1b" };
+  const AMBER = { borderColor: "#fcd34d", bgColor: "#fffbeb", textColor: "#92400e" };
+  const SLATE = { borderColor: "#cbd5e1", bgColor: "#f8fafc", textColor: "#0f1b3d" };
+
+  if (m.includes("já foi resgatado") || m.includes("ja foi resgatado") || m.includes("já utilizado")) {
+    return {
+      ...AMBER,
+      title: "Este código já foi usado",
+      detail: "Cada código de licença só pode ser ativado uma vez, em uma única conta.",
+      nextStep: "Confira em ‘Minhas licenças’ se já está ativa. Se não for você quem resgatou, fale com o suporte.",
+      actions: [{ to: "/minhas-licencas", label: "Minhas licenças" }, { to: "/suporte", label: "Falar com suporte" }],
+    };
+  }
+  if (m.includes("revogado")) {
+    return {
+      ...RED,
+      title: "Código revogado",
+      detail: "O administrador cancelou este código (ex.: estorno, fraude ou reemissão).",
+      nextStep: "Entre em contato com o suporte para verificar a situação ou solicitar reemissão.",
+      actions: [{ to: "/suporte", label: "Falar com suporte" }],
+    };
+  }
+  if (m.includes("expirad") || m.includes("expirou")) {
+    return {
+      ...AMBER,
+      title: "Código expirado",
+      detail: "A validade deste código venceu antes da ativação.",
+      nextStep: "Solicite a reemissão à equipe ou adquira um novo plano para continuar.",
+      actions: [{ to: "/suporte", label: "Solicitar reemissão" }, { to: "/planos", label: "Ver planos" }],
+    };
+  }
+  if (m.includes("não foi pago") || m.includes("nao foi pago") || m.includes("pendente") || m.includes("aguardando")) {
+    return {
+      ...AMBER,
+      title: "Pagamento ainda não confirmado",
+      detail: "Recebemos o código, mas o pagamento correspondente ainda não caiu no nosso sistema.",
+      nextStep: "Aguarde alguns minutos após pagar e tente de novo. Se já pagou há mais tempo, envie o comprovante ao suporte.",
+      actions: [{ to: "/suporte", label: "Enviar comprovante" }],
+    };
+  }
+  if (m.includes("não encontrado") || m.includes("nao encontrado") || m.includes("inválido") || m.includes("invalido")) {
+    return {
+      ...RED,
+      title: "Código não reconhecido",
+      detail: "Não localizamos esse código na nossa base. Pode ter erro de digitação, espaços extras ou caracteres parecidos (0/O, 1/I).",
+      nextStep: "Copie e cole diretamente do e-mail da compra. Se não achar o e-mail, verifique spam e promoções.",
+      actions: [{ to: "/planos", label: "Ver planos" }, { to: "/suporte", label: "Falar com suporte" }],
+    };
+  }
+  return {
+    ...SLATE,
+    title: "Não foi possível ativar",
+    detail: raw || "Erro desconhecido ao processar o código.",
+    nextStep: "Tente novamente em instantes. Se o problema persistir, entre em contato com o suporte.",
+    actions: [{ to: "/suporte", label: "Falar com suporte" }],
+  };
+}
+
+
 export const Route = createFileRoute("/resgatar")({
   ssr: false,
   head: () => ({
