@@ -48,21 +48,21 @@ export function SiteFooter() {
 
   return (
     <footer
-      className="mt-16 border-t"
+      className="mt-10 border-t md:mt-16"
       style={{ background: PALETTE.bgTint, borderColor: PALETTE.line }}
     >
       {/* Top — brand + link columns */}
       <div
         className={dsx(
           ds.container,
-          "grid gap-10 py-12 md:grid-cols-[1.2fr_2fr] md:gap-14 md:py-14",
+          "grid gap-7 py-7 md:grid-cols-[1.2fr_2fr] md:gap-14 md:py-14",
         )}
       >
         {/* Brand block */}
         <div className="max-w-sm">
-          <Link to="/" className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-2.5">
             <span
-              className="grid h-10 w-10 shrink-0 place-items-center rounded-lg text-[16px] font-black shadow-sm"
+              className="grid h-9 w-9 shrink-0 place-items-center rounded-lg text-[15px] font-black shadow-sm md:h-10 md:w-10 md:text-[16px]"
               style={{
                 background: PALETTE.navy,
                 color: PALETTE.goldSoft,
@@ -72,7 +72,7 @@ export function SiteFooter() {
               P
             </span>
             <span
-              className={dsx(serif, "text-[26px] leading-none")}
+              className={dsx(serif, "text-[22px] leading-none md:text-[26px]")}
               style={{ color: PALETTE.ink, letterSpacing: "-0.012em" }}
             >
               Preço
@@ -83,15 +83,14 @@ export function SiteFooter() {
           </Link>
 
           <p
-            className="mt-4 text-[13.5px] leading-relaxed"
+            className="mt-3 text-[12.5px] leading-relaxed md:mt-4 md:text-[13.5px]"
             style={{ color: PALETTE.muted }}
           >
             Comparador colaborativo de preços dos mercados de Feijó — Acre.
-            Dados verificados por nota fiscal, atualizados pela comunidade.
           </p>
 
           <ul
-            className="mt-5 space-y-2 text-[12.5px]"
+            className="mt-3.5 space-y-1.5 text-[12px] md:mt-5 md:space-y-2 md:text-[12.5px]"
             style={{ color: PALETTE.navy2 }}
           >
             <li className="flex items-center gap-2">
@@ -100,10 +99,7 @@ export function SiteFooter() {
             </li>
             <li className="flex items-center gap-2">
               <Mail className="h-3.5 w-3.5" style={{ color: PALETTE.gold }} />
-              <a
-                href="mailto:precofacil-fj@proton.me"
-                className="hover:underline"
-              >
+              <a href="mailto:precofacil-fj@proton.me" className="hover:underline">
                 precofacil-fj@proton.me
               </a>
             </li>
@@ -115,21 +111,21 @@ export function SiteFooter() {
         </div>
 
         {/* Link columns */}
-        <div className="grid grid-cols-2 gap-6 sm:grid-cols-3 sm:gap-8">
+        <div className="grid grid-cols-3 gap-4 sm:gap-8">
           {NAV_COLS.map((col) => (
             <div key={col.title}>
               <div
-                className="text-[10.5px] font-bold uppercase tracking-[0.22em]"
+                className="text-[10px] font-bold uppercase tracking-[0.2em] md:text-[10.5px] md:tracking-[0.22em]"
                 style={{ color: PALETTE.gold }}
               >
                 {col.title}
               </div>
-              <ul className="mt-3 space-y-2.5">
+              <ul className="mt-2 space-y-1.5 md:mt-3 md:space-y-2.5">
                 {col.links.map((l) => (
                   <li key={l.to}>
                     <Link
                       to={l.to}
-                      className="text-[13.5px] transition-colors"
+                      className="text-[12.5px] transition-colors md:text-[13.5px]"
                       style={{ color: PALETTE.navy2 }}
                     >
                       <span className="hover:text-[color:var(--nt-ink)]">
@@ -149,14 +145,14 @@ export function SiteFooter() {
         <div
           className={dsx(
             ds.container,
-            "flex flex-col items-start justify-between gap-3 py-5 text-[13px] font-medium sm:flex-row sm:items-center",
+            "flex flex-col items-start justify-between gap-2 py-3.5 text-[12px] font-medium sm:flex-row sm:items-center md:py-5 md:text-[13px]",
           )}
           style={{ color: PALETTE.ink }}
         >
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
             <span>© {year} <strong className="font-semibold">PreçoCerto</strong></span>
             <span aria-hidden style={{ color: PALETTE.muted }}>·</span>
-            <span style={{ color: PALETTE.navy2 }}>Feito com carinho em Feijó · Acre</span>
+            <span style={{ color: PALETTE.navy2 }}>Feijó · Acre</span>
           </div>
           <div className="flex items-center gap-4">
             <Link to="/privacidade" className="underline-offset-2 hover:underline" style={{ color: PALETTE.navy }}>
