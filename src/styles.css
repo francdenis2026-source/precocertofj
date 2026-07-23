@@ -1047,3 +1047,51 @@ iframe[src*="lovable.dev/badge"] {
 #lovable-badge {
   display: none !important;
 }
+
+/* ============= HIGH CONTRAST MODE (WCAG AAA) =============
+ * Ativado via classe `.hc` em <html>. Preserva a identidade Navy Trust
+ * escurecendo o navy institucional, saturando o dourado e reforçando
+ * bordas, tipografia e focus rings.
+ */
+:root.hc {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.10 0.02 258);
+  --surface: oklch(1 0 0);
+  --ink: oklch(0.10 0.02 258);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.10 0.02 258);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.10 0.02 258);
+  --muted: oklch(0.96 0.006 250);
+  --muted-foreground: oklch(0.28 0.03 258);
+  --primary: oklch(0.24 0.09 258);
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.96 0.006 250);
+  --secondary-foreground: oklch(0.10 0.02 258);
+  --accent: oklch(0.62 0.14 78);
+  --accent-foreground: oklch(0.10 0.02 258);
+  --accent-strong: oklch(0.42 0.16 250);
+  --border: oklch(0.35 0.02 258);
+  --input: oklch(0.35 0.02 258);
+  --ring: oklch(0.42 0.22 258);
+  --destructive: oklch(0.42 0.22 25);
+  font-size: 17px;
+}
+
+:root.hc *:focus-visible {
+  outline: 3px solid var(--color-ring) !important;
+  outline-offset: 2px !important;
+  box-shadow: none !important;
+}
+
+:root.hc ::placeholder {
+  color: var(--color-muted-foreground);
+  opacity: 1;
+}
+
+/* Sublinhado em links dentro de conteúdo (não afeta botões, chips ou nav) */
+:root.hc main a[href]:not(.no-underline):not([role="button"]):not([class*="btn-"]):not([class*="ds-chip"]) {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1.5px;
+}
