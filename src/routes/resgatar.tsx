@@ -22,12 +22,12 @@ import {
 import { toast } from "sonner";
 import { Logo } from "@/components/brand/Logo";
 
-/* Tokens Navy Trust — alto contraste */
-const NAVY = "#0f1b3d";
-const NAVY2 = "#1a2a52";
-const INK = "#0a1226";
-const GOLD = "#b58a3c";
-const GOLD_SOFT = "#f2dfa8";
+/* Ocean Modern — navy #0f2b52 + dourado #f5b301 (alinhado à homepage) */
+const NAVY = "#0f2b52";
+const NAVY2 = "#1e4a85";
+const INK = "#081b3a";
+const GOLD = "#f5b301";
+const GOLD_SOFT = "#ffe08a";
 const LINE = "#e5e7ef";
 const MUTED = "#475569";
 
