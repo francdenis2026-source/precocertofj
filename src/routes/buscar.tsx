@@ -85,6 +85,51 @@ function SearchPage() {
   const pureOnly = search.pure !== "0";
   const q = (search.q ?? "").slice(0, 80);
   const hasQuery = q.trim().length > 0;
+  const brandFilter = (search.brand ?? "").slice(0, 40);
+  const priceMin = search.min ? Number(search.min) : NaN;
+  const priceMax = search.max ? Number(search.max) : NaN;
+  const hasFilters =
+    brandFilter.trim().length > 0 || Number.isFinite(priceMin) || Number.isFinite(priceMax);
+
+  const setBrand = (next: string) =>
+    navigate({
+      search: (prev: Record<string, unknown>) => {
+        const nextSearch: Record<string, unknown> = { ...prev, brand: next };
+        if (!next) delete nextSearch.brand;
+        return nextSearch;
+      },
+      replace: true,
+    });
+  const setMinPrice = (next: string) =>
+    navigate({
+      search: (prev: Record<string, unknown>) => {
+        const s: Record<string, unknown> = { ...prev, min: next };
+        if (!next) delete s.min;
+        return s;
+      },
+      replace: true,
+    });
+  const setMaxPrice = (next: string) =>
+    navigate({
+      search: (prev: Record<string, unknown>) => {
+        const s: Record<string, unknown> = { ...prev, max: next };
+        if (!next) delete s.max;
+        return s;
+      },
+      replace: true,
+    });
+  const clearFilters = () =>
+    navigate({
+      search: (prev: Record<string, unknown>) => {
+        const s: Record<string, unknown> = { ...prev };
+        delete s.brand;
+        delete s.min;
+        delete s.max;
+        return s;
+      },
+      replace: true,
+    });
+
 
   useEffect(() => {
     if (!hasQuery) return;
