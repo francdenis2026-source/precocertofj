@@ -55,7 +55,7 @@ export function RadarCategorySheet({
             <SheetTitle className="font-display text-2xl font-bold text-white">
               {target?.label ?? "Categoria"}
             </SheetTitle>
-            <SheetDescription className="text-white/60">
+            <SheetDescription className="text-white/85">
               {target ? (
                 <>
                   Oscilação de{" "}
@@ -94,7 +94,7 @@ export function RadarCategorySheet({
                 </div>
               </div>
             ) : !data || data.products.length === 0 ? (
-              <div className="rounded-xl border border-white/10 bg-white/[0.03] p-6 text-center text-sm text-white/60">
+              <div className="rounded-xl border border-white/10 bg-white/[0.03] p-6 text-center text-sm text-white/85">
                 Sem produtos suficientes nesta categoria para exibir agora.
               </div>
             ) : (
@@ -132,7 +132,7 @@ export function RadarCategorySheet({
                               {brl(p.minPrice)}
                             </span>
                             {p.maxPrice > p.minPrice && (
-                              <span className="text-[11px] text-white/40 line-through tabular-nums">
+                              <span className="text-[11px] text-white/75 line-through tabular-nums">
                                 {brl(p.maxPrice)}
                               </span>
                             )}
@@ -147,7 +147,7 @@ export function RadarCategorySheet({
                                 loading="lazy"
                               />
                             ) : (
-                              <Store className="h-4 w-4 text-white/50" />
+                              <Store className="h-4 w-4 text-white/80" />
                             )}
                             <span className="min-w-0 flex-1 truncate text-[11px] font-medium text-white/80">
                                 {p.cheapestStore ?? "Menor preço"}
@@ -164,7 +164,7 @@ export function RadarCategorySheet({
                             )}
                           </div>
 
-                          <div className="mt-1.5 flex items-center gap-3 text-[10px] text-white/50">
+                          <div className="mt-1.5 flex items-center gap-3 text-[10px] text-white/80">
                             <span className="inline-flex items-center gap-1">
                               <TrendingDown className="h-3 w-3 text-emerald-300" />
                               economia {brl(savings)}
@@ -183,7 +183,7 @@ export function RadarCategorySheet({
             )}
           </div>
 
-          <div className="border-t border-white/10 bg-black/40 px-6 py-3 text-[11px] text-white/50">
+          <div className="border-t border-white/10 bg-black/40 px-6 py-3 text-[11px] text-white/80">
             {isFetching && !isLoading ? (
               <span className="inline-flex items-center gap-2">
                 <Loader2 className="h-3 w-3 animate-spin" />
