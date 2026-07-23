@@ -146,13 +146,14 @@ export function SiteFooter() {
         <div
           className={dsx(
             ds.container,
-            "flex flex-col items-start justify-between gap-1.5 py-3 text-[12px] font-medium sm:flex-row sm:items-center md:py-4 md:text-[13px]",
+            "flex flex-col items-start justify-between gap-1.5 py-3 text-[12px] font-medium leading-[1.5] sm:flex-row sm:items-center md:py-4 md:text-[13.5px] lg:text-[15px]",
           )}
           style={{ color: PALETTE.ink }}
         >
-          <span>© {year} <strong className="font-semibold">PreçoCerto</strong> · Feijó · Acre</span>
-          <span className="font-mono" style={{ color: PALETTE.navy2 }}>&lt;dev&gt; Franc D&apos;nis</span>
+          <span className="whitespace-normal">© {year} <strong className="font-semibold">PreçoCerto</strong> · Feijó · Acre</span>
+          <span className="whitespace-nowrap font-mono" style={{ color: PALETTE.navy2 }}>&lt;dev&gt; Franc D&apos;nis</span>
         </div>
+
       </div>
     </footer>
   );
