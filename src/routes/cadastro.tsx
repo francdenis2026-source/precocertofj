@@ -318,19 +318,18 @@ function CadastroPage() {
 
 
 
-            <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            <form onSubmit={handleSubmit} className="space-y-3" noValidate>
               <Field
                 label="Nome completo"
                 value={name}
                 onChange={(v) => setName(v.toLocaleUpperCase("pt-BR"))}
-
                 onBlur={() => markTouched("name")}
                 placeholder="Nome e sobrenome"
                 autoComplete="name"
                 state={vName}
                 showState={touched.name}
               />
-              <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <Field
                   label="CPF"
                   value={cpf}
