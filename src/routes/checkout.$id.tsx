@@ -48,10 +48,13 @@ function CheckoutPage() {
   const approve = useServerFn(approveCheckoutOrder);
   const createPref = useServerFn(createMercadoPagoPreference);
   const simulate = useServerFn(simulateCheckoutApproval);
+  const saveEmail = useServerFn(setCheckoutEmail);
   const { isAdmin } = useMyRoles();
 
   const [couponInput, setCouponInput] = useState("");
   const [applying, setApplying] = useState(false);
+  const [emailInput, setEmailInput] = useState("");
+  const [emailTouched, setEmailTouched] = useState(false);
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
