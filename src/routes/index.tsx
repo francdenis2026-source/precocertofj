@@ -419,13 +419,13 @@ function HomePage() {
 
           {/* -------- EXPLORE (dark navy band inside card) -------- */}
           <div
-            className="p-6 sm:p-7 lg:p-9 xl:p-10"
+            className="p-4 sm:p-5 lg:p-7 xl:p-8"
             style={{ background: P.navy, color: "#F5F6FA" }}
           >
-            <div className="mb-6 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="mb-4 flex flex-col gap-2 sm:mb-5 md:flex-row md:items-end md:justify-between md:gap-6">
               <div className="max-w-xl">
                 <div
-                  className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em]"
+                  className="mb-2 text-[9.5px] font-bold uppercase tracking-[0.28em] sm:text-[10px]"
                   style={{ color: P.gold }}
                 >
                   Explore a plataforma
@@ -433,27 +433,25 @@ function HomePage() {
                 <h2
                   className={`${serif} font-normal`}
                   style={{
-                    fontSize: "clamp(1.5rem, 3.2vw, 2.35rem)",
+                    fontSize: "clamp(1.35rem, 2.6vw, 2rem)",
                     lineHeight: 1,
                     letterSpacing: "-0.025em",
                     color: "#F5F6FA",
                   }}
                 >
-                  Tudo em três passos,
-                  <br />
+                  Tudo em três passos,{" "}
                   <span className="italic" style={{ color: P.gold }}>
                     sem esforço.
                   </span>
                 </h2>
-                <p className="mt-3 max-w-md text-[14px] leading-relaxed text-white/60">
-                  Ferramentas exclusivas para que você nunca mais pague caro em
-                  itens essenciais.
+                <p className="mt-2 max-w-md text-[13px] leading-snug text-white/60 sm:text-[13.5px]">
+                  Ferramentas exclusivas para você nunca mais pagar caro em itens essenciais.
                 </p>
               </div>
-              <div className="hidden h-px flex-1 md:mx-10 md:mb-3 md:block" style={{ background: "rgb(255 255 255 / 0.08)" }} />
+              <div className="hidden h-px flex-1 md:mx-8 md:mb-3 md:block" style={{ background: "rgb(255 255 255 / 0.08)" }} />
             </div>
 
-            <div className="grid gap-4 md:grid-cols-3 md:gap-6">
+            <div className="grid gap-2.5 sm:gap-3 md:grid-cols-3 md:gap-3.5">
               <ExploreCard
                 to="/melhores-precos"
                 number="01"
@@ -477,6 +475,7 @@ function HomePage() {
               />
             </div>
           </div>
+
         </div>
       </div>
 
