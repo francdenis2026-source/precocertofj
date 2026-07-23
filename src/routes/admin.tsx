@@ -18,6 +18,7 @@ import {
   type EstablishmentKind,
 } from "@/lib/establishments.functions";
 import { uploadImageDataUrl } from "@/lib/storage.functions";
+import { extractLogoDetails, type LogoExtract } from "@/lib/logo-extract.functions";
 import { claimFirstAdmin, listUsersWithRoles, grantRole, revokeRole, listRoleAuditLog, OWNER_EMAIL, type UserWithRoles, type RoleAuditEntry } from "@/lib/roles.functions";
 import { AppShell } from "@/components/brand/AppShell";
 import { PageHeader } from "@/components/brand/PageHeader";
@@ -2031,12 +2032,41 @@ function AuditTab() {
 function LogoUploadField({
   current,
   onChange,
+  onExtracted,
 }: {
   current: string;
   onChange: (url: string) => void;
+  onExtracted?: (data: LogoExtract) => void;
 }) {
   const upload = useServerFn(uploadImageDataUrl);
+  const extract = useServerFn(extractLogoDetails);
   const [busy, setBusy] = useState(false);
+  const [analyzing, setAnalyzing] = useState(false);
+  const [lastDataUrl, setLastDataUrl] = useState<string | null>(null);
+
+  const runExtract = async (dataUrl: string) => {
+    if (!onExtracted) return;
+    setAnalyzing(true);
+    try {
+      const result = await extract({ data: { image: dataUrl } });
+      onExtracted(result);
+      const filled = [
+        result.name && "nome",
+        result.kind && "tipo",
+        result.brandColor && "cor",
+        result.notes && "segmento",
+      ].filter(Boolean);
+      if (filled.length > 0) {
+        toast.success(`IA preencheu: ${filled.join(", ")}`);
+      } else {
+        toast.message("IA não identificou informações claras na logo.");
+      }
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Falha ao analisar logo");
+    } finally {
+      setAnalyzing(false);
+    }
+  };
 
   const handleFile = async (file: File) => {
     if (file.size > 2 * 1024 * 1024) {
@@ -2055,7 +2085,10 @@ function LogoUploadField({
       const path = `${crypto.randomUUID()}.${ext}`;
       const { publicUrl } = await upload({ data: { bucket: "logos", path, dataUrl } });
       onChange(publicUrl);
+      setLastDataUrl(dataUrl);
       toast.success("Logomarca enviada");
+      // Extração automática após upload
+      void runExtract(dataUrl);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Falha no upload");
     } finally {
@@ -2082,22 +2115,48 @@ function LogoUploadField({
           <Input
             type="file"
             accept="image/*"
-            disabled={busy}
+            disabled={busy || analyzing}
             onChange={(e) => {
               const f = e.target.files?.[0];
               if (f) void handleFile(f);
             }}
           />
-          {current && (
-            <Button type="button" variant="ghost" size="sm" onClick={() => onChange("")}>
-              Remover
-            </Button>
+          <div className="flex items-center gap-2">
+            {current && (
+              <Button type="button" variant="ghost" size="sm" onClick={() => onChange("")}>
+                Remover
+              </Button>
+            )}
+            {onExtracted && (current || lastDataUrl) && (
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                disabled={analyzing}
+                onClick={() => {
+                  const src = lastDataUrl ?? current;
+                  if (src) void runExtract(src);
+                }}
+              >
+                {analyzing ? (
+                  <><Loader2 className="mr-2 h-3 w-3 animate-spin" /> Analisando…</>
+                ) : (
+                  <><Sparkles className="mr-2 h-3 w-3" /> Analisar com IA</>
+                )}
+              </Button>
+            )}
+          </div>
+          {onExtracted && (
+            <p className="text-xs text-muted-foreground">
+              A IA lê a logo e preenche automaticamente nome, tipo, segmento e cor de marca.
+            </p>
           )}
         </div>
       </div>
     </div>
   );
 }
+
 
 
 const kindLabel: Record<EstablishmentKind, string> = {
@@ -2396,7 +2455,17 @@ function EstablishmentsTab() {
               <LogoUploadField
                 current={form.logoUrl}
                 onChange={(url) => setForm({ ...form, logoUrl: url })}
+                onExtracted={(ai) =>
+                  setForm((prev) => ({
+                    ...prev,
+                    name: prev.name.trim() ? prev.name : ai.name ?? prev.name,
+                    kind: prev.kind !== "mercado" ? prev.kind : ai.kind ?? prev.kind,
+                    brandColor: prev.brandColor ? prev.brandColor : ai.brandColor ?? prev.brandColor,
+                    notes: prev.notes.trim() ? prev.notes : ai.notes ?? prev.notes,
+                  }))
+                }
               />
+
             </div>
             <div className="md:col-span-2">
               <Label>Cor de identificação da estabelecimento</Label>
