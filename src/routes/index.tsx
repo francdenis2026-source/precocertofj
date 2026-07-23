@@ -13,7 +13,7 @@ import {
   ShieldCheck,
   Clock,
   Package,
-  TrendingDown as _TrendingDownDup,
+  
 } from "lucide-react";
 
 import { ds, dsx } from "@/lib/ds";
@@ -624,6 +624,11 @@ function HomePage() {
           </div>
         </TooltipProvider>
       </section>
+
+      {/* -------- RECENT PRODUCTS -------- */}
+      <RecentProducts P={P} serif={serif} />
+
+
 
 
       {/* -------- FINAL CTA -------- */}
