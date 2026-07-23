@@ -572,12 +572,18 @@ function HomePage() {
                 tip: "Mais de 1.500 produtos únicos cadastrados com preço, marca e categoria.",
               },
               {
-                k: "1.5k+",
-                l: "preços",
-                lFull: "preços colaborados",
-                icon: <LineChart className="h-4 w-4" />,
-                tip: "Histórico de preços enviados pela comunidade para você acompanhar a evolução.",
+                k: economy?.avgSavingsPct
+                  ? `${economy.avgSavingsPct}%`
+                  : "até 38%",
+                l: "economia",
+                lFull: "economia identificada",
+                icon: <TrendingDown className="h-4 w-4" />,
+                tip: economy?.productsWithComparison
+                  ? `Diferença média entre o melhor e o pior preço do mesmo produto, medida em ${economy.productsWithComparison.toLocaleString("pt-BR")} produtos com pelo menos 2 mercados. Melhor caso: ${economy.bestSavingsPct}%.`
+                  : "Diferença média entre o melhor e o pior preço encontrado para o mesmo produto em Feijó/AC nas últimas semanas.",
               },
+
+
 
             ].map((s) => (
               <Tooltip key={s.lFull}>
