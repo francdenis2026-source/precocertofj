@@ -41,7 +41,25 @@ function WelcomePage() {
     return safeInternalPath(raw) ?? "/app";
   }, []);
 
+  const getStatus = useServerFn(getMyOnboardingStatus);
+  const status = useQuery({
+    queryKey: ["onboarding-status"],
+    queryFn: () => getStatus(),
+    staleTime: 30_000,
+  });
+  const needsOnboarding = status.data ? !status.data.completed : false;
+
   useEffect(() => {
+    // Enquanto ainda não sabemos o status, não inicia countdown
+    if (status.isLoading) return;
+
+    // Se precisa completar cadastro, redireciona imediatamente
+    if (needsOnboarding) {
+      const next = encodeURIComponent(target);
+      router.history.replace(`/onboarding?next=${next}`);
+      return;
+    }
+
     const start = Date.now();
     const interval = window.setInterval(() => {
       const elapsed = Date.now() - start;
@@ -54,7 +72,7 @@ function WelcomePage() {
       window.clearInterval(interval);
       window.clearTimeout(timeout);
     };
-  }, [router, target]);
+  }, [router, target, status.isLoading, needsOnboarding]);
 
   const greetingName = firstName ? `, ${firstName}` : "";
 
