@@ -121,7 +121,7 @@ function AppHomeContent() {
         {summary && (
           <>
             <div className="mt-6 md:mt-8">
-              <SectionKicker eyebrow="Panorama" title="Sua semana em números" />
+              <SectionKicker eyebrow="Seu resumo" title="Como você está economizando" />
               <div className="mt-3 md:mt-4">
                 <StatGrid
                   className="lg:grid-cols-3"
@@ -130,7 +130,7 @@ function AppHomeContent() {
                       label: "Suas listas",
                       value: summary.totals.listsCount,
                       icon: ShoppingCart,
-                      hint: `${summary.totals.itemsCount} ${summary.totals.itemsCount === 1 ? "item" : "itens"} no total`,
+                      hint: `${summary.totals.itemsCount} ${summary.totals.itemsCount === 1 ? "item" : "itens"} para comprar`,
                     },
                     {
                       label: "Favoritos",
@@ -140,15 +140,15 @@ function AppHomeContent() {
                       tone: "primary",
                     },
                     {
-                      label: "Carrinho ideal",
+                      label: "Cesta mais barata",
                       value:
                         summary.totals.estimatedCartTotal !== null
                           ? brl(summary.totals.estimatedCartTotal)
                           : "—",
                       icon: TrendingDown,
                       hint: summary.totals.estimatedCartMarket
-                        ? `melhor em ${summary.totals.estimatedCartMarket}`
-                        : "cadastre favoritos para calcular",
+                        ? `hoje sai melhor em ${summary.totals.estimatedCartMarket}`
+                        : "favorite produtos para ver o melhor mercado",
                       tone: summary.totals.estimatedCartMarket ? "success" : "default",
                     },
                   ]}
