@@ -166,7 +166,7 @@ export function SiteHeader({ variant = "solid", showNav = true }: Props) {
             <>
               <Link
                 to="/login"
-                className="hidden items-center rounded-lg px-4 py-2.5 text-[15.5px] font-semibold text-white/90 transition-colors hover:bg-white/10 hover:text-white sm:inline-flex md:px-5 md:py-3 md:text-[16px]"
+                className="hidden items-center rounded-lg px-4 py-2.5 text-[15.5px] font-semibold text-white/90 transition-colors hover:bg-white/10 hover:text-white sm:inline-flex md:px-5 md:py-3 md:text-[16px] lg:text-[18px] xl:text-[19px]"
               >
                 Entrar
               </Link>
