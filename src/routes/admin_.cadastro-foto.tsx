@@ -56,15 +56,56 @@ function CadastroFotoPage() {
         const res = await analyze({ data: { image: dataUrl } });
         if (!res.products.length) {
           toast.error("A IA não conseguiu identificar produtos nesta foto.");
-        } else {
-          setDrafts(
-            res.products.map((p, i) => ({
-              ...p,
-              _uid: `${Date.now()}-${i}`,
-            })),
-          );
-          toast.success(`${res.products.length} produto(s) detectado(s) · confiança ${res.confidence}`);
+          return;
         }
+
+        // Preservação inteligente: não sobrescreve campos já editados manualmente.
+        // - Se o produto detectado (mesmo nome, case-insensitive) já existe como rascunho,
+        //   apenas preenche campos ainda vazios com a sugestão da IA.
+        // - Produtos novos são acrescentados ao final da lista (não substituem).
+        setDrafts((prev) => {
+          const byName = new Map(
+            prev.map((d) => [(d.productName ?? "").trim().toLowerCase(), d] as const),
+          );
+          const merged: Draft[] = [...prev];
+          let added = 0;
+          let filled = 0;
+
+          res.products.forEach((p, i) => {
+            const key = (p.productName ?? "").trim().toLowerCase();
+            const existing = key ? byName.get(key) : undefined;
+
+            if (existing && !existing._saved) {
+              // preencher só o que está vazio, sem tocar em campos editados pelo usuário
+              const patch: Partial<Draft> = {};
+              (["brand", "unit", "price", "barcode", "category"] as const).forEach((k) => {
+                if ((existing[k] ?? "") === "" || existing[k] == null) {
+                  if (p[k] != null && p[k] !== "") {
+                    (patch as Record<string, unknown>)[k] = p[k];
+                    filled++;
+                  }
+                }
+              });
+              if (Object.keys(patch).length) {
+                const idx = merged.findIndex((d) => d._uid === existing._uid);
+                merged[idx] = { ...existing, ...patch };
+              }
+            } else {
+              merged.push({ ...p, _uid: `${Date.now()}-${i}` });
+              added++;
+            }
+          });
+
+          const parts: string[] = [];
+          if (added) parts.push(`${added} novo(s)`);
+          if (filled) parts.push(`${filled} campo(s) preenchido(s)`);
+          toast.success(
+            parts.length
+              ? `IA: ${parts.join(" · ")} (confiança ${res.confidence})`
+              : `Nada novo a adicionar (confiança ${res.confidence})`,
+          );
+          return merged;
+        });
       } catch (e) {
         toast.error(`Falha na análise: ${(e as Error).message}`);
       } finally {
