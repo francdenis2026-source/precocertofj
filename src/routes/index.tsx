@@ -158,7 +158,7 @@ function HomePage() {
                 className={`${serif} font-normal`}
                 style={{
                   color: P.heading,
-                  fontSize: "clamp(1.9rem, 5.2vw, 4.5rem)",
+                  fontSize: "clamp(1.75rem, 4.6vw, 3.75rem)",
                   lineHeight: 0.95,
                   letterSpacing: "-0.03em",
                 }}
@@ -172,7 +172,7 @@ function HomePage() {
 
 
               <p
-                className="mt-4 max-w-xl text-[14px] leading-relaxed sm:text-[15px]"
+                className="mt-3 max-w-xl text-[13.5px] leading-relaxed sm:text-[14.5px]"
                 style={{ color: "color-mix(in oklab, var(--pc-home-ink) 75%, transparent)" }}
               >
                 Compare mercados de Feijó em tempo real e descubra em qual mercado
@@ -181,7 +181,7 @@ function HomePage() {
               </p>
 
               {/* Search */}
-              <form onSubmit={submitSearch} className="mt-5 max-w-xl">
+              <form onSubmit={submitSearch} className="mt-4 max-w-xl">
                 <div
                   className="flex items-center gap-2 rounded-2xl border p-1.5 transition-all focus-within:ring-2 sm:p-2"
                   style={{
