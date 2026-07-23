@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { redeemMyLicenseCode, previewLicenseCode } from "@/lib/licenses.functions";
+import { redeemMyLicenseCode } from "@/lib/licenses.functions";
 import { getMyAccount } from "@/lib/account.functions";
 import {
   Loader2,
@@ -113,14 +113,12 @@ function RedeemPage() {
   const inputRef = useRef<HTMLInputElement | null>(null);
 
   const redeem = useServerFn(redeemMyLicenseCode);
-  const preview = useServerFn(previewLicenseCode);
   const fetchAccount = useServerFn(getMyAccount);
 
   const clean = useMemo(() => sanitize(raw), [raw]);
   const display = useMemo(() => grouped(clean), [clean]);
   const validation = useMemo(() => validateCode(raw), [raw]);
   const canSubmit = clean.length >= MIN_LEN && validation.level !== "warn";
-  const showState = touched || clean.length > 0;
 
   const sessionQuery = useQuery({
     queryKey: ["auth-session"],
@@ -136,30 +134,11 @@ function RedeemPage() {
     enabled: hasSession && !!result?.ok,
   });
 
-  // Debounce do valor limpo para consultar o preview
-  const [debouncedClean, setDebouncedClean] = useState("");
-  useEffect(() => {
-    const id = setTimeout(() => setDebouncedClean(clean), 350);
-    return () => clearTimeout(id);
-  }, [clean]);
-
-  const previewQuery = useQuery({
-    queryKey: ["license-preview", debouncedClean],
-    queryFn: () => preview({ data: { code: debouncedClean } }),
-    enabled:
-      hasSession &&
-      !result?.ok &&
-      debouncedClean.length >= MIN_LEN &&
-      validation.level !== "warn",
-    staleTime: 10_000,
-    retry: false,
-  });
-  const previewData = previewQuery.data ?? null;
-  const previewLoading = previewQuery.isFetching;
-
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
+
+  const attemptedRef = useRef<string>("");
 
   async function handleSubmit(e?: React.FormEvent) {
     e?.preventDefault();
@@ -173,32 +152,36 @@ function RedeemPage() {
       );
       return;
     }
-    if (previewData && previewData.found && !previewData.redeemable) {
-      toast.error(previewData.message);
-      return;
-    }
+    attemptedRef.current = clean;
     setSubmitting(true);
     try {
       const res = await redeem({ data: { code: clean } });
-      setResult({
-        ok: res.success,
-        message: res.message,
-        addedDays: res.addedDays,
-        newPaidUntil: res.newPaidUntil,
-        code: clean,
-      });
       if (res.success) {
-        toast.success(res.message);
-        setTimeout(() => navigate({ to: "/app" }), 2200);
-      } else toast.error(res.message);
+        toast.success(res.message || "Licença ativada!");
+        navigate({ to: "/app" });
+        return;
+      }
+      setResult({ ok: false, message: res.message, code: clean });
+      toast.error(res.message);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Falha ao ativar";
       toast.error(msg);
-      setResult({ ok: false, message: msg });
+      setResult({ ok: false, message: msg, code: clean });
     } finally {
       setSubmitting(false);
     }
   }
+
+  // Auto-envio: assim que o código atinge o formato oficial (14 chars começando com PC), tenta ativar
+  useEffect(() => {
+    if (!hasSession || submitting || result) return;
+    if (clean.length !== CANONICAL_LEN || !clean.startsWith("PC")) return;
+    if (attemptedRef.current === clean) return;
+    handleSubmit();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [clean, hasSession, submitting, result]);
+
+
 
   async function pasteFromClipboard() {
     try {
@@ -318,19 +301,20 @@ function RedeemPage() {
                     autoComplete="one-time-code"
                     spellCheck={false}
                     placeholder="PC-XXXX-XXXX-XXXX"
-                    aria-invalid={showState && validation.level === "warn"}
+                    aria-invalid={touched && validation.level === "warn"}
                     aria-describedby="license-code-help"
                     className="h-12 w-full rounded-lg border bg-white pl-9 pr-3 text-[15px] font-bold uppercase tracking-[0.14em] outline-none transition focus:ring-2"
                     style={{
                       fontFamily: MONO,
                       color: INK,
                       borderColor:
-                        showState && validation.level === "warn"
+                        touched && validation.level === "warn"
                           ? "#dc2626"
-                          : showState && validation.level === "ok"
+                          : validation.level === "ok"
                           ? "#16a34a"
                           : LINE,
                     } as React.CSSProperties}
+
                   />
                 </div>
                 <button
@@ -385,28 +369,23 @@ function RedeemPage() {
                 </div>
               )}
 
-              {/* Preview em tempo real do código antes do envio */}
-              <CodePreviewPanel loading={previewLoading} data={previewData} enabled={canSubmit} />
+              <button
+                type="submit"
+                disabled={submitting || !canSubmit}
+                className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg text-[13px] font-bold uppercase tracking-[0.14em] transition disabled:cursor-not-allowed disabled:opacity-45"
+                style={{
+                  background: canSubmit && !submitting ? NAVY : "#94a3b8",
+                  color: "#fff",
+                  boxShadow: canSubmit && !submitting ? `0 10px 24px -12px ${NAVY}` : undefined,
+                }}
+              >
+                {submitting ? (
+                  <><Loader2 className="h-4 w-4 animate-spin" /> Ativando…</>
+                ) : (
+                  <>Ativar licença <ArrowRight className="h-4 w-4" /></>
+                )}
+              </button>
 
-
-              {(() => {
-                const blockedByPreview = !!(previewData && previewData.found && !previewData.redeemable);
-                const enabled = canSubmit && !blockedByPreview && !previewLoading;
-                return (
-                  <button
-                    type="submit"
-                    disabled={submitting || !enabled}
-                    className="mt-4 inline-flex h-12 w-full items-center justify-center gap-2 rounded-lg text-[13px] font-bold uppercase tracking-[0.14em] transition disabled:cursor-not-allowed disabled:opacity-45"
-                    style={{
-                      background: enabled ? NAVY : "#94a3b8",
-                      color: "#fff",
-                      boxShadow: enabled ? `0 10px 24px -12px ${NAVY}` : undefined,
-                    }}
-                  >
-                    {submitting ? <Loader2 className="h-4 w-4 animate-spin" /> : <>Ativar licença <ArrowRight className="h-4 w-4" /></>}
-                  </button>
-                );
-              })()}
 
 
               <div className="mt-2 text-right">
