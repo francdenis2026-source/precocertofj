@@ -105,9 +105,9 @@ function HomePage() {
       <SiteHeader variant="solid" showThemeToggle />
 
       {/* ============== EDITORIAL CARD ============== */}
-      <div className="mx-auto w-full max-w-7xl px-4 pt-6 pb-10 sm:px-6 sm:pt-10 lg:px-8 lg:pt-14">
+      <div className="mx-auto w-full max-w-6xl px-4 pt-4 pb-6 sm:px-6 sm:pt-6 lg:px-8 lg:pt-8">
         <div
-          className="overflow-hidden rounded-[1.75rem] shadow-[0_30px_80px_-30px_rgb(11_29_58_/_0.25)] ring-1 lg:rounded-[2.5rem]"
+          className="overflow-hidden rounded-[1.25rem] shadow-[0_20px_60px_-30px_rgb(11_29_58_/_0.22)] ring-1 lg:rounded-[1.75rem]"
           style={{
             background: P.card,
             borderColor: P.line,
@@ -118,10 +118,10 @@ function HomePage() {
           {/* -------- HERO SPLIT -------- */}
           <div className="flex flex-col lg:flex-row">
             {/* LEFT — content */}
-            <div className="flex-[1.2] p-5 sm:p-10 lg:p-16 xl:p-20 flex flex-col justify-center">
+            <div className="flex-[1.2] p-5 sm:p-8 lg:p-10 xl:p-12 flex flex-col justify-center">
               {/* Badge EM BREVE */}
               <div
-                className="mb-5 inline-flex w-fit items-center gap-2 rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] sm:mb-8 sm:gap-2.5 sm:px-4 sm:py-2 sm:text-[11px]"
+                className="mb-3 inline-flex w-fit items-center gap-2 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] sm:mb-5 sm:gap-2.5 sm:px-3.5 sm:py-1.5 sm:text-[11px]"
                 style={{ background: P.navy, color: "#F5F6FA" }}
               >
                 <span className="relative flex h-2 w-2">
@@ -146,7 +146,7 @@ function HomePage() {
 
               {today && (
                 <div
-                  className="mb-3 text-[10px] font-bold uppercase tracking-[0.22em] sm:mb-5 sm:text-[10.5px] sm:tracking-[0.24em]"
+                  className="mb-2 text-[10px] font-bold uppercase tracking-[0.22em] sm:mb-3 sm:text-[10.5px] sm:tracking-[0.24em]"
                   style={{ color: P.goldSoft }}
                 >
                   {today} · edição diária
@@ -158,8 +158,8 @@ function HomePage() {
                 className={`${serif} font-normal`}
                 style={{
                   color: P.heading,
-                  fontSize: "clamp(2.15rem, 7vw, 6.5rem)",
-                  lineHeight: 0.92,
+                  fontSize: "clamp(1.9rem, 5.2vw, 4.5rem)",
+                  lineHeight: 0.95,
                   letterSpacing: "-0.03em",
                 }}
               >
@@ -172,7 +172,7 @@ function HomePage() {
 
 
               <p
-                className="mt-6 max-w-xl text-[15px] leading-relaxed sm:text-[17px]"
+                className="mt-4 max-w-xl text-[14px] leading-relaxed sm:text-[15px]"
                 style={{ color: "color-mix(in oklab, var(--pc-home-ink) 75%, transparent)" }}
               >
                 Compare mercados de Feijó em tempo real e descubra em qual mercado
@@ -181,7 +181,7 @@ function HomePage() {
               </p>
 
               {/* Search */}
-              <form onSubmit={submitSearch} className="mt-8 max-w-xl">
+              <form onSubmit={submitSearch} className="mt-5 max-w-xl">
                 <div
                   className="flex items-center gap-2 rounded-2xl border p-1.5 transition-all focus-within:ring-2 sm:p-2"
                   style={{
@@ -205,13 +205,13 @@ function HomePage() {
                     inputMode="search"
                     placeholder="Qual item você busca hoje?"
                     aria-label="Buscar produto"
-                    className="flex-1 bg-transparent px-2 py-3 text-[15px] font-medium outline-none sm:text-base"
+                    className="flex-1 bg-transparent px-2 py-2.5 text-[14px] font-medium outline-none sm:text-[15px]"
                     style={{ color: P.ink }}
                   />
                   <button
                     type="submit"
                     aria-label="Buscar"
-                    className="inline-flex shrink-0 items-center gap-2 rounded-xl px-5 py-3 text-sm font-bold transition-transform active:scale-95 sm:px-8 sm:text-base"
+                    className="inline-flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-transform active:scale-95 sm:px-6 sm:text-[15px]"
                     style={{ background: P.gold, color: P.navy }}
                   >
                     <span className="hidden sm:inline">Buscar</span>
@@ -221,7 +221,7 @@ function HomePage() {
               </form>
 
               {/* Chips */}
-              <div className="mt-6 flex flex-wrap items-center gap-2">
+              <div className="mt-4 flex flex-wrap items-center gap-2">
                 <span
                   className="mr-1 text-[10px] font-bold uppercase tracking-[0.24em]"
                   style={{ color: "color-mix(in oklab, var(--pc-home-ink) 45%, transparent)" }}
@@ -248,10 +248,10 @@ function HomePage() {
               </div>
 
               {/* CTAs */}
-              <div className="mt-6 flex flex-wrap gap-2.5 sm:mt-8 sm:gap-3">
+              <div className="mt-5 flex flex-wrap gap-2.5 sm:mt-6 sm:gap-3">
                 <Link
                   to="/cadastro"
-                  className="group inline-flex min-h-[44px] items-center gap-2 rounded-xl px-5 py-3 text-[15px] font-bold shadow-lg transition-all hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:rounded-2xl sm:px-10 sm:py-5 sm:text-lg"
+                  className="group inline-flex min-h-[44px] items-center gap-2 rounded-xl px-5 py-2.5 text-[14px] font-bold shadow-lg transition-all hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:rounded-2xl sm:px-7 sm:py-3 sm:text-[15px]"
                   style={{
                     background: P.navy,
                     color: "#F5F6FA",
@@ -265,7 +265,7 @@ function HomePage() {
                 </Link>
                 <Link
                   to="/melhores-precos"
-                  className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border-2 px-5 py-3 text-[15px] font-bold transition-colors hover:text-[color:var(--pc-home-card)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:rounded-2xl sm:px-10 sm:py-5 sm:text-lg"
+                  className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border-2 px-5 py-2.5 text-[14px] font-bold transition-colors hover:text-[color:var(--pc-home-card)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:rounded-2xl sm:px-7 sm:py-3 sm:text-[15px]"
                   style={{
                     borderColor: P.heading,
                     color: P.heading,
@@ -289,7 +289,7 @@ function HomePage() {
 
               {/* Stats */}
               <div
-                className="mt-10 grid grid-cols-3 gap-4 border-t pt-6 sm:mt-14 sm:gap-12 sm:pt-8"
+                className="mt-7 grid grid-cols-3 gap-4 border-t pt-5 sm:mt-9 sm:gap-10 sm:pt-6"
                 style={{ borderColor: P.line }}
               >
 
@@ -312,7 +312,7 @@ function HomePage() {
                       className={`${serif} tabular-nums`}
                       style={{
                         color: P.heading,
-                        fontSize: "clamp(1.75rem, 3.6vw, 2.75rem)",
+                        fontSize: "clamp(1.5rem, 3vw, 2.15rem)",
                         lineHeight: 1,
                         letterSpacing: "-0.03em",
                       }}
@@ -333,7 +333,7 @@ function HomePage() {
             {/* RIGHT — image + floating quote */}
             <div
               className="relative hidden flex-1 lg:block"
-              style={{ background: P.paper, minHeight: 720 }}
+              style={{ background: P.paper, minHeight: 520 }}
             >
               {/* Light theme image */}
               <picture className="dark:hidden">
@@ -387,7 +387,7 @@ function HomePage() {
               />
               {/* Quote card */}
               <div
-                className="absolute inset-x-8 bottom-8 rounded-3xl p-7 shadow-2xl backdrop-blur-md xl:inset-x-12 xl:bottom-12 xl:p-8"
+                className="absolute inset-x-6 bottom-6 rounded-2xl p-5 shadow-2xl backdrop-blur-md xl:inset-x-8 xl:bottom-8 xl:p-6"
                 style={{
                   background: "color-mix(in oklab, var(--pc-home-card) 92%, transparent)",
                   borderWidth: 1,
@@ -395,13 +395,13 @@ function HomePage() {
                 }}
               >
                 <span
-                  className={`${serif} mb-2 block text-5xl leading-none`}
+                  className={`${serif} mb-1 block text-4xl leading-none`}
                   style={{ color: P.gold }}
                 >
                   “
                 </span>
                 <p
-                  className={`${serif} mb-4 text-xl italic leading-snug`}
+                  className={`${serif} mb-3 text-lg italic leading-snug`}
                   style={{ color: P.heading }}
                 >
                   Comparar preços não é só gastar menos — é comprar com
@@ -419,10 +419,10 @@ function HomePage() {
 
           {/* -------- EXPLORE (dark navy band inside card) -------- */}
           <div
-            className="p-6 sm:p-10 lg:p-16 xl:p-20"
+            className="p-6 sm:p-8 lg:p-10 xl:p-12"
             style={{ background: P.navy, color: "#F5F6FA" }}
           >
-            <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div className="max-w-xl">
                 <div
                   className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em]"
@@ -433,7 +433,7 @@ function HomePage() {
                 <h2
                   className={`${serif} font-normal`}
                   style={{
-                    fontSize: "clamp(2rem, 4.8vw, 3.75rem)",
+                    fontSize: "clamp(1.6rem, 3.6vw, 2.75rem)",
                     lineHeight: 1,
                     letterSpacing: "-0.025em",
                     color: "#F5F6FA",
@@ -445,7 +445,7 @@ function HomePage() {
                     sem esforço.
                   </span>
                 </h2>
-                <p className="mt-5 max-w-md text-[15px] leading-relaxed text-white/60">
+                <p className="mt-3 max-w-md text-[14px] leading-relaxed text-white/60">
                   Ferramentas exclusivas para que você nunca mais pague caro em
                   itens essenciais.
                 </p>
@@ -453,7 +453,7 @@ function HomePage() {
               <div className="hidden h-px flex-1 md:mx-10 md:mb-3 md:block" style={{ background: "rgb(255 255 255 / 0.08)" }} />
             </div>
 
-            <div className="grid gap-5 md:grid-cols-3 md:gap-8">
+            <div className="grid gap-4 md:grid-cols-3 md:gap-6">
               <ExploreCard
                 to="/melhores-precos"
                 number="01"
@@ -481,7 +481,7 @@ function HomePage() {
       </div>
 
       {/* -------- SOCIAL PROOF (compact) -------- */}
-      <section className="mx-auto w-full max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-6xl px-4 pb-6 sm:px-6 lg:px-8">
         <div className="grid grid-cols-3 gap-3 sm:gap-5">
           {[
             { k: "7", l: "mercados ativos", icon: <ShieldCheck className="h-4 w-4" /> },
@@ -518,7 +518,7 @@ function HomePage() {
       </section>
 
       {/* -------- FINAL CTA -------- */}
-      <section className="mx-auto w-full max-w-7xl px-4 pb-14 sm:px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-6xl px-4 pb-10 sm:px-6 lg:px-8">
         <div
           className="relative overflow-hidden rounded-2xl px-6 py-6 sm:px-10 sm:py-8"
           style={{ background: P.navy, color: "#F5F6FA" }}
@@ -587,7 +587,7 @@ function ExploreCard({
   return (
     <Link
       to={to}
-      className="group block rounded-[1.75rem] border p-8 transition-all duration-500 hover:-translate-y-1 lg:p-10"
+      className="group block rounded-2xl border p-6 transition-all duration-500 hover:-translate-y-1 lg:p-7"
       style={{
         background: "rgb(255 255 255 / 0.05)",
         borderColor: "rgb(255 255 255 / 0.10)",
@@ -602,19 +602,19 @@ function ExploreCard({
       }}
     >
       <div
-        className={`${serif} mb-8 italic opacity-60 transition-opacity group-hover:opacity-100`}
+        className={`${serif} mb-5 italic opacity-60 transition-opacity group-hover:opacity-100`}
         style={{
           color: P.gold,
-          fontSize: "clamp(3rem, 5vw, 4.5rem)",
+          fontSize: "clamp(2.25rem, 4vw, 3.25rem)",
           lineHeight: 1,
           letterSpacing: "-0.03em",
         }}
       >
         {number}
       </div>
-      <h3 className="mb-4 text-2xl font-bold text-white lg:text-[26px]">{title}</h3>
-      <p className="text-[15px] leading-relaxed text-white/60">{desc}</p>
-      <div className="mt-8 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.24em] text-white/80 transition-colors group-hover:text-[color:var(--pc-home-gold)]">
+      <h3 className="mb-3 text-xl font-bold text-white lg:text-[22px]">{title}</h3>
+      <p className="text-[14px] leading-relaxed text-white/60">{desc}</p>
+      <div className="mt-5 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.24em] text-white/80 transition-colors group-hover:text-[color:var(--pc-home-gold)]">
         {cta}
         <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
       </div>
