@@ -392,16 +392,17 @@ function HomePage() {
                 Dados verificados por nota fiscal
               </div>
               <h3
-                className={`${serif} mt-3 leading-[1.08]`}
+                className={`${serif} mt-3 leading-[1.08] text-white`}
                 style={{
-                  fontSize: "clamp(1.45rem, 3vw, 2.2rem)",
+                  fontSize: "clamp(1.55rem, 3.1vw, 2.35rem)",
                   letterSpacing: "-0.015em",
+                  textShadow: "0 1px 2px rgba(0,0,0,0.35)",
                 }}
               >
                 Nunca mais pague caro por{" "}
-                <span className="italic" style={{ color: PALETTE.goldSoft }}>arroz, feijão e café.</span>
+                <span className="italic font-semibold" style={{ color: "#F5D77A" }}>arroz, feijão e café.</span>
               </h3>
-              <p className="mt-2 max-w-xl text-[13px] text-white/80 sm:text-[13.5px]">
+              <p className="mt-2 max-w-xl text-[13.5px] text-white/95 sm:text-sm">
                 Cadastro em 30 segundos. Sem cartão. Cancele quando quiser.
               </p>
             </div>
