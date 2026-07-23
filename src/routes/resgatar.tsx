@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
-import { redeemMyLicenseCode } from "@/lib/licenses.functions";
+import { redeemMyLicenseCode, previewLicenseCode } from "@/lib/licenses.functions";
 import { getMyAccount } from "@/lib/account.functions";
 import {
   Loader2,
@@ -14,6 +14,10 @@ import {
   Clipboard,
   AlertCircle,
   KeyRound,
+  CalendarClock,
+  BadgeCheck,
+  RefreshCcw,
+  XCircle,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Logo } from "@/components/brand/Logo";
