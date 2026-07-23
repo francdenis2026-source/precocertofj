@@ -255,6 +255,7 @@ function MeusPedidos() {
             </Card>
           ))
         )}
+        </div>
       </div>
     </AppShell>
   );
