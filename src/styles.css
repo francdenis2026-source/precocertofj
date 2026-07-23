@@ -518,6 +518,33 @@
   color: var(--color-muted-foreground);
 }
 
+/* Nome do estabelecimento — tokens unificados (tipografia + cor + interação) */
+@utility market-name {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 1.2;
+  color: var(--market-accent);
+  cursor: pointer;
+  transition: color 150ms ease, text-decoration-color 150ms ease;
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.group:hover .market-name,
+.market-name:hover {
+  color: var(--market-accent-hover);
+  text-decoration-color: color-mix(in oklab, var(--market-accent-hover) 60%, transparent);
+}
+.group:active .market-name,
+.market-name:active {
+  color: var(--market-accent);
+  text-decoration-color: color-mix(in oklab, var(--market-accent) 80%, transparent);
+}
+
+
+
 /* Preços — sempre monoespaçado, tabular */
 @utility text-price {
   font-family: var(--font-mono);
