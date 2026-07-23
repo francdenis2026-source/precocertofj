@@ -131,51 +131,61 @@ function EstablishmentsPage() {
                   {data.items.map((e) => (
                     <li
                       key={e.id}
-                      className="rounded-xl border border-border/60 bg-card p-4 shadow-sm transition-shadow hover:shadow-md"
+                      className="rounded-xl border border-border/60 bg-card shadow-sm transition-shadow hover:shadow-md"
                     >
-                      <div className="flex items-start gap-3">
-                        <div
-                          className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl border border-border bg-muted"
-                          style={e.brandColor ? { borderColor: e.brandColor } : undefined}
-                        >
-                          {e.logoUrl ? (
-                            <img
-                              src={e.logoUrl}
-                              alt={`Logo ${e.name}`}
-                              className="h-full w-full object-contain"
-                              loading="lazy"
-                            />
-                          ) : (
-                            <span aria-hidden className="text-[16px] font-bold text-muted-foreground">
-                              {e.name.substring(0, 2).toUpperCase()}
-                            </span>
-                          )}
+                      <Link
+                        to="/estabelecimento/$slug"
+                        params={{ slug: slugifyEstablishment(e.name) }}
+                        className="block rounded-xl p-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                        aria-label={`Ver catálogo de ${e.name}`}
+                      >
+                        <div className="flex items-start gap-3">
+                          <div
+                            className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl border border-border bg-muted"
+                            style={e.brandColor ? { borderColor: e.brandColor } : undefined}
+                          >
+                            {e.logoUrl ? (
+                              <img
+                                src={e.logoUrl}
+                                alt={`Logo ${e.name}`}
+                                className="h-full w-full object-contain"
+                                loading="lazy"
+                              />
+                            ) : (
+                              <span aria-hidden className="text-[16px] font-bold text-muted-foreground">
+                                {e.name.substring(0, 2).toUpperCase()}
+                              </span>
+                            )}
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <h3 className="truncate text-[15px] font-semibold text-foreground">{e.name}</h3>
+                            <p className="mt-0.5 text-[13px] text-muted-foreground">
+                              {[e.neighborhood, e.city, e.state].filter(Boolean).join(" · ") ||
+                                "Localização não informada"}
+                            </p>
+                            <p className="mt-2 text-[13.5px] font-medium text-foreground">
+                              <span className="text-primary">{e.productsCount}</span>{" "}
+                              <span className="text-muted-foreground">produtos cadastrados</span>
+                            </p>
+                          </div>
                         </div>
-                        <div className="min-w-0 flex-1">
-                          <h3 className="truncate text-[15px] font-semibold text-foreground">{e.name}</h3>
-                          <p className="mt-0.5 text-[13px] text-muted-foreground">
-                            {[e.neighborhood, e.city, e.state].filter(Boolean).join(" · ") ||
-                              "Localização não informada"}
-                          </p>
-                          <p className="mt-2 text-[13.5px] font-medium text-foreground">
-                            <span className="text-primary">{e.productsCount}</span>{" "}
-                            <span className="text-muted-foreground">produtos cadastrados</span>
-                          </p>
+                        {e.topCategories.length > 0 && (
+                          <div className="mt-3 flex flex-wrap gap-1.5 border-t border-border/60 pt-3">
+                            {e.topCategories.map((c) => (
+                              <span
+                                key={c.category}
+                                className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-1 text-[13px] text-foreground"
+                              >
+                                {humanizeCategory(c.category)}
+                                <span className="text-muted-foreground">({c.count})</span>
+                              </span>
+                            ))}
+                          </div>
+                        )}
+                        <div className="mt-3 text-[12px] font-medium text-primary">
+                          Ver catálogo completo →
                         </div>
-                      </div>
-                      {e.topCategories.length > 0 && (
-                        <div className="mt-3 flex flex-wrap gap-1.5 border-t border-border/60 pt-3">
-                          {e.topCategories.map((c) => (
-                            <span
-                              key={c.category}
-                              className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-1 text-[13px] text-foreground"
-                            >
-                              {humanizeCategory(c.category)}
-                              <span className="text-muted-foreground">({c.count})</span>
-                            </span>
-                          ))}
-                        </div>
-                      )}
+                      </Link>
                     </li>
                   ))}
                 </ul>
