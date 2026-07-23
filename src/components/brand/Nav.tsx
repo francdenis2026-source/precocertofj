@@ -9,6 +9,7 @@ import { useMyProfile } from "@/hooks/useMyProfile";
 import { NotificationsBell } from "@/components/collab/NotificationsBell";
 import { useSignOut } from "@/hooks/use-sign-out";
 import { AuthNavToggle } from "@/components/nav/AuthNavToggle";
+import { useMyRoles } from "@/hooks/useMyRoles";
 import { loginHrefWithRedirect } from "@/lib/auth-redirect";
 import { getCart } from "@/lib/cart.functions";
 import { IconTile } from "@/components/ui/icon-tile";
@@ -24,6 +25,8 @@ export function Nav() {
   const { session, loading, firstName, fullName, initials, avatarUrl } = useMyProfile();
   const { signOut, loading: signingOut } = useSignOut();
   const isAuthed = !loading && !!session;
+  const { isAdmin } = useMyRoles();
+  const showAdminLink = !isAuthed || isAdmin;
   const fetchCart = useServerFn(getCart);
   const cartQuery = useQuery({
     queryKey: ["cart"],
@@ -62,15 +65,17 @@ export function Nav() {
         <div className="flex items-center gap-2">
           <ThemeToggle size="sm" />
           <HighContrastToggle tone="onLight" className="hidden sm:inline-flex" />
-          <Link
-            to="/admin-login"
-            aria-label="Área do administrador"
-            title="Admin"
-            className="group hidden h-9 shrink-0 items-center gap-2 rounded-full border border-border bg-surface py-1 pl-1 pr-3 text-xs font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-muted sm:inline-flex"
-          >
-            <IconTile icon={Shield} size="xs" tone="surface" interactive />
-            Admin
-          </Link>
+          {showAdminLink && (
+            <Link
+              to="/admin-login"
+              aria-label="Área do administrador"
+              title="Admin"
+              className="group hidden h-9 shrink-0 items-center gap-2 rounded-full border border-border bg-surface py-1 pl-1 pr-3 text-xs font-medium text-foreground transition-colors hover:border-primary/50 hover:bg-muted sm:inline-flex"
+            >
+              <IconTile icon={Shield} size="xs" tone="surface" interactive />
+              Admin
+            </Link>
+          )}
           <Link
             to="/cesta"
             aria-label={cartCount > 0 ? `Cesta com ${cartCount} itens` : "Cesta"}
