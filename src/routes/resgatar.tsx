@@ -540,3 +540,131 @@ function SuccessBody({
     </div>
   );
 }
+
+/* ------- Painel de detalhes do código (preview antes de enviar) ------- */
+function CodePreviewPanel({
+  loading,
+  data,
+  enabled,
+}: {
+  loading: boolean;
+  data: import("@/lib/licenses.functions").LicensePreview | null;
+  enabled: boolean;
+}) {
+  if (!enabled && !loading && !data) return null;
+
+  if (loading) {
+    return (
+      <div
+        className="mt-3 flex items-center gap-2 rounded-lg border px-3 py-2.5 text-[12px]"
+        style={{ borderColor: LINE, background: "#f8fafc", color: MUTED }}
+      >
+        <Loader2 className="h-3.5 w-3.5 animate-spin" style={{ color: NAVY }} />
+        Consultando código no sistema…
+      </div>
+    );
+  }
+  if (!data) return null;
+
+  if (!data.found) {
+    return (
+      <div
+        className="mt-3 flex items-start gap-2 rounded-lg border px-3 py-2.5 text-[12px]"
+        style={{ borderColor: "#fca5a5", background: "#fef2f2", color: "#991b1b" }}
+      >
+        <XCircle className="mt-0.5 h-4 w-4 flex-none" />
+        <span>{data.message}</span>
+      </div>
+    );
+  }
+
+  const good = data.redeemable;
+  const border = good ? "#bbf7d0" : "#fcd34d";
+  const bg = good ? "#f0fdf4" : "#fffbeb";
+  const ink = good ? "#166534" : "#92400e";
+  const badgeIcon = good ? <BadgeCheck className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />;
+
+  const expLabel = data.expiresAt
+    ? new Date(data.expiresAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" })
+    : "—";
+  const refundLabel = data.refundDeadline
+    ? new Date(data.refundDeadline).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })
+    : null;
+
+  return (
+    <div
+      className="mt-3 rounded-xl border p-3 text-[12px]"
+      style={{ borderColor: border, background: bg, color: INK }}
+    >
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em]" style={{ color: ink }}>
+          {badgeIcon}
+          {data.statusLabel}
+        </div>
+        {data.planName && (
+          <span
+            className="rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em]"
+            style={{ borderColor: border, color: ink, background: "#ffffff" }}
+          >
+            {data.planName}
+          </span>
+        )}
+      </div>
+
+      <dl className="mt-2.5 grid grid-cols-2 gap-2">
+        <div className="rounded-lg border bg-white px-2.5 py-1.5" style={{ borderColor: LINE }}>
+          <dt className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
+            <CalendarClock className="h-3 w-3" /> Validade
+          </dt>
+          <dd className="mt-0.5 text-[12.5px] font-bold" style={{ color: data.isExpired ? "#dc2626" : NAVY }}>
+            {expLabel}
+            {data.daysUntilExpiry != null && !data.isExpired && (
+              <span className="ml-1 text-[10.5px] font-normal" style={{ color: MUTED }}>
+                (em {data.daysUntilExpiry}d)
+              </span>
+            )}
+          </dd>
+        </div>
+        <div className="rounded-lg border bg-white px-2.5 py-1.5" style={{ borderColor: LINE }}>
+          <dt className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
+            <RefreshCcw className="h-3 w-3" /> Reembolso
+          </dt>
+          <dd
+            className="mt-0.5 text-[12.5px] font-bold"
+            style={{ color: data.refundable ? "#15803d" : "#991b1b" }}
+          >
+            {data.refundable
+              ? refundLabel
+                ? `Sim · até ${refundLabel}`
+                : "Sim"
+              : "Não disponível"}
+          </dd>
+        </div>
+        {data.planDays != null && (
+          <div className="rounded-lg border bg-white px-2.5 py-1.5" style={{ borderColor: LINE }}>
+            <dt className="text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
+              Duração
+            </dt>
+            <dd className="mt-0.5 text-[12.5px] font-bold" style={{ color: NAVY }}>
+              {data.planDays} dias
+            </dd>
+          </div>
+        )}
+        {data.priceCents != null && (
+          <div className="rounded-lg border bg-white px-2.5 py-1.5" style={{ borderColor: LINE }}>
+            <dt className="text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
+              Valor
+            </dt>
+            <dd className="mt-0.5 text-[12.5px] font-bold" style={{ color: NAVY }}>
+              R$ {(data.priceCents / 100).toFixed(2).replace(".", ",")}
+            </dd>
+          </div>
+        )}
+      </dl>
+
+      <p className="mt-2.5 text-[11.5px] leading-snug" style={{ color: ink }}>
+        {data.message}
+      </p>
+    </div>
+  );
+}
