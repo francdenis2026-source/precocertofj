@@ -61,19 +61,20 @@ export const Route = createFileRoute("/api/public/mp-webhook")({
           extra?: Record<string, unknown>,
         ) => {
           if (logRow) {
-            await supabaseAdmin
-              .from("webhook_events")
-              .update({
-                status,
-                error,
-                attempts: 1,
-                last_processed_at: new Date().toISOString(),
-                ...(extra ?? {}),
-              })
-              .eq("id", logRow.id);
+            const update: Record<string, unknown> = {
+              status,
+              error,
+              attempts: 1,
+              last_processed_at: new Date().toISOString(),
+            };
+            if (extra && Object.keys(extra).length > 0) {
+              update.email_status = extra;
+            }
+            await supabaseAdmin.from("webhook_events").update(update).eq("id", logRow.id);
           }
           return new Response(error ?? "ok", { status: httpStatus });
         };
+
 
         if (!dataId) return finish("skipped", "sem data.id", 200);
         if (!String(type).includes("payment"))
