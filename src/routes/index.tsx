@@ -66,6 +66,28 @@ const P = {
 };
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 
+// Padrão único para citações e trechos serifados em destaque.
+// Mantém tamanhos fluidos, leading, letter-spacing e kerning consistentes
+// em qualquer bloco de citação/destaque na página.
+const quoteTypography = {
+  fontSize: "clamp(1.1875rem, 1.05rem + 0.6vw, 1.4375rem)", // 19 → 23px
+  lineHeight: 1.35,
+  letterSpacing: "-0.005em",
+  wordSpacing: "0.01em",
+  textWrap: "balance" as const,
+  WebkitFontSmoothing: "antialiased" as const,
+  MozOsxFontSmoothing: "grayscale" as const,
+  fontFeatureSettings: '"kern" 1, "liga" 1, "calt" 1, "dlig" 1',
+  textRendering: "optimizeLegibility" as const,
+  fontKerning: "normal" as const,
+};
+const captionTypography = {
+  letterSpacing: "0.22em",
+  WebkitFontSmoothing: "antialiased" as const,
+  MozOsxFontSmoothing: "grayscale" as const,
+  textRendering: "optimizeLegibility" as const,
+};
+
 function HomePage() {
   const navigate = useNavigate();
   const { user, loading: sessionLoading } = useSession();
@@ -435,37 +457,34 @@ function HomePage() {
               <div
                 className="absolute inset-x-6 bottom-6 rounded-2xl p-5 shadow-2xl backdrop-blur-md xl:inset-x-8 xl:bottom-8 xl:p-6"
                 style={{
-                  background: "color-mix(in oklab, var(--pc-home-card) 92%, transparent)",
+                  background: "color-mix(in oklab, var(--pc-home-card) 96%, transparent)",
                   borderWidth: 1,
-                  borderColor: P.line,
+                  borderColor: "color-mix(in oklab, var(--pc-home-gold) 24%, var(--pc-home-line))",
                 }}
               >
                 <figure className="m-0">
                   <blockquote
-                    className={`${serif} m-0 text-[19px] italic sm:text-[21px] lg:text-[22px]`}
+                    className={`${serif} m-0 italic`}
                     style={{
-                      color: P.heading,
-                      lineHeight: 1.35,
-                      letterSpacing: "-0.005em",
-                      textWrap: "balance",
-                      WebkitFontSmoothing: "antialiased",
-                      MozOsxFontSmoothing: "grayscale",
-                      fontFeatureSettings: '"kern" 1, "liga" 1, "calt" 1',
-                      textRendering: "optimizeLegibility",
+                      color: "var(--pc-home-heading)",
+                      ...quoteTypography,
                     }}
                   >
                     <span
                       aria-hidden
-                      className={`${serif} mr-1 align-[-0.15em] text-[2.25em] leading-none`}
-                      style={{ color: P.gold }}
+                      className={`${serif} mr-1 align-[-0.15em] text-[2.25em] leading-none not-italic`}
+                      style={{ color: "var(--pc-home-gold)" }}
                     >
                       “
                     </span>
                     Comparar preços não é só gastar menos — é comprar com inteligência e liberdade.
                   </blockquote>
                   <figcaption
-                    className="mt-3 text-[10px] font-bold uppercase tracking-[0.22em]"
-                    style={{ color: "color-mix(in oklab, var(--pc-home-ink) 62%, transparent)" }}
+                    className="mt-3 text-[10.5px] font-bold uppercase"
+                    style={{
+                      color: "color-mix(in oklab, var(--pc-home-ink) 82%, transparent)",
+                      ...captionTypography,
+                    }}
                   >
                     — Equipe PreçoCerto Feijó
                   </figcaption>
