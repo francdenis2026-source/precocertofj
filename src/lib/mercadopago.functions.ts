@@ -265,3 +265,104 @@ export const simulateCheckoutApproval = createServerFn({ method: "POST" })
     };
   });
 
+/**
+ * Cria uma cobrança PIX direta via Mercado Pago Payments API e guarda o
+ * QR Code + copia-e-cola + expiração no pedido, permitindo uma tela dedicada
+ * dentro do próprio app (sem redirect para o Checkout Pro).
+ */
+export const createPixCharge = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((data: { orderId: string }) => ({ orderId: String(data?.orderId ?? "") }))
+  .handler(async ({ data, context }) => {
+    const tokenInfo = inspectMpToken(process.env.MP_ACCESS_TOKEN);
+    const token = process.env.MP_ACCESS_TOKEN!;
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const { data: order, error } = await supabaseAdmin
+      .from("checkout_orders")
+      .select(
+        "id, user_id, final_cents, status, plan_id, delivery_email, pix_expires_at, pix_qr_code, pix_qr_code_base64, pix_payment_id, license_plans:plan_id(name)",
+      )
+      .eq("id", data.orderId)
+      .maybeSingle();
+    if (error) throw new Error(error.message);
+    if (!order) throw new Error("Pedido não encontrado");
+    if (order.user_id !== context.userId) throw new Error("Acesso negado");
+    if (order.status === "approved") throw new Error("Pedido já aprovado");
+    if (!order.delivery_email) throw new Error("Informe o e-mail antes de gerar o PIX");
+    if (!order.final_cents || order.final_cents < 100) throw new Error("Valor inválido");
+
+    // Reaproveita PIX ainda válido para o mesmo pedido.
+    const now = Date.now();
+    if (
+      order.pix_qr_code &&
+      order.pix_expires_at &&
+      new Date(order.pix_expires_at).getTime() - now > 30_000
+    ) {
+      return {
+        qrCode: order.pix_qr_code,
+        qrCodeBase64: order.pix_qr_code_base64,
+        expiresAt: order.pix_expires_at,
+        paymentId: order.pix_payment_id,
+        sandbox: tokenInfo.env === "test",
+      };
+    }
+
+    const planName: string = (order as any).license_plans?.name ?? "Plano PreçoCerto";
+    const expiresAt = new Date(now + 30 * 60_000); // 30 minutos
+    const body = {
+      transaction_amount: centsToBRL(order.final_cents),
+      description: `PreçoCerto — ${planName}`,
+      payment_method_id: "pix",
+      external_reference: order.id,
+      date_of_expiration: expiresAt.toISOString(),
+      notification_url: `${PUBLIC_BASE_URL}/api/public/mp-webhook`,
+      payer: { email: order.delivery_email },
+      metadata: { order_id: order.id, user_id: order.user_id },
+    };
+
+    const resp = await fetch(`${MP_API}/v1/payments`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+        "X-Idempotency-Key": `pix-${order.id}-${Math.floor(now / 60000)}`,
+      },
+      body: JSON.stringify(body),
+    });
+
+    if (!resp.ok) {
+      const errBody = await resp.text();
+      console.error(`[MP] pix create failed [${resp.status}]: ${errBody}`);
+      throw new Error(`Falha ao gerar PIX (${resp.status})`);
+    }
+
+    const payment: any = await resp.json();
+    const tx = payment?.point_of_interaction?.transaction_data ?? {};
+    const qrCode: string = tx?.qr_code ?? "";
+    const qrCodeBase64: string = tx?.qr_code_base64 ?? "";
+    const paymentId: string = String(payment?.id ?? "");
+    const finalExpires = payment?.date_of_expiration ?? expiresAt.toISOString();
+
+    if (!qrCode) throw new Error("Mercado Pago não retornou o código PIX");
+
+    await supabaseAdmin
+      .from("checkout_orders")
+      .update({
+        pix_qr_code: qrCode,
+        pix_qr_code_base64: qrCodeBase64,
+        pix_expires_at: finalExpires,
+        pix_payment_id: paymentId,
+        provider_ref: paymentId,
+      })
+      .eq("id", order.id);
+
+    return {
+      qrCode,
+      qrCodeBase64,
+      expiresAt: finalExpires,
+      paymentId,
+      sandbox: tokenInfo.env === "test",
+    };
+  });
+
