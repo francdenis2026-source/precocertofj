@@ -1,16 +1,20 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
+import { adminBeforeLoad } from "@/lib/route-guards";
 import { analyzeProductImage, type VisionProduct } from "@/lib/vision.functions";
 import { savePhotoToCatalog } from "@/lib/photo-catalog.functions";
 import { ArrowLeft, Camera, Loader2, Sparkles, Save, Trash2, Plus } from "lucide-react";
 import { toast } from "sonner";
 
 export const Route = createFileRoute("/admin_/cadastro-foto")({
+  ssr: false,
+  beforeLoad: adminBeforeLoad,
   head: () => ({
     meta: [
       { title: "Cadastro por foto (IA) — Admin PreçoCerto" },
       { name: "description", content: "Cadastro assistido por IA a partir de fotos dos produtos." },
+      { name: "robots", content: "noindex, nofollow" },
     ],
   }),
   component: CadastroFotoPage,
