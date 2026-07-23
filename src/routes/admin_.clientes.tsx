@@ -142,6 +142,7 @@ function ClientesPage() {
               <RefreshCw className="h-3.5 w-3.5" /> Atualizar
             </Button>
             <ExportButton search={search} sort={sort} />
+            <ExportPdfButton search={search} sort={sort} />
           </div>
 
           <div className="overflow-x-auto rounded-md border">
@@ -498,6 +499,70 @@ function ExportButton({ search, sort }: { search: string; sort: "recent" | "logi
     <Button variant="outline" size="sm" onClick={handle} disabled={loading} className="gap-1.5">
       <Download className="h-3.5 w-3.5" />
       {loading ? "Exportando…" : "Exportar CSV"}
+    </Button>
+  );
+}
+
+function ExportPdfButton({ search, sort }: { search: string; sort: "recent" | "logins" | "name" | "last_seen" }) {
+  const exportFn = useServerFn(adminExportCustomers);
+  const [loading, setLoading] = useState(false);
+  async function handle() {
+    try {
+      setLoading(true);
+      const res = await exportFn({ data: { search, sort, limit: 2000 } });
+      // Parse CSV (headers + rows) — carregamos jsPDF em runtime para não pesar o bundle
+      const [{ default: jsPDF }, autoTableMod] = await Promise.all([
+        import("jspdf"),
+        import("jspdf-autotable"),
+      ]);
+      const autoTable = (autoTableMod as { default: (doc: unknown, opts: unknown) => void }).default;
+      const lines = res.csv.split(/\r?\n/).filter(Boolean);
+      const parse = (line: string) => {
+        const out: string[] = [];
+        let cur = "", inside = false;
+        for (let i = 0; i < line.length; i++) {
+          const ch = line[i];
+          if (ch === '"') {
+            if (inside && line[i + 1] === '"') { cur += '"'; i++; }
+            else inside = !inside;
+          } else if (ch === "," && !inside) { out.push(cur); cur = ""; }
+          else cur += ch;
+        }
+        out.push(cur);
+        return out;
+      };
+      const headers = parse(lines[0] ?? "");
+      const rows = lines.slice(1).map(parse);
+      const doc = new jsPDF({ orientation: "landscape", unit: "pt", format: "a4" });
+      doc.setFontSize(14);
+      doc.text("PreçoCerto — Clientes", 40, 40);
+      doc.setFontSize(9);
+      doc.text(
+        `Exportado em ${new Date().toLocaleString("pt-BR")} · ${rows.length} registros`,
+        40,
+        56,
+      );
+      autoTable(doc, {
+        startY: 70,
+        head: [headers],
+        body: rows,
+        styles: { fontSize: 7, cellPadding: 3, overflow: "linebreak" },
+        headStyles: { fillColor: [15, 27, 61], textColor: 255 },
+        alternateRowStyles: { fillColor: [245, 246, 250] },
+        margin: { left: 20, right: 20 },
+      });
+      doc.save(res.filename.replace(/\.csv$/, ".pdf"));
+      toast.success(`PDF gerado com ${rows.length} clientes.`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Falha ao exportar PDF");
+    } finally {
+      setLoading(false);
+    }
+  }
+  return (
+    <Button variant="outline" size="sm" onClick={handle} disabled={loading} className="gap-1.5">
+      <Download className="h-3.5 w-3.5" />
+      {loading ? "Gerando…" : "Exportar PDF"}
     </Button>
   );
 }

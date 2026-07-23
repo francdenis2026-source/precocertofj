@@ -60,6 +60,7 @@ import { Route as AdminWebhooksRouteImport } from './routes/admin_.webhooks'
 import { Route as AdminSinonimosRouteImport } from './routes/admin_.sinonimos'
 import { Route as AdminReportsRouteImport } from './routes/admin_.reports'
 import { Route as AdminRankCheckRouteImport } from './routes/admin_.rank-check'
+import { Route as AdminPromocoesCodigosRouteImport } from './routes/admin_.promocoes-codigos'
 import { Route as AdminPromocoesRouteImport } from './routes/admin_.promocoes'
 import { Route as AdminPrecosRouteImport } from './routes/admin_.precos'
 import { Route as AdminMetricasRouteImport } from './routes/admin_.metricas'
@@ -346,6 +347,11 @@ const AdminRankCheckRoute = AdminRankCheckRouteImport.update({
   path: '/admin/rank-check',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminPromocoesCodigosRoute = AdminPromocoesCodigosRouteImport.update({
+  id: '/admin_/promocoes-codigos',
+  path: '/admin/promocoes-codigos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminPromocoesRoute = AdminPromocoesRouteImport.update({
   id: '/admin_/promocoes',
   path: '/admin/promocoes',
@@ -561,6 +567,7 @@ export interface FileRoutesByFullPath {
   '/admin/metricas': typeof AdminMetricasRoute
   '/admin/precos': typeof AdminPrecosRoute
   '/admin/promocoes': typeof AdminPromocoesRoute
+  '/admin/promocoes-codigos': typeof AdminPromocoesCodigosRoute
   '/admin/rank-check': typeof AdminRankCheckRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/sinonimos': typeof AdminSinonimosRoute
@@ -644,6 +651,7 @@ export interface FileRoutesByTo {
   '/admin/metricas': typeof AdminMetricasRoute
   '/admin/precos': typeof AdminPrecosRoute
   '/admin/promocoes': typeof AdminPromocoesRoute
+  '/admin/promocoes-codigos': typeof AdminPromocoesCodigosRoute
   '/admin/rank-check': typeof AdminRankCheckRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/sinonimos': typeof AdminSinonimosRoute
@@ -728,6 +736,7 @@ export interface FileRoutesById {
   '/admin_/metricas': typeof AdminMetricasRoute
   '/admin_/precos': typeof AdminPrecosRoute
   '/admin_/promocoes': typeof AdminPromocoesRoute
+  '/admin_/promocoes-codigos': typeof AdminPromocoesCodigosRoute
   '/admin_/rank-check': typeof AdminRankCheckRoute
   '/admin_/reports': typeof AdminReportsRoute
   '/admin_/sinonimos': typeof AdminSinonimosRoute
@@ -813,6 +822,7 @@ export interface FileRouteTypes {
     | '/admin/metricas'
     | '/admin/precos'
     | '/admin/promocoes'
+    | '/admin/promocoes-codigos'
     | '/admin/rank-check'
     | '/admin/reports'
     | '/admin/sinonimos'
@@ -896,6 +906,7 @@ export interface FileRouteTypes {
     | '/admin/metricas'
     | '/admin/precos'
     | '/admin/promocoes'
+    | '/admin/promocoes-codigos'
     | '/admin/rank-check'
     | '/admin/reports'
     | '/admin/sinonimos'
@@ -979,6 +990,7 @@ export interface FileRouteTypes {
     | '/admin_/metricas'
     | '/admin_/precos'
     | '/admin_/promocoes'
+    | '/admin_/promocoes-codigos'
     | '/admin_/rank-check'
     | '/admin_/reports'
     | '/admin_/sinonimos'
@@ -1062,6 +1074,7 @@ export interface RootRouteChildren {
   AdminMetricasRoute: typeof AdminMetricasRoute
   AdminPrecosRoute: typeof AdminPrecosRoute
   AdminPromocoesRoute: typeof AdminPromocoesRoute
+  AdminPromocoesCodigosRoute: typeof AdminPromocoesCodigosRoute
   AdminRankCheckRoute: typeof AdminRankCheckRoute
   AdminReportsRoute: typeof AdminReportsRoute
   AdminSinonimosRoute: typeof AdminSinonimosRoute
@@ -1441,6 +1454,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRankCheckRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin_/promocoes-codigos': {
+      id: '/admin_/promocoes-codigos'
+      path: '/admin/promocoes-codigos'
+      fullPath: '/admin/promocoes-codigos'
+      preLoaderRoute: typeof AdminPromocoesCodigosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin_/promocoes': {
       id: '/admin_/promocoes'
       path: '/admin/promocoes'
@@ -1761,6 +1781,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminMetricasRoute: AdminMetricasRoute,
   AdminPrecosRoute: AdminPrecosRoute,
   AdminPromocoesRoute: AdminPromocoesRoute,
+  AdminPromocoesCodigosRoute: AdminPromocoesCodigosRoute,
   AdminRankCheckRoute: AdminRankCheckRoute,
   AdminReportsRoute: AdminReportsRoute,
   AdminSinonimosRoute: AdminSinonimosRoute,

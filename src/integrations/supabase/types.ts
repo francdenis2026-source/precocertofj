@@ -194,6 +194,36 @@ export type Database = {
         }
         Relationships: []
       }
+      blocked_ips: {
+        Row: {
+          blocked_until: string
+          created_at: string
+          created_by: string | null
+          id: string
+          ip: string
+          reason: string | null
+          updated_at: string
+        }
+        Insert: {
+          blocked_until: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          ip: string
+          reason?: string | null
+          updated_at?: string
+        }
+        Update: {
+          blocked_until?: string
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          ip?: string
+          reason?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       catalog_image_jobs: {
         Row: {
           attempts: number
@@ -1984,6 +2014,7 @@ export type Database = {
           id: string
           last_seen_at: string | null
           neighborhood: string | null
+          onboarding_completed_at: string | null
           paid_until: string | null
           phone: string
           suspended_at: string | null
@@ -2009,6 +2040,7 @@ export type Database = {
           id: string
           last_seen_at?: string | null
           neighborhood?: string | null
+          onboarding_completed_at?: string | null
           paid_until?: string | null
           phone: string
           suspended_at?: string | null
@@ -2034,6 +2066,7 @@ export type Database = {
           id?: string
           last_seen_at?: string | null
           neighborhood?: string | null
+          onboarding_completed_at?: string | null
           paid_until?: string | null
           phone?: string
           suspended_at?: string | null
@@ -3112,6 +3145,7 @@ export type Database = {
         Returns: boolean
       }
       infer_size_from_name: { Args: { p_name: string }; Returns: string }
+      is_ip_blocked: { Args: { _ip: string }; Returns: boolean }
       is_product_blocked: { Args: { p_name: string }; Returns: boolean }
       normalize_product_key: { Args: { name: string }; Returns: string }
       normalize_product_name: { Args: { p_name: string }; Returns: string }
