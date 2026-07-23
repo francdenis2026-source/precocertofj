@@ -173,11 +173,11 @@ function HomePage() {
         />
 
         <div
-          className="relative z-10 mx-auto flex max-w-7xl flex-col justify-end px-4 pb-12 pt-24 sm:pt-28 md:px-8 md:pt-40 md:pb-20"
+          className={dsx("relative z-10 flex flex-col justify-end pb-12 pt-24 sm:pt-28 md:pt-40 md:pb-20", ds.container)}
           style={{ minHeight: "min(92vh, 880px)" }}
         >
           <div className="max-w-4xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-3 py-1.5 text-[10.5px] font-semibold uppercase tracking-[0.2em] text-white backdrop-blur sm:px-4 sm:py-2 sm:text-[11.5px]">
+            <div className={dsx(ds.chip.onDark, "text-[10.5px] uppercase tracking-[0.2em] sm:text-[11.5px]")}>
               <span className="h-1.5 w-1.5 animate-pulse rounded-full" style={{ background: PALETTE.gold }} />
               <span className="truncate">{today || "atualizado agora"} · edição diária</span>
             </div>
@@ -221,12 +221,12 @@ function HomePage() {
                   inputMode="search"
                   placeholder="Buscar: arroz, café, leite…"
                   aria-label="Buscar produto"
-                  className={`${sans} min-w-0 flex-1 bg-transparent py-2.5 pr-1 text-[15px] text-white outline-none placeholder:text-white/65 sm:py-3 sm:text-[16px]`}
+                  className={dsx(sans, ds.input.onDark)}
                 />
                 <button
                   type="submit"
                   aria-label="Buscar"
-                  className="inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2.5 text-[13.5px] font-semibold shadow-md transition-transform hover:scale-[1.02] sm:px-5 sm:py-3 sm:text-[14.5px]"
+                  className={dsx(ds.btn.base, ds.btn.sizes.md, "shrink-0 shadow-md")}
                   style={{ background: PALETTE.gold, color: PALETTE.navy }}
                 >
                   <span className="hidden sm:inline">Buscar</span>
@@ -238,7 +238,7 @@ function HomePage() {
             <div className="mt-5 flex flex-col gap-2.5 sm:mt-6 sm:flex-row sm:flex-wrap sm:items-center">
               <Link
                 to="/cadastro"
-                className="group inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3.5 text-[14.5px] font-bold shadow-xl transition-all hover:scale-[1.02] sm:px-6 sm:py-4 sm:text-[15.5px]"
+                className={dsx("group", ds.btn.base, ds.btn.sizes.lg, "shadow-xl")}
                 style={{ background: PALETTE.gold, color: PALETTE.navy }}
               >
                 Começar grátis
@@ -246,7 +246,7 @@ function HomePage() {
               </Link>
               <Link
                 to="/melhores-precos"
-                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-white/40 bg-white/5 px-5 py-3.5 text-[14.5px] font-semibold text-white backdrop-blur transition-all hover:border-white hover:bg-white/15 sm:px-6 sm:py-4 sm:text-[15.5px]"
+                className={dsx(ds.btn.base, ds.btn.sizes.lg, ds.btn.variants.outlineOnDark)}
               >
                 <TrendingDown className="h-4 w-4" />
                 Ver rankings
@@ -254,19 +254,21 @@ function HomePage() {
             </div>
 
             <div className="mt-6 flex flex-wrap items-center gap-1.5 sm:gap-2">
-              <span className="mr-1 w-full text-[10.5px] font-semibold uppercase tracking-[0.16em] text-white/70 sm:w-auto sm:text-[11px]">
+              <span className={dsx(ds.type.overline, "mr-1 w-full text-white/70 sm:w-auto")}>
                 Populares:
               </span>
               {["arroz", "feijão", "leite", "óleo", "café", "açúcar"].map((t) => (
                 <button
                   key={t}
                   onClick={() => navigate({ to: "/buscar", search: { q: t } as any })}
-                  className="rounded-full border border-white/25 bg-white/5 px-3 py-1.5 text-[12px] font-medium text-white/90 backdrop-blur transition-colors hover:bg-white/15 hover:text-white sm:text-[12.5px]"
+                  className={ds.chip.onDark}
                 >
                   {t}
                 </button>
               ))}
             </div>
+
+
 
             <div className="mt-8 grid max-w-3xl grid-cols-3 gap-3 border-t border-white/15 pt-5 sm:gap-6 md:mt-12 md:pt-8">
               {[
