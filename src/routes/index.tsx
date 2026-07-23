@@ -123,6 +123,15 @@ function HomePage() {
   });
   const stats: any = statsQ.data ?? {};
 
+  const economyFn = useServerFn(getEconomyStat);
+  const economyQ = useQuery({
+    queryKey: ["home-economy"],
+    queryFn: () => economyFn({} as any),
+    staleTime: 5 * 60_000,
+  });
+  const economy = economyQ.data;
+
+
   const submitSearch = (e?: React.FormEvent) => {
     e?.preventDefault();
     const query = q.trim();
