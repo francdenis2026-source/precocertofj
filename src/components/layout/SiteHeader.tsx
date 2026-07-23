@@ -64,7 +64,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
       <div
         className={dsx(
           ds.container,
-          "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 py-1.5 sm:gap-4 sm:py-2.5 md:flex md:justify-between md:py-3",
+          "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 py-1 sm:gap-4 sm:py-2 md:flex md:justify-between md:py-2.5",
         )}
       >
         {/* Brand */}
