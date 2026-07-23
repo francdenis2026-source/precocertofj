@@ -45,6 +45,8 @@ const catalogQuery = queryOptions({
   staleTime: 60_000,
 });
 
+import { PreparoDicas } from "@/components/estabelecimento/PreparoDicas";
+
 export const Route = createFileRoute("/estabelecimento/recanto-da-carne")({
   loader: ({ context }) => context.queryClient.ensureQueryData(catalogQuery),
   head: () => ({
@@ -260,6 +262,8 @@ function RecantoDaCarnePage() {
             Nenhum produto encontrado para “{q}”.
           </div>
         )}
+
+        <PreparoDicas />
       </main>
 
       <PriceHistorySheet
