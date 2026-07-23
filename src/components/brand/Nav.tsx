@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { LogOut, MapPin, Shield, ShoppingBag, User } from "lucide-react";
 import { Logo } from "./Logo";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { HighContrastToggle } from "@/components/HighContrastToggle";
 import { useMyProfile } from "@/hooks/useMyProfile";
 import { NotificationsBell } from "@/components/collab/NotificationsBell";
 import { useSignOut } from "@/hooks/use-sign-out";
@@ -60,6 +61,7 @@ export function Nav() {
 
         <div className="flex items-center gap-2">
           <ThemeToggle size="sm" />
+          <HighContrastToggle tone="onLight" className="hidden sm:inline-flex" />
           <Link
             to="/admin-login"
             aria-label="Área do administrador"
