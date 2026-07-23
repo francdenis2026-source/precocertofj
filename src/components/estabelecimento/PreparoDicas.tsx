@@ -1,4 +1,10 @@
 import type { ReactNode } from "react";
+import imgCozidao from "@/assets/preparo/cozidao.jpg";
+import imgAssado from "@/assets/preparo/assado.jpg";
+import imgChurrasco from "@/assets/preparo/churrasco.jpg";
+import imgStrogonoff from "@/assets/preparo/strogonoff.jpg";
+import imgEnsopado from "@/assets/preparo/ensopado.jpg";
+import imgGrelhado from "@/assets/preparo/grelhado.jpg";
 
 type Dica = {
   key: string;
@@ -6,7 +12,9 @@ type Dica = {
   descricao: string;
   cortes: string[];
   icon: ReactNode;
+  foto: string;
 };
+
 
 const stroke = {
   fill: "none",
