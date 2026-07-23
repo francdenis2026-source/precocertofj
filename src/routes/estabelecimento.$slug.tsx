@@ -131,27 +131,12 @@ function EstablishmentPage() {
   const [q, setQ] = useState("");
   const [sort, setSort] = useState<SortKey>("price-asc");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
-  const [priceMin, setPriceMin] = useState<string>("");
-  const [priceMax, setPriceMax] = useState<string>("");
-  const [showFilters, setShowFilters] = useState(false);
   const [historyFor, setHistoryFor] = useState<PublicStoreProduct | null>(null);
-
-  const brands = useMemo(() => {
-    const set = new Set<string>();
-    for (const p of data.products) if (p.brand) set.add(p.brand);
-    return Array.from(set).sort((a, b) => a.localeCompare(b, "pt-BR"));
-  }, [data.products]);
 
   const filtered = useMemo(() => {
     const term = normalize(q);
-    const min = priceMin ? Number(priceMin.replace(",", ".")) : null;
-    const max = priceMax ? Number(priceMax.replace(",", ".")) : null;
     let list = data.products.slice();
     if (selectedCategory) list = list.filter((p) => p.category === selectedCategory);
-    if (selectedBrand) list = list.filter((p) => p.brand === selectedBrand);
-    if (min != null && Number.isFinite(min)) list = list.filter((p) => p.price >= min);
-    if (max != null && Number.isFinite(max)) list = list.filter((p) => p.price <= max);
     if (term) {
       list = list.filter((p) => {
         const hay = normalize(`${p.productName} ${p.brand ?? ""} ${p.category}`);
@@ -176,7 +161,7 @@ function EstablishmentPage() {
         list.sort((a, b) => a.productName.localeCompare(b.productName, "pt-BR"));
     }
     return list;
-  }, [data.products, q, sort, selectedCategory, selectedBrand, priceMin, priceMax]);
+  }, [data.products, q, sort, selectedCategory]);
 
   const cheapest = useMemo(() => {
     if (!data.products.length) return null;
@@ -187,22 +172,10 @@ function EstablishmentPage() {
     data.store.address || data.store.neighborhood || data.store.city,
   );
 
-  const activeFiltersCount =
-    (selectedCategory ? 1 : 0) +
-    (selectedBrand ? 1 : 0) +
-    (priceMin ? 1 : 0) +
-    (priceMax ? 1 : 0);
-
-  const clearFilters = () => {
-    setSelectedCategory(null);
-    setSelectedBrand(null);
-    setPriceMin("");
-    setPriceMax("");
-  };
-
   const createAlert = (_p: PublicStoreProduct) => {
     navigate({ to: "/alertas" });
   };
+
 
 
   return (
@@ -321,20 +294,6 @@ function EstablishmentPage() {
               inputMode="search"
             />
           </div>
-          <Button
-            type="button"
-            variant={showFilters || activeFiltersCount > 0 ? "default" : "outline"}
-            onClick={() => setShowFilters((v) => !v)}
-            className="sm:w-auto"
-          >
-            <SlidersHorizontal className="mr-1.5 h-4 w-4" />
-            Filtros
-            {activeFiltersCount > 0 && (
-              <span className="ml-1.5 rounded-full bg-primary-foreground/20 px-1.5 text-[10px] font-bold">
-                {activeFiltersCount}
-              </span>
-            )}
-          </Button>
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as SortKey)}
@@ -349,73 +308,11 @@ function EstablishmentPage() {
           </select>
         </div>
 
-        {showFilters && (
-          <div className="mt-3 rounded-lg border border-border bg-card p-3">
-            <div className="grid gap-3 sm:grid-cols-3">
-              <div>
-                <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                  Marca
-                </label>
-                <select
-                  value={selectedBrand ?? ""}
-                  onChange={(e) => setSelectedBrand(e.target.value || null)}
-                  className="h-10 w-full rounded-md border border-border bg-background px-3 text-sm"
-                  disabled={brands.length === 0}
-                >
-                  <option value="">Todas as marcas</option>
-                  {brands.map((b) => (
-                    <option key={b} value={b}>
-                      {b}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                  Preço mínimo (R$)
-                </label>
-                <Input
-                  type="number"
-                  inputMode="decimal"
-                  min="0"
-                  step="0.01"
-                  value={priceMin}
-                  onChange={(e) => setPriceMin(e.target.value)}
-                  placeholder="0,00"
-                />
-              </div>
-              <div>
-                <label className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                  Preço máximo (R$)
-                </label>
-                <Input
-                  type="number"
-                  inputMode="decimal"
-                  min="0"
-                  step="0.01"
-                  value={priceMax}
-                  onChange={(e) => setPriceMax(e.target.value)}
-                  placeholder="999,99"
-                />
-              </div>
-            </div>
-            {activeFiltersCount > 0 && (
-              <button
-                type="button"
-                onClick={clearFilters}
-                className="mt-3 inline-flex items-center gap-1 text-[12px] text-muted-foreground hover:text-foreground"
-              >
-                <X className="h-3 w-3" /> Limpar filtros
-              </button>
-            )}
-          </div>
-        )}
-
         <div className="mt-4 text-xs text-muted-foreground">
           {filtered.length} de {data.products.length} produtos
           {selectedCategory && <> · categoria <strong>{selectedCategory}</strong></>}
-          {selectedBrand && <> · marca <strong>{selectedBrand}</strong></>}
         </div>
+
 
         <ul className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {filtered.map((p) => (
@@ -470,16 +367,17 @@ function EstablishmentPage() {
         {filtered.length === 0 && (
           <div className="mt-10 rounded-lg border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
             Nenhum produto encontrado{q ? ` para "${q}"` : ""}
-            {activeFiltersCount > 0 && " com os filtros atuais"}.
-            {activeFiltersCount > 0 && (
+            {selectedCategory && " nessa categoria"}.
+            {selectedCategory && (
               <div className="mt-3">
-                <Button variant="outline" size="sm" onClick={clearFilters}>
-                  Limpar filtros
+                <Button variant="outline" size="sm" onClick={() => setSelectedCategory(null)}>
+                  Limpar categoria
                 </Button>
               </div>
             )}
           </div>
         )}
+
 
 
         {hasLocation && (

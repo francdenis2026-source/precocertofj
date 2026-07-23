@@ -722,18 +722,8 @@ function ComparadorPage() {
             >
               Limpar
             </button>
-            <Link
-              to="/comparar"
-              search={{ ids: selected.join(",") }}
-              className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-[12.5px] font-bold text-primary-foreground shadow-sm transition hover:opacity-90 disabled:opacity-40"
-              aria-disabled={selected.length < 2}
-              onClick={(e) => {
-                if (selected.length < 2) e.preventDefault();
-              }}
-            >
-              Comparar
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
+
+
           </div>
         </div>
       )}

@@ -31,7 +31,6 @@ import { Route as FaleConoscoRouteImport } from './routes/fale-conosco'
 import { Route as EstabelecimentosRouteImport } from './routes/estabelecimentos'
 import { Route as EconomiaRouteImport } from './routes/economia'
 import { Route as ComprarLicencaRouteImport } from './routes/comprar-licenca'
-import { Route as CompararRouteImport } from './routes/comparar'
 import { Route as ComparadorRouteImport } from './routes/comparador'
 import { Route as ColaborarRouteImport } from './routes/colaborar'
 import { Route as CestaBasicaRouteImport } from './routes/cesta-basica'
@@ -204,11 +203,6 @@ const EconomiaRoute = EconomiaRouteImport.update({
 const ComprarLicencaRoute = ComprarLicencaRouteImport.update({
   id: '/comprar-licenca',
   path: '/comprar-licenca',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const CompararRoute = CompararRouteImport.update({
-  id: '/comparar',
-  path: '/comparar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComparadorRoute = ComparadorRouteImport.update({
@@ -550,7 +544,6 @@ export interface FileRoutesByFullPath {
   '/cesta-basica': typeof CestaBasicaRoute
   '/colaborar': typeof ColaborarRoute
   '/comparador': typeof ComparadorRoute
-  '/comparar': typeof CompararRoute
   '/comprar-licenca': typeof ComprarLicencaRoute
   '/economia': typeof EconomiaRoute
   '/estabelecimentos': typeof EstabelecimentosRoute
@@ -638,7 +631,6 @@ export interface FileRoutesByTo {
   '/cesta-basica': typeof CestaBasicaRoute
   '/colaborar': typeof ColaborarRoute
   '/comparador': typeof ComparadorRoute
-  '/comparar': typeof CompararRoute
   '/comprar-licenca': typeof ComprarLicencaRoute
   '/economia': typeof EconomiaRoute
   '/estabelecimentos': typeof EstabelecimentosRoute
@@ -727,7 +719,6 @@ export interface FileRoutesById {
   '/cesta-basica': typeof CestaBasicaRoute
   '/colaborar': typeof ColaborarRoute
   '/comparador': typeof ComparadorRoute
-  '/comparar': typeof CompararRoute
   '/comprar-licenca': typeof ComprarLicencaRoute
   '/economia': typeof EconomiaRoute
   '/estabelecimentos': typeof EstabelecimentosRoute
@@ -817,7 +808,6 @@ export interface FileRouteTypes {
     | '/cesta-basica'
     | '/colaborar'
     | '/comparador'
-    | '/comparar'
     | '/comprar-licenca'
     | '/economia'
     | '/estabelecimentos'
@@ -905,7 +895,6 @@ export interface FileRouteTypes {
     | '/cesta-basica'
     | '/colaborar'
     | '/comparador'
-    | '/comparar'
     | '/comprar-licenca'
     | '/economia'
     | '/estabelecimentos'
@@ -993,7 +982,6 @@ export interface FileRouteTypes {
     | '/cesta-basica'
     | '/colaborar'
     | '/comparador'
-    | '/comparar'
     | '/comprar-licenca'
     | '/economia'
     | '/estabelecimentos'
@@ -1082,7 +1070,6 @@ export interface RootRouteChildren {
   CestaBasicaRoute: typeof CestaBasicaRoute
   ColaborarRoute: typeof ColaborarRoute
   ComparadorRoute: typeof ComparadorRoute
-  CompararRoute: typeof CompararRoute
   ComprarLicencaRoute: typeof ComprarLicencaRoute
   EconomiaRoute: typeof EconomiaRoute
   EstabelecimentosRoute: typeof EstabelecimentosRoute
@@ -1302,13 +1289,6 @@ declare module '@tanstack/react-router' {
       path: '/comprar-licenca'
       fullPath: '/comprar-licenca'
       preLoaderRoute: typeof ComprarLicencaRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/comparar': {
-      id: '/comparar'
-      path: '/comparar'
-      fullPath: '/comparar'
-      preLoaderRoute: typeof CompararRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/comparador': {
@@ -1832,7 +1812,6 @@ const rootRouteChildren: RootRouteChildren = {
   CestaBasicaRoute: CestaBasicaRoute,
   ColaborarRoute: ColaborarRoute,
   ComparadorRoute: ComparadorRoute,
-  CompararRoute: CompararRoute,
   ComprarLicencaRoute: ComprarLicencaRoute,
   EconomiaRoute: EconomiaRoute,
   EstabelecimentosRoute: EstabelecimentosRoute,
