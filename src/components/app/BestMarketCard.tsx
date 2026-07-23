@@ -36,13 +36,13 @@ export function BestMarketCard({
             <button
               type="button"
               onClick={() => onOpenStore(marketName)}
-              className="block text-left font-serif text-2xl text-foreground hover:text-primary"
+              className="block rounded-md text-left font-display text-2xl font-semibold tracking-tight text-foreground transition-colors hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               aria-label={`Abrir detalhes de ${marketName}`}
             >
               {marketName}
             </button>
           ) : (
-            <p className="font-serif text-2xl text-foreground">{marketName}</p>
+            <p className="font-display text-2xl font-semibold tracking-tight text-foreground">{marketName}</p>
           )}
           <p className="mt-1 text-sm text-muted-foreground">
             Melhor mercado para levar seus favoritos —{" "}
