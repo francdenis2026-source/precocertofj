@@ -150,33 +150,35 @@ export const adminGetCustomer = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     if (!profile) throw new Error("Cliente não encontrado");
 
-    const [{ data: roles }, { data: licenses }, { data: logins }, { data: authUser }] =
-      await Promise.all([
-        supabaseAdmin.from("user_roles").select("role, created_at").eq("user_id", data.userId),
-        supabaseAdmin
-          .from("license_codes")
-          .select("id, code, status, plan_id, redeemed_at, expires_at, created_at")
-          .eq("assigned_user_id", data.userId)
-          .order("created_at", { ascending: false })
-          .limit(20),
-        supabaseAdmin
-          .from("login_events")
-          .select("id, created_at, success, reason, ip_address, user_agent")
-          .eq("user_id", data.userId)
-          .order("created_at", { ascending: false })
-          .limit(30),
-        supabaseAdmin.auth.admin.getUserById(data.userId),
-      ]);
+    const [rolesRes, licensesRes, loginsRes, authRes] = await Promise.all([
+      supabaseAdmin.from("user_roles").select("role, created_at").eq("user_id", data.userId),
+      supabaseAdmin
+        .from("license_codes")
+        .select("id, code, status, plan_id, redeemed_at, expires_at, created_at")
+        .or(`redeemed_by.eq.${data.userId},buyer_user_id.eq.${data.userId}`)
+        .order("created_at", { ascending: false })
+        .limit(20),
+      supabaseAdmin
+        .from("login_events")
+        .select("id, created_at, success, reason, ip_address, user_agent")
+        .eq("user_id", data.userId)
+        .order("created_at", { ascending: false })
+        .limit(30),
+      supabaseAdmin.auth.admin.getUserById(data.userId),
+    ]);
+
+    const authUser = "user" in authRes ? authRes.user : null;
 
     return {
       profile: { ...profile, cpf_masked: maskCpf(profile.cpf) },
-      roles: roles ?? [],
-      licenses: licenses ?? [],
-      logins: logins ?? [],
-      email: authUser?.data?.user?.email ?? null,
-      emailConfirmedAt: authUser?.data?.user?.email_confirmed_at ?? null,
-      lastSignInAt: authUser?.data?.user?.last_sign_in_at ?? null,
+      roles: rolesRes.data ?? [],
+      licenses: licensesRes.data ?? [],
+      logins: loginsRes.data ?? [],
+      email: authUser?.email ?? null,
+      emailConfirmedAt: authUser?.email_confirmed_at ?? null,
+      lastSignInAt: authUser?.last_sign_in_at ?? null,
     };
+
   });
 
 // ============================================================================
