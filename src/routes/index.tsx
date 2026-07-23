@@ -613,6 +613,41 @@ function HomePage() {
       </section>
 
       <SiteFooter />
+
+      {/* Sticky floating CTA — logged-out only, appears after scroll */}
+      {isLoggedOut && (
+        <div
+          aria-hidden={!showStickyCta}
+          className={`pointer-events-none fixed inset-x-0 bottom-4 z-40 flex justify-center px-4 transition-all duration-300 sm:bottom-6 sm:justify-end sm:pr-6 ${
+            showStickyCta
+              ? "translate-y-0 opacity-100"
+              : "pointer-events-none translate-y-3 opacity-0"
+          }`}
+          style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+        >
+          <StartFreeDialog>
+            <button
+              type="button"
+              tabIndex={showStickyCta ? 0 : -1}
+              aria-label="Começar grátis — abrir opções de cadastro e login"
+              aria-haspopup="dialog"
+              className="group pointer-events-auto inline-flex min-h-[48px] items-center gap-2 rounded-full px-5 py-3 text-[14.5px] font-semibold tracking-[-0.005em] antialiased shadow-md transition-[transform,box-shadow] duration-150 hover:-translate-y-[1px] hover:shadow-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:translate-y-0 sm:text-[15px]"
+              style={{
+                background: P.gold,
+                color: P.navy,
+                // @ts-expect-error css var
+                "--tw-ring-color": P.gold,
+                "--tw-ring-offset-color": P.paper,
+              }}
+            >
+              <Sparkles className="h-4 w-4" strokeWidth={2.6} />
+              <span>Começar grátis</span>
+              <ArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5" strokeWidth={2.5} />
+            </button>
+          </StartFreeDialog>
+        </div>
+      )}
+
     </div>
   );
 }
