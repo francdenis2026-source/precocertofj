@@ -691,7 +691,7 @@ function MelhoresPrecosPage() {
 
       <section className="mx-auto max-w-7xl px-6 py-6" aria-live="polite">
         {isLoading && (
-          <LoadingList count={5} itemClassName="h-24" />
+          <LoadingGrid count={12} columns={4} />
         )}
 
         {error && (
