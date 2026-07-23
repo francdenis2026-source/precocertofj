@@ -64,14 +64,14 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
       <div
         className={dsx(
           ds.container,
-          "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-3.5 sm:gap-5 sm:py-4 md:flex md:justify-between md:py-5",
+          "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-2.5 sm:gap-5 sm:py-3 md:flex md:justify-between md:py-3.5",
         )}
       >
         {/* Brand */}
-        <Link to="/" className="flex min-w-0 items-center gap-3">
+        <Link to="/" className="flex min-w-0 items-center gap-2.5 sm:gap-3">
           <span
             className={dsx(
-              "grid h-11 w-11 shrink-0 place-items-center rounded-[10px] bg-brand text-[19px] font-black text-brand-foreground sm:h-12 sm:w-12 sm:text-[21px]",
+              "grid h-9 w-9 shrink-0 place-items-center rounded-[10px] bg-brand text-[17px] font-black text-brand-foreground sm:h-10 sm:w-10 sm:text-[19px]",
               isOverlay ? "shadow-[0_6px_18px_rgb(0_0_0/0.28)] ring-1 ring-black/10" : "shadow-elev-2",
             )}
           >
@@ -81,7 +81,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             <span
               className={dsx(
                 serif,
-                "truncate text-[26px] font-medium leading-[0.95] tracking-[-0.015em] antialiased sm:text-[30px] md:text-[32px]",
+                "truncate text-[22px] font-medium leading-[0.95] tracking-[-0.015em] antialiased sm:text-[26px] md:text-[28px]",
                 brandTextClass,
                 isOverlay && "[text-shadow:0_1px_2px_rgb(0_0_0/0.35),0_0_1px_rgb(0_0_0/0.25)]",
               )}
@@ -90,7 +90,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             </span>
             <span
               className={dsx(
-                "mt-1.5 hidden text-[11px] font-semibold uppercase tracking-[0.22em] antialiased sm:block",
+                "mt-1 hidden text-[10.5px] font-semibold uppercase tracking-[0.22em] antialiased sm:block",
                 subTextClass,
                 isOverlay && "[text-shadow:0_1px_2px_rgb(0_0_0/0.45)]",
               )}
@@ -101,6 +101,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
         </Link>
 
 
+
         {/* Primary nav */}
         {showNav && (
           <nav className="hidden items-center gap-1 lg:flex" aria-label="Principal">
@@ -108,7 +109,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
               <Link
                 key={l.to}
                 to={l.to}
-                className={dsx("rounded-lg px-4 py-2.5 text-[16px] font-semibold leading-[1.35] outline-none transition-colors focus-visible:ring-2 lg:text-[18px] xl:text-[19px]", navClass)}
+                className={dsx("rounded-lg px-3.5 py-2 text-[15px] font-semibold leading-[1.35] outline-none transition-colors focus-visible:ring-2 lg:text-[16px] xl:text-[17px]", navClass)}
                 activeProps={{ className: isOverlay ? "text-on-media bg-on-media-surface" : "text-primary bg-primary/10" }}
               >
                 {l.label}
@@ -116,6 +117,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             ))}
           </nav>
         )}
+
 
 
         {/* CTAs */}
@@ -175,19 +177,20 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             <>
               <Link
                 to="/login"
-                className={dsx("hidden items-center rounded-lg px-4 py-2.5 text-[15.5px] font-semibold leading-[1.35] outline-none transition-colors focus-visible:ring-2 sm:inline-flex md:px-5 md:py-3 md:text-[16px] lg:text-[18px] xl:text-[19px]", loginClass)}
+                className={dsx("hidden items-center rounded-lg px-3.5 py-2 text-[15px] font-semibold leading-[1.35] outline-none transition-colors focus-visible:ring-2 sm:inline-flex md:px-4 md:py-2.5 md:text-[16px] lg:text-[17px]", loginClass)}
               >
                 Entrar
               </Link>
               <Link
                 to="/cadastro"
-                className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand px-3.5 py-2 text-[13px] font-bold leading-[1.2] text-brand-foreground shadow-elev-2 outline-none transition hover:brightness-105 focus-visible:ring-2 focus-visible:ring-brand/60 active:scale-[0.98] sm:px-4 sm:py-2.5 sm:text-[13.5px] lg:px-5 lg:py-3 lg:text-[16px] xl:text-[17px]"
+                className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand px-3 py-1.5 text-[12.5px] font-bold leading-[1.2] text-brand-foreground shadow-elev-2 outline-none transition hover:brightness-105 focus-visible:ring-2 focus-visible:ring-brand/60 active:scale-[0.98] sm:px-3.5 sm:py-2 sm:text-[13px] lg:px-4 lg:py-2.5 lg:text-[15px] xl:text-[16px]"
               >
                 Criar conta
               </Link>
             </>
 
           )}
+
         </div>
       </div>
     </header>

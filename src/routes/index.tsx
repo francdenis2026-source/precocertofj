@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 // Responsive picture: modern formats (AVIF/WebP) with JPG fallback, tuned quality.
 import heroMarket from "@/assets/home-hero.jpg?w=480;640;896&format=avif;webp;jpg&quality=68&as=picture";
+import heroMarketDark from "@/assets/home-hero-dark.jpg?w=480;640;896&format=avif;webp;jpg&quality=68&as=picture";
 import heroPreloadAvif from "@/assets/home-hero.jpg?w=640&format=avif&quality=62&url";
 import {
   Search,
@@ -117,10 +118,10 @@ function HomePage() {
           {/* -------- HERO SPLIT -------- */}
           <div className="flex flex-col lg:flex-row">
             {/* LEFT — content */}
-            <div className="flex-[1.2] p-6 sm:p-10 lg:p-16 xl:p-20 flex flex-col justify-center">
+            <div className="flex-[1.2] p-5 sm:p-10 lg:p-16 xl:p-20 flex flex-col justify-center">
               {/* Badge EM BREVE */}
               <div
-                className="mb-8 inline-flex w-fit items-center gap-2.5 rounded-full px-4 py-2 text-[10px] font-bold uppercase tracking-[0.18em] sm:text-[11px]"
+                className="mb-5 inline-flex w-fit items-center gap-2 rounded-full px-3 py-1.5 text-[10px] font-bold uppercase tracking-[0.18em] sm:mb-8 sm:gap-2.5 sm:px-4 sm:py-2 sm:text-[11px]"
                 style={{ background: P.navy, color: "#F5F6FA" }}
               >
                 <span className="relative flex h-2 w-2">
@@ -145,7 +146,7 @@ function HomePage() {
 
               {today && (
                 <div
-                  className="mb-5 text-[10.5px] font-bold uppercase tracking-[0.24em]"
+                  className="mb-3 text-[10px] font-bold uppercase tracking-[0.22em] sm:mb-5 sm:text-[10.5px] sm:tracking-[0.24em]"
                   style={{ color: P.goldSoft }}
                 >
                   {today} · edição diária
@@ -157,8 +158,8 @@ function HomePage() {
                 className={`${serif} font-normal`}
                 style={{
                   color: P.heading,
-                  fontSize: "clamp(2.5rem, 7vw, 6.5rem)",
-                  lineHeight: 0.9,
+                  fontSize: "clamp(2.15rem, 7vw, 6.5rem)",
+                  lineHeight: 0.92,
                   letterSpacing: "-0.03em",
                 }}
               >
@@ -168,6 +169,7 @@ function HomePage() {
                   onde você compra.
                 </span>
               </h1>
+
 
               <p
                 className="mt-6 max-w-xl text-[15px] leading-relaxed sm:text-[17px]"
@@ -246,21 +248,30 @@ function HomePage() {
               </div>
 
               {/* CTAs */}
-              <div className="mt-8 flex flex-wrap gap-3">
+              <div className="mt-6 flex flex-wrap gap-2.5 sm:mt-8 sm:gap-3">
                 <Link
                   to="/cadastro"
-                  className="group inline-flex items-center gap-2 rounded-2xl px-8 py-4 text-base font-bold shadow-lg transition-all hover:shadow-xl sm:px-10 sm:py-5 sm:text-lg"
-                  style={{ background: P.navy, color: "#F5F6FA" }}
+                  className="group inline-flex min-h-[44px] items-center gap-2 rounded-xl px-5 py-3 text-[15px] font-bold shadow-lg transition-all hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:rounded-2xl sm:px-10 sm:py-5 sm:text-lg"
+                  style={{
+                    background: P.navy,
+                    color: "#F5F6FA",
+                    // @ts-expect-error css var
+                    "--tw-ring-color": P.gold,
+                    "--tw-ring-offset-color": P.card,
+                  }}
                 >
                   Começar grátis
                   <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                 </Link>
                 <Link
                   to="/melhores-precos"
-                  className="inline-flex items-center gap-2 rounded-2xl border-2 px-8 py-4 text-base font-bold transition-colors hover:text-[color:var(--pc-home-card)] sm:px-10 sm:py-5 sm:text-lg"
+                  className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border-2 px-5 py-3 text-[15px] font-bold transition-colors hover:text-[color:var(--pc-home-card)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:rounded-2xl sm:px-10 sm:py-5 sm:text-lg"
                   style={{
                     borderColor: P.heading,
                     color: P.heading,
+                    // @ts-expect-error css var
+                    "--tw-ring-color": P.gold,
+                    "--tw-ring-offset-color": P.card,
                   }}
                   onMouseEnter={(e) => {
                     (e.currentTarget as HTMLElement).style.background = P.heading;
@@ -278,9 +289,10 @@ function HomePage() {
 
               {/* Stats */}
               <div
-                className="mt-14 grid grid-cols-3 gap-6 border-t pt-8 sm:gap-12"
+                className="mt-10 grid grid-cols-3 gap-4 border-t pt-6 sm:mt-14 sm:gap-12 sm:pt-8"
                 style={{ borderColor: P.line }}
               >
+
                 {[
                   {
                     k: String(stats.establishments ?? 8).padStart(2, "0"),
@@ -323,7 +335,8 @@ function HomePage() {
               className="relative hidden flex-1 lg:block"
               style={{ background: P.paper, minHeight: 720 }}
             >
-              <picture>
+              {/* Light theme image */}
+              <picture className="dark:hidden">
                 {Object.entries(heroMarket.sources).map(([type, srcset]) => (
                   <source
                     key={type}
@@ -343,6 +356,27 @@ function HomePage() {
                   className="absolute inset-0 h-full w-full object-cover"
                 />
               </picture>
+              {/* Dark theme image — moody market scene */}
+              <picture className="hidden dark:block">
+                {Object.entries(heroMarketDark.sources).map(([type, srcset]) => (
+                  <source
+                    key={type}
+                    type={`image/${type}`}
+                    srcSet={srcset}
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                  />
+                ))}
+                <img
+                  src={heroMarketDark.img.src}
+                  width={heroMarketDark.img.w}
+                  height={heroMarketDark.img.h}
+                  alt="Mercado noturno com produtos em iluminação ambiente"
+                  decoding="async"
+                  loading="eager"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              </picture>
+
               {/* Subtle left fade so the frame reads clean against the panel */}
               <div
                 aria-hidden
