@@ -270,21 +270,43 @@ function HomePage() {
 
               {/* CTAs */}
               <div className="mt-5 flex flex-wrap items-center gap-3 sm:mt-6 sm:gap-4">
-                <Link
-                  to="/cadastro"
-                  aria-label="Começar grátis — criar conta"
-                  className="group inline-flex min-h-[48px] items-center gap-2 rounded-xl px-6 py-3 text-[15px] font-semibold tracking-[-0.005em] antialiased shadow-sm transition-[transform,box-shadow,background-color] duration-150 hover:-translate-y-[1px] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:translate-y-0 active:shadow-sm sm:min-h-[52px] sm:rounded-2xl sm:px-7 sm:py-3.5 sm:text-[16px]"
-                  style={{
-                    background: P.gold,
-                    color: P.navy,
-                    // @ts-expect-error css var
-                    "--tw-ring-color": P.gold,
-                    "--tw-ring-offset-color": P.card,
-                  }}
-                >
-                  <span>Começar grátis</span>
-                  <ArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5" strokeWidth={2.5} />
-                </Link>
+                {isLoggedOut ? (
+                  <StartFreeDialog>
+                    <button
+                      type="button"
+                      aria-label="Começar grátis — abrir opções de cadastro e login"
+                      aria-haspopup="dialog"
+                      className="group inline-flex min-h-[48px] items-center gap-2 rounded-xl px-6 py-3 text-[15px] font-semibold tracking-[-0.005em] antialiased shadow-sm transition-[transform,box-shadow,background-color] duration-150 hover:-translate-y-[1px] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:translate-y-0 active:shadow-sm sm:min-h-[52px] sm:rounded-2xl sm:px-7 sm:py-3.5 sm:text-[16px]"
+                      style={{
+                        background: P.gold,
+                        color: P.navy,
+                        // @ts-expect-error css var
+                        "--tw-ring-color": P.gold,
+                        "--tw-ring-offset-color": P.card,
+                      }}
+                    >
+                      <span>Começar grátis</span>
+                      <ArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5" strokeWidth={2.5} />
+                    </button>
+                  </StartFreeDialog>
+                ) : (
+                  <Link
+                    to="/app"
+                    aria-label="Ir para o painel"
+                    className="group inline-flex min-h-[48px] items-center gap-2 rounded-xl px-6 py-3 text-[15px] font-semibold tracking-[-0.005em] antialiased shadow-sm transition-[transform,box-shadow,background-color] duration-150 hover:-translate-y-[1px] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:translate-y-0 active:shadow-sm sm:min-h-[52px] sm:rounded-2xl sm:px-7 sm:py-3.5 sm:text-[16px]"
+                    style={{
+                      background: P.gold,
+                      color: P.navy,
+                      // @ts-expect-error css var
+                      "--tw-ring-color": P.gold,
+                      "--tw-ring-offset-color": P.card,
+                    }}
+                  >
+                    <span>Ir para o painel</span>
+                    <ArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5" strokeWidth={2.5} />
+                  </Link>
+                )}
+
 
                 <Link
                   to="/melhores-precos"
