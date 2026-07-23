@@ -246,7 +246,7 @@ function HomePage() {
             {/* Busca — pill unificado, botão embutido */}
             <form onSubmit={submitSearch} className="mt-6 max-w-2xl sm:mt-8">
               <div
-                className="flex items-center gap-2 rounded-2xl border border-[color:var(--pc-home-onhero-border)] bg-[color:var(--pc-home-onhero-glass)] p-1.5 backdrop-blur-xl transition-all focus-within:border-white/60 focus-within:bg-[color:var(--pc-home-onhero-glass-hover)] sm:p-2"
+                className="flex items-center gap-2 rounded-2xl border border-[color:var(--pc-home-onhero-border)] bg-[color:var(--pc-home-onhero-glass)] p-1.5 backdrop-blur-xl transition-all focus-within:border-[color:var(--pc-home-onhero-border-hover)] focus-within:bg-[color:var(--pc-home-onhero-glass-hover)] sm:p-2"
               >
                 <span className="pointer-events-none pl-3 sm:pl-4">
                   <Search className="h-5 w-5 text-[color:var(--pc-home-onhero-fg-90)]" strokeWidth={2.4} aria-hidden />
@@ -338,7 +338,7 @@ function HomePage() {
       {/* EXPLORE — seção premium com fundo cinematográfico */}
       <section
         className="relative overflow-hidden"
-        style={{ background: PALETTE.navy }}
+        style={{ background: PALETTE.exploreBg }}
       >
         {/* Imagem de fundo profissional */}
         <img
