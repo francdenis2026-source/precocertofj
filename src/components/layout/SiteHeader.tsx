@@ -101,7 +101,7 @@ export function SiteHeader({ variant = "solid", showNav = true }: Props) {
               <Link
                 key={l.to}
                 to={l.to}
-                className="rounded-lg px-4 py-2.5 text-[16px] font-semibold text-white/85 transition-colors hover:bg-white/10 hover:text-white lg:text-[18px] xl:text-[19px] [&.active]:text-white"
+                className="rounded-lg px-4 py-2.5 text-[16px] font-semibold leading-[1.35] text-white/85 outline-none transition-colors hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-white/60 lg:text-[18px] xl:text-[19px] [&.active]:text-white"
                 activeProps={{ className: "text-white bg-white/5" }}
               >
                 {l.label}
@@ -109,6 +109,7 @@ export function SiteHeader({ variant = "solid", showNav = true }: Props) {
             ))}
           </nav>
         )}
+
 
         {/* CTAs */}
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
@@ -166,13 +167,13 @@ export function SiteHeader({ variant = "solid", showNav = true }: Props) {
             <>
               <Link
                 to="/login"
-                className="hidden items-center rounded-lg px-4 py-2.5 text-[15.5px] font-semibold text-white/90 transition-colors hover:bg-white/10 hover:text-white sm:inline-flex md:px-5 md:py-3 md:text-[16px] lg:text-[18px] xl:text-[19px]"
+                className="hidden items-center rounded-lg px-4 py-2.5 text-[15.5px] font-semibold leading-[1.35] text-white/90 outline-none transition-colors hover:bg-white/10 hover:text-white focus-visible:ring-2 focus-visible:ring-white/60 sm:inline-flex md:px-5 md:py-3 md:text-[16px] lg:text-[18px] xl:text-[19px]"
               >
                 Entrar
               </Link>
               <Link
                 to="/cadastro"
-                className="inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-[13px] font-bold tracking-wide shadow-md transition hover:brightness-105 active:scale-[0.98] sm:px-4 sm:py-2.5 sm:text-[13.5px]"
+                className="inline-flex items-center justify-center gap-1.5 rounded-lg px-3.5 py-2 text-[13px] font-bold leading-[1.2] tracking-wide shadow-md outline-none transition hover:brightness-105 focus-visible:ring-2 focus-visible:ring-white/70 active:scale-[0.98] sm:px-4 sm:py-2.5 sm:text-[13.5px] lg:px-5 lg:py-3 lg:text-[16px] xl:text-[17px]"
                 style={{
                   background: PALETTE.gold,
                   color: PALETTE.navy,
@@ -183,6 +184,7 @@ export function SiteHeader({ variant = "solid", showNav = true }: Props) {
                 Criar conta
               </Link>
             </>
+
           )}
         </div>
       </div>

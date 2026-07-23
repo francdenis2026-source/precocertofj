@@ -115,7 +115,7 @@ export function SiteFooter() {
           {NAV_COLS.map((col) => (
             <div key={col.title}>
               <div
-                className="text-[10px] font-bold uppercase tracking-[0.2em] md:text-[10.5px] md:tracking-[0.22em]"
+                className="text-[10px] font-bold uppercase tracking-[0.2em] md:text-[11.5px] md:tracking-[0.22em] lg:text-[12.5px]"
                 style={{ color: PALETTE.gold }}
               >
                 {col.title}
@@ -125,7 +125,7 @@ export function SiteFooter() {
                   <li key={l.to}>
                     <Link
                       to={l.to}
-                      className="text-[12.5px] transition-colors md:text-[13.5px]"
+                      className="text-[12.5px] leading-[1.5] transition-colors md:text-[14.5px] lg:text-[16px]"
                       style={{ color: PALETTE.navy2 }}
                     >
                       <span className="hover:text-[color:var(--nt-ink)]">
@@ -138,6 +138,7 @@ export function SiteFooter() {
             </div>
           ))}
         </div>
+
       </div>
 
       {/* Bottom — legal strip (sem duplicar links do menu) */}
@@ -145,13 +146,14 @@ export function SiteFooter() {
         <div
           className={dsx(
             ds.container,
-            "flex flex-col items-start justify-between gap-1.5 py-3 text-[12px] font-medium sm:flex-row sm:items-center md:py-4 md:text-[13px]",
+            "flex flex-col items-start justify-between gap-1.5 py-3 text-[12px] font-medium leading-[1.5] sm:flex-row sm:items-center md:py-4 md:text-[13.5px] lg:text-[15px]",
           )}
           style={{ color: PALETTE.ink }}
         >
-          <span>© {year} <strong className="font-semibold">PreçoCerto</strong> · Feijó · Acre</span>
-          <span className="font-mono" style={{ color: PALETTE.navy2 }}>&lt;dev&gt; Franc D&apos;nis</span>
+          <span className="whitespace-normal">© {year} <strong className="font-semibold">PreçoCerto</strong> · Feijó · Acre</span>
+          <span className="whitespace-nowrap font-mono" style={{ color: PALETTE.navy2 }}>&lt;dev&gt; Franc D&apos;nis</span>
         </div>
+
       </div>
     </footer>
   );
