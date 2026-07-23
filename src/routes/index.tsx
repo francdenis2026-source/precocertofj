@@ -363,16 +363,16 @@ function HomePage() {
                 {[
                   {
                     k: String(stats.establishments ?? 8).padStart(2, "0"),
-                    l: "Estabelecimentos",
+                    l: "Mercados de Feijó",
                   },
                   {
                     k:
                       stats.products != null
                         ? `${stats.products.toLocaleString("pt-BR")}+`
                         : "1.000+",
-                    l: "Produtos catalogados",
+                    l: "Produtos com preço",
                   },
-                  { k: "24h", l: "Preços atualizados" },
+                  { k: "24h", l: "Preços conferidos" },
                 ].map((s) => (
                   <div key={s.l}>
                     <div
