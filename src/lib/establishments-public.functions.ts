@@ -69,33 +69,47 @@ export const listPublicEstablishments = createServerFn({ method: "GET" }).handle
       .order("name", { ascending: true });
     if (eErr) throw new Error(eErr.message);
 
-    // Aggregate scans → category counts per establishment
+    // Aggregate scans → category counts per establishment.
+    // Supabase-js default row cap is 1000; total scans exceed that,
+    // so paginate explicitly to keep every establishment counted.
     const scanClient = supabaseAdmin as unknown as {
       from: (t: string) => {
         select: (s: string) => {
           eq: (c: string, v: unknown) => {
             is: (c: string, v: null) => {
-              not: (c: string, op: string, v: unknown) => Promise<{
-                data: Array<{
-                  establishment_id: string;
-                  product_name: string;
-                  created_at: string;
-                }> | null;
-                error: { message: string } | null;
-              }>;
+              not: (c: string, op: string, v: unknown) => {
+                range: (from: number, to: number) => Promise<{
+                  data: Array<{
+                    establishment_id: string;
+                    product_name: string;
+                    created_at: string;
+                  }> | null;
+                  error: { message: string } | null;
+                }>;
+              };
             };
           };
         };
       };
     };
 
-    const { data: scans, error: sErr } = await scanClient
-      .from("scans")
-      .select("establishment_id, product_name, created_at")
-      .eq("status", "salvo")
-      .is("user_id", null)
-      .not("product_name", "is", null);
-    if (sErr) throw new Error(sErr.message);
+    const PAGE = 1000;
+    let offset = 0;
+    const scans: Array<{ establishment_id: string; product_name: string; created_at: string }> = [];
+    while (offset < 200_000) {
+      const { data, error: sErr } = await scanClient
+        .from("scans")
+        .select("establishment_id, product_name, created_at")
+        .eq("status", "salvo")
+        .is("user_id", null)
+        .not("product_name", "is", null)
+        .range(offset, offset + PAGE - 1);
+      if (sErr) throw new Error(sErr.message);
+      const batch = data ?? [];
+      scans.push(...batch);
+      if (batch.length < PAGE) break;
+      offset += PAGE;
+    }
 
     // Classify locally with lightweight regex-mirror of classify_product_category
     const classify = (name: string): string => {

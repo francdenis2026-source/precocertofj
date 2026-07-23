@@ -158,15 +158,30 @@ function RedeemPage() {
       const res = await redeem({ data: { code: clean } });
       if (res.success) {
         toast.success(res.message || "Licença ativada!");
-        navigate({ to: "/app" });
+        // Mostra tela de confirmação com validade + botão para o painel.
+        setResult({
+          ok: true,
+          message: res.message,
+          addedDays: res.addedDays,
+          newPaidUntil: res.newPaidUntil ?? null,
+          code: clean,
+        });
         return;
       }
+      // Falha (código já usado, expirado, revogado, inválido):
+      // libera imediatamente o campo para nova tentativa.
       setResult({ ok: false, message: res.message, code: clean });
       toast.error(res.message);
+      setRaw("");
+      setTouched(false);
+      setTimeout(() => inputRef.current?.focus(), 30);
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Falha ao ativar";
       toast.error(msg);
       setResult({ ok: false, message: msg, code: clean });
+      setRaw("");
+      setTouched(false);
+      setTimeout(() => inputRef.current?.focus(), 30);
     } finally {
       setSubmitting(false);
     }
@@ -291,7 +306,10 @@ function RedeemPage() {
                     id="license-code"
                     ref={inputRef}
                     value={display}
-                    onChange={(e) => setRaw(e.target.value)}
+                    onChange={(e) => {
+                      setRaw(e.target.value);
+                      if (result && !result.ok) setResult(null);
+                    }}
                     onBlur={() => setTouched(true)}
                     onPaste={(e) => {
                       e.preventDefault();
