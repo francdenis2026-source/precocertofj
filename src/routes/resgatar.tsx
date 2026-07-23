@@ -261,9 +261,8 @@ function RedeemPage() {
             <div className="flex items-center justify-center px-5 py-16">
               <Loader2 className="h-5 w-5 animate-spin" style={{ color: NAVY }} />
             </div>
-          ) : !hasSession ? (
-            <SignInGate />
           ) : result?.ok ? (
+
             <SuccessBody
               code={result.code ?? clean}
               addedDays={result.addedDays}
