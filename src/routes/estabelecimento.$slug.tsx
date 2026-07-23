@@ -190,14 +190,27 @@ function EstablishmentPage() {
                 {data.products.length} produto{data.products.length === 1 ? "" : "s"} publicados
                 {data.categories.length > 0 && ` · ${data.categories.length} categorias`}
               </CardDescription>
-              {(location || data.store.address) && (
-                <div className="mt-3 flex flex-wrap gap-3 text-xs text-muted-foreground">
-                  <span className="inline-flex items-center gap-1">
-                    <MapPin className="h-3.5 w-3.5" />
-                    {data.store.address ? `${data.store.address} · ${location}` : location}
+
+              <div className="mt-3 flex flex-wrap items-center gap-2">
+                {data.store.neighborhood && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-[12px] font-semibold text-primary">
+                    <MapPin className="h-3.5 w-3.5" aria-hidden />
+                    Bairro {data.store.neighborhood}
                   </span>
-                </div>
+                )}
+                {(data.store.city || data.store.state) && (
+                  <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-1 text-[12px] font-medium text-foreground">
+                    {[data.store.city, data.store.state].filter(Boolean).join(" · ")}
+                  </span>
+                )}
+              </div>
+              {data.store.address && (
+                <p className="mt-2 flex items-start gap-1.5 text-sm font-medium text-foreground">
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+                  <span>{data.store.address}</span>
+                </p>
               )}
+
               {data.categories.length > 0 && (
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {data.categories.slice(0, 6).map((c) => (
@@ -214,6 +227,7 @@ function EstablishmentPage() {
                 </div>
               )}
             </div>
+
           </CardHeader>
           {cheapest && (
             <CardContent className="border-t border-border/60 bg-muted/30 py-3">
