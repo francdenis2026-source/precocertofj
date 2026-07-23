@@ -80,7 +80,7 @@ export const createMercadoPagoPreference = createServerFn({ method: "POST" })
 
     const { data: order, error } = await supabaseAdmin
       .from("checkout_orders")
-      .select("id, user_id, final_cents, status, plan_id, license_plans:plan_id(name)")
+      .select("id, user_id, final_cents, status, plan_id, delivery_email, license_plans:plan_id(name)")
       .eq("id", data.orderId)
       .maybeSingle();
     if (error) throw new Error(error.message);
@@ -90,10 +90,17 @@ export const createMercadoPagoPreference = createServerFn({ method: "POST" })
     if (!order.final_cents || order.final_cents < 100) {
       throw new Error("Valor do pedido inválido");
     }
+    if (!order.delivery_email) {
+      throw new Error("Informe o e-mail de entrega antes de pagar.");
+    }
 
-    // Load user email for MP payer
-    const { data: userInfo } = await supabaseAdmin.auth.admin.getUserById(context.userId);
-    const payerEmail = userInfo?.user?.email ?? undefined;
+    // Preferir o e-mail informado no checkout (canal de entrega da licença);
+    // cair no e-mail da conta apenas como fallback.
+    let payerEmail: string | undefined = order.delivery_email ?? undefined;
+    if (!payerEmail) {
+      const { data: userInfo } = await supabaseAdmin.auth.admin.getUserById(context.userId);
+      payerEmail = userInfo?.user?.email ?? undefined;
+    }
 
     const planName: string = (order as any).license_plans?.name ?? "Plano PreçoCerto";
 
