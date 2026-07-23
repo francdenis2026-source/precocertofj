@@ -53,6 +53,7 @@ import { Route as LojaIdRouteImport } from './routes/loja.$id'
 import { Route as HistoricoScansRouteImport } from './routes/historico.scans'
 import { Route as HistoricoProdutosRouteImport } from './routes/historico.produtos'
 import { Route as HistoricoIdRouteImport } from './routes/historico.$id'
+import { Route as EstabelecimentoRecantoDaCarneRouteImport } from './routes/estabelecimento.recanto-da-carne'
 import { Route as CotacaoIdRouteImport } from './routes/cotacao.$id'
 import { Route as ComprovanteIdRouteImport } from './routes/comprovante.$id'
 import { Route as CheckoutIdRouteImport } from './routes/checkout.$id'
@@ -313,6 +314,12 @@ const HistoricoIdRoute = HistoricoIdRouteImport.update({
   path: '/$id',
   getParentRoute: () => HistoricoRoute,
 } as any)
+const EstabelecimentoRecantoDaCarneRoute =
+  EstabelecimentoRecantoDaCarneRouteImport.update({
+    id: '/estabelecimento/recanto-da-carne',
+    path: '/estabelecimento/recanto-da-carne',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const CotacaoIdRoute = CotacaoIdRouteImport.update({
   id: '/cotacao/$id',
   path: '/cotacao/$id',
@@ -583,6 +590,7 @@ export interface FileRoutesByFullPath {
   '/checkout/$id': typeof CheckoutIdRoute
   '/comprovante/$id': typeof ComprovanteIdRoute
   '/cotacao/$id': typeof CotacaoIdRoute
+  '/estabelecimento/recanto-da-carne': typeof EstabelecimentoRecantoDaCarneRoute
   '/historico/$id': typeof HistoricoIdRoute
   '/historico/produtos': typeof HistoricoProdutosRoute
   '/historico/scans': typeof HistoricoScansRoute
@@ -668,6 +676,7 @@ export interface FileRoutesByTo {
   '/checkout/$id': typeof CheckoutIdRoute
   '/comprovante/$id': typeof ComprovanteIdRoute
   '/cotacao/$id': typeof CotacaoIdRoute
+  '/estabelecimento/recanto-da-carne': typeof EstabelecimentoRecantoDaCarneRoute
   '/historico/$id': typeof HistoricoIdRoute
   '/historico/produtos': typeof HistoricoProdutosRoute
   '/historico/scans': typeof HistoricoScansRoute
@@ -754,6 +763,7 @@ export interface FileRoutesById {
   '/checkout/$id': typeof CheckoutIdRoute
   '/comprovante/$id': typeof ComprovanteIdRoute
   '/cotacao/$id': typeof CotacaoIdRoute
+  '/estabelecimento/recanto-da-carne': typeof EstabelecimentoRecantoDaCarneRoute
   '/historico/$id': typeof HistoricoIdRoute
   '/historico/produtos': typeof HistoricoProdutosRoute
   '/historico/scans': typeof HistoricoScansRoute
@@ -841,6 +851,7 @@ export interface FileRouteTypes {
     | '/checkout/$id'
     | '/comprovante/$id'
     | '/cotacao/$id'
+    | '/estabelecimento/recanto-da-carne'
     | '/historico/$id'
     | '/historico/produtos'
     | '/historico/scans'
@@ -926,6 +937,7 @@ export interface FileRouteTypes {
     | '/checkout/$id'
     | '/comprovante/$id'
     | '/cotacao/$id'
+    | '/estabelecimento/recanto-da-carne'
     | '/historico/$id'
     | '/historico/produtos'
     | '/historico/scans'
@@ -1011,6 +1023,7 @@ export interface FileRouteTypes {
     | '/checkout/$id'
     | '/comprovante/$id'
     | '/cotacao/$id'
+    | '/estabelecimento/recanto-da-carne'
     | '/historico/$id'
     | '/historico/produtos'
     | '/historico/scans'
@@ -1096,6 +1109,7 @@ export interface RootRouteChildren {
   CheckoutIdRoute: typeof CheckoutIdRoute
   ComprovanteIdRoute: typeof ComprovanteIdRoute
   CotacaoIdRoute: typeof CotacaoIdRoute
+  EstabelecimentoRecantoDaCarneRoute: typeof EstabelecimentoRecantoDaCarneRoute
   LojaIdRoute: typeof LojaIdRouteWithChildren
   ProdutoPublicoSlugRoute: typeof ProdutoPublicoSlugRoute
   ProdutoIdRoute: typeof ProdutoIdRoute
@@ -1417,6 +1431,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/historico/$id'
       preLoaderRoute: typeof HistoricoIdRouteImport
       parentRoute: typeof HistoricoRoute
+    }
+    '/estabelecimento/recanto-da-carne': {
+      id: '/estabelecimento/recanto-da-carne'
+      path: '/estabelecimento/recanto-da-carne'
+      fullPath: '/estabelecimento/recanto-da-carne'
+      preLoaderRoute: typeof EstabelecimentoRecantoDaCarneRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/cotacao/$id': {
       id: '/cotacao/$id'
@@ -1811,6 +1832,7 @@ const rootRouteChildren: RootRouteChildren = {
   CheckoutIdRoute: CheckoutIdRoute,
   ComprovanteIdRoute: ComprovanteIdRoute,
   CotacaoIdRoute: CotacaoIdRoute,
+  EstabelecimentoRecantoDaCarneRoute: EstabelecimentoRecantoDaCarneRoute,
   LojaIdRoute: LojaIdRouteWithChildren,
   ProdutoPublicoSlugRoute: ProdutoPublicoSlugRoute,
   ProdutoIdRoute: ProdutoIdRoute,

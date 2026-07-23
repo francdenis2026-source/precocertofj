@@ -1866,6 +1866,8 @@ export type Database = {
           brand: string | null
           captured_at: string
           change_pct: number | null
+          changed_by: string | null
+          changed_by_email: string | null
           created_at: string
           establishment_id: string
           id: string
@@ -1882,6 +1884,8 @@ export type Database = {
           brand?: string | null
           captured_at?: string
           change_pct?: number | null
+          changed_by?: string | null
+          changed_by_email?: string | null
           created_at?: string
           establishment_id: string
           id?: string
@@ -1898,6 +1902,8 @@ export type Database = {
           brand?: string | null
           captured_at?: string
           change_pct?: number | null
+          changed_by?: string | null
+          changed_by_email?: string | null
           created_at?: string
           establishment_id?: string
           id?: string
