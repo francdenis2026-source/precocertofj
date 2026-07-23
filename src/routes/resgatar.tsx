@@ -152,8 +152,15 @@ function RedeemPage() {
       );
       return;
     }
+    if (!hasSession) {
+      try { sessionStorage.setItem("pending_license_code", clean); } catch {}
+      toast.message("Entre na sua conta para concluir a ativação.");
+      navigate({ to: "/login", search: { redirect: "/resgatar" } as never });
+      return;
+    }
     attemptedRef.current = clean;
     setSubmitting(true);
+
     try {
       const res = await redeem({ data: { code: clean } });
       if (res.success) {
