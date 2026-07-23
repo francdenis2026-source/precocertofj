@@ -68,7 +68,7 @@ export function MobileNav() {
           )}
         </span>
         <span className={cn(
-          "text-[10px] font-semibold tracking-tight",
+          "text-[12px] font-semibold tracking-tight",
           active && "text-accent-strong",
         )}>
           {label}
@@ -99,7 +99,7 @@ export function MobileNav() {
             density="compact"
             interactive
           />
-          <span className={cn("text-[10px] font-semibold tracking-tight", active && "text-accent-strong")}>
+          <span className={cn("text-[12px] font-semibold tracking-tight", active && "text-accent-strong")}>
             Painel
           </span>
         </Link>
@@ -108,7 +108,7 @@ export function MobileNav() {
     return (
       <a href={loginHrefWithRedirect()} aria-label="Entrar" className={commonClass}>
         <IconTile icon={User} size="sm" tone="surface" density="compact" interactive />
-        <span className="text-[10px] font-semibold tracking-tight">Conta</span>
+        <span className="text-[12px] font-semibold tracking-tight">Conta</span>
       </a>
     );
   };
@@ -139,7 +139,7 @@ export function MobileNav() {
               className={cn("rounded-full", listaActive && "ring-4 ring-accent/25")}
             />
           </Link>
-          <span className="mt-[52px] text-[10px] font-semibold tracking-tight text-muted-foreground">
+          <span className="mt-[52px] text-[12px] font-semibold tracking-tight text-muted-foreground">
             Lista
           </span>
         </div>
