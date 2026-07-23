@@ -298,7 +298,7 @@ function HomePage() {
                 <button
                   key={t}
                   onClick={() => navigate({ to: "/buscar", search: { q: t } as any })}
-                  className="inline-flex items-center rounded-full border border-[color:var(--pc-home-onhero-border)] bg-[color:var(--pc-home-onhero-glass)] px-4 py-2 text-[14px] font-semibold text-[color:var(--pc-home-onhero-fg)] backdrop-blur transition-all hover:-translate-y-0.5 hover:border-[color:var(--pc-home-onhero-border-hover)] hover:bg-[color:var(--pc-home-onhero-glass-hover)]"
+                  className="inline-flex items-center rounded-full border border-[color:var(--pc-home-onhero-border)] bg-[color:var(--pc-home-onhero-glass)] px-4 py-2 text-[14px] font-semibold text-[color:var(--pc-home-onhero-fg)] backdrop-blur outline-none transition-all hover:-translate-y-0.5 hover:border-[color:var(--pc-home-onhero-border-hover)] hover:bg-[color:var(--pc-home-onhero-glass-hover)] focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-onhero-fg)]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-y-0 active:scale-[0.97]"
                 >
                   {t}
                 </button>
