@@ -680,49 +680,37 @@ function ExploreCard({
   return (
     <Link
       to={to}
-      className="group block rounded-2xl border p-3.5 shadow-elev-1 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-elev-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--pc-home-navy)] sm:p-4"
-      style={{
-        background: "rgb(255 255 255 / 0.05)",
-        borderColor: "rgb(255 255 255 / 0.10)",
-      }}
-      onMouseEnter={(e) => {
-        (e.currentTarget as HTMLElement).style.background = "rgb(255 255 255 / 0.10)";
-        (e.currentTarget as HTMLElement).style.borderColor = "color-mix(in oklab, var(--pc-home-gold) 40%, transparent)";
-      }}
-      onMouseLeave={(e) => {
-        (e.currentTarget as HTMLElement).style.background = "rgb(255 255 255 / 0.05)";
-        (e.currentTarget as HTMLElement).style.borderColor = "rgb(255 255 255 / 0.10)";
-      }}
+      className="group block rounded-xl border border-white/12 bg-white/[0.06] p-3.5 shadow-elev-1 transition-all duration-200 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[0.10] hover:shadow-elev-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--pc-home-navy)] sm:p-4"
     >
-      {/* Mobile: horizontal compact row · Tablet+Desktop: stacked */}
       <div className="flex items-start gap-3 sm:block">
         <div
-          className={`${serif} shrink-0 tabular-nums leading-none sm:mb-2`}
+          className="shrink-0 font-bold tabular-nums leading-none sm:mb-2"
           style={{
-            color: P.gold,
-            fontSize: "clamp(1.4rem, 2.4vw, 1.75rem)",
-            letterSpacing: "-0.02em",
+            color: P.goldSoft,
+            fontSize: "clamp(0.85rem, 1.2vw, 1rem)",
+            letterSpacing: "0.14em",
           }}
         >
           {number}
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="mb-0.5 text-[14.5px] font-semibold leading-tight text-white sm:mb-1 sm:text-[15.5px] lg:text-[17px]">
+          <h3 className="mb-1 text-[14.5px] font-semibold leading-tight text-white sm:text-[15.5px] lg:text-[16.5px]">
             {title}
           </h3>
-          <p className="text-[12.5px] leading-snug text-white/70 sm:text-[13px]">{desc}</p>
-          <div className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-[0.16em] text-white/80 transition-colors group-hover:text-[color:var(--pc-home-gold)] sm:mt-2.5 sm:text-[10.5px] sm:tracking-[0.18em]">
+          <p className="text-[12.5px] leading-snug text-white/85 sm:text-[13px]">{desc}</p>
+          <div className="mt-2 inline-flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-[0.16em] text-[color:var(--pc-home-gold-soft)] transition-colors group-hover:text-[color:var(--pc-home-gold)] sm:mt-2.5">
             {cta}
             <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1 sm:h-3.5 sm:w-3.5" />
           </div>
         </div>
         <ArrowRight
-          className="mt-1 h-4 w-4 shrink-0 text-white/40 transition-all group-hover:translate-x-0.5 group-hover:text-[color:var(--pc-home-gold)] sm:hidden"
+          className="mt-1 h-4 w-4 shrink-0 text-white/50 transition-all group-hover:translate-x-0.5 group-hover:text-[color:var(--pc-home-gold)] sm:hidden"
           aria-hidden
         />
       </div>
     </Link>
   );
 }
+
 
 
