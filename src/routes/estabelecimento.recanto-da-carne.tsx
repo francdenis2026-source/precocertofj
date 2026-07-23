@@ -260,6 +260,8 @@ function RecantoDaCarnePage() {
             Nenhum produto encontrado para “{q}”.
           </div>
         )}
+
+        <PreparoDicas />
       </main>
 
       <PriceHistorySheet
