@@ -192,6 +192,19 @@ export function PreparoDicas() {
     [temposSel, modosSel, proteinasSel],
   );
 
+  // Proteínas efetivamente presentes nos dados (dicas + variações).
+  // Chips sem nenhum corte cadastrado são desabilitados.
+  const proteinasDisponiveis = useMemo(() => {
+    const s = new Set<ProteinaId>();
+    PREPARO_DICAS.forEach((d) => {
+      (d.proteinas && d.proteinas.length > 0 ? d.proteinas : (["boi"] as ProteinaId[])).forEach((p) => s.add(p));
+      (d.variacoes ?? []).forEach((v) => {
+        (v.proteinas && v.proteinas.length > 0 ? v.proteinas : (["boi"] as ProteinaId[])).forEach((p) => s.add(p));
+      });
+    });
+    return s;
+  }, []);
+
   const favoritosPorDica = useMemo(() => {
     const map = new Map<string, string[]>();
     PREPARO_DICAS.forEach((d) => {
@@ -320,16 +333,22 @@ export function PreparoDicas() {
             <div className="flex flex-wrap gap-1.5">
               {PROTEINAS.map((p) => {
                 const active = proteinasSel.has(p.id);
+                const disponivel = proteinasDisponiveis.has(p.id);
                 return (
                   <button
                     key={p.id}
                     type="button"
-                    onClick={() => toggleProteina(p.id)}
+                    onClick={() => disponivel && toggleProteina(p.id)}
                     aria-pressed={active}
+                    aria-disabled={!disponivel}
+                    disabled={!disponivel}
+                    title={disponivel ? p.label : `${p.label} — sem cortes cadastrados ainda`}
                     className={`inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors ${
-                      active
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border bg-background text-foreground/80 hover:border-primary/60 hover:text-foreground"
+                      !disponivel
+                        ? "cursor-not-allowed border-dashed border-border/60 bg-background/40 text-muted-foreground/50 line-through"
+                        : active
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border bg-background text-foreground/80 hover:border-primary/60 hover:text-foreground"
                     }`}
                   >
                     <span aria-hidden="true">{p.emoji}</span>
@@ -510,58 +529,60 @@ export function PreparoDicas() {
                       </p>
                     )}
 
-                    <div className="mt-3">
-                      <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-foreground/70">
-                        Cortes recomendados
-                      </p>
-                      <ul className="space-y-1.5">
-                        {d.cortes.map((c) => {
-                          const fkey = favoriteKey(d.key, c.nome);
-                          const isFav = favs.has(fkey);
-                          return (
-                            <li
-                              key={c.nome}
-                              className={`flex items-start gap-2 rounded-md border px-2.5 py-1.5 transition-colors ${
-                                isFav
-                                  ? "border-primary/40 bg-primary/5"
-                                  : "border-border/60 bg-background/60"
-                              }`}
-                            >
-                              <button
-                                type="button"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  toggle(fkey);
-                                }}
-                                aria-pressed={isFav}
-                                aria-label={
+                    {(filtrosAtivos === 0 || d.matchesSelf) && (
+                      <div className="mt-3">
+                        <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-wider text-foreground/70">
+                          Cortes recomendados
+                        </p>
+                        <ul className="space-y-1.5">
+                          {d.cortes.map((c) => {
+                            const fkey = favoriteKey(d.key, c.nome);
+                            const isFav = favs.has(fkey);
+                            return (
+                              <li
+                                key={c.nome}
+                                className={`flex items-start gap-2 rounded-md border px-2.5 py-1.5 transition-colors ${
                                   isFav
-                                    ? `Remover ${c.nome} dos favoritos`
-                                    : `Salvar ${c.nome} como favorito`
-                                }
-                                className="mt-0.5 shrink-0 rounded p-0.5 text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                                    ? "border-primary/40 bg-primary/5"
+                                    : "border-border/60 bg-background/60"
+                                }`}
                               >
-                                <Star
-                                  className={`h-4 w-4 ${
-                                    isFav ? "fill-primary text-primary" : ""
-                                  }`}
-                                />
-                              </button>
-                              <div className="min-w-0">
-                                <span className="text-sm font-medium text-foreground">
-                                  {c.nome}
-                                </span>
-                                {c.nota && (
-                                  <span className="ml-1.5 text-[12px] text-muted-foreground">
-                                    — {c.nota}
+                                <button
+                                  type="button"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    toggle(fkey);
+                                  }}
+                                  aria-pressed={isFav}
+                                  aria-label={
+                                    isFav
+                                      ? `Remover ${c.nome} dos favoritos`
+                                      : `Salvar ${c.nome} como favorito`
+                                  }
+                                  className="mt-0.5 shrink-0 rounded p-0.5 text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                                >
+                                  <Star
+                                    className={`h-4 w-4 ${
+                                      isFav ? "fill-primary text-primary" : ""
+                                    }`}
+                                  />
+                                </button>
+                                <div className="min-w-0">
+                                  <span className="text-sm font-medium text-foreground">
+                                    {c.nome}
                                   </span>
-                                )}
-                              </div>
-                            </li>
-                          );
-                        })}
-                      </ul>
-                    </div>
+                                  {c.nota && (
+                                    <span className="ml-1.5 text-[12px] text-muted-foreground">
+                                      — {c.nota}
+                                    </span>
+                                  )}
+                                </div>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    )}
 
                     {variacoesRender.length > 0 && (
                       <div className="mt-3">
