@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { PREPARO_DICAS, favoriteKey } from "@/lib/preparo-dicas-data";
 import { gerarGuiaPreparoPDF } from "@/lib/preparo-dicas-pdf";
+import { shareOrDownloadPreparoCard } from "@/lib/preparo-dicas-card";
 import {
   MODOS,
   TEMPO_FAIXAS,
