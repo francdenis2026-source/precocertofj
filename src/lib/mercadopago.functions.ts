@@ -117,6 +117,16 @@ export const createMercadoPagoPreference = createServerFn({ method: "POST" })
       payer: payerEmail ? { email: payerEmail } : undefined,
       external_reference: order.id,
       statement_descriptor: "PRECOCERTO",
+      // Aceita PIX + cartão de crédito. Boleto/ATM são excluídos porque exigem
+      // homologação adicional na conta MP e costumam falhar para pequenos
+      // comércios locais — se necessário, remova o excluded_payment_types abaixo.
+      payment_methods: {
+        excluded_payment_types: [
+          { id: "ticket" },
+          { id: "atm" },
+        ],
+        installments: 1,
+      },
       back_urls: {
         success: `${PUBLIC_BASE_URL}/checkout/${order.id}?status=success`,
         failure: `${PUBLIC_BASE_URL}/checkout/${order.id}?status=failure`,
