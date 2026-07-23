@@ -479,7 +479,7 @@ function MelhoresPrecosPage() {
                     }
                   }
                 }}
-                className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-background px-3 py-1.5 text-[13px] font-semibold text-primary transition hover:border-primary hover:bg-primary/5"
+                className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-background px-3 py-1.5 text-[13px] font-semibold text-primary transition-colors hover:border-primary hover:bg-primary/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 aria-label="Compartilhar"
               >
                 <Share2 className="h-3.5 w-3.5" strokeWidth={2} />
