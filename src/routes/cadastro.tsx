@@ -539,7 +539,8 @@ function CadastroPage() {
               <Field
                 label="Nome completo"
                 value={name}
-                onChange={setName}
+                onChange={(v) => setName(v.toLocaleUpperCase("pt-BR"))}
+
                 onBlur={() => markTouched("name")}
                 placeholder="Nome e sobrenome"
                 autoComplete="name"
