@@ -16,6 +16,9 @@ import {
   adminGetCustomer,
   adminUpdateCustomer,
   adminResetCustomerPin,
+  adminSuspendCustomer,
+  adminReactivateCustomer,
+  adminExportCustomers,
 } from "@/lib/admin-customers.functions";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -38,7 +41,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Users, KeyRound, Copy, RefreshCw, Search, ShieldCheck } from "lucide-react";
+import { Users, KeyRound, Copy, RefreshCw, Search, ShieldCheck, Ban, CheckCircle2, Download } from "lucide-react";
 
 const listOptions = (search: string, sort: "recent" | "logins" | "name" | "last_seen", limit: number, offset: number) =>
   queryOptions({
@@ -138,6 +141,7 @@ function ClientesPage() {
             <Button variant="ghost" size="sm" onClick={() => list.refetch()} className="gap-1.5">
               <RefreshCw className="h-3.5 w-3.5" /> Atualizar
             </Button>
+            <ExportButton search={search} sort={sort} />
           </div>
 
           <div className="overflow-x-auto rounded-md border">
@@ -335,6 +339,17 @@ function CustomerDrawer({ userId, onClose }: { userId: string | null; onClose: (
                 <Field label="CEP" value={form.address_zip} onChange={(v) => setForm((f) => ({ ...f, address_zip: v }))} />
               </div>
 
+              {p.suspended_at && (
+                <div className="rounded-md border border-destructive/40 bg-destructive/10 p-3 text-sm">
+                  <p className="flex items-center gap-1.5 font-semibold text-destructive">
+                    <Ban className="h-4 w-4" /> Conta suspensa
+                  </p>
+                  <p className="mt-1 text-xs text-destructive/90">
+                    Desde {fmtDate(p.suspended_at)}. Motivo: {p.suspended_reason || "—"}
+                  </p>
+                </div>
+              )}
+
               <div className="flex flex-wrap items-center gap-2 pt-2">
                 <Button onClick={submit} disabled={update.isPending}>
                   {update.isPending ? "Salvando…" : "Salvar alterações"}
@@ -348,6 +363,14 @@ function CustomerDrawer({ userId, onClose }: { userId: string | null; onClose: (
                   <KeyRound className="h-4 w-4" />
                   {resetMut.isPending ? "Gerando…" : "Gerar código de reset de PIN"}
                 </Button>
+                <SuspendToggleButton
+                  userId={userId!}
+                  suspended={!!p.suspended_at}
+                  onDone={() => {
+                    qc.invalidateQueries({ queryKey: ["admin", "customer", userId] });
+                    qc.invalidateQueries({ queryKey: ["admin", "customers"] });
+                  }}
+                />
               </div>
 
               {resetCode && (
@@ -445,5 +468,87 @@ function Field({ label, value, onChange }: { label: string; value: string; onCha
       <Label className="text-xs">{label}</Label>
       <Input value={value} onChange={(e) => onChange(e.target.value)} />
     </div>
+  );
+}
+
+function ExportButton({ search, sort }: { search: string; sort: "recent" | "logins" | "name" | "last_seen" }) {
+  const exportFn = useServerFn(adminExportCustomers);
+  const [loading, setLoading] = useState(false);
+  async function handle() {
+    try {
+      setLoading(true);
+      const res = await exportFn({ data: { search, sort, limit: 2000 } });
+      const blob = new Blob(["\ufeff", res.csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = res.filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast.success(`Exportados ${res.count} clientes.`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Falha ao exportar");
+    } finally {
+      setLoading(false);
+    }
+  }
+  return (
+    <Button variant="outline" size="sm" onClick={handle} disabled={loading} className="gap-1.5">
+      <Download className="h-3.5 w-3.5" />
+      {loading ? "Exportando…" : "Exportar CSV"}
+    </Button>
+  );
+}
+
+function SuspendToggleButton({
+  userId,
+  suspended,
+  onDone,
+}: {
+  userId: string;
+  suspended: boolean;
+  onDone: () => void;
+}) {
+  const suspend = useServerFn(adminSuspendCustomer);
+  const reactivate = useServerFn(adminReactivateCustomer);
+  const [loading, setLoading] = useState(false);
+
+  async function handle() {
+    try {
+      if (suspended) {
+        if (!confirm("Reativar esta conta? O cliente poderá acessar novamente.")) return;
+        setLoading(true);
+        await reactivate({ data: { userId } });
+        toast.success("Conta reativada.");
+      } else {
+        const reason = prompt("Motivo da suspensão (mínimo 3 caracteres):");
+        if (!reason || reason.trim().length < 3) {
+          if (reason !== null) toast.error("Motivo obrigatório (mín. 3 caracteres).");
+          return;
+        }
+        setLoading(true);
+        await suspend({ data: { userId, reason: reason.trim() } });
+        toast.success("Conta suspensa. Sessões ativas foram encerradas.");
+      }
+      onDone();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Falha na operação");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <Button
+      variant={suspended ? "default" : "destructive"}
+      onClick={handle}
+      disabled={loading}
+      className="gap-1.5"
+    >
+      {suspended ? <CheckCircle2 className="h-4 w-4" /> : <Ban className="h-4 w-4" />}
+      {loading ? "Processando…" : suspended ? "Reativar conta" : "Suspender conta"}
+    </Button>
   );
 }

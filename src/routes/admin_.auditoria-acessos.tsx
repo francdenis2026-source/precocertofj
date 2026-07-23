@@ -1,0 +1,382 @@
+/**
+ * /admin/auditoria-acessos — Auditoria de acessos e login.
+ *
+ * Exibe tendências (série temporal), top IPs, motivos de falha e
+ * uma tabela paginada com filtros por período, IP e motivo.
+ */
+import { createFileRoute } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { adminBeforeLoad } from "@/lib/route-guards";
+import {
+  adminGetLoginStats,
+  adminListLoginEvents,
+} from "@/lib/admin-customers.functions";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Legend,
+  CartesianGrid,
+} from "recharts";
+import { ShieldAlert, Activity, RefreshCw, TrendingUp } from "lucide-react";
+
+export const Route = createFileRoute("/admin_/auditoria-acessos")({
+  beforeLoad: adminBeforeLoad,
+  head: () => ({
+    meta: [
+      { title: "Auditoria de acessos · PreçoCerto Admin" },
+      {
+        name: "description",
+        content:
+          "Tendências de login, tentativas por IP, motivos de falha e histórico completo de acessos.",
+      },
+    ],
+  }),
+  component: AuditoriaAcessosPage,
+});
+
+function fmt(v: string | null | undefined) {
+  if (!v) return "—";
+  try {
+    return new Date(v).toLocaleString("pt-BR");
+  } catch {
+    return v;
+  }
+}
+
+function AuditoriaAcessosPage() {
+  const [sinceDays, setSinceDays] = useState(14);
+  const [ip, setIp] = useState("");
+  const [reason, setReason] = useState("");
+  const [onlyFailures, setOnlyFailures] = useState(false);
+
+  const getStats = useServerFn(adminGetLoginStats);
+  const getEvents = useServerFn(adminListLoginEvents);
+
+  const stats = useQuery({
+    queryKey: ["admin", "login-stats", sinceDays],
+    queryFn: () => getStats({ data: { sinceDays } }),
+    staleTime: 30_000,
+  });
+
+  const events = useQuery({
+    queryKey: ["admin", "login-events", { sinceDays, ip, reason, onlyFailures }],
+    queryFn: () =>
+      getEvents({
+        data: {
+          sinceDays,
+          ip: ip.trim(),
+          reason: reason.trim(),
+          onlyFailures,
+          limit: 300,
+        },
+      }),
+    staleTime: 15_000,
+  });
+
+  const total = stats.data?.total ?? 0;
+  const successRate =
+    total > 0 ? Math.round(((stats.data?.totalSuccess ?? 0) / total) * 100) : 0;
+
+  return (
+    <div className="mx-auto max-w-7xl space-y-6 px-4 py-8">
+      <header className="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p className="text-xs uppercase tracking-widest text-muted-foreground">
+            Painel administrativo
+          </p>
+          <h1 className="mt-1 font-display text-3xl font-semibold text-foreground">
+            Auditoria de acessos
+          </h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Tendências de login, tentativas por IP e motivos de falha.
+          </p>
+        </div>
+        <div className="flex items-center gap-2">
+          <select
+            value={sinceDays}
+            onChange={(e) => setSinceDays(Number(e.target.value))}
+            className="h-9 rounded-md border bg-background px-2 text-sm"
+            aria-label="Período"
+          >
+            <option value={7}>Últimos 7 dias</option>
+            <option value={14}>Últimos 14 dias</option>
+            <option value={30}>Últimos 30 dias</option>
+            <option value={60}>Últimos 60 dias</option>
+            <option value={90}>Últimos 90 dias</option>
+          </select>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              void stats.refetch();
+              void events.refetch();
+            }}
+            className="gap-1.5"
+          >
+            <RefreshCw className="h-3.5 w-3.5" /> Atualizar
+          </Button>
+        </div>
+      </header>
+
+      {/* KPIs */}
+      <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <KpiCard
+          icon={<Activity className="h-4 w-4" />}
+          label="Tentativas totais"
+          value={total}
+        />
+        <KpiCard
+          icon={<TrendingUp className="h-4 w-4" />}
+          label="Sucessos"
+          value={stats.data?.totalSuccess ?? 0}
+          accent="ok"
+        />
+        <KpiCard
+          icon={<ShieldAlert className="h-4 w-4" />}
+          label="Falhas"
+          value={stats.data?.totalFailure ?? 0}
+          accent="warn"
+        />
+        <KpiCard label="Taxa de sucesso" value={`${successRate}%`} accent="ok" />
+      </section>
+
+      {/* Gráfico série temporal */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Tendência de acessos</CardTitle>
+          <CardDescription>
+            Sucessos e falhas por dia no período selecionado.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="h-72">
+          {stats.isLoading ? (
+            <div className="h-full w-full animate-pulse rounded bg-muted" />
+          ) : (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={stats.data?.series ?? []}>
+                <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                <XAxis
+                  dataKey="day"
+                  tickFormatter={(d: string) => d.slice(5)}
+                  fontSize={12}
+                />
+                <YAxis fontSize={12} allowDecimals={false} />
+                <Tooltip
+                  labelFormatter={(d) => `Dia ${d}`}
+                  contentStyle={{ fontSize: 12 }}
+                />
+                <Legend wrapperStyle={{ fontSize: 12 }} />
+                <Bar dataKey="success" name="Sucessos" fill="#10b981" stackId="a" />
+                <Bar dataKey="failure" name="Falhas" fill="#ef4444" stackId="a" />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Top IPs e Motivos */}
+      <section className="grid gap-4 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>IPs com mais falhas</CardTitle>
+            <CardDescription>Top 8 no período.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {(stats.data?.topIps ?? []).length === 0 ? (
+              <p className="py-4 text-center text-sm text-muted-foreground">
+                Nenhuma falha registrada.
+              </p>
+            ) : (
+              (stats.data?.topIps ?? []).map((row) => (
+                <div
+                  key={row.ip}
+                  className="flex items-center justify-between rounded-md border bg-muted/20 px-3 py-2 text-sm"
+                >
+                  <span className="font-mono text-xs">{row.ip}</span>
+                  <Badge variant="destructive">{row.count}</Badge>
+                </div>
+              ))
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Motivos de falha</CardTitle>
+            <CardDescription>Agregado no período.</CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            {(stats.data?.topReasons ?? []).length === 0 ? (
+              <p className="py-4 text-center text-sm text-muted-foreground">
+                Nenhum motivo registrado.
+              </p>
+            ) : (
+              (stats.data?.topReasons ?? []).map((row) => (
+                <div
+                  key={row.reason}
+                  className="flex items-center justify-between rounded-md border bg-muted/20 px-3 py-2 text-sm"
+                >
+                  <span className="text-xs">{row.reason}</span>
+                  <Badge variant="outline">{row.count}</Badge>
+                </div>
+              ))
+            )}
+          </CardContent>
+        </Card>
+      </section>
+
+      {/* Filtros + Tabela */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Histórico de tentativas</CardTitle>
+          <CardDescription>
+            Filtre por IP ou motivo. Máx. 300 registros por consulta.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="grid gap-3 sm:grid-cols-4">
+            <div>
+              <Label className="text-xs">IP contém</Label>
+              <Input
+                value={ip}
+                onChange={(e) => setIp(e.target.value)}
+                placeholder="ex: 187.19"
+                className="mt-1"
+              />
+            </div>
+            <div>
+              <Label className="text-xs">Motivo contém</Label>
+              <Input
+                value={reason}
+                onChange={(e) => setReason(e.target.value)}
+                placeholder="ex: pin incorreto"
+                className="mt-1"
+              />
+            </div>
+            <div className="flex items-end">
+              <label className="flex cursor-pointer items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  checked={onlyFailures}
+                  onChange={(e) => setOnlyFailures(e.target.checked)}
+                  className="h-4 w-4"
+                />
+                Apenas falhas
+              </label>
+            </div>
+            <div className="flex items-end">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => void events.refetch()}
+                className="w-full"
+              >
+                Aplicar filtros
+              </Button>
+            </div>
+          </div>
+
+          <div className="overflow-x-auto rounded-md border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Quando</TableHead>
+                  <TableHead>E-mail</TableHead>
+                  <TableHead>CPF</TableHead>
+                  <TableHead>IP</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Motivo</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {events.isLoading ? (
+                  <TableRow>
+                    <TableCell colSpan={6} className="py-8 text-center text-sm text-muted-foreground">
+                      Carregando…
+                    </TableCell>
+                  </TableRow>
+                ) : (events.data ?? []).length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={6} className="py-8 text-center text-sm text-muted-foreground">
+                      Nenhum registro encontrado.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  (events.data ?? []).map((e) => (
+                    <TableRow key={e.id}>
+                      <TableCell className="text-xs">{fmt(e.created_at)}</TableCell>
+                      <TableCell className="text-xs">{e.email ?? "—"}</TableCell>
+                      <TableCell className="font-mono text-xs">{e.cpf_masked ?? "—"}</TableCell>
+                      <TableCell className="font-mono text-xs">{e.ip_address ?? "—"}</TableCell>
+                      <TableCell>
+                        {e.success ? (
+                          <Badge className="bg-emerald-600 hover:bg-emerald-600">OK</Badge>
+                        ) : (
+                          <Badge variant="destructive">Falha</Badge>
+                        )}
+                      </TableCell>
+                      <TableCell className="text-xs text-muted-foreground">
+                        {e.reason ?? "—"}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
+
+function KpiCard({
+  icon,
+  label,
+  value,
+  accent,
+}: {
+  icon?: React.ReactNode;
+  label: string;
+  value: string | number;
+  accent?: "ok" | "warn";
+}) {
+  const border =
+    accent === "ok"
+      ? "border-emerald-500/30 bg-emerald-500/5"
+      : accent === "warn"
+      ? "border-destructive/30 bg-destructive/5"
+      : "";
+  return (
+    <Card className={border}>
+      <CardContent className="p-4">
+        <p className="flex items-center gap-1.5 text-xs uppercase tracking-widest text-muted-foreground">
+          {icon}
+          {label}
+        </p>
+        <p className="mt-1 font-display text-3xl font-semibold tabular-nums text-foreground">
+          {typeof value === "number" ? value.toLocaleString("pt-BR") : value}
+        </p>
+      </CardContent>
+    </Card>
+  );
+}
