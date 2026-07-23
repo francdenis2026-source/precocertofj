@@ -79,12 +79,12 @@ function AppHomeContent() {
 
   const statusLine =
     status === "trial"
-      ? `Período de teste — ${trialDays} ${trialDays === 1 ? "dia restante" : "dias restantes"}`
+      ? `${trialDays} ${trialDays === 1 ? "dia" : "dias"} de teste grátis — aproveite`
       : status === "active"
-        ? `Assinatura ativa por mais ${paidDays} ${paidDays === 1 ? "dia" : "dias"}`
+        ? `Assinatura ativa · renova em ${paidDays} ${paidDays === 1 ? "dia" : "dias"}`
         : status === "expired"
-          ? "Assinatura vencida"
-          : "Bem-vindo(a) de volta";
+          ? "Sua assinatura venceu — reative para continuar economizando"
+          : "Que bom te ver de novo";
 
   const moveItem = (ids: string[], idx: number, dir: -1 | 1) => {
     const next = swap(ids, idx, dir);
