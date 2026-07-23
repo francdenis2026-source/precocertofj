@@ -268,51 +268,111 @@ function HomePage() {
         </div>
       </section>
 
-      {/* EXPLORE — três atalhos compactos para páginas internas */}
-      <section className={dsx(ds.container, ds.sectionY.md)}>
-        <div className="mb-5 md:mb-6">
-          <div className={dsx(ds.type.overline)} style={{ color: PALETTE.navy2 }}>
-            Explore
-          </div>
-          <h2
-            className={`${serif} mt-1.5 leading-[1.05]`}
-            style={{
-              color: PALETTE.ink,
-              letterSpacing: "-0.02em",
-              fontSize: "clamp(1.6rem, 3.4vw, 2.25rem)",
-            }}
-          >
-            Tudo que você precisa, em três passos
-          </h2>
-        </div>
+      {/* EXPLORE — seção premium com fundo cinematográfico */}
+      <section
+        className="relative overflow-hidden"
+        style={{ background: PALETTE.navy }}
+      >
+        {/* Imagem de fundo profissional */}
+        <img
+          src={exploreBg}
+          alt=""
+          aria-hidden
+          loading="lazy"
+          width={1920}
+          height={1080}
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-60"
+        />
+        {/* Overlays: gradiente + textura de grid sutil */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: `linear-gradient(180deg, ${PALETTE.navy}f2 0%, ${PALETTE.navy}cc 45%, ${PALETTE.navy}f5 100%)`,
+          }}
+        />
+        <svg
+          aria-hidden
+          className="pointer-events-none absolute inset-0 h-full w-full opacity-[0.08]"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <defs>
+            <pattern id="explore-grid" width="48" height="48" patternUnits="userSpaceOnUse">
+              <path d="M48 0H0V48" fill="none" stroke={PALETTE.goldSoft} strokeWidth="0.5" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#explore-grid)" />
+        </svg>
+        {/* Halo dourado */}
+        <div
+          className="pointer-events-none absolute -top-32 left-1/2 h-[420px] w-[820px] -translate-x-1/2 rounded-full blur-3xl"
+          style={{ background: `radial-gradient(circle, ${PALETTE.gold}33 0%, transparent 65%)` }}
+        />
 
-        <div className={ds.grid.cols3}>
-          <ExploreCard
-            icon={<Trophy className="h-4 w-4" />}
-            eyebrow="01 — Ranking"
-            title="Mercados mais baratos da semana"
-            desc="Veja quem está com os menores preços por categoria e produto."
-            to="/melhores-precos"
-            cta="Ver rankings"
-          />
-          <ExploreCard
-            icon={<Store className="h-4 w-4" />}
-            eyebrow="02 — Mercados"
-            title="Todos os estabelecimentos de Feijó"
-            desc="Mapa por bairro, categorias mais comuns e produtos disponíveis."
-            to="/estabelecimentos"
-            cta="Ver mercados"
-          />
-          <ExploreCard
-            icon={<Sparkles className="h-4 w-4" />}
-            eyebrow="03 — Planos"
-            title="Assine e economize todo mês"
-            desc="Alertas de preço, listas ilimitadas e ferramenta de comparação premium."
-            to="/planos"
-            cta="Ver planos"
-          />
+        <div className={dsx(ds.container, "relative py-14 md:py-20")}>
+          {/* Cabeçalho editorial */}
+          <div className="mx-auto mb-10 max-w-2xl text-center md:mb-14">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/5 px-3 py-1 backdrop-blur">
+              <span
+                className="h-1.5 w-1.5 rounded-full"
+                style={{ background: PALETTE.gold, boxShadow: `0 0 12px ${PALETTE.gold}` }}
+              />
+              <span
+                className="text-[10px] font-semibold uppercase tracking-[0.24em]"
+                style={{ color: PALETTE.goldSoft }}
+              >
+                Explore a plataforma
+              </span>
+            </div>
+            <h2
+              className={`${serif} mt-4 text-white leading-[0.98]`}
+              style={{
+                letterSpacing: "-0.03em",
+                fontSize: "clamp(2rem, 5vw, 3.75rem)",
+              }}
+            >
+              Tudo que você precisa,{" "}
+              <span className="italic" style={{ color: PALETTE.goldSoft }}>
+                em três passos.
+              </span>
+            </h2>
+            <p className="mx-auto mt-4 max-w-lg text-[13.5px] leading-relaxed text-white/75 sm:text-[15px]">
+              Ranking, mercados e planos — organizados como uma redação: enxuto,
+              tipografado e feito para decidir rápido.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:gap-5">
+            <ExploreCard
+              number="01"
+              kicker="Ranking"
+              title="Mercados mais baratos da semana"
+              desc="Quem tem os menores preços por categoria, com evolução semanal."
+              to="/melhores-precos"
+              cta="Ver rankings"
+              svg={<TrophyMark />}
+            />
+            <ExploreCard
+              number="02"
+              kicker="Mercados"
+              title="Todos os estabelecimentos de Feijó"
+              desc="Bairros, categorias mais comuns e produtos disponíveis."
+              to="/estabelecimentos"
+              cta="Ver mercados"
+              svg={<StoreMark />}
+            />
+            <ExploreCard
+              number="03"
+              kicker="Planos"
+              title="Assine e economize todo mês"
+              desc="Alertas de preço, listas ilimitadas e comparador premium."
+              to="/planos"
+              cta="Ver planos"
+              svg={<SparkleMark />}
+            />
+          </div>
         </div>
       </section>
+
 
 
       {/* CTA FINAL — compacto */}
