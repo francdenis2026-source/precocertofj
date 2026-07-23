@@ -10,6 +10,7 @@ import type { PublicStore } from "@/lib/stores-public.functions";
 import { StatCard } from "@/components/dashboard/StatCard";
 import { SectionKicker } from "@/components/dashboard/SectionKicker";
 import { AppHero } from "@/components/app/AppHero";
+import { ExperimentalBanner } from "@/components/app/ExperimentalBanner";
 import { FavoriteItemsPanel } from "@/components/app/FavoriteItemsPanel";
 import { FavoriteMarketsPanel } from "@/components/app/FavoriteMarketsPanel";
 import { BestMarketCard } from "@/components/app/BestMarketCard";
@@ -106,6 +107,10 @@ function AppHomeContent() {
       />
       <div className="mx-auto max-w-7xl px-4 py-5 md:px-6 md:py-7">
         <AppHero firstName={firstName} statusLine={statusLine} />
+
+        <div className="mt-5 md:mt-6">
+          <ExperimentalBanner />
+        </div>
 
 
         {loading && (
