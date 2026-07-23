@@ -69,7 +69,7 @@ export const ds = {
       accent: "bg-accent text-accent-foreground shadow-elev-1 hover:shadow-elev-2",
       ghost: "border border-border bg-card text-foreground hover:border-primary/40",
       outlineOnDark:
-        "border-2 border-white/40 bg-white/5 text-white backdrop-blur hover:border-white hover:bg-white/15",
+        "border-2 border-on-media-border bg-on-media-surface text-on-media backdrop-blur hover:border-on-media hover:bg-on-media-surface",
     },
   },
 
