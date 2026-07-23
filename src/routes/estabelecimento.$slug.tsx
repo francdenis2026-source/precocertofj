@@ -131,27 +131,12 @@ function EstablishmentPage() {
   const [q, setQ] = useState("");
   const [sort, setSort] = useState<SortKey>("price-asc");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
-  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
-  const [priceMin, setPriceMin] = useState<string>("");
-  const [priceMax, setPriceMax] = useState<string>("");
-  const [showFilters, setShowFilters] = useState(false);
   const [historyFor, setHistoryFor] = useState<PublicStoreProduct | null>(null);
-
-  const brands = useMemo(() => {
-    const set = new Set<string>();
-    for (const p of data.products) if (p.brand) set.add(p.brand);
-    return Array.from(set).sort((a, b) => a.localeCompare(b, "pt-BR"));
-  }, [data.products]);
 
   const filtered = useMemo(() => {
     const term = normalize(q);
-    const min = priceMin ? Number(priceMin.replace(",", ".")) : null;
-    const max = priceMax ? Number(priceMax.replace(",", ".")) : null;
     let list = data.products.slice();
     if (selectedCategory) list = list.filter((p) => p.category === selectedCategory);
-    if (selectedBrand) list = list.filter((p) => p.brand === selectedBrand);
-    if (min != null && Number.isFinite(min)) list = list.filter((p) => p.price >= min);
-    if (max != null && Number.isFinite(max)) list = list.filter((p) => p.price <= max);
     if (term) {
       list = list.filter((p) => {
         const hay = normalize(`${p.productName} ${p.brand ?? ""} ${p.category}`);
@@ -176,7 +161,7 @@ function EstablishmentPage() {
         list.sort((a, b) => a.productName.localeCompare(b.productName, "pt-BR"));
     }
     return list;
-  }, [data.products, q, sort, selectedCategory, selectedBrand, priceMin, priceMax]);
+  }, [data.products, q, sort, selectedCategory]);
 
   const cheapest = useMemo(() => {
     if (!data.products.length) return null;
@@ -187,22 +172,10 @@ function EstablishmentPage() {
     data.store.address || data.store.neighborhood || data.store.city,
   );
 
-  const activeFiltersCount =
-    (selectedCategory ? 1 : 0) +
-    (selectedBrand ? 1 : 0) +
-    (priceMin ? 1 : 0) +
-    (priceMax ? 1 : 0);
-
-  const clearFilters = () => {
-    setSelectedCategory(null);
-    setSelectedBrand(null);
-    setPriceMin("");
-    setPriceMax("");
-  };
-
   const createAlert = (_p: PublicStoreProduct) => {
     navigate({ to: "/alertas" });
   };
+
 
 
   return (
