@@ -152,17 +152,35 @@ function WelcomePage() {
           />
         </motion.div>
 
-        <motion.button
-          type="button"
-          onClick={() => router.history.replace(target)}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.4, duration: 0.4 }}
-          className="mt-6 text-[12px] font-semibold underline-offset-4 transition hover:underline"
-          style={{ color: GOLD_SOFT, fontFamily: BODY }}
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.2, duration: 0.45 }}
+          className="mt-8 flex w-full flex-col items-center gap-3"
         >
-          Ir agora para o painel →
-        </motion.button>
+          <button
+            type="button"
+            onClick={() => router.history.replace("/lista")}
+            className="group inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-[14px] font-semibold shadow-lg transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+            style={{
+              background: `linear-gradient(90deg, ${GOLD}, ${GOLD_SOFT})`,
+              color: NAVY_DEEP,
+              fontFamily: BODY,
+              boxShadow: `0 10px 30px -12px ${GOLD}aa`,
+            }}
+          >
+            Criar minha lista
+            <span aria-hidden className="transition-transform group-hover:translate-x-0.5">→</span>
+          </button>
+          <button
+            type="button"
+            onClick={() => router.history.replace(target)}
+            className="text-[12px] font-semibold underline-offset-4 transition hover:underline"
+            style={{ color: GOLD_SOFT, fontFamily: BODY }}
+          >
+            Ir agora para o painel
+          </button>
+        </motion.div>
       </motion.div>
     </div>
   );
