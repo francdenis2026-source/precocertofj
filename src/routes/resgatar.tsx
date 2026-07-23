@@ -604,7 +604,7 @@ function RedeemPage() {
           )}
         </div>
         </div>
-      </div>
+
 
 
         {/* Nota fora do card */}
