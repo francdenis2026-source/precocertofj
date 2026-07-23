@@ -136,6 +136,27 @@ function RedeemPage() {
     enabled: hasSession && !!result?.ok,
   });
 
+  // Debounce do valor limpo para consultar o preview
+  const [debouncedClean, setDebouncedClean] = useState("");
+  useEffect(() => {
+    const id = setTimeout(() => setDebouncedClean(clean), 350);
+    return () => clearTimeout(id);
+  }, [clean]);
+
+  const previewQuery = useQuery({
+    queryKey: ["license-preview", debouncedClean],
+    queryFn: () => preview({ data: { code: debouncedClean } }),
+    enabled:
+      hasSession &&
+      !result?.ok &&
+      debouncedClean.length >= MIN_LEN &&
+      validation.level !== "warn",
+    staleTime: 10_000,
+    retry: false,
+  });
+  const previewData = previewQuery.data ?? null;
+  const previewLoading = previewQuery.isFetching;
+
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
