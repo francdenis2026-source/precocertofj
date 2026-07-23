@@ -11,6 +11,7 @@ import type { LucideIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { getMyAccount, updateMyCpf, updateMyProfile, updateMyAvatar } from "@/lib/account.functions";
+import { getMyProfileStats } from "@/lib/profile-stats.functions";
 import { SubscriptionStatusCard } from "@/components/account/SubscriptionStatusCard";
 import { CollaboratorStatusCard } from "@/components/collab/CollaboratorStatusCard";
 import { listMyPriceReports } from "@/lib/stores-public.functions";
