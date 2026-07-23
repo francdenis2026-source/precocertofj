@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import { computeUnitPrice } from "@/lib/unit-price";
 import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
-import { ShareButton } from "@/components/ui/share-button";
 import { X, RefreshCw, Trophy, AlertTriangle, Clock } from "lucide-react";
 import { useMyRoles } from "@/hooks/useMyRoles";
+
 
 /**
  * Diálogo/painel de comparação lado-a-lado de 2+ produtos escolhidos
@@ -93,11 +93,9 @@ export function ProductCompareDialog({
       ? worstTotal - bestTotal
       : null;
 
-  const shareUrl = useMemo(() => {
-    const slugs = entries.map((e) => e.slug).filter((s): s is string => !!s);
-    if (slugs.length < 2) return null;
-    return `/comparar?produtos=${slugs.map(encodeURIComponent).join(",")}`;
-  }, [entries]);
+  // O compartilhamento externo por link foi removido junto com a rota /comparar.
+  // A comparação segue disponível apenas dentro do app.
+
 
   async function handleRefresh() {
     if (!onRefresh || refreshing) return;
@@ -148,15 +146,6 @@ export function ProductCompareDialog({
                   strokeWidth={1.8}
                 />
               </button>
-            ) : null}
-            {shareUrl ? (
-              <ShareButton
-                url={shareUrl}
-                title={`Comparar ${entries.length} produtos`}
-                text={`Comparativo de preços de ${entries.map((e) => e.productName).join(", ")}`}
-                label="Compartilhar"
-                compact
-              />
             ) : null}
             <button
               type="button"
