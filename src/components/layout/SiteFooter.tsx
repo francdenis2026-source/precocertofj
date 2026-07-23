@@ -115,7 +115,7 @@ export function SiteFooter() {
           {NAV_COLS.map((col) => (
             <div key={col.title}>
               <div
-                className="text-[10px] font-bold uppercase tracking-[0.2em] md:text-[10.5px] md:tracking-[0.22em]"
+                className="text-[10px] font-bold uppercase tracking-[0.2em] md:text-[11.5px] md:tracking-[0.22em] lg:text-[12.5px]"
                 style={{ color: PALETTE.gold }}
               >
                 {col.title}
@@ -125,7 +125,7 @@ export function SiteFooter() {
                   <li key={l.to}>
                     <Link
                       to={l.to}
-                      className="text-[12.5px] transition-colors md:text-[13.5px]"
+                      className="text-[12.5px] leading-[1.5] transition-colors md:text-[14.5px] lg:text-[16px]"
                       style={{ color: PALETTE.navy2 }}
                     >
                       <span className="hover:text-[color:var(--nt-ink)]">
@@ -138,6 +138,7 @@ export function SiteFooter() {
             </div>
           ))}
         </div>
+
       </div>
 
       {/* Bottom — legal strip (sem duplicar links do menu) */}
