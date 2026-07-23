@@ -586,7 +586,7 @@ function CadastroPage() {
                   onComplete={() => markTouched("password")}
                   hasError={touched.password && !vPin.valid}
                 />
-                <p className="mt-2 text-[11.5px] text-slate-500">
+                <p className="mt-2 text-[11.5px] font-medium text-slate-600">
                   Use 6 números que só você lembra. Evite datas óbvias.
                 </p>
               </div>
@@ -649,7 +649,7 @@ function CadastroPage() {
               </div>
             </form>
 
-            <p className="mt-6 border-t border-slate-100 pt-4 text-center text-[11px] text-slate-500">
+            <p className="mt-6 border-t border-slate-200 pt-4 text-center text-[11.5px] font-medium text-slate-600">
               Ao continuar você aceita nossos{" "}
               <a className="font-semibold underline underline-offset-2 hover:text-slate-700" href="/termos">Termos</a>
               {" "}e a{" "}
