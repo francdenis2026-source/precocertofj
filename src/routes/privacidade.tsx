@@ -111,8 +111,8 @@ function PrivacidadePage() {
       icon: Share2,
       body: (
         <p>
-          Somente com processadores essenciais: banco/auth em nuvem, Mercado
-          Pago (assinatura PIX) e Twilio (SMS de recuperação).{" "}
+          Somente com processadores essenciais: banco/auth em nuvem e Mercado
+          Pago (pagamento PIX e cartão).{" "}
           <strong className="text-foreground">Nunca vendemos seus dados.</strong>
         </p>
       ),
