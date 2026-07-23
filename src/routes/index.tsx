@@ -419,10 +419,10 @@ function HomePage() {
 
           {/* -------- EXPLORE (dark navy band inside card) -------- */}
           <div
-            className="p-6 sm:p-10 lg:p-16 xl:p-20"
+            className="p-6 sm:p-8 lg:p-10 xl:p-12"
             style={{ background: P.navy, color: "#F5F6FA" }}
           >
-            <div className="mb-12 flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div className="max-w-xl">
                 <div
                   className="mb-4 text-[10px] font-bold uppercase tracking-[0.28em]"
