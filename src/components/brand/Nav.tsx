@@ -9,6 +9,7 @@ import { useMyProfile } from "@/hooks/useMyProfile";
 import { NotificationsBell } from "@/components/collab/NotificationsBell";
 import { useSignOut } from "@/hooks/use-sign-out";
 import { AuthNavToggle } from "@/components/nav/AuthNavToggle";
+import { useMyRoles } from "@/hooks/useMyRoles";
 import { loginHrefWithRedirect } from "@/lib/auth-redirect";
 import { getCart } from "@/lib/cart.functions";
 import { IconTile } from "@/components/ui/icon-tile";
