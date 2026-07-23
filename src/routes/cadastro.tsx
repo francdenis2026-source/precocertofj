@@ -579,7 +579,7 @@ function PinField({
           maxLength={1}
           type="password"
           aria-invalid={hasError}
-          className={`h-14 w-full min-w-0 rounded-xl border-2 ${borderCls} bg-white text-center text-2xl font-black text-slate-900 shadow-[inset_0_1px_0_rgba(15,27,61,0.04)] outline-none transition focus:ring-4`}
+          className={`h-12 w-full min-w-0 rounded-xl border-2 ${borderCls} bg-white text-center text-xl font-black text-slate-900 shadow-[inset_0_1px_0_rgba(15,27,61,0.04)] outline-none transition focus:ring-4`}
           style={{
             ["--pc-navy" as string]: "#0f1b3d",
             fontFeatureSettings: '"tnum" 1',
