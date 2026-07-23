@@ -720,7 +720,7 @@ export function PriceSearchBar({
                       isCheapest
                       cheapestReason={buildCheapestReason(result.cheapest.price, result.avg)}
                     />
-                    <span className="truncate not-italic font-medium text-foreground">{result.cheapest.marketName}</span>
+                    <span className="truncate not-italic font-semibold text-[var(--market-accent)] transition-colors group-hover:text-[var(--market-accent-hover)]">{result.cheapest.marketName}</span>
                   </p>
                   <p className="mt-0.5 font-display text-[26px] font-bold leading-tight tracking-tight tabular-nums text-accent-strong">
                     {fmt(result.cheapest.price)}
