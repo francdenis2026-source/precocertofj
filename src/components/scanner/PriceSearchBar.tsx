@@ -91,7 +91,35 @@ export function PriceSearchBar({
   const [quotaBlocked, setQuotaBlocked] = useState(false);
 
   const [query, setQuery] = useState(normalizeInput(initialQuery));
-  const [result, setResult] = useState<PriceSearchResult | null>(null);
+  const [rawResult, setResult] = useState<PriceSearchResult | null>(null);
+  const result = useMemo(() => {
+    if (!rawResult) return rawResult;
+    const brandNeedle = brandFilter.trim().toLowerCase();
+    const hasMin = typeof priceMin === "number" && Number.isFinite(priceMin);
+    const hasMax = typeof priceMax === "number" && Number.isFinite(priceMax);
+    if (!brandNeedle && !hasMin && !hasMax) return rawResult;
+    const groups = rawResult.groups
+      .map((g) => {
+        const items = (g.items ?? []).filter((it: any) => {
+          if (hasMin && it.price < (priceMin as number)) return false;
+          if (hasMax && it.price > (priceMax as number)) return false;
+          if (brandNeedle) {
+            const hay = `${g.productName ?? ""} ${it.marketName ?? ""} ${it.rawName ?? ""}`.toLowerCase();
+            if (!hay.includes(brandNeedle)) return false;
+          }
+          return true;
+        });
+        if (items.length === 0) return null;
+        const prices = items.map((i: any) => i.price);
+        const min = Math.min(...prices);
+        const max = Math.max(...prices);
+        const avg = prices.reduce((a: number, b: number) => a + b, 0) / prices.length;
+        return { ...g, items, min, max, avg, samples: items.length };
+      })
+      .filter(Boolean) as typeof rawResult.groups;
+    return { ...rawResult, groups };
+  }, [rawResult, brandFilter, priceMin, priceMax]);
+
   const [err, setErr] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
 
