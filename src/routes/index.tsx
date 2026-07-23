@@ -454,7 +454,7 @@ function HomePage() {
               <div className="hidden h-px flex-1 md:mx-8 md:mb-3 md:block" style={{ background: "rgb(255 255 255 / 0.08)" }} />
             </div>
 
-            <div className="grid gap-2 sm:gap-2.5 md:grid-cols-3 md:gap-3">
+            <div className="grid gap-2 sm:grid-cols-2 sm:gap-3 lg:grid-cols-3 lg:gap-3">
               <ExploreCard
                 to="/melhores-precos"
                 number="01"
