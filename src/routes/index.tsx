@@ -2,8 +2,9 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import heroMarket from "@/assets/home-hero.jpg?w=640;896;1280&format=avif;webp;jpg&as=picture";
-import heroPreloadAvif from "@/assets/home-hero.jpg?w=896&format=avif&url";
+// Responsive picture: modern formats (AVIF/WebP) with JPG fallback, tuned quality.
+import heroMarket from "@/assets/home-hero.jpg?w=480;640;896&format=avif;webp;jpg&quality=68&as=picture";
+import heroPreloadAvif from "@/assets/home-hero.jpg?w=640&format=avif&quality=62&url";
 import {
   Search,
   ArrowRight,
@@ -324,7 +325,12 @@ function HomePage() {
             >
               <picture>
                 {Object.entries(heroMarket.sources).map(([type, srcset]) => (
-                  <source key={type} type={`image/${type}`} srcSet={srcset} sizes="50vw" />
+                  <source
+                    key={type}
+                    type={`image/${type}`}
+                    srcSet={srcset}
+                    sizes="(min-width: 1024px) 50vw, 100vw"
+                  />
                 ))}
                 <img
                   src={heroMarket.img.src}
@@ -333,6 +339,7 @@ function HomePage() {
                   alt="Cesta com produtos frescos do mercado"
                   fetchPriority="high"
                   decoding="async"
+                  loading="eager"
                   className="absolute inset-0 h-full w-full object-cover"
                 />
               </picture>
