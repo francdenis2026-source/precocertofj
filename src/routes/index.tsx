@@ -251,27 +251,26 @@ function HomePage() {
               </div>
 
               {/* CTAs */}
-              <div className="mt-4 flex flex-wrap gap-2.5 sm:mt-5 sm:gap-3">
+              <div className="mt-5 flex flex-wrap items-center gap-3 sm:mt-6 sm:gap-4">
                 <Link
                   to="/cadastro"
-                  className="group relative inline-flex min-h-[44px] items-center gap-2 overflow-hidden rounded-xl px-5 py-2.5 text-[14.5px] font-semibold tracking-[-0.005em] antialiased transition-all duration-200 hover:-translate-y-[1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:translate-y-0 sm:rounded-2xl sm:px-6 sm:py-3 sm:text-[15px]"
+                  aria-label="Começar grátis — criar conta"
+                  className="group inline-flex min-h-[48px] items-center gap-2 rounded-xl px-6 py-3 text-[15px] font-semibold tracking-[-0.005em] antialiased shadow-sm transition-[transform,box-shadow,background-color] duration-150 hover:-translate-y-[1px] hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 active:translate-y-0 active:shadow-sm sm:min-h-[52px] sm:rounded-2xl sm:px-7 sm:py-3.5 sm:text-[16px]"
                   style={{
                     background: P.gold,
                     color: P.navy,
-                    boxShadow:
-                      "0 1px 0 rgb(255 255 255 / 0.35) inset, 0 8px 20px -8px color-mix(in oklab, var(--pc-home-gold) 65%, transparent), 0 2px 4px rgb(0 0 0 / 0.08)",
                     // @ts-expect-error css var
-                    "--tw-ring-color": P.navy,
+                    "--tw-ring-color": P.gold,
                     "--tw-ring-offset-color": P.card,
                   }}
                 >
-                  <span className="relative">Começar grátis</span>
-                  <ArrowRight className="relative h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5" strokeWidth={2.5} />
+                  <span>Começar grátis</span>
+                  <ArrowRight className="h-4 w-4 transition-transform duration-150 group-hover:translate-x-0.5" strokeWidth={2.5} />
                 </Link>
 
                 <Link
                   to="/melhores-precos"
-                  className="inline-flex min-h-[44px] items-center gap-2 rounded-xl border-2 px-5 py-2.5 text-[14px] font-bold transition-colors hover:text-[color:var(--pc-home-card)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:rounded-2xl sm:px-7 sm:py-3 sm:text-[15px]"
+                  className="inline-flex min-h-[48px] items-center gap-2 rounded-xl border px-5 py-2.5 text-[14.5px] font-semibold transition-colors hover:text-[color:var(--pc-home-card)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:rounded-2xl sm:px-6 sm:py-3 sm:text-[15px]"
                   style={{
                     borderColor: P.heading,
                     color: P.heading,
@@ -292,6 +291,7 @@ function HomePage() {
                   Ver rankings
                 </Link>
               </div>
+
 
               {/* Stats */}
               <div
