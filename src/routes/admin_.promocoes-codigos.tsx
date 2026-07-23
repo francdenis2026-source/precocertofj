@@ -90,10 +90,12 @@ function PromoCodesPage() {
         </div>
       </header>
 
-      <section className="grid gap-3 sm:grid-cols-3">
+      <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
         <Kpi icon={<Ticket className="h-4 w-4" />} label="Total geradas" value={codes.length} />
         <Kpi icon={<Clock className="h-4 w-4" />} label="Disponíveis" value={available} accent="ok" />
-        <Kpi icon={<CheckCircle2 className="h-4 w-4" />} label="Resgatadas" value={redeemed} />
+        <Kpi icon={<CheckCircle2 className="h-4 w-4" />} label="Ativadas" value={redeemed} />
+        <Kpi icon={<CheckCircle2 className="h-4 w-4" />} label="Ativas agora" value={activeRedeemed} accent="ok" />
+        <Kpi icon={<Clock className="h-4 w-4" />} label="Expiradas" value={expiredRedeemed} />
       </section>
 
       <Card>
