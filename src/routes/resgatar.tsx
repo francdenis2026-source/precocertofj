@@ -387,19 +387,42 @@ function RedeemPage() {
                 </span>
               </div>
 
-              {result && !result.ok && (
-                <div
-                  className="mt-3 flex items-start gap-2 rounded-lg border px-3 py-2 text-[12.5px]"
-                  style={{
-                    borderColor: "#fca5a5",
-                    background: "#fef2f2",
-                    color: "#991b1b",
-                  }}
-                >
-                  <AlertCircle className="mt-0.5 h-4 w-4 flex-none" />
-                  <span>{result.message}</span>
-                </div>
-              )}
+              {result && !result.ok && (() => {
+                const info = classifyRedeemError(result.message);
+                return (
+                  <div
+                    role="alert"
+                    className="mt-3 rounded-lg border px-3.5 py-3 text-[12.5px]"
+                    style={{ borderColor: info.borderColor, background: info.bgColor, color: info.textColor }}
+                  >
+                    <div className="flex items-start gap-2">
+                      <AlertCircle className="mt-0.5 h-4 w-4 flex-none" />
+                      <div className="min-w-0 flex-1">
+                        <div className="font-bold leading-tight">{info.title}</div>
+                        <div className="mt-0.5 leading-snug opacity-90">{info.detail}</div>
+                        <div className="mt-1.5 text-[11.5px] font-semibold" style={{ color: info.textColor }}>
+                          Próximo passo: <span className="font-normal">{info.nextStep}</span>
+                        </div>
+                        {info.actions.length > 0 && (
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            {info.actions.map((a) => (
+                              <Link
+                                key={a.to}
+                                to={a.to}
+                                className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-white"
+                                style={{ background: NAVY }}
+                              >
+                                {a.label}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                );
+              })()}
+
 
               <button
                 type="submit"
