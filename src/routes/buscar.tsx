@@ -11,7 +11,8 @@ import { QuickFilterBar } from "@/components/search/QuickFilterBar";
 import { ShareButton, SignupCTA } from "@/components/ds";
 import { useSession } from "@/hooks/useSession";
 import { trackEvent } from "@/lib/analytics-events";
-import { PageHeader, DataToolbar, EmptyState } from "@/components/layout";
+import { PageHeader, ListingShell, ListingToolbar } from "@/components/layout";
+import { EmptyState, RouteError } from "@/components/feedback";
 import { Button } from "@/components/ui/button";
 import { Search as SearchIcon } from "lucide-react";
 
@@ -43,18 +44,10 @@ export const Route = createFileRoute("/buscar")({
   }),
   component: SearchPage,
   errorComponent: ({ error, reset }) => (
-    <div className="mx-auto max-w-xl px-4 py-10">
-      <EmptyState
-        icon={SearchIcon}
-        title="Erro na busca"
-        description={error.message}
-        action={
-          <Button onClick={reset} variant="default" size="sm">
-            Tentar novamente
-          </Button>
-        }
-      />
-    </div>
+    <RouteError message={(error as Error)?.message} onRetry={reset} />
+  ),
+  notFoundComponent: () => (
+    <RouteError title="Página não encontrada" message="Volte para o início e tente novamente." />
   ),
 });
 
@@ -201,63 +194,65 @@ function SearchPage() {
           }
         />
 
-        <DataToolbar
-          className="mb-4"
-          filters={
-            <>
-              <QuickFilterBar<SearchMode>
-                label="Match"
-                ariaLabel="Modo de correspondência"
-                value={mode}
-                onChange={(next) => chooseMode(next ?? "strict")}
-                size="sm"
-                options={[
-                  {
-                    value: "strict",
-                    label: "Estrita",
-                    hint: "Palavra inteira — evita falsos positivos em buscas curtas",
-                  },
-                  {
-                    value: "loose",
-                    label: "Parcial",
-                    hint: "Permite prefixo (tokens ≥ 3 caracteres)",
-                  },
-                ]}
-              />
-              <QuickFilterBar<"pure" | "all">
-                label="Filtro"
-                ariaLabel="Filtro de item puro"
-                value={pureOnly ? "pure" : "all"}
-                onChange={(next) => setPure(next === "pure")}
-                size="sm"
-                options={[
-                  {
-                    value: "pure",
-                    label: "Somente item puro",
-                    hint: "Remove itens em que a palavra aparece só como ingrediente",
-                  },
-                  { value: "all", label: "Incluir ingredientes" },
-                ]}
-              />
-            </>
-          }
-        />
-
-        <PriceSearchBar
-          initialQuery={q}
-          mode={mode}
-          pureOnly={pureOnly}
-          onQueryChange={syncQueryToUrl}
-        />
-
-        {!hasQuery && (
-          <EmptyState
-            className="mt-6"
-            icon={SearchIcon}
-            title="Digite para começar"
-            description="Escreva o nome de um produto (arroz, feijão, café…) e veja os preços comparados nos mercados cadastrados."
+        <ListingShell density="md" className="mb-2">
+          <ListingToolbar
+            filters={
+              <>
+                <QuickFilterBar<SearchMode>
+                  label="Match"
+                  ariaLabel="Modo de correspondência"
+                  value={mode}
+                  onChange={(next) => chooseMode(next ?? "strict")}
+                  size="sm"
+                  options={[
+                    {
+                      value: "strict",
+                      label: "Estrita",
+                      hint: "Palavra inteira — evita falsos positivos em buscas curtas",
+                    },
+                    {
+                      value: "loose",
+                      label: "Parcial",
+                      hint: "Permite prefixo (tokens ≥ 3 caracteres)",
+                    },
+                  ]}
+                />
+                <QuickFilterBar<"pure" | "all">
+                  label="Filtro"
+                  ariaLabel="Filtro de item puro"
+                  value={pureOnly ? "pure" : "all"}
+                  onChange={(next) => setPure(next === "pure")}
+                  size="sm"
+                  options={[
+                    {
+                      value: "pure",
+                      label: "Somente item puro",
+                      hint: "Remove itens em que a palavra aparece só como ingrediente",
+                    },
+                    { value: "all", label: "Incluir ingredientes" },
+                  ]}
+                />
+              </>
+            }
           />
-        )}
+
+          <PriceSearchBar
+            initialQuery={q}
+            mode={mode}
+            pureOnly={pureOnly}
+            onQueryChange={syncQueryToUrl}
+          />
+
+          {!hasQuery && (
+            <EmptyState
+              className="mt-2"
+              icon={SearchIcon}
+              title="Digite para começar"
+              message="Escreva o nome de um produto (arroz, feijão, café…) e veja os preços comparados nos mercados cadastrados."
+            />
+          )}
+        </ListingShell>
+
 
         {hasQuery && !user ? (
           <SignupCTA context="save-comparison" className="mt-6" />

@@ -8,7 +8,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { Nav } from "@/components/brand/Nav";
 import { Footer } from "@/components/brand/Footer";
 import { Breadcrumbs } from "@/components/nav/Breadcrumbs";
-import { PageHeader, StatGrid } from "@/components/layout";
+import { PageHeader, StatGrid, ListingShell, ListingCount } from "@/components/layout";
 import { supabase } from "@/integrations/supabase/client";
 import { useSignedLogoUrls } from "@/hooks/use-signed-logo-urls";
 import { SlidersHorizontal, PackageSearch, Share2, TrendingDown, Trophy, Store as StoreIcon, ArrowRight, Clock, AlertTriangle, RefreshCw, Search as SearchIcon, ChevronLeft, ChevronRight, Flag, X } from "lucide-react";
@@ -21,7 +21,7 @@ import { PaywallInline } from "@/components/paywall/PaywallInline";
 import { useTeaserQuota } from "@/hooks/use-teaser-quota";
 
 import { QuickFilterBar } from "@/components/search/QuickFilterBar";
-import { ErrorState, EmptyState as FeedbackEmptyState, LoadingList } from "@/components/feedback";
+import { ErrorState, EmptyState as FeedbackEmptyState, LoadingGrid, RouteError } from "@/components/feedback";
 
 import { ProductImage } from "@/components/product/ProductImage";
 import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
@@ -130,6 +130,12 @@ export const Route = createFileRoute("/melhores-precos")({
     <ProtectedGate>
       <MelhoresPrecosPage />
     </ProtectedGate>
+  ),
+  errorComponent: ({ error, reset }) => (
+    <RouteError message={(error as Error)?.message} onRetry={reset} />
+  ),
+  notFoundComponent: () => (
+    <RouteError title="Página não encontrada" message="Volte para o início e tente novamente." />
   ),
 });
 
@@ -691,7 +697,7 @@ function MelhoresPrecosPage() {
 
       <section className="mx-auto max-w-7xl px-6 py-6" aria-live="polite">
         {isLoading && (
-          <LoadingList count={5} itemClassName="h-24" />
+          <LoadingGrid count={12} columns={4} />
         )}
 
         {error && (
