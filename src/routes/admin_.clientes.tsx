@@ -470,3 +470,85 @@ function Field({ label, value, onChange }: { label: string; value: string; onCha
     </div>
   );
 }
+
+function ExportButton({ search, sort }: { search: string; sort: "recent" | "logins" | "name" | "last_seen" }) {
+  const exportFn = useServerFn(adminExportCustomers);
+  const [loading, setLoading] = useState(false);
+  async function handle() {
+    try {
+      setLoading(true);
+      const res = await exportFn({ data: { search, sort, limit: 2000 } });
+      const blob = new Blob(["\ufeff", res.csv], { type: "text/csv;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = res.filename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      toast.success(`Exportados ${res.count} clientes.`);
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Falha ao exportar");
+    } finally {
+      setLoading(false);
+    }
+  }
+  return (
+    <Button variant="outline" size="sm" onClick={handle} disabled={loading} className="gap-1.5">
+      <Download className="h-3.5 w-3.5" />
+      {loading ? "Exportando…" : "Exportar CSV"}
+    </Button>
+  );
+}
+
+function SuspendToggleButton({
+  userId,
+  suspended,
+  onDone,
+}: {
+  userId: string;
+  suspended: boolean;
+  onDone: () => void;
+}) {
+  const suspend = useServerFn(adminSuspendCustomer);
+  const reactivate = useServerFn(adminReactivateCustomer);
+  const [loading, setLoading] = useState(false);
+
+  async function handle() {
+    try {
+      if (suspended) {
+        if (!confirm("Reativar esta conta? O cliente poderá acessar novamente.")) return;
+        setLoading(true);
+        await reactivate({ data: { userId } });
+        toast.success("Conta reativada.");
+      } else {
+        const reason = prompt("Motivo da suspensão (mínimo 3 caracteres):");
+        if (!reason || reason.trim().length < 3) {
+          if (reason !== null) toast.error("Motivo obrigatório (mín. 3 caracteres).");
+          return;
+        }
+        setLoading(true);
+        await suspend({ data: { userId, reason: reason.trim() } });
+        toast.success("Conta suspensa. Sessões ativas foram encerradas.");
+      }
+      onDone();
+    } catch (e) {
+      toast.error(e instanceof Error ? e.message : "Falha na operação");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  return (
+    <Button
+      variant={suspended ? "default" : "destructive"}
+      onClick={handle}
+      disabled={loading}
+      className="gap-1.5"
+    >
+      {suspended ? <CheckCircle2 className="h-4 w-4" /> : <Ban className="h-4 w-4" />}
+      {loading ? "Processando…" : suspended ? "Reativar conta" : "Suspender conta"}
+    </Button>
+  );
+}
