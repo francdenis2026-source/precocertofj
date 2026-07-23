@@ -289,15 +289,42 @@ function WebhooksPage() {
                       </TableCell>
                       <TableCell>{statusBadge(r.status ?? "?")}</TableCell>
                       <TableCell className="max-w-[220px] truncate text-xs text-muted-foreground">
-                        {r.error ?? "—"}
+                        {(() => {
+                          const es = (r as any).email_status as
+                            | { email_error?: string; email_sent?: boolean }
+                            | null;
+                          if (es?.email_error) return `email: ${es.email_error}`;
+                          return r.error ?? "—";
+                        })()}
                       </TableCell>
                       <TableCell>
-                        <Button size="sm" variant="ghost-navy" onClick={() => setSelected(r)}>
-                          Ver
-                        </Button>
+                        <div className="flex justify-end gap-1.5">
+                          {(() => {
+                            const es = (r as any).email_status as
+                              | { email_error?: string; email_sent?: boolean }
+                              | null;
+                            const hasEmailError = !!es?.email_error;
+                            if (!hasEmailError) return null;
+                            return (
+                              <Button
+                                size="sm"
+                                variant="executive"
+                                disabled={resend.isPending}
+                                onClick={() => resend.mutate(r.id)}
+                                title="Reenviar código para o mesmo pagamento"
+                              >
+                                <Send className="mr-1 h-3.5 w-3.5" /> Reenviar
+                              </Button>
+                            );
+                          })()}
+                          <Button size="sm" variant="ghost-navy" onClick={() => setSelected(r)}>
+                            Ver
+                          </Button>
+                        </div>
                       </TableCell>
                     </TableRow>
                   ))
+
                 )}
               </TableBody>
             </Table>
