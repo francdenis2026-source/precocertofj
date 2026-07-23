@@ -210,14 +210,25 @@ export function PreparoDicas() {
             className="flex h-full flex-col gap-3 rounded-xl border border-border/70 bg-background/60 p-4"
           >
             <div className="flex items-center gap-3">
-              <span
-                aria-hidden="true"
-                className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary/10 text-primary"
-              >
-                {d.icon}
-              </span>
+              <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-border/70 bg-muted">
+                <img
+                  src={d.foto}
+                  alt={`Exemplo de ${d.titulo.toLowerCase()}`}
+                  loading="lazy"
+                  width={512}
+                  height={512}
+                  className="h-full w-full object-cover"
+                />
+                <span
+                  aria-hidden="true"
+                  className="absolute -bottom-1 -right-1 flex h-6 w-6 items-center justify-center rounded-md bg-primary text-primary-foreground shadow-sm [&_svg]:h-4 [&_svg]:w-4"
+                >
+                  {d.icon}
+                </span>
+              </div>
               <h3 className="text-base font-semibold">{d.titulo}</h3>
             </div>
+
             <p className="text-sm text-muted-foreground">{d.descricao}</p>
             <div className="mt-auto flex flex-wrap gap-1.5 pt-1">
               {d.cortes.map((c) => (
