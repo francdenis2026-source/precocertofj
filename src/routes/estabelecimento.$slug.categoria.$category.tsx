@@ -30,6 +30,8 @@ import {
 } from "@/components/ui/sheet";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { ProductListCard } from "@/components/product/ProductListCard";
+import { EmptyState, LoadingGrid, RouteError } from "@/components/feedback";
 
 const brl = (v: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
@@ -89,13 +91,11 @@ export const Route = createFileRoute("/estabelecimento/$slug/categoria/$category
     };
   },
   errorComponent: ({ error, reset }) => (
-    <div className="mx-auto flex min-h-[60dvh] max-w-md flex-col items-center justify-center px-4 text-center">
-      <h2 className="text-lg font-semibold">Não foi possível carregar</h2>
-      <p className="mt-2 text-sm text-muted-foreground">
-        {error instanceof Error ? error.message : "Tente novamente."}
-      </p>
-      <Button className="mt-4" onClick={() => reset()}>Tentar de novo</Button>
-    </div>
+    <RouteError
+      title="Não foi possível carregar"
+      message={error instanceof Error ? error.message : "Tente novamente."}
+      onRetry={() => reset()}
+    />
   ),
   notFoundComponent: () => (
     <div className="mx-auto flex min-h-[50dvh] max-w-md flex-col items-center justify-center px-4 text-center">
@@ -108,8 +108,8 @@ export const Route = createFileRoute("/estabelecimento/$slug/categoria/$category
     </div>
   ),
   pendingComponent: () => (
-    <div className="flex min-h-[50dvh] items-center justify-center">
-      <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+    <div className="mx-auto w-full max-w-5xl px-4 py-8">
+      <LoadingGrid count={6} columns={3} />
     </div>
   ),
   component: CategoryPage,
@@ -214,42 +214,25 @@ function CategoryPage() {
         <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {items.map((p) => (
             <li key={p.slug}>
-              <Card interactive tabIndex={0} className="group h-full">
-                <CardContent className="flex h-full flex-col gap-2 p-4">
-                  <h3 className="font-medium leading-tight transition-colors group-hover:text-primary">
-                    {p.productName}
-                  </h3>
-                  <div className="mt-auto flex items-baseline justify-between gap-2 pt-2">
-                    <span className="text-xl font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
-                      {brl(p.price)}
-                    </span>
-                    {p.pricePerUnit != null && p.unitLabel && (
-                      <span className="text-xs tabular-nums text-muted-foreground">
-                        {brl(p.pricePerUnit)} {p.unitLabel.replace("R$", "").trim() || p.unitLabel}
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex items-center justify-between text-[11px] text-muted-foreground">
-                    <span>Atualizado {new Date(p.lastDate).toLocaleDateString("pt-BR")}</span>
-                    <button
-                      type="button"
-                      onClick={(e) => { e.stopPropagation(); setHistoryFor(p); }}
-                      className="inline-flex items-center gap-1 rounded-md px-2 py-1 transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                      aria-label={`Ver histórico de preço de ${p.productName}`}
-                    >
-                      <History className="h-3 w-3" /> Histórico
-                    </button>
-                  </div>
-                </CardContent>
-              </Card>
+              <ProductListCard
+                name={p.productName}
+                price={p.price}
+                pricePerUnit={p.pricePerUnit}
+                unitLabel={p.unitLabel}
+                lastDate={p.lastDate}
+                onHistory={() => setHistoryFor(p)}
+              />
             </li>
           ))}
         </ul>
 
         {items.length === 0 && (
-          <div className="mt-10 rounded-lg border border-dashed border-border p-8 text-center text-sm text-muted-foreground">
-            Nenhum produto encontrado{q ? ` para "${q}"` : ""} nesta categoria.
-          </div>
+          <EmptyState
+            className="mt-8"
+            icon={Search}
+            title="Nenhum produto encontrado"
+            message={q ? `Nenhum item para "${q}" nesta categoria.` : "Nenhum item nesta categoria."}
+          />
         )}
       </main>
 

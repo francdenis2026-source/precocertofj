@@ -547,20 +547,20 @@ function HomePage() {
           <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center md:gap-8">
             <div className="min-w-0">
               <h3
-                className={`${serif}`}
+                className="font-semibold"
                 style={{
                   color: "#F5F6FA",
                   fontSize: "clamp(1.25rem, 2.6vw, 2rem)",
                   lineHeight: 1.15,
-                  letterSpacing: "-0.015em",
+                  letterSpacing: "-0.02em",
                 }}
               >
                 Nunca mais pague caro por{" "}
-                <span className="italic" style={{ color: P.gold }}>
+                <span className="font-bold" style={{ color: P.gold }}>
                   arroz, feijão e café.
                 </span>
               </h3>
-              <p className="mt-1 text-[13px] text-white/70 sm:text-[14px]">
+              <p className="mt-1.5 text-[13.5px] text-white/85 sm:text-[14px]">
                 Cadastro em 30s · sem cartão.
               </p>
             </div>
@@ -609,7 +609,7 @@ function ExploreCard({
   return (
     <Link
       to={to}
-      className="group block rounded-xl border p-3.5 transition-all duration-300 hover:-translate-y-0.5 sm:rounded-2xl sm:p-4 lg:p-5"
+      className="group block rounded-xl border p-3.5 transition-all duration-300 hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--pc-home-navy)] sm:rounded-2xl sm:p-4 lg:p-5"
       style={{
         background: "rgb(255 255 255 / 0.05)",
         borderColor: "rgb(255 255 255 / 0.10)",
@@ -624,19 +624,20 @@ function ExploreCard({
       }}
     >
       <div
-        className={`${serif} mb-2 italic opacity-60 transition-opacity group-hover:opacity-100 sm:mb-2.5`}
+        className="mb-2 font-bold tabular-nums leading-none tracking-tight sm:mb-2.5"
         style={{
           color: P.gold,
-          fontSize: "clamp(1.5rem, 2.6vw, 2.15rem)",
-          lineHeight: 1,
-          letterSpacing: "-0.03em",
+          fontSize: "clamp(1.25rem, 2.2vw, 1.65rem)",
+          letterSpacing: "-0.02em",
         }}
       >
         {number}
       </div>
-      <h3 className="mb-1.5 text-[15px] font-bold text-white sm:text-base lg:text-[17px]">{title}</h3>
-      <p className="text-[12.5px] leading-snug text-white/60 sm:text-[13px]">{desc}</p>
-      <div className="mt-2.5 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-white/80 transition-colors group-hover:text-[color:var(--pc-home-gold)] sm:mt-3 sm:text-[10.5px]">
+      <h3 className="mb-1.5 text-[16px] font-semibold leading-tight text-white sm:text-[17px] lg:text-[18px]">
+        {title}
+      </h3>
+      <p className="text-[13px] leading-snug text-white/75 sm:text-[13.5px]">{desc}</p>
+      <div className="mt-3 inline-flex items-center gap-1.5 text-[10.5px] font-semibold uppercase tracking-[0.18em] text-white/85 transition-colors group-hover:text-[color:var(--pc-home-gold)] sm:mt-3.5">
         {cta}
         <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
       </div>
