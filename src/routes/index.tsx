@@ -543,8 +543,8 @@ function HomePage() {
         <div className="grid grid-cols-3 gap-3 sm:gap-4">
           {[
             { k: "7", l: "mercados no ar", icon: <ShieldCheck className="h-4 w-4" /> },
-            { k: "500+", l: "preços por semana", icon: <TrendingDown className="h-4 w-4" /> },
-            { k: "100%", l: "conferido por nota", icon: <Sparkles className="h-4 w-4" /> },
+            { k: "< 24h", l: "atualização de preços", icon: <Clock className="h-4 w-4" /> },
+            { k: "LGPD", l: "dados protegidos", icon: <ShieldCheck className="h-4 w-4" /> },
           ].map((s) => (
             <div
               key={s.l}
