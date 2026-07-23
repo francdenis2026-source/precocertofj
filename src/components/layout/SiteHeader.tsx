@@ -64,14 +64,14 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
       <div
         className={dsx(
           ds.container,
-          "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-2.5 sm:gap-5 sm:py-3 md:flex md:justify-between md:py-3.5",
+          "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 py-1.5 sm:gap-4 sm:py-2.5 md:flex md:justify-between md:py-3",
         )}
       >
         {/* Brand */}
-        <Link to="/" className="flex min-w-0 items-center gap-2.5 sm:gap-3">
+        <Link to="/" className="flex min-w-0 items-center gap-2 sm:gap-2.5">
           <span
             className={dsx(
-              "grid h-9 w-9 shrink-0 place-items-center rounded-[10px] bg-brand text-[17px] font-black text-brand-foreground sm:h-10 sm:w-10 sm:text-[19px]",
+              "grid h-8 w-8 shrink-0 place-items-center rounded-[9px] bg-brand text-[15px] font-black text-brand-foreground sm:h-9 sm:w-9 sm:text-[17px] md:h-10 md:w-10 md:text-[19px]",
               isOverlay ? "shadow-[0_6px_18px_rgb(0_0_0/0.28)] ring-1 ring-black/10" : "shadow-elev-2",
             )}
           >
@@ -81,7 +81,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             <span
               className={dsx(
                 serif,
-                "truncate text-[22px] font-medium leading-[0.95] tracking-[-0.015em] antialiased sm:text-[26px] md:text-[28px]",
+                "truncate text-[19px] font-medium leading-[0.95] tracking-[-0.015em] antialiased sm:text-[23px] md:text-[26px] lg:text-[28px]",
                 brandTextClass,
                 isOverlay && "[text-shadow:0_1px_2px_rgb(0_0_0/0.35),0_0_1px_rgb(0_0_0/0.25)]",
               )}
@@ -90,7 +90,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             </span>
             <span
               className={dsx(
-                "mt-1 hidden text-[10.5px] font-semibold uppercase tracking-[0.22em] antialiased sm:block",
+                "mt-0.5 hidden text-[10px] font-semibold uppercase tracking-[0.22em] antialiased sm:block",
                 subTextClass,
                 isOverlay && "[text-shadow:0_1px_2px_rgb(0_0_0/0.45)]",
               )}
@@ -99,6 +99,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             </span>
           </div>
         </Link>
+
 
 
 
