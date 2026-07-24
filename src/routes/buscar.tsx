@@ -349,20 +349,16 @@ function SearchPage() {
 }
 
 type FilterInputsProps = {
-  brand: string;
   min: string;
   max: string;
-  onBrand: (v: string) => void;
   onMin: (v: string) => void;
   onMax: (v: string) => void;
   onClear: () => void;
 };
 
-function FilterInputs({ brand, min, max, onBrand, onMin, onMax, onClear }: FilterInputsProps) {
-  const [b, setB] = useState(brand);
+function FilterInputs({ min, max, onMin, onMax, onClear }: FilterInputsProps) {
   const [mn, setMn] = useState(min);
   const [mx, setMx] = useState(max);
-  useEffect(() => setB(brand), [brand]);
   useEffect(() => setMn(min), [min]);
   useEffect(() => setMx(max), [max]);
 
@@ -374,68 +370,63 @@ function FilterInputs({ brand, min, max, onBrand, onMin, onMax, onClear }: Filte
     return cleaned;
   };
 
-  const dirty = b.trim() !== "" || mn.trim() !== "" || mx.trim() !== "";
+  const dirty = mn.trim() !== "" || mx.trim() !== "";
   const clearAll = () => {
-    setB("");
     setMn("");
     setMx("");
     onClear();
   };
 
   const inputBase =
-    "h-9 rounded-lg border border-border/70 bg-background/60 px-3 text-[13px] font-normal text-foreground placeholder:text-muted-foreground/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary transition-colors";
+    "h-9 w-24 rounded-md border-0 bg-transparent px-2 text-[13px] font-medium text-foreground tabular-nums placeholder:text-muted-foreground/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 transition-colors";
 
   return (
     <div className="ml-auto flex flex-wrap items-center gap-2">
-      <input
-        type="text"
-        inputMode="text"
-        maxLength={40}
-        placeholder="Marca"
-        value={b}
-        onChange={(e) => setB(e.currentTarget.value)}
-        onBlur={() => onBrand(b.trim())}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") { e.preventDefault(); onBrand(b.trim()); }
-        }}
-        aria-label="Marca"
-        className={`${inputBase} w-28`}
-      />
-      <input
-        type="number"
-        inputMode="decimal"
-        min={0}
-        step="0.01"
-        placeholder="R$ min"
-        value={mn}
-        onChange={(e) => setMn(sanitizePrice(e.currentTarget.value))}
-        onBlur={() => onMin(mn.trim())}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") { e.preventDefault(); onMin(mn.trim()); }
-        }}
-        aria-label="Preço mínimo"
-        className={`${inputBase} w-20 tabular-nums`}
-      />
-      <input
-        type="number"
-        inputMode="decimal"
-        min={0}
-        step="0.01"
-        placeholder="R$ máx"
-        value={mx}
-        onChange={(e) => setMx(sanitizePrice(e.currentTarget.value))}
-        onBlur={() => onMax(mx.trim())}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") { e.preventDefault(); onMax(mx.trim()); }
-        }}
-        aria-label="Preço máximo"
-        className={`${inputBase} w-20 tabular-nums`}
-      />
+      <div
+        className="flex items-center gap-1 rounded-lg border border-border/70 bg-background/60 px-2.5 py-0.5 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/30"
+        role="group"
+        aria-label="Faixa de preço"
+      >
+        <span className="select-none pr-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+          Faixa de preço
+        </span>
+        <input
+          type="number"
+          inputMode="decimal"
+          min={0}
+          step="0.01"
+          placeholder="R$ min"
+          value={mn}
+          onChange={(e) => setMn(sanitizePrice(e.currentTarget.value))}
+          onBlur={() => onMin(mn.trim())}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") { e.preventDefault(); onMin(mn.trim()); }
+          }}
+          aria-label="Preço mínimo"
+          className={inputBase}
+        />
+        <span aria-hidden="true" className="text-muted-foreground/60">—</span>
+        <input
+          type="number"
+          inputMode="decimal"
+          min={0}
+          step="0.01"
+          placeholder="R$ máx"
+          value={mx}
+          onChange={(e) => setMx(sanitizePrice(e.currentTarget.value))}
+          onBlur={() => onMax(mx.trim())}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") { e.preventDefault(); onMax(mx.trim()); }
+          }}
+          aria-label="Preço máximo"
+          className={inputBase}
+        />
+      </div>
       <button
         type="button"
         onClick={clearAll}
         disabled={!dirty}
-        className="inline-flex h-9 items-center rounded-lg px-3 text-[12px] font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-40"
+        className="inline-flex h-9 items-center rounded-lg px-3 text-[12px] font-semibold uppercase tracking-[0.08em] text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-40"
         aria-label="Limpar filtros"
       >
         Limpar
@@ -443,4 +434,5 @@ function FilterInputs({ brand, min, max, onBrand, onMin, onMax, onClear }: Filte
     </div>
   );
 }
+
 
