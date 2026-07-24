@@ -318,15 +318,8 @@ function SearchPage() {
               "linear-gradient(100deg, black 0%, black 55%, transparent 95%)",
           }}
         />
-        {/* Reforço inferior sutil */}
-        <div
-          aria-hidden
-          className="absolute inset-x-0 bottom-0 -z-20 h-1/3"
-          style={{
-            background:
-              "linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--brand-navy) 50%, transparent) 100%)",
-          }}
-        />
+        {/* Reforço inferior removido a pedido do usuário */}
+
         {/* Hairline dourada no topo */}
         <div
           aria-hidden
