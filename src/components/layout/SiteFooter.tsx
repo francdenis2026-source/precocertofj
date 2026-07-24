@@ -57,7 +57,7 @@ export function SiteFooter() {
         )}
       >
         {/* Row 1: brand + location + legal — single line */}
-        <div className="flex items-center justify-between gap-2 text-[clamp(10px,2.6vw,11.5px)] leading-none">
+        <div className="flex items-center justify-between gap-2 text-[clamp(11.5px,3vw,13px)] leading-none">
           <Link
             to="/"
             className="flex shrink-0 items-center gap-1.5"
@@ -66,12 +66,12 @@ export function SiteFooter() {
             <span className="grid h-5 w-5 place-items-center rounded-[5px] bg-brand text-[10px] font-black text-brand-foreground shadow-elev-2">
               P
             </span>
-            <span className={dsx(serif, "text-[clamp(12px,3.4vw,14px)] leading-none text-foreground")}>
+            <span className={dsx(serif, "text-[clamp(14px,3.9vw,16px)] leading-none text-foreground")}>
               Preço<span className="italic text-brand">Certo</span>
             </span>
           </Link>
-          <span className="inline-flex items-center gap-1 font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-            <MapPin className="h-3 w-3 text-brand" aria-hidden />
+          <span className="inline-flex items-center gap-1 font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+            <MapPin className="h-3.5 w-3.5 text-brand" aria-hidden />
             Feijó·AC
           </span>
           <span className="text-muted-foreground tabular-nums">© {year}</span>
@@ -80,7 +80,7 @@ export function SiteFooter() {
         {/* Row 2: nav chips + dev credit — inline flow */}
         <nav
           aria-label="Rodapé"
-          className="mt-1 flex flex-wrap items-center gap-x-1 gap-y-0.5 text-[clamp(11px,2.9vw,12.5px)] font-semibold leading-none text-foreground/85"
+          className="mt-1 flex flex-wrap items-center gap-x-1 gap-y-0.5 text-[clamp(12.5px,3.3vw,14px)] font-semibold leading-none text-foreground/85"
         >
           {MOBILE_LINKS.map((l, i) => (
             <span key={l.to} className="inline-flex items-center">
@@ -96,7 +96,7 @@ export function SiteFooter() {
             </span>
           ))}
           <span aria-hidden className="px-0.5 text-muted-foreground/50">·</span>
-          <span className="ml-auto font-mono text-[10.5px] font-normal text-muted-foreground">&lt;dev&gt; Franc</span>
+          <span className="ml-auto font-mono text-[11.5px] font-normal text-muted-foreground">&lt;dev&gt; Franc</span>
         </nav>
       </div>
 
