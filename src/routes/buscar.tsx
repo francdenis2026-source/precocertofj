@@ -283,7 +283,7 @@ function SearchPage() {
           <img
             src={buscarHero.img.src}
             alt=""
-            className="h-full w-full object-cover opacity-0 transition-opacity duration-500 [.pc-hero-picture.is-loaded_&]:opacity-100"
+            className="h-full w-full scale-[1.04] object-cover opacity-0 blur-[2px] transition-opacity duration-500 [.pc-hero-picture.is-loaded_&]:opacity-100"
             width={buscarHero.img.w}
             height={buscarHero.img.h}
             loading="eager"
