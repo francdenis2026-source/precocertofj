@@ -321,8 +321,8 @@ function SearchPage() {
               <Search className="h-3 w-3" aria-hidden />
               Comparador de preços
             </div>
-            <h1 className="text-[20px] md:text-[24px] font-bold leading-tight text-white [text-shadow:0_2px_10px_rgba(0,0,0,0.65)]">
-              Buscar <span className="text-brand-gold">preço</span> por nome
+            <h1 className="inline-flex items-center rounded-lg bg-brand-navy/85 px-3 py-1.5 text-[20px] md:text-[24px] font-bold leading-tight text-white ring-1 ring-brand-gold/40 shadow-[0_4px_18px_rgba(2,6,23,0.45)] backdrop-blur-[2px]">
+              Buscar <span className="ml-1.5 text-brand-gold">preço</span><span className="ml-1.5">por nome</span>
             </h1>
           </div>
           <p className="mt-2 inline-block max-w-2xl rounded-md bg-brand-navy/75 px-2.5 py-1 text-[12.5px] md:text-[13.5px] font-medium leading-snug text-white ring-1 ring-white/10 backdrop-blur-[2px] [text-shadow:0_1px_4px_rgba(0,0,0,0.55)]">
