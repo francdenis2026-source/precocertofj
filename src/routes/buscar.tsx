@@ -337,10 +337,17 @@ function SearchPage() {
                 "linear-gradient(100deg, #000 0%, #000 70%, transparent 100%)",
             }}
           />
-          <nav aria-label="Trilha" className="mb-1 flex items-center gap-1 text-[12px] font-semibold text-white">
-            <Link to="/" className="text-white hover:text-brand-gold">Início</Link>
-            <ChevronRight aria-hidden className="h-3 w-3 text-white/80" />
-            <span className="text-brand-gold">Buscar</span>
+          <nav aria-label="Trilha" className="mb-2 flex items-center gap-2 text-[14px] font-semibold text-white">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-white/20 bg-white/5 px-3 py-1.5 text-white transition-colors hover:border-brand-gold hover:bg-brand-gold hover:text-brand-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy"
+            >
+              Início
+            </Link>
+            <ChevronRight aria-hidden className="h-4 w-4 text-white/60" />
+            <span className="inline-flex items-center rounded-lg border border-brand-gold bg-brand-gold px-3 py-1.5 text-brand-navy">
+              Buscar
+            </span>
           </nav>
 
           <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
