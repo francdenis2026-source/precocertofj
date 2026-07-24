@@ -150,7 +150,7 @@ export function usePromptSignIn() {
         description,
         confirmLabel: preset.confirmLabel ?? "Entrar agora",
         cancelLabel: "Agora não",
-        tone: "info",
+        tone: isFavorite ? "warning" : "info",
       });
 
       if (!ok) return false;
