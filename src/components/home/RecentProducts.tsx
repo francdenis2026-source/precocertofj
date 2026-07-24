@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Clock, Store, Radio, ArrowRight, ChevronRight } from "lucide-react";
+import { Clock, Store, Radio, ArrowRight, ChevronRight, TrendingDown } from "lucide-react";
 import { getRecentProducts } from "@/lib/products-public.functions";
 import { getLiveTickerStats } from "@/lib/products-public.functions";
 import {
@@ -365,7 +365,12 @@ type RecentItem = {
   when: string;
   marketName: string | null;
   stores: number;
+  previousPrice: number | null;
+  dropPct: number | null;
 };
+
+/** Considera "queda relevante" a partir de ~5% de redução vs. maior preço anterior. */
+const DROP_THRESHOLD = 5;
 
 function MobilePriceRotator({
   data,
@@ -411,11 +416,29 @@ function MobilePriceRotator({
         className="block px-4 pt-3 pb-2 active:opacity-80"
         aria-label={`${current.name} — ${brl(current.price)} em ${current.marketName ?? "mercados"}`}
       >
-        <div className="mb-1.5 flex items-center gap-2">
+        <div className="mb-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
           <span className={`h-2 w-2 rounded-full ${f.dotClass}`} aria-hidden />
           <span className={`text-[10px] font-bold uppercase tracking-[0.14em] ${f.textClass}`}>
             {f.label}
           </span>
+          {current.dropPct !== null && current.dropPct >= DROP_THRESHOLD && (
+            <span
+              className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.1em]"
+              style={{
+                background: "color-mix(in oklab, #10b981 16%, transparent)",
+                color: "#059669",
+                border: "1px solid color-mix(in oklab, #10b981 45%, transparent)",
+              }}
+              title={
+                current.previousPrice
+                  ? `Antes ${brl(current.previousPrice)} · agora ${brl(current.price)}`
+                  : undefined
+              }
+            >
+              <TrendingDown className="h-3 w-3" aria-hidden />
+              baixou {current.dropPct}%
+            </span>
+          )}
           <span className="text-[10px] text-muted-foreground">·</span>
           <span className="text-[10px] font-medium text-muted-foreground">
             {relative(current.when)}
@@ -436,14 +459,27 @@ function MobilePriceRotator({
             <div className="market-name min-w-0 truncate text-[13px] font-bold uppercase tracking-[0.06em] text-[var(--market-accent)]">
               {current.marketName ?? "Vários mercados"}
             </div>
-            <div
-              className={`${serif} tabular-nums shrink-0 text-[30px] font-semibold leading-none`}
-              style={{ color: P.gold, letterSpacing: "-0.02em" }}
-            >
-              {brl(current.price)}
+            <div className="flex flex-col items-end leading-none">
+              {current.dropPct !== null &&
+                current.dropPct >= DROP_THRESHOLD &&
+                current.previousPrice && (
+                  <span
+                    className="tabular-nums text-[11px] font-medium text-muted-foreground line-through"
+                    aria-label={`Preço anterior ${brl(current.previousPrice)}`}
+                  >
+                    {brl(current.previousPrice)}
+                  </span>
+                )}
+              <div
+                className={`${serif} tabular-nums shrink-0 text-[30px] font-semibold leading-none`}
+                style={{ color: P.gold, letterSpacing: "-0.02em" }}
+              >
+                {brl(current.price)}
+              </div>
             </div>
           </div>
         </div>
+
 
         {/* Barra de progresso do auto-avanço */}
         <div className="mt-3 h-0.5 w-full overflow-hidden rounded-full" style={{ background: "color-mix(in oklab, var(--pc-home-ink) 10%, transparent)" }}>

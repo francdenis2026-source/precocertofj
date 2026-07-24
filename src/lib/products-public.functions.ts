@@ -14,6 +14,8 @@ export type RecentProduct = {
   marketName: string | null;
   when: string; // ISO date
   stores: number;
+  previousPrice: number | null;
+  dropPct: number | null; // percentual positivo = queda; null se não houver histórico relevante
 };
 
 export type LiveTickerStats = {
@@ -173,6 +175,7 @@ export const getRecentProducts = createServerFn({ method: "GET" })
           market_name: string | null;
           created_at: string;
         };
+        prices: number[]; // ordem: mais recente -> mais antigo
         marketCounts: Map<string, number>;
         stores: Set<string>;
       };
@@ -193,11 +196,13 @@ export const getRecentProducts = createServerFn({ method: "GET" })
               market_name: r.market_name ?? null,
               created_at: r.created_at,
             },
+            prices: [],
             marketCounts: new Map(),
             stores: new Set(),
           };
           buckets.set(key, b);
         }
+        b.prices.push(Number(r.price_captured));
         const mk = (r.market_name ?? "").trim();
         if (mk) b.marketCounts.set(mk, (b.marketCounts.get(mk) ?? 0) + 1);
         if (r.establishment_id) b.stores.add(r.establishment_id as string);
@@ -208,17 +213,26 @@ export const getRecentProducts = createServerFn({ method: "GET" })
           const topMarket =
             Array.from(b.marketCounts.entries()).sort((a, c) => c[1] - a[1])[0]?.[0] ??
             b.latest.market_name;
+
+          const current = b.latest.price_captured;
+          const prior = b.prices.slice(1).filter((p) => Number.isFinite(p) && p > 0);
+          const ref = prior.length ? Math.max(...prior) : null;
+          const drop = ref && ref > current ? ((ref - current) / ref) * 100 : null;
+
           return {
             slug: key.replace(/\s+/g, "-"),
             name: b.latest.product_name,
-            price: b.latest.price_captured,
+            price: current,
             marketName: topMarket ?? null,
             when: b.latest.created_at,
             stores: b.stores.size,
+            previousPrice: ref,
+            dropPct: drop !== null ? Math.round(drop * 10) / 10 : null,
           };
         })
         .sort((a, b) => (a.when < b.when ? 1 : -1))
         .slice(0, data.limit);
+
 
       return arr;
     } catch {
