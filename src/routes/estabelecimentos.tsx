@@ -362,8 +362,8 @@ function EstablishmentsPage() {
                   key={e.id}
                   to="/estabelecimento/$slug"
                   params={{ slug: slugifyEstablishment(e.name) }}
-                  className="group relative flex w-[210px] shrink-0 snap-start items-center gap-2.5 rounded-lg border border-border bg-background p-2 transition-colors hover:border-primary/60 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-                  style={e.brandColor ? { boxShadow: `inset 3px 0 0 ${e.brandColor}` } : undefined}
+                  className="group relative flex w-[210px] shrink-0 snap-start items-center gap-2.5 rounded-lg border border-border bg-background p-2 transition-colors hover:border-brand-gold/60 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                  style={{ boxShadow: "inset 3px 0 0 var(--brand-gold)" }}
                 >
                   <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md bg-white">
                     {e.logoUrl ? (
@@ -419,7 +419,7 @@ function EstablishmentsPage() {
               <SectionCard
                 title={
                   <span className="inline-flex items-center gap-2">
-                    <TrendingUp className="h-4 w-4 text-primary" aria-hidden />
+                    <TrendingUp className="h-4 w-4 text-brand-gold" aria-hidden />
                     Categorias mais populares
                   </span>
                 }
@@ -522,7 +522,7 @@ function EstablishmentsPage() {
                         <div className="flex items-start gap-3">
                           <div
                             className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl border border-border bg-muted"
-                            style={e.brandColor ? { borderColor: e.brandColor } : undefined}
+                            style={{ borderColor: "var(--brand-gold)" }}
                           >
                             {e.logoUrl ? (
                               <img
@@ -540,7 +540,7 @@ function EstablishmentsPage() {
                           <div className="min-w-0 flex-1">
                             <h3 className="truncate text-[15px] font-semibold text-foreground">{e.name}</h3>
                             {e.neighborhood && (
-                              <span className="mt-1 inline-flex items-center gap-1 rounded-full border border-brand-gold/40 bg-brand-navy/8 px-2 py-0.5 text-[12px] font-semibold text-brand-navy dark:bg-brand-gold/15 dark:text-brand-gold dark:border-brand-gold/50">
+                              <span className="mt-1 inline-flex items-center gap-1 rounded-full border border-brand-gold/50 bg-brand-gold/15 px-2 py-0.5 text-[12px] font-semibold text-brand-gold">
                                 <MapPin className="h-3 w-3" aria-hidden />
                                 {e.neighborhood}
                               </span>
@@ -716,7 +716,7 @@ function MetricDetailDialog({
                   <div className="min-w-0 flex-1">
                     <div className="truncate text-[13.5px] font-semibold text-foreground">{e.name}</div>
                     <div className="truncate text-[11.5px] text-muted-foreground">
-                      <span className="font-semibold text-primary">{e.productsCount}</span> produtos
+                      <span className="font-semibold text-brand-gold">{e.productsCount}</span> produtos
                       {e.neighborhood ? ` · ${e.neighborhood}` : ""}
                     </div>
                   </div>
@@ -731,7 +731,7 @@ function MetricDetailDialog({
           {which === "products" && data && (
             <div className="space-y-3">
               <div className="rounded-md border border-border/60 bg-muted/40 p-3 text-center">
-                <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-primary">Total monitorado</div>
+                <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-brand-gold">Total monitorado</div>
                 <div className="mt-1 text-[24px] font-extrabold tabular-nums text-foreground">
                   {data.totalProducts.toLocaleString("pt-BR")}
                 </div>
@@ -746,10 +746,10 @@ function MetricDetailDialog({
                     {data.topGlobalCategories.slice(0, 10).map((c) => (
                       <span
                         key={c.category}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-[12px] font-medium text-primary"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-gold/15 px-2.5 py-1 text-[12px] font-medium text-brand-gold"
                       >
                         {humanizeCategory(c.category)}
-                        <span className="rounded-full bg-primary/20 px-1.5 text-[11.5px] font-bold">{c.count}</span>
+                        <span className="rounded-full bg-brand-gold/25 px-1.5 text-[11.5px] font-bold text-brand-gold">{c.count}</span>
                       </span>
                     ))}
                   </div>
@@ -761,10 +761,10 @@ function MetricDetailDialog({
           {which === "savings" && data && (
             <div className="space-y-2.5">
               <div className="rounded-md border border-brand-gold/50 bg-brand-gold/10 p-3">
-                <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-brand-navy dark:text-brand-gold">
+                <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-brand-gold">
                   Diferença máxima na rede
                 </div>
-                <div className="mt-0.5 text-[22px] font-extrabold tabular-nums text-brand-navy dark:text-brand-gold">
+                <div className="mt-0.5 text-[22px] font-extrabold tabular-nums text-brand-gold">
                   R$ {data.totalMaxSavings.toFixed(2).replace(".", ",")}
                 </div>
                 <div className="text-[11.5px] text-muted-foreground">
@@ -779,7 +779,7 @@ function MetricDetailDialog({
                         <div className="truncate text-[13px] font-semibold text-foreground">{e.name}</div>
                         <div className="truncate text-[11px] text-muted-foreground">{e.neighborhood || e.city || "—"}</div>
                       </div>
-                      <div className="shrink-0 rounded bg-primary/10 px-2 py-0.5 text-[12.5px] font-bold tabular-nums text-primary">
+                      <div className="shrink-0 rounded bg-brand-gold/15 px-2 py-0.5 text-[12.5px] font-bold tabular-nums text-brand-gold">
                         até R$ {e.maxSavings.toFixed(2).replace(".", ",")}
                       </div>
                     </li>
