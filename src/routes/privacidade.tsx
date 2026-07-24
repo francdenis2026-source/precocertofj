@@ -236,6 +236,22 @@ function PrivacidadePage() {
     <div className="min-h-screen bg-background">
       <div className="mx-auto max-w-2xl px-4 py-6 sm:py-8">
         <header className="mb-4">
+          <Link
+            to="/"
+            aria-label="PreçoCerto — voltar ao início"
+            className="mb-3 inline-flex items-center gap-2.5 group"
+          >
+            <img
+              src="/logo-mark.svg"
+              alt=""
+              width={40}
+              height={40}
+              className="h-10 w-10 shrink-0 rounded-lg object-contain shadow-sm ring-1 ring-brand-gold/30 transition-transform group-hover:scale-[1.03]"
+            />
+            <span className="font-display text-[20px] font-semibold leading-none tracking-tight text-foreground">
+              <span className="text-brand-gold">P</span>reço<span className="text-brand-gold">C</span>erto
+            </span>
+          </Link>
           <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-brand-gold">
             <ShieldCheck className="mr-1 inline h-3 w-3" strokeWidth={2.2} />
             Documento oficial · Atualizado em {updated}
@@ -249,6 +265,7 @@ function PrivacidadePage() {
             momento.
           </p>
         </header>
+
 
         {/* Tabs */}
         <div
