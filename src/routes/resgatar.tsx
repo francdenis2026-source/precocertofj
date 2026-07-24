@@ -755,19 +755,20 @@ function SignInGate() {
         <Link
           to="/login"
           search={{ redirect: "/resgatar" } as never}
-          className="inline-flex h-11 items-center justify-center rounded-lg text-[13px] font-bold uppercase tracking-[0.14em] text-white"
-          style={{ background: NAVY }}
+          className="inline-flex h-11 items-center justify-center rounded-lg text-[13px] font-bold uppercase tracking-[0.14em]"
+          style={{ background: GOLD, color: NAVY }}
         >
           Entrar
         </Link>
         <Link
           to="/cadastro"
           className="inline-flex h-11 items-center justify-center rounded-lg border text-[13px] font-bold uppercase tracking-[0.14em]"
-          style={{ borderColor: LINE, color: NAVY }}
+          style={{ borderColor: GOLD, color: NAVY, background: "#fffbeb" }}
         >
           Criar conta
         </Link>
       </div>
+
     </div>
   );
 }
