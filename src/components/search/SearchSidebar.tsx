@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { Store as StoreIcon, ArrowRight, Flame, History as HistoryIcon } from "lucide-react";
+import { Store as StoreIcon, ArrowRight, Flame, History as HistoryIcon, X, Trash2 } from "lucide-react";
 import { listPublicStores } from "@/lib/stores-public.functions";
 import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
+import { useConfirm } from "@/components/ui/confirm-provider";
 
 const POPULAR: string[] = [
   "arroz 5kg",
@@ -16,16 +17,32 @@ const POPULAR: string[] = [
 type Props = {
   recent: string[];
   onPickQuery: (q: string) => void;
+  onRemoveRecent?: (q: string) => void;
+  onClearRecent?: () => void;
 };
 
-export function SearchSidebar({ recent, onPickQuery }: Props) {
+export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRecent }: Props) {
   const stores = useQuery({
     queryKey: ["public-stores-sidebar"],
     queryFn: () => listPublicStores(),
     staleTime: 5 * 60_000,
   });
+  const { confirm } = useConfirm();
 
   const list = (stores.data ?? []).slice(0, 6);
+
+  async function handleClearAll() {
+    if (!onClearRecent || recent.length === 0) return;
+    const ok = await confirm({
+      title: "Limpar histórico de buscas?",
+      description: "As últimas consultas salvas neste navegador serão removidas. Esta ação não pode ser desfeita.",
+      confirmLabel: "Limpar tudo",
+      cancelLabel: "Cancelar",
+      tone: "danger",
+    });
+    if (ok) onClearRecent();
+  }
+
 
   return (
     <aside className="sticky top-24 space-y-4">
@@ -33,6 +50,18 @@ export function SearchSidebar({ recent, onPickQuery }: Props) {
       <SidebarSection
         icon={<HistoryIcon className="h-3.5 w-3.5" />}
         title="Últimas buscas"
+        action={
+          recent.length > 0 && onClearRecent ? (
+            <button
+              type="button"
+              onClick={handleClearAll}
+              className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+              aria-label="Limpar histórico de buscas"
+            >
+              <Trash2 className="h-3 w-3" /> Limpar
+            </button>
+          ) : undefined
+        }
       >
         {recent.length === 0 ? (
           <p className="px-1 text-[12px] text-muted-foreground">
@@ -41,19 +70,31 @@ export function SearchSidebar({ recent, onPickQuery }: Props) {
         ) : (
           <ul className="space-y-1">
             {recent.slice(0, 6).map((t) => (
-              <li key={t}>
+              <li key={t} className="group flex items-center gap-1">
                 <button
                   type="button"
                   onClick={() => onPickQuery(t)}
-                  className="w-full truncate rounded-md px-2 py-1.5 text-left text-[12.5px] text-foreground/90 transition-colors hover:bg-brand-gold/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                  className="min-w-0 flex-1 truncate rounded-md px-2 py-1.5 text-left text-[12.5px] text-foreground/90 transition-colors hover:bg-brand-gold/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                 >
                   {t}
                 </button>
+                {onRemoveRecent && (
+                  <button
+                    type="button"
+                    onClick={() => onRemoveRecent(t)}
+                    className="grid h-7 w-7 flex-none place-items-center rounded-md text-muted-foreground opacity-0 transition-all hover:bg-destructive/10 hover:text-destructive focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold group-hover:opacity-100"
+                    aria-label={`Remover "${t}" do histórico`}
+                    title="Remover do histórico"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                )}
               </li>
             ))}
           </ul>
         )}
       </SidebarSection>
+
 
       {/* Populares */}
       <SidebarSection
