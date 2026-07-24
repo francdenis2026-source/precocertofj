@@ -27,8 +27,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ChevronRight, MapPin, Package, Search, Sparkles, Store, TrendingUp } from "lucide-react";
-import mercadosHero from "@/assets/mercados-hero.jpg?w=1200;1920&format=avif;webp;jpg&quality=68&as=picture";
+import { ChevronRight, MapPin, Package, Search, Sparkles, Store, TrendingUp, Pill, Croissant, Beef, ShoppingBasket, PiggyBank, Radio, ChevronLeft } from "lucide-react";
+import mercadosHero from "@/assets/mercados-hero-v2.jpg.asset.json";
+import { useRef } from "react";
 
 export const Route = createFileRoute("/estabelecimentos")({
   head: () => ({
