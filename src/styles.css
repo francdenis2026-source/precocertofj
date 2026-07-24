@@ -2485,3 +2485,149 @@ textarea::placeholder {
 .pc-search-scope .truncate {
   min-width: 0;
 }
+
+/* ===================== Native form controls — Professional styling =====================
+   Padroniza <select>, <input type="checkbox"> e <input type="radio"> em todo o sistema
+   com o tema Ocean Modern (navy/dourado). Substitui a aparência nativa do browser
+   por controles legíveis, acessíveis e coerentes em light/dark.
+   Componentes shadcn (Select, Checkbox, RadioGroup) NÃO são afetados pois usam <button>.
+   Escape hatch: adicionar a classe `native-control` ao elemento para ignorar. */
+
+/* --- <select> nativo --- */
+select:not(.native-control) {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  border: 1px solid hsl(var(--input));
+  border-radius: 8px;
+  padding: 0.5rem 2.25rem 0.5rem 0.75rem;
+  font-size: 14px;
+  line-height: 1.4;
+  font-weight: 500;
+  min-height: 40px;
+  cursor: pointer;
+  transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5b301' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 0.65rem center;
+  background-size: 16px 16px;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
+}
+select:not(.native-control):hover:not(:disabled) {
+  border-color: color-mix(in oklab, hsl(var(--primary)) 55%, hsl(var(--input)));
+  background-color: color-mix(in oklab, hsl(var(--background)) 96%, hsl(var(--primary)));
+}
+select:not(.native-control):focus-visible {
+  outline: none;
+  border-color: hsl(var(--primary));
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--pc-home-gold) 40%, transparent);
+}
+select:not(.native-control):disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+select:not(.native-control) option {
+  background-color: hsl(var(--popover));
+  color: hsl(var(--popover-foreground));
+  padding: 8px;
+}
+
+/* --- <input type="checkbox"> nativo --- */
+input[type="checkbox"]:not(.native-control) {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1.5px solid hsl(var(--input));
+  background-color: hsl(var(--background));
+  cursor: pointer;
+  display: inline-grid;
+  place-content: center;
+  vertical-align: middle;
+  transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, transform 120ms ease;
+  flex-shrink: 0;
+}
+input[type="checkbox"]:not(.native-control):hover:not(:disabled) {
+  border-color: color-mix(in oklab, hsl(var(--primary)) 60%, hsl(var(--input)));
+}
+input[type="checkbox"]:not(.native-control):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--pc-home-gold) 45%, transparent);
+  border-color: hsl(var(--primary));
+}
+input[type="checkbox"]:not(.native-control):checked {
+  background-color: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='20 6 9 17 4 12'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 12px 12px;
+}
+input[type="checkbox"]:not(.native-control):indeterminate {
+  background-color: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round'><line x1='5' y1='12' x2='19' y2='12'/></svg>");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 12px 12px;
+}
+input[type="checkbox"]:not(.native-control):active:not(:disabled) {
+  transform: scale(0.94);
+}
+input[type="checkbox"]:not(.native-control):disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* --- <input type="radio"> nativo --- */
+input[type="radio"]:not(.native-control) {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 1.5px solid hsl(var(--input));
+  background-color: hsl(var(--background));
+  cursor: pointer;
+  display: inline-grid;
+  place-content: center;
+  vertical-align: middle;
+  transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, transform 120ms ease;
+  flex-shrink: 0;
+}
+input[type="radio"]:not(.native-control)::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: transparent;
+  transition: background-color 150ms ease, transform 150ms ease;
+  transform: scale(0);
+}
+input[type="radio"]:not(.native-control):hover:not(:disabled) {
+  border-color: color-mix(in oklab, hsl(var(--primary)) 60%, hsl(var(--input)));
+}
+input[type="radio"]:not(.native-control):focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--pc-home-gold) 45%, transparent);
+  border-color: hsl(var(--primary));
+}
+input[type="radio"]:not(.native-control):checked {
+  border-color: hsl(var(--primary));
+  background-color: hsl(var(--background));
+}
+input[type="radio"]:not(.native-control):checked::before {
+  background-color: hsl(var(--primary));
+  transform: scale(1);
+}
+input[type="radio"]:not(.native-control):active:not(:disabled) {
+  transform: scale(0.94);
+}
+input[type="radio"]:not(.native-control):disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
