@@ -302,12 +302,12 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
                     {state.options.title}
                   </h2>
                   {state.options.description && (
-                    <p
+                    <div
                       id="confirm-desc"
-                      className="mt-1.5 text-[13.5px] leading-relaxed text-muted-foreground"
+                      className="mt-1.5 text-[13px] leading-snug text-muted-foreground"
                     >
                       {state.options.description}
-                    </p>
+                    </div>
                   )}
                   {state.kind === "prompt" && (
                     <div className="mt-4">
