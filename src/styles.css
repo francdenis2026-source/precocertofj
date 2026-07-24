@@ -2899,9 +2899,15 @@ input::placeholder, textarea::placeholder {
 .pc-search-scope > * { position: relative; z-index: 1; }
 
 /* ===================== Tipografia unificada (typeclear) =====================
-   Neutraliza qualquer uso residual de Instrument Serif via classes Tailwind
-   arbitrárias, garantindo que todos os títulos, eyebrows e microcopy
-   renderizem em Work Sans limpo, legível e sem distorção visual. */
+   Toda a interface renderiza em Work Sans. Nenhum elemento cai em fonte
+   padrão do navegador (Times/Serif/Monospace do UA). Códigos e valores
+   monoespaçados usam explicitamente `--font-mono` (IBM Plex Mono), não o
+   `monospace` genérico do UA. */
+html, body, #root, button, input, textarea, select, optgroup, fieldset,
+legend, label, table, th, td, li, dt, dd, blockquote, figcaption, address,
+cite, em, strong, small, sub, sup, mark, q, s, u, i, b, abbr {
+  font-family: "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
 [class*="Instrument_Serif"],
 [class*="font-serif"],
 [class*="font-display"] {
@@ -2913,6 +2919,12 @@ input::placeholder, textarea::placeholder {
 h1, h2, h3, h4, h5, h6 {
   font-family: "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
 }
+/* Códigos: sempre IBM Plex Mono via token, nunca `monospace` do UA */
+code, pre, kbd, samp, tt, var,
+[class*="font-mono"] {
+  font-family: var(--font-mono) !important;
+}
+
 
 /* Hero /buscar — véu navy responsivo (mobile mais forte, desktop mais leve) */
 .pc-hero-buscar .pc-hero-veil {
