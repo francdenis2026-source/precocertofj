@@ -369,7 +369,7 @@ function SearchPage() {
 
 
 
-          <div className="mt-2 rounded-2xl border border-white/15 bg-background/95 p-2 shadow-[0_18px_40px_-24px_rgba(2,6,23,0.65)] backdrop-blur-sm md:mt-2.5 md:p-2.5">
+          <div className="mt-2 rounded-2xl border border-white/15 bg-background/95 p-2 shadow-[0_18px_40px_-24px_rgba(2,6,23,0.65)] backdrop-blur-sm md:p-2.5">
             <PriceSearchBar
               initialQuery={q}
               mode={mode}
