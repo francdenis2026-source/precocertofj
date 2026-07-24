@@ -896,7 +896,7 @@ function HomePage() {
                       </div>
                       <div
                         className="mt-2 truncate text-[10px] font-bold uppercase leading-tight tracking-[0.14em] sm:text-[11px] sm:tracking-[0.16em]"
-                        style={{ color: "color-mix(in oklab, var(--pc-home-ink) 62%, transparent)" }}
+                        style={{ color: "color-mix(in oklab, var(--pc-home-ink) 82%, transparent)" }}
                       >
                         <span className="sm:hidden">{s.l}</span>
                         <span className="hidden sm:inline">{s.lFull}</span>
