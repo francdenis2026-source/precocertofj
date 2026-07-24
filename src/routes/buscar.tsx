@@ -337,13 +337,13 @@ function SearchPage() {
                 "linear-gradient(100deg, #000 0%, #000 70%, transparent 100%)",
             }}
           />
-          <nav aria-label="Trilha" className="mb-2 flex items-center gap-1 text-[12px] font-semibold text-white">
+          <nav aria-label="Trilha" className="mb-1 flex items-center gap-1 text-[12px] font-semibold text-white">
             <Link to="/" className="text-white hover:text-brand-gold">Início</Link>
             <ChevronRight aria-hidden className="h-3 w-3 text-white/80" />
             <span className="text-brand-gold">Buscar</span>
           </nav>
 
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+          <div className="flex flex-wrap items-center gap-x-2.5 gap-y-1">
             <div className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-2.5 py-0.5 text-[10.5px] font-bold uppercase tracking-[0.14em] text-brand-navy">
               <Search className="h-3 w-3" aria-hidden />
               Comparador de preços
@@ -352,11 +352,11 @@ function SearchPage() {
               Buscar <span className="text-brand-gold">preço</span> por nome
             </h1>
           </div>
-          <p className="mt-2 inline-block max-w-2xl text-[12.5px] md:text-[13.5px] font-medium leading-snug text-white [text-shadow:0_1px_4px_rgba(0,0,0,0.6)]">
+          <p className="mt-1 inline-block max-w-2xl text-[12.5px] md:text-[13.5px] font-medium leading-snug text-white [text-shadow:0_1px_4px_rgba(0,0,0,0.6)]">
             Consulte preço médio, mínimo e onde comprar mais barato em Feijó.
           </p>
 
-          <div className="mt-3 flex flex-wrap items-center gap-2">
+          <div className="mt-1.5 flex flex-wrap items-center gap-2">
             {hasQuery ? (
               <ShareButton
                 title={`PreçoCerto — ${q}`}
