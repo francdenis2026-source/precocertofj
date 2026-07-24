@@ -30,6 +30,7 @@ import {
 import { ChevronRight, MapPin, Package, Search, Sparkles, Store, TrendingUp, Pill, Croissant, Beef, ShoppingBasket, PiggyBank, Radio, ChevronLeft } from "lucide-react";
 import mercadosHero from "@/assets/mercados-hero-v2.jpg.asset.json";
 import { useRef } from "react";
+import { useAdaptiveOverlayOpacity } from "@/hooks/use-adaptive-overlay";
 
 export const Route = createFileRoute("/estabelecimentos")({
   head: () => ({
