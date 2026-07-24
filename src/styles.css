@@ -1011,7 +1011,8 @@ main :is(p, li, dt, dd, td, th, label, a, button, input, textarea, figcaption) {
   }
 }
 
-/* Respeita prefers-reduced-motion globalmente */
+/* Respeita prefers-reduced-motion globalmente — anula animações, transições,
+   glows externos e desfoques decorativos para uma interface mais leve. */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
@@ -1019,7 +1020,23 @@ main :is(p, li, dt, dd, td, th, label, a, button, input, textarea, figcaption) {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+  /* Zera glows/halos decorativos e blurs de fundo/backdrop */
+  [class*="blur-2xl"],
+  [class*="blur-3xl"],
+  [class*="drop-shadow-"] {
+    filter: none !important;
+    -webkit-filter: none !important;
+  }
+  [class*="backdrop-blur"] {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  /* Suaviza sombras muito extensas */
+  [class*="shadow-2xl"] {
+    box-shadow: 0 4px 12px -6px rgba(15, 27, 61, 0.25) !important;
+  }
 }
+
 
 
 /* ============= LAYOUT PRIMITIVES (mini DS) ============= */

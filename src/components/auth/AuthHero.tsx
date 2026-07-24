@@ -29,18 +29,18 @@ type Preset = {
 const PRESETS: Record<AuthHeroVariant, Preset> = {
   login: {
     badge: { icon: ShieldCheck, label: "Área do assinante" },
-    title: "Acesse a inteligência",
-    highlight: "da sua cidade.",
-    subtitle: "Entre com CPF e PIN para ver o painel ao vivo dos mercados de Feijó.",
+    title: "O preço certo,",
+    highlight: "aqui em Feijó.",
+    subtitle: "Entre com seu CPF e PIN e acompanhe, em tempo real, os preços dos mercados da cidade.",
     perks: [
-      "Comparativo em tempo real entre mercados",
+      "Comparativo entre mercados de Feijó",
       "Alertas de queda de preço no seu bairro",
-      "Rede colaborativa validada por nota fiscal",
+      "Base validada por notas fiscais reais",
     ],
     trust: {
       icon: ShieldCheck,
-      title: "Preços validados por nota fiscal",
-      caption: "Rede colaborativa · atualizada diariamente",
+      title: "Preços conferidos por nota fiscal",
+      caption: "Rede colaborativa · atualizada todo dia",
     },
     brandIcon: ShoppingCart,
     offer: { label: "Oferta ativa", title: "30 dias grátis", caption: "Envie sua nota e libere o painel completo." },
@@ -59,12 +59,13 @@ const PRESETS: Record<AuthHeroVariant, Preset> = {
     ],
     trust: {
       icon: ShieldCheck,
-      title: "Preços validados por nota fiscal",
-      caption: "Rede colaborativa · atualizada diariamente",
+      title: "Preços conferidos por nota fiscal",
+      caption: "Rede colaborativa · atualizada todo dia",
     },
     brandIcon: ShoppingCart,
     photo: true,
   },
+
   redeem: {
     badge: { icon: Ticket, label: "Ativação de licença" },
     title: "Libere seu acesso",
@@ -172,9 +173,10 @@ export function AuthHero({
       )}
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-16 -top-16 h-52 w-52 rounded-full opacity-25 blur-3xl"
+        className="pointer-events-none absolute -right-24 -top-24 h-40 w-40 rounded-full opacity-15 blur-2xl motion-reduce:hidden"
         style={{ background: T.gold }}
       />
+
 
       {/* Top: brand + badge + headline */}
       <div className="relative">
@@ -194,16 +196,16 @@ export function AuthHero({
         </div>
 
         <span
-          className="mt-5 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] md:mt-8"
+          className="mt-5 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] md:mt-8"
           style={{
-            borderColor: `color-mix(in oklab, ${T.gold} 55%, transparent)`,
-            background: `color-mix(in oklab, ${T.navy} 55%, transparent)`,
+            borderColor: `color-mix(in oklab, ${T.gold} 60%, transparent)`,
+            background: `color-mix(in oklab, ${T.navy} 70%, transparent)`,
             color: T.eyebrow,
-            backdropFilter: "blur(6px)",
           }}
         >
           <BadgeIcon className="h-3 w-3" /> {preset.badge.label}
         </span>
+
 
         <h2
           className="mt-3 tracking-tight md:mt-4"
@@ -256,36 +258,34 @@ export function AuthHero({
           </ul>
 
           <div
-            className="flex items-center gap-3 rounded-xl border px-3.5 py-2.5 backdrop-blur"
+            className="flex items-center gap-3 rounded-xl border px-3.5 py-2.5"
             style={{
-              borderColor: `color-mix(in oklab, ${T.gold} 55%, transparent)`,
-              background: `color-mix(in oklab, ${T.gold} 14%, transparent)`,
+              borderColor: `color-mix(in oklab, ${T.gold} 50%, transparent)`,
+              background: `color-mix(in oklab, ${T.navy2} 60%, transparent)`,
             }}
           >
             <div
-              className="flex h-10 w-10 flex-none items-center justify-center rounded-lg"
-              style={{
-                background: `linear-gradient(135deg, ${T.goldSoft}, ${T.gold})`,
-                color: T.navy,
-              }}
+              className="flex h-9 w-9 flex-none items-center justify-center rounded-lg"
+              style={{ background: T.gold, color: T.navy }}
             >
-              <TrustIcon className="h-5 w-5" strokeWidth={2.5} />
+              <TrustIcon className="h-4.5 w-4.5" strokeWidth={2.5} />
             </div>
             <div className="min-w-0 leading-tight">
               <div
-                className="text-[13px] font-semibold"
-                style={{ color: T.onNavy, fontFamily: T.display, letterSpacing: "-0.01em" }}
+                className="text-[13px] font-semibold tracking-tight"
+                style={{ color: T.onNavy, letterSpacing: "-0.005em" }}
               >
                 {preset.trust.title}
               </div>
               <div
-                className="text-[11.5px]"
-                style={{ color: `color-mix(in oklab, ${T.onNavy} 85%, transparent)` }}
+                className="mt-0.5 text-[11.5px]"
+                style={{ color: `color-mix(in oklab, ${T.onNavy} 82%, transparent)` }}
               >
                 {preset.trust.caption}
               </div>
             </div>
           </div>
+
 
           {preset.offer && (
             <div
