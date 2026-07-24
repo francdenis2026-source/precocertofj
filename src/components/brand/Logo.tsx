@@ -36,7 +36,7 @@ export function Logo({
             isDark ? "text-sidebar-foreground" : "text-foreground",
           )}
         >
-          <span className="text-accent">P</span>reço<span className="text-accent">C</span>erto
+          <span className="text-brand-gold">P</span>reço<span className="text-brand-gold">C</span>erto
         </span>
       )}
     </a>
