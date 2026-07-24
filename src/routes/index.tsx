@@ -763,7 +763,7 @@ function HomePage() {
                 {
                   k: String(stats.establishments ?? 8),
                   l: "mercados",
-                  lFull: "mercados no ar",
+                  lFull: "mercados parceiros",
                   icon: <ShieldCheck className="h-4 w-4" />,
                   tip: "Mercados de Feijó/AC ativos na plataforma com preços colaborativos.",
                 },
