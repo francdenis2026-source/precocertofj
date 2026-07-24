@@ -20,6 +20,13 @@ import {
   CardSkeleton,
 } from "@/components/layout";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { MapPin, Package, Search, Sparkles, Store, TrendingUp } from "lucide-react";
 
 export const Route = createFileRoute("/estabelecimentos")({
