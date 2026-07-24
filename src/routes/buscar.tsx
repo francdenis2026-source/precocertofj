@@ -298,22 +298,22 @@ function SearchPage() {
 
         {/* Véu navy responsivo — opacidade por breakpoint garante que a foto sempre apareça */}
         <div aria-hidden className="pc-hero-veil absolute inset-0 -z-20" />
+        {/* Gradiente diagonal para contraste do bloco de texto (esquerda mais escura) */}
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-20"
+          style={{
+            background:
+              "linear-gradient(100deg, color-mix(in oklab, var(--brand-navy) 88%, transparent) 0%, color-mix(in oklab, var(--brand-navy) 70%, transparent) 40%, color-mix(in oklab, var(--brand-navy) 35%, transparent) 75%, transparent 100%)",
+          }}
+        />
         {/* Reforço inferior para legibilidade da barra de busca */}
         <div
           aria-hidden
           className="absolute inset-x-0 bottom-0 -z-20 h-1/2"
           style={{
             background:
-              "linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--brand-navy) 55%, transparent) 100%)",
-          }}
-        />
-        {/* Realce dourado no canto superior esquerdo */}
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10"
-          style={{
-            background:
-              "radial-gradient(700px 260px at 8% -10%, color-mix(in oklab, var(--brand-gold) 14%, transparent) 0%, transparent 60%)",
+              "linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--brand-navy) 70%, transparent) 100%)",
           }}
         />
         {/* Hairline dourada no topo */}
@@ -325,6 +325,8 @@ function SearchPage() {
               "linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 20%, color-mix(in oklab, var(--brand-gold) 80%, transparent) 50%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 80%, transparent 100%)",
           }}
         />
+
+
 
 
 
