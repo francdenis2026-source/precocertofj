@@ -246,18 +246,9 @@ function EstablishmentsPage() {
               {currentKind ? currentKind.label : "Comércios parceiros"}
             </div>
             <h1 className="text-[20px] md:text-[24px] font-bold leading-tight text-white [text-shadow:0_2px_10px_rgba(0,0,0,0.65)]">
-              {currentKind ? currentKind.label : "Comércios"} de{" "}
-              <span
-                className="relative inline-block rounded-md px-2 py-0.5 font-extrabold tracking-tight text-brand-gold ring-1 ring-brand-gold/80 shadow-[0_4px_14px_-4px_rgba(0,0,0,0.55)]"
-                style={{
-                  background:
-                    "linear-gradient(180deg, color-mix(in oklab, var(--brand-navy) 96%, black) 0%, var(--brand-navy) 100%)",
-                }}
-              >
-                <span aria-hidden className="pointer-events-none absolute inset-x-1 -bottom-[3px] h-[2px] rounded-full bg-brand-gold/80" />
-                Feijó
-              </span>
+              {currentKind ? currentKind.label : "Comércios"} de Feijó
             </h1>
+
           </div>
           <p className="mt-2 inline-block max-w-2xl rounded-md bg-brand-navy/75 px-2.5 py-1 text-[12.5px] md:text-[13.5px] font-medium leading-snug text-white ring-1 ring-white/10 backdrop-blur-[2px] [text-shadow:0_1px_4px_rgba(0,0,0,0.55)]">
             {currentKind ? currentKind.tagline : "Cobertura de produtos, categorias e comparativo entre estabelecimentos monitorados pela comunidade."}
@@ -625,44 +616,36 @@ function HeroMetric({
       type="button"
       onClick={onClick}
       aria-label={`${label}: ${value}. ${hint ?? "Abrir detalhes"}`}
-      className="group relative flex w-full items-center gap-2.5 sm:gap-3 overflow-hidden rounded-lg px-2.5 py-2 sm:px-3.5 sm:py-2.5 text-left ring-1 ring-brand-gold/70 shadow-[0_8px_24px_-8px_rgba(0,0,0,0.6)] transition-all duration-200 hover:-translate-y-0.5 hover:ring-brand-gold hover:shadow-[0_12px_28px_-8px_rgba(212,175,55,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy active:translate-y-0 bg-brand-navy"
+      className="group relative flex w-full items-center gap-2 overflow-hidden rounded-md px-2 py-1.5 sm:px-2.5 sm:py-2 text-left ring-1 ring-brand-gold/60 shadow-[0_4px_14px_-6px_rgba(0,0,0,0.55)] transition-all duration-200 hover:ring-brand-gold hover:shadow-[0_6px_18px_-6px_rgba(212,175,55,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy bg-brand-navy"
       style={{
         backgroundImage:
-          "linear-gradient(135deg, color-mix(in oklab, var(--brand-navy) 96%, black) 0%, color-mix(in oklab, var(--brand-navy) 78%, black) 100%)",
+          "linear-gradient(135deg, color-mix(in oklab, var(--brand-navy) 96%, black) 0%, color-mix(in oklab, var(--brand-navy) 82%, black) 100%)",
       }}
     >
-      <span aria-hidden className="absolute inset-y-0 left-0 w-[3px] bg-brand-gold transition-all group-hover:w-[4px]" />
-      <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-gold/60 to-transparent" />
-      {/* halo hover */}
-      <span aria-hidden className="pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100"
-        style={{ background: "radial-gradient(120% 80% at 100% 0%, color-mix(in oklab, var(--brand-gold) 18%, transparent), transparent 60%)" }} />
+      <span aria-hidden className="absolute inset-y-0 left-0 w-[2px] bg-brand-gold" />
 
-      <div className="grid h-8 w-8 sm:h-9 sm:w-9 shrink-0 place-items-center rounded-md bg-brand-gold text-brand-navy shadow-inner ring-1 ring-brand-gold/80">
-        <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={2.5} aria-hidden />
+      <div className="grid h-6 w-6 sm:h-7 sm:w-7 shrink-0 place-items-center rounded bg-brand-gold text-brand-navy ring-1 ring-brand-gold/80">
+        <Icon className="h-3 w-3 sm:h-3.5 sm:w-3.5" strokeWidth={2.5} aria-hidden />
       </div>
       <div className="relative z-[1] min-w-0 flex-1">
-        <div className="truncate text-[9.5px] sm:text-[10px] font-bold uppercase tracking-[0.14em] sm:tracking-[0.16em] text-white/90">
+        <div className="truncate text-[9px] sm:text-[9.5px] font-bold uppercase tracking-[0.12em] text-white/75">
           {label}
         </div>
-        <div className="mt-0.5 flex items-center gap-1.5 text-[13.5px] sm:text-[15px] font-extrabold leading-tight text-white tabular-nums">
+        <div className="mt-px flex items-center gap-1 text-[12.5px] sm:text-[13.5px] font-extrabold leading-tight text-white tabular-nums">
           {live && (
-            <span className="relative inline-flex h-2 w-2">
+            <span className="relative inline-flex h-1.5 w-1.5">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-gold/70" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-gold" />
+              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-gold" />
             </span>
           )}
           <span className="truncate">{value}</span>
         </div>
-        {hint && (
-          <div className="mt-0.5 hidden sm:flex items-center gap-1 text-[10.5px] font-medium text-white/70 group-hover:text-brand-gold transition-colors">
-            <span className="truncate">{hint}</span>
-            <ChevronRight className="h-3 w-3 shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden />
-          </div>
-        )}
       </div>
+      <ChevronRight className="h-3 w-3 shrink-0 text-white/50 transition-all group-hover:text-brand-gold group-hover:translate-x-0.5" aria-hidden />
     </button>
   );
 }
+
 
 function MetricDetailDialog({
   open,
