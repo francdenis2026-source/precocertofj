@@ -1229,11 +1229,7 @@ function ProductDetailsCard({
   highlightTokens: string[];
 }) {
   return (
-    <div className="hairline-gold relative overflow-hidden rounded-xl border border-primary/20 bg-background p-3">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[color-mix(in_oklab,var(--color-accent)_65%,transparent)] to-transparent"
-      />
+    <div className="relative rounded-xl border border-border bg-card p-3">
       <div className="flex items-start gap-3">
         {suggestion.imageUrl ? (
           <img
@@ -1248,13 +1244,13 @@ function ProductDetailsCard({
           </div>
         )}
         <div className="min-w-0 flex-1">
-          <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-accent-strong">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
             Produto encontrado
           </p>
-          <p className="mt-0.5 truncate font-display text-base font-semibold tracking-tight text-foreground">
+          <p className="mt-0.5 truncate text-[15px] font-semibold tracking-tight text-foreground">
             <HighlightMatch text={suggestion.displayName} tokens={highlightTokens} />
           </p>
-          <p className="mt-0.5 truncate font-display text-[11px] italic text-muted-foreground">
+          <p className="mt-0.5 truncate text-[12px] text-muted-foreground">
             {[suggestion.brand, suggestion.category].filter(Boolean).join(" · ") ||
               "Sem informações adicionais"}
           </p>
