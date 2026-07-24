@@ -352,7 +352,7 @@ function SearchPage() {
               Buscar <span className="text-brand-gold">preço</span> por nome
             </h1>
           </div>
-          <p className="mt-2 inline-block max-w-2xl rounded-md bg-brand-navy/75 px-2.5 py-1 text-[12.5px] md:text-[13.5px] font-medium leading-snug text-white ring-1 ring-white/10 backdrop-blur-[2px] [text-shadow:0_1px_4px_rgba(0,0,0,0.55)]">
+          <p className="mt-2 inline-block max-w-2xl text-[12.5px] md:text-[13.5px] font-medium leading-snug text-white [text-shadow:0_1px_4px_rgba(0,0,0,0.6)]">
             Consulte preço médio, mínimo e onde comprar mais barato em Feijó.
           </p>
 
