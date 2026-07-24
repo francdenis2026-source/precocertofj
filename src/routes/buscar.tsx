@@ -337,16 +337,17 @@ function SearchPage() {
 
 
         <div className="mx-auto w-full max-w-7xl px-4 py-3 md:px-8 md:py-4">
-          <nav aria-label="Trilha" className="mb-1.5 flex items-center gap-1 text-[11px] font-medium text-white/70">
+          <nav aria-label="Trilha" className="mb-2 flex items-center gap-1.5 text-[13px] font-semibold">
             <Link
               to="/"
-              className="rounded-md px-1 py-0.5 outline-none transition-colors hover:text-brand-gold active:text-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+              className="inline-flex items-center rounded-md border border-white/25 bg-white/10 px-2.5 py-1 text-white outline-none transition-all hover:border-brand-gold hover:bg-brand-gold hover:text-brand-navy active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy backdrop-blur-[2px]"
             >
               Início
             </Link>
-            <ChevronRight aria-hidden className="h-3 w-3 opacity-60" />
-            <span className="text-white">Buscar</span>
+            <ChevronRight aria-hidden className="h-3.5 w-3.5 text-white/70" />
+            <span className="inline-flex items-center rounded-md bg-brand-gold px-2.5 py-1 text-brand-navy shadow-[0_2px_8px_-2px_color-mix(in_oklab,var(--brand-gold)_60%,transparent)]">Buscar</span>
           </nav>
+
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="min-w-0">
               <div className="mb-1.5 inline-flex items-center gap-1.5 rounded-full bg-brand-gold px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-brand-navy shadow-[0_2px_10px_-2px_color-mix(in_oklab,var(--brand-gold)_55%,transparent)]">
