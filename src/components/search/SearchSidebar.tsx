@@ -111,6 +111,20 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
       <SidebarSection
         icon={<Flame className="h-4 w-4 text-brand-gold" />}
         title="Buscas populares"
+        action={
+          useReal ? (
+            <span
+              title="Agregado dos últimos 30 dias"
+              className="inline-flex items-center gap-1 rounded-full bg-brand-gold/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-brand-gold"
+            >
+              <span className="relative inline-flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-gold/70 opacity-75" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-gold" />
+              </span>
+              Ao vivo
+            </span>
+          ) : undefined
+        }
       >
         <ul className="space-y-0.5">
           {popularList.map((p: string, i: number) => (
