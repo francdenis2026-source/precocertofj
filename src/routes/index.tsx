@@ -345,7 +345,8 @@ function HomePage() {
             height={heroMarketDark.img.h}
             alt="Mercado noturno com produtos em iluminação ambiente"
             decoding="async"
-            loading="eager"
+            loading="lazy"
+            fetchPriority="low"
             className="absolute inset-0 h-full w-full object-cover"
           />
         </picture>
