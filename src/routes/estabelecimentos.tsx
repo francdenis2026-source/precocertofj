@@ -390,10 +390,10 @@ function EstablishmentsPage() {
                   {data.topGlobalCategories.map((c) => (
                     <span
                       key={c.category}
-                      className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-[13px] font-medium text-primary"
+                      className="inline-flex items-center gap-1.5 rounded-full bg-primary px-3 py-1 text-[13px] font-medium text-primary-foreground shadow-sm ring-1 ring-brand-gold/30"
                     >
                       {humanizeCategory(c.category)}
-                      <span className="rounded-full bg-primary/20 px-1.5 py-0.5 text-[13px] font-bold">
+                      <span className="rounded-full bg-brand-gold px-1.5 py-0.5 text-[13px] font-bold text-brand-navy">
                         {c.count}
                       </span>
                     </span>
