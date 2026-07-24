@@ -159,6 +159,7 @@ function HomePage() {
     queryKey: ["home-stats"],
     queryFn: () => platformStats({} as any),
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
   const stats: any = statsQ.data ?? {};
 
@@ -167,8 +168,10 @@ function HomePage() {
     queryKey: ["home-economy"],
     queryFn: () => economyFn({} as any),
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
   const economy = economyQ.data;
+
 
   // Autocomplete de produtos (top 5)
   const suggestFn = useServerFn(getProductSuggestions);
