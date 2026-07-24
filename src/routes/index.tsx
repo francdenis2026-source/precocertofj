@@ -101,13 +101,14 @@ const captionTypography = {
 
 function HomePage() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { user, loading: sessionLoading } = useSession();
   const isLoggedOut = !sessionLoading && !user;
   const [q, setQ] = useState("");
   const [today, setToday] = useState("");
-
-
-  
+  const [showSuggest, setShowSuggest] = useState(false);
+  const [activeIdx, setActiveIdx] = useState(-1);
+  const searchBoxRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setToday(
@@ -135,13 +136,54 @@ function HomePage() {
   });
   const economy = economyQ.data;
 
+  // Autocomplete de produtos (top 5)
+  const suggestFn = useServerFn(getProductSuggestions);
+  const debouncedQ = useDebounced(q.trim(), 180);
+  const suggestQ = useQuery({
+    queryKey: ["home", "suggest", debouncedQ],
+    queryFn: () => suggestFn({ data: { q: debouncedQ, limit: 5 } }),
+    enabled: debouncedQ.length >= 2,
+    staleTime: 30_000,
+  });
+  const suggestions = suggestQ.data ?? [];
+
+  // Pull-to-refresh — recarrega dados dinâmicos da home
+  const { pull, refreshing, progress } = usePullToRefresh({
+    onRefresh: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["home-stats"] }),
+        queryClient.invalidateQueries({ queryKey: ["home-economy"] }),
+        queryClient.invalidateQueries({ queryKey: ["home", "recent-products", 6] }),
+      ]);
+    },
+  });
+
+  // Fecha popup ao clicar fora
+  useEffect(() => {
+    if (!showSuggest) return;
+    const onDoc = (e: MouseEvent) => {
+      if (!searchBoxRef.current) return;
+      if (!searchBoxRef.current.contains(e.target as Node)) setShowSuggest(false);
+    };
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, [showSuggest]);
 
   const submitSearch = (e?: React.FormEvent) => {
     e?.preventDefault();
     const query = q.trim();
     if (!query) return;
+    setShowSuggest(false);
     navigate({ to: "/buscar", search: { q: query } as any });
   };
+
+  const pickSuggestion = (name: string) => {
+    setQ(name);
+    setShowSuggest(false);
+    navigate({ to: "/buscar", search: { q: name } as any });
+  };
+
+
 
   return (
     <div
