@@ -188,23 +188,8 @@ function Page() {
       });
     },
     onSuccess: (result) => {
-      const mapped: Row[] = result.map((c) => ({
-        ...c,
-        action:
-          c.matchType === "barcode" || c.matchType === "signature"
-            ? "update"
-            : c.matchType === "fuzzy" && c.divergences.length > 0
-              ? "update"
-              : "new",
-        editedName: c.productName,
-        editedBrand: c.brand,
-        editedUnit: c.sizeUnit ?? c.unit,
-        editedQty: c.sizeValue,
-        editedBarcode: c.barcode,
-        editedPrice: c.price ?? 0,
-      }));
+      const mapped: Row[] = result.map((c) => candidateToRow(c));
       setRows(mapped);
-      // Expand every row that has divergences
       setExpanded(new Set(mapped.filter((r) => r.divergences.length > 0).map((r) => r.clientId)));
       toast.success(`${mapped.length} produtos extraídos pela IA`);
     },
