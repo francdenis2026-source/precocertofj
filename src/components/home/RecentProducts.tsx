@@ -20,6 +20,8 @@ import {
   toggleFavoritePanelProduct,
 } from "@/lib/favorite-panel.functions";
 import { useSession } from "@/hooks/useSession";
+import { useConfirm } from "@/components/ui/confirm-provider";
+import { useRouter } from "@tanstack/react-router";
 import { ProductQuickModal } from "@/components/home/ProductQuickModal";
 import {
   Dialog,
@@ -331,6 +333,8 @@ function SpotlightCard({
 }) {
   const { user } = useSession();
   const queryClient = useQueryClient();
+  const { confirm } = useConfirm();
+  const router = useRouter();
 
   // Modal de detalhes (produto, mercados, histórico)
   const [openItem, setOpenItem] = useState<RecentItem | null>(null);
@@ -365,20 +369,27 @@ function SpotlightCard({
     onSettled: () => setPendingKey(null),
   });
 
-  const handleFavorite = (name: string) => {
+  const handleFavorite = async (name: string) => {
     if (!user) {
-      toast.info("Entre na sua conta para favoritar preços.", {
-        action: {
-          label: "Entrar",
-          onClick: () => {
-            window.location.href = "/login";
-          },
-        },
+      const ok = await confirm({
+        title: "Entre para salvar este preço",
+        description:
+          "Favoritar produtos é grátis e leva 10 segundos. Assim que o preço cair em qualquer mercado, avisamos você por aqui.",
+        confirmLabel: "Entrar agora",
+        cancelLabel: "Agora não",
+        tone: "info",
       });
+      if (ok) {
+        router.navigate({
+          to: "/login",
+          search: { redirect: "/" } as never,
+        });
+      }
       return;
     }
     favMutation.mutate(name);
   };
+
 
   // Seleciona 1 item: prioriza maior queda relevante; fallback = primeiro
   const featured = [...data]
