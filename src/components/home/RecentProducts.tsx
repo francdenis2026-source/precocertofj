@@ -381,154 +381,120 @@ function MobilePriceRotator({
   P: Palette;
   serif: string;
 }) {
-  const [idx, setIdx] = useState(0);
-  const [paused, setPaused] = useState(false);
-
-  useEffect(() => {
-    if (paused || data.length <= 1) return;
-    const t = setInterval(() => setIdx((i) => (i + 1) % data.length), 4500);
-    return () => clearInterval(t);
-  }, [paused, data.length]);
-
-  // Reset index if list shrinks after a refetch
-  useEffect(() => {
-    if (idx >= data.length) setIdx(0);
-  }, [data.length, idx]);
-
-  const current = data[idx] ?? data[0];
-  const nextItems = [
-    data[(idx + 1) % data.length],
-    data[(idx + 2) % data.length],
-  ].filter((x): x is RecentItem => Boolean(x) && x.slug !== current.slug);
-
-  const f = freshness(current.when);
-
+  // Painel de preços estático — sem rotação. Estilo cotação de mercado.
   return (
-    <div className="sm:hidden -mx-4 border-y" style={{ borderColor: P.line, background: P.card }}>
-      {/* Card em destaque — troca sozinho a cada 4.5s */}
-      <Link
-        to="/produto/$slug"
-        params={{ slug: current.slug }}
-        onFocus={() => setPaused(true)}
-        onBlur={() => setPaused(false)}
-        onTouchStart={() => setPaused(true)}
-        onTouchEnd={() => setPaused(false)}
-        className="block px-4 pt-3 pb-2 active:opacity-80"
-        aria-label={`${current.name} — ${brl(current.price)} em ${current.marketName ?? "mercados"}`}
+    <div
+      className="sm:hidden -mx-4 border-y"
+      style={{ borderColor: P.line, background: P.card }}
+      aria-label="Painel de preços recentes"
+    >
+      <div
+        className="flex items-center justify-between px-4 py-2 border-b"
+        style={{
+          borderColor: P.line,
+          background: "color-mix(in oklab, var(--pc-home-ink) 4%, transparent)",
+        }}
       >
-        <div className="mb-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
-          <span className={`h-2 w-2 rounded-full ${f.dotClass}`} aria-hidden />
-          <span className={`text-[10px] font-bold uppercase tracking-[0.14em] ${f.textClass}`}>
-            {f.label}
-          </span>
-          {current.dropPct !== null && current.dropPct >= DROP_THRESHOLD && (
-            <span
-              className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.1em]"
-              style={{
-                background: "color-mix(in oklab, #10b981 16%, transparent)",
-                color: "#059669",
-                border: "1px solid color-mix(in oklab, #10b981 45%, transparent)",
-              }}
-              title={
-                current.previousPrice
-                  ? `Antes ${brl(current.previousPrice)} · agora ${brl(current.price)}`
-                  : undefined
-              }
-            >
-              <TrendingDown className="h-3 w-3" aria-hidden />
-              baixou {current.dropPct}%
-            </span>
-          )}
-          <span className="text-[10px] text-muted-foreground">·</span>
-          <span className="text-[10px] font-medium text-muted-foreground">
-            {relative(current.when)}
-          </span>
-          <span className="ml-auto text-[10px] font-bold uppercase tracking-[0.16em]" style={{ color: P.goldSoft }}>
-            {idx + 1}/{data.length}
-          </span>
-        </div>
+        <span
+          className="text-[10px] font-bold uppercase tracking-[0.18em]"
+          style={{ color: P.goldSoft }}
+        >
+          Painel de preços
+        </span>
+        <span
+          className="text-[10px] font-bold uppercase tracking-[0.14em] tabular-nums"
+          style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
+        >
+          {data.length} itens
+        </span>
+      </div>
 
-        <div key={current.slug} className="animate-in fade-in slide-in-from-bottom-1 duration-300">
-          <div
-            className="mb-1 line-clamp-2 text-[17px] font-semibold leading-tight"
-            style={{ color: P.heading }}
-          >
-            {current.name}
-          </div>
-          <div className="flex items-end justify-between gap-3">
-            <div className="market-name min-w-0 truncate text-[13px] font-bold uppercase tracking-[0.06em] text-[var(--market-accent)]">
-              {current.marketName ?? "Vários mercados"}
-            </div>
-            <div className="flex flex-col items-end leading-none">
-              {current.dropPct !== null &&
-                current.dropPct >= DROP_THRESHOLD &&
-                current.previousPrice && (
-                  <span
-                    className="tabular-nums text-[11px] font-medium text-muted-foreground line-through"
-                    aria-label={`Preço anterior ${brl(current.previousPrice)}`}
-                  >
-                    {brl(current.previousPrice)}
-                  </span>
-                )}
-              <div
-                className={`${serif} tabular-nums shrink-0 text-[30px] font-semibold leading-none`}
-                style={{ color: P.gold, letterSpacing: "-0.02em" }}
-              >
-                {brl(current.price)}
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        {/* Barra de progresso do auto-avanço */}
-        <div className="mt-3 h-0.5 w-full overflow-hidden rounded-full" style={{ background: "color-mix(in oklab, var(--pc-home-ink) 10%, transparent)" }}>
-          <div
-            key={`bar-${current.slug}-${paused ? "p" : "r"}`}
-            className="h-full"
-            style={{
-              background: P.gold,
-              width: "100%",
-              animation: paused ? undefined : "pc-rotator-bar 4.5s linear forwards",
-              transformOrigin: "left",
-            }}
-          />
-        </div>
-      </Link>
-
-      {/* Próximos — lista compacta clicável, sem movimento */}
-      {nextItems.length > 0 && (
-        <ul className="divide-y" style={{ borderColor: P.line }}>
-          {nextItems.map((p, i) => (
-            <li key={`${p.slug}-${i}`}>
+      <ul className="divide-y" style={{ borderColor: P.line }}>
+        {data.map((p) => {
+          const f = freshness(p.when);
+          const hasDrop = p.dropPct !== null && p.dropPct >= DROP_THRESHOLD;
+          return (
+            <li key={p.slug}>
               <Link
                 to="/produto/$slug"
                 params={{ slug: p.slug }}
-                className="flex items-center gap-3 px-4 py-2.5 active:bg-muted/40"
-                aria-label={`${p.name} — ${brl(p.price)}`}
+                className="flex items-center gap-3 px-4 py-3 active:bg-muted/40 focus-visible:outline-none focus-visible:bg-muted/40"
+                aria-label={`${p.name} — ${brl(p.price)} em ${p.marketName ?? "mercados de Feijó"}`}
               >
+                <span
+                  className={`h-2 w-2 shrink-0 rounded-full ${f.dotClass}`}
+                  aria-hidden
+                  title={f.label}
+                />
                 <div className="min-w-0 flex-1">
-                  <div className="truncate text-[13.5px] font-semibold" style={{ color: P.heading }}>
-                    {shortName(p.name, 32)}
+                  <div
+                    className="truncate text-[14px] font-semibold leading-tight"
+                    style={{ color: P.heading }}
+                  >
+                    {shortName(p.name, 34)}
                   </div>
-                  <div className="market-name truncate text-[11.5px] font-bold uppercase tracking-[0.05em] text-[var(--market-accent)]">
-                    {p.marketName ?? "Vários mercados"}
+                  <div className="mt-0.5 flex items-center gap-1.5 text-[11px]">
+                    <span className="market-name truncate font-bold uppercase tracking-[0.05em] text-[var(--market-accent)]">
+                      {p.marketName ?? "Vários mercados"}
+                    </span>
+                    <span className="text-muted-foreground">·</span>
+                    <span className="shrink-0 text-muted-foreground tabular-nums">
+                      {relative(p.when)}
+                    </span>
                   </div>
                 </div>
-                <span
-                  className={`${serif} tabular-nums shrink-0 text-[18px] font-semibold`}
-                  style={{ color: P.gold, letterSpacing: "-0.02em" }}
-                >
-                  {brl(p.price)}
-                </span>
-                <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+
+                <div className="flex shrink-0 flex-col items-end leading-none">
+                  {hasDrop && p.previousPrice && (
+                    <span
+                      className="mb-0.5 tabular-nums text-[10.5px] font-medium text-muted-foreground line-through"
+                      aria-label={`Preço anterior ${brl(p.previousPrice)}`}
+                    >
+                      {brl(p.previousPrice)}
+                    </span>
+                  )}
+                  <span
+                    className={`${serif} tabular-nums text-[19px] font-semibold leading-none`}
+                    style={{ color: P.gold, letterSpacing: "-0.02em" }}
+                  >
+                    {brl(p.price)}
+                  </span>
+                  {hasDrop && (
+                    <span
+                      className="mt-1 inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.1em]"
+                      style={{
+                        background: "color-mix(in oklab, #10b981 16%, transparent)",
+                        color: "#059669",
+                        border: "1px solid color-mix(in oklab, #10b981 45%, transparent)",
+                      }}
+                    >
+                      <TrendingDown className="h-2.5 w-2.5" aria-hidden />
+                      {p.dropPct}%
+                    </span>
+                  )}
+                </div>
+
+                <ChevronRight
+                  className="h-4 w-4 shrink-0 text-muted-foreground"
+                  aria-hidden
+                />
               </Link>
             </li>
-          ))}
-        </ul>
-      )}
+          );
+        })}
+      </ul>
+
+      <Link
+        to="/melhores-precos"
+        className="flex items-center justify-center gap-1.5 border-t px-4 py-2.5 text-[11px] font-bold uppercase tracking-[0.16em] active:opacity-80"
+        style={{ borderColor: P.line, color: P.gold }}
+      >
+        Ver todos os preços
+        <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+      </Link>
     </div>
   );
 }
+
 
 
