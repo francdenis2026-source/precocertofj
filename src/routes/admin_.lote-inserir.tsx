@@ -226,21 +226,6 @@ function Page() {
     onError: (e) => toast.error(e instanceof Error ? e.message : "Erro ao salvar"),
   });
 
-  const candidateToRow = (c: Candidate): Row => ({
-    ...c,
-    action:
-      c.matchType === "barcode" || c.matchType === "signature"
-        ? "update"
-        : c.matchType === "fuzzy" && c.divergences.length > 0
-          ? "update"
-          : "new",
-    editedName: c.productName,
-    editedBrand: c.brand,
-    editedUnit: c.sizeUnit ?? c.unit,
-    editedQty: c.sizeValue,
-    editedBarcode: c.barcode,
-    editedPrice: c.price ?? 0,
-  });
 
   const manualAdd = useMutation({
     mutationFn: async () => {
