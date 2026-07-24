@@ -278,7 +278,7 @@ function AssinarPage() {
             <button
               type="button"
               onClick={() => navigate({ to: "/app" })}
-              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-medium text-primary-foreground transition"
+              className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand-gold text-brand-navy text-sm font-semibold shadow-elev-1 transition hover:brightness-105 hover:shadow-elev-2"
             >
               Ir para o app <ArrowRight className="h-4 w-4" />
             </button>
@@ -288,7 +288,8 @@ function AssinarPage() {
             type="button"
             onClick={handleSubscribe}
             disabled={loading || waitingWebhook || (!!planId && planQuery.isPending)}
-            className="mt-8 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-primary text-sm font-medium text-primary-foreground transition disabled:opacity-60"
+            className="mt-8 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-brand-gold text-brand-navy text-sm font-semibold shadow-elev-1 transition hover:brightness-105 hover:shadow-elev-2 disabled:opacity-60"
+
           >
             {loading || waitingWebhook ? (
               <Loader2 className="h-4 w-4 animate-spin" />
