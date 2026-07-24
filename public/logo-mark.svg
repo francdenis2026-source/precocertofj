@@ -1,7 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="PreçoCerto">
   <title>PreçoCerto</title>
-  <!-- Tile navy alinhado ao brand.navy do site -->
-  <rect width="64" height="64" rx="14" fill="#0b1e3a"/>
-  <!-- P dourado (mesmo destaque do wordmark "PreçoCerto") -->
-  <path fill="#f5b301" d="M18 14h17.5c7.7 0 13 4.9 13 12.2 0 7.4-5.4 12.3-13.2 12.3H28V50h-10V14zm10 18.4h7c3 0 5-1.9 5-5.2s-2-5.2-5-5.2h-7v10.4z"/>
+  <rect width="64" height="64" rx="14" fill="#c9a227"/>
+  <path fill="#0b1e3a" d="M18 14h17.5c7.7 0 13 4.9 13 12.2 0 7.4-5.4 12.3-13.2 12.3H28V50h-10V14zm10 18.4h7c3 0 5-1.9 5-5.2s-2-5.2-5-5.2h-7v10.4z"/>
 </svg>
