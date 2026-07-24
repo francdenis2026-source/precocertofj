@@ -349,16 +349,17 @@ function SearchPage() {
           </nav>
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="min-w-0">
-              <div className="mb-1 inline-flex items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.14em] text-brand-gold">
-                <span className="h-1 w-1 rounded-full bg-brand-gold" />
+              <div className="mb-1.5 inline-flex items-center gap-1.5 rounded-full bg-brand-gold px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-brand-navy shadow-[0_2px_10px_-2px_color-mix(in_oklab,var(--brand-gold)_55%,transparent)]">
+                <span className="h-1.5 w-1.5 rounded-full bg-brand-navy" />
                 Comparador de preços
               </div>
-              <h1 className="text-[17px] md:text-[20px] font-semibold leading-tight text-white">
-                Buscar <span className="text-brand-gold">preço</span> por nome
+              <h1 className="text-[19px] md:text-[24px] font-bold leading-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.55)]">
+                Buscar <span className="text-brand-gold drop-shadow-[0_1px_6px_rgba(0,0,0,0.6)]">preço</span> por nome
               </h1>
-              <p className="mt-0.5 max-w-xl text-[11.5px] md:text-[12px] text-white/75">
+              <p className="mt-1 max-w-xl text-[12px] md:text-[13px] font-medium text-white/90 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]">
                 Consulte preço médio, mínimo e onde comprar mais barato em Feijó.
               </p>
+
             </div>
             <div className="flex items-center gap-2">
               {hasQuery ? (
