@@ -204,6 +204,36 @@ function HomePage() {
         fontFamily: "'Work Sans', system-ui, -apple-system, sans-serif",
       }}
     >
+      {/* -------- Pull-to-refresh (mobile) -------- */}
+      <div
+        aria-hidden={!pull && !refreshing}
+        className="pointer-events-none fixed inset-x-0 top-0 z-[60] flex justify-center sm:hidden"
+        style={{
+          transform: `translateY(${Math.max(0, pull - 24)}px)`,
+          opacity: pull > 8 || refreshing ? 1 : 0,
+          transition: refreshing ? "transform 200ms ease" : pull === 0 ? "transform 240ms ease, opacity 240ms ease" : "none",
+        }}
+      >
+        <div
+          className="mt-2 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] shadow-lg"
+          style={{
+            background: P.card,
+            color: P.heading,
+            border: `1px solid ${P.line}`,
+          }}
+        >
+          <RefreshCw
+            className={`h-3.5 w-3.5 ${refreshing ? "ptr-spin" : ""}`}
+            style={{
+              color: P.gold,
+              transform: refreshing ? undefined : `rotate(${progress * 270}deg)`,
+              transition: refreshing ? undefined : "transform 60ms linear",
+            }}
+          />
+          {refreshing ? "Atualizando" : progress >= 1 ? "Solte para atualizar" : "Puxe para atualizar"}
+        </div>
+      </div>
+
       <SiteHeader variant="solid" showThemeToggle />
 
       {/* -------- MOBILE QUICK-NAV (abaixo do header, sticky) -------- */}
@@ -217,34 +247,48 @@ function HomePage() {
           WebkitBackdropFilter: "saturate(140%) blur(8px)",
         }}
       >
-        <div className="flex gap-2.5 overflow-x-auto px-3 py-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          {[
-            { to: "/melhores-precos", label: "Ranking" },
-            { to: "/estabelecimentos", label: "Mercados" },
-            { to: "/buscar", label: "Buscar" },
-            { to: "/planos", label: "Alertas" },
-            { to: "/cesta-basica", label: "Cesta básica" },
-            { to: "/economia", label: "Economia" },
-          ].map((c) => (
-            <Link
-              key={c.to}
-              to={c.to}
-              className="inline-flex shrink-0 items-center rounded-full border px-5 py-2.5 text-[15px] font-semibold leading-none tracking-[-0.005em] shadow-sm transition-all active:scale-[0.97] hover:border-[color:var(--pc-home-gold)]"
-              style={{ borderColor: P.line, background: P.card, color: P.heading }}
-              activeProps={{
-                style: {
-                  background: P.heading,
-                  color: P.paper,
-                  borderColor: P.heading,
-                },
-              }}
-            >
-              {c.label}
-            </Link>
-          ))}
+        <div className="relative">
+          <div className="chips-scroller flex gap-2.5 overflow-x-auto px-3 py-3 pr-8 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            {[
+              { to: "/melhores-precos", label: "Ranking" },
+              { to: "/estabelecimentos", label: "Mercados" },
+              { to: "/buscar", label: "Buscar" },
+              { to: "/planos", label: "Alertas" },
+              { to: "/cesta-basica", label: "Cesta básica" },
+              { to: "/economia", label: "Economia" },
+            ].map((c) => (
+              <Link
+                key={c.to}
+                to={c.to}
+                className="inline-flex shrink-0 items-center rounded-full border px-5 py-2.5 text-[15px] font-semibold leading-none tracking-[-0.005em] shadow-sm transition-all active:scale-[0.97] hover:border-[color:var(--pc-home-gold)]"
+                style={{ borderColor: P.line, background: P.card, color: P.heading }}
+                activeProps={{
+                  style: {
+                    background: P.heading,
+                    color: P.paper,
+                    borderColor: P.heading,
+                  },
+                }}
+              >
+                {c.label}
+              </Link>
+            ))}
+          </div>
+          {/* Indicador de "há mais" — chevron pulsando */}
+          <div
+            aria-hidden
+            className="chips-hint pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 grid h-6 w-6 place-items-center rounded-full"
+            style={{
+              background: `color-mix(in oklab, ${P.gold} 18%, transparent)`,
+              color: P.gold,
+            }}
+          >
+            <ChevronRight className="h-3.5 w-3.5" strokeWidth={2.6} />
+          </div>
         </div>
 
       </nav>
+
 
 
 
