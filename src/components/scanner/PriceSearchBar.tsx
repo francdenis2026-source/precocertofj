@@ -773,28 +773,28 @@ export function PriceSearchBar({
                   const gap = rMax - rMin;
                   const pct = Math.round((gap / rMax) * 100);
                   return (
-                    <div className="grid gap-2 rounded-xl border border-brand-gold/45 bg-brand-navy px-3 py-2.5 text-white sm:grid-cols-2 sm:gap-3">
+                    <div className="grid gap-2 rounded-xl border border-white/10 bg-brand-navy px-3.5 py-3 text-white shadow-sm sm:grid-cols-2 sm:gap-4">
                       <div className="min-w-0">
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-gold">
+                        <p className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-brand-gold/90">
                           Melhor preço agora
                         </p>
-                        <p className="mt-0.5 truncate text-[18px] font-semibold leading-tight tabular-nums">
+                        <p className="mt-1 truncate text-[26px] font-bold leading-none tabular-nums">
                           {fmt(result.cheapest!.price)}
                         </p>
-                        <p className="mt-0.5 truncate text-[11.5px] text-white/75">
+                        <p className="mt-1 truncate text-[11.5px] text-white/70">
                           em <span className="font-semibold text-white">{result.cheapest!.marketName}</span>
                         </p>
                       </div>
-                      <div className="min-w-0 sm:border-l sm:border-white/15 sm:pl-3">
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-gold">
+                      <div className="min-w-0 sm:border-l sm:border-white/10 sm:pl-4">
+                        <p className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-brand-gold/90">
                           Economia estimada
                         </p>
-                        <p className="mt-0.5 text-[18px] font-semibold leading-tight tabular-nums">
+                        <p className="mt-1 text-[26px] font-bold leading-none tabular-nums">
                           {fmt(gap)}
-                          <span className="ml-1.5 text-[11.5px] font-semibold text-brand-gold">−{pct}%</span>
+                          <span className="ml-1.5 align-middle text-[12px] font-bold text-brand-gold">−{pct}%</span>
                         </p>
-                        <p className="mt-0.5 text-[11.5px] text-white/75 tabular-nums">
-                          mais barato vs. mais caro ({fmt(rMax)})
+                        <p className="mt-1 text-[11.5px] text-white/70 tabular-nums">
+                          vs. mais caro ({fmt(rMax)})
                         </p>
                       </div>
                     </div>
