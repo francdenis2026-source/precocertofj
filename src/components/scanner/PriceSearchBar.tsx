@@ -140,14 +140,18 @@ export function PriceSearchBar({
   const [history, setHistory] = useState<SearchHistoryEntry[]>([]);
   const [sortMode, setSortMode] = useLocalStorageState<SortMode>(
     "search:sort-mode",
-    "cheapest",
+    "relevance",
     {
       validate: (v): v is SortMode =>
-        v === "cheapest" || v === "unit" || v === "recent" || v === "kind" || v === "spread",
+        v === "relevance" || v === "cheapest" || v === "unit" || v === "recent" || v === "kind" || v === "spread",
     },
   );
   const [kindFilter, setKindFilter] = useState<string | null>(null);
-  const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
+  const [categoryFilter, setCategoryFilter] = useLocalStorageState<string | null>(
+    "search:category-filter",
+    null,
+    { validate: (v): v is string | null => v === null || typeof v === "string" },
+  );
   const [groupBy, setGroupBy] = useLocalStorageState<"product" | "market" | "matrix">(
     "pc:search:groupBy",
     "product",
