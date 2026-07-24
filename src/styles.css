@@ -2378,3 +2378,67 @@ textarea::placeholder {
     text-wrap: balance;
   }
 }
+
+/* ===================== PriceSearchBar — Reforços tipográficos =====================
+   O componente agora carrega .pc-search-scope no seu <section> raiz, então
+   herda a escala fluida definida acima. Aqui adicionamos regras específicas
+   do componente (font-mono, market-name, densidades por breakpoint). */
+
+/* Textos "mono" (códigos, eyebrows, timestamps) — mesma escala do micro,
+   mas preservando a família mono onde aplicada */
+.pc-search-scope .font-mono {
+  font-feature-settings: "tnum" 1, "ss01" 1;
+  letter-spacing: 0.02em;
+}
+
+/* Nome do estabelecimento (market-name) — respeita a hierarquia body */
+.pc-search-scope .market-name {
+  font-size: var(--pc-fs-body);
+  line-height: var(--pc-lh-snug);
+  font-weight: 600;
+}
+
+/* Título "Produto encontrado" / grupos — cai como h3 responsivo */
+.pc-search-scope [data-search-heading] {
+  font-size: var(--pc-fs-h3);
+  line-height: var(--pc-lh-snug);
+  letter-spacing: -0.005em;
+}
+
+/* Ajustes tablet (640–1023): mais respiro em cards e listas */
+@media (min-width: 640px) and (max-width: 1023px) {
+  .pc-search-scope section > form,
+  .pc-search-scope section > div {
+    gap: 0.5rem;
+  }
+  .pc-search-scope ul > li {
+    padding-top: 0.375rem;
+    padding-bottom: 0.375rem;
+  }
+}
+
+/* Desktop (>=1024): valores/preços um degrau acima para leitura à distância */
+@media (min-width: 1024px) {
+  .pc-search-scope .text-\[22px\],
+  .pc-search-scope .text-xl {
+    font-size: 1.625rem !important; /* 26px */
+  }
+}
+
+/* Botão principal do submit — mantém uppercase legível, sobe para 12px+ */
+.pc-search-scope button[type="submit"] {
+  font-size: clamp(0.75rem, 0.7rem + 0.15vw, 0.8125rem);
+  letter-spacing: 0.14em;
+}
+
+/* Sugestões e histórico do dropdown — nunca abaixo de 13px em mobile */
+.pc-search-scope [role="listbox"],
+.pc-search-scope [role="listbox"] * {
+  font-size: max(var(--pc-fs-body), 13px);
+  line-height: var(--pc-lh-snug);
+}
+
+/* Truncagem consistente em nomes longos (evita quebra fea em mobile) */
+.pc-search-scope .truncate {
+  min-width: 0;
+}
