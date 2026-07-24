@@ -215,21 +215,39 @@ function SearchPage() {
 
   return (
     <div className="min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
-      <div className="mx-auto max-w-3xl px-4 md:px-6">
-        <PageHeader
-          breadcrumbs={[{ label: "Início", to: "/" }, { label: "Buscar" }]}
-          title="Buscar preço por nome"
-          description="Preço médio, mínimo e onde está mais barato — sem precisar tirar foto."
-          actions={
-            <>
+      <div className="mx-auto max-w-3xl px-4 md:px-6 pt-3 md:pt-4">
+        {/* Header compacto no tema da homepage */}
+        <header className="mb-3 border-b border-border/50 pb-3">
+          <nav
+            aria-label="Trilha de navegação"
+            className="mb-1.5 flex items-center gap-1 text-[11px] text-muted-foreground"
+          >
+            <Link to="/" className="hover:text-foreground">Início</Link>
+            <span className="opacity-50">/</span>
+            <span className="text-foreground">Buscar</span>
+          </nav>
+          <div className="flex items-end justify-between gap-3">
+            <div className="min-w-0">
+              <h1
+                className="truncate text-[clamp(1.35rem,2.2vw,1.75rem)] leading-[1.05] tracking-tight text-foreground"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
+                Buscar <span style={{ color: "var(--pc-home-gold, hsl(var(--primary)))" }}>preço</span> por nome
+              </h1>
+              <p className="mt-0.5 text-[12.5px] leading-snug text-muted-foreground">
+                Preço médio, mínimo e onde está mais barato.
+              </p>
+            </div>
+            <div className="flex shrink-0 items-center gap-1.5">
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
                 onClick={goBack}
-                aria-label="Voltar para a seção anterior"
+                aria-label="Voltar"
+                className="h-8 px-2 text-[12px]"
               >
-                <ArrowLeft className="mr-1.5 h-4 w-4" strokeWidth={2} />
+                <ArrowLeft className="mr-1 h-3.5 w-3.5" strokeWidth={2} />
                 Voltar
               </Button>
               {hasQuery ? (
@@ -239,116 +257,11 @@ function SearchPage() {
                 />
               ) : null}
               <FreeQuotaBadge variant="inline" />
-            </>
-          }
-        />
-
-        <ListingShell density="md" className="mb-2">
-          <ListingToolbar
-            filters={
-              <>
-                <QuickFilterBar<SearchMode>
-                  label="Match"
-                  ariaLabel="Modo de correspondência"
-                  value={mode}
-                  onChange={(next) => chooseMode(next ?? "strict")}
-                  size="sm"
-                  options={[
-                    {
-                      value: "strict",
-                      label: "Estrita",
-                      hint: "Palavra inteira — evita falsos positivos em buscas curtas",
-                    },
-                    {
-                      value: "loose",
-                      label: "Parcial",
-                      hint: "Permite prefixo (tokens ≥ 3 caracteres)",
-                    },
-                  ]}
-                />
-                <QuickFilterBar<"pure" | "all">
-                  label="Filtro"
-                  ariaLabel="Filtro de item puro"
-                  value={pureOnly ? "pure" : "all"}
-                  onChange={(next) => setPure(next === "pure")}
-                  size="sm"
-                  options={[
-                    {
-                      value: "pure",
-                      label: "Somente item puro",
-                      hint: "Remove itens em que a palavra aparece só como ingrediente",
-                    },
-                    { value: "all", label: "Incluir ingredientes" },
-                  ]}
-                />
-              </>
-            }
-          />
-
-          {/* Filtros avançados: marca + faixa de preço (sincronizados na URL) */}
-          <div className="mb-3 flex flex-wrap items-center gap-2 rounded-xl border border-border bg-card/60 px-3 py-2">
-            <span className="font-mono text-[9.5px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
-              Filtros
-            </span>
-            <label className="inline-flex items-center gap-1.5">
-              <span className="sr-only">Marca</span>
-              <input
-                type="text"
-                inputMode="text"
-                maxLength={40}
-                placeholder="Marca (ex.: Camil)"
-                defaultValue={brandFilter}
-                onBlur={(e) => setBrand(e.currentTarget.value.trim())}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") setBrand(e.currentTarget.value.trim());
-                }}
-                className="h-8 w-36 rounded-md border border-border bg-background px-2 text-[12px] text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              />
-            </label>
-            <label className="inline-flex items-center gap-1.5">
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">R$ min</span>
-              <input
-                type="number"
-                inputMode="decimal"
-                min={0}
-                step="0.01"
-                placeholder="0,00"
-                defaultValue={search.min}
-                onBlur={(e) => setMinPrice(e.currentTarget.value.trim())}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") setMinPrice(e.currentTarget.value.trim());
-                }}
-                className="h-8 w-20 rounded-md border border-border bg-background px-2 text-[12px] tabular-nums text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              />
-            </label>
-            <label className="inline-flex items-center gap-1.5">
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">R$ max</span>
-              <input
-                type="number"
-                inputMode="decimal"
-                min={0}
-                step="0.01"
-                placeholder="99,90"
-                defaultValue={search.max}
-                onBlur={(e) => setMaxPrice(e.currentTarget.value.trim())}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") setMaxPrice(e.currentTarget.value.trim());
-                }}
-                className="h-8 w-20 rounded-md border border-border bg-background px-2 text-[12px] tabular-nums text-foreground placeholder:text-muted-foreground/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              />
-            </label>
-            {hasFilters ? (
-              <button
-                type="button"
-                onClick={clearFilters}
-                className="ml-auto inline-flex items-center rounded-full border border-border bg-background px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                aria-label="Limpar filtros"
-              >
-                Limpar filtros
-              </button>
-            ) : null}
+            </div>
           </div>
+        </header>
 
+        <ListingShell density="sm" className="mb-2">
           <PriceSearchBar
             initialQuery={q}
             mode={mode}
@@ -359,6 +272,78 @@ function SearchPage() {
             onQueryChange={syncQueryToUrl}
           />
 
+          {/* Toolbar única: match + filtro puro + filtros avançados */}
+          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-border/60 bg-card/50 px-3 py-2">
+            <QuickFilterBar<SearchMode>
+              label="Match"
+              ariaLabel="Modo de correspondência"
+              value={mode}
+              onChange={(next) => chooseMode(next ?? "strict")}
+              size="sm"
+              options={[
+                { value: "strict", label: "Estrita", hint: "Palavra inteira" },
+                { value: "loose", label: "Parcial", hint: "Permite prefixo (≥ 3 chars)" },
+              ]}
+            />
+            <QuickFilterBar<"pure" | "all">
+              label="Item"
+              ariaLabel="Filtro de item puro"
+              value={pureOnly ? "pure" : "all"}
+              onChange={(next) => setPure(next === "pure")}
+              size="sm"
+              options={[
+                { value: "pure", label: "Puro", hint: "Remove ingredientes" },
+                { value: "all", label: "Todos" },
+              ]}
+            />
+            <div className="ml-auto flex flex-wrap items-center gap-1.5">
+              <input
+                type="text"
+                inputMode="text"
+                maxLength={40}
+                placeholder="Marca"
+                defaultValue={brandFilter}
+                onBlur={(e) => setBrand(e.currentTarget.value.trim())}
+                onKeyDown={(e) => { if (e.key === "Enter") setBrand(e.currentTarget.value.trim()); }}
+                aria-label="Marca"
+                className="h-8 w-28 rounded-md border border-border bg-background px-2 text-[12px] text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              />
+              <input
+                type="number"
+                inputMode="decimal"
+                min={0}
+                step="0.01"
+                placeholder="R$ min"
+                defaultValue={search.min}
+                onBlur={(e) => setMinPrice(e.currentTarget.value.trim())}
+                onKeyDown={(e) => { if (e.key === "Enter") setMinPrice(e.currentTarget.value.trim()); }}
+                aria-label="Preço mínimo"
+                className="h-8 w-20 rounded-md border border-border bg-background px-2 text-[12px] tabular-nums text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              />
+              <input
+                type="number"
+                inputMode="decimal"
+                min={0}
+                step="0.01"
+                placeholder="R$ max"
+                defaultValue={search.max}
+                onBlur={(e) => setMaxPrice(e.currentTarget.value.trim())}
+                onKeyDown={(e) => { if (e.key === "Enter") setMaxPrice(e.currentTarget.value.trim()); }}
+                aria-label="Preço máximo"
+                className="h-8 w-20 rounded-md border border-border bg-background px-2 text-[12px] tabular-nums text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              />
+              {hasFilters ? (
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="inline-flex h-8 items-center rounded-full border border-border bg-background px-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  aria-label="Limpar filtros"
+                >
+                  Limpar
+                </button>
+              ) : null}
+            </div>
+          </div>
 
           {!hasQuery && (
             <EmptyState
