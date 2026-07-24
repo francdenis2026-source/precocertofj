@@ -614,6 +614,9 @@ function HomePage() {
           </div>
         </div>
       </section>
+      </div>
+
+
 
       {/* ============== HERO FULL-BLEED (desktop/tablet — sm:block) ============== */}
       <section
