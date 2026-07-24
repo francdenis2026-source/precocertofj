@@ -283,7 +283,7 @@ function SearchPage() {
           <img
             src={buscarHero.img.src}
             alt=""
-            className="h-full w-full scale-[1.04] object-cover opacity-0 blur-[2px] transition-opacity duration-500 [.pc-hero-picture.is-loaded_&]:opacity-100"
+            className="h-full w-full scale-[1.02] object-cover opacity-0 transition-opacity duration-500 [.pc-hero-picture.is-loaded_&]:opacity-100"
             width={buscarHero.img.w}
             height={buscarHero.img.h}
             loading="eager"
@@ -296,24 +296,35 @@ function SearchPage() {
           />
         </picture>
 
-        {/* Véu navy responsivo — opacidade por breakpoint garante que a foto sempre apareça */}
-        <div aria-hidden className="pc-hero-veil absolute inset-0 -z-20" />
-        {/* Gradiente diagonal para contraste do bloco de texto (esquerda mais escura) */}
+        {/* Véu navy leve — apenas o suficiente para dar profundidade sem obscurecer a foto */}
         <div
           aria-hidden
           className="absolute inset-0 -z-20"
           style={{
             background:
-              "linear-gradient(100deg, color-mix(in oklab, var(--brand-navy) 88%, transparent) 0%, color-mix(in oklab, var(--brand-navy) 70%, transparent) 40%, color-mix(in oklab, var(--brand-navy) 35%, transparent) 75%, transparent 100%)",
+              "linear-gradient(100deg, color-mix(in oklab, var(--brand-navy) 55%, transparent) 0%, color-mix(in oklab, var(--brand-navy) 22%, transparent) 45%, transparent 72%)",
           }}
         />
-        {/* Reforço inferior para legibilidade da barra de busca */}
+        {/* Painel desfocado à esquerda — concentra o blur na área de texto */}
         <div
           aria-hidden
-          className="absolute inset-x-0 bottom-0 -z-20 h-1/2"
+          className="absolute inset-y-0 left-0 -z-10 w-full md:w-[62%] backdrop-blur-md md:backdrop-blur-lg"
+          style={{
+            WebkitMaskImage:
+              "linear-gradient(100deg, black 0%, black 55%, transparent 95%)",
+            maskImage:
+              "linear-gradient(100deg, black 0%, black 55%, transparent 95%)",
+            background:
+              "linear-gradient(100deg, color-mix(in oklab, var(--brand-navy) 72%, transparent) 0%, color-mix(in oklab, var(--brand-navy) 45%, transparent) 55%, transparent 100%)",
+          }}
+        />
+        {/* Reforço inferior sutil */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 -z-20 h-1/3"
           style={{
             background:
-              "linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--brand-navy) 70%, transparent) 100%)",
+              "linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--brand-navy) 50%, transparent) 100%)",
           }}
         />
         {/* Hairline dourada no topo */}
