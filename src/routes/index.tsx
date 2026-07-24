@@ -742,85 +742,87 @@ function HomePage() {
       </div>
 
 
-      {/* -------- SOCIAL PROOF (compact, with tooltips) -------- */}
-      <section className="mx-auto w-full max-w-6xl px-3 pb-3 sm:px-6 sm:pb-4 lg:px-8">
-        <TooltipProvider delayDuration={150}>
-          <div className="grid grid-cols-3 gap-2 sm:gap-4">
+      {/* Wrapper flex para inverter a ordem no mobile: letreiro (RecentProducts) antes das estatísticas.
+          Em sm+ mantém a ordem original: estatísticas → recentes. */}
+      <div className="flex flex-col">
+        {/* -------- RECENT PRODUCTS (mobile: 1º, desktop: depois) -------- */}
+        <div className="order-1 sm:order-2">
+          <RecentProducts P={P} serif={serif} />
+        </div>
 
-            {[
-              {
-                k: String(stats.establishments ?? 8),
-                l: "mercados",
-                lFull: "mercados no ar",
-                icon: <ShieldCheck className="h-4 w-4" />,
-                tip: "Mercados de Feijó/AC ativos na plataforma com preços colaborativos.",
-              },
-              {
-                k: stats.products != null
-                  ? `${stats.products.toLocaleString("pt-BR")}+`
-                  : "1.5k+",
-                l: "produtos",
-                lFull: "produtos catalogados",
-                icon: <Package className="h-4 w-4" />,
-                tip: "Produtos únicos cadastrados com preço, marca e categoria.",
-              },
-
-              {
-                k: economy?.avgSavingsPct
-                  ? `${economy.avgSavingsPct}%`
-                  : "até 38%",
-                l: "economia",
-                lFull: "economia identificada",
-                icon: <TrendingDown className="h-4 w-4" />,
-                tip: economy?.productsWithComparison
-                  ? `Diferença média entre o melhor e o pior preço do mesmo produto, medida em ${economy.productsWithComparison.toLocaleString("pt-BR")} produtos com pelo menos 2 mercados. Melhor caso: ${economy.bestSavingsPct}%.`
-                  : "Diferença média entre o melhor e o pior preço encontrado para o mesmo produto em Feijó/AC nas últimas semanas.",
-              },
-
-
-
-            ].map((s) => (
-              <Tooltip key={s.lFull}>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    aria-label={`${s.k} ${s.lFull}. ${s.tip}`}
-                    className="rounded-2xl border px-3 py-3 text-center transition-colors hover:bg-[color-mix(in_oklab,var(--pc-home-card)_92%,var(--pc-home-gold)_8%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:px-4 sm:py-4"
-                    style={{ borderColor: P.line, background: P.card, color: P.heading }}
-                  >
-                    <div className="mb-1 flex items-center justify-center" style={{ color: P.goldSoft }}>
-                      {s.icon}
-                    </div>
-                    <div
-                      className={`${serif} tabular-nums`}
-                      style={{
-                        fontSize: "clamp(1.15rem, 2.8vw, 1.75rem)",
-                        lineHeight: 1,
-                        letterSpacing: "-0.02em",
-                      }}
+        {/* -------- SOCIAL PROOF (mobile: 2º, desktop: antes) -------- */}
+        <section className="order-2 mx-auto w-full max-w-6xl px-3 pb-3 sm:order-1 sm:px-6 sm:pb-4 lg:px-8">
+          <TooltipProvider delayDuration={150}>
+            <div className="grid grid-cols-3 gap-2 sm:gap-4">
+              {[
+                {
+                  k: String(stats.establishments ?? 8),
+                  l: "mercados",
+                  lFull: "mercados no ar",
+                  icon: <ShieldCheck className="h-4 w-4" />,
+                  tip: "Mercados de Feijó/AC ativos na plataforma com preços colaborativos.",
+                },
+                {
+                  k: stats.products != null
+                    ? `${stats.products.toLocaleString("pt-BR")}+`
+                    : "1.5k+",
+                  l: "produtos",
+                  lFull: "produtos catalogados",
+                  icon: <Package className="h-4 w-4" />,
+                  tip: "Produtos únicos cadastrados com preço, marca e categoria.",
+                },
+                {
+                  k: economy?.avgSavingsPct
+                    ? `${economy.avgSavingsPct}%`
+                    : "até 38%",
+                  l: "economia",
+                  lFull: "economia identificada",
+                  icon: <TrendingDown className="h-4 w-4" />,
+                  tip: economy?.productsWithComparison
+                    ? `Diferença média entre o melhor e o pior preço do mesmo produto, medida em ${economy.productsWithComparison.toLocaleString("pt-BR")} produtos com pelo menos 2 mercados. Melhor caso: ${economy.bestSavingsPct}%.`
+                    : "Diferença média entre o melhor e o pior preço encontrado para o mesmo produto em Feijó/AC nas últimas semanas.",
+                },
+              ].map((s) => (
+                <Tooltip key={s.lFull}>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      aria-label={`${s.k} ${s.lFull}. ${s.tip}`}
+                      className="rounded-2xl border px-3 py-3 text-center transition-colors hover:bg-[color-mix(in_oklab,var(--pc-home-card)_92%,var(--pc-home-gold)_8%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:px-4 sm:py-4"
+                      style={{ borderColor: P.line, background: P.card, color: P.heading }}
                     >
-                      {s.k}
-                    </div>
-                    <div
-                      className="mt-1.5 truncate text-[9.5px] font-bold uppercase tracking-[0.14em] sm:text-[11px] sm:tracking-[0.16em]"
-                      style={{ color: "color-mix(in oklab, var(--pc-home-ink) 60%, transparent)" }}
-                    >
-                      <span className="sm:hidden">{s.l}</span>
-                      <span className="hidden sm:inline">{s.lFull}</span>
-                    </div>
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom" className="max-w-[240px] text-[12px] leading-snug">
-                  {s.tip}
-                </TooltipContent>
-              </Tooltip>
-            ))}
-          </div>
-        </TooltipProvider>
-      </section>
+                      <div className="mb-1 flex items-center justify-center" style={{ color: P.goldSoft }}>
+                        {s.icon}
+                      </div>
+                      <div
+                        className={`${serif} tabular-nums`}
+                        style={{
+                          fontSize: "clamp(1.15rem, 2.8vw, 1.75rem)",
+                          lineHeight: 1,
+                          letterSpacing: "-0.02em",
+                        }}
+                      >
+                        {s.k}
+                      </div>
+                      <div
+                        className="mt-1.5 truncate text-[9.5px] font-bold uppercase tracking-[0.14em] sm:text-[11px] sm:tracking-[0.16em]"
+                        style={{ color: "color-mix(in oklab, var(--pc-home-ink) 60%, transparent)" }}
+                      >
+                        <span className="sm:hidden">{s.l}</span>
+                        <span className="hidden sm:inline">{s.lFull}</span>
+                      </div>
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" className="max-w-[240px] text-[12px] leading-snug">
+                    {s.tip}
+                  </TooltipContent>
+                </Tooltip>
+              ))}
+            </div>
+          </TooltipProvider>
+        </section>
+      </div>
 
-      {/* -------- RECENT PRODUCTS -------- */}
-      <RecentProducts P={P} serif={serif} />
 
 
 
