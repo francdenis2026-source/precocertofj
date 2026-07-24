@@ -377,8 +377,8 @@ function HomePage() {
                 Preços conferidos por nota fiscal, atualizados pelos próprios moradores.
               </p>
 
-              {/* Search */}
-              <form onSubmit={submitSearch} className="mt-4 max-w-xl">
+              {/* Search com autocomplete */}
+              <form onSubmit={submitSearch} className="relative mt-4 max-w-xl" ref={searchBoxRef}>
                 <div
                   className="flex items-center gap-2 rounded-2xl border p-1.5 transition-all focus-within:ring-2 sm:p-2"
                   style={{
@@ -397,11 +397,34 @@ function HomePage() {
                   </span>
                   <input
                     value={q}
-                    onChange={(e) => setQ(e.target.value)}
+                    onChange={(e) => {
+                      setQ(e.target.value);
+                      setShowSuggest(true);
+                      setActiveIdx(-1);
+                    }}
+                    onFocus={() => setShowSuggest(true)}
+                    onKeyDown={(e) => {
+                      if (!suggestions.length) return;
+                      if (e.key === "ArrowDown") {
+                        e.preventDefault();
+                        setActiveIdx((i) => Math.min(suggestions.length - 1, i + 1));
+                      } else if (e.key === "ArrowUp") {
+                        e.preventDefault();
+                        setActiveIdx((i) => Math.max(-1, i - 1));
+                      } else if (e.key === "Enter" && activeIdx >= 0) {
+                        e.preventDefault();
+                        pickSuggestion(suggestions[activeIdx].name);
+                      } else if (e.key === "Escape") {
+                        setShowSuggest(false);
+                      }
+                    }}
                     type="search"
                     inputMode="search"
                     placeholder="Ex.: Arroz Tio João 5kg"
                     aria-label="Buscar produto"
+                    aria-autocomplete="list"
+                    aria-expanded={showSuggest && suggestions.length > 0}
+                    aria-controls="home-suggest-list"
                     className="flex-1 bg-transparent px-2 py-3 text-[15.5px] font-medium outline-none sm:py-2.5 sm:text-[15px]"
                     style={{ color: P.ink }}
                   />
@@ -415,7 +438,50 @@ function HomePage() {
                     <ArrowRight className="h-5 w-5 sm:h-4 sm:w-4" />
                   </button>
                 </div>
+
+                {/* Popup de sugestões */}
+                {showSuggest && debouncedQ.length >= 2 && (suggestQ.isLoading || suggestions.length > 0) && (
+                  <ul
+                    id="home-suggest-list"
+                    role="listbox"
+                    className="absolute left-0 right-0 top-[calc(100%+6px)] z-40 max-h-[320px] overflow-auto rounded-2xl border shadow-2xl animate-fade-in"
+                    style={{ background: P.card, borderColor: P.line }}
+                  >
+                    {suggestQ.isLoading && suggestions.length === 0 ? (
+                      <li className="px-4 py-3 text-[13px]" style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}>
+                        Buscando…
+                      </li>
+                    ) : (
+                      suggestions.map((s, i) => (
+                        <li key={s.slug} role="option" aria-selected={i === activeIdx}>
+                          <button
+                            type="button"
+                            onMouseDown={(e) => { e.preventDefault(); pickSuggestion(s.name); }}
+                            onMouseEnter={() => setActiveIdx(i)}
+                            className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors"
+                            style={{
+                              background: i === activeIdx ? `color-mix(in oklab, ${P.gold} 12%, transparent)` : "transparent",
+                              color: P.heading,
+                            }}
+                          >
+                            <Search className="h-3.5 w-3.5 shrink-0" style={{ color: P.goldSoft }} strokeWidth={2.4} />
+                            <span className="flex-1 truncate text-[14px] font-semibold">{s.name}</span>
+                            {s.price != null && (
+                              <span
+                                className={`${serif} shrink-0 tabular-nums text-[15px] font-semibold`}
+                                style={{ color: P.gold, letterSpacing: "-0.01em" }}
+                              >
+                                {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(s.price)}
+                              </span>
+                            )}
+                          </button>
+                        </li>
+                      ))
+                    )}
+                  </ul>
+                )}
               </form>
+
 
               {/* Chips */}
               <div className="mt-3 hidden flex-wrap items-center gap-2 sm:flex">
