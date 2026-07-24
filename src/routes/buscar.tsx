@@ -339,7 +339,7 @@ function SearchPage() {
 
           {/* Painel lateral persistente — apenas desktop ≥ lg */}
           <div className="hidden lg:block">
-            <SearchSidebar recent={recent} onPickQuery={pickQuery} />
+            <SearchSidebar recent={recent} onPickQuery={pickQuery} onRemoveRecent={removeRecent} onClearRecent={clearRecent} />
           </div>
         </div>
       </div>
