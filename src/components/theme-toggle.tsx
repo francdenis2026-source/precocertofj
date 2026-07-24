@@ -70,19 +70,20 @@ export function ThemeToggle({
               ? "rotate-0 scale-100 opacity-100"
               : "-rotate-90 scale-50 opacity-0",
           )}
-          strokeWidth={1.75}
-          style={{ color: "#F5C86A", fill: "rgba(245,200,106,0.35)" }}
+          strokeWidth={2}
+          style={{ color: "#FFD98A", fill: "rgba(255,217,138,0.55)" }}
         />
         <Sun
           className={cn(
-            "absolute inset-0 transition-all duration-500 ease-out drop-shadow-[0_0_8px_rgba(245,158,11,0.55)]",
+            "absolute inset-0 transition-all duration-500 ease-out drop-shadow-[0_1px_2px_rgba(140,80,0,0.35)]",
             showDarkIcon
               ? "rotate-90 scale-50 opacity-0"
               : "rotate-0 scale-100 opacity-100",
           )}
-          strokeWidth={2}
-          style={{ color: "#F59E0B", fill: "rgba(245,158,11,0.18)" }}
+          strokeWidth={2.25}
+          style={{ color: "#B45309", fill: "rgba(180,83,9,0.35)" }}
         />
+
       </span>
     </Button>
 
