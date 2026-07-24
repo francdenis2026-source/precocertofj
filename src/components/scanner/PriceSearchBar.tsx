@@ -21,6 +21,7 @@ import { ProductQuickActions } from "@/components/product/ProductQuickActions";
 import { StoreBadge, StoreColorBar } from "@/components/brand/StoreBadge";
 import { tokenizeQuery, type SearchMode, type MatchReason } from "@/lib/search-tokens";
 import { ProductCompareDialog, CompareTray } from "@/components/search/ProductCompareDialog";
+import { ProductQuickModal } from "@/components/home/ProductQuickModal";
 import { useLocalStorageState } from "@/hooks/use-local-storage";
 // TeaserCard removido: resultados de busca são públicos e mostram nomes dos mercados
 import { LockOverlay } from "@/components/paywall/LockOverlay";
