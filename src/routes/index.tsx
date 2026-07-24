@@ -261,7 +261,7 @@ function HomePage() {
 
 
               <p
-                className="mt-3 max-w-xl text-[13.5px] leading-relaxed sm:text-[14.5px]"
+                className="mt-3 max-w-xl text-[15px] leading-relaxed sm:text-[14.5px]"
                 style={{ color: "color-mix(in oklab, var(--pc-home-ink) 78%, transparent)" }}
               >
                 Veja onde o arroz, o feijão e o café estão mais baratos hoje em Feijó.
