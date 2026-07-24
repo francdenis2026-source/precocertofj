@@ -129,6 +129,7 @@ function PlansPage() {
   const navigate = useNavigate();
   const fetchPlans = useServerFn(listPublicPlans);
   const create = useServerFn(createCheckoutOrder);
+  const promptSignIn = usePromptSignIn();
   const [buying, setBuying] = useState<string | null>(null);
 
   const { data: plans = [], isLoading } = useQuery({
