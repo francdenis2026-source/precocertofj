@@ -246,18 +246,9 @@ function EstablishmentsPage() {
               {currentKind ? currentKind.label : "Comércios parceiros"}
             </div>
             <h1 className="text-[20px] md:text-[24px] font-bold leading-tight text-white [text-shadow:0_2px_10px_rgba(0,0,0,0.65)]">
-              {currentKind ? currentKind.label : "Comércios"} de{" "}
-              <span
-                className="relative inline-block rounded-md px-2 py-0.5 font-extrabold tracking-tight text-brand-gold ring-1 ring-brand-gold/80 shadow-[0_4px_14px_-4px_rgba(0,0,0,0.55)]"
-                style={{
-                  background:
-                    "linear-gradient(180deg, color-mix(in oklab, var(--brand-navy) 96%, black) 0%, var(--brand-navy) 100%)",
-                }}
-              >
-                <span aria-hidden className="pointer-events-none absolute inset-x-1 -bottom-[3px] h-[2px] rounded-full bg-brand-gold/80" />
-                Feijó
-              </span>
+              {currentKind ? currentKind.label : "Comércios"} de Feijó
             </h1>
+
           </div>
           <p className="mt-2 inline-block max-w-2xl rounded-md bg-brand-navy/75 px-2.5 py-1 text-[12.5px] md:text-[13.5px] font-medium leading-snug text-white ring-1 ring-white/10 backdrop-blur-[2px] [text-shadow:0_1px_4px_rgba(0,0,0,0.55)]">
             {currentKind ? currentKind.tagline : "Cobertura de produtos, categorias e comparativo entre estabelecimentos monitorados pela comunidade."}
