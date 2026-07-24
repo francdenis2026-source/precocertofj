@@ -2256,3 +2256,125 @@ textarea::placeholder {
 .dark .pc-search-scope .text-muted-foreground\/40 {
   color: rgb(245 246 250 / 0.75) !important;
 }
+
+/* ===================== /buscar — Tipografia responsiva =====================
+   Escala fluida por breakpoint. Regra base:
+   - mobile (<640px):  corpo 14 / muted 12.5 / título 20
+   - tablet (640-1023): corpo 14.5 / muted 13 / título 22
+   - desktop (>=1024): corpo 15 / muted 13 / título 24
+   Line-heights garantem 1.4+ em texto informativo e 1.15+ em títulos.
+*/
+.pc-search-scope {
+  /* Tokens fluidos com clamp para ficar coerente entre breakpoints */
+  --pc-fs-hero:  clamp(1.25rem, 1.05rem + 1.1vw, 1.5rem);   /* 20 → 24 */
+  --pc-fs-h2:    clamp(1.0625rem, 0.95rem + 0.6vw, 1.1875rem); /* 17 → 19 */
+  --pc-fs-h3:    clamp(0.9375rem, 0.88rem + 0.35vw, 1.0625rem); /* 15 → 17 */
+  --pc-fs-body:  clamp(0.875rem, 0.83rem + 0.2vw, 0.9375rem);   /* 14 → 15 */
+  --pc-fs-meta:  clamp(0.78125rem, 0.75rem + 0.15vw, 0.8125rem); /* 12.5 → 13 */
+  --pc-fs-micro: clamp(0.75rem, 0.72rem + 0.1vw, 0.78125rem);    /* 12 → 12.5 */
+  --pc-lh-tight: 1.2;
+  --pc-lh-snug:  1.35;
+  --pc-lh-body:  1.5;
+  font-size: var(--pc-fs-body);
+  line-height: var(--pc-lh-body);
+}
+
+/* Cabeçalhos */
+.pc-search-scope h1 {
+  font-size: var(--pc-fs-hero);
+  line-height: var(--pc-lh-tight);
+}
+.pc-search-scope h2 {
+  font-size: var(--pc-fs-h2);
+  line-height: var(--pc-lh-snug);
+}
+.pc-search-scope h3 {
+  font-size: var(--pc-fs-h3);
+  line-height: var(--pc-lh-snug);
+}
+
+/* Parágrafos e labels de formulário */
+.pc-search-scope p,
+.pc-search-scope li,
+.pc-search-scope label {
+  line-height: var(--pc-lh-body);
+}
+
+/* Regras de escala responsiva sobre utilities Tailwind hardcoded
+   (mantém legibilidade sem reescrever o PriceSearchBar) */
+
+/* Micro (metadata, códigos, eyebrows) — nunca abaixo de 12px */
+.pc-search-scope .text-\[9px\],
+.pc-search-scope .text-\[9\.5px\],
+.pc-search-scope .text-\[10px\],
+.pc-search-scope .text-\[10\.5px\],
+.pc-search-scope .text-\[11px\] {
+  font-size: var(--pc-fs-micro) !important;
+  line-height: var(--pc-lh-snug) !important;
+}
+
+/* Meta (12.5–13) — labels, badges, hints */
+.pc-search-scope .text-\[12px\],
+.pc-search-scope .text-\[12\.5px\] {
+  font-size: var(--pc-fs-meta) !important;
+  line-height: var(--pc-lh-snug) !important;
+}
+
+/* Body (13–15) — descrições, itens de lista */
+.pc-search-scope .text-\[13px\],
+.pc-search-scope .text-\[13\.5px\],
+.pc-search-scope .text-sm {
+  font-size: var(--pc-fs-body) !important;
+  line-height: var(--pc-lh-body) !important;
+}
+
+/* Emphasis (16–18) — subtítulos e valores intermediários */
+.pc-search-scope .text-\[15px\],
+.pc-search-scope .text-\[16px\],
+.pc-search-scope .text-base {
+  font-size: var(--pc-fs-h3) !important;
+  line-height: var(--pc-lh-snug) !important;
+}
+
+/* Preços/valores destacados (18–24) */
+.pc-search-scope .text-\[18px\],
+.pc-search-scope .text-\[20px\],
+.pc-search-scope .text-\[22px\],
+.pc-search-scope .text-lg,
+.pc-search-scope .text-xl {
+  font-size: clamp(1.125rem, 1rem + 0.9vw, 1.5rem) !important;
+  line-height: var(--pc-lh-tight) !important;
+  letter-spacing: -0.01em;
+}
+
+/* Preserva números tabulares (tabular-nums) sem alterar sua legibilidade */
+.pc-search-scope .tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Densidade dos inputs cresce com o viewport para toque em telas médias */
+.pc-search-scope input,
+.pc-search-scope select,
+.pc-search-scope textarea {
+  font-size: var(--pc-fs-body);
+  line-height: var(--pc-lh-body);
+}
+@media (min-width: 640px) {
+  .pc-search-scope input:not([type="checkbox"]):not([type="radio"]),
+  .pc-search-scope select {
+    min-height: 36px;
+  }
+}
+@media (min-width: 1024px) {
+  .pc-search-scope input:not([type="checkbox"]):not([type="radio"]),
+  .pc-search-scope select {
+    min-height: 40px;
+  }
+}
+
+/* Evita "viúva" de uma palavra em títulos longos em telas pequenas */
+@media (max-width: 480px) {
+  .pc-search-scope h1 {
+    text-wrap: balance;
+  }
+}
