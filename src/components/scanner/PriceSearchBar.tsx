@@ -435,12 +435,13 @@ export function PriceSearchBar({
         <span
           role="note"
           aria-label="Passo 01: Pesquisar preço"
-          className="inline-flex items-center gap-1 rounded-full border border-accent-strong/40 bg-accent/10 px-2 py-0.5 font-sans text-[9.5px] font-semibold uppercase tracking-[0.16em] text-accent-strong"
+          className="inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-navy px-2 py-0.5 font-sans text-[9.5px] font-semibold uppercase tracking-[0.16em] text-brand-gold"
         >
           <span aria-hidden="true" className="tabular-nums">01</span>
           <span aria-hidden="true" className="opacity-70">·</span>
           <span aria-hidden="true">Pesquisar preço</span>
         </span>
+
       </div>
 
 
