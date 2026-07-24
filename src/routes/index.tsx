@@ -30,6 +30,7 @@ import { getEconomyStat } from "@/lib/products-public.functions";
 import { listPopularQueries } from "@/lib/search-popular.functions";
 import { RecentProducts } from "@/components/home/RecentProducts";
 import { StartFreeDialog } from "@/components/home/StartFreeDialog";
+import { MetricSpotlightDialog } from "@/components/home/MetricSpotlightDialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useSession } from "@/hooks/useSession";
 
