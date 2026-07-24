@@ -223,10 +223,17 @@ function EstablishmentsPage() {
         />
 
         <div className="mx-auto w-full max-w-6xl px-4 md:px-8 pt-4 md:pt-5 pb-4 md:pb-5">
-          <nav aria-label="Trilha" className="mb-2 flex items-center gap-1 text-[12px] font-semibold text-white">
-            <Link to="/" className="text-white hover:text-brand-gold">Início</Link>
-            <ChevronRight aria-hidden className="h-3 w-3 text-white/80" />
-            <span className="text-brand-gold">Mercados</span>
+          <nav aria-label="Trilha" className="mb-2 flex items-center gap-2 text-[14px] font-semibold text-white">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-white/20 bg-white/5 px-3 py-1.5 text-white transition-colors hover:border-brand-gold hover:bg-brand-gold hover:text-brand-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy"
+            >
+              Início
+            </Link>
+            <ChevronRight aria-hidden className="h-4 w-4 text-white/60" />
+            <span className="inline-flex items-center rounded-lg border border-brand-gold bg-brand-gold px-3 py-1.5 text-brand-navy">
+              Mercados
+            </span>
           </nav>
 
           <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
