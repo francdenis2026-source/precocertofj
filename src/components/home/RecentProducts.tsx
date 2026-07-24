@@ -120,7 +120,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
 
       {/* MOBILE: letreiro digital (marquee) — economiza tela vertical */}
       <div
-        className="sm:hidden -mx-4 overflow-hidden border-y py-3"
+        className="price-marquee-viewport sm:hidden -mx-4 overflow-hidden border-y py-3"
         style={{ borderColor: P.line, background: P.card }}
         aria-label="Atualizações recentes de preço"
       >
