@@ -1039,10 +1039,7 @@ function PinField({
   return (
     <div className="space-y-2">
       <div className="flex items-end justify-between">
-        <label
-          className="text-[10.5px] font-bold uppercase tracking-[0.2em]"
-          style={{ color: PC_EMERALD }}
-        >
+        <label className="text-[10.5px] font-bold uppercase tracking-[0.2em] text-[color:var(--pc-home-navy)] dark:text-[color:var(--pc-home-gold)]">
           PIN de 6 dígitos
         </label>
       </div>
@@ -1062,14 +1059,13 @@ function PinField({
             onKeyDown={(e) => handleKey(i, e)}
             onPaste={handlePaste}
             aria-label={`Dígito ${i + 1} do PIN`}
-            className="h-10 w-full rounded-md border bg-white text-center text-base font-bold outline-none transition"
+            className="h-10 w-full rounded-md border bg-background text-foreground text-center text-base font-bold outline-none transition"
             style={{
               borderColor: hasError
                 ? "#dc2626"
                 : d.trim()
                   ? PC_GOLD
-                  : "#cbd5e1",
-              color: PC_EMERALD_DEEP,
+                  : "hsl(var(--border, 214 32% 91%))",
               fontFamily: PC_DISPLAY,
             }}
             onFocus={(e) => {
@@ -1082,12 +1078,12 @@ function PinField({
                 ? "#dc2626"
                 : d.trim()
                   ? PC_GOLD
-                  : "#cbd5e1";
+                  : "hsl(var(--border, 214 32% 91%))";
             }}
-
           />
         ))}
       </div>
     </div>
   );
 }
+
