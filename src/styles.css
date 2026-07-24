@@ -2804,3 +2804,55 @@ input::placeholder, textarea::placeholder {
   color: color-mix(in oklab, var(--foreground) 88%, transparent);
 }
 
+
+/* ============================================================
+   /buscar — Ambiente visual (Navy + pattern editorial + vignette)
+   ============================================================ */
+.pc-search-scope {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(1200px 520px at 50% -120px,
+      color-mix(in oklab, var(--pc-home-navy) 42%, transparent) 0%,
+      transparent 70%),
+    linear-gradient(180deg,
+      color-mix(in oklab, var(--pc-home-navy) 8%, var(--background)) 0%,
+      var(--background) 60%);
+}
+.dark .pc-search-scope {
+  background:
+    radial-gradient(1200px 520px at 50% -120px,
+      color-mix(in oklab, var(--pc-home-navy) 90%, transparent) 0%,
+      transparent 70%),
+    linear-gradient(180deg,
+      color-mix(in oklab, var(--pc-home-navy) 55%, var(--background)) 0%,
+      var(--background) 65%);
+}
+.pc-search-scope::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(circle at 1px 1px,
+      color-mix(in oklab, var(--pc-home-gold) 30%, transparent) 1px,
+      transparent 1.6px);
+  background-size: 22px 22px;
+  background-position: 0 0;
+  opacity: 0.14;
+  mask-image: radial-gradient(ellipse at 50% 20%, black 30%, transparent 75%);
+  -webkit-mask-image: radial-gradient(ellipse at 50% 20%, black 30%, transparent 75%);
+}
+.dark .pc-search-scope::before { opacity: 0.22; }
+.pc-search-scope::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(ellipse at 50% 100%,
+    color-mix(in oklab, var(--pc-home-navy) 22%, transparent) 0%,
+    transparent 60%);
+}
+.pc-search-scope > * { position: relative; z-index: 1; }
