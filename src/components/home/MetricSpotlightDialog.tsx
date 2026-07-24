@@ -486,19 +486,118 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* ---------- Lista de mercados com busca + paginação progressiva ---------- */
+/* ---------- Estado persistido por aba (session) ---------- */
 
-const MARKETS_PAGE = 6;
+const PAGE_SIZE = 6;
+
+/** Persiste `{query, visible}` no sessionStorage para restaurar ao reabrir o modal. */
+function usePersistedListState(storageKey: string) {
+  const [query, setQuery] = useState("");
+  const [visible, setVisible] = useState(PAGE_SIZE);
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const raw = window.sessionStorage.getItem(storageKey);
+      if (raw) {
+        const parsed = JSON.parse(raw) as { q?: string; v?: number };
+        if (typeof parsed.q === "string") setQuery(parsed.q);
+        if (typeof parsed.v === "number" && parsed.v >= PAGE_SIZE) setVisible(parsed.v);
+      }
+    } catch {
+      /* ignore */
+    }
+    setReady(true);
+  }, [storageKey]);
+
+  useEffect(() => {
+    if (!ready || typeof window === "undefined") return;
+    try {
+      window.sessionStorage.setItem(storageKey, JSON.stringify({ q: query, v: visible }));
+    } catch {
+      /* ignore */
+    }
+  }, [ready, storageKey, query, visible]);
+
+  return { query, setQuery, visible, setVisible };
+}
+
+/* ---------- Barra de busca reutilizável ---------- */
+
+function SearchBar({
+  value,
+  onChange,
+  placeholder,
+  ariaLabel,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  placeholder: string;
+  ariaLabel: string;
+}) {
+  return (
+    <div
+      className="mb-2 flex items-center gap-2 rounded-xl border px-3 py-2"
+      style={{
+        borderColor: "color-mix(in oklab, var(--pc-home-line) 80%, transparent)",
+        background: "color-mix(in oklab, var(--pc-home-navy) 3%, transparent)",
+      }}
+    >
+      <Search className="h-4 w-4" style={{ color: "var(--pc-text-muted)" }} />
+      <input
+        type="search"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="w-full bg-transparent text-sm outline-none placeholder:opacity-60"
+        style={{ color: "var(--pc-home-heading)" }}
+        aria-label={ariaLabel}
+      />
+      {value && (
+        <button
+          type="button"
+          onClick={() => onChange("")}
+          className="text-[11px] font-semibold"
+          style={{ color: "var(--pc-home-navy)" }}
+        >
+          limpar
+        </button>
+      )}
+    </div>
+  );
+}
+
+function LoadMoreButton({ remaining, onClick }: { remaining: number; onClick: () => void }) {
+  if (remaining <= 0) return null;
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="mt-3 w-full rounded-xl border px-3 py-2 text-[12px] font-semibold transition-colors"
+      style={{
+        borderColor: "color-mix(in oklab, var(--pc-home-line) 80%, transparent)",
+        color: "var(--pc-home-navy)",
+        background: "color-mix(in oklab, var(--pc-home-navy) 3%, transparent)",
+      }}
+    >
+      Carregar mais ({remaining} restantes)
+    </button>
+  );
+}
+
+/* ---------- Lista de mercados ---------- */
 
 function MarketsList({
   stores,
   animate,
+  onNavigate,
 }: {
   stores: Awaited<ReturnType<typeof getMetricSpotlight>>["stores"];
   animate: boolean;
+  onNavigate: () => void;
 }) {
-  const [query, setQuery] = useState("");
-  const [visible, setVisible] = useState(MARKETS_PAGE);
+  const { query, setQuery, visible, setVisible } = usePersistedListState("pc-metric-markets");
 
   const filtered = useMemo(() => {
     const q = norm(query.trim());
@@ -509,10 +608,14 @@ function MarketsList({
     });
   }, [stores, query]);
 
-  // Reseta paginação quando a busca muda.
+  // Reseta paginação apenas quando a busca muda (não no restore).
+  const lastQueryRef = useRef(query);
   useEffect(() => {
-    setVisible(MARKETS_PAGE);
-  }, [query]);
+    if (lastQueryRef.current !== query) {
+      lastQueryRef.current = query;
+      setVisible(PAGE_SIZE);
+    }
+  }, [query, setVisible]);
 
   const shown = filtered.slice(0, visible);
   const hasMore = visible < filtered.length;
@@ -521,34 +624,12 @@ function MarketsList({
     <>
       <SectionTitle>Lista de parceiros</SectionTitle>
 
-      <div
-        className="mb-2 flex items-center gap-2 rounded-xl border px-3 py-2"
-        style={{
-          borderColor: "color-mix(in oklab, var(--pc-home-line) 80%, transparent)",
-          background: "color-mix(in oklab, var(--pc-home-navy) 3%, transparent)",
-        }}
-      >
-        <Search className="h-4 w-4" style={{ color: "var(--pc-text-muted)" }} />
-        <input
-          type="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Buscar por nome, bairro ou cidade…"
-          className="w-full bg-transparent text-sm outline-none placeholder:opacity-60"
-          style={{ color: "var(--pc-home-heading)" }}
-          aria-label="Buscar mercados"
-        />
-        {query && (
-          <button
-            type="button"
-            onClick={() => setQuery("")}
-            className="text-[11px] font-semibold"
-            style={{ color: "var(--pc-home-navy)" }}
-          >
-            limpar
-          </button>
-        )}
-      </div>
+      <SearchBar
+        value={query}
+        onChange={setQuery}
+        placeholder="Buscar por nome, bairro ou cidade…"
+        ariaLabel="Buscar mercados"
+      />
 
       <div
         className="mb-1 text-[11px]"
@@ -566,69 +647,253 @@ function MarketsList({
         {shown.map((s, i) => (
           <motion.li
             key={s.id}
-            className="flex items-center gap-3 py-2.5"
             initial={animate ? { opacity: 0, y: 6 } : false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.28, delay: Math.min(i * 0.03, 0.24), ease: EASE }}
           >
+            <Link
+              to="/estabelecimento/$slug"
+              params={{ slug: s.slug }}
+              onClick={onNavigate}
+              className="flex items-center gap-3 py-2.5 transition-colors hover:bg-[color-mix(in_oklab,var(--pc-home-navy)_4%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_oklab,var(--pc-home-gold)_60%,transparent)] rounded-lg -mx-1 px-1"
+              aria-label={`Abrir página do mercado ${s.name}`}
+            >
+              <div
+                className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-lg border text-[11px] font-bold"
+                style={{
+                  borderColor: "var(--pc-home-line)",
+                  background:
+                    s.brandColor ?? "color-mix(in oklab, var(--pc-home-navy) 6%, transparent)",
+                  color: s.brandColor ? "#fff" : "var(--pc-home-navy)",
+                }}
+              >
+                {s.logoUrl ? (
+                  <img src={s.logoUrl} alt="" className="h-full w-full object-cover" loading="lazy" />
+                ) : (
+                  <Store className="h-4 w-4" />
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
+                <div
+                  className="truncate text-sm font-semibold"
+                  style={{ color: "var(--pc-home-heading)" }}
+                >
+                  {s.name}
+                </div>
+                <div className="truncate text-[11px]" style={{ color: "var(--pc-text-muted)" }}>
+                  {[s.neighborhood, s.city].filter(Boolean).join(" · ") || "Feijó, AC"}
+                </div>
+              </div>
+              <div className="text-right">
+                <div
+                  className="text-sm font-bold tabular-nums"
+                  style={{ color: "var(--pc-home-gold)" }}
+                >
+                  {s.productCount}
+                </div>
+                <div className="text-[10px]" style={{ color: "var(--pc-text-muted)" }}>
+                  itens · {relTime(s.lastUpdate)}
+                </div>
+              </div>
+              <ArrowRight
+                className="h-4 w-4 shrink-0 opacity-40"
+                style={{ color: "var(--pc-home-navy)" }}
+                aria-hidden
+              />
+            </Link>
+          </motion.li>
+        ))}
+      </ul>
+
+      <LoadMoreButton
+        remaining={filtered.length - visible}
+        onClick={() => setVisible(visible + PAGE_SIZE)}
+      />
+    </>
+  );
+}
+
+/* ---------- Lista de últimas atualizações (aba produtos) ---------- */
+
+function ProductsRecentList({
+  updates,
+  animate,
+}: {
+  updates: Awaited<ReturnType<typeof getMetricSpotlight>>["recentUpdates"];
+  animate: boolean;
+}) {
+  const { query, setQuery, visible, setVisible } = usePersistedListState("pc-metric-products");
+  const filtered = useMemo(() => {
+    const q = norm(query.trim());
+    if (!q) return updates;
+    return updates.filter((u) =>
+      norm(`${u.productName} ${u.marketName ?? ""}`).includes(q),
+    );
+  }, [updates, query]);
+
+  const lastQueryRef = useRef(query);
+  useEffect(() => {
+    if (lastQueryRef.current !== query) {
+      lastQueryRef.current = query;
+      setVisible(PAGE_SIZE);
+    }
+  }, [query, setVisible]);
+
+  const shown = filtered.slice(0, visible);
+
+  return (
+    <>
+      <SectionTitle>Últimas atualizações</SectionTitle>
+      <SearchBar
+        value={query}
+        onChange={setQuery}
+        placeholder="Buscar por produto ou mercado…"
+        ariaLabel="Buscar atualizações de preço"
+      />
+      <div
+        className="mb-1 text-[11px]"
+        style={{ color: "var(--pc-text-muted)" }}
+        aria-live="polite"
+      >
+        {filtered.length === 0
+          ? "Nenhuma atualização encontrada"
+          : `${filtered.length} ${filtered.length === 1 ? "atualização" : "atualizações"}`}
+      </div>
+      <ul className="divide-y" style={{ borderColor: "var(--pc-home-line)" }}>
+        {shown.map((u, i) => (
+          <motion.li
+            key={`${u.productName}-${u.when}-${i}`}
+            className="flex items-center gap-3 py-2"
+            initial={animate ? { opacity: 0, y: 6 } : false}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.24, delay: Math.min(i * 0.02, 0.16), ease: EASE }}
+          >
+            <div className="min-w-0 flex-1">
+              <div
+                className="truncate text-[13px] font-semibold"
+                style={{ color: "var(--pc-home-heading)" }}
+              >
+                {u.productName}
+              </div>
+              <div className="truncate text-[11px]" style={{ color: "var(--pc-text-muted)" }}>
+                {u.marketName ?? "—"} · {relTime(u.when)}
+              </div>
+            </div>
             <div
-              className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-lg border text-[11px] font-bold"
+              className="text-sm font-bold tabular-nums"
+              style={{ color: "var(--pc-home-gold)" }}
+            >
+              {currency(u.price)}
+            </div>
+          </motion.li>
+        ))}
+      </ul>
+      <LoadMoreButton
+        remaining={filtered.length - visible}
+        onClick={() => setVisible(visible + PAGE_SIZE)}
+      />
+    </>
+  );
+}
+
+/* ---------- Lista de economias (aba savings) ---------- */
+
+function SavingsList({
+  items,
+  animate,
+}: {
+  items: Awaited<ReturnType<typeof getMetricSpotlight>>["topSavings"];
+  animate: boolean;
+}) {
+  const { query, setQuery, visible, setVisible } = usePersistedListState("pc-metric-savings");
+  const filtered = useMemo(() => {
+    const q = norm(query.trim());
+    if (!q) return items;
+    return items.filter((s) =>
+      norm(`${s.displayName} ${s.category ?? ""} ${s.cheapestStore ?? ""}`).includes(q),
+    );
+  }, [items, query]);
+
+  const lastQueryRef = useRef(query);
+  useEffect(() => {
+    if (lastQueryRef.current !== query) {
+      lastQueryRef.current = query;
+      setVisible(PAGE_SIZE);
+    }
+  }, [query, setVisible]);
+
+  const shown = filtered.slice(0, visible);
+
+  return (
+    <>
+      <SectionTitle>Maiores economias agora</SectionTitle>
+      <SearchBar
+        value={query}
+        onChange={setQuery}
+        placeholder="Buscar produto, categoria ou mercado…"
+        ariaLabel="Buscar economias"
+      />
+      <div
+        className="mb-1 text-[11px]"
+        style={{ color: "var(--pc-text-muted)" }}
+        aria-live="polite"
+      >
+        {filtered.length === 0
+          ? "Nenhuma economia encontrada"
+          : `${filtered.length} ${filtered.length === 1 ? "item comparado" : "itens comparados"}`}
+      </div>
+      <ul className="divide-y" style={{ borderColor: "var(--pc-home-line)" }}>
+        {shown.map((s, i) => (
+          <motion.li
+            key={`${s.catalogSlug ?? s.displayName}-${i}`}
+            className="flex items-center gap-3 py-2.5"
+            initial={animate ? { opacity: 0, y: 6 } : false}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.26, delay: Math.min(i * 0.03, 0.18), ease: EASE }}
+          >
+            <div
+              className="grid h-11 w-14 shrink-0 place-items-center rounded-lg text-sm font-bold tabular-nums"
               style={{
-                borderColor: "var(--pc-home-line)",
                 background:
-                  s.brandColor ?? "color-mix(in oklab, var(--pc-home-navy) 6%, transparent)",
-                color: s.brandColor ? "#fff" : "var(--pc-home-navy)",
+                  "linear-gradient(135deg, var(--pc-home-gold), var(--pc-home-gold-soft))",
+                color: "var(--pc-home-navy)",
               }}
             >
-              {s.logoUrl ? (
-                <img src={s.logoUrl} alt="" className="h-full w-full object-cover" loading="lazy" />
-              ) : (
-                <Store className="h-4 w-4" />
-              )}
+              {Math.round(s.savingsPct)}%
             </div>
             <div className="min-w-0 flex-1">
               <div
-                className="truncate text-sm font-semibold"
+                className="truncate text-[13px] font-semibold"
                 style={{ color: "var(--pc-home-heading)" }}
               >
-                {s.name}
+                {s.displayName}
               </div>
               <div className="truncate text-[11px]" style={{ color: "var(--pc-text-muted)" }}>
-                {[s.neighborhood, s.city].filter(Boolean).join(" · ") || "Feijó, AC"}
+                {s.storeCount} mercados · menor em {s.cheapestStore ?? "—"}
               </div>
             </div>
             <div className="text-right">
+              <div className="text-[11px] line-through" style={{ color: "var(--pc-text-muted)" }}>
+                {currency(s.maxPrice)}
+              </div>
               <div
                 className="text-sm font-bold tabular-nums"
                 style={{ color: "var(--pc-home-gold)" }}
               >
-                {s.productCount}
-              </div>
-              <div className="text-[10px]" style={{ color: "var(--pc-text-muted)" }}>
-                itens · {relTime(s.lastUpdate)}
+                {currency(s.minPrice)}
               </div>
             </div>
           </motion.li>
         ))}
       </ul>
-
-      {hasMore && (
-        <button
-          type="button"
-          onClick={() => setVisible((v) => v + MARKETS_PAGE)}
-          className="mt-3 w-full rounded-xl border px-3 py-2 text-[12px] font-semibold transition-colors"
-          style={{
-            borderColor: "color-mix(in oklab, var(--pc-home-line) 80%, transparent)",
-            color: "var(--pc-home-navy)",
-            background: "color-mix(in oklab, var(--pc-home-navy) 3%, transparent)",
-          }}
-        >
-          Carregar mais ({filtered.length - visible} restantes)
-        </button>
-      )}
+      <LoadMoreButton
+        remaining={filtered.length - visible}
+        onClick={() => setVisible(visible + PAGE_SIZE)}
+      />
     </>
   );
 }
+
 
 function MetricBody({
   kind,
