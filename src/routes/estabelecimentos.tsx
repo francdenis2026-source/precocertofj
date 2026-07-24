@@ -522,9 +522,9 @@ function EstablishmentsPage() {
                       >
                         <div className="flex items-start gap-3">
                           <div
-                            className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl border border-border bg-muted"
-                            style={{ borderColor: "var(--brand-gold)" }}
+                            className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl"
                           >
+
                             {e.logoUrl ? (
                               <img
                                 src={e.logoUrl}
