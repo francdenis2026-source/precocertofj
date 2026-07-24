@@ -1733,6 +1733,49 @@ iframe[src*="lovable.dev/badge"] {
   :focus-visible {
     outline-offset: 2px;
   }
+  /* Anel de foco unificado para elementos interativos — legível sobre fundos navy/azul */
+  button:focus-visible,
+  a:focus-visible,
+  [role="button"]:focus-visible,
+  [role="menuitem"]:focus-visible,
+  [role="option"]:focus-visible,
+  [role="tab"]:focus-visible,
+  [role="link"]:focus-visible,
+  [data-chip]:focus-visible,
+  .chip:focus-visible,
+  summary:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--color-background),
+      0 0 0 4px color-mix(in oklab, var(--pc-home-gold, #f5b301) 78%, transparent);
+    border-radius: inherit;
+  }
+  /* Links de conteúdo — hover/focus/active com contraste consistente */
+  a:not([class]) {
+    color: color-mix(in oklab, var(--color-primary) 85%, var(--color-foreground) 15%);
+    text-decoration-line: underline;
+    text-decoration-thickness: from-font;
+    text-underline-offset: 3px;
+    text-decoration-color: color-mix(in oklab, var(--pc-home-gold, #f5b301) 50%, transparent);
+    transition: color 150ms ease, text-decoration-color 150ms ease;
+  }
+  a:not([class]):hover {
+    color: color-mix(in oklab, var(--pc-home-gold, #f5b301) 40%, var(--color-foreground) 60%);
+    text-decoration-color: var(--pc-home-gold, #f5b301);
+  }
+  a:not([class]):active {
+    color: var(--pc-home-gold, #f5b301);
+  }
+  /* Pressed universal — reação visual no clique */
+  button:active:not(:disabled),
+  [role="button"]:active:not([aria-disabled="true"]) {
+    filter: brightness(0.96) saturate(1.02);
+  }
+  /* Loading — bloqueia cursor e mantém opacidade legível */
+  [data-loading="true"], button[aria-busy="true"] {
+    cursor: progress !important;
+    opacity: 0.92;
+  }
   /* Loading states: preserva altura da linha, remove tracking oscilante */
   [aria-busy="true"], [data-loading="true"] {
     letter-spacing: inherit !important;
