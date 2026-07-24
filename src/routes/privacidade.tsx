@@ -249,23 +249,24 @@ function PrivacidadePage() {
               height={40}
               className="h-10 w-10 shrink-0 rounded-lg object-contain shadow-sm ring-1 ring-brand-gold/30 transition-transform group-hover:scale-[1.03]"
             />
-            <span className="font-display text-[20px] font-semibold leading-none tracking-tight text-foreground">
+            <span className="font-display text-title font-semibold leading-none tracking-tight text-foreground">
               <span className="text-brand-gold">P</span>reço<span className="text-brand-gold">C</span>erto
             </span>
           </Link>
-          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-brand-gold">
+          <p className="text-eyebrow">
             <ShieldCheck className="mr-1 inline h-3 w-3" strokeWidth={2.2} />
             Documento oficial · Atualizado em {updated}
           </p>
-          <h1 className="mt-1.5 text-xl font-semibold leading-tight tracking-tight text-foreground sm:text-[22px]">
+          <h1 className="text-h2 mt-1.5 text-foreground">
             Termos e Privacidade
           </h1>
-          <p className="mt-1.5 max-w-xl text-[12.5px] leading-relaxed text-muted-foreground">
+          <p className="text-body-sm mt-1.5 max-w-xl text-muted-foreground">
             Em linguagem clara: o que coletamos, como usamos e as regras de uso
             da plataforma. Não vendemos dados. Exclusão e exportação a qualquer
             momento.
           </p>
         </header>
+
 
 
         {/* Tabs */}
