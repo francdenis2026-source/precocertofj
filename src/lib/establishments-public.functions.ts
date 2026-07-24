@@ -8,15 +8,18 @@ export type EstablishmentStat = {
   neighborhood: string | null;
   logoUrl: string | null;
   brandColor: string | null;
+  kind: string | null;
   productsCount: number;
   topCategories: Array<{ category: string; count: number }>;
   lastUpdate: string | null;
+  maxSavings: number;
 };
 
 export type EstablishmentsOverview = {
   totalEstablishments: number;
   totalProducts: number;
   totalCategories: number;
+  totalMaxSavings: number;
   topGlobalCategories: Array<{ category: string; count: number }>;
   items: EstablishmentStat[];
 };
