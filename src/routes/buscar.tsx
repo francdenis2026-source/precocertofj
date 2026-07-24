@@ -13,7 +13,7 @@ import { trackEvent } from "@/lib/analytics-events";
 import { RouteError } from "@/components/feedback";
 import { SearchDiscovery, pushRecentSearch } from "@/components/search/SearchDiscovery";
 import { SearchSidebar } from "@/components/search/SearchSidebar";
-import heroMarket from "@/assets/home-hero.jpg?w=480;768;1200;1600&format=avif;webp;jpg&quality=62&as=picture";
+
 import { ChevronRight } from "lucide-react";
 
 
