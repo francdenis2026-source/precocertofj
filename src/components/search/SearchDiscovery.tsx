@@ -57,12 +57,13 @@ export function pushRecentSearch(q: string) {
   try {
     // Import dinâmico para evitar custo no SSR / bundle inicial.
     void import("@/lib/analytics-events").then(({ trackEvent }) => {
-      trackEvent("search_query" as never, { q: term.toLowerCase().slice(0, 60) });
+      trackEvent("search_query", { q: term.toLowerCase().slice(0, 60) });
     });
   } catch {
     /* ignore */
   }
 }
+
 
 
 type Props = {
