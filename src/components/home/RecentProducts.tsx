@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Clock, Store } from "lucide-react";
+import { Clock, Store, Radio } from "lucide-react";
 import { getRecentProducts } from "@/lib/products-public.functions";
+import { getLiveTickerStats } from "@/lib/products-public.functions";
 
 
 const brl = (n: number) =>
