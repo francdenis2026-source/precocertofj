@@ -60,13 +60,14 @@ function Card({ item }: { item: Item }) {
         <span className="grid h-6 w-6 place-items-center rounded-md border border-brand-gold/30 bg-brand-gold/10 text-brand-gold">
           <Icon className="h-3 w-3" strokeWidth={2.4} />
         </span>
-        <h2 className="text-[12.5px] font-semibold tracking-tight text-foreground">
+        <h2 className="text-title font-semibold tracking-tight text-foreground">
           {item.title}
         </h2>
       </div>
-      <div className="text-[12px] leading-relaxed text-muted-foreground">
+      <div className="text-body-sm text-muted-foreground">
         {item.body}
       </div>
+
     </section>
   );
 }
