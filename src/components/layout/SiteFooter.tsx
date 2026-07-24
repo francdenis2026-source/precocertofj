@@ -111,7 +111,7 @@ export function SiteFooter() {
       >
         {/* Brand block */}
         <div className="max-w-sm">
-          <Link to="/" className="flex items-center gap-2 sm:gap-2.5">
+          <Link to="/" className="group flex items-center gap-2 rounded-lg outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:gap-2.5">
             <span
               className="grid h-8 w-8 shrink-0 place-items-center rounded-[9px] bg-brand text-[15px] font-black text-brand-foreground shadow-elev-2 sm:h-9 sm:w-9 sm:text-[17px] md:h-10 md:w-10 md:text-[19px]"
             >
