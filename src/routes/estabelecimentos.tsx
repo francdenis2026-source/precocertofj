@@ -73,6 +73,7 @@ function EstablishmentsPage() {
   const [neighborhood, setNeighborhood] = useState<string>("__all");
   const [sort, setSort] = useState<"name" | "neighborhood" | "products">("neighborhood");
   const [kindFilter, setKindFilter] = useState<string>("__all");
+  const [metricDetail, setMetricDetail] = useState<null | "establishments" | "products" | "savings" | "live">(null);
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const heroOverlayOpacity = useAdaptiveOverlayOpacity(mercadosHero.url, { min: 0.6, max: 0.94 });
 
