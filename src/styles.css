@@ -2174,3 +2174,85 @@ textarea::placeholder {
   opacity: 1; /* alguns UA aplicam 0.54 por padrão */
 }
 
+
+/* ===================== /buscar — Homepage-aligned scope =====================
+   Remapeia os tokens usados pelo PriceSearchBar (accent cyan → gold navy)
+   para que a página de buscar herde a MESMA paleta e tipografia da homepage
+   em light e dark. Também eleva font-size mínimo para 13px e line-height
+   1.45 em texto informativo (WCAG + legibilidade em telas médias). */
+.pc-search-scope {
+  /* Accent → Gold homepage (mantém contraste AA em ambos os temas) */
+  --accent: var(--pc-home-gold);
+  --accent-strong: var(--pc-home-gold);
+  --accent-foreground: var(--pc-text-on-gold);
+  --color-accent: var(--pc-home-gold);
+  --color-accent-strong: var(--pc-home-gold);
+  --color-accent-foreground: var(--pc-text-on-gold);
+  /* Surface alinhada ao card da homepage */
+  --surface: var(--pc-home-card);
+  --color-surface: var(--pc-home-card);
+}
+.dark .pc-search-scope {
+  --accent: var(--pc-home-gold);
+  --accent-strong: var(--pc-home-gold-soft);
+  --accent-foreground: #08122a;
+  --color-accent: var(--pc-home-gold);
+  --color-accent-strong: var(--pc-home-gold-soft);
+  --color-accent-foreground: #08122a;
+  --surface: var(--pc-home-card);
+  --color-surface: var(--pc-home-card);
+}
+
+/* Hierarquia tipográfica consistente dentro do escopo de busca */
+.pc-search-scope {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.pc-search-scope h1,
+.pc-search-scope h2,
+.pc-search-scope h3 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+}
+/* Sobe qualquer texto abaixo de 12px para 12px (mínimo legível em mobile) */
+.pc-search-scope .text-\[9px\],
+.pc-search-scope .text-\[9\.5px\],
+.pc-search-scope .text-\[10px\],
+.pc-search-scope .text-\[10\.5px\],
+.pc-search-scope .text-\[11px\] {
+  font-size: 12px !important;
+  line-height: 1.35 !important;
+}
+.pc-search-scope .text-\[12px\],
+.pc-search-scope .text-\[12\.5px\],
+.pc-search-scope .text-\[13px\] {
+  line-height: 1.45 !important;
+}
+/* Placeholders sempre com contraste AA */
+.pc-search-scope input::placeholder,
+.pc-search-scope textarea::placeholder {
+  color: var(--pc-text-placeholder);
+  opacity: 1;
+}
+.dark .pc-search-scope input::placeholder,
+.dark .pc-search-scope textarea::placeholder {
+  color: rgb(245 246 250 / 0.72);
+}
+/* Foco visível uniforme e com contraste em ambos os temas */
+.pc-search-scope :focus-visible {
+  outline: 2px solid var(--pc-home-gold);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+/* Nunca usar opacidade < 60% em texto muted dentro do escopo */
+.pc-search-scope .text-muted-foreground\/60,
+.pc-search-scope .text-muted-foreground\/50,
+.pc-search-scope .text-muted-foreground\/40 {
+  color: var(--pc-text-muted) !important;
+}
+.dark .pc-search-scope .text-muted-foreground\/60,
+.dark .pc-search-scope .text-muted-foreground\/50,
+.dark .pc-search-scope .text-muted-foreground\/40 {
+  color: rgb(245 246 250 / 0.75) !important;
+}
