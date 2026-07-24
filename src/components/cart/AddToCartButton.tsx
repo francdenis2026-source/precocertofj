@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { addToCart } from "@/lib/cart.functions";
 import { setPendingCartItem, type PendingCartItem } from "@/lib/pending-cart";
+import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 import { cn } from "@/lib/utils";
 
 export interface AddToCartButtonProps {
