@@ -2752,3 +2752,43 @@ input::placeholder, textarea::placeholder {
   opacity: 1;
   color: color-mix(in oklab, var(--muted-foreground) 92%, transparent);
 }
+
+/* 11) Legibilidade em superfícies escuras: título/descrição de diálogos e
+       microcopy jamais herdam serif fino em tamanho pequeno.
+       Trocamos font-display para sans quando o texto for ≤ 15px, mantendo
+       o serif editorial apenas para headings maiores. */
+[role="dialog"] .font-display,
+[role="alertdialog"] .font-display,
+.font-display.text-\[11px\],
+.font-display.text-\[12px\],
+.font-display.text-\[12\.5px\],
+.font-display.text-\[13px\],
+.font-display.text-\[13\.5px\],
+.font-display.text-\[14px\],
+.font-display.text-\[15px\] {
+  font-family: var(--font-sans, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif) !important;
+  letter-spacing: -0.005em;
+}
+
+/* 12) Contraste mínimo para texto secundário em toasts, tooltips e diálogos
+       sobre superfícies escuras — evita o efeito "quase apagado". */
+[role="dialog"] .text-muted-foreground,
+[role="alertdialog"] .text-muted-foreground,
+[role="status"] .text-muted-foreground,
+[role="alert"] .text-muted-foreground,
+[data-sonner-toast] .text-muted-foreground,
+[data-radix-tooltip-content] .text-muted-foreground {
+  color: color-mix(in oklab, var(--foreground) 82%, transparent) !important;
+}
+
+/* 13) Garante que qualquer texto ≤ 13px em superfícies dark nunca caia
+       abaixo de 70% de contraste do foreground. */
+.dark [role="dialog"] p,
+.dark [role="dialog"] li,
+.dark [role="alertdialog"] p,
+.dark [role="alertdialog"] li,
+.dark [data-sonner-toast] p,
+.dark [data-sonner-toast] div {
+  color: color-mix(in oklab, var(--foreground) 88%, transparent);
+}
+
