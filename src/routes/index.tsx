@@ -235,7 +235,7 @@ function HomePage() {
 
               {today && (
                 <div
-                  className="mb-3 text-[11.5px] font-bold uppercase tracking-[0.22em] sm:mb-3 sm:text-[10.5px] sm:tracking-[0.24em]"
+                  className="mb-3 text-[13px] font-bold uppercase tracking-[0.2em] sm:mb-3 sm:text-[10.5px] sm:tracking-[0.24em]"
                   style={{ color: P.goldSoft }}
                 >
                   {today} · edição diária
