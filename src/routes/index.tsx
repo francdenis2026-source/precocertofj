@@ -697,45 +697,66 @@ function HomePage() {
 
 
       {/* -------- FINAL CTA (compact ribbon) -------- */}
-      <section className="mx-auto w-full max-w-6xl px-4 pb-6 sm:px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-6xl px-4 pb-8 sm:px-6 lg:px-8">
         <div
-          className="relative overflow-hidden rounded-xl border px-4 py-3 sm:px-5 sm:py-3.5"
+          className="relative overflow-hidden rounded-2xl border p-4 sm:p-5"
           style={{
-            background: `linear-gradient(90deg, ${P.navy} 0%, color-mix(in oklab, ${P.navy} 88%, black) 100%)`,
-            borderColor: "color-mix(in oklab, #F5C86A 30%, transparent)",
+            background: `linear-gradient(135deg, ${P.navy} 0%, color-mix(in oklab, ${P.navy} 85%, black) 100%)`,
+            borderColor: "color-mix(in oklab, #F5C86A 32%, transparent)",
             color: "#F5F6FA",
+            boxShadow: "0 10px 30px -12px rgba(0,0,0,0.35)",
           }}
         >
-          <div className="flex items-center gap-3 sm:gap-4">
-            <span
-              className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg sm:inline-flex"
-              style={{ background: "color-mix(in oklab, #F5C86A 18%, transparent)", color: P.gold }}
-              aria-hidden
-            >
-              <Ticket className="h-4.5 w-4.5" strokeWidth={2.2} />
-            </span>
+          {/* subtle gold glow accent */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full opacity-30 blur-3xl"
+            style={{ background: P.gold }}
+          />
 
-            <div className="min-w-0 flex-1">
-              <p
-                className="truncate font-semibold leading-tight"
-                style={{ color: "#F5F6FA", fontSize: "clamp(0.92rem, 1.6vw, 1.05rem)", letterSpacing: "-0.005em" }}
+          <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+            <div className="flex items-center gap-3 sm:flex-1">
+              <span
+                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl sm:h-11 sm:w-11"
+                style={{
+                  background: "color-mix(in oklab, #F5C86A 20%, transparent)",
+                  color: P.gold,
+                  border: "1px solid color-mix(in oklab, #F5C86A 35%, transparent)",
+                }}
+                aria-hidden
               >
-                Já tem um código?{" "}
-                <span className="font-bold" style={{ color: P.gold }}>
-                  Ative sua licença agora.
-                </span>
-              </p>
-              <p className="mt-0.5 hidden text-[12px] text-white/70 sm:block">
-                Leva menos de 30 segundos.
-              </p>
+                <Ticket className="h-5 w-5" strokeWidth={2.2} />
+              </span>
+
+              <div className="min-w-0 flex-1">
+                <p
+                  className="text-[11px] font-semibold uppercase tracking-[0.14em]"
+                  style={{ color: "color-mix(in oklab, #F5C86A 85%, white)" }}
+                >
+                  Já tem um código?
+                </p>
+                <p
+                  className="mt-0.5 font-bold leading-tight"
+                  style={{
+                    color: "#FFFFFF",
+                    fontSize: "clamp(1rem, 1.6vw, 1.15rem)",
+                    letterSpacing: "-0.01em",
+                  }}
+                >
+                  Ative sua licença agora
+                </p>
+                <p className="mt-1 text-[12.5px] leading-snug text-white/70">
+                  Leva menos de 30 segundos.
+                </p>
+              </div>
             </div>
 
             <Link
               to="/resgatar"
-              className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3.5 py-2 text-[13px] font-bold transition-transform hover:scale-[1.02] active:scale-[0.98] sm:px-4 sm:text-[13.5px]"
+              className="inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-[14px] font-bold shadow-sm transition-transform hover:scale-[1.02] active:scale-[0.98] sm:w-auto sm:shrink-0 sm:px-5 sm:py-2.5 sm:text-[13.5px]"
               style={{ background: P.gold, color: P.navy }}
             >
-              Resgatar <ArrowRight className="h-3.5 w-3.5" />
+              Resgatar código <ArrowRight className="h-4 w-4" />
             </Link>
           </div>
         </div>
