@@ -316,6 +316,16 @@ export function PriceSearchBar({
     onQueryChange?.(v);
   };
 
+  const revertAutoCorrect = () => {
+    if (!autoCorrected) return;
+    const from = autoCorrected.from;
+    setAutoCorrected(null);
+    lastAutoCorrectFor.current = normalizeInput(from).trim().toLowerCase() + ":kept";
+    setInputValue(from);
+    runQuery(from);
+  };
+
+
   const clear = () => {
     setInputValue("");
     setResult(null);
