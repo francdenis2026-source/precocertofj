@@ -84,6 +84,8 @@ export type PromptSignInOptions = {
   payload?: Record<string, unknown>;
   /** Rota interna para voltar (default: pathname atual). */
   returnTo?: string;
+  /** Resumo compacto do item alvo (ex.: "Arroz 5kg · Comercial X"). */
+  summary?: string;
 };
 
 export function usePromptSignIn() {
@@ -94,9 +96,38 @@ export function usePromptSignIn() {
     async (opts: PromptSignInOptions): Promise<boolean> => {
       const preset = PRESETS[opts.intent];
       const benefits = opts.benefits ?? preset.benefits;
+      const isFavorite = opts.intent.startsWith("favorite");
 
       const description = (
         <div className="space-y-2.5">
+          {opts.summary ? (
+            <div
+              className={`flex items-center gap-2 rounded-lg border px-2.5 py-1.5 ${
+                isFavorite
+                  ? "border-amber-400/40 bg-amber-500/10 text-amber-700 dark:text-amber-300"
+                  : "border-sky-400/40 bg-sky-500/10 text-sky-700 dark:text-sky-300"
+              }`}
+              aria-label="Item selecionado"
+            >
+              <svg
+                width="13"
+                height="13"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                aria-hidden
+                className="shrink-0"
+              >
+                {isFavorite ? (
+                  <path d="M12 2.6l2.9 6.2 6.8.7-5.1 4.6 1.5 6.7L12 17.6l-6.1 3.2 1.5-6.7L2.3 9.5l6.8-.7z" />
+                ) : (
+                  <circle cx="12" cy="12" r="9" />
+                )}
+              </svg>
+              <span className="min-w-0 flex-1 truncate text-[12px] font-medium leading-tight">
+                {opts.summary}
+              </span>
+            </div>
+          ) : null}
           <p className="text-[12.5px] leading-snug text-muted-foreground">
             Entre para {preset.action}. Grátis, leva 10 segundos.
           </p>
