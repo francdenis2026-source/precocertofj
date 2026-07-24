@@ -207,11 +207,37 @@ function SearchPage() {
 
 
 
+  const pickQuery = (next: string) => {
+    pushRecentSearch(next);
+    if (urlSyncTimer.current != null) {
+      window.clearTimeout(urlSyncTimer.current);
+      urlSyncTimer.current = null;
+    }
+    navigate({
+      search: (prev: Record<string, unknown>) => ({ ...prev, q: next.slice(0, 80) }),
+      replace: true,
+    });
+  };
+
+  useEffect(() => {
+    if (hasQuery) pushRecentSearch(q);
+  }, [hasQuery, q]);
+
+  const [recent, setRecent] = useState<string[]>([]);
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem("search:recent-queries");
+      if (raw) setRecent(JSON.parse(raw));
+    } catch {
+      /* ignore */
+    }
+  }, [q]);
+
   return (
     <div
-      className="pc-search-scope min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground"
+      className="pc-search-scope min-h-[100dvh] pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground"
     >
-      <div className="mx-auto max-w-3xl px-4 md:px-6 pt-3 md:pt-4">
+      <div className="mx-auto w-full max-w-6xl px-4 md:px-6 pt-3 md:pt-4">
         <InternalPageHeader
           breadcrumbs={[{ label: "Início", to: "/" }, { label: "Buscar" }]}
           title="Buscar preço por nome"
@@ -228,79 +254,78 @@ function SearchPage() {
               <FreeQuotaBadge variant="inline" />
             </>
           }
-
         />
 
-        <ListingShell density="sm" className="mb-2">
-          <PriceSearchBar
-            initialQuery={q}
-            mode={mode}
-            pureOnly={pureOnly}
-            brandFilter={brandFilter}
-            priceMin={Number.isFinite(priceMin) ? priceMin : undefined}
-            priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
-            onQueryChange={syncQueryToUrl}
-          />
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
+          <div className="min-w-0">
+            <ListingShell density="sm" className="mb-2">
+              <PriceSearchBar
+                initialQuery={q}
+                mode={mode}
+                pureOnly={pureOnly}
+                brandFilter={brandFilter}
+                priceMin={Number.isFinite(priceMin) ? priceMin : undefined}
+                priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
+                onQueryChange={syncQueryToUrl}
+              />
 
-          {/* Toolbar única: match + filtro puro + filtros avançados */}
-          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-border/60 bg-card/50 px-3 py-2">
-            <QuickFilterBar<SearchMode>
-              label="Match"
-              ariaLabel="Modo de correspondência"
-              value={mode}
-              onChange={(next) => chooseMode(next ?? "strict")}
-              size="sm"
-              options={[
-                { value: "strict", label: "Estrita", hint: "Palavra inteira" },
-                { value: "loose", label: "Parcial", hint: "Permite prefixo (≥ 3 chars)" },
-              ]}
-            />
-            <QuickFilterBar<"pure" | "all">
-              label="Item"
-              ariaLabel="Filtro de item puro"
-              value={pureOnly ? "pure" : "all"}
-              onChange={(next) => setPure(next === "pure")}
-              size="sm"
-              options={[
-                { value: "pure", label: "Puro", hint: "Remove ingredientes" },
-                { value: "all", label: "Todos" },
-              ]}
-            />
-            <FilterInputs
-              brand={brandFilter}
-              min={search.min ?? ""}
-              max={search.max ?? ""}
-              onBrand={setBrand}
-              onMin={setMinPrice}
-              onMax={setMaxPrice}
-              onClear={clearFilters}
-            />
+              {/* Toolbar única: match + filtro puro + filtros avançados */}
+              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-border/60 bg-card/50 px-3 py-2">
+                <QuickFilterBar<SearchMode>
+                  label="Match"
+                  ariaLabel="Modo de correspondência"
+                  value={mode}
+                  onChange={(next) => chooseMode(next ?? "strict")}
+                  size="sm"
+                  options={[
+                    { value: "strict", label: "Estrita", hint: "Palavra inteira" },
+                    { value: "loose", label: "Parcial", hint: "Permite prefixo (≥ 3 chars)" },
+                  ]}
+                />
+                <QuickFilterBar<"pure" | "all">
+                  label="Item"
+                  ariaLabel="Filtro de item puro"
+                  value={pureOnly ? "pure" : "all"}
+                  onChange={(next) => setPure(next === "pure")}
+                  size="sm"
+                  options={[
+                    { value: "pure", label: "Puro", hint: "Remove ingredientes" },
+                    { value: "all", label: "Todos" },
+                  ]}
+                />
+                <FilterInputs
+                  brand={brandFilter}
+                  min={search.min ?? ""}
+                  max={search.max ?? ""}
+                  onBrand={setBrand}
+                  onMin={setMinPrice}
+                  onMax={setMaxPrice}
+                  onClear={clearFilters}
+                />
+              </div>
+
+              {!hasQuery && <SearchDiscovery onPickQuery={pickQuery} />}
+            </ListingShell>
+
+            {hasQuery && !user ? (
+              <SignupCTA context="save-comparison" className="mt-6" />
+            ) : (
+              <div className="mt-6 text-center">
+                <Link
+                  to="/"
+                  className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground hover:text-primary"
+                >
+                  Voltar ao início
+                </Link>
+              </div>
+            )}
           </div>
 
-
-          {!hasQuery && (
-            <EmptyState
-              className="mt-2"
-              icon={SearchIcon}
-              title="Digite para começar"
-              message="Escreva o nome de um produto (arroz, feijão, café…) e veja os preços comparados nos mercados cadastrados."
-            />
-          )}
-        </ListingShell>
-
-
-        {hasQuery && !user ? (
-          <SignupCTA context="save-comparison" className="mt-6" />
-        ) : (
-          <div className="mt-6 text-center">
-            <Link
-              to="/"
-              className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground hover:text-primary"
-            >
-              Voltar ao início
-            </Link>
+          {/* Painel lateral persistente — apenas desktop ≥ lg */}
+          <div className="hidden lg:block">
+            <SearchSidebar recent={recent} onPickQuery={pickQuery} />
           </div>
-        )}
+        </div>
       </div>
       <MobileNav />
     </div>
