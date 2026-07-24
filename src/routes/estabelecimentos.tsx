@@ -78,6 +78,9 @@ function EstablishmentsPage() {
     if (!data) return [] as EstablishmentsOverview["items"];
     const term = q.trim().toLowerCase();
     let list = data.items.slice();
+    if (kindFilter !== "__all") {
+      list = list.filter((e) => (e.kind ?? "outro") === kindFilter);
+    }
     if (neighborhood !== "__all") {
       list = list.filter((e) => (e.neighborhood ?? "") === neighborhood);
     }
