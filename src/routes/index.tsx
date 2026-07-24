@@ -729,7 +729,7 @@ function HomePage() {
 
               {today && (
                 <div
-                  className="mb-3 inline-flex w-fit items-center gap-2 text-[12px] font-semibold uppercase tabular-nums sm:mb-3 sm:text-[10.5px]"
+                  className="mb-2.5 inline-flex w-fit items-center gap-2 text-[12px] font-semibold uppercase tabular-nums sm:mb-2.5 sm:text-[10.5px]"
                   style={{
                     color: "var(--pc-text-muted)",
                     letterSpacing: "0.16em",
