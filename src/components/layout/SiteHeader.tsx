@@ -56,8 +56,9 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
     ? "border-on-media-border bg-on-media-surface text-on-media transition-colors hover:border-brand-soft hover:bg-brand-soft/15 hover:text-on-media focus-visible:ring-2 focus-visible:ring-on-media/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
     : "border-border bg-card text-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
   const loginClass = isOverlay
-    ? "text-on-media-muted transition-colors hover:bg-brand-soft/15 hover:text-brand-soft focus-visible:ring-2 focus-visible:ring-on-media/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
-    : "text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+    ? "bg-brand-soft text-[color:var(--pc-navy,#0b1e3b)] shadow-[0_4px_14px_rgb(0_0_0/0.25)] transition-all hover:brightness-110 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-on-media/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+    : "bg-primary text-primary-foreground shadow-elev-2 transition-all hover:brightness-110 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+
 
 
   return (
@@ -180,7 +181,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             <Link
               to="/login"
               className={dsx(
-                "inline-flex items-center rounded-lg px-3.5 py-2 text-[14.5px] font-semibold leading-[1.2] outline-none transition-colors focus-visible:ring-2 sm:px-3.5 sm:py-2 sm:text-[14.5px] md:px-4 md:py-2.5 md:text-[15.5px]",
+                "inline-flex items-center rounded-full px-5 py-2.5 text-[15px] font-bold leading-none tracking-[-0.005em] outline-none sm:rounded-lg sm:px-4 sm:py-2 sm:text-[14.5px] md:px-5 md:py-2.5 md:text-[15.5px]",
                 loginClass,
               )}
             >
