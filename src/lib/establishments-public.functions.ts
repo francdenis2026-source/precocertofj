@@ -86,6 +86,7 @@ export const listPublicEstablishments = createServerFn({ method: "GET" }).handle
                     establishment_id: string;
                     product_name: string;
                     created_at: string;
+                    price_captured: number | null;
                   }> | null;
                   error: { message: string } | null;
                 }>;
@@ -98,11 +99,11 @@ export const listPublicEstablishments = createServerFn({ method: "GET" }).handle
 
     const PAGE = 1000;
     let offset = 0;
-    const scans: Array<{ establishment_id: string; product_name: string; created_at: string }> = [];
+    const scans: Array<{ establishment_id: string; product_name: string; created_at: string; price_captured: number | null }> = [];
     while (offset < 200_000) {
       const { data, error: sErr } = await scanClient
         .from("scans")
-        .select("establishment_id, product_name, created_at")
+        .select("establishment_id, product_name, created_at, price_captured")
         .eq("status", "salvo")
         .is("user_id", null)
         .not("product_name", "is", null)
