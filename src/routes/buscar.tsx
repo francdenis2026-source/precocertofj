@@ -15,7 +15,7 @@ import { SearchDiscovery, pushRecentSearch } from "@/components/search/SearchDis
 import { SearchSidebar } from "@/components/search/SearchSidebar";
 
 import { ChevronRight } from "lucide-react";
-import buscarHero from "@/assets/buscar-hero.jpg?w=768;1200;1920&format=avif;webp;jpg&quality=68&as=srcset";
+import buscarHero from "@/assets/buscar-hero.jpg?w=1200;1920&format=avif;webp;jpg&quality=68&as=picture";
 
 
 const searchSchema = z.object({
