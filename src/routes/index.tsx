@@ -578,7 +578,7 @@ function HomePage() {
               <div className="mt-3 hidden flex-wrap items-center gap-2 sm:flex">
                 <span
                   className="mr-1 text-[10px] font-bold uppercase tracking-[0.24em]"
-                  style={{ color: "color-mix(in oklab, var(--pc-home-ink) 45%, transparent)" }}
+                  style={{ color: "color-mix(in oklab, var(--pc-home-ink) 72%, transparent)" }}
                 >
                   Buscas do dia:
                 </span>
