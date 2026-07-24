@@ -567,10 +567,10 @@ function HeroMetric({
       type="button"
       onClick={onClick}
       aria-label={`${label}: ${value}. ${hint ?? "Abrir detalhes"}`}
-      className="group relative flex w-full items-center gap-2.5 sm:gap-3 overflow-hidden rounded-lg px-2.5 py-2 sm:px-3.5 sm:py-2.5 text-left ring-1 ring-brand-gold/70 shadow-[0_8px_24px_-8px_rgba(0,0,0,0.6)] backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:ring-brand-gold hover:shadow-[0_12px_28px_-8px_rgba(212,175,55,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy active:translate-y-0"
+      className="group relative flex w-full items-center gap-2.5 sm:gap-3 overflow-hidden rounded-lg px-2.5 py-2 sm:px-3.5 sm:py-2.5 text-left ring-1 ring-brand-gold/70 shadow-[0_8px_24px_-8px_rgba(0,0,0,0.6)] transition-all duration-200 hover:-translate-y-0.5 hover:ring-brand-gold hover:shadow-[0_12px_28px_-8px_rgba(212,175,55,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy active:translate-y-0 bg-brand-navy"
       style={{
-        background:
-          "linear-gradient(135deg, color-mix(in oklab, var(--brand-navy) 96%, black) 0%, color-mix(in oklab, var(--brand-navy) 82%, black) 100%)",
+        backgroundImage:
+          "linear-gradient(135deg, color-mix(in oklab, var(--brand-navy) 96%, black) 0%, color-mix(in oklab, var(--brand-navy) 78%, black) 100%)",
       }}
     >
       <span aria-hidden className="absolute inset-y-0 left-0 w-[3px] bg-brand-gold transition-all group-hover:w-[4px]" />
@@ -583,7 +583,7 @@ function HeroMetric({
         <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={2.5} aria-hidden />
       </div>
       <div className="relative z-[1] min-w-0 flex-1">
-        <div className="truncate text-[9.5px] sm:text-[10px] font-bold uppercase tracking-[0.14em] sm:tracking-[0.16em] text-brand-gold/95">
+        <div className="truncate text-[9.5px] sm:text-[10px] font-bold uppercase tracking-[0.14em] sm:tracking-[0.16em] text-white/90">
           {label}
         </div>
         <div className="mt-0.5 flex items-center gap-1.5 text-[13.5px] sm:text-[15px] font-extrabold leading-tight text-white tabular-nums">
