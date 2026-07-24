@@ -29,18 +29,18 @@ type Preset = {
 const PRESETS: Record<AuthHeroVariant, Preset> = {
   login: {
     badge: { icon: ShieldCheck, label: "Área do assinante" },
-    title: "Acesse a inteligência",
-    highlight: "da sua cidade.",
-    subtitle: "Entre com CPF e PIN para ver o painel ao vivo dos mercados de Feijó.",
+    title: "O preço certo,",
+    highlight: "aqui em Feijó.",
+    subtitle: "Entre com seu CPF e PIN e acompanhe, em tempo real, os preços dos mercados da cidade.",
     perks: [
-      "Comparativo em tempo real entre mercados",
+      "Comparativo entre mercados de Feijó",
       "Alertas de queda de preço no seu bairro",
-      "Rede colaborativa validada por nota fiscal",
+      "Base validada por notas fiscais reais",
     ],
     trust: {
       icon: ShieldCheck,
-      title: "Preços validados por nota fiscal",
-      caption: "Rede colaborativa · atualizada diariamente",
+      title: "Preços conferidos por nota fiscal",
+      caption: "Rede colaborativa · atualizada todo dia",
     },
     brandIcon: ShoppingCart,
     offer: { label: "Oferta ativa", title: "30 dias grátis", caption: "Envie sua nota e libere o painel completo." },
@@ -59,12 +59,13 @@ const PRESETS: Record<AuthHeroVariant, Preset> = {
     ],
     trust: {
       icon: ShieldCheck,
-      title: "Preços validados por nota fiscal",
-      caption: "Rede colaborativa · atualizada diariamente",
+      title: "Preços conferidos por nota fiscal",
+      caption: "Rede colaborativa · atualizada todo dia",
     },
     brandIcon: ShoppingCart,
     photo: true,
   },
+
   redeem: {
     badge: { icon: Ticket, label: "Ativação de licença" },
     title: "Libere seu acesso",
