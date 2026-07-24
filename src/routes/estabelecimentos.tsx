@@ -239,17 +239,38 @@ function EstablishmentsPage() {
             })}
           </div>
 
-          {/* Métricas ao vivo — linha compacta */}
+          {/* Métricas ao vivo — botões acessíveis, abrem detalhes */}
           {data && (
-            <div className="mt-3 grid grid-cols-2 gap-2 md:grid-cols-4">
-              <HeroMetric icon={Store} label="Estabelecimentos" value={String(data.totalEstablishments)} />
-              <HeroMetric icon={Package} label="Produtos" value={data.totalProducts.toLocaleString("pt-BR")} />
+            <div className="mt-3 grid grid-cols-2 gap-2 sm:gap-2.5 md:grid-cols-4">
+              <HeroMetric
+                icon={Store}
+                label="Estabelecimentos"
+                value={String(data.totalEstablishments)}
+                hint="Ver rede"
+                onClick={() => setMetricDetail("establishments")}
+              />
+              <HeroMetric
+                icon={Package}
+                label="Produtos"
+                value={data.totalProducts.toLocaleString("pt-BR")}
+                hint="Ver categorias"
+                onClick={() => setMetricDetail("products")}
+              />
               <HeroMetric
                 icon={PiggyBank}
                 label="Maior economia"
                 value={data.totalMaxSavings > 0 ? `R$ ${data.totalMaxSavings.toFixed(2).replace(".", ",")}` : "—"}
+                hint="Onde economizar"
+                onClick={() => setMetricDetail("savings")}
               />
-              <HeroMetric icon={Radio} label="Atualização" value="ao vivo" live />
+              <HeroMetric
+                icon={Radio}
+                label="Atualização"
+                value="ao vivo"
+                live
+                hint="Como funciona"
+                onClick={() => setMetricDetail("live")}
+              />
             </div>
           )}
         </div>
