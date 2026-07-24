@@ -177,6 +177,13 @@ export function PriceSearchBar({
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestSeq = useRef(0);
 
+  // Auto-correção: quando a busca retorna vazia e temos uma sugestão fuzzy
+  // com boa similaridade, re-executamos automaticamente com o termo corrigido
+  // e exibimos um aviso permitindo voltar ao original.
+  const [autoCorrected, setAutoCorrected] = useState<{ from: string; to: string } | null>(null);
+  const lastAutoCorrectFor = useRef<string | null>(null);
+
+
   // Hydrate history from localStorage on mount (client-only).
   // Also recover any characters the user typed BEFORE React hydration
   // finished attaching the onChange handler — without this, the first
