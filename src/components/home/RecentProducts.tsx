@@ -1,10 +1,26 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Clock, Store, Radio, ArrowRight, ChevronRight, TrendingDown } from "lucide-react";
+import { toast } from "sonner";
+import {
+  Clock,
+  Store,
+  Radio,
+  ArrowRight,
+  ChevronRight,
+  TrendingDown,
+  Star,
+} from "lucide-react";
 import { getRecentProducts } from "@/lib/products-public.functions";
 import { getLiveTickerStats } from "@/lib/products-public.functions";
+import {
+  listFavoritedPanelKeys,
+  panelKeyFromName,
+  toggleFavoritePanelProduct,
+} from "@/lib/favorite-panel.functions";
+import { useSession } from "@/hooks/useSession";
+import { ProductQuickModal } from "@/components/home/ProductQuickModal";
 import {
   Dialog,
   DialogContent,
@@ -13,6 +29,7 @@ import {
   DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
+
 
 
 const brl = (n: number) =>
@@ -381,7 +398,57 @@ function MobilePriceRotator({
   P: Palette;
   serif: string;
 }) {
-  // Painel de preços estático — sem rotação. Estilo cotação de mercado.
+  const { user } = useSession();
+  const queryClient = useQueryClient();
+
+  // Modal de detalhes (produto, mercados, histórico)
+  const [openItem, setOpenItem] = useState<RecentItem | null>(null);
+
+  // Favoritos do usuário — chaves no formato do painel
+  const fetchFavKeys = useServerFn(listFavoritedPanelKeys);
+  const { data: favKeys } = useQuery({
+    queryKey: ["home", "panel-favorite-keys", user?.id ?? "anon"],
+    queryFn: () => fetchFavKeys(),
+    enabled: !!user,
+    staleTime: 60_000,
+  });
+  const favSet = new Set(favKeys?.keys ?? []);
+
+  const toggleFav = useServerFn(toggleFavoritePanelProduct);
+  const [pendingKey, setPendingKey] = useState<string | null>(null);
+  const favMutation = useMutation({
+    mutationFn: (name: string) => toggleFav({ data: { productName: name } }),
+    onMutate: (name) => setPendingKey(panelKeyFromName(name)),
+    onSuccess: (res) => {
+      toast.success(
+        res.favorited
+          ? "Adicionado aos favoritos — vamos avisar quando o preço cair."
+          : "Removido dos favoritos.",
+      );
+      queryClient.invalidateQueries({
+        queryKey: ["home", "panel-favorite-keys"],
+      });
+    },
+    onError: (e: unknown) =>
+      toast.error(e instanceof Error ? e.message : "Falha ao favoritar."),
+    onSettled: () => setPendingKey(null),
+  });
+
+  const handleFavorite = (name: string) => {
+    if (!user) {
+      toast.info("Entre na sua conta para favoritar preços.", {
+        action: {
+          label: "Entrar",
+          onClick: () => {
+            window.location.href = "/login";
+          },
+        },
+      });
+      return;
+    }
+    favMutation.mutate(name);
+  };
+
   return (
     <div
       className="sm:hidden -mx-4 border-y"
@@ -413,13 +480,17 @@ function MobilePriceRotator({
         {data.map((p) => {
           const f = freshness(p.when);
           const hasDrop = p.dropPct !== null && p.dropPct >= DROP_THRESHOLD;
+          const key = panelKeyFromName(p.name);
+          const isFav = favSet.has(key);
+          const isFavPending = pendingKey === key && favMutation.isPending;
+
           return (
-            <li key={p.slug}>
-              <Link
-                to="/produto/$slug"
-                params={{ slug: p.slug }}
-                className="flex items-center gap-3 px-4 py-3 active:bg-muted/40 focus-visible:outline-none focus-visible:bg-muted/40"
-                aria-label={`${p.name} — ${brl(p.price)} em ${p.marketName ?? "mercados de Feijó"}`}
+            <li key={p.slug} className="relative">
+              <button
+                type="button"
+                onClick={() => setOpenItem(p)}
+                className="flex w-full items-center gap-3 px-4 py-3 text-left active:bg-muted/40 focus-visible:outline-none focus-visible:bg-muted/40"
+                aria-label={`Ver detalhes de ${p.name} — ${brl(p.price)} em ${p.marketName ?? "mercados de Feijó"}`}
               >
                 <span
                   className={`h-2 w-2 shrink-0 rounded-full ${f.dotClass}`}
@@ -478,11 +549,51 @@ function MobilePriceRotator({
                   className="h-4 w-4 shrink-0 text-muted-foreground"
                   aria-hidden
                 />
-              </Link>
+              </button>
+
+              {/* Botão favoritar — flutuante para não interferir no clique da linha */}
+              <button
+                type="button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleFavorite(p.name);
+                }}
+                disabled={isFavPending}
+                aria-pressed={isFav}
+                aria-label={
+                  isFav
+                    ? `Remover ${p.name} dos favoritos`
+                    : `Favoritar ${p.name} para acompanhar quedas de preço`
+                }
+                title={
+                  isFav
+                    ? "Remover dos favoritos"
+                    : "Acompanhar futuras quedas de preço"
+                }
+                className={`absolute right-1 top-1 inline-flex h-7 w-7 items-center justify-center rounded-full transition-transform active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)]/60 ${
+                  isFavPending ? "opacity-50" : ""
+                }`}
+                style={{
+                  background: isFav
+                    ? "color-mix(in oklab, var(--pc-home-gold) 18%, transparent)"
+                    : "transparent",
+                }}
+              >
+                <Star
+                  className="h-4 w-4"
+                  strokeWidth={2}
+                  style={{
+                    color: isFav ? P.gold : "color-mix(in oklab, var(--pc-home-ink) 45%, transparent)",
+                    fill: isFav ? P.gold : "transparent",
+                  }}
+                  aria-hidden
+                />
+              </button>
             </li>
           );
         })}
       </ul>
+
 
       <Link
         to="/melhores-precos"
@@ -492,9 +603,20 @@ function MobilePriceRotator({
         Ver todos os preços
         <ArrowRight className="h-3.5 w-3.5" aria-hidden />
       </Link>
+
+      {/* Modal de detalhes do produto (mercados, histórico, link para a página) */}
+      <ProductQuickModal
+        slug={openItem?.slug ?? null}
+        open={!!openItem}
+        onOpenChange={(v) => {
+          if (!v) setOpenItem(null);
+        }}
+        fallbackName={openItem?.name}
+      />
     </div>
   );
 }
+
 
 
 
