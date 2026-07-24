@@ -139,6 +139,12 @@ export function PriceSearchBar({
   );
   const [kindFilter, setKindFilter] = useState<string | null>(null);
   const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
+  const [groupBy, setGroupBy] = useLocalStorageState<"product" | "market">(
+    "pc:search:groupBy",
+    "product",
+    { validate: (v): v is "product" | "market" => v === "product" || v === "market" },
+  );
+
 
   // Seleção para comparar produtos (2 a 3). Guarda o nome do grupo — a
   // busca já garante nomes únicos por catálogo dentro dos resultados.
