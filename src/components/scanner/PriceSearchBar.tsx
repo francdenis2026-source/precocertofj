@@ -1620,6 +1620,7 @@ function MarketGroupedResults({
   type Bucket = {
     marketName: string;
     logoUrl: string | null;
+    brandColor: string | null;
     minPrice: number;
     rows: Row[];
   };
@@ -1636,6 +1637,7 @@ function MarketGroupedResults({
         b = {
           marketName: p.marketName,
           logoUrl: p.marketLogoUrl,
+          brandColor: p.marketBrandColor ?? null,
           minPrice: p.price,
           rows: [],
         };
@@ -1643,9 +1645,11 @@ function MarketGroupedResults({
       }
       if (p.price < b.minPrice) b.minPrice = p.price;
       if (!b.logoUrl && p.marketLogoUrl) b.logoUrl = p.marketLogoUrl;
+      if (!b.brandColor && p.marketBrandColor) b.brandColor = p.marketBrandColor;
       b.rows.push({ productName: g.productName, catalogId: g.catalogId, price: p });
     }
   }
+
 
   const buckets = Array.from(bucketsMap.values())
     .map((b) => ({
@@ -1660,6 +1664,7 @@ function MarketGroupedResults({
     <div className="space-y-3">
       {buckets.map((b, idx) => {
         const isCheapest = globalMin != null && b.minPrice === globalMin;
+        const bar = b.brandColor && /^#[0-9A-Fa-f]{6}$/.test(b.brandColor) ? b.brandColor : null;
         return (
           <section
             key={b.marketName}
@@ -1669,10 +1674,13 @@ function MarketGroupedResults({
                 ? "border-brand-gold/70 bg-[color-mix(in_oklab,var(--color-brand-gold)_5%,var(--card))]"
                 : "border-border/60 bg-card/70")
             }
+            style={bar ? { boxShadow: `inset 4px 0 0 0 ${bar}` } : undefined}
           >
-            <header className="flex items-center gap-3 border-b border-border/50 bg-background/40 px-3 py-2.5">
+            <header className="flex items-center gap-3 border-b border-border/50 bg-background/40 px-3 py-2.5 pl-4">
               <span
-                className="grid h-8 w-8 flex-none place-items-center rounded-md border border-brand-gold/30 bg-background overflow-hidden"
+                className="grid h-8 w-8 flex-none place-items-center rounded-md border overflow-hidden bg-background"
+                style={{ borderColor: bar ?? undefined }}
+
                 aria-hidden="true"
               >
                 {b.logoUrl ? (
@@ -1757,7 +1765,7 @@ function MatrixCompareResults({
   query: string;
   isAuthenticated: boolean;
 }) {
-  type Market = { name: string; logoUrl: string | null; kind: string | null; minAcc: number };
+  type Market = { name: string; logoUrl: string | null; brandColor: string | null; kind: string | null; minAcc: number };
   const { allMarkets, cheapestByMarket, allProducts } = useMemo(() => {
     const marketsMap = new Map<string, Market>();
     const cbm = new Map<string, Map<string, number>>();
@@ -1771,11 +1779,13 @@ function MatrixCompareResults({
           marketsMap.set(p.marketName, {
             name: p.marketName,
             logoUrl: p.marketLogoUrl,
+            brandColor: p.marketBrandColor ?? null,
             kind: p.marketKind,
             minAcc: p.price,
           });
         } else {
           if (!m.logoUrl && p.marketLogoUrl) m.logoUrl = p.marketLogoUrl;
+          if (!m.brandColor && p.marketBrandColor) m.brandColor = p.marketBrandColor;
           if (p.price < m.minAcc) m.minAcc = p.price;
         }
         const prev = perMarket.get(p.marketName);
@@ -1783,6 +1793,7 @@ function MatrixCompareResults({
       }
       cbm.set(g.productName, perMarket);
     }
+
     const all = Array.from(marketsMap.values()).sort((a, z) => a.minAcc - z.minAcc);
     const prods = groups.filter((g) => cbm.has(g.productName)).sort((a, b) => a.min - b.min);
     return { allMarkets: all, cheapestByMarket: cbm, allProducts: prods };
@@ -1945,6 +1956,7 @@ function MatrixCompareResults({
           <div className="flex flex-wrap gap-1" role="group" aria-label="Selecionar mercados visíveis">
             {allMarkets.map((m) => {
               const active = !hidden.has(m.name);
+              const dot = m.brandColor && /^#[0-9A-Fa-f]{6}$/.test(m.brandColor) ? m.brandColor : undefined;
               return (
                 <button
                   key={m.name}
@@ -1967,6 +1979,11 @@ function MatrixCompareResults({
                       : "border-border bg-background text-muted-foreground hover:bg-background/80 line-through")
                   }
                 >
+                  <span
+                    aria-hidden
+                    className="inline-block h-2 w-2 rounded-full"
+                    style={{ backgroundColor: dot ?? "hsl(var(--muted-foreground))" }}
+                  />
                   {m.logoUrl ? (
                     <img src={m.logoUrl} alt="" className="h-3.5 w-3.5 rounded object-contain" loading="lazy" />
                   ) : (
@@ -1976,6 +1993,7 @@ function MatrixCompareResults({
                 </button>
               );
             })}
+
           </div>
         </div>
 
@@ -2039,34 +2057,40 @@ function MatrixCompareResults({
               >
                 Produto
               </th>
-              {markets.map((m, ci) => (
-                <th
-                  key={m.name}
-                  role="columnheader"
-                  scope="col"
-                  aria-colindex={ci + 2}
-                  data-row={0}
-                  data-col={ci + 1}
-                  tabIndex={-1}
-                  className="focus-ring min-w-[140px] border-b border-border/60 px-3 py-2 align-bottom"
-                >
-                  <div className="flex items-center gap-2">
-                    <span
-                      className="grid h-7 w-7 flex-none place-items-center rounded-md border border-brand-gold/30 bg-background overflow-hidden"
-                      aria-hidden="true"
-                    >
-                      {m.logoUrl ? (
-                        <img src={m.logoUrl} alt="" className="h-full w-full object-contain p-0.5" loading="lazy" />
-                      ) : (
-                        <ShoppingBag className="h-3.5 w-3.5 text-muted-foreground" />
-                      )}
-                    </span>
-                    <span className="market-name truncate text-[12.5px] font-semibold text-foreground">
-                      {m.name}
-                    </span>
-                  </div>
-                </th>
-              ))}
+              {markets.map((m, ci) => {
+                const bar = m.brandColor && /^#[0-9A-Fa-f]{6}$/.test(m.brandColor) ? m.brandColor : "transparent";
+                return (
+                  <th
+                    key={m.name}
+                    role="columnheader"
+                    scope="col"
+                    aria-colindex={ci + 2}
+                    data-row={0}
+                    data-col={ci + 1}
+                    tabIndex={-1}
+                    className="focus-ring min-w-[140px] border-b border-border/60 px-3 py-2 align-bottom"
+                    style={{ boxShadow: `inset 0 3px 0 0 ${bar}` }}
+                  >
+                    <div className="flex items-center gap-2 pt-1">
+                      <span
+                        className="grid h-7 w-7 flex-none place-items-center rounded-md border overflow-hidden bg-background"
+                        style={{ borderColor: bar === "transparent" ? undefined : bar }}
+                        aria-hidden="true"
+                      >
+                        {m.logoUrl ? (
+                          <img src={m.logoUrl} alt="" className="h-full w-full object-contain p-0.5" loading="lazy" />
+                        ) : (
+                          <ShoppingBag className="h-3.5 w-3.5 text-muted-foreground" />
+                        )}
+                      </span>
+                      <span className="market-name truncate text-[12.5px] font-semibold text-foreground">
+                        {m.name}
+                      </span>
+                    </div>
+                  </th>
+                );
+              })}
+
             </tr>
           </thead>
           <tbody>
