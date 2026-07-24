@@ -238,7 +238,7 @@ function HomePage() {
                   className="mb-3 text-[13px] font-bold uppercase tracking-[0.2em] sm:mb-3 sm:text-[10.5px] sm:tracking-[0.24em]"
                   style={{ color: P.goldSoft }}
                 >
-                  {today} · edição diária
+                  {today}
                 </div>
               )}
 
