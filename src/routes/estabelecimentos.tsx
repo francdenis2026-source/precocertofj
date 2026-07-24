@@ -357,7 +357,14 @@ function EstablishmentsPage() {
             </div>
             <div
               ref={carouselRef}
-              className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              onPointerDown={onCarouselPointerDown}
+              onPointerMove={onCarouselPointerMove}
+              onPointerUp={onCarouselPointerUp}
+              onPointerCancel={onCarouselPointerUp}
+              onPointerLeave={onCarouselPointerUp}
+              onWheel={onCarouselWheel}
+              onClickCapture={onCarouselLinkClickCapture}
+              className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1 cursor-grab select-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
               {featured.map((e) => (
                 <Link
