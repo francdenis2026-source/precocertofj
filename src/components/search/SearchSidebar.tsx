@@ -155,8 +155,8 @@ function SidebarSection({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-border/60 bg-card/60 p-3 backdrop-blur-sm">
-      <header className="mb-2 flex items-center justify-between gap-2 px-1">
+    <section className="rounded-xl border border-border/40 bg-card/40 p-4">
+      <header className="mb-3 flex items-center justify-between gap-2">
         <div className="flex items-center gap-1.5 text-muted-foreground">
           {icon}
           <h3 className="text-[11px] font-semibold uppercase tracking-[0.14em]">{title}</h3>

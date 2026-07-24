@@ -10,7 +10,7 @@ import { QuickFilterBar } from "@/components/search/QuickFilterBar";
 import { ShareButton, SignupCTA } from "@/components/ds";
 import { useSession } from "@/hooks/useSession";
 import { trackEvent } from "@/lib/analytics-events";
-import { ListingShell, InternalPageHeader } from "@/components/layout";
+import { InternalPageHeader } from "@/components/layout";
 import { RouteError } from "@/components/feedback";
 import { SearchDiscovery, pushRecentSearch } from "@/components/search/SearchDiscovery";
 import { SearchSidebar } from "@/components/search/SearchSidebar";
@@ -237,12 +237,12 @@ function SearchPage() {
     <div
       className="pc-search-scope min-h-[100dvh] pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground"
     >
-      <div className="mx-auto w-full max-w-6xl px-4 md:px-6 pt-3 md:pt-4">
+      <div className="mx-auto w-full max-w-7xl px-4 md:px-8 pt-4 md:pt-6">
         <InternalPageHeader
           breadcrumbs={[{ label: "Início", to: "/" }, { label: "Buscar" }]}
           title="Buscar preço por nome"
           highlight="preço"
-          description="Preço médio, mínimo e onde está mais barato."
+          description="Consulte o preço médio, mínimo e onde comprar mais barato."
           actions={
             <>
               {hasQuery ? (
@@ -256,64 +256,62 @@ function SearchPage() {
           }
         />
 
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
-          <div className="min-w-0">
-            <ListingShell density="sm" className="mb-2">
-              <PriceSearchBar
-                initialQuery={q}
-                mode={mode}
-                pureOnly={pureOnly}
-                brandFilter={brandFilter}
-                priceMin={Number.isFinite(priceMin) ? priceMin : undefined}
-                priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
-                onQueryChange={syncQueryToUrl}
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_280px]">
+          <div className="min-w-0 space-y-6">
+            <PriceSearchBar
+              initialQuery={q}
+              mode={mode}
+              pureOnly={pureOnly}
+              brandFilter={brandFilter}
+              priceMin={Number.isFinite(priceMin) ? priceMin : undefined}
+              priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
+              onQueryChange={syncQueryToUrl}
+            />
+
+            {/* Toolbar única: match + filtro puro + filtros avançados */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-3 border-b border-border/50 pb-4">
+              <QuickFilterBar<SearchMode>
+                label="Match"
+                ariaLabel="Modo de correspondência"
+                value={mode}
+                onChange={(next) => chooseMode(next ?? "strict")}
+                size="sm"
+                options={[
+                  { value: "strict", label: "Estrita", hint: "Palavra inteira" },
+                  { value: "loose", label: "Parcial", hint: "Permite prefixo (≥ 3 chars)" },
+                ]}
               />
+              <QuickFilterBar<"pure" | "all">
+                label="Item"
+                ariaLabel="Filtro de item puro"
+                value={pureOnly ? "pure" : "all"}
+                onChange={(next) => setPure(next === "pure")}
+                size="sm"
+                options={[
+                  { value: "pure", label: "Puro", hint: "Remove ingredientes" },
+                  { value: "all", label: "Todos" },
+                ]}
+              />
+              <FilterInputs
+                brand={brandFilter}
+                min={search.min ?? ""}
+                max={search.max ?? ""}
+                onBrand={setBrand}
+                onMin={setMinPrice}
+                onMax={setMaxPrice}
+                onClear={clearFilters}
+              />
+            </div>
 
-              {/* Toolbar única: match + filtro puro + filtros avançados */}
-              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-border/60 bg-card/50 px-3 py-2">
-                <QuickFilterBar<SearchMode>
-                  label="Match"
-                  ariaLabel="Modo de correspondência"
-                  value={mode}
-                  onChange={(next) => chooseMode(next ?? "strict")}
-                  size="sm"
-                  options={[
-                    { value: "strict", label: "Estrita", hint: "Palavra inteira" },
-                    { value: "loose", label: "Parcial", hint: "Permite prefixo (≥ 3 chars)" },
-                  ]}
-                />
-                <QuickFilterBar<"pure" | "all">
-                  label="Item"
-                  ariaLabel="Filtro de item puro"
-                  value={pureOnly ? "pure" : "all"}
-                  onChange={(next) => setPure(next === "pure")}
-                  size="sm"
-                  options={[
-                    { value: "pure", label: "Puro", hint: "Remove ingredientes" },
-                    { value: "all", label: "Todos" },
-                  ]}
-                />
-                <FilterInputs
-                  brand={brandFilter}
-                  min={search.min ?? ""}
-                  max={search.max ?? ""}
-                  onBrand={setBrand}
-                  onMin={setMinPrice}
-                  onMax={setMaxPrice}
-                  onClear={clearFilters}
-                />
-              </div>
-
-              {!hasQuery && <SearchDiscovery onPickQuery={pickQuery} />}
-            </ListingShell>
+            {!hasQuery && <SearchDiscovery onPickQuery={pickQuery} />}
 
             {hasQuery && !user ? (
-              <SignupCTA context="save-comparison" className="mt-6" />
+              <SignupCTA context="save-comparison" className="mt-2" />
             ) : (
-              <div className="mt-6 text-center">
+              <div className="pt-4 text-center">
                 <Link
                   to="/"
-                  className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground hover:text-primary"
+                  className="text-[12px] font-medium text-muted-foreground transition-colors hover:text-primary"
                 >
                   Voltar ao início
                 </Link>
@@ -367,7 +365,7 @@ function FilterInputs({ brand, min, max, onBrand, onMin, onMax, onClear }: Filte
   };
 
   const inputBase =
-    "h-9 rounded-md border border-border bg-background/60 px-2.5 text-[13px] text-foreground placeholder:text-muted-foreground/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary transition-colors";
+    "h-9 rounded-lg border border-border/70 bg-background/60 px-3 text-[13px] font-normal text-foreground placeholder:text-muted-foreground/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary transition-colors";
 
   return (
     <div className="ml-auto flex flex-wrap items-center gap-2">
@@ -419,7 +417,7 @@ function FilterInputs({ brand, min, max, onBrand, onMin, onMax, onClear }: Filte
         type="button"
         onClick={clearAll}
         disabled={!dirty}
-        className="inline-flex h-9 items-center gap-1.5 rounded-md border border-border bg-background/60 px-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground/80 transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-40"
+        className="inline-flex h-9 items-center rounded-lg px-3 text-[12px] font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-40"
         aria-label="Limpar filtros"
       >
         Limpar
