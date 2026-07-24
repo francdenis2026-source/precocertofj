@@ -704,7 +704,7 @@ function HomePage() {
 
               {/* Badge EM BREVE */}
               <div
-                className="mb-4 inline-flex w-fit items-center gap-2.5 rounded-full px-3.5 py-1.5 text-[12px] font-bold uppercase tracking-[0.18em] shadow-sm sm:mb-5 sm:gap-2.5 sm:px-3.5 sm:py-1.5 sm:text-[11px]"
+                className="mb-3 inline-flex w-fit items-center gap-2.5 rounded-full px-3.5 py-1.5 text-[12px] font-bold uppercase tracking-[0.18em] shadow-sm sm:mb-3.5 sm:gap-2.5 sm:px-3.5 sm:py-1.5 sm:text-[11px]"
                 style={{ background: P.navy, color: "#F5F6FA" }}
               >
                 <span className="relative flex h-2.5 w-2.5 sm:h-2 sm:w-2">
