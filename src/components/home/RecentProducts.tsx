@@ -333,6 +333,8 @@ function SpotlightCard({
 }) {
   const { user } = useSession();
   const queryClient = useQueryClient();
+  const { confirm } = useConfirm();
+  const router = useRouter();
 
   // Modal de detalhes (produto, mercados, histórico)
   const [openItem, setOpenItem] = useState<RecentItem | null>(null);
