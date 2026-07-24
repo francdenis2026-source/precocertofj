@@ -390,16 +390,20 @@
   @media (max-width: 640px) {
     input, select, textarea { font-size: 16px; }
   }
+  /* Tipografia unificada: Work Sans para tudo (typeclear, sem serif distorcido).
+     Mantemos as classes .font-display / .font-serif para não quebrar imports,
+     mas ambas agora renderizam em sans-serif limpo e legível. */
   .font-display {
-    font-family: var(--font-display);
-    font-weight: 400;
-    letter-spacing: -0.020em;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: -0.015em;
     text-rendering: geometricPrecision;
+    font-feature-settings: "ss01", "cv11";
   }
   .font-serif {
-    font-family: var(--font-display);
-    font-weight: 400;
-    letter-spacing: -0.015em;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    letter-spacing: -0.01em;
   }
   .font-mono {
     font-family: var(--font-mono);
