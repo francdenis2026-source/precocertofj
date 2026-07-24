@@ -512,7 +512,7 @@ function EstablishmentsPage() {
                   {visibleItems.map((e) => (
                     <li
                       key={e.id}
-                      className="rounded-xl border border-border/60 bg-card shadow-sm transition-shadow hover:shadow-md"
+                      className="rounded-xl border border-brand-gold/50 bg-card shadow-sm transition-all hover:border-brand-gold hover:shadow-md"
                     >
                       <Link
                         to="/estabelecimento/$slug"
