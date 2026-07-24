@@ -60,7 +60,7 @@ export function SiteFooter() {
         <div className="flex items-center justify-between gap-2 text-[clamp(13px,3.5vw,15px)] leading-none">
           <Link
             to="/"
-            className="flex shrink-0 items-center gap-1.5"
+            className="flex shrink-0 items-center gap-1.5 rounded-md outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             aria-label="PreçoCerto — início"
           >
             <span className="grid h-[22px] w-[22px] place-items-center rounded-[5px] bg-brand text-[11px] font-black text-brand-foreground shadow-elev-2">
@@ -86,7 +86,7 @@ export function SiteFooter() {
             <span key={l.to} className="inline-flex items-center">
               <Link
                 to={l.to}
-                className="rounded px-0.5 py-0.5 text-foreground/95 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                className="rounded-md px-1 py-0.5 text-foreground/95 outline-none transition-colors hover:bg-brand/10 hover:text-brand active:text-brand-strong focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background [&.active]:text-brand"
               >
                 {l.label}
               </Link>
@@ -111,7 +111,7 @@ export function SiteFooter() {
       >
         {/* Brand block */}
         <div className="max-w-sm">
-          <Link to="/" className="flex items-center gap-2 sm:gap-2.5">
+          <Link to="/" className="group flex items-center gap-2 rounded-lg outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:gap-2.5">
             <span
               className="grid h-8 w-8 shrink-0 place-items-center rounded-[9px] bg-brand text-[15px] font-black text-brand-foreground shadow-elev-2 sm:h-9 sm:w-9 sm:text-[17px] md:h-10 md:w-10 md:text-[19px]"
             >
@@ -135,7 +135,10 @@ export function SiteFooter() {
             </li>
             <li className="flex items-center gap-2">
               <Mail className="h-3.5 w-3.5 shrink-0 text-brand" />
-              <a href="mailto:precocerto-fj@proton.me" className="truncate text-foreground hover:text-brand hover:underline">
+              <a
+                href="mailto:precocerto-fj@proton.me"
+                className="truncate rounded-md px-1 py-0.5 -mx-1 text-foreground outline-none transition-colors hover:bg-brand/10 hover:text-brand hover:underline underline-offset-4 decoration-brand/70 active:text-brand-strong focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              >
                 precocerto-fj@proton.me
               </a>
             </li>
@@ -158,7 +161,7 @@ export function SiteFooter() {
                   <li key={l.to}>
                     <Link
                       to={l.to}
-                      className="inline-flex items-center rounded-md px-1.5 py-0.5 -mx-1.5 text-[13.5px] font-medium leading-[1.45] text-foreground/90 transition-colors hover:bg-brand/10 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:text-[14px] lg:text-[15px]"
+                      className="inline-flex items-center rounded-md px-1.5 py-0.5 -mx-1.5 text-[13.5px] font-medium leading-[1.45] text-foreground/90 outline-none transition-colors hover:bg-brand/10 hover:text-brand active:text-brand-strong focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background [&.active]:text-brand [&.active]:bg-brand/10 md:text-[14px] lg:text-[15px]"
                     >
                       <span>{l.label}</span>
                     </Link>

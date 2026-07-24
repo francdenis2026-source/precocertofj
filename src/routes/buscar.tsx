@@ -334,9 +334,14 @@ function SearchPage() {
 
 
 
-        <div className="mx-auto w-full max-w-7xl px-4 md:px-8 pt-3 md:pt-4 pb-3 md:pb-4">
-          <nav aria-label="Trilha" className="mb-2 flex items-center gap-1 text-[11px] font-medium text-white/70">
-            <Link to="/" className="hover:text-brand-gold">Início</Link>
+        <div className="mx-auto w-full max-w-7xl px-4 py-6 md:px-8 md:py-8">
+          <nav aria-label="Trilha" className="mb-3 flex items-center gap-1 text-[11.5px] font-medium text-white/70">
+            <Link
+              to="/"
+              className="rounded-md px-1 py-0.5 outline-none transition-colors hover:text-brand-gold active:text-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+            >
+              Início
+            </Link>
             <ChevronRight aria-hidden className="h-3 w-3 opacity-60" />
             <span className="text-white">Buscar</span>
           </nav>
