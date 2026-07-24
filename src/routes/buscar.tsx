@@ -298,22 +298,22 @@ function SearchPage() {
 
         {/* Véu navy responsivo — opacidade por breakpoint garante que a foto sempre apareça */}
         <div aria-hidden className="pc-hero-veil absolute inset-0 -z-20" />
+        {/* Gradiente diagonal para contraste do bloco de texto (esquerda mais escura) */}
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-20"
+          style={{
+            background:
+              "linear-gradient(100deg, color-mix(in oklab, var(--brand-navy) 88%, transparent) 0%, color-mix(in oklab, var(--brand-navy) 70%, transparent) 40%, color-mix(in oklab, var(--brand-navy) 35%, transparent) 75%, transparent 100%)",
+          }}
+        />
         {/* Reforço inferior para legibilidade da barra de busca */}
         <div
           aria-hidden
           className="absolute inset-x-0 bottom-0 -z-20 h-1/2"
           style={{
             background:
-              "linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--brand-navy) 55%, transparent) 100%)",
-          }}
-        />
-        {/* Realce dourado no canto superior esquerdo */}
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10"
-          style={{
-            background:
-              "radial-gradient(700px 260px at 8% -10%, color-mix(in oklab, var(--brand-gold) 14%, transparent) 0%, transparent 60%)",
+              "linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--brand-navy) 70%, transparent) 100%)",
           }}
         />
         {/* Hairline dourada no topo */}
@@ -325,6 +325,8 @@ function SearchPage() {
               "linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 20%, color-mix(in oklab, var(--brand-gold) 80%, transparent) 50%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 80%, transparent 100%)",
           }}
         />
+
+
 
 
 
@@ -347,16 +349,17 @@ function SearchPage() {
           </nav>
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="min-w-0">
-              <div className="mb-1 inline-flex items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.14em] text-brand-gold">
-                <span className="h-1 w-1 rounded-full bg-brand-gold" />
+              <div className="mb-1.5 inline-flex items-center gap-1.5 rounded-full bg-brand-gold px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-brand-navy shadow-[0_2px_10px_-2px_color-mix(in_oklab,var(--brand-gold)_55%,transparent)]">
+                <span className="h-1.5 w-1.5 rounded-full bg-brand-navy" />
                 Comparador de preços
               </div>
-              <h1 className="text-[17px] md:text-[20px] font-semibold leading-tight text-white">
-                Buscar <span className="text-brand-gold">preço</span> por nome
+              <h1 className="text-[19px] md:text-[24px] font-bold leading-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.55)]">
+                Buscar <span className="text-brand-gold drop-shadow-[0_1px_6px_rgba(0,0,0,0.6)]">preço</span> por nome
               </h1>
-              <p className="mt-0.5 max-w-xl text-[11.5px] md:text-[12px] text-white/75">
+              <p className="mt-1 max-w-xl text-[12px] md:text-[13px] font-medium text-white/90 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]">
                 Consulte preço médio, mínimo e onde comprar mais barato em Feijó.
               </p>
+
             </div>
             <div className="flex items-center gap-2">
               {hasQuery ? (
