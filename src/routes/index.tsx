@@ -877,14 +877,14 @@ function HomePage() {
 
 
       {/* -------- FINAL CTA (compact ribbon) -------- */}
-      <section className="mx-auto w-full max-w-6xl px-4 pb-8 sm:px-6 lg:px-8">
+      <section className="pc-container pc-section">
         <div
-          className="relative overflow-hidden rounded-2xl border p-4 sm:p-5"
+          className="relative overflow-hidden rounded-[var(--pc-radius-md)] border p-4 sm:p-5"
           style={{
             background: `linear-gradient(135deg, ${P.navy} 0%, color-mix(in oklab, ${P.navy} 85%, black) 100%)`,
             borderColor: "color-mix(in oklab, #F5C86A 32%, transparent)",
             color: "#F5F6FA",
-            boxShadow: "0 10px 30px -12px rgba(0,0,0,0.35)",
+            boxShadow: "var(--pc-shadow-3)",
           }}
         >
           {/* subtle gold glow accent */}
