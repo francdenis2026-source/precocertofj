@@ -761,6 +761,37 @@ export function PriceSearchBar({
           ) : (
 
             <>
+              {/* Resumo topo: melhor preço agora + economia estimada */}
+              {result.cheapest && result.max > result.min ? (
+                <div className="grid gap-2 rounded-xl border border-brand-gold/45 bg-brand-navy px-3 py-2.5 text-white sm:grid-cols-2 sm:gap-3">
+                  <div className="min-w-0">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-gold">
+                      Melhor preço agora
+                    </p>
+                    <p className="mt-0.5 truncate text-[18px] font-semibold leading-tight tabular-nums">
+                      {fmt(result.cheapest.price)}
+                    </p>
+                    <p className="mt-0.5 truncate text-[11.5px] text-white/75">
+                      em <span className="font-semibold text-white">{result.cheapest.marketName}</span>
+                    </p>
+                  </div>
+                  <div className="min-w-0 sm:border-l sm:border-white/15 sm:pl-3">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-gold">
+                      Economia estimada
+                    </p>
+                    <p className="mt-0.5 text-[18px] font-semibold leading-tight tabular-nums">
+                      {fmt(result.max - result.min)}
+                      <span className="ml-1.5 text-[11.5px] font-semibold text-brand-gold">
+                        −{Math.round(((result.max - result.min) / result.max) * 100)}%
+                      </span>
+                    </p>
+                    <p className="mt-0.5 text-[11.5px] text-white/75 tabular-nums">
+                      mais barato vs. mais caro ({fmt(result.max)})
+                    </p>
+                  </div>
+                </div>
+              ) : null}
+
               <div className="grid grid-cols-3 gap-2">
                 <Stat label="Média" value={fmt(result.avg)} />
                 <Stat
@@ -770,6 +801,7 @@ export function PriceSearchBar({
                 />
                 <Stat label="Amostras" value={String(result.samples)} />
               </div>
+
 
               {result.cheapest && (
                 <Link
