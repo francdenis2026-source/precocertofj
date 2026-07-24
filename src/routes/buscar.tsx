@@ -483,21 +483,6 @@ function FilterInputs({ min, max, onMin, onMax, onClear }: FilterInputsProps) {
     onClear();
   };
 
-  const applyPreset = (lo: string, hi: string) => {
-    setMn(lo);
-    setMx(hi);
-    onMin(lo);
-    onMax(hi);
-  };
-
-  const presets: { label: string; lo: string; hi: string }[] = [
-    { label: "Até R$ 20", lo: "", hi: "20" },
-    { label: "R$ 20–50", lo: "20", hi: "50" },
-    { label: "R$ 50–100", lo: "50", hi: "100" },
-    { label: "R$ 100+", lo: "100", hi: "" },
-  ];
-
-  const isActive = (lo: string, hi: string) => mn.trim() === lo && mx.trim() === hi;
 
   const inputBase =
     "h-9 w-24 rounded-md border-0 bg-transparent px-2 text-[13px] font-medium text-foreground tabular-nums placeholder:text-muted-foreground/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 transition-colors";
