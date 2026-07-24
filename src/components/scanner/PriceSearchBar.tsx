@@ -2001,7 +2001,7 @@ function MatrixCompareResults({
                     style={{ backgroundColor: dot ?? "hsl(var(--muted-foreground))" }}
                   />
                   {m.logoUrl ? (
-                    <img src={m.logoUrl} alt="" className="h-3.5 w-3.5 rounded object-contain" loading="lazy" />
+                    <LazyImage src={m.logoUrl} alt="" className="h-3.5 w-3.5 rounded object-contain" />
                   ) : (
                     <ShoppingBag className="h-3 w-3" aria-hidden="true" />
                   )}
