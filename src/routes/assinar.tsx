@@ -124,7 +124,7 @@ function AssinarPage() {
   const banner = useMemo(() => {
     if (mpStatus === "success" && waitingWebhook) {
       return {
-        icon: <Loader2 className="h-5 w-5 animate-spin text-primary" />,
+        icon: <Loader2 className="h-5 w-5 animate-spin text-brand-gold" />,
         title: "Confirmando pagamento com o Mercado Pago…",
         body:
           "Pode levar até 1 minuto. Deixe esta aba aberta — a página avisa quando a assinatura ficar ativa.",
@@ -141,7 +141,7 @@ function AssinarPage() {
     }
     if (mpStatus === "success" && !waitingWebhook && !isActive) {
       return {
-        icon: <Clock className="h-5 w-5 text-primary" />,
+        icon: <Clock className="h-5 w-5 text-brand-gold" />,
         title: "Pagamento recebido — aguardando confirmação",
         body:
           "O Mercado Pago ainda não notificou a ativação. Se o valor foi debitado, aguarde alguns minutos e clique em ‘Verificar agora’.",
@@ -150,7 +150,7 @@ function AssinarPage() {
     }
     if (mpStatus === "pending") {
       return {
-        icon: <Clock className="h-5 w-5 text-primary" />,
+        icon: <Clock className="h-5 w-5 text-brand-gold" />,
         title: "Pagamento em análise",
         body:
           "Assim que o Mercado Pago aprovar (boleto/pix), sua assinatura é ativada automaticamente.",
@@ -207,7 +207,7 @@ function AssinarPage() {
               ? "border-savings/30 bg-savings/10 text-foreground"
               : banner.tone === "error"
                 ? "border-destructive/30 bg-destructive/10 text-foreground"
-                : "border-primary/30 bg-primary/5 text-foreground"
+                : "border-brand-gold/30 bg-brand-gold/10 text-foreground"
           }`}
         >
           <span className="mt-0.5 flex-none">{banner.icon}</span>
@@ -222,7 +222,7 @@ function AssinarPage() {
                   qc.invalidateQueries({ queryKey: ["my-account"] });
                   setTimeout(() => setWaitingWebhook(false), 30_000);
                 }}
-                className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-background px-3 py-1 text-xs font-medium text-primary hover:bg-primary/5"
+                className="mt-2 inline-flex items-center gap-1.5 rounded-full border border-brand-gold/40 bg-background px-3 py-1 text-xs font-medium text-brand-gold hover:bg-brand-gold/10"
               >
                 <Loader2
                   className={`h-3 w-3 ${waitingWebhook ? "animate-spin" : ""}`}

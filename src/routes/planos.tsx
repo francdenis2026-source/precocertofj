@@ -181,7 +181,7 @@ function PlansPage() {
             Escolha o plano que combina com sua rotina. 7 dias grátis, sem cartão.
           </p>
           <div className="mt-2.5 inline-flex items-center gap-1.5 text-[11px] text-muted-foreground">
-            <ShieldCheck className="h-3.5 w-3.5 text-primary" aria-hidden />
+            <ShieldCheck className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
             Ativação imediata · Pix ou cartão de crédito
           </div>
         </section>
