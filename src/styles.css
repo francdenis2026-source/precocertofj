@@ -1842,7 +1842,7 @@ body::before {
       color-mix(in oklab, var(--color-background) 94%, transparent) 100%
     ),
     /* Foto editorial (blur navy + halo dourado) */
-    url("/__l5e/assets-v1/5897ac52-660e-4163-9e37-b4add9493d7c/site-background.jpg");
+    url("/__l5e/assets-v1/8006a16d-fef8-4cb8-87fa-f384aece8264/site-background.jpg");
   background-size: cover, cover;
   background-position: center, center center;
   background-repeat: no-repeat, no-repeat;
@@ -1857,7 +1857,7 @@ body::before {
       color-mix(in oklab, var(--color-background) 74%, transparent) 45%,
       color-mix(in oklab, var(--color-background) 88%, transparent) 100%
     ),
-    url("/__l5e/assets-v1/5897ac52-660e-4163-9e37-b4add9493d7c/site-background.jpg");
+    url("/__l5e/assets-v1/8006a16d-fef8-4cb8-87fa-f384aece8264/site-background.jpg");
   opacity: 1;
 }
 /* Mobile / redução de dados — attachment fixed é caro em iOS */
