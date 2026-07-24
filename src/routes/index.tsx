@@ -750,13 +750,13 @@ function HomePage() {
               )}
 
 
-              {/* H1 — text-shadow denso para garantir contraste sobre a foto sem véu global */}
+              {/* H1 — branco sobre painel navy, garante contraste em claro e escuro */}
               <h1
                 className={`${serif} pc-h1 font-normal`}
                 style={{
-                  color: P.heading,
+                  color: "#F8FAFC",
                   textShadow:
-                    "0 2px 14px rgba(2,6,23,0.60), 0 1px 3px rgba(2,6,23,0.55), 0 0 1px rgba(2,6,23,0.35)",
+                    "0 2px 14px rgba(2,6,23,0.75), 0 1px 3px rgba(2,6,23,0.7)",
                 }}
               >
                 Em Feijó, quem sabe o preço
@@ -766,12 +766,13 @@ function HomePage() {
                   style={{
                     color: P.goldSoft,
                     textShadow:
-                      "0 2px 14px rgba(2,6,23,0.65), 0 1px 3px rgba(2,6,23,0.6)",
+                      "0 2px 14px rgba(2,6,23,0.8), 0 1px 3px rgba(2,6,23,0.7)",
                   }}
                 >
                   compra melhor.
                 </span>
               </h1>
+
 
 
               {/* Subtítulo — contraste garantido pelo scrim lateral suave + text-shadow. */}
