@@ -365,7 +365,7 @@ function FilterInputs({ brand, min, max, onBrand, onMin, onMax, onClear }: Filte
   };
 
   const inputBase =
-    "h-9 rounded-md border border-border bg-background/60 px-2.5 text-[13px] text-foreground placeholder:text-muted-foreground/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary transition-colors";
+    "h-9 rounded-lg border border-border/70 bg-background/60 px-3 text-[13px] font-normal text-foreground placeholder:text-muted-foreground/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary transition-colors";
 
   return (
     <div className="ml-auto flex flex-wrap items-center gap-2">
