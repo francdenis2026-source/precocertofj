@@ -471,22 +471,13 @@ function SpotlightCard({
       <div
         className="pc-spotlight group relative overflow-hidden rounded-xl border p-3 sm:p-4 transition-transform hover:-translate-y-0.5"
         style={{
-          borderColor: "color-mix(in oklab, var(--pc-home-gold) 45%, transparent)",
-          background: `linear-gradient(135deg, ${P.card} 0%, color-mix(in oklab, var(--pc-home-gold) 6%, ${P.card}) 100%)`,
+          borderColor: "color-mix(in oklab, var(--pc-home-gold) 32%, transparent)",
+          background: P.card,
           boxShadow:
-            "0 6px 24px -10px color-mix(in oklab, var(--pc-home-gold) 30%, transparent), inset 0 1px 0 color-mix(in oklab, var(--pc-home-gold) 18%, transparent)",
+            "0 1px 2px rgba(0,0,0,0.25), inset 0 1px 0 color-mix(in oklab, var(--pc-home-gold) 10%, transparent)",
         }}
       >
-        {/* Brilho animado no canto */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute -right-12 -top-12 h-28 w-28 rounded-full opacity-50 blur-3xl"
-          style={{
-            background:
-              "radial-gradient(circle, color-mix(in oklab, var(--pc-home-gold) 55%, transparent) 0%, transparent 70%)",
-            animation: "pc-spot-pulse 3.5s ease-in-out infinite",
-          }}
-        />
+
 
         <button
           type="button"
@@ -502,7 +493,7 @@ function SpotlightCard({
                 color: "var(--pc-price)",
               }}
             >
-              <span className="h-1 w-1 rounded-full" style={{ background: P.gold, boxShadow: `0 0 6px ${P.gold}` }} />
+              <span className="h-1 w-1 rounded-full" style={{ background: P.gold }} />
               Destaque
             </span>
             {hasDrop && (
