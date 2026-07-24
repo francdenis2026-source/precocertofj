@@ -7,18 +7,26 @@ import {
   TrendingDown,
   History as HistoryIcon,
   X as XIcon,
+  Wheat,
+  Bean,
+  Coffee,
+  Milk,
+  Droplet,
+  Candy,
+  CookingPot,
+  type LucideIcon,
 } from "lucide-react";
 import { getPlatformStats } from "@/lib/stores-public.functions";
 
-const CATEGORIES: { label: string; q: string; emoji: string }[] = [
-  { label: "Arroz", q: "arroz", emoji: "🍚" },
-  { label: "Feijão", q: "feijão", emoji: "🫘" },
-  { label: "Café", q: "café", emoji: "☕" },
-  { label: "Leite", q: "leite", emoji: "🥛" },
-  { label: "Óleo", q: "óleo", emoji: "🫒" },
-  { label: "Açúcar", q: "açúcar", emoji: "🍬" },
-  { label: "Farinha", q: "farinha", emoji: "🌾" },
-  { label: "Macarrão", q: "macarrão", emoji: "🍝" },
+const CATEGORIES: { label: string; q: string; Icon: LucideIcon }[] = [
+  { label: "Arroz", q: "arroz", Icon: Wheat },
+  { label: "Feijão", q: "feijão", Icon: Bean },
+  { label: "Café", q: "café", Icon: Coffee },
+  { label: "Leite", q: "leite", Icon: Milk },
+  { label: "Óleo", q: "óleo", Icon: Droplet },
+  { label: "Açúcar", q: "açúcar", Icon: Candy },
+  { label: "Farinha", q: "farinha", Icon: Wheat },
+  { label: "Macarrão", q: "macarrão", Icon: CookingPot },
 ];
 
 const POPULAR: string[] = [
@@ -127,8 +135,11 @@ export function SearchDiscovery({ onPickQuery }: Props) {
               onClick={() => onPickQuery(c.q)}
               className="group snap-start inline-flex shrink-0 items-center gap-2 rounded-xl border border-border/60 bg-card/70 px-3 py-2 text-left text-[13px] font-medium text-foreground transition-colors hover:border-brand-gold hover:bg-brand-gold/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold sm:justify-start"
             >
-              <span aria-hidden className="text-base leading-none">
-                {c.emoji}
+              <span
+                aria-hidden
+                className="grid h-6 w-6 flex-none place-items-center rounded-md border border-brand-gold/30 bg-brand-gold/10 text-brand-gold transition-colors group-hover:bg-brand-gold group-hover:text-primary"
+              >
+                <c.Icon className="h-3.5 w-3.5" strokeWidth={2} />
               </span>
               <span className="truncate">{c.label}</span>
             </button>
