@@ -681,6 +681,28 @@ export function PriceSearchBar({
             }}
           />
 
+          {autoCorrected && (
+            <div
+              role="status"
+              className="flex flex-wrap items-center gap-2 rounded-lg border border-brand-gold/40 bg-brand-gold/10 px-3 py-2 text-[12px] text-foreground"
+            >
+              <Sparkles className="h-3.5 w-3.5 text-brand-gold" aria-hidden="true" />
+              <span>
+                Corrigido para{" "}
+                <strong className="font-semibold">“{autoCorrected.to}”</strong>. Você digitou{" "}
+                <em className="italic text-muted-foreground">“{autoCorrected.from}”</em>.
+              </span>
+              <button
+                type="button"
+                onClick={revertAutoCorrect}
+                className="ml-auto rounded-md border border-brand-gold/40 bg-background px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-foreground hover:bg-brand-gold/20 focus-ring"
+              >
+                Buscar “{autoCorrected.from}” mesmo assim
+              </button>
+            </div>
+          )}
+
+
           {result.canonicalGroup && result.excludedByPureFilter > 0 && (
             <p className="rounded-lg border border-primary/20 bg-primary/5 px-3 py-1.5 font-mono text-[10px] text-muted-foreground">
               Filtro <span className="text-primary">“{result.canonicalGroup}” puro</span> ativo — {result.excludedByPureFilter} item(s) com o termo apenas como ingrediente foram ocultados.
