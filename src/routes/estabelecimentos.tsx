@@ -204,14 +204,20 @@ function EstablishmentsPage() {
               {currentKind ? <currentKind.icon className="h-3 w-3" aria-hidden /> : <Store className="h-3 w-3" aria-hidden />}
               {currentKind ? currentKind.label : "Comércios parceiros"}
             </div>
-            <h1 className="text-[20px] md:text-[24px] font-bold leading-tight text-white [text-shadow:0_2px_8px_rgba(0,0,0,0.55)]">
+            <h1 className="text-[20px] md:text-[24px] font-bold leading-tight text-white [text-shadow:0_2px_10px_rgba(0,0,0,0.65)]">
               {currentKind ? currentKind.label : "Comércios"} de{" "}
-              <span className="relative inline-block rounded-md bg-brand-navy/85 px-1.5 py-0.5 text-brand-gold ring-1 ring-brand-gold/70">
+              <span
+                className="relative inline-block rounded-md px-2 py-0.5 font-extrabold text-brand-navy ring-1 ring-brand-gold/80 shadow-[0_2px_10px_-2px_rgba(0,0,0,0.45)]"
+                style={{
+                  background:
+                    "linear-gradient(180deg, color-mix(in oklab, var(--brand-gold) 96%, white) 0%, var(--brand-gold) 100%)",
+                }}
+              >
                 Feijó
               </span>
             </h1>
           </div>
-          <p className="mt-1.5 max-w-2xl text-[12.5px] md:text-[13.5px] font-medium leading-snug text-white [text-shadow:0_1px_6px_rgba(0,0,0,0.55)]">
+          <p className="mt-2 inline-block max-w-2xl rounded-md bg-brand-navy/75 px-2.5 py-1 text-[12.5px] md:text-[13.5px] font-medium leading-snug text-white ring-1 ring-white/10 backdrop-blur-[2px] [text-shadow:0_1px_4px_rgba(0,0,0,0.55)]">
             {currentKind ? currentKind.tagline : "Cobertura de produtos, categorias e comparativo entre estabelecimentos monitorados pela comunidade."}
           </p>
 
