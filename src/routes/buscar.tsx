@@ -316,16 +316,22 @@ function SearchPage() {
             </span>
           </nav>
 
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-2.5 py-0.5 text-[10.5px] font-bold uppercase tracking-[0.14em] text-brand-navy">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <div className="pc-seal text-[10.5px] font-bold uppercase tracking-[0.14em]" style={{ background: "var(--brand-gold)", color: "var(--brand-navy)", boxShadow: "0 0 0 1px var(--brand-gold), 0 4px 14px rgba(2,6,23,0.35)" }}>
               <Search className="h-3 w-3" aria-hidden />
               Comparador de preços
             </div>
-            <h1 className="inline-flex items-center rounded-lg bg-brand-navy/85 px-3 py-1.5 text-[20px] md:text-[24px] font-bold leading-tight text-white ring-1 ring-brand-gold/40 shadow-[0_4px_18px_rgba(2,6,23,0.45)] backdrop-blur-[2px]">
-              Buscar <span className="ml-1.5 text-brand-gold">preço</span><span className="ml-1.5">por nome</span>
+            <h1
+              tabIndex={0}
+              aria-label="Buscar preço por nome"
+              className="pc-seal-title text-[20px] md:text-[26px] font-bold leading-tight motion-safe:animate-fade-in"
+            >
+              <span>Buscar</span>
+              <span className="text-brand-gold">preço</span>
+              <span>por nome</span>
             </h1>
           </div>
-          <p className="mt-2 inline-block max-w-2xl rounded-md bg-brand-navy/75 px-2.5 py-1 text-[12.5px] md:text-[13.5px] font-medium leading-snug text-white ring-1 ring-white/10 backdrop-blur-[2px] [text-shadow:0_1px_4px_rgba(0,0,0,0.55)]">
+          <p className="pc-seal mt-2 max-w-2xl text-[12.5px] md:text-[13.5px] font-medium leading-snug" style={{ background: "color-mix(in oklab, var(--brand-navy) 76%, transparent)" }}>
             Consulte preço médio, mínimo e onde comprar mais barato em Feijó.
           </p>
 
