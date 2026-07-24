@@ -1700,12 +1700,12 @@ function MarketGroupedResults({
                 aria-hidden="true"
               >
                 {b.logoUrl ? (
-                  <img
+                  <LazyImage
                     src={b.logoUrl}
                     alt=""
                     className="h-full w-full object-contain p-0.5"
-                    loading="lazy"
                   />
+
                 ) : (
                   <ShoppingBag className="h-4 w-4 text-muted-foreground" />
                 )}
