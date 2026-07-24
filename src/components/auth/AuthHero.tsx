@@ -81,7 +81,8 @@ const PRESETS: Record<AuthHeroVariant, Preset> = {
       caption: "Compra segura · vinculada ao seu CPF",
     },
     brandIcon: ShoppingCart,
-    photo: false,
+    photo: true,
+    photoSrc: heroPhoto,
   },
   admin: {
     badge: { icon: Shield, label: "Portal interno" },
