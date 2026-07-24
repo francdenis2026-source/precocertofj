@@ -1462,7 +1462,7 @@ function ProductGroupCard({
                     Menor
                   </p>
                 )}
-                <p className="font-display text-[15px] font-semibold leading-tight tabular-nums text-foreground">
+                <p className="text-[15px] font-bold leading-tight tabular-nums text-foreground">
                   {fmt(p.price)}
                 </p>
 
