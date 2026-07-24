@@ -771,7 +771,7 @@ function HomePage() {
 
               {/* Subtítulo — contraste garantido pelo scrim lateral suave + text-shadow. */}
               <p
-                className="mt-3 max-w-md text-[13.5px] leading-snug sm:text-[13px]"
+                className="mt-2.5 max-w-md text-[13.5px] leading-snug sm:text-[13px]"
                 style={{
                   color: "#F5F6FA",
                   textShadow: "0 1px 3px rgba(2,6,23,0.6), 0 2px 10px rgba(2,6,23,0.45)",
