@@ -161,7 +161,7 @@ function HomePage() {
           WebkitBackdropFilter: "saturate(140%) blur(8px)",
         }}
       >
-        <div className="flex gap-1.5 overflow-x-auto px-3 py-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex gap-2 overflow-x-auto px-3 py-2.5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {[
             { to: "/melhores-precos", label: "Ranking" },
             { to: "/estabelecimentos", label: "Mercados" },
@@ -173,13 +173,21 @@ function HomePage() {
             <Link
               key={c.to}
               to={c.to}
-              className="inline-flex shrink-0 items-center rounded-full border px-3 py-1.5 text-[11.5px] font-semibold leading-none transition-colors active:scale-[0.97]"
+              className="inline-flex shrink-0 items-center rounded-full border px-4 py-2 text-[13.5px] font-semibold leading-none tracking-[-0.005em] shadow-sm transition-all active:scale-[0.97] hover:border-[color:var(--pc-home-gold)]"
               style={{ borderColor: P.line, background: P.card, color: P.heading }}
+              activeProps={{
+                style: {
+                  background: P.heading,
+                  color: P.paper,
+                  borderColor: P.heading,
+                },
+              }}
             >
               {c.label}
             </Link>
           ))}
         </div>
+
       </nav>
 
 
