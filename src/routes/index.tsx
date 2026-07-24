@@ -800,7 +800,7 @@ function HomePage() {
         </div>
 
         {/* -------- SOCIAL PROOF (mobile: 2º, desktop: antes) -------- */}
-        <section className="order-2 mx-auto w-full max-w-6xl px-3 pb-3 sm:order-1 sm:px-6 sm:pb-4 lg:px-8">
+        <section className="pc-container pc-section-tight order-2 sm:order-1">
           <TooltipProvider delayDuration={150}>
             <div className="grid grid-cols-3 gap-2 sm:gap-4">
               {[
