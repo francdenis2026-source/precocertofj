@@ -445,13 +445,8 @@ function HomePage() {
 
               {/* H1 */}
               <h1
-                className={`${serif} font-normal`}
-                style={{
-                  color: P.heading,
-                  fontSize: "clamp(1.55rem, 4.6vw, 3.75rem)",
-                  lineHeight: 0.95,
-                  letterSpacing: "-0.03em",
-                }}
+                className={`${serif} pc-h1 font-normal`}
+                style={{ color: P.heading }}
               >
                 Em Feijó, quem sabe o preço
                 <br />
@@ -723,12 +718,13 @@ function HomePage() {
       </section>
 
       {/* ============== EDITORIAL CARD (explore band) ============== */}
-      <div className="mx-auto w-full max-w-6xl px-3 pt-4 pb-3 sm:px-6 sm:pt-6 sm:pb-4 lg:px-8">
+      <div className="pc-container pc-section-tight">
         <div
-          className="overflow-hidden rounded-[1.25rem] shadow-[0_20px_60px_-30px_rgb(11_29_58_/_0.22)] ring-1 lg:rounded-[1.75rem]"
+          className="overflow-hidden rounded-[var(--pc-radius-lg)] ring-1 lg:rounded-[var(--pc-radius-xl)]"
           style={{
             background: P.card,
             borderColor: P.line,
+            boxShadow: "var(--pc-shadow-2)",
             // @ts-expect-error css var
             "--tw-ring-color": P.line,
           }}
@@ -746,14 +742,7 @@ function HomePage() {
               >
                 Por onde começar
               </div>
-              <h2
-                className="font-semibold text-white"
-                style={{
-                  fontSize: "clamp(1.05rem, 2vw, 1.5rem)",
-                  lineHeight: 1.15,
-                  letterSpacing: "-0.02em",
-                }}
-              >
+              <h2 className="pc-h2 text-white">
                 Três caminhos, uma cesta mais barata.
               </h2>
             </div>
@@ -799,7 +788,7 @@ function HomePage() {
         </div>
 
         {/* -------- SOCIAL PROOF (mobile: 2º, desktop: antes) -------- */}
-        <section className="order-2 mx-auto w-full max-w-6xl px-3 pb-3 sm:order-1 sm:px-6 sm:pb-4 lg:px-8">
+        <section className="pc-container pc-section-tight order-2 sm:order-1">
           <TooltipProvider delayDuration={150}>
             <div className="grid grid-cols-3 gap-2 sm:gap-4">
               {[
@@ -876,14 +865,14 @@ function HomePage() {
 
 
       {/* -------- FINAL CTA (compact ribbon) -------- */}
-      <section className="mx-auto w-full max-w-6xl px-4 pb-8 sm:px-6 lg:px-8">
+      <section className="pc-container pc-section">
         <div
-          className="relative overflow-hidden rounded-2xl border p-4 sm:p-5"
+          className="relative overflow-hidden rounded-[var(--pc-radius-md)] border p-4 sm:p-5"
           style={{
             background: `linear-gradient(135deg, ${P.navy} 0%, color-mix(in oklab, ${P.navy} 85%, black) 100%)`,
             borderColor: "color-mix(in oklab, #F5C86A 32%, transparent)",
             color: "#F5F6FA",
-            boxShadow: "0 10px 30px -12px rgba(0,0,0,0.35)",
+            boxShadow: "var(--pc-shadow-3)",
           }}
         >
           {/* subtle gold glow accent */}

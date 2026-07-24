@@ -1999,3 +1999,107 @@ body.no-page-bg::before { display: none; }
   0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 color-mix(in oklab, #10b981 40%, transparent); }
   50% { transform: scale(1.04); box-shadow: 0 0 0 6px transparent; }
 }
+
+/* ============================================================
+   HOMEPAGE RHYTHM TOKENS + UTILITIES
+   Fonte única de verdade para spacing, container, radii e shadows.
+   Todos os valores se adaptam automaticamente a light/dark via var(--pc-home-*).
+   ============================================================ */
+:root {
+  /* radii */
+  --pc-radius-sm: 0.75rem;
+  --pc-radius-md: 1rem;
+  --pc-radius-lg: 1.25rem;
+  --pc-radius-xl: 1.75rem;
+
+  /* elevations (light) — sombra suave azulada, respeitando o navy da marca */
+  --pc-shadow-1: 0 1px 2px -1px color-mix(in oklab, var(--pc-home-navy) 12%, transparent),
+                 0 4px 12px -6px color-mix(in oklab, var(--pc-home-navy) 14%, transparent);
+  --pc-shadow-2: 0 4px 10px -4px color-mix(in oklab, var(--pc-home-navy) 16%, transparent),
+                 0 20px 40px -20px color-mix(in oklab, var(--pc-home-navy) 22%, transparent);
+  --pc-shadow-3: 0 10px 30px -12px color-mix(in oklab, var(--pc-home-navy) 30%, transparent),
+                 0 30px 60px -30px color-mix(in oklab, var(--pc-home-navy) 34%, transparent);
+
+  /* rhythm — vertical section spacing (fluid) */
+  --pc-section-y: clamp(1.75rem, 3.2vw, 2.75rem);
+  --pc-section-gap: clamp(1rem, 2vw, 1.75rem);
+}
+
+/* dark: sombras mais densas em preto puro, radii idênticos */
+:where(.dark) {
+  --pc-shadow-1: 0 1px 2px -1px rgb(0 0 0 / 0.45),
+                 0 4px 14px -6px rgb(0 0 0 / 0.55);
+  --pc-shadow-2: 0 6px 14px -6px rgb(0 0 0 / 0.55),
+                 0 24px 50px -24px rgb(0 0 0 / 0.65);
+  --pc-shadow-3: 0 12px 32px -12px rgb(0 0 0 / 0.65),
+                 0 40px 80px -32px rgb(0 0 0 / 0.75);
+}
+
+/* Container padrão da homepage: max-width uniforme + gutters responsivos */
+@utility pc-container {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 72rem; /* 1152px = max-w-6xl */
+  padding-inline: 1rem;
+}
+@media (min-width: 640px) {
+  .pc-container { padding-inline: 1.5rem; }
+}
+@media (min-width: 1024px) {
+  .pc-container { padding-inline: 2rem; }
+}
+
+/* Ritmo vertical consistente entre seções */
+@utility pc-section {
+  padding-block: var(--pc-section-y);
+}
+@utility pc-section-tight {
+  padding-block: calc(var(--pc-section-y) * 0.5);
+}
+
+/* Superfícies (cards) padrão light/dark */
+@utility pc-surface {
+  background: var(--pc-home-card);
+  border: 1px solid var(--pc-home-line);
+  border-radius: var(--pc-radius-lg);
+  box-shadow: var(--pc-shadow-2);
+}
+@utility pc-surface-flat {
+  background: var(--pc-home-card);
+  border: 1px solid var(--pc-home-line);
+  border-radius: var(--pc-radius-md);
+  box-shadow: var(--pc-shadow-1);
+}
+
+/* Tipografia responsiva reutilizável */
+@utility pc-h1 {
+  font-size: clamp(1.75rem, 4.6vw, 3.75rem);
+  line-height: 0.98;
+  letter-spacing: -0.03em;
+}
+@utility pc-h2 {
+  font-size: clamp(1.25rem, 2.4vw, 1.75rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+@utility pc-h3 {
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+}
+@utility pc-lead {
+  font-size: clamp(0.95rem, 1.15vw, 1.0625rem);
+  line-height: 1.55;
+}
+@utility pc-body {
+  font-size: 0.9375rem; /* 15px */
+  line-height: 1.55;
+}
+@utility pc-eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
