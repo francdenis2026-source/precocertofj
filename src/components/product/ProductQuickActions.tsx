@@ -61,10 +61,12 @@ export function ProductQuickActions({
   });
 
   const redirectToLogin = () => {
-    toast.info("Faça login para salvar seus produtos");
-    const redirect = `${window.location.pathname}${window.location.search}`;
-    navigate({ to: "/login", search: { redirect } as never });
+    void promptSignIn({
+      intent: "favorite-item",
+      payload: { catalogId: resolvedCatalogId, slug, label },
+    });
   };
+
 
   const ensureCatalogId = async (): Promise<string> => {
     if (resolvedCatalogId) return resolvedCatalogId;
