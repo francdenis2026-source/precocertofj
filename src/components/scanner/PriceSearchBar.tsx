@@ -64,7 +64,7 @@ function buildCheapestReason(price: number, avg: number | null | undefined): str
 
 
 
-type SortMode = "cheapest" | "unit" | "recent" | "kind" | "spread";
+type SortMode = "relevance" | "cheapest" | "unit" | "recent" | "kind" | "spread";
 
 export function PriceSearchBar({
   initialQuery = "",
@@ -140,14 +140,18 @@ export function PriceSearchBar({
   const [history, setHistory] = useState<SearchHistoryEntry[]>([]);
   const [sortMode, setSortMode] = useLocalStorageState<SortMode>(
     "search:sort-mode",
-    "cheapest",
+    "relevance",
     {
       validate: (v): v is SortMode =>
-        v === "cheapest" || v === "unit" || v === "recent" || v === "kind" || v === "spread",
+        v === "relevance" || v === "cheapest" || v === "unit" || v === "recent" || v === "kind" || v === "spread",
     },
   );
   const [kindFilter, setKindFilter] = useState<string | null>(null);
-  const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
+  const [categoryFilter, setCategoryFilter] = useLocalStorageState<string | null>(
+    "search:category-filter",
+    null,
+    { validate: (v): v is string | null => v === null || typeof v === "string" },
+  );
   const [groupBy, setGroupBy] = useLocalStorageState<"product" | "market" | "matrix">(
     "pc:search:groupBy",
     "product",
@@ -761,6 +765,44 @@ export function PriceSearchBar({
           ) : (
 
             <>
+              {/* Resumo topo: melhor preço agora + economia estimada */}
+              {result.cheapest && typeof result.min === "number" && typeof result.max === "number" && result.max > result.min ? (
+                (() => {
+                  const rMin = result.min as number;
+                  const rMax = result.max as number;
+                  const gap = rMax - rMin;
+                  const pct = Math.round((gap / rMax) * 100);
+                  return (
+                    <div className="grid gap-2 rounded-xl border border-brand-gold/45 bg-brand-navy px-3 py-2.5 text-white sm:grid-cols-2 sm:gap-3">
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-gold">
+                          Melhor preço agora
+                        </p>
+                        <p className="mt-0.5 truncate text-[18px] font-semibold leading-tight tabular-nums">
+                          {fmt(result.cheapest!.price)}
+                        </p>
+                        <p className="mt-0.5 truncate text-[11.5px] text-white/75">
+                          em <span className="font-semibold text-white">{result.cheapest!.marketName}</span>
+                        </p>
+                      </div>
+                      <div className="min-w-0 sm:border-l sm:border-white/15 sm:pl-3">
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-gold">
+                          Economia estimada
+                        </p>
+                        <p className="mt-0.5 text-[18px] font-semibold leading-tight tabular-nums">
+                          {fmt(gap)}
+                          <span className="ml-1.5 text-[11.5px] font-semibold text-brand-gold">−{pct}%</span>
+                        </p>
+                        <p className="mt-0.5 text-[11.5px] text-white/75 tabular-nums">
+                          mais barato vs. mais caro ({fmt(rMax)})
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })()
+              ) : null}
+
+
               <div className="grid grid-cols-3 gap-2">
                 <Stat label="Média" value={fmt(result.avg)} />
                 <Stat
@@ -770,6 +812,7 @@ export function PriceSearchBar({
                 />
                 <Stat label="Amostras" value={String(result.samples)} />
               </div>
+
 
               {result.cheapest && (
                 <Link
@@ -896,9 +939,17 @@ export function PriceSearchBar({
 
                       <div className="space-y-2">
                         {filteredOrdered.map(([cat, groups]) => {
-                          // Ordena os grupos por menor preço ASC (mais barato primeiro),
-                          // depois por relevância (samples DESC como proxy).
+                          // Ordena grupos: se sortMode === "relevance", usa score de
+                          // correspondência (nome, marca, variações como 1L/integral);
+                          // caso contrário, mantém menor preço primeiro.
                           const sortedGroups = [...groups].sort((a, b) => {
+                            if (sortMode === "relevance") {
+                              const sa = scoreRelevance(a, query);
+                              const sb = scoreRelevance(b, query);
+                              if (sa !== sb) return sb - sa;
+                              if (a.min !== b.min) return a.min - b.min;
+                              return b.samples - a.samples;
+                            }
                             if (a.min !== b.min) return a.min - b.min;
                             return b.samples - a.samples;
                           });
@@ -1230,9 +1281,40 @@ type PricePoint = {
   when: string;
 };
 
+/**
+ * Score de relevância para ordenação de grupos de produto:
+ * - Match exato de token no nome → 4 pts
+ * - Match por prefixo/variação (1L, integral) → 2 pts
+ * - Match de marca → 3 pts
+ * - Bônus por conter todos os tokens da query no nome → 3 pts
+ * - Bônus leve por número de amostras (log) → até 1 pt
+ */
+function scoreRelevance(g: ProductGroup, query: string): number {
+  const q = normalizeInput(query).trim().toLowerCase();
+  if (!q) return 0;
+  const name = (g.productName ?? "").toLowerCase();
+  const tokens = q.split(/\s+/).filter((t) => t.length >= 2);
+  let score = 0;
+  for (const r of g.matchReasons ?? []) {
+    if (r.kind === "exact") score += 4;
+    else if (r.kind === "brand") score += 3;
+    else if (r.kind === "prefix") score += 2;
+  }
+  const allTokensInName = tokens.length > 0 && tokens.every((t) => name.includes(t));
+  if (allTokensInName) score += 3;
+  // Variações (1L, 500g, integral, desnatado…) — pequenos bônus se aparecem
+  // tanto na query quanto no nome.
+  const variationTerms = ["1l", "2l", "500ml", "500g", "1kg", "2kg", "integral", "desnatado", "semidesnatado", "light", "zero"];
+  for (const v of variationTerms) {
+    if (q.includes(v) && name.includes(v)) score += 1;
+  }
+  score += Math.min(1, Math.log10(1 + (g.samples ?? 0)) * 0.5);
+  return score;
+}
+
 function sortPrices(prices: PricePoint[], mode: SortMode, productName?: string): PricePoint[] {
   const arr = [...prices];
-  if (mode === "cheapest") arr.sort((a, b) => a.price - b.price);
+  if (mode === "cheapest" || mode === "relevance") arr.sort((a, b) => a.price - b.price);
   else if (mode === "unit") {
     // Ordena por preço unitário normalizado (R$/kg ou R$/L). Itens sem
     // tamanho detectável ficam no fim, mantendo a ordem por menor preço.
@@ -1311,6 +1393,9 @@ function QuickFilters({
         Ordenar
       </span>
 
+      <button type="button" className={chip(sortMode === "relevance")} onClick={() => onSort("relevance")}>
+        Relevância
+      </button>
       <button type="button" className={chip(sortMode === "cheapest")} onClick={() => onSort("cheapest")}>
         Menor preço
       </button>
