@@ -784,23 +784,24 @@ function HomePage() {
           }}
         >
           <div
-            className="hidden sm:block sm:px-6 sm:py-5 lg:px-7 lg:py-6"
+            className="px-4 py-4 sm:px-6 sm:py-5 lg:px-7 lg:py-6"
             style={{ color: "#F5F6FA" }}
           >
             {/* Header enxuto: eyebrow + título curto, sem descrição extra */}
-            <div className="mb-4 flex items-end justify-between gap-4">
+            <div className="mb-3 flex items-end justify-between gap-4 sm:mb-4">
               <div className="min-w-0">
                 <div
-                  className="mb-1 text-[10.5px] font-bold uppercase tracking-[0.24em]"
+                  className="mb-1 text-[10px] font-bold uppercase tracking-[0.22em] sm:text-[10.5px] sm:tracking-[0.24em]"
                   style={{ color: "var(--pc-eyebrow-on-navy)" }}
                 >
                   Por onde começar
                 </div>
-                <h2 className="text-[20px] font-semibold leading-tight text-white lg:text-[22px]">
+                <h2 className="text-[18px] font-semibold leading-tight text-white sm:text-[20px] lg:text-[22px]">
                   Três caminhos para <span style={{ color: "var(--pc-eyebrow-on-navy)" }}>economizar hoje</span>.
                 </h2>
               </div>
             </div>
+
 
             <div className="grid gap-2.5 sm:grid-cols-3">
               <ExploreCard
