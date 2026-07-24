@@ -509,12 +509,12 @@ function HomePage() {
 
           {/* -------- EXPLORE (dark navy band inside card) -------- */}
           <div
-            className="p-4 sm:p-5 lg:p-6 xl:p-7"
+            className="p-3 sm:p-5 lg:p-6 xl:p-7"
             style={{ background: P.navy, color: "#F5F6FA" }}
           >
-            <div className="mb-3 sm:mb-4">
+            <div className="mb-2.5 sm:mb-4">
               <div
-                className="mb-1.5 text-[9.5px] font-bold uppercase tracking-[0.24em] sm:text-[10.5px]"
+                className="mb-1 text-[9px] font-bold uppercase tracking-[0.22em] sm:mb-1.5 sm:text-[10.5px]"
                 style={{ color: P.goldSoft }}
               >
                 Por onde começar
@@ -522,7 +522,7 @@ function HomePage() {
               <h2
                 className="font-semibold text-white"
                 style={{
-                  fontSize: "clamp(1.05rem, 2vw, 1.5rem)",
+                  fontSize: "clamp(0.95rem, 2vw, 1.5rem)",
                   lineHeight: 1.15,
                   letterSpacing: "-0.02em",
                 }}
@@ -531,30 +531,31 @@ function HomePage() {
               </h2>
             </div>
 
-            <div className="grid gap-2 sm:grid-cols-2 sm:gap-3 lg:grid-cols-3">
+            <div className="flex flex-col divide-y divide-white/10 rounded-xl border border-white/10 bg-white/[0.03] sm:grid sm:grid-cols-2 sm:gap-3 sm:divide-y-0 sm:border-0 sm:bg-transparent lg:grid-cols-3">
               <ExploreCard
                 to="/melhores-precos"
                 number="01"
                 title="Ranking dos mercados"
-                desc="Veja qual mercado tem a cesta básica mais barata hoje."
+                desc="Qual mercado tem a cesta mais barata hoje."
                 cta="Ver ranking"
               />
               <ExploreCard
                 to="/estabelecimentos"
                 number="02"
                 title="Mercados por bairro"
-                desc="Endereço, horário e catálogo completo de cada mercado."
+                desc="Endereço, horário e catálogo de cada mercado."
                 cta="Explorar mercados"
               />
               <ExploreCard
                 to="/planos"
                 number="03"
                 title="Alertas de preço"
-                desc="Assine e receba aviso quando o preço cair no seu bairro."
+                desc="Aviso quando o preço cair no seu bairro."
                 cta="Ver planos"
               />
             </div>
           </div>
+
 
 
         </div>
