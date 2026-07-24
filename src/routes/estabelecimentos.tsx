@@ -746,10 +746,10 @@ function MetricDetailDialog({
                     {data.topGlobalCategories.slice(0, 10).map((c) => (
                       <span
                         key={c.category}
-                        className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-[12px] font-medium text-primary"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-gold/15 px-2.5 py-1 text-[12px] font-medium text-brand-gold"
                       >
                         {humanizeCategory(c.category)}
-                        <span className="rounded-full bg-primary/20 px-1.5 text-[11.5px] font-bold">{c.count}</span>
+                        <span className="rounded-full bg-brand-gold/25 px-1.5 text-[11.5px] font-bold text-brand-gold">{c.count}</span>
                       </span>
                     ))}
                   </div>
