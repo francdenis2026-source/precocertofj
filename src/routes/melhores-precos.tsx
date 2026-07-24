@@ -1209,23 +1209,21 @@ function PriceReportInlineButton({
   const [sent, setSent] = useState(false);
   const submit = useServerFn(submitPriceReport);
   const navigate = useNavigate();
+  const promptSignIn = usePromptSignIn();
 
   const handleOpen = () => {
     if (sessionLoading) return;
     if (!user) {
-      toast.info("Entre na sua conta para denunciar preços", {
-        description: "É rápido — leva menos de 1 minuto.",
-        action: {
-          label: "Entrar",
-          onClick: () =>
-            navigate({ to: "/login", search: { redirect: window.location.pathname } as never }),
-        },
+      void promptSignIn({
+        intent: "report-price",
+        payload: { productName, storeName, currentPrice },
       });
       return;
     }
     setSent(false);
     setOpen(true);
   };
+
 
   return (
     <>
