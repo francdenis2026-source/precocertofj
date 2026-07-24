@@ -256,14 +256,49 @@ function SearchPage() {
     <div
       className="pc-search-scope min-h-[100dvh] pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground"
     >
-      <div className="mx-auto w-full max-w-7xl px-4 md:px-8 pt-4 md:pt-6">
-        <InternalPageHeader
-          breadcrumbs={[{ label: "Início", to: "/" }, { label: "Buscar" }]}
-          title="Buscar preço por nome"
-          highlight="preço"
-          description="Consulte o preço médio, mínimo e onde comprar mais barato."
-          actions={
-            <>
+      {/* Hero compacto — foto do mercado da homepage + título + busca embutida */}
+      <section className="relative isolate overflow-hidden">
+        <div aria-hidden className="absolute inset-0 -z-10">
+          <picture>
+            {Object.entries(heroMarket.sources).map(([type, srcset]) => (
+              <source key={type} type={type} srcSet={srcset as string} sizes="100vw" />
+            ))}
+            <img
+              src={heroMarket.img.src}
+              width={heroMarket.img.w}
+              height={heroMarket.img.h}
+              alt=""
+              className="h-full w-full object-cover"
+              loading="eager"
+              fetchPriority="high"
+              decoding="async"
+            />
+          </picture>
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "linear-gradient(180deg, color-mix(in oklab, var(--brand-navy) 78%, transparent) 0%, color-mix(in oklab, var(--brand-navy) 88%, transparent) 100%)",
+            }}
+          />
+        </div>
+
+        <div className="mx-auto w-full max-w-7xl px-4 md:px-8 pt-4 md:pt-5 pb-5 md:pb-6">
+          <nav aria-label="Trilha" className="mb-2 flex items-center gap-1 text-[11px] font-medium text-white/70">
+            <Link to="/" className="hover:text-brand-gold">Início</Link>
+            <ChevronRight aria-hidden className="h-3 w-3 opacity-60" />
+            <span className="text-white">Buscar</span>
+          </nav>
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <div className="min-w-0">
+              <h1 className="text-[22px] md:text-[26px] font-semibold leading-tight text-white">
+                Buscar <span className="text-brand-gold">preço</span> por nome
+              </h1>
+              <p className="mt-1 max-w-xl text-[12.5px] md:text-[13px] text-white/80">
+                Consulte preço médio, mínimo e onde comprar mais barato em Feijó.
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
               {hasQuery ? (
                 <ShareButton
                   title={`PreçoCerto — ${q}`}
@@ -271,12 +306,10 @@ function SearchPage() {
                 />
               ) : null}
               <FreeQuotaBadge variant="inline" />
-            </>
-          }
-        />
+            </div>
+          </div>
 
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
-          <div className="min-w-0 space-y-6">
+          <div className="mt-4 rounded-2xl border border-white/15 bg-background/95 p-3 shadow-[0_18px_40px_-24px_rgba(2,6,23,0.65)] backdrop-blur-sm md:p-4">
             <PriceSearchBar
               initialQuery={q}
               mode={mode}
@@ -286,6 +319,13 @@ function SearchPage() {
               priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
               onQueryChange={syncQueryToUrl}
             />
+          </div>
+        </div>
+      </section>
+
+      <div className="mx-auto w-full max-w-7xl px-4 md:px-8 pt-4 md:pt-6">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
+          <div className="min-w-0 space-y-6">
 
             {/* Toolbar única: match + filtro puro + filtros avançados */}
             <div className="flex flex-wrap items-center gap-x-4 gap-y-3 border-b border-border/50 pb-4">
