@@ -1344,8 +1344,14 @@ function ProductGroupCard({
             {samples} preço{samples > 1 ? "s" : ""}
           </p>
           {cheapestInGroup ? (
-            <p className="mt-1 inline-flex max-w-full items-center gap-1 rounded-md border border-border bg-muted/40 px-1.5 py-0.5 text-[12px] text-foreground">
+            <p className="mt-1 inline-flex max-w-full items-center gap-1.5 rounded-md border border-accent-strong/40 bg-accent/10 px-1.5 py-0.5 text-[12px] text-foreground">
               <Crown className="h-3 w-3 shrink-0 text-accent-strong" strokeWidth={2} aria-hidden="true" />
+              <StoreBadge
+                name={cheapestInGroup.marketName}
+                logoUrl={cheapestInGroup.marketLogoUrl}
+                brandColor={cheapestInGroup.marketBrandColor}
+                size="xs"
+              />
               <span className="truncate">
                 Mais barato em <span className="market-name text-[12px]">{cheapestInGroup.marketName}</span> · <span className="font-semibold tabular-nums">{fmt(cheapestInGroup.price)}</span>
               </span>
