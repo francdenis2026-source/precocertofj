@@ -664,25 +664,27 @@ function HomePage() {
           />
         </picture>
 
-        {/* Scrim DESKTOP suave — só na coluna esquerda, atrás do conteúdo textual.
-            Metade direita da foto fica 100% nítida e colorida. */}
+        {/* Scrim DESKTOP — painel navy forte na coluna esquerda para garantir
+            contraste WCAG AA em modo claro e escuro. A metade direita da foto
+            segue nítida. */}
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 hidden sm:block"
           style={{
             background:
-              "linear-gradient(100deg, color-mix(in oklab, var(--pc-home-navy) 55%, transparent) 0%, color-mix(in oklab, var(--pc-home-navy) 32%, transparent) 32%, transparent 62%)",
+              "linear-gradient(100deg, rgba(2,6,23,0.82) 0%, rgba(2,6,23,0.72) 38%, rgba(2,6,23,0.35) 58%, transparent 72%)",
           }}
         />
-        {/* Fade inferior curto desktop — separa o hero da próxima seção sem escurecer a foto. */}
+        {/* Fade inferior curto desktop */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-8 sm:block"
+          className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-10 sm:block"
           style={{
             background:
-              "linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--pc-home-navy) 45%, transparent) 100%)",
+              "linear-gradient(180deg, transparent 0%, rgba(2,6,23,0.55) 100%)",
           }}
         />
+
 
         {/* Scrim MOBILE mantido — sem ele o conteúdo empilhado sobre a foto perde legibilidade. */}
         <div
@@ -748,13 +750,13 @@ function HomePage() {
               )}
 
 
-              {/* H1 — text-shadow denso para garantir contraste sobre a foto sem véu global */}
+              {/* H1 — branco sobre painel navy, garante contraste em claro e escuro */}
               <h1
                 className={`${serif} pc-h1 font-normal`}
                 style={{
-                  color: P.heading,
+                  color: "#F8FAFC",
                   textShadow:
-                    "0 2px 14px rgba(2,6,23,0.60), 0 1px 3px rgba(2,6,23,0.55), 0 0 1px rgba(2,6,23,0.35)",
+                    "0 2px 14px rgba(2,6,23,0.75), 0 1px 3px rgba(2,6,23,0.7)",
                 }}
               >
                 Em Feijó, quem sabe o preço
@@ -764,12 +766,13 @@ function HomePage() {
                   style={{
                     color: P.goldSoft,
                     textShadow:
-                      "0 2px 14px rgba(2,6,23,0.65), 0 1px 3px rgba(2,6,23,0.6)",
+                      "0 2px 14px rgba(2,6,23,0.8), 0 1px 3px rgba(2,6,23,0.7)",
                   }}
                 >
                   compra melhor.
                 </span>
               </h1>
+
 
 
               {/* Subtítulo — contraste garantido pelo scrim lateral suave + text-shadow. */}
