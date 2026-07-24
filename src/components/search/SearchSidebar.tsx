@@ -5,6 +5,8 @@ import { listPublicStores } from "@/lib/stores-public.functions";
 import { listPopularQueries } from "@/lib/search-popular.functions";
 import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 import { useConfirm } from "@/components/ui/confirm-provider";
+import { LazyImage } from "@/components/media/LazyImage";
+
 
 const POPULAR_FALLBACK: string[] = [
   "arroz 5kg",
