@@ -963,17 +963,19 @@ function HomePage() {
               {/* Chips — buscas populares reais (auto-refresh 60s, paginação client-side) */}
               <div className="mt-3 hidden flex-wrap items-center gap-2 sm:flex">
                 <span
-                  className="mr-1 inline-flex items-center gap-1.5 text-[10.5px] font-black uppercase tracking-[0.24em]"
+                  className="mr-1 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[10.5px] font-black uppercase tabular-nums"
                   style={{
-                    color: "var(--pc-eyebrow-on-navy)",
-                    textShadow: "0 1px 4px rgba(2,6,23,0.85)",
+                    background: P.navy,
+                    color: "#f2d689",
+                    letterSpacing: "0.22em",
+                    border: `1px solid ${P.gold}`,
+                    boxShadow: "0 6px 18px -10px rgba(2,6,23,0.9)",
                   }}
                 >
                   Buscas do dia
                   {popularQ.isFetching ? (
-                    <RefreshCw className="h-2.5 w-2.5 animate-spin" aria-hidden style={{ color: "var(--pc-eyebrow-on-navy)" }} />
+                    <RefreshCw className="h-2.5 w-2.5 animate-spin" aria-hidden style={{ color: "#f2d689" }} />
                   ) : null}
-                  <span aria-hidden style={{ color: "var(--pc-eyebrow-on-navy)" }}>·</span>
                 </span>
                 {currentPopular.map((t) => (
                   <button
@@ -998,7 +1000,7 @@ function HomePage() {
                     style={{
                       background: P.card,
                       borderColor: P.line,
-                      color: P.goldSoft,
+                      color: P.heading,
                     }}
                   >
                     Mais
@@ -1006,6 +1008,7 @@ function HomePage() {
                   </button>
                 ) : null}
               </div>
+
 
               {/* CTAs */}
               <div className="mt-5 flex flex-wrap items-center gap-3 sm:mt-6 sm:gap-4">
