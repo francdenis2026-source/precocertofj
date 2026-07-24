@@ -429,14 +429,14 @@ function HomePage() {
                 <div
                   className="mb-3 inline-flex w-fit items-center gap-2 text-[12px] font-semibold uppercase tabular-nums sm:mb-3 sm:text-[10.5px]"
                   style={{
-                    color: "color-mix(in oklab, var(--pc-home-ink) 85%, transparent)",
+                    color: "var(--pc-text-muted)",
                     letterSpacing: "0.16em",
                   }}
                 >
                   <span
                     aria-hidden
                     className="inline-block h-[1px] w-6"
-                    style={{ background: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
+                    style={{ background: "var(--pc-text-subtle)" }}
                   />
                   {today}
                 </div>
@@ -458,7 +458,7 @@ function HomePage() {
 
               <p
                 className="mt-3 max-w-md text-[13.5px] leading-snug sm:text-[13px]"
-                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 92%, transparent)" }}
+                style={{ color: "var(--pc-text-body)" }}
               >
                 Compare arroz, feijão e café nos mercados do seu bairro.{" "}
                 <span style={{ color: P.goldSoft, fontWeight: 700 }}>
@@ -482,7 +482,7 @@ function HomePage() {
                   <span className="pl-3 sm:pl-4">
                     <Search
                       className="h-5 w-5"
-                      style={{ color: "color-mix(in oklab, var(--pc-home-ink) 75%, transparent)" }}
+                      style={{ color: "var(--pc-text-muted)" }}
                       strokeWidth={2.2}
                     />
                   </span>
@@ -539,7 +539,7 @@ function HomePage() {
                     style={{ background: P.card, borderColor: P.line }}
                   >
                     {suggestQ.isLoading && suggestions.length === 0 ? (
-                      <li className="px-4 py-3 text-[13px]" style={{ color: "color-mix(in oklab, var(--pc-home-ink) 78%, transparent)" }}>
+                      <li className="px-4 py-3 text-[13px]" style={{ color: "var(--pc-text-muted)" }}>
                         Buscando…
                       </li>
                     ) : (
@@ -578,7 +578,7 @@ function HomePage() {
               <div className="mt-3 hidden flex-wrap items-center gap-2 sm:flex">
                 <span
                   className="mr-1 text-[10px] font-bold uppercase tracking-[0.24em]"
-                  style={{ color: "color-mix(in oklab, var(--pc-home-ink) 72%, transparent)" }}
+                  style={{ color: "var(--pc-text-muted)" }}
                 >
                   Buscas do dia:
                 </span>
@@ -709,7 +709,7 @@ function HomePage() {
             <figcaption
               className="mt-3 text-[10.5px] font-bold uppercase"
               style={{
-                color: "color-mix(in oklab, var(--pc-home-ink) 92%, transparent)",
+                color: "var(--pc-text-body)",
                 ...captionTypography,
               }}
             >
@@ -750,7 +750,7 @@ function HomePage() {
               </p>
               <p
                 className="mt-0.5 text-[13px] leading-snug sm:text-[13.5px]"
-                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 92%, transparent)" }}
+                style={{ color: "var(--pc-text-body)" }}
               >
                 Cada valor vem de nota fiscal ou de um morador que acabou de comprar.
               </p>
@@ -792,12 +792,12 @@ function HomePage() {
               <div className="min-w-0">
                 <div
                   className="mb-1 text-[10.5px] font-bold uppercase tracking-[0.24em]"
-                  style={{ color: P.goldSoft }}
+                  style={{ color: "var(--pc-eyebrow-on-navy)" }}
                 >
                   Por onde começar
                 </div>
                 <h2 className="text-[20px] font-semibold leading-tight text-white lg:text-[22px]">
-                  Três caminhos para <span style={{ color: P.gold }}>economizar hoje</span>.
+                  Três caminhos para <span style={{ color: "var(--pc-eyebrow-on-navy)" }}>economizar hoje</span>.
                 </h2>
               </div>
             </div>
@@ -896,7 +896,7 @@ function HomePage() {
                       </div>
                       <div
                         className="mt-2 truncate text-[10px] font-bold uppercase leading-tight tracking-[0.14em] sm:text-[11px] sm:tracking-[0.16em]"
-                        style={{ color: "color-mix(in oklab, var(--pc-home-ink) 82%, transparent)" }}
+                        style={{ color: "var(--pc-text-muted)" }}
                       >
                         <span className="sm:hidden">{s.l}</span>
                         <span className="hidden sm:inline">{s.lFull}</span>
@@ -1032,7 +1032,7 @@ function ExploreCard({
         <div
           className="shrink-0 font-bold tabular-nums leading-none sm:mb-2"
           style={{
-            color: P.goldSoft,
+            color: "var(--pc-eyebrow-on-navy)",
             fontSize: "clamp(0.75rem, 1.2vw, 1rem)",
             letterSpacing: "0.14em",
           }}
@@ -1046,13 +1046,13 @@ function ExploreCard({
           <p className="mt-0.5 truncate text-[11px] leading-snug text-white/70 sm:mt-1 sm:whitespace-normal sm:text-[13px] sm:text-white/85">
             {desc}
           </p>
-          <div className="mt-2 hidden items-center gap-1 text-[10.5px] font-bold uppercase tracking-[0.16em] text-[color:var(--pc-home-gold-soft)] transition-colors group-hover:text-[color:var(--pc-home-gold)] sm:mt-2.5 sm:inline-flex">
+          <div className="mt-2 hidden items-center gap-1 text-[10.5px] font-bold uppercase tracking-[0.16em] text-[color:var(--pc-eyebrow-on-navy)] transition-colors group-hover:text-white sm:mt-2.5 sm:inline-flex">
             {cta}
             <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1 sm:h-3.5 sm:w-3.5" />
           </div>
         </div>
         <ArrowRight
-          className="h-3.5 w-3.5 shrink-0 text-[color:var(--pc-home-gold-soft)] transition-transform group-active:translate-x-0.5 sm:hidden"
+          className="h-3.5 w-3.5 shrink-0 text-[color:var(--pc-eyebrow-on-navy)] transition-transform group-active:translate-x-0.5 sm:hidden"
           aria-hidden
         />
       </div>
