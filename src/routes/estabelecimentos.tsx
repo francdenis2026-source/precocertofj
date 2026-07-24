@@ -147,6 +147,47 @@ function EstablishmentsPage() {
     el.scrollBy({ left: dir * (el.clientWidth * 0.85), behavior: "smooth" });
   };
 
+  // Drag-to-scroll + wheel horizontal para navegar com o mouse
+  const dragState = useRef<{ active: boolean; startX: number; startScroll: number; moved: boolean }>({
+    active: false, startX: 0, startScroll: 0, moved: false,
+  });
+  const onCarouselPointerDown = (ev: React.PointerEvent<HTMLDivElement>) => {
+    const el = carouselRef.current;
+    if (!el || ev.pointerType === "touch") return;
+    dragState.current = { active: true, startX: ev.clientX, startScroll: el.scrollLeft, moved: false };
+    el.setPointerCapture(ev.pointerId);
+    el.style.cursor = "grabbing";
+  };
+  const onCarouselPointerMove = (ev: React.PointerEvent<HTMLDivElement>) => {
+    const el = carouselRef.current;
+    const st = dragState.current;
+    if (!el || !st.active) return;
+    const dx = ev.clientX - st.startX;
+    if (Math.abs(dx) > 4) st.moved = true;
+    el.scrollLeft = st.startScroll - dx;
+  };
+  const onCarouselPointerUp = (ev: React.PointerEvent<HTMLDivElement>) => {
+    const el = carouselRef.current;
+    if (!el) return;
+    dragState.current.active = false;
+    try { el.releasePointerCapture(ev.pointerId); } catch {}
+    el.style.cursor = "grab";
+  };
+  const onCarouselWheel = (ev: React.WheelEvent<HTMLDivElement>) => {
+    const el = carouselRef.current;
+    if (!el) return;
+    if (Math.abs(ev.deltaY) > Math.abs(ev.deltaX)) {
+      el.scrollLeft += ev.deltaY;
+    }
+  };
+  const onCarouselLinkClickCapture = (ev: React.MouseEvent<HTMLDivElement>) => {
+    if (dragState.current.moved) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      dragState.current.moved = false;
+    }
+  };
+
 
   return (
     <div className="min-h-dvh bg-background pb-24 md:pb-8">
@@ -316,7 +357,14 @@ function EstablishmentsPage() {
             </div>
             <div
               ref={carouselRef}
-              className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              onPointerDown={onCarouselPointerDown}
+              onPointerMove={onCarouselPointerMove}
+              onPointerUp={onCarouselPointerUp}
+              onPointerCancel={onCarouselPointerUp}
+              onPointerLeave={onCarouselPointerUp}
+              onWheel={onCarouselWheel}
+              onClickCapture={onCarouselLinkClickCapture}
+              className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1 cursor-grab select-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
               {featured.map((e) => (
                 <Link
