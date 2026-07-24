@@ -706,37 +706,40 @@ function ExploreCard({
   return (
     <Link
       to={to}
-      className="group block rounded-xl border border-white/12 bg-white/[0.06] p-3.5 shadow-elev-1 transition-all duration-200 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[0.10] hover:shadow-elev-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--pc-home-navy)] sm:p-4"
+      className="group block rounded-none border-0 bg-transparent px-3 py-2.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--pc-home-navy)] active:bg-white/[0.04] sm:rounded-xl sm:border sm:border-white/12 sm:bg-white/[0.06] sm:p-4 sm:shadow-elev-1 sm:hover:-translate-y-0.5 sm:hover:border-white/25 sm:hover:bg-white/[0.10] sm:hover:shadow-elev-2"
     >
-      <div className="flex items-start gap-3 sm:block">
+      <div className="flex items-center gap-3 sm:block">
         <div
           className="shrink-0 font-bold tabular-nums leading-none sm:mb-2"
           style={{
             color: P.goldSoft,
-            fontSize: "clamp(0.85rem, 1.2vw, 1rem)",
+            fontSize: "clamp(0.75rem, 1.2vw, 1rem)",
             letterSpacing: "0.14em",
           }}
         >
           {number}
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="mb-1 text-[14.5px] font-semibold leading-tight text-white sm:text-[15.5px] lg:text-[16.5px]">
+          <h3 className="truncate text-[13px] font-semibold leading-tight text-white sm:whitespace-normal sm:text-[15.5px] lg:text-[16.5px]">
             {title}
           </h3>
-          <p className="text-[12.5px] leading-snug text-white/85 sm:text-[13px]">{desc}</p>
-          <div className="mt-2 inline-flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-[0.16em] text-[color:var(--pc-home-gold-soft)] transition-colors group-hover:text-[color:var(--pc-home-gold)] sm:mt-2.5">
+          <p className="mt-0.5 truncate text-[11px] leading-snug text-white/70 sm:mt-1 sm:whitespace-normal sm:text-[13px] sm:text-white/85">
+            {desc}
+          </p>
+          <div className="mt-2 hidden items-center gap-1 text-[10.5px] font-bold uppercase tracking-[0.16em] text-[color:var(--pc-home-gold-soft)] transition-colors group-hover:text-[color:var(--pc-home-gold)] sm:mt-2.5 sm:inline-flex">
             {cta}
             <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1 sm:h-3.5 sm:w-3.5" />
           </div>
         </div>
         <ArrowRight
-          className="mt-1 h-4 w-4 shrink-0 text-white/50 transition-all group-hover:translate-x-0.5 group-hover:text-[color:var(--pc-home-gold)] sm:hidden"
+          className="h-3.5 w-3.5 shrink-0 text-[color:var(--pc-home-gold-soft)] transition-transform group-active:translate-x-0.5 sm:hidden"
           aria-hidden
         />
       </div>
     </Link>
   );
 }
+
 
 
 
