@@ -2049,34 +2049,40 @@ function MatrixCompareResults({
               >
                 Produto
               </th>
-              {markets.map((m, ci) => (
-                <th
-                  key={m.name}
-                  role="columnheader"
-                  scope="col"
-                  aria-colindex={ci + 2}
-                  data-row={0}
-                  data-col={ci + 1}
-                  tabIndex={-1}
-                  className="focus-ring min-w-[140px] border-b border-border/60 px-3 py-2 align-bottom"
-                >
-                  <div className="flex items-center gap-2">
-                    <span
-                      className="grid h-7 w-7 flex-none place-items-center rounded-md border border-brand-gold/30 bg-background overflow-hidden"
-                      aria-hidden="true"
-                    >
-                      {m.logoUrl ? (
-                        <img src={m.logoUrl} alt="" className="h-full w-full object-contain p-0.5" loading="lazy" />
-                      ) : (
-                        <ShoppingBag className="h-3.5 w-3.5 text-muted-foreground" />
-                      )}
-                    </span>
-                    <span className="market-name truncate text-[12.5px] font-semibold text-foreground">
-                      {m.name}
-                    </span>
-                  </div>
-                </th>
-              ))}
+              {markets.map((m, ci) => {
+                const bar = m.brandColor && /^#[0-9A-Fa-f]{6}$/.test(m.brandColor) ? m.brandColor : "transparent";
+                return (
+                  <th
+                    key={m.name}
+                    role="columnheader"
+                    scope="col"
+                    aria-colindex={ci + 2}
+                    data-row={0}
+                    data-col={ci + 1}
+                    tabIndex={-1}
+                    className="focus-ring min-w-[140px] border-b border-border/60 px-3 py-2 align-bottom"
+                    style={{ boxShadow: `inset 0 3px 0 0 ${bar}` }}
+                  >
+                    <div className="flex items-center gap-2 pt-1">
+                      <span
+                        className="grid h-7 w-7 flex-none place-items-center rounded-md border overflow-hidden bg-background"
+                        style={{ borderColor: bar === "transparent" ? undefined : bar }}
+                        aria-hidden="true"
+                      >
+                        {m.logoUrl ? (
+                          <img src={m.logoUrl} alt="" className="h-full w-full object-contain p-0.5" loading="lazy" />
+                        ) : (
+                          <ShoppingBag className="h-3.5 w-3.5 text-muted-foreground" />
+                        )}
+                      </span>
+                      <span className="market-name truncate text-[12.5px] font-semibold text-foreground">
+                        {m.name}
+                      </span>
+                    </div>
+                  </th>
+                );
+              })}
+
             </tr>
           </thead>
           <tbody>
