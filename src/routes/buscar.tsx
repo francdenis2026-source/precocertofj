@@ -233,6 +233,24 @@ function SearchPage() {
     }
   }, [q]);
 
+  const removeRecent = (item: string) => {
+    setRecent((prev) => {
+      const next = prev.filter((x) => x !== item);
+      try {
+        window.localStorage.setItem("search:recent-queries", JSON.stringify(next));
+      } catch { /* ignore */ }
+      return next;
+    });
+  };
+
+  const clearRecent = () => {
+    setRecent([]);
+    try {
+      window.localStorage.removeItem("search:recent-queries");
+    } catch { /* ignore */ }
+  };
+
+
   return (
     <div
       className="pc-search-scope min-h-[100dvh] pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground"
