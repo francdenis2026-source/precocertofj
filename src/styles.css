@@ -2698,3 +2698,91 @@ input[type="number"]:not(.native-control) {
 }
 
 
+
+/* =====================================================================
+   Calm Typography Layer — leitura profissional
+   Reduz brilho, glows e pesos exagerados em todo o app (home + internas).
+   Prioriza legibilidade em mobile e desktop mantendo hierarquia visual.
+   ===================================================================== */
+
+/* 1) Suavização global de fonte — reduz "brilho" percebido em telas HiDPI */
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* 2) Cap de peso: nada de 900. Bold real fica em 700; extras em 600. */
+.font-black,
+[class*=" font-black"],
+[class^="font-black"] { font-weight: 700 !important; }
+.font-extrabold,
+[class*=" font-extrabold"],
+[class^="font-extrabold"] { font-weight: 700 !important; }
+
+/* 3) Highlight de busca: sem fundo colorido brilhante — sublinhado dourado sutil */
+mark,
+.pc-search-scope mark {
+  background: transparent !important;
+  color: inherit !important;
+  padding: 0 !important;
+  font-weight: 600 !important;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--pc-home-gold, #b58a3c) 55%, transparent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  border-radius: 0 !important;
+}
+
+/* 4) Remove glows externos (drop-shadow com blur > 4px) de ícones e chips */
+.drop-shadow-\[0_0_6px_rgba\(245\,200\,106\,0\.6\)\],
+.drop-shadow-\[0_0_6px_oklch\(0\.74_0\.11_82\/0\.35\)\],
+.drop-shadow-\[0_2px_6px_rgb\(0_0_0\/0\.15\)\],
+.drop-shadow-\[0_1px_2px_rgba\(140\,80\,0\,0\.35\)\] {
+  filter: none !important;
+}
+
+/* 5) Nada de texto com gradiente/transparente fora do hero da homepage.
+      Textos com bg-clip-text tornam-se sólidos com o foreground do tema. */
+.text-transparent.bg-clip-text:not(.pc-hero-allow-gradient) {
+  color: var(--foreground) !important;
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: currentColor !important;
+}
+
+/* 6) Chips/badges de micro-copy uppercase — reduz peso e tracking exagerado */
+.pc-search-scope [class*="uppercase"][class*="tracking-widest"],
+.pc-search-scope [class*="uppercase"][class*="tracking-\[0.2"],
+.pc-search-scope [class*="uppercase"][class*="tracking-\[0.18"],
+.pc-search-scope [class*="uppercase"][class*="tracking-\[0.22"] {
+  font-weight: 600 !important;
+  letter-spacing: 0.12em !important;
+}
+
+/* 7) Suaviza pill "PREÇO MAIS BARATO" e similares: fundo translúcido, sem glow */
+.pc-search-scope .bg-accent\/10,
+.pc-search-scope .bg-accent\/8,
+.pc-search-scope .bg-accent\/15,
+.pc-search-scope .bg-accent\/20,
+.pc-search-scope .bg-accent\/25 {
+  background: color-mix(in oklab, var(--pc-home-gold) 12%, transparent) !important;
+}
+
+/* 8) Neutraliza brilho excessivo em shadow-[0_...] pesados (blur ≥ 20px)
+      dentro de superfícies internas — mantém elevação, remove halo */
+.pc-search-scope [class*="shadow-\[0_"] { box-shadow: var(--pc-shadow-1) !important; }
+.pc-search-scope button[class*="shadow-\["],
+.pc-search-scope a[class*="shadow-\["]  { box-shadow: none !important; }
+.pc-search-scope button[class*="shadow-\["]:hover,
+.pc-search-scope a[class*="shadow-\["]:hover  { box-shadow: var(--pc-shadow-1) !important; }
+
+/* 9) Ícones dentro de headings: nunca brilham (sem drop-shadow) */
+h1 svg, h2 svg, h3 svg, h4 svg { filter: none !important; }
+
+/* 10) Placeholders + muted: cor calma, sem quase-transparência */
+input::placeholder, textarea::placeholder {
+  opacity: 1;
+  color: color-mix(in oklab, var(--muted-foreground) 92%, transparent);
+}
