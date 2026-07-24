@@ -433,7 +433,7 @@ export function PriceSearchBar({
 
           {showHistory && (
             <div
-              className="absolute left-0 right-0 top-[calc(100%+4px)] z-30 max-h-72 overflow-auto rounded-2xl border border-primary/20 bg-background shadow-lg"
+              className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 max-h-72 overflow-auto rounded-2xl border border-primary/20 bg-background shadow-lg"
               role="listbox"
               aria-label="Buscas recentes"
             >
@@ -477,7 +477,7 @@ export function PriceSearchBar({
           )}
 
           {showList && (
-            <div className="absolute left-0 right-0 top-[calc(100%+4px)] z-30 max-h-80 overflow-auto rounded-2xl border border-primary/20 bg-background shadow-lg">
+            <div className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 max-h-80 overflow-auto rounded-2xl border border-primary/20 bg-background shadow-lg">
               {didYouMean && (
                 <button
                   type="button"
