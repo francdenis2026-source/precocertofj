@@ -66,20 +66,30 @@ export function ThemeToggle({
       )}
       {...props}
     >
-      {showDarkIcon ? (
+      <span className={cn("relative inline-block", icon)} aria-hidden>
         <Moon
-          className={cn(icon, "drop-shadow-[0_0_8px_rgba(245,200,106,0.75)]")}
+          className={cn(
+            "absolute inset-0 transition-all duration-500 ease-out drop-shadow-[0_0_8px_rgba(245,200,106,0.75)]",
+            showDarkIcon
+              ? "rotate-0 scale-100 opacity-100"
+              : "-rotate-90 scale-50 opacity-0",
+          )}
           strokeWidth={1.75}
           style={{ color: "#F5C86A", fill: "rgba(245,200,106,0.35)" }}
         />
-      ) : (
         <Sun
-          className={cn(icon, "drop-shadow-[0_0_8px_rgba(245,158,11,0.55)]")}
+          className={cn(
+            "absolute inset-0 transition-all duration-500 ease-out drop-shadow-[0_0_8px_rgba(245,158,11,0.55)]",
+            showDarkIcon
+              ? "rotate-90 scale-50 opacity-0"
+              : "rotate-0 scale-100 opacity-100",
+          )}
           strokeWidth={2}
           style={{ color: "#F59E0B", fill: "rgba(245,158,11,0.18)" }}
         />
-      )}
+      </span>
     </Button>
+
   );
 
 }
