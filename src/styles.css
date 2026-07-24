@@ -1867,19 +1867,60 @@ body.no-page-bg::before { display: none; }
   0% { transform: translate3d(0, 0, 0); }
   100% { transform: translate3d(-50%, 0, 0); }
 }
+
+/* Fade nas bordas — máscara suave para evitar cortes visuais */
+.price-marquee-viewport {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 24px,
+    #000 calc(100% - 24px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 24px,
+    #000 calc(100% - 24px),
+    transparent 100%
+  );
+}
+@media (min-width: 640px) {
+  .price-marquee-viewport {
+    -webkit-mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 48px,
+      #000 calc(100% - 48px),
+      transparent 100%
+    );
+    mask-image: linear-gradient(
+      to right,
+      transparent 0,
+      #000 48px,
+      #000 calc(100% - 48px),
+      transparent 100%
+    );
+  }
+}
+
 .price-marquee {
-  animation: price-marquee-slide 95s linear infinite;
+  /* Velocidade responsiva por viewport: mais lento no mobile, mais ágil no desktop */
+  animation: price-marquee-slide clamp(70s, 28vw + 60s, 110s) linear infinite;
   will-change: transform;
 }
 @media (min-width: 640px) {
-  .price-marquee { animation-duration: 65s; }
+  .price-marquee { animation-duration: clamp(55s, 12vw + 45s, 80s); }
 }
 
+/* Pausa automática em hover, foco de teclado e toque (mobile) */
 .price-marquee:hover,
-.price-marquee:focus-within {
+.price-marquee:focus-within,
+.price-marquee-viewport:active .price-marquee {
   animation-play-state: paused;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .price-marquee { animation: none; }
 }
+
