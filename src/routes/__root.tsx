@@ -167,6 +167,60 @@ function RootComponent() {
     return () => observer.disconnect();
   }, []);
 
+  // Global guard: bloqueia números negativos em <input type="number"> (exceto quando
+  // o input declara explicitamente allow-negative via data-allow-negative).
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const isGuardedNumber = (el: EventTarget | null): el is HTMLInputElement => {
+      if (!(el instanceof HTMLInputElement)) return false;
+      if (el.type !== "number") return false;
+      if (el.dataset.allowNegative === "true") return false;
+      return true;
+    };
+
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (!isGuardedNumber(e.target)) return;
+      if (e.key === "-" || e.key === "Subtract" || (e.key === "e" && e.shiftKey === false)) {
+        // bloqueia sinal negativo e notação exponencial que permitiria valores estranhos
+        e.preventDefault();
+      }
+    };
+
+    const clamp = (el: HTMLInputElement) => {
+      if (el.value === "" || el.value === "-") return;
+      const n = Number(el.value);
+      if (Number.isFinite(n) && n < 0) {
+        el.value = "0";
+        el.dispatchEvent(new Event("input", { bubbles: true }));
+        el.dispatchEvent(new Event("change", { bubbles: true }));
+      }
+    };
+
+    const onInput = (e: Event) => {
+      if (!isGuardedNumber(e.target)) return;
+      // reforça atributo min=0 caso não exista
+      if (!e.target.hasAttribute("min")) e.target.setAttribute("min", "0");
+      clamp(e.target);
+    };
+
+    const onPaste = (e: ClipboardEvent) => {
+      if (!isGuardedNumber(e.target)) return;
+      const text = e.clipboardData?.getData("text") ?? "";
+      if (/^-/.test(text.trim())) e.preventDefault();
+    };
+
+    document.addEventListener("keydown", onKeyDown, true);
+    document.addEventListener("input", onInput, true);
+    document.addEventListener("paste", onPaste, true);
+    return () => {
+      document.removeEventListener("keydown", onKeyDown, true);
+      document.removeEventListener("input", onInput, true);
+      document.removeEventListener("paste", onPaste, true);
+    };
+  }, []);
+
+
   useEffect(() => {
     // Sync router/query cache with auth identity transitions
     import("@/integrations/supabase/client").then(({ supabase }) => {
