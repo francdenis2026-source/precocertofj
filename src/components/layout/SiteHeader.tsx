@@ -96,13 +96,14 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             </span>
             <span
               className={dsx(
-                "mt-0.5 text-[10px] font-semibold uppercase tracking-[0.22em] antialiased",
+                "text-eyebrow-muted mt-0.5 antialiased",
                 subTextClass,
                 isOverlay && "[text-shadow:0_1px_2px_rgb(0_0_0/0.45)]",
               )}
             >
               Feijó <span className="mx-0.5 opacity-60">·</span> Acre
             </span>
+
           </div>
         </Link>
 
