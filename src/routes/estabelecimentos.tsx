@@ -205,30 +205,14 @@ function EstablishmentsPage() {
           aria-hidden
           src={mercadosHero.url}
           alt=""
-          className="absolute inset-0 -z-30 h-full w-full object-cover scale-[1.02] blur-[1px]"
+          className="absolute inset-0 -z-30 h-full w-full object-cover scale-[1.02]"
+          style={{ filter: "saturate(0.9) brightness(0.92) contrast(1.02)" }}
           loading="eager"
           fetchPriority="high"
           decoding="async"
         />
-        {/* Véu escuro adaptativo — opacidade calculada pela luminância da foto */}
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-20 transition-[background] duration-500"
-          style={{
-            background: `linear-gradient(90deg,
-              color-mix(in oklab, var(--brand-navy) ${Math.round(heroOverlayOpacity * 100)}%, transparent) 0%,
-              color-mix(in oklab, var(--brand-navy) ${Math.round(Math.max(0, heroOverlayOpacity - 0.06) * 100)}%, transparent) 55%,
-              color-mix(in oklab, var(--brand-navy) ${Math.round(Math.max(0, heroOverlayOpacity - 0.2) * 100)}%, transparent) 100%)`,
-          }}
-        />
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-10"
-          style={{
-            background:
-              "radial-gradient(700px 260px at 6% -20%, color-mix(in oklab, var(--brand-gold) 22%, transparent) 0%, transparent 60%)",
-          }}
-        />
+        {/* Véu navy adaptativo e glow dourado radial removidos a pedido — foto nítida. */}
+
         <div
           aria-hidden
           className="absolute inset-x-0 top-0 -z-10 h-px"

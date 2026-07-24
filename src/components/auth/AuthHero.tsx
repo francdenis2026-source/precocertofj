@@ -148,29 +148,18 @@ export function AuthHero({
             alt=""
             aria-hidden
             className="absolute inset-0 h-full w-full object-cover"
-            style={{ filter: "saturate(0.85) contrast(1.02)" }}
+            style={{ filter: "saturate(0.88) brightness(0.9) contrast(1.02)" }}
           />
+          {/* Véus adaptativos e glow dourado removidos — foto nítida.
+              Mantido apenas um leve fade inferior para separar a barra de conteúdo do rodapé do hero. */}
           <div
             aria-hidden
-            className="absolute inset-0"
-            style={{
-              background: `linear-gradient(160deg, color-mix(in oklab, ${T.navy} 94%, transparent) 0%, color-mix(in oklab, ${T.navy} 82%, transparent) 45%, color-mix(in oklab, ${T.navy2} 70%, transparent) 100%)`,
-            }}
-          />
-          <div
-            aria-hidden
-            className="absolute inset-x-0 bottom-0 h-48"
-            style={{ background: `linear-gradient(180deg, transparent, ${T.navy})` }}
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background: `radial-gradient(120% 60% at 50% 100%, color-mix(in oklab, ${T.gold} 12%, transparent) 0%, transparent 60%)`,
-            }}
+            className="absolute inset-x-0 bottom-0 h-24"
+            style={{ background: `linear-gradient(180deg, transparent, color-mix(in oklab, ${T.navy} 55%, transparent))` }}
           />
         </>
       )}
+
       <div
         aria-hidden
         className="pointer-events-none absolute -right-24 -top-24 h-40 w-40 rounded-full opacity-15 blur-2xl motion-reduce:hidden"

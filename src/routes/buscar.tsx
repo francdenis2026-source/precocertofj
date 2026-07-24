@@ -286,6 +286,7 @@ function SearchPage() {
             src={buscarHero.img.src}
             alt=""
             className="h-full w-full scale-[1.02] object-cover opacity-0 transition-opacity duration-500 [.pc-hero-picture.is-loaded_&]:opacity-100"
+            style={{ filter: "saturate(0.9) brightness(0.92) contrast(1.02)" }}
             width={buscarHero.img.w}
             height={buscarHero.img.h}
             loading="eager"
@@ -298,27 +299,9 @@ function SearchPage() {
           />
         </picture>
 
-        {/* Véu navy leve — apenas o suficiente para dar profundidade sem obscurecer a foto */}
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-20"
-          style={{
-            background:
-              "linear-gradient(100deg, color-mix(in oklab, var(--brand-navy) 55%, transparent) 0%, color-mix(in oklab, var(--brand-navy) 22%, transparent) 45%, transparent 72%)",
-          }}
-        />
-        {/* Painel desfocado à esquerda — opacidade/sombra adaptativas para AA em claro/escuro */}
-        <div
-          aria-hidden
-          className="pc-hero-panel absolute inset-y-0 left-0 -z-10 w-full md:w-[62%] md:backdrop-blur-[2px]"
-          style={{
-            WebkitMaskImage:
-              "linear-gradient(100deg, black 0%, black 55%, transparent 95%)",
-            maskImage:
-              "linear-gradient(100deg, black 0%, black 55%, transparent 95%)",
-          }}
-        />
-        {/* Reforço inferior removido a pedido do usuário */}
+        {/* Véus e painel desfocado removidos a pedido — foto 100% nítida.
+            Legibilidade dos títulos é mantida via text-shadow nos elementos abaixo. */}
+
 
         {/* Hairline dourada no topo */}
         <div
