@@ -60,13 +60,14 @@ function Card({ item }: { item: Item }) {
         <span className="grid h-6 w-6 place-items-center rounded-md border border-brand-gold/30 bg-brand-gold/10 text-brand-gold">
           <Icon className="h-3 w-3" strokeWidth={2.4} />
         </span>
-        <h2 className="text-[12.5px] font-semibold tracking-tight text-foreground">
+        <h2 className="text-title font-semibold tracking-tight text-foreground">
           {item.title}
         </h2>
       </div>
-      <div className="text-[12px] leading-relaxed text-muted-foreground">
+      <div className="text-body-sm text-muted-foreground">
         {item.body}
       </div>
+
     </section>
   );
 }
@@ -222,7 +223,7 @@ function PrivacidadePage() {
       body: (
         <a
           href="mailto:precocerto-fj@proton.me"
-          className="font-mono text-[12px] font-semibold text-brand-gold underline underline-offset-2 hover:text-brand-gold/80"
+          className="text-body-sm font-semibold text-brand-gold underline underline-offset-2 hover:text-brand-gold/80"
         >
           precocerto-fj@proton.me
         </a>
@@ -248,23 +249,24 @@ function PrivacidadePage() {
               height={40}
               className="h-10 w-10 shrink-0 rounded-lg object-contain shadow-sm ring-1 ring-brand-gold/30 transition-transform group-hover:scale-[1.03]"
             />
-            <span className="font-display text-[20px] font-semibold leading-none tracking-tight text-foreground">
+            <span className="font-display text-title font-semibold leading-none tracking-tight text-foreground">
               <span className="text-brand-gold">P</span>reço<span className="text-brand-gold">C</span>erto
             </span>
           </Link>
-          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-brand-gold">
+          <p className="text-eyebrow">
             <ShieldCheck className="mr-1 inline h-3 w-3" strokeWidth={2.2} />
             Documento oficial · Atualizado em {updated}
           </p>
-          <h1 className="mt-1.5 text-xl font-semibold leading-tight tracking-tight text-foreground sm:text-[22px]">
+          <h1 className="text-h2 mt-1.5 text-foreground">
             Termos e Privacidade
           </h1>
-          <p className="mt-1.5 max-w-xl text-[12.5px] leading-relaxed text-muted-foreground">
+          <p className="text-body-sm mt-1.5 max-w-xl text-muted-foreground">
             Em linguagem clara: o que coletamos, como usamos e as regras de uso
             da plataforma. Não vendemos dados. Exclusão e exportação a qualquer
             momento.
           </p>
         </header>
+
 
 
         {/* Tabs */}
@@ -280,11 +282,13 @@ function PrivacidadePage() {
               aria-selected={tab === k}
               onClick={() => setTab(k)}
               className={cn(
-                "rounded-md px-3 py-1.5 font-mono text-[10.5px] font-semibold uppercase tracking-[0.14em] transition-colors",
+                "text-eyebrow-muted rounded-md px-3 py-1.5 transition-colors",
                 tab === k
                   ? "bg-brand-gold text-brand-navy shadow-sm"
                   : "text-muted-foreground hover:text-foreground",
               )}
+
+
             >
               {k === "privacidade" ? "Privacidade" : "Termos"}
             </button>
@@ -300,7 +304,7 @@ function PrivacidadePage() {
         <div className="mt-5 flex justify-center">
           <Link
             to="/"
-            className="inline-flex items-center gap-1.5 font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-brand-gold"
+            className="text-eyebrow-muted inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-brand-gold"
           >
             <ArrowLeft className="h-3 w-3" strokeWidth={2.4} />
             Voltar para a página inicial

@@ -616,6 +616,29 @@
   color: var(--color-muted-foreground);
 }
 
+/* Eyebrow institucional — mono + gold, padrão em headers/documentos.
+   Usado por SiteHeader (subtítulo), /privacidade, hero editorial etc. */
+@utility text-eyebrow {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-overline);
+  line-height: 1;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-brand-gold);
+}
+/* Só tipografia — a cor deve ser controlada por text-* na marcação */
+@utility text-eyebrow-muted {
+  font-family: var(--font-mono);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-overline);
+  line-height: 1;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+
+
 /* Nome do estabelecimento — tokens unificados (tipografia + cor + interação) */
 @utility market-name {
   font-family: var(--font-sans);
