@@ -245,65 +245,195 @@ export const analyzeBatchPhotos = createServerFn({ method: "POST" })
           }
         }
 
-        // 2) fuzzy via RPC (fallback + signature-ish)
+        // 2) fuzzy via RPC v2 (nome + marca + gramagem)
         if (!candidate.existing && p.productName) {
-          const nameForMatch = p.brand
-            ? `${p.productName} ${p.brand}`.trim()
-            : p.productName;
-          const { data: matches } = await context.supabase.rpc("find_similar_scans", {
-            p_name: nameForMatch,
-            p_establishment_id: data.establishmentId,
-            p_threshold: 0.55,
+          const match = await runSimilarityMatch(context.supabase, {
+            establishmentId: data.establishmentId,
+            productName: p.productName,
+            brand: p.brand,
+            sizeValue: p.sizeValue,
+            sizeUnit: p.sizeUnit,
           });
-          const top = (matches ?? [])[0] as
-            | { id: string; product_name: string; price_captured: number | null; similarity: number }
-            | undefined;
-          if (top) {
-            const sim = Number(top.similarity ?? 0);
-            candidate.existing = {
-              scanId: top.id,
-              productName: top.product_name,
-              price: top.price_captured != null ? Number(top.price_captured) : null,
-              brand: null,
-              quantity: null,
-              unit: null,
-              barcode: null,
-              similarity: sim,
-            };
-            candidate.matchType = sim >= 0.85 ? "signature" : "fuzzy";
+          if (match) {
+            candidate.existing = match.existing;
+            candidate.matchType = match.matchType;
           }
         }
 
         // ---- divergences ----
-        if (candidate.existing) {
-          const ex = candidate.existing;
-          if (
-            candidate.productName &&
-            ex.productName &&
-            candidate.productName.trim().toLowerCase() !==
-              ex.productName.trim().toLowerCase()
-          ) {
-            candidate.divergences.push("name");
-          }
-          if (candidate.brand && !ex.productName.toLowerCase().includes(candidate.brand.toLowerCase())) {
-            candidate.divergences.push("brand");
-          }
-          if (
-            candidate.sizeValue != null &&
-            ex.productName &&
-            !ex.productName.toLowerCase().includes(String(candidate.sizeValue).toLowerCase())
-          ) {
-            candidate.divergences.push("size");
-          }
-          if (candidate.price != null && ex.price != null && Math.abs(candidate.price - ex.price) > 0.005) {
-            candidate.divergences.push("price");
-          }
-        }
+        computeDivergences(candidate);
 
         out.push(candidate);
       }
     }
     return out;
+  });
+
+// Shared matching helpers ---------------------------------------------------
+type SimilarityRow = {
+  id: string;
+  product_name: string;
+  price_captured: number | null;
+  quantity: number | null;
+  unit: string | null;
+  barcode: string | null;
+  similarity: number;
+  brand_match: boolean | null;
+  size_match: boolean | null;
+  score: number;
+};
+
+async function runSimilarityMatch(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: any,
+  input: {
+    establishmentId: string;
+    productName: string;
+    brand: string | null;
+    sizeValue: number | null;
+    sizeUnit: string | null;
+  },
+): Promise<{ existing: ExistingMatch; matchType: Candidate["matchType"] } | null> {
+  const { data, error } = await supabase.rpc("find_similar_scans_v2" as never, {
+    p_name: input.productName,
+    p_brand: input.brand,
+    p_size_value: input.sizeValue,
+    p_size_unit: input.sizeUnit,
+    p_establishment_id: input.establishmentId,
+    p_threshold: 0.45,
+  } as never);
+  if (error) console.error("find_similar_scans_v2 error:", error);
+  const rows = (data ?? []) as SimilarityRow[];
+  const top = rows[0];
+  if (!top) return null;
+  const sim = Number(top.similarity ?? 0);
+  const score = Number(top.score ?? sim);
+  const brandOk = top.brand_match !== false; // null (not informed) = neutral
+  const sizeOk = top.size_match !== false;
+  // "signature" (candidato a merge) só quando texto muito próximo E marca/gramagem NÃO contradizem.
+  const matchType: Candidate["matchType"] =
+    sim >= 0.85 && brandOk && sizeOk
+      ? "signature"
+      : score >= 0.55 || sim >= 0.7
+        ? "fuzzy"
+        : "none";
+  if (matchType === "none") return null;
+  return {
+    matchType,
+    existing: {
+      scanId: top.id,
+      productName: top.product_name,
+      price: top.price_captured != null ? Number(top.price_captured) : null,
+      brand: null,
+      quantity: top.quantity != null ? Number(top.quantity) : null,
+      unit: top.unit,
+      barcode: top.barcode,
+      similarity: sim,
+    },
+  };
+}
+
+function computeDivergences(candidate: Candidate): void {
+  if (!candidate.existing) return;
+  const ex = candidate.existing;
+  const exName = (ex.productName ?? "").trim().toLowerCase();
+  if (
+    candidate.productName &&
+    exName &&
+    candidate.productName.trim().toLowerCase() !== exName
+  ) {
+    candidate.divergences.push("name");
+  }
+  if (candidate.brand && !exName.includes(candidate.brand.toLowerCase())) {
+    candidate.divergences.push("brand");
+  }
+  if (candidate.sizeValue != null) {
+    const sv = String(candidate.sizeValue).toLowerCase();
+    const sizeInName = exName.includes(sv);
+    const sizeInQty =
+      ex.quantity != null && Math.abs(Number(ex.quantity) - candidate.sizeValue) < 0.01;
+    if (!sizeInName && !sizeInQty) candidate.divergences.push("size");
+  }
+  if (candidate.price != null && ex.price != null && Math.abs(candidate.price - ex.price) > 0.005) {
+    candidate.divergences.push("price");
+  }
+}
+
+// ---------- analyzeManualItem: revisão de etiquetas ilegíveis ----------
+const ManualInputSchema = z.object({
+  establishmentId: z.string().uuid(),
+  productName: z.string().trim().min(2).max(300),
+  brand: z.string().trim().max(80).nullable().optional(),
+  sizeValue: z.number().positive().max(100000).nullable().optional(),
+  sizeUnit: z.enum(["g", "kg", "ml", "l", "un"]).nullable().optional(),
+  barcode: z.string().trim().max(60).nullable().optional(),
+  price: z.number().positive().max(100000),
+  imagePreview: z.string().min(20).nullable().optional(),
+  category: z.string().trim().max(60).nullable().optional(),
+});
+
+export const analyzeManualItem = createServerFn({ method: "POST" })
+  .middleware([requireAdmin])
+  .inputValidator((input: unknown) => ManualInputSchema.parse(input))
+  .handler(async ({ data, context }): Promise<Candidate> => {
+    const candidate: Candidate = {
+      clientId: `manual-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+      imagePreview: data.imagePreview ?? null,
+      productName: data.productName,
+      brand: data.brand ?? null,
+      unit: data.sizeUnit ?? null,
+      sizeValue: data.sizeValue ?? null,
+      sizeUnit: data.sizeUnit ?? null,
+      category: data.category ?? null,
+      barcode: data.barcode ?? null,
+      price: data.price,
+      confidence: "high", // revisado por humano
+      matchType: "none",
+      existing: null,
+      divergences: [],
+    };
+
+    if (data.barcode) {
+      const { data: byBc } = await context.supabase
+        .from("scans")
+        .select("id, product_name, price_captured, quantity, unit, barcode")
+        .eq("establishment_id", data.establishmentId)
+        .eq("barcode", data.barcode)
+        .eq("status", "salvo")
+        .order("created_at", { ascending: false })
+        .limit(1)
+        .maybeSingle();
+      if (byBc) {
+        candidate.matchType = "barcode";
+        candidate.existing = {
+          scanId: byBc.id,
+          productName: byBc.product_name ?? "",
+          price: byBc.price_captured != null ? Number(byBc.price_captured) : null,
+          brand: null,
+          quantity: byBc.quantity != null ? Number(byBc.quantity) : null,
+          unit: byBc.unit,
+          barcode: byBc.barcode,
+          similarity: 1,
+        };
+      }
+    }
+
+    if (!candidate.existing) {
+      const match = await runSimilarityMatch(context.supabase, {
+        establishmentId: data.establishmentId,
+        productName: data.productName,
+        brand: data.brand ?? null,
+        sizeValue: data.sizeValue ?? null,
+        sizeUnit: data.sizeUnit ?? null,
+      });
+      if (match) {
+        candidate.existing = match.existing;
+        candidate.matchType = match.matchType;
+      }
+    }
+
+    computeDivergences(candidate);
+    return candidate;
   });
 
 // ---------- commitScanBatch ----------
