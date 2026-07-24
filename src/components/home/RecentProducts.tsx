@@ -1,9 +1,18 @@
+import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Clock, Store, Radio } from "lucide-react";
+import { Clock, Store, Radio, ArrowRight } from "lucide-react";
 import { getRecentProducts } from "@/lib/products-public.functions";
 import { getLiveTickerStats } from "@/lib/products-public.functions";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 
 const brl = (n: number) =>
@@ -88,6 +97,14 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
     refetchInterval: 90_000,
   });
 
+  const [liveOpen, setLiveOpen] = useState(false);
+  const { data: liveList, isLoading: liveListLoading } = useQuery({
+    queryKey: ["home", "recent-products", 20],
+    queryFn: () => fetchRecent({ data: { limit: 20 } }),
+    staleTime: 60_000,
+    enabled: liveOpen,
+  });
+
   if (!data || data.length === 0) return null;
 
   const lastUpdateLabel = live?.lastUpdate ? relative(live.lastUpdate) : null;
@@ -101,21 +118,113 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
       <div className="mb-4 flex items-end justify-between gap-4 sm:mb-5">
         <div className="min-w-0">
           <div className="mb-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
-            <span
-              className="inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em]"
-              style={{
-                borderColor: "color-mix(in oklab, #10b981 45%, transparent)",
-                background: "color-mix(in oklab, #10b981 12%, transparent)",
-                color: "#10b981",
-              }}
-              aria-label="Painel ao vivo"
-            >
-              <span className="relative inline-flex h-2 w-2">
-                <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500 opacity-70" />
-                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
-              </span>
-              Ao vivo
-            </span>
+            <Dialog open={liveOpen} onOpenChange={setLiveOpen}>
+              <DialogTrigger asChild>
+                <button
+                  type="button"
+                  className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] transition-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50"
+                  style={{
+                    borderColor: "color-mix(in oklab, #10b981 45%, transparent)",
+                    background: "color-mix(in oklab, #10b981 12%, transparent)",
+                    color: "#10b981",
+                  }}
+                  aria-label="Abrir painel ao vivo com os últimos preços conferidos"
+                >
+                  <span className="relative inline-flex h-2 w-2">
+                    <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500 opacity-70" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                  </span>
+                  Ao vivo
+                </button>
+              </DialogTrigger>
+              <DialogContent className="max-w-lg overflow-hidden p-0">
+                <DialogHeader className="border-b px-5 pb-3 pt-5" style={{ borderColor: P.line }}>
+                  <div className="mb-1.5 flex items-center gap-2">
+                    <span className="relative inline-flex h-2 w-2">
+                      <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500 opacity-70" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                    </span>
+                    <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-400">
+                      Painel ao vivo
+                    </span>
+                  </div>
+                  <DialogTitle className={`${serif} text-left text-2xl`} style={{ color: P.heading, letterSpacing: "-0.02em" }}>
+                    Últimos preços conferidos
+                  </DialogTitle>
+                  <DialogDescription className="text-left">
+                    {lastUpdateLabel ? `Última atualização ${lastUpdateLabel}` : "Coletas recentes em Feijó"}
+                    {typeof live?.checkedToday === "number" && live.checkedToday > 0
+                      ? ` · ${live.checkedToday} hoje`
+                      : ""}
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="max-h-[60vh] overflow-y-auto">
+                  {liveListLoading && !liveList ? (
+                    <ul className="divide-y" style={{ borderColor: P.line }}>
+                      {Array.from({ length: 6 }).map((_, i) => (
+                        <li key={i} className="flex items-center gap-3 px-5 py-3">
+                          <div className="h-2 w-2 shrink-0 animate-pulse rounded-full bg-muted" />
+                          <div className="flex-1 space-y-1.5">
+                            <div className="h-3 w-3/4 animate-pulse rounded bg-muted" />
+                            <div className="h-2.5 w-1/2 animate-pulse rounded bg-muted/60" />
+                          </div>
+                          <div className="h-4 w-16 animate-pulse rounded bg-muted" />
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <ul className="divide-y" style={{ borderColor: P.line }}>
+                      {(liveList ?? data).map((p) => {
+                        const f = freshness(p.when);
+                        return (
+                          <li key={p.slug}>
+                            <Link
+                              to="/produto/$slug"
+                              params={{ slug: p.slug }}
+                              onClick={() => setLiveOpen(false)}
+                              className="group flex items-center gap-3 px-5 py-3 transition-colors hover:bg-muted/40"
+                            >
+                              <span className={`mt-0.5 h-2 w-2 shrink-0 rounded-full ${f.dotClass}`} aria-hidden />
+                              <div className="min-w-0 flex-1">
+                                <div className="truncate text-[13px] font-semibold" style={{ color: P.heading }}>
+                                  {p.name}
+                                </div>
+                                <div className="mt-0.5 flex items-center gap-1.5 text-[11px]">
+                                  <span className="market-name truncate font-bold uppercase tracking-[0.05em] text-[var(--market-accent)]">
+                                    {p.marketName ?? "Vários mercados"}
+                                  </span>
+                                  <span className="text-muted-foreground">·</span>
+                                  <span className="text-muted-foreground">{relative(p.when)}</span>
+                                </div>
+                              </div>
+                              <span
+                                className={`${serif} tabular-nums shrink-0 text-[18px] font-semibold`}
+                                style={{ color: P.gold, letterSpacing: "-0.02em" }}
+                              >
+                                {brl(p.price)}
+                              </span>
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  )}
+                </div>
+
+                <div className="border-t px-5 py-3" style={{ borderColor: P.line }}>
+                  <Link
+                    to="/melhores-precos"
+                    onClick={() => setLiveOpen(false)}
+                    className="inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-[13px] font-bold uppercase tracking-[0.12em] transition-transform hover:scale-[1.01]"
+                    style={{ background: P.gold, color: "#0a1631" }}
+                  >
+                    Ver todos os resultados
+                    <ArrowRight className="h-4 w-4" aria-hidden />
+                  </Link>
+                </div>
+              </DialogContent>
+            </Dialog>
             {lastUpdateLabel && (
               <span
                 className="inline-flex items-center gap-1 text-[10.5px] font-medium tabular-nums"
@@ -126,18 +235,21 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
               </span>
             )}
             {typeof live?.checkedToday === "number" && live.checkedToday > 0 && (
-              <span
-                className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10.5px] font-bold tabular-nums"
+              <button
+                type="button"
+                onClick={() => setLiveOpen(true)}
+                className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10.5px] font-bold tabular-nums transition-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)]/50"
                 style={{
                   background: "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
                   color: P.gold,
                 }}
-                aria-label={`${live.checkedToday} preços conferidos hoje`}
+                aria-label={`Abrir painel: ${live.checkedToday} preços conferidos hoje`}
               >
                 {live.checkedToday} preços conferidos hoje
-              </span>
+              </button>
             )}
           </div>
+
           <div
             className="mb-1 text-[10px] font-bold uppercase tracking-[0.22em]"
             style={{ color: P.goldSoft }}
