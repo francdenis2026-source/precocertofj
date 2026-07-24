@@ -207,12 +207,13 @@ function EstablishmentsPage() {
             <h1 className="text-[20px] md:text-[24px] font-bold leading-tight text-white [text-shadow:0_2px_10px_rgba(0,0,0,0.65)]">
               {currentKind ? currentKind.label : "Comércios"} de{" "}
               <span
-                className="relative inline-block rounded-md px-2 py-0.5 font-extrabold text-brand-navy ring-1 ring-brand-gold/80 shadow-[0_2px_10px_-2px_rgba(0,0,0,0.45)]"
+                className="relative inline-block rounded-md px-2 py-0.5 font-extrabold tracking-tight text-brand-gold ring-1 ring-brand-gold/80 shadow-[0_4px_14px_-4px_rgba(0,0,0,0.55)]"
                 style={{
                   background:
-                    "linear-gradient(180deg, color-mix(in oklab, var(--brand-gold) 96%, white) 0%, var(--brand-gold) 100%)",
+                    "linear-gradient(180deg, color-mix(in oklab, var(--brand-navy) 96%, black) 0%, var(--brand-navy) 100%)",
                 }}
               >
+                <span aria-hidden className="pointer-events-none absolute inset-x-1 -bottom-[3px] h-[2px] rounded-full bg-brand-gold/80" />
                 Feijó
               </span>
             </h1>
