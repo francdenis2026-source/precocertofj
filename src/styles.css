@@ -2877,3 +2877,19 @@ input::placeholder, textarea::placeholder {
     transparent 60%);
 }
 .pc-search-scope > * { position: relative; z-index: 1; }
+
+/* ===================== Tipografia unificada (typeclear) =====================
+   Neutraliza qualquer uso residual de Instrument Serif via classes Tailwind
+   arbitrárias, garantindo que todos os títulos, eyebrows e microcopy
+   renderizem em Work Sans limpo, legível e sem distorção visual. */
+[class*="Instrument_Serif"],
+[class*="font-serif"],
+[class*="font-display"] {
+  font-family: "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  font-style: normal !important;
+}
+/* Eyebrows uppercase ganham peso e tracking equilibrados para leitura clara */
+.pc-eyebrow,
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
+}
