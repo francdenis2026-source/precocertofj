@@ -20,6 +20,8 @@ import {
   toggleFavoritePanelProduct,
 } from "@/lib/favorite-panel.functions";
 import { useSession } from "@/hooks/useSession";
+import { useConfirm } from "@/components/ui/confirm-provider";
+import { useRouter } from "@tanstack/react-router";
 import { ProductQuickModal } from "@/components/home/ProductQuickModal";
 import {
   Dialog,
