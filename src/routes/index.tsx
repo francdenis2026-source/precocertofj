@@ -150,10 +150,43 @@ function HomePage() {
     >
       <SiteHeader variant="solid" showThemeToggle />
 
+      {/* -------- MOBILE QUICK-NAV (abaixo do header, sticky) -------- */}
+      <nav
+        aria-label="Atalhos rápidos"
+        className="sticky top-[56px] z-30 -mb-1 border-b sm:hidden"
+        style={{
+          background: `color-mix(in oklab, ${P.paper} 92%, transparent)`,
+          borderColor: P.line,
+          backdropFilter: "saturate(140%) blur(8px)",
+          WebkitBackdropFilter: "saturate(140%) blur(8px)",
+        }}
+      >
+        <div className="flex gap-1.5 overflow-x-auto px-3 py-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          {[
+            { to: "/melhores-precos", label: "Ranking" },
+            { to: "/estabelecimentos", label: "Mercados" },
+            { to: "/buscar", label: "Buscar" },
+            { to: "/planos", label: "Alertas" },
+            { to: "/cesta-basica", label: "Cesta básica" },
+            { to: "/economia", label: "Economia" },
+          ].map((c) => (
+            <Link
+              key={c.to}
+              to={c.to}
+              className="inline-flex shrink-0 items-center rounded-full border px-3 py-1.5 text-[11.5px] font-semibold leading-none transition-colors active:scale-[0.97]"
+              style={{ borderColor: P.line, background: P.card, color: P.heading }}
+            >
+              {c.label}
+            </Link>
+          ))}
+        </div>
+      </nav>
+
+
 
 
       {/* ============== EDITORIAL CARD ============== */}
-      <div className="mx-auto w-full max-w-6xl px-4 pt-3 pb-4 sm:px-6 sm:pt-4 lg:px-8 lg:pt-5">
+      <div className="mx-auto w-full max-w-6xl px-3 pt-2 pb-3 sm:px-6 sm:pt-4 sm:pb-4 lg:px-8 lg:pt-5">
         <div
           className="overflow-hidden rounded-[1.25rem] shadow-[0_20px_60px_-30px_rgb(11_29_58_/_0.22)] ring-1 lg:rounded-[1.75rem]"
           style={{
@@ -166,7 +199,7 @@ function HomePage() {
           {/* -------- HERO SPLIT -------- */}
           <div className="flex flex-col lg:flex-row">
             {/* LEFT — content */}
-            <div className="flex-[1.2] p-5 sm:p-6 lg:p-8 xl:p-10 flex flex-col justify-center">
+            <div className="flex-[1.2] p-4 sm:p-6 lg:p-8 xl:p-10 flex flex-col justify-center">
               {/* Badge EM BREVE */}
               <div
                 className="mb-3 inline-flex w-fit items-center gap-2 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] sm:mb-5 sm:gap-2.5 sm:px-3.5 sm:py-1.5 sm:text-[11px]"
@@ -206,7 +239,7 @@ function HomePage() {
                 className={`${serif} font-normal`}
                 style={{
                   color: P.heading,
-                  fontSize: "clamp(1.75rem, 4.6vw, 3.75rem)",
+                  fontSize: "clamp(1.55rem, 4.6vw, 3.75rem)",
                   lineHeight: 0.95,
                   letterSpacing: "-0.03em",
                 }}
@@ -268,7 +301,7 @@ function HomePage() {
               </form>
 
               {/* Chips */}
-              <div className="mt-3 flex flex-wrap items-center gap-2">
+              <div className="mt-3 hidden flex-wrap items-center gap-2 sm:flex">
                 <span
                   className="mr-1 text-[10px] font-bold uppercase tracking-[0.24em]"
                   style={{ color: "color-mix(in oklab, var(--pc-home-ink) 45%, transparent)" }}
@@ -507,33 +540,8 @@ function HomePage() {
             </div>
           </div>
 
-          {/* -------- MOBILE: quick nav chips (essencial) -------- */}
-          <div
-            className="flex items-center justify-between gap-2 px-3 py-2.5 sm:hidden"
-            style={{ background: P.navy, color: "#F5F6FA" }}
-            aria-label="Atalhos rápidos"
-          >
-            {[
-              { to: "/melhores-precos", label: "Ranking" },
-              { to: "/estabelecimentos", label: "Mercados" },
-              { to: "/planos", label: "Alertas" },
-            ].map((c) => (
-              <Link
-                key={c.to}
-                to={c.to}
-                className="flex-1 rounded-lg border border-white/10 bg-white/[0.04] px-2 py-1.5 text-center text-[11px] font-semibold text-white/90 transition-colors active:bg-white/[0.10]"
-              >
-                {c.label}
-                <span
-                  className="ml-1 text-[10px]"
-                  style={{ color: P.goldSoft }}
-                  aria-hidden
-                >
-                  →
-                </span>
-              </Link>
-            ))}
-          </div>
+          {/* Chips mobile foram promovidos ao topo (sticky abaixo do header). */}
+
 
           {/* -------- EXPLORE (dark navy band inside card) — sm+ apenas -------- */}
           <div
@@ -592,9 +600,10 @@ function HomePage() {
 
 
       {/* -------- SOCIAL PROOF (compact, with tooltips) -------- */}
-      <section className="mx-auto w-full max-w-6xl px-4 pb-4 sm:px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-6xl px-3 pb-3 sm:px-6 sm:pb-4 lg:px-8">
         <TooltipProvider delayDuration={150}>
-          <div className="grid grid-cols-3 gap-3 sm:gap-4">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4">
+
             {[
               {
                 k: "8",
