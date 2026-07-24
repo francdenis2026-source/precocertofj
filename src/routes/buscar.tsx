@@ -213,25 +213,8 @@ function SearchPage() {
     if (urlSyncTimer.current != null) window.clearTimeout(urlSyncTimer.current);
   }, []);
 
-  const [legacyTheme, setLegacyTheme] = useState<boolean>(() => {
-    if (typeof window === "undefined") return false;
-    try {
-      return window.localStorage.getItem("pc-search-legacy-theme") === "1";
-    } catch {
-      return false;
-    }
-  });
-  const toggleLegacyTheme = useCallback(() => {
-    setLegacyTheme((v) => {
-      const next = !v;
-      try {
-        window.localStorage.setItem("pc-search-legacy-theme", next ? "1" : "0");
-      } catch {
-        /* ignore */
-      }
-      return next;
-    });
-  }, []);
+
+
 
   return (
     <div
