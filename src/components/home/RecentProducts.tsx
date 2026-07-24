@@ -351,18 +351,63 @@ function SpotlightCard({
 
   const toggleFav = useServerFn(toggleFavoritePanelProduct);
   const [pendingKey, setPendingKey] = useState<string | null>(null);
+
+  type FavArgs = { name: string; marketName?: string | null };
   const favMutation = useMutation({
-    mutationFn: (name: string) => toggleFav({ data: { productName: name } }),
-    onMutate: (name) => setPendingKey(panelKeyFromName(name)),
-    onSuccess: (res) => {
-      toast.success(
-        res.favorited
-          ? "Adicionado aos favoritos — vamos avisar quando o preço cair."
-          : "Removido dos favoritos.",
-      );
+    mutationFn: ({ name }: FavArgs) =>
+      toggleFav({ data: { productName: name } }),
+    onMutate: ({ name }) => setPendingKey(panelKeyFromName(name)),
+    onSuccess: (res, args) => {
       queryClient.invalidateQueries({
         queryKey: ["home", "panel-favorite-keys"],
       });
+      const location = args.marketName?.trim() || null;
+      if (res.favorited) {
+        toast.custom(
+          (t) => (
+            <div
+              role="status"
+              className="pc-fav-toast flex w-[340px] max-w-[92vw] items-center gap-3 rounded-xl border border-[color:var(--pc-home-gold)]/45 bg-[color:var(--pc-home-ink)] px-3.5 py-2.5 text-white shadow-2xl ring-1 ring-[color:var(--pc-home-gold)]/20"
+            >
+              <span
+                aria-hidden
+                className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-[color:var(--pc-home-gold)]/15 text-[color:var(--pc-home-gold)]"
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                  <path d="M12 2.6l2.9 6.2 6.8.7-5.1 4.6 1.5 6.7L12 17.6l-6.1 3.2 1.5-6.7L2.3 9.5l6.8-.7z" />
+                </svg>
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="text-[12.5px] font-semibold leading-tight">
+                  Salvo nos favoritos
+                </div>
+                <div className="mt-0.5 truncate text-[11.5px] leading-tight text-white/75">
+                  <span className="font-medium text-white/90">{args.name}</span>
+                  {location ? (
+                    <span className="text-white/60"> · {location}</span>
+                  ) : null}
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  toast.dismiss(t);
+                  favMutation.mutate(args);
+                }}
+                className="shrink-0 rounded-md border border-[color:var(--pc-home-gold)]/40 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-[color:var(--pc-home-gold)] transition-colors hover:bg-[color:var(--pc-home-gold)]/15 focus:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)]/60"
+              >
+                Desfazer
+              </button>
+            </div>
+          ),
+          { duration: 6000 },
+        );
+      } else {
+        toast("Removido dos favoritos", {
+          description: location ? `${args.name} · ${location}` : args.name,
+          duration: 3500,
+        });
+      }
     },
     onError: (e: unknown) =>
       toast.error(e instanceof Error ? e.message : "Falha ao favoritar."),
@@ -381,19 +426,29 @@ function SpotlightCard({
     if (!productName) return;
     const key = panelKeyFromName(productName);
     if (favSet.has(key)) return; // já favoritado — nada a fazer
-    favMutation.mutate(productName);
+    const marketName =
+      typeof intent?.payload?.marketName === "string"
+        ? (intent.payload.marketName as string)
+        : null;
+    favMutation.mutate({ name: productName, marketName });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.id]);
 
-  const handleFavorite = async (name: string) => {
+  const handleFavorite = async (item: {
+    name: string;
+    marketName?: string | null;
+  }) => {
     if (!user) {
       await promptSignIn({
         intent: "favorite-panel",
-        payload: { productName: name },
+        payload: { productName: item.name, marketName: item.marketName ?? null },
+        summary: item.marketName
+          ? `${item.name} · ${item.marketName}`
+          : item.name,
       });
       return;
     }
-    favMutation.mutate(name);
+    favMutation.mutate({ name: item.name, marketName: item.marketName });
   };
 
 
@@ -524,7 +579,7 @@ function SpotlightCard({
           <div className="flex items-center gap-3">
             <button
               type="button"
-              onClick={() => handleFavorite(p.name)}
+              onClick={() => handleFavorite({ name: p.name, marketName: p.marketName })}
               disabled={isFavPending}
               aria-pressed={isFav}
               aria-label={isFav ? `Remover ${p.name} dos favoritos` : `Favoritar ${p.name}`}
