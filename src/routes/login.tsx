@@ -279,21 +279,18 @@ function LoginPage() {
   }
 
   return (
-    <div
-      className="relative flex min-h-dvh w-full items-center justify-center px-4 py-8 sm:px-6"
-      style={{ background: PC_CREAM }}
-    >
-      {/* Ambient emerald glow — hidden on mobile to keep focus on the form */}
+    <div className="relative flex min-h-dvh w-full items-center justify-center bg-background px-4 py-8 sm:px-6">
+      {/* Ambient brand glow — subtle in both themes */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 hidden overflow-hidden md:block"
       >
         <div
-          className="absolute -left-40 -top-40 h-[520px] w-[520px] rounded-full opacity-40 blur-3xl"
+          className="absolute -left-40 -top-40 h-[520px] w-[520px] rounded-full opacity-30 blur-3xl dark:opacity-20"
           style={{ background: `radial-gradient(closest-side, ${PC_EMERALD}33, transparent)` }}
         />
         <div
-          className="absolute -bottom-40 -right-40 h-[520px] w-[520px] rounded-full opacity-30 blur-3xl"
+          className="absolute -bottom-40 -right-40 h-[520px] w-[520px] rounded-full opacity-25 blur-3xl dark:opacity-20"
           style={{ background: `radial-gradient(closest-side, ${PC_GOLD}33, transparent)` }}
         />
       </div>
@@ -301,7 +298,7 @@ function LoginPage() {
       {/* Top-right link */}
       <Link
         to="/"
-        className="absolute right-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white/80 px-2.5 py-1 text-[11px] font-semibold text-emerald-900 backdrop-blur transition hover:bg-white sm:right-5 sm:top-5 sm:px-3 sm:py-1.5"
+        className="absolute right-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-full border border-border bg-card/80 px-2.5 py-1 text-[11px] font-semibold text-foreground backdrop-blur transition hover:bg-card sm:right-5 sm:top-5 sm:px-3 sm:py-1.5"
         style={{ fontFamily: PC_BODY }}
       >
         ← Voltar ao site
@@ -311,12 +308,13 @@ function LoginPage() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 grid w-full max-w-[960px] overflow-hidden rounded-2xl border border-black/5 bg-white shadow-[0_30px_80px_-30px_rgba(6,78,59,0.35)] sm:rounded-3xl md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]"
+        className="relative z-10 grid w-full max-w-[960px] overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
       >
         {/* LEFT — Emerald benefit panel (hidden on mobile to reduce distraction) */}
         <div className="hidden md:block">
           <AuthHero variant={mode === "signup" ? "signup" : "login"} />
         </div>
+
 
 
         {/* RIGHT — Auth form */}
@@ -331,25 +329,23 @@ function LoginPage() {
               <ShoppingCart className="h-3.5 w-3.5" strokeWidth={2.5} />
             </div>
             <span
-              className="text-[15px] font-bold tracking-tight"
-              style={{ color: PC_EMERALD, fontFamily: PC_DISPLAY }}
+              className="text-[15px] font-bold tracking-tight text-foreground"
+              style={{ fontFamily: PC_DISPLAY }}
             >
               PreçoCerto
             </span>
           </div>
 
-          <p
-            className="text-[9.5px] font-bold uppercase tracking-[0.2em]"
-            style={{ color: PC_EMERALD }}
-          >
+          <p className="text-[9.5px] font-bold uppercase tracking-[0.2em] text-[color:var(--pc-home-navy)] dark:text-[color:var(--pc-home-gold)]">
             {mode === "login" ? "Área do assinante" : "Comece grátis"}
           </p>
           <h1
-            className="mt-1 text-[22px] leading-[1.15] font-bold tracking-tight"
-            style={{ color: PC_EMERALD_DEEP, fontFamily: PC_DISPLAY }}
+            className="mt-1 text-[22px] leading-[1.15] font-bold tracking-tight text-foreground"
+            style={{ fontFamily: PC_DISPLAY }}
           >
             {mode === "login" ? "Entrar na plataforma" : "Criar sua conta"}
           </h1>
+
 
           <TabSwitch mode={mode} onChange={setMode} />
 
@@ -458,14 +454,15 @@ function LoginPage() {
             })()}
 
             {mode === "signup" && (
-              <details className="group rounded-xl border border-slate-300 bg-slate-50">
-                <summary className="flex cursor-pointer list-none items-center justify-between px-3.5 py-2.5 text-[11px] font-semibold uppercase tracking-widest text-slate-600 transition hover:text-slate-900">
-                  Endereço <span className="ml-1 font-normal normal-case tracking-normal text-slate-400">(opcional)</span>
-                  <span className="text-[10.5px] font-normal normal-case tracking-normal text-slate-500 group-open:hidden">
+              <details className="group rounded-xl border border-border bg-muted/40">
+                <summary className="flex cursor-pointer list-none items-center justify-between px-3.5 py-2.5 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground transition hover:text-foreground">
+                  Endereço <span className="ml-1 font-normal normal-case tracking-normal text-muted-foreground/70">(opcional)</span>
+                  <span className="text-[10.5px] font-normal normal-case tracking-normal text-muted-foreground group-open:hidden">
                     adicionar
                   </span>
                 </summary>
-                <div className="space-y-3 border-t border-slate-200 bg-white px-3.5 py-3.5">
+                <div className="space-y-3 border-t border-border bg-card px-3.5 py-3.5">
+
 
                   <div className="grid grid-cols-3 gap-3">
                     <div className="col-span-1">
@@ -576,11 +573,10 @@ function LoginPage() {
             </button>
 
 
-            <div className="flex flex-col items-center gap-2 pt-1 text-[11.5px]" style={{ color: "#6b7280" }}>
+            <div className="flex flex-col items-center gap-2 pt-1 text-[11.5px] text-muted-foreground">
               <Link
                 to="/resgatar"
-                className="inline-flex items-center gap-1.5 font-semibold transition hover:underline"
-                style={{ color: PC_GOLD_DARK }}
+                className="inline-flex items-center gap-1.5 font-semibold transition hover:underline text-[color:var(--pc-home-gold)]"
               >
                 <Ticket className="h-3.5 w-3.5" />
                 Tenho um código promocional
@@ -588,10 +584,11 @@ function LoginPage() {
             </div>
           </form>
 
-          <p className="mt-6 border-t border-black/5 pt-4 text-center text-[10.5px] text-gray-400">
+          <p className="mt-6 border-t border-border pt-4 text-center text-[10.5px] text-muted-foreground">
             Ao continuar, você concorda com nossos{" "}
-            <Link to="/termos" className="underline hover:text-gray-600">Termos</Link> e{" "}
-            <Link to="/privacidade" className="underline hover:text-gray-600">Privacidade</Link>.
+            <Link to="/termos" className="underline hover:text-foreground">Termos</Link> e{" "}
+            <Link to="/privacidade" className="underline hover:text-foreground">Privacidade</Link>.
+
           </p>
         </div>
       </motion.div>
@@ -878,7 +875,7 @@ function TabSwitch({
     <div
       role="tablist"
       aria-label="Login ou cadastro"
-      className="mt-4 grid grid-cols-2 gap-1 rounded-lg border border-slate-300 bg-slate-100 p-0.5"
+      className="mt-4 grid grid-cols-2 gap-1 rounded-lg border border-border bg-muted p-0.5"
     >
       {tabs.map((t) => {
         const active = mode === t.key;
@@ -889,12 +886,11 @@ function TabSwitch({
             role="tab"
             aria-selected={active}
             onClick={() => onChange(t.key)}
-            style={active ? { color: PC_EMERALD_DEEP } : undefined}
             className={
               "relative h-8 rounded-md text-[12px] font-semibold transition " +
               (active
-                ? "bg-white shadow-sm ring-1 ring-slate-300"
-                : "text-slate-600 hover:text-slate-900")
+                ? "bg-card text-foreground shadow-sm ring-1 ring-border"
+                : "text-muted-foreground hover:text-foreground")
             }
           >
             {t.label}
@@ -902,6 +898,7 @@ function TabSwitch({
         );
       })}
     </div>
+
   );
 }
 
@@ -935,29 +932,28 @@ function Field({
   status?: FieldStatus;
   hint?: string | null;
 }) {
-  // The right panel is hardcoded white, so inputs use an explicit light palette
-  // to guarantee contrast regardless of the app's dark/light theme setting.
+  // Uses semantic tokens so the inputs are legible in both light and dark themes.
   const borderCls =
     status === "success"
       ? "border-emerald-500/70 focus:border-emerald-600 focus:ring-emerald-500/15"
       : status === "error"
         ? "border-rose-500/70 focus:border-rose-600 focus:ring-rose-500/15"
-        : "border-slate-300 hover:border-slate-400 focus:border-slate-900 focus:ring-slate-900/10";
+        : "border-input hover:border-ring focus:border-ring focus:ring-ring/20";
   const hintCls =
     status === "success"
-      ? "text-emerald-700"
+      ? "text-emerald-600 dark:text-emerald-400"
       : status === "error"
-        ? "text-rose-600"
-        : "text-slate-500";
+        ? "text-rose-600 dark:text-rose-400"
+        : "text-muted-foreground";
   return (
     <label className="block">
-      <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-600">
+      <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
         {label}
       </span>
 
       <div className="relative">
         {Icon && (
-          <Icon className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+          <Icon className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground/70" />
         )}
         <input
           type={type}
@@ -969,9 +965,8 @@ function Field({
           minLength={minLength}
           inputMode={inputMode}
           aria-invalid={status === "error" || undefined}
-          style={{ color: PC_EMERALD_DEEP }}
           className={
-            "h-9 w-full rounded-lg bg-white text-[13px] font-medium tracking-tight shadow-[inset_0_1px_0_rgba(15,23,42,0.02)] transition placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:ring-4 " +
+            "h-9 w-full rounded-lg bg-background text-foreground text-[13px] font-medium tracking-tight shadow-[inset_0_1px_0_rgba(15,23,42,0.02)] transition placeholder:font-normal placeholder:text-muted-foreground/60 focus:outline-none focus:ring-4 " +
             borderCls +
             " border " +
             (Icon ? "pl-9 " : "pl-3 ") +
@@ -979,12 +974,13 @@ function Field({
           }
         />
         {status === "success" && (
-          <Check className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-emerald-600" />
+          <Check className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-emerald-600 dark:text-emerald-400" />
         )}
         {status === "error" && (
-          <AlertCircle className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-rose-600" />
+          <AlertCircle className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-rose-600 dark:text-rose-400" />
         )}
       </div>
+
       {hint && (
         <p
           className={`mt-1 pl-0.5 text-[10.5px] font-medium ${hintCls}`}
@@ -1043,10 +1039,7 @@ function PinField({
   return (
     <div className="space-y-2">
       <div className="flex items-end justify-between">
-        <label
-          className="text-[10.5px] font-bold uppercase tracking-[0.2em]"
-          style={{ color: PC_EMERALD }}
-        >
+        <label className="text-[10.5px] font-bold uppercase tracking-[0.2em] text-[color:var(--pc-home-navy)] dark:text-[color:var(--pc-home-gold)]">
           PIN de 6 dígitos
         </label>
       </div>
@@ -1066,14 +1059,13 @@ function PinField({
             onKeyDown={(e) => handleKey(i, e)}
             onPaste={handlePaste}
             aria-label={`Dígito ${i + 1} do PIN`}
-            className="h-10 w-full rounded-md border bg-white text-center text-base font-bold outline-none transition"
+            className="h-10 w-full rounded-md border bg-background text-foreground text-center text-base font-bold outline-none transition"
             style={{
               borderColor: hasError
                 ? "#dc2626"
                 : d.trim()
                   ? PC_GOLD
-                  : "#cbd5e1",
-              color: PC_EMERALD_DEEP,
+                  : "var(--border)",
               fontFamily: PC_DISPLAY,
             }}
             onFocus={(e) => {
@@ -1086,12 +1078,12 @@ function PinField({
                 ? "#dc2626"
                 : d.trim()
                   ? PC_GOLD
-                  : "#cbd5e1";
+                  : "var(--border)";
             }}
-
           />
         ))}
       </div>
     </div>
   );
 }
+
