@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate, useRouter, retainSearchParams } from "@tanstack/react-router";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { PriceSearchBar } from "@/components/scanner/PriceSearchBar";
 import { MobileNav } from "@/components/nav/MobileNav";
 import { ArrowLeft } from "lucide-react";
@@ -213,8 +213,33 @@ function SearchPage() {
     if (urlSyncTimer.current != null) window.clearTimeout(urlSyncTimer.current);
   }, []);
 
+  const [legacyTheme, setLegacyTheme] = useState<boolean>(() => {
+    if (typeof window === "undefined") return false;
+    try {
+      return window.localStorage.getItem("pc-search-legacy-theme") === "1";
+    } catch {
+      return false;
+    }
+  });
+  const toggleLegacyTheme = useCallback(() => {
+    setLegacyTheme((v) => {
+      const next = !v;
+      try {
+        window.localStorage.setItem("pc-search-legacy-theme", next ? "1" : "0");
+      } catch {
+        /* ignore */
+      }
+      return next;
+    });
+  }, []);
+
   return (
-    <div className="pc-search-scope min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
+    <div
+      className={
+        "pc-search-scope min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground" +
+        (legacyTheme ? " pc-search-legacy" : "")
+      }
+    >
       <div className="mx-auto max-w-3xl px-4 md:px-6 pt-3 md:pt-4">
         <InternalPageHeader
           breadcrumbs={[{ label: "Início", to: "/" }, { label: "Buscar" }]}
@@ -223,6 +248,17 @@ function SearchPage() {
           description="Preço médio, mínimo e onde está mais barato."
           actions={
             <>
+              <button
+                type="button"
+                onClick={toggleLegacyTheme}
+                className="pc-search-theme-toggle"
+                data-legacy={legacyTheme ? "true" : "false"}
+                aria-pressed={legacyTheme}
+                title={legacyTheme ? "Ver paleta Navy/Gold (nova)" : "Ver paleta Ciano (atual)"}
+              >
+                <span className="pc-dot" aria-hidden="true" />
+                {legacyTheme ? "Ciano" : "Navy/Gold"}
+              </button>
               <Button
                 type="button"
                 variant="ghost"

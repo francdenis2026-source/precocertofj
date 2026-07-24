@@ -2223,7 +2223,7 @@ textarea::placeholder {
    para que a página de buscar herde a MESMA paleta e tipografia da homepage
    em light e dark. Também eleva font-size mínimo para 13px e line-height
    1.45 em texto informativo (WCAG + legibilidade em telas médias). */
-.pc-search-scope {
+.pc-search-scope:not(.pc-search-legacy) {
   /* Accent → Gold homepage (mantém contraste AA em ambos os temas) */
   --accent: var(--pc-home-gold);
   --accent-strong: var(--pc-home-gold);
@@ -2231,19 +2231,68 @@ textarea::placeholder {
   --color-accent: var(--pc-home-gold);
   --color-accent-strong: var(--pc-home-gold);
   --color-accent-foreground: var(--pc-text-on-gold);
+  /* Primary → Navy da homepage (elimina o ciano em chips e no CTA) */
+  --primary: var(--pc-home-navy);
+  --primary-foreground: var(--pc-home-gold);
+  --color-primary: var(--pc-home-navy);
+  --color-primary-foreground: var(--pc-home-gold);
+  --ring: var(--pc-home-gold);
+  --color-ring: var(--pc-home-gold);
   /* Surface alinhada ao card da homepage */
   --surface: var(--pc-home-card);
   --color-surface: var(--pc-home-card);
 }
-.dark .pc-search-scope {
+.dark .pc-search-scope:not(.pc-search-legacy) {
   --accent: var(--pc-home-gold);
   --accent-strong: var(--pc-home-gold-soft);
   --accent-foreground: #08122a;
   --color-accent: var(--pc-home-gold);
   --color-accent-strong: var(--pc-home-gold-soft);
   --color-accent-foreground: #08122a;
+  --primary: var(--pc-home-gold);
+  --primary-foreground: #08122a;
+  --color-primary: var(--pc-home-gold);
+  --color-primary-foreground: #08122a;
+  --ring: var(--pc-home-gold);
+  --color-ring: var(--pc-home-gold);
   --surface: var(--pc-home-card);
   --color-surface: var(--pc-home-card);
+}
+
+/* Toggle para comparar Navy/Gold (novo) vs. paleta ciano (legado) */
+.pc-search-theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  height: 2rem;
+  padding: 0 0.625rem;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in oklab, var(--pc-home-gold) 55%, transparent);
+  background: color-mix(in oklab, var(--pc-home-navy) 8%, transparent);
+  color: var(--foreground);
+  font-family: var(--font-mono, ui-monospace, monospace);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 160ms ease, border-color 160ms ease;
+}
+.pc-search-theme-toggle:hover {
+  background: color-mix(in oklab, var(--pc-home-gold) 14%, transparent);
+  border-color: var(--pc-home-gold);
+}
+.pc-search-theme-toggle:focus-visible {
+  outline: 3px solid color-mix(in oklab, var(--pc-home-gold) 75%, transparent);
+  outline-offset: 2px;
+}
+.pc-search-theme-toggle .pc-dot {
+  width: 8px; height: 8px; border-radius: 9999px;
+  background: var(--pc-home-gold);
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--pc-home-navy) 30%, transparent);
+}
+.pc-search-theme-toggle[data-legacy="true"] .pc-dot {
+  background: oklch(0.74 0.13 205);
 }
 
 /* Hierarquia tipográfica consistente dentro do escopo de busca */
