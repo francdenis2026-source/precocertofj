@@ -14,6 +14,8 @@ export type RecentProduct = {
   marketName: string | null;
   when: string; // ISO date
   stores: number;
+  previousPrice: number | null;
+  dropPct: number | null; // percentual positivo = queda; null se não houver histórico relevante
 };
 
 export type LiveTickerStats = {
