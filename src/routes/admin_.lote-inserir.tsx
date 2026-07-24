@@ -127,12 +127,24 @@ async function fileToResizedDataURL(file: File, max = 1280): Promise<string> {
 function Page() {
   const analyzeFn = useServerFn(analyzeBatchPhotos);
   const commitFn = useServerFn(commitScanBatch);
+  const manualFn = useServerFn(analyzeManualItem);
 
   const [establishmentId, setEstablishmentId] = useState<string>(REBOUCAS_ID);
   const [files, setFiles] = useState<Array<{ id: string; dataUrl: string; name: string }>>([]);
   const [rows, setRows] = useState<Row[]>([]);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const manualPhotoRef = useRef<HTMLInputElement>(null);
+
+  const [manualForm, setManualForm] = useState<{
+    name: string;
+    brand: string;
+    qty: string;
+    unit: string;
+    barcode: string;
+    price: string;
+    photo: string | null;
+  }>({ name: "", brand: "", qty: "", unit: "", barcode: "", price: "", photo: null });
 
   const { data: establishments } = useQuery({
     queryKey: ["establishments-all"],
