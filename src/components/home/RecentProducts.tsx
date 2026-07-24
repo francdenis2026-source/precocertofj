@@ -282,52 +282,9 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
       </div>
 
 
-      {/* MOBILE: letreiro digital (marquee) — economiza tela vertical */}
-      <div
-        className="price-marquee-viewport sm:hidden -mx-4 overflow-hidden border-y py-3"
-        style={{ borderColor: P.line, background: P.card }}
-        aria-label="Atualizações recentes de preço"
-      >
-        <div className="price-marquee flex w-max items-center gap-3 px-4">
+      {/* MOBILE: rotator de preços — auto-avança, fácil de ler no dia a dia */}
+      <MobilePriceRotator data={data} P={P} serif={serif} />
 
-          {[...data, ...data].map((p, i) => {
-            const f = freshness(p.when);
-            return (
-              <Link
-                key={`${p.slug}-${i}`}
-                to="/produto/$slug"
-                params={{ slug: p.slug }}
-                className="inline-flex shrink-0 items-center gap-3 rounded-2xl border px-4 py-2.5 shadow-sm"
-                style={{ borderColor: P.line, background: "var(--pc-home-bg, transparent)", color: P.heading }}
-                aria-label={`${p.name} — ${brl(p.price)} em ${p.marketName ?? "mercados"}`}
-              >
-                <span
-                  className={`h-2 w-2 shrink-0 rounded-full ${f.dotClass}`}
-                  aria-hidden
-                />
-                <div className="flex min-w-0 flex-col leading-tight gap-0.5">
-                  <span
-                    className="whitespace-nowrap text-[15px] font-semibold"
-                    title={p.name}
-                  >
-                    {shortName(p.name, 24)}
-                  </span>
-                  <span className="market-name whitespace-nowrap text-[13px] font-bold uppercase tracking-[0.06em] text-[var(--market-accent)]">
-                    {shortName(p.marketName ?? "vários mercados", 22)}
-                  </span>
-                </div>
-                <span
-                  className={`${serif} tabular-nums text-[22px] font-semibold leading-none pl-1 shrink-0`}
-                  style={{ color: P.gold, letterSpacing: "-0.02em" }}
-                >
-                  {brl(p.price)}
-                </span>
-              </Link>
-            );
-
-          })}
-        </div>
-      </div>
 
 
       {/* SM+: grid completo com mais detalhes */}
