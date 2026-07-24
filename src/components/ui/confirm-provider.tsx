@@ -269,7 +269,7 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
               aria-modal="true"
               aria-labelledby="confirm-title"
               aria-describedby={state.options.description ? "confirm-desc" : undefined}
-              className={`relative w-full max-w-md overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl ring-1 ${tc.ring}`}
+              className={`relative w-full max-w-[380px] overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl ring-1 ${tc.ring}`}
               onKeyDown={(e) => {
                 if (e.key === "Escape") {
                   e.preventDefault();
