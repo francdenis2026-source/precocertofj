@@ -58,13 +58,13 @@ export function PageLoader({
       aria-live="polite"
       aria-busy="true"
       className={cn(
-        "flex flex-col items-center justify-center gap-3 text-muted-foreground",
+        "flex flex-col items-center justify-center gap-3 text-foreground/85",
         fullScreen ? "min-h-[60dvh] w-full" : "py-16",
         className,
       )}
     >
       <Spinner size="lg" className="text-primary" label={label} />
-      <p className="text-sm">{label}</p>
+      <p className="text-[13px] sm:text-sm font-medium leading-snug">{label}</p>
     </div>
   );
 }
@@ -96,17 +96,19 @@ export function ErrorState({
     <div
       role="alert"
       className={cn(
-        "flex flex-col items-start gap-3 rounded-2xl border border-destructive/30 bg-destructive/5 p-5 text-sm text-destructive sm:flex-row sm:items-center",
+        "flex flex-col items-start gap-3 rounded-2xl border border-destructive/40 bg-destructive/10 p-5 text-[13px] sm:text-sm leading-relaxed text-foreground sm:flex-row sm:items-center",
         className,
       )}
     >
-      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-destructive/15">
+      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-destructive/20 text-destructive dark:text-destructive-foreground">
         <Icon className="h-4 w-4" />
       </span>
       <div className="min-w-0 flex-1">
-        <p className="font-semibold text-foreground">{title}</p>
+        <p className="text-[14px] sm:text-[15px] font-semibold leading-snug text-foreground">{title}</p>
         {message && (
-          <p className="mt-0.5 line-clamp-3 text-xs text-muted-foreground">{message}</p>
+          <p className="mt-1 line-clamp-3 text-[12.5px] sm:text-[13px] leading-relaxed text-foreground/80">
+            {message}
+          </p>
         )}
       </div>
       {onRetry && (
@@ -115,7 +117,7 @@ export function ErrorState({
           onClick={onRetry}
           variant="outline"
           size="sm"
-          className="shrink-0"
+          className="shrink-0 font-medium"
         >
           <RefreshCw className="h-3.5 w-3.5" />
           {retryLabel}
@@ -137,9 +139,9 @@ export function InlineError({ message, className, id }: InlineErrorProps) {
     <p
       id={id}
       role="alert"
-      className={cn("mt-1.5 flex items-center gap-1.5 text-xs font-medium text-destructive", className)}
+      className={cn("mt-1.5 flex items-center gap-1.5 text-[12.5px] sm:text-[13px] font-semibold leading-snug text-destructive", className)}
     >
-      <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+      <AlertCircle className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
       <span className="min-w-0">{message}</span>
     </p>
   );
@@ -169,13 +171,13 @@ export function RouteError({
         className,
       )}
     >
-      <span className="mb-5 grid h-14 w-14 place-items-center rounded-full bg-destructive/10 text-destructive">
-        <WifiOff className="h-6 w-6" strokeWidth={1.5} />
+      <span className="mb-5 grid h-14 w-14 place-items-center rounded-full bg-destructive/15 text-destructive ring-1 ring-destructive/30">
+        <WifiOff className="h-6 w-6" strokeWidth={1.75} />
       </span>
-      <h1 className="font-display text-xl font-semibold tracking-tight text-foreground">
+      <h1 className="text-[19px] sm:text-[21px] font-semibold tracking-tight leading-tight text-foreground">
         {title}
       </h1>
-      <p className="mt-2 text-sm text-muted-foreground">{message}</p>
+      <p className="mt-2 text-[13px] sm:text-sm leading-relaxed text-foreground/80">{message}</p>
       <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
         {onRetry && (
           <Button onClick={onRetry} size="sm">
@@ -215,16 +217,16 @@ export function RouteNotFound({
         className,
       )}
     >
-      <span className="mb-5 grid h-14 w-14 place-items-center rounded-full bg-muted text-muted-foreground">
-        <SearchX className="h-6 w-6" strokeWidth={1.5} />
+      <span className="mb-5 grid h-14 w-14 place-items-center rounded-full bg-muted text-foreground/85 ring-1 ring-border">
+        <SearchX className="h-6 w-6" strokeWidth={1.75} />
       </span>
-      <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground/70">
         404
       </p>
-      <h1 className="mt-1 font-display text-xl font-semibold tracking-tight text-foreground">
+      <h1 className="mt-1 text-[19px] sm:text-[21px] font-semibold tracking-tight leading-tight text-foreground">
         {title}
       </h1>
-      <p className="mt-2 text-sm text-muted-foreground">{message}</p>
+      <p className="mt-2 text-[13px] sm:text-sm leading-relaxed text-foreground/80">{message}</p>
       <div className="mt-6">
         <Button asChild size="sm">
           <a href="/">
@@ -263,29 +265,29 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center rounded-xl border border-dashed border-border/70 bg-card/40 text-center",
+        "flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card/60 text-center",
         isSm ? "px-4 py-5" : "px-5 py-7 sm:py-8",
         className,
       )}
     >
       <span
         className={cn(
-          "mb-2.5 grid place-items-center rounded-full bg-muted text-muted-foreground",
-          isSm ? "h-8 w-8" : "h-9 w-9",
+          "mb-2.5 grid place-items-center rounded-full bg-primary/12 text-primary ring-1 ring-primary/25 dark:bg-primary/20 dark:text-primary-foreground dark:ring-primary/40",
+          isSm ? "h-9 w-9" : "h-10 w-10",
         )}
       >
-        <Icon className={isSm ? "h-3.5 w-3.5" : "h-4 w-4"} strokeWidth={1.75} />
+        <Icon className={isSm ? "h-4 w-4" : "h-[18px] w-[18px]"} strokeWidth={2} />
       </span>
       <p
         className={cn(
-          "font-sans font-semibold tracking-tight text-foreground",
-          isSm ? "text-[15px] leading-snug" : "text-[16px] sm:text-[17px] leading-snug",
+          "font-sans font-semibold tracking-tight leading-snug text-foreground",
+          isSm ? "text-[15px]" : "text-[16px] sm:text-[17px]",
         )}
       >
         {title}
       </p>
       {message && (
-        <p className="mt-1.5 max-w-md text-[13px] sm:text-[13.5px] leading-relaxed text-foreground/80 dark:text-foreground/85">
+        <p className="mt-1.5 max-w-md text-[13px] sm:text-[13.5px] leading-relaxed text-foreground/85">
           {message}
         </p>
       )}
