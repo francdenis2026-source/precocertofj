@@ -19,16 +19,33 @@ export function ThemeToggle({
   ...props
 }: ThemeToggleProps) {
   const { toggle, isDark, mounted } = useTheme();
-  const dim = size === "sm" ? "h-8 w-8" : "h-9 w-9";
-  const icon = size === "sm" ? "h-3.5 w-3.5" : "h-4 w-4";
-
-  const toneClass =
-    tone === "dark"
-      ? "border-on-media-border bg-on-media-surface text-on-media hover:bg-on-media-surface"
-      : "border-border bg-surface text-muted-foreground hover:border-primary/40 hover:text-foreground";
+  const dim = size === "sm" ? "h-9 w-9" : "h-11 w-11";
+  const icon = size === "sm" ? "h-5 w-5" : "h-[22px] w-[22px]";
 
   const showDarkIcon = mounted && isDark;
   const label = showDarkIcon ? "Ativar modo claro" : "Ativar modo escuro";
+
+  // Active state: quando escuro (lua) ou claro (sol) ativo, o botão fica "aceso"
+  const activeStyle: React.CSSProperties = showDarkIcon
+    ? {
+        background:
+          "radial-gradient(circle at 35% 30%, rgba(245,200,106,0.28), rgba(245,200,106,0.08) 60%, transparent 75%)",
+        borderColor: "rgba(245,200,106,0.55)",
+        boxShadow:
+          "0 0 0 1px rgba(245,200,106,0.25), 0 0 12px rgba(245,200,106,0.35), inset 0 0 8px rgba(245,200,106,0.15)",
+      }
+    : {
+        background:
+          "radial-gradient(circle at 35% 30%, rgba(245,158,11,0.22), rgba(245,158,11,0.06) 60%, transparent 75%)",
+        borderColor: "rgba(245,158,11,0.45)",
+        boxShadow:
+          "0 0 0 1px rgba(245,158,11,0.20), 0 0 10px rgba(245,158,11,0.28), inset 0 0 6px rgba(245,158,11,0.12)",
+      };
+
+  const baseTone =
+    tone === "dark"
+      ? "border-on-media-border text-on-media"
+      : "border-border text-foreground";
 
   return (
     <Button
@@ -39,9 +56,11 @@ export function ThemeToggle({
       aria-label={label}
       aria-pressed={showDarkIcon}
       title={label}
+      style={activeStyle}
       className={cn(
-        "inline-flex items-center justify-center rounded-full border transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary/60",
-        toneClass,
+        "inline-flex items-center justify-center rounded-full border transition-all duration-200 outline-none",
+        "hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-primary/60",
+        baseTone,
         dim,
         className,
       )}
@@ -49,17 +68,18 @@ export function ThemeToggle({
     >
       {showDarkIcon ? (
         <Moon
-          className={cn(icon, "drop-shadow-[0_0_6px_rgba(191,161,74,0.55)]")}
+          className={cn(icon, "drop-shadow-[0_0_8px_rgba(245,200,106,0.75)]")}
           strokeWidth={1.75}
-          style={{ color: "#F5C86A", fill: "rgba(245,200,106,0.18)" }}
+          style={{ color: "#F5C86A", fill: "rgba(245,200,106,0.35)" }}
         />
       ) : (
         <Sun
-          className={cn(icon, "drop-shadow-[0_0_6px_rgba(245,158,11,0.35)]")}
-          strokeWidth={1.9}
-          style={{ color: "#F59E0B" }}
+          className={cn(icon, "drop-shadow-[0_0_8px_rgba(245,158,11,0.55)]")}
+          strokeWidth={2}
+          style={{ color: "#F59E0B", fill: "rgba(245,158,11,0.18)" }}
         />
       )}
     </Button>
   );
+
 }
