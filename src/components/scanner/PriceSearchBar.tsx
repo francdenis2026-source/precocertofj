@@ -1182,6 +1182,9 @@ function QuickFilters({
       <button type="button" className={chip(groupBy === "market")} onClick={() => onGroupBy("market")}>
         Por mercado
       </button>
+      <button type="button" className={chip(groupBy === "matrix")} onClick={() => onGroupBy("matrix")}>
+        Comparar lado a lado
+      </button>
       <span className="ml-2 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
         Ordenar
       </span>
