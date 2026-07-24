@@ -557,13 +557,19 @@ function HomePage() {
 
           {today && (
             <div
-              className="mb-3 inline-flex items-center gap-2 text-[10.5px] font-semibold uppercase tabular-nums"
-              style={{ color: "color-mix(in oklab, #0b1e3a 62%, transparent)", letterSpacing: "0.16em" }}
+              className="mb-3 inline-flex w-fit items-center gap-2 rounded-full px-2.5 py-1 text-[10.5px] font-bold uppercase tabular-nums"
+              style={{
+                background: `color-mix(in oklab, ${P.navy} 92%, transparent)`,
+                color: P.goldSoft,
+                letterSpacing: "0.18em",
+                border: `1px solid ${P.gold}66`,
+              }}
             >
-              <span aria-hidden className="inline-block h-px w-6" style={{ background: `color-mix(in oklab, ${P.navy} 35%, transparent)` }} />
+              <span aria-hidden className="inline-block h-[6px] w-[6px] rounded-full" style={{ background: P.gold }} />
               {today}
             </div>
           )}
+
 
           <h1
             id="hero-mobile-title-light"
