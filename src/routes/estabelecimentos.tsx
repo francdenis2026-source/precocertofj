@@ -31,6 +31,13 @@ import { ChevronRight, MapPin, Package, Search, Sparkles, Store, TrendingUp, Pil
 import mercadosHero from "@/assets/mercados-hero-v2.jpg.asset.json";
 import { useRef } from "react";
 import { useAdaptiveOverlayOpacity } from "@/hooks/use-adaptive-overlay";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 export const Route = createFileRoute("/estabelecimentos")({
   head: () => ({
