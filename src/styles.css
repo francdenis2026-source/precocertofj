@@ -2354,7 +2354,11 @@ textarea::placeholder {
 .pc-search-scope h3 {
   font-family: var(--font-display);
   letter-spacing: -0.01em;
-  color: var(--foreground);
+}
+/* Cor herdada por padrão; classes utilitárias (text-white, text-brand-gold) prevalecem */
+.pc-search-scope h2,
+.pc-search-scope h3 {
+  color: inherit;
 }
 /* Sobe qualquer texto abaixo de 12px para 12px (mínimo legível em mobile) */
 .pc-search-scope .text-\[9px\],
