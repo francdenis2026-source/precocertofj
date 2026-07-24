@@ -1931,21 +1931,11 @@ body.no-page-bg::before { display: none; }
   .price-marquee { animation-duration: clamp(55s, 12vw + 45s, 80s); }
 }
 
-/* Pausa automática em hover, foco de teclado e toque.
-   iOS Safari não dispara :hover/:active previsivelmente no touch;
-   por isso usamos também :focus-within e o seletor de toque abaixo. */
-.price-marquee:hover,
-.price-marquee:focus-within,
-.price-marquee-viewport:hover .price-marquee,
-.price-marquee-viewport:active .price-marquee,
-.price-marquee-viewport:focus-within .price-marquee {
-  animation-play-state: paused;
-}
-
-/* Dispositivos de toque puro: mantém pausa consistente enquanto o dedo segura o letreiro */
-@media (hover: none) and (pointer: coarse) {
-  .price-marquee-viewport:active .price-marquee,
-  .price-marquee-viewport:focus-within .price-marquee {
+/* Pausa em hover (desktop com mouse). No touch, o :active/:focus-within ficava
+   grudado após o usuário rolar a página, deixando o letreiro parado — por isso
+   NÃO usamos essas pseudo-classes aqui. */
+@media (hover: hover) and (pointer: fine) {
+  .price-marquee-viewport:hover .price-marquee {
     animation-play-state: paused;
   }
 }
@@ -1953,5 +1943,35 @@ body.no-page-bg::before { display: none; }
 @media (prefers-reduced-motion: reduce) {
   .price-marquee { animation: none; }
 }
+
+/* Fade lateral para o carrossel de chips mobile — indica scroll horizontal. */
+.chips-scroller {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 16px,
+    #000 calc(100% - 32px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 16px,
+    #000 calc(100% - 32px),
+    transparent 100%
+  );
+}
+
+/* Indicador "swipe" — chevron pulsando na borda direita dos chips */
+@keyframes chips-hint-nudge {
+  0%, 100% { transform: translateX(0); opacity: 0.85; }
+  50% { transform: translateX(4px); opacity: 1; }
+}
+.chips-hint { animation: chips-hint-nudge 1.6s ease-in-out infinite; }
+
+/* Pull-to-refresh spinner */
+@keyframes ptr-spin { to { transform: rotate(360deg); } }
+.ptr-spin { animation: ptr-spin 0.8s linear infinite; }
+
 
 

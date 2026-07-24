@@ -1,7 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+import { getProductSuggestions } from "@/lib/products-suggest.functions";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
+import { ChevronRight, RefreshCw } from "lucide-react";
+
 // Responsive picture: modern formats (AVIF/WebP) with JPG fallback, tuned quality.
 import heroMarket from "@/assets/home-hero.jpg?w=480;640;896&format=avif;webp;jpg&quality=68&as=picture";
 import heroMarketDark from "@/assets/home-hero-dark.jpg?w=480;640;896&format=avif;webp;jpg&quality=68&as=picture";
@@ -95,15 +99,27 @@ const captionTypography = {
   textRendering: "optimizeLegibility" as const,
 };
 
+function useDebounced<T>(value: T, delay: number): T {
+  const [v, setV] = useState(value);
+  useEffect(() => {
+    const t = setTimeout(() => setV(value), delay);
+    return () => clearTimeout(t);
+  }, [value, delay]);
+  return v;
+}
+
+
 function HomePage() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const { user, loading: sessionLoading } = useSession();
   const isLoggedOut = !sessionLoading && !user;
   const [q, setQ] = useState("");
   const [today, setToday] = useState("");
+  const [showSuggest, setShowSuggest] = useState(false);
+  const [activeIdx, setActiveIdx] = useState(-1);
+  const searchBoxRef = useRef<HTMLFormElement | null>(null);
 
-
-  
 
   useEffect(() => {
     setToday(
@@ -131,13 +147,54 @@ function HomePage() {
   });
   const economy = economyQ.data;
 
+  // Autocomplete de produtos (top 5)
+  const suggestFn = useServerFn(getProductSuggestions);
+  const debouncedQ = useDebounced(q.trim(), 180);
+  const suggestQ = useQuery({
+    queryKey: ["home", "suggest", debouncedQ],
+    queryFn: () => suggestFn({ data: { q: debouncedQ, limit: 5 } }),
+    enabled: debouncedQ.length >= 2,
+    staleTime: 30_000,
+  });
+  const suggestions = suggestQ.data ?? [];
+
+  // Pull-to-refresh — recarrega dados dinâmicos da home
+  const { pull, refreshing, progress } = usePullToRefresh({
+    onRefresh: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["home-stats"] }),
+        queryClient.invalidateQueries({ queryKey: ["home-economy"] }),
+        queryClient.invalidateQueries({ queryKey: ["home", "recent-products", 6] }),
+      ]);
+    },
+  });
+
+  // Fecha popup ao clicar fora
+  useEffect(() => {
+    if (!showSuggest) return;
+    const onDoc = (e: MouseEvent) => {
+      if (!searchBoxRef.current) return;
+      if (!searchBoxRef.current.contains(e.target as Node)) setShowSuggest(false);
+    };
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, [showSuggest]);
 
   const submitSearch = (e?: React.FormEvent) => {
     e?.preventDefault();
     const query = q.trim();
     if (!query) return;
+    setShowSuggest(false);
     navigate({ to: "/buscar", search: { q: query } as any });
   };
+
+  const pickSuggestion = (name: string) => {
+    setQ(name);
+    setShowSuggest(false);
+    navigate({ to: "/buscar", search: { q: name } as any });
+  };
+
+
 
   return (
     <div
@@ -148,6 +205,36 @@ function HomePage() {
         fontFamily: "'Work Sans', system-ui, -apple-system, sans-serif",
       }}
     >
+      {/* -------- Pull-to-refresh (mobile) -------- */}
+      <div
+        aria-hidden={!pull && !refreshing}
+        className="pointer-events-none fixed inset-x-0 top-0 z-[60] flex justify-center sm:hidden"
+        style={{
+          transform: `translateY(${Math.max(0, pull - 24)}px)`,
+          opacity: pull > 8 || refreshing ? 1 : 0,
+          transition: refreshing ? "transform 200ms ease" : pull === 0 ? "transform 240ms ease, opacity 240ms ease" : "none",
+        }}
+      >
+        <div
+          className="mt-2 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] shadow-lg"
+          style={{
+            background: P.card,
+            color: P.heading,
+            border: `1px solid ${P.line}`,
+          }}
+        >
+          <RefreshCw
+            className={`h-3.5 w-3.5 ${refreshing ? "ptr-spin" : ""}`}
+            style={{
+              color: P.gold,
+              transform: refreshing ? undefined : `rotate(${progress * 270}deg)`,
+              transition: refreshing ? undefined : "transform 60ms linear",
+            }}
+          />
+          {refreshing ? "Atualizando" : progress >= 1 ? "Solte para atualizar" : "Puxe para atualizar"}
+        </div>
+      </div>
+
       <SiteHeader variant="solid" showThemeToggle />
 
       {/* -------- MOBILE QUICK-NAV (abaixo do header, sticky) -------- */}
@@ -161,34 +248,48 @@ function HomePage() {
           WebkitBackdropFilter: "saturate(140%) blur(8px)",
         }}
       >
-        <div className="flex gap-2.5 overflow-x-auto px-3 py-3 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          {[
-            { to: "/melhores-precos", label: "Ranking" },
-            { to: "/estabelecimentos", label: "Mercados" },
-            { to: "/buscar", label: "Buscar" },
-            { to: "/planos", label: "Alertas" },
-            { to: "/cesta-basica", label: "Cesta básica" },
-            { to: "/economia", label: "Economia" },
-          ].map((c) => (
-            <Link
-              key={c.to}
-              to={c.to}
-              className="inline-flex shrink-0 items-center rounded-full border px-5 py-2.5 text-[15px] font-semibold leading-none tracking-[-0.005em] shadow-sm transition-all active:scale-[0.97] hover:border-[color:var(--pc-home-gold)]"
-              style={{ borderColor: P.line, background: P.card, color: P.heading }}
-              activeProps={{
-                style: {
-                  background: P.heading,
-                  color: P.paper,
-                  borderColor: P.heading,
-                },
-              }}
-            >
-              {c.label}
-            </Link>
-          ))}
+        <div className="relative">
+          <div className="chips-scroller flex gap-2.5 overflow-x-auto px-3 py-3 pr-8 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            {[
+              { to: "/melhores-precos", label: "Ranking" },
+              { to: "/estabelecimentos", label: "Mercados" },
+              { to: "/buscar", label: "Buscar" },
+              { to: "/planos", label: "Alertas" },
+              { to: "/cesta-basica", label: "Cesta básica" },
+              { to: "/economia", label: "Economia" },
+            ].map((c) => (
+              <Link
+                key={c.to}
+                to={c.to}
+                className="inline-flex shrink-0 items-center rounded-full border px-5 py-2.5 text-[15px] font-semibold leading-none tracking-[-0.005em] shadow-sm transition-all active:scale-[0.97] hover:border-[color:var(--pc-home-gold)]"
+                style={{ borderColor: P.line, background: P.card, color: P.heading }}
+                activeProps={{
+                  style: {
+                    background: P.heading,
+                    color: P.paper,
+                    borderColor: P.heading,
+                  },
+                }}
+              >
+                {c.label}
+              </Link>
+            ))}
+          </div>
+          {/* Indicador de "há mais" — chevron pulsando */}
+          <div
+            aria-hidden
+            className="chips-hint pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 grid h-6 w-6 place-items-center rounded-full"
+            style={{
+              background: `color-mix(in oklab, ${P.gold} 18%, transparent)`,
+              color: P.gold,
+            }}
+          >
+            <ChevronRight className="h-3.5 w-3.5" strokeWidth={2.6} />
+          </div>
         </div>
 
       </nav>
+
 
 
 
@@ -277,8 +378,8 @@ function HomePage() {
                 Preços conferidos por nota fiscal, atualizados pelos próprios moradores.
               </p>
 
-              {/* Search */}
-              <form onSubmit={submitSearch} className="mt-4 max-w-xl">
+              {/* Search com autocomplete */}
+              <form onSubmit={submitSearch} className="relative mt-4 max-w-xl" ref={searchBoxRef}>
                 <div
                   className="flex items-center gap-2 rounded-2xl border p-1.5 transition-all focus-within:ring-2 sm:p-2"
                   style={{
@@ -297,11 +398,34 @@ function HomePage() {
                   </span>
                   <input
                     value={q}
-                    onChange={(e) => setQ(e.target.value)}
+                    onChange={(e) => {
+                      setQ(e.target.value);
+                      setShowSuggest(true);
+                      setActiveIdx(-1);
+                    }}
+                    onFocus={() => setShowSuggest(true)}
+                    onKeyDown={(e) => {
+                      if (!suggestions.length) return;
+                      if (e.key === "ArrowDown") {
+                        e.preventDefault();
+                        setActiveIdx((i) => Math.min(suggestions.length - 1, i + 1));
+                      } else if (e.key === "ArrowUp") {
+                        e.preventDefault();
+                        setActiveIdx((i) => Math.max(-1, i - 1));
+                      } else if (e.key === "Enter" && activeIdx >= 0) {
+                        e.preventDefault();
+                        pickSuggestion(suggestions[activeIdx].name);
+                      } else if (e.key === "Escape") {
+                        setShowSuggest(false);
+                      }
+                    }}
                     type="search"
                     inputMode="search"
                     placeholder="Ex.: Arroz Tio João 5kg"
                     aria-label="Buscar produto"
+                    aria-autocomplete="list"
+                    aria-expanded={showSuggest && suggestions.length > 0}
+                    aria-controls="home-suggest-list"
                     className="flex-1 bg-transparent px-2 py-3 text-[15.5px] font-medium outline-none sm:py-2.5 sm:text-[15px]"
                     style={{ color: P.ink }}
                   />
@@ -315,7 +439,50 @@ function HomePage() {
                     <ArrowRight className="h-5 w-5 sm:h-4 sm:w-4" />
                   </button>
                 </div>
+
+                {/* Popup de sugestões */}
+                {showSuggest && debouncedQ.length >= 2 && (suggestQ.isLoading || suggestions.length > 0) && (
+                  <ul
+                    id="home-suggest-list"
+                    role="listbox"
+                    className="absolute left-0 right-0 top-[calc(100%+6px)] z-40 max-h-[320px] overflow-auto rounded-2xl border shadow-2xl animate-fade-in"
+                    style={{ background: P.card, borderColor: P.line }}
+                  >
+                    {suggestQ.isLoading && suggestions.length === 0 ? (
+                      <li className="px-4 py-3 text-[13px]" style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}>
+                        Buscando…
+                      </li>
+                    ) : (
+                      suggestions.map((s, i) => (
+                        <li key={s.slug} role="option" aria-selected={i === activeIdx}>
+                          <button
+                            type="button"
+                            onMouseDown={(e) => { e.preventDefault(); pickSuggestion(s.name); }}
+                            onMouseEnter={() => setActiveIdx(i)}
+                            className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors"
+                            style={{
+                              background: i === activeIdx ? `color-mix(in oklab, ${P.gold} 12%, transparent)` : "transparent",
+                              color: P.heading,
+                            }}
+                          >
+                            <Search className="h-3.5 w-3.5 shrink-0" style={{ color: P.goldSoft }} strokeWidth={2.4} />
+                            <span className="flex-1 truncate text-[14px] font-semibold">{s.name}</span>
+                            {s.price != null && (
+                              <span
+                                className={`${serif} shrink-0 tabular-nums text-[15px] font-semibold`}
+                                style={{ color: P.gold, letterSpacing: "-0.01em" }}
+                              >
+                                {new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(s.price)}
+                              </span>
+                            )}
+                          </button>
+                        </li>
+                      ))
+                    )}
+                  </ul>
+                )}
               </form>
+
 
               {/* Chips */}
               <div className="mt-3 hidden flex-wrap items-center gap-2 sm:flex">
@@ -575,85 +742,87 @@ function HomePage() {
       </div>
 
 
-      {/* -------- SOCIAL PROOF (compact, with tooltips) -------- */}
-      <section className="mx-auto w-full max-w-6xl px-3 pb-3 sm:px-6 sm:pb-4 lg:px-8">
-        <TooltipProvider delayDuration={150}>
-          <div className="grid grid-cols-3 gap-2 sm:gap-4">
+      {/* Wrapper flex para inverter a ordem no mobile: letreiro (RecentProducts) antes das estatísticas.
+          Em sm+ mantém a ordem original: estatísticas → recentes. */}
+      <div className="flex flex-col">
+        {/* -------- RECENT PRODUCTS (mobile: 1º, desktop: depois) -------- */}
+        <div className="order-1 sm:order-2">
+          <RecentProducts P={P} serif={serif} />
+        </div>
 
-            {[
-              {
-                k: String(stats.establishments ?? 8),
-                l: "mercados",
-                lFull: "mercados no ar",
-                icon: <ShieldCheck className="h-4 w-4" />,
-                tip: "Mercados de Feijó/AC ativos na plataforma com preços colaborativos.",
-              },
-              {
-                k: stats.products != null
-                  ? `${stats.products.toLocaleString("pt-BR")}+`
-                  : "1.5k+",
-                l: "produtos",
-                lFull: "produtos catalogados",
-                icon: <Package className="h-4 w-4" />,
-                tip: "Produtos únicos cadastrados com preço, marca e categoria.",
-              },
-
-              {
-                k: economy?.avgSavingsPct
-                  ? `${economy.avgSavingsPct}%`
-                  : "até 38%",
-                l: "economia",
-                lFull: "economia identificada",
-                icon: <TrendingDown className="h-4 w-4" />,
-                tip: economy?.productsWithComparison
-                  ? `Diferença média entre o melhor e o pior preço do mesmo produto, medida em ${economy.productsWithComparison.toLocaleString("pt-BR")} produtos com pelo menos 2 mercados. Melhor caso: ${economy.bestSavingsPct}%.`
-                  : "Diferença média entre o melhor e o pior preço encontrado para o mesmo produto em Feijó/AC nas últimas semanas.",
-              },
-
-
-
-            ].map((s) => (
-              <Tooltip key={s.lFull}>
-                <TooltipTrigger asChild>
-                  <button
-                    type="button"
-                    aria-label={`${s.k} ${s.lFull}. ${s.tip}`}
-                    className="rounded-2xl border px-3 py-3 text-center transition-colors hover:bg-[color-mix(in_oklab,var(--pc-home-card)_92%,var(--pc-home-gold)_8%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:px-4 sm:py-4"
-                    style={{ borderColor: P.line, background: P.card, color: P.heading }}
-                  >
-                    <div className="mb-1 flex items-center justify-center" style={{ color: P.goldSoft }}>
-                      {s.icon}
-                    </div>
-                    <div
-                      className={`${serif} tabular-nums`}
-                      style={{
-                        fontSize: "clamp(1.15rem, 2.8vw, 1.75rem)",
-                        lineHeight: 1,
-                        letterSpacing: "-0.02em",
-                      }}
+        {/* -------- SOCIAL PROOF (mobile: 2º, desktop: antes) -------- */}
+        <section className="order-2 mx-auto w-full max-w-6xl px-3 pb-3 sm:order-1 sm:px-6 sm:pb-4 lg:px-8">
+          <TooltipProvider delayDuration={150}>
+            <div className="grid grid-cols-3 gap-2 sm:gap-4">
+              {[
+                {
+                  k: String(stats.establishments ?? 8),
+                  l: "mercados",
+                  lFull: "mercados no ar",
+                  icon: <ShieldCheck className="h-4 w-4" />,
+                  tip: "Mercados de Feijó/AC ativos na plataforma com preços colaborativos.",
+                },
+                {
+                  k: stats.products != null
+                    ? `${stats.products.toLocaleString("pt-BR")}+`
+                    : "1.5k+",
+                  l: "produtos",
+                  lFull: "produtos catalogados",
+                  icon: <Package className="h-4 w-4" />,
+                  tip: "Produtos únicos cadastrados com preço, marca e categoria.",
+                },
+                {
+                  k: economy?.avgSavingsPct
+                    ? `${economy.avgSavingsPct}%`
+                    : "até 38%",
+                  l: "economia",
+                  lFull: "economia identificada",
+                  icon: <TrendingDown className="h-4 w-4" />,
+                  tip: economy?.productsWithComparison
+                    ? `Diferença média entre o melhor e o pior preço do mesmo produto, medida em ${economy.productsWithComparison.toLocaleString("pt-BR")} produtos com pelo menos 2 mercados. Melhor caso: ${economy.bestSavingsPct}%.`
+                    : "Diferença média entre o melhor e o pior preço encontrado para o mesmo produto em Feijó/AC nas últimas semanas.",
+                },
+              ].map((s) => (
+                <Tooltip key={s.lFull}>
+                  <TooltipTrigger asChild>
+                    <button
+                      type="button"
+                      aria-label={`${s.k} ${s.lFull}. ${s.tip}`}
+                      className="rounded-2xl border px-3 py-3 text-center transition-colors hover:bg-[color-mix(in_oklab,var(--pc-home-card)_92%,var(--pc-home-gold)_8%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:px-4 sm:py-4"
+                      style={{ borderColor: P.line, background: P.card, color: P.heading }}
                     >
-                      {s.k}
-                    </div>
-                    <div
-                      className="mt-1.5 truncate text-[9.5px] font-bold uppercase tracking-[0.14em] sm:text-[11px] sm:tracking-[0.16em]"
-                      style={{ color: "color-mix(in oklab, var(--pc-home-ink) 60%, transparent)" }}
-                    >
-                      <span className="sm:hidden">{s.l}</span>
-                      <span className="hidden sm:inline">{s.lFull}</span>
-                    </div>
-                  </button>
-                </TooltipTrigger>
-                <TooltipContent side="bottom" className="max-w-[240px] text-[12px] leading-snug">
-                  {s.tip}
-                </TooltipContent>
-              </Tooltip>
-            ))}
-          </div>
-        </TooltipProvider>
-      </section>
+                      <div className="mb-1 flex items-center justify-center" style={{ color: P.goldSoft }}>
+                        {s.icon}
+                      </div>
+                      <div
+                        className={`${serif} tabular-nums`}
+                        style={{
+                          fontSize: "clamp(1.15rem, 2.8vw, 1.75rem)",
+                          lineHeight: 1,
+                          letterSpacing: "-0.02em",
+                        }}
+                      >
+                        {s.k}
+                      </div>
+                      <div
+                        className="mt-1.5 truncate text-[9.5px] font-bold uppercase tracking-[0.14em] sm:text-[11px] sm:tracking-[0.16em]"
+                        style={{ color: "color-mix(in oklab, var(--pc-home-ink) 60%, transparent)" }}
+                      >
+                        <span className="sm:hidden">{s.l}</span>
+                        <span className="hidden sm:inline">{s.lFull}</span>
+                      </div>
+                    </button>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom" className="max-w-[240px] text-[12px] leading-snug">
+                    {s.tip}
+                  </TooltipContent>
+                </Tooltip>
+              ))}
+            </div>
+          </TooltipProvider>
+        </section>
+      </div>
 
-      {/* -------- RECENT PRODUCTS -------- */}
-      <RecentProducts P={P} serif={serif} />
 
 
 
