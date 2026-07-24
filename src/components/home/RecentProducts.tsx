@@ -299,81 +299,12 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
       </div>
 
 
-      {/* MOBILE: rotator de preços — auto-avança, fácil de ler no dia a dia */}
-      <MobilePriceRotator data={data} P={P} serif={serif} />
-
-
-
-      {/* SM+: grid completo com mais detalhes */}
-      <ul className="hidden grid-cols-2 gap-3 sm:grid sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
-        {data.map((p) => (
-          <li key={p.slug}>
-            <Link
-              to="/produto/$slug"
-              params={{ slug: p.slug }}
-              className="group block h-full rounded-2xl border p-3 transition-all hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
-              style={{ borderColor: P.line, background: P.card, color: P.heading }}
-              aria-label={`Ver histórico de ${p.name} em ${p.marketName ?? "mercados de Feijó"}`}
-            >
-              {(() => {
-                const f = freshness(p.when);
-                return (
-                  <div
-                    className={`mb-2 inline-flex items-center gap-1 rounded-full bg-background/60 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] ring-1 ${f.ringClass} ${f.textClass}`}
-                    title={`Status baseado na última coleta (${relative(p.when)})`}
-                  >
-                    <span className={`h-1.5 w-1.5 rounded-full ${f.dotClass}`} aria-hidden />
-                    {f.label}
-                  </div>
-                );
-              })()}
-              <div
-                className="mb-2 line-clamp-2 text-[12.5px] font-semibold leading-tight sm:text-[13px]"
-                style={{ color: P.heading }}
-              >
-                {p.name}
-              </div>
-              <div
-                className={`${serif} tabular-nums font-semibold`}
-                style={{
-                  color: P.gold,
-                  fontSize: "clamp(1.15rem, 2.1vw, 1.45rem)",
-                  lineHeight: 1,
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                {brl(p.price)}
-              </div>
-              <div className="mt-2 flex items-center gap-1.5 text-[11.5px]">
-                <Store
-                  className="h-3.5 w-3.5 shrink-0 text-[var(--market-accent)] transition-colors group-hover:text-[var(--market-accent-hover)]"
-                />
-                <span className="market-name truncate text-[12px] font-bold uppercase tracking-[0.05em] text-[var(--market-accent)]">
-                  {p.marketName ?? "Vários mercados"}
-                </span>
-
-
-              </div>
-
-              <div
-                className="mt-0.5 flex items-center gap-1 text-[10px]"
-                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
-              >
-                <Clock className="h-3 w-3 shrink-0" />
-                <span>Coletado {relative(p.when)}</span>
-                {p.stores > 1 ? (
-                  <span className="ml-auto rounded-full px-1.5 py-px text-[9px] font-bold uppercase tracking-wider" style={{ color: P.goldSoft }}>
-                    {p.stores} mercados
-                  </span>
-                ) : null}
-              </div>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {/* Único produto em destaque — spotlight com brilho para chamar atenção */}
+      <SpotlightCard data={data} P={P} serif={serif} />
     </section>
   );
 }
+
 
 type RecentItem = {
   slug: string;
