@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Store as StoreIcon, ArrowRight, Flame, History as HistoryIcon, X, Trash2 } from "lucide-react";
 import { listPublicStores } from "@/lib/stores-public.functions";
 import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
-import { useConfirm } from "@/components/feedback/confirm-provider";
+import { useConfirm } from "@/components/ui/confirm-provider";
 
 const POPULAR: string[] = [
   "arroz 5kg",
