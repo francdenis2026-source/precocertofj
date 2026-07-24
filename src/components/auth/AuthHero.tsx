@@ -2,17 +2,12 @@ import { CheckCircle2, ShoppingCart, ShieldCheck, UserPlus, Ticket, Sparkles, Sh
 import heroPhoto from "@/assets/cadastro-hero.jpg";
 
 /**
- * AuthHero — painel (split no desktop, banner compacto no mobile) reutilizável para telas de autenticação.
- * Ocean Modern: navy #0f2b52 + dourado #f5b301.
+ * AuthHero — painel (split no desktop, banner compacto no mobile) reutilizável
+ * para telas de autenticação. Alinhado 100% com os tokens da homepage:
+ *   • Cores: --pc-home-navy / --pc-home-navy-2 / --pc-home-gold / --pc-home-on-navy
+ *     (esses tokens já flipam automaticamente entre claro e escuro em src/styles.css).
+ *   • Tipografia: --font-display (Instrument Serif) para o headline, sans padrão para corpo.
  */
-
-const PC_EMERALD_DEEP = "#081b3a";
-const PC_EMERALD = "#0f2b52";
-const PC_EMERALD_LIGHT = "#1e4a85";
-const PC_GOLD = "#f5b301";
-const PC_GOLD_SOFT = "#F5D77A";
-const PC_DISPLAY = "'Outfit', system-ui, sans-serif";
-const PC_BODY = "'Figtree', system-ui, sans-serif";
 
 export type AuthHeroVariant = "login" | "signup" | "redeem" | "admin";
 
@@ -104,6 +99,17 @@ const PRESETS: Record<AuthHeroVariant, Preset> = {
   },
 };
 
+// Tokens de tema (referenciados via var() — flipam automaticamente em dark)
+const T = {
+  navy: "var(--pc-home-navy)",
+  navy2: "var(--pc-home-navy-2)",
+  gold: "var(--pc-home-gold)",
+  goldSoft: "var(--pc-home-gold-soft)",
+  onNavy: "var(--pc-home-on-navy)",
+  eyebrow: "var(--pc-eyebrow-on-navy)",
+  display: "var(--font-display)",
+};
+
 export function AuthHero({
   variant,
   className = "",
@@ -120,12 +126,12 @@ export function AuthHero({
 
   return (
     <aside
-      className={`relative flex min-h-[220px] flex-col justify-between overflow-hidden p-5 text-white sm:p-6 md:min-h-[520px] ${className}`}
+      className={`relative flex min-h-[220px] flex-col justify-between overflow-hidden p-5 sm:p-6 md:min-h-[520px] ${className}`}
       style={{
         background: preset.photo
           ? undefined
-          : `linear-gradient(165deg, ${PC_EMERALD_DEEP} 0%, ${PC_EMERALD} 55%, ${PC_EMERALD_LIGHT} 100%)`,
-        fontFamily: PC_BODY,
+          : `linear-gradient(165deg, ${T.navy} 0%, ${T.navy} 55%, ${T.navy2} 100%)`,
+        color: T.onNavy,
       }}
     >
       {preset.photo && (
@@ -135,40 +141,45 @@ export function AuthHero({
             aria-hidden
             className="absolute inset-0"
             style={{
-              background: `linear-gradient(165deg, ${PC_EMERALD_DEEP}f2 0%, ${PC_EMERALD}e6 55%, ${PC_EMERALD_LIGHT}cc 100%)`,
+              background: `linear-gradient(165deg, color-mix(in oklab, ${T.navy} 95%, transparent) 0%, color-mix(in oklab, ${T.navy} 88%, transparent) 55%, color-mix(in oklab, ${T.navy2} 78%, transparent) 100%)`,
             }}
           />
           <div
             aria-hidden
             className="absolute inset-x-0 bottom-0 h-40"
-            style={{ background: `linear-gradient(180deg, transparent, ${PC_EMERALD_DEEP}f2)` }}
+            style={{ background: `linear-gradient(180deg, transparent, ${T.navy})` }}
           />
         </>
       )}
       <div
         aria-hidden
         className="pointer-events-none absolute -right-16 -top-16 h-52 w-52 rounded-full opacity-25 blur-3xl"
-        style={{ background: PC_GOLD }}
+        style={{ background: T.gold }}
       />
 
       {/* Top: brand + badge + headline */}
       <div className="relative">
-        <div className="flex items-center gap-2.5" style={{ fontFamily: PC_DISPLAY }}>
+        <div className="flex items-center gap-2.5">
           <div
             className="flex h-9 w-9 items-center justify-center rounded-lg"
-            style={{ background: PC_GOLD, color: PC_EMERALD }}
+            style={{ background: T.gold, color: T.navy }}
           >
             <BrandIcon className="h-5 w-5" strokeWidth={2.5} />
           </div>
-          <span className="text-[18px] font-bold tracking-tight text-white sm:text-[19px]">PreçoCerto</span>
+          <span
+            className="text-[18px] font-bold tracking-tight sm:text-[19px]"
+            style={{ color: T.onNavy, fontFamily: T.display, letterSpacing: "-0.01em" }}
+          >
+            PreçoCerto
+          </span>
         </div>
 
         <span
           className="mt-5 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] md:mt-8"
           style={{
-            borderColor: "rgba(245,215,122,0.55)",
-            background: "rgba(10,22,49,0.35)",
-            color: PC_GOLD_SOFT,
+            borderColor: `color-mix(in oklab, ${T.gold} 55%, transparent)`,
+            background: `color-mix(in oklab, ${T.navy} 55%, transparent)`,
+            color: T.eyebrow,
             backdropFilter: "blur(6px)",
           }}
         >
@@ -176,26 +187,31 @@ export function AuthHero({
         </span>
 
         <h2
-          className="mt-3 tracking-tight text-white md:mt-4"
+          className="mt-3 tracking-tight md:mt-4"
           style={{
-            fontFamily: PC_DISPLAY,
-            fontWeight: 700,
-            fontSize: "clamp(1.35rem, 4.5vw, 2rem)",
-            lineHeight: 1.1,
+            fontFamily: T.display,
+            fontWeight: 400,
+            fontSize: "clamp(1.55rem, 4.8vw, 2.25rem)",
+            lineHeight: 1.05,
+            letterSpacing: "-0.01em",
+            color: T.onNavy,
             textShadow: preset.photo ? "0 2px 12px rgba(0,0,0,0.55)" : undefined,
           }}
         >
           {preset.title}{" "}
-          <span className="md:hidden" style={{ color: PC_GOLD_SOFT }}>{preset.highlight}</span>
+          <span className="italic md:hidden" style={{ color: T.gold }}>{preset.highlight}</span>
           <span className="hidden md:inline">
             <br />
-            <span style={{ color: PC_GOLD_SOFT }}>{preset.highlight}</span>
+            <span className="italic" style={{ color: T.gold }}>{preset.highlight}</span>
           </span>
         </h2>
 
         <p
-          className="mt-2 max-w-[38ch] text-[12.5px] leading-relaxed text-white/90 sm:text-[13px] md:mt-2.5"
-          style={{ textShadow: preset.photo ? "0 1px 6px rgba(0,0,0,0.5)" : undefined }}
+          className="mt-2 max-w-[38ch] text-[12.5px] leading-relaxed sm:text-[13px] md:mt-2.5"
+          style={{
+            color: `color-mix(in oklab, ${T.onNavy} 90%, transparent)`,
+            textShadow: preset.photo ? "0 1px 6px rgba(0,0,0,0.5)" : undefined,
+          }}
         >
           {preset.subtitle}
         </p>
@@ -208,10 +224,13 @@ export function AuthHero({
             {preset.perks.map((p) => (
               <li
                 key={p}
-                className="flex items-start gap-2 text-[12.5px] leading-snug text-white/90"
-                style={{ textShadow: preset.photo ? "0 1px 4px rgba(0,0,0,0.45)" : undefined }}
+                className="flex items-start gap-2 text-[12.5px] leading-snug"
+                style={{
+                  color: `color-mix(in oklab, ${T.onNavy} 92%, transparent)`,
+                  textShadow: preset.photo ? "0 1px 4px rgba(0,0,0,0.45)" : undefined,
+                }}
               >
-                <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none" style={{ color: PC_GOLD_SOFT }} />
+                <CheckCircle2 className="mt-0.5 h-4 w-4 flex-none" style={{ color: T.eyebrow }} />
                 <span>{p}</span>
               </li>
             ))}
@@ -220,39 +239,58 @@ export function AuthHero({
           <div
             className="flex items-center gap-3 rounded-xl border px-3.5 py-2.5 backdrop-blur"
             style={{
-              borderColor: "rgba(245,215,122,0.55)",
-              background: "rgba(245,215,122,0.14)",
+              borderColor: `color-mix(in oklab, ${T.gold} 55%, transparent)`,
+              background: `color-mix(in oklab, ${T.gold} 14%, transparent)`,
             }}
           >
             <div
               className="flex h-10 w-10 flex-none items-center justify-center rounded-lg"
-              style={{ background: `linear-gradient(135deg, ${PC_GOLD_SOFT}, #c9a34a)`, color: PC_EMERALD_DEEP }}
+              style={{
+                background: `linear-gradient(135deg, ${T.goldSoft}, ${T.gold})`,
+                color: T.navy,
+              }}
             >
               <TrustIcon className="h-5 w-5" strokeWidth={2.5} />
             </div>
             <div className="min-w-0 leading-tight">
               <div
-                className="text-[13px] font-bold text-white"
-                style={{ fontFamily: PC_DISPLAY, letterSpacing: "-0.01em" }}
+                className="text-[13px] font-semibold"
+                style={{ color: T.onNavy, fontFamily: T.display, letterSpacing: "-0.01em" }}
               >
                 {preset.trust.title}
               </div>
-              <div className="text-[11.5px] text-white/85">{preset.trust.caption}</div>
+              <div
+                className="text-[11.5px]"
+                style={{ color: `color-mix(in oklab, ${T.onNavy} 85%, transparent)` }}
+              >
+                {preset.trust.caption}
+              </div>
             </div>
           </div>
 
           {preset.offer && (
             <div
-              className="rounded-xl border border-white/10 p-3"
-              style={{ background: "rgba(30,74,133,0.35)" }}
+              className="rounded-xl border p-3"
+              style={{
+                background: `color-mix(in oklab, ${T.navy2} 45%, transparent)`,
+                borderColor: `color-mix(in oklab, ${T.onNavy} 12%, transparent)`,
+              }}
             >
-              <p className="text-[10px] font-bold uppercase tracking-[0.22em]" style={{ color: PC_GOLD }}>
+              <p className="text-[10px] font-bold uppercase tracking-[0.22em]" style={{ color: T.eyebrow }}>
                 {preset.offer.label}
               </p>
-              <p className="mt-1 text-[16px] font-bold text-white" style={{ fontFamily: PC_DISPLAY }}>
+              <p
+                className="mt-1 text-[18px]"
+                style={{ color: T.onNavy, fontFamily: T.display, fontWeight: 400, letterSpacing: "-0.01em" }}
+              >
                 {preset.offer.title}
               </p>
-              <p className="mt-0.5 text-[11px] text-white/85">{preset.offer.caption}</p>
+              <p
+                className="mt-0.5 text-[11px]"
+                style={{ color: `color-mix(in oklab, ${T.onNavy} 85%, transparent)` }}
+              >
+                {preset.offer.caption}
+              </p>
             </div>
           )}
         </div>
@@ -273,7 +311,7 @@ export function AuthSplitShell({
 }) {
   return (
     <div
-      className={`mx-auto grid w-full ${maxWidth} grid-cols-1 overflow-hidden rounded-2xl border border-slate-900/10 bg-white shadow-[0_24px_60px_-24px_rgba(15,27,61,0.30)] md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]`}
+      className={`mx-auto grid w-full ${maxWidth} grid-cols-1 overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-[0_24px_60px_-24px_rgba(15,27,61,0.30)] md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]`}
     >
       <AuthHero variant={variant} />
       <section className="relative overflow-hidden">{children}</section>
