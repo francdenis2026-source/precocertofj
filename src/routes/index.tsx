@@ -7,9 +7,11 @@ import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import { ChevronRight, RefreshCw } from "lucide-react";
 
 // Responsive picture: modern formats (AVIF/WebP) with JPG fallback, tuned quality.
-import heroMarket from "@/assets/home-hero.jpg?w=480;640;896&format=avif;webp;jpg&quality=68&as=picture";
-import heroMarketDark from "@/assets/home-hero-dark.jpg?w=480;640;896&format=avif;webp;jpg&quality=68&as=picture";
-import heroPreloadAvif from "@/assets/home-hero.jpg?w=640&format=avif&quality=62&url";
+// Widths cover mobile → full-HD desktop since the hero is full-bleed (100vw).
+import heroMarket from "@/assets/home-hero.jpg?w=480;768;1200;1600;1920&format=avif;webp;jpg&quality=65&as=picture";
+import heroMarketDark from "@/assets/home-hero-dark.jpg?w=480;768;1200;1600;1920&format=avif;webp;jpg&quality=65&as=picture";
+// AVIF srcset used by <link rel="preload"> so the browser picks the right size for the viewport.
+import heroPreloadAvifSrcset from "@/assets/home-hero.jpg?w=480;768;1200;1600&format=avif&quality=62&as=srcset";
 import {
   Search,
   ArrowRight,
@@ -54,7 +56,9 @@ export const Route = createFileRoute("/")({
       {
         rel: "preload",
         as: "image",
-        href: heroPreloadAvif,
+        href: heroPreloadAvifSrcset.split(",")[0].trim().split(" ")[0],
+        imagesrcset: heroPreloadAvifSrcset,
+        imagesizes: "100vw",
         type: "image/avif",
         fetchpriority: "high",
       },
@@ -341,7 +345,8 @@ function HomePage() {
             height={heroMarketDark.img.h}
             alt="Mercado noturno com produtos em iluminação ambiente"
             decoding="async"
-            loading="eager"
+            loading="lazy"
+            fetchPriority="low"
             className="absolute inset-0 h-full w-full object-cover"
           />
         </picture>
