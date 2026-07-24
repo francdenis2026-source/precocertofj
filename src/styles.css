@@ -2636,3 +2636,16 @@ input[type="radio"]:not(.native-control):disabled {
   cursor: not-allowed;
 }
 
+/* --- <input type="number"> — remove spinner arrows (Chrome/Safari/Firefox) --- */
+input[type="number"]:not(.native-control)::-webkit-outer-spin-button,
+input[type="number"]:not(.native-control)::-webkit-inner-spin-button {
+  -webkit-appearance: none !important;
+  appearance: none !important;
+  margin: 0 !important;
+}
+input[type="number"]:not(.native-control) {
+  -moz-appearance: textfield !important;
+  appearance: textfield !important;
+}
+
+
