@@ -153,24 +153,26 @@ function EstablishmentsPage() {
   });
   const onCarouselPointerDown = (ev: React.PointerEvent<HTMLDivElement>) => {
     const el = carouselRef.current;
-    if (!el || ev.pointerType === "touch") return;
+    if (!el || ev.pointerType === "touch" || ev.button !== 0) return;
     dragState.current = { active: true, startX: ev.clientX, startScroll: el.scrollLeft, moved: false };
-    el.setPointerCapture(ev.pointerId);
-    el.style.cursor = "grabbing";
+    // Não capturamos o pointer aqui — isso bloquearia o click nativo do <Link>.
+    // O drag-to-scroll usa apenas o pointermove enquanto o botão está pressionado.
   };
   const onCarouselPointerMove = (ev: React.PointerEvent<HTMLDivElement>) => {
     const el = carouselRef.current;
     const st = dragState.current;
     if (!el || !st.active) return;
     const dx = ev.clientX - st.startX;
-    if (Math.abs(dx) > 4) st.moved = true;
-    el.scrollLeft = st.startScroll - dx;
+    if (Math.abs(dx) > 6) {
+      st.moved = true;
+      el.style.cursor = "grabbing";
+      el.scrollLeft = st.startScroll - dx;
+    }
   };
-  const onCarouselPointerUp = (ev: React.PointerEvent<HTMLDivElement>) => {
+  const onCarouselPointerUp = (_ev: React.PointerEvent<HTMLDivElement>) => {
     const el = carouselRef.current;
     if (!el) return;
     dragState.current.active = false;
-    try { el.releasePointerCapture(ev.pointerId); } catch {}
     el.style.cursor = "grab";
   };
   const onCarouselWheel = (ev: React.WheelEvent<HTMLDivElement>) => {
@@ -184,9 +186,12 @@ function EstablishmentsPage() {
     if (dragState.current.moved) {
       ev.preventDefault();
       ev.stopPropagation();
-      dragState.current.moved = false;
     }
+    // Reseta em qualquer click (arrastou ou não) para não bloquear o próximo.
+    dragState.current.moved = false;
   };
+
+
 
 
   return (
