@@ -227,7 +227,6 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
         .map(([key, count]) => ({ key, label: CATEGORY_LABELS[key] ?? key, count }))
         .sort((a, b) => b.count - a.count);
 
-      const totalProducts = Array.from(catCounts.values()).reduce((a, b) => a + b, 0);
 
       const savings = (compRes.data ?? [])
         .map((r: any) => Number(r.savings_pct))
@@ -236,7 +235,6 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
         ? Math.round(savings.reduce((a: number, b: number) => a + b, 0) / savings.length)
         : 0;
       const bestSavingsPct = savings.length ? Math.round(Math.max(...savings)) : 0;
-
 
       const topSavings: MetricSavingsHighlight[] = (compRes.data ?? []).map((r: any) => ({
         displayName: r.display_name ?? "Produto",
@@ -263,10 +261,7 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
           scans7d: scans7dRes.count ?? 0,
           avgSavingsPct,
           bestSavingsPct,
-          productsCompared: (compRes.data ?? []).length
-            ? // approximate: use full cache count for productsCompared
-              Array.from(catCounts.values()).reduce((a, b) => a + b, 0)
-            : 0,
+          productsCompared: totalCompared,
           lastUpdate: (latestRes.data?.created_at as string | undefined) ?? null,
         },
         stores,
