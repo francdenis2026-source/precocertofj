@@ -1,0 +1,246 @@
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  Search as SearchIcon,
+  Sparkles,
+  Flame,
+  TrendingDown,
+  History as HistoryIcon,
+  X as XIcon,
+} from "lucide-react";
+import { getPlatformStats } from "@/lib/stores-public.functions";
+
+const CATEGORIES: { label: string; q: string; emoji: string }[] = [
+  { label: "Arroz", q: "arroz", emoji: "🍚" },
+  { label: "Feijão", q: "feijão", emoji: "🫘" },
+  { label: "Café", q: "café", emoji: "☕" },
+  { label: "Leite", q: "leite", emoji: "🥛" },
+  { label: "Óleo", q: "óleo", emoji: "🫒" },
+  { label: "Açúcar", q: "açúcar", emoji: "🍬" },
+  { label: "Farinha", q: "farinha", emoji: "🌾" },
+  { label: "Macarrão", q: "macarrão", emoji: "🍝" },
+];
+
+const POPULAR: string[] = [
+  "arroz 5kg",
+  "feijão carioca",
+  "café 500g",
+  "leite integral",
+  "óleo de soja",
+  "açúcar refinado",
+];
+
+const RECENT_KEY = "search:recent-queries";
+
+function readRecent(): string[] {
+  try {
+    const raw = window.localStorage.getItem(RECENT_KEY);
+    if (!raw) return [];
+    const arr = JSON.parse(raw);
+    return Array.isArray(arr) ? arr.filter((x) => typeof x === "string").slice(0, 8) : [];
+  } catch {
+    return [];
+  }
+}
+
+export function pushRecentSearch(q: string) {
+  const term = q.trim();
+  if (!term || term.length < 2) return;
+  try {
+    const cur = readRecent().filter((x) => x.toLowerCase() !== term.toLowerCase());
+    const next = [term, ...cur].slice(0, 8);
+    window.localStorage.setItem(RECENT_KEY, JSON.stringify(next));
+  } catch {
+    /* ignore */
+  }
+}
+
+type Props = {
+  onPickQuery: (q: string) => void;
+};
+
+const brl = (n: number) =>
+  new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n);
+
+export function SearchDiscovery({ onPickQuery }: Props) {
+  const [recent, setRecent] = useState<string[]>([]);
+  useEffect(() => setRecent(readRecent()), []);
+  const clearRecent = () => {
+    try {
+      window.localStorage.removeItem(RECENT_KEY);
+    } catch {
+      /* ignore */
+    }
+    setRecent([]);
+  };
+  const removeRecent = (term: string) => {
+    const next = recent.filter((x) => x !== term);
+    setRecent(next);
+    try {
+      window.localStorage.setItem(RECENT_KEY, JSON.stringify(next));
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const stats = useQuery({
+    queryKey: ["platform-stats-discovery"],
+    queryFn: () => getPlatformStats(),
+    staleTime: 5 * 60_000,
+  });
+
+  return (
+    <div className="mt-3 space-y-4">
+      {/* Hero vazio compacto */}
+      <div className="rounded-2xl border border-brand-gold-soft/30 bg-brand-navy/40 px-4 py-4 backdrop-blur-sm sm:px-5 sm:py-5">
+        <div className="flex items-start gap-3">
+          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-gold/15 text-brand-gold">
+            <SearchIcon className="h-4 w-4" />
+          </div>
+          <div className="min-w-0">
+            <h2 className="text-[15px] font-semibold text-foreground sm:text-base">
+              O que você quer comparar hoje?
+            </h2>
+            <p className="mt-0.5 text-[12.5px] text-muted-foreground">
+              Toque em uma categoria para começar — ou digite um produto acima.
+            </p>
+          </div>
+        </div>
+
+        {/* Categorias rápidas — grid no web, carrossel no mobile */}
+        <div className="mt-3 -mx-1 flex snap-x snap-mandatory gap-2 overflow-x-auto px-1 pb-1 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-4 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+          {CATEGORIES.map((c) => (
+            <button
+              key={c.q}
+              type="button"
+              onClick={() => onPickQuery(c.q)}
+              className="group snap-start inline-flex shrink-0 items-center gap-2 rounded-xl border border-border/60 bg-card/70 px-3 py-2 text-left text-[13px] font-medium text-foreground transition-colors hover:border-brand-gold hover:bg-brand-gold/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold sm:justify-start"
+            >
+              <span aria-hidden className="text-base leading-none">
+                {c.emoji}
+              </span>
+              <span className="truncate">{c.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Buscas populares — carrossel horizontal no mobile */}
+      <div>
+        <div className="mb-2 flex items-center gap-2 px-1">
+          <Flame className="h-3.5 w-3.5 text-brand-gold" />
+          <h3 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            Buscas populares
+          </h3>
+        </div>
+        <div className="-mx-1 flex snap-x snap-mandatory gap-2 overflow-x-auto px-1 pb-1">
+          {POPULAR.map((p) => (
+            <button
+              key={p}
+              type="button"
+              onClick={() => onPickQuery(p)}
+              className="snap-start inline-flex shrink-0 items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-3 py-1.5 text-[12.5px] font-medium text-foreground transition-colors hover:bg-brand-gold/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+            >
+              <Sparkles className="h-3 w-3 text-brand-gold" />
+              {p}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Buscas recentes */}
+      {recent.length > 0 && (
+        <div>
+          <div className="mb-2 flex items-center justify-between px-1">
+            <div className="flex items-center gap-2">
+              <HistoryIcon className="h-3.5 w-3.5 text-muted-foreground" />
+              <h3 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                Suas buscas recentes
+              </h3>
+            </div>
+            <button
+              type="button"
+              onClick={clearRecent}
+              className="text-[11px] font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:underline"
+            >
+              limpar
+            </button>
+          </div>
+          <div className="flex flex-wrap gap-2 px-1">
+            {recent.map((t) => (
+              <span
+                key={t}
+                className="group inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card/60 py-1 pl-3 pr-1 text-[12.5px] text-foreground"
+              >
+                <button
+                  type="button"
+                  onClick={() => onPickQuery(t)}
+                  className="focus-visible:outline-none focus-visible:underline"
+                >
+                  {t}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => removeRecent(t)}
+                  className="grid h-5 w-5 place-items-center rounded-full text-muted-foreground hover:bg-brand-gold/15 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                  aria-label={`Remover ${t}`}
+                >
+                  <XIcon className="h-3 w-3" />
+                </button>
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Indicadores da cesta — sinal de vida */}
+      <div className="grid grid-cols-3 gap-2 rounded-2xl border border-border/60 bg-card/50 p-2 sm:p-3">
+        <StatCell
+          icon={<TrendingDown className="h-3.5 w-3.5 text-emerald-500" />}
+          label="Preços em queda"
+          value={stats.data ? String(stats.data.priceDrops7d ?? 0) : "—"}
+          hint="7 dias"
+        />
+        <StatCell
+          icon={<Sparkles className="h-3.5 w-3.5 text-brand-gold" />}
+          label="Produtos monitorados"
+          value={stats.data ? String(stats.data.products ?? 0) : "—"}
+          hint="ativos"
+        />
+        <StatCell
+          icon={<Flame className="h-3.5 w-3.5 text-brand-gold" />}
+          label="Economia estimada"
+          value={stats.data ? brl(stats.data.estimatedSavings ?? 0) : "—"}
+          hint="cesta média"
+        />
+      </div>
+    </div>
+  );
+}
+
+function StatCell({
+  icon,
+  label,
+  value,
+  hint,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  hint: string;
+}) {
+  return (
+    <div className="min-w-0 rounded-xl bg-background/40 px-2 py-2 text-center sm:px-3">
+      <div className="flex items-center justify-center gap-1.5">
+        {icon}
+        <span className="truncate text-[10.5px] font-medium uppercase tracking-[0.1em] text-muted-foreground">
+          {label}
+        </span>
+      </div>
+      <div className="mt-1 truncate text-[15px] font-semibold tabular-nums text-foreground sm:text-base">
+        {value}
+      </div>
+      <div className="text-[10px] uppercase tracking-widest text-muted-foreground/80">{hint}</div>
+    </div>
+  );
+}
