@@ -149,7 +149,7 @@ function EstablishmentsPage() {
           aria-hidden
           src={mercadosHero.url}
           alt=""
-          className="absolute inset-0 -z-30 h-full w-full object-cover"
+          className="absolute inset-0 -z-30 h-full w-full object-cover scale-110 blur-md"
           loading="eager"
           fetchPriority="high"
           decoding="async"
