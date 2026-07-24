@@ -652,7 +652,8 @@ function HomePage() {
             </div>
           </div>
           {/* /content overlay */}
-        </div>
+
+
 
         {/* Floating quote card — desktop: canto inferior direito; mobile: full-width bottom */}
         <div
