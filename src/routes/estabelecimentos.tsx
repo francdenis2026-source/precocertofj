@@ -267,8 +267,8 @@ function EstablishmentsPage() {
             {currentKind ? currentKind.tagline : "Cobertura de produtos, categorias e comparativo entre estabelecimentos monitorados pela comunidade."}
           </p>
 
-          {/* Chips de categoria */}
-          <div className="mt-3 flex flex-wrap gap-1.5">
+          {/* Chips de categoria — padrão Wave 1: gold sólido ativo, gold-tint no hover */}
+          <div className="mt-3 flex flex-wrap gap-1.5" role="radiogroup" aria-label="Filtrar por tipo de estabelecimento">
             {(["__all", ...Object.keys(KIND_META)] as const).map((k) => {
               if (k !== "__all" && !kindsPresent.has(k)) return null;
               const meta = k === "__all" ? { label: "Todos", icon: Store } : KIND_META[k];
@@ -278,13 +278,15 @@ function EstablishmentsPage() {
                 <button
                   key={k}
                   type="button"
+                  role="radio"
+                  aria-checked={active}
                   onClick={() => setKindFilter(k)}
-                  aria-pressed={active}
                   className={[
-                    "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[12px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy shadow-[0_2px_8px_-2px_rgba(0,0,0,0.5)]",
+                    "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11.5px] font-semibold uppercase tracking-[0.14em] transition-colors duration-150",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy",
                     active
-                      ? "border-brand-gold bg-brand-gold text-brand-navy"
-                      : "border-brand-gold/60 bg-brand-navy/90 text-white hover:bg-brand-navy hover:border-brand-gold",
+                      ? "border-brand-gold bg-brand-gold text-brand-navy shadow-sm"
+                      : "border-white/25 bg-brand-navy/85 text-white hover:border-brand-gold hover:bg-[color-mix(in_oklab,var(--brand-gold)_22%,var(--brand-navy))]",
                   ].join(" ")}
                 >
                   <Icon className="h-3.5 w-3.5" aria-hidden />
@@ -293,6 +295,7 @@ function EstablishmentsPage() {
               );
             })}
           </div>
+
 
           {/* Métricas ao vivo — botões acessíveis, abrem detalhes */}
           {data && (
@@ -446,19 +449,20 @@ function EstablishmentsPage() {
                 }
                 description="Distribuição por número de produtos cadastrados na rede."
               >
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5">
                   {data.topGlobalCategories.map((c) => (
                     <span
                       key={c.category}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-navy px-3 py-1 text-[13px] font-medium text-white shadow-sm"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-foreground shadow-sm"
                     >
                       {humanizeCategory(c.category)}
-                      <span className="rounded-full bg-brand-gold/95 px-1.5 py-0.5 text-[12px] font-bold text-brand-navy tabular-nums">
+                      <span className="rounded-full bg-brand-gold px-1.5 py-0.5 text-[10px] font-bold text-brand-navy tabular-nums">
                         {c.count}
                       </span>
                     </span>
                   ))}
                 </div>
+
               </SectionCard>
             )}
 
@@ -598,14 +602,15 @@ function EstablishmentsPage() {
                             {e.topCategories.map((c) => (
                               <span
                                 key={c.category}
-                                className="inline-flex items-center gap-1 rounded-full border border-border bg-background/60 px-2.5 py-1 text-[12.5px] font-medium text-foreground"
+                                className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-0.5 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-foreground"
                               >
                                 {humanizeCategory(c.category)}
-                                <span className="rounded-full bg-muted px-1.5 text-[11px] font-bold text-muted-foreground tabular-nums">{c.count}</span>
+                                <span className="rounded-full bg-muted px-1.5 text-[10px] font-bold text-foreground/80 tabular-nums">{c.count}</span>
                               </span>
                             ))}
                           </div>
                         )}
+
                         <div className="mt-3 inline-flex items-center gap-1 text-[12px] font-semibold text-brand-gold">
                           Ver catálogo completo <ChevronRight className="h-3 w-3" aria-hidden />
                         </div>

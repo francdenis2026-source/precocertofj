@@ -182,10 +182,11 @@ function EstablishmentPage() {
       <main className="mx-auto max-w-5xl px-4 pb-16 pt-6">
         <Link
           to="/estabelecimentos"
-          className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+          className="mb-4 inline-flex h-9 items-center gap-1.5 rounded-full border border-border bg-background px-3.5 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
-          <ArrowLeft className="h-4 w-4" /> Todos os estabelecimentos
+          <ArrowLeft className="h-3.5 w-3.5" aria-hidden /> Todos os estabelecimentos
         </Link>
+
 
         <Card className="overflow-hidden">
           <CardHeader className="flex flex-row items-start gap-4">
@@ -209,17 +210,18 @@ function EstablishmentPage() {
 
               <div className="mt-3 flex flex-wrap items-center gap-2">
                 {data.store.neighborhood && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-[12px] font-semibold text-primary">
-                    <MapPin className="h-3.5 w-3.5" aria-hidden />
+                  <span className="inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-gold px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-navy">
+                    <MapPin className="h-3 w-3" aria-hidden />
                     Bairro {data.store.neighborhood}
                   </span>
                 )}
                 {(data.store.city || data.store.state) && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-1 text-[12px] font-medium text-foreground">
+                  <span className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground">
                     {[data.store.city, data.store.state].filter(Boolean).join(" · ")}
                   </span>
                 )}
               </div>
+
               {data.store.address && (
                 <p className="mt-2 flex items-start gap-1.5 text-sm font-medium text-foreground">
                   <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
@@ -243,21 +245,25 @@ function EstablishmentPage() {
 
         {data.categories.length > 0 && (
           <div className="mt-6" aria-label="Filtrar por categoria">
-            <div className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
               Categorias
             </div>
-            <div className="flex flex-wrap gap-1.5">
+            <div role="radiogroup" aria-label="Categorias" className="flex flex-wrap gap-1.5">
               <button
                 type="button"
+                role="radio"
+                aria-checked={selectedCategory === null}
                 onClick={() => setSelectedCategory(null)}
-                aria-pressed={selectedCategory === null}
                 className={
                   selectedCategory === null
-                    ? "inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1 text-[12px] font-semibold text-primary-foreground shadow-xs"
-                    : "inline-flex items-center gap-1 rounded-full border border-border bg-card px-3 py-1 text-[12px] text-foreground hover:bg-muted"
+                    ? "inline-flex h-9 items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-3.5 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-brand-navy shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    : "inline-flex h-9 items-center gap-1.5 rounded-full border border-border bg-background px-3.5 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 }
               >
-                Todas <span className="opacity-70">({data.products.length})</span>
+                Todas
+                <span className={selectedCategory === null ? "rounded-full bg-brand-navy/15 px-1.5 py-0.5 text-[10px] font-bold text-brand-navy tabular-nums" : "rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-bold text-foreground/80 tabular-nums"}>
+                  {data.products.length}
+                </span>
               </button>
               {data.categories.map((c) => {
                 const active = selectedCategory === c.label;
@@ -265,21 +271,26 @@ function EstablishmentPage() {
                   <button
                     key={c.key}
                     type="button"
+                    role="radio"
+                    aria-checked={active}
                     onClick={() => setSelectedCategory(active ? null : c.label)}
-                    aria-pressed={active}
                     className={
                       active
-                        ? "inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1 text-[12px] font-semibold text-primary-foreground shadow-xs"
-                        : "inline-flex items-center gap-1 rounded-full border border-border bg-card px-3 py-1 text-[12px] text-foreground hover:bg-muted"
+                        ? "inline-flex h-9 items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-3.5 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-brand-navy shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                        : "inline-flex h-9 items-center gap-1.5 rounded-full border border-border bg-background px-3.5 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                     }
                   >
-                    {c.label} <span className="opacity-70">({c.count})</span>
+                    {c.label}
+                    <span className={active ? "rounded-full bg-brand-navy/15 px-1.5 py-0.5 text-[10px] font-bold text-brand-navy tabular-nums" : "rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-bold text-foreground/80 tabular-nums"}>
+                      {c.count}
+                    </span>
                   </button>
                 );
               })}
             </div>
           </div>
         )}
+
 
         <div className="mt-4 flex flex-col gap-3 sm:flex-row">
           <div className="relative flex-1">
@@ -295,7 +306,7 @@ function EstablishmentPage() {
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as SortKey)}
-            className="h-10 rounded-md border border-border bg-background px-3 text-sm"
+            className="h-10 rounded-md border border-border bg-background px-3 text-sm text-foreground transition-colors hover:border-brand-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             aria-label="Ordenar por"
           >
             {(Object.keys(SORT_LABEL) as SortKey[]).map((k) => (
@@ -304,6 +315,7 @@ function EstablishmentPage() {
               </option>
             ))}
           </select>
+
         </div>
 
         <div className="mt-4 text-xs text-muted-foreground">
@@ -356,30 +368,31 @@ function EstablishmentPage() {
 
 
         {hasLocation && (
-          <div className="mt-10 rounded-xl border border-border/60 bg-muted/30 p-4">
-            <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <div className="mt-10 rounded-xl border border-border/70 bg-card p-4 shadow-sm">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
               Endereço do estabelecimento
             </div>
-            <div className="mt-2 flex flex-wrap items-start gap-x-3 gap-y-1 text-sm">
+            <div className="mt-2 flex flex-wrap items-start gap-x-3 gap-y-1.5 text-sm">
               {data.store.address && (
                 <span className="inline-flex items-start gap-1.5 font-medium text-foreground">
-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand-gold" aria-hidden />
                   {data.store.address}
                 </span>
               )}
               {data.store.neighborhood && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[12px] font-semibold text-primary">
+                <span className="inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-gold px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-navy">
                   Bairro {data.store.neighborhood}
                 </span>
               )}
               {(data.store.city || data.store.state) && (
-                <span className="text-muted-foreground">
+                <span className="inline-flex items-center rounded-full border border-border bg-background px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground">
                   {[data.store.city, data.store.state].filter(Boolean).join(" · ")}
                 </span>
               )}
             </div>
           </div>
         )}
+
 
         <p className="mt-6 text-[11px] leading-relaxed text-muted-foreground">
           Preços e informações exibidos pertencem ao estabelecimento{" "}
