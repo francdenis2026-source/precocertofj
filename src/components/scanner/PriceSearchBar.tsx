@@ -1314,7 +1314,7 @@ function scoreRelevance(g: ProductGroup, query: string): number {
 
 function sortPrices(prices: PricePoint[], mode: SortMode, productName?: string): PricePoint[] {
   const arr = [...prices];
-  if (mode === "cheapest") arr.sort((a, b) => a.price - b.price);
+  if (mode === "cheapest" || mode === "relevance") arr.sort((a, b) => a.price - b.price);
   else if (mode === "unit") {
     // Ordena por preço unitário normalizado (R$/kg ou R$/L). Itens sem
     // tamanho detectável ficam no fim, mantendo a ordem por menor preço.
