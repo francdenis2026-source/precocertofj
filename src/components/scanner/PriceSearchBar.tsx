@@ -139,10 +139,10 @@ export function PriceSearchBar({
   );
   const [kindFilter, setKindFilter] = useState<string | null>(null);
   const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
-  const [groupBy, setGroupBy] = useLocalStorageState<"product" | "market">(
+  const [groupBy, setGroupBy] = useLocalStorageState<"product" | "market" | "matrix">(
     "pc:search:groupBy",
     "product",
-    { validate: (v): v is "product" | "market" => v === "product" || v === "market" },
+    { validate: (v): v is "product" | "market" | "matrix" => v === "product" || v === "market" || v === "matrix" },
   );
 
 
