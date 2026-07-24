@@ -14,7 +14,7 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import {
   PageHeader,
   SectionCard,
-  StatGrid,
+  
   EmptyState,
   LoadingSkeleton,
   CardSkeleton,
@@ -131,6 +131,23 @@ function EstablishmentsPage() {
     if (!data) return [] as EstablishmentsOverview["items"];
     return data.items.slice().sort((a, b) => b.productsCount - a.productsCount).slice(0, 8);
   }, [data]);
+
+  // Ids used to compute status badges (mais barato, atualizado, destaque)
+  const badgeIds = useMemo(() => {
+    if (!data) return { cheapestId: null as string | null, featuredIds: new Set<string>() };
+    const cheapest = [...data.items]
+      .filter((i) => i.maxSavings > 0)
+      .sort((a, b) => b.maxSavings - a.maxSavings)[0];
+    const featuredIds = new Set(
+      [...data.items].sort((a, b) => b.productsCount - a.productsCount).slice(0, 3).map((i) => i.id),
+    );
+    return { cheapestId: cheapest?.id ?? null, featuredIds };
+  }, [data]);
+  const isRecent = (iso: string | null) => {
+    if (!iso) return false;
+    const t = new Date(iso).getTime();
+    return Number.isFinite(t) && Date.now() - t < 7 * 24 * 60 * 60 * 1000;
+  };
 
   const KIND_META: Record<string, { label: string; icon: typeof Store; tagline: string }> = {
     mercado: { label: "Supermercados", icon: ShoppingBasket, tagline: "Compare a cesta básica entre os supermercados de Feijó" },
@@ -353,16 +370,19 @@ function EstablishmentsPage() {
               onClickCapture={onCarouselLinkClickCapture}
               className="flex snap-x snap-mandatory gap-2 overflow-x-auto pb-1 cursor-grab select-none [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
             >
-              {featured.map((e) => (
+              {featured.map((e, idx) => (
                 <Link
                   key={e.id}
                   to="/estabelecimento/$slug"
                   params={{ slug: slugifyEstablishment(e.name) }}
-                  className="group relative flex w-[210px] shrink-0 snap-start items-center gap-2.5 rounded-lg border border-brand-gold/60 bg-background p-2 transition-colors hover:border-brand-gold hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-                  style={{ boxShadow: "inset 3px 0 0 var(--brand-gold)" }}
+                  className="group relative flex w-[210px] shrink-0 snap-start items-center gap-2.5 rounded-lg border border-border/70 bg-card p-2 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-gold/60 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                 >
-                  <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md">
-
+                  {idx === 0 && (
+                    <span className="absolute -top-1.5 right-2 rounded-full bg-brand-gold px-1.5 py-[1px] text-[9px] font-bold uppercase tracking-[0.12em] text-brand-navy shadow-sm">
+                      Top
+                    </span>
+                  )}
+                  <div className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-md border border-border/60 bg-white p-1">
                     {e.logoUrl ? (
                       <img src={e.logoUrl} alt="" className="h-full w-full object-contain" loading="lazy" />
                     ) : (
@@ -372,7 +392,7 @@ function EstablishmentsPage() {
                   <div className="min-w-0 flex-1">
                     <div className="truncate text-[12.5px] font-semibold text-foreground">{e.name}</div>
                     <div className="truncate text-[11px] text-muted-foreground">
-                      <span className="font-semibold text-brand-gold">{e.productsCount}</span> produtos
+                      <span className="font-semibold text-brand-gold tabular-nums">{e.productsCount}</span> produtos
                       {e.neighborhood ? ` · ${e.neighborhood}` : ""}
                     </div>
                   </div>
@@ -403,14 +423,7 @@ function EstablishmentsPage() {
 
         {data && (
           <div className="space-y-6">
-            <StatGrid
-              stats={[
-                { label: "Estabelecimentos", value: data.totalEstablishments, icon: MapPin, tone: "primary" },
-                { label: "Produtos monitorados", value: data.totalProducts, icon: Package, tone: "success" },
-                { label: "Categorias mapeadas", value: data.totalCategories, icon: Sparkles },
-              ]}
-              className="lg:grid-cols-3"
-            />
+            {/* StatGrid removida: métricas duplicavam o hero */}
 
             {data.topGlobalCategories.length > 0 && (
               <SectionCard
@@ -505,10 +518,14 @@ function EstablishmentsPage() {
                   className="grid grid-cols-1 gap-3 p-4 md:grid-cols-2 md:p-5"
                   aria-label="Lista de estabelecimentos"
                 >
-                  {visibleItems.map((e) => (
+                  {visibleItems.map((e) => {
+                    const isCheapest = badgeIds.cheapestId === e.id;
+                    const recent = isRecent(e.lastUpdate);
+                    const isFeatured = badgeIds.featuredIds.has(e.id);
+                    return (
                     <li
                       key={e.id}
-                      className="rounded-xl border border-brand-gold/50 bg-card shadow-sm transition-all hover:border-brand-gold hover:shadow-md"
+                      className="rounded-xl border border-border/70 bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-gold/50 hover:shadow-md"
                     >
                       <Link
                         to="/estabelecimento/$slug"
@@ -517,10 +534,7 @@ function EstablishmentsPage() {
                         aria-label={`Ver catálogo de ${e.name}`}
                       >
                         <div className="flex items-start gap-3">
-                          <div
-                            className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl"
-                          >
-
+                          <div className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl border border-border/60 bg-white p-1.5">
                             {e.logoUrl ? (
                               <img
                                 src={e.logoUrl}
@@ -529,25 +543,42 @@ function EstablishmentsPage() {
                                 loading="lazy"
                               />
                             ) : (
-                              <span aria-hidden className="text-[16px] font-bold text-muted-foreground">
+                              <span aria-hidden className="text-[16px] font-bold text-brand-navy">
                                 {e.name.substring(0, 2).toUpperCase()}
                               </span>
                             )}
                           </div>
                           <div className="min-w-0 flex-1">
-                            <h3 className="truncate text-[15px] font-semibold text-foreground">{e.name}</h3>
+                            <div className="flex flex-wrap items-center gap-1.5">
+                              <h3 className="truncate text-[15px] font-semibold text-foreground">{e.name}</h3>
+                              {isCheapest && (
+                                <span className="inline-flex items-center gap-1 rounded-full bg-brand-gold px-1.5 py-[1px] text-[9.5px] font-bold uppercase tracking-[0.1em] text-brand-navy">
+                                  <PiggyBank className="h-2.5 w-2.5" aria-hidden /> Mais barato hoje
+                                </span>
+                              )}
+                              {recent && (
+                                <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-1.5 py-[1px] text-[9.5px] font-bold uppercase tracking-[0.1em] text-emerald-600 dark:text-emerald-400">
+                                  <Radio className="h-2.5 w-2.5" aria-hidden /> Atualizado
+                                </span>
+                              )}
+                              {isFeatured && !isCheapest && (
+                                <span className="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-1.5 py-[1px] text-[9.5px] font-bold uppercase tracking-[0.1em] text-muted-foreground">
+                                  <Sparkles className="h-2.5 w-2.5" aria-hidden /> Destaque
+                                </span>
+                              )}
+                            </div>
                             {e.neighborhood && (
-                              <span className="mt-1 inline-flex items-center gap-1 rounded-full border border-brand-gold/50 bg-brand-gold/15 px-2 py-0.5 text-[12px] font-semibold text-brand-gold">
+                              <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[12px] font-medium text-muted-foreground">
                                 <MapPin className="h-3 w-3" aria-hidden />
                                 {e.neighborhood}
                               </span>
                             )}
-                            <p className="mt-1 text-[13px] text-muted-foreground">
+                            <p className="mt-1 text-[12.5px] text-muted-foreground">
                               {[e.city, e.state].filter(Boolean).join(" · ") || "Localização não informada"}
                             </p>
-                            <p className="mt-2 text-[13.5px] font-medium text-foreground">
-                              <span className="font-bold text-brand-gold">{e.productsCount}</span>{" "}
-                              <span className="text-muted-foreground">produtos cadastrados</span>
+                            <p className="mt-2 flex items-baseline gap-1.5 text-[13px] text-muted-foreground">
+                              <span className="text-[20px] font-bold leading-none tabular-nums text-foreground">{e.productsCount}</span>
+                              <span>produtos cadastrados</span>
                             </p>
                           </div>
                         </div>
@@ -559,7 +590,7 @@ function EstablishmentsPage() {
                                 className="inline-flex items-center gap-1 rounded-full border border-border bg-background/60 px-2.5 py-1 text-[12.5px] font-medium text-foreground"
                               >
                                 {humanizeCategory(c.category)}
-                                <span className="rounded-full bg-brand-gold/20 px-1.5 text-[11px] font-bold text-brand-gold tabular-nums">{c.count}</span>
+                                <span className="rounded-full bg-muted px-1.5 text-[11px] font-bold text-muted-foreground tabular-nums">{c.count}</span>
                               </span>
                             ))}
                           </div>
@@ -569,7 +600,8 @@ function EstablishmentsPage() {
                         </div>
                       </Link>
                     </li>
-                  ))}
+                    );
+                  })}
                 </ul>
                 )}
               </SectionCard>
@@ -613,20 +645,18 @@ function HeroMetric({
       type="button"
       onClick={onClick}
       aria-label={`${label}: ${value}. ${hint ?? "Abrir detalhes"}`}
-      className="group relative flex w-full items-center gap-2 rounded-md border border-brand-gold/45 bg-brand-navy/95 px-2.5 py-2 text-left transition-colors duration-150 hover:border-brand-gold hover:bg-brand-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy sm:gap-2.5 sm:px-3 sm:py-2.5"
+      className="group relative flex w-full items-center gap-2.5 rounded-md border border-white/10 bg-brand-navy/95 px-3 py-2.5 text-left shadow-[0_6px_18px_-12px_rgba(0,0,0,0.6)] transition-colors duration-150 hover:border-brand-gold/70 hover:bg-brand-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy sm:gap-3 sm:px-3.5 sm:py-3"
     >
-      <span aria-hidden className="absolute inset-y-1 left-0 w-[3px] rounded-r-sm bg-brand-gold" />
-
-      <div className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-brand-gold text-brand-navy sm:h-8 sm:w-8">
-        <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={2.25} aria-hidden />
+      <div className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-brand-gold/15 text-brand-gold sm:h-9 sm:w-9">
+        <Icon className="h-4 w-4" strokeWidth={2} aria-hidden />
       </div>
       <div className="relative z-[1] min-w-0 flex-1">
-        <div className="truncate text-[10px] font-semibold uppercase tracking-[0.12em] text-white/70 sm:text-[10.5px]">
+        <div className="truncate text-[9.5px] font-semibold uppercase tracking-[0.16em] text-white/55 sm:text-[10px]">
           {label}
         </div>
-        <div className="mt-0.5 flex items-baseline gap-1.5 text-[15px] font-semibold leading-tight text-white tabular-nums sm:text-[16px]">
+        <div className="mt-0.5 flex items-baseline gap-1.5 text-[20px] font-bold leading-none text-white tabular-nums sm:text-[22px]">
           {live && (
-            <span className="relative inline-flex h-1.5 w-1.5 shrink-0 translate-y-[-1px]">
+            <span className="relative inline-flex h-1.5 w-1.5 shrink-0 translate-y-[-2px]">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-gold/70" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-gold" />
             </span>
@@ -634,7 +664,7 @@ function HeroMetric({
           <span className="truncate">{value}</span>
         </div>
       </div>
-      <ChevronRight className="hidden xs:block h-3.5 w-3.5 shrink-0 text-white/45 transition-colors group-hover:text-brand-gold" aria-hidden />
+      <ChevronRight className="hidden xs:block h-3.5 w-3.5 shrink-0 text-white/30 transition-colors group-hover:text-brand-gold" aria-hidden />
     </button>
   );
 }
