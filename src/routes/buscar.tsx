@@ -1,10 +1,9 @@
-import { createFileRoute, Link, useNavigate, useRouter, retainSearchParams } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, retainSearchParams } from "@tanstack/react-router";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PriceSearchBar } from "@/components/scanner/PriceSearchBar";
 import { MobileNav } from "@/components/nav/MobileNav";
-import { ArrowLeft } from "lucide-react";
 import type { SearchMode } from "@/lib/search-tokens";
 import { FreeQuotaBadge } from "@/components/paywall/FreeQuotaBadge";
 import { QuickFilterBar } from "@/components/search/QuickFilterBar";
@@ -13,8 +12,8 @@ import { useSession } from "@/hooks/useSession";
 import { trackEvent } from "@/lib/analytics-events";
 import { ListingShell, InternalPageHeader } from "@/components/layout";
 import { EmptyState, RouteError } from "@/components/feedback";
-import { Button } from "@/components/ui/button";
 import { Search as SearchIcon } from "lucide-react";
+
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
