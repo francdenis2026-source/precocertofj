@@ -150,6 +150,39 @@ function HomePage() {
     >
       <SiteHeader variant="solid" showThemeToggle />
 
+      {/* -------- MOBILE QUICK-NAV (abaixo do header, sticky) -------- */}
+      <nav
+        aria-label="Atalhos rápidos"
+        className="sticky top-[56px] z-30 -mb-1 border-b sm:hidden"
+        style={{
+          background: `color-mix(in oklab, ${P.paper} 92%, transparent)`,
+          borderColor: P.line,
+          backdropFilter: "saturate(140%) blur(8px)",
+          WebkitBackdropFilter: "saturate(140%) blur(8px)",
+        }}
+      >
+        <div className="flex gap-1.5 overflow-x-auto px-3 py-2 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+          {[
+            { to: "/melhores-precos", label: "Ranking" },
+            { to: "/estabelecimentos", label: "Mercados" },
+            { to: "/buscar", label: "Buscar" },
+            { to: "/planos", label: "Alertas" },
+            { to: "/cesta-basica", label: "Cesta básica" },
+            { to: "/economia", label: "Economia" },
+          ].map((c) => (
+            <Link
+              key={c.to}
+              to={c.to}
+              className="inline-flex shrink-0 items-center rounded-full border px-3 py-1.5 text-[11.5px] font-semibold leading-none transition-colors active:scale-[0.97]"
+              style={{ borderColor: P.line, background: P.card, color: P.heading }}
+            >
+              {c.label}
+            </Link>
+          ))}
+        </div>
+      </nav>
+
+
 
 
       {/* ============== EDITORIAL CARD ============== */}
