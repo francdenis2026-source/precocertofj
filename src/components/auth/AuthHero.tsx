@@ -173,9 +173,10 @@ export function AuthHero({
       )}
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-16 -top-16 h-52 w-52 rounded-full opacity-25 blur-3xl"
+        className="pointer-events-none absolute -right-24 -top-24 h-40 w-40 rounded-full opacity-15 blur-2xl motion-reduce:hidden"
         style={{ background: T.gold }}
       />
+
 
       {/* Top: brand + badge + headline */}
       <div className="relative">
