@@ -214,7 +214,7 @@ function SearchPage() {
   }, []);
 
   return (
-    <div className="min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
+    <div className="pc-search-scope min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
       <div className="mx-auto max-w-3xl px-4 md:px-6 pt-3 md:pt-4">
         <InternalPageHeader
           breadcrumbs={[{ label: "Início", to: "/" }, { label: "Buscar" }]}
@@ -290,7 +290,7 @@ function SearchPage() {
                 onBlur={(e) => setBrand(e.currentTarget.value.trim())}
                 onKeyDown={(e) => { if (e.key === "Enter") setBrand(e.currentTarget.value.trim()); }}
                 aria-label="Marca"
-                className="h-8 w-28 rounded-md border border-border bg-background px-2 text-[12px] text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="h-8 w-28 rounded-md border border-border bg-background px-2 text-[12px] text-foreground placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               />
               <input
                 type="number"
@@ -302,7 +302,7 @@ function SearchPage() {
                 onBlur={(e) => setMinPrice(e.currentTarget.value.trim())}
                 onKeyDown={(e) => { if (e.key === "Enter") setMinPrice(e.currentTarget.value.trim()); }}
                 aria-label="Preço mínimo"
-                className="h-8 w-20 rounded-md border border-border bg-background px-2 text-[12px] tabular-nums text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="h-8 w-20 rounded-md border border-border bg-background px-2 text-[12px] tabular-nums text-foreground placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               />
               <input
                 type="number"
@@ -314,7 +314,7 @@ function SearchPage() {
                 onBlur={(e) => setMaxPrice(e.currentTarget.value.trim())}
                 onKeyDown={(e) => { if (e.key === "Enter") setMaxPrice(e.currentTarget.value.trim()); }}
                 aria-label="Preço máximo"
-                className="h-8 w-20 rounded-md border border-border bg-background px-2 text-[12px] tabular-nums text-foreground placeholder:text-muted-foreground/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="h-8 w-20 rounded-md border border-border bg-background px-2 text-[12px] tabular-nums text-foreground placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               />
               {hasFilters ? (
                 <button
