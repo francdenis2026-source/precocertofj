@@ -329,25 +329,23 @@ function LoginPage() {
               <ShoppingCart className="h-3.5 w-3.5" strokeWidth={2.5} />
             </div>
             <span
-              className="text-[15px] font-bold tracking-tight"
-              style={{ color: PC_EMERALD, fontFamily: PC_DISPLAY }}
+              className="text-[15px] font-bold tracking-tight text-foreground"
+              style={{ fontFamily: PC_DISPLAY }}
             >
               PreçoCerto
             </span>
           </div>
 
-          <p
-            className="text-[9.5px] font-bold uppercase tracking-[0.2em]"
-            style={{ color: PC_EMERALD }}
-          >
+          <p className="text-[9.5px] font-bold uppercase tracking-[0.2em] text-[color:var(--pc-home-navy)] dark:text-[color:var(--pc-home-gold)]">
             {mode === "login" ? "Área do assinante" : "Comece grátis"}
           </p>
           <h1
-            className="mt-1 text-[22px] leading-[1.15] font-bold tracking-tight"
-            style={{ color: PC_EMERALD_DEEP, fontFamily: PC_DISPLAY }}
+            className="mt-1 text-[22px] leading-[1.15] font-bold tracking-tight text-foreground"
+            style={{ fontFamily: PC_DISPLAY }}
           >
             {mode === "login" ? "Entrar na plataforma" : "Criar sua conta"}
           </h1>
+
 
           <TabSwitch mode={mode} onChange={setMode} />
 
