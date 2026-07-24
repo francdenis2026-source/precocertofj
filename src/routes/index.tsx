@@ -729,16 +729,19 @@ function HomePage() {
 
               {today && (
                 <div
-                  className="mb-2.5 inline-flex w-fit items-center gap-2 text-[12px] font-semibold uppercase tabular-nums sm:mb-2.5 sm:text-[10.5px]"
+                  className="mb-2.5 inline-flex w-fit items-center gap-2 rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tabular-nums sm:mb-2.5 sm:text-[10.5px]"
                   style={{
-                    color: "var(--pc-text-muted)",
-                    letterSpacing: "0.16em",
+                    background: "rgba(2,6,23,0.55)",
+                    color: P.goldSoft,
+                    letterSpacing: "0.18em",
+                    border: `1px solid ${P.gold}55`,
+                    backdropFilter: "blur(2px)",
                   }}
                 >
                   <span
                     aria-hidden
-                    className="inline-block h-[1px] w-6"
-                    style={{ background: "var(--pc-text-subtle)" }}
+                    className="inline-block h-[6px] w-[6px] rounded-full"
+                    style={{ background: P.gold }}
                   />
                   {today}
                 </div>
