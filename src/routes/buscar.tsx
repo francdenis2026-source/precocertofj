@@ -63,15 +63,12 @@ function SearchPage() {
   const navigate = useNavigate({ from: "/buscar" });
   const router = useRouter();
   const { user } = useSession();
+  const urlSyncTimer = useRef<number | null>(null);
+
 
   const goBack = useCallback(() => {
     try {
-      const canGoBack =
-        typeof window !== "undefined" &&
-        window.history.length > 1 &&
-        document.referrer &&
-        new URL(document.referrer).origin === window.location.origin;
-      if (canGoBack) {
+      if (typeof window !== "undefined" && window.history.length > 1) {
         router.history.back();
         return;
       }
@@ -118,17 +115,22 @@ function SearchPage() {
       },
       replace: true,
     });
-  const clearFilters = () =>
+  const clearFilters = () => {
+    try {
+      window.localStorage.removeItem(STORAGE_KEY);
+      window.localStorage.removeItem(PURE_KEY);
+    } catch {
+      /* ignore */
+    }
+    if (urlSyncTimer.current != null) {
+      window.clearTimeout(urlSyncTimer.current);
+      urlSyncTimer.current = null;
+    }
     navigate({
-      search: (prev: Record<string, unknown>) => {
-        const s: Record<string, unknown> = { ...prev };
-        delete s.brand;
-        delete s.min;
-        delete s.max;
-        return s;
-      },
+      search: () => ({ q: "", mode: "strict", pure: "1" }),
       replace: true,
     });
+  };
 
 
   useEffect(() => {
@@ -189,7 +191,8 @@ function SearchPage() {
     });
   };
 
-  const urlSyncTimer = useRef<number | null>(null);
+  // urlSyncTimer declared above
+
   const syncQueryToUrl = useCallback(
     (next: string) => {
       const value = next.slice(0, 80);
