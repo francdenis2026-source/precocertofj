@@ -60,7 +60,7 @@ export function SiteFooter() {
         <div className="flex items-center justify-between gap-2 text-[clamp(13px,3.5vw,15px)] leading-none">
           <Link
             to="/"
-            className="flex shrink-0 items-center gap-1.5"
+            className="flex shrink-0 items-center gap-1.5 rounded-md outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             aria-label="PreçoCerto — início"
           >
             <span className="grid h-[22px] w-[22px] place-items-center rounded-[5px] bg-brand text-[11px] font-black text-brand-foreground shadow-elev-2">
