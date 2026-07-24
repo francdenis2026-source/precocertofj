@@ -235,12 +235,21 @@ function HomePage() {
 
               {today && (
                 <div
-                  className="mb-3 text-[13px] font-bold uppercase tracking-[0.2em] sm:mb-3 sm:text-[10.5px] sm:tracking-[0.24em]"
-                  style={{ color: P.goldSoft }}
+                  className="mb-3 inline-flex w-fit items-center gap-2 text-[12px] font-semibold uppercase tabular-nums sm:mb-3 sm:text-[10.5px]"
+                  style={{
+                    color: "color-mix(in oklab, var(--pc-home-ink) 62%, transparent)",
+                    letterSpacing: "0.16em",
+                  }}
                 >
+                  <span
+                    aria-hidden
+                    className="inline-block h-[1px] w-6"
+                    style={{ background: "color-mix(in oklab, var(--pc-home-ink) 35%, transparent)" }}
+                  />
                   {today}
                 </div>
               )}
+
 
               {/* H1 */}
               <h1
