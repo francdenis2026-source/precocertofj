@@ -237,12 +237,12 @@ function SearchPage() {
     <div
       className="pc-search-scope min-h-[100dvh] pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground"
     >
-      <div className="mx-auto w-full max-w-6xl px-4 md:px-6 pt-3 md:pt-4">
+      <div className="mx-auto w-full max-w-7xl px-4 md:px-8 pt-4 md:pt-6">
         <InternalPageHeader
           breadcrumbs={[{ label: "Início", to: "/" }, { label: "Buscar" }]}
           title="Buscar preço por nome"
           highlight="preço"
-          description="Preço médio, mínimo e onde está mais barato."
+          description="Consulte o preço médio, mínimo e onde comprar mais barato."
           actions={
             <>
               {hasQuery ? (
@@ -256,64 +256,62 @@ function SearchPage() {
           }
         />
 
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
-          <div className="min-w-0">
-            <ListingShell density="sm" className="mb-2">
-              <PriceSearchBar
-                initialQuery={q}
-                mode={mode}
-                pureOnly={pureOnly}
-                brandFilter={brandFilter}
-                priceMin={Number.isFinite(priceMin) ? priceMin : undefined}
-                priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
-                onQueryChange={syncQueryToUrl}
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_280px]">
+          <div className="min-w-0 space-y-6">
+            <PriceSearchBar
+              initialQuery={q}
+              mode={mode}
+              pureOnly={pureOnly}
+              brandFilter={brandFilter}
+              priceMin={Number.isFinite(priceMin) ? priceMin : undefined}
+              priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
+              onQueryChange={syncQueryToUrl}
+            />
+
+            {/* Toolbar única: match + filtro puro + filtros avançados */}
+            <div className="flex flex-wrap items-center gap-x-4 gap-y-3 border-b border-border/50 pb-4">
+              <QuickFilterBar<SearchMode>
+                label="Match"
+                ariaLabel="Modo de correspondência"
+                value={mode}
+                onChange={(next) => chooseMode(next ?? "strict")}
+                size="sm"
+                options={[
+                  { value: "strict", label: "Estrita", hint: "Palavra inteira" },
+                  { value: "loose", label: "Parcial", hint: "Permite prefixo (≥ 3 chars)" },
+                ]}
               />
+              <QuickFilterBar<"pure" | "all">
+                label="Item"
+                ariaLabel="Filtro de item puro"
+                value={pureOnly ? "pure" : "all"}
+                onChange={(next) => setPure(next === "pure")}
+                size="sm"
+                options={[
+                  { value: "pure", label: "Puro", hint: "Remove ingredientes" },
+                  { value: "all", label: "Todos" },
+                ]}
+              />
+              <FilterInputs
+                brand={brandFilter}
+                min={search.min ?? ""}
+                max={search.max ?? ""}
+                onBrand={setBrand}
+                onMin={setMinPrice}
+                onMax={setMaxPrice}
+                onClear={clearFilters}
+              />
+            </div>
 
-              {/* Toolbar única: match + filtro puro + filtros avançados */}
-              <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-2 rounded-xl border border-border/60 bg-card/50 px-3 py-2">
-                <QuickFilterBar<SearchMode>
-                  label="Match"
-                  ariaLabel="Modo de correspondência"
-                  value={mode}
-                  onChange={(next) => chooseMode(next ?? "strict")}
-                  size="sm"
-                  options={[
-                    { value: "strict", label: "Estrita", hint: "Palavra inteira" },
-                    { value: "loose", label: "Parcial", hint: "Permite prefixo (≥ 3 chars)" },
-                  ]}
-                />
-                <QuickFilterBar<"pure" | "all">
-                  label="Item"
-                  ariaLabel="Filtro de item puro"
-                  value={pureOnly ? "pure" : "all"}
-                  onChange={(next) => setPure(next === "pure")}
-                  size="sm"
-                  options={[
-                    { value: "pure", label: "Puro", hint: "Remove ingredientes" },
-                    { value: "all", label: "Todos" },
-                  ]}
-                />
-                <FilterInputs
-                  brand={brandFilter}
-                  min={search.min ?? ""}
-                  max={search.max ?? ""}
-                  onBrand={setBrand}
-                  onMin={setMinPrice}
-                  onMax={setMaxPrice}
-                  onClear={clearFilters}
-                />
-              </div>
-
-              {!hasQuery && <SearchDiscovery onPickQuery={pickQuery} />}
-            </ListingShell>
+            {!hasQuery && <SearchDiscovery onPickQuery={pickQuery} />}
 
             {hasQuery && !user ? (
-              <SignupCTA context="save-comparison" className="mt-6" />
+              <SignupCTA context="save-comparison" className="mt-2" />
             ) : (
-              <div className="mt-6 text-center">
+              <div className="pt-4 text-center">
                 <Link
                   to="/"
-                  className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground hover:text-primary"
+                  className="text-[12px] font-medium text-muted-foreground transition-colors hover:text-primary"
                 >
                   Voltar ao início
                 </Link>
