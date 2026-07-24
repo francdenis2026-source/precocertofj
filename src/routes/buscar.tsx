@@ -334,7 +334,7 @@ function SearchPage() {
 
 
 
-        <div className="mx-auto w-full max-w-7xl px-4 py-6 md:px-8 md:py-8">
+        <div className="mx-auto w-full max-w-7xl px-4 py-3 md:px-8 md:py-4">
           <nav aria-label="Trilha" className="mb-3 flex items-center gap-1 text-[11.5px] font-medium text-white/70">
             <Link
               to="/"
