@@ -219,11 +219,12 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
 
       const savings = (compRes.data ?? [])
         .map((r: any) => Number(r.savings_pct))
-        .filter((n) => Number.isFinite(n) && n > 0);
+        .filter((n: number) => Number.isFinite(n) && n > 0);
       const avgSavingsPct = savings.length
-        ? Math.round(savings.reduce((a, b) => a + b, 0) / savings.length)
+        ? Math.round(savings.reduce((a: number, b: number) => a + b, 0) / savings.length)
         : 0;
       const bestSavingsPct = savings.length ? Math.round(Math.max(...savings)) : 0;
+
 
       const topSavings: MetricSavingsHighlight[] = (compRes.data ?? []).map((r: any) => ({
         displayName: r.display_name ?? "Produto",
