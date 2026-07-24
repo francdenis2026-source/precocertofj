@@ -41,8 +41,8 @@ export function QuickFilterBar<T extends string>({
     Array.isArray(value) ? value : value ? [value] : [],
   );
   const sizes = {
-    sm: "px-2.5 py-1 text-[10px]",
-    md: "px-3 py-1.5 text-[11px]",
+    sm: "h-8 px-3 text-[11px]",
+    md: "h-9 px-3.5 text-[11.5px]",
   }[size];
 
   return (
@@ -68,12 +68,12 @@ export function QuickFilterBar<T extends string>({
             title={opt.hint}
             onClick={() => onChange(active ? null : opt.value)}
             className={cn(
-              "inline-flex items-center gap-1.5 rounded-full border font-mono font-semibold uppercase tracking-[0.16em] transition",
-              "focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+              "inline-flex items-center gap-1.5 rounded-full border font-semibold uppercase tracking-[0.12em] transition-all duration-150",
+              "focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background",
               sizes,
               active
-                ? "border-primary bg-primary text-primary-foreground shadow-sm"
-                : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground",
+                ? "border-brand-gold bg-brand-gold text-brand-navy shadow-[0_4px_14px_-6px_color-mix(in_oklab,var(--brand-gold)_75%,transparent)] hover:brightness-105"
+                : "border-brand-navy/25 bg-background text-foreground/85 hover:-translate-y-px hover:border-brand-gold/70 hover:bg-brand-gold/10 hover:text-brand-navy dark:hover:text-brand-gold",
             )}
           >
             {opt.label}
@@ -81,7 +81,7 @@ export function QuickFilterBar<T extends string>({
               <span
                 className={cn(
                   "rounded-full px-1.5 py-0.5 text-[9px] font-bold tabular-nums",
-                  active ? "bg-background/25 text-primary-foreground" : "bg-background text-muted-foreground",
+                  active ? "bg-brand-navy/15 text-brand-navy" : "bg-muted text-muted-foreground",
                 )}
               >
                 {opt.count}
@@ -93,3 +93,4 @@ export function QuickFilterBar<T extends string>({
     </div>
   );
 }
+

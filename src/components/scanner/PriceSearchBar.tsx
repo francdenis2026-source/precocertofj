@@ -440,8 +440,13 @@ export function PriceSearchBar({
       </div>
 
 
-      <form onSubmit={submit} className="flex items-center gap-2" autoComplete="off">
+      <form onSubmit={submit} className="flex items-stretch gap-2" autoComplete="off">
         <div className="relative flex-1" ref={containerRef}>
+          <Search
+            aria-hidden="true"
+            strokeWidth={2}
+            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-navy/60 dark:text-brand-gold/70"
+          />
           <input
             ref={inputRef}
             type="text"
@@ -457,7 +462,7 @@ export function PriceSearchBar({
             }}
             onFocus={() => setShowSuggest(true)}
             onKeyDown={onKeyDown}
-            placeholder="ex.: Leite integral 1L"
+            placeholder="Buscar produto ou marca — ex.: Leite integral 1L"
             maxLength={80}
             spellCheck={false}
             autoCapitalize="sentences"
@@ -466,9 +471,10 @@ export function PriceSearchBar({
             aria-expanded={showList || showHistory}
             aria-autocomplete="list"
             aria-controls="price-search-suggestions"
-            className="focus-ring w-full rounded-full border border-primary/20 bg-background px-3 py-2 pr-8 text-sm tracking-wide text-foreground placeholder:text-muted-foreground"
+            className="h-11 w-full rounded-full border-2 border-brand-navy/20 bg-background pl-9 pr-9 text-[14px] font-medium tracking-wide text-foreground placeholder:font-normal placeholder:text-muted-foreground/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] transition-colors hover:border-brand-gold/60 focus:border-brand-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40 dark:border-brand-gold/25"
             aria-label="Nome do produto"
           />
+
           {query && (
             <button
               type="button"
@@ -609,11 +615,13 @@ export function PriceSearchBar({
         <button
           type="submit"
           disabled={pending}
-          className="rounded-full border border-[color-mix(in_oklab,var(--pc-home-gold)_65%,transparent)] bg-[var(--pc-home-gold)] px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest text-[#08122a] shadow-[0_8px_20px_-12px_color-mix(in_oklab,var(--pc-home-gold)_75%,transparent)] transition hover:brightness-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--pc-home-gold)] disabled:opacity-60"
+          className="inline-flex h-11 items-center gap-2 rounded-full border-2 border-brand-gold bg-brand-gold px-5 text-[12px] font-bold uppercase tracking-[0.14em] text-brand-navy shadow-[0_8px_20px_-10px_color-mix(in_oklab,var(--brand-gold)_80%,transparent)] transition-all duration-150 hover:-translate-y-px hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {pending ? "…" : "Buscar"}
+          <Search className="h-4 w-4" strokeWidth={2.25} aria-hidden="true" />
+          <span>{pending ? "Buscando…" : "Buscar"}</span>
         </button>
       </form>
+
 
 
       {err && (
@@ -969,9 +977,40 @@ export function PriceSearchBar({
                 );
               })()}
 
-              {result.groups.length === 0 && (
+              {result.groups.length === 0 && result.markets.length === 0 && (
+                <div className="mt-2 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-brand-gold/40 bg-gradient-to-b from-brand-navy/[0.03] to-transparent px-6 py-8 text-center dark:from-brand-gold/[0.04]">
+                  <span className="mb-3 grid h-14 w-14 place-items-center rounded-full border-2 border-brand-gold/50 bg-brand-gold/10 text-brand-gold shadow-[0_6px_18px_-8px_color-mix(in_oklab,var(--brand-gold)_70%,transparent)]">
+                    <Search className="h-6 w-6" strokeWidth={1.75} aria-hidden="true" />
+                  </span>
+                  <p className="text-[15px] font-bold tracking-tight text-foreground sm:text-[16px]">
+                    Nenhum preço encontrado para “{query.trim()}”
+                  </p>
+                  <p className="mt-1.5 max-w-md text-[13px] leading-relaxed text-muted-foreground">
+                    Tente um termo mais curto, verifique a grafia ou explore os mercados parceiros — pode ser que o produto ainda não tenha scan.
+                  </p>
+                  <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
+                    <button
+                      type="button"
+                      onClick={clear}
+                      className="inline-flex h-10 items-center gap-2 rounded-full border-2 border-brand-gold bg-brand-gold px-4 text-[12px] font-bold uppercase tracking-[0.14em] text-brand-navy shadow-[0_6px_18px_-8px_color-mix(in_oklab,var(--brand-gold)_75%,transparent)] transition-all hover:-translate-y-px hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    >
+                      <X className="h-3.5 w-3.5" aria-hidden="true" />
+                      Nova busca
+                    </button>
+                    <Link
+                      to="/estabelecimentos"
+                      className="inline-flex h-10 items-center gap-2 rounded-full border-2 border-brand-navy/25 bg-background px-4 text-[12px] font-bold uppercase tracking-[0.14em] text-foreground transition-all hover:-translate-y-px hover:border-brand-gold/70 hover:bg-brand-gold/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background dark:border-brand-gold/25"
+                    >
+                      <ShoppingBag className="h-3.5 w-3.5" aria-hidden="true" />
+                      Explorar mercados
+                    </Link>
+                  </div>
+                </div>
+              )}
 
+              {result.groups.length === 0 && (
                 result.markets.length > 0 && (
+
                   <div className="divide-y divide-[color-mix(in_oklab,var(--color-accent)_18%,transparent)] border-t border-[color-mix(in_oklab,var(--color-accent)_25%,transparent)]">
 
                     {result.markets.map((m, mi) => {
