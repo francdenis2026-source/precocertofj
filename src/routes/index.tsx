@@ -933,28 +933,16 @@ function HomePage() {
                   <button
                     key={t}
                     onClick={() => navigate({ to: "/buscar", search: { q: t } as any })}
-                    className="group inline-flex items-center rounded-full border px-4 py-1.5 text-[12px] font-semibold capitalize transition-colors duration-150 hover:border-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+                    className="inline-flex items-center rounded-full border px-4 py-1.5 text-[12px] font-semibold capitalize transition-colors duration-150 hover:bg-[color:var(--pc-hover-tint)] hover:border-[color:var(--pc-home-gold)] hover:text-[color:var(--pc-home-heading)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--pc-home-card)]"
                     style={{
                       background: P.card,
                       borderColor: P.line,
                       color: P.heading,
-                      // @ts-expect-error css var
-                      "--tw-ring-color": P.gold,
-                      "--tw-ring-offset-color": P.card,
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.background = P.gold;
-                      e.currentTarget.style.color = P.navy;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.background = P.card;
-                      e.currentTarget.style.color = P.heading;
                     }}
                   >
                     {t}
                   </button>
                 ))}
-
               </div>
 
               {/* CTAs */}
