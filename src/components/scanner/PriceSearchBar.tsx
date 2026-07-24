@@ -690,10 +690,10 @@ export function PriceSearchBar({
                 <Link
                   to="/produto-publico/$slug"
                   params={{ slug: result.query }}
-                  className="relative block rounded-xl border border-accent-strong/30 bg-accent/8 p-2.5 transition hover:border-accent-strong/60 hover:bg-accent/12"
+                  className="relative block rounded-xl border border-border bg-card p-2.5 transition hover:border-accent-strong/60"
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <p className="inline-flex items-center gap-1 rounded-md bg-accent-strong px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-accent-foreground">
+                    <p className="inline-flex items-center gap-1 rounded-md bg-accent-strong px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-accent-foreground">
                       <Crown className="h-3 w-3" strokeWidth={2} aria-hidden="true" />
                       Preço mais barato
                     </p>
@@ -705,7 +705,7 @@ export function PriceSearchBar({
                       size="sm"
                     />
                   </div>
-                  <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-muted-foreground">
+                  <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-foreground">
                     <StoreBadge
                       name={result.cheapest.marketName}
                       logoUrl={result.cheapest.marketLogoUrl}
@@ -716,7 +716,7 @@ export function PriceSearchBar({
                     />
                     <span className="market-name truncate text-[13px]">{result.cheapest.marketName}</span>
                   </p>
-                  <p className="mt-0.5 font-display text-[22px] font-bold leading-tight tracking-tight tabular-nums text-accent-strong">
+                  <p className="mt-0.5 text-[22px] font-bold leading-tight tracking-tight tabular-nums text-foreground">
                     {fmt(result.cheapest.price)}
                   </p>
                 </Link>
@@ -1014,11 +1014,11 @@ function Stat({
   icon?: React.ReactNode;
 }) {
   return (
-    <div className="hairline-gold relative overflow-hidden rounded-lg border border-primary/10 bg-background px-2 py-1.5">
-      <p className="flex items-center gap-1 font-mono text-[9px] uppercase tracking-[0.18em] text-accent-strong">
+    <div className="relative rounded-lg border border-border bg-card px-2 py-1.5">
+      <p className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
         {icon} {label}
       </p>
-      <p className="mt-0.5 font-display text-[17px] font-semibold leading-tight tracking-tight tabular-nums text-foreground">
+      <p className="mt-0.5 text-[17px] font-bold leading-tight tracking-tight tabular-nums text-foreground">
         {value}
       </p>
     </div>
@@ -1229,11 +1229,7 @@ function ProductDetailsCard({
   highlightTokens: string[];
 }) {
   return (
-    <div className="hairline-gold relative overflow-hidden rounded-xl border border-primary/20 bg-background p-3">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[color-mix(in_oklab,var(--color-accent)_65%,transparent)] to-transparent"
-      />
+    <div className="relative rounded-xl border border-border bg-card p-3">
       <div className="flex items-start gap-3">
         {suggestion.imageUrl ? (
           <img
@@ -1248,13 +1244,13 @@ function ProductDetailsCard({
           </div>
         )}
         <div className="min-w-0 flex-1">
-          <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-accent-strong">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
             Produto encontrado
           </p>
-          <p className="mt-0.5 truncate font-display text-base font-semibold tracking-tight text-foreground">
+          <p className="mt-0.5 truncate text-[15px] font-semibold tracking-tight text-foreground">
             <HighlightMatch text={suggestion.displayName} tokens={highlightTokens} />
           </p>
-          <p className="mt-0.5 truncate font-display text-[11px] italic text-muted-foreground">
+          <p className="mt-0.5 truncate text-[12px] text-muted-foreground">
             {[suggestion.brand, suggestion.category].filter(Boolean).join(" · ") ||
               "Sem informações adicionais"}
           </p>
@@ -1332,14 +1328,14 @@ function ProductGroupCard({
   }, [prices]);
 
   return (
-    <div className="relative overflow-hidden rounded-xl border border-primary/15 bg-background p-2">
+    <div className="relative rounded-xl border border-border bg-card p-2">
       <div className="mb-1.5 flex items-center justify-between gap-2">
         <div className="min-w-0 flex-1">
-          <p className="truncate font-display text-[14px] font-semibold tracking-tight text-foreground">
+          <p className="truncate text-[15px] font-semibold tracking-tight text-foreground">
             <HighlightMatch text={productName} tokens={highlightTokens} />
           </p>
-          <p className="mt-0.5 truncate text-[11px] text-muted-foreground">
-            <span className="font-medium text-accent-strong">menor</span> {fmt(min)}
+          <p className="mt-0.5 truncate text-[12px] text-muted-foreground">
+            <span className="font-semibold text-foreground">menor</span> {fmt(min)}
             <span aria-hidden="true" className="mx-1 opacity-40">·</span>
             média {fmt(avg)}
             <span aria-hidden="true" className="mx-1 opacity-40">·</span>
@@ -1348,10 +1344,10 @@ function ProductGroupCard({
             {samples} preço{samples > 1 ? "s" : ""}
           </p>
           {cheapestInGroup ? (
-            <p className="mt-1 inline-flex max-w-full items-center gap-1 rounded-md border border-accent-strong/30 bg-accent/8 px-1.5 py-0.5 text-[11px] text-accent-strong">
-              <Crown className="h-3 w-3 shrink-0" strokeWidth={2} aria-hidden="true" />
+            <p className="mt-1 inline-flex max-w-full items-center gap-1 rounded-md border border-border bg-muted/40 px-1.5 py-0.5 text-[12px] text-foreground">
+              <Crown className="h-3 w-3 shrink-0 text-accent-strong" strokeWidth={2} aria-hidden="true" />
               <span className="truncate">
-                Mais barato em <span className="market-name text-[11px]">{cheapestInGroup.marketName}</span> · {fmt(cheapestInGroup.price)}
+                Mais barato em <span className="market-name text-[12px]">{cheapestInGroup.marketName}</span> · <span className="font-semibold tabular-nums">{fmt(cheapestInGroup.price)}</span>
               </span>
             </p>
           ) : null}
@@ -1466,7 +1462,7 @@ function ProductGroupCard({
                     Menor
                   </p>
                 )}
-                <p className="font-display text-[15px] font-semibold leading-tight tabular-nums text-foreground">
+                <p className="text-[15px] font-bold leading-tight tabular-nums text-foreground">
                   {fmt(p.price)}
                 </p>
 
