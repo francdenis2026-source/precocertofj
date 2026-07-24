@@ -96,27 +96,21 @@ export function usePromptSignIn() {
       const benefits = opts.benefits ?? preset.benefits;
 
       const description = (
-        <div className="space-y-2">
-          <p className="text-[13.5px] leading-relaxed text-muted-foreground">
-            Para {preset.action} você precisa estar na sua conta. É grátis e
-            leva menos de 10 segundos.
+        <div className="space-y-2.5">
+          <p className="text-[12.5px] leading-snug text-muted-foreground">
+            Entre para {preset.action}. Grátis, leva 10 segundos.
           </p>
-          <div className="rounded-lg border border-border/60 bg-muted/40 p-3">
-            <p className="mb-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-foreground/80">
-              O que acontece agora
-            </p>
-            <ul className="space-y-1 text-[12.5px] leading-relaxed text-foreground/85">
-              {benefits.map((b, i) => (
-                <li key={i} className="flex items-start gap-2">
-                  <span
-                    aria-hidden
-                    className="mt-1 inline-block h-1.5 w-1.5 shrink-0 rounded-full bg-sky-500"
-                  />
-                  <span>{b}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
+          <ul className="space-y-1 text-[12px] leading-snug text-foreground/85">
+            {benefits.slice(0, 2).map((b, i) => (
+              <li key={i} className="flex items-start gap-1.5">
+                <span
+                  aria-hidden
+                  className="mt-[6px] inline-block h-1 w-1 shrink-0 rounded-full bg-sky-500"
+                />
+                <span>{b}</span>
+              </li>
+            ))}
+          </ul>
         </div>
       );
 

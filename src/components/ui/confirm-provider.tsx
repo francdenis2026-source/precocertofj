@@ -103,8 +103,8 @@ const toneClasses: Record<Tone, { ring: string; icon: string; iconBg: string; bu
 function ToneIcon({ tone }: { tone: Tone }) {
   // Distinct SVG per tone. Kept inline for zero-dependency, crisp scaling.
   const common = {
-    width: 28,
-    height: 28,
+    width: 20,
+    height: 20,
     viewBox: "0 0 24 24",
     fill: "none",
     stroke: "currentColor",
@@ -269,7 +269,7 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
               aria-modal="true"
               aria-labelledby="confirm-title"
               aria-describedby={state.options.description ? "confirm-desc" : undefined}
-              className={`relative w-full max-w-md overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl ring-1 ${tc.ring}`}
+              className={`relative w-full max-w-[380px] overflow-hidden rounded-2xl border border-border bg-surface shadow-2xl ring-1 ${tc.ring}`}
               onKeyDown={(e) => {
                 if (e.key === "Escape") {
                   e.preventDefault();
@@ -288,26 +288,26 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
                 className={`pointer-events-none absolute inset-x-0 top-0 h-1 ${tc.iconBg}`}
                 aria-hidden
               />
-              <div className="flex items-start gap-4 p-5 sm:p-6">
+              <div className="flex items-start gap-3 p-4 sm:p-5">
                 <div
-                  className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl ${tc.iconBg} ${tc.icon}`}
+                  className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${tc.iconBg} ${tc.icon}`}
                 >
                   <ToneIcon tone={tone} />
                 </div>
                 <div className="min-w-0 flex-1 pt-0.5">
                   <h2
                     id="confirm-title"
-                    className="font-display text-[17px] font-semibold leading-tight text-foreground"
+                    className="font-display text-[15px] font-semibold leading-tight text-foreground"
                   >
                     {state.options.title}
                   </h2>
                   {state.options.description && (
-                    <p
+                    <div
                       id="confirm-desc"
-                      className="mt-1.5 text-[13.5px] leading-relaxed text-muted-foreground"
+                      className="mt-1.5 text-[13px] leading-snug text-muted-foreground"
                     >
                       {state.options.description}
-                    </p>
+                    </div>
                   )}
                   {state.kind === "prompt" && (
                     <div className="mt-4">
@@ -350,7 +350,7 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
                   )}
                 </div>
               </div>
-              <div className="flex flex-col-reverse gap-2 border-t border-border bg-background/50 px-5 py-3.5 sm:flex-row sm:justify-end sm:px-6">
+              <div className="flex flex-col-reverse gap-2 border-t border-border bg-background/50 px-4 py-2.5 sm:flex-row sm:justify-end sm:px-5">
                 {state.kind !== "alert" && (
                   <button
                     type="button"
