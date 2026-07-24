@@ -783,7 +783,7 @@ export function PriceSearchBar({
                     />
 
                     {result.groups.length > 0 ? (
-                      <div className="space-y-3">
+                      <div className="space-y-2">
                         {filteredOrdered.map(([cat, groups]) => {
                           // Ordena os grupos por menor preço ASC (mais barato primeiro),
                           // depois por relevância (samples DESC como proxy).
@@ -792,7 +792,7 @@ export function PriceSearchBar({
                             return b.samples - a.samples;
                           });
                           return (
-                            <div key={cat} className="space-y-2">
+                            <div key={cat} className="space-y-1.5">
                               {showHeaders ? (
                                 <div className="flex items-center gap-2 px-0.5">
                                   <span className="text-[11px] font-semibold text-accent-strong">
