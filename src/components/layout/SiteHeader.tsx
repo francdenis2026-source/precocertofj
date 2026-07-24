@@ -180,7 +180,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             <Link
               to="/login"
               className={dsx(
-                "inline-flex items-center rounded-lg px-3 py-1.5 text-[13px] font-semibold leading-[1.2] outline-none transition-colors focus-visible:ring-2 sm:px-3.5 sm:py-2 sm:text-[14.5px] md:px-4 md:py-2.5 md:text-[15.5px]",
+                "inline-flex items-center rounded-lg px-3.5 py-2 text-[14.5px] font-semibold leading-[1.2] outline-none transition-colors focus-visible:ring-2 sm:px-3.5 sm:py-2 sm:text-[14.5px] md:px-4 md:py-2.5 md:text-[15.5px]",
                 loginClass,
               )}
             >
