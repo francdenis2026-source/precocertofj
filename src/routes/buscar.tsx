@@ -266,13 +266,31 @@ function SearchPage() {
               "radial-gradient(1000px 380px at 12% -10%, color-mix(in oklab, var(--brand-gold) 16%, transparent) 0%, transparent 60%), linear-gradient(180deg, var(--brand-navy) 0%, color-mix(in oklab, var(--brand-navy) 92%, black) 100%)",
           }}
         />
-        {/* Brilho diagonal muito sutil */}
+        {/* Listras de toldo (feira/mercado) no canto direito — referência sutil e profissional */}
         <div
           aria-hidden
-          className="absolute inset-0 -z-10"
+          className="pointer-events-none absolute -right-16 -top-10 -z-10 hidden h-[220%] w-[42%] rotate-[18deg] md:block"
           style={{
-            background:
-              "linear-gradient(115deg, transparent 45%, color-mix(in oklab, white 6%, transparent) 50%, transparent 55%)",
+            backgroundImage:
+              "repeating-linear-gradient(90deg, color-mix(in oklab, var(--brand-gold) 22%, transparent) 0 22px, transparent 22px 60px)",
+            maskImage:
+              "linear-gradient(90deg, transparent 0%, black 30%, black 70%, transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(90deg, transparent 0%, black 30%, black 70%, transparent 100%)",
+            opacity: 0.55,
+          }}
+        />
+        {/* Serrilha inferior — borda de toldo */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 -z-10 h-2"
+          style={{
+            backgroundImage:
+              "linear-gradient(135deg, color-mix(in oklab, var(--brand-gold) 55%, transparent) 25%, transparent 25.5%), linear-gradient(225deg, color-mix(in oklab, var(--brand-gold) 55%, transparent) 25%, transparent 25.5%)",
+            backgroundSize: "14px 8px",
+            backgroundRepeat: "repeat-x",
+            backgroundPosition: "0 100%",
+            opacity: 0.35,
           }}
         />
         {/* Hairline dourada superior */}
@@ -284,6 +302,8 @@ function SearchPage() {
               "linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 20%, color-mix(in oklab, var(--brand-gold) 80%, transparent) 50%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 80%, transparent 100%)",
           }}
         />
+
+
 
 
 
