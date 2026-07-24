@@ -792,13 +792,13 @@ function HomePage() {
 
               {today && (
                 <div
-                  className="mb-2.5 inline-flex w-fit items-center gap-2 rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tabular-nums sm:mb-2.5 sm:text-[10.5px]"
+                  className="mb-2.5 inline-flex w-fit items-center gap-2 rounded-full px-3 py-1 text-[11px] font-black uppercase tabular-nums sm:text-[10.5px]"
                   style={{
-                    background: "rgba(2,6,23,0.55)",
-                    color: P.goldSoft,
-                    letterSpacing: "0.18em",
-                    border: `1px solid ${P.gold}55`,
-                    backdropFilter: "blur(2px)",
+                    background: P.navy,
+                    color: "var(--pc-eyebrow-on-navy)",
+                    letterSpacing: "0.22em",
+                    border: `1px solid ${P.gold}`,
+                    boxShadow: "0 8px 22px -12px rgba(2,6,23,0.95)",
                   }}
                 >
                   <span
