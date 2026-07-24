@@ -301,13 +301,182 @@ function HomePage() {
 
 
 
-      {/* ============== HERO FULL-BLEED ============== */}
+      {/* ============== HERO MOBILE — navy sólido, alto contraste (sm:hidden) ============== */}
       <section
-        className="relative w-full overflow-hidden"
+        aria-labelledby="hero-mobile-title"
+        className="relative w-full overflow-hidden sm:hidden"
+        style={{ background: P.navy }}
+      >
+        {/* Foto tênue ao fundo para dar textura sem competir com o texto */}
+        <picture aria-hidden>
+          {Object.entries(heroMarket.sources).map(([type, srcset]) => (
+            <source key={type} type={`image/${type}`} srcSet={srcset} sizes="100vw" />
+          ))}
+          <img
+            src={heroMarket.img.src}
+            alt=""
+            width={heroMarket.img.w}
+            height={heroMarket.img.h}
+            fetchPriority="high"
+            decoding="async"
+            loading="eager"
+            className="absolute inset-0 h-full w-full object-cover opacity-25"
+            style={{ filter: "grayscale(30%) blur(1px)" }}
+          />
+        </picture>
+        {/* Scrim navy garante WCAG em qualquer imagem */}
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background: `linear-gradient(180deg, ${P.navy} 0%, color-mix(in oklab, ${P.navy} 92%, transparent) 55%, color-mix(in oklab, ${P.navy} 82%, transparent) 100%)`,
+          }}
+        />
+        {/* Glow dourado sutil no canto superior direito */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute right-[-40px] top-[-40px] h-40 w-40 rounded-full"
+          style={{ background: `color-mix(in oklab, ${P.gold} 22%, transparent)`, filter: "blur(60px)" }}
+        />
+
+        <div className="relative z-10 flex min-h-[86svh] flex-col px-5 pb-8 pt-6">
+          {/* Badge EM BREVE */}
+          <div
+            className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1.5"
+            style={{
+              background: `color-mix(in oklab, ${P.gold} 12%, transparent)`,
+              borderColor: `color-mix(in oklab, ${P.gold} 40%, transparent)`,
+            }}
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" style={{ background: P.gold }} />
+              <span className="relative inline-flex h-2 w-2 rounded-full" style={{ background: P.gold }} />
+            </span>
+            <span
+              className="rounded-full px-1.5 py-0.5 text-[10px] font-black tracking-[0.2em]"
+              style={{ background: P.gold, color: P.navy }}
+            >
+              EM BREVE
+            </span>
+            <span className="text-[10.5px] font-bold uppercase tracking-[0.18em]" style={{ color: P.gold }}>
+              IA integrada
+            </span>
+          </div>
+
+          {/* Data */}
+          {today && (
+            <div
+              className="mb-3 inline-flex items-center gap-2 text-[10.5px] font-semibold uppercase tabular-nums"
+              style={{ color: "rgba(255,255,255,0.55)", letterSpacing: "0.16em" }}
+            >
+              <span aria-hidden className="inline-block h-px w-6" style={{ background: "rgba(255,255,255,0.35)" }} />
+              {today}
+            </div>
+          )}
+
+          {/* Headline */}
+          <h1
+            id="hero-mobile-title"
+            className={`${serif} text-[38px] font-normal leading-[1.05] tracking-[-0.005em]`}
+            style={{ color: "#ffffff" }}
+          >
+            Em Feijó, quem sabe o preço{" "}
+            <span className="italic" style={{ color: P.gold }}>
+              compra melhor.
+            </span>
+          </h1>
+
+          {/* Suporte */}
+          <p className="mt-4 max-w-md text-[14px] leading-relaxed" style={{ color: "rgba(255,255,255,0.82)" }}>
+            Compare arroz, feijão e café nos mercados do seu bairro.{" "}
+            <span style={{ color: P.gold, fontWeight: 700 }}>Conferido por nota fiscal</span>
+            {" "}— feito por Feijó, para Feijó.
+          </p>
+
+          {/* Busca */}
+          <form onSubmit={submitSearch} className="relative mt-6">
+            <div
+              className="flex items-center gap-2 rounded-2xl border p-1.5 backdrop-blur-sm transition-all focus-within:ring-2"
+              style={{
+                background: "rgba(255,255,255,0.08)",
+                borderColor: "rgba(255,255,255,0.18)",
+                // @ts-expect-error css var
+                "--tw-ring-color": `color-mix(in oklab, ${P.gold} 55%, transparent)`,
+              }}
+            >
+              <span className="pl-3">
+                <Search className="h-5 w-5" style={{ color: "rgba(255,255,255,0.55)" }} strokeWidth={2.2} />
+              </span>
+              <input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                type="search"
+                inputMode="search"
+                placeholder="Ex.: Arroz Tio João 5kg"
+                aria-label="Buscar produto"
+                className="flex-1 bg-transparent px-2 py-3 text-[15px] font-medium outline-none placeholder:text-white/45"
+                style={{ color: "#ffffff" }}
+              />
+              <button
+                type="submit"
+                aria-label="Buscar"
+                className="inline-flex shrink-0 items-center justify-center rounded-xl px-4 py-3 transition-transform active:scale-95"
+                style={{ background: P.gold, color: P.navy }}
+              >
+                <ArrowRight className="h-5 w-5" strokeWidth={2.5} />
+              </button>
+            </div>
+          </form>
+
+          {/* CTAs empilhados */}
+          <div className="mt-auto flex flex-col gap-3 pt-8">
+            {isLoggedOut ? (
+              <StartFreeDialog>
+                <button
+                  type="button"
+                  aria-haspopup="dialog"
+                  className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl text-[15.5px] font-bold shadow-lg transition-transform active:scale-[0.98]"
+                  style={{ background: P.gold, color: P.navy }}
+                >
+                  Começar grátis
+                  <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
+                </button>
+              </StartFreeDialog>
+            ) : (
+              <Link
+                to="/app"
+                className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl text-[15.5px] font-bold shadow-lg transition-transform active:scale-[0.98]"
+                style={{ background: P.gold, color: P.navy }}
+              >
+                Ir para o painel
+                <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
+              </Link>
+            )}
+
+            <Link
+              to="/melhores-precos"
+              className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl border text-[15px] font-semibold transition-colors"
+              style={{
+                borderColor: "rgba(255,255,255,0.22)",
+                background: "rgba(255,255,255,0.04)",
+                color: "#ffffff",
+              }}
+            >
+              <TrendingDown className="h-4 w-4" />
+              Ver rankings
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ============== HERO FULL-BLEED (desktop/tablet — sm:block) ============== */}
+      <section
+        className="relative hidden w-full overflow-hidden sm:block"
         style={{
           minHeight: "min(78svh, 760px)",
         }}
       >
+
         {/* Background image — light */}
         <picture className="dark:hidden">
           {Object.entries(heroMarket.sources).map(([type, srcset]) => (
