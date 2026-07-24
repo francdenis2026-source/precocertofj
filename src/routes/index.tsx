@@ -210,21 +210,21 @@ function HomePage() {
             <div className="flex-[1.2] p-4 sm:p-6 lg:p-8 xl:p-10 flex flex-col justify-center">
               {/* Badge EM BREVE */}
               <div
-                className="mb-3 inline-flex w-fit items-center gap-2 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] sm:mb-5 sm:gap-2.5 sm:px-3.5 sm:py-1.5 sm:text-[11px]"
+                className="mb-4 inline-flex w-fit items-center gap-2.5 rounded-full px-3.5 py-1.5 text-[12px] font-bold uppercase tracking-[0.18em] shadow-sm sm:mb-5 sm:gap-2.5 sm:px-3.5 sm:py-1.5 sm:text-[11px]"
                 style={{ background: P.navy, color: "#F5F6FA" }}
               >
-                <span className="relative flex h-2 w-2">
+                <span className="relative flex h-2.5 w-2.5 sm:h-2 sm:w-2">
                   <span
                     className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
                     style={{ background: P.gold }}
                   />
                   <span
-                    className="relative inline-flex h-2 w-2 rounded-full"
+                    className="relative inline-flex h-2.5 w-2.5 rounded-full sm:h-2 sm:w-2"
                     style={{ background: P.gold }}
                   />
                 </span>
                 <span
-                  className="rounded-full px-2 py-0.5 text-[9px] font-bold tracking-[0.2em] sm:text-[10px]"
+                  className="rounded-full px-2 py-0.5 text-[11px] font-bold tracking-[0.2em] sm:text-[10px]"
                   style={{ background: P.gold, color: P.navy }}
                 >
                   EM BREVE
@@ -235,7 +235,7 @@ function HomePage() {
 
               {today && (
                 <div
-                  className="mb-2 text-[10px] font-bold uppercase tracking-[0.22em] sm:mb-3 sm:text-[10.5px] sm:tracking-[0.24em]"
+                  className="mb-3 text-[11.5px] font-bold uppercase tracking-[0.22em] sm:mb-3 sm:text-[10.5px] sm:tracking-[0.24em]"
                   style={{ color: P.goldSoft }}
                 >
                   {today} · edição diária
@@ -261,7 +261,7 @@ function HomePage() {
 
 
               <p
-                className="mt-3 max-w-xl text-[13.5px] leading-relaxed sm:text-[14.5px]"
+                className="mt-3 max-w-xl text-[15px] leading-relaxed sm:text-[14.5px]"
                 style={{ color: "color-mix(in oklab, var(--pc-home-ink) 78%, transparent)" }}
               >
                 Veja onde o arroz, o feijão e o café estão mais baratos hoje em Feijó.
@@ -293,17 +293,17 @@ function HomePage() {
                     inputMode="search"
                     placeholder="Ex.: Arroz Tio João 5kg"
                     aria-label="Buscar produto"
-                    className="flex-1 bg-transparent px-2 py-2.5 text-[14px] font-medium outline-none sm:text-[15px]"
+                    className="flex-1 bg-transparent px-2 py-3 text-[15.5px] font-medium outline-none sm:py-2.5 sm:text-[15px]"
                     style={{ color: P.ink }}
                   />
                   <button
                     type="submit"
                     aria-label="Buscar"
-                    className="inline-flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold transition-transform active:scale-95 sm:px-6 sm:text-[15px]"
+                    className="inline-flex shrink-0 items-center gap-2 rounded-xl px-5 py-3 text-[15px] font-bold transition-transform active:scale-95 sm:px-6 sm:py-2.5 sm:text-[15px]"
                     style={{ background: P.gold, color: P.navy }}
                   >
                     <span className="hidden sm:inline">Buscar</span>
-                    <ArrowRight className="h-4 w-4" />
+                    <ArrowRight className="h-5 w-5 sm:h-4 sm:w-4" />
                   </button>
                 </div>
               </form>
