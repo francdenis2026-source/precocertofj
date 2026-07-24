@@ -19,8 +19,8 @@ export function ThemeToggle({
   ...props
 }: ThemeToggleProps) {
   const { toggle, isDark, mounted } = useTheme();
-  const dim = size === "sm" ? "h-9 w-9" : "h-11 w-11";
-  const icon = size === "sm" ? "h-5 w-5" : "h-[22px] w-[22px]";
+  const dim = size === "sm" ? "h-8 w-8" : "h-9 w-9";
+  const icon = size === "sm" ? "h-4 w-4" : "h-[18px] w-[18px]";
 
   const showDarkIcon = mounted && isDark;
   const label = showDarkIcon ? "Ativar modo claro" : "Ativar modo escuro";
