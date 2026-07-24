@@ -723,12 +723,13 @@ function HomePage() {
       </section>
 
       {/* ============== EDITORIAL CARD (explore band) ============== */}
-      <div className="mx-auto w-full max-w-6xl px-3 pt-4 pb-3 sm:px-6 sm:pt-6 sm:pb-4 lg:px-8">
+      <div className="pc-container pc-section-tight">
         <div
-          className="overflow-hidden rounded-[1.25rem] shadow-[0_20px_60px_-30px_rgb(11_29_58_/_0.22)] ring-1 lg:rounded-[1.75rem]"
+          className="overflow-hidden rounded-[var(--pc-radius-lg)] ring-1 lg:rounded-[var(--pc-radius-xl)]"
           style={{
             background: P.card,
             borderColor: P.line,
+            boxShadow: "var(--pc-shadow-2)",
             // @ts-expect-error css var
             "--tw-ring-color": P.line,
           }}
