@@ -186,6 +186,11 @@
   --pc-home-gold: #b58a3c;
   --pc-home-gold-soft: #8a6218;
   --pc-home-line: #dfe3ec;
+  /* Tint dourado uniforme para hover de chips, links de sidebar e alvos leves.
+     Light: ~10% do gold sobre fundo claro (contraste elegante sem sujar).
+     Dark: aumentado no bloco .dark abaixo. */
+  --pc-hover-tint: color-mix(in oklab, var(--pc-home-gold) 10%, transparent);
+
   --pc-home-heading: #0f1b3d;
   --pc-home-on-navy: #f5f6fa;
   --pc-home-dot-opacity: 0.05;
@@ -308,6 +313,8 @@
   --pc-home-gold: #d7ad54;
   --pc-home-gold-soft: #ffe3a0;
   --pc-home-line: oklch(0.31 0.045 258);
+  --pc-hover-tint: color-mix(in oklab, var(--pc-home-gold) 16%, transparent);
+
   --pc-home-heading: #f5f6fa;
   --pc-home-on-navy: #f5f6fa;
   --pc-home-dot-opacity: 0.10;

@@ -15,8 +15,8 @@ export type QuickFilterOption<T extends string = string> = {
  * Acessibilidade:
  * - `role="radiogroup"` (single) ou lista de switches (multi-toggle)
  * - `aria-checked` reflete o estado ativo
- * - Foco visível via `focus-visible:ring-primary`
- * - Suporta navegação via Tab e ativação por Enter/Space (default do <button>)
+ * - Foco visível via `focus-visible:ring-brand-gold`
+ * - Alvos com min 44×44 no mobile (tap target).
  */
 export function QuickFilterBar<T extends string>({
   label,
@@ -41,8 +41,8 @@ export function QuickFilterBar<T extends string>({
     Array.isArray(value) ? value : value ? [value] : [],
   );
   const sizes = {
-    sm: "h-8 px-3 text-[11px]",
-    md: "h-9 px-3.5 text-[11.5px]",
+    sm: "h-8 min-h-8 px-3 text-[11px]",
+    md: "h-9 min-h-9 px-3.5 text-[11.5px]",
   }[size];
 
   return (
@@ -52,7 +52,7 @@ export function QuickFilterBar<T extends string>({
       className={cn("flex flex-wrap items-center gap-1.5", className)}
     >
       {label && (
-        <span className="mr-1 font-mono text-[9.5px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+        <span className="mr-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
           {label}
         </span>
       )}
@@ -68,12 +68,12 @@ export function QuickFilterBar<T extends string>({
             title={opt.hint}
             onClick={() => onChange(active ? null : opt.value)}
             className={cn(
-              "inline-flex items-center gap-1.5 rounded-full border font-semibold uppercase tracking-[0.12em] transition-all duration-150",
+              "inline-flex items-center gap-1.5 rounded-full border font-semibold uppercase tracking-[0.14em] transition-colors duration-150",
               "focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background",
               sizes,
               active
-                ? "border-brand-gold bg-brand-gold text-brand-navy shadow-[0_4px_14px_-6px_color-mix(in_oklab,var(--brand-gold)_75%,transparent)] hover:brightness-105"
-                : "border-brand-navy/25 bg-background text-foreground/85 hover:-translate-y-px hover:border-brand-gold/70 hover:bg-brand-gold/10 hover:text-brand-navy dark:hover:text-brand-gold",
+                ? "border-brand-gold bg-brand-gold text-brand-navy shadow-sm hover:brightness-[1.03]"
+                : "border-border bg-background text-foreground hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] hover:text-foreground",
             )}
           >
             {opt.label}
@@ -81,7 +81,7 @@ export function QuickFilterBar<T extends string>({
               <span
                 className={cn(
                   "rounded-full px-1.5 py-0.5 text-[9px] font-bold tabular-nums",
-                  active ? "bg-brand-navy/15 text-brand-navy" : "bg-muted text-muted-foreground",
+                  active ? "bg-brand-navy/15 text-brand-navy" : "bg-muted text-foreground/80",
                 )}
               >
                 {opt.count}
@@ -93,4 +93,3 @@ export function QuickFilterBar<T extends string>({
     </div>
   );
 }
-

@@ -61,9 +61,7 @@ export function pushRecentSearch(q: string) {
   } catch {
     /* ignore */
   }
-  // Registrar de forma agregada (fire-and-forget) para alimentar "buscas populares".
   try {
-    // Import dinâmico para evitar custo no SSR / bundle inicial.
     void import("@/lib/analytics-events").then(({ trackEvent }) => {
       trackEvent("search_query", { q: term.toLowerCase().slice(0, 60) });
     });
@@ -71,7 +69,6 @@ export function pushRecentSearch(q: string) {
     /* ignore */
   }
 }
-
 
 
 type Props = {
@@ -109,13 +106,16 @@ export function SearchDiscovery({ onPickQuery }: Props) {
   });
 
   return (
-    <div className="mt-3 space-y-4">
-      {/* Hero vazio compacto */}
-      <div className="rounded-2xl border border-brand-gold-soft/30 bg-brand-navy/40 px-4 py-4 backdrop-blur-sm sm:px-5 sm:py-5">
-        <div className="flex items-start gap-3">
-          <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-gold/15 text-brand-gold">
-            <SearchIcon className="h-4 w-4" />
-          </div>
+    <div className="mt-3 space-y-5">
+      {/* Bloco principal — surface sólida com contraste WCAG AA em ambos os modos */}
+      <section className="rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-5">
+        <header className="flex items-start gap-3">
+          <span
+            aria-hidden
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-gold text-brand-navy shadow-sm"
+          >
+            <SearchIcon className="h-4 w-4" strokeWidth={2.25} />
+          </span>
           <div className="min-w-0">
             <h2 className="text-[15px] font-semibold text-foreground sm:text-base">
               O que você quer comparar hoje?
@@ -124,34 +124,34 @@ export function SearchDiscovery({ onPickQuery }: Props) {
               Toque em uma categoria para começar — ou digite um produto acima.
             </p>
           </div>
-        </div>
+        </header>
 
-        {/* Categorias rápidas — grid no web, carrossel no mobile */}
-        <div className="mt-3 -mx-1 flex snap-x snap-mandatory gap-2 overflow-x-auto px-1 pb-1 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-4 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+        {/* Categorias — grid no web, carrossel no mobile. Alvos 44px. */}
+        <div className="mt-4 -mx-1 flex snap-x snap-mandatory gap-2 overflow-x-auto px-1 pb-1 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-4 sm:overflow-visible sm:px-0">
           {CATEGORIES.map((c) => (
             <button
               key={c.q}
               type="button"
               onClick={() => onPickQuery(c.q)}
-              className="group snap-start inline-flex shrink-0 items-center gap-2 rounded-xl border border-border/60 bg-card/70 px-3 py-2 text-left text-[13px] font-medium text-foreground transition-colors hover:border-brand-gold hover:bg-brand-gold/10 hover:text-foreground active:bg-brand-gold/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:justify-start"
+              className="group snap-start inline-flex h-11 shrink-0 items-center gap-2 rounded-xl border border-border bg-background px-3 text-left text-[13px] font-medium text-foreground shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_10%,transparent)] transition-all hover:-translate-y-px hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] hover:shadow-sm active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <span
                 aria-hidden
-                className="grid h-6 w-6 flex-none place-items-center rounded-md border border-brand-gold/40 bg-brand-gold/15 text-brand-gold transition-colors group-hover:border-brand-gold group-hover:bg-brand-gold group-hover:text-brand-navy group-focus-visible:bg-brand-gold group-focus-visible:text-brand-navy"
+                className="grid h-7 w-7 flex-none place-items-center rounded-md bg-brand-gold/15 text-brand-gold-soft transition-colors group-hover:bg-brand-gold group-hover:text-brand-navy dark:text-brand-gold"
               >
-                <c.Icon className="h-3.5 w-3.5" strokeWidth={2.25} />
+                <c.Icon className="h-4 w-4" strokeWidth={2.25} />
               </span>
               <span className="truncate">{c.label}</span>
             </button>
           ))}
         </div>
-      </div>
+      </section>
 
-      {/* Buscas populares — carrossel horizontal no mobile */}
-      <div>
+      {/* Buscas populares */}
+      <section>
         <div className="mb-2 flex items-center gap-2 px-1">
-          <Flame className="h-3.5 w-3.5 text-brand-gold" />
-          <h3 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          <Flame className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+          <h3 className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
             Buscas populares
           </h3>
         </div>
@@ -161,50 +161,50 @@ export function SearchDiscovery({ onPickQuery }: Props) {
               key={p}
               type="button"
               onClick={() => onPickQuery(p)}
-              className="snap-start inline-flex shrink-0 items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-3 py-1.5 text-[12.5px] font-medium text-foreground transition-colors hover:bg-brand-gold/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+              className="snap-start inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3.5 text-[12.5px] font-medium text-foreground shadow-sm transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
-              <Sparkles className="h-3 w-3 text-brand-gold" />
+              <Sparkles className="h-3 w-3 text-brand-gold" aria-hidden />
               {p}
             </button>
           ))}
         </div>
-      </div>
+      </section>
 
       {/* Buscas recentes */}
       {recent.length > 0 && (
-        <div>
+        <section>
           <div className="mb-2 flex items-center justify-between px-1">
             <div className="flex items-center gap-2">
-              <HistoryIcon className="h-3.5 w-3.5 text-muted-foreground" />
-              <h3 className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+              <HistoryIcon className="h-3.5 w-3.5 text-muted-foreground" aria-hidden />
+              <h3 className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                 Suas buscas recentes
               </h3>
             </div>
             <button
               type="button"
               onClick={clearRecent}
-              className="text-[11px] font-medium text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:underline"
+              className="rounded px-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
             >
-              limpar
+              Limpar
             </button>
           </div>
           <div className="flex flex-wrap gap-2 px-1">
             {recent.map((t) => (
               <span
                 key={t}
-                className="group inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-card/60 py-1 pl-3 pr-1 text-[12.5px] text-foreground"
+                className="group inline-flex items-center gap-1 rounded-full border border-border bg-card py-1 pl-3 pr-1 text-[12.5px] text-foreground shadow-sm"
               >
                 <button
                   type="button"
                   onClick={() => onPickQuery(t)}
-                  className="focus-visible:outline-none focus-visible:underline"
+                  className="rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                 >
                   {t}
                 </button>
                 <button
                   type="button"
                   onClick={() => removeRecent(t)}
-                  className="grid h-5 w-5 place-items-center rounded-full text-muted-foreground hover:bg-brand-gold/15 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                  className="grid h-6 w-6 place-items-center rounded-full text-muted-foreground hover:bg-[var(--pc-hover-tint)] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                   aria-label={`Remover ${t}`}
                 >
                   <XIcon className="h-3 w-3" />
@@ -212,30 +212,32 @@ export function SearchDiscovery({ onPickQuery }: Props) {
               </span>
             ))}
           </div>
-        </div>
+        </section>
       )}
 
-      {/* Indicadores da cesta — sinal de vida */}
-      <div className="grid grid-cols-3 gap-2 rounded-2xl border border-border/60 bg-card/50 p-2 sm:p-3">
-        <StatCell
-          icon={<TrendingDown className="h-3.5 w-3.5 text-emerald-500" />}
-          label="Preços em queda"
-          value={stats.data ? String(stats.data.priceDrops7d ?? 0) : "—"}
-          hint="7 dias"
-        />
-        <StatCell
-          icon={<Sparkles className="h-3.5 w-3.5 text-brand-gold" />}
-          label="Produtos monitorados"
-          value={stats.data ? String(stats.data.products ?? 0) : "—"}
-          hint="ativos"
-        />
-        <StatCell
-          icon={<Flame className="h-3.5 w-3.5 text-brand-gold" />}
-          label="Economia estimada"
-          value={stats.data ? brl(stats.data.estimatedSavings ?? 0) : "—"}
-          hint="cesta média"
-        />
-      </div>
+      {/* Sinal de vida — cartão próprio, mesmo padrão dos HeroMetric */}
+      <section className="rounded-2xl border border-border bg-card p-3 shadow-sm sm:p-4">
+        <div className="grid grid-cols-3 gap-3">
+          <StatCell
+            icon={<TrendingDown className="h-4 w-4" aria-hidden />}
+            label="Preços em queda"
+            value={stats.data ? String(stats.data.priceDrops7d ?? 0) : "—"}
+            hint="7 dias"
+          />
+          <StatCell
+            icon={<Sparkles className="h-4 w-4" aria-hidden />}
+            label="Produtos monitorados"
+            value={stats.data ? String(stats.data.products ?? 0) : "—"}
+            hint="ativos"
+          />
+          <StatCell
+            icon={<Flame className="h-4 w-4" aria-hidden />}
+            label="Economia estimada"
+            value={stats.data ? brl(stats.data.estimatedSavings ?? 0) : "—"}
+            hint="cesta média"
+          />
+        </div>
+      </section>
     </div>
   );
 }
@@ -252,17 +254,21 @@ function StatCell({
   hint: string;
 }) {
   return (
-    <div className="min-w-0 rounded-xl bg-background/40 px-2 py-2 text-center sm:px-3">
-      <div className="flex items-center justify-center gap-1.5">
-        {icon}
-        <span className="truncate text-[10.5px] font-medium uppercase tracking-[0.1em] text-muted-foreground">
+    <div className="min-w-0 rounded-xl border border-border/70 bg-background px-3 py-3">
+      <div className="flex items-center gap-1.5">
+        <span aria-hidden className="grid h-6 w-6 place-items-center rounded-md bg-brand-gold/15 text-brand-gold-soft dark:text-brand-gold">
+          {icon}
+        </span>
+        <span className="truncate text-[9.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
           {label}
         </span>
       </div>
-      <div className="mt-1 truncate text-[15px] font-semibold tabular-nums text-foreground sm:text-base">
+      <div className="mt-1.5 truncate text-[18px] font-bold tabular-nums leading-none text-foreground">
         {value}
       </div>
-      <div className="text-[10px] uppercase tracking-widest text-muted-foreground/80">{hint}</div>
+      <div className="mt-1 text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+        {hint}
+      </div>
     </div>
   );
 }
