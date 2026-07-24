@@ -1944,6 +1944,12 @@ body.no-page-bg::before { display: none; }
   .price-marquee { animation: none; }
 }
 
+/* Barra de progresso do rotator de preços mobile */
+@keyframes pc-rotator-bar {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
 /* Fade lateral para o carrossel de chips mobile — indica scroll horizontal. */
 .chips-scroller {
   -webkit-mask-image: linear-gradient(
