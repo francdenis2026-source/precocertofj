@@ -168,7 +168,6 @@ function PlansPage() {
 
   return (
     <div className="min-h-dvh bg-background">
-      <SiteHeader variant="solid" />
 
       <main>
         {/* Hero — ultra compact */}
