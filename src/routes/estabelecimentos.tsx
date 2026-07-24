@@ -142,39 +142,25 @@ function EstablishmentsPage() {
     <div className="min-h-dvh bg-background pb-24 md:pb-8">
       <SiteHeader variant="solid" />
 
-      {/* Hero editorial — foto de feira/mercado com véu navy para legibilidade */}
-      <section className="relative isolate overflow-hidden border-b border-white/10 pc-hero-buscar">
-        <div
+      {/* Hero editorial — imagem de supermercado, contraste WCAG, dados ao vivo, carrossel de mercados */}
+      <section className="relative isolate overflow-hidden border-b border-white/10">
+        <div aria-hidden className="absolute inset-0 -z-40" style={{ background: "var(--brand-navy)" }} />
+        <img
           aria-hidden
-          className="absolute inset-0 -z-40"
-          style={{ background: "var(--brand-navy)" }}
+          src={mercadosHero.url}
+          alt=""
+          className="absolute inset-0 -z-30 h-full w-full object-cover"
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
         />
-        <picture aria-hidden className="pc-hero-picture absolute inset-0 -z-30 h-full w-full">
-          {Object.entries(mercadosHero.sources).map(([type, srcset]) => (
-            <source key={type} type={type} srcSet={srcset as string} sizes="100vw" />
-          ))}
-          <img
-            src={mercadosHero.img.src}
-            alt=""
-            className="h-full w-full object-cover opacity-0 transition-opacity duration-500 [.pc-hero-picture.is-loaded_&]:opacity-100"
-            width={mercadosHero.img.w}
-            height={mercadosHero.img.h}
-            loading="eager"
-            fetchPriority="high"
-            decoding="async"
-            onLoad={(ev) => ev.currentTarget.closest(".pc-hero-picture")?.classList.add("is-loaded")}
-            ref={(el) => {
-              if (el?.complete) el.closest(".pc-hero-picture")?.classList.add("is-loaded");
-            }}
-          />
-        </picture>
-        <div aria-hidden className="pc-hero-veil absolute inset-0 -z-20" />
+        {/* Véu forte para contraste WCAG AAA em toda a área do texto */}
         <div
           aria-hidden
-          className="absolute inset-x-0 bottom-0 -z-20 h-1/2"
+          className="absolute inset-0 -z-20"
           style={{
             background:
-              "linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--brand-navy) 55%, transparent) 100%)",
+              "linear-gradient(180deg, color-mix(in oklab, var(--brand-navy) 92%, transparent) 0%, color-mix(in oklab, var(--brand-navy) 82%, transparent) 55%, color-mix(in oklab, var(--brand-navy) 94%, transparent) 100%)",
           }}
         />
         <div
@@ -182,7 +168,7 @@ function EstablishmentsPage() {
           className="absolute inset-0 -z-10"
           style={{
             background:
-              "radial-gradient(700px 260px at 8% -10%, color-mix(in oklab, var(--brand-gold) 14%, transparent) 0%, transparent 60%)",
+              "radial-gradient(900px 340px at 12% -10%, color-mix(in oklab, var(--brand-gold) 22%, transparent) 0%, transparent 60%)",
           }}
         />
         <div
@@ -190,26 +176,134 @@ function EstablishmentsPage() {
           className="absolute inset-x-0 top-0 -z-10 h-px"
           style={{
             background:
-              "linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 20%, color-mix(in oklab, var(--brand-gold) 80%, transparent) 50%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 80%, transparent 100%)",
+              "linear-gradient(90deg, transparent, color-mix(in oklab, var(--brand-gold) 85%, transparent) 50%, transparent)",
           }}
         />
 
-        <div className="mx-auto w-full max-w-6xl px-4 md:px-8 pt-6 md:pt-8 pb-6 md:pb-8">
-          <nav aria-label="Trilha" className="mb-3 flex items-center gap-1 text-[11px] font-medium text-white/70">
+        <div className="mx-auto w-full max-w-6xl px-4 md:px-8 pt-6 md:pt-10 pb-6 md:pb-8">
+          <nav aria-label="Trilha" className="mb-3 flex items-center gap-1 text-[12px] font-medium text-white/85">
             <Link to="/" className="hover:text-brand-gold">Início</Link>
-            <ChevronRight aria-hidden className="h-3 w-3 opacity-60" />
+            <ChevronRight aria-hidden className="h-3 w-3 opacity-70" />
             <span className="text-white">Mercados</span>
           </nav>
-          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-gold">
-            <span className="h-1.5 w-1.5 rounded-full bg-brand-gold" />
-            Mercados parceiros
+
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-brand-gold/50 bg-brand-gold/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-gold">
+            {currentKind ? <currentKind.icon className="h-3.5 w-3.5" aria-hidden /> : <Store className="h-3.5 w-3.5" aria-hidden />}
+            {currentKind ? currentKind.label : "Comércios parceiros"}
           </div>
-          <h1 className="text-[24px] md:text-[32px] font-semibold leading-tight text-white">
-            Mercados de <span className="text-brand-gold">Feijó</span> cadastrados
+
+          <h1 className="text-[26px] md:text-[36px] font-semibold leading-[1.15] text-white" style={{ textShadow: "0 2px 12px rgba(2,10,30,0.6)" }}>
+            {currentKind ? currentKind.label : "Comércios"} de <span className="text-brand-gold">Feijó</span>{" "}
+            <span className="text-white/90">com preço monitorado</span>
           </h1>
-          <p className="mt-1 max-w-2xl text-[12.5px] md:text-[13.5px] text-white/75">
-            Cobertura de produtos, categorias mais comuns e comparativo entre estabelecimentos monitorados pela comunidade.
+          <p className="mt-2 max-w-2xl text-[13.5px] md:text-[15px] leading-relaxed text-white/90">
+            {currentKind ? currentKind.tagline : "Cobertura de produtos, categorias mais populares e comparativo entre estabelecimentos monitorados pela comunidade."}
           </p>
+
+          {/* Chips de categoria */}
+          <div className="mt-4 flex flex-wrap gap-2">
+            {(["__all", ...Object.keys(KIND_META)] as const).map((k) => {
+              if (k !== "__all" && !kindsPresent.has(k)) return null;
+              const meta = k === "__all" ? { label: "Todos", icon: Store } : KIND_META[k];
+              const active = kindFilter === k;
+              const Icon = meta.icon;
+              return (
+                <button
+                  key={k}
+                  type="button"
+                  onClick={() => setKindFilter(k)}
+                  aria-pressed={active}
+                  className={[
+                    "inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-[12.5px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+                    active
+                      ? "border-brand-gold bg-brand-gold text-brand-navy shadow-[0_0_0_1px_var(--brand-gold)]"
+                      : "border-white/25 bg-white/5 text-white/90 hover:bg-white/10",
+                  ].join(" ")}
+                >
+                  <Icon className="h-3.5 w-3.5" aria-hidden />
+                  {meta.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Métricas ao vivo */}
+          {data && (
+            <div className="mt-5 grid grid-cols-2 gap-2.5 md:grid-cols-4">
+              <HeroMetric icon={Store} label="Estabelecimentos" value={String(data.totalEstablishments)} />
+              <HeroMetric icon={Package} label="Produtos monitorados" value={data.totalProducts.toLocaleString("pt-BR")} />
+              <HeroMetric
+                icon={PiggyBank}
+                label="Maior economia encontrada"
+                value={data.totalMaxSavings > 0 ? `R$ ${data.totalMaxSavings.toFixed(2).replace(".", ",")}` : "—"}
+              />
+              <HeroMetric icon={Radio} label="Atualização" value="ao vivo" live />
+            </div>
+          )}
+
+          {/* Carrossel de mercados em destaque */}
+          {featured.length > 0 && (
+            <div className="mt-6">
+              <div className="mb-2 flex items-end justify-between gap-3">
+                <div>
+                  <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-gold">Em destaque</div>
+                  <div className="text-[14px] font-medium text-white/90">Mercados com mais produtos cadastrados</div>
+                </div>
+                <div className="hidden gap-1.5 md:flex">
+                  <button
+                    type="button"
+                    aria-label="Rolar para a esquerda"
+                    onClick={() => scrollCarousel(-1)}
+                    className="grid h-8 w-8 place-items-center rounded-full border border-white/25 bg-white/5 text-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                  >
+                    <ChevronLeft className="h-4 w-4" aria-hidden />
+                  </button>
+                  <button
+                    type="button"
+                    aria-label="Rolar para a direita"
+                    onClick={() => scrollCarousel(1)}
+                    className="grid h-8 w-8 place-items-center rounded-full border border-white/25 bg-white/5 text-white hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                  >
+                    <ChevronRight className="h-4 w-4" aria-hidden />
+                  </button>
+                </div>
+              </div>
+              <div
+                ref={carouselRef}
+                className="flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              >
+                {featured.map((e) => (
+                  <Link
+                    key={e.id}
+                    to="/estabelecimento/$slug"
+                    params={{ slug: slugifyEstablishment(e.name) }}
+                    className="group relative flex w-[220px] shrink-0 snap-start flex-col gap-2 rounded-xl border border-white/15 bg-white/[0.06] p-3 backdrop-blur-sm transition-colors hover:border-brand-gold/60 hover:bg-white/[0.1] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                    style={e.brandColor ? { boxShadow: `inset 3px 0 0 ${e.brandColor}` } : undefined}
+                  >
+                    <div className="flex items-center gap-2.5">
+                      <div className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-lg bg-white">
+                        {e.logoUrl ? (
+                          <img src={e.logoUrl} alt="" className="h-full w-full object-contain" loading="lazy" />
+                        ) : (
+                          <span className="text-[13px] font-bold text-brand-navy">{e.name.substring(0, 2).toUpperCase()}</span>
+                        )}
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <div className="truncate text-[13px] font-semibold text-white">{e.name}</div>
+                        <div className="truncate text-[11.5px] text-white/70">{e.neighborhood ?? e.city ?? "Feijó"}</div>
+                      </div>
+                    </div>
+                    <div className="flex items-center justify-between text-[11.5px]">
+                      <span className="text-white/70">
+                        <span className="font-semibold text-brand-gold">{e.productsCount}</span> produtos
+                      </span>
+                      <span className="text-white/60 transition-colors group-hover:text-brand-gold">Ver →</span>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
