@@ -326,3 +326,100 @@ function SearchPage() {
     </div>
   );
 }
+
+type FilterInputsProps = {
+  brand: string;
+  min: string;
+  max: string;
+  onBrand: (v: string) => void;
+  onMin: (v: string) => void;
+  onMax: (v: string) => void;
+  onClear: () => void;
+};
+
+function FilterInputs({ brand, min, max, onBrand, onMin, onMax, onClear }: FilterInputsProps) {
+  const [b, setB] = useState(brand);
+  const [mn, setMn] = useState(min);
+  const [mx, setMx] = useState(max);
+  useEffect(() => setB(brand), [brand]);
+  useEffect(() => setMn(min), [min]);
+  useEffect(() => setMx(max), [max]);
+
+  const sanitizePrice = (v: string) => {
+    const cleaned = v.replace(",", ".").replace(/[^\d.]/g, "");
+    if (cleaned === "" || cleaned === ".") return "";
+    const n = Number(cleaned);
+    if (!Number.isFinite(n) || n < 0) return "";
+    return cleaned;
+  };
+
+  const dirty = b.trim() !== "" || mn.trim() !== "" || mx.trim() !== "";
+  const clearAll = () => {
+    setB("");
+    setMn("");
+    setMx("");
+    onClear();
+  };
+
+  const inputBase =
+    "h-9 rounded-md border border-border bg-background/60 px-2.5 text-[13px] text-foreground placeholder:text-muted-foreground/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:border-primary transition-colors";
+
+  return (
+    <div className="ml-auto flex flex-wrap items-center gap-2">
+      <input
+        type="text"
+        inputMode="text"
+        maxLength={40}
+        placeholder="Marca"
+        value={b}
+        onChange={(e) => setB(e.currentTarget.value)}
+        onBlur={() => onBrand(b.trim())}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") { e.preventDefault(); onBrand(b.trim()); }
+        }}
+        aria-label="Marca"
+        className={`${inputBase} w-28`}
+      />
+      <input
+        type="number"
+        inputMode="decimal"
+        min={0}
+        step="0.01"
+        placeholder="R$ min"
+        value={mn}
+        onChange={(e) => setMn(sanitizePrice(e.currentTarget.value))}
+        onBlur={() => onMin(mn.trim())}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") { e.preventDefault(); onMin(mn.trim()); }
+        }}
+        aria-label="Preço mínimo"
+        className={`${inputBase} w-20 tabular-nums`}
+      />
+      <input
+        type="number"
+        inputMode="decimal"
+        min={0}
+        step="0.01"
+        placeholder="R$ máx"
+        value={mx}
+        onChange={(e) => setMx(sanitizePrice(e.currentTarget.value))}
+        onBlur={() => onMax(mx.trim())}
+        onKeyDown={(e) => {
+          if (e.key === "Enter") { e.preventDefault(); onMax(mx.trim()); }
+        }}
+        aria-label="Preço máximo"
+        className={`${inputBase} w-20 tabular-nums`}
+      />
+      <button
+        type="button"
+        onClick={clearAll}
+        disabled={!dirty}
+        className="inline-flex h-9 items-center gap-1.5 rounded-md border border-border bg-background/60 px-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground/80 transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-40"
+        aria-label="Limpar filtros"
+      >
+        Limpar
+      </button>
+    </div>
+  );
+}
+
