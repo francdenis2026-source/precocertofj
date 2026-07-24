@@ -325,7 +325,18 @@ function SearchPage() {
 
 
 
-        <div className="mx-auto w-full max-w-7xl px-4 md:px-8 pt-4 md:pt-5 pb-4 md:pb-5">
+        <div className="relative mx-auto w-full max-w-7xl px-4 md:px-8 pt-4 md:pt-5 pb-4 md:pb-5">
+          {/* Painel suave de contraste: blur leve + véu navy só atrás do texto */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-y-2 left-2 right-auto -z-[1] w-[min(680px,92%)] rounded-2xl border border-white/10 shadow-[0_20px_40px_-28px_rgba(2,6,23,0.55)] backdrop-blur-[3px]"
+            style={{
+              background:
+                "linear-gradient(100deg, rgba(2,6,23,0.55) 0%, rgba(2,6,23,0.38) 55%, rgba(2,6,23,0.10) 85%, transparent 100%)",
+              maskImage:
+                "linear-gradient(100deg, #000 0%, #000 70%, transparent 100%)",
+            }}
+          />
           <nav aria-label="Trilha" className="mb-2 flex items-center gap-1 text-[12px] font-semibold text-white">
             <Link to="/" className="text-white hover:text-brand-gold">Início</Link>
             <ChevronRight aria-hidden className="h-3 w-3 text-white/80" />
