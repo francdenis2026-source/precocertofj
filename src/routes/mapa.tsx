@@ -77,6 +77,7 @@ function NeighborhoodsPage() {
   const queryClient = useQueryClient();
   const { session, loading: sessionLoading } = useSession();
   const isAuthed = !sessionLoading && !!session;
+  const promptSignIn = usePromptSignIn();
 
   const [term, setTerm] = useState("");
 
