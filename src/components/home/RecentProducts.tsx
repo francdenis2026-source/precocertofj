@@ -105,11 +105,11 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
 
       {/* MOBILE: letreiro digital (marquee) — economiza tela vertical */}
       <div
-        className="sm:hidden -mx-4 overflow-hidden rounded-xl border py-2"
+        className="sm:hidden -mx-4 overflow-hidden border-y py-3"
         style={{ borderColor: P.line, background: P.card }}
         aria-label="Atualizações recentes de preço"
       >
-        <div className="price-marquee flex w-max items-center gap-4 px-3">
+        <div className="price-marquee flex w-max items-center gap-3 px-4">
           {[...data, ...data].map((p, i) => {
             const f = freshness(p.when);
             return (
@@ -117,31 +117,34 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                 key={`${p.slug}-${i}`}
                 to="/produto/$slug"
                 params={{ slug: p.slug }}
-                className="inline-flex shrink-0 items-center gap-2 rounded-full border px-2.5 py-1.5"
+                className="inline-flex shrink-0 items-center gap-2.5 rounded-2xl border px-3.5 py-2.5 shadow-sm"
                 style={{ borderColor: P.line, background: "var(--pc-home-bg, transparent)", color: P.heading }}
                 aria-label={`${p.name} — ${brl(p.price)} em ${p.marketName ?? "mercados"}`}
               >
                 <span
-                  className={`h-1.5 w-1.5 rounded-full ${f.dotClass}`}
+                  className={`h-2 w-2 shrink-0 rounded-full ${f.dotClass}`}
                   aria-hidden
                 />
-                <span className="max-w-[9rem] truncate text-[11px] font-semibold leading-none">
-                  {p.name}
-                </span>
+                <div className="flex min-w-0 flex-col leading-tight">
+                  <span className="max-w-[11rem] truncate text-[13px] font-semibold">
+                    {p.name}
+                  </span>
+                  <span className="market-name truncate text-[11px] max-w-[11rem]">
+                    {p.marketName ?? "vários mercados"}
+                  </span>
+                </div>
                 <span
-                  className={`${serif} tabular-nums text-[13px] leading-none`}
+                  className={`${serif} tabular-nums text-[19px] leading-none pl-1`}
                   style={{ color: P.heading, letterSpacing: "-0.02em" }}
                 >
                   {brl(p.price)}
-                </span>
-                <span className="market-name truncate text-[10px] leading-none max-w-[6rem]">
-                  {p.marketName ?? "vários"}
                 </span>
               </Link>
             );
           })}
         </div>
       </div>
+
 
       {/* SM+: grid completo com mais detalhes */}
       <ul className="hidden grid-cols-2 gap-3 sm:grid sm:grid-cols-3 sm:gap-4 lg:grid-cols-6">
