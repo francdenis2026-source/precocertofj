@@ -86,7 +86,7 @@ export function SiteFooter() {
             <span key={l.to} className="inline-flex items-center">
               <Link
                 to={l.to}
-                className="rounded px-0.5 py-0.5 text-foreground/95 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                className="rounded px-0.5 py-0.5 text-foreground/95 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
               >
                 {l.label}
               </Link>
@@ -135,7 +135,7 @@ export function SiteFooter() {
             </li>
             <li className="flex items-center gap-2">
               <Mail className="h-3.5 w-3.5 shrink-0 text-brand" />
-              <a href="mailto:precocerto-fj@proton.me" className="truncate text-foreground hover:text-primary hover:underline">
+              <a href="mailto:precocerto-fj@proton.me" className="truncate text-foreground hover:text-brand hover:underline">
                 precocerto-fj@proton.me
               </a>
             </li>
@@ -158,7 +158,7 @@ export function SiteFooter() {
                   <li key={l.to}>
                     <Link
                       to={l.to}
-                      className="inline-flex items-center rounded-md px-1.5 py-0.5 -mx-1.5 text-[13.5px] font-medium leading-[1.45] text-foreground/90 transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:text-[14px] lg:text-[15px]"
+                      className="inline-flex items-center rounded-md px-1.5 py-0.5 -mx-1.5 text-[13.5px] font-medium leading-[1.45] text-foreground/90 transition-colors hover:bg-brand/10 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:text-[14px] lg:text-[15px]"
                     >
                       <span>{l.label}</span>
                     </Link>
