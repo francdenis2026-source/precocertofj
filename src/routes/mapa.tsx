@@ -18,6 +18,7 @@ import {
   toggleFavoriteNeighborhood,
 } from "@/lib/favorites-neighborhoods.functions";
 import { MobileNav } from "@/components/nav/MobileNav";
+import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 import { useSession } from "@/hooks/useSession";
 import { toast } from "sonner";
 import {
