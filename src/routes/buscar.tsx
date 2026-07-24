@@ -274,7 +274,7 @@ function SearchPage() {
           }
         />
 
-        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_280px]">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
           <div className="min-w-0 space-y-6">
             <PriceSearchBar
               initialQuery={q}
