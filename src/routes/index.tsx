@@ -1260,12 +1260,6 @@ function HomePage() {
               color: "#F5F6FA",
             }}
           >
-            {/* glow gold — canto direito */}
-            <div
-              aria-hidden
-              className="pointer-events-none absolute -right-24 -top-28 h-44 w-44 rounded-full opacity-15 blur-xl"
-              style={{ background: P.gold }}
-            />
             {/* pattern diagonal sutil */}
             <div
               aria-hidden
