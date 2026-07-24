@@ -2886,14 +2886,9 @@ input::placeholder, textarea::placeholder {
 .pc-search-scope {
   position: relative;
   isolation: isolate;
-  background:
-    radial-gradient(1200px 520px at 50% -120px,
-      color-mix(in oklab, var(--pc-home-navy) 42%, transparent) 0%,
-      transparent 70%),
-    linear-gradient(180deg,
-      color-mix(in oklab, var(--pc-home-navy) 8%, var(--background)) 0%,
-      var(--background) 60%);
+  background: var(--background);
 }
+
 .dark .pc-search-scope {
   background:
     radial-gradient(1200px 520px at 50% -120px,
