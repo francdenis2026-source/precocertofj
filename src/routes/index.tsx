@@ -832,16 +832,16 @@ function HomePage() {
 
 
 
-      {/* Wrapper flex para inverter a ordem no mobile: letreiro (RecentProducts) antes das estatísticas.
-          Em sm+ mantém a ordem original: estatísticas → recentes. */}
-      <div className="flex flex-col">
+      {/* Wrapper para ordenar mobile: letreiro antes das estatísticas — ritmo vertical consistente. */}
+      <div className="flex flex-col gap-6 pt-6 sm:gap-8 sm:pt-8">
         {/* -------- RECENT PRODUCTS (mobile: 1º, desktop: depois) -------- */}
         <div className="order-1 sm:order-2">
           <RecentProducts P={P} serif={serif} />
         </div>
 
-        {/* -------- SOCIAL PROOF (mobile: 2º, desktop: antes) -------- */}
-        <section className="pc-container pc-section-tight order-2 sm:order-1">
+        {/* -------- SOCIAL PROOF — tipografia refinada, mais escaneável no mobile -------- */}
+        <section className="pc-container order-2 sm:order-1">
+
           <TooltipProvider delayDuration={150}>
             <div className="grid grid-cols-3 gap-2 sm:gap-4">
               {[
