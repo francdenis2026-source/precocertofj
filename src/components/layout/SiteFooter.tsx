@@ -135,7 +135,10 @@ export function SiteFooter() {
             </li>
             <li className="flex items-center gap-2">
               <Mail className="h-3.5 w-3.5 shrink-0 text-brand" />
-              <a href="mailto:precocerto-fj@proton.me" className="truncate text-foreground hover:text-brand hover:underline">
+              <a
+                href="mailto:precocerto-fj@proton.me"
+                className="truncate rounded-md px-1 py-0.5 -mx-1 text-foreground outline-none transition-colors hover:bg-brand/10 hover:text-brand hover:underline underline-offset-4 decoration-brand/70 active:text-brand-strong focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              >
                 precocerto-fj@proton.me
               </a>
             </li>
