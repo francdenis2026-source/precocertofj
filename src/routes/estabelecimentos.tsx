@@ -283,7 +283,7 @@ function EstablishmentsPage() {
 
           {/* Métricas ao vivo — botões acessíveis, abrem detalhes */}
           {data && (
-            <div className="mt-3 grid grid-cols-2 gap-2 sm:gap-2.5 md:grid-cols-4">
+            <div className="mt-3 grid grid-cols-2 gap-1.5 sm:gap-2 md:grid-cols-4 md:gap-2.5">
               <HeroMetric
                 icon={Store}
                 label="Estabelecimentos"
@@ -616,7 +616,7 @@ function HeroMetric({
       type="button"
       onClick={onClick}
       aria-label={`${label}: ${value}. ${hint ?? "Abrir detalhes"}`}
-      className="group relative flex w-full items-center gap-2 overflow-hidden rounded-md px-2 py-1.5 sm:px-2.5 sm:py-2 text-left ring-1 ring-brand-gold/60 shadow-[0_4px_14px_-6px_rgba(0,0,0,0.55)] transition-all duration-200 hover:ring-brand-gold hover:shadow-[0_6px_18px_-6px_rgba(212,175,55,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy bg-brand-navy"
+      className="group relative flex w-full items-center gap-1.5 sm:gap-2 overflow-hidden rounded-md px-1.5 py-1 sm:px-2 sm:py-1.5 md:px-2.5 md:py-2 text-left ring-1 ring-brand-gold/60 shadow-[0_4px_14px_-6px_rgba(0,0,0,0.55)] transition-all duration-200 hover:ring-brand-gold hover:shadow-[0_6px_18px_-6px_rgba(212,175,55,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy bg-brand-navy"
       style={{
         backgroundImage:
           "linear-gradient(135deg, color-mix(in oklab, var(--brand-navy) 96%, black) 0%, color-mix(in oklab, var(--brand-navy) 82%, black) 100%)",
@@ -624,16 +624,16 @@ function HeroMetric({
     >
       <span aria-hidden className="absolute inset-y-0 left-0 w-[2px] bg-brand-gold" />
 
-      <div className="grid h-6 w-6 sm:h-7 sm:w-7 shrink-0 place-items-center rounded bg-brand-gold text-brand-navy ring-1 ring-brand-gold/80">
-        <Icon className="h-3 w-3 sm:h-3.5 sm:w-3.5" strokeWidth={2.5} aria-hidden />
+      <div className="grid h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 shrink-0 place-items-center rounded bg-brand-gold text-brand-navy ring-1 ring-brand-gold/80">
+        <Icon className="h-2.5 w-2.5 sm:h-3 sm:w-3 md:h-3.5 md:w-3.5" strokeWidth={2.5} aria-hidden />
       </div>
       <div className="relative z-[1] min-w-0 flex-1">
-        <div className="truncate text-[9px] sm:text-[9.5px] font-bold uppercase tracking-[0.12em] text-white/75">
+        <div className="truncate text-[8.5px] sm:text-[9px] md:text-[9.5px] font-bold uppercase tracking-[0.1em] sm:tracking-[0.12em] text-white/75">
           {label}
         </div>
-        <div className="mt-px flex items-center gap-1 text-[12.5px] sm:text-[13.5px] font-extrabold leading-tight text-white tabular-nums">
+        <div className="mt-px flex items-center gap-1 text-[11.5px] sm:text-[12.5px] md:text-[13.5px] font-extrabold leading-tight text-white tabular-nums">
           {live && (
-            <span className="relative inline-flex h-1.5 w-1.5">
+            <span className="relative inline-flex h-1.5 w-1.5 shrink-0">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-gold/70" />
               <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-gold" />
             </span>
@@ -641,7 +641,7 @@ function HeroMetric({
           <span className="truncate">{value}</span>
         </div>
       </div>
-      <ChevronRight className="h-3 w-3 shrink-0 text-white/50 transition-all group-hover:text-brand-gold group-hover:translate-x-0.5" aria-hidden />
+      <ChevronRight className="hidden xs:block h-3 w-3 shrink-0 text-white/50 transition-all group-hover:text-brand-gold group-hover:translate-x-0.5" aria-hidden />
     </button>
   );
 }
