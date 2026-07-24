@@ -482,7 +482,7 @@ function HomePage() {
                   <span className="pl-3 sm:pl-4">
                     <Search
                       className="h-5 w-5"
-                      style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
+                      style={{ color: "color-mix(in oklab, var(--pc-home-ink) 75%, transparent)" }}
                       strokeWidth={2.2}
                     />
                   </span>
