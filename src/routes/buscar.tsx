@@ -266,15 +266,39 @@ function SearchPage() {
               "radial-gradient(120% 80% at 15% 0%, color-mix(in oklab, var(--brand-gold) 14%, transparent) 0%, transparent 55%), radial-gradient(90% 70% at 100% 100%, color-mix(in oklab, var(--brand-gold) 8%, transparent) 0%, transparent 60%), linear-gradient(180deg, var(--brand-navy) 0%, color-mix(in oklab, var(--brand-navy) 92%, black) 100%)",
           }}
         />
+        {/* Padrão temático: código de barras + etiquetas de preço, sutil para não competir com o texto */}
         <div
           aria-hidden
-          className="absolute inset-0 -z-10 opacity-[0.09] mix-blend-overlay"
+          className="absolute inset-0 -z-10 opacity-[0.07]"
           style={{
-            backgroundImage:
-              "radial-gradient(circle at 1px 1px, rgba(255,255,255,0.55) 1px, transparent 0)",
-            backgroundSize: "22px 22px",
+            backgroundImage: `url("data:image/svg+xml;utf8,${encodeURIComponent(
+              `<svg xmlns='http://www.w3.org/2000/svg' width='260' height='160' viewBox='0 0 260 160'>
+                <g fill='none' stroke='%23f5b301' stroke-linecap='round'>
+                  <g stroke-width='2'>
+                    <path d='M12 20v40'/><path d='M18 20v40'/><path d='M22 20v40' stroke-width='4'/>
+                    <path d='M30 20v40'/><path d='M36 20v40' stroke-width='3'/><path d='M42 20v40'/>
+                    <path d='M48 20v40' stroke-width='4'/><path d='M56 20v40'/><path d='M62 20v40'/>
+                    <path d='M68 20v40' stroke-width='3'/><path d='M74 20v40'/><path d='M80 20v40' stroke-width='2'/>
+                  </g>
+                  <g stroke-width='2' transform='translate(150 90)'>
+                    <path d='M0 10v40'/><path d='M6 10v40' stroke-width='3'/><path d='M12 10v40'/>
+                    <path d='M18 10v40' stroke-width='4'/><path d='M26 10v40'/><path d='M32 10v40'/>
+                    <path d='M38 10v40' stroke-width='3'/><path d='M44 10v40'/><path d='M50 10v40' stroke-width='2'/>
+                  </g>
+                </g>
+                <g fill='none' stroke='%23ffffff' stroke-width='1.4' opacity='0.9'>
+                  <path d='M180 22 l30 0 l14 14 l-30 30 l-14 -14 z'/>
+                  <circle cx='188' cy='30' r='2.4'/>
+                  <path d='M40 118 l30 0 l14 14 l-30 30 l-14 -14 z'/>
+                  <circle cx='48' cy='126' r='2.4'/>
+                </g>
+              </svg>`
+            )}")`,
+            backgroundSize: "260px 160px",
+            backgroundRepeat: "repeat",
           }}
         />
+
 
         <div className="mx-auto w-full max-w-7xl px-4 md:px-8 pt-5 md:pt-7 pb-5 md:pb-7">
           <nav aria-label="Trilha" className="mb-3 flex items-center gap-1 text-[11px] font-medium text-white/70">
