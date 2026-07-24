@@ -135,8 +135,11 @@ export function SearchDiscovery({ onPickQuery }: Props) {
               onClick={() => onPickQuery(c.q)}
               className="group snap-start inline-flex shrink-0 items-center gap-2 rounded-xl border border-border/60 bg-card/70 px-3 py-2 text-left text-[13px] font-medium text-foreground transition-colors hover:border-brand-gold hover:bg-brand-gold/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold sm:justify-start"
             >
-              <span aria-hidden className="text-base leading-none">
-                {c.emoji}
+              <span
+                aria-hidden
+                className="grid h-6 w-6 flex-none place-items-center rounded-md border border-brand-gold/30 bg-brand-gold/10 text-brand-gold transition-colors group-hover:bg-brand-gold group-hover:text-primary"
+              >
+                <c.Icon className="h-3.5 w-3.5" strokeWidth={2} />
               </span>
               <span className="truncate">{c.label}</span>
             </button>
