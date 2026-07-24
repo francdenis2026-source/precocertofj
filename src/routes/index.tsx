@@ -13,7 +13,7 @@ import {
   ShieldCheck,
   Clock,
   Package,
-  
+  Ticket,
 } from "lucide-react";
 
 import { ds, dsx } from "@/lib/ds";
