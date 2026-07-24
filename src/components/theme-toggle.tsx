@@ -25,27 +25,23 @@ export function ThemeToggle({
   const showDarkIcon = mounted && isDark;
   const label = showDarkIcon ? "Ativar modo claro" : "Ativar modo escuro";
 
-  // Active state: quando escuro (lua) ou claro (sol) ativo, o botão fica "aceso"
+  // Botão com alto contraste: no escuro, disco navy profundo com aro dourado;
+  // no claro, disco claro com aro âmbar. Ambos ficam nítidos sobre qualquer header.
   const activeStyle: React.CSSProperties = showDarkIcon
     ? {
         background:
-          "radial-gradient(circle at 35% 30%, rgba(245,200,106,0.28), rgba(245,200,106,0.08) 60%, transparent 75%)",
-        borderColor: "rgba(245,200,106,0.55)",
+          "radial-gradient(circle at 32% 28%, #1e3a5f 0%, #0f1b3d 70%, #0a1330 100%)",
+        borderColor: "rgba(245,200,106,0.85)",
         boxShadow:
-          "0 0 0 1px rgba(245,200,106,0.25), 0 0 12px rgba(245,200,106,0.35), inset 0 0 8px rgba(245,200,106,0.15)",
+          "0 0 0 1px rgba(245,200,106,0.35), 0 2px 10px rgba(0,0,0,0.35), 0 0 14px rgba(245,200,106,0.30), inset 0 1px 0 rgba(255,255,255,0.08)",
       }
     : {
         background:
-          "radial-gradient(circle at 35% 30%, rgba(245,158,11,0.22), rgba(245,158,11,0.06) 60%, transparent 75%)",
-        borderColor: "rgba(245,158,11,0.45)",
+          "radial-gradient(circle at 32% 28%, #fff8e6 0%, #ffe9b3 70%, #f6d488 100%)",
+        borderColor: "rgba(180,120,20,0.55)",
         boxShadow:
-          "0 0 0 1px rgba(245,158,11,0.20), 0 0 10px rgba(245,158,11,0.28), inset 0 0 6px rgba(245,158,11,0.12)",
+          "0 0 0 1px rgba(180,120,20,0.25), 0 2px 8px rgba(180,120,20,0.20), 0 0 12px rgba(245,158,11,0.35), inset 0 1px 0 rgba(255,255,255,0.60)",
       };
-
-  const baseTone =
-    tone === "dark"
-      ? "border-on-media-border text-on-media"
-      : "border-border text-foreground";
 
   return (
     <Button
@@ -59,13 +55,13 @@ export function ThemeToggle({
       style={activeStyle}
       className={cn(
         "inline-flex items-center justify-center rounded-full border transition-all duration-200 outline-none",
-        "hover:scale-105 active:scale-95 focus-visible:ring-2 focus-visible:ring-primary/60",
-        baseTone,
+        "hover:scale-105 hover:brightness-110 active:scale-95 focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         dim,
         className,
       )}
       {...props}
     >
+
       <span className={cn("relative inline-block", icon)} aria-hidden>
         <Moon
           className={cn(
