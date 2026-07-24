@@ -63,6 +63,8 @@ function SearchPage() {
   const navigate = useNavigate({ from: "/buscar" });
   const router = useRouter();
   const { user } = useSession();
+  const urlSyncTimer = useRef<number | null>(null);
+
 
   const goBack = useCallback(() => {
     try {
