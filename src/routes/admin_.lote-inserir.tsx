@@ -430,6 +430,130 @@ function Page() {
           </CardContent>
         </Card>
 
+        {/* Manual: revisão de etiquetas ilegíveis */}
+        <Card>
+          <CardHeader className="pb-3">
+            <CardTitle className="text-base">Adicionar item manualmente</CardTitle>
+            <CardDescription>
+              Use quando a etiqueta estiver ilegível na foto. Preencha nome, marca e gramagem — o
+              sistema checa duplicatas antes de você aprovar abaixo.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-3">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-6">
+              <LabeledInput
+                label="Nome do produto *"
+                className="sm:col-span-3"
+                value={manualForm.name}
+                onChange={(v) => setManualForm((f) => ({ ...f, name: v }))}
+              />
+              <LabeledInput
+                label="Marca"
+                className="sm:col-span-3"
+                value={manualForm.brand}
+                onChange={(v) => setManualForm((f) => ({ ...f, brand: v }))}
+              />
+              <LabeledInput
+                label="Qtd"
+                type="number"
+                step="0.01"
+                value={manualForm.qty}
+                onChange={(v) => setManualForm((f) => ({ ...f, qty: v }))}
+              />
+              <div>
+                <div className="mb-1 text-[11px] uppercase tracking-wide text-muted-foreground">
+                  Un.
+                </div>
+                <Select
+                  value={manualForm.unit || "none"}
+                  onValueChange={(v) =>
+                    setManualForm((f) => ({ ...f, unit: v === "none" ? "" : v }))
+                  }
+                >
+                  <SelectTrigger className="h-9 text-sm">
+                    <SelectValue placeholder="—" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {UNITS.map((u) => (
+                      <SelectItem key={u || "none"} value={u || "none"}>
+                        {u || "—"}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <LabeledInput
+                label="EAN (opcional)"
+                value={manualForm.barcode}
+                onChange={(v) => setManualForm((f) => ({ ...f, barcode: v }))}
+              />
+              <LabeledInput
+                label="Preço R$ *"
+                type="number"
+                step="0.01"
+                value={manualForm.price}
+                onChange={(v) => setManualForm((f) => ({ ...f, price: v }))}
+              />
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <input
+                ref={manualPhotoRef}
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => void onManualPhoto(e.target.files?.[0] ?? null)}
+              />
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => manualPhotoRef.current?.click()}
+              >
+                <ImagePlus className="mr-2 h-4 w-4" />
+                {manualForm.photo ? "Trocar foto" : "Anexar foto (opcional)"}
+              </Button>
+              {manualForm.photo && (
+                <div className="flex items-center gap-2">
+                  <img
+                    src={manualForm.photo}
+                    alt="Prévia"
+                    className="h-10 w-10 rounded border object-cover"
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setManualForm((f) => ({ ...f, photo: null }));
+                      if (manualPhotoRef.current) manualPhotoRef.current.value = "";
+                    }}
+                  >
+                    Remover
+                  </Button>
+                </div>
+              )}
+              <Button
+                type="button"
+                className="ml-auto"
+                onClick={() => manualAdd.mutate()}
+                disabled={manualAdd.isPending}
+              >
+                {manualAdd.isPending ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <CheckCircle2 className="mr-2 h-4 w-4" />
+                )}
+                Verificar e adicionar
+              </Button>
+            </div>
+            <p className="text-xs text-muted-foreground">
+              A checagem compara <strong>nome + marca + gramagem</strong> com o que já existe neste
+              estabelecimento. Se houver algo parecido, o item aparece marcado para você decidir
+              entre <em>Atualizar</em>, <em>Novo</em> ou <em>Ignorar</em>.
+            </p>
+          </CardContent>
+        </Card>
+
         {/* Step 2 + 3: review + save */}
         {rows.length > 0 && (
           <Card>
