@@ -7,18 +7,26 @@ import {
   TrendingDown,
   History as HistoryIcon,
   X as XIcon,
+  Wheat,
+  Bean,
+  Coffee,
+  Milk,
+  Droplet,
+  Candy,
+  CookingPot,
+  type LucideIcon,
 } from "lucide-react";
 import { getPlatformStats } from "@/lib/stores-public.functions";
 
-const CATEGORIES: { label: string; q: string; emoji: string }[] = [
-  { label: "Arroz", q: "arroz", emoji: "🍚" },
-  { label: "Feijão", q: "feijão", emoji: "🫘" },
-  { label: "Café", q: "café", emoji: "☕" },
-  { label: "Leite", q: "leite", emoji: "🥛" },
-  { label: "Óleo", q: "óleo", emoji: "🫒" },
-  { label: "Açúcar", q: "açúcar", emoji: "🍬" },
-  { label: "Farinha", q: "farinha", emoji: "🌾" },
-  { label: "Macarrão", q: "macarrão", emoji: "🍝" },
+const CATEGORIES: { label: string; q: string; Icon: LucideIcon }[] = [
+  { label: "Arroz", q: "arroz", Icon: Wheat },
+  { label: "Feijão", q: "feijão", Icon: Bean },
+  { label: "Café", q: "café", Icon: Coffee },
+  { label: "Leite", q: "leite", Icon: Milk },
+  { label: "Óleo", q: "óleo", Icon: Droplet },
+  { label: "Açúcar", q: "açúcar", Icon: Candy },
+  { label: "Farinha", q: "farinha", Icon: Wheat },
+  { label: "Macarrão", q: "macarrão", Icon: CookingPot },
 ];
 
 const POPULAR: string[] = [
