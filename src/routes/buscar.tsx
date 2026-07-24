@@ -269,32 +269,35 @@ function SearchPage() {
       className="pc-search-scope min-h-[100dvh] pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground"
     >
       {/* Hero editorial — foto de corredor de mercado desfocada + véu navy para legibilidade */}
-      <section className="relative isolate overflow-hidden border-b border-white/10">
-        <picture aria-hidden className="absolute inset-0 -z-30 h-full w-full">
+      <section className="relative isolate overflow-hidden border-b border-white/10 pc-hero-buscar">
+        {/* Camada base sólida (navy) — evita área vazia enquanto a foto carrega */}
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-40"
+          style={{ background: "var(--brand-navy)" }}
+        />
+        <picture aria-hidden className="pc-hero-picture absolute inset-0 -z-30 h-full w-full">
           {Object.entries(buscarHero.sources).map(([type, srcset]) => (
             <source key={type} type={type} srcSet={srcset as string} sizes="100vw" />
           ))}
           <img
             src={buscarHero.img.src}
             alt=""
-            className="h-full w-full object-cover"
+            className="h-full w-full object-cover opacity-0 transition-opacity duration-500 [.pc-hero-picture.is-loaded_&]:opacity-100"
             width={buscarHero.img.w}
             height={buscarHero.img.h}
             loading="eager"
             fetchPriority="high"
             decoding="async"
+            onLoad={(ev) => ev.currentTarget.closest(".pc-hero-picture")?.classList.add("is-loaded")}
+            ref={(el) => {
+              if (el?.complete) el.closest(".pc-hero-picture")?.classList.add("is-loaded");
+            }}
           />
         </picture>
 
-        {/* Véu navy — translúcido para deixar a foto do mercado aparecer atrás do texto */}
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-20"
-          style={{
-            background:
-              "linear-gradient(90deg, color-mix(in oklab, var(--brand-navy) 78%, transparent) 0%, color-mix(in oklab, var(--brand-navy) 58%, transparent) 55%, color-mix(in oklab, var(--brand-navy) 38%, transparent) 100%)",
-          }}
-        />
+        {/* Véu navy responsivo — opacidade por breakpoint garante que a foto sempre apareça */}
+        <div aria-hidden className="pc-hero-veil absolute inset-0 -z-20" />
         {/* Reforço inferior para legibilidade da barra de busca */}
         <div
           aria-hidden
@@ -322,6 +325,7 @@ function SearchPage() {
               "linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 20%, color-mix(in oklab, var(--brand-gold) 80%, transparent) 50%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 80%, transparent 100%)",
           }}
         />
+
 
 
 
