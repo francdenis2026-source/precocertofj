@@ -101,7 +101,7 @@ export function ErrorState({
       )}
     >
       <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-destructive/20 text-destructive dark:text-destructive-foreground">
-        <Icon className="h-4 w-4" strokeWidth={2} />
+        <Icon className="h-4 w-4" />
       </span>
       <div className="min-w-0 flex-1">
         <p className="text-[14px] sm:text-[15px] font-semibold leading-snug text-foreground">{title}</p>
