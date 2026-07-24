@@ -160,7 +160,7 @@ function EstablishmentsPage() {
           className="absolute inset-0 -z-20"
           style={{
             background:
-              "linear-gradient(180deg, color-mix(in oklab, var(--brand-navy) 96%, transparent) 0%, color-mix(in oklab, var(--brand-navy) 90%, transparent) 100%)",
+              "linear-gradient(90deg, color-mix(in oklab, var(--brand-navy) 98%, transparent) 0%, color-mix(in oklab, var(--brand-navy) 94%, transparent) 55%, color-mix(in oklab, var(--brand-navy) 80%, transparent) 100%)",
           }}
         />
         <div
@@ -168,7 +168,7 @@ function EstablishmentsPage() {
           className="absolute inset-0 -z-10"
           style={{
             background:
-              "radial-gradient(600px 220px at 8% -10%, color-mix(in oklab, var(--brand-gold) 18%, transparent) 0%, transparent 60%)",
+              "radial-gradient(700px 260px at 6% -20%, color-mix(in oklab, var(--brand-gold) 22%, transparent) 0%, transparent 60%)",
           }}
         />
         <div
