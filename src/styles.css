@@ -2997,6 +2997,10 @@ code, pre, kbd, samp, tt, var,
     transparent 100%
   );
   box-shadow: var(--panel-shadow);
+  /* Isola a camada de composição: evita repaint em todo o hero e reduz custo do backdrop-filter */
+  contain: paint;
+  transform: translateZ(0);
+  will-change: transform;
 }
 /* Modo claro: foto de fundo é mais luminosa → aumentar véu e sombra
    para manter AA sem perder o efeito de desfoque. */
