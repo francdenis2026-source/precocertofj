@@ -436,7 +436,7 @@ function HomePage() {
                   <span
                     aria-hidden
                     className="inline-block h-[1px] w-6"
-                    style={{ background: "color-mix(in oklab, var(--pc-home-ink) 35%, transparent)" }}
+                    style={{ background: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
                   />
                   {today}
                 </div>
