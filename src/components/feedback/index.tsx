@@ -139,9 +139,9 @@ export function InlineError({ message, className, id }: InlineErrorProps) {
     <p
       id={id}
       role="alert"
-      className={cn("mt-1.5 flex items-center gap-1.5 text-xs font-medium text-destructive", className)}
+      className={cn("mt-1.5 flex items-center gap-1.5 text-[12.5px] sm:text-[13px] font-semibold leading-snug text-destructive", className)}
     >
-      <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+      <AlertCircle className="h-3.5 w-3.5 shrink-0" aria-hidden="true" />
       <span className="min-w-0">{message}</span>
     </p>
   );
