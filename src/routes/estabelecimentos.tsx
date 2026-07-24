@@ -552,40 +552,253 @@ function HeroMetric({
   label,
   value,
   live,
+  hint,
+  onClick,
 }: {
   icon: typeof Store;
   label: string;
   value: string;
   live?: boolean;
+  hint?: string;
+  onClick?: () => void;
 }) {
   return (
-    <div
-      className="group relative flex items-center gap-3 overflow-hidden rounded-lg px-3.5 py-2.5 ring-1 ring-brand-gold/70 shadow-[0_8px_24px_-8px_rgba(0,0,0,0.6)] backdrop-blur-md transition-all hover:ring-brand-gold hover:shadow-[0_10px_28px_-6px_rgba(212,175,55,0.35)]"
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label={`${label}: ${value}. ${hint ?? "Abrir detalhes"}`}
+      className="group relative flex w-full items-center gap-2.5 sm:gap-3 overflow-hidden rounded-lg px-2.5 py-2 sm:px-3.5 sm:py-2.5 text-left ring-1 ring-brand-gold/70 shadow-[0_8px_24px_-8px_rgba(0,0,0,0.6)] backdrop-blur-md transition-all duration-200 hover:-translate-y-0.5 hover:ring-brand-gold hover:shadow-[0_12px_28px_-8px_rgba(212,175,55,0.45)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy active:translate-y-0"
       style={{
         background:
           "linear-gradient(135deg, color-mix(in oklab, var(--brand-navy) 96%, black) 0%, color-mix(in oklab, var(--brand-navy) 82%, black) 100%)",
       }}
     >
-      <span aria-hidden className="absolute inset-y-0 left-0 w-[3px] bg-brand-gold" />
+      <span aria-hidden className="absolute inset-y-0 left-0 w-[3px] bg-brand-gold transition-all group-hover:w-[4px]" />
       <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-gold/60 to-transparent" />
+      {/* halo hover */}
+      <span aria-hidden className="pointer-events-none absolute inset-0 opacity-0 transition-opacity group-hover:opacity-100"
+        style={{ background: "radial-gradient(120% 80% at 100% 0%, color-mix(in oklab, var(--brand-gold) 18%, transparent), transparent 60%)" }} />
 
-      <div className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-brand-gold text-brand-navy shadow-inner ring-1 ring-brand-gold/80">
-        <Icon className="h-4 w-4" strokeWidth={2.5} aria-hidden />
+      <div className="grid h-8 w-8 sm:h-9 sm:w-9 shrink-0 place-items-center rounded-md bg-brand-gold text-brand-navy shadow-inner ring-1 ring-brand-gold/80">
+        <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" strokeWidth={2.5} aria-hidden />
       </div>
-      <div className="min-w-0">
-        <div className="truncate text-[10px] font-bold uppercase tracking-[0.16em] text-brand-gold/95">
+      <div className="relative z-[1] min-w-0 flex-1">
+        <div className="truncate text-[9.5px] sm:text-[10px] font-bold uppercase tracking-[0.14em] sm:tracking-[0.16em] text-brand-gold/95">
           {label}
         </div>
-        <div className="mt-0.5 flex items-center gap-1.5 text-[15px] font-extrabold leading-none text-white tabular-nums">
+        <div className="mt-0.5 flex items-center gap-1.5 text-[13.5px] sm:text-[15px] font-extrabold leading-tight text-white tabular-nums">
           {live && (
             <span className="relative inline-flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-gold/70" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-gold" />
             </span>
           )}
-          {value}
+          <span className="truncate">{value}</span>
         </div>
+        {hint && (
+          <div className="mt-0.5 hidden sm:flex items-center gap-1 text-[10.5px] font-medium text-white/70 group-hover:text-brand-gold transition-colors">
+            <span className="truncate">{hint}</span>
+            <ChevronRight className="h-3 w-3 shrink-0 transition-transform group-hover:translate-x-0.5" aria-hidden />
+          </div>
+        )}
       </div>
-    </div>
+    </button>
   );
 }
+
+function MetricDetailDialog({
+  open,
+  which,
+  onClose,
+  data,
+}: {
+  open: boolean;
+  which: null | "establishments" | "products" | "savings" | "live";
+  onClose: () => void;
+  data: EstablishmentsOverview | null;
+}) {
+  const cfg = which ? METRIC_DETAIL_META[which] : null;
+  const Icon = cfg?.icon ?? Store;
+
+  const savingsRanked = useMemo(() => {
+    if (!data) return [];
+    return [...data.items]
+      .filter((i) => i.maxSavings > 0)
+      .sort((a, b) => b.maxSavings - a.maxSavings)
+      .slice(0, 6);
+  }, [data]);
+
+  const topByProducts = useMemo(() => {
+    if (!data) return [];
+    return [...data.items].sort((a, b) => b.productsCount - a.productsCount).slice(0, 6);
+  }, [data]);
+
+  return (
+    <Dialog open={open} onOpenChange={(o) => !o && onClose()}>
+      <DialogContent className="max-w-lg overflow-hidden p-0">
+        <div
+          className="relative px-5 py-4 text-white"
+          style={{
+            background:
+              "linear-gradient(135deg, color-mix(in oklab, var(--brand-navy) 96%, black), color-mix(in oklab, var(--brand-navy) 78%, black))",
+          }}
+        >
+          <span aria-hidden className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-gold/70 to-transparent" />
+          <span aria-hidden className="absolute inset-y-0 left-0 w-[3px] bg-brand-gold" />
+          <DialogHeader className="space-y-1 text-left">
+            <div className="flex items-center gap-2.5">
+              <div className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-brand-gold text-brand-navy shadow-inner">
+                <Icon className="h-4 w-4" strokeWidth={2.5} aria-hidden />
+              </div>
+              <DialogTitle className="text-[15px] font-extrabold uppercase tracking-[0.14em] text-brand-gold">
+                {cfg?.title}
+              </DialogTitle>
+            </div>
+            <DialogDescription className="text-[13px] leading-snug text-white/85">
+              {cfg?.description}
+            </DialogDescription>
+          </DialogHeader>
+        </div>
+
+        <div className="max-h-[60vh] overflow-y-auto px-5 py-4">
+          {which === "establishments" && data && (
+            <ul className="space-y-2" aria-label="Estabelecimentos monitorados">
+              {topByProducts.map((e) => (
+                <li key={e.id} className="flex items-center gap-3 rounded-md border border-border/60 bg-card p-2.5">
+                  <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md bg-white">
+                    {e.logoUrl ? (
+                      <img src={e.logoUrl} alt="" className="h-full w-full object-contain" loading="lazy" />
+                    ) : (
+                      <span className="text-[11px] font-bold text-brand-navy">{e.name.substring(0, 2).toUpperCase()}</span>
+                    )}
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="truncate text-[13.5px] font-semibold text-foreground">{e.name}</div>
+                    <div className="truncate text-[11.5px] text-muted-foreground">
+                      <span className="font-semibold text-primary">{e.productsCount}</span> produtos
+                      {e.neighborhood ? ` · ${e.neighborhood}` : ""}
+                    </div>
+                  </div>
+                </li>
+              ))}
+              <li className="pt-1 text-center text-[12px] text-muted-foreground">
+                Total: <strong className="text-foreground">{data.totalEstablishments}</strong> estabelecimentos
+              </li>
+            </ul>
+          )}
+
+          {which === "products" && data && (
+            <div className="space-y-3">
+              <div className="rounded-md border border-border/60 bg-muted/40 p-3 text-center">
+                <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-primary">Total monitorado</div>
+                <div className="mt-1 text-[24px] font-extrabold tabular-nums text-foreground">
+                  {data.totalProducts.toLocaleString("pt-BR")}
+                </div>
+                <div className="text-[11.5px] text-muted-foreground">produtos em {data.totalCategories} categorias</div>
+              </div>
+              {data.topGlobalCategories.length > 0 && (
+                <div>
+                  <div className="mb-1.5 text-[11px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                    Categorias mais populares
+                  </div>
+                  <div className="flex flex-wrap gap-1.5">
+                    {data.topGlobalCategories.slice(0, 10).map((c) => (
+                      <span
+                        key={c.category}
+                        className="inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-2.5 py-1 text-[12px] font-medium text-primary"
+                      >
+                        {humanizeCategory(c.category)}
+                        <span className="rounded-full bg-primary/20 px-1.5 text-[11.5px] font-bold">{c.count}</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {which === "savings" && data && (
+            <div className="space-y-2.5">
+              <div className="rounded-md border border-brand-gold/50 bg-brand-gold/10 p-3">
+                <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-brand-navy dark:text-brand-gold">
+                  Diferença máxima na rede
+                </div>
+                <div className="mt-0.5 text-[22px] font-extrabold tabular-nums text-brand-navy dark:text-brand-gold">
+                  R$ {data.totalMaxSavings.toFixed(2).replace(".", ",")}
+                </div>
+                <div className="text-[11.5px] text-muted-foreground">
+                  entre o mesmo produto no mercado mais caro vs. o mais barato
+                </div>
+              </div>
+              {savingsRanked.length > 0 ? (
+                <ul className="space-y-1.5">
+                  {savingsRanked.map((e) => (
+                    <li key={e.id} className="flex items-center justify-between gap-3 rounded-md border border-border/60 bg-card p-2.5">
+                      <div className="min-w-0">
+                        <div className="truncate text-[13px] font-semibold text-foreground">{e.name}</div>
+                        <div className="truncate text-[11px] text-muted-foreground">{e.neighborhood || e.city || "—"}</div>
+                      </div>
+                      <div className="shrink-0 rounded bg-primary/10 px-2 py-0.5 text-[12.5px] font-bold tabular-nums text-primary">
+                        até R$ {e.maxSavings.toFixed(2).replace(".", ",")}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-center text-[12.5px] text-muted-foreground">Sem comparativos disponíveis ainda.</p>
+              )}
+            </div>
+          )}
+
+          {which === "live" && (
+            <div className="space-y-3 text-[13px] leading-relaxed text-foreground">
+              <p>
+                Os preços aqui exibidos são atualizados <strong>continuamente</strong> pela comunidade e por integrações com os mercados parceiros — sem intervalo fixo.
+              </p>
+              <ul className="space-y-1.5 text-[12.5px]">
+                <li className="flex items-start gap-2">
+                  <span aria-hidden className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gold" />
+                  Novos preços entram no ar em segundos após a leitura.
+                </li>
+                <li className="flex items-start gap-2">
+                  <span aria-hidden className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gold" />
+                  Cada card do mercado mostra o carimbo da última atualização.
+                </li>
+                <li className="flex items-start gap-2">
+                  <span aria-hidden className="mt-1 h-1.5 w-1.5 shrink-0 rounded-full bg-brand-gold" />
+                  Você pode ativar alertas para acompanhar variações do seu bairro.
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+const METRIC_DETAIL_META: Record<
+  "establishments" | "products" | "savings" | "live",
+  { title: string; description: string; icon: typeof Store }
+> = {
+  establishments: {
+    title: "Estabelecimentos",
+    description: "Mercados monitorados na região — ordenados pelos que têm mais produtos publicados.",
+    icon: Store,
+  },
+  products: {
+    title: "Produtos monitorados",
+    description: "Total de itens catalogados e as categorias mais presentes na rede.",
+    icon: Package,
+  },
+  savings: {
+    title: "Maior economia possível",
+    description: "Quanto você pode poupar comprando o mesmo produto no mercado mais barato.",
+    icon: PiggyBank,
+  },
+  live: {
+    title: "Atualização ao vivo",
+    description: "Como e quando os preços são renovados nesta plataforma.",
+    icon: Radio,
+  },
+};
