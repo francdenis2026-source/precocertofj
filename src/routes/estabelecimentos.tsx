@@ -779,7 +779,7 @@ function MetricDetailDialog({
                         <div className="truncate text-[13px] font-semibold text-foreground">{e.name}</div>
                         <div className="truncate text-[11px] text-muted-foreground">{e.neighborhood || e.city || "—"}</div>
                       </div>
-                      <div className="shrink-0 rounded bg-primary/10 px-2 py-0.5 text-[12.5px] font-bold tabular-nums text-primary">
+                      <div className="shrink-0 rounded bg-brand-gold/15 px-2 py-0.5 text-[12.5px] font-bold tabular-nums text-brand-gold">
                         até R$ {e.maxSavings.toFixed(2).replace(".", ",")}
                       </div>
                     </li>
