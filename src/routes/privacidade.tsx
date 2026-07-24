@@ -223,7 +223,7 @@ function PrivacidadePage() {
       body: (
         <a
           href="mailto:precocerto-fj@proton.me"
-          className="font-mono text-[12px] font-semibold text-brand-gold underline underline-offset-2 hover:text-brand-gold/80"
+          className="text-body-sm font-semibold text-brand-gold underline underline-offset-2 hover:text-brand-gold/80"
         >
           precocerto-fj@proton.me
         </a>
