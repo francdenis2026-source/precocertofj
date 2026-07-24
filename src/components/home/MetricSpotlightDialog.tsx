@@ -899,10 +899,12 @@ function MetricBody({
   kind,
   data,
   animate,
+  onNavigate,
 }: {
   kind: MetricKind;
   data: Awaited<ReturnType<typeof getMetricSpotlight>>;
   animate: boolean;
+  onNavigate: () => void;
 }) {
   if (kind === "markets") {
     return (
@@ -913,10 +915,11 @@ function MetricBody({
           <StatCell label="Preços/7d" value={data.totals.scans7d.toLocaleString("pt-BR")} />
         </div>
 
-        <MarketsList stores={data.stores} animate={animate} />
+        <MarketsList stores={data.stores} animate={animate} onNavigate={onNavigate} />
 
         <Link
           to="/estabelecimentos"
+          onClick={onNavigate}
           className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold"
           style={{ color: "var(--pc-home-navy)" }}
         >
@@ -978,39 +981,11 @@ function MetricBody({
           })}
         </div>
 
-        <SectionTitle>Últimas atualizações</SectionTitle>
-        <ul className="divide-y" style={{ borderColor: "var(--pc-home-line)" }}>
-          {data.recentUpdates.slice(0, 6).map((u, i) => (
-            <motion.li
-              key={i}
-              className="flex items-center gap-3 py-2"
-              initial={animate ? { opacity: 0, y: 6 } : false}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.28, delay: i * 0.04, ease: EASE }}
-            >
-              <div className="min-w-0 flex-1">
-                <div
-                  className="truncate text-[13px] font-semibold"
-                  style={{ color: "var(--pc-home-heading)" }}
-                >
-                  {u.productName}
-                </div>
-                <div className="truncate text-[11px]" style={{ color: "var(--pc-text-muted)" }}>
-                  {u.marketName ?? "—"} · {relTime(u.when)}
-                </div>
-              </div>
-              <div
-                className="text-sm font-bold tabular-nums"
-                style={{ color: "var(--pc-home-gold)" }}
-              >
-                {currency(u.price)}
-              </div>
-            </motion.li>
-          ))}
-        </ul>
+        <ProductsRecentList updates={data.recentUpdates} animate={animate} />
 
         <Link
           to="/buscar"
+          onClick={onNavigate}
           className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold"
           style={{ color: "var(--pc-home-navy)" }}
         >
@@ -1032,54 +1007,11 @@ function MetricBody({
         />
       </div>
 
-      <SectionTitle>Maiores economias agora</SectionTitle>
-      <ul className="divide-y" style={{ borderColor: "var(--pc-home-line)" }}>
-        {data.topSavings.map((s, i) => (
-          <motion.li
-            key={i}
-            className="flex items-center gap-3 py-2.5"
-            initial={animate ? { opacity: 0, y: 6 } : false}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.28, delay: i * 0.05, ease: EASE }}
-          >
-            <div
-              className="grid h-11 w-14 shrink-0 place-items-center rounded-lg text-sm font-bold tabular-nums"
-              style={{
-                background:
-                  "linear-gradient(135deg, var(--pc-home-gold), var(--pc-home-gold-soft))",
-                color: "var(--pc-home-navy)",
-              }}
-            >
-              {Math.round(s.savingsPct)}%
-            </div>
-            <div className="min-w-0 flex-1">
-              <div
-                className="truncate text-[13px] font-semibold"
-                style={{ color: "var(--pc-home-heading)" }}
-              >
-                {s.displayName}
-              </div>
-              <div className="truncate text-[11px]" style={{ color: "var(--pc-text-muted)" }}>
-                {s.storeCount} mercados · menor em {s.cheapestStore ?? "—"}
-              </div>
-            </div>
-            <div className="text-right">
-              <div className="text-[11px] line-through" style={{ color: "var(--pc-text-muted)" }}>
-                {currency(s.maxPrice)}
-              </div>
-              <div
-                className="text-sm font-bold tabular-nums"
-                style={{ color: "var(--pc-home-gold)" }}
-              >
-                {currency(s.minPrice)}
-              </div>
-            </div>
-          </motion.li>
-        ))}
-      </ul>
+      <SavingsList items={data.topSavings} animate={animate} />
 
       <Link
         to="/comparador"
+        onClick={onNavigate}
         className="mt-4 inline-flex items-center gap-1.5 text-sm font-semibold"
         style={{ color: "var(--pc-home-navy)" }}
       >
@@ -1088,3 +1020,4 @@ function MetricBody({
     </>
   );
 }
+
