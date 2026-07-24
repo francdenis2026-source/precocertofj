@@ -769,16 +769,12 @@ function HomePage() {
               </h1>
 
 
-              {/* Subtítulo — faixa tintada localizada (não véu global) para garantir contraste
-                  do parágrafo sem obscurecer a foto ao redor. */}
+              {/* Subtítulo — contraste garantido pelo scrim lateral suave + text-shadow. */}
               <p
-                className="mt-3 inline-block max-w-md rounded-md px-3 py-1.5 text-[13.5px] leading-snug sm:text-[13px] backdrop-blur-[2px]"
+                className="mt-3 max-w-md text-[13.5px] leading-snug sm:text-[13px]"
                 style={{
                   color: "#F5F6FA",
-                  background:
-                    "linear-gradient(90deg, color-mix(in oklab, var(--pc-home-navy) 82%, transparent) 0%, color-mix(in oklab, var(--pc-home-navy) 62%, transparent) 100%)",
-                  boxShadow: "inset 0 0 0 1px color-mix(in oklab, var(--pc-home-gold) 22%, transparent)",
-                  textShadow: "0 1px 3px rgba(2,6,23,0.55)",
+                  textShadow: "0 1px 3px rgba(2,6,23,0.6), 0 2px 10px rgba(2,6,23,0.45)",
                 }}
               >
                 Compare arroz, feijão e café nos mercados do seu bairro.{" "}
@@ -787,6 +783,7 @@ function HomePage() {
                 </span>{" "}
                 — feito por Feijó, para Feijó.
               </p>
+
 
 
 
