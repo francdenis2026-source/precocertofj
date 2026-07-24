@@ -285,8 +285,9 @@ function PrivacidadePage() {
                 "text-eyebrow-muted rounded-md px-3 py-1.5 transition-colors",
                 tab === k
                   ? "bg-brand-gold text-brand-navy shadow-sm"
-                  : "hover:text-foreground",
+                  : "text-muted-foreground hover:text-foreground",
               )}
+
 
             >
               {k === "privacidade" ? "Privacidade" : "Termos"}
