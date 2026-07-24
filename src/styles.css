@@ -162,7 +162,7 @@
 
   --border: oklch(0.885 0.018 250);
   --input: oklch(0.885 0.018 250);
-  --ring: oklch(0.50 0.19 258);
+  --ring: oklch(0.72 0.14 82);  /* Gold — foco visível consistente com navy/gold */
 
   --capture: oklch(0.52 0.20 262);
   --capture-foreground: oklch(0.99 0.002 250);
