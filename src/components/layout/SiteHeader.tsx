@@ -57,9 +57,10 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
     ? "border-on-media-border bg-on-media-surface text-on-media transition-colors hover:border-brand-soft hover:bg-brand-soft/15 hover:text-brand-soft focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
     : "border-border bg-card text-foreground transition-colors hover:border-brand hover:bg-brand/10 hover:text-brand focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
   // Botão "Entrar" alinhado à paleta gold/navy do header em ambas as variantes.
+  // Tokens-only (navy/gold). Hover visível: escurece o gold e sobe elevação; active afunda.
   const loginClass = isOverlay
-    ? "bg-[color:var(--pc-home-gold,#F5B301)] text-[color:var(--pc-home-navy,#0b1e3b)] shadow-[0_4px_14px_rgb(0_0_0/0.25)] ring-1 ring-[color:var(--pc-home-navy,#0b1e3b)]/10 transition-all hover:brightness-105 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-on-media/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
-    : "bg-[color:var(--pc-home-gold,#F5B301)] text-[color:var(--pc-home-navy,#0b1e3b)] shadow-elev-2 ring-1 ring-[color:var(--pc-home-navy,#0b1e3b)]/10 transition-all hover:brightness-105 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold,#F5B301)]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+    ? "bg-brand text-brand-foreground ring-1 ring-primary/20 shadow-[0_4px_14px_rgb(0_0_0/0.25)] transition-[background-color,box-shadow,transform] hover:bg-brand-strong hover:shadow-[0_8px_22px_rgb(0_0_0/0.32)] active:scale-[0.98] active:bg-brand-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+    : "bg-brand text-brand-foreground ring-1 ring-primary/15 shadow-elev-2 transition-[background-color,box-shadow,transform] hover:bg-brand-strong hover:shadow-elev-3 active:scale-[0.98] active:bg-brand-strong focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 
 
