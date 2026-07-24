@@ -10,7 +10,7 @@ import { QuickFilterBar } from "@/components/search/QuickFilterBar";
 import { ShareButton, SignupCTA } from "@/components/ds";
 import { useSession } from "@/hooks/useSession";
 import { trackEvent } from "@/lib/analytics-events";
-import { ListingShell, InternalPageHeader } from "@/components/layout";
+import { InternalPageHeader } from "@/components/layout";
 import { RouteError } from "@/components/feedback";
 import { SearchDiscovery, pushRecentSearch } from "@/components/search/SearchDiscovery";
 import { SearchSidebar } from "@/components/search/SearchSidebar";
