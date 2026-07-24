@@ -324,7 +324,7 @@ function EstablishmentsPage() {
           <div className="mx-auto w-full max-w-6xl px-4 md:px-8 py-3">
             <div className="mb-2 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
-                <span className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-primary">Em destaque</span>
+                <span className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-brand-gold">Em destaque</span>
                 <span className="text-[13px] font-medium text-foreground">Mercados com mais produtos</span>
               </div>
               <div className="hidden gap-1.5 md:flex">
@@ -375,7 +375,7 @@ function EstablishmentsPage() {
                   <div className="min-w-0 flex-1">
                     <div className="truncate text-[12.5px] font-semibold text-foreground">{e.name}</div>
                     <div className="truncate text-[11px] text-muted-foreground">
-                      <span className="font-semibold text-primary">{e.productsCount}</span> produtos
+                      <span className="font-semibold text-brand-gold">{e.productsCount}</span> produtos
                       {e.neighborhood ? ` · ${e.neighborhood}` : ""}
                     </div>
                   </div>
