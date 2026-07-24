@@ -350,7 +350,7 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
                   )}
                 </div>
               </div>
-              <div className="flex flex-col-reverse gap-2 border-t border-border bg-background/50 px-5 py-3.5 sm:flex-row sm:justify-end sm:px-6">
+              <div className="flex flex-col-reverse gap-2 border-t border-border bg-background/50 px-4 py-2.5 sm:flex-row sm:justify-end sm:px-5">
                 {state.kind !== "alert" && (
                   <button
                     type="button"
