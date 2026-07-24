@@ -761,10 +761,10 @@ function MetricDetailDialog({
           {which === "savings" && data && (
             <div className="space-y-2.5">
               <div className="rounded-md border border-brand-gold/50 bg-brand-gold/10 p-3">
-                <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-brand-navy dark:text-brand-gold">
+                <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-brand-gold">
                   Diferença máxima na rede
                 </div>
-                <div className="mt-0.5 text-[22px] font-extrabold tabular-nums text-brand-navy dark:text-brand-gold">
+                <div className="mt-0.5 text-[22px] font-extrabold tabular-nums text-brand-gold">
                   R$ {data.totalMaxSavings.toFixed(2).replace(".", ",")}
                 </div>
                 <div className="text-[11.5px] text-muted-foreground">
