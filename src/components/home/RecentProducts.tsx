@@ -128,7 +128,30 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
     enabled: liveOpen,
   });
 
-  if (!data || data.length === 0) return null;
+  if (!data) {
+    // Reserva vertical estável (evita CLS) enquanto o server function responde.
+    return (
+      <section
+        aria-hidden
+        aria-busy="true"
+        className="mx-auto w-full max-w-6xl px-4 pb-3 sm:px-6 lg:px-8"
+      >
+        <div className="mb-4 flex items-end justify-between gap-4 sm:mb-5">
+          <div className="min-w-0 space-y-2">
+            <div className="h-4 w-24 animate-pulse rounded-full" style={{ background: P.line }} />
+            <div className="h-5 w-64 animate-pulse rounded-md" style={{ background: P.line }} />
+          </div>
+          <div className="h-4 w-16 animate-pulse rounded-full" style={{ background: P.line }} />
+        </div>
+        <div
+          className="h-[132px] w-full animate-pulse rounded-2xl sm:h-[152px]"
+          style={{ background: P.line }}
+        />
+      </section>
+    );
+  }
+  if (data.length === 0) return null;
+
 
   const lastUpdateLabel = live?.lastUpdate ? relative(live.lastUpdate) : null;
 
