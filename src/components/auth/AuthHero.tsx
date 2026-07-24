@@ -44,7 +44,8 @@ const PRESETS: Record<AuthHeroVariant, Preset> = {
     },
     brandIcon: ShoppingCart,
     offer: { label: "Oferta ativa", title: "30 dias grátis", caption: "Envie sua nota e libere o painel completo." },
-    photo: false,
+    photo: true,
+    photoSrc: loginPhotoAsset.url,
   },
   signup: {
     badge: { icon: UserPlus, label: "Cadastro gratuito" },
