@@ -5,6 +5,8 @@ import { listPublicStores } from "@/lib/stores-public.functions";
 import { listPopularQueries } from "@/lib/search-popular.functions";
 import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 import { useConfirm } from "@/components/ui/confirm-provider";
+import { LazyImage } from "@/components/media/LazyImage";
+
 
 const POPULAR_FALLBACK: string[] = [
   "arroz 5kg",
@@ -184,12 +186,12 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
                 >
                   <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md border border-brand-gold/30 bg-background">
                     {s.logoUrl ? (
-                      <img
+                      <LazyImage
                         src={s.logoUrl}
                         alt={s.name}
                         className="h-full w-full object-contain p-0.5"
-                        loading="lazy"
                       />
+
                     ) : (
                       <StoreIcon className="h-4 w-4 text-muted-foreground" />
                     )}

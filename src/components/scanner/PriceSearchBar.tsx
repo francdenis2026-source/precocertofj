@@ -30,6 +30,8 @@ import { PaywallInline } from "@/components/paywall/PaywallInline";
 import { useTeaserQuota } from "@/hooks/use-teaser-quota";
 import { useSession } from "@/hooks/useSession";
 import { isTeaserLocked } from "@/lib/teaser-rule";
+import { LazyImage } from "@/components/media/LazyImage";
+
 
 
 
@@ -1350,12 +1352,14 @@ function ProductDetailsCard({
     <div className="relative rounded-xl border border-border bg-card p-3">
       <div className="flex items-start gap-3">
         {suggestion.imageUrl ? (
-          <img
+          <LazyImage
             src={suggestion.imageUrl}
             alt={suggestion.displayName}
-            loading="lazy"
+            width={64}
+            height={64}
             className="h-16 w-16 shrink-0 rounded-lg border border-border object-contain bg-background"
           />
+
         ) : (
           <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg border border-border bg-muted/30">
             <ShoppingBag className="h-5 w-5 text-muted-foreground" />
@@ -1696,12 +1700,12 @@ function MarketGroupedResults({
                 aria-hidden="true"
               >
                 {b.logoUrl ? (
-                  <img
+                  <LazyImage
                     src={b.logoUrl}
                     alt=""
                     className="h-full w-full object-contain p-0.5"
-                    loading="lazy"
                   />
+
                 ) : (
                   <ShoppingBag className="h-4 w-4 text-muted-foreground" />
                 )}
@@ -1997,7 +2001,7 @@ function MatrixCompareResults({
                     style={{ backgroundColor: dot ?? "hsl(var(--muted-foreground))" }}
                   />
                   {m.logoUrl ? (
-                    <img src={m.logoUrl} alt="" className="h-3.5 w-3.5 rounded object-contain" loading="lazy" />
+                    <LazyImage src={m.logoUrl} alt="" className="h-3.5 w-3.5 rounded object-contain" />
                   ) : (
                     <ShoppingBag className="h-3 w-3" aria-hidden="true" />
                   )}
@@ -2090,7 +2094,7 @@ function MatrixCompareResults({
                         aria-hidden="true"
                       >
                         {m.logoUrl ? (
-                          <img src={m.logoUrl} alt="" className="h-full w-full object-contain p-0.5" loading="lazy" />
+                          <LazyImage src={m.logoUrl} alt="" className="h-full w-full object-contain p-0.5" />
                         ) : (
                           <ShoppingBag className="h-3.5 w-3.5 text-muted-foreground" />
                         )}
