@@ -142,18 +142,31 @@ export function AuthHero({
     >
       {preset.photo && (
         <>
-          <img src={heroPhoto} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
+          <img
+            src={preset.photoSrc ?? heroPhoto}
+            alt=""
+            aria-hidden
+            className="absolute inset-0 h-full w-full object-cover"
+            style={{ filter: "saturate(0.85) contrast(1.02)" }}
+          />
           <div
             aria-hidden
             className="absolute inset-0"
             style={{
-              background: `linear-gradient(165deg, color-mix(in oklab, ${T.navy} 95%, transparent) 0%, color-mix(in oklab, ${T.navy} 88%, transparent) 55%, color-mix(in oklab, ${T.navy2} 78%, transparent) 100%)`,
+              background: `linear-gradient(160deg, color-mix(in oklab, ${T.navy} 94%, transparent) 0%, color-mix(in oklab, ${T.navy} 82%, transparent) 45%, color-mix(in oklab, ${T.navy2} 70%, transparent) 100%)`,
             }}
           />
           <div
             aria-hidden
-            className="absolute inset-x-0 bottom-0 h-40"
+            className="absolute inset-x-0 bottom-0 h-48"
             style={{ background: `linear-gradient(180deg, transparent, ${T.navy})` }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background: `radial-gradient(120% 60% at 50% 100%, color-mix(in oklab, ${T.gold} 12%, transparent) 0%, transparent 60%)`,
+            }}
           />
         </>
       )}
