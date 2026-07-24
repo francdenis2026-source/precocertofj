@@ -602,14 +602,15 @@ function EstablishmentsPage() {
                             {e.topCategories.map((c) => (
                               <span
                                 key={c.category}
-                                className="inline-flex items-center gap-1 rounded-full border border-border bg-background/60 px-2.5 py-1 text-[12.5px] font-medium text-foreground"
+                                className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-0.5 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-foreground"
                               >
                                 {humanizeCategory(c.category)}
-                                <span className="rounded-full bg-muted px-1.5 text-[11px] font-bold text-muted-foreground tabular-nums">{c.count}</span>
+                                <span className="rounded-full bg-muted px-1.5 text-[10px] font-bold text-foreground/80 tabular-nums">{c.count}</span>
                               </span>
                             ))}
                           </div>
                         )}
+
                         <div className="mt-3 inline-flex items-center gap-1 text-[12px] font-semibold text-brand-gold">
                           Ver catálogo completo <ChevronRight className="h-3 w-3" aria-hidden />
                         </div>
