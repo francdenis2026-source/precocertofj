@@ -259,7 +259,7 @@ function SearchPage() {
     >
       {/* Hero editorial — foto de corredor de mercado desfocada + véu navy para legibilidade */}
       <section className="relative isolate overflow-hidden border-b border-white/10">
-        <picture aria-hidden className="absolute inset-0 -z-10 h-full w-full">
+        <picture aria-hidden className="absolute inset-0 -z-30 h-full w-full">
           {Object.entries(buscarHero.sources).map(([type, srcset]) => (
             <source key={type} type={type} srcSet={srcset as string} sizes="100vw" />
           ))}
@@ -275,13 +275,22 @@ function SearchPage() {
           />
         </picture>
 
-        {/* Véu navy — mantém contraste WCAG do título e barra */}
+        {/* Véu navy — translúcido para deixar a foto do mercado aparecer atrás do texto */}
         <div
           aria-hidden
-          className="absolute inset-0 -z-10"
+          className="absolute inset-0 -z-20"
           style={{
             background:
-              "linear-gradient(90deg, color-mix(in oklab, var(--brand-navy) 94%, transparent) 0%, color-mix(in oklab, var(--brand-navy) 82%, transparent) 55%, color-mix(in oklab, var(--brand-navy) 68%, transparent) 100%)",
+              "linear-gradient(90deg, color-mix(in oklab, var(--brand-navy) 78%, transparent) 0%, color-mix(in oklab, var(--brand-navy) 58%, transparent) 55%, color-mix(in oklab, var(--brand-navy) 38%, transparent) 100%)",
+          }}
+        />
+        {/* Reforço inferior para legibilidade da barra de busca */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 -z-20 h-1/2"
+          style={{
+            background:
+              "linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--brand-navy) 55%, transparent) 100%)",
           }}
         />
         {/* Realce dourado no canto superior esquerdo */}
@@ -302,6 +311,7 @@ function SearchPage() {
               "linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 20%, color-mix(in oklab, var(--brand-gold) 80%, transparent) 50%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 80%, transparent 100%)",
           }}
         />
+
 
 
 
