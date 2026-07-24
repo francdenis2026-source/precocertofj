@@ -41,6 +41,7 @@ export function AddToCartButton({
   const navigate = useNavigate();
   const qc = useQueryClient();
   const addFn = useServerFn(addToCart);
+  const promptSignIn = usePromptSignIn();
   const [added, setAdded] = useState(false);
 
   const mutation = useMutation({
