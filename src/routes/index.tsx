@@ -1052,12 +1052,12 @@ function HomePage() {
 
                 <Link
                   to="/melhores-precos"
-                  className="inline-flex min-h-[48px] items-center gap-2 rounded-xl border px-5 py-2.5 text-[14.5px] font-semibold transition-colors hover:text-[color:var(--pc-home-card)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:rounded-2xl sm:px-6 sm:py-3 sm:text-[15px]"
+                  className="inline-flex min-h-[48px] items-center gap-2 rounded-xl border px-5 py-2.5 text-[14.5px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:rounded-2xl sm:px-6 sm:py-3 sm:text-[15px]"
                   style={{
-                    background: "color-mix(in oklab, var(--pc-home-navy) 72%, transparent)",
-                    borderColor: "color-mix(in oklab, var(--pc-home-gold) 70%, transparent)",
-                    color: "var(--pc-text-on-navy)",
-                    boxShadow: "0 10px 24px -18px rgba(2,6,23,0.85)",
+                    background: P.navy,
+                    borderColor: P.gold,
+                    color: "#f2d689",
+                    boxShadow: "0 10px 24px -14px rgba(2,6,23,0.9)",
                     // @ts-expect-error css var
                     "--tw-ring-color": P.gold,
                     "--tw-ring-offset-color": P.card,
@@ -1068,14 +1068,15 @@ function HomePage() {
                     (e.currentTarget as HTMLElement).style.borderColor = P.gold;
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "color-mix(in oklab, var(--pc-home-navy) 72%, transparent)";
-                    (e.currentTarget as HTMLElement).style.color = "var(--pc-text-on-navy)";
-                    (e.currentTarget as HTMLElement).style.borderColor = "color-mix(in oklab, var(--pc-home-gold) 70%, transparent)";
+                    (e.currentTarget as HTMLElement).style.background = P.navy;
+                    (e.currentTarget as HTMLElement).style.color = "#f2d689";
+                    (e.currentTarget as HTMLElement).style.borderColor = P.gold;
                   }}
                 >
                   <TrendingDown className="h-4 w-4" />
                   Ver rankings
                 </Link>
+
               </div>
 
             </div>
