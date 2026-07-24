@@ -214,7 +214,7 @@ function SearchPage() {
   }, []);
 
   return (
-    <div className="min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
+    <div className="pc-search-scope min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
       <div className="mx-auto max-w-3xl px-4 md:px-6 pt-3 md:pt-4">
         <InternalPageHeader
           breadcrumbs={[{ label: "Início", to: "/" }, { label: "Buscar" }]}
