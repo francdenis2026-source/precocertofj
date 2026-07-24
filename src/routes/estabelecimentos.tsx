@@ -181,22 +181,22 @@ function EstablishmentsPage() {
         />
 
         <div className="mx-auto w-full max-w-6xl px-4 md:px-8 pt-4 md:pt-5 pb-4 md:pb-5">
-          <nav aria-label="Trilha" className="mb-2 flex items-center gap-1 text-[12px] font-medium text-white">
-            <Link to="/" className="text-white/90 hover:text-brand-gold">Início</Link>
-            <ChevronRight aria-hidden className="h-3 w-3 opacity-80" />
+          <nav aria-label="Trilha" className="mb-2 flex items-center gap-1 text-[12px] font-semibold text-white">
+            <Link to="/" className="text-white hover:text-brand-gold">Início</Link>
+            <ChevronRight aria-hidden className="h-3 w-3 text-white/80" />
             <span className="text-brand-gold">Mercados</span>
           </nav>
 
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold/60 bg-brand-gold/20 px-2.5 py-0.5 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-brand-gold">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-2.5 py-0.5 text-[10.5px] font-bold uppercase tracking-[0.14em] text-brand-navy">
               {currentKind ? <currentKind.icon className="h-3 w-3" aria-hidden /> : <Store className="h-3 w-3" aria-hidden />}
               {currentKind ? currentKind.label : "Comércios parceiros"}
             </div>
-            <h1 className="text-[20px] md:text-[24px] font-semibold leading-tight text-white">
+            <h1 className="text-[20px] md:text-[24px] font-bold leading-tight text-white">
               {currentKind ? currentKind.label : "Comércios"} de <span className="text-brand-gold">Feijó</span>
             </h1>
           </div>
-          <p className="mt-1 max-w-2xl text-[12.5px] md:text-[13.5px] leading-snug text-white">
+          <p className="mt-1.5 max-w-2xl text-[12.5px] md:text-[13.5px] font-medium leading-snug text-white/95">
             {currentKind ? currentKind.tagline : "Cobertura de produtos, categorias e comparativo entre estabelecimentos monitorados pela comunidade."}
           </p>
 
@@ -216,8 +216,8 @@ function EstablishmentsPage() {
                   className={[
                     "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[12px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
                     active
-                      ? "border-brand-gold bg-brand-gold text-brand-navy"
-                      : "border-white/40 bg-white/10 text-white hover:bg-white/20",
+                      ? "border-brand-gold bg-brand-gold text-brand-navy shadow-sm"
+                      : "border-white/70 bg-white/15 text-white hover:bg-white/25",
                   ].join(" ")}
                 >
                   <Icon className="h-3.5 w-3.5" aria-hidden />
