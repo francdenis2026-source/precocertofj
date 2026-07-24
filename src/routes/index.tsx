@@ -1105,9 +1105,10 @@ function HomePage() {
             borderColor: P.line,
             boxShadow: "var(--pc-shadow-2)",
             // @ts-expect-error css var
-            "--tw-ring-color": "color-mix(in oklab, var(--pc-home-gold) 20%, transparent)",
+            "--tw-ring-color": "color-mix(in oklab, white 8%, transparent)",
           }}
         >
+
           <div
             className="px-4 py-4 sm:px-6 sm:py-5 lg:px-7 lg:py-6"
             style={{ color: "#F5F6FA" }}
