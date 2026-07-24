@@ -140,20 +140,20 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                   className={`h-2 w-2 shrink-0 rounded-full ${f.dotClass}`}
                   aria-hidden
                 />
-                <div className="flex min-w-0 flex-col leading-tight">
+                <div className="flex min-w-0 flex-col leading-tight gap-0.5">
                   <span
-                    className="whitespace-nowrap text-[13.5px] font-semibold"
+                    className="whitespace-nowrap text-[15px] font-semibold"
                     title={p.name}
                   >
                     {shortName(p.name, 24)}
                   </span>
-                  <span className="market-name whitespace-nowrap text-[11px]">
+                  <span className="market-name whitespace-nowrap text-[13px] font-bold uppercase tracking-[0.06em] text-[var(--market-accent)]">
                     {shortName(p.marketName ?? "vários mercados", 22)}
                   </span>
                 </div>
                 <span
-                  className={`${serif} tabular-nums text-[19px] leading-none pl-1 shrink-0`}
-                  style={{ color: P.heading, letterSpacing: "-0.02em" }}
+                  className={`${serif} tabular-nums text-[22px] font-semibold leading-none pl-1 shrink-0`}
+                  style={{ color: P.gold, letterSpacing: "-0.02em" }}
                 >
                   {brl(p.price)}
                 </span>
@@ -195,21 +195,21 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                 {p.name}
               </div>
               <div
-                className={`${serif} tabular-nums`}
+                className={`${serif} tabular-nums font-semibold`}
                 style={{
-                  color: P.heading,
-                  fontSize: "clamp(1.05rem, 2vw, 1.35rem)",
+                  color: P.gold,
+                  fontSize: "clamp(1.15rem, 2.1vw, 1.45rem)",
                   lineHeight: 1,
                   letterSpacing: "-0.02em",
                 }}
               >
                 {brl(p.price)}
               </div>
-              <div className="mt-2 flex items-center gap-1.5 text-[11px]">
+              <div className="mt-2 flex items-center gap-1.5 text-[11.5px]">
                 <Store
-                  className="h-3 w-3 shrink-0 text-[var(--market-accent)] transition-colors group-hover:text-[var(--market-accent-hover)]"
+                  className="h-3.5 w-3.5 shrink-0 text-[var(--market-accent)] transition-colors group-hover:text-[var(--market-accent-hover)]"
                 />
-                <span className="market-name truncate text-[11px]">
+                <span className="market-name truncate text-[12px] font-bold uppercase tracking-[0.05em] text-[var(--market-accent)]">
                   {p.marketName ?? "Vários mercados"}
                 </span>
 
