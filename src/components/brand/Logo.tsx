@@ -22,12 +22,13 @@ export function Logo({
       {...props}
     >
       <img
-        src="/icon-192.png"
+        src="/logo-mark.svg"
         alt="PreçoCerto"
         width={40}
         height={40}
-        className="h-10 w-10 shrink-0 object-contain"
+        className="h-10 w-10 shrink-0 rounded-lg object-contain ring-1 ring-brand-gold/30"
       />
+
       {!compact && (
         <span
           className={cn(
