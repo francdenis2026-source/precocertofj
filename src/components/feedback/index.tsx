@@ -278,17 +278,18 @@ export function EmptyState({
       </span>
       <p
         className={cn(
-          "font-display font-semibold tracking-tight text-foreground",
-          isSm ? "text-[14px]" : "text-[15px]",
+          "font-sans font-semibold tracking-tight text-foreground",
+          isSm ? "text-[15px] leading-snug" : "text-[16px] sm:text-[17px] leading-snug",
         )}
       >
         {title}
       </p>
       {message && (
-        <p className="mt-1 max-w-md text-[13px] leading-snug text-muted-foreground">
+        <p className="mt-1.5 max-w-md text-[13px] sm:text-[13.5px] leading-relaxed text-foreground/80 dark:text-foreground/85">
           {message}
         </p>
       )}
+
       {action && <div className="mt-3.5">{action}</div>}
     </div>
   );
