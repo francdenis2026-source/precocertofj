@@ -31,6 +31,7 @@ import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { submitPriceReport } from "@/lib/stores-public.functions";
 import { classifyProductType, PRODUCT_TYPE_LABEL } from "@/lib/product-type";
 import { useSession } from "@/hooks/useSession";
+import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 
 
 
