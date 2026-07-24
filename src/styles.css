@@ -627,6 +627,7 @@
   text-transform: uppercase;
   color: var(--color-brand-gold);
 }
+/* Só tipografia — a cor deve ser controlada por text-* na marcação */
 @utility text-eyebrow-muted {
   font-family: var(--font-mono);
   font-weight: var(--fw-semibold);
@@ -634,8 +635,8 @@
   line-height: 1;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--color-muted-foreground);
 }
+
 
 
 /* Nome do estabelecimento — tokens unificados (tipografia + cor + interação) */
