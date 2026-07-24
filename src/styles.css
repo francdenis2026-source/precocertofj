@@ -2923,3 +2923,29 @@ h1, h2, h3, h4, h5, h6 {
     );
   }
 }
+
+/* WCAG guard-rail: piso mínimo do véu no /buscar mesmo em desktop largo,
+   garantindo contraste AA do título/legenda em branco sobre a foto */
+.pc-hero-buscar .pc-hero-veil::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--brand-navy) 32%, transparent) 0%,
+    color-mix(in oklab, var(--brand-navy) 18%, transparent) 60%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+.pc-hero-buscar .pc-hero-veil {
+  position: absolute;
+}
+/* Sombra sutil no título/subtítulo do hero — melhora legibilidade
+   em qualquer breakpoint sem depender só da opacidade do véu */
+.pc-hero-buscar h1,
+.pc-hero-buscar h1 span,
+.pc-hero-buscar h1 + p,
+.pc-hero-buscar nav[aria-label="Trilha"] {
+  text-shadow: 0 1px 2px color-mix(in oklab, var(--brand-navy) 55%, transparent);
+}
