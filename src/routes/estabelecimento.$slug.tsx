@@ -306,7 +306,7 @@ function EstablishmentPage() {
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as SortKey)}
-            className="h-10 rounded-md border border-border bg-background px-3 text-sm"
+            className="h-10 rounded-md border border-border bg-background px-3 text-sm text-foreground transition-colors hover:border-brand-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             aria-label="Ordenar por"
           >
             {(Object.keys(SORT_LABEL) as SortKey[]).map((k) => (
@@ -315,6 +315,7 @@ function EstablishmentPage() {
               </option>
             ))}
           </select>
+
         </div>
 
         <div className="mt-4 text-xs text-muted-foreground">
