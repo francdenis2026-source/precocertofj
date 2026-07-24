@@ -279,21 +279,18 @@ function LoginPage() {
   }
 
   return (
-    <div
-      className="relative flex min-h-dvh w-full items-center justify-center px-4 py-8 sm:px-6"
-      style={{ background: PC_CREAM }}
-    >
-      {/* Ambient emerald glow — hidden on mobile to keep focus on the form */}
+    <div className="relative flex min-h-dvh w-full items-center justify-center bg-background px-4 py-8 sm:px-6">
+      {/* Ambient brand glow — subtle in both themes */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0 hidden overflow-hidden md:block"
       >
         <div
-          className="absolute -left-40 -top-40 h-[520px] w-[520px] rounded-full opacity-40 blur-3xl"
+          className="absolute -left-40 -top-40 h-[520px] w-[520px] rounded-full opacity-30 blur-3xl dark:opacity-20"
           style={{ background: `radial-gradient(closest-side, ${PC_EMERALD}33, transparent)` }}
         />
         <div
-          className="absolute -bottom-40 -right-40 h-[520px] w-[520px] rounded-full opacity-30 blur-3xl"
+          className="absolute -bottom-40 -right-40 h-[520px] w-[520px] rounded-full opacity-25 blur-3xl dark:opacity-20"
           style={{ background: `radial-gradient(closest-side, ${PC_GOLD}33, transparent)` }}
         />
       </div>
@@ -301,7 +298,7 @@ function LoginPage() {
       {/* Top-right link */}
       <Link
         to="/"
-        className="absolute right-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-full border border-black/10 bg-white/80 px-2.5 py-1 text-[11px] font-semibold text-emerald-900 backdrop-blur transition hover:bg-white sm:right-5 sm:top-5 sm:px-3 sm:py-1.5"
+        className="absolute right-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-full border border-border bg-card/80 px-2.5 py-1 text-[11px] font-semibold text-foreground backdrop-blur transition hover:bg-card sm:right-5 sm:top-5 sm:px-3 sm:py-1.5"
         style={{ fontFamily: PC_BODY }}
       >
         ← Voltar ao site
@@ -311,12 +308,13 @@ function LoginPage() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 grid w-full max-w-[960px] overflow-hidden rounded-2xl border border-black/5 bg-white shadow-[0_30px_80px_-30px_rgba(6,78,59,0.35)] sm:rounded-3xl md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]"
+        className="relative z-10 grid w-full max-w-[960px] overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
       >
         {/* LEFT — Emerald benefit panel (hidden on mobile to reduce distraction) */}
         <div className="hidden md:block">
           <AuthHero variant={mode === "signup" ? "signup" : "login"} />
         </div>
+
 
 
         {/* RIGHT — Auth form */}
