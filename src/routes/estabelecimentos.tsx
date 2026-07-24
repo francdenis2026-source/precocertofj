@@ -365,7 +365,8 @@ function EstablishmentsPage() {
                   className="group relative flex w-[210px] shrink-0 snap-start items-center gap-2.5 rounded-lg border border-border bg-background p-2 transition-colors hover:border-brand-gold/60 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                   style={{ boxShadow: "inset 3px 0 0 var(--brand-gold)" }}
                 >
-                  <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md bg-white">
+                  <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md">
+
                     {e.logoUrl ? (
                       <img src={e.logoUrl} alt="" className="h-full w-full object-contain" loading="lazy" />
                     ) : (
@@ -521,9 +522,9 @@ function EstablishmentsPage() {
                       >
                         <div className="flex items-start gap-3">
                           <div
-                            className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl border border-border bg-muted"
-                            style={{ borderColor: "var(--brand-gold)" }}
+                            className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl"
                           >
+
                             {e.logoUrl ? (
                               <img
                                 src={e.logoUrl}
@@ -616,15 +617,20 @@ function HeroMetric({
       type="button"
       onClick={onClick}
       aria-label={`${label}: ${value}. ${hint ?? "Abrir detalhes"}`}
-      className="group relative flex w-full items-center gap-1.5 sm:gap-2 overflow-hidden rounded-md px-1.5 py-1 sm:px-2 sm:py-1.5 md:px-2.5 md:py-2 text-left ring-1 ring-brand-gold/60 shadow-[0_4px_14px_-6px_rgba(0,0,0,0.55)] transition-all duration-200 hover:ring-brand-gold hover:shadow-[0_6px_18px_-6px_rgba(212,175,55,0.4)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy bg-brand-navy"
+      className="group relative flex w-full items-center gap-1.5 sm:gap-2 overflow-hidden rounded-md px-1.5 py-1 sm:px-2 sm:py-1.5 md:px-2.5 md:py-2 text-left ring-1 ring-brand-gold/60 shadow-[0_4px_14px_-6px_rgba(0,0,0,0.55)] transition-transform duration-300 ease-out will-change-transform hover:-translate-y-0.5 hover:scale-[1.02] hover:ring-brand-gold hover:shadow-[0_14px_30px_-12px_rgba(212,175,55,0.45)] active:translate-y-0 active:scale-[1.00] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy bg-brand-navy"
       style={{
         backgroundImage:
           "linear-gradient(135deg, color-mix(in oklab, var(--brand-navy) 96%, black) 0%, color-mix(in oklab, var(--brand-navy) 82%, black) 100%)",
       }}
     >
+      {/* shine sweep no hover */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-0 -translate-x-full skew-x-[-18deg] bg-gradient-to-r from-transparent via-white/12 to-transparent transition-transform duration-700 ease-out group-hover:translate-x-full"
+      />
       <span aria-hidden className="absolute inset-y-0 left-0 w-[2px] bg-brand-gold" />
 
-      <div className="grid h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 shrink-0 place-items-center rounded bg-brand-gold text-brand-navy ring-1 ring-brand-gold/80">
+      <div className="grid h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 shrink-0 place-items-center rounded bg-brand-gold text-brand-navy ring-1 ring-brand-gold/80 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-[-4deg]">
         <Icon className="h-2.5 w-2.5 sm:h-3 sm:w-3 md:h-3.5 md:w-3.5" strokeWidth={2.5} aria-hidden />
       </div>
       <div className="relative z-[1] min-w-0 flex-1">
@@ -706,7 +712,7 @@ function MetricDetailDialog({
             <ul className="space-y-2" aria-label="Estabelecimentos monitorados">
               {topByProducts.map((e) => (
                 <li key={e.id} className="flex items-center gap-3 rounded-md border border-border/60 bg-card p-2.5">
-                  <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md bg-white">
+                  <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md">
                     {e.logoUrl ? (
                       <img src={e.logoUrl} alt="" className="h-full w-full object-contain" loading="lazy" />
                     ) : (
