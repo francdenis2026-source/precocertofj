@@ -1884,6 +1884,12 @@ body.no-page-bg::before { display: none; }
     #000 calc(100% - 24px),
     transparent 100%
   );
+  /* iOS/Safari: cria uma camada de composição própria para o mask,
+     evitando repaint do conteúdo animado por baixo */
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 @media (min-width: 640px) {
   .price-marquee-viewport {
@@ -1907,20 +1913,45 @@ body.no-page-bg::before { display: none; }
 .price-marquee {
   /* Velocidade responsiva por viewport: mais lento no mobile, mais ágil no desktop */
   animation: price-marquee-slide clamp(70s, 28vw + 60s, 110s) linear infinite;
+  /* Otimizações iOS/Safari contra stuttering:
+     - promove a própria camada de composição (evita repintar a cada frame)
+     - força aceleração de GPU no WebKit
+     - hint explícito para o compositor */
   will-change: transform;
+  transform: translate3d(0, 0, 0);
+  -webkit-transform: translate3d(0, 0, 0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-perspective: 1000;
+  perspective: 1000;
+  /* Evita que o Safari "engasgue" ao interromper gestos verticais */
+  touch-action: pan-y;
 }
 @media (min-width: 640px) {
   .price-marquee { animation-duration: clamp(55s, 12vw + 45s, 80s); }
 }
 
-/* Pausa automática em hover, foco de teclado e toque (mobile) */
+/* Pausa automática em hover, foco de teclado e toque.
+   iOS Safari não dispara :hover/:active previsivelmente no touch;
+   por isso usamos também :focus-within e o seletor de toque abaixo. */
 .price-marquee:hover,
 .price-marquee:focus-within,
-.price-marquee-viewport:active .price-marquee {
+.price-marquee-viewport:hover .price-marquee,
+.price-marquee-viewport:active .price-marquee,
+.price-marquee-viewport:focus-within .price-marquee {
   animation-play-state: paused;
+}
+
+/* Dispositivos de toque puro: mantém pausa consistente enquanto o dedo segura o letreiro */
+@media (hover: none) and (pointer: coarse) {
+  .price-marquee-viewport:active .price-marquee,
+  .price-marquee-viewport:focus-within .price-marquee {
+    animation-play-state: paused;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .price-marquee { animation: none; }
 }
+
 

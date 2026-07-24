@@ -47,7 +47,7 @@ export function SiteFooter() {
 
   return (
     <footer
-      className="mt-4 border-t border-border bg-muted/45 text-foreground md:mt-8"
+      className="mt-4 border-t border-border bg-muted/60 text-foreground md:mt-8"
     >
       {/* ============ MOBILE (ultra compact — 2 lines) ============ */}
       <div
@@ -70,39 +70,37 @@ export function SiteFooter() {
               Preço<span className="italic text-brand">Certo</span>
             </span>
           </Link>
-          <span className="inline-flex items-center gap-1 font-semibold uppercase tracking-[0.1em] text-muted-foreground">
+          <span className="inline-flex items-center gap-1 font-semibold uppercase tracking-[0.1em] text-foreground/85">
             <MapPin className="h-4 w-4 text-brand" aria-hidden />
             Feijó·AC
           </span>
-          <span className="text-muted-foreground tabular-nums">© {year}</span>
+          <span className="font-semibold text-foreground/75 tabular-nums">© {year}</span>
         </div>
 
         {/* Row 2: nav chips + dev credit — inline flow */}
         <nav
           aria-label="Rodapé"
-          className="mt-1 flex flex-wrap items-center gap-x-1 gap-y-0.5 text-[clamp(13.5px,3.7vw,15.5px)] font-semibold leading-none text-foreground/90"
+          className="mt-1 flex flex-wrap items-center gap-x-1 gap-y-0.5 text-[clamp(13.5px,3.7vw,15.5px)] font-semibold leading-none text-foreground"
         >
           {MOBILE_LINKS.map((l, i) => (
             <span key={l.to} className="inline-flex items-center">
               <Link
                 to={l.to}
-                className="rounded px-0.5 py-0.5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+                className="rounded px-0.5 py-0.5 text-foreground/95 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
               >
                 {l.label}
               </Link>
               {i < MOBILE_LINKS.length - 1 && (
-                <span aria-hidden className="px-0.5 text-muted-foreground/50">·</span>
+                <span aria-hidden className="px-0.5 text-brand/60">·</span>
               )}
             </span>
           ))}
-          <span aria-hidden className="px-0.5 text-muted-foreground/50">·</span>
-          <span className="ml-auto font-mono text-[13px] font-normal text-muted-foreground">&lt;dev&gt; Franc</span>
+          <span aria-hidden className="px-0.5 text-brand/60">·</span>
+          <span className="ml-auto font-mono text-[13px] font-medium text-muted-foreground">
+            &lt;dev&gt; <span className="text-foreground/85">Franc</span>
+          </span>
         </nav>
       </div>
-
-
-
-
 
       {/* ============ DESKTOP / TABLET ============ */}
       <div
@@ -126,18 +124,18 @@ export function SiteFooter() {
             </span>
           </Link>
 
-          <p className="mt-2 text-[12px] leading-snug text-muted-foreground md:mt-2.5 md:text-[13px]">
+          <p className="mt-2 text-[13px] font-medium leading-snug text-foreground/80 md:mt-2.5 md:text-[13.5px]">
             Comparador colaborativo de preços dos mercados de Feijó — Acre.
           </p>
 
-          <ul className="mt-3 space-y-1.5 text-[12px] text-foreground/80 md:text-[12.5px]">
+          <ul className="mt-3 space-y-1 text-[13px] font-medium text-foreground/90 md:text-[13.5px]">
             <li className="flex items-center gap-2">
               <MapPin className="h-3.5 w-3.5 shrink-0 text-brand" />
               Feijó · Acre · Brasil
             </li>
             <li className="flex items-center gap-2">
               <Mail className="h-3.5 w-3.5 shrink-0 text-brand" />
-              <a href="mailto:precocerto-fj@proton.me" className="truncate hover:underline">
+              <a href="mailto:precocerto-fj@proton.me" className="truncate text-foreground hover:text-primary hover:underline">
                 precocerto-fj@proton.me
               </a>
             </li>
@@ -152,19 +150,18 @@ export function SiteFooter() {
         <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 sm:gap-8">
           {NAV_COLS.map((col) => (
             <div key={col.title} className="min-w-0">
-              <div className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand md:text-[11px] md:tracking-[0.22em] lg:text-[12px]">
+              <div className="text-[11px] font-bold uppercase tracking-[0.22em] text-brand md:text-[12px] lg:text-[12.5px]">
                 {col.title}
               </div>
-              <ul className="mt-2 space-y-1.5">
+              <ul className="mt-2 space-y-1">
                 {col.links.map((l) => (
                   <li key={l.to}>
                     <Link
                       to={l.to}
-                      className="inline-flex items-center rounded-md px-1.5 py-0.5 -mx-1.5 text-[12.5px] leading-[1.5] text-foreground/80 transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:text-[13.5px] lg:text-[14.5px]"
+                      className="inline-flex items-center rounded-md px-1.5 py-0.5 -mx-1.5 text-[13.5px] font-medium leading-[1.45] text-foreground/90 transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:text-[14px] lg:text-[15px]"
                     >
                       <span>{l.label}</span>
                     </Link>
-
                   </li>
                 ))}
               </ul>
@@ -178,14 +175,17 @@ export function SiteFooter() {
         <div
           className={dsx(
             ds.container,
-            "flex flex-col items-start justify-between gap-1 py-2 text-[11.5px] font-medium leading-[1.4] text-foreground sm:flex-row sm:items-center md:py-2.5 md:text-[12.5px] lg:text-[13.5px]",
+            "flex flex-col items-start justify-between gap-1 py-2 text-[12.5px] font-medium leading-[1.4] text-foreground/85 sm:flex-row sm:items-center md:py-2.5 md:text-[13px] lg:text-[13.5px]",
           )}
         >
-          <span className="whitespace-normal">© {year} <strong className="font-semibold">PreçoCerto</strong> · Feijó · Acre</span>
-          <span className="whitespace-nowrap font-mono text-muted-foreground">&lt;dev&gt; Franc D&apos;nis</span>
+          <span className="whitespace-normal">© {year} <strong className="font-semibold text-foreground">PreçoCerto</strong> · Feijó · Acre</span>
+          <span className="whitespace-nowrap font-mono text-muted-foreground">
+            &lt;dev&gt; <span className="text-foreground/90">Franc D&apos;nis</span>
+          </span>
         </div>
       </div>
     </footer>
   );
 }
+
 
