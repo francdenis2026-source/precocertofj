@@ -1868,9 +1868,14 @@ body.no-page-bg::before { display: none; }
   100% { transform: translate3d(-50%, 0, 0); }
 }
 .price-marquee {
-  animation: price-marquee-slide 32s linear infinite;
+  animation: price-marquee-slide 75s linear infinite;
   will-change: transform;
 }
+.price-marquee:hover,
+.price-marquee:focus-within {
+  animation-play-state: paused;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .price-marquee { animation: none; }
 }
