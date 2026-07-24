@@ -2587,11 +2587,11 @@ input[type="checkbox"]:not(.native-control):disabled {
 
 /* --- <input type="radio"> nativo --- */
 input[type="radio"]:not(.native-control) {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 50% !important;
   border: 1.5px solid hsl(var(--input));
   background-color: hsl(var(--background));
   cursor: pointer;
@@ -2600,7 +2600,9 @@ input[type="radio"]:not(.native-control) {
   vertical-align: middle;
   transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, transform 120ms ease;
   flex-shrink: 0;
+  padding: 0 !important;
 }
+
 input[type="radio"]:not(.native-control)::before {
   content: "";
   width: 8px;
