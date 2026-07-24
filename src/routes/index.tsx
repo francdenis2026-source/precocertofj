@@ -539,7 +539,7 @@ function HomePage() {
                     style={{ background: P.card, borderColor: P.line }}
                   >
                     {suggestQ.isLoading && suggestions.length === 0 ? (
-                      <li className="px-4 py-3 text-[13px]" style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}>
+                      <li className="px-4 py-3 text-[13px]" style={{ color: "color-mix(in oklab, var(--pc-home-ink) 78%, transparent)" }}>
                         Buscando…
                       </li>
                     ) : (
