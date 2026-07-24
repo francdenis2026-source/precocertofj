@@ -493,7 +493,7 @@ function SpotlightCard({
                 color: "var(--pc-price)",
               }}
             >
-              <span className="h-1 w-1 rounded-full" style={{ background: P.gold, boxShadow: `0 0 6px ${P.gold}` }} />
+              <span className="h-1 w-1 rounded-full" style={{ background: P.gold }} />
               Destaque
             </span>
             {hasDrop && (
