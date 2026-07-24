@@ -13,7 +13,7 @@ import {
   ShieldCheck,
   Clock,
   Package,
-  
+  Ticket,
 } from "lucide-react";
 
 import { ds, dsx } from "@/lib/ds";
@@ -687,44 +687,51 @@ function HomePage() {
 
 
 
-      {/* -------- FINAL CTA -------- */}
-      <section className="mx-auto w-full max-w-6xl px-4 pb-8 sm:px-6 lg:px-8">
+      {/* -------- FINAL CTA (compact ribbon) -------- */}
+      <section className="mx-auto w-full max-w-6xl px-4 pb-6 sm:px-6 lg:px-8">
         <div
-          className="relative overflow-hidden rounded-2xl px-6 py-5 sm:px-9 sm:py-6"
-          style={{ background: P.navy, color: "#F5F6FA" }}
+          className="relative overflow-hidden rounded-xl border px-4 py-3 sm:px-5 sm:py-3.5"
+          style={{
+            background: `linear-gradient(90deg, ${P.navy} 0%, color-mix(in oklab, ${P.navy} 88%, black) 100%)`,
+            borderColor: "color-mix(in oklab, #F5C86A 30%, transparent)",
+            color: "#F5F6FA",
+          }}
         >
-          <div className="grid gap-4 md:grid-cols-[1fr_auto] md:items-center md:gap-8">
-            <div className="min-w-0">
-              <h3
-                className="font-semibold"
-                style={{
-                  color: "#F5F6FA",
-                  fontSize: "clamp(1.25rem, 2.6vw, 2rem)",
-                  lineHeight: 1.15,
-                  letterSpacing: "-0.02em",
-                }}
+          <div className="flex items-center gap-3 sm:gap-4">
+            <span
+              className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-lg sm:inline-flex"
+              style={{ background: "color-mix(in oklab, #F5C86A 18%, transparent)", color: P.gold }}
+              aria-hidden
+            >
+              <Ticket className="h-4.5 w-4.5" strokeWidth={2.2} />
+            </span>
+
+            <div className="min-w-0 flex-1">
+              <p
+                className="truncate font-semibold leading-tight"
+                style={{ color: "#F5F6FA", fontSize: "clamp(0.92rem, 1.6vw, 1.05rem)", letterSpacing: "-0.005em" }}
               >
                 Já tem um código?{" "}
                 <span className="font-bold" style={{ color: P.gold }}>
-                  Resgate seus benefícios.
+                  Ative sua licença agora.
                 </span>
-              </h3>
-              <p className="mt-1.5 text-[13.5px] text-white/85 sm:text-[14px]">
-                Ative sua licença em segundos e desbloqueie os recursos exclusivos.
+              </p>
+              <p className="mt-0.5 hidden text-[12px] text-white/70 sm:block">
+                Leva menos de 30 segundos.
               </p>
             </div>
-            <div className="flex flex-wrap gap-3">
-              <Link
-                to="/resgatar"
-                className={dsx(ds.btn.base, ds.btn.sizes.md)}
-                style={{ background: P.gold, color: P.navy }}
-              >
-                Resgatar código <ArrowRight className="h-4 w-4" />
-              </Link>
-            </div>
+
+            <Link
+              to="/resgatar"
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3.5 py-2 text-[13px] font-bold transition-transform hover:scale-[1.02] active:scale-[0.98] sm:px-4 sm:text-[13.5px]"
+              style={{ background: P.gold, color: P.navy }}
+            >
+              Resgatar <ArrowRight className="h-3.5 w-3.5" />
+            </Link>
           </div>
         </div>
       </section>
+
 
       <SiteFooter />
 
