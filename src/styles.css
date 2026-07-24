@@ -2970,8 +2970,6 @@ input::placeholder, textarea::placeholder {
   backdrop-filter: blur(2px);
   transition: box-shadow 220ms ease, transform 220ms ease, background 220ms ease;
   outline: none;
-}
-@utility pc-seal-title-hover {
   &:hover,
   &:focus-visible {
     background: color-mix(in oklab, var(--brand-navy) 94%, transparent);
@@ -2985,6 +2983,7 @@ input::placeholder, textarea::placeholder {
     outline-offset: 3px;
   }
 }
+
 
 
 html, body, #root, button, input, textarea, select, optgroup, fieldset,
