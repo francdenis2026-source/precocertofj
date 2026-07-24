@@ -326,15 +326,16 @@ function SearchPage() {
 
 
         <div className="relative mx-auto w-full max-w-7xl px-4 md:px-8 pt-4 md:pt-5 pb-4 md:pb-5">
-          {/* Painel suave de contraste: blur leve + véu navy só atrás do texto */}
+          {/* Painel de contraste: cobre TODA a área de texto (breadcrumb + eyebrow + h1 + subtítulo).
+              Cor sólida navy com blur suave garante WCAG AA em modo claro e escuro sem escurecer a foto. */}
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-y-2 left-2 right-auto -z-[1] w-[min(680px,92%)] rounded-2xl border border-white/10 shadow-[0_20px_40px_-28px_rgba(2,6,23,0.55)] backdrop-blur-[3px]"
+            className="pointer-events-none absolute inset-y-2 left-2 -z-[1] w-[min(760px,94%)] rounded-2xl border border-white/12 shadow-[0_20px_40px_-28px_rgba(2,6,23,0.6)] backdrop-blur-[3px]"
             style={{
               background:
-                "linear-gradient(100deg, rgba(2,6,23,0.55) 0%, rgba(2,6,23,0.38) 55%, rgba(2,6,23,0.10) 85%, transparent 100%)",
+                "linear-gradient(100deg, rgba(2,6,23,0.72) 0%, rgba(2,6,23,0.58) 60%, rgba(2,6,23,0.18) 92%, transparent 100%)",
               maskImage:
-                "linear-gradient(100deg, #000 0%, #000 70%, transparent 100%)",
+                "linear-gradient(100deg, #000 0%, #000 78%, transparent 100%)",
             }}
           />
           <nav aria-label="Trilha" className="mb-2 flex items-center gap-2 text-[14px] font-semibold text-white">
@@ -350,16 +351,15 @@ function SearchPage() {
             </span>
           </nav>
 
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-[0.14em] text-brand-navy shadow-sm">
-              <Search className="h-3 w-3" aria-hidden />
-              Comparador de preços
-            </div>
-            <h1 className="text-[20px] md:text-[24px] font-bold leading-tight text-white [text-shadow:0_2px_10px_rgba(0,0,0,0.65)]">
-              Buscar <span className="text-brand-gold">preço</span> por nome
-            </h1>
+          {/* Eyebrow em sua própria linha para nunca sobrepor o H1 */}
+          <div className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-[0.14em] text-brand-navy shadow-sm">
+            <Search className="h-3 w-3" aria-hidden />
+            Comparador de preços
           </div>
-          <p className="mt-1.5 inline-block max-w-2xl text-[12.5px] md:text-[13.5px] font-medium leading-snug text-white/95 [text-shadow:0_1px_4px_rgba(0,0,0,0.6)]">
+          <h1 className="mt-1.5 text-[20px] md:text-[24px] font-bold leading-tight text-white [text-shadow:0_2px_10px_rgba(0,0,0,0.75),0_1px_2px_rgba(0,0,0,0.6)]">
+            Buscar <span className="text-brand-gold">preço</span> por nome
+          </h1>
+          <p className="mt-1.5 inline-block max-w-2xl text-[12.5px] md:text-[13.5px] font-medium leading-snug text-white [text-shadow:0_1px_4px_rgba(0,0,0,0.7)]">
             Consulte preço médio, mínimo e onde comprar mais barato em Feijó.
           </p>
 

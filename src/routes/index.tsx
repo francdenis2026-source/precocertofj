@@ -27,6 +27,7 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { getPlatformStats } from "@/lib/stores-public.functions";
 import { getEconomyStat } from "@/lib/products-public.functions";
+import { listPopularQueries } from "@/lib/search-popular.functions";
 import { RecentProducts } from "@/components/home/RecentProducts";
 import { StartFreeDialog } from "@/components/home/StartFreeDialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
@@ -171,6 +172,28 @@ function HomePage() {
     refetchOnWindowFocus: false,
   });
   const economy = economyQ.data;
+
+  // Buscas populares reais — auto-refresh a cada 60s, paginação client-side (6 chips por vez)
+  const popularFn = useServerFn(listPopularQueries);
+  const popularQ = useQuery({
+    queryKey: ["home-popular-queries", 7, 24],
+    queryFn: () => popularFn({ data: { days: 7, limit: 24 } } as any),
+    staleTime: 45_000,
+    refetchInterval: 60_000,
+    refetchOnWindowFocus: false,
+  });
+  const POPULAR_FALLBACK = ["arroz", "feijão", "leite", "óleo", "café", "açúcar"];
+  const popularAll: string[] = useMemo(() => {
+    const real = (popularQ.data ?? []).map((p: any) => String(p?.query ?? "")).filter(Boolean);
+    return real.length >= 3 ? real : POPULAR_FALLBACK;
+  }, [popularQ.data]);
+  const [popularPage, setPopularPage] = useState(0);
+  const POPULAR_PAGE_SIZE = 6;
+  const popularPageCount = Math.max(1, Math.ceil(popularAll.length / POPULAR_PAGE_SIZE));
+  const currentPopular = useMemo(() => {
+    const start = (popularPage % popularPageCount) * POPULAR_PAGE_SIZE;
+    return popularAll.slice(start, start + POPULAR_PAGE_SIZE);
+  }, [popularAll, popularPage, popularPageCount]);
 
 
   // Autocomplete de produtos (top 5)
@@ -921,15 +944,19 @@ function HomePage() {
               </form>
 
 
-              {/* Chips */}
+              {/* Chips — buscas populares reais (auto-refresh 60s, paginação client-side) */}
               <div className="mt-3 hidden flex-wrap items-center gap-2 sm:flex">
                 <span
-                  className="mr-1 text-[10px] font-bold uppercase tracking-[0.24em]"
+                  className="mr-1 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.24em]"
                   style={{ color: "var(--pc-text-muted)" }}
                 >
-                  Buscas do dia:
+                  Buscas do dia
+                  {popularQ.isFetching ? (
+                    <RefreshCw className="h-2.5 w-2.5 animate-spin" aria-hidden style={{ color: P.goldSoft }} />
+                  ) : null}
+                  <span aria-hidden style={{ color: P.line }}>·</span>
                 </span>
-                {["arroz", "feijão", "leite", "óleo", "café", "açúcar"].map((t) => (
+                {currentPopular.map((t) => (
                   <button
                     key={t}
                     onClick={() => navigate({ to: "/buscar", search: { q: t } as any })}
@@ -943,6 +970,22 @@ function HomePage() {
                     {t}
                   </button>
                 ))}
+                {popularPageCount > 1 ? (
+                  <button
+                    type="button"
+                    onClick={() => setPopularPage((p) => (p + 1) % popularPageCount)}
+                    aria-label="Mostrar mais buscas populares"
+                    className="inline-flex items-center gap-1 rounded-full border px-3 py-1.5 text-[11px] font-bold uppercase tracking-[0.14em] transition-colors duration-150 hover:bg-[color:var(--pc-hover-tint)] hover:border-[color:var(--pc-home-gold)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--pc-home-card)]"
+                    style={{
+                      background: P.card,
+                      borderColor: P.line,
+                      color: P.goldSoft,
+                    }}
+                  >
+                    Mais
+                    <ArrowRight className="h-3 w-3" strokeWidth={2.4} />
+                  </button>
+                ) : null}
               </div>
 
               {/* CTAs */}
