@@ -209,17 +209,18 @@ function EstablishmentPage() {
 
               <div className="mt-3 flex flex-wrap items-center gap-2">
                 {data.store.neighborhood && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2.5 py-1 text-[12px] font-semibold text-primary">
-                    <MapPin className="h-3.5 w-3.5" aria-hidden />
+                  <span className="inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-gold px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-navy">
+                    <MapPin className="h-3 w-3" aria-hidden />
                     Bairro {data.store.neighborhood}
                   </span>
                 )}
                 {(data.store.city || data.store.state) && (
-                  <span className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-1 text-[12px] font-medium text-foreground">
+                  <span className="inline-flex items-center gap-1 rounded-full border border-border bg-card px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground">
                     {[data.store.city, data.store.state].filter(Boolean).join(" · ")}
                   </span>
                 )}
               </div>
+
               {data.store.address && (
                 <p className="mt-2 flex items-start gap-1.5 text-sm font-medium text-foreground">
                   <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
