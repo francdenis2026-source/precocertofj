@@ -47,7 +47,18 @@ export const Route = createFileRoute("/buscar")({
         content: "Consulte preços por nome do produto em mercados próximos.",
       },
     ],
+    links: [
+      {
+        rel: "preload",
+        as: "image",
+        href: buscarHero.img.src,
+        imagesrcset: (buscarHero.sources.webp ?? buscarHero.sources.jpeg) as string,
+        imagesizes: "100vw",
+        fetchpriority: "high",
+      },
+    ],
   }),
+
   component: SearchPage,
   errorComponent: ({ error, reset }) => (
     <RouteError message={(error as Error)?.message} onRetry={reset} />
