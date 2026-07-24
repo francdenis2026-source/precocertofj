@@ -598,9 +598,10 @@ function RedeemPage() {
 
               {/* Garantias em linha compacta */}
               <ul className="mt-4 grid grid-cols-3 gap-2 border-t pt-3 text-[10.5px]" style={{ borderColor: LINE, color: MUTED }}>
-                <li className="flex items-center gap-1"><ShieldCheck className="h-3 w-3" style={{ color: NAVY }} />Uso único</li>
-                <li className="flex items-center gap-1"><KeyRound className="h-3 w-3" style={{ color: NAVY }} />Ligado ao CPF</li>
-                <li className="flex items-center gap-1"><CheckCircle2 className="h-3 w-3" style={{ color: NAVY }} />Ativação imediata</li>
+                <li className="flex items-center gap-1"><ShieldCheck className="h-3 w-3" style={{ color: GOLD }} />Uso único</li>
+                <li className="flex items-center gap-1"><KeyRound className="h-3 w-3" style={{ color: GOLD }} />Ligado ao CPF</li>
+                <li className="flex items-center gap-1"><CheckCircle2 className="h-3 w-3" style={{ color: GOLD }} />Ativação imediata</li>
+
               </ul>
             </form>
           )}
