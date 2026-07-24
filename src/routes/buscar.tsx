@@ -218,10 +218,7 @@ function SearchPage() {
 
   return (
     <div
-      className={
-        "pc-search-scope min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground" +
-        (legacyTheme ? " pc-search-legacy" : "")
-      }
+      className="pc-search-scope min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground"
     >
       <div className="mx-auto max-w-3xl px-4 md:px-6 pt-3 md:pt-4">
         <InternalPageHeader
@@ -231,17 +228,7 @@ function SearchPage() {
           description="Preço médio, mínimo e onde está mais barato."
           actions={
             <>
-              <button
-                type="button"
-                onClick={toggleLegacyTheme}
-                className="pc-search-theme-toggle"
-                data-legacy={legacyTheme ? "true" : "false"}
-                aria-pressed={legacyTheme}
-                title={legacyTheme ? "Ver paleta Navy/Gold (nova)" : "Ver paleta Ciano (atual)"}
-              >
-                <span className="pc-dot" aria-hidden="true" />
-                {legacyTheme ? "Ciano" : "Navy/Gold"}
-              </button>
+
               <Button
                 type="button"
                 variant="ghost"
