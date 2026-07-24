@@ -336,42 +336,37 @@ function SearchPage() {
 
 
 
-        <div className="mx-auto w-full max-w-7xl px-4 py-3 md:px-8 md:py-4">
-          <nav aria-label="Trilha" className="mb-2 flex items-center gap-1.5 text-[13px] font-semibold">
-            <Link
-              to="/"
-              className="inline-flex items-center rounded-md border border-white/25 bg-white/10 px-2.5 py-1 text-white outline-none transition-all hover:border-brand-gold hover:bg-brand-gold hover:text-brand-navy active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy backdrop-blur-[2px]"
-            >
-              Início
-            </Link>
-            <ChevronRight aria-hidden className="h-3.5 w-3.5 text-white/70" />
-            <span className="inline-flex items-center rounded-md bg-brand-gold px-2.5 py-1 text-brand-navy shadow-[0_2px_8px_-2px_color-mix(in_oklab,var(--brand-gold)_60%,transparent)]">Buscar</span>
+        <div className="mx-auto w-full max-w-7xl px-4 md:px-8 pt-4 md:pt-5 pb-4 md:pb-5">
+          <nav aria-label="Trilha" className="mb-2 flex items-center gap-1 text-[12px] font-semibold text-white">
+            <Link to="/" className="text-white hover:text-brand-gold">Início</Link>
+            <ChevronRight aria-hidden className="h-3 w-3 text-white/80" />
+            <span className="text-brand-gold">Buscar</span>
           </nav>
 
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="min-w-0">
-              <div className="mb-1.5 inline-flex items-center gap-1.5 rounded-full bg-brand-gold px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-brand-navy shadow-[0_2px_10px_-2px_color-mix(in_oklab,var(--brand-gold)_55%,transparent)]">
-                <span className="h-1.5 w-1.5 rounded-full bg-brand-navy" />
-                Comparador de preços
-              </div>
-              <h1 className="text-[19px] md:text-[24px] font-bold leading-tight text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.55)]">
-                Buscar <span className="text-brand-gold drop-shadow-[0_1px_6px_rgba(0,0,0,0.6)]">preço</span> por nome
-              </h1>
-              <p className="mt-1 max-w-xl text-[12px] md:text-[13px] font-medium text-white/90 drop-shadow-[0_1px_4px_rgba(0,0,0,0.5)]">
-                Consulte preço médio, mínimo e onde comprar mais barato em Feijó.
-              </p>
-
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-2.5 py-0.5 text-[10.5px] font-bold uppercase tracking-[0.14em] text-brand-navy">
+              <Search className="h-3 w-3" aria-hidden />
+              Comparador de preços
             </div>
-            <div className="flex items-center gap-2">
-              {hasQuery ? (
-                <ShareButton
-                  title={`PreçoCerto — ${q}`}
-                  text={`Veja preços comparados de "${q}" no PreçoCerto`}
-                />
-              ) : null}
-              <FreeQuotaBadge variant="inline" />
-            </div>
+            <h1 className="text-[20px] md:text-[24px] font-bold leading-tight text-white [text-shadow:0_2px_10px_rgba(0,0,0,0.65)]">
+              Buscar <span className="text-brand-gold">preço</span> por nome
+            </h1>
           </div>
+          <p className="mt-2 inline-block max-w-2xl rounded-md bg-brand-navy/75 px-2.5 py-1 text-[12.5px] md:text-[13.5px] font-medium leading-snug text-white ring-1 ring-white/10 backdrop-blur-[2px] [text-shadow:0_1px_4px_rgba(0,0,0,0.55)]">
+            Consulte preço médio, mínimo e onde comprar mais barato em Feijó.
+          </p>
+
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            {hasQuery ? (
+              <ShareButton
+                title={`PreçoCerto — ${q}`}
+                text={`Veja preços comparados de "${q}" no PreçoCerto`}
+              />
+            ) : null}
+            <FreeQuotaBadge variant="inline" />
+          </div>
+
+
 
 
           <div className="mt-2 rounded-2xl border border-white/15 bg-background/95 p-2 shadow-[0_18px_40px_-24px_rgba(2,6,23,0.65)] backdrop-blur-sm md:mt-2.5 md:p-2.5">
