@@ -842,19 +842,17 @@ export function PriceSearchBar({
                                       );
                                     })}
                                     {hidden > 0 ? (
-                                      <button
-                                        type="button"
-                                        onClick={() =>
+                                      <AutoLoadMore
+                                        onLoad={() =>
                                           setPageByCat((prev) => ({
                                             ...prev,
                                             [cat]: (prev[cat] ?? PAGE_SIZE) + PAGE_SIZE,
                                           }))
                                         }
-                                        className="mt-1 w-full rounded-lg border border-dashed border-border bg-background/60 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground transition hover:border-primary/40 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
-                                        aria-label={`Mostrar mais itens em ${cat}`}
-                                      >
-                                        Mostrar mais {Math.min(PAGE_SIZE, hidden)} · restam {hidden}
-                                      </button>
+                                        hidden={hidden}
+                                        pageSize={PAGE_SIZE}
+                                        category={cat}
+                                      />
                                     ) : null}
                                   </>
                                 );
