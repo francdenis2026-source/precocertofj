@@ -173,6 +173,28 @@ function HomePage() {
   });
   const economy = economyQ.data;
 
+  // Buscas populares reais — auto-refresh a cada 60s, paginação client-side (6 chips por vez)
+  const popularFn = useServerFn(listPopularQueries);
+  const popularQ = useQuery({
+    queryKey: ["home-popular-queries", 7, 24],
+    queryFn: () => popularFn({ data: { days: 7, limit: 24 } } as any),
+    staleTime: 45_000,
+    refetchInterval: 60_000,
+    refetchOnWindowFocus: false,
+  });
+  const POPULAR_FALLBACK = ["arroz", "feijão", "leite", "óleo", "café", "açúcar"];
+  const popularAll: string[] = useMemo(() => {
+    const real = (popularQ.data ?? []).map((p: any) => String(p?.query ?? "")).filter(Boolean);
+    return real.length >= 3 ? real : POPULAR_FALLBACK;
+  }, [popularQ.data]);
+  const [popularPage, setPopularPage] = useState(0);
+  const POPULAR_PAGE_SIZE = 6;
+  const popularPageCount = Math.max(1, Math.ceil(popularAll.length / POPULAR_PAGE_SIZE));
+  const currentPopular = useMemo(() => {
+    const start = (popularPage % popularPageCount) * POPULAR_PAGE_SIZE;
+    return popularAll.slice(start, start + POPULAR_PAGE_SIZE);
+  }, [popularAll, popularPage, popularPageCount]);
+
 
   // Autocomplete de produtos (top 5)
   const suggestFn = useServerFn(getProductSuggestions);
