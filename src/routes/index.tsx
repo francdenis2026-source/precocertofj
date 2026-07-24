@@ -118,7 +118,8 @@ function HomePage() {
   const [today, setToday] = useState("");
   const [showSuggest, setShowSuggest] = useState(false);
   const [activeIdx, setActiveIdx] = useState(-1);
-  const searchBoxRef = useRef<HTMLDivElement | null>(null);
+  const searchBoxRef = useRef<HTMLFormElement | null>(null);
+
 
   useEffect(() => {
     setToday(
