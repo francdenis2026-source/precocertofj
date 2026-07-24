@@ -875,7 +875,7 @@ function TabSwitch({
     <div
       role="tablist"
       aria-label="Login ou cadastro"
-      className="mt-4 grid grid-cols-2 gap-1 rounded-lg border border-slate-300 bg-slate-100 p-0.5"
+      className="mt-4 grid grid-cols-2 gap-1 rounded-lg border border-border bg-muted p-0.5"
     >
       {tabs.map((t) => {
         const active = mode === t.key;
@@ -886,12 +886,11 @@ function TabSwitch({
             role="tab"
             aria-selected={active}
             onClick={() => onChange(t.key)}
-            style={active ? { color: PC_EMERALD_DEEP } : undefined}
             className={
               "relative h-8 rounded-md text-[12px] font-semibold transition " +
               (active
-                ? "bg-white shadow-sm ring-1 ring-slate-300"
-                : "text-slate-600 hover:text-slate-900")
+                ? "bg-card text-foreground shadow-sm ring-1 ring-border"
+                : "text-muted-foreground hover:text-foreground")
             }
           >
             {t.label}
@@ -899,6 +898,7 @@ function TabSwitch({
         );
       })}
     </div>
+
   );
 }
 
