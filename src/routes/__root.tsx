@@ -87,18 +87,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico", sizes: "any" },
       { rel: "icon", href: "/logo-mark.svg", type: "image/svg+xml" },
-      { rel: "icon", href: "/favicon-32.png", type: "image/png", sizes: "32x32" },
-      { rel: "icon", href: "/favicon-16.png", type: "image/png", sizes: "16x16" },
-      { rel: "icon", href: "/icon-192.png", type: "image/png", sizes: "192x192" },
-      { rel: "icon", href: "/icon-512.png", type: "image/png", sizes: "512x512" },
-      { rel: "shortcut icon", href: "/favicon.ico" },
+      { rel: "icon", href: "/logo-mark.svg", sizes: "any", type: "image/svg+xml" },
       { rel: "apple-touch-icon", href: "/icon-180.png", sizes: "180x180" },
       { rel: "apple-touch-icon", href: "/icon-167.png", sizes: "167x167" },
       { rel: "apple-touch-icon", href: "/icon-152.png", sizes: "152x152" },
       { rel: "apple-touch-icon", href: "/icon-120.png", sizes: "120x120" },
-      { rel: "mask-icon", href: "/logo-mark.svg", color: "#0f2b52" },
+      { rel: "mask-icon", href: "/logo-mark.svg", color: "#0b1e3a" },
+
 
       { rel: "manifest", href: "/site.webmanifest" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
