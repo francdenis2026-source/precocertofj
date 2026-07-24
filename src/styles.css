@@ -1868,9 +1868,13 @@ body.no-page-bg::before { display: none; }
   100% { transform: translate3d(-50%, 0, 0); }
 }
 .price-marquee {
-  animation: price-marquee-slide 75s linear infinite;
+  animation: price-marquee-slide 95s linear infinite;
   will-change: transform;
 }
+@media (min-width: 640px) {
+  .price-marquee { animation-duration: 65s; }
+}
+
 .price-marquee:hover,
 .price-marquee:focus-within {
   animation-play-state: paused;
