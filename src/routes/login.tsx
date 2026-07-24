@@ -454,14 +454,15 @@ function LoginPage() {
             })()}
 
             {mode === "signup" && (
-              <details className="group rounded-xl border border-slate-300 bg-slate-50">
-                <summary className="flex cursor-pointer list-none items-center justify-between px-3.5 py-2.5 text-[11px] font-semibold uppercase tracking-widest text-slate-600 transition hover:text-slate-900">
-                  Endereço <span className="ml-1 font-normal normal-case tracking-normal text-slate-400">(opcional)</span>
-                  <span className="text-[10.5px] font-normal normal-case tracking-normal text-slate-500 group-open:hidden">
+              <details className="group rounded-xl border border-border bg-muted/40">
+                <summary className="flex cursor-pointer list-none items-center justify-between px-3.5 py-2.5 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground transition hover:text-foreground">
+                  Endereço <span className="ml-1 font-normal normal-case tracking-normal text-muted-foreground/70">(opcional)</span>
+                  <span className="text-[10.5px] font-normal normal-case tracking-normal text-muted-foreground group-open:hidden">
                     adicionar
                   </span>
                 </summary>
-                <div className="space-y-3 border-t border-slate-200 bg-white px-3.5 py-3.5">
+                <div className="space-y-3 border-t border-border bg-card px-3.5 py-3.5">
+
 
                   <div className="grid grid-cols-3 gap-3">
                     <div className="col-span-1">
