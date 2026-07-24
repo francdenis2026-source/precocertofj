@@ -266,7 +266,7 @@ function SearchPage() {
 
   return (
     <div
-      className="pc-search-scope min-h-[100dvh] pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground"
+      className="pc-search-scope min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground"
     >
       {/* Hero editorial — mesmo padrão de /estabelecimentos (blur suave, sem véus escuros extras) */}
       <section className="relative isolate overflow-hidden border-b border-white/10">
