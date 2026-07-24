@@ -1835,31 +1835,21 @@ body::before {
   pointer-events: none;
   background-color: var(--color-background);
   background-image:
-    /* Overlay de legibilidade (light) — véu claro para não competir com conteúdo */
+    /* Véu do próprio token de fundo — mesma receita em light e dark */
     linear-gradient(180deg,
-      color-mix(in oklab, var(--color-background) 78%, transparent) 0%,
-      color-mix(in oklab, var(--color-background) 88%, transparent) 45%,
-      color-mix(in oklab, var(--color-background) 94%, transparent) 100%
+      color-mix(in oklab, var(--color-background) 84%, transparent) 0%,
+      color-mix(in oklab, var(--color-background) 76%, transparent) 45%,
+      color-mix(in oklab, var(--color-background) 90%, transparent) 100%
     ),
-    /* Foto editorial (blur navy + halo dourado) */
-    url("/__l5e/assets-v1/8006a16d-fef8-4cb8-87fa-f384aece8264/site-background.jpg");
+    /* Foto editorial: corredor de mercado + prateleira de farmácia (cruz verde ao fundo), desfocada em navy com bokeh dourado */
+    url("/__l5e/assets-v1/e6b261d7-931d-47c8-8eaf-577a72b8ea4d/site-background.jpg");
   background-size: cover, cover;
-  background-position: center, center center;
+  background-position: center, center;
   background-repeat: no-repeat, no-repeat;
   background-attachment: fixed, fixed;
   opacity: 1;
 }
-.dark body::before {
-  background-image:
-    /* Overlay navy escuro para manter tokens dark legíveis */
-    linear-gradient(180deg,
-      color-mix(in oklab, var(--color-background) 82%, transparent) 0%,
-      color-mix(in oklab, var(--color-background) 74%, transparent) 45%,
-      color-mix(in oklab, var(--color-background) 88%, transparent) 100%
-    ),
-    url("/__l5e/assets-v1/8006a16d-fef8-4cb8-87fa-f384aece8264/site-background.jpg");
-  opacity: 1;
-}
+/* Dark herda a mesma receita — só o token --color-background muda, mantendo estilo consistente */
 /* Mobile / redução de dados — attachment fixed é caro em iOS */
 @media (max-width: 768px), (prefers-reduced-motion: reduce) {
   body::before { background-attachment: scroll, scroll; }
