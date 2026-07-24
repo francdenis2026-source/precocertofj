@@ -1361,19 +1361,25 @@ function ExploreCard({
   return (
     <Link
       to={to}
-      className="group block rounded-none border-0 bg-transparent px-3 py-2.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--pc-home-navy)] active:bg-white/[0.04] sm:rounded-xl sm:border sm:border-white/12 sm:bg-white/[0.06] sm:p-4 sm:shadow-elev-1 sm:hover:-translate-y-0.5 sm:hover:border-white/25 sm:hover:bg-white/[0.10] sm:hover:shadow-elev-2"
+      className="group relative block overflow-hidden rounded-xl border border-white/12 bg-white/[0.05] px-3.5 py-3 transition-all duration-150 hover:-translate-y-0.5 hover:border-[color:var(--pc-home-gold)] hover:bg-white/[0.10] hover:shadow-elev-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--pc-home-navy)] active:translate-y-0 sm:p-4"
     >
+      {/* faixa lateral gold que aparece no hover — mesmo padrão de destaque da Wave 2 */}
+      <span
+        aria-hidden
+        className="absolute inset-y-0 left-0 w-[3px] scale-y-0 origin-top transition-transform duration-200 group-hover:scale-y-100"
+        style={{ background: "var(--pc-eyebrow-on-navy)" }}
+      />
       <div className="flex items-center gap-3 sm:block">
-        <div
-          className="shrink-0 font-bold tabular-nums leading-none sm:mb-2"
+        <span
+          className="inline-flex h-7 shrink-0 items-center justify-center rounded-full border px-2 text-[10.5px] font-bold tabular-nums tracking-[0.14em] sm:mb-2.5 sm:h-6 sm:px-2"
           style={{
+            background: "color-mix(in oklab, var(--pc-eyebrow-on-navy) 14%, transparent)",
+            borderColor: "color-mix(in oklab, var(--pc-eyebrow-on-navy) 40%, transparent)",
             color: "var(--pc-eyebrow-on-navy)",
-            fontSize: "clamp(0.75rem, 1.2vw, 1rem)",
-            letterSpacing: "0.14em",
           }}
         >
           {number}
-        </div>
+        </span>
         <div className="min-w-0 flex-1">
           <h3 className="truncate text-[13px] font-semibold leading-tight text-white sm:whitespace-normal sm:text-[15.5px] lg:text-[16.5px]">
             {title}
@@ -1387,7 +1393,7 @@ function ExploreCard({
           </div>
         </div>
         <ArrowRight
-          className="h-3.5 w-3.5 shrink-0 text-[color:var(--pc-eyebrow-on-navy)] transition-transform group-active:translate-x-0.5 sm:hidden"
+          className="h-3.5 w-3.5 shrink-0 text-[color:var(--pc-eyebrow-on-navy)] transition-transform group-hover:translate-x-0.5 sm:hidden"
           aria-hidden
         />
       </div>
