@@ -282,11 +282,12 @@ function PrivacidadePage() {
               aria-selected={tab === k}
               onClick={() => setTab(k)}
               className={cn(
-                "rounded-md px-3 py-1.5 font-mono text-[10.5px] font-semibold uppercase tracking-[0.14em] transition-colors",
+                "text-eyebrow-muted rounded-md px-3 py-1.5 transition-colors",
                 tab === k
                   ? "bg-brand-gold text-brand-navy shadow-sm"
-                  : "text-muted-foreground hover:text-foreground",
+                  : "hover:text-foreground",
               )}
+
             >
               {k === "privacidade" ? "Privacidade" : "Termos"}
             </button>
