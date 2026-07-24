@@ -1163,8 +1163,8 @@ function QuickFilters({
   categories: string[];
   categoryFilter: string | null;
   onCategory: (c: string | null) => void;
-  groupBy: "product" | "market";
-  onGroupBy: (g: "product" | "market") => void;
+  groupBy: "product" | "market" | "matrix";
+  onGroupBy: (g: "product" | "market" | "matrix") => void;
 }) {
   const chip = (active: boolean) =>
     "rounded-full border px-2.5 py-1 font-mono text-[10px] tracking-wide transition " +
