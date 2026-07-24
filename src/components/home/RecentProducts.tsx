@@ -635,15 +635,19 @@ function SpotlightCard({
       </div>
 
 
-      {/* Modal de detalhes do produto (mercados, histórico, link para a página) */}
-      <ProductQuickModal
-        slug={openItem?.slug ?? null}
-        open={!!openItem}
-        onOpenChange={(v) => {
-          if (!v) setOpenItem(null);
-        }}
-        fallbackName={openItem?.name}
-      />
+      {/* Modal de detalhes do produto — só monta (e faz download do chunk) após o primeiro clique. */}
+      {openItem !== null && (
+        <Suspense fallback={null}>
+          <ProductQuickModal
+            slug={openItem?.slug ?? null}
+            open={!!openItem}
+            onOpenChange={(v) => {
+              if (!v) setOpenItem(null);
+            }}
+            fallbackName={openItem?.name}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }
