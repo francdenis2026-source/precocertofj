@@ -226,10 +226,10 @@ function EstablishmentsPage() {
                   onClick={() => setKindFilter(k)}
                   aria-pressed={active}
                   className={[
-                    "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[12px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+                    "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[12px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy shadow-[0_2px_8px_-2px_rgba(0,0,0,0.5)]",
                     active
-                      ? "border-brand-gold bg-brand-gold text-brand-navy shadow-sm"
-                      : "border-white/70 bg-white/15 text-white hover:bg-white/25",
+                      ? "border-brand-gold bg-brand-gold text-brand-navy"
+                      : "border-brand-gold/60 bg-brand-navy/90 text-white hover:bg-brand-navy hover:border-brand-gold",
                   ].join(" ")}
                 >
                   <Icon className="h-3.5 w-3.5" aria-hidden />
