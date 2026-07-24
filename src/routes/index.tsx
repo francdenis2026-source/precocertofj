@@ -600,9 +600,10 @@ function HomePage() {
 
 
       {/* -------- SOCIAL PROOF (compact, with tooltips) -------- */}
-      <section className="mx-auto w-full max-w-6xl px-4 pb-4 sm:px-6 lg:px-8">
+      <section className="mx-auto w-full max-w-6xl px-3 pb-3 sm:px-6 sm:pb-4 lg:px-8">
         <TooltipProvider delayDuration={150}>
-          <div className="grid grid-cols-3 gap-3 sm:gap-4">
+          <div className="grid grid-cols-3 gap-2 sm:gap-4">
+
             {[
               {
                 k: "8",
