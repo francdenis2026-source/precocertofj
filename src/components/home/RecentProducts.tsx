@@ -1,10 +1,26 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Clock, Store, Radio, ArrowRight, ChevronRight, TrendingDown } from "lucide-react";
+import { toast } from "sonner";
+import {
+  Clock,
+  Store,
+  Radio,
+  ArrowRight,
+  ChevronRight,
+  TrendingDown,
+  Star,
+} from "lucide-react";
 import { getRecentProducts } from "@/lib/products-public.functions";
 import { getLiveTickerStats } from "@/lib/products-public.functions";
+import {
+  listFavoritedPanelKeys,
+  panelKeyFromName,
+  toggleFavoritePanelProduct,
+} from "@/lib/favorite-panel.functions";
+import { useSession } from "@/hooks/useSession";
+import { ProductQuickModal } from "@/components/home/ProductQuickModal";
 import {
   Dialog,
   DialogContent,
@@ -13,6 +29,7 @@ import {
   DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
+
 
 
 const brl = (n: number) =>
