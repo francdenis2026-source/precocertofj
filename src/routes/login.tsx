@@ -318,17 +318,17 @@ function LoginPage() {
 
 
         {/* RIGHT — Auth form */}
-        <div className="p-8 sm:p-10" style={{ fontFamily: PC_BODY }}>
+        <div className="p-6 sm:p-8" style={{ fontFamily: PC_BODY }}>
           {/* Mobile-only compact brand row */}
-          <div className="mb-6 flex items-center gap-2 md:hidden">
+          <div className="mb-4 flex items-center gap-2 md:hidden">
             <div
-              className="flex h-8 w-8 items-center justify-center rounded-md"
+              className="flex h-7 w-7 items-center justify-center rounded-md"
               style={{ background: PC_EMERALD, color: PC_GOLD }}
             >
-              <ShoppingCart className="h-4 w-4" strokeWidth={2.5} />
+              <ShoppingCart className="h-3.5 w-3.5" strokeWidth={2.5} />
             </div>
             <span
-              className="text-[16px] font-bold tracking-tight"
+              className="text-[15px] font-bold tracking-tight"
               style={{ color: PC_EMERALD, fontFamily: PC_DISPLAY }}
             >
               PreçoCerto
@@ -336,13 +336,13 @@ function LoginPage() {
           </div>
 
           <p
-            className="text-[10.5px] font-bold uppercase tracking-[0.22em]"
+            className="text-[9.5px] font-bold uppercase tracking-[0.2em]"
             style={{ color: PC_EMERALD }}
           >
             {mode === "login" ? "Área do assinante" : "Comece grátis"}
           </p>
           <h1
-            className="mt-1.5 text-[26px] leading-[1.1] font-bold tracking-tight"
+            className="mt-1 text-[22px] leading-[1.15] font-bold tracking-tight"
             style={{ color: PC_EMERALD_DEEP, fontFamily: PC_DISPLAY }}
           >
             {mode === "login" ? "Entrar na plataforma" : "Criar sua conta"}
@@ -350,7 +350,7 @@ function LoginPage() {
 
           <TabSwitch mode={mode} onChange={setMode} />
 
-          <form className="mt-5 space-y-4" onSubmit={handleSubmit}>
+          <form className="mt-4 space-y-3" onSubmit={handleSubmit}>
 
             {mode === "signup" && (() => {
               const trimmed = fullName.trim();
@@ -872,7 +872,7 @@ function TabSwitch({
     <div
       role="tablist"
       aria-label="Login ou cadastro"
-      className="mt-5 grid grid-cols-2 gap-1 rounded-xl border border-border bg-muted/40 p-1"
+      className="mt-4 grid grid-cols-2 gap-1 rounded-lg border border-slate-200 bg-slate-100 p-0.5"
     >
       {tabs.map((t) => {
         const active = mode === t.key;
@@ -883,11 +883,12 @@ function TabSwitch({
             role="tab"
             aria-selected={active}
             onClick={() => onChange(t.key)}
+            style={active ? { color: PC_EMERALD_DEEP } : undefined}
             className={
-              "relative h-9 rounded-lg text-[12.5px] font-semibold transition " +
+              "relative h-8 rounded-md text-[12px] font-semibold transition " +
               (active
-                ? "bg-background text-foreground shadow-sm ring-1 ring-border"
-                : "text-muted-foreground hover:text-foreground")
+                ? "bg-white shadow-sm ring-1 ring-slate-200"
+                : "text-slate-500 hover:text-slate-800")
             }
           >
             {t.label}
@@ -927,26 +928,28 @@ function Field({
   status?: FieldStatus;
   hint?: string | null;
 }) {
+  // The right panel is hardcoded white, so inputs use an explicit light palette
+  // to guarantee contrast regardless of the app's dark/light theme setting.
   const borderCls =
     status === "success"
-      ? "border-primary/60 focus:border-primary focus:ring-primary/10"
+      ? "border-emerald-500/70 focus:border-emerald-600 focus:ring-emerald-500/15"
       : status === "error"
-        ? "border-destructive/60 focus:border-destructive focus:ring-destructive/10"
-        : "border-input focus:border-foreground focus:ring-foreground/5";
+        ? "border-rose-500/70 focus:border-rose-600 focus:ring-rose-500/15"
+        : "border-slate-200 hover:border-slate-300 focus:border-slate-900 focus:ring-slate-900/10";
   const hintCls =
     status === "success"
-      ? "text-primary"
+      ? "text-emerald-700"
       : status === "error"
-        ? "text-destructive"
-        : "text-muted-foreground";
+        ? "text-rose-600"
+        : "text-slate-500";
   return (
     <label className="block">
-      <span className="mb-1 block text-[10.5px] font-semibold uppercase tracking-wider text-muted-foreground">
+      <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
         {label}
       </span>
       <div className="relative">
         {Icon && (
-          <Icon className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Icon className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
         )}
         <input
           type={type}
@@ -958,24 +961,25 @@ function Field({
           minLength={minLength}
           inputMode={inputMode}
           aria-invalid={status === "error" || undefined}
+          style={{ color: PC_EMERALD_DEEP }}
           className={
-            "h-11 w-full rounded-xl bg-card text-sm text-foreground shadow-[0_1px_0_rgba(0,0,0,0.02)] transition placeholder:text-muted-foreground focus:outline-none focus:ring-4 " +
+            "h-9 w-full rounded-lg bg-white text-[13px] font-medium tracking-tight shadow-[inset_0_1px_0_rgba(15,23,42,0.02)] transition placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:ring-4 " +
             borderCls +
             " border " +
-            (Icon ? "pl-10 " : "pl-3.5 ") +
-            (status !== "idle" ? "pr-10" : "pr-3.5")
+            (Icon ? "pl-9 " : "pl-3 ") +
+            (status !== "idle" ? "pr-9" : "pr-3")
           }
         />
         {status === "success" && (
-          <Check className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" />
+          <Check className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-emerald-600" />
         )}
         {status === "error" && (
-          <AlertCircle className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-destructive" />
+          <AlertCircle className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-rose-600" />
         )}
       </div>
       {hint && (
         <p
-          className={`mt-1 pl-1 text-[11px] font-medium ${hintCls}`}
+          className={`mt-1 pl-0.5 text-[10.5px] font-medium ${hintCls}`}
           aria-live="polite"
         >
           {hint}
@@ -1038,7 +1042,7 @@ function PinField({
           PIN de 6 dígitos
         </label>
       </div>
-      <div className="grid grid-cols-6 gap-2">
+      <div className="grid grid-cols-6 gap-1.5">
         {digits.map((d, i) => (
           <input
             key={i}
@@ -1054,13 +1058,13 @@ function PinField({
             onKeyDown={(e) => handleKey(i, e)}
             onPaste={handlePaste}
             aria-label={`Dígito ${i + 1} do PIN`}
-            className="h-12 w-full rounded-lg border-2 bg-[#faf7ec] text-center text-xl font-bold outline-none transition"
+            className="h-10 w-full rounded-md border bg-white text-center text-base font-bold outline-none transition"
             style={{
               borderColor: hasError
                 ? "#dc2626"
                 : d.trim()
                   ? PC_GOLD
-                  : "rgba(6,78,59,0.14)",
+                  : "#e2e8f0",
               color: PC_EMERALD_DEEP,
               fontFamily: PC_DISPLAY,
             }}
@@ -1074,7 +1078,7 @@ function PinField({
                 ? "#dc2626"
                 : d.trim()
                   ? PC_GOLD
-                  : "rgba(6,78,59,0.14)";
+                  : "#e2e8f0";
             }}
           />
         ))}
