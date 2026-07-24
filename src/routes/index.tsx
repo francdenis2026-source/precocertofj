@@ -509,12 +509,12 @@ function HomePage() {
 
           {/* -------- EXPLORE (dark navy band inside card) -------- */}
           <div
-            className="p-4 sm:p-5 lg:p-6 xl:p-7"
+            className="p-3 sm:p-5 lg:p-6 xl:p-7"
             style={{ background: P.navy, color: "#F5F6FA" }}
           >
-            <div className="mb-3 sm:mb-4">
+            <div className="mb-2.5 sm:mb-4">
               <div
-                className="mb-1.5 text-[9.5px] font-bold uppercase tracking-[0.24em] sm:text-[10.5px]"
+                className="mb-1 text-[9px] font-bold uppercase tracking-[0.22em] sm:mb-1.5 sm:text-[10.5px]"
                 style={{ color: P.goldSoft }}
               >
                 Por onde começar
@@ -522,7 +522,7 @@ function HomePage() {
               <h2
                 className="font-semibold text-white"
                 style={{
-                  fontSize: "clamp(1.05rem, 2vw, 1.5rem)",
+                  fontSize: "clamp(0.95rem, 2vw, 1.5rem)",
                   lineHeight: 1.15,
                   letterSpacing: "-0.02em",
                 }}
@@ -531,30 +531,31 @@ function HomePage() {
               </h2>
             </div>
 
-            <div className="grid gap-2 sm:grid-cols-2 sm:gap-3 lg:grid-cols-3">
+            <div className="flex flex-col divide-y divide-white/10 rounded-xl border border-white/10 bg-white/[0.03] sm:grid sm:grid-cols-2 sm:gap-3 sm:divide-y-0 sm:border-0 sm:bg-transparent lg:grid-cols-3">
               <ExploreCard
                 to="/melhores-precos"
                 number="01"
                 title="Ranking dos mercados"
-                desc="Veja qual mercado tem a cesta básica mais barata hoje."
+                desc="Qual mercado tem a cesta mais barata hoje."
                 cta="Ver ranking"
               />
               <ExploreCard
                 to="/estabelecimentos"
                 number="02"
                 title="Mercados por bairro"
-                desc="Endereço, horário e catálogo completo de cada mercado."
+                desc="Endereço, horário e catálogo de cada mercado."
                 cta="Explorar mercados"
               />
               <ExploreCard
                 to="/planos"
                 number="03"
                 title="Alertas de preço"
-                desc="Assine e receba aviso quando o preço cair no seu bairro."
+                desc="Aviso quando o preço cair no seu bairro."
                 cta="Ver planos"
               />
             </div>
           </div>
+
 
 
         </div>
@@ -705,37 +706,40 @@ function ExploreCard({
   return (
     <Link
       to={to}
-      className="group block rounded-xl border border-white/12 bg-white/[0.06] p-3.5 shadow-elev-1 transition-all duration-200 hover:-translate-y-0.5 hover:border-white/25 hover:bg-white/[0.10] hover:shadow-elev-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--pc-home-navy)] sm:p-4"
+      className="group block rounded-none border-0 bg-transparent px-3 py-2.5 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[color:var(--pc-home-navy)] active:bg-white/[0.04] sm:rounded-xl sm:border sm:border-white/12 sm:bg-white/[0.06] sm:p-4 sm:shadow-elev-1 sm:hover:-translate-y-0.5 sm:hover:border-white/25 sm:hover:bg-white/[0.10] sm:hover:shadow-elev-2"
     >
-      <div className="flex items-start gap-3 sm:block">
+      <div className="flex items-center gap-3 sm:block">
         <div
           className="shrink-0 font-bold tabular-nums leading-none sm:mb-2"
           style={{
             color: P.goldSoft,
-            fontSize: "clamp(0.85rem, 1.2vw, 1rem)",
+            fontSize: "clamp(0.75rem, 1.2vw, 1rem)",
             letterSpacing: "0.14em",
           }}
         >
           {number}
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="mb-1 text-[14.5px] font-semibold leading-tight text-white sm:text-[15.5px] lg:text-[16.5px]">
+          <h3 className="truncate text-[13px] font-semibold leading-tight text-white sm:whitespace-normal sm:text-[15.5px] lg:text-[16.5px]">
             {title}
           </h3>
-          <p className="text-[12.5px] leading-snug text-white/85 sm:text-[13px]">{desc}</p>
-          <div className="mt-2 inline-flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-[0.16em] text-[color:var(--pc-home-gold-soft)] transition-colors group-hover:text-[color:var(--pc-home-gold)] sm:mt-2.5">
+          <p className="mt-0.5 truncate text-[11px] leading-snug text-white/70 sm:mt-1 sm:whitespace-normal sm:text-[13px] sm:text-white/85">
+            {desc}
+          </p>
+          <div className="mt-2 hidden items-center gap-1 text-[10.5px] font-bold uppercase tracking-[0.16em] text-[color:var(--pc-home-gold-soft)] transition-colors group-hover:text-[color:var(--pc-home-gold)] sm:mt-2.5 sm:inline-flex">
             {cta}
             <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1 sm:h-3.5 sm:w-3.5" />
           </div>
         </div>
         <ArrowRight
-          className="mt-1 h-4 w-4 shrink-0 text-white/50 transition-all group-hover:translate-x-0.5 group-hover:text-[color:var(--pc-home-gold)] sm:hidden"
+          className="h-3.5 w-3.5 shrink-0 text-[color:var(--pc-home-gold-soft)] transition-transform group-active:translate-x-0.5 sm:hidden"
           aria-hidden
         />
       </div>
     </Link>
   );
 }
+
 
 
 
