@@ -132,6 +132,23 @@ function EstablishmentsPage() {
     return data.items.slice().sort((a, b) => b.productsCount - a.productsCount).slice(0, 8);
   }, [data]);
 
+  // Ids used to compute status badges (mais barato, atualizado, destaque)
+  const badgeIds = useMemo(() => {
+    if (!data) return { cheapestId: null as string | null, featuredIds: new Set<string>() };
+    const cheapest = [...data.items]
+      .filter((i) => i.maxSavings > 0)
+      .sort((a, b) => b.maxSavings - a.maxSavings)[0];
+    const featuredIds = new Set(
+      [...data.items].sort((a, b) => b.productsCount - a.productsCount).slice(0, 3).map((i) => i.id),
+    );
+    return { cheapestId: cheapest?.id ?? null, featuredIds };
+  }, [data]);
+  const isRecent = (iso: string | null) => {
+    if (!iso) return false;
+    const t = new Date(iso).getTime();
+    return Number.isFinite(t) && Date.now() - t < 7 * 24 * 60 * 60 * 1000;
+  };
+
   const KIND_META: Record<string, { label: string; icon: typeof Store; tagline: string }> = {
     mercado: { label: "Supermercados", icon: ShoppingBasket, tagline: "Compare a cesta básica entre os supermercados de Feijó" },
     farmacia: { label: "Farmácias", icon: Pill, tagline: "Preços de medicamentos e cuidados no seu bairro" },
