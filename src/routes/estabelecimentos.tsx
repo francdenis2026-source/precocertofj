@@ -419,7 +419,7 @@ function EstablishmentsPage() {
               <SectionCard
                 title={
                   <span className="inline-flex items-center gap-2">
-                    <TrendingUp className="h-4 w-4 text-primary" aria-hidden />
+                    <TrendingUp className="h-4 w-4 text-brand-gold" aria-hidden />
                     Categorias mais populares
                   </span>
                 }
