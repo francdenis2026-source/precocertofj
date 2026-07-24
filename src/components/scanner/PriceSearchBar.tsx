@@ -939,9 +939,17 @@ export function PriceSearchBar({
 
                       <div className="space-y-2">
                         {filteredOrdered.map(([cat, groups]) => {
-                          // Ordena os grupos por menor preço ASC (mais barato primeiro),
-                          // depois por relevância (samples DESC como proxy).
+                          // Ordena grupos: se sortMode === "relevance", usa score de
+                          // correspondência (nome, marca, variações como 1L/integral);
+                          // caso contrário, mantém menor preço primeiro.
                           const sortedGroups = [...groups].sort((a, b) => {
+                            if (sortMode === "relevance") {
+                              const sa = scoreRelevance(a, query);
+                              const sb = scoreRelevance(b, query);
+                              if (sa !== sb) return sb - sa;
+                              if (a.min !== b.min) return a.min - b.min;
+                              return b.samples - a.samples;
+                            }
                             if (a.min !== b.min) return a.min - b.min;
                             return b.samples - a.samples;
                           });
