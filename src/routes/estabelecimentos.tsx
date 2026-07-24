@@ -108,7 +108,34 @@ function EstablishmentsPage() {
         list.sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
     }
     return list;
-  }, [data, q, neighborhood, sort]);
+  }, [data, q, neighborhood, sort, kindFilter]);
+
+  const kindsPresent = useMemo(() => {
+    if (!data) return new Set<string>();
+    const s = new Set<string>();
+    for (const it of data.items) s.add(it.kind ?? "outro");
+    return s;
+  }, [data]);
+
+  const featured = useMemo(() => {
+    if (!data) return [] as EstablishmentsOverview["items"];
+    return data.items.slice().sort((a, b) => b.productsCount - a.productsCount).slice(0, 8);
+  }, [data]);
+
+  const KIND_META: Record<string, { label: string; icon: typeof Store; tagline: string }> = {
+    mercado: { label: "Supermercados", icon: ShoppingBasket, tagline: "Compare a cesta básica entre os supermercados de Feijó" },
+    farmacia: { label: "Farmácias", icon: Pill, tagline: "Preços de medicamentos e cuidados no seu bairro" },
+    padaria: { label: "Padarias", icon: Croissant, tagline: "Pães, bolos e insumos com preço monitorado" },
+    acougue: { label: "Açougues", icon: Beef, tagline: "Cortes bovinos, suínos e aves comparados no dia" },
+    outro: { label: "Outros comércios", icon: Store, tagline: "Comércios parceiros com preços validados" },
+  };
+  const currentKind = kindFilter === "__all" ? null : (KIND_META[kindFilter] ?? KIND_META.outro);
+
+  const scrollCarousel = (dir: 1 | -1) => {
+    const el = carouselRef.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * (el.clientWidth * 0.85), behavior: "smooth" });
+  };
 
 
   return (
