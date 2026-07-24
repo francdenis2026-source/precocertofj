@@ -362,7 +362,7 @@ function EstablishmentsPage() {
                   key={e.id}
                   to="/estabelecimento/$slug"
                   params={{ slug: slugifyEstablishment(e.name) }}
-                  className="group relative flex w-[210px] shrink-0 snap-start items-center gap-2.5 rounded-lg border border-border bg-background p-2 transition-colors hover:border-brand-gold/60 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                  className="group relative flex w-[210px] shrink-0 snap-start items-center gap-2.5 rounded-lg border border-brand-gold/60 bg-background p-2 transition-colors hover:border-brand-gold hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                   style={{ boxShadow: "inset 3px 0 0 var(--brand-gold)" }}
                 >
                   <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md">
@@ -512,7 +512,7 @@ function EstablishmentsPage() {
                   {visibleItems.map((e) => (
                     <li
                       key={e.id}
-                      className="rounded-xl border border-border/60 bg-card shadow-sm transition-shadow hover:shadow-md"
+                      className="rounded-xl border border-brand-gold/50 bg-card shadow-sm transition-all hover:border-brand-gold hover:shadow-md"
                     >
                       <Link
                         to="/estabelecimento/$slug"
