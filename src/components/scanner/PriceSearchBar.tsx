@@ -1664,6 +1664,7 @@ function MarketGroupedResults({
     <div className="space-y-3">
       {buckets.map((b, idx) => {
         const isCheapest = globalMin != null && b.minPrice === globalMin;
+        const bar = b.brandColor && /^#[0-9A-Fa-f]{6}$/.test(b.brandColor) ? b.brandColor : null;
         return (
           <section
             key={b.marketName}
@@ -1673,10 +1674,13 @@ function MarketGroupedResults({
                 ? "border-brand-gold/70 bg-[color-mix(in_oklab,var(--color-brand-gold)_5%,var(--card))]"
                 : "border-border/60 bg-card/70")
             }
+            style={bar ? { boxShadow: `inset 4px 0 0 0 ${bar}` } : undefined}
           >
-            <header className="flex items-center gap-3 border-b border-border/50 bg-background/40 px-3 py-2.5">
+            <header className="flex items-center gap-3 border-b border-border/50 bg-background/40 px-3 py-2.5 pl-4">
               <span
-                className="grid h-8 w-8 flex-none place-items-center rounded-md border border-brand-gold/30 bg-background overflow-hidden"
+                className="grid h-8 w-8 flex-none place-items-center rounded-md border overflow-hidden bg-background"
+                style={{ borderColor: bar ?? undefined }}
+
                 aria-hidden="true"
               >
                 {b.logoUrl ? (
