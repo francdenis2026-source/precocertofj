@@ -53,7 +53,18 @@ export function pushRecentSearch(q: string) {
   } catch {
     /* ignore */
   }
+  // Registrar de forma agregada (fire-and-forget) para alimentar "buscas populares".
+  try {
+    // Import dinâmico para evitar custo no SSR / bundle inicial.
+    void import("@/lib/analytics-events").then(({ trackEvent }) => {
+      trackEvent("search_query", { q: term.toLowerCase().slice(0, 60) });
+    });
+  } catch {
+    /* ignore */
+  }
 }
+
+
 
 type Props = {
   onPickQuery: (q: string) => void;

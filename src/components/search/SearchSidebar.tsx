@@ -2,10 +2,11 @@ import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Store as StoreIcon, ArrowRight, Flame, History as HistoryIcon, X, Trash2 } from "lucide-react";
 import { listPublicStores } from "@/lib/stores-public.functions";
+import { listPopularQueries } from "@/lib/search-popular.functions";
 import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 import { useConfirm } from "@/components/ui/confirm-provider";
 
-const POPULAR: string[] = [
+const POPULAR_FALLBACK: string[] = [
   "arroz 5kg",
   "feijão carioca",
   "café 500g",
@@ -27,9 +28,19 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
     queryFn: () => listPublicStores(),
     staleTime: 5 * 60_000,
   });
+  const popular = useQuery({
+    queryKey: ["popular-queries", 30, 6],
+    queryFn: () => listPopularQueries({ data: { days: 30, limit: 6 } }),
+    staleTime: 5 * 60_000,
+  });
   const { confirm } = useConfirm();
 
   const list = (stores.data ?? []).slice(0, 6);
+  const popularItems: string[] =
+    (popular.data ?? []).map((p) => p.query).filter(Boolean).slice(0, 6);
+  const useReal = popularItems.length >= 3;
+  const popularList = useReal ? popularItems : POPULAR_FALLBACK;
+
 
   async function handleClearAll() {
     if (!onClearRecent || recent.length === 0) return;
@@ -100,9 +111,23 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
       <SidebarSection
         icon={<Flame className="h-4 w-4 text-brand-gold" />}
         title="Buscas populares"
+        action={
+          useReal ? (
+            <span
+              title="Agregado dos últimos 30 dias"
+              className="inline-flex items-center gap-1 rounded-full bg-brand-gold/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-brand-gold"
+            >
+              <span className="relative inline-flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-gold/70 opacity-75" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-gold" />
+              </span>
+              Ao vivo
+            </span>
+          ) : undefined
+        }
       >
         <ul className="space-y-0.5">
-          {POPULAR.map((p, i) => (
+          {popularList.map((p: string, i: number) => (
             <li key={p}>
               <button
                 type="button"
