@@ -231,18 +231,6 @@ function SearchPage() {
           description="Preço médio, mínimo e onde está mais barato."
           actions={
             <>
-
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={goBack}
-                aria-label="Voltar"
-                className="h-8 px-2 text-[12px]"
-              >
-                <ArrowLeft className="mr-1 h-3.5 w-3.5" strokeWidth={2} />
-                Voltar
-              </Button>
               {hasQuery ? (
                 <ShareButton
                   title={`PreçoCerto — ${q}`}
@@ -252,6 +240,7 @@ function SearchPage() {
               <FreeQuotaBadge variant="inline" />
             </>
           }
+
         />
 
         <ListingShell density="sm" className="mb-2">
