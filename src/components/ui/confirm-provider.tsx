@@ -297,7 +297,7 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
                 <div className="min-w-0 flex-1 pt-0.5">
                   <h2
                     id="confirm-title"
-                    className="font-display text-[17px] font-semibold leading-tight text-foreground"
+                    className="font-display text-[15px] font-semibold leading-tight text-foreground"
                   >
                     {state.options.title}
                   </h2>
