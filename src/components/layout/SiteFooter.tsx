@@ -53,38 +53,48 @@ export function SiteFooter() {
       <div
         className={dsx(
           ds.container,
-          "md:hidden pt-1.5 pb-[max(0.375rem,env(safe-area-inset-bottom))] px-[max(1rem,env(safe-area-inset-left))]",
+          "md:hidden pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] px-[max(1rem,env(safe-area-inset-left))]",
         )}
       >
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-3">
           <Link
             to="/"
-            className="grid h-6 w-6 shrink-0 place-items-center rounded-[6px] bg-brand text-[11px] font-black text-brand-foreground shadow-elev-2"
+            className="flex shrink-0 items-center gap-2"
             aria-label="PreçoCerto — início"
           >
-            P
+            <span className="grid h-8 w-8 place-items-center rounded-[8px] bg-brand text-[14px] font-black text-brand-foreground shadow-elev-2">
+              P
+            </span>
+            <span className={dsx(serif, "text-[17px] leading-none text-foreground")}>
+              Preço<span className="italic text-brand">Certo</span>
+            </span>
           </Link>
-          <nav
-            aria-label="Rodapé"
-            className="flex flex-wrap items-center justify-end gap-x-2 gap-y-0.5 text-[11px] font-medium leading-tight text-foreground/85"
-          >
-            {MOBILE_LINKS.map((l) => (
-              <Link
-                key={l.to}
-                to={l.to}
-                className="rounded-sm px-0.5 py-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand hover:text-primary"
-              >
-                {l.label}
-              </Link>
-            ))}
-          </nav>
+          <span className="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            Feijó · AC
+          </span>
         </div>
 
-        <div className="mt-1 flex items-center justify-between gap-2 text-[10px] leading-tight text-muted-foreground">
+        <nav
+          aria-label="Rodapé"
+          className="mt-3 grid grid-cols-3 gap-x-2 gap-y-1.5 text-[13px] font-semibold leading-tight text-foreground/90"
+        >
+          {MOBILE_LINKS.map((l) => (
+            <Link
+              key={l.to}
+              to={l.to}
+              className="rounded-md px-1.5 py-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand hover:text-primary"
+            >
+              {l.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="mt-3 flex items-center justify-between gap-2 border-t border-border/60 pt-2 text-[11.5px] leading-tight text-muted-foreground">
           <span>© {year} · Feijó/AC</span>
           <span className="font-mono">&lt;dev&gt; Franc D&apos;nis</span>
         </div>
       </div>
+
 
 
       {/* ============ DESKTOP / TABLET ============ */}
