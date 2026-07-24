@@ -1620,6 +1620,7 @@ function MarketGroupedResults({
   type Bucket = {
     marketName: string;
     logoUrl: string | null;
+    brandColor: string | null;
     minPrice: number;
     rows: Row[];
   };
@@ -1636,6 +1637,7 @@ function MarketGroupedResults({
         b = {
           marketName: p.marketName,
           logoUrl: p.marketLogoUrl,
+          brandColor: p.marketBrandColor ?? null,
           minPrice: p.price,
           rows: [],
         };
@@ -1643,9 +1645,11 @@ function MarketGroupedResults({
       }
       if (p.price < b.minPrice) b.minPrice = p.price;
       if (!b.logoUrl && p.marketLogoUrl) b.logoUrl = p.marketLogoUrl;
+      if (!b.brandColor && p.marketBrandColor) b.brandColor = p.marketBrandColor;
       b.rows.push({ productName: g.productName, catalogId: g.catalogId, price: p });
     }
   }
+
 
   const buckets = Array.from(bucketsMap.values())
     .map((b) => ({
