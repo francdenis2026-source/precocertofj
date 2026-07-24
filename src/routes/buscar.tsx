@@ -310,7 +310,7 @@ function SearchPage() {
         {/* Painel desfocado à esquerda — opacidade/sombra adaptativas para AA em claro/escuro */}
         <div
           aria-hidden
-          className="pc-hero-panel absolute inset-y-0 left-0 -z-10 w-full md:w-[62%] backdrop-blur-[3px] md:backdrop-blur-[6px]"
+          className="pc-hero-panel absolute inset-y-0 left-0 -z-10 w-full md:w-[62%] backdrop-blur-[1px] md:backdrop-blur-[2px]"
           style={{
             WebkitMaskImage:
               "linear-gradient(100deg, black 0%, black 55%, transparent 95%)",
