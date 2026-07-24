@@ -53,47 +53,56 @@ export function SiteFooter() {
       <div
         className={dsx(
           ds.container,
-          "md:hidden pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] px-[max(1rem,env(safe-area-inset-left))]",
+          "md:hidden pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] px-[max(0.875rem,env(safe-area-inset-left))]",
         )}
       >
-        <div className="flex items-center justify-between gap-3">
+        {/* Row 1: brand + location badge */}
+        <div className="flex items-center justify-between gap-2">
           <Link
             to="/"
-            className="flex shrink-0 items-center gap-2"
+            className="flex shrink-0 items-center gap-1.5"
             aria-label="PreçoCerto — início"
           >
-            <span className="grid h-8 w-8 place-items-center rounded-[8px] bg-brand text-[14px] font-black text-brand-foreground shadow-elev-2">
+            <span className="grid h-6 w-6 place-items-center rounded-[6px] bg-brand text-[11px] font-black text-brand-foreground shadow-elev-2">
               P
             </span>
-            <span className={dsx(serif, "text-[17px] leading-none text-foreground")}>
+            <span className={dsx(serif, "text-[14px] leading-none text-foreground")}>
               Preço<span className="italic text-brand">Certo</span>
             </span>
           </Link>
-          <span className="text-[10.5px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          <span className="inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+            <MapPin className="h-3 w-3 text-brand" aria-hidden />
             Feijó · AC
           </span>
         </div>
 
+        {/* Row 2: nav chips — inline flex, wraps if needed */}
         <nav
           aria-label="Rodapé"
-          className="mt-3 grid grid-cols-3 gap-x-2 gap-y-1.5 text-[13px] font-semibold leading-tight text-foreground/90"
+          className="mt-2 flex flex-wrap gap-x-1 gap-y-1 text-[12px] font-semibold leading-none text-foreground/85"
         >
-          {MOBILE_LINKS.map((l) => (
-            <Link
-              key={l.to}
-              to={l.to}
-              className="rounded-md px-1.5 py-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand hover:text-primary"
-            >
-              {l.label}
-            </Link>
+          {MOBILE_LINKS.map((l, i) => (
+            <span key={l.to} className="inline-flex items-center">
+              <Link
+                to={l.to}
+                className="rounded px-1 py-0.5 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand"
+              >
+                {l.label}
+              </Link>
+              {i < MOBILE_LINKS.length - 1 && (
+                <span aria-hidden className="px-0.5 text-muted-foreground/50">·</span>
+              )}
+            </span>
           ))}
         </nav>
 
-        <div className="mt-3 flex items-center justify-between gap-2 border-t border-border/60 pt-2 text-[11.5px] leading-tight text-muted-foreground">
-          <span>© {year} · Feijó/AC</span>
+        {/* Row 3: legal strip, single line */}
+        <div className="mt-2 flex items-center justify-between gap-2 border-t border-border/50 pt-1.5 text-[10.5px] leading-none text-muted-foreground">
+          <span>© {year} · LGPD</span>
           <span className="font-mono">&lt;dev&gt; Franc D&apos;nis</span>
         </div>
       </div>
+
 
 
 
