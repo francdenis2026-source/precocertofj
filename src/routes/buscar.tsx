@@ -14,7 +14,7 @@ import { RouteError } from "@/components/feedback";
 import { SearchDiscovery, pushRecentSearch } from "@/components/search/SearchDiscovery";
 import { SearchSidebar } from "@/components/search/SearchSidebar";
 
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Search } from "lucide-react";
 import buscarHero from "@/assets/buscar-hero.jpg?w=1200;1920&format=avif;webp;jpg&quality=68&as=picture";
 
 
