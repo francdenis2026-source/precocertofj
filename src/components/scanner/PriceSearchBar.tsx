@@ -1352,12 +1352,14 @@ function ProductDetailsCard({
     <div className="relative rounded-xl border border-border bg-card p-3">
       <div className="flex items-start gap-3">
         {suggestion.imageUrl ? (
-          <img
+          <LazyImage
             src={suggestion.imageUrl}
             alt={suggestion.displayName}
-            loading="lazy"
+            width={64}
+            height={64}
             className="h-16 w-16 shrink-0 rounded-lg border border-border object-contain bg-background"
           />
+
         ) : (
           <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg border border-border bg-muted/30">
             <ShoppingBag className="h-5 w-5 text-muted-foreground" />
