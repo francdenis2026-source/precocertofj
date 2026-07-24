@@ -49,16 +49,18 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
   const brandTextClass = isOverlay ? "text-on-media" : "text-foreground";
   const brandAccentClass = isOverlay ? "text-brand-soft" : "text-brand";
   const subTextClass = isOverlay ? "text-on-media-muted" : "text-muted-foreground";
+  // Nav: hover/active sempre em gold (brand) — legível em light e dark, sem tons cyan.
   const navClass = isOverlay
-    ? "relative text-on-media-muted transition-colors hover:text-brand-soft focus-visible:ring-on-media/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent [&.active]:text-on-media after:pointer-events-none after:absolute after:inset-x-2 after:-bottom-0.5 after:h-0.5 after:origin-center after:scale-x-0 after:rounded-full after:bg-brand-soft after:transition-transform after:duration-200 hover:after:scale-x-100 [&.active]:after:scale-x-100"
-    : "relative text-muted-foreground transition-colors hover:text-primary focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background [&.active]:text-primary after:pointer-events-none after:absolute after:inset-x-2 after:-bottom-0.5 after:h-0.5 after:origin-center after:scale-x-0 after:rounded-full after:bg-primary after:transition-transform after:duration-200 hover:after:scale-x-100 [&.active]:after:scale-x-100";
+    ? "relative text-on-media-muted transition-colors hover:text-brand-soft focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent [&.active]:text-brand-soft after:pointer-events-none after:absolute after:inset-x-2 after:-bottom-0.5 after:h-0.5 after:origin-center after:scale-x-0 after:rounded-full after:bg-brand-soft after:transition-transform after:duration-200 hover:after:scale-x-100 [&.active]:after:scale-x-100"
+    : "relative text-muted-foreground transition-colors hover:text-brand focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background [&.active]:text-brand after:pointer-events-none after:absolute after:inset-x-2 after:-bottom-0.5 after:h-0.5 after:origin-center after:scale-x-0 after:rounded-full after:bg-brand after:transition-transform after:duration-200 hover:after:scale-x-100 [&.active]:after:scale-x-100";
   const accountClass = isOverlay
-    ? "border-on-media-border bg-on-media-surface text-on-media transition-colors hover:border-brand-soft hover:bg-brand-soft/15 hover:text-on-media focus-visible:ring-2 focus-visible:ring-on-media/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
-    : "border-border bg-card text-foreground transition-colors hover:border-primary hover:bg-primary/10 hover:text-primary focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+    ? "border-on-media-border bg-on-media-surface text-on-media transition-colors hover:border-brand-soft hover:bg-brand-soft/15 hover:text-brand-soft focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
+    : "border-border bg-card text-foreground transition-colors hover:border-brand hover:bg-brand/10 hover:text-brand focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
   // Botão "Entrar" alinhado à paleta gold/navy do header em ambas as variantes.
   const loginClass = isOverlay
     ? "bg-[color:var(--pc-home-gold,#F5B301)] text-[color:var(--pc-home-navy,#0b1e3b)] shadow-[0_4px_14px_rgb(0_0_0/0.25)] ring-1 ring-[color:var(--pc-home-navy,#0b1e3b)]/10 transition-all hover:brightness-105 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-on-media/70 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
     : "bg-[color:var(--pc-home-gold,#F5B301)] text-[color:var(--pc-home-navy,#0b1e3b)] shadow-elev-2 ring-1 ring-[color:var(--pc-home-navy,#0b1e3b)]/10 transition-all hover:brightness-105 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold,#F5B301)]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+
 
 
 
