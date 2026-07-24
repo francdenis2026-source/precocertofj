@@ -1328,14 +1328,14 @@ function ProductGroupCard({
   }, [prices]);
 
   return (
-    <div className="relative overflow-hidden rounded-xl border border-primary/15 bg-background p-2">
+    <div className="relative rounded-xl border border-border bg-card p-2">
       <div className="mb-1.5 flex items-center justify-between gap-2">
         <div className="min-w-0 flex-1">
-          <p className="truncate font-display text-[14px] font-semibold tracking-tight text-foreground">
+          <p className="truncate text-[15px] font-semibold tracking-tight text-foreground">
             <HighlightMatch text={productName} tokens={highlightTokens} />
           </p>
-          <p className="mt-0.5 truncate text-[11px] text-muted-foreground">
-            <span className="font-medium text-accent-strong">menor</span> {fmt(min)}
+          <p className="mt-0.5 truncate text-[12px] text-muted-foreground">
+            <span className="font-semibold text-foreground">menor</span> {fmt(min)}
             <span aria-hidden="true" className="mx-1 opacity-40">·</span>
             média {fmt(avg)}
             <span aria-hidden="true" className="mx-1 opacity-40">·</span>
@@ -1344,10 +1344,10 @@ function ProductGroupCard({
             {samples} preço{samples > 1 ? "s" : ""}
           </p>
           {cheapestInGroup ? (
-            <p className="mt-1 inline-flex max-w-full items-center gap-1 rounded-md border border-accent-strong/30 bg-accent/8 px-1.5 py-0.5 text-[11px] text-accent-strong">
-              <Crown className="h-3 w-3 shrink-0" strokeWidth={2} aria-hidden="true" />
+            <p className="mt-1 inline-flex max-w-full items-center gap-1 rounded-md border border-border bg-muted/40 px-1.5 py-0.5 text-[12px] text-foreground">
+              <Crown className="h-3 w-3 shrink-0 text-accent-strong" strokeWidth={2} aria-hidden="true" />
               <span className="truncate">
-                Mais barato em <span className="market-name text-[11px]">{cheapestInGroup.marketName}</span> · {fmt(cheapestInGroup.price)}
+                Mais barato em <span className="market-name text-[12px]">{cheapestInGroup.marketName}</span> · <span className="font-semibold tabular-nums">{fmt(cheapestInGroup.price)}</span>
               </span>
             </p>
           ) : null}
