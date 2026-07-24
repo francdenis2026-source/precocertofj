@@ -123,6 +123,9 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
         className="price-marquee-viewport sm:hidden -mx-4 overflow-hidden border-y py-3"
         style={{ borderColor: P.line, background: P.card }}
         aria-label="Atualizações recentes de preço"
+        tabIndex={-1}
+        role="region"
+        onTouchStart={() => { /* Ativa :active no iOS Safari para pausar */ }}
       >
         <div className="price-marquee flex w-max items-center gap-3 px-4">
           {[...data, ...data].map((p, i) => {
