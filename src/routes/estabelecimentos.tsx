@@ -362,8 +362,8 @@ function EstablishmentsPage() {
                   key={e.id}
                   to="/estabelecimento/$slug"
                   params={{ slug: slugifyEstablishment(e.name) }}
-                  className="group relative flex w-[210px] shrink-0 snap-start items-center gap-2.5 rounded-lg border border-border bg-background p-2 transition-colors hover:border-primary/60 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-                  style={e.brandColor ? { boxShadow: `inset 3px 0 0 ${e.brandColor}` } : undefined}
+                  className="group relative flex w-[210px] shrink-0 snap-start items-center gap-2.5 rounded-lg border border-border bg-background p-2 transition-colors hover:border-brand-gold/60 hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                  style={{ boxShadow: "inset 3px 0 0 var(--brand-gold)" }}
                 >
                   <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md bg-white">
                     {e.logoUrl ? (
