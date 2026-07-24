@@ -99,6 +99,16 @@ const captionTypography = {
   textRendering: "optimizeLegibility" as const,
 };
 
+function useDebounced<T>(value: T, delay: number): T {
+  const [v, setV] = useState(value);
+  useEffect(() => {
+    const t = setTimeout(() => setV(value), delay);
+    return () => clearTimeout(t);
+  }, [value, delay]);
+  return v;
+}
+
+
 function HomePage() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
