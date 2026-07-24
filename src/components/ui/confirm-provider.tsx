@@ -288,9 +288,9 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
                 className={`pointer-events-none absolute inset-x-0 top-0 h-1 ${tc.iconBg}`}
                 aria-hidden
               />
-              <div className="flex items-start gap-4 p-5 sm:p-6">
+              <div className="flex items-start gap-3 p-4 sm:p-5">
                 <div
-                  className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl ${tc.iconBg} ${tc.icon}`}
+                  className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${tc.iconBg} ${tc.icon}`}
                 >
                   <ToneIcon tone={tone} />
                 </div>
