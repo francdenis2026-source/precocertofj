@@ -1289,34 +1289,34 @@ function ProductGroupCard({
   }, [prices]);
 
   return (
-    <div className="hairline-gold relative overflow-hidden rounded-xl border border-primary/15 bg-background p-2.5">
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[color-mix(in_oklab,var(--color-accent)_55%,transparent)] to-transparent"
-      />
-      <div className="mb-2 flex items-center justify-between gap-2">
+    <div className="relative overflow-hidden rounded-xl border border-primary/15 bg-background p-2">
+      <div className="mb-1.5 flex items-center justify-between gap-2">
         <div className="min-w-0 flex-1">
-          <p className="truncate font-display text-[15px] font-semibold tracking-tight text-foreground">
+          <p className="truncate font-display text-[14px] font-semibold tracking-tight text-foreground">
             <HighlightMatch text={productName} tokens={highlightTokens} />
           </p>
-          <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground">
-            <span className="text-accent-strong">Menor</span> {fmt(min)} ·{" "}
-            média {fmt(avg)} · máx {fmt(max)} · {samples} preço{samples > 1 ? "s" : ""}
+          <p className="mt-0.5 truncate text-[11px] text-muted-foreground">
+            <span className="font-medium text-accent-strong">menor</span> {fmt(min)}
+            <span aria-hidden="true" className="mx-1 opacity-40">·</span>
+            média {fmt(avg)}
+            <span aria-hidden="true" className="mx-1 opacity-40">·</span>
+            máx {fmt(max)}
+            <span aria-hidden="true" className="mx-1 opacity-40">·</span>
+            {samples} preço{samples > 1 ? "s" : ""}
           </p>
           {cheapestInGroup ? (
-            <p className="mt-1 inline-flex max-w-full items-center gap-1 rounded-full border border-accent-strong/40 bg-accent/10 px-2 py-0.5 font-mono text-[9.5px] uppercase tracking-[0.16em] text-accent-strong">
+            <p className="mt-1 inline-flex max-w-full items-center gap-1 rounded-md border border-accent-strong/30 bg-accent/8 px-1.5 py-0.5 text-[11px] text-accent-strong">
               <Crown className="h-3 w-3 shrink-0" strokeWidth={2} aria-hidden="true" />
               <span className="truncate">
-                Mais barato em <span className="market-name text-[10px]">{cheapestInGroup.marketName}</span> · {fmt(cheapestInGroup.price)}
+                Mais barato em <span className="market-name text-[11px]">{cheapestInGroup.marketName}</span> · {fmt(cheapestInGroup.price)}
               </span>
-
-
             </p>
           ) : null}
           {matchReasons.length > 0 && (
             <MatchReasonBadges reasons={matchReasons} className="mt-1" />
           )}
         </div>
+
 
 
         <div className="flex shrink-0 items-center gap-1.5">
@@ -1353,17 +1353,15 @@ function ProductGroupCard({
         </div>
       </div>
 
-      <ul className="mt-1 divide-y divide-[color-mix(in_oklab,var(--color-accent)_18%,transparent)] border-t border-[color-mix(in_oklab,var(--color-accent)_25%,transparent)]">
+      <ul className="mt-1 divide-y divide-border/60 border-t border-border/60">
         {prices.map((p, i) => {
           const isCheapest = globalMin != null && p.price === globalMin;
           return (
             <li
               key={`${p.marketName}-${p.when}-${i}`}
               className={
-                "relative flex items-stretch gap-2 pr-2 py-2 pl-0 " +
-                (isCheapest
-                  ? "bg-gradient-to-r from-accent/25 via-accent/10 to-transparent"
-                  : "bg-transparent")
+                "relative flex items-stretch gap-2 pr-2 py-1.5 pl-0 " +
+                (isCheapest ? "bg-accent/8" : "bg-transparent")
               }
             >
               <StoreColorBar name={p.marketName} brandColor={p.marketBrandColor} />
@@ -1372,15 +1370,15 @@ function ProductGroupCard({
                   role="img"
                   aria-label="Menor preço"
                   title="Menor preço"
-                  className="my-auto grid h-7 w-7 shrink-0 place-items-center rounded-full bg-accent-strong text-accent-foreground shadow-[0_4px_12px_-6px_color-mix(in_oklab,var(--color-accent)_75%,transparent)]"
+                  className="my-auto grid h-6 w-6 shrink-0 place-items-center rounded-full bg-accent-strong text-accent-foreground"
                 >
-                  <Crown className="h-3.5 w-3.5" strokeWidth={2} aria-hidden="true" />
+                  <Crown className="h-3 w-3" strokeWidth={2} aria-hidden="true" />
                 </span>
               ) : (
                 <span
                   role="img"
                   aria-label={`Posição ${i + 1}`}
-                  className="my-auto grid h-7 w-7 shrink-0 place-items-center rounded-full border border-accent-strong/40 bg-accent/10 font-sans text-[10.5px] font-semibold tabular-nums text-accent-strong"
+                  className="my-auto grid h-6 w-6 shrink-0 place-items-center rounded-full border border-border bg-muted/30 text-[10px] font-semibold tabular-nums text-muted-foreground"
                 >
                   <span aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
                 </span>
@@ -1404,12 +1402,13 @@ function ProductGroupCard({
                 </p>
 
 
-                <p className="truncate font-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground">
+                <p className="truncate text-[11px] text-muted-foreground">
                   {(p.marketKind ?? "Estabelecimento")}
-                  <span aria-hidden="true" className="mx-1 text-accent-strong/50">·</span>
+                  <span aria-hidden="true" className="mx-1 opacity-40">·</span>
                   {new Date(p.when).toLocaleDateString("pt-BR")}
                 </p>
               </div>
+
               <FairPriceBadge
                 price={p.price}
                 min={globalMin}
@@ -1420,13 +1419,14 @@ function ProductGroupCard({
               />
               <div className="shrink-0 self-center text-right">
                 {isCheapest && (
-                  <p className="font-mono text-[8px] uppercase tracking-[0.22em] text-accent-strong">
+                  <p className="text-[10px] font-semibold uppercase tracking-wide text-accent-strong">
                     Menor
                   </p>
                 )}
-                <p className="font-display text-[16px] font-semibold leading-tight tabular-nums text-foreground">
+                <p className="font-display text-[15px] font-semibold leading-tight tabular-nums text-foreground">
                   {fmt(p.price)}
                 </p>
+
                 <UnitPriceBadge
                   price={p.price}
                   productName={productName}
