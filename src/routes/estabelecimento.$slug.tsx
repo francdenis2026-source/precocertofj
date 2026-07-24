@@ -182,10 +182,11 @@ function EstablishmentPage() {
       <main className="mx-auto max-w-5xl px-4 pb-16 pt-6">
         <Link
           to="/estabelecimentos"
-          className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+          className="mb-4 inline-flex h-9 items-center gap-1.5 rounded-full border border-border bg-background px-3.5 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
-          <ArrowLeft className="h-4 w-4" /> Todos os estabelecimentos
+          <ArrowLeft className="h-3.5 w-3.5" aria-hidden /> Todos os estabelecimentos
         </Link>
+
 
         <Card className="overflow-hidden">
           <CardHeader className="flex flex-row items-start gap-4">
