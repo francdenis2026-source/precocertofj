@@ -173,6 +173,15 @@ function PlansPage() {
       <main>
         {/* Hero — ultra compact */}
         <section className={dsx(ds.container, "pt-5 pb-4 md:pt-7 md:pb-5 text-center")}>
+          <div className="mb-3 flex justify-center">
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-background/80 px-3 py-1.5 text-[12px] font-medium text-foreground/80 transition-colors hover:border-brand-gold/60 hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" aria-hidden />
+              Voltar para a home
+            </Link>
+          </div>
           <p className={ds.type.overline}>Planos · Feijó/AC</p>
           <h1 className="mt-1.5 font-display text-[22px] font-semibold tracking-tight text-foreground sm:text-[26px] md:text-[30px]">
             Economize todo mês na sua feira
