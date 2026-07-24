@@ -239,7 +239,7 @@ function HomePage() {
                 className={`${serif} font-normal`}
                 style={{
                   color: P.heading,
-                  fontSize: "clamp(1.75rem, 4.6vw, 3.75rem)",
+                  fontSize: "clamp(1.55rem, 4.6vw, 3.75rem)",
                   lineHeight: 0.95,
                   letterSpacing: "-0.03em",
                 }}
