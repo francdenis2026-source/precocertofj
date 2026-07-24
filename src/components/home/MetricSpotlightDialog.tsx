@@ -420,7 +420,7 @@ export function MetricSpotlightDialog({
               ))}
             </div>
           ) : (
-            <MetricBody kind={kind} data={data} animate={animate} />
+            <MetricBody kind={kind} data={data} animate={animate} onNavigate={() => onOpenChange(false)} />
           )}
 
           {data?.totals.lastUpdate && (
