@@ -3058,6 +3058,28 @@ export type Database = {
           similarity: number
         }[]
       }
+      find_similar_scans_v2: {
+        Args: {
+          p_brand?: string
+          p_establishment_id?: string
+          p_name: string
+          p_size_unit?: string
+          p_size_value?: number
+          p_threshold?: number
+        }
+        Returns: {
+          barcode: string
+          brand_match: boolean
+          id: string
+          price_captured: number
+          product_name: string
+          quantity: number
+          score: number
+          similarity: number
+          size_match: boolean
+          unit: string
+        }[]
+      }
       generate_license_code_string: { Args: never; Returns: string }
       get_coverage_overview: {
         Args: never
