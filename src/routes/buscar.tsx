@@ -60,22 +60,10 @@ const PURE_KEY = "search:pureOnly";
 function SearchPage() {
   const search = Route.useSearch();
   const navigate = useNavigate({ from: "/buscar" });
-  const router = useRouter();
   const { user } = useSession();
   const urlSyncTimer = useRef<number | null>(null);
 
 
-  const goBack = useCallback(() => {
-    try {
-      if (typeof window !== "undefined" && window.history.length > 1) {
-        router.history.back();
-        return;
-      }
-    } catch {
-      /* ignore */
-    }
-    navigate({ to: "/" });
-  }, [navigate, router]);
 
   const mode: SearchMode = search.mode === "loose" ? "loose" : "strict";
   const pureOnly = search.pure !== "0";
