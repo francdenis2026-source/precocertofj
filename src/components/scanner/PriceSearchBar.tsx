@@ -1757,7 +1757,7 @@ function MatrixCompareResults({
   query: string;
   isAuthenticated: boolean;
 }) {
-  type Market = { name: string; logoUrl: string | null; kind: string | null; minAcc: number };
+  type Market = { name: string; logoUrl: string | null; brandColor: string | null; kind: string | null; minAcc: number };
   const { allMarkets, cheapestByMarket, allProducts } = useMemo(() => {
     const marketsMap = new Map<string, Market>();
     const cbm = new Map<string, Map<string, number>>();
@@ -1771,11 +1771,13 @@ function MatrixCompareResults({
           marketsMap.set(p.marketName, {
             name: p.marketName,
             logoUrl: p.marketLogoUrl,
+            brandColor: p.marketBrandColor ?? null,
             kind: p.marketKind,
             minAcc: p.price,
           });
         } else {
           if (!m.logoUrl && p.marketLogoUrl) m.logoUrl = p.marketLogoUrl;
+          if (!m.brandColor && p.marketBrandColor) m.brandColor = p.marketBrandColor;
           if (p.price < m.minAcc) m.minAcc = p.price;
         }
         const prev = perMarket.get(p.marketName);
@@ -1783,6 +1785,7 @@ function MatrixCompareResults({
       }
       cbm.set(g.productName, perMarket);
     }
+
     const all = Array.from(marketsMap.values()).sort((a, z) => a.minAcc - z.minAcc);
     const prods = groups.filter((g) => cbm.has(g.productName)).sort((a, b) => a.min - b.min);
     return { allMarkets: all, cheapestByMarket: cbm, allProducts: prods };
