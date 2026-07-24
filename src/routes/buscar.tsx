@@ -269,11 +269,11 @@ function SearchPage() {
         {/* Padrão temático: código de barras + etiquetas de preço, sutil para não competir com o texto */}
         <div
           aria-hidden
-          className="absolute inset-0 -z-10 opacity-[0.07]"
+          className="absolute inset-0 -z-10 opacity-[0.16]"
           style={{
             backgroundImage: `url("data:image/svg+xml;utf8,${encodeURIComponent(
               `<svg xmlns='http://www.w3.org/2000/svg' width='260' height='160' viewBox='0 0 260 160'>
-                <g fill='none' stroke='%23f5b301' stroke-linecap='round'>
+                <g fill='none' stroke='#f5b301' stroke-linecap='round'>
                   <g stroke-width='2'>
                     <path d='M12 20v40'/><path d='M18 20v40'/><path d='M22 20v40' stroke-width='4'/>
                     <path d='M30 20v40'/><path d='M36 20v40' stroke-width='3'/><path d='M42 20v40'/>
@@ -286,7 +286,7 @@ function SearchPage() {
                     <path d='M38 10v40' stroke-width='3'/><path d='M44 10v40'/><path d='M50 10v40' stroke-width='2'/>
                   </g>
                 </g>
-                <g fill='none' stroke='%23ffffff' stroke-width='1.4' opacity='0.9'>
+                <g fill='none' stroke='#ffffff' stroke-width='1.4' opacity='0.9'>
                   <path d='M180 22 l30 0 l14 14 l-30 30 l-14 -14 z'/>
                   <circle cx='188' cy='30' r='2.4'/>
                   <path d='M40 118 l30 0 l14 14 l-30 30 l-14 -14 z'/>
@@ -298,6 +298,7 @@ function SearchPage() {
             backgroundRepeat: "repeat",
           }}
         />
+
 
 
         <div className="mx-auto w-full max-w-7xl px-4 md:px-8 pt-5 md:pt-7 pb-5 md:pb-7">
