@@ -143,12 +143,13 @@ export const listPublicEstablishments = createServerFn({ method: "GET" }).handle
       return "outros";
     };
 
-    type Agg = { total: Set<string>; cats: Map<string, number>; last: string | null };
+    type Agg = { total: Set<string>; cats: Map<string, number>; last: string | null; prices: Map<string, { min: number; max: number }> };
     const byEst = new Map<string, Agg>();
+    const globalPrices = new Map<string, { min: number; max: number }>();
     for (const s of scans ?? []) {
       let agg = byEst.get(s.establishment_id);
       if (!agg) {
-        agg = { total: new Set(), cats: new Map(), last: null };
+        agg = { total: new Set(), cats: new Map(), last: null, prices: new Map() };
         byEst.set(s.establishment_id, agg);
       }
       const key = s.product_name.toLowerCase().trim();
@@ -156,6 +157,20 @@ export const listPublicEstablishments = createServerFn({ method: "GET" }).handle
       const cat = classify(s.product_name);
       agg.cats.set(cat, (agg.cats.get(cat) ?? 0) + 1);
       if (!agg.last || s.created_at > agg.last) agg.last = s.created_at;
+      if (typeof s.price_captured === "number" && s.price_captured > 0) {
+        const cur = agg.prices.get(key);
+        if (!cur) agg.prices.set(key, { min: s.price_captured, max: s.price_captured });
+        else {
+          if (s.price_captured < cur.min) cur.min = s.price_captured;
+          if (s.price_captured > cur.max) cur.max = s.price_captured;
+        }
+        const g = globalPrices.get(key);
+        if (!g) globalPrices.set(key, { min: s.price_captured, max: s.price_captured });
+        else {
+          if (s.price_captured < g.min) g.min = s.price_captured;
+          if (s.price_captured > g.max) g.max = s.price_captured;
+        }
+      }
     }
 
     const items: EstablishmentStat[] = (ests ?? []).map((e) => {
@@ -166,6 +181,13 @@ export const listPublicEstablishments = createServerFn({ method: "GET" }).handle
             .slice(0, 4)
             .map(([category, count]) => ({ category, count }))
         : [];
+      let maxSavings = 0;
+      if (agg) {
+        for (const [, p] of agg.prices) {
+          const diff = p.max - p.min;
+          if (diff > maxSavings) maxSavings = diff;
+        }
+      }
       return {
         id: e.id,
         name: e.name,
@@ -174,9 +196,11 @@ export const listPublicEstablishments = createServerFn({ method: "GET" }).handle
         neighborhood: e.neighborhood,
         logoUrl: e.logo_url,
         brandColor: e.brand_color,
+        kind: e.kind ?? null,
         productsCount: agg?.total.size ?? 0,
         topCategories: cats,
         lastUpdate: agg?.last ?? null,
+        maxSavings: Math.round(maxSavings * 100) / 100,
       };
     });
 
@@ -193,11 +217,17 @@ export const listPublicEstablishments = createServerFn({ method: "GET" }).handle
       .map(([category, count]) => ({ category, count }));
 
     const totalProducts = items.reduce((s, i) => s + i.productsCount, 0);
+    let totalMaxSavings = 0;
+    for (const [, p] of globalPrices) {
+      const d = p.max - p.min;
+      if (d > totalMaxSavings) totalMaxSavings = d;
+    }
 
     return {
       totalEstablishments: items.length,
       totalProducts,
       totalCategories: globalCats.size,
+      totalMaxSavings: Math.round(totalMaxSavings * 100) / 100,
       topGlobalCategories,
       items,
     };
