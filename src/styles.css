@@ -510,7 +510,22 @@
   /* Ring width acessível — WCAG AA */
   --ring-width: 2px;
   --ring-offset-width: 2px;
+
+  /* ============= INTERACTIVE STATE TOKENS (single source of truth)
+     Consumidos por button, card, input, dialog, links e navegação.
+     Auto-adaptam-se em .dark porque referenciam --primary / --brand / --destructive. */
+  --state-hover-tint:   color-mix(in oklab, var(--brand) 12%, transparent);
+  --state-hover-strong: color-mix(in oklab, var(--brand) 20%, transparent);
+  --state-active-tint:  color-mix(in oklab, var(--brand) 22%, transparent);
+  --state-focus-ring:   var(--brand);
+  --state-focus-ring-soft: color-mix(in oklab, var(--brand) 55%, transparent);
+  --state-danger:       var(--destructive);
+  --state-danger-tint:  color-mix(in oklab, var(--destructive) 12%, transparent);
+  --state-success:      var(--savings);
+  --state-success-tint: color-mix(in oklab, var(--savings) 14%, transparent);
+  --state-disabled-opacity: 0.5;
 }
+
 
 @utility text-display {
   font-family: var(--font-sans);
