@@ -617,7 +617,7 @@ function HomePage() {
       <section
         className="relative hidden w-full overflow-hidden sm:block"
         style={{
-          minHeight: "min(78svh, 760px)",
+          minHeight: "min(62svh, 620px)",
         }}
       >
 
