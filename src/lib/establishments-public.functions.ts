@@ -67,7 +67,7 @@ export const listPublicEstablishments = createServerFn({ method: "GET" }).handle
 
     const { data: ests, error: eErr } = await client
       .from("establishments")
-      .select("id, name, city, state, neighborhood, logo_url, brand_color")
+      .select("id, name, city, state, neighborhood, logo_url, brand_color, kind")
       .eq("active", true)
       .order("name", { ascending: true });
     if (eErr) throw new Error(eErr.message);
