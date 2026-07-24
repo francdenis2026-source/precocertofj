@@ -304,7 +304,7 @@ function PrivacidadePage() {
         <div className="mt-5 flex justify-center">
           <Link
             to="/"
-            className="inline-flex items-center gap-1.5 font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-brand-gold"
+            className="text-eyebrow-muted inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-brand-gold"
           >
             <ArrowLeft className="h-3 w-3" strokeWidth={2.4} />
             Voltar para a página inicial
