@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import {
   analyzeBatchPhotos,
+  analyzeManualItem,
   commitScanBatch,
   type Candidate,
   type Decision,
