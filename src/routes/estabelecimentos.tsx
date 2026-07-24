@@ -191,7 +191,7 @@ function EstablishmentsPage() {
 
   return (
     <div className="min-h-dvh bg-background pb-24 md:pb-8">
-      <SiteHeader variant="solid" />
+
 
       {/* Hero editorial — imagem de supermercado, contraste WCAG, dados ao vivo, carrossel de mercados */}
       <section className="relative isolate overflow-hidden border-b border-white/10">
