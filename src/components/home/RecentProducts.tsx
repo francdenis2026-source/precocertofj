@@ -75,13 +75,22 @@ type Palette = {
 
 export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
   const fetchRecent = useServerFn(getRecentProducts);
+  const fetchLive = useServerFn(getLiveTickerStats);
   const { data } = useQuery({
     queryKey: ["home", "recent-products", 6],
     queryFn: () => fetchRecent({ data: { limit: 6 } }),
     staleTime: 60_000,
   });
+  const { data: live } = useQuery({
+    queryKey: ["home", "live-ticker-stats"],
+    queryFn: () => fetchLive(),
+    staleTime: 60_000,
+    refetchInterval: 90_000,
+  });
 
   if (!data || data.length === 0) return null;
+
+  const lastUpdateLabel = live?.lastUpdate ? relative(live.lastUpdate) : null;
 
 
   return (
