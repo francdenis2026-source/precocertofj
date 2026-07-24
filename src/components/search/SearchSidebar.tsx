@@ -231,11 +231,22 @@ function SidebarSection({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-xl border border-border/60 bg-card/60 p-5 shadow-sm">
+    <section className="rounded-xl border border-border/60 bg-card/70 p-5 shadow-sm">
       <header className="mb-3 flex items-center justify-between gap-2">
-        <div className="flex items-center gap-2 text-foreground">
-          <span className="text-brand-gold">{icon}</span>
-          <h3 className="font-sans text-[12px] font-bold uppercase tracking-[0.14em] text-foreground">
+        <div className="flex min-w-0 items-center gap-2">
+          <span className="grid h-6 w-6 flex-none place-items-center rounded-md bg-brand-gold/15 text-brand-gold">
+            {icon}
+          </span>
+          <h3
+            className="truncate text-[12.5px] font-semibold uppercase text-foreground"
+            style={{
+              fontFamily:
+                'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+              letterSpacing: "0.08em",
+              fontFeatureSettings: '"kern" 1, "liga" 1, "calt" 1',
+              color: "color-mix(in oklab, var(--foreground) 96%, transparent)",
+            }}
+          >
             {title}
           </h3>
         </div>
@@ -245,4 +256,5 @@ function SidebarSection({
     </section>
   );
 }
+
 
