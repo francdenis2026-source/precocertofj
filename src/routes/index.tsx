@@ -734,7 +734,7 @@ function HomePage() {
                 to="/planos"
                 number="03"
                 title="Alertas de preço"
-                desc="Aviso quando o preço cair no seu bairro."
+                desc="Avisamos quando o preço cair perto de você."
                 cta="Ver planos"
               />
             </div>
