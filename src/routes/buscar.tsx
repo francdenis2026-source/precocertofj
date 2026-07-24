@@ -66,12 +66,7 @@ function SearchPage() {
 
   const goBack = useCallback(() => {
     try {
-      const canGoBack =
-        typeof window !== "undefined" &&
-        window.history.length > 1 &&
-        document.referrer &&
-        new URL(document.referrer).origin === window.location.origin;
-      if (canGoBack) {
+      if (typeof window !== "undefined" && window.history.length > 1) {
         router.history.back();
         return;
       }
