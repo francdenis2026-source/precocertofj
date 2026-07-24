@@ -96,17 +96,19 @@ export function ErrorState({
     <div
       role="alert"
       className={cn(
-        "flex flex-col items-start gap-3 rounded-2xl border border-destructive/30 bg-destructive/5 p-5 text-sm text-destructive sm:flex-row sm:items-center",
+        "flex flex-col items-start gap-3 rounded-2xl border border-destructive/40 bg-destructive/10 p-5 text-[13px] sm:text-sm leading-relaxed text-foreground sm:flex-row sm:items-center",
         className,
       )}
     >
-      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-destructive/15">
-        <Icon className="h-4 w-4" />
+      <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-destructive/20 text-destructive dark:text-destructive-foreground">
+        <Icon className="h-4 w-4" strokeWidth={2} />
       </span>
       <div className="min-w-0 flex-1">
-        <p className="font-semibold text-foreground">{title}</p>
+        <p className="text-[14px] sm:text-[15px] font-semibold leading-snug text-foreground">{title}</p>
         {message && (
-          <p className="mt-0.5 line-clamp-3 text-xs text-muted-foreground">{message}</p>
+          <p className="mt-1 line-clamp-3 text-[12.5px] sm:text-[13px] leading-relaxed text-foreground/80">
+            {message}
+          </p>
         )}
       </div>
       {onRetry && (
@@ -115,7 +117,7 @@ export function ErrorState({
           onClick={onRetry}
           variant="outline"
           size="sm"
-          className="shrink-0"
+          className="shrink-0 font-medium"
         >
           <RefreshCw className="h-3.5 w-3.5" />
           {retryLabel}
