@@ -1065,7 +1065,7 @@ function PinField({
                 ? "#dc2626"
                 : d.trim()
                   ? PC_GOLD
-                  : "hsl(var(--border, 214 32% 91%))",
+                  : "var(--border)",
               fontFamily: PC_DISPLAY,
             }}
             onFocus={(e) => {
@@ -1078,7 +1078,7 @@ function PinField({
                 ? "#dc2626"
                 : d.trim()
                   ? PC_GOLD
-                  : "hsl(var(--border, 214 32% 91%))";
+                  : "var(--border)";
             }}
           />
         ))}
