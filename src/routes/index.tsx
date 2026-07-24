@@ -664,8 +664,25 @@ function HomePage() {
           />
         </picture>
 
-        {/* Scrims removidos a pedido — foto do hero fica 100% nítida e colorida.
-            Contraste do texto é mantido via text-shadow nos títulos/badges. */}
+        {/* Scrim DESKTOP suave — só na coluna esquerda, atrás do conteúdo textual.
+            Metade direita da foto fica 100% nítida e colorida. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 hidden sm:block"
+          style={{
+            background:
+              "linear-gradient(100deg, color-mix(in oklab, var(--pc-home-navy) 55%, transparent) 0%, color-mix(in oklab, var(--pc-home-navy) 32%, transparent) 32%, transparent 62%)",
+          }}
+        />
+        {/* Fade inferior curto desktop — separa o hero da próxima seção sem escurecer a foto. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 hidden h-8 sm:block"
+          style={{
+            background:
+              "linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--pc-home-navy) 45%, transparent) 100%)",
+          }}
+        />
 
         {/* Scrim MOBILE mantido — sem ele o conteúdo empilhado sobre a foto perde legibilidade. */}
         <div
@@ -676,6 +693,7 @@ function HomePage() {
               "linear-gradient(180deg, color-mix(in oklab, var(--pc-home-card) 88%, transparent) 0%, color-mix(in oklab, var(--pc-home-card) 70%, transparent) 32%, color-mix(in oklab, var(--pc-home-card) 55%, transparent) 60%, color-mix(in oklab, var(--pc-home-card) 78%, transparent) 100%)",
           }}
         />
+
 
 
         {/* CONTENT OVERLAY */}
