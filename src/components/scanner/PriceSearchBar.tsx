@@ -786,7 +786,10 @@ export function PriceSearchBar({
                       categories={availableCategories}
                       categoryFilter={categoryFilter}
                       onCategory={setCategoryFilter}
+                      groupBy={groupBy}
+                      onGroupBy={setGroupBy}
                     />
+
 
                     {result.groups.length > 0 ? (
                       <div className="space-y-2">
