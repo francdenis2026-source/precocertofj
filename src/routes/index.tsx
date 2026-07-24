@@ -429,14 +429,14 @@ function HomePage() {
                 <div
                   className="mb-3 inline-flex w-fit items-center gap-2 text-[12px] font-semibold uppercase tabular-nums sm:mb-3 sm:text-[10.5px]"
                   style={{
-                    color: "color-mix(in oklab, var(--pc-home-ink) 62%, transparent)",
+                    color: "color-mix(in oklab, var(--pc-home-ink) 85%, transparent)",
                     letterSpacing: "0.16em",
                   }}
                 >
                   <span
                     aria-hidden
                     className="inline-block h-[1px] w-6"
-                    style={{ background: "color-mix(in oklab, var(--pc-home-ink) 35%, transparent)" }}
+                    style={{ background: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
                   />
                   {today}
                 </div>
@@ -458,10 +458,10 @@ function HomePage() {
 
               <p
                 className="mt-3 max-w-md text-[13.5px] leading-snug sm:text-[13px]"
-                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 72%, transparent)" }}
+                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 92%, transparent)" }}
               >
                 Compare arroz, feijão e café nos mercados do seu bairro.{" "}
-                <span style={{ color: P.goldSoft, fontWeight: 600 }}>
+                <span style={{ color: P.goldSoft, fontWeight: 700 }}>
                   Conferido por nota fiscal
                 </span>{" "}
                 — feito por Feijó, para Feijó.
@@ -482,7 +482,7 @@ function HomePage() {
                   <span className="pl-3 sm:pl-4">
                     <Search
                       className="h-5 w-5"
-                      style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
+                      style={{ color: "color-mix(in oklab, var(--pc-home-ink) 75%, transparent)" }}
                       strokeWidth={2.2}
                     />
                   </span>
@@ -539,7 +539,7 @@ function HomePage() {
                     style={{ background: P.card, borderColor: P.line }}
                   >
                     {suggestQ.isLoading && suggestions.length === 0 ? (
-                      <li className="px-4 py-3 text-[13px]" style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}>
+                      <li className="px-4 py-3 text-[13px]" style={{ color: "color-mix(in oklab, var(--pc-home-ink) 78%, transparent)" }}>
                         Buscando…
                       </li>
                     ) : (
@@ -578,7 +578,7 @@ function HomePage() {
               <div className="mt-3 hidden flex-wrap items-center gap-2 sm:flex">
                 <span
                   className="mr-1 text-[10px] font-bold uppercase tracking-[0.24em]"
-                  style={{ color: "color-mix(in oklab, var(--pc-home-ink) 45%, transparent)" }}
+                  style={{ color: "color-mix(in oklab, var(--pc-home-ink) 72%, transparent)" }}
                 >
                   Buscas do dia:
                 </span>
@@ -709,7 +709,7 @@ function HomePage() {
             <figcaption
               className="mt-3 text-[10.5px] font-bold uppercase"
               style={{
-                color: "color-mix(in oklab, var(--pc-home-ink) 82%, transparent)",
+                color: "color-mix(in oklab, var(--pc-home-ink) 92%, transparent)",
                 ...captionTypography,
               }}
             >
@@ -750,7 +750,7 @@ function HomePage() {
               </p>
               <p
                 className="mt-0.5 text-[13px] leading-snug sm:text-[13.5px]"
-                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 82%, transparent)" }}
+                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 92%, transparent)" }}
               >
                 Cada valor vem de nota fiscal ou de um morador que acabou de comprar.
               </p>
@@ -896,7 +896,7 @@ function HomePage() {
                       </div>
                       <div
                         className="mt-2 truncate text-[10px] font-bold uppercase leading-tight tracking-[0.14em] sm:text-[11px] sm:tracking-[0.16em]"
-                        style={{ color: "color-mix(in oklab, var(--pc-home-ink) 62%, transparent)" }}
+                        style={{ color: "color-mix(in oklab, var(--pc-home-ink) 82%, transparent)" }}
                       >
                         <span className="sm:hidden">{s.l}</span>
                         <span className="hidden sm:inline">{s.lFull}</span>
