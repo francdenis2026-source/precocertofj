@@ -540,33 +540,8 @@ function HomePage() {
             </div>
           </div>
 
-          {/* -------- MOBILE: quick nav chips (essencial) -------- */}
-          <div
-            className="flex items-center justify-between gap-2 px-3 py-2.5 sm:hidden"
-            style={{ background: P.navy, color: "#F5F6FA" }}
-            aria-label="Atalhos rápidos"
-          >
-            {[
-              { to: "/melhores-precos", label: "Ranking" },
-              { to: "/estabelecimentos", label: "Mercados" },
-              { to: "/planos", label: "Alertas" },
-            ].map((c) => (
-              <Link
-                key={c.to}
-                to={c.to}
-                className="flex-1 rounded-lg border border-white/10 bg-white/[0.04] px-2 py-1.5 text-center text-[11px] font-semibold text-white/90 transition-colors active:bg-white/[0.10]"
-              >
-                {c.label}
-                <span
-                  className="ml-1 text-[10px]"
-                  style={{ color: P.goldSoft }}
-                  aria-hidden
-                >
-                  →
-                </span>
-              </Link>
-            ))}
-          </div>
+          {/* Chips mobile foram promovidos ao topo (sticky abaixo do header). */}
+
 
           {/* -------- EXPLORE (dark navy band inside card) — sm+ apenas -------- */}
           <div
