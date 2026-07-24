@@ -1861,3 +1861,16 @@ body.no-page-bg::before { display: none; }
 @media (prefers-reduced-motion: no-preference) {
   body::before { transition: opacity 300ms ease; }
 }
+
+/* Mobile price ticker — letreiro digital */
+@keyframes price-marquee-slide {
+  0% { transform: translate3d(0, 0, 0); }
+  100% { transform: translate3d(-50%, 0, 0); }
+}
+.price-marquee {
+  animation: price-marquee-slide 32s linear infinite;
+  will-change: transform;
+}
+@media (prefers-reduced-motion: reduce) {
+  .price-marquee { animation: none; }
+}

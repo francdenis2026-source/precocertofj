@@ -150,7 +150,7 @@ export function PriceSearchBar({
    * usuário clica em "Mostrar mais". Reset quando a query, filtros ou ordenação
    * mudam — evita esperar ("virtualização" leve com paginação incremental).
    */
-  const PAGE_SIZE = 8;
+  const PAGE_SIZE = 6;
   const [pageByCat, setPageByCat] = useState<Record<string, number>>({});
   useEffect(() => {
     setPageByCat({});
@@ -783,7 +783,7 @@ export function PriceSearchBar({
                     />
 
                     {result.groups.length > 0 ? (
-                      <div className="space-y-3">
+                      <div className="space-y-2">
                         {filteredOrdered.map(([cat, groups]) => {
                           // Ordena os grupos por menor preço ASC (mais barato primeiro),
                           // depois por relevância (samples DESC como proxy).
@@ -792,7 +792,7 @@ export function PriceSearchBar({
                             return b.samples - a.samples;
                           });
                           return (
-                            <div key={cat} className="space-y-2">
+                            <div key={cat} className="space-y-1.5">
                               {showHeaders ? (
                                 <div className="flex items-center gap-2 px-0.5">
                                   <span className="text-[11px] font-semibold text-accent-strong">
@@ -842,19 +842,17 @@ export function PriceSearchBar({
                                       );
                                     })}
                                     {hidden > 0 ? (
-                                      <button
-                                        type="button"
-                                        onClick={() =>
+                                      <AutoLoadMore
+                                        onLoad={() =>
                                           setPageByCat((prev) => ({
                                             ...prev,
                                             [cat]: (prev[cat] ?? PAGE_SIZE) + PAGE_SIZE,
                                           }))
                                         }
-                                        className="mt-1 w-full rounded-lg border border-dashed border-border bg-background/60 px-3 py-2 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground transition hover:border-primary/40 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
-                                        aria-label={`Mostrar mais itens em ${cat}`}
-                                      >
-                                        Mostrar mais {Math.min(PAGE_SIZE, hidden)} · restam {hidden}
-                                      </button>
+                                        hidden={hidden}
+                                        pageSize={PAGE_SIZE}
+                                        category={cat}
+                                      />
                                     ) : null}
                                   </>
                                 );
@@ -1024,6 +1022,55 @@ function Stat({
         {value}
       </p>
     </div>
+  );
+}
+
+
+/**
+ * Auto-load-more sentinel — dispara `onLoad()` quando entra na viewport,
+ * evitando cliques manuais em listas longas mas mantendo fallback acessível.
+ */
+function AutoLoadMore({
+  onLoad,
+  hidden,
+  pageSize,
+  category,
+}: {
+  onLoad: () => void;
+  hidden: number;
+  pageSize: number;
+  category: string;
+}) {
+  const ref = useRef<HTMLButtonElement | null>(null);
+  const onLoadRef = useRef(onLoad);
+  onLoadRef.current = onLoad;
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            onLoadRef.current();
+            break;
+          }
+        }
+      },
+      { rootMargin: "240px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <button
+      ref={ref}
+      type="button"
+      onClick={onLoad}
+      className="mt-1 w-full rounded-lg border border-dashed border-border bg-background/60 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground transition hover:border-primary/40 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+      aria-label={`Carregar mais itens em ${category}`}
+    >
+      Carregando mais {Math.min(pageSize, hidden)} · restam {hidden}
+    </button>
   );
 }
 
