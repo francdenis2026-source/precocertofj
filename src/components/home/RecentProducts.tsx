@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Clock, Store, Radio, ArrowRight } from "lucide-react";
+import { Clock, Store, Radio, ArrowRight, ChevronRight } from "lucide-react";
 import { getRecentProducts } from "@/lib/products-public.functions";
 import { getLiveTickerStats } from "@/lib/products-public.functions";
 import {
