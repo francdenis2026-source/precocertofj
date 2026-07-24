@@ -540,7 +540,7 @@ function EstablishmentsPage() {
                           <div className="min-w-0 flex-1">
                             <h3 className="truncate text-[15px] font-semibold text-foreground">{e.name}</h3>
                             {e.neighborhood && (
-                              <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[12px] font-medium text-primary">
+                              <span className="mt-1 inline-flex items-center gap-1 rounded-full border border-brand-gold/40 bg-brand-navy/8 px-2 py-0.5 text-[12px] font-semibold text-brand-navy dark:bg-brand-gold/15 dark:text-brand-gold dark:border-brand-gold/50">
                                 <MapPin className="h-3 w-3" aria-hidden />
                                 {e.neighborhood}
                               </span>
@@ -549,7 +549,7 @@ function EstablishmentsPage() {
                               {[e.city, e.state].filter(Boolean).join(" · ") || "Localização não informada"}
                             </p>
                             <p className="mt-2 text-[13.5px] font-medium text-foreground">
-                              <span className="text-primary">{e.productsCount}</span>{" "}
+                              <span className="font-bold text-brand-gold">{e.productsCount}</span>{" "}
                               <span className="text-muted-foreground">produtos cadastrados</span>
                             </p>
                           </div>
@@ -559,16 +559,16 @@ function EstablishmentsPage() {
                             {e.topCategories.map((c) => (
                               <span
                                 key={c.category}
-                                className="inline-flex items-center gap-1 rounded-full bg-muted px-2.5 py-1 text-[13px] text-foreground"
+                                className="inline-flex items-center gap-1 rounded-full border border-border bg-background/60 px-2.5 py-1 text-[12.5px] font-medium text-foreground"
                               >
                                 {humanizeCategory(c.category)}
-                                <span className="text-muted-foreground">({c.count})</span>
+                                <span className="rounded-full bg-brand-gold/20 px-1.5 text-[11px] font-bold text-brand-gold tabular-nums">{c.count}</span>
                               </span>
                             ))}
                           </div>
                         )}
-                        <div className="mt-3 text-[12px] font-medium text-primary">
-                          Ver catálogo completo →
+                        <div className="mt-3 inline-flex items-center gap-1 text-[12px] font-semibold text-brand-gold">
+                          Ver catálogo completo <ChevronRight className="h-3 w-3" aria-hidden />
                         </div>
                       </Link>
                     </li>
