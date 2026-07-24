@@ -297,21 +297,81 @@ function HomePage() {
 
 
 
-      {/* ============== EDITORIAL CARD ============== */}
-      <div className="mx-auto w-full max-w-6xl px-3 pt-2 pb-3 sm:px-6 sm:pt-4 sm:pb-4 lg:px-8 lg:pt-5">
+      {/* ============== HERO FULL-BLEED ============== */}
+      <section
+        className="relative w-full overflow-hidden"
+        style={{
+          minHeight: "min(100svh, 900px)",
+        }}
+      >
+        {/* Background image — light */}
+        <picture className="dark:hidden">
+          {Object.entries(heroMarket.sources).map(([type, srcset]) => (
+            <source
+              key={type}
+              type={`image/${type}`}
+              srcSet={srcset}
+              sizes="100vw"
+            />
+          ))}
+          <img
+            src={heroMarket.img.src}
+            width={heroMarket.img.w}
+            height={heroMarket.img.h}
+            alt="Cesta com produtos frescos do mercado"
+            fetchPriority="high"
+            decoding="async"
+            loading="eager"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        </picture>
+        {/* Background image — dark */}
+        <picture className="hidden dark:block">
+          {Object.entries(heroMarketDark.sources).map(([type, srcset]) => (
+            <source
+              key={type}
+              type={`image/${type}`}
+              srcSet={srcset}
+              sizes="100vw"
+            />
+          ))}
+          <img
+            src={heroMarketDark.img.src}
+            width={heroMarketDark.img.w}
+            height={heroMarketDark.img.h}
+            alt="Mercado noturno com produtos em iluminação ambiente"
+            decoding="async"
+            loading="eager"
+            className="absolute inset-0 h-full w-full object-cover"
+          />
+        </picture>
+
+        {/* Scrim: garante contraste do texto sobre a foto (light + dark) */}
         <div
-          className="overflow-hidden rounded-[1.25rem] shadow-[0_20px_60px_-30px_rgb(11_29_58_/_0.22)] ring-1 lg:rounded-[1.75rem]"
+          aria-hidden
+          className="absolute inset-0"
           style={{
-            background: P.card,
-            borderColor: P.line,
-            // @ts-expect-error css var
-            "--tw-ring-color": P.line,
+            background:
+              "linear-gradient(100deg, color-mix(in oklab, var(--pc-home-card) 94%, transparent) 0%, color-mix(in oklab, var(--pc-home-card) 82%, transparent) 38%, color-mix(in oklab, var(--pc-home-card) 40%, transparent) 68%, color-mix(in oklab, var(--pc-home-card) 10%, transparent) 100%)",
           }}
+        />
+        {/* Reforço inferior para o quote flutuante */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 h-40 sm:h-56"
+          style={{
+            background:
+              "linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--pc-home-card) 55%, transparent) 100%)",
+          }}
+        />
+
+        {/* CONTENT OVERLAY */}
+        <div
+          className="relative z-10 mx-auto flex w-full max-w-6xl flex-col justify-center px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24"
+          style={{ minHeight: "min(100svh, 900px)" }}
         >
-          {/* -------- HERO SPLIT -------- */}
-          <div className="flex flex-col lg:flex-row">
-            {/* LEFT — content */}
-            <div className="flex-[1.2] p-4 sm:p-6 lg:p-8 xl:p-10 flex flex-col justify-center">
+          <div className="max-w-2xl">
+
               {/* Badge EM BREVE */}
               <div
                 className="mb-4 inline-flex w-fit items-center gap-2.5 rounded-full px-3.5 py-1.5 text-[12px] font-bold uppercase tracking-[0.18em] shadow-sm sm:mb-5 sm:gap-2.5 sm:px-3.5 sm:py-1.5 sm:text-[11px]"
@@ -590,108 +650,63 @@ function HomePage() {
               </div>
 
             </div>
-
-
-            {/* RIGHT — image + floating quote */}
-            <div
-              className="relative hidden flex-1 lg:block"
-              style={{ background: P.paper, minHeight: 440 }}
-            >
-              {/* Light theme image */}
-              <picture className="dark:hidden">
-                {Object.entries(heroMarket.sources).map(([type, srcset]) => (
-                  <source
-                    key={type}
-                    type={`image/${type}`}
-                    srcSet={srcset}
-                    sizes="(min-width: 1024px) 50vw, 100vw"
-                  />
-                ))}
-                <img
-                  src={heroMarket.img.src}
-                  width={heroMarket.img.w}
-                  height={heroMarket.img.h}
-                  alt="Cesta com produtos frescos do mercado"
-                  fetchPriority="high"
-                  decoding="async"
-                  loading="eager"
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-              </picture>
-              {/* Dark theme image — moody market scene */}
-              <picture className="hidden dark:block">
-                {Object.entries(heroMarketDark.sources).map(([type, srcset]) => (
-                  <source
-                    key={type}
-                    type={`image/${type}`}
-                    srcSet={srcset}
-                    sizes="(min-width: 1024px) 50vw, 100vw"
-                  />
-                ))}
-                <img
-                  src={heroMarketDark.img.src}
-                  width={heroMarketDark.img.w}
-                  height={heroMarketDark.img.h}
-                  alt="Mercado noturno com produtos em iluminação ambiente"
-                  decoding="async"
-                  loading="eager"
-                  className="absolute inset-0 h-full w-full object-cover"
-                />
-              </picture>
-
-              {/* Subtle left fade so the frame reads clean against the panel */}
-              <div
-                aria-hidden
-                className="absolute inset-y-0 left-0 w-24"
-                style={{
-                  background: `linear-gradient(90deg, ${P.card} 0%, transparent 100%)`,
-                }}
-              />
-              {/* Quote card */}
-              <div
-                className="absolute inset-x-6 bottom-6 rounded-2xl p-5 shadow-2xl backdrop-blur-md xl:inset-x-8 xl:bottom-8 xl:p-6"
-                style={{
-                  background: "color-mix(in oklab, var(--pc-home-card) 96%, transparent)",
-                  borderWidth: 1,
-                  borderColor: "color-mix(in oklab, var(--pc-home-gold) 24%, var(--pc-home-line))",
-                }}
-              >
-                <figure className="m-0">
-                  <blockquote
-                    className={`${serif} m-0 italic`}
-                    style={{
-                      color: "var(--pc-home-heading)",
-                      ...quoteTypography,
-                    }}
-                  >
-                    <span
-                      aria-hidden
-                      className={`${serif} mr-1 align-[-0.15em] text-[2.25em] leading-none not-italic`}
-                      style={{ color: "var(--pc-home-gold)" }}
-                    >
-                      “
-                    </span>
-                    Comparar preços não é só gastar menos — é comprar com inteligência e liberdade.
-                  </blockquote>
-                  <figcaption
-                    className="mt-3 text-[10.5px] font-bold uppercase"
-                    style={{
-                      color: "color-mix(in oklab, var(--pc-home-ink) 82%, transparent)",
-                      ...captionTypography,
-                    }}
-                  >
-                    — Equipe PreçoCerto Feijó
-                  </figcaption>
-                </figure>
-
-              </div>
-            </div>
           </div>
+          {/* /content overlay */}
 
-          {/* Chips mobile foram promovidos ao topo (sticky abaixo do header). */}
 
 
+        {/* Floating quote card — desktop: canto inferior direito; mobile: full-width bottom */}
+        <div
+          className="absolute inset-x-4 bottom-4 z-10 rounded-2xl p-4 shadow-2xl backdrop-blur-md sm:inset-x-6 sm:bottom-6 sm:p-5 lg:left-auto lg:right-8 lg:bottom-8 lg:max-w-md lg:p-6"
+          style={{
+            background: "color-mix(in oklab, var(--pc-home-card) 92%, transparent)",
+            borderWidth: 1,
+            borderColor: "color-mix(in oklab, var(--pc-home-gold) 32%, var(--pc-home-line))",
+          }}
+        >
+          <figure className="m-0">
+            <blockquote
+              className={`${serif} m-0 italic`}
+              style={{
+                color: "var(--pc-home-heading)",
+                ...quoteTypography,
+              }}
+            >
+              <span
+                aria-hidden
+                className={`${serif} mr-1 align-[-0.15em] text-[2.25em] leading-none not-italic`}
+                style={{ color: "var(--pc-home-gold)" }}
+              >
+                “
+              </span>
+              Comparar preços não é só gastar menos — é comprar com inteligência e liberdade.
+            </blockquote>
+            <figcaption
+              className="mt-3 text-[10.5px] font-bold uppercase"
+              style={{
+                color: "color-mix(in oklab, var(--pc-home-ink) 82%, transparent)",
+                ...captionTypography,
+              }}
+            >
+              — Equipe PreçoCerto Feijó
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      {/* ============== EDITORIAL CARD (explore band) ============== */}
+      <div className="mx-auto w-full max-w-6xl px-3 pt-4 pb-3 sm:px-6 sm:pt-6 sm:pb-4 lg:px-8">
+        <div
+          className="overflow-hidden rounded-[1.25rem] shadow-[0_20px_60px_-30px_rgb(11_29_58_/_0.22)] ring-1 lg:rounded-[1.75rem]"
+          style={{
+            background: P.card,
+            borderColor: P.line,
+            // @ts-expect-error css var
+            "--tw-ring-color": P.line,
+          }}
+        >
           {/* -------- EXPLORE (dark navy band inside card) — sm+ apenas -------- */}
+
           <div
             className="hidden sm:block sm:p-5 lg:p-6 xl:p-7"
             style={{ background: P.navy, color: "#F5F6FA" }}
