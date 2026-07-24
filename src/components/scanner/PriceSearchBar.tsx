@@ -93,17 +93,22 @@ export function PriceSearchBar({
 
   const [query, setQuery] = useState(normalizeInput(initialQuery));
   const [rawResult, setResult] = useState<PriceSearchResult | null>(null);
+  const [marketFilter, setMarketFilter] = useState<string | null>(null);
+  // Reset market filter whenever a new search is issued (query changes).
+  useEffect(() => { setMarketFilter(null); }, [initialQuery]);
   const result = useMemo<PriceSearchResult | null>(() => {
     if (!rawResult) return rawResult;
     const brandNeedle = brandFilter.trim().toLowerCase();
     const hasMin = typeof priceMin === "number" && Number.isFinite(priceMin);
     const hasMax = typeof priceMax === "number" && Number.isFinite(priceMax);
-    if (!brandNeedle && !hasMin && !hasMax) return rawResult;
+    const marketNeedle = (marketFilter ?? "").trim().toLowerCase();
+    if (!brandNeedle && !hasMin && !hasMax && !marketNeedle) return rawResult;
     const groups = rawResult.groups
       .map((g) => {
         const prices = (g.prices ?? []).filter((p) => {
           if (hasMin && p.price < (priceMin as number)) return false;
           if (hasMax && p.price > (priceMax as number)) return false;
+          if (marketNeedle && (p.marketName ?? "").toLowerCase() !== marketNeedle) return false;
           if (brandNeedle) {
             const hay = `${g.productName ?? ""} ${p.marketName ?? ""}`.toLowerCase();
             if (!hay.includes(brandNeedle)) return false;
@@ -119,7 +124,7 @@ export function PriceSearchBar({
       })
       .filter(Boolean) as ProductGroup[];
     return { ...rawResult, groups };
-  }, [rawResult, brandFilter, priceMin, priceMax]);
+  }, [rawResult, brandFilter, priceMin, priceMax, marketFilter]);
 
 
   const [err, setErr] = useState<string | null>(null);
