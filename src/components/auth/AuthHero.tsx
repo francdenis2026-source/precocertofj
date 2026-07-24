@@ -196,16 +196,16 @@ export function AuthHero({
         </div>
 
         <span
-          className="mt-5 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] md:mt-8"
+          className="mt-5 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] md:mt-8"
           style={{
-            borderColor: `color-mix(in oklab, ${T.gold} 55%, transparent)`,
-            background: `color-mix(in oklab, ${T.navy} 55%, transparent)`,
+            borderColor: `color-mix(in oklab, ${T.gold} 60%, transparent)`,
+            background: `color-mix(in oklab, ${T.navy} 70%, transparent)`,
             color: T.eyebrow,
-            backdropFilter: "blur(6px)",
           }}
         >
           <BadgeIcon className="h-3 w-3" /> {preset.badge.label}
         </span>
+
 
         <h2
           className="mt-3 tracking-tight md:mt-4"
