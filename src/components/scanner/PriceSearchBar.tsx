@@ -1026,6 +1026,55 @@ function Stat({
 }
 
 
+/**
+ * Auto-load-more sentinel — dispara `onLoad()` quando entra na viewport,
+ * evitando cliques manuais em listas longas mas mantendo fallback acessível.
+ */
+function AutoLoadMore({
+  onLoad,
+  hidden,
+  pageSize,
+  category,
+}: {
+  onLoad: () => void;
+  hidden: number;
+  pageSize: number;
+  category: string;
+}) {
+  const ref = useRef<HTMLButtonElement | null>(null);
+  const onLoadRef = useRef(onLoad);
+  onLoadRef.current = onLoad;
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            onLoadRef.current();
+            break;
+          }
+        }
+      },
+      { rootMargin: "240px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <button
+      ref={ref}
+      type="button"
+      onClick={onLoad}
+      className="mt-1 w-full rounded-lg border border-dashed border-border bg-background/60 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground transition hover:border-primary/40 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+      aria-label={`Carregar mais itens em ${category}`}
+    >
+      Carregando mais {Math.min(pageSize, hidden)} · restam {hidden}
+    </button>
+  );
+}
+
+
 // HighlightMatch é importado de `@/components/search/HighlightMatch` para
 // manter a mesma lógica de tokens/acentos do backend.
 
