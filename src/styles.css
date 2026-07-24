@@ -249,9 +249,9 @@
   --popover: oklch(0.205 0.042 258);
   --popover-foreground: oklch(0.975 0.006 250);
 
-  /* Primary azul luminoso — destaque premium sobre o navy do background */
-  --primary: oklch(0.74 0.165 235);
-  --primary-foreground: oklch(0.13 0.04 258);
+  /* Primary navy institucional — mantém a identidade PreçoCerto no dark mode */
+  --primary: oklch(0.32 0.10 258);
+  --primary-foreground: oklch(0.985 0.005 250);
 
   --secondary: oklch(0.255 0.048 258);
   --secondary-foreground: oklch(0.975 0.006 250);
