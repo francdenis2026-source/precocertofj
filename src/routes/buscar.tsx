@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate, useRouter, retainSearchParams } from "@tanstack/react-router";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { PriceSearchBar } from "@/components/scanner/PriceSearchBar";
 import { MobileNav } from "@/components/nav/MobileNav";
 import { ArrowLeft } from "lucide-react";
