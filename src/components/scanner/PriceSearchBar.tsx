@@ -791,7 +791,18 @@ export function PriceSearchBar({
                     />
 
 
-                    {result.groups.length > 0 ? (
+                    {groupBy === "market" && result.groups.length > 0 ? (
+                      <MarketGroupedResults
+                        groups={filteredOrdered.flatMap(([, gs]) => gs)}
+                        kindFilter={kindFilter}
+                        fmt={fmt}
+                        globalMin={result.min}
+                        highlightTokens={highlightTokens}
+                      />
+                    ) : null}
+
+                    {groupBy === "product" && result.groups.length > 0 ? (
+
                       <div className="space-y-2">
                         {filteredOrdered.map(([cat, groups]) => {
                           // Ordena os grupos por menor preço ASC (mais barato primeiro),
