@@ -27,7 +27,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
     queryFn: () => listPublicStores(),
     staleTime: 5 * 60_000,
   });
-  const confirm = useConfirm();
+  const { confirm } = useConfirm();
 
   const list = (stores.data ?? []).slice(0, 6);
 
@@ -42,6 +42,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
     });
     if (ok) onClearRecent();
   }
+
 
   return (
     <aside className="sticky top-24 space-y-4">
