@@ -375,6 +375,22 @@ function FilterInputs({ min, max, onMin, onMax, onClear }: FilterInputsProps) {
     onClear();
   };
 
+  const applyPreset = (lo: string, hi: string) => {
+    setMn(lo);
+    setMx(hi);
+    onMin(lo);
+    onMax(hi);
+  };
+
+  const presets: { label: string; lo: string; hi: string }[] = [
+    { label: "Até R$ 20", lo: "", hi: "20" },
+    { label: "R$ 20–50", lo: "20", hi: "50" },
+    { label: "R$ 50–100", lo: "50", hi: "100" },
+    { label: "R$ 100+", lo: "100", hi: "" },
+  ];
+
+  const isActive = (lo: string, hi: string) => mn.trim() === lo && mx.trim() === hi;
+
   const inputBase =
     "h-9 w-24 rounded-md border-0 bg-transparent px-2 text-[13px] font-medium text-foreground tabular-nums placeholder:text-muted-foreground/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 transition-colors";
 
@@ -420,6 +436,31 @@ function FilterInputs({ min, max, onMin, onMax, onClear }: FilterInputsProps) {
           className={inputBase}
         />
       </div>
+      <div
+        role="group"
+        aria-label="Presets de faixa de preço"
+        className="flex flex-wrap items-center gap-1"
+      >
+        {presets.map((p) => {
+          const active = isActive(p.lo, p.hi);
+          return (
+            <button
+              key={p.label}
+              type="button"
+              onClick={() => applyPreset(p.lo, p.hi)}
+              aria-pressed={active}
+              className={
+                "inline-flex h-8 items-center rounded-full border px-3 text-[11.5px] font-semibold tabular-nums transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold " +
+                (active
+                  ? "border-brand-gold bg-brand-gold/15 text-brand-gold"
+                  : "border-border/70 bg-background/60 text-muted-foreground hover:border-brand-gold/60 hover:text-foreground")
+              }
+            >
+              {p.label}
+            </button>
+          );
+        })}
+      </div>
       <button
         type="button"
         onClick={clearAll}
@@ -432,5 +473,6 @@ function FilterInputs({ min, max, onMin, onMax, onClear }: FilterInputsProps) {
     </div>
   );
 }
+
 
 
