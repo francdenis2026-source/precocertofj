@@ -573,11 +573,10 @@ function LoginPage() {
             </button>
 
 
-            <div className="flex flex-col items-center gap-2 pt-1 text-[11.5px]" style={{ color: "#6b7280" }}>
+            <div className="flex flex-col items-center gap-2 pt-1 text-[11.5px] text-muted-foreground">
               <Link
                 to="/resgatar"
-                className="inline-flex items-center gap-1.5 font-semibold transition hover:underline"
-                style={{ color: PC_GOLD_DARK }}
+                className="inline-flex items-center gap-1.5 font-semibold transition hover:underline text-[color:var(--pc-home-gold)]"
               >
                 <Ticket className="h-3.5 w-3.5" />
                 Tenho um código promocional
@@ -585,10 +584,11 @@ function LoginPage() {
             </div>
           </form>
 
-          <p className="mt-6 border-t border-black/5 pt-4 text-center text-[10.5px] text-gray-400">
+          <p className="mt-6 border-t border-border pt-4 text-center text-[10.5px] text-muted-foreground">
             Ao continuar, você concorda com nossos{" "}
-            <Link to="/termos" className="underline hover:text-gray-600">Termos</Link> e{" "}
-            <Link to="/privacidade" className="underline hover:text-gray-600">Privacidade</Link>.
+            <Link to="/termos" className="underline hover:text-foreground">Termos</Link> e{" "}
+            <Link to="/privacidade" className="underline hover:text-foreground">Privacidade</Link>.
+
           </p>
         </div>
       </motion.div>
