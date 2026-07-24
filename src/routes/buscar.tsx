@@ -335,7 +335,7 @@ function SearchPage() {
 
 
         <div className="mx-auto w-full max-w-7xl px-4 py-3 md:px-8 md:py-4">
-          <nav aria-label="Trilha" className="mb-3 flex items-center gap-1 text-[11.5px] font-medium text-white/70">
+          <nav aria-label="Trilha" className="mb-1.5 flex items-center gap-1 text-[11px] font-medium text-white/70">
             <Link
               to="/"
               className="rounded-md px-1 py-0.5 outline-none transition-colors hover:text-brand-gold active:text-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
@@ -345,16 +345,16 @@ function SearchPage() {
             <ChevronRight aria-hidden className="h-3 w-3 opacity-60" />
             <span className="text-white">Buscar</span>
           </nav>
-          <div className="flex flex-wrap items-end justify-between gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="min-w-0">
-              <div className="mb-1.5 inline-flex items-center gap-2 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-gold">
-                <span className="h-1.5 w-1.5 rounded-full bg-brand-gold" />
+              <div className="mb-1 inline-flex items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.14em] text-brand-gold">
+                <span className="h-1 w-1 rounded-full bg-brand-gold" />
                 Comparador de preços
               </div>
-              <h1 className="text-[20px] md:text-[24px] font-semibold leading-tight text-white">
+              <h1 className="text-[17px] md:text-[20px] font-semibold leading-tight text-white">
                 Buscar <span className="text-brand-gold">preço</span> por nome
               </h1>
-              <p className="mt-0.5 max-w-xl text-[12px] md:text-[13px] text-white/75">
+              <p className="mt-0.5 max-w-xl text-[11.5px] md:text-[12px] text-white/75">
                 Consulte preço médio, mínimo e onde comprar mais barato em Feijó.
               </p>
             </div>
