@@ -540,7 +540,7 @@ function EstablishmentsPage() {
                           <div className="min-w-0 flex-1">
                             <h3 className="truncate text-[15px] font-semibold text-foreground">{e.name}</h3>
                             {e.neighborhood && (
-                              <span className="mt-1 inline-flex items-center gap-1 rounded-full border border-brand-gold/40 bg-brand-navy/8 px-2 py-0.5 text-[12px] font-semibold text-brand-navy dark:bg-brand-gold/15 dark:text-brand-gold dark:border-brand-gold/50">
+                              <span className="mt-1 inline-flex items-center gap-1 rounded-full border border-brand-gold/50 bg-brand-gold/15 px-2 py-0.5 text-[12px] font-semibold text-brand-gold">
                                 <MapPin className="h-3 w-3" aria-hidden />
                                 {e.neighborhood}
                               </span>
