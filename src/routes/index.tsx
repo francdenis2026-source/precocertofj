@@ -1,7 +1,11 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+import { getProductSuggestions } from "@/lib/products-suggest.functions";
+import { usePullToRefresh } from "@/hooks/usePullToRefresh";
+import { ChevronRight, RefreshCw } from "lucide-react";
+
 // Responsive picture: modern formats (AVIF/WebP) with JPG fallback, tuned quality.
 import heroMarket from "@/assets/home-hero.jpg?w=480;640;896&format=avif;webp;jpg&quality=68&as=picture";
 import heroMarketDark from "@/assets/home-hero-dark.jpg?w=480;640;896&format=avif;webp;jpg&quality=68&as=picture";
