@@ -750,7 +750,7 @@ function HomePage() {
               </p>
               <p
                 className="mt-0.5 text-[13px] leading-snug sm:text-[13.5px]"
-                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 82%, transparent)" }}
+                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 92%, transparent)" }}
               >
                 Cada valor vem de nota fiscal ou de um morador que acabou de comprar.
               </p>
