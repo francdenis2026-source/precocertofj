@@ -258,36 +258,34 @@ export function AuthHero({
           </ul>
 
           <div
-            className="flex items-center gap-3 rounded-xl border px-3.5 py-2.5 backdrop-blur"
+            className="flex items-center gap-3 rounded-xl border px-3.5 py-2.5"
             style={{
-              borderColor: `color-mix(in oklab, ${T.gold} 55%, transparent)`,
-              background: `color-mix(in oklab, ${T.gold} 14%, transparent)`,
+              borderColor: `color-mix(in oklab, ${T.gold} 50%, transparent)`,
+              background: `color-mix(in oklab, ${T.navy2} 60%, transparent)`,
             }}
           >
             <div
-              className="flex h-10 w-10 flex-none items-center justify-center rounded-lg"
-              style={{
-                background: `linear-gradient(135deg, ${T.goldSoft}, ${T.gold})`,
-                color: T.navy,
-              }}
+              className="flex h-9 w-9 flex-none items-center justify-center rounded-lg"
+              style={{ background: T.gold, color: T.navy }}
             >
-              <TrustIcon className="h-5 w-5" strokeWidth={2.5} />
+              <TrustIcon className="h-4.5 w-4.5" strokeWidth={2.5} />
             </div>
             <div className="min-w-0 leading-tight">
               <div
-                className="text-[13px] font-semibold"
-                style={{ color: T.onNavy, fontFamily: T.display, letterSpacing: "-0.01em" }}
+                className="text-[13px] font-semibold tracking-tight"
+                style={{ color: T.onNavy, letterSpacing: "-0.005em" }}
               >
                 {preset.trust.title}
               </div>
               <div
-                className="text-[11.5px]"
-                style={{ color: `color-mix(in oklab, ${T.onNavy} 85%, transparent)` }}
+                className="mt-0.5 text-[11.5px]"
+                style={{ color: `color-mix(in oklab, ${T.onNavy} 82%, transparent)` }}
               >
                 {preset.trust.caption}
               </div>
             </div>
           </div>
+
 
           {preset.offer && (
             <div
