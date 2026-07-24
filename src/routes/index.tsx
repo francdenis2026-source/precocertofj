@@ -1242,7 +1242,7 @@ function HomePage() {
 
 
       {/* -------- FINAL CTA (ribbon com moldura dourada — chama atenção sem virar hero) -------- */}
-      <section className="pc-container pt-8 sm:pt-10">
+      <section className="pc-container pt-3 sm:pt-4">
         <div
           className="relative overflow-hidden rounded-[var(--pc-radius-md)] p-[1.5px]"
           style={{
