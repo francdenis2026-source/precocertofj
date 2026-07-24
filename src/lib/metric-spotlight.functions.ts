@@ -1,9 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
 import { setResponseHeader } from "@tanstack/react-start/server";
+import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 
 export type MetricStoreItem = {
   id: string;
   name: string;
+  slug: string;
   city: string | null;
   neighborhood: string | null;
   logoUrl: string | null;
