@@ -709,7 +709,7 @@ function HomePage() {
             <figcaption
               className="mt-3 text-[10.5px] font-bold uppercase"
               style={{
-                color: "color-mix(in oklab, var(--pc-home-ink) 82%, transparent)",
+                color: "color-mix(in oklab, var(--pc-home-ink) 92%, transparent)",
                 ...captionTypography,
               }}
             >
