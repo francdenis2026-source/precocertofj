@@ -603,9 +603,20 @@ function MobilePriceRotator({
         Ver todos os preços
         <ArrowRight className="h-3.5 w-3.5" aria-hidden />
       </Link>
+
+      {/* Modal de detalhes do produto (mercados, histórico, link para a página) */}
+      <ProductQuickModal
+        slug={openItem?.slug ?? null}
+        open={!!openItem}
+        onOpenChange={(v) => {
+          if (!v) setOpenItem(null);
+        }}
+        fallbackName={openItem?.name}
+      />
     </div>
   );
 }
+
 
 
 
