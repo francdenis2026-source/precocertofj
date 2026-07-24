@@ -417,7 +417,7 @@ export function PriceSearchBar({
             aria-expanded={showList || showHistory}
             aria-autocomplete="list"
             aria-controls="price-search-suggestions"
-            className="w-full rounded-full border border-primary/20 bg-background px-3 py-2 pr-8 text-sm tracking-wide text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none"
+            className="focus-ring w-full rounded-full border border-primary/20 bg-background px-3 py-2 pr-8 text-sm tracking-wide text-foreground placeholder:text-muted-foreground"
             aria-label="Nome do produto"
           />
           {query && (
