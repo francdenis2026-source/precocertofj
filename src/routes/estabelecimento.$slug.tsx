@@ -244,21 +244,25 @@ function EstablishmentPage() {
 
         {data.categories.length > 0 && (
           <div className="mt-6" aria-label="Filtrar por categoria">
-            <div className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
               Categorias
             </div>
-            <div className="flex flex-wrap gap-1.5">
+            <div role="radiogroup" aria-label="Categorias" className="flex flex-wrap gap-1.5">
               <button
                 type="button"
+                role="radio"
+                aria-checked={selectedCategory === null}
                 onClick={() => setSelectedCategory(null)}
-                aria-pressed={selectedCategory === null}
                 className={
                   selectedCategory === null
-                    ? "inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1 text-[12px] font-semibold text-primary-foreground shadow-xs"
-                    : "inline-flex items-center gap-1 rounded-full border border-border bg-card px-3 py-1 text-[12px] text-foreground hover:bg-muted"
+                    ? "inline-flex h-9 items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-3.5 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-brand-navy shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    : "inline-flex h-9 items-center gap-1.5 rounded-full border border-border bg-background px-3.5 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 }
               >
-                Todas <span className="opacity-70">({data.products.length})</span>
+                Todas
+                <span className={selectedCategory === null ? "rounded-full bg-brand-navy/15 px-1.5 py-0.5 text-[10px] font-bold text-brand-navy tabular-nums" : "rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-bold text-foreground/80 tabular-nums"}>
+                  {data.products.length}
+                </span>
               </button>
               {data.categories.map((c) => {
                 const active = selectedCategory === c.label;
@@ -266,21 +270,26 @@ function EstablishmentPage() {
                   <button
                     key={c.key}
                     type="button"
+                    role="radio"
+                    aria-checked={active}
                     onClick={() => setSelectedCategory(active ? null : c.label)}
-                    aria-pressed={active}
                     className={
                       active
-                        ? "inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1 text-[12px] font-semibold text-primary-foreground shadow-xs"
-                        : "inline-flex items-center gap-1 rounded-full border border-border bg-card px-3 py-1 text-[12px] text-foreground hover:bg-muted"
+                        ? "inline-flex h-9 items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-3.5 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-brand-navy shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                        : "inline-flex h-9 items-center gap-1.5 rounded-full border border-border bg-background px-3.5 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                     }
                   >
-                    {c.label} <span className="opacity-70">({c.count})</span>
+                    {c.label}
+                    <span className={active ? "rounded-full bg-brand-navy/15 px-1.5 py-0.5 text-[10px] font-bold text-brand-navy tabular-nums" : "rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-bold text-foreground/80 tabular-nums"}>
+                      {c.count}
+                    </span>
                   </button>
                 );
               })}
             </div>
           </div>
         )}
+
 
         <div className="mt-4 flex flex-col gap-3 sm:flex-row">
           <div className="relative flex-1">
