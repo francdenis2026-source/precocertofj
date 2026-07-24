@@ -1,6 +1,16 @@
+import { useMemo, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Clock, Package, ShieldCheck, Store, TrendingDown } from "lucide-react";
+import {
+  ArrowRight,
+  Clock,
+  Package,
+  Search,
+  ShieldCheck,
+  Store,
+  TrendingDown,
+} from "lucide-react";
+import { motion, useReducedMotion, type Transition } from "framer-motion";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { getMetricSpotlight } from "@/lib/metric-spotlight.functions";
 
@@ -24,11 +34,38 @@ function relTime(iso: string | null): string {
   return `há ${months} mês${months > 1 ? "es" : ""}`;
 }
 
-/* ---------- SVG hero art (inline, alto nível) ---------- */
+/** Normaliza para busca sem acento/caixa. */
+function norm(s: string): string {
+  return s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
 
-function MarketsArt() {
+/* ---------- SVG hero art (responsivo + animado) ----------
+ * viewBox fixo + preserveAspectRatio="xMidYMid slice" cobre o container
+ * mesmo em telas ultra-wide/altas. Cores 100% via tokens (--pc-home-*)
+ * para respeitarem light/dark/high-contrast automaticamente.
+ */
+
+const EASE: Transition["ease"] = [0.22, 1, 0.36, 1];
+
+function MarketsArt({ animate }: { animate: boolean }) {
+  const buildings = [
+    { x: 30, w: 60, h: 90, awning: true },
+    { x: 100, w: 80, h: 120, awning: true },
+    { x: 190, w: 70, h: 100, awning: false },
+    { x: 270, w: 90, h: 130, awning: true },
+    { x: 370, w: 80, h: 110, awning: false },
+  ];
   return (
-    <svg viewBox="0 0 480 200" className="h-full w-full" role="img" aria-label="Skyline de mercados parceiros">
+    <svg
+      viewBox="0 0 480 200"
+      preserveAspectRatio="xMidYMid slice"
+      className="absolute inset-0 h-full w-full"
+      role="img"
+      aria-label="Skyline de mercados parceiros"
+    >
       <defs>
         <linearGradient id="mSky" x1="0" x2="0" y1="0" y2="1">
           <stop offset="0" stopColor="var(--pc-home-navy)" stopOpacity="0.95" />
@@ -44,20 +81,30 @@ function MarketsArt() {
       </defs>
       <rect width="480" height="200" fill="url(#mSky)" />
       <rect width="480" height="200" fill="url(#mDots)" />
-      {/* skyline de lojas */}
-      {[
-        { x: 30, w: 60, h: 90, awning: true },
-        { x: 100, w: 80, h: 120, awning: true },
-        { x: 190, w: 70, h: 100, awning: false },
-        { x: 270, w: 90, h: 130, awning: true },
-        { x: 370, w: 80, h: 110, awning: false },
-      ].map((b, i) => (
-        <g key={i}>
-          <rect x={b.x} y={200 - b.h} width={b.w} height={b.h} fill="var(--pc-home-navy)" stroke="url(#mGold)" strokeWidth="1.2" opacity="0.92" />
+      {buildings.map((b, i) => (
+        <motion.g
+          key={i}
+          initial={animate ? { opacity: 0, y: 14 } : false}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.55, delay: 0.05 + i * 0.07, ease: EASE }}
+        >
+          <rect
+            x={b.x}
+            y={200 - b.h}
+            width={b.w}
+            height={b.h}
+            fill="var(--pc-home-navy)"
+            stroke="url(#mGold)"
+            strokeWidth="1.2"
+            opacity="0.92"
+          />
           {b.awning && (
-            <path d={`M${b.x - 4} ${200 - b.h + 22} L${b.x + b.w + 4} ${200 - b.h + 22} L${b.x + b.w - 4} ${200 - b.h + 34} L${b.x + 4} ${200 - b.h + 34} Z`} fill="url(#mGold)" opacity="0.9" />
+            <path
+              d={`M${b.x - 4} ${200 - b.h + 22} L${b.x + b.w + 4} ${200 - b.h + 22} L${b.x + b.w - 4} ${200 - b.h + 34} L${b.x + 4} ${200 - b.h + 34} Z`}
+              fill="url(#mGold)"
+              opacity="0.9"
+            />
           )}
-          {/* janelas */}
           {[0, 1, 2].map((r) =>
             [0, 1, 2].map((c) => (
               <rect
@@ -71,21 +118,60 @@ function MarketsArt() {
               />
             )),
           )}
-          <rect x={b.x + b.w / 2 - 8} y={200 - 26} width={16} height={26} fill="var(--pc-home-gold)" opacity="0.85" />
-        </g>
+          <rect
+            x={b.x + b.w / 2 - 8}
+            y={200 - 26}
+            width={16}
+            height={26}
+            fill="var(--pc-home-gold)"
+            opacity="0.85"
+          />
+        </motion.g>
       ))}
-      {/* selo */}
-      <g transform="translate(408, 22)">
+      <motion.g
+        transform="translate(408, 22)"
+        initial={animate ? { scale: 0.6, opacity: 0 } : false}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.5, ease: EASE }}
+      >
         <circle r="18" fill="var(--pc-home-gold)" opacity="0.95" />
-        <path d="M-6 0 L-2 4 L7 -5" stroke="var(--pc-home-navy)" strokeWidth="2.4" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-      </g>
+        <path
+          d="M-6 0 L-2 4 L7 -5"
+          stroke="var(--pc-home-navy)"
+          strokeWidth="2.4"
+          fill="none"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </motion.g>
     </svg>
   );
 }
 
-function ProductsArt() {
+function ProductsArt({ animate }: { animate: boolean }) {
+  const crates = [
+    { x: 40, y: 118, w: 46, h: 42, tone: 0.9 },
+    { x: 96, y: 126, w: 38, h: 34, tone: 0.7 },
+    { x: 146, y: 112, w: 52, h: 48, tone: 1 },
+    { x: 210, y: 122, w: 44, h: 38, tone: 0.8 },
+    { x: 266, y: 116, w: 48, h: 44, tone: 0.9 },
+    { x: 326, y: 128, w: 40, h: 32, tone: 0.65 },
+    { x: 376, y: 118, w: 54, h: 42, tone: 0.95 },
+    { x: 60, y: 66, w: 46, h: 44, tone: 0.7 },
+    { x: 120, y: 74, w: 38, h: 36, tone: 0.55 },
+    { x: 172, y: 60, w: 56, h: 50, tone: 0.85 },
+    { x: 242, y: 70, w: 44, h: 40, tone: 0.7 },
+    { x: 300, y: 66, w: 50, h: 44, tone: 0.8 },
+    { x: 364, y: 78, w: 40, h: 32, tone: 0.55 },
+  ];
   return (
-    <svg viewBox="0 0 480 200" className="h-full w-full" role="img" aria-label="Catálogo de produtos">
+    <svg
+      viewBox="0 0 480 200"
+      preserveAspectRatio="xMidYMid slice"
+      className="absolute inset-0 h-full w-full"
+      role="img"
+      aria-label="Catálogo de produtos"
+    >
       <defs>
         <linearGradient id="pBg" x1="0" x2="1" y1="0" y2="1">
           <stop offset="0" stopColor="var(--pc-home-navy)" />
@@ -97,46 +183,63 @@ function ProductsArt() {
         </linearGradient>
       </defs>
       <rect width="480" height="200" fill="url(#pBg)" />
-      {/* prateleira */}
       <line x1="20" y1="160" x2="460" y2="160" stroke="url(#pGold)" strokeWidth="2" />
       <line x1="20" y1="110" x2="460" y2="110" stroke="url(#pGold)" strokeWidth="1.5" opacity="0.6" />
-      {/* caixas — grid organizado */}
-      {[
-        { x: 40, y: 118, w: 46, h: 42, tone: 0.9 },
-        { x: 96, y: 126, w: 38, h: 34, tone: 0.7 },
-        { x: 146, y: 112, w: 52, h: 48, tone: 1 },
-        { x: 210, y: 122, w: 44, h: 38, tone: 0.8 },
-        { x: 266, y: 116, w: 48, h: 44, tone: 0.9 },
-        { x: 326, y: 128, w: 40, h: 32, tone: 0.65 },
-        { x: 376, y: 118, w: 54, h: 42, tone: 0.95 },
-        // prateleira superior
-        { x: 60, y: 66, w: 46, h: 44, tone: 0.7 },
-        { x: 120, y: 74, w: 38, h: 36, tone: 0.55 },
-        { x: 172, y: 60, w: 56, h: 50, tone: 0.85 },
-        { x: 242, y: 70, w: 44, h: 40, tone: 0.7 },
-        { x: 300, y: 66, w: 50, h: 44, tone: 0.8 },
-        { x: 364, y: 78, w: 40, h: 32, tone: 0.55 },
-      ].map((c, i) => (
-        <g key={i}>
-          <rect x={c.x} y={c.y} width={c.w} height={c.h} fill="var(--pc-home-gold)" opacity={0.14 * c.tone + 0.08} stroke="var(--pc-home-gold)" strokeOpacity={0.4 * c.tone + 0.2} />
+      {crates.map((c, i) => (
+        <motion.g
+          key={i}
+          initial={animate ? { opacity: 0, y: 10 } : false}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, delay: 0.05 + (i % 7) * 0.05, ease: EASE }}
+        >
+          <rect
+            x={c.x}
+            y={c.y}
+            width={c.w}
+            height={c.h}
+            fill="var(--pc-home-gold)"
+            opacity={0.14 * c.tone + 0.08}
+            stroke="var(--pc-home-gold)"
+            strokeOpacity={0.4 * c.tone + 0.2}
+          />
           <rect x={c.x + 3} y={c.y + 6} width={c.w - 6} height={5} fill="var(--pc-home-gold)" opacity={0.55 * c.tone} />
           <rect x={c.x + 3} y={c.y + 14} width={c.w - 14} height={3} fill="var(--pc-home-gold)" opacity={0.3 * c.tone} />
-        </g>
+        </motion.g>
       ))}
-      {/* etiqueta */}
-      <g transform="translate(400, 24)">
+      <motion.g
+        transform="translate(400, 24)"
+        initial={animate ? { opacity: 0, x: 20 } : false}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5, delay: 0.4, ease: EASE }}
+      >
         <rect x="-52" y="-14" width="104" height="28" rx="6" fill="var(--pc-home-gold)" />
         <text x="0" y="5" textAnchor="middle" fontFamily="ui-sans-serif, system-ui" fontSize="12" fontWeight="700" fill="var(--pc-home-navy)">
           CATÁLOGO
         </text>
-      </g>
+      </motion.g>
     </svg>
   );
 }
 
-function SavingsArt() {
+function SavingsArt({ animate }: { animate: boolean }) {
+  const points: Array<[number, number]> = [
+    [20, 60],
+    [120, 70],
+    [220, 108],
+    [320, 128],
+    [420, 156],
+  ];
+  const linePath =
+    "M20 60 L70 78 L120 70 L170 92 L220 108 L270 100 L320 128 L370 138 L420 156 L460 168";
+  const areaPath = `${linePath} L460 200 L20 200 Z`;
   return (
-    <svg viewBox="0 0 480 200" className="h-full w-full" role="img" aria-label="Economia identificada">
+    <svg
+      viewBox="0 0 480 200"
+      preserveAspectRatio="xMidYMid slice"
+      className="absolute inset-0 h-full w-full"
+      role="img"
+      aria-label="Economia identificada"
+    >
       <defs>
         <linearGradient id="sBg" x1="0" x2="1" y1="0" y2="1">
           <stop offset="0" stopColor="var(--pc-home-navy)" />
@@ -152,41 +255,53 @@ function SavingsArt() {
         </linearGradient>
       </defs>
       <rect width="480" height="200" fill="url(#sBg)" />
-      {/* grade */}
       {[40, 80, 120, 160].map((y) => (
         <line key={y} x1="20" y1={y} x2="460" y2={y} stroke="var(--pc-home-gold)" strokeOpacity="0.08" />
       ))}
-      {/* área */}
-      <path
-        d="M20 60 L70 78 L120 70 L170 92 L220 108 L270 100 L320 128 L370 138 L420 156 L460 168 L460 200 L20 200 Z"
+      <motion.path
+        d={areaPath}
         fill="url(#sFill)"
+        initial={animate ? { opacity: 0 } : false}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.9, delay: 0.4, ease: EASE }}
       />
-      {/* linha */}
-      <path
-        d="M20 60 L70 78 L120 70 L170 92 L220 108 L270 100 L320 128 L370 138 L420 156 L460 168"
+      <motion.path
+        d={linePath}
         stroke="url(#sLine)"
         strokeWidth="2.5"
         fill="none"
         strokeLinecap="round"
         strokeLinejoin="round"
+        initial={animate ? { pathLength: 0 } : false}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 1.1, ease: EASE }}
       />
-      {/* pontos */}
-      {[
-        [20, 60],
-        [120, 70],
-        [220, 108],
-        [320, 128],
-        [420, 156],
-      ].map(([x, y], i) => (
-        <circle key={i} cx={x} cy={y} r="3.5" fill="var(--pc-home-gold)" stroke="var(--pc-home-navy)" strokeWidth="1.5" />
+      {points.map(([x, y], i) => (
+        <motion.circle
+          key={i}
+          cx={x}
+          cy={y}
+          r="3.5"
+          fill="var(--pc-home-gold)"
+          stroke="var(--pc-home-navy)"
+          strokeWidth="1.5"
+          initial={animate ? { scale: 0, opacity: 0 } : false}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ duration: 0.35, delay: 0.9 + i * 0.08, ease: EASE }}
+          style={{ transformOrigin: `${x}px ${y}px` }}
+        />
       ))}
-      {/* selo % */}
-      <g transform="translate(410, 30)">
+      <motion.g
+        transform="translate(410, 30)"
+        initial={animate ? { scale: 0.5, opacity: 0 } : false}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5, delay: 0.6, ease: EASE }}
+      >
         <circle r="22" fill="var(--pc-home-gold)" />
         <text x="0" y="5" textAnchor="middle" fontFamily="ui-sans-serif, system-ui" fontSize="14" fontWeight="800" fill="var(--pc-home-navy)">
           %
         </text>
-      </g>
+      </motion.g>
     </svg>
   );
 }
@@ -198,7 +313,7 @@ const HERO_CONFIG: Record<MetricKind, {
   title: string;
   subtitle: string;
   icon: React.ComponentType<{ className?: string }>;
-  Art: React.ComponentType;
+  Art: React.ComponentType<{ animate: boolean }>;
 }> = {
   markets: {
     eyebrow: "Rede colaborativa",
@@ -239,6 +354,9 @@ export function MetricSpotlightDialog({
     staleTime: 60_000,
   });
 
+  const prefersReducedMotion = useReducedMotion();
+  const animate = !prefersReducedMotion;
+
   if (!kind) return null;
   const cfg = HERO_CONFIG[kind];
   const Icon = cfg.icon;
@@ -249,9 +367,9 @@ export function MetricSpotlightDialog({
         className="max-w-2xl overflow-hidden p-0 sm:rounded-2xl"
         style={{ background: "var(--pc-home-card)", color: "var(--pc-home-heading)" }}
       >
-        {/* HERO */}
-        <div className="relative h-40 w-full overflow-hidden sm:h-48">
-          <cfg.Art />
+        {/* HERO — aspect ratio responsivo */}
+        <div className="relative aspect-[12/5] w-full overflow-hidden sm:aspect-[12/4.5]">
+          <cfg.Art animate={animate} />
           <div
             className="pointer-events-none absolute inset-0"
             style={{
@@ -259,7 +377,12 @@ export function MetricSpotlightDialog({
                 "linear-gradient(180deg, transparent 45%, color-mix(in oklab, var(--pc-home-navy) 82%, black) 100%)",
             }}
           />
-          <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4 sm:p-5">
+          <motion.div
+            className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4 sm:p-5"
+            initial={animate ? { opacity: 0, y: 12 } : false}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.15, ease: EASE }}
+          >
             <div>
               <div
                 className="mb-1 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.18em]"
@@ -269,12 +392,15 @@ export function MetricSpotlightDialog({
                 {cfg.eyebrow}
               </div>
               <DialogHeader className="p-0 text-left">
-                <DialogTitle className="text-[22px] font-bold leading-tight tracking-tight sm:text-[26px]" style={{ color: "#F5F6FA" }}>
+                <DialogTitle
+                  className="text-[22px] font-bold leading-tight tracking-tight sm:text-[26px]"
+                  style={{ color: "#F5F6FA" }}
+                >
                   {cfg.title}
                 </DialogTitle>
               </DialogHeader>
             </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* CONTENT */}
@@ -286,11 +412,15 @@ export function MetricSpotlightDialog({
           {isLoading || !data ? (
             <div className="grid grid-cols-3 gap-2 sm:gap-3">
               {[0, 1, 2].map((i) => (
-                <div key={i} className="h-16 animate-pulse rounded-xl" style={{ background: "color-mix(in oklab, var(--pc-home-navy) 8%, transparent)" }} />
+                <div
+                  key={i}
+                  className="h-16 animate-pulse rounded-xl"
+                  style={{ background: "color-mix(in oklab, var(--pc-home-navy) 8%, transparent)" }}
+                />
               ))}
             </div>
           ) : (
-            <MetricBody kind={kind} data={data} />
+            <MetricBody kind={kind} data={data} animate={animate} />
           )}
 
           {data?.totals.lastUpdate && (
@@ -299,7 +429,8 @@ export function MetricSpotlightDialog({
               style={{ color: "var(--pc-text-muted)" }}
             >
               <Clock className="h-3 w-3" />
-              Última atualização {relTime(data.totals.lastUpdate)} · {data.totals.scans7d.toLocaleString("pt-BR")} preços nos últimos 7 dias
+              Última atualização {relTime(data.totals.lastUpdate)} ·{" "}
+              {data.totals.scans7d.toLocaleString("pt-BR")} preços nos últimos 7 dias
             </div>
           )}
         </div>
@@ -308,7 +439,15 @@ export function MetricSpotlightDialog({
   );
 }
 
-function StatCell({ label, value, tone = "default" }: { label: string; value: string; tone?: "default" | "gold" }) {
+function StatCell({
+  label,
+  value,
+  tone = "default",
+}: {
+  label: string;
+  value: string;
+  tone?: "default" | "gold";
+}) {
   return (
     <div
       className="rounded-xl border px-3 py-2.5"
@@ -317,7 +456,10 @@ function StatCell({ label, value, tone = "default" }: { label: string; value: st
         background: "color-mix(in oklab, var(--pc-home-navy) 4%, transparent)",
       }}
     >
-      <div className="text-[9.5px] font-bold uppercase tracking-[0.14em]" style={{ color: "var(--pc-text-muted)" }}>
+      <div
+        className="text-[9.5px] font-bold uppercase tracking-[0.14em]"
+        style={{ color: "var(--pc-text-muted)" }}
+      >
         {label}
       </div>
       <div
@@ -344,12 +486,158 @@ function SectionTitle({ children }: { children: React.ReactNode }) {
   );
 }
 
+/* ---------- Lista de mercados com busca + paginação progressiva ---------- */
+
+const MARKETS_PAGE = 6;
+
+function MarketsList({
+  stores,
+  animate,
+}: {
+  stores: Awaited<ReturnType<typeof getMetricSpotlight>>["stores"];
+  animate: boolean;
+}) {
+  const [query, setQuery] = useState("");
+  const [visible, setVisible] = useState(MARKETS_PAGE);
+
+  const filtered = useMemo(() => {
+    const q = norm(query.trim());
+    if (!q) return stores;
+    return stores.filter((s) => {
+      const hay = norm(`${s.name} ${s.city ?? ""} ${s.neighborhood ?? ""}`);
+      return hay.includes(q);
+    });
+  }, [stores, query]);
+
+  // Reseta paginação quando a busca muda.
+  useEffect(() => {
+    setVisible(MARKETS_PAGE);
+  }, [query]);
+
+  const shown = filtered.slice(0, visible);
+  const hasMore = visible < filtered.length;
+
+  return (
+    <>
+      <SectionTitle>Lista de parceiros</SectionTitle>
+
+      <div
+        className="mb-2 flex items-center gap-2 rounded-xl border px-3 py-2"
+        style={{
+          borderColor: "color-mix(in oklab, var(--pc-home-line) 80%, transparent)",
+          background: "color-mix(in oklab, var(--pc-home-navy) 3%, transparent)",
+        }}
+      >
+        <Search className="h-4 w-4" style={{ color: "var(--pc-text-muted)" }} />
+        <input
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Buscar por nome, bairro ou cidade…"
+          className="w-full bg-transparent text-sm outline-none placeholder:opacity-60"
+          style={{ color: "var(--pc-home-heading)" }}
+          aria-label="Buscar mercados"
+        />
+        {query && (
+          <button
+            type="button"
+            onClick={() => setQuery("")}
+            className="text-[11px] font-semibold"
+            style={{ color: "var(--pc-home-navy)" }}
+          >
+            limpar
+          </button>
+        )}
+      </div>
+
+      <div
+        className="mb-1 text-[11px]"
+        style={{ color: "var(--pc-text-muted)" }}
+        aria-live="polite"
+      >
+        {filtered.length === 0
+          ? "Nenhum mercado encontrado"
+          : `${filtered.length} ${filtered.length === 1 ? "mercado" : "mercados"}${
+              query ? " para a busca" : ""
+            }`}
+      </div>
+
+      <ul className="divide-y" style={{ borderColor: "var(--pc-home-line)" }}>
+        {shown.map((s, i) => (
+          <motion.li
+            key={s.id}
+            className="flex items-center gap-3 py-2.5"
+            initial={animate ? { opacity: 0, y: 6 } : false}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.28, delay: Math.min(i * 0.03, 0.24), ease: EASE }}
+          >
+            <div
+              className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-lg border text-[11px] font-bold"
+              style={{
+                borderColor: "var(--pc-home-line)",
+                background:
+                  s.brandColor ?? "color-mix(in oklab, var(--pc-home-navy) 6%, transparent)",
+                color: s.brandColor ? "#fff" : "var(--pc-home-navy)",
+              }}
+            >
+              {s.logoUrl ? (
+                <img src={s.logoUrl} alt="" className="h-full w-full object-cover" loading="lazy" />
+              ) : (
+                <Store className="h-4 w-4" />
+              )}
+            </div>
+            <div className="min-w-0 flex-1">
+              <div
+                className="truncate text-sm font-semibold"
+                style={{ color: "var(--pc-home-heading)" }}
+              >
+                {s.name}
+              </div>
+              <div className="truncate text-[11px]" style={{ color: "var(--pc-text-muted)" }}>
+                {[s.neighborhood, s.city].filter(Boolean).join(" · ") || "Feijó, AC"}
+              </div>
+            </div>
+            <div className="text-right">
+              <div
+                className="text-sm font-bold tabular-nums"
+                style={{ color: "var(--pc-home-gold)" }}
+              >
+                {s.productCount}
+              </div>
+              <div className="text-[10px]" style={{ color: "var(--pc-text-muted)" }}>
+                itens · {relTime(s.lastUpdate)}
+              </div>
+            </div>
+          </motion.li>
+        ))}
+      </ul>
+
+      {hasMore && (
+        <button
+          type="button"
+          onClick={() => setVisible((v) => v + MARKETS_PAGE)}
+          className="mt-3 w-full rounded-xl border px-3 py-2 text-[12px] font-semibold transition-colors"
+          style={{
+            borderColor: "color-mix(in oklab, var(--pc-home-line) 80%, transparent)",
+            color: "var(--pc-home-navy)",
+            background: "color-mix(in oklab, var(--pc-home-navy) 3%, transparent)",
+          }}
+        >
+          Carregar mais ({filtered.length - visible} restantes)
+        </button>
+      )}
+    </>
+  );
+}
+
 function MetricBody({
   kind,
   data,
+  animate,
 }: {
   kind: MetricKind;
   data: Awaited<ReturnType<typeof getMetricSpotlight>>;
+  animate: boolean;
 }) {
   if (kind === "markets") {
     return (
@@ -360,43 +648,7 @@ function MetricBody({
           <StatCell label="Preços/7d" value={data.totals.scans7d.toLocaleString("pt-BR")} />
         </div>
 
-        <SectionTitle>Lista de parceiros</SectionTitle>
-        <ul className="divide-y" style={{ borderColor: "var(--pc-home-line)" }}>
-          {data.stores.map((s) => (
-            <li key={s.id} className="flex items-center gap-3 py-2.5">
-              <div
-                className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-lg border text-[11px] font-bold"
-                style={{
-                  borderColor: "var(--pc-home-line)",
-                  background: s.brandColor ?? "color-mix(in oklab, var(--pc-home-navy) 6%, transparent)",
-                  color: s.brandColor ? "#fff" : "var(--pc-home-navy)",
-                }}
-              >
-                {s.logoUrl ? (
-                  <img src={s.logoUrl} alt="" className="h-full w-full object-cover" loading="lazy" />
-                ) : (
-                  <Store className="h-4 w-4" />
-                )}
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="truncate text-sm font-semibold" style={{ color: "var(--pc-home-heading)" }}>
-                  {s.name}
-                </div>
-                <div className="truncate text-[11px]" style={{ color: "var(--pc-text-muted)" }}>
-                  {[s.neighborhood, s.city].filter(Boolean).join(" · ") || "Feijó, AC"}
-                </div>
-              </div>
-              <div className="text-right">
-                <div className="text-sm font-bold tabular-nums" style={{ color: "var(--pc-home-gold)" }}>
-                  {s.productCount}
-                </div>
-                <div className="text-[10px]" style={{ color: "var(--pc-text-muted)" }}>
-                  itens · {relTime(s.lastUpdate)}
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <MarketsList stores={data.stores} animate={animate} />
 
         <Link
           to="/estabelecimentos"
@@ -413,31 +665,47 @@ function MetricBody({
     return (
       <>
         <div className="grid grid-cols-3 gap-2 sm:gap-3">
-          <StatCell label="Cadastrados" value={data.totals.products.toLocaleString("pt-BR")} tone="gold" />
+          <StatCell
+            label="Cadastrados"
+            value={data.totals.products.toLocaleString("pt-BR")}
+            tone="gold"
+          />
           <StatCell label="Categorias" value={data.topCategories.length.toString()} />
           <StatCell label="Preços/7d" value={data.totals.scans7d.toLocaleString("pt-BR")} />
         </div>
 
         <SectionTitle>Distribuição por categoria</SectionTitle>
         <div className="space-y-2">
-          {data.topCategories.map((c) => {
+          {data.topCategories.map((c, i) => {
             const max = data.topCategories[0]?.count ?? 1;
             const pct = Math.max(6, Math.round((c.count / max) * 100));
             return (
               <div key={c.key} className="flex items-center gap-3">
-                <div className="w-28 shrink-0 truncate text-[12px]" style={{ color: "var(--pc-home-heading)" }}>
+                <div
+                  className="w-28 shrink-0 truncate text-[12px]"
+                  style={{ color: "var(--pc-home-heading)" }}
+                >
                   {c.label}
                 </div>
-                <div className="relative h-2 flex-1 overflow-hidden rounded-full" style={{ background: "color-mix(in oklab, var(--pc-home-navy) 8%, transparent)" }}>
-                  <div
+                <div
+                  className="relative h-2 flex-1 overflow-hidden rounded-full"
+                  style={{ background: "color-mix(in oklab, var(--pc-home-navy) 8%, transparent)" }}
+                >
+                  <motion.div
                     className="h-full rounded-full"
                     style={{
-                      width: `${pct}%`,
-                      background: "linear-gradient(90deg, var(--pc-home-gold-soft), var(--pc-home-gold))",
+                      background:
+                        "linear-gradient(90deg, var(--pc-home-gold-soft), var(--pc-home-gold))",
                     }}
+                    initial={animate ? { width: 0 } : false}
+                    animate={{ width: `${pct}%` }}
+                    transition={{ duration: 0.7, delay: 0.05 + i * 0.05, ease: EASE }}
                   />
                 </div>
-                <div className="w-10 text-right text-[12px] font-semibold tabular-nums" style={{ color: "var(--pc-text-muted)" }}>
+                <div
+                  className="w-10 text-right text-[12px] font-semibold tabular-nums"
+                  style={{ color: "var(--pc-text-muted)" }}
+                >
                   {c.count}
                 </div>
               </div>
@@ -448,19 +716,31 @@ function MetricBody({
         <SectionTitle>Últimas atualizações</SectionTitle>
         <ul className="divide-y" style={{ borderColor: "var(--pc-home-line)" }}>
           {data.recentUpdates.slice(0, 6).map((u, i) => (
-            <li key={i} className="flex items-center gap-3 py-2">
+            <motion.li
+              key={i}
+              className="flex items-center gap-3 py-2"
+              initial={animate ? { opacity: 0, y: 6 } : false}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.28, delay: i * 0.04, ease: EASE }}
+            >
               <div className="min-w-0 flex-1">
-                <div className="truncate text-[13px] font-semibold" style={{ color: "var(--pc-home-heading)" }}>
+                <div
+                  className="truncate text-[13px] font-semibold"
+                  style={{ color: "var(--pc-home-heading)" }}
+                >
                   {u.productName}
                 </div>
                 <div className="truncate text-[11px]" style={{ color: "var(--pc-text-muted)" }}>
                   {u.marketName ?? "—"} · {relTime(u.when)}
                 </div>
               </div>
-              <div className="text-sm font-bold tabular-nums" style={{ color: "var(--pc-home-gold)" }}>
+              <div
+                className="text-sm font-bold tabular-nums"
+                style={{ color: "var(--pc-home-gold)" }}
+              >
                 {currency(u.price)}
               </div>
-            </li>
+            </motion.li>
           ))}
         </ul>
 
@@ -481,24 +761,37 @@ function MetricBody({
       <div className="grid grid-cols-3 gap-2 sm:gap-3">
         <StatCell label="Média" value={`${data.totals.avgSavingsPct}%`} tone="gold" />
         <StatCell label="Melhor caso" value={`${data.totals.bestSavingsPct}%`} />
-        <StatCell label="Comparados" value={data.totals.productsCompared.toLocaleString("pt-BR")} />
+        <StatCell
+          label="Comparados"
+          value={data.totals.productsCompared.toLocaleString("pt-BR")}
+        />
       </div>
 
       <SectionTitle>Maiores economias agora</SectionTitle>
       <ul className="divide-y" style={{ borderColor: "var(--pc-home-line)" }}>
         {data.topSavings.map((s, i) => (
-          <li key={i} className="flex items-center gap-3 py-2.5">
+          <motion.li
+            key={i}
+            className="flex items-center gap-3 py-2.5"
+            initial={animate ? { opacity: 0, y: 6 } : false}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.28, delay: i * 0.05, ease: EASE }}
+          >
             <div
               className="grid h-11 w-14 shrink-0 place-items-center rounded-lg text-sm font-bold tabular-nums"
               style={{
-                background: "linear-gradient(135deg, var(--pc-home-gold), var(--pc-home-gold-soft))",
+                background:
+                  "linear-gradient(135deg, var(--pc-home-gold), var(--pc-home-gold-soft))",
                 color: "var(--pc-home-navy)",
               }}
             >
               {Math.round(s.savingsPct)}%
             </div>
             <div className="min-w-0 flex-1">
-              <div className="truncate text-[13px] font-semibold" style={{ color: "var(--pc-home-heading)" }}>
+              <div
+                className="truncate text-[13px] font-semibold"
+                style={{ color: "var(--pc-home-heading)" }}
+              >
                 {s.displayName}
               </div>
               <div className="truncate text-[11px]" style={{ color: "var(--pc-text-muted)" }}>
@@ -509,11 +802,14 @@ function MetricBody({
               <div className="text-[11px] line-through" style={{ color: "var(--pc-text-muted)" }}>
                 {currency(s.maxPrice)}
               </div>
-              <div className="text-sm font-bold tabular-nums" style={{ color: "var(--pc-home-gold)" }}>
+              <div
+                className="text-sm font-bold tabular-nums"
+                style={{ color: "var(--pc-home-gold)" }}
+              >
                 {currency(s.minPrice)}
               </div>
             </div>
-          </li>
+          </motion.li>
         ))}
       </ul>
 
