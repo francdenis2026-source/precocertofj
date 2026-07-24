@@ -417,7 +417,7 @@ function FilterInputs({ brand, min, max, onBrand, onMin, onMax, onClear }: Filte
         type="button"
         onClick={clearAll}
         disabled={!dirty}
-        className="inline-flex h-9 items-center gap-1.5 rounded-md border border-border bg-background/60 px-3 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground/80 transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-40"
+        className="inline-flex h-9 items-center rounded-lg px-3 text-[12px] font-medium text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-40"
         aria-label="Limpar filtros"
       >
         Limpar
