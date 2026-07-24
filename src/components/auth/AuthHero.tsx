@@ -1,5 +1,7 @@
 import { CheckCircle2, ShoppingCart, ShieldCheck, UserPlus, Ticket, Sparkles, Shield, type LucideIcon } from "lucide-react";
 import heroPhoto from "@/assets/cadastro-hero.jpg";
+import loginPhotoAsset from "@/assets/login-market.jpg.asset.json";
+import adminPhotoAsset from "@/assets/hero-supermarket.jpg.asset.json";
 
 /**
  * AuthHero — painel (split no desktop, banner compacto no mobile) reutilizável
@@ -21,6 +23,7 @@ type Preset = {
   brandIcon: LucideIcon;
   offer?: { label: string; title: string; caption: string };
   photo: boolean;
+  photoSrc?: string;
 };
 
 const PRESETS: Record<AuthHeroVariant, Preset> = {
@@ -41,7 +44,8 @@ const PRESETS: Record<AuthHeroVariant, Preset> = {
     },
     brandIcon: ShoppingCart,
     offer: { label: "Oferta ativa", title: "30 dias grátis", caption: "Envie sua nota e libere o painel completo." },
-    photo: false,
+    photo: true,
+    photoSrc: loginPhotoAsset.url,
   },
   signup: {
     badge: { icon: UserPlus, label: "Cadastro gratuito" },
@@ -77,7 +81,8 @@ const PRESETS: Record<AuthHeroVariant, Preset> = {
       caption: "Compra segura · vinculada ao seu CPF",
     },
     brandIcon: ShoppingCart,
-    photo: false,
+    photo: true,
+    photoSrc: heroPhoto,
   },
   admin: {
     badge: { icon: Shield, label: "Portal interno" },
@@ -95,7 +100,8 @@ const PRESETS: Record<AuthHeroVariant, Preset> = {
       caption: "Sessões auditadas · acesso por função",
     },
     brandIcon: Shield,
-    photo: false,
+    photo: true,
+    photoSrc: adminPhotoAsset.url,
   },
 };
 
@@ -136,18 +142,31 @@ export function AuthHero({
     >
       {preset.photo && (
         <>
-          <img src={heroPhoto} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover" />
+          <img
+            src={preset.photoSrc ?? heroPhoto}
+            alt=""
+            aria-hidden
+            className="absolute inset-0 h-full w-full object-cover"
+            style={{ filter: "saturate(0.85) contrast(1.02)" }}
+          />
           <div
             aria-hidden
             className="absolute inset-0"
             style={{
-              background: `linear-gradient(165deg, color-mix(in oklab, ${T.navy} 95%, transparent) 0%, color-mix(in oklab, ${T.navy} 88%, transparent) 55%, color-mix(in oklab, ${T.navy2} 78%, transparent) 100%)`,
+              background: `linear-gradient(160deg, color-mix(in oklab, ${T.navy} 94%, transparent) 0%, color-mix(in oklab, ${T.navy} 82%, transparent) 45%, color-mix(in oklab, ${T.navy2} 70%, transparent) 100%)`,
             }}
           />
           <div
             aria-hidden
-            className="absolute inset-x-0 bottom-0 h-40"
+            className="absolute inset-x-0 bottom-0 h-48"
             style={{ background: `linear-gradient(180deg, transparent, ${T.navy})` }}
+          />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background: `radial-gradient(120% 60% at 50% 100%, color-mix(in oklab, ${T.gold} 12%, transparent) 0%, transparent 60%)`,
+            }}
           />
         </>
       )}
