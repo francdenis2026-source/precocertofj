@@ -863,8 +863,11 @@ export function PriceSearchBar({
                         kindFilter={kindFilter}
                         fmt={fmt}
                         highlightTokens={highlightTokens}
+                        query={query}
+                        isAuthenticated={!!user}
                       />
                     ) : null}
+
 
                     {groupBy === "product" && result.groups.length > 0 ? (
 
