@@ -23,7 +23,10 @@ import { useSession } from "@/hooks/useSession";
 import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 import { consumeAuthIntent } from "@/lib/auth-intent";
 import { useEffect } from "react";
-import { ProductQuickModal } from "@/components/home/ProductQuickModal";
+// Modal pesado (histórico + mercados) só carrega após o primeiro clique num produto.
+const ProductQuickModal = lazy(() =>
+  import("@/components/home/ProductQuickModal").then((m) => ({ default: m.ProductQuickModal })),
+);
 import {
   Dialog,
   DialogContent,
