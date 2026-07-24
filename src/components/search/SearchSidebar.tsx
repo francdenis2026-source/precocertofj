@@ -186,12 +186,12 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
                 >
                   <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md border border-brand-gold/30 bg-background">
                     {s.logoUrl ? (
-                      <img
+                      <LazyImage
                         src={s.logoUrl}
                         alt={s.name}
                         className="h-full w-full object-contain p-0.5"
-                        loading="lazy"
                       />
+
                     ) : (
                       <StoreIcon className="h-4 w-4 text-muted-foreground" />
                     )}
