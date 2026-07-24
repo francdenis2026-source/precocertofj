@@ -1735,55 +1735,196 @@ function MarketGroupedResults({
 
 // -----------------------------------------------------------------------------
 // MatrixCompareResults — comparação lado a lado (produto × mercado).
-// Linhas = produtos; colunas = mercados. Cada célula mostra o preço daquele
-// produto no mercado da coluna, com o menor preço da linha destacado em gold.
+// - Grid acessível (role=grid, arrow-key nav, ARIA rowindex/colindex)
+// - Rolagem horizontal suave com botões prev/next
+// - Seletor de mercados nas colunas
+// - Modal de detalhes ao clicar produto/célula
+// - Exportar PDF (apenas usuários autenticados)
 // -----------------------------------------------------------------------------
 function MatrixCompareResults({
   groups,
   kindFilter,
   fmt,
   highlightTokens,
+  query,
+  isAuthenticated,
 }: {
   groups: ProductGroup[];
   kindFilter: string | null;
-  fmt: (n: number) => string;
+  fmt: (n: number | null | undefined) => string;
   highlightTokens: string[];
+  query: string;
+  isAuthenticated: boolean;
 }) {
   type Market = { name: string; logoUrl: string | null; kind: string | null; minAcc: number };
-  const marketsMap = new Map<string, Market>();
-  const cheapestByMarket = new Map<string, Map<string, number>>(); // product -> market -> price
-
-  for (const g of groups) {
-    const prices = kindFilter ? g.prices.filter((p) => p.marketKind === kindFilter) : g.prices;
-    if (prices.length === 0) continue;
-    const perMarket = new Map<string, number>();
-    for (const p of prices) {
-      const m = marketsMap.get(p.marketName);
-      if (!m) {
-        marketsMap.set(p.marketName, {
-          name: p.marketName,
-          logoUrl: p.marketLogoUrl,
-          kind: p.marketKind,
-          minAcc: p.price,
-        });
-      } else {
-        if (!m.logoUrl && p.marketLogoUrl) m.logoUrl = p.marketLogoUrl;
-        if (p.price < m.minAcc) m.minAcc = p.price;
+  const { allMarkets, cheapestByMarket, allProducts } = useMemo(() => {
+    const marketsMap = new Map<string, Market>();
+    const cbm = new Map<string, Map<string, number>>();
+    for (const g of groups) {
+      const prices = kindFilter ? g.prices.filter((p) => p.marketKind === kindFilter) : g.prices;
+      if (prices.length === 0) continue;
+      const perMarket = new Map<string, number>();
+      for (const p of prices) {
+        const m = marketsMap.get(p.marketName);
+        if (!m) {
+          marketsMap.set(p.marketName, {
+            name: p.marketName,
+            logoUrl: p.marketLogoUrl,
+            kind: p.marketKind,
+            minAcc: p.price,
+          });
+        } else {
+          if (!m.logoUrl && p.marketLogoUrl) m.logoUrl = p.marketLogoUrl;
+          if (p.price < m.minAcc) m.minAcc = p.price;
+        }
+        const prev = perMarket.get(p.marketName);
+        if (prev === undefined || p.price < prev) perMarket.set(p.marketName, p.price);
       }
-      const prev = perMarket.get(p.marketName);
-      if (prev === undefined || p.price < prev) perMarket.set(p.marketName, p.price);
+      cbm.set(g.productName, perMarket);
     }
-    cheapestByMarket.set(g.productName, perMarket);
-  }
+    const all = Array.from(marketsMap.values()).sort((a, z) => a.minAcc - z.minAcc);
+    const prods = groups.filter((g) => cbm.has(g.productName)).sort((a, b) => a.min - b.min);
+    return { allMarkets: all, cheapestByMarket: cbm, allProducts: prods };
+  }, [groups, kindFilter]);
 
-  const markets = Array.from(marketsMap.values()).sort((a, z) => a.minAcc - z.minAcc);
-  const products = groups
-    .filter((g) => cheapestByMarket.has(g.productName))
-    .sort((a, b) => a.min - b.min);
+  // Seleção de mercados visíveis (persistida por busca)
+  const [hidden, setHidden] = useState<Set<string>>(new Set());
+  useEffect(() => {
+    // Reset seleção quando a lista muda de forma significativa
+    setHidden((prev) => {
+      const names = new Set(allMarkets.map((m) => m.name));
+      const kept = new Set<string>();
+      for (const h of prev) if (names.has(h)) kept.add(h);
+      return kept;
+    });
+  }, [allMarkets]);
 
-  if (markets.length === 0 || products.length === 0) return null;
+  const markets = useMemo(
+    () => allMarkets.filter((m) => !hidden.has(m.name)),
+    [allMarkets, hidden],
+  );
+  const products = allProducts;
 
-  if (markets.length < 2) {
+  // Modal de detalhes
+  const [modalSlug, setModalSlug] = useState<string | null>(null);
+  const [modalOpen, setModalOpen] = useState(false);
+  const openProduct = (name: string) => {
+    setModalSlug(name);
+    setModalOpen(true);
+  };
+
+  // Refs para rolagem e navegação por teclado (grid)
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const gridRef = useRef<HTMLTableElement>(null);
+  const [scrollState, setScrollState] = useState({ canPrev: false, canNext: false });
+
+  const updateScrollState = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const canPrev = el.scrollLeft > 4;
+    const canNext = el.scrollLeft + el.clientWidth < el.scrollWidth - 4;
+    setScrollState((s) => (s.canPrev === canPrev && s.canNext === canNext ? s : { canPrev, canNext }));
+  };
+  useEffect(() => {
+    updateScrollState();
+    const el = scrollRef.current;
+    if (!el) return;
+    const onScroll = () => updateScrollState();
+    el.addEventListener("scroll", onScroll, { passive: true });
+    const ro = new ResizeObserver(() => updateScrollState());
+    ro.observe(el);
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      ro.disconnect();
+    };
+  }, [markets.length]);
+
+  const scrollBy = (dir: 1 | -1) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const step = Math.max(180, Math.round(el.clientWidth * 0.6));
+    el.scrollBy({ left: step * dir, behavior: "smooth" });
+  };
+
+  // Navegação por teclado no grid: setas + Home/End + PageUp/PageDown
+  const focusCell = (row: number, col: number) => {
+    const grid = gridRef.current;
+    if (!grid) return;
+    const rows = grid.querySelectorAll<HTMLElement>('[role="row"]');
+    const target = rows[row]?.querySelectorAll<HTMLElement>('[role="rowheader"],[role="gridcell"]')[col];
+    target?.focus();
+  };
+  const onGridKeyDown = (e: React.KeyboardEvent<HTMLTableElement>) => {
+    const t = e.target as HTMLElement;
+    const row = Number(t.getAttribute("data-row"));
+    const col = Number(t.getAttribute("data-col"));
+    if (Number.isNaN(row) || Number.isNaN(col)) return;
+    const maxRow = products.length; // includes header row 0
+    const maxCol = markets.length; // includes rowheader col 0
+    let nr = row;
+    let nc = col;
+    switch (e.key) {
+      case "ArrowRight": nc = Math.min(maxCol, col + 1); break;
+      case "ArrowLeft": nc = Math.max(0, col - 1); break;
+      case "ArrowDown": nr = Math.min(maxRow, row + 1); break;
+      case "ArrowUp": nr = Math.max(0, row - 1); break;
+      case "Home": nc = 0; break;
+      case "End": nc = maxCol; break;
+      case "PageDown": nr = Math.min(maxRow, row + 5); break;
+      case "PageUp": nr = Math.max(0, row - 5); break;
+      default: return;
+    }
+    e.preventDefault();
+    focusCell(nr, nc);
+  };
+
+  // Exportar PDF (autenticado)
+  const [exporting, setExporting] = useState(false);
+  const doExportPdf = async () => {
+    if (!isAuthenticated || exporting) return;
+    setExporting(true);
+    try {
+      const { exportRowsToPDF, stampedFilename } = await import("@/lib/export");
+      const columns = [
+        { key: "product", header: "Produto", accessor: (r: Record<string, string>) => r.product, align: "left" as const },
+        ...markets.map((m) => ({
+          key: m.name,
+          header: m.name,
+          accessor: (r: Record<string, string>) => r[m.name] ?? "—",
+          align: "right" as const,
+        })),
+      ];
+      const rows = products.map((g) => {
+        const row: Record<string, string> = { product: g.productName };
+        const perMarket = cheapestByMarket.get(g.productName)!;
+        for (const m of markets) {
+          const v = perMarket.get(m.name);
+          row[m.name] = v == null ? "—" : fmt(v);
+        }
+        return row;
+      });
+      await exportRowsToPDF(
+        stampedFilename(`comparacao_${query || "busca"}`),
+        columns,
+        rows,
+        {
+          title: "Comparação lado a lado",
+          subtitle: query ? `Busca: “${query}”` : undefined,
+          filters: [
+            `Mercados: ${markets.map((m) => m.name).join(", ") || "—"}`,
+            kindFilter ? `Tipo: ${kindFilter}` : "Todos os tipos",
+            `Produtos: ${products.length}`,
+          ],
+        },
+      );
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  if (allMarkets.length === 0 || products.length === 0) return null;
+
+  if (allMarkets.length < 2) {
     return (
       <div className="rounded-xl border border-border/60 bg-card/70 px-3 py-3 text-[12.5px] text-muted-foreground">
         Comparação lado a lado precisa de pelo menos 2 mercados com o mesmo produto. Ajuste os filtros
@@ -1793,110 +1934,254 @@ function MatrixCompareResults({
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-border/60 bg-card/70 shadow-sm">
-      <table className="w-full min-w-[560px] border-collapse text-[13px]">
-        <thead>
-          <tr className="bg-background/40 text-left">
-            <th
-              scope="col"
-              className="sticky left-0 z-10 min-w-[180px] border-b border-border/60 bg-background/80 px-3 py-2.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground backdrop-blur"
-            >
-              Produto
-            </th>
-            {markets.map((m) => (
-              <th
-                key={m.name}
-                scope="col"
-                className="min-w-[140px] border-b border-border/60 px-3 py-2 align-bottom"
-              >
-                <div className="flex items-center gap-2">
-                  <span
-                    className="grid h-7 w-7 flex-none place-items-center rounded-md border border-brand-gold/30 bg-background overflow-hidden"
-                    aria-hidden="true"
-                  >
-                    {m.logoUrl ? (
-                      <img src={m.logoUrl} alt="" className="h-full w-full object-contain p-0.5" loading="lazy" />
-                    ) : (
-                      <ShoppingBag className="h-3.5 w-3.5 text-muted-foreground" />
-                    )}
-                  </span>
-                  <span className="market-name truncate text-[12.5px] font-semibold text-foreground">
-                    {m.name}
-                  </span>
-                </div>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {products.map((g, rowIdx) => {
-            const row = cheapestByMarket.get(g.productName)!;
-            const rowValues = Array.from(row.values());
-            const rowMin = rowValues.length ? Math.min(...rowValues) : null;
-            const rowMax = rowValues.length ? Math.max(...rowValues) : null;
-            const zebra = rowIdx % 2 === 1 ? "bg-background/20" : "";
-            return (
-              <tr key={g.productName} className={"border-t border-border/40 " + zebra}>
-                <th
-                  scope="row"
-                  className="sticky left-0 z-[5] min-w-[180px] bg-card/95 px-3 py-2 text-left align-middle backdrop-blur"
+    <div className="space-y-2">
+      {/* Toolbar: seletor de mercados + navegação + exportar */}
+      <div className="flex flex-wrap items-center gap-2 rounded-xl border border-border/60 bg-card/60 px-2.5 py-2">
+        <div className="flex items-center gap-1.5">
+          <span className="text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
+            Colunas
+          </span>
+          <div className="flex flex-wrap gap-1" role="group" aria-label="Selecionar mercados visíveis">
+            {allMarkets.map((m) => {
+              const active = !hidden.has(m.name);
+              return (
+                <button
+                  key={m.name}
+                  type="button"
+                  aria-pressed={active}
+                  onClick={() => {
+                    setHidden((prev) => {
+                      const next = new Set(prev);
+                      if (next.has(m.name)) next.delete(m.name);
+                      else next.add(m.name);
+                      // Sempre manter ao menos 2 colunas visíveis
+                      if (allMarkets.length - next.size < 2) return prev;
+                      return next;
+                    });
+                  }}
+                  className={
+                    "focus-ring inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium transition " +
+                    (active
+                      ? "border-brand-gold/50 bg-brand-gold/15 text-foreground"
+                      : "border-border bg-background text-muted-foreground hover:bg-background/80 line-through")
+                  }
                 >
-                  <Link
-                    to="/produto/$slug"
-                    params={{ slug: g.productName }}
-                    className="block truncate text-[13px] font-medium text-foreground hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold rounded"
-                  >
-                    <HighlightMatch text={g.productName} tokens={highlightTokens} />
-                  </Link>
-                  {rowMin != null && rowMax != null && rowMax > rowMin ? (
-                    <p className="mt-0.5 text-[10.5px] text-muted-foreground">
-                      Economia até{" "}
-                      <span className="font-semibold text-brand-gold tabular-nums">
-                        {fmt(rowMax - rowMin)}
-                      </span>
-                    </p>
-                  ) : null}
+                  {m.logoUrl ? (
+                    <img src={m.logoUrl} alt="" className="h-3.5 w-3.5 rounded object-contain" loading="lazy" />
+                  ) : (
+                    <ShoppingBag className="h-3 w-3" aria-hidden="true" />
+                  )}
+                  <span className="max-w-[110px] truncate">{m.name}</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="ml-auto flex items-center gap-1.5">
+          <button
+            type="button"
+            onClick={() => scrollBy(-1)}
+            disabled={!scrollState.canPrev}
+            aria-label="Rolar colunas para a esquerda"
+            className="focus-ring inline-flex h-7 w-7 items-center justify-center rounded-full border border-border bg-background text-foreground disabled:opacity-40"
+          >
+            ‹
+          </button>
+          <button
+            type="button"
+            onClick={() => scrollBy(1)}
+            disabled={!scrollState.canNext}
+            aria-label="Rolar colunas para a direita"
+            className="focus-ring inline-flex h-7 w-7 items-center justify-center rounded-full border border-border bg-background text-foreground disabled:opacity-40"
+          >
+            ›
+          </button>
+          <button
+            type="button"
+            onClick={doExportPdf}
+            disabled={!isAuthenticated || exporting}
+            aria-label={isAuthenticated ? "Exportar comparação em PDF" : "Entre para exportar em PDF"}
+            title={isAuthenticated ? "Exportar em PDF" : "Disponível para usuários cadastrados"}
+            className="focus-ring inline-flex items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-gold/15 px-2.5 py-1 text-[11px] font-semibold text-foreground hover:bg-brand-gold/25 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {exporting ? "Gerando…" : isAuthenticated ? "Exportar PDF" : "Exportar PDF (login)"}
+          </button>
+        </div>
+      </div>
+
+      {/* Grid acessível */}
+      <div
+        ref={scrollRef}
+        className="overflow-x-auto rounded-xl border border-border/60 bg-card/70 shadow-sm scroll-smooth"
+        aria-label="Área de rolagem da comparação lado a lado"
+      >
+        <table
+          ref={gridRef}
+          role="grid"
+          aria-label="Comparação de preços por produto e mercado"
+          aria-rowcount={products.length + 1}
+          aria-colcount={markets.length + 1}
+          onKeyDown={onGridKeyDown}
+          className="w-full min-w-[560px] border-collapse text-[13px]"
+        >
+          <thead>
+            <tr role="row" aria-rowindex={1} className="bg-background/40 text-left">
+              <th
+                role="columnheader"
+                scope="col"
+                aria-colindex={1}
+                data-row={0}
+                data-col={0}
+                tabIndex={0}
+                className="focus-ring sticky left-0 z-10 min-w-[180px] border-b border-border/60 bg-background/80 px-3 py-2.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground backdrop-blur"
+              >
+                Produto
+              </th>
+              {markets.map((m, ci) => (
+                <th
+                  key={m.name}
+                  role="columnheader"
+                  scope="col"
+                  aria-colindex={ci + 2}
+                  data-row={0}
+                  data-col={ci + 1}
+                  tabIndex={-1}
+                  className="focus-ring min-w-[140px] border-b border-border/60 px-3 py-2 align-bottom"
+                >
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="grid h-7 w-7 flex-none place-items-center rounded-md border border-brand-gold/30 bg-background overflow-hidden"
+                      aria-hidden="true"
+                    >
+                      {m.logoUrl ? (
+                        <img src={m.logoUrl} alt="" className="h-full w-full object-contain p-0.5" loading="lazy" />
+                      ) : (
+                        <ShoppingBag className="h-3.5 w-3.5 text-muted-foreground" />
+                      )}
+                    </span>
+                    <span className="market-name truncate text-[12.5px] font-semibold text-foreground">
+                      {m.name}
+                    </span>
+                  </div>
                 </th>
-                {markets.map((m) => {
-                  const v = row.get(m.name);
-                  if (v === undefined) {
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {products.map((g, rowIdx) => {
+              const row = cheapestByMarket.get(g.productName)!;
+              const rowValues = markets.map((m) => row.get(m.name)).filter((v): v is number => typeof v === "number");
+              const rowMin = rowValues.length ? Math.min(...rowValues) : null;
+              const rowMax = rowValues.length ? Math.max(...rowValues) : null;
+              const zebra = rowIdx % 2 === 1 ? "bg-background/20" : "";
+              const productLabel =
+                rowMin != null && rowMax != null && rowMax > rowMin
+                  ? `${g.productName}. Economia até ${fmt(rowMax - rowMin)}. Abrir detalhes.`
+                  : `${g.productName}. Abrir detalhes.`;
+              return (
+                <tr
+                  role="row"
+                  aria-rowindex={rowIdx + 2}
+                  key={g.productName}
+                  className={"border-t border-border/40 " + zebra}
+                >
+                  <th
+                    role="rowheader"
+                    scope="row"
+                    aria-colindex={1}
+                    data-row={rowIdx + 1}
+                    data-col={0}
+                    tabIndex={-1}
+                    className="focus-ring sticky left-0 z-[5] min-w-[180px] bg-card/95 px-3 py-2 text-left align-middle backdrop-blur"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => openProduct(g.productName)}
+                      aria-label={productLabel}
+                      className="block w-full truncate text-left text-[13px] font-medium text-foreground hover:text-brand-gold focus:outline-none rounded"
+                    >
+                      <HighlightMatch text={g.productName} tokens={highlightTokens} />
+                    </button>
+                    {rowMin != null && rowMax != null && rowMax > rowMin ? (
+                      <p className="mt-0.5 text-[10.5px] text-muted-foreground">
+                        Economia até{" "}
+                        <span className="font-semibold text-brand-gold tabular-nums">
+                          {fmt(rowMax - rowMin)}
+                        </span>
+                      </p>
+                    ) : null}
+                  </th>
+                  {markets.map((m, ci) => {
+                    const v = row.get(m.name);
+                    const isMin = v != null && rowMin != null && v === rowMin;
+                    const isMax = v != null && rowMax != null && v === rowMax && rowMax > (rowMin ?? 0);
+                    const cellLabel =
+                      v == null
+                        ? `${m.name}: sem preço para ${g.productName}`
+                        : `${m.name}: ${fmt(v)} para ${g.productName}${isMin ? " — menor preço da linha" : ""}. Ver detalhes.`;
                     return (
                       <td
+                        role="gridcell"
+                        aria-colindex={ci + 2}
+                        aria-label={cellLabel}
+                        data-row={rowIdx + 1}
+                        data-col={ci + 1}
+                        tabIndex={-1}
+                        onClick={() => openProduct(g.productName)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            e.preventDefault();
+                            openProduct(g.productName);
+                          }
+                        }}
                         key={m.name}
-                        className="px-3 py-2 text-center align-middle text-[12px] text-muted-foreground/60"
+                        className={
+                          "focus-ring cursor-pointer px-3 py-2 align-middle tabular-nums " +
+                          (v == null
+                            ? "text-center text-[12px] text-muted-foreground/60"
+                            : isMin
+                              ? "bg-brand-gold/15 text-foreground font-bold"
+                              : isMax
+                                ? "text-muted-foreground"
+                                : "text-foreground")
+                        }
                       >
-                        —
+                        {v == null ? (
+                          "—"
+                        ) : (
+                          <div className="flex items-center gap-1.5">
+                            {isMin ? (
+                              <Crown className="h-3 w-3 text-brand-gold" aria-hidden="true" />
+                            ) : null}
+                            <span>{fmt(v)}</span>
+                          </div>
+                        )}
                       </td>
                     );
-                  }
-                  const isMin = rowMin != null && v === rowMin;
-                  const isMax = rowMax != null && v === rowMax && rowMax > (rowMin ?? 0);
-                  return (
-                    <td
-                      key={m.name}
-                      className={
-                        "px-3 py-2 align-middle tabular-nums " +
-                        (isMin
-                          ? "bg-brand-gold/15 text-foreground font-bold"
-                          : isMax
-                            ? "text-muted-foreground"
-                            : "text-foreground")
-                      }
-                    >
-                      <div className="flex items-center gap-1.5">
-                        {isMin ? (
-                          <Crown className="h-3 w-3 text-brand-gold" aria-label="menor preço" />
-                        ) : null}
-                        <span>{fmt(v)}</span>
-                      </div>
-                    </td>
-                  );
-                })}
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+                  })}
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
+
+      <p className="text-[10.5px] text-muted-foreground">
+        Dica: navegue com as setas do teclado (↑ ↓ ← →), Home/End e PageUp/PageDown. Enter abre os detalhes.
+      </p>
+
+      <ProductQuickModal
+        slug={modalSlug}
+        open={modalOpen}
+        onOpenChange={(v) => {
+          setModalOpen(v);
+          if (!v) setModalSlug(null);
+        }}
+        fallbackName={modalSlug ?? undefined}
+        queryTokens={highlightTokens}
+      />
     </div>
   );
 }
+
