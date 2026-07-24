@@ -103,8 +103,8 @@ const toneClasses: Record<Tone, { ring: string; icon: string; iconBg: string; bu
 function ToneIcon({ tone }: { tone: Tone }) {
   // Distinct SVG per tone. Kept inline for zero-dependency, crisp scaling.
   const common = {
-    width: 28,
-    height: 28,
+    width: 20,
+    height: 20,
     viewBox: "0 0 24 24",
     fill: "none",
     stroke: "currentColor",
