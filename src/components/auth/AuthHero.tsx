@@ -202,26 +202,26 @@ export function AuthHero({
           style={{
             fontFamily: T.display,
             fontWeight: 400,
-            fontSize: "clamp(1.55rem, 4.8vw, 2.25rem)",
+            fontSize: "clamp(1.5rem, 4.4vw, 2.1rem)",
             lineHeight: 1.05,
             letterSpacing: "-0.01em",
             color: T.onNavy,
-            textShadow: preset.photo ? "0 2px 12px rgba(0,0,0,0.55)" : undefined,
+            textShadow: preset.photo ? "0 2px 18px rgba(0,0,0,0.75), 0 1px 4px rgba(0,0,0,0.6)" : undefined,
           }}
         >
           {preset.title}{" "}
-          <span className="italic md:hidden" style={{ color: T.gold }}>{preset.highlight}</span>
+          <span className="italic md:hidden" style={{ color: T.gold, textShadow: preset.photo ? "0 2px 16px rgba(0,0,0,0.85), 0 0 2px rgba(0,0,0,0.7)" : undefined }}>{preset.highlight}</span>
           <span className="hidden md:inline">
             <br />
-            <span className="italic" style={{ color: T.gold }}>{preset.highlight}</span>
+            <span className="italic" style={{ color: T.gold, textShadow: preset.photo ? "0 2px 16px rgba(0,0,0,0.85), 0 0 2px rgba(0,0,0,0.7)" : undefined }}>{preset.highlight}</span>
           </span>
         </h2>
 
         <p
           className="mt-2 max-w-[38ch] text-[12.5px] leading-relaxed sm:text-[13px] md:mt-2.5"
           style={{
-            color: `color-mix(in oklab, ${T.onNavy} 90%, transparent)`,
-            textShadow: preset.photo ? "0 1px 6px rgba(0,0,0,0.5)" : undefined,
+            color: `color-mix(in oklab, ${T.onNavy} 94%, transparent)`,
+            textShadow: preset.photo ? "0 1px 10px rgba(0,0,0,0.7), 0 1px 3px rgba(0,0,0,0.55)" : undefined,
           }}
         >
           {preset.subtitle}
