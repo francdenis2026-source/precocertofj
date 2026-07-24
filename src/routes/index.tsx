@@ -582,19 +582,22 @@ function HomePage() {
 
             {[
               {
-                k: "8",
+                k: String(stats.establishments ?? 8),
                 l: "mercados",
                 lFull: "mercados no ar",
                 icon: <ShieldCheck className="h-4 w-4" />,
                 tip: "Mercados de Feijó/AC ativos na plataforma com preços colaborativos.",
               },
               {
-                k: "1.5k+",
+                k: stats.products != null
+                  ? `${stats.products.toLocaleString("pt-BR")}+`
+                  : "1.5k+",
                 l: "produtos",
                 lFull: "produtos catalogados",
                 icon: <Package className="h-4 w-4" />,
-                tip: "Mais de 1.500 produtos únicos cadastrados com preço, marca e categoria.",
+                tip: "Produtos únicos cadastrados com preço, marca e categoria.",
               },
+
               {
                 k: economy?.avgSavingsPct
                   ? `${economy.avgSavingsPct}%`
