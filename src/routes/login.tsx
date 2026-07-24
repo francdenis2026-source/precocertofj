@@ -872,7 +872,7 @@ function TabSwitch({
     <div
       role="tablist"
       aria-label="Login ou cadastro"
-      className="mt-5 grid grid-cols-2 gap-1 rounded-xl border border-border bg-muted/40 p-1"
+      className="mt-4 grid grid-cols-2 gap-1 rounded-lg border border-slate-200 bg-slate-100 p-0.5"
     >
       {tabs.map((t) => {
         const active = mode === t.key;
@@ -883,11 +883,12 @@ function TabSwitch({
             role="tab"
             aria-selected={active}
             onClick={() => onChange(t.key)}
+            style={active ? { color: PC_EMERALD_DEEP } : undefined}
             className={
-              "relative h-9 rounded-lg text-[12.5px] font-semibold transition " +
+              "relative h-8 rounded-md text-[12px] font-semibold transition " +
               (active
-                ? "bg-background text-foreground shadow-sm ring-1 ring-border"
-                : "text-muted-foreground hover:text-foreground")
+                ? "bg-white shadow-sm ring-1 ring-slate-200"
+                : "text-slate-500 hover:text-slate-800")
             }
           >
             {t.label}
@@ -927,26 +928,28 @@ function Field({
   status?: FieldStatus;
   hint?: string | null;
 }) {
+  // The right panel is hardcoded white, so inputs use an explicit light palette
+  // to guarantee contrast regardless of the app's dark/light theme setting.
   const borderCls =
     status === "success"
-      ? "border-primary/60 focus:border-primary focus:ring-primary/10"
+      ? "border-emerald-500/70 focus:border-emerald-600 focus:ring-emerald-500/15"
       : status === "error"
-        ? "border-destructive/60 focus:border-destructive focus:ring-destructive/10"
-        : "border-input focus:border-foreground focus:ring-foreground/5";
+        ? "border-rose-500/70 focus:border-rose-600 focus:ring-rose-500/15"
+        : "border-slate-200 hover:border-slate-300 focus:border-slate-900 focus:ring-slate-900/10";
   const hintCls =
     status === "success"
-      ? "text-primary"
+      ? "text-emerald-700"
       : status === "error"
-        ? "text-destructive"
-        : "text-muted-foreground";
+        ? "text-rose-600"
+        : "text-slate-500";
   return (
     <label className="block">
-      <span className="mb-1 block text-[10.5px] font-semibold uppercase tracking-wider text-muted-foreground">
+      <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
         {label}
       </span>
       <div className="relative">
         {Icon && (
-          <Icon className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Icon className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
         )}
         <input
           type={type}
@@ -958,24 +961,25 @@ function Field({
           minLength={minLength}
           inputMode={inputMode}
           aria-invalid={status === "error" || undefined}
+          style={{ color: PC_EMERALD_DEEP }}
           className={
-            "h-11 w-full rounded-xl bg-card text-sm text-foreground shadow-[0_1px_0_rgba(0,0,0,0.02)] transition placeholder:text-muted-foreground focus:outline-none focus:ring-4 " +
+            "h-9 w-full rounded-lg bg-white text-[13px] font-medium tracking-tight shadow-[inset_0_1px_0_rgba(15,23,42,0.02)] transition placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:ring-4 " +
             borderCls +
             " border " +
-            (Icon ? "pl-10 " : "pl-3.5 ") +
-            (status !== "idle" ? "pr-10" : "pr-3.5")
+            (Icon ? "pl-9 " : "pl-3 ") +
+            (status !== "idle" ? "pr-9" : "pr-3")
           }
         />
         {status === "success" && (
-          <Check className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-primary" />
+          <Check className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-emerald-600" />
         )}
         {status === "error" && (
-          <AlertCircle className="pointer-events-none absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-destructive" />
+          <AlertCircle className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-rose-600" />
         )}
       </div>
       {hint && (
         <p
-          className={`mt-1 pl-1 text-[11px] font-medium ${hintCls}`}
+          className={`mt-1 pl-0.5 text-[10.5px] font-medium ${hintCls}`}
           aria-live="polite"
         >
           {hint}
