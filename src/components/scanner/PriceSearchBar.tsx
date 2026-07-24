@@ -690,16 +690,10 @@ export function PriceSearchBar({
                 <Link
                   to="/produto-publico/$slug"
                   params={{ slug: result.query }}
-                  className="relative block overflow-hidden rounded-xl border border-accent-strong/40 bg-gradient-to-br from-accent/15 via-background to-background p-3 shadow-[0_10px_30px_-18px_color-mix(in_oklab,var(--color-accent)_65%,transparent)] transition hover:border-accent-strong/70"
+                  className="relative block rounded-xl border border-accent-strong/30 bg-accent/8 p-2.5 transition hover:border-accent-strong/60 hover:bg-accent/12"
                 >
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute -right-3 -top-3 grid h-14 w-14 place-items-center rounded-full bg-accent-strong/15 text-accent-strong"
-                  >
-                    <Crown className="h-6 w-6" strokeWidth={1.75} />
-                  </div>
-                  <div className="flex items-center justify-between gap-2 pr-10">
-                    <p className="inline-flex items-center gap-1 rounded-full bg-accent-strong px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.22em] text-accent-foreground">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="inline-flex items-center gap-1 rounded-md bg-accent-strong px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-accent-foreground">
                       <Crown className="h-3 w-3" strokeWidth={2} aria-hidden="true" />
                       Preço mais barato
                     </p>
@@ -711,7 +705,7 @@ export function PriceSearchBar({
                       size="sm"
                     />
                   </div>
-                  <p className="mt-1.5 flex items-center gap-1.5 font-display text-sm italic text-muted-foreground">
+                  <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-muted-foreground">
                     <StoreBadge
                       name={result.cheapest.marketName}
                       logoUrl={result.cheapest.marketLogoUrl}
@@ -720,13 +714,14 @@ export function PriceSearchBar({
                       isCheapest
                       cheapestReason={buildCheapestReason(result.cheapest.price, result.avg)}
                     />
-                    <span className="market-name truncate not-italic text-[13px]">{result.cheapest.marketName}</span>
+                    <span className="market-name truncate text-[13px]">{result.cheapest.marketName}</span>
                   </p>
-                  <p className="mt-0.5 font-display text-[26px] font-bold leading-tight tracking-tight tabular-nums text-accent-strong">
+                  <p className="mt-0.5 font-display text-[22px] font-bold leading-tight tracking-tight tabular-nums text-accent-strong">
                     {fmt(result.cheapest.price)}
                   </p>
                 </Link>
               )}
+
 
 
               {/* Product details area (from catalog) */}
@@ -800,15 +795,16 @@ export function PriceSearchBar({
                             <div key={cat} className="space-y-2">
                               {showHeaders ? (
                                 <div className="flex items-center gap-2 px-0.5">
-                                  <span className="font-mono text-[9px] font-semibold uppercase tracking-[0.22em] text-accent-strong">
+                                  <span className="text-[11px] font-semibold text-accent-strong">
                                     {cat}
                                   </span>
-                                  <span className="h-px flex-1 bg-gradient-to-r from-accent-strong/30 to-transparent" aria-hidden="true" />
-                                  <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+                                  <span className="h-px flex-1 bg-border" aria-hidden="true" />
+                                  <span className="text-[11px] text-muted-foreground">
                                     {sortedGroups.length} item{sortedGroups.length > 1 ? "s" : ""}
                                   </span>
                                 </div>
                               ) : null}
+
                               {(() => {
                                 const shown = pageByCat[cat] ?? PAGE_SIZE;
                                 const visibleGroups = sortedGroups.slice(0, shown);
