@@ -788,7 +788,7 @@ function HomePage() {
 
 
               {/* Search com autocomplete */}
-              <form onSubmit={submitSearch} className="relative mt-4 max-w-xl" ref={searchBoxRef}>
+              <form onSubmit={submitSearch} className="relative mt-3.5 max-w-xl" ref={searchBoxRef}>
                 <div
                   className="flex items-center gap-2 rounded-2xl border p-1.5 transition-all focus-within:ring-2 sm:p-2"
                   style={{
