@@ -1,8 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Clock, Store } from "lucide-react";
+import { Clock, Store, Radio } from "lucide-react";
 import { getRecentProducts } from "@/lib/products-public.functions";
+import { getLiveTickerStats } from "@/lib/products-public.functions";
 
 
 const brl = (n: number) =>
@@ -74,13 +75,22 @@ type Palette = {
 
 export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
   const fetchRecent = useServerFn(getRecentProducts);
+  const fetchLive = useServerFn(getLiveTickerStats);
   const { data } = useQuery({
     queryKey: ["home", "recent-products", 6],
     queryFn: () => fetchRecent({ data: { limit: 6 } }),
     staleTime: 60_000,
   });
+  const { data: live } = useQuery({
+    queryKey: ["home", "live-ticker-stats"],
+    queryFn: () => fetchLive(),
+    staleTime: 60_000,
+    refetchInterval: 90_000,
+  });
 
   if (!data || data.length === 0) return null;
+
+  const lastUpdateLabel = live?.lastUpdate ? relative(live.lastUpdate) : null;
 
 
   return (
@@ -89,7 +99,45 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
       className="mx-auto w-full max-w-6xl px-4 pb-8 sm:px-6 lg:px-8"
     >
       <div className="mb-4 flex items-end justify-between gap-4 sm:mb-5">
-        <div>
+        <div className="min-w-0">
+          <div className="mb-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
+            <span
+              className="inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em]"
+              style={{
+                borderColor: "color-mix(in oklab, #10b981 45%, transparent)",
+                background: "color-mix(in oklab, #10b981 12%, transparent)",
+                color: "#10b981",
+              }}
+              aria-label="Painel ao vivo"
+            >
+              <span className="relative inline-flex h-2 w-2">
+                <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500 opacity-70" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+              </span>
+              Ao vivo
+            </span>
+            {lastUpdateLabel && (
+              <span
+                className="inline-flex items-center gap-1 text-[10.5px] font-medium tabular-nums"
+                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 60%, transparent)" }}
+              >
+                <Radio className="h-3 w-3" aria-hidden />
+                Última atualização {lastUpdateLabel}
+              </span>
+            )}
+            {typeof live?.checkedToday === "number" && live.checkedToday > 0 && (
+              <span
+                className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10.5px] font-bold tabular-nums"
+                style={{
+                  background: "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
+                  color: P.gold,
+                }}
+                aria-label={`${live.checkedToday} preços conferidos hoje`}
+              >
+                {live.checkedToday} preços conferidos hoje
+              </span>
+            )}
+          </div>
           <div
             className="mb-1 text-[10px] font-bold uppercase tracking-[0.22em]"
             style={{ color: P.goldSoft }}
@@ -117,6 +165,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
           Ver mais →
         </Link>
       </div>
+
 
       {/* MOBILE: letreiro digital (marquee) — economiza tela vertical */}
       <div

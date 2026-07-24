@@ -16,6 +16,67 @@ export type RecentProduct = {
   stores: number;
 };
 
+export type LiveTickerStats = {
+  lastUpdate: string | null; // ISO
+  checkedToday: number;
+  totalRecent: number; // últimos 7 dias
+};
+
+/**
+ * Public — dados do "pregão ao vivo" para o badge do letreiro.
+ */
+export const getLiveTickerStats = createServerFn({ method: "GET" }).handler(
+  async (): Promise<LiveTickerStats> => {
+    try {
+      setResponseHeader(
+        "cache-control",
+        "public, max-age=60, s-maxage=120, stale-while-revalidate=600",
+      );
+    } catch {
+      /* ignore */
+    }
+
+    try {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+      const startOfToday = new Date();
+      startOfToday.setHours(0, 0, 0, 0);
+      const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+
+      const [latestRes, todayRes, weekRes] = await Promise.all([
+        supabaseAdmin
+          .from("scans")
+          .select("created_at")
+          .eq("status", "salvo")
+          .not("price_captured", "is", null)
+          .order("created_at", { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        supabaseAdmin
+          .from("scans")
+          .select("id", { count: "exact", head: true })
+          .eq("status", "salvo")
+          .not("price_captured", "is", null)
+          .gte("created_at", startOfToday.toISOString()),
+        supabaseAdmin
+          .from("scans")
+          .select("id", { count: "exact", head: true })
+          .eq("status", "salvo")
+          .not("price_captured", "is", null)
+          .gte("created_at", sevenDaysAgo.toISOString()),
+      ]);
+
+      return {
+        lastUpdate: (latestRes.data?.created_at as string | undefined) ?? null,
+        checkedToday: todayRes.count ?? 0,
+        totalRecent: weekRes.count ?? 0,
+      };
+    } catch {
+      return { lastUpdate: null, checkedToday: 0, totalRecent: 0 };
+    }
+  },
+);
+
 /**
  * Public — economia média identificada (menor vs. maior preço do mesmo produto
  * entre estabelecimentos, para produtos com pelo menos 2 mercados).
