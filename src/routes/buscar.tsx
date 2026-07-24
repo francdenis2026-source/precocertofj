@@ -259,18 +259,22 @@ function SearchPage() {
     >
       {/* Hero editorial — foto de corredor de mercado desfocada + véu navy para legibilidade */}
       <section className="relative isolate overflow-hidden border-b border-white/10">
-        <picture aria-hidden className="absolute inset-0 -z-10">
+        <picture aria-hidden className="absolute inset-0 -z-10 h-full w-full">
+          {Object.entries(buscarHero.sources).map(([type, srcset]) => (
+            <source key={type} type={type} srcSet={srcset as string} sizes="100vw" />
+          ))}
           <img
-            src={buscarHero}
+            src={buscarHero.img.src}
             alt=""
             className="h-full w-full object-cover"
-            width={1920}
-            height={720}
+            width={buscarHero.img.w}
+            height={buscarHero.img.h}
             loading="eager"
             fetchPriority="high"
             decoding="async"
           />
         </picture>
+
         {/* Véu navy — mantém contraste WCAG do título e barra */}
         <div
           aria-hidden
