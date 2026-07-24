@@ -21,6 +21,21 @@ const relative = (iso: string) => {
   return m <= 1 ? "há 1 mês" : `há ${m} meses`;
 };
 
+/** Encurta nomes longos preservando palavras — ideal para letreiro no mobile. */
+function shortName(raw: string, max = 22): string {
+  const clean = raw.replace(/\s+/g, " ").trim();
+  if (clean.length <= max) return clean;
+  const words = clean.split(" ");
+  let out = "";
+  for (const w of words) {
+    if ((out + (out ? " " : "") + w).length > max) break;
+    out += (out ? " " : "") + w;
+  }
+  if (!out) out = clean.slice(0, max);
+  return out + "…";
+}
+
+
 type Freshness = { label: string; dotClass: string; textClass: string; ringClass: string };
 
 function freshness(iso: string): Freshness {
@@ -117,7 +132,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                 key={`${p.slug}-${i}`}
                 to="/produto/$slug"
                 params={{ slug: p.slug }}
-                className="inline-flex shrink-0 items-center gap-2.5 rounded-2xl border px-3.5 py-2.5 shadow-sm"
+                className="inline-flex shrink-0 items-center gap-3 rounded-2xl border px-4 py-2.5 shadow-sm"
                 style={{ borderColor: P.line, background: "var(--pc-home-bg, transparent)", color: P.heading }}
                 aria-label={`${p.name} — ${brl(p.price)} em ${p.marketName ?? "mercados"}`}
               >
@@ -126,21 +141,25 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                   aria-hidden
                 />
                 <div className="flex min-w-0 flex-col leading-tight">
-                  <span className="max-w-[11rem] truncate text-[13px] font-semibold">
-                    {p.name}
+                  <span
+                    className="whitespace-nowrap text-[13.5px] font-semibold"
+                    title={p.name}
+                  >
+                    {shortName(p.name, 24)}
                   </span>
-                  <span className="market-name truncate text-[11px] max-w-[11rem]">
-                    {p.marketName ?? "vários mercados"}
+                  <span className="market-name whitespace-nowrap text-[11px]">
+                    {shortName(p.marketName ?? "vários mercados", 22)}
                   </span>
                 </div>
                 <span
-                  className={`${serif} tabular-nums text-[19px] leading-none pl-1`}
+                  className={`${serif} tabular-nums text-[19px] leading-none pl-1 shrink-0`}
                   style={{ color: P.heading, letterSpacing: "-0.02em" }}
                 >
                   {brl(p.price)}
                 </span>
               </Link>
             );
+
           })}
         </div>
       </div>
