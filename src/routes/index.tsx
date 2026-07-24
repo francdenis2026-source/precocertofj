@@ -334,7 +334,7 @@ function HomePage() {
           style={{ background: `color-mix(in oklab, ${P.gold} 22%, transparent)`, filter: "blur(60px)" }}
         />
 
-        <div className="relative z-10 flex min-h-[86svh] flex-col px-5 pb-8 pt-6">
+        <div className="relative z-10 flex min-h-[70svh] flex-col px-5 pb-8 pt-6">
           <div
             className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1.5"
             style={{
@@ -483,7 +483,7 @@ function HomePage() {
           style={{ background: `linear-gradient(90deg, transparent, ${P.gold}, transparent)` }}
         />
 
-        <div className="relative z-10 flex min-h-[86svh] flex-col px-5 pb-8 pt-6">
+        <div className="relative z-10 flex min-h-[70svh] flex-col px-5 pb-8 pt-6">
           {/* Badge EM BREVE — versão clara */}
           <div
             className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1.5"
