@@ -707,7 +707,7 @@ function MetricDetailDialog({
             <ul className="space-y-2" aria-label="Estabelecimentos monitorados">
               {topByProducts.map((e) => (
                 <li key={e.id} className="flex items-center gap-3 rounded-md border border-border/60 bg-card p-2.5">
-                  <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md bg-white">
+                  <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md">
                     {e.logoUrl ? (
                       <img src={e.logoUrl} alt="" className="h-full w-full object-contain" loading="lazy" />
                     ) : (
