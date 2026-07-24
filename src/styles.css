@@ -38,9 +38,9 @@
  */
 
 @theme inline {
-  --font-display: "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
+  --font-display: "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-sans: "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
-  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
+  --font-serif: "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, "JetBrains Mono", monospace;
 
   --radius-sm: calc(var(--radius) - 6px);
@@ -390,16 +390,20 @@
   @media (max-width: 640px) {
     input, select, textarea { font-size: 16px; }
   }
+  /* Tipografia unificada: Work Sans para tudo (typeclear, sem serif distorcido).
+     Mantemos as classes .font-display / .font-serif para não quebrar imports,
+     mas ambas agora renderizam em sans-serif limpo e legível. */
   .font-display {
-    font-family: var(--font-display);
-    font-weight: 400;
-    letter-spacing: -0.020em;
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: -0.015em;
     text-rendering: geometricPrecision;
+    font-feature-settings: "ss01", "cv11";
   }
   .font-serif {
-    font-family: var(--font-display);
-    font-weight: 400;
-    letter-spacing: -0.015em;
+    font-family: var(--font-sans);
+    font-weight: 500;
+    letter-spacing: -0.01em;
   }
   .font-mono {
     font-family: var(--font-mono);
@@ -2873,3 +2877,19 @@ input::placeholder, textarea::placeholder {
     transparent 60%);
 }
 .pc-search-scope > * { position: relative; z-index: 1; }
+
+/* ===================== Tipografia unificada (typeclear) =====================
+   Neutraliza qualquer uso residual de Instrument Serif via classes Tailwind
+   arbitrárias, garantindo que todos os títulos, eyebrows e microcopy
+   renderizem em Work Sans limpo, legível e sem distorção visual. */
+[class*="Instrument_Serif"],
+[class*="font-serif"],
+[class*="font-display"] {
+  font-family: "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
+  font-style: normal !important;
+}
+/* Eyebrows uppercase ganham peso e tracking equilibrados para leitura clara */
+.pc-eyebrow,
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
+}
