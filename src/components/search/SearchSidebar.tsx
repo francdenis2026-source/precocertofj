@@ -78,7 +78,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
             <button
               type="button"
               onClick={handleClearAll}
-              className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+              className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-foreground/70 transition-colors hover:bg-destructive/10 hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
               aria-label="Limpar histórico de buscas"
             >
               <Trash2 className="h-3.5 w-3.5" /> Limpar
@@ -87,7 +87,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
         }
       >
         {recent.length === 0 ? (
-          <p className="px-1 text-[13px] leading-relaxed text-muted-foreground">
+          <p className="px-1 text-[13px] leading-relaxed text-foreground/70">
             Suas últimas consultas aparecem aqui.
           </p>
         ) : (
@@ -97,7 +97,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
                 <button
                   type="button"
                   onClick={() => onPickQuery(t)}
-                  className="min-w-0 flex-1 truncate rounded-md px-2 py-2 text-left text-[13.5px] font-medium text-foreground transition-colors hover:bg-brand-gold/10 hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                  className="min-w-0 flex-1 truncate rounded-md px-2 py-2 text-left text-[13.5px] font-medium text-foreground transition-colors hover:bg-[var(--pc-hover-tint)] hover:text-brand-navy dark:hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                 >
                   {t}
                 </button>
@@ -105,7 +105,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
                   <button
                     type="button"
                     onClick={() => onRemoveRecent(t)}
-                    className="grid h-8 w-8 flex-none place-items-center rounded-md text-muted-foreground opacity-0 transition-all hover:bg-destructive/10 hover:text-destructive focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold group-hover:opacity-100"
+                    className="grid h-8 w-8 flex-none place-items-center rounded-md text-foreground/60 opacity-0 transition-all hover:bg-destructive/10 hover:text-destructive focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold group-hover:opacity-100"
                     aria-label={`Remover "${t}" do histórico`}
                     title="Remover do histórico"
                   >
@@ -121,17 +121,17 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
 
       {/* Populares */}
       <SidebarSection
-        icon={<Flame className="h-4 w-4 text-brand-gold" />}
+        icon={<Flame className="h-4 w-4" />}
         title="Buscas populares"
         action={
           useReal ? (
             <span
               title="Agregado dos últimos 30 dias"
-              className="inline-flex items-center gap-1 rounded-full bg-brand-gold/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.1em] text-brand-gold"
+              className="inline-flex items-center gap-1 rounded-full bg-brand-gold px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-brand-navy shadow-sm"
             >
               <span className="relative inline-flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-gold/70 opacity-75" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-gold" />
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-navy/60 opacity-75" />
+                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-navy" />
               </span>
               Ao vivo
             </span>
@@ -144,9 +144,9 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
               <button
                 type="button"
                 onClick={() => onPickQuery(p)}
-                className="group flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-left text-[13.5px] font-medium text-foreground transition-colors hover:bg-brand-gold/10 hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                className="group flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-left text-[13.5px] font-medium text-foreground transition-colors hover:bg-[var(--pc-hover-tint)] hover:text-brand-navy dark:hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
               >
-                <span className="grid h-5 w-5 place-items-center rounded-full bg-brand-gold/15 text-[11px] font-bold tabular-nums text-brand-gold">
+                <span className="grid h-5 w-5 place-items-center rounded-full bg-brand-gold text-[11px] font-bold tabular-nums text-brand-navy shadow-sm">
                   {i + 1}
                 </span>
                 <span className="truncate">{p}</span>
@@ -163,7 +163,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
         action={
           <Link
             to="/estabelecimentos"
-            className="inline-flex items-center gap-0.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-brand-gold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold rounded"
+            className="inline-flex items-center gap-0.5 rounded text-[10.5px] font-semibold uppercase tracking-[0.14em] text-brand-gold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
           >
             Ver todos <ArrowRight className="h-3 w-3" />
           </Link>
@@ -182,9 +182,9 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
                 <Link
                   to="/estabelecimento/$slug"
                   params={{ slug: slugifyEstablishment(s.name) }}
-                  className="flex items-center gap-2.5 rounded-md px-2 py-2 transition-colors hover:bg-brand-gold/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                  className="flex items-center gap-2.5 rounded-md px-2 py-2 transition-colors hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                 >
-                  <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md border border-brand-gold/30 bg-background">
+                  <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md bg-white ring-1 ring-border">
                     {s.logoUrl ? (
                       <LazyImage
                         src={s.logoUrl}
@@ -193,7 +193,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
                       />
 
                     ) : (
-                      <StoreIcon className="h-4 w-4 text-muted-foreground" />
+                      <StoreIcon className="h-4 w-4 text-foreground/60" />
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
@@ -201,7 +201,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
                       {s.name}
                     </div>
                     {s.neighborhood && (
-                      <div className="truncate text-[11.5px] text-muted-foreground">
+                      <div className="truncate text-[11.5px] text-foreground/70">
                         {s.neighborhood}
                       </div>
                     )}
@@ -210,7 +210,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
               </li>
             ))}
             {list.length === 0 && (
-              <p className="px-1 text-[13px] text-muted-foreground">
+              <p className="px-1 text-[13px] text-foreground/70">
                 Nenhum mercado disponível.
               </p>
             )}
@@ -233,22 +233,13 @@ function SidebarSection({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-xl border border-border/60 bg-card/70 p-5 shadow-sm">
+    <section className="rounded-xl border border-border bg-card p-5 shadow-sm">
       <header className="mb-3 flex items-center justify-between gap-2">
         <div className="flex min-w-0 items-center gap-2">
-          <span className="grid h-6 w-6 flex-none place-items-center rounded-md bg-brand-gold/15 text-brand-gold">
+          <span className="grid h-6 w-6 flex-none place-items-center rounded-md bg-brand-gold/15 text-brand-gold-soft dark:text-brand-gold">
             {icon}
           </span>
-          <h3
-            className="truncate text-[12.5px] font-semibold uppercase text-foreground"
-            style={{
-              fontFamily:
-                'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-              letterSpacing: "0.08em",
-              fontFeatureSettings: '"kern" 1, "liga" 1, "calt" 1',
-              color: "color-mix(in oklab, var(--foreground) 96%, transparent)",
-            }}
-          >
+          <h3 className="truncate text-[10.5px] font-semibold uppercase tracking-[0.14em] text-foreground">
             {title}
           </h3>
         </div>
@@ -258,5 +249,6 @@ function SidebarSection({
     </section>
   );
 }
+
 
 
