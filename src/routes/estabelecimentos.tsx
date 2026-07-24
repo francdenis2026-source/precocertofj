@@ -64,6 +64,8 @@ function EstablishmentsPage() {
   const [q, setQ] = useState("");
   const [neighborhood, setNeighborhood] = useState<string>("__all");
   const [sort, setSort] = useState<"name" | "neighborhood" | "products">("neighborhood");
+  const [kindFilter, setKindFilter] = useState<string>("__all");
+  const carouselRef = useRef<HTMLDivElement | null>(null);
 
   const neighborhoods = useMemo(() => {
     if (!data) return [] as string[];
