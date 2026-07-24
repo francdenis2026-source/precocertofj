@@ -9,7 +9,7 @@ import {
   type EstablishmentsOverview,
 } from "@/lib/establishments-public.functions";
 import { MobileNav } from "@/components/nav/MobileNav";
-import { SiteHeader } from "@/components/layout/SiteHeader";
+
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import {
   PageHeader,
