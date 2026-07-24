@@ -11,13 +11,14 @@ import {
   UserCheck,
   CheckCircle2,
   AlertTriangle,
+  ArrowLeft,
 } from "lucide-react";
 import { Footer } from "@/components/brand/Footer";
 import { cn } from "@/lib/utils";
 
 /**
- * Página compacta de Termos e Privacidade com navegação em abas.
- * Linguagem acessível, layout responsivo em cartões curtos, LGPD (Lei 13.709/2018).
+ * Termos e Privacidade — layout compacto com abas.
+ * Tokens semânticos + accent brand-gold para funcionar em light e dark.
  */
 export const Route = createFileRoute("/privacidade")({
   head: () => ({
@@ -53,17 +54,17 @@ function Card({ item }: { item: Item }) {
   return (
     <section
       id={item.id}
-      className="scroll-mt-20 rounded-xl border border-border bg-card p-4"
+      className="scroll-mt-20 rounded-lg border border-border bg-card p-3.5 transition-colors hover:border-brand-gold/40"
     >
       <div className="mb-1.5 flex items-center gap-2">
-        <span className="grid h-6 w-6 place-items-center rounded-full border border-primary/25 bg-primary/10 text-primary">
+        <span className="grid h-6 w-6 place-items-center rounded-md border border-brand-gold/30 bg-brand-gold/10 text-brand-gold">
           <Icon className="h-3 w-3" strokeWidth={2.4} />
         </span>
-        <h2 className="font-display text-[13px] font-bold tracking-tight text-foreground">
+        <h2 className="text-[12.5px] font-semibold tracking-tight text-foreground">
           {item.title}
         </h2>
       </div>
-      <div className="text-[12.5px] leading-snug text-muted-foreground">
+      <div className="text-[12px] leading-relaxed text-muted-foreground">
         {item.body}
       </div>
     </section>
@@ -171,7 +172,11 @@ function PrivacidadePage() {
       body: (
         <p>
           Preços são referenciais, coletados por usuários e parceiros. Podem
-          variar. <strong className="text-foreground">Confirme sempre no estabelecimento</strong> antes da compra.
+          variar.{" "}
+          <strong className="text-foreground">
+            Confirme sempre no estabelecimento
+          </strong>{" "}
+          antes da compra.
         </p>
       ),
     },
@@ -217,7 +222,7 @@ function PrivacidadePage() {
       body: (
         <a
           href="mailto:precocerto-fj@proton.me"
-          className="font-mono text-[12px] font-semibold text-primary underline underline-offset-2"
+          className="font-mono text-[12px] font-semibold text-brand-gold underline underline-offset-2 hover:text-brand-gold/80"
         >
           precocerto-fj@proton.me
         </a>
@@ -229,68 +234,59 @@ function PrivacidadePage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="mx-auto max-w-2xl px-4 py-8">
-        <header className="mb-5">
-          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.24em] text-primary">
+      <div className="mx-auto max-w-2xl px-4 py-6 sm:py-8">
+        <header className="mb-4">
+          <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-brand-gold">
             <ShieldCheck className="mr-1 inline h-3 w-3" strokeWidth={2.2} />
             Documento oficial · Atualizado em {updated}
           </p>
-          <h1 className="mt-1.5 font-display text-2xl font-bold leading-tight tracking-tight text-foreground">
+          <h1 className="mt-1.5 text-xl font-semibold leading-tight tracking-tight text-foreground sm:text-[22px]">
             Termos e Privacidade
           </h1>
-          <p className="mt-1.5 text-[12.5px] leading-snug text-muted-foreground">
+          <p className="mt-1.5 max-w-xl text-[12.5px] leading-relaxed text-muted-foreground">
             Em linguagem clara: o que coletamos, como usamos e as regras de uso
             da plataforma. Não vendemos dados. Exclusão e exportação a qualquer
             momento.
           </p>
         </header>
 
-        {/* Tabs de navegação */}
+        {/* Tabs */}
         <div
           role="tablist"
           aria-label="Seções do documento"
-          className="mb-4 inline-flex rounded-lg border border-border bg-card p-1"
+          className="mb-3 inline-flex rounded-lg border border-border bg-card p-1"
         >
-          <button
-            role="tab"
-            aria-selected={tab === "privacidade"}
-            onClick={() => setTab("privacidade")}
-            className={cn(
-              "rounded-md px-3 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-wider transition-colors",
-              tab === "privacidade"
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:text-foreground",
-            )}
-          >
-            Privacidade
-          </button>
-          <button
-            role="tab"
-            aria-selected={tab === "termos"}
-            onClick={() => setTab("termos")}
-            className={cn(
-              "rounded-md px-3 py-1.5 font-mono text-[11px] font-semibold uppercase tracking-wider transition-colors",
-              tab === "termos"
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:text-foreground",
-            )}
-          >
-            Termos
-          </button>
+          {(["privacidade", "termos"] as TabKey[]).map((k) => (
+            <button
+              key={k}
+              role="tab"
+              aria-selected={tab === k}
+              onClick={() => setTab(k)}
+              className={cn(
+                "rounded-md px-3 py-1.5 font-mono text-[10.5px] font-semibold uppercase tracking-[0.14em] transition-colors",
+                tab === k
+                  ? "bg-brand-gold text-brand-navy shadow-sm"
+                  : "text-muted-foreground hover:text-foreground",
+              )}
+            >
+              {k === "privacidade" ? "Privacidade" : "Termos"}
+            </button>
+          ))}
         </div>
 
-        <div className="grid gap-2.5 sm:grid-cols-2">
+        <div className="grid gap-2 sm:grid-cols-2">
           {items.map((item) => (
             <Card key={item.id} item={item} />
           ))}
         </div>
 
-        <div className="mt-6 flex justify-center">
+        <div className="mt-5 flex justify-center">
           <Link
             to="/"
-            className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground hover:text-primary"
+            className="inline-flex items-center gap-1.5 font-mono text-[10.5px] font-semibold uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:text-brand-gold"
           >
-            ← Voltar para a página inicial
+            <ArrowLeft className="h-3 w-3" strokeWidth={2.4} />
+            Voltar para a página inicial
           </Link>
         </div>
       </div>
