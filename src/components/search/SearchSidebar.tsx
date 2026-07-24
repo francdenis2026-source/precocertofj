@@ -113,7 +113,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
         title="Buscas populares"
       >
         <ul className="space-y-0.5">
-          {POPULAR.map((p, i) => (
+          {popularList.map((p: string, i: number) => (
             <li key={p}>
               <button
                 type="button"
