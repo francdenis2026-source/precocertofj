@@ -270,10 +270,6 @@ export const analyzeBatchPhotos = createServerFn({ method: "POST" })
   });
 
 // Shared matching helpers ---------------------------------------------------
-type SbClient = {
-  rpc: (fn: string, args: Record<string, unknown>) => Promise<{ data: unknown; error: unknown }>;
-};
-
 type SimilarityRow = {
   id: string;
   product_name: string;
@@ -288,7 +284,8 @@ type SimilarityRow = {
 };
 
 async function runSimilarityMatch(
-  supabase: SbClient,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  supabase: any,
   input: {
     establishmentId: string;
     productName: string;
@@ -297,14 +294,14 @@ async function runSimilarityMatch(
     sizeUnit: string | null;
   },
 ): Promise<{ existing: ExistingMatch; matchType: Candidate["matchType"] } | null> {
-  const { data, error } = await supabase.rpc("find_similar_scans_v2", {
+  const { data, error } = await supabase.rpc("find_similar_scans_v2" as never, {
     p_name: input.productName,
     p_brand: input.brand,
     p_size_value: input.sizeValue,
     p_size_unit: input.sizeUnit,
     p_establishment_id: input.establishmentId,
     p_threshold: 0.45,
-  });
+  } as never);
   if (error) console.error("find_similar_scans_v2 error:", error);
   const rows = (data ?? []) as SimilarityRow[];
   const top = rows[0];
