@@ -368,30 +368,31 @@ function EstablishmentPage() {
 
 
         {hasLocation && (
-          <div className="mt-10 rounded-xl border border-border/60 bg-muted/30 p-4">
-            <div className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <div className="mt-10 rounded-xl border border-border/70 bg-card p-4 shadow-sm">
+            <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
               Endereço do estabelecimento
             </div>
-            <div className="mt-2 flex flex-wrap items-start gap-x-3 gap-y-1 text-sm">
+            <div className="mt-2 flex flex-wrap items-start gap-x-3 gap-y-1.5 text-sm">
               {data.store.address && (
                 <span className="inline-flex items-start gap-1.5 font-medium text-foreground">
-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" aria-hidden />
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand-gold" aria-hidden />
                   {data.store.address}
                 </span>
               )}
               {data.store.neighborhood && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[12px] font-semibold text-primary">
+                <span className="inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-gold px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-navy">
                   Bairro {data.store.neighborhood}
                 </span>
               )}
               {(data.store.city || data.store.state) && (
-                <span className="text-muted-foreground">
+                <span className="inline-flex items-center rounded-full border border-border bg-background px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground">
                   {[data.store.city, data.store.state].filter(Boolean).join(" · ")}
                 </span>
               )}
             </div>
           </div>
         )}
+
 
         <p className="mt-6 text-[11px] leading-relaxed text-muted-foreground">
           Preços e informações exibidos pertencem ao estabelecimento{" "}
