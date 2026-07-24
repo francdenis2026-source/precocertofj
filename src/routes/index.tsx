@@ -719,78 +719,129 @@ function HomePage() {
         </div>
       </section>
 
-      {/* ============== EDITORIAL CARD (explore band) ============== */}
-      <div className="pc-container pc-section-tight">
+      {/* ============== BENEFIT STRIP (abaixo do hero — 1 promessa + CTA secundário) ============== */}
+      <section className="pc-container pt-4 sm:pt-6">
         <div
-          className="overflow-hidden rounded-[var(--pc-radius-lg)] ring-1 lg:rounded-[var(--pc-radius-xl)]"
+          className="flex flex-col gap-3 rounded-[var(--pc-radius-md)] border px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-5 sm:py-3.5"
           style={{
             background: P.card,
             borderColor: P.line,
-            boxShadow: "var(--pc-shadow-2)",
-            // @ts-expect-error css var
-            "--tw-ring-color": P.line,
+            boxShadow: "var(--pc-shadow-1)",
           }}
         >
-          {/* -------- EXPLORE (dark navy band inside card) — sm+ apenas -------- */}
-
-          <div
-            className="hidden sm:block sm:p-5 lg:p-6 xl:p-7"
-            style={{ background: P.navy, color: "#F5F6FA" }}
-          >
-            <div className="mb-4">
-              <div
-                className="mb-1.5 text-[10.5px] font-bold uppercase tracking-[0.22em]"
+          <div className="flex items-center gap-3 min-w-0">
+            <span
+              aria-hidden
+              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+              style={{
+                background: "color-mix(in oklab, var(--pc-home-gold) 16%, transparent)",
+                color: P.gold,
+                border: `1px solid color-mix(in oklab, ${P.gold} 32%, transparent)`,
+              }}
+            >
+              <ShieldCheck className="h-[18px] w-[18px]" strokeWidth={2.2} />
+            </span>
+            <div className="min-w-0">
+              <p
+                className="text-[10.5px] font-bold uppercase tracking-[0.18em]"
                 style={{ color: P.goldSoft }}
               >
-                Por onde começar
+                Preço real, conferido
+              </p>
+              <p
+                className="mt-0.5 text-[13px] leading-snug sm:text-[13.5px]"
+                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 82%, transparent)" }}
+              >
+                Cada valor vem de nota fiscal ou de um morador que acabou de comprar.
+              </p>
+            </div>
+          </div>
+
+          <Link
+            to="/melhores-precos"
+            className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg border px-3.5 py-2 text-[12.5px] font-semibold transition-colors hover:bg-[color-mix(in_oklab,var(--pc-home-navy)_6%,transparent)]"
+            style={{
+              borderColor: "color-mix(in oklab, var(--pc-home-navy) 35%, transparent)",
+              color: P.heading,
+            }}
+          >
+            Ver quem está mais barato hoje
+            <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.4} />
+          </Link>
+        </div>
+      </section>
+
+      {/* ============== EDITORIAL CARD (explore band) — compacto, hierarquia forte ============== */}
+      <div className="pc-container pt-6 sm:pt-8">
+        <div
+          className="overflow-hidden rounded-[var(--pc-radius-lg)] ring-1 lg:rounded-[var(--pc-radius-xl)]"
+          style={{
+            background: P.navy,
+            borderColor: P.line,
+            boxShadow: "var(--pc-shadow-2)",
+            // @ts-expect-error css var
+            "--tw-ring-color": "color-mix(in oklab, var(--pc-home-gold) 20%, transparent)",
+          }}
+        >
+          <div
+            className="hidden sm:block sm:px-6 sm:py-5 lg:px-7 lg:py-6"
+            style={{ color: "#F5F6FA" }}
+          >
+            {/* Header enxuto: eyebrow + título curto, sem descrição extra */}
+            <div className="mb-4 flex items-end justify-between gap-4">
+              <div className="min-w-0">
+                <div
+                  className="mb-1 text-[10.5px] font-bold uppercase tracking-[0.24em]"
+                  style={{ color: P.goldSoft }}
+                >
+                  Por onde começar
+                </div>
+                <h2 className="text-[20px] font-semibold leading-tight text-white lg:text-[22px]">
+                  Três caminhos para <span style={{ color: P.gold }}>economizar hoje</span>.
+                </h2>
               </div>
-              <h2 className="pc-h2 text-white">
-                Três caminhos, uma cesta mais barata.
-              </h2>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-2.5 sm:grid-cols-3">
               <ExploreCard
                 to="/melhores-precos"
                 number="01"
                 title="Ranking dos mercados"
-                desc="Qual mercado tem a cesta mais barata hoje."
+                desc="Cesta mais barata do dia."
                 cta="Ver ranking"
               />
               <ExploreCard
                 to="/estabelecimentos"
                 number="02"
                 title="Mercados por bairro"
-                desc="Endereço, horário e catálogo de cada mercado."
-                cta="Explorar mercados"
+                desc="Endereço, horário e catálogo."
+                cta="Explorar"
               />
               <ExploreCard
                 to="/planos"
                 number="03"
                 title="Alertas de preço"
-                desc="Avisamos quando o preço cair perto de você."
+                desc="Avisamos quando cai perto de você."
                 cta="Ver planos"
               />
             </div>
           </div>
-
-
-
-
         </div>
       </div>
 
 
-      {/* Wrapper flex para inverter a ordem no mobile: letreiro (RecentProducts) antes das estatísticas.
-          Em sm+ mantém a ordem original: estatísticas → recentes. */}
-      <div className="flex flex-col">
+
+
+      {/* Wrapper para ordenar mobile: letreiro antes das estatísticas — ritmo vertical consistente. */}
+      <div className="flex flex-col gap-6 pt-6 sm:gap-8 sm:pt-8">
         {/* -------- RECENT PRODUCTS (mobile: 1º, desktop: depois) -------- */}
         <div className="order-1 sm:order-2">
           <RecentProducts P={P} serif={serif} />
         </div>
 
-        {/* -------- SOCIAL PROOF (mobile: 2º, desktop: antes) -------- */}
-        <section className="pc-container pc-section-tight order-2 sm:order-1">
+        {/* -------- SOCIAL PROOF — tipografia refinada, mais escaneável no mobile -------- */}
+        <section className="pc-container order-2 sm:order-1">
+
           <TooltipProvider delayDuration={150}>
             <div className="grid grid-cols-3 gap-2 sm:gap-4">
               {[
@@ -827,30 +878,31 @@ function HomePage() {
                     <button
                       type="button"
                       aria-label={`${s.k} ${s.lFull}. ${s.tip}`}
-                      className="rounded-2xl border px-3 py-3 text-center transition-colors hover:bg-[color-mix(in_oklab,var(--pc-home-card)_92%,var(--pc-home-gold)_8%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:px-4 sm:py-4"
+                      className="group rounded-2xl border px-2.5 py-3.5 text-center transition-colors hover:bg-[color-mix(in_oklab,var(--pc-home-card)_92%,var(--pc-home-gold)_8%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:px-4 sm:py-4"
                       style={{ borderColor: P.line, background: P.card, color: P.heading }}
                     >
-                      <div className="mb-1 flex items-center justify-center" style={{ color: P.goldSoft }}>
+                      <div className="mb-1.5 flex items-center justify-center" style={{ color: P.goldSoft }}>
                         {s.icon}
                       </div>
                       <div
                         className={`${serif} tabular-nums`}
                         style={{
-                          fontSize: "clamp(1.15rem, 2.8vw, 1.75rem)",
+                          fontSize: "clamp(1.35rem, 3.2vw, 1.85rem)",
                           lineHeight: 1,
-                          letterSpacing: "-0.02em",
+                          letterSpacing: "-0.025em",
                         }}
                       >
                         {s.k}
                       </div>
                       <div
-                        className="mt-1.5 truncate text-[9.5px] font-bold uppercase tracking-[0.14em] sm:text-[11px] sm:tracking-[0.16em]"
-                        style={{ color: "color-mix(in oklab, var(--pc-home-ink) 60%, transparent)" }}
+                        className="mt-2 truncate text-[10px] font-bold uppercase leading-tight tracking-[0.14em] sm:text-[11px] sm:tracking-[0.16em]"
+                        style={{ color: "color-mix(in oklab, var(--pc-home-ink) 62%, transparent)" }}
                       >
                         <span className="sm:hidden">{s.l}</span>
                         <span className="hidden sm:inline">{s.lFull}</span>
                       </div>
                     </button>
+
                   </TooltipTrigger>
                   <TooltipContent side="bottom" className="max-w-[240px] text-[12px] leading-snug">
                     {s.tip}
@@ -866,71 +918,86 @@ function HomePage() {
 
 
 
-      {/* -------- FINAL CTA (compact ribbon) -------- */}
-      <section className="pc-container pc-section">
+      {/* -------- FINAL CTA (ribbon com moldura dourada — chama atenção sem virar hero) -------- */}
+      <section className="pc-container pt-8 sm:pt-10">
         <div
-          className="relative overflow-hidden rounded-[var(--pc-radius-md)] border p-4 sm:p-5"
+          className="relative overflow-hidden rounded-[var(--pc-radius-md)] p-[1.5px]"
           style={{
-            background: `linear-gradient(135deg, ${P.navy} 0%, color-mix(in oklab, ${P.navy} 85%, black) 100%)`,
-            borderColor: "color-mix(in oklab, #F5C86A 32%, transparent)",
-            color: "#F5F6FA",
+            background: `linear-gradient(120deg, ${P.gold} 0%, color-mix(in oklab, ${P.gold} 35%, transparent) 55%, color-mix(in oklab, ${P.gold} 70%, transparent) 100%)`,
             boxShadow: "var(--pc-shadow-3)",
           }}
         >
-          {/* subtle gold glow accent */}
           <div
-            aria-hidden
-            className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full opacity-30 blur-3xl"
-            style={{ background: P.gold }}
-          />
+            className="relative overflow-hidden rounded-[calc(var(--pc-radius-md)-2px)] px-4 py-3.5 sm:px-5 sm:py-4"
+            style={{
+              background: `linear-gradient(115deg, ${P.navy} 0%, color-mix(in oklab, ${P.navy} 82%, black) 100%)`,
+              color: "#F5F6FA",
+            }}
+          >
+            {/* glow gold — canto direito */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-20 -top-24 h-52 w-52 rounded-full opacity-35 blur-3xl"
+              style={{ background: P.gold }}
+            />
+            {/* pattern diagonal sutil */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 opacity-[0.06]"
+              style={{
+                backgroundImage: `repeating-linear-gradient(-45deg, ${P.gold} 0 1px, transparent 1px 14px)`,
+              }}
+            />
 
-          <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-            <div className="flex items-center gap-3 sm:flex-1">
-              <span
-                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl sm:h-11 sm:w-11"
-                style={{
-                  background: "color-mix(in oklab, #F5C86A 20%, transparent)",
-                  color: P.gold,
-                  border: "1px solid color-mix(in oklab, #F5C86A 35%, transparent)",
-                }}
-                aria-hidden
-              >
-                <Ticket className="h-5 w-5" strokeWidth={2.2} />
-              </span>
-
-              <div className="min-w-0 flex-1">
-                <p
-                  className="text-[11px] font-semibold uppercase tracking-[0.14em]"
-                  style={{ color: "color-mix(in oklab, #F5C86A 85%, white)" }}
-                >
-                  Já tem um código?
-                </p>
-                <p
-                  className="mt-0.5 font-bold leading-tight"
+            <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+              <div className="flex items-center gap-3 sm:flex-1">
+                <span
+                  className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
                   style={{
-                    color: "#FFFFFF",
-                    fontSize: "clamp(1rem, 1.6vw, 1.15rem)",
-                    letterSpacing: "-0.01em",
+                    background: "color-mix(in oklab, #F5C86A 22%, transparent)",
+                    color: P.gold,
+                    border: "1px solid color-mix(in oklab, #F5C86A 45%, transparent)",
                   }}
+                  aria-hidden
                 >
-                  Ative sua licença agora
-                </p>
-                <p className="mt-1 text-[12.5px] leading-snug text-white/70">
-                  Leva menos de 30 segundos.
-                </p>
-              </div>
-            </div>
+                  <Ticket className="h-5 w-5" strokeWidth={2.2} />
+                </span>
 
-            <Link
-              to="/resgatar"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-[14px] font-bold shadow-sm transition-transform hover:scale-[1.02] active:scale-[0.98] sm:w-auto sm:shrink-0 sm:px-5 sm:py-2.5 sm:text-[13.5px]"
-              style={{ background: P.gold, color: P.navy }}
-            >
-              Resgatar código <ArrowRight className="h-4 w-4" />
-            </Link>
+                <div className="min-w-0 flex-1">
+                  <p
+                    className="text-[10.5px] font-bold uppercase tracking-[0.2em]"
+                    style={{ color: "color-mix(in oklab, #F5C86A 88%, white)" }}
+                  >
+                    Já tem um código?
+                  </p>
+                  <p
+                    className="mt-0.5 font-bold leading-tight text-white"
+                    style={{
+                      fontSize: "clamp(0.95rem, 1.4vw, 1.05rem)",
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    Ative sua licença em 30 segundos.
+                  </p>
+                </div>
+              </div>
+
+              <Link
+                to="/resgatar"
+                className="group inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-[13.5px] font-bold shadow-sm transition-all hover:scale-[1.02] hover:shadow-md active:scale-[0.98] sm:w-auto sm:shrink-0 sm:px-5"
+                style={{ background: P.gold, color: P.navy }}
+              >
+                Resgatar código
+                <ArrowRight
+                  className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                  strokeWidth={2.6}
+                />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
+
 
 
       <SiteFooter />
