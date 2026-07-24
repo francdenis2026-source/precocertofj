@@ -2309,8 +2309,4 @@ function MarketLegend({
   );
 }
 
-// Import injected here to avoid duplicating at top for the helper only.
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const __markerLegendAssertReadable = readableTextOn;
-
 
