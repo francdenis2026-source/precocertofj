@@ -1948,6 +1948,7 @@ function MatrixCompareResults({
           <div className="flex flex-wrap gap-1" role="group" aria-label="Selecionar mercados visíveis">
             {allMarkets.map((m) => {
               const active = !hidden.has(m.name);
+              const dot = m.brandColor && /^#[0-9A-Fa-f]{6}$/.test(m.brandColor) ? m.brandColor : undefined;
               return (
                 <button
                   key={m.name}
@@ -1970,6 +1971,11 @@ function MatrixCompareResults({
                       : "border-border bg-background text-muted-foreground hover:bg-background/80 line-through")
                   }
                 >
+                  <span
+                    aria-hidden
+                    className="inline-block h-2 w-2 rounded-full"
+                    style={{ backgroundColor: dot ?? "hsl(var(--muted-foreground))" }}
+                  />
                   {m.logoUrl ? (
                     <img src={m.logoUrl} alt="" className="h-3.5 w-3.5 rounded object-contain" loading="lazy" />
                   ) : (
@@ -1979,6 +1985,7 @@ function MatrixCompareResults({
                 </button>
               );
             })}
+
           </div>
         </div>
 
