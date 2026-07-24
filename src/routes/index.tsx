@@ -1383,6 +1383,12 @@ function HomePage() {
 
 
 
+      <MetricSpotlightDialog
+        open={spotlight !== null}
+        onOpenChange={(v) => { if (!v) setSpotlight(null); }}
+        kind={spotlight}
+      />
+
       <SiteFooter />
 
 
