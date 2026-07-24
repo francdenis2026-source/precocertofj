@@ -100,7 +100,8 @@ const PRESETS: Record<AuthHeroVariant, Preset> = {
       caption: "Sessões auditadas · acesso por função",
     },
     brandIcon: Shield,
-    photo: false,
+    photo: true,
+    photoSrc: adminPhotoAsset.url,
   },
 };
 
