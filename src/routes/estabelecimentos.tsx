@@ -449,19 +449,20 @@ function EstablishmentsPage() {
                 }
                 description="Distribuição por número de produtos cadastrados na rede."
               >
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5">
                   {data.topGlobalCategories.map((c) => (
                     <span
                       key={c.category}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-navy px-3 py-1 text-[13px] font-medium text-white shadow-sm"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-foreground shadow-sm"
                     >
                       {humanizeCategory(c.category)}
-                      <span className="rounded-full bg-brand-gold/95 px-1.5 py-0.5 text-[12px] font-bold text-brand-navy tabular-nums">
+                      <span className="rounded-full bg-brand-gold px-1.5 py-0.5 text-[10px] font-bold text-brand-navy tabular-nums">
                         {c.count}
                       </span>
                     </span>
                   ))}
                 </div>
+
               </SectionCard>
             )}
 
