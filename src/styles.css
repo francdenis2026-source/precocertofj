@@ -2495,26 +2495,27 @@ textarea::placeholder {
 
 /* --- <select> nativo --- */
 select:not(.native-control) {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));
   border: 1px solid hsl(var(--input));
   border-radius: 8px;
-  padding: 0.5rem 2.25rem 0.5rem 0.75rem;
+  padding: 0.5rem 2.25rem 0.5rem 0.75rem !important;
   font-size: 14px;
   line-height: 1.4;
   font-weight: 500;
   min-height: 40px;
   cursor: pointer;
   transition: border-color 150ms ease, box-shadow 150ms ease, background-color 150ms ease;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5b301' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
-  background-repeat: no-repeat;
-  background-position: right 0.65rem center;
-  background-size: 16px 16px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23f5b301' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>") !important;
+  background-repeat: no-repeat !important;
+  background-position: right 0.65rem center !important;
+  background-size: 16px 16px !important;
   box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
 }
+
 select:not(.native-control):hover:not(:disabled) {
   border-color: color-mix(in oklab, hsl(var(--primary)) 55%, hsl(var(--input)));
   background-color: color-mix(in oklab, hsl(var(--background)) 96%, hsl(var(--primary)));
