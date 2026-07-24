@@ -56,7 +56,17 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
 
 
   return (
-    <aside className="sticky top-24 space-y-5">
+    <aside
+      className="pc-sidebar-typo sticky top-24 space-y-5 font-sans antialiased subpixel-antialiased"
+      style={{
+        fontFeatureSettings: '"kern" 1, "liga" 1, "calt" 1, "tnum" 1',
+        textRendering: "optimizeLegibility",
+        letterSpacing: "normal",
+        WebkitFontSmoothing: "antialiased",
+        MozOsxFontSmoothing: "grayscale",
+      }}
+    >
+
       {/* Últimas buscas */}
       <SidebarSection
         icon={<HistoryIcon className="h-4 w-4" />}
