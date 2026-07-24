@@ -11,6 +11,7 @@ import { resolveCatalogId } from "@/lib/cart.functions";
 import { toggleFavoriteItem } from "@/lib/favorites.functions";
 import { addListItem, listMyShoppingLists } from "@/lib/shopping-list.functions";
 import { cn } from "@/lib/utils";
+import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 
 export interface ProductQuickActionsProps {
   catalogId?: string | null;
