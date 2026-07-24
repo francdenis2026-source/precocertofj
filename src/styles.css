@@ -1841,24 +1841,28 @@ body::before {
   pointer-events: none;
   background-color: var(--color-background);
   background-image:
-    /* Véu do próprio token de fundo — mesma receita em light e dark */
+    /* Véu do token de fundo — mantém legibilidade em light e dark */
     linear-gradient(180deg,
-      color-mix(in oklab, var(--color-background) 84%, transparent) 0%,
-      color-mix(in oklab, var(--color-background) 76%, transparent) 45%,
-      color-mix(in oklab, var(--color-background) 90%, transparent) 100%
+      color-mix(in oklab, var(--color-background) 78%, transparent) 0%,
+      color-mix(in oklab, var(--color-background) 68%, transparent) 45%,
+      color-mix(in oklab, var(--color-background) 88%, transparent) 100%
     ),
-    /* Foto editorial: corredor de mercado + prateleira de farmácia (cruz verde ao fundo), desfocada em navy com bokeh dourado */
-    url("/__l5e/assets-v1/e6b261d7-931d-47c8-8eaf-577a72b8ea4d/site-background.jpg");
+    /* Foto realista: corredor de supermercado com bokeh dourado/navy */
+    url("/__l5e/assets-v1/a32df8d8-5a59-40a5-a81d-f0c041ae5f28/site-background.jpg");
   background-size: cover, cover;
-  background-position: center, center;
+  background-position: center, center center;
   background-repeat: no-repeat, no-repeat;
   background-attachment: fixed, fixed;
   opacity: 1;
 }
-/* Dark herda a mesma receita — só o token --color-background muda, mantendo estilo consistente */
-/* Mobile / redução de dados — attachment fixed é caro em iOS */
+/* Mobile: attachment scroll (fixed é caro em iOS) e enquadramento ajustado */
 @media (max-width: 768px), (prefers-reduced-motion: reduce) {
-  body::before { background-attachment: scroll, scroll; }
+  body::before {
+    background-attachment: scroll, scroll;
+    /* Recorta o corredor para o centro-direita — mantém profundidade em retrato */
+    background-position: center, 62% center;
+    background-size: cover, cover;
+  }
 }
 /* Opt-out: páginas com hero fullbleed (ex.: homepage) podem desativar */
 body.no-page-bg::before { display: none; }
