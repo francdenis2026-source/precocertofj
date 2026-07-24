@@ -1519,3 +1519,145 @@ function ProductGroupCard({
     </div>
   );
 }
+
+// -----------------------------------------------------------------------------
+// MarketGroupedResults — organiza os resultados por mercado (estabelecimento).
+// Cada mercado vira uma seção com logo + nome; produtos ordenados por menor
+// preço; mercados ordenados por menor preço do topo. Mantém a identidade
+// navy/gold do sistema (sem cor "por marca"), destacando o mercado com o
+// menor preço global via um selo dourado.
+// -----------------------------------------------------------------------------
+function MarketGroupedResults({
+  groups,
+  kindFilter,
+  fmt,
+  globalMin,
+  highlightTokens,
+}: {
+  groups: ProductGroup[];
+  kindFilter: string | null;
+  fmt: (n: number) => string;
+  globalMin: number | null;
+  highlightTokens: string[];
+}) {
+  type Row = {
+    productName: string;
+    catalogId: string | null;
+    price: PricePoint;
+  };
+  type Bucket = {
+    marketName: string;
+    logoUrl: string | null;
+    minPrice: number;
+    rows: Row[];
+  };
+
+  const bucketsMap = new Map<string, Bucket>();
+  for (const g of groups) {
+    const prices = kindFilter
+      ? g.prices.filter((p) => p.marketKind === kindFilter)
+      : g.prices;
+    for (const p of prices) {
+      const key = p.marketName;
+      let b = bucketsMap.get(key);
+      if (!b) {
+        b = {
+          marketName: p.marketName,
+          logoUrl: p.marketLogoUrl,
+          minPrice: p.price,
+          rows: [],
+        };
+        bucketsMap.set(key, b);
+      }
+      if (p.price < b.minPrice) b.minPrice = p.price;
+      if (!b.logoUrl && p.marketLogoUrl) b.logoUrl = p.marketLogoUrl;
+      b.rows.push({ productName: g.productName, catalogId: g.catalogId, price: p });
+    }
+  }
+
+  const buckets = Array.from(bucketsMap.values())
+    .map((b) => ({
+      ...b,
+      rows: [...b.rows].sort((a, z) => a.price.price - z.price.price),
+    }))
+    .sort((a, z) => a.minPrice - z.minPrice);
+
+  if (buckets.length === 0) return null;
+
+  return (
+    <div className="space-y-3">
+      {buckets.map((b, idx) => {
+        const isCheapest = globalMin != null && b.minPrice === globalMin;
+        return (
+          <section
+            key={b.marketName}
+            className={
+              "overflow-hidden rounded-xl border shadow-sm " +
+              (isCheapest
+                ? "border-brand-gold/70 bg-[color-mix(in_oklab,var(--color-brand-gold)_5%,var(--card))]"
+                : "border-border/60 bg-card/70")
+            }
+          >
+            <header className="flex items-center gap-3 border-b border-border/50 bg-background/40 px-3 py-2.5">
+              <span
+                className="grid h-8 w-8 flex-none place-items-center rounded-md border border-brand-gold/30 bg-background overflow-hidden"
+                aria-hidden="true"
+              >
+                {b.logoUrl ? (
+                  <img
+                    src={b.logoUrl}
+                    alt=""
+                    className="h-full w-full object-contain p-0.5"
+                    loading="lazy"
+                  />
+                ) : (
+                  <ShoppingBag className="h-4 w-4 text-muted-foreground" />
+                )}
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2">
+                  <span className="market-name truncate text-[13.5px] font-semibold text-foreground">
+                    {b.marketName}
+                  </span>
+                  {isCheapest ? (
+                    <span className="inline-flex items-center gap-1 rounded-full bg-brand-gold/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.1em] text-brand-gold">
+                      <Crown className="h-3 w-3" /> Menor preço
+                    </span>
+                  ) : (
+                    <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-primary">
+                      #{idx + 1}
+                    </span>
+                  )}
+                </div>
+                <p className="mt-0.5 text-[11.5px] text-muted-foreground">
+                  {b.rows.length} {b.rows.length === 1 ? "produto" : "produtos"} · a partir de{" "}
+                  <span className="font-semibold tabular-nums text-foreground">{fmt(b.minPrice)}</span>
+                </p>
+              </div>
+            </header>
+            <ul className="divide-y divide-border/50">
+              {b.rows.map((r, i) => (
+                <li
+                  key={`${r.productName}-${r.price.when}-${i}`}
+                  className="flex items-center gap-3 px-3 py-2 transition-colors hover:bg-brand-gold/5"
+                >
+                  <StoreColorBar name={b.marketName} brandColor={r.price.marketBrandColor} />
+                  <Link
+                    to="/produto/$slug"
+                    params={{ slug: r.productName }}
+                    className="min-w-0 flex-1 truncate text-[13.5px] font-medium text-foreground hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold rounded"
+                  >
+                    <HighlightMatch text={r.productName} tokens={highlightTokens} />
+                  </Link>
+                  <span className="whitespace-nowrap text-[14px] font-bold tabular-nums text-foreground">
+                    {fmt(r.price.price)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        );
+      })}
+    </div>
+  );
+}
