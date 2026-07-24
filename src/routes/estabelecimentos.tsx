@@ -525,16 +525,29 @@ function HeroMetric({
 }) {
   return (
     <div
-      className="flex items-center gap-2 rounded-md border border-brand-gold/60 px-2.5 py-1.5 shadow-sm"
-      style={{ background: "color-mix(in oklab, var(--brand-navy) 92%, black)" }}
+      className="group relative flex items-center gap-3 overflow-hidden rounded-lg px-3.5 py-2.5 ring-1 ring-brand-gold/70 shadow-[0_8px_24px_-8px_rgba(0,0,0,0.6)] backdrop-blur-md transition-all hover:ring-brand-gold hover:shadow-[0_10px_28px_-6px_rgba(212,175,55,0.35)]"
+      style={{
+        background:
+          "linear-gradient(135deg, color-mix(in oklab, var(--brand-navy) 96%, black) 0%, color-mix(in oklab, var(--brand-navy) 82%, black) 100%)",
+      }}
     >
-      <div className="grid h-6 w-6 shrink-0 place-items-center rounded bg-brand-gold text-brand-navy">
-        <Icon className="h-3.5 w-3.5" aria-hidden />
+      <span aria-hidden className="absolute inset-y-0 left-0 w-[3px] bg-brand-gold" />
+      <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-gold/60 to-transparent" />
+
+      <div className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-brand-gold text-brand-navy shadow-inner ring-1 ring-brand-gold/80">
+        <Icon className="h-4 w-4" strokeWidth={2.5} aria-hidden />
       </div>
       <div className="min-w-0">
-        <div className="truncate text-[10px] font-bold uppercase tracking-[0.12em] text-brand-gold">{label}</div>
-        <div className="flex items-center gap-1 text-[13.5px] font-bold text-white">
-          {live && <span aria-hidden className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-brand-gold" />}
+        <div className="truncate text-[10px] font-bold uppercase tracking-[0.16em] text-brand-gold/95">
+          {label}
+        </div>
+        <div className="mt-0.5 flex items-center gap-1.5 text-[15px] font-extrabold leading-none text-white tabular-nums">
+          {live && (
+            <span className="relative inline-flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-gold/70" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-brand-gold" />
+            </span>
+          )}
           {value}
         </div>
       </div>
