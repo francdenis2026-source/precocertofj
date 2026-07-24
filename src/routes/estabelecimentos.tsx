@@ -375,12 +375,15 @@ function EstablishmentsPage() {
                   key={e.id}
                   to="/estabelecimento/$slug"
                   params={{ slug: slugifyEstablishment(e.name) }}
-                  className="group relative flex w-[210px] shrink-0 snap-start items-center gap-2.5 rounded-lg border border-border/70 bg-card p-2 shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-gold/60 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                  className={`group relative flex w-[220px] shrink-0 snap-start items-center gap-2.5 overflow-hidden rounded-lg border bg-card p-2 pl-3 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold ${
+                    idx === 0 ? "border-brand-gold/60" : "border-border/70 hover:border-brand-gold/60"
+                  }`}
                 >
                   {idx === 0 && (
-                    <span className="absolute -top-1.5 right-2 rounded-full bg-brand-gold px-1.5 py-[1px] text-[9px] font-bold uppercase tracking-[0.12em] text-brand-navy shadow-sm">
-                      Top
-                    </span>
+                    <span
+                      aria-hidden
+                      className="absolute inset-y-0 left-0 w-[3px] bg-brand-gold"
+                    />
                   )}
                   <div className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-md border border-border/60 bg-white p-1">
                     {e.logoUrl ? (
@@ -390,7 +393,14 @@ function EstablishmentsPage() {
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="truncate text-[12.5px] font-semibold text-foreground">{e.name}</div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="truncate text-[12.5px] font-semibold text-foreground">{e.name}</span>
+                      {idx === 0 && (
+                        <span className="shrink-0 rounded-sm bg-brand-gold px-1 py-[1px] text-[8.5px] font-bold uppercase leading-none tracking-[0.14em] text-brand-navy">
+                          Top
+                        </span>
+                      )}
+                    </div>
                     <div className="truncate text-[11px] text-muted-foreground">
                       <span className="font-semibold text-brand-gold tabular-nums">{e.productsCount}</span> produtos
                       {e.neighborhood ? ` · ${e.neighborhood}` : ""}
@@ -398,6 +408,7 @@ function EstablishmentsPage() {
                   </div>
                 </Link>
               ))}
+
             </div>
           </div>
         </section>
