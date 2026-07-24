@@ -186,7 +186,7 @@ function HomePage() {
 
 
       {/* ============== EDITORIAL CARD ============== */}
-      <div className="mx-auto w-full max-w-6xl px-4 pt-3 pb-4 sm:px-6 sm:pt-4 lg:px-8 lg:pt-5">
+      <div className="mx-auto w-full max-w-6xl px-3 pt-2 pb-3 sm:px-6 sm:pt-4 sm:pb-4 lg:px-8 lg:pt-5">
         <div
           className="overflow-hidden rounded-[1.25rem] shadow-[0_20px_60px_-30px_rgb(11_29_58_/_0.22)] ring-1 lg:rounded-[1.75rem]"
           style={{
