@@ -133,13 +133,13 @@ export function SearchDiscovery({ onPickQuery }: Props) {
               key={c.q}
               type="button"
               onClick={() => onPickQuery(c.q)}
-              className="group snap-start inline-flex shrink-0 items-center gap-2 rounded-xl border border-border/60 bg-card/70 px-3 py-2 text-left text-[13px] font-medium text-foreground transition-colors hover:border-brand-gold hover:bg-brand-gold/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold sm:justify-start"
+              className="group snap-start inline-flex shrink-0 items-center gap-2 rounded-xl border border-border/60 bg-card/70 px-3 py-2 text-left text-[13px] font-medium text-foreground transition-colors hover:border-brand-gold hover:bg-brand-gold/10 hover:text-foreground active:bg-brand-gold/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:justify-start"
             >
               <span
                 aria-hidden
-                className="grid h-6 w-6 flex-none place-items-center rounded-md border border-brand-gold/30 bg-brand-gold/10 text-brand-gold transition-colors group-hover:bg-brand-gold group-hover:text-primary"
+                className="grid h-6 w-6 flex-none place-items-center rounded-md border border-brand-gold/40 bg-brand-gold/15 text-brand-gold transition-colors group-hover:border-brand-gold group-hover:bg-brand-gold group-hover:text-brand-navy group-focus-visible:bg-brand-gold group-focus-visible:text-brand-navy"
               >
-                <c.Icon className="h-3.5 w-3.5" strokeWidth={2} />
+                <c.Icon className="h-3.5 w-3.5" strokeWidth={2.25} />
               </span>
               <span className="truncate">{c.label}</span>
             </button>
