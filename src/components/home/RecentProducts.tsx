@@ -21,6 +21,21 @@ const relative = (iso: string) => {
   return m <= 1 ? "há 1 mês" : `há ${m} meses`;
 };
 
+/** Encurta nomes longos preservando palavras — ideal para letreiro no mobile. */
+function shortName(raw: string, max = 22): string {
+  const clean = raw.replace(/\s+/g, " ").trim();
+  if (clean.length <= max) return clean;
+  const words = clean.split(" ");
+  let out = "";
+  for (const w of words) {
+    if ((out + (out ? " " : "") + w).length > max) break;
+    out += (out ? " " : "") + w;
+  }
+  if (!out) out = clean.slice(0, max);
+  return out + "…";
+}
+
+
 type Freshness = { label: string; dotClass: string; textClass: string; ringClass: string };
 
 function freshness(iso: string): Freshness {
