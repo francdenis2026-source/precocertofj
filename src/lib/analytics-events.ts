@@ -23,7 +23,9 @@ export type AnalyticsEvent =
   | "visitor_click_unlock_generic"
   | "user_view_search"
   | "user_open_comparador_drilldown"
-  | "unlock_conversion";
+  | "unlock_conversion"
+  | "search_query";
+
 
 type Payload = Record<string, string | number | boolean | null | undefined>;
 
