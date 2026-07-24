@@ -485,16 +485,16 @@ function FilterInputs({ min, max, onMin, onMax, onClear }: FilterInputsProps) {
 
 
   const inputBase =
-    "h-9 w-24 rounded-md border-0 bg-transparent px-2 text-[13px] font-medium text-foreground tabular-nums placeholder:text-muted-foreground/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 transition-colors";
+    "h-9 w-24 rounded-md border-0 bg-transparent px-2 text-[13px] font-medium text-foreground tabular-nums placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50 transition-colors";
 
   return (
     <div className="ml-auto flex flex-wrap items-center gap-2">
       <div
-        className="flex items-center gap-1 rounded-lg border border-border/70 bg-background/60 px-2.5 py-0.5 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/30"
+        className="flex items-center gap-1 rounded-lg border border-border bg-card px-2.5 py-0.5 shadow-sm transition-colors focus-within:border-brand-gold focus-within:ring-2 focus-within:ring-brand-gold/30"
         role="group"
         aria-label="Faixa de preço"
       >
-        <span className="select-none pr-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+        <span className="select-none pr-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
           Faixa de preço
         </span>
         <input
@@ -512,7 +512,7 @@ function FilterInputs({ min, max, onMin, onMax, onClear }: FilterInputsProps) {
           aria-label="Preço mínimo"
           className={inputBase}
         />
-        <span aria-hidden="true" className="text-muted-foreground/60">—</span>
+        <span aria-hidden="true" className="text-border">—</span>
         <input
           type="number"
           inputMode="decimal"
@@ -529,12 +529,11 @@ function FilterInputs({ min, max, onMin, onMax, onClear }: FilterInputsProps) {
           className={inputBase}
         />
       </div>
-      {/* Presets removidos: a faixa numérica acima já cobre o mesmo controle sem duplicar chips */}
       <button
         type="button"
         onClick={clearAll}
         disabled={!dirty}
-        className="inline-flex h-9 items-center rounded-lg px-3 text-[12px] font-semibold uppercase tracking-[0.08em] text-muted-foreground transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary disabled:cursor-not-allowed disabled:opacity-40"
+        className="inline-flex h-9 items-center rounded-lg px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold disabled:cursor-not-allowed disabled:text-muted-foreground disabled:opacity-60"
         aria-label="Limpar filtros"
       >
         Limpar
@@ -542,6 +541,7 @@ function FilterInputs({ min, max, onMin, onMax, onClear }: FilterInputsProps) {
     </div>
   );
 }
+
 
 
 
