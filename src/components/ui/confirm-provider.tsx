@@ -297,18 +297,19 @@ export function ConfirmProvider({ children }: { children: ReactNode }) {
                 <div className="min-w-0 flex-1 pt-0.5">
                   <h2
                     id="confirm-title"
-                    className="font-display text-[15px] font-semibold leading-tight text-foreground"
+                    className="text-[16px] font-semibold leading-snug tracking-[-0.005em] text-foreground"
                   >
                     {state.options.title}
                   </h2>
                   {state.options.description && (
                     <div
                       id="confirm-desc"
-                      className="mt-1.5 text-[13px] leading-snug text-muted-foreground"
+                      className="mt-2 text-[13.5px] leading-relaxed text-foreground/85"
                     >
                       {state.options.description}
                     </div>
                   )}
+
                   {state.kind === "prompt" && (
                     <div className="mt-4">
                       {state.options.multiline ? (
