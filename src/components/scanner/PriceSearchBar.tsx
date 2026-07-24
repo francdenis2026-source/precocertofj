@@ -1281,6 +1281,37 @@ type PricePoint = {
   when: string;
 };
 
+/**
+ * Score de relevância para ordenação de grupos de produto:
+ * - Match exato de token no nome → 4 pts
+ * - Match por prefixo/variação (1L, integral) → 2 pts
+ * - Match de marca → 3 pts
+ * - Bônus por conter todos os tokens da query no nome → 3 pts
+ * - Bônus leve por número de amostras (log) → até 1 pt
+ */
+function scoreRelevance(g: ProductGroup, query: string): number {
+  const q = normalizeInput(query).trim().toLowerCase();
+  if (!q) return 0;
+  const name = (g.productName ?? "").toLowerCase();
+  const tokens = q.split(/\s+/).filter((t) => t.length >= 2);
+  let score = 0;
+  for (const r of g.matchReasons ?? []) {
+    if (r.kind === "exact") score += 4;
+    else if (r.kind === "brand") score += 3;
+    else if (r.kind === "prefix") score += 2;
+  }
+  const allTokensInName = tokens.length > 0 && tokens.every((t) => name.includes(t));
+  if (allTokensInName) score += 3;
+  // Variações (1L, 500g, integral, desnatado…) — pequenos bônus se aparecem
+  // tanto na query quanto no nome.
+  const variationTerms = ["1l", "2l", "500ml", "500g", "1kg", "2kg", "integral", "desnatado", "semidesnatado", "light", "zero"];
+  for (const v of variationTerms) {
+    if (q.includes(v) && name.includes(v)) score += 1;
+  }
+  score += Math.min(1, Math.log10(1 + (g.samples ?? 0)) * 0.5);
+  return score;
+}
+
 function sortPrices(prices: PricePoint[], mode: SortMode, productName?: string): PricePoint[] {
   const arr = [...prices];
   if (mode === "cheapest") arr.sort((a, b) => a.price - b.price);
