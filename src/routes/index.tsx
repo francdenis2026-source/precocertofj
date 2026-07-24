@@ -507,14 +507,42 @@ function HomePage() {
             </div>
           </div>
 
-          {/* -------- EXPLORE (dark navy band inside card) -------- */}
+          {/* -------- MOBILE: quick nav chips (essencial) -------- */}
           <div
-            className="p-3 sm:p-5 lg:p-6 xl:p-7"
+            className="flex items-center justify-between gap-2 px-3 py-2.5 sm:hidden"
+            style={{ background: P.navy, color: "#F5F6FA" }}
+            aria-label="Atalhos rápidos"
+          >
+            {[
+              { to: "/melhores-precos", label: "Ranking" },
+              { to: "/estabelecimentos", label: "Mercados" },
+              { to: "/planos", label: "Alertas" },
+            ].map((c) => (
+              <Link
+                key={c.to}
+                to={c.to}
+                className="flex-1 rounded-lg border border-white/10 bg-white/[0.04] px-2 py-1.5 text-center text-[11px] font-semibold text-white/90 transition-colors active:bg-white/[0.10]"
+              >
+                {c.label}
+                <span
+                  className="ml-1 text-[10px]"
+                  style={{ color: P.goldSoft }}
+                  aria-hidden
+                >
+                  →
+                </span>
+              </Link>
+            ))}
+          </div>
+
+          {/* -------- EXPLORE (dark navy band inside card) — sm+ apenas -------- */}
+          <div
+            className="hidden sm:block sm:p-5 lg:p-6 xl:p-7"
             style={{ background: P.navy, color: "#F5F6FA" }}
           >
-            <div className="mb-2.5 sm:mb-4">
+            <div className="mb-4">
               <div
-                className="mb-1 text-[9px] font-bold uppercase tracking-[0.22em] sm:mb-1.5 sm:text-[10.5px]"
+                className="mb-1.5 text-[10.5px] font-bold uppercase tracking-[0.22em]"
                 style={{ color: P.goldSoft }}
               >
                 Por onde começar
@@ -522,7 +550,7 @@ function HomePage() {
               <h2
                 className="font-semibold text-white"
                 style={{
-                  fontSize: "clamp(0.95rem, 2vw, 1.5rem)",
+                  fontSize: "clamp(1.05rem, 2vw, 1.5rem)",
                   lineHeight: 1.15,
                   letterSpacing: "-0.02em",
                 }}
@@ -531,7 +559,7 @@ function HomePage() {
               </h2>
             </div>
 
-            <div className="flex flex-col divide-y divide-white/10 rounded-xl border border-white/10 bg-white/[0.03] sm:grid sm:grid-cols-2 sm:gap-3 sm:divide-y-0 sm:border-0 sm:bg-transparent lg:grid-cols-3">
+            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
               <ExploreCard
                 to="/melhores-precos"
                 number="01"
@@ -555,6 +583,7 @@ function HomePage() {
               />
             </div>
           </div>
+
 
 
 
