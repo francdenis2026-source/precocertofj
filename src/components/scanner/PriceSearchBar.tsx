@@ -139,10 +139,10 @@ export function PriceSearchBar({
   );
   const [kindFilter, setKindFilter] = useState<string | null>(null);
   const [categoryFilter, setCategoryFilter] = useState<string | null>(null);
-  const [groupBy, setGroupBy] = useLocalStorageState<"product" | "market">(
+  const [groupBy, setGroupBy] = useLocalStorageState<"product" | "market" | "matrix">(
     "pc:search:groupBy",
     "product",
-    { validate: (v): v is "product" | "market" => v === "product" || v === "market" },
+    { validate: (v): v is "product" | "market" | "matrix" => v === "product" || v === "market" || v === "matrix" },
   );
 
 
@@ -801,6 +801,15 @@ export function PriceSearchBar({
                       />
                     ) : null}
 
+                    {groupBy === "matrix" && result.groups.length > 0 ? (
+                      <MatrixCompareResults
+                        groups={filteredOrdered.flatMap(([, gs]) => gs)}
+                        kindFilter={kindFilter}
+                        fmt={fmt}
+                        highlightTokens={highlightTokens}
+                      />
+                    ) : null}
+
                     {groupBy === "product" && result.groups.length > 0 ? (
 
                       <div className="space-y-2">
@@ -1163,8 +1172,8 @@ function QuickFilters({
   categories: string[];
   categoryFilter: string | null;
   onCategory: (c: string | null) => void;
-  groupBy: "product" | "market";
-  onGroupBy: (g: "product" | "market") => void;
+  groupBy: "product" | "market" | "matrix";
+  onGroupBy: (g: "product" | "market" | "matrix") => void;
 }) {
   const chip = (active: boolean) =>
     "rounded-full border px-2.5 py-1 font-mono text-[10px] tracking-wide transition " +
@@ -1181,6 +1190,9 @@ function QuickFilters({
       </button>
       <button type="button" className={chip(groupBy === "market")} onClick={() => onGroupBy("market")}>
         Por mercado
+      </button>
+      <button type="button" className={chip(groupBy === "matrix")} onClick={() => onGroupBy("matrix")}>
+        Comparar lado a lado
       </button>
       <span className="ml-2 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
         Ordenar
@@ -1658,6 +1670,174 @@ function MarketGroupedResults({
           </section>
         );
       })}
+    </div>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// MatrixCompareResults — comparação lado a lado (produto × mercado).
+// Linhas = produtos; colunas = mercados. Cada célula mostra o preço daquele
+// produto no mercado da coluna, com o menor preço da linha destacado em gold.
+// -----------------------------------------------------------------------------
+function MatrixCompareResults({
+  groups,
+  kindFilter,
+  fmt,
+  highlightTokens,
+}: {
+  groups: ProductGroup[];
+  kindFilter: string | null;
+  fmt: (n: number) => string;
+  highlightTokens: string[];
+}) {
+  type Market = { name: string; logoUrl: string | null; kind: string | null; minAcc: number };
+  const marketsMap = new Map<string, Market>();
+  const cheapestByMarket = new Map<string, Map<string, number>>(); // product -> market -> price
+
+  for (const g of groups) {
+    const prices = kindFilter ? g.prices.filter((p) => p.marketKind === kindFilter) : g.prices;
+    if (prices.length === 0) continue;
+    const perMarket = new Map<string, number>();
+    for (const p of prices) {
+      const m = marketsMap.get(p.marketName);
+      if (!m) {
+        marketsMap.set(p.marketName, {
+          name: p.marketName,
+          logoUrl: p.marketLogoUrl,
+          kind: p.marketKind,
+          minAcc: p.price,
+        });
+      } else {
+        if (!m.logoUrl && p.marketLogoUrl) m.logoUrl = p.marketLogoUrl;
+        if (p.price < m.minAcc) m.minAcc = p.price;
+      }
+      const prev = perMarket.get(p.marketName);
+      if (prev === undefined || p.price < prev) perMarket.set(p.marketName, p.price);
+    }
+    cheapestByMarket.set(g.productName, perMarket);
+  }
+
+  const markets = Array.from(marketsMap.values()).sort((a, z) => a.minAcc - z.minAcc);
+  const products = groups
+    .filter((g) => cheapestByMarket.has(g.productName))
+    .sort((a, b) => a.min - b.min);
+
+  if (markets.length === 0 || products.length === 0) return null;
+
+  if (markets.length < 2) {
+    return (
+      <div className="rounded-xl border border-border/60 bg-card/70 px-3 py-3 text-[12.5px] text-muted-foreground">
+        Comparação lado a lado precisa de pelo menos 2 mercados com o mesmo produto. Ajuste os filtros
+        para incluir mais estabelecimentos.
+      </div>
+    );
+  }
+
+  return (
+    <div className="overflow-x-auto rounded-xl border border-border/60 bg-card/70 shadow-sm">
+      <table className="w-full min-w-[560px] border-collapse text-[13px]">
+        <thead>
+          <tr className="bg-background/40 text-left">
+            <th
+              scope="col"
+              className="sticky left-0 z-10 min-w-[180px] border-b border-border/60 bg-background/80 px-3 py-2.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground backdrop-blur"
+            >
+              Produto
+            </th>
+            {markets.map((m) => (
+              <th
+                key={m.name}
+                scope="col"
+                className="min-w-[140px] border-b border-border/60 px-3 py-2 align-bottom"
+              >
+                <div className="flex items-center gap-2">
+                  <span
+                    className="grid h-7 w-7 flex-none place-items-center rounded-md border border-brand-gold/30 bg-background overflow-hidden"
+                    aria-hidden="true"
+                  >
+                    {m.logoUrl ? (
+                      <img src={m.logoUrl} alt="" className="h-full w-full object-contain p-0.5" loading="lazy" />
+                    ) : (
+                      <ShoppingBag className="h-3.5 w-3.5 text-muted-foreground" />
+                    )}
+                  </span>
+                  <span className="market-name truncate text-[12.5px] font-semibold text-foreground">
+                    {m.name}
+                  </span>
+                </div>
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {products.map((g, rowIdx) => {
+            const row = cheapestByMarket.get(g.productName)!;
+            const rowValues = Array.from(row.values());
+            const rowMin = rowValues.length ? Math.min(...rowValues) : null;
+            const rowMax = rowValues.length ? Math.max(...rowValues) : null;
+            const zebra = rowIdx % 2 === 1 ? "bg-background/20" : "";
+            return (
+              <tr key={g.productName} className={"border-t border-border/40 " + zebra}>
+                <th
+                  scope="row"
+                  className="sticky left-0 z-[5] min-w-[180px] bg-card/95 px-3 py-2 text-left align-middle backdrop-blur"
+                >
+                  <Link
+                    to="/produto/$slug"
+                    params={{ slug: g.productName }}
+                    className="block truncate text-[13px] font-medium text-foreground hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold rounded"
+                  >
+                    <HighlightMatch text={g.productName} tokens={highlightTokens} />
+                  </Link>
+                  {rowMin != null && rowMax != null && rowMax > rowMin ? (
+                    <p className="mt-0.5 text-[10.5px] text-muted-foreground">
+                      Economia até{" "}
+                      <span className="font-semibold text-brand-gold tabular-nums">
+                        {fmt(rowMax - rowMin)}
+                      </span>
+                    </p>
+                  ) : null}
+                </th>
+                {markets.map((m) => {
+                  const v = row.get(m.name);
+                  if (v === undefined) {
+                    return (
+                      <td
+                        key={m.name}
+                        className="px-3 py-2 text-center align-middle text-[12px] text-muted-foreground/60"
+                      >
+                        —
+                      </td>
+                    );
+                  }
+                  const isMin = rowMin != null && v === rowMin;
+                  const isMax = rowMax != null && v === rowMax && rowMax > (rowMin ?? 0);
+                  return (
+                    <td
+                      key={m.name}
+                      className={
+                        "px-3 py-2 align-middle tabular-nums " +
+                        (isMin
+                          ? "bg-brand-gold/15 text-foreground font-bold"
+                          : isMax
+                            ? "text-muted-foreground"
+                            : "text-foreground")
+                      }
+                    >
+                      <div className="flex items-center gap-1.5">
+                        {isMin ? (
+                          <Crown className="h-3 w-3 text-brand-gold" aria-label="menor preço" />
+                        ) : null}
+                        <span>{fmt(v)}</span>
+                      </div>
+                    </td>
+                  );
+                })}
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 }
