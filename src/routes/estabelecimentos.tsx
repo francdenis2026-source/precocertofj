@@ -510,3 +510,30 @@ function EstablishmentsPage() {
     </div>
   );
 }
+
+function HeroMetric({
+  icon: Icon,
+  label,
+  value,
+  live,
+}: {
+  icon: typeof Store;
+  label: string;
+  value: string;
+  live?: boolean;
+}) {
+  return (
+    <div className="flex items-center gap-2.5 rounded-lg border border-white/15 bg-white/[0.06] px-3 py-2.5 backdrop-blur-sm">
+      <div className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-brand-gold/15 text-brand-gold">
+        <Icon className="h-4 w-4" aria-hidden />
+      </div>
+      <div className="min-w-0">
+        <div className="truncate text-[10.5px] font-medium uppercase tracking-[0.1em] text-white/70">{label}</div>
+        <div className="flex items-center gap-1.5 text-[14px] font-semibold text-white">
+          {live && <span aria-hidden className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-brand-gold" />}
+          {value}
+        </div>
+      </div>
+    </div>
+  );
+}
