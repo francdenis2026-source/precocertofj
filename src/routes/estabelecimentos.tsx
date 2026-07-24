@@ -731,7 +731,7 @@ function MetricDetailDialog({
           {which === "products" && data && (
             <div className="space-y-3">
               <div className="rounded-md border border-border/60 bg-muted/40 p-3 text-center">
-                <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-primary">Total monitorado</div>
+                <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-brand-gold">Total monitorado</div>
                 <div className="mt-1 text-[24px] font-extrabold tabular-nums text-foreground">
                   {data.totalProducts.toLocaleString("pt-BR")}
                 </div>
