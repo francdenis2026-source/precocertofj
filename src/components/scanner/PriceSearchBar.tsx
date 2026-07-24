@@ -1393,6 +1393,9 @@ function QuickFilters({
         Ordenar
       </span>
 
+      <button type="button" className={chip(sortMode === "relevance")} onClick={() => onSort("relevance")}>
+        Relevância
+      </button>
       <button type="button" className={chip(sortMode === "cheapest")} onClick={() => onSort("cheapest")}>
         Menor preço
       </button>
