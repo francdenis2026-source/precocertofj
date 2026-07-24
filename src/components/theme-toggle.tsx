@@ -48,9 +48,17 @@ export function ThemeToggle({
       {...props}
     >
       {showDarkIcon ? (
-        <Moon className={icon} strokeWidth={1.75} />
+        <Moon
+          className={cn(icon, "drop-shadow-[0_0_6px_rgba(191,161,74,0.55)]")}
+          strokeWidth={1.75}
+          style={{ color: "#F5C86A", fill: "rgba(245,200,106,0.18)" }}
+        />
       ) : (
-        <Sun className={icon} strokeWidth={1.75} />
+        <Sun
+          className={cn(icon, "drop-shadow-[0_0_6px_rgba(245,158,11,0.35)]")}
+          strokeWidth={1.9}
+          style={{ color: "#F59E0B" }}
+        />
       )}
     </Button>
   );
