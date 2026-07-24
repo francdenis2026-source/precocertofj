@@ -30,6 +30,7 @@ import {
 import { ChevronRight, MapPin, Package, Search, Sparkles, Store, TrendingUp, Pill, Croissant, Beef, ShoppingBasket, PiggyBank, Radio, ChevronLeft } from "lucide-react";
 import mercadosHero from "@/assets/mercados-hero-v2.jpg.asset.json";
 import { useRef } from "react";
+import { useAdaptiveOverlayOpacity } from "@/hooks/use-adaptive-overlay";
 
 export const Route = createFileRoute("/estabelecimentos")({
   head: () => ({
@@ -66,6 +67,7 @@ function EstablishmentsPage() {
   const [sort, setSort] = useState<"name" | "neighborhood" | "products">("neighborhood");
   const [kindFilter, setKindFilter] = useState<string>("__all");
   const carouselRef = useRef<HTMLDivElement | null>(null);
+  const heroOverlayOpacity = useAdaptiveOverlayOpacity(mercadosHero.url, { min: 0.6, max: 0.94 });
 
   const neighborhoods = useMemo(() => {
     if (!data) return [] as string[];
@@ -154,13 +156,15 @@ function EstablishmentsPage() {
           fetchPriority="high"
           decoding="async"
         />
-        {/* Véu escuro consistente para contraste AAA em todo o hero */}
+        {/* Véu escuro adaptativo — opacidade calculada pela luminância da foto */}
         <div
           aria-hidden
-          className="absolute inset-0 -z-20"
+          className="absolute inset-0 -z-20 transition-[background] duration-500"
           style={{
-            background:
-              "linear-gradient(90deg, color-mix(in oklab, var(--brand-navy) 98%, transparent) 0%, color-mix(in oklab, var(--brand-navy) 94%, transparent) 55%, color-mix(in oklab, var(--brand-navy) 80%, transparent) 100%)",
+            background: `linear-gradient(90deg,
+              color-mix(in oklab, var(--brand-navy) ${Math.round(heroOverlayOpacity * 100)}%, transparent) 0%,
+              color-mix(in oklab, var(--brand-navy) ${Math.round(Math.max(0, heroOverlayOpacity - 0.06) * 100)}%, transparent) 55%,
+              color-mix(in oklab, var(--brand-navy) ${Math.round(Math.max(0, heroOverlayOpacity - 0.2) * 100)}%, transparent) 100%)`,
           }}
         />
         <div
