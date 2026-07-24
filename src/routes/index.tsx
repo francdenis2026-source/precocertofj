@@ -248,45 +248,48 @@ function HomePage() {
           WebkitBackdropFilter: "saturate(140%) blur(8px)",
         }}
       >
-        <div className="relative">
-          <div className="chips-scroller flex gap-2.5 overflow-x-auto px-3 py-3 pr-8 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-            {[
-              { to: "/melhores-precos", label: "Ranking" },
-              { to: "/estabelecimentos", label: "Mercados" },
-              { to: "/buscar", label: "Buscar" },
-              { to: "/planos", label: "Alertas" },
-              { to: "/cesta-basica", label: "Cesta básica" },
-              { to: "/economia", label: "Economia" },
-            ].map((c) => (
-              <Link
-                key={c.to}
-                to={c.to}
-                className="inline-flex shrink-0 items-center rounded-full border px-5 py-2.5 text-[15px] font-semibold leading-none tracking-[-0.005em] shadow-sm transition-all active:scale-[0.97] hover:border-[color:var(--pc-home-gold)]"
-                style={{ borderColor: P.line, background: P.card, color: P.heading }}
-                activeProps={{
-                  style: {
-                    background: P.heading,
-                    color: P.paper,
-                    borderColor: P.heading,
-                  },
-                }}
-              >
-                {c.label}
-              </Link>
-            ))}
-          </div>
-          {/* Indicador de "há mais" — chevron pulsando */}
-          <div
-            aria-hidden
-            className="chips-hint pointer-events-none absolute right-1.5 top-1/2 -translate-y-1/2 grid h-6 w-6 place-items-center rounded-full"
-            style={{
-              background: `color-mix(in oklab, ${P.gold} 18%, transparent)`,
-              color: P.gold,
-            }}
-          >
-            <ChevronRight className="h-3.5 w-3.5" strokeWidth={2.6} />
+        <div className="mx-auto w-full max-w-6xl px-3 sm:px-6 lg:px-8">
+          <div className="relative">
+            <div className="chips-scroller flex gap-2.5 overflow-x-auto py-3 pr-8 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+              {[
+                { to: "/melhores-precos", label: "Ranking" },
+                { to: "/estabelecimentos", label: "Mercados" },
+                { to: "/buscar", label: "Buscar" },
+                { to: "/planos", label: "Alertas" },
+                { to: "/cesta-basica", label: "Cesta básica" },
+                { to: "/economia", label: "Economia" },
+              ].map((c) => (
+                <Link
+                  key={c.to}
+                  to={c.to}
+                  className="inline-flex shrink-0 items-center rounded-full border px-5 py-2.5 text-[15px] font-semibold leading-none tracking-[-0.005em] shadow-sm transition-all active:scale-[0.97] hover:border-[color:var(--pc-home-gold)]"
+                  style={{ borderColor: P.line, background: P.card, color: P.heading }}
+                  activeProps={{
+                    style: {
+                      background: P.heading,
+                      color: P.paper,
+                      borderColor: P.heading,
+                    },
+                  }}
+                >
+                  {c.label}
+                </Link>
+              ))}
+            </div>
+            {/* Indicador de "há mais" — chevron pulsando */}
+            <div
+              aria-hidden
+              className="chips-hint pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 grid h-6 w-6 place-items-center rounded-full"
+              style={{
+                background: `color-mix(in oklab, ${P.gold} 18%, transparent)`,
+                color: P.gold,
+              }}
+            >
+              <ChevronRight className="h-3.5 w-3.5" strokeWidth={2.6} />
+            </div>
           </div>
         </div>
+
 
       </nav>
 
