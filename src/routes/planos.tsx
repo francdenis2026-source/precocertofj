@@ -380,10 +380,11 @@ function PlansPage() {
               Já comprou e recebeu um código?{" "}
               <Link
                 to="/resgatar"
-                className="font-medium text-primary hover:underline"
+                className="font-semibold text-brand-gold hover:underline"
               >
                 Ativar meu código
               </Link>
+
             </p>
           </div>
         </section>
