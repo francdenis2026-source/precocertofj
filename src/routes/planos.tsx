@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ds, dsx } from "@/lib/ds";
+import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 
 const PALETTE = {
   gold: "#b58a3c",
