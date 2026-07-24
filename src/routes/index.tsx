@@ -429,7 +429,7 @@ function HomePage() {
                 <div
                   className="mb-3 inline-flex w-fit items-center gap-2 text-[12px] font-semibold uppercase tabular-nums sm:mb-3 sm:text-[10.5px]"
                   style={{
-                    color: "color-mix(in oklab, var(--pc-home-ink) 62%, transparent)",
+                    color: "color-mix(in oklab, var(--pc-home-ink) 85%, transparent)",
                     letterSpacing: "0.16em",
                   }}
                 >
