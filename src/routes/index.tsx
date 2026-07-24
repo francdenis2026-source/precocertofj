@@ -199,7 +199,7 @@ function HomePage() {
           {/* -------- HERO SPLIT -------- */}
           <div className="flex flex-col lg:flex-row">
             {/* LEFT — content */}
-            <div className="flex-[1.2] p-5 sm:p-6 lg:p-8 xl:p-10 flex flex-col justify-center">
+            <div className="flex-[1.2] p-4 sm:p-6 lg:p-8 xl:p-10 flex flex-col justify-center">
               {/* Badge EM BREVE */}
               <div
                 className="mb-3 inline-flex w-fit items-center gap-2 rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-[0.18em] sm:mb-5 sm:gap-2.5 sm:px-3.5 sm:py-1.5 sm:text-[11px]"
