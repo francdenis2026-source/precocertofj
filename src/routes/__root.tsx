@@ -181,9 +181,23 @@ function RootComponent() {
 
     const onKeyDown = (e: KeyboardEvent) => {
       if (!isGuardedNumber(e.target)) return;
-      if (e.key === "-" || e.key === "Subtract" || (e.key === "e" && e.shiftKey === false)) {
-        // bloqueia sinal negativo e notação exponencial que permitiria valores estranhos
+      // bloqueia sinal negativo, positivo explícito e notação exponencial
+      if (e.key === "-" || e.key === "Subtract" || e.key === "+" || e.key === "e" || e.key === "E") {
         e.preventDefault();
+      }
+      // seta pra baixo no mínimo: impede ir a negativo via teclado
+      if (e.key === "ArrowDown") {
+        const el = e.target;
+        const n = Number(el.value);
+        const step = Number(el.step || "1") || 1;
+        if (Number.isFinite(n) && n - step < 0) {
+          e.preventDefault();
+          if (n !== 0) {
+            el.value = "0";
+            el.dispatchEvent(new Event("input", { bubbles: true }));
+            el.dispatchEvent(new Event("change", { bubbles: true }));
+          }
+        }
       }
     };
 
@@ -199,23 +213,38 @@ function RootComponent() {
 
     const onInput = (e: Event) => {
       if (!isGuardedNumber(e.target)) return;
-      // reforça atributo min=0 caso não exista
       if (!e.target.hasAttribute("min")) e.target.setAttribute("min", "0");
+      clamp(e.target);
+    };
+
+    const onBlur = (e: FocusEvent) => {
+      if (!isGuardedNumber(e.target)) return;
+      // limpa "-" solitário ou strings inválidas em blur
+      if (e.target.value === "-") {
+        e.target.value = "";
+        e.target.dispatchEvent(new Event("input", { bubbles: true }));
+        e.target.dispatchEvent(new Event("change", { bubbles: true }));
+        return;
+      }
       clamp(e.target);
     };
 
     const onPaste = (e: ClipboardEvent) => {
       if (!isGuardedNumber(e.target)) return;
       const text = e.clipboardData?.getData("text") ?? "";
-      if (/^-/.test(text.trim())) e.preventDefault();
+      const trimmed = text.trim();
+      // bloqueia paste com sinal negativo ou notação exponencial
+      if (/^-/.test(trimmed) || /[eE]/.test(trimmed)) e.preventDefault();
     };
 
     document.addEventListener("keydown", onKeyDown, true);
     document.addEventListener("input", onInput, true);
+    document.addEventListener("blur", onBlur, true);
     document.addEventListener("paste", onPaste, true);
     return () => {
       document.removeEventListener("keydown", onKeyDown, true);
       document.removeEventListener("input", onInput, true);
+      document.removeEventListener("blur", onBlur, true);
       document.removeEventListener("paste", onPaste, true);
     };
   }, []);
