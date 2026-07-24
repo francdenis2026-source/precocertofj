@@ -182,14 +182,16 @@ function CadastroPage() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="grid w-full max-w-4xl grid-cols-1 overflow-hidden rounded-2xl border border-slate-900/10 bg-white shadow-[0_24px_60px_-24px_rgba(15,27,61,0.30)] md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]"
+          className="grid w-full max-w-[960px] grid-cols-1 overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
         >
-          {/* LEFT — Hero panel reutilizável */}
-          <AuthHero variant="signup" />
+          {/* LEFT — Hero panel reutilizável (oculto no mobile, igual /login) */}
+          <div className="hidden md:block">
+            <AuthHero variant="signup" />
+          </div>
 
 
           {/* RIGHT — Form */}
-          <section className="relative overflow-hidden p-5 sm:p-7">
+          <section className="relative overflow-hidden p-5 sm:p-7 md:p-8">
             {/* Header */}
             <div className="mb-5 flex items-center gap-3">
               <div
