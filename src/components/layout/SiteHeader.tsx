@@ -117,7 +117,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                 key={l.to}
                 to={l.to}
                 className={dsx("rounded-lg px-3.5 py-2 text-[15px] font-semibold leading-[1.35] outline-none transition-colors focus-visible:ring-2 lg:text-[16px] xl:text-[17px]", navClass)}
-                activeProps={{ className: isOverlay ? "text-on-media bg-on-media-surface" : "text-primary bg-primary/10" }}
+                activeProps={{ className: isOverlay ? "text-brand-soft bg-brand-soft/12" : "text-brand bg-brand/10" }}
               >
                 {l.label}
               </Link>
