@@ -932,29 +932,28 @@ function Field({
   status?: FieldStatus;
   hint?: string | null;
 }) {
-  // The right panel is hardcoded white, so inputs use an explicit light palette
-  // to guarantee contrast regardless of the app's dark/light theme setting.
+  // Uses semantic tokens so the inputs are legible in both light and dark themes.
   const borderCls =
     status === "success"
       ? "border-emerald-500/70 focus:border-emerald-600 focus:ring-emerald-500/15"
       : status === "error"
         ? "border-rose-500/70 focus:border-rose-600 focus:ring-rose-500/15"
-        : "border-slate-300 hover:border-slate-400 focus:border-slate-900 focus:ring-slate-900/10";
+        : "border-input hover:border-ring focus:border-ring focus:ring-ring/20";
   const hintCls =
     status === "success"
-      ? "text-emerald-700"
+      ? "text-emerald-600 dark:text-emerald-400"
       : status === "error"
-        ? "text-rose-600"
-        : "text-slate-500";
+        ? "text-rose-600 dark:text-rose-400"
+        : "text-muted-foreground";
   return (
     <label className="block">
-      <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-600">
+      <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
         {label}
       </span>
 
       <div className="relative">
         {Icon && (
-          <Icon className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+          <Icon className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground/70" />
         )}
         <input
           type={type}
@@ -966,9 +965,8 @@ function Field({
           minLength={minLength}
           inputMode={inputMode}
           aria-invalid={status === "error" || undefined}
-          style={{ color: PC_EMERALD_DEEP }}
           className={
-            "h-9 w-full rounded-lg bg-white text-[13px] font-medium tracking-tight shadow-[inset_0_1px_0_rgba(15,23,42,0.02)] transition placeholder:font-normal placeholder:text-slate-400 focus:outline-none focus:ring-4 " +
+            "h-9 w-full rounded-lg bg-background text-foreground text-[13px] font-medium tracking-tight shadow-[inset_0_1px_0_rgba(15,23,42,0.02)] transition placeholder:font-normal placeholder:text-muted-foreground/60 focus:outline-none focus:ring-4 " +
             borderCls +
             " border " +
             (Icon ? "pl-9 " : "pl-3 ") +
@@ -976,12 +974,13 @@ function Field({
           }
         />
         {status === "success" && (
-          <Check className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-emerald-600" />
+          <Check className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-emerald-600 dark:text-emerald-400" />
         )}
         {status === "error" && (
-          <AlertCircle className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-rose-600" />
+          <AlertCircle className="pointer-events-none absolute right-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-rose-600 dark:text-rose-400" />
         )}
       </div>
+
       {hint && (
         <p
           className={`mt-1 pl-0.5 text-[10.5px] font-medium ${hintCls}`}
