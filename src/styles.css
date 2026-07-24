@@ -2981,3 +2981,42 @@ code, pre, kbd, samp, tt, var,
 .pc-hero-buscar nav[aria-label="Trilha"] {
   text-shadow: 0 1px 2px color-mix(in oklab, var(--brand-navy) 55%, transparent);
 }
+
+/* Painel desfocado do hero — tokens adaptativos garantem contraste WCAG AA
+   (>= 4.5:1 texto branco sobre navy) em ambos os temas, ajustando
+   opacidade do véu e profundidade da sombra automaticamente. */
+.pc-hero-panel {
+  --panel-a1: 78%;   /* opacidade navy na borda esquerda */
+  --panel-a2: 52%;   /* opacidade navy no meio */
+  --panel-shadow: 0 12px 32px -14px color-mix(in oklab, var(--brand-navy) 65%, transparent),
+                  inset 0 0 0 1px color-mix(in oklab, var(--brand-gold) 12%, transparent);
+  background: linear-gradient(
+    100deg,
+    color-mix(in oklab, var(--brand-navy) var(--panel-a1), transparent) 0%,
+    color-mix(in oklab, var(--brand-navy) var(--panel-a2), transparent) 55%,
+    transparent 100%
+  );
+  box-shadow: var(--panel-shadow);
+}
+/* Modo claro: foto de fundo é mais luminosa → aumentar véu e sombra
+   para manter AA sem perder o efeito de desfoque. */
+:root:not(.dark) .pc-hero-panel {
+  --panel-a1: 86%;
+  --panel-a2: 62%;
+  --panel-shadow: 0 16px 40px -14px color-mix(in oklab, var(--brand-navy) 78%, transparent),
+                  inset 0 0 0 1px color-mix(in oklab, var(--brand-gold) 18%, transparent);
+}
+/* Modo escuro: cena já é escura → aliviar véu preservando AA. */
+.dark .pc-hero-panel {
+  --panel-a1: 72%;
+  --panel-a2: 46%;
+  --panel-shadow: 0 10px 28px -14px color-mix(in oklab, black 55%, transparent),
+                  inset 0 0 0 1px color-mix(in oklab, var(--brand-gold) 10%, transparent);
+}
+/* Redução de transparência do sistema → sólido para garantir contraste. */
+@media (prefers-reduced-transparency: reduce) {
+  .pc-hero-panel {
+    backdrop-filter: none !important;
+    background: var(--brand-navy) !important;
+  }
+}
