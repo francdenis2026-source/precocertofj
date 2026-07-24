@@ -82,12 +82,13 @@ const DropdownMenuItem = React.forwardRef<
   <DropdownMenuPrimitive.Item
     ref={ref}
     className={cn(
-      "relative flex cursor-pointer select-none items-center gap-2 rounded-md px-2 py-2 text-sm outline-none transition-all duration-[var(--dur-base,150ms)] focus:bg-accent focus:text-accent-foreground data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-muted-foreground focus:[&>svg]:text-accent-foreground",
+      "relative flex cursor-pointer select-none items-center gap-2 rounded-md px-2 py-2 text-sm outline-none transition-[background-color,color,box-shadow] duration-[var(--dur-base,150ms)] hover:bg-accent/70 hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:ring-2 focus-visible:ring-[color-mix(in_oklab,var(--pc-home-gold,#f5b301)_70%,transparent)] focus-visible:ring-inset data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground active:bg-[color-mix(in_oklab,var(--accent)_70%,var(--foreground)_15%)] data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&>svg]:size-4 [&>svg]:shrink-0 [&>svg]:text-muted-foreground focus:[&>svg]:text-accent-foreground",
       inset && "pl-8",
       className,
     )}
     {...props}
   />
+
 ));
 DropdownMenuItem.displayName = DropdownMenuPrimitive.Item.displayName;
 
