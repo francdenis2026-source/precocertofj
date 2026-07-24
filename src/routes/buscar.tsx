@@ -268,16 +268,9 @@ function SearchPage() {
     <div
       className="pc-search-scope min-h-[100dvh] pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground"
     >
-      {/* Hero editorial — foto de corredor de mercado desfocada + véu navy para legibilidade */}
-      <section className="relative isolate border-b border-white/10 pc-hero-buscar [&>[data-hero-bg]]:absolute [&>[data-hero-bg]]:inset-0 [&>[data-hero-bg]]:overflow-hidden">
-        {/* Wrapper apenas dos fundos — clipa foto/blur sem cortar o dropdown da busca */}
-        <div data-hero-bg aria-hidden className="-z-40">
-        {/* Camada base sólida (navy) — evita área vazia enquanto a foto carrega */}
-        <div
-          aria-hidden
-          className="absolute inset-0 -z-40"
-          style={{ background: "var(--brand-navy)" }}
-        />
+      {/* Hero editorial — mesmo padrão de /estabelecimentos (blur suave, sem véus escuros extras) */}
+      <section className="relative isolate overflow-hidden border-b border-white/10">
+        <div aria-hidden className="absolute inset-0 -z-40" style={{ background: "var(--brand-navy)" }} />
         <picture aria-hidden className="pc-hero-picture absolute inset-0 -z-30 h-full w-full">
           {Object.entries(buscarHero.sources).map(([type, srcset]) => (
             <source key={type} type={type} srcSet={srcset as string} sizes="100vw" />
@@ -285,8 +278,8 @@ function SearchPage() {
           <img
             src={buscarHero.img.src}
             alt=""
-            className="h-full w-full scale-[1.02] object-cover opacity-0 transition-opacity duration-500 [.pc-hero-picture.is-loaded_&]:opacity-100"
-            style={{ filter: "saturate(0.9) brightness(0.92) contrast(1.02)" }}
+            className="h-full w-full scale-[1.04] object-cover opacity-0 transition-opacity duration-500 [.pc-hero-picture.is-loaded_&]:opacity-100"
+            style={{ filter: "saturate(0.9) brightness(0.9) contrast(1.02) blur(2px)" }}
             width={buscarHero.img.w}
             height={buscarHero.img.h}
             loading="eager"
@@ -299,45 +292,17 @@ function SearchPage() {
           />
         </picture>
 
-        {/* Véus e painel desfocado removidos a pedido — foto 100% nítida.
-            Legibilidade dos títulos é mantida via text-shadow nos elementos abaixo. */}
-
-
         {/* Hairline dourada no topo */}
         <div
           aria-hidden
           className="absolute inset-x-0 top-0 -z-10 h-px"
           style={{
             background:
-              "linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 20%, color-mix(in oklab, var(--brand-gold) 80%, transparent) 50%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 80%, transparent 100%)",
+              "linear-gradient(90deg, transparent, color-mix(in oklab, var(--brand-gold) 85%, transparent) 50%, transparent)",
           }}
         />
-        </div>
 
-
-
-
-
-
-
-
-
-
-
-
-        <div className="relative mx-auto w-full max-w-7xl px-4 md:px-8 pt-4 md:pt-5 pb-4 md:pb-5">
-          {/* Painel de contraste: cobre TODA a área de texto (breadcrumb + eyebrow + h1 + subtítulo).
-              Cor sólida navy com blur suave garante WCAG AA em modo claro e escuro sem escurecer a foto. */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-y-2 left-2 -z-[1] w-[min(760px,94%)] rounded-2xl border border-white/12 shadow-[0_20px_40px_-28px_rgba(2,6,23,0.6)] backdrop-blur-[3px]"
-            style={{
-              background:
-                "linear-gradient(100deg, rgba(2,6,23,0.72) 0%, rgba(2,6,23,0.58) 60%, rgba(2,6,23,0.18) 92%, transparent 100%)",
-              maskImage:
-                "linear-gradient(100deg, #000 0%, #000 78%, transparent 100%)",
-            }}
-          />
+        <div className="relative mx-auto w-full max-w-6xl px-4 md:px-8 pt-4 md:pt-5 pb-4 md:pb-5">
           <nav aria-label="Trilha" className="mb-2 flex items-center gap-2 text-[14px] font-semibold text-white">
             <Link
               to="/"
@@ -351,20 +316,20 @@ function SearchPage() {
             </span>
           </nav>
 
-          {/* Eyebrow em sua própria linha para nunca sobrepor o H1 */}
-          <div className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-[0.14em] text-brand-navy shadow-sm">
-            <Search className="h-3 w-3" aria-hidden />
-            Comparador de preços
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
+            <div className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-2.5 py-0.5 text-[10.5px] font-bold uppercase tracking-[0.14em] text-brand-navy">
+              <Search className="h-3 w-3" aria-hidden />
+              Comparador de preços
+            </div>
+            <h1 className="text-[20px] md:text-[24px] font-bold leading-tight text-white [text-shadow:0_2px_10px_rgba(0,0,0,0.65)]">
+              Buscar <span className="text-brand-gold">preço</span> por nome
+            </h1>
           </div>
-          <h1 className="mt-1.5 text-[20px] md:text-[24px] font-bold leading-tight text-white [text-shadow:0_2px_10px_rgba(0,0,0,0.75),0_1px_2px_rgba(0,0,0,0.6)]">
-            Buscar <span className="text-brand-gold">preço</span> por nome
-          </h1>
-          <p className="mt-1.5 inline-block max-w-2xl text-[12.5px] md:text-[13.5px] font-medium leading-snug text-white [text-shadow:0_1px_4px_rgba(0,0,0,0.7)]">
+          <p className="mt-2 inline-block max-w-2xl rounded-md bg-brand-navy/75 px-2.5 py-1 text-[12.5px] md:text-[13.5px] font-medium leading-snug text-white ring-1 ring-white/10 backdrop-blur-[2px] [text-shadow:0_1px_4px_rgba(0,0,0,0.55)]">
             Consulte preço médio, mínimo e onde comprar mais barato em Feijó.
           </p>
 
-
-          <div className="mt-1.5 flex flex-wrap items-center gap-2">
+          <div className="mt-2 flex flex-wrap items-center gap-2">
             {hasQuery ? (
               <ShareButton
                 title={`PreçoCerto — ${q}`}
@@ -374,10 +339,7 @@ function SearchPage() {
             <FreeQuotaBadge variant="inline" />
           </div>
 
-
-
-
-          <div className="mt-2 rounded-2xl border border-white/15 bg-background/95 p-2 shadow-[0_18px_40px_-24px_rgba(2,6,23,0.65)] backdrop-blur-sm md:p-2.5">
+          <div className="mt-3">
             <PriceSearchBar
               initialQuery={q}
               mode={mode}
@@ -390,6 +352,7 @@ function SearchPage() {
           </div>
         </div>
       </section>
+
 
       <div className="mx-auto w-full max-w-7xl px-4 md:px-8 pt-4 md:pt-6">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_340px]">
