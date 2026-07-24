@@ -2886,14 +2886,9 @@ input::placeholder, textarea::placeholder {
 .pc-search-scope {
   position: relative;
   isolation: isolate;
-  background:
-    radial-gradient(1200px 520px at 50% -120px,
-      color-mix(in oklab, var(--pc-home-navy) 42%, transparent) 0%,
-      transparent 70%),
-    linear-gradient(180deg,
-      color-mix(in oklab, var(--pc-home-navy) 8%, var(--background)) 0%,
-      var(--background) 60%);
+  background: var(--background);
 }
+
 .dark .pc-search-scope {
   background:
     radial-gradient(1200px 520px at 50% -120px,
@@ -2903,7 +2898,7 @@ input::placeholder, textarea::placeholder {
       color-mix(in oklab, var(--pc-home-navy) 55%, var(--background)) 0%,
       var(--background) 65%);
 }
-.pc-search-scope::before {
+.dark .pc-search-scope::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -2915,12 +2910,11 @@ input::placeholder, textarea::placeholder {
       transparent 1.6px);
   background-size: 22px 22px;
   background-position: 0 0;
-  opacity: 0.14;
+  opacity: 0.22;
   mask-image: radial-gradient(ellipse at 50% 20%, black 30%, transparent 75%);
   -webkit-mask-image: radial-gradient(ellipse at 50% 20%, black 30%, transparent 75%);
 }
-.dark .pc-search-scope::before { opacity: 0.22; }
-.pc-search-scope::after {
+.dark .pc-search-scope::after {
   content: "";
   position: absolute;
   inset: 0;
