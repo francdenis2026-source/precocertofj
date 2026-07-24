@@ -241,6 +241,78 @@ function Page() {
     onError: (e) => toast.error(e instanceof Error ? e.message : "Erro ao salvar"),
   });
 
+  const candidateToRow = (c: Candidate): Row => ({
+    ...c,
+    action:
+      c.matchType === "barcode" || c.matchType === "signature"
+        ? "update"
+        : c.matchType === "fuzzy" && c.divergences.length > 0
+          ? "update"
+          : "new",
+    editedName: c.productName,
+    editedBrand: c.brand,
+    editedUnit: c.sizeUnit ?? c.unit,
+    editedQty: c.sizeValue,
+    editedBarcode: c.barcode,
+    editedPrice: c.price ?? 0,
+  });
+
+  const manualAdd = useMutation({
+    mutationFn: async () => {
+      const price = parseFloat(manualForm.price.replace(",", "."));
+      const qty = manualForm.qty ? parseFloat(manualForm.qty.replace(",", ".")) : null;
+      if (!manualForm.name.trim() || manualForm.name.trim().length < 2)
+        throw new Error("Informe o nome do produto.");
+      if (!price || price <= 0) throw new Error("Informe um preço válido.");
+      const unitLower = manualForm.unit.toLowerCase();
+      const validUnit = ["g", "kg", "ml", "l", "un"].includes(unitLower) ? unitLower : null;
+      return manualFn({
+        data: {
+          establishmentId,
+          productName: manualForm.name.trim(),
+          brand: manualForm.brand.trim() || null,
+          sizeValue: qty,
+          sizeUnit: validUnit as "g" | "kg" | "ml" | "l" | "un" | null,
+          barcode: manualForm.barcode.trim() || null,
+          price,
+          imagePreview: manualForm.photo,
+        },
+      });
+    },
+    onSuccess: (c) => {
+      const row = candidateToRow(c);
+      setRows((prev) => [row, ...prev]);
+      if (row.divergences.length > 0 || row.matchType !== "none") {
+        setExpanded((prev) => new Set(prev).add(row.clientId));
+      }
+      setManualForm({ name: "", brand: "", qty: "", unit: "", barcode: "", price: "", photo: null });
+      if (manualPhotoRef.current) manualPhotoRef.current.value = "";
+      const msg =
+        row.matchType === "barcode"
+          ? "Item adicionado — EAN idêntico já cadastrado, revise abaixo."
+          : row.matchType === "signature"
+            ? "Item adicionado — possível duplicata forte, revise abaixo."
+            : row.matchType === "fuzzy"
+              ? `Item adicionado — parecido com "${row.existing?.productName ?? ""}", confirme.`
+              : "Item novo adicionado à revisão.";
+      toast.success(msg);
+    },
+    onError: (e) => toast.error(e instanceof Error ? e.message : "Erro ao adicionar item"),
+  });
+
+  const onManualPhoto = async (file: File | null) => {
+    if (!file) {
+      setManualForm((f) => ({ ...f, photo: null }));
+      return;
+    }
+    try {
+      const dataUrl = await fileToResizedDataURL(file);
+      setManualForm((f) => ({ ...f, photo: dataUrl }));
+    } catch {
+      toast.error("Não foi possível ler a foto.");
+    }
+  };
+
   const updateRow = (id: string, patch: Partial<Row>) =>
     setRows((prev) => prev.map((r) => (r.clientId === id ? { ...r, ...patch } : r)));
 
