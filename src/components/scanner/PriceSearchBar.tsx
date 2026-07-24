@@ -19,6 +19,7 @@ import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
 import { computeUnitPrice } from "@/lib/unit-price";
 import { ProductQuickActions } from "@/components/product/ProductQuickActions";
 import { StoreBadge, StoreColorBar } from "@/components/brand/StoreBadge";
+import { readableTextOn } from "@/lib/color-contrast";
 import { tokenizeQuery, type SearchMode, type MatchReason } from "@/lib/search-tokens";
 import { ProductCompareDialog, CompareTray } from "@/components/search/ProductCompareDialog";
 import { ProductQuickModal } from "@/components/home/ProductQuickModal";
