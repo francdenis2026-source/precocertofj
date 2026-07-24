@@ -365,7 +365,12 @@ type RecentItem = {
   when: string;
   marketName: string | null;
   stores: number;
+  previousPrice: number | null;
+  dropPct: number | null;
 };
+
+/** Considera "queda relevante" a partir de ~5% de redução vs. maior preço anterior. */
+const DROP_THRESHOLD = 5;
 
 function MobilePriceRotator({
   data,
