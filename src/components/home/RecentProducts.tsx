@@ -136,7 +136,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
   return (
     <section
       aria-labelledby="recent-products-heading"
-      className="mx-auto w-full max-w-6xl px-4 pb-8 sm:px-6 lg:px-8"
+      className="mx-auto w-full max-w-6xl px-4 pb-3 sm:px-6 lg:px-8"
     >
       <div className="mb-4 flex items-end justify-between gap-4 sm:mb-5">
         <div className="min-w-0">
