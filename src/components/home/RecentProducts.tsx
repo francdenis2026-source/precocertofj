@@ -393,20 +393,20 @@ function SpotlightCard({
   const isFavPending = pendingKey === key && favMutation.isPending;
 
   return (
-    <div className="mx-auto w-full max-w-2xl" aria-label="Destaque de preço">
+    <div className="mx-auto w-full max-w-xl" aria-label="Destaque de preço">
       <div
-        className="pc-spotlight group relative overflow-hidden rounded-2xl border p-4 sm:p-6 transition-transform hover:-translate-y-0.5"
+        className="pc-spotlight group relative overflow-hidden rounded-xl border p-3 sm:p-4 transition-transform hover:-translate-y-0.5"
         style={{
           borderColor: "color-mix(in oklab, var(--pc-home-gold) 45%, transparent)",
           background: `linear-gradient(135deg, ${P.card} 0%, color-mix(in oklab, var(--pc-home-gold) 6%, ${P.card}) 100%)`,
           boxShadow:
-            "0 10px 40px -12px color-mix(in oklab, var(--pc-home-gold) 35%, transparent), inset 0 1px 0 color-mix(in oklab, var(--pc-home-gold) 20%, transparent)",
+            "0 6px 24px -10px color-mix(in oklab, var(--pc-home-gold) 30%, transparent), inset 0 1px 0 color-mix(in oklab, var(--pc-home-gold) 18%, transparent)",
         }}
       >
         {/* Brilho animado no canto */}
         <span
           aria-hidden
-          className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full opacity-60 blur-3xl"
+          className="pointer-events-none absolute -right-12 -top-12 h-28 w-28 rounded-full opacity-50 blur-3xl"
           style={{
             background:
               "radial-gradient(circle, color-mix(in oklab, var(--pc-home-gold) 55%, transparent) 0%, transparent 70%)",
@@ -414,75 +414,66 @@ function SpotlightCard({
           }}
         />
 
-        <div className="relative flex items-center justify-between gap-2">
-          <span
-            className="inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.18em]"
-            style={{
-              background: "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
-              color: P.gold,
-            }}
-          >
-            <span className="h-1.5 w-1.5 rounded-full" style={{ background: P.gold, boxShadow: `0 0 8px ${P.gold}` }} />
-            Destaque
-          </span>
-          <button
-            type="button"
-            onClick={() => handleFavorite(p.name)}
-            disabled={isFavPending}
-            aria-pressed={isFav}
-            aria-label={isFav ? `Remover ${p.name} dos favoritos` : `Favoritar ${p.name}`}
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full transition-transform active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)]/60"
-            style={{
-              background: isFav
-                ? "color-mix(in oklab, var(--pc-home-gold) 18%, transparent)"
-                : "color-mix(in oklab, var(--pc-home-ink) 6%, transparent)",
-              opacity: isFavPending ? 0.5 : 1,
-            }}
-          >
-            <Star
-              className="h-4 w-4"
-              strokeWidth={2}
-              style={{
-                color: isFav ? P.gold : "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)",
-                fill: isFav ? P.gold : "transparent",
-              }}
-              aria-hidden
-            />
-          </button>
-        </div>
-
         <button
           type="button"
           onClick={() => setOpenItem(p)}
-          className="relative mt-3 block w-full text-left focus-visible:outline-none"
+          className="relative block w-full text-left focus-visible:outline-none"
           aria-label={`Ver detalhes de ${p.name} — ${brl(p.price)}`}
         >
-          <div
-            className="line-clamp-2 text-[16px] sm:text-[18px] font-semibold leading-tight"
-            style={{ color: P.heading }}
-          >
-            {p.name}
-          </div>
-
-          <div className="mt-1.5 flex items-center gap-2 text-[12px]">
-            <Store className="h-3.5 w-3.5 shrink-0 text-[var(--market-accent)]" aria-hidden />
-            <span className="market-name truncate font-bold uppercase tracking-[0.05em] text-[var(--market-accent)]">
-              {p.marketName ?? "Vários mercados"}
-            </span>
+          <div className="flex items-center gap-2">
             <span
-              className={`ml-auto inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.14em] ring-1 ${f.ringClass} ${f.textClass}`}
+              className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.18em]"
+              style={{
+                background: "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
+                color: P.gold,
+              }}
+            >
+              <span className="h-1 w-1 rounded-full" style={{ background: P.gold, boxShadow: `0 0 6px ${P.gold}` }} />
+              Destaque
+            </span>
+            {hasDrop && (
+              <span
+                className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.12em]"
+                style={{
+                  background: "color-mix(in oklab, #10b981 18%, transparent)",
+                  color: "#059669",
+                  border: "1px solid color-mix(in oklab, #10b981 50%, transparent)",
+                  animation: "pc-spot-badge 2.2s ease-in-out infinite",
+                }}
+              >
+                <TrendingDown className="h-2.5 w-2.5" aria-hidden />
+                Baixou {p.dropPct}%
+              </span>
+            )}
+            <span
+              className={`ml-auto inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] ring-1 ${f.ringClass} ${f.textClass}`}
               title={f.label}
             >
-              <span className={`h-1.5 w-1.5 rounded-full ${f.dotClass}`} aria-hidden />
+              <span className={`h-1 w-1 rounded-full ${f.dotClass}`} aria-hidden />
               {f.label}
             </span>
           </div>
 
-          <div className="mt-4 flex items-end justify-between gap-3">
-            <div className="flex flex-col leading-none">
+          <div className="mt-2 flex items-center gap-3">
+            <div className="min-w-0 flex-1">
+              <div
+                className="line-clamp-2 text-[14px] sm:text-[15px] font-semibold leading-snug"
+                style={{ color: P.heading }}
+              >
+                {p.name}
+              </div>
+              <div className="mt-1 flex items-center gap-1.5 text-[11px]">
+                <Store className="h-3 w-3 shrink-0 text-[var(--market-accent)]" aria-hidden />
+                <span className="market-name truncate font-bold uppercase tracking-[0.05em] text-[var(--market-accent)]">
+                  {p.marketName ?? "Vários mercados"}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-end leading-none shrink-0">
               {hasDrop && p.previousPrice && (
                 <span
-                  className="mb-1 text-[11px] font-medium text-muted-foreground line-through tabular-nums"
+                  className="mb-0.5 text-[10.5px] font-medium text-muted-foreground line-through tabular-nums"
                   aria-label={`Preço anterior ${brl(p.previousPrice)}`}
                 >
                   {brl(p.previousPrice)}
@@ -493,58 +484,65 @@ function SpotlightCard({
                 style={{
                   color: P.gold,
                   letterSpacing: "-0.02em",
-                  fontSize: "clamp(2rem, 6vw, 2.75rem)",
-                  textShadow: "0 2px 20px color-mix(in oklab, var(--pc-home-gold) 40%, transparent)",
+                  fontSize: "clamp(1.5rem, 4.5vw, 2rem)",
+                  textShadow: "0 2px 14px color-mix(in oklab, var(--pc-home-gold) 35%, transparent)",
                 }}
               >
                 {brl(p.price)}
               </span>
-              <span
-                className="mt-2 inline-flex items-center gap-1 text-[10.5px]"
-                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 60%, transparent)" }}
-              >
-                <Clock className="h-3 w-3" aria-hidden />
-                Coletado {relative(p.when)}
-              </span>
             </div>
-
-            {hasDrop && (
-              <span
-                className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.1em]"
-                style={{
-                  background: "color-mix(in oklab, #10b981 18%, transparent)",
-                  color: "#059669",
-                  border: "1px solid color-mix(in oklab, #10b981 50%, transparent)",
-                  animation: "pc-spot-badge 2.2s ease-in-out infinite",
-                }}
-              >
-                <TrendingDown className="h-3 w-3" aria-hidden />
-                Baixou {p.dropPct}%
-              </span>
-            )}
           </div>
         </button>
 
-        <div className="relative mt-4 flex items-center justify-between gap-2 border-t pt-3" style={{ borderColor: "color-mix(in oklab, var(--pc-home-gold) 22%, transparent)" }}>
-          <button
-            type="button"
-            onClick={() => setOpenItem(p)}
-            className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.14em] transition-opacity hover:opacity-80"
-            style={{ color: P.heading }}
+        <div className="relative mt-2.5 flex items-center justify-between gap-2 border-t pt-2" style={{ borderColor: "color-mix(in oklab, var(--pc-home-gold) 22%, transparent)" }}>
+          <span
+            className="inline-flex items-center gap-1 text-[10px]"
+            style={{ color: "color-mix(in oklab, var(--pc-home-ink) 60%, transparent)" }}
           >
-            Ver detalhes
-            <ChevronRight className="h-3.5 w-3.5" aria-hidden />
-          </button>
-          <Link
-            to="/melhores-precos"
-            className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.14em] transition-opacity hover:opacity-80"
-            style={{ color: P.gold }}
-          >
-            Todos os preços
-            <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-          </Link>
+            <Clock className="h-2.5 w-2.5" aria-hidden />
+            {relative(p.when)}
+          </span>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => handleFavorite(p.name)}
+              disabled={isFavPending}
+              aria-pressed={isFav}
+              aria-label={isFav ? `Remover ${p.name} dos favoritos` : `Favoritar ${p.name}`}
+              className="inline-flex h-6 w-6 items-center justify-center rounded-full transition-transform active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)]/60"
+              style={{ opacity: isFavPending ? 0.5 : 1 }}
+            >
+              <Star
+                className="h-3.5 w-3.5"
+                strokeWidth={2}
+                style={{
+                  color: isFav ? P.gold : "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)",
+                  fill: isFav ? P.gold : "transparent",
+                }}
+                aria-hidden
+              />
+            </button>
+            <button
+              type="button"
+              onClick={() => setOpenItem(p)}
+              className="inline-flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-[0.14em] transition-opacity hover:opacity-80"
+              style={{ color: P.heading }}
+            >
+              Detalhes
+              <ChevronRight className="h-3 w-3" aria-hidden />
+            </button>
+            <Link
+              to="/melhores-precos"
+              className="inline-flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-[0.14em] transition-opacity hover:opacity-80"
+              style={{ color: P.gold }}
+            >
+              Todos
+              <ArrowRight className="h-3 w-3" aria-hidden />
+            </Link>
+          </div>
         </div>
       </div>
+
 
       {/* Modal de detalhes do produto (mercados, histórico, link para a página) */}
       <ProductQuickModal
