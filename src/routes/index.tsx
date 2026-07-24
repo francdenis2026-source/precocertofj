@@ -961,14 +961,17 @@ function HomePage() {
               {/* Chips — buscas populares reais (auto-refresh 60s, paginação client-side) */}
               <div className="mt-3 hidden flex-wrap items-center gap-2 sm:flex">
                 <span
-                  className="mr-1 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.24em]"
-                  style={{ color: "var(--pc-text-muted)" }}
+                  className="mr-1 inline-flex items-center gap-1.5 text-[10.5px] font-black uppercase tracking-[0.24em]"
+                  style={{
+                    color: "var(--pc-eyebrow-on-navy)",
+                    textShadow: "0 1px 4px rgba(2,6,23,0.85)",
+                  }}
                 >
                   Buscas do dia
                   {popularQ.isFetching ? (
-                    <RefreshCw className="h-2.5 w-2.5 animate-spin" aria-hidden style={{ color: P.goldSoft }} />
+                    <RefreshCw className="h-2.5 w-2.5 animate-spin" aria-hidden style={{ color: "var(--pc-eyebrow-on-navy)" }} />
                   ) : null}
-                  <span aria-hidden style={{ color: P.line }}>·</span>
+                  <span aria-hidden style={{ color: "var(--pc-eyebrow-on-navy)" }}>·</span>
                 </span>
                 {currentPopular.map((t) => (
                   <button
@@ -1046,19 +1049,23 @@ function HomePage() {
                   to="/melhores-precos"
                   className="inline-flex min-h-[48px] items-center gap-2 rounded-xl border px-5 py-2.5 text-[14.5px] font-semibold transition-colors hover:text-[color:var(--pc-home-card)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 sm:rounded-2xl sm:px-6 sm:py-3 sm:text-[15px]"
                   style={{
-                    borderColor: P.heading,
-                    color: P.heading,
+                    background: "color-mix(in oklab, var(--pc-home-navy) 72%, transparent)",
+                    borderColor: "color-mix(in oklab, var(--pc-home-gold) 70%, transparent)",
+                    color: "var(--pc-text-on-navy)",
+                    boxShadow: "0 10px 24px -18px rgba(2,6,23,0.85)",
                     // @ts-expect-error css var
                     "--tw-ring-color": P.gold,
                     "--tw-ring-offset-color": P.card,
                   }}
                   onMouseEnter={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = P.heading;
-                    (e.currentTarget as HTMLElement).style.color = P.card;
+                    (e.currentTarget as HTMLElement).style.background = P.gold;
+                    (e.currentTarget as HTMLElement).style.color = P.navy;
+                    (e.currentTarget as HTMLElement).style.borderColor = P.gold;
                   }}
                   onMouseLeave={(e) => {
-                    (e.currentTarget as HTMLElement).style.background = "transparent";
-                    (e.currentTarget as HTMLElement).style.color = P.heading;
+                    (e.currentTarget as HTMLElement).style.background = "color-mix(in oklab, var(--pc-home-navy) 72%, transparent)";
+                    (e.currentTarget as HTMLElement).style.color = "var(--pc-text-on-navy)";
+                    (e.currentTarget as HTMLElement).style.borderColor = "color-mix(in oklab, var(--pc-home-gold) 70%, transparent)";
                   }}
                 >
                   <TrendingDown className="h-4 w-4" />
