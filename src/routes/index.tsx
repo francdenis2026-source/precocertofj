@@ -918,71 +918,86 @@ function HomePage() {
 
 
 
-      {/* -------- FINAL CTA (compact ribbon) -------- */}
-      <section className="pc-container pc-section">
+      {/* -------- FINAL CTA (ribbon com moldura dourada — chama atenção sem virar hero) -------- */}
+      <section className="pc-container pt-8 sm:pt-10">
         <div
-          className="relative overflow-hidden rounded-[var(--pc-radius-md)] border p-4 sm:p-5"
+          className="relative overflow-hidden rounded-[var(--pc-radius-md)] p-[1.5px]"
           style={{
-            background: `linear-gradient(135deg, ${P.navy} 0%, color-mix(in oklab, ${P.navy} 85%, black) 100%)`,
-            borderColor: "color-mix(in oklab, #F5C86A 32%, transparent)",
-            color: "#F5F6FA",
+            background: `linear-gradient(120deg, ${P.gold} 0%, color-mix(in oklab, ${P.gold} 35%, transparent) 55%, color-mix(in oklab, ${P.gold} 70%, transparent) 100%)`,
             boxShadow: "var(--pc-shadow-3)",
           }}
         >
-          {/* subtle gold glow accent */}
           <div
-            aria-hidden
-            className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full opacity-30 blur-3xl"
-            style={{ background: P.gold }}
-          />
+            className="relative overflow-hidden rounded-[calc(var(--pc-radius-md)-2px)] px-4 py-3.5 sm:px-5 sm:py-4"
+            style={{
+              background: `linear-gradient(115deg, ${P.navy} 0%, color-mix(in oklab, ${P.navy} 82%, black) 100%)`,
+              color: "#F5F6FA",
+            }}
+          >
+            {/* glow gold — canto direito */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-20 -top-24 h-52 w-52 rounded-full opacity-35 blur-3xl"
+              style={{ background: P.gold }}
+            />
+            {/* pattern diagonal sutil */}
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 opacity-[0.06]"
+              style={{
+                backgroundImage: `repeating-linear-gradient(-45deg, ${P.gold} 0 1px, transparent 1px 14px)`,
+              }}
+            />
 
-          <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-            <div className="flex items-center gap-3 sm:flex-1">
-              <span
-                className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl sm:h-11 sm:w-11"
-                style={{
-                  background: "color-mix(in oklab, #F5C86A 20%, transparent)",
-                  color: P.gold,
-                  border: "1px solid color-mix(in oklab, #F5C86A 35%, transparent)",
-                }}
-                aria-hidden
-              >
-                <Ticket className="h-5 w-5" strokeWidth={2.2} />
-              </span>
-
-              <div className="min-w-0 flex-1">
-                <p
-                  className="text-[11px] font-semibold uppercase tracking-[0.14em]"
-                  style={{ color: "color-mix(in oklab, #F5C86A 85%, white)" }}
-                >
-                  Já tem um código?
-                </p>
-                <p
-                  className="mt-0.5 font-bold leading-tight"
+            <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+              <div className="flex items-center gap-3 sm:flex-1">
+                <span
+                  className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
                   style={{
-                    color: "#FFFFFF",
-                    fontSize: "clamp(1rem, 1.6vw, 1.15rem)",
-                    letterSpacing: "-0.01em",
+                    background: "color-mix(in oklab, #F5C86A 22%, transparent)",
+                    color: P.gold,
+                    border: "1px solid color-mix(in oklab, #F5C86A 45%, transparent)",
                   }}
+                  aria-hidden
                 >
-                  Ative sua licença agora
-                </p>
-                <p className="mt-1 text-[12.5px] leading-snug text-white/70">
-                  Leva menos de 30 segundos.
-                </p>
-              </div>
-            </div>
+                  <Ticket className="h-5 w-5" strokeWidth={2.2} />
+                </span>
 
-            <Link
-              to="/resgatar"
-              className="inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-[14px] font-bold shadow-sm transition-transform hover:scale-[1.02] active:scale-[0.98] sm:w-auto sm:shrink-0 sm:px-5 sm:py-2.5 sm:text-[13.5px]"
-              style={{ background: P.gold, color: P.navy }}
-            >
-              Resgatar código <ArrowRight className="h-4 w-4" />
-            </Link>
+                <div className="min-w-0 flex-1">
+                  <p
+                    className="text-[10.5px] font-bold uppercase tracking-[0.2em]"
+                    style={{ color: "color-mix(in oklab, #F5C86A 88%, white)" }}
+                  >
+                    Já tem um código?
+                  </p>
+                  <p
+                    className="mt-0.5 font-bold leading-tight text-white"
+                    style={{
+                      fontSize: "clamp(0.95rem, 1.4vw, 1.05rem)",
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    Ative sua licença em 30 segundos.
+                  </p>
+                </div>
+              </div>
+
+              <Link
+                to="/resgatar"
+                className="group inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-[13.5px] font-bold shadow-sm transition-all hover:scale-[1.02] hover:shadow-md active:scale-[0.98] sm:w-auto sm:shrink-0 sm:px-5"
+                style={{ background: P.gold, color: P.navy }}
+              >
+                Resgatar código
+                <ArrowRight
+                  className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                  strokeWidth={2.6}
+                />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
+
 
 
       <SiteFooter />
