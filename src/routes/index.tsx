@@ -396,8 +396,7 @@ function HomePage() {
 
         {/* CONTENT OVERLAY */}
         <div
-          className="relative z-10 mx-auto flex w-full max-w-6xl flex-col justify-center px-4 py-14 sm:px-6 sm:py-20 lg:px-8 lg:py-24"
-          style={{ minHeight: "min(100svh, 900px)" }}
+          className="relative z-10 mx-auto flex w-full max-w-6xl flex-col justify-start px-4 pt-4 pb-14 sm:px-6 sm:pt-6 sm:pb-16 lg:px-8 lg:pt-8 lg:pb-20"
         >
           <div className="max-w-2xl">
 
