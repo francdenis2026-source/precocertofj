@@ -191,7 +191,8 @@ function SearchPage() {
     });
   };
 
-  const urlSyncTimer = useRef<number | null>(null);
+  // urlSyncTimer declared above
+
   const syncQueryToUrl = useCallback(
     (next: string) => {
       const value = next.slice(0, 80);
