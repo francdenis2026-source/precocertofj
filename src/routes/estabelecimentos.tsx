@@ -716,7 +716,7 @@ function MetricDetailDialog({
                   <div className="min-w-0 flex-1">
                     <div className="truncate text-[13.5px] font-semibold text-foreground">{e.name}</div>
                     <div className="truncate text-[11.5px] text-muted-foreground">
-                      <span className="font-semibold text-primary">{e.productsCount}</span> produtos
+                      <span className="font-semibold text-brand-gold">{e.productsCount}</span> produtos
                       {e.neighborhood ? ` · ${e.neighborhood}` : ""}
                     </div>
                   </div>
