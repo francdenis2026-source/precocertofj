@@ -698,13 +698,13 @@ function HomePage() {
 
         {/* CONTENT OVERLAY */}
         <div
-          className="relative z-10 mx-auto flex w-full max-w-6xl flex-col justify-start px-4 pt-4 pb-14 sm:px-6 sm:pt-6 sm:pb-16 lg:px-8 lg:pt-8 lg:pb-20"
+          className="relative z-10 mx-auto flex w-full max-w-6xl flex-col justify-center px-4 py-8 sm:px-6 sm:py-10 lg:px-8 lg:py-12"
         >
           <div className="max-w-2xl">
 
               {/* Badge EM BREVE */}
               <div
-                className="mb-4 inline-flex w-fit items-center gap-2.5 rounded-full px-3.5 py-1.5 text-[12px] font-bold uppercase tracking-[0.18em] shadow-sm sm:mb-5 sm:gap-2.5 sm:px-3.5 sm:py-1.5 sm:text-[11px]"
+                className="mb-3 inline-flex w-fit items-center gap-2.5 rounded-full px-3.5 py-1.5 text-[12px] font-bold uppercase tracking-[0.18em] shadow-sm sm:mb-3.5 sm:gap-2.5 sm:px-3.5 sm:py-1.5 sm:text-[11px]"
                 style={{ background: P.navy, color: "#F5F6FA" }}
               >
                 <span className="relative flex h-2.5 w-2.5 sm:h-2 sm:w-2">
@@ -729,7 +729,7 @@ function HomePage() {
 
               {today && (
                 <div
-                  className="mb-3 inline-flex w-fit items-center gap-2 text-[12px] font-semibold uppercase tabular-nums sm:mb-3 sm:text-[10.5px]"
+                  className="mb-2.5 inline-flex w-fit items-center gap-2 text-[12px] font-semibold uppercase tabular-nums sm:mb-2.5 sm:text-[10.5px]"
                   style={{
                     color: "var(--pc-text-muted)",
                     letterSpacing: "0.16em",
@@ -771,7 +771,7 @@ function HomePage() {
 
               {/* Subtítulo — contraste garantido pelo scrim lateral suave + text-shadow. */}
               <p
-                className="mt-3 max-w-md text-[13.5px] leading-snug sm:text-[13px]"
+                className="mt-2.5 max-w-md text-[13.5px] leading-snug sm:text-[13px]"
                 style={{
                   color: "#F5F6FA",
                   textShadow: "0 1px 3px rgba(2,6,23,0.6), 0 2px 10px rgba(2,6,23,0.45)",
@@ -788,7 +788,7 @@ function HomePage() {
 
 
               {/* Search com autocomplete */}
-              <form onSubmit={submitSearch} className="relative mt-4 max-w-xl" ref={searchBoxRef}>
+              <form onSubmit={submitSearch} className="relative mt-3.5 max-w-xl" ref={searchBoxRef}>
                 <div
                   className="flex items-center gap-2 rounded-2xl border p-1.5 transition-all focus-within:ring-2 sm:p-2"
                   style={{
