@@ -266,6 +266,24 @@ export function PriceSearchBar({
     return () => window.clearTimeout(t);
   }, [query, runSuggest]);
 
+  // Auto-correct: se resultado veio vazio e existe termo fuzzy próximo,
+  // troca automaticamente por ele (uma única vez por termo original).
+  useEffect(() => {
+    if (!rawResult) return;
+    const q = normalizeInput(query).trim().toLowerCase();
+    if (!q || rawResult.groups.length > 0) return;
+    if (lastAutoCorrectFor.current === q) return;
+    const cand = suggestions.find((s) => s.isFuzzy && s.similarity >= 0.45);
+    if (!cand) return;
+    const corrected = normalizeInput(cand.displayName);
+    if (corrected.trim().toLowerCase() === q) return;
+    lastAutoCorrectFor.current = q;
+    setAutoCorrected({ from: query, to: corrected });
+    setInputValue(corrected);
+    runQuery(corrected);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [rawResult, suggestions]);
+
   // Close dropdown on outside click
   useEffect(() => {
     if (!showSuggest) return;
@@ -276,6 +294,7 @@ export function PriceSearchBar({
     document.addEventListener("mousedown", onDown);
     return () => document.removeEventListener("mousedown", onDown);
   }, [showSuggest]);
+
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();
