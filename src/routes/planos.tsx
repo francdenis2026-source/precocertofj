@@ -269,7 +269,7 @@ function PlansPage() {
                       {planHighlights(plan.slug).map((h) => (
                         <li key={h} className="flex items-start gap-1.5">
                           <Check
-                            className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary"
+                            className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-gold"
                             aria-hidden
                           />
                           <span className="text-foreground/90">{h}</span>
@@ -284,11 +284,7 @@ function PlansPage() {
                       className={dsx(
                         ds.btn.base,
                         "mt-4 h-10 w-full px-3 text-[13px] font-semibold",
-                        isRecommended
-                          ? ds.btn.variants.primary
-                          : isFounder
-                            ? ds.btn.variants.accent
-                            : ds.btn.variants.ghost,
+                        "bg-brand-gold text-brand-navy shadow-elev-1 hover:brightness-105 hover:shadow-elev-2",
                       )}
                     >
                       {buying === plan.id
@@ -298,6 +294,7 @@ function PlansPage() {
                           : "Assinar"}
                       <ArrowRight className="h-3.5 w-3.5" aria-hidden />
                     </button>
+
                   </article>
                 );
               })}
