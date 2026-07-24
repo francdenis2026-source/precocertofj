@@ -88,13 +88,16 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
   const { data } = useQuery({
     queryKey: ["home", "recent-products", 6],
     queryFn: () => fetchRecent({ data: { limit: 6 } }),
-    staleTime: 60_000,
+    staleTime: 30_000,
+    refetchInterval: 45_000,
+    refetchOnWindowFocus: true,
   });
   const { data: live } = useQuery({
     queryKey: ["home", "live-ticker-stats"],
     queryFn: () => fetchLive(),
-    staleTime: 60_000,
-    refetchInterval: 90_000,
+    staleTime: 30_000,
+    refetchInterval: 45_000,
+    refetchOnWindowFocus: true,
   });
 
   const [liveOpen, setLiveOpen] = useState(false);
