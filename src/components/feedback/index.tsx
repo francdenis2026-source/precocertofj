@@ -58,13 +58,13 @@ export function PageLoader({
       aria-live="polite"
       aria-busy="true"
       className={cn(
-        "flex flex-col items-center justify-center gap-3 text-muted-foreground",
+        "flex flex-col items-center justify-center gap-3 text-foreground/85",
         fullScreen ? "min-h-[60dvh] w-full" : "py-16",
         className,
       )}
     >
       <Spinner size="lg" className="text-primary" label={label} />
-      <p className="text-sm">{label}</p>
+      <p className="text-[13px] sm:text-sm font-medium leading-snug">{label}</p>
     </div>
   );
 }
