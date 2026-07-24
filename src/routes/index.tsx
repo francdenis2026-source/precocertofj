@@ -301,16 +301,18 @@ function HomePage() {
 
 
 
-      {/* ============== HERO MOBILE — navy sólido, alto contraste (sm:hidden) ============== */}
+      {/* ============== HERO MOBILE (sm:hidden) — variantes por tema ============== */}
+      <div className="sm:hidden">
+      {/* DARK MODE — navy sólido */}
       <section
-        aria-labelledby="hero-mobile-title"
-        className="relative w-full overflow-hidden sm:hidden"
+        aria-labelledby="hero-mobile-title-dark"
+        className="relative hidden w-full overflow-hidden dark:block"
         style={{ background: P.navy }}
       >
-        {/* Foto tênue ao fundo para dar textura sem competir com o texto */}
+
         <picture aria-hidden>
           {Object.entries(heroMarket.sources).map(([type, srcset]) => (
-            <source key={type} type={`image/${type}`} srcSet={srcset} sizes="100vw" />
+            <source key={`d-${type}`} type={`image/${type}`} srcSet={srcset} sizes="100vw" />
           ))}
           <img
             src={heroMarket.img.src}
@@ -324,7 +326,6 @@ function HomePage() {
             style={{ filter: "grayscale(30%) blur(1px)" }}
           />
         </picture>
-        {/* Scrim navy garante WCAG em qualquer imagem */}
         <div
           aria-hidden
           className="absolute inset-0"
@@ -332,7 +333,6 @@ function HomePage() {
             background: `linear-gradient(180deg, ${P.navy} 0%, color-mix(in oklab, ${P.navy} 92%, transparent) 55%, color-mix(in oklab, ${P.navy} 82%, transparent) 100%)`,
           }}
         />
-        {/* Glow dourado sutil no canto superior direito */}
         <div
           aria-hidden
           className="pointer-events-none absolute right-[-40px] top-[-40px] h-40 w-40 rounded-full"
@@ -340,7 +340,6 @@ function HomePage() {
         />
 
         <div className="relative z-10 flex min-h-[86svh] flex-col px-5 pb-8 pt-6">
-          {/* Badge EM BREVE */}
           <div
             className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1.5"
             style={{
@@ -363,7 +362,6 @@ function HomePage() {
             </span>
           </div>
 
-          {/* Data */}
           {today && (
             <div
               className="mb-3 inline-flex items-center gap-2 text-[10.5px] font-semibold uppercase tabular-nums"
@@ -374,9 +372,8 @@ function HomePage() {
             </div>
           )}
 
-          {/* Headline */}
           <h1
-            id="hero-mobile-title"
+            id="hero-mobile-title-dark"
             className={`${serif} text-[38px] font-normal leading-[1.05] tracking-[-0.005em]`}
             style={{ color: "#ffffff" }}
           >
@@ -386,14 +383,12 @@ function HomePage() {
             </span>
           </h1>
 
-          {/* Suporte */}
           <p className="mt-4 max-w-md text-[14px] leading-relaxed" style={{ color: "rgba(255,255,255,0.82)" }}>
             Compare arroz, feijão e café nos mercados do seu bairro.{" "}
             <span style={{ color: P.gold, fontWeight: 700 }}>Conferido por nota fiscal</span>
             {" "}— feito por Feijó, para Feijó.
           </p>
 
-          {/* Busca */}
           <form onSubmit={submitSearch} className="relative mt-6">
             <div
               className="flex items-center gap-2 rounded-2xl border p-1.5 backdrop-blur-sm transition-all focus-within:ring-2"
@@ -428,7 +423,6 @@ function HomePage() {
             </div>
           </form>
 
-          {/* CTAs empilhados */}
           <div className="mt-auto flex flex-col gap-3 pt-8">
             {isLoggedOut ? (
               <StartFreeDialog>
@@ -468,6 +462,161 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* ============== HERO MOBILE — LIGHT MODE (creme editorial) ============== */}
+      <section
+        aria-labelledby="hero-mobile-title-light"
+        className="relative w-full overflow-hidden sm:hidden dark:hidden"
+        style={{
+          background:
+            "linear-gradient(180deg, #fbf8f1 0%, #f4efe3 55%, #ecdfc4 100%)",
+        }}
+      >
+        {/* Textura sutil de papel via ruído dourado */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.35]"
+          style={{
+            background:
+              "radial-gradient(circle at 15% 12%, color-mix(in oklab, #d4a017 22%, transparent) 0%, transparent 45%), radial-gradient(circle at 85% 88%, color-mix(in oklab, #0b1e3a 12%, transparent) 0%, transparent 50%)",
+          }}
+        />
+        {/* Linha dourada superior */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 top-0 h-[3px]"
+          style={{ background: `linear-gradient(90deg, transparent, ${P.gold}, transparent)` }}
+        />
+
+        <div className="relative z-10 flex min-h-[86svh] flex-col px-5 pb-8 pt-6">
+          {/* Badge EM BREVE — versão clara */}
+          <div
+            className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border px-3 py-1.5"
+            style={{
+              background: "#ffffff",
+              borderColor: `color-mix(in oklab, ${P.navy} 18%, transparent)`,
+              boxShadow: "0 1px 2px rgba(11,30,58,0.06)",
+            }}
+          >
+            <span className="relative flex h-2 w-2">
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75" style={{ background: P.gold }} />
+              <span className="relative inline-flex h-2 w-2 rounded-full" style={{ background: P.gold }} />
+            </span>
+            <span
+              className="rounded-full px-1.5 py-0.5 text-[10px] font-black tracking-[0.2em]"
+              style={{ background: P.navy, color: "#ffffff" }}
+            >
+              EM BREVE
+            </span>
+            <span className="text-[10.5px] font-bold uppercase tracking-[0.18em]" style={{ color: P.navy }}>
+              IA integrada
+            </span>
+          </div>
+
+          {today && (
+            <div
+              className="mb-3 inline-flex items-center gap-2 text-[10.5px] font-semibold uppercase tabular-nums"
+              style={{ color: "color-mix(in oklab, #0b1e3a 62%, transparent)", letterSpacing: "0.16em" }}
+            >
+              <span aria-hidden className="inline-block h-px w-6" style={{ background: `color-mix(in oklab, ${P.navy} 35%, transparent)` }} />
+              {today}
+            </div>
+          )}
+
+          <h1
+            id="hero-mobile-title-light"
+            className={`${serif} text-[38px] font-normal leading-[1.05] tracking-[-0.005em]`}
+            style={{ color: P.navy }}
+          >
+            Em Feijó, quem sabe o preço{" "}
+            <span className="italic" style={{ color: "#8a6410" }}>
+              compra melhor.
+            </span>
+          </h1>
+
+          <p className="mt-4 max-w-md text-[14px] leading-relaxed" style={{ color: "color-mix(in oklab, #0b1e3a 82%, transparent)" }}>
+            Compare arroz, feijão e café nos mercados do seu bairro.{" "}
+            <span style={{ color: "#6b4a10", fontWeight: 700 }}>Conferido por nota fiscal</span>
+            {" "}— feito por Feijó, para Feijó.
+          </p>
+
+          <form onSubmit={submitSearch} className="relative mt-6">
+            <div
+              className="flex items-center gap-2 rounded-2xl border p-1.5 transition-all focus-within:ring-2"
+              style={{
+                background: "#ffffff",
+                borderColor: `color-mix(in oklab, ${P.navy} 16%, transparent)`,
+                boxShadow: "0 2px 10px rgba(11,30,58,0.06)",
+                // @ts-expect-error css var
+                "--tw-ring-color": `color-mix(in oklab, ${P.gold} 60%, transparent)`,
+              }}
+            >
+              <span className="pl-3">
+                <Search className="h-5 w-5" style={{ color: `color-mix(in oklab, ${P.navy} 55%, transparent)` }} strokeWidth={2.2} />
+              </span>
+              <input
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                type="search"
+                inputMode="search"
+                placeholder="Ex.: Arroz Tio João 5kg"
+                aria-label="Buscar produto"
+                className="flex-1 bg-transparent px-2 py-3 text-[15px] font-medium outline-none"
+                style={{ color: P.navy }}
+              />
+              <button
+                type="submit"
+                aria-label="Buscar"
+                className="inline-flex shrink-0 items-center justify-center rounded-xl px-4 py-3 transition-transform active:scale-95"
+                style={{ background: P.navy, color: "#ffffff" }}
+              >
+                <ArrowRight className="h-5 w-5" strokeWidth={2.5} />
+              </button>
+            </div>
+          </form>
+
+          <div className="mt-auto flex flex-col gap-3 pt-8">
+            {isLoggedOut ? (
+              <StartFreeDialog>
+                <button
+                  type="button"
+                  aria-haspopup="dialog"
+                  className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl text-[15.5px] font-bold shadow-lg transition-transform active:scale-[0.98]"
+                  style={{ background: P.navy, color: "#ffffff" }}
+                >
+                  Começar grátis
+                  <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
+                </button>
+              </StartFreeDialog>
+            ) : (
+              <Link
+                to="/app"
+                className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl text-[15.5px] font-bold shadow-lg transition-transform active:scale-[0.98]"
+                style={{ background: P.navy, color: "#ffffff" }}
+              >
+                Ir para o painel
+                <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
+              </Link>
+            )}
+
+            <Link
+              to="/melhores-precos"
+              className="inline-flex min-h-[52px] w-full items-center justify-center gap-2 rounded-xl border text-[15px] font-semibold transition-colors"
+              style={{
+                borderColor: `color-mix(in oklab, ${P.navy} 22%, transparent)`,
+                background: "#ffffff",
+                color: P.navy,
+              }}
+            >
+              <TrendingDown className="h-4 w-4" />
+              Ver rankings
+            </Link>
+          </div>
+        </div>
+      </section>
+      </div>
+
+
 
       {/* ============== HERO FULL-BLEED (desktop/tablet — sm:block) ============== */}
       <section
