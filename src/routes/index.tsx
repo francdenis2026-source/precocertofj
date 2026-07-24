@@ -664,20 +664,10 @@ function HomePage() {
           />
         </picture>
 
-        {/* SCRIM SYSTEM — três camadas para garantir contraste em qualquer imagem/tela */}
+        {/* Scrims removidos a pedido — foto do hero fica 100% nítida e colorida.
+            Contraste do texto é mantido via text-shadow nos títulos/badges. */}
 
-        {/* 1) Base tint neutra: escurece levemente a foto em ambos os temas
-              para reduzir dependência do conteúdo da imagem. */}
-        <div
-          aria-hidden
-          className="absolute inset-0"
-          style={{
-            background:
-              "color-mix(in oklab, var(--pc-home-navy) 22%, transparent)",
-          }}
-        />
-
-        {/* 2a) Scrim MOBILE — vertical, denso embaixo (conteúdo empilhado). */}
+        {/* Scrim MOBILE mantido — sem ele o conteúdo empilhado sobre a foto perde legibilidade. */}
         <div
           aria-hidden
           className="absolute inset-0 sm:hidden"
@@ -687,25 +677,6 @@ function HomePage() {
           }}
         />
 
-        {/* 2b) Scrim DESKTOP — horizontal, forte na coluna esquerda, esvaece à direita. */}
-        <div
-          aria-hidden
-          className="absolute inset-0 hidden sm:block"
-          style={{
-            background:
-              "linear-gradient(100deg, color-mix(in oklab, var(--pc-home-card) 96%, transparent) 0%, color-mix(in oklab, var(--pc-home-card) 88%, transparent) 42%, color-mix(in oklab, var(--pc-home-card) 45%, transparent) 72%, color-mix(in oklab, var(--pc-home-card) 12%, transparent) 100%)",
-          }}
-        />
-
-        {/* 3) Reforço inferior para o quote flutuante e leitura do rodapé do hero. */}
-        <div
-          aria-hidden
-          className="absolute inset-x-0 bottom-0 h-40 sm:h-56"
-          style={{
-            background:
-              "linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--pc-home-card) 70%, transparent) 100%)",
-          }}
-        />
 
         {/* CONTENT OVERLAY */}
         <div
