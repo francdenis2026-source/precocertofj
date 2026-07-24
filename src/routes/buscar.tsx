@@ -311,10 +311,8 @@ function SearchPage() {
                 ]}
               />
               <FilterInputs
-                brand={brandFilter}
                 min={search.min ?? ""}
                 max={search.max ?? ""}
-                onBrand={setBrand}
                 onMin={setMinPrice}
                 onMax={setMaxPrice}
                 onClear={clearFilters}
