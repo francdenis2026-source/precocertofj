@@ -801,6 +801,15 @@ export function PriceSearchBar({
                       />
                     ) : null}
 
+                    {groupBy === "matrix" && result.groups.length > 0 ? (
+                      <MatrixCompareResults
+                        groups={filteredOrdered.flatMap(([, gs]) => gs)}
+                        kindFilter={kindFilter}
+                        fmt={fmt}
+                        highlightTokens={highlightTokens}
+                      />
+                    ) : null}
+
                     {groupBy === "product" && result.groups.length > 0 ? (
 
                       <div className="space-y-2">
