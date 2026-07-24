@@ -742,14 +742,7 @@ function HomePage() {
               >
                 Por onde começar
               </div>
-              <h2
-                className="font-semibold text-white"
-                style={{
-                  fontSize: "clamp(1.05rem, 2vw, 1.5rem)",
-                  lineHeight: 1.15,
-                  letterSpacing: "-0.02em",
-                }}
-              >
+              <h2 className="pc-h2 text-white">
                 Três caminhos, uma cesta mais barata.
               </h2>
             </div>
