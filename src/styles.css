@@ -2929,6 +2929,10 @@ input::placeholder, textarea::placeholder {
 /* ===================== Tipografia unificada (typeclear) =====================
    Toda a interface renderiza em Work Sans. Nenhum elemento cai em fonte
    padrão do navegador (Times/Serif/Monospace do UA). Códigos e valores
+   monoespaçados usam explicitamente `--font-mono` (IBM Plex Mono), não o
+   `monospace` genérico do UA. */
+
+
 
 /* ============================================================
    Selo/moldura para textos sobre foto (hero /buscar)
