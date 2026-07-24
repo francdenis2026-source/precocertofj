@@ -1,10 +1,9 @@
-import { createFileRoute, Link, useNavigate, useRouter, retainSearchParams } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, retainSearchParams } from "@tanstack/react-router";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PriceSearchBar } from "@/components/scanner/PriceSearchBar";
 import { MobileNav } from "@/components/nav/MobileNav";
-import { ArrowLeft } from "lucide-react";
 import type { SearchMode } from "@/lib/search-tokens";
 import { FreeQuotaBadge } from "@/components/paywall/FreeQuotaBadge";
 import { QuickFilterBar } from "@/components/search/QuickFilterBar";
@@ -13,8 +12,8 @@ import { useSession } from "@/hooks/useSession";
 import { trackEvent } from "@/lib/analytics-events";
 import { ListingShell, InternalPageHeader } from "@/components/layout";
 import { EmptyState, RouteError } from "@/components/feedback";
-import { Button } from "@/components/ui/button";
 import { Search as SearchIcon } from "lucide-react";
+
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
@@ -61,22 +60,10 @@ const PURE_KEY = "search:pureOnly";
 function SearchPage() {
   const search = Route.useSearch();
   const navigate = useNavigate({ from: "/buscar" });
-  const router = useRouter();
   const { user } = useSession();
   const urlSyncTimer = useRef<number | null>(null);
 
 
-  const goBack = useCallback(() => {
-    try {
-      if (typeof window !== "undefined" && window.history.length > 1) {
-        router.history.back();
-        return;
-      }
-    } catch {
-      /* ignore */
-    }
-    navigate({ to: "/" });
-  }, [navigate, router]);
 
   const mode: SearchMode = search.mode === "loose" ? "loose" : "strict";
   const pureOnly = search.pure !== "0";
@@ -231,18 +218,6 @@ function SearchPage() {
           description="Preço médio, mínimo e onde está mais barato."
           actions={
             <>
-
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                onClick={goBack}
-                aria-label="Voltar"
-                className="h-8 px-2 text-[12px]"
-              >
-                <ArrowLeft className="mr-1 h-3.5 w-3.5" strokeWidth={2} />
-                Voltar
-              </Button>
               {hasQuery ? (
                 <ShareButton
                   title={`PreçoCerto — ${q}`}
@@ -252,6 +227,7 @@ function SearchPage() {
               <FreeQuotaBadge variant="inline" />
             </>
           }
+
         />
 
         <ListingShell density="sm" className="mb-2">
