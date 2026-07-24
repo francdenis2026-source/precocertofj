@@ -23,6 +23,7 @@ type Preset = {
   brandIcon: LucideIcon;
   offer?: { label: string; title: string; caption: string };
   photo: boolean;
+  photoSrc?: string;
 };
 
 const PRESETS: Record<AuthHeroVariant, Preset> = {
