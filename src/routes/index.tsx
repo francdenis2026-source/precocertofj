@@ -301,12 +301,15 @@ function HomePage() {
 
 
 
-      {/* ============== HERO MOBILE — DARK MODE (navy sólido) ============== */}
+      {/* ============== HERO MOBILE (sm:hidden) — variantes por tema ============== */}
+      <div className="sm:hidden">
+      {/* DARK MODE — navy sólido */}
       <section
         aria-labelledby="hero-mobile-title-dark"
-        className="relative hidden w-full overflow-hidden sm:hidden dark:sm:hidden dark:block"
+        className="relative hidden w-full overflow-hidden dark:block"
         style={{ background: P.navy }}
       >
+
         <picture aria-hidden>
           {Object.entries(heroMarket.sources).map(([type, srcset]) => (
             <source key={`d-${type}`} type={`image/${type}`} srcSet={srcset} sizes="100vw" />
