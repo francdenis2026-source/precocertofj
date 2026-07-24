@@ -2094,7 +2094,7 @@ function MatrixCompareResults({
                         aria-hidden="true"
                       >
                         {m.logoUrl ? (
-                          <img src={m.logoUrl} alt="" className="h-full w-full object-contain p-0.5" loading="lazy" />
+                          <LazyImage src={m.logoUrl} alt="" className="h-full w-full object-contain p-0.5" />
                         ) : (
                           <ShoppingBag className="h-3.5 w-3.5 text-muted-foreground" />
                         )}
