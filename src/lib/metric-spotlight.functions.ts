@@ -116,7 +116,7 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
             .eq("status", "salvo")
             .not("price_captured", "is", null)
             .order("created_at", { ascending: false })
-            .limit(12),
+            .limit(120),
           sb
             .from("product_comparison_cache")
             .select(
@@ -124,7 +124,7 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
             )
             .gte("store_count", 2)
             .order("savings_pct", { ascending: false })
-            .limit(6),
+            .limit(80),
           sb
             .from("scans")
             .select("id", { count: "exact", head: true })
