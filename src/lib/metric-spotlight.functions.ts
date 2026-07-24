@@ -1,9 +1,11 @@
 import { createServerFn } from "@tanstack/react-start";
 import { setResponseHeader } from "@tanstack/react-start/server";
+import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 
 export type MetricStoreItem = {
   id: string;
   name: string;
+  slug: string;
   city: string | null;
   neighborhood: string | null;
   logoUrl: string | null;
@@ -114,7 +116,7 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
             .eq("status", "salvo")
             .not("price_captured", "is", null)
             .order("created_at", { ascending: false })
-            .limit(12),
+            .limit(120),
           sb
             .from("product_comparison_cache")
             .select(
@@ -122,7 +124,7 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
             )
             .gte("store_count", 2)
             .order("savings_pct", { ascending: false })
-            .limit(6),
+            .limit(80),
           sb
             .from("scans")
             .select("id", { count: "exact", head: true })
@@ -181,6 +183,7 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
           return {
             id: e.id,
             name: e.name,
+            slug: slugifyEstablishment(e.name),
             city: e.city,
             neighborhood: e.neighborhood,
             logoUrl: e.logo_url,
@@ -191,31 +194,39 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
         })
         .sort((a, b) => b.productCount - a.productCount);
 
-      // categorias por produto único
-      const productCategoryMap = new Map<string, string>();
-      for (const c of (compRes.data ?? []) as Array<{
-        display_name: string | null;
-        category: string | null;
-      }>) {
-        if (c.display_name && c.category)
-          productCategoryMap.set(c.display_name.toLowerCase(), c.category);
-      }
-      // conta categorias a partir do cache completo (limite pequeno já pego acima); melhor query dedicada:
-      const catRes = await sb
+      // Contagem verdadeira do catálogo canônico (produtos únicos por marca+embalagem).
+      const catalogCountRes = await sb
+        .from("product_catalog")
+        .select("id", { count: "exact", head: true });
+      const totalProducts = catalogCountRes.count ?? 0;
+
+      // Total de itens em comparação (pares com >=2 mercados).
+      const comparedCountRes = await sb
         .from("product_comparison_cache")
-        .select("category")
-        .not("category", "is", null);
+        .select("catalog_slug", { count: "exact", head: true })
+        .gte("store_count", 2);
+      const totalCompared = comparedCountRes.count ?? 0;
+
+      // Distribuição por categoria — paginado manualmente para escapar do limite 1000 do PostgREST.
       const catCounts = new Map<string, number>();
-      for (const c of (catRes.data ?? []) as Array<{ category: string | null }>) {
-        if (!c.category) continue;
-        catCounts.set(c.category, (catCounts.get(c.category) ?? 0) + 1);
+      const PAGE = 1000;
+      for (let from = 0; from < 20000; from += PAGE) {
+        const pageRes = await sb
+          .from("product_comparison_cache")
+          .select("category")
+          .not("category", "is", null)
+          .range(from, from + PAGE - 1);
+        const rows = (pageRes.data ?? []) as Array<{ category: string | null }>;
+        for (const c of rows) {
+          if (!c.category) continue;
+          catCounts.set(c.category, (catCounts.get(c.category) ?? 0) + 1);
+        }
+        if (rows.length < PAGE) break;
       }
       const topCategories: MetricCategoryBreakdown[] = Array.from(catCounts.entries())
         .map(([key, count]) => ({ key, label: CATEGORY_LABELS[key] ?? key, count }))
-        .sort((a, b) => b.count - a.count)
-        .slice(0, 6);
+        .sort((a, b) => b.count - a.count);
 
-      const totalProducts = Array.from(catCounts.values()).reduce((a, b) => a + b, 0);
 
       const savings = (compRes.data ?? [])
         .map((r: any) => Number(r.savings_pct))
@@ -224,7 +235,6 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
         ? Math.round(savings.reduce((a: number, b: number) => a + b, 0) / savings.length)
         : 0;
       const bestSavingsPct = savings.length ? Math.round(Math.max(...savings)) : 0;
-
 
       const topSavings: MetricSavingsHighlight[] = (compRes.data ?? []).map((r: any) => ({
         displayName: r.display_name ?? "Produto",
@@ -251,10 +261,7 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
           scans7d: scans7dRes.count ?? 0,
           avgSavingsPct,
           bestSavingsPct,
-          productsCompared: (compRes.data ?? []).length
-            ? // approximate: use full cache count for productsCompared
-              Array.from(catCounts.values()).reduce((a, b) => a + b, 0)
-            : 0,
+          productsCompared: totalCompared,
           lastUpdate: (latestRes.data?.created_at as string | undefined) ?? null,
         },
         stores,
