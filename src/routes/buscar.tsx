@@ -544,31 +544,7 @@ function FilterInputs({ min, max, onMin, onMax, onClear }: FilterInputsProps) {
           className={inputBase}
         />
       </div>
-      <div
-        role="group"
-        aria-label="Presets de faixa de preço"
-        className="flex flex-wrap items-center gap-1"
-      >
-        {presets.map((p) => {
-          const active = isActive(p.lo, p.hi);
-          return (
-            <button
-              key={p.label}
-              type="button"
-              onClick={() => applyPreset(p.lo, p.hi)}
-              aria-pressed={active}
-              className={
-                "inline-flex h-8 items-center rounded-full border px-3 text-[11.5px] font-semibold tabular-nums transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold " +
-                (active
-                  ? "border-brand-gold bg-brand-gold/15 text-brand-gold"
-                  : "border-border/70 bg-background/60 text-muted-foreground hover:border-brand-gold/60 hover:text-foreground")
-              }
-            >
-              {p.label}
-            </button>
-          );
-        })}
-      </div>
+      {/* Presets removidos: a faixa numérica acima já cobre o mesmo controle sem duplicar chips */}
       <button
         type="button"
         onClick={clearAll}
