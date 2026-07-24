@@ -518,10 +518,14 @@ function EstablishmentsPage() {
                   className="grid grid-cols-1 gap-3 p-4 md:grid-cols-2 md:p-5"
                   aria-label="Lista de estabelecimentos"
                 >
-                  {visibleItems.map((e) => (
+                  {visibleItems.map((e) => {
+                    const isCheapest = badgeIds.cheapestId === e.id;
+                    const recent = isRecent(e.lastUpdate);
+                    const isFeatured = badgeIds.featuredIds.has(e.id);
+                    return (
                     <li
                       key={e.id}
-                      className="rounded-xl border border-brand-gold/50 bg-card shadow-sm transition-all hover:border-brand-gold hover:shadow-md"
+                      className="rounded-xl border border-border/70 bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-gold/50 hover:shadow-md"
                     >
                       <Link
                         to="/estabelecimento/$slug"
@@ -530,10 +534,7 @@ function EstablishmentsPage() {
                         aria-label={`Ver catálogo de ${e.name}`}
                       >
                         <div className="flex items-start gap-3">
-                          <div
-                            className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl"
-                          >
-
+                          <div className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl border border-border/60 bg-white p-1.5">
                             {e.logoUrl ? (
                               <img
                                 src={e.logoUrl}
@@ -542,25 +543,42 @@ function EstablishmentsPage() {
                                 loading="lazy"
                               />
                             ) : (
-                              <span aria-hidden className="text-[16px] font-bold text-muted-foreground">
+                              <span aria-hidden className="text-[16px] font-bold text-brand-navy">
                                 {e.name.substring(0, 2).toUpperCase()}
                               </span>
                             )}
                           </div>
                           <div className="min-w-0 flex-1">
-                            <h3 className="truncate text-[15px] font-semibold text-foreground">{e.name}</h3>
+                            <div className="flex flex-wrap items-center gap-1.5">
+                              <h3 className="truncate text-[15px] font-semibold text-foreground">{e.name}</h3>
+                              {isCheapest && (
+                                <span className="inline-flex items-center gap-1 rounded-full bg-brand-gold px-1.5 py-[1px] text-[9.5px] font-bold uppercase tracking-[0.1em] text-brand-navy">
+                                  <PiggyBank className="h-2.5 w-2.5" aria-hidden /> Mais barato hoje
+                                </span>
+                              )}
+                              {recent && (
+                                <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-1.5 py-[1px] text-[9.5px] font-bold uppercase tracking-[0.1em] text-emerald-600 dark:text-emerald-400">
+                                  <Radio className="h-2.5 w-2.5" aria-hidden /> Atualizado
+                                </span>
+                              )}
+                              {isFeatured && !isCheapest && (
+                                <span className="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-1.5 py-[1px] text-[9.5px] font-bold uppercase tracking-[0.1em] text-muted-foreground">
+                                  <Sparkles className="h-2.5 w-2.5" aria-hidden /> Destaque
+                                </span>
+                              )}
+                            </div>
                             {e.neighborhood && (
-                              <span className="mt-1 inline-flex items-center gap-1 rounded-full border border-brand-gold/50 bg-brand-gold/15 px-2 py-0.5 text-[12px] font-semibold text-brand-gold">
+                              <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[12px] font-medium text-muted-foreground">
                                 <MapPin className="h-3 w-3" aria-hidden />
                                 {e.neighborhood}
                               </span>
                             )}
-                            <p className="mt-1 text-[13px] text-muted-foreground">
+                            <p className="mt-1 text-[12.5px] text-muted-foreground">
                               {[e.city, e.state].filter(Boolean).join(" · ") || "Localização não informada"}
                             </p>
-                            <p className="mt-2 text-[13.5px] font-medium text-foreground">
-                              <span className="font-bold text-brand-gold">{e.productsCount}</span>{" "}
-                              <span className="text-muted-foreground">produtos cadastrados</span>
+                            <p className="mt-2 flex items-baseline gap-1.5 text-[13px] text-muted-foreground">
+                              <span className="text-[20px] font-bold leading-none tabular-nums text-foreground">{e.productsCount}</span>
+                              <span>produtos cadastrados</span>
                             </p>
                           </div>
                         </div>
@@ -572,7 +590,7 @@ function EstablishmentsPage() {
                                 className="inline-flex items-center gap-1 rounded-full border border-border bg-background/60 px-2.5 py-1 text-[12.5px] font-medium text-foreground"
                               >
                                 {humanizeCategory(c.category)}
-                                <span className="rounded-full bg-brand-gold/20 px-1.5 text-[11px] font-bold text-brand-gold tabular-nums">{c.count}</span>
+                                <span className="rounded-full bg-muted px-1.5 text-[11px] font-bold text-muted-foreground tabular-nums">{c.count}</span>
                               </span>
                             ))}
                           </div>
@@ -582,7 +600,8 @@ function EstablishmentsPage() {
                         </div>
                       </Link>
                     </li>
-                  ))}
+                    );
+                  })}
                 </ul>
                 )}
               </SectionCard>
