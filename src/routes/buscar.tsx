@@ -286,54 +286,17 @@ function SearchPage() {
                 { value: "all", label: "Todos" },
               ]}
             />
-            <div className="ml-auto flex flex-wrap items-center gap-1.5">
-              <input
-                type="text"
-                inputMode="text"
-                maxLength={40}
-                placeholder="Marca"
-                defaultValue={brandFilter}
-                onBlur={(e) => setBrand(e.currentTarget.value.trim())}
-                onKeyDown={(e) => { if (e.key === "Enter") setBrand(e.currentTarget.value.trim()); }}
-                aria-label="Marca"
-                className="h-8 w-28 rounded-md border border-border bg-background px-2 text-[12px] text-foreground placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              />
-              <input
-                type="number"
-                inputMode="decimal"
-                min={0}
-                step="0.01"
-                placeholder="R$ min"
-                defaultValue={search.min}
-                onBlur={(e) => setMinPrice(e.currentTarget.value.trim())}
-                onKeyDown={(e) => { if (e.key === "Enter") setMinPrice(e.currentTarget.value.trim()); }}
-                aria-label="Preço mínimo"
-                className="h-8 w-20 rounded-md border border-border bg-background px-2 text-[12px] tabular-nums text-foreground placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              />
-              <input
-                type="number"
-                inputMode="decimal"
-                min={0}
-                step="0.01"
-                placeholder="R$ max"
-                defaultValue={search.max}
-                onBlur={(e) => setMaxPrice(e.currentTarget.value.trim())}
-                onKeyDown={(e) => { if (e.key === "Enter") setMaxPrice(e.currentTarget.value.trim()); }}
-                aria-label="Preço máximo"
-                className="h-8 w-20 rounded-md border border-border bg-background px-2 text-[12px] tabular-nums text-foreground placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              />
-              {hasFilters ? (
-                <button
-                  type="button"
-                  onClick={clearFilters}
-                  className="inline-flex h-8 items-center rounded-full border border-border bg-background px-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                  aria-label="Limpar filtros"
-                >
-                  Limpar
-                </button>
-              ) : null}
-            </div>
+            <FilterInputs
+              brand={brandFilter}
+              min={search.min ?? ""}
+              max={search.max ?? ""}
+              onBrand={setBrand}
+              onMin={setMinPrice}
+              onMax={setMaxPrice}
+              onClear={clearFilters}
+            />
           </div>
+
 
           {!hasQuery && (
             <EmptyState
