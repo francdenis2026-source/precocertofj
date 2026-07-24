@@ -441,12 +441,10 @@ export function PriceSearchBar({
             defaultValue={normalizeInput(initialQuery)}
             onChange={(e) => {
               const next = normalizeInput(e.target.value.slice(0, 80));
-              // Keep DOM in sync (React does not for uncontrolled inputs after
-              // programmatic writes) — see clear()/chooseSuggestion which write
-              // to inputRef.current.value directly.
               setQuery(next);
               setShowSuggest(true);
               onQueryChange?.(next);
+              if (autoCorrected) setAutoCorrected(null);
             }}
             onFocus={() => setShowSuggest(true)}
             onKeyDown={onKeyDown}
