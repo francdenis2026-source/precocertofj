@@ -440,8 +440,13 @@ export function PriceSearchBar({
       </div>
 
 
-      <form onSubmit={submit} className="flex items-center gap-2" autoComplete="off">
+      <form onSubmit={submit} className="flex items-stretch gap-2" autoComplete="off">
         <div className="relative flex-1" ref={containerRef}>
+          <Search
+            aria-hidden="true"
+            strokeWidth={2}
+            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-navy/60 dark:text-brand-gold/70"
+          />
           <input
             ref={inputRef}
             type="text"
@@ -457,7 +462,7 @@ export function PriceSearchBar({
             }}
             onFocus={() => setShowSuggest(true)}
             onKeyDown={onKeyDown}
-            placeholder="ex.: Leite integral 1L"
+            placeholder="Buscar produto ou marca — ex.: Leite integral 1L"
             maxLength={80}
             spellCheck={false}
             autoCapitalize="sentences"
@@ -466,9 +471,10 @@ export function PriceSearchBar({
             aria-expanded={showList || showHistory}
             aria-autocomplete="list"
             aria-controls="price-search-suggestions"
-            className="focus-ring w-full rounded-full border border-primary/20 bg-background px-3 py-2 pr-8 text-sm tracking-wide text-foreground placeholder:text-muted-foreground"
+            className="h-11 w-full rounded-full border-2 border-brand-navy/20 bg-background pl-9 pr-9 text-[14px] font-medium tracking-wide text-foreground placeholder:font-normal placeholder:text-muted-foreground/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] transition-colors hover:border-brand-gold/60 focus:border-brand-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40 dark:border-brand-gold/25"
             aria-label="Nome do produto"
           />
+
           {query && (
             <button
               type="button"
