@@ -195,21 +195,21 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                 {p.name}
               </div>
               <div
-                className={`${serif} tabular-nums`}
+                className={`${serif} tabular-nums font-semibold`}
                 style={{
-                  color: P.heading,
-                  fontSize: "clamp(1.05rem, 2vw, 1.35rem)",
+                  color: P.gold,
+                  fontSize: "clamp(1.15rem, 2.1vw, 1.45rem)",
                   lineHeight: 1,
                   letterSpacing: "-0.02em",
                 }}
               >
                 {brl(p.price)}
               </div>
-              <div className="mt-2 flex items-center gap-1.5 text-[11px]">
+              <div className="mt-2 flex items-center gap-1.5 text-[11.5px]">
                 <Store
-                  className="h-3 w-3 shrink-0 text-[var(--market-accent)] transition-colors group-hover:text-[var(--market-accent-hover)]"
+                  className="h-3.5 w-3.5 shrink-0 text-[var(--market-accent)] transition-colors group-hover:text-[var(--market-accent-hover)]"
                 />
-                <span className="market-name truncate text-[11px]">
+                <span className="market-name truncate text-[12px] font-bold uppercase tracking-[0.05em] text-[var(--market-accent)]">
                   {p.marketName ?? "Vários mercados"}
                 </span>
 
