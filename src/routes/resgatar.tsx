@@ -546,43 +546,45 @@ function RedeemPage() {
                 type="submit"
                 disabled={submitting || !canSubmit}
                 aria-disabled={submitting || !canSubmit}
-                className="group relative mt-4 inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-lg text-[13px] font-bold uppercase tracking-[0.14em] text-white transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed"
+                className="group relative mt-4 inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-lg text-[13px] font-bold uppercase tracking-[0.14em] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed"
                 style={{
                   background:
                     canSubmit && !submitting
-                      ? `linear-gradient(135deg, ${NAVY} 0%, #1e4a86 100%)`
-                      : `linear-gradient(135deg, ${NAVY} 0%, #24406e 100%)`,
+                      ? `linear-gradient(135deg, ${GOLD} 0%, ${GOLD_SOFT} 100%)`
+                      : `linear-gradient(135deg, ${GOLD} 0%, #e6c877 100%)`,
+                  color: NAVY,
                   boxShadow:
                     canSubmit && !submitting
-                      ? `0 12px 28px -10px ${NAVY}, inset 0 1px 0 rgba(255,255,255,0.18)`
-                      : `0 6px 14px -8px ${NAVY}, inset 0 1px 0 rgba(255,255,255,0.08)`,
+                      ? `0 12px 28px -10px ${GOLD}, inset 0 1px 0 rgba(255,255,255,0.35)`
+                      : `0 6px 14px -8px ${GOLD}, inset 0 1px 0 rgba(255,255,255,0.2)`,
                   opacity: canSubmit || submitting ? 1 : 0.85,
                   // @ts-expect-error css var for focus ring
-                  "--tw-ring-color": "#f5b301",
+                  "--tw-ring-color": NAVY,
                   "--tw-ring-offset-color": "#ffffff",
                 }}
               >
-                {/* Gold accent bar for premium feel */}
+                {/* Navy accent bar for premium feel */}
                 <span
                   aria-hidden
                   className="pointer-events-none absolute inset-x-0 top-0 h-[2px]"
-                  style={{ background: "linear-gradient(90deg, transparent, #f5b301, transparent)" }}
+                  style={{ background: `linear-gradient(90deg, transparent, ${NAVY}, transparent)` }}
                 />
                 {submitting ? (
                   <><Loader2 className="h-4 w-4 animate-spin" /> Ativando…</>
                 ) : verifyQuery.isFetching && formatOk ? (
                   <><Loader2 className="h-4 w-4 animate-spin" /> Verificando código…</>
                 ) : serverRejected || serverNotFound ? (
-                  <><XCircle className="h-4 w-4" style={{ color: "#fecaca" }} /> Código inválido</>
+                  <><XCircle className="h-4 w-4" style={{ color: "#7f1d1d" }} /> Código inválido</>
                 ) : !serverVerified && formatOk ? (
                   <>Aguardando verificação…</>
                 ) : (
                   <>
                     Ativar licença
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" style={{ color: "#f5b301" }} />
+                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" style={{ color: NAVY }} />
                   </>
                 )}
               </button>
+
 
 
 
