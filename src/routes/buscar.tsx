@@ -11,7 +11,7 @@ import { QuickFilterBar } from "@/components/search/QuickFilterBar";
 import { ShareButton, SignupCTA } from "@/components/ds";
 import { useSession } from "@/hooks/useSession";
 import { trackEvent } from "@/lib/analytics-events";
-import { ListingShell } from "@/components/layout";
+import { ListingShell, InternalPageHeader } from "@/components/layout";
 import { EmptyState, RouteError } from "@/components/feedback";
 import { Button } from "@/components/ui/button";
 import { Search as SearchIcon } from "lucide-react";
@@ -216,29 +216,13 @@ function SearchPage() {
   return (
     <div className="min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
       <div className="mx-auto max-w-3xl px-4 md:px-6 pt-3 md:pt-4">
-        {/* Header compacto no tema da homepage */}
-        <header className="mb-3 border-b border-border/50 pb-3">
-          <nav
-            aria-label="Trilha de navegação"
-            className="mb-1.5 flex items-center gap-1 text-[11px] text-muted-foreground"
-          >
-            <Link to="/" className="hover:text-foreground">Início</Link>
-            <span className="opacity-50">/</span>
-            <span className="text-foreground">Buscar</span>
-          </nav>
-          <div className="flex items-end justify-between gap-3">
-            <div className="min-w-0">
-              <h1
-                className="truncate text-[clamp(1.35rem,2.2vw,1.75rem)] leading-[1.05] tracking-tight text-foreground"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
-                Buscar <span style={{ color: "var(--pc-home-gold, hsl(var(--primary)))" }}>preço</span> por nome
-              </h1>
-              <p className="mt-0.5 text-[12.5px] leading-snug text-muted-foreground">
-                Preço médio, mínimo e onde está mais barato.
-              </p>
-            </div>
-            <div className="flex shrink-0 items-center gap-1.5">
+        <InternalPageHeader
+          breadcrumbs={[{ label: "Início", to: "/" }, { label: "Buscar" }]}
+          title="Buscar preço por nome"
+          highlight="preço"
+          description="Preço médio, mínimo e onde está mais barato."
+          actions={
+            <>
               <Button
                 type="button"
                 variant="ghost"
@@ -257,9 +241,9 @@ function SearchPage() {
                 />
               ) : null}
               <FreeQuotaBadge variant="inline" />
-            </div>
-          </div>
-        </header>
+            </>
+          }
+        />
 
         <ListingShell density="sm" className="mb-2">
           <PriceSearchBar
