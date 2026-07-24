@@ -171,13 +171,13 @@ export function RouteError({
         className,
       )}
     >
-      <span className="mb-5 grid h-14 w-14 place-items-center rounded-full bg-destructive/10 text-destructive">
-        <WifiOff className="h-6 w-6" strokeWidth={1.5} />
+      <span className="mb-5 grid h-14 w-14 place-items-center rounded-full bg-destructive/15 text-destructive ring-1 ring-destructive/30">
+        <WifiOff className="h-6 w-6" strokeWidth={1.75} />
       </span>
-      <h1 className="font-display text-xl font-semibold tracking-tight text-foreground">
+      <h1 className="text-[19px] sm:text-[21px] font-semibold tracking-tight leading-tight text-foreground">
         {title}
       </h1>
-      <p className="mt-2 text-sm text-muted-foreground">{message}</p>
+      <p className="mt-2 text-[13px] sm:text-sm leading-relaxed text-foreground/80">{message}</p>
       <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
         {onRetry && (
           <Button onClick={onRetry} size="sm">
@@ -217,16 +217,16 @@ export function RouteNotFound({
         className,
       )}
     >
-      <span className="mb-5 grid h-14 w-14 place-items-center rounded-full bg-muted text-muted-foreground">
-        <SearchX className="h-6 w-6" strokeWidth={1.5} />
+      <span className="mb-5 grid h-14 w-14 place-items-center rounded-full bg-muted text-foreground/85 ring-1 ring-border">
+        <SearchX className="h-6 w-6" strokeWidth={1.75} />
       </span>
-      <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground/70">
         404
       </p>
-      <h1 className="mt-1 font-display text-xl font-semibold tracking-tight text-foreground">
+      <h1 className="mt-1 text-[19px] sm:text-[21px] font-semibold tracking-tight leading-tight text-foreground">
         {title}
       </h1>
-      <p className="mt-2 text-sm text-muted-foreground">{message}</p>
+      <p className="mt-2 text-[13px] sm:text-sm leading-relaxed text-foreground/80">{message}</p>
       <div className="mt-6">
         <Button asChild size="sm">
           <a href="/">
