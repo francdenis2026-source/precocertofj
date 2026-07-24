@@ -57,13 +57,12 @@ export function SiteFooter() {
         )}
       >
         <div className="flex items-center justify-between gap-2">
-          <Link to="/" className="flex items-center gap-1.5 min-w-0" aria-label="PreçoCerto — início">
-            <span className="grid h-5 w-5 shrink-0 place-items-center rounded-[6px] bg-brand text-[10px] font-black text-brand-foreground shadow-elev-2">
-              P
-            </span>
-            <span className={dsx(serif, "truncate text-[13px] leading-none text-foreground")}>
-              Preço<span className="italic text-brand">Certo</span>
-            </span>
+          <Link
+            to="/"
+            className="grid h-6 w-6 shrink-0 place-items-center rounded-[6px] bg-brand text-[11px] font-black text-brand-foreground shadow-elev-2"
+            aria-label="PreçoCerto — início"
+          >
+            P
           </Link>
           <nav
             aria-label="Rodapé"
@@ -82,7 +81,7 @@ export function SiteFooter() {
         </div>
 
         <div className="mt-1 flex items-center justify-between gap-2 text-[10px] leading-tight text-muted-foreground">
-          <span>© {year} PreçoCerto · Feijó/AC</span>
+          <span>© {year} · Feijó/AC</span>
           <span className="font-mono">&lt;dev&gt; Franc D&apos;nis</span>
         </div>
       </div>
