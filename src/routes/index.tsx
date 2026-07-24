@@ -1226,38 +1226,40 @@ function HomePage() {
             <div className="grid grid-cols-3 gap-2 sm:gap-4">
               {[
                 {
+                  kind: "markets" as const,
                   k: String(stats.establishments ?? 8),
                   l: "mercados",
                   lFull: "mercados parceiros",
                   icon: <ShieldCheck className="h-4 w-4" />,
-                  tip: "Mercados de Feijó/AC ativos na plataforma com preços colaborativos.",
+                  tip: "Toque para ver a lista completa de mercados parceiros e suas atualizações.",
                 },
                 {
+                  kind: "products" as const,
                   k: stats.products != null
                     ? `${stats.products.toLocaleString("pt-BR")}+`
                     : "1.5k+",
                   l: "produtos",
                   lFull: "produtos catalogados",
                   icon: <Package className="h-4 w-4" />,
-                  tip: "Produtos únicos cadastrados com preço, marca e categoria.",
+                  tip: "Toque para ver categorias e últimas atualizações do catálogo.",
                 },
                 {
+                  kind: "savings" as const,
                   k: economy?.avgSavingsPct
                     ? `${economy.avgSavingsPct}%`
                     : "até 38%",
                   l: "economia",
                   lFull: "economia identificada",
                   icon: <TrendingDown className="h-4 w-4" />,
-                  tip: economy?.productsWithComparison
-                    ? `Diferença média entre o melhor e o pior preço do mesmo produto, medida em ${economy.productsWithComparison.toLocaleString("pt-BR")} produtos com pelo menos 2 mercados. Melhor caso: ${economy.bestSavingsPct}%.`
-                    : "Diferença média entre o melhor e o pior preço encontrado para o mesmo produto em Feijó/AC nas últimas semanas.",
+                  tip: "Toque para ver as maiores economias identificadas agora.",
                 },
               ].map((s) => (
                 <Tooltip key={s.lFull}>
                   <TooltipTrigger asChild>
                     <button
                       type="button"
-                      aria-label={`${s.k} ${s.lFull}. ${s.tip}`}
+                      onClick={() => setSpotlight(s.kind)}
+                      aria-label={`${s.k} ${s.lFull}. Ver detalhes.`}
                       className="group rounded-2xl border px-2.5 py-3 text-left transition-colors hover:bg-[color-mix(in_oklab,var(--pc-home-card)_92%,var(--pc-home-navy)_8%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:px-4 sm:py-3.5"
                       style={{ borderColor: "color-mix(in oklab, var(--pc-home-line) 70%, transparent)", background: P.card, color: P.heading }}
                     >
@@ -1295,6 +1297,7 @@ function HomePage() {
 
             </div>
           </TooltipProvider>
+
         </section>
       </div>
 
