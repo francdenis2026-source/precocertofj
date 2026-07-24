@@ -739,7 +739,7 @@ function HomePage() {
                 border: `1px solid color-mix(in oklab, ${P.gold} 32%, transparent)`,
               }}
             >
-              <ShieldCheck className="h-4.5 w-4.5" strokeWidth={2.2} />
+              <ShieldCheck className="h-[18px] w-[18px]" strokeWidth={2.2} />
             </span>
             <div className="min-w-0">
               <p
