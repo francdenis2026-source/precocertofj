@@ -305,17 +305,15 @@ function SearchPage() {
               "linear-gradient(100deg, color-mix(in oklab, var(--brand-navy) 55%, transparent) 0%, color-mix(in oklab, var(--brand-navy) 22%, transparent) 45%, transparent 72%)",
           }}
         />
-        {/* Painel desfocado à esquerda — concentra o blur na área de texto */}
+        {/* Painel desfocado à esquerda — opacidade/sombra adaptativas para AA em claro/escuro */}
         <div
           aria-hidden
-          className="absolute inset-y-0 left-0 -z-10 w-full md:w-[62%] backdrop-blur-md md:backdrop-blur-lg"
+          className="pc-hero-panel absolute inset-y-0 left-0 -z-10 w-full md:w-[62%] backdrop-blur-md md:backdrop-blur-lg"
           style={{
             WebkitMaskImage:
               "linear-gradient(100deg, black 0%, black 55%, transparent 95%)",
             maskImage:
               "linear-gradient(100deg, black 0%, black 55%, transparent 95%)",
-            background:
-              "linear-gradient(100deg, color-mix(in oklab, var(--brand-navy) 72%, transparent) 0%, color-mix(in oklab, var(--brand-navy) 45%, transparent) 55%, transparent 100%)",
           }}
         />
         {/* Reforço inferior sutil */}
