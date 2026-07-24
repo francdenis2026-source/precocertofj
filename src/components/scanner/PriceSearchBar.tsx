@@ -30,6 +30,8 @@ import { PaywallInline } from "@/components/paywall/PaywallInline";
 import { useTeaserQuota } from "@/hooks/use-teaser-quota";
 import { useSession } from "@/hooks/useSession";
 import { isTeaserLocked } from "@/lib/teaser-rule";
+import { LazyImage } from "@/components/media/LazyImage";
+
 
 
 
