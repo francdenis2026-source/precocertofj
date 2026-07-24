@@ -690,10 +690,10 @@ export function PriceSearchBar({
                 <Link
                   to="/produto-publico/$slug"
                   params={{ slug: result.query }}
-                  className="relative block rounded-xl border border-accent-strong/30 bg-accent/8 p-2.5 transition hover:border-accent-strong/60 hover:bg-accent/12"
+                  className="relative block rounded-xl border border-border bg-card p-2.5 transition hover:border-accent-strong/60"
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <p className="inline-flex items-center gap-1 rounded-md bg-accent-strong px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-accent-foreground">
+                    <p className="inline-flex items-center gap-1 rounded-md bg-accent-strong px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-accent-foreground">
                       <Crown className="h-3 w-3" strokeWidth={2} aria-hidden="true" />
                       Preço mais barato
                     </p>
@@ -705,7 +705,7 @@ export function PriceSearchBar({
                       size="sm"
                     />
                   </div>
-                  <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-muted-foreground">
+                  <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-foreground">
                     <StoreBadge
                       name={result.cheapest.marketName}
                       logoUrl={result.cheapest.marketLogoUrl}
@@ -716,7 +716,7 @@ export function PriceSearchBar({
                     />
                     <span className="market-name truncate text-[13px]">{result.cheapest.marketName}</span>
                   </p>
-                  <p className="mt-0.5 font-display text-[22px] font-bold leading-tight tracking-tight tabular-nums text-accent-strong">
+                  <p className="mt-0.5 text-[22px] font-bold leading-tight tracking-tight tabular-nums text-foreground">
                     {fmt(result.cheapest.price)}
                   </p>
                 </Link>
