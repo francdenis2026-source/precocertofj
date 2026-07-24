@@ -520,13 +520,16 @@ function HeroMetric({
   live?: boolean;
 }) {
   return (
-    <div className="flex items-center gap-2 rounded-md border border-white/25 bg-white/10 px-2.5 py-1.5 backdrop-blur-sm">
-      <div className="grid h-6 w-6 shrink-0 place-items-center rounded bg-brand-gold/25 text-brand-gold">
+    <div
+      className="flex items-center gap-2 rounded-md border border-brand-gold/60 px-2.5 py-1.5 shadow-sm"
+      style={{ background: "color-mix(in oklab, var(--brand-navy) 92%, black)" }}
+    >
+      <div className="grid h-6 w-6 shrink-0 place-items-center rounded bg-brand-gold text-brand-navy">
         <Icon className="h-3.5 w-3.5" aria-hidden />
       </div>
       <div className="min-w-0">
-        <div className="truncate text-[10px] font-semibold uppercase tracking-[0.1em] text-white/90">{label}</div>
-        <div className="flex items-center gap-1 text-[13px] font-semibold text-white">
+        <div className="truncate text-[10px] font-bold uppercase tracking-[0.12em] text-brand-gold">{label}</div>
+        <div className="flex items-center gap-1 text-[13.5px] font-bold text-white">
           {live && <span aria-hidden className="inline-block h-1.5 w-1.5 animate-pulse rounded-full bg-brand-gold" />}
           {value}
         </div>
