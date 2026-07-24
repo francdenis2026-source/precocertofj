@@ -265,29 +265,29 @@ export function EmptyState({
   return (
     <div
       className={cn(
-        "flex flex-col items-center justify-center rounded-xl border border-dashed border-border/70 bg-card/40 text-center",
+        "flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card/60 text-center",
         isSm ? "px-4 py-5" : "px-5 py-7 sm:py-8",
         className,
       )}
     >
       <span
         className={cn(
-          "mb-2.5 grid place-items-center rounded-full bg-muted text-muted-foreground",
-          isSm ? "h-8 w-8" : "h-9 w-9",
+          "mb-2.5 grid place-items-center rounded-full bg-primary/12 text-primary ring-1 ring-primary/25 dark:bg-primary/20 dark:text-primary-foreground dark:ring-primary/40",
+          isSm ? "h-9 w-9" : "h-10 w-10",
         )}
       >
-        <Icon className={isSm ? "h-3.5 w-3.5" : "h-4 w-4"} strokeWidth={1.75} />
+        <Icon className={isSm ? "h-4 w-4" : "h-[18px] w-[18px]"} strokeWidth={2} />
       </span>
       <p
         className={cn(
-          "font-sans font-semibold tracking-tight text-foreground",
-          isSm ? "text-[15px] leading-snug" : "text-[16px] sm:text-[17px] leading-snug",
+          "font-sans font-semibold tracking-tight leading-snug text-foreground",
+          isSm ? "text-[15px]" : "text-[16px] sm:text-[17px]",
         )}
       >
         {title}
       </p>
       {message && (
-        <p className="mt-1.5 max-w-md text-[13px] sm:text-[13.5px] leading-relaxed text-foreground/80 dark:text-foreground/85">
+        <p className="mt-1.5 max-w-md text-[13px] sm:text-[13.5px] leading-relaxed text-foreground/85">
           {message}
         </p>
       )}
