@@ -256,48 +256,35 @@ function SearchPage() {
     <div
       className="pc-search-scope min-h-[100dvh] pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground"
     >
-      {/* Hero minimalista — navy/gold, sem foto, alinhado ao tema institucional */}
+      {/* Hero editorial — navy limpo, faixa dourada de destaque, sem padrões repetidos */}
       <section className="relative isolate overflow-hidden border-b border-white/10">
         <div
           aria-hidden
           className="absolute inset-0 -z-10"
           style={{
             background:
-              "radial-gradient(120% 80% at 15% 0%, color-mix(in oklab, var(--brand-gold) 14%, transparent) 0%, transparent 55%), radial-gradient(90% 70% at 100% 100%, color-mix(in oklab, var(--brand-gold) 8%, transparent) 0%, transparent 60%), linear-gradient(180deg, var(--brand-navy) 0%, color-mix(in oklab, var(--brand-navy) 92%, black) 100%)",
+              "radial-gradient(1000px 380px at 12% -10%, color-mix(in oklab, var(--brand-gold) 16%, transparent) 0%, transparent 60%), linear-gradient(180deg, var(--brand-navy) 0%, color-mix(in oklab, var(--brand-navy) 92%, black) 100%)",
           }}
         />
-        {/* Padrão temático: código de barras + etiquetas de preço, sutil para não competir com o texto */}
+        {/* Brilho diagonal muito sutil */}
         <div
           aria-hidden
-          className="absolute inset-0 -z-10 opacity-[0.16]"
+          className="absolute inset-0 -z-10"
           style={{
-            backgroundImage: `url("data:image/svg+xml;utf8,${encodeURIComponent(
-              `<svg xmlns='http://www.w3.org/2000/svg' width='260' height='160' viewBox='0 0 260 160'>
-                <g fill='none' stroke='#f5b301' stroke-linecap='round'>
-                  <g stroke-width='2'>
-                    <path d='M12 20v40'/><path d='M18 20v40'/><path d='M22 20v40' stroke-width='4'/>
-                    <path d='M30 20v40'/><path d='M36 20v40' stroke-width='3'/><path d='M42 20v40'/>
-                    <path d='M48 20v40' stroke-width='4'/><path d='M56 20v40'/><path d='M62 20v40'/>
-                    <path d='M68 20v40' stroke-width='3'/><path d='M74 20v40'/><path d='M80 20v40' stroke-width='2'/>
-                  </g>
-                  <g stroke-width='2' transform='translate(150 90)'>
-                    <path d='M0 10v40'/><path d='M6 10v40' stroke-width='3'/><path d='M12 10v40'/>
-                    <path d='M18 10v40' stroke-width='4'/><path d='M26 10v40'/><path d='M32 10v40'/>
-                    <path d='M38 10v40' stroke-width='3'/><path d='M44 10v40'/><path d='M50 10v40' stroke-width='2'/>
-                  </g>
-                </g>
-                <g fill='none' stroke='#ffffff' stroke-width='1.4' opacity='0.9'>
-                  <path d='M180 22 l30 0 l14 14 l-30 30 l-14 -14 z'/>
-                  <circle cx='188' cy='30' r='2.4'/>
-                  <path d='M40 118 l30 0 l14 14 l-30 30 l-14 -14 z'/>
-                  <circle cx='48' cy='126' r='2.4'/>
-                </g>
-              </svg>`
-            )}")`,
-            backgroundSize: "260px 160px",
-            backgroundRepeat: "repeat",
+            background:
+              "linear-gradient(115deg, transparent 45%, color-mix(in oklab, white 6%, transparent) 50%, transparent 55%)",
           }}
         />
+        {/* Hairline dourada superior */}
+        <div
+          aria-hidden
+          className="absolute inset-x-0 top-0 -z-10 h-px"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 20%, color-mix(in oklab, var(--brand-gold) 80%, transparent) 50%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 80%, transparent 100%)",
+          }}
+        />
+
 
 
 
