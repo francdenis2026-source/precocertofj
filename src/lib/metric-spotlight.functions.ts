@@ -183,6 +183,7 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
           return {
             id: e.id,
             name: e.name,
+            slug: slugifyEstablishment(e.name),
             city: e.city,
             neighborhood: e.neighborhood,
             logoUrl: e.logo_url,
