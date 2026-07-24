@@ -358,3 +358,141 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
   );
 }
 
+type RecentItem = {
+  slug: string;
+  name: string;
+  price: number;
+  when: string;
+  marketName: string | null;
+  stores: number;
+};
+
+function MobilePriceRotator({
+  data,
+  P,
+  serif,
+}: {
+  data: RecentItem[];
+  P: Palette;
+  serif: string;
+}) {
+  const [idx, setIdx] = useState(0);
+  const [paused, setPaused] = useState(false);
+
+  useEffect(() => {
+    if (paused || data.length <= 1) return;
+    const t = setInterval(() => setIdx((i) => (i + 1) % data.length), 4500);
+    return () => clearInterval(t);
+  }, [paused, data.length]);
+
+  // Reset index if list shrinks after a refetch
+  useEffect(() => {
+    if (idx >= data.length) setIdx(0);
+  }, [data.length, idx]);
+
+  const current = data[idx] ?? data[0];
+  const nextItems = [
+    data[(idx + 1) % data.length],
+    data[(idx + 2) % data.length],
+  ].filter((x): x is RecentItem => Boolean(x) && x.slug !== current.slug);
+
+  const f = freshness(current.when);
+
+  return (
+    <div className="sm:hidden -mx-4 border-y" style={{ borderColor: P.line, background: P.card }}>
+      {/* Card em destaque — troca sozinho a cada 4.5s */}
+      <Link
+        to="/produto/$slug"
+        params={{ slug: current.slug }}
+        onFocus={() => setPaused(true)}
+        onBlur={() => setPaused(false)}
+        onTouchStart={() => setPaused(true)}
+        onTouchEnd={() => setPaused(false)}
+        className="block px-4 pt-3 pb-2 active:opacity-80"
+        aria-label={`${current.name} — ${brl(current.price)} em ${current.marketName ?? "mercados"}`}
+      >
+        <div className="mb-1.5 flex items-center gap-2">
+          <span className={`h-2 w-2 rounded-full ${f.dotClass}`} aria-hidden />
+          <span className={`text-[10px] font-bold uppercase tracking-[0.14em] ${f.textClass}`}>
+            {f.label}
+          </span>
+          <span className="text-[10px] text-muted-foreground">·</span>
+          <span className="text-[10px] font-medium text-muted-foreground">
+            {relative(current.when)}
+          </span>
+          <span className="ml-auto text-[10px] font-bold uppercase tracking-[0.16em]" style={{ color: P.goldSoft }}>
+            {idx + 1}/{data.length}
+          </span>
+        </div>
+
+        <div key={current.slug} className="animate-in fade-in slide-in-from-bottom-1 duration-300">
+          <div
+            className="mb-1 line-clamp-2 text-[17px] font-semibold leading-tight"
+            style={{ color: P.heading }}
+          >
+            {current.name}
+          </div>
+          <div className="flex items-end justify-between gap-3">
+            <div className="market-name min-w-0 truncate text-[13px] font-bold uppercase tracking-[0.06em] text-[var(--market-accent)]">
+              {current.marketName ?? "Vários mercados"}
+            </div>
+            <div
+              className={`${serif} tabular-nums shrink-0 text-[30px] font-semibold leading-none`}
+              style={{ color: P.gold, letterSpacing: "-0.02em" }}
+            >
+              {brl(current.price)}
+            </div>
+          </div>
+        </div>
+
+        {/* Barra de progresso do auto-avanço */}
+        <div className="mt-3 h-0.5 w-full overflow-hidden rounded-full" style={{ background: "color-mix(in oklab, var(--pc-home-ink) 10%, transparent)" }}>
+          <div
+            key={`bar-${current.slug}-${paused ? "p" : "r"}`}
+            className="h-full"
+            style={{
+              background: P.gold,
+              width: "100%",
+              animation: paused ? undefined : "pc-rotator-bar 4.5s linear forwards",
+              transformOrigin: "left",
+            }}
+          />
+        </div>
+      </Link>
+
+      {/* Próximos — lista compacta clicável, sem movimento */}
+      {nextItems.length > 0 && (
+        <ul className="divide-y" style={{ borderColor: P.line }}>
+          {nextItems.map((p, i) => (
+            <li key={`${p.slug}-${i}`}>
+              <Link
+                to="/produto/$slug"
+                params={{ slug: p.slug }}
+                className="flex items-center gap-3 px-4 py-2.5 active:bg-muted/40"
+                aria-label={`${p.name} — ${brl(p.price)}`}
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="truncate text-[13.5px] font-semibold" style={{ color: P.heading }}>
+                    {shortName(p.name, 32)}
+                  </div>
+                  <div className="market-name truncate text-[11.5px] font-bold uppercase tracking-[0.05em] text-[var(--market-accent)]">
+                    {p.marketName ?? "Vários mercados"}
+                  </div>
+                </div>
+                <span
+                  className={`${serif} tabular-nums shrink-0 text-[18px] font-semibold`}
+                  style={{ color: P.gold, letterSpacing: "-0.02em" }}
+                >
+                  {brl(p.price)}
+                </span>
+                <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+
