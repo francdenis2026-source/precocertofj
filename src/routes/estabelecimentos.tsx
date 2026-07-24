@@ -109,12 +109,79 @@ function EstablishmentsPage() {
     <div className="min-h-dvh bg-background pb-24 md:pb-8">
       <SiteHeader variant="solid" />
 
-      <main className="mx-auto w-full max-w-6xl px-4 md:px-6">
-        <PageHeader
-          breadcrumbs={[{ label: "Início", to: "/" }, { label: "Mercados" }]}
-          title="Mercados de Feijó cadastrados"
-          description="Cobertura de produtos, categorias mais comuns e comparativo entre estabelecimentos monitorados pela comunidade."
+      {/* Hero editorial — foto de feira/mercado com véu navy para legibilidade */}
+      <section className="relative isolate overflow-hidden border-b border-white/10 pc-hero-buscar">
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-40"
+          style={{ background: "var(--brand-navy)" }}
         />
+        <picture aria-hidden className="pc-hero-picture absolute inset-0 -z-30 h-full w-full">
+          {Object.entries(mercadosHero.sources).map(([type, srcset]) => (
+            <source key={type} type={type} srcSet={srcset as string} sizes="100vw" />
+          ))}
+          <img
+            src={mercadosHero.img.src}
+            alt=""
+            className="h-full w-full object-cover opacity-0 transition-opacity duration-500 [.pc-hero-picture.is-loaded_&]:opacity-100"
+            width={mercadosHero.img.w}
+            height={mercadosHero.img.h}
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            onLoad={(ev) => ev.currentTarget.closest(".pc-hero-picture")?.classList.add("is-loaded")}
+            ref={(el) => {
+              if (el?.complete) el.closest(".pc-hero-picture")?.classList.add("is-loaded");
+            }}
+          />
+        </picture>
+        <div aria-hidden className="pc-hero-veil absolute inset-0 -z-20" />
+        <div
+          aria-hidden
+          className="absolute inset-x-0 bottom-0 -z-20 h-1/2"
+          style={{
+            background:
+              "linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--brand-navy) 55%, transparent) 100%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-0 -z-10"
+          style={{
+            background:
+              "radial-gradient(700px 260px at 8% -10%, color-mix(in oklab, var(--brand-gold) 14%, transparent) 0%, transparent 60%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="absolute inset-x-0 top-0 -z-10 h-px"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 20%, color-mix(in oklab, var(--brand-gold) 80%, transparent) 50%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 80%, transparent 100%)",
+          }}
+        />
+
+        <div className="mx-auto w-full max-w-6xl px-4 md:px-8 pt-6 md:pt-8 pb-6 md:pb-8">
+          <nav aria-label="Trilha" className="mb-3 flex items-center gap-1 text-[11px] font-medium text-white/70">
+            <Link to="/" className="hover:text-brand-gold">Início</Link>
+            <ChevronRight aria-hidden className="h-3 w-3 opacity-60" />
+            <span className="text-white">Mercados</span>
+          </nav>
+          <div className="mb-2 inline-flex items-center gap-2 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-gold">
+            <span className="h-1.5 w-1.5 rounded-full bg-brand-gold" />
+            Mercados parceiros
+          </div>
+          <h1 className="text-[24px] md:text-[32px] font-semibold leading-tight text-white">
+            Mercados de <span className="text-brand-gold">Feijó</span> cadastrados
+          </h1>
+          <p className="mt-1 max-w-2xl text-[12.5px] md:text-[13.5px] text-white/75">
+            Cobertura de produtos, categorias mais comuns e comparativo entre estabelecimentos monitorados pela comunidade.
+          </p>
+        </div>
+      </section>
+
+      <main className="mx-auto w-full max-w-6xl px-4 md:px-6 pt-6 md:pt-8">
+
 
         {isLoading && (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
