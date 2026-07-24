@@ -142,10 +142,14 @@ function PlansPage() {
     try {
       const { data: session } = await supabase.auth.getSession();
       if (!session.session) {
-        toast.info("Faça login para continuar");
-        navigate({ to: "/login", search: { next: "/planos" } as any });
+        await promptSignIn({
+          intent: "checkout-plan",
+          payload: { planId: plan.id },
+          returnTo: "/planos",
+        });
         return;
       }
+
       if (plan.price_cents === 0) {
         toast.success("Seu período de degustação está ativo. Aproveite!");
         navigate({ to: "/app" });
