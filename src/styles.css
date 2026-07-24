@@ -68,6 +68,7 @@
   --color-brand: var(--brand);
   --color-brand-foreground: var(--brand-foreground);
   --color-brand-soft: var(--brand-soft);
+  --color-brand-strong: var(--brand-strong);
   /* Marca canônica Navy/Gold — sempre disponíveis como utilities:
      bg-brand-navy, text-brand-gold, border-brand-gold-soft, etc.
      Alternam automaticamente entre light/dark porque referenciam --pc-home-*. */
