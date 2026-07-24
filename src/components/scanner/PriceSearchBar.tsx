@@ -150,7 +150,7 @@ export function PriceSearchBar({
    * usuário clica em "Mostrar mais". Reset quando a query, filtros ou ordenação
    * mudam — evita esperar ("virtualização" leve com paginação incremental).
    */
-  const PAGE_SIZE = 8;
+  const PAGE_SIZE = 6;
   const [pageByCat, setPageByCat] = useState<Record<string, number>>({});
   useEffect(() => {
     setPageByCat({});
