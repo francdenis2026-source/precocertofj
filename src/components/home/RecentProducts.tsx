@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -23,7 +23,10 @@ import { useSession } from "@/hooks/useSession";
 import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 import { consumeAuthIntent } from "@/lib/auth-intent";
 import { useEffect } from "react";
-import { ProductQuickModal } from "@/components/home/ProductQuickModal";
+// Modal pesado (histórico + mercados) só carrega após o primeiro clique num produto.
+const ProductQuickModal = lazy(() =>
+  import("@/components/home/ProductQuickModal").then((m) => ({ default: m.ProductQuickModal })),
+);
 import {
   Dialog,
   DialogContent,
@@ -128,7 +131,30 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
     enabled: liveOpen,
   });
 
-  if (!data || data.length === 0) return null;
+  if (!data) {
+    // Reserva vertical estável (evita CLS) enquanto o server function responde.
+    return (
+      <section
+        aria-hidden
+        aria-busy="true"
+        className="mx-auto w-full max-w-6xl px-4 pb-3 sm:px-6 lg:px-8"
+      >
+        <div className="mb-4 flex items-end justify-between gap-4 sm:mb-5">
+          <div className="min-w-0 space-y-2">
+            <div className="h-4 w-24 animate-pulse rounded-full" style={{ background: P.line }} />
+            <div className="h-5 w-64 animate-pulse rounded-md" style={{ background: P.line }} />
+          </div>
+          <div className="h-4 w-16 animate-pulse rounded-full" style={{ background: P.line }} />
+        </div>
+        <div
+          className="h-[132px] w-full animate-pulse rounded-2xl sm:h-[152px]"
+          style={{ background: P.line }}
+        />
+      </section>
+    );
+  }
+  if (data.length === 0) return null;
+
 
   const lastUpdateLabel = live?.lastUpdate ? relative(live.lastUpdate) : null;
 
@@ -609,15 +635,19 @@ function SpotlightCard({
       </div>
 
 
-      {/* Modal de detalhes do produto (mercados, histórico, link para a página) */}
-      <ProductQuickModal
-        slug={openItem?.slug ?? null}
-        open={!!openItem}
-        onOpenChange={(v) => {
-          if (!v) setOpenItem(null);
-        }}
-        fallbackName={openItem?.name}
-      />
+      {/* Modal de detalhes do produto — só monta (e faz download do chunk) após o primeiro clique. */}
+      {openItem !== null && (
+        <Suspense fallback={null}>
+          <ProductQuickModal
+            slug={openItem?.slug ?? null}
+            open={!!openItem}
+            onOpenChange={(v) => {
+              if (!v) setOpenItem(null);
+            }}
+            fallbackName={openItem?.name}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }

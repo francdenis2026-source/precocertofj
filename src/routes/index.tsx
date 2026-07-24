@@ -35,6 +35,24 @@ import { useSession } from "@/hooks/useSession";
 
 
 export const Route = createFileRoute("/")({
+  // Warm cache em paralelo com o carregamento da rota — evita waterfall de fetch
+  // depois que a hero pinta. Não bloqueia a UI: erros são absorvidos e as próprias
+  // useQuery(...) tentam de novo com skeleton.
+  loader: async ({ context }) => {
+    void Promise.allSettled([
+      context.queryClient.ensureQueryData({
+        queryKey: ["home-stats"],
+        queryFn: () => getPlatformStats({} as any),
+        staleTime: 60_000,
+      }),
+      context.queryClient.ensureQueryData({
+        queryKey: ["home-economy"],
+        queryFn: () => getEconomyStat({} as any),
+        staleTime: 5 * 60_000,
+      }),
+    ]);
+    return null;
+  },
   head: () => ({
     meta: [
       { title: "PreçoCerto — Comparador inteligente de mercados em Feijó/AC" },
@@ -66,6 +84,7 @@ export const Route = createFileRoute("/")({
   }),
   component: HomePage,
 });
+
 
 /* ------- Tokens ------- */
 const P = {
@@ -140,6 +159,7 @@ function HomePage() {
     queryKey: ["home-stats"],
     queryFn: () => platformStats({} as any),
     staleTime: 60_000,
+    refetchOnWindowFocus: false,
   });
   const stats: any = statsQ.data ?? {};
 
@@ -148,8 +168,10 @@ function HomePage() {
     queryKey: ["home-economy"],
     queryFn: () => economyFn({} as any),
     staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
   });
   const economy = economyQ.data;
+
 
   // Autocomplete de produtos (top 5)
   const suggestFn = useServerFn(getProductSuggestions);
