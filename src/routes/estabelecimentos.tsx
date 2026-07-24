@@ -204,11 +204,14 @@ function EstablishmentsPage() {
               {currentKind ? <currentKind.icon className="h-3 w-3" aria-hidden /> : <Store className="h-3 w-3" aria-hidden />}
               {currentKind ? currentKind.label : "Comércios parceiros"}
             </div>
-            <h1 className="text-[20px] md:text-[24px] font-bold leading-tight text-white">
-              {currentKind ? currentKind.label : "Comércios"} de <span className="text-brand-gold">Feijó</span>
+            <h1 className="text-[20px] md:text-[24px] font-bold leading-tight text-white [text-shadow:0_2px_8px_rgba(0,0,0,0.55)]">
+              {currentKind ? currentKind.label : "Comércios"} de{" "}
+              <span className="relative inline-block rounded-md bg-brand-navy/85 px-1.5 py-0.5 text-brand-gold ring-1 ring-brand-gold/70">
+                Feijó
+              </span>
             </h1>
           </div>
-          <p className="mt-1.5 max-w-2xl text-[12.5px] md:text-[13.5px] font-medium leading-snug text-white/95">
+          <p className="mt-1.5 max-w-2xl text-[12.5px] md:text-[13.5px] font-medium leading-snug text-white [text-shadow:0_1px_6px_rgba(0,0,0,0.55)]">
             {currentKind ? currentKind.tagline : "Cobertura de produtos, categorias e comparativo entre estabelecimentos monitorados pela comunidade."}
           </p>
 
