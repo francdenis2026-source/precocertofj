@@ -719,66 +719,117 @@ function HomePage() {
         </div>
       </section>
 
-      {/* ============== EDITORIAL CARD (explore band) ============== */}
-      <div className="pc-container pc-section-tight">
+      {/* ============== BENEFIT STRIP (abaixo do hero — 1 promessa + CTA secundário) ============== */}
+      <section className="pc-container pt-4 sm:pt-6">
         <div
-          className="overflow-hidden rounded-[var(--pc-radius-lg)] ring-1 lg:rounded-[var(--pc-radius-xl)]"
+          className="flex flex-col gap-3 rounded-[var(--pc-radius-md)] border px-4 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6 sm:px-5 sm:py-3.5"
           style={{
             background: P.card,
             borderColor: P.line,
-            boxShadow: "var(--pc-shadow-2)",
-            // @ts-expect-error css var
-            "--tw-ring-color": P.line,
+            boxShadow: "var(--pc-shadow-1)",
           }}
         >
-          {/* -------- EXPLORE (dark navy band inside card) — sm+ apenas -------- */}
-
-          <div
-            className="hidden sm:block sm:p-5 lg:p-6 xl:p-7"
-            style={{ background: P.navy, color: "#F5F6FA" }}
-          >
-            <div className="mb-4">
-              <div
-                className="mb-1.5 text-[10.5px] font-bold uppercase tracking-[0.22em]"
+          <div className="flex items-center gap-3 min-w-0">
+            <span
+              aria-hidden
+              className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg"
+              style={{
+                background: "color-mix(in oklab, var(--pc-home-gold) 16%, transparent)",
+                color: P.gold,
+                border: `1px solid color-mix(in oklab, ${P.gold} 32%, transparent)`,
+              }}
+            >
+              <ShieldCheck className="h-4.5 w-4.5" strokeWidth={2.2} />
+            </span>
+            <div className="min-w-0">
+              <p
+                className="text-[10.5px] font-bold uppercase tracking-[0.18em]"
                 style={{ color: P.goldSoft }}
               >
-                Por onde começar
+                Preço real, conferido
+              </p>
+              <p
+                className="mt-0.5 text-[13px] leading-snug sm:text-[13.5px]"
+                style={{ color: "color-mix(in oklab, var(--pc-home-ink) 82%, transparent)" }}
+              >
+                Cada valor vem de nota fiscal ou de um morador que acabou de comprar.
+              </p>
+            </div>
+          </div>
+
+          <Link
+            to="/melhores-precos"
+            className="inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg border px-3.5 py-2 text-[12.5px] font-semibold transition-colors hover:bg-[color-mix(in_oklab,var(--pc-home-navy)_6%,transparent)]"
+            style={{
+              borderColor: "color-mix(in oklab, var(--pc-home-navy) 35%, transparent)",
+              color: P.heading,
+            }}
+          >
+            Ver quem está mais barato hoje
+            <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.4} />
+          </Link>
+        </div>
+      </section>
+
+      {/* ============== EDITORIAL CARD (explore band) — compacto, hierarquia forte ============== */}
+      <div className="pc-container pt-6 sm:pt-8">
+        <div
+          className="overflow-hidden rounded-[var(--pc-radius-lg)] ring-1 lg:rounded-[var(--pc-radius-xl)]"
+          style={{
+            background: P.navy,
+            borderColor: P.line,
+            boxShadow: "var(--pc-shadow-2)",
+            // @ts-expect-error css var
+            "--tw-ring-color": "color-mix(in oklab, var(--pc-home-gold) 20%, transparent)",
+          }}
+        >
+          <div
+            className="hidden sm:block sm:px-6 sm:py-5 lg:px-7 lg:py-6"
+            style={{ color: "#F5F6FA" }}
+          >
+            {/* Header enxuto: eyebrow + título curto, sem descrição extra */}
+            <div className="mb-4 flex items-end justify-between gap-4">
+              <div className="min-w-0">
+                <div
+                  className="mb-1 text-[10.5px] font-bold uppercase tracking-[0.24em]"
+                  style={{ color: P.goldSoft }}
+                >
+                  Por onde começar
+                </div>
+                <h2 className="text-[20px] font-semibold leading-tight text-white lg:text-[22px]">
+                  Três caminhos para <span style={{ color: P.gold }}>economizar hoje</span>.
+                </h2>
               </div>
-              <h2 className="pc-h2 text-white">
-                Três caminhos, uma cesta mais barata.
-              </h2>
             </div>
 
-            <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-2.5 sm:grid-cols-3">
               <ExploreCard
                 to="/melhores-precos"
                 number="01"
                 title="Ranking dos mercados"
-                desc="Qual mercado tem a cesta mais barata hoje."
+                desc="Cesta mais barata do dia."
                 cta="Ver ranking"
               />
               <ExploreCard
                 to="/estabelecimentos"
                 number="02"
                 title="Mercados por bairro"
-                desc="Endereço, horário e catálogo de cada mercado."
-                cta="Explorar mercados"
+                desc="Endereço, horário e catálogo."
+                cta="Explorar"
               />
               <ExploreCard
                 to="/planos"
                 number="03"
                 title="Alertas de preço"
-                desc="Avisamos quando o preço cair perto de você."
+                desc="Avisamos quando cai perto de você."
                 cta="Ver planos"
               />
             </div>
           </div>
-
-
-
-
         </div>
       </div>
+
+
 
 
       {/* Wrapper flex para inverter a ordem no mobile: letreiro (RecentProducts) antes das estatísticas.
