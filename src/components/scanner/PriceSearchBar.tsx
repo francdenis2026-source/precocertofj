@@ -1014,11 +1014,11 @@ function Stat({
   icon?: React.ReactNode;
 }) {
   return (
-    <div className="hairline-gold relative overflow-hidden rounded-lg border border-primary/10 bg-background px-2 py-1.5">
-      <p className="flex items-center gap-1 font-mono text-[9px] uppercase tracking-[0.18em] text-accent-strong">
+    <div className="relative rounded-lg border border-border bg-card px-2 py-1.5">
+      <p className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
         {icon} {label}
       </p>
-      <p className="mt-0.5 font-display text-[17px] font-semibold leading-tight tracking-tight tabular-nums text-foreground">
+      <p className="mt-0.5 text-[17px] font-bold leading-tight tracking-tight tabular-nums text-foreground">
         {value}
       </p>
     </div>
