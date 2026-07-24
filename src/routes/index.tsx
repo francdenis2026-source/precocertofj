@@ -878,30 +878,31 @@ function HomePage() {
                     <button
                       type="button"
                       aria-label={`${s.k} ${s.lFull}. ${s.tip}`}
-                      className="rounded-2xl border px-3 py-3 text-center transition-colors hover:bg-[color-mix(in_oklab,var(--pc-home-card)_92%,var(--pc-home-gold)_8%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:px-4 sm:py-4"
+                      className="group rounded-2xl border px-2.5 py-3.5 text-center transition-colors hover:bg-[color-mix(in_oklab,var(--pc-home-card)_92%,var(--pc-home-gold)_8%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:px-4 sm:py-4"
                       style={{ borderColor: P.line, background: P.card, color: P.heading }}
                     >
-                      <div className="mb-1 flex items-center justify-center" style={{ color: P.goldSoft }}>
+                      <div className="mb-1.5 flex items-center justify-center" style={{ color: P.goldSoft }}>
                         {s.icon}
                       </div>
                       <div
                         className={`${serif} tabular-nums`}
                         style={{
-                          fontSize: "clamp(1.15rem, 2.8vw, 1.75rem)",
+                          fontSize: "clamp(1.35rem, 3.2vw, 1.85rem)",
                           lineHeight: 1,
-                          letterSpacing: "-0.02em",
+                          letterSpacing: "-0.025em",
                         }}
                       >
                         {s.k}
                       </div>
                       <div
-                        className="mt-1.5 truncate text-[9.5px] font-bold uppercase tracking-[0.14em] sm:text-[11px] sm:tracking-[0.16em]"
-                        style={{ color: "color-mix(in oklab, var(--pc-home-ink) 60%, transparent)" }}
+                        className="mt-2 truncate text-[10px] font-bold uppercase leading-tight tracking-[0.14em] sm:text-[11px] sm:tracking-[0.16em]"
+                        style={{ color: "color-mix(in oklab, var(--pc-home-ink) 62%, transparent)" }}
                       >
                         <span className="sm:hidden">{s.l}</span>
                         <span className="hidden sm:inline">{s.lFull}</span>
                       </div>
                     </button>
+
                   </TooltipTrigger>
                   <TooltipContent side="bottom" className="max-w-[240px] text-[12px] leading-snug">
                     {s.tip}
