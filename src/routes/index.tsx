@@ -417,49 +417,8 @@ function HomePage() {
                 </Link>
               </div>
 
-
-              {/* Stats */}
-              <div
-                className="mt-5 grid grid-cols-3 gap-4 border-t pt-4 sm:mt-6 sm:gap-10 sm:pt-5"
-                style={{ borderColor: P.line }}
-              >
-
-                {[
-                  {
-                    k: String(stats.establishments ?? 8).padStart(2, "0"),
-                    l: "Mercados de Feijó",
-                  },
-                  {
-                    k:
-                      stats.products != null
-                        ? `${stats.products.toLocaleString("pt-BR")}+`
-                        : "1.000+",
-                    l: "Produtos com preço",
-                  },
-                  { k: "24h", l: "Preços conferidos" },
-                ].map((s) => (
-                  <div key={s.l}>
-                    <div
-                      className={`${serif} tabular-nums`}
-                      style={{
-                        color: P.heading,
-                        fontSize: "clamp(1.5rem, 3vw, 2.15rem)",
-                        lineHeight: 1,
-                        letterSpacing: "-0.03em",
-                      }}
-                    >
-                      {s.k}
-                    </div>
-                    <div
-                      className="mt-2 text-[10px] font-bold uppercase tracking-[0.2em] sm:text-[11px]"
-                      style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
-                    >
-                      {s.l}
-                    </div>
-                  </div>
-                ))}
-              </div>
             </div>
+
 
             {/* RIGHT — image + floating quote */}
             <div
@@ -623,19 +582,22 @@ function HomePage() {
 
             {[
               {
-                k: "8",
+                k: String(stats.establishments ?? 8),
                 l: "mercados",
                 lFull: "mercados no ar",
                 icon: <ShieldCheck className="h-4 w-4" />,
                 tip: "Mercados de Feijó/AC ativos na plataforma com preços colaborativos.",
               },
               {
-                k: "1.5k+",
+                k: stats.products != null
+                  ? `${stats.products.toLocaleString("pt-BR")}+`
+                  : "1.5k+",
                 l: "produtos",
                 lFull: "produtos catalogados",
                 icon: <Package className="h-4 w-4" />,
-                tip: "Mais de 1.500 produtos únicos cadastrados com preço, marca e categoria.",
+                tip: "Produtos únicos cadastrados com preço, marca e categoria.",
               },
+
               {
                 k: economy?.avgSavingsPct
                   ? `${economy.avgSavingsPct}%`
