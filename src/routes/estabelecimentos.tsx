@@ -20,6 +20,13 @@ import {
   CardSkeleton,
 } from "@/components/layout";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { MapPin, Package, Search, Sparkles, Store, TrendingUp } from "lucide-react";
 
 export const Route = createFileRoute("/estabelecimentos")({
@@ -183,29 +190,39 @@ function EstablishmentsPage() {
                       inputMode="search"
                     />
                   </div>
-                  <select
-                    value={neighborhood}
-                    onChange={(ev) => setNeighborhood(ev.target.value)}
-                    className="h-10 rounded-md border border-border bg-background px-3 text-sm"
-                    aria-label="Filtrar por bairro"
-                  >
-                    <option value="__all">Todos os bairros</option>
-                    {neighborhoods.map((n) => (
-                      <option key={n} value={n}>
-                        {n}
-                      </option>
-                    ))}
-                  </select>
-                  <select
+                  <Select value={neighborhood} onValueChange={setNeighborhood}>
+                    <SelectTrigger
+                      aria-label="Filtrar por bairro"
+                      className="h-10 w-full md:w-[200px]"
+                    >
+                      <SelectValue placeholder="Bairro" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="__all">Todos os bairros</SelectItem>
+                      {neighborhoods.map((n) => (
+                        <SelectItem key={n} value={n}>
+                          {n}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <Select
                     value={sort}
-                    onChange={(ev) => setSort(ev.target.value as typeof sort)}
-                    className="h-10 rounded-md border border-border bg-background px-3 text-sm"
-                    aria-label="Ordenar por"
+                    onValueChange={(v) => setSort(v as typeof sort)}
                   >
-                    <option value="neighborhood">Ordenar: bairro (A→Z)</option>
-                    <option value="name">Ordenar: nome (A→Z)</option>
-                    <option value="products">Ordenar: mais produtos</option>
-                  </select>
+                    <SelectTrigger
+                      aria-label="Ordenar por"
+                      className="h-10 w-full md:w-[220px]"
+                    >
+                      <SelectValue placeholder="Ordenar" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="neighborhood">Ordenar: bairro (A→Z)</SelectItem>
+                      <SelectItem value="name">Ordenar: nome (A→Z)</SelectItem>
+                      <SelectItem value="products">Ordenar: mais produtos</SelectItem>
+                    </SelectContent>
+                  </Select>
+
                 </div>
 
                 {visibleItems.length === 0 ? (

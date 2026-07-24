@@ -15,6 +15,7 @@ import { SearchDiscovery, pushRecentSearch } from "@/components/search/SearchDis
 import { SearchSidebar } from "@/components/search/SearchSidebar";
 
 import { ChevronRight } from "lucide-react";
+import buscarHero from "@/assets/buscar-hero.jpg?w=1200;1920&format=avif;webp;jpg&quality=68&as=picture";
 
 
 const searchSchema = z.object({
@@ -256,44 +257,43 @@ function SearchPage() {
     <div
       className="pc-search-scope min-h-[100dvh] pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground"
     >
-      {/* Hero editorial — navy limpo, faixa dourada de destaque, sem padrões repetidos */}
+      {/* Hero editorial — foto de corredor de mercado desfocada + véu navy para legibilidade */}
       <section className="relative isolate overflow-hidden border-b border-white/10">
+        <picture aria-hidden className="absolute inset-0 -z-10 h-full w-full">
+          {Object.entries(buscarHero.sources).map(([type, srcset]) => (
+            <source key={type} type={type} srcSet={srcset as string} sizes="100vw" />
+          ))}
+          <img
+            src={buscarHero.img.src}
+            alt=""
+            className="h-full w-full object-cover"
+            width={buscarHero.img.w}
+            height={buscarHero.img.h}
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+          />
+        </picture>
+
+        {/* Véu navy — mantém contraste WCAG do título e barra */}
         <div
           aria-hidden
           className="absolute inset-0 -z-10"
           style={{
             background:
-              "radial-gradient(1000px 380px at 12% -10%, color-mix(in oklab, var(--brand-gold) 16%, transparent) 0%, transparent 60%), linear-gradient(180deg, var(--brand-navy) 0%, color-mix(in oklab, var(--brand-navy) 92%, black) 100%)",
+              "linear-gradient(90deg, color-mix(in oklab, var(--brand-navy) 94%, transparent) 0%, color-mix(in oklab, var(--brand-navy) 82%, transparent) 55%, color-mix(in oklab, var(--brand-navy) 68%, transparent) 100%)",
           }}
         />
-        {/* Listras de toldo (feira/mercado) no canto direito — referência sutil e profissional */}
+        {/* Realce dourado no canto superior esquerdo */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-16 -top-10 -z-10 hidden h-[220%] w-[42%] rotate-[18deg] md:block"
+          className="absolute inset-0 -z-10"
           style={{
-            backgroundImage:
-              "repeating-linear-gradient(90deg, color-mix(in oklab, var(--brand-gold) 22%, transparent) 0 22px, transparent 22px 60px)",
-            maskImage:
-              "linear-gradient(90deg, transparent 0%, black 30%, black 70%, transparent 100%)",
-            WebkitMaskImage:
-              "linear-gradient(90deg, transparent 0%, black 30%, black 70%, transparent 100%)",
-            opacity: 0.55,
+            background:
+              "radial-gradient(700px 260px at 8% -10%, color-mix(in oklab, var(--brand-gold) 14%, transparent) 0%, transparent 60%)",
           }}
         />
-        {/* Serrilha inferior — borda de toldo */}
-        <div
-          aria-hidden
-          className="absolute inset-x-0 bottom-0 -z-10 h-2"
-          style={{
-            backgroundImage:
-              "linear-gradient(135deg, color-mix(in oklab, var(--brand-gold) 55%, transparent) 25%, transparent 25.5%), linear-gradient(225deg, color-mix(in oklab, var(--brand-gold) 55%, transparent) 25%, transparent 25.5%)",
-            backgroundSize: "14px 8px",
-            backgroundRepeat: "repeat-x",
-            backgroundPosition: "0 100%",
-            opacity: 0.35,
-          }}
-        />
-        {/* Hairline dourada superior */}
+        {/* Hairline dourada no topo */}
         <div
           aria-hidden
           className="absolute inset-x-0 top-0 -z-10 h-px"
@@ -302,6 +302,7 @@ function SearchPage() {
               "linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 20%, color-mix(in oklab, var(--brand-gold) 80%, transparent) 50%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 80%, transparent 100%)",
           }}
         />
+
 
 
 
