@@ -161,7 +161,7 @@ export function SiteFooter() {
                   <li key={l.to}>
                     <Link
                       to={l.to}
-                      className="inline-flex items-center rounded-md px-1.5 py-0.5 -mx-1.5 text-[13.5px] font-medium leading-[1.45] text-foreground/90 transition-colors hover:bg-brand/10 hover:text-brand focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary md:text-[14px] lg:text-[15px]"
+                      className="inline-flex items-center rounded-md px-1.5 py-0.5 -mx-1.5 text-[13.5px] font-medium leading-[1.45] text-foreground/90 outline-none transition-colors hover:bg-brand/10 hover:text-brand active:text-brand-strong focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background [&.active]:text-brand [&.active]:bg-brand/10 md:text-[14px] lg:text-[15px]"
                     >
                       <span>{l.label}</span>
                     </Link>
