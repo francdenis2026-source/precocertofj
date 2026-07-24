@@ -269,7 +269,9 @@ function SearchPage() {
       className="pc-search-scope min-h-[100dvh] pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground"
     >
       {/* Hero editorial — foto de corredor de mercado desfocada + véu navy para legibilidade */}
-      <section className="relative isolate overflow-hidden border-b border-white/10 pc-hero-buscar">
+      <section className="relative isolate border-b border-white/10 pc-hero-buscar [&>[data-hero-bg]]:absolute [&>[data-hero-bg]]:inset-0 [&>[data-hero-bg]]:overflow-hidden">
+        {/* Wrapper apenas dos fundos — clipa foto/blur sem cortar o dropdown da busca */}
+        <div data-hero-bg aria-hidden className="-z-40">
         {/* Camada base sólida (navy) — evita área vazia enquanto a foto carrega */}
         <div
           aria-hidden
@@ -334,6 +336,8 @@ function SearchPage() {
               "linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 20%, color-mix(in oklab, var(--brand-gold) 80%, transparent) 50%, color-mix(in oklab, var(--brand-gold) 60%, transparent) 80%, transparent 100%)",
           }}
         />
+        </div>
+
 
 
 
