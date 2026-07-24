@@ -153,18 +153,16 @@ function NeighborhoodsPage() {
 
   const handleFavClick = (name: string, city: string | null) => {
     if (!isAuthed) {
-      toast.info("Entre na sua conta para favoritar bairros", {
-        action: {
-          label: "Entrar",
-          onClick: () => {
-            window.location.href = "/auth?redirect=" + encodeURIComponent("/mapa");
-          },
-        },
+      void promptSignIn({
+        intent: "favorite-district",
+        payload: { name, city },
+        returnTo: "/mapa",
       });
       return;
     }
     toggleMutation.mutate({ key: name, name, city });
   };
+
 
   return (
     <div className="min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
