@@ -322,17 +322,27 @@ function HomePage() {
             fetchPriority="high"
             decoding="async"
             loading="eager"
-            className="absolute inset-0 h-full w-full object-cover opacity-25"
-            style={{ filter: "grayscale(30%) blur(1px)" }}
+            className="absolute inset-0 h-full w-full object-cover"
+            style={{ filter: "saturate(1.05) contrast(1.02)", opacity: 0.85 }}
           />
         </picture>
+        {/* Scrim escuro para legibilidade — mais denso na base, translúcido no topo */}
         <div
           aria-hidden
           className="absolute inset-0"
           style={{
-            background: `linear-gradient(180deg, ${P.navy} 0%, color-mix(in oklab, ${P.navy} 92%, transparent) 55%, color-mix(in oklab, ${P.navy} 82%, transparent) 100%)`,
+            background: `linear-gradient(180deg, color-mix(in oklab, ${P.navy} 35%, transparent) 0%, color-mix(in oklab, ${P.navy} 55%, transparent) 40%, color-mix(in oklab, ${P.navy} 88%, transparent) 78%, ${P.navy} 100%)`,
           }}
         />
+        {/* Vinheta lateral para dar foco no texto */}
+        <div
+          aria-hidden
+          className="absolute inset-0"
+          style={{
+            background: `radial-gradient(120% 80% at 20% 90%, color-mix(in oklab, ${P.navy} 70%, transparent) 0%, transparent 60%)`,
+          }}
+        />
+
         <div
           aria-hidden
           className="pointer-events-none absolute right-[-40px] top-[-40px] h-40 w-40 rounded-full"
