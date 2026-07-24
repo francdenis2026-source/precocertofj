@@ -2537,11 +2537,11 @@ select:not(.native-control) option {
 
 /* --- <input type="checkbox"> nativo --- */
 input[type="checkbox"]:not(.native-control) {
-  appearance: none;
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 4px;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 4px !important;
   border: 1.5px solid hsl(var(--input));
   background-color: hsl(var(--background));
   cursor: pointer;
@@ -2550,7 +2550,9 @@ input[type="checkbox"]:not(.native-control) {
   vertical-align: middle;
   transition: background-color 150ms ease, border-color 150ms ease, box-shadow 150ms ease, transform 120ms ease;
   flex-shrink: 0;
+  padding: 0 !important;
 }
+
 input[type="checkbox"]:not(.native-control):hover:not(:disabled) {
   border-color: color-mix(in oklab, hsl(var(--primary)) 60%, hsl(var(--input)));
 }
