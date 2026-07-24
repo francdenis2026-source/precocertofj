@@ -1138,6 +1138,8 @@ function QuickFilters({
   categories,
   categoryFilter,
   onCategory,
+  groupBy,
+  onGroupBy,
 }: {
   sortMode: SortMode;
   onSort: (m: SortMode) => void;
@@ -1147,6 +1149,8 @@ function QuickFilters({
   categories: string[];
   categoryFilter: string | null;
   onCategory: (c: string | null) => void;
+  groupBy: "product" | "market";
+  onGroupBy: (g: "product" | "market") => void;
 }) {
   const chip = (active: boolean) =>
     "rounded-full border px-2.5 py-1 font-mono text-[10px] tracking-wide transition " +
@@ -1156,8 +1160,18 @@ function QuickFilters({
   return (
     <div className="flex flex-wrap items-center gap-1.5">
       <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+        Agrupar
+      </span>
+      <button type="button" className={chip(groupBy === "product")} onClick={() => onGroupBy("product")}>
+        Por produto
+      </button>
+      <button type="button" className={chip(groupBy === "market")} onClick={() => onGroupBy("market")}>
+        Por mercado
+      </button>
+      <span className="ml-2 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
         Ordenar
       </span>
+
       <button type="button" className={chip(sortMode === "cheapest")} onClick={() => onSort("cheapest")}>
         Menor preço
       </button>
