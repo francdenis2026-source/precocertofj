@@ -35,6 +35,7 @@ export function ProductQuickActions({
   const listsFn = useServerFn(listMyShoppingLists);
   const addToListFn = useServerFn(addListItem);
   const resolveFn = useServerFn(resolveCatalogId);
+  const promptSignIn = usePromptSignIn();
   const [authed, setAuthed] = useState(false);
   const [favorited, setFavorited] = useState(false);
   const [listOpen, setListOpen] = useState(false);
