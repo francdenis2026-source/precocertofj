@@ -579,7 +579,7 @@ function SpotlightCard({
           <div className="flex items-center gap-3">
             <button
               type="button"
-              onClick={() => handleFavorite(p.name)}
+              onClick={() => handleFavorite({ name: p.name, marketName: p.marketName })}
               disabled={isFavPending}
               aria-pressed={isFav}
               aria-label={isFav ? `Remover ${p.name} dos favoritos` : `Favoritar ${p.name}`}
