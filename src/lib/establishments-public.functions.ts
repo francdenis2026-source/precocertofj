@@ -57,6 +57,7 @@ export const listPublicEstablishments = createServerFn({ method: "GET" }).handle
                 neighborhood: string | null;
                 logo_url: string | null;
                 brand_color: string | null;
+                kind: string | null;
               }> | null;
               error: { message: string } | null;
             }>;
