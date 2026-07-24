@@ -149,7 +149,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                   style={{
                     borderColor: "color-mix(in oklab, #10b981 45%, transparent)",
                     background: "color-mix(in oklab, #10b981 12%, transparent)",
-                    color: "#10b981",
+                    color: "var(--pc-live)",
                   }}
                   aria-label="Abrir painel ao vivo com os últimos preços conferidos"
                 >
@@ -223,7 +223,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                               </div>
                               <span
                                 className={`${serif} tabular-nums shrink-0 text-[18px] font-semibold`}
-                                style={{ color: P.gold, letterSpacing: "-0.02em" }}
+                                style={{ color: "var(--pc-price)", letterSpacing: "-0.02em" }}
                               >
                                 {brl(p.price)}
                               </span>
@@ -264,7 +264,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                 className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10.5px] font-bold tabular-nums transition-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)]/50"
                 style={{
                   background: "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
-                  color: P.gold,
+                  color: "var(--pc-price)",
                 }}
                 aria-label={`Abrir painel: ${live.checkedToday} preços conferidos hoje`}
               >
@@ -295,7 +295,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
         <Link
           to="/melhores-precos"
           className="hidden text-[11px] font-bold uppercase tracking-[0.16em] transition-colors hover:opacity-80 sm:inline-flex"
-          style={{ color: P.gold }}
+          style={{ color: "var(--pc-price)" }}
         >
           Ver mais →
         </Link>
@@ -499,7 +499,7 @@ function SpotlightCard({
               className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.18em]"
               style={{
                 background: "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
-                color: P.gold,
+                color: "var(--pc-price)",
               }}
             >
               <span className="h-1 w-1 rounded-full" style={{ background: P.gold, boxShadow: `0 0 6px ${P.gold}` }} />
@@ -556,7 +556,7 @@ function SpotlightCard({
               <span
                 className={`${serif} tabular-nums font-semibold leading-none`}
                 style={{
-                  color: P.gold,
+                  color: "var(--pc-price)",
                   letterSpacing: "-0.02em",
                   fontSize: "clamp(1.5rem, 4.5vw, 2rem)",
                   textShadow: "0 2px 14px color-mix(in oklab, var(--pc-home-gold) 35%, transparent)",
@@ -608,7 +608,7 @@ function SpotlightCard({
             <Link
               to="/melhores-precos"
               className="inline-flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-[0.14em] transition-opacity hover:opacity-80"
-              style={{ color: P.gold }}
+              style={{ color: "var(--pc-price)" }}
             >
               Todos
               <ArrowRight className="h-3 w-3" aria-hidden />

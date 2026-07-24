@@ -195,9 +195,34 @@
   --market-accent: #8a6218;
   --market-accent-hover: #6b4a10;
 
+  /* ============= Semantic TEXT tokens (WCAG-safe) — LIGHT =============
+     Baseline ink #08122a sobre superfícies claras (#ffffff / #f5f6fa / #eef1f7).
+     Todos os níveis abaixo passam WCAG AA (>= 4.5:1) para texto normal.
+     - strong  ~ 20:1  (títulos, valores, prices)
+     - body    ~ 12:1  (parágrafos)
+     - muted   ~ 7.6:1 (labels/legendas)
+     - subtle  ~ 5.0:1 (metadados — reservado a >= 14px)
+     - placeholder ~ 4.6:1 (mínimo AA para 15–16px)
+  */
+  --pc-text-strong:      rgb(8 18 42 / 1);
+  --pc-text-body:        rgb(8 18 42 / 0.92);
+  --pc-text-muted:       rgb(8 18 42 / 0.78);
+  --pc-text-subtle:      rgb(8 18 42 / 0.66);
+  --pc-text-placeholder: rgb(8 18 42 / 0.62);
+  --pc-text-on-gold:     #1a1108;  /* texto sobre pastilhas gold */
+  --pc-text-on-navy:     #f5f6fa;  /* texto sobre navy sólido */
+
+  /* Acentos com contraste garantido em superfícies claras */
+  --pc-price:           #6b4a10;   /* preço/valor sobre card branco  → 7.5:1 */
+  --pc-eyebrow-gold:    #6b4a10;   /* eyebrow gold sobre card branco → 7.5:1 */
+  --pc-eyebrow-on-navy: #f2d689;   /* eyebrow gold sobre navy sólido → 9.4:1 */
+  --pc-live:            #047857;   /* indicador ao-vivo sobre card claro → 5.8:1 */
+
+
   color-scheme: light;
 
 }
+
 
 /* ============= DARK — Deep Ocean ============= */
 .dark {
@@ -288,6 +313,30 @@
   /* Semantic — nome de estabelecimento (dark) */
   --market-accent: #ffe3a0;
   --market-accent-hover: #fff2cc;
+
+  /* ============= Semantic TEXT tokens (WCAG-safe) — DARK =============
+     Baseline ink near-white sobre navy card (#0f1b3d / oklch 0.20).
+     - strong  ~ 15:1  (títulos)
+     - body    ~ 12:1  (parágrafos)
+     - muted   ~ 8:1   (labels)
+     - subtle  ~ 6:1   (metadados)
+     - placeholder ~ 5:1
+  */
+  --pc-text-strong:      rgb(245 246 250 / 1);
+  --pc-text-body:        rgb(245 246 250 / 0.92);
+  --pc-text-muted:       rgb(245 246 250 / 0.80);
+  --pc-text-subtle:      rgb(245 246 250 / 0.68);
+  --pc-text-placeholder: rgb(245 246 250 / 0.60);
+  --pc-text-on-gold:     #1a1108;
+  --pc-text-on-navy:     #f5f6fa;
+
+  /* Acentos (dark) */
+  --pc-price:           #f3ce7a;   /* sobre card navy → 9:1 */
+  --pc-eyebrow-gold:    #ffe3a0;   /* sobre card navy → 11:1 */
+  --pc-eyebrow-on-navy: #f2d689;   /* mesmo em ambos os temas */
+  --pc-live:            #34d399;   /* sobre card navy → 7:1 */
+
+
 
   color-scheme: dark;
 
@@ -2103,3 +2152,25 @@ body.no-page-bg::before { display: none; }
   text-transform: uppercase;
   letter-spacing: 0.18em;
 }
+
+/* ===================== Tokens de contraste (WCAG AA) =====================
+   Estas utilities substituem qualquer uso ad-hoc de opacidade em texto,
+   garantindo ratios acima de 4.5:1 em ambos os temas. */
+@utility pc-text-strong  { color: var(--pc-text-strong); }
+@utility pc-text-body    { color: var(--pc-text-body); }
+@utility pc-text-muted   { color: var(--pc-text-muted); }
+@utility pc-text-subtle  {
+  color: var(--pc-text-subtle);
+  /* subtle é apenas para tipografia >= 14px */
+  font-size: max(0.875rem, 1em);
+}
+@utility pc-text-onnavy  { color: var(--pc-text-on-navy); }
+@utility pc-text-ongold  { color: var(--pc-text-on-gold); }
+
+/* Placeholder consistente e legível em ambos os temas */
+input::placeholder,
+textarea::placeholder {
+  color: var(--pc-text-placeholder);
+  opacity: 1; /* alguns UA aplicam 0.54 por padrão */
+}
+
