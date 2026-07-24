@@ -283,7 +283,7 @@ function SearchPage() {
           <img
             src={buscarHero.img.src}
             alt=""
-            className="h-full w-full object-cover opacity-0 transition-opacity duration-500 [.pc-hero-picture.is-loaded_&]:opacity-100"
+            className="h-full w-full scale-[1.04] object-cover opacity-0 blur-[2px] transition-opacity duration-500 [.pc-hero-picture.is-loaded_&]:opacity-100"
             width={buscarHero.img.w}
             height={buscarHero.img.h}
             loading="eager"
@@ -334,8 +334,8 @@ function SearchPage() {
 
 
 
-        <div className="mx-auto w-full max-w-7xl px-4 py-6 md:px-8 md:py-8">
-          <nav aria-label="Trilha" className="mb-3 flex items-center gap-1 text-[11.5px] font-medium text-white/70">
+        <div className="mx-auto w-full max-w-7xl px-4 py-3 md:px-8 md:py-4">
+          <nav aria-label="Trilha" className="mb-1.5 flex items-center gap-1 text-[11px] font-medium text-white/70">
             <Link
               to="/"
               className="rounded-md px-1 py-0.5 outline-none transition-colors hover:text-brand-gold active:text-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent"
@@ -345,16 +345,16 @@ function SearchPage() {
             <ChevronRight aria-hidden className="h-3 w-3 opacity-60" />
             <span className="text-white">Buscar</span>
           </nav>
-          <div className="flex flex-wrap items-end justify-between gap-2">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="min-w-0">
-              <div className="mb-1.5 inline-flex items-center gap-2 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-gold">
-                <span className="h-1.5 w-1.5 rounded-full bg-brand-gold" />
+              <div className="mb-1 inline-flex items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-2 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.14em] text-brand-gold">
+                <span className="h-1 w-1 rounded-full bg-brand-gold" />
                 Comparador de preços
               </div>
-              <h1 className="text-[20px] md:text-[24px] font-semibold leading-tight text-white">
+              <h1 className="text-[17px] md:text-[20px] font-semibold leading-tight text-white">
                 Buscar <span className="text-brand-gold">preço</span> por nome
               </h1>
-              <p className="mt-0.5 max-w-xl text-[12px] md:text-[13px] text-white/75">
+              <p className="mt-0.5 max-w-xl text-[11.5px] md:text-[12px] text-white/75">
                 Consulte preço médio, mínimo e onde comprar mais barato em Feijó.
               </p>
             </div>
@@ -370,7 +370,7 @@ function SearchPage() {
           </div>
 
 
-          <div className="mt-2.5 rounded-2xl border border-white/15 bg-background/95 p-2.5 shadow-[0_18px_40px_-24px_rgba(2,6,23,0.65)] backdrop-blur-sm md:mt-3 md:p-3">
+          <div className="mt-2 rounded-2xl border border-white/15 bg-background/95 p-2 shadow-[0_18px_40px_-24px_rgba(2,6,23,0.65)] backdrop-blur-sm md:mt-2.5 md:p-2.5">
             <PriceSearchBar
               initialQuery={q}
               mode={mode}
