@@ -205,8 +205,8 @@ function EstablishmentsPage() {
           aria-hidden
           src={mercadosHero.url}
           alt=""
-          className="absolute inset-0 -z-30 h-full w-full object-cover scale-[1.02]"
-          style={{ filter: "saturate(0.9) brightness(0.92) contrast(1.02)" }}
+          className="absolute inset-0 -z-30 h-full w-full object-cover scale-[1.04]"
+          style={{ filter: "saturate(0.9) brightness(0.9) contrast(1.02) blur(2px)" }}
           loading="eager"
           fetchPriority="high"
           decoding="async"
