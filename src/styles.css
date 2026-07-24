@@ -270,6 +270,7 @@
   --brand: oklch(0.80 0.135 82);
   --brand-foreground: oklch(0.13 0.04 258);
   --brand-soft: oklch(0.90 0.09 82);
+  --brand-strong: oklch(0.68 0.15 80);
   --on-media: oklch(0.99 0.002 250);
   --on-media-muted: oklch(0.92 0.02 248);
   --on-media-border: oklch(0.99 0.002 250 / 0.28);
