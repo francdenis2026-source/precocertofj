@@ -455,14 +455,15 @@ function LoginPage() {
             })()}
 
             {mode === "signup" && (
-              <details className="group rounded-xl border border-border/70 bg-card/40">
-                <summary className="flex cursor-pointer list-none items-center justify-between px-3.5 py-2.5 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground transition hover:text-foreground">
-                  Endereço (opcional)
-                  <span className="text-[10.5px] font-normal normal-case tracking-normal text-muted-foreground group-open:hidden">
+              <details className="group rounded-xl border border-slate-300 bg-slate-50">
+                <summary className="flex cursor-pointer list-none items-center justify-between px-3.5 py-2.5 text-[11px] font-semibold uppercase tracking-widest text-slate-600 transition hover:text-slate-900">
+                  Endereço <span className="ml-1 font-normal normal-case tracking-normal text-slate-400">(opcional)</span>
+                  <span className="text-[10.5px] font-normal normal-case tracking-normal text-slate-500 group-open:hidden">
                     adicionar
                   </span>
                 </summary>
-                <div className="space-y-3 border-t border-border/70 px-3.5 py-3.5">
+                <div className="space-y-3 border-t border-slate-200 bg-white px-3.5 py-3.5">
+
                   <div className="grid grid-cols-3 gap-3">
                     <div className="col-span-1">
                       <Field
@@ -553,11 +554,12 @@ function LoginPage() {
                 (mode === "signup" &&
                   (fullName.trim().length < 3 || phone.replace(/\D/g, "").length < 10))
               }
-              className="mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl text-[14px] font-bold text-white shadow-lg transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40"
+              className="mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl text-[14px] font-bold text-white shadow-lg transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:shadow-none"
               style={{
                 background: `linear-gradient(135deg, ${PC_EMERALD_DEEP}, ${PC_EMERALD})`,
                 boxShadow: `0 12px 24px -10px ${PC_EMERALD}66`,
                 fontFamily: PC_DISPLAY,
+                opacity: undefined,
               }}
             >
               {loading ? (
@@ -569,6 +571,7 @@ function LoginPage() {
                 </>
               )}
             </button>
+
 
             <div className="flex flex-col items-center gap-2 pt-1 text-[11.5px]" style={{ color: "#6b7280" }}>
               <Link
@@ -872,7 +875,7 @@ function TabSwitch({
     <div
       role="tablist"
       aria-label="Login ou cadastro"
-      className="mt-4 grid grid-cols-2 gap-1 rounded-lg border border-slate-200 bg-slate-100 p-0.5"
+      className="mt-4 grid grid-cols-2 gap-1 rounded-lg border border-slate-300 bg-slate-100 p-0.5"
     >
       {tabs.map((t) => {
         const active = mode === t.key;
@@ -887,8 +890,8 @@ function TabSwitch({
             className={
               "relative h-8 rounded-md text-[12px] font-semibold transition " +
               (active
-                ? "bg-white shadow-sm ring-1 ring-slate-200"
-                : "text-slate-500 hover:text-slate-800")
+                ? "bg-white shadow-sm ring-1 ring-slate-300"
+                : "text-slate-600 hover:text-slate-900")
             }
           >
             {t.label}
@@ -898,6 +901,7 @@ function TabSwitch({
     </div>
   );
 }
+
 
 type FieldStatus = "idle" | "success" | "error";
 
@@ -935,7 +939,7 @@ function Field({
       ? "border-emerald-500/70 focus:border-emerald-600 focus:ring-emerald-500/15"
       : status === "error"
         ? "border-rose-500/70 focus:border-rose-600 focus:ring-rose-500/15"
-        : "border-slate-200 hover:border-slate-300 focus:border-slate-900 focus:ring-slate-900/10";
+        : "border-slate-300 hover:border-slate-400 focus:border-slate-900 focus:ring-slate-900/10";
   const hintCls =
     status === "success"
       ? "text-emerald-700"
@@ -944,9 +948,10 @@ function Field({
         : "text-slate-500";
   return (
     <label className="block">
-      <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-500">
+      <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-600">
         {label}
       </span>
+
       <div className="relative">
         {Icon && (
           <Icon className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
@@ -1064,7 +1069,7 @@ function PinField({
                 ? "#dc2626"
                 : d.trim()
                   ? PC_GOLD
-                  : "#e2e8f0",
+                  : "#cbd5e1",
               color: PC_EMERALD_DEEP,
               fontFamily: PC_DISPLAY,
             }}
@@ -1078,8 +1083,9 @@ function PinField({
                 ? "#dc2626"
                 : d.trim()
                   ? PC_GOLD
-                  : "#e2e8f0";
+                  : "#cbd5e1";
             }}
+
           />
         ))}
       </div>
