@@ -1205,28 +1205,31 @@ function HomePage() {
                     <button
                       type="button"
                       aria-label={`${s.k} ${s.lFull}. ${s.tip}`}
-                      className="group rounded-2xl border px-2.5 py-3.5 text-center transition-colors hover:bg-[color-mix(in_oklab,var(--pc-home-card)_92%,var(--pc-home-gold)_8%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:px-4 sm:py-4"
-                      style={{ borderColor: P.line, background: P.card, color: P.heading }}
+                      className="group rounded-2xl border px-2.5 py-3 text-left transition-colors hover:bg-[color-mix(in_oklab,var(--pc-home-card)_92%,var(--pc-home-navy)_8%)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand sm:px-4 sm:py-3.5"
+                      style={{ borderColor: "color-mix(in oklab, var(--pc-home-line) 70%, transparent)", background: P.card, color: P.heading }}
                     >
-                      <div className="mb-1.5 flex items-center justify-center" style={{ color: P.goldSoft }}>
-                        {s.icon}
+                      <div
+                        className="mb-1 flex items-center gap-1.5 text-[9.5px] font-bold uppercase leading-none tracking-[0.16em] sm:text-[10px] sm:tracking-[0.18em]"
+                        style={{ color: "var(--pc-text-muted)" }}
+                      >
+                        <span className="inline-flex" style={{ color: P.goldSoft }} aria-hidden>
+                          {s.icon}
+                        </span>
+                        <span className="truncate">
+                          <span className="sm:hidden">{s.l}</span>
+                          <span className="hidden sm:inline">{s.lFull}</span>
+                        </span>
                       </div>
                       <div
-                        className={`${serif} tabular-nums`}
+                        className="font-bold tabular-nums"
                         style={{
-                          fontSize: "clamp(1.35rem, 3.2vw, 1.85rem)",
-                          lineHeight: 1,
-                          letterSpacing: "-0.025em",
+                          fontSize: "clamp(1.35rem, 3vw, 1.75rem)",
+                          lineHeight: 1.05,
+                          letterSpacing: "-0.02em",
+                          color: P.heading,
                         }}
                       >
                         {s.k}
-                      </div>
-                      <div
-                        className="mt-2 truncate text-[10px] font-bold uppercase leading-tight tracking-[0.14em] sm:text-[11px] sm:tracking-[0.16em]"
-                        style={{ color: "var(--pc-text-muted)" }}
-                      >
-                        <span className="sm:hidden">{s.l}</span>
-                        <span className="hidden sm:inline">{s.lFull}</span>
                       </div>
                     </button>
 
@@ -1236,6 +1239,7 @@ function HomePage() {
                   </TooltipContent>
                 </Tooltip>
               ))}
+
             </div>
           </TooltipProvider>
         </section>
