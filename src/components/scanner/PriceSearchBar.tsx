@@ -708,6 +708,12 @@ export function PriceSearchBar({
             </div>
           )}
 
+          <MarketLegend
+            source={rawResult}
+            active={marketFilter}
+            onPick={(name) => setMarketFilter((cur) => (cur === name ? null : name))}
+          />
+
 
           {result.canonicalGroup && result.excludedByPureFilter > 0 && (
             <p className="rounded-lg border border-primary/20 bg-primary/5 px-3 py-1.5 font-mono text-[10px] text-muted-foreground">
