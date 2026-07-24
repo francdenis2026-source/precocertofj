@@ -1,5 +1,7 @@
 import { CheckCircle2, ShoppingCart, ShieldCheck, UserPlus, Ticket, Sparkles, Shield, type LucideIcon } from "lucide-react";
 import heroPhoto from "@/assets/cadastro-hero.jpg";
+import loginPhotoAsset from "@/assets/login-market.jpg.asset.json";
+import adminPhotoAsset from "@/assets/hero-supermarket.jpg.asset.json";
 
 /**
  * AuthHero — painel (split no desktop, banner compacto no mobile) reutilizável
