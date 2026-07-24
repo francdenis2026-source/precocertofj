@@ -84,31 +84,32 @@ export function ThemeToggle({
         <Moon
           width={iconPx}
           height={iconPx}
-          strokeWidth={2}
+          strokeWidth={2.25}
           className={cn(
             "col-start-1 row-start-1 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]",
-            "drop-shadow-[0_0_6px_rgba(245,200,106,0.6)]",
+            "drop-shadow-[0_0_4px_rgba(0,0,0,0.55)]",
             "motion-reduce:transition-none",
             showDarkIcon
               ? "rotate-0 scale-100 opacity-100"
               : "-rotate-90 scale-50 opacity-0",
           )}
-          style={{ color: "#FFD98A", fill: "rgba(255,217,138,0.55)" }}
+          style={{ color: "#FFE7A8", fill: "rgba(255,217,138,0.35)" }}
         />
         <Sun
           width={iconPx}
           height={iconPx}
-          strokeWidth={2.25}
+          strokeWidth={2.5}
           className={cn(
             "col-start-1 row-start-1 transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]",
-            "drop-shadow-[0_1px_2px_rgba(140,80,0,0.35)]",
+            "drop-shadow-[0_1px_0_rgba(255,255,255,0.55)]",
             "motion-reduce:transition-none",
             showDarkIcon
               ? "rotate-90 scale-50 opacity-0"
               : "rotate-0 scale-100 opacity-100",
           )}
-          style={{ color: "#B45309", fill: "rgba(180,83,9,0.35)" }}
+          style={{ color: "#0f1b3d", fill: "rgba(15,27,61,0.18)" }}
         />
+
       </span>
     </Button>
   );
