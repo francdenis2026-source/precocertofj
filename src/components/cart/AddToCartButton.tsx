@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { addToCart } from "@/lib/cart.functions";
 import { setPendingCartItem, type PendingCartItem } from "@/lib/pending-cart";
+import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 import { cn } from "@/lib/utils";
 
 export interface AddToCartButtonProps {
@@ -40,6 +41,7 @@ export function AddToCartButton({
   const navigate = useNavigate();
   const qc = useQueryClient();
   const addFn = useServerFn(addToCart);
+  const promptSignIn = usePromptSignIn();
   const [added, setAdded] = useState(false);
 
   const mutation = useMutation({
@@ -74,12 +76,21 @@ export function AddToCartButton({
     if (!data.session) {
       const pending: PendingCartItem = { catalogId, slug, quantity, label };
       setPendingCartItem(pending);
-      toast.info("Faça login para montar sua cesta");
-      navigate({ to: "/login", search: { redirect: "/" } as never });
+      await promptSignIn({
+        intent: "favorite-item",
+        title: label ? `Entre para adicionar ${label} à cesta` : "Entre para montar sua cesta",
+        benefits: [
+          "Guardamos este produto para adicionar depois do login",
+          "Voltamos para a home e concluímos a inclusão sozinhos",
+          "Você pode gerenciar quantidades direto na sua cesta",
+        ],
+        returnTo: "/",
+      });
       return;
     }
     mutation.mutate();
   }
+
 
   const isBusy = mutation.isPending;
   const showCheck = added;

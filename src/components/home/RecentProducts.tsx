@@ -20,8 +20,9 @@ import {
   toggleFavoritePanelProduct,
 } from "@/lib/favorite-panel.functions";
 import { useSession } from "@/hooks/useSession";
-import { useConfirm } from "@/components/ui/confirm-provider";
-import { useRouter } from "@tanstack/react-router";
+import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
+import { consumeAuthIntent } from "@/lib/auth-intent";
+import { useEffect } from "react";
 import { ProductQuickModal } from "@/components/home/ProductQuickModal";
 import {
   Dialog,
@@ -333,8 +334,7 @@ function SpotlightCard({
 }) {
   const { user } = useSession();
   const queryClient = useQueryClient();
-  const { confirm } = useConfirm();
-  const router = useRouter();
+  const promptSignIn = usePromptSignIn();
 
   // Modal de detalhes (produto, mercados, histórico)
   const [openItem, setOpenItem] = useState<RecentItem | null>(null);
@@ -369,26 +369,34 @@ function SpotlightCard({
     onSettled: () => setPendingKey(null),
   });
 
+  // Consome intenção pendente após login: se o visitante clicou em favoritar
+  // sem estar autenticado, agora que está logado a ação é executada sozinha.
+  useEffect(() => {
+    if (!user) return;
+    const intent = consumeAuthIntent("favorite-panel");
+    const productName =
+      typeof intent?.payload?.productName === "string"
+        ? intent.payload.productName
+        : null;
+    if (!productName) return;
+    const key = panelKeyFromName(productName);
+    if (favSet.has(key)) return; // já favoritado — nada a fazer
+    favMutation.mutate(productName);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user?.id]);
+
   const handleFavorite = async (name: string) => {
     if (!user) {
-      const ok = await confirm({
-        title: "Entre para salvar este preço",
-        description:
-          "Favoritar produtos é grátis e leva 10 segundos. Assim que o preço cair em qualquer mercado, avisamos você por aqui.",
-        confirmLabel: "Entrar agora",
-        cancelLabel: "Agora não",
-        tone: "info",
+      await promptSignIn({
+        intent: "favorite-panel",
+        payload: { productName: name },
       });
-      if (ok) {
-        router.navigate({
-          to: "/login",
-          search: { redirect: "/" } as never,
-        });
-      }
       return;
     }
     favMutation.mutate(name);
   };
+
+
 
 
   // Seleciona 1 item: prioriza maior queda relevante; fallback = primeiro

@@ -18,6 +18,7 @@ import { toast } from "sonner";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ds, dsx } from "@/lib/ds";
+import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 
 const PALETTE = {
   gold: "#b58a3c",
@@ -128,6 +129,7 @@ function PlansPage() {
   const navigate = useNavigate();
   const fetchPlans = useServerFn(listPublicPlans);
   const create = useServerFn(createCheckoutOrder);
+  const promptSignIn = usePromptSignIn();
   const [buying, setBuying] = useState<string | null>(null);
 
   const { data: plans = [], isLoading } = useQuery({
@@ -140,10 +142,14 @@ function PlansPage() {
     try {
       const { data: session } = await supabase.auth.getSession();
       if (!session.session) {
-        toast.info("Faça login para continuar");
-        navigate({ to: "/login", search: { next: "/planos" } as any });
+        await promptSignIn({
+          intent: "checkout-plan",
+          payload: { planId: plan.id },
+          returnTo: "/planos",
+        });
         return;
       }
+
       if (plan.price_cents === 0) {
         toast.success("Seu período de degustação está ativo. Aproveite!");
         navigate({ to: "/app" });

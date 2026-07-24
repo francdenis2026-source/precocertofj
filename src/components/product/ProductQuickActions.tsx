@@ -11,6 +11,7 @@ import { resolveCatalogId } from "@/lib/cart.functions";
 import { toggleFavoriteItem } from "@/lib/favorites.functions";
 import { addListItem, listMyShoppingLists } from "@/lib/shopping-list.functions";
 import { cn } from "@/lib/utils";
+import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 
 export interface ProductQuickActionsProps {
   catalogId?: string | null;
@@ -34,6 +35,7 @@ export function ProductQuickActions({
   const listsFn = useServerFn(listMyShoppingLists);
   const addToListFn = useServerFn(addListItem);
   const resolveFn = useServerFn(resolveCatalogId);
+  const promptSignIn = usePromptSignIn();
   const [authed, setAuthed] = useState(false);
   const [favorited, setFavorited] = useState(false);
   const [listOpen, setListOpen] = useState(false);
@@ -59,10 +61,12 @@ export function ProductQuickActions({
   });
 
   const redirectToLogin = () => {
-    toast.info("Faça login para salvar seus produtos");
-    const redirect = `${window.location.pathname}${window.location.search}`;
-    navigate({ to: "/login", search: { redirect } as never });
+    void promptSignIn({
+      intent: "favorite-item",
+      payload: { catalogId: resolvedCatalogId, slug, label },
+    });
   };
+
 
   const ensureCatalogId = async (): Promise<string> => {
     if (resolvedCatalogId) return resolvedCatalogId;

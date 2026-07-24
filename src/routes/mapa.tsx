@@ -18,6 +18,7 @@ import {
   toggleFavoriteNeighborhood,
 } from "@/lib/favorites-neighborhoods.functions";
 import { MobileNav } from "@/components/nav/MobileNav";
+import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 import { useSession } from "@/hooks/useSession";
 import { toast } from "sonner";
 import {
@@ -76,6 +77,7 @@ function NeighborhoodsPage() {
   const queryClient = useQueryClient();
   const { session, loading: sessionLoading } = useSession();
   const isAuthed = !sessionLoading && !!session;
+  const promptSignIn = usePromptSignIn();
 
   const [term, setTerm] = useState("");
 
@@ -151,18 +153,16 @@ function NeighborhoodsPage() {
 
   const handleFavClick = (name: string, city: string | null) => {
     if (!isAuthed) {
-      toast.info("Entre na sua conta para favoritar bairros", {
-        action: {
-          label: "Entrar",
-          onClick: () => {
-            window.location.href = "/auth?redirect=" + encodeURIComponent("/mapa");
-          },
-        },
+      void promptSignIn({
+        intent: "favorite-district",
+        payload: { name, city },
+        returnTo: "/mapa",
       });
       return;
     }
     toggleMutation.mutate({ key: name, name, city });
   };
+
 
   return (
     <div className="min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
