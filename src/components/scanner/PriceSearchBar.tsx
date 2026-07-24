@@ -2221,3 +2221,95 @@ function MatrixCompareResults({
   );
 }
 
+/**
+ * Legenda compacta dos estabelecimentos presentes nos resultados. Cada chip usa
+ * o `brand_color` do mercado; clique alterna o filtro por aquele mercado.
+ * Texto e ícones respeitam contraste AA via `readableTextOn`.
+ */
+function MarketLegend({
+  source,
+  active,
+  onPick,
+}: {
+  source: PriceSearchResult | null;
+  active: string | null;
+  onPick: (name: string) => void;
+}) {
+  const markets = useMemo(() => {
+    if (!source) return [] as { name: string; color: string; count: number }[];
+    const map = new Map<string, { name: string; color: string; count: number }>();
+    for (const g of source.groups) {
+      for (const p of g.prices ?? []) {
+        const name = p.marketName?.trim();
+        if (!name) continue;
+        const raw = p.marketBrandColor;
+        const color = raw && /^#[0-9A-Fa-f]{6}$/.test(raw) ? raw : "#334155";
+        const cur = map.get(name);
+        if (cur) cur.count += 1;
+        else map.set(name, { name, color, count: 1 });
+      }
+    }
+    return [...map.values()].sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
+  }, [source]);
+
+  if (markets.length < 2) return null;
+
+  return (
+    <div
+      role="group"
+      aria-label="Filtrar por estabelecimento"
+      className="flex flex-wrap items-center gap-1.5 rounded-lg border border-border/60 bg-background/60 px-2 py-1.5"
+    >
+      <span className="pl-1 pr-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+        Mercados
+      </span>
+      {markets.map((m) => {
+        const isActive = active === m.name;
+        const isDim = active !== null && !isActive;
+        const fg = readableTextOn(m.color);
+        return (
+          <button
+            key={m.name}
+            type="button"
+            onClick={() => onPick(m.name)}
+            aria-pressed={isActive}
+            title={`${m.name} — ${m.count} preço(s)`}
+            className={
+              "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold " +
+              (isDim ? "opacity-50 hover:opacity-100" : "opacity-100")
+            }
+            style={{
+              backgroundColor: m.color,
+              color: fg,
+              borderColor: isActive ? fg : "transparent",
+              boxShadow: isActive ? `inset 0 0 0 1px ${fg}` : undefined,
+            }}
+          >
+            <span className="max-w-[120px] truncate">{m.name}</span>
+            <span
+              className="rounded-full px-1 text-[9px] tabular-nums"
+              style={{ backgroundColor: `${fg === "#ffffff" ? "rgba(0,0,0,0.22)" : "rgba(255,255,255,0.35)"}`, color: fg }}
+            >
+              {m.count}
+            </span>
+          </button>
+        );
+      })}
+      {active && (
+        <button
+          type="button"
+          onClick={() => onPick(active)}
+          className="ml-auto rounded-md px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+        >
+          Limpar
+        </button>
+      )}
+    </div>
+  );
+}
+
+// Import injected here to avoid duplicating at top for the helper only.
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const __markerLegendAssertReadable = readableTextOn;
+
+
