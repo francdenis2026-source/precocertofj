@@ -351,22 +351,46 @@ function HomePage() {
           />
         </picture>
 
-        {/* Scrim: garante contraste do texto sobre a foto (light + dark) */}
+        {/* SCRIM SYSTEM — três camadas para garantir contraste em qualquer imagem/tela */}
+
+        {/* 1) Base tint neutra: escurece levemente a foto em ambos os temas
+              para reduzir dependência do conteúdo da imagem. */}
         <div
           aria-hidden
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(100deg, color-mix(in oklab, var(--pc-home-card) 94%, transparent) 0%, color-mix(in oklab, var(--pc-home-card) 82%, transparent) 38%, color-mix(in oklab, var(--pc-home-card) 40%, transparent) 68%, color-mix(in oklab, var(--pc-home-card) 10%, transparent) 100%)",
+              "color-mix(in oklab, var(--pc-home-navy) 22%, transparent)",
           }}
         />
-        {/* Reforço inferior para o quote flutuante */}
+
+        {/* 2a) Scrim MOBILE — vertical, denso embaixo (conteúdo empilhado). */}
+        <div
+          aria-hidden
+          className="absolute inset-0 sm:hidden"
+          style={{
+            background:
+              "linear-gradient(180deg, color-mix(in oklab, var(--pc-home-card) 88%, transparent) 0%, color-mix(in oklab, var(--pc-home-card) 70%, transparent) 32%, color-mix(in oklab, var(--pc-home-card) 55%, transparent) 60%, color-mix(in oklab, var(--pc-home-card) 78%, transparent) 100%)",
+          }}
+        />
+
+        {/* 2b) Scrim DESKTOP — horizontal, forte na coluna esquerda, esvaece à direita. */}
+        <div
+          aria-hidden
+          className="absolute inset-0 hidden sm:block"
+          style={{
+            background:
+              "linear-gradient(100deg, color-mix(in oklab, var(--pc-home-card) 96%, transparent) 0%, color-mix(in oklab, var(--pc-home-card) 88%, transparent) 42%, color-mix(in oklab, var(--pc-home-card) 45%, transparent) 72%, color-mix(in oklab, var(--pc-home-card) 12%, transparent) 100%)",
+          }}
+        />
+
+        {/* 3) Reforço inferior para o quote flutuante e leitura do rodapé do hero. */}
         <div
           aria-hidden
           className="absolute inset-x-0 bottom-0 h-40 sm:h-56"
           style={{
             background:
-              "linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--pc-home-card) 55%, transparent) 100%)",
+              "linear-gradient(180deg, transparent 0%, color-mix(in oklab, var(--pc-home-card) 70%, transparent) 100%)",
           }}
         />
 
