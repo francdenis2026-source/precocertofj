@@ -305,7 +305,7 @@ function HomePage() {
       <section
         className="relative w-full overflow-hidden"
         style={{
-          minHeight: "min(100svh, 900px)",
+          minHeight: "min(78svh, 760px)",
         }}
       >
         {/* Background image — light */}
