@@ -13,6 +13,7 @@ import {
   ShieldCheck,
   ArrowRight,
   ChevronDown,
+  ArrowLeft,
 } from "lucide-react";
 import { toast } from "sonner";
 import { SiteHeader } from "@/components/layout/SiteHeader";
