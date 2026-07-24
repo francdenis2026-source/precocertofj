@@ -260,9 +260,10 @@
   --muted: oklch(0.255 0.048 258);
   --muted-foreground: oklch(0.78 0.022 250);
 
-  --accent: oklch(0.78 0.13 210);
-  --accent-foreground: oklch(0.13 0.04 258);
-  --accent-strong: oklch(0.84 0.12 215);
+  /* Accent no dark = navy elevado com leve calor dourado (evita azul brilhante) */
+  --accent: oklch(0.30 0.045 258);
+  --accent-foreground: oklch(0.96 0.02 82);
+  --accent-strong: oklch(0.38 0.055 258);
   /* Brand dourado casando com o bokeh do background */
   --brand: oklch(0.80 0.135 82);
   --brand-foreground: oklch(0.13 0.04 258);
