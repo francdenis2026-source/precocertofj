@@ -560,7 +560,7 @@ export function PriceSearchBar({
         <button
           type="submit"
           disabled={pending}
-          className="rounded-full border border-[color-mix(in_oklab,var(--color-accent)_55%,transparent)] bg-primary px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest text-primary-foreground shadow-[0_8px_20px_-12px_color-mix(in_oklab,var(--color-accent)_60%,transparent)] transition hover:brightness-110 disabled:opacity-60"
+          className="rounded-full border border-[color-mix(in_oklab,var(--pc-home-gold)_65%,transparent)] bg-[var(--pc-home-gold)] px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest text-[#08122a] shadow-[0_8px_20px_-12px_color-mix(in_oklab,var(--pc-home-gold)_75%,transparent)] transition hover:brightness-105 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--pc-home-gold)] disabled:opacity-60"
         >
           {pending ? "…" : "Buscar"}
         </button>
