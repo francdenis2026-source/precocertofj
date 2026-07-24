@@ -630,7 +630,7 @@ function HeroMetric({
       />
       <span aria-hidden className="absolute inset-y-0 left-0 w-[2px] bg-brand-gold" />
 
-      <div className="grid h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 shrink-0 place-items-center rounded bg-brand-gold text-brand-navy ring-1 ring-brand-gold/80">
+      <div className="grid h-5 w-5 sm:h-6 sm:w-6 md:h-7 md:w-7 shrink-0 place-items-center rounded bg-brand-gold text-brand-navy ring-1 ring-brand-gold/80 transition-transform duration-300 group-hover:scale-110 group-hover:rotate-[-4deg]">
         <Icon className="h-2.5 w-2.5 sm:h-3 sm:w-3 md:h-3.5 md:w-3.5" strokeWidth={2.5} aria-hidden />
       </div>
       <div className="relative z-[1] min-w-0 flex-1">
