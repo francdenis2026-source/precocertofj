@@ -45,6 +45,8 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ProductListCard } from "@/components/product/ProductListCard";
 import { FavoriteMarketButton } from "@/components/market/FavoriteMarketButton";
+import { RatingBadge, PLATFORM_RATING } from "@/components/ds/RatingStars";
+
 import { EmptyState, LoadingGrid, RouteError } from "@/components/feedback";
 
 const brl = (v: number) =>
@@ -226,12 +228,16 @@ function EstablishmentPage() {
             <div className="flex-1">
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <CardTitle className="text-2xl">{data.store.name}</CardTitle>
-                <FavoriteMarketButton marketName={data.store.name} variant="inline" />
+                <div className="flex flex-wrap items-center gap-2">
+                  <RatingBadge value={PLATFORM_RATING.value} count={PLATFORM_RATING.count} />
+                  <FavoriteMarketButton marketName={data.store.name} variant="inline" />
+                </div>
               </div>
-              <CardDescription className="mt-1">
+              <CardDescription className="mt-1 text-[12.5px] leading-snug">
                 {data.products.length} produto{data.products.length === 1 ? "" : "s"} publicados
                 {data.categories.length > 0 && ` · ${data.categories.length} categorias`}
               </CardDescription>
+
 
               <div className="mt-3 flex flex-wrap items-center gap-2">
                 {data.store.neighborhood && (

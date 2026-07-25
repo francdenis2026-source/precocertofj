@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
-import { RatingBadge } from "@/components/ds/RatingStars";
+import { RatingBadge, PLATFORM_RATING } from "@/components/ds/RatingStars";
 
 
 const P = {
@@ -31,8 +31,9 @@ const TESTIMONIALS: Testimonial[] = [
   { name: "Bruno Aguiar",     role: "Centro",           quote: "Simples e direto: aponto o produto e vejo onde está mais em conta.",   initials: "BA" },
 ];
 
-const RATING_AVG = 4.9;
-const RATING_COUNT = 312;
+const RATING_AVG = PLATFORM_RATING.value;
+const RATING_COUNT = PLATFORM_RATING.count;
+
 const VISIBLE_INITIAL = 3;
 
 export function SocialProofSection() {

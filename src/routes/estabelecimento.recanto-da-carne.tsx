@@ -35,6 +35,8 @@ import {
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ProductListCard } from "@/components/product/ProductListCard";
+import { RatingBadge, PLATFORM_RATING } from "@/components/ds/RatingStars";
+
 import { EmptyState, LoadingGrid, RouteError } from "@/components/feedback";
 
 const STORE_ID = "2de4712e-e767-4cfe-acf0-1ec111a316b8";
@@ -157,10 +159,14 @@ function RecantoDaCarnePage() {
               />
             )}
             <div className="flex-1">
-              <CardTitle className="text-2xl">Recanto da Carne</CardTitle>
-              <CardDescription className="mt-1">
+              <div className="flex flex-wrap items-start justify-between gap-2">
+                <CardTitle className="text-2xl">Recanto da Carne</CardTitle>
+                <RatingBadge value={PLATFORM_RATING.value} count={PLATFORM_RATING.count} />
+              </div>
+              <CardDescription className="mt-1 text-[12.5px] leading-snug">
                 Açougue · {data.products.length} produto{data.products.length === 1 ? "" : "s"} publicados
               </CardDescription>
+
               <div className="mt-3 flex flex-wrap gap-3 text-xs text-muted-foreground">
                 <span className="inline-flex items-center gap-1">
                   <MapPin className="h-3.5 w-3.5" />
