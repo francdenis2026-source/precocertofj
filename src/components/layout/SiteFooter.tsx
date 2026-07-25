@@ -53,7 +53,7 @@ export function SiteFooter() {
       <div
         className={dsx(
           ds.container,
-          "md:hidden pt-1 pb-[max(0.25rem,env(safe-area-inset-bottom))] px-[max(0.75rem,env(safe-area-inset-left))]",
+          "md:hidden pt-0.5 pb-[max(0.125rem,env(safe-area-inset-bottom))] px-[max(0.75rem,env(safe-area-inset-left))]",
         )}
       >
         {/* Row 1: brand + location + legal — single line */}
