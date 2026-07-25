@@ -527,7 +527,11 @@ function NeighborhoodsPage() {
                       )}
                       {group.topProducts.length > 0 && (
                         <div>
-                          <div className="mb-1 flex items-center gap-1 text-[9.5px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+                          <div
+                            className="mb-1 flex items-center gap-1 text-[9.5px] font-bold uppercase tracking-[0.14em] text-muted-foreground"
+                            translate="no"
+                            data-no-translate
+                          >
                             <TrendingUp className="h-3 w-3" /> Mais encontrados no bairro
                           </div>
                           <ul className="space-y-0.5">
