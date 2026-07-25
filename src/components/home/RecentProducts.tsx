@@ -77,7 +77,7 @@ function freshness(iso: string): Freshness {
     return {
       label: "Disponível",
       dotClass: "bg-emerald-500",
-      textClass: "text-emerald-600 dark:text-emerald-400",
+      textClass: "text-emerald-700 dark:text-emerald-400",
       ringClass: "ring-emerald-500/30",
     };
   if (days <= 30)
