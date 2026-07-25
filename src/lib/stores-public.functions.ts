@@ -9,6 +9,8 @@ export type PublicStore = {
   state: string;
   neighborhood: string | null;
   address: string | null;
+  latitude: number | null;
+  longitude: number | null;
   logoUrl: string | null;
   productCount: number;
   lastUpdate: string | null;
@@ -57,6 +59,8 @@ type EstabRow = {
   neighborhood: string | null;
   address: string | null;
   logo_url: string | null;
+  latitude: number | null;
+  longitude: number | null;
   active: boolean;
 };
 
