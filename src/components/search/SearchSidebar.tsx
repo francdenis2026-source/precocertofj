@@ -163,9 +163,9 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
         action={
           <Link
             to="/estabelecimentos"
-            className="inline-flex items-center gap-0.5 rounded text-[10.5px] font-semibold uppercase tracking-[0.14em] text-brand-gold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+            className="inline-flex shrink-0 items-center gap-0.5 whitespace-nowrap rounded text-[10.5px] font-semibold uppercase tracking-[0.14em] text-brand-gold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
           >
-            Ver todos <ArrowRight className="h-3 w-3" />
+            Todos <ArrowRight className="h-3 w-3" />
           </Link>
         }
       >

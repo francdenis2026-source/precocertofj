@@ -78,6 +78,8 @@ type Props = {
 const brl = (n: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n);
 
+const int = (n: number) => new Intl.NumberFormat("pt-BR").format(n);
+
 export function SearchDiscovery({ onPickQuery }: Props) {
   const [recent, setRecent] = useState<string[]>([]);
   useEffect(() => setRecent(readRecent()), []);
@@ -108,7 +110,11 @@ export function SearchDiscovery({ onPickQuery }: Props) {
   return (
     <div className="space-y-3">
       {/* Bloco principal — surface sólida com contraste WCAG AA em ambos os modos */}
-      <section className="rounded-xl border border-border bg-card p-3 shadow-sm sm:p-3.5">
+      <section className="relative overflow-hidden rounded-2xl border border-border bg-card p-3 shadow-sm sm:p-4">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-brand-gold/45 to-transparent"
+        />
         <header className="flex items-start gap-3">
           <span
             aria-hidden
@@ -117,10 +123,10 @@ export function SearchDiscovery({ onPickQuery }: Props) {
             <SearchIcon className="h-4 w-4" strokeWidth={2.25} />
           </span>
           <div className="min-w-0">
-            <h2 className="text-[15px] font-semibold text-foreground sm:text-base">
+            <h2 className="font-serif text-[15px] font-semibold leading-tight tracking-tight text-foreground sm:text-[17px]">
               O que você quer comparar hoje?
             </h2>
-            <p className="mt-0.5 text-[12.5px] text-muted-foreground">
+            <p className="mt-0.5 text-[12.5px] leading-snug text-muted-foreground">
               Toque em uma categoria para começar — ou digite um produto acima.
             </p>
           </div>
@@ -133,11 +139,11 @@ export function SearchDiscovery({ onPickQuery }: Props) {
               key={c.q}
               type="button"
               onClick={() => onPickQuery(c.q)}
-              className="group snap-start inline-flex h-11 shrink-0 items-center gap-2 rounded-xl border border-border bg-background px-3 text-left text-[13px] font-medium text-foreground shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_10%,transparent)] transition-all hover:-translate-y-px hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] hover:shadow-sm active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="group snap-start inline-flex h-11 shrink-0 items-center gap-2 rounded-xl border border-border bg-background px-3 text-left text-[13px] font-medium tracking-tight text-foreground shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_10%,transparent)] transition-all hover:-translate-y-px hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] hover:shadow-sm active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <span
                 aria-hidden
-                className="grid h-7 w-7 flex-none place-items-center rounded-md bg-brand-gold/15 text-brand-gold-soft transition-colors group-hover:bg-brand-gold group-hover:text-brand-navy dark:text-brand-gold"
+                className="grid h-7 w-7 flex-none place-items-center rounded-lg bg-brand-gold/15 text-brand-gold-soft transition-colors group-hover:bg-brand-gold group-hover:text-brand-navy dark:text-brand-gold"
               >
                 <c.Icon className="h-4 w-4" strokeWidth={2.25} />
               </span>
@@ -216,18 +222,18 @@ export function SearchDiscovery({ onPickQuery }: Props) {
       )}
 
       {/* Sinal de vida — cartão próprio, mesmo padrão dos HeroMetric */}
-      <section className="rounded-xl border border-border bg-card p-2.5 shadow-sm sm:p-3">
-        <div className="grid grid-cols-3 gap-2">
+      <section className="rounded-2xl border border-border bg-card p-2.5 shadow-sm sm:p-3">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           <StatCell
             icon={<TrendingDown className="h-4 w-4" aria-hidden />}
             label="Preços em queda"
-            value={stats.data ? String(stats.data.priceDrops7d ?? 0) : "—"}
+            value={stats.data ? int(stats.data.priceDrops7d ?? 0) : "—"}
             hint="7 dias"
           />
           <StatCell
             icon={<Sparkles className="h-4 w-4" aria-hidden />}
             label="Produtos monitorados"
-            value={stats.data ? String(stats.data.products ?? 0) : "—"}
+            value={stats.data ? int(stats.data.products ?? 0) : "—"}
             hint="ativos"
           />
           <StatCell
@@ -254,20 +260,23 @@ function StatCell({
   hint: string;
 }) {
   return (
-    <div className="min-w-0 rounded-lg border border-border/70 bg-background px-2.5 py-2">
-      <div className="flex items-center gap-1.5">
-        <span aria-hidden className="grid h-6 w-6 place-items-center rounded-md bg-brand-gold/15 text-brand-gold-soft dark:text-brand-gold">
-          {icon}
-        </span>
-        <span className="truncate text-[9.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+    <div className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] items-center gap-x-2 gap-y-0 rounded-xl border border-border/70 bg-background px-2.5 py-2 sm:block">
+      <span
+        aria-hidden
+        className="grid h-7 w-7 place-items-center rounded-lg bg-brand-gold/15 text-brand-gold-soft dark:text-brand-gold sm:h-6 sm:w-6"
+      >
+        {icon}
+      </span>
+      <div className="min-w-0 sm:mt-1.5">
+        <div className="text-[9.5px] font-semibold uppercase leading-tight tracking-[0.12em] text-muted-foreground">
           {label}
-        </span>
-      </div>
-      <div className="mt-1 truncate text-[17px] font-bold tabular-nums leading-none text-foreground">
-        {value}
-      </div>
-      <div className="mt-0.5 text-[9.5px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
-        {hint}
+        </div>
+        <div className="mt-0.5 truncate font-serif text-[17px] font-semibold tabular-nums leading-none tracking-tight text-foreground">
+          {value}
+        </div>
+        <div className="mt-0.5 text-[9.5px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
+          {hint}
+        </div>
       </div>
     </div>
   );
