@@ -10,7 +10,6 @@ export const PT_TERMS: Record<string, string> = {
   save: "salvar",
   cancel: "cancelar",
   delete: "excluir",
-  remove: "remover",
   edit: "editar",
   add: "adicionar",
   submit: "enviar",
@@ -19,8 +18,6 @@ export const PT_TERMS: Record<string, string> = {
   previous: "anterior",
   back: "voltar",
   close: "fechar",
-  open: "abrir",
-  continue: "continuar",
   confirm: "confirmar",
   update: "atualizar",
   refresh: "atualizar",
@@ -52,10 +49,9 @@ export const PT_TERMS: Record<string, string> = {
   error: "erro",
   warning: "aviso",
   success: "sucesso",
-  yes: "sim",
-  no: "não",
   page: "página",
 };
+
 
 /** Frases exatas — substituídas antes das palavras isoladas. */
 export const PT_PHRASES: Array<[RegExp, string]> = [
