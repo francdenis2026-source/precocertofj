@@ -197,3 +197,39 @@ export const collabSubmissionMetrics = createServerFn({ method: "GET" })
     }
     return counts;
   });
+
+export type CollabAuditEntry = {
+  id: string;
+  admin_user_id: string | null;
+  admin_full_name: string | null;
+  action: string;
+  target_id: string | null;
+  before: unknown;
+  after: unknown;
+  notes: string | null;
+  created_at: string;
+};
+
+export const listCollabAuditLog = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) =>
+    z
+      .object({
+        submission_id: z.string().uuid().optional(),
+        limit: z.number().int().min(1).max(500).default(100),
+      })
+      .parse(raw ?? {}),
+  )
+  .handler(async ({ data, context }): Promise<CollabAuditEntry[]> => {
+    await assertAdmin(context.supabase, context.userId);
+    const { data: rows, error } = await context.supabase.rpc(
+      "list_collab_audit_log" as never,
+      {
+        _submission_id: data.submission_id ?? null,
+        _limit: data.limit,
+      } as never,
+    );
+    if (error) throw new Error(error.message);
+    return (rows ?? []) as unknown as CollabAuditEntry[];
+  });
+
