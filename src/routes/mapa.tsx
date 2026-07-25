@@ -23,12 +23,10 @@ import { MobileNav } from "@/components/nav/MobileNav";
 import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 import { useSession } from "@/hooks/useSession";
 import { toast } from "sonner";
-import {
-  InternalPageHeader,
-  EmptyState,
-  LoadingSkeleton,
-} from "@/components/layout";
+import { EmptyState, LoadingSkeleton } from "@/components/layout";
+import { BackButton } from "@/components/layout/BackButton";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { Link } from "@tanstack/react-router";
 import {
   Select,
   SelectContent,
