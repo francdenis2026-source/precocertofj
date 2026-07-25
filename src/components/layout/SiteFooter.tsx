@@ -96,7 +96,7 @@ export function SiteFooter() {
             </span>
           ))}
           <span aria-hidden className="px-0.5 text-brand/60">·</span>
-          <span className="ml-auto font-mono text-[12px] font-medium text-muted-foreground">
+          <span className="ml-auto font-mono text-[11px] font-medium text-muted-foreground">
             &lt;dev&gt; <span className="text-foreground/85">Franc</span>
           </span>
         </nav>
