@@ -854,3 +854,87 @@ function PillarCard({
     </Link>
   );
 }
+
+
+/* -------- PartnersStrip — faixa de logos de mercados parceiros -------- */
+function PartnersStrip() {
+  const fetchStores = useServerFn(listPublicStores);
+  const storesQ = useQuery({
+    queryKey: ["home-partner-stores"],
+    queryFn: () => fetchStores({} as any),
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
+  });
+  const stores = (storesQ.data ?? []).filter((s: any) => s?.name).slice(0, 12);
+
+  if (!stores.length) return null;
+
+  return (
+    <section className="pc-container pt-8 sm:pt-10">
+      <div
+        className="rounded-[var(--pc-radius-md)] border px-4 py-5 sm:px-6 sm:py-6"
+        style={{ background: P.card, borderColor: P.line }}
+      >
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+          <div className="min-w-0">
+            <p
+              className="text-[10px] font-bold uppercase tracking-[0.2em]"
+              style={{ color: P.gold }}
+            >
+              Onde comparamos
+            </p>
+            <h2
+              className={`${serif} mt-1 leading-tight`}
+              style={{
+                color: P.heading,
+                fontSize: "clamp(1.35rem, 2.4vw, 1.75rem)",
+                letterSpacing: "-0.01em",
+              }}
+            >
+              Mercados parceiros de Feijó
+            </h2>
+          </div>
+          <Link
+            to="/estabelecimentos"
+            className="inline-flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-[0.14em] transition-colors hover:brightness-110"
+            style={{ color: P.gold }}
+          >
+            Ver todos
+            <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.6} />
+          </Link>
+        </div>
+
+        <ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3 md:grid-cols-6">
+          {stores.map((s: any) => (
+            <li key={s.id}>
+              <Link
+                to="/estabelecimentos"
+                className="group flex h-16 items-center justify-center rounded-xl border px-3 transition-all hover:-translate-y-0.5 hover:shadow-sm sm:h-20"
+                style={{ background: P.paper, borderColor: P.line }}
+                title={s.name}
+              >
+                {s.logoUrl || s.logo_url ? (
+                  <img
+                    src={s.logoUrl ?? s.logo_url}
+                    alt={s.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="max-h-10 max-w-full object-contain opacity-85 grayscale transition-all group-hover:opacity-100 group-hover:grayscale-0 sm:max-h-12"
+                  />
+                ) : (
+                  <span
+                    className="truncate text-center text-[11px] font-bold uppercase tracking-[0.14em]"
+                    style={{ color: P.heading }}
+                  >
+                    {s.name}
+                  </span>
+                )}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
