@@ -400,7 +400,26 @@ function EstablishmentsPage() {
                 </button>
               );
             })}
+            {user && favSet.size > 0 && (
+              <button
+                type="button"
+                role="switch"
+                aria-checked={onlyFavorites}
+                onClick={() => setOnlyFavorites((v) => !v)}
+                className={[
+                  "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11.5px] font-semibold uppercase tracking-[0.14em] transition-colors duration-150",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy",
+                  onlyFavorites
+                    ? "border-brand-gold bg-brand-gold text-brand-navy shadow-sm"
+                    : "border-white/25 bg-brand-navy/85 text-white hover:border-brand-gold",
+                ].join(" ")}
+                title="Mostrar apenas mercados que você salvou"
+              >
+                ★ Meus favoritos ({favSet.size})
+              </button>
+            )}
           </div>
+
 
 
           {/* Métricas ao vivo — botões acessíveis, abrem detalhes */}
