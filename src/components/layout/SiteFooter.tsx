@@ -124,26 +124,26 @@ export function SiteFooter() {
             </span>
           </Link>
 
-          <p className="mt-1.5 text-[12.5px] font-medium leading-snug text-foreground/80">
+          <p className="mt-1 text-[11.5px] font-medium leading-snug text-foreground/80">
             Comparador colaborativo de preços dos mercados de Feijó — Acre.
           </p>
 
-          <ul className="mt-1.5 space-y-0.5 text-[12.5px] font-medium text-foreground/90">
-            <li className="flex items-center gap-2">
-              <MapPin className="h-3.5 w-3.5 shrink-0 text-brand" />
+          <ul className="mt-1 space-y-0 text-[11.5px] font-medium text-foreground/90">
+            <li className="flex items-center gap-1.5">
+              <MapPin className="h-3 w-3 shrink-0 text-brand" />
               Feijó · Acre · Brasil
             </li>
-            <li className="flex items-center gap-2">
-              <Mail className="h-3.5 w-3.5 shrink-0 text-brand" />
+            <li className="flex items-center gap-1.5">
+              <Mail className="h-3 w-3 shrink-0 text-brand" />
               <a
                 href="mailto:precocerto-fj@proton.me"
-                className="truncate rounded-md px-1 py-0.5 -mx-1 text-foreground outline-none transition-colors hover:bg-brand/10 hover:text-brand hover:underline underline-offset-4 decoration-brand/70 active:text-brand-strong focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className="truncate rounded-md px-1 py-0 -mx-1 text-foreground outline-none transition-colors hover:bg-brand/10 hover:text-brand hover:underline underline-offset-4 decoration-brand/70 active:text-brand-strong focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 precocerto-fj@proton.me
               </a>
             </li>
-            <li className="flex items-center gap-2">
-              <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-brand" />
+            <li className="flex items-center gap-1.5">
+              <ShieldCheck className="h-3 w-3 shrink-0 text-brand" />
               Dados protegidos · LGPD
             </li>
           </ul>
