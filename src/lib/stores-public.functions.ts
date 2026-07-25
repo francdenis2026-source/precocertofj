@@ -245,7 +245,7 @@ export const listPublicStores = createServerFn({ method: "GET" }).handler(
       };
     };
     const { data: estabs, error } = await estabTable
-      .select("id, name, city, state, neighborhood, address, logo_url, active")
+      .select("id, name, city, state, neighborhood, address, logo_url, latitude, longitude, active")
       .eq("active", true)
       .order("name");
     if (error) throw new Error(error.message);
@@ -279,6 +279,8 @@ export const listPublicStores = createServerFn({ method: "GET" }).handler(
       state: e.state,
       neighborhood: e.neighborhood,
       address: e.address,
+      latitude: e.latitude ?? null,
+      longitude: e.longitude ?? null,
       logoUrl: e.logo_url,
       productCount: counts.get(e.id) ?? 0,
       lastUpdate: null,
