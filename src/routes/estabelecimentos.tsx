@@ -676,29 +676,29 @@ function EstablishmentsPage() {
                 description={`${allFilteredItems.length} ${allFilteredItems.length === 1 ? "estabelecimento" : "estabelecimentos"} monitorados.`}
                 bodyClassName="p-0"
               >
-                <div className="flex flex-col gap-3 border-b border-border/60 p-4 md:flex-row md:items-center md:justify-between md:p-5">
+                <div className="flex flex-col gap-2 border-b border-border/60 p-2.5 md:flex-row md:items-center md:justify-between md:gap-3 md:p-4">
                   <LocationControl loc={loc} variant="surface" />
                   {referencePoint && (
-                    <span className="text-[11.5px] uppercase tracking-[0.14em] text-muted-foreground">
+                    <span className="hidden md:inline text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
                       Referência ativa · distâncias estimadas
                     </span>
                   )}
                 </div>
-                <div className="flex flex-col gap-3 border-b border-border/60 p-4 md:flex-row md:items-center md:p-5">
-                  <div className="relative flex-1">
+                <div className="grid grid-cols-2 gap-2 border-b border-border/60 p-2.5 md:flex md:items-center md:p-4">
+                  <div className="relative col-span-2 md:flex-1">
                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       value={q}
                       onChange={(ev) => setQ(ev.target.value)}
                       placeholder="Buscar mercado, bairro ou cidade"
-                      className="pl-9"
+                      className="h-9 pl-9 md:h-10"
                       inputMode="search"
                     />
                   </div>
                   <Select value={neighborhood} onValueChange={setNeighborhood}>
                     <SelectTrigger
                       aria-label="Filtrar por bairro"
-                      className="h-10 w-full md:w-[200px]"
+                      className="h-9 w-full md:h-10 md:w-[190px]"
                     >
                       <SelectValue placeholder="Bairro" />
                     </SelectTrigger>
@@ -717,7 +717,7 @@ function EstablishmentsPage() {
                   >
                     <SelectTrigger
                       aria-label="Ordenar por"
-                      className="h-10 w-full md:w-[220px]"
+                      className="h-9 w-full md:h-10 md:w-[210px]"
                     >
                       <SelectValue placeholder="Ordenar" />
                     </SelectTrigger>
@@ -732,6 +732,7 @@ function EstablishmentsPage() {
                   </Select>
 
                 </div>
+
 
                 {visibleItems.length === 0 ? (
                   <div className="flex flex-col items-center gap-3 p-8 text-center">
@@ -761,9 +762,10 @@ function EstablishmentsPage() {
                   </div>
                 ) : (
                 <ul
-                  className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-2 md:p-5"
+                  className="grid grid-cols-1 gap-2.5 p-2.5 sm:grid-cols-2 sm:gap-3 md:p-4"
                   aria-label="Lista de estabelecimentos"
                 >
+
                   {visibleItems.map((e) => {
                     const isCheapest = badgeIds.cheapestId === e.id;
                     const recent = isRecent(e.lastUpdate);
@@ -883,19 +885,20 @@ function EstablishmentsPage() {
                 </ul>
                 )}
                 {allFilteredItems.length > visibleItems.length && (
-                  <div className="flex items-center justify-center gap-3 border-t border-border/60 p-4">
-                    <span className="text-[12px] text-muted-foreground">
-                      Mostrando {visibleItems.length} de {allFilteredItems.length}
+                  <div className="flex flex-wrap items-center justify-center gap-2 border-t border-border/60 px-2.5 py-2 md:px-4 md:py-3">
+                    <span className="text-[11px] text-muted-foreground md:text-[12px]">
+                      {visibleItems.length} de {allFilteredItems.length}
                     </span>
                     <button
                       type="button"
                       onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-4 py-1.5 text-[12px] font-bold uppercase tracking-[0.14em] text-brand-navy transition hover:brightness-105"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-3 py-1 text-[11.5px] font-bold uppercase tracking-[0.14em] text-brand-navy transition hover:brightness-105 md:px-4 md:py-1.5 md:text-[12px]"
                     >
                       Mostrar mais
                     </button>
                   </div>
                 )}
+
 
               </SectionCard>
             )}
