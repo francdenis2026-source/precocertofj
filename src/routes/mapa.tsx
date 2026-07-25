@@ -24,6 +24,7 @@ import { useSession } from "@/hooks/useSession";
 import { toast } from "sonner";
 import { EmptyState, LoadingSkeleton, PageShell, PageShellContent } from "@/components/layout";
 import { BackButton } from "@/components/layout/BackButton";
+import { SiteHeader } from "@/components/layout/SiteHeader";
 import { Link } from "@tanstack/react-router";
 import {
   Select,
@@ -259,85 +260,70 @@ function NeighborhoodsPage() {
 
   return (
     <PageShell>
+      <SiteHeader variant="solid" />
       <PageShellContent>
 
-      {/* Hero profissional — Navy/Gold, alinhado ao tema */}
+      {/* Hero compacto — Navy/Gold, alinhado ao tema */}
       <section className="relative overflow-hidden border-b border-brand-gold/20 bg-brand-navy text-white">
-        {/* grid sutil de fundo */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.07]"
+          className="pointer-events-none absolute inset-0 opacity-[0.06]"
           style={{
             backgroundImage:
               "linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)",
-            backgroundSize: "36px 36px",
+            backgroundSize: "32px 32px",
           }}
         />
-        {/* halo dourado */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full opacity-30 blur-3xl"
+          className="pointer-events-none absolute -right-20 -top-16 h-52 w-52 rounded-full opacity-25 blur-3xl"
           style={{ background: "radial-gradient(circle, #c9a227 0%, transparent 60%)" }}
         />
-        {/* faixa gold inferior */}
-        <div aria-hidden className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-brand-gold to-transparent" />
+        <div aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-brand-gold/70 to-transparent" />
 
-        <div className="relative mx-auto w-full max-w-4xl px-4 pt-4 pb-5 md:px-6 md:pt-5 md:pb-6">
-          <div className="mb-2 flex items-center justify-between gap-2">
-            <BackButton fallbackTo="/" variant="ghost" className="text-white/85 hover:text-white" />
-            <nav
-              aria-label="Trilha"
-              className="hidden items-center gap-1 text-[11px] font-medium text-white/70 sm:flex"
-            >
-              <Link to="/" className="transition-colors hover:text-brand-gold">Início</Link>
-              <span aria-hidden className="opacity-50">/</span>
-              <span className="text-white">Mercados por bairro</span>
-            </nav>
-          </div>
-
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-            <div className="min-w-0">
-              <div className="mb-1.5 inline-flex items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.16em] text-brand-gold">
-                <MapPin className="h-3 w-3" strokeWidth={2.5} />
-                Guia local · Feijó
-              </div>
-              <h1
-                className="text-[clamp(1.6rem,3.4vw,2.25rem)] font-semibold leading-[1.05] tracking-tight text-white"
-                style={{ fontFamily: "var(--font-display)" }}
-              >
-                Mercados por{" "}
-                <span className="italic text-brand-gold">bairro</span>
-              </h1>
-              <p className="mt-1 max-w-xl text-[12.5px] leading-snug text-white/75">
-                Descubra onde estão os mercados parceiros na sua região, favorite os seus e compare preços em segundos.
-              </p>
+        <div className="relative mx-auto flex w-full max-w-4xl flex-col gap-2 px-4 py-3 md:flex-row md:items-end md:justify-between md:gap-4 md:px-6 md:py-4">
+          <div className="min-w-0">
+            <div className="mb-1 inline-flex items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-2 py-[2px] text-[9.5px] font-bold uppercase tracking-[0.16em] text-brand-gold">
+              <MapPin className="h-2.5 w-2.5" strokeWidth={2.5} />
+              Guia local · Feijó
             </div>
+            <h1
+              className="text-[clamp(1.35rem,2.8vw,1.85rem)] font-semibold leading-[1.05] tracking-tight text-white"
+              style={{ fontFamily: "var(--font-display)" }}
+            >
+              Mercados por <span className="italic text-brand-gold">bairro</span>
+            </h1>
+            <p className="mt-0.5 max-w-xl text-[12px] leading-snug text-white/75">
+              Encontre mercados parceiros na sua região, favorite os seus e compare preços em segundos.
+            </p>
+          </div>
 
-            {filteredGroups.length > 0 && (
-              <div className="flex shrink-0 items-stretch gap-2">
-                <div className="rounded-lg border border-brand-gold/30 bg-white/[0.04] px-3 py-1.5 text-center backdrop-blur-sm">
-                  <div className="font-mono text-[18px] font-bold leading-none tabular-nums text-brand-gold">
-                    {filteredGroups.length}
-                  </div>
-                  <div className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.14em] text-white/70">
-                    {filteredGroups.length === 1 ? "Bairro" : "Bairros"}
-                  </div>
+          {filteredGroups.length > 0 && (
+            <div className="flex shrink-0 items-stretch gap-1.5">
+              <div className="rounded-md border border-brand-gold/30 bg-white/[0.04] px-2.5 py-1 text-center backdrop-blur-sm">
+                <div className="font-mono text-[15px] font-bold leading-none tabular-nums text-brand-gold">
+                  {filteredGroups.length}
                 </div>
-                <div className="rounded-lg border border-white/15 bg-white/[0.04] px-3 py-1.5 text-center backdrop-blur-sm">
-                  <div className="font-mono text-[18px] font-bold leading-none tabular-nums text-white">
-                    {totalMarkets}
-                  </div>
-                  <div className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.14em] text-white/70">
-                    {totalMarkets === 1 ? "Mercado" : "Mercados"}
-                  </div>
+                <div className="mt-0.5 text-[8.5px] font-bold uppercase tracking-[0.14em] text-white/70">
+                  {filteredGroups.length === 1 ? "Bairro" : "Bairros"}
                 </div>
               </div>
-            )}
-          </div>
+              <div className="rounded-md border border-white/15 bg-white/[0.04] px-2.5 py-1 text-center backdrop-blur-sm">
+                <div className="font-mono text-[15px] font-bold leading-none tabular-nums text-white">
+                  {totalMarkets}
+                </div>
+                <div className="mt-0.5 text-[8.5px] font-bold uppercase tracking-[0.14em] text-white/70">
+                  {totalMarkets === 1 ? "Mercado" : "Mercados"}
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
-      <main className="mx-auto w-full max-w-4xl px-4 pt-4 md:px-6 md:pt-5">
+      <main className="mx-auto w-full max-w-4xl px-4 pt-3 md:px-6 md:pt-4">
+
+
 
 
         {/* Barra de busca — compacta, focus dourado */}

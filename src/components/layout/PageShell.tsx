@@ -32,8 +32,8 @@ export function PageShell({
   hideFooter = false,
 }: PageShellProps) {
   return (
-    <div className={cn("bg-background text-foreground", className)}>
-      {children}
+    <div className={cn("flex min-h-[100dvh] flex-col bg-background text-foreground", className)}>
+      <div className="flex flex-1 flex-col">{children}</div>
       {!hideFooter && <SiteFooter />}
       {!hideMobileNav && <MobileNav />}
     </div>
@@ -54,7 +54,7 @@ export function PageShellContent({
   return (
     <div
       className={cn(
-        "pb-[calc(var(--mobile-nav-height)+1rem)] md:pb-0",
+        "flex-1 pb-[calc(var(--mobile-nav-height)+1rem)] md:pb-0",
         className,
       )}
     >
@@ -62,3 +62,4 @@ export function PageShellContent({
     </div>
   );
 }
+

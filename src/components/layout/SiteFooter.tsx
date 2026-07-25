@@ -47,7 +47,7 @@ export function SiteFooter() {
 
   return (
     <footer
-      className="mt-3 border-t border-border bg-muted/60 text-foreground md:mt-5"
+      className="mt-2 border-t border-border bg-muted/60 text-foreground md:mt-3"
     >
       {/* ============ MOBILE (ultra compact — 2 lines) ============ */}
       <div
@@ -106,7 +106,7 @@ export function SiteFooter() {
       <div
         className={dsx(
           ds.container,
-          "hidden md:grid gap-2 py-2.5 sm:gap-5 md:grid-cols-[1.2fr_2fr] md:gap-8 md:py-3.5",
+          "hidden md:grid gap-2 py-2 sm:gap-4 md:grid-cols-[1.2fr_2fr] md:gap-6 md:py-2.5",
         )}
       >
         {/* Brand block */}
@@ -178,7 +178,7 @@ export function SiteFooter() {
         <div
           className={dsx(
             ds.container,
-            "flex flex-col items-start justify-between gap-0.5 py-1.5 text-[12px] font-medium leading-[1.3] text-foreground/85 sm:flex-row sm:items-center md:text-[12.5px]",
+            "flex flex-col items-start justify-between gap-0.5 py-1 text-[11.5px] font-medium leading-[1.25] text-foreground/85 sm:flex-row sm:items-center md:text-[12px]",
           )}
         >
           <span className="whitespace-normal">© {year} <strong className="font-semibold text-foreground">PreçoCerto</strong> · Feijó · Acre</span>
