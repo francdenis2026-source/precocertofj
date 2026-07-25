@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/layout/BackButton";
 
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 
@@ -131,6 +132,13 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
 
         {/* CTAs */}
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+          {!isOverlay && (
+            <BackButton
+              variant="pill"
+              shortLabel=""
+              className="hidden sm:inline-flex"
+            />
+          )}
           {showThemeToggle && <ThemeToggle size="sm" tone={isOverlay ? "dark" : "light"} />}
           {loading ? (
             <div className={dsx("h-9 w-24 animate-pulse rounded-lg", isOverlay ? "bg-on-media-surface" : "bg-muted")} />

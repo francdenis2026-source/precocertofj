@@ -1,5 +1,6 @@
 export { PageHeader, type Crumb } from "./PageHeader";
 export { InternalPageHeader, type InternalCrumb } from "./InternalPageHeader";
+export { BackButton } from "./BackButton";
 export { SectionCard } from "./SectionCard";
 export { StatGrid, type Stat } from "./StatGrid";
 export { DataToolbar } from "./DataToolbar";
