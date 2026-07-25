@@ -224,7 +224,7 @@ function EstablishmentsPage() {
         list.sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
     }
     return list;
-  }, [data, q, neighborhood, sort, kindFilter]);
+  }, [data, q, neighborhood, sort, kindFilter, onlyFavorites, favSet]);
 
   const kindsPresent = useMemo(() => {
     if (!data) return new Set<string>();
