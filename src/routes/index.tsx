@@ -577,11 +577,16 @@ function HomePage() {
                 },
                 {
                   kind: "products" as const,
-                  k: stats.products != null ? stats.products.toLocaleString("pt-BR") : "1.500",
-                  l: "Produtos mapeados",
+                  k:
+                    stats.totalItems != null && stats.totalItems > 0
+                      ? stats.totalItems.toLocaleString("pt-BR")
+                      : stats.products != null
+                        ? stats.products.toLocaleString("pt-BR")
+                        : "1.500",
+                  l: "Produtos cadastrados",
                   lShort: "Produtos",
                   icon: <Package className="h-4 w-4" />,
-                  tip: "Ver categorias e últimas atualizações do catálogo.",
+                  tip: "Total de preços já cadastrados no sistema — ver categorias e últimas atualizações.",
                 },
                 {
                   kind: "savings" as const,
