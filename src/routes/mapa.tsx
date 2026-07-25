@@ -29,6 +29,13 @@ import {
   LoadingSkeleton,
 } from "@/components/layout";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export const Route = createFileRoute("/mapa")({
   head: () => ({
