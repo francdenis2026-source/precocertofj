@@ -83,10 +83,16 @@ function applyCase(source: string, replacement: string): string {
 }
 
 const WORD_ENTRIES = Object.entries(PT_TERMS);
+/**
+ * Limites Unicode-aware: `\b` do JS considera letras acentuadas como
+ * não-palavra, o que fazia "SUÍNO" virar "SUÍNÃO". Lookarounds com \p{L}
+ * evitam substituições dentro de palavras em português.
+ */
 const WORD_REGEX = new RegExp(
-  `\\b(${WORD_ENTRIES.map(([k]) => k).join("|")})\\b`,
-  "gi",
+  `(?<![\\p{L}\\p{N}_])(${WORD_ENTRIES.map(([k]) => k).join("|")})(?![\\p{L}\\p{N}_])`,
+  "giu",
 );
+
 
 /** Substitui termos em uma string preservando capitalização. */
 export function translateTerms(input: string): string {
