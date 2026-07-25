@@ -724,21 +724,22 @@ function ComparadorPage() {
         {equivalentRanking ? (
           <div className="mt-5">
             <PriceRankingPanel
-              productName={`${equivalentRanking.label} · ${equivalentRanking.brands} marcas`}
+              productName={
+                equivalentRanking.brands > 1
+                  ? `${equivalentRanking.label} · ${equivalentRanking.brands} marcas`
+                  : equivalentRanking.label
+              }
               sizeLabel={equivalentRanking.sizeLabel}
               stores={equivalentRanking.stores}
-            />
-          </div>
-        ) : referenceRow ? (
-          <div className="mt-5">
-            <PriceRankingPanel
-              productName={referenceRow.display_name}
-              sizeLabel={formatSize(referenceRow.size_value, referenceRow.size_unit)}
-              stores={referenceRow.stores ?? []}
-              onOpenStore={() => setOpenStoresRow(referenceRow)}
+              onOpenStore={
+                referenceRow && equivalentRanking.brands === 1
+                  ? () => setOpenStoresRow(referenceRow)
+                  : undefined
+              }
             />
           </div>
         ) : null}
+
 
       </section>
 

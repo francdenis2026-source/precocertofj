@@ -492,13 +492,33 @@ export const searchProductPrice = createServerFn({ method: "POST" })
       .slice(0, 15)
       .map(({ _score: _s, ...g }) => g);
 
-    // Ranking de estabelecimentos: usa as linhas do produto principal
-    // (primeiro grupo por score) — assim, ordenado por menor preço, o
-    // ranking reflete diretamente onde o produto selecionado está mais
-    // barato. Fallback: se não houver grupos (busca muito ampla), usa
-    // todos os registros.
-    const rankingSource: ProductPricePoint[] =
+    // Grupo equivalente ("mesma prateleira"): mesmo termo buscado + mesmo
+    // tamanho + mesma categoria, atravessando marcas. É a ÚNICA fonte tanto do
+    // resumo ("menor preço agora") quanto do ranking de mercados — antes o
+    // ranking usava só o grupo top (uma marca) e divergia do resumo, apontando
+    // estabelecimento/valor diferentes.
+    const refIndexInGroups = Math.max(
+      0,
+      groups.findIndex((g) => new Set(g.prices.map((p) => p.marketName)).size > 1),
+    );
+    const eqIdx =
       groups.length > 0
+        ? selectEquivalentIndexes(
+            groups.map((g) => ({ name: g.productName })),
+            didYouMean ?? data.query,
+            refIndexInGroups,
+          )
+        : [];
+    const eqGroups = eqIdx.map((i) => groups[i]).filter(Boolean);
+    const refGroup = eqGroups[0] ?? groups[0] ?? null;
+    const eqPrices = eqGroups.flatMap((g) => g.prices);
+
+    // Ranking de estabelecimentos: mesmas linhas usadas no resumo.
+    // Fallback: se não houver grupos (busca muito ampla), usa todos os registros.
+    const rankingSource: ProductPricePoint[] =
+      eqPrices.length > 0
+        ? eqPrices
+        : groups.length > 0
         ? groups[0].prices
         : list
             .map((r) => {
@@ -516,6 +536,7 @@ export const searchProductPrice = createServerFn({ method: "POST" })
               } as ProductPricePoint;
             })
             .filter((x): x is ProductPricePoint => x != null);
+
 
     const byMarket = new Map<
       string,
