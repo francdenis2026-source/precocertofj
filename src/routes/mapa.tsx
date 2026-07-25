@@ -25,8 +25,8 @@ import {
   InternalPageHeader,
   EmptyState,
   LoadingSkeleton,
-  SiteFooter,
 } from "@/components/layout";
+import { SiteFooter } from "@/components/layout/SiteFooter";
 
 export const Route = createFileRoute("/mapa")({
   head: () => ({
