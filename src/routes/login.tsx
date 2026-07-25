@@ -349,7 +349,7 @@ function LoginPage() {
 
           <TabSwitch mode={mode} onChange={setMode} />
 
-          <form className="mt-4 space-y-3" onSubmit={handleSubmit}>
+          <form className="mt-3 space-y-2.5" onSubmit={handleSubmit}>
 
             {mode === "signup" && (() => {
               const trimmed = fullName.trim();
