@@ -758,7 +758,7 @@ function HomePage() {
                 </span>
                 <span
                   className="mt-0.5 hidden text-[11px] font-medium sm:block"
-                  style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
+                  style={{ color: "color-mix(in oklab, var(--pc-home-ink) 78%, transparent)" }}
                 >
                   + 8 categorias
                 </span>
