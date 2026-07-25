@@ -354,6 +354,13 @@ function ProductPublicPage() {
               </section>
             )}
 
+            {/* Quick compare strip: menor/maior preço, spread e atualização */}
+            {data.markets.length > 1 && (
+              <div className="mt-3">
+                <QuickCompareStrip markets={data.markets} />
+              </div>
+            )}
+
             {/* Controls: sort + filter */}
             <section className="mt-3">
               <div className="mb-2 flex flex-wrap items-center justify-between gap-2 px-1">
