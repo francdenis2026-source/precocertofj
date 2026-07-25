@@ -139,28 +139,6 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                 {l.label}
               </Link>
             ))}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  type="button"
-                  className={dsx("rounded-lg px-2.5 py-2 text-[15px] font-semibold outline-none transition-colors focus-visible:ring-2", navClass)}
-                  aria-label="Mais opções"
-                >
-                  <MoreHorizontal className="h-4.5 w-4.5" />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-52">
-                <DropdownMenuItem onSelect={() => navigate({ to: "/resgatar" })}>
-                  <Ticket className="mr-2 h-4 w-4" /> Resgatar código
-                </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => navigate({ to: "/colaborar" })}>
-                  <HeartHandshake className="mr-2 h-4 w-4" /> Programa colaborador
-                </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => navigate({ to: "/fale-conosco" })}>
-                  <UserIcon className="mr-2 h-4 w-4" /> Fale conosco
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
           </nav>
         )}
 
