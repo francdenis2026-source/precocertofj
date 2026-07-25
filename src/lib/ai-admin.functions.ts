@@ -82,11 +82,11 @@ export const updateAiSettings = createServerFn({ method: "POST" })
       : undefined;
 
     const { data: row, error } = await context.supabase.rpc("admin_update_ai_settings", {
-      _default_quota: data.defaultQuota ?? null,
-      _require_active_plan: data.requireActivePlan ?? null,
-      _allow_trial: data.allowTrial ?? null,
-      _assistant_enabled: data.assistantEnabled ?? null,
-      _warn_thresholds: thresholds ?? null,
+      _default_quota: data.defaultQuota,
+      _require_active_plan: data.requireActivePlan,
+      _allow_trial: data.allowTrial,
+      _assistant_enabled: data.assistantEnabled,
+      _warn_thresholds: thresholds,
     });
     if (error) throw new Error(error.message);
     return mapSettings((Array.isArray(row) ? row[0] : row) as Record<string, unknown>);
