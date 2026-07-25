@@ -322,9 +322,7 @@ function NeighborhoodsPage() {
       </section>
 
       <main className="mx-auto w-full max-w-4xl px-4 pt-3 md:px-6 md:pt-4">
-        <div className="mb-2 flex items-center justify-between">
-          <BackButton fallbackTo="/" variant="ghost" />
-        </div>
+
 
 
 
