@@ -260,7 +260,7 @@ function NeighborhoodsPage() {
 
   return (
     <PageShell>
-      <SiteHeader variant="solid" showBack={false} />
+      
       <PageShellContent>
 
       {/* Hero editorial — foto aérea + camadas Navy/Gold */}
