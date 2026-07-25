@@ -523,20 +523,20 @@ function HomePage() {
                 </button>
               )}
 
-              <span aria-hidden className="mx-1 h-3 w-px" style={{ background: "rgba(255,255,255,0.14)" }} />
+              <span aria-hidden className="mx-1 hidden h-3 w-px sm:inline-block" style={{ background: "rgba(255,255,255,0.14)" }} />
 
-              {/* Nav chips consolidados (mesmo estilo dos populares, destaque dourado) */}
+              {/* Nav chips consolidados — no mobile mostra só 2, desktop mostra tudo */}
               {[
-                { to: "/estabelecimentos", label: "Mercados" },
-                { to: "/melhores-precos", label: "Ranking" },
-                { to: "/colaborar", label: "Colaborar" },
-                { to: "/planos", label: "Planos Plus" },
-                { to: "/resgatar", label: "Resgatar código" },
+                { to: "/estabelecimentos", label: "Mercados", mobile: true },
+                { to: "/melhores-precos", label: "Ranking", mobile: true },
+                { to: "/colaborar", label: "Colaborar", mobile: false },
+                { to: "/planos", label: "Planos Plus", mobile: false },
+                { to: "/resgatar", label: "Resgatar código", mobile: false },
               ].map((c) => (
                 <Link
                   key={c.to}
                   to={c.to}
-                  className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11.5px] font-semibold transition-all hover:-translate-y-px"
+                  className={`${c.mobile ? "inline-flex" : "hidden sm:inline-flex"} items-center rounded-full border px-2.5 py-0.5 text-[11.5px] font-semibold transition-all hover:-translate-y-px`}
                   style={{
                     background: "color-mix(in oklab, var(--pc-home-gold) 10%, transparent)",
                     borderColor: "color-mix(in oklab, var(--pc-home-gold) 32%, transparent)",
@@ -573,12 +573,13 @@ function HomePage() {
 
 
 
+
           </div>
 
           {/* ============ METRICS ROW (border-y sobre o navy) ============ */}
           <TooltipProvider delayDuration={150}>
             <div
-              className="mx-auto mt-4 grid max-w-5xl grid-cols-3 gap-2 border-y py-2.5 sm:mt-5 sm:gap-8 sm:py-3.5"
+              className="mx-auto mt-4 grid max-w-5xl grid-cols-3 gap-1 border-y py-2 sm:mt-5 sm:gap-8 sm:py-3.5"
               style={{ borderColor: "rgba(255,255,255,0.08)" }}
             >
               {[
@@ -586,6 +587,7 @@ function HomePage() {
                   kind: "markets" as const,
                   k: String(stats.establishments ?? 8),
                   l: "Mercados parceiros",
+                  lShort: "Mercados",
                   icon: <ShieldCheck className="h-4 w-4" />,
                   tip: "Ver a lista completa de mercados parceiros e suas atualizações.",
                 },
@@ -593,6 +595,7 @@ function HomePage() {
                   kind: "products" as const,
                   k: stats.products != null ? stats.products.toLocaleString("pt-BR") : "1.500",
                   l: "Produtos mapeados",
+                  lShort: "Produtos",
                   icon: <Package className="h-4 w-4" />,
                   tip: "Ver categorias e últimas atualizações do catálogo.",
                 },
@@ -600,9 +603,11 @@ function HomePage() {
                   kind: "savings" as const,
                   k: economy?.avgSavingsPct ? `${economy.avgSavingsPct}%` : "38%",
                   l: "Economia média",
+                  lShort: "Economia",
                   icon: <TrendingDown className="h-4 w-4" />,
                   tip: "Ver as maiores economias identificadas agora.",
                 },
+
               ].map((s, i, arr) => (
                 <Tooltip key={s.l}>
                   <TooltipTrigger asChild>
@@ -610,7 +615,7 @@ function HomePage() {
                       type="button"
                       onClick={() => setSpotlight(s.kind)}
                       aria-label={`${s.k} — ${s.l}. Ver detalhes.`}
-                      className={`group flex flex-col items-center gap-1.5 rounded-xl px-2 py-2 text-center transition-colors hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)] ${
+                      className={`group flex min-w-0 flex-col items-center gap-1 rounded-xl px-1 py-1.5 text-center transition-colors hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)] sm:gap-1.5 sm:px-2 sm:py-2 ${
                         i > 0 ? "border-l border-white/[0.06] sm:border-l" : ""
                       }`}
                     >
@@ -618,7 +623,7 @@ function HomePage() {
                         className={`${serif} tabular-nums`}
                         style={{
                           color: "#F5C86A",
-                          fontSize: "clamp(1.25rem, 3vw, 2rem)",
+                          fontSize: "clamp(1.1rem, 3vw, 2rem)",
                           lineHeight: 1,
                           letterSpacing: "-0.01em",
                         }}
@@ -626,15 +631,17 @@ function HomePage() {
                         {s.k}
                       </div>
                       <div
-                        className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-[0.16em] sm:text-[10px] sm:tracking-[0.2em]"
+                        className="flex min-w-0 items-center gap-1 text-[9px] font-bold uppercase tracking-[0.12em] sm:text-[10px] sm:tracking-[0.2em]"
                         style={{ color: "rgba(255,255,255,0.6)" }}
                       >
                         <span className="hidden sm:inline-flex" aria-hidden style={{ color: P.goldSoft }}>
                           {s.icon}
                         </span>
-                        <span className="truncate">{s.l}</span>
+                        <span className="truncate sm:hidden">{s.lShort}</span>
+                        <span className="hidden truncate sm:inline">{s.l}</span>
                       </div>
                     </button>
+
                   </TooltipTrigger>
                   <TooltipContent side="bottom" className="max-w-[240px] text-[12px] leading-snug">
                     {s.tip}
@@ -654,11 +661,11 @@ function HomePage() {
         className="scroll-mt-24"
         style={{ background: P.paper, borderBottom: `1px solid ${P.line}` }}
       >
-        <div className="mx-auto w-full max-w-6xl px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
-          <div className="mb-2.5 flex items-center justify-between gap-3">
+        <div className="mx-auto w-full max-w-6xl px-3 py-3 sm:px-6 sm:py-5 lg:px-8">
+          <div className="mb-2 flex items-center justify-between gap-3 sm:mb-2.5">
             <h2
               id="categorias-title"
-              className="text-[11px] font-bold uppercase tracking-[0.22em]"
+              className="text-[10.5px] font-bold uppercase tracking-[0.2em] sm:text-[11px] sm:tracking-[0.22em]"
               style={{ color: P.heading }}
             >
               Pesquise por categoria
@@ -667,19 +674,19 @@ function HomePage() {
               Um clique para começar
             </span>
           </div>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
+          <div className="grid grid-cols-4 gap-1.5 sm:gap-3">
             {[
-              { key: "supermercados", label: "Supermercados", icon: <ShoppingCart className="h-5 w-5" strokeWidth={2.2} />, q: "supermercado" },
-              { key: "farmacias", label: "Farmácias", icon: <Pill className="h-5 w-5" strokeWidth={2.2} />, q: "farmácia" },
-              { key: "construcao", label: "Construção", icon: <HardHat className="h-5 w-5" strokeWidth={2.2} />, q: "construção" },
-              { key: "postos", label: "Postos", icon: <Fuel className="h-5 w-5" strokeWidth={2.2} />, q: "posto combustível" },
+              { key: "supermercados", label: "Mercado", full: "Supermercados", icon: <ShoppingCart className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />, q: "supermercado" },
+              { key: "farmacias", label: "Farmácia", full: "Farmácias", icon: <Pill className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />, q: "farmácia" },
+              { key: "construcao", label: "Construção", full: "Construção", icon: <HardHat className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />, q: "construção" },
+              { key: "postos", label: "Postos", full: "Postos", icon: <Fuel className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />, q: "posto combustível" },
             ].map((c) => (
               <button
                 key={c.key}
                 type="button"
                 onClick={() => navigate({ to: "/buscar", search: { q: c.q } as any })}
-                aria-label={`Pesquisar em ${c.label}`}
-                className="group flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-all hover:-translate-y-px hover:shadow-md focus-visible:outline-none focus-visible:ring-2"
+                aria-label={`Pesquisar em ${c.full}`}
+                className="group flex flex-col items-center justify-center gap-1.5 rounded-2xl border px-1.5 py-2.5 text-center transition-all active:scale-[0.97] hover:-translate-y-px hover:shadow-md focus-visible:outline-none focus-visible:ring-2 sm:flex-row sm:justify-start sm:gap-3 sm:px-3 sm:py-2.5 sm:text-left"
                 style={{
                   background: P.card,
                   borderColor: P.line,
@@ -689,7 +696,7 @@ function HomePage() {
                 }}
               >
                 <span
-                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition-colors group-hover:brightness-110"
+                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-colors group-hover:brightness-110 sm:h-9 sm:w-9 sm:rounded-lg"
                   style={{
                     background: `color-mix(in oklab, ${P.gold} 16%, transparent)`,
                     color: P.navy,
@@ -699,8 +706,8 @@ function HomePage() {
                 >
                   {c.icon}
                 </span>
-                <span className="flex-1 min-w-0">
-                  <span className="block truncate text-[13.5px] font-semibold leading-tight sm:text-[14px]">
+                <span className="flex-1 min-w-0 sm:min-w-0">
+                  <span className="block truncate text-[11.5px] font-semibold leading-tight sm:text-[14px]">
                     {c.label}
                   </span>
                   <span
@@ -711,7 +718,7 @@ function HomePage() {
                   </span>
                 </span>
                 <ArrowRight
-                  className="h-4 w-4 shrink-0 opacity-60 transition-all group-hover:translate-x-0.5 group-hover:opacity-100"
+                  className="hidden h-4 w-4 shrink-0 opacity-60 transition-all group-hover:translate-x-0.5 group-hover:opacity-100 sm:inline"
                   strokeWidth={2.4}
                   style={{ color: P.gold }}
                 />
@@ -720,6 +727,9 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+
+
 
 
 
@@ -736,9 +746,9 @@ function HomePage() {
       </section>
 
 
-      {/* ============== 3 PILARES (cards) ============== */}
+      {/* ============== 3 PILARES (cards — horizontal compact no mobile) ============== */}
       <section id="pilares" className="pc-container pt-2 scroll-mt-24 sm:pt-3">
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-4">
           <PillarCard
             to="/melhores-precos"
             icon={<LineChart className="h-5 w-5" strokeWidth={2} />}
@@ -781,10 +791,13 @@ function HomePage() {
       </section>
 
 
-      {/* ============== CTA FINAL (lazy) ============== */}
-      <Suspense fallback={null}>
-        <FinalCTASection />
-      </Suspense>
+      {/* ============== CTA FINAL (lazy — oculto no mobile p/ evitar duplicidade com o hero) ============== */}
+      <div className="hidden sm:block">
+        <Suspense fallback={null}>
+          <FinalCTASection />
+        </Suspense>
+      </div>
+
 
 
       <BackToTop />
@@ -820,24 +833,27 @@ function PillarCard({
     return (
       <Link
         to={to}
-        className="group block overflow-hidden rounded-2xl p-4 transition-all hover:-translate-y-1 hover:shadow-2xl sm:p-5"
+        className="group flex items-center gap-3 overflow-hidden rounded-2xl p-3 transition-all active:scale-[0.99] hover:-translate-y-1 hover:shadow-2xl sm:block sm:p-5"
         style={{
           background: `linear-gradient(135deg, var(--pc-home-gold) 0%, color-mix(in oklab, var(--pc-home-gold) 82%, black) 100%)`,
           color: "var(--pc-home-navy)",
         }}
       >
         <div
-          className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-lg"
+          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl sm:mb-3 sm:h-9 sm:w-9 sm:rounded-lg"
           style={{ background: "color-mix(in oklab, var(--pc-home-navy) 12%, transparent)" }}
         >
           {icon}
         </div>
-        <h3 className={`${serif} mb-1.5 text-[18px] leading-tight sm:text-[20px]`}>{title}</h3>
-        <p className="text-[12.5px] font-medium leading-snug opacity-80">{desc}</p>
-        <div className="mt-3 inline-flex items-center gap-1.5 text-[10.5px] font-bold uppercase tracking-[0.18em] opacity-90 transition-opacity group-hover:opacity-100">
-          {cta}
-          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
+        <div className="min-w-0 flex-1">
+          <h3 className={`${serif} text-[15.5px] leading-tight sm:mb-1.5 sm:text-[20px]`}>{title}</h3>
+          <p className="mt-0.5 line-clamp-2 text-[12px] font-medium leading-snug opacity-85 sm:mt-0 sm:line-clamp-none sm:text-[12.5px]">{desc}</p>
+          <div className="mt-1.5 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] opacity-90 transition-opacity group-hover:opacity-100 sm:mt-3 sm:text-[10.5px] sm:tracking-[0.18em]">
+            {cta}
+            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
+          </div>
         </div>
+        <ArrowRight className="h-5 w-5 shrink-0 opacity-80 sm:hidden" strokeWidth={2.6} />
       </Link>
     );
   }
@@ -845,14 +861,14 @@ function PillarCard({
   return (
     <Link
       to={to}
-      className="group block overflow-hidden rounded-2xl border p-4 transition-all hover:-translate-y-1 sm:p-5"
+      className="group flex items-center gap-3 overflow-hidden rounded-2xl border p-3 transition-all active:scale-[0.99] hover:-translate-y-1 sm:block sm:p-5"
       style={{
         background: "var(--pc-home-card)",
         borderColor: "var(--pc-home-line)",
       }}
     >
       <div
-        className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-lg"
+        className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl sm:mb-3 sm:h-9 sm:w-9 sm:rounded-lg"
         style={{
           background: "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
           color: "var(--pc-home-gold)",
@@ -861,25 +877,29 @@ function PillarCard({
       >
         {icon}
       </div>
-      <h3
-        className={`${serif} mb-1.5 text-[18px] leading-tight sm:text-[20px]`}
-        style={{ color: "var(--pc-home-heading)" }}
-      >
-        {title}
-      </h3>
-      <p className="text-[12.5px] font-medium leading-snug" style={{ color: "var(--pc-text-body)" }}>
-        {desc}
-      </p>
-      <div
-        className="mt-3 inline-flex items-center gap-1.5 text-[10.5px] font-bold uppercase tracking-[0.18em] transition-colors group-hover:text-[color:var(--pc-home-gold)]"
-        style={{ color: "var(--pc-home-heading)" }}
-      >
-        {cta}
-        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
+      <div className="min-w-0 flex-1">
+        <h3
+          className={`${serif} text-[15.5px] leading-tight sm:mb-1.5 sm:text-[20px]`}
+          style={{ color: "var(--pc-home-heading)" }}
+        >
+          {title}
+        </h3>
+        <p className="mt-0.5 line-clamp-2 text-[12px] font-medium leading-snug sm:mt-0 sm:line-clamp-none sm:text-[12.5px]" style={{ color: "var(--pc-text-body)" }}>
+          {desc}
+        </p>
+        <div
+          className="mt-1.5 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] transition-colors group-hover:text-[color:var(--pc-home-gold)] sm:mt-3 sm:text-[10.5px] sm:tracking-[0.18em]"
+          style={{ color: "var(--pc-home-heading)" }}
+        >
+          {cta}
+          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
+        </div>
       </div>
+      <ArrowRight className="h-5 w-5 shrink-0 opacity-60 sm:hidden" strokeWidth={2.4} style={{ color: "var(--pc-home-gold)" }} />
     </Link>
   );
 }
+
 
 
 /* -------- PartnersStrip — faixa de logos de mercados parceiros -------- */
