@@ -770,6 +770,8 @@ function ComparadorPage() {
 
         </div>
 
+        <PriceAuditAlert report={auditReport} />
+
         {equivalentRanking ? (
           <div className="mt-5">
             <PriceRankingPanel
