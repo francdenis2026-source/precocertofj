@@ -832,6 +832,19 @@ function EstablishmentsPage() {
                             <Radio className={`h-3.5 w-3.5 shrink-0 ${freshness.live ? "text-emerald-500" : "text-muted-foreground"}`} aria-hidden />
                             <span className="truncate text-muted-foreground">{freshness.label}</span>
                           </div>
+                          {dist && (
+                            <div className="col-span-2 flex items-center gap-1.5 border-t border-border/40 pt-1.5">
+                              <MapPin className="h-3.5 w-3.5 shrink-0 text-brand-navy dark:text-brand-gold" aria-hidden />
+                              <span className="text-muted-foreground">
+                                <span className="font-bold tabular-nums text-foreground">{formatDistance(dist.km)}</span>{" "}
+                                {dist.source === "exact"
+                                  ? "de você"
+                                  : dist.source === "neighborhood"
+                                    ? "aprox. (bairro)"
+                                    : "aprox. (cidade)"}
+                              </span>
+                            </div>
+                          )}
                         </div>
 
                         {/* Selos contextuais — altura reservada para consistência entre cards */}
