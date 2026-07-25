@@ -464,7 +464,29 @@ function NeighborhoodsPage() {
               </button>
             )}
           </div>
+
+          {/* Legenda visual — o que os selos e ícones significam */}
+          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border/60 pt-2 text-[10.5px] text-muted-foreground">
+            <span className="font-bold uppercase tracking-[0.14em]">Legenda:</span>
+            <span className="inline-flex items-center gap-1">
+              <span className="inline-block h-2 w-[3px] rounded-sm bg-brand-gold" aria-hidden />
+              Bairro
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <Star className="h-3 w-3 fill-brand-gold text-brand-gold" aria-hidden />
+              Favorito
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <Package className="h-3 w-3 text-brand-gold" aria-hidden />
+              Nº de produtos
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <TrendingUp className="h-3 w-3 text-brand-gold" aria-hidden />
+              Mais procurados no bairro
+            </span>
+          </div>
         </div>
+
 
         {/* Seus bairros — atalho gold */}
         {isAuthed && favoriteGroups.length > 0 && !term && (
@@ -490,7 +512,40 @@ function NeighborhoodsPage() {
           </section>
         )}
 
-        {groups.isLoading && <LoadingSkeleton rows={4} />}
+        {groups.isLoading && (
+          <div className="space-y-3" aria-live="polite" aria-busy="true">
+            <span className="sr-only">Carregando bairros…</span>
+            {[0, 1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="overflow-hidden rounded-xl border border-border bg-card shadow-sm"
+              >
+                <div className="flex items-center justify-between gap-3 border-b border-border bg-muted/30 px-3.5 py-2.5">
+                  <div className="flex items-center gap-2">
+                    <div className="h-7 w-7 animate-pulse rounded-md bg-muted" />
+                    <div className="space-y-1">
+                      <div className="h-3.5 w-32 animate-pulse rounded bg-muted" />
+                      <div className="h-2.5 w-20 animate-pulse rounded bg-muted/70" />
+                    </div>
+                  </div>
+                  <div className="h-4 w-20 animate-pulse rounded-full bg-muted" />
+                </div>
+                <div className="divide-y divide-border">
+                  {[0, 1].map((k) => (
+                    <div key={k} className="flex items-center gap-3 px-3.5 py-2.5">
+                      <div className="h-10 w-10 animate-pulse rounded-lg bg-muted" />
+                      <div className="flex-1 space-y-1">
+                        <div className="h-3 w-2/3 animate-pulse rounded bg-muted" />
+                        <div className="h-2.5 w-1/2 animate-pulse rounded bg-muted/70" />
+                      </div>
+                      <div className="h-5 w-12 animate-pulse rounded-full bg-muted" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {groups.error && (
           <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-4 text-[13.5px] text-destructive">
@@ -501,14 +556,27 @@ function NeighborhoodsPage() {
         {groups.data && filteredGroups.length === 0 && !groups.isLoading && (
           <EmptyState
             icon={MapPin}
-            title={term ? "Nenhum mercado encontrado" : "Nenhum bairro cadastrado ainda"}
+            title={hasActiveFilters ? "Nenhum bairro corresponde aos filtros" : "Nenhum bairro cadastrado ainda"}
             description={
-              term
-                ? `Nenhum resultado para "${term}". Tente outro nome.`
+              hasActiveFilters
+                ? "Ajuste ou limpe os filtros para ver todos os bairros disponíveis."
                 : "Assim que houver mercados cadastrados, eles aparecerão aqui."
+            }
+            action={
+              hasActiveFilters ? (
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-brand-gold bg-brand-gold px-3 py-1.5 text-[12px] font-bold uppercase tracking-[0.1em] text-brand-navy transition-colors hover:brightness-105"
+                >
+                  <SlidersHorizontal className="h-3 w-3" aria-hidden /> Limpar filtros
+                </button>
+              ) : undefined
             }
           />
         )}
+
+
 
         {filteredGroups.length > 0 && (
           <div className="space-y-3">

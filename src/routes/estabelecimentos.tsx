@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+
 import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -61,6 +62,66 @@ export const Route = createFileRoute("/estabelecimentos")({
   component: EstablishmentsPage,
 });
 
+// Persistência de filtros/scroll — sessionStorage sobrevive a navegações internas
+type PersistedFilters = {
+  q: string;
+  neighborhood: string;
+  sort: "name" | "neighborhood" | "products";
+  kindFilter: string;
+};
+const FILTERS_KEY = "pc:establishments:filters:v1";
+const SCROLL_KEY = "pc:establishments:scroll:v1";
+const DEFAULT_FILTERS: PersistedFilters = {
+  q: "",
+  neighborhood: "__all",
+  sort: "neighborhood",
+  kindFilter: "__all",
+};
+function readPersistedFilters(): PersistedFilters {
+  if (typeof window === "undefined") return DEFAULT_FILTERS;
+  try {
+    const raw = sessionStorage.getItem(FILTERS_KEY);
+    if (!raw) return DEFAULT_FILTERS;
+    const parsed = JSON.parse(raw);
+    return { ...DEFAULT_FILTERS, ...parsed };
+  } catch {
+    return DEFAULT_FILTERS;
+  }
+}
+function writePersistedFilters(f: PersistedFilters) {
+  if (typeof window === "undefined") return;
+  try {
+    sessionStorage.setItem(FILTERS_KEY, JSON.stringify(f));
+  } catch {
+    /* storage cheio ou bloqueado — ignorar */
+  }
+}
+
+// Classificação por catálogo — sempre presente para consistência visual entre cards
+function classifyTier(productsCount: number): { label: string; color: string } {
+  if (productsCount >= 200) return { label: "Ouro", color: "#c9a227" };
+  if (productsCount >= 60) return { label: "Prata", color: "#7c8895" };
+  if (productsCount >= 15) return { label: "Bronze", color: "#a97142" };
+  return { label: "Novo", color: "#4b6cb7" };
+}
+
+// Freshness — proxy de "horários" (sinaliza atividade recente do estabelecimento)
+function describeFreshness(iso: string | null): { label: string; live: boolean } {
+  if (!iso) return { label: "Sem atualização recente", live: false };
+  const t = new Date(iso).getTime();
+  if (!Number.isFinite(t)) return { label: "Sem atualização recente", live: false };
+  const diff = Date.now() - t;
+  const hours = diff / (60 * 60 * 1000);
+  if (hours < 24) return { label: "Atualizado hoje", live: true };
+  const days = Math.floor(hours / 24);
+  if (days === 1) return { label: "Atualizado ontem", live: true };
+  if (days < 7) return { label: `Atualizado há ${days} dias`, live: true };
+  if (days < 30) return { label: `Atualizado há ${Math.floor(days / 7)} sem.`, live: false };
+  return { label: "Atualização antiga", live: false };
+}
+
+
+
 function EstablishmentsPage() {
   const fetchList = useServerFn(listPublicEstablishments);
   const { data, isLoading, error } = useQuery({
@@ -69,13 +130,32 @@ function EstablishmentsPage() {
     staleTime: 60_000,
   });
 
-  const [q, setQ] = useState("");
-  const [neighborhood, setNeighborhood] = useState<string>("__all");
-  const [sort, setSort] = useState<"name" | "neighborhood" | "products">("neighborhood");
-  const [kindFilter, setKindFilter] = useState<string>("__all");
+  // Filtros persistidos em sessionStorage — sobrevivem ao voltar de /estabelecimento/$slug
+  const persisted = readPersistedFilters();
+  const [q, setQ] = useState(persisted.q);
+  const [neighborhood, setNeighborhood] = useState<string>(persisted.neighborhood);
+  const [sort, setSort] = useState<"name" | "neighborhood" | "products">(persisted.sort);
+  const [kindFilter, setKindFilter] = useState<string>(persisted.kindFilter);
   const [metricDetail, setMetricDetail] = useState<null | "establishments" | "products" | "savings" | "live">(null);
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const heroOverlayOpacity = useAdaptiveOverlayOpacity(mercadosHero.url, { min: 0.6, max: 0.94 });
+
+  // Salva no sessionStorage sempre que qualquer filtro muda.
+  useEffect(() => {
+    writePersistedFilters({ q, neighborhood, sort, kindFilter });
+  }, [q, neighborhood, sort, kindFilter]);
+
+  // Restaura scroll ao voltar
+  useEffect(() => {
+    const y = Number(sessionStorage.getItem(SCROLL_KEY) ?? "0");
+    if (y > 0) window.scrollTo({ top: y, behavior: "auto" });
+    const onScroll = () => {
+      sessionStorage.setItem(SCROLL_KEY, String(window.scrollY));
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
 
   const neighborhoods = useMemo(() => {
     if (!data) return [] as string[];
@@ -525,35 +605,57 @@ function EstablishmentsPage() {
                 </div>
 
                 {visibleItems.length === 0 ? (
-                  <div className="p-6 text-center text-sm text-muted-foreground">
-                    Nenhum estabelecimento encontrado com esse filtro.
+                  <div className="flex flex-col items-center gap-3 p-8 text-center">
+                    <div className="grid h-11 w-11 place-items-center rounded-full border border-border bg-background text-muted-foreground">
+                      <Store className="h-5 w-5" aria-hidden />
+                    </div>
+                    <div className="space-y-1">
+                      <p className="text-[14px] font-semibold text-foreground">
+                        Nenhum estabelecimento encontrado
+                      </p>
+                      <p className="text-[12.5px] text-muted-foreground">
+                        Ajuste ou limpe os filtros para ver toda a rede.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setQ("");
+                        setNeighborhood("__all");
+                        setKindFilter("__all");
+                        setSort("neighborhood");
+                      }}
+                      className="inline-flex items-center gap-1.5 rounded-md border border-brand-gold bg-brand-gold px-3 py-1.5 text-[11.5px] font-bold uppercase tracking-[0.1em] text-brand-navy transition-colors hover:brightness-105"
+                    >
+                      Limpar filtros
+                    </button>
                   </div>
                 ) : (
                 <ul
-                  className="grid grid-cols-1 gap-3 p-4 md:grid-cols-2 md:p-5"
+                  className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-2 md:p-5"
                   aria-label="Lista de estabelecimentos"
                 >
                   {visibleItems.map((e) => {
                     const isCheapest = badgeIds.cheapestId === e.id;
                     const recent = isRecent(e.lastUpdate);
                     const isFeatured = badgeIds.featuredIds.has(e.id);
+                    const tier = classifyTier(e.productsCount);
+                    const freshness = describeFreshness(e.lastUpdate);
                     return (
-                    <li
-                      key={e.id}
-                      className="rounded-xl border border-border/70 bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-gold/50 hover:shadow-md"
-                    >
+                    <li key={e.id} className="h-full">
                       <Link
                         to="/estabelecimento/$slug"
                         params={{ slug: slugifyEstablishment(e.name) }}
-                        className="block rounded-xl p-4 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                        aria-label={`Ver catálogo de ${e.name}`}
+                        className="group flex h-full flex-col overflow-hidden rounded-xl border border-border/70 bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-gold/60 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                        aria-label={`Ver detalhes de ${e.name}`}
                       >
-                        <div className="flex items-start gap-3">
+                        {/* Cabeçalho — logo + nome + selos + classificação */}
+                        <div className="flex items-start gap-3 p-4">
                           <div className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl border border-border/60 bg-white p-1.5">
                             {e.logoUrl ? (
                               <img
                                 src={e.logoUrl}
-                                alt={`Logo ${e.name}`}
+                                alt=""
                                 className="h-full w-full object-contain"
                                 loading="lazy"
                               />
@@ -564,55 +666,68 @@ function EstablishmentsPage() {
                             )}
                           </div>
                           <div className="min-w-0 flex-1">
-                            <div className="flex flex-wrap items-center gap-1.5">
-                              <h3 className="truncate text-[15px] font-semibold text-foreground">{e.name}</h3>
-                              {isCheapest && (
-                                <span className="inline-flex items-center gap-1 rounded-full bg-brand-gold px-1.5 py-[1px] text-[9.5px] font-bold uppercase tracking-[0.1em] text-brand-navy">
-                                  <PiggyBank className="h-2.5 w-2.5" aria-hidden /> Mais barato hoje
-                                </span>
-                              )}
-                              {recent && (
-                                <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-1.5 py-[1px] text-[9.5px] font-bold uppercase tracking-[0.1em] text-emerald-600 dark:text-emerald-400">
-                                  <Radio className="h-2.5 w-2.5" aria-hidden /> Atualizado
-                                </span>
-                              )}
-                              {isFeatured && !isCheapest && (
-                                <span className="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-1.5 py-[1px] text-[9.5px] font-bold uppercase tracking-[0.1em] text-muted-foreground">
-                                  <Sparkles className="h-2.5 w-2.5" aria-hidden /> Destaque
-                                </span>
-                              )}
+                            <h3 className="truncate text-[15px] font-semibold text-foreground">{e.name}</h3>
+                            <p className="mt-0.5 truncate text-[12px] text-muted-foreground">
+                              {[e.neighborhood, e.city].filter(Boolean).join(" · ") || "Localização não informada"}
+                            </p>
+                            {/* Classificação — sempre presente para consistência */}
+                            <div
+                              className="mt-1.5 inline-flex items-center gap-1 rounded-full border px-1.5 py-[1px] text-[9.5px] font-bold uppercase tracking-[0.14em]"
+                              style={{
+                                background: `color-mix(in oklab, ${tier.color} 12%, transparent)`,
+                                borderColor: `color-mix(in oklab, ${tier.color} 45%, transparent)`,
+                                color: tier.color,
+                              }}
+                              title={`Classificação por catálogo: ${tier.label}`}
+                            >
+                              <Sparkles className="h-2.5 w-2.5" aria-hidden />
+                              {tier.label}
                             </div>
-                            {e.neighborhood && (
-                              <span className="mt-1 inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5 text-[12px] font-medium text-muted-foreground">
-                                <MapPin className="h-3 w-3" aria-hidden />
-                                {e.neighborhood}
-                              </span>
-                            )}
-                            <p className="mt-1 text-[12.5px] text-muted-foreground">
-                              {[e.city, e.state].filter(Boolean).join(" · ") || "Localização não informada"}
-                            </p>
-                            <p className="mt-2 flex items-baseline gap-1.5 text-[13px] text-muted-foreground">
-                              <span className="text-[20px] font-bold leading-none tabular-nums text-foreground">{e.productsCount}</span>
-                              <span>produtos cadastrados</span>
-                            </p>
                           </div>
                         </div>
-                        {e.topCategories.length > 0 && (
-                          <div className="mt-3 flex flex-wrap gap-1.5 border-t border-border/60 pt-3">
-                            {e.topCategories.map((c) => (
-                              <span
-                                key={c.category}
-                                className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-0.5 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-foreground"
-                              >
-                                {humanizeCategory(c.category)}
-                                <span className="rounded-full bg-muted px-1.5 text-[10px] font-bold text-foreground/80 tabular-nums">{c.count}</span>
-                              </span>
-                            ))}
-                          </div>
-                        )}
 
-                        <div className="mt-3 inline-flex items-center gap-1 text-[12px] font-semibold text-brand-gold">
-                          Ver catálogo completo <ChevronRight className="h-3 w-3" aria-hidden />
+                        {/* Meta — sempre no mesmo lugar: contagem + freshness (proxy de horários) */}
+                        <div className="grid grid-cols-2 gap-2 border-t border-border/60 bg-muted/25 px-4 py-2.5 text-[11.5px]">
+                          <div className="flex items-center gap-1.5">
+                            <Package className="h-3.5 w-3.5 shrink-0 text-brand-gold" aria-hidden />
+                            <span className="text-muted-foreground">
+                              <span className="font-bold tabular-nums text-foreground">{e.productsCount}</span> produtos
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1.5">
+                            <Radio className={`h-3.5 w-3.5 shrink-0 ${freshness.live ? "text-emerald-500" : "text-muted-foreground"}`} aria-hidden />
+                            <span className="truncate text-muted-foreground">{freshness.label}</span>
+                          </div>
+                        </div>
+
+                        {/* Selos contextuais — altura reservada para consistência entre cards */}
+                        <div className="flex min-h-[26px] flex-wrap items-center gap-1 px-4 pt-2">
+                          {isCheapest && (
+                            <span className="inline-flex items-center gap-1 rounded-full bg-brand-gold px-1.5 py-[1px] text-[9.5px] font-bold uppercase tracking-[0.1em] text-brand-navy">
+                              <PiggyBank className="h-2.5 w-2.5" aria-hidden /> Mais barato hoje
+                            </span>
+                          )}
+                          {recent && (
+                            <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-1.5 py-[1px] text-[9.5px] font-bold uppercase tracking-[0.1em] text-emerald-600 dark:text-emerald-400">
+                              <Radio className="h-2.5 w-2.5" aria-hidden /> Atualizado
+                            </span>
+                          )}
+                          {isFeatured && !isCheapest && (
+                            <span className="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-1.5 py-[1px] text-[9.5px] font-bold uppercase tracking-[0.1em] text-muted-foreground">
+                              <Sparkles className="h-2.5 w-2.5" aria-hidden /> Destaque
+                            </span>
+                          )}
+                        </div>
+
+                        {/* CTA fixo no rodapé — sempre visível, mesmo lugar em todos os cards */}
+                        <div className="mt-auto flex items-center justify-between border-t border-border/60 px-4 py-2.5">
+                          <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                            {e.topCategories[0] ? humanizeCategory(e.topCategories[0].category) : "Ver catálogo"}
+                          </span>
+                          <span className="inline-flex items-center gap-1 rounded-md bg-brand-gold/10 px-2 py-1 text-[12px] font-bold uppercase tracking-[0.1em] text-brand-gold transition-colors group-hover:bg-brand-gold group-hover:text-brand-navy">
+                            Ver detalhes
+                            <ChevronRight className="h-3 w-3" aria-hidden />
+                          </span>
                         </div>
                       </Link>
                     </li>
@@ -620,6 +735,7 @@ function EstablishmentsPage() {
                   })}
                 </ul>
                 )}
+
               </SectionCard>
             )}
 
