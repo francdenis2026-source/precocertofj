@@ -70,13 +70,32 @@ function EstablishmentsPage() {
     staleTime: 60_000,
   });
 
-  const [q, setQ] = useState("");
-  const [neighborhood, setNeighborhood] = useState<string>("__all");
-  const [sort, setSort] = useState<"name" | "neighborhood" | "products">("neighborhood");
-  const [kindFilter, setKindFilter] = useState<string>("__all");
+  // Filtros persistidos em sessionStorage — sobrevivem ao voltar de /estabelecimento/$slug
+  const persisted = readPersistedFilters();
+  const [q, setQ] = useState(persisted.q);
+  const [neighborhood, setNeighborhood] = useState<string>(persisted.neighborhood);
+  const [sort, setSort] = useState<"name" | "neighborhood" | "products">(persisted.sort);
+  const [kindFilter, setKindFilter] = useState<string>(persisted.kindFilter);
   const [metricDetail, setMetricDetail] = useState<null | "establishments" | "products" | "savings" | "live">(null);
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const heroOverlayOpacity = useAdaptiveOverlayOpacity(mercadosHero.url, { min: 0.6, max: 0.94 });
+
+  // Salva no sessionStorage sempre que qualquer filtro muda.
+  useEffect(() => {
+    writePersistedFilters({ q, neighborhood, sort, kindFilter });
+  }, [q, neighborhood, sort, kindFilter]);
+
+  // Restaura scroll ao voltar
+  useEffect(() => {
+    const y = Number(sessionStorage.getItem(SCROLL_KEY) ?? "0");
+    if (y > 0) window.scrollTo({ top: y, behavior: "auto" });
+    const onScroll = () => {
+      sessionStorage.setItem(SCROLL_KEY, String(window.scrollY));
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
 
   const neighborhoods = useMemo(() => {
     if (!data) return [] as string[];
