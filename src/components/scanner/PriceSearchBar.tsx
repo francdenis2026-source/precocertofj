@@ -795,6 +795,13 @@ export function PriceSearchBar({
                   const rMax = result.max as number;
                   const gap = rMax - rMin;
                   const pct = Math.round((gap / rMax) * 100);
+                  // Mercado com o maior preço do MESMO produto de referência.
+                  const refGroup = result.groups?.find(
+                    (g) => g.productName === result.cheapest?.productName,
+                  );
+                  const priciestMarket = refGroup
+                    ? [...refGroup.prices].sort((a, b) => b.price - a.price)[0]?.marketName ?? null
+                    : null;
                   return (
                     <div className="grid gap-2 rounded-xl border border-white/10 bg-brand-navy px-3.5 py-3 text-white shadow-sm sm:grid-cols-2 sm:gap-4">
                       <div className="min-w-0">
@@ -823,6 +830,9 @@ export function PriceSearchBar({
                         </p>
                         <p className="mt-1 text-[11.5px] text-white/70 tabular-nums">
                           mesmo produto · mais caro {fmt(rMax)}
+                          {priciestMarket ? (
+                            <> em <span className="font-semibold text-white/90">{priciestMarket}</span></>
+                          ) : null}
                         </p>
 
                       </div>
