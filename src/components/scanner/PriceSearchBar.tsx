@@ -938,7 +938,7 @@ export function PriceSearchBar({
 
                     {groupBy === "product" && result.groups.length > 0 ? (
 
-                      <div className="space-y-2">
+                      <div className="pc-results">
                         {filteredOrdered.map(([cat, groups]) => {
                           // Ordena grupos: se sortMode === "relevance", usa score de
                           // correspondência (nome, marca, variações como 1L/integral);
@@ -955,18 +955,17 @@ export function PriceSearchBar({
                             return b.samples - a.samples;
                           });
                           return (
-                            <div key={cat} className="space-y-1.5">
+                            <div key={cat} className="pc-results">
                               {showHeaders ? (
                                 <div className="flex items-center gap-2 px-0.5">
-                                  <span className="text-[11px] font-semibold text-accent-strong">
-                                    {cat}
-                                  </span>
+                                  <span className="pc-res-label">{cat}</span>
                                   <span className="h-px flex-1 bg-border" aria-hidden="true" />
-                                  <span className="text-[11px] text-muted-foreground">
+                                  <span className="pc-res-meta tabular-nums">
                                     {sortedGroups.length} item{sortedGroups.length > 1 ? "s" : ""}
                                   </span>
                                 </div>
                               ) : null}
+
 
                               {(() => {
                                 const shown = pageByCat[cat] ?? PAGE_SIZE;
@@ -1575,13 +1574,13 @@ function ProductGroupCard({
   }, [prices]);
 
   return (
-    <div className="relative rounded-xl border border-border bg-card p-2">
-      <div className="mb-1.5 flex items-center justify-between gap-2">
+    <div className="pc-res-card relative">
+      <div className="mb-1 flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
-          <p className="truncate text-[15px] font-semibold tracking-tight text-foreground">
+          <p className="pc-res-title truncate">
             <HighlightMatch text={productName} tokens={highlightTokens} />
           </p>
-          <p className="mt-0.5 truncate text-[12px] text-muted-foreground">
+          <p className="pc-res-meta mt-0.5 truncate">
             <span className="font-semibold text-foreground">menor</span> {fmt(min)}
             <span aria-hidden="true" className="mx-1 opacity-40">·</span>
             média {fmt(avg)}
@@ -1591,8 +1590,12 @@ function ProductGroupCard({
             {samples} preço{samples > 1 ? "s" : ""}
           </p>
           {cheapestInGroup ? (
-            <p className="mt-1 inline-flex max-w-full items-center gap-1.5 rounded-md border border-accent-strong/40 bg-accent/10 px-1.5 py-0.5 text-[12px] text-foreground">
-              <Crown className="h-3 w-3 shrink-0 text-accent-strong" strokeWidth={2} aria-hidden="true" />
+            <p className="pc-res-meta mt-1 inline-flex max-w-full items-center gap-1.5 rounded-md border border-[color-mix(in_oklab,var(--brand-gold)_38%,transparent)] bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-1.5 py-0.5 text-foreground">
+              <Crown
+                className="h-3 w-3 shrink-0 text-[var(--pc-gold-ink)]"
+                strokeWidth={2}
+                aria-hidden="true"
+              />
               <StoreBadge
                 name={cheapestInGroup.marketName}
                 logoUrl={cheapestInGroup.marketLogoUrl}
@@ -1600,7 +1603,12 @@ function ProductGroupCard({
                 size="xs"
               />
               <span className="truncate">
-                Mais barato em <span className="market-name text-[12px]">{cheapestInGroup.marketName}</span> · <span className="font-semibold tabular-nums">{fmt(cheapestInGroup.price)}</span>
+                Mais barato em{" "}
+                <span className="market-name">{cheapestInGroup.marketName}</span>{" "}
+                ·{" "}
+                <span className="font-semibold tabular-nums">
+                  {fmt(cheapestInGroup.price)}
+                </span>
               </span>
             </p>
           ) : null}
@@ -1609,9 +1617,7 @@ function ProductGroupCard({
           )}
         </div>
 
-
-
-        <div className="flex shrink-0 items-center gap-1.5">
+        <div className="flex shrink-0 items-center gap-1">
           {onToggleCompare ? (
             <button
               type="button"
@@ -1624,11 +1630,10 @@ function ProductGroupCard({
                   : `Adicionar ${productName} à comparação`
               }
               className={
-                "rounded-full border px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest transition " +
+                "pc-res-label rounded-full border px-2 py-1 transition " +
                 (isCompareSelected
                   ? "border-accent-strong bg-accent-strong text-accent-foreground"
-                  : "border-primary/40 bg-background text-muted-foreground hover:border-primary/70 hover:text-primary disabled:cursor-not-allowed disabled:opacity-60")
-
+                  : "border-border bg-background text-muted-foreground hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)] disabled:cursor-not-allowed disabled:opacity-60")
               }
             >
               {isCompareSelected ? "✓ Comparar" : "+ Comparar"}
@@ -1638,23 +1643,21 @@ function ProductGroupCard({
           <Link
             to="/produto-publico/$slug"
             params={{ slug: productName }}
-            className="rounded-full border border-primary/30 bg-primary/5 px-2 py-0.5 font-mono text-[9px] tracking-wide text-primary hover:bg-primary/10"
+            className="pc-res-label rounded-full border border-border bg-background px-2 py-1 text-foreground hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)]"
           >
             Detalhes
           </Link>
         </div>
       </div>
 
-      <ul className="mt-1 divide-y divide-border/60 border-t border-border/60">
+      <ul className="mt-1 border-t border-[color-mix(in_oklab,var(--color-border)_70%,transparent)]">
         {prices.map((p, i) => {
           const isCheapest = globalMin != null && p.price === globalMin;
           return (
             <li
               key={`${p.marketName}-${p.when}-${i}`}
-              className={
-                "relative flex items-stretch gap-2 pr-2 py-1.5 pl-0 " +
-                (isCheapest ? "bg-accent/8" : "bg-transparent")
-              }
+              className="pc-res-row relative"
+              data-cheapest={isCheapest ? "true" : "false"}
             >
               <StoreColorBar name={p.marketName} brandColor={p.marketBrandColor} />
               {isCheapest ? (
@@ -1662,7 +1665,7 @@ function ProductGroupCard({
                   role="img"
                   aria-label="Menor preço"
                   title="Menor preço"
-                  className="my-auto grid h-6 w-6 shrink-0 place-items-center rounded-full bg-accent-strong text-accent-foreground"
+                  className="my-auto grid h-5.5 w-5.5 shrink-0 place-items-center rounded-full bg-accent-strong text-accent-foreground"
                 >
                   <Crown className="h-3 w-3" strokeWidth={2} aria-hidden="true" />
                 </span>
@@ -1670,12 +1673,11 @@ function ProductGroupCard({
                 <span
                   role="img"
                   aria-label={`Posição ${i + 1}`}
-                  className="my-auto grid h-6 w-6 shrink-0 place-items-center rounded-full border border-border bg-muted/30 text-[10px] font-semibold tabular-nums text-muted-foreground"
+                  className="my-auto grid h-5.5 w-5.5 shrink-0 place-items-center rounded-full border border-border bg-muted/40 text-[10px] font-semibold tabular-nums text-muted-foreground"
                 >
                   <span aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
                 </span>
               )}
-
 
               <StoreBadge
                 name={p.marketName}
@@ -1684,18 +1686,12 @@ function ProductGroupCard({
                 size="sm"
                 className="my-auto"
                 isCheapest={isCheapest}
-                cheapestReason={
-                  isCheapest ? buildCheapestReason(p.price, globalAvg) : null
-                }
+                cheapestReason={isCheapest ? buildCheapestReason(p.price, globalAvg) : null}
               />
               <div className="min-w-0 flex-1 self-center">
-                <p className="market-name truncate text-[13px]">
-                  {p.marketName}
-                </p>
-
-
-                <p className="truncate text-[11px] text-muted-foreground">
-                  {(p.marketKind ?? "Estabelecimento")}
+                <p className="market-name pc-res-store truncate">{p.marketName}</p>
+                <p className="pc-res-meta truncate">
+                  {p.marketKind ?? "Estabelecimento"}
                   <span aria-hidden="true" className="mx-1 opacity-40">·</span>
                   {new Date(p.when).toLocaleDateString("pt-BR")}
                 </p>
@@ -1710,20 +1706,9 @@ function ProductGroupCard({
                 className="self-center"
               />
               <div className="shrink-0 self-center text-right">
-                {isCheapest && (
-                  <p className="text-[10px] font-semibold uppercase tracking-wide text-accent-strong">
-                    Menor
-                  </p>
-                )}
-                <p className="text-[15px] font-bold leading-tight tabular-nums text-foreground">
-                  {fmt(p.price)}
-                </p>
-
-                <UnitPriceBadge
-                  price={p.price}
-                  productName={productName}
-                  className="mt-0.5"
-                />
+                {isCheapest && <p className="pc-res-label">Menor</p>}
+                <p className="pc-res-price">{fmt(p.price)}</p>
+                <UnitPriceBadge price={p.price} productName={productName} className="mt-0.5" />
               </div>
             </li>
           );

@@ -3128,3 +3128,81 @@ code, pre, kbd, samp, tt, var,
   }
 }
 
+
+/* ---------------------------------------------------------------------------
+   /buscar — grade de resultados
+   Escala tipográfica e espaçamento 100% tokenizados (claro e escuro).
+   Usar `.pc-results` no contêiner da listagem e as classes derivadas nos itens.
+--------------------------------------------------------------------------- */
+.pc-results {
+  --res-gap: 0.375rem;          /* espaço entre cards */
+  --res-card-pad: 0.5rem;       /* padding interno do card */
+  --res-row-pad-y: 0.3125rem;   /* altura das linhas de preço */
+  --res-radius: 0.75rem;
+
+  --res-title: 13.5px;
+  --res-meta: 11px;
+  --res-store: 12.5px;
+  --res-price: 14.5px;
+  --res-label: 9.5px;
+
+  --res-line: color-mix(in oklab, var(--color-border) 70%, transparent);
+  --res-highlight: color-mix(in oklab, var(--brand-gold) 10%, transparent);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--res-gap);
+}
+.dark .pc-results {
+  --res-highlight: color-mix(in oklab, var(--brand-gold) 14%, transparent);
+}
+
+.pc-res-card {
+  border-radius: var(--res-radius);
+  border: 1px solid var(--res-line);
+  background: var(--color-card);
+  padding: var(--res-card-pad);
+}
+.pc-res-title {
+  font-size: var(--res-title);
+  font-weight: 600;
+  letter-spacing: -0.011em;
+  line-height: 1.25;
+  color: var(--color-foreground);
+}
+.pc-res-meta {
+  font-size: var(--res-meta);
+  line-height: 1.35;
+  color: var(--color-muted-foreground);
+}
+.pc-res-store {
+  font-size: var(--res-store);
+  line-height: 1.25;
+}
+.pc-res-price {
+  font-size: var(--res-price);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-foreground);
+}
+.pc-res-label {
+  font-size: var(--res-label);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--pc-gold-ink);
+}
+.pc-res-row {
+  display: flex;
+  align-items: stretch;
+  gap: 0.5rem;
+  padding: var(--res-row-pad-y) 0.375rem var(--res-row-pad-y) 0;
+}
+.pc-res-row + .pc-res-row {
+  border-top: 1px solid var(--res-line);
+}
+.pc-res-row[data-cheapest="true"] {
+  background: var(--res-highlight);
+}
