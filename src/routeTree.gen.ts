@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SemPermissaoRouteImport } from './routes/sem-permissao'
 import { Route as ResgatarRouteImport } from './routes/resgatar'
 import { Route as PrivacidadeRouteImport } from './routes/privacidade'
@@ -98,6 +99,11 @@ import { Route as ApiPublicHooksRefreshCatalogImagesRouteImport } from './routes
 import { Route as ApiPublicHooksDrainCatalogImagesRouteImport } from './routes/api/public/hooks/drain-catalog-images'
 import { Route as ApiPublicHooksCollabInboundRouteImport } from './routes/api/public/hooks/collab-inbound'
 
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SemPermissaoRoute = SemPermissaoRouteImport.update({
   id: '/sem-permissao',
   path: '/sem-permissao',
@@ -584,6 +590,7 @@ export interface FileRoutesByFullPath {
   '/privacidade': typeof PrivacidadeRoute
   '/resgatar': typeof ResgatarRoute
   '/sem-permissao': typeof SemPermissaoRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/gestao': typeof AdminGestaoRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
@@ -674,6 +681,7 @@ export interface FileRoutesByTo {
   '/privacidade': typeof PrivacidadeRoute
   '/resgatar': typeof ResgatarRoute
   '/sem-permissao': typeof SemPermissaoRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/gestao': typeof AdminGestaoRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
@@ -765,6 +773,7 @@ export interface FileRoutesById {
   '/privacidade': typeof PrivacidadeRoute
   '/resgatar': typeof ResgatarRoute
   '/sem-permissao': typeof SemPermissaoRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/gestao': typeof AdminGestaoRoute
   '/admin_/analytics': typeof AdminAnalyticsRoute
   '/admin_/auditoria': typeof AdminAuditoriaRoute
@@ -857,6 +866,7 @@ export interface FileRouteTypes {
     | '/privacidade'
     | '/resgatar'
     | '/sem-permissao'
+    | '/sitemap.xml'
     | '/admin/gestao'
     | '/admin/analytics'
     | '/admin/auditoria'
@@ -947,6 +957,7 @@ export interface FileRouteTypes {
     | '/privacidade'
     | '/resgatar'
     | '/sem-permissao'
+    | '/sitemap.xml'
     | '/admin/gestao'
     | '/admin/analytics'
     | '/admin/auditoria'
@@ -1037,6 +1048,7 @@ export interface FileRouteTypes {
     | '/privacidade'
     | '/resgatar'
     | '/sem-permissao'
+    | '/sitemap.xml'
     | '/admin/gestao'
     | '/admin_/analytics'
     | '/admin_/auditoria'
@@ -1128,6 +1140,7 @@ export interface RootRouteChildren {
   PrivacidadeRoute: typeof PrivacidadeRoute
   ResgatarRoute: typeof ResgatarRoute
   SemPermissaoRoute: typeof SemPermissaoRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
   AdminAuditoriaRoute: typeof AdminAuditoriaRoute
   AdminAuditoriaAcessosRoute: typeof AdminAuditoriaAcessosRoute
@@ -1176,6 +1189,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sem-permissao': {
       id: '/sem-permissao'
       path: '/sem-permissao'
@@ -1894,6 +1914,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacidadeRoute: PrivacidadeRoute,
   ResgatarRoute: ResgatarRoute,
   SemPermissaoRoute: SemPermissaoRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   AdminAnalyticsRoute: AdminAnalyticsRoute,
   AdminAuditoriaRoute: AdminAuditoriaRoute,
   AdminAuditoriaAcessosRoute: AdminAuditoriaAcessosRoute,
@@ -1944,3 +1965,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
