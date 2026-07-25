@@ -17,7 +17,7 @@ const storeQuery = (id: string) =>
     staleTime: 60_000,
   });
 
-export const Route = createFileRoute("/estabelecimento/$slug/acougue")({
+export const Route = createFileRoute("/estabelecimento/$slug_/acougue")({
   loader: async ({ params, context }) => {
     const match = await resolveEstablishmentBySlug({ data: { slug: params.slug } });
     if (!match) throw notFound();
