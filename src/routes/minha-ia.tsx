@@ -91,9 +91,11 @@ function MyAiPage() {
             <div>
               <CardTitle className="text-base">Plano e regras</CardTitle>
               <CardDescription>
-                {quota?.planName
-                  ? `Plano ${quota.planName} — ${quota.limit} perguntas por mês.`
-                  : "Sem plano vinculado — cota padrão da plataforma."}
+                {quota?.reason === "plan_not_eligible"
+                  ? "O assistente de IA é exclusivo dos planos pagos (Mensal, Trimestral ou Anual). O plano Degustação não inclui IA."
+                  : quota?.planName
+                    ? `Plano ${quota.planName} — ${quota.limit} perguntas por mês.`
+                    : "Sem plano vinculado — cota padrão da plataforma."}
               </CardDescription>
             </div>
             <Button asChild size="sm" variant="outline">
