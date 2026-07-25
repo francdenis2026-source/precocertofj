@@ -81,6 +81,12 @@ function NeighborhoodsPage() {
   const promptSignIn = usePromptSignIn();
 
   const [term, setTerm] = useState("");
+  const [sortBy, setSortBy] = useState<"price" | "markets" | "alpha" | "favorites">(
+    "price",
+  );
+  const [category, setCategory] = useState<string>("");
+  const [cityFilter, setCityFilter] = useState<string>("");
+  const [onlyFavs, setOnlyFavs] = useState(false);
 
   const groups = useQuery({
     queryKey: ["neighborhoods"],
