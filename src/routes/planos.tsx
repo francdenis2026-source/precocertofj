@@ -386,3 +386,258 @@ function PlansPage() {
     </div>
   );
 }
+
+// ============================================================================
+// ComparisonMatrix — tabela comparativa lado a lado com plano ideal destacado
+// ============================================================================
+
+type ComparisonRow = {
+  label: string;
+  values: Partial<Record<string, string | boolean>>;
+};
+
+function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
+  const bySlug = Object.fromEntries(plans.map((p) => [p.slug, p]));
+  const val = (slug: string, v: string | boolean) => (bySlug[slug] ? { [slug]: v } : {});
+
+  return [
+    {
+      label: "Duração",
+      values: Object.fromEntries(
+        plans.map((p) => [
+          p.slug,
+          p.days >= 365 * 5 ? "Vitalício" : `${p.days} dias`,
+        ]),
+      ),
+    },
+    {
+      label: "Preço total",
+      values: Object.fromEntries(
+        plans.map((p) => [
+          p.slug,
+          p.price_cents === 0 ? "Grátis" : centsToBRL(p.price_cents),
+        ]),
+      ),
+    },
+    {
+      label: "Equivalente por mês",
+      values: Object.fromEntries(
+        plans.map((p) => [p.slug, pricePerMonth(p.price_cents, p.days) ?? "—"]),
+      ),
+    },
+    {
+      label: "Comparador ilimitado",
+      values: {
+        ...val("degustacao", true),
+        ...val("mensal", true),
+        ...val("trimestral", true),
+        ...val("anual", true),
+        ...val("fundador-feijo", true),
+        ...val("fundador", true),
+      },
+    },
+    {
+      label: "Alertas de queda de preço",
+      values: {
+        ...val("degustacao", "Prévia"),
+        ...val("mensal", true),
+        ...val("trimestral", true),
+        ...val("anual", true),
+        ...val("fundador-feijo", true),
+        ...val("fundador", true),
+      },
+    },
+    {
+      label: "Listas inteligentes",
+      values: {
+        ...val("degustacao", true),
+        ...val("mensal", true),
+        ...val("trimestral", true),
+        ...val("anual", true),
+        ...val("fundador-feijo", true),
+        ...val("fundador", true),
+      },
+    },
+    {
+      label: "Histórico completo",
+      values: {
+        ...val("degustacao", false),
+        ...val("mensal", true),
+        ...val("trimestral", true),
+        ...val("anual", true),
+        ...val("fundador-feijo", true),
+        ...val("fundador", true),
+      },
+    },
+    {
+      label: "Suporte prioritário",
+      values: {
+        ...val("degustacao", false),
+        ...val("mensal", false),
+        ...val("trimestral", true),
+        ...val("anual", true),
+        ...val("fundador-feijo", true),
+        ...val("fundador", true),
+      },
+    },
+    {
+      label: "Selo de apoiador",
+      values: {
+        ...val("fundador-feijo", true),
+        ...val("fundador", true),
+      },
+    },
+  ];
+}
+
+function ComparisonCell({ value }: { value: string | boolean | undefined }) {
+  if (value === true) {
+    return (
+      <span className="inline-flex items-center justify-center">
+        <Check className="h-4 w-4 text-brand-gold" strokeWidth={2.5} aria-label="Incluído" />
+      </span>
+    );
+  }
+  if (value === false || value === undefined) {
+    return (
+      <span className="inline-flex items-center justify-center text-muted-foreground/50">
+        <Minus className="h-3.5 w-3.5" aria-label="Não incluído" />
+      </span>
+    );
+  }
+  return <span className="text-[12.5px] font-semibold text-foreground">{value}</span>;
+}
+
+function ComparisonMatrix({
+  plans,
+  recommendedSlug,
+  onBuy,
+  buying,
+}: {
+  plans: PublicPlan[];
+  recommendedSlug: string;
+  onBuy: (p: PublicPlan) => void;
+  buying: string | null;
+}) {
+  if (plans.length === 0) return null;
+  const rows = planFeatureMatrix(plans);
+
+  return (
+    <div className="overflow-x-auto rounded-2xl border border-border/60 bg-card shadow-elev-1">
+      <table className="w-full min-w-[640px] border-collapse text-left">
+        <thead>
+          <tr className="border-b border-border/60">
+            <th
+              scope="col"
+              className="sticky left-0 z-[1] w-[38%] bg-card px-4 py-3 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground"
+            >
+              Recursos
+            </th>
+            {plans.map((p) => {
+              const isRec = p.slug === recommendedSlug;
+              return (
+                <th
+                  key={p.id}
+                  scope="col"
+                  className={dsx(
+                    "px-3 py-3 text-center align-top",
+                    isRec && "relative bg-brand-gold/[0.08]",
+                  )}
+                >
+                  {isRec && (
+                    <span
+                      aria-hidden
+                      className="absolute inset-x-0 top-0 h-[3px] bg-brand-gold"
+                    />
+                  )}
+                  {isRec && (
+                    <span className="mb-1.5 inline-flex items-center gap-1 rounded-full bg-brand-gold px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.14em] text-brand-navy">
+                      <Sparkles className="h-2.5 w-2.5" aria-hidden /> Ideal
+                    </span>
+                  )}
+                  <div className="font-display text-[13.5px] font-semibold text-foreground">
+                    {p.name}
+                  </div>
+                  <div className="mt-0.5 text-[11px] text-muted-foreground">
+                    {p.price_cents === 0
+                      ? "Grátis"
+                      : `${centsToBRL(p.price_cents)}${
+                          p.days >= 60
+                            ? ` · ${pricePerMonth(p.price_cents, p.days)}/mês`
+                            : ""
+                        }`}
+                  </div>
+                </th>
+              );
+            })}
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row, i) => (
+            <tr
+              key={row.label}
+              className={i % 2 === 0 ? "bg-muted/20" : "bg-transparent"}
+            >
+              <th
+                scope="row"
+                className="sticky left-0 z-[1] whitespace-normal bg-inherit px-4 py-2.5 text-left text-[12.5px] font-medium text-foreground"
+              >
+                {row.label}
+              </th>
+              {plans.map((p) => {
+                const isRec = p.slug === recommendedSlug;
+                return (
+                  <td
+                    key={p.id}
+                    className={dsx(
+                      "px-3 py-2.5 text-center",
+                      isRec && "bg-brand-gold/[0.06]",
+                    )}
+                  >
+                    <ComparisonCell value={row.values[p.slug]} />
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+          {/* Linha final: CTAs */}
+          <tr className="border-t-2 border-border/60">
+            <th scope="row" className="sticky left-0 z-[1] bg-card px-4 py-3" />
+            {plans.map((p) => {
+              const isRec = p.slug === recommendedSlug;
+              const isFree = p.price_cents === 0;
+              return (
+                <td
+                  key={p.id}
+                  className={dsx("px-2 py-3 align-top", isRec && "bg-brand-gold/[0.08]")}
+                >
+                  <button
+                    type="button"
+                    onClick={() => onBuy(p)}
+                    disabled={buying === p.id}
+                    className={dsx(
+                      "inline-flex w-full items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11.5px] font-bold uppercase tracking-wide transition-all disabled:cursor-wait disabled:opacity-70",
+                      isRec
+                        ? "bg-brand-gold text-brand-navy shadow-sm hover:brightness-105"
+                        : "border border-border bg-background text-foreground hover:border-brand-gold hover:text-brand-gold",
+                    )}
+                  >
+                    {buying === p.id
+                      ? "…"
+                      : isFree
+                        ? "Testar grátis"
+                        : isRec
+                          ? "Assinar agora"
+                          : "Escolher"}
+                    <ArrowRight className="h-3 w-3" aria-hidden />
+                  </button>
+                </td>
+              );
+            })}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
