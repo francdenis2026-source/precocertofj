@@ -2195,9 +2195,9 @@ body.no-page-bg::before { display: none; }
   --pc-shadow-3: 0 10px 30px -12px color-mix(in oklab, var(--pc-home-navy) 30%, transparent),
                  0 30px 60px -30px color-mix(in oklab, var(--pc-home-navy) 34%, transparent);
 
-  /* rhythm — vertical section spacing (fluid) */
-  --pc-section-y: clamp(1.75rem, 3.2vw, 2.75rem);
-  --pc-section-gap: clamp(1rem, 2vw, 1.75rem);
+  /* rhythm — vertical section spacing (fluid, compacto) */
+  --pc-section-y: clamp(1rem, 2vw, 1.75rem);
+  --pc-section-gap: clamp(0.625rem, 1.4vw, 1.125rem);
 }
 
 /* dark: sombras mais densas em preto puro, radii idênticos */
