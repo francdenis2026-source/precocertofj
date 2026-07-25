@@ -687,7 +687,15 @@ function ComparadorPage() {
 
         </div>
 
-        {referenceRow && (
+        {equivalentRanking ? (
+          <div className="mt-5">
+            <PriceRankingPanel
+              productName={`${equivalentRanking.label} · ${equivalentRanking.brands} marcas`}
+              sizeLabel={equivalentRanking.sizeLabel}
+              stores={equivalentRanking.stores}
+            />
+          </div>
+        ) : referenceRow ? (
           <div className="mt-5">
             <PriceRankingPanel
               productName={referenceRow.display_name}
@@ -696,7 +704,8 @@ function ComparadorPage() {
               onOpenStore={() => setOpenStoresRow(referenceRow)}
             />
           </div>
-        )}
+        ) : null}
+
       </section>
 
 
