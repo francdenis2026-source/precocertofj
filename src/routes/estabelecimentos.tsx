@@ -94,7 +94,31 @@ function writePersistedFilters(f: PersistedFilters) {
     sessionStorage.setItem(FILTERS_KEY, JSON.stringify(f));
   } catch {
     /* storage cheio ou bloqueado — ignorar */
-  }
+}
+
+// Classificação por catálogo — sempre presente para consistência visual entre cards
+function classifyTier(productsCount: number): { label: string; color: string } {
+  if (productsCount >= 200) return { label: "Ouro", color: "#c9a227" };
+  if (productsCount >= 60) return { label: "Prata", color: "#7c8895" };
+  if (productsCount >= 15) return { label: "Bronze", color: "#a97142" };
+  return { label: "Novo", color: "#4b6cb7" };
+}
+
+// Freshness — proxy de "horários" (sinaliza atividade recente do estabelecimento)
+function describeFreshness(iso: string | null): { label: string; live: boolean } {
+  if (!iso) return { label: "Sem atualização recente", live: false };
+  const t = new Date(iso).getTime();
+  if (!Number.isFinite(t)) return { label: "Sem atualização recente", live: false };
+  const diff = Date.now() - t;
+  const hours = diff / (60 * 60 * 1000);
+  if (hours < 24) return { label: "Atualizado hoje", live: true };
+  const days = Math.floor(hours / 24);
+  if (days === 1) return { label: "Atualizado ontem", live: true };
+  if (days < 7) return { label: `Atualizado há ${days} dias`, live: true };
+  if (days < 30) return { label: `Atualizado há ${Math.floor(days / 7)} sem.`, live: false };
+  return { label: "Atualização antiga", live: false };
+}
+
 }
 
 
