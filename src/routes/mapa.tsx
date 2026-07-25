@@ -131,22 +131,106 @@ function NeighborhoodsPage() {
     },
   });
 
+  // Opções derivadas (categorias e cidades disponíveis)
+  const availableCategories = useMemo(() => {
+    const set = new Map<string, number>();
+    for (const g of groups.data ?? []) {
+      for (const c of g.topCategories) {
+        set.set(c.name, (set.get(c.name) ?? 0) + c.count);
+      }
+    }
+    return Array.from(set.entries())
+      .sort((a, z) => z[1] - a[1])
+      .map(([name]) => name);
+  }, [groups.data]);
+
+  const availableCities = useMemo(() => {
+    const set = new Set<string>();
+    for (const g of groups.data ?? []) {
+      if (g.city) set.add(g.city);
+    }
+    return Array.from(set).sort((a, z) => a.localeCompare(z, "pt-BR"));
+  }, [groups.data]);
+
+  // Preço mínimo por bairro (para ordenar por "menor preço")
+  const minPriceByNeighborhood = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const g of groups.data ?? []) {
+      const prices = g.topProducts
+        .map((p) => p.minPrice)
+        .filter((v): v is number => v != null);
+      if (prices.length > 0) m.set(g.neighborhood, Math.min(...prices));
+    }
+    return m;
+  }, [groups.data]);
+
   const filteredGroups = useMemo(() => {
     const data = groups.data ?? [];
     const q = term.trim().toLocaleLowerCase("pt-BR");
-    if (!q) return data;
-    return data
-      .map((g) => ({
-        ...g,
-        establishments: g.establishments.filter((e) =>
-          e.name.toLocaleLowerCase("pt-BR").includes(q),
-        ),
-      }))
-      .filter((g) => g.establishments.length > 0);
-  }, [groups.data, term]);
+
+    let out = data.map((g) => {
+      const ests = q
+        ? g.establishments.filter((e) =>
+            e.name.toLocaleLowerCase("pt-BR").includes(q),
+          )
+        : g.establishments;
+      return { ...g, establishments: ests };
+    });
+
+    if (q) out = out.filter((g) => g.establishments.length > 0);
+
+    if (cityFilter) {
+      out = out.filter((g) => (g.city ?? "") === cityFilter);
+    }
+
+    if (category) {
+      out = out.filter((g) => g.topCategories.some((c) => c.name === category));
+    }
+
+    if (onlyFavs) {
+      out = out.filter((g) => favKeys.has(g.neighborhood));
+    }
+
+    // Ordenação
+    const collator = new Intl.Collator("pt-BR", { sensitivity: "base" });
+    if (sortBy === "price") {
+      out = [...out].sort((a, z) => {
+        const pa = minPriceByNeighborhood.get(a.neighborhood) ?? Infinity;
+        const pz = minPriceByNeighborhood.get(z.neighborhood) ?? Infinity;
+        if (pa !== pz) return pa - pz;
+        return collator.compare(a.neighborhood, z.neighborhood);
+      });
+    } else if (sortBy === "markets") {
+      out = [...out].sort(
+        (a, z) => z.establishments.length - a.establishments.length,
+      );
+    } else if (sortBy === "alpha") {
+      out = [...out].sort((a, z) => collator.compare(a.neighborhood, z.neighborhood));
+    } else if (sortBy === "favorites") {
+      out = [...out].sort((a, z) => {
+        const fa = favKeys.has(a.neighborhood) ? 0 : 1;
+        const fz = favKeys.has(z.neighborhood) ? 0 : 1;
+        if (fa !== fz) return fa - fz;
+        return z.establishments.length - a.establishments.length;
+      });
+    }
+
+    return out;
+  }, [groups.data, term, cityFilter, category, onlyFavs, sortBy, favKeys, minPriceByNeighborhood]);
 
   const totalMarkets =
     filteredGroups.reduce((n, g) => n + g.establishments.length, 0) ?? 0;
+
+  const hasActiveFilters =
+    !!term || !!category || !!cityFilter || onlyFavs || sortBy !== "price";
+
+  const clearFilters = () => {
+    setTerm("");
+    setCategory("");
+    setCityFilter("");
+    setOnlyFavs(false);
+    setSortBy("price");
+  };
 
   const favoriteGroups = useMemo(() => {
     if (!favs.data || favs.data.length === 0) return [];
