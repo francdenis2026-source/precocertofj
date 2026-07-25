@@ -762,9 +762,10 @@ function EstablishmentsPage() {
                   </div>
                 ) : (
                 <ul
-                  className="grid grid-cols-1 gap-3 p-4 sm:grid-cols-2 md:p-5"
+                  className="grid grid-cols-1 gap-2.5 p-2.5 sm:grid-cols-2 sm:gap-3 md:p-4"
                   aria-label="Lista de estabelecimentos"
                 >
+
                   {visibleItems.map((e) => {
                     const isCheapest = badgeIds.cheapestId === e.id;
                     const recent = isRecent(e.lastUpdate);
