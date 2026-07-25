@@ -89,7 +89,7 @@ import { Route as AdminAuditoriaAcessosRouteImport } from './routes/admin_.audit
 import { Route as AdminAuditoriaRouteImport } from './routes/admin_.auditoria'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin_.analytics'
 import { Route as AdminGestaoRouteImport } from './routes/admin/gestao'
-import { Route as EstabelecimentoSlugAcougueRouteImport } from './routes/estabelecimento.$slug.acougue'
+import { Route as EstabelecimentoSlugAcougueRouteImport } from './routes/estabelecimento.$slug_.acougue'
 import { Route as ApiPublicMpWebhookRouteImport } from './routes/api/public/mp-webhook'
 import { Route as ApiAdminCatalogImageRouteImport } from './routes/api/admin/catalog-image'
 import { Route as AdminCoberturaIdRouteImport } from './routes/admin_.cobertura.$id'
@@ -504,9 +504,9 @@ const AdminGestaoRoute = AdminGestaoRouteImport.update({
 } as any)
 const EstabelecimentoSlugAcougueRoute =
   EstabelecimentoSlugAcougueRouteImport.update({
-    id: '/acougue',
-    path: '/acougue',
-    getParentRoute: () => EstabelecimentoSlugRoute,
+    id: '/estabelecimento/$slug_/acougue',
+    path: '/estabelecimento/$slug/acougue',
+    getParentRoute: () => rootRouteImport,
   } as any)
 const ApiPublicMpWebhookRoute = ApiPublicMpWebhookRouteImport.update({
   id: '/api/public/mp-webhook',
@@ -836,7 +836,7 @@ export interface FileRoutesById {
   '/admin_/cobertura/$id': typeof AdminCoberturaIdRoute
   '/api/admin/catalog-image': typeof ApiAdminCatalogImageRoute
   '/api/public/mp-webhook': typeof ApiPublicMpWebhookRoute
-  '/estabelecimento/$slug/acougue': typeof EstabelecimentoSlugAcougueRoute
+  '/estabelecimento/$slug_/acougue': typeof EstabelecimentoSlugAcougueRoute
   '/api/public/hooks/collab-inbound': typeof ApiPublicHooksCollabInboundRoute
   '/api/public/hooks/drain-catalog-images': typeof ApiPublicHooksDrainCatalogImagesRoute
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
@@ -1117,7 +1117,7 @@ export interface FileRouteTypes {
     | '/admin_/cobertura/$id'
     | '/api/admin/catalog-image'
     | '/api/public/mp-webhook'
-    | '/estabelecimento/$slug/acougue'
+    | '/estabelecimento/$slug_/acougue'
     | '/api/public/hooks/collab-inbound'
     | '/api/public/hooks/drain-catalog-images'
     | '/api/public/hooks/refresh-catalog-images'
@@ -1206,6 +1206,7 @@ export interface RootRouteChildren {
   ProdutoSlugRoute: typeof ProdutoSlugRoute
   ApiAdminCatalogImageRoute: typeof ApiAdminCatalogImageRoute
   ApiPublicMpWebhookRoute: typeof ApiPublicMpWebhookRoute
+  EstabelecimentoSlugAcougueRoute: typeof EstabelecimentoSlugAcougueRoute
   ApiPublicHooksCollabInboundRoute: typeof ApiPublicHooksCollabInboundRoute
   ApiPublicHooksDrainCatalogImagesRoute: typeof ApiPublicHooksDrainCatalogImagesRoute
   ApiPublicHooksRefreshCatalogImagesRoute: typeof ApiPublicHooksRefreshCatalogImagesRoute
@@ -1775,12 +1776,12 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminGestaoRouteImport
       parentRoute: typeof AdminRoute
     }
-    '/estabelecimento/$slug/acougue': {
-      id: '/estabelecimento/$slug/acougue'
-      path: '/acougue'
+    '/estabelecimento/$slug_/acougue': {
+      id: '/estabelecimento/$slug_/acougue'
+      path: '/estabelecimento/$slug/acougue'
       fullPath: '/estabelecimento/$slug/acougue'
       preLoaderRoute: typeof EstabelecimentoSlugAcougueRouteImport
-      parentRoute: typeof EstabelecimentoSlugRoute
+      parentRoute: typeof rootRouteImport
     }
     '/api/public/mp-webhook': {
       id: '/api/public/mp-webhook'
@@ -1894,12 +1895,10 @@ const AdminCoberturaRouteWithChildren = AdminCoberturaRoute._addFileChildren(
 )
 
 interface EstabelecimentoSlugRouteChildren {
-  EstabelecimentoSlugAcougueRoute: typeof EstabelecimentoSlugAcougueRoute
   EstabelecimentoSlugCategoriaCategoryRoute: typeof EstabelecimentoSlugCategoriaCategoryRoute
 }
 
 const EstabelecimentoSlugRouteChildren: EstabelecimentoSlugRouteChildren = {
-  EstabelecimentoSlugAcougueRoute: EstabelecimentoSlugAcougueRoute,
   EstabelecimentoSlugCategoriaCategoryRoute:
     EstabelecimentoSlugCategoriaCategoryRoute,
 }
@@ -1997,6 +1996,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProdutoSlugRoute: ProdutoSlugRoute,
   ApiAdminCatalogImageRoute: ApiAdminCatalogImageRoute,
   ApiPublicMpWebhookRoute: ApiPublicMpWebhookRoute,
+  EstabelecimentoSlugAcougueRoute: EstabelecimentoSlugAcougueRoute,
   ApiPublicHooksCollabInboundRoute: ApiPublicHooksCollabInboundRoute,
   ApiPublicHooksDrainCatalogImagesRoute: ApiPublicHooksDrainCatalogImagesRoute,
   ApiPublicHooksRefreshCatalogImagesRoute:
