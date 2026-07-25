@@ -190,18 +190,12 @@ export function CollaboratorStatusCard() {
         )}
 
         <div className="mt-4 flex flex-wrap items-center gap-2">
-          <a
-            href={collabMailtoHref()}
+          <Link
+            to="/colaborar"
             className="inline-flex h-10 items-center gap-2 rounded-full bg-primary px-5 text-[13px] font-bold text-primary-foreground shadow-[0_2px_0_0_rgb(0_0_0/0.08)] transition hover:-translate-y-0.5 hover:bg-primary/90 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
           >
             Enviar nova nota fiscal
             <ArrowRight className="h-4 w-4" strokeWidth={2.4} />
-          </a>
-          <Link
-            to="/colaborar"
-            className="inline-flex h-10 items-center gap-1 rounded-full border border-border bg-background px-4 text-[13px] font-semibold text-foreground hover:bg-muted"
-          >
-            Como funciona
           </Link>
         </div>
       </div>
