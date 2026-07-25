@@ -312,47 +312,27 @@ function PlansPage() {
         </section>
 
 
-        {/* Comparativo — slim */}
+        {/* Comparativo — matriz de recursos com plano ideal destacado */}
         <section className={dsx(ds.container, "pb-8 md:pb-10")}>
-          <div className="rounded-xl border border-border/60 bg-card overflow-hidden">
-            <div className="border-b border-border/60 px-4 py-2.5">
-              <h2 className="font-display text-[14px] font-semibold tracking-tight text-foreground">
-                Quanto custa cada plano
+          <div className="mx-auto max-w-5xl">
+            <div className="mb-3 text-center">
+              <p className={ds.type.overline}>Compare lado a lado</p>
+              <h2 className="mt-1 font-display text-[17px] font-semibold tracking-tight text-foreground sm:text-[19px]">
+                O que está incluído em cada plano
               </h2>
-              <p className="text-[11.5px] text-muted-foreground">
-                Duração, preço total e equivalente mensal.
+              <p className="mt-1 text-[12px] text-muted-foreground">
+                Destaque em dourado no plano ideal para a maioria dos assinantes.
               </p>
             </div>
-            <div className="overflow-x-auto">
-              <table className="w-full text-[12.5px]">
-                <thead className="bg-muted/40 text-[10.5px] uppercase tracking-wider text-muted-foreground">
-                  <tr>
-                    <th className="px-3 py-2 text-left font-semibold">Plano</th>
-                    <th className="px-3 py-2 text-left font-semibold">Duração</th>
-                    <th className="px-3 py-2 text-left font-semibold">Preço</th>
-                    <th className="px-3 py-2 text-left font-semibold">Equiv./mês</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {plans.map((p) => (
-                    <tr key={p.id} className="border-t border-border/50">
-                      <td className="px-3 py-2 font-medium text-foreground">{p.name}</td>
-                      <td className="px-3 py-2 text-foreground/80">
-                        {p.days >= 365 * 5 ? "Vitalício" : `${p.days} dias`}
-                      </td>
-                      <td className="px-3 py-2 text-foreground/80">
-                        {p.price_cents === 0 ? "Grátis" : centsToBRL(p.price_cents)}
-                      </td>
-                      <td className="px-3 py-2 text-muted-foreground">
-                        {pricePerMonth(p.price_cents, p.days) ?? "—"}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <ComparisonMatrix
+              plans={plans}
+              recommendedSlug={recommendedSlug}
+              onBuy={handleBuy}
+              buying={buying}
+            />
           </div>
         </section>
+
 
         {/* FAQ — compact */}
         <section
