@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { Search } from "lucide-react";
+import { Search, Link2, Check } from "lucide-react";
 import { scrollToSection } from "@/lib/scroll";
+
 
 
 const P = {
