@@ -287,42 +287,59 @@ function HomePage() {
       </nav>
 
 
-      {/* ============== HERO — SaaS premium (navy solid, search central) ============== */}
+      {/* ============== HERO — Foto editorial + scrim navy ============== */}
       <section
         aria-labelledby="hero-title"
         className="relative w-full overflow-hidden"
         style={{ background: P.navy, color: "#F5F6FA" }}
       >
-        {/* Fundo: mesh gold discreto + grid tênue — cara de dashboard, sem foto stock */}
+        {/* Foto de fundo */}
+        <img
+          src={homeHeroImg}
+          alt=""
+          aria-hidden
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
+          style={{ opacity: 0.42 }}
+        />
+        {/* Scrim navy vertical para leitura */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -top-40 -right-32 h-[520px] w-[520px] rounded-full"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: `linear-gradient(180deg, color-mix(in oklab, ${P.navy} 78%, transparent) 0%, color-mix(in oklab, ${P.navy} 62%, transparent) 45%, color-mix(in oklab, ${P.navy} 88%, transparent) 100%)`,
+          }}
+        />
+        {/* Vinheta lateral p/ contraste em telas largas */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 hidden sm:block"
+          style={{
+            background: `radial-gradient(120% 80% at 50% 40%, transparent 40%, color-mix(in oklab, ${P.navy} 55%, transparent) 100%)`,
+          }}
+        />
+        {/* Glow dourado */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-40 -right-32 h-[420px] w-[420px] rounded-full"
           style={{
             background: `radial-gradient(circle, color-mix(in oklab, ${P.gold} 55%, transparent) 0%, transparent 65%)`,
             filter: "blur(90px)",
-            opacity: 0.35,
+            opacity: 0.32,
           }}
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[420px] rounded-full"
+          className="pointer-events-none absolute -bottom-40 -left-32 h-[360px] w-[360px] rounded-full"
           style={{
             background: `radial-gradient(circle, color-mix(in oklab, ${P.gold} 30%, transparent) 0%, transparent 70%)`,
             filter: "blur(100px)",
-            opacity: 0.25,
+            opacity: 0.22,
           }}
         />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.05]"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)",
-            backgroundSize: "64px 64px",
-            maskImage: "radial-gradient(circle at 50% 40%, black 30%, transparent 75%)",
-            WebkitMaskImage: "radial-gradient(circle at 50% 40%, black 30%, transparent 75%)",
-          }}
-        />
+
 
         <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-8 pb-10 sm:px-6 sm:pt-12 sm:pb-14 lg:px-8 lg:pt-16 lg:pb-16">
           <div className="mx-auto max-w-4xl text-center">
