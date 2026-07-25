@@ -656,6 +656,12 @@ function HomePage() {
       </section>
 
 
+      {/* ============== MERCADOS PARCEIROS — faixa de logos ============== */}
+      <PartnersStrip />
+
+
+
+
       {/* ============== 3 PILARES (cards) ============== */}
       <section className="pc-container pt-8 sm:pt-10">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5">
