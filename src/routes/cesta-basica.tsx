@@ -70,6 +70,8 @@ import { getMyAccount } from "@/lib/account.functions";
 import { EssentialGlyph, BasketMark } from "@/components/cesta/EssentialGlyph";
 import { ItemPriceStrip, type PriceStripRow } from "@/components/basket/ItemPriceStrip";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
+import { AiCostEstimate } from "@/components/ai/AiCostEstimate";
+
 
 export const Route = createFileRoute("/cesta-basica")({
   validateSearch: (
@@ -4509,7 +4511,13 @@ function AssistantSidePanel({
         </div>
 
         <footer className="border-t border-border p-3">
+          <AiCostEstimate
+            draft={input}
+            historyChars={turns.reduce((s, t) => s + t.content.length, 0)}
+            className="mb-2"
+          />
           <div className="flex items-end gap-2">
+
             <textarea
               ref={inputRef}
               value={input}
