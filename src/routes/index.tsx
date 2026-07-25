@@ -18,6 +18,7 @@ import {
   Pill,
   HardHat,
   Fuel,
+  Grid3x3,
 } from "lucide-react";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
