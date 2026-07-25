@@ -254,7 +254,7 @@ function ReviewDialog({
   const reviewFn = useServerFn(reviewCollaboratorSubmission);
   const signFn = useServerFn(signCollabAttachments);
   const { confirm } = useConfirm();
-  const [rewardDays, setRewardDays] = useState(30);
+  const [rewardDays, setRewardDays] = useState(7);
   const [reason, setReason] = useState("");
   const [notes, setNotes] = useState("");
 
