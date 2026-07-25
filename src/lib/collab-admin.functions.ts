@@ -198,14 +198,16 @@ export const collabSubmissionMetrics = createServerFn({ method: "GET" })
     return counts;
   });
 
+type Json = string | number | boolean | null | { [k: string]: Json } | Json[];
+
 export type CollabAuditEntry = {
   id: string;
   admin_user_id: string | null;
   admin_full_name: string | null;
   action: string;
   target_id: string | null;
-  before: Record<string, unknown> | null;
-  after: Record<string, unknown> | null;
+  before: Json;
+  after: Json;
   notes: string | null;
   created_at: string;
 };
