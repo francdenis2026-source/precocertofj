@@ -174,6 +174,24 @@ function EstablishmentPage() {
     data.store.address || data.store.neighborhood || data.store.city,
   );
 
+  const loc = useUserLocation();
+  const referencePoint = useMemo(() => {
+    if (loc.status === "granted" && loc.coords) return loc.coords;
+    if (loc.status === "manual" && loc.neighborhoodKey) {
+      return resolveEstablishmentPosition({ neighborhood: loc.neighborhoodKey }).position;
+    }
+    return null;
+  }, [loc.status, loc.coords, loc.neighborhoodKey]);
+  const distance = useMemo(() => {
+    if (!referencePoint) return null;
+    const { position, source } = resolveEstablishmentPosition({
+      latitude: data.store.latitude,
+      longitude: data.store.longitude,
+      neighborhood: data.store.neighborhood,
+    });
+    return { km: haversineKm(referencePoint, position), source };
+  }, [referencePoint, data.store.latitude, data.store.longitude, data.store.neighborhood]);
+
   const createAlert = (_p: PublicStoreProduct) => {
     navigate({ to: "/alertas" });
   };
