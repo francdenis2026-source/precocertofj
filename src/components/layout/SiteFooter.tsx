@@ -106,7 +106,7 @@ export function SiteFooter() {
       <div
         className={dsx(
           ds.container,
-          "hidden md:grid gap-2 py-2 sm:gap-4 md:grid-cols-[1.2fr_2fr] md:gap-6 md:py-2.5",
+          "hidden md:grid gap-2 py-1.5 sm:gap-3 md:grid-cols-[1.2fr_2fr] md:gap-5 md:py-2",
         )}
       >
         {/* Brand block */}
