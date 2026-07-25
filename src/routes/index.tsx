@@ -647,7 +647,82 @@ function HomePage() {
       </section>
 
 
-      {/* ============== MERCADOS PARCEIROS — faixa de logos ============== */}
+      {/* ============== CATEGORIAS RÁPIDAS ============== */}
+      <section
+        id="categorias"
+        aria-labelledby="categorias-title"
+        className="scroll-mt-24"
+        style={{ background: P.paper, borderBottom: `1px solid ${P.line}` }}
+      >
+        <div className="mx-auto w-full max-w-6xl px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
+          <div className="mb-2.5 flex items-center justify-between gap-3">
+            <h2
+              id="categorias-title"
+              className="text-[11px] font-bold uppercase tracking-[0.22em]"
+              style={{ color: P.heading }}
+            >
+              Pesquise por categoria
+            </h2>
+            <span className="hidden text-[11px] sm:inline" style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}>
+              Um clique para começar
+            </span>
+          </div>
+          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
+            {[
+              { key: "supermercados", label: "Supermercados", icon: <ShoppingCart className="h-5 w-5" strokeWidth={2.2} />, q: "supermercado" },
+              { key: "farmacias", label: "Farmácias", icon: <Pill className="h-5 w-5" strokeWidth={2.2} />, q: "farmácia" },
+              { key: "construcao", label: "Construção", icon: <HardHat className="h-5 w-5" strokeWidth={2.2} />, q: "construção" },
+              { key: "postos", label: "Postos", icon: <Fuel className="h-5 w-5" strokeWidth={2.2} />, q: "posto combustível" },
+            ].map((c) => (
+              <button
+                key={c.key}
+                type="button"
+                onClick={() => navigate({ to: "/buscar", search: { q: c.q } as any })}
+                aria-label={`Pesquisar em ${c.label}`}
+                className="group flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-all hover:-translate-y-px hover:shadow-md focus-visible:outline-none focus-visible:ring-2"
+                style={{
+                  background: P.card,
+                  borderColor: P.line,
+                  color: P.heading,
+                  // @ts-expect-error css var
+                  "--tw-ring-color": `color-mix(in oklab, ${P.gold} 60%, transparent)`,
+                }}
+              >
+                <span
+                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition-colors group-hover:brightness-110"
+                  style={{
+                    background: `color-mix(in oklab, ${P.gold} 16%, transparent)`,
+                    color: P.navy,
+                    border: `1px solid color-mix(in oklab, ${P.gold} 38%, transparent)`,
+                  }}
+                  aria-hidden
+                >
+                  {c.icon}
+                </span>
+                <span className="flex-1 min-w-0">
+                  <span className="block truncate text-[13.5px] font-semibold leading-tight sm:text-[14px]">
+                    {c.label}
+                  </span>
+                  <span
+                    className="mt-0.5 hidden text-[11px] font-medium sm:block"
+                    style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
+                  >
+                    Ver ofertas
+                  </span>
+                </span>
+                <ArrowRight
+                  className="h-4 w-4 shrink-0 opacity-60 transition-all group-hover:translate-x-0.5 group-hover:opacity-100"
+                  strokeWidth={2.4}
+                  style={{ color: P.gold }}
+                />
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
+
       <section id="parceiros" className="scroll-mt-24">
         <PartnersStrip />
       </section>
