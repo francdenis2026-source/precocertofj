@@ -265,10 +265,6 @@ function HomePage() {
       <SiteHeader variant="solid" showThemeToggle />
 
 
-      {/* -------- STICKY ANCHOR NAV (scroll-spy + mini busca) -------- */}
-      <HomeAnchorNav
-        onSearch={(query) => navigate({ to: "/buscar", search: { q: query } as any })}
-      />
 
 
       {/* ============== HERO — Foto editorial + scrim navy ============== */}
