@@ -22,6 +22,10 @@ import { StoreBadge, StoreColorBar } from "@/components/brand/StoreBadge";
 import { readableTextOn } from "@/lib/color-contrast";
 import { tokenizeQuery, type SearchMode, type MatchReason } from "@/lib/search-tokens";
 import { ProductCompareDialog, CompareTray } from "@/components/search/ProductCompareDialog";
+import {
+  SearchEmptyState,
+  type EmptyFilterShortcut,
+} from "@/components/search/SearchEmptyState";
 import { ProductQuickModal } from "@/components/home/ProductQuickModal";
 import { useLocalStorageState } from "@/hooks/use-local-storage";
 // TeaserCard removido: resultados de busca são públicos e mostram nomes dos mercados
@@ -74,6 +78,9 @@ export function PriceSearchBar({
   priceMin,
   priceMax,
   onQueryChange,
+  filterShortcuts = [],
+  activeFilterCount = 0,
+  onClearFilters,
 }: {
   initialQuery?: string;
   mode?: SearchMode;
@@ -82,6 +89,10 @@ export function PriceSearchBar({
   priceMin?: number;
   priceMax?: number;
   onQueryChange?: (q: string) => void;
+  /** Atalhos exibidos no estado vazio para afrouxar filtros da rota. */
+  filterShortcuts?: EmptyFilterShortcut[];
+  activeFilterCount?: number;
+  onClearFilters?: () => void;
 }) {
 
   const runSearch = useServerFn(searchProductPrice);
@@ -738,10 +749,21 @@ export function PriceSearchBar({
           )}
           {result.samples === 0 ? (
             <>
-              <p className="rounded-lg border border-border bg-background p-3 text-center font-mono text-[10px] text-muted-foreground">
-                Nenhum preço encontrado para “{result.query}”. Faça um scan para
-                cadastrar o primeiro.
-              </p>
+              <SearchEmptyState
+                query={result.query}
+                recent={history.map((h) => h.query)}
+                onSearch={(term) => {
+                  const next = normalizeInput(term);
+                  setInputValue(next);
+                  setShowSuggest(false);
+                  runQuery(next);
+                }}
+                onClearQuery={clear}
+                filterShortcuts={filterShortcuts}
+                activeFilterCount={activeFilterCount}
+                onClearFilters={onClearFilters}
+              />
+
               {didYouMean && (
                 <button
                   type="button"
@@ -1029,35 +1051,22 @@ export function PriceSearchBar({
               })()}
 
               {result.groups.length === 0 && result.markets.length === 0 && (
-                <div className="mt-2 flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-brand-gold/40 bg-gradient-to-b from-brand-navy/[0.03] to-transparent px-6 py-8 text-center dark:from-brand-gold/[0.04]">
-                  <span className="mb-3 grid h-14 w-14 place-items-center rounded-full border-2 border-brand-gold/50 bg-brand-gold/10 text-brand-gold shadow-[0_6px_18px_-8px_color-mix(in_oklab,var(--brand-gold)_70%,transparent)]">
-                    <Search className="h-6 w-6" strokeWidth={1.75} aria-hidden="true" />
-                  </span>
-                  <p className="text-[15px] font-bold tracking-tight text-foreground sm:text-[16px]">
-                    Nenhum preço encontrado para “{query.trim()}”
-                  </p>
-                  <p className="mt-1.5 max-w-md text-[13px] leading-relaxed text-muted-foreground">
-                    Tente um termo mais curto, verifique a grafia ou explore os mercados parceiros — pode ser que o produto ainda não tenha scan.
-                  </p>
-                  <div className="mt-4 flex flex-wrap items-center justify-center gap-2">
-                    <button
-                      type="button"
-                      onClick={clear}
-                      className="inline-flex h-10 items-center gap-2 rounded-full border-2 border-brand-gold bg-brand-gold px-4 text-[12px] font-bold uppercase tracking-[0.14em] text-brand-navy shadow-[0_6px_18px_-8px_color-mix(in_oklab,var(--brand-gold)_75%,transparent)] transition-all hover:-translate-y-px hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-                    >
-                      <X className="h-3.5 w-3.5" aria-hidden="true" />
-                      Nova busca
-                    </button>
-                    <Link
-                      to="/estabelecimentos"
-                      className="inline-flex h-10 items-center gap-2 rounded-full border-2 border-brand-navy/25 bg-background px-4 text-[12px] font-bold uppercase tracking-[0.14em] text-foreground transition-all hover:-translate-y-px hover:border-brand-gold/70 hover:bg-brand-gold/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background dark:border-brand-gold/25"
-                    >
-                      <ShoppingBag className="h-3.5 w-3.5" aria-hidden="true" />
-                      Explorar mercados
-                    </Link>
-                  </div>
-                </div>
+                <SearchEmptyState
+                  query={query}
+                  recent={history.map((h) => h.query)}
+                  onSearch={(term) => {
+                    const next = normalizeInput(term);
+                    setInputValue(next);
+                    setShowSuggest(false);
+                    runQuery(next);
+                  }}
+                  onClearQuery={clear}
+                  filterShortcuts={filterShortcuts}
+                  activeFilterCount={activeFilterCount}
+                  onClearFilters={onClearFilters}
+                />
               )}
+
 
               {result.groups.length === 0 && (
                 result.markets.length > 0 && (
