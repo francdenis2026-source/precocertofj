@@ -464,7 +464,29 @@ function NeighborhoodsPage() {
               </button>
             )}
           </div>
+
+          {/* Legenda visual — o que os selos e ícones significam */}
+          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border/60 pt-2 text-[10.5px] text-muted-foreground">
+            <span className="font-bold uppercase tracking-[0.14em]">Legenda:</span>
+            <span className="inline-flex items-center gap-1">
+              <span className="inline-block h-2 w-[3px] rounded-sm bg-brand-gold" aria-hidden />
+              Bairro
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <Star className="h-3 w-3 fill-brand-gold text-brand-gold" aria-hidden />
+              Favorito
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <Package className="h-3 w-3 text-brand-gold" aria-hidden />
+              Nº de produtos
+            </span>
+            <span className="inline-flex items-center gap-1">
+              <TrendingUp className="h-3 w-3 text-brand-gold" aria-hidden />
+              Mais procurados no bairro
+            </span>
+          </div>
         </div>
+
 
         {/* Seus bairros — atalho gold */}
         {isAuthed && favoriteGroups.length > 0 && !term && (
