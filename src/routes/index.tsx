@@ -654,11 +654,11 @@ function HomePage() {
         className="scroll-mt-24"
         style={{ background: P.paper, borderBottom: `1px solid ${P.line}` }}
       >
-        <div className="mx-auto w-full max-w-6xl px-4 py-4 sm:px-6 sm:py-5 lg:px-8">
-          <div className="mb-2.5 flex items-center justify-between gap-3">
+        <div className="mx-auto w-full max-w-6xl px-3 py-3 sm:px-6 sm:py-5 lg:px-8">
+          <div className="mb-2 flex items-center justify-between gap-3 sm:mb-2.5">
             <h2
               id="categorias-title"
-              className="text-[11px] font-bold uppercase tracking-[0.22em]"
+              className="text-[10.5px] font-bold uppercase tracking-[0.2em] sm:text-[11px] sm:tracking-[0.22em]"
               style={{ color: P.heading }}
             >
               Pesquise por categoria
@@ -667,19 +667,19 @@ function HomePage() {
               Um clique para começar
             </span>
           </div>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-4 sm:gap-3">
+          <div className="grid grid-cols-4 gap-1.5 sm:gap-3">
             {[
-              { key: "supermercados", label: "Supermercados", icon: <ShoppingCart className="h-5 w-5" strokeWidth={2.2} />, q: "supermercado" },
-              { key: "farmacias", label: "Farmácias", icon: <Pill className="h-5 w-5" strokeWidth={2.2} />, q: "farmácia" },
-              { key: "construcao", label: "Construção", icon: <HardHat className="h-5 w-5" strokeWidth={2.2} />, q: "construção" },
-              { key: "postos", label: "Postos", icon: <Fuel className="h-5 w-5" strokeWidth={2.2} />, q: "posto combustível" },
+              { key: "supermercados", label: "Mercado", full: "Supermercados", icon: <ShoppingCart className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />, q: "supermercado" },
+              { key: "farmacias", label: "Farmácia", full: "Farmácias", icon: <Pill className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />, q: "farmácia" },
+              { key: "construcao", label: "Construção", full: "Construção", icon: <HardHat className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />, q: "construção" },
+              { key: "postos", label: "Postos", full: "Postos", icon: <Fuel className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />, q: "posto combustível" },
             ].map((c) => (
               <button
                 key={c.key}
                 type="button"
                 onClick={() => navigate({ to: "/buscar", search: { q: c.q } as any })}
-                aria-label={`Pesquisar em ${c.label}`}
-                className="group flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left transition-all hover:-translate-y-px hover:shadow-md focus-visible:outline-none focus-visible:ring-2"
+                aria-label={`Pesquisar em ${c.full}`}
+                className="group flex flex-col items-center justify-center gap-1.5 rounded-2xl border px-1.5 py-2.5 text-center transition-all active:scale-[0.97] hover:-translate-y-px hover:shadow-md focus-visible:outline-none focus-visible:ring-2 sm:flex-row sm:justify-start sm:gap-3 sm:px-3 sm:py-2.5 sm:text-left"
                 style={{
                   background: P.card,
                   borderColor: P.line,
@@ -689,7 +689,7 @@ function HomePage() {
                 }}
               >
                 <span
-                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-lg transition-colors group-hover:brightness-110"
+                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-colors group-hover:brightness-110 sm:h-9 sm:w-9 sm:rounded-lg"
                   style={{
                     background: `color-mix(in oklab, ${P.gold} 16%, transparent)`,
                     color: P.navy,
@@ -699,8 +699,8 @@ function HomePage() {
                 >
                   {c.icon}
                 </span>
-                <span className="flex-1 min-w-0">
-                  <span className="block truncate text-[13.5px] font-semibold leading-tight sm:text-[14px]">
+                <span className="flex-1 min-w-0 sm:min-w-0">
+                  <span className="block truncate text-[11.5px] font-semibold leading-tight sm:text-[14px]">
                     {c.label}
                   </span>
                   <span
@@ -711,7 +711,7 @@ function HomePage() {
                   </span>
                 </span>
                 <ArrowRight
-                  className="h-4 w-4 shrink-0 opacity-60 transition-all group-hover:translate-x-0.5 group-hover:opacity-100"
+                  className="hidden h-4 w-4 shrink-0 opacity-60 transition-all group-hover:translate-x-0.5 group-hover:opacity-100 sm:inline"
                   strokeWidth={2.4}
                   style={{ color: P.gold }}
                 />
@@ -720,6 +720,9 @@ function HomePage() {
           </div>
         </div>
       </section>
+
+
+
 
 
 
