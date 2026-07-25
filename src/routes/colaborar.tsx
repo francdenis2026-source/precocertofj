@@ -28,6 +28,7 @@ import {
   getMyCollabMonthProgress,
 } from "@/lib/collab-token.functions";
 import { getMyCollaboratorSubmissions } from "@/lib/collaborator.functions";
+import { CollaboratorUploadForm } from "@/components/collab/CollaboratorUploadForm";
 
 export const Route = createFileRoute("/colaborar")({
   head: () => ({
