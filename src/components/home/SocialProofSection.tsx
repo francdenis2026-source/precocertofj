@@ -31,8 +31,9 @@ const TESTIMONIALS: Testimonial[] = [
   { name: "Bruno Aguiar",     role: "Centro",           quote: "Simples e direto: aponto o produto e vejo onde está mais em conta.",   initials: "BA" },
 ];
 
-const RATING_AVG = 4.9;
-const RATING_COUNT = 312;
+const RATING_AVG = PLATFORM_RATING.value;
+const RATING_COUNT = PLATFORM_RATING.count;
+
 const VISIBLE_INITIAL = 3;
 
 export function SocialProofSection() {
