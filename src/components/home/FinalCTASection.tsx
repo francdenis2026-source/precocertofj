@@ -67,10 +67,10 @@ export function FinalCTASection() {
           />
 
 
-          <div className="relative px-4 py-5 sm:px-6 sm:py-7">
-            <div className="mx-auto flex max-w-2xl flex-col items-center gap-2.5 text-center">
+          <div className="relative px-4 py-3.5 sm:px-6 sm:py-4">
+            <div className="mx-auto flex max-w-2xl flex-col items-center gap-1.5 text-center">
               <span
-                className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.2em]"
+                className="inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.2em]"
                 style={{
                   background: `color-mix(in oklab, ${P.gold} 12%, transparent)`,
                   borderColor: `color-mix(in oklab, ${P.gold} 45%, transparent)`,
@@ -85,7 +85,7 @@ export function FinalCTASection() {
                 className={`${serif} leading-[1.05] tracking-tight`}
                 style={{
                   color: "#F8FAFC",
-                  fontSize: "clamp(1.35rem, 3vw, 1.9rem)",
+                  fontSize: "clamp(1.15rem, 2.2vw, 1.55rem)",
                   textShadow: "0 2px 18px rgba(0,0,0,0.4)",
                 }}
               >
@@ -96,9 +96,8 @@ export function FinalCTASection() {
                 .
               </h2>
 
-
               <p
-                className="max-w-xl text-[12.5px] sm:text-[13px]"
+                className="max-w-xl text-[12px] leading-snug"
                 style={{ color: "rgba(245,246,250,0.82)" }}
               >
                 Compare em tempo real os preços dos mercados parceiros do seu bairro.
@@ -156,21 +155,21 @@ export function FinalCTASection() {
 
               {/* Selos de confiança */}
               <ul
-                className="mt-1 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-[11.5px]"
+                className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px]"
                 style={{ color: "rgba(245,246,250,0.78)" }}
               >
-                <li className="inline-flex items-center gap-1.5">
-                  <Zap className="h-3.5 w-3.5" style={{ color: "#F5C86A" }} aria-hidden />
+                <li className="inline-flex items-center gap-1">
+                  <Zap className="h-3 w-3" style={{ color: "#F5C86A" }} aria-hidden />
                   Resultados instantâneos
                 </li>
                 <li aria-hidden className="opacity-40">•</li>
-                <li className="inline-flex items-center gap-1.5">
-                  <ShieldCheck className="h-3.5 w-3.5" style={{ color: "#F5C86A" }} aria-hidden />
+                <li className="inline-flex items-center gap-1">
+                  <ShieldCheck className="h-3 w-3" style={{ color: "#F5C86A" }} aria-hidden />
                   Dados verificados
                 </li>
                 <li aria-hidden className="opacity-40">•</li>
-                <li className="inline-flex items-center gap-1.5">
-                  <Sparkles className="h-3.5 w-3.5" style={{ color: "#F5C86A" }} aria-hidden />
+                <li className="inline-flex items-center gap-1">
+                  <Sparkles className="h-3 w-3" style={{ color: "#F5C86A" }} aria-hidden />
                   Mercados do seu bairro
                 </li>
               </ul>
