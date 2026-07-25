@@ -1,6 +1,7 @@
-import { Link, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, Ticket, Search, Loader2 } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
+import { ArrowRight, Sparkles, Search, Loader2 } from "lucide-react";
 import { useState, type FormEvent } from "react";
+
 
 const P = {
   navy: "var(--pc-home-navy)",
@@ -25,7 +26,7 @@ export function FinalCTASection() {
   };
 
   return (
-    <section aria-labelledby="final-cta-title" className="pc-container pt-6 sm:pt-8">
+    <section aria-labelledby="final-cta-title" className="pc-container pt-3 sm:pt-4">
       <div
         className="relative overflow-hidden rounded-[var(--pc-radius-md)] p-[1.5px]"
         style={{

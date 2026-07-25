@@ -647,7 +647,7 @@ function HomePage() {
 
 
       {/* ============== 3 PILARES (cards) ============== */}
-      <section id="pilares" className="pc-container pt-3 scroll-mt-24 sm:pt-4">
+      <section id="pilares" className="pc-container pt-2 scroll-mt-24 sm:pt-3">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
           <PillarCard
             to="/melhores-precos"
@@ -676,7 +676,7 @@ function HomePage() {
 
 
       {/* ============== RECENTES ============== */}
-      <section id="recentes" className="pt-3 scroll-mt-24 sm:pt-4">
+      <section id="recentes" className="pt-2 scroll-mt-24 sm:pt-3">
         <RecentProducts P={P} serif={serif} />
       </section>
 
