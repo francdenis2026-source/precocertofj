@@ -303,6 +303,105 @@ function NeighborhoodsPage() {
           )}
         </div>
 
+        {/* Filtros e ordenação — compacta, gold accents */}
+        <div className="mb-3 rounded-lg border border-border bg-card p-2.5 shadow-sm">
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Ordenação */}
+            <label className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2 py-1 text-[12px] focus-within:border-brand-gold focus-within:ring-2 focus-within:ring-brand-gold/30">
+              <ArrowUpDown className="h-3.5 w-3.5 text-brand-gold" />
+              <span className="text-[10.5px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                Ordenar
+              </span>
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
+                className="bg-transparent text-[12px] font-semibold text-foreground focus:outline-none"
+                aria-label="Ordenar bairros"
+              >
+                <option value="price">Menor preço</option>
+                <option value="markets">Mais mercados</option>
+                <option value="alpha">A–Z</option>
+                {isAuthed && <option value="favorites">Favoritos primeiro</option>}
+              </select>
+            </label>
+
+            {/* Categoria */}
+            <label className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2 py-1 text-[12px] focus-within:border-brand-gold focus-within:ring-2 focus-within:ring-brand-gold/30">
+              <Tag className="h-3.5 w-3.5 text-brand-gold" />
+              <span className="text-[10.5px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                Categoria
+              </span>
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="max-w-[140px] bg-transparent text-[12px] font-semibold text-foreground focus:outline-none"
+                aria-label="Filtrar por categoria"
+              >
+                <option value="">Todas</option>
+                {availableCategories.map((c) => (
+                  <option key={c} value={c}>
+                    {c}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            {/* Cidade / região */}
+            {availableCities.length > 1 && (
+              <label className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2 py-1 text-[12px] focus-within:border-brand-gold focus-within:ring-2 focus-within:ring-brand-gold/30">
+                <MapPin className="h-3.5 w-3.5 text-brand-gold" />
+                <span className="text-[10.5px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                  Região
+                </span>
+                <select
+                  value={cityFilter}
+                  onChange={(e) => setCityFilter(e.target.value)}
+                  className="max-w-[140px] bg-transparent text-[12px] font-semibold text-foreground focus:outline-none"
+                  aria-label="Filtrar por cidade"
+                >
+                  <option value="">Todas</option>
+                  {availableCities.map((c) => (
+                    <option key={c} value={c}>
+                      {c}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            )}
+
+            {/* Somente favoritos */}
+            {isAuthed && (
+              <button
+                type="button"
+                onClick={() => setOnlyFavs((v) => !v)}
+                aria-pressed={onlyFavs}
+                className={
+                  "inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-[12px] font-semibold transition-colors " +
+                  (onlyFavs
+                    ? "border-brand-gold bg-brand-gold/15 text-brand-gold"
+                    : "border-border bg-background text-foreground hover:border-brand-gold/60")
+                }
+              >
+                <Star
+                  className={"h-3.5 w-3.5 " + (onlyFavs ? "fill-brand-gold text-brand-gold" : "text-muted-foreground")}
+                />
+                Favoritos
+              </button>
+            )}
+
+            {hasActiveFilters && (
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="ml-auto inline-flex items-center gap-1 rounded-md border border-border bg-background px-2 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:border-brand-gold/60 hover:text-brand-gold"
+              >
+                <SlidersHorizontal className="h-3 w-3" />
+                Limpar
+              </button>
+            )}
+          </div>
+        </div>
+
         {/* Seus bairros — atalho gold */}
         {isAuthed && favoriteGroups.length > 0 && !term && (
           <section className="mb-4">
