@@ -23,7 +23,9 @@ import {
   listCollaboratorSubmissions,
   reviewCollaboratorSubmission,
   collabSubmissionMetrics,
+  listCollabAuditLog,
   type AdminSubmission,
+  type CollabAuditEntry,
 } from "@/lib/collab-admin.functions";
 import { signCollabAttachments } from "@/lib/collab-submit.functions";
 
@@ -224,6 +226,8 @@ export function CollaboratorsTab() {
         )}
       </Card>
 
+      <AuditLogPanel />
+
       <ReviewDialog
         submission={active}
         mode={reviewMode}
@@ -234,11 +238,94 @@ export function CollaboratorsTab() {
         onDone={() => {
           qc.invalidateQueries({ queryKey: ["collab-list"] });
           qc.invalidateQueries({ queryKey: ["collab-metrics"] });
+          qc.invalidateQueries({ queryKey: ["collab-audit"] });
         }}
       />
     </div>
   );
 }
+
+/* -------------------------- Audit trail panel -------------------------- */
+
+function AuditLogPanel() {
+  const auditFn = useServerFn(listCollabAuditLog);
+  const { data, isLoading } = useQuery({
+    queryKey: ["collab-audit"],
+    queryFn: () => auditFn({ data: { limit: 50 } }),
+    refetchInterval: 60_000,
+  });
+
+  const actionLabel = (a: string) => {
+    if (a === "collab_review_approved") return "Aprovou";
+    if (a === "collab_review_rejected") return "Rejeitou";
+    if (a === "collab_review_review") return "Marcou em análise";
+    if (a === "collab_review_received") return "Reabriu";
+    return a;
+  };
+  const actionTone = (a: string): "default" | "secondary" | "outline" | "destructive" => {
+    if (a === "collab_review_approved") return "default";
+    if (a === "collab_review_rejected") return "destructive";
+    return "secondary";
+  };
+
+  return (
+    <Card className="p-4">
+      <div className="flex items-center gap-2">
+        <ClipboardList className="h-4 w-4 text-primary" />
+        <h3 className="font-semibold">Trilha de auditoria</h3>
+        <span className="text-xs text-muted-foreground">
+          últimas ações de aprovação/rejeição
+        </span>
+      </div>
+      {isLoading ? (
+        <div className="flex justify-center py-6">
+          <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+        </div>
+      ) : (data ?? []).length === 0 ? (
+        <p className="mt-3 text-sm text-muted-foreground">
+          Nenhuma ação registrada ainda.
+        </p>
+      ) : (
+        <ul className="mt-3 divide-y divide-border">
+          {(data ?? []).map((r: CollabAuditEntry) => {
+            const after = (r.after ?? {}) as Record<string, unknown>;
+            const rewardAwarded = Number(
+              (after as { reward_days?: unknown }).reward_days ?? 0,
+            );
+            return (
+              <li
+                key={r.id}
+                className="flex flex-wrap items-center justify-between gap-2 py-2 text-sm"
+              >
+                <div className="min-w-0">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Badge variant={actionTone(r.action)}>{actionLabel(r.action)}</Badge>
+                    <span className="font-medium">
+                      {r.admin_full_name ?? "Admin"}
+                    </span>
+                    <span className="text-xs text-muted-foreground">
+                      {new Date(r.created_at).toLocaleString("pt-BR")}
+                    </span>
+                  </div>
+                  <div className="mt-0.5 text-xs text-muted-foreground">
+                    envio <span className="font-mono">{r.target_id?.slice(0, 8) ?? "—"}</span>
+                    {r.notes ? ` · ${r.notes}` : ""}
+                  </div>
+                </div>
+                {rewardAwarded > 0 && (
+                  <span className="inline-flex items-center gap-1 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+                    <Gift className="h-3 w-3" /> +{rewardAwarded} dias
+                  </span>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </Card>
+  );
+}
+
 
 function ReviewDialog({
   submission,

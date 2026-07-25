@@ -3232,6 +3232,20 @@ export type Database = {
       infer_size_from_name: { Args: { p_name: string }; Returns: string }
       is_ip_blocked: { Args: { _ip: string }; Returns: boolean }
       is_product_blocked: { Args: { p_name: string }; Returns: boolean }
+      list_collab_audit_log: {
+        Args: { _limit?: number; _submission_id?: string }
+        Returns: {
+          action: string
+          admin_full_name: string
+          admin_user_id: string
+          after: Json
+          before: Json
+          created_at: string
+          id: string
+          notes: string
+          target_id: string
+        }[]
+      }
       normalize_product_key: { Args: { name: string }; Returns: string }
       normalize_product_name: { Args: { p_name: string }; Returns: string }
       plan_conversion_metrics: {

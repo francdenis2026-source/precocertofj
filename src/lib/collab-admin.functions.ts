@@ -76,6 +76,14 @@ export const reviewCollaboratorSubmission = createServerFn({ method: "POST" })
   )
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
+
+    // Snapshot BEFORE for audit trail
+    const { data: beforeRow } = await context.supabase
+      .from("collaborator_submissions" as never)
+      .select("id, status, reward_days, reward_granted, admin_notes, rejection_reason, user_id, email")
+      .eq("id", data.id)
+      .maybeSingle();
+
     const rpcArgs: Record<string, unknown> = {
       _id: data.id,
       _status: data.status,
@@ -90,6 +98,21 @@ export const reviewCollaboratorSubmission = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
 
     const sub = updated as AdminSubmission | null;
+
+    // Persist audit trail (best-effort; never blocks the review)
+    try {
+      await context.supabase.rpc("admin_log_action" as never, {
+        _action: `collab_review_${data.status}`,
+        _target_type: "collab_submission",
+        _target_id: data.id,
+        _before: (beforeRow ?? null) as never,
+        _after: (sub ?? null) as never,
+        _notes: data.admin_notes ?? data.rejection_reason ?? null,
+      } as never);
+    } catch (err) {
+      console.warn("[collab-audit] log failed:", err instanceof Error ? err.message : err);
+    }
+
     // Send email notification for approved/rejected outcomes.
     if (sub && (data.status === "approved" || data.status === "rejected")) {
       const apiKey = process.env.LOVABLE_API_KEY;
@@ -174,3 +197,41 @@ export const collabSubmissionMetrics = createServerFn({ method: "GET" })
     }
     return counts;
   });
+
+type Json = string | number | boolean | null | { [k: string]: Json } | Json[];
+
+export type CollabAuditEntry = {
+  id: string;
+  admin_user_id: string | null;
+  admin_full_name: string | null;
+  action: string;
+  target_id: string | null;
+  before: Json;
+  after: Json;
+  notes: string | null;
+  created_at: string;
+};
+
+export const listCollabAuditLog = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((raw: unknown) =>
+    z
+      .object({
+        submission_id: z.string().uuid().optional(),
+        limit: z.number().int().min(1).max(500).default(100),
+      })
+      .parse(raw ?? {}),
+  )
+  .handler(async ({ data, context }): Promise<CollabAuditEntry[]> => {
+    await assertAdmin(context.supabase, context.userId);
+    const { data: rows, error } = await context.supabase.rpc(
+      "list_collab_audit_log" as never,
+      {
+        _submission_id: data.submission_id ?? null,
+        _limit: data.limit,
+      } as never,
+    );
+    if (error) throw new Error(error.message);
+    return (rows ?? []) as unknown as CollabAuditEntry[];
+  });
+
