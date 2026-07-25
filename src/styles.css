@@ -2528,12 +2528,14 @@ textarea::placeholder {
   }
 }
 
-/* Evita "viúva" de uma palavra em títulos longos em telas pequenas */
+/* Evita "viúva" de uma palavra em títulos longos em telas pequenas
+   (não se aplica a títulos truncados em barras compactas) */
 @media (max-width: 480px) {
-  .pc-search-scope h1 {
+  .pc-search-scope h1:not(.truncate) {
     text-wrap: balance;
   }
 }
+
 
 /* ===================== PriceSearchBar — Reforços tipográficos =====================
    O componente agora carrega .pc-search-scope no seu <section> raiz, então
