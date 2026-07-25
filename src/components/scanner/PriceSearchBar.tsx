@@ -804,6 +804,11 @@ export function PriceSearchBar({
                         <p className="mt-1 truncate text-[26px] font-bold leading-none tabular-nums">
                           {fmt(result.cheapest!.price)}
                         </p>
+                        {result.cheapest!.productName ? (
+                          <p className="mt-1 truncate text-[11.5px] font-medium text-brand-gold/90">
+                            {result.cheapest!.productName}
+                          </p>
+                        ) : null}
                         <p className="mt-1 truncate text-[11.5px] text-white/70">
                           em <span className="font-semibold text-white">{result.cheapest!.marketName}</span>
                         </p>
@@ -817,8 +822,9 @@ export function PriceSearchBar({
                           <span className="ml-1.5 align-middle text-[12px] font-bold text-brand-gold">−{pct}%</span>
                         </p>
                         <p className="mt-1 text-[11.5px] text-white/70 tabular-nums">
-                          vs. mais caro ({fmt(rMax)})
+                          mesmo produto · mais caro {fmt(rMax)}
                         </p>
+
                       </div>
                     </div>
                   );
