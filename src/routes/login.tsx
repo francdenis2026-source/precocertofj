@@ -584,7 +584,7 @@ function LoginPage() {
             </div>
           </form>
 
-          <p className="mt-6 border-t border-border pt-4 text-center text-[10.5px] text-muted-foreground">
+          <p className="mt-4 border-t border-border pt-3 text-center text-[10px] text-muted-foreground">
             Ao continuar, você concorda com nossos{" "}
             <Link to="/termos" className="underline hover:text-foreground">Termos</Link> e{" "}
             <Link to="/privacidade" className="underline hover:text-foreground">Privacidade</Link>.
