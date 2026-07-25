@@ -1,5 +1,45 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="PreçoCerto">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="PreçoCerto">
   <title>PreçoCerto</title>
-  <rect width="64" height="64" rx="14" fill="#c9a227"/>
-  <path fill="#0b1e3a" d="M18 14h17.5c7.7 0 13 4.9 13 12.2 0 7.4-5.4 12.3-13.2 12.3H28V50h-10V14zm10 18.4h7c3 0 5-1.9 5-5.2s-2-5.2-5-5.2h-7v10.4z"/>
+  <!-- Fundo transparente para funcionar em qualquer superfície -->
+  <defs>
+    <linearGradient id="tag" x1="18" y1="18" x2="110" y2="118" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#f5c145"/>
+      <stop offset="1" stop-color="#e2a520"/>
+    </linearGradient>
+    <linearGradient id="shine" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="drop" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+      <feOffset dx="0" dy="2" result="off"/>
+      <feColorMatrix in="off" values="0 0 0 0 0.043  0 0 0 0 0.118  0 0 0 0 0.227  0 0 0 0.35 0"/>
+      <feBlend in="SourceGraphic"/>
+    </filter>
+  </defs>
+
+  <!-- Cordão da etiqueta -->
+  <path d="M63 20 C 55 8, 40 8, 40 22 C 40 30, 46 34, 52 34"
+        fill="none" stroke="#e8ecf3" stroke-width="4.5" stroke-linecap="round"/>
+
+  <!-- Sombra sutil atrás da etiqueta -->
+  <path d="M40 30 h48 a8 8 0 0 1 5.66 2.34 l22 22 a8 8 0 0 1 0 11.32 l-40 40 a8 8 0 0 1 -11.32 0 l-22-22 A8 8 0 0 1 40 78 Z"
+        fill="#0b1e3a" opacity=".22" transform="translate(3 4)"/>
+
+  <!-- Corpo da etiqueta (gold) -->
+  <path d="M40 26 h48 a8 8 0 0 1 5.66 2.34 l22 22 a8 8 0 0 1 0 11.32 l-40 40 a8 8 0 0 1 -11.32 0 l-22-22 A8 8 0 0 1 40 74 Z"
+        fill="url(#tag)" stroke="#c98f1a" stroke-width="1.2"/>
+
+  <!-- Brilho superior -->
+  <path d="M40 26 h48 a8 8 0 0 1 5.66 2.34 l6 6 a8 8 0 0 1 0 11.32 l-6 6 a8 8 0 0 1 -11.32 0 L40 26 Z"
+        fill="url(#shine)"/>
+
+  <!-- Furo -->
+  <circle cx="55" cy="41" r="6.5" fill="#0b1e3a"/>
+  <circle cx="55" cy="41" r="2.4" fill="#f5c145"/>
+
+  <!-- Check -->
+  <path d="M55 74 l12 12 l24 -26"
+        fill="none" stroke="#ffffff" stroke-width="9"
+        stroke-linecap="round" stroke-linejoin="round" filter="url(#drop)"/>
 </svg>
