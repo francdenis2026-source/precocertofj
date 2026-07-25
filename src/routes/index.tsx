@@ -344,12 +344,12 @@ function HomePage() {
         />
 
 
-        <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-5 pb-6 sm:px-6 sm:pt-8 sm:pb-9 lg:px-8 lg:pt-10 lg:pb-10">
+        <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-3 pb-4 sm:px-6 sm:pt-5 sm:pb-6 lg:px-8 lg:pt-6 lg:pb-7">
           <div className="mx-auto max-w-4xl text-center">
             {/* Badges */}
-            <div className="mb-4 flex flex-wrap items-center justify-center gap-2 sm:mb-5">
+            <div className="mb-2.5 flex flex-wrap items-center justify-center gap-2 sm:mb-3">
               <span
-                className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[10.5px] font-bold uppercase tracking-[0.2em]"
+                className="inline-flex items-center gap-2 rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.2em]"
                 style={{
                   background: `color-mix(in oklab, ${P.gold} 12%, transparent)`,
                   borderColor: `color-mix(in oklab, ${P.gold} 40%, transparent)`,
@@ -364,7 +364,7 @@ function HomePage() {
               </span>
               {today && (
                 <span
-                  className="hidden items-center gap-1.5 rounded-full px-3 py-1 text-[10.5px] font-bold uppercase tabular-nums tracking-[0.2em] sm:inline-flex"
+                  className="hidden items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tabular-nums tracking-[0.2em] sm:inline-flex"
                   style={{
                     background: "rgba(255,255,255,0.06)",
                     color: "#F5C86A",
@@ -383,32 +383,30 @@ function HomePage() {
               className={`${serif} font-normal leading-[1.02] tracking-[-0.01em]`}
               style={{
                 color: "#F8FAFC",
-                fontSize: "clamp(1.85rem, 4.4vw, 3.5rem)",
+                fontSize: "clamp(1.5rem, 3.6vw, 2.75rem)",
               }}
             >
               Encontre o{" "}
-              <span className="italic" style={{ color: "#F5C86A" }}>preço certo</span>
-              <br className="hidden sm:block" />
-              <span className="sm:hidden"> </span>
+              <span className="italic" style={{ color: "#F5C86A" }}>preço certo</span>{" "}
               sem sair de casa.
             </h1>
 
             <p
-              className="mx-auto mt-3 max-w-2xl text-[14px] font-light leading-relaxed sm:text-[16px]"
+              className="mx-auto mt-2 max-w-2xl text-[12.5px] font-light leading-snug sm:text-[14px]"
               style={{ color: "rgba(255,255,255,0.72)" }}
             >
-              Compare preços entre os principais mercados de Feijó e economize em cada compra
-              com dados atualizados pela comunidade.
+              Compare os principais mercados de Feijó e economize em cada compra.
             </p>
+
 
             {/* Search bar branca — herói da página */}
             <form
               onSubmit={submitSearch}
-              className="relative mx-auto mt-5 max-w-2xl sm:mt-6"
+              className="relative mx-auto mt-3 max-w-2xl sm:mt-4"
               ref={searchBoxRef}
             >
               <div
-                className="flex items-center gap-1 rounded-2xl p-1.5 shadow-2xl transition-all focus-within:ring-2 sm:p-2"
+                className="flex items-center gap-1 rounded-2xl p-1 shadow-2xl transition-all focus-within:ring-2 sm:p-1.5"
                 style={{
                   background: "#ffffff",
                   // @ts-expect-error css var
@@ -448,17 +446,17 @@ function HomePage() {
                   aria-autocomplete="list"
                   aria-expanded={showSuggest && suggestions.length > 0}
                   aria-controls="home-suggest-list"
-                  className="flex-1 bg-transparent px-2 py-3 text-[15px] font-medium outline-none placeholder:text-slate-400 sm:text-[16px]"
+                  className="flex-1 bg-transparent px-2 py-2.5 text-[14.5px] font-medium outline-none placeholder:text-slate-400 sm:text-[15.5px]"
                   style={{ color: "#0f172a" }}
                 />
                 <button
                   type="submit"
                   aria-label="Buscar preço"
-                  className="inline-flex shrink-0 items-center gap-2 rounded-xl px-4 py-3 text-[14px] font-bold uppercase tracking-wide transition-all hover:brightness-95 active:scale-95 sm:px-7 sm:py-3 sm:text-[14.5px]"
+                  className="inline-flex shrink-0 items-center gap-2 rounded-xl px-3.5 py-2.5 text-[13.5px] font-bold uppercase tracking-wide transition-all hover:brightness-95 active:scale-95 sm:px-6 sm:py-2.5 sm:text-[14px]"
                   style={{ background: P.gold, color: P.navy }}
                 >
                   <span className="hidden sm:inline">Buscar</span>
-                  <ArrowRight className="h-5 w-5 sm:hidden" strokeWidth={2.5} />
+                  <ArrowRight className="h-4.5 w-4.5 sm:hidden" strokeWidth={2.5} />
                   <ArrowRight className="hidden h-4 w-4 sm:inline" strokeWidth={2.5} />
                 </button>
               </div>
@@ -504,8 +502,8 @@ function HomePage() {
               )}
             </form>
 
-            {/* Chips populares */}
-            <div className="mx-auto mt-4 flex max-w-2xl flex-wrap items-center justify-center gap-1.5 sm:gap-2">
+            {/* Chips populares + CTA inline (compactos) */}
+            <div className="mx-auto mt-3 flex max-w-2xl flex-wrap items-center justify-center gap-1.5 sm:mt-3.5 sm:gap-2">
               <span
                 className="text-[10px] font-bold uppercase tracking-[0.2em]"
                 style={{ color: "rgba(255,255,255,0.5)" }}
@@ -516,7 +514,7 @@ function HomePage() {
                 <button
                   key={t}
                   onClick={() => navigate({ to: "/buscar", search: { q: t } as any })}
-                  className="inline-flex items-center rounded-full border px-3 py-1 text-[12px] font-medium capitalize transition-all hover:-translate-y-px"
+                  className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11.5px] font-medium capitalize transition-all hover:-translate-y-px"
                   style={{
                     background: "rgba(255,255,255,0.05)",
                     borderColor: "rgba(255,255,255,0.12)",
@@ -530,7 +528,7 @@ function HomePage() {
                 <button
                   type="button"
                   onClick={() => setPopularPage((p) => (p + 1) % popularPageCount)}
-                  className="inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-[0.14em] transition-colors hover:brightness-110"
+                  className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] transition-colors hover:brightness-110"
                   style={{
                     background: "rgba(255,255,255,0.05)",
                     borderColor: "rgba(255,255,255,0.12)",
@@ -541,56 +539,37 @@ function HomePage() {
                   Mais
                 </button>
               )}
-            </div>
-
-            {/* CTAs — secundários abaixo do search */}
-            <div className="mt-4 flex flex-wrap items-center justify-center gap-3 sm:mt-5">
+              <span aria-hidden className="mx-0.5 hidden h-3 w-px sm:inline-block" style={{ background: "rgba(255,255,255,0.14)" }} />
               {isLoggedOut ? (
                 <StartFreeDialog>
                   <button
                     type="button"
                     aria-haspopup="dialog"
-                    className="group inline-flex items-center gap-2 rounded-xl border px-5 py-2.5 text-[13.5px] font-semibold transition-all hover:-translate-y-px"
-                    style={{
-                      background: "rgba(255,255,255,0.06)",
-                      borderColor: "rgba(255,255,255,0.16)",
-                      color: "#ffffff",
-                    }}
+                    className="inline-flex items-center gap-1 text-[11.5px] font-semibold transition-colors hover:brightness-125"
+                    style={{ color: "#F5C86A" }}
                   >
                     Começar grátis
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.4} />
+                    <ArrowRight className="h-3 w-3" strokeWidth={2.6} />
                   </button>
                 </StartFreeDialog>
               ) : (
                 <Link
                   to="/app"
-                  className="group inline-flex items-center gap-2 rounded-xl border px-5 py-2.5 text-[13.5px] font-semibold transition-all hover:-translate-y-px"
-                  style={{
-                    background: "rgba(255,255,255,0.06)",
-                    borderColor: "rgba(255,255,255,0.16)",
-                    color: "#ffffff",
-                  }}
+                  className="inline-flex items-center gap-1 text-[11.5px] font-semibold transition-colors hover:brightness-125"
+                  style={{ color: "#F5C86A" }}
                 >
                   Ir para o painel
-                  <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.4} />
+                  <ArrowRight className="h-3 w-3" strokeWidth={2.6} />
                 </Link>
               )}
-              <Link
-                to="/melhores-precos"
-                className="inline-flex items-center gap-2 text-[13px] font-semibold transition-colors hover:brightness-125"
-                style={{ color: "#F5C86A" }}
-              >
-                <TrendingDown className="h-4 w-4" />
-                Ver rankings do dia
-                <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.4} />
-              </Link>
             </div>
+
           </div>
 
           {/* ============ METRICS ROW (border-y sobre o navy) ============ */}
           <TooltipProvider delayDuration={150}>
             <div
-              className="mx-auto mt-7 grid max-w-5xl grid-cols-3 gap-2 border-y py-4 sm:mt-9 sm:gap-8 sm:py-5"
+              className="mx-auto mt-4 grid max-w-5xl grid-cols-3 gap-2 border-y py-2.5 sm:mt-5 sm:gap-8 sm:py-3.5"
               style={{ borderColor: "rgba(255,255,255,0.08)" }}
             >
               {[
@@ -630,7 +609,7 @@ function HomePage() {
                         className={`${serif} tabular-nums`}
                         style={{
                           color: "#F5C86A",
-                          fontSize: "clamp(1.5rem, 3.8vw, 2.5rem)",
+                          fontSize: "clamp(1.25rem, 3vw, 2rem)",
                           lineHeight: 1,
                           letterSpacing: "-0.01em",
                         }}
@@ -638,7 +617,7 @@ function HomePage() {
                         {s.k}
                       </div>
                       <div
-                        className="flex items-center gap-1 text-[9.5px] font-bold uppercase tracking-[0.18em] sm:text-[10.5px] sm:tracking-[0.22em]"
+                        className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-[0.16em] sm:text-[10px] sm:tracking-[0.2em]"
                         style={{ color: "rgba(255,255,255,0.6)" }}
                       >
                         <span className="hidden sm:inline-flex" aria-hidden style={{ color: P.goldSoft }}>
@@ -669,7 +648,7 @@ function HomePage() {
 
 
       {/* ============== 3 PILARES (cards) ============== */}
-      <section className="pc-container pt-5 sm:pt-6">
+      <section className="pc-container pt-3 sm:pt-4">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
           <PillarCard
             to="/melhores-precos"
@@ -698,7 +677,7 @@ function HomePage() {
 
 
       {/* ============== RECENTES ============== */}
-      <div className="pt-5 sm:pt-6">
+      <div className="pt-3 sm:pt-4">
         <RecentProducts P={P} serif={serif} />
       </div>
 
@@ -820,7 +799,7 @@ function PartnersStrip() {
   if (!stores.length) return null;
 
   return (
-    <section className="pc-container pt-5 sm:pt-6">
+    <section className="pc-container pt-3 sm:pt-4">
       <div
         className="rounded-[var(--pc-radius-md)] border px-4 py-4 sm:px-5 sm:py-5"
         style={{ background: P.card, borderColor: P.line }}
