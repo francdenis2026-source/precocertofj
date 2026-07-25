@@ -74,14 +74,16 @@ export const Route = createFileRoute("/estabelecimentos")({
 });
 
 // Persistência de filtros/scroll — sessionStorage sobrevive a navegações internas
+type SortKey = "distance" | "name" | "neighborhood" | "products";
 type PersistedFilters = {
   q: string;
   neighborhood: string;
-  sort: "name" | "neighborhood" | "products";
+  sort: SortKey;
   kindFilter: string;
 };
 const FILTERS_KEY = "pc:establishments:filters:v1";
 const SCROLL_KEY = "pc:establishments:scroll:v1";
+const PAGE_SIZE = 6;
 const DEFAULT_FILTERS: PersistedFilters = {
   q: "",
   neighborhood: "__all",
