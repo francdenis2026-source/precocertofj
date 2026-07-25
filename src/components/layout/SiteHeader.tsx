@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { LogOut, User as UserIcon, Key, Receipt, LayoutDashboard, ChevronDown, Search, Ticket, Menu } from "lucide-react";
 import { ds, dsx } from "@/lib/ds";
@@ -45,6 +45,9 @@ const NAV_LINKS = [
 
 export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle = true, showBack = true }: Props) {
   const isOverlay = variant === "overlay";
+  const pathname = useLocation({ select: (l) => l.pathname });
+  // Na homepage não há "tela anterior" dentro do app: o Voltar não faz sentido.
+  const canShowBack = showBack && pathname !== "/";
   const { session, firstName, initials, loading } = useMyProfile();
   const [q, setQ] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
@@ -221,7 +224,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             </form>
           )}
 
-          {!isOverlay && showBack && (
+          {!isOverlay && canShowBack && (
             <BackButton
               variant="pill"
               shortLabel=""
