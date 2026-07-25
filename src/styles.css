@@ -155,12 +155,17 @@
   --on-media-surface: oklch(1 0 0 / 0.66);
 
   --neon: oklch(0.72 0.14 220);
-  --savings: oklch(0.55 0.13 165);
+  --savings: oklch(0.46 0.13 165);
   --savings-foreground: oklch(0.99 0.002 250);
   --warning: oklch(0.80 0.155 78);
   --warning-foreground: oklch(0.20 0.05 258);
-  --destructive: oklch(0.58 0.20 25);
+  --destructive: oklch(0.50 0.20 25);
   --destructive-foreground: oklch(0.99 0.002 250);
+
+  /* Texto/ícone de badges tonais — precisa inverter entre light/dark
+     porque o fundo do badge é o próprio token a 10-15% sobre o card. */
+  --badge-primary-fg: var(--primary);
+  --badge-warning-fg: var(--warning-foreground);
 
   --border: oklch(0.885 0.018 250);
   --input: oklch(0.885 0.018 250);
