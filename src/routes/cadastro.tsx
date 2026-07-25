@@ -177,12 +177,12 @@ function CadastroPage() {
         </Link>
       </header>
 
-      <main className="relative z-10 flex items-start justify-center px-4 pb-8 pt-2 md:items-center md:min-h-[calc(100dvh-72px)]">
+      <main className="relative z-10 flex items-start justify-center px-4 pb-6 pt-2 md:items-center md:min-h-[calc(100dvh-72px)]">
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="grid w-full max-w-[960px] grid-cols-1 overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
+          className="grid w-full max-w-[900px] grid-cols-1 overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
         >
           {/* LEFT — Hero panel reutilizável (oculto no mobile, igual /login) */}
           <div className="hidden md:block">
@@ -191,27 +191,27 @@ function CadastroPage() {
 
 
           {/* RIGHT — Form */}
-          <section className="relative overflow-hidden p-5 sm:p-7 md:p-8">
+          <section className="relative overflow-hidden p-4 sm:p-5 md:p-6">
             {/* Header */}
-            <div className="mb-5 flex items-center gap-3">
+            <div className="mb-3 flex items-center gap-2.5">
               <div
-                className="flex h-11 w-11 flex-none items-center justify-center rounded-xl"
+                className="flex h-9 w-9 flex-none items-center justify-center rounded-lg"
                 style={{
                   background: `linear-gradient(135deg, ${PC_EMERALD} 0%, ${PC_EMERALD_DEEP} 100%)`,
                   boxShadow: `inset 0 0 0 1px ${PC_GOLD}66, 0 6px 14px -6px rgba(15,27,61,0.45)`,
                 }}
               >
-                <UserPlus className="h-5 w-5 text-white" />
+                <UserPlus className="h-4 w-4 text-white" />
               </div>
               <div className="min-w-0">
                 <div
-                  className="text-[10px] font-bold uppercase tracking-[0.22em]"
+                  className="text-[9.5px] font-bold uppercase tracking-[0.22em]"
                   style={{ color: PC_EMERALD }}
                 >
                   Novo assinante
                 </div>
                 <h2
-                  className="mt-0.5 text-[22px] leading-[1.05] tracking-tight"
+                  className="mt-0.5 text-[18px] leading-[1.05] tracking-tight"
                   style={{ fontFamily: PC_DISPLAY, fontWeight: 700, color: "#0a1631" }}
                 >
                   Criar conta
