@@ -258,7 +258,9 @@ function NeighborhoodsPage() {
   };
 
   return (
-    <div className="min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
+    <PageShell>
+      <div>
+
       {/* Hero profissional — Navy/Gold, alinhado ao tema */}
       <section className="relative overflow-hidden border-b border-brand-gold/20 bg-brand-navy text-white">
         {/* grid sutil de fundo */}
