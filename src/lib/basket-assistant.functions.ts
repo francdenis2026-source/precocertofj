@@ -2,28 +2,67 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { getBasketComparison, buildBudgetBasket, type EssentialKey } from "./basket.functions";
 
+export type AiAccess = {
+  allowed: boolean;
+  reason: string;
+  planSlug: string | null;
+  planName: string | null;
+  limit: number;
+  used: number;
+  resetAt: string;
+  requireActivePlan: boolean;
+  allowTrial: boolean;
+  assistantEnabled: boolean;
+  warnThresholds: number[];
+  paidUntil: string | null;
+  trialEndsAt: string | null;
+};
+
 /**
- * Garante que o usuário autenticado tem plano de assinatura pago ativo
- * (paid_until no futuro). Trial NÃO libera IA — apenas assinantes.
+ * Lê o estado de acesso à IA do usuário aplicando as regras configuráveis
+ * pelo administrador (exigir plano ativo, permitir trial, ligar/desligar) e a
+ * cota mensal derivada do plano.
  */
-async function assertActivePaidPlan(ctx: {
-  supabase: any;
-  userId: string;
-}): Promise<void> {
-  const { data, error } = await ctx.supabase
-    .from("profiles")
-    .select("paid_until")
-    .eq("id", ctx.userId)
-    .maybeSingle();
+async function loadAiAccess(userId: string): Promise<AiAccess> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  await supabaseAdmin.rpc("get_or_create_ai_quota", { _user_id: userId, _default_limit: 20 });
+  const { data, error } = await supabaseAdmin.rpc("get_ai_access", { _user_id: userId });
   if (error) throw new Error(error.message);
-  const paidMs = data?.paid_until ? Date.parse(data.paid_until as string) : 0;
-  if (!paidMs || paidMs <= Date.now()) {
+  const r = (Array.isArray(data) ? data[0] : data) as Record<string, unknown> | null;
+  return {
+    allowed: Boolean(r?.allowed),
+    reason: String(r?.reason ?? "unknown"),
+    planSlug: (r?.plan_slug as string) ?? null,
+    planName: (r?.plan_name as string) ?? null,
+    limit: Number(r?.quota_limit ?? 0),
+    used: Number(r?.used ?? 0),
+    resetAt: String(r?.reset_at ?? new Date().toISOString()),
+    requireActivePlan: Boolean(r?.require_active_plan ?? true),
+    allowTrial: Boolean(r?.allow_trial ?? false),
+    assistantEnabled: Boolean(r?.assistant_enabled ?? true),
+    warnThresholds: (r?.warn_thresholds as number[]) ?? [75, 95],
+    paidUntil: (r?.paid_until as string) ?? null,
+    trialEndsAt: (r?.trial_ends_at as string) ?? null,
+  };
+}
+
+/** Bloqueia o uso da IA conforme as regras administrativas configuradas. */
+async function assertAiAllowed(userId: string): Promise<AiAccess> {
+  const access = await loadAiAccess(userId);
+  if (!access.allowed && access.reason === "disabled") {
+    throw new Response("Assistente de IA temporariamente desativado.", { status: 403 });
+  }
+  if (!access.allowed && access.reason === "no_active_plan") {
     throw new Response(
-      "Assistente de IA disponível apenas para assinantes ativos.",
+      access.allowTrial
+        ? "Assistente de IA disponível para assinantes ativos ou período de teste."
+        : "Assistente de IA disponível apenas para assinantes ativos.",
       { status: 403 },
     );
   }
+  return access;
 }
+
 
 export type AssistantMessage = { role: "user" | "assistant"; content: string };
 
