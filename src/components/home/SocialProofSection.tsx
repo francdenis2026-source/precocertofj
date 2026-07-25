@@ -81,28 +81,8 @@ export function SocialProofSection() {
             </h2>
           </div>
 
-          <div
-            className="flex shrink-0 items-center gap-2 rounded-lg border px-2.5 py-1"
-            style={{
-              background: "color-mix(in oklab, var(--pc-home-gold) 8%, transparent)",
-              borderColor: "color-mix(in oklab, var(--pc-home-gold) 28%, transparent)",
-            }}
-          >
-            <span
-              className={`${serif} tabular-nums leading-none`}
-              style={{ color: P.heading, fontSize: "1.05rem", letterSpacing: "-0.02em" }}
-            >
-              {RATING_AVG.toFixed(1).replace(".", ",")}
-            </span>
-            <div className="flex items-center gap-0.5" aria-hidden>
-              {Array.from({ length: 5 }).map((_, i) => (
-                <Star key={i} className="h-3 w-3" fill={P.gold} style={{ color: P.gold }} />
-              ))}
-            </div>
-            <span className="text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: P.body }}>
-              · {RATING_COUNT}
-            </span>
-          </div>
+          <RatingBadge value={RATING_AVG} count={RATING_COUNT} />
+
         </header>
 
         {/* Mobile: carrossel snap. Desktop: grid até 3, expande para grid completo */}
