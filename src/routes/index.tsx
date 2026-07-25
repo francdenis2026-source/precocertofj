@@ -339,7 +339,7 @@ function HomePage() {
                 style={{
                   background: `color-mix(in oklab, ${P.gold} 12%, transparent)`,
                   borderColor: `color-mix(in oklab, ${P.gold} 40%, transparent)`,
-                  color: "#F5C86A",
+                  color: "#E8BE72",
                 }}
               >
                 <span className="relative flex h-1.5 w-1.5">
@@ -353,7 +353,7 @@ function HomePage() {
                   className="hidden items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tabular-nums tracking-[0.2em] sm:inline-flex"
                   style={{
                     background: "rgba(255,255,255,0.06)",
-                    color: "#F5C86A",
+                    color: "#E8BE72",
                     border: "1px solid rgba(255,255,255,0.12)",
                   }}
                 >
@@ -368,18 +368,18 @@ function HomePage() {
               id="hero-title"
               className={`${serif} font-normal leading-[1.02] tracking-[-0.01em]`}
               style={{
-                color: "#F8FAFC",
+                color: "#EAF0F7",
                 fontSize: "clamp(1.5rem, 3.6vw, 2.75rem)",
               }}
             >
               Encontre o{" "}
-              <span className="italic" style={{ color: "#F5C86A" }}>preço certo</span>{" "}
+              <span className="italic" style={{ color: "#E8BE72" }}>preço certo</span>{" "}
               sem sair de casa.
             </h1>
 
             <p
               className="mx-auto mt-2 max-w-2xl text-[12.5px] font-light leading-snug sm:text-[14px]"
-              style={{ color: "rgba(255,255,255,0.72)" }}
+              style={{ color: "rgba(226,232,240,0.80)" }}
             >
               Compare os principais mercados de Feijó e economize em cada compra.
             </p>
@@ -492,7 +492,7 @@ function HomePage() {
             <div className="mx-auto mt-3 flex max-w-3xl flex-wrap items-center justify-center gap-1.5 sm:mt-3.5">
               <span
                 className="text-[10px] font-bold uppercase tracking-[0.2em]"
-                style={{ color: "rgba(255,255,255,0.5)" }}
+                style={{ color: "rgba(226,232,240,0.62)" }}
               >
                 Populares:
               </span>
@@ -504,7 +504,7 @@ function HomePage() {
                   style={{
                     background: "rgba(255,255,255,0.05)",
                     borderColor: "rgba(255,255,255,0.12)",
-                    color: "rgba(255,255,255,0.85)",
+                    color: "rgba(226,232,240,0.86)",
                   }}
                 >
                   {t}
@@ -518,7 +518,7 @@ function HomePage() {
                   style={{
                     background: "rgba(255,255,255,0.05)",
                     borderColor: "rgba(255,255,255,0.12)",
-                    color: "#F5C86A",
+                    color: "#E8BE72",
                   }}
                   aria-label="Mais buscas populares"
                 >
@@ -605,7 +605,7 @@ function HomePage() {
                       <div
                         className={`${serif} tabular-nums`}
                         style={{
-                          color: "#F5C86A",
+                          color: "#E8BE72",
                           fontSize: "clamp(1.1rem, 3vw, 2rem)",
                           lineHeight: 1,
                           letterSpacing: "-0.01em",
@@ -615,7 +615,7 @@ function HomePage() {
                       </div>
                       <div
                         className="flex min-w-0 items-center gap-1 text-[9px] font-bold uppercase tracking-[0.12em] sm:text-[10px] sm:tracking-[0.2em]"
-                        style={{ color: "rgba(255,255,255,0.6)" }}
+                        style={{ color: "rgba(226,232,240,0.70)" }}
                       >
                         <span className="hidden sm:inline-flex" aria-hidden style={{ color: P.goldSoft }}>
                           {s.icon}
