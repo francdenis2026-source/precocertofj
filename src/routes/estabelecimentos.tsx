@@ -41,6 +41,11 @@ import {
 } from "@/components/ui/select";
 import { ChevronRight, MapPin, Package, Search, Sparkles, Store, TrendingUp, Pill, Croissant, Beef, ShoppingBasket, PiggyBank, Radio, ChevronLeft } from "lucide-react";
 import mercadosHero from "@/assets/mercados-hero-v3.jpg.asset.json";
+import {
+  MarketEditorialCard,
+  MarketEditorialCardSkeleton,
+} from "@/components/estabelecimentos/MarketEditorialCard";
+
 import { useRef } from "react";
 import { useAdaptiveOverlayOpacity } from "@/hooks/use-adaptive-overlay";
 import {
