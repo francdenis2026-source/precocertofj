@@ -550,9 +550,9 @@ function RedeemPage() {
                 style={{
                   background:
                     canSubmit && !submitting
-                      ? `linear-gradient(135deg, ${GOLD} 0%, ${GOLD_SOFT} 100%)`
-                      : `linear-gradient(135deg, ${GOLD} 0%, #e6c877 100%)`,
-                  color: NAVY,
+                      ? GOLD
+                      : "#e6c877",
+                  color: INK,
                   boxShadow:
                     canSubmit && !submitting
                       ? `0 12px 28px -10px ${GOLD}, inset 0 1px 0 rgba(255,255,255,0.35)`
