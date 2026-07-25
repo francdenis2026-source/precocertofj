@@ -70,6 +70,8 @@ import { getMyAccount } from "@/lib/account.functions";
 import { EssentialGlyph, BasketMark } from "@/components/cesta/EssentialGlyph";
 import { ItemPriceStrip, type PriceStripRow } from "@/components/basket/ItemPriceStrip";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
+import { AiCostEstimate } from "@/components/ai/AiCostEstimate";
+
 
 export const Route = createFileRoute("/cesta-basica")({
   validateSearch: (
