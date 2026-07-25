@@ -446,6 +446,15 @@ function EstablishmentsPage() {
             {currentKind ? currentKind.tagline : "Cobertura de produtos, categorias e comparativo entre estabelecimentos monitorados pela comunidade."}
           </p>
 
+          <Link
+            to="/farmacias"
+            className="mt-2 inline-flex h-9 items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-3.5 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-brand-navy shadow-sm transition-opacity hover:opacity-90"
+          >
+            <Pill className="h-3.5 w-3.5" aria-hidden /> Plantão das farmácias de Feijó
+          </Link>
+
+
+
           {/* Chips de categoria — padrão Wave 1: gold sólido ativo, gold-tint no hover */}
           <div className="mt-3 flex flex-wrap gap-1.5" role="radiogroup" aria-label="Filtrar por tipo de estabelecimento">
             {(["__all", ...Object.keys(KIND_META)] as const).map((k) => {

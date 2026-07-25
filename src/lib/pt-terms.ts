@@ -10,7 +10,6 @@ export const PT_TERMS: Record<string, string> = {
   save: "salvar",
   cancel: "cancelar",
   delete: "excluir",
-  remove: "remover",
   edit: "editar",
   add: "adicionar",
   submit: "enviar",
@@ -19,8 +18,6 @@ export const PT_TERMS: Record<string, string> = {
   previous: "anterior",
   back: "voltar",
   close: "fechar",
-  open: "abrir",
-  continue: "continuar",
   confirm: "confirmar",
   update: "atualizar",
   refresh: "atualizar",
@@ -52,10 +49,9 @@ export const PT_TERMS: Record<string, string> = {
   error: "erro",
   warning: "aviso",
   success: "sucesso",
-  yes: "sim",
-  no: "não",
   page: "página",
 };
+
 
 /** Frases exatas — substituídas antes das palavras isoladas. */
 export const PT_PHRASES: Array<[RegExp, string]> = [
@@ -87,10 +83,16 @@ function applyCase(source: string, replacement: string): string {
 }
 
 const WORD_ENTRIES = Object.entries(PT_TERMS);
+/**
+ * Limites Unicode-aware: `\b` do JS considera letras acentuadas como
+ * não-palavra, o que fazia "SUÍNO" virar "SUÍNÃO". Lookarounds com \p{L}
+ * evitam substituições dentro de palavras em português.
+ */
 const WORD_REGEX = new RegExp(
-  `\\b(${WORD_ENTRIES.map(([k]) => k).join("|")})\\b`,
-  "gi",
+  `(?<![\\p{L}\\p{N}_])(${WORD_ENTRIES.map(([k]) => k).join("|")})(?![\\p{L}\\p{N}_])`,
+  "giu",
 );
+
 
 /** Substitui termos em uma string preservando capitalização. */
 export function translateTerms(input: string): string {

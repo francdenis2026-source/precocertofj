@@ -28,6 +28,7 @@ import { Route as ListaRouteImport } from './routes/lista'
 import { Route as HistoricoRouteImport } from './routes/historico'
 import { Route as FinancasRouteImport } from './routes/financas'
 import { Route as FavoritosRouteImport } from './routes/favoritos'
+import { Route as FarmaciasRouteImport } from './routes/farmacias'
 import { Route as FaleConoscoRouteImport } from './routes/fale-conosco'
 import { Route as EstabelecimentosRouteImport } from './routes/estabelecimentos'
 import { Route as EconomiaRouteImport } from './routes/economia'
@@ -88,6 +89,7 @@ import { Route as AdminAuditoriaAcessosRouteImport } from './routes/admin_.audit
 import { Route as AdminAuditoriaRouteImport } from './routes/admin_.auditoria'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin_.analytics'
 import { Route as AdminGestaoRouteImport } from './routes/admin/gestao'
+import { Route as EstabelecimentoSlugAcougueRouteImport } from './routes/estabelecimento.$slug_.acougue'
 import { Route as ApiPublicMpWebhookRouteImport } from './routes/api/public/mp-webhook'
 import { Route as ApiAdminCatalogImageRouteImport } from './routes/api/admin/catalog-image'
 import { Route as AdminCoberturaIdRouteImport } from './routes/admin_.cobertura.$id'
@@ -192,6 +194,11 @@ const FinancasRoute = FinancasRouteImport.update({
 const FavoritosRoute = FavoritosRouteImport.update({
   id: '/favoritos',
   path: '/favoritos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FarmaciasRoute = FarmaciasRouteImport.update({
+  id: '/farmacias',
+  path: '/farmacias',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaleConoscoRoute = FaleConoscoRouteImport.update({
@@ -495,6 +502,12 @@ const AdminGestaoRoute = AdminGestaoRouteImport.update({
   path: '/gestao',
   getParentRoute: () => AdminRoute,
 } as any)
+const EstabelecimentoSlugAcougueRoute =
+  EstabelecimentoSlugAcougueRouteImport.update({
+    id: '/estabelecimento/$slug_/acougue',
+    path: '/estabelecimento/$slug/acougue',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicMpWebhookRoute = ApiPublicMpWebhookRouteImport.update({
   id: '/api/public/mp-webhook',
   path: '/api/public/mp-webhook',
@@ -572,6 +585,7 @@ export interface FileRoutesByFullPath {
   '/economia': typeof EconomiaRoute
   '/estabelecimentos': typeof EstabelecimentosRoute
   '/fale-conosco': typeof FaleConoscoRoute
+  '/farmacias': typeof FarmaciasRoute
   '/favoritos': typeof FavoritosRoute
   '/financas': typeof FinancasRoute
   '/historico': typeof HistoricoRouteWithChildren
@@ -635,6 +649,7 @@ export interface FileRoutesByFullPath {
   '/admin/cobertura/$id': typeof AdminCoberturaIdRoute
   '/api/admin/catalog-image': typeof ApiAdminCatalogImageRoute
   '/api/public/mp-webhook': typeof ApiPublicMpWebhookRoute
+  '/estabelecimento/$slug/acougue': typeof EstabelecimentoSlugAcougueRoute
   '/api/public/hooks/collab-inbound': typeof ApiPublicHooksCollabInboundRoute
   '/api/public/hooks/drain-catalog-images': typeof ApiPublicHooksDrainCatalogImagesRoute
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
@@ -663,6 +678,7 @@ export interface FileRoutesByTo {
   '/economia': typeof EconomiaRoute
   '/estabelecimentos': typeof EstabelecimentosRoute
   '/fale-conosco': typeof FaleConoscoRoute
+  '/farmacias': typeof FarmaciasRoute
   '/favoritos': typeof FavoritosRoute
   '/financas': typeof FinancasRoute
   '/historico': typeof HistoricoRouteWithChildren
@@ -726,6 +742,7 @@ export interface FileRoutesByTo {
   '/admin/cobertura/$id': typeof AdminCoberturaIdRoute
   '/api/admin/catalog-image': typeof ApiAdminCatalogImageRoute
   '/api/public/mp-webhook': typeof ApiPublicMpWebhookRoute
+  '/estabelecimento/$slug/acougue': typeof EstabelecimentoSlugAcougueRoute
   '/api/public/hooks/collab-inbound': typeof ApiPublicHooksCollabInboundRoute
   '/api/public/hooks/drain-catalog-images': typeof ApiPublicHooksDrainCatalogImagesRoute
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
@@ -755,6 +772,7 @@ export interface FileRoutesById {
   '/economia': typeof EconomiaRoute
   '/estabelecimentos': typeof EstabelecimentosRoute
   '/fale-conosco': typeof FaleConoscoRoute
+  '/farmacias': typeof FarmaciasRoute
   '/favoritos': typeof FavoritosRoute
   '/financas': typeof FinancasRoute
   '/historico': typeof HistoricoRouteWithChildren
@@ -818,6 +836,7 @@ export interface FileRoutesById {
   '/admin_/cobertura/$id': typeof AdminCoberturaIdRoute
   '/api/admin/catalog-image': typeof ApiAdminCatalogImageRoute
   '/api/public/mp-webhook': typeof ApiPublicMpWebhookRoute
+  '/estabelecimento/$slug_/acougue': typeof EstabelecimentoSlugAcougueRoute
   '/api/public/hooks/collab-inbound': typeof ApiPublicHooksCollabInboundRoute
   '/api/public/hooks/drain-catalog-images': typeof ApiPublicHooksDrainCatalogImagesRoute
   '/api/public/hooks/refresh-catalog-images': typeof ApiPublicHooksRefreshCatalogImagesRoute
@@ -848,6 +867,7 @@ export interface FileRouteTypes {
     | '/economia'
     | '/estabelecimentos'
     | '/fale-conosco'
+    | '/farmacias'
     | '/favoritos'
     | '/financas'
     | '/historico'
@@ -911,6 +931,7 @@ export interface FileRouteTypes {
     | '/admin/cobertura/$id'
     | '/api/admin/catalog-image'
     | '/api/public/mp-webhook'
+    | '/estabelecimento/$slug/acougue'
     | '/api/public/hooks/collab-inbound'
     | '/api/public/hooks/drain-catalog-images'
     | '/api/public/hooks/refresh-catalog-images'
@@ -939,6 +960,7 @@ export interface FileRouteTypes {
     | '/economia'
     | '/estabelecimentos'
     | '/fale-conosco'
+    | '/farmacias'
     | '/favoritos'
     | '/financas'
     | '/historico'
@@ -1002,6 +1024,7 @@ export interface FileRouteTypes {
     | '/admin/cobertura/$id'
     | '/api/admin/catalog-image'
     | '/api/public/mp-webhook'
+    | '/estabelecimento/$slug/acougue'
     | '/api/public/hooks/collab-inbound'
     | '/api/public/hooks/drain-catalog-images'
     | '/api/public/hooks/refresh-catalog-images'
@@ -1030,6 +1053,7 @@ export interface FileRouteTypes {
     | '/economia'
     | '/estabelecimentos'
     | '/fale-conosco'
+    | '/farmacias'
     | '/favoritos'
     | '/financas'
     | '/historico'
@@ -1093,6 +1117,7 @@ export interface FileRouteTypes {
     | '/admin_/cobertura/$id'
     | '/api/admin/catalog-image'
     | '/api/public/mp-webhook'
+    | '/estabelecimento/$slug_/acougue'
     | '/api/public/hooks/collab-inbound'
     | '/api/public/hooks/drain-catalog-images'
     | '/api/public/hooks/refresh-catalog-images'
@@ -1122,6 +1147,7 @@ export interface RootRouteChildren {
   EconomiaRoute: typeof EconomiaRoute
   EstabelecimentosRoute: typeof EstabelecimentosRoute
   FaleConoscoRoute: typeof FaleConoscoRoute
+  FarmaciasRoute: typeof FarmaciasRoute
   FavoritosRoute: typeof FavoritosRoute
   FinancasRoute: typeof FinancasRoute
   HistoricoRoute: typeof HistoricoRouteWithChildren
@@ -1180,6 +1206,7 @@ export interface RootRouteChildren {
   ProdutoSlugRoute: typeof ProdutoSlugRoute
   ApiAdminCatalogImageRoute: typeof ApiAdminCatalogImageRoute
   ApiPublicMpWebhookRoute: typeof ApiPublicMpWebhookRoute
+  EstabelecimentoSlugAcougueRoute: typeof EstabelecimentoSlugAcougueRoute
   ApiPublicHooksCollabInboundRoute: typeof ApiPublicHooksCollabInboundRoute
   ApiPublicHooksDrainCatalogImagesRoute: typeof ApiPublicHooksDrainCatalogImagesRoute
   ApiPublicHooksRefreshCatalogImagesRoute: typeof ApiPublicHooksRefreshCatalogImagesRoute
@@ -1320,6 +1347,13 @@ declare module '@tanstack/react-router' {
       path: '/favoritos'
       fullPath: '/favoritos'
       preLoaderRoute: typeof FavoritosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/farmacias': {
+      id: '/farmacias'
+      path: '/farmacias'
+      fullPath: '/farmacias'
+      preLoaderRoute: typeof FarmaciasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/fale-conosco': {
@@ -1742,6 +1776,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminGestaoRouteImport
       parentRoute: typeof AdminRoute
     }
+    '/estabelecimento/$slug_/acougue': {
+      id: '/estabelecimento/$slug_/acougue'
+      path: '/estabelecimento/$slug/acougue'
+      fullPath: '/estabelecimento/$slug/acougue'
+      preLoaderRoute: typeof EstabelecimentoSlugAcougueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/mp-webhook': {
       id: '/api/public/mp-webhook'
       path: '/api/public/mp-webhook'
@@ -1896,6 +1937,7 @@ const rootRouteChildren: RootRouteChildren = {
   EconomiaRoute: EconomiaRoute,
   EstabelecimentosRoute: EstabelecimentosRoute,
   FaleConoscoRoute: FaleConoscoRoute,
+  FarmaciasRoute: FarmaciasRoute,
   FavoritosRoute: FavoritosRoute,
   FinancasRoute: FinancasRoute,
   HistoricoRoute: HistoricoRouteWithChildren,
@@ -1954,6 +1996,7 @@ const rootRouteChildren: RootRouteChildren = {
   ProdutoSlugRoute: ProdutoSlugRoute,
   ApiAdminCatalogImageRoute: ApiAdminCatalogImageRoute,
   ApiPublicMpWebhookRoute: ApiPublicMpWebhookRoute,
+  EstabelecimentoSlugAcougueRoute: EstabelecimentoSlugAcougueRoute,
   ApiPublicHooksCollabInboundRoute: ApiPublicHooksCollabInboundRoute,
   ApiPublicHooksDrainCatalogImagesRoute: ApiPublicHooksDrainCatalogImagesRoute,
   ApiPublicHooksRefreshCatalogImagesRoute:
