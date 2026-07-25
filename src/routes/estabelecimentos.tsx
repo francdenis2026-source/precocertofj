@@ -770,6 +770,7 @@ function EstablishmentsPage() {
                     const isFeatured = badgeIds.featuredIds.has(e.id);
                     const tier = classifyTier(e.productsCount);
                     const freshness = describeFreshness(e.lastUpdate);
+                    const dist = distanceById.get(e.id);
                     return (
                     <li key={e.id} className="relative h-full">
                       <FavoriteMarketButton
