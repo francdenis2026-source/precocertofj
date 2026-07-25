@@ -150,18 +150,18 @@ export function SiteFooter() {
         </div>
 
         {/* Link columns */}
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-5">
+        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-4">
           {NAV_COLS.map((col) => (
             <div key={col.title} className="min-w-0">
-              <div className="text-[10.5px] font-bold uppercase tracking-[0.22em] text-brand md:text-[11.5px]">
+              <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-brand md:text-[10.5px]">
                 {col.title}
               </div>
-              <ul className="mt-1 space-y-0">
+              <ul className="mt-0.5 space-y-0">
                 {col.links.map((l) => (
                   <li key={l.to}>
                     <Link
                       to={l.to}
-                      className="inline-flex items-center rounded-md px-1.5 py-0.5 -mx-1.5 text-[13px] font-medium leading-[1.35] text-foreground/90 outline-none transition-colors hover:bg-brand/10 hover:text-brand active:text-brand-strong focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background [&.active]:text-brand [&.active]:bg-brand/10 md:text-[13.5px]"
+                      className="inline-flex items-center rounded-md px-1.5 py-0 -mx-1.5 text-[12px] font-medium leading-[1.3] text-foreground/90 outline-none transition-colors hover:bg-brand/10 hover:text-brand active:text-brand-strong focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background [&.active]:text-brand [&.active]:bg-brand/10 md:text-[12.5px]"
                     >
                       <span>{l.label}</span>
                     </Link>
