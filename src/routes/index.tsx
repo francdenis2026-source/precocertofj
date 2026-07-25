@@ -36,6 +36,7 @@ import { PartnersPanel } from "@/components/home/PartnersPanel";
 import { BenefitsSection } from "@/components/home/BenefitsSection";
 
 import { MobileAccordion } from "@/components/home/MobileAccordion";
+import { AllCategoriesDialog } from "@/components/home/AllCategoriesDialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useSession } from "@/hooks/useSession";
 import homeHeroImg from "@/assets/home-hero.jpg";
