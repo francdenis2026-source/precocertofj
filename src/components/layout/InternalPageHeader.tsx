@@ -36,6 +36,8 @@ export function InternalPageHeader({
   description,
   actions,
   breadcrumbs,
+  showBack = true,
+  backFallback = "/",
   className,
 }: InternalPageHeaderProps) {
   const renderTitle = () => {
