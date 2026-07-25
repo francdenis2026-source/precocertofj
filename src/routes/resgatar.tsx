@@ -448,8 +448,8 @@ function RedeemPage() {
                 <button
                   type="button"
                   onClick={pasteFromClipboard}
-                  className="inline-flex items-center gap-1.5 rounded-lg border px-3 text-[12px] font-semibold transition hover:bg-slate-50"
-                  style={{ borderColor: LINE, color: NAVY }}
+                  className="inline-flex items-center gap-1.5 rounded-lg border-2 px-3 text-[12px] font-semibold transition hover:bg-slate-50"
+                  style={{ borderColor: "#cbd5e1", color: NAVY }}
                   aria-label="Colar código da área de transferência"
                 >
                   <Clipboard className="h-3.5 w-3.5" />
