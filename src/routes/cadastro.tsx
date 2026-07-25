@@ -258,8 +258,8 @@ function CadastroPage() {
               </div>
 
               <div>
-                <div className="mb-2 flex items-center justify-between">
-                  <label className="block text-[10.5px] font-bold uppercase tracking-[0.22em] text-slate-900">
+                <div className="mb-1.5 flex items-center justify-between">
+                  <label className="block text-[10px] font-bold uppercase tracking-[0.22em] text-slate-900">
                     PIN de acesso · 6 dígitos
                   </label>
 
@@ -271,7 +271,7 @@ function CadastroPage() {
                   onComplete={() => markTouched("password")}
                   hasError={touched.password && !vPin.valid}
                 />
-                <p className="mt-2 text-[11.5px] font-medium text-slate-600">
+                <p className="mt-1.5 text-[10.5px] font-medium text-slate-600">
                   Use 6 números que só você lembra. Evite datas óbvias.
                 </p>
               </div>
