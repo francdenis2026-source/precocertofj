@@ -869,7 +869,7 @@ function HomePage() {
 
 
 
-/* -------- PillarCard — célula compacta de faixa (mobile + desktop) -------- */
+/* -------- PillarCard — célula ultra-compacta -------- */
 function PillarCard({
   to,
   icon,
@@ -890,45 +890,44 @@ function PillarCard({
     <Link
       to={to}
       aria-label={`${title} — ${cta}`}
-      className="group relative flex items-center gap-3 px-3.5 py-3 transition-colors active:scale-[0.997] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset sm:gap-3 sm:px-4 sm:py-3.5"
+      className="group relative flex items-center gap-2 px-2.5 py-2.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset sm:gap-2.5 sm:px-3.5 sm:py-3"
       style={{
         background: isGold
           ? `linear-gradient(135deg, var(--pc-home-gold) 0%, color-mix(in oklab, var(--pc-home-gold) 88%, black) 100%)`
           : "transparent",
         color: isGold ? "var(--pc-home-navy)" : undefined,
-        borderColor: "var(--pc-home-line)",
         // @ts-expect-error css var
         "--tw-ring-color": `color-mix(in oklab, var(--pc-home-gold) 70%, transparent)`,
       }}
     >
       <span
-        className="grid h-9 w-9 shrink-0 place-items-center rounded-lg"
+        className="grid h-7 w-7 shrink-0 place-items-center rounded-md sm:h-8 sm:w-8"
         style={{
           background: isGold
             ? "color-mix(in oklab, var(--pc-home-navy) 14%, transparent)"
-            : "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
+            : "color-mix(in oklab, var(--pc-home-gold) 12%, transparent)",
           color: isGold ? "var(--pc-home-navy)" : "var(--pc-home-gold)",
           border: isGold
             ? "1px solid color-mix(in oklab, var(--pc-home-navy) 22%, transparent)"
-            : "1px solid color-mix(in oklab, var(--pc-home-gold) 32%, transparent)",
+            : "1px solid color-mix(in oklab, var(--pc-home-gold) 28%, transparent)",
         }}
         aria-hidden
       >
         {icon}
       </span>
 
-      <span className="min-w-0 flex-1">
+      <span className="min-w-0 flex-1 leading-tight">
         <span
-          className="block truncate text-[13.5px] font-semibold leading-tight sm:text-[14px]"
+          className="block truncate text-[12px] font-semibold sm:text-[13px]"
           style={{ color: isGold ? "var(--pc-home-navy)" : "var(--pc-home-heading)" }}
         >
           {title}
         </span>
         <span
-          className="mt-0.5 line-clamp-1 text-[11.5px] leading-snug sm:line-clamp-2 sm:text-[12px]"
+          className="hidden truncate text-[11px] sm:block"
           style={{
             color: isGold
-              ? "color-mix(in oklab, var(--pc-home-navy) 82%, transparent)"
+              ? "color-mix(in oklab, var(--pc-home-navy) 80%, transparent)"
               : "var(--pc-text-body)",
           }}
         >
@@ -936,18 +935,8 @@ function PillarCard({
         </span>
       </span>
 
-      <span
-        className="hidden shrink-0 items-center gap-1 text-[10px] font-bold uppercase tracking-[0.14em] sm:inline-flex"
-        style={{ color: isGold ? "var(--pc-home-navy)" : "var(--pc-home-gold)" }}
-      >
-        {cta}
-        <ArrowRight
-          className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5"
-          strokeWidth={2.6}
-        />
-      </span>
       <ArrowRight
-        className="h-4 w-4 shrink-0 opacity-70 sm:hidden"
+        className="h-3.5 w-3.5 shrink-0 opacity-70 transition-transform group-hover:translate-x-0.5"
         strokeWidth={2.6}
         style={{ color: isGold ? "var(--pc-home-navy)" : "var(--pc-home-gold)" }}
         aria-hidden
