@@ -24,8 +24,8 @@ export function sizeSignature(
   fallback?: { sizeValue?: number | null; sizeUnit?: string | null },
 ): string {
   const parsed = parseProductSize(name, fallback);
-  if (parsed && parsed.totalValue > 0) {
-    return `${Number(parsed.totalValue.toFixed(3))}:${parsed.unit}`;
+  if (parsed && parsed.totalSize > 0) {
+    return `${Number(parsed.totalSize.toFixed(3))}:${parsed.unitSizeUnit}`;
   }
   const v = fallback?.sizeValue;
   const u = (fallback?.sizeUnit ?? "").toLowerCase();
