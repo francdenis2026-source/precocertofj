@@ -165,24 +165,24 @@ function CadastroPage() {
         }}
       />
 
-      <header className="relative z-10 mx-auto flex w-full max-w-5xl items-center justify-between px-5 py-3.5 md:px-6">
+      <header className="relative z-10 mx-auto flex w-full max-w-[900px] items-center justify-between px-5 py-2.5 md:px-6">
         <Link to="/" className="flex items-center gap-2">
-          <Logo className="h-7 w-auto" />
+          <Logo className="h-6 w-auto" />
         </Link>
         <Link
           to={loginHref}
-          className="rounded-full border border-slate-900/10 bg-white/70 px-3.5 py-1.5 text-[12px] font-semibold text-slate-700 backdrop-blur transition hover:bg-white"
+          className="rounded-full border border-slate-900/10 bg-white/70 px-3 py-1 text-[11.5px] font-semibold text-slate-700 backdrop-blur transition hover:bg-white"
         >
           Já tenho conta →
         </Link>
       </header>
 
-      <main className="relative z-10 flex items-start justify-center px-4 pb-8 pt-2 md:items-center md:min-h-[calc(100dvh-72px)]">
+      <main className="relative z-10 flex items-start justify-center px-4 pb-6 pt-2 md:items-center md:min-h-[calc(100dvh-72px)]">
         <motion.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="grid w-full max-w-[960px] grid-cols-1 overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
+          className="grid w-full max-w-[900px] grid-cols-1 overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
         >
           {/* LEFT — Hero panel reutilizável (oculto no mobile, igual /login) */}
           <div className="hidden md:block">
@@ -191,27 +191,27 @@ function CadastroPage() {
 
 
           {/* RIGHT — Form */}
-          <section className="relative overflow-hidden p-5 sm:p-7 md:p-8">
+          <section className="relative overflow-hidden p-4 sm:p-5 md:p-6">
             {/* Header */}
-            <div className="mb-5 flex items-center gap-3">
+            <div className="mb-3 flex items-center gap-2.5">
               <div
-                className="flex h-11 w-11 flex-none items-center justify-center rounded-xl"
+                className="flex h-9 w-9 flex-none items-center justify-center rounded-lg"
                 style={{
                   background: `linear-gradient(135deg, ${PC_EMERALD} 0%, ${PC_EMERALD_DEEP} 100%)`,
                   boxShadow: `inset 0 0 0 1px ${PC_GOLD}66, 0 6px 14px -6px rgba(15,27,61,0.45)`,
                 }}
               >
-                <UserPlus className="h-5 w-5 text-white" />
+                <UserPlus className="h-4 w-4 text-white" />
               </div>
               <div className="min-w-0">
                 <div
-                  className="text-[10px] font-bold uppercase tracking-[0.22em]"
+                  className="text-[9.5px] font-bold uppercase tracking-[0.22em]"
                   style={{ color: PC_EMERALD }}
                 >
                   Novo assinante
                 </div>
                 <h2
-                  className="mt-0.5 text-[22px] leading-[1.05] tracking-tight"
+                  className="mt-0.5 text-[18px] leading-[1.05] tracking-tight"
                   style={{ fontFamily: PC_DISPLAY, fontWeight: 700, color: "#0a1631" }}
                 >
                   Criar conta
@@ -221,7 +221,7 @@ function CadastroPage() {
 
 
 
-            <form onSubmit={handleSubmit} className="space-y-3" noValidate>
+            <form onSubmit={handleSubmit} className="space-y-2.5" noValidate>
               <Field
                 label="Nome completo"
                 value={name}
@@ -232,7 +232,7 @@ function CadastroPage() {
                 state={vName}
                 showState={touched.name}
               />
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
                 <Field
                   label="CPF"
                   value={cpf}
@@ -258,8 +258,8 @@ function CadastroPage() {
               </div>
 
               <div>
-                <div className="mb-2 flex items-center justify-between">
-                  <label className="block text-[10.5px] font-bold uppercase tracking-[0.22em] text-slate-900">
+                <div className="mb-1.5 flex items-center justify-between">
+                  <label className="block text-[10px] font-bold uppercase tracking-[0.22em] text-slate-900">
                     PIN de acesso · 6 dígitos
                   </label>
 
@@ -271,7 +271,7 @@ function CadastroPage() {
                   onComplete={() => markTouched("password")}
                   hasError={touched.password && !vPin.valid}
                 />
-                <p className="mt-2 text-[11.5px] font-medium text-slate-600">
+                <p className="mt-1.5 text-[10.5px] font-medium text-slate-600">
                   Use 6 números que só você lembra. Evite datas óbvias.
                 </p>
               </div>
@@ -294,13 +294,13 @@ function CadastroPage() {
               <button
                 type="submit"
                 disabled={loading || !allValid}
-                className="group relative mt-2 inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-xl text-[14.5px] font-bold !text-white shadow-xl transition hover:brightness-[1.08] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:brightness-100"
+                className="group relative mt-1 inline-flex h-11 w-full items-center justify-center gap-2 overflow-hidden rounded-lg text-[13.5px] font-bold !text-white shadow-lg transition hover:brightness-[1.08] disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:brightness-100"
                 style={{
                   background: allValid && !loading
                     ? `linear-gradient(135deg, ${PC_EMERALD_LIGHT} 0%, ${PC_EMERALD} 50%, ${PC_EMERALD_DEEP} 100%)`
                     : `linear-gradient(135deg, #6b7896, #4a5670)`,
                   boxShadow: allValid && !loading
-                    ? `0 14px 32px -12px rgba(15,27,61,0.55), inset 0 1px 0 rgba(255,255,255,0.14), inset 0 0 0 1px ${PC_GOLD}55`
+                    ? `0 12px 26px -12px rgba(15,27,61,0.55), inset 0 1px 0 rgba(255,255,255,0.14), inset 0 0 0 1px ${PC_GOLD}55`
                     : "0 6px 16px -8px rgba(15,27,61,0.35)",
                   fontFamily: PC_DISPLAY,
                   letterSpacing: "0.01em",
@@ -313,7 +313,7 @@ function CadastroPage() {
                   </>
                 ) : (
                   <>
-                    <span>Criar conta e continuar</span>
+                    <span>Criar conta grátis</span>
                     <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
                   </>
                 )}
@@ -334,7 +334,7 @@ function CadastroPage() {
               </div>
             </form>
 
-            <p className="mt-4 border-t border-slate-200 pt-3 text-center text-[11px] font-medium text-slate-600">
+            <p className="mt-3 border-t border-slate-200 pt-2.5 text-center text-[10.5px] font-medium text-slate-600">
               Ao continuar você aceita nossos{" "}
               <a className="font-semibold underline underline-offset-2 hover:text-slate-700" href="/termos">Termos</a>
               {" "}e a{" "}
@@ -412,7 +412,7 @@ function Field({
         inputMode={inputMode}
         autoComplete={autoComplete}
         aria-invalid={invalid}
-        className={`h-11 w-full rounded-xl border-2 ${border} bg-white px-3.5 text-[14.5px] font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-500 outline-none transition focus:ring-4`}
+        className={`h-10 w-full rounded-lg border-2 ${border} bg-white px-3 text-[13.5px] font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-500 outline-none transition focus:ring-4`}
         style={{ ["--pc-navy" as string]: PC_EMERALD } as React.CSSProperties}
       />
     </label>
@@ -482,7 +482,7 @@ function PinField({
           maxLength={1}
           type="password"
           aria-invalid={hasError}
-          className={`h-12 w-full min-w-0 rounded-xl border-2 ${borderCls} bg-white text-center text-xl font-black text-slate-900 shadow-[inset_0_1px_0_rgba(15,27,61,0.04)] outline-none transition focus:ring-4`}
+          className={`h-10 w-full min-w-0 rounded-lg border-2 ${borderCls} bg-white text-center text-lg font-black text-slate-900 shadow-[inset_0_1px_0_rgba(15,27,61,0.04)] outline-none transition focus:ring-4`}
           style={{
             ["--pc-navy" as string]: "#0f1b3d",
             fontFeatureSettings: '"tnum" 1',

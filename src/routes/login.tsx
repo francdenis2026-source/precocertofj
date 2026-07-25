@@ -279,7 +279,7 @@ function LoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-dvh w-full items-center justify-center bg-background px-4 py-8 sm:px-6">
+    <div className="relative flex min-h-dvh w-full items-center justify-center bg-background px-4 py-4 sm:px-6 sm:py-6">
       {/* Ambient brand glow — subtle in both themes */}
       <div
         aria-hidden
@@ -308,7 +308,7 @@ function LoginPage() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 grid w-full max-w-[960px] overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
+        className="relative z-10 grid w-full max-w-[900px] overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
       >
         {/* LEFT — Emerald benefit panel (hidden on mobile to reduce distraction) */}
         <div className="hidden md:block">
@@ -318,7 +318,7 @@ function LoginPage() {
 
 
         {/* RIGHT — Auth form */}
-        <div className="p-5 sm:p-7 md:p-8" style={{ fontFamily: PC_BODY }}>
+        <div className="p-4 sm:p-5 md:p-6" style={{ fontFamily: PC_BODY }}>
 
           {/* Mobile-only compact brand row */}
           <div className="mb-4 flex items-center gap-2 md:hidden">
@@ -349,7 +349,7 @@ function LoginPage() {
 
           <TabSwitch mode={mode} onChange={setMode} />
 
-          <form className="mt-4 space-y-3" onSubmit={handleSubmit}>
+          <form className="mt-3 space-y-2.5" onSubmit={handleSubmit}>
 
             {mode === "signup" && (() => {
               const trimmed = fullName.trim();
@@ -554,7 +554,7 @@ function LoginPage() {
                 (mode === "signup" &&
                   (fullName.trim().length < 3 || phone.replace(/\D/g, "").length < 10))
               }
-              className="mt-1 inline-flex h-12 w-full items-center justify-center gap-2 rounded-xl text-[14px] font-bold text-white shadow-lg transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:shadow-none"
+              className="mt-1 inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg text-[13.5px] font-bold text-white shadow-lg transition hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:shadow-none"
               style={{
                 background: `linear-gradient(135deg, ${PC_EMERALD_DEEP}, ${PC_EMERALD})`,
                 boxShadow: `0 12px 24px -10px ${PC_EMERALD}66`,
@@ -584,7 +584,7 @@ function LoginPage() {
             </div>
           </form>
 
-          <p className="mt-6 border-t border-border pt-4 text-center text-[10.5px] text-muted-foreground">
+          <p className="mt-4 border-t border-border pt-3 text-center text-[10px] text-muted-foreground">
             Ao continuar, você concorda com nossos{" "}
             <Link to="/termos" className="underline hover:text-foreground">Termos</Link> e{" "}
             <Link to="/privacidade" className="underline hover:text-foreground">Privacidade</Link>.
