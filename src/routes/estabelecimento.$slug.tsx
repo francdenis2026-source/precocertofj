@@ -41,6 +41,7 @@ import {
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ProductListCard } from "@/components/product/ProductListCard";
+import { FavoriteMarketButton } from "@/components/market/FavoriteMarketButton";
 import { EmptyState, LoadingGrid, RouteError } from "@/components/feedback";
 
 const brl = (v: number) =>
