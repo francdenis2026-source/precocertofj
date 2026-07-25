@@ -11,4 +11,4 @@ export { ListingShell } from "./ListingShell";
 export { ListingToolbar } from "./ListingToolbar";
 export { ListingGrid } from "./ListingGrid";
 export { ListingCount } from "./ListingCount";
-export { PageShell } from "./PageShell";
+export { PageShell, PageShellContent } from "./PageShell";
