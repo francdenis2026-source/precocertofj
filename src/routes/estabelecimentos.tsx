@@ -131,6 +131,26 @@ function EstablishmentsPage() {
     staleTime: 60_000,
   });
 
+  const { user } = useSession();
+  const listFavFn = useServerFn(listFavoriteMarkets);
+  const { data: favMarkets } = useQuery({
+    queryKey: ["favorite-markets"],
+    queryFn: () => listFavFn(),
+    enabled: !!user,
+    staleTime: 60_000,
+  });
+  const favSet = useMemo(
+    () =>
+      new Set(
+        (favMarkets ?? []).map((f) => f.marketName.trim().toLowerCase()),
+      ),
+    [favMarkets],
+  );
+  const [onlyFavorites, setOnlyFavorites] = useState(false);
+  useEffect(() => {
+    if (!user) setOnlyFavorites(false);
+  }, [user]);
+
   // Filtros persistidos em sessionStorage — sobrevivem ao voltar de /estabelecimento/$slug
   const persisted = readPersistedFilters();
   const [q, setQ] = useState(persisted.q);
