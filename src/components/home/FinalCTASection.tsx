@@ -155,21 +155,21 @@ export function FinalCTASection() {
 
               {/* Selos de confiança */}
               <ul
-                className="mt-1 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-[11.5px]"
+                className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-[11px]"
                 style={{ color: "rgba(245,246,250,0.78)" }}
               >
-                <li className="inline-flex items-center gap-1.5">
-                  <Zap className="h-3.5 w-3.5" style={{ color: "#F5C86A" }} aria-hidden />
+                <li className="inline-flex items-center gap-1">
+                  <Zap className="h-3 w-3" style={{ color: "#F5C86A" }} aria-hidden />
                   Resultados instantâneos
                 </li>
                 <li aria-hidden className="opacity-40">•</li>
-                <li className="inline-flex items-center gap-1.5">
-                  <ShieldCheck className="h-3.5 w-3.5" style={{ color: "#F5C86A" }} aria-hidden />
+                <li className="inline-flex items-center gap-1">
+                  <ShieldCheck className="h-3 w-3" style={{ color: "#F5C86A" }} aria-hidden />
                   Dados verificados
                 </li>
                 <li aria-hidden className="opacity-40">•</li>
-                <li className="inline-flex items-center gap-1.5">
-                  <Sparkles className="h-3.5 w-3.5" style={{ color: "#F5C86A" }} aria-hidden />
+                <li className="inline-flex items-center gap-1">
+                  <Sparkles className="h-3 w-3" style={{ color: "#F5C86A" }} aria-hidden />
                   Mercados do seu bairro
                 </li>
               </ul>
