@@ -119,6 +119,39 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_settings: {
+        Row: {
+          allow_trial: boolean
+          assistant_enabled: boolean
+          default_quota: number
+          id: boolean
+          require_active_plan: boolean
+          updated_at: string
+          updated_by: string | null
+          warn_thresholds: number[]
+        }
+        Insert: {
+          allow_trial?: boolean
+          assistant_enabled?: boolean
+          default_quota?: number
+          id?: boolean
+          require_active_plan?: boolean
+          updated_at?: string
+          updated_by?: string | null
+          warn_thresholds?: number[]
+        }
+        Update: {
+          allow_trial?: boolean
+          assistant_enabled?: boolean
+          default_quota?: number
+          id?: boolean
+          require_active_plan?: boolean
+          updated_at?: string
+          updated_by?: string | null
+          warn_thresholds?: number[]
+        }
+        Relationships: []
+      }
       ai_usage: {
         Row: {
           completion_tokens: number
@@ -1217,6 +1250,7 @@ export type Database = {
       license_plans: {
         Row: {
           active: boolean
+          ai_monthly_quota: number
           created_at: string
           days: number
           description: string | null
@@ -1229,6 +1263,7 @@ export type Database = {
         }
         Insert: {
           active?: boolean
+          ai_monthly_quota?: number
           created_at?: string
           days: number
           description?: string | null
@@ -1241,6 +1276,7 @@ export type Database = {
         }
         Update: {
           active?: boolean
+          ai_monthly_quota?: number
           created_at?: string
           days?: number
           description?: string | null
@@ -2906,6 +2942,73 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      admin_set_plan_ai_quota: {
+        Args: { _plan_id: string; _quota: number }
+        Returns: {
+          active: boolean
+          ai_monthly_quota: number
+          created_at: string
+          days: number
+          description: string | null
+          id: string
+          name: string
+          price_cents: number
+          slug: string
+          sort_order: number
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "license_plans"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      admin_set_user_ai_quota: {
+        Args: { _quota: number; _user_id: string }
+        Returns: {
+          created_at: string
+          id: string
+          month_key: string
+          quota_limit: number
+          reset_at: string
+          updated_at: string
+          used: number
+          user_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "ai_quota"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      admin_update_ai_settings: {
+        Args: {
+          _allow_trial?: boolean
+          _assistant_enabled?: boolean
+          _default_quota?: number
+          _require_active_plan?: boolean
+          _warn_thresholds?: number[]
+        }
+        Returns: {
+          allow_trial: boolean
+          assistant_enabled: boolean
+          default_quota: number
+          id: boolean
+          require_active_plan: boolean
+          updated_at: string
+          updated_by: string | null
+          warn_thresholds: number[]
+        }
+        SetofOptions: {
+          from: "*"
+          to: "ai_settings"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      ai_effective_quota: { Args: { _user_id: string }; Returns: number }
       apply_paid_license: {
         Args: { _license_id: string; _mp_payment_id: string }
         Returns: {
@@ -3097,6 +3200,24 @@ export type Database = {
       }
       generate_collab_token: { Args: never; Returns: string }
       generate_license_code_string: { Args: never; Returns: string }
+      get_ai_access: {
+        Args: { _user_id: string }
+        Returns: {
+          allow_trial: boolean
+          allowed: boolean
+          assistant_enabled: boolean
+          paid_until: string
+          plan_name: string
+          plan_slug: string
+          quota_limit: number
+          reason: string
+          require_active_plan: boolean
+          reset_at: string
+          trial_ends_at: string
+          used: number
+          warn_thresholds: number[]
+        }[]
+      }
       get_coverage_overview: {
         Args: never
         Returns: {
@@ -3244,6 +3365,16 @@ export type Database = {
           id: string
           notes: string
           target_id: string
+        }[]
+      }
+      my_ai_usage_summary: {
+        Args: { _months?: number }
+        Returns: {
+          completion_tokens: number
+          month_key: string
+          prompt_tokens: number
+          requests: number
+          total_tokens: number
         }[]
       }
       normalize_product_key: { Args: { name: string }; Returns: string }

@@ -71,6 +71,7 @@ import { EssentialGlyph, BasketMark } from "@/components/cesta/EssentialGlyph";
 import { ItemPriceStrip, type PriceStripRow } from "@/components/basket/ItemPriceStrip";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { AiCostEstimate } from "@/components/ai/AiCostEstimate";
+import { AiQuotaWarning } from "@/components/ai/AiQuotaWarning";
 
 
 export const Route = createFileRoute("/cesta-basica")({
@@ -4511,6 +4512,7 @@ function AssistantSidePanel({
         </div>
 
         <footer className="border-t border-border p-3">
+          <AiQuotaWarning className="mb-2" />
           <AiCostEstimate
             draft={input}
             historyChars={turns.reduce((s, t) => s + t.content.length, 0)}

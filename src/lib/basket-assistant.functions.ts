@@ -2,28 +2,67 @@ import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { getBasketComparison, buildBudgetBasket, type EssentialKey } from "./basket.functions";
 
+export type AiAccess = {
+  allowed: boolean;
+  reason: string;
+  planSlug: string | null;
+  planName: string | null;
+  limit: number;
+  used: number;
+  resetAt: string;
+  requireActivePlan: boolean;
+  allowTrial: boolean;
+  assistantEnabled: boolean;
+  warnThresholds: number[];
+  paidUntil: string | null;
+  trialEndsAt: string | null;
+};
+
 /**
- * Garante que o usuário autenticado tem plano de assinatura pago ativo
- * (paid_until no futuro). Trial NÃO libera IA — apenas assinantes.
+ * Lê o estado de acesso à IA do usuário aplicando as regras configuráveis
+ * pelo administrador (exigir plano ativo, permitir trial, ligar/desligar) e a
+ * cota mensal derivada do plano.
  */
-async function assertActivePaidPlan(ctx: {
-  supabase: any;
-  userId: string;
-}): Promise<void> {
-  const { data, error } = await ctx.supabase
-    .from("profiles")
-    .select("paid_until")
-    .eq("id", ctx.userId)
-    .maybeSingle();
+async function loadAiAccess(userId: string): Promise<AiAccess> {
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  await supabaseAdmin.rpc("get_or_create_ai_quota", { _user_id: userId, _default_limit: 20 });
+  const { data, error } = await supabaseAdmin.rpc("get_ai_access", { _user_id: userId });
   if (error) throw new Error(error.message);
-  const paidMs = data?.paid_until ? Date.parse(data.paid_until as string) : 0;
-  if (!paidMs || paidMs <= Date.now()) {
+  const r = (Array.isArray(data) ? data[0] : data) as Record<string, unknown> | null;
+  return {
+    allowed: Boolean(r?.allowed),
+    reason: String(r?.reason ?? "unknown"),
+    planSlug: (r?.plan_slug as string) ?? null,
+    planName: (r?.plan_name as string) ?? null,
+    limit: Number(r?.quota_limit ?? 0),
+    used: Number(r?.used ?? 0),
+    resetAt: String(r?.reset_at ?? new Date().toISOString()),
+    requireActivePlan: Boolean(r?.require_active_plan ?? true),
+    allowTrial: Boolean(r?.allow_trial ?? false),
+    assistantEnabled: Boolean(r?.assistant_enabled ?? true),
+    warnThresholds: (r?.warn_thresholds as number[]) ?? [75, 95],
+    paidUntil: (r?.paid_until as string) ?? null,
+    trialEndsAt: (r?.trial_ends_at as string) ?? null,
+  };
+}
+
+/** Bloqueia o uso da IA conforme as regras administrativas configuradas. */
+async function assertAiAllowed(userId: string): Promise<AiAccess> {
+  const access = await loadAiAccess(userId);
+  if (!access.allowed && access.reason === "disabled") {
+    throw new Response("Assistente de IA temporariamente desativado.", { status: 403 });
+  }
+  if (!access.allowed && access.reason === "no_active_plan") {
     throw new Response(
-      "Assistente de IA disponível apenas para assinantes ativos.",
+      access.allowTrial
+        ? "Assistente de IA disponível para assinantes ativos ou período de teste."
+        : "Assistente de IA disponível apenas para assinantes ativos.",
       { status: 403 },
     );
   }
+  return access;
 }
+
 
 export type AssistantMessage = { role: "user" | "assistant"; content: string };
 
@@ -258,7 +297,7 @@ export const askBasketAssistant = createServerFn({ method: "POST" })
     };
   })
   .handler(async ({ data, context }): Promise<AssistantResponse & { quota?: { used: number; limit: number; resetAt: string } }> => {
-    await assertActivePaidPlan(context);
+    const access = await assertAiAllowed(context.userId);
     const key = process.env.LOVABLE_API_KEY;
     if (!key) {
       return { reply: "Assistente indisponível (chave de IA não configurada).", actions: [] };
@@ -274,7 +313,7 @@ export const askBasketAssistant = createServerFn({ method: "POST" })
     const q = Array.isArray(quotaRes) ? quotaRes[0] : quotaRes;
     if (q && !q.allowed) {
       return {
-        reply: `Você atingiu o limite mensal de ${q.quota_limit} perguntas ao assistente. Cota renova em ${new Date(q.reset_at).toLocaleDateString("pt-BR")}.`,
+        reply: `Você atingiu o limite mensal de ${q.quota_limit} perguntas ao assistente${access.planName ? ` no plano ${access.planName}` : ""}. Cota renova em ${new Date(q.reset_at).toLocaleDateString("pt-BR")}.`,
         actions: [],
         quota: { used: q.used, limit: q.quota_limit, resetAt: q.reset_at },
       };
@@ -346,16 +385,75 @@ export const askBasketAssistant = createServerFn({ method: "POST" })
     }
   });
 
-/** Retorna cota atual de IA do usuário. */
+/** Retorna cota, plano e regras de acesso de IA do usuário. */
 export const getMyAiQuota = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<{ used: number; limit: number; resetAt: string } | null> => {
+  .handler(async ({ context }): Promise<AiAccess> => loadAiAccess(context.userId));
+
+/**
+ * Histórico de perguntas à IA do usuário, com estimativa de créditos por
+ * chamada e total consumido no mês corrente.
+ */
+export const getMyAiUsage = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<{
+    items: Array<{
+      id: string;
+      createdAt: string;
+      functionName: string;
+      model: string | null;
+      promptTokens: number;
+      completionTokens: number;
+      totalTokens: number;
+      success: boolean;
+      errorMessage: string | null;
+      credits: number;
+    }>;
+    months: Array<{ monthKey: string; requests: number; totalTokens: number; credits: number }>;
+    currentMonth: { requests: number; totalTokens: number; credits: number };
+  }> => {
+    const { creditsForTokens } = await import("./ai-cost");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data } = await supabaseAdmin
-      .rpc("get_or_create_ai_quota", { _user_id: context.userId, _default_limit: 20 });
-    const row = Array.isArray(data) ? data[0] : data;
-    if (!row) return null;
-    return { used: row.used ?? 0, limit: row.quota_limit ?? 20, resetAt: row.reset_at };
+    const { data: rows } = await supabaseAdmin
+      .from("ai_usage")
+      .select("id, created_at, function_name, model, prompt_tokens, completion_tokens, total_tokens, success, error_message")
+      .eq("user_id", context.userId)
+      .order("created_at", { ascending: false })
+      .limit(200);
+
+    const items = (rows ?? []).map((r) => ({
+      id: r.id as string,
+      createdAt: r.created_at as string,
+      functionName: r.function_name as string,
+      model: (r.model as string) ?? null,
+      promptTokens: r.prompt_tokens ?? 0,
+      completionTokens: r.completion_tokens ?? 0,
+      totalTokens: r.total_tokens ?? 0,
+      success: Boolean(r.success),
+      errorMessage: (r.error_message as string) ?? null,
+      credits: creditsForTokens(
+        (r.model as string) ?? "google/gemini-2.5-flash-lite",
+        r.prompt_tokens ?? 0,
+        r.completion_tokens ?? 0,
+      ),
+    }));
+
+    const byMonth = new Map<string, { requests: number; totalTokens: number; credits: number }>();
+    for (const it of items) {
+      const key = it.createdAt.slice(0, 7);
+      const cur = byMonth.get(key) ?? { requests: 0, totalTokens: 0, credits: 0 };
+      cur.requests += 1;
+      cur.totalTokens += it.totalTokens;
+      cur.credits += it.credits;
+      byMonth.set(key, cur);
+    }
+    const months = [...byMonth.entries()]
+      .map(([monthKey, v]) => ({ monthKey, ...v }))
+      .sort((a, b) => (a.monthKey < b.monthKey ? 1 : -1));
+    const nowKey = new Date().toISOString().slice(0, 7);
+    const currentMonth = byMonth.get(nowKey) ?? { requests: 0, totalTokens: 0, credits: 0 };
+
+    return { items, months, currentMonth };
   });
 
 /**
@@ -450,7 +548,7 @@ export const explainBasketSavings = createServerFn({ method: "POST" })
     },
   )
   .handler(async ({ data, context }): Promise<{ text: string }> => {
-    await assertActivePaidPlan(context);
+    await assertAiAllowed(context.userId);
     const keys = Object.keys(data.quantities) as EssentialKey[];
     if (keys.length === 0) {
       return {
