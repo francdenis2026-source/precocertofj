@@ -26,6 +26,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ListaRouteImport } from './routes/lista'
 import { Route as HistoricoRouteImport } from './routes/historico'
 import { Route as FinancasRouteImport } from './routes/financas'
+import { Route as FavoritosRouteImport } from './routes/favoritos'
 import { Route as FaleConoscoRouteImport } from './routes/fale-conosco'
 import { Route as EstabelecimentosRouteImport } from './routes/estabelecimentos'
 import { Route as EconomiaRouteImport } from './routes/economia'
@@ -180,6 +181,11 @@ const HistoricoRoute = HistoricoRouteImport.update({
 const FinancasRoute = FinancasRouteImport.update({
   id: '/financas',
   path: '/financas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FavoritosRoute = FavoritosRouteImport.update({
+  id: '/favoritos',
+  path: '/favoritos',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaleConoscoRoute = FaleConoscoRouteImport.update({
@@ -560,6 +566,7 @@ export interface FileRoutesByFullPath {
   '/economia': typeof EconomiaRoute
   '/estabelecimentos': typeof EstabelecimentosRoute
   '/fale-conosco': typeof FaleConoscoRoute
+  '/favoritos': typeof FavoritosRoute
   '/financas': typeof FinancasRoute
   '/historico': typeof HistoricoRouteWithChildren
   '/lista': typeof ListaRoute
@@ -649,6 +656,7 @@ export interface FileRoutesByTo {
   '/economia': typeof EconomiaRoute
   '/estabelecimentos': typeof EstabelecimentosRoute
   '/fale-conosco': typeof FaleConoscoRoute
+  '/favoritos': typeof FavoritosRoute
   '/financas': typeof FinancasRoute
   '/historico': typeof HistoricoRouteWithChildren
   '/lista': typeof ListaRoute
@@ -739,6 +747,7 @@ export interface FileRoutesById {
   '/economia': typeof EconomiaRoute
   '/estabelecimentos': typeof EstabelecimentosRoute
   '/fale-conosco': typeof FaleConoscoRoute
+  '/favoritos': typeof FavoritosRoute
   '/financas': typeof FinancasRoute
   '/historico': typeof HistoricoRouteWithChildren
   '/lista': typeof ListaRoute
@@ -830,6 +839,7 @@ export interface FileRouteTypes {
     | '/economia'
     | '/estabelecimentos'
     | '/fale-conosco'
+    | '/favoritos'
     | '/financas'
     | '/historico'
     | '/lista'
@@ -919,6 +929,7 @@ export interface FileRouteTypes {
     | '/economia'
     | '/estabelecimentos'
     | '/fale-conosco'
+    | '/favoritos'
     | '/financas'
     | '/historico'
     | '/lista'
@@ -1008,6 +1019,7 @@ export interface FileRouteTypes {
     | '/economia'
     | '/estabelecimentos'
     | '/fale-conosco'
+    | '/favoritos'
     | '/financas'
     | '/historico'
     | '/lista'
@@ -1098,6 +1110,7 @@ export interface RootRouteChildren {
   EconomiaRoute: typeof EconomiaRoute
   EstabelecimentosRoute: typeof EstabelecimentosRoute
   FaleConoscoRoute: typeof FaleConoscoRoute
+  FavoritosRoute: typeof FavoritosRoute
   FinancasRoute: typeof FinancasRoute
   HistoricoRoute: typeof HistoricoRouteWithChildren
   ListaRoute: typeof ListaRoute
@@ -1280,6 +1293,13 @@ declare module '@tanstack/react-router' {
       path: '/financas'
       fullPath: '/financas'
       preLoaderRoute: typeof FinancasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/favoritos': {
+      id: '/favoritos'
+      path: '/favoritos'
+      fullPath: '/favoritos'
+      preLoaderRoute: typeof FavoritosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/fale-conosco': {
@@ -1856,6 +1876,7 @@ const rootRouteChildren: RootRouteChildren = {
   EconomiaRoute: EconomiaRoute,
   EstabelecimentosRoute: EstabelecimentosRoute,
   FaleConoscoRoute: FaleConoscoRoute,
+  FavoritosRoute: FavoritosRoute,
   FinancasRoute: FinancasRoute,
   HistoricoRoute: HistoricoRouteWithChildren,
   ListaRoute: ListaRoute,

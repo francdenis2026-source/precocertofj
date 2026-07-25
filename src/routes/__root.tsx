@@ -20,6 +20,8 @@ import { UnlockConversionTracker } from "@/components/analytics/UnlockConversion
 import { useTheme } from "@/hooks/use-theme";
 
 import { RouteError, RouteNotFound } from "@/components/feedback";
+import { BottomTabBar } from "@/components/layout/BottomTabBar";
+import { MobileStickySearch } from "@/components/layout/MobileStickySearch";
 
 function NotFoundComponent() {
   return <RouteNotFound />;
@@ -273,8 +275,12 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ConfirmProvider>
+        <MobileStickySearch />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
+        <BottomTabBar />
+        {/* Compensa a altura da BottomTabBar apenas no mobile, sem afetar desktop. */}
+        <div aria-hidden className="h-[64px] md:hidden" />
         <IdleLogoutMonitor />
         <UnlockConversionTracker />
         
