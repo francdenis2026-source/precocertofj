@@ -245,6 +245,24 @@ function EstablishmentPage() {
                     {[data.store.city, data.store.state].filter(Boolean).join(" · ")}
                   </span>
                 )}
+                {distance && (
+                  <span
+                    className="inline-flex items-center gap-1 rounded-full border border-brand-navy/30 bg-brand-navy/5 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-navy dark:border-brand-gold/40 dark:bg-brand-gold/10 dark:text-brand-gold"
+                    title={
+                      distance.source === "exact"
+                        ? "Distância linear a partir da sua localização"
+                        : distance.source === "neighborhood"
+                          ? "Distância aproximada — baseada no bairro"
+                          : "Distância aproximada — baseada na cidade"
+                    }
+                  >
+                    <MapPin className="h-3 w-3" aria-hidden />
+                    {formatDistance(distance.km)} {distance.source === "exact" ? "de você" : "aprox."}
+                  </span>
+                )}
+              </div>
+              <div className="mt-3">
+                <LocationControl loc={loc} variant="surface" />
               </div>
 
               {data.store.address && (
