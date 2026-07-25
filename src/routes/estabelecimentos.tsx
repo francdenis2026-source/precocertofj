@@ -673,9 +673,17 @@ function EstablishmentsPage() {
             ) : (
               <SectionCard
                 title="Rede de mercados"
-                description={`${visibleItems.length} de ${data.items.length} ${data.items.length === 1 ? "estabelecimento" : "estabelecimentos"} monitorados.`}
+                description={`${allFilteredItems.length} ${allFilteredItems.length === 1 ? "estabelecimento" : "estabelecimentos"} monitorados.`}
                 bodyClassName="p-0"
               >
+                <div className="flex flex-col gap-3 border-b border-border/60 p-4 md:flex-row md:items-center md:justify-between md:p-5">
+                  <LocationControl loc={loc} variant="surface" />
+                  {referencePoint && (
+                    <span className="text-[11.5px] uppercase tracking-[0.14em] text-muted-foreground">
+                      Referência ativa · distâncias estimadas
+                    </span>
+                  )}
+                </div>
                 <div className="flex flex-col gap-3 border-b border-border/60 p-4 md:flex-row md:items-center md:p-5">
                   <div className="relative flex-1">
                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
