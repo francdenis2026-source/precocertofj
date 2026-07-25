@@ -321,7 +321,7 @@ function SearchPage() {
         <div className="mx-auto grid w-full max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-4 py-1.5 md:gap-3 md:px-8">
           <BackButton fallbackTo="/" variant="ghost" />
           <div className="flex min-w-0 items-baseline gap-2.5">
-            <h1 className="truncate font-serif text-[15px] font-semibold leading-tight tracking-tight text-foreground sm:text-[17px]">
+            <h1 className="min-w-0 truncate whitespace-nowrap font-serif text-[14.5px] font-semibold leading-tight tracking-tight text-foreground sm:text-[17px]">
               Buscar <span className="text-[var(--pc-gold-ink)]">preço</span> por nome
             </h1>
             <p className="hidden truncate text-[11.5px] leading-snug text-muted-foreground lg:block">
