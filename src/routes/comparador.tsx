@@ -301,24 +301,6 @@ function ComparadorPage() {
     return filterAndSortComparisonRows(allRows, q, cat);
   }, [allRows, q, cat]);
 
-  const stats = useMemo(() => {
-    const stores = new Set<string>();
-    let cheapestRow: (typeof rows)[number] | null = null;
-    for (const r of rows) {
-      for (const s of r.stores) stores.add(s.establishment_id);
-      const price = Number(r.min_price);
-      if (!Number.isFinite(price) || price <= 0) continue;
-      if (!cheapestRow || price < Number(cheapestRow.min_price)) cheapestRow = r;
-    }
-    return {
-      cheapest: cheapestRow?.min_price ?? null,
-      cheapestName: cheapestRow?.display_name ?? null,
-      cheapestStore: cheapestRow?.cheapest_store ?? null,
-      storeCount: stores.size,
-      productCount: rows.length,
-    };
-  }, [rows]);
-
   /**
    * Produto de referência do ranking: o primeiro resultado presente em mais de
    * um mercado (comparação válida entre lojas do mesmo item). Se nenhum tiver
@@ -334,6 +316,11 @@ function ComparadorPage() {
    * categoria, atravessando marcas (ex.: óleo de soja 900ml Coamo/Soya/
    * Concórdia). Garante que o "menor preço" mostrado seja realmente o mais
    * baixo do município para aquele item — e não o da marca mais popular.
+   *
+   * IMPORTANTE: este é o ÚNICO ponto que decide o menor preço quando há busca
+   * ativa. O card "Menor preço agora" e o ranking leem daqui, então nunca
+   * podem divergir (antes o card varria todos os resultados e podia apontar
+   * outro produto/estabelecimento).
    */
   const equivalentRanking = useMemo(() => {
     if (!referenceRow) return null;
@@ -350,36 +337,83 @@ function ComparadorPage() {
       refIndex,
     );
     const members = idxs.map((i) => rows[i]).filter(Boolean);
-    if (members.length <= 1) return null;
+    if (members.length === 0) return null;
 
     // Melhor preço por mercado dentro do grupo (produto mais barato da loja).
     const byStore = new Map<string, { store_name: string; establishment_id?: string | null; price: number; product_name?: string | null; last_seen_at?: string | null }>();
+    const push = (s: {
+      store_name: string;
+      establishment_id?: string | null;
+      price: number;
+      product_name?: string | null;
+      last_seen_at?: string | null;
+    }) => {
+      const price = Number(s.price);
+      if (!Number.isFinite(price) || price <= 0) return;
+      const key = s.establishment_id ?? s.store_name;
+      if (!key) return;
+      const cur = byStore.get(key);
+      if (!cur || price < cur.price) byStore.set(key, { ...s, price });
+    };
     for (const m of members) {
-      for (const s of m.stores ?? []) {
-        const price = Number(s.price);
-        if (!Number.isFinite(price) || price <= 0) continue;
-        const key = s.establishment_id ?? s.store_name;
-        const cur = byStore.get(key);
-        if (!cur || price < cur.price) {
-          byStore.set(key, {
+      const list = m.stores ?? [];
+      if (list.length > 0) {
+        for (const s of list) {
+          push({
             store_name: s.store_name,
             establishment_id: s.establishment_id,
-            price,
+            price: Number(s.price),
             product_name: s.product_name ?? m.display_name,
             last_seen_at: s.last_seen_at,
           });
         }
+      } else if (m.cheapest_store) {
+        // Fallback: cache sem detalhamento por loja — não perder o menor preço.
+        push({
+          store_name: m.cheapest_store,
+          establishment_id: m.cheapest_establishment_id,
+          price: Number(m.min_price),
+          product_name: m.display_name,
+          last_seen_at: null,
+        });
       }
     }
     const stores = Array.from(byStore.values()).sort((a, b) => a.price - b.price);
     if (stores.length === 0) return null;
     return {
-      label: equivalentGroupLabel(members.map((m) => m.display_name), referenceRow.display_name),
+      label:
+        members.length > 1
+          ? equivalentGroupLabel(members.map((m) => m.display_name), referenceRow.display_name)
+          : referenceRow.display_name,
       sizeLabel: formatSize(referenceRow.size_value, referenceRow.size_unit),
       brands: members.length,
       stores,
+      cheapest: stores[0],
     };
   }, [rows, q, referenceRow]);
+
+  const stats = useMemo(() => {
+    const stores = new Set<string>();
+    let cheapestRow: (typeof rows)[number] | null = null;
+    for (const r of rows) {
+      for (const s of r.stores) stores.add(s.establishment_id);
+      const price = Number(r.min_price);
+      if (!Number.isFinite(price) || price <= 0) continue;
+      if (!cheapestRow || price < Number(cheapestRow.min_price)) cheapestRow = r;
+    }
+    // Com busca ativa, o menor preço vem do MESMO grupo comparado no ranking.
+    const eq = equivalentRanking?.cheapest;
+    return {
+      cheapest: eq ? eq.price : (cheapestRow?.min_price ?? null),
+      cheapestName: eq
+        ? (eq.product_name ?? equivalentRanking?.label ?? null)
+        : (cheapestRow?.display_name ?? null),
+      cheapestStore: eq ? eq.store_name : (cheapestRow?.cheapest_store ?? null),
+      storeCount: stores.size,
+      productCount: rows.length,
+    };
+  }, [rows, equivalentRanking]);
+
 
 
 
