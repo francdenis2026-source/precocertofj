@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { LogOut, User as UserIcon, Key, Receipt, LayoutDashboard, ChevronDown, Search, Ticket } from "lucide-react";
+import { LogOut, User as UserIcon, Key, Receipt, LayoutDashboard, ChevronDown, Search, Ticket, Menu } from "lucide-react";
 import { ds, dsx } from "@/lib/ds";
 import { useMyProfile } from "@/hooks/useMyProfile";
 import { useSignOut } from "@/hooks/use-sign-out";
@@ -15,6 +15,7 @@ import {
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/layout/BackButton";
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 
@@ -46,6 +47,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
   const isOverlay = variant === "overlay";
   const { session, firstName, initials, loading } = useMyProfile();
   const [q, setQ] = useState("");
+  const [menuOpen, setMenuOpen] = useState(false);
   // Busca compacta no header aparece após o usuário rolar o hero (apenas overlay/landing).
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
