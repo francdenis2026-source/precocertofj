@@ -635,10 +635,11 @@ export function PriceSearchBar({
         <button
           type="submit"
           disabled={pending}
-          className="inline-flex h-11 items-center gap-2 rounded-full border-2 border-brand-gold bg-brand-gold px-5 text-[12px] font-bold uppercase tracking-[0.14em] text-brand-navy shadow-[0_8px_20px_-10px_color-mix(in_oklab,var(--brand-gold)_80%,transparent)] transition-all duration-150 hover:-translate-y-px hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-60"
+          aria-label="Buscar"
+          className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-full border-2 border-brand-gold bg-brand-gold px-3.5 text-[12px] font-bold uppercase tracking-[0.14em] text-brand-navy shadow-[0_8px_20px_-10px_color-mix(in_oklab,var(--brand-gold)_80%,transparent)] transition-all duration-150 hover:-translate-y-px hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-60 sm:px-5"
         >
           <Search className="h-4 w-4" strokeWidth={2.25} aria-hidden="true" />
-          <span>{pending ? "Buscando…" : "Buscar"}</span>
+          <span className="hidden sm:inline">{pending ? "Buscando…" : "Buscar"}</span>
         </button>
       </form>
 
