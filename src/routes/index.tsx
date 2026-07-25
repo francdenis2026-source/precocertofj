@@ -287,7 +287,7 @@ function HomePage() {
         </div>
       </div>
 
-      <SiteHeader variant="solid" showThemeToggle />
+      
 
       {/* -------- MOBILE QUICK-NAV (abaixo do header, sticky) -------- */}
       <nav
