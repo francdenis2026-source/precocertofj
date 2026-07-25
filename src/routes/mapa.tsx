@@ -563,12 +563,19 @@ function NeighborhoodsPage() {
                 : "Assim que houver mercados cadastrados, eles aparecerão aqui."
             }
             action={
-              hasActiveFilters
-                ? { label: "Limpar filtros", onClick: clearFilters }
-                : undefined
+              hasActiveFilters ? (
+                <button
+                  type="button"
+                  onClick={clearFilters}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-brand-gold bg-brand-gold px-3 py-1.5 text-[12px] font-bold uppercase tracking-[0.1em] text-brand-navy transition-colors hover:brightness-105"
+                >
+                  <SlidersHorizontal className="h-3 w-3" aria-hidden /> Limpar filtros
+                </button>
+              ) : undefined
             }
           />
         )}
+
 
 
         {filteredGroups.length > 0 && (
