@@ -28,12 +28,9 @@ import {
 } from "@/components/search/SearchEmptyState";
 import { ProductQuickModal } from "@/components/home/ProductQuickModal";
 import { useLocalStorageState } from "@/hooks/use-local-storage";
-// TeaserCard removido: resultados de busca são públicos e mostram nomes dos mercados
-import { LockOverlay } from "@/components/paywall/LockOverlay";
 import { PaywallInline } from "@/components/paywall/PaywallInline";
 import { useTeaserQuota } from "@/hooks/use-teaser-quota";
 import { useSession } from "@/hooks/useSession";
-import { isTeaserLocked } from "@/lib/teaser-rule";
 import { LazyImage } from "@/components/media/LazyImage";
 
 
