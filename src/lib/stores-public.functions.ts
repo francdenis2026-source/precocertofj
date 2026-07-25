@@ -724,7 +724,7 @@ export const getCheapestStoresRanking = createServerFn({ method: "GET" })
     };
     const { data: estabs, error: eErr } = await estabsClient
       .from("establishments")
-      .select("id, name, city, state, neighborhood, address, logo_url, active")
+      .select("id, name, city, state, neighborhood, address, logo_url, latitude, longitude, active")
       .in("id", estIds);
     if (eErr) throw new Error(eErr.message);
 
@@ -809,7 +809,7 @@ async function loadStoreAndScans(id: string) {
     };
   };
   const { data: estab, error: eErr } = await estabTable
-    .select("id, name, city, state, neighborhood, address, logo_url, active")
+    .select("id, name, city, state, neighborhood, address, logo_url, latitude, longitude, active")
     .eq("id", id)
     .maybeSingle();
   if (eErr) throw new Error(eErr.message);
@@ -1081,7 +1081,7 @@ export const getCrossStoreComparison = createServerFn({ method: "GET" })
       };
     };
     const { data: estabs } = await estabTable
-      .select("id, name, city, state, neighborhood, address, logo_url, active")
+      .select("id, name, city, state, neighborhood, address, logo_url, latitude, longitude, active")
       .eq("active", true);
 
     const scansTable = supabaseAdmin.from("scans" as never) as unknown as {
@@ -1613,7 +1613,7 @@ export const compareStoreCart = createServerFn({ method: "POST" })
       };
     };
     const { data: estabs } = await estabTable
-      .select("id, name, city, state, neighborhood, address, logo_url, active")
+      .select("id, name, city, state, neighborhood, address, logo_url, latitude, longitude, active")
       .eq("active", true);
 
     // 3) All scans (limit by recency to keep payload small)
