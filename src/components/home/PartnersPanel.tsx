@@ -86,8 +86,8 @@ export function PartnersPanel({
           <div className="min-w-0">
             {eyebrow ? (
               <p
-                className="truncate text-[9.5px] font-bold uppercase tracking-[0.22em] sm:text-[10px]"
-                style={{ color: gold }}
+                className="truncate text-[10.5px] font-bold uppercase tracking-[0.22em] sm:text-[11px]"
+                style={{ color: "var(--pc-gold-ink)" }}
               >
                 {eyebrow}
               </p>
@@ -226,7 +226,7 @@ function TileLabel({ name }: { name: string }) {
     <span
       className={cn(
         "line-clamp-2 break-words text-center font-bold uppercase leading-[1.05] tracking-[0.08em] text-slate-800",
-        "text-[9px] min-[380px]:text-[9.5px] sm:text-[10.5px]",
+        "text-[10px] min-[380px]:text-[10.5px] sm:text-[11px]",
       )}
     >
       {name}

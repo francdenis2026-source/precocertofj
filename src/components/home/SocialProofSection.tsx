@@ -69,7 +69,7 @@ export function SocialProofSection() {
       >
         <header className="mb-2.5 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-baseline gap-2.5 min-w-0">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] shrink-0" style={{ color: P.gold }}>
+            <p className="text-[10.5px] font-bold uppercase tracking-[0.2em] shrink-0 sm:text-[11px]" style={{ color: "var(--pc-gold-ink)" }}>
               Prova social
             </p>
             <h2

@@ -65,14 +65,14 @@ export function BottomTabBar() {
                   "group flex min-h-[56px] flex-col items-center justify-center gap-0.5 px-2 pt-1.5 pb-1",
                   "text-[11px] font-semibold leading-none outline-none",
                   "transition-colors focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-card",
-                  active ? "text-brand" : "text-muted-foreground hover:text-foreground",
+                  active ? "text-[var(--pc-gold-ink)]" : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 <span
                   className={cn(
                     "grid h-8 w-8 place-items-center rounded-xl transition-colors",
                     active
-                      ? "bg-brand/12 text-brand"
+                      ? "bg-brand/12 text-[var(--pc-gold-ink)]"
                       : "text-current group-hover:bg-muted/60",
                   )}
                 >

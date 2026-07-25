@@ -3,7 +3,7 @@ import { Zap, Wallet, MapPin, ShieldCheck } from "lucide-react";
 const P = {
   card: "var(--pc-home-card)",
   line: "var(--pc-home-line)",
-  gold: "var(--pc-home-gold)",
+  gold: "var(--pc-gold-ink)",
   heading: "var(--pc-home-heading)",
   body: "var(--pc-text-body)",
 };
@@ -22,7 +22,7 @@ export function BenefitsSection() {
     <section aria-labelledby="benefits-title" className="pc-container pt-4 sm:pt-5">
       <header className="mb-2.5 flex items-baseline justify-between gap-3">
         <div className="flex items-baseline gap-2.5 min-w-0">
-          <p className="text-[10px] font-bold uppercase tracking-[0.2em] shrink-0" style={{ color: P.gold }}>
+          <p className="text-[10.5px] font-bold uppercase tracking-[0.2em] shrink-0 sm:text-[11px]" style={{ color: P.gold }}>
             Benefícios
           </p>
           <h2

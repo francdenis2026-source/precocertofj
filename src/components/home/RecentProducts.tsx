@@ -193,7 +193,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                       <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500 opacity-70" />
                       <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
                     </span>
-                    <span className="text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-600 dark:text-emerald-400">
+                    <span className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-400">
                       Painel ao vivo
                     </span>
                   </div>

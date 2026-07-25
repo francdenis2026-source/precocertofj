@@ -153,7 +153,7 @@ export function SiteFooter() {
         <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-4">
           {NAV_COLS.map((col) => (
             <div key={col.title} className="min-w-0">
-              <div className="text-[10px] font-bold uppercase tracking-[0.22em] text-brand md:text-[10.5px]">
+              <div className="text-[10.5px] font-bold uppercase tracking-[0.22em] text-[var(--pc-gold-ink)] md:text-[11px]">
                 {col.title}
               </div>
               <ul className="mt-0.5 space-y-0">

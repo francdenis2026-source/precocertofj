@@ -615,7 +615,7 @@ function HomePage() {
                         {s.k}
                       </div>
                       <div
-                        className="flex min-w-0 items-center gap-1 text-[9px] font-bold uppercase tracking-[0.12em] sm:text-[10px] sm:tracking-[0.2em]"
+                        className="flex min-w-0 items-center gap-1 text-[10.5px] font-bold uppercase tracking-[0.12em] sm:text-[11px] sm:tracking-[0.2em]"
                         style={{ color: "rgba(226,232,240,0.70)" }}
                       >
                         <span className="hidden sm:inline-flex" aria-hidden style={{ color: P.goldSoft }}>
@@ -654,7 +654,7 @@ function HomePage() {
             >
               Pesquise por categoria
             </h2>
-            <span className="hidden text-[11px] sm:inline" style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}>
+            <span className="hidden text-[11px] sm:inline" style={{ color: "color-mix(in oklab, var(--pc-home-ink) 74%, transparent)" }}>
               Um clique para começar
             </span>
           </div>
