@@ -191,6 +191,19 @@ function EstablishmentsPage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Auto-switch para "distância" quando o usuário fornece uma referência de localização
+  useEffect(() => {
+    if (loc.hasReference) setSort("distance");
+  }, [loc.hasReference]);
+
+  // Ponto de referência: coordenadas reais ou centróide do bairro escolhido manualmente
+  const referencePoint = useMemo(() => {
+    if (loc.status === "granted" && loc.coords) return loc.coords;
+    if (loc.status === "manual" && loc.neighborhoodKey) {
+      return resolveEstablishmentPosition({ neighborhood: loc.neighborhoodKey }).position;
+    }
+    return null;
+  }, [loc.status, loc.coords, loc.neighborhoodKey]);
 
   const neighborhoods = useMemo(() => {
     if (!data) return [] as string[];
@@ -199,7 +212,22 @@ function EstablishmentsPage() {
     return Array.from(set).sort((a, b) => a.localeCompare(b, "pt-BR"));
   }, [data]);
 
-  const visibleItems = useMemo(() => {
+  // Mapa id → distância em km (quando houver referência)
+  const distanceById = useMemo(() => {
+    const m = new Map<string, { km: number; source: "exact" | "neighborhood" | "city" }>();
+    if (!data || !referencePoint) return m;
+    for (const e of data.items) {
+      const { position, source } = resolveEstablishmentPosition({
+        latitude: e.latitude,
+        longitude: e.longitude,
+        neighborhood: e.neighborhood,
+      });
+      m.set(e.id, { km: haversineKm(referencePoint, position), source });
+    }
+    return m;
+  }, [data, referencePoint]);
+
+  const allFilteredItems = useMemo(() => {
     if (!data) return [] as EstablishmentsOverview["items"];
     const term = q.trim().toLowerCase();
     let list = data.items.slice();
@@ -220,6 +248,29 @@ function EstablishmentsPage() {
       );
     }
     switch (sort) {
+      case "distance": {
+        // Sem referência: cai para bairro-do-usuário quando ele escolheu manualmente,
+        // senão comporta-se como "bairro (A→Z)" para não confundir.
+        if (referencePoint) {
+          list.sort((a, b) => {
+            const da = distanceById.get(a.id)?.km ?? Number.POSITIVE_INFINITY;
+            const db = distanceById.get(b.id)?.km ?? Number.POSITIVE_INFINITY;
+            if (da !== db) return da - db;
+            return a.name.localeCompare(b.name, "pt-BR");
+          });
+        } else if (loc.neighborhoodKey) {
+          const target = loc.neighborhoodKey;
+          list.sort((a, b) => {
+            const sameA = normalizeNeighborhood(a.neighborhood) === target ? 0 : 1;
+            const sameB = normalizeNeighborhood(b.neighborhood) === target ? 0 : 1;
+            if (sameA !== sameB) return sameA - sameB;
+            return a.name.localeCompare(b.name, "pt-BR");
+          });
+        } else {
+          list.sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
+        }
+        break;
+      }
       case "neighborhood":
         list.sort((a, b) => {
           const an = a.neighborhood ?? "\uffff";
@@ -236,7 +287,17 @@ function EstablishmentsPage() {
         list.sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
     }
     return list;
-  }, [data, q, neighborhood, sort, kindFilter, onlyFavorites, favSet]);
+  }, [data, q, neighborhood, sort, kindFilter, onlyFavorites, favSet, referencePoint, distanceById, loc.neighborhoodKey]);
+
+  // Reset da paginação quando o resultado muda
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [q, neighborhood, sort, kindFilter, onlyFavorites, referencePoint]);
+
+  const visibleItems = useMemo(
+    () => allFilteredItems.slice(0, visibleCount),
+    [allFilteredItems, visibleCount],
+  );
 
   const kindsPresent = useMemo(() => {
     if (!data) return new Set<string>();
