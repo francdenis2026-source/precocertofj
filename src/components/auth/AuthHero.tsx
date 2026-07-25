@@ -34,7 +34,7 @@ const PRESETS: Record<AuthHeroVariant, Preset> = {
     subtitle: "Entre com seu CPF e PIN para acompanhar, em tempo real, os preços praticados nos mercados de Feijó.",
     perks: [
       "Comparativo entre mercados parceiros de Feijó",
-      "Alertas de queda de preço no seu bairro",
+      "Alertas de queda de preço nos mercados parceiros",
       "Base auditada por notas fiscais reais",
     ],
     trust: {
