@@ -27,6 +27,7 @@ import { listPopularQueries } from "@/lib/search-popular.functions";
 import { RecentProducts } from "@/components/home/RecentProducts";
 import { StartFreeDialog } from "@/components/home/StartFreeDialog";
 import { MetricSpotlightDialog } from "@/components/home/MetricSpotlightDialog";
+import { PartnersPanel } from "@/components/home/PartnersPanel";
 import { BenefitsSection } from "@/components/home/BenefitsSection";
 
 import { MobileAccordion } from "@/components/home/MobileAccordion";
