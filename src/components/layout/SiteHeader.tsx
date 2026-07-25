@@ -241,6 +241,10 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                 <DropdownMenuItem onSelect={() => navigate({ to: "/minhas-licencas" })}>
                   <Key className="mr-2 h-4 w-4" /> Minhas licenças
                 </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => navigate({ to: "/resgatar" })}>
+                  <Ticket className="mr-2 h-4 w-4" /> Resgatar código
+                </DropdownMenuItem>
+
                 <DropdownMenuItem onSelect={() => navigate({ to: "/meus-pedidos" })}>
                   <Receipt className="mr-2 h-4 w-4" /> Meus pedidos
                 </DropdownMenuItem>
