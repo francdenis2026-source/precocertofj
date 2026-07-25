@@ -9,6 +9,7 @@ import {
   type SearchMode,
 } from "@/lib/search-tokens";
 import { scoreProductName } from "@/lib/search-scoring";
+import { equivalentGroupLabel, selectEquivalentIndexes } from "@/lib/equivalent-group";
 import {
   buildSynonymIndex,
   nameHasExcludedToken,
