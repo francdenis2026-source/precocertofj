@@ -716,7 +716,7 @@ function EstablishmentsPage() {
                       <Select value={neighborhood} onValueChange={setNeighborhood}>
                         <SelectTrigger
                           aria-label="Filtrar por bairro"
-                          className="h-10 w-full rounded-xl text-[12.5px] md:w-[168px]"
+                          className="h-10 w-full rounded-xl text-[12.5px] md:w-[192px]"
                         >
                           <SelectValue placeholder="Bairro" />
                         </SelectTrigger>

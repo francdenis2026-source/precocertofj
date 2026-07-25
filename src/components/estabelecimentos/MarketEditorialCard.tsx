@@ -106,7 +106,10 @@ export function MarketEditorialCard({
         />
 
         {/* Painel de marca */}
-        <div className="relative flex h-[104px] items-center justify-center overflow-hidden bg-[color-mix(in_oklab,var(--brand-navy)_5%,white)] px-4">
+        <div
+          className="relative flex h-[104px] items-center justify-center overflow-hidden px-4"
+          style={{ background: "color-mix(in oklab, var(--brand-navy) 4%, white)" }}
+        >
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 opacity-[0.5]"
@@ -119,7 +122,8 @@ export function MarketEditorialCard({
           {typeof rank === "number" && (
             <span
               aria-hidden
-              className="absolute -left-1 bottom-[-14px] select-none font-sans text-[64px] font-bold leading-none tracking-tighter text-[color-mix(in_oklab,var(--brand-navy)_10%,transparent)]"
+              className="absolute bottom-2 left-2.5 select-none font-sans text-[26px] font-bold leading-none tracking-tighter"
+              style={{ color: "color-mix(in oklab, var(--brand-navy) 16%, transparent)" }}
             >
               {String(rank).padStart(2, "0")}
             </span>
@@ -140,7 +144,7 @@ export function MarketEditorialCard({
           )}
 
           {/* Selos contextuais */}
-          <div className="absolute left-2.5 top-2.5 z-10 flex flex-wrap items-center gap-1">
+          <div className="absolute left-2.5 top-2 z-10 flex flex-wrap items-center gap-1">
             {isCheapest && (
               <span className="inline-flex items-center gap-1 rounded-full bg-brand-gold px-2 py-[2px] text-[9.5px] font-bold uppercase tracking-[0.14em] text-brand-navy shadow-sm">
                 <PiggyBank className="h-2.5 w-2.5" aria-hidden /> Mais barato
