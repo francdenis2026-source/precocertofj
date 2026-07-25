@@ -297,7 +297,7 @@ export const askBasketAssistant = createServerFn({ method: "POST" })
     };
   })
   .handler(async ({ data, context }): Promise<AssistantResponse & { quota?: { used: number; limit: number; resetAt: string } }> => {
-    await assertActivePaidPlan(context);
+    const access = await assertAiAllowed(context.userId);
     const key = process.env.LOVABLE_API_KEY;
     if (!key) {
       return { reply: "Assistente indisponível (chave de IA não configurada).", actions: [] };
@@ -313,7 +313,7 @@ export const askBasketAssistant = createServerFn({ method: "POST" })
     const q = Array.isArray(quotaRes) ? quotaRes[0] : quotaRes;
     if (q && !q.allowed) {
       return {
-        reply: `Você atingiu o limite mensal de ${q.quota_limit} perguntas ao assistente. Cota renova em ${new Date(q.reset_at).toLocaleDateString("pt-BR")}.`,
+        reply: `Você atingiu o limite mensal de ${q.quota_limit} perguntas ao assistente${access.planName ? ` no plano ${access.planName}` : ""}. Cota renova em ${new Date(q.reset_at).toLocaleDateString("pt-BR")}.`,
         actions: [],
         quota: { used: q.used, limit: q.quota_limit, resetAt: q.reset_at },
       };
@@ -385,16 +385,75 @@ export const askBasketAssistant = createServerFn({ method: "POST" })
     }
   });
 
-/** Retorna cota atual de IA do usuário. */
+/** Retorna cota, plano e regras de acesso de IA do usuário. */
 export const getMyAiQuota = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
-  .handler(async ({ context }): Promise<{ used: number; limit: number; resetAt: string } | null> => {
+  .handler(async ({ context }): Promise<AiAccess> => loadAiAccess(context.userId));
+
+/**
+ * Histórico de perguntas à IA do usuário, com estimativa de créditos por
+ * chamada e total consumido no mês corrente.
+ */
+export const getMyAiUsage = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<{
+    items: Array<{
+      id: string;
+      createdAt: string;
+      functionName: string;
+      model: string | null;
+      promptTokens: number;
+      completionTokens: number;
+      totalTokens: number;
+      success: boolean;
+      errorMessage: string | null;
+      credits: number;
+    }>;
+    months: Array<{ monthKey: string; requests: number; totalTokens: number; credits: number }>;
+    currentMonth: { requests: number; totalTokens: number; credits: number };
+  }> => {
+    const { creditsForTokens } = await import("./ai-cost");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { data } = await supabaseAdmin
-      .rpc("get_or_create_ai_quota", { _user_id: context.userId, _default_limit: 20 });
-    const row = Array.isArray(data) ? data[0] : data;
-    if (!row) return null;
-    return { used: row.used ?? 0, limit: row.quota_limit ?? 20, resetAt: row.reset_at };
+    const { data: rows } = await supabaseAdmin
+      .from("ai_usage")
+      .select("id, created_at, function_name, model, prompt_tokens, completion_tokens, total_tokens, success, error_message")
+      .eq("user_id", context.userId)
+      .order("created_at", { ascending: false })
+      .limit(200);
+
+    const items = (rows ?? []).map((r) => ({
+      id: r.id as string,
+      createdAt: r.created_at as string,
+      functionName: r.function_name as string,
+      model: (r.model as string) ?? null,
+      promptTokens: r.prompt_tokens ?? 0,
+      completionTokens: r.completion_tokens ?? 0,
+      totalTokens: r.total_tokens ?? 0,
+      success: Boolean(r.success),
+      errorMessage: (r.error_message as string) ?? null,
+      credits: creditsForTokens(
+        (r.model as string) ?? "google/gemini-2.5-flash-lite",
+        r.prompt_tokens ?? 0,
+        r.completion_tokens ?? 0,
+      ),
+    }));
+
+    const byMonth = new Map<string, { requests: number; totalTokens: number; credits: number }>();
+    for (const it of items) {
+      const key = it.createdAt.slice(0, 7);
+      const cur = byMonth.get(key) ?? { requests: 0, totalTokens: 0, credits: 0 };
+      cur.requests += 1;
+      cur.totalTokens += it.totalTokens;
+      cur.credits += it.credits;
+      byMonth.set(key, cur);
+    }
+    const months = [...byMonth.entries()]
+      .map(([monthKey, v]) => ({ monthKey, ...v }))
+      .sort((a, b) => (a.monthKey < b.monthKey ? 1 : -1));
+    const nowKey = new Date().toISOString().slice(0, 7);
+    const currentMonth = byMonth.get(nowKey) ?? { requests: 0, totalTokens: 0, credits: 0 };
+
+    return { items, months, currentMonth };
   });
 
 /**
@@ -489,7 +548,7 @@ export const explainBasketSavings = createServerFn({ method: "POST" })
     },
   )
   .handler(async ({ data, context }): Promise<{ text: string }> => {
-    await assertActivePaidPlan(context);
+    await assertAiAllowed(context.userId);
     const keys = Object.keys(data.quantities) as EssentialKey[];
     if (keys.length === 0) {
       return {
