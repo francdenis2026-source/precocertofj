@@ -29,6 +29,8 @@ type Props = {
   showNav?: boolean;
   /** Mostra o botão de alternância claro/escuro (apenas na homepage). */
   showThemeToggle?: boolean;
+  /** Mostra o botão "Voltar" (padrão true na variante solid). */
+  showBack?: boolean;
 };
 
 const NAV_LINKS = [
@@ -38,7 +40,7 @@ const NAV_LINKS = [
   { to: "/planos", label: "Planos" },
 ] as const;
 
-export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle = true }: Props) {
+export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle = true, showBack = true }: Props) {
   const isOverlay = variant === "overlay";
   const { session, firstName, initials, loading } = useMyProfile();
   const { signOut, loading: signingOut } = useSignOut();
@@ -132,7 +134,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
 
         {/* CTAs */}
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-          {!isOverlay && (
+          {!isOverlay && showBack && (
             <BackButton
               variant="pill"
               shortLabel=""
