@@ -26,10 +26,13 @@ export const getRouter = () => {
     context: { queryClient },
     scrollRestoration: true,
     defaultPreload: "intent",
-    defaultPreloadStaleTime: 0,
+    defaultPreloadStaleTime: 30_000,
+    defaultPendingMs: 1200,
+    defaultPendingMinMs: 0,
     defaultPendingComponent: () => <PageLoader fullScreen />,
     defaultErrorComponent: DefaultErrorComponent,
     defaultNotFoundComponent: () => <RouteNotFound />,
+
   });
 
   return router;
