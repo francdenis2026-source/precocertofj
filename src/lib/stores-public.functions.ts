@@ -1018,6 +1018,8 @@ export const getPublicProductDetail = createServerFn({ method: "GET" })
         state: estab.state,
         neighborhood: estab.neighborhood,
         address: estab.address,
+        latitude: estab.latitude ?? null,
+        longitude: estab.longitude ?? null,
         logoUrl: estab.logo_url,
         productCount: products.length,
         lastUpdate: target.lastDate,
