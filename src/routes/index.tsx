@@ -744,21 +744,21 @@ function PillarCard({
     return (
       <Link
         to={to}
-        className="group block overflow-hidden rounded-3xl p-6 transition-all hover:-translate-y-1 hover:shadow-2xl sm:p-7"
+        className="group block overflow-hidden rounded-2xl p-4 transition-all hover:-translate-y-1 hover:shadow-2xl sm:p-5"
         style={{
           background: `linear-gradient(135deg, var(--pc-home-gold) 0%, color-mix(in oklab, var(--pc-home-gold) 82%, black) 100%)`,
           color: "var(--pc-home-navy)",
         }}
       >
         <div
-          className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl"
+          className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-lg"
           style={{ background: "color-mix(in oklab, var(--pc-home-navy) 12%, transparent)" }}
         >
           {icon}
         </div>
-        <h3 className={`${serif} mb-2 text-[22px] leading-tight sm:text-[24px]`}>{title}</h3>
-        <p className="text-[13.5px] font-medium leading-relaxed opacity-80">{desc}</p>
-        <div className="mt-5 inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.18em] opacity-90 transition-opacity group-hover:opacity-100">
+        <h3 className={`${serif} mb-1.5 text-[18px] leading-tight sm:text-[20px]`}>{title}</h3>
+        <p className="text-[12.5px] font-medium leading-snug opacity-80">{desc}</p>
+        <div className="mt-3 inline-flex items-center gap-1.5 text-[10.5px] font-bold uppercase tracking-[0.18em] opacity-90 transition-opacity group-hover:opacity-100">
           {cta}
           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
         </div>
@@ -769,14 +769,14 @@ function PillarCard({
   return (
     <Link
       to={to}
-      className="group block overflow-hidden rounded-3xl border p-6 transition-all hover:-translate-y-1 sm:p-7"
+      className="group block overflow-hidden rounded-2xl border p-4 transition-all hover:-translate-y-1 sm:p-5"
       style={{
         background: "var(--pc-home-card)",
         borderColor: "var(--pc-home-line)",
       }}
     >
       <div
-        className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl"
+        className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-lg"
         style={{
           background: "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
           color: "var(--pc-home-gold)",
@@ -786,16 +786,16 @@ function PillarCard({
         {icon}
       </div>
       <h3
-        className={`${serif} mb-2 text-[22px] leading-tight sm:text-[24px]`}
+        className={`${serif} mb-1.5 text-[18px] leading-tight sm:text-[20px]`}
         style={{ color: "var(--pc-home-heading)" }}
       >
         {title}
       </h3>
-      <p className="text-[13.5px] font-medium leading-relaxed" style={{ color: "var(--pc-text-body)" }}>
+      <p className="text-[12.5px] font-medium leading-snug" style={{ color: "var(--pc-text-body)" }}>
         {desc}
       </p>
       <div
-        className="mt-5 inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.18em] transition-colors group-hover:text-[color:var(--pc-home-gold)]"
+        className="mt-3 inline-flex items-center gap-1.5 text-[10.5px] font-bold uppercase tracking-[0.18em] transition-colors group-hover:text-[color:var(--pc-home-gold)]"
         style={{ color: "var(--pc-home-heading)" }}
       >
         {cta}
@@ -820,12 +820,12 @@ function PartnersStrip() {
   if (!stores.length) return null;
 
   return (
-    <section className="pc-container pt-8 sm:pt-10">
+    <section className="pc-container pt-5 sm:pt-6">
       <div
-        className="rounded-[var(--pc-radius-md)] border px-4 py-5 sm:px-6 sm:py-6"
+        className="rounded-[var(--pc-radius-md)] border px-4 py-4 sm:px-5 sm:py-5"
         style={{ background: P.card, borderColor: P.line }}
       >
-        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+        <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
           <div className="min-w-0">
             <p
               className="text-[10px] font-bold uppercase tracking-[0.2em]"
@@ -859,7 +859,7 @@ function PartnersStrip() {
             <li key={s.id}>
               <Link
                 to="/estabelecimentos"
-                className="group flex h-16 items-center justify-center rounded-xl border px-3 transition-all hover:-translate-y-0.5 hover:shadow-sm sm:h-20"
+                className="group flex h-14 items-center justify-center rounded-xl border px-3 transition-all hover:-translate-y-0.5 hover:shadow-sm sm:h-16"
                 style={{ background: P.paper, borderColor: P.line }}
                 title={s.name}
               >
