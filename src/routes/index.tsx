@@ -344,7 +344,7 @@ function HomePage() {
         />
 
 
-        <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-8 pb-10 sm:px-6 sm:pt-12 sm:pb-14 lg:px-8 lg:pt-16 lg:pb-16">
+        <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-5 pb-6 sm:px-6 sm:pt-8 sm:pb-9 lg:px-8 lg:pt-10 lg:pb-10">
           <div className="mx-auto max-w-4xl text-center">
             {/* Badges */}
             <div className="mb-4 flex flex-wrap items-center justify-center gap-2 sm:mb-5">
@@ -383,7 +383,7 @@ function HomePage() {
               className={`${serif} font-normal leading-[1.02] tracking-[-0.01em]`}
               style={{
                 color: "#F8FAFC",
-                fontSize: "clamp(2.25rem, 5.4vw, 4.5rem)",
+                fontSize: "clamp(1.85rem, 4.4vw, 3.5rem)",
               }}
             >
               Encontre o{" "}
@@ -394,7 +394,7 @@ function HomePage() {
             </h1>
 
             <p
-              className="mx-auto mt-4 max-w-2xl text-[15px] font-light leading-relaxed sm:text-[17px]"
+              className="mx-auto mt-3 max-w-2xl text-[14px] font-light leading-relaxed sm:text-[16px]"
               style={{ color: "rgba(255,255,255,0.72)" }}
             >
               Compare preços entre os principais mercados de Feijó e economize em cada compra
@@ -404,7 +404,7 @@ function HomePage() {
             {/* Search bar branca — herói da página */}
             <form
               onSubmit={submitSearch}
-              className="relative mx-auto mt-7 max-w-2xl sm:mt-9"
+              className="relative mx-auto mt-5 max-w-2xl sm:mt-6"
               ref={searchBoxRef}
             >
               <div
@@ -544,7 +544,7 @@ function HomePage() {
             </div>
 
             {/* CTAs — secundários abaixo do search */}
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:mt-8">
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-3 sm:mt-5">
               {isLoggedOut ? (
                 <StartFreeDialog>
                   <button
@@ -590,7 +590,7 @@ function HomePage() {
           {/* ============ METRICS ROW (border-y sobre o navy) ============ */}
           <TooltipProvider delayDuration={150}>
             <div
-              className="mx-auto mt-12 grid max-w-5xl grid-cols-3 gap-2 border-y py-6 sm:mt-16 sm:gap-8 sm:py-9"
+              className="mx-auto mt-7 grid max-w-5xl grid-cols-3 gap-2 border-y py-4 sm:mt-9 sm:gap-8 sm:py-5"
               style={{ borderColor: "rgba(255,255,255,0.08)" }}
             >
               {[
@@ -669,8 +669,8 @@ function HomePage() {
 
 
       {/* ============== 3 PILARES (cards) ============== */}
-      <section className="pc-container pt-8 sm:pt-10">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5">
+      <section className="pc-container pt-5 sm:pt-6">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
           <PillarCard
             to="/melhores-precos"
             icon={<LineChart className="h-5 w-5" strokeWidth={2} />}
@@ -698,7 +698,7 @@ function HomePage() {
 
 
       {/* ============== RECENTES ============== */}
-      <div className="pt-8 sm:pt-10">
+      <div className="pt-5 sm:pt-6">
         <RecentProducts P={P} serif={serif} />
       </div>
 
