@@ -50,8 +50,9 @@ const SelectTrigger = React.forwardRef<
       "data-[placeholder]:text-muted-foreground",
       "hover:border-ring/60 hover:text-foreground",
       "focus:outline-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-1",
+      "data-[state=open]:border-ring data-[state=open]:ring-2 data-[state=open]:ring-ring/40 data-[state=open]:text-foreground",
       "aria-invalid:border-destructive aria-invalid:focus-visible:ring-destructive/40",
-      "disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1 [&[data-state=open]>svg]:rotate-180 [&>svg]:transition-transform [&>svg]:duration-150",
+      "disabled:cursor-not-allowed disabled:opacity-60 disabled:text-muted-foreground [&>span]:line-clamp-1 [&[data-state=open]>svg]:rotate-180 [&>svg]:transition-transform [&>svg]:duration-150",
       className,
     )}
     {...props}
