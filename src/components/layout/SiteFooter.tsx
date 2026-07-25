@@ -150,20 +150,20 @@ export function SiteFooter() {
         </div>
 
         {/* Link columns */}
-        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 sm:gap-4">
+        <div className="grid grid-cols-3 gap-x-3 gap-y-1 sm:gap-x-5">
           {NAV_COLS.map((col) => (
             <div key={col.title} className="min-w-0">
-              <div className="text-[10.5px] font-bold uppercase tracking-[0.22em] text-[var(--pc-gold-ink)] md:text-[11px]">
+              <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--pc-gold-ink)] antialiased md:text-[10.5px]">
                 {col.title}
               </div>
-              <ul className="mt-0.5 space-y-0">
+              <ul className="mt-1 space-y-px border-t border-border/70 pt-1">
                 {col.links.map((l) => (
                   <li key={l.to}>
                     <Link
                       to={l.to}
-                      className="inline-flex items-center rounded-md px-1.5 py-0 -mx-1.5 text-[12px] font-medium leading-[1.3] text-foreground/90 outline-none transition-colors hover:bg-brand/10 hover:text-brand active:text-brand-strong focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background [&.active]:text-brand [&.active]:bg-brand/10 md:text-[12.5px]"
+                      className="inline-flex max-w-full items-center truncate rounded-md px-1.5 py-0.5 -mx-1.5 text-[12.5px] font-medium leading-[1.35] tracking-[-0.005em] text-foreground/85 antialiased outline-none transition-colors hover:bg-brand/10 hover:text-[var(--pc-gold-ink)] active:text-brand-strong focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background [&.active]:text-[var(--pc-gold-ink)] [&.active]:bg-brand/10"
                     >
-                      <span>{l.label}</span>
+                      <span className="truncate">{l.label}</span>
                     </Link>
                   </li>
                 ))}
