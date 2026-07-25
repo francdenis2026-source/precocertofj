@@ -80,7 +80,7 @@ export function SiteFooter() {
         {/* Row 2: nav chips + dev credit — inline flow */}
         <nav
           aria-label="Rodapé"
-          className="mt-0.5 flex flex-wrap items-center gap-x-1 gap-y-0 text-[clamp(12.5px,3.4vw,14.5px)] font-semibold leading-none text-foreground"
+          className="mt-0.5 flex flex-wrap items-center gap-x-1 gap-y-0 text-[clamp(11.5px,3.1vw,13.5px)] font-semibold leading-none text-foreground"
         >
           {MOBILE_LINKS.map((l, i) => (
             <span key={l.to} className="inline-flex items-center">
