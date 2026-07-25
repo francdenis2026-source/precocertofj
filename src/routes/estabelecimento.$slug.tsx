@@ -44,6 +44,8 @@ import {
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ProductListCard } from "@/components/product/ProductListCard";
+import { ButcherCounter, splitButcherCuts } from "@/components/estabelecimento/ButcherCounter";
+import { PreparoDicas } from "@/components/estabelecimento/PreparoDicas";
 import { FavoriteMarketButton } from "@/components/market/FavoriteMarketButton";
 import { RatingBadge, PLATFORM_RATING } from "@/components/ds/RatingStars";
 
@@ -136,10 +138,15 @@ function EstablishmentPage() {
   const [sort, setSort] = useState<SortKey>("price-asc");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [historyFor, setHistoryFor] = useState<PublicStoreProduct | null>(null);
+  const [tab, setTab] = useState<"catalogo" | "acougue">("catalogo");
+
+  const { cuts, general } = useMemo(() => splitButcherCuts(data.products), [data.products]);
+  const hasButcher = cuts.length >= 5;
+  const catalogProducts = hasButcher ? general : data.products;
 
   const filtered = useMemo(() => {
     const term = normalize(q);
-    let list = data.products.slice();
+    let list = catalogProducts.slice();
     if (selectedCategory) list = list.filter((p) => p.category === selectedCategory);
     if (term) {
       list = list.filter((p) => {
@@ -247,6 +254,7 @@ function EstablishmentPage() {
               <CardDescription className="mt-1 text-[12.5px] leading-snug">
                 {data.products.length} produto{data.products.length === 1 ? "" : "s"} publicados
                 {data.categories.length > 0 && ` · ${data.categories.length} categorias`}
+                {hasButcher && ` · ${cuts.length} cortes no açougue`}
               </CardDescription>
 
 
@@ -304,6 +312,55 @@ function EstablishmentPage() {
           )}
         </Card>
 
+        {hasButcher && (
+          <div
+            role="tablist"
+            aria-label="Áreas do estabelecimento"
+            className="mt-6 flex flex-wrap gap-1.5"
+          >
+            {([
+              { id: "catalogo" as const, label: "Catálogo do mercado", count: general.length },
+              { id: "acougue" as const, label: `Açougue do ${data.store.name.split(" ")[0]}`, count: cuts.length },
+            ]).map((t) => {
+              const active = tab === t.id;
+              return (
+                <button
+                  key={t.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={active}
+                  onClick={() => setTab(t.id)}
+                  className={
+                    active
+                      ? "inline-flex h-10 items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-4 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-brand-navy shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                      : "inline-flex h-10 items-center gap-1.5 rounded-full border border-border bg-background px-4 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                  }
+                >
+                  {t.label}
+                  <span
+                    className={
+                      active
+                        ? "rounded-full bg-brand-navy/15 px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-brand-navy"
+                        : "rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-foreground/80"
+                    }
+                  >
+                    {t.count}
+                  </span>
+                </button>
+              );
+            })}
+            <Link
+              to="/estabelecimento/$slug/acougue"
+              params={{ slug }}
+              className="inline-flex h-10 items-center gap-1.5 rounded-full border border-border bg-background px-4 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)]"
+            >
+              Página do açougue
+            </Link>
+          </div>
+        )}
+
+        {tab === "catalogo" && (
+        <>
         {data.categories.length > 0 && (
           <div className="mt-6" aria-label="Filtrar por categoria">
             <div className="mb-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
@@ -323,7 +380,7 @@ function EstablishmentPage() {
               >
                 Todas
                 <span className={selectedCategory === null ? "rounded-full bg-brand-navy/15 px-1.5 py-0.5 text-[10px] font-bold text-brand-navy tabular-nums" : "rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-bold text-foreground/80 tabular-nums"}>
-                  {data.products.length}
+                  {catalogProducts.length}
                 </span>
               </button>
               {data.categories.map((c) => {
@@ -380,7 +437,7 @@ function EstablishmentPage() {
         </div>
 
         <div className="mt-4 text-xs text-muted-foreground">
-          {filtered.length} de {data.products.length} produtos
+          {filtered.length} de {catalogProducts.length} produtos
           {selectedCategory && <> · categoria <strong>{selectedCategory}</strong></>}
         </div>
 
@@ -424,6 +481,23 @@ function EstablishmentPage() {
             }
           />
         )}
+        </>
+        )}
+
+        {hasButcher && tab === "acougue" && (
+          <>
+            <ButcherCounter
+              storeName={data.store.name}
+              cuts={cuts}
+              onHistory={(p) => setHistoryFor(p)}
+              onAlert={(p) => createAlert(p)}
+            />
+            <div className="mt-10">
+              <PreparoDicas />
+            </div>
+          </>
+        )}
+
 
 
 
