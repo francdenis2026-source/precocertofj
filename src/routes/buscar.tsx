@@ -305,7 +305,11 @@ function SearchPage() {
               priceMin={Number.isFinite(priceMin) ? priceMin : undefined}
               priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
               onQueryChange={syncQueryToUrl}
+              filterShortcuts={emptyFilterShortcuts}
+              activeFilterCount={activeFilterCount}
+              onClearFilters={activeFilterCount > 0 ? clearFilters : undefined}
             />
+
           </div>
 
           {hasQuery && (
