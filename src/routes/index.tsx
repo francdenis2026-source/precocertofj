@@ -962,9 +962,12 @@ function PillarCard({
           ].join(" ")}
           style={{
             background: isGold
-              ? "color-mix(in oklab, var(--pc-home-navy) 12%, transparent)"
-              : "color-mix(in oklab, var(--pc-home-gold) 10%, transparent)",
+              ? "color-mix(in oklab, var(--pc-home-navy) 14%, transparent)"
+              : "color-mix(in oklab, var(--pc-home-gold) 22%, transparent)",
             color: isGold ? "var(--pc-home-navy)" : "var(--pc-home-gold)",
+            border: isGold
+              ? "1px solid color-mix(in oklab, var(--pc-home-navy) 26%, transparent)"
+              : "1px solid color-mix(in oklab, var(--pc-home-gold) 45%, transparent)",
           }}
         >
           <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.8} />
