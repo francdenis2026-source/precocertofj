@@ -10,11 +10,14 @@ import {
 } from "@/lib/checkout.functions";
 import {
   Check,
+  Minus,
   ShieldCheck,
   ArrowRight,
   ChevronDown,
   ArrowLeft,
+  Sparkles,
 } from "lucide-react";
+
 import { toast } from "sonner";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
