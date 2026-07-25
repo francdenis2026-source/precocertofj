@@ -622,11 +622,27 @@ function ComparadorPage() {
           <StatCard
             label="Menor preço agora"
             value={stats.cheapest != null ? formatBRL(Number(stats.cheapest)) : "—"}
-            hint={stats.cheapestName ?? undefined}
+            hint={
+              stats.cheapestName
+                ? `${stats.cheapestName}${stats.cheapestStore ? ` — ${shortenStoreName(stats.cheapestStore)}` : ""}`
+                : undefined
+            }
           />
 
         </div>
+
+        {referenceRow && (
+          <div className="mt-5">
+            <PriceRankingPanel
+              productName={referenceRow.display_name}
+              sizeLabel={formatSize(referenceRow.size_value, referenceRow.size_unit)}
+              stores={referenceRow.stores ?? []}
+              onOpenStore={() => setOpenStoresRow(referenceRow)}
+            />
+          </div>
+        )}
       </section>
+
 
 
       <section
