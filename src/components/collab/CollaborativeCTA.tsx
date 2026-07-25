@@ -135,7 +135,7 @@ export function CollaborativeCTA({
 
           <div className="mt-5 flex flex-wrap items-center gap-3">
             <a
-              href={mailHref()}
+              href="/colaborar"
               className={
                 "inline-flex h-11 items-center gap-2 rounded-full px-6 text-sm font-bold shadow-[0_2px_0_0_rgb(0_0_0/0.08)] transition hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 " +
                 (isDark
@@ -144,17 +144,8 @@ export function CollaborativeCTA({
               }
             >
               <Mail className="h-4 w-4" strokeWidth={2.4} />
-              Enviar nota fiscal
+              Participar do programa
               <ArrowRight className="h-4 w-4" strokeWidth={2.4} />
-            </a>
-            <a
-              href={`mailto:${COLLAB_EMAIL}`}
-              className={
-                "select-all font-mono text-[12.5px] font-semibold underline-offset-4 hover:underline " +
-                (isDark ? "text-white/95" : "text-foreground")
-              }
-            >
-              {COLLAB_EMAIL}
             </a>
             <a
               href="/colaborar"
@@ -163,10 +154,11 @@ export function CollaborativeCTA({
                 (isDark ? "text-emerald-200" : "text-primary")
               }
             >
-              Como funciona →
+              Ver como funciona →
             </a>
           </div>
         </div>
+
 
         {/* Ilustração SVG — nota fiscal estilizada */}
         <div className="relative hidden shrink-0 md:block">
