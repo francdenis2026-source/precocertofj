@@ -904,7 +904,7 @@ function HeroMetric({
         <Icon className="h-4 w-4" strokeWidth={2} aria-hidden />
       </div>
       <div className="relative z-[1] min-w-0 flex-1">
-        <div className="truncate text-[9.5px] font-semibold uppercase tracking-[0.16em] text-white/55 sm:text-[10px]">
+        <div className="line-clamp-2 text-[9.5px] font-semibold uppercase leading-[1.25] tracking-[0.12em] text-white/60 sm:truncate sm:tracking-[0.16em] sm:text-[10px]">
           {label}
         </div>
         <div className="mt-0.5 flex items-baseline gap-1.5 text-[20px] font-bold leading-none text-white tabular-nums sm:text-[22px]">
