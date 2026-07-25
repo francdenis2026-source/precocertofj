@@ -793,33 +793,43 @@ function HomePage() {
       </section>
 
 
-      {/* ============== 3 PILARES (cards — horizontal compact no mobile) ============== */}
+      {/* ============== 3 PILARES — faixa compacta (mobile + desktop) ============== */}
       <section id="pilares" className="pc-container pt-2 scroll-mt-24 sm:pt-3">
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-4">
+        <div
+          className="grid grid-cols-1 divide-y overflow-hidden rounded-2xl border shadow-sm sm:grid-cols-3 sm:divide-x sm:divide-y-0"
+          style={{
+            background: "var(--pc-home-card)",
+            borderColor: "var(--pc-home-line)",
+            // @ts-expect-error css var
+            "--tw-divide-opacity": 1,
+            borderCollapse: "separate",
+          }}
+        >
           <PillarCard
             to="/melhores-precos"
-            icon={<LineChart className="h-5 w-5" strokeWidth={2} />}
+            icon={<LineChart className="h-4 w-4" strokeWidth={2.2} />}
             title="Histórico de preços"
-            desc="Veja a variação nos últimos meses e saiba quando é o melhor momento para comprar."
+            desc="Variação recente e melhor momento de compra."
             cta="Ver ranking"
           />
           <PillarCard
             to="/colaborar"
-            icon={<Users className="h-5 w-5" strokeWidth={2} />}
+            icon={<Users className="h-4 w-4" strokeWidth={2.2} />}
             title="Comunidade ativa"
-            desc="Contribua enviando fotos de encartes e notas fiscais para ajudar outros moradores."
+            desc="Envie encartes e notas para ajudar sua vizinhança."
             cta="Colaborar"
           />
           <PillarCard
             to="/planos"
-            icon={<Sparkles className="h-5 w-5" strokeWidth={2} />}
+            icon={<Sparkles className="h-4 w-4" strokeWidth={2.2} />}
             title="PreçoCerto Plus"
-            desc="Alertas em tempo real de promoções exclusivas e listas inteligentes de compra."
+            desc="Alertas em tempo real e listas inteligentes."
             cta="Ver planos"
             emphasis
           />
         </div>
       </section>
+
 
 
       {/* ============== RECENTES ============== */}
