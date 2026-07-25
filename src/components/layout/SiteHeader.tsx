@@ -133,13 +133,16 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
 
         {/* Primary nav — desktop */}
         {showNav && (
-          <nav className="hidden items-center gap-1 lg:flex" aria-label="Navegação principal">
+          <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Navegação principal">
             {NAV_LINKS.map((l) => (
               <Link
                 key={l.to}
                 to={l.to}
-                className={dsx("rounded-lg px-3 py-2 text-[15px] font-semibold leading-[1.35] outline-none transition-colors focus-visible:ring-2 xl:text-[16px]", navClass)}
-                activeProps={{ className: isOverlay ? "text-brand-soft bg-brand-soft/12" : "text-brand bg-brand/10", "aria-current": "page" } as any}
+                className={dsx(
+                  "rounded-lg px-2.5 py-1.5 text-[14px] font-semibold leading-[1.25] tracking-[-0.005em] antialiased outline-none transition-colors focus-visible:ring-2 xl:px-3 xl:text-[14.5px]",
+                  navClass,
+                )}
+                activeProps={{ className: isOverlay ? "text-brand-soft bg-brand-soft/12" : "text-[var(--pc-gold-ink)] bg-brand/10", "aria-current": "page" } as any}
               >
                 {l.label}
               </Link>
