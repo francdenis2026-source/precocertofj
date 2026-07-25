@@ -14,6 +14,10 @@ import {
   LineChart,
   Users,
   Sparkles,
+  ShoppingCart,
+  Pill,
+  HardHat,
+  Fuel,
 } from "lucide-react";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
