@@ -19,13 +19,11 @@ import {
   listFavoriteNeighborhoods,
   toggleFavoriteNeighborhood,
 } from "@/lib/favorites-neighborhoods.functions";
-import { MobileNav } from "@/components/nav/MobileNav";
 import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 import { useSession } from "@/hooks/useSession";
 import { toast } from "sonner";
-import { EmptyState, LoadingSkeleton } from "@/components/layout";
+import { EmptyState, LoadingSkeleton, PageShell, PageShellContent } from "@/components/layout";
 import { BackButton } from "@/components/layout/BackButton";
-import { SiteFooter } from "@/components/layout/SiteFooter";
 import { Link } from "@tanstack/react-router";
 import {
   Select,
@@ -260,7 +258,9 @@ function NeighborhoodsPage() {
   };
 
   return (
-    <div className="min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
+    <PageShell>
+      <PageShellContent>
+
       {/* Hero profissional — Navy/Gold, alinhado ao tema */}
       <section className="relative overflow-hidden border-b border-brand-gold/20 bg-brand-navy text-white">
         {/* grid sutil de fundo */}
@@ -670,8 +670,7 @@ function NeighborhoodsPage() {
           </div>
         )}
       </main>
-      <SiteFooter />
-      <MobileNav />
-    </div>
+      </PageShellContent>
+    </PageShell>
   );
 }
