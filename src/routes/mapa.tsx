@@ -512,7 +512,40 @@ function NeighborhoodsPage() {
           </section>
         )}
 
-        {groups.isLoading && <LoadingSkeleton rows={4} />}
+        {groups.isLoading && (
+          <div className="space-y-3" aria-live="polite" aria-busy="true">
+            <span className="sr-only">Carregando bairros…</span>
+            {[0, 1, 2, 3].map((i) => (
+              <div
+                key={i}
+                className="overflow-hidden rounded-xl border border-border bg-card shadow-sm"
+              >
+                <div className="flex items-center justify-between gap-3 border-b border-border bg-muted/30 px-3.5 py-2.5">
+                  <div className="flex items-center gap-2">
+                    <div className="h-7 w-7 animate-pulse rounded-md bg-muted" />
+                    <div className="space-y-1">
+                      <div className="h-3.5 w-32 animate-pulse rounded bg-muted" />
+                      <div className="h-2.5 w-20 animate-pulse rounded bg-muted/70" />
+                    </div>
+                  </div>
+                  <div className="h-4 w-20 animate-pulse rounded-full bg-muted" />
+                </div>
+                <div className="divide-y divide-border">
+                  {[0, 1].map((k) => (
+                    <div key={k} className="flex items-center gap-3 px-3.5 py-2.5">
+                      <div className="h-10 w-10 animate-pulse rounded-lg bg-muted" />
+                      <div className="flex-1 space-y-1">
+                        <div className="h-3 w-2/3 animate-pulse rounded bg-muted" />
+                        <div className="h-2.5 w-1/2 animate-pulse rounded bg-muted/70" />
+                      </div>
+                      <div className="h-5 w-12 animate-pulse rounded-full bg-muted" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
 
         {groups.error && (
           <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-4 text-[13.5px] text-destructive">
@@ -523,14 +556,20 @@ function NeighborhoodsPage() {
         {groups.data && filteredGroups.length === 0 && !groups.isLoading && (
           <EmptyState
             icon={MapPin}
-            title={term ? "Nenhum mercado encontrado" : "Nenhum bairro cadastrado ainda"}
+            title={hasActiveFilters ? "Nenhum bairro corresponde aos filtros" : "Nenhum bairro cadastrado ainda"}
             description={
-              term
-                ? `Nenhum resultado para "${term}". Tente outro nome.`
+              hasActiveFilters
+                ? "Ajuste ou limpe os filtros para ver todos os bairros disponíveis."
                 : "Assim que houver mercados cadastrados, eles aparecerão aqui."
+            }
+            action={
+              hasActiveFilters
+                ? { label: "Limpar filtros", onClick: clearFilters }
+                : undefined
             }
           />
         )}
+
 
         {filteredGroups.length > 0 && (
           <div className="space-y-3">
