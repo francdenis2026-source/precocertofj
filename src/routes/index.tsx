@@ -124,6 +124,7 @@ function HomePage() {
   const [showSuggest, setShowSuggest] = useState(false);
   const [activeIdx, setActiveIdx] = useState(-1);
   const [spotlight, setSpotlight] = useState<import("@/components/home/MetricSpotlightDialog").MetricKind | null>(null);
+  const [allCatsOpen, setAllCatsOpen] = useState(false);
   const searchBoxRef = useRef<HTMLFormElement | null>(null);
 
 
