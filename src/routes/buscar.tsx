@@ -20,6 +20,7 @@ import { Filter, Search, SlidersHorizontal, Sparkles, X } from "lucide-react";
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
+  categoria: fallback(z.string(), "").default(""),
   mode: fallback(z.string(), "strict").default("strict"),
   pure: fallback(z.string(), "1").default("1"),
   brand: fallback(z.string(), "").default(""),
@@ -30,7 +31,7 @@ const searchSchema = z.object({
 export const Route = createFileRoute("/buscar")({
   validateSearch: zodValidator(searchSchema),
   search: {
-    middlewares: [retainSearchParams(["q", "mode", "pure", "brand", "min", "max"])],
+    middlewares: [retainSearchParams(["q", "categoria", "mode", "pure", "brand", "min", "max"])],
   },
 
   head: () => ({
