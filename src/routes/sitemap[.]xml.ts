@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
+import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 
 const BASE_URL = "https://precocerto-feijo.app";
 
@@ -38,9 +39,13 @@ export const Route = createFileRoute("/sitemap.xml")({
             process.env.VITE_SUPABASE_PUBLISHABLE_KEY ?? import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
             { auth: { persistSession: false } },
           );
-          const { data } = await supabase.from("establishments").select("slug").not("slug", "is", null);
+          const { data } = await supabase
+            .from("establishments")
+            .select("name")
+            .eq("active", true);
           for (const row of data ?? []) {
-            if (row.slug) entries.push({ path: `/estabelecimento/${row.slug}`, changefreq: "daily", priority: "0.7" });
+            const slug = row.name ? slugifyEstablishment(row.name) : "";
+            if (slug) entries.push({ path: `/estabelecimento/${slug}`, changefreq: "daily", priority: "0.7" });
           }
         } catch {
           // sitemap continua válido apenas com as rotas estáticas
