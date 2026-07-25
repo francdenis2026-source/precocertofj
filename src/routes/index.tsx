@@ -12,7 +12,7 @@ import {
   TrendingDown,
   ShieldCheck,
   Package,
-  Ticket,
+  // Ticket removido (agora vive dentro de FinalCTASection)
   LineChart,
   Users,
   Sparkles,
