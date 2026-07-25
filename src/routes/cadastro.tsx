@@ -412,7 +412,7 @@ function Field({
         inputMode={inputMode}
         autoComplete={autoComplete}
         aria-invalid={invalid}
-        className={`h-11 w-full rounded-xl border-2 ${border} bg-white px-3.5 text-[14.5px] font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-500 outline-none transition focus:ring-4`}
+        className={`h-10 w-full rounded-lg border-2 ${border} bg-white px-3 text-[13.5px] font-medium text-slate-900 placeholder:font-normal placeholder:text-slate-500 outline-none transition focus:ring-4`}
         style={{ ["--pc-navy" as string]: PC_EMERALD } as React.CSSProperties}
       />
     </label>
