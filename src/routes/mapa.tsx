@@ -261,30 +261,84 @@ function NeighborhoodsPage() {
 
   return (
     <div className="min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
-      <main className="mx-auto w-full max-w-4xl px-4 pt-4 md:px-6 md:pt-6">
-        <InternalPageHeader
-          breadcrumbs={[
-            { label: "Início", to: "/" },
-            { label: "Mercados por bairro" },
-          ]}
-          title="Mercados por bairro"
-          highlight="bairro"
-          description="Encontre os mercados cadastrados na sua região e favorite os seus."
-          actions={
-            filteredGroups.length > 0 ? (
-              <div className="flex items-center gap-1.5">
-                <span className="inline-flex items-center gap-1 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-brand-gold">
-                  <MapPin className="h-3 w-3" aria-hidden />
-                  {filteredGroups.length} {filteredGroups.length === 1 ? "bairro" : "bairros"}
-                </span>
-                <span className="inline-flex items-center gap-1 rounded-full border border-border bg-muted/60 px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-foreground">
-                  <Store className="h-3 w-3" aria-hidden />
-                  {totalMarkets} {totalMarkets === 1 ? "mercado" : "mercados"}
-                </span>
-              </div>
-            ) : null
-          }
+      {/* Hero profissional — Navy/Gold, alinhado ao tema */}
+      <section className="relative overflow-hidden border-b border-brand-gold/20 bg-brand-navy text-white">
+        {/* grid sutil de fundo */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 opacity-[0.07]"
+          style={{
+            backgroundImage:
+              "linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)",
+            backgroundSize: "36px 36px",
+          }}
         />
+        {/* halo dourado */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full opacity-30 blur-3xl"
+          style={{ background: "radial-gradient(circle, #c9a227 0%, transparent 60%)" }}
+        />
+        {/* faixa gold inferior */}
+        <div aria-hidden className="absolute inset-x-0 bottom-0 h-[2px] bg-gradient-to-r from-transparent via-brand-gold to-transparent" />
+
+        <div className="relative mx-auto w-full max-w-4xl px-4 pt-4 pb-5 md:px-6 md:pt-5 md:pb-6">
+          <div className="mb-2 flex items-center justify-between gap-2">
+            <BackButton fallbackTo="/" variant="ghost" className="text-white/85 hover:text-white" />
+            <nav
+              aria-label="Trilha"
+              className="hidden items-center gap-1 text-[11px] font-medium text-white/70 sm:flex"
+            >
+              <Link to="/" className="transition-colors hover:text-brand-gold">Início</Link>
+              <span aria-hidden className="opacity-50">/</span>
+              <span className="text-white">Mercados por bairro</span>
+            </nav>
+          </div>
+
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+            <div className="min-w-0">
+              <div className="mb-1.5 inline-flex items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.16em] text-brand-gold">
+                <MapPin className="h-3 w-3" strokeWidth={2.5} />
+                Guia local · Feijó
+              </div>
+              <h1
+                className="text-[clamp(1.6rem,3.4vw,2.25rem)] font-semibold leading-[1.05] tracking-tight text-white"
+                style={{ fontFamily: "var(--font-display)" }}
+              >
+                Mercados por{" "}
+                <span className="italic text-brand-gold">bairro</span>
+              </h1>
+              <p className="mt-1 max-w-xl text-[12.5px] leading-snug text-white/75">
+                Descubra onde estão os mercados parceiros na sua região, favorite os seus e compare preços em segundos.
+              </p>
+            </div>
+
+            {filteredGroups.length > 0 && (
+              <div className="flex shrink-0 items-stretch gap-2">
+                <div className="rounded-lg border border-brand-gold/30 bg-white/[0.04] px-3 py-1.5 text-center backdrop-blur-sm">
+                  <div className="font-mono text-[18px] font-bold leading-none tabular-nums text-brand-gold">
+                    {filteredGroups.length}
+                  </div>
+                  <div className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.14em] text-white/70">
+                    {filteredGroups.length === 1 ? "Bairro" : "Bairros"}
+                  </div>
+                </div>
+                <div className="rounded-lg border border-white/15 bg-white/[0.04] px-3 py-1.5 text-center backdrop-blur-sm">
+                  <div className="font-mono text-[18px] font-bold leading-none tabular-nums text-white">
+                    {totalMarkets}
+                  </div>
+                  <div className="mt-0.5 text-[9px] font-bold uppercase tracking-[0.14em] text-white/70">
+                    {totalMarkets === 1 ? "Mercado" : "Mercados"}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
+      <main className="mx-auto w-full max-w-4xl px-4 pt-4 md:px-6 md:pt-5">
+
 
         {/* Barra de busca — compacta, focus dourado */}
         <div className="mb-3 flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 shadow-sm transition-colors focus-within:border-brand-gold focus-within:ring-2 focus-within:ring-brand-gold/30">
