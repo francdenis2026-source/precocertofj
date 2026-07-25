@@ -178,7 +178,7 @@ export function SiteFooter() {
         <div
           className={dsx(
             ds.container,
-            "flex flex-col items-start justify-between gap-0 py-0.5 text-[11px] font-medium leading-[1.2] text-foreground/85 sm:flex-row sm:items-center md:text-[11.5px]",
+            "flex flex-col items-start justify-between gap-0 py-0 text-[10.5px] font-medium leading-[1.15] text-foreground/85 sm:flex-row sm:items-center md:text-[11px]",
           )}
         >
           <span className="whitespace-normal">© {year} <strong className="font-semibold text-foreground">PreçoCerto</strong> · Feijó · Acre</span>
