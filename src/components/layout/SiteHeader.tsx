@@ -126,21 +126,22 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
 
 
 
-        {/* Primary nav */}
+        {/* Primary nav — desktop */}
         {showNav && (
-          <nav className="hidden items-center gap-1 lg:flex" aria-label="Principal">
+          <nav className="hidden items-center gap-1 lg:flex" aria-label="Navegação principal">
             {NAV_LINKS.map((l) => (
               <Link
                 key={l.to}
                 to={l.to}
                 className={dsx("rounded-lg px-3 py-2 text-[15px] font-semibold leading-[1.35] outline-none transition-colors focus-visible:ring-2 xl:text-[16px]", navClass)}
-                activeProps={{ className: isOverlay ? "text-brand-soft bg-brand-soft/12" : "text-brand bg-brand/10" }}
+                activeProps={{ className: isOverlay ? "text-brand-soft bg-brand-soft/12" : "text-brand bg-brand/10", "aria-current": "page" } as any}
               >
                 {l.label}
               </Link>
             ))}
           </nav>
         )}
+
 
         {/* CTAs */}
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
