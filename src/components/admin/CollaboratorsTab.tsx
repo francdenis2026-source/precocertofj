@@ -254,7 +254,7 @@ function ReviewDialog({
   const reviewFn = useServerFn(reviewCollaboratorSubmission);
   const signFn = useServerFn(signCollabAttachments);
   const { confirm } = useConfirm();
-  const [rewardDays, setRewardDays] = useState(30);
+  const [rewardDays, setRewardDays] = useState(7);
   const [reason, setReason] = useState("");
   const [notes, setNotes] = useState("");
 
@@ -391,18 +391,23 @@ function ReviewDialog({
             {mode === "approve" && (
               <>
                 <div>
-                  <Label>Dias de brinde (adicionados ao paid_until)</Label>
+                  <Label>Dias de brinde por esta nota (padrão: 7)</Label>
                   <Input
                     type="number"
                     min={0}
-                    max={730}
+                    max={30}
                     value={rewardDays}
                     onChange={(e) => setRewardDays(Number(e.target.value) || 0)}
                   />
+                  <p className="mt-1 text-[11px] text-muted-foreground">
+                    Teto de 30 dias/mês por colaborador. Se o teto já foi atingido,
+                    o sistema credita apenas o restante possível.
+                  </p>
                   {!submission.user_id && (
                     <p className="mt-1 text-[11px] text-amber-700 dark:text-amber-300">
-                      Este envio não está vinculado a uma conta — o brinde não poderá ser aplicado
-                      automaticamente. Vincule uma conta primeiro ou registre apenas a aprovação.
+                      Este envio não está vinculado a uma conta — o brinde não poderá
+                      ser aplicado automaticamente. Peça o token do colaborador ou
+                      vincule uma conta primeiro.
                     </p>
                   )}
                 </div>

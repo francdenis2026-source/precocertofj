@@ -488,6 +488,7 @@ export type Database = {
           reviewed_at: string | null
           reviewed_by: string | null
           reward_days: number | null
+          reward_days_awarded: number
           reward_granted: boolean
           source: string
           status: string
@@ -511,6 +512,7 @@ export type Database = {
           reviewed_at?: string | null
           reviewed_by?: string | null
           reward_days?: number | null
+          reward_days_awarded?: number
           reward_granted?: boolean
           source?: string
           status?: string
@@ -534,6 +536,7 @@ export type Database = {
           reviewed_at?: string | null
           reviewed_by?: string | null
           reward_days?: number | null
+          reward_days_awarded?: number
           reward_granted?: boolean
           source?: string
           status?: string
@@ -2032,6 +2035,7 @@ export type Database = {
           address_zip: string | null
           avatar_url: string | null
           city: string | null
+          collab_token: string | null
           cpf: string
           created_at: string
           full_name: string
@@ -2059,6 +2063,7 @@ export type Database = {
           address_zip?: string | null
           avatar_url?: string | null
           city?: string | null
+          collab_token?: string | null
           cpf: string
           created_at?: string
           full_name: string
@@ -2086,6 +2091,7 @@ export type Database = {
           address_zip?: string | null
           avatar_url?: string | null
           city?: string | null
+          collab_token?: string | null
           cpf?: string
           created_at?: string
           full_name?: string
@@ -2886,6 +2892,7 @@ export type Database = {
           reviewed_at: string | null
           reviewed_by: string | null
           reward_days: number | null
+          reward_days_awarded: number
           reward_granted: boolean
           source: string
           status: string
@@ -3080,6 +3087,15 @@ export type Database = {
           unit: string
         }[]
       }
+      find_user_by_collab_token: {
+        Args: { _token: string }
+        Returns: {
+          email: string
+          full_name: string
+          user_id: string
+        }[]
+      }
+      generate_collab_token: { Args: never; Returns: string }
       generate_license_code_string: { Args: never; Returns: string }
       get_coverage_overview: {
         Args: never
@@ -3108,6 +3124,17 @@ export type Database = {
           stores_count: number
         }[]
       }
+      get_my_collab_month_progress: {
+        Args: never
+        Returns: {
+          approved_month: number
+          days_awarded: number
+          days_remaining: number
+          month_key: string
+          monthly_cap: number
+          submissions_month: number
+        }[]
+      }
       get_or_create_ai_quota: {
         Args: { _default_limit?: number; _user_id: string }
         Returns: {
@@ -3127,6 +3154,7 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      get_or_create_collab_token: { Args: never; Returns: string }
       get_present_products_for_establishment: {
         Args: {
           _category?: string
