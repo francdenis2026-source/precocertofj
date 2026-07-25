@@ -322,8 +322,10 @@ function SearchPage() {
           <BackButton fallbackTo="/" variant="ghost" />
           <div className="flex min-w-0 items-baseline gap-2.5">
             <h1 className="min-w-0 truncate whitespace-nowrap font-serif text-[14.5px] font-semibold leading-tight tracking-tight text-foreground sm:text-[17px]">
-              Buscar <span className="text-[var(--pc-gold-ink)]">preço</span> por nome
+              Buscar <span className="text-[var(--pc-gold-ink)]">preço</span>
+              <span className="hidden sm:inline"> por nome</span>
             </h1>
+
             <p className="hidden truncate text-[11.5px] leading-snug text-muted-foreground lg:block">
               Preço médio, mínimo e onde está mais barato — em todos os mercados parceiros.
             </p>
