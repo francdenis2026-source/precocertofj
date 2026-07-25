@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Search } from "lucide-react";
+import { scrollToSection } from "@/lib/scroll";
+
 
 const P = {
   paper: "var(--pc-home-paper)",
@@ -64,11 +66,9 @@ export function HomeAnchorNav({ onSearch }: { onSearch: (q: string) => void }) {
   }, [active]);
 
   const jumpTo = (id: string) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const y = el.getBoundingClientRect().top + window.scrollY - 96;
-    window.scrollTo({ top: y, behavior: "smooth" });
+    scrollToSection(id);
   };
+
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault();

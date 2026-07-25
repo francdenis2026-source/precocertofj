@@ -20,6 +20,8 @@ import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { BackToTop } from "@/components/layout/BackToTop";
 import { getPlatformStats, listPublicStores } from "@/lib/stores-public.functions";
+import { scrollToSection } from "@/lib/scroll";
+
 import { getEconomyStat } from "@/lib/products-public.functions";
 import { listPopularQueries } from "@/lib/search-popular.functions";
 import { RecentProducts } from "@/components/home/RecentProducts";
@@ -127,6 +129,18 @@ function HomePage() {
       }),
     );
   }, []);
+
+  // Deep-link a seções via #hash — usa o mesmo helper dos chips de âncora
+  // para respeitar dinamicamente a altura do header sticky (mobile + web).
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const hash = window.location.hash?.replace("#", "");
+    if (!hash) return;
+    // aguarda o layout inicial estabilizar antes de medir sticky offsets
+    const t = setTimeout(() => scrollToSection(hash), 120);
+    return () => clearTimeout(t);
+  }, []);
+
 
   const platformStats = useServerFn(getPlatformStats);
   const statsQ = useQuery({
