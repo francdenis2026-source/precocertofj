@@ -54,7 +54,8 @@ const FinalCTASection = lazy(() =>
 
 export const Route = createFileRoute("/")({
   loader: async ({ context }) => {
-    void Promise.allSettled([
+    // aguarda os números reais no SSR para não piscar placeholders no primeiro paint
+    await Promise.allSettled([
       context.queryClient.ensureQueryData({
         queryKey: ["home-stats"],
         queryFn: () => getPlatformStats({} as any),
