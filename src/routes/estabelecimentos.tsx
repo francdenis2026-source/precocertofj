@@ -10,6 +10,7 @@ import {
   type EstablishmentsOverview,
 } from "@/lib/establishments-public.functions";
 import { MobileNav } from "@/components/nav/MobileNav";
+import { FavoriteMarketButton } from "@/components/market/FavoriteMarketButton";
 
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import {
