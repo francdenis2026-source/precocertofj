@@ -94,6 +94,7 @@ function writePersistedFilters(f: PersistedFilters) {
     sessionStorage.setItem(FILTERS_KEY, JSON.stringify(f));
   } catch {
     /* storage cheio ou bloqueado — ignorar */
+  }
 }
 
 // Classificação por catálogo — sempre presente para consistência visual entre cards
@@ -119,7 +120,6 @@ function describeFreshness(iso: string | null): { label: string; live: boolean }
   return { label: "Atualização antiga", live: false };
 }
 
-}
 
 
 function EstablishmentsPage() {
