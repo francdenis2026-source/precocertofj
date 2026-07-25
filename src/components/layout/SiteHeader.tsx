@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { LogOut, User as UserIcon, Key, Receipt, LayoutDashboard, ChevronDown, Search, MoreHorizontal, HeartHandshake, Ticket } from "lucide-react";
+import { LogOut, User as UserIcon, Key, Receipt, LayoutDashboard, ChevronDown, Search, Ticket } from "lucide-react";
 import { ds, dsx } from "@/lib/ds";
 import { useMyProfile } from "@/hooks/useMyProfile";
 import { useSignOut } from "@/hooks/use-sign-out";
