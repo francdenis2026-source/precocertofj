@@ -145,6 +145,47 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
 
         {/* CTAs */}
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+          {/* Menu de navegação para telas < lg (mobile e tablet) */}
+          {showNav && (
+            <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
+              <SheetTrigger asChild>
+                <button
+                  type="button"
+                  aria-label="Abrir menu de navegação"
+                  className={dsx(
+                    "inline-flex h-11 w-11 items-center justify-center rounded-lg border outline-none transition-colors focus-visible:ring-2 lg:hidden",
+                    isOverlay
+                      ? "border-on-media-border bg-on-media-surface text-on-media focus-visible:ring-brand/60"
+                      : "border-border bg-card text-foreground focus-visible:ring-brand/60",
+                  )}
+                >
+                  <Menu className="h-5 w-5" aria-hidden />
+                </button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-[86vw] max-w-xs p-0">
+                <SheetHeader className="px-4 pt-4 pb-2 text-left">
+                  <SheetTitle className="text-[17px]">Navegação</SheetTitle>
+                </SheetHeader>
+                <nav aria-label="Navegação do menu" className="px-2 pb-6">
+                  <ul className="flex flex-col">
+                    {[...NAV_LINKS, { to: "/resgatar", label: "Resgatar código" } as const].map((l) => (
+                      <li key={l.to}>
+                        <Link
+                          to={l.to}
+                          onClick={() => setMenuOpen(false)}
+                          className="flex min-h-11 items-center rounded-lg px-3 text-[15.5px] font-semibold text-foreground outline-none transition-colors hover:bg-brand/10 hover:text-brand focus-visible:ring-2 focus-visible:ring-brand/60"
+                          activeProps={{ className: "bg-brand/12 text-brand", "aria-current": "page" } as any}
+                        >
+                          {l.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </nav>
+              </SheetContent>
+            </Sheet>
+          )}
+
           {/* Busca compacta no topo — páginas internas sempre; landing após rolar o hero */}
           {showNav && scrolled && (
             <form
