@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { Search, Link2, Check } from "lucide-react";
+import { Search, Link2, Check, Share2 } from "lucide-react";
 import { scrollToSection } from "@/lib/scroll";
 
 
@@ -97,22 +97,54 @@ export function HomeAnchorNav({ onSearch }: { onSearch: (q: string) => void }) {
   };
 
   const [copied, setCopied] = useState(false);
-  const copyLink = async () => {
+  const [canShare, setCanShare] = useState(false);
+
+  useEffect(() => {
+    // navigator.share só é útil em contexto seguro (https) — típico em mobile
+    setCanShare(typeof navigator !== "undefined" && typeof navigator.share === "function");
+  }, []);
+
+  const buildShareUrl = () => {
+    const target = active && active !== "hero" ? `#${active}` : "";
+    return `${window.location.origin}${window.location.pathname}${window.location.search}${target}`;
+  };
+
+  const copyToClipboard = async (url: string) => {
+    if (navigator.clipboard?.writeText) {
+      await navigator.clipboard.writeText(url);
+      return;
+    }
+    const ta = document.createElement("textarea");
+    ta.value = url;
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+  };
+
+  const activeLabel = ANCHORS.find((a) => a.id === active)?.label ?? "Início";
+
+  const shareLink = async () => {
+    const url = buildShareUrl();
+    const shareData: ShareData = {
+      title: `PreçoCerto — ${activeLabel}`,
+      text: `Confira "${activeLabel}" no PreçoCerto`,
+      url,
+    };
     try {
-      const target = active && active !== "hero" ? `#${active}` : "";
-      const url = `${window.location.origin}${window.location.pathname}${window.location.search}${target}`;
-      if (navigator.clipboard?.writeText) {
-        await navigator.clipboard.writeText(url);
-      } else {
-        const ta = document.createElement("textarea");
-        ta.value = url;
-        ta.style.position = "fixed";
-        ta.style.opacity = "0";
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand("copy");
-        document.body.removeChild(ta);
+      if (canShare && (!navigator.canShare || navigator.canShare(shareData))) {
+        await navigator.share(shareData);
+        return;
       }
+    } catch (err) {
+      // AbortError = usuário cancelou; não faz fallback nem mostra erro.
+      if ((err as DOMException)?.name === "AbortError") return;
+      // Outros erros → cai no fallback de cópia.
+    }
+    try {
+      await copyToClipboard(url);
       setCopied(true);
       setTimeout(() => setCopied(false), 1600);
     } catch {
@@ -120,7 +152,6 @@ export function HomeAnchorNav({ onSearch }: { onSearch: (q: string) => void }) {
     }
   };
 
-  const activeLabel = ANCHORS.find((a) => a.id === active)?.label ?? "Início";
 
 
   return (
@@ -195,12 +226,22 @@ export function HomeAnchorNav({ onSearch }: { onSearch: (q: string) => void }) {
           </div>
         </form>
 
-        {/* Copiar link da seção atual */}
+        {/* Compartilhar / copiar link da seção atual */}
         <button
           type="button"
-          onClick={copyLink}
-          aria-label={`Copiar link da seção ${activeLabel}`}
-          title={copied ? "Link copiado" : `Copiar link — ${activeLabel}`}
+          onClick={shareLink}
+          aria-label={
+            canShare
+              ? `Compartilhar link da seção ${activeLabel}`
+              : `Copiar link da seção ${activeLabel}`
+          }
+          title={
+            copied
+              ? "Link copiado"
+              : canShare
+                ? `Compartilhar — ${activeLabel}`
+                : `Copiar link — ${activeLabel}`
+          }
           className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border px-2.5 text-[11.5px] font-semibold leading-none transition-all active:scale-[0.97]"
           style={{
             background: copied ? `color-mix(in oklab, ${P.gold} 16%, ${P.card})` : P.card,
@@ -210,11 +251,16 @@ export function HomeAnchorNav({ onSearch }: { onSearch: (q: string) => void }) {
         >
           {copied ? (
             <Check className="h-3.5 w-3.5" strokeWidth={2.6} style={{ color: P.gold }} />
+          ) : canShare ? (
+            <Share2 className="h-3.5 w-3.5" strokeWidth={2.4} />
           ) : (
             <Link2 className="h-3.5 w-3.5" strokeWidth={2.4} />
           )}
-          <span className="hidden sm:inline">{copied ? "Copiado" : "Copiar link"}</span>
+          <span className="hidden sm:inline">
+            {copied ? "Copiado" : canShare ? "Compartilhar" : "Copiar link"}
+          </span>
         </button>
+
       </div>
 
     </nav>
