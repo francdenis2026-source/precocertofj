@@ -84,6 +84,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:image", content: "https://precocerto-feijo.app/og-image.jpg" },
       { name: "twitter:image:alt", content: "PreçoCerto — Consulte o preço antes de comprar" },
       { name: "twitter:site", content: "@precocerto" },
+      // Impede tradução automática do navegador (Chrome/Edge/Safari) — app é 100% pt-BR
+      { name: "google", content: "notranslate" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
