@@ -10,6 +10,9 @@ import {
   type EstablishmentsOverview,
 } from "@/lib/establishments-public.functions";
 import { MobileNav } from "@/components/nav/MobileNav";
+import { FavoriteMarketButton } from "@/components/market/FavoriteMarketButton";
+import { useSession } from "@/hooks/useSession";
+import { listFavoriteMarkets } from "@/lib/favorites.functions";
 
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import {
@@ -130,6 +133,26 @@ function EstablishmentsPage() {
     staleTime: 60_000,
   });
 
+  const { user } = useSession();
+  const listFavFn = useServerFn(listFavoriteMarkets);
+  const { data: favMarkets } = useQuery({
+    queryKey: ["favorite-markets"],
+    queryFn: () => listFavFn(),
+    enabled: !!user,
+    staleTime: 60_000,
+  });
+  const favSet = useMemo(
+    () =>
+      new Set(
+        (favMarkets ?? []).map((f) => f.marketName.trim().toLowerCase()),
+      ),
+    [favMarkets],
+  );
+  const [onlyFavorites, setOnlyFavorites] = useState(false);
+  useEffect(() => {
+    if (!user) setOnlyFavorites(false);
+  }, [user]);
+
   // Filtros persistidos em sessionStorage — sobrevivem ao voltar de /estabelecimento/$slug
   const persisted = readPersistedFilters();
   const [q, setQ] = useState(persisted.q);
@@ -168,6 +191,9 @@ function EstablishmentsPage() {
     if (!data) return [] as EstablishmentsOverview["items"];
     const term = q.trim().toLowerCase();
     let list = data.items.slice();
+    if (onlyFavorites) {
+      list = list.filter((e) => favSet.has(e.name.trim().toLowerCase()));
+    }
     if (kindFilter !== "__all") {
       list = list.filter((e) => (e.kind ?? "outro") === kindFilter);
     }
@@ -198,7 +224,7 @@ function EstablishmentsPage() {
         list.sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
     }
     return list;
-  }, [data, q, neighborhood, sort, kindFilter]);
+  }, [data, q, neighborhood, sort, kindFilter, onlyFavorites, favSet]);
 
   const kindsPresent = useMemo(() => {
     if (!data) return new Set<string>();
@@ -374,7 +400,26 @@ function EstablishmentsPage() {
                 </button>
               );
             })}
+            {user && favSet.size > 0 && (
+              <button
+                type="button"
+                role="switch"
+                aria-checked={onlyFavorites}
+                onClick={() => setOnlyFavorites((v) => !v)}
+                className={[
+                  "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11.5px] font-semibold uppercase tracking-[0.14em] transition-colors duration-150",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy",
+                  onlyFavorites
+                    ? "border-brand-gold bg-brand-gold text-brand-navy shadow-sm"
+                    : "border-white/25 bg-brand-navy/85 text-white hover:border-brand-gold",
+                ].join(" ")}
+                title="Mostrar apenas mercados que você salvou"
+              >
+                ★ Meus favoritos ({favSet.size})
+              </button>
+            )}
           </div>
+
 
 
           {/* Métricas ao vivo — botões acessíveis, abrem detalhes */}
@@ -642,7 +687,11 @@ function EstablishmentsPage() {
                     const tier = classifyTier(e.productsCount);
                     const freshness = describeFreshness(e.lastUpdate);
                     return (
-                    <li key={e.id} className="h-full">
+                    <li key={e.id} className="relative h-full">
+                      <FavoriteMarketButton
+                        marketName={e.name}
+                        className="absolute right-2 top-2 z-10"
+                      />
                       <Link
                         to="/estabelecimento/$slug"
                         params={{ slug: slugifyEstablishment(e.name) }}
