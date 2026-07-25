@@ -690,62 +690,83 @@ function EstablishmentsPage() {
                 description={`${allFilteredItems.length} ${allFilteredItems.length === 1 ? "estabelecimento" : "estabelecimentos"} monitorados.`}
                 bodyClassName="p-0"
               >
-                <div className="flex flex-col gap-2 border-b border-border/60 p-2.5 md:flex-row md:items-center md:justify-between md:gap-3 md:p-4">
-                  <LocationControl loc={loc} variant="surface" />
-                  {referencePoint && (
-                    <span className="hidden md:inline text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-                      Referência ativa · distâncias estimadas
-                    </span>
-                  )}
-                </div>
-                <div className="grid grid-cols-2 gap-2 border-b border-border/60 p-2.5 md:flex md:items-center md:p-4">
-                  <div className="relative col-span-2 md:flex-1">
-                    <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-                    <Input
-                      value={q}
-                      onChange={(ev) => setQ(ev.target.value)}
-                      placeholder="Buscar mercado, bairro ou cidade"
-                      className="h-9 pl-9 md:h-10"
-                      inputMode="search"
-                    />
+                {/* Barra de comando — busca protagonista + filtros, fixa ao rolar */}
+                <div className="sticky top-0 z-20 border-b border-border/60 bg-card/95 backdrop-blur-md supports-[backdrop-filter]:bg-card/80">
+                  <span
+                    aria-hidden
+                    className="block h-px w-full"
+                    style={{
+                      background:
+                        "linear-gradient(90deg, transparent, color-mix(in oklab, var(--brand-gold) 75%, transparent) 50%, transparent)",
+                    }}
+                  />
+                  <div className="flex flex-col gap-2 p-2.5 md:flex-row md:items-center md:gap-2.5 md:p-3.5">
+                    <div className="relative min-w-0 flex-1">
+                      <Search
+                        className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--pc-gold-ink)]"
+                        aria-hidden
+                      />
+                      <Input
+                        value={q}
+                        onChange={(ev) => setQ(ev.target.value)}
+                        placeholder="Buscar mercado, bairro ou cidade"
+                        className="h-10 rounded-xl border-border/70 pl-9 text-[13.5px] shadow-sm focus-visible:ring-brand-gold"
+                        inputMode="search"
+                        aria-label="Buscar mercado, bairro ou cidade"
+                      />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 md:flex md:shrink-0 md:items-center">
+                      <Select value={neighborhood} onValueChange={setNeighborhood}>
+                        <SelectTrigger
+                          aria-label="Filtrar por bairro"
+                          className="h-10 w-full rounded-xl text-[12.5px] md:w-[168px]"
+                        >
+                          <SelectValue placeholder="Bairro" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="__all">Todos os bairros</SelectItem>
+                          {neighborhoods.map((n) => (
+                            <SelectItem key={n} value={n}>
+                              {n}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <Select value={sort} onValueChange={(v) => setSort(v as typeof sort)}>
+                        <SelectTrigger
+                          aria-label="Ordenar por"
+                          className="h-10 w-full rounded-xl text-[12.5px] md:w-[186px]"
+                        >
+                          <SelectValue placeholder="Ordenar" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="distance" disabled={!loc.hasReference}>
+                            Mais próximos {loc.hasReference ? "" : "(ative a localização)"}
+                          </SelectItem>
+                          <SelectItem value="neighborhood">Bairro (A→Z)</SelectItem>
+                          <SelectItem value="name">Nome (A→Z)</SelectItem>
+                          <SelectItem value="products">Mais produtos</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
-                  <Select value={neighborhood} onValueChange={setNeighborhood}>
-                    <SelectTrigger
-                      aria-label="Filtrar por bairro"
-                      className="h-9 w-full md:h-10 md:w-[190px]"
-                    >
-                      <SelectValue placeholder="Bairro" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="__all">Todos os bairros</SelectItem>
-                      {neighborhoods.map((n) => (
-                        <SelectItem key={n} value={n}>
-                          {n}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Select
-                    value={sort}
-                    onValueChange={(v) => setSort(v as typeof sort)}
-                  >
-                    <SelectTrigger
-                      aria-label="Ordenar por"
-                      className="h-9 w-full md:h-10 md:w-[210px]"
-                    >
-                      <SelectValue placeholder="Ordenar" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="distance" disabled={!loc.hasReference}>
-                        Ordenar: mais próximos {loc.hasReference ? "" : "(ative sua localização)"}
-                      </SelectItem>
-                      <SelectItem value="neighborhood">Ordenar: bairro (A→Z)</SelectItem>
-                      <SelectItem value="name">Ordenar: nome (A→Z)</SelectItem>
-                      <SelectItem value="products">Ordenar: mais produtos</SelectItem>
-                    </SelectContent>
-                  </Select>
-
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/50 px-2.5 py-2 md:px-3.5">
+                    <LocationControl loc={loc} variant="surface" />
+                    <span className="text-[10.5px] font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                      {referencePoint ? (
+                        <>Referência ativa · distâncias estimadas</>
+                      ) : (
+                        <>
+                          <span className="tabular-nums text-foreground">
+                            {allFilteredItems.length}
+                          </span>{" "}
+                          {allFilteredItems.length === 1 ? "resultado" : "resultados"}
+                        </>
+                      )}
+                    </span>
+                  </div>
                 </div>
+
 
 
                 {visibleItems.length === 0 ? (
