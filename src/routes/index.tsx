@@ -528,27 +528,7 @@ function HomePage() {
 
               <span aria-hidden className="mx-1 hidden h-3 w-px sm:inline-block" style={{ background: "rgba(255,255,255,0.14)" }} />
 
-              {/* Nav chips consolidados — no mobile mostra só 2, desktop mostra tudo */}
-              {[
-                { to: "/estabelecimentos", label: "Mercados", mobile: true },
-                { to: "/melhores-precos", label: "Ranking", mobile: true },
-                { to: "/colaborar", label: "Colaborar", mobile: false },
-                { to: "/planos", label: "Planos Plus", mobile: false },
-                { to: "/resgatar", label: "Resgatar código", mobile: false },
-              ].map((c) => (
-                <Link
-                  key={c.to}
-                  to={c.to}
-                  className={`${c.mobile ? "inline-flex" : "hidden sm:inline-flex"} items-center rounded-full border px-2.5 py-0.5 text-[11.5px] font-semibold transition-all hover:-translate-y-px`}
-                  style={{
-                    background: "color-mix(in oklab, var(--pc-home-gold) 10%, transparent)",
-                    borderColor: "color-mix(in oklab, var(--pc-home-gold) 32%, transparent)",
-                    color: "#F5C86A",
-                  }}
-                >
-                  {c.label}
-                </Link>
-              ))}
+
 
               {isLoggedOut ? (
                 <StartFreeDialog>
