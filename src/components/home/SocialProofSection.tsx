@@ -77,7 +77,7 @@ export function SocialProofSection() {
               className={`${serif} leading-tight truncate`}
               style={{ color: P.heading, fontSize: "clamp(1rem, 1.7vw, 1.3rem)", letterSpacing: "-0.01em" }}
             >
-              Feito com <span style={{ color: P.gold }}>quem economiza</span>
+              Feito com <span style={{ color: "var(--pc-gold-ink)" }}>quem economiza</span>
             </h2>
           </div>
 
