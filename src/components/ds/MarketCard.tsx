@@ -1,9 +1,11 @@
 import { forwardRef, type ReactNode } from "react";
 import { motion, type HTMLMotionProps } from "framer-motion";
-import { MapPin, Store, ArrowUpRight, Star } from "lucide-react";
+import { MapPin, Store, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSignedLogoUrl } from "@/hooks/use-signed-logo-urls";
 import { Badge } from "./Badge";
+import { RatingInline } from "./RatingStars";
+
 
 export interface MarketCardProps extends HTMLMotionProps<"article"> {
   name: string;
@@ -206,7 +208,7 @@ export const MarketCard = forwardRef<HTMLElement, MarketCardProps>(function Mark
           {badge}
         </div>
 
-        <div className="mt-0.5 flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-xs text-muted-foreground">
+        <div className="mt-0.5 flex flex-wrap items-center gap-x-2.5 gap-y-0.5 text-[12.5px] leading-snug text-muted-foreground">
           {neighborhood ? (
             <span className="inline-flex items-center gap-1">
               <MapPin className="h-3 w-3" aria-hidden />
@@ -217,13 +219,9 @@ export const MarketCard = forwardRef<HTMLElement, MarketCardProps>(function Mark
           {typeof productCount === "number" ? (
             <span className="tabular-nums">{productCount} produtos</span>
           ) : null}
-          {typeof rating === "number" ? (
-            <span className="inline-flex items-center gap-1 tabular-nums text-warning">
-              <Star className="h-3 w-3 fill-current" aria-hidden />
-              {rating.toFixed(1)}
-            </span>
-          ) : null}
+          {typeof rating === "number" ? <RatingInline value={rating} /> : null}
         </div>
+
       </div>
 
       {action ?? (
