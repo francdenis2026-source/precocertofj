@@ -718,7 +718,7 @@ function CodeVerifier({
               ? { color: "#991b1b", bg: "#fee2e2", dot: "#dc2626" }
               : c.state === "loading"
               ? { color: NAVY, bg: "#eef2ff", dot: "#6366f1" }
-              : { color: "#64748b", bg: "#f1f5f9", dot: "#cbd5e1" };
+              : { color: "#334155", bg: "#e2e8f0", dot: "#64748b" };
           return (
             <span
               key={c.label}
