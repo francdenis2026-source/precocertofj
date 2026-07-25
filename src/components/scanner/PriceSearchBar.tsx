@@ -611,10 +611,20 @@ export function PriceSearchBar({
                     )}
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-[13px] font-medium uppercase tracking-wide">
-                        <HighlightMatch text={s.displayName} tokens={highlightTokens} />
+                        {/* "loose" destaca prefixos (ex.: "mante" em "Manteiga") */}
+                        <HighlightMatch text={s.displayName} tokens={highlightTokens} mode="loose" />
                       </p>
                       <p className="truncate font-mono text-[10px] text-muted-foreground">
-                        {[s.brand, s.category].filter(Boolean).join(" · ") || "Produto"}
+                        {[s.brand, s.category].filter(Boolean).join(" · ") ? (
+                          <HighlightMatch
+                            text={[s.brand, s.category].filter(Boolean).join(" · ")}
+                            tokens={highlightTokens}
+                            mode="loose"
+                            className="rounded bg-accent/20 px-0.5 font-bold text-foreground"
+                          />
+                        ) : (
+                          "Produto"
+                        )}
                       </p>
                     </div>
                   </button>
@@ -623,7 +633,8 @@ export function PriceSearchBar({
 
               </ul>
             </div>
-          )}
+          </AnchoredDropdown>
+
 
         </div>
         <button
