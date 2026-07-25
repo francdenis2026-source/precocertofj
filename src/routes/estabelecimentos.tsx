@@ -633,13 +633,16 @@ function EstablishmentsPage() {
 
 
         {isLoading && (
-          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-            <CardSkeleton />
-            <CardSkeleton />
-            <CardSkeleton />
-            <CardSkeleton />
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            <MarketEditorialCardSkeleton />
+            <MarketEditorialCardSkeleton />
+            <MarketEditorialCardSkeleton />
+            <MarketEditorialCardSkeleton />
+            <MarketEditorialCardSkeleton />
+            <MarketEditorialCardSkeleton />
           </div>
         )}
+
 
         {error && (
           <div className="rounded-xl border border-destructive/40 bg-destructive/5 p-4 text-[14px] text-destructive">
