@@ -220,18 +220,18 @@ export function SearchDiscovery({ onPickQuery }: Props) {
       )}
 
       {/* Sinal de vida — cartão próprio, mesmo padrão dos HeroMetric */}
-      <section className="rounded-xl border border-border bg-card p-2.5 shadow-sm sm:p-3">
+      <section className="rounded-2xl border border-border bg-card p-2.5 shadow-sm sm:p-3">
         <div className="grid grid-cols-3 gap-2">
           <StatCell
             icon={<TrendingDown className="h-4 w-4" aria-hidden />}
             label="Preços em queda"
-            value={stats.data ? String(stats.data.priceDrops7d ?? 0) : "—"}
+            value={stats.data ? int(stats.data.priceDrops7d ?? 0) : "—"}
             hint="7 dias"
           />
           <StatCell
             icon={<Sparkles className="h-4 w-4" aria-hidden />}
             label="Produtos monitorados"
-            value={stats.data ? String(stats.data.products ?? 0) : "—"}
+            value={stats.data ? int(stats.data.products ?? 0) : "—"}
             hint="ativos"
           />
           <StatCell
