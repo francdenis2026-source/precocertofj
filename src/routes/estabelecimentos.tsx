@@ -191,6 +191,9 @@ function EstablishmentsPage() {
     if (!data) return [] as EstablishmentsOverview["items"];
     const term = q.trim().toLowerCase();
     let list = data.items.slice();
+    if (onlyFavorites) {
+      list = list.filter((e) => favSet.has(e.name.trim().toLowerCase()));
+    }
     if (kindFilter !== "__all") {
       list = list.filter((e) => (e.kind ?? "outro") === kindFilter);
     }
