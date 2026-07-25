@@ -112,6 +112,16 @@ export async function performPriceSearch(data: {
         !nameHasExcludedToken(r.product_name ?? "", synonymGroup),
     );
     excludedByPureFilter = before - list.length;
+  } else if (synonymGroup) {
+    const canonicalRows = list.filter(
+      (r) =>
+        nameStartsWithPrimarySynonym(r.product_name ?? "", synonymGroup) &&
+        !nameHasExcludedToken(r.product_name ?? "", synonymGroup),
+    );
+    if (canonicalRows.length >= 2) {
+      excludedByPureFilter = list.length - canonicalRows.length;
+      list = canonicalRows;
+    }
   }
 
   type SuggRow = {
