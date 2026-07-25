@@ -27,24 +27,42 @@ export function HomeAnchorNav({ onSearch }: { onSearch: (q: string) => void }) {
   const [showMini, setShowMini] = useState(false);
   const railRef = useRef<HTMLDivElement | null>(null);
 
-  // Scroll-spy via IntersectionObserver
+  // Scroll-spy via IntersectionObserver + sync do #hash na URL (replaceState)
   useEffect(() => {
     const els = ANCHORS
       .map((a) => document.getElementById(a.id))
       .filter((e): e is HTMLElement => !!e);
     if (!els.length) return;
+
+    let rafId = 0;
+    const syncHash = (id: string) => {
+      const target = id === "hero" ? "" : `#${id}`;
+      const current = window.location.hash;
+      if (current === target) return;
+      const url = window.location.pathname + window.location.search + target;
+      window.history.replaceState(window.history.state, "", url);
+    };
+
     const io = new IntersectionObserver(
       (entries) => {
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
-        if (visible[0]) setActive(visible[0].target.id);
+        if (!visible[0]) return;
+        const id = visible[0].target.id;
+        setActive(id);
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => syncHash(id));
       },
       { rootMargin: "-40% 0px -50% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] },
     );
     els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    return () => {
+      io.disconnect();
+      cancelAnimationFrame(rafId);
+    };
   }, []);
+
 
   // Mostrar mini-busca ao rolar para fora do hero
   useEffect(() => {
