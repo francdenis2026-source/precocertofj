@@ -109,6 +109,16 @@ const GROUPS: SynonymGroup[] = [
     synonyms: ["feijao", "feijao carioca", "feijao preto", "feijao fradinho"],
     excludeTokens: ["biscoito", "tempero"],
   },
+  {
+    canonical: "manteiga",
+    synonyms: ["manteiga", "manteiga com sal", "manteiga sem sal"],
+    excludeTokens: ["margarina", "biscoito", "bolacha", "pipoca", "requeijao", "queijo", "creme"],
+  },
+  {
+    canonical: "margarina",
+    synonyms: ["margarina", "creme vegetal"],
+    excludeTokens: ["manteiga", "biscoito", "bolacha"],
+  },
 ];
 
 const CANONICAL_INDEX = new Map<string, SynonymGroup>(
