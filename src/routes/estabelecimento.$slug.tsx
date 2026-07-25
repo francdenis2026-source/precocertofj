@@ -213,21 +213,32 @@ function EstablishmentPage() {
 
 
         <Card className="overflow-hidden">
-          <CardHeader className="flex flex-row items-start gap-4">
-            {data.store.logoUrl ? (
-              <img
-                src={data.store.logoUrl}
-                alt={data.store.name}
-                className="h-20 w-20 rounded-full border border-border object-cover"
-              />
-            ) : (
-              <div className="grid h-20 w-20 place-items-center rounded-full border border-border bg-muted text-lg font-bold text-muted-foreground">
-                {data.store.name.substring(0, 2).toUpperCase()}
-              </div>
-            )}
+          <CardHeader className="flex flex-row items-start gap-4 sm:gap-5">
+            <figure className="m-0 shrink-0 text-center">
+              {data.store.logoUrl ? (
+                <img
+                  src={data.store.logoUrl}
+                  alt={`Logomarca do ${data.store.name}`}
+                  loading="lazy"
+                  className="h-20 w-20 rounded-2xl border border-border bg-card object-contain p-1.5 shadow-sm sm:h-24 sm:w-24"
+                />
+              ) : (
+                <div className="grid h-20 w-20 place-items-center rounded-2xl border border-border bg-muted text-lg font-bold tracking-tight text-muted-foreground sm:h-24 sm:w-24">
+                  {data.store.name.substring(0, 2).toUpperCase()}
+                </div>
+              )}
+              <figcaption className="mt-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                Logomarca
+              </figcaption>
+            </figure>
             <div className="flex-1">
-              <div className="flex flex-wrap items-start justify-between gap-2">
-                <CardTitle className="text-2xl">{data.store.name}</CardTitle>
+              <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">
+                Mercado parceiro
+              </div>
+              <div className="mt-1 flex flex-wrap items-start justify-between gap-2">
+                <CardTitle className="font-serif text-[22px] font-semibold leading-tight tracking-tight sm:text-[26px]">
+                  {data.store.name}
+                </CardTitle>
                 <div className="flex flex-wrap items-center gap-2">
                   <RatingBadge value={PLATFORM_RATING.value} count={PLATFORM_RATING.count} />
                   <FavoriteMarketButton marketName={data.store.name} variant="inline" />
@@ -237,6 +248,7 @@ function EstablishmentPage() {
                 {data.products.length} produto{data.products.length === 1 ? "" : "s"} publicados
                 {data.categories.length > 0 && ` · ${data.categories.length} categorias`}
               </CardDescription>
+
 
 
               <div className="mt-3 flex flex-wrap items-center gap-2">
