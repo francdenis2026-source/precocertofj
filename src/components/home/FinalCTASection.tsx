@@ -1,15 +1,29 @@
-import { Link } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, Ticket, Search } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { ArrowRight, Sparkles, Ticket, Search, Loader2 } from "lucide-react";
+import { useState, type FormEvent } from "react";
 
 const P = {
   navy: "var(--pc-home-navy)",
   gold: "var(--pc-home-gold)",
-  goldSoft: "var(--pc-home-gold-soft)",
 };
 
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 
 export function FinalCTASection() {
+  const navigate = useNavigate();
+  const [q, setQ] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const onSubmit = (ev: FormEvent) => {
+    ev.preventDefault();
+    const term = q.trim();
+    setLoading(true);
+    // Feedback imediato — navega no próximo tick para permitir render do estado de loading.
+    setTimeout(() => {
+      navigate({ to: "/buscar", search: term ? { q: term } : undefined });
+    }, 60);
+  };
+
   return (
     <section aria-labelledby="final-cta-title" className="pc-container pt-10 sm:pt-12">
       <div
@@ -26,7 +40,6 @@ export function FinalCTASection() {
             color: "#F5F6FA",
           }}
         >
-          {/* Padrão diagonal sutil */}
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 opacity-[0.05]"
@@ -34,7 +47,6 @@ export function FinalCTASection() {
               backgroundImage: `repeating-linear-gradient(-45deg, ${P.gold} 0 1px, transparent 1px 14px)`,
             }}
           />
-          {/* Glow dourado */}
           <div
             aria-hidden
             className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full"
@@ -45,7 +57,7 @@ export function FinalCTASection() {
             }}
           />
 
-          <div className="relative flex flex-col items-center gap-6 text-center sm:gap-7">
+          <div className="relative mx-auto flex max-w-2xl flex-col items-center gap-5 text-center">
             <span
               className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[10.5px] font-bold uppercase tracking-[0.2em]"
               style={{
@@ -59,62 +71,93 @@ export function FinalCTASection() {
 
             <h2
               id="final-cta-title"
-              className={`${serif} max-w-3xl leading-[1.05] tracking-tight`}
+              className={`${serif} leading-[1.05] tracking-tight`}
               style={{
                 color: "#F8FAFC",
-                fontSize: "clamp(1.75rem, 4vw, 2.75rem)",
+                fontSize: "clamp(1.6rem, 3.6vw, 2.5rem)",
               }}
             >
-              A sua próxima compra pode custar até{" "}
+              Encontre o preço certo em{" "}
               <span className="italic" style={{ color: "#F5C86A" }}>
-                40% menos
+                segundos
               </span>
               .
             </h2>
 
-            <p
-              className="max-w-xl text-[14px] leading-relaxed sm:text-[15px]"
-              style={{ color: "rgba(255,255,255,0.72)" }}
+            {/* Ação primária: busca inline com feedback imediato */}
+            <form
+              onSubmit={onSubmit}
+              className="w-full"
+              role="search"
+              aria-label="Buscar preço agora"
             >
-              Junte-se a centenas de famílias de Feijó que já economizam a cada visita ao mercado.
-              É grátis para começar.
-            </p>
-
-            <div className="flex w-full flex-col items-stretch justify-center gap-3 sm:w-auto sm:flex-row sm:items-center">
-              <Link
-                to="/buscar"
-                className="group inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-[14px] font-bold uppercase tracking-wide shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl active:scale-[0.98]"
-                style={{ background: P.gold, color: P.navy }}
-              >
-                <Search className="h-4 w-4" strokeWidth={2.5} aria-hidden />
-                Buscar preço agora
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
-              </Link>
-
-              <Link
-                to="/planos"
-                className="group inline-flex items-center justify-center gap-2 rounded-xl border px-6 py-3 text-[14px] font-bold uppercase tracking-wide transition-all hover:-translate-y-px"
+              <div
+                className="flex items-center gap-2 rounded-2xl border p-1.5 shadow-lg transition-colors focus-within:border-[color:var(--pc-home-gold)]"
                 style={{
-                  background: "rgba(255,255,255,0.06)",
-                  borderColor: "rgba(255,255,255,0.22)",
-                  color: "#ffffff",
+                  background: "rgba(255,255,255,0.97)",
+                  borderColor: "rgba(255,255,255,0.2)",
                 }}
               >
+                <div className="flex flex-1 items-center gap-2 pl-3">
+                  <Search className="h-4 w-4 shrink-0 text-slate-500" aria-hidden />
+                  <input
+                    type="search"
+                    value={q}
+                    onChange={(e) => setQ(e.target.value)}
+                    placeholder="Ex.: Arroz, Feijão, Leite…"
+                    className="min-w-0 flex-1 bg-transparent py-2.5 text-[14px] text-slate-900 outline-none placeholder:text-slate-400"
+                    aria-label="O que você procura?"
+                    autoComplete="off"
+                    disabled={loading}
+                  />
+                </div>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="group inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-[13px] font-bold uppercase tracking-wide shadow-sm transition-all hover:brightness-105 active:scale-[0.98] disabled:cursor-wait disabled:opacity-90"
+                  style={{ background: P.gold, color: P.navy }}
+                  aria-live="polite"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+                      Abrindo…
+                    </>
+                  ) : (
+                    <>
+                      Buscar
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
+                    </>
+                  )}
+                </button>
+              </div>
+              <p
+                className="mt-2 text-[11.5px]"
+                style={{ color: "rgba(255,255,255,0.6)" }}
+              >
+                Grátis, sem cadastro. Enter para buscar.
+              </p>
+            </form>
+
+            {/* Ações secundárias — texto discreto para não competir com a busca */}
+            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-[12.5px]">
+              <Link
+                to="/planos"
+                className="inline-flex items-center gap-1 font-semibold text-white/85 transition-colors hover:text-white"
+              >
                 Ver planos Plus
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.4} />
+                <ArrowRight className="h-3 w-3" strokeWidth={2.4} />
+              </Link>
+              <span aria-hidden className="text-white/25">·</span>
+              <Link
+                to="/resgatar"
+                className="inline-flex items-center gap-1 font-semibold transition-colors hover:brightness-125"
+                style={{ color: "#F5C86A" }}
+              >
+                <Ticket className="h-3.5 w-3.5" strokeWidth={2.4} />
+                Já tenho um código
               </Link>
             </div>
-
-            {/* Sub-link — resgatar código */}
-            <Link
-              to="/resgatar"
-              className="inline-flex items-center gap-1.5 text-[12.5px] font-semibold transition-colors hover:brightness-125"
-              style={{ color: "#F5C86A" }}
-            >
-              <Ticket className="h-3.5 w-3.5" strokeWidth={2.4} />
-              Já tenho um código de licença
-              <ArrowRight className="h-3 w-3" strokeWidth={2.4} />
-            </Link>
           </div>
         </div>
       </div>
