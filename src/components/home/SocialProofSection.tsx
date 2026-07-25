@@ -127,8 +127,8 @@ export function SocialProofSection() {
                   aria-hidden
                   className="grid h-7 w-7 shrink-0 place-items-center rounded-full text-[10.5px] font-bold"
                   style={{
-                    background: "color-mix(in oklab, var(--pc-home-navy) 12%, transparent)",
-                    color: P.navy,
+                    background: "color-mix(in oklab, var(--pc-home-gold) 20%, transparent)",
+                    color: P.heading,
                   }}
                 >
                   {t.initials}

@@ -429,6 +429,7 @@ function HomePage() {
                   inputMode="search"
                   placeholder="O que você procura hoje? (ex.: Arroz, Feijão, Leite…)"
                   aria-label="Buscar produto"
+                  role="combobox"
                   aria-autocomplete="list"
                   aria-expanded={showSuggest && suggestions.length > 0}
                   aria-controls="home-suggest-list"
