@@ -297,7 +297,7 @@
   --badge-primary-fg: oklch(0.82 0.10 250);
   --badge-warning-fg: var(--warning);
   --destructive: oklch(0.70 0.20 25);
-  --destructive-foreground: oklch(0.99 0.002 250);
+  --destructive-foreground: oklch(0.14 0.04 258);
 
   --border: oklch(0.345 0.05 258);
   --input: oklch(0.345 0.05 258);

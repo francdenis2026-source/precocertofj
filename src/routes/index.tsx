@@ -715,7 +715,7 @@ function HomePage() {
                   </span>
                   <span
                     className="mt-0.5 hidden text-[11px] font-medium sm:block"
-                    style={{ color: "color-mix(in oklab, var(--pc-home-ink) 92%, transparent)" }}
+                    style={{ color: "var(--pc-home-ink)" }}
                   >
                     Ver ofertas
                   </span>
@@ -758,7 +758,7 @@ function HomePage() {
                 </span>
                 <span
                   className="mt-0.5 hidden text-[11px] font-medium sm:block"
-                  style={{ color: "color-mix(in oklab, var(--pc-home-ink) 92%, transparent)" }}
+                  style={{ color: "var(--pc-home-ink)" }}
                 >
                   + 8 categorias
                 </span>

@@ -165,7 +165,7 @@ const CASES = [
   { label: "Plus · chevron sobre gold", bg: [GOLD, `color-mix(in oklab, ${NAVY} 14%, transparent)`], fg: NAVY, min: 3 },
   // ---- Tiles de categoria ----
   { label: "Categoria · rótulo", bg: [CARD], fg: "var(--pc-home-heading)", min: 4.5 },
-  { label: "Categoria · 'Ver ofertas'", bg: [CARD], fg: "color-mix(in oklab, var(--pc-home-ink) 92%, transparent)", min: 4.5 },
+  { label: "Categoria · 'Ver ofertas'", bg: [CARD], fg: "var(--pc-home-ink)", min: 4.5 },
   { label: "Categoria · ícone gold", bg: [CARD, `color-mix(in oklab, ${GOLD} 18%, transparent)`], fg: GOLD_INK, min: 3 },
   { label: "Categoria · seta gold", bg: [CARD], fg: GOLD_INK, min: 3 },
   { label: "Ver todas · rótulo", bg: [CARD, `color-mix(in oklab, ${GOLD} 8%, transparent)`], fg: "var(--pc-home-heading)", min: 4.5 },
