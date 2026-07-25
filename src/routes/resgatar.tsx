@@ -431,7 +431,7 @@ function RedeemPage() {
                     placeholder="PC-XXXX-XXXX-XXXX"
                     aria-invalid={touched && validation.level === "warn"}
                     aria-describedby="license-code-help"
-                    className="h-12 w-full rounded-lg border bg-white pl-9 pr-3 text-[15px] font-bold uppercase tracking-[0.14em] outline-none transition focus:ring-2"
+                    className="h-12 w-full rounded-lg border bg-white pl-9 pr-3 text-[15px] font-bold uppercase tracking-[0.14em] outline-none transition placeholder:font-semibold placeholder:tracking-[0.14em] placeholder:text-slate-400 focus:ring-2"
                     style={{
                       fontFamily: MONO,
                       color: INK,
@@ -440,7 +440,7 @@ function RedeemPage() {
                           ? "#dc2626"
                           : validation.level === "ok"
                           ? "#16a34a"
-                          : LINE,
+                          : "#cbd5e1",
                     } as React.CSSProperties}
 
                   />
@@ -448,8 +448,8 @@ function RedeemPage() {
                 <button
                   type="button"
                   onClick={pasteFromClipboard}
-                  className="inline-flex items-center gap-1.5 rounded-lg border px-3 text-[12px] font-semibold transition hover:bg-slate-50"
-                  style={{ borderColor: LINE, color: NAVY }}
+                  className="inline-flex items-center gap-1.5 rounded-lg border-2 px-3 text-[12px] font-semibold transition hover:bg-slate-50"
+                  style={{ borderColor: "#cbd5e1", color: NAVY }}
                   aria-label="Colar código da área de transferência"
                 >
                   <Clipboard className="h-3.5 w-3.5" />
@@ -550,9 +550,9 @@ function RedeemPage() {
                 style={{
                   background:
                     canSubmit && !submitting
-                      ? `linear-gradient(135deg, ${GOLD} 0%, ${GOLD_SOFT} 100%)`
-                      : `linear-gradient(135deg, ${GOLD} 0%, #e6c877 100%)`,
-                  color: NAVY,
+                      ? GOLD
+                      : "#e6c877",
+                  color: INK,
                   boxShadow:
                     canSubmit && !submitting
                       ? `0 12px 28px -10px ${GOLD}, inset 0 1px 0 rgba(255,255,255,0.35)`
@@ -597,10 +597,10 @@ function RedeemPage() {
 
 
               {/* Garantias em linha compacta */}
-              <ul className="mt-4 grid grid-cols-3 gap-2 border-t pt-3 text-[10.5px]" style={{ borderColor: LINE, color: MUTED }}>
-                <li className="flex items-center gap-1"><ShieldCheck className="h-3 w-3" style={{ color: GOLD }} />Uso único</li>
-                <li className="flex items-center gap-1"><KeyRound className="h-3 w-3" style={{ color: GOLD }} />Ligado ao CPF</li>
-                <li className="flex items-center gap-1"><CheckCircle2 className="h-3 w-3" style={{ color: GOLD }} />Ativação imediata</li>
+              <ul className="mt-4 grid grid-cols-3 gap-2 border-t pt-3 text-[10.5px] font-semibold" style={{ borderColor: "#cbd5e1", color: "#334155" }}>
+                <li className="flex items-center gap-1"><ShieldCheck className="h-3 w-3" style={{ color: NAVY }} />Uso único</li>
+                <li className="flex items-center gap-1"><KeyRound className="h-3 w-3" style={{ color: NAVY }} />Ligado ao CPF</li>
+                <li className="flex items-center gap-1"><CheckCircle2 className="h-3 w-3" style={{ color: NAVY }} />Ativação imediata</li>
 
               </ul>
             </form>
@@ -679,15 +679,15 @@ function CodeVerifier({
     <div
       className="mt-2 flex items-center gap-1.5 rounded-md border px-2 py-1.5"
       style={{
-        borderColor: allOk ? "#bbf7d0" : serverBad ? "#fecaca" : LINE,
-        background: allOk ? "#f0fdf4" : serverBad ? "#fef2f2" : "#fafbfd",
+        borderColor: allOk ? "#86efac" : serverBad ? "#fca5a5" : "#cbd5e1",
+        background: allOk ? "#f0fdf4" : serverBad ? "#fef2f2" : "#f8fafc",
       }}
       aria-label="Verificação do código"
       aria-live="polite"
     >
       <span
         className="flex items-center gap-1 text-[9.5px] font-bold uppercase tracking-[0.14em]"
-        style={{ color: allOk ? "#15803d" : serverBad ? "#991b1b" : NAVY2 }}
+        style={{ color: allOk ? "#166534" : serverBad ? "#991b1b" : INK }}
       >
         {submitting || serverChecking ? (
           <Loader2 className="h-3 w-3 animate-spin" />
@@ -718,7 +718,7 @@ function CodeVerifier({
               ? { color: "#991b1b", bg: "#fee2e2", dot: "#dc2626" }
               : c.state === "loading"
               ? { color: NAVY, bg: "#eef2ff", dot: "#6366f1" }
-              : { color: "#64748b", bg: "#f1f5f9", dot: "#cbd5e1" };
+              : { color: "#334155", bg: "#e2e8f0", dot: "#64748b" };
           return (
             <span
               key={c.label}
