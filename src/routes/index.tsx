@@ -5,7 +5,6 @@ import { useServerFn } from "@tanstack/react-start";
 import { getProductSuggestions } from "@/lib/products-suggest.functions";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import {
-  ChevronRight,
   RefreshCw,
   Search,
   ArrowRight,
