@@ -20,7 +20,8 @@ function oklchToRgb(L, C, hDeg) {
   const r =  4.0767416621 * l3 - 3.3077115913 * m3 + 0.2309699292 * s3;
   const g = -1.2684380046 * l3 + 2.6097574011 * m3 - 0.3413193965 * s3;
   const bl = -0.0041960863 * l3 - 0.7034186147 * m3 + 1.707614701 * s3;
-  return [r, g, bl].map((v) => Math.min(1, Math.max(0, v)));
+  const enc = (u) => (u <= 0.0031308 ? 12.92 * u : 1.055 * u ** (1 / 2.4) - 0.055);
+  return [r, g, bl].map((v) => Math.min(1, Math.max(0, enc(v))));
 }
 function relLuminance([r, g, b]) {
   const lin = (u) => (u <= 0.04045 ? u / 12.92 : ((u + 0.055) / 1.055) ** 2.4);
