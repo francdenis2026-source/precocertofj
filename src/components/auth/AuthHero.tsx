@@ -51,11 +51,11 @@ const PRESETS: Record<AuthHeroVariant, Preset> = {
     badge: { icon: UserPlus, label: "Cadastro gratuito" },
     title: "Compare preços",
     highlight: "de verdade.",
-    subtitle: "Crie sua conta com CPF e PIN em 30 segundos e comece a comparar os mercados de Feijó.",
+    subtitle: "Crie sua conta com CPF e PIN em menos de 1 minuto e comece a comparar os mercados parceiros de Feijó.",
     perks: [
-      "Comparativo em tempo real entre mercados",
-      "Alertas de queda de preço",
-      "Bônus: 30 dias grátis ao enviar sua nota",
+      "Comparativo em tempo real entre mercados parceiros",
+      "Alertas de queda de preço no seu bairro",
+      "Bônus: 30 dias grátis ao enviar sua primeira nota",
     ],
     trust: {
       icon: ShieldCheck,
