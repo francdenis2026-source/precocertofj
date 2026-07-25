@@ -749,10 +749,21 @@ export function PriceSearchBar({
           )}
           {result.samples === 0 ? (
             <>
-              <p className="rounded-lg border border-border bg-background p-3 text-center font-mono text-[10px] text-muted-foreground">
-                Nenhum preço encontrado para “{result.query}”. Faça um scan para
-                cadastrar o primeiro.
-              </p>
+              <SearchEmptyState
+                query={result.query}
+                recent={history.map((h) => h.query)}
+                onSearch={(term) => {
+                  const next = normalizeInput(term);
+                  setInputValue(next);
+                  setShowSuggest(false);
+                  runQuery(next);
+                }}
+                onClearQuery={clear}
+                filterShortcuts={filterShortcuts}
+                activeFilterCount={activeFilterCount}
+                onClearFilters={onClearFilters}
+              />
+
               {didYouMean && (
                 <button
                   type="button"
