@@ -150,19 +150,31 @@ function RecantoDaCarnePage() {
         </Link>
 
         <Card className="overflow-hidden">
-          <CardHeader className="flex flex-row items-start gap-4">
+          <CardHeader className="flex flex-row items-start gap-4 sm:gap-5">
             {data.store.logoUrl && (
-              <img
-                src={data.store.logoUrl}
-                alt="Recanto da Carne"
-                className="h-20 w-20 rounded-full border border-border object-cover"
-              />
+              <figure className="m-0 shrink-0 text-center">
+                <img
+                  src={data.store.logoUrl}
+                  alt="Logomarca do Recanto da Carne"
+                  loading="lazy"
+                  className="h-20 w-20 rounded-2xl border border-border bg-card object-contain p-1.5 shadow-sm sm:h-24 sm:w-24"
+                />
+                <figcaption className="mt-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                  Logomarca
+                </figcaption>
+              </figure>
             )}
             <div className="flex-1">
-              <div className="flex flex-wrap items-start justify-between gap-2">
-                <CardTitle className="text-2xl">Recanto da Carne</CardTitle>
+              <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">
+                Mercado parceiro
+              </div>
+              <div className="mt-1 flex flex-wrap items-start justify-between gap-2">
+                <CardTitle className="font-serif text-[22px] font-semibold leading-tight tracking-tight sm:text-[26px]">
+                  Recanto da Carne
+                </CardTitle>
                 <RatingBadge value={PLATFORM_RATING.value} count={PLATFORM_RATING.count} />
               </div>
+
               <CardDescription className="mt-1 text-[12.5px] leading-snug">
                 Açougue · {data.products.length} produto{data.products.length === 1 ? "" : "s"} publicados
               </CardDescription>
