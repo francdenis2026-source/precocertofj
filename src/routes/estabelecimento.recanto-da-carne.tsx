@@ -35,6 +35,8 @@ import {
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ProductListCard } from "@/components/product/ProductListCard";
+import { RatingBadge, PLATFORM_RATING } from "@/components/ds/RatingStars";
+
 import { EmptyState, LoadingGrid, RouteError } from "@/components/feedback";
 
 const STORE_ID = "2de4712e-e767-4cfe-acf0-1ec111a316b8";
