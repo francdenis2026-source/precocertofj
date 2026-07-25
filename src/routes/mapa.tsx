@@ -23,7 +23,6 @@ import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 import { useSession } from "@/hooks/useSession";
 import { toast } from "sonner";
 import { EmptyState, LoadingSkeleton, PageShell, PageShellContent } from "@/components/layout";
-import { BackButton } from "@/components/layout/BackButton";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { Link } from "@tanstack/react-router";
 import {
