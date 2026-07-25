@@ -615,7 +615,7 @@ function HomePage() {
                       type="button"
                       onClick={() => setSpotlight(s.kind)}
                       aria-label={`${s.k} — ${s.l}. Ver detalhes.`}
-                      className={`group flex flex-col items-center gap-1.5 rounded-xl px-2 py-2 text-center transition-colors hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)] ${
+                      className={`group flex min-w-0 flex-col items-center gap-1 rounded-xl px-1 py-1.5 text-center transition-colors hover:bg-white/[0.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)] sm:gap-1.5 sm:px-2 sm:py-2 ${
                         i > 0 ? "border-l border-white/[0.06] sm:border-l" : ""
                       }`}
                     >
@@ -623,7 +623,7 @@ function HomePage() {
                         className={`${serif} tabular-nums`}
                         style={{
                           color: "#F5C86A",
-                          fontSize: "clamp(1.25rem, 3vw, 2rem)",
+                          fontSize: "clamp(1.1rem, 3vw, 2rem)",
                           lineHeight: 1,
                           letterSpacing: "-0.01em",
                         }}
@@ -631,15 +631,17 @@ function HomePage() {
                         {s.k}
                       </div>
                       <div
-                        className="flex items-center gap-1 text-[9px] font-bold uppercase tracking-[0.16em] sm:text-[10px] sm:tracking-[0.2em]"
+                        className="flex min-w-0 items-center gap-1 text-[9px] font-bold uppercase tracking-[0.12em] sm:text-[10px] sm:tracking-[0.2em]"
                         style={{ color: "rgba(255,255,255,0.6)" }}
                       >
                         <span className="hidden sm:inline-flex" aria-hidden style={{ color: P.goldSoft }}>
                           {s.icon}
                         </span>
-                        <span className="truncate">{s.l}</span>
+                        <span className="truncate sm:hidden">{s.lShort}</span>
+                        <span className="hidden truncate sm:inline">{s.l}</span>
                       </div>
                     </button>
+
                   </TooltipTrigger>
                   <TooltipContent side="bottom" className="max-w-[240px] text-[12px] leading-snug">
                     {s.tip}
