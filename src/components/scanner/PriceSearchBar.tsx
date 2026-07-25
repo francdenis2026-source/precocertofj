@@ -499,12 +499,20 @@ export function PriceSearchBar({
             </button>
           )}
 
-          {showHistory && (
-            <div
-              className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 max-h-72 overflow-auto rounded-2xl border border-primary/20 bg-background shadow-lg"
-              role="listbox"
-              aria-label="Buscas recentes"
-            >
+          {/*
+            Portal ancorado: no mobile a lista ficava recortada/coberta por
+            headers e barras sticky quando era `absolute` dentro da seção.
+            O AnchoredDropdown renderiza em `position: fixed` no <body>, com
+            reposicionamento em scroll/resize e fechamento por clique fora/Esc.
+          */}
+          <AnchoredDropdown
+            anchorRef={containerRef}
+            open={showHistory}
+            onClose={() => setShowSuggest(false)}
+            maxHeight={288}
+            ariaLabel="Buscas recentes"
+          >
+            <div>
               <div className="flex items-center justify-between px-3 py-1.5 border-b border-border">
                 <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
                   Buscas recentes
@@ -517,7 +525,7 @@ export function PriceSearchBar({
                   Limpar
                 </button>
               </div>
-              <ul>
+              <ul role="listbox" aria-label="Buscas recentes">
                 {history.map((h) => (
                   <li key={h.query} role="option" aria-selected={false}>
                     <div className="group flex items-center gap-2 px-3 py-2 text-left text-sm text-foreground transition hover:bg-primary/5">
@@ -542,10 +550,17 @@ export function PriceSearchBar({
                 ))}
               </ul>
             </div>
-          )}
+          </AnchoredDropdown>
 
-          {showList && (
-            <div className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 max-h-80 overflow-auto rounded-2xl border border-primary/20 bg-background shadow-lg">
+          <AnchoredDropdown
+            anchorRef={containerRef}
+            open={showList}
+            onClose={() => setShowSuggest(false)}
+            maxHeight={320}
+            ariaLabel="Sugestões de produtos"
+          >
+            <div>
+
               {didYouMean && (
                 <button
                   type="button"
