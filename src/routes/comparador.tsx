@@ -960,8 +960,13 @@ function ComparisonTableRow({
       </td>
       <td className="hidden px-4 py-3 text-right md:table-cell">
         {isMulti ? (
-          <span className="font-mono text-sm text-muted-foreground line-through">
-            {formatBRL(Number(row.avg_price))}
+          <span className="inline-flex flex-col items-end">
+            <span className="font-mono text-sm text-muted-foreground line-through">
+              {formatBRL(Number(row.avg_price))}
+            </span>
+            <span className="font-mono text-[10.5px] text-muted-foreground/80">
+              maior {formatBRL(Number(row.max_price))}
+            </span>
           </span>
         ) : (
           <span className="text-xs text-muted-foreground">—</span>
@@ -1150,6 +1155,15 @@ function ProductCard({
             isMulti={isMulti}
             size="sm"
           />
+          {isMulti && (
+            <p className="mt-1 truncate text-[9.5px] leading-tight text-muted-foreground">
+              Maior no município:{" "}
+              <span className="tabular-nums font-medium text-foreground/80">
+                {formatBRL(Number(row.max_price))}
+              </span>
+              {stores.length > 1 ? ` — ${shortenStoreName(stores[stores.length - 1].store_name)}` : ""}
+            </p>
+          )}
           <div className="mt-1 flex min-h-4 flex-wrap items-center gap-1">
             <UnitPriceBadge
               price={Number(row.min_price)}
