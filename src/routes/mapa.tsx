@@ -670,8 +670,7 @@ function NeighborhoodsPage() {
           </div>
         )}
       </main>
-      <SiteFooter />
-      <MobileNav />
-    </div>
+      </div>
+    </PageShell>
   );
 }
