@@ -20,6 +20,9 @@ import { getPublicStoreCatalog, type PublicStoreProduct } from "@/lib/stores-pub
 import { getPublicPriceHistory } from "@/lib/store-public-history.functions";
 import { resolveEstablishmentBySlug } from "@/lib/establishment-slug.functions";
 import { normalize } from "@/lib/search-tokens";
+import { useUserLocation } from "@/hooks/useUserLocation";
+import { LocationControl } from "@/components/location/LocationControl";
+import { formatDistance, haversineKm, resolveEstablishmentPosition } from "@/lib/geo";
 import { Button } from "@/components/ui/button";
 
 import { Input } from "@/components/ui/input";
