@@ -328,6 +328,59 @@ function ComparadorPage() {
     return rows.find((r) => Number(r.store_count) > 1) ?? rows[0];
   }, [rows, q]);
 
+  /**
+   * Grupo equivalente: mesmos termos buscados + mesmo tamanho + mesma
+   * categoria, atravessando marcas (ex.: óleo de soja 900ml Coamo/Soya/
+   * Concórdia). Garante que o "menor preço" mostrado seja realmente o mais
+   * baixo do município para aquele item — e não o da marca mais popular.
+   */
+  const equivalentRanking = useMemo(() => {
+    if (!referenceRow) return null;
+    const refIndex = rows.findIndex((r) => r.product_key === referenceRow.product_key);
+    if (refIndex < 0) return null;
+    const idxs = selectEquivalentIndexes(
+      rows.map((r) => ({
+        name: r.display_name,
+        category: r.category,
+        sizeValue: r.size_value,
+        sizeUnit: r.size_unit,
+      })),
+      q,
+      refIndex,
+    );
+    const members = idxs.map((i) => rows[i]).filter(Boolean);
+    if (members.length <= 1) return null;
+
+    // Melhor preço por mercado dentro do grupo (produto mais barato da loja).
+    const byStore = new Map<string, { store_name: string; establishment_id?: string | null; price: number; product_name?: string | null; last_seen_at?: string | null }>();
+    for (const m of members) {
+      for (const s of m.stores ?? []) {
+        const price = Number(s.price);
+        if (!Number.isFinite(price) || price <= 0) continue;
+        const key = s.establishment_id ?? s.store_name;
+        const cur = byStore.get(key);
+        if (!cur || price < cur.price) {
+          byStore.set(key, {
+            store_name: s.store_name,
+            establishment_id: s.establishment_id,
+            price,
+            product_name: s.product_name ?? m.display_name,
+            last_seen_at: s.last_seen_at,
+          });
+        }
+      }
+    }
+    const stores = Array.from(byStore.values()).sort((a, b) => a.price - b.price);
+    if (stores.length === 0) return null;
+    return {
+      label: equivalentGroupLabel(members.map((m) => m.display_name), referenceRow.display_name),
+      sizeLabel: formatSize(referenceRow.size_value, referenceRow.size_unit),
+      brands: members.length,
+      stores,
+    };
+  }, [rows, q, referenceRow]);
+
+
 
 
   const signedImages = useSignedLogoUrls(useMemo(() => rows.map((r) => r.image_url), [rows]));
