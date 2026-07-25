@@ -249,7 +249,8 @@ function HomePage() {
 
   return (
     <div
-      className="min-h-screen w-full antialiased pc-home"
+      className="min-h-screen w-full antialiased pc-home flex flex-col"
+
       style={{
         background: P.paper,
         color: P.ink,
@@ -1413,8 +1414,9 @@ function HomePage() {
         onOpenChange={(v) => { if (!v) setSpotlight(null); }}
         kind={spotlight}
       />
-
+      <div className="flex-1" aria-hidden />
       <SiteFooter />
+
 
 
 
