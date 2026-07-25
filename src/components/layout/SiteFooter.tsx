@@ -26,7 +26,6 @@ const NAV_COLS: Array<{ title: string; links: Array<{ to: string; label: string 
   {
     title: "Institucional",
     links: [
-      { to: "/colaborar", label: "Colaborar" },
       { to: "/fale-conosco", label: "Fale conosco" },
       { to: "/privacidade", label: "Privacidade" },
     ],
