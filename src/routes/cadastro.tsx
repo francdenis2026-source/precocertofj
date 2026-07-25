@@ -334,7 +334,7 @@ function CadastroPage() {
               </div>
             </form>
 
-            <p className="mt-4 border-t border-slate-200 pt-3 text-center text-[11px] font-medium text-slate-600">
+            <p className="mt-3 border-t border-slate-200 pt-2.5 text-center text-[10.5px] font-medium text-slate-600">
               Ao continuar você aceita nossos{" "}
               <a className="font-semibold underline underline-offset-2 hover:text-slate-700" href="/termos">Termos</a>
               {" "}e a{" "}
