@@ -106,19 +106,19 @@ export function SiteFooter() {
       <div
         className={dsx(
           ds.container,
-          "hidden md:grid gap-2 py-1.5 sm:gap-3 md:grid-cols-[1.2fr_2fr] md:gap-5 md:py-2",
+          "hidden md:grid gap-2 py-1 sm:gap-3 md:grid-cols-[1.2fr_2fr] md:gap-4 md:py-1.5",
         )}
       >
         {/* Brand block */}
         <div className="max-w-sm">
           <Link to="/" className="group flex items-center gap-2 rounded-lg outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background">
             <span
-              className="grid h-7 w-7 shrink-0 place-items-center rounded-[8px] bg-brand text-[13px] font-black text-brand-foreground shadow-elev-2 md:h-8 md:w-8 md:text-[15px]"
+              className="grid h-6 w-6 shrink-0 place-items-center rounded-[7px] bg-brand text-[12px] font-black text-brand-foreground shadow-elev-2 md:h-7 md:w-7 md:text-[13px]"
             >
               P
             </span>
             <span
-              className={dsx(serif, "text-[18px] leading-none text-foreground md:text-[21px]")}
+              className={dsx(serif, "text-[16px] leading-none text-foreground md:text-[18px]")}
             >
               Preço<span className="italic text-brand">Certo</span>
             </span>
