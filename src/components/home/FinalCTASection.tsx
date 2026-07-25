@@ -55,14 +55,6 @@ export function FinalCTASection() {
               background: `linear-gradient(115deg, color-mix(in oklab, ${P.navy} 92%, transparent) 0%, color-mix(in oklab, ${P.navy} 72%, transparent) 55%, color-mix(in oklab, ${P.navy} 88%, transparent) 100%)`,
             }}
           />
-          {/* Grão diagonal dourado sutil */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 -z-10 opacity-[0.06]"
-            style={{
-              backgroundImage: `repeating-linear-gradient(-45deg, ${P.gold} 0 1px, transparent 1px 14px)`,
-            }}
-          />
           {/* Halo dourado */}
           <div
             aria-hidden
@@ -73,6 +65,7 @@ export function FinalCTASection() {
               opacity: 0.5,
             }}
           />
+
 
           <div className="relative px-4 py-8 sm:px-8 sm:py-12">
             <div className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
