@@ -133,7 +133,7 @@ export function selectCheapestEquivalentIndexes(
     });
     if (querySize && size !== querySize) continue;
     const indexes = selectEquivalentIndexes(items, query, referenceIndex);
-    if (indexes.length === 0) return;
+    if (indexes.length === 0) continue;
     const minPrice = Math.min(...indexes.map((i) => candidatePrice(items[i])));
     const samples = indexes.reduce((sum, i) => sum + candidateSamples(items[i]), 0);
     const itemCount = indexes.length;
