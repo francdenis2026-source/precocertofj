@@ -746,9 +746,9 @@ function HomePage() {
       </section>
 
 
-      {/* ============== 3 PILARES (cards) ============== */}
+      {/* ============== 3 PILARES (cards — horizontal compact no mobile) ============== */}
       <section id="pilares" className="pc-container pt-2 scroll-mt-24 sm:pt-3">
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-4">
           <PillarCard
             to="/melhores-precos"
             icon={<LineChart className="h-5 w-5" strokeWidth={2} />}
@@ -791,10 +791,13 @@ function HomePage() {
       </section>
 
 
-      {/* ============== CTA FINAL (lazy) ============== */}
-      <Suspense fallback={null}>
-        <FinalCTASection />
-      </Suspense>
+      {/* ============== CTA FINAL (lazy — oculto no mobile p/ evitar duplicidade com o hero) ============== */}
+      <div className="hidden sm:block">
+        <Suspense fallback={null}>
+          <FinalCTASection />
+        </Suspense>
+      </div>
+
 
 
       <BackToTop />
