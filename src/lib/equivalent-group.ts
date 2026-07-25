@@ -97,13 +97,13 @@ export function selectEquivalentIndexes(
 }
 
 /**
- * Seleciona o grupo equivalente que contém o MENOR preço real.
+ * Seleciona o melhor grupo equivalente para uma busca genérica.
  *
  * Diferente de `selectEquivalentIndexes`, que parte de uma referência já
  * escolhida, este helper testa cada item como âncora possível e escolhe o
- * cluster equivalente mais barato. Isso remove o viés de marcas mais populares
- * ou mais distribuídas: em busca genérica como "óleo de soja", o resumo passa
- * a apontar a marca/tamanho com menor etiqueta, sem misturar tamanhos.
+ * cluster mais representativo; dentro dele o menor preço real vence. Isso
+ * remove o viés de marcas mais populares sem cair no erro oposto de escolher
+ * uma embalagem minúscula só porque sua etiqueta absoluta é menor.
  */
 export function selectCheapestEquivalentIndexes(
   items: EquivalentCandidate[],
@@ -112,38 +112,51 @@ export function selectCheapestEquivalentIndexes(
   if (items.length === 0) return [];
   const tokens = tokenizeQuery(query).map((t) => normalize(t)).filter((t) => t.length >= 3);
   if (tokens.length === 0) return [0];
+  const querySize = sizeSignature(query);
 
   let best:
     | {
         indexes: number[];
         minPrice: number;
+        itemCount: number;
         samples: number;
         referenceIndex: number;
+        size: string;
       }
     | null = null;
 
-  items.forEach((_, referenceIndex) => {
+  for (let referenceIndex = 0; referenceIndex < items.length; referenceIndex += 1) {
+    const reference = items[referenceIndex];
+    const size = sizeSignature(reference.name, {
+      sizeValue: reference.sizeValue,
+      sizeUnit: reference.sizeUnit,
+    });
+    if (querySize && size !== querySize) continue;
     const indexes = selectEquivalentIndexes(items, query, referenceIndex);
     if (indexes.length === 0) return;
     const minPrice = Math.min(...indexes.map((i) => candidatePrice(items[i])));
     const samples = indexes.reduce((sum, i) => sum + candidateSamples(items[i]), 0);
+    const itemCount = indexes.length;
     if (
       !best ||
-      minPrice < best.minPrice - 0.005 ||
-      (Math.abs(minPrice - best.minPrice) <= 0.005 && indexes.length > best.indexes.length) ||
+      (querySize && minPrice < best.minPrice - 0.005) ||
+      (!querySize && itemCount > best.itemCount) ||
+      (!querySize && itemCount === best.itemCount && samples > best.samples) ||
+      ((!querySize || (querySize && Math.abs(minPrice - best.minPrice) <= 0.005)) &&
+        itemCount === best.itemCount &&
+        samples === best.samples &&
+        minPrice < best.minPrice - 0.005) ||
       (Math.abs(minPrice - best.minPrice) <= 0.005 &&
-        indexes.length === best.indexes.length &&
-        samples > best.samples) ||
-      (Math.abs(minPrice - best.minPrice) <= 0.005 &&
-        indexes.length === best.indexes.length &&
+        itemCount === best.itemCount &&
         samples === best.samples &&
         referenceIndex < best.referenceIndex)
     ) {
-      best = { indexes, minPrice, samples, referenceIndex };
+      best = { indexes, minPrice, itemCount, samples, referenceIndex, size };
     }
-  });
+  }
 
-  return best?.indexes ?? [0];
+  if (!best) return [0];
+  return best.indexes;
 }
 
 function labelForSignature(sig: string): string | null {
