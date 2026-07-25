@@ -241,11 +241,30 @@ function SearchPage() {
     } catch { /* ignore */ }
   };
 
+  // Restauração de scroll ao voltar para /buscar preservando filtros
+  useEffect(() => {
+    try {
+      const raw = window.sessionStorage.getItem("search:scroll");
+      if (raw) {
+        const y = Number(raw);
+        if (Number.isFinite(y) && y > 0) {
+          requestAnimationFrame(() => window.scrollTo({ top: y, behavior: "auto" }));
+        }
+      }
+    } catch { /* ignore */ }
+    const onScroll = () => {
+      try {
+        window.sessionStorage.setItem("search:scroll", String(window.scrollY));
+      } catch { /* ignore */ }
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   return (
     <div className="pc-search-scope flex min-h-[100dvh] flex-col bg-background text-foreground">
-      {/* HERO CLARO — aproveita tokens semânticos (funciona em light e dark) */}
-      <section className="relative isolate overflow-hidden border-b border-border/60 bg-gradient-to-b from-muted/40 via-background to-background">
-        {/* Ornamentos sutis */}
+      {/* HERO CLARO + BARRA DE BUSCA STICKY */}
+      <section className="sticky top-0 z-30 border-b border-border/60 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-0 -z-10 opacity-[0.35]"
@@ -263,13 +282,13 @@ function SearchPage() {
           }}
         />
 
-        <div className="relative mx-auto w-full max-w-5xl px-4 md:px-8 pt-4 md:pt-6 pb-5 md:pb-7">
-          <div className="mb-3 flex items-center justify-between gap-3">
+        <div className="relative mx-auto w-full max-w-5xl px-4 md:px-8 pt-3 md:pt-4 pb-3 md:pb-4">
+          <div className="mb-2 flex items-center justify-between gap-3">
             <BackButton fallbackTo="/" variant="ghost" />
             <FreeQuotaBadge variant="inline" />
           </div>
 
-          <div className="flex flex-col items-start gap-2 md:items-center md:text-center">
+          <div className="flex flex-col items-start gap-1.5 md:items-center md:text-center">
             <span
               className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[10.5px] font-semibold uppercase tracking-[0.14em]"
               style={{
@@ -282,18 +301,15 @@ function SearchPage() {
               Comparador de preços
             </span>
             <h1
-              className="text-[clamp(1.5rem,3vw,2rem)] leading-[1.05] tracking-tight text-foreground"
+              className="text-[clamp(1.25rem,2.4vw,1.65rem)] leading-[1.05] tracking-tight text-foreground"
               style={{ fontFamily: "var(--font-display)" }}
             >
               Buscar <span style={{ color: "var(--brand-gold)" }}>preço</span> por nome
             </h1>
-            <p className="max-w-xl text-[13px] leading-snug text-muted-foreground md:text-[13.5px]">
-              Consulte preço médio, mínimo e onde comprar mais barato em Feijó.
-            </p>
           </div>
 
           {/* BARRA DE BUSCA — destacada em cartão elevado */}
-          <div className="mt-4 md:mt-5">
+          <div className="mt-3">
             <div
               className="relative rounded-2xl border border-border bg-card p-2 shadow-[0_18px_40px_-24px_rgba(15,23,42,0.35)] md:p-3"
               style={{
@@ -323,6 +339,7 @@ function SearchPage() {
           </div>
         </div>
       </section>
+
 
       {/* CORPO */}
       <div className="mx-auto w-full max-w-7xl flex-1 px-4 md:px-8 pt-5 md:pt-6 pb-[calc(var(--mobile-nav-height)+1.5rem)] md:pb-10">
