@@ -20,7 +20,7 @@ import {
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
-import { getPlatformStats } from "@/lib/stores-public.functions";
+import { getPlatformStats, listPublicStores } from "@/lib/stores-public.functions";
 import { getEconomyStat } from "@/lib/products-public.functions";
 import { listPopularQueries } from "@/lib/search-popular.functions";
 import { RecentProducts } from "@/components/home/RecentProducts";
@@ -28,6 +28,7 @@ import { StartFreeDialog } from "@/components/home/StartFreeDialog";
 import { MetricSpotlightDialog } from "@/components/home/MetricSpotlightDialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useSession } from "@/hooks/useSession";
+import homeHeroImg from "@/assets/home-hero.jpg";
 
 
 
