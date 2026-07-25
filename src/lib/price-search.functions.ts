@@ -74,7 +74,10 @@ export type PriceSearchResult = {
     marketBrandColor: string | null;
     price: number;
     when: string;
+    /** Produto de referência do resumo (mesmo produto comparado entre mercados). */
+    productName: string | null;
   } | null;
+
   markets: PriceSearchMarket[];
   groups: ProductGroup[];
   recent: Array<{
