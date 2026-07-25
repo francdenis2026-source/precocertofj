@@ -20,7 +20,7 @@ import {
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
-import { getPlatformStats } from "@/lib/stores-public.functions";
+import { getPlatformStats, listPublicStores } from "@/lib/stores-public.functions";
 import { getEconomyStat } from "@/lib/products-public.functions";
 import { listPopularQueries } from "@/lib/search-popular.functions";
 import { RecentProducts } from "@/components/home/RecentProducts";
@@ -28,6 +28,7 @@ import { StartFreeDialog } from "@/components/home/StartFreeDialog";
 import { MetricSpotlightDialog } from "@/components/home/MetricSpotlightDialog";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useSession } from "@/hooks/useSession";
+import homeHeroImg from "@/assets/home-hero.jpg";
 
 
 
@@ -286,42 +287,59 @@ function HomePage() {
       </nav>
 
 
-      {/* ============== HERO — SaaS premium (navy solid, search central) ============== */}
+      {/* ============== HERO — Foto editorial + scrim navy ============== */}
       <section
         aria-labelledby="hero-title"
         className="relative w-full overflow-hidden"
         style={{ background: P.navy, color: "#F5F6FA" }}
       >
-        {/* Fundo: mesh gold discreto + grid tênue — cara de dashboard, sem foto stock */}
+        {/* Foto de fundo */}
+        <img
+          src={homeHeroImg}
+          alt=""
+          aria-hidden
+          loading="eager"
+          fetchPriority="high"
+          decoding="async"
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
+          style={{ opacity: 0.42 }}
+        />
+        {/* Scrim navy vertical para leitura */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -top-40 -right-32 h-[520px] w-[520px] rounded-full"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background: `linear-gradient(180deg, color-mix(in oklab, ${P.navy} 78%, transparent) 0%, color-mix(in oklab, ${P.navy} 62%, transparent) 45%, color-mix(in oklab, ${P.navy} 88%, transparent) 100%)`,
+          }}
+        />
+        {/* Vinheta lateral p/ contraste em telas largas */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 hidden sm:block"
+          style={{
+            background: `radial-gradient(120% 80% at 50% 40%, transparent 40%, color-mix(in oklab, ${P.navy} 55%, transparent) 100%)`,
+          }}
+        />
+        {/* Glow dourado */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -top-40 -right-32 h-[420px] w-[420px] rounded-full"
           style={{
             background: `radial-gradient(circle, color-mix(in oklab, ${P.gold} 55%, transparent) 0%, transparent 65%)`,
             filter: "blur(90px)",
-            opacity: 0.35,
+            opacity: 0.32,
           }}
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[420px] rounded-full"
+          className="pointer-events-none absolute -bottom-40 -left-32 h-[360px] w-[360px] rounded-full"
           style={{
             background: `radial-gradient(circle, color-mix(in oklab, ${P.gold} 30%, transparent) 0%, transparent 70%)`,
             filter: "blur(100px)",
-            opacity: 0.25,
+            opacity: 0.22,
           }}
         />
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.05]"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(255,255,255,0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.4) 1px, transparent 1px)",
-            backgroundSize: "64px 64px",
-            maskImage: "radial-gradient(circle at 50% 40%, black 30%, transparent 75%)",
-            WebkitMaskImage: "radial-gradient(circle at 50% 40%, black 30%, transparent 75%)",
-          }}
-        />
+
 
         <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-8 pb-10 sm:px-6 sm:pt-12 sm:pb-14 lg:px-8 lg:pt-16 lg:pb-16">
           <div className="mx-auto max-w-4xl text-center">
@@ -638,6 +656,12 @@ function HomePage() {
       </section>
 
 
+      {/* ============== MERCADOS PARCEIROS — faixa de logos ============== */}
+      <PartnersStrip />
+
+
+
+
       {/* ============== 3 PILARES (cards) ============== */}
       <section className="pc-container pt-8 sm:pt-10">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5">
@@ -830,3 +854,87 @@ function PillarCard({
     </Link>
   );
 }
+
+
+/* -------- PartnersStrip — faixa de logos de mercados parceiros -------- */
+function PartnersStrip() {
+  const fetchStores = useServerFn(listPublicStores);
+  const storesQ = useQuery({
+    queryKey: ["home-partner-stores"],
+    queryFn: () => fetchStores({} as any),
+    staleTime: 5 * 60_000,
+    refetchOnWindowFocus: false,
+  });
+  const stores = (storesQ.data ?? []).filter((s: any) => s?.name).slice(0, 12);
+
+  if (!stores.length) return null;
+
+  return (
+    <section className="pc-container pt-8 sm:pt-10">
+      <div
+        className="rounded-[var(--pc-radius-md)] border px-4 py-5 sm:px-6 sm:py-6"
+        style={{ background: P.card, borderColor: P.line }}
+      >
+        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+          <div className="min-w-0">
+            <p
+              className="text-[10px] font-bold uppercase tracking-[0.2em]"
+              style={{ color: P.gold }}
+            >
+              Onde comparamos
+            </p>
+            <h2
+              className={`${serif} mt-1 leading-tight`}
+              style={{
+                color: P.heading,
+                fontSize: "clamp(1.35rem, 2.4vw, 1.75rem)",
+                letterSpacing: "-0.01em",
+              }}
+            >
+              Mercados parceiros de Feijó
+            </h2>
+          </div>
+          <Link
+            to="/estabelecimentos"
+            className="inline-flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-[0.14em] transition-colors hover:brightness-110"
+            style={{ color: P.gold }}
+          >
+            Ver todos
+            <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.6} />
+          </Link>
+        </div>
+
+        <ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3 md:grid-cols-6">
+          {stores.map((s: any) => (
+            <li key={s.id}>
+              <Link
+                to="/estabelecimentos"
+                className="group flex h-16 items-center justify-center rounded-xl border px-3 transition-all hover:-translate-y-0.5 hover:shadow-sm sm:h-20"
+                style={{ background: P.paper, borderColor: P.line }}
+                title={s.name}
+              >
+                {s.logoUrl || s.logo_url ? (
+                  <img
+                    src={s.logoUrl ?? s.logo_url}
+                    alt={s.name}
+                    loading="lazy"
+                    decoding="async"
+                    className="max-h-10 max-w-full object-contain opacity-85 grayscale transition-all group-hover:opacity-100 group-hover:grayscale-0 sm:max-h-12"
+                  />
+                ) : (
+                  <span
+                    className="truncate text-center text-[11px] font-bold uppercase tracking-[0.14em]"
+                    style={{ color: P.heading }}
+                  >
+                    {s.name}
+                  </span>
+                )}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
