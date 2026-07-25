@@ -20,6 +20,8 @@ import { UnlockConversionTracker } from "@/components/analytics/UnlockConversion
 import { useTheme } from "@/hooks/use-theme";
 
 import { RouteError, RouteNotFound } from "@/components/feedback";
+import { BottomTabBar } from "@/components/layout/BottomTabBar";
+import { MobileStickySearch } from "@/components/layout/MobileStickySearch";
 
 function NotFoundComponent() {
   return <RouteNotFound />;
