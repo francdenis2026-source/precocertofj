@@ -221,7 +221,7 @@ function CadastroPage() {
 
 
 
-            <form onSubmit={handleSubmit} className="space-y-3" noValidate>
+            <form onSubmit={handleSubmit} className="space-y-2.5" noValidate>
               <Field
                 label="Nome completo"
                 value={name}
