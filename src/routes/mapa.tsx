@@ -670,7 +670,7 @@ function NeighborhoodsPage() {
           </div>
         )}
       </main>
-      </div>
+      </PageShellContent>
     </PageShell>
   );
 }
