@@ -1,18 +1,16 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getProductSuggestions } from "@/lib/products-suggest.functions";
 import { usePullToRefresh } from "@/hooks/usePullToRefresh";
 import {
-  ChevronRight,
   RefreshCw,
   Search,
   ArrowRight,
   TrendingDown,
   ShieldCheck,
   Package,
-  // Ticket removido (agora vive dentro de FinalCTASection)
   LineChart,
   Users,
   Sparkles,
@@ -20,6 +18,7 @@ import {
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { BackToTop } from "@/components/layout/BackToTop";
 import { getPlatformStats, listPublicStores } from "@/lib/stores-public.functions";
 import { getEconomyStat } from "@/lib/products-public.functions";
 import { listPopularQueries } from "@/lib/search-popular.functions";
@@ -27,11 +26,20 @@ import { RecentProducts } from "@/components/home/RecentProducts";
 import { StartFreeDialog } from "@/components/home/StartFreeDialog";
 import { MetricSpotlightDialog } from "@/components/home/MetricSpotlightDialog";
 import { BenefitsSection } from "@/components/home/BenefitsSection";
-import { SocialProofSection } from "@/components/home/SocialProofSection";
-import { FinalCTASection } from "@/components/home/FinalCTASection";
+import { HomeAnchorNav } from "@/components/home/HomeAnchorNav";
+import { MobileAccordion } from "@/components/home/MobileAccordion";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useSession } from "@/hooks/useSession";
 import homeHeroImg from "@/assets/home-hero.jpg";
+
+/* Below-the-fold: carregados sob demanda */
+const SocialProofSection = lazy(() =>
+  import("@/components/home/SocialProofSection").then((m) => ({ default: m.SocialProofSection })),
+);
+const FinalCTASection = lazy(() =>
+  import("@/components/home/FinalCTASection").then((m) => ({ default: m.FinalCTASection })),
+);
+
 
 
 
@@ -243,57 +251,17 @@ function HomePage() {
       <SiteHeader variant="solid" showThemeToggle />
 
 
-      {/* -------- MOBILE QUICK-NAV -------- */}
-      <nav
-        aria-label="Atalhos rápidos"
-        className="sticky top-[56px] z-30 border-b sm:hidden"
-        style={{
-          background: `color-mix(in oklab, ${P.paper} 92%, transparent)`,
-          borderColor: P.line,
-          backdropFilter: "saturate(140%) blur(8px)",
-          WebkitBackdropFilter: "saturate(140%) blur(8px)",
-        }}
-      >
-        <div className="mx-auto w-full max-w-6xl px-3 sm:px-6 lg:px-8">
-          <div className="relative">
-            <div className="chips-scroller flex gap-2.5 overflow-x-auto py-2.5 pr-8 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-              {[
-                { to: "/melhores-precos", label: "Ranking" },
-                { to: "/estabelecimentos", label: "Mercados" },
-                { to: "/buscar", label: "Buscar" },
-                { to: "/planos", label: "Alertas" },
-                { to: "/cesta-basica", label: "Cesta básica" },
-                { to: "/economia", label: "Economia" },
-              ].map((c) => (
-                <Link
-                  key={c.to}
-                  to={c.to}
-                  className="inline-flex shrink-0 items-center rounded-full border px-4 py-2 text-[14px] font-semibold leading-none tracking-[-0.005em] shadow-sm transition-all active:scale-[0.97] hover:border-[color:var(--pc-home-gold)]"
-                  style={{ borderColor: P.line, background: P.card, color: P.heading }}
-                  activeProps={{
-                    style: { background: P.heading, color: P.paper, borderColor: P.heading },
-                  }}
-                >
-                  {c.label}
-                </Link>
-              ))}
-            </div>
-            <div
-              aria-hidden
-              className="chips-hint pointer-events-none absolute right-0 top-1/2 -translate-y-1/2 grid h-6 w-6 place-items-center rounded-full"
-              style={{ background: `color-mix(in oklab, ${P.gold} 18%, transparent)`, color: P.gold }}
-            >
-              <ChevronRight className="h-3.5 w-3.5" strokeWidth={2.6} />
-            </div>
-          </div>
-        </div>
-      </nav>
+      {/* -------- STICKY ANCHOR NAV (scroll-spy + mini busca) -------- */}
+      <HomeAnchorNav
+        onSearch={(query) => navigate({ to: "/buscar", search: { q: query } as any })}
+      />
 
 
       {/* ============== HERO — Foto editorial + scrim navy ============== */}
       <section
+        id="hero"
         aria-labelledby="hero-title"
-        className="relative w-full overflow-hidden"
+        className="relative w-full overflow-hidden scroll-mt-24"
         style={{ background: P.navy, color: "#F5F6FA" }}
       >
         {/* Foto de fundo */}
@@ -639,16 +607,21 @@ function HomePage() {
 
 
       {/* ============== MERCADOS PARCEIROS — faixa de logos ============== */}
-      <PartnersStrip />
+      <section id="parceiros" className="scroll-mt-24">
+        <PartnersStrip />
+      </section>
 
 
-
-      {/* ============== BENEFÍCIOS ============== */}
-      <BenefitsSection />
+      {/* ============== BENEFÍCIOS (accordion no mobile) ============== */}
+      <section id="beneficios" className="scroll-mt-24">
+        <MobileAccordion eyebrow="Benefícios" title="Por que usar o PreçoCerto" defaultOpen={false}>
+          <BenefitsSection />
+        </MobileAccordion>
+      </section>
 
 
       {/* ============== 3 PILARES (cards) ============== */}
-      <section className="pc-container pt-3 sm:pt-4">
+      <section id="pilares" className="pc-container pt-3 scroll-mt-24 sm:pt-4">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
           <PillarCard
             to="/melhores-precos"
@@ -677,21 +650,28 @@ function HomePage() {
 
 
       {/* ============== RECENTES ============== */}
-      <div className="pt-3 sm:pt-4">
+      <section id="recentes" className="pt-3 scroll-mt-24 sm:pt-4">
         <RecentProducts P={P} serif={serif} />
-      </div>
+      </section>
 
 
-      {/* ============== PROVA SOCIAL ============== */}
-      <SocialProofSection />
+      {/* ============== PROVA SOCIAL (accordion no mobile, lazy) ============== */}
+      <section id="prova-social" className="scroll-mt-24">
+        <MobileAccordion eyebrow="Prova social" title="Depoimentos da comunidade" defaultOpen={false}>
+          <Suspense fallback={<div className="pc-container pt-3" aria-hidden><div className="h-24 rounded-lg" style={{ background: "color-mix(in oklab, var(--pc-home-line) 40%, transparent)" }} /></div>}>
+            <SocialProofSection />
+          </Suspense>
+        </MobileAccordion>
+      </section>
 
 
-      {/* ============== CTA FINAL PERSUASIVO ============== */}
-      <FinalCTASection />
+      {/* ============== CTA FINAL (lazy) ============== */}
+      <Suspense fallback={null}>
+        <FinalCTASection />
+      </Suspense>
 
 
-
-
+      <BackToTop />
       <MetricSpotlightDialog
         open={spotlight !== null}
         onOpenChange={(v) => { if (!v) setSpotlight(null); }}
@@ -701,6 +681,7 @@ function HomePage() {
     </div>
   );
 }
+
 
 
 /* -------- PillarCard -------- */
