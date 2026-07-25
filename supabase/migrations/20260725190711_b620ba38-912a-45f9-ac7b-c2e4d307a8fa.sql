@@ -1,0 +1,1 @@
+UPDATE public.establishments SET logo_url = '/__l5e/assets-v1/995ed21b-3cde-4a6b-87ef-dc200bc956c2/facem-logo.png' WHERE name ILIKE '%facem%';
