@@ -106,9 +106,9 @@ export function SearchDiscovery({ onPickQuery }: Props) {
   });
 
   return (
-    <div className="mt-3 space-y-5">
+    <div className="space-y-3">
       {/* Bloco principal — surface sólida com contraste WCAG AA em ambos os modos */}
-      <section className="rounded-2xl border border-border bg-card p-4 shadow-sm sm:p-5">
+      <section className="rounded-xl border border-border bg-card p-3 shadow-sm sm:p-3.5">
         <header className="flex items-start gap-3">
           <span
             aria-hidden
@@ -127,7 +127,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
         </header>
 
         {/* Categorias — grid no web, carrossel no mobile. Alvos 44px. */}
-        <div className="mt-4 -mx-1 flex snap-x snap-mandatory gap-2 overflow-x-auto px-1 pb-1 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-4 sm:overflow-visible sm:px-0">
+        <div className="mt-3 -mx-1 flex snap-x snap-mandatory gap-2 overflow-x-auto px-1 pb-1 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-4 sm:overflow-visible sm:px-0 lg:grid-cols-4">
           {CATEGORIES.map((c) => (
             <button
               key={c.q}
@@ -147,8 +147,8 @@ export function SearchDiscovery({ onPickQuery }: Props) {
         </div>
       </section>
 
-      {/* Buscas populares */}
-      <section>
+      {/* Buscas populares — no desktop já aparecem na sidebar */}
+      <section className="lg:hidden">
         <div className="mb-2 flex items-center gap-2 px-1">
           <Flame className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
           <h3 className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
@@ -216,8 +216,8 @@ export function SearchDiscovery({ onPickQuery }: Props) {
       )}
 
       {/* Sinal de vida — cartão próprio, mesmo padrão dos HeroMetric */}
-      <section className="rounded-2xl border border-border bg-card p-3 shadow-sm sm:p-4">
-        <div className="grid grid-cols-3 gap-3">
+      <section className="rounded-xl border border-border bg-card p-2.5 shadow-sm sm:p-3">
+        <div className="grid grid-cols-3 gap-2">
           <StatCell
             icon={<TrendingDown className="h-4 w-4" aria-hidden />}
             label="Preços em queda"
@@ -254,7 +254,7 @@ function StatCell({
   hint: string;
 }) {
   return (
-    <div className="min-w-0 rounded-xl border border-border/70 bg-background px-3 py-3">
+    <div className="min-w-0 rounded-lg border border-border/70 bg-background px-2.5 py-2">
       <div className="flex items-center gap-1.5">
         <span aria-hidden className="grid h-6 w-6 place-items-center rounded-md bg-brand-gold/15 text-brand-gold-soft dark:text-brand-gold">
           {icon}
@@ -263,10 +263,10 @@ function StatCell({
           {label}
         </span>
       </div>
-      <div className="mt-1.5 truncate text-[18px] font-bold tabular-nums leading-none text-foreground">
+      <div className="mt-1 truncate text-[17px] font-bold tabular-nums leading-none text-foreground">
         {value}
       </div>
-      <div className="mt-1 text-[10px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
+      <div className="mt-0.5 text-[9.5px] font-medium uppercase tracking-[0.14em] text-muted-foreground">
         {hint}
       </div>
     </div>
