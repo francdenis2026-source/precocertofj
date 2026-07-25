@@ -264,88 +264,65 @@ function SearchPage() {
 
   return (
     <div className="pc-search-scope flex min-h-[100dvh] flex-col bg-background text-foreground">
-      {/* HERO CLARO + BARRA DE BUSCA STICKY */}
-      <section className="sticky top-0 z-30 border-b border-border/60 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+      {/* HERO COMPACTO + BARRA DE BUSCA STICKY */}
+      <section className="sticky top-0 z-30 border-b border-border/70 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 -z-10 opacity-[0.35]"
-          style={{
-            backgroundImage:
-              "radial-gradient(600px 240px at 12% 0%, color-mix(in oklab, var(--brand-gold) 18%, transparent), transparent 60%), radial-gradient(500px 200px at 90% 10%, color-mix(in oklab, var(--brand-navy) 14%, transparent), transparent 55%)",
-          }}
+          className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(520px_180px_at_10%_0%,color-mix(in_oklab,var(--brand-gold)_12%,transparent),transparent_65%)]"
         />
         <div
           aria-hidden
-          className="absolute inset-x-0 top-0 h-px"
-          style={{
-            background:
-              "linear-gradient(90deg, transparent, color-mix(in oklab, var(--brand-gold) 60%, transparent) 50%, transparent)",
-          }}
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-brand-gold/60 to-transparent"
         />
 
-        <div className="relative mx-auto w-full max-w-5xl px-4 md:px-8 pt-3 md:pt-4 pb-3 md:pb-4">
-          <div className="mb-2 flex items-center justify-between gap-3">
-            <BackButton fallbackTo="/" variant="ghost" />
+        <div className="relative mx-auto w-full max-w-5xl px-4 pb-2.5 pt-2.5 md:px-8 md:pb-3 md:pt-3">
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+            <div className="flex min-w-0 items-center gap-2">
+              <BackButton fallbackTo="/" variant="ghost" />
+              <span className="hidden truncate text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)] sm:inline">
+                Comparador de preços
+              </span>
+            </div>
             <FreeQuotaBadge variant="inline" />
           </div>
 
-          <div className="flex flex-col items-start gap-1.5 md:items-center md:text-center">
-            <span
-              className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[10.5px] font-semibold uppercase tracking-[0.14em]"
-              style={{
-                borderColor: "color-mix(in oklab, var(--brand-gold) 45%, transparent)",
-                background: "color-mix(in oklab, var(--brand-gold) 12%, transparent)",
-                color: "color-mix(in oklab, var(--brand-navy) 85%, var(--foreground))",
-              }}
-            >
-              <Sparkles className="h-3 w-3" aria-hidden />
-              Comparador de preços
-            </span>
-            <h1
-              className="text-[clamp(1.25rem,2.4vw,1.65rem)] leading-[1.05] tracking-tight text-foreground"
-              style={{ fontFamily: "var(--font-display)" }}
-            >
-              Buscar <span style={{ color: "var(--brand-gold)" }}>preço</span> por nome
+          <div className="mt-1.5 flex flex-wrap items-end justify-between gap-x-3 gap-y-1">
+            <h1 className="font-serif text-[19px] font-semibold leading-tight tracking-tight text-foreground sm:text-[22px]">
+              Buscar <span className="text-[var(--pc-gold-ink)]">preço</span> por nome
             </h1>
+            <p className="text-[12.5px] leading-snug text-muted-foreground">
+              Preço médio, mínimo e onde está mais barato.
+            </p>
           </div>
 
-          {/* BARRA DE BUSCA — destacada em cartão elevado */}
-          <div className="mt-3">
-            <div
-              className="relative rounded-2xl border border-border bg-card p-2 shadow-[0_18px_40px_-24px_rgba(15,23,42,0.35)] md:p-3"
-              style={{
-                boxShadow:
-                  "0 1px 0 0 color-mix(in oklab, var(--brand-gold) 40%, transparent) inset, 0 18px 40px -24px rgba(15,23,42,0.35)",
-              }}
-            >
-              <PriceSearchBar
-                initialQuery={q}
-                mode={mode}
-                pureOnly={pureOnly}
-                brandFilter={brandFilter}
-                priceMin={Number.isFinite(priceMin) ? priceMin : undefined}
-                priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
-                onQueryChange={syncQueryToUrl}
+          {/* BARRA DE BUSCA — cartão compacto */}
+          <div className="mt-2 rounded-xl border border-border bg-card p-1.5 shadow-sm ring-1 ring-brand-gold/15 md:p-2">
+            <PriceSearchBar
+              initialQuery={q}
+              mode={mode}
+              pureOnly={pureOnly}
+              brandFilter={brandFilter}
+              priceMin={Number.isFinite(priceMin) ? priceMin : undefined}
+              priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
+              onQueryChange={syncQueryToUrl}
+            />
+          </div>
+
+          {hasQuery && (
+            <div className="mt-1.5 flex flex-wrap items-center justify-center gap-2">
+              <ShareButton
+                title={`PreçoCerto — ${q}`}
+                text={`Veja preços comparados de "${q}" no PreçoCerto`}
               />
             </div>
-
-            {hasQuery && (
-              <div className="mt-2 flex flex-wrap items-center justify-center gap-2">
-                <ShareButton
-                  title={`PreçoCerto — ${q}`}
-                  text={`Veja preços comparados de "${q}" no PreçoCerto`}
-                />
-              </div>
-            )}
-          </div>
+          )}
         </div>
       </section>
 
-
       {/* CORPO */}
-      <div className="mx-auto w-full max-w-7xl flex-1 px-4 md:px-8 pt-5 md:pt-6 pb-[calc(var(--mobile-nav-height)+1.5rem)] md:pb-10">
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px] lg:gap-8">
-          <div className="min-w-0 space-y-5">
+      <div className="mx-auto w-full max-w-7xl flex-1 px-4 pb-[calc(var(--mobile-nav-height)+1.25rem)] pt-3.5 md:px-8 md:pb-8 md:pt-4">
+        <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_312px] lg:gap-6">
+          <div className="min-w-0 space-y-3.5">
             {/* Toolbar de filtros — organizada, com colapso no mobile */}
             <FiltersToolbar
               open={filtersOpen}
@@ -364,12 +341,12 @@ function SearchPage() {
 
             {!hasQuery && <SearchDiscovery onPickQuery={pickQuery} />}
 
-            {hasQuery && !user && <SignupCTA context="save-comparison" className="mt-2" />}
+            {hasQuery && !user && <SignupCTA context="save-comparison" />}
 
-            <div className="pt-4 text-center">
+            <div className="pt-1 text-center">
               <Link
                 to="/"
-                className="text-[12px] font-medium text-muted-foreground transition-colors hover:text-primary"
+                className="text-[12px] font-medium text-muted-foreground transition-colors hover:text-[var(--pc-gold-ink)]"
               >
                 Voltar ao início
               </Link>
@@ -395,6 +372,7 @@ function SearchPage() {
     </div>
   );
 }
+
 
 // ============================================================================
 // Toolbar de filtros — colapsável no mobile, aberta por padrão no desktop
