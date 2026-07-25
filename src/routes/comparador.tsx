@@ -23,6 +23,7 @@ import { ConfidenceBadge, computeConfidence } from "@/components/product/Confide
 import { computeUnitPrice } from "@/lib/unit-price";
 import { QuickFilterBar } from "@/components/search/QuickFilterBar";
 import { ProductStoresDialog } from "@/components/product/ProductStoresDialog";
+import { PriceRankingPanel } from "@/components/product/PriceRankingPanel";
 
 import { useTeaserQuota } from "@/hooks/use-teaser-quota";
 import { useSession } from "@/hooks/useSession";
@@ -141,6 +142,7 @@ type StoreEntry = {
   store_name: string;
   price: number;
   product_name: string;
+  last_seen_at?: string | null;
 };
 
 type Comparison = {
