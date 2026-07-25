@@ -49,13 +49,18 @@ export function AnchoredDropdown({
     const above = r.top - gap - 8;
     const flip = below < 160 && above > below;
     const height = Math.max(120, Math.min(maxHeight, flip ? above : below));
+    // No mobile o campo divide a linha com o botão "Buscar" e fica estreito
+    // demais para ler o nome do produto — a lista pode ser mais larga que a
+    // âncora, respeitando as margens da tela.
+    const width = Math.max(r.width, Math.min(window.innerWidth - 16, 420));
     setPos({
       top: flip ? Math.max(8, r.top - gap - height) : r.bottom + gap,
-      left: Math.max(8, Math.min(r.left, window.innerWidth - r.width - 8)),
-      width: r.width,
+      left: Math.max(8, Math.min(r.left, window.innerWidth - width - 8)),
+      width,
       height,
     });
   };
+
 
   useLayoutEffect(() => {
     if (!open) return;
