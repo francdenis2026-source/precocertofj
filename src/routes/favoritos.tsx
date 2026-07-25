@@ -65,7 +65,7 @@ function FavoritosPage() {
           <div className="h-24 animate-pulse rounded-xl bg-muted/40" aria-hidden />
         ) : !user ? (
           <EmptyState
-            icon={<Heart className="h-6 w-6" />}
+            icon={Heart}
             title="Entre para ver seus favoritos"
             description="Salve mercados e produtos para acessar rapidamente aqui."
             action={
@@ -129,10 +129,9 @@ function FavoritosPage() {
                 </ul>
               ) : (
                 <EmptyState
-                  icon={<Store className="h-5 w-5" />}
+                  icon={Store}
                   title="Nenhum mercado salvo"
                   description="Favorite um mercado tocando na ⭐ dentro da página do estabelecimento."
-                  compact
                 />
               )}
             </section>
@@ -164,9 +163,9 @@ function FavoritosPage() {
                       <button
                         type="button"
                         onClick={() =>
-                          navigate({ to: "/buscar", search: { q: it.name } as never })
+                          navigate({ to: "/buscar", search: { q: it.displayName } as never })
                         }
-                        aria-label={`Ver preços de ${it.name}`}
+                        aria-label={`Ver preços de ${it.displayName}`}
                         className="group flex min-h-[64px] w-full items-center gap-3 rounded-xl border border-border bg-card p-3 text-left transition-all hover:-translate-y-px hover:border-brand/60 hover:shadow-md outline-none focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background active:scale-[0.99]"
                       >
                         <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand/10 text-brand border border-brand/30" aria-hidden>
@@ -174,11 +173,15 @@ function FavoritosPage() {
                         </span>
                         <span className="min-w-0 flex-1">
                           <span className="block truncate text-[14px] font-semibold">
-                            {it.name}
+                            {it.displayName}
                           </span>
-                          {it.best ? (
+                          {it.currentPrice != null && it.preferredEstablishmentName ? (
+                            <span className="block truncate text-[11.5px] text-muted-foreground">
+                              R$ {it.currentPrice.toFixed(2)} · {it.preferredEstablishmentName}
+                            </span>
+                          ) : it.currentPrice != null ? (
                             <span className="block text-[11.5px] text-muted-foreground">
-                              Melhor: R$ {it.best.price.toFixed(2)} · {it.best.marketName}
+                              R$ {it.currentPrice.toFixed(2)}
                             </span>
                           ) : (
                             <span className="block text-[11.5px] text-muted-foreground">
@@ -193,10 +196,9 @@ function FavoritosPage() {
                 </ul>
               ) : (
                 <EmptyState
-                  icon={<ShoppingBag className="h-5 w-5" />}
+                  icon={ShoppingBag}
                   title="Nenhum produto salvo"
                   description="Favorite um produto na busca para acompanhar variações de preço."
-                  compact
                 />
               )}
             </section>
