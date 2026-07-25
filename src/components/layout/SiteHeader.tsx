@@ -134,7 +134,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
 
         {/* CTAs */}
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
-          {!isOverlay && (
+          {!isOverlay && showBack && (
             <BackButton
               variant="pill"
               shortLabel=""
