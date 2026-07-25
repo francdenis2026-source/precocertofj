@@ -38,12 +38,24 @@ const NAV_LINKS = [
   { to: "/buscar", label: "Buscar" },
   { to: "/melhores-precos", label: "Rankings" },
   { to: "/estabelecimentos", label: "Mercados" },
+  { to: "/colaborar", label: "Colaborar" },
   { to: "/planos", label: "Planos" },
 ] as const;
 
 export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle = true, showBack = true }: Props) {
   const isOverlay = variant === "overlay";
   const { session, firstName, initials, loading } = useMyProfile();
+  const [q, setQ] = useState("");
+  // Busca compacta no header aparece após o usuário rolar o hero (apenas overlay/landing).
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    if (!isOverlay) return;
+    const onScroll = () => setScrolled(window.scrollY > 320);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [isOverlay]);
+
   const { signOut, loading: signingOut } = useSignOut();
   const navigate = useNavigate();
 
