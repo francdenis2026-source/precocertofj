@@ -679,15 +679,15 @@ function CodeVerifier({
     <div
       className="mt-2 flex items-center gap-1.5 rounded-md border px-2 py-1.5"
       style={{
-        borderColor: allOk ? "#bbf7d0" : serverBad ? "#fecaca" : LINE,
-        background: allOk ? "#f0fdf4" : serverBad ? "#fef2f2" : "#fafbfd",
+        borderColor: allOk ? "#86efac" : serverBad ? "#fca5a5" : "#cbd5e1",
+        background: allOk ? "#f0fdf4" : serverBad ? "#fef2f2" : "#f8fafc",
       }}
       aria-label="Verificação do código"
       aria-live="polite"
     >
       <span
         className="flex items-center gap-1 text-[9.5px] font-bold uppercase tracking-[0.14em]"
-        style={{ color: allOk ? "#15803d" : serverBad ? "#991b1b" : NAVY2 }}
+        style={{ color: allOk ? "#166534" : serverBad ? "#991b1b" : INK }}
       >
         {submitting || serverChecking ? (
           <Loader2 className="h-3 w-3 animate-spin" />
