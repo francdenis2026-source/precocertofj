@@ -62,6 +62,42 @@ export const Route = createFileRoute("/estabelecimentos")({
   component: EstablishmentsPage,
 });
 
+// Persistência de filtros/scroll — sessionStorage sobrevive a navegações internas
+type PersistedFilters = {
+  q: string;
+  neighborhood: string;
+  sort: "name" | "neighborhood" | "products";
+  kindFilter: string;
+};
+const FILTERS_KEY = "pc:establishments:filters:v1";
+const SCROLL_KEY = "pc:establishments:scroll:v1";
+const DEFAULT_FILTERS: PersistedFilters = {
+  q: "",
+  neighborhood: "__all",
+  sort: "neighborhood",
+  kindFilter: "__all",
+};
+function readPersistedFilters(): PersistedFilters {
+  if (typeof window === "undefined") return DEFAULT_FILTERS;
+  try {
+    const raw = sessionStorage.getItem(FILTERS_KEY);
+    if (!raw) return DEFAULT_FILTERS;
+    const parsed = JSON.parse(raw);
+    return { ...DEFAULT_FILTERS, ...parsed };
+  } catch {
+    return DEFAULT_FILTERS;
+  }
+}
+function writePersistedFilters(f: PersistedFilters) {
+  if (typeof window === "undefined") return;
+  try {
+    sessionStorage.setItem(FILTERS_KEY, JSON.stringify(f));
+  } catch {
+    /* storage cheio ou bloqueado — ignorar */
+  }
+}
+
+
 function EstablishmentsPage() {
   const fetchList = useServerFn(listPublicEstablishments);
   const { data, isLoading, error } = useQuery({
