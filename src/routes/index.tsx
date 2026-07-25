@@ -806,7 +806,7 @@ function PartnersStrip() {
   if (!stores.length) return null;
 
   return (
-    <section className="pc-container pt-3 sm:pt-4">
+    <section className="pc-container pt-2 sm:pt-3">
       <div
         className="rounded-[var(--pc-radius-md)] border px-4 py-4 sm:px-5 sm:py-5"
         style={{ background: P.card, borderColor: P.line }}
