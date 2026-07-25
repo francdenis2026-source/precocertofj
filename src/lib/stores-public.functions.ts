@@ -293,6 +293,8 @@ export type PlatformStats = {
   priceDrops7d: number;
   activeComparisons: number;
   products: number;
+  /** Total de registros de preço já cadastrados no sistema (scans públicos salvos). */
+  totalItems: number;
   estimatedSavings: number; // soma de (avg - min) em produtos com >=2 mercados
 };
 
