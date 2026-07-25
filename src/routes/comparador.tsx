@@ -23,6 +23,7 @@ import { ConfidenceBadge, computeConfidence } from "@/components/product/Confide
 import { computeUnitPrice } from "@/lib/unit-price";
 import { QuickFilterBar } from "@/components/search/QuickFilterBar";
 import { ProductStoresDialog } from "@/components/product/ProductStoresDialog";
+import { PriceRankingPanel } from "@/components/product/PriceRankingPanel";
 
 import { useTeaserQuota } from "@/hooks/use-teaser-quota";
 import { useSession } from "@/hooks/useSession";
@@ -141,6 +142,7 @@ type StoreEntry = {
   store_name: string;
   price: number;
   product_name: string;
+  last_seen_at?: string | null;
 };
 
 type Comparison = {
@@ -310,10 +312,22 @@ function ComparadorPage() {
     return {
       cheapest: cheapestRow?.min_price ?? null,
       cheapestName: cheapestRow?.display_name ?? null,
+      cheapestStore: cheapestRow?.cheapest_store ?? null,
       storeCount: stores.size,
       productCount: rows.length,
     };
   }, [rows]);
+
+  /**
+   * Produto de referência do ranking: o primeiro resultado presente em mais de
+   * um mercado (comparação válida entre lojas do mesmo item). Se nenhum tiver
+   * multi-mercado, usa o primeiro resultado. Nunca mistura produtos diferentes.
+   */
+  const referenceRow = useMemo<Comparison | null>(() => {
+    if (!q.trim() || rows.length === 0) return null;
+    return rows.find((r) => Number(r.store_count) > 1) ?? rows[0];
+  }, [rows, q]);
+
 
 
   const signedImages = useSignedLogoUrls(useMemo(() => rows.map((r) => r.image_url), [rows]));
@@ -610,11 +624,27 @@ function ComparadorPage() {
           <StatCard
             label="Menor preço agora"
             value={stats.cheapest != null ? formatBRL(Number(stats.cheapest)) : "—"}
-            hint={stats.cheapestName ?? undefined}
+            hint={
+              stats.cheapestName
+                ? `${stats.cheapestName}${stats.cheapestStore ? ` — ${shortenStoreName(stats.cheapestStore)}` : ""}`
+                : undefined
+            }
           />
 
         </div>
+
+        {referenceRow && (
+          <div className="mt-5">
+            <PriceRankingPanel
+              productName={referenceRow.display_name}
+              sizeLabel={formatSize(referenceRow.size_value, referenceRow.size_unit)}
+              stores={referenceRow.stores ?? []}
+              onOpenStore={() => setOpenStoresRow(referenceRow)}
+            />
+          </div>
+        )}
       </section>
+
 
 
       <section
@@ -930,8 +960,13 @@ function ComparisonTableRow({
       </td>
       <td className="hidden px-4 py-3 text-right md:table-cell">
         {isMulti ? (
-          <span className="font-mono text-sm text-muted-foreground line-through">
-            {formatBRL(Number(row.avg_price))}
+          <span className="inline-flex flex-col items-end">
+            <span className="font-mono text-sm text-muted-foreground line-through">
+              {formatBRL(Number(row.avg_price))}
+            </span>
+            <span className="font-mono text-[10.5px] text-muted-foreground/80">
+              maior {formatBRL(Number(row.max_price))}
+            </span>
           </span>
         ) : (
           <span className="text-xs text-muted-foreground">—</span>
@@ -1120,6 +1155,15 @@ function ProductCard({
             isMulti={isMulti}
             size="sm"
           />
+          {isMulti && (
+            <p className="mt-1 truncate text-[9.5px] leading-tight text-muted-foreground">
+              Maior no município:{" "}
+              <span className="tabular-nums font-medium text-foreground/80">
+                {formatBRL(Number(row.max_price))}
+              </span>
+              {stores.length > 1 ? ` — ${shortenStoreName(stores[stores.length - 1].store_name)}` : ""}
+            </p>
+          )}
           <div className="mt-1 flex min-h-4 flex-wrap items-center gap-1">
             <UnitPriceBadge
               price={Number(row.min_price)}
