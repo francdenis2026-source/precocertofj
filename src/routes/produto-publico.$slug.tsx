@@ -18,6 +18,7 @@ import {
   Filter,
 } from "lucide-react";
 import { getPublicProduct, type PublicProduct } from "@/lib/public-product.functions";
+import { QuickCompareStrip } from "@/components/product/QuickCompareStrip";
 import { ProductImage } from "@/components/product/ProductImage";
 import { useSignedLogoUrl } from "@/hooks/use-signed-logo-urls";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
@@ -351,6 +352,13 @@ function ProductPublicPage() {
                   secondary={data.history.map((h) => ({ x: h.date, y: h.avg }))}
                 />
               </section>
+            )}
+
+            {/* Quick compare strip: menor/maior preço, spread e atualização */}
+            {data.markets.length > 1 && (
+              <div className="mt-3">
+                <QuickCompareStrip markets={data.markets} />
+              </div>
             )}
 
             {/* Controls: sort + filter */}
