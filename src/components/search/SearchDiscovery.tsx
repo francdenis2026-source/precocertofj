@@ -108,7 +108,11 @@ export function SearchDiscovery({ onPickQuery }: Props) {
   return (
     <div className="space-y-3">
       {/* Bloco principal — surface sólida com contraste WCAG AA em ambos os modos */}
-      <section className="rounded-xl border border-border bg-card p-3 shadow-sm sm:p-3.5">
+      <section className="relative overflow-hidden rounded-2xl border border-border bg-card p-3 shadow-sm sm:p-4">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-brand-gold/45 to-transparent"
+        />
         <header className="flex items-start gap-3">
           <span
             aria-hidden
@@ -117,10 +121,10 @@ export function SearchDiscovery({ onPickQuery }: Props) {
             <SearchIcon className="h-4 w-4" strokeWidth={2.25} />
           </span>
           <div className="min-w-0">
-            <h2 className="text-[15px] font-semibold text-foreground sm:text-base">
+            <h2 className="font-serif text-[15px] font-semibold leading-tight tracking-tight text-foreground sm:text-[17px]">
               O que você quer comparar hoje?
             </h2>
-            <p className="mt-0.5 text-[12.5px] text-muted-foreground">
+            <p className="mt-0.5 text-[12.5px] leading-snug text-muted-foreground">
               Toque em uma categoria para começar — ou digite um produto acima.
             </p>
           </div>
@@ -133,11 +137,11 @@ export function SearchDiscovery({ onPickQuery }: Props) {
               key={c.q}
               type="button"
               onClick={() => onPickQuery(c.q)}
-              className="group snap-start inline-flex h-11 shrink-0 items-center gap-2 rounded-xl border border-border bg-background px-3 text-left text-[13px] font-medium text-foreground shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_10%,transparent)] transition-all hover:-translate-y-px hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] hover:shadow-sm active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="group snap-start inline-flex h-11 shrink-0 items-center gap-2 rounded-xl border border-border bg-background px-3 text-left text-[13px] font-medium tracking-tight text-foreground shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_10%,transparent)] transition-all hover:-translate-y-px hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] hover:shadow-sm active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <span
                 aria-hidden
-                className="grid h-7 w-7 flex-none place-items-center rounded-md bg-brand-gold/15 text-brand-gold-soft transition-colors group-hover:bg-brand-gold group-hover:text-brand-navy dark:text-brand-gold"
+                className="grid h-7 w-7 flex-none place-items-center rounded-lg bg-brand-gold/15 text-brand-gold-soft transition-colors group-hover:bg-brand-gold group-hover:text-brand-navy dark:text-brand-gold"
               >
                 <c.Icon className="h-4 w-4" strokeWidth={2.25} />
               </span>
