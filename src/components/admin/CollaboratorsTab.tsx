@@ -23,7 +23,9 @@ import {
   listCollaboratorSubmissions,
   reviewCollaboratorSubmission,
   collabSubmissionMetrics,
+  listCollabAuditLog,
   type AdminSubmission,
+  type CollabAuditEntry,
 } from "@/lib/collab-admin.functions";
 import { signCollabAttachments } from "@/lib/collab-submit.functions";
 
