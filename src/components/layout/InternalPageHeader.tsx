@@ -65,6 +65,11 @@ export function InternalPageHeader({
         className,
       )}
     >
+      {showBack && (
+        <div className="mb-1.5">
+          <BackButton fallbackTo={backFallback} variant="ghost" />
+        </div>
+      )}
       {breadcrumbs && breadcrumbs.length > 0 && (
         <nav
           aria-label="Trilha de navegação"
