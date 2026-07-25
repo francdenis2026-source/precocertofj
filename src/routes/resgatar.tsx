@@ -431,7 +431,7 @@ function RedeemPage() {
                     placeholder="PC-XXXX-XXXX-XXXX"
                     aria-invalid={touched && validation.level === "warn"}
                     aria-describedby="license-code-help"
-                    className="h-12 w-full rounded-lg border bg-white pl-9 pr-3 text-[15px] font-bold uppercase tracking-[0.14em] outline-none transition focus:ring-2"
+                    className="h-12 w-full rounded-lg border bg-white pl-9 pr-3 text-[15px] font-bold uppercase tracking-[0.14em] outline-none transition placeholder:font-semibold placeholder:tracking-[0.14em] placeholder:text-slate-400 focus:ring-2"
                     style={{
                       fontFamily: MONO,
                       color: INK,
@@ -440,7 +440,7 @@ function RedeemPage() {
                           ? "#dc2626"
                           : validation.level === "ok"
                           ? "#16a34a"
-                          : LINE,
+                          : "#cbd5e1",
                     } as React.CSSProperties}
 
                   />
