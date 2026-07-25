@@ -570,7 +570,7 @@ function HomePage() {
               {[
                 {
                   kind: "markets" as const,
-                  k: String(stats.establishments ?? 8),
+                  k: stats.establishments != null ? String(stats.establishments) : "—",
                   l: "Mercados parceiros",
                   lShort: "Mercados",
                   icon: <ShieldCheck className="h-4 w-4" />,
@@ -583,7 +583,7 @@ function HomePage() {
                       ? stats.totalItems.toLocaleString("pt-BR")
                       : stats.products != null
                         ? stats.products.toLocaleString("pt-BR")
-                        : "1.500",
+                        : "—",
                   l: "Produtos cadastrados",
                   lShort: "Produtos",
                   icon: <Package className="h-4 w-4" />,
@@ -591,7 +591,7 @@ function HomePage() {
                 },
                 {
                   kind: "savings" as const,
-                  k: economy?.avgSavingsPct ? `${economy.avgSavingsPct}%` : "38%",
+                  k: economy?.avgSavingsPct ? `${economy.avgSavingsPct}%` : "—",
                   l: "Economia média",
                   lShort: "Economia",
                   icon: <TrendingDown className="h-4 w-4" />,
