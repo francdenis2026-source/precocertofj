@@ -352,7 +352,27 @@ function SearchPage() {
           }
         >
           <div className="min-w-0 space-y-2.5">
-            {/* Filtros — barra única compacta, antes dos resultados */}
+            {/* BUSCA — protagonista, com moldura sutil de marca */}
+            <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-1.5 shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_18%,transparent),0_12px_28px_-24px_color-mix(in_oklab,var(--brand-navy)_45%,transparent)] md:p-2.5">
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-brand-gold/50 to-transparent"
+              />
+              <PriceSearchBar
+                initialQuery={q}
+                mode={mode}
+                pureOnly={pureOnly}
+                brandFilter={brandFilter}
+                priceMin={Number.isFinite(priceMin) ? priceMin : undefined}
+                priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
+                onQueryChange={syncQueryToUrl}
+                filterShortcuts={emptyFilterShortcuts}
+                activeFilterCount={activeFilterCount}
+                onClearFilters={activeFilterCount > 0 ? clearFilters : undefined}
+              />
+            </div>
+
+            {/* Filtros — barra única compacta, logo abaixo da busca */}
             <FiltersToolbar
               open={filtersOpen}
               onToggle={() => setFiltersOpen((v) => !v)}
@@ -367,22 +387,6 @@ function SearchPage() {
               onMax={setMaxPrice}
               onClear={clearFilters}
             />
-
-            {/* BUSCA + RESULTADOS */}
-            <div className="rounded-xl border border-border bg-card p-1.5 shadow-sm ring-1 ring-brand-gold/15 md:p-2">
-              <PriceSearchBar
-                initialQuery={q}
-                mode={mode}
-                pureOnly={pureOnly}
-                brandFilter={brandFilter}
-                priceMin={Number.isFinite(priceMin) ? priceMin : undefined}
-                priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
-                onQueryChange={syncQueryToUrl}
-                filterShortcuts={emptyFilterShortcuts}
-                activeFilterCount={activeFilterCount}
-                onClearFilters={activeFilterCount > 0 ? clearFilters : undefined}
-              />
-            </div>
 
             {!hasQuery && <SearchDiscovery onPickQuery={pickQuery} />}
 
