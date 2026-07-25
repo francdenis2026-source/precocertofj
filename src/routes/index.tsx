@@ -470,8 +470,8 @@ function HomePage() {
               )}
             </form>
 
-            {/* Chips populares + CTA inline (compactos) */}
-            <div className="mx-auto mt-3 flex max-w-2xl flex-wrap items-center justify-center gap-1.5 sm:mt-3.5 sm:gap-2">
+            {/* Chips compactos — populares + navegação consolidada */}
+            <div className="mx-auto mt-3 flex max-w-3xl flex-wrap items-center justify-center gap-1.5 sm:mt-3.5">
               <span
                 className="text-[10px] font-bold uppercase tracking-[0.2em]"
                 style={{ color: "rgba(255,255,255,0.5)" }}
@@ -507,14 +507,38 @@ function HomePage() {
                   Mais
                 </button>
               )}
-              <span aria-hidden className="mx-0.5 hidden h-3 w-px sm:inline-block" style={{ background: "rgba(255,255,255,0.14)" }} />
+
+              <span aria-hidden className="mx-1 h-3 w-px" style={{ background: "rgba(255,255,255,0.14)" }} />
+
+              {/* Nav chips consolidados (mesmo estilo dos populares, destaque dourado) */}
+              {[
+                { to: "/estabelecimentos", label: "Mercados" },
+                { to: "/melhores-precos", label: "Ranking" },
+                { to: "/colaborar", label: "Colaborar" },
+                { to: "/planos", label: "Planos Plus" },
+                { to: "/resgatar", label: "Resgatar código" },
+              ].map((c) => (
+                <Link
+                  key={c.to}
+                  to={c.to}
+                  className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11.5px] font-semibold transition-all hover:-translate-y-px"
+                  style={{
+                    background: "color-mix(in oklab, var(--pc-home-gold) 10%, transparent)",
+                    borderColor: "color-mix(in oklab, var(--pc-home-gold) 32%, transparent)",
+                    color: "#F5C86A",
+                  }}
+                >
+                  {c.label}
+                </Link>
+              ))}
+
               {isLoggedOut ? (
                 <StartFreeDialog>
                   <button
                     type="button"
                     aria-haspopup="dialog"
-                    className="inline-flex items-center gap-1 text-[11.5px] font-semibold transition-colors hover:brightness-125"
-                    style={{ color: "#F5C86A" }}
+                    className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11.5px] font-bold transition-all hover:brightness-95"
+                    style={{ background: P.gold, color: P.navy }}
                   >
                     Começar grátis
                     <ArrowRight className="h-3 w-3" strokeWidth={2.6} />
@@ -523,14 +547,16 @@ function HomePage() {
               ) : (
                 <Link
                   to="/app"
-                  className="inline-flex items-center gap-1 text-[11.5px] font-semibold transition-colors hover:brightness-125"
-                  style={{ color: "#F5C86A" }}
+                  className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11.5px] font-bold transition-all hover:brightness-95"
+                  style={{ background: P.gold, color: P.navy }}
                 >
                   Ir para o painel
                   <ArrowRight className="h-3 w-3" strokeWidth={2.6} />
                 </Link>
               )}
             </div>
+
+
 
           </div>
 
