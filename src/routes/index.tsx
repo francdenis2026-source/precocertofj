@@ -793,10 +793,15 @@ function HomePage() {
       </section>
 
 
-      {/* ============== 3 PILARES — ribbon minimalista ============== */}
-      <section id="pilares" className="pc-container pt-2 scroll-mt-24 sm:pt-3">
-        <div
-          className="grid grid-cols-3 overflow-hidden rounded-xl border divide-x shadow-[0_1px_0_rgba(0,0,0,0.03)]"
+      {/* ============== 3 PILARES — ribbon acessível ============== */}
+      <section
+        id="pilares"
+        aria-label="Recursos principais do PreçoCerto"
+        className="pc-container pt-2 scroll-mt-24 sm:pt-3"
+      >
+        <ul
+          role="list"
+          className="grid grid-cols-3 items-stretch overflow-hidden rounded-xl border divide-x shadow-[0_1px_0_rgba(0,0,0,0.03)]"
           style={{
             background: "var(--pc-home-card)",
             borderColor: "var(--pc-home-line)",
@@ -806,27 +811,27 @@ function HomePage() {
         >
           <PillarCard
             to="/melhores-precos"
-            icon={<LineChart className="h-[14px] w-[14px]" strokeWidth={2.4} />}
+            icon={<LineChart aria-hidden strokeWidth={2.4} />}
             title="Histórico"
             desc="Variação e melhor hora de comprar."
             cta="Ver ranking"
           />
           <PillarCard
             to="/colaborar"
-            icon={<Users className="h-[14px] w-[14px]" strokeWidth={2.4} />}
+            icon={<Users aria-hidden strokeWidth={2.4} />}
             title="Comunidade"
             desc="Envie encartes e notas fiscais."
             cta="Colaborar"
           />
           <PillarCard
             to="/planos"
-            icon={<Sparkles className="h-[14px] w-[14px]" strokeWidth={2.4} />}
+            icon={<Sparkles aria-hidden strokeWidth={2.4} />}
             title="Plus"
             desc="Alertas e listas inteligentes."
             cta="Ver planos"
             emphasis
           />
-        </div>
+        </ul>
       </section>
 
 
@@ -870,6 +875,7 @@ function HomePage() {
 
 
 /* -------- PillarCard — célula ultra-compacta -------- */
+/* -------- PillarCard — célula acessível, compacta e polida -------- */
 function PillarCard({
   to,
   icon,
@@ -887,61 +893,86 @@ function PillarCard({
 }) {
   const isGold = !!emphasis;
   return (
-    <Link
-      to={to}
-      aria-label={`${title} — ${cta}`}
-      className="group relative flex items-center gap-2 px-2.5 py-2.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset sm:gap-2.5 sm:px-3.5 sm:py-3"
-      style={{
-        background: isGold
-          ? `linear-gradient(135deg, var(--pc-home-gold) 0%, color-mix(in oklab, var(--pc-home-gold) 88%, black) 100%)`
-          : "transparent",
-        color: isGold ? "var(--pc-home-navy)" : undefined,
-        // @ts-expect-error css var
-        "--tw-ring-color": `color-mix(in oklab, var(--pc-home-gold) 70%, transparent)`,
-      }}
-    >
-      <span
-        className="grid h-7 w-7 shrink-0 place-items-center rounded-md sm:h-8 sm:w-8"
+    <li role="listitem" className="contents">
+      <Link
+        to={to}
+        aria-label={`${title}: ${desc} — ${cta}`}
+        className={[
+          "group relative flex min-h-[56px] items-center gap-2 px-2.5 py-2.5",
+          "sm:min-h-[64px] sm:gap-3 sm:px-4 sm:py-3",
+          "transition-all duration-200 ease-out motion-reduce:transition-none",
+          "hover:-translate-y-[1px] hover:shadow-[inset_0_-2px_0_0_var(--pc-home-gold)]",
+          "active:translate-y-0 active:shadow-none",
+          "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:z-10",
+        ].join(" ")}
         style={{
           background: isGold
-            ? "color-mix(in oklab, var(--pc-home-navy) 14%, transparent)"
-            : "color-mix(in oklab, var(--pc-home-gold) 12%, transparent)",
-          color: isGold ? "var(--pc-home-navy)" : "var(--pc-home-gold)",
-          border: isGold
-            ? "1px solid color-mix(in oklab, var(--pc-home-navy) 22%, transparent)"
-            : "1px solid color-mix(in oklab, var(--pc-home-gold) 28%, transparent)",
+            ? `linear-gradient(135deg, var(--pc-home-gold) 0%, color-mix(in oklab, var(--pc-home-gold) 88%, black) 100%)`
+            : "transparent",
+          color: isGold ? "var(--pc-home-navy)" : undefined,
+          // @ts-expect-error css var
+          "--tw-ring-color": `color-mix(in oklab, var(--pc-home-gold) 80%, transparent)`,
         }}
-        aria-hidden
       >
-        {icon}
-      </span>
-
-      <span className="min-w-0 flex-1 leading-tight">
+        {/* Ícone */}
         <span
-          className="block truncate text-[12px] font-semibold sm:text-[13px]"
-          style={{ color: isGold ? "var(--pc-home-navy)" : "var(--pc-home-heading)" }}
-        >
-          {title}
-        </span>
-        <span
-          className="hidden truncate text-[11px] sm:block"
+          className="grid h-8 w-8 shrink-0 place-items-center rounded-md transition-transform duration-200 group-hover:scale-[1.06] motion-reduce:transform-none sm:h-9 sm:w-9"
           style={{
-            color: isGold
-              ? "color-mix(in oklab, var(--pc-home-navy) 80%, transparent)"
-              : "var(--pc-text-body)",
+            background: isGold
+              ? "color-mix(in oklab, var(--pc-home-navy) 16%, transparent)"
+              : "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
+            color: isGold ? "var(--pc-home-navy)" : "var(--pc-home-gold)",
+            border: isGold
+              ? "1px solid color-mix(in oklab, var(--pc-home-navy) 24%, transparent)"
+              : "1px solid color-mix(in oklab, var(--pc-home-gold) 30%, transparent)",
           }}
         >
-          {desc}
+          <span className="[&_svg]:h-[15px] [&_svg]:w-[15px] sm:[&_svg]:h-4 sm:[&_svg]:w-4">
+            {icon}
+          </span>
         </span>
-      </span>
 
-      <ArrowRight
-        className="h-3.5 w-3.5 shrink-0 opacity-70 transition-transform group-hover:translate-x-0.5"
-        strokeWidth={2.6}
-        style={{ color: isGold ? "var(--pc-home-navy)" : "var(--pc-home-gold)" }}
-        aria-hidden
-      />
-    </Link>
+        {/* Texto */}
+        <span className="min-w-0 flex-1">
+          <span
+            className="block truncate text-[12.5px] font-semibold leading-[1.15] sm:text-[13.5px]"
+            style={{ color: isGold ? "var(--pc-home-navy)" : "var(--pc-home-heading)" }}
+          >
+            {title}
+          </span>
+          <span
+            className="mt-0.5 hidden text-[11.5px] leading-[1.35] sm:block sm:line-clamp-2"
+            style={{
+              color: isGold
+                ? "color-mix(in oklab, var(--pc-home-navy) 82%, transparent)"
+                : "var(--pc-text-body)",
+            }}
+          >
+            {desc}
+          </span>
+        </span>
+
+        {/* Micro-CTA (chevron) — alvo de toque adequado */}
+        <span
+          aria-hidden
+          className={[
+            "grid h-8 w-8 shrink-0 place-items-center rounded-full transition-all duration-200",
+            "group-hover:translate-x-0.5 group-hover:scale-105",
+            "group-active:translate-x-1 motion-reduce:transform-none",
+          ].join(" ")}
+          style={{
+            background: isGold
+              ? "color-mix(in oklab, var(--pc-home-navy) 12%, transparent)"
+              : "color-mix(in oklab, var(--pc-home-gold) 10%, transparent)",
+            color: isGold ? "var(--pc-home-navy)" : "var(--pc-home-gold)",
+          }}
+        >
+          <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.8} />
+        </span>
+        {/* Rótulo textual do CTA para leitores de tela */}
+        <span className="sr-only">{cta}</span>
+      </Link>
+    </li>
   );
 }
 
