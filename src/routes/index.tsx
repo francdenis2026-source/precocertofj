@@ -870,7 +870,7 @@ function HomePage() {
 
 
 
-/* -------- PillarCard -------- */
+/* -------- PillarCard — célula compacta de faixa (mobile + desktop) -------- */
 function PillarCard({
   to,
   icon,
@@ -886,76 +886,77 @@ function PillarCard({
   cta: string;
   emphasis?: boolean;
 }) {
-  if (emphasis) {
-    return (
-      <Link
-        to={to}
-        className="group flex items-center gap-3 overflow-hidden rounded-2xl p-3 transition-all active:scale-[0.99] hover:-translate-y-1 hover:shadow-2xl sm:block sm:p-5"
-        style={{
-          background: `linear-gradient(135deg, var(--pc-home-gold) 0%, color-mix(in oklab, var(--pc-home-gold) 82%, black) 100%)`,
-          color: "var(--pc-home-navy)",
-        }}
-      >
-        <div
-          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl sm:mb-3 sm:h-9 sm:w-9 sm:rounded-lg"
-          style={{ background: "color-mix(in oklab, var(--pc-home-navy) 12%, transparent)" }}
-        >
-          {icon}
-        </div>
-        <div className="min-w-0 flex-1">
-          <h3 className={`${serif} text-[15.5px] leading-tight sm:mb-1.5 sm:text-[20px]`}>{title}</h3>
-          <p className="mt-0.5 line-clamp-2 text-[12px] font-medium leading-snug opacity-85 sm:mt-0 sm:line-clamp-none sm:text-[12.5px]">{desc}</p>
-          <div className="mt-1.5 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] opacity-90 transition-opacity group-hover:opacity-100 sm:mt-3 sm:text-[10.5px] sm:tracking-[0.18em]">
-            {cta}
-            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
-          </div>
-        </div>
-        <ArrowRight className="h-5 w-5 shrink-0 opacity-80 sm:hidden" strokeWidth={2.6} />
-      </Link>
-    );
-  }
-
+  const isGold = !!emphasis;
   return (
     <Link
       to={to}
-      className="group flex items-center gap-3 overflow-hidden rounded-2xl border p-3 transition-all active:scale-[0.99] hover:-translate-y-1 sm:block sm:p-5"
+      aria-label={`${title} — ${cta}`}
+      className="group relative flex items-center gap-3 px-3.5 py-3 transition-colors active:scale-[0.997] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset sm:gap-3 sm:px-4 sm:py-3.5"
       style={{
-        background: "var(--pc-home-card)",
+        background: isGold
+          ? `linear-gradient(135deg, var(--pc-home-gold) 0%, color-mix(in oklab, var(--pc-home-gold) 88%, black) 100%)`
+          : "transparent",
+        color: isGold ? "var(--pc-home-navy)" : undefined,
         borderColor: "var(--pc-home-line)",
+        // @ts-expect-error css var
+        "--tw-ring-color": `color-mix(in oklab, var(--pc-home-gold) 70%, transparent)`,
       }}
     >
-      <div
-        className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl sm:mb-3 sm:h-9 sm:w-9 sm:rounded-lg"
+      <span
+        className="grid h-9 w-9 shrink-0 place-items-center rounded-lg"
         style={{
-          background: "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
-          color: "var(--pc-home-gold)",
-          border: "1px solid color-mix(in oklab, var(--pc-home-gold) 32%, transparent)",
+          background: isGold
+            ? "color-mix(in oklab, var(--pc-home-navy) 14%, transparent)"
+            : "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
+          color: isGold ? "var(--pc-home-navy)" : "var(--pc-home-gold)",
+          border: isGold
+            ? "1px solid color-mix(in oklab, var(--pc-home-navy) 22%, transparent)"
+            : "1px solid color-mix(in oklab, var(--pc-home-gold) 32%, transparent)",
         }}
+        aria-hidden
       >
         {icon}
-      </div>
-      <div className="min-w-0 flex-1">
-        <h3
-          className={`${serif} text-[15.5px] leading-tight sm:mb-1.5 sm:text-[20px]`}
-          style={{ color: "var(--pc-home-heading)" }}
+      </span>
+
+      <span className="min-w-0 flex-1">
+        <span
+          className="block truncate text-[13.5px] font-semibold leading-tight sm:text-[14px]"
+          style={{ color: isGold ? "var(--pc-home-navy)" : "var(--pc-home-heading)" }}
         >
           {title}
-        </h3>
-        <p className="mt-0.5 line-clamp-2 text-[12px] font-medium leading-snug sm:mt-0 sm:line-clamp-none sm:text-[12.5px]" style={{ color: "var(--pc-text-body)" }}>
-          {desc}
-        </p>
-        <div
-          className="mt-1.5 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] transition-colors group-hover:text-[color:var(--pc-home-gold)] sm:mt-3 sm:text-[10.5px] sm:tracking-[0.18em]"
-          style={{ color: "var(--pc-home-heading)" }}
+        </span>
+        <span
+          className="mt-0.5 line-clamp-1 text-[11.5px] leading-snug sm:line-clamp-2 sm:text-[12px]"
+          style={{
+            color: isGold
+              ? "color-mix(in oklab, var(--pc-home-navy) 82%, transparent)"
+              : "var(--pc-text-body)",
+          }}
         >
-          {cta}
-          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
-        </div>
-      </div>
-      <ArrowRight className="h-5 w-5 shrink-0 opacity-60 sm:hidden" strokeWidth={2.4} style={{ color: "var(--pc-home-gold)" }} />
+          {desc}
+        </span>
+      </span>
+
+      <span
+        className="hidden shrink-0 items-center gap-1 text-[10px] font-bold uppercase tracking-[0.14em] sm:inline-flex"
+        style={{ color: isGold ? "var(--pc-home-navy)" : "var(--pc-home-gold)" }}
+      >
+        {cta}
+        <ArrowRight
+          className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5"
+          strokeWidth={2.6}
+        />
+      </span>
+      <ArrowRight
+        className="h-4 w-4 shrink-0 opacity-70 sm:hidden"
+        strokeWidth={2.6}
+        style={{ color: isGold ? "var(--pc-home-navy)" : "var(--pc-home-gold)" }}
+        aria-hidden
+      />
     </Link>
   );
 }
+
 
 
 
