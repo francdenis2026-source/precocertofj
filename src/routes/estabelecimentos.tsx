@@ -771,129 +771,52 @@ function EstablishmentsPage() {
                   </div>
                 ) : (
                 <ul
-                  className="grid grid-cols-1 gap-2.5 p-2.5 sm:grid-cols-2 sm:gap-3 md:p-4"
+                  className="grid grid-cols-1 gap-3 p-2.5 sm:grid-cols-2 md:p-4 lg:grid-cols-3"
                   aria-label="Lista de estabelecimentos"
                 >
-
-                  {visibleItems.map((e) => {
-                    const isCheapest = badgeIds.cheapestId === e.id;
-                    const recent = isRecent(e.lastUpdate);
-                    const isFeatured = badgeIds.featuredIds.has(e.id);
+                  {visibleItems.map((e, idx) => {
                     const tier = classifyTier(e.productsCount);
                     const freshness = describeFreshness(e.lastUpdate);
                     const dist = distanceById.get(e.id);
                     return (
-                    <li key={e.id} className="relative h-full">
-                      <FavoriteMarketButton
-                        marketName={e.name}
-                        className="absolute right-2 top-2 z-10"
-                      />
-                      <Link
-                        to="/estabelecimento/$slug"
-                        params={{ slug: slugifyEstablishment(e.name) }}
-                        className="group flex h-full flex-col overflow-hidden rounded-xl border border-border/70 bg-card shadow-sm transition-all hover:-translate-y-0.5 hover:border-brand-gold/60 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-                        aria-label={`Ver detalhes de ${e.name}`}
-                      >
-                        {/* Cabeçalho — logo + nome + selos + classificação */}
-                        <div className="flex items-start gap-3 p-3.5 md:p-4">
-                          <div className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl border border-border/60 bg-white p-1.5 shadow-sm">
-                            {e.logoUrl ? (
-                              <img
-                                src={e.logoUrl}
-                                alt=""
-                                className="h-full w-full object-contain"
-                                loading="lazy"
-                              />
-                            ) : (
-                              <span aria-hidden className="text-[16px] font-bold text-brand-navy">
-                                {e.name.substring(0, 2).toUpperCase()}
-                              </span>
-                            )}
-                          </div>
-                          <div className="min-w-0 flex-1">
-                            <h3 className="truncate text-[15.5px] font-semibold leading-[1.25] tracking-[-0.01em] text-foreground antialiased">
-                              {e.name}
-                            </h3>
-                            <p className="mt-0.5 truncate text-[12.5px] font-medium leading-[1.35] text-muted-foreground">
-                              {[e.neighborhood, e.city].filter(Boolean).join(" · ") || "Localização não informada"}
-                            </p>
-                            {/* Classificação — sempre presente para consistência */}
-                            <div
-                              className="mt-1.5 inline-flex items-center gap-1 rounded-full border px-2 py-[2px] text-[10px] font-bold uppercase tracking-[0.16em]"
-                              style={{
-                                background: `color-mix(in oklab, ${tier.color} 12%, transparent)`,
-                                borderColor: `color-mix(in oklab, ${tier.color} 45%, transparent)`,
-                                color: tier.color,
-                              }}
-                              title={`Classificação por catálogo: ${tier.label}`}
-                            >
-                              <Sparkles className="h-2.5 w-2.5" aria-hidden />
-                              {tier.label}
-                            </div>
-                          </div>
-                        </div>
-
-                        {/* Meta — sempre no mesmo lugar: contagem + freshness (proxy de horários) */}
-                        <div className="grid grid-cols-2 gap-x-2 gap-y-1.5 border-t border-border/60 bg-muted/30 px-3.5 py-2.5 text-[12px] font-medium md:px-4">
-                          <div className="flex items-center gap-1.5">
-                            <Package className="h-3.5 w-3.5 shrink-0 text-[var(--pc-gold-ink)]" aria-hidden />
-                            <span className="text-muted-foreground">
-                              <span className="font-bold tabular-nums text-foreground">{e.productsCount}</span> produtos
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-1.5">
-                            <Radio className={`h-3.5 w-3.5 shrink-0 ${freshness.live ? "text-emerald-600 dark:text-emerald-400" : "text-muted-foreground"}`} aria-hidden />
-                            <span className="truncate text-muted-foreground">{freshness.label}</span>
-                          </div>
-                          {dist && (
-                            <div className="col-span-2 flex items-center gap-1.5 border-t border-border/40 pt-1.5">
-                              <MapPin className="h-3.5 w-3.5 shrink-0 text-[var(--pc-gold-ink)]" aria-hidden />
-                              <span className="text-muted-foreground">
-                                <span className="font-bold tabular-nums text-foreground">{formatDistance(dist.km)}</span>{" "}
-                                {dist.source === "exact"
-                                  ? "de você"
-                                  : dist.source === "neighborhood"
-                                    ? "aprox. (bairro)"
-                                    : "aprox. (cidade)"}
-                              </span>
-                            </div>
-                          )}
-                        </div>
-
-                        {/* Selos contextuais — altura reservada para consistência entre cards */}
-                        <div className="flex min-h-[26px] flex-wrap items-center gap-1 px-3.5 pt-2 md:px-4">
-                          {isCheapest && (
-                            <span className="inline-flex items-center gap-1 rounded-full bg-brand-gold px-2 py-[2px] text-[10px] font-bold uppercase tracking-[0.12em] text-brand-navy">
-                              <PiggyBank className="h-2.5 w-2.5" aria-hidden /> Mais barato hoje
-                            </span>
-                          )}
-                          {recent && (
-                            <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/40 bg-emerald-500/10 px-2 py-[2px] text-[10px] font-bold uppercase tracking-[0.12em] text-emerald-700 dark:text-emerald-400">
-                              <Radio className="h-2.5 w-2.5" aria-hidden /> Atualizado
-                            </span>
-                          )}
-                          {isFeatured && !isCheapest && (
-                            <span className="inline-flex items-center gap-1 rounded-full border border-border bg-muted px-2 py-[2px] text-[10px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
-                              <Sparkles className="h-2.5 w-2.5" aria-hidden /> Destaque
-                            </span>
-                          )}
-                        </div>
-
-                        {/* CTA fixo no rodapé — sempre visível, mesmo lugar em todos os cards */}
-                        <div className="mt-auto flex items-center justify-between gap-2 border-t border-border/60 px-3.5 py-2.5 md:px-4">
-                          <span className="min-w-0 truncate text-[10.5px] font-bold uppercase tracking-[0.16em] text-muted-foreground">
-                            {e.topCategories[0] ? humanizeCategory(e.topCategories[0].category) : "Ver catálogo"}
-                          </span>
-                          <span className="inline-flex shrink-0 items-center gap-1 rounded-md bg-brand-gold/12 px-2 py-1 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--pc-gold-ink)] transition-colors group-hover:bg-brand-gold group-hover:text-brand-navy">
-                            Ver detalhes
-                            <ChevronRight className="h-3 w-3" aria-hidden />
-                          </span>
-                        </div>
-                      </Link>
-                    </li>
+                      <li key={e.id} className="h-full">
+                        <MarketEditorialCard
+                          slug={slugifyEstablishment(e.name)}
+                          name={e.name}
+                          logoUrl={e.logoUrl}
+                          neighborhood={e.neighborhood}
+                          city={e.city}
+                          productsCount={e.productsCount}
+                          freshnessLabel={freshness.label}
+                          freshnessLive={freshness.live}
+                          tierLabel={tier.label}
+                          tierColor={tier.color}
+                          rank={idx + 1}
+                          distanceLabel={dist ? formatDistance(dist.km) : null}
+                          distanceQualifier={
+                            dist
+                              ? dist.source === "exact"
+                                ? "de você"
+                                : dist.source === "neighborhood"
+                                  ? "aprox. (bairro)"
+                                  : "aprox. (cidade)"
+                              : null
+                          }
+                          topCategory={
+                            e.topCategories[0]
+                              ? humanizeCategory(e.topCategories[0].category)
+                              : null
+                          }
+                          maxSavings={e.maxSavings}
+                          isCheapest={badgeIds.cheapestId === e.id}
+                          isFeatured={badgeIds.featuredIds.has(e.id)}
+                          favoriteSlot={<FavoriteMarketButton marketName={e.name} />}
+                        />
+                      </li>
                     );
                   })}
                 </ul>
+
                 )}
                 {allFilteredItems.length > visibleItems.length && (
                   <div className="flex flex-wrap items-center justify-center gap-2 border-t border-border/60 px-2.5 py-2 md:px-4 md:py-3">
