@@ -347,8 +347,9 @@ export async function performPriceSearch(data: {
     : [];
   const eqGroups = eqIdx.map((i) => groups[i]).filter(Boolean);
   const eqPrices = eqGroups.flatMap((g) => g.prices);
-  const bestPoint = eqPrices.length > 0
-    ? eqPrices.reduce((best, p) => (p.price < best.price ? p : best), eqPrices[0])
+  const firstEqPrice = eqPrices[0] ?? null;
+  const bestPoint = firstEqPrice
+    ? eqPrices.reduce((best, p) => (p.price < best.price ? p : best), firstEqPrice)
     : null;
   const refGroup = bestPoint
     ? eqGroups.find((g) => g.prices.some((p) => p === bestPoint)) ?? eqGroups[0] ?? groups[0] ?? null

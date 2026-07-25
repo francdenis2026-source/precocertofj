@@ -127,6 +127,7 @@ export function selectCheapestEquivalentIndexes(
 
   for (let referenceIndex = 0; referenceIndex < items.length; referenceIndex += 1) {
     const reference = items[referenceIndex];
+    if (!reference) continue;
     const size = sizeSignature(reference.name, {
       sizeValue: reference.sizeValue,
       sizeUnit: reference.sizeUnit,
@@ -151,7 +152,7 @@ export function selectCheapestEquivalentIndexes(
         samples === best.samples &&
         referenceIndex < best.referenceIndex)
     ) {
-      best = { indexes, minPrice, itemCount, samples, referenceIndex, size };
+      best = { indexes: [...indexes], minPrice, itemCount, samples, referenceIndex, size };
     }
   }
 
