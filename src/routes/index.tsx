@@ -793,10 +793,15 @@ function HomePage() {
       </section>
 
 
-      {/* ============== 3 PILARES — ribbon minimalista ============== */}
-      <section id="pilares" className="pc-container pt-2 scroll-mt-24 sm:pt-3">
-        <div
-          className="grid grid-cols-3 overflow-hidden rounded-xl border divide-x shadow-[0_1px_0_rgba(0,0,0,0.03)]"
+      {/* ============== 3 PILARES — ribbon acessível ============== */}
+      <section
+        id="pilares"
+        aria-label="Recursos principais do PreçoCerto"
+        className="pc-container pt-2 scroll-mt-24 sm:pt-3"
+      >
+        <ul
+          role="list"
+          className="grid grid-cols-3 items-stretch overflow-hidden rounded-xl border divide-x shadow-[0_1px_0_rgba(0,0,0,0.03)]"
           style={{
             background: "var(--pc-home-card)",
             borderColor: "var(--pc-home-line)",
@@ -806,27 +811,27 @@ function HomePage() {
         >
           <PillarCard
             to="/melhores-precos"
-            icon={<LineChart className="h-[14px] w-[14px]" strokeWidth={2.4} />}
+            icon={<LineChart aria-hidden strokeWidth={2.4} />}
             title="Histórico"
             desc="Variação e melhor hora de comprar."
             cta="Ver ranking"
           />
           <PillarCard
             to="/colaborar"
-            icon={<Users className="h-[14px] w-[14px]" strokeWidth={2.4} />}
+            icon={<Users aria-hidden strokeWidth={2.4} />}
             title="Comunidade"
             desc="Envie encartes e notas fiscais."
             cta="Colaborar"
           />
           <PillarCard
             to="/planos"
-            icon={<Sparkles className="h-[14px] w-[14px]" strokeWidth={2.4} />}
+            icon={<Sparkles aria-hidden strokeWidth={2.4} />}
             title="Plus"
             desc="Alertas e listas inteligentes."
             cta="Ver planos"
             emphasis
           />
-        </div>
+        </ul>
       </section>
 
 
