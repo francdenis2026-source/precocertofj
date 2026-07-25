@@ -702,7 +702,7 @@ function HomePage() {
                   className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-colors group-hover:brightness-110 group-focus-visible:brightness-110 sm:h-9 sm:w-9 sm:rounded-lg"
                   style={{
                     background: `color-mix(in oklab, ${P.gold} 18%, transparent)`,
-                    color: P.gold,
+                    color: "var(--pc-gold-ink)",
                     border: `1px solid color-mix(in oklab, ${P.gold} 45%, transparent)`,
                   }}
                   aria-hidden
@@ -715,7 +715,7 @@ function HomePage() {
                   </span>
                   <span
                     className="mt-0.5 hidden text-[11px] font-medium sm:block"
-                    style={{ color: "color-mix(in oklab, var(--pc-home-ink) 78%, transparent)" }}
+                    style={{ color: "color-mix(in oklab, var(--pc-home-ink) 92%, transparent)" }}
                   >
                     Ver ofertas
                   </span>
@@ -723,7 +723,7 @@ function HomePage() {
                 <ArrowRight
                   className="hidden h-4 w-4 shrink-0 opacity-60 transition-all group-hover:translate-x-0.5 group-hover:opacity-100 sm:inline"
                   strokeWidth={2.4}
-                  style={{ color: P.gold }}
+                  style={{ color: "var(--pc-gold-ink)" }}
                 />
               </button>
             ))}
@@ -758,7 +758,7 @@ function HomePage() {
                 </span>
                 <span
                   className="mt-0.5 hidden text-[11px] font-medium sm:block"
-                  style={{ color: "color-mix(in oklab, var(--pc-home-ink) 78%, transparent)" }}
+                  style={{ color: "color-mix(in oklab, var(--pc-home-ink) 92%, transparent)" }}
                 >
                   + 8 categorias
                 </span>
@@ -766,7 +766,7 @@ function HomePage() {
               <ArrowRight
                 className="hidden h-4 w-4 shrink-0 opacity-70 sm:inline"
                 strokeWidth={2.4}
-                style={{ color: P.gold }}
+                style={{ color: "var(--pc-gold-ink)" }}
               />
             </button>
           </div>
@@ -921,7 +921,7 @@ function PillarCard({
             background: isGold
               ? "color-mix(in oklab, var(--pc-home-navy) 16%, transparent)"
               : "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
-            color: isGold ? "var(--pc-home-navy)" : "var(--pc-home-gold)",
+            color: isGold ? "var(--pc-home-navy)" : "var(--pc-gold-ink)",
             border: isGold
               ? "1px solid color-mix(in oklab, var(--pc-home-navy) 24%, transparent)"
               : "1px solid color-mix(in oklab, var(--pc-home-gold) 30%, transparent)",
@@ -944,7 +944,7 @@ function PillarCard({
             className="mt-0.5 hidden text-[11.5px] leading-[1.35] sm:block sm:line-clamp-2"
             style={{
               color: isGold
-                ? "color-mix(in oklab, var(--pc-home-navy) 82%, transparent)"
+                ? "var(--pc-home-navy)"
                 : "var(--pc-text-body)",
             }}
           >
@@ -964,7 +964,7 @@ function PillarCard({
             background: isGold
               ? "color-mix(in oklab, var(--pc-home-navy) 14%, transparent)"
               : "color-mix(in oklab, var(--pc-home-gold) 22%, transparent)",
-            color: isGold ? "var(--pc-home-navy)" : "var(--pc-home-gold)",
+            color: isGold ? "var(--pc-home-navy)" : "var(--pc-gold-ink)",
             border: isGold
               ? "1px solid color-mix(in oklab, var(--pc-home-navy) 26%, transparent)"
               : "1px solid color-mix(in oklab, var(--pc-home-gold) 45%, transparent)",
