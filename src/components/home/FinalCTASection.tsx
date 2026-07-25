@@ -67,10 +67,10 @@ export function FinalCTASection() {
           />
 
 
-          <div className="relative px-4 py-8 sm:px-8 sm:py-12">
-            <div className="mx-auto flex max-w-2xl flex-col items-center gap-4 text-center">
+          <div className="relative px-4 py-5 sm:px-6 sm:py-7">
+            <div className="mx-auto flex max-w-2xl flex-col items-center gap-2.5 text-center">
               <span
-                className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[10.5px] font-bold uppercase tracking-[0.22em]"
+                className="inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.2em]"
                 style={{
                   background: `color-mix(in oklab, ${P.gold} 12%, transparent)`,
                   borderColor: `color-mix(in oklab, ${P.gold} 45%, transparent)`,
@@ -82,11 +82,11 @@ export function FinalCTASection() {
 
               <h2
                 id="final-cta-title"
-                className={`${serif} leading-[1.02] tracking-tight`}
+                className={`${serif} leading-[1.05] tracking-tight`}
                 style={{
                   color: "#F8FAFC",
-                  fontSize: "clamp(1.75rem, 4.2vw, 2.75rem)",
-                  textShadow: "0 2px 24px rgba(0,0,0,0.45)",
+                  fontSize: "clamp(1.35rem, 3vw, 1.9rem)",
+                  textShadow: "0 2px 18px rgba(0,0,0,0.4)",
                 }}
               >
                 Encontre o preço certo em{" "}
@@ -95,6 +95,7 @@ export function FinalCTASection() {
                 </span>
                 .
               </h2>
+
 
               <p
                 className="max-w-xl text-[13.5px] sm:text-[14.5px]"
