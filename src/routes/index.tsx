@@ -677,7 +677,7 @@ function HomePage() {
               Um clique para começar
             </span>
           </div>
-          <div className="grid grid-cols-4 gap-1.5 sm:gap-3">
+          <div className="grid grid-cols-5 gap-1.5 sm:gap-3">
             {[
               { key: "supermercados", label: "Mercado", full: "Supermercados", icon: <ShoppingCart className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />, q: "supermercado" },
               { key: "farmacias", label: "Farmácia", full: "Farmácias", icon: <Pill className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />, q: "farmácia" },
@@ -689,17 +689,17 @@ function HomePage() {
                 type="button"
                 onClick={() => navigate({ to: "/buscar", search: { q: c.q } as any })}
                 aria-label={`Pesquisar em ${c.full}`}
-                className="group flex flex-col items-center justify-center gap-1.5 rounded-2xl border px-1.5 py-2.5 text-center transition-all active:scale-[0.97] hover:-translate-y-px hover:shadow-md focus-visible:outline-none focus-visible:ring-2 sm:flex-row sm:justify-start sm:gap-3 sm:px-3 sm:py-2.5 sm:text-left"
+                className="group flex min-h-[64px] flex-col items-center justify-center gap-1.5 rounded-2xl border px-1.5 py-2.5 text-center transition-all active:scale-[0.97] hover:-translate-y-px hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent sm:flex-row sm:justify-start sm:gap-3 sm:px-3 sm:py-2.5 sm:text-left"
                 style={{
                   background: P.card,
                   borderColor: P.line,
                   color: P.heading,
                   // @ts-expect-error css var
-                  "--tw-ring-color": `color-mix(in oklab, ${P.gold} 60%, transparent)`,
+                  "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
                 }}
               >
                 <span
-                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-colors group-hover:brightness-110 sm:h-9 sm:w-9 sm:rounded-lg"
+                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-colors group-hover:brightness-110 group-focus-visible:brightness-110 sm:h-9 sm:w-9 sm:rounded-lg"
                   style={{
                     background: `color-mix(in oklab, ${P.gold} 16%, transparent)`,
                     color: P.navy,
@@ -727,9 +727,53 @@ function HomePage() {
                 />
               </button>
             ))}
+            {/* 5º tile: "Ver todas" abre modal com todas as categorias + busca interna */}
+            <button
+              type="button"
+              onClick={() => setAllCatsOpen(true)}
+              aria-label="Ver todas as categorias"
+              aria-haspopup="dialog"
+              className="group flex min-h-[64px] flex-col items-center justify-center gap-1.5 rounded-2xl border border-dashed px-1.5 py-2.5 text-center transition-all active:scale-[0.97] hover:-translate-y-px hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent sm:flex-row sm:justify-start sm:gap-3 sm:px-3 sm:py-2.5 sm:text-left"
+              style={{
+                background: `color-mix(in oklab, ${P.gold} 8%, ${P.card})`,
+                borderColor: `color-mix(in oklab, ${P.gold} 55%, ${P.line})`,
+                color: P.heading,
+                // @ts-expect-error css var
+                "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
+              }}
+            >
+              <span
+                className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl sm:h-9 sm:w-9 sm:rounded-lg"
+                style={{
+                  background: P.gold,
+                  color: P.navy,
+                }}
+                aria-hidden
+              >
+                <Grid3x3 className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.4} />
+              </span>
+              <span className="flex-1 min-w-0">
+                <span className="block truncate text-[11.5px] font-bold leading-tight sm:text-[14px]" style={{ color: P.heading }}>
+                  Ver todas
+                </span>
+                <span
+                  className="mt-0.5 hidden text-[11px] font-medium sm:block"
+                  style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
+                >
+                  + 8 categorias
+                </span>
+              </span>
+              <ArrowRight
+                className="hidden h-4 w-4 shrink-0 opacity-70 sm:inline"
+                strokeWidth={2.4}
+                style={{ color: P.gold }}
+              />
+            </button>
           </div>
         </div>
       </section>
+
+      <AllCategoriesDialog open={allCatsOpen} onOpenChange={setAllCatsOpen} />
 
 
 
