@@ -133,7 +133,7 @@ export function AuthHero({
 
   return (
     <aside
-      className={`relative flex min-h-[200px] flex-col justify-between overflow-hidden p-5 sm:p-6 md:min-h-[440px] ${className}`}
+      className={`relative flex min-h-[180px] flex-col justify-between overflow-hidden p-4 sm:p-5 md:min-h-[360px] ${className}`}
       style={{
         background: preset.photo
           ? undefined
