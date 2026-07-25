@@ -149,7 +149,7 @@ export function PriceSearchBar({
   const [history, setHistory] = useState<SearchHistoryEntry[]>([]);
   const [sortMode, setSortMode] = useLocalStorageState<SortMode>(
     "search:sort-mode",
-    "relevance",
+    "cheapest",
     {
       validate: (v): v is SortMode =>
         v === "relevance" || v === "cheapest" || v === "unit" || v === "recent" || v === "kind" || v === "spread",
@@ -987,10 +987,10 @@ export function PriceSearchBar({
                           // caso contrário, mantém menor preço primeiro.
                           const sortedGroups = [...groups].sort((a, b) => {
                             if (sortMode === "relevance") {
+                              if (a.min !== b.min) return a.min - b.min;
                               const sa = scoreRelevance(a, query);
                               const sb = scoreRelevance(b, query);
                               if (sa !== sb) return sb - sa;
-                              if (a.min !== b.min) return a.min - b.min;
                               return b.samples - a.samples;
                             }
                             if (a.min !== b.min) return a.min - b.min;

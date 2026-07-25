@@ -24,7 +24,7 @@ import { computeUnitPrice } from "@/lib/unit-price";
 import { QuickFilterBar } from "@/components/search/QuickFilterBar";
 import { ProductStoresDialog } from "@/components/product/ProductStoresDialog";
 import { PriceRankingPanel } from "@/components/product/PriceRankingPanel";
-import { equivalentGroupLabel, selectEquivalentIndexes } from "@/lib/equivalent-group";
+import { equivalentGroupLabel, selectCheapestEquivalentIndexes } from "@/lib/equivalent-group";
 import { auditPriceConsistency } from "@/lib/price-audit";
 import { PriceAuditAlert } from "@/components/product/PriceAuditAlert";
 
@@ -304,16 +304,6 @@ function ComparadorPage() {
   }, [allRows, q, cat]);
 
   /**
-   * Produto de referência do ranking: o primeiro resultado presente em mais de
-   * um mercado (comparação válida entre lojas do mesmo item). Se nenhum tiver
-   * multi-mercado, usa o primeiro resultado. Nunca mistura produtos diferentes.
-   */
-  const referenceRow = useMemo<Comparison | null>(() => {
-    if (!q.trim() || rows.length === 0) return null;
-    return rows.find((r) => Number(r.store_count) > 1) ?? rows[0];
-  }, [rows, q]);
-
-  /**
    * Grupo equivalente: mesmos termos buscados + mesmo tamanho + mesma
    * categoria, atravessando marcas (ex.: óleo de soja 900ml Coamo/Soya/
    * Concórdia). Garante que o "menor preço" mostrado seja realmente o mais
@@ -325,21 +315,23 @@ function ComparadorPage() {
    * outro produto/estabelecimento).
    */
   const equivalentRanking = useMemo(() => {
-    if (!referenceRow) return null;
-    const refIndex = rows.findIndex((r) => r.product_key === referenceRow.product_key);
-    if (refIndex < 0) return null;
-    const idxs = selectEquivalentIndexes(
+    if (!q.trim() || rows.length === 0) return null;
+    const idxs = selectCheapestEquivalentIndexes(
       rows.map((r) => ({
         name: r.display_name,
         category: r.category,
         sizeValue: r.size_value,
         sizeUnit: r.size_unit,
+        minPrice: r.min_price,
+        samples: r.store_count,
       })),
       q,
-      refIndex,
     );
     const members = idxs.map((i) => rows[i]).filter(Boolean);
     if (members.length === 0) return null;
+    const cheapestMember = members.reduce((best, row) =>
+      Number(row.min_price) < Number(best.min_price) ? row : best,
+    members[0]);
 
     // Melhor preço por mercado dentro do grupo (produto mais barato da loja).
     const byStore = new Map<string, { store_name: string; establishment_id?: string | null; price: number; product_name?: string | null; last_seen_at?: string | null }>();
@@ -385,14 +377,15 @@ function ComparadorPage() {
     return {
       label:
         members.length > 1
-          ? equivalentGroupLabel(members.map((m) => m.display_name), referenceRow.display_name)
-          : referenceRow.display_name,
-      sizeLabel: formatSize(referenceRow.size_value, referenceRow.size_unit),
+          ? equivalentGroupLabel(members.map((m) => m.display_name), cheapestMember.display_name)
+          : cheapestMember.display_name,
+      sizeLabel: formatSize(cheapestMember.size_value, cheapestMember.size_unit),
       brands: members.length,
       stores,
       cheapest: stores[0],
+      referenceRow: cheapestMember,
     };
-  }, [rows, q, referenceRow]);
+  }, [rows, q]);
 
   const stats = useMemo(() => {
     const stores = new Set<string>();
@@ -783,8 +776,8 @@ function ComparadorPage() {
               sizeLabel={equivalentRanking.sizeLabel}
               stores={equivalentRanking.stores}
               onOpenStore={
-                referenceRow && equivalentRanking.brands === 1
-                  ? () => setOpenStoresRow(referenceRow)
+                equivalentRanking.referenceRow && equivalentRanking.brands === 1
+                  ? () => setOpenStoresRow(equivalentRanking.referenceRow)
                   : undefined
               }
             />
