@@ -714,6 +714,9 @@ function EstablishmentsPage() {
                       <SelectValue placeholder="Ordenar" />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem value="distance" disabled={!loc.hasReference}>
+                        Ordenar: mais próximos {loc.hasReference ? "" : "(ative sua localização)"}
+                      </SelectItem>
                       <SelectItem value="neighborhood">Ordenar: bairro (A→Z)</SelectItem>
                       <SelectItem value="name">Ordenar: nome (A→Z)</SelectItem>
                       <SelectItem value="products">Ordenar: mais produtos</SelectItem>
