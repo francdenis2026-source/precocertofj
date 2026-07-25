@@ -579,27 +579,9 @@ export const searchProductPrice = createServerFn({ method: "POST" })
       .slice(0, 20);
 
 
-    // Resumo ("melhor preço agora" / "economia estimada") deve comparar itens
-    // EQUIVALENTES entre mercados: mesmo termo buscado + mesmo tamanho,
-    // atravessando marcas (ex.: óleo de soja 900ml Coamo / Soya / Concórdia).
-    // Antes usava só um grupo (a marca com mais mercados) e escondia o preço
-    // realmente mais baixo do município; e antes disso comparava itens
-    // diferentes (óleo de pimenta 150ml vs. óleo de coco capilar).
-    const refIndexInGroups = Math.max(
-      0,
-      groups.findIndex((g) => new Set(g.prices.map((p) => p.marketName)).size > 1),
-    );
-    const eqIdx =
-      groups.length > 0
-        ? selectEquivalentIndexes(
-            groups.map((g) => ({ name: g.productName })),
-            didYouMean ?? data.query,
-            refIndexInGroups,
-          )
-        : [];
-    const eqGroups = eqIdx.map((i) => groups[i]).filter(Boolean);
-    const refGroup = eqGroups[0] ?? groups[0] ?? null;
-    const eqPrices = eqGroups.flatMap((g) => g.prices);
+    // Resumo ("melhor preço agora" / "economia estimada") usa exatamente o
+    // mesmo conjunto equivalente calculado acima para o ranking.
+
 
     let cheapest: PriceSearchResult["cheapest"] = null;
     if (refGroup && eqPrices.length > 0) {
