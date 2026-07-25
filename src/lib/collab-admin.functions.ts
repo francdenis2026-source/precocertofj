@@ -204,8 +204,8 @@ export type CollabAuditEntry = {
   admin_full_name: string | null;
   action: string;
   target_id: string | null;
-  before: unknown;
-  after: unknown;
+  before: Record<string, unknown> | null;
+  after: Record<string, unknown> | null;
   notes: string | null;
   created_at: string;
 };
