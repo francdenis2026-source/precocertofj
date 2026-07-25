@@ -77,13 +77,13 @@ export function SiteFooter() {
           <span className="font-semibold text-foreground/75 tabular-nums">© {year}</span>
         </div>
 
-        {/* Row 2: nav chips + dev credit — inline flow */}
+        {/* Row 2: nav chips com scroll horizontal p/ evitar corte */}
         <nav
           aria-label="Rodapé"
-          className="mt-0.5 flex flex-wrap items-center gap-x-1 gap-y-0 text-[clamp(11.5px,3.1vw,13.5px)] font-semibold leading-none text-foreground"
+          className="mt-1 -mx-2 flex items-center gap-x-1 overflow-x-auto whitespace-nowrap px-2 pb-0.5 text-[12px] font-semibold leading-none text-foreground [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         >
           {MOBILE_LINKS.map((l, i) => (
-            <span key={l.to} className="inline-flex items-center">
+            <span key={l.to} className="inline-flex shrink-0 items-center">
               <Link
                 to={l.to}
                 className="rounded-md px-1 py-0.5 text-foreground/95 outline-none transition-colors hover:bg-brand/10 hover:text-brand active:text-brand-strong focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background [&.active]:text-brand"
@@ -95,12 +95,13 @@ export function SiteFooter() {
               )}
             </span>
           ))}
-          <span aria-hidden className="px-0.5 text-brand/60">·</span>
-          <span className="ml-auto font-mono text-[11px] font-medium text-muted-foreground">
-            &lt;dev&gt; <span className="text-foreground/85">Franc</span>
-          </span>
         </nav>
+        {/* Row 3: dev credit isolado */}
+        <div className="mt-0.5 text-right font-mono text-[10.5px] font-medium text-muted-foreground">
+          &lt;dev&gt; <span className="text-foreground/85">Franc D&apos;nis</span>
+        </div>
       </div>
+
 
       {/* ============ DESKTOP / TABLET ============ */}
       <div
