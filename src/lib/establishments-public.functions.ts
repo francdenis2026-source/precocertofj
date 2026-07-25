@@ -6,6 +6,8 @@ export type EstablishmentStat = {
   city: string | null;
   state: string | null;
   neighborhood: string | null;
+  latitude: number | null;
+  longitude: number | null;
   logoUrl: string | null;
   brandColor: string | null;
   kind: string | null;
