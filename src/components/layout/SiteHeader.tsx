@@ -49,12 +49,11 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
   // Busca compacta no header aparece após o usuário rolar o hero (apenas overlay/landing).
   const [scrolled, setScrolled] = useState(false);
   useEffect(() => {
-    if (!isOverlay) return;
     const onScroll = () => setScrolled(window.scrollY > 320);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, [isOverlay]);
+  }, []);
 
   const { signOut, loading: signingOut } = useSignOut();
   const navigate = useNavigate();
@@ -168,7 +167,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
         {/* CTAs */}
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           {/* Busca compacta no topo — páginas internas sempre; landing após rolar o hero */}
-          {showNav && (!isOverlay || scrolled) && (
+          {showNav && scrolled && (
             <form
               onSubmit={(e) => {
                 e.preventDefault();
