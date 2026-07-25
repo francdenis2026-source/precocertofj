@@ -13,6 +13,7 @@ import {
 import { Clock, Crown, Search, ShoppingBag, Sparkles, TrendingDown, X } from "lucide-react";
 import { FairPriceBadge } from "@/components/product/FairPriceBadge";
 import { HighlightMatch } from "@/components/search/HighlightMatch";
+import { AnchoredDropdown } from "@/components/search/AnchoredDropdown";
 import { MatchReasonBadges } from "@/components/search/MatchReasonBadges";
 import { SearchInterpretationSummary } from "@/components/search/SearchInterpretationSummary";
 import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
@@ -305,16 +306,10 @@ export function PriceSearchBar({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rawResult, suggestions]);
 
-  // Close dropdown on outside click
-  useEffect(() => {
-    if (!showSuggest) return;
-    const onDown = (e: MouseEvent) => {
-      if (!containerRef.current) return;
-      if (!containerRef.current.contains(e.target as Node)) setShowSuggest(false);
-    };
-    document.addEventListener("mousedown", onDown);
-    return () => document.removeEventListener("mousedown", onDown);
-  }, [showSuggest]);
+  // Fechamento ao clicar fora / Esc é responsabilidade do AnchoredDropdown
+  // (o painel vive em portal, então um listener baseado em containerRef
+  // fecharia a lista antes do clique na sugestão registrar).
+
 
 
   const submit = (e: React.FormEvent) => {
