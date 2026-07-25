@@ -13,6 +13,7 @@ import {
 import { Clock, Crown, Search, ShoppingBag, Sparkles, TrendingDown, X } from "lucide-react";
 import { FairPriceBadge } from "@/components/product/FairPriceBadge";
 import { HighlightMatch } from "@/components/search/HighlightMatch";
+import { AnchoredDropdown } from "@/components/search/AnchoredDropdown";
 import { MatchReasonBadges } from "@/components/search/MatchReasonBadges";
 import { SearchInterpretationSummary } from "@/components/search/SearchInterpretationSummary";
 import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
@@ -305,16 +306,10 @@ export function PriceSearchBar({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [rawResult, suggestions]);
 
-  // Close dropdown on outside click
-  useEffect(() => {
-    if (!showSuggest) return;
-    const onDown = (e: MouseEvent) => {
-      if (!containerRef.current) return;
-      if (!containerRef.current.contains(e.target as Node)) setShowSuggest(false);
-    };
-    document.addEventListener("mousedown", onDown);
-    return () => document.removeEventListener("mousedown", onDown);
-  }, [showSuggest]);
+  // Fechamento ao clicar fora / Esc é responsabilidade do AnchoredDropdown
+  // (o painel vive em portal, então um listener baseado em containerRef
+  // fecharia a lista antes do clique na sugestão registrar).
+
 
 
   const submit = (e: React.FormEvent) => {
@@ -499,12 +494,20 @@ export function PriceSearchBar({
             </button>
           )}
 
-          {showHistory && (
-            <div
-              className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 max-h-72 overflow-auto rounded-2xl border border-primary/20 bg-background shadow-lg"
-              role="listbox"
-              aria-label="Buscas recentes"
-            >
+          {/*
+            Portal ancorado: no mobile a lista ficava recortada/coberta por
+            headers e barras sticky quando era `absolute` dentro da seção.
+            O AnchoredDropdown renderiza em `position: fixed` no <body>, com
+            reposicionamento em scroll/resize e fechamento por clique fora/Esc.
+          */}
+          <AnchoredDropdown
+            anchorRef={containerRef}
+            open={showHistory}
+            onClose={() => setShowSuggest(false)}
+            maxHeight={288}
+            ariaLabel="Buscas recentes"
+          >
+            <div>
               <div className="flex items-center justify-between px-3 py-1.5 border-b border-border">
                 <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
                   Buscas recentes
@@ -517,7 +520,7 @@ export function PriceSearchBar({
                   Limpar
                 </button>
               </div>
-              <ul>
+              <ul role="listbox" aria-label="Buscas recentes">
                 {history.map((h) => (
                   <li key={h.query} role="option" aria-selected={false}>
                     <div className="group flex items-center gap-2 px-3 py-2 text-left text-sm text-foreground transition hover:bg-primary/5">
@@ -542,10 +545,17 @@ export function PriceSearchBar({
                 ))}
               </ul>
             </div>
-          )}
+          </AnchoredDropdown>
 
-          {showList && (
-            <div className="absolute left-0 right-0 top-[calc(100%+4px)] z-50 max-h-80 overflow-auto rounded-2xl border border-primary/20 bg-background shadow-lg">
+          <AnchoredDropdown
+            anchorRef={containerRef}
+            open={showList}
+            onClose={() => setShowSuggest(false)}
+            maxHeight={320}
+            ariaLabel="Sugestões de produtos"
+          >
+            <div>
+
               {didYouMean && (
                 <button
                   type="button"
@@ -596,10 +606,20 @@ export function PriceSearchBar({
                     )}
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-[13px] font-medium uppercase tracking-wide">
-                        <HighlightMatch text={s.displayName} tokens={highlightTokens} />
+                        {/* "loose" destaca prefixos (ex.: "mante" em "Manteiga") */}
+                        <HighlightMatch text={s.displayName} tokens={highlightTokens} mode="loose" />
                       </p>
                       <p className="truncate font-mono text-[10px] text-muted-foreground">
-                        {[s.brand, s.category].filter(Boolean).join(" · ") || "Produto"}
+                        {[s.brand, s.category].filter(Boolean).join(" · ") ? (
+                          <HighlightMatch
+                            text={[s.brand, s.category].filter(Boolean).join(" · ")}
+                            tokens={highlightTokens}
+                            mode="loose"
+                            className="rounded bg-accent/20 px-0.5 font-bold text-foreground"
+                          />
+                        ) : (
+                          "Produto"
+                        )}
                       </p>
                     </div>
                   </button>
@@ -608,7 +628,8 @@ export function PriceSearchBar({
 
               </ul>
             </div>
-          )}
+          </AnchoredDropdown>
+
 
         </div>
         <button

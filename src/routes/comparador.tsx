@@ -25,6 +25,8 @@ import { QuickFilterBar } from "@/components/search/QuickFilterBar";
 import { ProductStoresDialog } from "@/components/product/ProductStoresDialog";
 import { PriceRankingPanel } from "@/components/product/PriceRankingPanel";
 import { equivalentGroupLabel, selectEquivalentIndexes } from "@/lib/equivalent-group";
+import { auditPriceConsistency } from "@/lib/price-audit";
+import { PriceAuditAlert } from "@/components/product/PriceAuditAlert";
 
 import { useTeaserQuota } from "@/hooks/use-teaser-quota";
 import { useSession } from "@/hooks/useSession";
@@ -414,6 +416,53 @@ function ComparadorPage() {
     };
   }, [rows, equivalentRanking]);
 
+  /**
+   * Verificação automática a cada pesquisa: confere se o menor preço exibido
+   * no card bate exatamente com o topo do ranking equivalente e varre as
+   * linhas em busca de faixa invertida, divergência entre fontes e lojas
+   * ausentes no cache. Só aparece na tela quando encontra algo.
+   */
+  const auditReport = useMemo(() => {
+    if (rows.length === 0) return null;
+    const report = auditPriceConsistency({
+      rows: rows.map((r) => ({
+        display_name: r.display_name,
+        min_price: r.min_price,
+        max_price: r.max_price,
+        cheapest_store: r.cheapest_store,
+        store_count: r.store_count,
+        stores: (r.stores ?? []).map((s) => ({
+          store_name: s.store_name,
+          establishment_id: s.establishment_id,
+          price: Number(s.price),
+        })),
+      })),
+      ranking: equivalentRanking
+        ? {
+            label: equivalentRanking.label,
+            cheapest: {
+              store_name: equivalentRanking.cheapest.store_name,
+              establishment_id: equivalentRanking.cheapest.establishment_id,
+              price: Number(equivalentRanking.cheapest.price),
+            },
+            stores: equivalentRanking.stores.map((s) => ({
+              store_name: s.store_name,
+              establishment_id: s.establishment_id,
+              price: Number(s.price),
+            })),
+          }
+        : null,
+      card: { price: stats.cheapest != null ? Number(stats.cheapest) : null, storeName: stats.cheapestStore },
+    });
+    return report.issues.length > 0 ? report : null;
+  }, [rows, equivalentRanking, stats]);
+
+  useEffect(() => {
+    if (auditReport && auditReport.criticalCount > 0) {
+      console.warn("[auditoria de preços]", auditReport.issues);
+    }
+  }, [auditReport]);
+
 
 
 
@@ -720,6 +769,8 @@ function ComparadorPage() {
           />
 
         </div>
+
+        <PriceAuditAlert report={auditReport} />
 
         {equivalentRanking ? (
           <div className="mt-5">
