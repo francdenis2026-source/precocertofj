@@ -19,6 +19,7 @@ import { Route as PerfilRouteImport } from './routes/perfil'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as NotificacoesRouteImport } from './routes/notificacoes'
 import { Route as MinhasLicencasRouteImport } from './routes/minhas-licencas'
+import { Route as MinhaIaRouteImport } from './routes/minha-ia'
 import { Route as MeusPedidosRouteImport } from './routes/meus-pedidos'
 import { Route as MelhoresPrecosRouteImport } from './routes/melhores-precos'
 import { Route as MapaRouteImport } from './routes/mapa'
@@ -150,6 +151,11 @@ const NotificacoesRoute = NotificacoesRouteImport.update({
 const MinhasLicencasRoute = MinhasLicencasRouteImport.update({
   id: '/minhas-licencas',
   path: '/minhas-licencas',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MinhaIaRoute = MinhaIaRouteImport.update({
+  id: '/minha-ia',
+  path: '/minha-ia',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MeusPedidosRoute = MeusPedidosRouteImport.update({
@@ -601,6 +607,7 @@ export interface FileRoutesByFullPath {
   '/mapa': typeof MapaRoute
   '/melhores-precos': typeof MelhoresPrecosRoute
   '/meus-pedidos': typeof MeusPedidosRoute
+  '/minha-ia': typeof MinhaIaRoute
   '/minhas-licencas': typeof MinhasLicencasRoute
   '/notificacoes': typeof NotificacoesRoute
   '/onboarding': typeof OnboardingRoute
@@ -695,6 +702,7 @@ export interface FileRoutesByTo {
   '/mapa': typeof MapaRoute
   '/melhores-precos': typeof MelhoresPrecosRoute
   '/meus-pedidos': typeof MeusPedidosRoute
+  '/minha-ia': typeof MinhaIaRoute
   '/minhas-licencas': typeof MinhasLicencasRoute
   '/notificacoes': typeof NotificacoesRoute
   '/onboarding': typeof OnboardingRoute
@@ -790,6 +798,7 @@ export interface FileRoutesById {
   '/mapa': typeof MapaRoute
   '/melhores-precos': typeof MelhoresPrecosRoute
   '/meus-pedidos': typeof MeusPedidosRoute
+  '/minha-ia': typeof MinhaIaRoute
   '/minhas-licencas': typeof MinhasLicencasRoute
   '/notificacoes': typeof NotificacoesRoute
   '/onboarding': typeof OnboardingRoute
@@ -886,6 +895,7 @@ export interface FileRouteTypes {
     | '/mapa'
     | '/melhores-precos'
     | '/meus-pedidos'
+    | '/minha-ia'
     | '/minhas-licencas'
     | '/notificacoes'
     | '/onboarding'
@@ -980,6 +990,7 @@ export interface FileRouteTypes {
     | '/mapa'
     | '/melhores-precos'
     | '/meus-pedidos'
+    | '/minha-ia'
     | '/minhas-licencas'
     | '/notificacoes'
     | '/onboarding'
@@ -1074,6 +1085,7 @@ export interface FileRouteTypes {
     | '/mapa'
     | '/melhores-precos'
     | '/meus-pedidos'
+    | '/minha-ia'
     | '/minhas-licencas'
     | '/notificacoes'
     | '/onboarding'
@@ -1169,6 +1181,7 @@ export interface RootRouteChildren {
   MapaRoute: typeof MapaRoute
   MelhoresPrecosRoute: typeof MelhoresPrecosRoute
   MeusPedidosRoute: typeof MeusPedidosRoute
+  MinhaIaRoute: typeof MinhaIaRoute
   MinhasLicencasRoute: typeof MinhasLicencasRoute
   NotificacoesRoute: typeof NotificacoesRoute
   OnboardingRoute: typeof OnboardingRoute
@@ -1297,6 +1310,13 @@ declare module '@tanstack/react-router' {
       path: '/minhas-licencas'
       fullPath: '/minhas-licencas'
       preLoaderRoute: typeof MinhasLicencasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/minha-ia': {
+      id: '/minha-ia'
+      path: '/minha-ia'
+      fullPath: '/minha-ia'
+      preLoaderRoute: typeof MinhaIaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/meus-pedidos': {
@@ -1967,6 +1987,7 @@ const rootRouteChildren: RootRouteChildren = {
   MapaRoute: MapaRoute,
   MelhoresPrecosRoute: MelhoresPrecosRoute,
   MeusPedidosRoute: MeusPedidosRoute,
+  MinhaIaRoute: MinhaIaRoute,
   MinhasLicencasRoute: MinhasLicencasRoute,
   NotificacoesRoute: NotificacoesRoute,
   OnboardingRoute: OnboardingRoute,
