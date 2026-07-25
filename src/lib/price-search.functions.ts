@@ -9,6 +9,7 @@ import {
   type SearchMode,
 } from "@/lib/search-tokens";
 import { scoreProductName } from "@/lib/search-scoring";
+import { equivalentGroupLabel, selectEquivalentIndexes } from "@/lib/equivalent-group";
 import {
   buildSynonymIndex,
   nameHasExcludedToken,
@@ -557,28 +558,45 @@ export const searchProductPrice = createServerFn({ method: "POST" })
       .slice(0, 20);
 
 
-    // Resumo ("melhor preço agora" / "economia estimada") deve comparar o
-    // MESMO produto entre mercados. Antes usava todas as linhas que casavam a
-    // busca, o que comparava itens diferentes (ex.: óleo de pimenta 150ml vs.
-    // óleo de coco capilar) e gerava uma economia irreal.
-    const refGroup =
-      groups.find((g) => new Set(g.prices.map((p) => p.marketName)).size > 1) ??
-      groups[0] ??
-      null;
+    // Resumo ("melhor preço agora" / "economia estimada") deve comparar itens
+    // EQUIVALENTES entre mercados: mesmo termo buscado + mesmo tamanho,
+    // atravessando marcas (ex.: óleo de soja 900ml Coamo / Soya / Concórdia).
+    // Antes usava só um grupo (a marca com mais mercados) e escondia o preço
+    // realmente mais baixo do município; e antes disso comparava itens
+    // diferentes (óleo de pimenta 150ml vs. óleo de coco capilar).
+    const refIndexInGroups = Math.max(
+      0,
+      groups.findIndex((g) => new Set(g.prices.map((p) => p.marketName)).size > 1),
+    );
+    const eqIdx =
+      groups.length > 0
+        ? selectEquivalentIndexes(
+            groups.map((g) => ({ name: g.productName })),
+            didYouMean ?? data.query,
+            refIndexInGroups,
+          )
+        : [];
+    const eqGroups = eqIdx.map((i) => groups[i]).filter(Boolean);
+    const refGroup = eqGroups[0] ?? groups[0] ?? null;
+    const eqPrices = eqGroups.flatMap((g) => g.prices);
 
     let cheapest: PriceSearchResult["cheapest"] = null;
-    if (refGroup && refGroup.prices.length > 0) {
-      min = refGroup.min;
-      avg = refGroup.avg;
-      max = refGroup.max;
-      const best = refGroup.prices.reduce((b, p) => (p.price < b.price ? p : b), refGroup.prices[0]);
+    if (refGroup && eqPrices.length > 0) {
+      const ps = eqPrices.map((p) => p.price);
+      min = Math.min(...ps);
+      max = Math.max(...ps);
+      avg = Number((ps.reduce((a, b) => a + b, 0) / ps.length).toFixed(2));
+      const best = eqPrices.reduce((b, p) => (p.price < b.price ? p : b), eqPrices[0]);
       cheapest = {
         marketName: best.marketName,
         marketLogoUrl: best.marketLogoUrl,
         marketBrandColor: best.marketBrandColor,
         price: best.price,
         when: best.when,
-        productName: refGroup.productName,
+        productName:
+          eqGroups.length > 1
+            ? equivalentGroupLabel(eqGroups.map((g) => g.productName), refGroup.productName)
+            : refGroup.productName,
       };
     } else {
       const cheapestRow = list.reduce<Row | null>((best, r) => {
