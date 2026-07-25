@@ -651,7 +651,7 @@ function EstablishmentsPage() {
                   {data.topGlobalCategories.map((c) => (
                     <span
                       key={c.category}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-foreground shadow-sm"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-foreground/90 shadow-sm"
                     >
                       {humanizeCategory(c.category)}
                       <span className="rounded-full bg-brand-gold px-1.5 py-0.5 text-[10px] font-bold text-brand-navy tabular-nums">
