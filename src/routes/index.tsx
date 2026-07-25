@@ -818,23 +818,23 @@ function PartnersStrip() {
   return (
     <section className="pc-container pt-2 sm:pt-3">
       <div
-        className="rounded-[var(--pc-radius-md)] border px-3 py-3 sm:px-4 sm:py-4"
+        className="rounded-[var(--pc-radius-md)] border px-3 py-3 shadow-[0_1px_0_rgba(255,255,255,0.04)_inset,0_10px_30px_-18px_rgba(0,0,0,0.55)] sm:px-4 sm:py-4"
         style={{ background: P.card, borderColor: P.line }}
       >
-        <div className="mb-2.5 flex flex-wrap items-end justify-between gap-2 sm:mb-3">
+        <header className="mb-3 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-3 sm:mb-3.5">
           <div className="min-w-0">
             <p
-              className="text-[10px] font-bold uppercase tracking-[0.2em]"
+              className="text-[9.5px] font-bold uppercase tracking-[0.22em] sm:text-[10px]"
               style={{ color: P.gold }}
             >
               Onde comparamos
             </p>
             <h2
-              className={`${serif} mt-0.5 leading-tight`}
+              className={`${serif} mt-0.5 truncate leading-[1.15]`}
               style={{
                 color: P.heading,
-                fontSize: "clamp(1.15rem, 2vw, 1.5rem)",
-                letterSpacing: "-0.01em",
+                fontSize: "clamp(1.05rem, 2vw, 1.45rem)",
+                letterSpacing: "-0.015em",
               }}
             >
               Mercados parceiros de Feijó
@@ -842,20 +842,21 @@ function PartnersStrip() {
           </div>
           <Link
             to="/estabelecimentos"
-            className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] transition-colors hover:brightness-110"
+            className="inline-flex shrink-0 items-center gap-1 rounded-full border border-[color:var(--pc-gold,#c9a84c)]/25 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] transition-all hover:border-[color:var(--pc-gold,#c9a84c)]/60 hover:bg-white/[0.03] sm:text-[11px]"
             style={{ color: P.gold }}
           >
-            Ver todos
-            <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.6} />
+            <span className="hidden sm:inline">Ver todos</span>
+            <span className="sm:hidden">Todos</span>
+            <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" strokeWidth={2.6} />
           </Link>
-        </div>
+        </header>
 
         <ul className="grid grid-cols-4 gap-1.5 sm:grid-cols-6 sm:gap-2 md:grid-cols-8">
           {stores.map((s: any) => (
             <li key={s.id}>
               <Link
                 to="/estabelecimentos"
-                className="group relative flex h-12 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-white px-2 shadow-[0_1px_2px_rgba(0,0,0,0.25)] ring-1 ring-black/5 transition-all hover:-translate-y-0.5 hover:shadow-md sm:h-14"
+                className="group relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden rounded-lg border border-black/5 bg-white px-1.5 py-1 shadow-[0_1px_2px_rgba(0,0,0,0.18),0_0_0_1px_rgba(255,255,255,0.04)] ring-0 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_14px_-4px_rgba(0,0,0,0.35)] sm:px-2 sm:py-1.5"
                 title={s.name}
                 aria-label={s.name}
               >
@@ -865,13 +866,18 @@ function PartnersStrip() {
                     alt={s.name}
                     loading="lazy"
                     decoding="async"
-                    className="max-h-9 max-w-full object-contain sm:max-h-11"
+                    className="max-h-[78%] max-w-[88%] object-contain"
                   />
                 ) : (
-                  <span className="truncate text-center text-[10px] font-bold uppercase tracking-[0.12em] text-slate-800">
+                  <span className="line-clamp-2 text-center text-[9.5px] font-bold uppercase leading-tight tracking-[0.1em] text-slate-800 sm:text-[10.5px]">
                     {s.name}
                   </span>
                 )}
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-0 bottom-0 h-[2px] origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"
+                  style={{ background: P.gold }}
+                />
               </Link>
             </li>
           ))}
