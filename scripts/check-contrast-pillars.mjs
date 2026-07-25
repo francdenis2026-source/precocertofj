@@ -147,6 +147,7 @@ function flatten(layers, vars) {
 /* ---------------- pares auditados ---------------- */
 const CARD = "var(--pc-home-card)";
 const GOLD = "var(--pc-home-gold)";
+const GOLD_INK = "var(--pc-gold-ink)";
 const NAVY = "var(--pc-home-navy)";
 
 /** { label, bgLayers, fg, min } — min = razão mínima exigida (4.5 texto, 3 UI/texto grande) */
@@ -154,26 +155,26 @@ const CASES = [
   // ---- Pilares (ribbon sobre card) ----
   { label: "Pilar · título", bg: [CARD], fg: "var(--pc-home-heading)", min: 4.5 },
   { label: "Pilar · descrição", bg: [CARD], fg: "var(--pc-text-body)", min: 4.5 },
-  { label: "Pilar · ícone (gold)", bg: [CARD, `color-mix(in oklab, ${GOLD} 14%, transparent)`], fg: GOLD, min: 3 },
+  { label: "Pilar · ícone (gold)", bg: [CARD, `color-mix(in oklab, ${GOLD} 14%, transparent)`], fg: GOLD_INK, min: 3 },
   { label: "Pilar · borda ícone", bg: [CARD], fg: `color-mix(in oklab, ${GOLD} 30%, transparent)`, min: 1 },
-  { label: "Pilar · chevron (gold)", bg: [CARD, `color-mix(in oklab, ${GOLD} 22%, transparent)`], fg: GOLD, min: 3 },
+  { label: "Pilar · chevron (gold)", bg: [CARD, `color-mix(in oklab, ${GOLD} 22%, transparent)`], fg: GOLD_INK, min: 3 },
   // ---- Pilar Plus (fundo gold) ----
   { label: "Plus · título sobre gold", bg: [GOLD], fg: NAVY, min: 4.5 },
-  { label: "Plus · descrição sobre gold", bg: [GOLD], fg: `color-mix(in oklab, ${NAVY} 82%, transparent)`, min: 4.5 },
+  { label: "Plus · descrição sobre gold", bg: [GOLD], fg: NAVY, min: 4.5 },
   { label: "Plus · ícone sobre gold", bg: [GOLD, `color-mix(in oklab, ${NAVY} 16%, transparent)`], fg: NAVY, min: 3 },
   { label: "Plus · chevron sobre gold", bg: [GOLD, `color-mix(in oklab, ${NAVY} 14%, transparent)`], fg: NAVY, min: 3 },
   // ---- Tiles de categoria ----
   { label: "Categoria · rótulo", bg: [CARD], fg: "var(--pc-home-heading)", min: 4.5 },
-  { label: "Categoria · 'Ver ofertas'", bg: [CARD], fg: "color-mix(in oklab, var(--pc-home-ink) 78%, transparent)", min: 4.5 },
-  { label: "Categoria · ícone gold", bg: [CARD, `color-mix(in oklab, ${GOLD} 18%, transparent)`], fg: GOLD, min: 3 },
-  { label: "Categoria · seta gold", bg: [CARD], fg: GOLD, min: 3 },
+  { label: "Categoria · 'Ver ofertas'", bg: [CARD], fg: "color-mix(in oklab, var(--pc-home-ink) 92%, transparent)", min: 4.5 },
+  { label: "Categoria · ícone gold", bg: [CARD, `color-mix(in oklab, ${GOLD} 18%, transparent)`], fg: GOLD_INK, min: 3 },
+  { label: "Categoria · seta gold", bg: [CARD], fg: GOLD_INK, min: 3 },
   { label: "Ver todas · rótulo", bg: [CARD, `color-mix(in oklab, ${GOLD} 8%, transparent)`], fg: "var(--pc-home-heading)", min: 4.5 },
   { label: "Ver todas · ícone (navy/gold)", bg: [GOLD], fg: NAVY, min: 3 },
   // ---- Badges do design system (tonais sobre card) ----
-  { label: "Badge · primary tonal", bg: ["var(--card)", "color-mix(in oklab, var(--primary) 10%, transparent)"], fg: "var(--primary)", min: 4.5 },
+  { label: "Badge · primary tonal", bg: ["var(--card)", "color-mix(in oklab, var(--primary) 10%, transparent)"], fg: "var(--badge-primary-fg)", min: 4.5 },
   { label: "Badge · savings tonal", bg: ["var(--card)", "color-mix(in oklab, var(--savings) 10%, transparent)"], fg: "var(--savings)", min: 4.5 },
   { label: "Badge · savings solid", bg: ["var(--savings)"], fg: "var(--savings-foreground)", min: 4.5 },
-  { label: "Badge · warning tonal", bg: ["var(--card)", "color-mix(in oklab, var(--warning) 15%, transparent)"], fg: "var(--warning-foreground)", min: 4.5 },
+  { label: "Badge · warning tonal", bg: ["var(--card)", "color-mix(in oklab, var(--warning) 15%, transparent)"], fg: "var(--badge-warning-fg)", min: 4.5 },
   { label: "Badge · destructive tonal", bg: ["var(--card)", "color-mix(in oklab, var(--destructive) 10%, transparent)"], fg: "var(--destructive)", min: 4.5 },
   { label: "Badge · muted", bg: ["var(--muted)"], fg: "var(--muted-foreground)", min: 4.5 },
   { label: "Badge · outline", bg: ["var(--background)"], fg: "var(--foreground)", min: 4.5 },
