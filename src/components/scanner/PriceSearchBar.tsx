@@ -571,9 +571,8 @@ export function PriceSearchBar({
                 role="listbox"
               >
 
-              {suggestions.map((s, i) => {
-                const locked = isVisitor && isTeaserLocked(s.id, i);
-                const btn = (
+              {suggestions.map((s, i) => (
+                <li key={s.id} role="option" aria-selected={i === activeIdx}>
                   <button
                     type="button"
                     onMouseEnter={() => setActiveIdx(i)}
@@ -607,21 +606,8 @@ export function PriceSearchBar({
                       </p>
                     </div>
                   </button>
-                );
-                return (
-                  <li key={s.id} role="option" aria-selected={i === activeIdx}>
-                    {locked ? (
-                      <div className="relative h-[52px]">
-                        <LockOverlay locked variant="compact">
-                          {btn}
-                        </LockOverlay>
-                      </div>
-                    ) : (
-                      btn
-                    )}
-                  </li>
-                );
-              })}
+                </li>
+              ))}
 
               </ul>
             </div>
