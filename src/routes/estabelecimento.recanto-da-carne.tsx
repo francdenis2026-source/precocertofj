@@ -157,10 +157,14 @@ function RecantoDaCarnePage() {
               />
             )}
             <div className="flex-1">
-              <CardTitle className="text-2xl">Recanto da Carne</CardTitle>
-              <CardDescription className="mt-1">
+              <div className="flex flex-wrap items-start justify-between gap-2">
+                <CardTitle className="text-2xl">Recanto da Carne</CardTitle>
+                <RatingBadge value={PLATFORM_RATING.value} count={PLATFORM_RATING.count} />
+              </div>
+              <CardDescription className="mt-1 text-[12.5px] leading-snug">
                 Açougue · {data.products.length} produto{data.products.length === 1 ? "" : "s"} publicados
               </CardDescription>
+
               <div className="mt-3 flex flex-wrap gap-3 text-xs text-muted-foreground">
                 <span className="inline-flex items-center gap-1">
                   <MapPin className="h-3.5 w-3.5" />
