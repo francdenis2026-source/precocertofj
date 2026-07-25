@@ -608,16 +608,21 @@ function HomePage() {
 
 
       {/* ============== MERCADOS PARCEIROS — faixa de logos ============== */}
-      <PartnersStrip />
+      <section id="parceiros" className="scroll-mt-24">
+        <PartnersStrip />
+      </section>
 
 
-
-      {/* ============== BENEFÍCIOS ============== */}
-      <BenefitsSection />
+      {/* ============== BENEFÍCIOS (accordion no mobile) ============== */}
+      <section id="beneficios" className="scroll-mt-24">
+        <MobileAccordion eyebrow="Benefícios" title="Por que usar o PreçoCerto" defaultOpen={false}>
+          <BenefitsSection />
+        </MobileAccordion>
+      </section>
 
 
       {/* ============== 3 PILARES (cards) ============== */}
-      <section className="pc-container pt-3 sm:pt-4">
+      <section id="pilares" className="pc-container pt-3 scroll-mt-24 sm:pt-4">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
           <PillarCard
             to="/melhores-precos"
@@ -646,21 +651,28 @@ function HomePage() {
 
 
       {/* ============== RECENTES ============== */}
-      <div className="pt-3 sm:pt-4">
+      <section id="recentes" className="pt-3 scroll-mt-24 sm:pt-4">
         <RecentProducts P={P} serif={serif} />
-      </div>
+      </section>
 
 
-      {/* ============== PROVA SOCIAL ============== */}
-      <SocialProofSection />
+      {/* ============== PROVA SOCIAL (accordion no mobile, lazy) ============== */}
+      <section id="prova-social" className="scroll-mt-24">
+        <MobileAccordion eyebrow="Prova social" title="Depoimentos da comunidade" defaultOpen={false}>
+          <Suspense fallback={<div className="pc-container pt-3" aria-hidden><div className="h-24 rounded-lg" style={{ background: "color-mix(in oklab, var(--pc-home-line) 40%, transparent)" }} /></div>}>
+            <SocialProofSection />
+          </Suspense>
+        </MobileAccordion>
+      </section>
 
 
-      {/* ============== CTA FINAL PERSUASIVO ============== */}
-      <FinalCTASection />
+      {/* ============== CTA FINAL (lazy) ============== */}
+      <Suspense fallback={null}>
+        <FinalCTASection />
+      </Suspense>
 
 
-
-
+      <BackToTop />
       <MetricSpotlightDialog
         open={spotlight !== null}
         onOpenChange={(v) => { if (!v) setSpotlight(null); }}
@@ -670,6 +682,7 @@ function HomePage() {
     </div>
   );
 }
+
 
 
 /* -------- PillarCard -------- */
