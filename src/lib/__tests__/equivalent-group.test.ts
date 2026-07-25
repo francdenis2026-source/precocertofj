@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   selectEquivalentIndexes,
+  selectCheapestEquivalentIndexes,
   equivalentGroupLabel,
   sizeSignature,
 } from "@/lib/equivalent-group";
@@ -82,7 +83,7 @@ describe("equivalentGroupLabel", () => {
         ["Óleo de Soja Coamo 900ml", "Óleo de Soja Soya 900ml"],
         "Óleo de Soja Coamo 900ml",
       ),
-    ).toBe("Óleo de Soja");
+    ).toBe("Óleo de Soja 900ml");
   });
 
   it("cai no fallback quando não há prefixo útil", () => {
@@ -91,5 +92,32 @@ describe("equivalentGroupLabel", () => {
 
   it("um único nome devolve o próprio nome", () => {
     expect(equivalentGroupLabel(["Leite 1L"], "x")).toBe("Leite 1L");
+  });
+});
+
+describe("selectCheapestEquivalentIndexes", () => {
+  it("prioriza o grupo equivalente que contém o menor preço real", () => {
+    const idx = selectCheapestEquivalentIndexes(
+      [
+        { name: "Óleo de Soja Concórdia 900ml", category: "mercearia", minPrice: 8.5, samples: 3 },
+        { name: "Óleo de Soja Coamo 900ml", category: "mercearia", minPrice: 8.25, samples: 1 },
+        { name: "Óleo de Soja Soya 900ml", category: "mercearia", minPrice: 9, samples: 2 },
+        { name: "Óleo de Soja Liza 150ml", category: "mercearia", minPrice: 5, samples: 1 },
+      ],
+      "oleo de soja",
+    );
+    expect(idx.sort()).toEqual([0, 1, 2]);
+  });
+
+  it("respeita tamanho explícito na busca para não misturar embalagens", () => {
+    const idx = selectCheapestEquivalentIndexes(
+      [
+        { name: "Manteiga Aviação 200g", category: "mercearia", minPrice: 14.99, samples: 2 },
+        { name: "Manteiga Itambé 500g", category: "mercearia", minPrice: 24.99, samples: 2 },
+        { name: "Manteiga Piracanjuba 200g", category: "mercearia", minPrice: 12.99, samples: 1 },
+      ],
+      "manteiga 200g",
+    );
+    expect(idx.sort()).toEqual([0, 2]);
   });
 });
