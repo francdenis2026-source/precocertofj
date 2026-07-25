@@ -25,7 +25,7 @@ export function FinalCTASection() {
   };
 
   return (
-    <section aria-labelledby="final-cta-title" className="pc-container pt-10 sm:pt-12">
+    <section aria-labelledby="final-cta-title" className="pc-container pt-6 sm:pt-8">
       <div
         className="relative overflow-hidden rounded-[var(--pc-radius-md)] p-[1.5px]"
         style={{
@@ -34,7 +34,7 @@ export function FinalCTASection() {
         }}
       >
         <div
-          className="relative overflow-hidden rounded-[calc(var(--pc-radius-md)-2px)] px-5 py-7 sm:px-8 sm:py-10"
+          className="relative overflow-hidden rounded-[calc(var(--pc-radius-md)-2px)] px-4 py-5 sm:px-6 sm:py-7"
           style={{
             background: `linear-gradient(115deg, ${P.navy} 0%, color-mix(in oklab, ${P.navy} 82%, black) 100%)`,
             color: "#F5F6FA",
@@ -57,7 +57,7 @@ export function FinalCTASection() {
             }}
           />
 
-          <div className="relative mx-auto flex max-w-2xl flex-col items-center gap-5 text-center">
+          <div className="relative mx-auto flex max-w-2xl flex-col items-center gap-3.5 text-center">
             <span
               className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[10.5px] font-bold uppercase tracking-[0.2em]"
               style={{
@@ -74,7 +74,7 @@ export function FinalCTASection() {
               className={`${serif} leading-[1.05] tracking-tight`}
               style={{
                 color: "#F8FAFC",
-                fontSize: "clamp(1.6rem, 3.6vw, 2.5rem)",
+                fontSize: "clamp(1.35rem, 3vw, 2rem)",
               }}
             >
               Encontre o preço certo em{" "}

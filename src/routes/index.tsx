@@ -344,7 +344,7 @@ function HomePage() {
         />
 
 
-        <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-8 pb-10 sm:px-6 sm:pt-12 sm:pb-14 lg:px-8 lg:pt-16 lg:pb-16">
+        <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-5 pb-6 sm:px-6 sm:pt-8 sm:pb-9 lg:px-8 lg:pt-10 lg:pb-10">
           <div className="mx-auto max-w-4xl text-center">
             {/* Badges */}
             <div className="mb-4 flex flex-wrap items-center justify-center gap-2 sm:mb-5">
@@ -383,7 +383,7 @@ function HomePage() {
               className={`${serif} font-normal leading-[1.02] tracking-[-0.01em]`}
               style={{
                 color: "#F8FAFC",
-                fontSize: "clamp(2.25rem, 5.4vw, 4.5rem)",
+                fontSize: "clamp(1.85rem, 4.4vw, 3.5rem)",
               }}
             >
               Encontre o{" "}
@@ -394,7 +394,7 @@ function HomePage() {
             </h1>
 
             <p
-              className="mx-auto mt-4 max-w-2xl text-[15px] font-light leading-relaxed sm:text-[17px]"
+              className="mx-auto mt-3 max-w-2xl text-[14px] font-light leading-relaxed sm:text-[16px]"
               style={{ color: "rgba(255,255,255,0.72)" }}
             >
               Compare preços entre os principais mercados de Feijó e economize em cada compra
@@ -404,7 +404,7 @@ function HomePage() {
             {/* Search bar branca — herói da página */}
             <form
               onSubmit={submitSearch}
-              className="relative mx-auto mt-7 max-w-2xl sm:mt-9"
+              className="relative mx-auto mt-5 max-w-2xl sm:mt-6"
               ref={searchBoxRef}
             >
               <div
@@ -544,7 +544,7 @@ function HomePage() {
             </div>
 
             {/* CTAs — secundários abaixo do search */}
-            <div className="mt-6 flex flex-wrap items-center justify-center gap-3 sm:mt-8">
+            <div className="mt-4 flex flex-wrap items-center justify-center gap-3 sm:mt-5">
               {isLoggedOut ? (
                 <StartFreeDialog>
                   <button
@@ -590,7 +590,7 @@ function HomePage() {
           {/* ============ METRICS ROW (border-y sobre o navy) ============ */}
           <TooltipProvider delayDuration={150}>
             <div
-              className="mx-auto mt-12 grid max-w-5xl grid-cols-3 gap-2 border-y py-6 sm:mt-16 sm:gap-8 sm:py-9"
+              className="mx-auto mt-7 grid max-w-5xl grid-cols-3 gap-2 border-y py-4 sm:mt-9 sm:gap-8 sm:py-5"
               style={{ borderColor: "rgba(255,255,255,0.08)" }}
             >
               {[
@@ -669,8 +669,8 @@ function HomePage() {
 
 
       {/* ============== 3 PILARES (cards) ============== */}
-      <section className="pc-container pt-8 sm:pt-10">
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5">
+      <section className="pc-container pt-5 sm:pt-6">
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
           <PillarCard
             to="/melhores-precos"
             icon={<LineChart className="h-5 w-5" strokeWidth={2} />}
@@ -698,7 +698,7 @@ function HomePage() {
 
 
       {/* ============== RECENTES ============== */}
-      <div className="pt-8 sm:pt-10">
+      <div className="pt-5 sm:pt-6">
         <RecentProducts P={P} serif={serif} />
       </div>
 
@@ -744,21 +744,21 @@ function PillarCard({
     return (
       <Link
         to={to}
-        className="group block overflow-hidden rounded-3xl p-6 transition-all hover:-translate-y-1 hover:shadow-2xl sm:p-7"
+        className="group block overflow-hidden rounded-2xl p-4 transition-all hover:-translate-y-1 hover:shadow-2xl sm:p-5"
         style={{
           background: `linear-gradient(135deg, var(--pc-home-gold) 0%, color-mix(in oklab, var(--pc-home-gold) 82%, black) 100%)`,
           color: "var(--pc-home-navy)",
         }}
       >
         <div
-          className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl"
+          className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-lg"
           style={{ background: "color-mix(in oklab, var(--pc-home-navy) 12%, transparent)" }}
         >
           {icon}
         </div>
-        <h3 className={`${serif} mb-2 text-[22px] leading-tight sm:text-[24px]`}>{title}</h3>
-        <p className="text-[13.5px] font-medium leading-relaxed opacity-80">{desc}</p>
-        <div className="mt-5 inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.18em] opacity-90 transition-opacity group-hover:opacity-100">
+        <h3 className={`${serif} mb-1.5 text-[18px] leading-tight sm:text-[20px]`}>{title}</h3>
+        <p className="text-[12.5px] font-medium leading-snug opacity-80">{desc}</p>
+        <div className="mt-3 inline-flex items-center gap-1.5 text-[10.5px] font-bold uppercase tracking-[0.18em] opacity-90 transition-opacity group-hover:opacity-100">
           {cta}
           <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
         </div>
@@ -769,14 +769,14 @@ function PillarCard({
   return (
     <Link
       to={to}
-      className="group block overflow-hidden rounded-3xl border p-6 transition-all hover:-translate-y-1 sm:p-7"
+      className="group block overflow-hidden rounded-2xl border p-4 transition-all hover:-translate-y-1 sm:p-5"
       style={{
         background: "var(--pc-home-card)",
         borderColor: "var(--pc-home-line)",
       }}
     >
       <div
-        className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-xl"
+        className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-lg"
         style={{
           background: "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
           color: "var(--pc-home-gold)",
@@ -786,16 +786,16 @@ function PillarCard({
         {icon}
       </div>
       <h3
-        className={`${serif} mb-2 text-[22px] leading-tight sm:text-[24px]`}
+        className={`${serif} mb-1.5 text-[18px] leading-tight sm:text-[20px]`}
         style={{ color: "var(--pc-home-heading)" }}
       >
         {title}
       </h3>
-      <p className="text-[13.5px] font-medium leading-relaxed" style={{ color: "var(--pc-text-body)" }}>
+      <p className="text-[12.5px] font-medium leading-snug" style={{ color: "var(--pc-text-body)" }}>
         {desc}
       </p>
       <div
-        className="mt-5 inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.18em] transition-colors group-hover:text-[color:var(--pc-home-gold)]"
+        className="mt-3 inline-flex items-center gap-1.5 text-[10.5px] font-bold uppercase tracking-[0.18em] transition-colors group-hover:text-[color:var(--pc-home-gold)]"
         style={{ color: "var(--pc-home-heading)" }}
       >
         {cta}
@@ -820,12 +820,12 @@ function PartnersStrip() {
   if (!stores.length) return null;
 
   return (
-    <section className="pc-container pt-8 sm:pt-10">
+    <section className="pc-container pt-5 sm:pt-6">
       <div
-        className="rounded-[var(--pc-radius-md)] border px-4 py-5 sm:px-6 sm:py-6"
+        className="rounded-[var(--pc-radius-md)] border px-4 py-4 sm:px-5 sm:py-5"
         style={{ background: P.card, borderColor: P.line }}
       >
-        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+        <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
           <div className="min-w-0">
             <p
               className="text-[10px] font-bold uppercase tracking-[0.2em]"
@@ -859,7 +859,7 @@ function PartnersStrip() {
             <li key={s.id}>
               <Link
                 to="/estabelecimentos"
-                className="group flex h-16 items-center justify-center rounded-xl border px-3 transition-all hover:-translate-y-0.5 hover:shadow-sm sm:h-20"
+                className="group flex h-14 items-center justify-center rounded-xl border px-3 transition-all hover:-translate-y-0.5 hover:shadow-sm sm:h-16"
                 style={{ background: P.paper, borderColor: P.line }}
                 title={s.name}
               >

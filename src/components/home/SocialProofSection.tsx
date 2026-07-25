@@ -46,14 +46,14 @@ export function SocialProofSection() {
   return (
     <section
       aria-labelledby="social-proof-title"
-      className="pc-container pt-8 sm:pt-10"
+      className="pc-container pt-5 sm:pt-6"
     >
       <div
-        className="rounded-[var(--pc-radius-md)] border p-5 sm:p-7"
+        className="rounded-[var(--pc-radius-md)] border p-4 sm:p-5"
         style={{ background: P.card, borderColor: P.line }}
       >
         {/* Header — rating + título */}
-        <header className="mb-5 flex flex-col items-start justify-between gap-4 sm:mb-6 sm:flex-row sm:items-end">
+        <header className="mb-4 flex flex-col items-start justify-between gap-3 sm:mb-5 sm:flex-row sm:items-end">
           <div className="min-w-0">
             <p
               className="text-[10px] font-bold uppercase tracking-[0.2em]"
@@ -66,7 +66,7 @@ export function SocialProofSection() {
               className={`${serif} mt-1 leading-tight`}
               style={{
                 color: P.heading,
-                fontSize: "clamp(1.5rem, 2.8vw, 2rem)",
+                fontSize: "clamp(1.25rem, 2.4vw, 1.75rem)",
                 letterSpacing: "-0.01em",
               }}
             >
@@ -114,11 +114,11 @@ export function SocialProofSection() {
         </header>
 
         {/* Cards de depoimentos */}
-        <ul className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
+        <ul className="grid grid-cols-1 gap-2.5 sm:grid-cols-3 sm:gap-3">
           {TESTIMONIALS.map((t) => (
             <li
               key={t.name}
-              className="relative flex flex-col rounded-2xl border p-4 sm:p-5"
+              className="relative flex flex-col rounded-xl border p-3.5 sm:p-4"
               style={{ background: P.paper, borderColor: P.line }}
             >
               <Quote

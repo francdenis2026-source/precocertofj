@@ -39,9 +39,9 @@ export function BenefitsSection() {
   return (
     <section
       aria-labelledby="benefits-title"
-      className="pc-container pt-8 sm:pt-10"
+      className="pc-container pt-5 sm:pt-6"
     >
-      <header className="mb-4 flex flex-col items-start gap-1 sm:mb-5">
+      <header className="mb-3 flex flex-col items-start gap-1 sm:mb-4">
         <p
           className="text-[10px] font-bold uppercase tracking-[0.2em]"
           style={{ color: P.gold }}
@@ -53,7 +53,7 @@ export function BenefitsSection() {
           className={`${serif} leading-tight`}
           style={{
             color: P.heading,
-            fontSize: "clamp(1.35rem, 2.4vw, 1.75rem)",
+            fontSize: "clamp(1.15rem, 2.1vw, 1.5rem)",
             letterSpacing: "-0.01em",
           }}
         >
@@ -61,15 +61,15 @@ export function BenefitsSection() {
         </h2>
       </header>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+      <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-4 sm:gap-3">
         {BENEFITS.map((b) => (
           <article
             key={b.title}
-            className="group rounded-2xl border p-4 transition-all hover:-translate-y-0.5 hover:shadow-sm sm:p-5"
+            className="group rounded-xl border p-3 transition-all hover:-translate-y-0.5 hover:shadow-sm sm:p-4"
             style={{ background: P.card, borderColor: P.line }}
           >
             <div
-              className="mb-3 inline-flex h-10 w-10 items-center justify-center rounded-xl"
+              className="mb-2 inline-flex h-9 w-9 items-center justify-center rounded-lg"
               style={{
                 background: "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
                 color: P.gold,
@@ -80,13 +80,13 @@ export function BenefitsSection() {
               {b.icon}
             </div>
             <h3
-              className="text-[14.5px] font-bold leading-tight tracking-tight sm:text-[15.5px]"
+              className="text-[13.5px] font-bold leading-tight tracking-tight sm:text-[14.5px]"
               style={{ color: P.heading }}
             >
               {b.title}
             </h3>
             <p
-              className="mt-1.5 text-[12.5px] leading-snug sm:text-[13px]"
+              className="mt-1 text-[12px] leading-snug sm:text-[12.5px]"
               style={{ color: P.body }}
             >
               {b.desc}
