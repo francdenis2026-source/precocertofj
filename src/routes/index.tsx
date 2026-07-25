@@ -818,10 +818,10 @@ function PartnersStrip() {
   return (
     <section className="pc-container pt-2 sm:pt-3">
       <div
-        className="rounded-[var(--pc-radius-md)] border px-4 py-4 sm:px-5 sm:py-5"
+        className="rounded-[var(--pc-radius-md)] border px-3 py-3 sm:px-4 sm:py-4"
         style={{ background: P.card, borderColor: P.line }}
       >
-        <div className="mb-3 flex flex-wrap items-end justify-between gap-3">
+        <div className="mb-2.5 flex flex-wrap items-end justify-between gap-2 sm:mb-3">
           <div className="min-w-0">
             <p
               className="text-[10px] font-bold uppercase tracking-[0.2em]"
@@ -830,10 +830,10 @@ function PartnersStrip() {
               Onde comparamos
             </p>
             <h2
-              className={`${serif} mt-1 leading-tight`}
+              className={`${serif} mt-0.5 leading-tight`}
               style={{
                 color: P.heading,
-                fontSize: "clamp(1.35rem, 2.4vw, 1.75rem)",
+                fontSize: "clamp(1.15rem, 2vw, 1.5rem)",
                 letterSpacing: "-0.01em",
               }}
             >
@@ -842,7 +842,7 @@ function PartnersStrip() {
           </div>
           <Link
             to="/estabelecimentos"
-            className="inline-flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-[0.14em] transition-colors hover:brightness-110"
+            className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] transition-colors hover:brightness-110"
             style={{ color: P.gold }}
           >
             Ver todos
@@ -850,14 +850,14 @@ function PartnersStrip() {
           </Link>
         </div>
 
-        <ul className="grid grid-cols-3 gap-2 sm:grid-cols-4 sm:gap-3 md:grid-cols-6">
+        <ul className="grid grid-cols-4 gap-1.5 sm:grid-cols-6 sm:gap-2 md:grid-cols-8">
           {stores.map((s: any) => (
             <li key={s.id}>
               <Link
                 to="/estabelecimentos"
-                className="group flex h-14 items-center justify-center rounded-xl border px-3 transition-all hover:-translate-y-0.5 hover:shadow-sm sm:h-16"
-                style={{ background: P.paper, borderColor: P.line }}
+                className="group relative flex h-12 items-center justify-center overflow-hidden rounded-lg border border-white/10 bg-white px-2 shadow-[0_1px_2px_rgba(0,0,0,0.25)] ring-1 ring-black/5 transition-all hover:-translate-y-0.5 hover:shadow-md sm:h-14"
                 title={s.name}
+                aria-label={s.name}
               >
                 {s.logoUrl || s.logo_url ? (
                   <img
@@ -865,13 +865,10 @@ function PartnersStrip() {
                     alt={s.name}
                     loading="lazy"
                     decoding="async"
-                    className="max-h-10 max-w-full object-contain opacity-85 grayscale transition-all group-hover:opacity-100 group-hover:grayscale-0 sm:max-h-12"
+                    className="max-h-9 max-w-full object-contain sm:max-h-11"
                   />
                 ) : (
-                  <span
-                    className="truncate text-center text-[11px] font-bold uppercase tracking-[0.14em]"
-                    style={{ color: P.heading }}
-                  >
+                  <span className="truncate text-center text-[10px] font-bold uppercase tracking-[0.12em] text-slate-800">
                     {s.name}
                   </span>
                 )}
