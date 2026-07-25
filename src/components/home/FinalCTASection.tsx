@@ -98,7 +98,7 @@ export function FinalCTASection() {
 
 
               <p
-                className="max-w-xl text-[13.5px] sm:text-[14.5px]"
+                className="max-w-xl text-[12.5px] sm:text-[13px]"
                 style={{ color: "rgba(245,246,250,0.82)" }}
               >
                 Compare em tempo real os preços dos mercados parceiros do seu bairro.
@@ -106,26 +106,26 @@ export function FinalCTASection() {
 
               <form
                 onSubmit={onSubmit}
-                className="mt-1 w-full"
+                className="w-full"
                 role="search"
                 aria-label="Buscar preço agora"
               >
                 <div
-                  className="flex items-center gap-2 rounded-2xl border p-1.5 transition-colors focus-within:border-[color:var(--pc-home-gold)]"
+                  className="flex items-center gap-1.5 rounded-xl border p-1 transition-colors focus-within:border-[color:var(--pc-home-gold)]"
                   style={{
                     background: "rgba(255,255,255,0.98)",
                     borderColor: "rgba(255,255,255,0.25)",
-                    boxShadow: "0 18px 40px -18px rgba(0,0,0,0.55)",
+                    boxShadow: "0 12px 28px -14px rgba(0,0,0,0.5)",
                   }}
                 >
-                  <div className="flex flex-1 items-center gap-2 pl-3">
+                  <div className="flex flex-1 items-center gap-2 pl-2.5">
                     <Search className="h-4 w-4 shrink-0 text-slate-500" aria-hidden />
                     <input
                       type="search"
                       value={q}
                       onChange={(e) => setQ(e.target.value)}
                       placeholder="Ex.: Arroz, Feijão, Leite…"
-                      className="min-w-0 flex-1 bg-transparent py-2.5 text-[14px] text-slate-900 outline-none placeholder:text-slate-400"
+                      className="min-w-0 flex-1 bg-transparent py-1.5 text-[13.5px] text-slate-900 outline-none placeholder:text-slate-400"
                       aria-label="O que você procura?"
                       autoComplete="off"
                       disabled={loading}
@@ -134,30 +134,25 @@ export function FinalCTASection() {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="group inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-[13px] font-bold uppercase tracking-wide shadow-sm transition-all hover:brightness-105 active:scale-[0.98] disabled:cursor-wait disabled:opacity-90"
+                    className="group inline-flex items-center justify-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-bold uppercase tracking-wide shadow-sm transition-all hover:brightness-105 active:scale-[0.98] disabled:cursor-wait disabled:opacity-90"
                     style={{ background: P.gold, color: P.navy }}
                     aria-live="polite"
                   >
                     {loading ? (
                       <>
-                        <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
                         Abrindo…
                       </>
                     ) : (
                       <>
                         Buscar
-                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
+                        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
                       </>
                     )}
                   </button>
                 </div>
-                <p
-                  className="mt-2 text-[11.5px]"
-                  style={{ color: "rgba(245,246,250,0.68)" }}
-                >
-                  Grátis, sem cadastro. Enter para buscar.
-                </p>
               </form>
+
 
               {/* Selos de confiança */}
               <ul
