@@ -13,6 +13,14 @@ import { MobileNav } from "@/components/nav/MobileNav";
 import { FavoriteMarketButton } from "@/components/market/FavoriteMarketButton";
 import { useSession } from "@/hooks/useSession";
 import { listFavoriteMarkets } from "@/lib/favorites.functions";
+import { useUserLocation } from "@/hooks/useUserLocation";
+import { LocationControl } from "@/components/location/LocationControl";
+import {
+  formatDistance,
+  haversineKm,
+  resolveEstablishmentPosition,
+} from "@/lib/geo";
+import { normalizeNeighborhood } from "@/lib/geo-labels";
 
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import {
