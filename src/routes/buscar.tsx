@@ -410,21 +410,15 @@ function FiltersToolbar({
   return (
     <section
       aria-label="Filtros de busca"
-      className="overflow-hidden rounded-xl border border-border bg-card/60 shadow-sm"
+      className="overflow-hidden rounded-xl border border-border bg-card shadow-sm"
     >
       {/* Header da toolbar */}
-      <header className="flex items-center justify-between gap-3 border-b border-border/60 px-3 py-2">
-        <div className="flex items-center gap-2 text-[12.5px] font-semibold text-foreground">
-          <SlidersHorizontal className="h-3.5 w-3.5 text-muted-foreground" aria-hidden />
+      <header className="flex items-center justify-between gap-3 border-b border-border/70 px-3 py-1.5">
+        <div className="flex items-center gap-2 text-[12.5px] font-semibold tracking-tight text-foreground">
+          <SlidersHorizontal className="h-3.5 w-3.5 text-[var(--pc-gold-ink)]" aria-hidden />
           Filtros
           {activeCount > 0 && (
-            <span
-              className="inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[10.5px] font-bold tabular-nums"
-              style={{
-                background: "color-mix(in oklab, var(--brand-gold) 20%, transparent)",
-                color: "var(--brand-navy)",
-              }}
-            >
+            <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-gold px-1.5 text-[10.5px] font-bold tabular-nums text-brand-navy">
               {activeCount}
             </span>
           )}
@@ -434,7 +428,7 @@ function FiltersToolbar({
             <button
               type="button"
               onClick={onClear}
-              className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+              className="inline-flex h-8 items-center gap-1 rounded-md px-2 text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
             >
               <X className="h-3 w-3" aria-hidden /> Limpar
             </button>
@@ -442,7 +436,7 @@ function FiltersToolbar({
           <button
             type="button"
             onClick={onToggle}
-            className="inline-flex items-center gap-1 rounded-md border border-border bg-background px-2 py-1 text-[11px] font-semibold text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold md:hidden"
+            className="inline-flex h-8 items-center gap-1 rounded-md border border-border bg-background px-2.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold md:hidden"
             aria-expanded={open}
           >
             <Filter className="h-3 w-3" aria-hidden />
@@ -452,7 +446,8 @@ function FiltersToolbar({
       </header>
 
       {/* Grid de filtros */}
-      <div className={`${open ? "grid" : "hidden"} gap-x-4 gap-y-3 px-3 py-3 md:!grid md:grid-cols-[auto_auto_1fr] md:items-center`}>
+      <div className={`${open ? "grid" : "hidden"} gap-x-4 gap-y-2.5 px-3 py-2.5 md:!grid md:grid-cols-[auto_auto_1fr] md:items-end`}>
+
         <div className="flex flex-col gap-1">
           <span className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
             Correspondência
