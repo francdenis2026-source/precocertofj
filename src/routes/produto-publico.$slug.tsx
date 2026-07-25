@@ -18,6 +18,7 @@ import {
   Filter,
 } from "lucide-react";
 import { getPublicProduct, type PublicProduct } from "@/lib/public-product.functions";
+import { QuickCompareStrip } from "@/components/product/QuickCompareStrip";
 import { ProductImage } from "@/components/product/ProductImage";
 import { useSignedLogoUrl } from "@/hooks/use-signed-logo-urls";
 import { AddToCartButton } from "@/components/cart/AddToCartButton";
