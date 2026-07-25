@@ -643,7 +643,11 @@ function EstablishmentsPage() {
                     const tier = classifyTier(e.productsCount);
                     const freshness = describeFreshness(e.lastUpdate);
                     return (
-                    <li key={e.id} className="h-full">
+                    <li key={e.id} className="relative h-full">
+                      <FavoriteMarketButton
+                        marketName={e.name}
+                        className="absolute right-2 top-2 z-10"
+                      />
                       <Link
                         to="/estabelecimento/$slug"
                         params={{ slug: slugifyEstablishment(e.name) }}
