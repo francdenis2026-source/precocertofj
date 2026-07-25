@@ -223,7 +223,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
 
       {/* Sinal de vida — cartão próprio, mesmo padrão dos HeroMetric */}
       <section className="rounded-2xl border border-border bg-card p-2.5 shadow-sm sm:p-3">
-        <div className="grid grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           <StatCell
             icon={<TrendingDown className="h-4 w-4" aria-hidden />}
             label="Preços em queda"
