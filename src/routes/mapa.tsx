@@ -263,20 +263,31 @@ function NeighborhoodsPage() {
       <SiteHeader variant="solid" showBack={false} />
       <PageShellContent>
 
-      {/* Hero ultracompacto — Navy/Gold, alinhado ao tema */}
-      <section className="relative overflow-hidden border-b border-brand-gold/20 bg-brand-navy text-white">
-        <div
+      {/* Hero editorial — foto aérea + camadas Navy/Gold */}
+      <section className="relative isolate overflow-hidden border-b border-brand-gold/20 bg-brand-navy text-white">
+        {/* Foto de fundo (aérea de cidade ribeirinha ao entardecer) */}
+        <img
+          src={mapaHero}
+          alt=""
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.06]"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right, #ffffff 1px, transparent 1px), linear-gradient(to bottom, #ffffff 1px, transparent 1px)",
-            backgroundSize: "28px 28px",
-          }}
+          width={1920}
+          height={720}
+          className="pointer-events-none absolute inset-0 -z-10 h-full w-full object-cover object-[50%_60%] opacity-[0.55]"
         />
+        {/* Scrim vertical Navy → transparente → Navy para legibilidade do texto */}
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-16 -top-12 h-40 w-40 rounded-full opacity-25 blur-3xl"
+          className="pointer-events-none absolute inset-0 -z-10 bg-gradient-to-b from-brand-navy/95 via-brand-navy/55 to-brand-navy/95"
+        />
+        {/* Vinheta lateral para reforçar leitura do título à esquerda */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 left-0 -z-10 w-2/3 bg-gradient-to-r from-brand-navy/85 via-brand-navy/45 to-transparent"
+        />
+        {/* Realce dourado sutil no canto superior direito */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-16 -top-12 -z-10 h-40 w-40 rounded-full opacity-30 blur-3xl"
           style={{ background: "radial-gradient(circle, #c9a227 0%, transparent 60%)" }}
         />
         <div aria-hidden className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-brand-gold/70 to-transparent" />
