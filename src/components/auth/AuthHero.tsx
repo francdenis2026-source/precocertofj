@@ -31,11 +31,11 @@ const PRESETS: Record<AuthHeroVariant, Preset> = {
     badge: { icon: ShieldCheck, label: "Área do assinante" },
     title: "O preço certo,",
     highlight: "aqui em Feijó.",
-    subtitle: "Entre com seu CPF e PIN e acompanhe, em tempo real, os preços dos mercados da cidade.",
+    subtitle: "Entre com seu CPF e PIN para acompanhar, em tempo real, os preços praticados nos mercados de Feijó.",
     perks: [
-      "Comparativo entre mercados de Feijó",
+      "Comparativo entre mercados parceiros de Feijó",
       "Alertas de queda de preço no seu bairro",
-      "Base validada por notas fiscais reais",
+      "Base auditada por notas fiscais reais",
     ],
     trust: {
       icon: ShieldCheck,
@@ -51,11 +51,11 @@ const PRESETS: Record<AuthHeroVariant, Preset> = {
     badge: { icon: UserPlus, label: "Cadastro gratuito" },
     title: "Compare preços",
     highlight: "de verdade.",
-    subtitle: "Crie sua conta com CPF e PIN em 30 segundos e comece a comparar os mercados de Feijó.",
+    subtitle: "Crie sua conta com CPF e PIN em menos de 1 minuto e comece a comparar os mercados parceiros de Feijó.",
     perks: [
-      "Comparativo em tempo real entre mercados",
-      "Alertas de queda de preço",
-      "Bônus: 30 dias grátis ao enviar sua nota",
+      "Comparativo em tempo real entre mercados parceiros",
+      "Alertas de queda de preço no seu bairro",
+      "Bônus: 30 dias grátis ao enviar sua primeira nota",
     ],
     trust: {
       icon: ShieldCheck,
