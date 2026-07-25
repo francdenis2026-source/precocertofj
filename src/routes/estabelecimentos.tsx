@@ -507,7 +507,7 @@ function EstablishmentsPage() {
               />
               <HeroMetric
                 icon={Package}
-                label="Produtos"
+                label="Produtos cadastrados"
                 value={data.totalProducts.toLocaleString("pt-BR")}
                 hint="Ver categorias"
                 onClick={() => setMetricDetail("products")}
