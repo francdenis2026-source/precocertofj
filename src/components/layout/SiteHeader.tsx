@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
+import { BackButton } from "@/components/layout/BackButton";
 
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 
