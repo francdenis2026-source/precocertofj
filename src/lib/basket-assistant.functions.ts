@@ -358,6 +358,54 @@ export const getMyAiQuota = createServerFn({ method: "GET" })
     return { used: row.used ?? 0, limit: row.quota_limit ?? 20, resetAt: row.reset_at };
   });
 
+/**
+ * Estimativa de custo de uma pergunta ao assistente, em créditos Lovable.
+ * Usa a média real de tokens registrada em ai_usage (últimos 30 dias) quando
+ * existir; caso contrário, usa uma média típica do prompt do assistente.
+ */
+export const estimateAssistantCost = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async (): Promise<{
+    model: string;
+    avgPromptTokens: number;
+    avgCompletionTokens: number;
+    creditsPerAsk: number;
+    samples: number;
+  }> => {
+    const { creditsForTokens } = await import("./ai-cost");
+    const model = "google/gemini-2.5-flash-lite";
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const since = new Date(Date.now() - 30 * 24 * 3600 * 1000).toISOString();
+    const { data } = await supabaseAdmin
+      .from("ai_usage")
+      .select("prompt_tokens, completion_tokens")
+      .eq("function_name", "askBasketAssistant")
+      .eq("success", true)
+      .gte("created_at", since)
+      .limit(500);
+
+    const rows = (data ?? []).filter((r) => (r.prompt_tokens ?? 0) > 0);
+    // Baseline: prompt de sistema + ferramentas ≈ 900 tokens, resposta ≈ 120.
+    let avgPrompt = 950;
+    let avgCompletion = 120;
+    if (rows.length > 0) {
+      avgPrompt = Math.round(
+        rows.reduce((s, r) => s + (r.prompt_tokens ?? 0), 0) / rows.length,
+      );
+      avgCompletion = Math.round(
+        rows.reduce((s, r) => s + (r.completion_tokens ?? 0), 0) / rows.length,
+      );
+    }
+    return {
+      model,
+      avgPromptTokens: avgPrompt,
+      avgCompletionTokens: avgCompletion,
+      creditsPerAsk: creditsForTokens(model, avgPrompt, avgCompletion),
+      samples: rows.length,
+    };
+  });
+
+
 // Convenience helpers (kept for backwards compat)
 export const previewBudgetBasket = createServerFn({ method: "POST" })
   .inputValidator((data: { budget: number }) => data)
