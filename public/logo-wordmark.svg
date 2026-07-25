@@ -1,21 +1,28 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 128" role="img" aria-label="PreçoCerto">
-  <title>PreçoCerto</title>
-  <g>
-    <path d="M64 12a52 52 0 1 0 46.5 76" fill="none" stroke="#22a45d" stroke-width="12" stroke-linecap="round"/>
-    <g fill="none" stroke="#12294a" stroke-width="7" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M30 46h10l10 34h44"/>
-      <path d="M46 62h48l6-16H50"/>
-    </g>
-    <circle cx="58" cy="94" r="6" fill="#12294a"/>
-    <circle cx="88" cy="94" r="6" fill="#12294a"/>
-    <g transform="translate(70 22) rotate(18)">
-      <path d="M0 6a6 6 0 0 1 6-6h22l18 18-24 24-22-22z" fill="#22a45d"/>
-      <circle cx="10" cy="10" r="3.2" fill="#ffffff"/>
-      <text x="22" y="30" font-family="Inter, Arial, sans-serif" font-weight="800" font-size="20" fill="#ffffff" text-anchor="middle">%</text>
-    </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 120" role="img" aria-label="PreçoCerto — Feijó · Acre">
+  <title>PreçoCerto — Feijó · Acre</title>
+  <style>
+    .p { fill: currentColor; }
+    .c { fill: #e2a520; }
+    .sub { fill: #94a3b8; letter-spacing: 6px; }
+    .rule { stroke: #e2a520; stroke-width: 4; stroke-linecap: round; }
+    text { font-family: 'Sora','Inter',system-ui,sans-serif; font-weight: 700; }
+  </style>
+  <!-- Marca (tag+check) -->
+  <g transform="translate(0 8) scale(0.86)">
+    <use href="#tag"/>
   </g>
-  <g font-family="Inter, 'Segoe UI', Arial, sans-serif" font-weight="800" font-size="58" letter-spacing="-1">
-    <text x="150" y="82" fill="#12294a">Preço</text>
-    <text x="330" y="82" fill="#22a45d">Certo</text>
-  </g>
+  <defs>
+    <symbol id="tag" viewBox="0 0 128 128">
+      <path d="M63 20 C 55 8, 40 8, 40 22 C 40 30, 46 34, 52 34" fill="none" stroke="#cbd5e1" stroke-width="4.5" stroke-linecap="round"/>
+      <path d="M40 26 h48 a8 8 0 0 1 5.66 2.34 l22 22 a8 8 0 0 1 0 11.32 l-40 40 a8 8 0 0 1 -11.32 0 l-22-22 A8 8 0 0 1 40 74 Z" fill="#f2b829" stroke="#c98f1a" stroke-width="1.2"/>
+      <circle cx="55" cy="41" r="6.5" fill="#0b1e3a"/>
+      <circle cx="55" cy="41" r="2.4" fill="#f2b829"/>
+      <path d="M55 74 l12 12 l24 -26" fill="none" stroke="#ffffff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+  </defs>
+  <!-- Wordmark -->
+  <text x="140" y="72" font-size="60"><tspan class="p">Preço</tspan><tspan class="c">Certo</tspan></text>
+  <!-- Subtitle -->
+  <line x1="140" y1="96" x2="168" y2="96" class="rule"/>
+  <text x="180" y="102" font-size="14" class="sub">FEIJÓ  •  ACRE</text>
 </svg>
