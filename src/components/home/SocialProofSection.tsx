@@ -1,5 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { RatingBadge, RatingInline } from "@/components/ds/RatingStars";
+
 
 const P = {
   paper: "var(--pc-home-paper)",
