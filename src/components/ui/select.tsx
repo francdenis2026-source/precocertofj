@@ -2,9 +2,35 @@
 
 import * as React from "react";
 import * as SelectPrimitive from "@radix-ui/react-select";
-import { Check, ChevronDown, ChevronUp } from "lucide-react";
+import { Check, ChevronUp } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+
+/**
+ * Chevron SVG usando currentColor para herdar a cor do texto (tokens do tema).
+ * Tamanho controlado por classes utilitárias (size-*) para escalar junto ao Trigger.
+ */
+const ChevronIcon = React.forwardRef<SVGSVGElement, React.SVGProps<SVGSVGElement>>(
+  ({ className, ...props }, ref) => (
+    <svg
+      ref={ref}
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      focusable="false"
+      className={cn("size-4 shrink-0", className)}
+      {...props}
+    >
+      <path d="m6 9 6 6 6-6" />
+    </svg>
+  ),
+);
+ChevronIcon.displayName = "ChevronIcon";
 
 const Select = SelectPrimitive.Root;
 
