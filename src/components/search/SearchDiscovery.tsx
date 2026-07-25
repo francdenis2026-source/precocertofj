@@ -78,6 +78,8 @@ type Props = {
 const brl = (n: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n);
 
+const int = (n: number) => new Intl.NumberFormat("pt-BR").format(n);
+
 export function SearchDiscovery({ onPickQuery }: Props) {
   const [recent, setRecent] = useState<string[]>([]);
   useEffect(() => setRecent(readRecent()), []);
