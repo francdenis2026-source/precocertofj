@@ -885,19 +885,20 @@ function EstablishmentsPage() {
                 </ul>
                 )}
                 {allFilteredItems.length > visibleItems.length && (
-                  <div className="flex items-center justify-center gap-3 border-t border-border/60 p-4">
-                    <span className="text-[12px] text-muted-foreground">
-                      Mostrando {visibleItems.length} de {allFilteredItems.length}
+                  <div className="flex flex-wrap items-center justify-center gap-2 border-t border-border/60 px-2.5 py-2 md:px-4 md:py-3">
+                    <span className="text-[11px] text-muted-foreground md:text-[12px]">
+                      {visibleItems.length} de {allFilteredItems.length}
                     </span>
                     <button
                       type="button"
                       onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-4 py-1.5 text-[12px] font-bold uppercase tracking-[0.14em] text-brand-navy transition hover:brightness-105"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-3 py-1 text-[11.5px] font-bold uppercase tracking-[0.14em] text-brand-navy transition hover:brightness-105 md:px-4 md:py-1.5 md:text-[12px]"
                     >
                       Mostrar mais
                     </button>
                   </div>
                 )}
+
 
               </SectionCard>
             )}
