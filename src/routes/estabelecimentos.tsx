@@ -11,6 +11,8 @@ import {
 } from "@/lib/establishments-public.functions";
 import { MobileNav } from "@/components/nav/MobileNav";
 import { FavoriteMarketButton } from "@/components/market/FavoriteMarketButton";
+import { useSession } from "@/hooks/useSession";
+import { listFavoriteMarkets } from "@/lib/favorites.functions";
 
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import {
