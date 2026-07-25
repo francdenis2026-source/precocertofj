@@ -28,7 +28,7 @@ import { RecentProducts } from "@/components/home/RecentProducts";
 import { StartFreeDialog } from "@/components/home/StartFreeDialog";
 import { MetricSpotlightDialog } from "@/components/home/MetricSpotlightDialog";
 import { BenefitsSection } from "@/components/home/BenefitsSection";
-import { HomeAnchorNav } from "@/components/home/HomeAnchorNav";
+
 import { MobileAccordion } from "@/components/home/MobileAccordion";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useSession } from "@/hooks/useSession";
@@ -265,10 +265,6 @@ function HomePage() {
       <SiteHeader variant="solid" showThemeToggle />
 
 
-      {/* -------- STICKY ANCHOR NAV (scroll-spy + mini busca) -------- */}
-      <HomeAnchorNav
-        onSearch={(query) => navigate({ to: "/buscar", search: { q: query } as any })}
-      />
 
 
       {/* ============== HERO — Foto editorial + scrim navy ============== */}
