@@ -12,7 +12,7 @@ import {
   TrendingDown,
   ShieldCheck,
   Package,
-  Ticket,
+  // Ticket removido (agora vive dentro de FinalCTASection)
   LineChart,
   Users,
   Sparkles,
@@ -26,6 +26,9 @@ import { listPopularQueries } from "@/lib/search-popular.functions";
 import { RecentProducts } from "@/components/home/RecentProducts";
 import { StartFreeDialog } from "@/components/home/StartFreeDialog";
 import { MetricSpotlightDialog } from "@/components/home/MetricSpotlightDialog";
+import { BenefitsSection } from "@/components/home/BenefitsSection";
+import { SocialProofSection } from "@/components/home/SocialProofSection";
+import { FinalCTASection } from "@/components/home/FinalCTASection";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useSession } from "@/hooks/useSession";
 import homeHeroImg from "@/assets/home-hero.jpg";
@@ -661,6 +664,9 @@ function HomePage() {
 
 
 
+      {/* ============== BENEFÍCIOS ============== */}
+      <BenefitsSection />
+
 
       {/* ============== 3 PILARES (cards) ============== */}
       <section className="pc-container pt-8 sm:pt-10">
@@ -697,70 +703,14 @@ function HomePage() {
       </div>
 
 
-      {/* ============== CTA — Resgatar código ============== */}
-      <section className="pc-container pt-8 sm:pt-10">
-        <div
-          className="relative overflow-hidden rounded-[var(--pc-radius-md)] p-[1.5px]"
-          style={{
-            background: `linear-gradient(120deg, ${P.gold} 0%, color-mix(in oklab, ${P.gold} 35%, transparent) 55%, color-mix(in oklab, ${P.gold} 70%, transparent) 100%)`,
-            boxShadow: "var(--pc-shadow-3)",
-          }}
-        >
-          <div
-            className="relative overflow-hidden rounded-[calc(var(--pc-radius-md)-2px)] px-4 py-3.5 sm:px-5 sm:py-4"
-            style={{
-              background: `linear-gradient(115deg, ${P.navy} 0%, color-mix(in oklab, ${P.navy} 82%, black) 100%)`,
-              color: "#F5F6FA",
-            }}
-          >
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-0 opacity-[0.06]"
-              style={{ backgroundImage: `repeating-linear-gradient(-45deg, ${P.gold} 0 1px, transparent 1px 14px)` }}
-            />
+      {/* ============== PROVA SOCIAL ============== */}
+      <SocialProofSection />
 
-            <div className="relative flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
-              <div className="flex items-center gap-3 sm:flex-1">
-                <span
-                  className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl"
-                  style={{
-                    background: "color-mix(in oklab, #F5C86A 22%, transparent)",
-                    color: P.gold,
-                    border: "1px solid color-mix(in oklab, #F5C86A 45%, transparent)",
-                  }}
-                  aria-hidden
-                >
-                  <Ticket className="h-5 w-5" strokeWidth={2.2} />
-                </span>
 
-                <div className="min-w-0 flex-1">
-                  <p
-                    className="text-[10.5px] font-bold uppercase tracking-[0.2em]"
-                    style={{ color: "color-mix(in oklab, #F5C86A 88%, white)" }}
-                  >
-                    Já tem um código?
-                  </p>
-                  <p
-                    className="mt-0.5 font-bold leading-tight text-white"
-                    style={{ fontSize: "clamp(0.95rem, 1.4vw, 1.05rem)", letterSpacing: "-0.01em" }}
-                  >
-                    Ative sua licença em 30 segundos.
-                  </p>
-                </div>
-              </div>
+      {/* ============== CTA FINAL PERSUASIVO ============== */}
+      <FinalCTASection />
 
-              <Link
-                to="/resgatar"
-                className="group inline-flex w-full items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-[13.5px] font-bold shadow-sm transition-all hover:scale-[1.02] hover:shadow-md active:scale-[0.98] sm:w-auto sm:shrink-0 sm:px-5"
-                style={{ background: P.gold, color: P.navy }}
-              >
-                Resgatar código
-                <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
+
 
 
       <MetricSpotlightDialog
