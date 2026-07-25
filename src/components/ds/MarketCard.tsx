@@ -1,9 +1,11 @@
 import { forwardRef, type ReactNode } from "react";
 import { motion, type HTMLMotionProps } from "framer-motion";
-import { MapPin, Store, ArrowUpRight, Star } from "lucide-react";
+import { MapPin, Store, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useSignedLogoUrl } from "@/hooks/use-signed-logo-urls";
 import { Badge } from "./Badge";
+import { RatingInline } from "./RatingStars";
+
 
 export interface MarketCardProps extends HTMLMotionProps<"article"> {
   name: string;
