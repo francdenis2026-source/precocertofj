@@ -29,7 +29,6 @@ import {
   
   EmptyState,
   LoadingSkeleton,
-  CardSkeleton,
 } from "@/components/layout";
 import { Input } from "@/components/ui/input";
 import {
@@ -39,7 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ChevronRight, MapPin, Package, Search, Sparkles, Store, TrendingUp, Pill, Croissant, Beef, ShoppingBasket, PiggyBank, Radio, ChevronLeft } from "lucide-react";
+import { ChevronRight, Package, Search, Store, TrendingUp, Pill, Croissant, Beef, ShoppingBasket, PiggyBank, Radio, ChevronLeft } from "lucide-react";
 import mercadosHero from "@/assets/mercados-hero-v3.jpg.asset.json";
 import {
   MarketEditorialCard,
@@ -327,11 +326,6 @@ function EstablishmentsPage() {
     );
     return { cheapestId: cheapest?.id ?? null, featuredIds };
   }, [data]);
-  const isRecent = (iso: string | null) => {
-    if (!iso) return false;
-    const t = new Date(iso).getTime();
-    return Number.isFinite(t) && Date.now() - t < 7 * 24 * 60 * 60 * 1000;
-  };
 
   const KIND_META: Record<string, { label: string; icon: typeof Store; tagline: string }> = {
     mercado: { label: "Supermercados", icon: ShoppingBasket, tagline: "Compare a cesta básica entre os supermercados de Feijó" },
