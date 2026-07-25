@@ -310,10 +310,22 @@ function ComparadorPage() {
     return {
       cheapest: cheapestRow?.min_price ?? null,
       cheapestName: cheapestRow?.display_name ?? null,
+      cheapestStore: cheapestRow?.cheapest_store ?? null,
       storeCount: stores.size,
       productCount: rows.length,
     };
   }, [rows]);
+
+  /**
+   * Produto de referência do ranking: o primeiro resultado presente em mais de
+   * um mercado (comparação válida entre lojas do mesmo item). Se nenhum tiver
+   * multi-mercado, usa o primeiro resultado. Nunca mistura produtos diferentes.
+   */
+  const referenceRow = useMemo<Comparison | null>(() => {
+    if (!q.trim() || rows.length === 0) return null;
+    return rows.find((r) => Number(r.store_count) > 1) ?? rows[0];
+  }, [rows, q]);
+
 
 
   const signedImages = useSignedLogoUrls(useMemo(() => rows.map((r) => r.image_url), [rows]));
