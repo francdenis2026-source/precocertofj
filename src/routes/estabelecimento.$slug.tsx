@@ -203,7 +203,10 @@ function EstablishmentPage() {
               </div>
             )}
             <div className="flex-1">
-              <CardTitle className="text-2xl">{data.store.name}</CardTitle>
+              <div className="flex flex-wrap items-start justify-between gap-2">
+                <CardTitle className="text-2xl">{data.store.name}</CardTitle>
+                <FavoriteMarketButton marketName={data.store.name} variant="inline" />
+              </div>
               <CardDescription className="mt-1">
                 {data.products.length} produto{data.products.length === 1 ? "" : "s"} publicados
                 {data.categories.length > 0 && ` · ${data.categories.length} categorias`}
