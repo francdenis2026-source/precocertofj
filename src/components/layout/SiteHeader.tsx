@@ -29,6 +29,8 @@ type Props = {
   showNav?: boolean;
   /** Mostra o botão de alternância claro/escuro (apenas na homepage). */
   showThemeToggle?: boolean;
+  /** Mostra o botão "Voltar" (padrão true na variante solid). */
+  showBack?: boolean;
 };
 
 const NAV_LINKS = [
