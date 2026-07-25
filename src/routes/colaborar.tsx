@@ -177,6 +177,7 @@ function CollaboratorPanel() {
   const awarded = prog?.days_awarded ?? 0;
   const remaining = prog?.days_remaining ?? cap;
   const pct = cap > 0 ? Math.min(100, Math.round((awarded / cap) * 100)) : 0;
+  const capReached = remaining <= 0;
 
   return (
     <section className="mt-6 space-y-4">
@@ -197,11 +198,11 @@ function CollaboratorPanel() {
 
           <div className="flex flex-col items-end gap-2">
             <a
-              href={token ? collabMailtoHref(token) : undefined}
-              aria-disabled={!token}
+              href={token && !capReached ? collabMailtoHref(token) : undefined}
+              aria-disabled={!token || capReached}
               className={
                 "inline-flex h-11 items-center gap-2 rounded-full bg-primary px-6 text-sm font-bold text-primary-foreground shadow-[0_2px_0_0_rgb(0_0_0/0.08)] transition hover:-translate-y-0.5 hover:bg-primary/90 " +
-                (!token ? "pointer-events-none opacity-50" : "")
+                (!token || capReached ? "pointer-events-none opacity-50" : "")
               }
             >
               <Send className="h-4 w-4" strokeWidth={2.4} />
@@ -220,12 +221,12 @@ function CollaboratorPanel() {
               Progresso do mês
             </div>
             <div className="text-[12px] text-muted-foreground">
-              {awarded} de {cap} dias creditados · restam {remaining}
+              {awarded} de {cap} dias creditados · restam <strong className="text-foreground">{remaining}</strong>
             </div>
           </div>
           <div className="mt-2 h-2.5 w-full overflow-hidden rounded-full bg-muted">
             <div
-              className="h-full rounded-full bg-primary transition-[width]"
+              className={"h-full rounded-full transition-[width] " + (capReached ? "bg-emerald-600" : "bg-primary")}
               style={{ width: `${pct}%` }}
             />
           </div>
@@ -233,7 +234,34 @@ function CollaboratorPanel() {
             +7 dias por nota aprovada. Envie até <strong>5 notas por mês</strong> para bater o teto.
           </p>
         </div>
+
+        {/* Aviso de bloqueio ao atingir o teto */}
+        {capReached && (
+          <div
+            role="status"
+            className="mt-4 flex items-start gap-3 rounded-xl border border-emerald-500/40 bg-emerald-500/10 p-4"
+          >
+            <CheckCircle2
+              className="mt-0.5 h-5 w-5 flex-none text-emerald-600 dark:text-emerald-400"
+              strokeWidth={2.4}
+            />
+            <div className="min-w-0">
+              <p className="font-display text-[14.5px] font-bold text-emerald-800 dark:text-emerald-200">
+                Você já ganhou os 30 dias grátis deste mês 🎉
+              </p>
+              <p className="mt-1 text-[12.5px] leading-relaxed text-emerald-900/80 dark:text-emerald-100/80">
+                O teto mensal por conta foi atingido. Novos envios só voltam a gerar
+                crédito no <strong>próximo mês</strong>. Você pode acompanhar seus dias
+                em <Link to="/perfil" className="underline">Meu Perfil</Link>.
+              </p>
+            </div>
+          </div>
+        )}
       </div>
+
+      {/* Upload direto pelo app (só quando ainda há dias no mês) */}
+      {!capReached && <CollaboratorUploadForm />}
+
 
       {/* Histórico */}
       <div className="rounded-2xl border border-border bg-card p-5 md:p-6">
