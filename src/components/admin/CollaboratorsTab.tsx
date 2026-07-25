@@ -287,7 +287,7 @@ function AuditLogPanel() {
         </p>
       ) : (
         <ul className="mt-3 divide-y divide-border">
-          {(data ?? []).map((r) => {
+          {(data ?? []).map((r: CollabAuditEntry) => {
             const after = (r.after ?? {}) as Record<string, unknown>;
             const rewardAwarded = Number(
               (after as { reward_days?: unknown }).reward_days ?? 0,
