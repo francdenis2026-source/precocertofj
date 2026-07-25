@@ -538,11 +538,12 @@ function PriceRangeInputs({ min, max, onMin, onMax }: PriceRangeInputsProps) {
   };
 
   const inputBase =
-    "h-9 w-24 rounded-md border-0 bg-transparent px-2 text-[13px] font-medium text-foreground tabular-nums placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50 transition-colors";
+    "h-7 w-[74px] rounded-md border-0 bg-transparent px-1.5 text-[12px] font-medium text-foreground tabular-nums placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50 transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
 
   return (
     <div
-      className="flex items-center gap-1 rounded-lg border border-border bg-background px-2.5 py-0.5 shadow-sm transition-colors focus-within:border-brand-gold focus-within:ring-2 focus-within:ring-brand-gold/30"
+      className="flex items-center gap-0.5 rounded-lg border border-border bg-background px-2 py-0.5 shadow-sm transition-colors focus-within:border-brand-gold focus-within:ring-2 focus-within:ring-brand-gold/30"
+
       role="group"
       aria-label="Faixa de preço"
     >
