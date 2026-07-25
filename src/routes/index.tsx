@@ -833,24 +833,27 @@ function PillarCard({
     return (
       <Link
         to={to}
-        className="group block overflow-hidden rounded-2xl p-4 transition-all hover:-translate-y-1 hover:shadow-2xl sm:p-5"
+        className="group flex items-center gap-3 overflow-hidden rounded-2xl p-3 transition-all active:scale-[0.99] hover:-translate-y-1 hover:shadow-2xl sm:block sm:p-5"
         style={{
           background: `linear-gradient(135deg, var(--pc-home-gold) 0%, color-mix(in oklab, var(--pc-home-gold) 82%, black) 100%)`,
           color: "var(--pc-home-navy)",
         }}
       >
         <div
-          className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-lg"
+          className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl sm:mb-3 sm:h-9 sm:w-9 sm:rounded-lg"
           style={{ background: "color-mix(in oklab, var(--pc-home-navy) 12%, transparent)" }}
         >
           {icon}
         </div>
-        <h3 className={`${serif} mb-1.5 text-[18px] leading-tight sm:text-[20px]`}>{title}</h3>
-        <p className="text-[12.5px] font-medium leading-snug opacity-80">{desc}</p>
-        <div className="mt-3 inline-flex items-center gap-1.5 text-[10.5px] font-bold uppercase tracking-[0.18em] opacity-90 transition-opacity group-hover:opacity-100">
-          {cta}
-          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
+        <div className="min-w-0 flex-1">
+          <h3 className={`${serif} text-[15.5px] leading-tight sm:mb-1.5 sm:text-[20px]`}>{title}</h3>
+          <p className="mt-0.5 line-clamp-2 text-[12px] font-medium leading-snug opacity-85 sm:mt-0 sm:line-clamp-none sm:text-[12.5px]">{desc}</p>
+          <div className="mt-1.5 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] opacity-90 transition-opacity group-hover:opacity-100 sm:mt-3 sm:text-[10.5px] sm:tracking-[0.18em]">
+            {cta}
+            <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
+          </div>
         </div>
+        <ArrowRight className="h-5 w-5 shrink-0 opacity-80 sm:hidden" strokeWidth={2.6} />
       </Link>
     );
   }
@@ -858,14 +861,14 @@ function PillarCard({
   return (
     <Link
       to={to}
-      className="group block overflow-hidden rounded-2xl border p-4 transition-all hover:-translate-y-1 sm:p-5"
+      className="group flex items-center gap-3 overflow-hidden rounded-2xl border p-3 transition-all active:scale-[0.99] hover:-translate-y-1 sm:block sm:p-5"
       style={{
         background: "var(--pc-home-card)",
         borderColor: "var(--pc-home-line)",
       }}
     >
       <div
-        className="mb-3 inline-flex h-9 w-9 items-center justify-center rounded-lg"
+        className="inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-xl sm:mb-3 sm:h-9 sm:w-9 sm:rounded-lg"
         style={{
           background: "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
           color: "var(--pc-home-gold)",
@@ -874,25 +877,29 @@ function PillarCard({
       >
         {icon}
       </div>
-      <h3
-        className={`${serif} mb-1.5 text-[18px] leading-tight sm:text-[20px]`}
-        style={{ color: "var(--pc-home-heading)" }}
-      >
-        {title}
-      </h3>
-      <p className="text-[12.5px] font-medium leading-snug" style={{ color: "var(--pc-text-body)" }}>
-        {desc}
-      </p>
-      <div
-        className="mt-3 inline-flex items-center gap-1.5 text-[10.5px] font-bold uppercase tracking-[0.18em] transition-colors group-hover:text-[color:var(--pc-home-gold)]"
-        style={{ color: "var(--pc-home-heading)" }}
-      >
-        {cta}
-        <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
+      <div className="min-w-0 flex-1">
+        <h3
+          className={`${serif} text-[15.5px] leading-tight sm:mb-1.5 sm:text-[20px]`}
+          style={{ color: "var(--pc-home-heading)" }}
+        >
+          {title}
+        </h3>
+        <p className="mt-0.5 line-clamp-2 text-[12px] font-medium leading-snug sm:mt-0 sm:line-clamp-none sm:text-[12.5px]" style={{ color: "var(--pc-text-body)" }}>
+          {desc}
+        </p>
+        <div
+          className="mt-1.5 inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] transition-colors group-hover:text-[color:var(--pc-home-gold)] sm:mt-3 sm:text-[10.5px] sm:tracking-[0.18em]"
+          style={{ color: "var(--pc-home-heading)" }}
+        >
+          {cta}
+          <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" strokeWidth={2.6} />
+        </div>
       </div>
+      <ArrowRight className="h-5 w-5 shrink-0 opacity-60 sm:hidden" strokeWidth={2.4} style={{ color: "var(--pc-home-gold)" }} />
     </Link>
   );
 }
+
 
 
 /* -------- PartnersStrip — faixa de logos de mercados parceiros -------- */
