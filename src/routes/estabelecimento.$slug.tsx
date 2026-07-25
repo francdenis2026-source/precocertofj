@@ -350,7 +350,7 @@ function EstablishmentPage() {
               );
             })}
             <Link
-              to="/estabelecimento/$slug/acougue"
+              to="/estabelecimento/$slug_/acougue"
               params={{ slug }}
               className="inline-flex h-10 items-center gap-1.5 rounded-full border border-border bg-background px-4 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)]"
             >
