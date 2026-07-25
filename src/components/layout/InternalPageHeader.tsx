@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
+import { BackButton } from "./BackButton";
 
 export type InternalCrumb = { label: string; to?: string };
 
@@ -15,6 +16,10 @@ interface InternalPageHeaderProps {
   actions?: ReactNode;
   /** Trilha compacta acima do título. */
   breadcrumbs?: InternalCrumb[];
+  /** Exibe botão "Voltar" inteligente (usa histórico do SPA). Default: true. */
+  showBack?: boolean;
+  /** Rota de fallback do botão voltar quando não há histórico. Default: "/". */
+  backFallback?: string;
   className?: string;
 }
 
