@@ -3,6 +3,10 @@ import { cn } from "@/lib/utils";
 
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 
+/** Avaliação agregada da plataforma — fonte única para homepage e páginas internas. */
+export const PLATFORM_RATING = { value: 4.9, count: 312 } as const;
+
+
 function Stars({ size, count = 5 }: { size: "xs" | "sm"; count?: number }) {
   return (
     <span className="flex items-center gap-0.5" aria-hidden>
