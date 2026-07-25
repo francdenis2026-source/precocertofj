@@ -579,7 +579,7 @@ function HomePage() {
           {/* ============ METRICS ROW (border-y sobre o navy) ============ */}
           <TooltipProvider delayDuration={150}>
             <div
-              className="mx-auto mt-4 grid max-w-5xl grid-cols-3 gap-2 border-y py-2.5 sm:mt-5 sm:gap-8 sm:py-3.5"
+              className="mx-auto mt-4 grid max-w-5xl grid-cols-3 gap-1 border-y py-2 sm:mt-5 sm:gap-8 sm:py-3.5"
               style={{ borderColor: "rgba(255,255,255,0.08)" }}
             >
               {[
@@ -587,6 +587,7 @@ function HomePage() {
                   kind: "markets" as const,
                   k: String(stats.establishments ?? 8),
                   l: "Mercados parceiros",
+                  lShort: "Mercados",
                   icon: <ShieldCheck className="h-4 w-4" />,
                   tip: "Ver a lista completa de mercados parceiros e suas atualizações.",
                 },
@@ -594,6 +595,7 @@ function HomePage() {
                   kind: "products" as const,
                   k: stats.products != null ? stats.products.toLocaleString("pt-BR") : "1.500",
                   l: "Produtos mapeados",
+                  lShort: "Produtos",
                   icon: <Package className="h-4 w-4" />,
                   tip: "Ver categorias e últimas atualizações do catálogo.",
                 },
@@ -601,9 +603,11 @@ function HomePage() {
                   kind: "savings" as const,
                   k: economy?.avgSavingsPct ? `${economy.avgSavingsPct}%` : "38%",
                   l: "Economia média",
+                  lShort: "Economia",
                   icon: <TrendingDown className="h-4 w-4" />,
                   tip: "Ver as maiores economias identificadas agora.",
                 },
+
               ].map((s, i, arr) => (
                 <Tooltip key={s.l}>
                   <TooltipTrigger asChild>
