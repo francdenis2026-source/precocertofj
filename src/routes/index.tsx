@@ -701,21 +701,21 @@ function HomePage() {
                 <span
                   className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl transition-colors group-hover:brightness-110 group-focus-visible:brightness-110 sm:h-9 sm:w-9 sm:rounded-lg"
                   style={{
-                    background: `color-mix(in oklab, ${P.gold} 16%, transparent)`,
-                    color: P.navy,
-                    border: `1px solid color-mix(in oklab, ${P.gold} 38%, transparent)`,
+                    background: `color-mix(in oklab, ${P.gold} 18%, transparent)`,
+                    color: P.gold,
+                    border: `1px solid color-mix(in oklab, ${P.gold} 45%, transparent)`,
                   }}
                   aria-hidden
                 >
                   {c.icon}
                 </span>
                 <span className="flex-1 min-w-0 sm:min-w-0">
-                  <span className="block truncate text-[11.5px] font-semibold leading-tight sm:text-[14px]">
+                  <span className="block truncate text-[11.5px] font-semibold leading-tight sm:text-[14px]" style={{ color: P.heading }}>
                     {c.label}
                   </span>
                   <span
                     className="mt-0.5 hidden text-[11px] font-medium sm:block"
-                    style={{ color: "color-mix(in oklab, var(--pc-home-ink) 55%, transparent)" }}
+                    style={{ color: "color-mix(in oklab, var(--pc-home-ink) 78%, transparent)" }}
                   >
                     Ver ofertas
                   </span>
