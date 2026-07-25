@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { getProductSuggestions } from "@/lib/products-suggest.functions";
@@ -12,7 +12,6 @@ import {
   TrendingDown,
   ShieldCheck,
   Package,
-  // Ticket removido (agora vive dentro de FinalCTASection)
   LineChart,
   Users,
   Sparkles,
@@ -20,6 +19,7 @@ import {
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { BackToTop } from "@/components/layout/BackToTop";
 import { getPlatformStats, listPublicStores } from "@/lib/stores-public.functions";
 import { getEconomyStat } from "@/lib/products-public.functions";
 import { listPopularQueries } from "@/lib/search-popular.functions";
@@ -27,11 +27,20 @@ import { RecentProducts } from "@/components/home/RecentProducts";
 import { StartFreeDialog } from "@/components/home/StartFreeDialog";
 import { MetricSpotlightDialog } from "@/components/home/MetricSpotlightDialog";
 import { BenefitsSection } from "@/components/home/BenefitsSection";
-import { SocialProofSection } from "@/components/home/SocialProofSection";
-import { FinalCTASection } from "@/components/home/FinalCTASection";
+import { HomeAnchorNav } from "@/components/home/HomeAnchorNav";
+import { MobileAccordion } from "@/components/home/MobileAccordion";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useSession } from "@/hooks/useSession";
 import homeHeroImg from "@/assets/home-hero.jpg";
+
+/* Below-the-fold: carregados sob demanda */
+const SocialProofSection = lazy(() =>
+  import("@/components/home/SocialProofSection").then((m) => ({ default: m.SocialProofSection })),
+);
+const FinalCTASection = lazy(() =>
+  import("@/components/home/FinalCTASection").then((m) => ({ default: m.FinalCTASection })),
+);
+
 
 
 
