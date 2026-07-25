@@ -557,23 +557,47 @@ export const searchProductPrice = createServerFn({ method: "POST" })
       .slice(0, 20);
 
 
-    const cheapestRow = list.reduce<Row | null>((best, r) => {
-      if (!best || Number(r.price_captured) < Number(best.price_captured)) return r;
-      return best;
-    }, null);
-    const cheapest =
-      cheapestRow && cheapestRow.market_name
-        ? (() => {
-            const meta = metaByName.get(cheapestRow.market_name.trim());
-            return {
-              marketName: cheapestRow.market_name,
-              marketLogoUrl: meta?.logoUrl ?? null,
-              marketBrandColor: meta?.brandColor ?? null,
-              price: Number(cheapestRow.price_captured),
-              when: cheapestRow.created_at,
-            };
-          })()
-        : null;
+    // Resumo ("melhor preço agora" / "economia estimada") deve comparar o
+    // MESMO produto entre mercados. Antes usava todas as linhas que casavam a
+    // busca, o que comparava itens diferentes (ex.: óleo de pimenta 150ml vs.
+    // óleo de coco capilar) e gerava uma economia irreal.
+    const refGroup =
+      groups.find((g) => new Set(g.prices.map((p) => p.marketName)).size > 1) ??
+      groups[0] ??
+      null;
+
+    let cheapest: PriceSearchResult["cheapest"] = null;
+    if (refGroup && refGroup.prices.length > 0) {
+      min = refGroup.min;
+      avg = refGroup.avg;
+      max = refGroup.max;
+      const best = refGroup.prices.reduce((b, p) => (p.price < b.price ? p : b), refGroup.prices[0]);
+      cheapest = {
+        marketName: best.marketName,
+        marketLogoUrl: best.marketLogoUrl,
+        marketBrandColor: best.marketBrandColor,
+        price: best.price,
+        when: best.when,
+        productName: refGroup.productName,
+      };
+    } else {
+      const cheapestRow = list.reduce<Row | null>((best, r) => {
+        if (!best || Number(r.price_captured) < Number(best.price_captured)) return r;
+        return best;
+      }, null);
+      if (cheapestRow && cheapestRow.market_name) {
+        const meta = metaByName.get(cheapestRow.market_name.trim());
+        cheapest = {
+          marketName: cheapestRow.market_name,
+          marketLogoUrl: meta?.logoUrl ?? null,
+          marketBrandColor: meta?.brandColor ?? null,
+          price: Number(cheapestRow.price_captured),
+          when: cheapestRow.created_at,
+          productName: cheapestRow.product_name ?? null,
+        };
+      }
+    }
+
 
     const recent = list.slice(0, 5).map((r) => ({
       productName: r.product_name ?? data.query,
