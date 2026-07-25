@@ -29,6 +29,13 @@ import {
   LoadingSkeleton,
 } from "@/components/layout";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export const Route = createFileRoute("/mapa")({
   head: () => ({
@@ -303,70 +310,81 @@ function NeighborhoodsPage() {
           )}
         </div>
 
-        {/* Filtros e ordenação — compacta, gold accents */}
+        {/* Filtros e ordenação — Selects estilizados (SVG chevron, tokens do tema) */}
         <div className="mb-3 rounded-lg border border-border bg-card p-2.5 shadow-sm">
           <div className="flex flex-wrap items-center gap-2">
             {/* Ordenação */}
-            <label className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2 py-1 text-[12px] focus-within:border-brand-gold focus-within:ring-2 focus-within:ring-brand-gold/30">
-              <ArrowUpDown className="h-3.5 w-3.5 text-brand-gold" />
-              <span className="text-[10.5px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+            <div className="inline-flex min-w-[180px] items-center gap-1.5">
+              <span className="inline-flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                <ArrowUpDown className="h-3.5 w-3.5 text-brand-gold" strokeWidth={2.25} />
                 Ordenar
               </span>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-                className="bg-transparent text-[12px] font-semibold text-foreground focus:outline-none"
-                aria-label="Ordenar bairros"
-              >
-                <option value="price">Menor preço</option>
-                <option value="markets">Mais mercados</option>
-                <option value="alpha">A–Z</option>
-                {isAuthed && <option value="favorites">Favoritos primeiro</option>}
-              </select>
-            </label>
+              <Select value={sortBy} onValueChange={(v) => setSortBy(v as typeof sortBy)}>
+                <SelectTrigger
+                  className="h-8 flex-1 border-border bg-background px-2.5 text-[12.5px] font-semibold text-foreground shadow-none hover:border-brand-gold/60 focus-visible:border-brand-gold focus-visible:ring-brand-gold/30"
+                  aria-label="Ordenar bairros"
+                >
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="text-[12.5px]">
+                  <SelectItem value="price">Menor preço</SelectItem>
+                  <SelectItem value="markets">Mais mercados</SelectItem>
+                  <SelectItem value="alpha">A–Z</SelectItem>
+                  {isAuthed && (
+                    <SelectItem value="favorites">Favoritos primeiro</SelectItem>
+                  )}
+                </SelectContent>
+              </Select>
+            </div>
 
             {/* Categoria */}
-            <label className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2 py-1 text-[12px] focus-within:border-brand-gold focus-within:ring-2 focus-within:ring-brand-gold/30">
-              <Tag className="h-3.5 w-3.5 text-brand-gold" />
-              <span className="text-[10.5px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+            <div className="inline-flex min-w-[200px] items-center gap-1.5">
+              <span className="inline-flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                <Tag className="h-3.5 w-3.5 text-brand-gold" strokeWidth={2.25} />
                 Categoria
               </span>
-              <select
-                value={category}
-                onChange={(e) => setCategory(e.target.value)}
-                className="max-w-[140px] bg-transparent text-[12px] font-semibold text-foreground focus:outline-none"
-                aria-label="Filtrar por categoria"
-              >
-                <option value="">Todas</option>
-                {availableCategories.map((c) => (
-                  <option key={c} value={c}>
-                    {c}
-                  </option>
-                ))}
-              </select>
-            </label>
+              <Select value={category || "__all"} onValueChange={(v) => setCategory(v === "__all" ? "" : v)}>
+                <SelectTrigger
+                  className="h-8 flex-1 border-border bg-background px-2.5 text-[12.5px] font-semibold text-foreground shadow-none hover:border-brand-gold/60 focus-visible:border-brand-gold focus-visible:ring-brand-gold/30"
+                  aria-label="Filtrar por categoria"
+                >
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="max-h-64 text-[12.5px]">
+                  <SelectItem value="__all">Todas as categorias</SelectItem>
+                  {availableCategories.map((c) => (
+                    <SelectItem key={c} value={c}>
+                      {c}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
 
             {/* Cidade / região */}
             {availableCities.length > 1 && (
-              <label className="inline-flex items-center gap-1.5 rounded-md border border-border bg-background px-2 py-1 text-[12px] focus-within:border-brand-gold focus-within:ring-2 focus-within:ring-brand-gold/30">
-                <MapPin className="h-3.5 w-3.5 text-brand-gold" />
-                <span className="text-[10.5px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+              <div className="inline-flex min-w-[180px] items-center gap-1.5">
+                <span className="inline-flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                  <MapPin className="h-3.5 w-3.5 text-brand-gold" strokeWidth={2.25} />
                   Região
                 </span>
-                <select
-                  value={cityFilter}
-                  onChange={(e) => setCityFilter(e.target.value)}
-                  className="max-w-[140px] bg-transparent text-[12px] font-semibold text-foreground focus:outline-none"
-                  aria-label="Filtrar por cidade"
-                >
-                  <option value="">Todas</option>
-                  {availableCities.map((c) => (
-                    <option key={c} value={c}>
-                      {c}
-                    </option>
-                  ))}
-                </select>
-              </label>
+                <Select value={cityFilter || "__all"} onValueChange={(v) => setCityFilter(v === "__all" ? "" : v)}>
+                  <SelectTrigger
+                    className="h-8 flex-1 border-border bg-background px-2.5 text-[12.5px] font-semibold text-foreground shadow-none hover:border-brand-gold/60 focus-visible:border-brand-gold focus-visible:ring-brand-gold/30"
+                    aria-label="Filtrar por cidade"
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="text-[12.5px]">
+                    <SelectItem value="__all">Todas</SelectItem>
+                    {availableCities.map((c) => (
+                      <SelectItem key={c} value={c}>
+                        {c}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             )}
 
             {/* Somente favoritos */}
