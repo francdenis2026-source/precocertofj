@@ -167,7 +167,9 @@ function EstablishmentsPage() {
   const persisted = readPersistedFilters();
   const [q, setQ] = useState(persisted.q);
   const [neighborhood, setNeighborhood] = useState<string>(persisted.neighborhood);
-  const [sort, setSort] = useState<"name" | "neighborhood" | "products">(persisted.sort);
+  const [sort, setSort] = useState<SortKey>(persisted.sort);
+  const [visibleCount, setVisibleCount] = useState<number>(PAGE_SIZE);
+  const loc = useUserLocation();
   const [kindFilter, setKindFilter] = useState<string>(persisted.kindFilter);
   const [metricDetail, setMetricDetail] = useState<null | "establishments" | "products" | "savings" | "live">(null);
   const carouselRef = useRef<HTMLDivElement | null>(null);
