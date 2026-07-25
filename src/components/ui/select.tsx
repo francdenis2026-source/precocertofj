@@ -59,7 +59,7 @@ const SelectTrigger = React.forwardRef<
   >
     {children}
     <SelectPrimitive.Icon asChild>
-      <ChevronIcon className="ml-2 size-4 text-muted-foreground group-data-[state=open]:text-foreground" />
+      <ChevronIcon className="ml-2 size-4 text-muted-foreground" />
     </SelectPrimitive.Icon>
   </SelectPrimitive.Trigger>
 ));
