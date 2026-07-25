@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { LogOut, User as UserIcon, Key, Receipt, LayoutDashboard, ChevronDown, Search, Ticket, Menu } from "lucide-react";
 import { ds, dsx } from "@/lib/ds";
@@ -45,6 +45,9 @@ const NAV_LINKS = [
 
 export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle = true, showBack = true }: Props) {
   const isOverlay = variant === "overlay";
+  const pathname = useLocation({ select: (l) => l.pathname });
+  // Na homepage não há "tela anterior" dentro do app: o Voltar não faz sentido.
+  const canShowBack = showBack && pathname !== "/";
   const { session, firstName, initials, loading } = useMyProfile();
   const [q, setQ] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
@@ -64,7 +67,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
     ? "absolute inset-x-0 top-0 z-30"
     : "sticky top-0 z-40 border-b border-border bg-card/95 text-foreground shadow-elev-1 backdrop-blur-xl dark:bg-background/88";
   const brandTextClass = isOverlay ? "text-on-media" : "text-foreground";
-  const brandAccentClass = isOverlay ? "text-brand-soft" : "text-brand";
+  const brandAccentClass = isOverlay ? "text-brand-soft" : "text-[var(--pc-gold-ink)]";
   const subTextClass = isOverlay ? "text-on-media-muted" : "text-muted-foreground";
   // Nav: hover/active sempre em gold (brand) — legível em light e dark, sem tons cyan.
   const navClass = isOverlay
@@ -221,7 +224,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             </form>
           )}
 
-          {!isOverlay && showBack && (
+          {!isOverlay && canShowBack && (
             <BackButton
               variant="pill"
               shortLabel=""

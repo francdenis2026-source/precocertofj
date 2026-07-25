@@ -69,7 +69,7 @@ export function SocialProofSection() {
       >
         <header className="mb-2.5 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-baseline gap-2.5 min-w-0">
-            <p className="text-[10px] font-bold uppercase tracking-[0.2em] shrink-0" style={{ color: P.gold }}>
+            <p className="text-[10.5px] font-bold uppercase tracking-[0.2em] shrink-0 sm:text-[11px]" style={{ color: "var(--pc-gold-ink)" }}>
               Prova social
             </p>
             <h2
@@ -77,7 +77,7 @@ export function SocialProofSection() {
               className={`${serif} leading-tight truncate`}
               style={{ color: P.heading, fontSize: "clamp(1rem, 1.7vw, 1.3rem)", letterSpacing: "-0.01em" }}
             >
-              Feito com <span style={{ color: P.gold }}>quem economiza</span>
+              Feito com <span style={{ color: "var(--pc-gold-ink)" }}>quem economiza</span>
             </h2>
           </div>
 
