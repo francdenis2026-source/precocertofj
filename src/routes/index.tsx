@@ -648,7 +648,7 @@ function HomePage() {
 
 
       {/* ============== 3 PILARES (cards) ============== */}
-      <section className="pc-container pt-5 sm:pt-6">
+      <section className="pc-container pt-3 sm:pt-4">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-4">
           <PillarCard
             to="/melhores-precos"
@@ -677,7 +677,7 @@ function HomePage() {
 
 
       {/* ============== RECENTES ============== */}
-      <div className="pt-5 sm:pt-6">
+      <div className="pt-3 sm:pt-4">
         <RecentProducts P={P} serif={serif} />
       </div>
 
@@ -799,7 +799,7 @@ function PartnersStrip() {
   if (!stores.length) return null;
 
   return (
-    <section className="pc-container pt-5 sm:pt-6">
+    <section className="pc-container pt-3 sm:pt-4">
       <div
         className="rounded-[var(--pc-radius-md)] border px-4 py-4 sm:px-5 sm:py-5"
         style={{ background: P.card, borderColor: P.line }}
