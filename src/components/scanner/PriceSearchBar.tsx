@@ -938,7 +938,7 @@ export function PriceSearchBar({
 
                     {groupBy === "product" && result.groups.length > 0 ? (
 
-                      <div className="space-y-2">
+                      <div className="pc-results">
                         {filteredOrdered.map(([cat, groups]) => {
                           // Ordena grupos: se sortMode === "relevance", usa score de
                           // correspondência (nome, marca, variações como 1L/integral);
@@ -955,18 +955,17 @@ export function PriceSearchBar({
                             return b.samples - a.samples;
                           });
                           return (
-                            <div key={cat} className="space-y-1.5">
+                            <div key={cat} className="pc-results">
                               {showHeaders ? (
                                 <div className="flex items-center gap-2 px-0.5">
-                                  <span className="text-[11px] font-semibold text-accent-strong">
-                                    {cat}
-                                  </span>
+                                  <span className="pc-res-label">{cat}</span>
                                   <span className="h-px flex-1 bg-border" aria-hidden="true" />
-                                  <span className="text-[11px] text-muted-foreground">
+                                  <span className="pc-res-meta tabular-nums">
                                     {sortedGroups.length} item{sortedGroups.length > 1 ? "s" : ""}
                                   </span>
                                 </div>
                               ) : null}
+
 
                               {(() => {
                                 const shown = pageByCat[cat] ?? PAGE_SIZE;
