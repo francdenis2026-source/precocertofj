@@ -78,6 +78,9 @@ export function PriceSearchBar({
   priceMin,
   priceMax,
   onQueryChange,
+  filterShortcuts = [],
+  activeFilterCount = 0,
+  onClearFilters,
 }: {
   initialQuery?: string;
   mode?: SearchMode;
@@ -86,6 +89,10 @@ export function PriceSearchBar({
   priceMin?: number;
   priceMax?: number;
   onQueryChange?: (q: string) => void;
+  /** Atalhos exibidos no estado vazio para afrouxar filtros da rota. */
+  filterShortcuts?: EmptyFilterShortcut[];
+  activeFilterCount?: number;
+  onClearFilters?: () => void;
 }) {
 
   const runSearch = useServerFn(searchProductPrice);
