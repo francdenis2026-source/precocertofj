@@ -28,7 +28,7 @@ import { RecentProducts } from "@/components/home/RecentProducts";
 import { StartFreeDialog } from "@/components/home/StartFreeDialog";
 import { MetricSpotlightDialog } from "@/components/home/MetricSpotlightDialog";
 import { BenefitsSection } from "@/components/home/BenefitsSection";
-import { HomeAnchorNav } from "@/components/home/HomeAnchorNav";
+
 import { MobileAccordion } from "@/components/home/MobileAccordion";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useSession } from "@/hooks/useSession";
