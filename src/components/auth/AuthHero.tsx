@@ -70,11 +70,11 @@ const PRESETS: Record<AuthHeroVariant, Preset> = {
     badge: { icon: Ticket, label: "Ativação de licença" },
     title: "Libere seu acesso",
     highlight: "em segundos.",
-    subtitle: "Cole o código PC-XXXX-XXXX-XXXX recebido no e-mail. A liberação é imediata.",
+    subtitle: "Informe o código PC-XXXX-XXXX-XXXX que você recebeu por e-mail. A ativação é imediata e vinculada ao seu CPF.",
     perks: [
       "Ativação imediata após validar o código",
-      "Renove ou empilhe códigos sem perder dias",
-      "Suporte prioritário para assinantes",
+      "Acumule códigos e estenda sua assinatura sem perder dias",
+      "Suporte prioritário para assinantes ativos",
     ],
     trust: {
       icon: Sparkles,
