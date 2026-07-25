@@ -57,7 +57,7 @@ export function SiteFooter() {
         )}
       >
         {/* Row 1: brand + location + legal — single line */}
-        <div className="flex items-center justify-between gap-2 text-[clamp(12px,3.3vw,14px)] leading-none">
+        <div className="flex items-center justify-between gap-2 text-[clamp(11px,3vw,13px)] leading-none">
           <Link
             to="/"
             className="flex shrink-0 items-center gap-1.5 rounded-md outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
