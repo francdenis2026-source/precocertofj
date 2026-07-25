@@ -811,79 +811,25 @@ function PartnersStrip() {
     staleTime: 5 * 60_000,
     refetchOnWindowFocus: false,
   });
-  const stores = (storesQ.data ?? []).filter((s: any) => s?.name).slice(0, 12);
-
-  if (!stores.length) return null;
+  const items = (storesQ.data ?? [])
+    .filter((s: any) => s?.name)
+    .map((s: any) => ({
+      id: s.id,
+      name: s.name,
+      logoUrl: s.logoUrl ?? s.logo_url ?? null,
+    }));
 
   return (
-    <section className="pc-container pt-2 sm:pt-3">
-      <div
-        className="rounded-[var(--pc-radius-md)] border px-3 py-3 shadow-[0_1px_0_rgba(255,255,255,0.04)_inset,0_10px_30px_-18px_rgba(0,0,0,0.55)] sm:px-4 sm:py-4"
-        style={{ background: P.card, borderColor: P.line }}
-      >
-        <header className="mb-3 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-3 sm:mb-3.5">
-          <div className="min-w-0">
-            <p
-              className="text-[9.5px] font-bold uppercase tracking-[0.22em] sm:text-[10px]"
-              style={{ color: P.gold }}
-            >
-              Onde comparamos
-            </p>
-            <h2
-              className={`${serif} mt-0.5 truncate leading-[1.15]`}
-              style={{
-                color: P.heading,
-                fontSize: "clamp(1.05rem, 2vw, 1.45rem)",
-                letterSpacing: "-0.015em",
-              }}
-            >
-              Mercados parceiros de Feijó
-            </h2>
-          </div>
-          <Link
-            to="/estabelecimentos"
-            className="inline-flex shrink-0 items-center gap-1 rounded-full border border-[color:var(--pc-gold,#c9a84c)]/25 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.16em] transition-all hover:border-[color:var(--pc-gold,#c9a84c)]/60 hover:bg-white/[0.03] sm:text-[11px]"
-            style={{ color: P.gold }}
-          >
-            <span className="hidden sm:inline">Ver todos</span>
-            <span className="sm:hidden">Todos</span>
-            <ArrowRight className="h-3 w-3 sm:h-3.5 sm:w-3.5" strokeWidth={2.6} />
-          </Link>
-        </header>
-
-        <ul className="grid grid-cols-4 gap-1.5 sm:grid-cols-6 sm:gap-2 md:grid-cols-8">
-          {stores.map((s: any) => (
-            <li key={s.id}>
-              <Link
-                to="/estabelecimentos"
-                className="group relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden rounded-lg border border-black/5 bg-white px-1.5 py-1 shadow-[0_1px_2px_rgba(0,0,0,0.18),0_0_0_1px_rgba(255,255,255,0.04)] ring-0 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_14px_-4px_rgba(0,0,0,0.35)] sm:px-2 sm:py-1.5"
-                title={s.name}
-                aria-label={s.name}
-              >
-                {s.logoUrl || s.logo_url ? (
-                  <img
-                    src={s.logoUrl ?? s.logo_url}
-                    alt={s.name}
-                    loading="lazy"
-                    decoding="async"
-                    className="max-h-[78%] max-w-[88%] object-contain"
-                  />
-                ) : (
-                  <span className="line-clamp-2 text-center text-[9.5px] font-bold uppercase leading-tight tracking-[0.1em] text-slate-800 sm:text-[10.5px]">
-                    {s.name}
-                  </span>
-                )}
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute inset-x-0 bottom-0 h-[2px] origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100"
-                  style={{ background: P.gold }}
-                />
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </section>
+    <PartnersPanel
+      eyebrow="Onde comparamos"
+      title="Mercados parceiros de Feijó"
+      ctaHref="/estabelecimentos"
+      defaultTileHref="/estabelecimentos"
+      items={items}
+      loading={storesQ.isLoading}
+      skeletonCount={8}
+      maxItems={12}
+    />
   );
 }
 
