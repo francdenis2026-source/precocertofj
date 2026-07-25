@@ -275,8 +275,12 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ConfirmProvider>
+        <MobileStickySearch />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
+        <BottomTabBar />
+        {/* Compensa a altura da BottomTabBar apenas no mobile, sem afetar desktop. */}
+        <div aria-hidden className="h-[64px] md:hidden" />
         <IdleLogoutMonitor />
         <UnlockConversionTracker />
         
