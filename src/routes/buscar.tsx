@@ -176,6 +176,54 @@ function SearchPage() {
     });
   };
 
+  const clearBrand = () =>
+    navigate({
+      search: (prev: Record<string, unknown>) => ({ ...prev, brand: undefined }),
+      replace: true,
+    });
+
+  /** Atalhos oferecidos no estado vazio para afrouxar a busca. */
+  const emptyFilterShortcuts = [
+    mode === "strict"
+      ? {
+          key: "loose",
+          label: "Busca ampla",
+          hint: "Aceita termos parecidos e variações de escrita",
+          onApply: () => chooseMode("loose"),
+        }
+      : null,
+    pureOnly
+      ? {
+          key: "pure",
+          label: "Incluir combinações",
+          hint: "Mostra também itens em que o termo aparece como ingrediente",
+          onApply: () => setPure(false),
+        }
+      : null,
+    brandFilter.trim()
+      ? {
+          key: "brand",
+          label: `Remover marca “${brandFilter.trim()}”`,
+          onApply: clearBrand,
+        }
+      : null,
+    Number.isFinite(priceMin) || Number.isFinite(priceMax)
+      ? {
+          key: "price",
+          label: "Remover faixa de preço",
+          onApply: () => {
+            setMinPrice("");
+            setMaxPrice("");
+          },
+        }
+      : null,
+  ].filter(Boolean) as {
+    key: string;
+    label: string;
+    hint?: string;
+    onApply: () => void;
+  }[];
+
   const syncQueryToUrl = useCallback(
     (next: string) => {
       const value = next.slice(0, 80);
