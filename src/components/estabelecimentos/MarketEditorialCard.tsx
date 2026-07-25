@@ -88,7 +88,7 @@ export function MarketEditorialCard({
         aria-label={`Ver detalhes de ${name}`}
         className={cn(
           "group relative flex h-full flex-col overflow-hidden rounded-2xl border bg-card shadow-sm transition-all duration-200",
-          "hover:-translate-y-[3px] hover:shadow-[0_18px_40px_-24px_color-mix(in_oklab,var(--brand-navy)_55%,transparent)]",
+          "hover:-translate-y-[3px] hover:shadow-[0_18px_40px_-24px_color-mix(in_oklab,var(--pc-home-navy)_55%,transparent)]",
           "focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background",
           isCheapest
             ? "border-brand-gold/70 ring-1 ring-brand-gold/25"
@@ -108,14 +108,14 @@ export function MarketEditorialCard({
         {/* Painel de marca */}
         <div
           className="relative flex h-[104px] items-center justify-center overflow-hidden px-4"
-          style={{ background: "color-mix(in oklab, var(--brand-navy) 4%, white)" }}
+          style={{ background: "color-mix(in oklab, var(--pc-home-navy) 4%, white)" }}
         >
           <div
             aria-hidden
             className="pointer-events-none absolute inset-0 opacity-[0.5]"
             style={{
               backgroundImage:
-                "linear-gradient(to right, color-mix(in oklab, var(--brand-navy) 8%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--brand-navy) 8%, transparent) 1px, transparent 1px)",
+                "linear-gradient(to right, color-mix(in oklab, var(--pc-home-navy) 8%, transparent) 1px, transparent 1px), linear-gradient(to bottom, color-mix(in oklab, var(--pc-home-navy) 8%, transparent) 1px, transparent 1px)",
               backgroundSize: "20px 20px",
             }}
           />
@@ -123,7 +123,7 @@ export function MarketEditorialCard({
             <span
               aria-hidden
               className="absolute bottom-2 left-2.5 select-none font-sans text-[26px] font-bold leading-none tracking-tighter"
-              style={{ color: "color-mix(in oklab, var(--brand-navy) 16%, transparent)" }}
+              style={{ color: "color-mix(in oklab, var(--pc-home-navy) 16%, transparent)" }}
             >
               {String(rank).padStart(2, "0")}
             </span>
