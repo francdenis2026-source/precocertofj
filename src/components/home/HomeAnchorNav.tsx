@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
-import { Search } from "lucide-react";
+import { Search, Link2, Check } from "lucide-react";
 import { scrollToSection } from "@/lib/scroll";
+
 
 
 const P = {
@@ -95,6 +96,33 @@ export function HomeAnchorNav({ onSearch }: { onSearch: (q: string) => void }) {
     onSearch(query);
   };
 
+  const [copied, setCopied] = useState(false);
+  const copyLink = async () => {
+    try {
+      const target = active && active !== "hero" ? `#${active}` : "";
+      const url = `${window.location.origin}${window.location.pathname}${window.location.search}${target}`;
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(url);
+      } else {
+        const ta = document.createElement("textarea");
+        ta.value = url;
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+      }
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
+    } catch {
+      /* silencioso */
+    }
+  };
+
+  const activeLabel = ANCHORS.find((a) => a.id === active)?.label ?? "Início";
+
+
   return (
     <nav
       aria-label="Seções da página"
@@ -166,7 +194,29 @@ export function HomeAnchorNav({ onSearch }: { onSearch: (q: string) => void }) {
             />
           </div>
         </form>
+
+        {/* Copiar link da seção atual */}
+        <button
+          type="button"
+          onClick={copyLink}
+          aria-label={`Copiar link da seção ${activeLabel}`}
+          title={copied ? "Link copiado" : `Copiar link — ${activeLabel}`}
+          className="inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border px-2.5 text-[11.5px] font-semibold leading-none transition-all active:scale-[0.97]"
+          style={{
+            background: copied ? `color-mix(in oklab, ${P.gold} 16%, ${P.card})` : P.card,
+            color: copied ? P.heading : P.body,
+            borderColor: copied ? `color-mix(in oklab, ${P.gold} 55%, ${P.line})` : P.line,
+          }}
+        >
+          {copied ? (
+            <Check className="h-3.5 w-3.5" strokeWidth={2.6} style={{ color: P.gold }} />
+          ) : (
+            <Link2 className="h-3.5 w-3.5" strokeWidth={2.4} />
+          )}
+          <span className="hidden sm:inline">{copied ? "Copiado" : "Copiar link"}</span>
+        </button>
       </div>
+
     </nav>
   );
 }
