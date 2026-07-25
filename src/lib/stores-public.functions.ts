@@ -339,9 +339,27 @@ export const getPlatformStats = createServerFn({ method: "GET" }).handler(
       }>;
     };
 
-    const [{ data, error }, comps] = await Promise.all([
+    const countClient = supabaseAdmin as unknown as {
+      from: (t: string) => {
+        select: (
+          s: string,
+          o: { count: "exact"; head: true },
+        ) => {
+          eq: (c: string, v: unknown) => {
+            is: (c: string, v: null) => Promise<{ count: number | null }>;
+          };
+        };
+      };
+    };
+
+    const [{ data, error }, comps, itemsCount] = await Promise.all([
       client.rpc("platform_public_stats"),
       compsClient.rpc("get_price_comparisons"),
+      countClient
+        .from("scans")
+        .select("id", { count: "exact", head: true })
+        .eq("status", "salvo")
+        .is("user_id", null),
     ]);
     if (error) throw new Error(error.message);
     const row = data?.[0];
@@ -370,6 +388,7 @@ export const getPlatformStats = createServerFn({ method: "GET" }).handler(
       priceDrops7d: row?.price_drops_7d ?? 0,
       activeComparisons: row?.active_comparisons ?? 0,
       products: uniqueKeys.size || (comps.data?.length ?? 0),
+      totalItems: itemsCount.count ?? 0,
       estimatedSavings: Number(estimatedSavings.toFixed(2)),
     };
   },
