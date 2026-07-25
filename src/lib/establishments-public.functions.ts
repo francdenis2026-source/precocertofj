@@ -198,6 +198,8 @@ export const listPublicEstablishments = createServerFn({ method: "GET" }).handle
         city: e.city,
         state: e.state,
         neighborhood: e.neighborhood,
+        latitude: e.latitude ?? null,
+        longitude: e.longitude ?? null,
         logoUrl: e.logo_url,
         brandColor: e.brand_color,
         kind: e.kind ?? null,
