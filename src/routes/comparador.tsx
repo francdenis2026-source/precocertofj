@@ -24,6 +24,7 @@ import { computeUnitPrice } from "@/lib/unit-price";
 import { QuickFilterBar } from "@/components/search/QuickFilterBar";
 import { ProductStoresDialog } from "@/components/product/ProductStoresDialog";
 import { PriceRankingPanel } from "@/components/product/PriceRankingPanel";
+import { equivalentGroupLabel, selectEquivalentIndexes } from "@/lib/equivalent-group";
 
 import { useTeaserQuota } from "@/hooks/use-teaser-quota";
 import { useSession } from "@/hooks/useSession";
