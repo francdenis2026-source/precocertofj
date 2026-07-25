@@ -47,7 +47,7 @@ export function SiteFooter() {
 
   return (
     <footer
-      className="mt-1 border-t border-border bg-muted/60 text-foreground md:mt-1.5"
+      className="mt-0.5 border-t border-border bg-muted/60 text-foreground"
     >
       {/* ============ MOBILE (ultra compact — 2 lines) ============ */}
       <div
