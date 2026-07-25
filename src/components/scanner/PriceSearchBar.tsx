@@ -28,12 +28,9 @@ import {
 } from "@/components/search/SearchEmptyState";
 import { ProductQuickModal } from "@/components/home/ProductQuickModal";
 import { useLocalStorageState } from "@/hooks/use-local-storage";
-// TeaserCard removido: resultados de busca são públicos e mostram nomes dos mercados
-import { LockOverlay } from "@/components/paywall/LockOverlay";
 import { PaywallInline } from "@/components/paywall/PaywallInline";
 import { useTeaserQuota } from "@/hooks/use-teaser-quota";
 import { useSession } from "@/hooks/useSession";
-import { isTeaserLocked } from "@/lib/teaser-rule";
 import { LazyImage } from "@/components/media/LazyImage";
 
 
@@ -571,9 +568,8 @@ export function PriceSearchBar({
                 role="listbox"
               >
 
-              {suggestions.map((s, i) => {
-                const locked = isVisitor && isTeaserLocked(s.id, i);
-                const btn = (
+              {suggestions.map((s, i) => (
+                <li key={s.id} role="option" aria-selected={i === activeIdx}>
                   <button
                     type="button"
                     onMouseEnter={() => setActiveIdx(i)}
@@ -607,21 +603,8 @@ export function PriceSearchBar({
                       </p>
                     </div>
                   </button>
-                );
-                return (
-                  <li key={s.id} role="option" aria-selected={i === activeIdx}>
-                    {locked ? (
-                      <div className="relative h-[52px]">
-                        <LockOverlay locked variant="compact">
-                          {btn}
-                        </LockOverlay>
-                      </div>
-                    ) : (
-                      btn
-                    )}
-                  </li>
-                );
-              })}
+                </li>
+              ))}
 
               </ul>
             </div>
