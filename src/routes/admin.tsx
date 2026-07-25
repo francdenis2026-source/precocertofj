@@ -2364,6 +2364,10 @@ function EstablishmentsTab() {
           <Button asChild size="sm" variant="outline">
             <Link to="/admin/icones-categoria">Ícones de categoria</Link>
           </Button>
+          <Button asChild size="sm" variant="outline">
+            <Link to="/admin/ia">Configurações de IA</Link>
+          </Button>
+
           <Button size="sm" onClick={openNew}>
             <Plus className="mr-2 h-4 w-4" /> Novo
           </Button>
