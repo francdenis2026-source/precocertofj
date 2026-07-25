@@ -134,19 +134,72 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
               <Link
                 key={l.to}
                 to={l.to}
-                className={dsx("rounded-lg px-3.5 py-2 text-[15px] font-semibold leading-[1.35] outline-none transition-colors focus-visible:ring-2 lg:text-[16px] xl:text-[17px]", navClass)}
+                className={dsx("rounded-lg px-3 py-2 text-[15px] font-semibold leading-[1.35] outline-none transition-colors focus-visible:ring-2 xl:text-[16px]", navClass)}
                 activeProps={{ className: isOverlay ? "text-brand-soft bg-brand-soft/12" : "text-brand bg-brand/10" }}
               >
                 {l.label}
               </Link>
             ))}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  type="button"
+                  className={dsx("rounded-lg px-2.5 py-2 text-[15px] font-semibold outline-none transition-colors focus-visible:ring-2", navClass)}
+                  aria-label="Mais opções"
+                >
+                  <MoreHorizontal className="h-4.5 w-4.5" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-52">
+                <DropdownMenuItem onSelect={() => navigate({ to: "/resgatar" })}>
+                  <Ticket className="mr-2 h-4 w-4" /> Resgatar código
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => navigate({ to: "/colaborar" })}>
+                  <HeartHandshake className="mr-2 h-4 w-4" /> Programa colaborador
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => navigate({ to: "/fale-conosco" })}>
+                  <UserIcon className="mr-2 h-4 w-4" /> Fale conosco
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </nav>
         )}
 
-
-
         {/* CTAs */}
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
+          {/* Busca compacta no topo — páginas internas sempre; landing após rolar o hero */}
+          {showNav && (!isOverlay || scrolled) && (
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                const term = q.trim();
+                if (term) navigate({ to: "/buscar", search: { q: term } as any });
+              }}
+              role="search"
+              className="hidden md:block"
+            >
+              <label className="sr-only" htmlFor="header-search">Buscar produto</label>
+              <div
+                className={dsx(
+                  "flex items-center gap-1.5 rounded-full border px-3 py-1.5",
+                  isOverlay ? "border-on-media-border bg-on-media-surface" : "border-border bg-card",
+                )}
+              >
+                <Search className={dsx("h-4 w-4", isOverlay ? "text-on-media-muted" : "text-muted-foreground")} />
+                <input
+                  id="header-search"
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  placeholder="Buscar preço…"
+                  className={dsx(
+                    "w-32 bg-transparent text-[13.5px] font-medium outline-none xl:w-44",
+                    isOverlay ? "text-on-media placeholder:text-on-media-muted" : "text-foreground placeholder:text-muted-foreground",
+                  )}
+                />
+              </div>
+            </form>
+          )}
+
           {!isOverlay && showBack && (
             <BackButton
               variant="pill"
