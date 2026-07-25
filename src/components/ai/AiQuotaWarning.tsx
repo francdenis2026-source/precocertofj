@@ -14,7 +14,22 @@ export function AiQuotaWarning({ className }: { className?: string }) {
     queryFn: () => fetchQuota(),
     staleTime: 30_000,
   });
-  if (!data || data.limit <= 0) return null;
+  if (!data) return null;
+
+  if (data.reason === "plan_not_eligible") {
+    return (
+      <Row
+        icon={<Ban className="size-4" />}
+        tone="danger"
+        className={className}
+      >
+        O assistente de IA está disponível apenas nos planos pagos (Mensal, Trimestral ou Anual).
+        O plano Degustação não inclui IA.
+      </Row>
+    );
+  }
+
+  if (data.limit <= 0) return null;
 
   const remaining = Math.max(0, data.limit - data.used);
   const pct = (data.used / data.limit) * 100;

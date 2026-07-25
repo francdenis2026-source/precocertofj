@@ -60,6 +60,12 @@ async function assertAiAllowed(userId: string): Promise<AiAccess> {
       { status: 403 },
     );
   }
+  if (!access.allowed && access.reason === "plan_not_eligible") {
+    throw new Response(
+      "O assistente de IA está disponível apenas nos planos pagos (Mensal, Trimestral ou Anual). O plano Degustação não inclui IA.",
+      { status: 403 },
+    );
+  }
   return access;
 }
 
