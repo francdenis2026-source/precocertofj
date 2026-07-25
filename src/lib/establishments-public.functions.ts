@@ -6,6 +6,8 @@ export type EstablishmentStat = {
   city: string | null;
   state: string | null;
   neighborhood: string | null;
+  latitude: number | null;
+  longitude: number | null;
   logoUrl: string | null;
   brandColor: string | null;
   kind: string | null;
@@ -49,7 +51,7 @@ export const listPublicEstablishments = createServerFn({ method: "GET" }).handle
         select: (s: string) => {
           eq: (c: string, v: unknown) => {
             order: (c: string, o: { ascending: boolean }) => Promise<{
-              data: Array<{
+            data: Array<{
                 id: string;
                 name: string;
                 city: string | null;
@@ -58,6 +60,8 @@ export const listPublicEstablishments = createServerFn({ method: "GET" }).handle
                 logo_url: string | null;
                 brand_color: string | null;
                 kind: string | null;
+                latitude: number | null;
+                longitude: number | null;
               }> | null;
               error: { message: string } | null;
             }>;
@@ -68,7 +72,7 @@ export const listPublicEstablishments = createServerFn({ method: "GET" }).handle
 
     const { data: ests, error: eErr } = await client
       .from("establishments")
-      .select("id, name, city, state, neighborhood, logo_url, brand_color, kind")
+      .select("id, name, city, state, neighborhood, logo_url, brand_color, kind, latitude, longitude")
       .eq("active", true)
       .order("name", { ascending: true });
     if (eErr) throw new Error(eErr.message);
@@ -194,6 +198,8 @@ export const listPublicEstablishments = createServerFn({ method: "GET" }).handle
         city: e.city,
         state: e.state,
         neighborhood: e.neighborhood,
+        latitude: e.latitude ?? null,
+        longitude: e.longitude ?? null,
         logoUrl: e.logo_url,
         brandColor: e.brand_color,
         kind: e.kind ?? null,

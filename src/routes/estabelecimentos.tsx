@@ -13,6 +13,14 @@ import { MobileNav } from "@/components/nav/MobileNav";
 import { FavoriteMarketButton } from "@/components/market/FavoriteMarketButton";
 import { useSession } from "@/hooks/useSession";
 import { listFavoriteMarkets } from "@/lib/favorites.functions";
+import { useUserLocation } from "@/hooks/useUserLocation";
+import { LocationControl } from "@/components/location/LocationControl";
+import {
+  formatDistance,
+  haversineKm,
+  resolveEstablishmentPosition,
+} from "@/lib/geo";
+import { normalizeNeighborhood } from "@/lib/geo-labels";
 
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import {
@@ -66,14 +74,16 @@ export const Route = createFileRoute("/estabelecimentos")({
 });
 
 // Persistência de filtros/scroll — sessionStorage sobrevive a navegações internas
+type SortKey = "distance" | "name" | "neighborhood" | "products";
 type PersistedFilters = {
   q: string;
   neighborhood: string;
-  sort: "name" | "neighborhood" | "products";
+  sort: SortKey;
   kindFilter: string;
 };
 const FILTERS_KEY = "pc:establishments:filters:v1";
 const SCROLL_KEY = "pc:establishments:scroll:v1";
+const PAGE_SIZE = 6;
 const DEFAULT_FILTERS: PersistedFilters = {
   q: "",
   neighborhood: "__all",
@@ -157,7 +167,9 @@ function EstablishmentsPage() {
   const persisted = readPersistedFilters();
   const [q, setQ] = useState(persisted.q);
   const [neighborhood, setNeighborhood] = useState<string>(persisted.neighborhood);
-  const [sort, setSort] = useState<"name" | "neighborhood" | "products">(persisted.sort);
+  const [sort, setSort] = useState<SortKey>(persisted.sort);
+  const [visibleCount, setVisibleCount] = useState<number>(PAGE_SIZE);
+  const loc = useUserLocation();
   const [kindFilter, setKindFilter] = useState<string>(persisted.kindFilter);
   const [metricDetail, setMetricDetail] = useState<null | "establishments" | "products" | "savings" | "live">(null);
   const carouselRef = useRef<HTMLDivElement | null>(null);
@@ -179,6 +191,19 @@ function EstablishmentsPage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Auto-switch para "distância" quando o usuário fornece uma referência de localização
+  useEffect(() => {
+    if (loc.hasReference) setSort("distance");
+  }, [loc.hasReference]);
+
+  // Ponto de referência: coordenadas reais ou centróide do bairro escolhido manualmente
+  const referencePoint = useMemo(() => {
+    if (loc.status === "granted" && loc.coords) return loc.coords;
+    if (loc.status === "manual" && loc.neighborhoodKey) {
+      return resolveEstablishmentPosition({ neighborhood: loc.neighborhoodKey }).position;
+    }
+    return null;
+  }, [loc.status, loc.coords, loc.neighborhoodKey]);
 
   const neighborhoods = useMemo(() => {
     if (!data) return [] as string[];
@@ -187,7 +212,22 @@ function EstablishmentsPage() {
     return Array.from(set).sort((a, b) => a.localeCompare(b, "pt-BR"));
   }, [data]);
 
-  const visibleItems = useMemo(() => {
+  // Mapa id → distância em km (quando houver referência)
+  const distanceById = useMemo(() => {
+    const m = new Map<string, { km: number; source: "exact" | "neighborhood" | "city" }>();
+    if (!data || !referencePoint) return m;
+    for (const e of data.items) {
+      const { position, source } = resolveEstablishmentPosition({
+        latitude: e.latitude,
+        longitude: e.longitude,
+        neighborhood: e.neighborhood,
+      });
+      m.set(e.id, { km: haversineKm(referencePoint, position), source });
+    }
+    return m;
+  }, [data, referencePoint]);
+
+  const allFilteredItems = useMemo(() => {
     if (!data) return [] as EstablishmentsOverview["items"];
     const term = q.trim().toLowerCase();
     let list = data.items.slice();
@@ -208,6 +248,29 @@ function EstablishmentsPage() {
       );
     }
     switch (sort) {
+      case "distance": {
+        // Sem referência: cai para bairro-do-usuário quando ele escolheu manualmente,
+        // senão comporta-se como "bairro (A→Z)" para não confundir.
+        if (referencePoint) {
+          list.sort((a, b) => {
+            const da = distanceById.get(a.id)?.km ?? Number.POSITIVE_INFINITY;
+            const db = distanceById.get(b.id)?.km ?? Number.POSITIVE_INFINITY;
+            if (da !== db) return da - db;
+            return a.name.localeCompare(b.name, "pt-BR");
+          });
+        } else if (loc.neighborhoodKey) {
+          const target = loc.neighborhoodKey;
+          list.sort((a, b) => {
+            const sameA = normalizeNeighborhood(a.neighborhood) === target ? 0 : 1;
+            const sameB = normalizeNeighborhood(b.neighborhood) === target ? 0 : 1;
+            if (sameA !== sameB) return sameA - sameB;
+            return a.name.localeCompare(b.name, "pt-BR");
+          });
+        } else {
+          list.sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
+        }
+        break;
+      }
       case "neighborhood":
         list.sort((a, b) => {
           const an = a.neighborhood ?? "\uffff";
@@ -224,7 +287,17 @@ function EstablishmentsPage() {
         list.sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
     }
     return list;
-  }, [data, q, neighborhood, sort, kindFilter, onlyFavorites, favSet]);
+  }, [data, q, neighborhood, sort, kindFilter, onlyFavorites, favSet, referencePoint, distanceById, loc.neighborhoodKey]);
+
+  // Reset da paginação quando o resultado muda
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+  }, [q, neighborhood, sort, kindFilter, onlyFavorites, referencePoint]);
+
+  const visibleItems = useMemo(
+    () => allFilteredItems.slice(0, visibleCount),
+    [allFilteredItems, visibleCount],
+  );
 
   const kindsPresent = useMemo(() => {
     if (!data) return new Set<string>();
@@ -600,9 +673,17 @@ function EstablishmentsPage() {
             ) : (
               <SectionCard
                 title="Rede de mercados"
-                description={`${visibleItems.length} de ${data.items.length} ${data.items.length === 1 ? "estabelecimento" : "estabelecimentos"} monitorados.`}
+                description={`${allFilteredItems.length} ${allFilteredItems.length === 1 ? "estabelecimento" : "estabelecimentos"} monitorados.`}
                 bodyClassName="p-0"
               >
+                <div className="flex flex-col gap-3 border-b border-border/60 p-4 md:flex-row md:items-center md:justify-between md:p-5">
+                  <LocationControl loc={loc} variant="surface" />
+                  {referencePoint && (
+                    <span className="text-[11.5px] uppercase tracking-[0.14em] text-muted-foreground">
+                      Referência ativa · distâncias estimadas
+                    </span>
+                  )}
+                </div>
                 <div className="flex flex-col gap-3 border-b border-border/60 p-4 md:flex-row md:items-center md:p-5">
                   <div className="relative flex-1">
                     <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -641,6 +722,9 @@ function EstablishmentsPage() {
                       <SelectValue placeholder="Ordenar" />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem value="distance" disabled={!loc.hasReference}>
+                        Ordenar: mais próximos {loc.hasReference ? "" : "(ative sua localização)"}
+                      </SelectItem>
                       <SelectItem value="neighborhood">Ordenar: bairro (A→Z)</SelectItem>
                       <SelectItem value="name">Ordenar: nome (A→Z)</SelectItem>
                       <SelectItem value="products">Ordenar: mais produtos</SelectItem>
@@ -686,6 +770,7 @@ function EstablishmentsPage() {
                     const isFeatured = badgeIds.featuredIds.has(e.id);
                     const tier = classifyTier(e.productsCount);
                     const freshness = describeFreshness(e.lastUpdate);
+                    const dist = distanceById.get(e.id);
                     return (
                     <li key={e.id} className="relative h-full">
                       <FavoriteMarketButton
@@ -747,6 +832,19 @@ function EstablishmentsPage() {
                             <Radio className={`h-3.5 w-3.5 shrink-0 ${freshness.live ? "text-emerald-500" : "text-muted-foreground"}`} aria-hidden />
                             <span className="truncate text-muted-foreground">{freshness.label}</span>
                           </div>
+                          {dist && (
+                            <div className="col-span-2 flex items-center gap-1.5 border-t border-border/40 pt-1.5">
+                              <MapPin className="h-3.5 w-3.5 shrink-0 text-brand-navy dark:text-brand-gold" aria-hidden />
+                              <span className="text-muted-foreground">
+                                <span className="font-bold tabular-nums text-foreground">{formatDistance(dist.km)}</span>{" "}
+                                {dist.source === "exact"
+                                  ? "de você"
+                                  : dist.source === "neighborhood"
+                                    ? "aprox. (bairro)"
+                                    : "aprox. (cidade)"}
+                              </span>
+                            </div>
+                          )}
                         </div>
 
                         {/* Selos contextuais — altura reservada para consistência entre cards */}
@@ -783,6 +881,20 @@ function EstablishmentsPage() {
                     );
                   })}
                 </ul>
+                )}
+                {allFilteredItems.length > visibleItems.length && (
+                  <div className="flex items-center justify-center gap-3 border-t border-border/60 p-4">
+                    <span className="text-[12px] text-muted-foreground">
+                      Mostrando {visibleItems.length} de {allFilteredItems.length}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-4 py-1.5 text-[12px] font-bold uppercase tracking-[0.14em] text-brand-navy transition hover:brightness-105"
+                    >
+                      Mostrar mais
+                    </button>
+                  </div>
                 )}
 
               </SectionCard>

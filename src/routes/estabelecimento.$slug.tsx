@@ -20,6 +20,9 @@ import { getPublicStoreCatalog, type PublicStoreProduct } from "@/lib/stores-pub
 import { getPublicPriceHistory } from "@/lib/store-public-history.functions";
 import { resolveEstablishmentBySlug } from "@/lib/establishment-slug.functions";
 import { normalize } from "@/lib/search-tokens";
+import { useUserLocation } from "@/hooks/useUserLocation";
+import { LocationControl } from "@/components/location/LocationControl";
+import { formatDistance, haversineKm, resolveEstablishmentPosition } from "@/lib/geo";
 import { Button } from "@/components/ui/button";
 
 import { Input } from "@/components/ui/input";
@@ -171,6 +174,24 @@ function EstablishmentPage() {
     data.store.address || data.store.neighborhood || data.store.city,
   );
 
+  const loc = useUserLocation();
+  const referencePoint = useMemo(() => {
+    if (loc.status === "granted" && loc.coords) return loc.coords;
+    if (loc.status === "manual" && loc.neighborhoodKey) {
+      return resolveEstablishmentPosition({ neighborhood: loc.neighborhoodKey }).position;
+    }
+    return null;
+  }, [loc.status, loc.coords, loc.neighborhoodKey]);
+  const distance = useMemo(() => {
+    if (!referencePoint) return null;
+    const { position, source } = resolveEstablishmentPosition({
+      latitude: data.store.latitude,
+      longitude: data.store.longitude,
+      neighborhood: data.store.neighborhood,
+    });
+    return { km: haversineKm(referencePoint, position), source };
+  }, [referencePoint, data.store.latitude, data.store.longitude, data.store.neighborhood]);
+
   const createAlert = (_p: PublicStoreProduct) => {
     navigate({ to: "/alertas" });
   };
@@ -224,6 +245,24 @@ function EstablishmentPage() {
                     {[data.store.city, data.store.state].filter(Boolean).join(" · ")}
                   </span>
                 )}
+                {distance && (
+                  <span
+                    className="inline-flex items-center gap-1 rounded-full border border-brand-navy/30 bg-brand-navy/5 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-navy dark:border-brand-gold/40 dark:bg-brand-gold/10 dark:text-brand-gold"
+                    title={
+                      distance.source === "exact"
+                        ? "Distância linear a partir da sua localização"
+                        : distance.source === "neighborhood"
+                          ? "Distância aproximada — baseada no bairro"
+                          : "Distância aproximada — baseada na cidade"
+                    }
+                  >
+                    <MapPin className="h-3 w-3" aria-hidden />
+                    {formatDistance(distance.km)} {distance.source === "exact" ? "de você" : "aprox."}
+                  </span>
+                )}
+              </div>
+              <div className="mt-3">
+                <LocationControl loc={loc} variant="surface" />
               </div>
 
               {data.store.address && (
