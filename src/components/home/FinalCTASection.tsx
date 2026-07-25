@@ -1,6 +1,7 @@
-import { Link, useNavigate } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, Ticket, Search, Loader2 } from "lucide-react";
+import { useNavigate } from "@tanstack/react-router";
+import { ArrowRight, Sparkles, Search, Loader2 } from "lucide-react";
 import { useState, type FormEvent } from "react";
+
 
 const P = {
   navy: "var(--pc-home-navy)",
@@ -25,7 +26,7 @@ export function FinalCTASection() {
   };
 
   return (
-    <section aria-labelledby="final-cta-title" className="pc-container pt-6 sm:pt-8">
+    <section aria-labelledby="final-cta-title" className="pc-container pt-3 sm:pt-4">
       <div
         className="relative overflow-hidden rounded-[var(--pc-radius-md)] p-[1.5px]"
         style={{
@@ -139,25 +140,8 @@ export function FinalCTASection() {
               </p>
             </form>
 
-            {/* Ações secundárias — texto discreto para não competir com a busca */}
-            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-[12.5px]">
-              <Link
-                to="/planos"
-                className="inline-flex items-center gap-1 font-semibold text-white/85 transition-colors hover:text-white"
-              >
-                Ver planos Plus
-                <ArrowRight className="h-3 w-3" strokeWidth={2.4} />
-              </Link>
-              <span aria-hidden className="text-white/25">·</span>
-              <Link
-                to="/resgatar"
-                className="inline-flex items-center gap-1 font-semibold transition-colors hover:brightness-125"
-                style={{ color: "#F5C86A" }}
-              >
-                <Ticket className="h-3.5 w-3.5" strokeWidth={2.4} />
-                Já tenho um código
-              </Link>
-            </div>
+
+
           </div>
         </div>
       </div>
