@@ -259,7 +259,7 @@ function NeighborhoodsPage() {
 
   return (
     <PageShell>
-      <div>
+      <PageShellContent>
 
       {/* Hero profissional — Navy/Gold, alinhado ao tema */}
       <section className="relative overflow-hidden border-b border-brand-gold/20 bg-brand-navy text-white">
