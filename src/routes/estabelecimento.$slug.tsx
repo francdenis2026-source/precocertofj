@@ -79,9 +79,21 @@ const storeQuery = (id: string) =>
     queryFn: () => getPublicStoreCatalog({ data: { id } }),
     staleTime: 60_000,
   });
+const SEARCH_DEFAULTS = { q: "", cat: "", view: "grid", sort: "price-asc", aba: "catalogo" };
+
+const searchSchema = z.object({
+  q: fallback(z.string(), "").default(""),
+  cat: fallback(z.string(), "").default(""),
+  view: fallback(z.string(), "grid").default("grid"),
+  sort: fallback(z.string(), "price-asc").default("price-asc"),
+  aba: fallback(z.string(), "catalogo").default("catalogo"),
+});
 
 export const Route = createFileRoute("/estabelecimento/$slug")({
+  validateSearch: zodValidator(searchSchema),
+  search: { middlewares: [stripSearchParams(SEARCH_DEFAULTS)] },
   loader: async ({ params, context }) => {
+
     const match = await resolveEstablishmentBySlug({ data: { slug: params.slug } });
     if (!match) throw notFound();
     await context.queryClient.ensureQueryData(storeQuery(match.id));
