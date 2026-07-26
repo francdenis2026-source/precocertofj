@@ -447,7 +447,7 @@ function EstablishmentPage() {
                   </ul>
                 ) : (
                   <div className="mt-2 overflow-hidden rounded-lg border border-border bg-card">
-                    <div className="grid grid-cols-[minmax(0,1fr)_84px] items-center gap-2 border-b border-border bg-muted/60 px-2.5 py-1.5 sm:grid-cols-[minmax(0,1fr)_120px_92px_136px]">
+                    <div className="grid grid-cols-[minmax(0,1fr)_96px] items-center gap-3 border-b border-border bg-muted/60 px-2.5 py-1.5 sm:grid-cols-[minmax(0,1fr)_128px_104px_168px]">
                       <span className="text-[10px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground">
                         Produto
                       </span>
@@ -1002,10 +1002,10 @@ function ProductRow({
   onHistory: () => void;
 }) {
   const unit =
-    product.unitLabel?.replace("R$", "").trim() ||
+    product.unitLabel?.replace("R$", "").replace(/^\s*\/\s*/, "").trim() ||
     (product.pricePerUnit != null ? "un" : null);
   return (
-    <div className="grid grid-cols-[minmax(0,1fr)_84px] items-center gap-2 px-2.5 py-1.5 transition-colors hover:bg-muted/50 sm:grid-cols-[minmax(0,1fr)_120px_92px_136px]">
+    <div className="grid grid-cols-[minmax(0,1fr)_96px] items-center gap-3 px-2.5 py-1.5 transition-colors hover:bg-muted/50 sm:grid-cols-[minmax(0,1fr)_128px_104px_168px]">
       <button
         type="button"
         onClick={onOpen}
@@ -1035,7 +1035,7 @@ function ProductRow({
         )}
       </span>
 
-      <span className="text-right text-[13px] font-bold tabular-nums leading-tight text-foreground">
+      <span className="whitespace-nowrap text-right text-[13px] font-bold tabular-nums leading-tight text-foreground">
         {brl(product.price)}
       </span>
 
