@@ -762,18 +762,48 @@ function EstablishmentsPage() {
                   </div>
                   <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/50 px-2.5 py-2 md:px-3.5">
                     <LocationControl loc={loc} variant="surface" />
-                    <span className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-foreground/70">
-                      {referencePoint ? (
-                        <>Referência ativa · distâncias estimadas</>
-                      ) : (
-                        <>
-                          <span className="tabular-nums text-foreground">
-                            {allFilteredItems.length}
-                          </span>{" "}
-                          {allFilteredItems.length === 1 ? "resultado" : "resultados"}
-                        </>
-                      )}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <div
+                        role="group"
+                        aria-label="Modo de exibição"
+                        className="inline-flex overflow-hidden rounded-full border border-border/70 bg-background"
+                      >
+                        {([
+                          { key: "cards" as const, icon: LayoutGrid, label: "Cards" },
+                          { key: "list" as const, icon: Rows3, label: "Lista" },
+                        ]).map((opt) => {
+                          const active = view === opt.key;
+                          return (
+                            <button
+                              key={opt.key}
+                              type="button"
+                              onClick={() => setView(opt.key)}
+                              aria-pressed={active}
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-[0.12em] transition ${
+                                active
+                                  ? "bg-brand-gold text-brand-navy"
+                                  : "text-foreground/70 hover:text-foreground"
+                              }`}
+                            >
+                              <opt.icon className="h-3.5 w-3.5" aria-hidden />
+                              {opt.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <span className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-foreground/70">
+                        {referencePoint ? (
+                          <>Referência ativa</>
+                        ) : (
+                          <>
+                            <span className="tabular-nums text-foreground">
+                              {allFilteredItems.length}
+                            </span>{" "}
+                            {allFilteredItems.length === 1 ? "resultado" : "resultados"}
+                          </>
+                        )}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
