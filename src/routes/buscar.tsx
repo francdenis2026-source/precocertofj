@@ -248,7 +248,7 @@ function SearchPage() {
           },
           replace: true,
         });
-      }, 250);
+      }, 400);
     },
     [navigate],
   );
