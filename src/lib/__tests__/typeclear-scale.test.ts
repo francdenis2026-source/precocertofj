@@ -14,9 +14,16 @@ const tokens = Object.keys(tc) as TcToken[];
 describe("TypeClear — escala responsiva", () => {
   it("todo token usa clamp() fluido", () => {
     for (const t of tokens) {
-      expect(tc[t], t).toMatch(/text-\[clamp\([^\]]+\)\]/);
+      expect(tc[t], t).toMatch(/text-\[calc\(clamp\([^\]]+\)\]/);
     }
   });
+
+  it("todo token respeita a variável de escala do modo de leitura", () => {
+    for (const t of tokens) {
+      expect(tc[t], t).toContain("var(--tc-scale,1)");
+    }
+  });
+
 
   it("nenhum token fica abaixo do piso absoluto", () => {
     for (const t of tokens) {

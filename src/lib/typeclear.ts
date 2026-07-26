@@ -17,13 +17,21 @@ export const MIN_ANY_PX = 11;
 /** Piso para textos de leitura (corpo, meta, títulos, células, controles). */
 export const MIN_READABLE_PX = 12;
 
-/** Helper: gera a classe de tamanho fluido do Tailwind. */
+/**
+ * Helper: gera a classe de tamanho fluido do Tailwind.
+ *
+ * O resultado é multiplicado por `--tc-scale` (padrão `1`), o que permite ao
+ * "modo de leitura" ampliar toda a tipografia do sistema sem tocar em nenhum
+ * componente — e sem mexer em paddings/gaps, que continuam nas classes de
+ * layout (a altura é compensada por reflow/line-clamp, ver `styles.css`).
+ */
 export const fluid = (minPx: number, maxPx: number, from = 380, to = 1280) => {
   const slope = (maxPx - minPx) / (to - from);
   const vw = +(slope * 100).toFixed(4);
   const base = +(minPx - slope * from).toFixed(3);
-  return `text-[clamp(${minPx}px,${base}px_+_${vw}vw,${maxPx}px)]`;
+  return `text-[calc(clamp(${minPx}px,${base}px_+_${vw}vw,${maxPx}px)*var(--tc-scale,1))]`;
 };
+
 
 export const tc = {
   /** Rótulo dourado acima de um título. */
@@ -75,6 +83,11 @@ export const READABLE_TOKENS: TcToken[] = [
 
 /** Extrai o `min` (px) declarado no clamp de um token. */
 export function minFontPx(token: TcToken): number | null {
-  const m = tc[token].match(/text-\[clamp\((\d+(?:\.\d+)?)px/);
+  const m = tc[token].match(/clamp\((\d+(?:\.\d+)?)px/);
   return m ? Number(m[1]) : null;
 }
+
+/** Fatores de ampliação do modo de leitura. */
+export const READING_SCALE = 1.12;
+export const DEFAULT_SCALE = 1;
+

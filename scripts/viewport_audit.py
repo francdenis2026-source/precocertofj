@@ -73,6 +73,17 @@ async def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--url", default="http://localhost:8080")
     ap.add_argument("--routes", default="")
+    ap.add_argument(
+        "--reading",
+        action="store_true",
+        help="ativa o modo de leitura (tipografia +12%) antes de medir",
+    )
+    ap.add_argument(
+        "--max-ratio",
+        type=float,
+        default=MAX_HEIGHT_RATIO,
+        help="razao maxima de altura aceita (padrao 1.15)",
+    )
     args = ap.parse_args()
     routes = [r for r in args.routes.split(",") if r] or ROUTES
 
@@ -84,6 +95,11 @@ async def main() -> int:
         for name, w, h in VIEWPORTS:
             ctx = await browser.new_context(viewport={"width": w, "height": h})
             page = await ctx.new_page()
+            if args.reading:
+                await page.goto(args.url, wait_until="domcontentloaded", timeout=30000)
+                await page.evaluate(
+                    "() => window.localStorage.setItem('pc:reading-mode','1')"
+                )
             for route in routes:
                 try:
                     await page.goto(f"{args.url}{route}", wait_until="networkidle", timeout=30000)
@@ -107,9 +123,9 @@ async def main() -> int:
         print(f"{name:<10} {route:<20} {str(ratio) + 'x':>7} {str(ox):>10} {ntiny:>13}  {sample}")
 
     problems = [r for r in rows if r[3] or r[4]]
-    over = [r for r in rows if r[2] > MAX_HEIGHT_RATIO]
+    over = [r for r in rows if r[2] > args.max_ratio]
     if over:
-        print(f"\nAcima da meta de uma tela (> {MAX_HEIGHT_RATIO}x):")
+        print(f"\nAcima da meta de uma tela (> {args.max_ratio}x):")
         for name, route, ratio, *_ in over:
             print(f"  {name} {route} -> {ratio}x")
     print(
