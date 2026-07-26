@@ -1,12 +1,16 @@
 import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowDown,
   ArrowUp,
+  ChevronLeft,
+  ChevronRight,
   History,
+  LayoutGrid,
+  List as ListIcon,
   MapPin,
   Search,
   Minus,
@@ -18,10 +22,18 @@ import { getPublicStoreCatalog, type PublicStoreProduct } from "@/lib/stores-pub
 import { getPublicPriceHistory } from "@/lib/store-public-history.functions";
 import { resolveEstablishmentBySlug } from "@/lib/establishment-slug.functions";
 import { normalize } from "@/lib/search-tokens";
+import { createRailController, type RailState } from "@/lib/rail-scroll";
 import { useUserLocation } from "@/hooks/useUserLocation";
 import { LocationControl } from "@/components/location/LocationControl";
 import { formatDistance, haversineKm, resolveEstablishmentPosition } from "@/lib/geo";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Sheet,
   SheetContent,
@@ -36,8 +48,10 @@ import { ButcherCounter, splitButcherCuts } from "@/components/estabelecimento/B
 import { PreparoDicas } from "@/components/estabelecimento/PreparoDicas";
 import { FavoriteMarketButton } from "@/components/market/FavoriteMarketButton";
 import { RatingBadge, PLATFORM_RATING } from "@/components/ds/RatingStars";
+import { ProductQuickView, type QuickViewProduct } from "@/components/product/ProductQuickView";
 
 import { EmptyState, LoadingGrid, RouteError } from "@/components/feedback";
+
 
 const brl = (v: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
