@@ -3325,3 +3325,44 @@ select optgroup {
   font-weight: 500;
   letter-spacing: -0.01em;
 }
+
+/* =====================================================================
+   MODO DE LEITURA — tipografia maior com a MESMA altura de página.
+   O toggle define `--tc-scale` no <html>; todos os tokens TypeClear já
+   multiplicam por essa variável. Aqui compensamos o ganho de altura com
+   reflow controlado: folgas verticais menores e line-clamps mais curtos.
+   ===================================================================== */
+html { --tc-scale: 1; }
+
+html[data-reading="on"] {
+  /* Folga vertical global levemente comprimida para absorver o +12% de tipo. */
+  --pc-reading-tighten: 0.88;
+}
+
+/* Compressão de espaçamentos verticais em containers de conteúdo. */
+html[data-reading="on"] :where(.pc-container, main > section, [data-reading-section]) {
+  padding-top: calc(var(--pc-reading-pt, 0px));
+}
+
+/* Textos de apoio ganham clamp mais curto para não empurrar o layout. */
+html[data-reading="on"] .tc-flow {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: var(--tc-flow-reading, 2);
+  overflow: hidden;
+}
+html[data-reading="on"] .tc-flow-1 { -webkit-line-clamp: 1; }
+html[data-reading="on"] .tc-flow-3 { -webkit-line-clamp: 3; }
+
+/* Elementos puramente decorativos somem no modo de leitura (ganho de altura). */
+html[data-reading="on"] .tc-hide-reading { display: none !important; }
+
+/* Compressão fina de listas e grades densas. */
+html[data-reading="on"] :where([data-reading-dense]) {
+  row-gap: calc(0.5rem * var(--pc-reading-tighten));
+}
+
+/* Alturas mínimas de cartões acompanham a compressão. */
+html[data-reading="on"] :where([data-reading-card]) {
+  padding-block: calc(0.5rem * var(--pc-reading-tighten));
+}
