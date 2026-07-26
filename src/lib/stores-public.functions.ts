@@ -301,7 +301,19 @@ export type PlatformStats = {
   estimatedSavings: number;
   /** Soma da economia potencial em todos os produtos comparados, em R$. */
   totalSavings: number;
+  /** ISO da apuração dos números (quando a consulta ao banco terminou). */
+  generatedAt: string;
+  /** Janela de tempo considerada nas quedas de preço, em dias. */
+  windowDays: number;
+  /** false quando a integração com o banco falhou — a UI mostra erro/zero. */
+  ok: boolean;
+  /** Mensagem curta de erro, quando `ok` for false. */
+  error: string | null;
 };
+
+/** Janela usada pela RPC `platform_public_stats` para detectar quedas de preço. */
+export const PLATFORM_STATS_WINDOW_DAYS = 30;
+
 
 export const getPlatformStats = createServerFn({ method: "GET" }).handler(
   async (): Promise<PlatformStats> => {
