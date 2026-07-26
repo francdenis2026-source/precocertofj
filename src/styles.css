@@ -2038,8 +2038,13 @@ body::before {
   background-size: cover, cover;
   background-position: center, center center;
   background-repeat: no-repeat, no-repeat;
-  background-attachment: fixed, fixed;
+  /* O próprio ::before já é position:fixed — `attachment: fixed` seria
+     redundante e força repaint do layer inteiro a cada frame de scroll. */
+  background-attachment: scroll, scroll;
   opacity: 1;
+  /* Mantém o fundo em uma camada composta, fora do fluxo de pintura. */
+  transform: translateZ(0);
+  backface-visibility: hidden;
 }
 /* Mobile: attachment scroll (fixed é caro em iOS) e enquadramento ajustado */
 @media (max-width: 768px), (prefers-reduced-motion: reduce) {
