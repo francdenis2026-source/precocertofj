@@ -560,6 +560,39 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
       },
     },
     {
+      label: "Scan Inteligente (IA) / mês",
+      values: {
+        ...val("degustacao", "—"),
+        ...val("mensal", "30 análises"),
+        ...val("trimestral", "150 análises"),
+        ...val("anual", "150 análises"),
+        ...val("fundador-feijo", "600 análises"),
+        ...val("fundador", "600 análises"),
+      },
+    },
+    {
+      label: "Cataloga\u00e7\u00e3o por foto (lote)",
+      values: {
+        ...val("degustacao", false),
+        ...val("mensal", false),
+        ...val("trimestral", true),
+        ...val("anual", true),
+        ...val("fundador-feijo", true),
+        ...val("fundador", true),
+      },
+    },
+    {
+      label: "Pacote extra de IA (avulso)",
+      values: {
+        ...val("degustacao", false),
+        ...val("mensal", "R$ 9,90 / 50"),
+        ...val("trimestral", "R$ 9,90 / 50"),
+        ...val("anual", "R$ 9,90 / 50"),
+        ...val("fundador-feijo", "R$ 9,90 / 50"),
+        ...val("fundador", "R$ 9,90 / 50"),
+      },
+    },
+    {
       label: "Selo de apoiador",
       values: {
         ...val("fundador-feijo", true),
@@ -568,6 +601,7 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
     },
   ];
 }
+
 
 function ComparisonCell({ value }: { value: string | boolean | undefined }) {
   if (value === true) {
