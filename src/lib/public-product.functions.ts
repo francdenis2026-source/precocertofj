@@ -289,7 +289,12 @@ export const getPublicProduct = createServerFn({ method: "POST" })
     }
     const citiesRanking: PublicProductCityRank[] = Array.from(byCity.entries())
       .map(([city, v]) => {
-        const sorted = v.entries.slice().sort((a, b) => a.priceMin - b.priceMin);
+        const sorted = sortByPriceStable(v.entries, (m) => ({
+          store: m.marketName,
+          price: m.priceMin,
+          samples: m.samples,
+          lastSeen: m.lastSeen,
+        }));
         const best = sorted[0];
         const avgCity = Number(
           (
