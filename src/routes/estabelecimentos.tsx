@@ -991,8 +991,35 @@ function EstablishmentsPage() {
                   </div>
                 </div>
                 ) : (
+                <>
+                {/* Mobile: linhas densas — mantém a lista em uma tela */}
+                <ul className="divide-y divide-border/60 py-1 md:hidden" aria-label="Lista de estabelecimentos">
+                  {visibleItems.map((e, idx) => {
+                    const slug = slugifyEstablishment(e.name);
+                    const locality = [e.neighborhood, e.city].filter(Boolean).join(" · ");
+                    return (
+                      <li key={e.id}>
+                        <Link
+                          to="/estabelecimento/$slug"
+                          params={{ slug }}
+                          className="flex items-center gap-2.5 px-2 py-2 transition-colors hover:bg-muted/50"
+                        >
+                          <StoreLogoThumb src={e.logoUrl} name={e.name} eager={idx < 4} className="h-9 w-11 shrink-0" />
+                          <span className="min-w-0 flex-1">
+                            <span className={`block truncate ${tc.itemTitle}`}>{e.name}</span>
+                            {locality && (
+                              <span className={`block truncate ${tc.meta}`}>{locality}</span>
+                            )}
+                          </span>
+                          <span className={`shrink-0 font-bold text-foreground ${tc.num}`}>{e.productsCount}</span>
+                          <ChevronRight className="h-4 w-4 shrink-0 text-foreground/40" aria-hidden />
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
                 <ul
-                  className="grid grid-cols-1 gap-3 py-4 sm:grid-cols-2 lg:grid-cols-3"
+                  className="hidden grid-cols-1 gap-3 py-4 md:grid sm:grid-cols-2 lg:grid-cols-3"
                   aria-label="Lista de estabelecimentos"
                 >
                   {visibleItems.map((e, idx) => {
@@ -1040,7 +1067,7 @@ function EstablishmentsPage() {
                     );
                   })}
                 </ul>
-
+                </>
                 )}
                 {allFilteredItems.length > visibleItems.length && (
                   <div
