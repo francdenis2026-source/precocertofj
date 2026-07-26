@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { buildLivePanel, type LivePanelMetric } from "@/lib/live-panel";
 import { getProductSuggestions } from "@/lib/products-suggest.functions";
 import { getPlatformStats, listPublicStores } from "@/lib/stores-public.functions";
 import { getEconomyStat } from "@/lib/products-public.functions";
