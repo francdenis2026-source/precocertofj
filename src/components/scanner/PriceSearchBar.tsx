@@ -1696,7 +1696,8 @@ function ProductGroupCard({
       </div>
 
       <ul className="mt-1 border-t border-[color-mix(in_oklab,var(--color-border)_70%,transparent)]">
-        {prices.map((p, i) => {
+        {visiblePrices.map((p, i) => {
+
           const isCheapest = globalMin != null && p.price === globalMin;
           return (
             <li
