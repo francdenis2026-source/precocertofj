@@ -209,20 +209,19 @@ export function MetricSpotlightDialog({
         {/* ===== FOOTER fixo ===== */}
         <div className="flex shrink-0 items-center justify-between gap-2 border-t border-border bg-card px-3 py-2 sm:px-4">
           <span className="flex min-w-0 items-center gap-1.5 truncate text-[10.5px] text-muted-foreground">
-            <Clock className="h-3 w-3 shrink-0" />
-            {data?.totals.lastUpdate
-              ? `${relTime(data.totals.lastUpdate)} · ${num(data.totals.scans7d)} preços/7d`
-              : "carregando dados…"}
+            <ShieldCheck className="h-3 w-3 shrink-0" />
+            Dados colaborativos de Feijó/AC
           </span>
           <Link
             to={kind === "markets" ? "/estabelecimentos" : kind === "products" ? "/buscar" : "/comparador"}
             onClick={() => onOpenChange(false)}
-            className="inline-flex shrink-0 items-center gap-1 rounded-lg px-2.5 py-1.5 text-[11.5px] font-bold text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="pc-metric-link inline-flex shrink-0 items-center gap-1 rounded-lg px-2.5 py-1.5 text-[11.5px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2"
           >
             {kind === "markets" ? "Ver mercados" : kind === "products" ? "Ver catálogo" : "Comparador"}
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
+
       </DialogContent>
     </Dialog>
   );
@@ -236,13 +235,13 @@ function statStrip(
     return [
       ["Mercados", num(data.totals.establishments)],
       ["Produtos", num(data.totals.products)],
-      ["Preços/7d", num(data.totals.scans7d)],
+      ["Comparáveis", num(data.totals.productsCompared)],
     ];
   if (kind === "products")
     return [
       ["Cadastrados", num(data.totals.products)],
       ["Categorias", num(data.topCategories.length)],
-      ["Preços/7d", num(data.totals.scans7d)],
+      ["Mercados", num(data.totals.establishments)],
     ];
   return [
     ["Média", `${data.totals.avgSavingsPct}%`],
@@ -250,6 +249,7 @@ function statStrip(
     ["Comparados", num(data.totals.productsCompared)],
   ];
 }
+
 
 /* ---------- Primitivos compactos ---------- */
 
@@ -280,7 +280,7 @@ function SearchBar({
   ariaLabel: string;
 }) {
   return (
-    <div className="mb-2 flex h-9 items-center gap-2 rounded-lg border border-border bg-muted/40 px-2.5 focus-within:border-primary/60 focus-within:ring-2 focus-within:ring-primary/20">
+    <div className="mb-2 flex h-9 items-center gap-2 rounded-lg border border-border bg-muted/40 px-2.5 focus-within:border-[var(--pc-home-gold)] focus-within:ring-2 focus-within:ring-[color-mix(in_oklab,var(--pc-home-gold)_35%,transparent)]">
       <Search className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
       <input
         type="search"
@@ -294,7 +294,7 @@ function SearchBar({
         <button
           type="button"
           onClick={() => onChange("")}
-          className="shrink-0 text-[10.5px] font-bold uppercase tracking-wide text-primary"
+          className="pc-metric-ink shrink-0 text-[10.5px] font-bold uppercase tracking-wide"
         >
           limpar
         </button>
@@ -309,7 +309,7 @@ function LoadMoreButton({ remaining, onClick }: { remaining: number; onClick: ()
     <button
       type="button"
       onClick={onClick}
-      className="mt-2 w-full rounded-lg border border-border bg-muted/40 py-1.5 text-[11.5px] font-bold text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+      className="mt-2 w-full rounded-lg border border-border bg-muted/40 py-1.5 text-[11.5px] font-bold text-foreground transition-colors hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-gold)]"
     >
       Carregar mais ({remaining})
     </button>
@@ -413,7 +413,7 @@ function MarketsList({
                 params={{ slug: s.slug }}
                 onClick={onNavigate}
                 aria-label={`Abrir página do mercado ${s.name}`}
-                className="-mx-1 flex items-center gap-2.5 rounded-lg px-1 py-2 transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="-mx-1 flex items-center gap-2.5 rounded-lg px-1 py-2 transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-gold)]"
               >
                 <StoreBadge
                   name={s.name}
@@ -531,7 +531,7 @@ function ProductsRecentList({
                   search={{ q: u.productName } as never}
                   onClick={onNavigate}
                   aria-label={`Comparar preços de ${u.productName}`}
-                  className="block truncate text-[13px] font-semibold text-foreground underline-offset-2 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  className="pc-metric-hover block truncate text-[13px] font-semibold text-foreground underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-gold)]"
                 >
                   {u.productName}
                 </Link>
@@ -541,14 +541,13 @@ function ProductsRecentList({
                       to="/estabelecimento/$slug"
                       params={{ slug: u.marketSlug }}
                       onClick={onNavigate}
-                      className="font-semibold text-primary underline-offset-2 hover:underline"
+                      className="pc-metric-ink font-semibold underline-offset-2 hover:underline"
                     >
                       {u.marketName}
                     </Link>
                   ) : (
                     (u.marketName ?? "—")
-                  )}{" "}
-                  · {relTime(u.when)}
+                  )}
                 </div>
               </div>
               <div
@@ -624,7 +623,7 @@ function SavingsList({
                     params={{ slug: s.catalogSlug }}
                     onClick={onNavigate}
                     aria-label={`Ver comparação de ${s.displayName}`}
-                    className="block truncate text-[13px] font-semibold text-foreground underline-offset-2 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                    className="pc-metric-hover block truncate text-[13px] font-semibold text-foreground underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-gold)]"
                   >
                     {s.displayName}
                   </Link>
@@ -640,7 +639,7 @@ function SavingsList({
                       to="/estabelecimento/$slug"
                       params={{ slug: s.cheapestStoreSlug }}
                       onClick={onNavigate}
-                      className="font-semibold text-primary underline-offset-2 hover:underline"
+                      className="pc-metric-ink font-semibold underline-offset-2 hover:underline"
                     >
                       {s.cheapestStore}
                     </Link>
@@ -666,7 +665,7 @@ function SavingsList({
                   params={{ slug: s.catalogSlug }}
                   onClick={onNavigate}
                   aria-label={`Abrir comparação de ${s.displayName}`}
-                  className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  className="pc-metric-ink-hover grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-border text-muted-foreground transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-gold)]"
                 >
                   <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
