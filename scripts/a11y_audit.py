@@ -53,7 +53,7 @@ FOCUS_PROBE = r"""
     const txt = (el.innerText || el.textContent || '').trim();
     if (txt) return txt;
     if (el.getAttribute('title')) return el.getAttribute('title').trim();
-    if (el.tagName === 'INPUT') {
+    if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA' || el.tagName === 'SELECT') {
       if (el.labels && el.labels.length) return Array.from(el.labels).map(l => l.textContent.trim()).join(' ');
       if (el.placeholder) return el.placeholder;
       if (el.value && el.type !== 'text') return el.value;
