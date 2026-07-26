@@ -3142,11 +3142,12 @@ code, pre, kbd, samp, tt, var,
   --res-row-pad-y: 0.3125rem;   /* altura das linhas de preço */
   --res-radius: 0.75rem;
 
-  --res-title: 13.5px;
-  --res-meta: 11px;
-  --res-store: 12.5px;
-  --res-price: 14.5px;
-  --res-label: 9.5px;
+  --res-title: 14px;
+  --res-meta: 11.5px;
+  --res-store: 13px;
+  --res-price: 15px;
+  --res-label: 11px;
+
 
   --res-line: color-mix(in oklab, var(--color-border) 70%, transparent);
   --res-highlight: color-mix(in oklab, var(--brand-gold) 10%, transparent);
