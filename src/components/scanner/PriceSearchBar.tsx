@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, useTransition } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
 import { searchProductPrice, type PriceSearchResult, type PriceSuggestion, type ProductGroup } from "@/lib/price-search.functions";
@@ -142,7 +142,7 @@ export function PriceSearchBar({
 
 
   const [err, setErr] = useState<string | null>(null);
-  const [pending, startTransition] = useTransition();
+  const [isSearching, setIsSearching] = useState(false);
 
 
   const [suggestions, setSuggestions] = useState<ProductSuggestion[]>([]);
@@ -247,12 +247,14 @@ export function PriceSearchBar({
     if (isVisitor && quota.exceeded) {
       setQuotaBlocked(true);
       setResult(null);
+      setIsSearching(false);
       return;
     }
     setQuotaBlocked(false);
     // Evita refetch idêntico (mesmo termo + mesmos filtros) — principal fonte
     // de "flicker" quando a URL sincroniza enquanto o usuário digita.
     const key = `${q.toLowerCase()}|${mode}|${pureOnly ? 1 : 0}`;
+    onQueryChange?.(q);
     if (!opts?.force && lastSearchKey.current === key) return;
     lastSearchKey.current = key;
     // Só debita cota quando o visitante realmente digita e envia uma busca
@@ -263,17 +265,19 @@ export function PriceSearchBar({
     const ctrl = new AbortController();
     searchAbort.current = ctrl;
     const seq = ++searchSeq.current;
-    startTransition(() => {
-      runSearch({ data: { query: q, mode, pureOnly }, signal: ctrl.signal })
-        .then((r) => {
-          if (seq !== searchSeq.current) return; // resposta obsoleta
-          setResult(r);
-        })
-        .catch((e: unknown) => {
-          if (seq !== searchSeq.current || ctrl.signal.aborted) return;
-          setErr(e instanceof Error ? e.message : String(e));
-        });
-    });
+    setIsSearching(true);
+    runSearch({ data: { query: q, mode, pureOnly }, signal: ctrl.signal })
+      .then((r) => {
+        if (seq !== searchSeq.current) return; // resposta obsoleta
+        setResult(r);
+      })
+      .catch((e: unknown) => {
+        if (seq !== searchSeq.current || ctrl.signal.aborted) return;
+        setErr(e instanceof Error ? e.message : String(e));
+      })
+      .finally(() => {
+        if (seq === searchSeq.current) setIsSearching(false);
+      });
   };
 
   // Cancela requisições pendentes ao desmontar.
@@ -372,7 +376,6 @@ export function PriceSearchBar({
   const setInputValue = (v: string) => {
     if (inputRef.current) inputRef.current.value = v;
     setQuery(v);
-    onQueryChange?.(v);
   };
 
   const revertAutoCorrect = () => {
@@ -386,11 +389,16 @@ export function PriceSearchBar({
 
 
   const clear = () => {
+    searchAbort.current?.abort();
+    searchSeq.current += 1;
+    lastSearchKey.current = null;
     setInputValue("");
     setResult(null);
     setErr(null);
+    setIsSearching(false);
     setSuggestions([]);
     setShowSuggest(false);
+    onQueryChange?.("");
     inputRef.current?.focus();
   };
 
@@ -508,7 +516,6 @@ export function PriceSearchBar({
               const next = normalizeInput(e.target.value.slice(0, 80));
               setQuery(next);
               setShowSuggest(true);
-              onQueryChange?.(next);
               if (autoCorrected) setAutoCorrected(null);
             }}
             onFocus={() => setShowSuggest(true)}
@@ -691,12 +698,12 @@ export function PriceSearchBar({
         </div>
         <button
           type="submit"
-          disabled={pending}
+          disabled={isSearching}
           aria-label="Buscar"
           className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-full border-2 border-brand-gold bg-brand-gold px-3.5 text-[12px] font-bold uppercase tracking-[0.14em] text-brand-navy shadow-[0_8px_20px_-10px_color-mix(in_oklab,var(--brand-gold)_80%,transparent)] transition-all duration-150 hover:-translate-y-px hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-60 sm:px-5"
         >
           <Search className="h-4 w-4" strokeWidth={2.25} aria-hidden="true" />
-          <span className="hidden sm:inline">{pending ? "Buscando…" : "Buscar"}</span>
+          <span className="hidden sm:inline">{isSearching ? "Buscando…" : "Buscar"}</span>
         </button>
       </form>
 
@@ -723,7 +730,7 @@ export function PriceSearchBar({
       )}
 
       {/* Loading skeleton — só quando ainda não há resultado (evita piscar durante refetch) */}
-      {pending && !result && !err && !quotaBlocked && (
+      {isSearching && !result && !err && !quotaBlocked && (
         <div
           className="mt-3 min-h-[640px] space-y-2 [content-visibility:auto]"
           aria-busy="true"
@@ -758,8 +765,8 @@ export function PriceSearchBar({
 
       {result && !err && !quotaBlocked && (
         <div
-          className={`mt-3 min-h-[640px] space-y-2 [overflow-anchor:none] transition-opacity duration-150 ${pending ? "opacity-70" : "opacity-100"}`}
-          aria-busy={pending || undefined}
+          className={`mt-3 min-h-[640px] space-y-2 [overflow-anchor:none] transition-opacity duration-150 ${isSearching ? "opacity-70" : "opacity-100"}`}
+          aria-busy={isSearching || undefined}
           aria-live="polite"
         >
           <SearchInterpretationSummary

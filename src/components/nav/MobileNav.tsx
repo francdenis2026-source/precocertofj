@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
@@ -20,6 +21,12 @@ export function MobileNav() {
   const pathname = location.pathname;
   const { session, loading: sessionLoading } = useSession();
   const isAuthed = !sessionLoading && !!session;
+  const [loginHref, setLoginHref] = useState("/login");
+
+  useEffect(() => {
+    if (isAuthed) return;
+    setLoginHref(loginHrefWithRedirect());
+  }, [isAuthed, location.pathname, location.searchStr]);
 
   const fetchCart = useServerFn(getCart);
   const cartQuery = useQuery({
@@ -119,7 +126,7 @@ export function MobileNav() {
           </Link>
         ) : (
           <a
-            href={loginHrefWithRedirect()}
+            href={loginHref}
             aria-label="Entrar"
             className="group flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-1.5 text-muted-foreground transition-colors hover:text-foreground"
           >
