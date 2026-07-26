@@ -743,7 +743,7 @@ function ComparadorPage() {
           <button
             type="button"
             onClick={handleShare}
-            className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-background px-4 py-2 font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-primary transition hover:border-primary hover:bg-primary/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-background px-4 py-2 font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-primary transition hover:border-primary hover:bg-primary/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             aria-label="Compartilhar esta visualização do comparador"
           >
             <Share2 className="h-3.5 w-3.5" strokeWidth={2} />
@@ -753,7 +753,7 @@ function ComparadorPage() {
       />
 
 
-      <section className="mx-auto max-w-7xl px-4 pt-4 md:px-6 md:pt-8">
+      <section className="mx-auto max-w-7xl px-4 pt-2.5 md:px-6 md:pt-8">
         <div className="flex items-center gap-2 rounded-2xl border border-border bg-background px-4 py-2.5 shadow-sm transition focus-within:border-primary focus-within:shadow-[0_0_0_3px_color-mix(in_oklab,var(--color-primary)_25%,transparent)]">
           <Search className="h-4 w-4 text-muted-foreground" />
           <input
