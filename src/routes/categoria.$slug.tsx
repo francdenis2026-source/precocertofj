@@ -55,6 +55,8 @@ const ICONS: Record<string, typeof ShoppingCart> = {
 const brl = (v: number) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
+const SEARCH_DEFAULTS = { q: "", loja: "", view: "list", page: 1, per: 30 };
+
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
   loja: fallback(z.string(), "").default(""),
@@ -65,6 +67,8 @@ const searchSchema = z.object({
 
 export const Route = createFileRoute("/categoria/$slug")({
   validateSearch: zodValidator(searchSchema),
+  search: { middlewares: [stripSearchParams(SEARCH_DEFAULTS)] },
+
   head: ({ params }) => {
     const def = categoryBySlug(params.slug);
     const label = def?.label ?? "Categoria";
