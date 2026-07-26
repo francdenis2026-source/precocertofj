@@ -9,7 +9,6 @@ import {
   ShieldCheck,
   Store,
   TrendingDown,
-  X,
 } from "lucide-react";
 import {
   Dialog,
@@ -163,14 +162,7 @@ export function MetricSpotlightDialog({
                 </DialogDescription>
               </DialogHeader>
             </div>
-            <button
-              type="button"
-              onClick={() => onOpenChange(false)}
-              aria-label="Fechar"
-              className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-white/20 text-white/80 transition-colors hover:bg-white/10 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color-mix(in_oklab,var(--pc-home-gold)_70%,transparent)]"
-            >
-              <X className="h-4 w-4" />
-            </button>
+            <span className="w-7 shrink-0" aria-hidden />
           </div>
 
           {/* Stat strip dentro do hero — economiza altura */}
