@@ -132,15 +132,6 @@ function CategoryPage() {
   }, [qInput, q, setSearch]);
 
   const [limit, setLimit] = useState(24);
-  const [quickView, setQuickView] = useState<null | {
-    name: string;
-    unit: string | null;
-    minPrice: number;
-    maxPrice: number;
-    cheapestStore: string;
-    cheapestLogo: string | null;
-    storeCount: number;
-  }>(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ["category-hub", slug],
@@ -161,6 +152,21 @@ function CategoryPage() {
     return list;
   }, [data, q, storeFilter]);
 
+  // Quick view controlado pela URL (?p=nome): compartilhável e reversível
+  // com voltar/avançar do navegador.
+  const openProduct = search.p;
+  const quickView = useMemo(() => {
+    if (!openProduct) return null;
+    const found = (data?.products ?? []).find((p) => p.name === openProduct);
+    return found ?? { name: openProduct };
+  }, [openProduct, data]);
+
+  const openQuickView = useCallback(
+    (name: string) => setSearch({ p: name }),
+    [setSearch],
+  );
+  const closeQuickView = useCallback(() => setSearch({ p: "" }), [setSearch]);
+
   // Contagens e páginas sempre coerentes com filtros/loja/categoria ativa
   const totalPages = Math.max(1, Math.ceil(products.length / perPage));
   const safePage = Math.min(page, totalPages);
@@ -170,6 +176,10 @@ function CategoryPage() {
   useEffect(() => {
     setLimit(24);
   }, [slug, q, storeFilter, perPage, view]);
+
+  // Restaura a rolagem e a categoria ativa ao usar voltar/avançar.
+  useScrollRestoration(!isLoading && Boolean(def));
+
 
 
   if (!def) {
