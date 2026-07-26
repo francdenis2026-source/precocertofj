@@ -148,13 +148,27 @@ function useFavoritos() {
   return { favs, toggle, clear };
 }
 
+/** Chip padrão navy/gold — mesmo desenho usado no balcão do açougue. */
+const chipCls = (active: boolean, disabled = false) =>
+  disabled
+    ? "inline-flex h-7 shrink-0 cursor-not-allowed items-center gap-1 rounded-full border border-dashed border-border/60 bg-background/40 px-2.5 text-[11px] font-medium leading-none text-muted-foreground/60"
+    : active
+      ? "inline-flex h-7 shrink-0 items-center gap-1 rounded-full border border-brand-gold bg-brand-gold px-2.5 text-[11px] font-bold leading-none text-brand-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+      : "inline-flex h-7 shrink-0 items-center gap-1 rounded-full border border-border bg-background px-2.5 text-[11px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+
+const microLabel =
+  "text-[10px] font-bold uppercase leading-none tracking-[0.16em] text-muted-foreground";
+
 export function PreparoDicas() {
   const { favs, toggle, clear } = useFavoritos();
   const [baixando, setBaixando] = useState(false);
   const [cardKey, setCardKey] = useState<string | null>(null);
+  const [filtrosAbertos, setFiltrosAbertos] = useState(false);
   const [temposSel, setTemposSel] = useState<Set<TempoFaixaId>>(() => new Set());
   const [modosSel, setModosSel] = useState<Set<ModoId>>(() => new Set());
   const [proteinasSel, setProteinasSel] = useState<Set<ProteinaId>>(() => new Set());
+
+
 
   const toggleTempo = (id: TempoFaixaId) => {
     setTemposSel((prev) => {
