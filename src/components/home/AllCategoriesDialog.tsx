@@ -19,34 +19,37 @@ import {
   PawPrint,
   BookOpen,
   Home as HomeIcon,
-  Zap,
+  Sparkles,
   Search,
   ArrowRight,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-type Cat = {
-  slug: string;
-  label: string;
-  desc: string;
-  q: string;
-  Icon: typeof ShoppingCart;
+import { CATEGORY_DEFS } from "@/lib/category-hub";
+
+const ICONS: Record<string, typeof ShoppingCart> = {
+  supermercados: ShoppingCart,
+  farmacias: Pill,
+  acougues: Beef,
+  padarias: Croissant,
+  hortifruti: Apple,
+  bebidas: Wine,
+  limpeza: HomeIcon,
+  higiene: Sparkles,
+  pet: PawPrint,
+  construcao: HardHat,
+  postos: Fuel,
+  papelaria: BookOpen,
 };
 
-const CATEGORIES: Cat[] = [
-  { slug: "supermercados", label: "Supermercados", desc: "Compra do mês", q: "supermercado", Icon: ShoppingCart },
-  { slug: "farmacias", label: "Farmácias", desc: "Medicamentos e higiene", q: "farmácia", Icon: Pill },
-  { slug: "construcao", label: "Construção", desc: "Materiais e ferramentas", q: "construção", Icon: HardHat },
-  { slug: "postos", label: "Postos", desc: "Combustível e conveniência", q: "posto combustível", Icon: Fuel },
-  { slug: "padarias", label: "Padarias", desc: "Pães e confeitaria", q: "padaria", Icon: Croissant },
-  { slug: "acougues", label: "Açougues", desc: "Carnes e frios", q: "açougue", Icon: Beef },
-  { slug: "hortifruti", label: "Hortifrúti", desc: "Frutas, legumes e verduras", q: "hortifruti", Icon: Apple },
-  { slug: "bebidas", label: "Bebidas", desc: "Adega e distribuidoras", q: "bebidas", Icon: Wine },
-  { slug: "pet", label: "Pet", desc: "Ração e acessórios", q: "pet shop", Icon: PawPrint },
-  { slug: "papelaria", label: "Papelaria", desc: "Escritório e escolar", q: "papelaria", Icon: BookOpen },
-  { slug: "casa", label: "Casa & Utilidades", desc: "Limpeza e bazar", q: "utilidades domésticas", Icon: HomeIcon },
-  { slug: "eletro", label: "Eletro", desc: "Eletrodomésticos", q: "eletrodomésticos", Icon: Zap },
-];
+type Cat = { slug: string; label: string; desc: string; Icon: typeof ShoppingCart };
+
+const CATEGORIES: Cat[] = CATEGORY_DEFS.map((c) => ({
+  slug: c.slug,
+  label: c.label,
+  desc: c.desc,
+  Icon: ICONS[c.slug] ?? ShoppingCart,
+}));
 
 // remove acentos + minúsculas p/ busca tolerante
 const norm = (s: string) =>
@@ -72,7 +75,7 @@ export function AllCategoriesDialog({
 
   const go = (c: Cat) => {
     onOpenChange(false);
-    navigate({ to: "/buscar", search: { q: c.q, categoria: c.slug } as never });
+    navigate({ to: "/categoria/$slug", params: { slug: c.slug } });
   };
 
   return (
