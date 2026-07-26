@@ -1013,6 +1013,8 @@ function EstablishmentsPage() {
                           tierLabel={tier.label}
                           tierColor={tier.color}
                           rank={idx + 1}
+                          priority={idx < 6}
+
                           distanceLabel={dist ? formatDistance(dist.km) : null}
                           distanceQualifier={
                             dist
