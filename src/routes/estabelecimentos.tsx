@@ -191,6 +191,21 @@ function EstablishmentsPage() {
   }, [view]);
   const searchTokens = useMemo(() => tokenizeQuery(q), [q]);
   const sentinelRef = useRef<HTMLDivElement | null>(null);
+  // Carregamento incremental: revela mais itens quando o rodapé entra em tela.
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((en) => en.isIntersecting)) {
+          setVisibleCount((c) => c + PAGE_SIZE);
+        }
+      },
+      { rootMargin: "240px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [visibleCount, q, neighborhood, sort, kindFilter, view]);
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const heroOverlayOpacity = useAdaptiveOverlayOpacity(mercadosHero.url, { min: 0.6, max: 0.94 });
 
