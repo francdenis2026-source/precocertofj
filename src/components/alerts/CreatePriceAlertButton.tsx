@@ -133,20 +133,35 @@ export function CreatePriceAlertButton({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" variant="outline" className="gap-1.5">
-          <Bell className="h-3.5 w-3.5" />
-          Criar alerta
-        </Button>
+        {compact ? (
+          <button
+            type="button"
+            className={
+              triggerClassName ??
+              "inline-flex h-6 items-center gap-1 rounded-full border border-[color-mix(in_oklab,var(--brand-gold)_45%,transparent)] bg-background px-2 text-[10.5px] font-semibold text-[var(--pc-gold-ink)] transition hover:bg-[color-mix(in_oklab,var(--brand-gold)_12%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50"
+            }
+          >
+            <Bell className="h-3 w-3" aria-hidden="true" />
+            {triggerLabel}
+          </button>
+        ) : (
+          <Button size="sm" variant="outline" className={triggerClassName ?? "gap-1.5"}>
+            <Bell className="h-3.5 w-3.5" />
+            {triggerLabel}
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Alerta de variação</DialogTitle>
           <DialogDescription>
             Avisamos quando o preço de{" "}
-            <strong>{displayName ?? productName ?? "este produto"}</strong>{" "}
+            <strong>{displayName ?? productName ?? "este produto"}</strong>
+            {categoryLabel ? ` (${categoryLabel})` : ""}{" "}
             variar acima do limite escolhido.
           </DialogDescription>
         </DialogHeader>
+
 
         <div className="space-y-3">
           <div>
