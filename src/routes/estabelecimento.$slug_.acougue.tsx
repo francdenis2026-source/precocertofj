@@ -8,7 +8,7 @@ import {
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { ArrowLeft, Beef, MapPin, Store } from "lucide-react";
 import { getPublicStoreCatalog, type PublicStoreProduct } from "@/lib/stores-public.functions";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
@@ -31,13 +31,15 @@ const storeQuery = (id: string) =>
     staleTime: 60_000,
   });
 
-const SEARCH_DEFAULTS = { bq: "", prot: "", bsort: "kg-asc", bview: "grid" };
+const SEARCH_DEFAULTS = { bq: "", prot: "", bsort: "kg-asc", bview: "grid", p: "" };
 
 const searchSchema = z.object({
   bq: fallback(z.string(), "").default(""),
   prot: fallback(z.string(), "").default(""),
   bsort: fallback(z.string(), "kg-asc").default("kg-asc"),
   bview: fallback(z.string(), "grid").default("grid"),
+  /** Slug do corte aberto no modal — permite compartilhar link direto. */
+  p: fallback(z.string(), "").default(""),
 });
 
 export const Route = createFileRoute("/estabelecimento/$slug_/acougue")({
@@ -96,17 +98,24 @@ export const Route = createFileRoute("/estabelecimento/$slug_/acougue")({
 });
 
 function ButcherPage() {
-  const { storeId, slug } = Route.useLoaderData();
+  const { storeId } = Route.useLoaderData();
+  const { slug } = Route.useParams();
   const { data } = useSuspenseQuery(storeQuery(storeId));
   const { cuts } = useMemo(() => splitButcherCuts(data.products), [data.products]);
-  const [quickView, setQuickView] = useState<PublicStoreProduct | null>(null);
   const navigate = useNavigate();
   const search = Route.useSearch();
+  // Corte aberto vem da URL: recarregar/compartilhar reabre o mesmo produto.
+  const quickView = useMemo<PublicStoreProduct | null>(
+    () => (search.p ? (cuts.find((c) => c.slug === search.p) ?? null) : null),
+    [cuts, search.p],
+  );
 
   const butcherState = useMemo(
     () => parseButcherState({ q: search.bq, prot: search.prot, bsort: search.bsort, bview: search.bview }),
     [search.bq, search.prot, search.bsort, search.bview],
   );
+  const searchRef = useRef(search);
+  searchRef.current = search;
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stateRef = useRef(butcherState);
   stateRef.current = butcherState;
@@ -116,8 +125,14 @@ function ButcherPage() {
     const apply = () =>
       navigate({
         to: "/estabelecimento/$slug_/acougue",
-        params: { slug },
-        search: { bq: next.q, prot: next.protein ?? "", bsort: next.sort, bview: next.view },
+        params: { slug, slug_: slug } as never,
+        search: {
+          ...searchRef.current,
+          bq: next.q,
+          prot: next.protein ?? "",
+          bsort: next.sort,
+          bview: next.view,
+        },
         replace: patch.q !== undefined,
       });
     if (timer.current) clearTimeout(timer.current);
@@ -125,22 +140,42 @@ function ButcherPage() {
     else apply();
   }, [navigate, slug]);
 
-  const openQuickView = useCallback((p: PublicStoreProduct) => setQuickView(p), []);
+  const openQuickView = useCallback(
+    (product: PublicStoreProduct) => {
+      navigate({
+        to: "/estabelecimento/$slug_/acougue",
+        params: { slug, slug_: slug } as never,
+        search: { ...searchRef.current, p: product.slug },
+      });
+    },
+    [navigate, slug],
+  );
+  const closeQuickView = useCallback(() => {
+    navigate({
+      to: "/estabelecimento/$slug_/acougue",
+      params: { slug, slug_: slug } as never,
+      search: { ...searchRef.current, p: "" },
+      replace: true,
+    });
+  }, [navigate, slug]);
 
 
   return (
     <div className="min-h-svh bg-background text-foreground">
       <SiteHeader />
-      <main className="mx-auto max-w-5xl px-4 pb-16 pt-6">
+      <main className="mx-auto max-w-5xl px-3 pb-14 pt-3 sm:px-6">
         <Link
           to="/estabelecimento/$slug"
           params={{ slug }}
-          className="mb-4 inline-flex h-9 items-center gap-1.5 rounded-full border border-border bg-background px-3.5 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)]"
+          aria-label={`Voltar para ${data.store.name}`}
+          className="inline-flex h-8 max-w-full items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[10px] font-bold uppercase leading-none tracking-[0.16em] text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
         >
-          <ArrowLeft className="h-3.5 w-3.5" aria-hidden /> Voltar para {data.store.name}
+          <ArrowLeft className="h-3.5 w-3.5 shrink-0 text-brand-gold" aria-hidden />
+          <span className="truncate">Voltar para a loja</span>
         </Link>
 
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11.5px] text-muted-foreground">
+
+        <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11.5px] leading-snug text-muted-foreground">
           {data.store.neighborhood && (
             <span className="inline-flex items-center gap-1">
               <MapPin className="h-3.5 w-3.5 text-brand-gold" aria-hidden /> Bairro{" "}
@@ -159,7 +194,7 @@ function ButcherPage() {
               onStateChange={patchButcher}
               onOpen={openQuickView}
             />
-            <div className="mt-8">
+            <div className="mt-5">
               <PreparoDicas />
             </div>
           </>
@@ -193,7 +228,7 @@ function ButcherPage() {
               }
             : null
         }
-        onClose={() => setQuickView(null)}
+        onClose={closeQuickView}
       />
       <SiteFooter />
     </div>

@@ -94,6 +94,7 @@ const SEARCH_DEFAULTS = {
   prot: "",
   bsort: "kg-asc",
   bview: "grid",
+  p: "",
 };
 
 const searchSchema = z.object({
@@ -106,6 +107,8 @@ const searchSchema = z.object({
   prot: fallback(z.string(), "").default(""),
   bsort: fallback(z.string(), "kg-asc").default("kg-asc"),
   bview: fallback(z.string(), "grid").default("grid"),
+  /** Slug do produto/corte aberto no modal — link compartilhável. */
+  p: fallback(z.string(), "").default(""),
 });
 
 export const Route = createFileRoute("/estabelecimento/$slug")({
@@ -196,7 +199,11 @@ function EstablishmentPage() {
 
   const [q, setQ] = useState(search.q);
   const [historyFor, setHistoryFor] = useState<PublicStoreProduct | null>(null);
-  const [quickView, setQuickView] = useState<PublicStoreProduct | null>(null);
+  // Produto do modal vem da URL: recarregar ou compartilhar reabre o mesmo item.
+  const quickView = useMemo<PublicStoreProduct | null>(
+    () => (search.p ? (data.products.find((p) => p.slug === search.p) ?? null) : null),
+    [data.products, search.p],
+  );
   const [limit, setLimit] = useState(30);
 
   // Sincroniza o termo digitado com a URL (debounce) para compartilhar/voltar.
@@ -312,7 +319,12 @@ function EstablishmentPage() {
     },
     [navigate],
   );
-  const openQuickView = useCallback((p: PublicStoreProduct) => setQuickView(p), []);
+  const openQuickView = useCallback((p: PublicStoreProduct) => {
+    setSearchRef.current({ p: p.slug });
+  }, []);
+  const closeQuickView = useCallback(() => {
+    setSearchRef.current({ p: "" }, { replace: true });
+  }, []);
   const openHistory = useCallback((p: PublicStoreProduct) => setHistoryFor(p), []);
 
 
@@ -330,7 +342,7 @@ function EstablishmentPage() {
         </Link>
 
         {/* Hero compacto — escala: eyebrow 10 / título 19-22 / meta 12 / stat 15 */}
-        <header className="mt-2.5 overflow-hidden rounded-xl border border-border/70 bg-[var(--pc-navy,#0b1e3f)] text-white shadow-sm">
+        <header className="mt-2.5 overflow-hidden rounded-xl border border-border/70 bg-brand-navy text-white shadow-sm">
           <div className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-3 px-3.5 py-3 sm:px-4">
             <StoreBadge
               name={data.store.name}
@@ -491,7 +503,7 @@ function EstablishmentPage() {
                       <li key={p.slug}>
                         <ProductTile
                           product={p}
-                          onOpen={() => setQuickView(p)}
+                          onOpen={() => openQuickView(p)}
                           onAlert={() => createAlert(p)}
                           onHistory={() => setHistoryFor(p)}
                         />
@@ -519,7 +531,7 @@ function EstablishmentPage() {
                         <li key={p.slug}>
                           <ProductRow
                             product={p}
-                            onOpen={() => setQuickView(p)}
+                            onOpen={() => openQuickView(p)}
                             onAlert={() => createAlert(p)}
                             onHistory={() => setHistoryFor(p)}
                           />
@@ -642,7 +654,7 @@ function EstablishmentPage() {
               } satisfies QuickViewProduct)
             : null
         }
-        onClose={() => setQuickView(null)}
+        onClose={closeQuickView}
       />
 
 
@@ -998,7 +1010,7 @@ function ProductTile({
   onHistory: () => void;
 }) {
   return (
-    <article className="flex h-full flex-col justify-between rounded-lg border border-border bg-card shadow-[0_1px_2px_rgba(11,30,63,0.04)] transition-colors hover:border-brand-gold hover:bg-muted/30">
+    <article className="flex h-full flex-col justify-between rounded-lg border border-border bg-card shadow-elev-1 transition-colors hover:border-brand-gold hover:bg-muted/30">
       <button
         type="button"
         onClick={onOpen}

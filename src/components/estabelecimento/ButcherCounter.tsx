@@ -224,7 +224,7 @@ export function ButcherCounter({
   return (
     <section aria-label={`Açougue do ${storeName}`} className="mt-4">
       {/* Cabeçalho compacto — sem repetir o nome da loja já exibido no topo */}
-      <div className="grid gap-2 rounded-xl border border-border bg-card p-3 shadow-[0_1px_2px_rgba(11,30,63,0.05)] lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-4">
+      <div className="grid gap-2 rounded-xl border border-border bg-card p-3 shadow-elev-1 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-4">
         <div className="min-w-0">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-2 py-0.5 text-[10px] font-bold uppercase leading-none tracking-[0.16em] text-brand-navy">
             <Beef className="h-3 w-3" aria-hidden /> Setor interno
@@ -386,18 +386,31 @@ export function ButcherCounter({
         <h3 className="text-[11px] font-bold uppercase tracking-[0.16em] text-foreground">
           Cortes de balcão
         </h3>
-        <span className="text-[11px] text-muted-foreground">
+        <span className="text-[11px] text-muted-foreground" aria-hidden>
           {filtered.length} de {cuts.length}
           {protein ? ` · ${proteinLabel(protein)}` : ""}
         </span>
       </div>
 
+      {/* Região viva: anuncia resultado dos filtros a leitores de tela */}
+      <p className="sr-only" role="status" aria-live="polite">
+        {loading
+          ? "Carregando cortes do açougue."
+          : error
+            ? `Erro ao carregar os cortes: ${error}`
+            : `${filtered.length} de ${cuts.length} cortes exibidos${
+                protein ? ` em ${proteinLabel(protein)}` : ""
+              }${q ? ` para a busca ${q}` : ""}.`}
+      </p>
+
       {loading ? (
         <CutSkeletons view={view} />
       ) : error ? (
+        <div role="alert">
         <EmptyState
           className="mt-2"
           size="sm"
+
           icon={AlertTriangle}
           title="Não foi possível carregar os cortes"
           message={error}
@@ -409,6 +422,7 @@ export function ButcherCounter({
             ) : undefined
           }
         />
+        </div>
       ) : filtered.length > 0 ? (
         <>
           {view === "grid" ? (
@@ -457,6 +471,7 @@ export function ButcherCounter({
         </>
       ) : (
         <EmptyState
+          role="status"
           className="mt-4"
           size="sm"
           icon={Beef}
@@ -546,7 +561,7 @@ const CutTile = memo(function CutTile({
 }) {
   const kg = cutPricePerKg(cut);
   return (
-    <article className="flex h-full flex-col justify-between rounded-lg border border-border bg-card shadow-[0_1px_2px_rgba(11,30,63,0.04)] transition-colors hover:border-brand-gold hover:bg-muted/30">
+    <article className="flex h-full flex-col justify-between rounded-lg border border-border bg-card shadow-elev-1 transition-colors hover:border-brand-gold hover:bg-muted/30">
       <button
         type="button"
         onClick={onOpen ? () => onOpen(cut) : undefined}
@@ -591,7 +606,7 @@ const CutRow = memo(function CutRow({
 }) {
   const kg = cutPricePerKg(cut);
   return (
-    <div className="grid grid-cols-[minmax(0,1fr)_96px] items-center gap-3 px-2.5 py-1.5 transition-colors hover:bg-muted/50 sm:grid-cols-[minmax(0,1fr)_120px_96px_200px]">
+    <div className="grid grid-cols-[minmax(0,1fr)_96px] min-h-11 items-center gap-3 px-2.5 py-2 transition-colors hover:bg-muted/50 sm:min-h-0 sm:py-1.5 sm:grid-cols-[minmax(0,1fr)_120px_96px_200px]">
       <button
         type="button"
         onClick={onOpen ? () => onOpen(cut) : undefined}
@@ -630,6 +645,8 @@ function CutSkeletons({ view }: { view: "grid" | "list" }) {
       <div
         className="mt-2 overflow-hidden rounded-lg border border-border bg-card"
         role="status"
+        aria-live="polite"
+        aria-busy="true"
         aria-label="Carregando cortes"
       >
         <ul className="divide-y divide-border/70">
@@ -647,6 +664,8 @@ function CutSkeletons({ view }: { view: "grid" | "list" }) {
     <ul
       className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3"
       role="status"
+      aria-live="polite"
+      aria-busy="true"
       aria-label="Carregando cortes"
     >
       {rows.map((_, i) => (
