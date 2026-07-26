@@ -588,10 +588,74 @@ function CategoryRail({ current }: { current: string }) {
     };
   }, [sync, current]);
 
+  // Arraste com o mouse (pointer drag), sem atrapalhar o clique nos chips
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let down = false;
+    let moved = false;
+    let startX = 0;
+    let startScroll = 0;
+
+    const onDown = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse" || e.button !== 0) return;
+      down = true;
+      moved = false;
+      startX = e.clientX;
+      startScroll = el.scrollLeft;
+    };
+    const onMove = (e: PointerEvent) => {
+      if (!down) return;
+      const dx = e.clientX - startX;
+      if (!moved && Math.abs(dx) < 4) return;
+      moved = true;
+      el.style.cursor = "grabbing";
+      el.scrollLeft = startScroll - dx;
+    };
+    const onUp = () => {
+      down = false;
+      el.style.cursor = "";
+      if (moved) {
+        const block = (ev: Event) => ev.preventDefault();
+        el.addEventListener("click", block, { capture: true, once: true });
+        window.setTimeout(() => el.removeEventListener("click", block, true), 0);
+      }
+      moved = false;
+    };
+
+    el.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    return () => {
+      el.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+    };
+  }, []);
+
   const scrollBy = (dir: -1 | 1) => {
     const el = ref.current;
     if (!el) return;
     el.scrollBy({ left: dir * Math.max(180, el.clientWidth * 0.7), behavior: "smooth" });
+  };
+
+  /** Navegação por teclado: setas movem o foco entre as categorias. */
+  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const keys = ["ArrowRight", "ArrowLeft", "Home", "End"];
+    if (!keys.includes(e.key)) return;
+    const el = ref.current;
+    if (!el) return;
+    const items = Array.from(el.querySelectorAll<HTMLElement>("a[data-rail-item]"));
+    if (items.length === 0) return;
+    const idx = items.findIndex((n) => n === document.activeElement);
+    let next = idx;
+    if (e.key === "ArrowRight") next = idx < 0 ? 0 : Math.min(items.length - 1, idx + 1);
+    if (e.key === "ArrowLeft") next = idx < 0 ? 0 : Math.max(0, idx - 1);
+    if (e.key === "Home") next = 0;
+    if (e.key === "End") next = items.length - 1;
+    e.preventDefault();
+    items[next]?.focus();
+    items[next]?.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
   };
 
   return (
@@ -599,9 +663,10 @@ function CategoryRail({ current }: { current: string }) {
       <div
         ref={ref}
         onScroll={sync}
-        className="no-scrollbar overflow-x-auto scroll-smooth px-8"
+        onKeyDown={onKeyDown}
+        className="no-scrollbar overflow-x-auto scroll-smooth px-9 py-1"
       >
-        <ul className="flex w-max gap-1.5">
+        <ul className="flex w-max gap-1.5 pr-1">
           {CATEGORY_DEFS.map((c) => {
             const CIcon = ICONS[c.slug] ?? Package;
             const active = c.slug === current;
@@ -610,14 +675,16 @@ function CategoryRail({ current }: { current: string }) {
                 <Link
                   to="/categoria/$slug"
                   params={{ slug: c.slug }}
+                  data-rail-item=""
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[12px] font-semibold leading-none transition-colors",
+                    "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[12px] font-semibold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                     active
                       ? "border-brand-gold bg-brand-gold text-brand-navy"
                       : "border-border bg-card text-foreground hover:border-brand-gold",
                   )}
                 >
+
                   <CIcon className="h-3.5 w-3.5" aria-hidden /> {c.short}
                 </Link>
               </li>
