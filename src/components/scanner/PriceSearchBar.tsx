@@ -1603,11 +1603,20 @@ function ProductGroupCard({
   canSelectCompare?: boolean;
   onToggleCompare?: () => void;
 }) {
-  // Mercado mais barata dentro deste grupo — usada para destaque no cabeçalho.
+  // Mercado mais barato dentro deste grupo — usado para destaque no cabeçalho.
   const cheapestInGroup = useMemo(() => {
     if (prices.length === 0) return null;
     return prices.reduce((best, cur) => (cur.price < best.price ? cur : best), prices[0]);
   }, [prices]);
+
+  // Mostra por padrão apenas os 3 melhores preços de cada produto: mantém a
+  // página curta e legível; o restante fica a um clique de distância.
+  const COLLAPSED = 3;
+  const [expanded, setExpanded] = useState(false);
+  const visiblePrices = expanded ? prices : prices.slice(0, COLLAPSED);
+  const hiddenPrices = prices.length - visiblePrices.length;
+
+
 
   return (
     <div className="pc-res-card relative">
