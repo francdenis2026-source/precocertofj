@@ -6,8 +6,9 @@ interface LogoProps extends React.HTMLAttributes<HTMLAnchorElement> {
   compact?: boolean;
   /** Exibe a linha "FEIJÓ • ACRE" sob o wordmark. */
   showTagline?: boolean;
-  /** "dark" = sobre superfícies escuras (sidebar/footer). */
-  variant?: "default" | "dark";
+  /** "dark" = sobre superfícies escuras (sidebar/footer).
+   *  "on-light" = sobre superfícies claras fixas (independente do tema). */
+  variant?: "default" | "dark" | "on-light";
 }
 
 /**
@@ -23,6 +24,7 @@ export function Logo({
   ...props
 }: LogoProps) {
   const isDark = variant === "dark";
+  const onLight = variant === "on-light";
   return (
     <a
       href={href}
@@ -48,16 +50,23 @@ export function Logo({
           <span
             className={cn(
               "font-display text-[22px] font-bold tracking-tight",
-              isDark ? "text-white" : "text-foreground",
+              isDark ? "text-white" : onLight ? "text-[#08122a]" : "text-foreground",
             )}
           >
-            Preço<span className="text-brand-gold">Certo</span>
+            Preço
+            <span className={onLight ? "text-[var(--pc-gold-ink)]" : "text-brand-gold"}>
+              Certo
+            </span>
           </span>
           {showTagline && (
             <span
               className={cn(
                 "mt-1 flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.28em]",
-                isDark ? "text-white/60" : "text-muted-foreground",
+                isDark
+                  ? "text-white/60"
+                  : onLight
+                    ? "text-[#41506b]"
+                    : "text-muted-foreground",
               )}
             >
               <span

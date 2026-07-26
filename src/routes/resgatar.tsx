@@ -326,7 +326,7 @@ function RedeemPage() {
       {/* Header slim */}
       <header className="mx-auto flex w-full max-w-4xl items-center justify-between px-4 py-4 md:px-6">
         <Link to="/" className="flex items-center gap-2">
-          <Logo className="h-7 w-auto" />
+          <Logo variant="on-light" className="h-7 w-auto" />
         </Link>
         <Link
           to="/"
