@@ -1970,8 +1970,12 @@ function MarketGroupedResults({
             brandColor={b.brandColor}
             kind={b.kind}
             minPrice={b.minPrice}
+            bestCount={b.bestCount}
+            savings={b.savings}
+            gapToBest={b.gapToBest}
             rows={b.rows}
             isCheapest={globalMin != null && b.minPrice === globalMin && idx === 0}
+
             fmt={fmt}
             highlightTokens={highlightTokens}
           />
