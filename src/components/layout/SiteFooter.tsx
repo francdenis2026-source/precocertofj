@@ -111,11 +111,8 @@ export function SiteFooter() {
         {/* Brand block */}
         <div className="max-w-sm">
           <Link to="/" className="group flex items-center gap-2 rounded-lg outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background">
-            <span
-              className="grid h-6 w-6 shrink-0 place-items-center rounded-[7px] bg-brand text-[12px] font-black text-brand-foreground shadow-elev-2 md:h-7 md:w-7 md:text-[13px]"
-            >
-              P
-            </span>
+            <img src="/logo-mark.png" alt="" aria-hidden width={28} height={28} className="h-7 w-7 shrink-0 object-contain md:h-8 md:w-8" />
+
             <span
               className={dsx(serif, "text-[16px] leading-none text-foreground md:text-[18px]")}
             >
