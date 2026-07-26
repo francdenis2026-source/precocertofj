@@ -166,12 +166,14 @@ async def main() -> int:
     ap.add_argument("--base", default="http://localhost:8080")
     ap.add_argument("--routes", nargs="*", default=ROUTES)
     ap.add_argument("--json", default=None)
+    ap.add_argument("--only-mobile", action="store_true")
     args = ap.parse_args()
 
     failures = []
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
-        for vp_name, w, h in VIEWPORTS:
+        viewports = [v for v in VIEWPORTS if v[0] == "mobile"] if args.only_mobile else VIEWPORTS
+        for vp_name, w, h in viewports:
             ctx = await browser.new_context(viewport={"width": w, "height": h})
             page = await ctx.new_page()
             await page.goto(args.base, wait_until="domcontentloaded")

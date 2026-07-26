@@ -84,7 +84,7 @@ export function SiteFooter() {
             <span key={l.to} className="inline-flex shrink-0 items-center">
               <Link
                 to={l.to}
-                className="rounded-md px-1 py-0.5 text-foreground/95 outline-none transition-colors hover:bg-brand/10 hover:text-brand active:text-brand-strong focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background [&.active]:text-brand"
+                className="rounded-md px-1 py-0.5 text-foreground/95 outline-none transition-colors hover:bg-brand/10 hover:text-brand active:text-brand-strong focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background [&.active]:text-[color:var(--pc-gold-ink)] dark:[&.active]:text-brand"
               >
                 {l.label}
               </Link>

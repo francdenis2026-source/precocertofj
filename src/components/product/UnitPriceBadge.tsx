@@ -44,7 +44,7 @@ export function UnitPriceBadge({
   return (
     <span
       className={
-        "inline-flex items-center gap-1 rounded-sm border border-accent-strong/40 bg-accent/[0.08] px-1.5 py-0.5 font-mono text-[11px] font-semibold uppercase leading-none tracking-wide text-accent-strong " +
+        "inline-flex items-center gap-1 rounded-sm border border-accent-strong/40 bg-accent/[0.08] px-1.5 py-0.5 font-mono text-[11px] font-semibold uppercase leading-none tracking-wide text-accent-ink " +
         (className ?? "")
       }
       aria-label={ariaLabel}
@@ -54,7 +54,7 @@ export function UnitPriceBadge({
       {showConverted && u.converted ? (
         <span
           aria-label={`convertido de ${u.sourceLabel}`}
-          className="ml-1 rounded-[3px] bg-accent-strong/15 px-1 py-[1px] font-sans text-[11px] font-semibold uppercase tracking-wide text-accent-strong"
+          className="ml-1 rounded-[3px] bg-accent-strong/15 px-1 py-[1px] font-sans text-[11px] font-semibold uppercase tracking-wide text-accent-ink"
         >
           conv.
         </span>
