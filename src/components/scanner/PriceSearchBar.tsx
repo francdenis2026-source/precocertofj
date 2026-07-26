@@ -501,7 +501,7 @@ export function PriceSearchBar({
         <span
           role="note"
           aria-label="Passo 01: Pesquisar preço"
-          className="inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-navy px-2 py-0.5 font-sans text-[11px] font-medium text-brand-gold"
+          className="inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-navy px-2 py-0.5 font-sans text-[11px] font-medium text-brand-gold gold-on-dark"
         >
           <span aria-hidden="true" className="tabular-nums">01</span>
           <span aria-hidden="true" className="opacity-70">·</span>
