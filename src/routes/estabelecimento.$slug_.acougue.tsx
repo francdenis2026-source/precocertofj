@@ -163,14 +163,17 @@ function ButcherPage() {
   return (
     <div className="min-h-svh bg-background text-foreground">
       <SiteHeader />
-      <main className="mx-auto max-w-5xl px-4 pb-16 pt-6">
+      <main className="mx-auto max-w-5xl px-3 pb-14 pt-3 sm:px-6">
         <Link
           to="/estabelecimento/$slug"
           params={{ slug }}
-          className="mb-4 inline-flex h-9 items-center gap-1.5 rounded-full border border-border bg-background px-3.5 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)]"
+          aria-label={`Voltar para ${data.store.name}`}
+          className="inline-flex h-8 max-w-full items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[10px] font-bold uppercase leading-none tracking-[0.16em] text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
         >
-          <ArrowLeft className="h-3.5 w-3.5" aria-hidden /> Voltar para {data.store.name}
+          <ArrowLeft className="h-3.5 w-3.5 shrink-0 text-brand-gold" aria-hidden />
+          <span className="truncate">Voltar para a loja</span>
         </Link>
+
 
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11.5px] text-muted-foreground">
           {data.store.neighborhood && (
