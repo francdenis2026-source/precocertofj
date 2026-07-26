@@ -300,6 +300,15 @@ export function ButcherCounter({
         <div
           role="radiogroup"
           aria-label="Modo de exibição"
+          onKeyDown={(e) => {
+            if (["ArrowRight", "ArrowDown", "End"].includes(e.key)) {
+              e.preventDefault();
+              patchState({ view: "list" });
+            } else if (["ArrowLeft", "ArrowUp", "Home"].includes(e.key)) {
+              e.preventDefault();
+              patchState({ view: "grid" });
+            }
+          }}
           className="flex h-9 shrink-0 items-center gap-1 rounded-lg border border-border bg-card p-1"
         >
           {[
@@ -313,12 +322,13 @@ export function ButcherCounter({
                 type="button"
                 role="radio"
                 aria-checked={active}
+                tabIndex={active ? 0 : -1}
                 aria-label={`Exibir em ${label.toLowerCase()}`}
                 onClick={() => patchState({ view: id })}
                 className={
                   active
-                    ? "inline-flex h-7 items-center gap-1 rounded-md bg-brand-gold px-2 text-[11.5px] font-bold leading-none text-brand-navy"
-                    : "inline-flex h-7 items-center gap-1 rounded-md px-2 text-[11.5px] font-semibold leading-none text-muted-foreground transition-colors hover:text-foreground"
+                    ? "inline-flex h-7 items-center gap-1 rounded-md bg-brand-gold px-2 text-[11.5px] font-bold leading-none text-brand-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    : "inline-flex h-7 items-center gap-1 rounded-md px-2 text-[11.5px] font-semibold leading-none text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 }
               >
                 <Icon className="h-3.5 w-3.5" aria-hidden /> {label}
@@ -326,6 +336,7 @@ export function ButcherCounter({
             );
           })}
         </div>
+
       </div>
 
       <div className="mt-2.5 flex items-baseline justify-between gap-3">
