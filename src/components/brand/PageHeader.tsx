@@ -120,10 +120,12 @@ export function PageHeader({
                 {title}
               </h1>
               {description && (
-                <p className=cn(
+                <p
+                  className={cn(
                     "tc-flow mt-1.5 line-clamp-1 max-w-2xl text-body text-muted-foreground md:mt-2 md:line-clamp-none",
                     compactMobile && "hidden md:block",
-                  )>
+                  )}
+                >
                   {description}
                 </p>
               )}
