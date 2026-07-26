@@ -13,8 +13,6 @@ import {
   Loader2,
   Store,
   Bell,
-  SlidersHorizontal,
-  X,
 } from "lucide-react";
 import { getPublicStoreCatalog, type PublicStoreProduct } from "@/lib/stores-public.functions";
 import { getPublicPriceHistory } from "@/lib/store-public-history.functions";
@@ -24,16 +22,6 @@ import { useUserLocation } from "@/hooks/useUserLocation";
 import { LocationControl } from "@/components/location/LocationControl";
 import { formatDistance, haversineKm, resolveEstablishmentPosition } from "@/lib/geo";
 import { Button } from "@/components/ui/button";
-
-import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
 import {
   Sheet,
   SheetContent,
@@ -43,7 +31,7 @@ import {
 } from "@/components/ui/sheet";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
-import { ProductListCard } from "@/components/product/ProductListCard";
+import { StoreBadge } from "@/components/brand/StoreBadge";
 import { ButcherCounter, splitButcherCuts } from "@/components/estabelecimento/ButcherCounter";
 import { PreparoDicas } from "@/components/estabelecimento/PreparoDicas";
 import { FavoriteMarketButton } from "@/components/market/FavoriteMarketButton";
