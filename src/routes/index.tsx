@@ -347,12 +347,19 @@ function HomePage() {
           }}
         />
 
-        {/* Selagem final da borda esquerda: fica acima dos glows para não sobrar faixa sem scrim */}
+        {/* Selagem final das bordas: fica acima dos glows para não sobrar faixa sem scrim */}
         <div
           aria-hidden
           className="pointer-events-none absolute -inset-y-px -left-3 w-32 sm:w-40 lg:w-48"
           style={{
             background: `linear-gradient(90deg, color-mix(in oklab, ${P.navy} 96%, transparent) 0%, color-mix(in oklab, ${P.navy} 78%, transparent) 58%, transparent 100%)`,
+          }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -inset-y-px -right-3 w-40 sm:w-52 lg:w-72 xl:w-80"
+          style={{
+            background: `linear-gradient(90deg, transparent 0%, color-mix(in oklab, ${P.navy} 82%, transparent) 44%, color-mix(in oklab, ${P.navy} 98%, transparent) 100%)`,
           }}
         />
 
