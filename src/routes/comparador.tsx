@@ -591,7 +591,18 @@ function ComparadorPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected.length, quota.loading]);
   const TEASER_PREVIEW = 3;
-  const visibleRows = quota.exceeded ? sortedRows.slice(0, TEASER_PREVIEW) : sortedRows;
+  // Paginação: mantém a página curta (tipografia maior sem estourar a altura).
+  const RESULTS_PAGE_SIZE = 12;
+  const [page, setPage] = useState(1);
+  useEffect(() => {
+    setPage(1);
+  }, [q, cat, sortKey, view]);
+  const pagedRows = useMemo(
+    () => sortedRows.slice((page - 1) * RESULTS_PAGE_SIZE, page * RESULTS_PAGE_SIZE),
+    [sortedRows, page],
+  );
+  const totalPages = Math.max(1, Math.ceil(sortedRows.length / RESULTS_PAGE_SIZE));
+  const visibleRows = quota.exceeded ? sortedRows.slice(0, TEASER_PREVIEW) : pagedRows;
 
   // Dialog "Preços por estabelecimento" — sincronizado com o querystring `?p=<product_key>`
   // para que voltar/avançar no navegador reabra o mesmo produto.
@@ -859,6 +870,32 @@ function ComparadorPage() {
                 onOpenStores={(row) => setOpenStoresRow(row)}
               />
             )}
+            {!quota.exceeded && totalPages > 1 && (
+              <nav
+                aria-label="Paginação dos resultados"
+                className="mt-4 flex items-center justify-between gap-3 border-t border-border/60 pt-3"
+              >
+                <button
+                  type="button"
+                  onClick={() => setPage((p) => Math.max(1, p - 1))}
+                  disabled={page === 1}
+                  className="inline-flex items-center rounded-full border border-border bg-background px-3.5 py-1.5 text-[12.5px] font-semibold text-foreground transition hover:border-primary/50 disabled:opacity-40"
+                >
+                  Anterior
+                </button>
+                <span className="text-[12.5px] font-medium tabular-nums text-muted-foreground">
+                  Página {page} de {totalPages} · {sortedRows.length} produtos
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                  disabled={page === totalPages}
+                  className="inline-flex items-center rounded-full border border-border bg-background px-3.5 py-1.5 text-[12.5px] font-semibold text-foreground transition hover:border-primary/50 disabled:opacity-40"
+                >
+                  Próxima
+                </button>
+              </nav>
+            )}
             {quota.exceeded && (
               <div className="mt-8 pb-24">
                 <PaywallInline
@@ -867,7 +904,7 @@ function ComparadorPage() {
                 />
               </div>
             )}
-            {!quota.exceeded && <div className="pb-24" />}
+            {!quota.exceeded && <div className="pb-16" />}
           </div>
         )}
       </section>
