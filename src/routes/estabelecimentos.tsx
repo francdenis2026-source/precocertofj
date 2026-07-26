@@ -1097,17 +1097,14 @@ function HeroMetric({
       type="button"
       onClick={onClick}
       aria-label={`${label}: ${value}. ${hint ?? "Abrir detalhes"}`}
-      className="group relative flex w-full items-center gap-2 rounded-lg border border-white/15 bg-brand-navy/95 px-2.5 py-1.5 text-left shadow-[0_6px_18px_-12px_rgba(0,0,0,0.6)] transition-colors duration-150 hover:border-brand-gold/70 hover:bg-brand-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy sm:gap-2.5 sm:px-3 sm:py-2"
+      className="group flex min-w-0 items-center gap-2 rounded-md px-1 py-0.5 text-left transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
     >
-      <div className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-brand-gold/20 text-brand-gold sm:h-8 sm:w-8">
-        <Icon className="h-3.5 w-3.5" strokeWidth={2} aria-hidden />
-      </div>
-      <div className="relative z-[1] min-w-0 flex-1">
-        <div className="truncate text-[9px] font-semibold uppercase leading-[1.25] tracking-[0.12em] text-white/75 sm:text-[9.5px] sm:tracking-[0.14em]">
+      <Icon className="h-4 w-4 shrink-0 text-[var(--pc-gold-ink)]" strokeWidth={1.75} aria-hidden />
+      <span className="min-w-0">
+        <span className="block truncate text-[9.5px] font-semibold uppercase leading-[1.25] tracking-[0.16em] text-muted-foreground">
           {label}
-        </div>
-        <div className="mt-0.5 flex items-baseline gap-1.5 text-[16px] font-bold leading-none text-white tabular-nums sm:text-[18px]">
-
+        </span>
+        <span className="mt-0.5 flex items-baseline gap-1.5 text-[15px] font-semibold leading-none tabular-nums text-foreground">
           {live && (
             <span className="relative inline-flex h-1.5 w-1.5 shrink-0 translate-y-[-2px]">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-gold/70" />
@@ -1115,12 +1112,16 @@ function HeroMetric({
             </span>
           )}
           <span className="truncate">{value}</span>
-        </div>
-      </div>
-      <ChevronRight className="hidden xs:block h-3.5 w-3.5 shrink-0 text-white/30 transition-colors group-hover:text-brand-gold" aria-hidden />
+        </span>
+      </span>
+      <ChevronRight
+        className="hidden h-3.5 w-3.5 shrink-0 text-muted-foreground/50 transition-colors group-hover:text-[var(--pc-gold-ink)] sm:block"
+        aria-hidden
+      />
     </button>
   );
 }
+
 
 
 
