@@ -592,14 +592,20 @@ function ComparadorPage() {
   }, [selected.length, quota.loading]);
   const TEASER_PREVIEW = 3;
   // Paginação: mantém a página curta (tipografia maior sem estourar a altura).
-  const RESULTS_PAGE_SIZE = 12;
+  const [RESULTS_PAGE_SIZE, setResultsPageSize] = useState(12);
+  useEffect(() => {
+    const sync = () => setResultsPageSize(window.innerWidth < 768 ? 6 : 12);
+    sync();
+    window.addEventListener("resize", sync);
+    return () => window.removeEventListener("resize", sync);
+  }, []);
   const [page, setPage] = useState(1);
   useEffect(() => {
     setPage(1);
-  }, [q, cat, sortKey, view]);
+  }, [q, cat, sortKey, view, RESULTS_PAGE_SIZE]);
   const pagedRows = useMemo(
     () => sortedRows.slice((page - 1) * RESULTS_PAGE_SIZE, page * RESULTS_PAGE_SIZE),
-    [sortedRows, page],
+    [sortedRows, page, RESULTS_PAGE_SIZE],
   );
   const totalPages = Math.max(1, Math.ceil(sortedRows.length / RESULTS_PAGE_SIZE));
   const visibleRows = quota.exceeded ? sortedRows.slice(0, TEASER_PREVIEW) : pagedRows;
