@@ -1056,7 +1056,8 @@ function EstablishmentsPage() {
                 )}
 
 
-              </SectionCard>
+              </section>
+
             )}
 
           </div>
