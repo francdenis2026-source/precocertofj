@@ -21,6 +21,12 @@ import {
   resolveEstablishmentPosition,
 } from "@/lib/geo";
 import { normalizeNeighborhood } from "@/lib/geo-labels";
+import { HighlightMatch } from "@/components/search/HighlightMatch";
+import { tokenizeQuery } from "@/lib/search-tokens";
+
+/** Grade tabular da visualização em Lista (colunas alinhadas). */
+const LIST_GRID =
+  "grid grid-cols-[28px_44px_minmax(0,1fr)_150px_84px_78px_112px_20px] items-center gap-3";
 
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import {
@@ -183,6 +189,8 @@ function EstablishmentsPage() {
   useEffect(() => {
     if (typeof window !== "undefined") window.localStorage.setItem("pc_estab_view", view);
   }, [view]);
+  const searchTokens = useMemo(() => tokenizeQuery(q), [q]);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const heroOverlayOpacity = useAdaptiveOverlayOpacity(mercadosHero.url, { min: 0.6, max: 0.94 });
 
@@ -1010,6 +1018,7 @@ function EstablishmentsPage() {
                           maxSavings={e.maxSavings}
                           isCheapest={badgeIds.cheapestId === e.id}
                           isFeatured={badgeIds.featuredIds.has(e.id)}
+                          highlightTokens={searchTokens}
                           favoriteSlot={<FavoriteMarketButton marketName={e.name} />}
                         />
                       </li>
@@ -1019,7 +1028,10 @@ function EstablishmentsPage() {
 
                 )}
                 {allFilteredItems.length > visibleItems.length && (
-                  <div className="flex flex-wrap items-center justify-center gap-2 border-t border-border/60 px-2.5 py-2 md:px-4 md:py-3">
+                  <div
+                    ref={sentinelRef}
+                    className="flex flex-wrap items-center justify-center gap-2 border-t border-border/60 px-2.5 py-2 md:px-4 md:py-3"
+                  >
                     <span className="text-[11px] text-muted-foreground md:text-[12px]">
                       {visibleItems.length} de {allFilteredItems.length}
                     </span>
