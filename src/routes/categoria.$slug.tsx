@@ -112,66 +112,80 @@ function CategoryPage() {
   return (
     <div className="min-h-svh bg-background text-foreground">
       <SiteHeader />
-      <main className="mx-auto max-w-6xl px-3 pb-14 pt-4 sm:px-6">
-        {/* Hero compacto */}
+      <main className="mx-auto max-w-6xl px-3 pb-14 pt-3 sm:px-6">
+        {/* Hero compacto — escala tipográfica única (eyebrow 10 / título 19-22 / meta 12 / stat 15) */}
         <header className="overflow-hidden rounded-xl border border-border/70 bg-[var(--pc-navy,#0b1e3f)] text-white shadow-sm">
-          <div className="flex items-center gap-3 px-4 py-3.5">
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-brand-gold text-brand-navy">
-              <Icon className="h-5 w-5" strokeWidth={2.3} aria-hidden />
+          <div className="flex items-center gap-3 px-3.5 py-3 sm:px-4">
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-brand-gold text-brand-navy sm:h-10 sm:w-10">
+              <Icon className="h-[18px] w-[18px] sm:h-5 sm:w-5" strokeWidth={2.2} aria-hidden />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-brand-gold">
+              <p className="text-[10px] font-bold uppercase leading-none tracking-[0.18em] text-brand-gold">
                 Categoria
               </p>
-              <h1 className="truncate font-serif text-[20px] font-semibold leading-tight sm:text-[24px]">
+              <h1 className="mt-1 truncate font-serif text-[19px] font-semibold leading-[1.15] sm:text-[22px]">
                 {def.label}
               </h1>
-              <p className="mt-0.5 truncate text-[12px] text-white/70">{def.desc}</p>
+              <p className="mt-0.5 truncate text-[12px] leading-snug text-white/70">{def.desc}</p>
             </div>
-            <dl className="hidden shrink-0 gap-4 sm:flex">
+            <dl className="hidden shrink-0 items-start gap-5 sm:flex">
               <Stat label="Produtos" value={data?.totals.products ?? 0} />
               <Stat label="Lojas" value={data?.totals.stores ?? 0} />
               <Stat label="Preços" value={data?.totals.prices ?? 0} />
             </dl>
           </div>
-          <div className="flex gap-3 border-t border-white/10 px-4 py-2 sm:hidden">
-            <Stat label="Produtos" value={data?.totals.products ?? 0} />
-            <Stat label="Lojas" value={data?.totals.stores ?? 0} />
-            <Stat label="Preços" value={data?.totals.prices ?? 0} />
-          </div>
+          <dl className="grid grid-cols-3 divide-x divide-white/10 border-t border-white/10 sm:hidden">
+            <div className="px-3 py-1.5">
+              <Stat label="Produtos" value={data?.totals.products ?? 0} align="left" />
+            </div>
+            <div className="px-3 py-1.5">
+              <Stat label="Lojas" value={data?.totals.stores ?? 0} align="left" />
+            </div>
+            <div className="px-3 py-1.5">
+              <Stat label="Preços" value={data?.totals.prices ?? 0} align="left" />
+            </div>
+          </dl>
         </header>
 
-        {/* Trilho de categorias */}
-        <nav aria-label="Outras categorias" className="mt-3 -mx-3 overflow-x-auto px-3 pb-1 sm:mx-0 sm:px-0">
-          <ul className="flex gap-1.5">
-            {CATEGORY_DEFS.map((c) => {
-              const CIcon = ICONS[c.slug] ?? Package;
-              const active = c.slug === slug;
-              return (
-                <li key={c.slug}>
-                  <Link
-                    to="/categoria/$slug"
-                    params={{ slug: c.slug }}
-                    className={cn(
-                      "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[12px] font-semibold transition-colors",
-                      active
-                        ? "border-brand-gold bg-brand-gold text-brand-navy"
-                        : "border-border bg-card text-foreground hover:border-brand-gold",
-                    )}
-                  >
-                    <CIcon className="h-3.5 w-3.5" aria-hidden /> {c.short}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+        {/* Trilho de categorias — sem barra de rolagem visível, com fade nas bordas */}
+        <nav aria-label="Outras categorias" className="relative mt-2.5">
+          <div className="no-scrollbar -mx-3 overflow-x-auto px-3 sm:mx-0 sm:px-0">
+            <ul className="flex w-max gap-1.5 pr-6 sm:pr-0">
+              {CATEGORY_DEFS.map((c) => {
+                const CIcon = ICONS[c.slug] ?? Package;
+                const active = c.slug === slug;
+                return (
+                  <li key={c.slug}>
+                    <Link
+                      to="/categoria/$slug"
+                      params={{ slug: c.slug }}
+                      aria-current={active ? "page" : undefined}
+                      className={cn(
+                        "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[12px] font-semibold leading-none transition-colors",
+                        active
+                          ? "border-brand-gold bg-brand-gold text-brand-navy"
+                          : "border-border bg-card text-foreground hover:border-brand-gold",
+                      )}
+                    >
+                      <CIcon className="h-3.5 w-3.5" aria-hidden /> {c.short}
+                    </Link>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-background to-transparent sm:hidden"
+          />
         </nav>
+
 
         {/* Plantão (só farmácias) */}
         {slug === "farmacias" && <PlantaoStrip />}
 
         {/* Lojas do nicho */}
-        <section className="mt-4" aria-label={`Estabelecimentos — ${def.label}`}>
+        <section className="mt-5" aria-label={`Estabelecimentos — ${def.label}`}>
           <SectionTitle icon={Building2} title="Estabelecimentos" hint={`${data?.stores.length ?? 0} no nicho`} />
           {isLoading ? (
             <SkeletonRow />
@@ -211,7 +225,7 @@ function CategoryPage() {
         </section>
 
         {/* Produtos do nicho */}
-        <section className="mt-6" aria-label={`Produtos — ${def.label}`}>
+        <section className="mt-5" aria-label={`Produtos — ${def.label}`}>
           <SectionTitle
             icon={Package}
             title="Produtos da categoria"
@@ -305,14 +319,27 @@ function CategoryPage() {
   );
 }
 
-function Stat({ label, value }: { label: string; value: number }) {
+function Stat({
+  label,
+  value,
+  align = "right",
+}: {
+  label: string;
+  value: number;
+  align?: "left" | "right";
+}) {
   return (
-    <div className="text-center sm:text-right">
-      <dt className="text-[9.5px] font-semibold uppercase tracking-[0.14em] text-white/60">{label}</dt>
-      <dd className="text-[15px] font-bold tabular-nums text-brand-gold">{value}</dd>
+    <div className={align === "left" ? "text-left" : "text-right"}>
+      <dt className="text-[9.5px] font-semibold uppercase leading-none tracking-[0.14em] text-white/60">
+        {label}
+      </dt>
+      <dd className="mt-1 text-[15px] font-bold leading-none tabular-nums text-brand-gold">
+        {value.toLocaleString("pt-BR")}
+      </dd>
     </div>
   );
 }
+
 
 function SectionTitle({
   icon: Icon,
@@ -373,35 +400,54 @@ function PlantaoStrip() {
   const amanha = hoje && PLANTOES[hoje + 1] ? farmaciaPorId(PLANTOES[hoje + 1]) : null;
 
   return (
-    <section className="mt-3 rounded-xl border border-brand-gold/60 bg-brand-gold/10 p-3" aria-label="Plantão das farmácias">
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-        <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--pc-gold-ink)]">
-          <CalendarDays className="h-3.5 w-3.5" aria-hidden /> Plantão
-          {hoje ? ` · hoje (${diaDaSemana(hoje)})` : ""}
-        </span>
-        <span className="min-w-0 flex-1 truncate text-[13px] font-semibold text-foreground">
-          {f ? `${f.nome} — ${f.endereco}, ${f.bairro}` : "Consulte o calendário oficial do mês"}
-        </span>
-        {f?.telefones[0] && (
-          <a
-            href={`tel:${f.telefones[0].replace(/\D/g, "")}`}
-            className="inline-flex h-7 items-center gap-1 rounded-full border border-border bg-background px-2.5 text-[11.5px] font-semibold"
+    <section
+      className="mt-2.5 overflow-hidden rounded-xl border border-brand-gold/55 bg-brand-gold/10"
+      aria-label="Plantão das farmácias"
+    >
+      <div className="flex flex-col gap-2 px-3 py-2.5 lg:flex-row lg:items-center lg:gap-3">
+        <div className="flex min-w-0 flex-1 flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-2.5">
+          <span className="inline-flex h-6 w-fit shrink-0 items-center gap-1.5 rounded-full bg-brand-gold px-2.5 text-[9.5px] font-bold uppercase leading-none tracking-[0.14em] text-brand-navy">
+            <CalendarDays className="h-3 w-3" aria-hidden />
+            Plantão{hoje ? ` · ${diaDaSemana(hoje)}` : ""}
+          </span>
+          <p className="min-w-0 truncate text-[13px] font-semibold leading-snug text-foreground">
+            {f ? (
+              <>
+                {f.nome}
+                <span className="font-normal text-muted-foreground">
+                  {" — "}
+                  {f.endereco}, {f.bairro}
+                </span>
+              </>
+            ) : (
+              "Consulte o calendário oficial do mês"
+            )}
+          </p>
+        </div>
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
+          {f?.telefones[0] && (
+            <a
+              href={`tel:${f.telefones[0].replace(/\D/g, "")}`}
+              className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-background px-3 text-[11.5px] font-semibold leading-none whitespace-nowrap text-foreground transition-colors hover:border-brand-gold"
+            >
+              <Phone className="h-3 w-3 text-brand-gold" aria-hidden /> {f.telefones[0]}
+            </a>
+          )}
+          <Link
+            to="/farmacias"
+            className="inline-flex h-8 items-center gap-1.5 rounded-full bg-brand-gold px-3 text-[11.5px] font-bold leading-none whitespace-nowrap text-brand-navy transition-opacity hover:opacity-90"
           >
-            <Phone className="h-3 w-3" aria-hidden /> {f.telefones[0]}
-          </a>
-        )}
-        <Link
-          to="/farmacias"
-          className="inline-flex h-7 items-center gap-1 rounded-full bg-brand-gold px-3 text-[11.5px] font-bold text-brand-navy"
-        >
-          Calendário completo <ArrowRight className="h-3 w-3" aria-hidden />
-        </Link>
+            Calendário completo <ArrowRight className="h-3 w-3" aria-hidden />
+          </Link>
+        </div>
       </div>
       {amanha && (
-        <p className="mt-1 text-[11.5px] text-muted-foreground">
-          Amanhã: <strong className="font-semibold text-foreground">{amanha.nome}</strong> — {amanha.bairro}
+        <p className="border-t border-brand-gold/25 px-3 py-1.5 text-[11.5px] leading-snug text-muted-foreground">
+          Amanhã: <strong className="font-semibold text-foreground">{amanha.nome}</strong> —{" "}
+          {amanha.bairro}
         </p>
       )}
     </section>
   );
+
 }
