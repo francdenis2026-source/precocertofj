@@ -13,6 +13,13 @@ import { trackEvent } from "@/lib/analytics-events";
 import { RouteError } from "@/components/feedback";
 import { SearchDiscovery, pushRecentSearch } from "@/components/search/SearchDiscovery";
 import { SearchSidebar } from "@/components/search/SearchSidebar";
+import {
+  clearSearchHistory,
+  getSearchHistory,
+  removeSearchHistory,
+  setSearchHistoryPersistence,
+} from "@/lib/search-history";
+
 import { BackButton } from "@/components/layout/BackButton";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 
