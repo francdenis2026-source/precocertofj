@@ -37,8 +37,9 @@ function getMetrics(src: string): Promise<LogoMetrics> {
 /** Métricas + apresentação recomendada para uma logo. */
 export function useLogoPresentation(
   src?: string | null,
-  opts: { targetFill?: number } = {},
+  opts: { targetFill?: number; enabled?: boolean } = {},
 ): { metrics: LogoMetrics | null; presentation: LogoPresentation; ready: boolean } {
+  const enabled = opts.enabled ?? true;
   const [metrics, setMetrics] = useState<LogoMetrics | null>(() =>
     src ? cache.get(src) ?? null : null,
   );
@@ -53,6 +54,7 @@ export function useLogoPresentation(
       setMetrics(cached);
       return;
     }
+    if (!enabled) return;
     let alive = true;
     // A análise usa canvas (custo de CPU). Adiada para ociosidade do browser
     // para não travar a primeira pintura quando há várias logos na tela.
@@ -72,7 +74,8 @@ export function useLogoPresentation(
       if (idle) w.cancelIdleCallback?.(handle);
       else window.clearTimeout(handle);
     };
-  }, [src]);
+  }, [src, enabled]);
+
 
   return {
     metrics,
