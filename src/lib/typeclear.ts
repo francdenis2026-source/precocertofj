@@ -41,9 +41,9 @@ export const tc = {
   /** Texto secundário compacto. */
   meta: `${fluid(12.5, 13.5)} leading-[1.35] text-muted-foreground`,
   /** Chips, botões-pílula e filtros. */
-  chip: `${fluid(11.5, 12.5)} font-semibold uppercase leading-none tracking-[0.12em]`,
+  chip: `${fluid(12, 13)} font-semibold uppercase leading-none tracking-[0.12em]`,
   /** Rótulos de comando (toolbar, toggles). */
-  control: `${fluid(11.5, 12.5)} font-semibold uppercase leading-none tracking-[0.08em]`,
+  control: `${fluid(12, 13)} font-semibold uppercase leading-none tracking-[0.08em]`,
   /** Cabeçalho de coluna em tabelas. */
   tableHead: `${fluid(11, 12)} font-bold uppercase leading-none tracking-[0.12em] text-foreground/70`,
   /** Célula de tabela. */
