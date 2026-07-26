@@ -4,7 +4,7 @@
  * Trava as invariantes que garantem que "voltar" a partir de um resultado
  * sempre devolve o usuário à tela de busca (descoberta), nunca à homepage:
  *  - a primeira busca EMPILHA histórico (`replace: hasQuery`);
- *  - com termo ativo, o botão de voltar limpa `q` em vez de usar o BackButton;
+ *  - com termo ativo, o botão de voltar zera `q` em vez de usar o BackButton;
  *  - o BackButton genérico (fallback para "/") só aparece sem termo ativo.
  */
 import { describe, expect, it } from "vitest";
@@ -20,12 +20,18 @@ describe("/buscar — regressão de navegação de volta", () => {
     expect(matches.length).toBeGreaterThanOrEqual(2);
   });
 
-  it("com termo ativo, o voltar limpa a query em vez de sair da rota", () => {
+  it("com termo ativo, o voltar zera a query em vez de sair da rota", () => {
     const idx = route.indexOf('aria-label="Voltar para a busca"');
     expect(idx).toBeGreaterThan(-1);
     const handler = route.slice(Math.max(0, idx - 900), idx);
-    expect(handler).toContain("delete s.q");
+    expect(handler).toContain('s.q = ""');
+    expect(handler).toContain("replace: true");
     expect(handler).not.toContain('to: "/"');
+  });
+
+  it("não apaga q com delete, porque retainSearchParams reidrata o termo antigo", () => {
+    expect(route).not.toContain("delete s.q");
+    expect(route).toContain('nextSearch.q = ""');
   });
 
   it("o BackButton com fallback para a home só é usado sem termo ativo", () => {
