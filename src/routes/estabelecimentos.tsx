@@ -886,7 +886,6 @@ function EstablishmentsPage() {
                           <span className="hidden w-[104px] shrink-0 text-right text-[11px] text-foreground/75 md:block">
                             {freshness.label}
                           </span>
-                          <FavoriteMarketButton marketName={e.name} />
                           <ChevronRight className="h-4 w-4 shrink-0 text-foreground/50" aria-hidden />
                         </Link>
                       </li>
