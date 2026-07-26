@@ -47,10 +47,21 @@ export function ProductQuickView({
     staleTime: 60_000,
   });
 
-  const markets = (data?.markets ?? []).slice(0, 8);
-  // Evita duplicidade: com um único estabelecimento, o destaque "Menor preço"
-  // repetiria a mesma linha da lista abaixo.
-  const showCheapestHighlight = Boolean(product?.cheapestStore) && markets.length > 1;
+  // Lista canônica: um registro por estabelecimento, ordem estável em empates.
+  const allMarkets = dedupeByStorePrice(data?.markets ?? [], (m) => ({
+    store: m.marketName,
+    price: m.priceMin,
+    samples: m.samples,
+    lastSeen: m.lastSeen,
+  }));
+  const markets = allMarkets.slice(0, 8);
+  // "Menor preço" sai sempre da mesma lista renderizada abaixo; com um único
+  // estabelecimento o destaque repetiria a linha, então é omitido.
+  const cheapest = allMarkets.length > 1 ? allMarkets[0] : null;
+  const cheapestLogo =
+    cheapest && storeKey(cheapest.marketName) === storeKey(product?.cheapestStore)
+      ? (product?.cheapestLogo ?? null)
+      : null;
 
   return (
     <Dialog open={Boolean(product)} onOpenChange={(v) => !v && onClose()}>
