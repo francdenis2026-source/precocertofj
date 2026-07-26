@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { HighlightMatch } from "@/components/search/HighlightMatch";
 
 export interface MarketEditorialCardProps {
   slug: string;
@@ -36,6 +37,8 @@ export interface MarketEditorialCardProps {
   favoriteSlot?: ReactNode;
   /** Índice para exibir a numeração editorial. */
   rank?: number;
+  /** Tokens da busca — destacados no nome/localidade. */
+  highlightTokens?: string[];
   className?: string;
 }
 
@@ -65,6 +68,7 @@ export function MarketEditorialCard({
   isFeatured = false,
   favoriteSlot,
   rank,
+  highlightTokens,
   className,
 }: MarketEditorialCardProps) {
   const initials = name
@@ -124,7 +128,7 @@ export function MarketEditorialCard({
               alt=""
               loading="lazy"
               decoding="async"
-              className="relative z-10 max-h-[54px] max-w-[62%] object-contain drop-shadow-sm transition-transform duration-300 group-hover:scale-[1.04]"
+              className="relative z-10 h-[48px] w-[62%] object-contain object-center drop-shadow-sm transition-transform duration-300 group-hover:scale-[1.04]"
             />
           ) : (
             <span className="relative z-10 grid h-12 w-12 place-items-center rounded-lg bg-brand-navy/10 text-[15px] font-bold text-brand-navy ring-1 ring-brand-navy/15">
@@ -164,12 +168,16 @@ export function MarketEditorialCard({
         {/* Nome + localidade */}
         <div className="border-t border-border/70 px-3 pb-1.5 pt-2">
           <h3 className="truncate text-[14.5px] font-semibold leading-[1.2] tracking-[-0.01em] text-foreground">
-            {name}
+            <HighlightMatch text={name} tokens={highlightTokens ?? []} mode="loose" />
           </h3>
           <p className="mt-0.5 flex items-center gap-1 truncate text-[11.5px] font-medium text-foreground/70">
             <MapPin className="h-3 w-3 shrink-0 text-[var(--pc-gold-ink)]" aria-hidden />
             <span className="truncate">
-              {[neighborhood, city].filter(Boolean).join(" · ") || "Localização não informada"}
+              <HighlightMatch
+                text={[neighborhood, city].filter(Boolean).join(" · ") || "Localização não informada"}
+                tokens={highlightTokens ?? []}
+                mode="loose"
+              />
             </span>
           </p>
         </div>
