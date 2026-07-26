@@ -357,7 +357,7 @@ function SearchPage() {
               : "grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-5"
           }
         >
-          <div className="min-w-0 space-y-2.5">
+          <div className={`min-w-0 space-y-2.5 ${hasQuery ? "min-h-[75svh]" : ""}`}>
             {/* BUSCA — protagonista, com moldura sutil de marca */}
             <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-1.5 shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_18%,transparent),0_12px_28px_-24px_color-mix(in_oklab,var(--brand-navy)_45%,transparent)] md:p-2.5">
               <div
