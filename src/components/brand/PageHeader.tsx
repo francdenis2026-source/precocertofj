@@ -51,7 +51,7 @@ export function PageHeader({
   return (
     <header
       className={cn(
-        "border-b border-border/60 bg-background/90 px-4 py-6 backdrop-blur md:px-8 md:py-8",
+        "border-b border-border/60 bg-background/90 px-4 py-3.5 backdrop-blur md:px-8 md:py-8",
         className,
       )}
     >
@@ -117,7 +117,7 @@ export function PageHeader({
                 {title}
               </h1>
               {description && (
-                <p className="mt-2 max-w-2xl text-body text-muted-foreground">
+                <p className="tc-flow mt-1.5 line-clamp-2 max-w-2xl text-body text-muted-foreground md:mt-2 md:line-clamp-none">
                   {description}
                 </p>
               )}
