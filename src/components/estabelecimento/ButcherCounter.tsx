@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Beef, Bell, History, LayoutGrid, List as ListIcon, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
