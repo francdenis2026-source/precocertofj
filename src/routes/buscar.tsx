@@ -370,37 +370,32 @@ function SearchPage() {
       className={`pc-search-scope flex min-h-[100svh] flex-col bg-background text-foreground${reducedMotion ? " pc-reduce-motion" : ""}`}
     >
 
-      {/* BARRA DE COMANDO — sticky, uma linha, sem desperdício vertical */}
-      <header className="sticky top-0 z-30 border-b border-border/70 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-brand-gold/60 to-transparent"
-        />
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2 px-4 py-1.5 md:gap-3 md:px-8">
+      {/* BARRA DE COMANDO — editorial: hairline, respiro e rótulo micro */}
+      <header className="sticky top-0 z-30 border-b border-border/60 bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/75">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-2.5 md:gap-6 md:px-8 md:py-3">
           <BackButton fallbackTo="/" variant="ghost" />
-          <div className="flex min-w-0 items-baseline gap-2.5">
-            <h1 className="min-w-0 truncate whitespace-nowrap font-serif text-[14.5px] font-semibold leading-tight tracking-tight text-foreground sm:text-[17px]">
-              Buscar <span className="text-[var(--pc-gold-ink)]">preço</span>
-              <span className="hidden sm:inline"> por nome</span>
+          <div className="flex min-w-0 flex-col gap-0.5">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--pc-gold-ink)]">
+              Comparador de preços
+            </span>
+            <h1 className="min-w-0 truncate whitespace-nowrap font-serif text-[17px] font-normal leading-tight tracking-tight text-foreground sm:text-[21px]">
+              Buscar preço<span className="hidden sm:inline"> por nome</span>
             </h1>
-
-            <p className="hidden truncate text-[11.5px] leading-snug text-muted-foreground lg:block">
-              Preço médio, mínimo e onde está mais barato — em todos os mercados parceiros.
-            </p>
           </div>
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-3">
             {hasQuery && (
               <ShareButton
                 title={`PreçoCerto — ${q}`}
                 text={`Veja preços comparados de "${q}" no PreçoCerto`}
               />
             )}
+            <span aria-hidden className="hidden h-8 w-px bg-border md:block" />
             <button
               type="button"
               onClick={toggleReducedMotion}
               aria-pressed={reducedMotion}
               title="Reduzir animações desta tela"
-              className="inline-flex h-7 items-center gap-1 rounded-full border border-border px-2 text-[11px] font-semibold text-muted-foreground hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold aria-pressed:border-brand-gold aria-pressed:text-[var(--pc-gold-ink)]"
+              className="inline-flex h-7 items-center gap-1.5 rounded-full border border-border px-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold aria-pressed:border-brand-gold aria-pressed:text-[var(--pc-gold-ink)]"
             >
               <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
               <span className="hidden sm:inline">
@@ -414,26 +409,23 @@ function SearchPage() {
       </header>
 
       {/* CORPO — largura total quando há resultados; 2 colunas na descoberta */}
-      <div className="mx-auto w-full max-w-7xl flex-1 [overflow-anchor:none] px-4 pb-[calc(var(--mobile-nav-height)+1rem)] pt-2.5 md:px-8 md:pb-8 md:pt-3">
+      <div className="mx-auto w-full max-w-7xl flex-1 [overflow-anchor:none] px-4 pb-[calc(var(--mobile-nav-height)+1rem)] pt-4 md:px-8 md:pb-14 md:pt-7">
         <div
           className={
             hasQuery
-              ? "space-y-2.5"
-              : "grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-5"
+              ? "space-y-6"
+              : "grid gap-8 lg:grid-cols-[minmax(0,1fr)_280px] lg:gap-12"
           }
         >
-          <div className={`min-w-0 space-y-2.5 ${hasQuery ? "min-h-[75svh]" : ""}`}>
-            {/* BUSCA — protagonista, com moldura sutil de marca */}
-            <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-1.5 shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_18%,transparent),0_12px_28px_-24px_color-mix(in_oklab,var(--brand-navy)_45%,transparent)] md:p-2.5">
-              <div
-                aria-hidden
-                className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-brand-gold/50 to-transparent"
-              />
+          <div className={`min-w-0 space-y-6 ${hasQuery ? "min-h-[75svh]" : ""}`}>
+            {/* BUSCA — protagonista, sem caixa: apenas fio dourado superior */}
+            <div className="relative border-t border-brand-gold/40 pt-4">
               <PriceSearchBar
                 initialQuery={q}
                 mode={mode}
                 pureOnly={pureOnly}
                 brandFilter={brandFilter}
+
                 priceMin={Number.isFinite(priceMin) ? priceMin : undefined}
                 priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
                 onQueryChange={syncQueryToUrl}
@@ -445,7 +437,7 @@ function SearchPage() {
 
             {/* Filtros — barra única compacta e fixa (sticky) abaixo do topo:
                 alternar filtros não desloca o conteúdo já renderizado. */}
-            <div className="sticky top-[var(--pc-search-top,44px)] z-20 -mx-1 min-h-[42px] bg-background/95 px-1 py-1 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+            <div className="sticky top-[var(--pc-search-top,52px)] z-20 -mx-1 min-h-[42px] border-y border-border/60 bg-background/92 px-1 backdrop-blur supports-[backdrop-filter]:bg-background/75">
               <FiltersToolbar
                 open={filtersOpen}
                 onToggle={() => setFiltersOpen((v) => !v)}
@@ -530,18 +522,19 @@ function FiltersToolbar({
   return (
     <section
       aria-label="Filtros de busca"
-      className="rounded-xl border border-border bg-card px-2.5 py-1.5 shadow-sm"
+      className="bg-transparent px-0.5 py-2"
     >
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-        <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
-          <SlidersHorizontal className="h-3.5 w-3.5 text-[var(--pc-gold-ink)]" aria-hidden />
-          Filtros
+      <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+        <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.22em] text-[var(--pc-gold-ink)]">
+          <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden />
+          Filtrar por
           {activeCount > 0 && (
             <span className="inline-flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-brand-gold px-1.5 text-[10px] font-bold tabular-nums text-brand-navy">
               {activeCount}
             </span>
           )}
         </div>
+
 
         <button
           type="button"

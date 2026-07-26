@@ -42,7 +42,7 @@ describe("/buscar — regressão de flicker", () => {
   });
 
   it("mantém a barra de filtros fixa (sticky) para não deslocar conteúdo", () => {
-    expect(route).toContain("sticky top-[var(--pc-search-top,44px)]");
+    expect(route).toContain("sticky top-[var(--pc-search-top,52px)]");
   });
 
   it("expõe o modo de animações reduzidas na busca", () => {

@@ -99,7 +99,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
   return (
     <div className="space-y-3">
       {/* Bloco principal — surface sólida com contraste WCAG AA em ambos os modos */}
-      <section className="relative overflow-hidden rounded-2xl border border-border bg-card p-3 shadow-sm sm:p-4">
+      <section className="relative border-t border-border/60 pt-5">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-brand-gold/45 to-transparent"
@@ -169,7 +169,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
       {recent.length > 0 && (
         <section
           aria-label="Últimas buscas"
-          className="rounded-xl border border-border bg-card px-2.5 py-2 shadow-sm"
+          className="border-t border-border/60 px-0.5 py-3"
         >
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
             <div className="flex min-w-0 items-center gap-2">
@@ -222,7 +222,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
 
 
       {/* Sinal de vida — cartão próprio, mesmo padrão dos HeroMetric */}
-      <section className="rounded-2xl border border-border bg-card p-2.5 shadow-sm sm:p-3">
+      <section className="border-t border-border/60 pt-5">
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           <StatCell
             icon={<TrendingDown className="h-4 w-4" aria-hidden />}

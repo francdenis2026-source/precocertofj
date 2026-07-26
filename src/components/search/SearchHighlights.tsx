@@ -178,7 +178,7 @@ export function SearchHighlights({ onPickQuery }: Props) {
   return (
     <section
       aria-label="Destaques da busca"
-      className="relative overflow-hidden rounded-2xl border border-border bg-card p-3 shadow-sm"
+      className="relative border-t border-border/60 pt-5"
     >
       <div
         aria-hidden

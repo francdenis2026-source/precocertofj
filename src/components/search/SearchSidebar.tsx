@@ -233,7 +233,7 @@ function SidebarSection({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-xl border border-border bg-card p-5 shadow-sm">
+    <section className="border-t border-border/60 pt-5">
       <header className="mb-3 flex items-center justify-between gap-2">
         <div className="flex min-w-0 items-center gap-2">
           <span className="grid h-6 w-6 flex-none place-items-center rounded-md bg-brand-gold/15 text-brand-gold-soft dark:text-brand-gold">

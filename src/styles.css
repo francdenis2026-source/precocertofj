@@ -3283,3 +3283,22 @@ select optgroup {
 .pc-search-scope.pc-reduce-motion *:hover {
   transform: none !important;
 }
+
+/* /buscar — direção "editorial de linhas finas":
+   caixas viram fios, raios menores, sem sombras pesadas. */
+.pc-search-scope .shadow-sm,
+.pc-search-scope [class*="shadow-["] {
+  box-shadow: none !important;
+}
+.pc-search-scope .rounded-2xl { border-radius: 0.5rem; }
+.pc-search-scope .rounded-xl { border-radius: 0.375rem; }
+.pc-search-scope .border-border {
+  border-color: color-mix(in oklab, var(--border) 62%, transparent);
+}
+.pc-search-scope .border-2 { border-width: 1px; }
+.pc-search-scope h2,
+.pc-search-scope h3 {
+  font-family: var(--font-serif, ui-serif, Georgia, serif);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
