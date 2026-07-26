@@ -261,8 +261,8 @@ function HomePage() {
     <div
       className="pc-home relative flex min-h-[100dvh] w-full flex-col overflow-hidden antialiased"
       style={{
-        background: P.navy,
-        color: "#EAF0F7",
+        background: "var(--pc-home-hero-bg)",
+        color: "var(--pc-home-onhero-fg)",
         fontFamily: "'Work Sans', system-ui, -apple-system, sans-serif",
       }}
     >
@@ -275,20 +275,20 @@ function HomePage() {
         fetchPriority="high"
         decoding="async"
         className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
-        style={{ opacity: 0.34 }}
+        style={{ opacity: "var(--pc-home-hero-img-opacity)" as unknown as number }}
       />
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
-          background: `linear-gradient(180deg, color-mix(in oklab, ${P.navy} 82%, transparent) 0%, color-mix(in oklab, ${P.navy} 66%, transparent) 42%, color-mix(in oklab, ${P.navy} 94%, transparent) 100%)`,
+          background: `linear-gradient(180deg, color-mix(in oklab, var(--pc-home-hero-bg) 82%, transparent) 0%, color-mix(in oklab, var(--pc-home-hero-bg) 66%, transparent) 42%, color-mix(in oklab, var(--pc-home-hero-bg) 94%, transparent) 100%)`,
         }}
       />
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
-          background: `radial-gradient(115% 78% at 50% 38%, transparent 38%, color-mix(in oklab, ${P.navy} 62%, transparent) 100%)`,
+          background: `radial-gradient(115% 78% at 50% 38%, transparent 38%, color-mix(in oklab, var(--pc-home-hero-bg) 62%, transparent) 100%)`,
         }}
       />
       <div
@@ -318,7 +318,7 @@ function HomePage() {
                 style={{
                   background: `color-mix(in oklab, ${P.gold} 12%, transparent)`,
                   borderColor: `color-mix(in oklab, ${P.gold} 40%, transparent)`,
-                  color: "#E8BE72",
+                  color: "var(--pc-home-onhero-gold)",
                 }}
               >
                 <span className="relative flex h-1.5 w-1.5">
@@ -334,15 +334,15 @@ function HomePage() {
               <h1
                 id="hero-title"
                 className={`${serif} mt-2 font-normal leading-[1.02] tracking-[-0.015em]`}
-                style={{ color: "#EAF0F7", fontSize: "clamp(1.5rem, 4.2vw, 3.25rem)" }}
+                style={{ color: "var(--pc-home-onhero-fg)", fontSize: "clamp(1.5rem, 4.2vw, 3.25rem)" }}
               >
-                Encontre o <span className="italic" style={{ color: "#E8BE72" }}>preço certo</span>{" "}
+                Encontre o <span className="italic" style={{ color: "var(--pc-home-onhero-gold)" }}>preço certo</span>{" "}
                 sem sair de casa.
               </h1>
 
               <p
                 className="tc-flow mt-2 hidden max-w-xl text-[13px] min-[360px]:block font-light leading-snug sm:text-[15px]"
-                style={{ color: "rgba(226,232,240,0.82)" }}
+                style={{ color: "var(--pc-home-onhero-fg-80)" }}
               >
                 Compare os principais mercados de Feijó em tempo real e leve para casa a
                 melhor compra de cada semana.
@@ -457,7 +457,7 @@ function HomePage() {
               <div className="mt-2.5 flex flex-wrap items-center gap-1.5 sm:mt-3">
                 <span
                   className="text-[11px] font-bold uppercase tracking-[0.2em]"
-                  style={{ color: "rgba(226,232,240,0.6)" }}
+                  style={{ color: "var(--pc-home-onhero-fg-60)" }}
                 >
                   Populares:
                 </span>
@@ -468,9 +468,9 @@ function HomePage() {
                     onClick={() => navigate({ to: "/buscar", search: { q: t } as any })}
                     className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11.5px] font-medium capitalize transition-all hover:-translate-y-px"
                     style={{
-                      background: "rgba(255,255,255,0.05)",
-                      borderColor: "rgba(255,255,255,0.12)",
-                      color: "rgba(226,232,240,0.88)",
+                      background: "var(--pc-home-onhero-glass-soft)",
+                      borderColor: "var(--pc-home-onhero-border-soft)",
+                      color: "var(--pc-home-onhero-fg-85)",
                     }}
                   >
                     {t}
@@ -506,21 +506,21 @@ function HomePage() {
               <div
                 className="rounded-2xl border p-3 backdrop-blur-md sm:p-4"
                 style={{
-                  background: "rgba(255,255,255,0.06)",
-                  borderColor: "rgba(255,255,255,0.14)",
+                  background: "var(--pc-home-onhero-glass)",
+                  borderColor: "var(--pc-home-onhero-border)",
                 }}
               >
                 <div className="mb-2 flex items-center justify-between gap-2">
                   <span
                     className="text-[11px] font-bold uppercase tracking-[0.2em]"
-                    style={{ color: "#E8BE72" }}
+                    style={{ color: "var(--pc-home-onhero-gold)" }}
                   >
                     Painel ao vivo
                   </span>
                   <Link
                     to="/estabelecimentos"
                     className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.14em] transition-colors hover:brightness-125"
-                    style={{ color: "rgba(226,232,240,0.72)" }}
+                    style={{ color: "var(--pc-home-onhero-fg-70)" }}
                   >
                     Mercados <ArrowRight className="h-3 w-3" strokeWidth={2.6} />
                   </Link>
@@ -535,8 +535,8 @@ function HomePage() {
                       aria-label={`${value} — ${label}. Ver detalhes.`}
                       className="group flex min-w-0 flex-col items-center gap-1 rounded-xl border px-1.5 py-2 text-center transition-all hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2"
                       style={{
-                        background: "rgba(255,255,255,0.04)",
-                        borderColor: "rgba(255,255,255,0.1)",
+                        background: "var(--pc-home-onhero-glass-soft)",
+                        borderColor: "var(--pc-home-onhero-border-soft)",
                         // @ts-expect-error css var
                         "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
                       }}
@@ -544,13 +544,13 @@ function HomePage() {
                       <Icon className="h-3.5 w-3.5" style={{ color: P.goldSoft }} aria-hidden />
                       <span
                         className={`${serif} tabular-nums leading-none`}
-                        style={{ color: "#E8BE72", fontSize: "clamp(1.15rem, 2.6vw, 1.9rem)" }}
+                        style={{ color: "var(--pc-home-onhero-gold)", fontSize: "clamp(1.15rem, 2.6vw, 1.9rem)" }}
                       >
                         {value}
                       </span>
                       <span
                         className="w-full truncate text-[11px] font-bold uppercase tracking-[0.12em]"
-                        style={{ color: "rgba(226,232,240,0.7)" }}
+                        style={{ color: "var(--pc-home-onhero-fg-70)" }}
                       >
                         <span className="sm:hidden">{short}</span>
                         <span className="hidden sm:inline">{label}</span>
@@ -562,13 +562,13 @@ function HomePage() {
                 {/* Faixa de parceiros — logos compactos */}
                 <div
                   className="mt-3 hidden border-t pt-2.5 min-[360px]:block"
-                  style={{ borderColor: "rgba(255,255,255,0.1)" }}
+                  style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}
                 >
                   <div className="mb-1.5 flex items-center gap-1.5">
                     <MapPin className="h-3 w-3" style={{ color: P.goldSoft }} aria-hidden />
                     <span
                       className="text-[11px] font-bold uppercase tracking-[0.18em]"
-                      style={{ color: "rgba(226,232,240,0.62)" }}
+                      style={{ color: "var(--pc-home-onhero-fg-60)" }}
                     >
                       Onde comparamos
                     </span>
@@ -580,8 +580,8 @@ function HomePage() {
                         to="/estabelecimentos"
                         className="inline-flex max-w-[46%] items-center gap-1.5 rounded-lg border px-2 py-1 transition-colors hover:border-brand-gold/60"
                         style={{
-                          background: "rgba(255,255,255,0.04)",
-                          borderColor: "rgba(255,255,255,0.1)",
+                          background: "var(--pc-home-onhero-glass-soft)",
+                          borderColor: "var(--pc-home-onhero-border-soft)",
                         }}
                       >
                         {s?.logoUrl ? (
@@ -596,13 +596,13 @@ function HomePage() {
                         ) : (
                           <span
                             className="h-4 w-4 shrink-0 rounded"
-                            style={{ background: "rgba(255,255,255,0.12)" }}
+                            style={{ background: "var(--pc-home-onhero-border-soft)" }}
                             aria-hidden
                           />
                         )}
                         <span
                           className="truncate text-[11.5px] font-semibold"
-                          style={{ color: "rgba(226,232,240,0.86)" }}
+                          style={{ color: "var(--pc-home-onhero-fg-85)" }}
                         >
                           {s?.name ?? "—"}
                         </span>
@@ -628,16 +628,16 @@ function HomePage() {
                     data-reading-card
                     className="group flex min-h-[54px] flex-col items-center justify-center gap-1 rounded-xl border px-1 py-2 text-center transition-all hover:-translate-y-px active:scale-[0.97] focus-visible:outline-none focus-visible:ring-2"
                     style={{
-                      background: "rgba(255,255,255,0.06)",
-                      borderColor: "rgba(255,255,255,0.13)",
+                      background: "var(--pc-home-onhero-glass)",
+                      borderColor: "var(--pc-home-onhero-border)",
                       // @ts-expect-error css var
                       "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
                     }}
                   >
-                    <Icon className="h-4 w-4" style={{ color: "#E8BE72" }} strokeWidth={2.2} aria-hidden />
+                    <Icon className="h-4 w-4" style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.2} aria-hidden />
                     <span
                       className="w-full truncate text-[11.5px] font-semibold"
-                      style={{ color: "rgba(234,240,247,0.92)" }}
+                      style={{ color: "var(--pc-home-onhero-fg-90)" }}
                     >
                       {label}
                     </span>
@@ -657,8 +657,8 @@ function HomePage() {
                     "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
                   }}
                 >
-                  <Grid3x3 className="h-4 w-4" style={{ color: "#E8BE72" }} strokeWidth={2.4} aria-hidden />
-                  <span className="w-full truncate text-[11.5px] font-bold" style={{ color: "#E8BE72" }}>
+                  <Grid3x3 className="h-4 w-4" style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.4} aria-hidden />
+                  <span className="w-full truncate text-[11.5px] font-bold" style={{ color: "var(--pc-home-onhero-gold)" }}>
                     Todas
                   </span>
                 </button>
@@ -677,16 +677,16 @@ function HomePage() {
                     data-reading-card
                     className="flex min-h-[54px] flex-col items-center justify-center gap-1 rounded-xl border px-1 py-2 text-center transition-all hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2"
                     style={{
-                      background: "rgba(255,255,255,0.06)",
-                      borderColor: "rgba(255,255,255,0.13)",
+                      background: "var(--pc-home-onhero-glass)",
+                      borderColor: "var(--pc-home-onhero-border)",
                       // @ts-expect-error css var
                       "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
                     }}
                   >
-                    <LayoutGrid className="h-4 w-4" style={{ color: "#E8BE72" }} strokeWidth={2.2} aria-hidden />
+                    <LayoutGrid className="h-4 w-4" style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.2} aria-hidden />
                     <span
                       className="w-full truncate text-[11.5px] font-semibold"
-                      style={{ color: "rgba(234,240,247,0.92)" }}
+                      style={{ color: "var(--pc-home-onhero-fg-90)" }}
                     >
                       Explorar
                     </span>
@@ -695,12 +695,12 @@ function HomePage() {
                 <SheetContent
                   side="bottom"
                   className="max-h-[88dvh] overflow-y-auto border-t-0 p-4 sm:p-6"
-                  style={{ background: P.navy, color: "#EAF0F7" }}
+                  style={{ background: "var(--pc-home-explore-bg)", color: "var(--pc-home-onhero-fg)" }}
                 >
                   <SheetHeader className="text-left">
                     <SheetTitle
                       className="font-serif text-[19px] font-normal"
-                      style={{ color: "#EAF0F7" }}
+                      style={{ color: "var(--pc-home-onhero-fg)" }}
                     >
                       Explorar o PreçoCerto
                     </SheetTitle>
@@ -722,12 +722,12 @@ function HomePage() {
         {/* ================= RODAPÉ COMPACTO ================= */}
         <footer
           className="border-t px-4 py-2 sm:px-6 lg:px-8"
-          style={{ borderColor: "rgba(255,255,255,0.1)" }}
+          style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}
         >
           <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-3 gap-y-1">
-            <p className="text-[11px]" style={{ color: "rgba(226,232,240,0.6)" }}>
+            <p className="text-[11px]" style={{ color: "var(--pc-home-onhero-fg-60)" }}>
               © {new Date().getFullYear()} PreçoCerto · Feijó/AC ·{" "}
-              <span style={{ color: "#E8BE72" }}>&lt;dev&gt; Franc D&apos;nis</span>
+              <span style={{ color: "var(--pc-home-onhero-gold)" }}>&lt;dev&gt; Franc D&apos;nis</span>
             </p>
             <nav aria-label="Links institucionais" className="flex flex-wrap items-center gap-x-3 gap-y-1">
               {[
@@ -741,7 +741,7 @@ function HomePage() {
                   key={l.to}
                   to={l.to}
                   className="text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors hover:brightness-125"
-                  style={{ color: "rgba(226,232,240,0.72)" }}
+                  style={{ color: "var(--pc-home-onhero-fg-70)" }}
                 >
                   {l.label}
                 </Link>
@@ -780,23 +780,23 @@ function PillarLink({
       data-reading-card
       className="flex min-h-[54px] flex-col items-center justify-center gap-1 rounded-xl border px-1 py-2 text-center transition-all hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2"
       style={{
-        background: emphasis ? "var(--pc-home-gold)" : "rgba(255,255,255,0.06)",
+        background: emphasis ? "var(--pc-home-gold)" : "var(--pc-home-onhero-glass)",
         borderColor: emphasis
           ? "var(--pc-home-gold)"
-          : "rgba(255,255,255,0.13)",
+          : "var(--pc-home-onhero-border)",
         // @ts-expect-error css var
         "--tw-ring-color": "color-mix(in oklab, var(--pc-home-gold) 70%, transparent)",
       }}
     >
       <Icon
         className="h-4 w-4"
-        style={{ color: emphasis ? "var(--pc-home-navy)" : "#E8BE72" }}
+        style={{ color: emphasis ? "var(--pc-home-navy)" : "var(--pc-home-onhero-gold)" }}
         strokeWidth={2.2}
         aria-hidden
       />
       <span
         className="w-full truncate text-[11.5px] font-semibold"
-        style={{ color: emphasis ? "var(--pc-home-navy)" : "rgba(234,240,247,0.92)" }}
+        style={{ color: emphasis ? "var(--pc-home-navy)" : "var(--pc-home-onhero-fg-90)" }}
       >
         {label}
       </span>
