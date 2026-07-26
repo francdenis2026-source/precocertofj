@@ -38,7 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ChevronRight, Package, Search, Store, TrendingUp, Pill, Croissant, Beef, ShoppingBasket, PiggyBank, Radio, ChevronLeft } from "lucide-react";
+import { ChevronRight, Package, Search, Store, TrendingUp, Pill, Croissant, Beef, ShoppingBasket, PiggyBank, Radio, ChevronLeft, LayoutGrid, Rows3 } from "lucide-react";
 import mercadosHero from "@/assets/mercados-hero-v3.jpg.asset.json";
 import {
   MarketEditorialCard,
