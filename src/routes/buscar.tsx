@@ -259,36 +259,32 @@ function SearchPage() {
     });
   };
 
+  // Persistência do histórico: só para usuários autenticados. Visitantes usam
+  // armazenamento em memória (limpa ao atualizar a página).
+  useEffect(() => {
+    if (loading) return;
+    setSearchHistoryPersistence(!!user);
+    setRecent(getSearchHistory().map((e) => e.query));
+  }, [loading, user]);
+
   useEffect(() => {
     if (hasQuery) pushRecentSearch(q);
   }, [hasQuery, q]);
 
   const [recent, setRecent] = useState<string[]>([]);
   useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem("search:recent-queries");
-      if (raw) setRecent(JSON.parse(raw));
-    } catch {
-      /* ignore */
-    }
+    setRecent(getSearchHistory().map((e) => e.query));
   }, [q]);
 
   const removeRecent = (item: string) => {
-    setRecent((prev) => {
-      const next = prev.filter((x) => x !== item);
-      try {
-        window.localStorage.setItem("search:recent-queries", JSON.stringify(next));
-      } catch { /* ignore */ }
-      return next;
-    });
+    setRecent(removeSearchHistory(item).map((e) => e.query));
   };
 
   const clearRecent = () => {
+    clearSearchHistory();
     setRecent([]);
-    try {
-      window.localStorage.removeItem("search:recent-queries");
-    } catch { /* ignore */ }
   };
+
 
   // Restauração de scroll ao voltar para /buscar preservando filtros
   useEffect(() => {
