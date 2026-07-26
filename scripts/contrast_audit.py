@@ -145,7 +145,9 @@ PROBE = r"""
     const large = size >= 24 || (size >= 18.66 && bold);
     const need = large ? 3 : 4.5;
     if ((cr !== null && !overlay && cr < need) || clipped) {
+      el.setAttribute('data-ca-probe', String(out.length));
       out.push({
+        probe: out.length,
         text: el.textContent.trim().slice(0, 40),
         cr, need, clipped,
         size: Math.round(size * 10) / 10,
@@ -157,6 +159,45 @@ PROBE = r"""
   return out;
 }
 """
+
+
+def _srgb_lum(rgb):
+    def ch(v):
+        v /= 255
+        return v / 12.92 if v <= 0.04045 else ((v + 0.055) / 1.055) ** 2.4
+    r, g, b = rgb
+    return 0.2126 * ch(r) + 0.7152 * ch(g) + 0.0722 * ch(b)
+
+
+def pixel_contrast(png_bytes):
+    """Contraste REAL medido nos pixels renderizados do elemento.
+
+    Elimina falsos positivos da composição CSS (gradientes, camadas,
+    backdrop-filter) medindo o texto contra o fundo efetivamente pintado.
+    """
+    import io
+    from collections import Counter
+    from PIL import Image
+
+    img = Image.open(io.BytesIO(png_bytes)).convert("RGB")
+    if img.width < 2 or img.height < 2:
+        return None
+    if img.width * img.height > 200_000:
+        img = img.resize((min(img.width, 400), min(img.height, 200)))
+    px = list(img.getdata())
+    quant = [(p[0] // 8 * 8, p[1] // 8 * 8, p[2] // 8 * 8) for p in px]
+    counts = Counter(quant)
+    bg = counts.most_common(1)[0][0]
+    bg_l = _srgb_lum(bg)
+    # texto = pixel com maior distância de luminância em relação ao fundo,
+    # ignorando 2% de outliers (anti-aliasing / bordas)
+    lums = sorted(_srgb_lum(p) for p in quant)
+    lo = lums[int(len(lums) * 0.02)]
+    hi = lums[int(len(lums) * 0.98)]
+    fg_l = lo if abs(lo - bg_l) > abs(hi - bg_l) else hi
+    a, b = max(fg_l, bg_l), min(fg_l, bg_l)
+    return round((a + 0.05) / (b + 0.05), 2)
+
 
 
 async def main() -> int:
