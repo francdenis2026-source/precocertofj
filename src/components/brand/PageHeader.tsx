@@ -51,7 +51,7 @@ export function PageHeader({
   return (
     <header
       className={cn(
-        "border-b border-border/60 bg-background/90 px-4 py-6 backdrop-blur md:px-8 md:py-8",
+        "border-b border-border/60 bg-background/90 px-4 py-3.5 backdrop-blur md:px-8 md:py-8",
         className,
       )}
     >

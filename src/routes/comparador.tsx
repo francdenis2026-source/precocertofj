@@ -796,7 +796,7 @@ function ComparadorPage() {
           </Sheet>
         </div>
 
-        <div className="mt-6 grid gap-3 sm:grid-cols-3">
+        <div className="mt-4 grid grid-cols-3 gap-2 md:mt-6 md:gap-3">
           <StatCard label="Produtos encontrados" value={String(stats.productCount)} />
           <StatCard
             label="Mercados com preço"
