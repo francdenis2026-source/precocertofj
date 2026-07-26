@@ -144,13 +144,13 @@ export function MarketEditorialCard({
               {typeof rank === "number" && (
                 <span
                   aria-hidden
-                  className="shrink-0 text-[10.5px] font-bold tabular-nums tracking-tight text-foreground/45"
+                  className="shrink-0 text-[11.5px] font-bold tabular-nums tracking-tight text-foreground/55"
                 >
                   {String(rank).padStart(2, "0")}
                 </span>
               )}
               <span
-                className="shrink-0 rounded-full border px-1.5 py-[1px] text-[9px] font-bold uppercase leading-none tracking-[0.1em] text-foreground/85"
+                className="shrink-0 rounded-full border px-1.5 py-[2px] text-[10px] font-bold uppercase leading-none tracking-[0.08em] text-foreground/85"
                 style={{
                   background: `color-mix(in oklab, ${tierColor} 16%, transparent)`,
                   borderColor: `color-mix(in oklab, ${tierColor} 45%, transparent)`,
@@ -161,20 +161,20 @@ export function MarketEditorialCard({
               </span>
 
               {isCheapest ? (
-                <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-brand-gold px-1.5 py-[1px] text-[9px] font-bold uppercase leading-none tracking-[0.1em] text-brand-navy">
+                <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-brand-gold px-1.5 py-[2px] text-[10px] font-bold uppercase leading-none tracking-[0.08em] text-brand-navy">
                   <PiggyBank className="h-2.5 w-2.5" aria-hidden /> Mais barato
                 </span>
               ) : isFeatured ? (
-                <span className="inline-flex shrink-0 items-center rounded-full border border-brand-navy/25 px-1.5 py-[1px] text-[9px] font-bold uppercase leading-none tracking-[0.1em] text-brand-navy dark:border-brand-gold/30 dark:text-[var(--pc-gold-ink)]">
+                <span className="inline-flex shrink-0 items-center rounded-full border border-brand-navy/25 px-1.5 py-[2px] text-[10px] font-bold uppercase leading-none tracking-[0.08em] text-brand-navy dark:border-brand-gold/30 dark:text-[var(--pc-gold-ink)]">
                   Destaque
                 </span>
               ) : null}
             </span>
 
-            <h3 className="mt-1 truncate text-[14.5px] font-semibold leading-[1.2] tracking-[-0.01em] text-foreground">
+            <h3 className="mt-1 truncate text-[15.5px] font-semibold leading-[1.2] tracking-[-0.01em] text-foreground">
               <HighlightMatch text={name} tokens={highlightTokens ?? []} mode="loose" />
             </h3>
-            <p className="mt-0.5 flex items-center gap-1 truncate text-[11.5px] font-medium text-foreground/70">
+            <p className="mt-0.5 flex items-center gap-1 truncate text-[12.5px] font-medium text-foreground/70">
               <MapPin className="h-3 w-3 shrink-0 text-[var(--pc-gold-ink)]" aria-hidden />
               <span className="truncate">
                 <HighlightMatch
@@ -190,7 +190,7 @@ export function MarketEditorialCard({
         </div>
 
         {/* Linha única de dados */}
-        <dl className="mx-3 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border/60 py-1.5 text-[11.5px] text-foreground/80">
+        <dl className="mx-3 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border/60 py-1.5 text-[12.5px] text-foreground/80">
           <div className="flex min-w-0 items-center gap-1">
             <Package className="h-3.5 w-3.5 shrink-0 text-[var(--pc-gold-ink)]" aria-hidden />
             <dt className="sr-only">Produtos com preço</dt>
@@ -235,14 +235,14 @@ export function MarketEditorialCard({
 
         {/* Rodapé */}
         <div className="mt-auto flex items-center justify-between gap-2 px-3 py-1.5">
-          <span className="min-w-0 truncate text-[10.5px] font-semibold text-foreground/70">
+          <span className="min-w-0 truncate text-[12px] font-semibold text-foreground/70">
             {topCategory && topCategory.trim().toLowerCase() !== "outros"
               ? `Mais preços em ${topCategory.toLowerCase()}`
               : "Ver catálogo completo"}
 
           </span>
 
-          <span className="inline-flex shrink-0 items-center gap-1 rounded-md bg-brand-gold/16 px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-[0.1em] text-[var(--pc-gold-ink)] transition-colors group-hover:bg-brand-gold group-hover:text-brand-navy">
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-md bg-brand-gold/16 px-2 py-0.5 text-[11.5px] font-bold uppercase tracking-[0.08em] text-[var(--pc-gold-ink)] transition-colors group-hover:bg-brand-gold group-hover:text-brand-navy">
             Ver preços
             <ChevronRight
               className="h-3 w-3 transition-transform group-hover:translate-x-0.5"
