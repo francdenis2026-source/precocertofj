@@ -602,10 +602,18 @@ function ComparadorPage() {
   // Paginação: mantém a página curta (tipografia maior sem estourar a altura).
   const [RESULTS_PAGE_SIZE, setResultsPageSize] = useState(12);
   useEffect(() => {
-    const sync = () => setResultsPageSize(window.innerWidth < 768 ? 6 : 12);
+    const sync = () => setResultsPageSize(window.innerWidth < 768 ? 4 : 12);
     sync();
-    window.addEventListener("resize", sync);
-    return () => window.removeEventListener("resize", sync);
+    let raf = 0;
+    const onResize = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(sync);
+    };
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
   const [page, setPage] = useState(1);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -744,7 +752,7 @@ function ComparadorPage() {
       />
 
 
-      <section className="mx-auto max-w-7xl px-6 pt-8">
+      <section className="mx-auto max-w-7xl px-4 pt-4 md:px-6 md:pt-8">
         <div className="flex items-center gap-2 rounded-2xl border border-border bg-background px-4 py-2.5 shadow-sm transition focus-within:border-primary focus-within:shadow-[0_0_0_3px_color-mix(in_oklab,var(--color-primary)_25%,transparent)]">
           <Search className="h-4 w-4 text-muted-foreground" />
           <input
@@ -846,7 +854,7 @@ function ComparadorPage() {
         id="resultados"
         tabIndex={-1}
         aria-label="Resultados da comparação (atalho: R)"
-        className="mx-auto max-w-7xl px-6 py-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        className="mx-auto max-w-7xl px-4 py-5 focus:outline-none md:px-6 md:py-10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
         {isLoading && (view === "grid"
           ? <LoadingGrid count={6} columns={3} />
@@ -1247,7 +1255,7 @@ function StatCard({ label, value, hint }: { label: string; value: string; hint?:
   );
 }
 
-function ProductCard({
+function ProductCardBase({
   row,
   index,
   imageOverride,
@@ -1269,7 +1277,7 @@ function ProductCard({
   const isMulti = Number(row.store_count) > 1;
 
   return (
-    <li className="relative h-full">
+    <li className="cv-card relative h-full">
       <TeaserCard
         id={row.product_key}
         index={index}
