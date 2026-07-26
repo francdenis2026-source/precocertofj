@@ -128,6 +128,15 @@ function CategoryPage() {
   }, [qInput, q, setSearch]);
 
   const [limit, setLimit] = useState(24);
+  const [quickView, setQuickView] = useState<null | {
+    name: string;
+    unit: string | null;
+    minPrice: number;
+    maxPrice: number;
+    cheapestStore: string;
+    cheapestLogo: string | null;
+    storeCount: number;
+  }>(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ["category-hub", slug],
