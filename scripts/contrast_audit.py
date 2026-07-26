@@ -184,7 +184,8 @@ def pixel_contrast(png_bytes):
         return None
     if img.width * img.height > 200_000:
         img = img.resize((min(img.width, 400), min(img.height, 200)))
-    px = list(img.getdata())
+    px = list(img.convert("RGB").tobytes())
+    px = [tuple(px[i:i + 3]) for i in range(0, len(px), 3)]
     quant = [(p[0] // 8 * 8, p[1] // 8 * 8, p[2] // 8 * 8) for p in px]
     counts = Counter(quant)
     bg = counts.most_common(1)[0][0]
