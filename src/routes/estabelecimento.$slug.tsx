@@ -654,7 +654,7 @@ function EstablishmentPage() {
               } satisfies QuickViewProduct)
             : null
         }
-        onClose={() => setQuickView(null)}
+        onClose={closeQuickView}
       />
 
 
