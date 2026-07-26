@@ -104,7 +104,8 @@ export function StoreBadge({
 }: StoreBadgeProps) {
   const color = getStoreColor(name, brandColor);
   const dim =
-    size === "xs" ? "h-4 w-4 text-[8px]" : size === "md" ? "h-8 w-8 text-[11px]" : "h-6 w-6 text-[9px]";
+    size === "xs" ? "h-6 w-6 text-[9px]" : size === "md" ? "h-11 w-11 text-[13px]" : "h-9 w-9 text-[11px]";
+
 
   // Assina URLs do bucket privado `logos` on-the-fly (com cache global).
   const [resolvedLogo, setResolvedLogo] = useState<string | null>(logoUrl ?? null);
