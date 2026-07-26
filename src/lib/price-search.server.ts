@@ -233,10 +233,26 @@ export async function performPriceSearch(data: {
       .replace(/[^a-zA-Z0-9]+/g, " ")
       .trim()
       .toUpperCase();
+  const metaKeys: Array<[string, EstabMeta]> = [];
   const getMeta = (n: string | null | undefined): EstabMeta | undefined => {
     if (!n) return undefined;
-    return metaByName.get(n.trim()) ?? metaByName.get(metaKey(n));
+    const direct = metaByName.get(n.trim()) ?? metaByName.get(metaKey(n));
+    if (direct) return direct;
+    // Fallback: nome do scan contém (ou está contido em) o nome do estabelecimento
+    // ex.: "MERCEARIA ACOUGUE & PANIFICADORA DOCE DIA" → "DOCE DIA".
+    const key = metaKey(n);
+    let best: EstabMeta | undefined;
+    let bestLen = 0;
+    for (const [k, meta] of metaKeys) {
+      if (k.length < 5) continue;
+      if ((key.includes(k) || k.includes(key)) && k.length > bestLen) {
+        best = meta;
+        bestLen = k.length;
+      }
+    }
+    return best;
   };
+
   if (marketNames.length > 0) {
     const { data: estabs } = await (supabaseAdmin as unknown as {
       from: (t: string) => {
