@@ -312,30 +312,10 @@ export const getPlatformStats = createServerFn({ method: "GET" }).handler(
               establishments: number | null;
               price_drops_7d: number | null;
               active_comparisons: number | null;
+              unique_products: number | null;
+              avg_savings: number | null;
+              total_savings: number | null;
             }>
-          | null;
-        error: { message: string } | null;
-      }>;
-      from: (t: string) => {
-        select: (
-          s: string,
-        ) => {
-          eq: (col: string, val: string) => {
-            not: (col: string, op: string, val: null) => Promise<{
-              data: Array<{ product_name: string | null }> | null;
-              error: { message: string } | null;
-            }>;
-          };
-        };
-      };
-    };
-
-    const compsClient = supabaseAdmin as unknown as {
-      rpc: (
-        fn: string,
-      ) => Promise<{
-        data:
-          | Array<{ min_price: number | null; avg_price: number | null; store_count: number | null }>
           | null;
         error: { message: string } | null;
       }>;
@@ -354,9 +334,8 @@ export const getPlatformStats = createServerFn({ method: "GET" }).handler(
       };
     };
 
-    const [{ data, error }, comps, itemsCount] = await Promise.all([
+    const [{ data, error }, itemsCount] = await Promise.all([
       client.rpc("platform_public_stats"),
-      compsClient.rpc("get_price_comparisons"),
       countClient
         .from("scans")
         .select("id", { count: "exact", head: true })
@@ -365,60 +344,24 @@ export const getPlatformStats = createServerFn({ method: "GET" }).handler(
     ]);
     if (error) throw new Error(error.message);
     const row = data?.[0];
-    // Fonte única: cache de comparações (mesma base usada em /comparador).
-    // Evita o teto de 1000 linhas do PostgREST ao contar nomes únicos via scans.
-    const norm = (s: string): string =>
-      s
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, " ")
-        .trim();
-    const uniqueKeys = new Set<string>();
-    let estimatedSavings = 0;
-    for (const c of comps.data ?? []) {
-      const anyRow = c as unknown as { product_name?: string | null };
-      const k = norm(anyRow.product_name ?? "");
-      if (k) uniqueKeys.add(k);
-      const min = Number(c.min_price ?? 0);
-      const avg = Number(c.avg_price ?? 0);
-      const sc = Number(c.store_count ?? 0);
-      if (sc >= 2 && avg > min) estimatedSavings += avg - min;
-    }
-    // Produtos distintos com preço público — paginado (PostgREST corta em 1000 linhas).
-    // Mesma definição usada no painel de métricas, para os números não divergirem.
-    const distinctNames = new Set<string>();
-    {
-      const sb = supabaseAdmin as any;
-      const PAGE = 1000;
-      for (let from = 0; from < 40000; from += PAGE) {
-        const res = await sb
-          .from("scans")
-          .select("product_name")
-          .eq("status", "salvo")
-          .is("user_id", null)
-          .not("price_captured", "is", null)
-          .range(from, from + PAGE - 1);
-        const rows = (res.data ?? []) as Array<{ product_name: string | null }>;
-        for (const r of rows) {
-          const k = norm(r.product_name ?? "");
-          if (k) distinctNames.add(k);
-        }
-        if (rows.length < PAGE) break;
-      }
-    }
+
+    // Todas as métricas agregadas vêm do banco (platform_public_stats), evitando
+    // o teto de 1000 linhas do PostgREST que antes truncava produtos e economia.
+    const unique = row?.unique_products ?? 0;
 
     return {
       establishments: row?.establishments ?? 0,
       priceDrops7d: row?.price_drops_7d ?? 0,
       activeComparisons: row?.active_comparisons ?? 0,
-      products: uniqueKeys.size || (comps.data?.length ?? 0),
-      totalItems: distinctNames.size,
+      products: unique,
+      totalItems: unique,
       priceRecords: itemsCount.count ?? 0,
-      estimatedSavings: Number(estimatedSavings.toFixed(2)),
+      estimatedSavings: Number(row?.avg_savings ?? 0),
+      totalSavings: Number(row?.total_savings ?? 0),
     };
   },
 );
+
 
 
 // ---------- Ranking: mercados com mais menor preço nos últimos 7 dias ----------
