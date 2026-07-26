@@ -955,7 +955,7 @@ function ProductTile({
   );
 }
 
-/** Linha densa para o modo Lista. */
+/** Linha densa em colunas (produto · unidade · preço · ações) para o modo Lista. */
 function ProductRow({
   product,
   onOpen,
@@ -967,44 +967,64 @@ function ProductRow({
   onAlert: () => void;
   onHistory: () => void;
 }) {
+  const unit =
+    product.unitLabel?.replace("R$", "").trim() ||
+    (product.pricePerUnit != null ? "un" : null);
   return (
-    <div className="flex items-center gap-2 px-2.5 py-2 transition-colors hover:bg-muted/40">
+    <div className="grid grid-cols-[minmax(0,1fr)_84px] items-center gap-2 px-2.5 py-1.5 transition-colors hover:bg-muted/50 sm:grid-cols-[minmax(0,1fr)_120px_92px_136px]">
       <button
         type="button"
         onClick={onOpen}
         aria-label={`Ver detalhes de ${product.productName}`}
-        className="min-w-0 flex-1 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
+        className="min-w-0 rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
       >
-        <span className="block truncate text-[12.5px] font-semibold leading-snug text-foreground">
+        <span className="block truncate text-[12.5px] font-semibold leading-tight text-foreground">
           {product.productName}
         </span>
-        <span className="block truncate text-[10.5px] leading-none text-muted-foreground">
+        <span className="block truncate text-[10.5px] leading-tight text-muted-foreground">
           {[product.brand, product.category].filter(Boolean).join(" · ") || "Sem categoria"}
-          {unitSuffix(product)}
         </span>
       </button>
-      <span className="shrink-0 text-[13px] font-bold tabular-nums text-foreground">
+
+      <span className="hidden min-w-0 truncate text-[11.5px] leading-tight text-muted-foreground sm:block">
+        {unit ? (
+          <>
+            {unit}
+            {product.pricePerUnit != null ? (
+              <span className="block truncate text-[10.5px] tabular-nums text-muted-foreground">
+                {brl(product.pricePerUnit)} / {unit}
+              </span>
+            ) : null}
+          </>
+        ) : (
+          "—"
+        )}
+      </span>
+
+      <span className="text-right text-[13px] font-bold tabular-nums leading-tight text-foreground">
         {brl(product.price)}
       </span>
-      <div className="flex shrink-0 items-center gap-1">
+
+      <div className="hidden items-center justify-end gap-1 sm:flex">
         <button
           type="button"
           onClick={onAlert}
           aria-label={`Criar alerta de preço para ${product.productName}`}
-          className="grid h-7 w-7 place-items-center rounded-full border border-border transition-colors hover:border-brand-gold"
+          className="inline-flex h-7 items-center gap-1 rounded-full border border-border bg-background px-2 text-[10.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
         >
-          <Bell className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+          <Bell className="h-3 w-3 text-brand-gold" aria-hidden /> Alerta
         </button>
         <button
           type="button"
           onClick={onHistory}
           aria-label={`Ver histórico de preço de ${product.productName}`}
-          className="grid h-7 w-7 place-items-center rounded-full border border-border transition-colors hover:border-brand-gold"
+          className="inline-flex h-7 items-center gap-1 rounded-full border border-border bg-background px-2 text-[10.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
         >
-          <History className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+          <History className="h-3 w-3 text-brand-gold" aria-hidden /> Histórico
         </button>
       </div>
     </div>
   );
 }
+
 
