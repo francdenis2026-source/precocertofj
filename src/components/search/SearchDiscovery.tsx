@@ -228,20 +228,21 @@ export function SearchDiscovery({ onPickQuery }: Props) {
             icon={<TrendingDown className="h-4 w-4" aria-hidden />}
             label="Preços em queda"
             value={stats.data ? int(stats.data.priceDrops7d ?? 0) : "—"}
-            hint="7 dias"
+            hint="últimos 30 dias"
           />
           <StatCell
             icon={<Sparkles className="h-4 w-4" aria-hidden />}
             label="Produtos monitorados"
             value={stats.data ? int(stats.data.products ?? 0) : "—"}
-            hint="ativos"
+            hint="com preço público"
           />
           <StatCell
             icon={<Flame className="h-4 w-4" aria-hidden />}
-            label="Economia estimada"
+            label="Economia média"
             value={stats.data ? brl(stats.data.estimatedSavings ?? 0) : "—"}
-            hint="cesta média"
+            hint="por produto comparado"
           />
+
         </div>
       </section>
     </div>
