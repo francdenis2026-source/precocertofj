@@ -402,7 +402,7 @@ function EstablishmentPage() {
                   className="h-9 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13px] outline-none focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
                 />
               </div>
-              <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
+              <Select value={sort} onValueChange={(v) => setSearch({ sort: v })}>
                 <SelectTrigger
                   aria-label="Ordenar por"
                   className="h-9 w-full text-[12.5px] font-medium sm:w-[240px]"
@@ -417,7 +417,7 @@ function EstablishmentPage() {
                   ))}
                 </SelectContent>
               </Select>
-              <ViewToggle value={view} onChange={setView} />
+              <ViewToggle value={view} onChange={(v) => setSearch({ view: v })} />
             </div>
 
             <div className="mt-2.5 flex items-baseline justify-between gap-3">
