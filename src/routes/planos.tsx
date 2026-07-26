@@ -130,6 +130,8 @@ function PlansPage() {
   const create = useServerFn(createCheckoutOrder);
   const promptSignIn = usePromptSignIn();
   const [buying, setBuying] = useState<string | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
 
   const { data: plans = [], isLoading } = useQuery({
     queryKey: ["public-plans"],
