@@ -441,6 +441,77 @@ function CategoryPage() {
   );
 }
 
+/** Alternância Lista/Grade acessível: radiogroup com foco rotativo e setas do teclado. */
+function ViewToggle({
+  view,
+  onChange,
+}: {
+  view: "list" | "grid";
+  onChange: (v: "list" | "grid") => void;
+}) {
+  const options = [
+    { id: "list", label: "Lista", Icon: List },
+    { id: "grid", label: "Grade", Icon: LayoutGrid },
+  ] as const;
+  const refs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const move = (dir: -1 | 1, index: number) => {
+    const next = (index + dir + options.length) % options.length;
+    onChange(options[next].id);
+    refs.current[next]?.focus();
+  };
+
+  return (
+    <div
+      role="radiogroup"
+      aria-label="Modo de exibição dos produtos"
+      className="flex h-10 shrink-0 items-center gap-1 rounded-lg border border-border bg-card p-1"
+    >
+      {options.map(({ id, label, Icon: VIcon }, i) => {
+        const selected = view === id;
+        return (
+          <button
+            key={id}
+            ref={(el) => {
+              refs.current[i] = el;
+            }}
+            type="button"
+            role="radio"
+            aria-checked={selected}
+            aria-label={`Exibir em ${label.toLowerCase()}`}
+            aria-controls="cat-prod-results"
+            tabIndex={selected ? 0 : -1}
+            title={label}
+            onClick={() => onChange(id)}
+            onKeyDown={(e) => {
+              if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+                e.preventDefault();
+                move(1, i);
+              } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+                e.preventDefault();
+                move(-1, i);
+              } else if (e.key === " " || e.key === "Enter") {
+                e.preventDefault();
+                onChange(id);
+              }
+            }}
+            className={cn(
+              "grid h-8 w-8 place-items-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+              selected
+                ? "bg-brand-gold text-brand-navy"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            <VIcon className="h-4 w-4" aria-hidden />
+            <span className="sr-only">{label}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+
 function FilterChip({
   label,
   active,
