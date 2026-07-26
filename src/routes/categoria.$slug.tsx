@@ -101,7 +101,7 @@ function CategoryPage() {
     let list = data?.products ?? [];
     const term = norm(q.trim());
     if (term) list = list.filter((p) => norm(p.name).includes(term));
-    if (storeFilter) list = list.filter((p) => p.cheapestStore === storeFilter);
+    if (storeFilter) list = list.filter((p) => p.storeNames.includes(storeFilter));
     return list;
   }, [data, q, storeFilter]);
 
