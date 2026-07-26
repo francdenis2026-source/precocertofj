@@ -493,8 +493,10 @@ function CategoryBars({
 
 function ProductsRecentList({
   updates,
+  onNavigate,
 }: {
   updates: Awaited<ReturnType<typeof getMetricSpotlight>>["recentUpdates"];
+  onNavigate: () => void;
 }) {
   const { query, setQuery, visible, setVisible } = usePersistedListState("pc-metric-products");
   const filtered = useMemo(() => {
@@ -524,11 +526,29 @@ function ProductsRecentList({
                 <Package className="h-3.5 w-3.5" />
               </span>
               <div className="min-w-0 flex-1">
-                <div className="truncate text-[13px] font-semibold text-foreground">
+                <Link
+                  to="/buscar"
+                  search={{ q: u.productName } as never}
+                  onClick={onNavigate}
+                  aria-label={`Comparar preços de ${u.productName}`}
+                  className="block truncate text-[13px] font-semibold text-foreground underline-offset-2 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                >
                   {u.productName}
-                </div>
+                </Link>
                 <div className="truncate text-[11px] text-muted-foreground">
-                  {u.marketName ?? "—"} · {relTime(u.when)}
+                  {u.marketSlug && u.marketName ? (
+                    <Link
+                      to="/estabelecimento/$slug"
+                      params={{ slug: u.marketSlug }}
+                      onClick={onNavigate}
+                      className="font-semibold text-primary underline-offset-2 hover:underline"
+                    >
+                      {u.marketName}
+                    </Link>
+                  ) : (
+                    (u.marketName ?? "—")
+                  )}{" "}
+                  · {relTime(u.when)}
                 </div>
               </div>
               <div
@@ -553,8 +573,10 @@ function ProductsRecentList({
 
 function SavingsList({
   items,
+  onNavigate,
 }: {
   items: Awaited<ReturnType<typeof getMetricSpotlight>>["topSavings"];
+  onNavigate: () => void;
 }) {
   const { query, setQuery, visible, setVisible } = usePersistedListState("pc-metric-savings");
   const filtered = useMemo(() => {
@@ -596,11 +618,35 @@ function SavingsList({
                 {Math.round(s.savingsPct)}%
               </span>
               <div className="min-w-0 flex-1">
-                <div className="truncate text-[13px] font-semibold text-foreground">
-                  {s.displayName}
-                </div>
+                {s.catalogSlug ? (
+                  <Link
+                    to="/produto/$slug"
+                    params={{ slug: s.catalogSlug }}
+                    onClick={onNavigate}
+                    aria-label={`Ver comparação de ${s.displayName}`}
+                    className="block truncate text-[13px] font-semibold text-foreground underline-offset-2 hover:text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  >
+                    {s.displayName}
+                  </Link>
+                ) : (
+                  <div className="truncate text-[13px] font-semibold text-foreground">
+                    {s.displayName}
+                  </div>
+                )}
                 <div className="truncate text-[11px] text-muted-foreground">
-                  {s.storeCount} mercados · menor em {s.cheapestStore ?? "—"}
+                  {s.storeCount} mercados · menor em{" "}
+                  {s.cheapestStoreSlug && s.cheapestStore ? (
+                    <Link
+                      to="/estabelecimento/$slug"
+                      params={{ slug: s.cheapestStoreSlug }}
+                      onClick={onNavigate}
+                      className="font-semibold text-primary underline-offset-2 hover:underline"
+                    >
+                      {s.cheapestStore}
+                    </Link>
+                  ) : (
+                    (s.cheapestStore ?? "—")
+                  )}
                 </div>
               </div>
               <div className="shrink-0 text-right leading-tight">
@@ -614,6 +660,17 @@ function SavingsList({
                   {currency(s.minPrice)}
                 </div>
               </div>
+              {s.catalogSlug && (
+                <Link
+                  to="/produto/$slug"
+                  params={{ slug: s.catalogSlug }}
+                  onClick={onNavigate}
+                  aria-label={`Abrir comparação de ${s.displayName}`}
+                  className="grid h-7 w-7 shrink-0 place-items-center rounded-lg border border-border text-muted-foreground transition-colors hover:border-primary hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                >
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </Link>
+              )}
             </li>
           ))}
         </ul>
@@ -645,12 +702,12 @@ function MetricBody({
     return (
       <>
         <CategoryBars categories={data.topCategories} />
-        <ProductsRecentList updates={data.recentUpdates} />
+        <ProductsRecentList updates={data.recentUpdates} onNavigate={onNavigate} />
       </>
     );
   }
 
-  return <SavingsList items={data.topSavings} />;
+  return <SavingsList items={data.topSavings} onNavigate={onNavigate} />;
 }
 
 /** Ícone exportado para reuso em cartões de métrica. */
