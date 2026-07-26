@@ -44,6 +44,8 @@ export type CategoryHub = {
   desc: string;
   stores: HubStore[];
   products: HubProduct[];
+  /** quantos produtos vieram na lista (pode ser menor que totals.products) */
+  returned: number;
   totals: { products: number; prices: number; stores: number };
 };
 
@@ -65,6 +67,9 @@ type EstabRow = {
   address: string | null;
   active: boolean | null;
 };
+
+/** teto de itens enviados ao cliente na lista da categoria */
+const MAX_LIST = 1500;
 
 const num = (v: unknown): number | null => {
   const n = typeof v === "number" ? v : Number(v);
@@ -121,7 +126,8 @@ export async function buildCategoryHub(slug: string): Promise<CategoryHub> {
   // Último preço por (loja, produto)
   const latest = new Map<string, { row: ScanRow; store: EstabRow }>();
   let priceCount = 0;
-  const storeCounts = new Map<string, number>();
+  /** produtos DISTINTOS por loja (não registros de preço) */
+  const storeProducts = new Map<string, Set<string>>();
 
   for (const s of scans) {
     const name = (s.product_name ?? "").trim();
@@ -133,9 +139,12 @@ export async function buildCategoryHub(slug: string): Promise<CategoryHub> {
     if (!productInCategory(def, { name, unit: s.unit }, fromNiche)) continue;
 
     priceCount += 1;
-    storeCounts.set(store.id, (storeCounts.get(store.id) ?? 0) + 1);
+    const pk = productKey(name);
+    const set = storeProducts.get(store.id) ?? new Set<string>();
+    set.add(pk);
+    storeProducts.set(store.id, set);
 
-    const k = `${store.id}::${productKey(name)}`;
+    const k = `${store.id}::${pk}`;
     const prev = latest.get(k);
     if (!prev || prev.row.created_at < s.created_at) latest.set(k, { row: s, store });
   }
@@ -175,7 +184,7 @@ export async function buildCategoryHub(slug: string): Promise<CategoryHub> {
     .sort((a, b) => a.minPrice - b.minPrice || b.storeCount - a.storeCount);
 
   const stores: HubStore[] = estabs
-    .filter((e) => nicheStoreIds.has(e.id) || (storeCounts.get(e.id) ?? 0) > 0)
+    .filter((e) => nicheStoreIds.has(e.id) || (storeProducts.get(e.id)?.size ?? 0) > 0)
     .map((e) => ({
       id: e.id,
       name: e.name,
@@ -185,7 +194,7 @@ export async function buildCategoryHub(slug: string): Promise<CategoryHub> {
       neighborhood: e.neighborhood,
       address: e.address,
       kind: e.kind,
-      productCount: storeCounts.get(e.id) ?? 0,
+      productCount: storeProducts.get(e.id)?.size ?? 0,
       isNicheStore: nicheStoreIds.has(e.id),
     }))
     .sort((a, b) => Number(b.isNicheStore) - Number(a.isNicheStore) || b.productCount - a.productCount);
@@ -195,7 +204,8 @@ export async function buildCategoryHub(slug: string): Promise<CategoryHub> {
     label: def.label,
     desc: def.desc,
     stores,
-    products: products.slice(0, 300),
+    products: products.slice(0, MAX_LIST),
+    returned: Math.min(products.length, MAX_LIST),
     totals: { products: products.length, prices: priceCount, stores: stores.length },
   };
 }
