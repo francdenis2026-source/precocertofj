@@ -264,9 +264,10 @@ function TileLabel({ name }: { name: string }) {
   return (
     <span
       className={cn(
-        "line-clamp-2 break-words text-center font-bold uppercase leading-[1.05] tracking-[0.08em] text-slate-800",
+        "line-clamp-2 break-words text-center font-bold uppercase leading-[1.05] tracking-[0.08em]",
         "text-[10px] min-[380px]:text-[10.5px] sm:text-[11px]",
       )}
+      style={{ color: "var(--pc-home-heading)" }}
     >
       {name}
     </span>
@@ -283,13 +284,19 @@ function PartnerTileSkeleton({ children }: { children?: ReactNode }) {
       aria-hidden
       className={cn(
         "relative flex h-[66px] w-full items-center justify-center overflow-hidden sm:h-[76px]",
-        "rounded-[10px] border border-black/[0.06]",
-        "bg-gradient-to-br from-white/85 via-white/70 to-white/85",
-        "shadow-[0_1px_2px_rgba(0,0,0,0.15)]",
+        "rounded-[14px] border",
       )}
+      style={{
+        borderColor: "color-mix(in oklab, var(--pc-home-line) 85%, transparent)",
+        background: "color-mix(in oklab, var(--pc-home-heading) 5%, transparent)",
+      }}
     >
-      <span className="h-2/5 w-3/5 animate-pulse rounded bg-slate-200/80" />
+      <span
+        className="h-2/5 w-3/5 animate-pulse rounded"
+        style={{ background: "color-mix(in oklab, var(--pc-home-heading) 12%, transparent)" }}
+      />
       {children}
+
     </div>
   );
 }
