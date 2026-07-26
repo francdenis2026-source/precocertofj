@@ -925,22 +925,16 @@ function EstablishmentsPage() {
                               params={{ slug }}
                               title={`Abrir ${e.name}`}
                               aria-label={`Abrir página de ${e.name}`}
-                              className="grid h-9 w-11 place-items-center overflow-hidden rounded-md border border-border/70 bg-white p-1 shadow-sm transition group-hover:border-brand-gold/70 group-hover:shadow"
+                              className="block shadow-sm transition group-hover:shadow"
                             >
-                              {e.logoUrl ? (
-                                <img
-                                  src={e.logoUrl}
-                                  alt={`Logo ${e.name}`}
-                                  loading="lazy"
-                                  decoding="async"
-                                  className="h-full w-full object-contain object-center"
-                                />
-                              ) : (
-                                <span className="text-[11px] font-bold text-brand-navy">
-                                  {e.name.substring(0, 2).toUpperCase()}
-                                </span>
-                              )}
+                              <StoreLogoThumb
+                                src={e.logoUrl}
+                                name={e.name}
+                                eager={idx < 6}
+                                className="h-9 w-11 transition group-hover:border-brand-gold/70"
+                              />
                             </Link>
+
 
                             <span className="flex min-w-0 items-center gap-1.5">
                               <Link
