@@ -1,5 +1,13 @@
 import { memo, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Beef, Bell, History, LayoutGrid, List as ListIcon, Search } from "lucide-react";
+import {
+  AlertTriangle,
+  Beef,
+  Bell,
+  History,
+  LayoutGrid,
+  List as ListIcon,
+  Search,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -92,12 +100,20 @@ export function ButcherCounter({
   onOpen,
   state,
   onStateChange,
+  loading = false,
+  error = null,
+  onRetry,
 }: {
   storeName: string;
   cuts: Cut[];
   onHistory?: (p: PublicStoreProduct) => void;
   onAlert?: (p: PublicStoreProduct) => void;
   onOpen?: (p: PublicStoreProduct) => void;
+  /** Carregando cortes do servidor — mostra skeletons no lugar da lista. */
+  loading?: boolean;
+  /** Falha ao carregar cortes — mostra mensagem consistente com nova tentativa. */
+  error?: string | null;
+  onRetry?: () => void;
   /** Estado controlado (sincronizado com a URL). Quando ausente, usa estado local. */
   state?: ButcherViewState;
   onStateChange?: (patch: Partial<ButcherViewState>) => void;
@@ -174,9 +190,15 @@ export function ButcherCounter({
 
   // Trilho de proteína: navegação por teclado (←/→/Home/End) com foco móvel.
   const railRef = useRef<HTMLDivElement | null>(null);
+  // Proteínas visíveis: as que têm cortes + a ativa vinda da URL (mesmo vazia),
+  // para que o filtro restaurado apareça e possa ser removido.
+  const visibleProteins = useMemo(
+    () => BUTCHER_PROTEINS.filter((p) => (counts.get(p.id) ?? 0) > 0 || p.id === protein),
+    [counts, protein],
+  );
   const options: (ButcherProtein | null)[] = useMemo(
-    () => [null, ...BUTCHER_PROTEINS.filter((p) => (counts.get(p.id) ?? 0) > 0).map((p) => p.id)],
-    [counts],
+    () => [null, ...visibleProteins.map((p) => p.id)],
+    [visibleProteins],
   );
   const activeIndex = Math.max(0, options.indexOf(protein));
 
@@ -253,7 +275,7 @@ export function ButcherCounter({
             {cuts.length}
           </span>
         </button>
-        {BUTCHER_PROTEINS.filter((p) => (counts.get(p.id) ?? 0) > 0).map((p, i) => {
+        {visibleProteins.map((p, i) => {
           const active = protein === p.id;
           return (
             <button
@@ -273,7 +295,7 @@ export function ButcherCounter({
                     : "rounded-full bg-foreground/10 px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-foreground"
                 }
               >
-                {counts.get(p.id)}
+                {counts.get(p.id) ?? 0}
               </span>
             </button>
           );
@@ -367,7 +389,24 @@ export function ButcherCounter({
         </span>
       </div>
 
-      {filtered.length > 0 ? (
+      {loading ? (
+        <CutSkeletons view={view} />
+      ) : error ? (
+        <EmptyState
+          className="mt-2"
+          size="sm"
+          icon={AlertTriangle}
+          title="Não foi possível carregar os cortes"
+          message={error}
+          action={
+            onRetry ? (
+              <Button variant="outline" size="sm" onClick={onRetry}>
+                Tentar novamente
+              </Button>
+            ) : undefined
+          }
+        />
+      ) : filtered.length > 0 ? (
         <>
           {view === "grid" ? (
             <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
@@ -415,10 +454,19 @@ export function ButcherCounter({
         </>
       ) : (
         <EmptyState
-          className="mt-6"
+          className="mt-4"
+          size="sm"
           icon={Beef}
           title="Nenhum corte encontrado"
-          message={q ? `Nenhum corte para "${q}".` : "Ainda não há cortes publicados."}
+          message={
+            q && protein
+              ? `Nenhum corte de ${proteinLabel(protein).toLowerCase()} para "${q}".`
+              : q
+                ? `Nenhum corte para "${q}".`
+                : protein
+                  ? `Este balcão ainda não tem cortes de ${proteinLabel(protein).toLowerCase()}.`
+                  : "Ainda não há cortes publicados."
+          }
           action={
             q || protein ? (
               <Button
@@ -570,3 +618,44 @@ const CutRow = memo(function CutRow({
     </div>
   );
 });
+
+/** Skeletons na mesma densidade da grade/lista de cortes. */
+function CutSkeletons({ view }: { view: "grid" | "list" }) {
+  const rows = Array.from({ length: 6 });
+  if (view === "list") {
+    return (
+      <div
+        className="mt-2 overflow-hidden rounded-lg border border-border bg-card"
+        role="status"
+        aria-label="Carregando cortes"
+      >
+        <ul className="divide-y divide-border/70">
+          {rows.map((_, i) => (
+            <li key={i} className="flex items-center gap-3 px-2.5 py-2.5">
+              <span className="h-3.5 flex-1 animate-pulse rounded bg-muted" />
+              <span className="h-3.5 w-16 animate-pulse rounded bg-muted" />
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+  return (
+    <ul
+      className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3"
+      role="status"
+      aria-label="Carregando cortes"
+    >
+      {rows.map((_, i) => (
+        <li
+          key={i}
+          className="rounded-lg border border-border bg-card p-3"
+        >
+          <span className="block h-3.5 w-3/4 animate-pulse rounded bg-muted" />
+          <span className="mt-2 block h-3 w-1/2 animate-pulse rounded bg-muted" />
+          <span className="mt-3 block h-3 w-1/3 animate-pulse rounded bg-muted" />
+        </li>
+      ))}
+    </ul>
+  );
+}

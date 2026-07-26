@@ -1,7 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Loader2, Store, TrendingDown } from "lucide-react";
+import { AlertTriangle, ArrowRight, RotateCcw, Store, TrendingDown } from "lucide-react";
 
 import {
   Dialog,
@@ -41,7 +42,13 @@ export function ProductQuickView({
   onClose: () => void;
 }) {
   const fetchProduct = useServerFn(getPublicProduct);
-  const { data, isLoading } = useQuery({
+  // Foco inicial no corpo do modal; Radix devolve o foco ao gatilho ao fechar.
+  const bodyRef = useRef<HTMLDivElement | null>(null);
+  const openerRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    if (product) openerRef.current = document.activeElement as HTMLElement | null;
+  }, [product]);
+  const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ["public-product-quickview", product?.name ?? ""],
     queryFn: () => fetchProduct({ data: { slug: product!.name } }),
     enabled: Boolean(product?.name),
@@ -66,7 +73,17 @@ export function ProductQuickView({
 
   return (
     <Dialog open={Boolean(product)} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="max-w-md gap-0 overflow-hidden p-0">
+      <DialogContent
+        className="max-w-md gap-0 overflow-hidden p-0"
+        onOpenAutoFocus={(e) => {
+          e.preventDefault();
+          bodyRef.current?.focus();
+        }}
+        onCloseAutoFocus={(e) => {
+          e.preventDefault();
+          openerRef.current?.focus();
+        }}
+      >
         <DialogHeader className="flex-row items-start gap-3 space-y-0 border-b border-border bg-card p-3.5 text-left">
           <div className="h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-border bg-background">
             <ProductImage
@@ -99,6 +116,7 @@ export function ProductQuickView({
         </DialogHeader>
 
         <div
+          ref={bodyRef}
           className="max-h-[52svh] overflow-y-auto p-3.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
           tabIndex={0}
           role="region"
@@ -125,11 +143,34 @@ export function ProductQuickView({
           </p>
 
           {isLoading ? (
-            <div className="flex items-center justify-center py-6">
-              <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" aria-hidden />
+            <ul
+              className="divide-y divide-border overflow-hidden rounded-lg border border-border"
+              role="status"
+              aria-label="Carregando preços"
+            >
+              {Array.from({ length: 4 }).map((_, i) => (
+                <li key={i} className="flex items-center gap-2 px-2.5 py-2.5">
+                  <span className="h-3.5 flex-1 animate-pulse rounded bg-muted" />
+                  <span className="h-3.5 w-14 animate-pulse rounded bg-muted" />
+                </li>
+              ))}
+            </ul>
+          ) : isError ? (
+            <div className="rounded-lg border border-dashed border-border bg-card/60 px-3 py-4 text-center">
+              <AlertTriangle className="mx-auto h-4 w-4 text-brand-gold" aria-hidden />
+              <p className="mt-1.5 text-[12.5px] font-semibold text-foreground">
+                Não foi possível carregar os preços
+              </p>
+              <button
+                type="button"
+                onClick={() => refetch()}
+                className="mt-2 inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-background px-3 text-[11.5px] font-semibold text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+              >
+                <RotateCcw className="h-3 w-3" aria-hidden /> Tentar novamente
+              </button>
             </div>
           ) : markets.length === 0 ? (
-            <p className="py-3 text-[12.5px] text-muted-foreground">
+            <p className="rounded-lg border border-dashed border-border bg-card/60 px-3 py-3 text-center text-[12.5px] text-muted-foreground">
               Ainda não há outros preços registrados para este produto.
             </p>
           ) : (
