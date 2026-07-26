@@ -171,12 +171,15 @@ export function AuthHero({
       {/* Top: brand + badge + headline */}
       <div className="relative">
         <div className="flex items-center gap-2.5">
-          <div
-            className="flex h-9 w-9 items-center justify-center rounded-lg"
-            style={{ background: T.gold, color: T.navy }}
-          >
-            <BrandIcon className="h-5 w-5" strokeWidth={2.5} />
-          </div>
+          <img
+            src="/logo-mark.png"
+            alt=""
+            aria-hidden
+            width={36}
+            height={36}
+            className="h-9 w-9 shrink-0 object-contain drop-shadow-[0_4px_12px_rgb(0_0_0/0.35)]"
+          />
+
           <span
             className="text-[18px] font-bold tracking-tight sm:text-[19px]"
             style={{ color: T.onNavy, fontFamily: T.display, letterSpacing: "-0.01em" }}
