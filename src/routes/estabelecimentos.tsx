@@ -21,6 +21,12 @@ import {
   resolveEstablishmentPosition,
 } from "@/lib/geo";
 import { normalizeNeighborhood } from "@/lib/geo-labels";
+import { HighlightMatch } from "@/components/search/HighlightMatch";
+import { tokenizeQuery } from "@/lib/search-tokens";
+
+/** Grade tabular da visualização em Lista (colunas alinhadas). */
+const LIST_GRID =
+  "grid grid-cols-[28px_44px_minmax(0,1fr)_160px_80px_78px_120px_20px] items-center gap-3";
 
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import {
@@ -183,6 +189,23 @@ function EstablishmentsPage() {
   useEffect(() => {
     if (typeof window !== "undefined") window.localStorage.setItem("pc_estab_view", view);
   }, [view]);
+  const searchTokens = useMemo(() => tokenizeQuery(q), [q]);
+  const sentinelRef = useRef<HTMLDivElement | null>(null);
+  // Carregamento incremental: revela mais itens quando o rodapé entra em tela.
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((en) => en.isIntersecting)) {
+          setVisibleCount((c) => c + PAGE_SIZE);
+        }
+      },
+      { rootMargin: "240px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [visibleCount, q, neighborhood, sort, kindFilter, view]);
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const heroOverlayOpacity = useAdaptiveOverlayOpacity(mercadosHero.url, { min: 0.6, max: 0.94 });
 
@@ -639,7 +662,24 @@ function EstablishmentsPage() {
       <main className="mx-auto w-full max-w-6xl px-4 md:px-6 pt-6 md:pt-8">
 
 
-        {isLoading && (
+        {isLoading && view === "list" && (
+          <div className="overflow-hidden rounded-xl border border-border/70">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className={`${LIST_GRID} border-b border-border/50 px-3 py-2.5 md:px-4`}>
+                <span className="h-3 w-4 animate-pulse rounded bg-muted" />
+                <span className="h-9 w-11 animate-pulse rounded-md bg-muted" />
+                <span className="h-3.5 w-2/3 animate-pulse rounded bg-muted" />
+                <span className="h-3 w-24 animate-pulse rounded bg-muted" />
+                <span className="ml-auto h-3 w-10 animate-pulse rounded bg-muted" />
+                <span className="ml-auto h-3 w-8 animate-pulse rounded bg-muted" />
+                <span className="ml-auto h-3 w-16 animate-pulse rounded bg-muted" />
+                <span />
+              </div>
+            ))}
+          </div>
+        )}
+
+        {isLoading && view === "cards" && (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <MarketEditorialCardSkeleton />
             <MarketEditorialCardSkeleton />
@@ -836,62 +876,139 @@ function EstablishmentsPage() {
                     </button>
                   </div>
                 ) : view === "list" ? (
-                <ul className="divide-y divide-border/60" aria-label="Lista de estabelecimentos">
-                  {visibleItems.map((e, idx) => {
-                    const tier = classifyTier(e.productsCount);
-                    const freshness = describeFreshness(e.lastUpdate);
-                    const dist = distanceById.get(e.id);
-                    return (
-                      <li key={e.id}>
-                        <Link
-                          to="/estabelecimento/$slug"
-                          params={{ slug: slugifyEstablishment(e.name) }}
-                          className="flex items-center gap-3 px-3 py-2.5 transition-colors hover:bg-muted/50 md:px-4"
-                        >
-                          <span className="w-6 shrink-0 text-right font-mono text-[12px] font-bold tabular-nums text-foreground/55">
-                            {String(idx + 1).padStart(2, "0")}
-                          </span>
-                          <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md border border-border/60 bg-white p-1">
-                            {e.logoUrl ? (
-                              <img src={e.logoUrl} alt="" loading="lazy" className="h-full w-full object-contain" />
-                            ) : (
-                              <span className="text-[11px] font-bold text-brand-navy">
-                                {e.name.substring(0, 2).toUpperCase()}
-                              </span>
-                            )}
-                          </span>
-                          <span className="min-w-0 flex-1">
+                <div className="overflow-x-auto">
+                  <div className="min-w-[680px]">
+                    {/* Cabeçalho tabular — colunas clicáveis para ordenar */}
+                    <div className={`${LIST_GRID} border-b border-border/60 bg-muted/40 px-3 py-2 text-[9.5px] font-bold uppercase tracking-[0.08em] text-foreground/70 md:px-4 [&>*]:truncate`}>
+                      <span className="text-right">#</span>
+                      <span aria-hidden />
+                      <button
+                        type="button"
+                        onClick={() => setSort("name")}
+                        className={`text-left uppercase tracking-[0.14em] transition-colors hover:text-foreground ${sort === "name" ? "text-[var(--pc-gold-ink)]" : ""}`}
+                      >
+                        Estabelecimento
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSort("neighborhood")}
+                        className={`text-left uppercase tracking-[0.14em] transition-colors hover:text-foreground ${sort === "neighborhood" ? "text-[var(--pc-gold-ink)]" : ""}`}
+                      >
+                        Bairro / Cidade
+                      </button>
+                      <button
+                        type="button"
+                        disabled={!loc.hasReference}
+                        onClick={() => setSort("distance")}
+                        className={`text-right uppercase tracking-[0.14em] transition-colors hover:text-foreground disabled:opacity-50 ${sort === "distance" ? "text-[var(--pc-gold-ink)]" : ""}`}
+                      >
+                        Distância
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSort("products")}
+                        className={`text-right uppercase tracking-[0.14em] transition-colors hover:text-foreground ${sort === "products" ? "text-[var(--pc-gold-ink)]" : ""}`}
+                      >
+                        Produtos
+                      </button>
+                      <span className="text-right">Atualização</span>
+                      <span aria-hidden />
+                    </div>
+
+                    <ul className="divide-y divide-border/60" aria-label="Lista de estabelecimentos">
+                      {visibleItems.map((e, idx) => {
+                        const tier = classifyTier(e.productsCount);
+                        const freshness = describeFreshness(e.lastUpdate);
+                        const dist = distanceById.get(e.id);
+                        const slug = slugifyEstablishment(e.name);
+                        const locality =
+                          [e.neighborhood, e.city].filter(Boolean).join(" · ") ||
+                          "Localização não informada";
+                        return (
+                          <li
+                            key={e.id}
+                            className={`${LIST_GRID} group px-3 py-2 transition-colors hover:bg-muted/50 md:px-4`}
+                          >
+                            <span className="text-right font-mono text-[12px] font-bold tabular-nums text-foreground/60">
+                              {String(idx + 1).padStart(2, "0")}
+                            </span>
+
+                            <Link
+                              to="/estabelecimento/$slug"
+                              params={{ slug }}
+                              title={`Abrir ${e.name}`}
+                              aria-label={`Abrir página de ${e.name}`}
+                              className="grid h-9 w-11 place-items-center overflow-hidden rounded-md border border-border/70 bg-white p-1 shadow-sm transition group-hover:border-brand-gold/70 group-hover:shadow"
+                            >
+                              {e.logoUrl ? (
+                                <img
+                                  src={e.logoUrl}
+                                  alt={`Logo ${e.name}`}
+                                  loading="lazy"
+                                  decoding="async"
+                                  className="h-full w-full object-contain object-center"
+                                />
+                              ) : (
+                                <span className="text-[11px] font-bold text-brand-navy">
+                                  {e.name.substring(0, 2).toUpperCase()}
+                                </span>
+                              )}
+                            </Link>
+
                             <span className="flex min-w-0 items-center gap-1.5">
-                              <span className="truncate text-[13.5px] font-semibold text-foreground">{e.name}</span>
+                              <Link
+                                to="/estabelecimento/$slug"
+                                params={{ slug }}
+                                title={e.name}
+                                className="truncate text-[13.5px] font-semibold text-foreground hover:text-[var(--pc-gold-ink)] hover:underline"
+                              >
+                                <HighlightMatch text={e.name} tokens={searchTokens} mode="loose" />
+                              </Link>
                               <span
+                                title={`Classificação por catálogo: ${tier.label}`}
                                 className="shrink-0 rounded-sm px-1 py-[1px] text-[8.5px] font-bold uppercase leading-none tracking-[0.14em]"
-                                style={{ backgroundColor: tier.color, color: "var(--brand-navy)" }}
+                                style={{
+                                  background: `color-mix(in oklab, ${tier.color} 16%, white)`,
+                                  color: `color-mix(in oklab, ${tier.color} 62%, black)`,
+                                }}
                               >
                                 {tier.label}
                               </span>
                             </span>
-                            <span className="mt-0.5 block truncate text-[11.5px] text-foreground/75">
-                              {[e.neighborhood, e.city].filter(Boolean).join(" · ") || "Localização não informada"}
-                              {dist ? ` · ${formatDistance(dist.km)}` : ""}
+
+                            <span className="min-w-0 truncate text-[12px] text-foreground/80" title={locality}>
+                              <HighlightMatch text={locality} tokens={searchTokens} mode="loose" />
                             </span>
-                          </span>
-                          <span className="hidden shrink-0 text-right sm:block">
-                            <span className="block font-mono text-[13px] font-bold tabular-nums text-foreground">
+
+                            <span
+                              className="text-right font-mono text-[12px] tabular-nums text-foreground/80"
+                              title={dist ? `Distância estimada: ${formatDistance(dist.km)}` : undefined}
+                            >
+                              {dist ? formatDistance(dist.km) : "—"}
+                            </span>
+
+                            <span className="text-right font-mono text-[13px] font-bold tabular-nums text-foreground">
                               {e.productsCount}
                             </span>
-                            <span className="block text-[10px] font-bold uppercase tracking-[0.12em] text-foreground/70">
-                              produtos
+
+                            <span className="text-right text-[11px] text-foreground/75" title={freshness.label}>
+                              {freshness.label}
                             </span>
-                          </span>
-                          <span className="hidden w-[104px] shrink-0 text-right text-[11px] text-foreground/75 md:block">
-                            {freshness.label}
-                          </span>
-                          <ChevronRight className="h-4 w-4 shrink-0 text-foreground/50" aria-hidden />
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
+
+                            <Link
+                              to="/estabelecimento/$slug"
+                              params={{ slug }}
+                              aria-label={`Ver detalhes de ${e.name}`}
+                              className="grid place-items-center text-foreground/50 transition-colors hover:text-[var(--pc-gold-ink)]"
+                            >
+                              <ChevronRight className="h-4 w-4" aria-hidden />
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                </div>
                 ) : (
                 <ul
                   className="grid grid-cols-1 gap-3 p-2.5 sm:grid-cols-2 md:p-4 lg:grid-cols-3"
@@ -933,6 +1050,7 @@ function EstablishmentsPage() {
                           maxSavings={e.maxSavings}
                           isCheapest={badgeIds.cheapestId === e.id}
                           isFeatured={badgeIds.featuredIds.has(e.id)}
+                          highlightTokens={searchTokens}
                           favoriteSlot={<FavoriteMarketButton marketName={e.name} />}
                         />
                       </li>
@@ -942,7 +1060,10 @@ function EstablishmentsPage() {
 
                 )}
                 {allFilteredItems.length > visibleItems.length && (
-                  <div className="flex flex-wrap items-center justify-center gap-2 border-t border-border/60 px-2.5 py-2 md:px-4 md:py-3">
+                  <div
+                    ref={sentinelRef}
+                    className="flex flex-wrap items-center justify-center gap-2 border-t border-border/60 px-2.5 py-2 md:px-4 md:py-3"
+                  >
                     <span className="text-[11px] text-muted-foreground md:text-[12px]">
                       {visibleItems.length} de {allFilteredItems.length}
                     </span>
