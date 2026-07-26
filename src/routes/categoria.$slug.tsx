@@ -350,10 +350,10 @@ function CategoryPage() {
                 <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
                   {visible.map((p) => (
                     <li key={p.key}>
-                      <Link
-                        to="/buscar"
-                        search={{ q: p.name } as never}
-                        className="flex h-full items-start gap-2.5 rounded-lg border border-border bg-card p-2.5 transition-colors hover:border-brand-gold"
+                      <button
+                        type="button"
+                        onClick={() => setQuickView(p)}
+                        className="flex h-full w-full items-start gap-2.5 rounded-lg border border-border bg-card p-2.5 text-left transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                       >
                         <StoreBadge name={p.cheapestStore} logoUrl={p.cheapestLogo} size="xs" />
                         <span className="min-w-0 flex-1">
@@ -368,47 +368,50 @@ function CategoryPage() {
                             {brl(p.minPrice)}
                           </span>
                         </span>
-                      </Link>
+                      </button>
                     </li>
                   ))}
                 </ul>
               ) : (
               <ul className="mt-2 divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
                 {visible.map((p) => (
-                  <li key={p.key} className="flex items-center gap-2.5 px-2.5 py-2">
-                    <StoreBadge name={p.cheapestStore} logoUrl={p.cheapestLogo} size="xs" />
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate text-[13px] font-semibold leading-tight">
-                        {p.name}
-                      </span>
-                      <span className="block truncate text-[11px] text-muted-foreground">
-                        {p.cheapestStore}
-                        {p.storeCount > 1 ? ` · ${p.storeCount} mercados` : ""}
-                        {p.unit ? ` · ${p.unit}` : ""}
-                      </span>
-                    </span>
-                    <span className="shrink-0 text-right">
-                      <span className="block text-[13.5px] font-bold tabular-nums text-foreground">
-                        {brl(p.minPrice)}
-                      </span>
-                      {p.storeCount > 1 && p.maxPrice > p.minPrice && (
-                        <span className="block text-[10.5px] tabular-nums text-muted-foreground">
-                          até {brl(p.maxPrice)}
-                        </span>
-                      )}
-                    </span>
-                    <Link
-                      to="/buscar"
-                      search={{ q: p.name } as never}
-                      aria-label={`Comparar ${p.name}`}
-                      className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-border text-brand-gold hover:border-brand-gold"
+                  <li key={p.key}>
+                    <button
+                      type="button"
+                      onClick={() => setQuickView(p)}
+                      aria-label={`Ver detalhes de ${p.name}`}
+                      className="flex w-full items-center gap-2.5 px-2.5 py-2 text-left transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
                     >
-                      <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-                    </Link>
+                      <StoreBadge name={p.cheapestStore} logoUrl={p.cheapestLogo} size="xs" />
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-[13px] font-semibold leading-tight">
+                          {p.name}
+                        </span>
+                        <span className="block truncate text-[11px] text-muted-foreground">
+                          {p.cheapestStore}
+                          {p.storeCount > 1 ? ` · ${p.storeCount} mercados` : ""}
+                          {p.unit ? ` · ${p.unit}` : ""}
+                        </span>
+                      </span>
+                      <span className="shrink-0 text-right">
+                        <span className="block text-[13.5px] font-bold tabular-nums text-foreground">
+                          {brl(p.minPrice)}
+                        </span>
+                        {p.storeCount > 1 && p.maxPrice > p.minPrice && (
+                          <span className="block text-[10.5px] tabular-nums text-muted-foreground">
+                            até {brl(p.maxPrice)}
+                          </span>
+                        )}
+                      </span>
+                      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-border text-brand-gold">
+                        <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+                      </span>
+                    </button>
                   </li>
                 ))}
               </ul>
               )}
+
               {view === "list" ? (
                 <Pagination
                   page={safePage}
