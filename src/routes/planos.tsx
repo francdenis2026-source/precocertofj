@@ -262,7 +262,7 @@ function PlansPage() {
                     </div>
 
                     <ul className="mt-3 flex-1 space-y-1.5 text-[12.5px] leading-snug">
-                      {planHighlights(plan.slug).map((h) => (
+                      {planHighlights(plan.slug).slice(0, 2).map((h) => (
                         <li key={h} className="flex items-start gap-1.5">
                           <Check
                             className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-gold"
@@ -272,6 +272,7 @@ function PlansPage() {
                         </li>
                       ))}
                     </ul>
+
 
                     <button
                       type="button"
