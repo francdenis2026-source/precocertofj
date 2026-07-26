@@ -708,14 +708,14 @@ function PriceHistorySheet({
 function StoreStat({ label, value, hint }: { label: string; value: string; hint?: string | null }) {
   return (
     <div className="min-w-0 px-3 py-1.5">
-      <dt className="text-[9.5px] font-semibold uppercase leading-none tracking-[0.14em] text-white/60">
+      <dt className="text-[9.5px] font-semibold uppercase leading-none tracking-[0.14em] text-white/70">
         {label}
       </dt>
       <dd className="mt-1 truncate text-[15px] font-bold leading-none tabular-nums text-brand-gold">
         {value}
       </dd>
       {hint ? (
-        <p className="mt-1 truncate text-[10.5px] leading-none text-white/55">{hint}</p>
+        <p className="mt-1 truncate text-[10.5px] leading-none text-white/75">{hint}</p>
       ) : null}
     </div>
   );
@@ -940,7 +940,7 @@ function ProductTile({
   onHistory: () => void;
 }) {
   return (
-    <article className="flex h-full flex-col justify-between rounded-lg border border-border bg-card transition-colors hover:border-brand-gold">
+    <article className="flex h-full flex-col justify-between rounded-lg border border-border bg-card shadow-[0_1px_2px_rgba(11,30,63,0.04)] transition-colors hover:border-brand-gold hover:bg-muted/30">
       <button
         type="button"
         onClick={onOpen}
