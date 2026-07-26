@@ -186,7 +186,15 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
       >();
       const uniqueProductNames = new Set<string>();
       for (const s of allScans) {
-        if (s.product_name) uniqueProductNames.add(s.product_name.trim().toLowerCase());
+        if (s.product_name)
+          uniqueProductNames.add(
+            s.product_name
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, "")
+              .toLowerCase()
+              .replace(/[^a-z0-9]+/g, " ")
+              .trim(),
+          );
 
         if (!s.establishment_id) continue;
         const cur = scansPerStore.get(s.establishment_id) ?? {
