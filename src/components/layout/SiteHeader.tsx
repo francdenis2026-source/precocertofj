@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
+import { ReadingModeToggle } from "@/components/layout/ReadingModeToggle";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/layout/BackButton";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
