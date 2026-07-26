@@ -117,7 +117,7 @@ function writePersistedFilters(f: PersistedFilters) {
 // Classificação por catálogo — sempre presente para consistência visual entre cards
 function classifyTier(productsCount: number): { label: string; color: string } {
   if (productsCount >= 200) return { label: "Ouro", color: "#c9a227" };
-  if (productsCount >= 60) return { label: "Prata", color: "#7c8895" };
+  if (productsCount >= 60) return { label: "Prata", color: "#5b6673" };
   if (productsCount >= 15) return { label: "Bronze", color: "#a97142" };
   return { label: "Novo", color: "#4b6cb7" };
 }
