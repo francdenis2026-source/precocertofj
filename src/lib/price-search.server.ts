@@ -226,40 +226,69 @@ export async function performPriceSearch(data: {
     brandColor: string | null;
   };
   const metaByName = new Map<string, EstabMeta>();
+  const metaKey = (n: string) =>
+    (n ?? "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9]+/g, " ")
+      .trim()
+      .toUpperCase();
+  const metaKeys: Array<[string, EstabMeta]> = [];
+  const getMeta = (n: string | null | undefined): EstabMeta | undefined => {
+    if (!n) return undefined;
+    const direct = metaByName.get(n.trim()) ?? metaByName.get(metaKey(n));
+    if (direct) return direct;
+    // Fallback: nome do scan contém (ou está contido em) o nome do estabelecimento
+    // ex.: "MERCEARIA ACOUGUE & PANIFICADORA DOCE DIA" → "DOCE DIA".
+    const key = metaKey(n);
+    let best: EstabMeta | undefined;
+    let bestLen = 0;
+    for (const [k, meta] of metaKeys) {
+      if (k.length < 5) continue;
+      if ((key.includes(k) || k.includes(key)) && k.length > bestLen) {
+        best = meta;
+        bestLen = k.length;
+      }
+    }
+    return best;
+  };
+
   if (marketNames.length > 0) {
     const { data: estabs } = await (supabaseAdmin as unknown as {
       from: (t: string) => {
-        select: (s: string) => {
-          in: (
-            c: string,
-            v: string[],
-          ) => Promise<{
-            data:
-              | Array<{
-                  id: string;
-                  name: string;
-                  kind: string | null;
-                  logo_url: string | null;
-                  brand_color: string | null;
-                }>
-              | null;
-            error: { message: string } | null;
-          }>;
-        };
+        select: (s: string) => Promise<{
+          data:
+            | Array<{
+                id: string;
+                name: string;
+                kind: string | null;
+                logo_url: string | null;
+                brand_color: string | null;
+              }>
+            | null;
+          error: { message: string } | null;
+        }>;
       };
     })
       .from("establishments")
-      .select("id, name, kind, logo_url, brand_color")
-      .in("name", marketNames);
+      .select("id, name, kind, logo_url, brand_color");
     for (const e of estabs ?? []) {
-      metaByName.set(e.name, {
+      const meta: EstabMeta = {
         id: e.id,
         kind: e.kind,
         logoUrl: e.logo_url,
         brandColor: e.brand_color,
-      });
+      };
+      metaByName.set(e.name, meta);
+      const key = metaKey(e.name);
+      const existing = metaByName.get(key);
+      // Prefere o registro que tem logo quando há nomes equivalentes.
+      if (!existing || (!existing.logoUrl && meta.logoUrl)) metaByName.set(key, meta);
+      if (meta.logoUrl) metaKeys.push([key, meta]);
     }
+
   }
+
 
   const prices = list.map((r) => Number(r.price_captured));
   let avg = Number((prices.reduce((a, b) => a + b, 0) / prices.length).toFixed(2));
@@ -295,7 +324,7 @@ export async function performPriceSearch(data: {
     if (!key) continue;
     const cur = byProduct.get(key) ?? { display: raw, rows: [] };
     const mn = (r.market_name ?? "").trim() || "—";
-    const meta = metaByName.get(mn);
+    const meta = getMeta(mn);
     cur.rows.push({
       marketName: mn,
       marketKind: meta?.kind ?? null,
@@ -374,7 +403,7 @@ export async function performPriceSearch(data: {
           .map((r) => {
             const mn = (r.market_name ?? "").trim();
             if (!mn) return null;
-            const meta = metaByName.get(mn);
+            const meta = getMeta(mn);
             return {
               marketName: mn,
               marketKind: meta?.kind ?? null,
@@ -408,7 +437,7 @@ export async function performPriceSearch(data: {
   }
   const markets: PriceSearchMarket[] = Array.from(byMarket.entries())
     .map(([marketName, v]) => {
-      const meta = metaByName.get(marketName);
+      const meta = getMeta(marketName);
       return {
         marketName,
         marketKind: meta?.kind ?? null,
@@ -451,7 +480,7 @@ export async function performPriceSearch(data: {
       return best;
     }, null);
     if (cheapestRow && cheapestRow.market_name) {
-      const meta = metaByName.get(cheapestRow.market_name.trim());
+      const meta = getMeta(cheapestRow.market_name.trim());
       cheapest = {
         marketName: cheapestRow.market_name,
         marketLogoUrl: meta?.logoUrl ?? null,
