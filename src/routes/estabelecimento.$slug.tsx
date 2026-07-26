@@ -320,40 +320,20 @@ function EstablishmentPage() {
         {tab === "catalogo" && (
           <>
             {data.categories.length > 0 && (
-              <nav aria-label="Filtrar por categoria" className="relative mt-2.5">
-                <div className="no-scrollbar -mx-3 overflow-x-auto px-3 sm:mx-0 sm:px-0">
-                  <div role="radiogroup" aria-label="Categorias" className="flex w-max gap-1.5 pr-6 sm:pr-0">
-                    <CategoryChip
-                      label="Todas"
-                      count={catalogProducts.length}
-                      active={selectedCategory === null}
-                      onClick={() => {
-                        setSelectedCategory(null);
-                        setLimit(30);
-                      }}
-                    />
-                    {data.categories.map((c) => (
-                      <CategoryChip
-                        key={c.key}
-                        label={c.label}
-                        count={c.count}
-                        active={selectedCategory === c.label}
-                        onClick={() => {
-                          setSelectedCategory(selectedCategory === c.label ? null : c.label);
-                          setLimit(30);
-                        }}
-                      />
-                    ))}
-                  </div>
-                </div>
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-background to-transparent sm:hidden"
-                />
-              </nav>
+              <CategoryRail
+                categories={[
+                  { key: "__all", label: "Todas", count: catalogProducts.length },
+                  ...data.categories,
+                ]}
+                activeLabel={selectedCategory}
+                onSelect={(label) => {
+                  setSelectedCategory(label === "Todas" ? null : label);
+                  setLimit(30);
+                }}
+              />
             )}
 
-            <div className="mt-2.5 flex flex-col gap-2 sm:flex-row">
+            <div className="mt-2.5 flex flex-col gap-2 sm:flex-row sm:items-center">
               <div className="relative flex-1">
                 <Search
                   className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
@@ -371,18 +351,22 @@ function EstablishmentPage() {
                   className="h-9 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13px] outline-none focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
                 />
               </div>
-              <select
-                value={sort}
-                onChange={(e) => setSort(e.target.value as SortKey)}
-                className="h-9 rounded-lg border border-border bg-background px-3 text-[12.5px] font-medium text-foreground transition-colors hover:border-brand-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50"
-                aria-label="Ordenar por"
-              >
-                {(Object.keys(SORT_LABEL) as SortKey[]).map((k) => (
-                  <option key={k} value={k}>
-                    {SORT_LABEL[k]}
-                  </option>
-                ))}
-              </select>
+              <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
+                <SelectTrigger
+                  aria-label="Ordenar por"
+                  className="h-9 w-full text-[12.5px] font-medium sm:w-[240px]"
+                >
+                  <SelectValue placeholder="Ordenar por" />
+                </SelectTrigger>
+                <SelectContent>
+                  {(Object.keys(SORT_LABEL) as SortKey[]).map((k) => (
+                    <SelectItem key={k} value={k} className="text-[12.5px]">
+                      {SORT_LABEL[k]}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <ViewToggle value={view} onChange={setView} />
             </div>
 
             <div className="mt-2.5 flex items-baseline justify-between gap-3">
@@ -397,17 +381,33 @@ function EstablishmentPage() {
 
             {filtered.length > 0 ? (
               <>
-                <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                  {filtered.slice(0, limit).map((p) => (
-                    <li key={p.slug}>
-                      <ProductTile
-                        product={p}
-                        onAlert={() => createAlert(p)}
-                        onHistory={() => setHistoryFor(p)}
-                      />
-                    </li>
-                  ))}
-                </ul>
+                {view === "grid" ? (
+                  <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                    {filtered.slice(0, limit).map((p) => (
+                      <li key={p.slug}>
+                        <ProductTile
+                          product={p}
+                          onOpen={() => setQuickView(p)}
+                          onAlert={() => createAlert(p)}
+                          onHistory={() => setHistoryFor(p)}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                ) : (
+                  <ul className="mt-2 divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
+                    {filtered.slice(0, limit).map((p) => (
+                      <li key={p.slug}>
+                        <ProductRow
+                          product={p}
+                          onOpen={() => setQuickView(p)}
+                          onAlert={() => createAlert(p)}
+                          onHistory={() => setHistoryFor(p)}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                )}
                 {filtered.length > limit && (
                   <button
                     type="button"
@@ -418,6 +418,7 @@ function EstablishmentPage() {
                   </button>
                 )}
               </>
+
             ) : (
               <EmptyState
                 className="mt-6"
