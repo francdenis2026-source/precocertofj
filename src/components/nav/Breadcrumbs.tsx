@@ -44,6 +44,8 @@ export function Breadcrumbs({
       <nav aria-label="Navegação" className="flex min-w-0 items-center gap-1.5 overflow-hidden">
         <a
           href="/"
+          aria-label="Início"
+          title="Ir para a página inicial"
           aria-current={pathname === "/" ? "page" : undefined}
           className="inline-flex items-center gap-1 rounded-full px-2 py-1 text-muted-foreground hover:bg-muted hover:text-foreground"
         >
