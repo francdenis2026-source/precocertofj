@@ -226,40 +226,51 @@ export async function performPriceSearch(data: {
     brandColor: string | null;
   };
   const metaByName = new Map<string, EstabMeta>();
+  const metaKey = (n: string) =>
+    (n ?? "")
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-zA-Z0-9]+/g, " ")
+      .trim()
+      .toUpperCase();
+  const getMeta = (n: string | null | undefined): EstabMeta | undefined => {
+    if (!n) return undefined;
+    return metaByName.get(n.trim()) ?? metaByName.get(metaKey(n));
+  };
   if (marketNames.length > 0) {
     const { data: estabs } = await (supabaseAdmin as unknown as {
       from: (t: string) => {
-        select: (s: string) => {
-          in: (
-            c: string,
-            v: string[],
-          ) => Promise<{
-            data:
-              | Array<{
-                  id: string;
-                  name: string;
-                  kind: string | null;
-                  logo_url: string | null;
-                  brand_color: string | null;
-                }>
-              | null;
-            error: { message: string } | null;
-          }>;
-        };
+        select: (s: string) => Promise<{
+          data:
+            | Array<{
+                id: string;
+                name: string;
+                kind: string | null;
+                logo_url: string | null;
+                brand_color: string | null;
+              }>
+            | null;
+          error: { message: string } | null;
+        }>;
       };
     })
       .from("establishments")
-      .select("id, name, kind, logo_url, brand_color")
-      .in("name", marketNames);
+      .select("id, name, kind, logo_url, brand_color");
     for (const e of estabs ?? []) {
-      metaByName.set(e.name, {
+      const meta: EstabMeta = {
         id: e.id,
         kind: e.kind,
         logoUrl: e.logo_url,
         brandColor: e.brand_color,
-      });
+      };
+      metaByName.set(e.name, meta);
+      const key = metaKey(e.name);
+      const existing = metaByName.get(key);
+      // Prefere o registro que tem logo quando há nomes equivalentes.
+      if (!existing || (!existing.logoUrl && meta.logoUrl)) metaByName.set(key, meta);
     }
   }
+
 
   const prices = list.map((r) => Number(r.price_captured));
   let avg = Number((prices.reduce((a, b) => a + b, 0) / prices.length).toFixed(2));
