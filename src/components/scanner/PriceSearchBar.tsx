@@ -1638,8 +1638,9 @@ function ProductGroupCard({
 
   return (
     <div className="pc-res-card relative">
-      <div className="mb-1 flex items-start justify-between gap-2">
-        <div className="min-w-0 flex-1">
+      <div className="mb-1.5 flex flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
+        <div className="min-w-0 flex-1 order-1">
+
           <p className="pc-res-title truncate">
             <HighlightMatch text={productName} tokens={highlightTokens} />
           </p>
