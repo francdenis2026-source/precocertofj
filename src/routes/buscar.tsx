@@ -12,6 +12,8 @@ import { useSession } from "@/hooks/useSession";
 import { trackEvent } from "@/lib/analytics-events";
 import { RouteError } from "@/components/feedback";
 import { SearchDiscovery, pushRecentSearch } from "@/components/search/SearchDiscovery";
+import { SearchHighlights } from "@/components/search/SearchHighlights";
+
 import { SearchSidebar } from "@/components/search/SearchSidebar";
 import {
   clearSearchHistory,
@@ -392,6 +394,9 @@ function SearchPage() {
             />
 
             {!hasQuery && <SearchDiscovery onPickQuery={pickQuery} />}
+
+            {!hasQuery && <SearchHighlights onPickQuery={pickQuery} />}
+
 
             {hasQuery && !user && <SignupCTA context="save-comparison" />}
           </div>
