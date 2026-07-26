@@ -99,11 +99,16 @@ function ButcherPage() {
 
         {cuts.length > 0 ? (
           <>
-            <ButcherCounter storeName={data.store.name} cuts={cuts} />
-            <div className="mt-10">
+            <ButcherCounter
+              storeName={data.store.name}
+              cuts={cuts}
+              onOpen={(p) => setQuickView(p)}
+            />
+            <div className="mt-8">
               <PreparoDicas />
             </div>
           </>
+
         ) : (
           <EmptyState
             className="mt-10"
