@@ -23,7 +23,7 @@ type LocalFile = {
 const MAX_FILES = 10;
 const MAX_SIZE_MB = 8;
 
-export function CollaboratorUploadForm() {
+export function CollaboratorUploadForm({ embedded = false }: { embedded?: boolean } = {}) {
   const { session } = useMyProfile();
   const userId = session?.user?.id;
   const submitFn = useServerFn(createCollaboratorSubmission);
@@ -145,24 +145,29 @@ export function CollaboratorUploadForm() {
   return (
     <section
       aria-labelledby="upload-title"
-      className="mt-8 rounded-2xl border border-primary/25 bg-gradient-to-br from-primary/8 via-card to-background p-5 md:p-6"
+      className={
+        embedded
+          ? ""
+          : "mt-6 rounded-xl border border-border bg-card p-4 shadow-elev-1 md:p-5"
+      }
     >
-      <div className="flex items-start justify-between gap-3">
-        <div>
+      {!embedded && (
+        <div className="mb-3">
           <h2
             id="upload-title"
-            className="flex items-center gap-2 font-display text-[20px] font-bold tracking-tight text-foreground"
+            className="flex items-center gap-2 text-[15.5px] font-semibold tracking-tight text-foreground"
           >
-            <Upload className="h-5 w-5 text-primary" strokeWidth={2.4} />
+            <Upload className="h-4 w-4 text-brand-gold" strokeWidth={2.2} />
             Enviar direto pelo app
           </h2>
-          <p className="mt-1 text-[13px] text-muted-foreground">
-            Suas fotos são anexadas ao envio e revisadas pelo administrador — sem precisar abrir o e-mail.
+          <p className="mt-0.5 text-[12.5px] leading-snug text-muted-foreground">
+            Suas fotos são anexadas ao envio e revisadas pela equipe — sem precisar abrir o e-mail.
           </p>
         </div>
-      </div>
+      )}
 
-      <div className="mt-4 grid gap-3 md:grid-cols-2">
+      <div className="grid gap-3 md:grid-cols-2">
+
         <div>
           <Label htmlFor="collab-market">Mercado / estabelecimento *</Label>
           <Input
