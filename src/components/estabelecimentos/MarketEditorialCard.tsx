@@ -138,16 +138,16 @@ export function MarketEditorialCard({
                 </span>
               )}
               <span
-                className="shrink-0 rounded-full border px-1.5 py-[1px] text-[9px] font-bold uppercase leading-none tracking-[0.1em]"
+                className="shrink-0 rounded-full border px-1.5 py-[1px] text-[9px] font-bold uppercase leading-none tracking-[0.1em] text-foreground/85"
                 style={{
-                  background: `color-mix(in oklab, ${tierColor} 13%, transparent)`,
-                  borderColor: `color-mix(in oklab, ${tierColor} 42%, transparent)`,
-                  color: `color-mix(in oklab, ${tierColor} 60%, black)`,
+                  background: `color-mix(in oklab, ${tierColor} 16%, transparent)`,
+                  borderColor: `color-mix(in oklab, ${tierColor} 45%, transparent)`,
                 }}
                 title={`Preços cadastrados: ${tierLabel}`}
               >
                 {tierLabel}
               </span>
+
               {isCheapest ? (
                 <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-brand-gold px-1.5 py-[1px] text-[9px] font-bold uppercase leading-none tracking-[0.1em] text-brand-navy">
                   <PiggyBank className="h-2.5 w-2.5" aria-hidden /> Mais barato
