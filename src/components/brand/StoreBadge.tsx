@@ -145,10 +145,11 @@ export function StoreBadge({
 
     <span
       className={cn(
-        "inline-flex shrink-0 items-center justify-center rounded-full font-mono font-bold",
+        "inline-flex shrink-0 items-center justify-center rounded-lg font-mono font-bold",
         dim,
         className,
       )}
+
       style={{ backgroundColor: color, color: readableTextOn(color) }}
       aria-hidden
       title={name}
