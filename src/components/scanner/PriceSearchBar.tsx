@@ -1822,6 +1822,8 @@ function MarketGroupedResults({
     productName: string;
     catalogId: string | null;
     price: PricePoint;
+    /** Este mercado tem o menor preço da plataforma para este produto. */
+    isBest: boolean;
   };
   type Bucket = {
     marketName: string;
@@ -1830,8 +1832,15 @@ function MarketGroupedResults({
     kind: string | null;
     minPrice: number;
     maxPrice: number;
+    /** Nº de produtos em que este mercado tem o menor preço. */
+    bestCount: number;
+    /** Soma de (preço mais caro − preço daqui) nos produtos comparáveis. */
+    savings: number;
+    /** Soma de (preço daqui − melhor preço) nos produtos comparáveis. */
+    gapToBest: number;
     rows: Row[];
   };
+
 
   const [marketPage, setMarketPage] = useState(4);
   const [onlyMarket, setOnlyMarket] = useState<string | null>(null);
