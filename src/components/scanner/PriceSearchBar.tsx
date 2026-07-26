@@ -1448,8 +1448,11 @@ function scoreRelevance(g: ProductGroup, query: string): number {
 
 function sortPrices(prices: PricePoint[], mode: SortMode, productName?: string): PricePoint[] {
   const arr = [...prices];
+  // Empate de preço → o preço coletado mais recentemente vem primeiro.
+  const byRecency = (a: PricePoint, b: PricePoint) =>
+    new Date(b.when).getTime() - new Date(a.when).getTime();
   if (mode === "cheapest" || mode === "relevance" || mode === "savings")
-    arr.sort((a, b) => a.price - b.price);
+    arr.sort((a, b) => a.price - b.price || byRecency(a, b));
   else if (mode === "unit") {
     // Ordena por preço unitário normalizado (R$/kg ou R$/L). Itens sem
     // tamanho detectável ficam no fim, mantendo a ordem por menor preço.
@@ -1460,17 +1463,19 @@ function sortPrices(prices: PricePoint[], mode: SortMode, productName?: string):
     arr.sort((a, b) => {
       const ua = perBase(a);
       const ub = perBase(b);
-      if (ua === ub) return a.price - b.price;
+      if (ua === ub) return a.price - b.price || byRecency(a, b);
       return ua - ub;
     });
   } else if (mode === "recent")
-    arr.sort((a, b) => new Date(b.when).getTime() - new Date(a.when).getTime());
+    arr.sort((a, b) => byRecency(a, b) || a.price - b.price);
   else if (mode === "kind")
     arr.sort(
       (a, b) =>
         (a.marketKind ?? "zzz").localeCompare(b.marketKind ?? "zzz") ||
-        a.price - b.price,
+        a.price - b.price ||
+        byRecency(a, b),
     );
+
   else if (mode === "spread") {
     // "Menor variação" — na lista de preços de um grupo, isso equivale a
     // ordenar do preço mais próximo da mediana para o mais distante, útil
