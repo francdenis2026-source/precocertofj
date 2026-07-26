@@ -209,20 +209,19 @@ export function MetricSpotlightDialog({
         {/* ===== FOOTER fixo ===== */}
         <div className="flex shrink-0 items-center justify-between gap-2 border-t border-border bg-card px-3 py-2 sm:px-4">
           <span className="flex min-w-0 items-center gap-1.5 truncate text-[10.5px] text-muted-foreground">
-            <Clock className="h-3 w-3 shrink-0" />
-            {data?.totals.lastUpdate
-              ? `${relTime(data.totals.lastUpdate)} · ${num(data.totals.scans7d)} preços/7d`
-              : "carregando dados…"}
+            <ShieldCheck className="h-3 w-3 shrink-0" />
+            Dados colaborativos de Feijó/AC
           </span>
           <Link
             to={kind === "markets" ? "/estabelecimentos" : kind === "products" ? "/buscar" : "/comparador"}
             onClick={() => onOpenChange(false)}
-            className="inline-flex shrink-0 items-center gap-1 rounded-lg px-2.5 py-1.5 text-[11.5px] font-bold text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="pc-metric-link inline-flex shrink-0 items-center gap-1 rounded-lg px-2.5 py-1.5 text-[11.5px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2"
           >
             {kind === "markets" ? "Ver mercados" : kind === "products" ? "Ver catálogo" : "Comparador"}
             <ArrowRight className="h-3.5 w-3.5" />
           </Link>
         </div>
+
       </DialogContent>
     </Dialog>
   );
