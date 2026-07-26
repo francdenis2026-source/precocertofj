@@ -3399,8 +3399,11 @@ export type Database = {
         Args: never
         Returns: {
           active_comparisons: number
+          avg_savings: number
           establishments: number
           price_drops_7d: number
+          total_savings: number
+          unique_products: number
         }[]
       }
       reactivate_checkout_order: {
