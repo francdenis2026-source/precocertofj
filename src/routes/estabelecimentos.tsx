@@ -783,7 +783,7 @@ function EstablishmentsPage() {
                       </Select>
                     </div>
                   </div>
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/50 px-2.5 py-2 md:px-3.5">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/50 py-2">
                     <LocationControl loc={loc} variant="surface" />
                     <div className="flex items-center gap-2">
                       <div
