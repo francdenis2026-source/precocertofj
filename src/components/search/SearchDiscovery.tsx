@@ -38,29 +38,18 @@ const POPULAR: string[] = [
   "açúcar refinado",
 ];
 
-const RECENT_KEY = "search:recent-queries";
-
+/**
+ * Fonte única do histórico: `@/lib/search-history`. Para visitantes anônimos o
+ * histórico vive apenas em memória (limpa ao atualizar a página).
+ */
 function readRecent(): string[] {
-  try {
-    const raw = window.localStorage.getItem(RECENT_KEY);
-    if (!raw) return [];
-    const arr = JSON.parse(raw);
-    return Array.isArray(arr) ? arr.filter((x) => typeof x === "string").slice(0, 8) : [];
-  } catch {
-    return [];
-  }
+  return getSearchHistory().map((e) => e.query);
 }
 
 export function pushRecentSearch(q: string) {
   const term = q.trim();
   if (!term || term.length < 2) return;
-  try {
-    const cur = readRecent().filter((x) => x.toLowerCase() !== term.toLowerCase());
-    const next = [term, ...cur].slice(0, 8);
-    window.localStorage.setItem(RECENT_KEY, JSON.stringify(next));
-  } catch {
-    /* ignore */
-  }
+  pushSearchHistory(term);
   try {
     void import("@/lib/analytics-events").then(({ trackEvent }) => {
       trackEvent("search_query", { q: term.toLowerCase().slice(0, 60) });
@@ -69,6 +58,8 @@ export function pushRecentSearch(q: string) {
     /* ignore */
   }
 }
+
+
 
 
 type Props = {
