@@ -729,7 +729,7 @@ export function PriceSearchBar({
                 <button
                   type="button"
                   onClick={() => {
-                    const term = normalizeInput(inputValue).trim();
+                    const term = normalizeInput(inputRef.current?.value ?? query).trim();
                     if (term.length >= 2) runQuery(term);
                   }}
                   className="pc-res-store inline-flex h-9 items-center gap-1.5 rounded-full border border-[color-mix(in_oklab,var(--brand-gold)_55%,transparent)] bg-[color-mix(in_oklab,var(--brand-gold)_14%,transparent)] px-3.5 font-semibold text-[var(--pc-gold-ink)] transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50"
