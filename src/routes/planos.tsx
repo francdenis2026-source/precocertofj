@@ -122,7 +122,16 @@ const FAQ = [
     q: "Posso trocar de plano depois?",
     a: "Sim. Ative um novo código a qualquer momento e o novo período soma ao acesso atual.",
   },
+  {
+    q: "Quem pode usar a IA e quantas análises tenho por mês?",
+    a: "O Scan Inteligente (leitura de nota, etiqueta e embalagem por foto) é exclusivo dos planos pagos: 30 análises/mês no Essencial, 150 no Trimestral e Anual e 600 no plano Comércio/Fundador. O plano de degustação não inclui IA. A cota renova todo mês e o saldo aparece no seu perfil.",
+  },
+  {
+    q: "E se eu precisar de mais análises?",
+    a: "Você compra um pacote avulso de 50 análises por R$ 9,90, válido por 12 meses e cumulativo com a cota do plano. Mercados parceiros que catalogam vitrine inteira usam o plano Comércio, com cataloga\u00e7\u00e3o em lote e prioridade de processamento.",
+  },
 ];
+
 
 function PlansPage() {
   const navigate = useNavigate();
