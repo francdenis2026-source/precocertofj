@@ -682,7 +682,7 @@ function HomePage() {
               <button
                 key={c.key}
                 type="button"
-                onClick={() => navigate({ to: "/buscar", search: { q: c.q } as any })}
+                onClick={() => navigate({ to: "/categoria/$slug", params: { slug: c.key } })}
                 aria-label={`Pesquisar em ${c.full}`}
                 className="group flex min-h-[64px] flex-col items-center justify-center gap-1.5 rounded-2xl border px-1.5 py-2.5 text-center transition-all active:scale-[0.97] hover:-translate-y-px hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent sm:flex-row sm:justify-start sm:gap-3 sm:px-3 sm:py-2.5 sm:text-left"
                 style={{

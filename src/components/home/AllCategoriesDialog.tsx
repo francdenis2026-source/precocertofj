@@ -72,7 +72,7 @@ export function AllCategoriesDialog({
 
   const go = (c: Cat) => {
     onOpenChange(false);
-    navigate({ to: "/buscar", search: { q: c.q, categoria: c.slug } as never });
+    navigate({ to: "/categoria/$slug", params: { slug: c.slug } });
   };
 
   return (
