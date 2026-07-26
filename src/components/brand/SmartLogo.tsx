@@ -97,8 +97,11 @@ export function SmartLogoImage({
   premium3d = false,
   targetFill = 0.94,
   className,
+  eager = true,
 }: Pick<SmartLogoProps, "src" | "name" | "premium3d" | "targetFill"> & {
   className?: string;
+  /** Carrega imediatamente (padrão) — evita tiles vazios acima/perto da dobra. */
+  eager?: boolean;
 }) {
   const { presentation, ready } = useLogoPresentation(src, { targetFill });
   if (!src) return null;
@@ -107,7 +110,8 @@ export function SmartLogoImage({
     <img
       src={src}
       alt={`Logomarca ${name}`}
-      loading="lazy"
+      loading={eager ? "eager" : "lazy"}
+      fetchPriority={eager ? "high" : "auto"}
       decoding="async"
       className={cn(
         "max-h-full max-w-full object-contain transition-[opacity,transform] duration-300",
@@ -117,7 +121,7 @@ export function SmartLogoImage({
         transform: `translate(${presentation.offsetX}%, ${presentation.offsetY}%) scale(${presentation.scale})`,
         opacity: ready ? 1 : 0.9,
         filter: premium3d
-          ? "drop-shadow(0 1px 0 rgba(255,255,255,0.85)) drop-shadow(0 2px 3px rgba(15,23,42,0.28))"
+          ? "drop-shadow(0 1px 1px rgba(15,23,42,0.16))"
           : undefined,
       }}
     />

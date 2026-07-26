@@ -186,7 +186,7 @@ const PLATE_BG =
   "linear-gradient(168deg, #fdfefe 0%, #f1f5fa 46%, #e4ebf4 100%)";
 
 export const PartnerTile = forwardRef<HTMLAnchorElement, PartnerTileProps>(
-  function PartnerTile({ item, defaultHref, premium3d = true }, ref) {
+  function PartnerTile({ item, defaultHref, premium3d = false }, ref) {
     const href = item.href ?? defaultHref ?? "/estabelecimentos";
     const hasLogo = Boolean(item.logoUrl);
     // Marca de tinta clara → dispensa placa (o logo respira sobre o painel).
@@ -234,12 +234,13 @@ export const PartnerTile = forwardRef<HTMLAnchorElement, PartnerTileProps>(
         }
       >
         {hasLogo ? (
-          <span className="relative flex h-[86%] w-[94%] items-center justify-center overflow-hidden">
+          <span className="relative flex h-[86%] w-[94%] min-h-[34px] items-center justify-center overflow-hidden">
             <SmartLogoImage
               src={item.logoUrl}
               name={item.name}
-              premium3d={premium3d && needsPlate}
+              premium3d={false}
               targetFill={0.96}
+              eager
               className="group-hover:brightness-[1.03]"
 
             />
