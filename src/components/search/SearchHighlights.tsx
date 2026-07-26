@@ -1,18 +1,50 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowRight, Store, TrendingDown } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { ArrowRight, PlusCircle, Search, Sparkles, Store, TrendingDown } from "lucide-react";
 import { getSearchHighlights, type HighlightItem } from "@/lib/search-highlights.functions";
 import { humanizeCategory } from "@/lib/establishments-public.functions";
 import { QuickFilterBar } from "@/components/search/QuickFilterBar";
+import { useSession } from "@/hooks/useSession";
+import { getSearchHistory } from "@/lib/search-history";
+import { listFavoriteItems } from "@/lib/favorites.functions";
 
 const brl = (n: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n);
 
-type View = "economia" | "cobertura";
+const norm = (s: string) =>
+  s
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase();
+
+const STOP = new Set([
+  "de",
+  "da",
+  "do",
+  "com",
+  "sem",
+  "para",
+  "kg",
+  "ml",
+  "un",
+  "por",
+  "pct",
+  "und",
+]);
+
+function tokens(text: string): string[] {
+  return norm(text)
+    .split(/[^a-z0-9]+/)
+    .filter((t) => t.length >= 3 && !STOP.has(t));
+}
+
+type View = "economia" | "cobertura" | "para-voce";
 
 type Props = {
   onPickQuery: (q: string) => void;
 };
+
 
 /**
  * Descoberta com dados reais em `/buscar`. Alterna entre economias (maior
