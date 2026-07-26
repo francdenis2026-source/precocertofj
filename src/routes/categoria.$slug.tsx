@@ -272,8 +272,9 @@ function CategoryPage() {
                   </Link>
                   {slug === "acougues" && !s.isNicheStore && (
                     <Link
-                      to="/estabelecimento/$slug/acougue"
+                      to="/estabelecimento/$slug"
                       params={{ slug: s.slug }}
+                      search={{ aba: "acougue" } as never}
                       className="mt-1 inline-flex h-7 items-center gap-1 rounded-full border border-border px-2.5 text-[11px] font-semibold text-foreground hover:border-brand-gold"
                     >
                       <Beef className="h-3 w-3 text-brand-gold" aria-hidden /> Ver açougue do mercado
