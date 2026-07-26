@@ -33,8 +33,11 @@ export interface MarketEditorialCardProps {
   rank?: number;
   /** Tokens da busca — destacados no nome/localidade. */
   highlightTokens?: string[];
+  /** Card acima da dobra: carrega a logo imediatamente. */
+  priority?: boolean;
   className?: string;
 }
+
 
 const PLATE_BG =
   "radial-gradient(120% 120% at 50% 0%, #ffffff 0%, #f3f6fb 62%, #e9eef7 100%)";
