@@ -25,7 +25,9 @@ import {
 import { BackButton } from "@/components/layout/BackButton";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 
-import { Filter, Search, SlidersHorizontal, X } from "lucide-react";
+import { useReducedMotion } from "@/lib/reduced-motion";
+import { Filter, Search, SlidersHorizontal, Sparkles, X } from "lucide-react";
+
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
@@ -77,6 +79,8 @@ function SearchPage() {
   const { user, loading } = useSession();
   const urlSyncTimer = useRef<number | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const { reducedMotion, toggleReducedMotion } = useReducedMotion();
+
 
   const mode: SearchMode = search.mode === "loose" ? "loose" : "strict";
   const pureOnly = search.pure !== "0";
@@ -165,13 +169,18 @@ function SearchPage() {
     }
   }, [navigate]);
 
+  // Filtros também sincronizam com `replace: true`: nunca empilham histórico
+  // nem provocam remontagem/piscada da rota entre alternâncias.
   const chooseMode = (m: SearchMode) => {
     try {
       window.localStorage.setItem(STORAGE_KEY, m);
     } catch {
       /* ignore */
     }
-    navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, mode: m }) });
+    navigate({
+      search: (prev: Record<string, unknown>) => ({ ...prev, mode: m }),
+      replace: true,
+    });
   };
 
   const setPure = (next: boolean) => {
@@ -182,8 +191,10 @@ function SearchPage() {
     }
     navigate({
       search: (prev: Record<string, unknown>) => ({ ...prev, pure: next ? "1" : "0" }),
+      replace: true,
     });
   };
+
 
   const clearBrand = () =>
     navigate({
@@ -354,7 +365,11 @@ function SearchPage() {
 
 
   return (
-    <div className="pc-search-scope flex min-h-[100svh] flex-col bg-background text-foreground">
+    <div
+      data-reduced-motion={reducedMotion ? "on" : "off"}
+      className={`pc-search-scope flex min-h-[100svh] flex-col bg-background text-foreground${reducedMotion ? " pc-reduce-motion" : ""}`}
+    >
+
       {/* BARRA DE COMANDO — sticky, uma linha, sem desperdício vertical */}
       <header className="sticky top-0 z-30 border-b border-border/70 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div
@@ -380,8 +395,21 @@ function SearchPage() {
                 text={`Veja preços comparados de "${q}" no PreçoCerto`}
               />
             )}
+            <button
+              type="button"
+              onClick={toggleReducedMotion}
+              aria-pressed={reducedMotion}
+              title="Reduzir animações desta tela"
+              className="inline-flex h-7 items-center gap-1 rounded-full border border-border px-2 text-[11px] font-semibold text-muted-foreground hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold aria-pressed:border-brand-gold aria-pressed:text-[var(--pc-gold-ink)]"
+            >
+              <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+              <span className="hidden sm:inline">
+                {reducedMotion ? "Animações reduzidas" : "Reduzir animações"}
+              </span>
+            </button>
             <FreeQuotaBadge variant="inline" />
           </div>
+
         </div>
       </header>
 
