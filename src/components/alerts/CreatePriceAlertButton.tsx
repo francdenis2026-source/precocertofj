@@ -39,20 +39,42 @@ export function CreatePriceAlertButton({
   productName,
   displayName,
   defaultEstablishmentId,
+  defaultDirection = "drop",
+  defaultThresholdPct = 5,
+  defaultTargetPrice,
+  categoryLabel,
+  triggerLabel = "Criar alerta",
+  triggerClassName,
+  compact = false,
 }: {
   productKey?: string;
   productName?: string;
   displayName?: string;
   defaultEstablishmentId?: string | null;
+  /** Direção pré-selecionada do alerta. */
+  defaultDirection?: AlertDirection;
+  /** Sensibilidade/frequência pré-selecionada (em % de variação). */
+  defaultThresholdPct?: number;
+  /** Preço-alvo sugerido (ex.: melhor preço atual do produto). */
+  defaultTargetPrice?: number | null;
+  /** Categoria do produto, exibida como contexto no diálogo. */
+  categoryLabel?: string | null;
+  triggerLabel?: string;
+  triggerClassName?: string;
+  /** Gatilho enxuto (chip) para uso dentro de cards de resultado. */
+  compact?: boolean;
 }) {
   const create = useServerFn(createAlertSubscription);
   const listStores = useServerFn(listPublicStores);
   const getAccount = useServerFn(getMyAccount);
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
-  const [direction, setDirection] = useState<AlertDirection>("drop");
-  const [thresholdPct, setThresholdPct] = useState<string>("5");
-  const [targetPrice, setTargetPrice] = useState<string>("");
+  const [direction, setDirection] = useState<AlertDirection>(defaultDirection);
+  const [thresholdPct, setThresholdPct] = useState<string>(String(defaultThresholdPct));
+  const [targetPrice, setTargetPrice] = useState<string>(
+    defaultTargetPrice != null ? String(defaultTargetPrice.toFixed(2)) : "",
+  );
+
   const [establishmentId, setEstablishmentId] = useState<string>(
     defaultEstablishmentId ?? "any",
   );
@@ -111,20 +133,35 @@ export function CreatePriceAlertButton({
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm" variant="outline" className="gap-1.5">
-          <Bell className="h-3.5 w-3.5" />
-          Criar alerta
-        </Button>
+        {compact ? (
+          <button
+            type="button"
+            className={
+              triggerClassName ??
+              "inline-flex h-6 items-center gap-1 rounded-full border border-[color-mix(in_oklab,var(--brand-gold)_45%,transparent)] bg-background px-2 text-[10.5px] font-semibold text-[var(--pc-gold-ink)] transition hover:bg-[color-mix(in_oklab,var(--brand-gold)_12%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50"
+            }
+          >
+            <Bell className="h-3 w-3" aria-hidden="true" />
+            {triggerLabel}
+          </button>
+        ) : (
+          <Button size="sm" variant="outline" className={triggerClassName ?? "gap-1.5"}>
+            <Bell className="h-3.5 w-3.5" />
+            {triggerLabel}
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>Alerta de variação</DialogTitle>
           <DialogDescription>
             Avisamos quando o preço de{" "}
-            <strong>{displayName ?? productName ?? "este produto"}</strong>{" "}
+            <strong>{displayName ?? productName ?? "este produto"}</strong>
+            {categoryLabel ? ` (${categoryLabel})` : ""}{" "}
             variar acima do limite escolhido.
           </DialogDescription>
         </DialogHeader>
+
 
         <div className="space-y-3">
           <div>
@@ -145,6 +182,34 @@ export function CreatePriceAlertButton({
               </SelectContent>
             </Select>
           </div>
+          <div>
+            <Label className="text-[11px] uppercase tracking-widest text-muted-foreground">
+              Frequência dos avisos
+            </Label>
+            <Select
+              value={
+                Number(thresholdPct) <= 1
+                  ? "1"
+                  : Number(thresholdPct) <= 5
+                    ? "5"
+                    : Number(thresholdPct) <= 10
+                      ? "10"
+                      : "15"
+              }
+              onValueChange={setThresholdPct}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">Toda variação (a partir de 1%)</SelectItem>
+                <SelectItem value="5">Variações relevantes (5%)</SelectItem>
+                <SelectItem value="10">Só variações fortes (10%)</SelectItem>
+                <SelectItem value="15">Apenas grandes variações (15%)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           <div className="grid grid-cols-2 gap-2">
             <div>
               <Label className="text-[11px] uppercase tracking-widest text-muted-foreground">

@@ -14,6 +14,8 @@ import {
 
 import { Clock, Crown, Search, ShoppingBag, Sparkles, X } from "lucide-react";
 import { FairPriceBadge } from "@/components/product/FairPriceBadge";
+import { CreatePriceAlertButton } from "@/components/alerts/CreatePriceAlertButton";
+
 import { HighlightMatch } from "@/components/search/HighlightMatch";
 import { AnchoredDropdown } from "@/components/search/AnchoredDropdown";
 import { MatchReasonBadges } from "@/components/search/MatchReasonBadges";
@@ -158,6 +160,16 @@ export function PriceSearchBar({
     },
   );
   const [kindFilter, setKindFilter] = useState<string | null>(null);
+  /**
+   * Filtro de disponibilidade: não há campo de estoque na base, então usamos a
+   * recência da coleta como melhor proxy disponível ("preço visto há ≤ X dias").
+   */
+  const [freshness, setFreshness] = useLocalStorageState<"all" | "30" | "7">(
+    "search:freshness",
+    "all",
+    { validate: (v): v is "all" | "30" | "7" => v === "all" || v === "30" || v === "7" },
+  );
+
   const [categoryFilter, setCategoryFilter] = useLocalStorageState<string | null>(
     "search:category-filter",
     null,
@@ -1017,8 +1029,29 @@ export function PriceSearchBar({
                     catByName.set(s.displayName.toLowerCase(), s.category);
                   }
                 }
+                // Disponibilidade: mantém só preços coletados dentro da janela
+                // escolhida e recalcula as estatísticas do grupo.
+                const maxAgeDays = freshness === "all" ? null : Number(freshness);
+                const visibleGroups =
+                  maxAgeDays == null
+                    ? result.groups
+                    : result.groups
+                        .map((g) => {
+                          const prices = g.prices.filter((p) => daysSince(p.when) <= maxAgeDays);
+                          if (prices.length === 0) return null;
+                          const vals = prices.map((p) => p.price);
+                          return {
+                            ...g,
+                            prices,
+                            samples: prices.length,
+                            min: Math.min(...vals),
+                            max: Math.max(...vals),
+                            avg: vals.reduce((s, v) => s + v, 0) / vals.length,
+                          };
+                        })
+                        .filter((g): g is ProductGroup => g !== null);
                 const buckets = new Map<string, typeof result.groups>();
-                for (const g of result.groups) {
+                for (const g of visibleGroups) {
                   const cat =
                     (g.catalogId && catByCatalog.get(g.catalogId)) ||
                     catByName.get(g.productName.toLowerCase()) ||
@@ -1027,6 +1060,7 @@ export function PriceSearchBar({
                   arr.push(g);
                   buckets.set(cat, arr);
                 }
+
                 const availableCategories = Array.from(buckets.keys()).sort();
                 // Ordena buckets por MENOR preço mínimo (mais barato primeiro),
                 // depois por relevância (tamanho do grupo). Isso destaca as
@@ -1060,10 +1094,28 @@ export function PriceSearchBar({
                       onCategory={setCategoryFilter}
                       groupBy={groupBy}
                       onGroupBy={setGroupBy}
+                      freshness={freshness}
+                      onFreshness={setFreshness}
                     />
 
+                    {result.groups.length > 0 && visibleGroups.length === 0 ? (
+                      <div className="pc-res-card mt-2">
+                        <p className="pc-res-title">Nenhum preço nessa janela de tempo</p>
+                        <p className="pc-res-meta mt-1">
+                          Não há preços coletados nos últimos {maxAgeDays} dias para esta busca.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => setFreshness("all")}
+                          className="pc-res-label mt-2 rounded-full border border-border bg-background px-2.5 py-1 text-foreground hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)]"
+                        >
+                          Mostrar todos os períodos
+                        </button>
+                      </div>
+                    ) : null}
 
-                    {groupBy === "market" && result.groups.length > 0 ? (
+                    {groupBy === "market" && visibleGroups.length > 0 ? (
+
                       <MarketGroupedResults
                         groups={filteredOrdered.flatMap(([, gs]) => gs)}
                         kindFilter={kindFilter}
@@ -1074,7 +1126,7 @@ export function PriceSearchBar({
                       />
                     ) : null}
 
-                    {groupBy === "matrix" && result.groups.length > 0 ? (
+                    {groupBy === "matrix" && visibleGroups.length > 0 ? (
                       <MatrixCompareResults
                         groups={filteredOrdered.flatMap(([, gs]) => gs)}
                         kindFilter={kindFilter}
@@ -1086,7 +1138,7 @@ export function PriceSearchBar({
                     ) : null}
 
 
-                    {groupBy === "product" && result.groups.length > 0 ? (
+                    {groupBy === "product" && visibleGroups.length > 0 ? (
 
                       <div className="pc-results">
                         {filteredOrdered.map(([cat, groups]) => {
@@ -1386,6 +1438,35 @@ type PricePoint = {
   when: string;
 };
 
+/** Dias inteiros desde a coleta do preço (0 = hoje). */
+function daysSince(when: string): number {
+  const t = new Date(when).getTime();
+  if (!Number.isFinite(t)) return Number.POSITIVE_INFINITY;
+  return Math.max(0, Math.floor((Date.now() - t) / 86_400_000));
+}
+
+/** Rótulo curto de recência: "hoje", "há 3 dias", "há 2 meses". */
+function freshnessLabel(when: string): string {
+  const d = daysSince(when);
+  if (!Number.isFinite(d)) return "sem data";
+  if (d <= 0) return "hoje";
+  if (d === 1) return "ontem";
+  if (d < 30) return `há ${d} dias`;
+  const months = Math.round(d / 30);
+  if (months < 12) return `há ${months} ${months === 1 ? "mês" : "meses"}`;
+  const years = Math.round(months / 12);
+  return `há ${years} ano${years > 1 ? "s" : ""}`;
+}
+
+/** Classe de disponibilidade estimada pela recência da coleta. */
+function availabilityTone(when: string): "fresh" | "recent" | "stale" {
+  const d = daysSince(when);
+  if (d <= 7) return "fresh";
+  if (d <= 30) return "recent";
+  return "stale";
+}
+
+
 /**
  * Score de relevância para ordenação de grupos de produto:
  * - Match exato de token no nome → 4 pts
@@ -1419,8 +1500,11 @@ function scoreRelevance(g: ProductGroup, query: string): number {
 
 function sortPrices(prices: PricePoint[], mode: SortMode, productName?: string): PricePoint[] {
   const arr = [...prices];
+  // Empate de preço → o preço coletado mais recentemente vem primeiro.
+  const byRecency = (a: PricePoint, b: PricePoint) =>
+    new Date(b.when).getTime() - new Date(a.when).getTime();
   if (mode === "cheapest" || mode === "relevance" || mode === "savings")
-    arr.sort((a, b) => a.price - b.price);
+    arr.sort((a, b) => a.price - b.price || byRecency(a, b));
   else if (mode === "unit") {
     // Ordena por preço unitário normalizado (R$/kg ou R$/L). Itens sem
     // tamanho detectável ficam no fim, mantendo a ordem por menor preço.
@@ -1431,17 +1515,19 @@ function sortPrices(prices: PricePoint[], mode: SortMode, productName?: string):
     arr.sort((a, b) => {
       const ua = perBase(a);
       const ub = perBase(b);
-      if (ua === ub) return a.price - b.price;
+      if (ua === ub) return a.price - b.price || byRecency(a, b);
       return ua - ub;
     });
   } else if (mode === "recent")
-    arr.sort((a, b) => new Date(b.when).getTime() - new Date(a.when).getTime());
+    arr.sort((a, b) => byRecency(a, b) || a.price - b.price);
   else if (mode === "kind")
     arr.sort(
       (a, b) =>
         (a.marketKind ?? "zzz").localeCompare(b.marketKind ?? "zzz") ||
-        a.price - b.price,
+        a.price - b.price ||
+        byRecency(a, b),
     );
+
   else if (mode === "spread") {
     // "Menor variação" — na lista de preços de um grupo, isso equivale a
     // ordenar do preço mais próximo da mediana para o mais distante, útil
@@ -1464,6 +1550,8 @@ function QuickFilters({
   onCategory,
   groupBy,
   onGroupBy,
+  freshness,
+  onFreshness,
 }: {
   sortMode: SortMode;
   onSort: (m: SortMode) => void;
@@ -1475,6 +1563,8 @@ function QuickFilters({
   onCategory: (c: string | null) => void;
   groupBy: "product" | "market" | "matrix";
   onGroupBy: (g: "product" | "market" | "matrix") => void;
+  freshness: "all" | "30" | "7";
+  onFreshness: (v: "all" | "30" | "7") => void;
 }) {
   const chip = (active: boolean) =>
     "rounded-full border px-2.5 py-1 font-mono text-[10px] tracking-wide transition " +
@@ -1521,6 +1611,32 @@ function QuickFilters({
       <button type="button" className={chip(sortMode === "recent")} onClick={() => onSort("recent")}>
         Mais recente
       </button>
+      <span aria-hidden className="mx-0.5 h-4 w-px self-center bg-border" />
+      <button
+        type="button"
+        className={chip(freshness === "all")}
+        onClick={() => onFreshness("all")}
+        title="Mostra preços de qualquer período"
+      >
+        Todos os preços
+      </button>
+      <button
+        type="button"
+        className={chip(freshness === "30")}
+        onClick={() => onFreshness("30")}
+        title="Só preços vistos nos últimos 30 dias"
+      >
+        Vistos em 30 dias
+      </button>
+      <button
+        type="button"
+        className={chip(freshness === "7")}
+        onClick={() => onFreshness("7")}
+        title="Só preços vistos nos últimos 7 dias"
+      >
+        Vistos em 7 dias
+      </button>
+
       {kinds.length > 0 && (
         <button type="button" className={chip(sortMode === "kind")} onClick={() => onSort("kind")}>
           Por tipo
@@ -1756,6 +1872,16 @@ function ProductGroupCard({
             </button>
           ) : null}
           <ProductQuickActions catalogId={catalogId} slug={productName} label={productName} />
+          <CreatePriceAlertButton
+            compact
+            triggerLabel="Alerta"
+            productKey={productName}
+            productName={productName}
+            displayName={productName}
+            defaultTargetPrice={cheapestInGroup?.price ?? min}
+            defaultDirection="drop"
+            defaultThresholdPct={5}
+          />
           <Link
             to="/produto-publico/$slug"
             params={{ slug: productName }}
@@ -1763,6 +1889,7 @@ function ProductGroupCard({
           >
             Detalhes
           </Link>
+
         </div>
       </div>
 
@@ -1810,8 +1937,15 @@ function ProductGroupCard({
                 <p className="pc-res-meta truncate">
                   {p.marketKind ?? "Estabelecimento"}
                   <span aria-hidden="true" className="mx-1 opacity-40">·</span>
-                  {new Date(p.when).toLocaleDateString("pt-BR")}
+                  <span
+                    title={`Preço coletado em ${new Date(p.when).toLocaleDateString("pt-BR")}`}
+                    data-freshness={availabilityTone(p.when)}
+                    className="data-[freshness=stale]:opacity-60 data-[freshness=fresh]:text-[var(--pc-gold-ink)]"
+                  >
+                    atualizado {freshnessLabel(p.when)}
+                  </span>
                 </p>
+
               </div>
 
               <FairPriceBadge
@@ -2189,6 +2323,14 @@ function MarketBucketSection({
                 melhor
               </span>
             ) : null}
+            <span
+              data-freshness={availabilityTone(r.price.when)}
+              title={`Preço coletado em ${new Date(r.price.when).toLocaleDateString("pt-BR")}`}
+              className="hidden shrink-0 text-[10.5px] text-muted-foreground data-[freshness=stale]:opacity-60 sm:inline"
+            >
+              {freshnessLabel(r.price.when)}
+            </span>
+
             <span
               className={
                 "whitespace-nowrap rounded-md px-1.5 py-1 text-[13.5px] font-semibold leading-none tabular-nums tracking-[-0.02em] sm:px-2 sm:text-[15px] " +
@@ -2661,8 +2803,36 @@ function MatrixCompareResults({
                               <Crown className="h-3 w-3 text-brand-gold" aria-hidden="true" />
                             ) : null}
                             <span>{fmt(v)}</span>
+                            {rowMin != null && v > rowMin ? (
+                              <span
+                                title={`${(((v - rowMin) / rowMin) * 100).toFixed(0)}% acima do menor preço`}
+                                className="text-[10px] font-semibold text-muted-foreground"
+                              >
+                                +{(((v - rowMin) / rowMin) * 100).toFixed(0)}%
+                              </span>
+                            ) : null}
+                            {isMin && rowMax != null && rowMax > v ? (
+                              <span
+                                title="Economia frente ao mais caro desta linha"
+                                className="text-[10px] font-semibold text-[var(--pc-gold-ink)]"
+                              >
+                                −{(((rowMax - v) / rowMax) * 100).toFixed(0)}%
+                              </span>
+                            ) : null}
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                openProduct(g.productName);
+                              }}
+                              aria-label={`Abrir ${g.productName} em ${m.name}`}
+                              className="ml-auto rounded-full border border-border px-1.5 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.08em] text-muted-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)]"
+                            >
+                              Abrir
+                            </button>
                           </div>
                         )}
+
                       </td>
                     );
                   })}
