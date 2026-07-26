@@ -311,7 +311,7 @@ function CategoryPage() {
             <div
               role="group"
               aria-label="Filtrar por loja"
-              className="no-scrollbar mt-2 flex gap-1.5 overflow-x-auto pb-0.5"
+              className="no-scrollbar mt-2 flex gap-1.5 overflow-x-auto pb-0.5 sm:flex-wrap sm:overflow-visible"
             >
               <FilterChip
                 label="Todas as lojas"
