@@ -222,31 +222,34 @@ export function ButcherCounter({
   };
 
   return (
-    <section aria-label={`Açougue do ${storeName}`} className="mt-5">
-      {/* Cabeçalho compacto do setor */}
-      <div className="rounded-xl border border-border bg-card p-3.5 shadow-[0_1px_2px_rgba(11,30,63,0.05)] sm:p-4">
-        <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-2.5 py-0.5 text-[10px] font-bold uppercase leading-none tracking-[0.16em] text-brand-navy">
-          <Beef className="h-3 w-3" aria-hidden /> Setor interno
-        </span>
-        <h2 className="mt-2 font-serif text-[19px] font-semibold leading-tight tracking-tight text-foreground sm:text-[22px]">
-          Açougue do {storeName}
-        </h2>
-        <p className="mt-1 text-[12px] leading-snug text-muted-foreground">
-          {cuts.length} corte{cuts.length === 1 ? "" : "s"} de balcão com preço por quilo — não é um
-          estabelecimento separado.
-        </p>
+    <section aria-label={`Açougue do ${storeName}`} className="mt-4">
+      {/* Cabeçalho compacto — sem repetir o nome da loja já exibido no topo */}
+      <div className="grid gap-2 rounded-xl border border-border bg-card p-3 shadow-[0_1px_2px_rgba(11,30,63,0.05)] lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-4">
+        <div className="min-w-0">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-2 py-0.5 text-[10px] font-bold uppercase leading-none tracking-[0.16em] text-brand-navy">
+            <Beef className="h-3 w-3" aria-hidden /> Setor interno
+          </span>
+          <h2 className="mt-1.5 font-serif text-[17px] font-semibold leading-tight tracking-tight text-foreground sm:text-[19px]">
+            Balcão do açougue
+          </h2>
+          <p className="mt-0.5 text-[12px] leading-snug text-muted-foreground">
+            {cuts.length} corte{cuts.length === 1 ? "" : "s"} com preço por quilo — setor dentro da
+            loja, não é um estabelecimento separado.
+          </p>
+        </div>
         {cheapest && (
-          <p className="mt-2 flex flex-wrap items-baseline gap-x-1.5 rounded-lg border border-brand-gold/40 bg-brand-gold/10 px-2.5 py-1.5 text-[12.5px]">
-            <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">
+          <div className="flex flex-wrap items-baseline gap-x-1.5 rounded-lg border border-brand-gold/40 bg-brand-gold/10 px-2.5 py-1.5 text-[12.5px] lg:max-w-[320px]">
+            <span className="text-[10px] font-bold uppercase leading-none tracking-[0.14em] text-[var(--pc-gold-ink)]">
               Menor preço por kg
             </span>
             <strong className="font-semibold text-foreground">{cheapest.productName}</strong>
             <span className="font-bold tabular-nums text-[var(--pc-gold-ink)]">
               {brl(cutPricePerKg(cheapest) ?? cheapest.price)}/kg
             </span>
-          </p>
+          </div>
         )}
       </div>
+
 
       {/* Filtro por proteína — trilho com teclado */}
       <div
