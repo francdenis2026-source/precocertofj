@@ -88,6 +88,7 @@ import { Route as AdminClientesRouteImport } from './routes/admin_.clientes'
 import { Route as AdminCategorizacaoRouteImport } from './routes/admin_.categorizacao'
 import { Route as AdminCatalogoRouteImport } from './routes/admin_.catalogo'
 import { Route as AdminCadastroFotoRouteImport } from './routes/admin_.cadastro-foto'
+import { Route as AdminAuditoriaNumerosRouteImport } from './routes/admin_.auditoria-numeros'
 import { Route as AdminAuditoriaAcessosRouteImport } from './routes/admin_.auditoria-acessos'
 import { Route as AdminAuditoriaRouteImport } from './routes/admin_.auditoria'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin_.analytics'
@@ -500,6 +501,11 @@ const AdminCadastroFotoRoute = AdminCadastroFotoRouteImport.update({
   path: '/admin/cadastro-foto',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminAuditoriaNumerosRoute = AdminAuditoriaNumerosRouteImport.update({
+  id: '/admin_/auditoria-numeros',
+  path: '/admin/auditoria-numeros',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminAuditoriaAcessosRoute = AdminAuditoriaAcessosRouteImport.update({
   id: '/admin_/auditoria-acessos',
   path: '/admin/auditoria-acessos',
@@ -628,6 +634,7 @@ export interface FileRoutesByFullPath {
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/auditoria-acessos': typeof AdminAuditoriaAcessosRoute
+  '/admin/auditoria-numeros': typeof AdminAuditoriaNumerosRoute
   '/admin/cadastro-foto': typeof AdminCadastroFotoRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorizacao': typeof AdminCategorizacaoRoute
@@ -724,6 +731,7 @@ export interface FileRoutesByTo {
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/auditoria-acessos': typeof AdminAuditoriaAcessosRoute
+  '/admin/auditoria-numeros': typeof AdminAuditoriaNumerosRoute
   '/admin/cadastro-foto': typeof AdminCadastroFotoRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorizacao': typeof AdminCategorizacaoRoute
@@ -821,6 +829,7 @@ export interface FileRoutesById {
   '/admin_/analytics': typeof AdminAnalyticsRoute
   '/admin_/auditoria': typeof AdminAuditoriaRoute
   '/admin_/auditoria-acessos': typeof AdminAuditoriaAcessosRoute
+  '/admin_/auditoria-numeros': typeof AdminAuditoriaNumerosRoute
   '/admin_/cadastro-foto': typeof AdminCadastroFotoRoute
   '/admin_/catalogo': typeof AdminCatalogoRoute
   '/admin_/categorizacao': typeof AdminCategorizacaoRoute
@@ -919,6 +928,7 @@ export interface FileRouteTypes {
     | '/admin/analytics'
     | '/admin/auditoria'
     | '/admin/auditoria-acessos'
+    | '/admin/auditoria-numeros'
     | '/admin/cadastro-foto'
     | '/admin/catalogo'
     | '/admin/categorizacao'
@@ -1015,6 +1025,7 @@ export interface FileRouteTypes {
     | '/admin/analytics'
     | '/admin/auditoria'
     | '/admin/auditoria-acessos'
+    | '/admin/auditoria-numeros'
     | '/admin/cadastro-foto'
     | '/admin/catalogo'
     | '/admin/categorizacao'
@@ -1111,6 +1122,7 @@ export interface FileRouteTypes {
     | '/admin_/analytics'
     | '/admin_/auditoria'
     | '/admin_/auditoria-acessos'
+    | '/admin_/auditoria-numeros'
     | '/admin_/cadastro-foto'
     | '/admin_/catalogo'
     | '/admin_/categorizacao'
@@ -1207,6 +1219,7 @@ export interface RootRouteChildren {
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
   AdminAuditoriaRoute: typeof AdminAuditoriaRoute
   AdminAuditoriaAcessosRoute: typeof AdminAuditoriaAcessosRoute
+  AdminAuditoriaNumerosRoute: typeof AdminAuditoriaNumerosRoute
   AdminCadastroFotoRoute: typeof AdminCadastroFotoRoute
   AdminCatalogoRoute: typeof AdminCatalogoRoute
   AdminCategorizacaoRoute: typeof AdminCategorizacaoRoute
@@ -1808,6 +1821,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminCadastroFotoRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin_/auditoria-numeros': {
+      id: '/admin_/auditoria-numeros'
+      path: '/admin/auditoria-numeros'
+      fullPath: '/admin/auditoria-numeros'
+      preLoaderRoute: typeof AdminAuditoriaNumerosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin_/auditoria-acessos': {
       id: '/admin_/auditoria-acessos'
       path: '/admin/auditoria-acessos'
@@ -2021,6 +2041,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminAnalyticsRoute: AdminAnalyticsRoute,
   AdminAuditoriaRoute: AdminAuditoriaRoute,
   AdminAuditoriaAcessosRoute: AdminAuditoriaAcessosRoute,
+  AdminAuditoriaNumerosRoute: AdminAuditoriaNumerosRoute,
   AdminCadastroFotoRoute: AdminCadastroFotoRoute,
   AdminCatalogoRoute: AdminCatalogoRoute,
   AdminCategorizacaoRoute: AdminCategorizacaoRoute,
