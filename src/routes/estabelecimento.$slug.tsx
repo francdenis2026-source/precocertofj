@@ -139,6 +139,7 @@ function EstablishmentPage() {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [historyFor, setHistoryFor] = useState<PublicStoreProduct | null>(null);
   const [tab, setTab] = useState<"catalogo" | "acougue">("catalogo");
+  const [limit, setLimit] = useState(30);
 
   const { cuts, general } = useMemo(() => splitButcherCuts(data.products), [data.products]);
   const hasButcher = cuts.length >= 5;
