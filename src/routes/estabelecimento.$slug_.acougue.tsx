@@ -114,6 +114,8 @@ function ButcherPage() {
     () => parseButcherState({ q: search.bq, prot: search.prot, bsort: search.bsort, bview: search.bview }),
     [search.bq, search.prot, search.bsort, search.bview],
   );
+  const searchRef = useRef(search);
+  searchRef.current = search;
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const stateRef = useRef(butcherState);
   stateRef.current = butcherState;
@@ -124,13 +126,13 @@ function ButcherPage() {
       navigate({
         to: "/estabelecimento/$slug_/acougue",
         params: { slug, slug_: slug } as never,
-        search: (prev: Record<string, unknown>) => ({
-          ...prev,
+        search: {
+          ...searchRef.current,
           bq: next.q,
           prot: next.protein ?? "",
           bsort: next.sort,
           bview: next.view,
-        }) as never,
+        },
         replace: patch.q !== undefined,
       });
     if (timer.current) clearTimeout(timer.current);
@@ -143,7 +145,7 @@ function ButcherPage() {
       navigate({
         to: "/estabelecimento/$slug_/acougue",
         params: { slug, slug_: slug } as never,
-        search: ((prev: Record<string, unknown>) => ({ ...prev, p: product.slug })) as never,
+        search: { ...searchRef.current, p: product.slug },
       });
     },
     [navigate, slug],
@@ -152,7 +154,7 @@ function ButcherPage() {
     navigate({
       to: "/estabelecimento/$slug_/acougue",
       params: { slug, slug_: slug } as never,
-      search: ((prev: Record<string, unknown>) => ({ ...prev, p: "" })) as never,
+      search: { ...searchRef.current, p: "" },
       replace: true,
     });
   }, [navigate, slug]);
