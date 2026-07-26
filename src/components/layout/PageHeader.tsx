@@ -31,6 +31,10 @@ export function PageHeader({
         className,
       )}
     >
+      {/* Marca clicável em todas as rotas — não depende do botão "Voltar". */}
+      <div className="mb-1.5 flex min-w-0 items-center">
+        <HomeBrandLink className="-ml-1" />
+      </div>
       {breadcrumbs && breadcrumbs.length > 0 && (
         <nav
           aria-label="Trilha de navegação"
