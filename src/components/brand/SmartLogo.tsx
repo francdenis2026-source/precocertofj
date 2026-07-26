@@ -54,11 +54,29 @@ export function useLogoPresentation(
       return;
     }
     let alive = true;
-    void getMetrics(src).then((m) => {
-      if (alive) setMetrics(m);
+    // A análise usa canvas (custo de CPU). Adiada para ociosidade do browser
+    // para não travar a primeira pintura quando há várias logos na tela.
+    const schedule =
+      typeof window !== "undefined" && "requestIdleCallback" in window
+        ? (fn: () => void) =>
+            (window as unknown as {
+              requestIdleCallback: (cb: () => void, o?: { timeout: number }) => number;
+            }).requestIdleCallback(fn, { timeout: 1200 })
+        : (fn: () => void) => window.setTimeout(fn, 200);
+    const handle = schedule(() => {
+      void getMetrics(src).then((m) => {
+        if (alive) setMetrics(m);
+      });
     });
     return () => {
       alive = false;
+      if (typeof window !== "undefined" && "cancelIdleCallback" in window) {
+        (window as unknown as { cancelIdleCallback: (h: number) => void }).cancelIdleCallback(
+          handle,
+        );
+      } else {
+        window.clearTimeout(handle);
+      }
     };
   }, [src]);
 
