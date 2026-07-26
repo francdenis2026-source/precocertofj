@@ -56,18 +56,41 @@ export function ButcherCounter({
   onHistory,
   onAlert,
   onOpen,
+  state,
+  onStateChange,
 }: {
   storeName: string;
   cuts: Cut[];
   onHistory?: (p: PublicStoreProduct) => void;
   onAlert?: (p: PublicStoreProduct) => void;
   onOpen?: (p: PublicStoreProduct) => void;
+  /** Estado controlado (sincronizado com a URL). Quando ausente, usa estado local. */
+  state?: ButcherViewState;
+  onStateChange?: (patch: Partial<ButcherViewState>) => void;
 }) {
-  const [q, setQ] = useState("");
-  const [protein, setProtein] = useState<ButcherProtein | null>(null);
-  const [sort, setSort] = useState<CutSort>("kg-asc");
-  const [view, setView] = useState<"grid" | "list">("grid");
+  const [local, setLocal] = useState<ButcherViewState>(BUTCHER_STATE_DEFAULTS);
+  const controlled = Boolean(state && onStateChange);
+  const current = controlled ? (state as ButcherViewState) : local;
+  const patchState = (patch: Partial<ButcherViewState>) => {
+    if (controlled) onStateChange!(patch);
+    else setLocal((prev) => ({ ...prev, ...patch }));
+  };
+
+  const q = current.q;
+  const protein = current.protein;
+  const sort = current.sort;
+  const view = current.view;
+
+  // Termo local para digitação fluida quando controlado por URL (debounce no pai).
+  const [draft, setDraft] = useState(q);
+  useEffect(() => {
+    setDraft(q);
+  }, [q]);
+
   const [limit, setLimit] = useState(30);
+  useEffect(() => {
+    setLimit(30);
+  }, [q, protein, sort, view]);
 
   const counts = useMemo(() => {
     const m = new Map<ButcherProtein, number>();
@@ -97,6 +120,33 @@ export function ButcherCounter({
   const cheapest = filtered.length > 1 ? filtered[0] : null;
   const shown = filtered.slice(0, limit);
 
+  // Trilho de proteína: navegação por teclado (←/→/Home/End) com foco móvel.
+  const railRef = useRef<HTMLDivElement | null>(null);
+  const options: (ButcherProtein | null)[] = useMemo(
+    () => [null, ...BUTCHER_PROTEINS.filter((p) => (counts.get(p.id) ?? 0) > 0).map((p) => p.id)],
+    [counts],
+  );
+  const activeIndex = Math.max(0, options.indexOf(protein));
+
+  const focusChip = (index: number) => {
+    const nodes = railRef.current?.querySelectorAll<HTMLButtonElement>('[role="radio"]');
+    nodes?.[index]?.focus();
+    nodes?.[index]?.scrollIntoView({ block: "nearest", inline: "nearest" });
+  };
+
+  const onRailKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const last = options.length - 1;
+    let next: number | null = null;
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") next = Math.min(last, activeIndex + 1);
+    else if (e.key === "ArrowLeft" || e.key === "ArrowUp") next = Math.max(0, activeIndex - 1);
+    else if (e.key === "Home") next = 0;
+    else if (e.key === "End") next = last;
+    if (next === null) return;
+    e.preventDefault();
+    patchState({ protein: options[next] });
+    requestAnimationFrame(() => focusChip(next!));
+  };
+
   return (
     <section aria-label={`Açougue do ${storeName}`} className="mt-5">
       {/* Cabeçalho compacto do setor */}
@@ -112,40 +162,46 @@ export function ButcherCounter({
           estabelecimento separado.
         </p>
         {cheapest && (
-          <p className="mt-2 flex flex-wrap items-baseline gap-x-1.5 text-[12.5px]">
-            <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+          <p className="mt-2 flex flex-wrap items-baseline gap-x-1.5 rounded-lg border border-brand-gold/40 bg-brand-gold/10 px-2.5 py-1.5 text-[12.5px]">
+            <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">
               Menor preço por kg
             </span>
-            <strong className="text-foreground">{cheapest.productName}</strong>
-            <span className="font-bold tabular-nums text-brand-gold">
+            <strong className="font-semibold text-foreground">{cheapest.productName}</strong>
+            <span className="font-bold tabular-nums text-[var(--pc-gold-ink)]">
               {brl(cutPricePerKg(cheapest) ?? cheapest.price)}/kg
             </span>
           </p>
         )}
       </div>
 
-      {/* Filtro por proteína */}
+      {/* Filtro por proteína — trilho com teclado */}
       <div
+        ref={railRef}
         className="mt-3 flex gap-1.5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         role="radiogroup"
         aria-label="Filtrar por proteína"
+        onKeyDown={onRailKeyDown}
       >
         <button
           type="button"
           role="radio"
           aria-checked={protein === null}
-          onClick={() => {
-            setProtein(null);
-            setLimit(30);
-          }}
+          tabIndex={activeIndex === 0 ? 0 : -1}
+          onClick={() => patchState({ protein: null })}
           className={chip(protein === null)}
         >
           Todos
-          <span className="rounded-full bg-foreground/10 px-1.5 py-0.5 text-[10px] font-bold tabular-nums">
+          <span
+            className={
+              protein === null
+                ? "rounded-full bg-brand-navy/15 px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-brand-navy"
+                : "rounded-full bg-foreground/10 px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-foreground"
+            }
+          >
             {cuts.length}
           </span>
         </button>
-        {BUTCHER_PROTEINS.filter((p) => (counts.get(p.id) ?? 0) > 0).map((p) => {
+        {BUTCHER_PROTEINS.filter((p) => (counts.get(p.id) ?? 0) > 0).map((p, i) => {
           const active = protein === p.id;
           return (
             <button
@@ -153,10 +209,8 @@ export function ButcherCounter({
               type="button"
               role="radio"
               aria-checked={active}
-              onClick={() => {
-                setProtein(active ? null : p.id);
-                setLimit(30);
-              }}
+              tabIndex={activeIndex === i + 1 ? 0 : -1}
+              onClick={() => patchState({ protein: active ? null : p.id })}
               className={chip(active)}
             >
               {p.label}
@@ -164,7 +218,7 @@ export function ButcherCounter({
                 className={
                   active
                     ? "rounded-full bg-brand-navy/15 px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-brand-navy"
-                    : "rounded-full bg-foreground/10 px-1.5 py-0.5 text-[10px] font-bold tabular-nums"
+                    : "rounded-full bg-foreground/10 px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-foreground"
                 }
               >
                 {counts.get(p.id)}
@@ -173,6 +227,7 @@ export function ButcherCounter({
           );
         })}
       </div>
+
 
       {/* Busca · ordenação · modo */}
       <div className="mt-2.5 flex flex-col gap-2 sm:flex-row sm:items-center">
