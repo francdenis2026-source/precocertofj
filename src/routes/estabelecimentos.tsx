@@ -204,7 +204,7 @@ function EstablishmentsPage() {
     return () => io.disconnect();
   }, [visibleCount, q, neighborhood, sort, kindFilter, view]);
   const carouselRef = useRef<HTMLDivElement | null>(null);
-  const heroOverlayOpacity = useAdaptiveOverlayOpacity(mercadosHero.url, { min: 0.6, max: 0.94 });
+  
 
   // Salva no sessionStorage sempre que qualquer filtro muda.
   useEffect(() => {
