@@ -35,6 +35,8 @@ export type HubProduct = {
   cheapestStore: string;
   cheapestSlug: string;
   cheapestLogo: string | null;
+  /** todas as lojas que têm esse produto (para filtro por loja) */
+  storeNames: string[];
   updatedAt: string;
 };
 
@@ -178,6 +180,7 @@ export async function buildCategoryHub(slug: string): Promise<CategoryHub> {
         cheapestStore: cheapest.store.name,
         cheapestSlug: nEstablishment(cheapest.store.name),
         cheapestLogo: cheapest.store.logo_url,
+        storeNames: [...new Set(g.entries.map((e) => e.store.name))],
         updatedAt: g.entries.reduce((m, e) => (e.at > m ? e.at : m), g.entries[0].at),
       };
     })

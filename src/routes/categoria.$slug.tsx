@@ -82,6 +82,9 @@ function CategoryPage() {
   const [q, setQ] = useState("");
   const [limit, setLimit] = useState(24);
   const [view, setView] = useState<"list" | "grid">("list");
+  const [storeFilter, setStoreFilter] = useState<string>("");
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(30);
 
   const { data, isLoading } = useQuery({
     queryKey: ["category-hub", slug],
@@ -95,11 +98,29 @@ function CategoryPage() {
   const totalListed = data?.products.length ?? 0;
 
   const products = useMemo(() => {
-    const list = data?.products ?? [];
+    let list = data?.products ?? [];
     const term = norm(q.trim());
-    if (!term) return list;
-    return list.filter((p) => norm(p.name).includes(term));
-  }, [data, q]);
+    if (term) list = list.filter((p) => norm(p.name).includes(term));
+    if (storeFilter) list = list.filter((p) => p.storeNames.includes(storeFilter));
+    return list;
+  }, [data, q, storeFilter]);
+
+  // Contagens e páginas sempre coerentes com filtros/loja/categoria ativa
+  const totalPages = Math.max(1, Math.ceil(products.length / perPage));
+  const safePage = Math.min(page, totalPages);
+  const pageStart = (safePage - 1) * perPage;
+  const visible = view === "list" ? products.slice(pageStart, pageStart + perPage) : products.slice(0, limit);
+
+  useEffect(() => {
+    setPage(1);
+    setLimit(24);
+  }, [slug, q, storeFilter, perPage, view]);
+
+  useEffect(() => {
+    // a categoria mudou: limpa filtros que não existem no novo nicho
+    setStoreFilter("");
+    setQ("");
+  }, [slug]);
 
   if (!def) {
     return (
@@ -208,11 +229,13 @@ function CategoryPage() {
             icon={Package}
             title="Produtos da categoria"
             hint={
-              q
-                ? `${products.length} de ${totalListed.toLocaleString("pt-BR")} filtrado(s)`
-                : totalAll > totalListed
-                  ? `${totalListed.toLocaleString("pt-BR")} exibidos de ${totalAll.toLocaleString("pt-BR")}`
-                  : `${totalAll.toLocaleString("pt-BR")} produto(s)`
+              isLoading
+                ? "carregando…"
+                : q || storeFilter
+                  ? `${products.length.toLocaleString("pt-BR")} de ${totalListed.toLocaleString("pt-BR")} filtrado(s)`
+                  : totalAll > totalListed
+                    ? `${totalListed.toLocaleString("pt-BR")} exibidos de ${totalAll.toLocaleString("pt-BR")}`
+                    : `${totalAll.toLocaleString("pt-BR")} produto(s)`
             }
           />
           <div className="mt-2 flex items-center gap-2">
@@ -225,10 +248,7 @@ function CategoryPage() {
                 id="cat-prod-search"
                 type="search"
                 value={q}
-                onChange={(e) => {
-                  setQ(e.target.value);
-                  setLimit(24);
-                }}
+                onChange={(e) => setQ(e.target.value)}
                 placeholder={`Filtrar em ${def.label.toLowerCase()}…`}
                 className="h-10 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13.5px] outline-none focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
               />
@@ -262,18 +282,39 @@ function CategoryPage() {
             </div>
           </div>
 
+          {(data?.stores.length ?? 0) > 1 && (
+            <div
+              role="group"
+              aria-label="Filtrar por loja"
+              className="no-scrollbar mt-2 flex gap-1.5 overflow-x-auto pb-0.5"
+            >
+              <FilterChip
+                label="Todas as lojas"
+                active={storeFilter === ""}
+                onClick={() => setStoreFilter("")}
+              />
+              {data!.stores.map((s2) => (
+                <FilterChip
+                  key={s2.id}
+                  label={s2.name}
+                  active={storeFilter === s2.name}
+                  onClick={() => setStoreFilter(storeFilter === s2.name ? "" : s2.name)}
+                />
+              ))}
+            </div>
+          )}
 
           {isLoading ? (
             <SkeletonRow />
           ) : products.length === 0 ? (
             <EmptyCard
               text={
-                q
+                q || storeFilter
                   ? "Nenhum produto encontrado com esse filtro."
                   : "Ainda não há produtos desta categoria cadastrados. Colabore enviando fotos de etiquetas."
               }
               action={
-                !q
+                !q && !storeFilter
                   ? { label: "Quero colaborar", onClick: () => navigate({ to: "/colaborar" }) }
                   : undefined
               }
@@ -282,7 +323,7 @@ function CategoryPage() {
             <>
               {view === "grid" ? (
                 <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                  {products.slice(0, limit).map((p) => (
+                  {visible.map((p) => (
                     <li key={p.key}>
                       <Link
                         to="/buscar"
@@ -308,7 +349,7 @@ function CategoryPage() {
                 </ul>
               ) : (
               <ul className="mt-2 divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
-                {products.slice(0, limit).map((p) => (
+                {visible.map((p) => (
                   <li key={p.key} className="flex items-center gap-2.5 px-2.5 py-2">
                     <StoreBadge name={p.cheapestStore} logoUrl={p.cheapestLogo} size="xs" />
                     <span className="min-w-0 flex-1">
@@ -343,14 +384,30 @@ function CategoryPage() {
                 ))}
               </ul>
               )}
-              {products.length > limit && (
-                <button
-                  type="button"
-                  onClick={() => setLimit((l) => l + 24)}
-                  className="mt-2 h-9 w-full rounded-lg border border-border bg-card text-[12.5px] font-semibold hover:border-brand-gold"
-                >
-                  Mostrar mais ({products.length - limit} restantes)
-                </button>
+              {view === "list" ? (
+                <Pagination
+                  page={safePage}
+                  totalPages={totalPages}
+                  perPage={perPage}
+                  from={products.length === 0 ? 0 : pageStart + 1}
+                  to={Math.min(pageStart + perPage, products.length)}
+                  total={products.length}
+                  onPage={(n) => {
+                    setPage(n);
+                    document.getElementById("cat-prod-search")?.scrollIntoView({ block: "center" });
+                  }}
+                  onPerPage={setPerPage}
+                />
+              ) : (
+                products.length > limit && (
+                  <button
+                    type="button"
+                    onClick={() => setLimit((l) => l + 24)}
+                    className="mt-2 h-9 w-full rounded-lg border border-border bg-card text-[12.5px] font-semibold hover:border-brand-gold"
+                  >
+                    Mostrar mais ({products.length - limit} restantes)
+                  </button>
+                )
               )}
             </>
           )}
@@ -361,7 +418,141 @@ function CategoryPage() {
   );
 }
 
-/** Trilho horizontal de categorias com setas, roda do mouse e fades. */
+function FilterChip({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={cn(
+        "inline-flex h-7 shrink-0 items-center whitespace-nowrap rounded-full border px-2.5 text-[11.5px] font-semibold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+        active
+          ? "border-brand-gold bg-brand-gold text-brand-navy"
+          : "border-border bg-card text-muted-foreground hover:border-brand-gold hover:text-foreground",
+      )}
+    >
+      {label}
+    </button>
+  );
+}
+
+/** Paginação numérica consistente para o modo Lista. */
+function Pagination({
+  page,
+  totalPages,
+  perPage,
+  from,
+  to,
+  total,
+  onPage,
+  onPerPage,
+}: {
+  page: number;
+  totalPages: number;
+  perPage: number;
+  from: number;
+  to: number;
+  total: number;
+  onPage: (n: number) => void;
+  onPerPage: (n: number) => void;
+}) {
+  const pages = useMemo(() => {
+    const out: (number | "…")[] = [];
+    const push = (n: number) => out.push(n);
+    if (totalPages <= 7) {
+      for (let i = 1; i <= totalPages; i++) push(i);
+      return out;
+    }
+    push(1);
+    if (page > 3) out.push("…");
+    for (let i = Math.max(2, page - 1); i <= Math.min(totalPages - 1, page + 1); i++) push(i);
+    if (page < totalPages - 2) out.push("…");
+    push(totalPages);
+    return out;
+  }, [page, totalPages]);
+
+  const btn =
+    "grid h-8 min-w-8 place-items-center rounded-md border px-2 text-[12px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold disabled:opacity-40";
+
+  return (
+    <nav
+      aria-label="Paginação de produtos"
+      className="mt-2.5 flex flex-col gap-2 border-t border-border pt-2.5 sm:flex-row sm:items-center sm:justify-between"
+    >
+      <p className="text-[11.5px] text-muted-foreground" aria-live="polite">
+        {total === 0
+          ? "Nenhum resultado"
+          : `Exibindo ${from.toLocaleString("pt-BR")}–${to.toLocaleString("pt-BR")} de ${total.toLocaleString("pt-BR")}`}
+      </p>
+      <div className="flex flex-wrap items-center gap-1.5">
+        <button
+          type="button"
+          className={cn(btn, "border-border bg-card")}
+          onClick={() => onPage(page - 1)}
+          disabled={page <= 1}
+          aria-label="Página anterior"
+        >
+          <ChevronLeft className="h-4 w-4" aria-hidden />
+        </button>
+        {pages.map((n, i) =>
+          n === "…" ? (
+            <span key={`gap-${i}`} className="px-1 text-[12px] text-muted-foreground">
+              …
+            </span>
+          ) : (
+            <button
+              key={n}
+              type="button"
+              onClick={() => onPage(n)}
+              aria-current={n === page ? "page" : undefined}
+              className={cn(
+                btn,
+                n === page
+                  ? "border-brand-gold bg-brand-gold text-brand-navy"
+                  : "border-border bg-card text-foreground hover:border-brand-gold",
+              )}
+            >
+              {n}
+            </button>
+          ),
+        )}
+        <button
+          type="button"
+          className={cn(btn, "border-border bg-card")}
+          onClick={() => onPage(page + 1)}
+          disabled={page >= totalPages}
+          aria-label="Próxima página"
+        >
+          <ChevronRight className="h-4 w-4" aria-hidden />
+        </button>
+        <label className="ml-1 inline-flex items-center gap-1.5 text-[11.5px] text-muted-foreground">
+          <span className="sr-only sm:not-sr-only">Por página</span>
+          <select
+            value={perPage}
+            onChange={(e) => onPerPage(Number(e.target.value))}
+            className="h-8 rounded-md border border-border bg-card px-1.5 text-[12px] font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+          >
+            {[30, 60, 120].map((n) => (
+              <option key={n} value={n}>
+                {n}
+              </option>
+            ))}
+          </select>
+        </label>
+      </div>
+    </nav>
+  );
+}
+
+/** Trilho horizontal de categorias com setas, roda do mouse, arraste e teclado. */
 function CategoryRail({ current }: { current: string }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const [canPrev, setCanPrev] = useState(false);
@@ -397,10 +588,74 @@ function CategoryRail({ current }: { current: string }) {
     };
   }, [sync, current]);
 
+  // Arraste com o mouse (pointer drag), sem atrapalhar o clique nos chips
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    let down = false;
+    let moved = false;
+    let startX = 0;
+    let startScroll = 0;
+
+    const onDown = (e: PointerEvent) => {
+      if (e.pointerType !== "mouse" || e.button !== 0) return;
+      down = true;
+      moved = false;
+      startX = e.clientX;
+      startScroll = el.scrollLeft;
+    };
+    const onMove = (e: PointerEvent) => {
+      if (!down) return;
+      const dx = e.clientX - startX;
+      if (!moved && Math.abs(dx) < 4) return;
+      moved = true;
+      el.style.cursor = "grabbing";
+      el.scrollLeft = startScroll - dx;
+    };
+    const onUp = () => {
+      down = false;
+      el.style.cursor = "";
+      if (moved) {
+        const block = (ev: Event) => ev.preventDefault();
+        el.addEventListener("click", block, { capture: true, once: true });
+        window.setTimeout(() => el.removeEventListener("click", block, true), 0);
+      }
+      moved = false;
+    };
+
+    el.addEventListener("pointerdown", onDown);
+    window.addEventListener("pointermove", onMove);
+    window.addEventListener("pointerup", onUp);
+    return () => {
+      el.removeEventListener("pointerdown", onDown);
+      window.removeEventListener("pointermove", onMove);
+      window.removeEventListener("pointerup", onUp);
+    };
+  }, []);
+
   const scrollBy = (dir: -1 | 1) => {
     const el = ref.current;
     if (!el) return;
     el.scrollBy({ left: dir * Math.max(180, el.clientWidth * 0.7), behavior: "smooth" });
+  };
+
+  /** Navegação por teclado: setas movem o foco entre as categorias. */
+  const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const keys = ["ArrowRight", "ArrowLeft", "Home", "End"];
+    if (!keys.includes(e.key)) return;
+    const el = ref.current;
+    if (!el) return;
+    const items = Array.from(el.querySelectorAll<HTMLElement>("a[data-rail-item]"));
+    if (items.length === 0) return;
+    const idx = items.findIndex((n) => n === document.activeElement);
+    let next = idx;
+    if (e.key === "ArrowRight") next = idx < 0 ? 0 : Math.min(items.length - 1, idx + 1);
+    if (e.key === "ArrowLeft") next = idx < 0 ? 0 : Math.max(0, idx - 1);
+    if (e.key === "Home") next = 0;
+    if (e.key === "End") next = items.length - 1;
+    e.preventDefault();
+    items[next]?.focus();
+    items[next]?.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
   };
 
   return (
@@ -408,9 +663,10 @@ function CategoryRail({ current }: { current: string }) {
       <div
         ref={ref}
         onScroll={sync}
-        className="no-scrollbar overflow-x-auto scroll-smooth px-8"
+        onKeyDown={onKeyDown}
+        className="no-scrollbar overflow-x-auto scroll-smooth px-9 py-1"
       >
-        <ul className="flex w-max gap-1.5">
+        <ul className="flex w-max gap-1.5 pr-1">
           {CATEGORY_DEFS.map((c) => {
             const CIcon = ICONS[c.slug] ?? Package;
             const active = c.slug === current;
@@ -419,14 +675,16 @@ function CategoryRail({ current }: { current: string }) {
                 <Link
                   to="/categoria/$slug"
                   params={{ slug: c.slug }}
+                  data-rail-item=""
                   aria-current={active ? "page" : undefined}
                   className={cn(
-                    "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[12px] font-semibold leading-none transition-colors",
+                    "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[12px] font-semibold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                     active
                       ? "border-brand-gold bg-brand-gold text-brand-navy"
                       : "border-border bg-card text-foreground hover:border-brand-gold",
                   )}
                 >
+
                   <CIcon className="h-3.5 w-3.5" aria-hidden /> {c.short}
                 </Link>
               </li>
