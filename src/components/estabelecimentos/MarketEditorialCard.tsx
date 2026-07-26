@@ -144,7 +144,7 @@ export function MarketEditorialCard({
               {typeof rank === "number" && (
                 <span
                   aria-hidden
-                  className="shrink-0 text-[11.5px] font-bold tabular-nums tracking-tight text-foreground/55"
+                  className="shrink-0 text-[11.5px] font-bold tabular-nums tracking-tight text-muted-foreground"
                 >
                   {String(rank).padStart(2, "0")}
                 </span>
