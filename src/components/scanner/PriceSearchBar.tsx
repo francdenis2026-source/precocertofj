@@ -1924,8 +1924,15 @@ function ProductGroupCard({
                 <p className="pc-res-meta truncate">
                   {p.marketKind ?? "Estabelecimento"}
                   <span aria-hidden="true" className="mx-1 opacity-40">·</span>
-                  {new Date(p.when).toLocaleDateString("pt-BR")}
+                  <span
+                    title={`Preço coletado em ${new Date(p.when).toLocaleDateString("pt-BR")}`}
+                    data-freshness={availabilityTone(p.when)}
+                    className="data-[freshness=stale]:opacity-60 data-[freshness=fresh]:text-[var(--pc-gold-ink)]"
+                  >
+                    atualizado {freshnessLabel(p.when)}
+                  </span>
                 </p>
+
               </div>
 
               <FairPriceBadge
