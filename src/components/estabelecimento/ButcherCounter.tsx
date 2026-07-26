@@ -406,6 +406,7 @@ export function ButcherCounter({
       {loading ? (
         <CutSkeletons view={view} />
       ) : error ? (
+        <div role="alert">
         <EmptyState
           className="mt-2"
           size="sm"
@@ -421,6 +422,7 @@ export function ButcherCounter({
             ) : undefined
           }
         />
+        </div>
       ) : filtered.length > 0 ? (
         <>
           {view === "grid" ? (
@@ -469,6 +471,7 @@ export function ButcherCounter({
         </>
       ) : (
         <EmptyState
+          role="status"
           className="mt-4"
           size="sm"
           icon={Beef}
@@ -603,7 +606,7 @@ const CutRow = memo(function CutRow({
 }) {
   const kg = cutPricePerKg(cut);
   return (
-    <div className="grid grid-cols-[minmax(0,1fr)_96px] items-center gap-3 px-2.5 py-1.5 transition-colors hover:bg-muted/50 sm:grid-cols-[minmax(0,1fr)_120px_96px_200px]">
+    <div className="grid grid-cols-[minmax(0,1fr)_96px] min-h-11 items-center gap-3 px-2.5 py-2 transition-colors hover:bg-muted/50 sm:min-h-0 sm:py-1.5 sm:grid-cols-[minmax(0,1fr)_120px_96px_200px]">
       <button
         type="button"
         onClick={onOpen ? () => onOpen(cut) : undefined}
@@ -642,6 +645,8 @@ function CutSkeletons({ view }: { view: "grid" | "list" }) {
       <div
         className="mt-2 overflow-hidden rounded-lg border border-border bg-card"
         role="status"
+        aria-live="polite"
+        aria-busy="true"
         aria-label="Carregando cortes"
       >
         <ul className="divide-y divide-border/70">
@@ -659,6 +664,8 @@ function CutSkeletons({ view }: { view: "grid" | "list" }) {
     <ul
       className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3"
       role="status"
+      aria-live="polite"
+      aria-busy="true"
       aria-label="Carregando cortes"
     >
       {rows.map((_, i) => (
