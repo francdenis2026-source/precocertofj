@@ -662,7 +662,24 @@ function EstablishmentsPage() {
       <main className="mx-auto w-full max-w-6xl px-4 md:px-6 pt-6 md:pt-8">
 
 
-        {isLoading && (
+        {isLoading && view === "list" && (
+          <div className="overflow-hidden rounded-xl border border-border/70">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className={`${LIST_GRID} border-b border-border/50 px-3 py-2.5 md:px-4`}>
+                <span className="h-3 w-4 animate-pulse rounded bg-muted" />
+                <span className="h-9 w-11 animate-pulse rounded-md bg-muted" />
+                <span className="h-3.5 w-2/3 animate-pulse rounded bg-muted" />
+                <span className="h-3 w-24 animate-pulse rounded bg-muted" />
+                <span className="ml-auto h-3 w-10 animate-pulse rounded bg-muted" />
+                <span className="ml-auto h-3 w-8 animate-pulse rounded bg-muted" />
+                <span className="ml-auto h-3 w-16 animate-pulse rounded bg-muted" />
+                <span />
+              </div>
+            ))}
+          </div>
+        )}
+
+        {isLoading && view === "cards" && (
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             <MarketEditorialCardSkeleton />
             <MarketEditorialCardSkeleton />
