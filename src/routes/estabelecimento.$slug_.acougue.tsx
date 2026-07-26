@@ -8,7 +8,7 @@ import {
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { ArrowLeft, Beef, MapPin, Store } from "lucide-react";
 import { getPublicStoreCatalog, type PublicStoreProduct } from "@/lib/stores-public.functions";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
@@ -108,8 +108,11 @@ function ButcherPage() {
     [search.bq, search.prot, search.bsort, search.bview],
   );
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const patchButcher = (patch: Partial<ButcherViewState>) => {
-    const next = { ...butcherState, ...patch };
+  const stateRef = useRef(butcherState);
+  stateRef.current = butcherState;
+  // Callback estável: alternar Grade/Lista e categorias não recria o balcão.
+  const patchButcher = useCallback((patch: Partial<ButcherViewState>) => {
+    const next = { ...stateRef.current, ...patch };
     const apply = () =>
       navigate({
         to: "/estabelecimento/$slug_/acougue",
@@ -120,7 +123,9 @@ function ButcherPage() {
     if (timer.current) clearTimeout(timer.current);
     if (patch.q !== undefined) timer.current = setTimeout(apply, 350);
     else apply();
-  };
+  }, [navigate, slug]);
+
+  const openQuickView = useCallback((p: PublicStoreProduct) => setQuickView(p), []);
 
 
   return (
@@ -152,7 +157,7 @@ function ButcherPage() {
               cuts={cuts}
               state={butcherState}
               onStateChange={patchButcher}
-              onOpen={(p) => setQuickView(p)}
+              onOpen={openQuickView}
             />
             <div className="mt-8">
               <PreparoDicas />

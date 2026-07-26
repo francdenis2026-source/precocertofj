@@ -9,7 +9,7 @@ import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { queryOptions, useSuspenseQuery, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowDown,
@@ -284,10 +284,15 @@ function EstablishmentPage() {
     [search.bq, search.prot, search.bsort, search.bview],
   );
   const butcherQueryRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const patchButcher = (patch: Partial<ButcherViewState>) => {
-    const next = { ...butcherState, ...patch };
+  const butcherStateRef = useRef(butcherState);
+  butcherStateRef.current = butcherState;
+  const setSearchRef = useRef(setSearch);
+  setSearchRef.current = setSearch;
+  // Callback estável: evita re-renderizar o balcão a cada mudança de estado.
+  const patchButcher = useCallback((patch: Partial<ButcherViewState>) => {
+    const next = { ...butcherStateRef.current, ...patch };
     const apply = () =>
-      setSearch(
+      setSearchRef.current(
         {
           bq: next.q,
           prot: next.protein ?? "",
@@ -299,11 +304,17 @@ function EstablishmentPage() {
     if (butcherQueryRef.current) clearTimeout(butcherQueryRef.current);
     if (patch.q !== undefined) butcherQueryRef.current = setTimeout(apply, 350);
     else apply();
-  };
+  }, []);
 
-  const createAlert = (_p: PublicStoreProduct) => {
-    navigate({ to: "/alertas" });
-  };
+  const createAlert = useCallback(
+    (_p: PublicStoreProduct) => {
+      navigate({ to: "/alertas" });
+    },
+    [navigate],
+  );
+  const openQuickView = useCallback((p: PublicStoreProduct) => setQuickView(p), []);
+  const openHistory = useCallback((p: PublicStoreProduct) => setHistoryFor(p), []);
+
 
 
 
@@ -560,9 +571,9 @@ function EstablishmentPage() {
               cuts={cuts}
               state={butcherState}
               onStateChange={patchButcher}
-              onHistory={(p) => setHistoryFor(p)}
-              onAlert={(p) => createAlert(p)}
-              onOpen={(p) => setQuickView(p)}
+              onHistory={openHistory}
+              onAlert={createAlert}
+              onOpen={openQuickView}
             />
             <div className="mt-8">
               <PreparoDicas />
