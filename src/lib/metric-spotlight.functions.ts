@@ -213,11 +213,9 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
         })
         .sort((a, b) => b.productCount - a.productCount);
 
-      // Contagem verdadeira do catálogo canônico (produtos únicos por marca+embalagem).
-      const catalogCountRes = await sb
-        .from("product_catalog")
-        .select("id", { count: "exact", head: true });
-      const totalProducts = catalogCountRes.count ?? 0;
+      // Produtos cadastrados = itens distintos com preço registrado em algum mercado.
+      const totalProducts = uniqueProductNames.size;
+
 
       // Total de itens em comparação (pares com >=2 mercados).
       const comparedCountRes = await sb
