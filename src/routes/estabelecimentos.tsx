@@ -836,62 +836,139 @@ function EstablishmentsPage() {
                     </button>
                   </div>
                 ) : view === "list" ? (
-                <ul className="divide-y divide-border/60" aria-label="Lista de estabelecimentos">
-                  {visibleItems.map((e, idx) => {
-                    const tier = classifyTier(e.productsCount);
-                    const freshness = describeFreshness(e.lastUpdate);
-                    const dist = distanceById.get(e.id);
-                    return (
-                      <li key={e.id}>
-                        <Link
-                          to="/estabelecimento/$slug"
-                          params={{ slug: slugifyEstablishment(e.name) }}
-                          className="flex items-center gap-3 px-3 py-2.5 transition-colors hover:bg-muted/50 md:px-4"
-                        >
-                          <span className="w-6 shrink-0 text-right font-mono text-[12px] font-bold tabular-nums text-foreground/55">
-                            {String(idx + 1).padStart(2, "0")}
-                          </span>
-                          <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md border border-border/60 bg-white p-1">
-                            {e.logoUrl ? (
-                              <img src={e.logoUrl} alt="" loading="lazy" className="h-full w-full object-contain" />
-                            ) : (
-                              <span className="text-[11px] font-bold text-brand-navy">
-                                {e.name.substring(0, 2).toUpperCase()}
-                              </span>
-                            )}
-                          </span>
-                          <span className="min-w-0 flex-1">
+                <div className="overflow-x-auto">
+                  <div className="min-w-[680px]">
+                    {/* Cabeçalho tabular — colunas clicáveis para ordenar */}
+                    <div className={`${LIST_GRID} border-b border-border/60 bg-muted/40 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/70 md:px-4`}>
+                      <span className="text-right">#</span>
+                      <span className="sr-only">Logo</span>
+                      <button
+                        type="button"
+                        onClick={() => setSort("name")}
+                        className={`text-left uppercase tracking-[0.14em] transition-colors hover:text-foreground ${sort === "name" ? "text-[var(--pc-gold-ink)]" : ""}`}
+                      >
+                        Estabelecimento
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSort("neighborhood")}
+                        className={`text-left uppercase tracking-[0.14em] transition-colors hover:text-foreground ${sort === "neighborhood" ? "text-[var(--pc-gold-ink)]" : ""}`}
+                      >
+                        Bairro / Cidade
+                      </button>
+                      <button
+                        type="button"
+                        disabled={!loc.hasReference}
+                        onClick={() => setSort("distance")}
+                        className={`text-right uppercase tracking-[0.14em] transition-colors hover:text-foreground disabled:opacity-50 ${sort === "distance" ? "text-[var(--pc-gold-ink)]" : ""}`}
+                      >
+                        Distância
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setSort("products")}
+                        className={`text-right uppercase tracking-[0.14em] transition-colors hover:text-foreground ${sort === "products" ? "text-[var(--pc-gold-ink)]" : ""}`}
+                      >
+                        Produtos
+                      </button>
+                      <span className="text-right">Atualização</span>
+                      <span className="sr-only">Abrir</span>
+                    </div>
+
+                    <ul className="divide-y divide-border/60" aria-label="Lista de estabelecimentos">
+                      {visibleItems.map((e, idx) => {
+                        const tier = classifyTier(e.productsCount);
+                        const freshness = describeFreshness(e.lastUpdate);
+                        const dist = distanceById.get(e.id);
+                        const slug = slugifyEstablishment(e.name);
+                        const locality =
+                          [e.neighborhood, e.city].filter(Boolean).join(" · ") ||
+                          "Localização não informada";
+                        return (
+                          <li
+                            key={e.id}
+                            className={`${LIST_GRID} group px-3 py-2 transition-colors hover:bg-muted/50 md:px-4`}
+                          >
+                            <span className="text-right font-mono text-[12px] font-bold tabular-nums text-foreground/60">
+                              {String(idx + 1).padStart(2, "0")}
+                            </span>
+
+                            <Link
+                              to="/estabelecimento/$slug"
+                              params={{ slug }}
+                              title={`Abrir ${e.name}`}
+                              aria-label={`Abrir página de ${e.name}`}
+                              className="grid h-9 w-11 place-items-center overflow-hidden rounded-md border border-border/70 bg-white p-1 shadow-sm transition group-hover:border-brand-gold/70 group-hover:shadow"
+                            >
+                              {e.logoUrl ? (
+                                <img
+                                  src={e.logoUrl}
+                                  alt={`Logo ${e.name}`}
+                                  loading="lazy"
+                                  decoding="async"
+                                  className="h-full w-full object-contain object-center"
+                                />
+                              ) : (
+                                <span className="text-[11px] font-bold text-brand-navy">
+                                  {e.name.substring(0, 2).toUpperCase()}
+                                </span>
+                              )}
+                            </Link>
+
                             <span className="flex min-w-0 items-center gap-1.5">
-                              <span className="truncate text-[13.5px] font-semibold text-foreground">{e.name}</span>
+                              <Link
+                                to="/estabelecimento/$slug"
+                                params={{ slug }}
+                                title={e.name}
+                                className="truncate text-[13.5px] font-semibold text-foreground hover:text-[var(--pc-gold-ink)] hover:underline"
+                              >
+                                <HighlightMatch text={e.name} tokens={searchTokens} mode="loose" />
+                              </Link>
                               <span
+                                title={`Classificação por catálogo: ${tier.label}`}
                                 className="shrink-0 rounded-sm px-1 py-[1px] text-[8.5px] font-bold uppercase leading-none tracking-[0.14em]"
-                                style={{ backgroundColor: tier.color, color: "var(--brand-navy)" }}
+                                style={{
+                                  background: `color-mix(in oklab, ${tier.color} 16%, white)`,
+                                  color: `color-mix(in oklab, ${tier.color} 62%, black)`,
+                                }}
                               >
                                 {tier.label}
                               </span>
                             </span>
-                            <span className="mt-0.5 block truncate text-[11.5px] text-foreground/75">
-                              {[e.neighborhood, e.city].filter(Boolean).join(" · ") || "Localização não informada"}
-                              {dist ? ` · ${formatDistance(dist.km)}` : ""}
+
+                            <span className="min-w-0 truncate text-[12px] text-foreground/80" title={locality}>
+                              <HighlightMatch text={locality} tokens={searchTokens} mode="loose" />
                             </span>
-                          </span>
-                          <span className="hidden shrink-0 text-right sm:block">
-                            <span className="block font-mono text-[13px] font-bold tabular-nums text-foreground">
+
+                            <span
+                              className="text-right font-mono text-[12px] tabular-nums text-foreground/80"
+                              title={dist ? `Distância estimada: ${formatDistance(dist.km)}` : undefined}
+                            >
+                              {dist ? formatDistance(dist.km) : "—"}
+                            </span>
+
+                            <span className="text-right font-mono text-[13px] font-bold tabular-nums text-foreground">
                               {e.productsCount}
                             </span>
-                            <span className="block text-[10px] font-bold uppercase tracking-[0.12em] text-foreground/70">
-                              produtos
+
+                            <span className="text-right text-[11px] text-foreground/75" title={freshness.label}>
+                              {freshness.label}
                             </span>
-                          </span>
-                          <span className="hidden w-[104px] shrink-0 text-right text-[11px] text-foreground/75 md:block">
-                            {freshness.label}
-                          </span>
-                          <ChevronRight className="h-4 w-4 shrink-0 text-foreground/50" aria-hidden />
-                        </Link>
-                      </li>
-                    );
-                  })}
-                </ul>
+
+                            <Link
+                              to="/estabelecimento/$slug"
+                              params={{ slug }}
+                              aria-label={`Ver detalhes de ${e.name}`}
+                              className="grid place-items-center text-foreground/50 transition-colors hover:text-[var(--pc-gold-ink)]"
+                            >
+                              <ChevronRight className="h-4 w-4" aria-hidden />
+                            </Link>
+                          </li>
+                        );
+                      })}
+                    </ul>
+                  </div>
+                </div>
                 ) : (
                 <ul
                   className="grid grid-cols-1 gap-3 p-2.5 sm:grid-cols-2 md:p-4 lg:grid-cols-3"
