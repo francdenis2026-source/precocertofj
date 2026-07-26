@@ -1609,6 +1609,32 @@ function QuickFilters({
       <button type="button" className={chip(sortMode === "recent")} onClick={() => onSort("recent")}>
         Mais recente
       </button>
+      <span aria-hidden className="mx-0.5 h-4 w-px self-center bg-border" />
+      <button
+        type="button"
+        className={chip(freshness === "all")}
+        onClick={() => onFreshness("all")}
+        title="Mostra preços de qualquer período"
+      >
+        Todos os preços
+      </button>
+      <button
+        type="button"
+        className={chip(freshness === "30")}
+        onClick={() => onFreshness("30")}
+        title="Só preços vistos nos últimos 30 dias"
+      >
+        Vistos em 30 dias
+      </button>
+      <button
+        type="button"
+        className={chip(freshness === "7")}
+        onClick={() => onFreshness("7")}
+        title="Só preços vistos nos últimos 7 dias"
+      >
+        Vistos em 7 dias
+      </button>
+
       {kinds.length > 0 && (
         <button type="button" className={chip(sortMode === "kind")} onClick={() => onSort("kind")}>
           Por tipo
