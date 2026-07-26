@@ -19,7 +19,7 @@ import {
 
 import { toast } from "sonner";
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { PageShell, PageShellContent } from "@/components/layout/PageShell";
+
 import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
 import { ds, dsx } from "@/lib/ds";
 import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
