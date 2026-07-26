@@ -1642,11 +1642,17 @@ a[href*="lovable.dev"][target="_blank"] {
   pointer-events: none !important;
 }
 
-html {
+html,
+body,
+#root {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
-html::-webkit-scrollbar {
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+#root::-webkit-scrollbar {
+  display: none;
   width: 0;
   height: 0;
   background: transparent;
