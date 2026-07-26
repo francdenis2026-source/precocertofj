@@ -117,7 +117,7 @@ export function PageHeader({
                 {title}
               </h1>
               {description && (
-                <p className="mt-2 max-w-2xl text-body text-muted-foreground">
+                <p className="tc-flow mt-1.5 line-clamp-2 max-w-2xl text-body text-muted-foreground md:mt-2 md:line-clamp-none">
                   {description}
                 </p>
               )}
