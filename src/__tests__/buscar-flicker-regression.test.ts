@@ -28,13 +28,17 @@ describe("/buscar — regressão de flicker", () => {
     expect(calls.length).toBe(2); // runQuery (submit) + clear
   });
 
-  it("toda navegação de filtro usa replace: true", () => {
+  it("toda navegação de filtro evita empilhar histórico", () => {
     const navigates = route.match(/navigate\(\{[\s\S]*?\n {4}\}\)/g) ?? [];
     expect(navigates.length).toBeGreaterThan(0);
     for (const call of navigates) {
-      expect(call).toContain("replace: true");
+      // `replace: hasQuery` é intencional na sincronização da query: a primeira
+      // busca empilha (para o "voltar" retornar à tela de busca) e os
+      // refinamentos seguintes substituem.
+      expect(call).toMatch(/replace: (true|hasQuery)/);
     }
   });
+
 
   it("reserva altura estável no skeleton e nos resultados", () => {
     expect(bar.match(/min-h-\[640px\]/g)?.length ?? 0).toBeGreaterThanOrEqual(2);

@@ -13,6 +13,7 @@ import {
   Milk,
   Droplet,
   Candy,
+  Clock,
   CookingPot,
   type LucideIcon,
 } from "lucide-react";
@@ -78,6 +79,17 @@ const brl = (n: number) =>
 
 const int = (n: number) => new Intl.NumberFormat("pt-BR").format(n);
 
+const updatedLabel = (iso: string) => {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "—";
+  return new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(d);
+};
+
 export function SearchDiscovery({ onPickQuery }: Props) {
   const [recent, setRecent] = useState<string[]>([]);
   useEffect(() => setRecent(readRecent()), []);
@@ -94,7 +106,13 @@ export function SearchDiscovery({ onPickQuery }: Props) {
     queryKey: ["platform-stats-discovery"],
     queryFn: () => getPlatformStats(),
     staleTime: 5 * 60_000,
+    retry: 1,
   });
+
+  // Números só são exibidos quando vieram do banco (`ok`). Falha ou carregamento
+  // mostram "—" + aviso, nunca valores estimados no cliente.
+  const statsOk = Boolean(stats.data?.ok);
+  const statsFailed = Boolean(stats.isError || (stats.data && !stats.data.ok));
 
   return (
     <div className="space-y-3">
@@ -223,28 +241,51 @@ export function SearchDiscovery({ onPickQuery }: Props) {
 
       {/* Sinal de vida — cartão próprio, mesmo padrão dos HeroMetric */}
       <section className="border-t border-border/60 pt-5">
+        <div className="mb-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 px-0.5">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border/70 px-2 py-0.5 text-[10.5px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
+            <Clock className="h-3 w-3 text-brand-gold" aria-hidden />
+            Janela: últimos {stats.data?.windowDays ?? 30} dias
+          </span>
+          <span className="text-[10.5px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
+            {statsFailed
+              ? "Dados indisponíveis"
+              : stats.data?.generatedAt
+                ? `Atualizado em ${updatedLabel(stats.data.generatedAt)}`
+                : "Atualizando…"}
+          </span>
+        </div>
+        {statsFailed && (
+          <p
+            role="status"
+            className="mb-2 rounded-lg border border-border/70 px-2.5 py-2 text-[12px] leading-snug text-muted-foreground"
+          >
+            Não foi possível carregar os números do banco agora. Os indicadores abaixo
+            aparecem zerados até a conexão ser restabelecida.
+          </p>
+        )}
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
           <StatCell
             icon={<TrendingDown className="h-4 w-4" aria-hidden />}
             label="Preços em queda"
-            value={stats.data ? int(stats.data.priceDrops7d ?? 0) : "—"}
-            hint="últimos 30 dias"
+            value={statsOk ? int(stats.data!.priceDrops7d ?? 0) : "—"}
+            hint={`últimos ${stats.data?.windowDays ?? 30} dias`}
           />
           <StatCell
             icon={<Sparkles className="h-4 w-4" aria-hidden />}
             label="Produtos monitorados"
-            value={stats.data ? int(stats.data.products ?? 0) : "—"}
+            value={statsOk ? int(stats.data!.products ?? 0) : "—"}
             hint="com preço público"
           />
           <StatCell
             icon={<Flame className="h-4 w-4" aria-hidden />}
             label="Economia média"
-            value={stats.data ? brl(stats.data.estimatedSavings ?? 0) : "—"}
+            value={statsOk ? brl(stats.data!.estimatedSavings ?? 0) : "—"}
             hint="por produto comparado"
           />
 
         </div>
       </section>
+
     </div>
   );
 }
