@@ -147,38 +147,9 @@ function CategoryPage() {
           </dl>
         </header>
 
-        {/* Trilho de categorias — sem barra de rolagem visível, com fade nas bordas */}
-        <nav aria-label="Outras categorias" className="relative mt-2.5">
-          <div className="no-scrollbar -mx-3 overflow-x-auto px-3 sm:mx-0 sm:px-0">
-            <ul className="flex w-max gap-1.5 pr-6 sm:pr-0">
-              {CATEGORY_DEFS.map((c) => {
-                const CIcon = ICONS[c.slug] ?? Package;
-                const active = c.slug === slug;
-                return (
-                  <li key={c.slug}>
-                    <Link
-                      to="/categoria/$slug"
-                      params={{ slug: c.slug }}
-                      aria-current={active ? "page" : undefined}
-                      className={cn(
-                        "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[12px] font-semibold leading-none transition-colors",
-                        active
-                          ? "border-brand-gold bg-brand-gold text-brand-navy"
-                          : "border-border bg-card text-foreground hover:border-brand-gold",
-                      )}
-                    >
-                      <CIcon className="h-3.5 w-3.5" aria-hidden /> {c.short}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-          <span
-            aria-hidden
-            className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-background to-transparent sm:hidden"
-          />
-        </nav>
+        {/* Trilho de categorias — setas de navegação + roda do mouse horizontal */}
+        <CategoryRail current={slug} />
+
 
 
         {/* Plantão (só farmácias) */}
