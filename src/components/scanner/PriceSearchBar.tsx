@@ -223,6 +223,15 @@ export function PriceSearchBar({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Histórico só é persistido para usuários autenticados; visitantes usam
+  // memória volátil (o histórico é limpo a cada recarregamento da página).
+  useEffect(() => {
+    if (sessionLoading) return;
+    setSearchHistoryPersistence(!!user);
+    setHistory(getSearchHistory());
+  }, [sessionLoading, user]);
+
+
   const runQuery = (q: string) => {
     setErr(null);
     setShowSuggest(false);
