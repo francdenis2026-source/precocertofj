@@ -3268,3 +3268,18 @@ select optgroup {
   background-color: var(--card);
   color: var(--foreground);
 }
+
+/* Modo de animações reduzidas da busca (/buscar).
+   Desliga transições, animações e scroll suave dentro do escopo da busca
+   para eliminar qualquer efeito visual que possa parecer "flicker". */
+.pc-search-scope.pc-reduce-motion,
+.pc-search-scope.pc-reduce-motion * {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  transition-delay: 0ms !important;
+  scroll-behavior: auto !important;
+}
+.pc-search-scope.pc-reduce-motion *:hover {
+  transform: none !important;
+}
