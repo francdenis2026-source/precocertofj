@@ -301,57 +301,75 @@ function PlansPage() {
           )}
         </section>
 
-        {/* Detalhes — comparativo e dúvidas ficam recolhidos para caber em 1 tela */}
+        {/* Comparativo — recolhido para manter a página única */}
         <section
-          className={dsx(ds.container, "pb-10")}
-          aria-label="Detalhes dos planos"
+          id="comparativo"
+          className={dsx(ds.container, "pb-4 scroll-mt-24")}
+          aria-label="Comparativo de planos"
         >
-          <div className="grid gap-2.5 lg:grid-cols-2">
-            <details className="group rounded-xl border border-border bg-card px-4 py-3 open:shadow-elev-1">
-              <summary className="flex min-h-9 cursor-pointer list-none items-center justify-between gap-3 text-[13px] font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold">
-                <span className="inline-flex items-center gap-2">
-                  <Sparkles className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
-                  Comparar recursos de cada plano
-                </span>
-                <ChevronDown
-                  className="h-3.5 w-3.5 shrink-0 text-muted-foreground transition group-open:rotate-180"
-                  aria-hidden
-                />
-              </summary>
-              <div className="mt-3">
-                <ComparisonMatrix
-                  plans={plans}
-                  recommendedSlug={recommendedSlug}
-                  onBuy={handleBuy}
-                  buying={buying}
-                />
-              </div>
-            </details>
+          <details className="group rounded-xl border border-border bg-card px-4 py-3 open:shadow-elev-1">
+            <summary className="flex min-h-9 cursor-pointer list-none items-center justify-between gap-3 text-[13px] font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold">
+              <span className="inline-flex items-center gap-2">
+                <Sparkles className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+                Comparar recursos de cada plano
+              </span>
+              <ChevronDown
+                className="h-3.5 w-3.5 shrink-0 text-muted-foreground transition group-open:rotate-180"
+                aria-hidden
+              />
+            </summary>
+            <div className="mt-3">
+              <ComparisonMatrix
+                plans={plans}
+                recommendedSlug={recommendedSlug}
+                onBuy={handleBuy}
+                buying={buying}
+              />
+            </div>
+          </details>
+        </section>
 
-            <details className="group rounded-xl border border-border bg-card px-4 py-3 open:shadow-elev-1">
-              <summary className="flex min-h-9 cursor-pointer list-none items-center justify-between gap-3 text-[13px] font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold">
-                <span className="inline-flex items-center gap-2">
-                  <ShieldCheck className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
-                  Perguntas frequentes
-                </span>
-                <ChevronDown
-                  className="h-3.5 w-3.5 shrink-0 text-muted-foreground transition group-open:rotate-180"
-                  aria-hidden
-                />
-              </summary>
-              <dl className="mt-3 divide-y divide-border/70">
-                {FAQ.map((item) => (
-                  <div key={item.q} className="py-2 first:pt-0 last:pb-0">
-                    <dt className="text-[12.5px] font-semibold text-foreground">
-                      {item.q}
-                    </dt>
-                    <dd className="mt-0.5 text-[12px] leading-relaxed text-muted-foreground">
-                      {item.a}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </details>
+        {/* FAQ — acordeão recolhível */}
+        <section
+          id="faq"
+          className={dsx(ds.container, "scroll-mt-24 pb-28 md:pb-24")}
+          aria-labelledby="faq-title"
+        >
+          <div className="mb-2.5 flex items-baseline justify-between gap-3">
+            <h2
+              id="faq-title"
+              className="font-display text-[15.5px] font-semibold tracking-tight text-foreground"
+            >
+              Perguntas frequentes
+            </h2>
+            <a
+              href="#planos"
+              className="text-[11.5px] font-semibold text-brand-gold hover:underline"
+            >
+              Voltar aos planos
+            </a>
+          </div>
+
+          <div className="divide-y divide-border/70 overflow-hidden rounded-xl border border-border bg-card">
+            {FAQ.map((item, i) => (
+              <details
+                key={item.q}
+                name="planos-faq"
+                open={i === 0}
+                className="group px-4"
+              >
+                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 py-2.5 text-[12.5px] font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold">
+                  <span>{item.q}</span>
+                  <ChevronDown
+                    className="h-3.5 w-3.5 shrink-0 text-muted-foreground transition group-open:rotate-180"
+                    aria-hidden
+                  />
+                </summary>
+                <p className="pb-3 pr-6 text-[12px] leading-relaxed text-muted-foreground">
+                  {item.a}
+                </p>
+              </details>
+            ))}
           </div>
 
           <p className="mt-3 text-center text-[12px] text-muted-foreground">
@@ -365,7 +383,49 @@ function PlansPage() {
           </p>
         </section>
 
+        {/* CTA sticky — conversão sem poluir o conteúdo */}
+        {selectedPlan && (
+          <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40">
+            <div
+              className={dsx(
+                ds.container,
+                "pointer-events-auto pb-3 pt-2",
+              )}
+            >
+              <div className="flex items-center justify-between gap-3 rounded-xl border border-border bg-card/95 px-3.5 py-2.5 shadow-elev-2 backdrop-blur supports-[backdrop-filter]:bg-card/80">
+                <div className="min-w-0">
+                  <p className="truncate text-[12.5px] font-semibold text-foreground">
+                    {selectedPlan.name}
+                  </p>
+                  <p className="truncate text-[11.5px] text-muted-foreground">
+                    {selectedPlan.price_cents === 0
+                      ? "7 dias grátis · sem cartão"
+                      : `${centsToBRL(selectedPlan.price_cents)} · ${selectedPlan.days} dias`}
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleBuy(selectedPlan)}
+                  disabled={buying === selectedPlan.id}
+                  className={dsx(
+                    ds.btn.base,
+                    "h-10 shrink-0 bg-brand-gold px-4 text-[12px] font-bold uppercase tracking-[0.08em] text-brand-navy shadow-elev-1 hover:brightness-105 focus-visible:ring-2 focus-visible:ring-brand-gold",
+                  )}
+                >
+                  {buying === selectedPlan.id
+                    ? "Iniciando…"
+                    : selectedPlan.price_cents === 0
+                      ? "Começar grátis"
+                      : "Assinar"}
+                  <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
       </PageShellContent>
+
     </PageShell>
   );
 }
