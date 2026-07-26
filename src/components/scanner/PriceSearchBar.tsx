@@ -1767,12 +1767,14 @@ function MarketGroupedResults({
   kindFilter,
   fmt,
   globalMin,
+  sortMode,
   highlightTokens,
 }: {
   groups: ProductGroup[];
   kindFilter: string | null;
-  fmt: (n: number) => string;
+  fmt: (n: number | null | undefined) => string;
   globalMin: number | null;
+  sortMode: SortMode;
   highlightTokens: string[];
 }) {
   type Row = {
