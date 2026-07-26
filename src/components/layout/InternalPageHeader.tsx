@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { BackButton } from "./BackButton";
+import { HomeBrandLink } from "./HomeBrandLink";
 
 export type InternalCrumb = { label: string; to?: string };
 
@@ -65,11 +66,18 @@ export function InternalPageHeader({
         className,
       )}
     >
-      {showBack && (
-        <div className="mb-1.5">
-          <BackButton fallbackTo={backFallback} variant="ghost" />
-        </div>
-      )}
+      {/* A marca é sempre o caminho de volta à homepage — o "Voltar" é opcional. */}
+      <div className="mb-1.5 flex min-w-0 items-center gap-2">
+        <HomeBrandLink className="-ml-1" />
+        {showBack && (
+          <>
+            <span aria-hidden="true" className="text-border">
+              /
+            </span>
+            <BackButton fallbackTo={backFallback} variant="ghost" />
+          </>
+        )}
+      </div>
       {breadcrumbs && breadcrumbs.length > 0 && (
         <nav
           aria-label="Trilha de navegação"

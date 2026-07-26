@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { buildLivePanel, type LivePanelMetric } from "@/lib/live-panel";
 import { getProductSuggestions } from "@/lib/products-suggest.functions";
 import { getPlatformStats, listPublicStores } from "@/lib/stores-public.functions";
 import { getEconomyStat } from "@/lib/products-public.functions";
@@ -228,34 +229,21 @@ function HomePage() {
     navigate({ to: "/buscar", search: { q: name } as any });
   };
 
-  const metrics = [
-    {
-      kind: "markets" as const,
-      value: stats.establishments != null ? String(stats.establishments) : "—",
-      label: "Mercados parceiros",
-      short: "Mercados",
-      Icon: ShieldCheck,
-    },
-    {
-      kind: "products" as const,
-      value:
-        stats.totalItems != null && stats.totalItems > 0
-          ? stats.totalItems.toLocaleString("pt-BR")
-          : stats.products != null
-            ? stats.products.toLocaleString("pt-BR")
-            : "—",
-      label: "Preços cadastrados",
-      short: "Preços",
-      Icon: Package,
-    },
-    {
-      kind: "savings" as const,
-      value: economy?.avgSavingsPct ? `${economy.avgSavingsPct}%` : "—",
-      label: "Economia média",
-      short: "Economia",
-      Icon: TrendingDown,
-    },
-  ];
+  // Painel ao vivo: lógica pura e testada (src/lib/live-panel.ts) — placeholder
+  // "—" + mensagem amigável quando a consulta falha, nunca números inventados.
+  const livePanel = buildLivePanel({
+    stats,
+    economy,
+    statsLoading: statsQ.isLoading,
+    economyLoading: economyQ.isLoading,
+    statsError: statsQ.isError,
+    economyError: economyQ.isError,
+  });
+  const METRIC_ICONS = { markets: ShieldCheck, products: Package, savings: TrendingDown } as const;
+  const metrics = livePanel.metrics.map((m: LivePanelMetric) => ({
+    ...m,
+    Icon: METRIC_ICONS[m.kind],
+  }));
 
   return (
     <div
@@ -558,6 +546,20 @@ function HomePage() {
                     </button>
                   ))}
                 </div>
+
+                {livePanel.failed && (
+                  <p
+                    role="status"
+                    className="mt-2 rounded-lg border px-2 py-1.5 text-[11.5px] leading-snug"
+                    style={{
+                      color: "var(--pc-home-onhero-fg-80)",
+                      borderColor: "var(--pc-home-onhero-border-soft)",
+                      background: "var(--pc-home-onhero-glass-soft)",
+                    }}
+                  >
+                    {livePanel.errorMessage}
+                  </p>
+                )}
 
                 {/* Faixa de parceiros — logos compactos */}
                 <div

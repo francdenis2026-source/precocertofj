@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { HomeBrandLink } from "./HomeBrandLink";
 
 export type Crumb = { label: string; to?: string };
 
@@ -30,6 +31,10 @@ export function PageHeader({
         className,
       )}
     >
+      {/* Marca clicável em todas as rotas — não depende do botão "Voltar". */}
+      <div className="mb-1.5 flex min-w-0 items-center">
+        <HomeBrandLink className="-ml-1" />
+      </div>
       {breadcrumbs && breadcrumbs.length > 0 && (
         <nav
           aria-label="Trilha de navegação"
