@@ -333,7 +333,9 @@ function CategoryPage() {
                   : undefined
               }
             />
+          ) : (
             <div id="cat-prod-results">
+
               <p className="sr-only" aria-live="polite">
                 {`${products.length.toLocaleString("pt-BR")} produto(s) — modo ${view === "list" ? "lista" : "grade"}${
                   view === "list" ? `, página ${safePage} de ${totalPages}` : ""
