@@ -40,7 +40,7 @@ ROUTES = [
 ]
 
 # Espelha MIN_ANY_PX em src/lib/typeclear.ts
-MIN_FONT_PX = 10.5
+MIN_FONT_PX = 11
 # Meta "uma tela": ate 1.15x a altura da viewport
 MAX_HEIGHT_RATIO = 1.15
 

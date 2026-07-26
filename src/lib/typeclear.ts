@@ -13,7 +13,7 @@
  */
 
 /** Piso absoluto para qualquer texto do sistema (selos/tags inclusos). */
-export const MIN_ANY_PX = 10.5;
+export const MIN_ANY_PX = 11;
 /** Piso para textos de leitura (corpo, meta, títulos, células, controles). */
 export const MIN_READABLE_PX = 12;
 
@@ -53,7 +53,7 @@ export const tc = {
   /** Números (contagens, distâncias, preços). */
   num: `font-mono ${fluid(13, 14.5)} leading-[1.2] tabular-nums`,
   /** Selo minúsculo. */
-  tag: `${fluid(10.5, 11.5)} font-bold uppercase leading-none tracking-[0.12em]`,
+  tag: `${fluid(11, 12)} font-bold uppercase leading-none tracking-[0.12em]`,
 } as const;
 
 export type TcToken = keyof typeof tc;
