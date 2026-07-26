@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useMotionValue, useTransform, animate, AnimatePresence } from "framer-motion";
-import { ArrowRight, Loader2, User, Phone, MapPin, Hash, ShieldAlert, AlertCircle, Check, ShoppingCart, Ticket } from "lucide-react";
+import { ArrowRight, Loader2, User, Phone, MapPin, Hash, ShieldAlert, AlertCircle, Check, Ticket } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
