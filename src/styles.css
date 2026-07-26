@@ -3400,6 +3400,9 @@ html[data-reading="on"] :where([data-reading-card]) {
    por sair da regra com a classe .gold-on-dark.
    ========================================================================== */
 html:not(.dark) :is(
+  .text-brand,
+  .text-brand\/90,
+  .text-brand\/80,
   .text-brand-gold,
   .text-brand-gold\/90,
   .text-brand-gold\/80,
@@ -3409,6 +3412,7 @@ html:not(.dark) :is(
 }
 
 html:not(.dark) :is(
+  .hover\:text-brand,
   .hover\:text-brand-gold,
   .hover\:text-brand-gold\/80
 ):not(.gold-on-dark):hover {
@@ -3421,11 +3425,13 @@ html:not(.dark) .text-brand-gold-soft:not(.gold-on-dark) {
 
 /* Dourado sobre fundo navy/escuro permanece vivo mesmo no modo claro. */
 html:not(.dark) :is(.bg-brand-navy, .bg-brand-navy-2, [data-surface="navy"]) :is(
+  .text-brand,
   .text-brand-gold,
   .text-brand-gold-soft
 ) {
   color: var(--pc-home-gold);
 }
+
 
 /* ============================================================================
    INTERAÇÃO PADRÃO — "pc-tile" / "pc-lift"
