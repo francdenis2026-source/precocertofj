@@ -263,7 +263,12 @@ export const getPublicProduct = createServerFn({ method: "POST" })
             .slice(-30),
         };
       })
-      .sort((a, b) => a.priceMin - b.priceMin)
+      .sort((a, b) =>
+        comparePriceEntries(
+          { store: a.marketName, price: a.priceMin, samples: a.samples, lastSeen: a.lastSeen },
+          { store: b.marketName, price: b.priceMin, samples: b.samples, lastSeen: b.lastSeen },
+        ),
+      )
       .slice(0, 12);
 
     // Ranking segmentado por cidade
