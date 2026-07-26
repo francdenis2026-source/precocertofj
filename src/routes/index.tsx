@@ -369,6 +369,15 @@ function HomePage() {
             background: `linear-gradient(90deg, transparent 0%, color-mix(in oklab, ${P.navy} 82%, transparent) 44%, color-mix(in oklab, ${P.navy} 98%, transparent) 100%)`,
           }}
         />
+        {/* Fusão com a seção seguinte: elimina a faixa/emenda entre hero e o corpo */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-24 sm:h-28"
+          style={{
+            background: `linear-gradient(180deg, transparent 0%, color-mix(in oklab, ${P.paper} 55%, transparent) 55%, ${P.paper} 100%)`,
+          }}
+        />
+
 
 
         <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-3 pb-4 sm:px-6 sm:pt-5 sm:pb-6 lg:px-8 lg:pt-6 lg:pb-7">
