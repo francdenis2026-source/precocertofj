@@ -835,6 +835,64 @@ function EstablishmentsPage() {
                       Limpar filtros
                     </button>
                   </div>
+                ) : view === "list" ? (
+                <ul className="divide-y divide-border/60" aria-label="Lista de estabelecimentos">
+                  {visibleItems.map((e, idx) => {
+                    const tier = classifyTier(e.productsCount);
+                    const freshness = describeFreshness(e.lastUpdate);
+                    const dist = distanceById.get(e.id);
+                    return (
+                      <li key={e.id}>
+                        <Link
+                          to="/estabelecimento/$slug"
+                          params={{ slug: slugifyEstablishment(e.name) }}
+                          className="flex items-center gap-3 px-3 py-2.5 transition-colors hover:bg-muted/50 md:px-4"
+                        >
+                          <span className="w-6 shrink-0 text-right font-mono text-[12px] font-bold tabular-nums text-foreground/55">
+                            {String(idx + 1).padStart(2, "0")}
+                          </span>
+                          <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md border border-border/60 bg-white p-1">
+                            {e.logoUrl ? (
+                              <img src={e.logoUrl} alt="" loading="lazy" className="h-full w-full object-contain" />
+                            ) : (
+                              <span className="text-[11px] font-bold text-brand-navy">
+                                {e.name.substring(0, 2).toUpperCase()}
+                              </span>
+                            )}
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="flex min-w-0 items-center gap-1.5">
+                              <span className="truncate text-[13.5px] font-semibold text-foreground">{e.name}</span>
+                              <span
+                                className="shrink-0 rounded-sm px-1 py-[1px] text-[8.5px] font-bold uppercase leading-none tracking-[0.14em]"
+                                style={{ backgroundColor: tier.color, color: "var(--brand-navy)" }}
+                              >
+                                {tier.label}
+                              </span>
+                            </span>
+                            <span className="mt-0.5 block truncate text-[11.5px] text-foreground/75">
+                              {[e.neighborhood, e.city].filter(Boolean).join(" · ") || "Localização não informada"}
+                              {dist ? ` · ${formatDistance(dist.km)}` : ""}
+                            </span>
+                          </span>
+                          <span className="hidden shrink-0 text-right sm:block">
+                            <span className="block font-mono text-[13px] font-bold tabular-nums text-foreground">
+                              {e.productsCount}
+                            </span>
+                            <span className="block text-[10px] font-bold uppercase tracking-[0.12em] text-foreground/70">
+                              produtos
+                            </span>
+                          </span>
+                          <span className="hidden w-[104px] shrink-0 text-right text-[11px] text-foreground/75 md:block">
+                            {freshness.label}
+                          </span>
+                          <FavoriteMarketButton marketName={e.name} />
+                          <ChevronRight className="h-4 w-4 shrink-0 text-foreground/50" aria-hidden />
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
                 ) : (
                 <ul
                   className="grid grid-cols-1 gap-3 p-2.5 sm:grid-cols-2 md:p-4 lg:grid-cols-3"
