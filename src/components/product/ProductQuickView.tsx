@@ -48,6 +48,9 @@ export function ProductQuickView({
   });
 
   const markets = (data?.markets ?? []).slice(0, 8);
+  // Evita duplicidade: com um único estabelecimento, o destaque "Menor preço"
+  // repetiria a mesma linha da lista abaixo.
+  const showCheapestHighlight = Boolean(product?.cheapestStore) && markets.length > 1;
 
   return (
     <Dialog open={Boolean(product)} onOpenChange={(v) => !v && onClose()}>
