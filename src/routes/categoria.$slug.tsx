@@ -1,7 +1,10 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, stripSearchParams } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { zodValidator, fallback } from "@tanstack/zod-adapter";
+import { z } from "zod";
 import { useServerFn } from "@tanstack/react-start";
+
 import {
   ArrowRight,
   Beef,
@@ -52,7 +55,20 @@ const ICONS: Record<string, typeof ShoppingCart> = {
 const brl = (v: number) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
+const SEARCH_DEFAULTS = { q: "", loja: "", view: "list", page: 1, per: 30 };
+
+const searchSchema = z.object({
+  q: fallback(z.string(), "").default(""),
+  loja: fallback(z.string(), "").default(""),
+  view: fallback(z.string(), "list").default("list"),
+  page: fallback(z.number().int(), 1).default(1),
+  per: fallback(z.number().int(), 30).default(30),
+});
+
 export const Route = createFileRoute("/categoria/$slug")({
+  validateSearch: zodValidator(searchSchema),
+  search: { middlewares: [stripSearchParams(SEARCH_DEFAULTS)] },
+
   head: ({ params }) => {
     const def = categoryBySlug(params.slug);
     const label = def?.label ?? "Categoria";
@@ -76,15 +92,42 @@ export const Route = createFileRoute("/categoria/$slug")({
 
 function CategoryPage() {
   const { slug } = Route.useParams();
+  const search = Route.useSearch();
   const navigate = useNavigate();
   const def = categoryBySlug(slug);
   const fetchHub = useServerFn(getCategoryHub);
-  const [q, setQ] = useState("");
+
+  // Estado derivado da URL (compartilhável + voltar/avançar do navegador)
+  const q = search.q;
+  const storeFilter = search.loja;
+  const view: "list" | "grid" = search.view === "grid" ? "grid" : "list";
+  const perPage = [30, 60, 120].includes(search.per) ? search.per : 30;
+  const page = Math.max(1, search.page);
+
+  const setSearch = useCallback(
+    (patch: Partial<typeof search>, opts?: { replace?: boolean }) => {
+      navigate({
+        to: "/categoria/$slug",
+        params: { slug },
+        search: { ...search, ...patch },
+        replace: opts?.replace ?? false,
+        resetScroll: false,
+      });
+    },
+    [navigate, slug, search],
+  );
+
+
+  // Campo de busca: digitação local + sincronização debounced na URL (sem poluir o histórico)
+  const [qInput, setQInput] = useState(q);
+  useEffect(() => setQInput(q), [q]);
+  useEffect(() => {
+    if (qInput === q) return;
+    const t = window.setTimeout(() => setSearch({ q: qInput, page: 1 }, { replace: true }), 350);
+    return () => window.clearTimeout(t);
+  }, [qInput, q, setSearch]);
+
   const [limit, setLimit] = useState(24);
-  const [view, setView] = useState<"list" | "grid">("list");
-  const [storeFilter, setStoreFilter] = useState<string>("");
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(30);
 
   const { data, isLoading } = useQuery({
     queryKey: ["category-hub", slug],
@@ -112,15 +155,9 @@ function CategoryPage() {
   const visible = view === "list" ? products.slice(pageStart, pageStart + perPage) : products.slice(0, limit);
 
   useEffect(() => {
-    setPage(1);
     setLimit(24);
   }, [slug, q, storeFilter, perPage, view]);
 
-  useEffect(() => {
-    // a categoria mudou: limpa filtros que não existem no novo nicho
-    setStoreFilter("");
-    setQ("");
-  }, [slug]);
 
   if (!def) {
     return (
@@ -247,39 +284,17 @@ function CategoryPage() {
               <input
                 id="cat-prod-search"
                 type="search"
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
+                value={qInput}
+                onChange={(e) => setQInput(e.target.value)}
+                aria-controls="cat-prod-results"
                 placeholder={`Filtrar em ${def.label.toLowerCase()}…`}
                 className="h-10 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13.5px] outline-none focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
               />
             </div>
-            <div
-              role="group"
-              aria-label="Modo de exibição"
-              className="flex h-10 shrink-0 items-center gap-1 rounded-lg border border-border bg-card p-1"
-            >
-              {([
-                { id: "list", label: "Lista", Icon: List },
-                { id: "grid", label: "Grade", Icon: LayoutGrid },
-              ] as const).map(({ id, label, Icon: VIcon }) => (
-                <button
-                  key={id}
-                  type="button"
-                  onClick={() => setView(id)}
-                  aria-pressed={view === id}
-                  title={label}
-                  className={cn(
-                    "grid h-8 w-8 place-items-center rounded-md transition-colors",
-                    view === id
-                      ? "bg-brand-gold text-brand-navy"
-                      : "text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  <VIcon className="h-4 w-4" aria-hidden />
-                  <span className="sr-only">{label}</span>
-                </button>
-              ))}
-            </div>
+            <ViewToggle
+              view={view}
+              onChange={(v) => setSearch({ view: v, page: 1 })}
+            />
           </div>
 
           {(data?.stores.length ?? 0) > 1 && (
@@ -291,18 +306,21 @@ function CategoryPage() {
               <FilterChip
                 label="Todas as lojas"
                 active={storeFilter === ""}
-                onClick={() => setStoreFilter("")}
+                onClick={() => setSearch({ loja: "", page: 1 })}
               />
               {data!.stores.map((s2) => (
                 <FilterChip
                   key={s2.id}
                   label={s2.name}
                   active={storeFilter === s2.name}
-                  onClick={() => setStoreFilter(storeFilter === s2.name ? "" : s2.name)}
+                  onClick={() =>
+                    setSearch({ loja: storeFilter === s2.name ? "" : s2.name, page: 1 })
+                  }
                 />
               ))}
             </div>
           )}
+
 
           {isLoading ? (
             <SkeletonRow />
@@ -320,8 +338,15 @@ function CategoryPage() {
               }
             />
           ) : (
-            <>
+            <div id="cat-prod-results">
+
+              <p className="sr-only" aria-live="polite">
+                {`${products.length.toLocaleString("pt-BR")} produto(s) — modo ${view === "list" ? "lista" : "grade"}${
+                  view === "list" ? `, página ${safePage} de ${totalPages}` : ""
+                }`}
+              </p>
               {view === "grid" ? (
+
                 <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
                   {visible.map((p) => (
                     <li key={p.key}>
@@ -393,10 +418,11 @@ function CategoryPage() {
                   to={Math.min(pageStart + perPage, products.length)}
                   total={products.length}
                   onPage={(n) => {
-                    setPage(n);
+                    setSearch({ page: n });
                     document.getElementById("cat-prod-search")?.scrollIntoView({ block: "center" });
                   }}
-                  onPerPage={setPerPage}
+                  onPerPage={(n) => setSearch({ per: n, page: 1 })}
+
                 />
               ) : (
                 products.length > limit && (
@@ -409,7 +435,8 @@ function CategoryPage() {
                   </button>
                 )
               )}
-            </>
+            </div>
+
           )}
         </section>
       </main>
@@ -417,6 +444,77 @@ function CategoryPage() {
     </div>
   );
 }
+
+/** Alternância Lista/Grade acessível: radiogroup com foco rotativo e setas do teclado. */
+function ViewToggle({
+  view,
+  onChange,
+}: {
+  view: "list" | "grid";
+  onChange: (v: "list" | "grid") => void;
+}) {
+  const options = [
+    { id: "list", label: "Lista", Icon: List },
+    { id: "grid", label: "Grade", Icon: LayoutGrid },
+  ] as const;
+  const refs = useRef<(HTMLButtonElement | null)[]>([]);
+
+  const move = (dir: -1 | 1, index: number) => {
+    const next = (index + dir + options.length) % options.length;
+    onChange(options[next].id);
+    refs.current[next]?.focus();
+  };
+
+  return (
+    <div
+      role="radiogroup"
+      aria-label="Modo de exibição dos produtos"
+      className="flex h-10 shrink-0 items-center gap-1 rounded-lg border border-border bg-card p-1"
+    >
+      {options.map(({ id, label, Icon: VIcon }, i) => {
+        const selected = view === id;
+        return (
+          <button
+            key={id}
+            ref={(el) => {
+              refs.current[i] = el;
+            }}
+            type="button"
+            role="radio"
+            aria-checked={selected}
+            aria-label={`Exibir em ${label.toLowerCase()}`}
+            aria-controls="cat-prod-results"
+            tabIndex={selected ? 0 : -1}
+            title={label}
+            onClick={() => onChange(id)}
+            onKeyDown={(e) => {
+              if (e.key === "ArrowRight" || e.key === "ArrowDown") {
+                e.preventDefault();
+                move(1, i);
+              } else if (e.key === "ArrowLeft" || e.key === "ArrowUp") {
+                e.preventDefault();
+                move(-1, i);
+              } else if (e.key === " " || e.key === "Enter") {
+                e.preventDefault();
+                onChange(id);
+              }
+            }}
+            className={cn(
+              "grid h-8 w-8 place-items-center rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+              selected
+                ? "bg-brand-gold text-brand-navy"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            <VIcon className="h-4 w-4" aria-hidden />
+            <span className="sr-only">{label}</span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 
 function FilterChip({
   label,
@@ -660,10 +758,16 @@ function CategoryRail({ current }: { current: string }) {
 
   return (
     <nav aria-label="Outras categorias" className="relative mt-2.5">
+      <p id="cat-rail-help" className="sr-only">
+        Use as setas esquerda e direita para navegar entre as categorias. Home vai para a
+        primeira e End para a última.
+      </p>
       <div
         ref={ref}
         onScroll={sync}
         onKeyDown={onKeyDown}
+        role="group"
+        aria-describedby="cat-rail-help"
         className="no-scrollbar overflow-x-auto scroll-smooth px-9 py-1"
       >
         <ul className="flex w-max gap-1.5 pr-1">
@@ -677,6 +781,8 @@ function CategoryRail({ current }: { current: string }) {
                   params={{ slug: c.slug }}
                   data-rail-item=""
                   aria-current={active ? "page" : undefined}
+                  aria-label={`Categoria ${c.label}${active ? " (atual)" : ""}`}
+                  tabIndex={active ? 0 : -1}
                   className={cn(
                     "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[12px] font-semibold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                     active
@@ -684,7 +790,6 @@ function CategoryRail({ current }: { current: string }) {
                       : "border-border bg-card text-foreground hover:border-brand-gold",
                   )}
                 >
-
                   <CIcon className="h-3.5 w-3.5" aria-hidden /> {c.short}
                 </Link>
               </li>
@@ -692,6 +797,7 @@ function CategoryRail({ current }: { current: string }) {
           })}
         </ul>
       </div>
+
 
       <span
         aria-hidden
