@@ -212,21 +212,29 @@ function PlansPage() {
           >
             <span className="text-foreground">Planos</span>
             <span aria-hidden className="text-border">·</span>
-            <a href="#comparativo" className="transition hover:text-brand-gold">
+            <button
+              type="button"
+              onClick={() => setTab("comparativo")}
+              className="uppercase tracking-[0.1em] transition hover:text-brand-gold"
+            >
               Comparativo
-            </a>
+            </button>
             <span aria-hidden className="text-border">·</span>
-            <a href="#faq" className="transition hover:text-brand-gold">
+            <button
+              type="button"
+              onClick={() => setTab("faq")}
+              className="uppercase tracking-[0.1em] transition hover:text-brand-gold"
+            >
               Dúvidas
-            </a>
+            </button>
           </nav>
 
           {isLoading ? (
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-3 pt-2.5 sm:grid-cols-2 lg:grid-cols-4">
               {[0, 1, 2, 3].map((i) => (
                 <div
                   key={i}
-                  className="h-52 animate-pulse rounded-xl border border-border bg-muted/40"
+                  className="h-[254px] animate-pulse rounded-xl border border-border bg-muted/40"
                 />
               ))}
             </div>
@@ -244,7 +252,7 @@ function PlansPage() {
                     key={plan.id}
                     onClick={() => setSelectedId(plan.id)}
                     className={dsx(
-                      "relative flex cursor-pointer flex-col rounded-xl border border-border bg-card p-4 shadow-elev-1 transition-all hover:shadow-elev-2 sm:p-[18px]",
+                      "pc-lift relative flex min-h-[254px] cursor-pointer flex-col rounded-xl border border-border bg-card p-4 shadow-elev-1 sm:p-[18px]",
                       isRecommended && "border-brand-gold/70",
                       isFounder && "border-brand-gold/50",
                       isSelected && "border-brand-gold ring-2 ring-brand-gold/35",
@@ -255,9 +263,7 @@ function PlansPage() {
                         <span
                           className={dsx(
                             "inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[10.5px] font-bold uppercase tracking-[0.14em] shadow-elev-1",
-                            isRecommended
-                              ? "bg-brand-gold text-brand-navy"
-                              : "border border-brand-gold/60 bg-card text-brand-gold",
+                            isRecommended ? "badge-gold" : "badge-gold-outline",
                           )}
                         >
                           {isRecommended ? "Mais escolhido" : "Limitado"}
@@ -310,11 +316,12 @@ function PlansPage() {
                         handleBuy(plan);
                       }}
                       disabled={buying === plan.id}
+                      data-loading={buying === plan.id ? "true" : undefined}
                       className={dsx(
                         ds.btn.base,
-                        "mt-4 h-11 w-full px-3 text-[12.5px] font-semibold uppercase tracking-[0.06em] focus-visible:ring-2 focus-visible:ring-brand-gold",
+                        "mt-4 h-11 w-full px-3 text-[12.5px] font-semibold uppercase tracking-[0.06em]",
                         isRecommended || isFounder
-                          ? "bg-brand-gold text-brand-navy shadow-elev-1 hover:brightness-105 hover:shadow-elev-2"
+                          ? "btn-gold shadow-elev-1 hover:shadow-elev-2"
                           : "border border-border bg-card text-foreground hover:border-brand-gold hover:text-brand-gold",
                       )}
                     >
@@ -331,6 +338,7 @@ function PlansPage() {
               })}
             </div>
           )}
+
         </section>
 
         {/* Detalhes — painel de ALTURA FIXA: alternar abas ou abrir uma dúvida
