@@ -416,21 +416,25 @@ function SearchPage() {
               />
             </div>
 
-            {/* Filtros — barra única compacta, logo abaixo da busca */}
-            <FiltersToolbar
-              open={filtersOpen}
-              onToggle={() => setFiltersOpen((v) => !v)}
-              activeCount={activeFilterCount}
-              mode={mode}
-              onMode={chooseMode}
-              pureOnly={pureOnly}
-              onPure={setPure}
-              min={search.min ?? ""}
-              max={search.max ?? ""}
-              onMin={setMinPrice}
-              onMax={setMaxPrice}
-              onClear={clearFilters}
-            />
+            {/* Filtros — barra única compacta e fixa (sticky) abaixo do topo:
+                alternar filtros não desloca o conteúdo já renderizado. */}
+            <div className="sticky top-[var(--pc-search-top,44px)] z-20 -mx-1 min-h-[42px] bg-background/95 px-1 py-1 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+              <FiltersToolbar
+                open={filtersOpen}
+                onToggle={() => setFiltersOpen((v) => !v)}
+                activeCount={activeFilterCount}
+                mode={mode}
+                onMode={chooseMode}
+                pureOnly={pureOnly}
+                onPure={setPure}
+                min={search.min ?? ""}
+                max={search.max ?? ""}
+                onMin={setMinPrice}
+                onMax={setMaxPrice}
+                onClear={clearFilters}
+              />
+            </div>
+
 
             {!hasQuery && <SearchDiscovery onPickQuery={pickQuery} />}
 
