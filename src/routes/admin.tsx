@@ -266,6 +266,8 @@ function AdminPage() {
             { to: "/admin/metricas", label: "Métricas & cache", icon: Gauge },
             { to: "/admin/precos", label: "Gestão de preços", icon: ShieldCheck },
             { to: "/admin/consistencia", label: "Consistência", icon: AlertTriangle },
+            { to: "/admin/auditoria-numeros", label: "Auditoria de números", icon: Gauge },
+
             { to: "/admin/cobertura", label: "Cobertura por estabelecimento", icon: Store },
             { to: "/admin/lote-inserir", label: "Scan Inteligente", icon: Plus },
             { to: "/admin/cadastro-foto", label: "Cadastro por foto (IA)", icon: Sparkles },
