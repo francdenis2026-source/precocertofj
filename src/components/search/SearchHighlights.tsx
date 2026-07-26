@@ -48,8 +48,8 @@ type Props = {
 
 /**
  * Descoberta com dados reais em `/buscar`. Alterna entre economias (maior
- * diferença de preço, filtrável por categoria) e maior cobertura entre
- * mercados parceiros.
+ * diferença de preço), maior cobertura e — para quem está logado — destaques
+ * personalizados pelas categorias mais pesquisadas e itens salvos.
  */
 export function SearchHighlights({ onPickQuery }: Props) {
   const { data, isPending } = useQuery({
@@ -58,10 +58,84 @@ export function SearchHighlights({ onPickQuery }: Props) {
     staleTime: 5 * 60_000,
   });
 
+  const { user } = useSession();
+
+  // Consultas recentes (client-only) — base do sinal de personalização.
+  const [historyTerms, setHistoryTerms] = useState<string[]>([]);
+  useEffect(() => {
+    if (!user) {
+      setHistoryTerms([]);
+      return;
+    }
+    setHistoryTerms(getSearchHistory().map((e) => e.query));
+  }, [user]);
+
+  const { data: favorites } = useQuery({
+    queryKey: ["favorite-items", "highlights", user?.id ?? "anon"],
+    queryFn: () => listFavoriteItems(),
+    enabled: !!user,
+    staleTime: 5 * 60_000,
+  });
+
+  const personalTokens = useMemo(() => {
+    const set = new Set<string>();
+    for (const q of historyTerms) for (const t of tokens(q)) set.add(t);
+    for (const f of favorites ?? []) for (const t of tokens(f.displayName)) set.add(t);
+    return set;
+  }, [historyTerms, favorites]);
+
+  const hasSignal = personalTokens.size > 0;
+
+  const pool = useMemo(
+    () => [...(data?.opportunities ?? []), ...(data?.covered ?? [])],
+    [data],
+  );
+
+  /** Categorias favoritas do usuário, inferidas pelos itens que casam com o histórico/salvos. */
+  const personalItems = useMemo(() => {
+    if (!hasSignal) return [] as HighlightItem[];
+    const score = (item: HighlightItem) => {
+      const t = tokens(item.name);
+      return t.reduce((acc, tok) => acc + (personalTokens.has(tok) ? 1 : 0), 0);
+    };
+
+    const catScore = new Map<string, number>();
+    for (const item of pool) {
+      const s = score(item);
+      if (s > 0 && item.category) catScore.set(item.category, (catScore.get(item.category) ?? 0) + s);
+    }
+
+    const seen = new Set<string>();
+    return pool
+      .map((item) => {
+        const direct = score(item);
+        const cat = item.category ? (catScore.get(item.category) ?? 0) : 0;
+        return { item, rank: direct * 10 + Math.min(cat, 6) + item.savings / 1000 };
+      })
+      .filter((r) => r.rank >= 1)
+      .sort((a, b) => b.rank - a.rank)
+      .filter(({ item }) => (seen.has(item.key) ? false : (seen.add(item.key), true)))
+      .map((r) => r.item);
+  }, [pool, personalTokens, hasSignal]);
+
+  const canPersonalize = !!user && personalItems.length > 0;
+
   const [view, setView] = useState<View>("economia");
   const [category, setCategory] = useState<string>("");
 
-  const source = view === "economia" ? (data?.opportunities ?? []) : (data?.covered ?? []);
+  // Abre em "Para você" assim que houver sinal suficiente.
+  useEffect(() => {
+    if (canPersonalize) setView((v) => (v === "economia" ? "para-voce" : v));
+  }, [canPersonalize]);
+
+  const effectiveView: View = view === "para-voce" && !canPersonalize ? "economia" : view;
+
+  const source =
+    effectiveView === "para-voce"
+      ? personalItems
+      : effectiveView === "economia"
+        ? (data?.opportunities ?? [])
+        : (data?.covered ?? []);
 
   const categories = useMemo(() => {
     const counts = new Map<string, number>();
@@ -79,14 +153,27 @@ export function SearchHighlights({ onPickQuery }: Props) {
 
   const items = useMemo(() => {
     const filtered = activeCategory ? source.filter((i) => i.category === activeCategory) : source;
-    return filtered.slice(0, view === "economia" ? 6 : 8);
-  }, [source, activeCategory, view]);
+    return filtered.slice(0, effectiveView === "cobertura" ? 8 : 6);
+  }, [source, activeCategory, effectiveView]);
 
   if (!isPending && (data?.opportunities.length ?? 0) === 0 && (data?.covered.length ?? 0) === 0) {
     return null;
   }
 
-  const isEconomia = view === "economia";
+  const isEconomia = effectiveView === "economia";
+  const isPersonal = effectiveView === "para-voce";
+  const asCards = effectiveView !== "cobertura";
+
+  const title = isPersonal
+    ? "Destaques para você"
+    : isEconomia
+      ? "Onde a diferença de preço é maior"
+      : "Mais comparados nos mercados";
+  const subtitle = isPersonal
+    ? "Baseado no que você mais pesquisa e nos itens que salvou."
+    : isEconomia
+      ? "Mesmo produto, mercados diferentes — quanto dá para economizar hoje."
+      : "Itens presentes em vários mercados parceiros — clique para comparar.";
 
   return (
     <section
@@ -104,7 +191,9 @@ export function SearchHighlights({ onPickQuery }: Props) {
             aria-hidden
             className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-brand-gold/15 text-brand-gold-soft dark:text-brand-gold"
           >
-            {isEconomia ? (
+            {isPersonal ? (
+              <Sparkles className="h-4 w-4" strokeWidth={2.25} />
+            ) : isEconomia ? (
               <TrendingDown className="h-4 w-4" strokeWidth={2.25} />
             ) : (
               <Store className="h-4 w-4" strokeWidth={2.25} />
@@ -112,32 +201,37 @@ export function SearchHighlights({ onPickQuery }: Props) {
           </span>
           <div className="min-w-0">
             <h2 className="font-serif text-[14.5px] font-semibold leading-tight tracking-tight text-foreground">
-              {isEconomia ? "Onde a diferença de preço é maior" : "Mais comparados nos mercados"}
+              {title}
             </h2>
-            <p className="text-[11.5px] leading-snug text-muted-foreground">
-              {isEconomia
-                ? "Mesmo produto, mercados diferentes — quanto dá para economizar hoje."
-                : "Itens presentes em vários mercados parceiros — clique para comparar."}
-            </p>
+            <p className="text-[11.5px] leading-snug text-muted-foreground">{subtitle}</p>
           </div>
         </div>
 
         <QuickFilterBar<View>
           ariaLabel="Tipo de destaque"
-          value={view}
+          value={effectiveView}
           size="sm"
           onChange={(next) => {
             setView(next ?? "economia");
             setCategory("");
           }}
           options={[
+            ...(canPersonalize
+              ? [
+                  {
+                    value: "para-voce" as View,
+                    label: "Para você",
+                    hint: "Categorias que você mais pesquisa e itens salvos",
+                  },
+                ]
+              : []),
             {
-              value: "economia",
+              value: "economia" as View,
               label: "Economias",
               hint: "Maior diferença de preço entre mercados",
             },
             {
-              value: "cobertura",
+              value: "cobertura" as View,
               label: "Maior cobertura",
               hint: "Produtos presentes em mais mercados",
             },
@@ -171,13 +265,12 @@ export function SearchHighlights({ onPickQuery }: Props) {
         {isPending ? (
           <SkeletonGrid rows={6} />
         ) : items.length === 0 ? (
-          <p
-            role="status"
-            className="rounded-xl border border-dashed border-border px-3 py-4 text-center text-[12.5px] text-muted-foreground"
-          >
-            Nenhum destaque nesta categoria por enquanto.
-          </p>
-        ) : isEconomia ? (
+          <EmptyHighlights
+            categoryLabel={activeCategory ? humanizeCategory(activeCategory) : null}
+            onClearCategory={() => setCategory("")}
+            onPickQuery={onPickQuery}
+          />
+        ) : asCards ? (
           <ul className="grid gap-1.5 sm:grid-cols-2 lg:grid-cols-3">
             {items.map((item) => (
               <li key={item.key}>
@@ -195,6 +288,93 @@ export function SearchHighlights({ onPickQuery }: Props) {
           </ul>
         )}
       </div>
+    </section>
+  );
+}
+
+/**
+ * Estado vazio acionável: busca direta de um item e atalho para cadastrar
+ * um preço novo quando a categoria ainda não tem destaques.
+ */
+function EmptyHighlights({
+  categoryLabel,
+  onClearCategory,
+  onPickQuery,
+}: {
+  categoryLabel: string | null;
+  onClearCategory: () => void;
+  onPickQuery: (q: string) => void;
+}) {
+  const [term, setTerm] = useState("");
+
+  return (
+    <div
+      role="status"
+      className="rounded-xl border border-dashed border-border bg-background/60 px-3 py-4 text-center"
+    >
+      <p className="text-[12.5px] font-medium tracking-tight text-foreground">
+        {categoryLabel
+          ? `Ainda não há destaques em ${categoryLabel}.`
+          : "Ainda não há destaques por aqui."}
+      </p>
+      <p className="mt-0.5 text-[11.5px] leading-snug text-muted-foreground">
+        Busque um item específico ou ajude cadastrando um preço que você viu no mercado.
+      </p>
+
+      <form
+        className="mx-auto mt-2.5 flex w-full max-w-md items-center gap-1.5"
+        onSubmit={(e) => {
+          e.preventDefault();
+          const q = term.trim();
+          if (q.length >= 2) onPickQuery(q);
+        }}
+      >
+        <label className="sr-only" htmlFor="empty-highlight-search">
+          Buscar um item específico
+        </label>
+        <div className="relative min-w-0 flex-1">
+          <Search
+            aria-hidden
+            className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
+          />
+          <input
+            id="empty-highlight-search"
+            value={term}
+            onChange={(e) => setTerm(e.target.value)}
+            placeholder="Ex.: arroz 5kg"
+            className="h-8 w-full rounded-full border border-border bg-background pl-8 pr-3 text-[12px] text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+          />
+        </div>
+        <button
+          type="submit"
+          className="inline-flex h-8 shrink-0 items-center rounded-full bg-brand-gold px-3 text-[11.5px] font-semibold text-brand-navy transition-colors hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        >
+          Buscar
+        </button>
+      </form>
+
+      <div className="mt-2 flex flex-wrap items-center justify-center gap-1.5">
+        {categoryLabel && (
+          <button
+            type="button"
+            onClick={onClearCategory}
+            className="inline-flex h-7 items-center rounded-full border border-border px-2.5 text-[11.5px] font-medium text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)]"
+          >
+            Ver todas as categorias
+          </button>
+        )}
+        <Link
+          to="/colaborar"
+          className="inline-flex h-7 items-center gap-1 rounded-full border border-brand-gold px-2.5 text-[11.5px] font-semibold text-brand-gold-soft transition-colors hover:bg-brand-gold hover:text-brand-navy dark:text-brand-gold"
+        >
+          <PlusCircle aria-hidden className="h-3.5 w-3.5" />
+          Cadastrar um preço
+        </Link>
+      </div>
+    </div>
+  );
+}
+
     </section>
   );
 }
