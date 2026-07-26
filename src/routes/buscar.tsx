@@ -395,8 +395,21 @@ function SearchPage() {
                 text={`Veja preços comparados de "${q}" no PreçoCerto`}
               />
             )}
+            <button
+              type="button"
+              onClick={toggleReducedMotion}
+              aria-pressed={reducedMotion}
+              title="Reduzir animações desta tela"
+              className="inline-flex h-7 items-center gap-1 rounded-full border border-border px-2 text-[11px] font-semibold text-muted-foreground hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold aria-pressed:border-brand-gold aria-pressed:text-[var(--pc-gold-ink)]"
+            >
+              <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
+              <span className="hidden sm:inline">
+                {reducedMotion ? "Animações reduzidas" : "Reduzir animações"}
+              </span>
+            </button>
             <FreeQuotaBadge variant="inline" />
           </div>
+
         </div>
       </header>
 
