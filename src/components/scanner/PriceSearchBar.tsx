@@ -1487,38 +1487,34 @@ function ProductDetailsCard({
   highlightTokens: string[];
 }) {
   return (
-    <div className="relative rounded-xl border border-border bg-card p-3">
-      <div className="flex items-start gap-3">
+    <div className="relative rounded-lg border border-border bg-card px-2.5 py-2">
+      <div className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-2.5">
         {suggestion.imageUrl ? (
           <LazyImage
             src={suggestion.imageUrl}
             alt={suggestion.displayName}
-            width={64}
-            height={64}
-            className="h-16 w-16 shrink-0 rounded-lg border border-border object-contain bg-background"
+            width={40}
+            height={40}
+            className="h-10 w-10 shrink-0 rounded-md border border-border bg-background object-contain"
           />
-
         ) : (
-          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-lg border border-border bg-muted/30">
-            <ShoppingBag className="h-5 w-5 text-muted-foreground" />
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md border border-border bg-muted/30">
+            <ShoppingBag className="h-4 w-4 text-muted-foreground" />
           </div>
         )}
-        <div className="min-w-0 flex-1">
-          <p className="text-[11.5px] font-medium text-accent-strong">
-            Produto encontrado
-          </p>
-          <p className="mt-0.5 truncate text-[15px] font-semibold tracking-tight text-foreground">
-            <HighlightMatch text={suggestion.displayName} tokens={highlightTokens} />
-          </p>
-          <p className="mt-0.5 truncate text-[12px] text-muted-foreground">
-            {[suggestion.brand, suggestion.category].filter(Boolean).join(" · ") ||
-              "Sem informações adicionais"}
-          </p>
-          {suggestion.matchReasons.length > 0 && (
-            <MatchReasonBadges reasons={suggestion.matchReasons} className="mt-1" />
-          )}
+        <div className="min-w-0">
+          <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-0.5">
+            <p className="truncate text-[13.5px] font-semibold tracking-tight text-foreground">
+              <HighlightMatch text={suggestion.displayName} tokens={highlightTokens} />
+            </p>
+            {([suggestion.brand, suggestion.category].filter(Boolean).join(" · ") || "") && (
+              <span className="truncate text-[11.5px] text-muted-foreground">
+                {[suggestion.brand, suggestion.category].filter(Boolean).join(" · ")}
+              </span>
+            )}
+          </div>
 
-          <div className="mt-2 flex flex-wrap gap-2">
+          <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
             <ProductQuickActions
               catalogId={suggestion.id}
               slug={suggestion.displayName}
@@ -1527,23 +1523,24 @@ function ProductDetailsCard({
             <Link
               to="/produto-publico/$slug"
               params={{ slug: suggestion.displayName }}
-              className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 font-mono text-[10px] tracking-wide text-primary hover:bg-primary/20"
+              className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary hover:bg-primary/20"
             >
-              Ver informações completas
+              Detalhes
             </Link>
             <Link
               to="/produto-publico/$slug"
               params={{ slug: suggestion.displayName }}
               hash="historico"
-              className="rounded-full border border-border bg-background px-3 py-1 font-mono text-[10px] tracking-wide text-foreground hover:bg-primary/5"
+              className="rounded-full border border-border bg-background px-2.5 py-0.5 text-[11px] font-medium text-foreground hover:bg-primary/5"
             >
-              Histórico de preços
+              Histórico
             </Link>
           </div>
         </div>
       </div>
     </div>
   );
+
 }
 
 function ProductGroupCard({
