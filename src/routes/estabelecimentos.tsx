@@ -26,7 +26,7 @@ import { tokenizeQuery } from "@/lib/search-tokens";
 
 /** Grade tabular da visualização em Lista (colunas alinhadas). */
 const LIST_GRID =
-  "grid grid-cols-[28px_44px_minmax(0,1fr)_150px_84px_78px_112px_20px] items-center gap-3";
+  "grid grid-cols-[28px_44px_minmax(0,1fr)_160px_80px_78px_120px_20px] items-center gap-3";
 
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import {
@@ -879,7 +879,7 @@ function EstablishmentsPage() {
                 <div className="overflow-x-auto">
                   <div className="min-w-[680px]">
                     {/* Cabeçalho tabular — colunas clicáveis para ordenar */}
-                    <div className={`${LIST_GRID} border-b border-border/60 bg-muted/40 px-3 py-2 text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/70 md:px-4`}>
+                    <div className={`${LIST_GRID} border-b border-border/60 bg-muted/40 px-3 py-2 text-[9.5px] font-bold uppercase tracking-[0.08em] text-foreground/70 md:px-4 [&>*]:truncate`}>
                       <span className="text-right">#</span>
                       <span className="sr-only">Logo</span>
                       <button
