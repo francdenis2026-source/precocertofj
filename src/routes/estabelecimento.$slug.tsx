@@ -156,14 +156,45 @@ function EstablishmentPage() {
   const { slug } = Route.useParams();
   const { data } = useSuspenseQuery(storeQuery(storeId));
   const navigate = useNavigate();
-  const [q, setQ] = useState("");
-  const [sort, setSort] = useState<SortKey>("price-asc");
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const search = Route.useSearch();
+
+  const setSearch = (patch: Record<string, string>) => {
+    navigate({
+      to: "/estabelecimento/$slug",
+      params: { slug },
+      search: (prev) => ({ ...prev, ...patch }),
+      replace: true,
+    });
+  };
+
+  const sort: SortKey = (Object.keys(SORT_LABEL) as SortKey[]).includes(search.sort as SortKey)
+    ? (search.sort as SortKey)
+    : "price-asc";
+  const view: "grid" | "list" = search.view === "list" ? "list" : "grid";
+  const tab: "catalogo" | "acougue" = search.aba === "acougue" ? "acougue" : "catalogo";
+  const selectedCategory = search.cat ? search.cat : null;
+
+  const [q, setQ] = useState(search.q);
   const [historyFor, setHistoryFor] = useState<PublicStoreProduct | null>(null);
   const [quickView, setQuickView] = useState<PublicStoreProduct | null>(null);
-  const [view, setView] = useState<"grid" | "list">("grid");
-  const [tab, setTab] = useState<"catalogo" | "acougue">("catalogo");
   const [limit, setLimit] = useState(30);
+
+  // Sincroniza o termo digitado com a URL (debounce) para compartilhar/voltar.
+  useEffect(() => {
+    if (q === search.q) return;
+    const t = setTimeout(() => setSearch({ q }), 350);
+    return () => clearTimeout(t);
+  }, [q]);
+
+  useEffect(() => {
+    setQ(search.q);
+  }, [search.q]);
+
+  useEffect(() => {
+    setLimit(30);
+  }, [search.cat, search.q, search.sort, search.view]);
+
+
 
 
   const { cuts, general } = useMemo(() => splitButcherCuts(data.products), [data.products]);
