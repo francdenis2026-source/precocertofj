@@ -439,7 +439,7 @@ export function ButcherCounter({
   );
 }
 
-function ActionButtons({
+const ActionButtons = memo(function ActionButtons({
   cut,
   onAlert,
   onHistory,
@@ -482,7 +482,7 @@ function ActionButtons({
 }
 
 /** Cartão compacto de corte — clique abre o modal de detalhes. */
-function CutTile({
+const CutTile = memo(function CutTile({
   cut,
   onOpen,
   onAlert,
@@ -527,7 +527,7 @@ function CutTile({
 }
 
 /** Linha densa em colunas (corte · R$/kg · preço · ações). */
-function CutRow({
+const CutRow = memo(function CutRow({
   cut,
   onOpen,
   onAlert,
