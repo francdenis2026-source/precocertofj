@@ -3802,3 +3802,43 @@ html.dark :is(.hover\:text-primary):not(.primary-on-light):hover {
     min-height: 46px !important;
   }
 }
+
+/* Compressão extra do cabeçalho/ação em alturas < 440px. */
+@media (max-height: 440px) {
+  [data-planos-shell] > main > section:first-of-type {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+  [data-planos-shell] > main > section:first-of-type a[href="/"],
+  [data-planos-shell] > main > section:first-of-type nav {
+    display: none !important;
+  }
+  [data-planos-shell] h1 {
+    font-size: 0.95rem !important;
+    margin: 0 !important;
+  }
+  [data-planos-shell] [data-planos-card] {
+    height: clamp(104px, 42vh, 132px) !important;
+    padding: 0.5rem 0.65rem !important;
+  }
+  [data-planos-shell] [data-planos-card] button,
+  [data-planos-shell] [data-planos-card] a {
+    min-height: 30px !important;
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+  [data-planos-shell] #planos {
+    padding-bottom: 0.25rem !important;
+  }
+  [data-planos-shell] #planos > div {
+    padding-top: 0.35rem !important;
+  }
+  [data-planos-shell] [data-testid="planos-cta-bar"] {
+    padding-top: 0 !important;
+  }
+  [data-planos-shell] [data-testid="planos-cta-bar"] > div {
+    min-height: 42px !important;
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+}
