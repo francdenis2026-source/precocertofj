@@ -284,10 +284,15 @@ function EstablishmentPage() {
     [search.bq, search.prot, search.bsort, search.bview],
   );
   const butcherQueryRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const patchButcher = (patch: Partial<ButcherViewState>) => {
-    const next = { ...butcherState, ...patch };
+  const butcherStateRef = useRef(butcherState);
+  butcherStateRef.current = butcherState;
+  const setSearchRef = useRef(setSearch);
+  setSearchRef.current = setSearch;
+  // Callback estável: evita re-renderizar o balcão a cada mudança de estado.
+  const patchButcher = useCallback((patch: Partial<ButcherViewState>) => {
+    const next = { ...butcherStateRef.current, ...patch };
     const apply = () =>
-      setSearch(
+      setSearchRef.current(
         {
           bq: next.q,
           prot: next.protein ?? "",
@@ -299,11 +304,17 @@ function EstablishmentPage() {
     if (butcherQueryRef.current) clearTimeout(butcherQueryRef.current);
     if (patch.q !== undefined) butcherQueryRef.current = setTimeout(apply, 350);
     else apply();
-  };
+  }, []);
 
-  const createAlert = (_p: PublicStoreProduct) => {
-    navigate({ to: "/alertas" });
-  };
+  const createAlert = useCallback(
+    (_p: PublicStoreProduct) => {
+      navigate({ to: "/alertas" });
+    },
+    [navigate],
+  );
+  const openQuickView = useCallback((p: PublicStoreProduct) => setQuickView(p), []);
+  const openHistory = useCallback((p: PublicStoreProduct) => setHistoryFor(p), []);
+
 
 
 
