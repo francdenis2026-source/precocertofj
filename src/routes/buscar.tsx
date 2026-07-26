@@ -165,13 +165,18 @@ function SearchPage() {
     }
   }, [navigate]);
 
+  // Filtros também sincronizam com `replace: true`: nunca empilham histórico
+  // nem provocam remontagem/piscada da rota entre alternâncias.
   const chooseMode = (m: SearchMode) => {
     try {
       window.localStorage.setItem(STORAGE_KEY, m);
     } catch {
       /* ignore */
     }
-    navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, mode: m }) });
+    navigate({
+      search: (prev: Record<string, unknown>) => ({ ...prev, mode: m }),
+      replace: true,
+    });
   };
 
   const setPure = (next: boolean) => {
@@ -182,8 +187,10 @@ function SearchPage() {
     }
     navigate({
       search: (prev: Record<string, unknown>) => ({ ...prev, pure: next ? "1" : "0" }),
+      replace: true,
     });
   };
+
 
   const clearBrand = () =>
     navigate({
