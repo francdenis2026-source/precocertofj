@@ -522,7 +522,7 @@ function FiltersToolbar({
   return (
     <section
       aria-label="Filtros de busca"
-      className="rounded-xl border border-border bg-card px-2.5 py-1.5 shadow-sm"
+      className="bg-transparent px-0.5 py-2"
     >
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
         <div className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
