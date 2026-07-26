@@ -385,12 +385,36 @@ export const getPlatformStats = createServerFn({ method: "GET" }).handler(
       const sc = Number(c.store_count ?? 0);
       if (sc >= 2 && avg > min) estimatedSavings += avg - min;
     }
+    // Produtos distintos com preço público — paginado (PostgREST corta em 1000 linhas).
+    // Mesma definição usada no painel de métricas, para os números não divergirem.
+    const distinctNames = new Set<string>();
+    {
+      const sb = supabaseAdmin as any;
+      const PAGE = 1000;
+      for (let from = 0; from < 40000; from += PAGE) {
+        const res = await sb
+          .from("scans")
+          .select("product_name")
+          .eq("status", "salvo")
+          .is("user_id", null)
+          .not("price_captured", "is", null)
+          .range(from, from + PAGE - 1);
+        const rows = (res.data ?? []) as Array<{ product_name: string | null }>;
+        for (const r of rows) {
+          const k = norm(r.product_name ?? "");
+          if (k) distinctNames.add(k);
+        }
+        if (rows.length < PAGE) break;
+      }
+    }
+
     return {
       establishments: row?.establishments ?? 0,
       priceDrops7d: row?.price_drops_7d ?? 0,
       activeComparisons: row?.active_comparisons ?? 0,
       products: uniqueKeys.size || (comps.data?.length ?? 0),
-      totalItems: itemsCount.count ?? 0,
+      totalItems: distinctNames.size,
+      priceRecords: itemsCount.count ?? 0,
       estimatedSavings: Number(estimatedSavings.toFixed(2)),
     };
   },
