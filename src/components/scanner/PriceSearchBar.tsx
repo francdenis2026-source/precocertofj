@@ -710,15 +710,45 @@ export function PriceSearchBar({
 
 
       {err && (
-        <p
+        <div
           role="alert"
           aria-live="assertive"
-          className="mt-2 flex items-start gap-1.5 rounded-lg border border-destructive/40 bg-destructive/10 px-2 py-1.5 font-mono text-[10px] text-destructive-foreground"
+          className="pc-res-card mt-3 border-[color-mix(in_oklab,var(--color-destructive)_38%,transparent)] bg-[color-mix(in_oklab,var(--color-destructive)_7%,transparent)] p-3 sm:p-4"
         >
-          <span aria-hidden="true">⚠</span>
-          <span className="min-w-0">{err}</span>
-        </p>
+          <div className="flex items-start gap-2.5">
+            <span
+              aria-hidden="true"
+              className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full border border-[color-mix(in_oklab,var(--color-destructive)_45%,transparent)] text-destructive"
+            >
+              !
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="pc-res-title">Não foi possível concluir a busca</p>
+              <p className="pc-res-meta mt-1 break-words">{err}</p>
+              <div className="mt-2.5 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const term = normalizeInput(inputValue).trim();
+                    if (term.length >= 2) runQuery(term);
+                  }}
+                  className="pc-res-store inline-flex h-9 items-center gap-1.5 rounded-full border border-[color-mix(in_oklab,var(--brand-gold)_55%,transparent)] bg-[color-mix(in_oklab,var(--brand-gold)_14%,transparent)] px-3.5 font-semibold text-[var(--pc-gold-ink)] transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50"
+                >
+                  Tentar novamente
+                </button>
+                <button
+                  type="button"
+                  onClick={clear}
+                  className="pc-res-store inline-flex h-9 items-center gap-1.5 rounded-full border border-border bg-background px-3.5 font-medium text-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50"
+                >
+                  Nova busca
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
+
 
       {quotaBlocked && !err && (
         <div className="mt-3">
