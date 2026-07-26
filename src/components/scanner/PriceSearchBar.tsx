@@ -1870,6 +1870,16 @@ function ProductGroupCard({
             </button>
           ) : null}
           <ProductQuickActions catalogId={catalogId} slug={productName} label={productName} />
+          <CreatePriceAlertButton
+            compact
+            triggerLabel="Alerta"
+            productKey={productName}
+            productName={productName}
+            displayName={productName}
+            defaultTargetPrice={cheapestInGroup?.price ?? min}
+            defaultDirection="drop"
+            defaultThresholdPct={5}
+          />
           <Link
             to="/produto-publico/$slug"
             params={{ slug: productName }}
@@ -1877,6 +1887,7 @@ function ProductGroupCard({
           >
             Detalhes
           </Link>
+
         </div>
       </div>
 
