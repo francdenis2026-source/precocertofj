@@ -160,8 +160,10 @@ describe.each([
     expect(contrast(color(S, "pc-home-onhero-gold"), exploreBg)).toBeGreaterThanOrEqual(UI);
   });
 
-  it("hero e faixa Explorar não colapsam na mesma cor (separação visual)", () => {
-    expect(readVar(S, "pc-home-hero-bg")).not.toBe(readVar(S, "pc-home-explore-bg"));
+  it("a faixa Explorar acompanha a luminosidade do tema (sem inversão)", () => {
+    const heroL = luminance(heroBg);
+    const exploreL = luminance(exploreBg);
+    expect(Math.abs(heroL - exploreL)).toBeLessThan(0.25);
   });
 });
 
