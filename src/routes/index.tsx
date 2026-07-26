@@ -299,6 +299,8 @@ function HomePage() {
             maskImage:
               "linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 68%, rgba(0,0,0,0) 100%)",
           }}
+        />
+
 
         {/* Scrim navy vertical para leitura */}
         <div
