@@ -200,6 +200,11 @@ export function PriceSearchBar({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestSeq = useRef(0);
+  const suggestAbort = useRef<AbortController | null>(null);
+  /** Sequência da busca principal — descarta respostas fora de ordem. */
+  const searchSeq = useRef(0);
+  const searchAbort = useRef<AbortController | null>(null);
+  const lastSearchKey = useRef<string | null>(null);
 
   // Auto-correção: quando a busca retorna vazia e temos uma sugestão fuzzy
   // com boa similaridade, re-executamos automaticamente com o termo corrigido
@@ -232,7 +237,7 @@ export function PriceSearchBar({
   }, [sessionLoading, user]);
 
 
-  const runQuery = (q: string) => {
+  const runQuery = (q: string, opts?: { force?: boolean }) => {
     setErr(null);
     setShowSuggest(false);
     setHistory(pushSearchHistory(q));
@@ -245,18 +250,40 @@ export function PriceSearchBar({
       return;
     }
     setQuotaBlocked(false);
+    // Evita refetch idêntico (mesmo termo + mesmos filtros) — principal fonte
+    // de "flicker" quando a URL sincroniza enquanto o usuário digita.
+    const key = `${q.toLowerCase()}|${mode}|${pureOnly ? 1 : 0}`;
+    if (!opts?.force && lastSearchKey.current === key) return;
+    lastSearchKey.current = key;
     // Só debita cota quando o visitante realmente digita e envia uma busca
     // manual — auto-run vindo da URL não custa (`consumeOnce` por termo).
     if (isVisitor) quota.consumeOnce(`search:${q.toLowerCase()}`);
+    // Cancela a requisição anterior ainda em voo.
+    searchAbort.current?.abort();
+    const ctrl = new AbortController();
+    searchAbort.current = ctrl;
+    const seq = ++searchSeq.current;
     startTransition(() => {
-      runSearch({ data: { query: q, mode, pureOnly } })
-        .then((r) => setResult(r))
-        .catch((e: unknown) => setErr(e instanceof Error ? e.message : String(e)));
+      runSearch({ data: { query: q, mode, pureOnly }, signal: ctrl.signal })
+        .then((r) => {
+          if (seq !== searchSeq.current) return; // resposta obsoleta
+          setResult(r);
+        })
+        .catch((e: unknown) => {
+          if (seq !== searchSeq.current || ctrl.signal.aborted) return;
+          setErr(e instanceof Error ? e.message : String(e));
+        });
     });
   };
 
-
-
+  // Cancela requisições pendentes ao desmontar.
+  useEffect(
+    () => () => {
+      searchAbort.current?.abort();
+      suggestAbort.current?.abort();
+    },
+    [],
+  );
 
   useEffect(() => {
     if (autoRan.current) return;
@@ -276,28 +303,33 @@ export function PriceSearchBar({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, pureOnly]);
 
-  // Debounced autocomplete
+  // Autocomplete com debounce + cancelamento da requisição anterior.
   useEffect(() => {
     const q = query.trim();
     if (q.length < 2) {
+      suggestAbort.current?.abort();
       setSuggestions([]);
       return;
     }
     const seq = ++suggestSeq.current;
     const t = window.setTimeout(() => {
-      runSuggest({ data: { query: q } })
+      suggestAbort.current?.abort();
+      const ctrl = new AbortController();
+      suggestAbort.current = ctrl;
+      runSuggest({ data: { query: q }, signal: ctrl.signal })
         .then((rows) => {
           if (seq !== suggestSeq.current) return;
           setSuggestions(rows);
           setActiveIdx(-1);
         })
         .catch(() => {
-          if (seq !== suggestSeq.current) return;
-          setSuggestions([]);
+          if (seq !== suggestSeq.current || ctrl.signal.aborted) return;
+          // Mantém as sugestões anteriores para não piscar a lista.
         });
-    }, 180);
+    }, 280);
     return () => window.clearTimeout(t);
   }, [query, runSuggest]);
+
 
   // Auto-correct: se resultado veio vazio e existe termo fuzzy próximo,
   // troca automaticamente por ele (uma única vez por termo original).
@@ -334,7 +366,7 @@ export function PriceSearchBar({
       return;
     }
     if (q !== query) setQuery(q);
-    runQuery(q);
+    runQuery(q, { force: true });
   };
 
   const setInputValue = (v: string) => {
@@ -693,7 +725,7 @@ export function PriceSearchBar({
       {/* Loading skeleton — só quando ainda não há resultado (evita piscar durante refetch) */}
       {pending && !result && !err && !quotaBlocked && (
         <div
-          className="mt-3 space-y-2"
+          className="mt-3 min-h-[640px] space-y-2 [content-visibility:auto]"
           aria-busy="true"
           aria-live="polite"
           aria-label="Carregando resultados"
@@ -725,7 +757,11 @@ export function PriceSearchBar({
       )}
 
       {result && !err && !quotaBlocked && (
-        <div className="mt-3 space-y-2" aria-live="polite">
+        <div
+          className={`mt-3 min-h-[640px] space-y-2 [overflow-anchor:none] transition-opacity duration-150 ${pending ? "opacity-70" : "opacity-100"}`}
+          aria-busy={pending || undefined}
+          aria-live="polite"
+        >
           <SearchInterpretationSummary
             query={query}
             tokens={highlightTokens}
