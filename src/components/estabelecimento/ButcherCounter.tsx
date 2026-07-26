@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Beef, Bell, History, LayoutGrid, List as ListIcon, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,12 +21,46 @@ import {
 const brl = (v: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
 
-type CutSort = "kg-asc" | "kg-desc" | "name";
+export type CutSort = "kg-asc" | "kg-desc" | "name";
 const SORT_LABEL: Record<CutSort, string> = {
   "kg-asc": "Menor preço por kg",
   "kg-desc": "Maior preço por kg",
   name: "Nome (A → Z)",
 };
+
+/** Estado visual do balcão — espelhado na URL pelas rotas. */
+export type ButcherViewState = {
+  q: string;
+  protein: ButcherProtein | null;
+  sort: CutSort;
+  view: "grid" | "list";
+};
+
+export const BUTCHER_STATE_DEFAULTS: ButcherViewState = {
+  q: "",
+  protein: null,
+  sort: "kg-asc",
+  view: "grid",
+};
+
+export const CUT_SORT_KEYS: CutSort[] = ["kg-asc", "kg-desc", "name"];
+
+/** Converte valores crus da URL em estado válido do balcão. */
+export function parseButcherState(raw: {
+  q?: string;
+  prot?: string;
+  bsort?: string;
+  bview?: string;
+}): ButcherViewState {
+  const protein = BUTCHER_PROTEINS.find((p) => p.id === raw.prot)?.id ?? null;
+  return {
+    q: raw.q ?? "",
+    protein,
+    sort: CUT_SORT_KEYS.includes(raw.bsort as CutSort) ? (raw.bsort as CutSort) : "kg-asc",
+    view: raw.bview === "list" ? "list" : "grid",
+  };
+}
+
 
 type Cut = PublicStoreProduct & { protein: ButcherProtein };
 
@@ -56,18 +90,41 @@ export function ButcherCounter({
   onHistory,
   onAlert,
   onOpen,
+  state,
+  onStateChange,
 }: {
   storeName: string;
   cuts: Cut[];
   onHistory?: (p: PublicStoreProduct) => void;
   onAlert?: (p: PublicStoreProduct) => void;
   onOpen?: (p: PublicStoreProduct) => void;
+  /** Estado controlado (sincronizado com a URL). Quando ausente, usa estado local. */
+  state?: ButcherViewState;
+  onStateChange?: (patch: Partial<ButcherViewState>) => void;
 }) {
-  const [q, setQ] = useState("");
-  const [protein, setProtein] = useState<ButcherProtein | null>(null);
-  const [sort, setSort] = useState<CutSort>("kg-asc");
-  const [view, setView] = useState<"grid" | "list">("grid");
+  const [local, setLocal] = useState<ButcherViewState>(BUTCHER_STATE_DEFAULTS);
+  const controlled = Boolean(state && onStateChange);
+  const current = controlled ? (state as ButcherViewState) : local;
+  const patchState = (patch: Partial<ButcherViewState>) => {
+    if (controlled) onStateChange!(patch);
+    else setLocal((prev) => ({ ...prev, ...patch }));
+  };
+
+  const q = current.q;
+  const protein = current.protein;
+  const sort = current.sort;
+  const view = current.view;
+
+  // Termo local para digitação fluida quando controlado por URL (debounce no pai).
+  const [draft, setDraft] = useState(q);
+  useEffect(() => {
+    setDraft(q);
+  }, [q]);
+
   const [limit, setLimit] = useState(30);
+  useEffect(() => {
+    setLimit(30);
+  }, [q, protein, sort, view]);
 
   const counts = useMemo(() => {
     const m = new Map<ButcherProtein, number>();
@@ -97,6 +154,33 @@ export function ButcherCounter({
   const cheapest = filtered.length > 1 ? filtered[0] : null;
   const shown = filtered.slice(0, limit);
 
+  // Trilho de proteína: navegação por teclado (←/→/Home/End) com foco móvel.
+  const railRef = useRef<HTMLDivElement | null>(null);
+  const options: (ButcherProtein | null)[] = useMemo(
+    () => [null, ...BUTCHER_PROTEINS.filter((p) => (counts.get(p.id) ?? 0) > 0).map((p) => p.id)],
+    [counts],
+  );
+  const activeIndex = Math.max(0, options.indexOf(protein));
+
+  const focusChip = (index: number) => {
+    const nodes = railRef.current?.querySelectorAll<HTMLButtonElement>('[role="radio"]');
+    nodes?.[index]?.focus();
+    nodes?.[index]?.scrollIntoView({ block: "nearest", inline: "nearest" });
+  };
+
+  const onRailKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const last = options.length - 1;
+    let next: number | null = null;
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") next = Math.min(last, activeIndex + 1);
+    else if (e.key === "ArrowLeft" || e.key === "ArrowUp") next = Math.max(0, activeIndex - 1);
+    else if (e.key === "Home") next = 0;
+    else if (e.key === "End") next = last;
+    if (next === null) return;
+    e.preventDefault();
+    patchState({ protein: options[next] });
+    requestAnimationFrame(() => focusChip(next!));
+  };
+
   return (
     <section aria-label={`Açougue do ${storeName}`} className="mt-5">
       {/* Cabeçalho compacto do setor */}
@@ -112,40 +196,46 @@ export function ButcherCounter({
           estabelecimento separado.
         </p>
         {cheapest && (
-          <p className="mt-2 flex flex-wrap items-baseline gap-x-1.5 text-[12.5px]">
-            <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+          <p className="mt-2 flex flex-wrap items-baseline gap-x-1.5 rounded-lg border border-brand-gold/40 bg-brand-gold/10 px-2.5 py-1.5 text-[12.5px]">
+            <span className="text-[10px] font-bold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">
               Menor preço por kg
             </span>
-            <strong className="text-foreground">{cheapest.productName}</strong>
-            <span className="font-bold tabular-nums text-brand-gold">
+            <strong className="font-semibold text-foreground">{cheapest.productName}</strong>
+            <span className="font-bold tabular-nums text-[var(--pc-gold-ink)]">
               {brl(cutPricePerKg(cheapest) ?? cheapest.price)}/kg
             </span>
           </p>
         )}
       </div>
 
-      {/* Filtro por proteína */}
+      {/* Filtro por proteína — trilho com teclado */}
       <div
+        ref={railRef}
         className="mt-3 flex gap-1.5 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
         role="radiogroup"
         aria-label="Filtrar por proteína"
+        onKeyDown={onRailKeyDown}
       >
         <button
           type="button"
           role="radio"
           aria-checked={protein === null}
-          onClick={() => {
-            setProtein(null);
-            setLimit(30);
-          }}
+          tabIndex={activeIndex === 0 ? 0 : -1}
+          onClick={() => patchState({ protein: null })}
           className={chip(protein === null)}
         >
           Todos
-          <span className="rounded-full bg-foreground/10 px-1.5 py-0.5 text-[10px] font-bold tabular-nums">
+          <span
+            className={
+              protein === null
+                ? "rounded-full bg-brand-navy/15 px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-brand-navy"
+                : "rounded-full bg-foreground/10 px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-foreground"
+            }
+          >
             {cuts.length}
           </span>
         </button>
-        {BUTCHER_PROTEINS.filter((p) => (counts.get(p.id) ?? 0) > 0).map((p) => {
+        {BUTCHER_PROTEINS.filter((p) => (counts.get(p.id) ?? 0) > 0).map((p, i) => {
           const active = protein === p.id;
           return (
             <button
@@ -153,10 +243,8 @@ export function ButcherCounter({
               type="button"
               role="radio"
               aria-checked={active}
-              onClick={() => {
-                setProtein(active ? null : p.id);
-                setLimit(30);
-              }}
+              tabIndex={activeIndex === i + 1 ? 0 : -1}
+              onClick={() => patchState({ protein: active ? null : p.id })}
               className={chip(active)}
             >
               {p.label}
@@ -164,7 +252,7 @@ export function ButcherCounter({
                 className={
                   active
                     ? "rounded-full bg-brand-navy/15 px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-brand-navy"
-                    : "rounded-full bg-foreground/10 px-1.5 py-0.5 text-[10px] font-bold tabular-nums"
+                    : "rounded-full bg-foreground/10 px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-foreground"
                 }
               >
                 {counts.get(p.id)}
@@ -174,6 +262,7 @@ export function ButcherCounter({
         })}
       </div>
 
+
       {/* Busca · ordenação · modo */}
       <div className="mt-2.5 flex flex-col gap-2 sm:flex-row sm:items-center">
         <div className="relative flex-1">
@@ -182,10 +271,10 @@ export function ButcherCounter({
             aria-hidden
           />
           <input
-            value={q}
+            value={draft}
             onChange={(e) => {
-              setQ(e.target.value);
-              setLimit(30);
+              setDraft(e.target.value);
+              patchState({ q: e.target.value });
             }}
             placeholder="Buscar corte (picanha, coxa, costela…)"
             aria-label="Buscar corte"
@@ -193,7 +282,7 @@ export function ButcherCounter({
             className="h-9 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13px] text-foreground outline-none placeholder:text-muted-foreground focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
           />
         </div>
-        <Select value={sort} onValueChange={(v) => setSort(v as CutSort)}>
+        <Select value={sort} onValueChange={(v) => patchState({ sort: v as CutSort })}>
           <SelectTrigger
             aria-label="Ordenar cortes"
             className="h-9 w-full text-[12.5px] font-medium sm:w-[220px]"
@@ -211,6 +300,15 @@ export function ButcherCounter({
         <div
           role="radiogroup"
           aria-label="Modo de exibição"
+          onKeyDown={(e) => {
+            if (["ArrowRight", "ArrowDown", "End"].includes(e.key)) {
+              e.preventDefault();
+              patchState({ view: "list" });
+            } else if (["ArrowLeft", "ArrowUp", "Home"].includes(e.key)) {
+              e.preventDefault();
+              patchState({ view: "grid" });
+            }
+          }}
           className="flex h-9 shrink-0 items-center gap-1 rounded-lg border border-border bg-card p-1"
         >
           {[
@@ -224,12 +322,13 @@ export function ButcherCounter({
                 type="button"
                 role="radio"
                 aria-checked={active}
+                tabIndex={active ? 0 : -1}
                 aria-label={`Exibir em ${label.toLowerCase()}`}
-                onClick={() => setView(id)}
+                onClick={() => patchState({ view: id })}
                 className={
                   active
-                    ? "inline-flex h-7 items-center gap-1 rounded-md bg-brand-gold px-2 text-[11.5px] font-bold leading-none text-brand-navy"
-                    : "inline-flex h-7 items-center gap-1 rounded-md px-2 text-[11.5px] font-semibold leading-none text-muted-foreground transition-colors hover:text-foreground"
+                    ? "inline-flex h-7 items-center gap-1 rounded-md bg-brand-gold px-2 text-[11.5px] font-bold leading-none text-brand-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                    : "inline-flex h-7 items-center gap-1 rounded-md px-2 text-[11.5px] font-semibold leading-none text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                 }
               >
                 <Icon className="h-3.5 w-3.5" aria-hidden /> {label}
@@ -237,6 +336,7 @@ export function ButcherCounter({
             );
           })}
         </div>
+
       </div>
 
       <div className="mt-2.5 flex items-baseline justify-between gap-3">
@@ -307,8 +407,8 @@ export function ButcherCounter({
                 variant="outline"
                 size="sm"
                 onClick={() => {
-                  setQ("");
-                  setProtein(null);
+                  setDraft("");
+                  patchState({ q: "", protein: null });
                 }}
               >
                 Limpar filtros

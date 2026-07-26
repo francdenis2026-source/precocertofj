@@ -1,13 +1,26 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  notFound,
+  useNavigate,
+  stripSearchParams,
+} from "@tanstack/react-router";
+import { zodValidator, fallback } from "@tanstack/zod-adapter";
+import { z } from "zod";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { ArrowLeft, Beef, MapPin, Store } from "lucide-react";
 import { getPublicStoreCatalog, type PublicStoreProduct } from "@/lib/stores-public.functions";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
 import { resolveEstablishmentBySlug } from "@/lib/establishment-slug.functions";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
-import { ButcherCounter, splitButcherCuts } from "@/components/estabelecimento/ButcherCounter";
+import {
+  ButcherCounter,
+  splitButcherCuts,
+  parseButcherState,
+  type ButcherViewState,
+} from "@/components/estabelecimento/ButcherCounter";
 import { PreparoDicas } from "@/components/estabelecimento/PreparoDicas";
 import { EmptyState, LoadingGrid, RouteError } from "@/components/feedback";
 
@@ -18,7 +31,18 @@ const storeQuery = (id: string) =>
     staleTime: 60_000,
   });
 
+const SEARCH_DEFAULTS = { bq: "", prot: "", bsort: "kg-asc", bview: "grid" };
+
+const searchSchema = z.object({
+  bq: fallback(z.string(), "").default(""),
+  prot: fallback(z.string(), "").default(""),
+  bsort: fallback(z.string(), "kg-asc").default("kg-asc"),
+  bview: fallback(z.string(), "grid").default("grid"),
+});
+
 export const Route = createFileRoute("/estabelecimento/$slug_/acougue")({
+  validateSearch: zodValidator(searchSchema),
+  search: { middlewares: [stripSearchParams(SEARCH_DEFAULTS)] },
   loader: async ({ params, context }) => {
     const match = await resolveEstablishmentBySlug({ data: { slug: params.slug } });
     if (!match) throw notFound();
@@ -76,6 +100,27 @@ function ButcherPage() {
   const { data } = useSuspenseQuery(storeQuery(storeId));
   const { cuts } = useMemo(() => splitButcherCuts(data.products), [data.products]);
   const [quickView, setQuickView] = useState<PublicStoreProduct | null>(null);
+  const navigate = useNavigate();
+  const search = Route.useSearch();
+
+  const butcherState = useMemo(
+    () => parseButcherState({ q: search.bq, prot: search.prot, bsort: search.bsort, bview: search.bview }),
+    [search.bq, search.prot, search.bsort, search.bview],
+  );
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const patchButcher = (patch: Partial<ButcherViewState>) => {
+    const next = { ...butcherState, ...patch };
+    const apply = () =>
+      navigate({
+        to: "/estabelecimento/$slug_/acougue",
+        params: { slug },
+        search: { bq: next.q, prot: next.protein ?? "", bsort: next.sort, bview: next.view },
+        replace: patch.q !== undefined,
+      });
+    if (timer.current) clearTimeout(timer.current);
+    if (patch.q !== undefined) timer.current = setTimeout(apply, 350);
+    else apply();
+  };
 
 
   return (
@@ -105,6 +150,8 @@ function ButcherPage() {
             <ButcherCounter
               storeName={data.store.name}
               cuts={cuts}
+              state={butcherState}
+              onStateChange={patchButcher}
               onOpen={(p) => setQuickView(p)}
             />
             <div className="mt-8">
