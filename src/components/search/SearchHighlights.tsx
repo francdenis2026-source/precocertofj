@@ -375,9 +375,7 @@ function EmptyHighlights({
   );
 }
 
-    </section>
-  );
-}
+
 
 function CategoryChip({
   label,
