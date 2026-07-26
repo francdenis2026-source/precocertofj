@@ -560,7 +560,7 @@ function PriceRangeInputs({ min, max, onMin, onMax }: PriceRangeInputsProps) {
         inputMode="decimal"
         min={0}
         step="0.01"
-        placeholder="R$ min"
+        placeholder="De R$"
         value={mn}
         onChange={(e) => setMn(sanitizePrice(e.currentTarget.value))}
         onBlur={() => onMin(mn.trim())}
@@ -576,7 +576,7 @@ function PriceRangeInputs({ min, max, onMin, onMax }: PriceRangeInputsProps) {
         inputMode="decimal"
         min={0}
         step="0.01"
-        placeholder="R$ máx"
+        placeholder="Até R$"
         value={mx}
         onChange={(e) => setMx(sanitizePrice(e.currentTarget.value))}
         onBlur={() => onMax(mx.trim())}

@@ -122,10 +122,10 @@ function writePersistedFilters(f: PersistedFilters) {
 
 // Classificação por catálogo — sempre presente para consistência visual entre cards
 function classifyTier(productsCount: number): { label: string; color: string } {
-  if (productsCount >= 200) return { label: "Ouro", color: "#c9a227" };
-  if (productsCount >= 60) return { label: "Prata", color: "#5b6673" };
-  if (productsCount >= 15) return { label: "Bronze", color: "#a97142" };
-  return { label: "Novo", color: "#4b6cb7" };
+  if (productsCount >= 200) return { label: "+200 itens", color: "#c9a227" };
+  if (productsCount >= 60) return { label: "+60 itens", color: "#5b6673" };
+  if (productsCount >= 15) return { label: "+15 itens", color: "#a97142" };
+  return { label: "Novo aqui", color: "#4b6cb7" };
 }
 
 // Freshness — proxy de "horários" (sinaliza atividade recente do estabelecimento)
@@ -965,7 +965,7 @@ function EstablishmentsPage() {
                                 <HighlightMatch text={e.name} tokens={searchTokens} mode="loose" />
                               </Link>
                               <span
-                                title={`Classificação por catálogo: ${tier.label}`}
+                                title={`Quantidade de preços cadastrados: ${tier.label}`}
                                 className="shrink-0 rounded-sm px-1 py-[1px] text-[8.5px] font-bold uppercase leading-none tracking-[0.14em]"
                                 style={{
                                   background: `color-mix(in oklab, ${tier.color} 16%, white)`,
