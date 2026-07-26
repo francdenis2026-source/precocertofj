@@ -770,8 +770,9 @@ function CategoryRail({ current }: { current: string }) {
           canNext ? "opacity-100" : "opacity-0",
         )}
       />
-      <RailArrow side="left" onClick={() => scrollBy(-1)} disabled={!canPrev} />
-      <RailArrow side="right" onClick={() => scrollBy(1)} disabled={!canNext} />
+      <RailArrow side="left" onClick={() => ctrl.current?.scrollByPage(-1)} disabled={!canPrev} />
+      <RailArrow side="right" onClick={() => ctrl.current?.scrollByPage(1)} disabled={!canNext} />
+
     </nav>
   );
 }
