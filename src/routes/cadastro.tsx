@@ -167,7 +167,7 @@ function CadastroPage() {
 
       <header className="relative z-10 mx-auto flex w-full max-w-[900px] items-center justify-between px-5 py-2.5 md:px-6">
         <Link to="/" className="flex items-center gap-2">
-          <Logo className="h-6 w-auto" />
+          <Logo className="h-7 w-auto" href="/" />
         </Link>
         <Link
           to={loginHref}
