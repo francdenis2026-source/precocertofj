@@ -881,7 +881,7 @@ function EstablishmentsPage() {
                     {/* Cabeçalho tabular — colunas clicáveis para ordenar */}
                     <div className={`${LIST_GRID} border-b border-border/60 bg-muted/40 px-3 py-2 text-[9.5px] font-bold uppercase tracking-[0.08em] text-foreground/70 md:px-4 [&>*]:truncate`}>
                       <span className="text-right">#</span>
-                      <span className="sr-only">Logo</span>
+                      <span aria-hidden />
                       <button
                         type="button"
                         onClick={() => setSort("name")}
@@ -912,7 +912,7 @@ function EstablishmentsPage() {
                         Produtos
                       </button>
                       <span className="text-right">Atualização</span>
-                      <span className="sr-only">Abrir</span>
+                      <span aria-hidden />
                     </div>
 
                     <ul className="divide-y divide-border/60" aria-label="Lista de estabelecimentos">
