@@ -297,7 +297,10 @@ export type PlatformStats = {
   totalItems: number;
   /** Total bruto de registros de preço (linhas), usado só como métrica secundária. */
   priceRecords: number;
-  estimatedSavings: number; // soma de (avg - min) em produtos com >=2 mercados
+  /** Economia média por produto comparado (avg − min), em R$. */
+  estimatedSavings: number;
+  /** Soma da economia potencial em todos os produtos comparados, em R$. */
+  totalSavings: number;
 };
 
 export const getPlatformStats = createServerFn({ method: "GET" }).handler(
