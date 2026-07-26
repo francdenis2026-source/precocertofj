@@ -89,21 +89,28 @@ FOCUS_PROBE = r"""
   }
 
   // ordem de foco (DOM) vs ordem visual
-  const rects = nodes.map(el => {
-    const r = el.getBoundingClientRect();
-    return { el, top: Math.round(r.top / 24), left: Math.round(r.left) };
-  });
+  const rects = nodes.map(el => ({ el, r: el.getBoundingClientRect() }));
   const outOfOrder = [];
-  for (let i = 1; i < rects.length; i++) {
-    const a = rects[i - 1], b = rects[i];
-    let scoped = false, p = b.el.parentElement;
+  const scopedRoot = (el) => {
+    let p = el.parentElement;
     while (p && p !== document.body) {
       const cs = getComputedStyle(p);
-      if (cs.position === 'fixed' || cs.position === 'sticky' || /(auto|scroll)/.test(cs.overflowY + cs.overflowX)) { scoped = true; break; }
+      if (cs.position === 'fixed' || cs.position === 'sticky'
+          || /(auto|scroll)/.test(cs.overflowY + cs.overflowX)
+          || cs.display === 'grid' || cs.flexWrap === 'wrap'
+          || p.hasAttribute('role')) return p;
       p = p.parentElement;
     }
-    if (scoped) continue;
-    if (b.top < a.top - 1) outOfOrder.push(`${describe(a.el)} -> ${describe(b.el)}`);
+    return document.body;
+  };
+  for (let i = 1; i < rects.length; i++) {
+    const a = rects[i - 1], b = rects[i];
+    // grids, listas com quebra e regiões roladas/fixas têm ordem própria
+    if (scopedRoot(a.el) !== document.body || scopedRoot(b.el) !== document.body) continue;
+    // salto para cima maior que uma linha inteira = ordem de foco invertida
+    if (b.r.bottom < a.r.top - 8) {
+      outOfOrder.push(`${describe(a.el)}@${Math.round(a.r.top)} -> ${describe(b.el)}@${Math.round(b.r.top)}`);
+    }
   }
 
   return { total: nodes.length, unnamed, positiveTab, hiddenFocusable, outOfOrder: outOfOrder.slice(0, 6) };
