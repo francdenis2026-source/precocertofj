@@ -112,7 +112,7 @@ export function MarketEditorialCard({
             <span
               aria-hidden
               className="absolute bottom-1 left-2 select-none font-sans text-[18px] font-bold leading-none tracking-tighter"
-              style={{ color: "color-mix(in oklab, var(--pc-home-navy) 22%, transparent)" }}
+              style={{ color: "color-mix(in oklab, var(--pc-home-navy) 55%, transparent)" }}
             >
               {String(rank).padStart(2, "0")}
             </span>
@@ -151,9 +151,9 @@ export function MarketEditorialCard({
           <span
             className="absolute bottom-1.5 right-2 z-10 inline-flex items-center rounded-full border px-1.5 py-[1px] text-[9px] font-bold uppercase tracking-[0.14em]"
             style={{
-              background: `color-mix(in oklab, ${tierColor} 18%, white)`,
+              background: `color-mix(in oklab, ${tierColor} 14%, white)`,
               borderColor: `color-mix(in oklab, ${tierColor} 55%, transparent)`,
-              color: `color-mix(in oklab, ${tierColor} 82%, black)`,
+              color: `color-mix(in oklab, ${tierColor} 62%, black)`,
             }}
             title={`Classificação por catálogo: ${tierLabel}`}
           >
