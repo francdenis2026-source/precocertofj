@@ -181,9 +181,9 @@ type PartnerTileProps = {
   premium3d?: boolean;
 };
 
-/** Placa clara suave (sem branco duro) para marcas de tinta escura. */
+/** Placa única cor-de-pérola: uma só superfície, sem "quadrado branco". */
 const PLATE_BG =
-  "radial-gradient(120% 120% at 50% 0%, rgba(255,255,255,0.97) 0%, rgba(241,245,251,0.92) 60%, rgba(228,235,245,0.88) 100%)";
+  "linear-gradient(168deg, #fdfefe 0%, #f1f5fa 46%, #e4ebf4 100%)";
 
 export const PartnerTile = forwardRef<HTMLAnchorElement, PartnerTileProps>(
   function PartnerTile({ item, defaultHref, premium3d = true }, ref) {
@@ -207,18 +207,26 @@ export const PartnerTile = forwardRef<HTMLAnchorElement, PartnerTileProps>(
         className={cn(
           "group relative flex h-[66px] w-full items-center justify-center overflow-hidden sm:h-[76px]",
           "rounded-[14px] border",
-          "px-2 py-1.5",
+          "px-2.5 py-2",
           "transition-all duration-200 will-change-transform",
           "hover:-translate-y-0.5",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:-translate-y-0.5",
         )}
         style={
           {
-            // O tile acompanha o painel: vidro sutil, sem retângulo branco.
-            background:
-              "linear-gradient(180deg, color-mix(in oklab, var(--pc-home-heading) 7%, transparent) 0%, color-mix(in oklab, var(--pc-home-heading) 3%, transparent) 100%)",
-            borderColor: "color-mix(in oklab, var(--pc-home-line) 85%, transparent)",
-            boxShadow: "inset 0 1px 0 color-mix(in oklab, var(--pc-home-heading) 8%, transparent)",
+            // Uma única superfície por tile: placa pérola para marcas escuras,
+            // vidro sutil (integrado ao painel) para marcas de tinta clara.
+            background: needsPlate
+              ? PLATE_BG
+              : "linear-gradient(180deg, color-mix(in oklab, var(--pc-home-heading) 8%, transparent) 0%, color-mix(in oklab, var(--pc-home-heading) 3%, transparent) 100%)",
+            borderColor: needsPlate
+              ? "color-mix(in oklab, var(--pc-home-gold) 26%, transparent)"
+              : "color-mix(in oklab, var(--pc-home-line) 85%, transparent)",
+            boxShadow: needsPlate
+              ? premium3d
+                ? "inset 0 1px 0 rgba(255,255,255,0.95), 0 1px 2px rgba(8,18,42,0.18), 0 12px 22px -16px rgba(8,18,42,0.6)"
+                : "0 1px 2px rgba(8,18,42,0.18)"
+              : "inset 0 1px 0 color-mix(in oklab, var(--pc-home-heading) 10%, transparent)",
             ["--tw-ring-color" as string]:
               "color-mix(in oklab, var(--pc-home-gold) 75%, transparent)",
             ["--tw-ring-offset-color" as string]: "var(--pc-home-card)",
@@ -226,28 +234,14 @@ export const PartnerTile = forwardRef<HTMLAnchorElement, PartnerTileProps>(
         }
       >
         {hasLogo ? (
-          <span
-            className={cn(
-              "relative flex items-center justify-center overflow-hidden rounded-[11px]",
-              needsPlate ? "h-[84%] w-full px-2 py-1" : "h-[88%] w-[94%]",
-            )}
-            style={
-              needsPlate
-                ? {
-                    background: PLATE_BG,
-                    boxShadow: premium3d
-                      ? "0 1px 1px rgba(15,23,42,0.10), 0 8px 16px -12px rgba(15,23,42,0.45)"
-                      : undefined,
-                  }
-                : undefined
-            }
-          >
+          <span className="relative flex h-[86%] w-[94%] items-center justify-center overflow-hidden">
             <SmartLogoImage
               src={item.logoUrl}
               name={item.name}
               premium3d={premium3d && needsPlate}
-              targetFill={0.94}
+              targetFill={0.96}
               className="group-hover:brightness-[1.03]"
+
             />
           </span>
         ) : (
