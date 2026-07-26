@@ -246,8 +246,8 @@ function PartnerTileSkeleton({ children }: { children?: ReactNode }) {
     <div
       aria-hidden
       className={cn(
-        "relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden",
-        "rounded-lg border border-black/5",
+        "relative flex h-[52px] w-full items-center justify-center overflow-hidden sm:h-[58px]",
+        "rounded-[10px] border border-black/[0.06]",
         "bg-gradient-to-br from-white/85 via-white/70 to-white/85",
         "shadow-[0_1px_2px_rgba(0,0,0,0.15)]",
       )}
