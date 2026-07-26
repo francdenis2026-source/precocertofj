@@ -3388,3 +3388,39 @@ html[data-reading="on"] :where([data-reading-dense]) {
 html[data-reading="on"] :where([data-reading-card]) {
   padding-block: calc(0.5rem * var(--pc-reading-tighten));
 }
+
+/* ============================================================================
+   LIGHT MODE — gold legível (WCAG AA)
+   O dourado de marca (--pc-home-gold #b58a3c) é ótimo como preenchimento,
+   borda e badge, mas reprova como TEXTO sobre superfícies claras (2.9:1).
+   Em light, todo texto/ícone dourado passa a usar --pc-gold-ink (#6b4a12 ≈ 7.4:1)
+   mantendo a identidade quente da marca. Superfícies escuras podem optar
+   por sair da regra com a classe .gold-on-dark.
+   ========================================================================== */
+html:not(.dark) :is(
+  .text-brand-gold,
+  .text-brand-gold\/90,
+  .text-brand-gold\/80,
+  .text-brand-gold\/70
+):not(.gold-on-dark) {
+  color: var(--pc-gold-ink);
+}
+
+html:not(.dark) :is(
+  .hover\:text-brand-gold,
+  .hover\:text-brand-gold\/80
+):not(.gold-on-dark):hover {
+  color: var(--pc-gold-ink);
+}
+
+html:not(.dark) .text-brand-gold-soft:not(.gold-on-dark) {
+  color: var(--pc-gold-ink);
+}
+
+/* Dourado sobre fundo navy/escuro permanece vivo mesmo no modo claro. */
+html:not(.dark) :is(.bg-brand-navy, .bg-brand-navy-2, [data-surface="navy"]) :is(
+  .text-brand-gold,
+  .text-brand-gold-soft
+) {
+  color: var(--pc-home-gold);
+}
