@@ -112,7 +112,60 @@ const PRIVACIDADE: Item[] = [
       </>
     ),
   },
+  {
+    id: "quem-desenvolve",
+    title: "Quem desenvolve",
+    body: (
+      <>
+        O PreçoCerto é idealizado e desenvolvido por{" "}
+        <strong className="font-semibold text-foreground">Franc D&apos;nis</strong>,
+        desenvolvedor em Feijó (AC). A iniciativa nasceu de um objetivo simples:
+        dar a qualquer pessoa o mesmo poder de pesquisa que grandes compradores
+        têm — comparar preços reais, do comércio local, antes de gastar.
+      </>
+    ),
+  },
+  {
+    id: "em-evolucao",
+    title: "Plataforma em evolução",
+    body: (
+      <>
+        O produto está em desenvolvimento contínuo: alguma função pode apresentar
+        instabilidade ou dados incompletos. Preços são colaborativos e podem
+        variar no caixa. Novas funcionalidades entram conforme a colaboração da
+        comunidade — sua nota fiscal e seus relatos melhoram a base para todos.
+      </>
+    ),
+  },
+  {
+    id: "parcerias",
+    title: "Parcerias, delivery e apps sob demanda",
+    body: (
+      <>
+        Quer cadastrar seu comércio, vender direto pelo site, ativar delivery ou
+        encomendar um aplicativo sob demanda? Fale com o desenvolvedor pelo
+        WhatsApp{" "}
+        <a
+          href="https://wa.me/5588992031340"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-semibold text-brand-gold underline underline-offset-2"
+        >
+          (88) 99203-1340
+        </a>{" "}
+        ou por{" "}
+        <a
+          href="mailto:precocerto-fj@proton.me"
+          className="font-semibold text-brand-gold underline underline-offset-2"
+        >
+          precocerto-fj@proton.me
+        </a>
+        .
+      </>
+    ),
+  },
 ];
+
 
 const TERMOS: Item[] = [
   {
