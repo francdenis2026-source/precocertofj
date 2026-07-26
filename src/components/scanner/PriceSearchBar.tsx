@@ -1681,7 +1681,7 @@ function ProductGroupCard({
           )}
         </div>
 
-        <div className="flex shrink-0 items-center gap-1">
+        <div className="order-2 flex flex-wrap items-center gap-1 sm:shrink-0 sm:flex-nowrap sm:justify-end">
           {onToggleCompare ? (
             <button
               type="button"
