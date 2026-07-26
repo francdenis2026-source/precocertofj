@@ -17,6 +17,7 @@ import { IdleLogoutMonitor } from "@/components/auth/IdleLogoutMonitor";
 import { useAutoTranslate } from "@/lib/pt-terms";
 
 import { UnlockConversionTracker } from "@/components/analytics/UnlockConversionTracker";
+import { useReadingMode } from "@/hooks/use-reading-mode";
 import { useTheme } from "@/hooks/use-theme";
 
 import { RouteError, RouteNotFound } from "@/components/feedback";
@@ -120,6 +121,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children:
           "try{var s=localStorage.getItem('pc-theme');var d=s!=='light';var r=document.documentElement;r.classList.toggle('dark',d);r.dataset.theme=d?'dark':'light';r.style.colorScheme=d?'dark':'light';}catch(e){var r=document.documentElement;r.classList.add('dark');r.dataset.theme='dark';r.style.colorScheme='dark';}",
       },
+      {
+        children:
+          "try{var on=localStorage.getItem('pc:reading-mode')==='1';var r=document.documentElement;r.dataset.reading=on?'on':'off';r.style.setProperty('--tc-scale',on?'1.12':'1');}catch(e){}",
+      },
     ],
 
 
@@ -149,6 +154,7 @@ function RootComponent() {
   const router = useRouter();
   useAutoTranslate();
   useTheme();
+  useReadingMode();
 
   // PWA: registra o service worker (auto-update) apenas em produção real.
   useEffect(() => {
