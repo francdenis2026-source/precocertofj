@@ -449,7 +449,7 @@ export function PriceSearchBar({
         <span
           role="note"
           aria-label="Passo 01: Pesquisar preço"
-          className="inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-navy px-2 py-0.5 font-sans text-[9.5px] font-semibold uppercase tracking-[0.16em] text-brand-gold"
+          className="inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-navy px-2 py-0.5 font-sans text-[11px] font-medium text-brand-gold"
         >
           <span aria-hidden="true" className="tabular-nums">01</span>
           <span aria-hidden="true" className="opacity-70">·</span>
@@ -589,10 +589,10 @@ export function PriceSearchBar({
                 >
                   <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 text-warning" strokeWidth={1.75} />
                   <div className="min-w-0 flex-1">
-                    <p className="font-mono text-[9px] uppercase tracking-widest text-warning dark:text-warning">
+                    <p className="text-[11.5px] font-medium text-warning dark:text-warning">
                       Você quis dizer
                     </p>
-                    <p className="truncate text-[13px] font-semibold uppercase tracking-wide text-foreground">
+                    <p className="truncate text-[13.5px] font-semibold text-foreground">
                       {didYouMean.displayName}?
                     </p>
                   </div>
@@ -630,7 +630,7 @@ export function PriceSearchBar({
                       </div>
                     )}
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-[13px] font-medium uppercase tracking-wide">
+                      <p className="truncate text-[13.5px] font-medium">
                         {/* "loose" destaca prefixos (ex.: "mante" em "Manteiga") */}
                         <HighlightMatch text={s.displayName} tokens={highlightTokens} mode="loose" />
                       </p>
@@ -758,7 +758,7 @@ export function PriceSearchBar({
               <button
                 type="button"
                 onClick={revertAutoCorrect}
-                className="ml-auto rounded-md border border-brand-gold/40 bg-background px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-foreground hover:bg-brand-gold/20 focus-ring"
+                className="ml-auto rounded-md border border-brand-gold/40 bg-background px-2 py-0.5 text-[12px] font-medium text-foreground hover:bg-brand-gold/20 focus-ring"
               >
                 Buscar “{autoCorrected.from}” mesmo assim
               </button>
@@ -802,10 +802,10 @@ export function PriceSearchBar({
                 >
                   <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 text-warning" strokeWidth={1.75} />
                   <div className="min-w-0 flex-1">
-                    <p className="font-mono text-[9px] uppercase tracking-widest text-warning dark:text-warning">
+                    <p className="text-[11.5px] font-medium text-warning dark:text-warning">
                       Você quis dizer
                     </p>
-                    <p className="truncate text-sm font-semibold uppercase tracking-wide text-foreground">
+                    <p className="truncate text-sm font-semibold text-foreground">
                       {didYouMean.displayName}?
                     </p>
                     <p className="font-mono text-[9px] text-muted-foreground">
@@ -835,7 +835,7 @@ export function PriceSearchBar({
                   return (
                     <div className="grid gap-2 rounded-xl border border-white/10 bg-brand-navy px-3.5 py-3 text-white shadow-sm sm:grid-cols-2 sm:gap-4">
                       <div className="min-w-0">
-                        <p className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-brand-gold/90">
+                        <p className="text-[11px] font-medium text-brand-gold/90">
                           Melhor preço agora
                         </p>
                         <p className="mt-1 truncate text-[26px] font-bold leading-none tabular-nums">
@@ -851,7 +851,7 @@ export function PriceSearchBar({
                         </p>
                       </div>
                       <div className="min-w-0 sm:border-l sm:border-white/10 sm:pl-4">
-                        <p className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-brand-gold/90">
+                        <p className="text-[11px] font-medium text-brand-gold/90">
                           Economia estimada
                         </p>
                         <p className="mt-1 text-[26px] font-bold leading-none tabular-nums">
@@ -890,7 +890,7 @@ export function PriceSearchBar({
                   className="relative block rounded-xl border border-border bg-card p-2.5 transition hover:border-accent-strong/60"
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <p className="inline-flex items-center gap-1 rounded-md bg-accent-strong px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-accent-foreground">
+                    <p className="inline-flex items-center gap-1 rounded-md bg-accent-strong px-1.5 py-0.5 text-[12px] font-medium text-accent-foreground">
                       <Crown className="h-3 w-3" strokeWidth={2} aria-hidden="true" />
                       Preço mais barato
                     </p>
@@ -1149,7 +1149,7 @@ export function PriceSearchBar({
                             </p>
 
 
-                            <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground">
+                            <p className="text-[11.5px] font-medium text-muted-foreground">
                               {m.samples} scan{m.samples > 1 ? "s" : ""}
                               <span aria-hidden="true" className="mx-1 text-accent-strong/50">·</span>
                               média {fmt(m.priceAvg)}
@@ -1171,7 +1171,7 @@ export function PriceSearchBar({
                           />
                           <div className="shrink-0 self-center text-right">
                             {isCheapest && (
-                              <p className="font-mono text-[8px] uppercase tracking-[0.22em] text-accent-strong">
+                              <p className="text-[11px] font-medium text-accent-strong">
                                 Menor
                               </p>
                             )}
@@ -1263,7 +1263,7 @@ function Stat({
 }) {
   return (
     <div className="relative rounded-lg border border-border/70 bg-card px-2.5 py-2">
-      <p className="flex items-center gap-1 text-[9.5px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+      <p className="flex items-center gap-1 text-[11px] font-medium text-muted-foreground">
         {icon} {label}
       </p>
       <p className="mt-1 text-[20px] font-bold leading-none tracking-tight tabular-nums text-foreground">
@@ -1413,7 +1413,7 @@ function QuickFilters({
       : "border-border bg-background text-muted-foreground hover:text-foreground");
   return (
     <div className="flex flex-wrap items-center gap-1.5">
-      <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+      <span className="text-[11.5px] font-medium text-muted-foreground">
         Agrupar
       </span>
       <button type="button" className={chip(groupBy === "product")} onClick={() => onGroupBy("product")}>
@@ -1425,7 +1425,7 @@ function QuickFilters({
       <button type="button" className={chip(groupBy === "matrix")} onClick={() => onGroupBy("matrix")}>
         Comparar lado a lado
       </button>
-      <span className="ml-2 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+      <span className="ml-2 text-[11.5px] font-medium text-muted-foreground">
         Ordenar
       </span>
 
@@ -1455,7 +1455,7 @@ function QuickFilters({
       )}
       {categories.length > 1 && (
         <>
-          <span className="ml-2 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+          <span className="ml-2 text-[11.5px] font-medium text-muted-foreground">
             Categoria
           </span>
           <button
@@ -1479,7 +1479,7 @@ function QuickFilters({
       )}
       {kinds.length > 0 && (
         <>
-          <span className="ml-2 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+          <span className="ml-2 text-[11.5px] font-medium text-muted-foreground">
             Tipo
           </span>
           <button type="button" className={chip(kindFilter === null)} onClick={() => onKind(null)}>
@@ -1526,7 +1526,7 @@ function ProductDetailsCard({
           </div>
         )}
         <div className="min-w-0 flex-1">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
+          <p className="text-[11.5px] font-medium text-accent-strong">
             Produto encontrado
           </p>
           <p className="mt-0.5 truncate text-[15px] font-semibold tracking-tight text-foreground">
@@ -2181,7 +2181,7 @@ function MatrixCompareResults({
       {/* Toolbar: seletor de mercados + navegação + exportar */}
       <div className="flex flex-wrap items-center gap-2 rounded-xl border border-border/60 bg-card/60 px-2.5 py-2">
         <div className="flex items-center gap-1.5">
-          <span className="text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
+          <span className="text-[12px] font-medium text-muted-foreground">
             Colunas
           </span>
           <div className="flex flex-wrap gap-1" role="group" aria-label="Selecionar mercados visíveis">
@@ -2284,7 +2284,7 @@ function MatrixCompareResults({
                 data-row={0}
                 data-col={0}
                 tabIndex={0}
-                className="focus-ring sticky left-0 z-10 min-w-[180px] border-b border-border/60 bg-background/80 px-3 py-2.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground backdrop-blur"
+                className="focus-ring sticky left-0 z-10 min-w-[180px] border-b border-border/60 bg-background/80 px-3 py-2.5 text-[12px] font-medium text-muted-foreground backdrop-blur"
               >
                 Produto
               </th>
@@ -2480,7 +2480,7 @@ function MarketLegend({
       aria-label="Filtrar por estabelecimento"
       className="flex flex-wrap items-center gap-1.5 rounded-lg border border-border/60 bg-background/60 px-2 py-1.5"
     >
-      <span className="pl-1 pr-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+      <span className="pl-1 pr-1 text-[11.5px] font-medium text-muted-foreground">
         Mercados
       </span>
       {markets.map((m) => {
@@ -2519,7 +2519,7 @@ function MarketLegend({
         <button
           type="button"
           onClick={() => onPick(active)}
-          className="ml-auto rounded-md px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+          className="ml-auto rounded-md px-2 py-0.5 text-[12px] font-medium text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
         >
           Limpar
         </button>
