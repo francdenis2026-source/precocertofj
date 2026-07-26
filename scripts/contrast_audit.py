@@ -144,7 +144,7 @@ PROBE = r"""
     const bold = parseInt(cs.fontWeight, 10) >= 700;
     const large = size >= 24 || (size >= 18.66 && bold);
     const need = large ? 3 : 4.5;
-    if ((cr !== null && cr < need) || clipped) {
+    if ((cr !== null && !overlay && cr < need) || clipped) {
       out.push({
         text: el.textContent.trim().slice(0, 40),
         cr, need, clipped,
