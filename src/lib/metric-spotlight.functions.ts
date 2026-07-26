@@ -180,11 +180,10 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
         string,
         { count: number; last: string | null; names: Set<string> }
       >();
-      for (const s of (storeCountsRes.data ?? []) as Array<{
-        establishment_id: string | null;
-        created_at: string;
-        product_name: string | null;
-      }>) {
+      const uniqueProductNames = new Set<string>();
+      for (const s of allScans) {
+        if (s.product_name) uniqueProductNames.add(s.product_name.trim().toLowerCase());
+
         if (!s.establishment_id) continue;
         const cur = scansPerStore.get(s.establishment_id) ?? {
           count: 0,
