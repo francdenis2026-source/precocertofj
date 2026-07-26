@@ -454,7 +454,7 @@ function HomePage() {
                     key={t}
                     type="button"
                     onClick={() => navigate({ to: "/buscar", search: { q: t } as any })}
-                    className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11.5px] font-medium capitalize transition-all hover:-translate-y-px"
+                    className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11.5px] font-medium capitalize pc-tile"
                     style={{
                       background: "var(--pc-home-onhero-glass-soft)",
                       borderColor: "var(--pc-home-onhero-border-soft)",
@@ -580,7 +580,7 @@ function HomePage() {
                       <Link
                         key={s?.id ?? i}
                         to="/estabelecimentos"
-                        className="inline-flex max-w-[46%] items-center gap-1.5 rounded-lg border px-2 py-1 transition-colors hover:border-brand-gold/60"
+                        className="inline-flex max-w-[46%] items-center gap-1.5 rounded-lg border px-2 py-1 pc-tile"
                         style={{
                           background: "var(--pc-home-onhero-glass-soft)",
                           borderColor: "var(--pc-home-onhero-border-soft)",
