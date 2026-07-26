@@ -676,7 +676,7 @@ function HomePage() {
             {[
               { key: "supermercados", label: "Mercado", full: "Supermercados", icon: <ShoppingCart className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />, q: "supermercado" },
               { key: "farmacias", label: "Farmácia", full: "Farmácias", icon: <Pill className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />, q: "farmácia" },
-              { key: "construcao", label: "Construção", full: "Construção", icon: <HardHat className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />, q: "construção" },
+              { key: "acougues", label: "Açougue", full: "Açougues", icon: <Beef className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />, q: "açougue" },
               { key: "postos", label: "Postos", full: "Postos", icon: <Fuel className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />, q: "posto combustível" },
             ].map((c) => (
               <button
