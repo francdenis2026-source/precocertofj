@@ -200,25 +200,61 @@ function CategoryPage() {
           <SectionTitle
             icon={Package}
             title="Produtos da categoria"
-            hint={`${products.length} resultado(s)`}
+            hint={
+              q
+                ? `${products.length} de ${totalListed.toLocaleString("pt-BR")} filtrado(s)`
+                : totalAll > totalListed
+                  ? `${totalListed.toLocaleString("pt-BR")} exibidos de ${totalAll.toLocaleString("pt-BR")}`
+                  : `${totalAll.toLocaleString("pt-BR")} produto(s)`
+            }
           />
-          <div className="relative mt-2">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
-            <label htmlFor="cat-prod-search" className="sr-only">
-              Filtrar produtos da categoria
-            </label>
-            <input
-              id="cat-prod-search"
-              type="search"
-              value={q}
-              onChange={(e) => {
-                setQ(e.target.value);
-                setLimit(24);
-              }}
-              placeholder={`Filtrar em ${def.label.toLowerCase()}…`}
-              className="h-10 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13.5px] outline-none focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
-            />
+          <div className="mt-2 flex items-center gap-2">
+            <div className="relative min-w-0 flex-1">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
+              <label htmlFor="cat-prod-search" className="sr-only">
+                Filtrar produtos da categoria
+              </label>
+              <input
+                id="cat-prod-search"
+                type="search"
+                value={q}
+                onChange={(e) => {
+                  setQ(e.target.value);
+                  setLimit(24);
+                }}
+                placeholder={`Filtrar em ${def.label.toLowerCase()}…`}
+                className="h-10 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13.5px] outline-none focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
+              />
+            </div>
+            <div
+              role="group"
+              aria-label="Modo de exibição"
+              className="flex h-10 shrink-0 items-center gap-1 rounded-lg border border-border bg-card p-1"
+            >
+              {([
+                { id: "list", label: "Lista", Icon: List },
+                { id: "grid", label: "Grade", Icon: LayoutGrid },
+              ] as const).map(({ id, label, Icon: VIcon }) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => setView(id)}
+                  aria-pressed={view === id}
+                  title={label}
+                  className={cn(
+                    "grid h-8 w-8 place-items-center rounded-md transition-colors",
+                    view === id
+                      ? "bg-brand-gold text-brand-navy"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  <VIcon className="h-4 w-4" aria-hidden />
+                  <span className="sr-only">{label}</span>
+                </button>
+              ))}
+            </div>
           </div>
+
 
           {isLoading ? (
             <SkeletonRow />
