@@ -21,6 +21,13 @@ import { SavingsBadge } from "@/components/product/SavingsBadge";
 import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
 import { ConfidenceBadge, computeConfidence } from "@/components/product/ConfidenceBadge";
 import { computeUnitPrice } from "@/lib/unit-price";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 import { QuickFilterBar } from "@/components/search/QuickFilterBar";
 import { ProductStoresDialog } from "@/components/product/ProductStoresDialog";
 import { PriceRankingPanel } from "@/components/product/PriceRankingPanel";
@@ -48,6 +55,7 @@ import {
   Scale,
   LayoutGrid,
   Rows3,
+  SlidersHorizontal,
   Lock,
   Share2,
 } from "lucide-react";
@@ -600,6 +608,7 @@ function ComparadorPage() {
     return () => window.removeEventListener("resize", sync);
   }, []);
   const [page, setPage] = useState(1);
+  const [filtersOpen, setFiltersOpen] = useState(false);
   useEffect(() => {
     setPage(1);
   }, [q, cat, sortKey, view, RESULTS_PAGE_SIZE]);
@@ -630,6 +639,85 @@ function ComparadorPage() {
 
 
 
+
+  const filtersNode = (
+    <>
+        {categoryOptions.length > 0 && (
+        <div className="mt-4">
+          <QuickFilterBar<string>
+            label="Categoria"
+            ariaLabel="Filtrar por categoria"
+            value={cat || null}
+            onChange={(next) => setCat(next ?? "")}
+            options={[
+              { value: "__all", label: "Todas" },
+              ...categoryOptions.map((c) => ({ value: c.key, label: c.key, count: c.count })),
+            ].map((o) =>
+              o.value === "__all"
+                ? { value: "", label: o.label as string }
+                : (o as { value: string; label: string; count?: number }),
+            )}
+          />
+        </div>
+      )}
+
+      {/* Sort + view chips — consistent chip design (QuickFilterBar) */}
+      <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
+        <QuickFilterBar<SortKey>
+          label="Ordenar"
+          ariaLabel="Ordenar produtos"
+          value={sortKey}
+          onChange={(next) => setSortKey(next ?? "relevance")}
+          options={[
+            { value: "relevance", label: "Relevância" },
+            { value: "price-asc", label: "Menor preço", hint: "Preço crescente" },
+            { value: "unit-asc", label: "Menor R$/kg ou R$/L", hint: "Compara unidades diferentes" },
+            { value: "savings-desc", label: "Maior economia %" },
+            { value: "confidence-desc", label: "Maior confiança", hint: "Prioriza dados mais completos e consistentes" },
+            { value: "name", label: "A–Z" },
+          ]}
+        />
+        <QuickFilterBar<ViewMode>
+          label="Visual"
+          ariaLabel="Modo de exibição"
+          value={view}
+          onChange={(next) => setView(next ?? "grid")}
+          options={[
+            { value: "grid", label: (<span className="inline-flex items-center gap-1"><LayoutGrid className="h-3 w-3" /> Cards</span>) },
+            { value: "table", label: (<span className="inline-flex items-center gap-1"><Rows3 className="h-3 w-3" /> Tabela</span>) },
+          ]}
+        />
+      </div>
+
+      {/* Confidence filter + low-quality signal */}
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+        <QuickFilterBar<ConfFilter>
+          label="Confiança"
+          ariaLabel="Filtrar por nível de confiança dos dados"
+          value={confFilter || null}
+          onChange={(next) => setConfFilter((next as ConfFilter) ?? "")}
+          options={[
+            { value: "alta", label: "Alta", hint: "≥ 3 mercados, dados consistentes" },
+            { value: "media", label: "Parcial", hint: "2 mercados, variação elevada ou tamanho ausente" },
+            { value: "baixa", label: "Baixa", hint: "1 mercado, dados divergentes ou variação muito alta" },
+          ]}
+        />
+        {lowQualityCount > 0 && !confFilter && (
+          <button
+            type="button"
+            onClick={() => setConfFilter("baixa")}
+            className="inline-flex items-center gap-1.5 rounded-full border border-destructive/40 bg-destructive/10 px-2.5 py-1 font-mono text-[11px] font-semibold uppercase tracking-wider text-destructive transition hover:bg-destructive/15"
+            title="Ver apenas produtos com dados de baixa qualidade"
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-destructive" />
+            {lowQualityCount} com baixa qualidade
+          </button>
+        )}
+      </div>
+
+
+    </>
+  );
 
   return (
     <div className="min-h-screen">
@@ -687,79 +775,26 @@ function ComparadorPage() {
           )}
         </div>
 
-        {categoryOptions.length > 0 && (
-          <div className="mt-4">
-            <QuickFilterBar<string>
-              label="Categoria"
-              ariaLabel="Filtrar por categoria"
-              value={cat || null}
-              onChange={(next) => setCat(next ?? "")}
-              options={[
-                { value: "__all", label: "Todas" },
-                ...categoryOptions.map((c) => ({ value: c.key, label: c.key, count: c.count })),
-              ].map((o) =>
-                o.value === "__all"
-                  ? { value: "", label: o.label as string }
-                  : (o as { value: string; label: string; count?: number }),
-              )}
-            />
-          </div>
-        )}
-
-        {/* Sort + view chips — consistent chip design (QuickFilterBar) */}
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
-          <QuickFilterBar<SortKey>
-            label="Ordenar"
-            ariaLabel="Ordenar produtos"
-            value={sortKey}
-            onChange={(next) => setSortKey(next ?? "relevance")}
-            options={[
-              { value: "relevance", label: "Relevância" },
-              { value: "price-asc", label: "Menor preço", hint: "Preço crescente" },
-              { value: "unit-asc", label: "Menor R$/kg ou R$/L", hint: "Compara unidades diferentes" },
-              { value: "savings-desc", label: "Maior economia %" },
-              { value: "confidence-desc", label: "Maior confiança", hint: "Prioriza dados mais completos e consistentes" },
-              { value: "name", label: "A–Z" },
-            ]}
-          />
-          <QuickFilterBar<ViewMode>
-            label="Visual"
-            ariaLabel="Modo de exibição"
-            value={view}
-            onChange={(next) => setView(next ?? "grid")}
-            options={[
-              { value: "grid", label: (<span className="inline-flex items-center gap-1"><LayoutGrid className="h-3 w-3" /> Cards</span>) },
-              { value: "table", label: (<span className="inline-flex items-center gap-1"><Rows3 className="h-3 w-3" /> Tabela</span>) },
-            ]}
-          />
+        {/* Filtros — inline no desktop, drawer no mobile */}
+        <div className="hidden md:block">{filtersNode}</div>
+        <div className="mt-3 md:hidden">
+          <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
+            <SheetTrigger asChild>
+              <button
+                type="button"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-[12.5px] font-bold uppercase tracking-[0.1em] text-foreground transition hover:border-primary/50"
+              >
+                <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden /> Filtros e ordenação
+              </button>
+            </SheetTrigger>
+            <SheetContent side="bottom" className="max-h-[85dvh] overflow-y-auto">
+              <SheetHeader className="text-left">
+                <SheetTitle className="text-[15px]">Filtros e ordenação</SheetTitle>
+              </SheetHeader>
+              <div className="space-y-1 pb-8">{filtersNode}</div>
+            </SheetContent>
+          </Sheet>
         </div>
-
-        {/* Confidence filter + low-quality signal */}
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-          <QuickFilterBar<ConfFilter>
-            label="Confiança"
-            ariaLabel="Filtrar por nível de confiança dos dados"
-            value={confFilter || null}
-            onChange={(next) => setConfFilter((next as ConfFilter) ?? "")}
-            options={[
-              { value: "alta", label: "Alta", hint: "≥ 3 mercados, dados consistentes" },
-              { value: "media", label: "Parcial", hint: "2 mercados, variação elevada ou tamanho ausente" },
-              { value: "baixa", label: "Baixa", hint: "1 mercado, dados divergentes ou variação muito alta" },
-            ]}
-          />
-          {lowQualityCount > 0 && !confFilter && (
-            <button
-              type="button"
-              onClick={() => setConfFilter("baixa")}
-              className="inline-flex items-center gap-1.5 rounded-full border border-destructive/40 bg-destructive/10 px-2.5 py-1 font-mono text-[11px] font-semibold uppercase tracking-wider text-destructive transition hover:bg-destructive/15"
-              title="Ver apenas produtos com dados de baixa qualidade"
-            >
-              <span className="h-1.5 w-1.5 rounded-full bg-destructive" />
-              {lowQualityCount} com baixa qualidade
-            </button>
-          )}
-        </div>
-
 
         <div className="mt-6 grid gap-3 sm:grid-cols-3">
           <StatCard label="Produtos encontrados" value={String(stats.productCount)} />
