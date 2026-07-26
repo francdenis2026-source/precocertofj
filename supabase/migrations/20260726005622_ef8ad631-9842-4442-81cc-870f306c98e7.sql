@@ -1,0 +1,2 @@
+update public.establishments set logo_url='/logos/parceirao-v4.png' where id='905ca83b-5bd5-4d91-a543-76b2966e7d45';
+update public.establishments set logo_url='/logos/reboucas-v4.png' where id='c3f3df85-42fe-41ed-97a1-3115330783e2';
