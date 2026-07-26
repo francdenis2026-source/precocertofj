@@ -759,37 +759,59 @@ export function PriceSearchBar({
         </div>
       )}
 
-      {/* Loading skeleton — só quando ainda não há resultado (evita piscar durante refetch) */}
+      {/* Loading skeleton — espelha a hierarquia real dos resultados (resumo + cards) */}
       {isSearching && !result && !err && !quotaBlocked && (
         <div
-          className="mt-4 min-h-[640px] space-y-3 [content-visibility:auto] md:space-y-4"
+          className="pc-results mt-4 min-h-[640px] [content-visibility:auto]"
           aria-busy="true"
           aria-live="polite"
           aria-label="Carregando resultados"
         >
-          <div className="grid grid-cols-3 gap-2">
-            {[0, 1, 2].map((i) => (
-              <div key={i} className="h-14 animate-pulse rounded-lg border border-primary/10 bg-background" />
-            ))}
-          </div>
-          <div className="h-16 animate-pulse rounded-xl border border-primary/10 bg-background" />
-          {/* Skeleton específico para lista com ordinais pill — reduz layout shift */}
-          <ul className="space-y-2" aria-hidden="true">
-            {[0, 1, 2].map((i) => (
-              <li
-                key={i}
-                className="flex items-center gap-2 rounded-xl border border-primary/10 bg-background p-2"
-              >
-                <span className="h-7 w-7 shrink-0 animate-pulse rounded-full border border-accent-strong/20 bg-accent/10" />
-                <span className="h-7 w-7 shrink-0 animate-pulse rounded-full border border-border bg-muted/40" />
-                <div className="min-w-0 flex-1 space-y-1.5">
-                  <span className="block h-3 w-2/3 animate-pulse rounded bg-muted/50" />
-                  <span className="block h-2 w-1/3 animate-pulse rounded bg-muted/40" />
+          <p className="sr-only">Buscando preços…</p>
+
+          {/* Painel resumo (melhor preço / economia) */}
+          <div
+            className="animate-pulse rounded-xl border border-[color-mix(in_oklab,var(--color-border)_45%,transparent)] p-3.5 sm:p-4"
+            aria-hidden="true"
+          >
+            <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
+              {[0, 1].map((i) => (
+                <div key={i} className="space-y-2">
+                  <span className="block h-2.5 w-24 rounded bg-muted/50" />
+                  <span className="block h-6 w-32 rounded bg-muted/60" />
+                  <span className="block h-2.5 w-40 rounded bg-muted/40" />
                 </div>
-                <span className="h-5 w-16 shrink-0 animate-pulse rounded bg-muted/40" />
+              ))}
+            </div>
+          </div>
+
+          {/* Cards de produto */}
+          <ul className="contents" aria-hidden="true">
+            {[0, 1, 2, 3].map((i) => (
+              <li key={i} className="pc-res-card animate-pulse">
+                <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
+                  <div className="min-w-0 flex-1 space-y-1.5">
+                    <span className="block h-3.5 w-3/5 rounded bg-muted/55" />
+                    <span className="block h-2.5 w-2/5 rounded bg-muted/40" />
+                  </div>
+                  <div className="flex gap-1.5">
+                    <span className="h-6 w-20 rounded-full bg-muted/35" />
+                    <span className="hidden h-6 w-16 rounded-full bg-muted/30 sm:block" />
+                  </div>
+                </div>
+                <div className="mt-2.5 space-y-2 border-t border-[color-mix(in_oklab,var(--color-border)_45%,transparent)] pt-2.5">
+                  {[0, 1].map((j) => (
+                    <div key={j} className="flex items-center gap-2.5">
+                      <span className="h-7 w-7 shrink-0 rounded-full bg-muted/40" />
+                      <span className="h-3 min-w-0 flex-1 rounded bg-muted/35" />
+                      <span className="h-4 w-16 shrink-0 rounded bg-muted/45" />
+                    </div>
+                  ))}
+                </div>
               </li>
             ))}
           </ul>
+
         </div>
       )}
 
