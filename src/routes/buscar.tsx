@@ -361,7 +361,11 @@ function SearchPage() {
 
 
   return (
-    <div className="pc-search-scope flex min-h-[100svh] flex-col bg-background text-foreground">
+    <div
+      data-reduced-motion={reducedMotion ? "on" : "off"}
+      className={`pc-search-scope flex min-h-[100svh] flex-col bg-background text-foreground${reducedMotion ? " pc-reduce-motion" : ""}`}
+    >
+
       {/* BARRA DE COMANDO — sticky, uma linha, sem desperdício vertical */}
       <header className="sticky top-0 z-30 border-b border-border/70 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div
