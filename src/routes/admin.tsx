@@ -19,6 +19,8 @@ import {
 } from "@/lib/establishments.functions";
 import { uploadImageDataUrl } from "@/lib/storage.functions";
 import { extractLogoDetails, type LogoExtract } from "@/lib/logo-extract.functions";
+import { LogoQualityPanel } from "@/components/brand/LogoQualityPanel";
+
 import { claimFirstAdmin, listUsersWithRoles, grantRole, revokeRole, listRoleAuditLog, OWNER_EMAIL, type UserWithRoles, type RoleAuditEntry } from "@/lib/roles.functions";
 import { AppShell } from "@/components/brand/AppShell";
 import { PageHeader } from "@/components/brand/PageHeader";
