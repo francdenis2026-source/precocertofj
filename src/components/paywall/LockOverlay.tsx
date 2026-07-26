@@ -200,11 +200,11 @@ export function LockOverlay({
               {heading}
             </p>
             <span aria-hidden="true" className="relative h-[2px] w-10 rounded-full bg-primary/70" />
-            <p className="relative line-clamp-2 max-w-[260px] text-[12px] leading-snug text-muted-foreground">
+            <p className="relative hidden shrink-0 line-clamp-2 max-w-[260px] text-[12px] sm:block leading-snug text-muted-foreground">
               {helper}
             </p>
             {reason ? (
-              <p className="relative max-w-[280px] rounded-md border border-primary/20 bg-primary/5 px-2.5 py-1.5 line-clamp-2 text-[11px] leading-snug text-foreground/85">
+              <p className="relative hidden shrink-0 max-w-[280px] rounded-md sm:block border border-primary/20 bg-primary/5 px-2.5 py-1.5 line-clamp-2 text-[11px] leading-snug text-foreground/85">
                 {reason}
               </p>
             ) : null}
