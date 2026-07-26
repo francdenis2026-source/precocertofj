@@ -360,7 +360,7 @@ function StorePage() {
           {/* Gradient banner */}
           <div className="relative h-20 bg-gradient-to-br from-primary/25 via-primary/10 to-accent/20">
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,theme(colors.primary/30),transparent_60%)]" />
-            <span className="absolute left-3 top-2 inline-flex items-center gap-1 rounded-full bg-background/85 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-[0.18em] text-primary shadow-sm backdrop-blur">
+            <span className="absolute left-3 top-2 inline-flex items-center gap-1 rounded-full bg-background/85 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary shadow-sm backdrop-blur">
               <Check className="h-2.5 w-2.5" strokeWidth={3} />
               Mercado verificada
             </span>
@@ -406,7 +406,7 @@ function StorePage() {
             {/* Stats grid — Produtos · Categorias · Última leitura */}
             <div className="mt-3 grid grid-cols-3 gap-2">
               <div className="rounded-xl border border-border bg-background/60 px-2.5 py-2">
-                <p className="text-[9px] font-semibold uppercase tracking-wider text-muted-foreground">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                   Produtos
                 </p>
                 <p className="num mt-0.5 font-display text-[16px] font-bold text-foreground">
@@ -414,7 +414,7 @@ function StorePage() {
                 </p>
               </div>
               <div className="rounded-xl border border-border bg-background/60 px-2.5 py-2">
-                <p className="text-[9px] font-semibold uppercase tracking-wider text-muted-foreground">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                   Categorias
                 </p>
                 <p className="num mt-0.5 font-display text-[16px] font-bold text-foreground">
@@ -422,7 +422,7 @@ function StorePage() {
                 </p>
               </div>
               <div className="rounded-xl border border-border bg-background/60 px-2.5 py-2">
-                <p className="text-[9px] font-semibold uppercase tracking-wider text-muted-foreground">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                   Atualizado
                 </p>
                 <p className="mt-0.5 font-display text-[12px] font-semibold leading-tight text-foreground">
@@ -550,7 +550,7 @@ function StorePage() {
               <h2 className="font-display text-[13px] font-semibold text-foreground">
                 Melhores desta mercado
               </h2>
-              <span className="text-[10.5px] text-muted-foreground">arraste →</span>
+              <span className="text-[11px] text-muted-foreground">arraste →</span>
             </div>
             <SwipeRow ariaLabel="Destaques da mercado">
               {featured.map((p) => (
@@ -626,7 +626,7 @@ function StorePage() {
                               const key = categories.find((c) => c.label === group.label)?.key;
                               if (key) setCat(key);
                             }}
-                            className="num text-[10.5px] font-semibold text-primary hover:underline"
+                            className="num text-[11px] font-semibold text-primary hover:underline"
                           >
                             {group.items.length} {group.items.length === 1 ? "item" : "itens"} →
                           </button>
@@ -677,7 +677,7 @@ function StorePage() {
             >
               <span className="relative">
                 <ShoppingBag className="h-4 w-4" />
-                <span className="num absolute -right-2 -top-2 grid h-4 min-w-[16px] place-items-center rounded-full bg-accent px-1 text-[9px] font-bold text-accent-foreground">
+                <span className="num absolute -right-2 -top-2 grid h-4 min-w-[16px] place-items-center rounded-full bg-accent px-1 text-[11px] font-bold text-accent-foreground">
                   {cart.totalQty}
                 </span>
               </span>
@@ -795,7 +795,7 @@ function ProductRow({
           <p className="truncate text-[13px] font-semibold leading-tight text-foreground">
             {p.productName}
           </p>
-          <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0 text-[10.5px] leading-tight text-muted-foreground">
+          <div className="mt-0.5 flex flex-wrap items-center gap-x-2 gap-y-0 text-[11px] leading-tight text-muted-foreground">
             {p.unit && <span>{p.unit}</span>}
             {p.pricePerUnit != null && p.unitLabel && (
               <span className="num">{fmtPPU(p.pricePerUnit, p.unitLabel)}</span>
@@ -826,7 +826,7 @@ function QtyControl({
         type="button"
         onClick={onAdd}
         aria-label="Adicionar à cesta"
-        className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-3 py-1.5 text-[10.5px] font-semibold uppercase tracking-wider text-primary-foreground transition hover:bg-primary/90"
+        className="inline-flex shrink-0 items-center gap-1 rounded-full bg-primary px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wider text-primary-foreground transition hover:bg-primary/90"
       >
         <Plus className="h-3.5 w-3.5" strokeWidth={2.4} />
         Cesta
@@ -896,13 +896,13 @@ function FeaturedCard({
         )}
       </Link>
       <div className="flex flex-1 flex-col gap-0.5 p-1.5">
-        <p className="line-clamp-1 min-h-[11px] text-[9px] font-medium uppercase tracking-wide text-muted-foreground">
+        <p className="line-clamp-1 min-h-[11px] text-[11px] font-medium uppercase tracking-wide text-muted-foreground">
           {p.category}
         </p>
         <Link
           to="/loja/$id/produto/$slug"
           params={{ id: storeId, slug: p.slug }}
-          className="line-clamp-2 min-h-[2.2em] text-[10.5px] font-semibold leading-tight text-foreground hover:text-primary"
+          className="line-clamp-2 min-h-[2.2em] text-[11px] font-semibold leading-tight text-foreground hover:text-primary"
         >
           {p.productName}
         </Link>
@@ -1099,7 +1099,7 @@ function CartDrawer({
               type="button"
               onClick={handlePdf}
               disabled={entries.length === 0}
-              className="inline-flex items-center justify-center gap-1 rounded-full border border-primary/40 bg-surface px-2 py-2 text-[10.5px] font-semibold uppercase tracking-wider text-primary hover:bg-primary/10 disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-1 rounded-full border border-primary/40 bg-surface px-2 py-2 text-[11px] font-semibold uppercase tracking-wider text-primary hover:bg-primary/10 disabled:opacity-50"
             >
               <FileDown className="h-3.5 w-3.5" /> PDF
             </button>
@@ -1107,7 +1107,7 @@ function CartDrawer({
               type="button"
               onClick={() => handleShareOrSave(false, false)}
               disabled={entries.length === 0 || saving}
-              className="inline-flex items-center justify-center gap-1 rounded-full border border-primary/40 bg-surface px-2 py-2 text-[10.5px] font-semibold uppercase tracking-wider text-primary hover:bg-primary/10 disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-1 rounded-full border border-primary/40 bg-surface px-2 py-2 text-[11px] font-semibold uppercase tracking-wider text-primary hover:bg-primary/10 disabled:opacity-50"
             >
               {saving ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Save className="h-3.5 w-3.5" />}
               Salvar
@@ -1116,12 +1116,12 @@ function CartDrawer({
               type="button"
               onClick={() => handleShareOrSave(true, true)}
               disabled={entries.length === 0 || saving}
-              className="inline-flex items-center justify-center gap-1 rounded-full border border-primary/40 bg-surface px-2 py-2 text-[10.5px] font-semibold uppercase tracking-wider text-primary hover:bg-primary/10 disabled:opacity-50"
+              className="inline-flex items-center justify-center gap-1 rounded-full border border-primary/40 bg-surface px-2 py-2 text-[11px] font-semibold uppercase tracking-wider text-primary hover:bg-primary/10 disabled:opacity-50"
             >
               <Share2 className="h-3.5 w-3.5" /> Compartilhar
             </button>
           </div>
-          <p className="text-center text-[10px] text-muted-foreground">
+          <p className="text-center text-[11px] text-muted-foreground">
             Sistema de pesquisa de preços — não realizamos pagamentos.
           </p>
         </div>
@@ -1166,7 +1166,7 @@ function CartDrawer({
                     <p className="truncate text-[12.5px] font-semibold text-foreground">
                       {row.productName}
                     </p>
-                    <p className="num mt-0.5 text-[10.5px] text-muted-foreground">
+                    <p className="num mt-0.5 text-[11px] text-muted-foreground">
                       {fmt(row.price)} × {row.quantity} ={" "}
                       <span className="font-semibold text-foreground">
                         {fmt(row.price * row.quantity)}
@@ -1351,12 +1351,12 @@ function CompareRow({
               {store.storeName}
             </p>
             {isCurrent && (
-              <span className="rounded-full bg-primary/15 px-1.5 py-[1px] text-[8.5px] font-bold uppercase tracking-wider text-primary">
+              <span className="rounded-full bg-primary/15 px-1.5 py-[1px] text-[11px] font-bold uppercase tracking-wider text-primary">
                 Atual
               </span>
             )}
           </div>
-          <p className="mt-0.5 text-[10.5px] text-muted-foreground">
+          <p className="mt-0.5 text-[11px] text-muted-foreground">
             {store.city}/{store.state} · {store.matchedCount}/{store.totalCount} itens
             encontrados
           </p>
@@ -1373,7 +1373,7 @@ function CompareRow({
           {!isCurrent && complete && refTotal > 0 && (
             <p
               className={cn(
-                "num text-[10px] font-semibold",
+                "num text-[11px] font-semibold",
                 cheaper
                   ? "text-savings dark:text-savings"
                   : diff > 0
@@ -1385,7 +1385,7 @@ function CompareRow({
             </p>
           )}
           {!complete && (
-            <p className="text-[9.5px] font-semibold uppercase tracking-wider text-warning">
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-warning">
               parcial
             </p>
           )}
@@ -1400,14 +1400,14 @@ function CompareRow({
                   {it.productName}
                 </span>
                 {it.matched ? (
-                  <span className="text-[10px] text-muted-foreground">
+                  <span className="text-[11px] text-muted-foreground">
                     {fmt(it.unitPrice ?? 0)} × {it.quantity}
                     {it.matchedName && it.matchedName.toUpperCase() !== it.productName.toUpperCase()
                       ? ` · como "${it.matchedName}"`
                       : ""}
                   </span>
                 ) : (
-                  <span className="text-[10px] text-warning">
+                  <span className="text-[11px] text-warning">
                     Sem registro em {isCurrent ? currentName : store.storeName}
                   </span>
                 )}

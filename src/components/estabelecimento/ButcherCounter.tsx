@@ -226,7 +226,7 @@ export function ButcherCounter({
       {/* Cabeçalho compacto — sem repetir o nome da loja já exibido no topo */}
       <div className="grid gap-2 rounded-xl border border-border bg-card p-3 shadow-elev-1 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-4">
         <div className="min-w-0">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-2 py-0.5 text-[10px] font-bold uppercase leading-none tracking-[0.16em] text-brand-navy">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-2 py-0.5 text-[11px] font-bold uppercase leading-none tracking-[0.16em] text-brand-navy">
             <Beef className="h-3 w-3" aria-hidden /> Setor interno
           </span>
           <h2 className="mt-1.5 font-serif text-[17px] font-semibold leading-tight tracking-tight text-foreground sm:text-[19px]">
@@ -239,7 +239,7 @@ export function ButcherCounter({
         </div>
         {cheapest && (
           <div className="flex flex-wrap items-baseline gap-x-1.5 rounded-lg border border-brand-gold/40 bg-brand-gold/10 px-2.5 py-1.5 text-[12.5px] lg:max-w-[320px]">
-            <span className="text-[10px] font-bold uppercase leading-none tracking-[0.14em] text-[var(--pc-gold-ink)]">
+            <span className="text-[11px] font-bold uppercase leading-none tracking-[0.14em] text-[var(--pc-gold-ink)]">
               Menor preço por kg
             </span>
             <strong className="font-semibold text-foreground">{cheapest.productName}</strong>
@@ -271,8 +271,8 @@ export function ButcherCounter({
           <span
             className={
               protein === null
-                ? "rounded-full bg-brand-navy/15 px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-brand-navy"
-                : "rounded-full bg-foreground/10 px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-foreground"
+                ? "rounded-full bg-brand-navy/15 px-1.5 py-0.5 text-[11px] font-bold tabular-nums text-brand-navy"
+                : "rounded-full bg-foreground/10 px-1.5 py-0.5 text-[11px] font-bold tabular-nums text-foreground"
             }
           >
             {cuts.length}
@@ -294,8 +294,8 @@ export function ButcherCounter({
               <span
                 className={
                   active
-                    ? "rounded-full bg-brand-navy/15 px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-brand-navy"
-                    : "rounded-full bg-foreground/10 px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-foreground"
+                    ? "rounded-full bg-brand-navy/15 px-1.5 py-0.5 text-[11px] font-bold tabular-nums text-brand-navy"
+                    : "rounded-full bg-foreground/10 px-1.5 py-0.5 text-[11px] font-bold tabular-nums text-foreground"
                 }
               >
                 {counts.get(p.id) ?? 0}
@@ -436,16 +436,16 @@ export function ButcherCounter({
           ) : (
             <div className="mt-2 overflow-hidden rounded-lg border border-border bg-card">
               <div className="grid grid-cols-[minmax(0,1fr)_96px] items-center gap-3 border-b border-border bg-muted/60 px-2.5 py-1.5 sm:grid-cols-[minmax(0,1fr)_120px_96px_200px]">
-                <span className="text-[10px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground">
+                <span className="text-[11px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground">
                   Corte
                 </span>
-                <span className="hidden text-[10px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground sm:block">
+                <span className="hidden text-[11px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground sm:block">
                   Preço por kg
                 </span>
-                <span className="text-right text-[10px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground">
+                <span className="text-right text-[11px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground">
                   Preço
                 </span>
-                <span className="hidden text-right text-[10px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground sm:block">
+                <span className="hidden text-right text-[11px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground sm:block">
                   Ações
                 </span>
               </div>
@@ -518,8 +518,8 @@ const ActionButtons = memo(function ActionButtons({
 }) {
   const cls =
     size === "sm"
-      ? "inline-flex h-6 items-center gap-1 rounded-full border border-border bg-background px-2 text-[10.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-      : "inline-flex h-7 items-center gap-1 rounded-full border border-border bg-background px-2 text-[10.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold";
+      ? "inline-flex h-6 items-center gap-1 rounded-full border border-border bg-background px-2 text-[11px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+      : "inline-flex h-7 items-center gap-1 rounded-full border border-border bg-background px-2 text-[11px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold";
   if (!onAlert && !onHistory) return null;
   return (
     <div className="flex shrink-0 items-center gap-1">
@@ -583,7 +583,7 @@ const CutTile = memo(function CutTile({
         </p>
       </button>
       <div className="mx-3 mb-2.5 flex items-center justify-between gap-2 border-t border-border/70 pt-1.5">
-        <span className="truncate text-[10.5px] leading-none text-muted-foreground">
+        <span className="truncate text-[11px] leading-none text-muted-foreground">
           {cut.lastDate ? `Atualizado ${new Date(cut.lastDate).toLocaleDateString("pt-BR")}` : ""}
         </span>
         <ActionButtons cut={cut} onAlert={onAlert} onHistory={onHistory} />
@@ -616,7 +616,7 @@ const CutRow = memo(function CutRow({
         <span className="block truncate text-[12.5px] font-semibold leading-tight text-foreground">
           {cut.productName}
         </span>
-        <span className="block truncate text-[10.5px] leading-tight text-muted-foreground">
+        <span className="block truncate text-[11px] leading-tight text-muted-foreground">
           {proteinLabel(cut.protein)}
           {cut.brand ? ` · ${cut.brand}` : ""}
         </span>

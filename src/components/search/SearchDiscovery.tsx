@@ -242,11 +242,11 @@ export function SearchDiscovery({ onPickQuery }: Props) {
       {/* Sinal de vida — cartão próprio, mesmo padrão dos HeroMetric */}
       <section className="border-t border-border/60 pt-5">
         <div className="mb-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 px-0.5">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-border/70 px-2 py-0.5 text-[10.5px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border/70 px-2 py-0.5 text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
             <Clock className="h-3 w-3 text-brand-gold" aria-hidden />
             Janela: últimos {stats.data?.windowDays ?? 30} dias
           </span>
-          <span className="text-[10.5px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
+          <span className="text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
             {statsFailed
               ? "Dados indisponíveis"
               : stats.data?.generatedAt
@@ -310,13 +310,13 @@ function StatCell({
         {icon}
       </span>
       <div className="min-w-0 sm:mt-1.5">
-        <div className="text-[9.5px] font-semibold uppercase leading-tight tracking-[0.12em] text-muted-foreground">
+        <div className="text-[11px] font-semibold uppercase leading-tight tracking-[0.12em] text-muted-foreground">
           {label}
         </div>
         <div className="mt-0.5 truncate font-serif text-[17px] font-semibold tabular-nums leading-none tracking-tight text-foreground">
           {value}
         </div>
-        <div className="mt-0.5 text-[9.5px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
+        <div className="mt-0.5 text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
           {hint}
         </div>
       </div>

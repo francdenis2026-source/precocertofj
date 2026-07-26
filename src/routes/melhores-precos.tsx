@@ -584,7 +584,7 @@ function MelhoresPrecosPage() {
               <option key={loc} value={loc} />
             ))}
           </datalist>
-          <p className="shrink-0 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground sm:pl-2">
+          <p className="shrink-0 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground sm:pl-2">
             {rows.length} {rows.length === 1 ? "produto" : "produtos"}
             {q && ` • filtrado por “${q}”`}
           </p>
@@ -596,7 +596,7 @@ function MelhoresPrecosPage() {
             <SlidersHorizontal className="h-3.5 w-3.5" />
             Filtros avançados
             {hasFilters && (
-              <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[9px] font-bold tracking-wide text-primary">
+              <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[11px] font-bold tracking-wide text-primary">
                 ativos
               </span>
             )}
@@ -609,7 +609,7 @@ function MelhoresPrecosPage() {
                     e.stopPropagation();
                     navigate({ search: {} });
                   }}
-                  className="rounded-full border border-border bg-background px-2.5 py-0.5 text-[10px] font-medium text-muted-foreground transition-colors hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  className="rounded-full border border-border bg-background px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 >
                   Limpar
                 </button>
@@ -653,7 +653,7 @@ function MelhoresPrecosPage() {
                 className="w-full accent-primary"
                 aria-label="Número mínimo de mercados com preço"
               />
-              <div className="flex justify-between text-[10px] text-muted-foreground">
+              <div className="flex justify-between text-[11px] text-muted-foreground">
                 <span>1</span>
                 <span>{Math.max(2, maxStoreCount)}</span>
               </div>
@@ -793,7 +793,7 @@ function Pagination({
       aria-label="Paginação"
       className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card/60 px-4 py-3"
     >
-      <p className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted-foreground">
+      <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
         {from}–{to} de {total}
       </p>
       <div className="flex items-center gap-1">
@@ -916,7 +916,7 @@ function CategoryTabs({
 function StatCard({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <div className="hairline-gold rounded-xl border border-border bg-card px-4 py-3">
-      <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+      <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
         {label}
       </p>
       <p className="mt-1 font-display text-[20px] font-bold leading-tight tracking-tight text-foreground">
@@ -979,7 +979,7 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
       {/* Rank ribbon */}
       <span
         aria-label={`Posição ${rank}`}
-        className="absolute left-2 top-2 z-10 inline-flex h-5 min-w-[1.75rem] items-center justify-center rounded-full border border-accent/60 bg-background/95 px-1.5 font-mono text-[10px] font-bold leading-none text-accent shadow-sm backdrop-blur"
+        className="absolute left-2 top-2 z-10 inline-flex h-5 min-w-[1.75rem] items-center justify-center rounded-full border border-accent/60 bg-background/95 px-1.5 font-mono text-[11px] font-bold leading-none text-accent shadow-sm backdrop-blur"
       >
         {rank.toString().padStart(2, "0")}
       </span>
@@ -997,23 +997,23 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
           sizes="(min-width: 1536px) 16vw, (min-width: 1280px) 20vw, (min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
         />
         {isMulti ? (
-          <span className="absolute right-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-savings px-1.5 py-0.5 font-mono text-[9px] font-bold leading-none text-savings-foreground shadow-sm">
+          <span className="absolute right-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-savings px-1.5 py-0.5 font-mono text-[11px] font-bold leading-none text-savings-foreground shadow-sm">
             <TrendingDown className="h-2.5 w-2.5" strokeWidth={2.4} />
             −{Number(row.savings_pct).toFixed(0)}%
           </span>
         ) : (
-          <span className="absolute right-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-background/90 px-1.5 py-0.5 font-mono text-[9px] font-semibold leading-none text-muted-foreground shadow-sm">
+          <span className="absolute right-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-background/90 px-1.5 py-0.5 font-mono text-[11px] font-semibold leading-none text-muted-foreground shadow-sm">
             <Trophy className="h-2.5 w-2.5 text-accent" strokeWidth={2.4} />
             único
           </span>
         )}
-        <span className="absolute right-1.5 bottom-1.5 inline-flex items-center gap-1 rounded-sm border border-accent/40 bg-background/90 px-1 py-0.5 font-display text-[9px] italic text-foreground backdrop-blur">
+        <span className="absolute right-1.5 bottom-1.5 inline-flex items-center gap-1 rounded-sm border border-accent/40 bg-background/90 px-1 py-0.5 font-display text-[11px] italic text-foreground backdrop-blur">
           <StoreIcon className="h-2.5 w-2.5 text-accent" /> {row.store_count}
         </span>
         {cardFreshness && (
           <span
             className={
-              "absolute left-1.5 bottom-1.5 inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 font-mono text-[9px] font-semibold leading-none shadow-sm backdrop-blur " +
+              "absolute left-1.5 bottom-1.5 inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 font-mono text-[11px] font-semibold leading-none shadow-sm backdrop-blur " +
               (cardFreshness.stale
                 ? "bg-destructive/90 text-destructive-foreground"
                 : "bg-background/90 text-muted-foreground border border-accent/30")
@@ -1033,20 +1033,20 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
 
       {/* Header — alturas fixas */}
       <div className="flex flex-col gap-0.5 px-2.5 pt-2 sm:px-3 sm:pt-2.5">
-        <span className="h-3 truncate font-sans text-[8.5px] font-semibold uppercase leading-none tracking-[0.2em] text-accent">
+        <span className="h-3 truncate font-sans text-[11px] font-semibold uppercase leading-none tracking-[0.2em] text-accent">
           {catLabel || "\u00A0"}
         </span>
         <h2 className="line-clamp-2 h-[2.4em] font-display text-[12px] font-semibold leading-[1.2] tracking-tight text-foreground sm:text-[12.5px]">
           {row.display_name}
         </h2>
-        <span className="h-3 truncate font-display text-[10px] italic leading-none text-muted-foreground">
+        <span className="h-3 truncate font-display text-[11px] italic leading-none text-muted-foreground">
           {size ?? "\u00A0"}
         </span>
       </div>
 
       {/* Price hero */}
       <div className="mt-1.5 border-y border-accent/25 bg-background/40 px-2.5 py-2 sm:px-3">
-        <span className="mb-0.5 block font-sans text-[8.5px] font-semibold uppercase leading-none tracking-[0.2em] text-muted-foreground">
+        <span className="mb-0.5 block font-sans text-[11px] font-semibold uppercase leading-none tracking-[0.2em] text-muted-foreground">
           Menor preço
         </span>
         <div className="flex items-baseline justify-between gap-2">
@@ -1054,7 +1054,7 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
             {formatBRL(bestPrice)}
           </span>
           {isMulti && avgPrice > 0 && (
-            <span className="num font-display text-[10px] italic leading-none text-muted-foreground line-through">
+            <span className="num font-display text-[11px] italic leading-none text-muted-foreground line-through">
               {formatBRL(avgPrice)}
             </span>
           )}
@@ -1068,22 +1068,22 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
           />
         </div>
         {/* Métricas de ordenação — visíveis em todos os cards */}
-        <dl className="mt-1.5 grid grid-cols-3 gap-1 border-t border-accent/15 pt-1.5 font-mono text-[8.5px] uppercase tracking-[0.12em] text-muted-foreground">
+        <dl className="mt-1.5 grid grid-cols-3 gap-1 border-t border-accent/15 pt-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
           <div className="min-w-0">
             <dt className="truncate">Menor</dt>
-            <dd className="num truncate font-display text-[10px] font-bold not-italic tabular-nums text-primary">
+            <dd className="num truncate font-display text-[11px] font-bold not-italic tabular-nums text-primary">
               {formatBRL(bestPrice)}
             </dd>
           </div>
           <div className="min-w-0">
             <dt className="truncate">Ticket médio</dt>
-            <dd className="num truncate font-display text-[10px] font-semibold not-italic tabular-nums text-foreground">
+            <dd className="num truncate font-display text-[11px] font-semibold not-italic tabular-nums text-foreground">
               {avgPrice > 0 ? formatBRL(avgPrice) : "—"}
             </dd>
           </div>
           <div className="min-w-0">
             <dt className="truncate">Economia</dt>
-            <dd className="num truncate font-display text-[10px] font-bold not-italic tabular-nums text-savings">
+            <dd className="num truncate font-display text-[11px] font-bold not-italic tabular-nums text-savings">
               {isMulti ? `−${Number(row.savings_pct).toFixed(1)}%` : "—"}
             </dd>
           </div>
@@ -1103,7 +1103,7 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
                 className="flex h-7 items-center px-2.5 sm:h-8 sm:px-3"
                 aria-hidden
               >
-                <span className="text-[10.5px] italic text-muted-foreground/50">—</span>
+                <span className="text-[11px] italic text-muted-foreground/50">—</span>
               </li>
             );
           }
@@ -1123,7 +1123,7 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
                   <span className="h-1 w-1 shrink-0 rounded-full bg-accent/40" />
                 )}
                 <span
-                  className="truncate font-display text-[10.5px] font-medium leading-none text-foreground sm:text-[11px]"
+                  className="truncate font-display text-[11px] font-medium leading-none text-foreground sm:text-[11px]"
                   title={s.store_name}
                 >
                   {shortenStoreName(s.store_name)}
@@ -1131,7 +1131,7 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
                 {freshness ? (
                   <span
                     className={
-                      "inline-flex shrink-0 items-center gap-0.5 rounded-full px-1 py-0.5 text-[8.5px] font-medium leading-none " +
+                      "inline-flex shrink-0 items-center gap-0.5 rounded-full px-1 py-0.5 text-[11px] font-medium leading-none " +
                       (freshness.stale
                         ? "bg-destructive/10 text-destructive"
                         : "bg-muted/60 text-muted-foreground")
@@ -1151,10 +1151,10 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
                 className={
                   "num shrink-0 tabular-nums leading-none " +
                   (freshness?.stale
-                    ? "font-display text-[10.5px] text-muted-foreground line-through decoration-destructive/60 sm:text-[11px]"
+                    ? "font-display text-[11px] text-muted-foreground line-through decoration-destructive/60 sm:text-[11px]"
                     : isBest
                       ? "font-display text-[11px] font-semibold text-savings sm:text-[11.5px]"
-                      : "font-display text-[10px] text-muted-foreground sm:text-[10.5px]")
+                      : "font-display text-[11px] text-muted-foreground sm:text-[11px]")
                 }
                 title={s.last_seen_at ? formatRelative(s.last_seen_at) : undefined}
               >
@@ -1166,7 +1166,7 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
       </ul>
 
       {/* Footer CTA */}
-      <div className="flex h-7 items-center justify-between border-t border-accent/30 px-2.5 font-display text-[10.5px] italic leading-none text-primary sm:h-8 sm:px-3 sm:text-[11px]">
+      <div className="flex h-7 items-center justify-between border-t border-accent/30 px-2.5 font-display text-[11px] italic leading-none text-primary sm:h-8 sm:px-3 sm:text-[11px]">
         <span>Ver detalhes</span>
         <ArrowRight className="h-3 w-3 shrink-0 transition-transform group-hover:translate-x-0.5" />
       </div>
@@ -1231,7 +1231,7 @@ function PriceReportInlineButton({
         type="button"
         onClick={handleOpen}
         disabled={sessionLoading}
-        className="mt-1 inline-flex w-full items-center justify-center gap-1 rounded-md border border-border bg-background/70 px-2 py-1 font-mono text-[9.5px] font-semibold uppercase tracking-[0.16em] text-muted-foreground transition hover:border-destructive/40 hover:bg-destructive/5 hover:text-destructive disabled:opacity-50"
+        className="mt-1 inline-flex w-full items-center justify-center gap-1 rounded-md border border-border bg-background/70 px-2 py-1 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground transition hover:border-destructive/40 hover:bg-destructive/5 hover:text-destructive disabled:opacity-50"
         aria-label={user ? `Denunciar preço de ${productName} em ${storeName}` : `Entrar para denunciar preço de ${productName}`}
         title={user ? "Denunciar preço incorreto" : "É necessário entrar na conta para denunciar"}
       >

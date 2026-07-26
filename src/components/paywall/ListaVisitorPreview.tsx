@@ -42,7 +42,7 @@ export function ListaVisitorPreview() {
         <div className="absolute -right-14 -top-14 h-40 w-40 rounded-full bg-accent" aria-hidden />
         <div className="absolute -right-24 top-20 h-32 w-32 rounded-full bg-white/10 blur-3xl" aria-hidden />
         <div className="relative">
-          <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] backdrop-blur">
+          <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] backdrop-blur">
             <ShoppingCart className="h-3 w-3" /> Prévia da lista de compras
           </span>
           <h1 className="mt-4 font-display text-3xl font-extrabold leading-[1.05] md:text-5xl">
@@ -87,7 +87,7 @@ export function ListaVisitorPreview() {
                     <p className="font-mono text-sm font-semibold text-foreground">
                       R$ {item.price.toFixed(2).replace(".", ",")}
                     </p>
-                    <p className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-savings-foreground">
+                    <p className="inline-flex items-center gap-0.5 text-[11px] font-semibold text-savings-foreground">
                       <TrendingDown className="h-3 w-3" aria-hidden /> {item.saving}
                     </p>
                   </div>
@@ -126,7 +126,7 @@ export function ListaVisitorPreview() {
         <aside className="rounded-2xl border border-primary/25 bg-gradient-to-br from-primary/10 via-background to-background p-5">
           <div className="flex items-center gap-2 text-primary">
             <Sparkles className="h-4 w-4" strokeWidth={2.4} aria-hidden />
-            <p className="font-mono text-[10px] font-bold uppercase tracking-[0.2em]">
+            <p className="font-mono text-[11px] font-bold uppercase tracking-[0.2em]">
               O que você desbloqueia
             </p>
           </div>

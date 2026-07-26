@@ -160,7 +160,7 @@ function ListaContent() {
             aria-hidden
           />
           <div className="relative">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] backdrop-blur">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] backdrop-blur">
               <ShoppingCart className="h-3 w-3" /> Suas listas
             </span>
             <h1 className="mt-5 font-display text-[40px] font-extrabold leading-[0.95] md:text-5xl">
@@ -1051,7 +1051,7 @@ function SplitRoutePanel({
         </div>
         {hasSavings && (
           <div className="text-right">
-            <p className="inline-flex items-center gap-1 rounded-full bg-savings px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-savings-foreground">
+            <p className="inline-flex items-center gap-1 rounded-full bg-savings px-2.5 py-1 text-[11px] font-black uppercase tracking-widest text-savings-foreground">
               <TrendingDown className="h-3 w-3" strokeWidth={3} />
               -{route.savingsPct.toFixed(1)}%
             </p>
@@ -1124,7 +1124,7 @@ function SplitRoutePanel({
 
         <aside className="flex flex-col justify-between rounded-xl border border-border bg-background p-4 md:w-56">
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
               Roteiro
             </p>
             <p className="mt-1 num font-display text-2xl font-black text-savings">
@@ -1137,7 +1137,7 @@ function SplitRoutePanel({
 
           {route.singleMarketTotal !== null && route.singleMarketName && (
             <div className="mt-4 border-t border-border pt-3">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+              <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                 Uma mercado só
               </p>
               <p className="mt-1 num font-mono text-lg font-bold text-foreground">

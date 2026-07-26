@@ -129,12 +129,12 @@ export function ProductImage({
             <FallbackIcon className="h-6 w-6 opacity-60" aria-hidden />
           )}
           {fallbackLabel && (
-            <span className="line-clamp-2 text-[10px] font-semibold uppercase leading-tight tracking-wider">
+            <span className="line-clamp-2 text-[11px] font-semibold uppercase leading-tight tracking-wider">
               {fallbackLabel}
             </span>
           )}
           <span
-            className="rounded-full bg-muted-foreground/10 px-2 py-0.5 text-[9px] font-medium uppercase tracking-wider text-muted-foreground"
+            className="rounded-full bg-muted-foreground/10 px-2 py-0.5 text-[11px] font-medium uppercase tracking-wider text-muted-foreground"
             aria-live="polite"
           >
             {src ? "Sem imagem" : "Foto em breve"}

@@ -930,7 +930,7 @@ main :is(p, li, dt, dd, td, th, label, a, button, input, textarea, figcaption) {
   font-size: clamp(1.05rem, 0.4vw + 0.95rem, 1.25rem);
   font-weight: 700;
 }
-.app-scope [data-sidebar="header"] a span[class*="text-[9px]"] {
+.app-scope [data-sidebar="header"] a span[class*="text-[11px]"] {
   font-size: clamp(0.7rem, 0.12vw + 0.66rem, 0.78rem);
 }
 .app-scope [data-sidebar="footer"] [data-sidebar="menu-button"] {

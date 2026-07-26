@@ -40,7 +40,7 @@ export function AuditHistoryButton({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1 rounded-lg border border-border bg-surface px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground hover:bg-primary/5 hover:text-primary"
+        className="inline-flex items-center gap-1 rounded-lg border border-border bg-surface px-2 py-1 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground hover:bg-primary/5 hover:text-primary"
       >
         <History className="h-3 w-3" />
         {label}
@@ -92,7 +92,7 @@ function AuditDrawer({
                 const changes = e.action === "update" ? diffJson(e.before, e.after) : [];
                 return (
                   <li key={e.id} className="rounded-xl border border-border bg-surface p-3">
-                    <p className="flex items-baseline justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                    <p className="flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                       <span className={e.action === "delete" ? "text-destructive" : "text-primary"}>
                         {e.action === "delete" ? "Exclusão" : "Edição"}
                       </span>

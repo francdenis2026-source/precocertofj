@@ -34,7 +34,7 @@ export function PanelCard({
       <header className="flex flex-wrap items-start justify-between gap-3 border-b border-border/50 px-4 py-3 md:px-5 md:py-3.5">
         <div className="flex flex-col gap-0.5">
           {eyebrow ? (
-            <span className="text-[10px] font-semibold uppercase tracking-[0.16em] text-primary">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
               {eyebrow}
             </span>
           ) : null}

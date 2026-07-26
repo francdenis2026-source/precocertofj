@@ -58,7 +58,7 @@ export function AuditLogTable({ entries }: { entries: AuditEntry[] }) {
                 <TableCell className="max-w-[200px] truncate text-xs">
                   <span className="text-muted-foreground">{e.target_type}</span>
                   {e.target_id && (
-                    <div className="truncate font-mono text-[10px]">{e.target_id}</div>
+                    <div className="truncate font-mono text-[11px]">{e.target_id}</div>
                   )}
                 </TableCell>
                 <TableCell className="max-w-[240px] truncate text-xs text-muted-foreground">
@@ -96,7 +96,7 @@ function JsonPopover({ before, after }: { before: unknown; after: unknown }) {
       <PopoverContent align="end" className="w-96">
         <div className="space-y-3 text-xs">
           <div>
-            <div className="mb-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+            <div className="mb-1 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
               Antes
             </div>
             <pre className="max-h-40 overflow-auto rounded bg-muted/60 p-2 text-[11px]">
@@ -104,7 +104,7 @@ function JsonPopover({ before, after }: { before: unknown; after: unknown }) {
             </pre>
           </div>
           <div>
-            <div className="mb-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+            <div className="mb-1 text-[11px] font-bold uppercase tracking-wider text-muted-foreground">
               Depois
             </div>
             <pre className="max-h-40 overflow-auto rounded bg-muted/60 p-2 text-[11px]">

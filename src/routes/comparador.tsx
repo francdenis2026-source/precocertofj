@@ -654,7 +654,7 @@ function ComparadorPage() {
           />
           <kbd
             aria-hidden
-            className="hidden shrink-0 rounded border border-border bg-card px-1.5 py-0.5 font-mono text-[10px] text-muted-foreground sm:inline-block"
+            className="hidden shrink-0 rounded border border-border bg-card px-1.5 py-0.5 font-mono text-[11px] text-muted-foreground sm:inline-block"
             title="Atalho: / ou Ctrl+K para buscar, R para resultados"
           >
             /
@@ -734,7 +734,7 @@ function ComparadorPage() {
             <button
               type="button"
               onClick={() => setConfFilter("baixa")}
-              className="inline-flex items-center gap-1.5 rounded-full border border-destructive/40 bg-destructive/10 px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-wider text-destructive transition hover:bg-destructive/15"
+              className="inline-flex items-center gap-1.5 rounded-full border border-destructive/40 bg-destructive/10 px-2.5 py-1 font-mono text-[11px] font-semibold uppercase tracking-wider text-destructive transition hover:bg-destructive/15"
               title="Ver apenas produtos com dados de baixa qualidade"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-destructive" />
@@ -950,7 +950,7 @@ function ComparisonTable({
   onOpenStores: (row: Comparison) => void;
 }) {
   const headerBtn =
-    "inline-flex items-center gap-1 rounded font-mono text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground transition hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background";
+    "inline-flex items-center gap-1 rounded font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground transition hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background";
   const ariaSort = (k: SortKey): "ascending" | "descending" | "none" => {
     if (sortKey !== k) return "none";
     return k === "price-asc" || k === "name" ? "ascending" : "descending";
@@ -1041,7 +1041,7 @@ function ComparisonTableRow({
             </p>
             <Link
               to="/login"
-              className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 font-mono text-[10px] font-bold uppercase tracking-widest text-primary transition hover:bg-primary/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="rounded-full border border-primary/30 bg-primary/10 px-3 py-1 font-mono text-[11px] font-bold uppercase tracking-widest text-primary transition hover:bg-primary/20 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               Desbloquear
             </Link>
@@ -1068,7 +1068,7 @@ function ComparisonTableRow({
           {row.display_name}
         </button>
         {row.category && (
-          <p className="mt-0.5 text-[10.5px] uppercase tracking-widest text-muted-foreground">
+          <p className="mt-0.5 text-[11px] uppercase tracking-widest text-muted-foreground">
             {row.category}
           </p>
         )}
@@ -1077,7 +1077,7 @@ function ComparisonTableRow({
         <p className="font-display text-lg font-extrabold leading-none tabular-nums text-primary">
           {formatBRL(Number(row.min_price))}
         </p>
-        <p className="mt-1 truncate text-[10.5px] text-muted-foreground" title={row.cheapest_store}>
+        <p className="mt-1 truncate text-[11px] text-muted-foreground" title={row.cheapest_store}>
           {shortenStoreName(row.cheapest_store)}
         </p>
         <div className="mt-1 flex flex-wrap items-center justify-end gap-1">
@@ -1106,7 +1106,7 @@ function ComparisonTableRow({
             <span className="font-mono text-sm text-muted-foreground line-through">
               {formatBRL(Number(row.avg_price))}
             </span>
-            <span className="font-mono text-[10.5px] text-muted-foreground/80">
+            <span className="font-mono text-[11px] text-muted-foreground/80">
               maior {formatBRL(Number(row.max_price))}
             </span>
           </span>
@@ -1138,7 +1138,7 @@ function ComparisonTableRow({
               : `Adicionar ${row.display_name} à comparação`
           }
           className={
-            "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-widest transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-card " +
+            "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-widest transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-card " +
             (selected
               ? "border-primary bg-primary text-primary-foreground"
               : canSelect
@@ -1211,7 +1211,7 @@ function ProductCard({
             : `Adicionar ${row.display_name} à comparação`
         }
         className={
-          "absolute left-2 top-2 z-20 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-widest shadow-sm backdrop-blur transition " +
+          "absolute left-2 top-2 z-20 inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-bold uppercase tracking-widest shadow-sm backdrop-blur transition " +
           (selected
             ? "border-primary bg-primary text-primary-foreground"
             : canSelect
@@ -1266,27 +1266,27 @@ function ProductCard({
               <SavingsBadge pct={Number(row.savings_pct)} variant="solid" size="sm" />
             </div>
           )}
-          <span className="absolute right-1.5 bottom-1.5 inline-flex items-center gap-1 rounded-sm border border-accent/40 bg-background/90 px-1 py-0.5 font-display text-[9px] italic text-foreground backdrop-blur">
+          <span className="absolute right-1.5 bottom-1.5 inline-flex items-center gap-1 rounded-sm border border-accent/40 bg-background/90 px-1 py-0.5 font-display text-[11px] italic text-foreground backdrop-blur">
             <StoreIcon className="h-2.5 w-2.5 text-accent" /> {row.store_count}
           </span>
         </div>
 
         {/* Header — alturas fixas para alinhamento */}
         <div className="flex flex-col gap-0.5 px-2.5 pt-2 sm:px-3 sm:pt-2.5">
-          <span className="h-3 truncate font-sans text-[8.5px] font-semibold uppercase leading-none tracking-[0.2em] text-accent">
+          <span className="h-3 truncate font-sans text-[11px] font-semibold uppercase leading-none tracking-[0.2em] text-accent">
             {row.category || "\u00A0"}
           </span>
           <h2 className="line-clamp-2 h-[2.4em] font-display text-[12px] font-semibold leading-[1.2] tracking-tight text-foreground sm:text-[12.5px]">
             {row.display_name}
           </h2>
-          <span className="h-3 truncate font-display text-[10px] italic leading-none text-muted-foreground">
+          <span className="h-3 truncate font-display text-[11px] italic leading-none text-muted-foreground">
             {size ?? "\u00A0"}
           </span>
         </div>
 
         {/* Price hero */}
         <div className="mt-1.5 border-y border-accent/25 bg-background/40 px-2.5 py-2 sm:px-3">
-          <span className="mb-0.5 block font-sans text-[8.5px] font-semibold uppercase leading-none tracking-[0.2em] text-muted-foreground">
+          <span className="mb-0.5 block font-sans text-[11px] font-semibold uppercase leading-none tracking-[0.2em] text-muted-foreground">
             Menor preço
           </span>
           <PriceHero
@@ -1298,7 +1298,7 @@ function ProductCard({
             size="sm"
           />
           {isMulti && (
-            <p className="mt-1 truncate text-[9.5px] leading-tight text-muted-foreground">
+            <p className="mt-1 truncate text-[11px] leading-tight text-muted-foreground">
               Maior no município:{" "}
               <span className="tabular-nums font-medium text-foreground/80">
                 {formatBRL(Number(row.max_price))}
@@ -1339,7 +1339,7 @@ function ProductCard({
                   className="flex h-7 items-center px-2.5 sm:h-8 sm:px-3"
                   aria-hidden
                 >
-                  <span className="text-[10.5px] italic text-muted-foreground/50">—</span>
+                  <span className="text-[11px] italic text-muted-foreground/50">—</span>
                 </li>
               );
             }
@@ -1358,7 +1358,7 @@ function ProductCard({
                     <span className="h-1 w-1 shrink-0 rounded-full bg-accent/40" />
                   )}
                   <span
-                    className="truncate font-display text-[10.5px] font-medium leading-none text-foreground sm:text-[11px]"
+                    className="truncate font-display text-[11px] font-medium leading-none text-foreground sm:text-[11px]"
                     title={s.store_name}
                   >
                     {shortenStoreName(s.store_name)}
@@ -1369,7 +1369,7 @@ function ProductCard({
                     "num shrink-0 tabular-nums leading-none " +
                     (isBest
                       ? "font-display text-[11px] font-semibold text-savings sm:text-[11.5px]"
-                      : "font-display text-[10px] text-muted-foreground sm:text-[10.5px]")
+                      : "font-display text-[11px] text-muted-foreground sm:text-[11px]")
                   }
                 >
                   {formatBRL(Number(s.price))}
@@ -1380,7 +1380,7 @@ function ProductCard({
         </ul>
 
         {/* Footer CTA */}
-        <div className="flex h-7 items-center justify-between border-t border-accent/30 px-2.5 font-display text-[10.5px] italic leading-none text-primary sm:h-8 sm:px-3 sm:text-[11px]">
+        <div className="flex h-7 items-center justify-between border-t border-accent/30 px-2.5 font-display text-[11px] italic leading-none text-primary sm:h-8 sm:px-3 sm:text-[11px]">
           <span>Ver em todas as mercados</span>
           <ArrowRight className="h-3 w-3 shrink-0 transition-transform group-hover:translate-x-0.5" />
         </div>

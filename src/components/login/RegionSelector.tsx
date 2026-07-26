@@ -67,7 +67,7 @@ export function RegionSelector({
 
   return (
     <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4 backdrop-blur-sm">
-      <div className="mb-3 flex items-center justify-between text-[10px] font-bold uppercase tracking-[0.22em] text-white/85">
+      <div className="mb-3 flex items-center justify-between text-[11px] font-bold uppercase tracking-[0.22em] text-white/85">
         <span className="inline-flex items-center gap-2">
           <MapPin className="h-3 w-3" />
           Sua cidade
@@ -100,7 +100,7 @@ export function RegionSelector({
       ) : (
         <>
           <label className="block">
-            <span className="mb-1 block text-[10px] font-semibold uppercase tracking-wider text-white/75">
+            <span className="mb-1 block text-[11px] font-semibold uppercase tracking-wider text-white/75">
               Cidade
             </span>
             <select
@@ -116,7 +116,7 @@ export function RegionSelector({
               ))}
             </select>
           </label>
-          <p className="mt-2 text-[10px] leading-relaxed text-white/75">
+          <p className="mt-2 text-[11px] leading-relaxed text-white/75">
             Personaliza o Barômetro com leituras da sua cidade.
           </p>
         </>

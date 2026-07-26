@@ -114,7 +114,7 @@ export function PriceHistoryDrawer({
                               <Store className="h-3.5 w-3.5 shrink-0" />
                               <span className="truncate">{m.storeName}</span>
                               {idx === 0 && (
-                                <span className="ml-1 rounded-full bg-savings/15 px-1.5 py-0.5 text-[9px] font-bold uppercase text-savings">
+                                <span className="ml-1 rounded-full bg-savings/15 px-1.5 py-0.5 text-[11px] font-bold uppercase text-savings">
                                   Mais barato
                                 </span>
                               )}
@@ -128,7 +128,7 @@ export function PriceHistoryDrawer({
                             <p className="font-mono text-lg font-bold">
                               {brl(m.lastPrice)}
                             </p>
-                            <p className="flex items-center justify-end gap-1 text-[10px] text-muted-foreground">
+                            <p className="flex items-center justify-end gap-1 text-[11px] text-muted-foreground">
                               <Icon className="h-3 w-3" />
                               {brl(m.minPrice)} — {brl(m.maxPrice)}
                             </p>
@@ -175,7 +175,7 @@ function Stat({
         : "text-primary";
   return (
     <div className="text-center">
-      <p className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">
+      <p className="text-[11px] font-bold uppercase tracking-widest text-muted-foreground">
         {label}
       </p>
       <p className={`mt-0.5 font-mono text-base font-bold ${cls}`}>

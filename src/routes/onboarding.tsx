@@ -97,7 +97,7 @@ function OnboardingPage() {
       <div className="mx-auto flex max-w-lg flex-col items-center">
         <Logo className="text-white" />
 
-        <div className="mt-6 flex items-center gap-2 rounded-full border border-[#e6c97740] bg-white/5 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.24em] text-[#e6c977]">
+        <div className="mt-6 flex items-center gap-2 rounded-full border border-[#e6c97740] bg-white/5 px-3 py-1 text-[11px] font-bold uppercase tracking-[0.24em] text-[#e6c977]">
           <ShieldCheck className="h-3 w-3" />
           Falta menos de 1 minuto
         </div>

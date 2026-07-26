@@ -142,7 +142,7 @@ export function MetricSpotlightDialog({
             </span>
             <div className="min-w-0 flex-1">
               <div
-                className="text-[10px] font-bold uppercase tracking-[0.16em]"
+                className="text-[11px] font-bold uppercase tracking-[0.16em]"
                 style={{ color: "var(--pc-home-gold-soft)" }}
               >
                 {cfg.eyebrow}
@@ -179,7 +179,7 @@ export function MetricSpotlightDialog({
                 key={i}
                 className="rounded-lg border border-white/12 bg-white/[0.06] px-2 py-1.5"
               >
-                <div className="text-[9px] font-bold uppercase tracking-[0.12em] text-white/65">
+                <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-white/65">
                   {label}
                 </div>
                 <div
@@ -208,7 +208,7 @@ export function MetricSpotlightDialog({
 
         {/* ===== FOOTER fixo ===== */}
         <div className="flex shrink-0 items-center justify-between gap-2 border-t border-border bg-card px-3 py-2 sm:px-4">
-          <span className="flex min-w-0 items-center gap-1.5 truncate text-[10.5px] text-muted-foreground">
+          <span className="flex min-w-0 items-center gap-1.5 truncate text-[11px] text-muted-foreground">
             <ShieldCheck className="h-3 w-3 shrink-0" />
             Dados colaborativos de Feijó/AC
           </span>
@@ -256,11 +256,11 @@ function statStrip(
 function SectionLabel({ children, count }: { children: React.ReactNode; count?: string }) {
   return (
     <div className="mb-1.5 flex items-baseline justify-between gap-2">
-      <h3 className="text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+      <h3 className="text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
         {children}
       </h3>
       {count && (
-        <span className="text-[10.5px] font-semibold tabular-nums text-muted-foreground">
+        <span className="text-[11px] font-semibold tabular-nums text-muted-foreground">
           {count}
         </span>
       )}
@@ -294,7 +294,7 @@ function SearchBar({
         <button
           type="button"
           onClick={() => onChange("")}
-          className="pc-metric-ink shrink-0 text-[10.5px] font-bold uppercase tracking-wide"
+          className="pc-metric-ink shrink-0 text-[11px] font-bold uppercase tracking-wide"
         >
           limpar
         </button>
@@ -436,7 +436,7 @@ function MarketsList({
                   >
                     {num(s.productCount)}
                   </div>
-                  <div className="text-[10px] text-muted-foreground">itens</div>
+                  <div className="text-[11px] text-muted-foreground">itens</div>
                 </div>
               </Link>
             </li>
@@ -649,7 +649,7 @@ function SavingsList({
                 </div>
               </div>
               <div className="shrink-0 text-right leading-tight">
-                <div className="text-[10.5px] line-through text-muted-foreground">
+                <div className="text-[11px] line-through text-muted-foreground">
                   {currency(s.maxPrice)}
                 </div>
                 <div

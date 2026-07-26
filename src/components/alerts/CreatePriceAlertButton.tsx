@@ -138,7 +138,7 @@ export function CreatePriceAlertButton({
             type="button"
             className={
               triggerClassName ??
-              "inline-flex h-6 items-center gap-1 rounded-full border border-[color-mix(in_oklab,var(--brand-gold)_45%,transparent)] bg-background px-2 text-[10.5px] font-semibold text-[var(--pc-gold-ink)] transition hover:bg-[color-mix(in_oklab,var(--brand-gold)_12%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50"
+              "inline-flex h-6 items-center gap-1 rounded-full border border-[color-mix(in_oklab,var(--brand-gold)_45%,transparent)] bg-background px-2 text-[11px] font-semibold text-[var(--pc-gold-ink)] transition hover:bg-[color-mix(in_oklab,var(--brand-gold)_12%,transparent)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50"
             }
           >
             <Bell className="h-3 w-3" aria-hidden="true" />

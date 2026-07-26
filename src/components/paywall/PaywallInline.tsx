@@ -45,7 +45,7 @@ export function PaywallInline({
           <Lock className="h-6 w-6" strokeWidth={2.2} />
         </div>
         <div className="min-w-0 flex-1">
-          <p className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.22em] text-primary">
+          <p className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-[0.22em] text-primary">
             <Lock className="h-2.5 w-2.5 md:hidden" strokeWidth={2.6} />
             {eyebrow}
           </p>

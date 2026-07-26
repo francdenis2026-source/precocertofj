@@ -37,7 +37,7 @@ export function FairPriceBadge({
   const sizeCls =
     size === "md"
       ? "gap-1.5 px-2.5 py-1 text-[11px]"
-      : "gap-1 px-2 py-0.5 text-[10px]";
+      : "gap-1 px-2 py-0.5 text-[11px]";
 
   return (
     <span

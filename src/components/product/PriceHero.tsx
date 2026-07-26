@@ -52,7 +52,7 @@ export function PriceHero({
       )}
     >
       <div className="min-w-0">
-        <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+        <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
           {label}
         </p>
         <p
@@ -76,7 +76,7 @@ export function PriceHero({
         <div className="flex flex-col items-end gap-1 text-right">
           {avgPrice != null && Number.isFinite(Number(avgPrice)) && (
             <>
-              <p className="font-mono text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+              <p className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
                 Média
               </p>
               <p className="font-mono text-sm text-muted-foreground line-through">

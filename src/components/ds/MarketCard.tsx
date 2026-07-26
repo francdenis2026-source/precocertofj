@@ -142,11 +142,11 @@ export const MarketCard = forwardRef<HTMLElement, MarketCardProps>(function Mark
                   ) : null}
                 </>
               ) : (
-                <span className="font-mono text-[10px] uppercase tracking-[0.14em]">Explore</span>
+                <span className="font-mono text-[11px] uppercase tracking-[0.14em]">Explore</span>
               )}
             </div>
             {typeof productCount === "number" ? (
-              <span className="shrink-0 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-primary">
+              <span className="shrink-0 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-primary">
                 {productCount}
                 <span className="ml-0.5 text-muted-foreground">itens</span>
               </span>

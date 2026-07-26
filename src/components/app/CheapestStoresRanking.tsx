@@ -127,7 +127,7 @@ export function CheapestStoresRanking() {
         {summary && summary.totalProductsCompared > 0 && (
           <Link
             to="/melhores-precos"
-            className="shrink-0 rounded-full border border-border bg-background px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.14em] text-primary hover:border-primary/40 hover:bg-primary/5"
+            className="shrink-0 rounded-full border border-border bg-background px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-primary hover:border-primary/40 hover:bg-primary/5"
           >
             Ver todos
           </Link>
@@ -167,7 +167,7 @@ export function CheapestStoresRanking() {
           <button
             type="button"
             onClick={() => setSort("wins")}
-            className="shrink-0 rounded-full border border-border bg-background px-2 py-0.5 font-mono text-[9.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground hover:border-primary/40 hover:text-foreground"
+            className="shrink-0 rounded-full border border-border bg-background px-2 py-0.5 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground hover:border-primary/40 hover:text-foreground"
             aria-label="Voltar à ordenação padrão"
           >
             Padrão
@@ -269,7 +269,7 @@ export function CheapestStoresRanking() {
                       ) : (
                         <RankIcon className="h-4 w-4" />
                       )}
-                      <span className="absolute -bottom-1 -right-1 grid h-4.5 min-w-4.5 place-items-center rounded-full border border-background bg-foreground px-1 text-[9.5px] font-bold leading-none text-background">
+                      <span className="absolute -bottom-1 -right-1 grid h-4.5 min-w-4.5 place-items-center rounded-full border border-background bg-foreground px-1 text-[11px] font-bold leading-none text-background">
                         {idx + 1}
                       </span>
                     </div>
@@ -279,7 +279,7 @@ export function CheapestStoresRanking() {
                         <p className="truncate font-display text-[13.5px] font-semibold md:text-sm">
                           {r.storeName}
                         </p>
-                        <p className="truncate text-[10px] text-muted-foreground">
+                        <p className="truncate text-[11px] text-muted-foreground">
                           {r.city}
                           {r.state ? ` · ${r.state}` : ""}
                         </p>
@@ -297,7 +297,7 @@ export function CheapestStoresRanking() {
                             aria-hidden="true"
                           />
                         </div>
-                        <span className="shrink-0 font-mono text-[10px] tabular-nums text-muted-foreground">
+                        <span className="shrink-0 font-mono text-[11px] tabular-nums text-muted-foreground">
                           {r.wins}/{r.productsCompared}
                         </span>
                       </div>
@@ -306,7 +306,7 @@ export function CheapestStoresRanking() {
                         {r.topCategories.slice(0, 3).map((c) => (
                           <span
                             key={c.category}
-                            className="inline-flex items-center gap-1 rounded-full bg-muted px-1.5 py-0.5 font-mono text-[9.5px] uppercase tracking-[0.12em] text-muted-foreground"
+                            className="inline-flex items-center gap-1 rounded-full bg-muted px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground"
                             title={`${c.wins} vitórias em ${c.appearances} disputas`}
                           >
                             {CATEGORY_LABEL[c.category] ?? c.category}
@@ -315,7 +315,7 @@ export function CheapestStoresRanking() {
                         ))}
                         {r.exclusiveProducts > 0 && (
                           <span
-                            className="inline-flex items-center gap-1 rounded-full border border-primary/25 bg-primary/5 px-1.5 py-0.5 font-mono text-[9.5px] uppercase tracking-[0.12em] text-primary"
+                            className="inline-flex items-center gap-1 rounded-full border border-primary/25 bg-primary/5 px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-[0.12em] text-primary"
                             title="Produtos que só este mercado tem cadastrados"
                           >
                             <Sparkles className="h-2.5 w-2.5" />
@@ -335,9 +335,9 @@ export function CheapestStoresRanking() {
                       >
                         <p className="font-display text-[15px] font-bold tabular-nums text-foreground md:text-lg">
                           {winRate}
-                          <span className="ml-0.5 text-[10px] font-semibold text-muted-foreground">%</span>
+                          <span className="ml-0.5 text-[11px] font-semibold text-muted-foreground">%</span>
                         </p>
-                        <p className="text-[8.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                           vitórias
                         </p>
                       </div>
@@ -348,10 +348,10 @@ export function CheapestStoresRanking() {
                         )}
                         title="Economia média vs. concorrentes"
                       >
-                        <p className="font-mono text-[10.5px] font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
+                        <p className="font-mono text-[11px] font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
                           {r.avgSavingsPct > 0 ? `−${r.avgSavingsPct.toFixed(1)}%` : "—"}
                         </p>
-                        <p className="text-[8.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                           economia
                         </p>
                       </div>
@@ -362,10 +362,10 @@ export function CheapestStoresRanking() {
                         )}
                         title="Ticket médio das vitórias"
                       >
-                        <p className="font-mono text-[10.5px] font-bold tabular-nums text-foreground">
+                        <p className="font-mono text-[11px] font-bold tabular-nums text-foreground">
                           {r.avgTicketWins > 0 ? brl(r.avgTicketWins) : "—"}
                         </p>
-                        <p className="text-[8.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                        <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                           ticket médio
                         </p>
                       </div>
@@ -416,7 +416,7 @@ function TrendChip({
   return (
     <span
       className={cn(
-        "ml-auto inline-flex shrink-0 items-center gap-0.5 rounded-full px-1.5 py-0.5 font-mono text-[9px] font-bold uppercase tracking-[0.12em] ring-1",
+        "ml-auto inline-flex shrink-0 items-center gap-0.5 rounded-full px-1.5 py-0.5 font-mono text-[11px] font-bold uppercase tracking-[0.12em] ring-1",
         tone,
       )}
       title={
@@ -452,13 +452,13 @@ function SummaryTile({
         <Icon className="h-3.5 w-3.5" aria-hidden />
       </span>
       <div className="min-w-0">
-        <p className="truncate font-mono text-[8.5px] uppercase tracking-[0.16em] text-muted-foreground">
+        <p className="truncate font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
           {label}
         </p>
         <p className="truncate font-display text-[15px] font-bold leading-tight text-foreground">
           {value}
         </p>
-        <p className="truncate text-[9.5px] leading-tight text-muted-foreground">{hint}</p>
+        <p className="truncate text-[11px] leading-tight text-muted-foreground">{hint}</p>
       </div>
     </div>
   );

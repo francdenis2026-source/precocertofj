@@ -215,7 +215,7 @@ function CestaBasicaPage() {
             <BasketMark className="h-4 w-4" />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-muted-foreground leading-none">
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground leading-none">
               PreçoCerto
             </p>
             <h1 className="truncate font-display text-[15px] font-semibold tracking-tight text-foreground leading-tight">
@@ -226,7 +226,7 @@ function CestaBasicaPage() {
             <button
               type="button"
               onClick={() => setMode(null)}
-              className="hidden sm:inline-flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-1 font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground hover:bg-surface"
+              className="hidden sm:inline-flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground hover:bg-surface"
             >
               Trocar
             </button>
@@ -235,7 +235,7 @@ function CestaBasicaPage() {
             <button
               type="button"
               onClick={() => setAssistantOpen(true)}
-              className="inline-flex items-center gap-1 rounded-full border border-primary/40 bg-primary/5 px-2.5 py-1 font-mono text-[9.5px] uppercase tracking-[0.16em] text-primary hover:bg-primary/10"
+              className="inline-flex items-center gap-1 rounded-full border border-primary/40 bg-primary/5 px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.16em] text-primary hover:bg-primary/10"
               title="Assistente de IA"
             >
               <Sparkles className="h-3 w-3" /> IA
@@ -243,7 +243,7 @@ function CestaBasicaPage() {
           ) : (
             <Link
               to="/assinar"
-              className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-2.5 py-1 font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground hover:text-foreground"
+              className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground hover:text-foreground"
               title={
                 user
                   ? "IA disponível apenas para assinantes ativos"
@@ -263,12 +263,12 @@ function CestaBasicaPage() {
 
         {mode === "compare" && (
           <details className="group rounded-xl border border-border bg-surface">
-            <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-3 py-2.5 font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted-foreground hover:text-foreground">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-2 px-3 py-2.5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground hover:text-foreground">
               <span className="inline-flex items-center gap-2">
                 <MapPin className="h-3.5 w-3.5" />
                 Ajustar cidade, raio e cobertura
                 {(city || coords || radiusKm || minCoverage > 0 || missingMode !== "zero") && (
-                  <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[9px] text-primary">ativo</span>
+                  <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] text-primary">ativo</span>
                 )}
               </span>
               <ChevronDown className="h-3.5 w-3.5 transition group-open:rotate-180" />
@@ -389,7 +389,7 @@ function IntroChooser({ onPick }: { onPick: (m: Mode) => void }) {
   return (
     <section className="space-y-4 pt-2">
       <div className="text-center">
-        <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
           Passo 1 de 1
         </p>
         <h2 className="mt-1 font-display text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
@@ -414,7 +414,7 @@ function IntroChooser({ onPick }: { onPick: (m: Mode) => void }) {
               {opt.title}
             </h3>
             <p className="mt-1 flex-1 text-xs text-muted-foreground">{opt.desc}</p>
-            <span className="mt-3 inline-flex items-center gap-1 font-mono text-[10.5px] uppercase tracking-[0.16em] text-primary group-hover:gap-2 transition-all">
+            <span className="mt-3 inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-[0.16em] text-primary group-hover:gap-2 transition-all">
               {opt.cta} →
             </span>
           </button>
@@ -433,7 +433,7 @@ function ModeSwitcher({ mode, setMode }: { mode: Mode; setMode: (m: Mode | null)
   return (
     <div className="flex items-center justify-between gap-2 rounded-xl border border-border bg-surface px-3 py-2">
       <div className="min-w-0">
-        <p className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-muted-foreground leading-none">
+        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground leading-none">
           Modo atual
         </p>
         <p className="mt-0.5 truncate font-display text-[13.5px] font-semibold text-foreground">
@@ -443,7 +443,7 @@ function ModeSwitcher({ mode, setMode }: { mode: Mode; setMode: (m: Mode | null)
       <button
         type="button"
         onClick={() => setMode(null)}
-        className="inline-flex shrink-0 items-center gap-1 rounded-full border border-border bg-background px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-foreground hover:bg-primary/5 hover:text-primary"
+        className="inline-flex shrink-0 items-center gap-1 rounded-full border border-border bg-background px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-foreground hover:bg-primary/5 hover:text-primary"
       >
         Trocar
       </button>
@@ -495,7 +495,7 @@ function FilterBar({
           onClick={requestGeolocation}
           disabled={gpsBusy}
           className={
-            "inline-flex h-9 items-center gap-1.5 rounded-xl border px-3 font-mono text-[10.5px] uppercase tracking-[0.16em] transition disabled:opacity-60 " +
+            "inline-flex h-9 items-center gap-1.5 rounded-xl border px-3 font-mono text-[11px] uppercase tracking-[0.16em] transition disabled:opacity-60 " +
             (coords
               ? "border-primary bg-primary/10 text-primary"
               : "border-border bg-background text-foreground hover:bg-primary/5")
@@ -521,7 +521,7 @@ function FilterBar({
           <button
             type="button"
             onClick={onClear}
-            className="inline-flex h-9 items-center gap-1 rounded-xl border border-border bg-background px-3 font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted-foreground hover:bg-destructive/5 hover:text-destructive"
+            className="inline-flex h-9 items-center gap-1 rounded-xl border border-border bg-background px-3 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground hover:bg-destructive/5 hover:text-destructive"
           >
             <Trash2 className="h-3.5 w-3.5" /> Limpar
           </button>
@@ -531,7 +531,7 @@ function FilterBar({
       <div className="grid gap-3 border-t border-border/60 pt-3 sm:grid-cols-2">
         {/* Filtro por cobertura mínima */}
         <div>
-          <label className="flex items-baseline justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+          <label className="flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
             <span>Cobertura mínima</span>
             <span className="text-foreground tabular-nums">{minCoverage}%</span>
           </label>
@@ -544,14 +544,14 @@ function FilterBar({
             onChange={(e) => setMinCoverage(Number(e.target.value))}
             className="mt-1 w-full accent-primary"
           />
-          <p className="mt-1 font-mono text-[10px] text-muted-foreground/80">
+          <p className="mt-1 font-mono text-[11px] text-muted-foreground/80">
             Mostrar apenas mercados com {minCoverage}% ou mais dos itens da cesta.
           </p>
         </div>
 
         {/* Como somar itens sem preço */}
         <div>
-          <label className="flex items-baseline justify-between font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+          <label className="flex items-baseline justify-between font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
             <span>Itens sem preço</span>
           </label>
           <div className="mt-1 grid grid-cols-3 gap-1 rounded-xl border border-border bg-background p-1">
@@ -568,7 +568,7 @@ function FilterBar({
                 onClick={() => setMissingMode(opt.v)}
                 title={opt.hint}
                 className={
-                  "rounded-lg px-2 py-1 font-mono text-[10.5px] transition " +
+                  "rounded-lg px-2 py-1 font-mono text-[11px] transition " +
                   (missingMode === opt.v
                     ? "bg-primary text-primary-foreground"
                     : "text-muted-foreground hover:bg-primary/5")
@@ -738,7 +738,7 @@ function CompareMode({
         <button
           type="button"
           onClick={() => exportBasketPdf(data, { missingMode, minCoverage })}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-surface px-3 py-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-foreground hover:bg-primary/5"
+          className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-surface px-3 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-foreground hover:bg-primary/5"
         >
           <FileDown className="h-3.5 w-3.5" /> Exportar PDF
         </button>
@@ -753,14 +753,14 @@ function CompareMode({
               toast.error("Não foi possível copiar. Tente novamente.");
             }
           }}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-surface px-3 py-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-foreground hover:bg-primary/5"
+          className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-surface px-3 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-foreground hover:bg-primary/5"
         >
           <ClipboardCopy className="h-3.5 w-3.5" /> Copiar resumo
         </button>
         <button
           type="button"
           onClick={() => setSaveDialog({ share: false })}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-surface px-3 py-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-foreground hover:bg-primary/5"
+          className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-surface px-3 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-foreground hover:bg-primary/5"
         >
           <Star className="h-3.5 w-3.5" /> Salvar com nome
         </button>
@@ -768,7 +768,7 @@ function CompareMode({
           type="button"
           onClick={() => setSaveDialog({ share: true })}
           disabled={savingShare}
-          className="inline-flex items-center gap-1.5 rounded-xl border border-primary/40 bg-primary/10 px-3 py-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-primary hover:bg-primary/15 disabled:opacity-60"
+          className="inline-flex items-center gap-1.5 rounded-xl border border-primary/40 bg-primary/10 px-3 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-primary hover:bg-primary/15 disabled:opacity-60"
         >
           {savingShare ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Share2 className="h-3.5 w-3.5" />}
           Salvar & Compartilhar
@@ -827,14 +827,14 @@ function CompareMode({
                       >
                         {s.establishmentName}
                       </Link>
-                      <p className="mt-0.5 font-mono text-[10.5px] uppercase tracking-[0.18em] text-muted-foreground">
+                      <p className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
                         {s.itemsFound}/{s.totalItems} itens · cobertura {(s.coverage * 100).toFixed(0)}%
                         {s.distanceKm != null && ` · ${s.distanceKm.toFixed(1)} km`}
                       </p>
                     </div>
                     <div className="shrink-0 text-right">
                       {isBest && (
-                        <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-primary">
+                        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-primary">
                           Mais barato
                         </p>
                       )}
@@ -842,11 +842,11 @@ function CompareMode({
                         {fmt(est.displayTotal)}
                       </p>
                       {missingCount > 0 && est.maxEstimate > est.minEstimate ? (
-                        <p className="mt-0.5 font-mono text-[9.5px] uppercase tracking-[0.14em] text-muted-foreground">
+                        <p className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
                           faixa {fmt(est.minEstimate)} — <span className="text-warning">{fmt(est.maxEstimate)}</span>
                         </p>
                       ) : (
-                        <p className="mt-0.5 font-mono text-[9.5px] uppercase tracking-[0.14em] text-muted-foreground">
+                        <p className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
                           {missingCount === 0 ? "cesta completa" : `${missingCount} item(ns) sem preço`}
                         </p>
                       )}
@@ -859,7 +859,7 @@ function CompareMode({
                       setExpandedStore(isExpanded ? null : s.establishmentId)
                     }
                     aria-expanded={isExpanded}
-                    className="mt-3 inline-flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground hover:border-primary/40 hover:text-foreground"
+                    className="mt-3 inline-flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground hover:border-primary/40 hover:text-foreground"
                   >
                     <ChevronDown
                       className={"h-3 w-3 transition " + (isExpanded ? "rotate-180" : "")}
@@ -870,7 +870,7 @@ function CompareMode({
                   {isExpanded ? (
                     <div className="mt-3 overflow-hidden rounded-xl border border-border/60">
                       <table className="w-full text-left font-mono text-[11px]">
-                        <thead className="bg-muted/40 text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
+                        <thead className="bg-muted/40 text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                           <tr>
                             <th className="px-3 py-2 font-semibold">Item</th>
                             <th className="px-3 py-2 font-semibold">Produto usado</th>
@@ -941,7 +941,7 @@ function CompareMode({
                           return (
                             <span
                               key={i}
-                              className="inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-primary/5 px-2.5 py-1 font-mono text-[10.5px] text-foreground"
+                              className="inline-flex items-center gap-1.5 rounded-full border border-primary/25 bg-primary/5 px-2.5 py-1 font-mono text-[11px] text-foreground"
                             >
                               <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden />
                               <span className="max-w-[110px] truncate">{label}</span>
@@ -953,7 +953,7 @@ function CompareMode({
                           return (
                             <span
                               key={i}
-                              className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-muted-foreground/30 bg-muted/40 px-2.5 py-1 font-mono text-[10.5px] text-muted-foreground/80"
+                              className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-muted-foreground/30 bg-muted/40 px-2.5 py-1 font-mono text-[11px] text-muted-foreground/80"
                             >
                               <span className="h-1.5 w-1.5 rounded-full bg-muted-foreground/40" aria-hidden />
                               <span className="max-w-[110px] truncate">{label}</span>
@@ -965,7 +965,7 @@ function CompareMode({
                           return (
                             <span
                               key={i}
-                              className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-accent/50 bg-accent/5 px-2.5 py-1 font-mono text-[10.5px] text-accent-strong"
+                              className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-accent/50 bg-accent/5 px-2.5 py-1 font-mono text-[11px] text-accent-strong"
                             >
                               <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
                               <span className="max-w-[110px] truncate">{label}</span>
@@ -976,7 +976,7 @@ function CompareMode({
                         return (
                           <span
                             key={i}
-                            className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-warning/50 bg-warning/5 px-2.5 py-1 font-mono text-[10.5px] text-warning line-through decoration-warning/70"
+                            className="inline-flex items-center gap-1.5 rounded-full border border-dashed border-warning/50 bg-warning/5 px-2.5 py-1 font-mono text-[11px] text-warning line-through decoration-warning/70"
                           >
                             <span className="h-1.5 w-1.5 rounded-full bg-warning" aria-hidden />
                             <span className="max-w-[110px] truncate no-underline">{label}</span>
@@ -1029,7 +1029,7 @@ function CompareMode({
                   <p className="truncate font-display text-[13px] font-medium text-foreground">
                     {c.label}
                   </p>
-                  <p className="truncate font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted-foreground">
+                  <p className="truncate font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                     {c.establishmentName} · {c.productName}
                   </p>
                 </div>
@@ -1662,7 +1662,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
             type="button"
             onClick={() => setScope("global")}
             className={
-              "rounded-lg px-2 py-1.5 font-mono text-[10.5px] uppercase tracking-[0.16em] transition " +
+              "rounded-lg px-2 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] transition " +
               (scope === "global"
                 ? "bg-primary text-primary-foreground"
                 : "text-muted-foreground hover:text-foreground")
@@ -1674,7 +1674,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
             type="button"
             onClick={() => setScope("store")}
             className={
-              "rounded-lg px-2 py-1.5 font-mono text-[10.5px] uppercase tracking-[0.16em] transition " +
+              "rounded-lg px-2 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] transition " +
               (scope === "store"
                 ? "bg-primary text-primary-foreground"
                 : "text-muted-foreground hover:text-foreground")
@@ -1686,7 +1686,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
 
         {scope === "store" && (
           <div className="mb-3">
-            <label htmlFor="basket-store" className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+            <label htmlFor="basket-store" className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
               Mercado
             </label>
             <select
@@ -1709,7 +1709,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
           </div>
         )}
 
-        <label htmlFor="budget" className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+        <label htmlFor="budget" className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
           Quanto você tem para gastar?
         </label>
         <div className="mt-2 flex items-center gap-2 rounded-xl border border-border bg-background px-3">
@@ -1742,7 +1742,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
               type="button"
               onClick={() => setInput(String(v))}
               className={
-                "rounded-full border px-2.5 py-1 font-mono text-[10.5px] tabular-nums transition " +
+                "rounded-full border px-2.5 py-1 font-mono text-[11px] tabular-nums transition " +
                 (budgetValue === v
                   ? "border-primary bg-primary/10 text-primary"
                   : "border-border bg-background text-muted-foreground hover:border-primary/40 hover:text-foreground")
@@ -1762,13 +1762,13 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
               className="flex w-full items-center justify-between gap-2"
               aria-expanded={showCustomize}
             >
-              <span className="font-mono text-[10.5px] uppercase tracking-[0.2em] text-foreground">
+              <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-foreground">
                 Personalizar itens
-                <span className="ml-1.5 rounded-full bg-primary/10 px-1.5 py-0.5 text-[9.5px] text-primary">
+                <span className="ml-1.5 rounded-full bg-primary/10 px-1.5 py-0.5 text-[11px] text-primary">
                   {isFullyIncluded ? "todos" : `${includedCount}/${totalEssentials}`}
                 </span>
               </span>
-              <span className="font-mono text-[10px] text-muted-foreground">
+              <span className="font-mono text-[11px] text-muted-foreground">
                 {showCustomize ? "esconder" : "escolher"}
               </span>
             </button>
@@ -1777,7 +1777,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                 {/* Filtro por categoria */}
                 {options.categories.length > 0 && (
                   <div>
-                    <p className="mb-1 font-mono text-[9.5px] uppercase tracking-[0.2em] text-muted-foreground">
+                    <p className="mb-1 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
                       Categorias
                     </p>
                     <div className="flex flex-wrap gap-1.5">
@@ -1798,7 +1798,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                             type="button"
                             onClick={() => toggleCategory(c.key)}
                             className={
-                              "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.14em] transition " +
+                              "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.14em] transition " +
                               (state === "all"
                                 ? "border-primary bg-primary text-primary-foreground"
                                 : state === "some"
@@ -1825,7 +1825,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
 
                 {/* Itens individuais */}
                 <div>
-                  <p className="mb-1 font-mono text-[9.5px] uppercase tracking-[0.2em] text-muted-foreground">
+                  <p className="mb-1 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
                     Itens
                   </p>
                   <div className="flex flex-wrap gap-1.5">
@@ -1837,7 +1837,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                           type="button"
                           onClick={() => toggleKey(e.key)}
                           className={
-                            "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 font-mono text-[10.5px] transition " +
+                            "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 font-mono text-[11px] transition " +
                             (on
                               ? "border-primary bg-primary/10 text-primary"
                               : "border-border bg-background text-muted-foreground hover:border-primary/40")
@@ -1859,7 +1859,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                   <button
                     type="button"
                     onClick={selectAllKeys}
-                    className="font-mono text-[10px] uppercase tracking-[0.16em] text-primary hover:underline"
+                    className="font-mono text-[11px] uppercase tracking-[0.16em] text-primary hover:underline"
                   >
                     Marcar todos
                   </button>
@@ -1867,12 +1867,12 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                   <button
                     type="button"
                     onClick={clearAllKeys}
-                    className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground hover:underline"
+                    className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground hover:underline"
                   >
                     Desmarcar todos
                   </button>
                 </div>
-                <p className="font-mono text-[9.5px] tracking-[0.06em] text-muted-foreground">
+                <p className="font-mono text-[11px] tracking-[0.06em] text-muted-foreground">
                   Só os itens marcados vão para o cálculo. Você pode ajustar antes de montar.
                 </p>
               </div>
@@ -1886,10 +1886,10 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
         <div className="rounded-2xl border border-border bg-surface p-3.5">
           <div className="flex items-start justify-between gap-2">
             <div className="min-w-0">
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
                 Prévia da varredura
                 {scope === "store" && selectedStoreId && (
-                  <span className="ml-1.5 rounded-full bg-primary/10 px-1.5 py-0.5 text-[9.5px] text-primary">
+                  <span className="ml-1.5 rounded-full bg-primary/10 px-1.5 py-0.5 text-[11px] text-primary">
                     mercado selecionada
                   </span>
                 )}
@@ -1903,7 +1903,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                   </span>
                 )}
               </h3>
-              <p className="mt-0.5 font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
+              <p className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                 {previewData.withPrice}/{previewData.count} com preço {scope === "store" ? "nesta mercado" : "recente"}
                 {previewData.count > 0 && (
                   <>
@@ -1915,7 +1915,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
             <button
               type="button"
               onClick={() => setPreviewOpen((v) => !v)}
-              className="shrink-0 rounded-lg border border-border bg-background px-2 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground hover:text-foreground"
+              className="shrink-0 rounded-lg border border-border bg-background px-2 py-1 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground hover:text-foreground"
               aria-expanded={previewOpen}
               aria-controls="basket-preview-list"
             >
@@ -1933,7 +1933,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                   <span className="flex-1 truncate font-display text-[12.5px] text-foreground">
                     {r.label}
                   </span>
-                  <span className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-muted-foreground">
+                  <span className="font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
                     {r.category}
                   </span>
                   <span className="w-24 shrink-0 text-right font-mono text-[11px] tabular-nums">
@@ -1953,7 +1953,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
             </ul>
           )}
           {previewData.count === 0 && (
-            <p className="mt-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-warning">
+            <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.16em] text-warning">
               Nenhum item selecionado. Marque ao menos 1 essencial para montar.
             </p>
           )}
@@ -1961,7 +1961,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
             <div className="mt-2 flex items-start gap-2 rounded-lg border border-warning/40 bg-warning/5 px-2.5 py-2">
               <AlertTriangle className="h-4 w-4 shrink-0 text-warning" aria-hidden />
               <div className="min-w-0">
-                <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-warning">
+                <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-warning">
                   Custo estimado acima do orçamento
                 </p>
                 <p className="mt-0.5 text-[11.5px] leading-snug text-muted-foreground">
@@ -1980,15 +1980,15 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
       {session.user && savedFiltered.length > 0 && (
         <div className="rounded-2xl border border-border bg-surface p-3.5">
           <div className="flex items-baseline justify-between">
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
               Histórico
               {scope === "store" && selectedStoreId && (
-                <span className="ml-1.5 rounded-full bg-primary/10 px-1.5 py-0.5 text-[9.5px] text-primary">
+                <span className="ml-1.5 rounded-full bg-primary/10 px-1.5 py-0.5 text-[11px] text-primary">
                   desta mercado
                 </span>
               )}
             </p>
-            <span className="font-mono text-[10px] text-muted-foreground">
+            <span className="font-mono text-[11px] text-muted-foreground">
               {savedFiltered.length} {savedFiltered.length === 1 ? "cesta" : "cestas"}
             </span>
           </div>
@@ -2007,7 +2007,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                     <p className="truncate font-display text-[12.5px] font-medium text-foreground">
                       {s.name}
                     </p>
-                    <p className="truncate font-mono text-[9.5px] uppercase tracking-[0.14em] text-muted-foreground">
+                    <p className="truncate font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
                       {typeof f.budget === "number" ? `R$ ${f.budget.toFixed(0)}` : "—"}
                       {f.establishmentName ? ` · ${f.establishmentName}` : ""}
                       {" · "}
@@ -2017,7 +2017,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                   <button
                     type="button"
                     onClick={() => handleLoadSaved(s.id)}
-                    className="shrink-0 rounded-lg border border-border bg-surface px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-foreground hover:border-primary/40 hover:text-primary"
+                    className="shrink-0 rounded-lg border border-border bg-surface px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.16em] text-foreground hover:border-primary/40 hover:text-primary"
                   >
                     Carregar
                   </button>
@@ -2051,7 +2051,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
               );
             })}
           </ul>
-          <p className="mt-2 font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
+          <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
             Duplique para variar mercado/categorias sem perder a original. Use o painel abaixo para comparar duas cestas lado a lado.
           </p>
         </div>
@@ -2068,7 +2068,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
           {/* Barra de progresso do orçamento */}
           <div className="rounded-2xl border border-border bg-surface p-4">
             <div className="flex items-baseline justify-between">
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
                 Uso do orçamento
               </p>
               <p className="font-display text-[13px] font-semibold tabular-nums text-foreground">
@@ -2081,13 +2081,13 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                 style={{ width: `${usage}%` }}
               />
             </div>
-            <p className="mt-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+            <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
               {visibleResult.remaining >= 0
                 ? `sobra ${fmt(visibleResult.remaining)} · ${visibleResult.items.length} itens`
                 : `${fmt(Math.abs(visibleResult.remaining))} acima do orçamento`}
             </p>
             {visibleResult.restrictedTo && (
-              <p className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 font-mono text-[9.5px] uppercase tracking-[0.16em] text-primary">
+              <p className="mt-1.5 inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 font-mono text-[11px] uppercase tracking-[0.16em] text-primary">
                 Mercado: {visibleResult.restrictedTo.establishmentName}
               </p>
             )}
@@ -2096,7 +2096,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                 <button
                   type="button"
                   onClick={() => setSaveDialog(true)}
-                  className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-1.5 font-mono text-[10.5px] uppercase tracking-[0.16em] text-foreground hover:bg-primary/5"
+                  className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-foreground hover:bg-primary/5"
                 >
                   <Star className="h-3.5 w-3.5" /> Salvar cesta
                 </button>
@@ -2104,14 +2104,14 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
               <button
                 type="button"
                 onClick={handleExportPdf}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-1.5 font-mono text-[10.5px] uppercase tracking-[0.16em] text-foreground hover:bg-primary/5"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-background px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-foreground hover:bg-primary/5"
               >
                 <FileDown className="h-3.5 w-3.5" /> Exportar PDF
               </button>
               <button
                 type="button"
                 onClick={handleClear}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-destructive/40 bg-destructive/5 px-3 py-1.5 font-mono text-[10.5px] uppercase tracking-[0.16em] text-destructive hover:bg-destructive/10"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-destructive/40 bg-destructive/5 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-destructive hover:bg-destructive/10"
               >
                 <Trash2 className="h-3.5 w-3.5" /> Limpar cesta
               </button>
@@ -2132,7 +2132,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
               <h2 className="font-display text-[13px] font-semibold tracking-tight text-foreground">
                 Itens escolhidos ({visibleResult.items.length})
               </h2>
-              <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+              <p className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                 {visibleResult.restrictedTo
                   ? "Menor preço recente na mercado selecionada"
                   : "Menor preço recente em qualquer mercado"}
@@ -2154,12 +2154,12 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                         <p className="truncate font-display text-[13px] font-medium text-foreground">
                           {it.label}
                           {swap ? (
-                            <span className="ml-1.5 inline-flex items-center gap-0.5 rounded border border-primary/40 bg-primary/10 px-1 py-[1px] align-middle font-mono text-[8.5px] uppercase tracking-[0.14em] text-primary">
+                            <span className="ml-1.5 inline-flex items-center gap-0.5 rounded border border-primary/40 bg-primary/10 px-1 py-[1px] align-middle font-mono text-[11px] uppercase tracking-[0.14em] text-primary">
                               <Repeat className="h-2 w-2" aria-hidden="true" /> trocado
                             </span>
                           ) : null}
                         </p>
-                        <p className="truncate font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                        <p className="truncate font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                           {it.productName} · {it.establishmentName}
                         </p>
                       </div>
@@ -2205,7 +2205,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                           {fmt(it.price)}
                         </Link>
                         {qtyValue > 1 ? (
-                          <p className="mt-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground">
+                          <p className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
                             × {qtyValue} = <span className="text-foreground">{fmt(lineTotal)}</span>
                           </p>
                         ) : null}
@@ -2225,14 +2225,14 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                       <button
                         type="button"
                         onClick={() => openBudgetPrices(it.key, it.label)}
-                        className="inline-flex items-center gap-1 rounded-md border border-border bg-background px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground hover:border-primary/40 hover:text-primary"
+                        className="inline-flex items-center gap-1 rounded-md border border-border bg-background px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground hover:border-primary/40 hover:text-primary"
                       >
                         <Repeat className="h-2.5 w-2.5" /> Trocar mercado
                       </button>
                       <Link
                         to="/buscar"
                         search={{ q: it.label }}
-                        className="inline-flex items-center gap-1 rounded-md border border-border bg-background px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground hover:border-primary/40 hover:text-primary"
+                        className="inline-flex items-center gap-1 rounded-md border border-border bg-background px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground hover:border-primary/40 hover:text-primary"
                         title="Buscar variantes específicas deste item"
                       >
                         <Search className="h-2.5 w-2.5" /> Buscar item
@@ -2241,7 +2241,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                         <button
                           type="button"
                           onClick={() => clearSwap(it.key)}
-                          className="inline-flex items-center gap-1 rounded-md border border-primary/40 bg-primary/10 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-primary hover:bg-primary/15"
+                          className="inline-flex items-center gap-1 rounded-md border border-primary/40 bg-primary/10 px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-primary hover:bg-primary/15"
                         >
                           Restaurar automático
                         </button>
@@ -2271,7 +2271,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                 );
               })}
               {visibleResult.items.length === 0 && (
-                <li className="px-4 py-4 text-center font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted-foreground">
+                <li className="px-4 py-4 text-center font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                   Todos os itens foram removidos. Restaure abaixo ou monte novamente.
                 </li>
               )}
@@ -2283,7 +2283,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
               <p className="font-display text-[12.5px] font-semibold text-foreground">
                 Removidos desta cesta
               </p>
-              <p className="mt-0.5 font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
+              <p className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                 Clique em um item para trazer de volta ao cálculo.
               </p>
               <div className="mt-2 flex flex-wrap gap-1.5">
@@ -2295,7 +2295,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                       key={k}
                       type="button"
                       onClick={() => handleRestoreItem(k)}
-                      className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-1 font-mono text-[10.5px] text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
+                      className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-1 font-mono text-[11px] text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
                     >
                       <EssentialGlyph k={k} className="h-3 w-3" />
                       {orig.label} <span className="opacity-60">· {fmt(orig.price)}</span>
@@ -2311,7 +2311,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
               <p className="font-display text-[12.5px] font-semibold text-foreground">
                 Não couberam no orçamento
               </p>
-              <p className="mt-1 font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted-foreground">
+              <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                 {result.missing.map((m) => m.label).join(" · ")}
               </p>
             </div>
@@ -2748,18 +2748,18 @@ function ManualMode({
       {/* Sticky summary */}
       <div className="sticky top-[112px] z-20 flex items-center justify-between gap-3 rounded-2xl border border-border bg-surface/95 p-3 backdrop-blur">
         <div className="min-w-0">
-          <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+          <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
             Sua cesta
           </p>
           <p className="font-display text-[20px] font-bold tabular-nums text-foreground leading-none">
             {fmt(totals.sum)}
           </p>
-          <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+          <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
             {selectedCount} tipo(s) · {totals.items} unidade(s)
             {totals.missing > 0 && ` · ${totals.missing} sem preço`}
           </p>
           {totals.savings > 0 && (
-            <p className="mt-1 font-mono text-[10px] uppercase tracking-[0.14em] text-emerald-600 dark:text-emerald-400">
+            <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.14em] text-emerald-600 dark:text-emerald-400">
               Economia: {fmt(totals.savings)} vs. média do mercado ({fmt(totals.avgSum)})
             </p>
           )}
@@ -2769,7 +2769,7 @@ function ManualMode({
             <button
               type="button"
               onClick={exportPdf}
-              className="inline-flex items-center gap-1 rounded-lg border border-border bg-background px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-foreground hover:bg-primary/5"
+              className="inline-flex items-center gap-1 rounded-lg border border-border bg-background px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-foreground hover:bg-primary/5"
               aria-label="Exportar cesta em PDF"
             >
               <FileDown className="h-3 w-3" /> PDF
@@ -2779,7 +2779,7 @@ function ManualMode({
             <button
               type="button"
               onClick={shareLink}
-              className="inline-flex items-center gap-1 rounded-lg border border-border bg-background px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-foreground hover:bg-primary/5"
+              className="inline-flex items-center gap-1 rounded-lg border border-border bg-background px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-foreground hover:bg-primary/5"
               aria-label="Copiar link da cesta"
               title="Copiar link para compartilhar esta cesta"
             >
@@ -2790,7 +2790,7 @@ function ManualMode({
             <button
               type="button"
               onClick={explain}
-              className="inline-flex items-center gap-1 rounded-lg border border-emerald-500/40 bg-emerald-500/5 px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/10"
+              className="inline-flex items-center gap-1 rounded-lg border border-emerald-500/40 bg-emerald-500/5 px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-emerald-700 dark:text-emerald-400 hover:bg-emerald-500/10"
               aria-label="Explicar economia"
               title="Ver quanto você economiza vs. média do mercado"
             >
@@ -2801,7 +2801,7 @@ function ManualMode({
             <button
               type="button"
               onClick={() => setSaveDialog(true)}
-              className="inline-flex items-center gap-1 rounded-lg border border-primary/40 bg-primary/5 px-2.5 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-primary hover:bg-primary/10"
+              className="inline-flex items-center gap-1 rounded-lg border border-primary/40 bg-primary/5 px-2.5 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-primary hover:bg-primary/10"
             >
               <Star className="h-3 w-3" /> Salvar
             </button>
@@ -2825,7 +2825,7 @@ function ManualMode({
                   clearDraftFn().catch(() => {});
                 }
               }}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-destructive/40 bg-destructive/5 px-3 py-1.5 font-mono text-[10.5px] uppercase tracking-[0.16em] text-destructive hover:bg-destructive/10"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-destructive/40 bg-destructive/5 px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-destructive hover:bg-destructive/10"
             >
               <Trash2 className="h-3.5 w-3.5" /> Limpar cesta
             </button>
@@ -2833,7 +2833,7 @@ function ManualMode({
 
           {session.user && selectedCount > 0 && (
             <span
-              className="hidden sm:inline-flex items-center gap-1 rounded-md border border-border/60 bg-background px-2 py-1 font-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground"
+              className="hidden sm:inline-flex items-center gap-1 rounded-md border border-border/60 bg-background px-2 py-1 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground"
               aria-live="polite"
             >
               {draftSyncing ? (
@@ -2867,7 +2867,7 @@ function ManualMode({
                   <Sparkles className="h-4 w-4" />
                 </span>
                 <div>
-                  <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-muted-foreground leading-none">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground leading-none">
                     Análise da IA
                   </p>
                   <p className="font-display text-[14px] font-semibold text-foreground">
@@ -2905,14 +2905,14 @@ function ManualMode({
                       .then(() => toast.success("Análise copiada."))
                       .catch(() => toast.error("Não foi possível copiar."));
                   }}
-                  className="inline-flex items-center gap-1 rounded-lg border border-border bg-surface px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground hover:bg-primary/5 hover:text-primary"
+                  className="inline-flex items-center gap-1 rounded-lg border border-border bg-surface px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground hover:bg-primary/5 hover:text-primary"
                 >
                   <ClipboardCopy className="h-3 w-3" /> Copiar
                 </button>
                 <button
                   type="button"
                   onClick={() => setExplainOpen(false)}
-                  className="rounded-lg bg-primary px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-primary-foreground"
+                  className="rounded-lg bg-primary px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-primary-foreground"
                 >
                   Fechar
                 </button>
@@ -2989,7 +2989,7 @@ function ManualMode({
         />
       )}
 
-      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground px-1">
+      <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground px-1">
         Toque para adicionar · digite ou use +/− para a quantidade · a mercado mais barata é escolhida automaticamente
       </p>
 
@@ -2999,10 +2999,10 @@ function ManualMode({
           className="rounded-2xl border border-border bg-surface p-3"
         >
           <div className="flex items-center justify-between gap-2 pb-2">
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
               Total por mercado (mais barata por item)
             </p>
-            <span className="font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
+            <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
               {perStore.length} mercado(s)
             </span>
           </div>
@@ -3013,7 +3013,7 @@ function ManualMode({
                 <li key={s.establishmentId} className="flex items-center justify-between gap-3 py-2">
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-2">
-                      <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-primary/10 font-mono text-[10px] font-bold text-primary">
+                      <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-primary/10 font-mono text-[11px] font-bold text-primary">
                         {i + 1}
                       </span>
                       <Link
@@ -3024,7 +3024,7 @@ function ManualMode({
                         {s.establishmentName}
                       </Link>
                     </div>
-                    <p className="mt-0.5 pl-7 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                    <p className="mt-0.5 pl-7 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
                       {s.itemCount} item(ns) · {s.units} unidade(s) · {share.toFixed(0)}% da cesta
                     </p>
                   </div>
@@ -3045,14 +3045,14 @@ function ManualMode({
         >
           <div className="flex items-start justify-between gap-2 pb-2">
             <div>
-              <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
                 Quanto ficaria comprando tudo em cada mercado
               </p>
-              <p className="mt-0.5 font-mono text-[9.5px] tracking-[0.12em] text-muted-foreground/80">
+              <p className="mt-0.5 font-mono text-[11px] tracking-[0.12em] text-muted-foreground/80">
                 Ordenado por cobertura da sua cesta e menor valor. Itens fora do estoque da mercado usam preço médio (estimativa).
               </p>
             </div>
-            <span className="shrink-0 font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
+            <span className="shrink-0 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
               {perStoreFull.length} mercado(s)
             </span>
           </div>
@@ -3066,7 +3066,7 @@ function ManualMode({
                     <div className="flex items-center gap-2 flex-wrap">
                       <span
                         className={
-                          "grid h-5 w-5 shrink-0 place-items-center rounded-full font-mono text-[10px] font-bold " +
+                          "grid h-5 w-5 shrink-0 place-items-center rounded-full font-mono text-[11px] font-bold " +
                           (best ? "bg-emerald-500 text-white" : "bg-primary/10 text-primary")
                         }
                       >
@@ -3080,26 +3080,26 @@ function ManualMode({
                         {s.establishmentName}
                       </Link>
                       {best && (
-                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-emerald-600">
+                        <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-emerald-600">
                           <Star className="h-2.5 w-2.5 fill-current" /> melhor
                         </span>
                       )}
                       {full ? (
-                        <span className="inline-flex items-center rounded-full bg-primary/10 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-primary">
+                        <span className="inline-flex items-center rounded-full bg-primary/10 px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-primary">
                           cesta completa
                         </span>
                       ) : (
-                        <span className="inline-flex items-center rounded-full bg-amber-500/10 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-amber-600">
+                        <span className="inline-flex items-center rounded-full bg-amber-500/10 px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-amber-600">
                           {s.missing} sem estoque
                         </span>
                       )}
                     </div>
-                    <p className="mt-0.5 pl-7 font-mono text-[10px] uppercase tracking-[0.14em] text-muted-foreground">
+                    <p className="mt-0.5 pl-7 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
                       {s.covered}/{s.selected} itens · cobertura {(s.coverage * 100).toFixed(0)}%
                     </p>
                     {!full && s.missingLabels.length > 0 && (
                       <p
-                        className="mt-0.5 pl-7 font-mono text-[9.5px] tracking-[0.06em] text-amber-700/80 line-clamp-2"
+                        className="mt-0.5 pl-7 font-mono text-[11px] tracking-[0.06em] text-amber-700/80 line-clamp-2"
                         title={s.missingLabels.join(", ")}
                       >
                         faltam: {s.missingLabels.slice(0, 4).join(", ")}
@@ -3111,13 +3111,13 @@ function ManualMode({
                     <p className="font-display text-[15px] font-bold tabular-nums text-foreground">
                       {fmt(s.totalEstimated)}
                       {!full && (
-                        <span className="ml-1 font-mono text-[9px] font-normal uppercase tracking-[0.16em] text-muted-foreground">
+                        <span className="ml-1 font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-muted-foreground">
                           est.
                         </span>
                       )}
                     </p>
                     {!full && s.totalReal > 0 && (
-                      <p className="mt-0.5 font-mono text-[10px] tabular-nums text-muted-foreground">
+                      <p className="mt-0.5 font-mono text-[11px] tabular-nums text-muted-foreground">
                         real: {fmt(s.totalReal)}
                       </p>
                     )}
@@ -3131,7 +3131,7 @@ function ManualMode({
                             Math.max(1, Math.floor(s.totalEstimated * 0.9)),
                           )
                         }
-                        className="mt-1 inline-flex items-center gap-1 rounded-full border border-border bg-background px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground hover:border-primary hover:text-primary"
+                        className="mt-1 inline-flex items-center gap-1 rounded-full border border-border bg-background px-2 py-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground hover:border-primary hover:text-primary"
                         title={`Avisar quando a cesta ficar abaixo de ${fmt(Math.max(1, Math.floor(s.totalEstimated * 0.9)))} nesta mercado`}
                       >
                         <AlertTriangle className="h-2.5 w-2.5" /> alerta -10%
@@ -3187,7 +3187,7 @@ function ManualMode({
                   <p className="truncate font-display text-[12.5px] font-semibold text-foreground leading-tight">
                     {ess.label}
                   </p>
-                  <p className="mt-0.5 font-mono text-[10px] tabular-nums text-muted-foreground">
+                  <p className="mt-0.5 font-mono text-[11px] tabular-nums text-muted-foreground">
                     {c ? `${fmt(c.price)}/un` : "sem preço"}
                   </p>
                 </div>
@@ -3249,12 +3249,12 @@ function ManualMode({
                 </div>
               )}
               {active && subtotal != null && (
-                <p className="mt-1.5 font-mono text-[10.5px] tabular-nums font-semibold text-foreground">
+                <p className="mt-1.5 font-mono text-[11px] tabular-nums font-semibold text-foreground">
                   Subtotal: <span className="text-primary">{fmt(subtotal)}</span>
                 </p>
               )}
               {active && c && (
-                <p className="mt-0.5 truncate font-mono text-[9.5px] uppercase tracking-[0.14em] text-muted-foreground">
+                <p className="mt-0.5 truncate font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
                   {c.establishmentName}
                 </p>
               )}
@@ -3262,7 +3262,7 @@ function ManualMode({
                 <button
                   type="button"
                   onClick={() => openPrices(ess.key, ess.label)}
-                  className="inline-flex items-center gap-1 self-start rounded-md border border-border bg-background px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.14em] text-muted-foreground hover:border-primary/40 hover:text-primary"
+                  className="inline-flex items-center gap-1 self-start rounded-md border border-border bg-background px-1.5 py-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground hover:border-primary/40 hover:text-primary"
                   aria-label={`Ver preços de ${ess.label} em outras mercados`}
                 >
                   <Eye className="h-2.5 w-2.5" /> Ver preços
@@ -3315,7 +3315,7 @@ function EssentialPricesDialog({
       >
         <div className="flex items-center justify-between border-b border-border px-4 py-3">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
               Preços em todas as mercados
             </p>
             <p className="font-display text-[16px] font-bold text-foreground leading-tight">
@@ -3346,7 +3346,7 @@ function EssentialPricesDialog({
             <>
               <div className="grid grid-cols-3 gap-2 border-b border-border bg-background px-4 py-2 text-center">
                 <div>
-                  <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                     Menor
                   </p>
                   <p className="font-display text-[13px] font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
@@ -3354,7 +3354,7 @@ function EssentialPricesDialog({
                   </p>
                 </div>
                 <div>
-                  <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                     Média
                   </p>
                   <p className="font-display text-[13px] font-bold tabular-nums text-foreground">
@@ -3362,7 +3362,7 @@ function EssentialPricesDialog({
                   </p>
                 </div>
                 <div>
-                  <p className="font-mono text-[9px] uppercase tracking-[0.16em] text-muted-foreground">
+                  <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                     Maior
                   </p>
                   <p className="font-display text-[13px] font-bold tabular-nums text-amber-600 dark:text-amber-400">
@@ -3375,7 +3375,7 @@ function EssentialPricesDialog({
                   <li key={r.establishmentId} className="flex items-center justify-between gap-3 px-4 py-2.5">
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-primary/10 font-mono text-[10px] font-bold text-primary">
+                        <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-primary/10 font-mono text-[11px] font-bold text-primary">
                           {i + 1}
                         </span>
                         <Link
@@ -3386,7 +3386,7 @@ function EssentialPricesDialog({
                           {r.establishmentName}
                         </Link>
                       </div>
-                      <p className="mt-0.5 truncate pl-7 font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
+                      <p className="mt-0.5 truncate pl-7 font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
                         {r.productName}
                         {r.city ? ` · ${r.city}` : ""}
                       </p>
@@ -3399,7 +3399,7 @@ function EssentialPricesDialog({
                         <button
                           type="button"
                           onClick={() => onSelect(r)}
-                          className="rounded-md border border-primary/40 bg-primary/10 px-2 py-1 font-mono text-[9.5px] uppercase tracking-[0.16em] text-primary transition hover:bg-primary/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                          className="rounded-md border border-primary/40 bg-primary/10 px-2 py-1 font-mono text-[11px] uppercase tracking-[0.16em] text-primary transition hover:bg-primary/15 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
                           aria-label={`Escolher ${r.establishmentName} por ${fmt(r.price)}`}
                         >
                           Escolher
@@ -3537,7 +3537,7 @@ function SavedBasketsPanel() {
           <h2 className="font-display text-[14px] font-semibold tracking-tight text-foreground">
             Minhas cestas salvas
           </h2>
-          <p className="mt-0.5 font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+          <p className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
             Marque 2 cestas com <Columns2 className="inline h-3 w-3" /> para comparar lado a lado.
           </p>
         </div>
@@ -3546,7 +3546,7 @@ function SavedBasketsPanel() {
             type="button"
             onClick={openCompare}
             disabled={compareIds.length !== 2 || compareBusy}
-            className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-primary/40 bg-primary/5 px-2.5 py-1 font-mono text-[10px] uppercase tracking-[0.16em] text-primary hover:bg-primary/10 disabled:opacity-50"
+            className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-primary/40 bg-primary/5 px-2.5 py-1 font-mono text-[11px] uppercase tracking-[0.16em] text-primary hover:bg-primary/10 disabled:opacity-50"
           >
             {compareBusy ? (
               <Loader2 className="h-3 w-3 animate-spin" />
@@ -3591,7 +3591,7 @@ function SavedBasketsPanel() {
                   <p className="truncate font-display text-[13px] font-medium text-foreground group-hover:text-primary">
                     {b.name}
                   </p>
-                  <p className="truncate font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+                  <p className="truncate font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                     {b.mode === "budget" ? "Orçamento/Manual" : "Comparação"} ·{" "}
                     {new Date(b.createdAt).toLocaleDateString("pt-BR")}
                     {b.shareToken && " · compartilhada"}
@@ -3726,7 +3726,7 @@ function CompareBasketsDialog({
       <div className="flex h-[92vh] w-full max-w-5xl flex-col overflow-hidden rounded-t-2xl bg-background shadow-2xl sm:h-auto sm:max-h-[90vh] sm:rounded-2xl">
         <header className="flex items-center justify-between gap-2 border-b border-border bg-surface px-4 py-3">
           <div>
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
               Comparar cestas
             </p>
             <h3 className="font-display text-base font-semibold text-foreground">
@@ -3747,7 +3747,7 @@ function CompareBasketsDialog({
           <BasketSummaryCard label="Cesta A" name={a.name} total={parsedA.total} count={parsedA.rows.length} tone="a" />
           <BasketSummaryCard label="Cesta B" name={b.name} total={parsedB.total} count={parsedB.rows.length} tone="b" />
           <div className="rounded-xl border border-border bg-background p-3">
-            <p className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-muted-foreground">
+            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
               Diferença
             </p>
             <p
@@ -3773,7 +3773,7 @@ function CompareBasketsDialog({
         </div>
 
         <div className="grow overflow-y-auto p-4">
-          <h4 className="font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+          <h4 className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
             Itens em comum ({analysis.shared.length})
           </h4>
           {analysis.shared.length === 0 ? (
@@ -3785,16 +3785,16 @@ function CompareBasketsDialog({
               <table className="w-full min-w-[520px] text-sm">
                 <thead className="bg-surface text-left">
                   <tr>
-                    <th className="whitespace-nowrap px-3 py-2 font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
+                    <th className="whitespace-nowrap px-3 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                       Item
                     </th>
-                    <th className="whitespace-nowrap px-3 py-2 text-right font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
+                    <th className="whitespace-nowrap px-3 py-2 text-right font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                       A
                     </th>
-                    <th className="whitespace-nowrap px-3 py-2 text-right font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
+                    <th className="whitespace-nowrap px-3 py-2 text-right font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                       B
                     </th>
-                    <th className="whitespace-nowrap px-3 py-2 text-right font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
+                    <th className="whitespace-nowrap px-3 py-2 text-right font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                       Δ
                     </th>
                   </tr>
@@ -3844,7 +3844,7 @@ function CompareBasketsDialog({
           <button
             type="button"
             onClick={onClose}
-            className="rounded-lg border border-border bg-background px-3 py-1.5 font-mono text-[10.5px] uppercase tracking-[0.16em] text-foreground hover:bg-primary/5"
+            className="rounded-lg border border-border bg-background px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-foreground hover:bg-primary/5"
           >
             Fechar
           </button>
@@ -3873,7 +3873,7 @@ function BasketSummaryCard({
       : "border-sky-500/40 bg-sky-500/5";
   return (
     <div className={`rounded-xl border ${accent} p-3`}>
-      <p className="font-mono text-[9.5px] uppercase tracking-[0.18em] text-muted-foreground">
+      <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
         {label}
       </p>
       <p className="mt-0.5 truncate font-display text-[13px] font-semibold text-foreground">
@@ -3882,7 +3882,7 @@ function BasketSummaryCard({
       <p className="mt-1 font-display text-lg font-bold tabular-nums text-foreground">
         {fmt(total)}
       </p>
-      <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+      <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
         {count} {count === 1 ? "item" : "itens"}
       </p>
     </div>
@@ -3901,7 +3901,7 @@ function ExclusiveList({
   const accent = tone === "a" ? "text-emerald-700 dark:text-emerald-300" : "text-sky-700 dark:text-sky-300";
   return (
     <div className="rounded-xl border border-border bg-surface p-3">
-      <p className={`font-mono text-[10px] uppercase tracking-[0.18em] ${accent}`}>{label}</p>
+      <p className={`font-mono text-[11px] uppercase tracking-[0.18em] ${accent}`}>{label}</p>
       {items.length === 0 ? (
         <p className="mt-1 text-xs text-muted-foreground">Nenhum item exclusivo.</p>
       ) : (
@@ -3947,7 +3947,7 @@ function SaveNamedDialog({
             <X className="h-3.5 w-3.5" />
           </button>
         </div>
-        <label className="mt-3 block font-mono text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+        <label className="mt-3 block font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
           Nome da cesta
         </label>
         <input
@@ -3960,14 +3960,14 @@ function SaveNamedDialog({
           placeholder="Ex: Cesta do mês, Feira do sábado…"
           className="mt-1.5 h-10 w-full rounded-xl border border-border bg-surface px-3 font-display text-[14px] text-foreground outline-none focus:border-primary"
         />
-        <p className="mt-1 font-mono text-[9.5px] text-muted-foreground">
+        <p className="mt-1 font-mono text-[11px] text-muted-foreground">
           {trimmed.length}/80 caracteres
         </p>
         <div className="mt-4 flex items-center justify-end gap-2">
           <button
             type="button"
             onClick={onCancel}
-            className="rounded-xl border border-border bg-surface px-3 py-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted-foreground hover:bg-primary/5 hover:text-foreground"
+            className="rounded-xl border border-border bg-surface px-3 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground hover:bg-primary/5 hover:text-foreground"
           >
             Cancelar
           </button>
@@ -3975,7 +3975,7 @@ function SaveNamedDialog({
             type="button"
             disabled={!valid || busy}
             onClick={() => onConfirm(trimmed)}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3.5 py-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3.5 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-primary-foreground hover:bg-primary/90 disabled:opacity-60"
           >
             {busy && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
             {submitLabel}
@@ -4200,7 +4200,7 @@ function BasketDetailDialog({
             <p className="truncate font-display text-[14px] font-semibold text-foreground">
               {detail.name}
             </p>
-            <p className="mt-0.5 truncate font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+            <p className="mt-0.5 truncate font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
               {parsed.headline} · {parsed.meta.join(" · ")}
             </p>
           </div>
@@ -4222,7 +4222,7 @@ function BasketDetailDialog({
           ) : (
             <div className="overflow-hidden rounded-xl border border-border">
               <table className="w-full text-left font-mono text-[11px]">
-                <thead className="bg-muted/40 text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
+                <thead className="bg-muted/40 text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                   <tr>
                     <th className="px-3 py-2 font-semibold">Item</th>
                     <th className="px-3 py-2 font-semibold">Produto</th>
@@ -4292,14 +4292,14 @@ function BasketDetailDialog({
                 toast.error("Não foi possível copiar.");
               }
             }}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-surface px-3 py-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-foreground hover:bg-primary/5"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-border bg-surface px-3 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-foreground hover:bg-primary/5"
           >
             <ClipboardCopy className="h-3.5 w-3.5" /> Copiar resumo
           </button>
           <button
             type="button"
             onClick={onClose}
-            className="rounded-xl bg-primary px-3.5 py-2 font-mono text-[10.5px] uppercase tracking-[0.16em] text-primary-foreground hover:bg-primary/90"
+            className="rounded-xl bg-primary px-3.5 py-2 font-mono text-[11px] uppercase tracking-[0.16em] text-primary-foreground hover:bg-primary/90"
           >
             Fechar
           </button>
@@ -4439,7 +4439,7 @@ function AssistantSidePanel({
               <Sparkles className="h-4 w-4" />
             </span>
             <div>
-              <p className="font-mono text-[9px] uppercase tracking-[0.22em] text-muted-foreground leading-none">
+              <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-muted-foreground leading-none">
                 Assistente IA
               </p>
               <p className="font-display text-[14px] font-semibold leading-tight text-foreground">
@@ -4477,7 +4477,7 @@ function AssistantSidePanel({
                     .map((a, idx) => (
                       <span
                         key={idx}
-                        className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/5 px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-primary"
+                        className="inline-flex items-center gap-1 rounded-full border border-primary/30 bg-primary/5 px-2 py-0.5 font-mono text-[11px] uppercase tracking-[0.1em] text-primary"
                       >
                         <Check className="h-3 w-3" />
                         {ACTION_LABEL[a.type]}
@@ -4544,7 +4544,7 @@ function AssistantSidePanel({
               <Send className="h-4 w-4" />
             </button>
           </div>
-          <p className="mt-1.5 font-mono text-[9.5px] uppercase tracking-[0.16em] text-muted-foreground">
+          <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
             Powered by Lovable AI · Gemini
           </p>
         </footer>
@@ -4556,12 +4556,12 @@ function AssistantSidePanel({
 function SummaryCard({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <div className="rounded-2xl border border-border bg-surface p-4">
-      <p className="font-mono text-[10.5px] uppercase tracking-[0.2em] text-muted-foreground">{label}</p>
+      <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">{label}</p>
       <p className="mt-1 font-display text-[22px] font-semibold tabular-nums tracking-tight text-foreground">
         {value}
       </p>
       {hint && (
-        <p className="mt-0.5 font-mono text-[10.5px] uppercase tracking-[0.16em] text-muted-foreground">
+        <p className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
           {hint}
         </p>
       )}

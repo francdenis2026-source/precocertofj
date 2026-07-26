@@ -83,7 +83,7 @@ export function Nav() {
           >
             <IconTile icon={ShoppingBag} size="sm" tone="surface" interactive />
             {cartCount > 0 && (
-              <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-accent px-1 text-[10px] font-bold leading-none text-accent-foreground shadow">
+              <span className="absolute -right-1 -top-1 inline-flex h-4 min-w-[16px] items-center justify-center rounded-full bg-accent px-1 text-[11px] font-bold leading-none text-accent-foreground shadow">
                 {cartCount > 99 ? "99+" : cartCount}
               </span>
             )}

@@ -149,7 +149,7 @@ export function CollaboratorStatusCard() {
                         </span>
                         <span
                           className={
-                            "inline-flex flex-none items-center rounded-full border px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-wide " +
+                            "inline-flex flex-none items-center rounded-full border px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide " +
                             info.tone
                           }
                         >
@@ -224,7 +224,7 @@ function SummaryTile({
       <div className="font-display text-[20px] font-bold leading-none tabular-nums text-foreground">
         {value}
       </div>
-      <div className="mt-1 text-[10.5px] font-semibold uppercase tracking-wide text-muted-foreground">
+      <div className="mt-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
         {label}
       </div>
     </div>

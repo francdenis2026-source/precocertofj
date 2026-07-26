@@ -169,7 +169,7 @@ export function DataTable<T>({
                   key={col.key}
                   style={col.width ? { width: col.width } : undefined}
                   className={cn(
-                    "h-10 px-3 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground",
+                    "h-10 px-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground",
                     col.align === "right" && "text-right",
                     col.align === "center" && "text-center",
                     col.headerClassName,

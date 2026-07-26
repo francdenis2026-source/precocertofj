@@ -49,7 +49,7 @@ export function RadarCategorySheet({
       >
         <div className="flex h-full flex-col">
           <SheetHeader className="border-b border-white/10 bg-gradient-to-br from-white/[0.06] to-transparent px-6 py-5">
-            <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-emerald-300/90">
+            <p className="text-[11px] font-bold uppercase tracking-[0.24em] text-emerald-300/90">
               Radar · Categoria em destaque
             </p>
             <SheetTitle className="font-display text-2xl font-bold text-white">
@@ -117,7 +117,7 @@ export function RadarCategorySheet({
                               className="h-full w-full object-contain"
                             />
                           </div>
-                          <span className="absolute -left-1 -top-1 rounded-full bg-emerald-400 px-1.5 py-0.5 text-[9px] font-bold text-neutral-950">
+                          <span className="absolute -left-1 -top-1 rounded-full bg-emerald-400 px-1.5 py-0.5 text-[11px] font-bold text-neutral-950">
                             #{idx + 1}
                           </span>
                         </div>
@@ -157,14 +157,14 @@ export function RadarCategorySheet({
                                 to="/loja/$id"
                                 params={{ id: p.cheapestEstablishmentId }}
                                 onClick={() => onOpenChange(false)}
-                                className="inline-flex items-center gap-0.5 text-[10px] font-semibold uppercase tracking-wide text-emerald-300 hover:text-emerald-200"
+                                className="inline-flex items-center gap-0.5 text-[11px] font-semibold uppercase tracking-wide text-emerald-300 hover:text-emerald-200"
                               >
                                 Ver <ExternalLink className="h-3 w-3" />
                               </Link>
                             )}
                           </div>
 
-                          <div className="mt-1.5 flex items-center gap-3 text-[10px] text-white/80">
+                          <div className="mt-1.5 flex items-center gap-3 text-[11px] text-white/80">
                             <span className="inline-flex items-center gap-1">
                               <TrendingDown className="h-3 w-3 text-emerald-300" />
                               economia {brl(savings)}

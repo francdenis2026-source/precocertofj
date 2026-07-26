@@ -47,7 +47,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
 
       <div className="flex min-w-0 flex-1 items-center gap-2">
         <span
-          className="hidden items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-[0.12em] text-foreground md:inline-flex"
+          className="hidden items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground md:inline-flex"
           aria-label={isAdminScope ? "Área administrativa" : "Localização atual"}
         >
           {isAdminScope ? (
@@ -59,7 +59,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
         </span>
 
         {isAdminScope && (
-          <span className="hidden items-center gap-1.5 rounded-full border border-border bg-muted px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-[0.12em] text-muted-foreground lg:inline-flex">
+          <span className="hidden items-center gap-1.5 rounded-full border border-border bg-muted px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground lg:inline-flex">
             <Activity className="h-3.5 w-3.5" />
             Administração do sistema
           </span>
@@ -80,7 +80,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
               />
             ) : (
               <span
-                className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary"
+                className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-primary/10 text-[11px] font-bold text-primary"
               >
                 {initials ?? <User className="h-3 w-3" />}
               </span>

@@ -15,7 +15,7 @@ export function SectionKicker({ eyebrow, title, actions }: SectionKickerProps) {
   return (
     <div className="flex items-end justify-between gap-4 border-b border-border/70 pb-2.5">
       <div className="min-w-0">
-        <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-accent">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.22em] text-accent">
           {eyebrow}
         </p>
         <h2 className="mt-1 font-display text-xl font-bold tracking-tight text-foreground md:text-2xl">

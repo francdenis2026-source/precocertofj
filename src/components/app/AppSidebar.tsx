@@ -168,7 +168,7 @@ export function AppSidebar() {
 
   const renderGroup = (group: NavGroup) => (
     <SidebarGroup key={group.label} className="py-2">
-      <SidebarGroupLabel className="px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-sidebar-foreground/55">
+      <SidebarGroupLabel className="px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-sidebar-foreground/55">
         {group.label}
       </SidebarGroupLabel>
       <SidebarGroupContent>
@@ -229,7 +229,7 @@ export function AppSidebar() {
             <span className="text-[15px] font-semibold tracking-tight text-sidebar-foreground">
               {isAdminArea ? "Console" : "PreçoCerto"}
             </span>
-            <span className="mt-1 text-[9px] font-semibold uppercase tracking-[0.2em] text-sidebar-primary">
+            <span className="mt-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-sidebar-primary">
               {isAdminArea ? "Administração" : "Aplicativo"}
             </span>
           </span>
@@ -251,7 +251,7 @@ export function AppSidebar() {
 
         {!isAdminArea && !rolesLoading && isAdmin && (
           <SidebarGroup className="py-2">
-            <SidebarGroupLabel className="px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-sidebar-foreground/55">
+            <SidebarGroupLabel className="px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-sidebar-foreground/55">
               Administração
             </SidebarGroupLabel>
             <SidebarGroupContent>

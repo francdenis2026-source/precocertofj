@@ -404,7 +404,7 @@ function DashboardView({
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <span className="text-sm font-semibold">Registrar gasto com alimentação</span>
-            <Badge variant="outline" className="border-emerald-500/40 bg-emerald-500/10 px-1.5 py-0 text-[10px] font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">
+            <Badge variant="outline" className="border-emerald-500/40 bg-emerald-500/10 px-1.5 py-0 text-[11px] font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">
               rápido
             </Badge>
           </div>
@@ -413,7 +413,7 @@ function DashboardView({
           </p>
         </div>
         <div className="hidden shrink-0 text-right sm:block">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Este mês</p>
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Este mês</p>
           <p className="font-display text-base font-semibold tabular-nums text-emerald-700 dark:text-emerald-300">
             {BRL(foodTotal)}
           </p>

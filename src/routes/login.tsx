@@ -338,7 +338,7 @@ function LoginPage() {
           </div>
 
 
-          <p className="text-[9.5px] font-bold uppercase tracking-[0.2em] text-[color:var(--pc-home-navy)] dark:text-[color:var(--pc-home-gold)]">
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[color:var(--pc-home-navy)] dark:text-[color:var(--pc-home-gold)]">
             {mode === "login" ? "Área do assinante" : "Comece grátis"}
           </p>
           <h1
@@ -459,7 +459,7 @@ function LoginPage() {
               <details className="group rounded-xl border border-border bg-muted/40">
                 <summary className="flex cursor-pointer list-none items-center justify-between px-3.5 py-2.5 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground transition hover:text-foreground">
                   Endereço <span className="ml-1 font-normal normal-case tracking-normal text-muted-foreground/70">(opcional)</span>
-                  <span className="text-[10.5px] font-normal normal-case tracking-normal text-muted-foreground group-open:hidden">
+                  <span className="text-[11px] font-normal normal-case tracking-normal text-muted-foreground group-open:hidden">
                     adicionar
                   </span>
                 </summary>
@@ -586,7 +586,7 @@ function LoginPage() {
             </div>
           </form>
 
-          <p className="mt-4 border-t border-border pt-3 text-center text-[10px] text-muted-foreground">
+          <p className="mt-4 border-t border-border pt-3 text-center text-[11px] text-muted-foreground">
             Ao continuar, você concorda com nossos{" "}
             <Link to="/termos" className="underline hover:text-foreground">Termos</Link> e{" "}
             <Link to="/privacidade" className="underline hover:text-foreground">Privacidade</Link>.
@@ -666,7 +666,7 @@ function EditorialPanel({ region }: { region: SelectedRegion | null }) {
   return (
     <div className="my-10">
       <div className="max-w-2xl">
-        <p className="mb-4 inline-flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.28em] text-emerald-300/90">
+        <p className="mb-4 inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.28em] text-emerald-300/90">
           <span className="h-px w-8 bg-emerald-300/70" />
           {h?.eyebrow ?? "Radar de preços · Edição da semana"}
           {isFetching && !isLoading && (
@@ -720,7 +720,7 @@ function EditorialPanel({ region }: { region: SelectedRegion | null }) {
             />
             <div className="relative flex items-end justify-between gap-6">
               <div>
-                <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-white/80">
+                <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-white/80">
                   Maior oscilação da semana
                 </p>
                 <p className="mt-2 font-display text-[22px] font-semibold leading-tight text-white">
@@ -747,7 +747,7 @@ function EditorialPanel({ region }: { region: SelectedRegion | null }) {
                     "—"
                   )}
                 </p>
-                <p className="mt-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/75">
+                <p className="mt-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white/75">
                   oscilação da semana
 
                 </p>
@@ -792,10 +792,10 @@ function EditorialPanel({ region }: { region: SelectedRegion | null }) {
                     className={`absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r ${toneRing[b.tone]}`}
                   />
                   <div className="flex items-start justify-between gap-2">
-                    <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-white/80">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-white/80">
                       {b.label}
                     </p>
-                    <span className="rounded-full bg-white/5 px-1.5 py-0.5 text-[9px] font-bold tabular-nums text-white/85">
+                    <span className="rounded-full bg-white/5 px-1.5 py-0.5 text-[11px] font-bold tabular-nums text-white/85">
                       #{idx + 1}
                     </span>
                   </div>
@@ -826,7 +826,7 @@ function EditorialPanel({ region }: { region: SelectedRegion | null }) {
                       )}
                     </AnimatePresence>
                   </div>
-                  <span className="mt-2 inline-flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-white/75 transition group-hover:text-emerald-300">
+                  <span className="mt-2 inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider text-white/75 transition group-hover:text-emerald-300">
                     Ver produtos <ArrowRight className="h-3 w-3" />
                   </span>
                 </motion.button>
@@ -949,7 +949,7 @@ function Field({
         : "text-muted-foreground";
   return (
     <label className="block">
-      <span className="mb-1 block text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+      <span className="mb-1 block text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
         {label}
       </span>
 
@@ -985,7 +985,7 @@ function Field({
 
       {hint && (
         <p
-          className={`mt-1 pl-0.5 text-[10.5px] font-medium ${hintCls}`}
+          className={`mt-1 pl-0.5 text-[11px] font-medium ${hintCls}`}
           aria-live="polite"
         >
           {hint}
@@ -1041,7 +1041,7 @@ function PinField({
   return (
     <div className="space-y-2">
       <div className="flex items-end justify-between">
-        <label className="text-[10.5px] font-bold uppercase tracking-[0.2em] text-[color:var(--pc-home-navy)] dark:text-[color:var(--pc-home-gold)]">
+        <label className="text-[11px] font-bold uppercase tracking-[0.2em] text-[color:var(--pc-home-navy)] dark:text-[color:var(--pc-home-gold)]">
           PIN de 6 dígitos
         </label>
       </div>

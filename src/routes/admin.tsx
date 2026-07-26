@@ -325,7 +325,7 @@ function Kpi({ icon, label, value }: { icon: React.ReactNode; label: string; val
   return (
     <Card className="rounded-xl border-border">
       <CardContent className="pt-5">
-        <div className="mb-2 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+        <div className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
           {icon}{label}
         </div>
         <div className="font-mono text-[22px] font-semibold tabular-nums tracking-tight">{value}</div>
@@ -1518,11 +1518,11 @@ function WebhooksTab() {
                         <div className="flex flex-col gap-1">
                           <StatusPill status={ev.status} />
                           {!ev.signature_valid && (
-                            <span className="text-[10px] text-destructive">assinatura inválida</span>
+                            <span className="text-[11px] text-destructive">assinatura inválida</span>
                           )}
                         </div>
                       </TableCell>
-                      <TableCell className="font-mono text-[10px]">
+                      <TableCell className="font-mono text-[11px]">
                         {ev.subscriber_id ? ev.subscriber_id.slice(0, 8) : "-"}
                       </TableCell>
                       <TableCell className="text-center text-sm">{ev.attempts}</TableCell>

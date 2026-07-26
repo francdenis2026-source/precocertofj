@@ -392,7 +392,7 @@ function LicensesTab() {
               sortable: true,
               accessor: (c: any) => c.status,
               cell: (c: any) => (
-                <Badge variant={c.status === "paid" ? "default" : "secondary"} className="text-[10px]">
+                <Badge variant={c.status === "paid" ? "default" : "secondary"} className="text-[11px]">
                   {c.status}
                 </Badge>
               ),

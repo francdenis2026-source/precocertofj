@@ -431,13 +431,13 @@ function EstablishmentsPage() {
               "linear-gradient(90deg, transparent, color-mix(in oklab, var(--brand-gold) 75%, transparent) 50%, transparent)",
           }}
         />
-        <div className="mx-auto grid w-full max-w-6xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-2.5 md:gap-6 md:px-8 md:py-3">
+        <div className="mx-auto grid w-full max-w-6xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-2 md:gap-6 md:px-8 md:py-2.5">
           <BackButton fallbackTo="/" variant="ghost" />
           <div className="flex min-w-0 flex-col gap-0.5">
-            <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--pc-gold-ink)]">
+            <span className={tc.eyebrow}>
               {currentKind ? currentKind.label : "Comércios parceiros"}
             </span>
-            <h1 className="min-w-0 truncate whitespace-nowrap font-serif text-[19px] font-normal leading-tight tracking-tight text-foreground sm:text-[23px]">
+            <h1 className={`min-w-0 truncate whitespace-nowrap ${tc.h1}`}>
               {currentKind ? currentKind.label : "Mercados"}
               <span className="hidden sm:inline"> de Feijó</span>
             </h1>
@@ -447,7 +447,7 @@ function EstablishmentsPage() {
             <Link
               to="/farmacias"
               title="Ver a escala de plantão das farmácias"
-              className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border px-3 text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+              className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border px-3 text-[11.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
             >
               <Pill className="h-3.5 w-3.5" aria-hidden />
               <span className="hidden sm:inline">Plantão das farmácias</span>
@@ -458,15 +458,15 @@ function EstablishmentsPage() {
 
       {/* IDENTIDADE — linha fina com tagline, tipos de comércio e números ao vivo */}
       <section className="border-b border-border/60">
-        <div className="mx-auto w-full max-w-6xl px-4 py-2.5 md:px-8 md:py-3">
-          <p className={`max-w-2xl ${tc.lead}`}>
+        <div className="mx-auto w-full max-w-6xl px-4 py-2 md:px-8 md:py-2.5">
+          <p className={`max-w-2xl line-clamp-2 text-pretty ${tc.lead}`}>
             {currentKind
               ? currentKind.tagline
               : "Cobertura de produtos, categorias e comparativo entre os estabelecimentos monitorados pela comunidade."}
           </p>
 
           <div
-            className="mt-2.5 flex flex-wrap gap-1.5"
+            className="mt-2 flex flex-wrap gap-1.5"
             role="radiogroup"
             aria-label="Filtrar por tipo de estabelecimento"
           >
@@ -516,7 +516,7 @@ function EstablishmentsPage() {
           </div>
 
           {data && (
-            <dl className="mt-3 flex flex-wrap items-stretch gap-x-6 gap-y-2 border-t border-border/60 pt-2.5">
+            <dl className="mt-2.5 flex flex-wrap items-stretch gap-x-5 gap-y-1.5 border-t border-border/60 pt-2 md:gap-x-7">
               <HeroMetric
                 icon={Store}
                 label="Comércios"
@@ -1214,7 +1214,7 @@ function MetricDetailDialog({
           {which === "products" && data && (
             <div className="space-y-3">
               <div className="rounded-md border border-border/60 bg-muted/40 p-3 text-center">
-                <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-brand-gold">Total monitorado</div>
+                <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-gold">Total monitorado</div>
                 <div className="mt-1 text-[24px] font-extrabold tabular-nums text-foreground">
                   {data.totalProducts.toLocaleString("pt-BR")}
                 </div>
@@ -1244,7 +1244,7 @@ function MetricDetailDialog({
           {which === "savings" && data && (
             <div className="space-y-2.5">
               <div className="rounded-md border border-brand-gold/50 bg-brand-gold/10 p-3">
-                <div className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-brand-gold">
+                <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-gold">
                   Diferença máxima na rede
                 </div>
                 <div className="mt-0.5 text-[22px] font-extrabold tabular-nums text-brand-gold">

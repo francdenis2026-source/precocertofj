@@ -54,7 +54,7 @@ export const nt = {
 
   // Typography
   eyebrow:
-    "text-[10px] font-semibold uppercase tracking-[0.16em] text-muted-foreground",
+    "text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground",
   editorialTitle: "font-['Instrument_Serif',ui-serif,serif] font-normal leading-tight",
 
   // Buttons

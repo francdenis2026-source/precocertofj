@@ -201,7 +201,7 @@ function ProductPublicPage() {
           <span
             role="note"
             aria-label="Seção: Detalhes do produto"
-            className="hidden items-center rounded-full border border-accent-strong/30 bg-accent/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-accent-strong sm:inline-flex"
+            className="hidden items-center rounded-full border border-accent-strong/30 bg-accent/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-accent-strong sm:inline-flex"
           >
             Detalhes do produto
           </span>
@@ -233,7 +233,7 @@ function ProductPublicPage() {
                 />
               </div>
               {cheapest && data.markets.length > 1 && (
-                <span className="absolute left-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-savings px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-savings-foreground shadow-sm">
+                <span className="absolute left-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-savings px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-savings-foreground shadow-sm">
                   <TrendingDown className="h-2.5 w-2.5" />
                   -{spread.toFixed(0)}%
                 </span>
@@ -242,7 +242,7 @@ function ProductPublicPage() {
 
             {/* Info */}
             <div className="flex min-w-0 flex-col">
-              <div className="flex flex-wrap items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+              <div className="flex flex-wrap items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                 <span
                   role="note"
                   aria-label="Categoria: Produto"
@@ -270,7 +270,7 @@ function ProductPublicPage() {
               {/* Price hero — visível sem rolagem */}
               <div className="mt-2.5 flex items-end justify-between gap-3 rounded-xl border border-border bg-background p-2.5 md:p-3">
                 <div className="min-w-0">
-                  <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
+                  <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
                     Melhor preço
                   </p>
                   <p className="mt-1 font-display text-[22px] font-extrabold tabular-nums leading-none text-primary sm:text-[28px]">
@@ -336,14 +336,14 @@ function ProductPublicPage() {
               <section className="mt-3 rounded-2xl border border-border bg-card p-3 md:p-4">
                 <div className="mb-2 flex items-center justify-between gap-2">
                   <div className="min-w-0">
-                    <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
                       Tendência
                     </p>
                     <h2 className="font-display text-sm font-bold text-foreground md:text-base">
                       Histórico de preços
                     </h2>
                   </div>
-                  <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                  <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
                     {data.history.length} dias
                   </span>
                 </div>
@@ -367,7 +367,7 @@ function ProductPublicPage() {
                 <h2 className="font-display text-sm font-bold text-foreground md:text-base">
                   Comparar mercados
                 </h2>
-                <span className="text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
+                <span className="text-[11px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
                   {filteredMarkets.length} de {data.markets.length}
                 </span>
               </div>
@@ -460,7 +460,7 @@ function ProductPublicPage() {
 function MiniStat({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-lg border border-border bg-background px-2 py-1.5">
-      <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
         {label}
       </p>
       <p className="mt-1 font-display text-[17px] font-semibold tabular-nums leading-tight text-foreground">
@@ -575,7 +575,7 @@ function MarketCard({
               <p className="truncate text-sm font-semibold text-foreground">
                 {m.marketName}
               </p>
-              <p className="truncate text-[10px] text-muted-foreground">
+              <p className="truncate text-[11px] text-muted-foreground">
                 {isBest ? (
                   <span className="font-semibold uppercase tracking-[0.18em] text-savings">
                     Melhor preço
@@ -629,7 +629,7 @@ function MarketCard({
 
           {m.history.length >= 2 && (
             <div className="mt-3">
-              <p className="mb-1 text-[9px] font-semibold uppercase tracking-widest text-muted-foreground">
+              <p className="mb-1 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
                 Últimos preços neste mercado
               </p>
               <Sparkline
@@ -640,7 +640,7 @@ function MarketCard({
           )}
 
           {barcode && (
-            <p className="mt-3 truncate text-[10px] text-muted-foreground">
+            <p className="mt-3 truncate text-[11px] text-muted-foreground">
               <span className="font-semibold uppercase tracking-widest">
                 Código de barras:
               </span>{" "}
@@ -648,7 +648,7 @@ function MarketCard({
             </p>
           )}
 
-          <p className="mt-2 text-[10px] leading-relaxed text-muted-foreground">
+          <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">
             Preços variam por lote, promoções e datas. Os valores mostrados são o menor, médio e maior registrados nos últimos scans deste mercado.
           </p>
         </div>
@@ -668,7 +668,7 @@ function Detail({
 }) {
   return (
     <div className="rounded-md border border-border bg-card px-2 py-1.5">
-      <p className="text-[9px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
+      <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
         {label}
       </p>
       <p
@@ -775,7 +775,7 @@ function Sparkline({
         />
       </svg>
       {!compact && (
-        <div className="mt-1 flex items-center justify-between text-[10px] text-muted-foreground">
+        <div className="mt-1 flex items-center justify-between text-[11px] text-muted-foreground">
           <span>
             {fmtDate(first.x)} · {fmt(first.y)}
           </span>

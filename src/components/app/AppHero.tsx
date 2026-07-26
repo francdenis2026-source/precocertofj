@@ -35,11 +35,11 @@ export function AppHero({ firstName, statusLine }: AppHeroProps) {
 
       <div className="relative flex flex-wrap items-end justify-between gap-4 md:gap-6">
         <div className="min-w-0 max-w-2xl">
-          <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">
+          <span className="inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/5 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.22em] text-primary">
             <span className="live-dot" aria-hidden />
             Painel ao vivo
           </span>
-          <p className="mt-3 text-[10.5px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
+          <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
             Olá, {firstName}
           </p>
           <h1 className="font-display mt-1 text-[30px] font-extrabold leading-[0.98] tracking-tight text-foreground md:text-[42px]">

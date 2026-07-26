@@ -48,7 +48,7 @@ export function ProductListCard({
             {name}
           </h3>
           {category ? (
-            <Badge variant="outline" className="shrink-0 text-[10px]">
+            <Badge variant="outline" className="shrink-0 text-[11px]">
               {category}
             </Badge>
           ) : null}

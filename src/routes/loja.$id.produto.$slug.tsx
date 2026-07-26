@@ -171,7 +171,7 @@ function ProductDetailPage() {
                   {product.productName.charAt(0).toUpperCase()}
                 </span>
               )}
-              <span className="absolute bottom-1 left-1 rounded-full bg-background/90 px-1.5 py-[1px] text-[8.5px] font-semibold uppercase tracking-wider text-muted-foreground backdrop-blur">
+              <span className="absolute bottom-1 left-1 rounded-full bg-background/90 px-1.5 py-[1px] text-[11px] font-semibold uppercase tracking-wider text-muted-foreground backdrop-blur">
                 {product.category}
               </span>
             </button>
@@ -180,7 +180,7 @@ function ProductDetailPage() {
               <h1 className="font-display text-[16px] font-bold leading-tight text-foreground">
                 {product.productName}
               </h1>
-              <p className="mt-0.5 flex items-center gap-1 text-[10.5px] text-muted-foreground">
+              <p className="mt-0.5 flex items-center gap-1 text-[11px] text-muted-foreground">
                 <StoreIcon className="h-3 w-3 shrink-0" />
                 <span className="truncate">{store.name}</span>
                 <span className="mx-0.5">·</span>
@@ -192,14 +192,14 @@ function ProductDetailPage() {
 
               <div className="mt-2 flex items-end justify-between gap-2">
                 <div className="min-w-0">
-                  <p className="text-[8.5px] font-semibold uppercase tracking-widest text-muted-foreground">
+                  <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
                     Último preço
                   </p>
                   <p className="num font-display text-[24px] font-extrabold leading-none text-primary">
                     {fmt(product.price)}
                   </p>
                   {product.pricePerUnit != null && product.unitLabel && (
-                    <p className="num mt-0.5 text-[10.5px] text-muted-foreground">
+                    <p className="num mt-0.5 text-[11px] text-muted-foreground">
                       {product.unitLabel} {product.pricePerUnit.toFixed(2).replace(".", ",")}
                     </p>
                   )}
@@ -207,7 +207,7 @@ function ProductDetailPage() {
                 {history.length >= 2 && (
                   <div
                     className={
-                      "inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[10.5px] font-semibold " +
+                      "inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-semibold " +
                       (trend < 0
                         ? "bg-savings/15 text-savings"
                         : trend > 0
@@ -234,7 +234,7 @@ function ProductDetailPage() {
             <div className="flex items-center gap-2 min-w-0">
               <Clock className="h-3.5 w-3.5 shrink-0 text-primary" />
               <div className="min-w-0">
-                <p className="text-[9px] font-semibold uppercase tracking-widest text-muted-foreground">
+                <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
                   Preço atualizado
                 </p>
                 <p className="truncate text-[11.5px] font-semibold text-foreground">
@@ -242,7 +242,7 @@ function ProductDetailPage() {
                 </p>
               </div>
             </div>
-            <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-[10.5px] font-semibold text-primary">
+            <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-semibold text-primary">
               {fmtRelative(product.lastDate)}
             </span>
           </div>
@@ -281,7 +281,7 @@ function ProductDetailPage() {
                       <p className="truncate text-[12.5px] font-semibold text-foreground">
                         {v.productName}
                       </p>
-                      <p className="text-[10.5px] text-muted-foreground">
+                      <p className="text-[11px] text-muted-foreground">
                         {v.unit ?? "—"}
                         {v.pricePerUnit != null && v.unitLabel && (
                           <>
@@ -388,7 +388,7 @@ function Stat({
         : "text-foreground";
   return (
     <div className="rounded-xl border border-border bg-background px-2 py-2 text-center">
-      <p className="text-[9px] font-semibold uppercase tracking-widest text-muted-foreground">
+      <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
         {label}
       </p>
       <p className={`num mt-0.5 font-display text-[13px] font-bold ${color}`}>{value}</p>
@@ -399,7 +399,7 @@ function Stat({
 function MetaBox({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-xl border border-border bg-surface p-2.5">
-      <p className="text-[9px] font-semibold uppercase tracking-widest text-muted-foreground">
+      <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
         {label}
       </p>
       <p className="mt-0.5 truncate text-[12.5px] font-semibold text-foreground">{value}</p>
@@ -472,7 +472,7 @@ function CompareSection({
             Economize {fmt(diff)}{" "}
             <span className="opacity-80">({diffPct.toFixed(1).replace(".", ",")}%)</span>
           </p>
-          <p className="text-[10.5px] opacity-90">
+          <p className="text-[11px] opacity-90">
             Melhor oferta em <strong>{best.storeName}</strong> por {fmt(best.price)}.
           </p>
         </div>
@@ -487,12 +487,12 @@ function CompareSection({
             className="flex w-full items-center justify-between gap-2 px-3 py-2 text-left"
           >
             <span className="flex items-center gap-1.5 text-[11px] font-semibold text-foreground">
-              <span className="rounded-full bg-savings/20 px-1.5 py-[1px] text-[8.5px] font-bold uppercase tracking-wider text-savings">
+              <span className="rounded-full bg-savings/20 px-1.5 py-[1px] text-[11px] font-bold uppercase tracking-wider text-savings">
                 Melhor
               </span>
               <span className="truncate">{bestReasonHeadline(reason)}</span>
             </span>
-            <span className="shrink-0 text-[10px] text-muted-foreground">
+            <span className="shrink-0 text-[11px] text-muted-foreground">
               {reasonOpen ? "ocultar" : "por quê?"}
             </span>
           </button>
@@ -530,7 +530,7 @@ function CompareSection({
                   recente venceu.
                 </li>
               )}
-              <li className="text-[10px] opacity-80">
+              <li className="text-[11px] opacity-80">
                 Baseado em {reason.offersCount} mercados comparadas.
               </li>
             </ul>
@@ -568,17 +568,17 @@ function CompareSection({
                   <p className="flex items-center gap-1.5 text-[12px] font-semibold text-foreground">
                     <span className="truncate">{o.storeName}</span>
                     {isBest && (
-                      <span className="shrink-0 rounded-full bg-savings/20 px-1.5 py-[1px] text-[8.5px] font-bold uppercase tracking-wider text-savings">
+                      <span className="shrink-0 rounded-full bg-savings/20 px-1.5 py-[1px] text-[11px] font-bold uppercase tracking-wider text-savings">
                         Melhor
                       </span>
                     )}
                     {isCurrent && !isBest && (
-                      <span className="shrink-0 rounded-full bg-muted px-1.5 py-[1px] text-[8.5px] font-semibold uppercase tracking-wider text-muted-foreground">
+                      <span className="shrink-0 rounded-full bg-muted px-1.5 py-[1px] text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                         Atual
                       </span>
                     )}
                   </p>
-                  <p className="truncate text-[10px] text-muted-foreground">
+                  <p className="truncate text-[11px] text-muted-foreground">
                     {o.storeCity}/{o.storeState} · {fmtDate(o.lastDate)}
                   </p>
                 </div>
@@ -589,7 +589,7 @@ function CompareSection({
                     {fmt(o.price)}
                   </p>
                   {o.pricePerUnit != null && o.unitLabel && (
-                    <p className="num text-[9.5px] text-muted-foreground">
+                    <p className="num text-[11px] text-muted-foreground">
                       {o.unitLabel} {o.pricePerUnit.toFixed(2).replace(".", ",")}
                     </p>
                   )}
@@ -599,7 +599,7 @@ function CompareSection({
           );
         })}
       </ul>
-      <p className="mt-2 text-[10px] text-muted-foreground">
+      <p className="mt-2 text-[11px] text-muted-foreground">
         Comparação baseada em produtos com mesmo código de barras ou nome equivalente.
         {slug ? "" : ""}
       </p>
@@ -661,7 +661,7 @@ function ReportCard({ report }: { report: MyPriceReport }) {
           <p className="text-[11.5px] font-semibold text-foreground">
             {REASON_LABEL[report.reason] ?? report.reason}
           </p>
-          <p className="mt-0.5 text-[10px] text-muted-foreground">
+          <p className="mt-0.5 text-[11px] text-muted-foreground">
             {new Date(report.createdAt).toLocaleDateString("pt-BR", {
               day: "2-digit",
               month: "short",
@@ -679,7 +679,7 @@ function ReportCard({ report }: { report: MyPriceReport }) {
           </p>
         </div>
         <span
-          className={`shrink-0 rounded-full px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-wider ${meta.classes}`}
+          className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider ${meta.classes}`}
         >
           {meta.label}
         </span>
@@ -698,12 +698,12 @@ function ReportCard({ report }: { report: MyPriceReport }) {
         </p>
       )}
       {report.actionTaken && (
-        <p className="mt-1.5 text-[10.5px] font-semibold text-primary">
+        <p className="mt-1.5 text-[11px] font-semibold text-primary">
           Ação: {ACTION_LABEL[report.actionTaken] ?? report.actionTaken}
         </p>
       )}
       {report.adminNotes && (
-        <p className="mt-1 rounded-lg bg-muted/60 px-2 py-1.5 text-[10.5px] text-foreground">
+        <p className="mt-1 rounded-lg bg-muted/60 px-2 py-1.5 text-[11px] text-foreground">
           <span className="font-semibold">Admin:</span> {report.adminNotes}
         </p>
       )}
@@ -824,7 +824,7 @@ function ImageGalleryDialog({
             draggable={false}
           />
         </div>
-        <p className="rounded-b-2xl bg-background/95 px-3 py-1.5 text-center text-[10px] text-muted-foreground">
+        <p className="rounded-b-2xl bg-background/95 px-3 py-1.5 text-center text-[11px] text-muted-foreground">
           Clique duplo para alternar zoom · Arraste para mover · ESC para fechar
         </p>
       </div>
@@ -980,7 +980,7 @@ function ReportDialog({
           </p>
         )}
 
-        <label className="mb-1 block text-[10.5px] font-semibold uppercase tracking-widest text-muted-foreground">
+        <label className="mb-1 block text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
           Motivo
         </label>
         <div className="mb-3 grid grid-cols-2 gap-1.5">
@@ -1001,7 +1001,7 @@ function ReportDialog({
           ))}
         </div>
 
-        <label className="mb-1 block text-[10.5px] font-semibold uppercase tracking-widest text-muted-foreground">
+        <label className="mb-1 block text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
           Preço correto (opcional)
         </label>
         <input
@@ -1013,7 +1013,7 @@ function ReportDialog({
           className="mb-3 w-full rounded-lg border border-border bg-surface px-3 py-2 text-[13px] text-foreground focus:border-primary focus:outline-none"
         />
 
-        <label className="mb-1 block text-[10.5px] font-semibold uppercase tracking-widest text-muted-foreground">
+        <label className="mb-1 block text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
           Observação (opcional)
         </label>
         <textarea
@@ -1024,7 +1024,7 @@ function ReportDialog({
           className="mb-3 w-full resize-none rounded-lg border border-border bg-surface px-3 py-2 text-[13px] text-foreground focus:border-primary focus:outline-none"
         />
 
-        <label className="mb-1 block text-[10.5px] font-semibold uppercase tracking-widest text-muted-foreground">
+        <label className="mb-1 block text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
           Evidência (opcional — foto ou PDF, máx 8MB)
         </label>
         <label className="mb-3 flex cursor-pointer items-center gap-2 rounded-lg border border-dashed border-border bg-surface px-3 py-2.5 text-[12px] text-muted-foreground hover:border-primary hover:text-primary">

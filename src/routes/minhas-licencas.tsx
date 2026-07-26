@@ -125,7 +125,7 @@ function MinhasLicencas() {
             <div className="font-mono text-[12.5px] text-foreground">
               {d.toLocaleDateString("pt-BR")}
             </div>
-            <div className="text-[10.5px] text-muted-foreground">
+            <div className="text-[11px] text-muted-foreground">
               {active ? "válida" : "expira"}
               {r.redeemed_at && ` · resg. ${new Date(r.redeemed_at).toLocaleDateString("pt-BR")}`}
             </div>

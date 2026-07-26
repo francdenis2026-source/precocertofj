@@ -210,7 +210,7 @@ function CategoryPage() {
               <Icon className="h-[18px] w-[18px] sm:h-5 sm:w-5" strokeWidth={2.2} aria-hidden />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="text-[10px] font-bold uppercase leading-none tracking-[0.18em] text-brand-gold">
+              <p className="text-[11px] font-bold uppercase leading-none tracking-[0.18em] text-brand-gold">
                 Categoria
               </p>
               <h1 className="mt-1 truncate font-serif text-[19px] font-semibold leading-[1.15] sm:text-[22px]">
@@ -424,7 +424,7 @@ function CategoryPage() {
                           {brl(p.minPrice)}
                         </span>
                         {p.storeCount > 1 && p.maxPrice > p.minPrice && (
-                          <span className="block text-[10.5px] tabular-nums text-muted-foreground">
+                          <span className="block text-[11px] tabular-nums text-muted-foreground">
                             até {brl(p.maxPrice)}
                           </span>
                         )}
@@ -816,7 +816,7 @@ function Stat({
 }) {
   return (
     <div className={align === "left" ? "text-left" : "text-right"}>
-      <dt className="text-[9.5px] font-semibold uppercase leading-none tracking-[0.14em] text-white/60">
+      <dt className="text-[11px] font-semibold uppercase leading-none tracking-[0.14em] text-white/60">
         {label}
       </dt>
       <dd className="mt-1 text-[15px] font-bold leading-none tabular-nums text-brand-gold">
@@ -892,7 +892,7 @@ function PlantaoStrip() {
     >
       <div className="flex flex-col gap-2 px-3 py-2.5 lg:flex-row lg:items-center lg:gap-3">
         <div className="flex min-w-0 flex-1 flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-2.5">
-          <span className="inline-flex h-6 w-fit shrink-0 items-center gap-1.5 rounded-full bg-brand-gold px-2.5 text-[9.5px] font-bold uppercase leading-none tracking-[0.14em] text-brand-navy">
+          <span className="inline-flex h-6 w-fit shrink-0 items-center gap-1.5 rounded-full bg-brand-gold px-2.5 text-[11px] font-bold uppercase leading-none tracking-[0.14em] text-brand-navy">
             <CalendarDays className="h-3 w-3" aria-hidden />
             Plantão{hoje ? ` · ${diaDaSemana(hoje)}` : ""}
           </span>

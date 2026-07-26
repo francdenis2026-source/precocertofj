@@ -259,12 +259,12 @@ export function CollaboratorUploadForm({ embedded = false }: { embedded?: boolea
                   </div>
                 )}
                 {f.uploaded && (
-                  <span className="absolute left-1 top-1 rounded bg-emerald-600 px-1.5 py-0.5 text-[10px] font-bold text-white">
+                  <span className="absolute left-1 top-1 rounded bg-emerald-600 px-1.5 py-0.5 text-[11px] font-bold text-white">
                     OK
                   </span>
                 )}
                 {f.error && (
-                  <span className="absolute inset-x-0 bottom-0 truncate bg-rose-600/90 px-1 py-0.5 text-[10px] font-medium text-white">
+                  <span className="absolute inset-x-0 bottom-0 truncate bg-rose-600/90 px-1 py-0.5 text-[11px] font-medium text-white">
                     {f.error}
                   </span>
                 )}

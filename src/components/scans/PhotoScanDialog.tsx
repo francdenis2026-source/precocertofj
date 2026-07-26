@@ -233,7 +233,7 @@ export function PhotoScanDialog({
               >
                 <div className="grid grid-cols-1 gap-2 sm:grid-cols-[1fr_120px_auto]">
                   <div>
-                    <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                    <Label className="text-[11px] uppercase tracking-widest text-muted-foreground">
                       Produto
                     </Label>
                     <Input
@@ -243,7 +243,7 @@ export function PhotoScanDialog({
                     />
                   </div>
                   <div>
-                    <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                    <Label className="text-[11px] uppercase tracking-widest text-muted-foreground">
                       Preço R$
                     </Label>
                     <Input

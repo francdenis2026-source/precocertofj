@@ -76,7 +76,7 @@ export function ProductImage({
     size === "sm" ? "h-8 w-8" : size === "lg" ? "h-16 w-16" : "h-12 w-12";
   const textSize =
     size === "sm"
-      ? "text-[10px]"
+      ? "text-[11px]"
       : size === "lg"
         ? "text-sm"
         : "text-[11px]";

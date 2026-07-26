@@ -201,7 +201,7 @@ function Stat({
     <div className="rounded-xl border border-border bg-surface p-3">
       <div className="flex items-center gap-1.5">
         {icon}
-        <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+        <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
           {label}
         </span>
       </div>

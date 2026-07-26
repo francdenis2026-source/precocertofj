@@ -33,7 +33,7 @@ export function PriceAuditAlert({ report }: { report: AuditReport | null }) {
         <X className="h-3.5 w-3.5" />
       </button>
 
-      <p className="flex items-center gap-2 font-mono text-[10px] font-bold uppercase tracking-widest">
+      <p className="flex items-center gap-2 font-mono text-[11px] font-bold uppercase tracking-widest">
         {critical ? (
           <AlertTriangle className="h-3.5 w-3.5 text-destructive" strokeWidth={2} />
         ) : (
@@ -53,7 +53,7 @@ export function PriceAuditAlert({ report }: { report: AuditReport | null }) {
       </ul>
 
       {report.issues.length > shown.length && (
-        <p className="mt-1.5 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+        <p className="mt-1.5 font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
           +{report.issues.length - shown.length} outra(s) inconsistência(s)
         </p>
       )}

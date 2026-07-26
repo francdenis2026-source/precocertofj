@@ -50,17 +50,17 @@ export function AiCostEstimate({
       }`}
     >
       <Coins className="h-3.5 w-3.5 shrink-0 text-primary" aria-hidden />
-      <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">
+      <span className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
         Custo estimado
       </span>
       <span className="font-display text-[12px] font-semibold tabular-nums text-foreground">
         ≈ {formatCredits(credits)} crédito{credits >= 2 ? "s" : ""}
       </span>
-      <span className="font-mono text-[10px] text-muted-foreground">
+      <span className="font-mono text-[11px] text-muted-foreground">
         · ~{promptTokens.toLocaleString("pt-BR")} tokens
       </span>
       {remaining !== null && (
-        <span className="font-mono text-[10px] text-muted-foreground">
+        <span className="font-mono text-[11px] text-muted-foreground">
           · {remaining} pergunta{remaining === 1 ? "" : "s"} na cota
         </span>
       )}

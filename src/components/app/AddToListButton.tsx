@@ -29,7 +29,7 @@ export function AddToListButton({ catalogId, lists, onAdd }: AddToListButtonProp
         <>
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
           <div className="absolute right-0 top-full z-50 mt-1 min-w-[200px] rounded-lg border border-border bg-card p-1 shadow-lg">
-            <p className="px-3 py-2 text-[10px] uppercase tracking-widest text-muted-foreground">
+            <p className="px-3 py-2 text-[11px] uppercase tracking-widest text-muted-foreground">
               Adicionar em
             </p>
             {lists.map((l) => (

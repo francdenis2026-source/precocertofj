@@ -63,7 +63,7 @@ function SharePage() {
           </div>
           <a
             href="/"
-            className="rounded-full border border-primary/30 px-3 py-1 font-mono text-[10px] uppercase tracking-widest text-primary hover:bg-primary/10"
+            className="rounded-full border border-primary/30 px-3 py-1 font-mono text-[11px] uppercase tracking-widest text-primary hover:bg-primary/10"
           >
             Abrir app
           </a>
@@ -81,7 +81,7 @@ function SharePage() {
         )}
         {result?.status === "expired" && (
           <div className="rounded-2xl border border-warning/40 bg-warning/10 p-8 text-center">
-            <p className="font-mono text-[10px] uppercase tracking-widest text-warning">
+            <p className="font-mono text-[11px] uppercase tracking-widest text-warning">
               Link expirado
             </p>
             <p className="mt-2 text-sm text-foreground">
@@ -93,7 +93,7 @@ function SharePage() {
             </p>
             <a
               href="/"
-              className="mt-4 inline-block rounded-full bg-neon px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest text-primary-foreground"
+              className="mt-4 inline-block rounded-full bg-neon px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-widest text-primary-foreground"
             >
               Abrir PreçoCerto
             </a>
@@ -131,11 +131,11 @@ function SharePage() {
                 </div>
                 <div className="min-w-0 flex-1">
                   {data.marketName && (
-                    <p className="flex items-center gap-1 font-mono text-[10px] uppercase tracking-widest text-primary">
+                    <p className="flex items-center gap-1 font-mono text-[11px] uppercase tracking-widest text-primary">
                       <ShoppingBag className="h-3 w-3" /> {data.marketName}
                     </p>
                   )}
-                  <p className="mt-1 font-mono text-[10px] text-muted-foreground">
+                  <p className="mt-1 font-mono text-[11px] text-muted-foreground">
                     Gerado em {new Date(data.createdAt).toLocaleString("pt-BR")} · Expira em{" "}
                     {new Date(data.expiresAt).toLocaleDateString("pt-BR")}
                   </p>
@@ -155,7 +155,7 @@ function SharePage() {
                         toast.error(e instanceof Error ? e.message : "Falha no PDF");
                       }
                     }}
-                    className="mt-3 inline-flex items-center gap-2 rounded-full bg-neon px-4 py-2 font-mono text-[10px] font-bold uppercase tracking-widest text-primary-foreground hover:brightness-110"
+                    className="mt-3 inline-flex items-center gap-2 rounded-full bg-neon px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-widest text-primary-foreground hover:brightness-110"
                   >
                     <Download className="h-3 w-3" /> Exportar PDF
                   </button>
@@ -201,7 +201,7 @@ function SharePage() {
 function Meta({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="rounded-lg border border-border bg-background px-2 py-1">
-      <p className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+      <p className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
         {label}
       </p>
       <p className="mt-0.5 truncate font-mono text-xs">{children}</p>

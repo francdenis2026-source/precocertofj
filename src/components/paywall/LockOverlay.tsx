@@ -176,7 +176,7 @@ export function LockOverlay({
         <LockMark compact={compact} />
 
         <span
-          className="relative inline-flex items-center gap-1 rounded-full border border-primary/25 bg-background/60 px-2 py-0.5 text-[9px] font-bold uppercase tracking-[0.22em] text-primary shadow-sm backdrop-blur"
+          className="relative inline-flex items-center gap-1 rounded-full border border-primary/25 bg-background/60 px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.22em] text-primary shadow-sm backdrop-blur"
           aria-hidden="true"
         >
           <span className="h-1 w-1 rounded-full bg-primary" />
@@ -216,7 +216,7 @@ export function LockOverlay({
           aria-label="Criar conta grátis para ver este preço"
           className={
             "relative inline-flex items-center justify-center rounded-full bg-primary font-bold text-primary-foreground shadow-[0_6px_18px_-6px_color-mix(in_oklab,var(--color-primary)_60%,transparent),inset_0_1px_0_0_color-mix(in_oklab,white_30%,transparent)] transition hover:-translate-y-0.5 hover:bg-primary/95 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background " +
-            (compact ? "px-3 py-1.5 text-[10.5px]" : "mt-1 px-5 py-2.5 text-xs")
+            (compact ? "px-3 py-1.5 text-[11px]" : "mt-1 px-5 py-2.5 text-xs")
           }
         >
           Criar conta grátis
@@ -224,7 +224,7 @@ export function LockOverlay({
         {!compact && (
           <a
             href={href}
-            className="relative rounded text-[10.5px] text-muted-foreground underline-offset-2 hover:text-foreground hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            className="relative rounded text-[11px] text-muted-foreground underline-offset-2 hover:text-foreground hover:underline focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
           >
             Já tenho conta
           </a>

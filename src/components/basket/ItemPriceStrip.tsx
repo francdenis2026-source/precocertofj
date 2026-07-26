@@ -46,12 +46,12 @@ export function ItemPriceStrip({
   return (
     <div className={"relative " + className}>
       <div className="mb-1 flex items-center justify-between gap-2 px-0.5">
-        <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground">
+        <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
           Comparar mercados · {rows.length}
         </p>
         {spread > 0 ? (
           <span
-            className="rounded-full border border-accent-strong/40 bg-accent/10 px-1.5 py-[1px] font-mono text-[8.5px] uppercase tracking-[0.16em] text-accent-strong"
+            className="rounded-full border border-accent-strong/40 bg-accent/10 px-1.5 py-[1px] font-mono text-[11px] uppercase tracking-[0.16em] text-accent-strong"
             title="Diferença entre a mais barata e a mais cara"
           >
             variação {spread.toFixed(0)}%
@@ -78,7 +78,7 @@ export function ItemPriceStrip({
                     aria-hidden="true"
                   />
                 ) : null}
-                <span className="truncate font-mono text-[9.5px] uppercase tracking-[0.12em] text-muted-foreground">
+                <span className="truncate font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
                   {r.establishmentName}
                 </span>
               </div>
@@ -90,7 +90,7 @@ export function ItemPriceStrip({
               >
                 {fmt(r.price)}
               </p>
-              <p className="mt-0.5 font-mono text-[8.5px] uppercase tracking-[0.14em] text-muted-foreground">
+              <p className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
                 {isCheapest ? "menor" : `+${pctVsMin.toFixed(0)}%`}
               </p>
             </>
@@ -123,7 +123,7 @@ export function ItemPriceStrip({
               }
             >
               {content}
-              <span className="mt-1 inline-flex items-center gap-1 rounded border border-border bg-surface px-1 py-[1px] font-mono text-[8px] uppercase tracking-[0.16em] text-muted-foreground">
+              <span className="mt-1 inline-flex items-center gap-1 rounded border border-border bg-surface px-1 py-[1px] font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                 <Repeat className="h-2.5 w-2.5" aria-hidden="true" /> escolher
               </span>
             </button>

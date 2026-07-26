@@ -152,12 +152,12 @@ export function SearchInterpretationSummary({
       role="status"
       aria-label="Como sua busca foi interpretada"
     >
-      <span className="font-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground">
+      <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
         Entendi
       </span>
 
       {sizeLabel && !editing ? (
-        <span className="inline-flex items-center gap-1 rounded-full border border-accent-strong/40 bg-accent/10 px-2 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide text-accent-strong">
+        <span className="inline-flex items-center gap-1 rounded-full border border-accent-strong/40 bg-accent/10 px-2 py-0.5 font-mono text-[11px] font-semibold uppercase tracking-wide text-accent-strong">
           <Scale className="h-3 w-3" strokeWidth={2} aria-hidden="true" />
           Buscando {sizeLabel}
           {onQueryChange ? (
@@ -196,7 +196,7 @@ export function SearchInterpretationSummary({
             aria-label="Unidade"
             value={editUnit}
             onChange={(e) => setEditUnit(e.target.value as UnitChoice)}
-            className="border-0 bg-transparent font-mono text-[10px] font-semibold uppercase text-foreground focus:outline-none"
+            className="border-0 bg-transparent font-mono text-[11px] font-semibold uppercase text-foreground focus:outline-none"
           >
             {UNIT_OPTIONS.map((u) => (
               <option key={u} value={u}>{u}</option>
@@ -227,7 +227,7 @@ export function SearchInterpretationSummary({
           type="button"
           onClick={() => removeToken(t)}
           disabled={!onQueryChange}
-          className="group inline-flex h-[18px] items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-1.5 font-mono text-[9.5px] font-semibold uppercase tracking-wide text-primary transition hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive disabled:cursor-default disabled:hover:border-primary/30 disabled:hover:bg-primary/10 disabled:hover:text-primary"
+          className="group inline-flex h-[18px] items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-1.5 font-mono text-[11px] font-semibold uppercase tracking-wide text-primary transition hover:border-destructive/40 hover:bg-destructive/10 hover:text-destructive disabled:cursor-default disabled:hover:border-primary/30 disabled:hover:bg-primary/10 disabled:hover:text-primary"
           aria-label={onQueryChange ? `Remover "${t}" da busca` : `Termo reconhecido: ${t}`}
         >
           <span>{t}</span>
@@ -242,7 +242,7 @@ export function SearchInterpretationSummary({
       ))}
 
       {tokens.length === 0 && !sizeLabel ? (
-        <span className="font-mono text-[10px] text-muted-foreground">
+        <span className="font-mono text-[11px] text-muted-foreground">
           nada específico — refine sua busca
         </span>
       ) : null}
@@ -251,7 +251,7 @@ export function SearchInterpretationSummary({
         <button
           type="button"
           onClick={onEdit}
-          className="ml-auto inline-flex items-center gap-1 rounded-full border border-border bg-background px-2 py-0.5 font-mono text-[9.5px] font-semibold uppercase tracking-wide text-muted-foreground transition hover:border-primary/40 hover:text-primary"
+          className="ml-auto inline-flex items-center gap-1 rounded-full border border-border bg-background px-2 py-0.5 font-mono text-[11px] font-semibold uppercase tracking-wide text-muted-foreground transition hover:border-primary/40 hover:text-primary"
           aria-label="Corrigir busca"
         >
           <Pencil className="h-2.5 w-2.5" strokeWidth={2} />

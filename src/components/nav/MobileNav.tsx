@@ -95,12 +95,12 @@ export function MobileNav() {
                   strokeWidth={active ? 2.4 : 2}
                 />
                 {showBadge && (
-                  <span className="absolute -right-1.5 -top-1 inline-flex h-[14px] min-w-[14px] items-center justify-center rounded-full bg-accent px-1 text-[9px] font-bold leading-none text-accent-foreground ring-2 ring-background">
+                  <span className="absolute -right-1.5 -top-1 inline-flex h-[14px] min-w-[14px] items-center justify-center rounded-full bg-accent px-1 text-[11px] font-bold leading-none text-accent-foreground ring-2 ring-background">
                     {cartCount > 99 ? "99+" : cartCount}
                   </span>
                 )}
               </span>
-              <span className="text-[10.5px] font-semibold leading-none tracking-tight">
+              <span className="text-[11px] font-semibold leading-none tracking-tight">
                 {it.label}
               </span>
             </Link>
@@ -122,7 +122,7 @@ export function MobileNav() {
               <span aria-hidden className="absolute inset-x-3 top-0 h-0.5 rounded-b-full bg-primary" />
             )}
             <User className="h-[22px] w-[22px]" strokeWidth={isAppActive ? 2.4 : 2} />
-            <span className="text-[10.5px] font-semibold leading-none tracking-tight">Painel</span>
+            <span className="text-[11px] font-semibold leading-none tracking-tight">Painel</span>
           </Link>
         ) : (
           <a
@@ -131,7 +131,7 @@ export function MobileNav() {
             className="group flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-1.5 text-muted-foreground transition-colors hover:text-foreground"
           >
             <User className="h-[22px] w-[22px]" strokeWidth={2} />
-            <span className="text-[10.5px] font-semibold leading-none tracking-tight">Entrar</span>
+            <span className="text-[11px] font-semibold leading-none tracking-tight">Entrar</span>
           </a>
         )}
       </div>

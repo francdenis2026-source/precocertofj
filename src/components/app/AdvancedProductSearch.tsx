@@ -181,7 +181,7 @@ export function AdvancedProductSearch() {
             <SlidersHorizontal className="h-4 w-4" aria-hidden="true" />
             Filtros
             {activeChips.length > 0 && (
-              <span className="ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary-foreground/20 px-1.5 text-[10px] font-bold">
+              <span className="ml-1 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-primary-foreground/20 px-1.5 text-[11px] font-bold">
                 {activeChips.length}
               </span>
             )}
@@ -375,7 +375,7 @@ export function AdvancedProductSearch() {
                     <p className="line-clamp-2 text-xs font-semibold text-foreground md:text-sm">
                       {p.displayName}
                     </p>
-                    <div className="mt-0.5 flex flex-wrap items-center gap-1 text-[10px] text-muted-foreground">
+                    <div className="mt-0.5 flex flex-wrap items-center gap-1 text-[11px] text-muted-foreground">
                       {p.brand && (
                         <span className="inline-flex items-center gap-0.5">
                           <Tag className="h-2.5 w-2.5" aria-hidden="true" />
@@ -390,7 +390,7 @@ export function AdvancedProductSearch() {
                     </div>
                     <div className="mt-1 flex items-baseline justify-between gap-2">
                       <div>
-                        <span className="text-[10px] font-semibold uppercase tracking-wide text-muted-foreground">
+                        <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                           A partir de
                         </span>
                         <p className="font-display text-base font-bold tabular-nums text-foreground md:text-lg">
@@ -398,7 +398,7 @@ export function AdvancedProductSearch() {
                         </p>
                       </div>
                       {p.storesCount > 0 && (
-                        <span className="inline-flex items-center gap-0.5 text-[10px] text-muted-foreground">
+                        <span className="inline-flex items-center gap-0.5 text-[11px] text-muted-foreground">
                           <Store className="h-2.5 w-2.5" aria-hidden="true" />
                           {p.storesCount}
                         </span>

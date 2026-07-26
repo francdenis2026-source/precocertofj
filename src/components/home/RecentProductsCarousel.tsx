@@ -128,7 +128,7 @@ export function RecentProductsCarousel() {
     >
       <header className="mb-2.5 flex items-end justify-between gap-3">
         <div className="min-w-0">
-          <p className="flex items-center gap-1.5 text-[10.5px] font-semibold uppercase tracking-[0.18em] text-primary">
+          <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
             <Sparkles className="h-3 w-3" strokeWidth={2.4} aria-hidden />
             Novidades no catálogo
           </p>
@@ -189,12 +189,12 @@ export function RecentProductsCarousel() {
                   />
 
                   {/* NEW badge */}
-                  <span className="absolute left-2 top-2 z-10 inline-flex items-center gap-1 rounded-full bg-foreground/90 px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-wider text-background backdrop-blur">
+                  <span className="absolute left-2 top-2 z-10 inline-flex items-center gap-1 rounded-full bg-foreground/90 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-background backdrop-blur">
                     <Clock3 className="h-2.5 w-2.5" strokeWidth={2.8} aria-hidden />
                     {timeAgo(p.createdAt)}
                   </span>
                   {savings >= 8 && (
-                    <span className="absolute right-2 top-2 z-10 rounded-full bg-primary px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-wider text-primary-foreground shadow">
+                    <span className="absolute right-2 top-2 z-10 rounded-full bg-primary px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-primary-foreground shadow">
                       -{savings}%
                     </span>
                   )}
@@ -211,7 +211,7 @@ export function RecentProductsCarousel() {
 
                   <div className="space-y-1 p-2.5">
                     {p.brand && (
-                      <p className="truncate text-[9.5px] font-semibold uppercase tracking-wider text-muted-foreground">
+                      <p className="truncate text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                         {p.brand}
                       </p>
                     )}
@@ -225,19 +225,19 @@ export function RecentProductsCarousel() {
                             {formatBRL(price)}
                           </span>
                           {avg != null && avg > price && (
-                            <span className="text-[10px] font-medium text-muted-foreground line-through">
+                            <span className="text-[11px] font-medium text-muted-foreground line-through">
                               {formatBRL(avg)}
                             </span>
                           )}
                         </div>
                         {store && (
-                          <p className="truncate text-[10px] text-muted-foreground">
+                          <p className="truncate text-[11px] text-muted-foreground">
                             em <span className="font-semibold text-foreground/80">{store}</span>
                           </p>
                         )}
                       </div>
                     ) : (
-                      <p className="pt-0.5 text-[10.5px] font-medium text-muted-foreground">
+                      <p className="pt-0.5 text-[11px] font-medium text-muted-foreground">
                         Preços em breve
                       </p>
                     )}

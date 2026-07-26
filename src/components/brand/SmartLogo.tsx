@@ -216,7 +216,7 @@ export function SmartLogo({
           />
         </div>
       ) : (
-        <span className="px-1.5 text-center text-[10px] font-bold uppercase leading-[1.05] tracking-[0.08em] text-slate-700">
+        <span className="px-1.5 text-center text-[11px] font-bold uppercase leading-[1.05] tracking-[0.08em] text-slate-700">
           {name}
         </span>
       )}

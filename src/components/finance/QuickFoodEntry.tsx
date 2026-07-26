@@ -251,7 +251,7 @@ export function QuickFoodEntry({
                       aria-hidden="true"
                     />
                     <span className="text-sm font-semibold leading-none">{m.label}</span>
-                    <span className="text-[10.5px] leading-tight text-muted-foreground">
+                    <span className="text-[11px] leading-tight text-muted-foreground">
                       {m.subtitle}
                     </span>
                     {active && (

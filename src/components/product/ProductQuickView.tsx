@@ -126,7 +126,7 @@ export function ProductQuickView({
             <div className="mb-3 flex items-center gap-2.5 rounded-lg border border-brand-gold/40 bg-brand-gold/10 p-2.5">
               <StoreBadge name={cheapest.marketName} logoUrl={cheapestLogo} size="xs" />
               <div className="min-w-0 flex-1">
-                <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-brand-gold">
+                <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-gold">
                   Menor preço
                 </p>
                 <p className="truncate text-[12.5px] font-semibold">{cheapest.marketName}</p>
@@ -190,7 +190,7 @@ export function ProductQuickView({
                     <span className="block truncate text-[12.5px] font-semibold">
                       {m.marketName}
                     </span>
-                    <span className="block truncate text-[10.5px] text-muted-foreground">
+                    <span className="block truncate text-[11px] text-muted-foreground">
                       {[m.neighborhood, m.city].filter(Boolean).join(" · ") || "Feijó/AC"} ·{" "}
                       {new Date(m.lastSeen).toLocaleDateString("pt-BR")}
                     </span>
@@ -200,7 +200,7 @@ export function ProductQuickView({
                       {brl(m.priceMin)}
                     </span>
                     {m.priceMax > m.priceMin && (
-                      <span className="block text-[10px] tabular-nums text-muted-foreground">
+                      <span className="block text-[11px] tabular-nums text-muted-foreground">
                         até {brl(m.priceMax)}
                       </span>
                     )}

@@ -70,7 +70,7 @@ export function FinalCTASection() {
           <div className="relative px-4 py-3.5 sm:px-6 sm:py-4">
             <div className="mx-auto flex max-w-2xl flex-col items-center gap-1.5 text-center">
               <span
-                className="inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.2em]"
+                className="inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.2em]"
                 style={{
                   background: `color-mix(in oklab, ${P.gold} 12%, transparent)`,
                   borderColor: `color-mix(in oklab, ${P.gold} 45%, transparent)`,

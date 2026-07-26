@@ -35,7 +35,7 @@ export function MobileAccordion({
           <div className="min-w-0">
             {eyebrow && (
               <p
-                className="text-[9.5px] font-bold uppercase tracking-[0.2em]"
+                className="text-[11px] font-bold uppercase tracking-[0.2em]"
                 style={{ color: "var(--pc-home-gold)" }}
               >
                 {eyebrow}

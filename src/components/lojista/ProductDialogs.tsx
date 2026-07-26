@@ -437,11 +437,11 @@ export function HistorySheet({
 
         <div className="mt-4 flex flex-wrap items-end gap-2 rounded-lg border border-border bg-muted/30 p-3">
           <div className="flex-1 min-w-[130px]">
-            <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">De</Label>
+            <Label className="text-[11px] uppercase tracking-widest text-muted-foreground">De</Label>
             <Input type="date" value={from} onChange={(e) => setFrom(e.target.value)} />
           </div>
           <div className="flex-1 min-w-[130px]">
-            <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">Até</Label>
+            <Label className="text-[11px] uppercase tracking-widest text-muted-foreground">Até</Label>
             <Input type="date" value={to} onChange={(e) => setTo(e.target.value)} />
           </div>
           {(from || to) && (
@@ -540,7 +540,7 @@ export function HistorySheet({
                     </span>
                   </a>
                 )}
-                <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
+                <p className="mt-1 font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
                   {new Date(h.createdAt).toLocaleString("pt-BR")} · {h.author}
                 </p>
               </li>

@@ -215,7 +215,7 @@ export function ProductQuickActions({
                 onClick={() => setListOpen(false)}
               />
               <div className="absolute right-0 top-full z-50 mt-1 min-w-52 rounded-lg border border-border bg-card p-1 shadow-lg">
-                <p className="px-3 py-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                <p className="px-3 py-2 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
                   Enviar para
                 </p>
                 {(listsQuery.data ?? []).length > 0 ? (
