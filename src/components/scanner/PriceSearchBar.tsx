@@ -1386,6 +1386,35 @@ type PricePoint = {
   when: string;
 };
 
+/** Dias inteiros desde a coleta do preço (0 = hoje). */
+function daysSince(when: string): number {
+  const t = new Date(when).getTime();
+  if (!Number.isFinite(t)) return Number.POSITIVE_INFINITY;
+  return Math.max(0, Math.floor((Date.now() - t) / 86_400_000));
+}
+
+/** Rótulo curto de recência: "hoje", "há 3 dias", "há 2 meses". */
+function freshnessLabel(when: string): string {
+  const d = daysSince(when);
+  if (!Number.isFinite(d)) return "sem data";
+  if (d <= 0) return "hoje";
+  if (d === 1) return "ontem";
+  if (d < 30) return `há ${d} dias`;
+  const months = Math.round(d / 30);
+  if (months < 12) return `há ${months} ${months === 1 ? "mês" : "meses"}`;
+  const years = Math.round(months / 12);
+  return `há ${years} ano${years > 1 ? "s" : ""}`;
+}
+
+/** Classe de disponibilidade estimada pela recência da coleta. */
+function availabilityTone(when: string): "fresh" | "recent" | "stale" {
+  const d = daysSince(when);
+  if (d <= 7) return "fresh";
+  if (d <= 30) return "recent";
+  return "stale";
+}
+
+
 /**
  * Score de relevância para ordenação de grupos de produto:
  * - Match exato de token no nome → 4 pts
