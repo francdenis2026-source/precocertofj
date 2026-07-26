@@ -228,34 +228,18 @@ function HomePage() {
     navigate({ to: "/buscar", search: { q: name } as any });
   };
 
-  const metrics = [
-    {
-      kind: "markets" as const,
-      value: stats.establishments != null ? String(stats.establishments) : "—",
-      label: "Mercados parceiros",
-      short: "Mercados",
-      Icon: ShieldCheck,
-    },
-    {
-      kind: "products" as const,
-      value:
-        stats.totalItems != null && stats.totalItems > 0
-          ? stats.totalItems.toLocaleString("pt-BR")
-          : stats.products != null
-            ? stats.products.toLocaleString("pt-BR")
-            : "—",
-      label: "Preços cadastrados",
-      short: "Preços",
-      Icon: Package,
-    },
-    {
-      kind: "savings" as const,
-      value: economy?.avgSavingsPct ? `${economy.avgSavingsPct}%` : "—",
-      label: "Economia média",
-      short: "Economia",
-      Icon: TrendingDown,
-    },
-  ];
+  // Painel ao vivo: lógica pura e testada (src/lib/live-panel.ts) — placeholder
+  // "—" + mensagem amigável quando a consulta falha, nunca números inventados.
+  const livePanel = buildLivePanel({
+    stats,
+    economy,
+    statsLoading: statsQ.isLoading,
+    economyLoading: economyQ.isLoading,
+    statsError: statsQ.isError,
+    economyError: economyQ.isError,
+  });
+  const METRIC_ICONS = { markets: ShieldCheck, products: Package, savings: TrendingDown } as const;
+  const metrics = livePanel.metrics.map((m) => ({ ...m, Icon: METRIC_ICONS[m.kind] }));
 
   return (
     <div
