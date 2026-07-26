@@ -89,7 +89,7 @@ function ProductDetailPage() {
   };
 
   return (
-    <div className="min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1.5rem)] text-foreground">
+    <div className="min-h-[100svh] bg-background pb-[calc(var(--mobile-nav-height)+1.5rem)] text-foreground">
       <Breadcrumbs
         items={[
           { label: "Pesquisa", to: "/buscar" },

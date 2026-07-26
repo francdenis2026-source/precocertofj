@@ -43,7 +43,7 @@ function FavoritosPage() {
   });
 
   return (
-    <div className="min-h-dvh bg-background text-foreground">
+    <div className="min-h-svh bg-background text-foreground">
       <SiteHeader />
       <main className="mx-auto w-full max-w-4xl px-4 pt-4 pb-24 sm:pt-8 md:pb-12">
         <header className="mb-4 flex items-center gap-3 sm:mb-6">

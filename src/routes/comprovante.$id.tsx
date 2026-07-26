@@ -98,7 +98,7 @@ function ReceiptPage() {
   }
 
   return (
-    <div className="min-h-[100dvh] bg-muted/30 pb-16 print:bg-white">
+    <div className="min-h-[100svh] bg-muted/30 pb-16 print:bg-white">
       {/* Toolbar (hidden on print) */}
       <div className="sticky top-0 z-10 border-b border-border bg-background/80 backdrop-blur print:hidden">
         <div className="mx-auto flex max-w-3xl items-center justify-between gap-3 px-4 py-3">

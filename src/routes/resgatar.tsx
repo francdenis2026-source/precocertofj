@@ -320,7 +320,7 @@ function RedeemPage() {
 
   return (
     <div
-      className="min-h-[100dvh]"
+      className="min-h-[100svh]"
       style={{ background: "#f5f6fa", fontFamily: "'Figtree', system-ui, sans-serif", color: INK }}
     >
       {/* Header slim */}

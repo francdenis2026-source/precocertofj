@@ -128,7 +128,7 @@ function ProductDetailPage() {
       : 0;
 
   return (
-    <div className="min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1.5rem)] text-foreground">
+    <div className="min-h-[100svh] bg-background pb-[calc(var(--mobile-nav-height)+1.5rem)] text-foreground">
       <div className="mx-auto max-w-md px-4 pt-[max(env(safe-area-inset-top),0.75rem)]">
         <Link
           to="/loja/$id"

@@ -58,7 +58,7 @@ function DetailPage() {
       : "bg-surface border border-border text-foreground";
 
   return (
-    <div className="min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
+    <div className="min-h-[100svh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
       <div className="mx-auto max-w-md px-3 py-4 sm:px-4">
         <header className="mb-4 flex items-center gap-3">
           <Link

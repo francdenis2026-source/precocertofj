@@ -78,7 +78,7 @@ function WelcomePage() {
 
   return (
     <div
-      className="relative flex min-h-dvh w-full items-center justify-center overflow-hidden px-4 py-8"
+      className="relative flex min-h-svh w-full items-center justify-center overflow-hidden px-4 py-8"
       style={{
         background: `radial-gradient(ellipse at top, ${NAVY_LIGHT} 0%, ${NAVY} 45%, ${NAVY_DEEP} 100%)`,
         fontFamily: BODY,

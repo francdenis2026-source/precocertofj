@@ -96,7 +96,7 @@ function CategoryPage() {
 
   if (!def) {
     return (
-      <div className="min-h-dvh bg-background text-foreground">
+      <div className="min-h-svh bg-background text-foreground">
         <SiteHeader />
         <main className="mx-auto max-w-3xl px-4 py-16 text-center">
           <h1 className="font-serif text-[24px] font-semibold">Categoria não encontrada</h1>
@@ -110,7 +110,7 @@ function CategoryPage() {
   }
 
   return (
-    <div className="min-h-dvh bg-background text-foreground">
+    <div className="min-h-svh bg-background text-foreground">
       <SiteHeader />
       <main className="mx-auto max-w-6xl px-3 pb-14 pt-4 sm:px-6">
         {/* Hero compacto */}

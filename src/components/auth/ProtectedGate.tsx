@@ -74,7 +74,7 @@ export function ProtectedGate({ children }: { children: React.ReactNode }) {
     accountQuery.data?.status === "expired"
   ) {
     return (
-      <div className="flex min-h-[100dvh] items-center justify-center bg-background px-6">
+      <div className="flex min-h-[100svh] items-center justify-center bg-background px-6">
         <div className="relative w-full max-w-sm overflow-hidden rounded-3xl bg-primary p-8 text-primary-foreground">
           <div
             className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-accent"
@@ -101,7 +101,7 @@ export function ProtectedGate({ children }: { children: React.ReactNode }) {
 
   if (hasSession && accountQuery.isError) {
     return (
-      <div className="flex min-h-[100dvh] items-center justify-center bg-background px-6">
+      <div className="flex min-h-[100svh] items-center justify-center bg-background px-6">
         <div className="w-full max-w-sm rounded-3xl border border-border bg-card p-8 text-center">
           <p className="font-display text-xl text-foreground">
             Não foi possível carregar sua conta

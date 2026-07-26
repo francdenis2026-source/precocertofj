@@ -43,7 +43,7 @@ function FarmaciasPage() {
   const amanha = hoje && PLANTOES[hoje + 1] ? farmaciaPorId(PLANTOES[hoje + 1]) : null;
 
   return (
-    <div className="min-h-dvh bg-background text-foreground">
+    <div className="min-h-svh bg-background text-foreground">
       <SiteHeader />
       <main className="mx-auto max-w-5xl px-4 pb-16 pt-6">
         <Link

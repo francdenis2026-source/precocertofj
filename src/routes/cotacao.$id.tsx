@@ -72,7 +72,7 @@ function PublicQuotePage() {
     typeof window !== "undefined" ? `${window.location.origin}/cotacao/${data.id}` : null;
 
   return (
-    <div className="min-h-[100dvh] bg-background pb-12 text-foreground">
+    <div className="min-h-[100svh] bg-background pb-12 text-foreground">
       <div className="mx-auto max-w-2xl px-4 py-6">
         <Link
           to="/"
