@@ -175,7 +175,7 @@ export function MarketEditorialCard({
         </div>
 
         {/* Linha única de dados */}
-        <dl className="mx-3 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border/60 py-1.5 text-[11.5px] text-foreground/75">
+        <dl className="mx-3 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border/60 py-1.5 text-[11.5px] text-foreground/80">
           <div className="flex min-w-0 items-center gap-1">
             <Package className="h-3.5 w-3.5 shrink-0 text-[var(--pc-gold-ink)]" aria-hidden />
             <dt className="sr-only">Produtos cadastrados</dt>
@@ -187,7 +187,7 @@ export function MarketEditorialCard({
             <Radio
               className={cn(
                 "h-3.5 w-3.5 shrink-0",
-                freshnessLive ? "text-emerald-600 dark:text-emerald-400" : "text-foreground/50",
+                freshnessLive ? "text-emerald-600 dark:text-emerald-400" : "text-foreground/65",
               )}
               aria-hidden
             />
@@ -220,7 +220,7 @@ export function MarketEditorialCard({
 
         {/* Rodapé */}
         <div className="mt-auto flex items-center justify-between gap-2 px-3 py-2">
-          <span className="min-w-0 truncate text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/65">
+          <span className="min-w-0 truncate text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/75">
             {topCategory ?? "Ver catálogo"}
           </span>
           <span className="inline-flex shrink-0 items-center gap-1 rounded-md bg-brand-gold/16 px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-[0.1em] text-[var(--pc-gold-ink)] transition-colors group-hover:bg-brand-gold group-hover:text-brand-navy">
