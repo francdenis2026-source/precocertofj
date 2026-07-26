@@ -9,7 +9,7 @@ import {
   storeInCategory,
   type CategoryDef,
 } from "@/lib/category-hub";
-import { nEstablishment } from "@/lib/establishment-slug.functions";
+import { slugifyEstablishment as nEstablishment } from "@/lib/establishment-slug.functions";
 
 export type HubStore = {
   id: string;
