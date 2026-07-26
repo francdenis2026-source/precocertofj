@@ -127,21 +127,22 @@ export function StoreBadge({
     <span
 
       className={cn(
-        "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full ring-2 ring-offset-1 ring-offset-background",
+        "relative inline-grid shrink-0 place-items-center overflow-hidden rounded-lg border bg-[oklch(0.995_0.004_95)] p-[3px]",
         dim,
         className,
       )}
-      style={{ ["--tw-ring-color" as string]: color }}
+      style={{ borderColor: `color-mix(in oklab, ${color} 45%, transparent)` }}
       aria-hidden
     >
       <img
         src={resolvedLogo ?? undefined}
         alt=""
         loading="lazy"
-        className="h-full w-full object-cover"
+        className="h-full w-full object-contain object-center"
       />
     </span>
   ) : (
+
     <span
       className={cn(
         "inline-flex shrink-0 items-center justify-center rounded-full font-mono font-bold",
