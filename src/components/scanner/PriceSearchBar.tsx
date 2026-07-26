@@ -1948,13 +1948,6 @@ function MarketBucketSection({
   const visible = expanded ? rows : rows.slice(0, COLLAPSED);
   const hiddenCount = rows.length - visible.length;
   const bar = brandColor && /^#[0-9A-Fa-f]{6}$/.test(brandColor) ? brandColor : null;
-  const initials = marketName
-    .replace(/[^\p{L}\s]/gu, "")
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((w) => w[0]?.toUpperCase() ?? "")
-    .join("");
 
   return (
     <section
