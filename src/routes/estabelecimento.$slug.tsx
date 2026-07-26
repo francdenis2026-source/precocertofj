@@ -183,7 +183,7 @@ function EstablishmentPage() {
   // Sincroniza o termo digitado com a URL (debounce) para compartilhar/voltar.
   useEffect(() => {
     if (q === search.q) return;
-    const t = setTimeout(() => setSearch({ q }), 350);
+    const t = setTimeout(() => setSearch({ q }, { replace: true }), 350);
     return () => clearTimeout(t);
   }, [q]);
 
