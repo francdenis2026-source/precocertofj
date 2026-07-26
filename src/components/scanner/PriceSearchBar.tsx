@@ -8,8 +8,10 @@ import {
   getSearchHistory,
   pushSearchHistory,
   removeSearchHistory,
+  setSearchHistoryPersistence,
   type SearchHistoryEntry,
 } from "@/lib/search-history";
+
 import { Clock, Crown, Search, ShoppingBag, Sparkles, TrendingDown, X } from "lucide-react";
 import { FairPriceBadge } from "@/components/product/FairPriceBadge";
 import { HighlightMatch } from "@/components/search/HighlightMatch";
