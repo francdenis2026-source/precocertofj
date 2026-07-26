@@ -136,7 +136,12 @@ export function LockOverlay({
 
   return (
     <div
-      className="relative isolate h-full w-full overflow-hidden rounded-[inherit]"
+      className={
+        "relative isolate h-full w-full overflow-hidden rounded-[inherit] " +
+        // O conteúdo real fica em camada absoluta; sem altura mínima o card
+        // colapsaria para 0px dentro de grids com linhas automáticas.
+        (variant === "compact" ? "min-h-[184px]" : "min-h-[240px]")
+      }
       role="group"
       aria-label={`${heading}. ${helper}`}
     >
