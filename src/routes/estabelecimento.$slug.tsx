@@ -518,10 +518,12 @@ function EstablishmentPage() {
               cuts={cuts}
               onHistory={(p) => setHistoryFor(p)}
               onAlert={(p) => createAlert(p)}
+              onOpen={(p) => setQuickView(p)}
             />
-            <div className="mt-10">
+            <div className="mt-8">
               <PreparoDicas />
             </div>
+
           </>
         )}
 

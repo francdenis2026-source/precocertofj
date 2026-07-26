@@ -1,8 +1,9 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { ArrowLeft, Beef, MapPin, Store } from "lucide-react";
-import { getPublicStoreCatalog } from "@/lib/stores-public.functions";
+import { getPublicStoreCatalog, type PublicStoreProduct } from "@/lib/stores-public.functions";
+import { ProductQuickView } from "@/components/product/ProductQuickView";
 import { resolveEstablishmentBySlug } from "@/lib/establishment-slug.functions";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
@@ -74,6 +75,8 @@ function ButcherPage() {
   const { storeId, slug } = Route.useLoaderData();
   const { data } = useSuspenseQuery(storeQuery(storeId));
   const { cuts } = useMemo(() => splitButcherCuts(data.products), [data.products]);
+  const [quickView, setQuickView] = useState<PublicStoreProduct | null>(null);
+
 
   return (
     <div className="min-h-svh bg-background text-foreground">
@@ -99,11 +102,16 @@ function ButcherPage() {
 
         {cuts.length > 0 ? (
           <>
-            <ButcherCounter storeName={data.store.name} cuts={cuts} />
-            <div className="mt-10">
+            <ButcherCounter
+              storeName={data.store.name}
+              cuts={cuts}
+              onOpen={(p) => setQuickView(p)}
+            />
+            <div className="mt-8">
               <PreparoDicas />
             </div>
           </>
+
         ) : (
           <EmptyState
             className="mt-10"
@@ -119,6 +127,22 @@ function ButcherPage() {
           separado e não é contabilizado como novo estabelecimento na plataforma.
         </p>
       </main>
+      <ProductQuickView
+        product={
+          quickView
+            ? {
+                name: quickView.productName,
+                unit: quickView.unitLabel,
+                minPrice: quickView.price,
+                maxPrice: quickView.price,
+                cheapestStore: data.store.name,
+                storeCount: 1,
+                updatedAt: quickView.lastDate,
+              }
+            : null
+        }
+        onClose={() => setQuickView(null)}
+      />
       <SiteFooter />
     </div>
   );
