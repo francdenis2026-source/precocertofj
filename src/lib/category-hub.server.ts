@@ -91,25 +91,32 @@ export async function buildCategoryHub(slug: string): Promise<CategoryHub> {
     estabs.filter((e) => storeInCategory(def, { name: e.name, kind: e.kind })).map((e) => e.id),
   );
 
-  const { data: scansRaw } = await (supabaseAdmin.from("scans" as never) as never as {
-    select: (s: string) => {
-      not: (
-        c: string,
-        op: string,
-        v: unknown,
-      ) => {
-        order: (c: string, o: { ascending: boolean }) => {
-          limit: (n: number) => Promise<{ data: ScanRow[] | null }>;
+  // PostgREST limita 1000 linhas por requisição → pagina até esgotar.
+  const scans: ScanRow[] = [];
+  const PAGE = 1000;
+  for (let page = 0; page < 12; page++) {
+    const { data: chunk } = await (supabaseAdmin.from("scans" as never) as never as {
+      select: (s: string) => {
+        not: (
+          c: string,
+          op: string,
+          v: unknown,
+        ) => {
+          order: (c: string, o: { ascending: boolean }) => {
+            range: (a: number, b: number) => Promise<{ data: ScanRow[] | null }>;
+          };
         };
       };
-    };
-  })
-    .select("product_name, price_captured, unit, establishment_id, created_at")
-    .not("price_captured", "is", null)
-    .order("created_at", { ascending: false })
-    .limit(5000);
+    })
+      .select("product_name, price_captured, unit, establishment_id, created_at")
+      .not("price_captured", "is", null)
+      .order("created_at", { ascending: false })
+      .range(page * PAGE, page * PAGE + PAGE - 1);
+    const rows = chunk ?? [];
+    scans.push(...rows);
+    if (rows.length < PAGE) break;
+  }
 
-  const scans = scansRaw ?? [];
 
   // Último preço por (loja, produto)
   const latest = new Map<string, { row: ScanRow; store: EstabRow }>();
