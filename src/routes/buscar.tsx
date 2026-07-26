@@ -77,6 +77,8 @@ function SearchPage() {
   const { user, loading } = useSession();
   const urlSyncTimer = useRef<number | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const { reducedMotion, toggleReducedMotion } = useReducedMotion();
+
 
   const mode: SearchMode = search.mode === "loose" ? "loose" : "strict";
   const pureOnly = search.pure !== "0";
