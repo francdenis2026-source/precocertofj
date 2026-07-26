@@ -555,7 +555,7 @@ function EstablishmentsPage() {
 
       {/* Faixa de mercados em destaque — fora do hero, mais compacta e legível */}
       {featured.length > 0 && (
-        <section className="border-b border-border/60 bg-muted/40">
+        <section className="border-b border-border/60">
           <div className="mx-auto w-full max-w-6xl px-4 md:px-8 py-3">
             <div className="mb-2 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
