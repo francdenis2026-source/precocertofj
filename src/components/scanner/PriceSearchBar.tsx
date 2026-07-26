@@ -158,6 +158,16 @@ export function PriceSearchBar({
     },
   );
   const [kindFilter, setKindFilter] = useState<string | null>(null);
+  /**
+   * Filtro de disponibilidade: não há campo de estoque na base, então usamos a
+   * recência da coleta como melhor proxy disponível ("preço visto há ≤ X dias").
+   */
+  const [freshness, setFreshness] = useLocalStorageState<"all" | "30" | "7">(
+    "search:freshness",
+    "all",
+    { validate: (v): v is "all" | "30" | "7" => v === "all" || v === "30" || v === "7" },
+  );
+
   const [categoryFilter, setCategoryFilter] = useLocalStorageState<string | null>(
     "search:category-filter",
     null,
