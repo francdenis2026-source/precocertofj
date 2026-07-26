@@ -8,8 +8,10 @@ import {
   getSearchHistory,
   pushSearchHistory,
   removeSearchHistory,
+  setSearchHistoryPersistence,
   type SearchHistoryEntry,
 } from "@/lib/search-history";
+
 import { Clock, Crown, Search, ShoppingBag, Sparkles, TrendingDown, X } from "lucide-react";
 import { FairPriceBadge } from "@/components/product/FairPriceBadge";
 import { HighlightMatch } from "@/components/search/HighlightMatch";
@@ -98,7 +100,7 @@ export function PriceSearchBar({
 
 
 
-  const { user } = useSession();
+  const { user, loading: sessionLoading } = useSession();
   const isVisitor = !user;
   const quota = useTeaserQuota(3);
   const [quotaBlocked, setQuotaBlocked] = useState(false);
@@ -220,6 +222,15 @@ export function PriceSearchBar({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // Histórico só é persistido para usuários autenticados; visitantes usam
+  // memória volátil (o histórico é limpo a cada recarregamento da página).
+  useEffect(() => {
+    if (sessionLoading) return;
+    setSearchHistoryPersistence(!!user);
+    setHistory(getSearchHistory());
+  }, [sessionLoading, user]);
+
 
   const runQuery = (q: string) => {
     setErr(null);
@@ -438,7 +449,7 @@ export function PriceSearchBar({
         <span
           role="note"
           aria-label="Passo 01: Pesquisar preço"
-          className="inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-navy px-2 py-0.5 font-sans text-[9.5px] font-semibold uppercase tracking-[0.16em] text-brand-gold"
+          className="inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-navy px-2 py-0.5 font-sans text-[11px] font-medium text-brand-gold"
         >
           <span aria-hidden="true" className="tabular-nums">01</span>
           <span aria-hidden="true" className="opacity-70">·</span>
@@ -504,48 +515,62 @@ export function PriceSearchBar({
             anchorRef={containerRef}
             open={showHistory}
             onClose={() => setShowSuggest(false)}
-            maxHeight={288}
-            ariaLabel="Buscas recentes"
+            maxHeight={220}
+            ariaLabel="Últimas buscas"
           >
             <div>
-              <div className="flex items-center justify-between px-3 py-1.5 border-b border-border">
-                <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                  Buscas recentes
+              <div className="flex items-center justify-between border-b border-border px-3 py-1.5">
+                <span className="text-[12px] font-medium text-muted-foreground">
+                  Últimas buscas
                 </span>
                 <button
                   type="button"
                   onMouseDown={clearAllHistory}
-                  className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground"
+                  className="rounded px-1 text-[12px] font-medium text-muted-foreground hover:text-foreground"
                 >
                   Limpar
                 </button>
               </div>
-              <ul role="listbox" aria-label="Buscas recentes">
+              <div
+                role="listbox"
+                aria-label="Últimas buscas"
+                className="flex flex-wrap gap-1.5 p-2.5"
+              >
                 {history.map((h) => (
-                  <li key={h.query} role="option" aria-selected={false}>
-                    <div className="group flex items-center gap-2 px-3 py-2 text-left text-sm text-foreground transition hover:bg-primary/5">
-                      <Clock className="h-3.5 w-3.5 shrink-0 text-muted-foreground" strokeWidth={1.5} />
-                      <button
-                        type="button"
-                        onClick={() => chooseHistory(h.query)}
-                        className="min-w-0 flex-1 truncate text-left uppercase tracking-wide"
-                      >
-                        {h.query}
-                      </button>
-                      <button
-                        type="button"
-                        onMouseDown={(e) => removeHistoryItem(e, h.query)}
-                        aria-label={`Remover ${h.query} do histórico`}
-                        className="shrink-0 rounded-full p-1 text-muted-foreground opacity-0 transition hover:text-foreground group-hover:opacity-100"
-                      >
-                        <X className="h-3 w-3" />
-                      </button>
-                    </div>
-                  </li>
+                  <span
+                    key={h.query}
+                    role="option"
+                    aria-selected={false}
+                    className="group inline-flex max-w-full items-center gap-1 rounded-full border border-border bg-background py-0.5 pl-2 pr-0.5 text-[12.5px] text-foreground"
+                  >
+                    <Clock className="h-3 w-3 shrink-0 text-muted-foreground" strokeWidth={1.75} />
+                    <button
+                      type="button"
+                      onClick={() => chooseHistory(h.query)}
+                      className="max-w-[11rem] truncate text-left"
+                      title={h.query}
+                    >
+                      {h.query}
+                    </button>
+                    <button
+                      type="button"
+                      onMouseDown={(e) => removeHistoryItem(e, h.query)}
+                      aria-label={`Remover ${h.query} do histórico`}
+                      className="grid h-5 w-5 shrink-0 place-items-center rounded-full text-muted-foreground transition hover:bg-primary/10 hover:text-foreground"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </span>
                 ))}
-              </ul>
+              </div>
+              {isVisitor ? (
+                <p className="border-t border-border px-3 py-1.5 text-[11.5px] text-muted-foreground">
+                  Sem conta, o histórico fica só nesta visita — entre para salvá-lo.
+                </p>
+              ) : null}
             </div>
           </AnchoredDropdown>
+
 
           <AnchoredDropdown
             anchorRef={containerRef}
@@ -564,10 +589,10 @@ export function PriceSearchBar({
                 >
                   <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 text-warning" strokeWidth={1.75} />
                   <div className="min-w-0 flex-1">
-                    <p className="font-mono text-[9px] uppercase tracking-widest text-warning dark:text-warning">
+                    <p className="text-[11.5px] font-medium text-warning dark:text-warning">
                       Você quis dizer
                     </p>
-                    <p className="truncate text-[13px] font-semibold uppercase tracking-wide text-foreground">
+                    <p className="truncate text-[13.5px] font-semibold text-foreground">
                       {didYouMean.displayName}?
                     </p>
                   </div>
@@ -605,7 +630,7 @@ export function PriceSearchBar({
                       </div>
                     )}
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-[13px] font-medium uppercase tracking-wide">
+                      <p className="truncate text-[13.5px] font-medium">
                         {/* "loose" destaca prefixos (ex.: "mante" em "Manteiga") */}
                         <HighlightMatch text={s.displayName} tokens={highlightTokens} mode="loose" />
                       </p>
@@ -733,7 +758,7 @@ export function PriceSearchBar({
               <button
                 type="button"
                 onClick={revertAutoCorrect}
-                className="ml-auto rounded-md border border-brand-gold/40 bg-background px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-foreground hover:bg-brand-gold/20 focus-ring"
+                className="ml-auto rounded-md border border-brand-gold/40 bg-background px-2 py-0.5 text-[12px] font-medium text-foreground hover:bg-brand-gold/20 focus-ring"
               >
                 Buscar “{autoCorrected.from}” mesmo assim
               </button>
@@ -777,10 +802,10 @@ export function PriceSearchBar({
                 >
                   <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 text-warning" strokeWidth={1.75} />
                   <div className="min-w-0 flex-1">
-                    <p className="font-mono text-[9px] uppercase tracking-widest text-warning dark:text-warning">
+                    <p className="text-[11.5px] font-medium text-warning dark:text-warning">
                       Você quis dizer
                     </p>
-                    <p className="truncate text-sm font-semibold uppercase tracking-wide text-foreground">
+                    <p className="truncate text-sm font-semibold text-foreground">
                       {didYouMean.displayName}?
                     </p>
                     <p className="font-mono text-[9px] text-muted-foreground">
@@ -810,7 +835,7 @@ export function PriceSearchBar({
                   return (
                     <div className="grid gap-2 rounded-xl border border-white/10 bg-brand-navy px-3.5 py-3 text-white shadow-sm sm:grid-cols-2 sm:gap-4">
                       <div className="min-w-0">
-                        <p className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-brand-gold/90">
+                        <p className="text-[11px] font-medium text-brand-gold/90">
                           Melhor preço agora
                         </p>
                         <p className="mt-1 truncate text-[26px] font-bold leading-none tabular-nums">
@@ -826,7 +851,7 @@ export function PriceSearchBar({
                         </p>
                       </div>
                       <div className="min-w-0 sm:border-l sm:border-white/10 sm:pl-4">
-                        <p className="text-[9.5px] font-semibold uppercase tracking-[0.16em] text-brand-gold/90">
+                        <p className="text-[11px] font-medium text-brand-gold/90">
                           Economia estimada
                         </p>
                         <p className="mt-1 text-[26px] font-bold leading-none tabular-nums">
@@ -865,7 +890,7 @@ export function PriceSearchBar({
                   className="relative block rounded-xl border border-border bg-card p-2.5 transition hover:border-accent-strong/60"
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <p className="inline-flex items-center gap-1 rounded-md bg-accent-strong px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-wide text-accent-foreground">
+                    <p className="inline-flex items-center gap-1 rounded-md bg-accent-strong px-1.5 py-0.5 text-[12px] font-medium text-accent-foreground">
                       <Crown className="h-3 w-3" strokeWidth={2} aria-hidden="true" />
                       Preço mais barato
                     </p>
@@ -1124,7 +1149,7 @@ export function PriceSearchBar({
                             </p>
 
 
-                            <p className="font-mono text-[9px] uppercase tracking-[0.18em] text-muted-foreground">
+                            <p className="text-[11.5px] font-medium text-muted-foreground">
                               {m.samples} scan{m.samples > 1 ? "s" : ""}
                               <span aria-hidden="true" className="mx-1 text-accent-strong/50">·</span>
                               média {fmt(m.priceAvg)}
@@ -1146,7 +1171,7 @@ export function PriceSearchBar({
                           />
                           <div className="shrink-0 self-center text-right">
                             {isCheapest && (
-                              <p className="font-mono text-[8px] uppercase tracking-[0.22em] text-accent-strong">
+                              <p className="text-[11px] font-medium text-accent-strong">
                                 Menor
                               </p>
                             )}
@@ -1238,7 +1263,7 @@ function Stat({
 }) {
   return (
     <div className="relative rounded-lg border border-border/70 bg-card px-2.5 py-2">
-      <p className="flex items-center gap-1 text-[9.5px] font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+      <p className="flex items-center gap-1 text-[11px] font-medium text-muted-foreground">
         {icon} {label}
       </p>
       <p className="mt-1 text-[20px] font-bold leading-none tracking-tight tabular-nums text-foreground">
@@ -1250,8 +1275,9 @@ function Stat({
 
 
 /**
- * Auto-load-more sentinel — dispara `onLoad()` quando entra na viewport,
- * evitando cliques manuais em listas longas mas mantendo fallback acessível.
+ * Botão explícito de "mostrar mais" — substituiu o carregamento automático por
+ * scroll (que deixava a página infinitamente alta). O usuário decide quando
+ * revelar o próximo lote, mantendo a página com altura previsível.
  */
 function AutoLoadMore({
   onLoad,
@@ -1264,37 +1290,17 @@ function AutoLoadMore({
   pageSize: number;
   category: string;
 }) {
-  const ref = useRef<HTMLButtonElement | null>(null);
-  const onLoadRef = useRef(onLoad);
-  onLoadRef.current = onLoad;
-  useEffect(() => {
-    const el = ref.current;
-    if (!el || typeof IntersectionObserver === "undefined") return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        for (const e of entries) {
-          if (e.isIntersecting) {
-            onLoadRef.current();
-            break;
-          }
-        }
-      },
-      { rootMargin: "240px 0px" },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
   return (
     <button
-      ref={ref}
       type="button"
       onClick={onLoad}
-      className="mt-1 w-full rounded-lg border border-dashed border-border bg-background/60 px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground transition hover:border-primary/40 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
-      aria-label={`Carregar mais itens em ${category}`}
+      className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-1.5 text-[12px] font-medium text-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+      aria-label={`Mostrar mais itens em ${category}`}
     >
-      Carregando mais {Math.min(pageSize, hidden)} · restam {hidden}
+      Mostrar mais {Math.min(pageSize, hidden)} de {hidden} restantes
     </button>
   );
+
 }
 
 
@@ -1407,7 +1413,7 @@ function QuickFilters({
       : "border-border bg-background text-muted-foreground hover:text-foreground");
   return (
     <div className="flex flex-wrap items-center gap-1.5">
-      <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+      <span className="text-[11.5px] font-medium text-muted-foreground">
         Agrupar
       </span>
       <button type="button" className={chip(groupBy === "product")} onClick={() => onGroupBy("product")}>
@@ -1419,7 +1425,7 @@ function QuickFilters({
       <button type="button" className={chip(groupBy === "matrix")} onClick={() => onGroupBy("matrix")}>
         Comparar lado a lado
       </button>
-      <span className="ml-2 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+      <span className="ml-2 text-[11.5px] font-medium text-muted-foreground">
         Ordenar
       </span>
 
@@ -1449,7 +1455,7 @@ function QuickFilters({
       )}
       {categories.length > 1 && (
         <>
-          <span className="ml-2 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+          <span className="ml-2 text-[11.5px] font-medium text-muted-foreground">
             Categoria
           </span>
           <button
@@ -1473,7 +1479,7 @@ function QuickFilters({
       )}
       {kinds.length > 0 && (
         <>
-          <span className="ml-2 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+          <span className="ml-2 text-[11.5px] font-medium text-muted-foreground">
             Tipo
           </span>
           <button type="button" className={chip(kindFilter === null)} onClick={() => onKind(null)}>
@@ -1520,7 +1526,7 @@ function ProductDetailsCard({
           </div>
         )}
         <div className="min-w-0 flex-1">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
+          <p className="text-[11.5px] font-medium text-accent-strong">
             Produto encontrado
           </p>
           <p className="mt-0.5 truncate text-[15px] font-semibold tracking-tight text-foreground">
@@ -1597,11 +1603,20 @@ function ProductGroupCard({
   canSelectCompare?: boolean;
   onToggleCompare?: () => void;
 }) {
-  // Mercado mais barata dentro deste grupo — usada para destaque no cabeçalho.
+  // Mercado mais barato dentro deste grupo — usado para destaque no cabeçalho.
   const cheapestInGroup = useMemo(() => {
     if (prices.length === 0) return null;
     return prices.reduce((best, cur) => (cur.price < best.price ? cur : best), prices[0]);
   }, [prices]);
+
+  // Mostra por padrão apenas os 3 melhores preços de cada produto: mantém a
+  // página curta e legível; o restante fica a um clique de distância.
+  const COLLAPSED = 3;
+  const [expanded, setExpanded] = useState(false);
+  const visiblePrices = expanded ? prices : prices.slice(0, COLLAPSED);
+  const hiddenPrices = prices.length - visiblePrices.length;
+
+
 
   return (
     <div className="pc-res-card relative">
@@ -1681,7 +1696,8 @@ function ProductGroupCard({
       </div>
 
       <ul className="mt-1 border-t border-[color-mix(in_oklab,var(--color-border)_70%,transparent)]">
-        {prices.map((p, i) => {
+        {visiblePrices.map((p, i) => {
+
           const isCheapest = globalMin != null && p.price === globalMin;
           return (
             <li
@@ -1744,6 +1760,19 @@ function ProductGroupCard({
           );
         })}
       </ul>
+      {hiddenPrices > 0 || expanded ? (
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          aria-expanded={expanded}
+          className="mt-1 w-full rounded-lg border border-border bg-background px-2.5 py-1 text-[12px] font-medium text-muted-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+        >
+          {expanded
+            ? "Ver menos mercados"
+            : `Ver os outros ${hiddenPrices} mercado${hiddenPrices > 1 ? "s" : ""}`}
+        </button>
+      ) : null}
+
     </div>
   );
 }
@@ -1817,86 +1846,132 @@ function MarketGroupedResults({
   if (buckets.length === 0) return null;
 
   return (
-    <div className="space-y-3">
-      {buckets.map((b, idx) => {
-        const isCheapest = globalMin != null && b.minPrice === globalMin;
-        const bar = b.brandColor && /^#[0-9A-Fa-f]{6}$/.test(b.brandColor) ? b.brandColor : null;
-        return (
-          <section
-            key={b.marketName}
-            className={
-              "overflow-hidden rounded-xl border shadow-sm " +
-              (isCheapest
-                ? "border-brand-gold/70 bg-[color-mix(in_oklab,var(--color-brand-gold)_5%,var(--card))]"
-                : "border-border/60 bg-card/70")
-            }
-            style={bar ? { boxShadow: `inset 4px 0 0 0 ${bar}` } : undefined}
-          >
-            <header className="flex items-center gap-3 border-b border-border/50 bg-background/40 px-3 py-2.5 pl-4">
-              <span
-                className="grid h-8 w-8 flex-none place-items-center rounded-md border overflow-hidden bg-background"
-                style={{ borderColor: bar ?? undefined }}
-
-                aria-hidden="true"
-              >
-                {b.logoUrl ? (
-                  <LazyImage
-                    src={b.logoUrl}
-                    alt=""
-                    className="h-full w-full object-contain p-0.5"
-                  />
-
-                ) : (
-                  <ShoppingBag className="h-4 w-4 text-muted-foreground" />
-                )}
-              </span>
-              <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-2">
-                  <span className="market-name truncate text-[13.5px] font-semibold text-foreground">
-                    {b.marketName}
-                  </span>
-                  {isCheapest ? (
-                    <span className="inline-flex items-center gap-1 rounded-full bg-brand-gold/20 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.1em] text-brand-gold">
-                      <Crown className="h-3 w-3" /> Menor preço
-                    </span>
-                  ) : (
-                    <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-primary">
-                      #{idx + 1}
-                    </span>
-                  )}
-                </div>
-                <p className="mt-0.5 text-[11.5px] text-muted-foreground">
-                  {b.rows.length} {b.rows.length === 1 ? "produto" : "produtos"} · a partir de{" "}
-                  <span className="font-semibold tabular-nums text-foreground">{fmt(b.minPrice)}</span>
-                </p>
-              </div>
-            </header>
-            <ul className="divide-y divide-border/50">
-              {b.rows.map((r, i) => (
-                <li
-                  key={`${r.productName}-${r.price.when}-${i}`}
-                  className="flex items-center gap-3 px-3 py-2 transition-colors hover:bg-brand-gold/5"
-                >
-                  <StoreColorBar name={b.marketName} brandColor={r.price.marketBrandColor} />
-                  <Link
-                    to="/produto/$slug"
-                    params={{ slug: r.productName }}
-                    className="min-w-0 flex-1 truncate text-[13.5px] font-medium text-foreground hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold rounded"
-                  >
-                    <HighlightMatch text={r.productName} tokens={highlightTokens} />
-                  </Link>
-                  <span className="whitespace-nowrap text-[14px] font-bold tabular-nums text-foreground">
-                    {fmt(r.price.price)}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </section>
-        );
-      })}
+    <div className="pc-results">
+      {buckets.map((b, idx) => (
+        <MarketBucketSection
+          key={b.marketName}
+          rank={idx + 1}
+          marketName={b.marketName}
+          logoUrl={b.logoUrl}
+          brandColor={b.brandColor}
+          minPrice={b.minPrice}
+          rows={b.rows}
+          isCheapest={globalMin != null && b.minPrice === globalMin}
+          fmt={fmt}
+          highlightTokens={highlightTokens}
+        />
+      ))}
     </div>
   );
 }
+
+/**
+ * Seção de um estabelecimento na visão "por mercado".
+ * Mostra até 5 produtos por padrão — o resto abre sob demanda, evitando
+ * páginas de rolagem interminável.
+ */
+function MarketBucketSection({
+  rank,
+  marketName,
+  logoUrl,
+  brandColor,
+  minPrice,
+  rows,
+  isCheapest,
+  fmt,
+  highlightTokens,
+}: {
+  rank: number;
+  marketName: string;
+  logoUrl: string | null;
+  brandColor: string | null;
+  minPrice: number;
+  rows: { productName: string; catalogId: string | null; price: PricePoint }[];
+  isCheapest: boolean;
+  fmt: (n: number) => string;
+  highlightTokens: string[];
+}) {
+  const COLLAPSED = 5;
+  const [expanded, setExpanded] = useState(false);
+  const visible = expanded ? rows : rows.slice(0, COLLAPSED);
+  const hiddenCount = rows.length - visible.length;
+  const bar = brandColor && /^#[0-9A-Fa-f]{6}$/.test(brandColor) ? brandColor : null;
+
+  return (
+    <section
+      className={
+        "overflow-hidden rounded-xl border " +
+        (isCheapest
+          ? "border-[color-mix(in_oklab,var(--brand-gold)_55%,transparent)] bg-[color-mix(in_oklab,var(--brand-gold)_5%,var(--color-card))]"
+          : "border-[color-mix(in_oklab,var(--color-border)_70%,transparent)] bg-card")
+      }
+      style={bar ? { boxShadow: `inset 4px 0 0 0 ${bar}` } : undefined}
+      aria-label={`Produtos em ${marketName}`}
+    >
+      <header className="flex items-center gap-2.5 border-b border-[color-mix(in_oklab,var(--color-border)_70%,transparent)] px-3 py-2 pl-4">
+        <span
+          className="grid h-8 w-8 flex-none place-items-center overflow-hidden rounded-md border border-border bg-background"
+          aria-hidden="true"
+        >
+          {logoUrl ? (
+            <LazyImage src={logoUrl} alt="" className="h-full w-full object-contain p-0.5" />
+          ) : (
+            <ShoppingBag className="h-4 w-4 text-muted-foreground" />
+          )}
+        </span>
+        <div className="min-w-0 flex-1">
+          <div className="flex min-w-0 items-center gap-2">
+            <span className="market-name pc-res-title truncate">{marketName}</span>
+            {isCheapest ? (
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-[color-mix(in_oklab,var(--brand-gold)_45%,transparent)] bg-[color-mix(in_oklab,var(--brand-gold)_12%,transparent)] px-1.5 py-0.5 text-[11px] font-medium text-foreground">
+                <Crown className="h-3 w-3 text-[var(--pc-gold-ink)]" aria-hidden="true" /> Menor preço
+              </span>
+            ) : (
+              <span className="shrink-0 rounded-full border border-border bg-background px-1.5 py-0.5 text-[11px] font-medium tabular-nums text-muted-foreground">
+                {rank}º
+              </span>
+            )}
+          </div>
+          <p className="pc-res-meta mt-0.5 truncate">
+            {rows.length} {rows.length === 1 ? "produto encontrado" : "produtos encontrados"} · a
+            partir de{" "}
+            <span className="font-semibold tabular-nums text-foreground">{fmt(minPrice)}</span>
+          </p>
+        </div>
+      </header>
+      <ul>
+        {visible.map((r, i) => (
+          <li
+            key={`${r.productName}-${r.price.when}-${i}`}
+            className="pc-res-row items-center pl-3 transition-colors hover:bg-[color-mix(in_oklab,var(--brand-gold)_6%,transparent)]"
+          >
+            <Link
+              to="/produto/$slug"
+              params={{ slug: r.productName }}
+              className="pc-res-store min-w-0 flex-1 truncate rounded font-medium text-foreground hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+            >
+              <HighlightMatch text={r.productName} tokens={highlightTokens} />
+            </Link>
+            <span className="pc-res-price whitespace-nowrap">{fmt(r.price.price)}</span>
+          </li>
+        ))}
+      </ul>
+      {hiddenCount > 0 || expanded ? (
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          aria-expanded={expanded}
+          className="w-full border-t border-[color-mix(in_oklab,var(--color-border)_70%,transparent)] px-3 py-1.5 text-[12px] font-medium text-muted-foreground transition hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+        >
+          {expanded
+            ? `Mostrar apenas ${COLLAPSED} produtos`
+            : `Ver os outros ${hiddenCount} produtos deste mercado`}
+        </button>
+      ) : null}
+    </section>
+  );
+}
+
 
 // -----------------------------------------------------------------------------
 // MatrixCompareResults — comparação lado a lado (produto × mercado).
@@ -2106,7 +2181,7 @@ function MatrixCompareResults({
       {/* Toolbar: seletor de mercados + navegação + exportar */}
       <div className="flex flex-wrap items-center gap-2 rounded-xl border border-border/60 bg-card/60 px-2.5 py-2">
         <div className="flex items-center gap-1.5">
-          <span className="text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
+          <span className="text-[12px] font-medium text-muted-foreground">
             Colunas
           </span>
           <div className="flex flex-wrap gap-1" role="group" aria-label="Selecionar mercados visíveis">
@@ -2209,7 +2284,7 @@ function MatrixCompareResults({
                 data-row={0}
                 data-col={0}
                 tabIndex={0}
-                className="focus-ring sticky left-0 z-10 min-w-[180px] border-b border-border/60 bg-background/80 px-3 py-2.5 text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground backdrop-blur"
+                className="focus-ring sticky left-0 z-10 min-w-[180px] border-b border-border/60 bg-background/80 px-3 py-2.5 text-[12px] font-medium text-muted-foreground backdrop-blur"
               >
                 Produto
               </th>
@@ -2405,7 +2480,7 @@ function MarketLegend({
       aria-label="Filtrar por estabelecimento"
       className="flex flex-wrap items-center gap-1.5 rounded-lg border border-border/60 bg-background/60 px-2 py-1.5"
     >
-      <span className="pl-1 pr-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+      <span className="pl-1 pr-1 text-[11.5px] font-medium text-muted-foreground">
         Mercados
       </span>
       {markets.map((m) => {
@@ -2444,7 +2519,7 @@ function MarketLegend({
         <button
           type="button"
           onClick={() => onPick(active)}
-          className="ml-auto rounded-md px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+          className="ml-auto rounded-md px-2 py-0.5 text-[12px] font-medium text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
         >
           Limpar
         </button>

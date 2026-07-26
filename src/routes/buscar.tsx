@@ -13,6 +13,13 @@ import { trackEvent } from "@/lib/analytics-events";
 import { RouteError } from "@/components/feedback";
 import { SearchDiscovery, pushRecentSearch } from "@/components/search/SearchDiscovery";
 import { SearchSidebar } from "@/components/search/SearchSidebar";
+import {
+  clearSearchHistory,
+  getSearchHistory,
+  removeSearchHistory,
+  setSearchHistoryPersistence,
+} from "@/lib/search-history";
+
 import { BackButton } from "@/components/layout/BackButton";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 
@@ -65,7 +72,7 @@ const PURE_KEY = "search:pureOnly";
 function SearchPage() {
   const search = Route.useSearch();
   const navigate = useNavigate({ from: "/buscar" });
-  const { user } = useSession();
+  const { user, loading } = useSession();
   const urlSyncTimer = useRef<number | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
 
@@ -259,36 +266,32 @@ function SearchPage() {
     });
   };
 
+  // Persistência do histórico: só para usuários autenticados. Visitantes usam
+  // armazenamento em memória (limpa ao atualizar a página).
+  useEffect(() => {
+    if (loading) return;
+    setSearchHistoryPersistence(!!user);
+    setRecent(getSearchHistory().map((e) => e.query));
+  }, [loading, user]);
+
   useEffect(() => {
     if (hasQuery) pushRecentSearch(q);
   }, [hasQuery, q]);
 
   const [recent, setRecent] = useState<string[]>([]);
   useEffect(() => {
-    try {
-      const raw = window.localStorage.getItem("search:recent-queries");
-      if (raw) setRecent(JSON.parse(raw));
-    } catch {
-      /* ignore */
-    }
+    setRecent(getSearchHistory().map((e) => e.query));
   }, [q]);
 
   const removeRecent = (item: string) => {
-    setRecent((prev) => {
-      const next = prev.filter((x) => x !== item);
-      try {
-        window.localStorage.setItem("search:recent-queries", JSON.stringify(next));
-      } catch { /* ignore */ }
-      return next;
-    });
+    setRecent(removeSearchHistory(item).map((e) => e.query));
   };
 
   const clearRecent = () => {
+    clearSearchHistory();
     setRecent([]);
-    try {
-      window.localStorage.removeItem("search:recent-queries");
-    } catch { /* ignore */ }
   };
+
 
   // Restauração de scroll ao voltar para /buscar preservando filtros
   useEffect(() => {

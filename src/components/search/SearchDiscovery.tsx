@@ -17,6 +17,13 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { getPlatformStats } from "@/lib/stores-public.functions";
+import {
+  clearSearchHistory,
+  getSearchHistory,
+  pushSearchHistory,
+  removeSearchHistory,
+} from "@/lib/search-history";
+
 
 const CATEGORIES: { label: string; q: string; Icon: LucideIcon }[] = [
   { label: "Arroz", q: "arroz", Icon: Wheat },
@@ -38,29 +45,18 @@ const POPULAR: string[] = [
   "açúcar refinado",
 ];
 
-const RECENT_KEY = "search:recent-queries";
-
+/**
+ * Fonte única do histórico: `@/lib/search-history`. Para visitantes anônimos o
+ * histórico vive apenas em memória (limpa ao atualizar a página).
+ */
 function readRecent(): string[] {
-  try {
-    const raw = window.localStorage.getItem(RECENT_KEY);
-    if (!raw) return [];
-    const arr = JSON.parse(raw);
-    return Array.isArray(arr) ? arr.filter((x) => typeof x === "string").slice(0, 8) : [];
-  } catch {
-    return [];
-  }
+  return getSearchHistory().map((e) => e.query);
 }
 
 export function pushRecentSearch(q: string) {
   const term = q.trim();
   if (!term || term.length < 2) return;
-  try {
-    const cur = readRecent().filter((x) => x.toLowerCase() !== term.toLowerCase());
-    const next = [term, ...cur].slice(0, 8);
-    window.localStorage.setItem(RECENT_KEY, JSON.stringify(next));
-  } catch {
-    /* ignore */
-  }
+  pushSearchHistory(term);
   try {
     void import("@/lib/analytics-events").then(({ trackEvent }) => {
       trackEvent("search_query", { q: term.toLowerCase().slice(0, 60) });
@@ -69,6 +65,8 @@ export function pushRecentSearch(q: string) {
     /* ignore */
   }
 }
+
+
 
 
 type Props = {
@@ -84,22 +82,13 @@ export function SearchDiscovery({ onPickQuery }: Props) {
   const [recent, setRecent] = useState<string[]>([]);
   useEffect(() => setRecent(readRecent()), []);
   const clearRecent = () => {
-    try {
-      window.localStorage.removeItem(RECENT_KEY);
-    } catch {
-      /* ignore */
-    }
+    clearSearchHistory();
     setRecent([]);
   };
   const removeRecent = (term: string) => {
-    const next = recent.filter((x) => x !== term);
-    setRecent(next);
-    try {
-      window.localStorage.setItem(RECENT_KEY, JSON.stringify(next));
-    } catch {
-      /* ignore */
-    }
+    setRecent(removeSearchHistory(term).map((e) => e.query));
   };
+
 
   const stats = useQuery({
     queryKey: ["platform-stats-discovery"],
@@ -157,7 +146,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
       <section className="lg:hidden">
         <div className="mb-2 flex items-center gap-2 px-1">
           <Flame className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
-          <h3 className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          <h3 className="text-[12px] font-medium text-muted-foreground">
             Buscas populares
           </h3>
         </div>
@@ -176,50 +165,61 @@ export function SearchDiscovery({ onPickQuery }: Props) {
         </div>
       </section>
 
-      {/* Buscas recentes */}
+      {/* Últimas buscas — trilha compacta de um único nível, sem quebra de linha */}
       {recent.length > 0 && (
-        <section>
-          <div className="mb-2 flex items-center justify-between px-1">
-            <div className="flex items-center gap-2">
-              <HistoryIcon className="h-3.5 w-3.5 text-muted-foreground" aria-hidden />
-              <h3 className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                Suas buscas recentes
-              </h3>
+        <section
+          aria-label="Últimas buscas"
+          className="rounded-xl border border-border bg-card px-2.5 py-2 shadow-sm"
+        >
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+            <div className="flex min-w-0 items-center gap-2">
+              <span
+                aria-hidden
+                className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-brand-gold/15 text-brand-gold-soft dark:text-brand-gold"
+              >
+                <HistoryIcon className="h-3.5 w-3.5" />
+              </span>
+              <span className="shrink-0 text-[12px] font-medium text-muted-foreground">
+                Últimas buscas
+              </span>
+              <div className="-mx-1 flex min-w-0 flex-1 snap-x gap-1.5 overflow-x-auto px-1 py-0.5">
+                {recent.slice(0, 6).map((t) => (
+                  <span
+                    key={t}
+                    className="group inline-flex shrink-0 snap-start items-center gap-0.5 rounded-full border border-border bg-background py-0.5 pl-2.5 pr-0.5 text-[12px] text-foreground"
+                  >
+                    <button
+                      type="button"
+                      onClick={() => onPickQuery(t)}
+                      className="max-w-[9.5rem] truncate rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                      title={t}
+                    >
+                      {t}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => removeRecent(t)}
+                      className="grid h-5 w-5 place-items-center rounded-full text-muted-foreground hover:bg-[var(--pc-hover-tint)] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                      aria-label={`Remover ${t}`}
+                    >
+                      <XIcon className="h-3 w-3" />
+                    </button>
+                  </span>
+                ))}
+              </div>
             </div>
             <button
               type="button"
               onClick={clearRecent}
-              className="rounded px-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+              className="shrink-0 rounded-md px-1.5 py-1 text-[12px] font-medium text-muted-foreground hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
             >
               Limpar
             </button>
           </div>
-          <div className="flex flex-wrap gap-2 px-1">
-            {recent.map((t) => (
-              <span
-                key={t}
-                className="group inline-flex items-center gap-1 rounded-full border border-border bg-card py-1 pl-3 pr-1 text-[12.5px] text-foreground shadow-sm"
-              >
-                <button
-                  type="button"
-                  onClick={() => onPickQuery(t)}
-                  className="rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-                >
-                  {t}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => removeRecent(t)}
-                  className="grid h-6 w-6 place-items-center rounded-full text-muted-foreground hover:bg-[var(--pc-hover-tint)] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-                  aria-label={`Remover ${t}`}
-                >
-                  <XIcon className="h-3 w-3" />
-                </button>
-              </span>
-            ))}
-          </div>
         </section>
       )}
+
+
 
       {/* Sinal de vida — cartão próprio, mesmo padrão dos HeroMetric */}
       <section className="rounded-2xl border border-border bg-card p-2.5 shadow-sm sm:p-3">
