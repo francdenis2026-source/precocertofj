@@ -515,48 +515,62 @@ export function PriceSearchBar({
             anchorRef={containerRef}
             open={showHistory}
             onClose={() => setShowSuggest(false)}
-            maxHeight={288}
-            ariaLabel="Buscas recentes"
+            maxHeight={220}
+            ariaLabel="Últimas buscas"
           >
             <div>
-              <div className="flex items-center justify-between px-3 py-1.5 border-b border-border">
-                <span className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground">
-                  Buscas recentes
+              <div className="flex items-center justify-between border-b border-border px-3 py-1.5">
+                <span className="text-[12px] font-medium text-muted-foreground">
+                  Últimas buscas
                 </span>
                 <button
                   type="button"
                   onMouseDown={clearAllHistory}
-                  className="font-mono text-[10px] uppercase tracking-widest text-muted-foreground hover:text-foreground"
+                  className="rounded px-1 text-[12px] font-medium text-muted-foreground hover:text-foreground"
                 >
                   Limpar
                 </button>
               </div>
-              <ul role="listbox" aria-label="Buscas recentes">
+              <div
+                role="listbox"
+                aria-label="Últimas buscas"
+                className="flex flex-wrap gap-1.5 p-2.5"
+              >
                 {history.map((h) => (
-                  <li key={h.query} role="option" aria-selected={false}>
-                    <div className="group flex items-center gap-2 px-3 py-2 text-left text-sm text-foreground transition hover:bg-primary/5">
-                      <Clock className="h-3.5 w-3.5 shrink-0 text-muted-foreground" strokeWidth={1.5} />
-                      <button
-                        type="button"
-                        onClick={() => chooseHistory(h.query)}
-                        className="min-w-0 flex-1 truncate text-left uppercase tracking-wide"
-                      >
-                        {h.query}
-                      </button>
-                      <button
-                        type="button"
-                        onMouseDown={(e) => removeHistoryItem(e, h.query)}
-                        aria-label={`Remover ${h.query} do histórico`}
-                        className="shrink-0 rounded-full p-1 text-muted-foreground opacity-0 transition hover:text-foreground group-hover:opacity-100"
-                      >
-                        <X className="h-3 w-3" />
-                      </button>
-                    </div>
-                  </li>
+                  <span
+                    key={h.query}
+                    role="option"
+                    aria-selected={false}
+                    className="group inline-flex max-w-full items-center gap-1 rounded-full border border-border bg-background py-0.5 pl-2 pr-0.5 text-[12.5px] text-foreground"
+                  >
+                    <Clock className="h-3 w-3 shrink-0 text-muted-foreground" strokeWidth={1.75} />
+                    <button
+                      type="button"
+                      onClick={() => chooseHistory(h.query)}
+                      className="max-w-[11rem] truncate text-left"
+                      title={h.query}
+                    >
+                      {h.query}
+                    </button>
+                    <button
+                      type="button"
+                      onMouseDown={(e) => removeHistoryItem(e, h.query)}
+                      aria-label={`Remover ${h.query} do histórico`}
+                      className="grid h-5 w-5 shrink-0 place-items-center rounded-full text-muted-foreground transition hover:bg-primary/10 hover:text-foreground"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </span>
                 ))}
-              </ul>
+              </div>
+              {isVisitor ? (
+                <p className="border-t border-border px-3 py-1.5 text-[11.5px] text-muted-foreground">
+                  Sem conta, o histórico fica só nesta visita — entre para salvá-lo.
+                </p>
+              ) : null}
             </div>
           </AnchoredDropdown>
+
 
           <AnchoredDropdown
             anchorRef={containerRef}
