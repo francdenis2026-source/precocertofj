@@ -293,7 +293,11 @@ export function PreparoDicas() {
               })),
             },
           ].map(({ label, Icon, items }) => (
-            <div key={label} className="grid gap-1.5 sm:grid-cols-[132px_minmax(0,1fr)] sm:gap-3">
+            <div
+              key={label}
+              className="grid gap-1.5 sm:grid-cols-[164px_minmax(0,1fr)] sm:items-center sm:gap-3"
+            >
+
               <p className={`flex items-center gap-1.5 sm:h-7 ${microLabel}`}>
                 <Icon className="h-3 w-3 shrink-0 text-brand-gold" aria-hidden /> {label}
               </p>
