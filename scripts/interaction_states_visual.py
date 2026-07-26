@@ -62,6 +62,12 @@ READ = """
   const el = document.querySelector(`[data-istate-probe="${idx}"]`);
   if (!el) return null;
   const cs = getComputedStyle(el);
+  // muitos componentes movem o feedback para o pai (.group) ou para um filho
+  // (ícone/underline): considerar a vizinhança evita falsos negativos.
+  const near = [el.parentElement, el.firstElementChild].filter(Boolean).map((n) => {
+    const c = getComputedStyle(n);
+    return c.transform + c.boxShadow + c.backgroundColor + c.backgroundImage + c.color + c.borderColor + c.opacity + c.textDecorationLine;
+  }).join('||');
   const r = el.getBoundingClientRect();
   return {
     transform: cs.transform,
@@ -72,6 +78,7 @@ READ = """
     outline: cs.outlineWidth + ' ' + cs.outlineColor + ' ' + cs.outlineStyle,
     opacity: cs.opacity,
     filter: cs.filter,
+    near,
     w: Math.round(r.width * 100) / 100,
     h: Math.round(r.height * 100) / 100,
   };
@@ -80,7 +87,7 @@ READ = """
 
 VISUAL_KEYS = (
     "transform", "boxShadow", "background", "color", "borderColor",
-    "outline", "opacity", "filter",
+    "outline", "opacity", "filter", "near",
 )
 
 
