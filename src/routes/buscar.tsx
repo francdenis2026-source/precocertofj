@@ -237,18 +237,17 @@ function SearchPage() {
     (next: string) => {
       const value = next.slice(0, 80);
       if (urlSyncTimer.current != null) window.clearTimeout(urlSyncTimer.current);
-      urlSyncTimer.current = window.setTimeout(() => {
-        navigate({
-          search: (prev: Record<string, unknown>) => {
-            const currentQ = typeof prev?.q === "string" ? prev.q : "";
-            if (currentQ === value) return prev;
-            const nextSearch: Record<string, unknown> = { ...prev, q: value };
-            if (!value) delete nextSearch.q;
-            return nextSearch;
-          },
-          replace: true,
-        });
-      }, 400);
+      urlSyncTimer.current = null;
+      navigate({
+        search: (prev: Record<string, unknown>) => {
+          const currentQ = typeof prev?.q === "string" ? prev.q : "";
+          if (currentQ === value) return prev;
+          const nextSearch: Record<string, unknown> = { ...prev, q: value };
+          if (!value) delete nextSearch.q;
+          return nextSearch;
+        },
+        replace: true,
+      });
     },
     [navigate],
   );
