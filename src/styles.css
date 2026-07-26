@@ -3252,3 +3252,13 @@ code, pre, kbd, samp, tt, var,
   color: var(--pc-home-navy);
 }
 .dark .pc-metric-ink-hover:hover { color: var(--pc-home-gold); }
+
+/* Selects nativos: garante contraste das opções em ambos os temas */
+select {
+  color-scheme: light dark;
+}
+select option,
+select optgroup {
+  background-color: var(--card);
+  color: var(--foreground);
+}
