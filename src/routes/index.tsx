@@ -308,7 +308,7 @@ function HomePage() {
         <main
           id="hero"
           aria-labelledby="hero-title"
-          className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center gap-3 px-4 py-3 sm:gap-4 sm:px-6 sm:py-4 lg:px-8"
+          className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center gap-2.5 px-3 py-2.5 sm:gap-4 sm:px-6 sm:py-4 lg:px-8"
         >
           <div className="grid flex-1 items-center gap-4 lg:grid-cols-12 lg:gap-8">
             {/* ---------- Coluna editorial ---------- */}
@@ -561,7 +561,7 @@ function HomePage() {
 
                 {/* Faixa de parceiros — logos compactos */}
                 <div
-                  className="mt-3 border-t pt-2.5"
+                  className="mt-3 hidden border-t pt-2.5 min-[360px]:block"
                   style={{ borderColor: "rgba(255,255,255,0.1)" }}
                 >
                   <div className="mb-1.5 flex items-center gap-1.5">
