@@ -105,10 +105,15 @@ export function ButcherCounter({
   const [local, setLocal] = useState<ButcherViewState>(BUTCHER_STATE_DEFAULTS);
   const controlled = Boolean(state && onStateChange);
   const current = controlled ? (state as ButcherViewState) : local;
-  const patchState = (patch: Partial<ButcherViewState>) => {
-    if (controlled) onStateChange!(patch);
-    else setLocal((prev) => ({ ...prev, ...patch }));
-  };
+  const changeRef = useRef(onStateChange);
+  changeRef.current = onStateChange;
+  const patchState = useCallback(
+    (patch: Partial<ButcherViewState>) => {
+      if (controlled) changeRef.current?.(patch);
+      else setLocal((prev) => ({ ...prev, ...patch }));
+    },
+    [controlled],
+  );
 
   const q = current.q;
   const protein = current.protein;
@@ -122,9 +127,21 @@ export function ButcherCounter({
   }, [q]);
 
   const [limit, setLimit] = useState(30);
+  // Alternar Grade/Lista preserva a paginação — só filtros reiniciam a lista.
   useEffect(() => {
     setLimit(30);
-  }, [q, protein, sort, view]);
+  }, [q, protein, sort]);
+
+  // Índice pré-computado: normalização e preço/kg calculados uma única vez.
+  const index = useMemo(
+    () =>
+      cuts.map((cut) => ({
+        cut,
+        search: normalize(cut.productName),
+        kg: cutPricePerKg(cut) ?? cut.price,
+      })),
+    [cuts],
+  );
 
   const counts = useMemo(() => {
     const m = new Map<ButcherProtein, number>();
@@ -134,25 +151,26 @@ export function ButcherCounter({
 
   const filtered = useMemo(() => {
     const term = normalize(q);
-    let list = cuts.slice();
-    if (protein) list = list.filter((c) => c.protein === protein);
-    if (term) list = list.filter((c) => normalize(c.productName).includes(term));
-    const kg = (p: PublicStoreProduct) => cutPricePerKg(p) ?? p.price;
+    let list = index;
+    if (protein) list = list.filter((e) => e.cut.protein === protein);
+    if (term) list = list.filter((e) => e.search.includes(term));
+    const rows = list === index ? list.slice() : list;
     switch (sort) {
       case "kg-desc":
-        list.sort((a, b) => kg(b) - kg(a));
+        rows.sort((a, b) => b.kg - a.kg || a.cut.slug.localeCompare(b.cut.slug));
         break;
       case "name":
-        list.sort((a, b) => a.productName.localeCompare(b.productName, "pt-BR"));
+        rows.sort((a, b) => a.cut.productName.localeCompare(b.cut.productName, "pt-BR"));
         break;
       default:
-        list.sort((a, b) => kg(a) - kg(b));
+        rows.sort((a, b) => a.kg - b.kg || a.cut.slug.localeCompare(b.cut.slug));
     }
-    return list;
-  }, [cuts, q, protein, sort]);
+    return rows.map((e) => e.cut);
+  }, [index, q, protein, sort]);
 
   const cheapest = filtered.length > 1 ? filtered[0] : null;
-  const shown = filtered.slice(0, limit);
+  const shown = useMemo(() => filtered.slice(0, limit), [filtered, limit]);
+
 
   // Trilho de proteína: navegação por teclado (←/→/Home/End) com foco móvel.
   const railRef = useRef<HTMLDivElement | null>(null);
