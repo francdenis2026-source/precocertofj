@@ -1784,9 +1784,14 @@ function MarketGroupedResults({
     marketName: string;
     logoUrl: string | null;
     brandColor: string | null;
+    kind: string | null;
     minPrice: number;
+    maxPrice: number;
     rows: Row[];
   };
+
+  const [marketPage, setMarketPage] = useState(4);
+  const [onlyMarket, setOnlyMarket] = useState<string | null>(null);
 
   const bucketsMap = new Map<string, Bucket>();
   for (const g of groups) {
@@ -1801,47 +1806,112 @@ function MarketGroupedResults({
           marketName: p.marketName,
           logoUrl: p.marketLogoUrl,
           brandColor: p.marketBrandColor ?? null,
+          kind: p.marketKind ?? null,
           minPrice: p.price,
+          maxPrice: p.price,
           rows: [],
         };
         bucketsMap.set(key, b);
       }
       if (p.price < b.minPrice) b.minPrice = p.price;
+      if (p.price > b.maxPrice) b.maxPrice = p.price;
       if (!b.logoUrl && p.marketLogoUrl) b.logoUrl = p.marketLogoUrl;
       if (!b.brandColor && p.marketBrandColor) b.brandColor = p.marketBrandColor;
+      if (!b.kind && p.marketKind) b.kind = p.marketKind;
       b.rows.push({ productName: g.productName, catalogId: g.catalogId, price: p });
     }
   }
 
-
-  const buckets = Array.from(bucketsMap.values())
+  const allBuckets = Array.from(bucketsMap.values())
     .map((b) => ({
       ...b,
       rows: [...b.rows].sort((a, z) => a.price.price - z.price.price),
     }))
-    .sort((a, z) => a.minPrice - z.minPrice);
+    .sort((a, z) => {
+      if (sortMode === "savings") {
+        const sa = a.maxPrice - a.minPrice;
+        const sz = z.maxPrice - z.minPrice;
+        if (sa !== sz) return sz - sa;
+      }
+      if (a.minPrice !== z.minPrice) return a.minPrice - z.minPrice;
+      return z.rows.length - a.rows.length;
+    });
 
-  if (buckets.length === 0) return null;
+  if (allBuckets.length === 0) return null;
+
+  const scoped = onlyMarket
+    ? allBuckets.filter((b) => b.marketName === onlyMarket)
+    : allBuckets;
+  const buckets = scoped.slice(0, onlyMarket ? scoped.length : marketPage);
+  const hiddenMarkets = scoped.length - buckets.length;
 
   return (
-    <div className="pc-results">
-      {buckets.map((b, idx) => (
-        <MarketBucketSection
-          key={b.marketName}
-          rank={idx + 1}
-          marketName={b.marketName}
-          logoUrl={b.logoUrl}
-          brandColor={b.brandColor}
-          minPrice={b.minPrice}
-          rows={b.rows}
-          isCheapest={globalMin != null && b.minPrice === globalMin}
-          fmt={fmt}
-          highlightTokens={highlightTokens}
-        />
-      ))}
+    <div className="space-y-2">
+      {/* Filtro rápido por estabelecimento — compacta a lista sem rolar */}
+      {allBuckets.length > 1 ? (
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <span className="shrink-0 text-[11.5px] font-medium text-muted-foreground">Mercado</span>
+          <button
+            type="button"
+            onClick={() => setOnlyMarket(null)}
+            className={
+              "shrink-0 rounded-full border px-2.5 py-1 text-[11px] font-medium transition " +
+              (onlyMarket === null
+                ? "border-brand-gold bg-brand-gold text-brand-navy"
+                : "border-border bg-background text-muted-foreground hover:text-foreground")
+            }
+          >
+            Todos
+          </button>
+          {allBuckets.map((b) => (
+            <button
+              key={b.marketName}
+              type="button"
+              onClick={() => setOnlyMarket(onlyMarket === b.marketName ? null : b.marketName)}
+              className={
+                "shrink-0 max-w-[46vw] truncate rounded-full border px-2.5 py-1 text-[11px] font-medium transition sm:max-w-none " +
+                (onlyMarket === b.marketName
+                  ? "border-brand-gold bg-brand-gold text-brand-navy"
+                  : "border-border bg-background text-muted-foreground hover:text-foreground")
+              }
+            >
+              {b.marketName}
+            </button>
+          ))}
+        </div>
+      ) : null}
+
+      <div className="pc-results">
+        {buckets.map((b, idx) => (
+          <MarketBucketSection
+            key={b.marketName}
+            rank={allBuckets.indexOf(b) + 1}
+            marketName={b.marketName}
+            logoUrl={b.logoUrl}
+            brandColor={b.brandColor}
+            kind={b.kind}
+            minPrice={b.minPrice}
+            rows={b.rows}
+            isCheapest={globalMin != null && b.minPrice === globalMin && idx === 0}
+            fmt={fmt}
+            highlightTokens={highlightTokens}
+          />
+        ))}
+      </div>
+
+      {hiddenMarkets > 0 ? (
+        <button
+          type="button"
+          onClick={() => setMarketPage((v) => v + 4)}
+          className="w-full rounded-lg border border-border bg-card px-3 py-2 text-[12.5px] font-semibold text-foreground transition hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+        >
+          Ver mais {Math.min(4, hiddenMarkets)} de {hiddenMarkets} mercados
+        </button>
+      ) : null}
     </div>
   );
 }
+
 
 /**
  * Seção de um estabelecimento na visão "por mercado".
