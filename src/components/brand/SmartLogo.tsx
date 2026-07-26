@@ -54,11 +54,23 @@ export function useLogoPresentation(
       return;
     }
     let alive = true;
-    void getMetrics(src).then((m) => {
-      if (alive) setMetrics(m);
-    });
+    // A análise usa canvas (custo de CPU). Adiada para ociosidade do browser
+    // para não travar a primeira pintura quando há várias logos na tela.
+    const w = window as unknown as {
+      requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number;
+      cancelIdleCallback?: (h: number) => void;
+    };
+    const run = () => {
+      void getMetrics(src).then((m) => {
+        if (alive) setMetrics(m);
+      });
+    };
+    const idle = typeof w.requestIdleCallback === "function";
+    const handle = idle ? w.requestIdleCallback!(run, { timeout: 1200 }) : window.setTimeout(run, 200);
     return () => {
       alive = false;
+      if (idle) w.cancelIdleCallback?.(handle);
+      else window.clearTimeout(handle);
     };
   }, [src]);
 
@@ -110,6 +122,9 @@ export function SmartLogoImage({
     <img
       src={src}
       alt={`Logomarca ${name}`}
+      // Mesmo modo CORS do analisador (logo-quality) → uma única requisição
+      // por logo em vez de duas entradas de cache distintas.
+      crossOrigin="anonymous"
       loading={eager ? "eager" : "lazy"}
       fetchPriority={eager ? "high" : "auto"}
       decoding="async"
