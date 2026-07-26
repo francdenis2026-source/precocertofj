@@ -680,30 +680,34 @@ function EstablishmentsPage() {
             {/* StatGrid removida: métricas duplicavam o hero */}
 
             {data.topGlobalCategories.length > 0 && (
-              <SectionCard
-                title={
-                  <span className="inline-flex items-center gap-2">
-                    <TrendingUp className="h-4 w-4 text-brand-gold" aria-hidden />
+              <section aria-labelledby="cats-heading" className="border-t border-border/60 pt-4">
+                <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                  <h2
+                    id="cats-heading"
+                    className="inline-flex items-center gap-2 font-serif text-[19px] font-normal leading-tight tracking-tight text-foreground"
+                  >
+                    <TrendingUp className="h-4 w-4 text-[var(--pc-gold-ink)]" aria-hidden />
                     Categorias mais populares
+                  </h2>
+                  <span className="text-[11.5px] text-muted-foreground">
+                    Por número de produtos cadastrados na rede
                   </span>
-                }
-                description="Distribuição por número de produtos cadastrados na rede."
-              >
+                </div>
                 <div className="flex flex-wrap gap-1.5">
                   {data.topGlobalCategories.map((c) => (
                     <span
                       key={c.category}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-foreground/90 shadow-sm"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-foreground/85"
                     >
                       {humanizeCategory(c.category)}
-                      <span className="rounded-full bg-brand-gold px-1.5 py-0.5 text-[10px] font-bold text-brand-navy tabular-nums">
+                      <span className="text-[10.5px] font-bold tabular-nums text-[var(--pc-gold-ink)]">
                         {c.count}
                       </span>
                     </span>
                   ))}
                 </div>
+              </section>
 
-              </SectionCard>
             )}
 
             {data.items.length === 0 ? (
