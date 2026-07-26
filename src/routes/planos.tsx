@@ -404,12 +404,14 @@ function PlansPage() {
 
         {/* Barra de ação — em fluxo, sempre visível, nunca sobreposta. */}
         <div
+          data-testid="planos-cta-bar"
           className={dsx(
             ds.container,
             "shrink-0 pb-[calc(env(safe-area-inset-bottom,0px)+0.5rem)] pt-1",
           )}
         >
           <div className="flex min-h-[54px] items-center justify-between gap-3 rounded-xl border border-border bg-card px-3.5 py-2 shadow-elev-2">
+
             <div className="min-w-0">
               <p className="truncate text-[12.5px] font-semibold text-foreground">
                 {selectedPlan?.name ?? "Escolha um plano"}
