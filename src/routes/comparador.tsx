@@ -737,6 +737,7 @@ function ComparadorPage() {
         eyebrow="Preços reais dos mercados"
         title={<>Comparador de <em className="italic text-primary">preços</em></>}
         description="Todos os produtos abaixo são preços reais capturados nos mercados cadastrados. Clique em um produto para ver a foto, a descrição e o preço em cada mercado, do mais barato ao mais caro."
+        compactMobile
         meta={<FreeQuotaBadge variant="inline" />}
         actions={
           <button
