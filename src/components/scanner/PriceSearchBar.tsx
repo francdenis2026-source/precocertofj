@@ -68,7 +68,7 @@ function buildCheapestReason(price: number, avg: number | null | undefined): str
 
 
 
-type SortMode = "relevance" | "cheapest" | "unit" | "recent" | "kind" | "spread";
+type SortMode = "relevance" | "cheapest" | "unit" | "recent" | "kind" | "spread" | "savings";
 
 export function PriceSearchBar({
   initialQuery = "",
@@ -154,7 +154,7 @@ export function PriceSearchBar({
     "cheapest",
     {
       validate: (v): v is SortMode =>
-        v === "relevance" || v === "cheapest" || v === "unit" || v === "recent" || v === "kind" || v === "spread",
+        v === "relevance" || v === "cheapest" || v === "unit" || v === "recent" || v === "kind" || v === "spread" || v === "savings",
     },
   );
   const [kindFilter, setKindFilter] = useState<string | null>(null);
@@ -974,6 +974,7 @@ export function PriceSearchBar({
                         kindFilter={kindFilter}
                         fmt={fmt}
                         globalMin={result.min}
+                        sortMode={sortMode}
                         highlightTokens={highlightTokens}
                       />
                     ) : null}
@@ -1004,6 +1005,11 @@ export function PriceSearchBar({
                               const sb = scoreRelevance(b, query);
                               if (sa !== sb) return sb - sa;
                               return b.samples - a.samples;
+                            }
+                            if (sortMode === "savings") {
+                              const sa = (a.max ?? a.min) - a.min;
+                              const sb = (b.max ?? b.min) - b.min;
+                              if (sa !== sb) return sb - sa;
                             }
                             if (a.min !== b.min) return a.min - b.min;
                             return b.samples - a.samples;
@@ -1318,7 +1324,8 @@ function scoreRelevance(g: ProductGroup, query: string): number {
 
 function sortPrices(prices: PricePoint[], mode: SortMode, productName?: string): PricePoint[] {
   const arr = [...prices];
-  if (mode === "cheapest" || mode === "relevance") arr.sort((a, b) => a.price - b.price);
+  if (mode === "cheapest" || mode === "relevance" || mode === "savings")
+    arr.sort((a, b) => a.price - b.price);
   else if (mode === "unit") {
     // Ordena por preço unitário normalizado (R$/kg ou R$/L). Itens sem
     // tamanho detectável ficam no fim, mantendo a ordem por menor preço.
@@ -1409,6 +1416,9 @@ function QuickFilters({
         onClick={() => onSort("unit")}
       >
         Menor R$/kg ou /L
+      </button>
+      <button type="button" className={chip(sortMode === "savings")} onClick={() => onSort("savings")}>
+        Maior economia
       </button>
       <button type="button" className={chip(sortMode === "spread")} onClick={() => onSort("spread")}>
         Menor variação
