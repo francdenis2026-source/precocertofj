@@ -1238,26 +1238,8 @@ export function PriceSearchBar({
 }
 
 
-function Stat({
-  label,
-  value,
-  icon,
-}: {
-  label: string;
-  value: string;
-  icon?: React.ReactNode;
-}) {
-  return (
-    <div className="relative rounded-lg border border-border/70 bg-card px-2.5 py-2">
-      <p className="flex items-center gap-1 text-[11px] font-medium text-muted-foreground">
-        {icon} {label}
-      </p>
-      <p className="mt-1 text-[20px] font-bold leading-none tracking-tight tabular-nums text-foreground">
-        {value}
-      </p>
-    </div>
-  );
-}
+
+
 
 
 /**
