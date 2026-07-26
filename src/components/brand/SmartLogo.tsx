@@ -56,27 +56,21 @@ export function useLogoPresentation(
     let alive = true;
     // A análise usa canvas (custo de CPU). Adiada para ociosidade do browser
     // para não travar a primeira pintura quando há várias logos na tela.
-    const schedule =
-      typeof window !== "undefined" && "requestIdleCallback" in window
-        ? (fn: () => void) =>
-            (window as unknown as {
-              requestIdleCallback: (cb: () => void, o?: { timeout: number }) => number;
-            }).requestIdleCallback(fn, { timeout: 1200 })
-        : (fn: () => void) => window.setTimeout(fn, 200);
-    const handle = schedule(() => {
+    const w = window as unknown as {
+      requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number;
+      cancelIdleCallback?: (h: number) => void;
+    };
+    const run = () => {
       void getMetrics(src).then((m) => {
         if (alive) setMetrics(m);
       });
-    });
+    };
+    const idle = typeof w.requestIdleCallback === "function";
+    const handle = idle ? w.requestIdleCallback!(run, { timeout: 1200 }) : window.setTimeout(run, 200);
     return () => {
       alive = false;
-      if (typeof window !== "undefined" && "cancelIdleCallback" in window) {
-        (window as unknown as { cancelIdleCallback: (h: number) => void }).cancelIdleCallback(
-          handle,
-        );
-      } else {
-        window.clearTimeout(handle);
-      }
+      if (idle) w.cancelIdleCallback?.(handle);
+      else window.clearTimeout(handle);
     };
   }, [src]);
 
