@@ -467,7 +467,8 @@ function NeighborhoodsPage() {
           </div>
 
           {/* Legenda visual — o que os selos e ícones significam */}
-          <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-border/60 pt-2 text-[11px] text-muted-foreground">
+          <div className="mt-2 hidden flex-wrap items-center gap-x-3 gap-y-1 border-t border-border/60 pt-2 text-[11px] text-muted-foreground md:flex">
+
             <span className="font-bold uppercase tracking-[0.14em]">Legenda:</span>
             <span className="inline-flex items-center gap-1">
               <span className="inline-block h-2 w-[3px] rounded-sm bg-brand-gold" aria-hidden />
