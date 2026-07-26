@@ -547,6 +547,20 @@ function HomePage() {
                   ))}
                 </div>
 
+                {livePanel.failed && (
+                  <p
+                    role="status"
+                    className="mt-2 rounded-lg border px-2 py-1.5 text-[11.5px] leading-snug"
+                    style={{
+                      color: "var(--pc-home-onhero-fg-80)",
+                      borderColor: "var(--pc-home-onhero-border-soft)",
+                      background: "var(--pc-home-onhero-glass-soft)",
+                    }}
+                  >
+                    {livePanel.errorMessage}
+                  </p>
+                )}
+
                 {/* Faixa de parceiros — logos compactos */}
                 <div
                   className="mt-3 hidden border-t pt-2.5 min-[360px]:block"
