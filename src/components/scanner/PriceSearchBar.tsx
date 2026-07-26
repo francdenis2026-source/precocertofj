@@ -14,6 +14,8 @@ import {
 
 import { Clock, Crown, Search, ShoppingBag, Sparkles, X } from "lucide-react";
 import { FairPriceBadge } from "@/components/product/FairPriceBadge";
+import { CreatePriceAlertButton } from "@/components/alerts/CreatePriceAlertButton";
+
 import { HighlightMatch } from "@/components/search/HighlightMatch";
 import { AnchoredDropdown } from "@/components/search/AnchoredDropdown";
 import { MatchReasonBadges } from "@/components/search/MatchReasonBadges";
