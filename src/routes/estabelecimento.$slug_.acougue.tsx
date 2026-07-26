@@ -74,6 +74,8 @@ function ButcherPage() {
   const { storeId, slug } = Route.useLoaderData();
   const { data } = useSuspenseQuery(storeQuery(storeId));
   const { cuts } = useMemo(() => splitButcherCuts(data.products), [data.products]);
+  const [quickView, setQuickView] = useState<PublicStoreProduct | null>(null);
+
 
   return (
     <div className="min-h-svh bg-background text-foreground">
