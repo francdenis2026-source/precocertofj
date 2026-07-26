@@ -356,9 +356,10 @@ function NeighborhoodsPage() {
           )}
         </div>
 
-        {/* Filtros e ordenação — Selects estilizados (SVG chevron, tokens do tema) */}
-        <div className="mb-3 rounded-lg border border-border bg-card p-2.5 shadow-sm">
+        {/* Filtros e ordenação — inline no desktop, drawer no mobile */}
+        <div className="mb-3 rounded-lg border border-border bg-card p-2.5 shadow-sm max-md:hidden">
           <div className="flex flex-wrap items-center gap-2">
+
             {/* Ordenação */}
             <div className="inline-flex min-w-[180px] items-center gap-1.5">
               <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
