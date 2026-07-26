@@ -94,6 +94,7 @@ export function buildLivePanel(input: {
     metrics,
     loading,
     failed,
-    errorMessage: failed ? (stats?.error ?? LIVE_PANEL_ERROR_MESSAGE) : null,
+    // Mensagem sempre amigável — nunca vazar texto cru do banco na UI.
+    errorMessage: failed ? LIVE_PANEL_ERROR_MESSAGE : null,
   };
 }
