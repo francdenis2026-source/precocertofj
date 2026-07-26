@@ -295,9 +295,12 @@ function SearchPage() {
   };
 
 
-  // A página de busca sempre abre travada no topo (ao entrar, ao voltar para
-  // /buscar e ao alternar entre "descoberta" e "resultados"), evitando o
-  // efeito de redimensionamento/salto conforme o conteúdo carrega.
+  // Restauração de rolagem: guardamos a posição por "estado" da página
+  // (descoberta vs. resultados da query) e restauramos ao voltar para /buscar
+  // ou ao alternar entre os dois estados — sem salto visual.
+  const scrollKey = hasQuery ? `pc:buscar:scroll:${q.trim().toLowerCase()}` : "pc:buscar:scroll:home";
+  const scrollKeyRef = useRef(scrollKey);
+
   useEffect(() => {
     if (typeof window === "undefined") return;
     if ("scrollRestoration" in window.history) {
@@ -309,11 +312,46 @@ function SearchPage() {
     }
   }, []);
 
+  // Persiste a posição atual (throttled por rAF) na chave ativa.
   useEffect(() => {
     if (typeof window === "undefined") return;
-    const id = window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "auto" }));
+    scrollKeyRef.current = scrollKey;
+    let frame = 0;
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        try {
+          window.sessionStorage.setItem(scrollKeyRef.current, String(window.scrollY));
+        } catch {
+          /* ignore */
+        }
+      });
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, [scrollKey]);
+
+  // Restaura ao montar / ao alternar entre descoberta e resultados.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    let saved = 0;
+    try {
+      saved = Number(window.sessionStorage.getItem(scrollKey) ?? "0") || 0;
+    } catch {
+      saved = 0;
+    }
+    const target = Number.isFinite(saved) && saved > 0 ? saved : 0;
+    const id = window.requestAnimationFrame(() =>
+      window.scrollTo({ top: target, behavior: "auto" }),
+    );
     return () => window.cancelAnimationFrame(id);
-  }, [hasQuery]);
+  }, [scrollKey]);
+
+
 
 
   return (
