@@ -254,7 +254,9 @@ function SearchPage() {
           const currentQ = typeof prev?.q === "string" ? prev.q : "";
           if (currentQ === value) return prev;
           const nextSearch: Record<string, unknown> = { ...prev, q: value };
-          if (!value) delete nextSearch.q;
+          // `retainSearchParams` preserva parâmetros omitidos. Para voltar à
+          // descoberta da busca, `q` precisa ser explicitamente vazio.
+          if (!value) nextSearch.q = "";
           return nextSearch;
         },
         // A primeira busca empilha histórico (voltar → tela de busca vazia);
@@ -383,9 +385,13 @@ function SearchPage() {
                 navigate({
                   search: (prev: Record<string, unknown>) => {
                     const s = { ...prev };
-                    delete s.q;
+                    // Não remover a chave: o middleware de retenção reidrata
+                    // `q` a partir da URL atual. Valor vazio muda a rota para
+                    // o estado inicial de busca.
+                    s.q = "";
                     return s;
                   },
+                  replace: true,
                 })
               }
               className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[12.5px] font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
