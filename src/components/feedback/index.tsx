@@ -252,6 +252,10 @@ interface EmptyStateProps {
   className?: string;
   /** Visual density. */
   size?: "sm" | "md";
+  /** Papel ARIA (ex.: "status" para anunciar resultados vazios). */
+  role?: string;
+  /** Região viva quando o estado surge após uma ação do usuário. */
+  "aria-live"?: "off" | "polite" | "assertive";
 }
 
 export function EmptyState({
@@ -261,16 +265,21 @@ export function EmptyState({
   action,
   className,
   size = "md",
+  role,
+  "aria-live": ariaLive,
 }: EmptyStateProps) {
   const isSm = size === "sm";
   return (
     <div
+      role={role}
+      aria-live={ariaLive ?? (role === "status" ? "polite" : undefined)}
       className={cn(
         "flex flex-col items-center justify-center rounded-xl border border-dashed border-border bg-card/60 text-center",
         isSm ? "px-4 py-5" : "px-5 py-7 sm:py-8",
         className,
       )}
     >
+
       <span
         className={cn(
           "mb-2.5 grid place-items-center rounded-full bg-primary/12 text-primary ring-1 ring-primary/25 dark:bg-primary/20 dark:text-primary-foreground dark:ring-primary/40",
