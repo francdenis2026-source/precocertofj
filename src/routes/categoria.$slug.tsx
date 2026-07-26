@@ -280,39 +280,17 @@ function CategoryPage() {
               <input
                 id="cat-prod-search"
                 type="search"
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
+                value={qInput}
+                onChange={(e) => setQInput(e.target.value)}
+                aria-controls="cat-prod-results"
                 placeholder={`Filtrar em ${def.label.toLowerCase()}…`}
                 className="h-10 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13.5px] outline-none focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
               />
             </div>
-            <div
-              role="group"
-              aria-label="Modo de exibição"
-              className="flex h-10 shrink-0 items-center gap-1 rounded-lg border border-border bg-card p-1"
-            >
-              {([
-                { id: "list", label: "Lista", Icon: List },
-                { id: "grid", label: "Grade", Icon: LayoutGrid },
-              ] as const).map(({ id, label, Icon: VIcon }) => (
-                <button
-                  key={id}
-                  type="button"
-                  onClick={() => setView(id)}
-                  aria-pressed={view === id}
-                  title={label}
-                  className={cn(
-                    "grid h-8 w-8 place-items-center rounded-md transition-colors",
-                    view === id
-                      ? "bg-brand-gold text-brand-navy"
-                      : "text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  <VIcon className="h-4 w-4" aria-hidden />
-                  <span className="sr-only">{label}</span>
-                </button>
-              ))}
-            </div>
+            <ViewToggle
+              view={view}
+              onChange={(v) => setSearch({ view: v, page: 1 })}
+            />
           </div>
 
           {(data?.stores.length ?? 0) > 1 && (
@@ -324,18 +302,21 @@ function CategoryPage() {
               <FilterChip
                 label="Todas as lojas"
                 active={storeFilter === ""}
-                onClick={() => setStoreFilter("")}
+                onClick={() => setSearch({ loja: "", page: 1 })}
               />
               {data!.stores.map((s2) => (
                 <FilterChip
                   key={s2.id}
                   label={s2.name}
                   active={storeFilter === s2.name}
-                  onClick={() => setStoreFilter(storeFilter === s2.name ? "" : s2.name)}
+                  onClick={() =>
+                    setSearch({ loja: storeFilter === s2.name ? "" : s2.name, page: 1 })
+                  }
                 />
               ))}
             </div>
           )}
+
 
           {isLoading ? (
             <SkeletonRow />
