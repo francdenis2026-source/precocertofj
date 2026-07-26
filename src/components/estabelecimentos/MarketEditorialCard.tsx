@@ -127,8 +127,10 @@ export function MarketEditorialCard({
                   src={logoUrl}
                   name={name}
                   targetFill={0.96}
+                  eager={priority}
                   className="transition-transform duration-300 group-hover:scale-[1.05]"
                 />
+
               </span>
             ) : (
               <span className="grid h-full w-full place-items-center rounded-[11px] bg-brand-navy/10 text-[14px] font-bold text-brand-navy ring-1 ring-brand-navy/15">
