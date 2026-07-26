@@ -2376,18 +2376,15 @@ function MatrixCompareResults({
                     style={{ boxShadow: `inset 0 3px 0 0 ${bar}` }}
                   >
                     <div className="flex items-center gap-2 pt-1">
-                      <span
-                        className="grid h-10 w-10 flex-none place-items-center overflow-hidden rounded-md border bg-[oklch(0.995_0.004_95)]"
-                        style={{ borderColor: bar === "transparent" ? undefined : bar }}
-                        aria-hidden="true"
-                      >
-                        {m.logoUrl ? (
-                          <LazyImage src={m.logoUrl} alt="" className="h-full w-full object-contain p-0.5" />
-                        ) : (
-                          <ShoppingBag className="h-3.5 w-3.5 text-muted-foreground" />
-                        )}
-                      </span>
+                      <StoreBadge
+                        name={m.name}
+                        logoUrl={m.logoUrl}
+                        brandColor={m.brandColor}
+                        size="sm"
+                        className="flex-none"
+                      />
                       <span className="market-name truncate text-[12.5px] font-semibold text-foreground">
+
                         {m.name}
                       </span>
                     </div>
