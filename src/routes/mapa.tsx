@@ -12,6 +12,7 @@ import {
   Tag,
   TrendingUp,
   ArrowUpDown,
+  ChevronDown,
   SlidersHorizontal,
 } from "lucide-react";
 import { listEstablishmentsByNeighborhood } from "@/lib/scans-history.functions";
@@ -99,6 +100,14 @@ function NeighborhoodsPage() {
   const [cityFilter, setCityFilter] = useState<string>("");
   const [onlyFavs, setOnlyFavs] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [expanded, setExpanded] = useState<Set<string>>(new Set());
+  const toggleExpanded = (key: string) =>
+    setExpanded((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
 
   const groups = useQuery({
     queryKey: ["neighborhoods"],
@@ -713,6 +722,8 @@ function NeighborhoodsPage() {
           <div className="space-y-3">
             {filteredGroups.map((group) => {
               const isFav = favKeys.has(group.neighborhood);
+              const isOpen = expanded.has(group.neighborhood);
+              const bodyClass = isOpen ? "block" : "hidden md:block";
               return (
                 <section
                   key={group.neighborhood}
@@ -747,6 +758,18 @@ function NeighborhoodsPage() {
                       </span>
                       <button
                         type="button"
+                        onClick={() => toggleExpanded(group.neighborhood)}
+                        aria-expanded={isOpen}
+                        aria-label={isOpen ? "Recolher bairro" : "Expandir bairro"}
+                        className="rounded-full p-1.5 text-muted-foreground transition-colors hover:text-brand-gold md:hidden"
+                      >
+                        <ChevronDown
+                          className={"h-4 w-4 transition-transform " + (isOpen ? "rotate-180" : "")}
+                          strokeWidth={2.25}
+                        />
+                      </button>
+                      <button
+                        type="button"
                         onClick={() => handleFavClick(group.neighborhood, group.city)}
                         aria-label={isFav ? "Remover dos favoritos" : "Favoritar bairro"}
                         aria-pressed={isFav}
@@ -767,7 +790,7 @@ function NeighborhoodsPage() {
 
                   {/* Insights — categorias e top produtos */}
                   {(group.topCategories.length > 0 || group.topProducts.length > 0) && (
-                    <div className="space-y-2.5 border-b border-border bg-muted/10 px-3.5 py-2.5">
+                    <div className={`${bodyClass} space-y-2.5 border-b border-border bg-muted/10 px-3.5 py-2.5`}>
                       {group.topCategories.length > 0 && (
                         <div>
                           <div className="mb-1 flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
@@ -817,7 +840,7 @@ function NeighborhoodsPage() {
                     </div>
                   )}
 
-                  <ul className="divide-y divide-border">
+                  <ul className={`${bodyClass} divide-y divide-border`}>
                     {group.establishments.map((est) => (
                       <li
                         key={est.id}
