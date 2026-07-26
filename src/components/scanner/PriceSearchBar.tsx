@@ -818,106 +818,92 @@ export function PriceSearchBar({
           ) : (
 
             <>
-              {/* Resumo topo: melhor preço agora + economia estimada */}
-              {result.cheapest && typeof result.min === "number" && typeof result.max === "number" && result.max > result.min ? (
-                (() => {
-                  const rMin = result.min as number;
-                  const rMax = result.max as number;
-                  const gap = rMax - rMin;
-                  const pct = Math.round((gap / rMax) * 100);
-                  // Mercado com o maior preço do MESMO produto de referência.
-                  const refGroup = result.groups?.find(
-                    (g) => g.productName === result.cheapest?.productName,
-                  );
-                  const priciestMarket = refGroup
-                    ? [...refGroup.prices].sort((a, b) => b.price - a.price)[0]?.marketName ?? null
-                    : null;
-                  return (
-                    <div className="grid gap-2 rounded-xl border border-white/10 bg-brand-navy px-3.5 py-3 text-white shadow-sm sm:grid-cols-2 sm:gap-4">
+              {/* Resumo topo: um único painel com melhor preço, economia e estatísticas */}
+              {(() => {
+                const rMin = typeof result.min === "number" ? result.min : null;
+                const rMax = typeof result.max === "number" ? result.max : null;
+                const hasGap = result.cheapest && rMin != null && rMax != null && rMax > rMin;
+                const gap = hasGap ? (rMax as number) - (rMin as number) : 0;
+                const pct = hasGap ? Math.round((gap / (rMax as number)) * 100) : 0;
+                const refGroup = result.groups?.find(
+                  (g) => g.productName === result.cheapest?.productName,
+                );
+                const priciestMarket = refGroup
+                  ? [...refGroup.prices].sort((a, b) => b.price - a.price)[0]?.marketName ?? null
+                  : null;
+
+                return (
+                  <div className="overflow-hidden rounded-xl border border-white/10 bg-brand-navy text-white shadow-sm">
+                    <div className="grid gap-3 px-3.5 py-3 sm:grid-cols-2 sm:gap-4">
                       <div className="min-w-0">
-                        <p className="text-[11px] font-medium text-brand-gold/90">
-                          Melhor preço agora
+                        <p className="text-[11px] font-medium text-brand-gold/90">Melhor preço agora</p>
+                        <p className="mt-1 flex items-baseline gap-2 text-[26px] font-bold leading-none tabular-nums">
+                          {fmt(result.cheapest?.price ?? result.min)}
                         </p>
-                        <p className="mt-1 truncate text-[26px] font-bold leading-none tabular-nums">
-                          {fmt(result.cheapest!.price)}
-                        </p>
-                        {result.cheapest!.productName ? (
-                          <p className="mt-1 truncate text-[11.5px] font-medium text-brand-gold/90">
-                            {result.cheapest!.productName}
+                        {result.cheapest ? (
+                          <p className="mt-1.5 flex min-w-0 items-center gap-1.5 text-[12px] text-white/75">
+                            <StoreBadge
+                              name={result.cheapest.marketName}
+                              logoUrl={result.cheapest.marketLogoUrl}
+                              brandColor={result.cheapest.marketBrandColor}
+                              size="xs"
+                              isCheapest
+                              cheapestReason={buildCheapestReason(result.cheapest.price, result.avg)}
+                            />
+                            <span className="truncate">
+                              {result.cheapest.productName ? (
+                                <span className="font-medium text-white">
+                                  {result.cheapest.productName}
+                                </span>
+                              ) : null}
+                              {result.cheapest.productName ? " · " : ""}
+                              em{" "}
+                              <span className="font-semibold text-white">
+                                {result.cheapest.marketName}
+                              </span>
+                            </span>
                           </p>
                         ) : null}
-                        <p className="mt-1 truncate text-[11.5px] text-white/70">
-                          em <span className="font-semibold text-white">{result.cheapest!.marketName}</span>
-                        </p>
                       </div>
-                      <div className="min-w-0 sm:border-l sm:border-white/10 sm:pl-4">
-                        <p className="text-[11px] font-medium text-brand-gold/90">
-                          Economia estimada
-                        </p>
-                        <p className="mt-1 text-[26px] font-bold leading-none tabular-nums">
-                          {fmt(gap)}
-                          <span className="ml-1.5 align-middle text-[12px] font-bold text-brand-gold">−{pct}%</span>
-                        </p>
-                        <p className="mt-1 text-[11.5px] text-white/70 tabular-nums">
-                          mesmo produto · mais caro {fmt(rMax)}
-                          {priciestMarket ? (
-                            <> em <span className="font-semibold text-white/90">{priciestMarket}</span></>
-                          ) : null}
-                        </p>
 
-                      </div>
+                      {hasGap ? (
+                        <div className="min-w-0 border-t border-white/10 pt-3 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-4">
+                          <p className="text-[11px] font-medium text-brand-gold/90">Economia estimada</p>
+                          <p className="mt-1 text-[26px] font-bold leading-none tabular-nums">
+                            {fmt(gap)}
+                            <span className="ml-1.5 align-middle text-[12px] font-bold text-brand-gold">
+                              −{pct}%
+                            </span>
+                          </p>
+                          <p className="mt-1.5 truncate text-[12px] text-white/75 tabular-nums">
+                            mesmo produto · mais caro {fmt(rMax)}
+                            {priciestMarket ? (
+                              <> em <span className="font-semibold text-white/90">{priciestMarket}</span></>
+                            ) : null}
+                          </p>
+                        </div>
+                      ) : null}
                     </div>
-                  );
-                })()
-              ) : null}
 
-
-              <div className="grid grid-cols-3 gap-2">
-                <Stat label="Média" value={fmt(result.avg)} />
-                <Stat
-                  label="Mínimo"
-                  value={fmt(result.min)}
-                  icon={<TrendingDown className="h-3 w-3 text-neon" />}
-                />
-                <Stat label="Amostras" value={String(result.samples)} />
-              </div>
-
-
-              {result.cheapest && (
-                <Link
-                  to="/produto-publico/$slug"
-                  params={{ slug: result.query }}
-                  className="relative block rounded-xl border border-border bg-card p-2.5 transition hover:border-accent-strong/60"
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <p className="inline-flex items-center gap-1 rounded-md bg-accent-strong px-1.5 py-0.5 text-[12px] font-medium text-accent-foreground">
-                      <Crown className="h-3 w-3" strokeWidth={2} aria-hidden="true" />
-                      Preço mais barato
-                    </p>
-                    <FairPriceBadge
-                      price={result.cheapest.price}
-                      min={result.min}
-                      avg={result.avg}
-                      max={result.max}
-                      size="sm"
-                    />
+                    {/* Estatísticas — faixa única, sem cards repetidos */}
+                    <dl className="grid grid-cols-3 divide-x divide-white/10 border-t border-white/10 bg-white/[0.04]">
+                      {[
+                        { k: "Preço médio", v: fmt(result.avg) },
+                        { k: "Menor preço", v: fmt(result.min) },
+                        { k: "Preços comparados", v: String(result.samples) },
+                      ].map((s) => (
+                        <div key={s.k} className="min-w-0 px-3.5 py-2">
+                          <dt className="truncate text-[10.5px] font-medium text-white/60">{s.k}</dt>
+                          <dd className="mt-0.5 text-[15px] font-bold leading-none tabular-nums text-white">
+                            {s.v}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
                   </div>
-                  <p className="mt-1.5 flex items-center gap-1.5 text-[13px] text-foreground">
-                    <StoreBadge
-                      name={result.cheapest.marketName}
-                      logoUrl={result.cheapest.marketLogoUrl}
-                      brandColor={result.cheapest.marketBrandColor}
-                      size="xs"
-                      isCheapest
-                      cheapestReason={buildCheapestReason(result.cheapest.price, result.avg)}
-                    />
-                    <span className="market-name truncate text-[13px]">{result.cheapest.marketName}</span>
-                  </p>
-                  <p className="mt-0.5 text-[22px] font-bold leading-tight tracking-tight tabular-nums text-foreground">
-                    {fmt(result.cheapest.price)}
-                  </p>
-                </Link>
-              )}
+                );
+              })()}
+
 
 
 
