@@ -722,7 +722,7 @@ function EstablishmentsPage() {
                       <Select value={neighborhood} onValueChange={setNeighborhood}>
                         <SelectTrigger
                           aria-label="Filtrar por bairro"
-                          className="h-10 w-full rounded-xl text-[12.5px] md:w-[192px]"
+                          className="h-10 w-full min-w-0 rounded-xl text-[12px] md:w-[192px] md:text-[12.5px] [&>span]:truncate"
                         >
                           <SelectValue placeholder="Bairro" />
                         </SelectTrigger>
@@ -738,7 +738,7 @@ function EstablishmentsPage() {
                       <Select value={sort} onValueChange={(v) => setSort(v as typeof sort)}>
                         <SelectTrigger
                           aria-label="Ordenar por"
-                          className="h-10 w-full rounded-xl text-[12.5px] md:w-[186px]"
+                          className="h-10 w-full min-w-0 rounded-xl text-[12px] md:w-[186px] md:text-[12.5px] [&>span]:truncate"
                         >
                           <SelectValue placeholder="Ordenar" />
                         </SelectTrigger>
@@ -755,7 +755,7 @@ function EstablishmentsPage() {
                   </div>
                   <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/50 px-2.5 py-2 md:px-3.5">
                     <LocationControl loc={loc} variant="surface" />
-                    <span className="text-[10.5px] font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                    <span className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-foreground/70">
                       {referencePoint ? (
                         <>Referência ativa · distâncias estimadas</>
                       ) : (
