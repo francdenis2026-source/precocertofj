@@ -52,7 +52,12 @@ import {
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { StoreBadge } from "@/components/brand/StoreBadge";
-import { ButcherCounter, splitButcherCuts } from "@/components/estabelecimento/ButcherCounter";
+import {
+  ButcherCounter,
+  splitButcherCuts,
+  parseButcherState,
+  type ButcherViewState,
+} from "@/components/estabelecimento/ButcherCounter";
 import { PreparoDicas } from "@/components/estabelecimento/PreparoDicas";
 import { FavoriteMarketButton } from "@/components/market/FavoriteMarketButton";
 import { RatingBadge, PLATFORM_RATING } from "@/components/ds/RatingStars";
@@ -79,7 +84,17 @@ const storeQuery = (id: string) =>
     queryFn: () => getPublicStoreCatalog({ data: { id } }),
     staleTime: 60_000,
   });
-const SEARCH_DEFAULTS = { q: "", cat: "", view: "grid", sort: "price-asc", aba: "catalogo" };
+const SEARCH_DEFAULTS = {
+  q: "",
+  cat: "",
+  view: "grid",
+  sort: "price-asc",
+  aba: "catalogo",
+  bq: "",
+  prot: "",
+  bsort: "kg-asc",
+  bview: "grid",
+};
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
@@ -87,6 +102,10 @@ const searchSchema = z.object({
   view: fallback(z.string(), "grid").default("grid"),
   sort: fallback(z.string(), "price-asc").default("price-asc"),
   aba: fallback(z.string(), "catalogo").default("catalogo"),
+  bq: fallback(z.string(), "").default(""),
+  prot: fallback(z.string(), "").default(""),
+  bsort: fallback(z.string(), "kg-asc").default("kg-asc"),
+  bview: fallback(z.string(), "grid").default("grid"),
 });
 
 export const Route = createFileRoute("/estabelecimento/$slug")({
@@ -258,6 +277,29 @@ function EstablishmentPage() {
     });
     return { km: haversineKm(referencePoint, position), source };
   }, [referencePoint, data.store.latitude, data.store.longitude, data.store.neighborhood]);
+
+  // Estado do açougue espelhado na URL (compartilhável e com voltar/avançar).
+  const butcherState = useMemo(
+    () => parseButcherState({ q: search.bq, prot: search.prot, bsort: search.bsort, bview: search.bview }),
+    [search.bq, search.prot, search.bsort, search.bview],
+  );
+  const butcherQueryRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const patchButcher = (patch: Partial<ButcherViewState>) => {
+    const next = { ...butcherState, ...patch };
+    const apply = () =>
+      setSearch(
+        {
+          bq: next.q,
+          prot: next.protein ?? "",
+          bsort: next.sort,
+          bview: next.view,
+        },
+        { replace: patch.q !== undefined },
+      );
+    if (butcherQueryRef.current) clearTimeout(butcherQueryRef.current);
+    if (patch.q !== undefined) butcherQueryRef.current = setTimeout(apply, 350);
+    else apply();
+  };
 
   const createAlert = (_p: PublicStoreProduct) => {
     navigate({ to: "/alertas" });
@@ -516,6 +558,8 @@ function EstablishmentPage() {
             <ButcherCounter
               storeName={data.store.name}
               cuts={cuts}
+              state={butcherState}
+              onStateChange={patchButcher}
               onHistory={(p) => setHistoryFor(p)}
               onAlert={(p) => createAlert(p)}
               onOpen={(p) => setQuickView(p)}
