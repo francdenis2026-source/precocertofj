@@ -1188,20 +1188,19 @@ function MetricDetailDialog({
             <ul className="space-y-2" aria-label="Estabelecimentos monitorados">
               {topByProducts.map((e) => (
                 <li key={e.id} className="flex items-center gap-3 rounded-md border border-border/60 bg-card p-2.5">
-                  <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md">
-                    {e.logoUrl ? (
-                      <img src={e.logoUrl} alt="" className="h-full w-full object-contain" loading="lazy" />
-                    ) : (
-                      <span className="text-[11px] font-bold text-brand-navy">{e.name.substring(0, 2).toUpperCase()}</span>
-                    )}
-                  </div>
+                  <StoreLogoThumb
+                    src={e.logoUrl}
+                    name={e.name}
+                    className="h-9 w-9 border-transparent bg-transparent p-0"
+                  />
                   <div className="min-w-0 flex-1">
-                    <div className="truncate text-[13.5px] font-semibold text-foreground">{e.name}</div>
-                    <div className="truncate text-[11.5px] text-muted-foreground">
+                    <div className={`truncate ${tc.itemTitle}`}>{e.name}</div>
+                    <div className={`truncate ${tc.meta}`}>
                       <span className="font-semibold text-brand-gold">{e.productsCount}</span> produtos
                       {e.neighborhood ? ` · ${e.neighborhood}` : ""}
                     </div>
                   </div>
+
                 </li>
               ))}
               <li className="pt-1 text-center text-[12px] text-muted-foreground">
