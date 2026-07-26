@@ -1,4 +1,12 @@
-import { createFileRoute, Link, notFound, useNavigate } from "@tanstack/react-router";
+import {
+  createFileRoute,
+  Link,
+  notFound,
+  useNavigate,
+  stripSearchParams,
+} from "@tanstack/react-router";
+import { zodValidator, fallback } from "@tanstack/zod-adapter";
+import { z } from "zod";
 import { queryOptions, useSuspenseQuery, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -71,9 +79,21 @@ const storeQuery = (id: string) =>
     queryFn: () => getPublicStoreCatalog({ data: { id } }),
     staleTime: 60_000,
   });
+const SEARCH_DEFAULTS = { q: "", cat: "", view: "grid", sort: "price-asc", aba: "catalogo" };
+
+const searchSchema = z.object({
+  q: fallback(z.string(), "").default(""),
+  cat: fallback(z.string(), "").default(""),
+  view: fallback(z.string(), "grid").default("grid"),
+  sort: fallback(z.string(), "price-asc").default("price-asc"),
+  aba: fallback(z.string(), "catalogo").default("catalogo"),
+});
 
 export const Route = createFileRoute("/estabelecimento/$slug")({
+  validateSearch: zodValidator(searchSchema),
+  search: { middlewares: [stripSearchParams(SEARCH_DEFAULTS)] },
   loader: async ({ params, context }) => {
+
     const match = await resolveEstablishmentBySlug({ data: { slug: params.slug } });
     if (!match) throw notFound();
     await context.queryClient.ensureQueryData(storeQuery(match.id));
@@ -136,14 +156,46 @@ function EstablishmentPage() {
   const { slug } = Route.useParams();
   const { data } = useSuspenseQuery(storeQuery(storeId));
   const navigate = useNavigate();
-  const [q, setQ] = useState("");
-  const [sort, setSort] = useState<SortKey>("price-asc");
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const search = Route.useSearch();
+
+  const setSearch = (patch: Partial<typeof search>, opts?: { replace?: boolean }) => {
+    navigate({
+      to: "/estabelecimento/$slug",
+      params: { slug },
+      search: { ...search, ...patch },
+      replace: opts?.replace ?? false,
+    });
+  };
+
+
+  const sort: SortKey = (Object.keys(SORT_LABEL) as SortKey[]).includes(search.sort as SortKey)
+    ? (search.sort as SortKey)
+    : "price-asc";
+  const view: "grid" | "list" = search.view === "list" ? "list" : "grid";
+  const tab: "catalogo" | "acougue" = search.aba === "acougue" ? "acougue" : "catalogo";
+  const selectedCategory = search.cat ? search.cat : null;
+
+  const [q, setQ] = useState(search.q);
   const [historyFor, setHistoryFor] = useState<PublicStoreProduct | null>(null);
   const [quickView, setQuickView] = useState<PublicStoreProduct | null>(null);
-  const [view, setView] = useState<"grid" | "list">("grid");
-  const [tab, setTab] = useState<"catalogo" | "acougue">("catalogo");
   const [limit, setLimit] = useState(30);
+
+  // Sincroniza o termo digitado com a URL (debounce) para compartilhar/voltar.
+  useEffect(() => {
+    if (q === search.q) return;
+    const t = setTimeout(() => setSearch({ q }, { replace: true }), 350);
+    return () => clearTimeout(t);
+  }, [q]);
+
+  useEffect(() => {
+    setQ(search.q);
+  }, [search.q]);
+
+  useEffect(() => {
+    setLimit(30);
+  }, [search.cat, search.q, search.sort, search.view]);
+
+
 
 
   const { cuts, general } = useMemo(() => splitButcherCuts(data.products), [data.products]);
@@ -295,7 +347,7 @@ function EstablishmentPage() {
                   type="button"
                   role="tab"
                   aria-selected={active}
-                  onClick={() => setTab(t.id)}
+                  onClick={() => setSearch({ aba: t.id })}
                   className={
                     active
                       ? "inline-flex h-8 items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-3 text-[12px] font-semibold leading-none text-brand-navy"
@@ -327,8 +379,7 @@ function EstablishmentPage() {
                 ]}
                 activeLabel={selectedCategory}
                 onSelect={(label) => {
-                  setSelectedCategory(label === "Todas" ? null : label);
-                  setLimit(30);
+                  setSearch({ cat: label === "Todas" ? "" : label });
                 }}
               />
             )}
@@ -351,7 +402,7 @@ function EstablishmentPage() {
                   className="h-9 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13px] outline-none focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
                 />
               </div>
-              <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
+              <Select value={sort} onValueChange={(v) => setSearch({ sort: v })}>
                 <SelectTrigger
                   aria-label="Ordenar por"
                   className="h-9 w-full text-[12.5px] font-medium sm:w-[240px]"
@@ -366,7 +417,7 @@ function EstablishmentPage() {
                   ))}
                 </SelectContent>
               </Select>
-              <ViewToggle value={view} onChange={setView} />
+              <ViewToggle value={view} onChange={(v) => setSearch({ view: v })} />
             </div>
 
             <div className="mt-2.5 flex items-baseline justify-between gap-3">
@@ -395,18 +446,34 @@ function EstablishmentPage() {
                     ))}
                   </ul>
                 ) : (
-                  <ul className="mt-2 divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
-                    {filtered.slice(0, limit).map((p) => (
-                      <li key={p.slug}>
-                        <ProductRow
-                          product={p}
-                          onOpen={() => setQuickView(p)}
-                          onAlert={() => createAlert(p)}
-                          onHistory={() => setHistoryFor(p)}
-                        />
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="mt-2 overflow-hidden rounded-lg border border-border bg-card">
+                    <div className="grid grid-cols-[minmax(0,1fr)_96px] items-center gap-3 border-b border-border bg-muted/60 px-2.5 py-1.5 sm:grid-cols-[minmax(0,1fr)_120px_96px_200px]">
+                      <span className="text-[10px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground">
+                        Produto
+                      </span>
+                      <span className="hidden text-[10px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground sm:block">
+                        Unidade
+                      </span>
+                      <span className="text-right text-[10px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground">
+                        Preço
+                      </span>
+                      <span className="hidden text-right text-[10px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground sm:block">
+                        Ações
+                      </span>
+                    </div>
+                    <ul className="divide-y divide-border/70">
+                      {filtered.slice(0, limit).map((p) => (
+                        <li key={p.slug}>
+                          <ProductRow
+                            product={p}
+                            onOpen={() => setQuickView(p)}
+                            onAlert={() => createAlert(p)}
+                            onHistory={() => setHistoryFor(p)}
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 )}
                 {filtered.length > limit && (
                   <button
@@ -433,7 +500,7 @@ function EstablishmentPage() {
                 }
                 action={
                   selectedCategory ? (
-                    <Button variant="outline" size="sm" onClick={() => setSelectedCategory(null)}>
+                    <Button variant="outline" size="sm" onClick={() => setSearch({ cat: "" })}>
                       Limpar categoria
                     </Button>
                   ) : undefined
@@ -641,48 +708,62 @@ function PriceHistorySheet({
 function StoreStat({ label, value, hint }: { label: string; value: string; hint?: string | null }) {
   return (
     <div className="min-w-0 px-3 py-1.5">
-      <dt className="text-[9.5px] font-semibold uppercase leading-none tracking-[0.14em] text-white/60">
+      <dt className="text-[9.5px] font-semibold uppercase leading-none tracking-[0.14em] text-white/70">
         {label}
       </dt>
       <dd className="mt-1 truncate text-[15px] font-bold leading-none tabular-nums text-brand-gold">
         {value}
       </dd>
       {hint ? (
-        <p className="mt-1 truncate text-[10.5px] leading-none text-white/55">{hint}</p>
+        <p className="mt-1 truncate text-[10.5px] leading-none text-white/75">{hint}</p>
       ) : null}
     </div>
   );
 }
 
-/** Chip de categoria — altura fixa 32px, contraste navy/gold. */
+/** Chip de categoria — 32px, contraste navy/gold e foco visível. */
 function CategoryChip({
   label,
   count,
   active,
+  tabIndex,
   onClick,
 }: {
   label: string;
   count: number;
   active: boolean;
+  tabIndex: number;
   onClick: () => void;
 }) {
   return (
     <button
       type="button"
       role="radio"
+      data-rail-item
       aria-checked={active}
+      aria-current={active ? "page" : undefined}
+      tabIndex={tabIndex}
       onClick={onClick}
       className={
-        active
-          ? "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border border-brand-gold bg-brand-gold px-3 text-[12px] font-semibold leading-none text-brand-navy"
-          : "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border border-border bg-card px-3 text-[12px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold"
+        "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[12px] font-semibold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-1 focus-visible:ring-offset-background " +
+        (active
+          ? "border-brand-gold bg-brand-gold text-brand-navy"
+          : "border-border bg-card text-foreground hover:border-brand-gold hover:bg-muted/60")
       }
     >
       {label}
-      <span className="text-[10px] font-bold tabular-nums opacity-70">{count}</span>
+      <span
+        className={
+          "text-[10px] font-bold tabular-nums " +
+          (active ? "text-brand-navy/70" : "text-muted-foreground")
+        }
+      >
+        {count}
+      </span>
     </button>
   );
 }
+
 
 /** Trilho de categorias com setas, arraste, roda e teclado (sem recortes). */
 function CategoryRail({
@@ -713,6 +794,17 @@ function CategoryRail({
     };
   }, [categories.length]);
 
+  const activeIndex = Math.max(
+    0,
+    categories.findIndex((c) =>
+      c.label === "Todas" ? activeLabel === null : activeLabel === c.label,
+    ),
+  );
+
+  useEffect(() => {
+    ctrlRef.current?.centerActive("smooth");
+  }, [activeLabel]);
+
   return (
     <nav aria-label="Filtrar por categoria" className="relative mt-2.5">
       <div className="flex items-center gap-1.5">
@@ -729,8 +821,12 @@ function CategoryRail({
           }}
           className="no-scrollbar min-w-0 flex-1 overflow-x-auto scroll-smooth"
         >
-          <div role="radiogroup" aria-label="Categorias" className="flex w-max gap-1.5 px-0.5 py-0.5">
-            {categories.map((c) => {
+          <div
+            role="radiogroup"
+            aria-label="Categorias do estabelecimento"
+            className="flex w-max gap-1.5 px-0.5 py-0.5"
+          >
+            {categories.map((c, i) => {
               const active = c.label === "Todas" ? activeLabel === null : activeLabel === c.label;
               return (
                 <CategoryChip
@@ -738,6 +834,7 @@ function CategoryRail({
                   label={c.label}
                   count={c.count}
                   active={active}
+                  tabIndex={i === activeIndex ? 0 : -1}
                   onClick={() => onSelect(c.label)}
                 />
               );
@@ -750,8 +847,12 @@ function CategoryRail({
           onClick={() => ctrlRef.current?.scrollByPage(1)}
         />
       </div>
+      <p className="sr-only" aria-live="polite">
+        {activeLabel ? `Categoria ${activeLabel} selecionada` : "Todas as categorias"}
+      </p>
     </nav>
   );
+
 }
 
 function RailArrow({
@@ -839,7 +940,7 @@ function ProductTile({
   onHistory: () => void;
 }) {
   return (
-    <article className="flex h-full flex-col justify-between rounded-lg border border-border bg-card transition-colors hover:border-brand-gold">
+    <article className="flex h-full flex-col justify-between rounded-lg border border-border bg-card shadow-[0_1px_2px_rgba(11,30,63,0.04)] transition-colors hover:border-brand-gold hover:bg-muted/30">
       <button
         type="button"
         onClick={onOpen}
@@ -888,7 +989,7 @@ function ProductTile({
   );
 }
 
-/** Linha densa para o modo Lista. */
+/** Linha densa em colunas (produto · unidade · preço · ações) para o modo Lista. */
 function ProductRow({
   product,
   onOpen,
@@ -900,44 +1001,64 @@ function ProductRow({
   onAlert: () => void;
   onHistory: () => void;
 }) {
+  const unit =
+    product.unitLabel?.replace("R$", "").replace(/^\s*\/\s*/, "").trim() ||
+    (product.pricePerUnit != null ? "un" : null);
   return (
-    <div className="flex items-center gap-2 px-2.5 py-2 transition-colors hover:bg-muted/40">
+    <div className="grid grid-cols-[minmax(0,1fr)_96px] items-center gap-3 px-2.5 py-1.5 transition-colors hover:bg-muted/50 sm:grid-cols-[minmax(0,1fr)_120px_96px_200px]">
       <button
         type="button"
         onClick={onOpen}
         aria-label={`Ver detalhes de ${product.productName}`}
-        className="min-w-0 flex-1 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
+        className="min-w-0 rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
       >
-        <span className="block truncate text-[12.5px] font-semibold leading-snug text-foreground">
+        <span className="block truncate text-[12.5px] font-semibold leading-tight text-foreground">
           {product.productName}
         </span>
-        <span className="block truncate text-[10.5px] leading-none text-muted-foreground">
+        <span className="block truncate text-[10.5px] leading-tight text-muted-foreground">
           {[product.brand, product.category].filter(Boolean).join(" · ") || "Sem categoria"}
-          {unitSuffix(product)}
         </span>
       </button>
-      <span className="shrink-0 text-[13px] font-bold tabular-nums text-foreground">
+
+      <span className="hidden min-w-0 truncate text-[11.5px] leading-tight text-muted-foreground sm:block">
+        {unit ? (
+          <>
+            {unit}
+            {product.pricePerUnit != null ? (
+              <span className="block truncate text-[10.5px] tabular-nums text-muted-foreground">
+                {brl(product.pricePerUnit)} / {unit}
+              </span>
+            ) : null}
+          </>
+        ) : (
+          "—"
+        )}
+      </span>
+
+      <span className="whitespace-nowrap text-right text-[13px] font-bold tabular-nums leading-tight text-foreground">
         {brl(product.price)}
       </span>
-      <div className="flex shrink-0 items-center gap-1">
+
+      <div className="hidden items-center justify-end gap-1 sm:flex">
         <button
           type="button"
           onClick={onAlert}
           aria-label={`Criar alerta de preço para ${product.productName}`}
-          className="grid h-7 w-7 place-items-center rounded-full border border-border transition-colors hover:border-brand-gold"
+          className="inline-flex h-7 items-center gap-1 rounded-full border border-border bg-background px-2 text-[10.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
         >
-          <Bell className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+          <Bell className="h-3 w-3 text-brand-gold" aria-hidden /> Alerta
         </button>
         <button
           type="button"
           onClick={onHistory}
           aria-label={`Ver histórico de preço de ${product.productName}`}
-          className="grid h-7 w-7 place-items-center rounded-full border border-border transition-colors hover:border-brand-gold"
+          className="inline-flex h-7 items-center gap-1 rounded-full border border-border bg-background px-2 text-[10.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
         >
-          <History className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+          <History className="h-3 w-3 text-brand-gold" aria-hidden /> Histórico
         </button>
       </div>
     </div>
   );
 }
+
 
