@@ -82,22 +82,13 @@ export function SearchDiscovery({ onPickQuery }: Props) {
   const [recent, setRecent] = useState<string[]>([]);
   useEffect(() => setRecent(readRecent()), []);
   const clearRecent = () => {
-    try {
-      window.localStorage.removeItem(RECENT_KEY);
-    } catch {
-      /* ignore */
-    }
+    clearSearchHistory();
     setRecent([]);
   };
   const removeRecent = (term: string) => {
-    const next = recent.filter((x) => x !== term);
-    setRecent(next);
-    try {
-      window.localStorage.setItem(RECENT_KEY, JSON.stringify(next));
-    } catch {
-      /* ignore */
-    }
+    setRecent(removeSearchHistory(term).map((e) => e.query));
   };
+
 
   const stats = useQuery({
     queryKey: ["platform-stats-discovery"],
