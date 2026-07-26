@@ -349,33 +349,50 @@ export const getPlatformStats = createServerFn({ method: "GET" }).handler(
       };
     };
 
-    const [{ data, error }, itemsCount] = await Promise.all([
-      client.rpc("platform_public_stats"),
+    const [rpcRes, itemsCount] = await Promise.all([
+      client.rpc("platform_public_stats").catch((e: unknown) => ({
+        data: null,
+        error: { message: e instanceof Error ? e.message : "falha na consulta" },
+      })),
       countClient
         .from("scans")
         .select("id", { count: "exact", head: true })
         .eq("status", "salvo")
-        .is("user_id", null),
+        .is("user_id", null)
+        .catch(() => ({ count: null })),
     ]);
-    if (error) throw new Error(error.message);
+
+    const { data, error } = rpcRes;
     const row = data?.[0];
+    const num = (v: unknown) => {
+      const n = Number(v ?? 0);
+      return Number.isFinite(n) && n >= 0 ? n : 0;
+    };
 
     // Todas as métricas agregadas vêm do banco (platform_public_stats), evitando
     // o teto de 1000 linhas do PostgREST que antes truncava produtos e economia.
-    const unique = row?.unique_products ?? 0;
+    // Quando a integração falha, devolvemos zeros + `ok: false` para a UI mostrar
+    // o estado de erro de forma consistente (nunca números inventados).
+    const failed = Boolean(error) || !row;
+    const unique = failed ? 0 : num(row?.unique_products);
 
     return {
-      establishments: row?.establishments ?? 0,
-      priceDrops7d: row?.price_drops_7d ?? 0,
-      activeComparisons: row?.active_comparisons ?? 0,
+      establishments: failed ? 0 : num(row?.establishments),
+      priceDrops7d: failed ? 0 : num(row?.price_drops_7d),
+      activeComparisons: failed ? 0 : num(row?.active_comparisons),
       products: unique,
       totalItems: unique,
-      priceRecords: itemsCount.count ?? 0,
-      estimatedSavings: Number(row?.avg_savings ?? 0),
-      totalSavings: Number(row?.total_savings ?? 0),
+      priceRecords: failed ? 0 : (itemsCount.count ?? 0),
+      estimatedSavings: failed ? 0 : num(row?.avg_savings),
+      totalSavings: failed ? 0 : num(row?.total_savings),
+      generatedAt: new Date().toISOString(),
+      windowDays: PLATFORM_STATS_WINDOW_DAYS,
+      ok: !failed,
+      error: failed ? (error?.message ?? "sem dados do banco") : null,
     };
   },
 );
+
 
 
 
