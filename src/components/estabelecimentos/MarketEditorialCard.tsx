@@ -70,6 +70,7 @@ export function MarketEditorialCard({
   favoriteSlot,
   rank,
   highlightTokens,
+  priority = false,
   className,
 }: MarketEditorialCardProps) {
   const initials = name
@@ -80,13 +81,19 @@ export function MarketEditorialCard({
     .join("")
     .toUpperCase();
 
-  const { metrics } = useLogoPresentation(logoUrl, { targetFill: 0.94 });
+  // Reaproveita o cache de métricas já preenchido pela imagem (uma análise por
+  // URL em toda a aplicação); só dispara leitura própria nos cards prioritários.
+  const { metrics } = useLogoPresentation(logoUrl, {
+    targetFill: 0.94,
+    enabled: priority,
+  });
   const lightInk = Boolean(
     metrics?.analyzed &&
       metrics.hasAlpha &&
       (metrics.lightInkRatio > 0.5 || metrics.contentLuma > 0.72),
   );
   const needsPlate = Boolean(logoUrl) && !lightInk;
+
 
   return (
     <div className={cn("relative h-full", className)}>
