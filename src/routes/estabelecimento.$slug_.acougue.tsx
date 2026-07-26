@@ -123,7 +123,7 @@ function ButcherPage() {
       navigate({
         to: "/estabelecimento/$slug_/acougue",
         params: { slug },
-        search: (prev) => ({
+        search: (prev: Record<string, unknown>) => ({
           ...prev,
           bq: next.q,
           prot: next.protein ?? "",
@@ -142,7 +142,7 @@ function ButcherPage() {
       navigate({
         to: "/estabelecimento/$slug_/acougue",
         params: { slug },
-        search: (prev) => ({ ...prev, p: product.slug }),
+        search: (prev: Record<string, unknown>) => ({ ...prev, p: product.slug }),
       });
     },
     [navigate, slug],
@@ -151,7 +151,7 @@ function ButcherPage() {
     navigate({
       to: "/estabelecimento/$slug_/acougue",
       params: { slug },
-      search: (prev) => ({ ...prev, p: "" }),
+      search: (prev: Record<string, unknown>) => ({ ...prev, p: "" }),
       replace: true,
     });
   }, [navigate, slug]);
