@@ -123,7 +123,7 @@ export function PageHeader({
                 <p
                   className={cn(
                     "tc-flow mt-1.5 line-clamp-1 max-w-2xl text-body text-muted-foreground md:mt-2 md:line-clamp-none",
-                    compactMobile && "hidden md:block",
+                    compactMobile && "max-md:!hidden",
                   )}
                 >
                   {description}
