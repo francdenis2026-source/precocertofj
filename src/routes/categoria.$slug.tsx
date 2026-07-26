@@ -319,14 +319,27 @@ function CategoryPage() {
   );
 }
 
-function Stat({ label, value }: { label: string; value: number }) {
+function Stat({
+  label,
+  value,
+  align = "right",
+}: {
+  label: string;
+  value: number;
+  align?: "left" | "right";
+}) {
   return (
-    <div className="text-center sm:text-right">
-      <dt className="text-[9.5px] font-semibold uppercase tracking-[0.14em] text-white/60">{label}</dt>
-      <dd className="text-[15px] font-bold tabular-nums text-brand-gold">{value}</dd>
+    <div className={align === "left" ? "text-left" : "text-right"}>
+      <dt className="text-[9.5px] font-semibold uppercase leading-none tracking-[0.14em] text-white/60">
+        {label}
+      </dt>
+      <dd className="mt-1 text-[15px] font-bold leading-none tabular-nums text-brand-gold">
+        {value.toLocaleString("pt-BR")}
+      </dd>
     </div>
   );
 }
+
 
 function SectionTitle({
   icon: Icon,
