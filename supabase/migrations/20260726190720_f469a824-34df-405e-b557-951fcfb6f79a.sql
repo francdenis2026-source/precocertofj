@@ -1,0 +1,9 @@
+update public.establishments set logo_url='/logos/central-super-v5.png' where id='2148aff3-4b80-4b0d-adf8-a06e50e3c2c4';
+update public.establishments set logo_url='/logos/parceirao-v5.png' where id='905ca83b-5bd5-4d91-a543-76b2966e7d45';
+update public.establishments set logo_url='/logos/vanderley-v5.png' where id='555544d3-d211-4125-8bdb-70351e768b63';
+update public.establishments set logo_url='/logos/doce-dia-v5.png' where id='5c71b8fb-4fe2-4f65-8bd0-80726d92a243';
+update public.establishments set logo_url='/logos/ultra-v5.png' where id='f773cd4e-4561-48e7-a438-3ff26790d22a';
+update public.establishments set logo_url='/logos/facem-v5.png' where id='87bac1d3-304b-4560-bc1f-21744c0c3182';
+update public.establishments set logo_url='/logos/reboucas-v5.png' where id='c3f3df85-42fe-41ed-97a1-3115330783e2';
+update public.establishments set logo_url='/logos/recanto-v5.png' where id='2de4712e-e767-4cfe-acf0-1ec111a316b8';
+update public.establishments set logo_url='/logos/feijoense-v5.png' where id='0b39b658-42f1-42c4-b1ac-eb81e4ba27bf';
