@@ -794,6 +794,17 @@ function CategoryRail({
     };
   }, [categories.length]);
 
+  const activeIndex = Math.max(
+    0,
+    categories.findIndex((c) =>
+      c.label === "Todas" ? activeLabel === null : activeLabel === c.label,
+    ),
+  );
+
+  useEffect(() => {
+    ctrlRef.current?.centerActive("smooth");
+  }, [activeLabel]);
+
   return (
     <nav aria-label="Filtrar por categoria" className="relative mt-2.5">
       <div className="flex items-center gap-1.5">
@@ -810,8 +821,12 @@ function CategoryRail({
           }}
           className="no-scrollbar min-w-0 flex-1 overflow-x-auto scroll-smooth"
         >
-          <div role="radiogroup" aria-label="Categorias" className="flex w-max gap-1.5 px-0.5 py-0.5">
-            {categories.map((c) => {
+          <div
+            role="radiogroup"
+            aria-label="Categorias do estabelecimento"
+            className="flex w-max gap-1.5 px-0.5 py-0.5"
+          >
+            {categories.map((c, i) => {
               const active = c.label === "Todas" ? activeLabel === null : activeLabel === c.label;
               return (
                 <CategoryChip
@@ -819,6 +834,7 @@ function CategoryRail({
                   label={c.label}
                   count={c.count}
                   active={active}
+                  tabIndex={i === activeIndex ? 0 : -1}
                   onClick={() => onSelect(c.label)}
                 />
               );
@@ -831,8 +847,12 @@ function CategoryRail({
           onClick={() => ctrlRef.current?.scrollByPage(1)}
         />
       </div>
+      <p className="sr-only" aria-live="polite">
+        {activeLabel ? `Categoria ${activeLabel} selecionada` : "Todas as categorias"}
+      </p>
     </nav>
   );
+
 }
 
 function RailArrow({
