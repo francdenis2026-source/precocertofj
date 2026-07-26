@@ -3611,3 +3611,15 @@ html.dark :is(
 html.dark :is(.hover\:text-primary):not(.primary-on-light):hover {
   color: var(--primary-ink);
 }
+
+/* ==========================================================================
+   TRILHO DE ROLAGEM INTERNA (pc-rail)
+   Regiões que rolam por dentro do layout de tela única: sem barra visível,
+   sem "scroll chaining" para a página, com inércia no iOS.
+   ========================================================================== */
+@utility pc-rail {
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  &::-webkit-scrollbar { width: 0; height: 0; }
+}
