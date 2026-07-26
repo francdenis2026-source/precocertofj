@@ -131,6 +131,8 @@ function PlansPage() {
   const promptSignIn = usePromptSignIn();
   const [buying, setBuying] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [tab, setTab] = useState<"comparativo" | "faq">("comparativo");
+
 
 
   const { data: plans = [], isLoading } = useQuery({
