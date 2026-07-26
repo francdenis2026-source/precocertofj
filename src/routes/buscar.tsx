@@ -295,25 +295,26 @@ function SearchPage() {
   };
 
 
-  // Restauração de scroll ao voltar para /buscar preservando filtros
+  // A página de busca sempre abre travada no topo (ao entrar, ao voltar para
+  // /buscar e ao alternar entre "descoberta" e "resultados"), evitando o
+  // efeito de redimensionamento/salto conforme o conteúdo carrega.
   useEffect(() => {
-    try {
-      const raw = window.sessionStorage.getItem("search:scroll");
-      if (raw) {
-        const y = Number(raw);
-        if (Number.isFinite(y) && y > 0) {
-          requestAnimationFrame(() => window.scrollTo({ top: y, behavior: "auto" }));
-        }
-      }
-    } catch { /* ignore */ }
-    const onScroll = () => {
-      try {
-        window.sessionStorage.setItem("search:scroll", String(window.scrollY));
-      } catch { /* ignore */ }
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    if (typeof window === "undefined") return;
+    if ("scrollRestoration" in window.history) {
+      const prev = window.history.scrollRestoration;
+      window.history.scrollRestoration = "manual";
+      return () => {
+        window.history.scrollRestoration = prev;
+      };
+    }
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const id = window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "auto" }));
+    return () => window.cancelAnimationFrame(id);
+  }, [hasQuery]);
+
 
   return (
     <div className="pc-search-scope flex min-h-[100svh] flex-col bg-background text-foreground">
@@ -348,7 +349,7 @@ function SearchPage() {
       </header>
 
       {/* CORPO — largura total quando há resultados; 2 colunas na descoberta */}
-      <div className="mx-auto w-full max-w-7xl flex-1 px-4 pb-[calc(var(--mobile-nav-height)+1rem)] pt-2.5 md:px-8 md:pb-8 md:pt-3">
+      <div className="mx-auto w-full max-w-7xl flex-1 [overflow-anchor:none] px-4 pb-[calc(var(--mobile-nav-height)+1rem)] pt-2.5 md:px-8 md:pb-8 md:pt-3">
         <div
           className={
             hasQuery
@@ -356,7 +357,7 @@ function SearchPage() {
               : "grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-5"
           }
         >
-          <div className="min-w-0 space-y-2.5">
+          <div className={`min-w-0 space-y-2.5 ${hasQuery ? "min-h-[75svh]" : ""}`}>
             {/* BUSCA — protagonista, com moldura sutil de marca */}
             <div className="relative overflow-hidden rounded-2xl border border-border bg-card p-1.5 shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_18%,transparent),0_12px_28px_-24px_color-mix(in_oklab,var(--brand-navy)_45%,transparent)] md:p-2.5">
               <div
