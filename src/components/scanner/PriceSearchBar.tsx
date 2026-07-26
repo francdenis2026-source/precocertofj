@@ -2286,11 +2286,13 @@ function MatrixCompareResults({
                     className="inline-block h-2 w-2 rounded-full"
                     style={{ backgroundColor: dot ?? "hsl(var(--muted-foreground))" }}
                   />
-                  {m.logoUrl ? (
-                    <LazyImage src={m.logoUrl} alt="" className="h-5 w-5 rounded bg-[oklch(0.995_0.004_95)] object-contain p-[1px]" />
-                  ) : (
-                    <ShoppingBag className="h-3 w-3" aria-hidden="true" />
-                  )}
+                  <StoreBadge
+                    name={m.name}
+                    logoUrl={m.logoUrl}
+                    brandColor={m.brandColor}
+                    size="xs"
+                  />
+
                   <span className="max-w-[110px] truncate">{m.name}</span>
                 </button>
               );
