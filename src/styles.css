@@ -3587,3 +3587,27 @@ html:not(.dark) :is(.bg-brand-navy, .bg-brand-navy-2, [data-surface="navy"]) :is
   border: 1px solid color-mix(in oklab, var(--pc-home-gold) 55%, transparent);
   color: var(--pc-gold-ink);
 }
+
+/* ==========================================================================
+   TEXTO "PRIMARY" NO MODO ESCURO
+   --primary é navy sólido (ótimo como fundo, ilegível como texto sobre o
+   fundo escuro). Em .dark, qualquer texto/ícone .text-primary passa a usar
+   --primary-ink, um azul claro com contraste AA sobre o navy do tema.
+   Superfícies claras dentro do tema escuro podem sair da regra com
+   .primary-on-light.
+   ========================================================================== */
+.dark {
+  --primary-ink: oklch(0.84 0.075 258);
+}
+
+html.dark :is(
+  .text-primary,
+  .text-primary\/90,
+  .text-primary\/80
+):not(.primary-on-light) {
+  color: var(--primary-ink);
+}
+
+html.dark :is(.hover\:text-primary):not(.primary-on-light):hover {
+  color: var(--primary-ink);
+}
