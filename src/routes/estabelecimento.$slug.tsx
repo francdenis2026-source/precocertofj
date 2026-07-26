@@ -158,12 +158,12 @@ function EstablishmentPage() {
   const navigate = useNavigate();
   const search = Route.useSearch();
 
-  const setSearch = (patch: Partial<typeof search>) => {
+  const setSearch = (patch: Partial<typeof search>, opts?: { replace?: boolean }) => {
     navigate({
       to: "/estabelecimento/$slug",
       params: { slug },
       search: { ...search, ...patch },
-      replace: true,
+      replace: opts?.replace ?? false,
     });
   };
 
