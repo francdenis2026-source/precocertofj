@@ -262,7 +262,7 @@ function PlansPage() {
                     </div>
 
                     <ul className="mt-3 flex-1 space-y-1.5 text-[12.5px] leading-snug">
-                      {planHighlights(plan.slug).map((h) => (
+                      {planHighlights(plan.slug).slice(0, 2).map((h) => (
                         <li key={h} className="flex items-start gap-1.5">
                           <Check
                             className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-gold"
@@ -272,6 +272,7 @@ function PlansPage() {
                         </li>
                       ))}
                     </ul>
+
 
                     <button
                       type="button"
@@ -300,72 +301,70 @@ function PlansPage() {
           )}
         </section>
 
-
-        {/* Comparativo — matriz de recursos com plano ideal destacado */}
-        <section className={dsx(ds.container, "pb-6 md:pb-8")} aria-label="Comparativo de planos">
-          <div className="mx-auto max-w-5xl">
-            <div className="mb-3 text-center">
-              <p className={ds.type.overline}>Compare lado a lado</p>
-              <h2 className="mt-1 font-display text-[17px] font-semibold tracking-tight text-foreground sm:text-[18px]">
-                O que está incluído em cada plano
-              </h2>
-              <p className="mt-1 text-[12px] text-muted-foreground">
-                Destaque em dourado no plano ideal para a maioria dos assinantes.
-              </p>
-            </div>
-            <ComparisonMatrix
-              plans={plans}
-              recommendedSlug={recommendedSlug}
-              onBuy={handleBuy}
-              buying={buying}
-            />
-          </div>
-        </section>
-
-
-        {/* FAQ — compact */}
+        {/* Detalhes — comparativo e dúvidas ficam recolhidos para caber em 1 tela */}
         <section
-          className="mx-auto max-w-2xl px-4 pb-10 sm:px-6"
-          aria-labelledby="faq-title"
+          className={dsx(ds.container, "pb-10")}
+          aria-label="Detalhes dos planos"
         >
-          <h2
-            id="faq-title"
-            className="mb-3 text-center font-display text-[17px] font-semibold tracking-tight text-foreground sm:text-[18px]"
-          >
-            Perguntas frequentes
-          </h2>
-          <div className="space-y-2">
-            {FAQ.map((item, i) => (
-              <details
-                key={i}
-                className="group rounded-lg border border-border bg-card px-3.5 py-2.5 open:shadow-elev-1"
-              >
-                <summary className="flex min-h-9 cursor-pointer items-center justify-between gap-3 text-[13px] font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold">
-                  <span>{item.q}</span>
-                  <ChevronDown
-                    className="h-3.5 w-3.5 shrink-0 text-muted-foreground transition group-open:rotate-180"
-                    aria-hidden
-                  />
-                </summary>
-                <p className="mt-1.5 text-[12.5px] leading-relaxed text-muted-foreground">
-                  {item.a}
-                </p>
-              </details>
-            ))}
-          </div>
-          <div className="mt-5 text-center">
-            <p className="text-[12px] text-muted-foreground">
-              Já comprou e recebeu um código?{" "}
-              <Link
-                to="/resgatar"
-                className="font-semibold text-brand-gold hover:underline"
-              >
-                Ativar meu código
-              </Link>
+          <div className="grid gap-2.5 lg:grid-cols-2">
+            <details className="group rounded-xl border border-border bg-card px-4 py-3 open:shadow-elev-1">
+              <summary className="flex min-h-9 cursor-pointer list-none items-center justify-between gap-3 text-[13px] font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold">
+                <span className="inline-flex items-center gap-2">
+                  <Sparkles className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+                  Comparar recursos de cada plano
+                </span>
+                <ChevronDown
+                  className="h-3.5 w-3.5 shrink-0 text-muted-foreground transition group-open:rotate-180"
+                  aria-hidden
+                />
+              </summary>
+              <div className="mt-3">
+                <ComparisonMatrix
+                  plans={plans}
+                  recommendedSlug={recommendedSlug}
+                  onBuy={handleBuy}
+                  buying={buying}
+                />
+              </div>
+            </details>
 
-            </p>
+            <details className="group rounded-xl border border-border bg-card px-4 py-3 open:shadow-elev-1">
+              <summary className="flex min-h-9 cursor-pointer list-none items-center justify-between gap-3 text-[13px] font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold">
+                <span className="inline-flex items-center gap-2">
+                  <ShieldCheck className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+                  Perguntas frequentes
+                </span>
+                <ChevronDown
+                  className="h-3.5 w-3.5 shrink-0 text-muted-foreground transition group-open:rotate-180"
+                  aria-hidden
+                />
+              </summary>
+              <dl className="mt-3 divide-y divide-border/70">
+                {FAQ.map((item) => (
+                  <div key={item.q} className="py-2 first:pt-0 last:pb-0">
+                    <dt className="text-[12.5px] font-semibold text-foreground">
+                      {item.q}
+                    </dt>
+                    <dd className="mt-0.5 text-[12px] leading-relaxed text-muted-foreground">
+                      {item.a}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            </details>
           </div>
+
+          <p className="mt-3 text-center text-[12px] text-muted-foreground">
+            Já comprou e recebeu um código?{" "}
+            <Link
+              to="/resgatar"
+              className="font-semibold text-brand-gold hover:underline"
+            >
+              Ativar meu código
+            </Link>
+          </p>
         </section>
+
       </PageShellContent>
     </PageShell>
   );
