@@ -89,28 +89,24 @@ function FaleConoscoPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f7f9fc]">
+    <div className="min-h-screen bg-background">
       <SiteHeader variant="solid" />
 
       <main className={dsx(ds.container, "py-8 md:py-14")}>
         <header className="max-w-2xl">
-          <span
-            className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em]"
-            style={{ borderColor: "#e2c67a", background: "#fbf3dc", color: "#7a5a1e" }}
-          >
+          <span className="badge-gold-outline inline-flex items-center gap-2 rounded-full border px-3 py-1 text-[11px] font-bold uppercase tracking-[0.18em]">
             <MessageSquare className="h-3.5 w-3.5" />
             Fale Conosco
           </span>
-          <h1
-            className="mt-4 font-['Instrument_Serif',ui-serif,Georgia,serif] text-[32px] leading-[1.05] tracking-[-0.012em] text-[#0f1b3d] md:text-[46px]"
-          >
-            Precisa falar com a equipe do <span className="italic text-[#b58a3c]">PreçoCerto</span>?
+          <h1 className="mt-4 font-['Instrument_Serif',ui-serif,Georgia,serif] text-[32px] leading-[1.05] tracking-[-0.012em] text-foreground md:text-[46px]">
+            Precisa falar com a equipe do{" "}
+            <span className="italic text-brand-gold">PreçoCerto</span>?
           </h1>
-          <p className="mt-3 max-w-xl text-[15px] leading-[1.55] text-[#334463] md:text-[16px]">
+          <p className="mt-3 max-w-xl text-[15px] leading-[1.55] text-muted-foreground md:text-[16px]">
             Envie sua mensagem pelo formulário abaixo. Nós respondemos direto do e-mail institucional{" "}
             <a
               href={`mailto:${CONTACT_EMAIL}`}
-              className="font-semibold text-[#0f1b3d] underline underline-offset-2 hover:text-[#b58a3c]"
+              className="font-semibold text-foreground underline underline-offset-2 hover:text-brand-gold"
             >
               {CONTACT_EMAIL}
             </a>
@@ -122,12 +118,11 @@ function FaleConoscoPage() {
           {/* Formulário */}
           <form
             onSubmit={onSubmit}
-            className="rounded-2xl border bg-white p-5 shadow-sm md:p-7"
-            style={{ borderColor: "#d4dbe6" }}
+            className="rounded-2xl border border-border bg-card p-5 shadow-sm md:p-7"
           >
             <div className="grid gap-4 sm:grid-cols-2">
               <label className="block">
-                <span className="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-[#334463]">
+                <span className="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                   Nome
                 </span>
                 <input
@@ -138,13 +133,12 @@ function FaleConoscoPage() {
                   minLength={2}
                   autoComplete="name"
                   placeholder="Como podemos te chamar"
-                  className="mt-1.5 w-full rounded-lg border bg-white px-3.5 py-2.5 text-[15px] text-[#0f1b3d] outline-none transition focus:border-[#b58a3c] focus:ring-2 focus:ring-[#b58a3c]/25"
-                  style={{ borderColor: "#d4dbe6" }}
+                  className="mt-1.5 w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-[15px] text-foreground outline-none transition placeholder:text-muted-foreground focus:border-brand focus:ring-2 focus:ring-brand/25"
                 />
               </label>
 
               <label className="block">
-                <span className="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-[#334463]">
+                <span className="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                   E-mail (opcional)
                 </span>
                 <input
@@ -153,14 +147,13 @@ function FaleConoscoPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   autoComplete="email"
                   placeholder="para resposta"
-                  className="mt-1.5 w-full rounded-lg border bg-white px-3.5 py-2.5 text-[15px] text-[#0f1b3d] outline-none transition focus:border-[#b58a3c] focus:ring-2 focus:ring-[#b58a3c]/25"
-                  style={{ borderColor: "#d4dbe6" }}
+                  className="mt-1.5 w-full rounded-lg border border-border bg-background px-3.5 py-2.5 text-[15px] text-foreground outline-none transition placeholder:text-muted-foreground focus:border-brand focus:ring-2 focus:ring-brand/25"
                 />
               </label>
             </div>
 
             <label className="mt-4 block">
-              <span className="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-[#334463]">
+              <span className="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                 Assunto
               </span>
               <div className="mt-2 flex flex-wrap gap-1.5">
@@ -171,11 +164,12 @@ function FaleConoscoPage() {
                       key={a.value}
                       type="button"
                       onClick={() => setAssunto(a.value)}
+                      aria-pressed={active}
                       className={dsx(
-                        "rounded-full border px-3 py-1.5 text-[13px] font-semibold transition",
+                        "pc-tile rounded-full border px-3 py-1.5 text-[13px] font-semibold transition",
                         active
-                          ? "border-[#0f1b3d] bg-[#0f1b3d] text-white"
-                          : "border-[#d4dbe6] bg-white text-[#334463] hover:border-[#0f1b3d]/40",
+                          ? "border-primary bg-primary text-primary-foreground"
+                          : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground",
                       )}
                     >
                       {a.label}
@@ -186,7 +180,7 @@ function FaleConoscoPage() {
             </label>
 
             <label className="mt-4 block">
-              <span className="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-[#334463]">
+              <span className="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                 Mensagem
               </span>
               <textarea
@@ -196,28 +190,22 @@ function FaleConoscoPage() {
                 minLength={10}
                 rows={6}
                 placeholder="Conte pra gente o que aconteceu, sua sugestão ou dúvida…"
-                className="mt-1.5 w-full resize-y rounded-lg border bg-white px-3.5 py-2.5 text-[15px] leading-[1.55] text-[#0f1b3d] outline-none transition focus:border-[#b58a3c] focus:ring-2 focus:ring-[#b58a3c]/25"
-                style={{ borderColor: "#d4dbe6" }}
+                className="mt-1.5 w-full resize-y rounded-lg border border-border bg-background px-3.5 py-2.5 text-[15px] leading-[1.55] text-foreground outline-none transition placeholder:text-muted-foreground focus:border-brand focus:ring-2 focus:ring-brand/25"
               />
-              <span className="mt-1 block text-[11.5px] text-[#6a7a94]">
+              <span className="mt-1 block text-[11.5px] text-muted-foreground">
                 Mínimo de 10 caracteres. Nunca envie senhas ou dados bancários.
               </span>
             </label>
 
             <div className="mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-[12px] text-[#6a7a94]">
+              <p className="text-[12px] text-muted-foreground">
                 Ao enviar, seu app de e-mail abre com a mensagem preenchida para{" "}
-                <strong className="font-semibold text-[#0f1b3d]">{CONTACT_EMAIL}</strong>.
+                <strong className="font-semibold text-foreground">{CONTACT_EMAIL}</strong>.
               </p>
               <button
                 type="submit"
                 disabled={!canSubmit}
-                className="inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-[15px] font-bold shadow-md transition hover:brightness-105 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60"
-                style={{
-                  background: "#b58a3c",
-                  color: "#0f1b3d",
-                  boxShadow: "0 6px 16px #b58a3c40",
-                }}
+                className="btn-gold btn-state-safe pc-lift inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-[15px] font-bold shadow-md transition active:scale-[0.98] disabled:cursor-not-allowed"
               >
                 <Send className="h-4 w-4" />
                 Enviar mensagem
@@ -227,33 +215,26 @@ function FaleConoscoPage() {
 
           {/* Fallback / canal direto */}
           <aside className="space-y-4">
-            <div
-              className="rounded-2xl border bg-white p-5 shadow-sm"
-              style={{ borderColor: "#d4dbe6" }}
-            >
-              <div className="flex items-center gap-2 text-[12.5px] font-bold uppercase tracking-[0.18em] text-[#b58a3c]">
+            <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+              <div className="flex items-center gap-2 text-[12.5px] font-bold uppercase tracking-[0.18em] text-brand-gold">
                 <Mail className="h-4 w-4" />
                 Canal direto
               </div>
-              <p className="mt-2 text-[14.5px] leading-[1.55] text-[#334463]">
+              <p className="mt-2 text-[14.5px] leading-[1.55] text-muted-foreground">
                 Se preferir, escreva diretamente para o e-mail institucional. Respondemos em até
                 dois dias úteis.
               </p>
-              <div
-                className="mt-3 flex items-center justify-between gap-2 rounded-lg border bg-[#f7f9fc] px-3 py-2.5"
-                style={{ borderColor: "#d4dbe6" }}
-              >
+              <div className="mt-3 flex items-center justify-between gap-2 rounded-lg border border-border bg-muted/40 px-3 py-2.5">
                 <a
                   href={`mailto:${CONTACT_EMAIL}`}
-                  className="truncate text-[14px] font-semibold text-[#0f1b3d] hover:text-[#b58a3c]"
+                  className="truncate text-[14px] font-semibold text-foreground hover:text-brand-gold"
                 >
                   {CONTACT_EMAIL}
                 </a>
                 <button
                   type="button"
                   onClick={onCopyEmail}
-                  className="inline-flex shrink-0 items-center gap-1.5 rounded-md border px-2.5 py-1.5 text-[12px] font-semibold text-[#334463] transition hover:border-[#0f1b3d]/40"
-                  style={{ borderColor: "#d4dbe6", background: "white" }}
+                  className="pc-tile inline-flex shrink-0 items-center gap-1.5 rounded-md border border-border bg-card px-2.5 py-1.5 text-[12px] font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
                   aria-label="Copiar e-mail"
                 >
                   {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
@@ -262,15 +243,12 @@ function FaleConoscoPage() {
               </div>
             </div>
 
-            <div
-              className="rounded-2xl border p-5"
-              style={{ borderColor: "#e2c67a", background: "#fbf3dc" }}
-            >
-              <div className="flex items-center gap-2 text-[12.5px] font-bold uppercase tracking-[0.18em] text-[#7a5a1e]">
+            <div className="rounded-2xl border border-brand-gold/35 bg-brand-gold/10 p-5">
+              <div className="flex items-center gap-2 text-[12.5px] font-bold uppercase tracking-[0.18em] text-brand-gold">
                 <ShieldCheck className="h-4 w-4" />
                 Privacidade
               </div>
-              <p className="mt-2 text-[13.5px] leading-[1.55] text-[#5c4514]">
+              <p className="mt-2 text-[13.5px] leading-[1.55] text-foreground/90">
                 Suas mensagens são tratadas conforme a nossa{" "}
                 <a href="/privacidade" className="font-semibold underline underline-offset-2">
                   Política de Privacidade
@@ -286,3 +264,4 @@ function FaleConoscoPage() {
     </div>
   );
 }
+

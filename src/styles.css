@@ -3400,6 +3400,9 @@ html[data-reading="on"] :where([data-reading-card]) {
    por sair da regra com a classe .gold-on-dark.
    ========================================================================== */
 html:not(.dark) :is(
+  .text-brand,
+  .text-brand\/90,
+  .text-brand\/80,
   .text-brand-gold,
   .text-brand-gold\/90,
   .text-brand-gold\/80,
@@ -3409,6 +3412,7 @@ html:not(.dark) :is(
 }
 
 html:not(.dark) :is(
+  .hover\:text-brand,
   .hover\:text-brand-gold,
   .hover\:text-brand-gold\/80
 ):not(.gold-on-dark):hover {
@@ -3421,8 +3425,189 @@ html:not(.dark) .text-brand-gold-soft:not(.gold-on-dark) {
 
 /* Dourado sobre fundo navy/escuro permanece vivo mesmo no modo claro. */
 html:not(.dark) :is(.bg-brand-navy, .bg-brand-navy-2, [data-surface="navy"]) :is(
+  .text-brand,
   .text-brand-gold,
   .text-brand-gold-soft
 ) {
   color: var(--pc-home-gold);
+}
+
+
+/* ============================================================================
+   INTERAÇÃO PADRÃO — "pc-tile" / "pc-lift"
+   Hover profissional e consistente para cartões, tiles e superfícies clicáveis.
+   Regras: elevação curta, halo dourado sutil, ícone com micro-escala e
+   feedback de :active. Respeita prefers-reduced-motion.
+   ========================================================================== */
+@utility pc-tile {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition:
+    transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 220ms ease,
+    border-color 220ms ease,
+    filter 220ms ease;
+  will-change: transform;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    opacity: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      130% 150% at 50% 0%,
+      color-mix(in oklab, var(--pc-home-gold) 24%, transparent),
+      transparent 72%
+    );
+    transition: opacity 220ms ease;
+  }
+
+  & svg {
+    transition: transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+
+  &:hover {
+    transform: translateY(-2px);
+    border-color: color-mix(in oklab, var(--pc-home-gold) 62%, transparent);
+    box-shadow:
+      0 12px 24px -14px color-mix(in oklab, var(--pc-home-navy) 65%, transparent),
+      inset 0 0 0 1px color-mix(in oklab, var(--pc-home-gold) 20%, transparent);
+  }
+  &:hover::after { opacity: 1; }
+  &:hover svg { transform: translateY(-1px) scale(1.06); }
+
+  &:active {
+    transform: translateY(0) scale(0.985);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--color-background),
+      0 0 0 4px color-mix(in oklab, var(--pc-home-gold) 75%, transparent);
+  }
+}
+
+/* Variante para superfícies claras (cards de conteúdo, listas, painéis). */
+@utility pc-lift {
+  transition:
+    transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+  &:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in oklab, var(--pc-home-gold) 45%, var(--color-border));
+    box-shadow: 0 16px 30px -18px color-mix(in oklab, var(--pc-home-navy) 55%, transparent);
+  }
+  &:active { transform: translateY(-1px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pc-tile,
+  .pc-tile:hover,
+  .pc-tile:active,
+  .pc-lift,
+  .pc-lift:hover {
+    transform: none !important;
+  }
+  .pc-tile svg,
+  .pc-tile:hover svg { transform: none !important; }
+}
+
+/* Cartões do DS herdam o mesmo vocabulário de hover. */
+@utility ds-card-lift {
+  &:hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in oklab, var(--pc-home-gold) 45%, var(--color-border));
+    box-shadow: 0 16px 30px -18px color-mix(in oklab, var(--pc-home-navy) 55%, transparent);
+  }
+}
+
+/* ============================================================================
+   ESTADOS SEGUROS DE BOTÃO (contraste AA em hover/disabled/loading)
+   `opacity` em botões cheios derruba o contraste do rótulo. Aqui o estado
+   desabilitado/carregando troca por superfícies sólidas com par AA garantido.
+   ========================================================================== */
+@utility btn-state-safe {
+  transition:
+    filter 160ms ease,
+    background-color 160ms ease,
+    color 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+
+  &:disabled,
+  &[aria-disabled="true"],
+  &[data-loading="true"] {
+    opacity: 1 !important;
+    background-color: var(--color-muted) !important;
+    background-image: none !important;
+    color: var(--color-muted-foreground) !important;
+    border-color: var(--color-border) !important;
+    box-shadow: none !important;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+  &[data-loading="true"] { cursor: progress; }
+}
+
+/* Botão dourado: hover/active mantêm o par dourado × navy (≥ 5:1). */
+@utility btn-gold {
+  background-color: var(--pc-home-gold);
+  color: var(--pc-home-navy);
+  border: 1px solid color-mix(in oklab, var(--pc-home-navy) 12%, var(--pc-home-gold));
+  &:hover {
+    background-color: color-mix(in oklab, var(--pc-home-gold) 88%, #ffffff);
+    color: var(--pc-home-navy);
+  }
+  &:active {
+    background-color: color-mix(in oklab, var(--pc-home-gold) 90%, var(--pc-home-navy));
+    color: var(--pc-home-navy);
+  }
+  &:focus-visible {
+    outline: none;
+    box-shadow:
+      0 0 0 2px var(--color-background),
+      0 0 0 4px color-mix(in oklab, var(--pc-home-gold) 80%, transparent);
+  }
+}
+
+/* Badge dourado sólido — rótulo sempre navy, inclusive em hover. */
+@utility badge-gold {
+  background-color: var(--pc-home-gold);
+  color: var(--pc-home-navy);
+  border: 1px solid color-mix(in oklab, var(--pc-home-navy) 14%, var(--pc-home-gold));
+}
+/* Badge dourado "outline" — em light usa a tinta escura legível. */
+@utility badge-gold-outline {
+  background-color: color-mix(in oklab, var(--pc-home-gold) 14%, transparent);
+  border: 1px solid color-mix(in oklab, var(--pc-home-gold) 55%, transparent);
+  color: var(--pc-gold-ink);
+}
+
+/* ==========================================================================
+   TEXTO "PRIMARY" NO MODO ESCURO
+   --primary é navy sólido (ótimo como fundo, ilegível como texto sobre o
+   fundo escuro). Em .dark, qualquer texto/ícone .text-primary passa a usar
+   --primary-ink, um azul claro com contraste AA sobre o navy do tema.
+   Superfícies claras dentro do tema escuro podem sair da regra com
+   .primary-on-light.
+   ========================================================================== */
+.dark {
+  --primary-ink: oklch(0.84 0.075 258);
+}
+
+html.dark :is(
+  .text-primary,
+  .text-primary\/90,
+  .text-primary\/80
+):not(.primary-on-light) {
+  color: var(--primary-ink);
+}
+
+html.dark :is(.hover\:text-primary):not(.primary-on-light):hover {
+  color: var(--primary-ink);
 }

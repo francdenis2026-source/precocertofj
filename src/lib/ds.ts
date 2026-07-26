@@ -58,7 +58,7 @@ export const ds = {
     base:
       "inline-flex items-center justify-center gap-2 rounded-xl font-semibold " +
       "transition-transform duration-150 hover:scale-[1.02] active:scale-[0.99] " +
-      "disabled:opacity-50 disabled:pointer-events-none focus-ring",
+      "disabled:pointer-events-none focus-ring btn-state-safe",
     sizes: {
       sm: "px-3 py-2 text-[13px]",
       md: "px-4 py-2.5 text-sm sm:px-5 sm:py-3",
@@ -76,7 +76,7 @@ export const ds = {
   /* ---------- Superfícies ---------- */
   card: {
     base: "ds-card",
-    hover: "ds-card ds-card-hover",
+    hover: "ds-card ds-card-hover pc-lift",
     padded: "ds-card p-6 md:p-7",
     paddedHover: "ds-card ds-card-hover p-6 md:p-7",
     paddedLg: "ds-card p-7 md:p-9",
