@@ -146,7 +146,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
       <section className="lg:hidden">
         <div className="mb-2 flex items-center gap-2 px-1">
           <Flame className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
-          <h3 className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+          <h3 className="text-[12px] font-medium text-muted-foreground">
             Buscas populares
           </h3>
         </div>

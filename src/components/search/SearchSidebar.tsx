@@ -78,7 +78,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
             <button
               type="button"
               onClick={handleClearAll}
-              className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-foreground/70 transition-colors hover:bg-destructive/10 hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+              className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[12px] font-medium text-foreground/70 transition-colors hover:bg-destructive/10 hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
               aria-label="Limpar histórico de buscas"
             >
               <Trash2 className="h-3.5 w-3.5" /> Limpar
@@ -163,7 +163,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
         action={
           <Link
             to="/estabelecimentos"
-            className="inline-flex shrink-0 items-center gap-0.5 whitespace-nowrap rounded text-[10.5px] font-semibold uppercase tracking-[0.14em] text-brand-gold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+            className="inline-flex shrink-0 items-center gap-0.5 whitespace-nowrap rounded text-[12px] font-medium text-brand-gold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
           >
             Todos <ArrowRight className="h-3 w-3" />
           </Link>
@@ -239,7 +239,7 @@ function SidebarSection({
           <span className="grid h-6 w-6 flex-none place-items-center rounded-md bg-brand-gold/15 text-brand-gold-soft dark:text-brand-gold">
             {icon}
           </span>
-          <h3 className="truncate text-[10.5px] font-semibold uppercase tracking-[0.14em] text-foreground">
+          <h3 className="truncate text-[12px] font-medium text-foreground">
             {title}
           </h3>
         </div>
