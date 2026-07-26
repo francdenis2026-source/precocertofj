@@ -550,6 +550,18 @@
   --state-disabled-opacity: 0.5;
 }
 
+/* Perf: pula layout/paint de blocos fora da viewport (listas longas no mobile).
+   contain-intrinsic-size reserva a altura estimada para não pular o scroll. */
+@utility cv-card {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 220px;
+}
+
+@utility cv-row {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 180px;
+}
+
 
 @utility text-display {
   font-family: var(--font-sans);
