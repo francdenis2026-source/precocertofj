@@ -424,18 +424,18 @@ function PlantaoStrip() {
             )}
           </p>
         </div>
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
           {f?.telefones[0] && (
             <a
               href={`tel:${f.telefones[0].replace(/\D/g, "")}`}
-              className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-background px-3 text-[11.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold"
+              className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-background px-3 text-[11.5px] font-semibold leading-none whitespace-nowrap text-foreground transition-colors hover:border-brand-gold"
             >
               <Phone className="h-3 w-3 text-brand-gold" aria-hidden /> {f.telefones[0]}
             </a>
           )}
           <Link
             to="/farmacias"
-            className="inline-flex h-8 items-center gap-1.5 rounded-full bg-brand-gold px-3 text-[11.5px] font-bold leading-none text-brand-navy transition-opacity hover:opacity-90"
+            className="inline-flex h-8 items-center gap-1.5 rounded-full bg-brand-gold px-3 text-[11.5px] font-bold leading-none whitespace-nowrap text-brand-navy transition-opacity hover:opacity-90"
           >
             Calendário completo <ArrowRight className="h-3 w-3" aria-hidden />
           </Link>
