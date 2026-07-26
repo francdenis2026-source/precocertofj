@@ -407,9 +407,12 @@
     overflow-y: visible;
     overscroll-behavior-y: auto;
   }
-  @supports (height: 100dvh) {
-    body { min-height: 100dvh; }
+  /* svh (não dvh): a altura não muda quando o teclado do celular abre,
+     evitando o "redimensionamento" da tela ao digitar na busca. */
+  @supports (height: 100svh) {
+    body { min-height: 100svh; }
   }
+
   @media (max-width: 640px) {
     input, select, textarea { font-size: 16px; }
   }
