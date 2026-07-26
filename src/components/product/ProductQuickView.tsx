@@ -83,7 +83,12 @@ export function ProductQuickView({
           </div>
         </DialogHeader>
 
-        <div className="max-h-[52svh] overflow-y-auto p-3.5">
+        <div
+          className="max-h-[52svh] overflow-y-auto p-3.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
+          tabIndex={0}
+          role="region"
+          aria-label="Detalhes e preços do produto"
+        >
           {product?.cheapestStore && (
             <div className="mb-3 flex items-center gap-2.5 rounded-lg border border-brand-gold/40 bg-brand-gold/10 p-2.5">
               <StoreBadge
@@ -158,7 +163,7 @@ export function ProductQuickView({
             to="/buscar"
             search={{ q: product?.name ?? "" } as never}
             onClick={onClose}
-            className="flex h-9 w-full items-center justify-center gap-1.5 rounded-lg bg-brand-gold text-[12.5px] font-bold text-brand-navy transition-opacity hover:opacity-90"
+            className="flex h-9 w-full items-center justify-center gap-1.5 rounded-lg bg-brand-gold text-[12.5px] font-bold text-brand-navy transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-card"
           >
             Comparar em todos os mercados
             <ArrowRight className="h-3.5 w-3.5" aria-hidden />

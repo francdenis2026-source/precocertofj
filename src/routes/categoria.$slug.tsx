@@ -36,6 +36,8 @@ import { ProductQuickView } from "@/components/product/ProductQuickView";
 import { getCategoryHub } from "@/lib/category-hub.functions";
 import { CATEGORY_DEFS, categoryBySlug, norm } from "@/lib/category-hub";
 import { PLANTOES, diaDaSemana, diaVigente, farmaciaPorId } from "@/lib/farmacias-plantao";
+import { useScrollRestoration } from "@/lib/use-scroll-restoration";
+import { createRailController } from "@/lib/rail-scroll";
 import { cn } from "@/lib/utils";
 
 const ICONS: Record<string, typeof ShoppingCart> = {
@@ -56,7 +58,7 @@ const ICONS: Record<string, typeof ShoppingCart> = {
 const brl = (v: number) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
-const SEARCH_DEFAULTS = { q: "", loja: "", view: "list", page: 1, per: 30 };
+const SEARCH_DEFAULTS = { q: "", loja: "", view: "list", page: 1, per: 30, p: "" };
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
@@ -64,7 +66,10 @@ const searchSchema = z.object({
   view: fallback(z.string(), "list").default("list"),
   page: fallback(z.number().int(), 1).default(1),
   per: fallback(z.number().int(), 30).default(30),
+  /** Produto aberto no quick view (compartilhável e reversível pelo histórico). */
+  p: fallback(z.string(), "").default(""),
 });
+
 
 export const Route = createFileRoute("/categoria/$slug")({
   validateSearch: zodValidator(searchSchema),
@@ -129,15 +134,6 @@ function CategoryPage() {
   }, [qInput, q, setSearch]);
 
   const [limit, setLimit] = useState(24);
-  const [quickView, setQuickView] = useState<null | {
-    name: string;
-    unit: string | null;
-    minPrice: number;
-    maxPrice: number;
-    cheapestStore: string;
-    cheapestLogo: string | null;
-    storeCount: number;
-  }>(null);
 
   const { data, isLoading } = useQuery({
     queryKey: ["category-hub", slug],
@@ -158,6 +154,21 @@ function CategoryPage() {
     return list;
   }, [data, q, storeFilter]);
 
+  // Quick view controlado pela URL (?p=nome): compartilhável e reversível
+  // com voltar/avançar do navegador.
+  const openProduct = search.p;
+  const quickView = useMemo(() => {
+    if (!openProduct) return null;
+    const found = (data?.products ?? []).find((p) => p.name === openProduct);
+    return found ?? { name: openProduct };
+  }, [openProduct, data]);
+
+  const openQuickView = useCallback(
+    (name: string) => setSearch({ p: name }),
+    [setSearch],
+  );
+  const closeQuickView = useCallback(() => setSearch({ p: "" }), [setSearch]);
+
   // Contagens e páginas sempre coerentes com filtros/loja/categoria ativa
   const totalPages = Math.max(1, Math.ceil(products.length / perPage));
   const safePage = Math.min(page, totalPages);
@@ -167,6 +178,10 @@ function CategoryPage() {
   useEffect(() => {
     setLimit(24);
   }, [slug, q, storeFilter, perPage, view]);
+
+  // Restaura a rolagem e a categoria ativa ao usar voltar/avançar.
+  useScrollRestoration(!isLoading && Boolean(def));
+
 
 
   if (!def) {
@@ -362,7 +377,7 @@ function CategoryPage() {
                     <li key={p.key}>
                       <button
                         type="button"
-                        onClick={() => setQuickView(p)}
+                        onClick={() => openQuickView(p.name)}
                         className="flex h-full w-full items-start gap-2.5 rounded-lg border border-border bg-card p-2.5 text-left transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                       >
                         <StoreBadge name={p.cheapestStore} logoUrl={p.cheapestLogo} size="xs" />
@@ -388,7 +403,7 @@ function CategoryPage() {
                   <li key={p.key}>
                     <button
                       type="button"
-                      onClick={() => setQuickView(p)}
+                      onClick={() => openQuickView(p.name)}
                       aria-label={`Ver detalhes de ${p.name}`}
                       className="flex w-full items-center gap-2.5 px-2.5 py-2 text-left transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
                     >
@@ -453,7 +468,7 @@ function CategoryPage() {
           )}
         </section>
       </main>
-      <ProductQuickView product={quickView} onClose={() => setQuickView(null)} />
+      <ProductQuickView product={quickView} onClose={closeQuickView} />
       <SiteFooter />
     </div>
   );
@@ -667,107 +682,28 @@ function Pagination({
 /** Trilho horizontal de categorias com setas, roda do mouse, arraste e teclado. */
 function CategoryRail({ current }: { current: string }) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [canPrev, setCanPrev] = useState(false);
-  const [canNext, setCanNext] = useState(false);
-
-  const sync = useCallback(() => {
-    const el = ref.current;
-    if (!el) return;
-    setCanPrev(el.scrollLeft > 4);
-    setCanNext(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
-  }, []);
+  const ctrl = useRef<ReturnType<typeof createRailController> | null>(null);
+  const [{ canPrev, canNext }, setState] = useState({ canPrev: false, canNext: false });
 
   useEffect(() => {
-    sync();
     const el = ref.current;
     if (!el) return;
-    const onWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
-      const before = el.scrollLeft;
-      el.scrollLeft += e.deltaY;
-      if (el.scrollLeft !== before) e.preventDefault();
-    };
-    el.addEventListener("wheel", onWheel, { passive: false });
-    window.addEventListener("resize", sync);
-    // centraliza a categoria ativa
-    el.querySelector<HTMLElement>('[aria-current="page"]')?.scrollIntoView({
-      inline: "center",
-      block: "nearest",
-    });
+    const c = createRailController(el, setState);
+    ctrl.current = c;
     return () => {
-      el.removeEventListener("wheel", onWheel);
-      window.removeEventListener("resize", sync);
-    };
-  }, [sync, current]);
-
-  // Arraste com o mouse (pointer drag), sem atrapalhar o clique nos chips
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    let down = false;
-    let moved = false;
-    let startX = 0;
-    let startScroll = 0;
-
-    const onDown = (e: PointerEvent) => {
-      if (e.pointerType !== "mouse" || e.button !== 0) return;
-      down = true;
-      moved = false;
-      startX = e.clientX;
-      startScroll = el.scrollLeft;
-    };
-    const onMove = (e: PointerEvent) => {
-      if (!down) return;
-      const dx = e.clientX - startX;
-      if (!moved && Math.abs(dx) < 4) return;
-      moved = true;
-      el.style.cursor = "grabbing";
-      el.scrollLeft = startScroll - dx;
-    };
-    const onUp = () => {
-      down = false;
-      el.style.cursor = "";
-      if (moved) {
-        const block = (ev: Event) => ev.preventDefault();
-        el.addEventListener("click", block, { capture: true, once: true });
-        window.setTimeout(() => el.removeEventListener("click", block, true), 0);
-      }
-      moved = false;
-    };
-
-    el.addEventListener("pointerdown", onDown);
-    window.addEventListener("pointermove", onMove);
-    window.addEventListener("pointerup", onUp);
-    return () => {
-      el.removeEventListener("pointerdown", onDown);
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointerup", onUp);
+      c.destroy();
+      ctrl.current = null;
     };
   }, []);
 
-  const scrollBy = (dir: -1 | 1) => {
-    const el = ref.current;
-    if (!el) return;
-    el.scrollBy({ left: dir * Math.max(180, el.clientWidth * 0.7), behavior: "smooth" });
-  };
+  // Centraliza (e revalida) sempre que a categoria ativa muda.
+  useEffect(() => {
+    ctrl.current?.centerActive("smooth");
+    ctrl.current?.sync();
+  }, [current]);
 
-  /** Navegação por teclado: setas movem o foco entre as categorias. */
   const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    const keys = ["ArrowRight", "ArrowLeft", "Home", "End"];
-    if (!keys.includes(e.key)) return;
-    const el = ref.current;
-    if (!el) return;
-    const items = Array.from(el.querySelectorAll<HTMLElement>("a[data-rail-item]"));
-    if (items.length === 0) return;
-    const idx = items.findIndex((n) => n === document.activeElement);
-    let next = idx;
-    if (e.key === "ArrowRight") next = idx < 0 ? 0 : Math.min(items.length - 1, idx + 1);
-    if (e.key === "ArrowLeft") next = idx < 0 ? 0 : Math.max(0, idx - 1);
-    if (e.key === "Home") next = 0;
-    if (e.key === "End") next = items.length - 1;
-    e.preventDefault();
-    items[next]?.focus();
-    items[next]?.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
+    if (ctrl.current?.handleKey(e.key)) e.preventDefault();
   };
 
   return (
@@ -778,11 +714,18 @@ function CategoryRail({ current }: { current: string }) {
       </p>
       <div
         ref={ref}
-        onScroll={sync}
         onKeyDown={onKeyDown}
         role="group"
         aria-describedby="cat-rail-help"
-        className="no-scrollbar overflow-x-auto scroll-smooth px-9 py-1"
+        className={cn(
+          "no-scrollbar overflow-x-auto overscroll-x-contain scroll-smooth py-1",
+          // O espaço lateral acompanha a presença das setas para nunca recortar
+          // o primeiro/último chip em nenhuma largura de tela.
+          "[scroll-padding-inline:2.25rem]",
+          canPrev ? "pl-9" : "pl-0.5",
+          canNext ? "pr-9" : "pr-0.5",
+        )}
+
       >
         <ul className="flex w-max gap-1.5 pr-1">
           {CATEGORY_DEFS.map((c) => {
@@ -827,8 +770,9 @@ function CategoryRail({ current }: { current: string }) {
           canNext ? "opacity-100" : "opacity-0",
         )}
       />
-      <RailArrow side="left" onClick={() => scrollBy(-1)} disabled={!canPrev} />
-      <RailArrow side="right" onClick={() => scrollBy(1)} disabled={!canNext} />
+      <RailArrow side="left" onClick={() => ctrl.current?.scrollByPage(-1)} disabled={!canPrev} />
+      <RailArrow side="right" onClick={() => ctrl.current?.scrollByPage(1)} disabled={!canNext} />
+
     </nav>
   );
 }
