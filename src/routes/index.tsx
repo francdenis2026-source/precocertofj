@@ -139,6 +139,13 @@ function HomePage() {
     );
   }, []);
 
+  useEffect(() => {
+    document.body.classList.add("no-page-bg");
+    return () => {
+      document.body.classList.remove("no-page-bg");
+    };
+  }, []);
+
   // Deep-link a seções via #hash — usa o mesmo helper dos chips de âncora
   // para respeitar dinamicamente a altura do header sticky (mobile + web).
   useEffect(() => {
