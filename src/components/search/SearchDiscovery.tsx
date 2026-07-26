@@ -13,6 +13,7 @@ import {
   Milk,
   Droplet,
   Candy,
+  Clock,
   CookingPot,
   type LucideIcon,
 } from "lucide-react";
@@ -78,6 +79,17 @@ const brl = (n: number) =>
 
 const int = (n: number) => new Intl.NumberFormat("pt-BR").format(n);
 
+const updatedLabel = (iso: string) => {
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "—";
+  return new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(d);
+};
+
 export function SearchDiscovery({ onPickQuery }: Props) {
   const [recent, setRecent] = useState<string[]>([]);
   useEffect(() => setRecent(readRecent()), []);
@@ -94,7 +106,13 @@ export function SearchDiscovery({ onPickQuery }: Props) {
     queryKey: ["platform-stats-discovery"],
     queryFn: () => getPlatformStats(),
     staleTime: 5 * 60_000,
+    retry: 1,
   });
+
+  // Números só são exibidos quando vieram do banco (`ok`). Falha ou carregamento
+  // mostram "—" + aviso, nunca valores estimados no cliente.
+  const statsOk = Boolean(stats.data?.ok);
+  const statsFailed = Boolean(stats.isError || (stats.data && !stats.data.ok));
 
   return (
     <div className="space-y-3">
