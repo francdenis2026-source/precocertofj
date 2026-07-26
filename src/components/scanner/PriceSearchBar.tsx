@@ -98,7 +98,7 @@ export function PriceSearchBar({
 
 
 
-  const { user } = useSession();
+  const { user, loading: sessionLoading } = useSession();
   const isVisitor = !user;
   const quota = useTeaserQuota(3);
   const [quotaBlocked, setQuotaBlocked] = useState(false);
