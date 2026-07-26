@@ -52,7 +52,16 @@ const ICONS: Record<string, typeof ShoppingCart> = {
 const brl = (v: number) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
+const searchSchema = z.object({
+  q: fallback(z.string(), "").default(""),
+  loja: fallback(z.string(), "").default(""),
+  view: fallback(z.string(), "list").default("list"),
+  page: fallback(z.number().int(), 1).default(1),
+  per: fallback(z.number().int(), 30).default(30),
+});
+
 export const Route = createFileRoute("/categoria/$slug")({
+  validateSearch: zodValidator(searchSchema),
   head: ({ params }) => {
     const def = categoryBySlug(params.slug);
     const label = def?.label ?? "Categoria";
@@ -76,15 +85,41 @@ export const Route = createFileRoute("/categoria/$slug")({
 
 function CategoryPage() {
   const { slug } = Route.useParams();
+  const search = Route.useSearch();
   const navigate = useNavigate();
   const def = categoryBySlug(slug);
   const fetchHub = useServerFn(getCategoryHub);
-  const [q, setQ] = useState("");
+
+  // Estado derivado da URL (compartilhável + voltar/avançar do navegador)
+  const q = search.q;
+  const storeFilter = search.loja;
+  const view: "list" | "grid" = search.view === "grid" ? "grid" : "list";
+  const perPage = [30, 60, 120].includes(search.per) ? search.per : 30;
+  const page = Math.max(1, search.page);
+
+  const setSearch = useCallback(
+    (patch: Partial<typeof search>, opts?: { replace?: boolean }) => {
+      navigate({
+        to: "/categoria/$slug",
+        params: { slug },
+        search: (prev) => ({ ...prev, ...patch }),
+        replace: opts?.replace ?? false,
+        resetScroll: false,
+      });
+    },
+    [navigate, slug],
+  );
+
+  // Campo de busca: digitação local + sincronização debounced na URL (sem poluir o histórico)
+  const [qInput, setQInput] = useState(q);
+  useEffect(() => setQInput(q), [q]);
+  useEffect(() => {
+    if (qInput === q) return;
+    const t = window.setTimeout(() => setSearch({ q: qInput, page: 1 }, { replace: true }), 350);
+    return () => window.clearTimeout(t);
+  }, [qInput, q, setSearch]);
+
   const [limit, setLimit] = useState(24);
-  const [view, setView] = useState<"list" | "grid">("list");
-  const [storeFilter, setStoreFilter] = useState<string>("");
-  const [page, setPage] = useState(1);
-  const [perPage, setPerPage] = useState(30);
 
   const { data, isLoading } = useQuery({
     queryKey: ["category-hub", slug],
@@ -112,15 +147,9 @@ function CategoryPage() {
   const visible = view === "list" ? products.slice(pageStart, pageStart + perPage) : products.slice(0, limit);
 
   useEffect(() => {
-    setPage(1);
     setLimit(24);
   }, [slug, q, storeFilter, perPage, view]);
 
-  useEffect(() => {
-    // a categoria mudou: limpa filtros que não existem no novo nicho
-    setStoreFilter("");
-    setQ("");
-  }, [slug]);
 
   if (!def) {
     return (
