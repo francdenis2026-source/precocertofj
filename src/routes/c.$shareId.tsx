@@ -52,7 +52,7 @@ function SharePage() {
   const data = result?.status === "ok" ? result.share : null;
 
   return (
-    <div className="min-h-[100dvh] bg-background text-foreground">
+    <div className="min-h-[100svh] bg-background text-foreground">
       <header className="border-b border-primary/20 bg-surface">
         <div className="mx-auto flex max-w-3xl items-center justify-between px-4 py-4">
           <div className="flex items-center gap-2">

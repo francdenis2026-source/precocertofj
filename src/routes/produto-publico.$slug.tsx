@@ -185,7 +185,7 @@ function ProductPublicPage() {
   );
 
   return (
-    <div className="min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1.5rem)] text-foreground md:pb-10">
+    <div className="min-h-[100svh] bg-background pb-[calc(var(--mobile-nav-height)+1.5rem)] text-foreground md:pb-10">
       <FreeQuotaBadge variant="floating" />
 
       {/* Top bar */}

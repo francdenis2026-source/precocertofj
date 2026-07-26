@@ -4,7 +4,7 @@
  */
 export function StoreSkeleton() {
   return (
-    <div className="min-h-[100dvh] bg-background pb-24 text-foreground">
+    <div className="min-h-[100svh] bg-background pb-24 text-foreground">
       <div className="mx-auto max-w-md px-4 pt-4">
         <div className="mb-3 h-3 w-16 animate-pulse rounded-full bg-muted" />
 

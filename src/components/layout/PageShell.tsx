@@ -32,7 +32,7 @@ export function PageShell({
   hideFooter = false,
 }: PageShellProps) {
   return (
-    <div className={cn("flex min-h-[100dvh] flex-col bg-background text-foreground", className)}>
+    <div className={cn("flex min-h-[100svh] flex-col bg-background text-foreground", className)}>
       <div className="flex flex-1 flex-col">{children}</div>
       {!hideFooter && <SiteFooter />}
       {!hideMobileNav && <MobileNav />}

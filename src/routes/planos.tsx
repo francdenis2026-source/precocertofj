@@ -171,7 +171,7 @@ function PlansPage() {
   const recommendedSlug = "anual";
 
   return (
-    <div className="min-h-dvh bg-background">
+    <div className="min-h-svh bg-background">
 
       <main>
         {/* Hero — ultra compact */}

@@ -96,7 +96,7 @@ function CestaPage() {
   const totalItems = items.reduce((s, it) => s + it.quantity, 0);
 
   return (
-    <div className="min-h-[100dvh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
+    <div className="min-h-[100svh] bg-background pb-[calc(var(--mobile-nav-height)+1rem)] text-foreground">
       <div className="mx-auto max-w-2xl px-4 md:px-6">
         <PageHeader
           breadcrumbs={[{ label: "Início", to: "/" }, { label: "Minha cesta" }]}

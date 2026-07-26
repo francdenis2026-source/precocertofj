@@ -314,7 +314,7 @@ function SearchPage() {
   }, []);
 
   return (
-    <div className="pc-search-scope flex min-h-[100dvh] flex-col bg-background text-foreground">
+    <div className="pc-search-scope flex min-h-[100svh] flex-col bg-background text-foreground">
       {/* BARRA DE COMANDO — sticky, uma linha, sem desperdício vertical */}
       <header className="sticky top-0 z-30 border-b border-border/70 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/80">
         <div

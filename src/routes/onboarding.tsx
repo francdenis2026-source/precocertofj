@@ -80,7 +80,7 @@ function OnboardingPage() {
 
   if (sessionLoading || status.isLoading) {
     return (
-      <div className="flex min-h-dvh items-center justify-center">
+      <div className="flex min-h-svh items-center justify-center">
         <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
       </div>
     );
@@ -88,7 +88,7 @@ function OnboardingPage() {
 
   return (
     <div
-      className="min-h-dvh w-full px-4 py-10"
+      className="min-h-svh w-full px-4 py-10"
       style={{
         background:
           "radial-gradient(ellipse at top, #1e3a5f 0%, #0f1b3d 45%, #0a1631 100%)",

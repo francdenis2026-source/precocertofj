@@ -420,7 +420,7 @@ function EstablishmentsPage() {
 
 
   return (
-    <div className="min-h-dvh bg-background pb-24 md:pb-8">
+    <div className="min-h-svh bg-background pb-24 md:pb-8">
 
 
       {/* Hero editorial — imagem de supermercado, contraste WCAG, dados ao vivo, carrossel de mercados */}

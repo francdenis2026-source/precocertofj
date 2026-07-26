@@ -279,7 +279,7 @@ function LoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-dvh w-full items-center justify-center bg-background px-4 py-4 sm:px-6 sm:py-6">
+    <div className="relative flex min-h-svh w-full items-center justify-center bg-background px-4 py-4 sm:px-6 sm:py-6">
       {/* Ambient brand glow — subtle in both themes */}
       <div
         aria-hidden

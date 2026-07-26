@@ -154,7 +154,7 @@ function CadastroPage() {
 
   return (
     <div
-      className="relative min-h-[100dvh] overflow-hidden"
+      className="relative min-h-[100svh] overflow-hidden"
       style={{ background: PC_CREAM, fontFamily: PC_BODY, color: "#0f172a" }}
     >
       <div
