@@ -122,6 +122,9 @@ export function SmartLogoImage({
     <img
       src={src}
       alt={`Logomarca ${name}`}
+      // Mesmo modo CORS do analisador (logo-quality) → uma única requisição
+      // por logo em vez de duas entradas de cache distintas.
+      crossOrigin="anonymous"
       loading={eager ? "eager" : "lazy"}
       fetchPriority={eager ? "high" : "auto"}
       decoding="async"
