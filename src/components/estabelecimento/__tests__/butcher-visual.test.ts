@@ -13,7 +13,6 @@ const BUTCHER = read("src/components/estabelecimento/ButcherCounter.tsx");
 const DICAS = read("src/components/estabelecimento/PreparoDicas.tsx");
 const QUICKVIEW = read("src/components/product/ProductQuickView.tsx");
 const ROUTE_STORE = read("src/routes/estabelecimento.$slug.tsx");
-const ROUTE_BUTCHER = read("src/routes/estabelecimento.$slug_.acougue.tsx");
 
 const SOURCES: Array<[string, string]> = [
   ["ButcherCounter", BUTCHER],
@@ -92,7 +91,6 @@ describe("açougue · acessibilidade", () => {
 describe("açougue · estado compartilhável na URL", () => {
   it.each([
     ["estabelecimento.$slug", ROUTE_STORE],
-    ["estabelecimento.$slug_.acougue", ROUTE_BUTCHER],
   ])("%s espelha filtros e produto aberto na URL", (_name, src) => {
     for (const key of ["bq", "prot", "bsort", "bview", "p"]) {
       expect(src).toContain(`${key}:`);

@@ -424,13 +424,6 @@ function EstablishmentPage() {
                 </button>
               );
             })}
-            <Link
-              to="/estabelecimento/$slug_/acougue"
-              params={{ slug }}
-              className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[12px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold"
-            >
-              Página do açougue
-            </Link>
           </div>
         )}
 
