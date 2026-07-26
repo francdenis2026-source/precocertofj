@@ -14,20 +14,15 @@ import {
   ShieldCheck,
   ArrowRight,
   ChevronDown,
-  ArrowLeft,
   Sparkles,
 } from "lucide-react";
 
 import { toast } from "sonner";
 import { SiteHeader } from "@/components/layout/SiteHeader";
-import { SiteFooter } from "@/components/layout/SiteFooter";
+import { PageShell, PageShellContent } from "@/components/layout/PageShell";
+import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
 import { ds, dsx } from "@/lib/ds";
 import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
-
-const PALETTE = {
-  gold: "#b58a3c",
-  goldSoft: "#f2dfa8",
-} as const;
 
 export const Route = createFileRoute("/planos")({
   head: () => ({
@@ -171,41 +166,37 @@ function PlansPage() {
   const recommendedSlug = "anual";
 
   return (
-    <div className="min-h-svh bg-background">
+    <PageShell>
+      <SiteHeader />
 
-      <main>
-        {/* Hero — ultra compact */}
-        <section className={dsx(ds.container, "pt-5 pb-4 md:pt-7 md:pb-5 text-center")}>
-          <div className="mb-2 flex justify-start">
-            <Link
-              to="/"
-              className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground transition-colors hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 rounded"
-            >
-              <ArrowLeft className="h-3 w-3" aria-hidden />
-              Voltar
-            </Link>
-          </div>
-          <p className={ds.type.overline}>Planos · Feijó/AC</p>
-          <h1 className="mt-1.5 font-display text-[22px] font-semibold tracking-tight text-foreground sm:text-[26px] md:text-[30px]">
-            Economize todo mês na sua feira
-          </h1>
-          <p className="mx-auto mt-1.5 max-w-xl text-[13px] leading-snug text-muted-foreground sm:text-[14px]">
-            Escolha o plano que combina com sua rotina. 7 dias grátis, sem cartão.
-          </p>
-          <div className="mt-2.5 inline-flex items-center gap-1.5 text-[11px] text-muted-foreground">
-            <ShieldCheck className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
-            Ativação imediata · Pix ou cartão de crédito
-          </div>
+      <PageShellContent>
+        {/* Cabeçalho compacto — mesmo padrão das páginas internas */}
+        <section className={dsx(ds.container, "pt-3 pb-3 md:pt-4")}>
+          <InternalPageHeader
+            title="Planos e preços"
+            highlight="preços"
+            breadcrumbs={[{ label: "Início", to: "/" }, { label: "Planos" }]}
+            description={
+              <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-1">
+                <span>Escolha o plano que combina com sua rotina — 7 dias grátis, sem cartão.</span>
+                <span className="inline-flex items-center gap-1 text-[11.5px] text-muted-foreground">
+                  <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-brand-gold" aria-hidden />
+                  Ativação imediata · Pix ou cartão
+                </span>
+              </span>
+            }
+            className="mb-0"
+          />
         </section>
 
         {/* Plans grid — compact */}
-        <section className={dsx(ds.container, "pb-6 md:pb-8")}>
+        <section className={dsx(ds.container, "pb-5 md:pb-7")} aria-label="Planos disponíveis">
           {isLoading ? (
             <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
               {[0, 1, 2, 3].map((i) => (
                 <div
                   key={i}
-                  className="h-52 animate-pulse rounded-xl border border-border/60 bg-muted/30"
+                  className="h-52 animate-pulse rounded-xl border border-border bg-muted/40"
                 />
               ))}
             </div>
@@ -221,36 +212,28 @@ function PlansPage() {
                   <article
                     key={plan.id}
                     className={dsx(
-                      "relative flex flex-col rounded-2xl border border-border/60 bg-card p-4 shadow-elev-1 transition-shadow hover:shadow-elev-2 sm:p-5",
-                      isRecommended && "border-primary/70 ring-1 ring-primary/30",
-                      isFounder && "ring-1",
+                      "relative flex flex-col rounded-xl border border-border bg-card p-3.5 shadow-elev-1 transition-shadow hover:shadow-elev-2 sm:p-4",
+                      isRecommended && "border-brand-gold ring-1 ring-brand-gold/30",
+                      isFounder && "border-brand-gold/70 ring-1 ring-brand-gold/20",
                     )}
-                    style={
-                      isFounder
-                        ? {
-                            borderColor: PALETTE.gold,
-                            boxShadow: `0 0 0 1px ${PALETTE.gold}44`,
-                          }
-                        : undefined
-                    }
                   >
                     {(isRecommended || isFounder) && (
                       <div className="absolute -top-2.5 left-1/2 -translate-x-1/2">
                         <span
-                          className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.14em] shadow-sm"
-                          style={
+                          className={dsx(
+                            "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.14em] shadow-elev-1",
                             isRecommended
-                              ? { background: "var(--color-primary)", color: "var(--color-primary-foreground)" }
-                              : { background: PALETTE.gold, color: "#0f1b3d" }
-                          }
+                              ? "bg-brand-gold text-brand-navy"
+                              : "border border-brand-gold/60 bg-card text-brand-gold",
+                          )}
                         >
-                          {isRecommended ? "★ Mais escolhido" : "Limitado"}
+                          {isRecommended ? "Mais escolhido" : "Limitado"}
                         </span>
                       </div>
                     )}
 
                     <header>
-                      <h2 className="font-display text-[16px] font-semibold tracking-tight text-foreground">
+                      <h2 className="font-display text-[15.5px] font-semibold tracking-tight text-foreground">
                         {plan.name}
                       </h2>
                       {plan.description && (
@@ -262,7 +245,7 @@ function PlansPage() {
 
                     <div className="mt-3">
                       <div className="flex items-baseline gap-1">
-                        <span className="font-display text-[26px] font-bold leading-none tracking-tight text-foreground">
+                        <span className="font-display text-[24px] font-semibold leading-none tracking-tight text-foreground">
                           {isFree ? "Grátis" : centsToBRL(plan.price_cents)}
                         </span>
                       </div>
@@ -295,7 +278,7 @@ function PlansPage() {
                       disabled={buying === plan.id}
                       className={dsx(
                         ds.btn.base,
-                        "mt-4 h-10 w-full px-3 text-[13px] font-semibold",
+                        "mt-3.5 h-11 w-full px-3 text-[12.5px] font-semibold uppercase tracking-[0.06em]",
                         "bg-brand-gold text-brand-navy shadow-elev-1 hover:brightness-105 hover:shadow-elev-2",
                       )}
                     >
@@ -316,11 +299,11 @@ function PlansPage() {
 
 
         {/* Comparativo — matriz de recursos com plano ideal destacado */}
-        <section className={dsx(ds.container, "pb-8 md:pb-10")}>
+        <section className={dsx(ds.container, "pb-6 md:pb-8")} aria-label="Comparativo de planos">
           <div className="mx-auto max-w-5xl">
             <div className="mb-3 text-center">
               <p className={ds.type.overline}>Compare lado a lado</p>
-              <h2 className="mt-1 font-display text-[17px] font-semibold tracking-tight text-foreground sm:text-[19px]">
+              <h2 className="mt-1 font-display text-[17px] font-semibold tracking-tight text-foreground sm:text-[18px]">
                 O que está incluído em cada plano
               </h2>
               <p className="mt-1 text-[12px] text-muted-foreground">
@@ -339,12 +322,12 @@ function PlansPage() {
 
         {/* FAQ — compact */}
         <section
-          className="mx-auto max-w-2xl px-4 pb-14 sm:px-6"
+          className="mx-auto max-w-2xl px-4 pb-10 sm:px-6"
           aria-labelledby="faq-title"
         >
           <h2
             id="faq-title"
-            className="mb-4 text-center font-display text-[18px] font-semibold tracking-tight text-foreground sm:text-[20px]"
+            className="mb-3 text-center font-display text-[17px] font-semibold tracking-tight text-foreground sm:text-[18px]"
           >
             Perguntas frequentes
           </h2>
@@ -352,9 +335,9 @@ function PlansPage() {
             {FAQ.map((item, i) => (
               <details
                 key={i}
-                className="group rounded-lg border border-border/60 bg-card px-3.5 py-2.5 open:shadow-sm"
+                className="group rounded-lg border border-border bg-card px-3.5 py-2.5 open:shadow-elev-1"
               >
-                <summary className="flex cursor-pointer items-center justify-between gap-3 text-[13.5px] font-medium text-foreground">
+                <summary className="flex min-h-9 cursor-pointer items-center justify-between gap-3 text-[13px] font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold">
                   <span>{item.q}</span>
                   <ChevronDown
                     className="h-3.5 w-3.5 shrink-0 text-muted-foreground transition group-open:rotate-180"
@@ -367,7 +350,7 @@ function PlansPage() {
               </details>
             ))}
           </div>
-          <div className="mt-6 text-center">
+          <div className="mt-5 text-center">
             <p className="text-[12px] text-muted-foreground">
               Já comprou e recebeu um código?{" "}
               <Link
@@ -380,10 +363,8 @@ function PlansPage() {
             </p>
           </div>
         </section>
-      </main>
-
-      <SiteFooter />
-    </div>
+      </PageShellContent>
+    </PageShell>
   );
 }
 
@@ -523,10 +504,10 @@ function ComparisonMatrix({
   const rows = planFeatureMatrix(plans);
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-border/60 bg-card shadow-elev-1">
+    <div className="overflow-x-auto rounded-xl border border-border bg-card shadow-elev-1">
       <table className="w-full min-w-[640px] border-collapse text-left">
         <thead>
-          <tr className="border-b border-border/60">
+          <tr className="border-b border-border">
             <th
               scope="col"
               className="sticky left-0 z-[1] w-[38%] bg-card px-4 py-3 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground"
@@ -576,7 +557,7 @@ function ComparisonMatrix({
           {rows.map((row, i) => (
             <tr
               key={row.label}
-              className={i % 2 === 0 ? "bg-muted/20" : "bg-transparent"}
+              className={i % 2 === 0 ? "bg-muted/25" : "bg-transparent"}
             >
               <th
                 scope="row"
@@ -601,7 +582,7 @@ function ComparisonMatrix({
             </tr>
           ))}
           {/* Linha final: CTAs */}
-          <tr className="border-t-2 border-border/60">
+          <tr className="border-t border-border">
             <th scope="row" className="sticky left-0 z-[1] bg-card px-4 py-3" />
             {plans.map((p) => {
               const isRec = p.slug === recommendedSlug;
@@ -616,9 +597,9 @@ function ComparisonMatrix({
                     onClick={() => onBuy(p)}
                     disabled={buying === p.id}
                     className={dsx(
-                      "inline-flex w-full items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11.5px] font-bold uppercase tracking-wide transition-all disabled:cursor-wait disabled:opacity-70",
+                      "inline-flex min-h-10 w-full items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold uppercase tracking-[0.08em] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold disabled:cursor-wait disabled:opacity-70",
                       isRec
-                        ? "bg-brand-gold text-brand-navy shadow-sm hover:brightness-105"
+                        ? "bg-brand-gold text-brand-navy shadow-elev-1 hover:brightness-105"
                         : "border border-border bg-background text-foreground hover:border-brand-gold hover:text-brand-gold",
                     )}
                   >
