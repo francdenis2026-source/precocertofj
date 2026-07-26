@@ -547,8 +547,7 @@ function ProductsRecentList({
                     </Link>
                   ) : (
                     (u.marketName ?? "—")
-                  )}{" "}
-                  · {relTime(u.when)}
+                  )}
                 </div>
               </div>
               <div
