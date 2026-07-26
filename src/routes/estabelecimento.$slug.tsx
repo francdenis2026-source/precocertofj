@@ -9,7 +9,7 @@ import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { queryOptions, useSuspenseQuery, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
   ArrowDown,
@@ -571,9 +571,9 @@ function EstablishmentPage() {
               cuts={cuts}
               state={butcherState}
               onStateChange={patchButcher}
-              onHistory={(p) => setHistoryFor(p)}
-              onAlert={(p) => createAlert(p)}
-              onOpen={(p) => setQuickView(p)}
+              onHistory={openHistory}
+              onAlert={createAlert}
+              onOpen={openQuickView}
             />
             <div className="mt-8">
               <PreparoDicas />
