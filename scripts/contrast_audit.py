@@ -111,8 +111,27 @@ PROBE = r"""
     if (rect.width < 2 || rect.height < 2) continue;
     if (rect.bottom < 0 || rect.top > 6000) continue;
 
-    const clipped = el.scrollWidth > el.clientWidth + 2 && cs.overflow !== 'visible'
+    // Rótulos sobrepostos a mídia (position absolute/fixed sem fundo próprio ou
+    // com text-shadow) não podem ser medidos contra o fundo do documento.
+    let overlay = cs.textShadow !== 'none';
+    let n = el, depth = 0;
+    while (n && depth < 4 && !overlay) {
+      const ncs = getComputedStyle(n);
+      if (ncs.position === 'absolute' || ncs.position === 'fixed') {
+        const own = parse(ncs.backgroundColor);
+        if (!own || own.a < 0.9) overlay = true;
+      }
+      n = n.parentElement;
+      depth += 1;
+    }
+
+    // Clipping real: overflow escondido cortando o texto (ignora truncate com
+    // reticências, que é intencional).
+    const clipped = el.scrollWidth > el.clientWidth + 2
+      && cs.overflow !== 'visible'
+      && cs.textOverflow !== 'ellipsis'
       && !/auto|scroll/.test(cs.overflowX);
+
 
     const fgRaw = parse(cs.color);
     const bg = bgOf(el);
