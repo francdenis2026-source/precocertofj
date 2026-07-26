@@ -2,6 +2,7 @@ import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { BackButton } from "@/components/layout/BackButton";
+import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
 
@@ -220,7 +221,11 @@ function PrivacidadePage() {
           }}
         />
         <div className="mx-auto grid w-full max-w-5xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2.5 px-3 py-2 sm:px-4 sm:py-2.5 md:gap-6 md:px-8 md:py-3">
-          <BackButton fallbackTo="/" variant="ghost" />
+          <div className="flex min-w-0 items-center gap-1.5">
+            <BackButton fallbackTo="/" variant="ghost" />
+            <span aria-hidden className="h-5 w-px bg-border" />
+            <HomeBrandLink />
+          </div>
           <div className="flex min-w-0 flex-col gap-0.5">
             <span className={cn(tc.eyebrow, "hidden sm:block")}>
               Documento oficial

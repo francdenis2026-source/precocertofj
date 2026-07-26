@@ -349,18 +349,21 @@ export const getPlatformStats = createServerFn({ method: "GET" }).handler(
       };
     };
 
+    // PostgrestBuilder é "thenable", mas não expõe `.catch` — usar Promise.resolve.
     const [rpcRes, itemsCount] = await Promise.all([
-      client.rpc("platform_public_stats").catch((e: unknown) => ({
+      Promise.resolve(client.rpc("platform_public_stats")).catch((e: unknown) => ({
         data: null,
         error: { message: e instanceof Error ? e.message : "falha na consulta" },
       })),
-      countClient
-        .from("scans")
-        .select("id", { count: "exact", head: true })
-        .eq("status", "salvo")
-        .is("user_id", null)
-        .catch(() => ({ count: null })),
+      Promise.resolve(
+        countClient
+          .from("scans")
+          .select("id", { count: "exact", head: true })
+          .eq("status", "salvo")
+          .is("user_id", null),
+      ).catch(() => ({ count: null })),
     ]);
+
 
     const { data, error } = rpcRes;
     const row = data?.[0];

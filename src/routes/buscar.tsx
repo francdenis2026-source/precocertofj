@@ -23,6 +23,7 @@ import {
 } from "@/lib/search-history";
 
 import { BackButton } from "@/components/layout/BackButton";
+import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 
 import { useReducedMotion } from "@/lib/reduced-motion";
@@ -378,31 +379,36 @@ function SearchPage() {
       {/* BARRA DE COMANDO — editorial: hairline, respiro e rótulo micro */}
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/75">
         <div className="mx-auto grid w-full max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-2.5 md:gap-6 md:px-8 md:py-3">
-          {hasQuery ? (
-            <button
-              type="button"
-              onClick={() =>
-                navigate({
-                  search: (prev: Record<string, unknown>) => {
-                    const s = { ...prev };
-                    // Não remover a chave: o middleware de retenção reidrata
-                    // `q` a partir da URL atual. Valor vazio muda a rota para
-                    // o estado inicial de busca.
-                    s.q = "";
-                    return s;
-                  },
-                  replace: true,
-                })
-              }
-              className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[12.5px] font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-              aria-label="Voltar para a busca"
-            >
-              <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
-              <span>Voltar</span>
-            </button>
-          ) : (
-            <BackButton fallbackTo="/" variant="ghost" />
-          )}
+          <div className="flex min-w-0 items-center gap-1.5">
+            {hasQuery ? (
+              <button
+                type="button"
+                onClick={() =>
+                  navigate({
+                    search: (prev: Record<string, unknown>) => {
+                      const s = { ...prev };
+                      // Não remover a chave: o middleware de retenção reidrata
+                      // `q` a partir da URL atual. Valor vazio muda a rota para
+                      // o estado inicial de busca.
+                      s.q = "";
+                      return s;
+                    },
+                    replace: true,
+                  })
+                }
+                className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[12.5px] font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                aria-label="Voltar para a busca"
+              >
+                <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+                <span>Voltar</span>
+              </button>
+            ) : (
+              <BackButton fallbackTo="/" variant="ghost" />
+            )}
+            <span aria-hidden className="h-5 w-px bg-border" />
+            <HomeBrandLink />
+          </div>
+
           <div className="flex min-w-0 flex-col gap-0.5">
             <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--pc-gold-ink)]">
               Comparador de preços
