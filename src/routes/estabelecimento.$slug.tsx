@@ -158,14 +158,15 @@ function EstablishmentPage() {
   const navigate = useNavigate();
   const search = Route.useSearch();
 
-  const setSearch = (patch: Record<string, string>) => {
+  const setSearch = (patch: Partial<typeof search>) => {
     navigate({
       to: "/estabelecimento/$slug",
       params: { slug },
-      search: (prev) => ({ ...prev, ...patch }),
+      search: { ...search, ...patch },
       replace: true,
     });
   };
+
 
   const sort: SortKey = (Object.keys(SORT_LABEL) as SortKey[]).includes(search.sort as SortKey)
     ? (search.sort as SortKey)
