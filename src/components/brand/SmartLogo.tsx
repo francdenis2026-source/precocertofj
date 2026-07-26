@@ -8,7 +8,7 @@
  *  • Variação "3D premium" opcional: relevo leve + sombra realista, sem
  *    aumentar a altura do tile.
  */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   analyzeLogo,
   computeLogoPresentation,
