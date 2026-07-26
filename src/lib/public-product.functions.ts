@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { setResponseHeader } from "@tanstack/react-start/server";
 import { normalizeProductName, signStorageImageUrl } from "@/lib/product-image-utils";
+import { comparePriceEntries, sortByPriceStable } from "@/lib/price-rank";
 
 export type PublicProductMarket = {
   marketName: string;
