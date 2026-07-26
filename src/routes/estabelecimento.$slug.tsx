@@ -600,3 +600,106 @@ function PriceHistorySheet({
     </Sheet>
   );
 }
+
+/** Estatística do hero — escala 10/15, contraste sobre navy. */
+function StoreStat({ label, value, hint }: { label: string; value: string; hint?: string | null }) {
+  return (
+    <div className="min-w-0 px-3 py-1.5">
+      <dt className="text-[9.5px] font-semibold uppercase leading-none tracking-[0.14em] text-white/60">
+        {label}
+      </dt>
+      <dd className="mt-1 truncate text-[15px] font-bold leading-none tabular-nums text-brand-gold">
+        {value}
+      </dd>
+      {hint ? (
+        <p className="mt-1 truncate text-[10.5px] leading-none text-white/55">{hint}</p>
+      ) : null}
+    </div>
+  );
+}
+
+/** Chip de categoria — altura fixa 32px, contraste navy/gold. */
+function CategoryChip({
+  label,
+  count,
+  active,
+  onClick,
+}: {
+  label: string;
+  count: number;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      role="radio"
+      aria-checked={active}
+      onClick={onClick}
+      className={
+        active
+          ? "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border border-brand-gold bg-brand-gold px-3 text-[12px] font-semibold leading-none text-brand-navy"
+          : "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border border-border bg-card px-3 text-[12px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold"
+      }
+    >
+      {label}
+      <span className="text-[10px] font-bold tabular-nums opacity-70">{count}</span>
+    </button>
+  );
+}
+
+/** Cartão compacto de produto — densidade alta e tipografia única. */
+function ProductTile({
+  product,
+  onAlert,
+  onHistory,
+}: {
+  product: PublicStoreProduct;
+  onAlert: () => void;
+  onHistory: () => void;
+}) {
+  const unit = product.unitLabel
+    ? product.unitLabel.replace("R$", "").trim() || product.unitLabel
+    : null;
+  return (
+    <article className="flex h-full flex-col justify-between rounded-lg border border-border bg-card px-3 py-2.5 transition-colors hover:border-brand-gold">
+      <div className="flex items-start gap-2">
+        <h3 className="min-w-0 flex-1 text-[13px] font-semibold leading-snug text-foreground">
+          {product.productName}
+        </h3>
+        <span className="shrink-0 text-[13.5px] font-bold leading-tight tabular-nums text-foreground">
+          {brl(product.price)}
+        </span>
+      </div>
+      <p className="mt-1 truncate text-[11px] leading-none text-muted-foreground">
+        {[product.brand, product.category].filter(Boolean).join(" · ") || "Sem categoria"}
+        {product.pricePerUnit != null && unit ? ` · ${brl(product.pricePerUnit)} ${unit}` : ""}
+      </p>
+      <div className="mt-2 flex items-center justify-between gap-2 border-t border-border/70 pt-1.5">
+        <span className="truncate text-[10.5px] leading-none text-muted-foreground">
+          {product.lastDate
+            ? `Atualizado ${new Date(product.lastDate).toLocaleDateString("pt-BR")}`
+            : ""}
+        </span>
+        <div className="flex shrink-0 items-center gap-1">
+          <button
+            type="button"
+            onClick={onAlert}
+            aria-label={`Criar alerta de preço para ${product.productName}`}
+            className="inline-flex h-6 items-center gap-1 rounded-full border border-border px-2 text-[10.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold"
+          >
+            <Bell className="h-3 w-3 text-brand-gold" aria-hidden /> Alerta
+          </button>
+          <button
+            type="button"
+            onClick={onHistory}
+            aria-label={`Ver histórico de preço de ${product.productName}`}
+            className="inline-flex h-6 items-center gap-1 rounded-full border border-border px-2 text-[10.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold"
+          >
+            <History className="h-3 w-3 text-brand-gold" aria-hidden /> Histórico
+          </button>
+        </div>
+      </div>
+    </article>
+  );
+}
