@@ -13,6 +13,7 @@ import {
 import { ProductImage } from "@/components/ds/ProductImage";
 import { StoreBadge } from "@/components/brand/StoreBadge";
 import { getPublicProduct } from "@/lib/public-product.functions";
+import { dedupeByStorePrice, storeKey } from "@/lib/price-rank";
 
 const brl = (v: number) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
@@ -47,10 +48,21 @@ export function ProductQuickView({
     staleTime: 60_000,
   });
 
-  const markets = (data?.markets ?? []).slice(0, 8);
-  // Evita duplicidade: com um único estabelecimento, o destaque "Menor preço"
-  // repetiria a mesma linha da lista abaixo.
-  const showCheapestHighlight = Boolean(product?.cheapestStore) && markets.length > 1;
+  // Lista canônica: um registro por estabelecimento, ordem estável em empates.
+  const allMarkets = dedupeByStorePrice(data?.markets ?? [], (m) => ({
+    store: m.marketName,
+    price: m.priceMin,
+    samples: m.samples,
+    lastSeen: m.lastSeen,
+  }));
+  const markets = allMarkets.slice(0, 8);
+  // "Menor preço" sai sempre da mesma lista renderizada abaixo; com um único
+  // estabelecimento o destaque repetiria a linha, então é omitido.
+  const cheapest = allMarkets.length > 1 ? allMarkets[0] : null;
+  const cheapestLogo =
+    cheapest && storeKey(cheapest.marketName) === storeKey(product?.cheapestStore)
+      ? (product?.cheapestLogo ?? null)
+      : null;
 
   return (
     <Dialog open={Boolean(product)} onOpenChange={(v) => !v && onClose()}>
@@ -92,26 +104,21 @@ export function ProductQuickView({
           role="region"
           aria-label="Detalhes e preços do produto"
         >
-          {showCheapestHighlight && product?.cheapestStore && (
+          {cheapest && (
             <div className="mb-3 flex items-center gap-2.5 rounded-lg border border-brand-gold/40 bg-brand-gold/10 p-2.5">
-              <StoreBadge
-                name={product.cheapestStore}
-                logoUrl={product.cheapestLogo ?? null}
-                size="xs"
-              />
+              <StoreBadge name={cheapest.marketName} logoUrl={cheapestLogo} size="xs" />
               <div className="min-w-0 flex-1">
                 <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-brand-gold">
                   Menor preço
                 </p>
-                <p className="truncate text-[12.5px] font-semibold">{product.cheapestStore}</p>
+                <p className="truncate text-[12.5px] font-semibold">{cheapest.marketName}</p>
               </div>
-              {product.minPrice != null && (
-                <span className="shrink-0 text-[13.5px] font-bold tabular-nums">
-                  {brl(product.minPrice)}
-                </span>
-              )}
+              <span className="shrink-0 text-[13.5px] font-bold tabular-nums">
+                {brl(cheapest.priceMin)}
+              </span>
             </div>
           )}
+
 
           <p className="mb-1.5 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
             <Store className="h-3.5 w-3.5" aria-hidden /> Preço por estabelecimento

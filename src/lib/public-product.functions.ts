@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { setResponseHeader } from "@tanstack/react-start/server";
 import { normalizeProductName, signStorageImageUrl } from "@/lib/product-image-utils";
+import { comparePriceEntries, sortByPriceStable } from "@/lib/price-rank";
 
 export type PublicProductMarket = {
   marketName: string;
@@ -263,7 +264,12 @@ export const getPublicProduct = createServerFn({ method: "POST" })
             .slice(-30),
         };
       })
-      .sort((a, b) => a.priceMin - b.priceMin)
+      .sort((a, b) =>
+        comparePriceEntries(
+          { store: a.marketName, price: a.priceMin, samples: a.samples, lastSeen: a.lastSeen },
+          { store: b.marketName, price: b.priceMin, samples: b.samples, lastSeen: b.lastSeen },
+        ),
+      )
       .slice(0, 12);
 
     // Ranking segmentado por cidade
@@ -283,7 +289,12 @@ export const getPublicProduct = createServerFn({ method: "POST" })
     }
     const citiesRanking: PublicProductCityRank[] = Array.from(byCity.entries())
       .map(([city, v]) => {
-        const sorted = v.entries.slice().sort((a, b) => a.priceMin - b.priceMin);
+        const sorted = sortByPriceStable(v.entries, (m) => ({
+          store: m.marketName,
+          price: m.priceMin,
+          samples: m.samples,
+          lastSeen: m.lastSeen,
+        }));
         const best = sorted[0];
         const avgCity = Number(
           (
@@ -301,7 +312,12 @@ export const getPublicProduct = createServerFn({ method: "POST" })
           avgPrice: avgCity,
         };
       })
-      .sort((a, b) => a.bestPrice - b.bestPrice);
+      .sort((a, b) =>
+        comparePriceEntries(
+          { store: a.bestMarket, price: a.bestPrice, samples: a.bestSamples, lastSeen: a.bestLastSeen },
+          { store: b.bestMarket, price: b.bestPrice, samples: b.bestSamples, lastSeen: b.bestLastSeen },
+        ),
+      );
 
     const currentPrice = Number(list[0].price_captured);
     const previousPrice =
