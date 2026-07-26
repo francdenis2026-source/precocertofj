@@ -94,6 +94,7 @@ const SEARCH_DEFAULTS = {
   prot: "",
   bsort: "kg-asc",
   bview: "grid",
+  p: "",
 };
 
 const searchSchema = z.object({
@@ -106,6 +107,8 @@ const searchSchema = z.object({
   prot: fallback(z.string(), "").default(""),
   bsort: fallback(z.string(), "kg-asc").default("kg-asc"),
   bview: fallback(z.string(), "grid").default("grid"),
+  /** Slug do produto/corte aberto no modal — link compartilhável. */
+  p: fallback(z.string(), "").default(""),
 });
 
 export const Route = createFileRoute("/estabelecimento/$slug")({
@@ -196,7 +199,11 @@ function EstablishmentPage() {
 
   const [q, setQ] = useState(search.q);
   const [historyFor, setHistoryFor] = useState<PublicStoreProduct | null>(null);
-  const [quickView, setQuickView] = useState<PublicStoreProduct | null>(null);
+  // Produto do modal vem da URL: recarregar ou compartilhar reabre o mesmo item.
+  const quickView = useMemo<PublicStoreProduct | null>(
+    () => (search.p ? (data.products.find((p) => p.slug === search.p) ?? null) : null),
+    [data.products, search.p],
+  );
   const [limit, setLimit] = useState(30);
 
   // Sincroniza o termo digitado com a URL (debounce) para compartilhar/voltar.
@@ -312,7 +319,12 @@ function EstablishmentPage() {
     },
     [navigate],
   );
-  const openQuickView = useCallback((p: PublicStoreProduct) => setQuickView(p), []);
+  const openQuickView = useCallback((p: PublicStoreProduct) => {
+    setSearchRef.current({ p: p.slug });
+  }, []);
+  const closeQuickView = useCallback(() => {
+    setSearchRef.current({ p: "" }, { replace: true });
+  }, []);
   const openHistory = useCallback((p: PublicStoreProduct) => setHistoryFor(p), []);
 
 
@@ -491,7 +503,7 @@ function EstablishmentPage() {
                       <li key={p.slug}>
                         <ProductTile
                           product={p}
-                          onOpen={() => setQuickView(p)}
+                          onOpen={() => openQuickView(p)}
                           onAlert={() => createAlert(p)}
                           onHistory={() => setHistoryFor(p)}
                         />
@@ -519,7 +531,7 @@ function EstablishmentPage() {
                         <li key={p.slug}>
                           <ProductRow
                             product={p}
-                            onOpen={() => setQuickView(p)}
+                            onOpen={() => openQuickView(p)}
                             onAlert={() => createAlert(p)}
                             onHistory={() => setHistoryFor(p)}
                           />

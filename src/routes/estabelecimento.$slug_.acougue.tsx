@@ -8,7 +8,7 @@ import {
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { ArrowLeft, Beef, MapPin, Store } from "lucide-react";
 import { getPublicStoreCatalog, type PublicStoreProduct } from "@/lib/stores-public.functions";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
@@ -31,13 +31,15 @@ const storeQuery = (id: string) =>
     staleTime: 60_000,
   });
 
-const SEARCH_DEFAULTS = { bq: "", prot: "", bsort: "kg-asc", bview: "grid" };
+const SEARCH_DEFAULTS = { bq: "", prot: "", bsort: "kg-asc", bview: "grid", p: "" };
 
 const searchSchema = z.object({
   bq: fallback(z.string(), "").default(""),
   prot: fallback(z.string(), "").default(""),
   bsort: fallback(z.string(), "kg-asc").default("kg-asc"),
   bview: fallback(z.string(), "grid").default("grid"),
+  /** Slug do corte aberto no modal — permite compartilhar link direto. */
+  p: fallback(z.string(), "").default(""),
 });
 
 export const Route = createFileRoute("/estabelecimento/$slug_/acougue")({
@@ -99,9 +101,13 @@ function ButcherPage() {
   const { storeId, slug } = Route.useLoaderData();
   const { data } = useSuspenseQuery(storeQuery(storeId));
   const { cuts } = useMemo(() => splitButcherCuts(data.products), [data.products]);
-  const [quickView, setQuickView] = useState<PublicStoreProduct | null>(null);
   const navigate = useNavigate();
   const search = Route.useSearch();
+  // Corte aberto vem da URL: recarregar/compartilhar reabre o mesmo produto.
+  const quickView = useMemo<PublicStoreProduct | null>(
+    () => (search.p ? (cuts.find((c) => c.slug === search.p) ?? null) : null),
+    [cuts, search.p],
+  );
 
   const butcherState = useMemo(
     () => parseButcherState({ q: search.bq, prot: search.prot, bsort: search.bsort, bview: search.bview }),
@@ -117,7 +123,13 @@ function ButcherPage() {
       navigate({
         to: "/estabelecimento/$slug_/acougue",
         params: { slug },
-        search: { bq: next.q, prot: next.protein ?? "", bsort: next.sort, bview: next.view },
+        search: (prev) => ({
+          ...prev,
+          bq: next.q,
+          prot: next.protein ?? "",
+          bsort: next.sort,
+          bview: next.view,
+        }),
         replace: patch.q !== undefined,
       });
     if (timer.current) clearTimeout(timer.current);
@@ -125,7 +137,24 @@ function ButcherPage() {
     else apply();
   }, [navigate, slug]);
 
-  const openQuickView = useCallback((p: PublicStoreProduct) => setQuickView(p), []);
+  const openQuickView = useCallback(
+    (product: PublicStoreProduct) => {
+      navigate({
+        to: "/estabelecimento/$slug_/acougue",
+        params: { slug },
+        search: (prev) => ({ ...prev, p: product.slug }),
+      });
+    },
+    [navigate, slug],
+  );
+  const closeQuickView = useCallback(() => {
+    navigate({
+      to: "/estabelecimento/$slug_/acougue",
+      params: { slug },
+      search: (prev) => ({ ...prev, p: "" }),
+      replace: true,
+    });
+  }, [navigate, slug]);
 
 
   return (
@@ -193,7 +222,7 @@ function ButcherPage() {
               }
             : null
         }
-        onClose={() => setQuickView(null)}
+        onClose={closeQuickView}
       />
       <SiteFooter />
     </div>
