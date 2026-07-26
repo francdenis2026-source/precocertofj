@@ -1925,6 +1925,7 @@ function MarketBucketSection({
   marketName,
   logoUrl,
   brandColor,
+  kind,
   minPrice,
   rows,
   isCheapest,
@@ -1935,17 +1936,25 @@ function MarketBucketSection({
   marketName: string;
   logoUrl: string | null;
   brandColor: string | null;
+  kind: string | null;
   minPrice: number;
   rows: { productName: string; catalogId: string | null; price: PricePoint }[];
   isCheapest: boolean;
-  fmt: (n: number) => string;
+  fmt: (n: number | null | undefined) => string;
   highlightTokens: string[];
 }) {
-  const COLLAPSED = 5;
+  const COLLAPSED = 4;
   const [expanded, setExpanded] = useState(false);
   const visible = expanded ? rows : rows.slice(0, COLLAPSED);
   const hiddenCount = rows.length - visible.length;
   const bar = brandColor && /^#[0-9A-Fa-f]{6}$/.test(brandColor) ? brandColor : null;
+  const initials = marketName
+    .replace(/[^\p{L}\s]/gu, "")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((w) => w[0]?.toUpperCase() ?? "")
+    .join("");
 
   return (
     <section
@@ -1955,44 +1964,51 @@ function MarketBucketSection({
           ? "border-[color-mix(in_oklab,var(--brand-gold)_60%,transparent)] bg-card"
           : "border-border bg-card")
       }
-      style={bar ? { boxShadow: `inset 4px 0 0 0 ${bar}` } : undefined}
+      style={bar ? { boxShadow: `inset 3px 0 0 0 ${bar}` } : undefined}
       aria-label={`Produtos em ${marketName}`}
     >
-      {/* Cabeçalho do mercado — placa de logo com fundo claro para contraste */}
+      {/* Cabeçalho — logo em placa neutra (claro/escuro), nome, categoria e menor preço */}
       <header
         className={
-          "flex items-center gap-3 border-b px-3 py-2.5 pl-4 " +
+          "flex items-center gap-2.5 border-b px-2.5 py-2 pl-3 sm:gap-3 sm:px-3 sm:py-2.5 sm:pl-4 " +
           (isCheapest
             ? "border-[color-mix(in_oklab,var(--brand-gold)_35%,transparent)] bg-[color-mix(in_oklab,var(--brand-gold)_9%,var(--color-card))]"
             : "border-border bg-[color-mix(in_oklab,var(--color-muted)_45%,var(--color-card))]")
         }
       >
         <span
-          className="grid h-11 w-11 flex-none place-items-center overflow-hidden rounded-lg border border-[color-mix(in_oklab,var(--brand-navy)_14%,transparent)] bg-[oklch(0.995_0.004_95)] p-1 shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_35%,transparent)]"
+          className="grid h-9 w-9 flex-none place-items-center overflow-hidden rounded-lg border border-[color-mix(in_oklab,var(--brand-navy)_14%,transparent)] bg-[oklch(0.995_0.004_95)] p-1 shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_35%,transparent)] sm:h-11 sm:w-11"
           aria-hidden="true"
         >
           {logoUrl ? (
-            <LazyImage src={logoUrl} alt="" className="h-full w-full object-contain" />
+            <LazyImage
+              src={logoUrl}
+              alt=""
+              className="h-full w-full object-contain object-center"
+            />
+          ) : initials ? (
+            <span className="text-[12px] font-bold leading-none text-brand-navy">{initials}</span>
           ) : (
-            <ShoppingBag className="h-5 w-5 text-muted-foreground" />
+            <ShoppingBag className="h-4 w-4 text-brand-navy/70" />
           )}
         </span>
         <div className="min-w-0 flex-1">
-          <div className="flex min-w-0 items-center gap-2">
-            <span className="market-name truncate text-[15px] font-semibold leading-tight tracking-[-0.011em] text-foreground">
+          <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
+            <span className="market-name truncate text-[13.5px] font-semibold leading-tight tracking-[-0.011em] text-foreground sm:text-[15px]">
               {marketName}
             </span>
             {isCheapest ? (
-              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-brand-gold px-2 py-0.5 text-[11px] font-semibold text-brand-navy">
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-brand-gold px-1.5 py-0.5 text-[10.5px] font-semibold text-brand-navy sm:px-2 sm:text-[11px]">
                 <Crown className="h-3 w-3" aria-hidden="true" /> Menor preço
               </span>
             ) : (
-              <span className="shrink-0 rounded-full border border-border bg-background px-1.5 py-0.5 text-[11px] font-semibold tabular-nums text-muted-foreground">
+              <span className="shrink-0 rounded-full border border-border bg-background px-1.5 py-0.5 text-[10.5px] font-semibold tabular-nums text-muted-foreground sm:text-[11px]">
                 {rank}º
               </span>
             )}
           </div>
-          <p className="mt-0.5 truncate text-[12px] leading-snug text-muted-foreground">
+          <p className="mt-0.5 truncate text-[11.5px] leading-snug text-muted-foreground sm:text-[12px]">
+            {kind ? <span className="capitalize">{kind}</span> : "Estabelecimento"} ·{" "}
             {rows.length} {rows.length === 1 ? "produto" : "produtos"} · a partir de{" "}
             <span className="font-semibold tabular-nums text-foreground">{fmt(minPrice)}</span>
           </p>
@@ -2003,21 +2019,19 @@ function MarketBucketSection({
         {visible.map((r, i) => (
           <li
             key={`${r.productName}-${r.price.when}-${i}`}
-            className="flex items-center gap-3 px-3 py-2.5 pl-4 transition-colors hover:bg-[color-mix(in_oklab,var(--brand-gold)_8%,transparent)]"
+            className="flex items-center gap-2.5 px-2.5 py-2 pl-3 transition-colors hover:bg-[color-mix(in_oklab,var(--brand-gold)_8%,transparent)] sm:gap-3 sm:px-3 sm:py-2.5 sm:pl-4"
           >
             <Link
               to="/produto/$slug"
               params={{ slug: r.productName }}
-              className="min-w-0 flex-1 truncate rounded text-[13.5px] font-medium leading-snug text-foreground hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+              className="min-w-0 flex-1 truncate rounded text-[12.5px] font-medium leading-snug text-foreground hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold sm:text-[13.5px]"
             >
               <HighlightMatch text={r.productName} tokens={highlightTokens} />
             </Link>
             <span
               className={
-                "whitespace-nowrap rounded-md px-2 py-1 text-[15px] font-bold leading-none tabular-nums tracking-[-0.015em] " +
-                (i === 0
-                  ? "bg-brand-navy text-white"
-                  : "text-foreground")
+                "whitespace-nowrap rounded-md px-1.5 py-1 text-[13.5px] font-bold leading-none tabular-nums tracking-[-0.015em] sm:px-2 sm:text-[15px] " +
+                (i === 0 ? "bg-brand-navy text-white" : "text-foreground")
               }
             >
               {fmt(r.price.price)}
@@ -2025,6 +2039,7 @@ function MarketBucketSection({
           </li>
         ))}
       </ul>
+
 
       {hiddenCount > 0 || expanded ? (
         <button
