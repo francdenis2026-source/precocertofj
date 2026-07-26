@@ -39,20 +39,42 @@ export function CreatePriceAlertButton({
   productName,
   displayName,
   defaultEstablishmentId,
+  defaultDirection = "drop",
+  defaultThresholdPct = 5,
+  defaultTargetPrice,
+  categoryLabel,
+  triggerLabel = "Criar alerta",
+  triggerClassName,
+  compact = false,
 }: {
   productKey?: string;
   productName?: string;
   displayName?: string;
   defaultEstablishmentId?: string | null;
+  /** Direção pré-selecionada do alerta. */
+  defaultDirection?: AlertDirection;
+  /** Sensibilidade/frequência pré-selecionada (em % de variação). */
+  defaultThresholdPct?: number;
+  /** Preço-alvo sugerido (ex.: melhor preço atual do produto). */
+  defaultTargetPrice?: number | null;
+  /** Categoria do produto, exibida como contexto no diálogo. */
+  categoryLabel?: string | null;
+  triggerLabel?: string;
+  triggerClassName?: string;
+  /** Gatilho enxuto (chip) para uso dentro de cards de resultado. */
+  compact?: boolean;
 }) {
   const create = useServerFn(createAlertSubscription);
   const listStores = useServerFn(listPublicStores);
   const getAccount = useServerFn(getMyAccount);
   const qc = useQueryClient();
   const [open, setOpen] = useState(false);
-  const [direction, setDirection] = useState<AlertDirection>("drop");
-  const [thresholdPct, setThresholdPct] = useState<string>("5");
-  const [targetPrice, setTargetPrice] = useState<string>("");
+  const [direction, setDirection] = useState<AlertDirection>(defaultDirection);
+  const [thresholdPct, setThresholdPct] = useState<string>(String(defaultThresholdPct));
+  const [targetPrice, setTargetPrice] = useState<string>(
+    defaultTargetPrice != null ? String(defaultTargetPrice.toFixed(2)) : "",
+  );
+
   const [establishmentId, setEstablishmentId] = useState<string>(
     defaultEstablishmentId ?? "any",
   );
