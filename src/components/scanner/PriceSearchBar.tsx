@@ -765,7 +765,7 @@ export function PriceSearchBar({
 
       {result && !err && !quotaBlocked && (
         <div
-          className={`mt-3 min-h-[640px] space-y-2 [overflow-anchor:none] transition-opacity duration-150 ${isSearching ? "opacity-70" : "opacity-100"}`}
+          className={`mt-4 min-h-[640px] space-y-3 [overflow-anchor:none] transition-opacity duration-150 md:space-y-4 ${isSearching ? "opacity-70" : "opacity-100"}`}
           aria-busy={isSearching || undefined}
           aria-live="polite"
         >
