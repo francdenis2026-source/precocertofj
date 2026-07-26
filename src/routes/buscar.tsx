@@ -257,10 +257,12 @@ function SearchPage() {
           if (!value) delete nextSearch.q;
           return nextSearch;
         },
-        replace: true,
+        // A primeira busca empilha histórico (voltar → tela de busca vazia);
+        // refinamentos posteriores substituem para não poluir o histórico.
+        replace: hasQuery,
       });
     },
-    [navigate],
+    [navigate, hasQuery],
   );
   useEffect(() => () => {
     if (urlSyncTimer.current != null) window.clearTimeout(urlSyncTimer.current);
@@ -274,9 +276,10 @@ function SearchPage() {
     }
     navigate({
       search: (prev: Record<string, unknown>) => ({ ...prev, q: next.slice(0, 80) }),
-      replace: true,
+      replace: hasQuery,
     });
   };
+
 
   // Persistência do histórico: só para usuários autenticados. Visitantes usam
   // armazenamento em memória (limpa ao atualizar a página).
