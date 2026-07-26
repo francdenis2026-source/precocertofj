@@ -334,14 +334,14 @@ function HomePage() {
               <h1
                 id="hero-title"
                 className={`${serif} mt-2 font-normal leading-[1.02] tracking-[-0.015em]`}
-                style={{ color: "#EAF0F7", fontSize: "clamp(1.75rem, 4.2vw, 3.25rem)" }}
+                style={{ color: "#EAF0F7", fontSize: "clamp(1.5rem, 4.2vw, 3.25rem)" }}
               >
                 Encontre o <span className="italic" style={{ color: "#E8BE72" }}>preço certo</span>{" "}
                 sem sair de casa.
               </h1>
 
               <p
-                className="tc-flow mt-2 max-w-xl text-[13px] font-light leading-snug sm:text-[15px]"
+                className="tc-flow mt-2 hidden max-w-xl text-[13px] min-[360px]:block font-light leading-snug sm:text-[15px]"
                 style={{ color: "rgba(226,232,240,0.82)" }}
               >
                 Compare os principais mercados de Feijó em tempo real e leve para casa a
@@ -461,7 +461,7 @@ function HomePage() {
                 >
                   Populares:
                 </span>
-                {popularAll.slice(0, 5).map((t) => (
+                {popularAll.slice(0, 4).map((t) => (
                   <button
                     key={t}
                     type="button"
