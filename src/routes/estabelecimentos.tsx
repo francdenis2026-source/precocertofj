@@ -552,7 +552,7 @@ function EstablishmentsPage() {
           <div className="mx-auto w-full max-w-6xl px-4 md:px-8 py-3">
             <div className="mb-2 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
-                <span className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-brand-gold">Em destaque</span>
+                <span className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">Em destaque</span>
                 <span className="text-[13px] font-medium text-foreground">Mercados com mais produtos</span>
               </div>
               <div className="hidden gap-1.5 md:flex">
