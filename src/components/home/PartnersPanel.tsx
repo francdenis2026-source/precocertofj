@@ -104,7 +104,14 @@ export function PartnersPanel({
             >
               {title}
             </h2>
+            <p
+              className="mt-0.5 truncate text-[11.5px] sm:text-[12px]"
+              style={{ color: "var(--pc-home-muted, rgba(255,255,255,0.7))" }}
+            >
+              Toque no mercado para ver os preços de hoje
+            </p>
           </div>
+
 
           {ctaHref ? (
             <Link
