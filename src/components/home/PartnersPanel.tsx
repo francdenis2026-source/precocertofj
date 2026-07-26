@@ -183,12 +183,12 @@ export const PartnerTile = forwardRef<HTMLAnchorElement, PartnerTileProps>(
         aria-label={item.name}
         title={item.name}
         className={cn(
-          "group relative flex aspect-[16/10] w-full items-center justify-center overflow-hidden",
-          "rounded-lg border border-black/5 bg-white",
-          "px-1.5 py-1 sm:px-2 sm:py-1.5",
-          "shadow-[0_1px_2px_rgba(0,0,0,0.18),0_0_0_1px_rgba(255,255,255,0.04)]",
+          "group relative flex h-[52px] w-full items-center justify-center overflow-hidden sm:h-[58px]",
+          "rounded-[10px] border border-black/[0.06] bg-white",
+          "px-2 py-1.5",
+          "shadow-[0_1px_2px_rgba(0,0,0,0.16)]",
           "transition-all duration-200 will-change-transform",
-          "hover:-translate-y-0.5 hover:shadow-[0_6px_14px_-4px_rgba(0,0,0,0.35)]",
+          "hover:-translate-y-0.5 hover:border-black/10 hover:shadow-[0_8px_16px_-6px_rgba(0,0,0,0.4)]",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:-translate-y-0.5",
         )}
         style={
@@ -205,9 +205,10 @@ export const PartnerTile = forwardRef<HTMLAnchorElement, PartnerTileProps>(
             alt=""
             loading="lazy"
             decoding="async"
-            className="max-h-[78%] max-w-[88%] object-contain"
+            className="max-h-[80%] max-w-[86%] object-contain transition-transform duration-300 group-hover:scale-[1.06]"
           />
         ) : (
+
           <TileLabel name={item.name} />
         )}
 
