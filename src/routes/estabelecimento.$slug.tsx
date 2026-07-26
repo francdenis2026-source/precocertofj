@@ -379,8 +379,7 @@ function EstablishmentPage() {
                 ]}
                 activeLabel={selectedCategory}
                 onSelect={(label) => {
-                  setSelectedCategory(label === "Todas" ? null : label);
-                  setLimit(30);
+                  setSearch({ cat: label === "Todas" ? "" : label });
                 }}
               />
             )}
