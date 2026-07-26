@@ -141,13 +141,31 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
             .order("created_at", { ascending: false })
             .limit(1)
             .maybeSingle(),
-          sb
+          Promise.resolve({ data: [] as unknown[] }),
+        ]);
+
+      // Todos os preços salvos — paginado (PostgREST corta em 1000 linhas).
+      const allScans: Array<{
+        establishment_id: string | null;
+        created_at: string;
+        product_name: string | null;
+      }> = [];
+      {
+        const PAGE_SCANS = 1000;
+        for (let from = 0; from < 40000; from += PAGE_SCANS) {
+          const res = await sb
             .from("scans")
             .select("establishment_id, created_at, product_name")
             .eq("status", "salvo")
             .not("price_captured", "is", null)
-            .not("establishment_id", "is", null),
-        ]);
+            .order("created_at", { ascending: false })
+            .range(from, from + PAGE_SCANS - 1);
+          const rows = (res.data ?? []) as typeof allScans;
+          allScans.push(...rows);
+          if (rows.length < PAGE_SCANS) break;
+        }
+      }
+
 
       const estabs = (estabsRes.data ?? []) as Array<{
         id: string;
