@@ -333,9 +333,14 @@ function CategoryPage() {
                   : undefined
               }
             />
-          ) : (
-            <>
+            <div id="cat-prod-results">
+              <p className="sr-only" aria-live="polite">
+                {`${products.length.toLocaleString("pt-BR")} produto(s) — modo ${view === "list" ? "lista" : "grade"}${
+                  view === "list" ? `, página ${safePage} de ${totalPages}` : ""
+                }`}
+              </p>
               {view === "grid" ? (
+
                 <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
                   {visible.map((p) => (
                     <li key={p.key}>
