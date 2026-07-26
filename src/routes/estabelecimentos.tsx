@@ -417,40 +417,45 @@ function EstablishmentsPage() {
           }}
         />
 
-        <div className="mx-auto w-full max-w-6xl px-4 md:px-8 pt-4 md:pt-5 pb-4 md:pb-5">
-          <nav aria-label="Trilha" className="mb-2 flex items-center gap-2 text-[14px] font-semibold text-white">
+        <div className="mx-auto w-full max-w-6xl px-4 md:px-8 pt-3 md:pt-4 pb-3.5 md:pb-4">
+          <nav aria-label="Trilha" className="mb-2.5 flex items-center gap-1.5 text-[12.5px] font-semibold">
             <Link
               to="/"
-              className="inline-flex items-center gap-1.5 rounded-lg border border-white/20 bg-white/5 px-3 py-1.5 text-white transition-colors hover:border-brand-gold hover:bg-brand-gold hover:text-brand-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy"
+              className="inline-flex items-center rounded-md border border-white/25 bg-brand-navy/70 px-2 py-1 text-white transition-colors hover:border-brand-gold hover:bg-brand-gold hover:text-brand-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy"
             >
               Início
             </Link>
-            <ChevronRight aria-hidden className="h-4 w-4 text-white/60" />
-            <span className="inline-flex items-center rounded-lg border border-brand-gold bg-brand-gold px-3 py-1.5 text-brand-navy">
+            <ChevronRight aria-hidden className="h-3.5 w-3.5 text-white/70" />
+            <span className="inline-flex items-center rounded-md bg-brand-gold px-2 py-1 text-brand-navy">
               Mercados
             </span>
           </nav>
 
-          <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-2.5 py-0.5 text-[10.5px] font-bold uppercase tracking-[0.14em] text-brand-navy">
-              {currentKind ? <currentKind.icon className="h-3 w-3" aria-hidden /> : <Store className="h-3 w-3" aria-hidden />}
-              {currentKind ? currentKind.label : "Comércios parceiros"}
+          {/* Cabeçalho organizado: identidade à esquerda, ação à direita */}
+          <div className="grid gap-2.5 md:grid-cols-[minmax(0,1fr)_auto] md:items-end md:gap-6">
+            <div className="min-w-0 rounded-lg bg-brand-navy/80 px-3 py-2.5 ring-1 ring-white/15 backdrop-blur-[3px]">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-gold px-2 py-[2px] text-[10px] font-bold uppercase tracking-[0.14em] text-brand-navy">
+                  {currentKind ? <currentKind.icon className="h-3 w-3" aria-hidden /> : <Store className="h-3 w-3" aria-hidden />}
+                  {currentKind ? currentKind.label : "Comércios parceiros"}
+                </span>
+              </div>
+              <h1 className="mt-1.5 text-[21px] font-bold leading-tight tracking-[-0.01em] text-white md:text-[25px]">
+                {currentKind ? currentKind.label : "Comércios"} de Feijó
+              </h1>
+              <p className="mt-1 max-w-2xl text-[12.5px] font-medium leading-snug text-white/90 md:text-[13.5px]">
+                {currentKind ? currentKind.tagline : "Cobertura de produtos, categorias e comparativo entre estabelecimentos monitorados pela comunidade."}
+              </p>
             </div>
-            <h1 className="text-[20px] md:text-[24px] font-bold leading-tight text-white [text-shadow:0_2px_10px_rgba(0,0,0,0.65)]">
-              {currentKind ? currentKind.label : "Comércios"} de Feijó
-            </h1>
 
+            <Link
+              to="/farmacias"
+              className="inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-brand-gold px-3.5 text-[11px] font-bold uppercase tracking-[0.12em] text-brand-navy shadow-sm transition-opacity hover:opacity-90 md:self-end"
+            >
+              <Pill className="h-3.5 w-3.5" aria-hidden /> Plantão das farmácias
+            </Link>
           </div>
-          <p className="mt-2 inline-block max-w-2xl rounded-md bg-brand-navy/75 px-2.5 py-1 text-[12.5px] md:text-[13.5px] font-medium leading-snug text-white ring-1 ring-white/10 backdrop-blur-[2px] [text-shadow:0_1px_4px_rgba(0,0,0,0.55)]">
-            {currentKind ? currentKind.tagline : "Cobertura de produtos, categorias e comparativo entre estabelecimentos monitorados pela comunidade."}
-          </p>
 
-          <Link
-            to="/farmacias"
-            className="mt-2 inline-flex h-9 items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-3.5 text-[11.5px] font-semibold uppercase tracking-[0.14em] text-brand-navy shadow-sm transition-opacity hover:opacity-90"
-          >
-            <Pill className="h-3.5 w-3.5" aria-hidden /> Plantão das farmácias de Feijó
-          </Link>
 
 
 
@@ -505,17 +510,17 @@ function EstablishmentsPage() {
 
           {/* Métricas ao vivo — botões acessíveis, abrem detalhes */}
           {data && (
-            <div className="mt-3 grid grid-cols-2 gap-1.5 sm:gap-2 md:grid-cols-4 md:gap-2.5">
+            <div className="mt-2.5 grid grid-cols-2 gap-1.5 sm:gap-2 md:grid-cols-4">
               <HeroMetric
                 icon={Store}
-                label="Estabelecimentos"
+                label="Comércios"
                 value={String(data.totalEstablishments)}
                 hint="Ver rede"
                 onClick={() => setMetricDetail("establishments")}
               />
               <HeroMetric
                 icon={Package}
-                label="Produtos cadastrados"
+                label="Produtos"
                 value={data.totalProducts.toLocaleString("pt-BR")}
                 hint="Ver categorias"
                 onClick={() => setMetricDetail("products")}
@@ -523,6 +528,7 @@ function EstablishmentsPage() {
               <HeroMetric
                 icon={PiggyBank}
                 label="Maior economia"
+
                 value={data.totalMaxSavings > 0 ? `R$ ${data.totalMaxSavings.toFixed(2).replace(".", ",")}` : "—"}
                 hint="Onde economizar"
                 onClick={() => setMetricDetail("savings")}
@@ -546,7 +552,7 @@ function EstablishmentsPage() {
           <div className="mx-auto w-full max-w-6xl px-4 md:px-8 py-3">
             <div className="mb-2 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
-                <span className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-brand-gold">Em destaque</span>
+                <span className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">Em destaque</span>
                 <span className="text-[13px] font-medium text-foreground">Mercados com mais produtos</span>
               </div>
               <div className="hidden gap-1.5 md:flex">
@@ -716,7 +722,7 @@ function EstablishmentsPage() {
                       <Select value={neighborhood} onValueChange={setNeighborhood}>
                         <SelectTrigger
                           aria-label="Filtrar por bairro"
-                          className="h-10 w-full rounded-xl text-[12.5px] md:w-[192px]"
+                          className="h-10 w-full min-w-0 rounded-xl text-[12px] md:w-[192px] md:text-[12.5px] [&>span]:truncate"
                         >
                           <SelectValue placeholder="Bairro" />
                         </SelectTrigger>
@@ -732,7 +738,7 @@ function EstablishmentsPage() {
                       <Select value={sort} onValueChange={(v) => setSort(v as typeof sort)}>
                         <SelectTrigger
                           aria-label="Ordenar por"
-                          className="h-10 w-full rounded-xl text-[12.5px] md:w-[186px]"
+                          className="h-10 w-full min-w-0 rounded-xl text-[12px] md:w-[186px] md:text-[12.5px] [&>span]:truncate"
                         >
                           <SelectValue placeholder="Ordenar" />
                         </SelectTrigger>
@@ -749,7 +755,7 @@ function EstablishmentsPage() {
                   </div>
                   <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/50 px-2.5 py-2 md:px-3.5">
                     <LocationControl loc={loc} variant="surface" />
-                    <span className="text-[10.5px] font-bold uppercase tracking-[0.16em] text-muted-foreground">
+                    <span className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-foreground/70">
                       {referencePoint ? (
                         <>Referência ativa · distâncias estimadas</>
                       ) : (
@@ -898,16 +904,17 @@ function HeroMetric({
       type="button"
       onClick={onClick}
       aria-label={`${label}: ${value}. ${hint ?? "Abrir detalhes"}`}
-      className="group relative flex w-full items-center gap-2.5 rounded-md border border-white/10 bg-brand-navy/95 px-3 py-2.5 text-left shadow-[0_6px_18px_-12px_rgba(0,0,0,0.6)] transition-colors duration-150 hover:border-brand-gold/70 hover:bg-brand-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy sm:gap-3 sm:px-3.5 sm:py-3"
+      className="group relative flex w-full items-center gap-2 rounded-lg border border-white/15 bg-brand-navy/95 px-2.5 py-1.5 text-left shadow-[0_6px_18px_-12px_rgba(0,0,0,0.6)] transition-colors duration-150 hover:border-brand-gold/70 hover:bg-brand-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy sm:gap-2.5 sm:px-3 sm:py-2"
     >
-      <div className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-brand-gold/15 text-brand-gold sm:h-9 sm:w-9">
-        <Icon className="h-4 w-4" strokeWidth={2} aria-hidden />
+      <div className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-brand-gold/20 text-brand-gold sm:h-8 sm:w-8">
+        <Icon className="h-3.5 w-3.5" strokeWidth={2} aria-hidden />
       </div>
       <div className="relative z-[1] min-w-0 flex-1">
-        <div className="line-clamp-2 text-[9.5px] font-semibold uppercase leading-[1.25] tracking-[0.12em] text-white/60 sm:truncate sm:tracking-[0.16em] sm:text-[10px]">
+        <div className="truncate text-[9px] font-semibold uppercase leading-[1.25] tracking-[0.12em] text-white/75 sm:text-[9.5px] sm:tracking-[0.14em]">
           {label}
         </div>
-        <div className="mt-0.5 flex items-baseline gap-1.5 text-[20px] font-bold leading-none text-white tabular-nums sm:text-[22px]">
+        <div className="mt-0.5 flex items-baseline gap-1.5 text-[16px] font-bold leading-none text-white tabular-nums sm:text-[18px]">
+
           {live && (
             <span className="relative inline-flex h-1.5 w-1.5 shrink-0 translate-y-[-2px]">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-gold/70" />
