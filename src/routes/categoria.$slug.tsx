@@ -682,107 +682,28 @@ function Pagination({
 /** Trilho horizontal de categorias com setas, roda do mouse, arraste e teclado. */
 function CategoryRail({ current }: { current: string }) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const [canPrev, setCanPrev] = useState(false);
-  const [canNext, setCanNext] = useState(false);
-
-  const sync = useCallback(() => {
-    const el = ref.current;
-    if (!el) return;
-    setCanPrev(el.scrollLeft > 4);
-    setCanNext(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
-  }, []);
+  const ctrl = useRef<ReturnType<typeof createRailController> | null>(null);
+  const [{ canPrev, canNext }, setState] = useState({ canPrev: false, canNext: false });
 
   useEffect(() => {
-    sync();
     const el = ref.current;
     if (!el) return;
-    const onWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
-      const before = el.scrollLeft;
-      el.scrollLeft += e.deltaY;
-      if (el.scrollLeft !== before) e.preventDefault();
-    };
-    el.addEventListener("wheel", onWheel, { passive: false });
-    window.addEventListener("resize", sync);
-    // centraliza a categoria ativa
-    el.querySelector<HTMLElement>('[aria-current="page"]')?.scrollIntoView({
-      inline: "center",
-      block: "nearest",
-    });
+    const c = createRailController(el, setState);
+    ctrl.current = c;
     return () => {
-      el.removeEventListener("wheel", onWheel);
-      window.removeEventListener("resize", sync);
-    };
-  }, [sync, current]);
-
-  // Arraste com o mouse (pointer drag), sem atrapalhar o clique nos chips
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    let down = false;
-    let moved = false;
-    let startX = 0;
-    let startScroll = 0;
-
-    const onDown = (e: PointerEvent) => {
-      if (e.pointerType !== "mouse" || e.button !== 0) return;
-      down = true;
-      moved = false;
-      startX = e.clientX;
-      startScroll = el.scrollLeft;
-    };
-    const onMove = (e: PointerEvent) => {
-      if (!down) return;
-      const dx = e.clientX - startX;
-      if (!moved && Math.abs(dx) < 4) return;
-      moved = true;
-      el.style.cursor = "grabbing";
-      el.scrollLeft = startScroll - dx;
-    };
-    const onUp = () => {
-      down = false;
-      el.style.cursor = "";
-      if (moved) {
-        const block = (ev: Event) => ev.preventDefault();
-        el.addEventListener("click", block, { capture: true, once: true });
-        window.setTimeout(() => el.removeEventListener("click", block, true), 0);
-      }
-      moved = false;
-    };
-
-    el.addEventListener("pointerdown", onDown);
-    window.addEventListener("pointermove", onMove);
-    window.addEventListener("pointerup", onUp);
-    return () => {
-      el.removeEventListener("pointerdown", onDown);
-      window.removeEventListener("pointermove", onMove);
-      window.removeEventListener("pointerup", onUp);
+      c.destroy();
+      ctrl.current = null;
     };
   }, []);
 
-  const scrollBy = (dir: -1 | 1) => {
-    const el = ref.current;
-    if (!el) return;
-    el.scrollBy({ left: dir * Math.max(180, el.clientWidth * 0.7), behavior: "smooth" });
-  };
+  // Centraliza (e revalida) sempre que a categoria ativa muda.
+  useEffect(() => {
+    ctrl.current?.centerActive("smooth");
+    ctrl.current?.sync();
+  }, [current]);
 
-  /** Navegação por teclado: setas movem o foco entre as categorias. */
   const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    const keys = ["ArrowRight", "ArrowLeft", "Home", "End"];
-    if (!keys.includes(e.key)) return;
-    const el = ref.current;
-    if (!el) return;
-    const items = Array.from(el.querySelectorAll<HTMLElement>("a[data-rail-item]"));
-    if (items.length === 0) return;
-    const idx = items.findIndex((n) => n === document.activeElement);
-    let next = idx;
-    if (e.key === "ArrowRight") next = idx < 0 ? 0 : Math.min(items.length - 1, idx + 1);
-    if (e.key === "ArrowLeft") next = idx < 0 ? 0 : Math.max(0, idx - 1);
-    if (e.key === "Home") next = 0;
-    if (e.key === "End") next = items.length - 1;
-    e.preventDefault();
-    items[next]?.focus();
-    items[next]?.scrollIntoView({ inline: "center", block: "nearest", behavior: "smooth" });
+    if (ctrl.current?.handleKey(e.key)) e.preventDefault();
   };
 
   return (
@@ -793,11 +714,18 @@ function CategoryRail({ current }: { current: string }) {
       </p>
       <div
         ref={ref}
-        onScroll={sync}
         onKeyDown={onKeyDown}
         role="group"
         aria-describedby="cat-rail-help"
-        className="no-scrollbar overflow-x-auto scroll-smooth px-9 py-1"
+        className={cn(
+          "no-scrollbar overflow-x-auto overscroll-x-contain scroll-smooth py-1",
+          // O espaço lateral acompanha a presença das setas para nunca recortar
+          // o primeiro/último chip em nenhuma largura de tela.
+          "[scroll-padding-inline:2.25rem]",
+          canPrev ? "pl-9" : "pl-0.5",
+          canNext ? "pr-9" : "pr-0.5",
+        )}
+
       >
         <ul className="flex w-max gap-1.5 pr-1">
           {CATEGORY_DEFS.map((c) => {
