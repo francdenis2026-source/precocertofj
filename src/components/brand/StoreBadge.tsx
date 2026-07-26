@@ -104,7 +104,8 @@ export function StoreBadge({
 }: StoreBadgeProps) {
   const color = getStoreColor(name, brandColor);
   const dim =
-    size === "xs" ? "h-4 w-4 text-[8px]" : size === "md" ? "h-8 w-8 text-[11px]" : "h-6 w-6 text-[9px]";
+    size === "xs" ? "h-6 w-6 text-[9px]" : size === "md" ? "h-11 w-11 text-[13px]" : "h-9 w-9 text-[11px]";
+
 
   // Assina URLs do bucket privado `logos` on-the-fly (com cache global).
   const [resolvedLogo, setResolvedLogo] = useState<string | null>(logoUrl ?? null);
@@ -126,27 +127,29 @@ export function StoreBadge({
     <span
 
       className={cn(
-        "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full ring-2 ring-offset-1 ring-offset-background",
+        "relative inline-grid shrink-0 place-items-center overflow-hidden rounded-lg border bg-[oklch(0.995_0.004_95)] p-[3px]",
         dim,
         className,
       )}
-      style={{ ["--tw-ring-color" as string]: color }}
+      style={{ borderColor: `color-mix(in oklab, ${color} 45%, transparent)` }}
       aria-hidden
     >
       <img
         src={resolvedLogo ?? undefined}
         alt=""
         loading="lazy"
-        className="h-full w-full object-cover"
+        className="h-full w-full object-contain object-center"
       />
     </span>
   ) : (
+
     <span
       className={cn(
-        "inline-flex shrink-0 items-center justify-center rounded-full font-mono font-bold",
+        "inline-flex shrink-0 items-center justify-center rounded-lg font-mono font-bold",
         dim,
         className,
       )}
+
       style={{ backgroundColor: color, color: readableTextOn(color) }}
       aria-hidden
       title={name}

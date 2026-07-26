@@ -1977,7 +1977,7 @@ function MarketBucketSection({
         }
       >
         <span
-          className="grid h-9 w-9 flex-none place-items-center overflow-hidden rounded-lg border border-[color-mix(in_oklab,var(--brand-navy)_14%,transparent)] bg-[oklch(0.995_0.004_95)] p-1 shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_35%,transparent)] sm:h-11 sm:w-11"
+          className="grid h-12 w-12 flex-none place-items-center overflow-hidden rounded-lg border border-[color-mix(in_oklab,var(--brand-navy)_14%,transparent)] bg-[oklch(0.995_0.004_95)] p-1.5 shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_35%,transparent)] sm:h-14 sm:w-14"
           aria-hidden="true"
         >
           {logoUrl ? (
@@ -2302,7 +2302,7 @@ function MatrixCompareResults({
                     style={{ backgroundColor: dot ?? "hsl(var(--muted-foreground))" }}
                   />
                   {m.logoUrl ? (
-                    <LazyImage src={m.logoUrl} alt="" className="h-3.5 w-3.5 rounded object-contain" />
+                    <LazyImage src={m.logoUrl} alt="" className="h-5 w-5 rounded bg-[oklch(0.995_0.004_95)] object-contain p-[1px]" />
                   ) : (
                     <ShoppingBag className="h-3 w-3" aria-hidden="true" />
                   )}
@@ -2390,7 +2390,7 @@ function MatrixCompareResults({
                   >
                     <div className="flex items-center gap-2 pt-1">
                       <span
-                        className="grid h-7 w-7 flex-none place-items-center rounded-md border overflow-hidden bg-background"
+                        className="grid h-10 w-10 flex-none place-items-center overflow-hidden rounded-md border bg-[oklch(0.995_0.004_95)]"
                         style={{ borderColor: bar === "transparent" ? undefined : bar }}
                         aria-hidden="true"
                       >
