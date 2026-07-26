@@ -64,7 +64,7 @@ export type StoreBadgeProps = {
   name: string;
   logoUrl?: string | null;
   brandColor?: string | null;
-  size?: "xs" | "sm" | "md";
+  size?: "xs" | "sm" | "md" | "lg";
   className?: string;
   /** Distância em km até o estabelecimento — exibida no tooltip se informada. */
   distanceKm?: number | null;
