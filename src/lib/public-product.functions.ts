@@ -312,7 +312,12 @@ export const getPublicProduct = createServerFn({ method: "POST" })
           avgPrice: avgCity,
         };
       })
-      .sort((a, b) => a.bestPrice - b.bestPrice);
+      .sort((a, b) =>
+        comparePriceEntries(
+          { store: a.bestMarket, price: a.bestPrice, samples: a.bestSamples, lastSeen: a.bestLastSeen },
+          { store: b.bestMarket, price: b.bestPrice, samples: b.bestSamples, lastSeen: b.bestLastSeen },
+        ),
+      );
 
     const currentPrice = Number(list[0].price_captured);
     const previousPrice =
