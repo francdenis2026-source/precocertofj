@@ -16,6 +16,7 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight } from "lucide-react";
 import { forwardRef, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
+import { SmartLogoImage, useLogoPresentation } from "@/components/brand/SmartLogo";
 
 export type PartnerTileItem = {
   id: string | number;
@@ -169,12 +170,19 @@ export function PartnersPanel({
 type PartnerTileProps = {
   item: PartnerTileItem;
   defaultHref?: string;
+  /** Relevo/sombra 3D premium (não altera a altura do tile). */
+  premium3d?: boolean;
 };
 
+const SOFT_TILE_BG = "linear-gradient(160deg, #f6f8fc 0%, #eef2f8 55%, #e8edf5 100%)";
+
 export const PartnerTile = forwardRef<HTMLAnchorElement, PartnerTileProps>(
-  function PartnerTile({ item, defaultHref }, ref) {
+  function PartnerTile({ item, defaultHref, premium3d = true }, ref) {
     const href = item.href ?? defaultHref ?? "/estabelecimentos";
     const hasLogo = Boolean(item.logoUrl);
+    // Fundo inteligente: branco para marcas escuras, suave para tintas claras.
+    const { presentation } = useLogoPresentation(item.logoUrl, { targetFill: 0.92 });
+    const soft = hasLogo && presentation.background === "soft";
 
     return (
       <Link
@@ -184,15 +192,18 @@ export const PartnerTile = forwardRef<HTMLAnchorElement, PartnerTileProps>(
         title={item.name}
         className={cn(
           "group relative flex h-[66px] w-full items-center justify-center overflow-hidden sm:h-[76px]",
-          "rounded-[10px] border border-black/[0.06] bg-white",
+          "rounded-[10px] border border-black/[0.07]",
           "px-2.5 py-2",
-          "shadow-[0_1px_2px_rgba(0,0,0,0.16)]",
           "transition-all duration-200 will-change-transform",
-          "hover:-translate-y-0.5 hover:border-black/10 hover:shadow-[0_8px_16px_-6px_rgba(0,0,0,0.4)]",
+          "hover:-translate-y-0.5 hover:border-black/10",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:-translate-y-0.5",
         )}
         style={
           {
+            background: soft ? SOFT_TILE_BG : "#ffffff",
+            boxShadow: premium3d
+              ? "inset 0 1px 0 rgba(255,255,255,0.95), inset 0 -1px 0 rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.16), 0 10px 20px -14px rgba(15,23,42,0.5)"
+              : "0 1px 2px rgba(15,23,42,0.16)",
             ["--tw-ring-color" as string]:
               "color-mix(in oklab, var(--pc-home-gold) 75%, transparent)",
             ["--tw-ring-offset-color" as string]: "var(--pc-home-card)",
@@ -200,17 +211,30 @@ export const PartnerTile = forwardRef<HTMLAnchorElement, PartnerTileProps>(
         }
       >
         {hasLogo ? (
-          <img
-            src={item.logoUrl ?? undefined}
-            alt=""
-            loading="lazy"
-            decoding="async"
-            className="max-h-[88%] max-w-[92%] object-contain transition-transform duration-300 group-hover:scale-[1.06]"
-          />
+          <span className="flex h-[88%] w-[92%] items-center justify-center overflow-hidden">
+            <SmartLogoImage
+              src={item.logoUrl}
+              name={item.name}
+              premium3d={premium3d}
+              targetFill={0.92}
+              className="group-hover:brightness-[1.02]"
+            />
+          </span>
         ) : (
 
           <TileLabel name={item.name} />
         )}
+
+        {premium3d ? (
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-x-0 top-0 h-1/2"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%)",
+            }}
+          />
+        ) : null}
 
         <span
           aria-hidden
