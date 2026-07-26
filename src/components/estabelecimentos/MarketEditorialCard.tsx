@@ -33,8 +33,11 @@ export interface MarketEditorialCardProps {
   rank?: number;
   /** Tokens da busca — destacados no nome/localidade. */
   highlightTokens?: string[];
+  /** Card acima da dobra: carrega a logo imediatamente. */
+  priority?: boolean;
   className?: string;
 }
+
 
 const PLATE_BG =
   "radial-gradient(120% 120% at 50% 0%, #ffffff 0%, #f3f6fb 62%, #e9eef7 100%)";
@@ -67,6 +70,7 @@ export function MarketEditorialCard({
   favoriteSlot,
   rank,
   highlightTokens,
+  priority = false,
   className,
 }: MarketEditorialCardProps) {
   const initials = name
@@ -77,13 +81,19 @@ export function MarketEditorialCard({
     .join("")
     .toUpperCase();
 
-  const { metrics } = useLogoPresentation(logoUrl, { targetFill: 0.94 });
+  // Reaproveita o cache de métricas já preenchido pela imagem (uma análise por
+  // URL em toda a aplicação); só dispara leitura própria nos cards prioritários.
+  const { metrics } = useLogoPresentation(logoUrl, {
+    targetFill: 0.94,
+    enabled: priority,
+  });
   const lightInk = Boolean(
     metrics?.analyzed &&
       metrics.hasAlpha &&
       (metrics.lightInkRatio > 0.5 || metrics.contentLuma > 0.72),
   );
   const needsPlate = Boolean(logoUrl) && !lightInk;
+
 
   return (
     <div className={cn("relative h-full", className)}>
@@ -117,8 +127,10 @@ export function MarketEditorialCard({
                   src={logoUrl}
                   name={name}
                   targetFill={0.96}
+                  eager={priority}
                   className="transition-transform duration-300 group-hover:scale-[1.05]"
                 />
+
               </span>
             ) : (
               <span className="grid h-full w-full place-items-center rounded-[11px] bg-brand-navy/10 text-[14px] font-bold text-brand-navy ring-1 ring-brand-navy/15">

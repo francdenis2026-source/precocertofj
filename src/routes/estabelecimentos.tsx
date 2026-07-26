@@ -49,6 +49,9 @@ import {
 } from "@/components/estabelecimentos/MarketEditorialCard";
 
 import { useRef } from "react";
+import { StoreLogoThumb } from "@/components/brand/StoreLogoThumb";
+import { tc } from "@/lib/typeclear";
+
 
 import {
   Dialog,
@@ -456,7 +459,7 @@ function EstablishmentsPage() {
       {/* IDENTIDADE — linha fina com tagline, tipos de comércio e números ao vivo */}
       <section className="border-b border-border/60">
         <div className="mx-auto w-full max-w-6xl px-4 py-3 md:px-8 md:py-4">
-          <p className="max-w-2xl text-[12.5px] leading-relaxed text-muted-foreground md:text-[13px]">
+          <p className={`max-w-2xl ${tc.lead}`}>
             {currentKind
               ? currentKind.tagline
               : "Cobertura de produtos, categorias e comparativo entre os estabelecimentos monitorados pela comunidade."}
@@ -480,7 +483,7 @@ function EstablishmentsPage() {
                   aria-checked={active}
                   onClick={() => setKindFilter(k)}
                   className={[
-                    "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-[0.14em] transition-colors duration-150",
+                    `inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 transition-colors duration-150 ${tc.chip}`,
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
                     active
                       ? "border-brand-gold bg-brand-gold text-brand-navy"
@@ -499,7 +502,7 @@ function EstablishmentsPage() {
                 aria-checked={onlyFavorites}
                 onClick={() => setOnlyFavorites((v) => !v)}
                 className={[
-                  "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-[0.14em] transition-colors duration-150",
+                  `inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 transition-colors duration-150 ${tc.chip}`,
                   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
                   onlyFavorites
                     ? "border-brand-gold bg-brand-gold text-brand-navy"
@@ -559,8 +562,8 @@ function EstablishmentsPage() {
           <div className="mx-auto w-full max-w-6xl px-4 md:px-8 py-3">
             <div className="mb-2 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
-                <span className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">Em destaque</span>
-                <span className="text-[13px] font-medium text-foreground">Mercados com mais produtos</span>
+                <span className={tc.eyebrow}>Em destaque</span>
+                <span className={`font-medium ${tc.body}`}>Mercados com mais produtos</span>
               </div>
               <div className="hidden gap-1.5 md:flex">
                 <button
@@ -607,28 +610,29 @@ function EstablishmentsPage() {
                       className="absolute inset-y-0 left-0 w-[3px] bg-brand-gold"
                     />
                   )}
-                  <div className="grid h-[52px] w-[52px] shrink-0 place-items-center overflow-hidden rounded-md border border-border/60 bg-white p-1">
-                    {e.logoUrl ? (
-                      <img src={e.logoUrl} alt="" className="h-full w-full object-contain" loading="lazy" />
-                    ) : (
-                      <span className="text-[13px] font-bold text-brand-navy">{e.name.substring(0, 2).toUpperCase()}</span>
-                    )}
-                  </div>
+                  <StoreLogoThumb
+                    src={e.logoUrl}
+                    name={e.name}
+                    eager={idx < 3}
+                    className="h-[52px] w-[52px] border-border/60"
+                    initialsClassName="text-[13px]"
+                  />
 
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5">
-                      <span className="truncate text-[12.5px] font-semibold text-foreground">{e.name}</span>
+                      <span className={`truncate ${tc.itemTitle}`}>{e.name}</span>
                       {idx === 0 && (
-                        <span className="shrink-0 rounded-sm bg-brand-gold px-1 py-[1px] text-[8.5px] font-bold uppercase leading-none tracking-[0.14em] text-brand-navy">
+                        <span className={`shrink-0 rounded-sm bg-brand-gold px-1 py-[1px] text-brand-navy ${tc.tag}`}>
                           Top
                         </span>
                       )}
                     </div>
-                    <div className="truncate text-[11px] text-muted-foreground">
+                    <div className={`truncate ${tc.meta}`}>
                       <span className="font-semibold text-brand-gold tabular-nums">{e.productsCount}</span> produtos
                       {e.neighborhood ? ` · ${e.neighborhood}` : ""}
                     </div>
                   </div>
+
                 </Link>
               ))}
 
@@ -684,12 +688,12 @@ function EstablishmentsPage() {
                 <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                   <h2
                     id="cats-heading"
-                    className="inline-flex items-center gap-2 font-serif text-[19px] font-normal leading-tight tracking-tight text-foreground"
+                    className={`inline-flex items-center gap-2 ${tc.h2}`}
                   >
                     <TrendingUp className="h-4 w-4 text-[var(--pc-gold-ink)]" aria-hidden />
                     Categorias mais populares
                   </h2>
-                  <span className="text-[11.5px] text-muted-foreground">
+                  <span className={tc.sectionNote}>
                     Por número de produtos cadastrados na rede
                   </span>
                 </div>
@@ -697,10 +701,10 @@ function EstablishmentsPage() {
                   {data.topGlobalCategories.map((c) => (
                     <span
                       key={c.category}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-foreground/85"
+                      className={`inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-foreground/85 ${tc.chip}`}
                     >
                       {humanizeCategory(c.category)}
-                      <span className="text-[10.5px] font-bold tabular-nums text-[var(--pc-gold-ink)]">
+                      <span className={`tabular-nums text-[var(--pc-gold-ink)] ${tc.chip}`}>
                         {c.count}
                       </span>
                     </span>
@@ -721,11 +725,11 @@ function EstablishmentsPage() {
                 <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-t border-border/60 pt-4">
                   <h2
                     id="rede-heading"
-                    className="font-serif text-[19px] font-normal leading-tight tracking-tight text-foreground"
+                    className={tc.h2}
                   >
                     Rede de mercados
                   </h2>
-                  <span className="text-[11.5px] text-muted-foreground">
+                  <span className={tc.sectionNote}>
                     {allFilteredItems.length}{" "}
                     {allFilteredItems.length === 1 ? "estabelecimento" : "estabelecimentos"} monitorados
                   </span>
@@ -743,7 +747,7 @@ function EstablishmentsPage() {
                         value={q}
                         onChange={(ev) => setQ(ev.target.value)}
                         placeholder="Buscar mercado, bairro ou cidade"
-                        className="h-10 rounded-xl border-border/70 pl-9 text-[13.5px] shadow-sm focus-visible:ring-brand-gold"
+                        className="h-10 rounded-xl border-border/70 pl-9 text-[12.5px] shadow-sm focus-visible:ring-brand-gold"
                         inputMode="search"
                         aria-label="Buscar mercado, bairro ou cidade"
                       />
@@ -802,7 +806,7 @@ function EstablishmentsPage() {
                               type="button"
                               onClick={() => setView(opt.key)}
                               aria-pressed={active}
-                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-[0.12em] transition ${
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 ${tc.control} transition ${
                                 active
                                   ? "bg-brand-gold text-brand-navy"
                                   : "text-foreground/70 hover:text-foreground"
@@ -814,7 +818,7 @@ function EstablishmentsPage() {
                           );
                         })}
                       </div>
-                      <span className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-foreground/70">
+                      <span className={`text-foreground/70 ${tc.control}`}>
                         {referencePoint ? (
                           <>Referência ativa</>
                         ) : (
@@ -838,10 +842,10 @@ function EstablishmentsPage() {
                       <Store className="h-5 w-5" aria-hidden />
                     </div>
                     <div className="space-y-1">
-                      <p className="text-[14px] font-semibold text-foreground">
+                      <p className="text-[13.5px] font-semibold text-foreground">
                         Nenhum estabelecimento encontrado
                       </p>
-                      <p className="text-[12.5px] text-muted-foreground">
+                      <p className={tc.lead}>
                         Ajuste ou limpe os filtros para ver toda a rede.
                       </p>
                     </div>
@@ -853,7 +857,7 @@ function EstablishmentsPage() {
                         setKindFilter("__all");
                         setSort("neighborhood");
                       }}
-                      className="inline-flex items-center gap-1.5 rounded-md border border-brand-gold bg-brand-gold px-3 py-1.5 text-[11.5px] font-bold uppercase tracking-[0.1em] text-brand-navy transition-colors hover:brightness-105"
+                      className={`inline-flex items-center gap-1.5 rounded-md border border-brand-gold bg-brand-gold px-3 py-1.5 text-brand-navy transition-colors hover:brightness-105 ${tc.control}`}
                     >
                       Limpar filtros
                     </button>
@@ -862,7 +866,7 @@ function EstablishmentsPage() {
                 <div className="overflow-x-auto">
                   <div className="min-w-[680px]">
                     {/* Cabeçalho tabular — colunas clicáveis para ordenar */}
-                    <div className={`${LIST_GRID} border-b border-border/60 bg-muted/40 px-3 py-2 text-[9.5px] font-bold uppercase tracking-[0.08em] text-foreground/70 md:px-4 [&>*]:truncate`}>
+                    <div className={`${LIST_GRID} border-b border-border/60 bg-muted/40 px-3 py-2 md:px-4 ${tc.tableHead} [&>*]:truncate`}>
                       <span className="text-right">#</span>
                       <span aria-hidden />
                       <button
@@ -912,7 +916,7 @@ function EstablishmentsPage() {
                             key={e.id}
                             className={`${LIST_GRID} group px-3 py-2 transition-colors hover:bg-muted/50 md:px-4`}
                           >
-                            <span className="text-right font-mono text-[12px] font-bold tabular-nums text-foreground/60">
+                            <span className={`text-right font-bold text-foreground/60 ${tc.num}`}>
                               {String(idx + 1).padStart(2, "0")}
                             </span>
 
@@ -921,35 +925,29 @@ function EstablishmentsPage() {
                               params={{ slug }}
                               title={`Abrir ${e.name}`}
                               aria-label={`Abrir página de ${e.name}`}
-                              className="grid h-9 w-11 place-items-center overflow-hidden rounded-md border border-border/70 bg-white p-1 shadow-sm transition group-hover:border-brand-gold/70 group-hover:shadow"
+                              className="block shadow-sm transition group-hover:shadow"
                             >
-                              {e.logoUrl ? (
-                                <img
-                                  src={e.logoUrl}
-                                  alt={`Logo ${e.name}`}
-                                  loading="lazy"
-                                  decoding="async"
-                                  className="h-full w-full object-contain object-center"
-                                />
-                              ) : (
-                                <span className="text-[11px] font-bold text-brand-navy">
-                                  {e.name.substring(0, 2).toUpperCase()}
-                                </span>
-                              )}
+                              <StoreLogoThumb
+                                src={e.logoUrl}
+                                name={e.name}
+                                eager={idx < 6}
+                                className="h-9 w-11 transition group-hover:border-brand-gold/70"
+                              />
                             </Link>
+
 
                             <span className="flex min-w-0 items-center gap-1.5">
                               <Link
                                 to="/estabelecimento/$slug"
                                 params={{ slug }}
                                 title={e.name}
-                                className="truncate text-[13.5px] font-semibold text-foreground hover:text-[var(--pc-gold-ink)] hover:underline"
+                                className={`truncate hover:text-[var(--pc-gold-ink)] hover:underline ${tc.itemTitle}`}
                               >
                                 <HighlightMatch text={e.name} tokens={searchTokens} mode="loose" />
                               </Link>
                               <span
                                 title={`Quantidade de preços cadastrados: ${tier.label}`}
-                                className="shrink-0 rounded-sm px-1 py-[1px] text-[8.5px] font-bold uppercase leading-none tracking-[0.14em]"
+                                className={`shrink-0 rounded-sm px-1 py-[1px] ${tc.tag}`}
                                 style={{
                                   background: `color-mix(in oklab, ${tier.color} 16%, white)`,
                                   color: `color-mix(in oklab, ${tier.color} 62%, black)`,
@@ -959,22 +957,22 @@ function EstablishmentsPage() {
                               </span>
                             </span>
 
-                            <span className="min-w-0 truncate text-[12px] text-foreground/80" title={locality}>
+                            <span className={`min-w-0 truncate ${tc.cell}`} title={locality}>
                               <HighlightMatch text={locality} tokens={searchTokens} mode="loose" />
                             </span>
 
                             <span
-                              className="text-right font-mono text-[12px] tabular-nums text-foreground/80"
+                              className={`text-right text-foreground/80 ${tc.num}`}
                               title={dist ? `Distância estimada: ${formatDistance(dist.km)}` : undefined}
                             >
                               {dist ? formatDistance(dist.km) : "—"}
                             </span>
 
-                            <span className="text-right font-mono text-[13px] font-bold tabular-nums text-foreground">
+                            <span className={`text-right font-bold text-foreground ${tc.num}`}>
                               {e.productsCount}
                             </span>
 
-                            <span className="text-right text-[11px] text-foreground/75" title={freshness.label}>
+                            <span className={`text-right ${tc.meta}`} title={freshness.label}>
                               {freshness.label}
                             </span>
 
@@ -1015,6 +1013,8 @@ function EstablishmentsPage() {
                           tierLabel={tier.label}
                           tierColor={tier.color}
                           rank={idx + 1}
+                          priority={idx < 6}
+
                           distanceLabel={dist ? formatDistance(dist.km) : null}
                           distanceQualifier={
                             dist
@@ -1190,20 +1190,19 @@ function MetricDetailDialog({
             <ul className="space-y-2" aria-label="Estabelecimentos monitorados">
               {topByProducts.map((e) => (
                 <li key={e.id} className="flex items-center gap-3 rounded-md border border-border/60 bg-card p-2.5">
-                  <div className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md">
-                    {e.logoUrl ? (
-                      <img src={e.logoUrl} alt="" className="h-full w-full object-contain" loading="lazy" />
-                    ) : (
-                      <span className="text-[11px] font-bold text-brand-navy">{e.name.substring(0, 2).toUpperCase()}</span>
-                    )}
-                  </div>
+                  <StoreLogoThumb
+                    src={e.logoUrl}
+                    name={e.name}
+                    className="h-9 w-9 border-transparent bg-transparent p-0"
+                  />
                   <div className="min-w-0 flex-1">
-                    <div className="truncate text-[13.5px] font-semibold text-foreground">{e.name}</div>
-                    <div className="truncate text-[11.5px] text-muted-foreground">
+                    <div className={`truncate ${tc.itemTitle}`}>{e.name}</div>
+                    <div className={`truncate ${tc.meta}`}>
                       <span className="font-semibold text-brand-gold">{e.productsCount}</span> produtos
                       {e.neighborhood ? ` · ${e.neighborhood}` : ""}
                     </div>
                   </div>
+
                 </li>
               ))}
               <li className="pt-1 text-center text-[12px] text-muted-foreground">
@@ -1219,7 +1218,7 @@ function MetricDetailDialog({
                 <div className="mt-1 text-[24px] font-extrabold tabular-nums text-foreground">
                   {data.totalProducts.toLocaleString("pt-BR")}
                 </div>
-                <div className="text-[11.5px] text-muted-foreground">produtos em {data.totalCategories} categorias</div>
+                <div className={tc.sectionNote}>produtos em {data.totalCategories} categorias</div>
               </div>
               {data.topGlobalCategories.length > 0 && (
                 <div>
@@ -1251,7 +1250,7 @@ function MetricDetailDialog({
                 <div className="mt-0.5 text-[22px] font-extrabold tabular-nums text-brand-gold">
                   R$ {data.totalMaxSavings.toFixed(2).replace(".", ",")}
                 </div>
-                <div className="text-[11.5px] text-muted-foreground">
+                <div className={tc.sectionNote}>
                   entre o mesmo produto no mercado mais caro vs. o mais barato
                 </div>
               </div>

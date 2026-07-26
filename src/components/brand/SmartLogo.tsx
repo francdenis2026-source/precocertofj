@@ -8,7 +8,7 @@
  *  • Variação "3D premium" opcional: relevo leve + sombra realista, sem
  *    aumentar a altura do tile.
  */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   analyzeLogo,
   computeLogoPresentation,
@@ -37,8 +37,9 @@ function getMetrics(src: string): Promise<LogoMetrics> {
 /** Métricas + apresentação recomendada para uma logo. */
 export function useLogoPresentation(
   src?: string | null,
-  opts: { targetFill?: number } = {},
+  opts: { targetFill?: number; enabled?: boolean } = {},
 ): { metrics: LogoMetrics | null; presentation: LogoPresentation; ready: boolean } {
+  const enabled = opts.enabled ?? true;
   const [metrics, setMetrics] = useState<LogoMetrics | null>(() =>
     src ? cache.get(src) ?? null : null,
   );
@@ -53,6 +54,7 @@ export function useLogoPresentation(
       setMetrics(cached);
       return;
     }
+    if (!enabled) return;
     let alive = true;
     // A análise usa canvas (custo de CPU). Adiada para ociosidade do browser
     // para não travar a primeira pintura quando há várias logos na tela.
@@ -72,7 +74,8 @@ export function useLogoPresentation(
       if (idle) w.cancelIdleCallback?.(handle);
       else window.clearTimeout(handle);
     };
-  }, [src]);
+  }, [src, enabled]);
+
 
   return {
     metrics,
@@ -115,11 +118,40 @@ export function SmartLogoImage({
   /** Carrega imediatamente (padrão) — evita tiles vazios acima/perto da dobra. */
   eager?: boolean;
 }) {
-  const { presentation, ready } = useLogoPresentation(src, { targetFill });
+  const [inView, setInView] = useState(eager);
+  const imgRef = useRef<HTMLImageElement | null>(null);
+
+  useEffect(() => {
+    if (eager || inView) return;
+    const el = imgRef.current;
+    if (!el || typeof IntersectionObserver === "undefined") {
+      setInView(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setInView(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: "240px", threshold: 0.01 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, [eager, inView]);
+
+  // Só analisa (canvas) o que está perto da viewport — evita dezenas de
+  // decodificações simultâneas em listas longas.
+  const { presentation, ready } = useLogoPresentation(src, {
+    targetFill,
+    enabled: inView,
+  });
   if (!src) return null;
 
   return (
     <img
+      ref={imgRef}
       src={src}
       alt={`Logomarca ${name}`}
       // Mesmo modo CORS do analisador (logo-quality) → uma única requisição
@@ -142,6 +174,7 @@ export function SmartLogoImage({
     />
   );
 }
+
 
 /** Quadro completo com fundo inteligente + relevo opcional. */
 export function SmartLogo({
