@@ -1845,6 +1845,22 @@ function MarketGroupedResults({
   const [marketPage, setMarketPage] = useState(4);
   const [onlyMarket, setOnlyMarket] = useState<string | null>(null);
 
+  /** Melhor e pior preço de cada produto entre todos os mercados do resultado. */
+  const spread = new Map<string, { best: number; worst: number }>();
+  for (const g of groups) {
+    const prices = kindFilter
+      ? g.prices.filter((p) => p.marketKind === kindFilter)
+      : g.prices;
+    for (const p of prices) {
+      const cur = spread.get(g.productName);
+      if (!cur) spread.set(g.productName, { best: p.price, worst: p.price });
+      else {
+        if (p.price < cur.best) cur.best = p.price;
+        if (p.price > cur.worst) cur.worst = p.price;
+      }
+    }
+  }
+
   const bucketsMap = new Map<string, Bucket>();
   for (const g of groups) {
     const prices = kindFilter
@@ -1861,6 +1877,9 @@ function MarketGroupedResults({
           kind: p.marketKind ?? null,
           minPrice: p.price,
           maxPrice: p.price,
+          bestCount: 0,
+          savings: 0,
+          gapToBest: 0,
           rows: [],
         };
         bucketsMap.set(key, b);
@@ -1870,7 +1889,15 @@ function MarketGroupedResults({
       if (!b.logoUrl && p.marketLogoUrl) b.logoUrl = p.marketLogoUrl;
       if (!b.brandColor && p.marketBrandColor) b.brandColor = p.marketBrandColor;
       if (!b.kind && p.marketKind) b.kind = p.marketKind;
-      b.rows.push({ productName: g.productName, catalogId: g.catalogId, price: p });
+
+      const sp = spread.get(g.productName);
+      const isBest = !!sp && p.price <= sp.best + 0.0001;
+      if (sp && sp.worst > sp.best) {
+        if (isBest) b.bestCount += 1;
+        b.savings += Math.max(0, sp.worst - p.price);
+        b.gapToBest += Math.max(0, p.price - sp.best);
+      }
+      b.rows.push({ productName: g.productName, catalogId: g.catalogId, price: p, isBest });
     }
   }
 
@@ -1881,13 +1908,13 @@ function MarketGroupedResults({
     }))
     .sort((a, z) => {
       if (sortMode === "savings") {
-        const sa = a.maxPrice - a.minPrice;
-        const sz = z.maxPrice - z.minPrice;
-        if (sa !== sz) return sz - sa;
+        if (a.savings !== z.savings) return z.savings - a.savings;
       }
+      if (a.bestCount !== z.bestCount) return z.bestCount - a.bestCount;
       if (a.minPrice !== z.minPrice) return a.minPrice - z.minPrice;
       return z.rows.length - a.rows.length;
     });
+
 
   if (allBuckets.length === 0) return null;
 
