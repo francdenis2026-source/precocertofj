@@ -3789,3 +3789,16 @@ html.dark :is(.hover\:text-primary):not(.primary-on-light):hover {
     line-height: 1.25 !important;
   }
 }
+
+/* Landscape muito baixo (< 440px de altura): mantém apenas planos + ação. */
+@media (max-height: 440px) {
+  [data-planos-shell] #detalhes {
+    display: none !important;
+  }
+  [data-planos-shell] [data-planos-card] {
+    height: clamp(112px, 46vh, 150px) !important;
+  }
+  [data-planos-shell] [data-testid="planos-cta-bar"] > div {
+    min-height: 46px !important;
+  }
+}
