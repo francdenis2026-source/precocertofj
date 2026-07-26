@@ -1948,13 +1948,6 @@ function MarketBucketSection({
   const visible = expanded ? rows : rows.slice(0, COLLAPSED);
   const hiddenCount = rows.length - visible.length;
   const bar = brandColor && /^#[0-9A-Fa-f]{6}$/.test(brandColor) ? brandColor : null;
-  const initials = marketName
-    .replace(/[^\p{L}\s]/gu, "")
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map((w) => w[0]?.toUpperCase() ?? "")
-    .join("");
 
   return (
     <section
@@ -1976,22 +1969,14 @@ function MarketBucketSection({
             : "border-border bg-[color-mix(in_oklab,var(--color-muted)_45%,var(--color-card))]")
         }
       >
-        <span
-          className="grid h-12 w-12 flex-none place-items-center overflow-hidden rounded-lg border border-[color-mix(in_oklab,var(--brand-navy)_14%,transparent)] bg-[oklch(0.995_0.004_95)] p-1.5 shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_35%,transparent)] sm:h-14 sm:w-14"
-          aria-hidden="true"
-        >
-          {logoUrl ? (
-            <LazyImage
-              src={logoUrl}
-              alt=""
-              className="h-full w-full object-contain object-center"
-            />
-          ) : initials ? (
-            <span className="text-[12px] font-bold leading-none text-brand-navy">{initials}</span>
-          ) : (
-            <ShoppingBag className="h-4 w-4 text-brand-navy/70" />
-          )}
-        </span>
+        <StoreBadge
+          name={marketName}
+          logoUrl={logoUrl}
+          brandColor={brandColor}
+          size="md"
+          className="flex-none"
+        />
+
         <div className="min-w-0 flex-1">
           <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
             <span className="market-name truncate text-[13.5px] font-semibold leading-tight tracking-[-0.011em] text-foreground sm:text-[15px]">
@@ -2301,11 +2286,13 @@ function MatrixCompareResults({
                     className="inline-block h-2 w-2 rounded-full"
                     style={{ backgroundColor: dot ?? "hsl(var(--muted-foreground))" }}
                   />
-                  {m.logoUrl ? (
-                    <LazyImage src={m.logoUrl} alt="" className="h-5 w-5 rounded bg-[oklch(0.995_0.004_95)] object-contain p-[1px]" />
-                  ) : (
-                    <ShoppingBag className="h-3 w-3" aria-hidden="true" />
-                  )}
+                  <StoreBadge
+                    name={m.name}
+                    logoUrl={m.logoUrl}
+                    brandColor={m.brandColor}
+                    size="xs"
+                  />
+
                   <span className="max-w-[110px] truncate">{m.name}</span>
                 </button>
               );
@@ -2389,18 +2376,15 @@ function MatrixCompareResults({
                     style={{ boxShadow: `inset 0 3px 0 0 ${bar}` }}
                   >
                     <div className="flex items-center gap-2 pt-1">
-                      <span
-                        className="grid h-10 w-10 flex-none place-items-center overflow-hidden rounded-md border bg-[oklch(0.995_0.004_95)]"
-                        style={{ borderColor: bar === "transparent" ? undefined : bar }}
-                        aria-hidden="true"
-                      >
-                        {m.logoUrl ? (
-                          <LazyImage src={m.logoUrl} alt="" className="h-full w-full object-contain p-0.5" />
-                        ) : (
-                          <ShoppingBag className="h-3.5 w-3.5 text-muted-foreground" />
-                        )}
-                      </span>
+                      <StoreBadge
+                        name={m.name}
+                        logoUrl={m.logoUrl}
+                        brandColor={m.brandColor}
+                        size="sm"
+                        className="flex-none"
+                      />
                       <span className="market-name truncate text-[12.5px] font-semibold text-foreground">
+
                         {m.name}
                       </span>
                     </div>

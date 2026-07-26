@@ -64,7 +64,7 @@ export type StoreBadgeProps = {
   name: string;
   logoUrl?: string | null;
   brandColor?: string | null;
-  size?: "xs" | "sm" | "md";
+  size?: "xs" | "sm" | "md" | "lg";
   className?: string;
   /** Distância em km até o estabelecimento — exibida no tooltip se informada. */
   distanceKm?: number | null;
@@ -104,7 +104,14 @@ export function StoreBadge({
 }: StoreBadgeProps) {
   const color = getStoreColor(name, brandColor);
   const dim =
-    size === "xs" ? "h-6 w-6 text-[9px]" : size === "md" ? "h-11 w-11 text-[13px]" : "h-9 w-9 text-[11px]";
+    size === "xs"
+      ? "h-7 w-7 text-[10px]"
+      : size === "md"
+        ? "h-14 w-14 text-[15px]"
+        : size === "lg"
+          ? "h-16 w-16 text-[17px]"
+          : "h-11 w-11 text-[12px]";
+  const pad = size === "xs" ? "p-[2px]" : "p-[3px]";
 
 
   // Assina URLs do bucket privado `logos` on-the-fly (com cache global).
@@ -127,11 +134,12 @@ export function StoreBadge({
     <span
 
       className={cn(
-        "relative inline-grid shrink-0 place-items-center overflow-hidden rounded-lg border bg-[oklch(0.995_0.004_95)] p-[3px]",
+        "relative inline-grid shrink-0 place-items-center overflow-hidden rounded-lg border bg-white shadow-[0_1px_3px_-1px_rgba(11,30,63,0.45)] ring-1 ring-inset ring-black/5",
         dim,
+        pad,
         className,
       )}
-      style={{ borderColor: `color-mix(in oklab, ${color} 45%, transparent)` }}
+      style={{ borderColor: `color-mix(in oklab, ${color} 55%, transparent)` }}
       aria-hidden
     >
       <img
@@ -142,6 +150,7 @@ export function StoreBadge({
       />
     </span>
   ) : (
+
 
     <span
       className={cn(
