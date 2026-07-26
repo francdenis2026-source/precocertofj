@@ -90,8 +90,12 @@ PROBE = r"""
       if (acc && acc.a >= 0.999) return acc;
       node = node.parentElement;
     }
-    if (!acc) return { r: 255, g: 255, b: 255, a: 1 };
-    return over(acc, { r: 255, g: 255, b: 255, a: 1 });
+    const root = parse(getComputedStyle(document.documentElement).backgroundColor)
+      || { r: 255, g: 255, b: 255, a: 1 };
+    const base = root.a >= 0.999 ? root : { r: 255, g: 255, b: 255, a: 1 };
+    if (!acc) return base;
+    return over(acc, base);
+
   };
 
   const out = [];
