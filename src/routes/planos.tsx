@@ -185,7 +185,7 @@ function PlansPage() {
 
 
   return (
-    <div className="flex h-[100svh] flex-col overflow-hidden bg-background text-foreground">
+    <div className="flex h-[calc(100svh-64px)] flex-col overflow-hidden overscroll-none bg-background text-foreground md:h-[100svh]">
       <div className="shrink-0">
         <SiteHeader />
       </div>
