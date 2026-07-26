@@ -104,26 +104,21 @@ export function ProductQuickView({
           role="region"
           aria-label="Detalhes e preços do produto"
         >
-          {showCheapestHighlight && product?.cheapestStore && (
+          {cheapest && (
             <div className="mb-3 flex items-center gap-2.5 rounded-lg border border-brand-gold/40 bg-brand-gold/10 p-2.5">
-              <StoreBadge
-                name={product.cheapestStore}
-                logoUrl={product.cheapestLogo ?? null}
-                size="xs"
-              />
+              <StoreBadge name={cheapest.marketName} logoUrl={cheapestLogo} size="xs" />
               <div className="min-w-0 flex-1">
                 <p className="text-[10px] font-bold uppercase tracking-[0.14em] text-brand-gold">
                   Menor preço
                 </p>
-                <p className="truncate text-[12.5px] font-semibold">{product.cheapestStore}</p>
+                <p className="truncate text-[12.5px] font-semibold">{cheapest.marketName}</p>
               </div>
-              {product.minPrice != null && (
-                <span className="shrink-0 text-[13.5px] font-bold tabular-nums">
-                  {brl(product.minPrice)}
-                </span>
-              )}
+              <span className="shrink-0 text-[13.5px] font-bold tabular-nums">
+                {brl(cheapest.priceMin)}
+              </span>
             </div>
           )}
+
 
           <p className="mb-1.5 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
             <Store className="h-3.5 w-3.5" aria-hidden /> Preço por estabelecimento
