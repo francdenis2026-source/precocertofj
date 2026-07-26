@@ -175,7 +175,7 @@ function ButcherPage() {
         </Link>
 
 
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11.5px] text-muted-foreground">
+        <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11.5px] leading-snug text-muted-foreground">
           {data.store.neighborhood && (
             <span className="inline-flex items-center gap-1">
               <MapPin className="h-3.5 w-3.5 text-brand-gold" aria-hidden /> Bairro{" "}
@@ -194,7 +194,7 @@ function ButcherPage() {
               onStateChange={patchButcher}
               onOpen={openQuickView}
             />
-            <div className="mt-8">
+            <div className="mt-5">
               <PreparoDicas />
             </div>
           </>
