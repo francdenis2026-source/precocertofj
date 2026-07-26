@@ -49,6 +49,9 @@ import {
 } from "@/components/estabelecimentos/MarketEditorialCard";
 
 import { useRef } from "react";
+import { StoreLogoThumb } from "@/components/brand/StoreLogoThumb";
+import { tc } from "@/lib/typeclear";
+
 
 import {
   Dialog,
