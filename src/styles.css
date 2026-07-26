@@ -3768,3 +3768,24 @@ html.dark :is(.hover\:text-primary):not(.primary-on-light):hover {
     transform: none !important;
   }
 }
+
+/* Landscape de celular (altura curta): densifica /planos para caber em 1 tela. */
+@media (max-height: 540px) {
+  [data-planos-shell] [data-short-hide],
+  [data-planos-shell] nav[aria-label="breadcrumb"] {
+    display: none !important;
+  }
+  [data-planos-shell] h1 {
+    font-size: 1.05rem !important;
+    line-height: 1.15 !important;
+  }
+  [data-planos-shell] [data-planos-card] {
+    height: clamp(122px, 34vh, 168px) !important;
+    min-height: 0 !important;
+    padding: 0.6rem 0.75rem !important;
+  }
+  [data-planos-shell] [data-planos-card] :where(p, li, span) {
+    font-size: 11px !important;
+    line-height: 1.25 !important;
+  }
+}
