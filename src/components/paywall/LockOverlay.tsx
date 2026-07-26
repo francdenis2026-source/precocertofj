@@ -140,7 +140,7 @@ export function LockOverlay({
         "relative isolate h-full w-full overflow-hidden rounded-[inherit] " +
         // O conteúdo real fica em camada absoluta; sem altura mínima o card
         // colapsaria para 0px dentro de grids com linhas automáticas.
-        (variant === "compact" ? "min-h-[184px]" : "min-h-[196px] sm:min-h-[268px]")
+        (variant === "compact" ? "min-h-[184px]" : "min-h-[168px] sm:min-h-[268px]")
       }
       role="group"
       aria-label={`${heading}. ${helper}`}

@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate, retainSearchParams } from "@tanstac
 import { Nav } from "@/components/brand/Nav";
 import { Footer } from "@/components/brand/Footer";
 import { Breadcrumbs } from "@/components/nav/Breadcrumbs";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
@@ -602,10 +602,18 @@ function ComparadorPage() {
   // Paginação: mantém a página curta (tipografia maior sem estourar a altura).
   const [RESULTS_PAGE_SIZE, setResultsPageSize] = useState(12);
   useEffect(() => {
-    const sync = () => setResultsPageSize(window.innerWidth < 768 ? 6 : 12);
+    const sync = () => setResultsPageSize(window.innerWidth < 768 ? 4 : 12);
     sync();
-    window.addEventListener("resize", sync);
-    return () => window.removeEventListener("resize", sync);
+    let raf = 0;
+    const onResize = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(sync);
+    };
+    window.addEventListener("resize", onResize, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("resize", onResize);
+    };
   }, []);
   const [page, setPage] = useState(1);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -729,12 +737,13 @@ function ComparadorPage() {
         eyebrow="Preços reais dos mercados"
         title={<>Comparador de <em className="italic text-primary">preços</em></>}
         description="Todos os produtos abaixo são preços reais capturados nos mercados cadastrados. Clique em um produto para ver a foto, a descrição e o preço em cada mercado, do mais barato ao mais caro."
+        compactMobile
         meta={<FreeQuotaBadge variant="inline" />}
         actions={
           <button
             type="button"
             onClick={handleShare}
-            className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-background px-4 py-2 font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-primary transition hover:border-primary hover:bg-primary/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+            className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-background px-4 py-2 font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-primary transition hover:border-primary hover:bg-primary/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             aria-label="Compartilhar esta visualização do comparador"
           >
             <Share2 className="h-3.5 w-3.5" strokeWidth={2} />
@@ -744,7 +753,7 @@ function ComparadorPage() {
       />
 
 
-      <section className="mx-auto max-w-7xl px-6 pt-8">
+      <section className="mx-auto max-w-7xl px-4 pt-2.5 md:px-6 md:pt-8">
         <div className="flex items-center gap-2 rounded-2xl border border-border bg-background px-4 py-2.5 shadow-sm transition focus-within:border-primary focus-within:shadow-[0_0_0_3px_color-mix(in_oklab,var(--color-primary)_25%,transparent)]">
           <Search className="h-4 w-4 text-muted-foreground" />
           <input
@@ -846,7 +855,7 @@ function ComparadorPage() {
         id="resultados"
         tabIndex={-1}
         aria-label="Resultados da comparação (atalho: R)"
-        className="mx-auto max-w-7xl px-6 py-10 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+        className="mx-auto max-w-7xl px-4 py-5 focus:outline-none md:px-6 md:py-10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
         {isLoading && (view === "grid"
           ? <LoadingGrid count={6} columns={3} />
@@ -1239,15 +1248,19 @@ function ComparisonTableRow({
 
 function StatCard({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
-    <div className="rounded-2xl border border-border bg-card p-5">
-      <p className="text-xs uppercase tracking-widest text-muted-foreground">{label}</p>
-      <p className="mt-2 font-mono text-2xl text-foreground">{value}</p>
-      {hint && <p className="mt-1 truncate text-xs text-muted-foreground">{hint}</p>}
+    <div className="rounded-xl border border-border bg-card p-2.5 md:rounded-2xl md:p-5">
+      <p className="text-[10.5px] leading-[1.2] uppercase tracking-[0.14em] text-muted-foreground md:text-xs md:tracking-widest">
+        {label}
+      </p>
+      <p className="mt-1 font-mono text-[17px] leading-tight text-foreground md:mt-2 md:text-2xl">
+        {value}
+      </p>
+      {hint && <p className="mt-0.5 hidden truncate text-xs text-muted-foreground md:mt-1 md:block">{hint}</p>}
     </div>
   );
 }
 
-function ProductCard({
+function ProductCardBase({
   row,
   index,
   imageOverride,
@@ -1269,7 +1282,7 @@ function ProductCard({
   const isMulti = Number(row.store_count) > 1;
 
   return (
-    <li className="relative h-full">
+    <li className="cv-card relative h-full">
       <TeaserCard
         id={row.product_key}
         index={index}
@@ -1470,4 +1483,7 @@ function ProductCard({
     </li>
   );
 }
+
+// Memoizado: evita re-render de todos os cards a cada tecla/filtro no mobile.
+const ProductCard = memo(ProductCardBase);
 

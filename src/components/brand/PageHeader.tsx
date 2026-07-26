@@ -27,6 +27,8 @@ type PageHeaderProps = {
   className?: string;
   /** Se true, exibe uma linha dourada de 24px antes do título. */
   goldRule?: boolean;
+  /** Oculta a descrição no mobile (telas curtas) mantendo-a no desktop. */
+  compactMobile?: boolean;
 };
 
 /**
@@ -43,6 +45,7 @@ export function PageHeader({
   meta,
   editorial = false,
   goldRule = false,
+  compactMobile = false,
   className,
 }: PageHeaderProps) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -51,7 +54,7 @@ export function PageHeader({
   return (
     <header
       className={cn(
-        "border-b border-border/60 bg-background/90 px-4 py-3.5 backdrop-blur md:px-8 md:py-8",
+        "border-b border-border/60 bg-background/90 px-4 py-2.5 backdrop-blur md:px-8 md:py-8",
         className,
       )}
     >
@@ -117,7 +120,12 @@ export function PageHeader({
                 {title}
               </h1>
               {description && (
-                <p className="tc-flow mt-1.5 line-clamp-2 max-w-2xl text-body text-muted-foreground md:mt-2 md:line-clamp-none">
+                <p
+                  className={cn(
+                    "tc-flow mt-1.5 line-clamp-1 max-w-2xl text-body text-muted-foreground md:mt-2 md:line-clamp-none",
+                    compactMobile && "max-md:!hidden",
+                  )}
+                >
                   {description}
                 </p>
               )}
