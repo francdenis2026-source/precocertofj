@@ -227,7 +227,7 @@ function GroupCard({ group, onChanged }: { group: SynonymGroupRow; onChanged: ()
 function TokenLine({ label, tokens, tone }: { label: string; tokens: string[]; tone: "primary" | "destructive" }) {
   return (
     <div className="flex flex-wrap items-baseline gap-1.5">
-      <span className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground">{label}</span>
+      <span className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">{label}</span>
       {tokens.length === 0 ? (
         <span className="text-xs italic text-muted-foreground">nenhum</span>
       ) : (

@@ -147,7 +147,7 @@ export function FoodTrendChart({
               const dDelta = d.Atual - d.Anterior;
               return (
                 <div key={d.key} className="rounded-lg border bg-muted/30 p-2">
-                  <dt className="flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  <dt className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                     <span className="inline-block h-2 w-2 rounded-full" style={{ background: d.color }} aria-hidden="true" />
                     {d.mode}
                   </dt>
@@ -155,7 +155,7 @@ export function FoodTrendChart({
                   {d.Anterior > 0 && (
                     <dd
                       className={cn(
-                        "text-[10px] font-semibold tabular-nums",
+                        "text-[11px] font-semibold tabular-nums",
                         dDelta > 0 ? "text-destructive" : "text-emerald-600 dark:text-emerald-400"
                       )}
                     >

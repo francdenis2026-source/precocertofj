@@ -52,7 +52,7 @@ export function QuickFilterBar<T extends string>({
       className={cn("flex flex-wrap items-center gap-1.5", className)}
     >
       {label && (
-        <span className="mr-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+        <span className="mr-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
           {label}
         </span>
       )}
@@ -80,7 +80,7 @@ export function QuickFilterBar<T extends string>({
             {typeof opt.count === "number" && (
               <span
                 className={cn(
-                  "rounded-full px-1.5 py-0.5 text-[9px] font-bold tabular-nums",
+                  "rounded-full px-1.5 py-0.5 text-[11px] font-bold tabular-nums",
                   active ? "bg-brand-navy/15 text-brand-navy" : "bg-muted text-foreground/80",
                 )}
               >

@@ -72,7 +72,7 @@ export function SocialProofSection() {
       >
         <header className="mb-2.5 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-baseline gap-2.5 min-w-0">
-            <p className="text-[10.5px] font-bold uppercase tracking-[0.2em] shrink-0 sm:text-[11px]" style={{ color: "var(--pc-gold-ink)" }}>
+            <p className="text-[11px] font-bold uppercase tracking-[0.2em] shrink-0 sm:text-[11px]" style={{ color: "var(--pc-gold-ink)" }}>
               Prova social
             </p>
             <h2
@@ -108,7 +108,7 @@ export function SocialProofSection() {
               <div className="mt-2 flex items-center gap-2">
                 <span
                   aria-hidden
-                  className="grid h-7 w-7 shrink-0 place-items-center rounded-full text-[10.5px] font-bold"
+                  className="grid h-7 w-7 shrink-0 place-items-center rounded-full text-[11px] font-bold"
                   style={{
                     background: "color-mix(in oklab, var(--pc-home-gold) 20%, transparent)",
                     color: P.heading,
@@ -120,7 +120,7 @@ export function SocialProofSection() {
                   <p className="truncate text-[11.5px] font-bold leading-tight" style={{ color: P.heading }}>
                     {t.name}
                   </p>
-                  <p className="truncate text-[10.5px] font-medium" style={{ color: P.body }}>
+                  <p className="truncate text-[11px] font-medium" style={{ color: P.body }}>
                     {t.role}
                   </p>
                 </div>

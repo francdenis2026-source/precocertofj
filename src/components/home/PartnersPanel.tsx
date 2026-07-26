@@ -87,7 +87,7 @@ export function PartnersPanel({
           <div className="min-w-0">
             {eyebrow ? (
               <p
-                className="truncate text-[10.5px] font-bold uppercase tracking-[0.22em] sm:text-[11px]"
+                className="truncate text-[11px] font-bold uppercase tracking-[0.22em] sm:text-[11px]"
                 style={{ color: "var(--pc-gold-ink)" }}
               >
                 {eyebrow}
@@ -119,7 +119,7 @@ export function PartnersPanel({
               aria-label={`${ctaLabel} — ${title}`}
               className={cn(
                 "inline-flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1",
-                "text-[10px] font-bold uppercase tracking-[0.16em] sm:text-[11px]",
+                "text-[11px] font-bold uppercase tracking-[0.16em] sm:text-[11px]",
                 "transition-colors duration-200",
                 "hover:bg-white/[0.04]",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
@@ -267,7 +267,7 @@ function TileLabel({ name }: { name: string }) {
     <span
       className={cn(
         "line-clamp-2 break-words text-center font-bold uppercase leading-[1.05] tracking-[0.08em]",
-        "text-[10px] min-[380px]:text-[10.5px] sm:text-[11px]",
+        "text-[11px] min-[380px]:text-[11px] sm:text-[11px]",
       )}
       style={{ color: "var(--pc-home-heading)" }}
     >

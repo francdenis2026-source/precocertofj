@@ -171,7 +171,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
               <DialogTrigger asChild>
                 <button
                   type="button"
-                  className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] transition-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50"
+                  className="inline-flex cursor-pointer items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] transition-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/50"
                   style={{
                     borderColor: "color-mix(in oklab, #10b981 45%, transparent)",
                     background: "color-mix(in oklab, #10b981 12%, transparent)",
@@ -193,7 +193,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                       <span className="absolute inset-0 animate-ping rounded-full bg-emerald-500 opacity-70" />
                       <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
                     </span>
-                    <span className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-400">
+                    <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-emerald-700 dark:text-emerald-400">
                       Painel ao vivo
                     </span>
                   </div>
@@ -276,7 +276,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
             </Dialog>
             {lastUpdateLabel && (
               <span
-                className="inline-flex items-center gap-1 text-[10.5px] font-medium tabular-nums"
+                className="inline-flex items-center gap-1 text-[11px] font-medium tabular-nums"
                 style={{ color: "color-mix(in oklab, var(--pc-home-ink) 60%, transparent)" }}
               >
                 <Radio className="h-3 w-3" aria-hidden />
@@ -287,7 +287,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
               <button
                 type="button"
                 onClick={() => setLiveOpen(true)}
-                className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10.5px] font-bold tabular-nums transition-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)]/50"
+                className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold tabular-nums transition-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-gold)]/50"
                 style={{
                   background: "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
                   color: "var(--pc-price)",
@@ -300,7 +300,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
           </div>
 
           <div
-            className="mb-1 text-[10px] font-bold uppercase tracking-[0.22em]"
+            className="mb-1 text-[11px] font-bold uppercase tracking-[0.22em]"
             style={{ color: P.goldSoft }}
           >
             Recém-cadastrados
@@ -513,7 +513,7 @@ function SpotlightCard({
         >
           <div className="flex items-center gap-2">
             <span
-              className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.18em]"
+              className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.18em]"
               style={{
                 background: "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
                 color: "var(--pc-price)",
@@ -524,7 +524,7 @@ function SpotlightCard({
             </span>
             {hasDrop && (
               <span
-                className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.12em]"
+                className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.12em]"
                 style={{
                   background: "color-mix(in oklab, #10b981 18%, transparent)",
                   color: "#059669",
@@ -537,7 +537,7 @@ function SpotlightCard({
               </span>
             )}
             <span
-              className={`ml-auto inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-[0.14em] ring-1 ${f.ringClass} ${f.textClass}`}
+              className={`ml-auto inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] ring-1 ${f.ringClass} ${f.textClass}`}
               title={f.label}
             >
               <span className={`h-1 w-1 rounded-full ${f.dotClass}`} aria-hidden />
@@ -564,7 +564,7 @@ function SpotlightCard({
             <div className="flex flex-col items-end leading-none shrink-0">
               {hasDrop && p.previousPrice && (
                 <span
-                  className="mb-0.5 text-[10.5px] font-medium text-muted-foreground line-through tabular-nums"
+                  className="mb-0.5 text-[11px] font-medium text-muted-foreground line-through tabular-nums"
                   aria-label={`Preço anterior ${brl(p.previousPrice)}`}
                 >
                   {brl(p.previousPrice)}
@@ -587,7 +587,7 @@ function SpotlightCard({
 
         <div className="relative mt-2.5 flex items-center justify-between gap-2 border-t pt-2" style={{ borderColor: "color-mix(in oklab, var(--pc-home-gold) 22%, transparent)" }}>
           <span
-            className="inline-flex items-center gap-1 text-[10px]"
+            className="inline-flex items-center gap-1 text-[11px]"
             style={{ color: "color-mix(in oklab, var(--pc-home-ink) 60%, transparent)" }}
           >
             <Clock className="h-2.5 w-2.5" aria-hidden />
@@ -616,7 +616,7 @@ function SpotlightCard({
             <button
               type="button"
               onClick={() => setOpenItem(p)}
-              className="inline-flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-[0.14em] transition-opacity hover:opacity-80"
+              className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.14em] transition-opacity hover:opacity-80"
               style={{ color: P.heading }}
             >
               Detalhes
@@ -624,7 +624,7 @@ function SpotlightCard({
             </button>
             <Link
               to="/melhores-precos"
-              className="inline-flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-[0.14em] transition-opacity hover:opacity-80"
+              className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.14em] transition-opacity hover:opacity-80"
               style={{ color: "var(--pc-price)" }}
             >
               Todos

@@ -153,7 +153,7 @@ function Page() {
                     </div>
                     <div className="text-center">
                       <div className="text-sm font-medium">{c.label}</div>
-                      <div className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                      <div className="text-[11px] uppercase tracking-wider text-muted-foreground">
                         {ov?.kind === "url" ? "Imagem" : ov?.kind === "lucide" ? `Lucide · ${ov.value}` : "Padrão"}
                       </div>
                     </div>

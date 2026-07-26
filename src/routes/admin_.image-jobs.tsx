@@ -641,7 +641,7 @@ function SourcesPanel() {
                   key={d}
                   className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2"
                 >
-                  <Badge variant="outline" className="font-mono text-[10px]">
+                  <Badge variant="outline" className="font-mono text-[11px]">
                     #{idx + 1}
                   </Badge>
                   <span className="flex-1 font-mono text-sm">{d}</span>
@@ -1006,7 +1006,7 @@ function ProviderStatsCard({
                   <div className="mb-3 flex items-center gap-2">
                     <span className={`inline-block h-2 w-2 rounded-full ${dot}`} />
                     <span className="font-medium">{providerLabel(p.provider)}</span>
-                    <Badge variant="outline" className="ml-auto text-[10px]">
+                    <Badge variant="outline" className="ml-auto text-[11px]">
                       {p.total} job{p.total === 1 ? "" : "s"}
                     </Badge>
                   </div>
@@ -1087,19 +1087,19 @@ function JobRow({ job, onRetry }: { job: ImageJob; onRetry: (id: string) => void
           {isCreditError && (
             <Badge
               variant="outline"
-              className="border-warning/40 bg-warning/10 text-[10px] text-warning dark:text-warning"
+              className="border-warning/40 bg-warning/10 text-[11px] text-warning dark:text-warning"
             >
               <Coins className="mr-1 h-3 w-3" /> sem créditos
             </Badge>
           )}
-          <Badge variant="outline" className="text-[10px]">
+          <Badge variant="outline" className="text-[11px]">
             prioridade {job.priority}
           </Badge>
           {job.provider && (
             <Badge
               variant="outline"
               className={
-                "text-[10px] " +
+                "text-[11px] " +
                 (job.provider.startsWith("gemini_direct")
                   ? "border-savings/40 bg-savings/10 text-savings dark:text-savings"
                   : "border-primary/40 bg-primary/10 text-primary dark:text-primary")

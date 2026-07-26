@@ -48,7 +48,7 @@ export function QuickCompareStrip({ markets }: { markets: QuickCompareMarket[] }
         <h2 className="font-display text-sm font-bold text-foreground md:text-base">
           Comparação rápida
         </h2>
-        <span className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-2 py-0.5 text-[10px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
+        <span className="inline-flex items-center gap-1 rounded-full border border-border bg-surface px-2 py-0.5 text-[11px] font-medium uppercase tracking-[0.16em] text-muted-foreground">
           <Store className="h-3 w-3" strokeWidth={2} /> {markets.length} mercados
         </span>
       </header>
@@ -112,7 +112,7 @@ function Cell({
         : "text-foreground";
   return (
     <div className={`rounded-xl border ${toneCls} px-2.5 py-2`}>
-      <p className="flex items-center gap-1 text-[9px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+      <p className="flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
         {icon}
         {label}
       </p>
@@ -122,7 +122,7 @@ function Cell({
         {value}
       </p>
       {hint ? (
-        <p className="mt-0.5 truncate text-[10px] text-muted-foreground" title={hint}>
+        <p className="mt-0.5 truncate text-[11px] text-muted-foreground" title={hint}>
           {hint}
         </p>
       ) : null}

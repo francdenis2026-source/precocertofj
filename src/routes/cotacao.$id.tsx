@@ -82,7 +82,7 @@ function PublicQuotePage() {
         </Link>
 
         <header className="mt-3 rounded-2xl border border-border bg-surface p-4 shadow-sm">
-          <p className="text-[9px] font-semibold uppercase tracking-[0.2em] text-accent">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent">
             Cotação de cesta
           </p>
           <h1 className="mt-1 font-display text-[22px] font-bold leading-tight text-foreground">
@@ -93,7 +93,7 @@ function PublicQuotePage() {
           </p>
           <div className="mt-4 grid grid-cols-2 gap-2">
             <div className="rounded-xl border border-border bg-background/60 px-3 py-2">
-              <p className="text-[9.5px] font-semibold uppercase tracking-wider text-muted-foreground">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                 Itens
               </p>
               <p className="num mt-0.5 font-display text-[16px] font-bold text-foreground">
@@ -101,7 +101,7 @@ function PublicQuotePage() {
               </p>
             </div>
             <div className="rounded-xl border border-border bg-background/60 px-3 py-2">
-              <p className="text-[9.5px] font-semibold uppercase tracking-wider text-muted-foreground">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                 Total nesta mercado
               </p>
               <p className="num mt-0.5 font-display text-[16px] font-bold text-primary">
@@ -137,7 +137,7 @@ function PublicQuotePage() {
                   <p className="truncate text-[12.5px] font-semibold text-foreground">
                     {it.productName}
                   </p>
-                  <p className="num text-[10.5px] text-muted-foreground">
+                  <p className="num text-[11px] text-muted-foreground">
                     {fmt(it.price)} × {it.quantity}
                   </p>
                 </div>
@@ -168,12 +168,12 @@ function PublicQuotePage() {
                       <p className="truncate text-[12.5px] font-semibold text-foreground">
                         {r.storeName}
                         {r.isReference && (
-                          <span className="ml-1.5 rounded-full bg-primary/15 px-1.5 py-[1px] text-[8.5px] font-bold uppercase tracking-wider text-primary">
+                          <span className="ml-1.5 rounded-full bg-primary/15 px-1.5 py-[1px] text-[11px] font-bold uppercase tracking-wider text-primary">
                             atual
                           </span>
                         )}
                       </p>
-                      <p className="text-[10.5px] text-muted-foreground">
+                      <p className="text-[11px] text-muted-foreground">
                         {r.matchedCount}/{r.totalCount} itens
                       </p>
                     </div>
@@ -191,7 +191,7 @@ function PublicQuotePage() {
                       {!r.isReference && (
                         <p
                           className={cn(
-                            "num text-[10px] font-semibold",
+                            "num text-[11px] font-semibold",
                             cheaper
                               ? "text-savings dark:text-savings"
                               : diff > 0
@@ -211,7 +211,7 @@ function PublicQuotePage() {
           </section>
         )}
 
-        <p className="mt-6 text-center text-[10.5px] text-muted-foreground">
+        <p className="mt-6 text-center text-[11px] text-muted-foreground">
           Sistema de pesquisa de preços — não realizamos pagamentos.
         </p>
       </div>

@@ -302,7 +302,7 @@ function AdminPrecosPage() {
                         <TableCell className="max-w-[280px]">
                           <div className="truncate text-sm font-medium">{s.product_name ?? "—"}</div>
                           {s.barcode && (
-                            <div className="font-mono text-[10px] text-muted-foreground">{s.barcode}</div>
+                            <div className="font-mono text-[11px] text-muted-foreground">{s.barcode}</div>
                           )}
                         </TableCell>
                         <TableCell className="max-w-[200px] truncate text-sm">

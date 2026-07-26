@@ -188,7 +188,7 @@ function ScansHistoryPage() {
                         </div>
                         <div className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
                           <span
-                            className={`inline-block rounded-full border px-2 py-0.5 font-mono text-[9px] uppercase tracking-widest ${STATUS_STYLE[r.status] ?? ""}`}
+                            className={`inline-block rounded-full border px-2 py-0.5 font-mono text-[11px] uppercase tracking-widest ${STATUS_STYLE[r.status] ?? ""}`}
                           >
                             {r.status}
                           </span>
@@ -203,7 +203,7 @@ function ScansHistoryPage() {
                             : "—"}
                         </div>
                         <div
-                          className={`font-mono text-[10px] font-bold uppercase ${
+                          className={`font-mono text-[11px] font-bold uppercase ${
                             r.verdict === "barato"
                               ? "text-neon"
                               : r.verdict === "caro"

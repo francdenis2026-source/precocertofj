@@ -59,7 +59,7 @@ export function FreeQuotaBadge({
         </span>
         <a
           href={href}
-          className="rounded-full bg-primary px-2.5 py-1 text-[10px] font-bold text-primary-foreground transition hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="rounded-full bg-primary px-2.5 py-1 text-[11px] font-bold text-primary-foreground transition hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           Criar conta
         </a>
@@ -95,7 +95,7 @@ export function FreeQuotaBadge({
       <span className="sr-only">Consumidas: {used}.</span>
       <a
         href={href}
-        className="ml-1 rounded-full bg-primary px-2 py-0.5 text-[10px] font-bold text-primary-foreground transition hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="ml-1 rounded-full bg-primary px-2 py-0.5 text-[11px] font-bold text-primary-foreground transition hover:opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         Criar conta
       </a>

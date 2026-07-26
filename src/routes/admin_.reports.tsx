@@ -236,7 +236,7 @@ function AdminReportCard({ report }: { report: AdminPriceReport }) {
           </p>
         </div>
         <span
-          className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${meta.classes}`}
+          className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider ${meta.classes}`}
         >
           {meta.label}
         </span>
@@ -244,7 +244,7 @@ function AdminReportCard({ report }: { report: AdminPriceReport }) {
 
       <div className="mt-3 grid grid-cols-2 gap-2 rounded-lg bg-muted/60 p-2.5 text-[11.5px] text-foreground">
         <div>
-          <p className="text-[9.5px] font-semibold uppercase tracking-widest text-muted-foreground">
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
             Motivo
           </p>
           <p className="font-semibold">
@@ -252,7 +252,7 @@ function AdminReportCard({ report }: { report: AdminPriceReport }) {
           </p>
         </div>
         <div>
-          <p className="text-[9.5px] font-semibold uppercase tracking-widest text-muted-foreground">
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
             Preço na base
           </p>
           <p className="num font-semibold">
@@ -263,7 +263,7 @@ function AdminReportCard({ report }: { report: AdminPriceReport }) {
         </div>
         {report.correctPrice != null && (
           <div>
-            <p className="text-[9.5px] font-semibold uppercase tracking-widest text-muted-foreground">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
               Preço sugerido
             </p>
             <p className="num font-semibold text-primary">
@@ -303,7 +303,7 @@ function AdminReportCard({ report }: { report: AdminPriceReport }) {
 
       <div className="mt-4 grid gap-3 border-t border-border pt-3 sm:grid-cols-2">
         <div>
-          <label className="mb-1 block text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+          <label className="mb-1 block text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
             Status
           </label>
           <select
@@ -318,7 +318,7 @@ function AdminReportCard({ report }: { report: AdminPriceReport }) {
           </select>
         </div>
         <div>
-          <label className="mb-1 block text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+          <label className="mb-1 block text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
             Ação tomada
           </label>
           <select
@@ -335,7 +335,7 @@ function AdminReportCard({ report }: { report: AdminPriceReport }) {
         </div>
       </div>
 
-      <label className="mt-3 mb-1 block text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+      <label className="mt-3 mb-1 block text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
         Notas do admin
       </label>
       <textarea
@@ -358,7 +358,7 @@ function AdminReportCard({ report }: { report: AdminPriceReport }) {
       </div>
 
       {report.resolvedAt && (
-        <p className="mt-2 text-[10.5px] text-muted-foreground">
+        <p className="mt-2 text-[11px] text-muted-foreground">
           Última resolução em{" "}
           {new Date(report.resolvedAt).toLocaleString("pt-BR", {
             day: "2-digit",

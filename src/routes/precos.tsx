@@ -233,7 +233,7 @@ function PrecosPage() {
                             <span className="font-mono">{fmtBRL(p.lastPrice)}</span>
                             <VariationBadge pct={p.variationPct} />
                           </div>
-                          <span className="block text-[10px] text-muted-foreground">
+                          <span className="block text-[11px] text-muted-foreground">
                             {p.readings} leitura{p.readings === 1 ? "" : "s"} · última {fmtDate(p.lastDate)}
                           </span>
                         </div>

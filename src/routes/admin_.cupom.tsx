@@ -670,17 +670,17 @@ function CupomPage() {
                           />
                           <div className="mt-1 flex flex-wrap gap-1">
                             {it.mergedCount > 1 && (
-                              <Badge variant="outline" className="gap-1 text-[10px]">
+                              <Badge variant="outline" className="gap-1 text-[11px]">
                                 <Copy className="h-3 w-3" /> unificados: {it.mergedCount}
                               </Badge>
                             )}
                             {it.duplicateOfScanId && (
-                              <Badge className="bg-warning/10 text-warning hover:bg-warning/10 text-[10px]">
+                              <Badge className="bg-warning/10 text-warning hover:bg-warning/10 text-[11px]">
                                 já registrado
                               </Badge>
                             )}
                             {it.barcode && (
-                              <Badge variant="outline" className="font-mono text-[10px]">
+                              <Badge variant="outline" className="font-mono text-[11px]">
                                 {it.barcode}
                               </Badge>
                             )}

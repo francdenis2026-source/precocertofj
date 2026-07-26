@@ -243,7 +243,7 @@ function CheapestSpotlightRow({ rows }: { rows: Comparison[] }) {
       right={
         <Link
           to="/melhores-precos"
-          className="text-[10.5px] font-semibold text-primary hover:underline"
+          className="text-[11px] font-semibold text-primary hover:underline"
         >
           Ver todos →
         </Link>
@@ -298,7 +298,7 @@ function CheapestSpotlightRow({ rows }: { rows: Comparison[] }) {
         })}
       </motion.div>
       {top.length > 4 && (
-        <p className="mt-2 flex items-center gap-1 text-[10.5px] text-muted-foreground">
+        <p className="mt-2 flex items-center gap-1 text-[11px] text-muted-foreground">
           <DSBadge variant="savingsSoft" size="sm">
             {top.length} destaques
           </DSBadge>
@@ -344,7 +344,7 @@ function RecentProductsRow({
           <button
             type="button"
             onClick={() => setShowAll((v) => !v)}
-            className="text-[10.5px] font-semibold text-primary hover:underline"
+            className="text-[11px] font-semibold text-primary hover:underline"
           >
             {showAll ? "Ver menos" : `Ver mais (${products.length - INITIAL})`}
           </button>
@@ -406,10 +406,10 @@ function RecentProductsRow({
                     className="relative mx-auto aspect-square w-full rounded-sm bg-gradient-to-br from-muted to-background"
                     imageClassName="object-contain p-1.5 transition-transform duration-300 ease-out group-hover:scale-[1.03]"
                   />
-                  <p className="mt-1 line-clamp-2 min-h-[2.2em] text-[10.5px] font-semibold leading-tight text-foreground">
+                  <p className="mt-1 line-clamp-2 min-h-[2.2em] text-[11px] font-semibold leading-tight text-foreground">
                     {p.displayName}
                   </p>
-                  <p className="mt-0.5 line-clamp-1 min-h-[11px] text-[9px] text-muted-foreground">
+                  <p className="mt-0.5 line-clamp-1 min-h-[11px] text-[11px] text-muted-foreground">
                     {p.brand ?? ""}
                   </p>
                 </Link>
@@ -475,7 +475,7 @@ function CheapestComparisonsBlock({ rows }: { rows: Comparison[] }) {
       right={
         <Link
           to="/melhores-precos"
-          className="text-[10.5px] font-semibold text-primary hover:underline"
+          className="text-[11px] font-semibold text-primary hover:underline"
         >
           Ver todos →
         </Link>
@@ -517,7 +517,7 @@ function CheapestComparisonsBlock({ rows }: { rows: Comparison[] }) {
                 aria-label={isSel ? "Remover da comparação" : "Selecionar para comparar"}
                 onClick={() => toggleSelect(r.product_key)}
                 className={
-                  "absolute left-1 top-2 z-10 inline-flex h-4 w-4 items-center justify-center rounded-full border text-[9px] font-bold transition " +
+                  "absolute left-1 top-2 z-10 inline-flex h-4 w-4 items-center justify-center rounded-full border text-[11px] font-bold transition " +
                   (isSel
                     ? "border-primary bg-primary text-primary-foreground"
                     : "border-border bg-background/90 text-muted-foreground hover:border-primary/60 hover:text-primary")
@@ -526,7 +526,7 @@ function CheapestComparisonsBlock({ rows }: { rows: Comparison[] }) {
                 {isSel ? "✓" : "+"}
               </button>
               {isMulti && (
-                <span className="absolute right-1 top-2 z-10 inline-flex items-center gap-0.5 rounded-full bg-savings px-1 py-[1px] text-[8px] font-bold uppercase tracking-wider text-savings-foreground shadow-sm">
+                <span className="absolute right-1 top-2 z-10 inline-flex items-center gap-0.5 rounded-full bg-savings px-1 py-[1px] text-[11px] font-bold uppercase tracking-wider text-savings-foreground shadow-sm">
                   <TrendingDown className="h-2 w-2" />
                   -{Number(r.savings_pct).toFixed(0)}%
                 </span>
@@ -555,17 +555,17 @@ function CheapestComparisonsBlock({ rows }: { rows: Comparison[] }) {
                   </p>
                   <div className="mt-0.5 flex items-center gap-1">
                     {size && (
-                      <span className="font-display text-[9px] italic text-muted-foreground">
+                      <span className="font-display text-[11px] italic text-muted-foreground">
                         {size}
                       </span>
                     )}
-                    <span className="ml-auto inline-flex items-center gap-0.5 text-[8px] text-muted-foreground">
+                    <span className="ml-auto inline-flex items-center gap-0.5 text-[11px] text-muted-foreground">
                       <StoreIcon className="h-2 w-2" />
                       {r.store_count}
                     </span>
                   </div>
                   <div className="mt-1 border-t border-accent/25 pt-0.5">
-                    <p className="text-[8.5px] font-semibold uppercase tracking-[0.2em] text-accent-strong">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent-strong">
                       Menor
                     </p>
                     <div className="flex items-baseline justify-between gap-1">
@@ -573,7 +573,7 @@ function CheapestComparisonsBlock({ rows }: { rows: Comparison[] }) {
                         {fmt(Number(r.min_price))}
                       </p>
                       <p
-                        className="line-clamp-1 font-display text-[8px] italic text-muted-foreground"
+                        className="line-clamp-1 font-display text-[11px] italic text-muted-foreground"
                         title={r.cheapest_store}
                       >
                         {shortenStoreName(r.cheapest_store)}
@@ -588,7 +588,7 @@ function CheapestComparisonsBlock({ rows }: { rows: Comparison[] }) {
                   type="button"
                   onClick={() => setDetailRow(r)}
                   disabled={!isMulti}
-                  className="inline-flex flex-1 items-center justify-center gap-0.5 rounded-full border border-accent-strong/40 bg-accent-strong/[0.08] px-1 py-0.5 text-[9.5px] font-semibold uppercase tracking-wider text-accent-strong transition hover:bg-accent-strong/15 disabled:opacity-40"
+                  className="inline-flex flex-1 items-center justify-center gap-0.5 rounded-full border border-accent-strong/40 bg-accent-strong/[0.08] px-1 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-accent-strong transition hover:bg-accent-strong/15 disabled:opacity-40"
                   title={isMulti ? "Comparar preços entre mercados" : "Único preço disponível"}
                 >
                   <GitCompare className="h-2 w-2" />
@@ -607,7 +607,7 @@ function CheapestComparisonsBlock({ rows }: { rows: Comparison[] }) {
           <button
             type="button"
             onClick={() => setShowAll((v) => !v)}
-            className="inline-flex h-7 items-center gap-1 rounded-full border border-border bg-surface px-3 text-[10.5px] font-bold uppercase tracking-[0.14em] text-primary transition hover:border-primary/50"
+            className="inline-flex h-7 items-center gap-1 rounded-full border border-border bg-surface px-3 text-[11px] font-bold uppercase tracking-[0.14em] text-primary transition hover:border-primary/50"
           >
             {showAll ? "Ver menos" : `Ver mais (${filteredAll.length - INITIAL_LIMIT})`}
           </button>
@@ -624,7 +624,7 @@ function CheapestComparisonsBlock({ rows }: { rows: Comparison[] }) {
               <p className="text-[11px] font-semibold text-foreground">
                 {selected.length} de {MAX_SELECT} selecionados
               </p>
-              <p className="truncate text-[10px] text-muted-foreground">
+              <p className="truncate text-[11px] text-muted-foreground">
                 {selected.length < MIN_SELECT
                   ? `Escolha pelo menos ${MIN_SELECT} produtos`
                   : "Pronto para ver o ranking"}
@@ -675,7 +675,7 @@ function CatChip({
       type="button"
       onClick={onClick}
       className={
-        "h-6 shrink-0 whitespace-nowrap rounded-full border px-2 text-[9.5px] font-semibold uppercase tracking-wider transition " +
+        "h-6 shrink-0 whitespace-nowrap rounded-full border px-2 text-[11px] font-semibold uppercase tracking-wider transition " +
         (active
           ? "border-primary bg-primary text-primary-foreground"
           : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground")
@@ -726,7 +726,7 @@ function CompareDialog({
                     <div className="flex min-w-0 items-center gap-2">
                       <span
                         className={
-                          "inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[10px] font-bold " +
+                          "inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-bold " +
                           (isBest
                             ? "bg-savings text-savings-foreground"
                             : "bg-muted text-muted-foreground")
@@ -739,12 +739,12 @@ function CompareDialog({
                           {shortenStoreName(s.store_name)}
                         </p>
                         {isBest && (
-                          <p className="text-[10px] font-medium uppercase tracking-wider text-savings">
+                          <p className="text-[11px] font-medium uppercase tracking-wider text-savings">
                             Melhor preço
                           </p>
                         )}
                         {isWorst && !isBest && (
-                          <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+                          <p className="text-[11px] uppercase tracking-wider text-muted-foreground">
                             Mais caro
                           </p>
                         )}
@@ -821,7 +821,7 @@ function RankingDialog({
                 <p className="truncate text-[13px] font-semibold text-foreground">
                   {r.display_name}
                 </p>
-                <p className="truncate text-[10.5px] text-muted-foreground">
+                <p className="truncate text-[11px] text-muted-foreground">
                   <Trophy className="mr-0.5 inline h-2.5 w-2.5 text-savings" />
                   {shortenStoreName(r.cheapest_store)} · {r.store_count}{" "}
                   {r.store_count === 1 ? "mercado" : "mercados"}
@@ -832,7 +832,7 @@ function RankingDialog({
                   {fmt(Number(r.min_price))}
                 </p>
                 {Number(r.store_count) > 1 && (
-                  <p className="inline-flex items-center gap-0.5 text-[10px] font-semibold text-savings">
+                  <p className="inline-flex items-center gap-0.5 text-[11px] font-semibold text-savings">
                     <TrendingDown className="h-2.5 w-2.5" />
                     -{Number(r.savings_pct).toFixed(1)}%
                   </p>
@@ -858,7 +858,7 @@ function RankingDialog({
             </p>
           </div>
         </div>
-        <p className="text-center text-[10.5px] text-muted-foreground">
+        <p className="text-center text-[11px] text-muted-foreground">
           Economia potencial:{" "}
           <span className="font-bold text-savings">{fmt(Math.max(0, totalAvg - totalMin))}</span>{" "}
           em relação à média
@@ -884,7 +884,7 @@ function ShowcaseRow({
   return (
     <div>
       <div className="mb-1.5 flex items-center gap-1.5">
-        <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[8.5px] font-semibold uppercase tracking-[0.14em] text-primary">
+        <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-primary">
           {icon}
           {eyebrow}
         </span>

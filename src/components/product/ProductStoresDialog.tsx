@@ -195,7 +195,7 @@ export function ProductStoresDialog({
             className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/40 to-transparent"
           />
           <DialogHeader className="space-y-1">
-            <p className="font-mono text-[10px] font-semibold uppercase tracking-[0.22em] text-primary">
+            <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-primary">
               <StoreIcon className="mr-1 inline h-3 w-3" strokeWidth={2.2} />
               Comparativo por estabelecimento
             </p>
@@ -245,7 +245,7 @@ export function ProductStoresDialog({
               aria-label="Ordenar e filtrar estabelecimentos"
               className="mb-2 flex flex-wrap items-center gap-1.5"
             >
-              <span className="mr-1 flex items-center gap-1 font-mono text-[9.5px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              <span className="mr-1 flex items-center gap-1 font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                 <ArrowDownUp className="h-3 w-3" strokeWidth={2.2} />
                 Ordenar
               </span>
@@ -285,7 +285,7 @@ export function ProductStoresDialog({
               aria-label="Filtrar por nível de confiança"
               className="mb-2 flex flex-wrap items-center gap-1.5"
             >
-              <span className="mr-1 font-mono text-[9.5px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+              <span className="mr-1 font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
                 Confiança
               </span>
               {(["", "alta", "media", "baixa"] as const).map((level) => (
@@ -329,7 +329,7 @@ export function ProductStoresDialog({
                         <span
                           aria-hidden
                           className={cn(
-                            "grid h-7 w-7 shrink-0 place-items-center rounded-full font-mono text-[10px] font-bold tabular-nums",
+                            "grid h-7 w-7 shrink-0 place-items-center rounded-full font-mono text-[11px] font-bold tabular-nums",
                             isCheapest
                               ? "bg-savings text-savings-foreground shadow-sm"
                               : "border border-border bg-muted/40 text-muted-foreground",
@@ -347,17 +347,17 @@ export function ProductStoresDialog({
                           </p>
                           <div className="flex flex-wrap items-center gap-1.5 pt-0.5">
                             {isCheapest ? (
-                              <span className="font-mono text-[9px] uppercase tracking-[0.2em] text-savings">
+                              <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-savings">
                                 Menor preço
                               </span>
                             ) : stats.min != null && stats.min > 0 ? (
-                              <span className="font-mono text-[9.5px] text-muted-foreground">
+                              <span className="font-mono text-[11px] text-muted-foreground">
                                 +{formatBRL(Number(s.price) - stats.min)} vs. menor
                               </span>
                             ) : null}
                             <ConfidenceDot level={confidence} />
                             {s.distance_km != null && Number.isFinite(Number(s.distance_km)) ? (
-                              <span className="inline-flex items-center gap-0.5 font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+                              <span className="inline-flex items-center gap-0.5 font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
                                 <MapPin className="h-2.5 w-2.5" strokeWidth={2.2} />
                                 {Number(s.distance_km).toFixed(1)} km
                               </span>
@@ -427,7 +427,7 @@ function SortChip({
       aria-pressed={active}
       title={title}
       className={cn(
-        "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         disabled && "cursor-not-allowed opacity-45",
         active
           ? "border-primary bg-primary text-primary-foreground shadow-sm"
@@ -465,7 +465,7 @@ function FilterChip({
       onClick={onClick}
       aria-pressed={active}
       className={cn(
-        "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.16em] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+        "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] transition focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
         active
           ? cn("bg-primary text-primary-foreground border-primary shadow-sm")
           : cn(toneClass, "bg-background/60 hover:border-primary/40 hover:text-foreground"),
@@ -487,7 +487,7 @@ function ConfidenceDot({ level }: { level: "alta" | "media" | "baixa" }) {
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 font-mono text-[8.5px] font-bold uppercase tracking-widest",
+        "inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 font-mono text-[11px] font-bold uppercase tracking-widest",
         tone,
       )}
       title={label}
@@ -511,7 +511,7 @@ function StatMini({
 }) {
   return (
     <div className="rounded-lg border border-border bg-card px-2.5 py-2">
-      <p className="font-mono text-[9px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+      <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
         {label}
       </p>
       <p
@@ -523,7 +523,7 @@ function StatMini({
         {value}
       </p>
       {hint ? (
-        <p className="mt-0.5 font-mono text-[8.5px] uppercase tracking-widest text-muted-foreground">
+        <p className="mt-0.5 font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
           {hint}
         </p>
       ) : null}
@@ -574,7 +574,7 @@ function VisitorLockPanel({
           <span className="mx-auto grid h-11 w-11 place-items-center rounded-full border border-primary/30 bg-primary/10 text-primary shadow-inner">
             <Lock className="h-5 w-5" strokeWidth={2} />
           </span>
-          <p className="mt-3 font-mono text-[10px] font-semibold uppercase tracking-[0.24em] text-primary">
+          <p className="mt-3 font-mono text-[11px] font-semibold uppercase tracking-[0.24em] text-primary">
             Preços por estabelecimento
           </p>
           <h3 className="mt-1 font-display text-[17px] font-bold leading-tight tracking-tight text-foreground">
@@ -609,7 +609,7 @@ function VisitorLockPanel({
               Ver planos
             </Link>
           </div>
-          <p className="mt-3 font-mono text-[9.5px] uppercase tracking-[0.2em] text-muted-foreground">
+          <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
             <X className="mr-1 inline h-3 w-3 text-savings" strokeWidth={2.4} />
             Sem cartão · 30 dias grátis
           </p>

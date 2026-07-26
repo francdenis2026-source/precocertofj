@@ -685,7 +685,7 @@ export function PriceSearchBar({
                         {/* "loose" destaca prefixos (ex.: "mante" em "Manteiga") */}
                         <HighlightMatch text={s.displayName} tokens={highlightTokens} mode="loose" />
                       </p>
-                      <p className="truncate font-mono text-[10px] text-muted-foreground">
+                      <p className="truncate font-mono text-[11px] text-muted-foreground">
                         {[s.brand, s.category].filter(Boolean).join(" · ") ? (
                           <HighlightMatch
                             text={[s.brand, s.category].filter(Boolean).join(" · ")}
@@ -880,7 +880,7 @@ export function PriceSearchBar({
 
 
           {result.canonicalGroup && result.excludedByPureFilter > 0 && (
-            <p className="rounded-lg border border-primary/20 bg-primary/5 px-3 py-1.5 font-mono text-[10px] text-muted-foreground">
+            <p className="rounded-lg border border-primary/20 bg-primary/5 px-3 py-1.5 font-mono text-[11px] text-muted-foreground">
               Filtro <span className="text-primary">“{result.canonicalGroup}” puro</span> ativo — {result.excludedByPureFilter} item(s) com o termo apenas como ingrediente foram ocultados.
             </p>
           )}
@@ -915,7 +915,7 @@ export function PriceSearchBar({
                     <p className="truncate text-sm font-semibold text-foreground">
                       {didYouMean.displayName}?
                     </p>
-                    <p className="font-mono text-[9px] text-muted-foreground">
+                    <p className="font-mono text-[11px] text-muted-foreground">
                       Clique para buscar com esta correção
                     </p>
                   </div>
@@ -1000,7 +1000,7 @@ export function PriceSearchBar({
                         { k: "Preços comparados", v: String(result.samples) },
                       ].map((s) => (
                         <div key={s.k} className="min-w-0 px-3.5 py-2">
-                          <dt className="truncate text-[10.5px] font-medium text-white/60">{s.k}</dt>
+                          <dt className="truncate text-[11px] font-medium text-white/60">{s.k}</dt>
                           <dd className="mt-0.5 text-[15px] font-bold leading-none tabular-nums text-white">
                             {s.v}
                           </dd>
@@ -1266,7 +1266,7 @@ export function PriceSearchBar({
                           <span
                             role="img"
                             aria-label={`Posição ${mi + 1}`}
-                            className="my-auto grid h-7 w-7 shrink-0 place-items-center rounded-full border border-accent-strong/40 bg-accent/10 font-sans text-[10.5px] font-semibold tabular-nums text-accent-strong"
+                            className="my-auto grid h-7 w-7 shrink-0 place-items-center rounded-full border border-accent-strong/40 bg-accent/10 font-sans text-[11px] font-semibold tabular-nums text-accent-strong"
                           >
                             <span aria-hidden="true">{String(mi + 1).padStart(2, "0")}</span>
                           </span>
@@ -1567,7 +1567,7 @@ function QuickFilters({
   onFreshness: (v: "all" | "30" | "7") => void;
 }) {
   const chip = (active: boolean) =>
-    "rounded-full border px-2.5 py-1 font-mono text-[10px] tracking-wide transition " +
+    "rounded-full border px-2.5 py-1 font-mono text-[11px] tracking-wide transition " +
     (active
       ? "border-primary bg-primary/15 text-primary"
       : "border-border bg-background text-muted-foreground hover:text-foreground");
@@ -1917,7 +1917,7 @@ function ProductGroupCard({
                 <span
                   role="img"
                   aria-label={`Posição ${i + 1}`}
-                  className="my-auto grid h-5.5 w-5.5 shrink-0 place-items-center rounded-full border border-border bg-muted/40 text-[10px] font-semibold tabular-nums text-muted-foreground"
+                  className="my-auto grid h-5.5 w-5.5 shrink-0 place-items-center rounded-full border border-border bg-muted/40 text-[11px] font-semibold tabular-nums text-muted-foreground"
                 >
                   <span aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
                 </span>
@@ -2259,11 +2259,11 @@ function MarketBucketSection({
               {marketName}
             </span>
             {isCheapest ? (
-              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-brand-gold px-1.5 py-0.5 text-[10.5px] font-semibold text-brand-navy sm:px-2 sm:text-[11px]">
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-brand-gold px-1.5 py-0.5 text-[11px] font-semibold text-brand-navy sm:px-2 sm:text-[11px]">
                 <Crown className="h-3 w-3" aria-hidden="true" /> Menor preço
               </span>
             ) : (
-              <span className="shrink-0 rounded-full border border-[color-mix(in_oklab,var(--color-border)_60%,transparent)] px-1.5 py-0.5 text-[10.5px] font-medium tabular-nums text-muted-foreground sm:text-[11px]">
+              <span className="shrink-0 rounded-full border border-[color-mix(in_oklab,var(--color-border)_60%,transparent)] px-1.5 py-0.5 text-[11px] font-medium tabular-nums text-muted-foreground sm:text-[11px]">
                 {rank}º
               </span>
             )}
@@ -2317,7 +2317,7 @@ function MarketBucketSection({
             </Link>
             {r.isBest ? (
               <span
-                className="hidden shrink-0 rounded-full border border-[color-mix(in_oklab,var(--brand-gold)_45%,transparent)] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] text-[var(--pc-gold-ink)] sm:inline"
+                className="hidden shrink-0 rounded-full border border-[color-mix(in_oklab,var(--brand-gold)_45%,transparent)] px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--pc-gold-ink)] sm:inline"
                 title="Menor preço desta busca para este produto"
               >
                 melhor
@@ -2326,7 +2326,7 @@ function MarketBucketSection({
             <span
               data-freshness={availabilityTone(r.price.when)}
               title={`Preço coletado em ${new Date(r.price.when).toLocaleDateString("pt-BR")}`}
-              className="hidden shrink-0 text-[10.5px] text-muted-foreground data-[freshness=stale]:opacity-60 sm:inline"
+              className="hidden shrink-0 text-[11px] text-muted-foreground data-[freshness=stale]:opacity-60 sm:inline"
             >
               {freshnessLabel(r.price.when)}
             </span>
@@ -2752,7 +2752,7 @@ function MatrixCompareResults({
                       <HighlightMatch text={g.productName} tokens={highlightTokens} />
                     </button>
                     {rowMin != null && rowMax != null && rowMax > rowMin ? (
-                      <p className="mt-0.5 text-[10.5px] text-muted-foreground">
+                      <p className="mt-0.5 text-[11px] text-muted-foreground">
                         Economia até{" "}
                         <span className="font-semibold text-brand-gold tabular-nums">
                           {fmt(rowMax - rowMin)}
@@ -2806,7 +2806,7 @@ function MatrixCompareResults({
                             {rowMin != null && v > rowMin ? (
                               <span
                                 title={`${(((v - rowMin) / rowMin) * 100).toFixed(0)}% acima do menor preço`}
-                                className="text-[10px] font-semibold text-muted-foreground"
+                                className="text-[11px] font-semibold text-muted-foreground"
                               >
                                 +{(((v - rowMin) / rowMin) * 100).toFixed(0)}%
                               </span>
@@ -2814,7 +2814,7 @@ function MatrixCompareResults({
                             {isMin && rowMax != null && rowMax > v ? (
                               <span
                                 title="Economia frente ao mais caro desta linha"
-                                className="text-[10px] font-semibold text-[var(--pc-gold-ink)]"
+                                className="text-[11px] font-semibold text-[var(--pc-gold-ink)]"
                               >
                                 −{(((rowMax - v) / rowMax) * 100).toFixed(0)}%
                               </span>
@@ -2826,7 +2826,7 @@ function MatrixCompareResults({
                                 openProduct(g.productName);
                               }}
                               aria-label={`Abrir ${g.productName} em ${m.name}`}
-                              className="ml-auto rounded-full border border-border px-1.5 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.08em] text-muted-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)]"
+                              className="ml-auto rounded-full border border-border px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)]"
                             >
                               Abrir
                             </button>
@@ -2843,7 +2843,7 @@ function MatrixCompareResults({
         </table>
       </div>
 
-      <p className="text-[10.5px] text-muted-foreground">
+      <p className="text-[11px] text-muted-foreground">
         Dica: navegue com as setas do teclado (↑ ↓ ← →), Home/End e PageUp/PageDown. Enter abre os detalhes.
       </p>
 
@@ -2927,7 +2927,7 @@ function MarketLegend({
           >
             <span className="max-w-[120px] truncate">{m.name}</span>
             <span
-              className="rounded-full px-1 text-[9px] tabular-nums"
+              className="rounded-full px-1 text-[11px] tabular-nums"
               style={{ backgroundColor: `${fg === "#ffffff" ? "rgba(0,0,0,0.22)" : "rgba(255,255,255,0.35)"}`, color: fg }}
             >
               {m.count}

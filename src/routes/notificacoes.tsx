@@ -199,7 +199,7 @@ function NotificacoesPage() {
             >
               {f.label}
               <span
-                className={`inline-flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold ${
+                className={`inline-flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[11px] font-bold ${
                   active ? "bg-primary-foreground/20" : "bg-muted text-muted-foreground"
                 }`}
               >
@@ -249,7 +249,7 @@ function NotificacoesPage() {
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <span
-                        className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide ${toneStyles(cat)}`}
+                        className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-bold uppercase tracking-wide ${toneStyles(cat)}`}
                       >
                         {toneLabel(cat)}
                       </span>

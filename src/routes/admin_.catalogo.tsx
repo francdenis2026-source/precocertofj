@@ -386,7 +386,7 @@ function ItemsPanel() {
               className="h-full w-full object-cover"
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center text-[9px] text-muted-foreground">
+            <div className="flex h-full w-full items-center justify-center text-[11px] text-muted-foreground">
               sem
             </div>
           )}
@@ -591,7 +591,7 @@ function ItemsPanel() {
                 />
               </div>
               <div className="flex items-center justify-between gap-2 pt-3">
-                <Badge variant="outline" className="max-w-[60%] truncate font-mono text-[10px]">
+                <Badge variant="outline" className="max-w-[60%] truncate font-mono text-[11px]">
                   {editingFor.normalizedName.slice(0, 40)}
                   {editingFor.normalizedName.length > 40 ? "…" : ""}
                 </Badge>
@@ -1516,7 +1516,7 @@ function AuditPanel() {
       width: "110px",
       accessor: (r) => r.action,
       cell: (r) => (
-        <Badge variant="outline" className="text-[10px] uppercase">
+        <Badge variant="outline" className="text-[11px] uppercase">
           {r.action}
         </Badge>
       ),

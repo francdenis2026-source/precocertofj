@@ -150,7 +150,7 @@ export function MarketEditorialCard({
                 </span>
               )}
               <span
-                className="shrink-0 rounded-full border px-1.5 py-[2px] text-[10px] font-bold uppercase leading-none tracking-[0.08em] text-foreground/85"
+                className="shrink-0 rounded-full border px-1.5 py-[2px] text-[11px] font-bold uppercase leading-none tracking-[0.08em] text-foreground/85"
                 style={{
                   background: `color-mix(in oklab, ${tierColor} 16%, transparent)`,
                   borderColor: `color-mix(in oklab, ${tierColor} 45%, transparent)`,
@@ -161,11 +161,11 @@ export function MarketEditorialCard({
               </span>
 
               {isCheapest ? (
-                <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-brand-gold px-1.5 py-[2px] text-[10px] font-bold uppercase leading-none tracking-[0.08em] text-brand-navy">
+                <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-brand-gold px-1.5 py-[2px] text-[11px] font-bold uppercase leading-none tracking-[0.08em] text-brand-navy">
                   <PiggyBank className="h-2.5 w-2.5" aria-hidden /> Mais barato
                 </span>
               ) : isFeatured ? (
-                <span className="inline-flex shrink-0 items-center rounded-full border border-brand-navy/25 px-1.5 py-[2px] text-[10px] font-bold uppercase leading-none tracking-[0.08em] text-brand-navy dark:border-brand-gold/30 dark:text-[var(--pc-gold-ink)]">
+                <span className="inline-flex shrink-0 items-center rounded-full border border-brand-navy/25 px-1.5 py-[2px] text-[11px] font-bold uppercase leading-none tracking-[0.08em] text-brand-navy dark:border-brand-gold/30 dark:text-[var(--pc-gold-ink)]">
                   Destaque
                 </span>
               ) : null}

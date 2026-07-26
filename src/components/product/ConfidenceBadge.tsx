@@ -96,7 +96,7 @@ export function ConfidenceBadge({
         "inline-flex items-center gap-1 rounded-sm border px-1.5 py-0.5 font-mono font-semibold uppercase leading-none tracking-wide " +
         s.className +
         " " +
-        (compact ? "text-[9px]" : "text-[9.5px]") +
+        (compact ? "text-[11px]" : "text-[11px]") +
         " " +
         className
       }

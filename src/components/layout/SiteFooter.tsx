@@ -95,7 +95,7 @@ export function SiteFooter() {
           ))}
         </nav>
         {/* Row 3: dev credit isolado */}
-        <div className="mt-0.5 text-right font-mono text-[10.5px] font-medium text-muted-foreground">
+        <div className="mt-0.5 text-right font-mono text-[11px] font-medium text-muted-foreground">
           &lt;dev&gt; <span className="text-foreground/85">Franc D&apos;nis</span>
         </div>
       </div>
@@ -149,7 +149,7 @@ export function SiteFooter() {
         <div className="grid grid-cols-3 gap-x-3 gap-y-1 sm:gap-x-5">
           {NAV_COLS.map((col) => (
             <div key={col.title} className="min-w-0">
-              <div className="text-[10px] font-bold uppercase tracking-[0.18em] text-[var(--pc-gold-ink)] antialiased md:text-[10.5px]">
+              <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--pc-gold-ink)] antialiased md:text-[11px]">
                 {col.title}
               </div>
               <ul className="mt-1 space-y-px border-t border-border/70 pt-1">
@@ -174,7 +174,7 @@ export function SiteFooter() {
         <div
           className={dsx(
             ds.container,
-            "flex flex-col items-start justify-between gap-0 py-0 text-[10.5px] font-medium leading-[1.15] text-foreground/85 sm:flex-row sm:items-center md:text-[11px]",
+            "flex flex-col items-start justify-between gap-0 py-0 text-[11px] font-medium leading-[1.15] text-foreground/85 sm:flex-row sm:items-center md:text-[11px]",
           )}
         >
           <span className="whitespace-normal">© {year} <strong className="font-semibold text-foreground">PreçoCerto</strong> · Feijó · Acre</span>

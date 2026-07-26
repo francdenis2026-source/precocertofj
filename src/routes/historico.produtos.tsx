@@ -170,7 +170,7 @@ function ProductsHistoryPage() {
                         <div className="font-mono text-fluid-lg font-bold tabular-nums text-capture">
                           R$ {r.currentPrice.toFixed(2).replace(".", ",")}
                         </div>
-                        <div className="mt-0.5 text-[10px] uppercase tracking-widest text-muted-foreground">
+                        <div className="mt-0.5 text-[11px] uppercase tracking-widest text-muted-foreground">
                           {new Date(r.createdAt).toLocaleDateString("pt-BR")}
                         </div>
                       </div>

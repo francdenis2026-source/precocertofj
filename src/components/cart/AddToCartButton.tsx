@@ -100,11 +100,11 @@ export function AddToCartButton({
 
   const variantClasses: Record<NonNullable<AddToCartButtonProps["variant"]>, string> = {
     solid:
-      "bg-primary text-primary-foreground hover:bg-primary/90 px-3 py-1.5 text-[10px]",
+      "bg-primary text-primary-foreground hover:bg-primary/90 px-3 py-1.5 text-[11px]",
     ghost:
-      "border border-primary/30 text-primary hover:bg-primary/10 px-3 py-1.5 text-[10px]",
+      "border border-primary/30 text-primary hover:bg-primary/10 px-3 py-1.5 text-[11px]",
     compact:
-      "bg-foreground text-background hover:bg-foreground/90 px-2 py-1 text-[9px]",
+      "bg-foreground text-background hover:bg-foreground/90 px-2 py-1 text-[11px]",
   };
 
   return (

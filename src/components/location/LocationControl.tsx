@@ -105,7 +105,7 @@ export function LocationControl({ loc, className = "", variant = "hero" }: Props
         <button
           type="button"
           onClick={loc.clear}
-          className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 text-[10.5px] font-semibold uppercase tracking-[0.12em] transition-colors ${styles.secondary}`}
+          className={`inline-flex items-center gap-1 rounded-full border px-2 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors ${styles.secondary}`}
           title="Remover referência de localização"
         >
           <X className="h-3 w-3" aria-hidden /> Limpar

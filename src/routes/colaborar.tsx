@@ -200,7 +200,7 @@ function CollaboratorWorkspace() {
       <section className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         {/* Token */}
         <div className="rounded-xl border border-border bg-card p-4 shadow-elev-1">
-          <p className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-brand-gold">
+          <p className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-brand-gold">
             <KeyRound className="h-3 w-3" strokeWidth={2.6} aria-hidden />
             Seu token
           </p>
@@ -215,7 +215,7 @@ function CollaboratorWorkspace() {
         {/* Progresso */}
         <div className="rounded-xl border border-border bg-card p-4 shadow-elev-1">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-brand-gold">
+            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-brand-gold">
               Progresso do mês
             </p>
             <p
@@ -283,7 +283,7 @@ function CollaboratorWorkspace() {
             <Receipt className="h-3.5 w-3.5" aria-hidden />
             Meus envios
             {subs.length > 0 && (
-              <span className="rounded-full bg-brand-gold/15 px-1.5 text-[10.5px] font-bold text-brand-gold">
+              <span className="rounded-full bg-brand-gold/15 px-1.5 text-[11px] font-bold text-brand-gold">
                 {subs.length}
               </span>
             )}
@@ -393,7 +393,7 @@ function CollaboratorWorkspace() {
         <TabsContent value="regras" className="mt-3">
           <div className="grid gap-3 md:grid-cols-2">
             <div className="rounded-xl border border-border bg-card p-4 shadow-elev-1">
-              <h2 className="text-[10px] font-bold uppercase tracking-[0.16em] text-brand-gold">
+              <h2 className="text-[11px] font-bold uppercase tracking-[0.16em] text-brand-gold">
                 Em 3 passos
               </h2>
               <ol className="mt-2.5 space-y-2.5">
@@ -418,7 +418,7 @@ function CollaboratorWorkspace() {
               </ol>
             </div>
             <div className="rounded-xl border border-border bg-card p-4 shadow-elev-1">
-              <h2 className="text-[10px] font-bold uppercase tracking-[0.16em] text-brand-gold">
+              <h2 className="text-[11px] font-bold uppercase tracking-[0.16em] text-brand-gold">
                 Regras
               </h2>
               <ul className="mt-2.5 space-y-1.5">
@@ -455,7 +455,7 @@ function Metric({
 }) {
   return (
     <div className="rounded-lg border border-border/70 bg-background/60 px-2.5 py-1.5">
-      <dt className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
+      <dt className="flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
         {Icon && <Icon className="h-3 w-3" aria-hidden />}
         {label}
       </dt>
@@ -518,13 +518,13 @@ function StatusPill({ status, rewardDays }: { status: string; rewardDays: number
     <div className="flex flex-none flex-col items-end gap-0.5">
       <span
         className={
-          "rounded-full border px-2 py-0.5 text-[10.5px] font-semibold " + s.cls
+          "rounded-full border px-2 py-0.5 text-[11px] font-semibold " + s.cls
         }
       >
         {s.label}
       </span>
       {status === "approved" && rewardDays > 0 && (
-        <span className="text-[10.5px] font-semibold text-emerald-700 dark:text-emerald-300">
+        <span className="text-[11px] font-semibold text-emerald-700 dark:text-emerald-300">
           +{rewardDays} dias
         </span>
       )}

@@ -385,7 +385,7 @@ function HomePage() {
             {/* Badges */}
             <div className="mb-2.5 flex flex-wrap items-center justify-center gap-2 sm:mb-3">
               <span
-                className="inline-flex items-center gap-2 rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.2em]"
+                className="inline-flex items-center gap-2 rounded-full border px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.2em]"
                 style={{
                   background: `color-mix(in oklab, ${P.gold} 12%, transparent)`,
                   borderColor: `color-mix(in oklab, ${P.gold} 40%, transparent)`,
@@ -400,7 +400,7 @@ function HomePage() {
               </span>
               {today && (
                 <span
-                  className="hidden items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tabular-nums tracking-[0.2em] sm:inline-flex"
+                  className="hidden items-center gap-1.5 rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tabular-nums tracking-[0.2em] sm:inline-flex"
                   style={{
                     background: "rgba(255,255,255,0.06)",
                     color: "#E8BE72",
@@ -542,7 +542,7 @@ function HomePage() {
             {/* Chips compactos — populares + navegação consolidada */}
             <div className="mx-auto mt-3 flex max-w-3xl flex-wrap items-center justify-center gap-1.5 sm:mt-3.5">
               <span
-                className="text-[10px] font-bold uppercase tracking-[0.2em]"
+                className="text-[11px] font-bold uppercase tracking-[0.2em]"
                 style={{ color: "rgba(226,232,240,0.62)" }}
               >
                 Populares:
@@ -565,7 +565,7 @@ function HomePage() {
                 <button
                   type="button"
                   onClick={() => setPopularPage((p) => (p + 1) % popularPageCount)}
-                  className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] transition-colors hover:brightness-110"
+                  className="inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] transition-colors hover:brightness-110"
                   style={{
                     background: "rgba(255,255,255,0.05)",
                     borderColor: "rgba(255,255,255,0.12)",
@@ -670,7 +670,7 @@ function HomePage() {
                         {s.k}
                       </div>
                       <div
-                        className="flex min-w-0 items-center gap-1 text-[10.5px] font-bold uppercase tracking-[0.12em] sm:text-[11px] sm:tracking-[0.2em]"
+                        className="flex min-w-0 items-center gap-1 text-[11px] font-bold uppercase tracking-[0.12em] sm:text-[11px] sm:tracking-[0.2em]"
                         style={{ color: "rgba(226,232,240,0.70)" }}
                       >
                         <span className="hidden sm:inline-flex" aria-hidden style={{ color: P.goldSoft }}>
@@ -704,7 +704,7 @@ function HomePage() {
           <div className="mb-2 flex items-center justify-between gap-3 sm:mb-2.5">
             <h2
               id="categorias-title"
-              className="text-[10.5px] font-bold uppercase tracking-[0.2em] sm:text-[11px] sm:tracking-[0.22em]"
+              className="text-[11px] font-bold uppercase tracking-[0.2em] sm:text-[11px] sm:tracking-[0.22em]"
               style={{ color: P.heading }}
             >
               Pesquise por categoria

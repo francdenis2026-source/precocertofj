@@ -102,7 +102,7 @@ export function FoodBudgetAlerts({
                 <Badge
                   variant="outline"
                   className={cn(
-                    "px-1.5 py-0 text-[10px] font-bold uppercase tracking-wider tabular-nums",
+                    "px-1.5 py-0 text-[11px] font-bold uppercase tracking-wider tabular-nums",
                     over100
                       ? "border-destructive/50 bg-destructive/10 text-destructive"
                       : "border-amber-500/50 bg-amber-500/10 text-amber-700 dark:text-amber-300"

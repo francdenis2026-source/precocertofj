@@ -84,13 +84,13 @@ export function StoreCard({ store, onOpen, wins = 0, isTop = false, featured = f
           {/* Top-right badges */}
           <div className="absolute right-1 top-1 flex items-center gap-1">
             {isTop && (
-              <span className="inline-flex items-center gap-0.5 rounded-sm border border-accent/70 bg-accent/95 px-1 py-[1px] font-display text-[8px] italic tracking-wide text-accent-foreground shadow-[0_1px_2px_color-mix(in_oklab,black_25%,transparent)]">
+              <span className="inline-flex items-center gap-0.5 rounded-sm border border-accent/70 bg-accent/95 px-1 py-[1px] font-display text-[11px] italic tracking-wide text-accent-foreground shadow-[0_1px_2px_color-mix(in_oklab,black_25%,transparent)]">
                 <Trophy className="h-2 w-2" strokeWidth={2.5} />
                 Top
               </span>
             )}
             {!isTop && wins > 0 && (
-              <span className="inline-flex items-center gap-0.5 rounded-sm border border-savings/60 bg-savings/95 px-1 py-[1px] font-display text-[8px] italic tracking-wide text-savings-foreground shadow-sm">
+              <span className="inline-flex items-center gap-0.5 rounded-sm border border-savings/60 bg-savings/95 px-1 py-[1px] font-display text-[11px] italic tracking-wide text-savings-foreground shadow-sm">
                 <TrendingDown className="h-2 w-2" strokeWidth={2.5} />
                 {wins}
               </span>
@@ -133,14 +133,14 @@ export function StoreCard({ store, onOpen, wins = 0, isTop = false, featured = f
           <p className="line-clamp-1 font-display text-[12px] font-semibold leading-tight tracking-tight text-foreground">
             {store.name}
           </p>
-          <p className="mt-0.5 flex items-center gap-0.5 truncate font-display text-[9px] italic text-muted-foreground">
+          <p className="mt-0.5 flex items-center gap-0.5 truncate font-display text-[11px] italic text-muted-foreground">
             <MapPin className="h-2 w-2 shrink-0 text-accent" />
             {store.city}/{store.state}
           </p>
           <div className="mt-1 flex items-end justify-between border-t border-accent/30 pt-1">
             <p className="num font-display text-[12px] font-semibold text-foreground leading-none">
               {store.productCount}
-              <span className="ml-0.5 font-display text-[8.5px] italic font-normal text-muted-foreground">
+              <span className="ml-0.5 font-display text-[11px] italic font-normal text-muted-foreground">
                 itens
               </span>
             </p>
@@ -161,7 +161,7 @@ export function StoreCard({ store, onOpen, wins = 0, isTop = false, featured = f
           backgroundOrigin: "border-box",
           backgroundClip: "padding-box, border-box",
         }}
-        className="bg-primary/[0.04] px-2 py-1 text-center font-display text-[10px] italic tracking-wide text-primary transition hover:bg-primary hover:text-primary-foreground hover:not-italic focus-visible:bg-primary focus-visible:text-primary-foreground focus-visible:outline-none"
+        className="bg-primary/[0.04] px-2 py-1 text-center font-display text-[11px] italic tracking-wide text-primary transition hover:bg-primary hover:text-primary-foreground hover:not-italic focus-visible:bg-primary focus-visible:text-primary-foreground focus-visible:outline-none"
       >
         Ver preços <span className="not-italic">→</span>
       </Link>

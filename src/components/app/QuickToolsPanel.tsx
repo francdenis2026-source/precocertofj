@@ -87,7 +87,7 @@ export function QuickToolsPanel() {
                   <Icon className="h-5 w-5" />
                 </div>
                 {tool.badge && (
-                  <span className="rounded-full bg-background/70 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] ring-1 ring-inset ring-border/60 backdrop-blur">
+                  <span className="rounded-full bg-background/70 px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] ring-1 ring-inset ring-border/60 backdrop-blur">
                     {tool.badge}
                   </span>
                 )}

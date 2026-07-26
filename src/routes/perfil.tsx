@@ -285,7 +285,7 @@ function Perfil() {
                 </button>
               )}
               {!avatarPath && (
-                <p className="text-[10px] text-muted-foreground">
+                <p className="text-[11px] text-muted-foreground">
                   Sem foto — usamos as iniciais do seu nome.
                 </p>
               )}
@@ -569,7 +569,7 @@ function MetricBox({
     <div className="group rounded-2xl border border-border bg-card p-4 transition-colors hover:border-primary/60">
       <IconTile icon={Icon} tone={tone} size="sm" density="regular" interactive />
       <p className="mt-3 font-mono text-2xl font-medium text-foreground">{value}</p>
-      <p className="mt-1 text-[10px] uppercase tracking-widest text-muted-foreground">{label}</p>
+      <p className="mt-1 text-[11px] uppercase tracking-widest text-muted-foreground">{label}</p>
       <p className="mt-0.5 text-xs text-muted-foreground">{note}</p>
     </div>
   );
@@ -667,7 +667,7 @@ function MyReportsPanel() {
                   <p className="truncate text-[12.5px] font-semibold text-foreground">
                     {r.productName}
                   </p>
-                  <p className="text-[10.5px] text-muted-foreground">
+                  <p className="text-[11px] text-muted-foreground">
                     {r.establishmentName ?? "—"} · {REASON[r.reason] ?? r.reason} ·{" "}
                     {new Date(r.createdAt).toLocaleDateString("pt-BR", {
                       day: "2-digit",
@@ -677,7 +677,7 @@ function MyReportsPanel() {
                 </div>
                 <span
                   className={
-                    "shrink-0 rounded-full px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-wider " +
+                    "shrink-0 rounded-full px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider " +
                     meta.classes
                   }
                 >
@@ -685,7 +685,7 @@ function MyReportsPanel() {
                 </span>
               </div>
               {r.adminNotes && (
-                <p className="mt-1.5 rounded-md bg-muted/60 px-2 py-1 text-[10.5px] text-foreground">
+                <p className="mt-1.5 rounded-md bg-muted/60 px-2 py-1 text-[11px] text-foreground">
                   <span className="font-semibold">Admin:</span> {r.adminNotes}
                 </p>
               )}
@@ -753,7 +753,7 @@ function MyStoreQuotesPanel() {
                 <p className="truncate text-[12.5px] font-semibold text-foreground">
                   {q.storeName}
                 </p>
-                <p className="text-[10.5px] text-muted-foreground">
+                <p className="text-[11px] text-muted-foreground">
                   {q.itemCount} {q.itemCount === 1 ? "item" : "itens"} ·{" "}
                   <span className="num font-semibold text-foreground">{fmt(q.total)}</span> ·{" "}
                   {new Date(q.createdAt).toLocaleDateString("pt-BR", {
@@ -776,7 +776,7 @@ function MyStoreQuotesPanel() {
                     type="button"
                     onClick={() => copyShareLink(q.id)}
                     aria-label="Copiar link público"
-                    className="rounded-full px-2 py-1 text-[10px] font-semibold uppercase tracking-wider text-primary hover:bg-primary/10"
+                    className="rounded-full px-2 py-1 text-[11px] font-semibold uppercase tracking-wider text-primary hover:bg-primary/10"
                   >
                     Link
                   </button>

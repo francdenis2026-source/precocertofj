@@ -127,7 +127,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
           useReal ? (
             <span
               title="Agregado dos últimos 30 dias"
-              className="inline-flex items-center gap-1 rounded-full bg-brand-gold px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-brand-navy shadow-sm"
+              className="inline-flex items-center gap-1 rounded-full bg-brand-gold px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-brand-navy shadow-sm"
             >
               <span className="relative inline-flex h-1.5 w-1.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-navy/60 opacity-75" />

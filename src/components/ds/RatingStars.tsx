@@ -53,7 +53,7 @@ export function RatingBadge({
       <Stars size="sm" />
       {typeof count === "number" ? (
         <span
-          className="text-[10px] font-semibold uppercase tracking-[0.12em]"
+          className="text-[11px] font-semibold uppercase tracking-[0.12em]"
           style={{ color: "var(--pc-text-body)" }}
         >
           · {count}
@@ -88,7 +88,7 @@ export function RatingInline({
         {value.toFixed(1).replace(".", ",")}
       </span>
       {typeof count === "number" ? (
-        <span className="text-[10.5px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
+        <span className="text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
           ({count})
         </span>
       ) : null}

@@ -174,7 +174,7 @@ export const ComparisonCard = forwardRef<HTMLElement, ComparisonCardProps>(funct
                     {freshness ? (
                       <span
                         className={cn(
-                          "inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10px] font-medium leading-none",
+                          "inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[11px] font-medium leading-none",
                           freshness.stale
                             ? "bg-destructive/10 text-destructive"
                             : "bg-muted/60 text-muted-foreground",

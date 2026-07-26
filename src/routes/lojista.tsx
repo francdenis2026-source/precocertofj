@@ -80,7 +80,7 @@ function Lojista() {
       <aside className="hidden border-r border-border bg-card md:flex md:flex-col">
         <div className="border-b border-border p-5">
           <Logo />
-          <p className="mt-3 text-[10px] uppercase tracking-widest text-muted-foreground">
+          <p className="mt-3 text-[11px] uppercase tracking-widest text-muted-foreground">
             Painel do lojista
           </p>
         </div>
@@ -199,7 +199,7 @@ function Overview() {
                 }
               >
                 <span>{a.message}</span>
-                <span className="font-mono text-[10px] text-muted-foreground">
+                <span className="font-mono text-[11px] text-muted-foreground">
                   {new Date(a.createdAt).toLocaleString("pt-BR")}
                 </span>
               </li>
@@ -226,7 +226,7 @@ function Overview() {
           </div>
           <table className="mt-4 w-full text-sm">
             <thead>
-              <tr className="border-b border-border text-left text-[10px] uppercase tracking-widest text-muted-foreground">
+              <tr className="border-b border-border text-left text-[11px] uppercase tracking-widest text-muted-foreground">
                 <th className="pb-2">Produto</th>
                 <th className="pb-2">Buscas</th>
                 <th className="pb-2">Seu preço</th>
@@ -258,7 +258,7 @@ function Overview() {
                   </td>
                   <td className="py-3 text-right">
                     {r.best ? (
-                      <span className="rounded-full bg-savings/15 px-2 py-0.5 text-[10px] font-medium uppercase tracking-widest text-savings-foreground">
+                      <span className="rounded-full bg-savings/15 px-2 py-0.5 text-[11px] font-medium uppercase tracking-widest text-savings-foreground">
                         Melhor preço
                       </span>
                     ) : (
@@ -386,7 +386,7 @@ function ProductsTab() {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border text-left text-[10px] uppercase tracking-widest text-muted-foreground">
+              <tr className="border-b border-border text-left text-[11px] uppercase tracking-widest text-muted-foreground">
                 <th className="px-4 py-3">Produto</th>
                 <th className="px-4 py-3">EAN</th>
                 <th className="px-4 py-3">Categoria</th>

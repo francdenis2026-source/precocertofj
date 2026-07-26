@@ -22,7 +22,7 @@ export function BenefitsSection() {
     <section aria-labelledby="benefits-title" className="pc-container pt-4 sm:pt-5">
       <header className="mb-2.5 flex items-baseline justify-between gap-3">
         <div className="flex items-baseline gap-2.5 min-w-0">
-          <p className="text-[10.5px] font-bold uppercase tracking-[0.2em] shrink-0 sm:text-[11px]" style={{ color: P.gold }}>
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] shrink-0 sm:text-[11px]" style={{ color: P.gold }}>
             Benefícios
           </p>
           <h2

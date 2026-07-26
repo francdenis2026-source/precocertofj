@@ -51,7 +51,7 @@ export function CollaborativeCTA({
         <div className="min-w-0">
           <p
             className={
-              "inline-flex items-center gap-2 rounded-full border px-2.5 py-1 font-mono text-[10px] font-bold uppercase tracking-[0.22em] " +
+              "inline-flex items-center gap-2 rounded-full border px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-[0.22em] " +
               (isDark
                 ? "border-emerald-300/30 bg-emerald-300/10 text-emerald-200"
                 : "border-primary/25 bg-primary/10 text-primary")

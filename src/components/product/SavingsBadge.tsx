@@ -30,8 +30,8 @@ export function SavingsBadge({
   const base =
     "inline-flex items-center gap-1 rounded-full font-mono font-bold uppercase tracking-widest tabular-nums";
   const sizes = {
-    sm: "px-1.5 py-0.5 text-[9px]",
-    md: "px-2.5 py-1 text-[10px]",
+    sm: "px-1.5 py-0.5 text-[11px]",
+    md: "px-2.5 py-1 text-[11px]",
   };
   const variants = {
     solid: "bg-savings text-savings-foreground shadow-sm",

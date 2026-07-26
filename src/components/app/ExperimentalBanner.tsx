@@ -64,7 +64,7 @@ export function ExperimentalBanner() {
         </div>
 
         <div className="flex-1">
-          <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-[#e6c977]">
+          <p className="text-[11px] font-bold uppercase tracking-[0.28em] text-[#e6c977]">
             Fase experimental
           </p>
           <h2 className="mt-1 font-display text-lg font-semibold leading-tight text-white sm:text-xl">

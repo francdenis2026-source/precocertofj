@@ -188,12 +188,12 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
           {/* Menor preço destaque */}
           <div className="rounded-3xl border border-savings/30 bg-gradient-to-br from-savings/12 via-background to-primary/8 p-4">
             <div className="flex items-center justify-between">
-              <p className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-savings">
+              <p className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.18em] text-savings">
                 <TrendingDown className="h-3 w-3" strokeWidth={3} />
                 Menor preço da mercado
               </p>
               {lowest?.category && (
-                <span className="rounded-full bg-background/80 px-2 py-0.5 text-[10px] font-semibold text-muted-foreground">
+                <span className="rounded-full bg-background/80 px-2 py-0.5 text-[11px] font-semibold text-muted-foreground">
                   {lowest.category}
                 </span>
               )}
@@ -252,10 +252,10 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
           {store && (topHistoryQuery.data?.length ?? 0) > 0 && (
             <div>
               <div className="mb-2 flex items-baseline justify-between">
-                <p className="text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground">
+                <p className="text-[11px] font-black uppercase tracking-[0.18em] text-muted-foreground">
                   Top 5 · tendência 30 dias
                 </p>
-                <span className="text-[9.5px] font-semibold uppercase tracking-wider text-muted-foreground">
+                <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
                   ↘ baixando · ↗ subindo
                 </span>
               </div>
@@ -295,7 +295,7 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
                             {p.points.length >= 2 && (
                               <span
                                 className={cn(
-                                  "text-[9.5px] font-bold uppercase tracking-wider",
+                                  "text-[11px] font-bold uppercase tracking-wider",
                                   dropped && "text-savings",
                                   raised && "text-destructive",
                                   !dropped && !raised && "text-muted-foreground",
@@ -330,7 +330,7 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
             (topHistoryQuery.data?.length ?? 0) === 0 &&
             cheapest.length > 1 && (
               <div>
-                <p className="mb-2 text-[10px] font-black uppercase tracking-[0.18em] text-muted-foreground">
+                <p className="mb-2 text-[11px] font-black uppercase tracking-[0.18em] text-muted-foreground">
                   Outros preços baixos
                 </p>
                 <ul className="overflow-hidden rounded-2xl border border-border bg-surface">
@@ -399,7 +399,7 @@ function StatBox({
     >
       <span
         className={cn(
-          "inline-flex items-center gap-1 text-[9.5px] font-semibold uppercase tracking-wider",
+          "inline-flex items-center gap-1 text-[11px] font-semibold uppercase tracking-wider",
           highlight ? "text-accent" : "text-muted-foreground",
         )}
       >

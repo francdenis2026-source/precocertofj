@@ -68,7 +68,7 @@ function DetailPage() {
           >
             <ArrowLeft className="h-4 w-4" strokeWidth={1.5} />
           </Link>
-          <span className="font-mono text-[10px] uppercase tracking-widest text-primary">
+          <span className="font-mono text-[11px] uppercase tracking-widest text-primary">
             Detalhe
           </span>
         </header>
@@ -104,7 +104,7 @@ function DetailPage() {
             />
 
             <div className={`rounded-3xl p-5 ${verdictBg}`}>
-              <p className="font-mono text-[10px] font-bold uppercase tracking-widest opacity-80">
+              <p className="font-mono text-[11px] font-bold uppercase tracking-widest opacity-80">
                 Veredito
               </p>
               <p className="mt-1 font-mono text-4xl font-extrabold leading-none">
@@ -124,7 +124,7 @@ function DetailPage() {
                 </span>
               </div>
               {scan.averagePrice !== null && (
-                <p className="mt-2 font-mono text-[10px] opacity-70">
+                <p className="mt-2 font-mono text-[11px] opacity-70">
                   Média histórica: R$ {scan.averagePrice.toFixed(2).replace(".", ",")}
                 </p>
               )}
@@ -171,7 +171,7 @@ function DetailPage() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div className="rounded-2xl border border-primary/10 bg-surface p-3">
-      <dt className="font-mono text-[9px] uppercase tracking-widest text-muted-foreground">
+      <dt className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
         {label}
       </dt>
       <dd className="mt-1 min-w-0 break-words font-mono text-xs text-foreground">{children}</dd>

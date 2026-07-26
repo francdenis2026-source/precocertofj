@@ -359,7 +359,7 @@ function RedeemPage() {
               <Ticket className="h-4 w-4" />
             </div>
             <div className="min-w-0 flex-1">
-              <div className="text-[9.5px] font-bold uppercase tracking-[0.22em]" style={{ color: GOLD_SOFT }}>
+              <div className="text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: GOLD_SOFT }}>
                 Ativação de licença
               </div>
               <div className="truncate text-[12.5px] font-medium text-white/90">
@@ -401,7 +401,7 @@ function RedeemPage() {
               {/* Campo único grande — legível e compacto */}
               <label
                 htmlFor="license-code"
-                className="mt-4 block text-[10.5px] font-bold uppercase tracking-[0.18em]"
+                className="mt-4 block text-[11px] font-bold uppercase tracking-[0.18em]"
                 style={{ color: NAVY }}
               >
                 Código de licença
@@ -597,7 +597,7 @@ function RedeemPage() {
 
 
               {/* Garantias em linha compacta */}
-              <ul className="mt-4 grid grid-cols-3 gap-2 border-t pt-3 text-[10.5px] font-semibold" style={{ borderColor: "#cbd5e1", color: "#334155" }}>
+              <ul className="mt-4 grid grid-cols-3 gap-2 border-t pt-3 text-[11px] font-semibold" style={{ borderColor: "#cbd5e1", color: "#334155" }}>
                 <li className="flex items-center gap-1"><ShieldCheck className="h-3 w-3" style={{ color: NAVY }} />Uso único</li>
                 <li className="flex items-center gap-1"><KeyRound className="h-3 w-3" style={{ color: NAVY }} />Ligado ao CPF</li>
                 <li className="flex items-center gap-1"><CheckCircle2 className="h-3 w-3" style={{ color: NAVY }} />Ativação imediata</li>
@@ -686,7 +686,7 @@ function CodeVerifier({
       aria-live="polite"
     >
       <span
-        className="flex items-center gap-1 text-[9.5px] font-bold uppercase tracking-[0.14em]"
+        className="flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.14em]"
         style={{ color: allOk ? "#166534" : serverBad ? "#991b1b" : INK }}
       >
         {submitting || serverChecking ? (
@@ -722,7 +722,7 @@ function CodeVerifier({
           return (
             <span
               key={c.label}
-              className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[9.5px] font-semibold"
+              className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[11px] font-semibold"
               style={{ color: palette.color, background: palette.bg }}
             >
               {c.state === "loading" ? (
@@ -903,7 +903,7 @@ function CodePreviewPanel({
         </div>
         {data.planName && (
           <span
-            className="rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em]"
+            className="rounded-full border px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em]"
             style={{ borderColor: border, color: ink, background: "#ffffff" }}
           >
             {data.planName}
@@ -913,20 +913,20 @@ function CodePreviewPanel({
 
       <dl className="mt-2.5 grid grid-cols-2 gap-2">
         <div className="rounded-lg border bg-white px-2.5 py-1.5" style={{ borderColor: LINE }}>
-          <dt className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
+          <dt className="flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
             <CalendarClock className="h-3 w-3" /> Validade
           </dt>
           <dd className="mt-0.5 text-[12.5px] font-bold" style={{ color: data.isExpired ? "#dc2626" : NAVY }}>
             {expLabel}
             {data.daysUntilExpiry != null && !data.isExpired && (
-              <span className="ml-1 text-[10.5px] font-normal" style={{ color: MUTED }}>
+              <span className="ml-1 text-[11px] font-normal" style={{ color: MUTED }}>
                 (em {data.daysUntilExpiry}d)
               </span>
             )}
           </dd>
         </div>
         <div className="rounded-lg border bg-white px-2.5 py-1.5" style={{ borderColor: LINE }}>
-          <dt className="flex items-center gap-1 text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
+          <dt className="flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
             <RefreshCcw className="h-3 w-3" /> Reembolso
           </dt>
           <dd
@@ -942,7 +942,7 @@ function CodePreviewPanel({
         </div>
         {data.planDays != null && (
           <div className="rounded-lg border bg-white px-2.5 py-1.5" style={{ borderColor: LINE }}>
-            <dt className="text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
+            <dt className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
               Duração
             </dt>
             <dd className="mt-0.5 text-[12.5px] font-bold" style={{ color: NAVY }}>
@@ -952,7 +952,7 @@ function CodePreviewPanel({
         )}
         {data.priceCents != null && (
           <div className="rounded-lg border bg-white px-2.5 py-1.5" style={{ borderColor: LINE }}>
-            <dt className="text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
+            <dt className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
               Valor
             </dt>
             <dd className="mt-0.5 text-[12.5px] font-bold" style={{ color: NAVY }}>

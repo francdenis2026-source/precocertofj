@@ -91,7 +91,7 @@ export function TrustIndicator({ lastSeenAt, totalScans, compact = false, classN
           type="button"
           onClick={(e) => e.stopPropagation()}
           className={cn(
-            "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-medium transition-colors hover:opacity-90",
+            "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium transition-colors hover:opacity-90",
             cfg.color,
             className,
           )}
@@ -128,7 +128,7 @@ export function TrustIndicator({ lastSeenAt, totalScans, compact = false, classN
                 <dd className="font-medium text-foreground">{formatFullDate(lastSeenAt)}</dd>
               </div>
             </dl>
-            <p className="mt-2 flex items-start gap-1 rounded-md bg-muted/50 p-1.5 text-[10px] leading-snug text-muted-foreground">
+            <p className="mt-2 flex items-start gap-1 rounded-md bg-muted/50 p-1.5 text-[11px] leading-snug text-muted-foreground">
               <Info className="mt-0.5 h-3 w-3 shrink-0" aria-hidden />
               Os valores são coletados nas gôndolas e podem variar por atualização de tabela ou etiquetagem. Confirme no ponto de venda.
             </p>

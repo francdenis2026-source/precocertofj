@@ -79,7 +79,7 @@ export function ShareButton({
       type="button"
       onClick={handleShare}
       className={cn(
-        "inline-flex items-center justify-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 font-mono text-[10.5px] uppercase tracking-[0.18em] text-foreground transition hover:border-accent-strong/50 hover:bg-accent/10",
+        "inline-flex items-center justify-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 font-mono text-[11px] uppercase tracking-[0.18em] text-foreground transition hover:border-accent-strong/50 hover:bg-accent/10",
         className,
       )}
     >

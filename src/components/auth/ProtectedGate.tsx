@@ -81,7 +81,7 @@ export function ProtectedGate({ children }: { children: React.ReactNode }) {
             aria-hidden
           />
           <div className="relative">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] backdrop-blur">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] backdrop-blur">
               <span className="live-dot" aria-hidden />
               PreçoCerto
             </span>

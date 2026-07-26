@@ -148,7 +148,7 @@ export function CollaboratorsTab() {
                       <div className="font-medium">{r.full_name ?? "—"}</div>
                       <div className="text-xs text-muted-foreground break-all">{r.email}</div>
                       {!r.user_id && (
-                        <div className="mt-0.5 text-[10.5px] text-amber-700 dark:text-amber-300">
+                        <div className="mt-0.5 text-[11px] text-amber-700 dark:text-amber-300">
                           sem conta vinculada
                         </div>
                       )}
@@ -430,7 +430,7 @@ function ReviewDialog({
                   <div className="text-xs font-semibold text-foreground">
                     Anexos ({submission.attachment_paths.length})
                   </div>
-                  <span className="text-[10px] text-muted-foreground">links expiram em 30 min</span>
+                  <span className="text-[11px] text-muted-foreground">links expiram em 30 min</span>
                 </div>
                 {!attachments ? (
                   <div className="text-xs text-muted-foreground">Carregando anexos...</div>
@@ -457,7 +457,7 @@ function ReviewDialog({
                               loading="lazy"
                             />
                           ) : (
-                            <div className="flex h-24 items-center justify-center px-1 text-center text-[10px] font-medium text-muted-foreground">
+                            <div className="flex h-24 items-center justify-center px-1 text-center text-[11px] font-medium text-muted-foreground">
                               {a.path.split("/").pop()}
                             </div>
                           )}

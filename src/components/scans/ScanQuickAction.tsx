@@ -64,7 +64,7 @@ export function ScanQuickAction() {
     <div className="rounded-2xl border border-brass/30 bg-gradient-to-br from-brass/5 via-card to-card p-4">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-[10px] font-bold uppercase tracking-widest text-brass">
+          <p className="text-[11px] font-bold uppercase tracking-widest text-brass">
             Escanear por foto
           </p>
           <p className="mt-1 text-sm text-muted-foreground">

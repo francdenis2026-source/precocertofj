@@ -229,7 +229,7 @@ function NovaListaWizard() {
         {/* ------------------------- STEP 1 ------------------------- */}
         {step === 1 && (
           <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
-            <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
+            <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
               <Sparkles className="h-3 w-3" /> Começando
             </span>
             <h1 className="mt-4 font-display text-3xl font-extrabold leading-tight text-foreground md:text-4xl">
@@ -356,7 +356,7 @@ function NovaListaWizard() {
             {/* Essenciais agrupados */}
             <div className="rounded-2xl border border-border bg-card p-5 md:p-6">
               <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
+                <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
                   <ShoppingCart className="h-3 w-3" /> Sugestões populares
                 </span>
               </div>
@@ -452,7 +452,7 @@ function NovaListaWizard() {
         {/* ------------------------- STEP 3 ------------------------- */}
         {step === 3 && (
           <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
-            <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
+            <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
               <ListChecks className="h-3 w-3" /> Revisão
             </span>
             <h1 className="mt-4 font-display text-3xl font-extrabold leading-tight text-foreground md:text-4xl">
@@ -584,7 +584,7 @@ function NovaListaWizard() {
               <div className="flex items-center gap-2 text-primary">
                 <Camera className="h-5 w-5" />
                 <ScanLine className="h-5 w-5" />
-                <span className="ml-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em]">
+                <span className="ml-1 rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em]">
                   Em breve
                 </span>
               </div>

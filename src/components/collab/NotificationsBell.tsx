@@ -81,7 +81,7 @@ export function NotificationsBell() {
         >
           <Bell className="h-4 w-4" strokeWidth={2.4} />
           {unread.length > 0 && (
-            <span className="absolute -right-0.5 -top-0.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-rose-600 px-1 text-[10px] font-bold text-white">
+            <span className="absolute -right-0.5 -top-0.5 inline-flex h-4 min-w-4 items-center justify-center rounded-full bg-rose-600 px-1 text-[11px] font-bold text-white">
               {unread.length > 9 ? "9+" : unread.length}
             </span>
           )}
@@ -121,7 +121,7 @@ export function NotificationsBell() {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-baseline justify-between gap-2">
                         <p className="text-[13px] font-semibold text-foreground">{n.title}</p>
-                        <span className="flex-none text-[10.5px] text-muted-foreground">
+                        <span className="flex-none text-[11px] text-muted-foreground">
                           {fmtRelative(n.created_at)}
                         </span>
                       </div>

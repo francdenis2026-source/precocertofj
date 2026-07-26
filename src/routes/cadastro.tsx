@@ -204,7 +204,7 @@ function CadastroPage() {
               </div>
               <div className="min-w-0">
                 <div
-                  className="text-[9.5px] font-bold uppercase tracking-[0.22em]"
+                  className="text-[11px] font-bold uppercase tracking-[0.22em]"
                   style={{ color: PC_EMERALD }}
                 >
                   Novo assinante
@@ -258,7 +258,7 @@ function CadastroPage() {
 
               <div>
                 <div className="mb-1.5 flex items-center justify-between">
-                  <label className="block text-[10px] font-bold uppercase tracking-[0.22em] text-slate-900">
+                  <label className="block text-[11px] font-bold uppercase tracking-[0.22em] text-slate-900">
                     PIN de acesso · 6 dígitos
                   </label>
 
@@ -270,7 +270,7 @@ function CadastroPage() {
                   onComplete={() => markTouched("password")}
                   hasError={touched.password && !vPin.valid}
                 />
-                <p className="mt-1.5 text-[10.5px] font-medium text-slate-600">
+                <p className="mt-1.5 text-[11px] font-medium text-slate-600">
                   Use 6 números que só você lembra. Evite datas óbvias.
                 </p>
               </div>
@@ -333,7 +333,7 @@ function CadastroPage() {
               </div>
             </form>
 
-            <p className="mt-3 border-t border-slate-200 pt-2.5 text-center text-[10.5px] font-medium text-slate-600">
+            <p className="mt-3 border-t border-slate-200 pt-2.5 text-center text-[11px] font-medium text-slate-600">
               Ao continuar você aceita nossos{" "}
               <a className="font-semibold underline underline-offset-2 hover:text-slate-700" href="/termos">Termos</a>
               {" "}e a{" "}
@@ -350,7 +350,7 @@ function FieldStatus({ state, show }: { state: FieldState; show: boolean }) {
   if (!show) return null;
   if (state.valid) {
     return (
-      <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-emerald-700">
+      <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-emerald-700">
         <CheckCircle2 className="h-3 w-3" /> ok
       </span>
     );
@@ -358,7 +358,7 @@ function FieldStatus({ state, show }: { state: FieldState; show: boolean }) {
   const text = state.msg ?? state.hint;
   if (!text) return null;
   return (
-    <span className="inline-flex items-center gap-1 text-[10px] font-semibold text-rose-600">
+    <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-rose-600">
       <AlertCircle className="h-3 w-3" /> {text}
     </span>
   );
@@ -397,7 +397,7 @@ function Field({
   return (
     <label className="block">
       <div className="mb-1.5 flex items-center justify-between">
-        <span className="block text-[10.5px] font-bold uppercase tracking-[0.22em] text-slate-900">
+        <span className="block text-[11px] font-bold uppercase tracking-[0.22em] text-slate-900">
           {label}
         </span>
         {state && <FieldStatus state={state} show={!!showState} />}

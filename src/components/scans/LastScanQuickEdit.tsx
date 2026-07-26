@@ -81,7 +81,7 @@ export function LastScanQuickEdit({ scan, onUpdated }: Props) {
       <div className="rounded-2xl border border-brass/30 bg-gradient-to-br from-brass/5 via-card to-card p-4">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="text-[10px] font-bold uppercase tracking-widest text-brass">
+            <p className="text-[11px] font-bold uppercase tracking-widest text-brass">
               Último registro
             </p>
             <p className="mt-1 truncate text-sm font-semibold" title={scan.productName}>
@@ -107,14 +107,14 @@ export function LastScanQuickEdit({ scan, onUpdated }: Props) {
         {editing ? (
           <div className="mt-3 space-y-2">
             <div>
-              <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">
+              <Label className="text-[11px] uppercase tracking-widest text-muted-foreground">
                 Nome
               </Label>
               <Input value={name} onChange={(e) => setName(e.target.value)} />
             </div>
             <div className="grid grid-cols-3 gap-2">
               <div>
-                <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                <Label className="text-[11px] uppercase tracking-widest text-muted-foreground">
                   Preço
                 </Label>
                 <Input
@@ -127,7 +127,7 @@ export function LastScanQuickEdit({ scan, onUpdated }: Props) {
                 />
               </div>
               <div>
-                <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                <Label className="text-[11px] uppercase tracking-widest text-muted-foreground">
                   Marca
                 </Label>
                 <Input
@@ -137,7 +137,7 @@ export function LastScanQuickEdit({ scan, onUpdated }: Props) {
                 />
               </div>
               <div>
-                <Label className="text-[10px] uppercase tracking-widest text-muted-foreground">
+                <Label className="text-[11px] uppercase tracking-widest text-muted-foreground">
                   Peso
                 </Label>
                 <Input

@@ -105,7 +105,7 @@ export function StoreBadge({
   const color = getStoreColor(name, brandColor);
   const dim =
     size === "xs"
-      ? "h-7 w-7 text-[10px]"
+      ? "h-7 w-7 text-[11px]"
       : size === "md"
         ? "h-14 w-14 text-[15px]"
         : size === "lg"

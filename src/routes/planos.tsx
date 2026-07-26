@@ -222,7 +222,7 @@ function PlansPage() {
                       <div className="absolute -top-2.5 left-1/2 -translate-x-1/2">
                         <span
                           className={dsx(
-                            "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.14em] shadow-elev-1",
+                            "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] shadow-elev-1",
                             isRecommended
                               ? "bg-brand-gold text-brand-navy"
                               : "border border-brand-gold/60 bg-card text-brand-gold",
@@ -535,7 +535,7 @@ function ComparisonMatrix({
                     />
                   )}
                   {isRec && (
-                    <span className="mb-1.5 inline-flex items-center gap-1 rounded-full bg-brand-gold px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.14em] text-brand-navy">
+                    <span className="mb-1.5 inline-flex items-center gap-1 rounded-full bg-brand-gold px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-brand-navy">
                       <Sparkles className="h-2.5 w-2.5" aria-hidden /> Ideal
                     </span>
                   )}

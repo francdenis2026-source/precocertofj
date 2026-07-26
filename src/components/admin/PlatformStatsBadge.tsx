@@ -52,7 +52,7 @@ function StatChip({
     <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1 text-xs">
       <span className="text-primary">{icon}</span>
       <span className="font-semibold tabular-nums">{value}</span>
-      <span className="uppercase tracking-widest text-[10px] text-muted-foreground">
+      <span className="uppercase tracking-widest text-[11px] text-muted-foreground">
         {label}
       </span>
     </span>

@@ -75,7 +75,7 @@ function FarmaciasPage() {
         {plantaoHoje ? (
           <section className="mt-4 grid gap-3 sm:grid-cols-2" aria-label="Plantão de hoje">
             <article className="rounded-xl border border-brand-gold/70 bg-brand-gold/10 p-4 shadow-sm">
-              <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">
+              <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">
                 Hoje · dia {hoje} ({diaDaSemana(hoje!)})
               </div>
               <h2 className="mt-1 font-serif text-[20px] font-semibold leading-tight">
@@ -99,7 +99,7 @@ function FarmaciasPage() {
             </article>
             {amanha && (
               <article className="rounded-xl border border-border/70 bg-card p-4 shadow-sm">
-                <div className="text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                   Amanhã · dia {hoje! + 1} ({diaDaSemana(hoje! + 1)})
                 </div>
                 <h2 className="mt-1 font-serif text-[18px] font-semibold leading-tight">
@@ -131,13 +131,13 @@ function FarmaciasPage() {
               </caption>
               <thead className="bg-muted/60">
                 <tr>
-                  <th scope="col" className="px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                  <th scope="col" className="px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                     Dia
                   </th>
-                  <th scope="col" className="px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                  <th scope="col" className="px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                     Semana
                   </th>
-                  <th scope="col" className="px-3 py-2 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                  <th scope="col" className="px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                     Farmácia de plantão
                   </th>
                 </tr>
@@ -162,7 +162,7 @@ function FarmaciasPage() {
                       <td className="px-3 py-2 font-medium">
                         {f?.nome ?? "—"}
                         {atual && (
-                          <span className="ml-2 rounded-full bg-brand-gold px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-brand-navy">
+                          <span className="ml-2 rounded-full bg-brand-gold px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-brand-navy">
                             hoje
                           </span>
                         )}

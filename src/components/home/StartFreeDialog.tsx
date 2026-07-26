@@ -50,7 +50,7 @@ export function StartFreeDialog({ children, redirect }: Props) {
           }}
         >
           <div
-            className="mb-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.18em]"
+            className="mb-3 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.18em]"
             style={{
               background: "var(--pc-home-gold)",
               color: "var(--pc-home-navy)",
