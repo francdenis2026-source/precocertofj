@@ -292,8 +292,16 @@ function HomePage() {
           fetchPriority="high"
           decoding="async"
           className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
-          style={{ opacity: 0.42 }}
+          style={{
+            opacity: 0.42,
+            WebkitMaskImage:
+              "linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 68%, rgba(0,0,0,0) 100%)",
+            maskImage:
+              "linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 68%, rgba(0,0,0,0) 100%)",
+          }}
         />
+
+
         {/* Scrim navy vertical para leitura */}
         <div
           aria-hidden
