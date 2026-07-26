@@ -186,7 +186,7 @@ const PLATE_BG =
   "linear-gradient(168deg, #fdfefe 0%, #f1f5fa 46%, #e4ebf4 100%)";
 
 export const PartnerTile = forwardRef<HTMLAnchorElement, PartnerTileProps>(
-  function PartnerTile({ item, defaultHref, premium3d = true }, ref) {
+  function PartnerTile({ item, defaultHref, premium3d = false }, ref) {
     const href = item.href ?? defaultHref ?? "/estabelecimentos";
     const hasLogo = Boolean(item.logoUrl);
     // Marca de tinta clara → dispensa placa (o logo respira sobre o painel).
