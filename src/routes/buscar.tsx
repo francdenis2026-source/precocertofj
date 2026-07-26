@@ -65,7 +65,7 @@ const PURE_KEY = "search:pureOnly";
 function SearchPage() {
   const search = Route.useSearch();
   const navigate = useNavigate({ from: "/buscar" });
-  const { user } = useSession();
+  const { user, loading } = useSession();
   const urlSyncTimer = useRef<number | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
 
