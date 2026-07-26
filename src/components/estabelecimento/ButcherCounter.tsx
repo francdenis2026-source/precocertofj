@@ -224,7 +224,7 @@ export function ButcherCounter({
   return (
     <section aria-label={`Açougue do ${storeName}`} className="mt-4">
       {/* Cabeçalho compacto — sem repetir o nome da loja já exibido no topo */}
-      <div className="grid gap-2 rounded-xl border border-border bg-card p-3 shadow-[0_1px_2px_rgba(11,30,63,0.05)] lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-4">
+      <div className="grid gap-2 rounded-xl border border-border bg-card p-3 shadow-elev-1 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-4">
         <div className="min-w-0">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-2 py-0.5 text-[10px] font-bold uppercase leading-none tracking-[0.16em] text-brand-navy">
             <Beef className="h-3 w-3" aria-hidden /> Setor interno
@@ -546,7 +546,7 @@ const CutTile = memo(function CutTile({
 }) {
   const kg = cutPricePerKg(cut);
   return (
-    <article className="flex h-full flex-col justify-between rounded-lg border border-border bg-card shadow-[0_1px_2px_rgba(11,30,63,0.04)] transition-colors hover:border-brand-gold hover:bg-muted/30">
+    <article className="flex h-full flex-col justify-between rounded-lg border border-border bg-card shadow-elev-1 transition-colors hover:border-brand-gold hover:bg-muted/30">
       <button
         type="button"
         onClick={onOpen ? () => onOpen(cut) : undefined}

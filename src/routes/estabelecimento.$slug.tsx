@@ -330,7 +330,7 @@ function EstablishmentPage() {
         </Link>
 
         {/* Hero compacto — escala: eyebrow 10 / título 19-22 / meta 12 / stat 15 */}
-        <header className="mt-2.5 overflow-hidden rounded-xl border border-border/70 bg-[var(--pc-navy,#0b1e3f)] text-white shadow-sm">
+        <header className="mt-2.5 overflow-hidden rounded-xl border border-border/70 bg-brand-navy text-white shadow-sm">
           <div className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-3 px-3.5 py-3 sm:px-4">
             <StoreBadge
               name={data.store.name}
@@ -998,7 +998,7 @@ function ProductTile({
   onHistory: () => void;
 }) {
   return (
-    <article className="flex h-full flex-col justify-between rounded-lg border border-border bg-card shadow-[0_1px_2px_rgba(11,30,63,0.04)] transition-colors hover:border-brand-gold hover:bg-muted/30">
+    <article className="flex h-full flex-col justify-between rounded-lg border border-border bg-card shadow-elev-1 transition-colors hover:border-brand-gold hover:bg-muted/30">
       <button
         type="button"
         onClick={onOpen}

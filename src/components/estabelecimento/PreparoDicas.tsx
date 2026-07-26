@@ -178,7 +178,7 @@ export function PreparoDicas() {
   return (
     <section
       aria-labelledby="preparo-dicas-title"
-      className="rounded-xl border border-border bg-card p-3.5 shadow-[0_1px_2px_rgba(11,30,63,0.05)] sm:p-4"
+      className="rounded-xl border border-border bg-card p-3.5 shadow-elev-1 sm:p-4"
     >
       {/* Cabeçalho compacto */}
       <header className="grid grid-cols-[minmax(0,1fr)_auto] items-start gap-3">
