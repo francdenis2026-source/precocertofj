@@ -200,6 +200,11 @@ export function PriceSearchBar({
   const containerRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestSeq = useRef(0);
+  const suggestAbort = useRef<AbortController | null>(null);
+  /** Sequência da busca principal — descarta respostas fora de ordem. */
+  const searchSeq = useRef(0);
+  const searchAbort = useRef<AbortController | null>(null);
+  const lastSearchKey = useRef<string | null>(null);
 
   // Auto-correção: quando a busca retorna vazia e temos uma sugestão fuzzy
   // com boa similaridade, re-executamos automaticamente com o termo corrigido
