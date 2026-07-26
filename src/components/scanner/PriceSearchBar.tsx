@@ -2008,6 +2008,9 @@ function MarketBucketSection({
   brandColor,
   kind,
   minPrice,
+  bestCount,
+  savings,
+  gapToBest,
   rows,
   isCheapest,
   fmt,
@@ -2019,7 +2022,11 @@ function MarketBucketSection({
   brandColor: string | null;
   kind: string | null;
   minPrice: number;
-  rows: { productName: string; catalogId: string | null; price: PricePoint }[];
+  bestCount: number;
+  savings: number;
+  gapToBest: number;
+  rows: { productName: string; catalogId: string | null; price: PricePoint; isBest: boolean }[];
+
   isCheapest: boolean;
   fmt: (n: number | null | undefined) => string;
   highlightTokens: string[];
