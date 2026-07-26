@@ -1124,7 +1124,7 @@ export function PriceSearchBar({
                       />
                     ) : null}
 
-                    {groupBy === "matrix" && result.groups.length > 0 ? (
+                    {groupBy === "matrix" && visibleGroups.length > 0 ? (
                       <MatrixCompareResults
                         groups={filteredOrdered.flatMap(([, gs]) => gs)}
                         kindFilter={kindFilter}
@@ -1136,7 +1136,7 @@ export function PriceSearchBar({
                     ) : null}
 
 
-                    {groupBy === "product" && result.groups.length > 0 ? (
+                    {groupBy === "product" && visibleGroups.length > 0 ? (
 
                       <div className="pc-results">
                         {filteredOrdered.map(([cat, groups]) => {
@@ -1548,6 +1548,8 @@ function QuickFilters({
   onCategory,
   groupBy,
   onGroupBy,
+  freshness,
+  onFreshness,
 }: {
   sortMode: SortMode;
   onSort: (m: SortMode) => void;
@@ -1559,6 +1561,8 @@ function QuickFilters({
   onCategory: (c: string | null) => void;
   groupBy: "product" | "market" | "matrix";
   onGroupBy: (g: "product" | "market" | "matrix") => void;
+  freshness: "all" | "30" | "7";
+  onFreshness: (v: "all" | "30" | "7") => void;
 }) {
   const chip = (active: boolean) =>
     "rounded-full border px-2.5 py-1 font-mono text-[10px] tracking-wide transition " +
