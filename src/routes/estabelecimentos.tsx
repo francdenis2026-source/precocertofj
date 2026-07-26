@@ -29,10 +29,8 @@ const LIST_GRID =
   "grid grid-cols-[28px_44px_minmax(0,1fr)_160px_80px_78px_120px_20px] items-center gap-3";
 
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { BackButton } from "@/components/layout/BackButton";
 import {
-  PageHeader,
-  SectionCard,
-  
   EmptyState,
   LoadingSkeleton,
 } from "@/components/layout";
@@ -45,14 +43,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ChevronRight, Package, Search, Store, TrendingUp, Pill, Croissant, Beef, ShoppingBasket, PiggyBank, Radio, ChevronLeft, LayoutGrid, Rows3 } from "lucide-react";
-import mercadosHero from "@/assets/mercados-hero-v3.jpg.asset.json";
 import {
   MarketEditorialCard,
   MarketEditorialCardSkeleton,
 } from "@/components/estabelecimentos/MarketEditorialCard";
 
 import { useRef } from "react";
-import { useAdaptiveOverlayOpacity } from "@/hooks/use-adaptive-overlay";
+
 import {
   Dialog,
   DialogContent,
