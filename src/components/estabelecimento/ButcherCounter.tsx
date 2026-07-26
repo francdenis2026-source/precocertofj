@@ -190,9 +190,15 @@ export function ButcherCounter({
 
   // Trilho de proteína: navegação por teclado (←/→/Home/End) com foco móvel.
   const railRef = useRef<HTMLDivElement | null>(null);
+  // Proteínas visíveis: as que têm cortes + a ativa vinda da URL (mesmo vazia),
+  // para que o filtro restaurado apareça e possa ser removido.
+  const visibleProteins = useMemo(
+    () => BUTCHER_PROTEINS.filter((p) => (counts.get(p.id) ?? 0) > 0 || p.id === protein),
+    [counts, protein],
+  );
   const options: (ButcherProtein | null)[] = useMemo(
-    () => [null, ...BUTCHER_PROTEINS.filter((p) => (counts.get(p.id) ?? 0) > 0).map((p) => p.id)],
-    [counts],
+    () => [null, ...visibleProteins.map((p) => p.id)],
+    [visibleProteins],
   );
   const activeIndex = Math.max(0, options.indexOf(protein));
 
@@ -269,7 +275,7 @@ export function ButcherCounter({
             {cuts.length}
           </span>
         </button>
-        {BUTCHER_PROTEINS.filter((p) => (counts.get(p.id) ?? 0) > 0).map((p, i) => {
+        {visibleProteins.map((p, i) => {
           const active = protein === p.id;
           return (
             <button
@@ -289,7 +295,7 @@ export function ButcherCounter({
                     : "rounded-full bg-foreground/10 px-1.5 py-0.5 text-[10px] font-bold tabular-nums text-foreground"
                 }
               >
-                {counts.get(p.id)}
+                {counts.get(p.id) ?? 0}
               </span>
             </button>
           );
@@ -452,7 +458,15 @@ export function ButcherCounter({
           size="sm"
           icon={Beef}
           title="Nenhum corte encontrado"
-          message={q ? `Nenhum corte para "${q}".` : "Ainda não há cortes publicados."}
+          message={
+            q && protein
+              ? `Nenhum corte de ${proteinLabel(protein).toLowerCase()} para "${q}".`
+              : q
+                ? `Nenhum corte para "${q}".`
+                : protein
+                  ? `Este balcão ainda não tem cortes de ${proteinLabel(protein).toLowerCase()}.`
+                  : "Ainda não há cortes publicados."
+          }
           action={
             q || protein ? (
               <Button
