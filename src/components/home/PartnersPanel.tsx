@@ -174,36 +174,44 @@ type PartnerTileProps = {
   premium3d?: boolean;
 };
 
-const SOFT_TILE_BG = "linear-gradient(160deg, #f6f8fc 0%, #eef2f8 55%, #e8edf5 100%)";
+/** Placa clara suave (sem branco duro) para marcas de tinta escura. */
+const PLATE_BG =
+  "radial-gradient(120% 120% at 50% 0%, rgba(255,255,255,0.97) 0%, rgba(241,245,251,0.92) 60%, rgba(228,235,245,0.88) 100%)";
 
 export const PartnerTile = forwardRef<HTMLAnchorElement, PartnerTileProps>(
   function PartnerTile({ item, defaultHref, premium3d = true }, ref) {
     const href = item.href ?? defaultHref ?? "/estabelecimentos";
     const hasLogo = Boolean(item.logoUrl);
-    // Fundo inteligente: branco para marcas escuras, suave para tintas claras.
-    const { presentation } = useLogoPresentation(item.logoUrl, { targetFill: 0.92 });
-    const soft = hasLogo && presentation.background === "soft";
+    // Marca de tinta clara → dispensa placa (o logo respira sobre o painel).
+    const { metrics } = useLogoPresentation(item.logoUrl, { targetFill: 0.92 });
+    const lightInk = Boolean(
+      metrics?.analyzed &&
+        metrics.hasAlpha &&
+        (metrics.lightInkRatio > 0.5 || metrics.contentLuma > 0.72),
+    );
+    const needsPlate = hasLogo && !lightInk;
 
     return (
       <Link
         ref={ref as any}
         to={href}
-        aria-label={item.name}
+        aria-label={`Ver preços de ${item.name}`}
         title={item.name}
         className={cn(
           "group relative flex h-[66px] w-full items-center justify-center overflow-hidden sm:h-[76px]",
-          "rounded-[10px] border border-black/[0.07]",
-          "px-2.5 py-2",
+          "rounded-[14px] border",
+          "px-2 py-1.5",
           "transition-all duration-200 will-change-transform",
-          "hover:-translate-y-0.5 hover:border-black/10",
+          "hover:-translate-y-0.5",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:-translate-y-0.5",
         )}
         style={
           {
-            background: soft ? SOFT_TILE_BG : "#ffffff",
-            boxShadow: premium3d
-              ? "inset 0 1px 0 rgba(255,255,255,0.95), inset 0 -1px 0 rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.16), 0 10px 20px -14px rgba(15,23,42,0.5)"
-              : "0 1px 2px rgba(15,23,42,0.16)",
+            // O tile acompanha o painel: vidro sutil, sem retângulo branco.
+            background:
+              "linear-gradient(180deg, color-mix(in oklab, var(--pc-home-heading) 7%, transparent) 0%, color-mix(in oklab, var(--pc-home-heading) 3%, transparent) 100%)",
+            borderColor: "color-mix(in oklab, var(--pc-home-line) 85%, transparent)",
+            boxShadow: "inset 0 1px 0 color-mix(in oklab, var(--pc-home-heading) 8%, transparent)",
             ["--tw-ring-color" as string]:
               "color-mix(in oklab, var(--pc-home-gold) 75%, transparent)",
             ["--tw-ring-offset-color" as string]: "var(--pc-home-card)",
@@ -211,30 +219,34 @@ export const PartnerTile = forwardRef<HTMLAnchorElement, PartnerTileProps>(
         }
       >
         {hasLogo ? (
-          <span className="flex h-[88%] w-[92%] items-center justify-center overflow-hidden">
+          <span
+            className={cn(
+              "relative flex items-center justify-center overflow-hidden rounded-[11px]",
+              needsPlate ? "h-[84%] w-full px-2 py-1" : "h-[88%] w-[94%]",
+            )}
+            style={
+              needsPlate
+                ? {
+                    background: PLATE_BG,
+                    boxShadow: premium3d
+                      ? "0 1px 1px rgba(15,23,42,0.10), 0 8px 16px -12px rgba(15,23,42,0.45)"
+                      : undefined,
+                  }
+                : undefined
+            }
+          >
             <SmartLogoImage
               src={item.logoUrl}
               name={item.name}
-              premium3d={premium3d}
-              targetFill={0.92}
-              className="group-hover:brightness-[1.02]"
+              premium3d={premium3d && needsPlate}
+              targetFill={0.94}
+              className="group-hover:brightness-[1.03]"
             />
           </span>
         ) : (
-
           <TileLabel name={item.name} />
         )}
 
-        {premium3d ? (
-          <span
-            aria-hidden
-            className="pointer-events-none absolute inset-x-0 top-0 h-1/2"
-            style={{
-              background:
-                "linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%)",
-            }}
-          />
-        ) : null}
 
         <span
           aria-hidden
