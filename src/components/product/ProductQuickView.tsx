@@ -146,6 +146,8 @@ export function ProductQuickView({
             <ul
               className="divide-y divide-border overflow-hidden rounded-lg border border-border"
               role="status"
+              aria-live="polite"
+              aria-busy="true"
               aria-label="Carregando preços"
             >
               {Array.from({ length: 4 }).map((_, i) => (
@@ -156,7 +158,10 @@ export function ProductQuickView({
               ))}
             </ul>
           ) : isError ? (
-            <div className="rounded-lg border border-dashed border-border bg-card/60 px-3 py-4 text-center">
+            <div
+              role="alert"
+              className="rounded-lg border border-dashed border-border bg-card/60 px-3 py-4 text-center"
+            >
               <AlertTriangle className="mx-auto h-4 w-4 text-brand-gold" aria-hidden />
               <p className="mt-1.5 text-[12.5px] font-semibold text-foreground">
                 Não foi possível carregar os preços
@@ -170,7 +175,11 @@ export function ProductQuickView({
               </button>
             </div>
           ) : markets.length === 0 ? (
-            <p className="rounded-lg border border-dashed border-border bg-card/60 px-3 py-3 text-center text-[12.5px] text-muted-foreground">
+            <p
+              role="status"
+              aria-live="polite"
+              className="rounded-lg border border-dashed border-border bg-card/60 px-3 py-3 text-center text-[12.5px] text-muted-foreground"
+            >
               Ainda não há outros preços registrados para este produto.
             </p>
           ) : (
