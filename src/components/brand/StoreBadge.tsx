@@ -145,7 +145,9 @@ export function StoreBadge({
       <img
         src={resolvedLogo ?? undefined}
         alt=""
-        loading="lazy"
+        loading="eager"
+        fetchPriority="high"
+        decoding="async"
         className="h-full w-full object-contain object-center"
       />
     </span>
