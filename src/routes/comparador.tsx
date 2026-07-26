@@ -1248,7 +1248,7 @@ function ComparisonTableRow({
 function StatCard({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <div className="rounded-xl border border-border bg-card p-2.5 md:rounded-2xl md:p-5">
-      <p className="truncate text-[10.5px] uppercase tracking-[0.14em] text-muted-foreground md:text-xs md:tracking-widest">
+      <p className="text-[10.5px] leading-[1.2] uppercase tracking-[0.14em] text-muted-foreground md:text-xs md:tracking-widest">
         {label}
       </p>
       <p className="mt-1 font-mono text-[17px] leading-tight text-foreground md:mt-2 md:text-2xl">
