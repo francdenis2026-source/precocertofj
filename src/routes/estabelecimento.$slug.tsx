@@ -500,7 +500,7 @@ function EstablishmentPage() {
                 }
                 action={
                   selectedCategory ? (
-                    <Button variant="outline" size="sm" onClick={() => setSelectedCategory(null)}>
+                    <Button variant="outline" size="sm" onClick={() => setSearch({ cat: "" })}>
                       Limpar categoria
                     </Button>
                   ) : undefined
