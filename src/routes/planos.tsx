@@ -198,10 +198,29 @@ function PlansPage() {
           />
         </section>
 
-        {/* Plans grid — compact */}
-        <section className={dsx(ds.container, "pb-5 md:pb-7")} aria-label="Planos disponíveis">
+        {/* Plans grid — hierarquia clara */}
+        <section
+          id="planos"
+          className={dsx(ds.container, "scroll-mt-24 pb-5 md:pb-7")}
+          aria-label="Planos disponíveis"
+        >
+          <nav
+            aria-label="Navegação da página de planos"
+            className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground"
+          >
+            <span className="text-foreground">Planos</span>
+            <span aria-hidden className="text-border">·</span>
+            <a href="#comparativo" className="transition hover:text-brand-gold">
+              Comparativo
+            </a>
+            <span aria-hidden className="text-border">·</span>
+            <a href="#faq" className="transition hover:text-brand-gold">
+              Dúvidas
+            </a>
+          </nav>
+
           {isLoading ? (
-            <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
               {[0, 1, 2, 3].map((i) => (
                 <div
                   key={i}
@@ -210,27 +229,30 @@ function PlansPage() {
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid grid-cols-1 gap-3 pt-2.5 sm:grid-cols-2 lg:grid-cols-4">
               {plans.map((plan) => {
                 const isRecommended = plan.slug === recommendedSlug;
                 const perMonth = pricePerMonth(plan.price_cents, plan.days);
                 const isFounder = plan.slug.includes("fundador");
                 const isFree = plan.price_cents === 0;
+                const isSelected = selectedPlan?.id === plan.id;
 
                 return (
                   <article
                     key={plan.id}
+                    onClick={() => setSelectedId(plan.id)}
                     className={dsx(
-                      "relative flex flex-col rounded-xl border border-border bg-card p-3.5 shadow-elev-1 transition-shadow hover:shadow-elev-2 sm:p-4",
-                      isRecommended && "border-brand-gold ring-1 ring-brand-gold/30",
-                      isFounder && "border-brand-gold/70 ring-1 ring-brand-gold/20",
+                      "relative flex cursor-pointer flex-col rounded-xl border border-border bg-card p-4 shadow-elev-1 transition-all hover:shadow-elev-2 sm:p-[18px]",
+                      isRecommended && "border-brand-gold/70",
+                      isFounder && "border-brand-gold/50",
+                      isSelected && "border-brand-gold ring-2 ring-brand-gold/35",
                     )}
                   >
                     {(isRecommended || isFounder) && (
                       <div className="absolute -top-2.5 left-1/2 -translate-x-1/2">
                         <span
                           className={dsx(
-                            "inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] shadow-elev-1",
+                            "inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[10.5px] font-bold uppercase tracking-[0.14em] shadow-elev-1",
                             isRecommended
                               ? "bg-brand-gold text-brand-navy"
                               : "border border-brand-gold/60 bg-card text-brand-gold",
@@ -241,24 +263,17 @@ function PlansPage() {
                       </div>
                     )}
 
-                    <header>
-                      <h2 className="font-display text-[15.5px] font-semibold tracking-tight text-foreground">
-                        {plan.name}
-                      </h2>
-                      {plan.description && (
-                        <p className="mt-1 text-[12px] leading-snug text-muted-foreground">
-                          {plan.description}
-                        </p>
-                      )}
-                    </header>
+                    {/* 1. Identidade */}
+                    <h2 className="font-display text-[16px] font-semibold leading-tight tracking-tight text-foreground">
+                      {plan.name}
+                    </h2>
 
-                    <div className="mt-3">
-                      <div className="flex items-baseline gap-1">
-                        <span className="font-display text-[24px] font-semibold leading-none tracking-tight text-foreground">
-                          {isFree ? "Grátis" : centsToBRL(plan.price_cents)}
-                        </span>
-                      </div>
-                      <p className="mt-1.5 text-[11.5px] leading-snug text-muted-foreground">
+                    {/* 2. Preço — âncora visual */}
+                    <div className="mt-3.5">
+                      <span className="font-display text-[27px] font-semibold leading-none tracking-tight text-foreground">
+                        {isFree ? "Grátis" : centsToBRL(plan.price_cents)}
+                      </span>
+                      <p className="mt-2 text-[11.5px] leading-snug text-muted-foreground">
                         {isFounder
                           ? "Pagamento único · vitalício"
                           : isFree
@@ -269,26 +284,33 @@ function PlansPage() {
                       </p>
                     </div>
 
-                    <ul className="mt-3 flex-1 space-y-1.5 text-[12.5px] leading-snug">
+                    <div className="my-4 h-px bg-border/70" aria-hidden />
+
+                    {/* 3. Benefícios */}
+                    <ul className="flex-1 space-y-2 text-[12.5px] leading-snug">
                       {planHighlights(plan.slug).slice(0, 2).map((h) => (
-                        <li key={h} className="flex items-start gap-1.5">
+                        <li key={h} className="flex items-start gap-2">
                           <Check
                             className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-gold"
                             aria-hidden
                           />
-                          <span className="text-foreground/90">{h}</span>
+                          <span className="text-foreground/85">{h}</span>
                         </li>
                       ))}
                     </ul>
 
-
+                    {/* 4. Ação */}
                     <button
                       type="button"
-                      onClick={() => handleBuy(plan)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedId(plan.id);
+                        handleBuy(plan);
+                      }}
                       disabled={buying === plan.id}
                       className={dsx(
                         ds.btn.base,
-                        "mt-3.5 h-11 w-full px-3 text-[12.5px] font-semibold uppercase tracking-[0.06em] focus-visible:ring-2 focus-visible:ring-brand-gold",
+                        "mt-4 h-11 w-full px-3 text-[12.5px] font-semibold uppercase tracking-[0.06em] focus-visible:ring-2 focus-visible:ring-brand-gold",
                         isRecommended || isFounder
                           ? "bg-brand-gold text-brand-navy shadow-elev-1 hover:brightness-105 hover:shadow-elev-2"
                           : "border border-border bg-card text-foreground hover:border-brand-gold hover:text-brand-gold",
@@ -301,8 +323,8 @@ function PlansPage() {
                           : "Assinar"}
                       <ArrowRight className="h-3.5 w-3.5" aria-hidden />
                     </button>
-
                   </article>
+
                 );
               })}
             </div>
