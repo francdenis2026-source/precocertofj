@@ -2324,6 +2324,14 @@ function MarketBucketSection({
               </span>
             ) : null}
             <span
+              data-freshness={availabilityTone(r.price.when)}
+              title={`Preço coletado em ${new Date(r.price.when).toLocaleDateString("pt-BR")}`}
+              className="hidden shrink-0 text-[10.5px] text-muted-foreground data-[freshness=stale]:opacity-60 sm:inline"
+            >
+              {freshnessLabel(r.price.when)}
+            </span>
+
+            <span
               className={
                 "whitespace-nowrap rounded-md px-1.5 py-1 text-[13.5px] font-semibold leading-none tabular-nums tracking-[-0.02em] sm:px-2 sm:text-[15px] " +
                 (r.isBest
