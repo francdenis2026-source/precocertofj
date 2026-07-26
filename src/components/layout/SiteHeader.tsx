@@ -240,6 +240,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
               className="hidden sm:inline-flex"
             />
           )}
+          <ReadingModeToggle tone={isOverlay ? "dark" : "light"} className="hidden sm:inline-flex" />
           {showThemeToggle && <ThemeToggle size="sm" tone={isOverlay ? "dark" : "light"} />}
           {loading ? (
             <div className={dsx("h-9 w-24 animate-pulse rounded-lg", isOverlay ? "bg-on-media-surface" : "bg-muted")} />
