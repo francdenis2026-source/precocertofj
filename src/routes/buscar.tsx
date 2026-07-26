@@ -479,28 +479,29 @@ function FiltersToolbar({
           className={`${open ? "flex" : "hidden"} w-full flex-wrap items-center gap-x-3 gap-y-2 md:!flex md:w-auto`}
         >
           <QuickFilterBar<SearchMode>
-            ariaLabel="Modo de correspondência"
+            ariaLabel="Como buscar o nome do produto"
             value={mode}
             onChange={(next) => onMode(next ?? "strict")}
             size="sm"
             options={[
-              { value: "strict", label: "Estrita", hint: "Palavra inteira" },
-              { value: "loose", label: "Parcial", hint: "Permite prefixo (≥ 3 chars)" },
+              { value: "strict", label: "Nome exato", hint: "Mostra só o que tem a palavra igual" },
+              { value: "loose", label: "Nomes parecidos", hint: "Aceita variações da palavra" },
             ]}
           />
 
           <span aria-hidden className="hidden h-4 w-px bg-border md:block" />
 
           <QuickFilterBar<"pure" | "all">
-            ariaLabel="Filtro de item puro"
+            ariaLabel="O que mostrar nos resultados"
             value={pureOnly ? "pure" : "all"}
             onChange={(next) => onPure(next === "pure")}
             size="sm"
             options={[
-              { value: "pure", label: "Puro", hint: "Remove ingredientes" },
-              { value: "all", label: "Todos" },
+              { value: "pure", label: "Só o produto", hint: "Esconde kits, temperos e misturas" },
+              { value: "all", label: "Mostrar tudo", hint: "Inclui kits e produtos parecidos" },
             ]}
           />
+
 
           <span aria-hidden className="hidden h-4 w-px bg-border md:block" />
 
@@ -559,7 +560,7 @@ function PriceRangeInputs({ min, max, onMin, onMax }: PriceRangeInputsProps) {
         inputMode="decimal"
         min={0}
         step="0.01"
-        placeholder="R$ min"
+        placeholder="De R$"
         value={mn}
         onChange={(e) => setMn(sanitizePrice(e.currentTarget.value))}
         onBlur={() => onMin(mn.trim())}
@@ -575,7 +576,7 @@ function PriceRangeInputs({ min, max, onMin, onMax }: PriceRangeInputsProps) {
         inputMode="decimal"
         min={0}
         step="0.01"
-        placeholder="R$ máx"
+        placeholder="Até R$"
         value={mx}
         onChange={(e) => setMx(sanitizePrice(e.currentTarget.value))}
         onBlur={() => onMax(mx.trim())}

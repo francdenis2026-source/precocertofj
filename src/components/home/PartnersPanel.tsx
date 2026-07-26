@@ -104,7 +104,14 @@ export function PartnersPanel({
             >
               {title}
             </h2>
+            <p
+              className="mt-0.5 truncate text-[11.5px] sm:text-[12px]"
+              style={{ color: "color-mix(in oklab, var(--pc-home-heading) 68%, transparent)" }}
+            >
+              Toque no mercado para ver os preços de hoje
+            </p>
           </div>
+
 
           {ctaHref ? (
             <Link
@@ -174,36 +181,52 @@ type PartnerTileProps = {
   premium3d?: boolean;
 };
 
-const SOFT_TILE_BG = "linear-gradient(160deg, #f6f8fc 0%, #eef2f8 55%, #e8edf5 100%)";
+/** Placa única cor-de-pérola: uma só superfície, sem "quadrado branco". */
+const PLATE_BG =
+  "linear-gradient(168deg, #fdfefe 0%, #f1f5fa 46%, #e4ebf4 100%)";
 
 export const PartnerTile = forwardRef<HTMLAnchorElement, PartnerTileProps>(
   function PartnerTile({ item, defaultHref, premium3d = true }, ref) {
     const href = item.href ?? defaultHref ?? "/estabelecimentos";
     const hasLogo = Boolean(item.logoUrl);
-    // Fundo inteligente: branco para marcas escuras, suave para tintas claras.
-    const { presentation } = useLogoPresentation(item.logoUrl, { targetFill: 0.92 });
-    const soft = hasLogo && presentation.background === "soft";
+    // Marca de tinta clara → dispensa placa (o logo respira sobre o painel).
+    const { metrics } = useLogoPresentation(item.logoUrl, { targetFill: 0.92 });
+    const lightInk = Boolean(
+      metrics?.analyzed &&
+        metrics.hasAlpha &&
+        (metrics.lightInkRatio > 0.5 || metrics.contentLuma > 0.72),
+    );
+    const needsPlate = hasLogo && !lightInk;
 
     return (
       <Link
         ref={ref as any}
         to={href}
-        aria-label={item.name}
+        aria-label={`Ver preços de ${item.name}`}
         title={item.name}
         className={cn(
           "group relative flex h-[66px] w-full items-center justify-center overflow-hidden sm:h-[76px]",
-          "rounded-[10px] border border-black/[0.07]",
+          "rounded-[14px] border",
           "px-2.5 py-2",
           "transition-all duration-200 will-change-transform",
-          "hover:-translate-y-0.5 hover:border-black/10",
+          "hover:-translate-y-0.5",
           "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:-translate-y-0.5",
         )}
         style={
           {
-            background: soft ? SOFT_TILE_BG : "#ffffff",
-            boxShadow: premium3d
-              ? "inset 0 1px 0 rgba(255,255,255,0.95), inset 0 -1px 0 rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.16), 0 10px 20px -14px rgba(15,23,42,0.5)"
-              : "0 1px 2px rgba(15,23,42,0.16)",
+            // Uma única superfície por tile: placa pérola para marcas escuras,
+            // vidro sutil (integrado ao painel) para marcas de tinta clara.
+            background: needsPlate
+              ? PLATE_BG
+              : "linear-gradient(180deg, color-mix(in oklab, var(--pc-home-heading) 8%, transparent) 0%, color-mix(in oklab, var(--pc-home-heading) 3%, transparent) 100%)",
+            borderColor: needsPlate
+              ? "color-mix(in oklab, var(--pc-home-gold) 26%, transparent)"
+              : "color-mix(in oklab, var(--pc-home-line) 85%, transparent)",
+            boxShadow: needsPlate
+              ? premium3d
+                ? "inset 0 1px 0 rgba(255,255,255,0.95), 0 1px 2px rgba(8,18,42,0.18), 0 12px 22px -16px rgba(8,18,42,0.6)"
+                : "0 1px 2px rgba(8,18,42,0.18)"
+              : "inset 0 1px 0 color-mix(in oklab, var(--pc-home-heading) 10%, transparent)",
             ["--tw-ring-color" as string]:
               "color-mix(in oklab, var(--pc-home-gold) 75%, transparent)",
             ["--tw-ring-offset-color" as string]: "var(--pc-home-card)",
@@ -211,30 +234,20 @@ export const PartnerTile = forwardRef<HTMLAnchorElement, PartnerTileProps>(
         }
       >
         {hasLogo ? (
-          <span className="flex h-[88%] w-[92%] items-center justify-center overflow-hidden">
+          <span className="relative flex h-[86%] w-[94%] items-center justify-center overflow-hidden">
             <SmartLogoImage
               src={item.logoUrl}
               name={item.name}
-              premium3d={premium3d}
-              targetFill={0.92}
-              className="group-hover:brightness-[1.02]"
+              premium3d={premium3d && needsPlate}
+              targetFill={0.96}
+              className="group-hover:brightness-[1.03]"
+
             />
           </span>
         ) : (
-
           <TileLabel name={item.name} />
         )}
 
-        {premium3d ? (
-          <span
-            aria-hidden
-            className="pointer-events-none absolute inset-x-0 top-0 h-1/2"
-            style={{
-              background:
-                "linear-gradient(180deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0) 100%)",
-            }}
-          />
-        ) : null}
 
         <span
           aria-hidden
@@ -252,9 +265,10 @@ function TileLabel({ name }: { name: string }) {
   return (
     <span
       className={cn(
-        "line-clamp-2 break-words text-center font-bold uppercase leading-[1.05] tracking-[0.08em] text-slate-800",
+        "line-clamp-2 break-words text-center font-bold uppercase leading-[1.05] tracking-[0.08em]",
         "text-[10px] min-[380px]:text-[10.5px] sm:text-[11px]",
       )}
+      style={{ color: "var(--pc-home-heading)" }}
     >
       {name}
     </span>
@@ -271,13 +285,19 @@ function PartnerTileSkeleton({ children }: { children?: ReactNode }) {
       aria-hidden
       className={cn(
         "relative flex h-[66px] w-full items-center justify-center overflow-hidden sm:h-[76px]",
-        "rounded-[10px] border border-black/[0.06]",
-        "bg-gradient-to-br from-white/85 via-white/70 to-white/85",
-        "shadow-[0_1px_2px_rgba(0,0,0,0.15)]",
+        "rounded-[14px] border",
       )}
+      style={{
+        borderColor: "color-mix(in oklab, var(--pc-home-line) 85%, transparent)",
+        background: "color-mix(in oklab, var(--pc-home-heading) 5%, transparent)",
+      }}
     >
-      <span className="h-2/5 w-3/5 animate-pulse rounded bg-slate-200/80" />
+      <span
+        className="h-2/5 w-3/5 animate-pulse rounded"
+        style={{ background: "color-mix(in oklab, var(--pc-home-heading) 12%, transparent)" }}
+      />
       {children}
+
     </div>
   );
 }
