@@ -222,7 +222,7 @@ export function AppSidebar() {
             className="relative grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-sidebar-border bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
             aria-hidden
           >
-            {isAdminArea ? <ShieldCheck className="h-5 w-5" strokeWidth={2.25} /> : <span className="text-[13px] font-bold leading-none">P</span>}
+            {isAdminArea ? <ShieldCheck className="h-5 w-5" strokeWidth={2.25} /> : <img src="/logo-mark.png" alt="" aria-hidden width={26} height={26} className="h-[26px] w-[26px] object-contain" />}
             <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-accent ring-2 ring-sidebar" />
           </span>
           <span className="flex flex-col leading-none group-data-[collapsible=icon]:hidden">

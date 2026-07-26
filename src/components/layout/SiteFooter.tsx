@@ -62,9 +62,8 @@ export function SiteFooter() {
             className="flex shrink-0 items-center gap-1.5 rounded-md outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             aria-label="PreçoCerto — início"
           >
-            <span className="grid h-[18px] w-[18px] place-items-center rounded-[5px] bg-brand text-[9px] font-black text-brand-foreground shadow-elev-2">
-              P
-            </span>
+            <img src="/logo-mark.png" alt="" aria-hidden width={20} height={20} className="h-5 w-5 shrink-0 object-contain" />
+
             <span className={dsx(serif, "text-[clamp(13px,3.6vw,15px)] leading-none text-foreground")}>
               Preço<span className="italic text-brand">Certo</span>
             </span>
@@ -112,11 +111,8 @@ export function SiteFooter() {
         {/* Brand block */}
         <div className="max-w-sm">
           <Link to="/" className="group flex items-center gap-2 rounded-lg outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background">
-            <span
-              className="grid h-6 w-6 shrink-0 place-items-center rounded-[7px] bg-brand text-[12px] font-black text-brand-foreground shadow-elev-2 md:h-7 md:w-7 md:text-[13px]"
-            >
-              P
-            </span>
+            <img src="/logo-mark.png" alt="" aria-hidden width={28} height={28} className="h-7 w-7 shrink-0 object-contain md:h-8 md:w-8" />
+
             <span
               className={dsx(serif, "text-[16px] leading-none text-foreground md:text-[18px]")}
             >

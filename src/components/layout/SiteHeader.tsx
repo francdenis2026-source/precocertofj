@@ -95,14 +95,20 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
       >
         {/* Brand */}
         <Link to="/" className="flex min-w-0 items-center gap-2.5 sm:gap-2.5">
-          <span
+          <img
+            src="/logo-mark.png"
+            alt=""
+            aria-hidden="true"
+            width={40}
+            height={40}
             className={dsx(
-              "grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-brand text-[19px] font-black text-brand-foreground sm:h-9 sm:w-9 sm:text-[17px] md:h-10 md:w-10 md:text-[19px]",
-              isOverlay ? "shadow-[0_6px_18px_rgb(0_0_0/0.28)] ring-1 ring-black/10" : "shadow-elev-2",
+              "h-10 w-10 shrink-0 object-contain sm:h-9 sm:w-9 md:h-10 md:w-10",
+              isOverlay
+                ? "drop-shadow-[0_6px_18px_rgb(0_0_0/0.35)]"
+                : "drop-shadow-[0_2px_6px_rgb(11_22_44/0.22)]",
             )}
-          >
-            P
-          </span>
+          />
+
           <div className="flex min-w-0 flex-col leading-none">
             <span
               className={dsx(
