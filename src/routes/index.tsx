@@ -16,7 +16,7 @@ import {
   Sparkles,
   ShoppingCart,
   Pill,
-  HardHat,
+  Beef,
   Fuel,
   Grid3x3,
 } from "lucide-react";
