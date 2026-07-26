@@ -295,25 +295,26 @@ function SearchPage() {
   };
 
 
-  // Restauração de scroll ao voltar para /buscar preservando filtros
+  // A página de busca sempre abre travada no topo (ao entrar, ao voltar para
+  // /buscar e ao alternar entre "descoberta" e "resultados"), evitando o
+  // efeito de redimensionamento/salto conforme o conteúdo carrega.
   useEffect(() => {
-    try {
-      const raw = window.sessionStorage.getItem("search:scroll");
-      if (raw) {
-        const y = Number(raw);
-        if (Number.isFinite(y) && y > 0) {
-          requestAnimationFrame(() => window.scrollTo({ top: y, behavior: "auto" }));
-        }
-      }
-    } catch { /* ignore */ }
-    const onScroll = () => {
-      try {
-        window.sessionStorage.setItem("search:scroll", String(window.scrollY));
-      } catch { /* ignore */ }
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    if (typeof window === "undefined") return;
+    if ("scrollRestoration" in window.history) {
+      const prev = window.history.scrollRestoration;
+      window.history.scrollRestoration = "manual";
+      return () => {
+        window.history.scrollRestoration = prev;
+      };
+    }
   }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const id = window.requestAnimationFrame(() => window.scrollTo({ top: 0, behavior: "auto" }));
+    return () => window.cancelAnimationFrame(id);
+  }, [hasQuery]);
+
 
   return (
     <div className="pc-search-scope flex min-h-[100svh] flex-col bg-background text-foreground">
