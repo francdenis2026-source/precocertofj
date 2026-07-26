@@ -347,6 +347,15 @@ function HomePage() {
           }}
         />
 
+        {/* Selagem final da borda esquerda: fica acima dos glows para não sobrar faixa sem scrim */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -inset-y-px -left-3 w-32 sm:w-40 lg:w-48"
+          style={{
+            background: `linear-gradient(90deg, color-mix(in oklab, ${P.navy} 96%, transparent) 0%, color-mix(in oklab, ${P.navy} 78%, transparent) 58%, transparent 100%)`,
+          }}
+        />
+
 
         <div className="relative z-10 mx-auto w-full max-w-6xl px-4 pt-3 pb-4 sm:px-6 sm:pt-5 sm:pb-6 lg:px-8 lg:pt-6 lg:pb-7">
           <div className="mx-auto max-w-4xl text-center">
