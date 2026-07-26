@@ -2085,6 +2085,32 @@ function MarketBucketSection({
             {rows.length} {rows.length === 1 ? "produto" : "produtos"} · a partir de{" "}
             <span className="font-semibold tabular-nums text-foreground">{fmt(minPrice)}</span>
           </p>
+
+          {/* Destaque de economia por mercado — leve, uma linha, sem caixas pesadas */}
+          {bestCount > 0 || savings > 0 || gapToBest > 0 ? (
+            <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] leading-none sm:text-[11.5px]">
+              {bestCount > 0 ? (
+                <span className="inline-flex items-center gap-1 rounded-full border border-[color-mix(in_oklab,var(--brand-gold)_45%,transparent)] bg-[color-mix(in_oklab,var(--brand-gold)_12%,transparent)] px-2 py-1 font-semibold text-[var(--pc-gold-ink)]">
+                  <Crown className="h-3 w-3" aria-hidden="true" />
+                  {bestCount} {bestCount === 1 ? "melhor preço" : "melhores preços"}
+                </span>
+              ) : null}
+              {savings > 0 ? (
+                <span className="inline-flex items-center gap-1 py-1 text-muted-foreground">
+                  economia de{" "}
+                  <strong className="font-semibold tabular-nums text-foreground">
+                    {fmt(savings)}
+                  </strong>{" "}
+                  vs. o mais caro
+                </span>
+              ) : null}
+              {gapToBest > 0 ? (
+                <span className="inline-flex items-center gap-1 py-1 tabular-nums text-muted-foreground">
+                  +{fmt(gapToBest)} acima do melhor
+                </span>
+              ) : null}
+            </p>
+          ) : null}
         </div>
       </header>
 
@@ -2101,10 +2127,18 @@ function MarketBucketSection({
             >
               <HighlightMatch text={r.productName} tokens={highlightTokens} />
             </Link>
+            {r.isBest ? (
+              <span
+                className="hidden shrink-0 rounded-full border border-[color-mix(in_oklab,var(--brand-gold)_45%,transparent)] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] text-[var(--pc-gold-ink)] sm:inline"
+                title="Menor preço desta busca para este produto"
+              >
+                melhor
+              </span>
+            ) : null}
             <span
               className={
                 "whitespace-nowrap rounded-md px-1.5 py-1 text-[13.5px] font-semibold leading-none tabular-nums tracking-[-0.02em] sm:px-2 sm:text-[15px] " +
-                (i === 0
+                (r.isBest
                   ? "bg-[color-mix(in_oklab,var(--brand-gold)_18%,transparent)] text-foreground"
                   : "text-foreground")
               }
@@ -2113,6 +2147,7 @@ function MarketBucketSection({
             </span>
           </li>
         ))}
+
       </ul>
 
 
