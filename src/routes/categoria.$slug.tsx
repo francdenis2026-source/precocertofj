@@ -36,6 +36,8 @@ import { ProductQuickView } from "@/components/product/ProductQuickView";
 import { getCategoryHub } from "@/lib/category-hub.functions";
 import { CATEGORY_DEFS, categoryBySlug, norm } from "@/lib/category-hub";
 import { PLANTOES, diaDaSemana, diaVigente, farmaciaPorId } from "@/lib/farmacias-plantao";
+import { useScrollRestoration } from "@/lib/use-scroll-restoration";
+import { createRailController } from "@/lib/rail-scroll";
 import { cn } from "@/lib/utils";
 
 const ICONS: Record<string, typeof ShoppingCart> = {
@@ -375,7 +377,7 @@ function CategoryPage() {
                     <li key={p.key}>
                       <button
                         type="button"
-                        onClick={() => setQuickView(p)}
+                        onClick={() => openQuickView(p.name)}
                         className="flex h-full w-full items-start gap-2.5 rounded-lg border border-border bg-card p-2.5 text-left transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                       >
                         <StoreBadge name={p.cheapestStore} logoUrl={p.cheapestLogo} size="xs" />
@@ -401,7 +403,7 @@ function CategoryPage() {
                   <li key={p.key}>
                     <button
                       type="button"
-                      onClick={() => setQuickView(p)}
+                      onClick={() => openQuickView(p.name)}
                       aria-label={`Ver detalhes de ${p.name}`}
                       className="flex w-full items-center gap-2.5 px-2.5 py-2 text-left transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
                     >
@@ -466,7 +468,7 @@ function CategoryPage() {
           )}
         </section>
       </main>
-      <ProductQuickView product={quickView} onClose={() => setQuickView(null)} />
+      <ProductQuickView product={quickView} onClose={closeQuickView} />
       <SiteFooter />
     </div>
   );
