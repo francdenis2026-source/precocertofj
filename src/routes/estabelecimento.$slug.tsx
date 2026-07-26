@@ -446,18 +446,34 @@ function EstablishmentPage() {
                     ))}
                   </ul>
                 ) : (
-                  <ul className="mt-2 divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
-                    {filtered.slice(0, limit).map((p) => (
-                      <li key={p.slug}>
-                        <ProductRow
-                          product={p}
-                          onOpen={() => setQuickView(p)}
-                          onAlert={() => createAlert(p)}
-                          onHistory={() => setHistoryFor(p)}
-                        />
-                      </li>
-                    ))}
-                  </ul>
+                  <div className="mt-2 overflow-hidden rounded-lg border border-border bg-card">
+                    <div className="grid grid-cols-[minmax(0,1fr)_84px] items-center gap-2 border-b border-border bg-muted/60 px-2.5 py-1.5 sm:grid-cols-[minmax(0,1fr)_120px_92px_136px]">
+                      <span className="text-[10px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground">
+                        Produto
+                      </span>
+                      <span className="hidden text-[10px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground sm:block">
+                        Unidade
+                      </span>
+                      <span className="text-right text-[10px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground">
+                        Preço
+                      </span>
+                      <span className="hidden text-right text-[10px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground sm:block">
+                        Ações
+                      </span>
+                    </div>
+                    <ul className="divide-y divide-border/70">
+                      {filtered.slice(0, limit).map((p) => (
+                        <li key={p.slug}>
+                          <ProductRow
+                            product={p}
+                            onOpen={() => setQuickView(p)}
+                            onAlert={() => createAlert(p)}
+                            onHistory={() => setHistoryFor(p)}
+                          />
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 )}
                 {filtered.length > limit && (
                   <button
