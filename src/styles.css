@@ -210,17 +210,17 @@
   --pc-home-cta-gradient: linear-gradient(140deg, #f7ecd1 0%, #e9d59a 100%);
   /* "sobre hero/explore/cta": em light o fundo é claro, texto vira navy */
   --pc-home-onhero-fg: #08122a;
-  --pc-home-onhero-fg-90: rgb(8 18 42 / 0.94);
-  --pc-home-onhero-fg-85: rgb(8 18 42 / 0.88);
-  --pc-home-onhero-fg-80: rgb(8 18 42 / 0.82);
+  --pc-home-onhero-fg-90: #101a33;
+  --pc-home-onhero-fg-85: #17223d;
+  --pc-home-onhero-fg-80: #1d2946;
   --pc-home-onhero-glass-soft: rgb(255 255 255 / 0.55);
   --pc-home-onhero-glass: rgb(255 255 255 / 0.72);
   --pc-home-onhero-glass-hover: rgb(255 255 255 / 0.88);
   --pc-home-onhero-border-soft: rgb(15 27 61 / 0.18);
   --pc-home-onhero-border: rgb(15 27 61 / 0.32);
   --pc-home-onhero-border-hover: rgb(15 27 61 / 0.50);
-  --pc-home-onhero-fg-70: rgb(8 18 42 / 0.74);
-  --pc-home-onhero-fg-60: rgb(8 18 42 / 0.64);
+  --pc-home-onhero-fg-70: #2a3757;
+  --pc-home-onhero-fg-60: #38456a;
   --pc-home-onhero-gold: #7a5410;
   --pc-home-hero-bg: #f5f6fa;
   --pc-home-hero-img-opacity: 0.18;
@@ -342,17 +342,17 @@
   --pc-home-cta-gradient: linear-gradient(140deg, #071126 0%, #172a4b 100%);
   /* "sobre hero/explore/cta": dark = branco sobre navy */
   --pc-home-onhero-fg: #ffffff;
-  --pc-home-onhero-fg-90: rgb(255 255 255 / 0.90);
-  --pc-home-onhero-fg-85: rgb(255 255 255 / 0.85);
-  --pc-home-onhero-fg-80: rgb(255 255 255 / 0.80);
+  --pc-home-onhero-fg-90: #f4f7fc;
+  --pc-home-onhero-fg-85: #eaf0f9;
+  --pc-home-onhero-fg-80: #e0e8f4;
   --pc-home-onhero-glass-soft: rgb(255 255 255 / 0.05);
   --pc-home-onhero-glass: rgb(255 255 255 / 0.10);
   --pc-home-onhero-glass-hover: rgb(255 255 255 / 0.15);
   --pc-home-onhero-border-soft: rgb(255 255 255 / 0.12);
   --pc-home-onhero-border: rgb(255 255 255 / 0.25);
   --pc-home-onhero-border-hover: rgb(255 255 255 / 0.45);
-  --pc-home-onhero-fg-70: rgb(226 232 240 / 0.74);
-  --pc-home-onhero-fg-60: rgb(226 232 240 / 0.62);
+  --pc-home-onhero-fg-70: #cbd6e8;
+  --pc-home-onhero-fg-60: #b7c5dd;
   --pc-home-onhero-gold: #E8BE72;
   --pc-home-hero-bg: #071126;
   --pc-home-hero-img-opacity: 0.34;
