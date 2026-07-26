@@ -366,7 +366,7 @@ export function PriceSearchBar({
       return;
     }
     if (q !== query) setQuery(q);
-    runQuery(q);
+    runQuery(q, { force: true });
   };
 
   const setInputValue = (v: string) => {
