@@ -23,6 +23,7 @@ import {
 } from "@/lib/search-history";
 
 import { BackButton } from "@/components/layout/BackButton";
+import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 
 import { useReducedMotion } from "@/lib/reduced-motion";
@@ -401,7 +402,11 @@ function SearchPage() {
               <span>Voltar</span>
             </button>
           ) : (
+            <div className="flex min-w-0 items-center gap-1.5">
             <BackButton fallbackTo="/" variant="ghost" />
+            <span aria-hidden className="h-5 w-px bg-border" />
+            <HomeBrandLink />
+          </div>
           )}
           <div className="flex min-w-0 flex-col gap-0.5">
             <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--pc-gold-ink)]">

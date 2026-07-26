@@ -30,6 +30,7 @@ const LIST_GRID =
 
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { BackButton } from "@/components/layout/BackButton";
+import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import {
   EmptyState,
   LoadingSkeleton,
@@ -432,7 +433,11 @@ function EstablishmentsPage() {
           }}
         />
         <div className="mx-auto grid w-full max-w-6xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-2 md:gap-6 md:px-8 md:py-2.5">
-          <BackButton fallbackTo="/" variant="ghost" />
+          <div className="flex min-w-0 items-center gap-1.5">
+            <BackButton fallbackTo="/" variant="ghost" />
+            <span aria-hidden className="h-5 w-px bg-border" />
+            <HomeBrandLink />
+          </div>
           <div className="flex min-w-0 flex-col gap-0.5">
             <span className={tc.eyebrow}>
               {currentKind ? currentKind.label : "Comércios parceiros"}
