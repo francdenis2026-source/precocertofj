@@ -79,15 +79,15 @@ export const getSearchHighlights = createServerFn({ method: "GET" }).handler(
         });
       }
 
+      // Listas maiores: o filtro por categoria acontece no cliente.
       const opportunities = [...items]
         .sort((a, b) => b.savings - a.savings || b.savingsPct - a.savingsPct)
-        .slice(0, 6);
+        .slice(0, 60);
 
-      const oppKeys = new Set(opportunities.map((i) => i.key));
       const covered = [...items]
-        .filter((i) => !oppKeys.has(i.key))
         .sort((a, b) => b.storeCount - a.storeCount || a.minPrice - b.minPrice)
-        .slice(0, 8);
+        .slice(0, 60);
+
 
       return { opportunities, covered };
     } catch {
