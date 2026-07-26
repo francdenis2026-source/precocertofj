@@ -35,7 +35,7 @@ export function Logo({
       {...props}
     >
       <img
-        src="/logo-mark.svg"
+        src="/logo-mark.png"
         alt=""
         aria-hidden="true"
         width={40}

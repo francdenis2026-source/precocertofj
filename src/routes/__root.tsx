@@ -91,7 +91,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/logo-mark.svg", type: "image/svg+xml", sizes: "any" },
+      { rel: "icon", href: "/logo-mark.png", type: "image/png", sizes: "any" },
       { rel: "icon", href: "/favicon.ico", sizes: "any" },
       { rel: "icon", href: "/icon-192.png", sizes: "192x192", type: "image/png" },
       { rel: "icon", href: "/icon-256.png", sizes: "256x256", type: "image/png" },
@@ -102,7 +102,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "apple-touch-icon", href: "/icon-167.png", sizes: "167x167" },
       { rel: "apple-touch-icon", href: "/icon-152.png", sizes: "152x152" },
       { rel: "apple-touch-icon", href: "/icon-120.png", sizes: "120x120" },
-      { rel: "mask-icon", href: "/logo-mark.svg", color: "#e2a520" },
+      e2a520" },#e2a520" },
 
 
       { rel: "manifest", href: "/site.webmanifest" },

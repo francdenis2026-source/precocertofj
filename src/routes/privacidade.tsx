@@ -243,7 +243,7 @@ function PrivacidadePage() {
             className="mb-3 inline-flex items-center gap-2.5 group"
           >
             <img
-              src="/logo-mark.svg"
+              src="/logo-mark.png"
               alt=""
               width={40}
               height={40}
