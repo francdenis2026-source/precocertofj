@@ -271,10 +271,10 @@ export function ButcherCounter({
             aria-hidden
           />
           <input
-            value={q}
+            value={draft}
             onChange={(e) => {
-              setQ(e.target.value);
-              setLimit(30);
+              setDraft(e.target.value);
+              patchState({ q: e.target.value });
             }}
             placeholder="Buscar corte (picanha, coxa, costela…)"
             aria-label="Buscar corte"
@@ -282,7 +282,7 @@ export function ButcherCounter({
             className="h-9 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13px] text-foreground outline-none placeholder:text-muted-foreground focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
           />
         </div>
-        <Select value={sort} onValueChange={(v) => setSort(v as CutSort)}>
+        <Select value={sort} onValueChange={(v) => patchState({ sort: v as CutSort })}>
           <SelectTrigger
             aria-label="Ordenar cortes"
             className="h-9 w-full text-[12.5px] font-medium sm:w-[220px]"
@@ -314,7 +314,7 @@ export function ButcherCounter({
                 role="radio"
                 aria-checked={active}
                 aria-label={`Exibir em ${label.toLowerCase()}`}
-                onClick={() => setView(id)}
+                onClick={() => patchState({ view: id })}
                 className={
                   active
                     ? "inline-flex h-7 items-center gap-1 rounded-md bg-brand-gold px-2 text-[11.5px] font-bold leading-none text-brand-navy"
@@ -396,8 +396,8 @@ export function ButcherCounter({
                 variant="outline"
                 size="sm"
                 onClick={() => {
-                  setQ("");
-                  setProtein(null);
+                  setDraft("");
+                  patchState({ q: "", protein: null });
                 }}
               >
                 Limpar filtros
