@@ -105,13 +105,14 @@ function CategoryPage() {
       navigate({
         to: "/categoria/$slug",
         params: { slug },
-        search: (prev) => ({ ...prev, ...patch }),
+        search: { ...search, ...patch },
         replace: opts?.replace ?? false,
         resetScroll: false,
       });
     },
-    [navigate, slug],
+    [navigate, slug, search],
   );
+
 
   // Campo de busca: digitação local + sincronização debounced na URL (sem poluir o histórico)
   const [qInput, setQInput] = useState(q);
