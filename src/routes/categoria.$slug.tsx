@@ -754,10 +754,16 @@ function CategoryRail({ current }: { current: string }) {
 
   return (
     <nav aria-label="Outras categorias" className="relative mt-2.5">
+      <p id="cat-rail-help" className="sr-only">
+        Use as setas esquerda e direita para navegar entre as categorias. Home vai para a
+        primeira e End para a última.
+      </p>
       <div
         ref={ref}
         onScroll={sync}
         onKeyDown={onKeyDown}
+        role="group"
+        aria-describedby="cat-rail-help"
         className="no-scrollbar overflow-x-auto scroll-smooth px-9 py-1"
       >
         <ul className="flex w-max gap-1.5 pr-1">
@@ -771,6 +777,8 @@ function CategoryRail({ current }: { current: string }) {
                   params={{ slug: c.slug }}
                   data-rail-item=""
                   aria-current={active ? "page" : undefined}
+                  aria-label={`Categoria ${c.label}${active ? " (atual)" : ""}`}
+                  tabIndex={active ? 0 : -1}
                   className={cn(
                     "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[12px] font-semibold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                     active
@@ -778,7 +786,6 @@ function CategoryRail({ current }: { current: string }) {
                       : "border-border bg-card text-foreground hover:border-brand-gold",
                   )}
                 >
-
                   <CIcon className="h-3.5 w-3.5" aria-hidden /> {c.short}
                 </Link>
               </li>
@@ -786,6 +793,7 @@ function CategoryRail({ current }: { current: string }) {
           })}
         </ul>
       </div>
+
 
       <span
         aria-hidden
