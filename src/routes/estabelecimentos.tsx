@@ -29,10 +29,8 @@ const LIST_GRID =
   "grid grid-cols-[28px_44px_minmax(0,1fr)_160px_80px_78px_120px_20px] items-center gap-3";
 
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { BackButton } from "@/components/layout/BackButton";
 import {
-  PageHeader,
-  SectionCard,
-  
   EmptyState,
   LoadingSkeleton,
 } from "@/components/layout";
@@ -45,14 +43,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { ChevronRight, Package, Search, Store, TrendingUp, Pill, Croissant, Beef, ShoppingBasket, PiggyBank, Radio, ChevronLeft, LayoutGrid, Rows3 } from "lucide-react";
-import mercadosHero from "@/assets/mercados-hero-v3.jpg.asset.json";
 import {
   MarketEditorialCard,
   MarketEditorialCardSkeleton,
 } from "@/components/estabelecimentos/MarketEditorialCard";
 
 import { useRef } from "react";
-import { useAdaptiveOverlayOpacity } from "@/hooks/use-adaptive-overlay";
+
 import {
   Dialog,
   DialogContent,
@@ -207,7 +204,7 @@ function EstablishmentsPage() {
     return () => io.disconnect();
   }, [visibleCount, q, neighborhood, sort, kindFilter, view]);
   const carouselRef = useRef<HTMLDivElement | null>(null);
-  const heroOverlayOpacity = useAdaptiveOverlayOpacity(mercadosHero.url, { min: 0.6, max: 0.94 });
+  
 
   // Salva no sessionStorage sempre que qualquer filtro muda.
   useEffect(() => {
@@ -420,77 +417,56 @@ function EstablishmentsPage() {
 
 
   return (
-    <div className="min-h-svh bg-background pb-24 md:pb-8">
-
-
-      {/* Hero editorial — imagem de supermercado, contraste WCAG, dados ao vivo, carrossel de mercados */}
-      <section className="relative isolate overflow-hidden border-b border-white/10">
-        <div aria-hidden className="absolute inset-0 -z-40" style={{ background: "var(--brand-navy)" }} />
-        <img
+    <div className="flex min-h-svh flex-col bg-background pb-24 md:pb-8">
+      {/* TOPO — mesma gramática editorial de /buscar: fio dourado, sem painéis pesados */}
+      <header className="sticky top-0 z-30 border-b border-border/60 bg-background/92 backdrop-blur supports-[backdrop-filter]:bg-background/75">
+        <span
           aria-hidden
-          src={mercadosHero.url}
-          alt=""
-          className="absolute inset-0 -z-30 h-full w-full object-cover scale-[1.04]"
-          style={{ filter: "saturate(0.9) brightness(0.9) contrast(1.02) blur(2px)" }}
-          loading="eager"
-          fetchPriority="high"
-          decoding="async"
-        />
-        {/* Véu navy adaptativo e glow dourado radial removidos a pedido — foto nítida. */}
-
-        <div
-          aria-hidden
-          className="absolute inset-x-0 top-0 -z-10 h-px"
+          className="block h-px w-full"
           style={{
             background:
-              "linear-gradient(90deg, transparent, color-mix(in oklab, var(--brand-gold) 85%, transparent) 50%, transparent)",
+              "linear-gradient(90deg, transparent, color-mix(in oklab, var(--brand-gold) 75%, transparent) 50%, transparent)",
           }}
         />
-
-        <div className="mx-auto w-full max-w-6xl px-4 md:px-8 pt-3 md:pt-4 pb-3.5 md:pb-4">
-          <nav aria-label="Trilha" className="mb-2.5 flex items-center gap-1.5 text-[12.5px] font-semibold">
-            <Link
-              to="/"
-              className="inline-flex items-center rounded-md border border-white/25 bg-brand-navy/70 px-2 py-1 text-white transition-colors hover:border-brand-gold hover:bg-brand-gold hover:text-brand-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy"
-            >
-              Início
-            </Link>
-            <ChevronRight aria-hidden className="h-3.5 w-3.5 text-white/70" />
-            <span className="inline-flex items-center rounded-md bg-brand-gold px-2 py-1 text-brand-navy">
-              Mercados
+        <div className="mx-auto grid w-full max-w-6xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-2.5 md:gap-6 md:px-8 md:py-3">
+          <BackButton fallbackTo="/" variant="ghost" />
+          <div className="flex min-w-0 flex-col gap-0.5">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--pc-gold-ink)]">
+              {currentKind ? currentKind.label : "Comércios parceiros"}
             </span>
-          </nav>
-
-          {/* Cabeçalho organizado: identidade à esquerda, ação à direita */}
-          <div className="grid gap-2.5 md:grid-cols-[minmax(0,1fr)_auto] md:items-end md:gap-6">
-            <div className="min-w-0 rounded-lg bg-brand-navy/80 px-3 py-2.5 ring-1 ring-white/15 backdrop-blur-[3px]">
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1.5 rounded-full bg-brand-gold px-2 py-[2px] text-[10px] font-bold uppercase tracking-[0.14em] text-brand-navy">
-                  {currentKind ? <currentKind.icon className="h-3 w-3" aria-hidden /> : <Store className="h-3 w-3" aria-hidden />}
-                  {currentKind ? currentKind.label : "Comércios parceiros"}
-                </span>
-              </div>
-              <h1 className="mt-1.5 text-[21px] font-bold leading-tight tracking-[-0.01em] text-white md:text-[25px]">
-                {currentKind ? currentKind.label : "Comércios"} de Feijó
-              </h1>
-              <p className="mt-1 max-w-2xl text-[12.5px] font-medium leading-snug text-white/90 md:text-[13.5px]">
-                {currentKind ? currentKind.tagline : "Cobertura de produtos, categorias e comparativo entre estabelecimentos monitorados pela comunidade."}
-              </p>
-            </div>
-
+            <h1 className="min-w-0 truncate whitespace-nowrap font-serif text-[17px] font-normal leading-tight tracking-tight text-foreground sm:text-[21px]">
+              {currentKind ? currentKind.label : "Mercados"}
+              <span className="hidden sm:inline"> de Feijó</span>
+            </h1>
+          </div>
+          <div className="flex items-center gap-3">
+            <span aria-hidden className="hidden h-8 w-px bg-border md:block" />
             <Link
               to="/farmacias"
-              className="inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full bg-brand-gold px-3.5 text-[11px] font-bold uppercase tracking-[0.12em] text-brand-navy shadow-sm transition-opacity hover:opacity-90 md:self-end"
+              title="Ver a escala de plantão das farmácias"
+              className="inline-flex h-7 items-center gap-1.5 rounded-full border border-border px-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
             >
-              <Pill className="h-3.5 w-3.5" aria-hidden /> Plantão das farmácias
+              <Pill className="h-3.5 w-3.5" aria-hidden />
+              <span className="hidden sm:inline">Plantão das farmácias</span>
             </Link>
           </div>
+        </div>
+      </header>
 
+      {/* IDENTIDADE — linha fina com tagline, tipos de comércio e números ao vivo */}
+      <section className="border-b border-border/60">
+        <div className="mx-auto w-full max-w-6xl px-4 py-3 md:px-8 md:py-4">
+          <p className="max-w-2xl text-[12.5px] leading-relaxed text-muted-foreground md:text-[13px]">
+            {currentKind
+              ? currentKind.tagline
+              : "Cobertura de produtos, categorias e comparativo entre os estabelecimentos monitorados pela comunidade."}
+          </p>
 
-
-
-          {/* Chips de categoria — padrão Wave 1: gold sólido ativo, gold-tint no hover */}
-          <div className="mt-3 flex flex-wrap gap-1.5" role="radiogroup" aria-label="Filtrar por tipo de estabelecimento">
+          <div
+            className="mt-2.5 flex flex-wrap gap-1.5"
+            role="radiogroup"
+            aria-label="Filtrar por tipo de estabelecimento"
+          >
             {(["__all", ...Object.keys(KIND_META)] as const).map((k) => {
               if (k !== "__all" && !kindsPresent.has(k)) return null;
               const meta = k === "__all" ? { label: "Todos", icon: Store } : KIND_META[k];
@@ -504,11 +480,11 @@ function EstablishmentsPage() {
                   aria-checked={active}
                   onClick={() => setKindFilter(k)}
                   className={[
-                    "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11.5px] font-semibold uppercase tracking-[0.14em] transition-colors duration-150",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy",
+                    "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-[0.14em] transition-colors duration-150",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
                     active
-                      ? "border-brand-gold bg-brand-gold text-brand-navy shadow-sm"
-                      : "border-white/25 bg-brand-navy/85 text-white hover:border-brand-gold hover:bg-[color-mix(in_oklab,var(--brand-gold)_22%,var(--brand-navy))]",
+                      ? "border-brand-gold bg-brand-gold text-brand-navy"
+                      : "border-border bg-background text-muted-foreground hover:border-brand-gold hover:text-[var(--pc-gold-ink)]",
                   ].join(" ")}
                 >
                   <Icon className="h-3.5 w-3.5" aria-hidden />
@@ -523,24 +499,21 @@ function EstablishmentsPage() {
                 aria-checked={onlyFavorites}
                 onClick={() => setOnlyFavorites((v) => !v)}
                 className={[
-                  "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11.5px] font-semibold uppercase tracking-[0.14em] transition-colors duration-150",
-                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy",
+                  "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-[0.14em] transition-colors duration-150",
+                  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
                   onlyFavorites
-                    ? "border-brand-gold bg-brand-gold text-brand-navy shadow-sm"
-                    : "border-white/25 bg-brand-navy/85 text-white hover:border-brand-gold",
+                    ? "border-brand-gold bg-brand-gold text-brand-navy"
+                    : "border-border bg-background text-muted-foreground hover:border-brand-gold hover:text-[var(--pc-gold-ink)]",
                 ].join(" ")}
                 title="Mostrar apenas mercados que você salvou"
               >
-                ★ Meus favoritos ({favSet.size})
+                ★ Favoritos ({favSet.size})
               </button>
             )}
           </div>
 
-
-
-          {/* Métricas ao vivo — botões acessíveis, abrem detalhes */}
           {data && (
-            <div className="mt-2.5 grid grid-cols-2 gap-1.5 sm:gap-2 md:grid-cols-4">
+            <dl className="mt-3 flex flex-wrap items-stretch gap-x-6 gap-y-2 border-t border-border/60 pt-2.5">
               <HeroMetric
                 icon={Store}
                 label="Comércios"
@@ -558,8 +531,11 @@ function EstablishmentsPage() {
               <HeroMetric
                 icon={PiggyBank}
                 label="Maior economia"
-
-                value={data.totalMaxSavings > 0 ? `R$ ${data.totalMaxSavings.toFixed(2).replace(".", ",")}` : "—"}
+                value={
+                  data.totalMaxSavings > 0
+                    ? `R$ ${data.totalMaxSavings.toFixed(2).replace(".", ",")}`
+                    : "—"
+                }
                 hint="Onde economizar"
                 onClick={() => setMetricDetail("savings")}
               />
@@ -571,14 +547,15 @@ function EstablishmentsPage() {
                 hint="Como funciona"
                 onClick={() => setMetricDetail("live")}
               />
-            </div>
+            </dl>
           )}
         </div>
       </section>
 
+
       {/* Faixa de mercados em destaque — fora do hero, mais compacta e legível */}
       {featured.length > 0 && (
-        <section className="border-b border-border/60 bg-muted/40">
+        <section className="border-b border-border/60">
           <div className="mx-auto w-full max-w-6xl px-4 md:px-8 py-3">
             <div className="mb-2 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2">
@@ -703,30 +680,34 @@ function EstablishmentsPage() {
             {/* StatGrid removida: métricas duplicavam o hero */}
 
             {data.topGlobalCategories.length > 0 && (
-              <SectionCard
-                title={
-                  <span className="inline-flex items-center gap-2">
-                    <TrendingUp className="h-4 w-4 text-brand-gold" aria-hidden />
+              <section aria-labelledby="cats-heading" className="border-t border-border/60 pt-4">
+                <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+                  <h2
+                    id="cats-heading"
+                    className="inline-flex items-center gap-2 font-serif text-[19px] font-normal leading-tight tracking-tight text-foreground"
+                  >
+                    <TrendingUp className="h-4 w-4 text-[var(--pc-gold-ink)]" aria-hidden />
                     Categorias mais populares
+                  </h2>
+                  <span className="text-[11.5px] text-muted-foreground">
+                    Por número de produtos cadastrados na rede
                   </span>
-                }
-                description="Distribuição por número de produtos cadastrados na rede."
-              >
+                </div>
                 <div className="flex flex-wrap gap-1.5">
                   {data.topGlobalCategories.map((c) => (
                     <span
                       key={c.category}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.16em] text-foreground/90 shadow-sm"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-foreground/85"
                     >
                       {humanizeCategory(c.category)}
-                      <span className="rounded-full bg-brand-gold px-1.5 py-0.5 text-[10px] font-bold text-brand-navy tabular-nums">
+                      <span className="text-[10.5px] font-bold tabular-nums text-[var(--pc-gold-ink)]">
                         {c.count}
                       </span>
                     </span>
                   ))}
                 </div>
+              </section>
 
-              </SectionCard>
             )}
 
             {data.items.length === 0 ? (
@@ -736,22 +717,23 @@ function EstablishmentsPage() {
                 description="Assim que houver mercados na sua região, eles aparecerão aqui."
               />
             ) : (
-              <SectionCard
-                title="Rede de mercados"
-                description={`${allFilteredItems.length} ${allFilteredItems.length === 1 ? "estabelecimento" : "estabelecimentos"} monitorados.`}
-                bodyClassName="p-0"
-              >
+              <section aria-labelledby="rede-heading">
+                <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-t border-border/60 pt-4">
+                  <h2
+                    id="rede-heading"
+                    className="font-serif text-[19px] font-normal leading-tight tracking-tight text-foreground"
+                  >
+                    Rede de mercados
+                  </h2>
+                  <span className="text-[11.5px] text-muted-foreground">
+                    {allFilteredItems.length}{" "}
+                    {allFilteredItems.length === 1 ? "estabelecimento" : "estabelecimentos"} monitorados
+                  </span>
+                </div>
                 {/* Barra de comando — busca protagonista + filtros, fixa ao rolar */}
-                <div className="sticky top-0 z-20 border-b border-border/60 bg-card/95 backdrop-blur-md supports-[backdrop-filter]:bg-card/80">
-                  <span
-                    aria-hidden
-                    className="block h-px w-full"
-                    style={{
-                      background:
-                        "linear-gradient(90deg, transparent, color-mix(in oklab, var(--brand-gold) 75%, transparent) 50%, transparent)",
-                    }}
-                  />
-                  <div className="flex flex-col gap-2 p-2.5 md:flex-row md:items-center md:gap-2.5 md:p-3.5">
+                <div className="sticky top-[52px] z-20 border-y border-border/60 bg-background/95 backdrop-blur md:top-[60px] supports-[backdrop-filter]:bg-background/80">
+                  <div className="flex flex-col gap-2 py-2.5 md:flex-row md:items-center md:gap-2.5">
+
                     <div className="relative min-w-0 flex-1">
                       <Search
                         className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--pc-gold-ink)]"
@@ -801,7 +783,7 @@ function EstablishmentsPage() {
                       </Select>
                     </div>
                   </div>
-                  <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/50 px-2.5 py-2 md:px-3.5">
+                  <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/50 py-2">
                     <LocationControl loc={loc} variant="surface" />
                     <div className="flex items-center gap-2">
                       <div
@@ -1012,7 +994,7 @@ function EstablishmentsPage() {
                 </div>
                 ) : (
                 <ul
-                  className="grid grid-cols-1 gap-3 p-2.5 sm:grid-cols-2 md:p-4 lg:grid-cols-3"
+                  className="grid grid-cols-1 gap-3 py-4 sm:grid-cols-2 lg:grid-cols-3"
                   aria-label="Lista de estabelecimentos"
                 >
                   {visibleItems.map((e, idx) => {
@@ -1079,7 +1061,8 @@ function EstablishmentsPage() {
                 )}
 
 
-              </SectionCard>
+              </section>
+
             )}
 
           </div>
@@ -1120,17 +1103,14 @@ function HeroMetric({
       type="button"
       onClick={onClick}
       aria-label={`${label}: ${value}. ${hint ?? "Abrir detalhes"}`}
-      className="group relative flex w-full items-center gap-2 rounded-lg border border-white/15 bg-brand-navy/95 px-2.5 py-1.5 text-left shadow-[0_6px_18px_-12px_rgba(0,0,0,0.6)] transition-colors duration-150 hover:border-brand-gold/70 hover:bg-brand-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-brand-navy sm:gap-2.5 sm:px-3 sm:py-2"
+      className="group flex min-w-0 items-center gap-2 rounded-md px-1 py-0.5 text-left transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
     >
-      <div className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-brand-gold/20 text-brand-gold sm:h-8 sm:w-8">
-        <Icon className="h-3.5 w-3.5" strokeWidth={2} aria-hidden />
-      </div>
-      <div className="relative z-[1] min-w-0 flex-1">
-        <div className="truncate text-[9px] font-semibold uppercase leading-[1.25] tracking-[0.12em] text-white/75 sm:text-[9.5px] sm:tracking-[0.14em]">
+      <Icon className="h-4 w-4 shrink-0 text-[var(--pc-gold-ink)]" strokeWidth={1.75} aria-hidden />
+      <span className="min-w-0">
+        <span className="block truncate text-[9.5px] font-semibold uppercase leading-[1.25] tracking-[0.16em] text-muted-foreground">
           {label}
-        </div>
-        <div className="mt-0.5 flex items-baseline gap-1.5 text-[16px] font-bold leading-none text-white tabular-nums sm:text-[18px]">
-
+        </span>
+        <span className="mt-0.5 flex items-baseline gap-1.5 text-[15px] font-semibold leading-none tabular-nums text-foreground">
           {live && (
             <span className="relative inline-flex h-1.5 w-1.5 shrink-0 translate-y-[-2px]">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-gold/70" />
@@ -1138,12 +1118,16 @@ function HeroMetric({
             </span>
           )}
           <span className="truncate">{value}</span>
-        </div>
-      </div>
-      <ChevronRight className="hidden xs:block h-3.5 w-3.5 shrink-0 text-white/30 transition-colors group-hover:text-brand-gold" aria-hidden />
+        </span>
+      </span>
+      <ChevronRight
+        className="hidden h-3.5 w-3.5 shrink-0 text-muted-foreground/50 transition-colors group-hover:text-[var(--pc-gold-ink)] sm:block"
+        aria-hidden
+      />
     </button>
   );
 }
+
 
 
 
