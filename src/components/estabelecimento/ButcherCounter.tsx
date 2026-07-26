@@ -479,7 +479,7 @@ const ActionButtons = memo(function ActionButtons({
       )}
     </div>
   );
-}
+});
 
 /** Cartão compacto de corte — clique abre o modal de detalhes. */
 const CutTile = memo(function CutTile({
@@ -524,7 +524,7 @@ const CutTile = memo(function CutTile({
       </div>
     </article>
   );
-}
+});
 
 /** Linha densa em colunas (corte · R$/kg · preço · ações). */
 const CutRow = memo(function CutRow({
@@ -569,4 +569,4 @@ const CutRow = memo(function CutRow({
       </div>
     </div>
   );
-}
+});
