@@ -160,6 +160,7 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
             .from("scans")
             .select("establishment_id, created_at, product_name")
             .eq("status", "salvo")
+            .is("user_id", null)
             .not("price_captured", "is", null)
             .order("created_at", { ascending: false })
             .range(from, from + PAGE_SCANS - 1);
