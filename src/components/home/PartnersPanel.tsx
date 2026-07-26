@@ -137,24 +137,26 @@ export function PartnersPanel({
           role="list"
           aria-busy={loading || undefined}
           className={cn(
-            "grid grid-cols-3 gap-1.5",
-            "min-[380px]:grid-cols-4",
-            "sm:grid-cols-6 sm:gap-2",
-            "md:grid-cols-8",
+            // Trilho compacto: rolagem horizontal com snap no mobile,
+            // linha única distribuída no desktop.
+            "-mx-1 flex snap-x snap-mandatory gap-1.5 overflow-x-auto px-1 pb-1",
+            "[scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
+            "sm:gap-2 md:mx-0 md:grid md:grid-flow-col md:auto-cols-fr md:overflow-visible md:px-0 md:pb-0",
           )}
         >
           {loading
             ? Array.from({ length: skeletonCount }).map((_, i) => (
-                <li key={`sk-${i}`}>
+                <li key={`sk-${i}`} className="w-[86px] shrink-0 snap-start sm:w-[100px] md:w-auto">
                   <PartnerTileSkeleton />
                 </li>
               ))
             : visible.map((it) => (
-                <li key={it.id}>
+                <li key={it.id} className="w-[86px] shrink-0 snap-start sm:w-[100px] md:w-auto">
                   <PartnerTile item={it} defaultHref={defaultTileHref} />
                 </li>
               ))}
         </ul>
+
       </div>
     </section>
   );
