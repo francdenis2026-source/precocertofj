@@ -284,7 +284,9 @@ export async function performPriceSearch(data: {
       const existing = metaByName.get(key);
       // Prefere o registro que tem logo quando há nomes equivalentes.
       if (!existing || (!existing.logoUrl && meta.logoUrl)) metaByName.set(key, meta);
+      if (meta.logoUrl) metaKeys.push([key, meta]);
     }
+
   }
 
 
