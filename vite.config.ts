@@ -21,6 +21,8 @@ export default defineConfig({
         // O manifesto oficial vive em public/site.webmanifest — o plugin não deve gerar outro.
         manifest: false,
         filename: "sw.js",
+        // O build do cliente vai para dist/client — o SW precisa ser servido em /sw.js.
+        outDir: "dist/client",
         registerType: "autoUpdate",
         // Nunca emitir/registrar SW em dev (evita cache velho no preview do Lovable).
         devOptions: { enabled: false },
