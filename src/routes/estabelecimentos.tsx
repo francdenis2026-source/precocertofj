@@ -620,7 +620,7 @@ function EstablishmentsPage() {
                   key={e.id}
                   to="/estabelecimento/$slug"
                   params={{ slug: slugifyEstablishment(e.name) }}
-                  className={`group relative flex w-[220px] shrink-0 snap-start items-center gap-2.5 overflow-hidden rounded-lg border bg-card p-2 pl-3 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold ${
+                  className={`group relative flex w-[236px] shrink-0 snap-start items-center gap-3 overflow-hidden rounded-lg border bg-card p-2 pl-3 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold ${
                     idx === 0 ? "border-brand-gold/60" : "border-border/70 hover:border-brand-gold/60"
                   }`}
                 >
@@ -630,13 +630,14 @@ function EstablishmentsPage() {
                       className="absolute inset-y-0 left-0 w-[3px] bg-brand-gold"
                     />
                   )}
-                  <div className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-md border border-border/60 bg-white p-1">
+                  <div className="grid h-[52px] w-[52px] shrink-0 place-items-center overflow-hidden rounded-md border border-border/60 bg-white p-1">
                     {e.logoUrl ? (
                       <img src={e.logoUrl} alt="" className="h-full w-full object-contain" loading="lazy" />
                     ) : (
-                      <span className="text-[12px] font-bold text-brand-navy">{e.name.substring(0, 2).toUpperCase()}</span>
+                      <span className="text-[13px] font-bold text-brand-navy">{e.name.substring(0, 2).toUpperCase()}</span>
                     )}
                   </div>
+
                   <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-1.5">
                       <span className="truncate text-[12.5px] font-semibold text-foreground">{e.name}</span>
