@@ -17,7 +17,7 @@ const CSS = readFileSync(resolve(process.cwd(), "src/styles.css"), "utf8");
 
 /** Extrai o bloco do seletor que contém `marker` (styles.css tem vários `:root`). */
 function block(selector: string, marker: string): string {
-  const re = new RegExp(`(^|\\})\\s*${selector.replace(".", "\\.")}\\s*\\{`, "g");
+  const re = new RegExp(`^\\s*${selector.replace(".", "\\.")}\\s*\\{`, "gm");
   let m: RegExpExecArray | null;
   while ((m = re.exec(CSS))) {
     const start = CSS.indexOf("{", m.index);
