@@ -48,10 +48,7 @@ export function InternalPageHeader({
     return (
       <>
         {title.slice(0, idx)}
-        <span
-          style={{ color: "var(--pc-home-gold, hsl(var(--primary)))" }}
-          className="font-medium"
-        >
+        <span className="text-brand-gold font-medium">
           {title.slice(idx, idx + highlight.length)}
         </span>
         {title.slice(idx + highlight.length)}
