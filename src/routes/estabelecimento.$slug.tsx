@@ -503,6 +503,24 @@ function EstablishmentPage() {
         onClose={() => setHistoryFor(null)}
       />
 
+      <ProductQuickView
+        product={
+          quickView
+            ? ({
+                name: quickView.productName,
+                unit: quickView.unitLabel,
+                minPrice: quickView.price,
+                maxPrice: quickView.price,
+                cheapestStore: data.store.name,
+                cheapestLogo: data.store.logoUrl,
+                updatedAt: quickView.lastDate,
+              } satisfies QuickViewProduct)
+            : null
+        }
+        onClose={() => setQuickView(null)}
+      />
+
+
       <SiteFooter />
     </div>
   );
