@@ -175,6 +175,7 @@ function PlansPage() {
           <InternalPageHeader
             title="Planos e preços"
             highlight="preços"
+            showBack={false}
             breadcrumbs={[{ label: "Início", to: "/" }, { label: "Planos" }]}
             description={
               <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-1">
@@ -278,8 +279,10 @@ function PlansPage() {
                       disabled={buying === plan.id}
                       className={dsx(
                         ds.btn.base,
-                        "mt-3.5 h-11 w-full px-3 text-[12.5px] font-semibold uppercase tracking-[0.06em]",
-                        "bg-brand-gold text-brand-navy shadow-elev-1 hover:brightness-105 hover:shadow-elev-2",
+                        "mt-3.5 h-11 w-full px-3 text-[12.5px] font-semibold uppercase tracking-[0.06em] focus-visible:ring-2 focus-visible:ring-brand-gold",
+                        isRecommended || isFounder
+                          ? "bg-brand-gold text-brand-navy shadow-elev-1 hover:brightness-105 hover:shadow-elev-2"
+                          : "border border-border bg-card text-foreground hover:border-brand-gold hover:text-brand-gold",
                       )}
                     >
                       {buying === plan.id
