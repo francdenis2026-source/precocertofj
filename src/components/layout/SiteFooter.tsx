@@ -62,9 +62,8 @@ export function SiteFooter() {
             className="flex shrink-0 items-center gap-1.5 rounded-md outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             aria-label="PreçoCerto — início"
           >
-            <span className="grid h-[18px] w-[18px] place-items-center rounded-[5px] bg-brand text-[9px] font-black text-brand-foreground shadow-elev-2">
-              P
-            </span>
+            <img src="/logo-mark.png" alt="" aria-hidden width={20} height={20} className="h-5 w-5 shrink-0 object-contain" />
+
             <span className={dsx(serif, "text-[clamp(13px,3.6vw,15px)] leading-none text-foreground")}>
               Preço<span className="italic text-brand">Certo</span>
             </span>
