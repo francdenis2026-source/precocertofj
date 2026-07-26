@@ -1027,8 +1027,29 @@ export function PriceSearchBar({
                     catByName.set(s.displayName.toLowerCase(), s.category);
                   }
                 }
+                // Disponibilidade: mantém só preços coletados dentro da janela
+                // escolhida e recalcula as estatísticas do grupo.
+                const maxAgeDays = freshness === "all" ? null : Number(freshness);
+                const visibleGroups =
+                  maxAgeDays == null
+                    ? result.groups
+                    : result.groups
+                        .map((g) => {
+                          const prices = g.prices.filter((p) => daysSince(p.when) <= maxAgeDays);
+                          if (prices.length === 0) return null;
+                          const vals = prices.map((p) => p.price);
+                          return {
+                            ...g,
+                            prices,
+                            samples: prices.length,
+                            min: Math.min(...vals),
+                            max: Math.max(...vals),
+                            avg: vals.reduce((s, v) => s + v, 0) / vals.length,
+                          };
+                        })
+                        .filter((g): g is ProductGroup => g !== null);
                 const buckets = new Map<string, typeof result.groups>();
-                for (const g of result.groups) {
+                for (const g of visibleGroups) {
                   const cat =
                     (g.catalogId && catByCatalog.get(g.catalogId)) ||
                     catByName.get(g.productName.toLowerCase()) ||
@@ -1037,6 +1058,7 @@ export function PriceSearchBar({
                   arr.push(g);
                   buckets.set(cat, arr);
                 }
+
                 const availableCategories = Array.from(buckets.keys()).sort();
                 // Ordena buckets por MENOR preço mínimo (mais barato primeiro),
                 // depois por relevância (tamanho do grupo). Isso destaca as
