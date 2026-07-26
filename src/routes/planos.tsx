@@ -185,12 +185,14 @@ function PlansPage() {
 
 
   return (
-    <PageShell>
-      <SiteHeader />
+    <div className="flex h-[100svh] flex-col overflow-hidden bg-background text-foreground">
+      <div className="shrink-0">
+        <SiteHeader />
+      </div>
 
-      <PageShellContent>
-        {/* Cabeçalho compacto — mesmo padrão das páginas internas */}
-        <section className={dsx(ds.container, "pt-3 pb-3 md:pt-4")}>
+      <main className="flex min-h-0 flex-1 flex-col">
+        {/* Cabeçalho compacto — altura fixa */}
+        <section className={dsx(ds.container, "shrink-0 pt-2 pb-2 md:pt-3")}>
           <InternalPageHeader
             title="Planos e preços"
             highlight="preços"
@@ -209,46 +211,24 @@ function PlansPage() {
           />
         </section>
 
-        {/* Plans grid — hierarquia clara */}
+        {/* Planos — carrossel com snap no mobile, grade no desktop.
+            Altura reservada: nunca empurra o restante da tela. */}
         <section
           id="planos"
-          className={dsx(ds.container, "scroll-mt-24 pb-5 md:pb-7")}
+          className={dsx(ds.container, "shrink-0 pb-2")}
           aria-label="Planos disponíveis"
         >
-          <nav
-            aria-label="Navegação da página de planos"
-            className="mb-3 flex flex-wrap items-center gap-x-3 gap-y-1 text-[11.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground"
-          >
-            <span className="text-foreground">Planos</span>
-            <span aria-hidden className="text-border">·</span>
-            <button
-              type="button"
-              onClick={() => setTab("comparativo")}
-              className="uppercase tracking-[0.1em] transition hover:text-brand-gold"
-            >
-              Comparativo
-            </button>
-            <span aria-hidden className="text-border">·</span>
-            <button
-              type="button"
-              onClick={() => setTab("faq")}
-              className="uppercase tracking-[0.1em] transition hover:text-brand-gold"
-            >
-              Dúvidas
-            </button>
-          </nav>
-
           {isLoading ? (
-            <div className="grid grid-cols-1 gap-3 pt-2.5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="flex gap-3 overflow-hidden pt-2 lg:grid lg:grid-cols-4">
               {[0, 1, 2, 3].map((i) => (
                 <div
                   key={i}
-                  className="h-[254px] animate-pulse rounded-xl border border-border bg-muted/40"
+                  className="h-[clamp(190px,26vh,238px)] w-[76%] shrink-0 animate-pulse rounded-xl border border-border bg-muted/40 lg:w-auto"
                 />
               ))}
             </div>
           ) : (
-            <div className="grid grid-cols-1 gap-3 pt-2.5 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="pc-rail flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1 pt-2.5 lg:grid lg:grid-cols-4 lg:overflow-visible">
               {plans.map((plan) => {
                 const isRecommended = plan.slug === recommendedSlug;
                 const perMonth = pricePerMonth(plan.price_cents, plan.days);
@@ -261,36 +241,32 @@ function PlansPage() {
                     key={plan.id}
                     onClick={() => setSelectedId(plan.id)}
                     className={dsx(
-                      "pc-lift relative flex min-h-[254px] cursor-pointer flex-col rounded-xl border border-border bg-card p-4 shadow-elev-1 sm:p-[18px]",
+                      "pc-lift relative flex h-[clamp(190px,26vh,238px)] w-[76%] shrink-0 snap-start cursor-pointer flex-col rounded-xl border border-border bg-card p-3.5 shadow-elev-1 sm:w-[46%] lg:h-auto lg:min-h-[214px] lg:w-auto lg:p-4",
                       isRecommended && "border-brand-gold/70",
                       isFounder && "border-brand-gold/50",
                       isSelected && "border-brand-gold ring-2 ring-brand-gold/35",
                     )}
                   >
                     {(isRecommended || isFounder) && (
-                      <div className="absolute -top-2.5 left-1/2 -translate-x-1/2">
-                        <span
-                          className={dsx(
-                            "inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2.5 py-0.5 text-[10.5px] font-bold uppercase tracking-[0.14em] shadow-elev-1",
-                            isRecommended ? "badge-gold" : "badge-gold-outline",
-                          )}
-                        >
-                          {isRecommended ? "Mais escolhido" : "Limitado"}
-                        </span>
-                      </div>
+                      <span
+                        className={dsx(
+                          "absolute right-3 top-3 inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.12em]",
+                          isRecommended ? "badge-gold" : "badge-gold-outline",
+                        )}
+                      >
+                        {isRecommended ? "Mais escolhido" : "Limitado"}
+                      </span>
                     )}
 
-                    {/* 1. Identidade */}
-                    <h2 className="font-display text-[16px] font-semibold leading-tight tracking-tight text-foreground">
+                    <h2 className="pr-24 font-display text-[15px] font-semibold leading-tight tracking-tight text-foreground">
                       {plan.name}
                     </h2>
 
-                    {/* 2. Preço — âncora visual */}
-                    <div className="mt-3.5">
-                      <span className="font-display text-[27px] font-semibold leading-none tracking-tight text-foreground">
+                    <div className="mt-2">
+                      <span className="font-display text-[25px] font-semibold leading-none tracking-tight text-foreground">
                         {isFree ? "Grátis" : centsToBRL(plan.price_cents)}
                       </span>
-                      <p className="mt-2 text-[11.5px] leading-snug text-muted-foreground">
+                      <p className="mt-1.5 text-[11.5px] leading-snug text-muted-foreground">
                         {isFounder
                           ? "Pagamento único · vitalício"
                           : isFree
@@ -301,10 +277,9 @@ function PlansPage() {
                       </p>
                     </div>
 
-                    <div className="my-4 h-px bg-border/70" aria-hidden />
+                    <div className="my-2.5 h-px bg-border/70" aria-hidden />
 
-                    {/* 3. Benefícios */}
-                    <ul className="flex-1 space-y-2 text-[12.5px] leading-snug">
+                    <ul className="min-h-0 flex-1 space-y-1.5 overflow-hidden text-[12px] leading-snug">
                       {planHighlights(plan.slug).slice(0, 2).map((h) => (
                         <li key={h} className="flex items-start gap-2">
                           <Check
@@ -316,7 +291,6 @@ function PlansPage() {
                       ))}
                     </ul>
 
-                    {/* 4. Ação */}
                     <button
                       type="button"
                       onClick={(e) => {
@@ -328,9 +302,9 @@ function PlansPage() {
                       data-loading={buying === plan.id ? "true" : undefined}
                       className={dsx(
                         ds.btn.base,
-                        "mt-4 h-11 w-full px-3 text-[12.5px] font-semibold uppercase tracking-[0.06em]",
+                        "btn-state-safe mt-2.5 h-10 w-full px-3 text-[12px] font-semibold uppercase tracking-[0.06em]",
                         isRecommended || isFounder
-                          ? "btn-gold shadow-elev-1 hover:shadow-elev-2"
+                          ? "btn-gold shadow-elev-1"
                           : "border border-border bg-card text-foreground hover:border-brand-gold hover:text-brand-gold",
                       )}
                     >
@@ -342,26 +316,23 @@ function PlansPage() {
                       <ArrowRight className="h-3.5 w-3.5" aria-hidden />
                     </button>
                   </article>
-
                 );
               })}
             </div>
           )}
-
         </section>
 
-        {/* Detalhes — painel de ALTURA FIXA: alternar abas ou abrir uma dúvida
-            rola dentro do painel e nunca redimensiona a página. */}
+        {/* Detalhes — ocupa a altura restante; a rolagem acontece AQUI dentro. */}
         <section
           id="detalhes"
-          className={dsx(ds.container, "scroll-mt-24 pb-24 md:pb-20")}
+          className={dsx(ds.container, "flex min-h-0 flex-1 flex-col pb-2")}
           aria-label="Detalhes dos planos"
         >
-          <div className="overflow-hidden rounded-xl border border-border bg-card">
+          <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border bg-card">
             <div
               role="tablist"
               aria-label="Detalhes"
-              className="flex items-center gap-1 border-b border-border/70 px-2"
+              className="flex shrink-0 items-center gap-1 border-b border-border/70 px-2"
             >
               {([
                 { id: "comparativo", label: "Comparar recursos", Icon: Sparkles },
@@ -391,7 +362,7 @@ function PlansPage() {
               id="detalhes-panel"
               role="tabpanel"
               aria-labelledby={`tab-${tab}`}
-              className="h-[clamp(200px,28vh,300px)] overflow-y-auto px-4 py-3"
+              className="pc-rail min-h-0 flex-1 overflow-y-auto px-4 py-3"
             >
               {tab === "comparativo" ? (
                 <ComparisonMatrix
@@ -431,49 +402,50 @@ function PlansPage() {
           </div>
         </section>
 
-        {/* CTA sticky — altura reservada sempre, para não deslocar o conteúdo */}
-        <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40">
-          <div className={dsx(ds.container, "pointer-events-auto pb-3 pt-2")}>
-            <div className="flex min-h-[58px] items-center justify-between gap-3 rounded-xl border border-border bg-card/95 px-3.5 py-2.5 shadow-elev-2 backdrop-blur supports-[backdrop-filter]:bg-card/85">
-              <div className="min-w-0">
-                <p className="truncate text-[12.5px] font-semibold text-foreground">
-                  {selectedPlan?.name ?? "Escolha um plano"}
-                </p>
-                <p className="truncate text-[11.5px] text-muted-foreground">
-                  {!selectedPlan
-                    ? "7 dias grátis, sem cartão"
-                    : selectedPlan.price_cents === 0
-                      ? "7 dias grátis · sem cartão"
-                      : `${centsToBRL(selectedPlan.price_cents)} · ${selectedPlan.days} dias`}
-                </p>
-              </div>
-              <button
-                type="button"
-                onClick={() => selectedPlan && handleBuy(selectedPlan)}
-                disabled={!selectedPlan || buying === selectedPlan.id}
-                data-loading={selectedPlan && buying === selectedPlan.id ? "true" : undefined}
-                className={dsx(
-                  ds.btn.base,
-                  "btn-gold h-10 min-w-[9.5rem] shrink-0 px-4 text-[12px] font-bold uppercase tracking-[0.08em] shadow-elev-1",
-                )}
-              >
-                {selectedPlan && buying === selectedPlan.id
-                  ? "Iniciando…"
-                  : selectedPlan?.price_cents === 0
-                    ? "Começar grátis"
-                    : "Assinar"}
-                <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-              </button>
+        {/* Barra de ação — em fluxo, sempre visível, nunca sobreposta. */}
+        <div
+          className={dsx(
+            ds.container,
+            "shrink-0 pb-[calc(env(safe-area-inset-bottom,0px)+0.5rem)] pt-1",
+          )}
+        >
+          <div className="flex min-h-[54px] items-center justify-between gap-3 rounded-xl border border-border bg-card px-3.5 py-2 shadow-elev-2">
+            <div className="min-w-0">
+              <p className="truncate text-[12.5px] font-semibold text-foreground">
+                {selectedPlan?.name ?? "Escolha um plano"}
+              </p>
+              <p className="truncate text-[11.5px] text-muted-foreground">
+                {!selectedPlan
+                  ? "7 dias grátis, sem cartão"
+                  : selectedPlan.price_cents === 0
+                    ? "7 dias grátis · sem cartão"
+                    : `${centsToBRL(selectedPlan.price_cents)} · ${selectedPlan.days} dias`}
+              </p>
             </div>
+            <button
+              type="button"
+              onClick={() => selectedPlan && handleBuy(selectedPlan)}
+              disabled={!selectedPlan || buying === selectedPlan.id}
+              data-loading={selectedPlan && buying === selectedPlan.id ? "true" : undefined}
+              className={dsx(
+                ds.btn.base,
+                "btn-gold btn-state-safe h-10 min-w-[8.5rem] shrink-0 px-4 text-[12px] font-bold uppercase tracking-[0.08em] shadow-elev-1 sm:min-w-[9.5rem]",
+              )}
+            >
+              {selectedPlan && buying === selectedPlan.id
+                ? "Iniciando…"
+                : selectedPlan?.price_cents === 0
+                  ? "Começar grátis"
+                  : "Assinar"}
+              <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+            </button>
           </div>
         </div>
-
-
-      </PageShellContent>
-
-    </PageShell>
+      </main>
+    </div>
   );
 }
+
 
 // ============================================================================
 // ComparisonMatrix — tabela comparativa lado a lado com plano ideal destacado
