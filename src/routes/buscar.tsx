@@ -420,8 +420,12 @@ function SearchPage() {
           <div className={`min-w-0 space-y-6 ${hasQuery ? "min-h-[75svh]" : ""}`}>
             {/* BUSCA — protagonista, sem caixa: apenas fio dourado superior */}
             <div className="relative border-t border-brand-gold/40 pt-4">
-
+              <PriceSearchBar
+                initialQuery={q}
+                mode={mode}
+                pureOnly={pureOnly}
                 brandFilter={brandFilter}
+
                 priceMin={Number.isFinite(priceMin) ? priceMin : undefined}
                 priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
                 onQueryChange={syncQueryToUrl}
