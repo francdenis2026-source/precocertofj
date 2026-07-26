@@ -26,7 +26,7 @@ import { BackButton } from "@/components/layout/BackButton";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 
 import { useReducedMotion } from "@/lib/reduced-motion";
-import { Filter, Search, SlidersHorizontal, Sparkles, X } from "lucide-react";
+import { BellRing, Filter, Search, SlidersHorizontal, X } from "lucide-react";
 
 
 const searchSchema = z.object({
@@ -79,7 +79,7 @@ function SearchPage() {
   const { user, loading } = useSession();
   const urlSyncTimer = useRef<number | null>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
-  const { reducedMotion, toggleReducedMotion } = useReducedMotion();
+  const { reducedMotion } = useReducedMotion();
 
 
   const mode: SearchMode = search.mode === "loose" ? "loose" : "strict";
@@ -390,18 +390,15 @@ function SearchPage() {
               />
             )}
             <span aria-hidden className="hidden h-8 w-px bg-border md:block" />
-            <button
-              type="button"
-              onClick={toggleReducedMotion}
-              aria-pressed={reducedMotion}
-              title="Reduzir animações desta tela"
-              className="inline-flex h-7 items-center gap-1.5 rounded-full border border-border px-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold aria-pressed:border-brand-gold aria-pressed:text-[var(--pc-gold-ink)]"
+            <Link
+              to="/alertas"
+              title="Criar alerta quando o preço cair"
+              className="inline-flex h-7 items-center gap-1.5 rounded-full border border-border px-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
             >
-              <Sparkles className="h-3.5 w-3.5" aria-hidden="true" />
-              <span className="hidden sm:inline">
-                {reducedMotion ? "Animações reduzidas" : "Reduzir animações"}
-              </span>
-            </button>
+              <BellRing className="h-3.5 w-3.5" aria-hidden="true" />
+              <span className="hidden sm:inline">Alertas de preço</span>
+            </Link>
+
             <FreeQuotaBadge variant="inline" />
           </div>
 
