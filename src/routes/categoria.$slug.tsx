@@ -430,7 +430,8 @@ function CategoryPage() {
                   </button>
                 )
               )}
-            </>
+            </div>
+
           )}
         </section>
       </main>
