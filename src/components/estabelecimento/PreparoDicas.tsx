@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Beef, Clock, Download, Filter, Flame, Share2, Star, Trash2, X } from "lucide-react";
 import imgCozidao from "@/assets/preparo/cozidao.jpg";
 import imgAssado from "@/assets/preparo/assado.jpg";
@@ -29,10 +29,6 @@ const PROTEINA_LABEL: Record<ProteinaId, string> = PROTEINAS.reduce(
   (acc, p) => ({ ...acc, [p.id]: p.label }),
   {} as Record<ProteinaId, string>,
 );
-const PROTEINA_EMOJI: Record<ProteinaId, string> = PROTEINAS.reduce(
-  (acc, p) => ({ ...acc, [p.id]: p.emoji }),
-  {} as Record<ProteinaId, string>,
-);
 
 const FOTOS: Record<string, string> = {
   cozidao: imgCozidao,
@@ -41,73 +37,6 @@ const FOTOS: Record<string, string> = {
   strogonoff: imgStrogonoff,
   ensopado: imgEnsopado,
   grelhado: imgGrelhado,
-};
-
-const stroke = {
-  fill: "none",
-  stroke: "currentColor",
-  strokeWidth: 1.6,
-  strokeLinecap: "round" as const,
-  strokeLinejoin: "round" as const,
-};
-
-const ICONS: Record<string, ReactNode> = {
-  cozidao: (
-    <svg viewBox="0 0 48 48" aria-hidden="true" className="h-8 w-8">
-      <path {...stroke} d="M9 20h30l-3 18a3 3 0 0 1-3 2.5H15a3 3 0 0 1-3-2.5L9 20Z" />
-      <path {...stroke} d="M6 20h36" />
-      <path {...stroke} d="M14 20V16a4 4 0 0 1 4-4h12a4 4 0 0 1 4 4v4" />
-      <path {...stroke} d="M20 9c1.5-1.5 1.5-3 0-4.5" />
-      <path {...stroke} d="M28 9c1.5-1.5 1.5-3 0-4.5" />
-    </svg>
-  ),
-  assado: (
-    <svg viewBox="0 0 48 48" aria-hidden="true" className="h-8 w-8">
-      <ellipse {...stroke} cx="24" cy="30" rx="18" ry="7" />
-      <path {...stroke} d="M6 30v3a3 3 0 0 0 3 3h30a3 3 0 0 0 3-3v-3" />
-      <path {...stroke} d="M14 27c2-4 6-6 10-6s8 2 10 6" />
-      <path {...stroke} d="M18 24l2-2M24 22v-2M30 24l-2-2" />
-    </svg>
-  ),
-  churrasco: (
-    <svg viewBox="0 0 48 48" aria-hidden="true" className="h-8 w-8">
-      <path {...stroke} d="M6 14h36" />
-      <path {...stroke} d="M42 14l3-2M42 14l3 2" />
-      <rect {...stroke} x="10" y="10" width="7" height="8" rx="1.5" />
-      <rect {...stroke} x="20" y="10" width="7" height="8" rx="1.5" />
-      <rect {...stroke} x="30" y="10" width="7" height="8" rx="1.5" />
-      <path {...stroke} d="M12 40c-2-3 0-5 2-7-1 4 3 4 3 8" />
-      <path {...stroke} d="M23 42c-2-3 0-6 2-8-1 4 3 5 3 9" />
-      <path {...stroke} d="M34 40c-2-3 0-5 2-7-1 4 3 4 3 8" />
-    </svg>
-  ),
-  strogonoff: (
-    <svg viewBox="0 0 48 48" aria-hidden="true" className="h-8 w-8">
-      <path {...stroke} d="M8 22h28a4 4 0 0 1 0 8H14a6 6 0 0 1-6-6v-2Z" />
-      <path {...stroke} d="M36 26h6" />
-      <path {...stroke} d="M14 20c2-2 5-2 7 0" />
-      <path {...stroke} d="M22 18c2-2 5-2 7 0" />
-      <path {...stroke} d="M18 15c2-2 5-2 7 0" />
-    </svg>
-  ),
-  ensopado: (
-    <svg viewBox="0 0 48 48" aria-hidden="true" className="h-8 w-8">
-      <path {...stroke} d="M6 24h36a0 0 0 0 1 0 0 18 18 0 0 1-36 0Z" />
-      <path {...stroke} d="M4 24h40" />
-      <path {...stroke} d="M36 8l4 4-12 12-4-4Z" />
-      <circle {...stroke} cx="16" cy="32" r="2" />
-      <circle {...stroke} cx="24" cy="36" r="2" />
-      <circle {...stroke} cx="32" cy="32" r="2" />
-    </svg>
-  ),
-  grelhado: (
-    <svg viewBox="0 0 48 48" aria-hidden="true" className="h-8 w-8">
-      <rect {...stroke} x="6" y="14" width="36" height="20" rx="2" />
-      <path {...stroke} d="M6 20h36M6 26h36M6 32h36" />
-      <path {...stroke} d="M14 34v4M34 34v4" />
-      <path {...stroke} d="M18 23c3-3 9-3 12 0s3 5 0 6H18c-3-1-3-3 0-6Z" />
-    </svg>
-  ),
 };
 
 const STORAGE_KEY = "preparo:favoritos:v1";
