@@ -510,17 +510,17 @@ function EstablishmentsPage() {
 
           {/* Métricas ao vivo — botões acessíveis, abrem detalhes */}
           {data && (
-            <div className="mt-3 grid grid-cols-2 gap-1.5 sm:gap-2 md:grid-cols-4 md:gap-2.5">
+            <div className="mt-2.5 grid grid-cols-2 gap-1.5 sm:gap-2 md:grid-cols-4">
               <HeroMetric
                 icon={Store}
-                label="Estabelecimentos"
+                label="Comércios"
                 value={String(data.totalEstablishments)}
                 hint="Ver rede"
                 onClick={() => setMetricDetail("establishments")}
               />
               <HeroMetric
                 icon={Package}
-                label="Produtos cadastrados"
+                label="Produtos"
                 value={data.totalProducts.toLocaleString("pt-BR")}
                 hint="Ver categorias"
                 onClick={() => setMetricDetail("products")}
@@ -528,6 +528,7 @@ function EstablishmentsPage() {
               <HeroMetric
                 icon={PiggyBank}
                 label="Maior economia"
+
                 value={data.totalMaxSavings > 0 ? `R$ ${data.totalMaxSavings.toFixed(2).replace(".", ",")}` : "—"}
                 hint="Onde economizar"
                 onClick={() => setMetricDetail("savings")}
