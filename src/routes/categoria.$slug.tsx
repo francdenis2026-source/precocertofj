@@ -400,35 +400,54 @@ function PlantaoStrip() {
   const amanha = hoje && PLANTOES[hoje + 1] ? farmaciaPorId(PLANTOES[hoje + 1]) : null;
 
   return (
-    <section className="mt-3 rounded-xl border border-brand-gold/60 bg-brand-gold/10 p-3" aria-label="Plantão das farmácias">
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-        <span className="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-[var(--pc-gold-ink)]">
-          <CalendarDays className="h-3.5 w-3.5" aria-hidden /> Plantão
-          {hoje ? ` · hoje (${diaDaSemana(hoje)})` : ""}
-        </span>
-        <span className="min-w-0 flex-1 truncate text-[13px] font-semibold text-foreground">
-          {f ? `${f.nome} — ${f.endereco}, ${f.bairro}` : "Consulte o calendário oficial do mês"}
-        </span>
-        {f?.telefones[0] && (
-          <a
-            href={`tel:${f.telefones[0].replace(/\D/g, "")}`}
-            className="inline-flex h-7 items-center gap-1 rounded-full border border-border bg-background px-2.5 text-[11.5px] font-semibold"
+    <section
+      className="mt-2.5 overflow-hidden rounded-xl border border-brand-gold/55 bg-brand-gold/10"
+      aria-label="Plantão das farmácias"
+    >
+      <div className="flex flex-col gap-2 px-3 py-2.5 lg:flex-row lg:items-center lg:gap-3">
+        <div className="flex min-w-0 flex-1 flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-2.5">
+          <span className="inline-flex h-6 w-fit shrink-0 items-center gap-1.5 rounded-full bg-brand-gold px-2.5 text-[9.5px] font-bold uppercase leading-none tracking-[0.14em] text-brand-navy">
+            <CalendarDays className="h-3 w-3" aria-hidden />
+            Plantão{hoje ? ` · ${diaDaSemana(hoje)}` : ""}
+          </span>
+          <p className="min-w-0 truncate text-[13px] font-semibold leading-snug text-foreground">
+            {f ? (
+              <>
+                {f.nome}
+                <span className="font-normal text-muted-foreground">
+                  {" — "}
+                  {f.endereco}, {f.bairro}
+                </span>
+              </>
+            ) : (
+              "Consulte o calendário oficial do mês"
+            )}
+          </p>
+        </div>
+        <div className="flex shrink-0 items-center gap-2">
+          {f?.telefones[0] && (
+            <a
+              href={`tel:${f.telefones[0].replace(/\D/g, "")}`}
+              className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-background px-3 text-[11.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold"
+            >
+              <Phone className="h-3 w-3 text-brand-gold" aria-hidden /> {f.telefones[0]}
+            </a>
+          )}
+          <Link
+            to="/farmacias"
+            className="inline-flex h-8 items-center gap-1.5 rounded-full bg-brand-gold px-3 text-[11.5px] font-bold leading-none text-brand-navy transition-opacity hover:opacity-90"
           >
-            <Phone className="h-3 w-3" aria-hidden /> {f.telefones[0]}
-          </a>
-        )}
-        <Link
-          to="/farmacias"
-          className="inline-flex h-7 items-center gap-1 rounded-full bg-brand-gold px-3 text-[11.5px] font-bold text-brand-navy"
-        >
-          Calendário completo <ArrowRight className="h-3 w-3" aria-hidden />
-        </Link>
+            Calendário completo <ArrowRight className="h-3 w-3" aria-hidden />
+          </Link>
+        </div>
       </div>
       {amanha && (
-        <p className="mt-1 text-[11.5px] text-muted-foreground">
-          Amanhã: <strong className="font-semibold text-foreground">{amanha.nome}</strong> — {amanha.bairro}
+        <p className="border-t border-brand-gold/25 px-3 py-1.5 text-[11.5px] leading-snug text-muted-foreground">
+          Amanhã: <strong className="font-semibold text-foreground">{amanha.nome}</strong> —{" "}
+          {amanha.bairro}
         </p>
       )}
     </section>
   );
+
 }
