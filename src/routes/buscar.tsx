@@ -25,7 +25,9 @@ import {
 import { BackButton } from "@/components/layout/BackButton";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 
-import { Filter, Search, SlidersHorizontal, X } from "lucide-react";
+import { useReducedMotion } from "@/lib/reduced-motion";
+import { Filter, Search, SlidersHorizontal, Sparkles, X } from "lucide-react";
+
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
