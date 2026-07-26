@@ -1943,7 +1943,9 @@ function MarketGroupedResults({
       if (!b.kind && p.marketKind) b.kind = p.marketKind;
 
       const sp = spread.get(g.productName);
-      const isBest = !!sp && p.price <= sp.best + 0.0001;
+      // Só faz sentido marcar "melhor" quando há mais de um preço para comparar.
+      const isBest = !!sp && sp.worst > sp.best && p.price <= sp.best + 0.0001;
+
       if (sp && sp.worst > sp.best) {
         if (isBest) b.bestCount += 1;
         b.savings += Math.max(0, sp.worst - p.price);
