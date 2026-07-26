@@ -67,6 +67,9 @@ const CATEGORY_LABELS: Record<string, string> = {
   doces: "Doces",
   congelados: "Congelados",
   biscoitos: "Biscoitos",
+  bebidas_em_po: "Bebidas em pó",
+  hortifruti: "Hortifrúti",
+  pet: "Pet",
   outros: "Outros",
 };
 
@@ -241,7 +244,7 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
         if (rows.length < PAGE) break;
       }
       const topCategories: MetricCategoryBreakdown[] = Array.from(catCounts.entries())
-        .map(([key, count]) => ({ key, label: CATEGORY_LABELS[key] ?? key, count }))
+        .map(([key, count]) => ({ key, label: CATEGORY_LABELS[key] ?? key.replace(/_/g, " ").replace(/^./, (c) => c.toUpperCase()), count }))
         .sort((a, b) => b.count - a.count);
 
 
