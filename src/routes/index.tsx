@@ -692,13 +692,21 @@ function HomePage() {
                     </span>
                   </button>
                 </SheetTrigger>
-                <SheetContent side="bottom" className="max-h-[88dvh] overflow-y-auto">
+                <SheetContent
+                  side="bottom"
+                  className="max-h-[88dvh] overflow-y-auto border-t-0 p-4 sm:p-6"
+                  style={{ background: P.navy, color: "#EAF0F7" }}
+                >
                   <SheetHeader className="text-left">
-                    <SheetTitle className="font-serif text-[19px] font-normal">
+                    <SheetTitle
+                      className="font-serif text-[19px] font-normal"
+                      style={{ color: "#EAF0F7" }}
+                    >
                       Explorar o PreçoCerto
                     </SheetTitle>
                   </SheetHeader>
                   <div className="space-y-5 pb-6">
+
                     <Suspense fallback={<div className="h-24 animate-pulse rounded-lg bg-muted" />}>
                       <RecentProducts P={P} serif={serif} />
                       <BenefitsSection />
