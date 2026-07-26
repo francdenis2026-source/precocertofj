@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Link, useCanGoBack, useRouter } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
@@ -31,6 +32,10 @@ export function BackButton({
 }: BackButtonProps) {
   const router = useRouter();
   const canGoBack = useCanGoBack();
+  // O histórico só existe no cliente: renderizar o mesmo elemento (<a>) no SSR
+  // e na primeira renderização evita aviso de hidratação ao navegar.
+  const [hydrated, setHydrated] = useState(false);
+  useEffect(() => setHydrated(true), []);
 
   const base =
     "inline-flex items-center gap-1.5 rounded-md text-[12.5px] font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
@@ -54,7 +59,7 @@ export function BackButton({
     </>
   );
 
-  if (canGoBack) {
+  if (hydrated && canGoBack) {
     return (
       <button
         type="button"
