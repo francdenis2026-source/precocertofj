@@ -33,6 +33,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
 
 export const Route = createFileRoute("/mapa")({
   head: () => ({
@@ -91,6 +98,7 @@ function NeighborhoodsPage() {
   const [category, setCategory] = useState<string>("");
   const [cityFilter, setCityFilter] = useState<string>("");
   const [onlyFavs, setOnlyFavs] = useState(false);
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const groups = useQuery({
     queryKey: ["neighborhoods"],
