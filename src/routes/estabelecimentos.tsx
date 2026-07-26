@@ -38,7 +38,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ChevronRight, Package, Search, Store, TrendingUp, Pill, Croissant, Beef, ShoppingBasket, PiggyBank, Radio, ChevronLeft } from "lucide-react";
+import { ChevronRight, Package, Search, Store, TrendingUp, Pill, Croissant, Beef, ShoppingBasket, PiggyBank, Radio, ChevronLeft, LayoutGrid, Rows3 } from "lucide-react";
 import mercadosHero from "@/assets/mercados-hero-v3.jpg.asset.json";
 import {
   MarketEditorialCard,
@@ -176,6 +176,13 @@ function EstablishmentsPage() {
   const loc = useUserLocation();
   const [kindFilter, setKindFilter] = useState<string>(persisted.kindFilter);
   const [metricDetail, setMetricDetail] = useState<null | "establishments" | "products" | "savings" | "live">(null);
+  const [view, setView] = useState<"cards" | "list">(() => {
+    if (typeof window === "undefined") return "cards";
+    return window.localStorage.getItem("pc_estab_view") === "list" ? "list" : "cards";
+  });
+  useEffect(() => {
+    if (typeof window !== "undefined") window.localStorage.setItem("pc_estab_view", view);
+  }, [view]);
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const heroOverlayOpacity = useAdaptiveOverlayOpacity(mercadosHero.url, { min: 0.6, max: 0.94 });
 
@@ -755,18 +762,48 @@ function EstablishmentsPage() {
                   </div>
                   <div className="flex flex-wrap items-center justify-between gap-2 border-t border-border/50 px-2.5 py-2 md:px-3.5">
                     <LocationControl loc={loc} variant="surface" />
-                    <span className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-foreground/70">
-                      {referencePoint ? (
-                        <>Referência ativa · distâncias estimadas</>
-                      ) : (
-                        <>
-                          <span className="tabular-nums text-foreground">
-                            {allFilteredItems.length}
-                          </span>{" "}
-                          {allFilteredItems.length === 1 ? "resultado" : "resultados"}
-                        </>
-                      )}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <div
+                        role="group"
+                        aria-label="Modo de exibição"
+                        className="inline-flex overflow-hidden rounded-full border border-border/70 bg-background"
+                      >
+                        {([
+                          { key: "cards" as const, icon: LayoutGrid, label: "Cards" },
+                          { key: "list" as const, icon: Rows3, label: "Lista" },
+                        ]).map((opt) => {
+                          const active = view === opt.key;
+                          return (
+                            <button
+                              key={opt.key}
+                              type="button"
+                              onClick={() => setView(opt.key)}
+                              aria-pressed={active}
+                              className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-[0.12em] transition ${
+                                active
+                                  ? "bg-brand-gold text-brand-navy"
+                                  : "text-foreground/70 hover:text-foreground"
+                              }`}
+                            >
+                              <opt.icon className="h-3.5 w-3.5" aria-hidden />
+                              {opt.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                      <span className="text-[10.5px] font-bold uppercase tracking-[0.14em] text-foreground/70">
+                        {referencePoint ? (
+                          <>Referência ativa</>
+                        ) : (
+                          <>
+                            <span className="tabular-nums text-foreground">
+                              {allFilteredItems.length}
+                            </span>{" "}
+                            {allFilteredItems.length === 1 ? "resultado" : "resultados"}
+                          </>
+                        )}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
@@ -798,6 +835,63 @@ function EstablishmentsPage() {
                       Limpar filtros
                     </button>
                   </div>
+                ) : view === "list" ? (
+                <ul className="divide-y divide-border/60" aria-label="Lista de estabelecimentos">
+                  {visibleItems.map((e, idx) => {
+                    const tier = classifyTier(e.productsCount);
+                    const freshness = describeFreshness(e.lastUpdate);
+                    const dist = distanceById.get(e.id);
+                    return (
+                      <li key={e.id}>
+                        <Link
+                          to="/estabelecimento/$slug"
+                          params={{ slug: slugifyEstablishment(e.name) }}
+                          className="flex items-center gap-3 px-3 py-2.5 transition-colors hover:bg-muted/50 md:px-4"
+                        >
+                          <span className="w-6 shrink-0 text-right font-mono text-[12px] font-bold tabular-nums text-foreground/55">
+                            {String(idx + 1).padStart(2, "0")}
+                          </span>
+                          <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md border border-border/60 bg-white p-1">
+                            {e.logoUrl ? (
+                              <img src={e.logoUrl} alt="" loading="lazy" className="h-full w-full object-contain" />
+                            ) : (
+                              <span className="text-[11px] font-bold text-brand-navy">
+                                {e.name.substring(0, 2).toUpperCase()}
+                              </span>
+                            )}
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="flex min-w-0 items-center gap-1.5">
+                              <span className="truncate text-[13.5px] font-semibold text-foreground">{e.name}</span>
+                              <span
+                                className="shrink-0 rounded-sm px-1 py-[1px] text-[8.5px] font-bold uppercase leading-none tracking-[0.14em]"
+                                style={{ backgroundColor: tier.color, color: "var(--brand-navy)" }}
+                              >
+                                {tier.label}
+                              </span>
+                            </span>
+                            <span className="mt-0.5 block truncate text-[11.5px] text-foreground/75">
+                              {[e.neighborhood, e.city].filter(Boolean).join(" · ") || "Localização não informada"}
+                              {dist ? ` · ${formatDistance(dist.km)}` : ""}
+                            </span>
+                          </span>
+                          <span className="hidden shrink-0 text-right sm:block">
+                            <span className="block font-mono text-[13px] font-bold tabular-nums text-foreground">
+                              {e.productsCount}
+                            </span>
+                            <span className="block text-[10px] font-bold uppercase tracking-[0.12em] text-foreground/70">
+                              produtos
+                            </span>
+                          </span>
+                          <span className="hidden w-[104px] shrink-0 text-right text-[11px] text-foreground/75 md:block">
+                            {freshness.label}
+                          </span>
+                          <ChevronRight className="h-4 w-4 shrink-0 text-foreground/50" aria-hidden />
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
                 ) : (
                 <ul
                   className="grid grid-cols-1 gap-3 p-2.5 sm:grid-cols-2 md:p-4 lg:grid-cols-3"
