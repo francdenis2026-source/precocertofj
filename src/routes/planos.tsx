@@ -185,7 +185,7 @@ function PlansPage() {
 
 
   return (
-    <div className="flex h-[calc(100svh-64px)] flex-col overflow-hidden overscroll-none bg-background text-foreground md:h-[100svh]">
+    <div data-planos-shell className="flex h-[calc(100svh-64px)] flex-col overflow-hidden overscroll-none bg-background text-foreground md:h-[100svh]">
       <div className="shrink-0">
         <SiteHeader />
       </div>
@@ -199,7 +199,7 @@ function PlansPage() {
             showBack={false}
             breadcrumbs={[{ label: "Início", to: "/" }, { label: "Planos" }]}
             description={
-              <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-1">
+              <span data-short-hide className="inline-flex flex-wrap items-center gap-x-2 gap-y-1">
                 <span>Escolha o plano que combina com sua rotina — 7 dias grátis, sem cartão.</span>
                 <span className="inline-flex items-center gap-1 text-[11.5px] text-muted-foreground">
                   <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-brand-gold" aria-hidden />
@@ -223,6 +223,7 @@ function PlansPage() {
               {[0, 1, 2, 3].map((i) => (
                 <div
                   key={i}
+                  data-planos-card
                   className="h-[clamp(190px,26vh,238px)] w-[76%] shrink-0 animate-pulse rounded-xl border border-border bg-muted/40 lg:w-auto"
                 />
               ))}
@@ -239,6 +240,7 @@ function PlansPage() {
                 return (
                   <article
                     key={plan.id}
+                    data-planos-card
                     onClick={() => setSelectedId(plan.id)}
                     className={dsx(
                       "pc-lift relative flex h-[clamp(190px,26vh,238px)] w-[76%] shrink-0 snap-start cursor-pointer flex-col rounded-xl border border-border bg-card p-3.5 shadow-elev-1 sm:w-[46%] lg:h-auto lg:min-h-[214px] lg:w-auto lg:p-4",
@@ -250,7 +252,7 @@ function PlansPage() {
                     {(isRecommended || isFounder) && (
                       <span
                         className={dsx(
-                          "absolute right-3 top-3 inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.12em]",
+                          "absolute right-3 top-3 inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.12em]",
                           isRecommended ? "badge-gold" : "badge-gold-outline",
                         )}
                       >
@@ -404,12 +406,14 @@ function PlansPage() {
 
         {/* Barra de ação — em fluxo, sempre visível, nunca sobreposta. */}
         <div
+          data-testid="planos-cta-bar"
           className={dsx(
             ds.container,
             "shrink-0 pb-[calc(env(safe-area-inset-bottom,0px)+0.5rem)] pt-1",
           )}
         >
           <div className="flex min-h-[54px] items-center justify-between gap-3 rounded-xl border border-border bg-card px-3.5 py-2 shadow-elev-2">
+
             <div className="min-w-0">
               <p className="truncate text-[12.5px] font-semibold text-foreground">
                 {selectedPlan?.name ?? "Escolha um plano"}

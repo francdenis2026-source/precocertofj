@@ -146,12 +146,13 @@ const PRIVACIDADE: Item[] = [
         encomendar um aplicativo sob demanda? Fale com o desenvolvedor pelo
         WhatsApp{" "}
         <a
-          href="https://wa.me/5588992031340"
+          href="https://wa.me/5568992031340"
           target="_blank"
           rel="noopener noreferrer"
           className="font-semibold text-brand-gold underline underline-offset-2"
         >
-          (88) 99203-1340
+          (68) 99203-1340
+
         </a>{" "}
         ou por{" "}
         <a

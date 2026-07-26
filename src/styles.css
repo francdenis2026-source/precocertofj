@@ -3680,3 +3680,165 @@ html.dark :is(.hover\:text-primary):not(.primary-on-light):hover {
     transform: none !important;
   }
 }
+
+/* ============================================================================
+   HOVER/FOCO/TOQUE PROFISSIONAL — paridade entre mouse, teclado e touch.
+   Mesmo vocabulário (elevação curta + halo dourado) aplicado a cartões e
+   elementos clicáveis genéricos, sem depender apenas de :hover.
+   ========================================================================== */
+:where(
+  .pc-lift,
+  .pc-tile,
+  .ds-card-hover,
+  a.ds-card,
+  button.ds-card,
+  label.ds-card,
+  .pc-surface,
+  a[data-card],
+  button[data-card],
+  [data-clickable]
+):focus-visible {
+  outline: none;
+  transform: translateY(-2px);
+  border-color: color-mix(in oklab, var(--pc-home-gold) 55%, var(--color-border));
+  box-shadow:
+    0 0 0 2px var(--color-background),
+    0 0 0 4px color-mix(in oklab, var(--pc-home-gold) 75%, transparent),
+    0 14px 26px -18px color-mix(in oklab, var(--pc-home-navy) 55%, transparent);
+}
+
+/* Touch: sem hover disponível, o feedback vem do toque (press state). */
+@media (hover: none) {
+  :where(
+    .pc-lift,
+    .pc-tile,
+    .ds-card-hover,
+    a.ds-card,
+    button.ds-card,
+    label.ds-card,
+    .pc-surface,
+    a[data-card],
+    button[data-card],
+    [data-clickable]
+  ) {
+    -webkit-tap-highlight-color: transparent;
+    transition:
+      transform 140ms cubic-bezier(0.2, 0.7, 0.2, 1),
+      box-shadow 140ms ease,
+      border-color 140ms ease;
+  }
+  :where(
+    .pc-lift,
+    .pc-tile,
+    .ds-card-hover,
+    a.ds-card,
+    button.ds-card,
+    label.ds-card,
+    .pc-surface,
+    a[data-card],
+    button[data-card],
+    [data-clickable]
+  ):active {
+    transform: scale(0.985);
+    border-color: color-mix(in oklab, var(--pc-home-gold) 45%, var(--color-border));
+    box-shadow: 0 10px 20px -16px color-mix(in oklab, var(--pc-home-navy) 60%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(
+    .pc-lift,
+    .pc-tile,
+    .ds-card-hover,
+    a.ds-card,
+    button.ds-card,
+    label.ds-card,
+    .pc-surface,
+    a[data-card],
+    button[data-card],
+    [data-clickable]
+  ):focus-visible,
+  :where(
+    .pc-lift,
+    .pc-tile,
+    .ds-card-hover,
+    .pc-surface,
+    [data-clickable]
+  ):active {
+    transform: none !important;
+  }
+}
+
+/* Landscape de celular (altura curta): densifica /planos para caber em 1 tela. */
+@media (max-height: 540px) {
+  [data-planos-shell] [data-short-hide],
+  [data-planos-shell] nav[aria-label="breadcrumb"] {
+    display: none !important;
+  }
+  [data-planos-shell] h1 {
+    font-size: 1.05rem !important;
+    line-height: 1.15 !important;
+  }
+  [data-planos-shell] [data-planos-card] {
+    height: clamp(122px, 34vh, 168px) !important;
+    min-height: 0 !important;
+    padding: 0.6rem 0.75rem !important;
+  }
+  [data-planos-shell] [data-planos-card] :where(p, li, span) {
+    font-size: 11px !important;
+    line-height: 1.25 !important;
+  }
+}
+
+/* Landscape muito baixo (< 440px de altura): mantém apenas planos + ação. */
+@media (max-height: 440px) {
+  [data-planos-shell] #detalhes {
+    display: none !important;
+  }
+  [data-planos-shell] [data-planos-card] {
+    height: clamp(112px, 46vh, 150px) !important;
+  }
+  [data-planos-shell] [data-testid="planos-cta-bar"] > div {
+    min-height: 46px !important;
+  }
+}
+
+/* Compressão extra do cabeçalho/ação em alturas < 440px. */
+@media (max-height: 440px) {
+  [data-planos-shell] > main > section:first-of-type {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+  [data-planos-shell] > main > section:first-of-type a[href="/"],
+  [data-planos-shell] > main > section:first-of-type nav {
+    display: none !important;
+  }
+  [data-planos-shell] h1 {
+    font-size: 0.95rem !important;
+    margin: 0 !important;
+  }
+  [data-planos-shell] [data-planos-card] {
+    height: clamp(104px, 42vh, 132px) !important;
+    padding: 0.5rem 0.65rem !important;
+  }
+  [data-planos-shell] [data-planos-card] button,
+  [data-planos-shell] [data-planos-card] a {
+    min-height: 30px !important;
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+  [data-planos-shell] #planos {
+    padding-bottom: 0.25rem !important;
+  }
+  [data-planos-shell] #planos > div {
+    padding-top: 0.35rem !important;
+  }
+  [data-planos-shell] [data-testid="planos-cta-bar"] {
+    padding-top: 0 !important;
+  }
+  [data-planos-shell] [data-testid="planos-cta-bar"] > div {
+    min-height: 42px !important;
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.25rem !important;
+  }
+}
