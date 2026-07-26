@@ -176,6 +176,13 @@ function EstablishmentsPage() {
   const loc = useUserLocation();
   const [kindFilter, setKindFilter] = useState<string>(persisted.kindFilter);
   const [metricDetail, setMetricDetail] = useState<null | "establishments" | "products" | "savings" | "live">(null);
+  const [view, setView] = useState<"cards" | "list">(() => {
+    if (typeof window === "undefined") return "cards";
+    return window.localStorage.getItem("pc_estab_view") === "list" ? "list" : "cards";
+  });
+  useEffect(() => {
+    if (typeof window !== "undefined") window.localStorage.setItem("pc_estab_view", view);
+  }, [view]);
   const carouselRef = useRef<HTMLDivElement | null>(null);
   const heroOverlayOpacity = useAdaptiveOverlayOpacity(mercadosHero.url, { min: 0.6, max: 0.94 });
 
