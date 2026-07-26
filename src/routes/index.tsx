@@ -291,7 +291,7 @@ function HomePage() {
           loading="eager"
           fetchPriority="high"
           decoding="async"
-          className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
+          className="pointer-events-none absolute -inset-px h-[calc(100%+2px)] w-[calc(100%+2px)] object-cover object-center"
           style={{
             opacity: 0.42,
             WebkitMaskImage:
@@ -305,19 +305,28 @@ function HomePage() {
         {/* Scrim navy vertical para leitura */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0"
+          className="pointer-events-none absolute -inset-px"
           style={{
             background: `linear-gradient(180deg, color-mix(in oklab, ${P.navy} 78%, transparent) 0%, color-mix(in oklab, ${P.navy} 62%, transparent) 45%, color-mix(in oklab, ${P.navy} 88%, transparent) 100%)`,
           }}
         />
-        {/* Vinheta lateral p/ contraste em telas largas */}
+        {/* Vinheta lateral p/ contraste — cobre também as bordas em qualquer largura */}
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 hidden sm:block"
+          className="pointer-events-none absolute -inset-px"
           style={{
             background: `radial-gradient(120% 80% at 50% 40%, transparent 40%, color-mix(in oklab, ${P.navy} 55%, transparent) 100%)`,
           }}
         />
+        {/* Selagem das bordas esquerda/direita (evita faixa clara na lateral) */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -inset-px"
+          style={{
+            background: `linear-gradient(90deg, color-mix(in oklab, ${P.navy} 70%, transparent) 0%, transparent 12%, transparent 88%, color-mix(in oklab, ${P.navy} 70%, transparent) 100%)`,
+          }}
+        />
+
         {/* Glow dourado */}
         <div
           aria-hidden
