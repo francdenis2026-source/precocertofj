@@ -170,7 +170,7 @@ export function RecentProductsCarousel() {
                   to="/produto-publico/$slug"
                   params={{ slug }}
                   aria-label={`Ver ${p.displayName}`}
-                  className="group/card relative block h-full overflow-hidden rounded-2xl border border-white/40 bg-background/55 shadow-sm backdrop-blur-2xl backdrop-saturate-150 transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:border-white/10 dark:bg-background/40"
+                  className="group/card relative block h-full overflow-hidden rounded-2xl border border-white/40 bg-background/85 shadow-sm transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:border-white/10 dark:bg-background/40"
                 >
                   {/* Glass highlight on top edge */}
                   <span

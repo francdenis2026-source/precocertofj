@@ -65,7 +65,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
 
   const shellClass = isOverlay
     ? "absolute inset-x-0 top-0 z-30"
-    : "sticky top-0 z-40 border-b border-border bg-card/95 text-foreground shadow-elev-1 backdrop-blur-xl dark:bg-background/88";
+    : "sticky top-0 z-40 border-b border-border bg-card/95 text-foreground shadow-elev-1 backdrop-blur-md dark:bg-background/88";
   const brandTextClass = isOverlay ? "text-on-media" : "text-foreground";
   const brandAccentClass = isOverlay ? "text-brand-soft" : "text-[var(--pc-gold-ink)]";
   const subTextClass = isOverlay ? "text-on-media-muted" : "text-muted-foreground";
