@@ -3215,3 +3215,37 @@ code, pre, kbd, samp, tt, var,
 .pc-res-row[data-cheapest="true"] {
   background: var(--res-highlight);
 }
+
+/* Links de ação dentro dos modais de métrica da homepage.
+   Usa a identidade navy/gold em vez do azul do primary, garantindo contraste
+   AA no card claro (navy) e no card escuro (gold). */
+.pc-metric-link {
+  color: var(--pc-home-navy);
+}
+.pc-metric-link:hover {
+  background: color-mix(in oklab, var(--pc-home-gold) 22%, transparent);
+  color: var(--pc-home-navy);
+}
+.pc-metric-link:focus-visible {
+  --tw-ring-color: var(--pc-home-gold);
+}
+.dark .pc-metric-link {
+  color: var(--pc-home-gold);
+}
+.dark .pc-metric-link:hover {
+  background: color-mix(in oklab, var(--pc-home-gold) 18%, transparent);
+  color: var(--pc-home-gold-soft, var(--pc-home-gold));
+}
+.pc-metric-ink {
+  color: var(--pc-home-navy);
+}
+.dark .pc-metric-ink {
+  color: var(--pc-home-gold);
+}
+.pc-metric-hover:hover { color: var(--pc-home-navy); }
+.dark .pc-metric-hover:hover { color: var(--pc-home-gold); }
+.pc-metric-ink-hover:hover {
+  border-color: var(--pc-home-gold);
+  color: var(--pc-home-navy);
+}
+.dark .pc-metric-ink-hover:hover { color: var(--pc-home-gold); }
