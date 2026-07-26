@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { ChevronRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { HomeBrandLink } from "./HomeBrandLink";
 
 export type Crumb = { label: string; to?: string };
 

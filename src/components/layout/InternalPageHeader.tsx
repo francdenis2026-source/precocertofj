@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { BackButton } from "./BackButton";
+import { HomeBrandLink } from "./HomeBrandLink";
 
 export type InternalCrumb = { label: string; to?: string };
 
