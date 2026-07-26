@@ -728,7 +728,7 @@ function NeighborhoodsPage() {
                 <section
                   key={group.neighborhood}
                   id={`bairro-${encodeURIComponent(group.neighborhood)}`}
-                  className="overflow-hidden rounded-xl border border-border bg-card shadow-sm scroll-mt-4 transition-colors hover:border-brand-gold/40"
+                  className="cv-row overflow-hidden rounded-xl border border-border bg-card shadow-sm scroll-mt-4 transition-colors hover:border-brand-gold/40"
                 >
                   {/* Header do bairro — faixa dourada lateral + tipografia clean */}
                   <header className="relative flex items-center justify-between gap-3 border-b border-border bg-muted/30 px-3.5 py-2.5 pl-4">
@@ -858,6 +858,9 @@ function NeighborhoodsPage() {
                               alt={est.name}
                               className="h-full w-full object-cover"
                               loading="lazy"
+                              decoding="async"
+                              width={40}
+                              height={40}
                             />
                           ) : (
                             <Store className="h-4.5 w-4.5 text-muted-foreground" />

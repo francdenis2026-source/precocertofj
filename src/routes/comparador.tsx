@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate, retainSearchParams } from "@tanstac
 import { Nav } from "@/components/brand/Nav";
 import { Footer } from "@/components/brand/Footer";
 import { Breadcrumbs } from "@/components/nav/Breadcrumbs";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
@@ -1478,4 +1478,7 @@ function ProductCardBase({
     </li>
   );
 }
+
+// Memoizado: evita re-render de todos os cards a cada tecla/filtro no mobile.
+const ProductCard = memo(ProductCardBase);
 
