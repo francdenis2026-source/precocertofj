@@ -452,6 +452,7 @@ function CategoryPage() {
           )}
         </section>
       </main>
+      <ProductQuickView product={quickView} onClose={() => setQuickView(null)} />
       <SiteFooter />
     </div>
   );
