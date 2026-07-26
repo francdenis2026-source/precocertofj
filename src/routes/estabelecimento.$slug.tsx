@@ -684,34 +684,182 @@ function CategoryChip({
   );
 }
 
-/** Cartão compacto de produto — densidade alta e tipografia única. */
+/** Trilho de categorias com setas, arraste, roda e teclado (sem recortes). */
+function CategoryRail({
+  categories,
+  activeLabel,
+  onSelect,
+}: {
+  categories: { key: string; label: string; count: number }[];
+  activeLabel: string | null;
+  onSelect: (label: string) => void;
+}) {
+  const scrollerRef = useRef<HTMLDivElement | null>(null);
+  const [state, setState] = useState<RailState>({ canPrev: false, canNext: false });
+  const ctrlRef = useRef<ReturnType<typeof createRailController> | null>(null);
+
+  useEffect(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const ctrl = createRailController(el, setState);
+    ctrlRef.current = ctrl;
+    ctrl.sync();
+    const onResize = () => ctrl.sync();
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      ctrl.destroy();
+      ctrlRef.current = null;
+    };
+  }, [categories.length]);
+
+  return (
+    <nav aria-label="Filtrar por categoria" className="relative mt-2.5">
+      <div className="flex items-center gap-1.5">
+        <RailArrow
+          dir={-1}
+          disabled={!state.canPrev}
+          onClick={() => ctrlRef.current?.scrollByPage(-1)}
+        />
+        <div
+          ref={scrollerRef}
+          onScroll={() => ctrlRef.current?.sync()}
+          onKeyDown={(e) => {
+            if (ctrlRef.current?.handleKey(e.key)) e.preventDefault();
+          }}
+          className="no-scrollbar min-w-0 flex-1 overflow-x-auto scroll-smooth"
+        >
+          <div role="radiogroup" aria-label="Categorias" className="flex w-max gap-1.5 px-0.5 py-0.5">
+            {categories.map((c) => {
+              const active = c.label === "Todas" ? activeLabel === null : activeLabel === c.label;
+              return (
+                <CategoryChip
+                  key={c.key}
+                  label={c.label}
+                  count={c.count}
+                  active={active}
+                  onClick={() => onSelect(c.label)}
+                />
+              );
+            })}
+          </div>
+        </div>
+        <RailArrow
+          dir={1}
+          disabled={!state.canNext}
+          onClick={() => ctrlRef.current?.scrollByPage(1)}
+        />
+      </div>
+    </nav>
+  );
+}
+
+function RailArrow({
+  dir,
+  disabled,
+  onClick,
+}: {
+  dir: -1 | 1;
+  disabled: boolean;
+  onClick: () => void;
+}) {
+  const Icon = dir === -1 ? ChevronLeft : ChevronRight;
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={dir === -1 ? "Categorias anteriores" : "Próximas categorias"}
+      className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-border bg-card text-foreground transition-colors hover:border-brand-gold disabled:opacity-35 disabled:hover:border-border"
+    >
+      <Icon className="h-4 w-4 text-brand-gold" aria-hidden />
+    </button>
+  );
+}
+
+/** Alternância Lista/Grade — radiogroup acessível. */
+function ViewToggle({
+  value,
+  onChange,
+}: {
+  value: "grid" | "list";
+  onChange: (v: "grid" | "list") => void;
+}) {
+  const items = [
+    { id: "grid" as const, label: "Grade", Icon: LayoutGrid },
+    { id: "list" as const, label: "Lista", Icon: ListIcon },
+  ];
+  return (
+    <div
+      role="radiogroup"
+      aria-label="Modo de exibição"
+      className="flex h-9 shrink-0 items-center gap-1 rounded-lg border border-border bg-card p-1"
+    >
+      {items.map(({ id, label, Icon }) => {
+        const active = value === id;
+        return (
+          <button
+            key={id}
+            type="button"
+            role="radio"
+            aria-checked={active}
+            aria-label={`Exibir em ${label.toLowerCase()}`}
+            onClick={() => onChange(id)}
+            className={
+              active
+                ? "inline-flex h-7 items-center gap-1 rounded-md bg-brand-gold px-2 text-[11.5px] font-bold leading-none text-brand-navy"
+                : "inline-flex h-7 items-center gap-1 rounded-md px-2 text-[11.5px] font-semibold leading-none text-muted-foreground transition-colors hover:text-foreground"
+            }
+          >
+            <Icon className="h-3.5 w-3.5" aria-hidden /> {label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function unitSuffix(product: PublicStoreProduct) {
+  const unit = product.unitLabel
+    ? product.unitLabel.replace("R$", "").trim() || product.unitLabel
+    : null;
+  return product.pricePerUnit != null && unit ? ` · ${brl(product.pricePerUnit)} ${unit}` : "";
+}
+
+/** Cartão compacto de produto — clique abre o modal de detalhes. */
 function ProductTile({
   product,
+  onOpen,
   onAlert,
   onHistory,
 }: {
   product: PublicStoreProduct;
+  onOpen: () => void;
   onAlert: () => void;
   onHistory: () => void;
 }) {
-  const unit = product.unitLabel
-    ? product.unitLabel.replace("R$", "").trim() || product.unitLabel
-    : null;
   return (
-    <article className="flex h-full flex-col justify-between rounded-lg border border-border bg-card px-3 py-2.5 transition-colors hover:border-brand-gold">
-      <div className="flex items-start gap-2">
-        <h3 className="min-w-0 flex-1 text-[13px] font-semibold leading-snug text-foreground">
-          {product.productName}
-        </h3>
-        <span className="shrink-0 text-[13.5px] font-bold leading-tight tabular-nums text-foreground">
-          {brl(product.price)}
-        </span>
-      </div>
-      <p className="mt-1 truncate text-[11px] leading-none text-muted-foreground">
-        {[product.brand, product.category].filter(Boolean).join(" · ") || "Sem categoria"}
-        {product.pricePerUnit != null && unit ? ` · ${brl(product.pricePerUnit)} ${unit}` : ""}
-      </p>
-      <div className="mt-2 flex items-center justify-between gap-2 border-t border-border/70 pt-1.5">
+    <article className="flex h-full flex-col justify-between rounded-lg border border-border bg-card transition-colors hover:border-brand-gold">
+      <button
+        type="button"
+        onClick={onOpen}
+        aria-label={`Ver detalhes de ${product.productName}`}
+        className="w-full px-3 pb-1.5 pt-2.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
+      >
+        <div className="flex items-start gap-2">
+          <h3 className="min-w-0 flex-1 text-[13px] font-semibold leading-snug text-foreground">
+            {product.productName}
+          </h3>
+          <span className="shrink-0 text-[13.5px] font-bold leading-tight tabular-nums text-foreground">
+            {brl(product.price)}
+          </span>
+        </div>
+        <p className="mt-1 truncate text-[11px] leading-none text-muted-foreground">
+          {[product.brand, product.category].filter(Boolean).join(" · ") || "Sem categoria"}
+          {unitSuffix(product)}
+        </p>
+      </button>
+      <div className="mx-3 mb-2.5 flex items-center justify-between gap-2 border-t border-border/70 pt-1.5">
         <span className="truncate text-[10.5px] leading-none text-muted-foreground">
           {product.lastDate
             ? `Atualizado ${new Date(product.lastDate).toLocaleDateString("pt-BR")}`
@@ -739,3 +887,57 @@ function ProductTile({
     </article>
   );
 }
+
+/** Linha densa para o modo Lista. */
+function ProductRow({
+  product,
+  onOpen,
+  onAlert,
+  onHistory,
+}: {
+  product: PublicStoreProduct;
+  onOpen: () => void;
+  onAlert: () => void;
+  onHistory: () => void;
+}) {
+  return (
+    <div className="flex items-center gap-2 px-2.5 py-2 transition-colors hover:bg-muted/40">
+      <button
+        type="button"
+        onClick={onOpen}
+        aria-label={`Ver detalhes de ${product.productName}`}
+        className="min-w-0 flex-1 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
+      >
+        <span className="block truncate text-[12.5px] font-semibold leading-snug text-foreground">
+          {product.productName}
+        </span>
+        <span className="block truncate text-[10.5px] leading-none text-muted-foreground">
+          {[product.brand, product.category].filter(Boolean).join(" · ") || "Sem categoria"}
+          {unitSuffix(product)}
+        </span>
+      </button>
+      <span className="shrink-0 text-[13px] font-bold tabular-nums text-foreground">
+        {brl(product.price)}
+      </span>
+      <div className="flex shrink-0 items-center gap-1">
+        <button
+          type="button"
+          onClick={onAlert}
+          aria-label={`Criar alerta de preço para ${product.productName}`}
+          className="grid h-7 w-7 place-items-center rounded-full border border-border transition-colors hover:border-brand-gold"
+        >
+          <Bell className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+        </button>
+        <button
+          type="button"
+          onClick={onHistory}
+          aria-label={`Ver histórico de preço de ${product.productName}`}
+          className="grid h-7 w-7 place-items-center rounded-full border border-border transition-colors hover:border-brand-gold"
+        >
+          <History className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+        </button>
+      </div>
+    </div>
+  );
+}
+
