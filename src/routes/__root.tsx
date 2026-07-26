@@ -150,6 +150,13 @@ function RootComponent() {
   useAutoTranslate();
   useTheme();
 
+  // PWA: registra o service worker (auto-update) apenas em produção real.
+  useEffect(() => {
+    void import("@/lib/pwa").then((m) => m.setupServiceWorker());
+  }, []);
+
+
+
 
   useEffect(() => {
     if (typeof window === "undefined") return;
