@@ -575,9 +575,10 @@ function EstablishmentPage() {
               onAlert={createAlert}
               onOpen={openQuickView}
             />
-            <div className="mt-8">
+            <div className="mt-5">
               <PreparoDicas />
             </div>
+
 
           </>
         )}
