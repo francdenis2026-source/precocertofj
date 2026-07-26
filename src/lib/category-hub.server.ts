@@ -172,7 +172,7 @@ export async function buildCategoryHub(slug: string): Promise<CategoryHub> {
         updatedAt: g.entries.reduce((m, e) => (e.at > m ? e.at : m), g.entries[0].at),
       };
     })
-    .sort((a, b) => b.storeCount - a.storeCount || a.minPrice - b.minPrice);
+    .sort((a, b) => a.minPrice - b.minPrice || b.storeCount - a.storeCount);
 
   const stores: HubStore[] = estabs
     .filter((e) => nicheStoreIds.has(e.id) || (storeCounts.get(e.id) ?? 0) > 0)
