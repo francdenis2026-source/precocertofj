@@ -713,22 +713,23 @@ function EstablishmentsPage() {
                 description="Assim que houver mercados na sua região, eles aparecerão aqui."
               />
             ) : (
-              <SectionCard
-                title="Rede de mercados"
-                description={`${allFilteredItems.length} ${allFilteredItems.length === 1 ? "estabelecimento" : "estabelecimentos"} monitorados.`}
-                bodyClassName="p-0"
-              >
+              <section aria-labelledby="rede-heading">
+                <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-t border-border/60 pt-4">
+                  <h2
+                    id="rede-heading"
+                    className="font-serif text-[19px] font-normal leading-tight tracking-tight text-foreground"
+                  >
+                    Rede de mercados
+                  </h2>
+                  <span className="text-[11.5px] text-muted-foreground">
+                    {allFilteredItems.length}{" "}
+                    {allFilteredItems.length === 1 ? "estabelecimento" : "estabelecimentos"} monitorados
+                  </span>
+                </div>
                 {/* Barra de comando — busca protagonista + filtros, fixa ao rolar */}
-                <div className="sticky top-0 z-20 border-b border-border/60 bg-card/95 backdrop-blur-md supports-[backdrop-filter]:bg-card/80">
-                  <span
-                    aria-hidden
-                    className="block h-px w-full"
-                    style={{
-                      background:
-                        "linear-gradient(90deg, transparent, color-mix(in oklab, var(--brand-gold) 75%, transparent) 50%, transparent)",
-                    }}
-                  />
-                  <div className="flex flex-col gap-2 p-2.5 md:flex-row md:items-center md:gap-2.5 md:p-3.5">
+                <div className="sticky top-[52px] z-20 border-y border-border/60 bg-background/95 backdrop-blur md:top-[60px] supports-[backdrop-filter]:bg-background/80">
+                  <div className="flex flex-col gap-2 py-2.5 md:flex-row md:items-center md:gap-2.5">
+
                     <div className="relative min-w-0 flex-1">
                       <Search
                         className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--pc-gold-ink)]"
