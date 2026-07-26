@@ -123,7 +123,7 @@ function ButcherPage() {
     const apply = () =>
       navigate({
         to: "/estabelecimento/$slug_/acougue",
-        params: { slug },
+        params: { slug, slug_: slug } as never,
         search: (prev: Record<string, unknown>) => ({
           ...prev,
           bq: next.q,
@@ -142,7 +142,7 @@ function ButcherPage() {
     (product: PublicStoreProduct) => {
       navigate({
         to: "/estabelecimento/$slug_/acougue",
-        params: { slug },
+        params: { slug, slug_: slug } as never,
         search: ((prev: Record<string, unknown>) => ({ ...prev, p: product.slug })) as never,
       });
     },
@@ -151,7 +151,7 @@ function ButcherPage() {
   const closeQuickView = useCallback(() => {
     navigate({
       to: "/estabelecimento/$slug_/acougue",
-      params: { slug },
+      params: { slug, slug_: slug } as never,
       search: ((prev: Record<string, unknown>) => ({ ...prev, p: "" })) as never,
       replace: true,
     });
