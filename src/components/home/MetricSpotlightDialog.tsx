@@ -236,13 +236,13 @@ function statStrip(
     return [
       ["Mercados", num(data.totals.establishments)],
       ["Produtos", num(data.totals.products)],
-      ["Preços/7d", num(data.totals.scans7d)],
+      ["Comparáveis", num(data.totals.productsCompared)],
     ];
   if (kind === "products")
     return [
       ["Cadastrados", num(data.totals.products)],
       ["Categorias", num(data.topCategories.length)],
-      ["Preços/7d", num(data.totals.scans7d)],
+      ["Mercados", num(data.totals.establishments)],
     ];
   return [
     ["Média", `${data.totals.avgSavingsPct}%`],
@@ -250,6 +250,7 @@ function statStrip(
     ["Comparados", num(data.totals.productsCompared)],
   ];
 }
+
 
 /* ---------- Primitivos compactos ---------- */
 
