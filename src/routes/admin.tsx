@@ -2153,9 +2153,11 @@ function LogoUploadField({
           )}
         </div>
       </div>
+      <LogoQualityPanel src={current || lastDataUrl} name="Prévia" />
     </div>
   );
 }
+
 
 
 
