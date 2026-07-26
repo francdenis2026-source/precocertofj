@@ -1976,22 +1976,14 @@ function MarketBucketSection({
             : "border-border bg-[color-mix(in_oklab,var(--color-muted)_45%,var(--color-card))]")
         }
       >
-        <span
-          className="grid h-12 w-12 flex-none place-items-center overflow-hidden rounded-lg border border-[color-mix(in_oklab,var(--brand-navy)_14%,transparent)] bg-[oklch(0.995_0.004_95)] p-1.5 shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_35%,transparent)] sm:h-14 sm:w-14"
-          aria-hidden="true"
-        >
-          {logoUrl ? (
-            <LazyImage
-              src={logoUrl}
-              alt=""
-              className="h-full w-full object-contain object-center"
-            />
-          ) : initials ? (
-            <span className="text-[12px] font-bold leading-none text-brand-navy">{initials}</span>
-          ) : (
-            <ShoppingBag className="h-4 w-4 text-brand-navy/70" />
-          )}
-        </span>
+        <StoreBadge
+          name={marketName}
+          logoUrl={logoUrl}
+          brandColor={brandColor}
+          size="md"
+          className="flex-none"
+        />
+
         <div className="min-w-0 flex-1">
           <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
             <span className="market-name truncate text-[13.5px] font-semibold leading-tight tracking-[-0.011em] text-foreground sm:text-[15px]">
