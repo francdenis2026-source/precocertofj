@@ -240,7 +240,10 @@ function HomePage() {
     economyError: economyQ.isError,
   });
   const METRIC_ICONS = { markets: ShieldCheck, products: Package, savings: TrendingDown } as const;
-  const metrics = livePanel.metrics.map((m) => ({ ...m, Icon: METRIC_ICONS[m.kind] }));
+  const metrics = livePanel.metrics.map((m: LivePanelMetric) => ({
+    ...m,
+    Icon: METRIC_ICONS[m.kind],
+  }));
 
   return (
     <div
