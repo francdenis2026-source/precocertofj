@@ -757,7 +757,11 @@ export function PriceSearchBar({
       )}
 
       {result && !err && !quotaBlocked && (
-        <div className="mt-3 space-y-2" aria-live="polite">
+        <div
+          className={`mt-3 min-h-[640px] space-y-2 [overflow-anchor:none] transition-opacity duration-150 ${pending ? "opacity-70" : "opacity-100"}`}
+          aria-busy={pending || undefined}
+          aria-live="polite"
+        >
           <SearchInterpretationSummary
             query={query}
             tokens={highlightTokens}
