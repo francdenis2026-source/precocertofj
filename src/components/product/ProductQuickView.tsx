@@ -13,6 +13,7 @@ import {
 import { ProductImage } from "@/components/ds/ProductImage";
 import { StoreBadge } from "@/components/brand/StoreBadge";
 import { getPublicProduct } from "@/lib/public-product.functions";
+import { dedupeByStorePrice, storeKey } from "@/lib/price-rank";
 
 const brl = (v: number) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
