@@ -1,0 +1,1 @@
+update public.establishments set logo_url='/__l5e/assets-v1/00d218ad-73f9-4d58-be02-844519fcbf4e/mercantil-reboucas.png' where name='MERCANTIL REBOUÇAS';

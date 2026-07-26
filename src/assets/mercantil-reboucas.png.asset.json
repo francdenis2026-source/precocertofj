@@ -1,11 +1,11 @@
 {
-  "asset_id": "f1efc057-6164-465c-91db-48185b5d69ba",
-  "content_type": "image/png",
-  "created_at": "2026-07-20T15:37:47Z",
-  "original_filename": "mercantil-reboucas.png",
+  "version": 1,
+  "asset_id": "00d218ad-73f9-4d58-be02-844519fcbf4e",
   "project_id": "1b5cbba5-752c-4b2c-977b-781e86551914",
-  "r2_key": "a/v1/1b5cbba5-752c-4b2c-977b-781e86551914/f1efc057-6164-465c-91db-48185b5d69ba/mercantil-reboucas.png",
-  "size": 795764,
-  "url": "/__l5e/assets-v1/f1efc057-6164-465c-91db-48185b5d69ba/mercantil-reboucas.png",
-  "version": 1
+  "url": "/__l5e/assets-v1/00d218ad-73f9-4d58-be02-844519fcbf4e/mercantil-reboucas.png",
+  "r2_key": "a/v1/1b5cbba5-752c-4b2c-977b-781e86551914/00d218ad-73f9-4d58-be02-844519fcbf4e/mercantil-reboucas.png",
+  "original_filename": "mercantil-reboucas.png",
+  "size": 491854,
+  "content_type": "image/png",
+  "created_at": "2026-07-26T00:36:18Z"
 }
