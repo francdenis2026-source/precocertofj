@@ -56,7 +56,7 @@ const ICONS: Record<string, typeof ShoppingCart> = {
 const brl = (v: number) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
-const SEARCH_DEFAULTS = { q: "", loja: "", view: "list", page: 1, per: 30 };
+const SEARCH_DEFAULTS = { q: "", loja: "", view: "list", page: 1, per: 30, p: "" };
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
@@ -64,7 +64,10 @@ const searchSchema = z.object({
   view: fallback(z.string(), "list").default("list"),
   page: fallback(z.number().int(), 1).default(1),
   per: fallback(z.number().int(), 30).default(30),
+  /** Produto aberto no quick view (compartilhável e reversível pelo histórico). */
+  p: fallback(z.string(), "").default(""),
 });
+
 
 export const Route = createFileRoute("/categoria/$slug")({
   validateSearch: zodValidator(searchSchema),
