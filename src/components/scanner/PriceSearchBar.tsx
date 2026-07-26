@@ -12,7 +12,7 @@ import {
   type SearchHistoryEntry,
 } from "@/lib/search-history";
 
-import { Clock, Crown, Search, ShoppingBag, Sparkles, TrendingDown, X } from "lucide-react";
+import { Clock, Crown, Search, ShoppingBag, Sparkles, X } from "lucide-react";
 import { FairPriceBadge } from "@/components/product/FairPriceBadge";
 import { HighlightMatch } from "@/components/search/HighlightMatch";
 import { AnchoredDropdown } from "@/components/search/AnchoredDropdown";
