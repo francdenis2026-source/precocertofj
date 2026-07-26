@@ -143,7 +143,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
             >
               <span
                 aria-hidden
-                className="grid h-7 w-7 flex-none place-items-center rounded-lg bg-brand-gold/15 text-brand-gold-soft transition-colors group-hover:bg-brand-gold group-hover:text-brand-navy dark:text-brand-gold"
+                className="grid h-7 w-7 flex-none place-items-center rounded-lg bg-brand-gold/15 text-brand-gold-soft transition-colors dark:text-brand-gold group-hover:bg-brand-gold group-hover:text-brand-navy dark:group-hover:text-brand-navy group-focus-visible:bg-brand-gold group-focus-visible:text-brand-navy dark:group-focus-visible:text-brand-navy"
               >
                 <c.Icon className="h-4 w-4" strokeWidth={2.25} />
               </span>
