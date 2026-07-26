@@ -1945,7 +1945,7 @@ function MarketGroupedResults({
         <button
           type="button"
           onClick={() => setMarketPage((v) => v + 4)}
-          className="w-full rounded-lg border border-border bg-card px-3 py-2 text-[12.5px] font-semibold text-foreground transition hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+          className="w-full rounded-lg border border-[color-mix(in_oklab,var(--color-border)_55%,transparent)] px-3 py-2 text-[12px] font-medium text-muted-foreground transition hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
         >
           Ver mais {Math.min(4, hiddenMarkets)} de {hiddenMarkets} mercados
         </button>
