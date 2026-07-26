@@ -165,6 +165,12 @@ function PlansPage() {
 
   const recommendedSlug = "anual";
 
+  const selectedPlan =
+    plans.find((p) => p.id === selectedId) ??
+    plans.find((p) => p.slug === recommendedSlug) ??
+    plans[0];
+
+
   return (
     <PageShell>
       <SiteHeader />
