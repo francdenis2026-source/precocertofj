@@ -252,7 +252,7 @@ function PlansPage() {
                     {(isRecommended || isFounder) && (
                       <span
                         className={dsx(
-                          "absolute right-3 top-3 inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[9.5px] font-bold uppercase tracking-[0.12em]",
+                          "absolute right-3 top-3 inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.12em]",
                           isRecommended ? "badge-gold" : "badge-gold-outline",
                         )}
                       >
