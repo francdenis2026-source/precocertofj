@@ -306,7 +306,7 @@ export async function performPriceSearch(data: {
     if (!key) continue;
     const cur = byProduct.get(key) ?? { display: raw, rows: [] };
     const mn = (r.market_name ?? "").trim() || "—";
-    const meta = metaByName.get(mn);
+    const meta = getMeta(mn);
     cur.rows.push({
       marketName: mn,
       marketKind: meta?.kind ?? null,
@@ -385,7 +385,7 @@ export async function performPriceSearch(data: {
           .map((r) => {
             const mn = (r.market_name ?? "").trim();
             if (!mn) return null;
-            const meta = metaByName.get(mn);
+            const meta = getMeta(mn);
             return {
               marketName: mn,
               marketKind: meta?.kind ?? null,
@@ -419,7 +419,7 @@ export async function performPriceSearch(data: {
   }
   const markets: PriceSearchMarket[] = Array.from(byMarket.entries())
     .map(([marketName, v]) => {
-      const meta = metaByName.get(marketName);
+      const meta = getMeta(marketName);
       return {
         marketName,
         marketKind: meta?.kind ?? null,
@@ -462,7 +462,7 @@ export async function performPriceSearch(data: {
       return best;
     }, null);
     if (cheapestRow && cheapestRow.market_name) {
-      const meta = metaByName.get(cheapestRow.market_name.trim());
+      const meta = getMeta(cheapestRow.market_name.trim());
       cheapest = {
         marketName: cheapestRow.market_name,
         marketLogoUrl: meta?.logoUrl ?? null,
