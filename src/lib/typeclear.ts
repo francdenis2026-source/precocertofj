@@ -8,31 +8,32 @@
 export const tc = {
   /** Rótulo dourado acima de um título. */
   eyebrow:
-    "text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--pc-gold-ink)]",
+    "text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--pc-gold-ink)]",
   /** Título principal da página (header fixo). */
-  h1: "font-serif text-[17px] font-normal leading-tight tracking-tight text-foreground sm:text-[21px]",
+  h1: "font-serif text-[19px] font-normal leading-tight tracking-tight text-foreground sm:text-[23px]",
   /** Título de seção. */
-  h2: "font-serif text-[19px] font-normal leading-tight tracking-tight text-foreground",
+  h2: "font-serif text-[21px] font-normal leading-tight tracking-tight text-foreground",
   /** Subtítulo/apoio de seção. */
-  sectionNote: "text-[11.5px] leading-relaxed text-muted-foreground",
+  sectionNote: "text-[12.5px] leading-snug text-muted-foreground",
   /** Parágrafo de apoio (tagline, descrições curtas). */
-  lead: "text-[12.5px] leading-relaxed text-muted-foreground md:text-[13px]",
+  lead: "text-[13.5px] leading-relaxed text-muted-foreground md:text-[14px]",
   /** Corpo padrão. */
-  body: "text-[12.5px] leading-relaxed text-foreground",
+  body: "text-[13.5px] leading-relaxed text-foreground",
   /** Texto secundário compacto. */
-  meta: "text-[11.5px] leading-snug text-muted-foreground",
+  meta: "text-[12.5px] leading-snug text-muted-foreground",
   /** Chips, botões-pílula e filtros. */
-  chip: "text-[10.5px] font-semibold uppercase tracking-[0.14em]",
+  chip: "text-[11.5px] font-semibold uppercase tracking-[0.12em]",
   /** Rótulos de comando (toolbar, toggles). */
-  control: "text-[10.5px] font-semibold uppercase tracking-[0.1em]",
+  control: "text-[11.5px] font-semibold uppercase tracking-[0.08em]",
   /** Cabeçalho de coluna em tabelas. */
-  tableHead: "text-[10px] font-bold uppercase tracking-[0.14em] text-foreground/70",
+  tableHead: "text-[11px] font-bold uppercase tracking-[0.12em] text-foreground/70",
   /** Célula de tabela. */
-  cell: "text-[12px] leading-snug text-foreground/80",
+  cell: "text-[13px] leading-snug text-foreground/80",
   /** Nome/título de item em lista. */
-  itemTitle: "text-[12.5px] font-semibold leading-snug text-foreground",
+  itemTitle: "text-[13.5px] font-semibold leading-snug text-foreground",
   /** Números (contagens, distâncias, preços). */
-  num: "font-mono text-[12px] tabular-nums",
+  num: "font-mono text-[13px] tabular-nums",
   /** Selo minúsculo. */
-  tag: "text-[8.5px] font-bold uppercase leading-none tracking-[0.14em]",
+  tag: "text-[9.5px] font-bold uppercase leading-none tracking-[0.12em]",
 } as const;
+
