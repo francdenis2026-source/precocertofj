@@ -17,6 +17,13 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { getPlatformStats } from "@/lib/stores-public.functions";
+import {
+  clearSearchHistory,
+  getSearchHistory,
+  pushSearchHistory,
+  removeSearchHistory,
+} from "@/lib/search-history";
+
 
 const CATEGORIES: { label: string; q: string; Icon: LucideIcon }[] = [
   { label: "Arroz", q: "arroz", Icon: Wheat },
