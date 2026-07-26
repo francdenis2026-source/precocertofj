@@ -3623,3 +3623,56 @@ html.dark :is(.hover\:text-primary):not(.primary-on-light):hover {
   scrollbar-width: none;
   &::-webkit-scrollbar { width: 0; height: 0; }
 }
+
+/* ==========================================================================
+   HOVER PROFISSIONAL GLOBAL
+   Todo cartão/superfície clicável do site herda o mesmo vocabulário:
+   elevação curta, halo dourado na borda, leve "parallax" da mídia interna e
+   feedback de :active. Só em ponteiros finos, e desligado em reduced-motion.
+   ========================================================================== */
+:where(.ds-card, .ds-card-hover, a.pc-surface, button.pc-surface, .pc-surface) {
+  transition:
+    transform 220ms cubic-bezier(0.2, 0.7, 0.2, 1),
+    box-shadow 220ms ease,
+    border-color 220ms ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :where(
+    .ds-card-hover,
+    a.ds-card,
+    button.ds-card,
+    label.ds-card,
+    .pc-surface,
+    a[data-card],
+    button[data-card]
+  ):hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in oklab, var(--pc-home-gold) 45%, var(--color-border));
+    box-shadow: 0 16px 30px -18px color-mix(in oklab, var(--pc-home-navy) 55%, transparent);
+  }
+
+  /* Parallax leve: a mídia interna sobe/aproxima um pouco menos que o cartão. */
+  :where(.pc-lift, .pc-tile, .ds-card-hover, a.ds-card, .pc-surface) :where(img, .pc-parallax) {
+    transition: transform 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
+    will-change: transform;
+  }
+  :where(.pc-lift, .pc-tile, .ds-card-hover, a.ds-card, .pc-surface):hover
+    :where(img, .pc-parallax) {
+    transform: translateY(-1.5px) scale(1.02);
+  }
+}
+
+:where(.ds-card-hover, a.ds-card, button.ds-card, .pc-surface):active {
+  transform: translateY(-1px) scale(0.995);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :where(.ds-card, .ds-card-hover, a.ds-card, button.ds-card, .pc-surface),
+  :where(.ds-card-hover, a.ds-card, button.ds-card, .pc-surface):hover,
+  :where(.ds-card-hover, a.ds-card, button.ds-card, .pc-surface):active,
+  :where(.pc-lift, .pc-tile, .ds-card-hover, a.ds-card, .pc-surface):hover
+    :where(img, .pc-parallax) {
+    transform: none !important;
+  }
+}
