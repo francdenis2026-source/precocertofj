@@ -1092,10 +1092,28 @@ export function PriceSearchBar({
                       onCategory={setCategoryFilter}
                       groupBy={groupBy}
                       onGroupBy={setGroupBy}
+                      freshness={freshness}
+                      onFreshness={setFreshness}
                     />
 
+                    {result.groups.length > 0 && visibleGroups.length === 0 ? (
+                      <div className="pc-res-card mt-2">
+                        <p className="pc-res-title">Nenhum preço nessa janela de tempo</p>
+                        <p className="pc-res-meta mt-1">
+                          Não há preços coletados nos últimos {maxAgeDays} dias para esta busca.
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => setFreshness("all")}
+                          className="pc-res-label mt-2 rounded-full border border-border bg-background px-2.5 py-1 text-foreground hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)]"
+                        >
+                          Mostrar todos os períodos
+                        </button>
+                      </div>
+                    ) : null}
 
-                    {groupBy === "market" && result.groups.length > 0 ? (
+                    {groupBy === "market" && visibleGroups.length > 0 ? (
+
                       <MarketGroupedResults
                         groups={filteredOrdered.flatMap(([, gs]) => gs)}
                         kindFilter={kindFilter}
