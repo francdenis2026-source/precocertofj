@@ -2795,8 +2795,36 @@ function MatrixCompareResults({
                               <Crown className="h-3 w-3 text-brand-gold" aria-hidden="true" />
                             ) : null}
                             <span>{fmt(v)}</span>
+                            {rowMin != null && v > rowMin ? (
+                              <span
+                                title={`${(((v - rowMin) / rowMin) * 100).toFixed(0)}% acima do menor preço`}
+                                className="text-[10px] font-semibold text-muted-foreground"
+                              >
+                                +{(((v - rowMin) / rowMin) * 100).toFixed(0)}%
+                              </span>
+                            ) : null}
+                            {isMin && rowMax != null && rowMax > v ? (
+                              <span
+                                title="Economia frente ao mais caro desta linha"
+                                className="text-[10px] font-semibold text-[var(--pc-gold-ink)]"
+                              >
+                                −{(((rowMax - v) / rowMax) * 100).toFixed(0)}%
+                              </span>
+                            ) : null}
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                openProduct(g.productName);
+                              }}
+                              aria-label={`Abrir ${g.productName} em ${m.name}`}
+                              className="ml-auto rounded-full border border-border px-1.5 py-0.5 text-[9.5px] font-semibold uppercase tracking-[0.08em] text-muted-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)]"
+                            >
+                              Abrir
+                            </button>
                           </div>
                         )}
+
                       </td>
                     );
                   })}
