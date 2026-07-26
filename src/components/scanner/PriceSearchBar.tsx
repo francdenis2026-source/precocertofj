@@ -1760,6 +1760,19 @@ function ProductGroupCard({
           );
         })}
       </ul>
+      {hiddenPrices > 0 || expanded ? (
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
+          aria-expanded={expanded}
+          className="mt-1 w-full rounded-lg border border-border bg-background px-2.5 py-1 text-[12px] font-medium text-muted-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+        >
+          {expanded
+            ? "Ver menos mercados"
+            : `Ver os outros ${hiddenPrices} mercado${hiddenPrices > 1 ? "s" : ""}`}
+        </button>
+      ) : null}
+
     </div>
   );
 }
