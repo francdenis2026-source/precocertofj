@@ -420,7 +420,7 @@ function EstablishmentsPage() {
 
 
   return (
-    <div className="flex min-h-svh flex-col bg-background pb-24 md:pb-8">
+    <div className="flex min-h-svh flex-col bg-background pb-24 md:pb-6">
       {/* TOPO — mesma gramática editorial de /buscar: fio dourado, sem painéis pesados */}
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/92 backdrop-blur supports-[backdrop-filter]:bg-background/75">
         <span
@@ -434,10 +434,10 @@ function EstablishmentsPage() {
         <div className="mx-auto grid w-full max-w-6xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-2.5 md:gap-6 md:px-8 md:py-3">
           <BackButton fallbackTo="/" variant="ghost" />
           <div className="flex min-w-0 flex-col gap-0.5">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.22em] text-[var(--pc-gold-ink)]">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-[var(--pc-gold-ink)]">
               {currentKind ? currentKind.label : "Comércios parceiros"}
             </span>
-            <h1 className="min-w-0 truncate whitespace-nowrap font-serif text-[17px] font-normal leading-tight tracking-tight text-foreground sm:text-[21px]">
+            <h1 className="min-w-0 truncate whitespace-nowrap font-serif text-[19px] font-normal leading-tight tracking-tight text-foreground sm:text-[23px]">
               {currentKind ? currentKind.label : "Mercados"}
               <span className="hidden sm:inline"> de Feijó</span>
             </h1>
@@ -447,7 +447,7 @@ function EstablishmentsPage() {
             <Link
               to="/farmacias"
               title="Ver a escala de plantão das farmácias"
-              className="inline-flex h-7 items-center gap-1.5 rounded-full border border-border px-2.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+              className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border px-3 text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
             >
               <Pill className="h-3.5 w-3.5" aria-hidden />
               <span className="hidden sm:inline">Plantão das farmácias</span>
@@ -458,7 +458,7 @@ function EstablishmentsPage() {
 
       {/* IDENTIDADE — linha fina com tagline, tipos de comércio e números ao vivo */}
       <section className="border-b border-border/60">
-        <div className="mx-auto w-full max-w-6xl px-4 py-3 md:px-8 md:py-4">
+        <div className="mx-auto w-full max-w-6xl px-4 py-2.5 md:px-8 md:py-3">
           <p className={`max-w-2xl ${tc.lead}`}>
             {currentKind
               ? currentKind.tagline
@@ -615,7 +615,7 @@ function EstablishmentsPage() {
                     name={e.name}
                     eager={idx < 3}
                     className="h-[52px] w-[52px] border-border/60"
-                    initialsClassName="text-[13px]"
+                    initialsClassName="text-[14px]"
                   />
 
                   <div className="min-w-0 flex-1">
@@ -641,7 +641,7 @@ function EstablishmentsPage() {
         </section>
       )}
 
-      <main className="mx-auto w-full max-w-6xl px-4 md:px-6 pt-6 md:pt-8">
+      <main className="mx-auto w-full max-w-6xl px-4 md:px-6 pt-4 md:pt-5">
 
 
         {isLoading && view === "list" && (
@@ -674,17 +674,17 @@ function EstablishmentsPage() {
 
 
         {error && (
-          <div className="rounded-xl border border-destructive/40 bg-destructive/5 p-4 text-[14px] text-destructive">
+          <div className="rounded-xl border border-destructive/40 bg-destructive/5 p-4 text-[14.5px] text-destructive">
             Erro: {(error as Error).message}
           </div>
         )}
 
         {data && (
-          <div className="space-y-6">
+          <div className="space-y-4">
             {/* StatGrid removida: métricas duplicavam o hero */}
 
             {data.topGlobalCategories.length > 0 && (
-              <section aria-labelledby="cats-heading" className="border-t border-border/60 pt-4">
+              <section aria-labelledby="cats-heading" className="border-t border-border/60 pt-3">
                 <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
                   <h2
                     id="cats-heading"
@@ -722,7 +722,7 @@ function EstablishmentsPage() {
               />
             ) : (
               <section aria-labelledby="rede-heading">
-                <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-t border-border/60 pt-4">
+                <div className="mb-2 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-t border-border/60 pt-3">
                   <h2
                     id="rede-heading"
                     className={tc.h2}
@@ -747,7 +747,7 @@ function EstablishmentsPage() {
                         value={q}
                         onChange={(ev) => setQ(ev.target.value)}
                         placeholder="Buscar mercado, bairro ou cidade"
-                        className="h-10 rounded-xl border-border/70 pl-9 text-[12.5px] shadow-sm focus-visible:ring-brand-gold"
+                        className="h-10 rounded-xl border-border/70 pl-9 text-[13.5px] shadow-sm focus-visible:ring-brand-gold"
                         inputMode="search"
                         aria-label="Buscar mercado, bairro ou cidade"
                       />
@@ -756,7 +756,7 @@ function EstablishmentsPage() {
                       <Select value={neighborhood} onValueChange={setNeighborhood}>
                         <SelectTrigger
                           aria-label="Filtrar por bairro"
-                          className="h-10 w-full min-w-0 rounded-xl text-[12px] md:w-[192px] md:text-[12.5px] [&>span]:truncate"
+                          className="h-10 w-full min-w-0 rounded-xl text-[13px] md:w-[192px] md:text-[13.5px] [&>span]:truncate"
                         >
                           <SelectValue placeholder="Bairro" />
                         </SelectTrigger>
@@ -772,7 +772,7 @@ function EstablishmentsPage() {
                       <Select value={sort} onValueChange={(v) => setSort(v as typeof sort)}>
                         <SelectTrigger
                           aria-label="Ordenar por"
-                          className="h-10 w-full min-w-0 rounded-xl text-[12px] md:w-[186px] md:text-[12.5px] [&>span]:truncate"
+                          className="h-10 w-full min-w-0 rounded-xl text-[13px] md:w-[186px] md:text-[13.5px] [&>span]:truncate"
                         >
                           <SelectValue placeholder="Ordenar" />
                         </SelectTrigger>
@@ -842,7 +842,7 @@ function EstablishmentsPage() {
                       <Store className="h-5 w-5" aria-hidden />
                     </div>
                     <div className="space-y-1">
-                      <p className="text-[13.5px] font-semibold text-foreground">
+                      <p className="text-[15px] font-semibold text-foreground">
                         Nenhum estabelecimento encontrado
                       </p>
                       <p className={tc.lead}>
@@ -1047,13 +1047,13 @@ function EstablishmentsPage() {
                     ref={sentinelRef}
                     className="flex flex-wrap items-center justify-center gap-2 border-t border-border/60 px-2.5 py-2 md:px-4 md:py-3"
                   >
-                    <span className="text-[11px] text-muted-foreground md:text-[12px]">
+                    <span className="text-[12.5px] text-muted-foreground md:text-[13px]">
                       {visibleItems.length} de {allFilteredItems.length}
                     </span>
                     <button
                       type="button"
                       onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-3 py-1 text-[11.5px] font-bold uppercase tracking-[0.14em] text-brand-navy transition hover:brightness-105 md:px-4 md:py-1.5 md:text-[12px]"
+                      className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-3.5 py-1.5 text-[12.5px] font-bold uppercase tracking-[0.1em] text-brand-navy transition hover:brightness-105 md:px-4 md:py-1.5 md:text-[13px]"
                     >
                       Mostrar mais
                     </button>
@@ -1107,10 +1107,10 @@ function HeroMetric({
     >
       <Icon className="h-4 w-4 shrink-0 text-[var(--pc-gold-ink)]" strokeWidth={1.75} aria-hidden />
       <span className="min-w-0">
-        <span className="block truncate text-[9.5px] font-semibold uppercase leading-[1.25] tracking-[0.16em] text-muted-foreground">
+        <span className="block truncate text-[11px] font-semibold uppercase leading-[1.25] tracking-[0.12em] text-muted-foreground">
           {label}
         </span>
-        <span className="mt-0.5 flex items-baseline gap-1.5 text-[15px] font-semibold leading-none tabular-nums text-foreground">
+        <span className="mt-0.5 flex items-baseline gap-1.5 text-[16.5px] font-semibold leading-none tabular-nums text-foreground">
           {live && (
             <span className="relative inline-flex h-1.5 w-1.5 shrink-0 translate-y-[-2px]">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-gold/70" />
