@@ -54,7 +54,7 @@ export function Logo({
             )}
           >
             Preço
-            <span className={onLight ? "text-[var(--pc-gold-ink)]" : "text-brand-gold"}>
+            <span className={onLight ? "text-[#6b4a12]" : "text-brand-gold"}>
               Certo
             </span>
           </span>
