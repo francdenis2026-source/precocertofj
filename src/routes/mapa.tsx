@@ -334,27 +334,148 @@ function NeighborhoodsPage() {
 
 
 
-        {/* Barra de busca — compacta, focus dourado */}
-        <div className="mb-3 flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 shadow-sm transition-colors focus-within:border-brand-gold focus-within:ring-2 focus-within:ring-brand-gold/30">
-          <Search className="h-4 w-4 text-muted-foreground" strokeWidth={1.75} />
-          <input
-            value={term}
-            onChange={(e) => setTerm(e.target.value)}
-            placeholder="Buscar mercado por nome…"
-            className="min-w-0 flex-1 bg-transparent text-[13.5px] text-foreground placeholder:text-muted-foreground focus:outline-none"
-            data-no-translate
-          />
-          {term && (
-            <button
-              type="button"
-              onClick={() => setTerm("")}
-              className="rounded-full p-1 text-muted-foreground transition-colors hover:text-brand-gold"
-              aria-label="Limpar busca"
-            >
-              <X className="h-3.5 w-3.5" />
-            </button>
-          )}
+        {/* Barra de busca — compacta, focus dourado (com atalho de filtros no mobile) */}
+        <div className="mb-2 flex items-center gap-2 md:mb-3">
+          <div className="flex min-w-0 flex-1 items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 shadow-sm transition-colors focus-within:border-brand-gold focus-within:ring-2 focus-within:ring-brand-gold/30">
+            <Search className="h-4 w-4 shrink-0 text-muted-foreground" strokeWidth={1.75} />
+            <input
+              value={term}
+              onChange={(e) => setTerm(e.target.value)}
+              placeholder="Buscar mercado por nome…"
+              className="min-w-0 flex-1 bg-transparent text-[13.5px] text-foreground placeholder:text-muted-foreground focus:outline-none"
+              data-no-translate
+            />
+            {term && (
+              <button
+                type="button"
+                onClick={() => setTerm("")}
+                className="rounded-full p-1 text-muted-foreground transition-colors hover:text-brand-gold"
+                aria-label="Limpar busca"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            )}
+          </div>
+
+          {/* Drawer de filtros — só no mobile */}
+          <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
+            <SheetTrigger asChild>
+              <button
+                type="button"
+                className={
+                  "inline-flex shrink-0 items-center gap-1.5 rounded-lg border px-2.5 py-2 text-[12px] font-bold uppercase tracking-[0.1em] transition-colors md:hidden " +
+                  (hasActiveFilters
+                    ? "border-brand-gold bg-brand-gold/15 text-brand-gold"
+                    : "border-border bg-card text-muted-foreground")
+                }
+                aria-label="Abrir filtros"
+              >
+                <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden />
+                Filtros
+              </button>
+            </SheetTrigger>
+            <SheetContent side="bottom" className="max-h-[80dvh] overflow-y-auto">
+              <SheetHeader className="text-left">
+                <SheetTitle className="text-[15px]">Filtros e ordenação</SheetTitle>
+              </SheetHeader>
+              <div className="space-y-3 pb-6">
+                <label className="block">
+                  <span className="mb-1 flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                    <ArrowUpDown className="h-3.5 w-3.5 text-brand-gold" strokeWidth={2.25} /> Ordenar
+                  </span>
+                  <Select value={sortBy} onValueChange={(v) => setSortBy(v as typeof sortBy)}>
+                    <SelectTrigger className="h-9 w-full text-[13px] font-semibold">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="text-[13px]">
+                      <SelectItem value="price">Menor preço</SelectItem>
+                      <SelectItem value="markets">Mais mercados</SelectItem>
+                      <SelectItem value="alpha">A–Z</SelectItem>
+                      {isAuthed && <SelectItem value="favorites">Favoritos primeiro</SelectItem>}
+                    </SelectContent>
+                  </Select>
+                </label>
+
+                <label className="block">
+                  <span className="mb-1 flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                    <Tag className="h-3.5 w-3.5 text-brand-gold" strokeWidth={2.25} /> Categoria
+                  </span>
+                  <Select value={category || "__all"} onValueChange={(v) => setCategory(v === "__all" ? "" : v)}>
+                    <SelectTrigger className="h-9 w-full text-[13px] font-semibold">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent className="max-h-60 text-[13px]">
+                      <SelectItem value="__all">Todas as categorias</SelectItem>
+                      {availableCategories.map((c) => (
+                        <SelectItem key={c} value={c}>
+                          {c}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </label>
+
+                {availableCities.length > 1 && (
+                  <label className="block">
+                    <span className="mb-1 flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.12em] text-muted-foreground">
+                      <MapPin className="h-3.5 w-3.5 text-brand-gold" strokeWidth={2.25} /> Região
+                    </span>
+                    <Select value={cityFilter || "__all"} onValueChange={(v) => setCityFilter(v === "__all" ? "" : v)}>
+                      <SelectTrigger className="h-9 w-full text-[13px] font-semibold">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="text-[13px]">
+                        <SelectItem value="__all">Todas</SelectItem>
+                        {availableCities.map((c) => (
+                          <SelectItem key={c} value={c}>
+                            {c}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </label>
+                )}
+
+                {isAuthed && (
+                  <button
+                    type="button"
+                    onClick={() => setOnlyFavs((v) => !v)}
+                    aria-pressed={onlyFavs}
+                    className={
+                      "inline-flex w-full items-center justify-center gap-1.5 rounded-lg border px-3 py-2 text-[13px] font-semibold transition-colors " +
+                      (onlyFavs
+                        ? "border-brand-gold bg-brand-gold/15 text-brand-gold"
+                        : "border-border bg-background text-foreground")
+                    }
+                  >
+                    <Star className={"h-4 w-4 " + (onlyFavs ? "fill-brand-gold text-brand-gold" : "text-muted-foreground")} />
+                    Somente favoritos
+                  </button>
+                )}
+
+                <div className="flex gap-2 pt-1">
+                  {hasActiveFilters && (
+                    <button
+                      type="button"
+                      onClick={clearFilters}
+                      className="flex-1 rounded-lg border border-border px-3 py-2 text-[12px] font-bold uppercase tracking-[0.1em] text-muted-foreground"
+                    >
+                      Limpar
+                    </button>
+                  )}
+                  <button
+                    type="button"
+                    onClick={() => setFiltersOpen(false)}
+                    className="flex-1 rounded-lg bg-brand-gold px-3 py-2 text-[12px] font-bold uppercase tracking-[0.1em] text-brand-navy"
+                  >
+                    Ver {filteredGroups.length} {filteredGroups.length === 1 ? "bairro" : "bairros"}
+                  </button>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
         </div>
+
 
         {/* Filtros e ordenação — inline no desktop, drawer no mobile */}
         <div className="mb-3 rounded-lg border border-border bg-card p-2.5 shadow-sm max-md:hidden">
