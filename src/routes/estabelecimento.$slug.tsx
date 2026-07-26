@@ -140,8 +140,11 @@ function EstablishmentPage() {
   const [sort, setSort] = useState<SortKey>("price-asc");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [historyFor, setHistoryFor] = useState<PublicStoreProduct | null>(null);
+  const [quickView, setQuickView] = useState<PublicStoreProduct | null>(null);
+  const [view, setView] = useState<"grid" | "list">("grid");
   const [tab, setTab] = useState<"catalogo" | "acougue">("catalogo");
   const [limit, setLimit] = useState(30);
+
 
   const { cuts, general } = useMemo(() => splitButcherCuts(data.products), [data.products]);
   const hasButcher = cuts.length >= 5;
