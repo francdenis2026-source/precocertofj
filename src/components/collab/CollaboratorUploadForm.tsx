@@ -23,7 +23,7 @@ type LocalFile = {
 const MAX_FILES = 10;
 const MAX_SIZE_MB = 8;
 
-export function CollaboratorUploadForm() {
+export function CollaboratorUploadForm({ embedded = false }: { embedded?: boolean } = {}) {
   const { session } = useMyProfile();
   const userId = session?.user?.id;
   const submitFn = useServerFn(createCollaboratorSubmission);
