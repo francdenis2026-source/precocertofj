@@ -22,6 +22,13 @@ import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Sheet,
   SheetContent,
   SheetHeader,
@@ -199,16 +206,18 @@ function CategoryPage() {
               inputMode="search"
             />
           </div>
-          <select
-            value={sort}
-            onChange={(e) => setSort(e.target.value as SortKey)}
-            className="h-10 rounded-md border border-border bg-background px-3 text-sm"
-            aria-label="Ordenar por"
-          >
-            {(Object.keys(SORT_LABEL) as SortKey[]).map((k) => (
-              <option key={k} value={k}>{SORT_LABEL[k]}</option>
-            ))}
-          </select>
+          <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
+            <SelectTrigger className="h-10 w-full sm:w-[260px]" aria-label="Ordenar por">
+              <SelectValue placeholder="Ordenar por" />
+            </SelectTrigger>
+            <SelectContent>
+              {(Object.keys(SORT_LABEL) as SortKey[]).map((k) => (
+                <SelectItem key={k} value={k}>
+                  {SORT_LABEL[k]}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </div>
 
         <ul className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
