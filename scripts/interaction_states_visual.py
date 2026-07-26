@@ -24,7 +24,14 @@ from playwright.async_api import async_playwright
 
 ROUTES = ["/", "/planos", "/buscar", "/estabelecimentos"]
 THEMES = ("light", "dark")
-BREAKPOINTS = [("mobile", 390, 844), ("tablet", 768, 1024), ("desktop", 1440, 900)]
+# (nome, largura, altura, ponteiro fino?) — em telas touch o site usa
+# @media (hover: none) e responde no :active, não no :hover.
+BREAKPOINTS = [
+    ("mobile", 390, 844, False),
+    ("tablet", 768, 1024, False),
+    ("desktop", 1280, 900, True),
+    ("desktop-xl", 1600, 1000, True),
+]
 
 SAMPLE = """
 (max) => {
@@ -81,7 +88,7 @@ def changed(a: dict, b: dict) -> list[str]:
     return [k for k in VISUAL_KEYS if a.get(k) != b.get(k)]
 
 
-async def audit_page(page, base, route, theme, bp_name, results, max_nodes):
+async def audit_page(page, base, route, theme, bp_name, hoverable, results, max_nodes):
     await page.goto(f"{base}{route}", wait_until="domcontentloaded")
     await page.evaluate(f"localStorage.setItem('pc-theme', {json.dumps(theme)})")
     await page.reload(wait_until="domcontentloaded")
@@ -119,18 +126,22 @@ async def audit_page(page, base, route, theme, bp_name, results, max_nodes):
         failures = []
         hover_delta = changed(idle, hover)
         focus_delta = changed(idle, focus)
-        if not hover_delta:
+        if hoverable and not hover_delta:
             failures.append("hover sem retorno visual")
-        if not focus_delta:
+        if hoverable and not focus_delta:
             failures.append("focus-visible sem retorno visual")
         for st, snap in (("hover", hover), ("focus", focus)):
-            if abs(snap["w"] - idle["w"]) > 1 or abs(snap["h"] - idle["h"]) > 1:
+            # transform (scale/translate) é permitido: não afeta o fluxo.
+            if snap["transform"] == idle["transform"] and (
+                abs(snap["w"] - idle["w"]) > 1 or abs(snap["h"] - idle["h"]) > 1
+            ):
                 failures.append(
                     f"{st} altera layout ({idle['w']}x{idle['h']} -> {snap['w']}x{snap['h']})"
                 )
 
         results.append({
             "route": route, "theme": theme, "bp": bp_name, "el": key,
+            "hoverable": hoverable,
             "hover_delta": hover_delta, "focus_delta": focus_delta,
             "failures": failures,
         })
@@ -141,7 +152,7 @@ def cross_breakpoint_check(results):
     issues = []
     by_key: dict[tuple[str, str], dict[str, bool]] = {}
     for r in results:
-        if r.get("skipped"):
+        if r.get("skipped") or not r.get("hoverable"):
             continue
         k = (r["route"], r["el"])
         by_key.setdefault(k, {})[r["bp"]] = bool(r["hover_delta"]) and bool(r["focus_delta"])
@@ -163,15 +174,15 @@ async def main() -> int:
     async with async_playwright() as p:
         browser = await p.chromium.launch(headless=True)
         try:
-            for bp_name, w, h in BREAKPOINTS:
+            for bp_name, w, h, hoverable in BREAKPOINTS:
                 ctx = await browser.new_context(
-                    viewport={"width": w, "height": h}, has_touch=w <= 900
+                    viewport={"width": w, "height": h}, has_touch=not hoverable
                 )
                 page = await ctx.new_page()
                 for route in args.routes:
                     for theme in THEMES:
                         await audit_page(page, args.base, route, theme, bp_name,
-                                         results, args.max_nodes)
+                                         hoverable, results, args.max_nodes)
                 await ctx.close()
         finally:
             await browser.close()
