@@ -732,7 +732,7 @@ export function PriceSearchBar({
       {/* Loading skeleton — só quando ainda não há resultado (evita piscar durante refetch) */}
       {isSearching && !result && !err && !quotaBlocked && (
         <div
-          className="mt-3 min-h-[640px] space-y-2 [content-visibility:auto]"
+          className="mt-4 min-h-[640px] space-y-3 [content-visibility:auto] md:space-y-4"
           aria-busy="true"
           aria-live="polite"
           aria-label="Carregando resultados"
