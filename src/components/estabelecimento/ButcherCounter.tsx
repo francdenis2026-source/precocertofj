@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Beef, Bell, History, LayoutGrid, List as ListIcon, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,12 +21,46 @@ import {
 const brl = (v: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
 
-type CutSort = "kg-asc" | "kg-desc" | "name";
+export type CutSort = "kg-asc" | "kg-desc" | "name";
 const SORT_LABEL: Record<CutSort, string> = {
   "kg-asc": "Menor preço por kg",
   "kg-desc": "Maior preço por kg",
   name: "Nome (A → Z)",
 };
+
+/** Estado visual do balcão — espelhado na URL pelas rotas. */
+export type ButcherViewState = {
+  q: string;
+  protein: ButcherProtein | null;
+  sort: CutSort;
+  view: "grid" | "list";
+};
+
+export const BUTCHER_STATE_DEFAULTS: ButcherViewState = {
+  q: "",
+  protein: null,
+  sort: "kg-asc",
+  view: "grid",
+};
+
+export const CUT_SORT_KEYS: CutSort[] = ["kg-asc", "kg-desc", "name"];
+
+/** Converte valores crus da URL em estado válido do balcão. */
+export function parseButcherState(raw: {
+  q?: string;
+  prot?: string;
+  bsort?: string;
+  bview?: string;
+}): ButcherViewState {
+  const protein = BUTCHER_PROTEINS.find((p) => p.id === raw.prot)?.id ?? null;
+  return {
+    q: raw.q ?? "",
+    protein,
+    sort: CUT_SORT_KEYS.includes(raw.bsort as CutSort) ? (raw.bsort as CutSort) : "kg-asc",
+    view: raw.bview === "list" ? "list" : "grid",
+  };
+}
+
 
 type Cut = PublicStoreProduct & { protein: ButcherProtein };
 
