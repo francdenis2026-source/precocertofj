@@ -349,7 +349,7 @@ function SearchPage() {
       </header>
 
       {/* CORPO — largura total quando há resultados; 2 colunas na descoberta */}
-      <div className="mx-auto w-full max-w-7xl flex-1 px-4 pb-[calc(var(--mobile-nav-height)+1rem)] pt-2.5 md:px-8 md:pb-8 md:pt-3">
+      <div className="mx-auto w-full max-w-7xl flex-1 [overflow-anchor:none] px-4 pb-[calc(var(--mobile-nav-height)+1rem)] pt-2.5 md:px-8 md:pb-8 md:pt-3">
         <div
           className={
             hasQuery
