@@ -386,11 +386,22 @@ export function ButcherCounter({
         <h3 className="text-[11px] font-bold uppercase tracking-[0.16em] text-foreground">
           Cortes de balcão
         </h3>
-        <span className="text-[11px] text-muted-foreground">
+        <span className="text-[11px] text-muted-foreground" aria-hidden>
           {filtered.length} de {cuts.length}
           {protein ? ` · ${proteinLabel(protein)}` : ""}
         </span>
       </div>
+
+      {/* Região viva: anuncia resultado dos filtros a leitores de tela */}
+      <p className="sr-only" role="status" aria-live="polite">
+        {loading
+          ? "Carregando cortes do açougue."
+          : error
+            ? `Erro ao carregar os cortes: ${error}`
+            : `${filtered.length} de ${cuts.length} cortes exibidos${
+                protein ? ` em ${proteinLabel(protein)}` : ""
+              }${q ? ` para a busca ${q}` : ""}.`}
+      </p>
 
       {loading ? (
         <CutSkeletons view={view} />
@@ -398,6 +409,7 @@ export function ButcherCounter({
         <EmptyState
           className="mt-2"
           size="sm"
+
           icon={AlertTriangle}
           title="Não foi possível carregar os cortes"
           message={error}
