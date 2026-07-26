@@ -17,6 +17,7 @@ export type MetricStoreItem = {
 export type MetricRecentUpdate = {
   productName: string;
   marketName: string | null;
+  marketSlug: string | null;
   price: number;
   when: string;
 };
@@ -35,6 +36,7 @@ export type MetricSavingsHighlight = {
   savingsPct: number;
   storeCount: number;
   cheapestStore: string | null;
+  cheapestStoreSlug: string | null;
   catalogSlug: string | null;
 };
 
@@ -236,6 +238,19 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
         : 0;
       const bestSavingsPct = savings.length ? Math.round(Math.max(...savings)) : 0;
 
+      const storeSlugByName = new Map<string, string>();
+      for (const st of stores) storeSlugByName.set(st.name.trim().toLowerCase(), st.slug);
+      const resolveStoreSlug = (name: string | null | undefined): string | null => {
+        if (!name) return null;
+        const key = name.trim().toLowerCase();
+        const direct = storeSlugByName.get(key);
+        if (direct) return direct;
+        for (const [n, slug] of storeSlugByName) {
+          if (n.includes(key) || key.includes(n)) return slug;
+        }
+        return null;
+      };
+
       const topSavings: MetricSavingsHighlight[] = (compRes.data ?? []).map((r: any) => ({
         displayName: r.display_name ?? "Produto",
         category: r.category ?? null,
@@ -244,12 +259,14 @@ export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
         savingsPct: Number(r.savings_pct ?? 0),
         storeCount: Number(r.store_count ?? 0),
         cheapestStore: r.cheapest_store ?? null,
+        cheapestStoreSlug: resolveStoreSlug(r.cheapest_store),
         catalogSlug: r.catalog_slug ?? null,
       }));
 
       const recentUpdates: MetricRecentUpdate[] = (recentRes.data ?? []).map((r: any) => ({
         productName: r.product_name ?? "Item",
         marketName: r.market_name ?? null,
+        marketSlug: resolveStoreSlug(r.market_name),
         price: Number(r.price_captured ?? 0),
         when: r.created_at,
       }));
