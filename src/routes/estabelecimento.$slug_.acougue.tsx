@@ -98,7 +98,8 @@ export const Route = createFileRoute("/estabelecimento/$slug_/acougue")({
 });
 
 function ButcherPage() {
-  const { storeId, slug } = Route.useLoaderData();
+  const { storeId } = Route.useLoaderData();
+  const { slug } = Route.useParams();
   const { data } = useSuspenseQuery(storeQuery(storeId));
   const { cuts } = useMemo(() => splitButcherCuts(data.products), [data.products]);
   const navigate = useNavigate();
@@ -129,7 +130,7 @@ function ButcherPage() {
           prot: next.protein ?? "",
           bsort: next.sort,
           bview: next.view,
-        }),
+        }) as never,
         replace: patch.q !== undefined,
       });
     if (timer.current) clearTimeout(timer.current);
@@ -142,7 +143,7 @@ function ButcherPage() {
       navigate({
         to: "/estabelecimento/$slug_/acougue",
         params: { slug },
-        search: (prev: Record<string, unknown>) => ({ ...prev, p: product.slug }),
+        search: ((prev: Record<string, unknown>) => ({ ...prev, p: product.slug })) as never,
       });
     },
     [navigate, slug],
@@ -151,7 +152,7 @@ function ButcherPage() {
     navigate({
       to: "/estabelecimento/$slug_/acougue",
       params: { slug },
-      search: (prev: Record<string, unknown>) => ({ ...prev, p: "" }),
+      search: ((prev: Record<string, unknown>) => ({ ...prev, p: "" })) as never,
       replace: true,
     });
   }, [navigate, slug]);
