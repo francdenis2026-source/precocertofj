@@ -83,6 +83,11 @@ export const READABLE_TOKENS: TcToken[] = [
 
 /** Extrai o `min` (px) declarado no clamp de um token. */
 export function minFontPx(token: TcToken): number | null {
-  const m = tc[token].match(/text-\[clamp\((\d+(?:\.\d+)?)px/);
+  const m = tc[token].match(/clamp\((\d+(?:\.\d+)?)px/);
   return m ? Number(m[1]) : null;
 }
+
+/** Fatores de ampliação do modo de leitura. */
+export const READING_SCALE = 1.12;
+export const DEFAULT_SCALE = 1;
+
