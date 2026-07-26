@@ -710,15 +710,45 @@ export function PriceSearchBar({
 
 
       {err && (
-        <p
+        <div
           role="alert"
           aria-live="assertive"
-          className="mt-2 flex items-start gap-1.5 rounded-lg border border-destructive/40 bg-destructive/10 px-2 py-1.5 font-mono text-[10px] text-destructive-foreground"
+          className="pc-res-card mt-3 border-[color-mix(in_oklab,var(--color-destructive)_38%,transparent)] bg-[color-mix(in_oklab,var(--color-destructive)_7%,transparent)] p-3 sm:p-4"
         >
-          <span aria-hidden="true">⚠</span>
-          <span className="min-w-0">{err}</span>
-        </p>
+          <div className="flex items-start gap-2.5">
+            <span
+              aria-hidden="true"
+              className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full border border-[color-mix(in_oklab,var(--color-destructive)_45%,transparent)] text-destructive"
+            >
+              !
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="pc-res-title">Não foi possível concluir a busca</p>
+              <p className="pc-res-meta mt-1 break-words">{err}</p>
+              <div className="mt-2.5 flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const term = normalizeInput(inputRef.current?.value ?? query).trim();
+                    if (term.length >= 2) runQuery(term);
+                  }}
+                  className="pc-res-store inline-flex h-9 items-center gap-1.5 rounded-full border border-[color-mix(in_oklab,var(--brand-gold)_55%,transparent)] bg-[color-mix(in_oklab,var(--brand-gold)_14%,transparent)] px-3.5 font-semibold text-[var(--pc-gold-ink)] transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50"
+                >
+                  Tentar novamente
+                </button>
+                <button
+                  type="button"
+                  onClick={clear}
+                  className="pc-res-store inline-flex h-9 items-center gap-1.5 rounded-full border border-border bg-background px-3.5 font-medium text-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50"
+                >
+                  Nova busca
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
+
 
       {quotaBlocked && !err && (
         <div className="mt-3">
@@ -729,37 +759,59 @@ export function PriceSearchBar({
         </div>
       )}
 
-      {/* Loading skeleton — só quando ainda não há resultado (evita piscar durante refetch) */}
+      {/* Loading skeleton — espelha a hierarquia real dos resultados (resumo + cards) */}
       {isSearching && !result && !err && !quotaBlocked && (
         <div
-          className="mt-4 min-h-[640px] space-y-3 [content-visibility:auto] md:space-y-4"
+          className="pc-results mt-4 min-h-[640px] [content-visibility:auto]"
           aria-busy="true"
           aria-live="polite"
           aria-label="Carregando resultados"
         >
-          <div className="grid grid-cols-3 gap-2">
-            {[0, 1, 2].map((i) => (
-              <div key={i} className="h-14 animate-pulse rounded-lg border border-primary/10 bg-background" />
-            ))}
-          </div>
-          <div className="h-16 animate-pulse rounded-xl border border-primary/10 bg-background" />
-          {/* Skeleton específico para lista com ordinais pill — reduz layout shift */}
-          <ul className="space-y-2" aria-hidden="true">
-            {[0, 1, 2].map((i) => (
-              <li
-                key={i}
-                className="flex items-center gap-2 rounded-xl border border-primary/10 bg-background p-2"
-              >
-                <span className="h-7 w-7 shrink-0 animate-pulse rounded-full border border-accent-strong/20 bg-accent/10" />
-                <span className="h-7 w-7 shrink-0 animate-pulse rounded-full border border-border bg-muted/40" />
-                <div className="min-w-0 flex-1 space-y-1.5">
-                  <span className="block h-3 w-2/3 animate-pulse rounded bg-muted/50" />
-                  <span className="block h-2 w-1/3 animate-pulse rounded bg-muted/40" />
+          <p className="sr-only">Buscando preços…</p>
+
+          {/* Painel resumo (melhor preço / economia) */}
+          <div
+            className="animate-pulse rounded-xl border border-[color-mix(in_oklab,var(--color-border)_45%,transparent)] p-3.5 sm:p-4"
+            aria-hidden="true"
+          >
+            <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
+              {[0, 1].map((i) => (
+                <div key={i} className="space-y-2">
+                  <span className="block h-2.5 w-24 rounded bg-muted/50" />
+                  <span className="block h-6 w-32 rounded bg-muted/60" />
+                  <span className="block h-2.5 w-40 rounded bg-muted/40" />
                 </div>
-                <span className="h-5 w-16 shrink-0 animate-pulse rounded bg-muted/40" />
+              ))}
+            </div>
+          </div>
+
+          {/* Cards de produto */}
+          <ul className="contents" aria-hidden="true">
+            {[0, 1, 2, 3].map((i) => (
+              <li key={i} className="pc-res-card animate-pulse">
+                <div className="flex flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
+                  <div className="min-w-0 flex-1 space-y-1.5">
+                    <span className="block h-3.5 w-3/5 rounded bg-muted/55" />
+                    <span className="block h-2.5 w-2/5 rounded bg-muted/40" />
+                  </div>
+                  <div className="flex gap-1.5">
+                    <span className="h-6 w-20 rounded-full bg-muted/35" />
+                    <span className="hidden h-6 w-16 rounded-full bg-muted/30 sm:block" />
+                  </div>
+                </div>
+                <div className="mt-2.5 space-y-2 border-t border-[color-mix(in_oklab,var(--color-border)_45%,transparent)] pt-2.5">
+                  {[0, 1].map((j) => (
+                    <div key={j} className="flex items-center gap-2.5">
+                      <span className="h-7 w-7 shrink-0 rounded-full bg-muted/40" />
+                      <span className="h-3 min-w-0 flex-1 rounded bg-muted/35" />
+                      <span className="h-4 w-16 shrink-0 rounded bg-muted/45" />
+                    </div>
+                  ))}
+                </div>
               </li>
             ))}
           </ul>
+
         </div>
       )}
 
@@ -1822,6 +1874,8 @@ function MarketGroupedResults({
     productName: string;
     catalogId: string | null;
     price: PricePoint;
+    /** Este mercado tem o menor preço da plataforma para este produto. */
+    isBest: boolean;
   };
   type Bucket = {
     marketName: string;
@@ -1830,11 +1884,34 @@ function MarketGroupedResults({
     kind: string | null;
     minPrice: number;
     maxPrice: number;
+    /** Nº de produtos em que este mercado tem o menor preço. */
+    bestCount: number;
+    /** Soma de (preço mais caro − preço daqui) nos produtos comparáveis. */
+    savings: number;
+    /** Soma de (preço daqui − melhor preço) nos produtos comparáveis. */
+    gapToBest: number;
     rows: Row[];
   };
 
+
   const [marketPage, setMarketPage] = useState(4);
   const [onlyMarket, setOnlyMarket] = useState<string | null>(null);
+
+  /** Melhor e pior preço de cada produto entre todos os mercados do resultado. */
+  const spread = new Map<string, { best: number; worst: number }>();
+  for (const g of groups) {
+    const prices = kindFilter
+      ? g.prices.filter((p) => p.marketKind === kindFilter)
+      : g.prices;
+    for (const p of prices) {
+      const cur = spread.get(g.productName);
+      if (!cur) spread.set(g.productName, { best: p.price, worst: p.price });
+      else {
+        if (p.price < cur.best) cur.best = p.price;
+        if (p.price > cur.worst) cur.worst = p.price;
+      }
+    }
+  }
 
   const bucketsMap = new Map<string, Bucket>();
   for (const g of groups) {
@@ -1852,6 +1929,9 @@ function MarketGroupedResults({
           kind: p.marketKind ?? null,
           minPrice: p.price,
           maxPrice: p.price,
+          bestCount: 0,
+          savings: 0,
+          gapToBest: 0,
           rows: [],
         };
         bucketsMap.set(key, b);
@@ -1861,7 +1941,17 @@ function MarketGroupedResults({
       if (!b.logoUrl && p.marketLogoUrl) b.logoUrl = p.marketLogoUrl;
       if (!b.brandColor && p.marketBrandColor) b.brandColor = p.marketBrandColor;
       if (!b.kind && p.marketKind) b.kind = p.marketKind;
-      b.rows.push({ productName: g.productName, catalogId: g.catalogId, price: p });
+
+      const sp = spread.get(g.productName);
+      // Só faz sentido marcar "melhor" quando há mais de um preço para comparar.
+      const isBest = !!sp && sp.worst > sp.best && p.price <= sp.best + 0.0001;
+
+      if (sp && sp.worst > sp.best) {
+        if (isBest) b.bestCount += 1;
+        b.savings += Math.max(0, sp.worst - p.price);
+        b.gapToBest += Math.max(0, p.price - sp.best);
+      }
+      b.rows.push({ productName: g.productName, catalogId: g.catalogId, price: p, isBest });
     }
   }
 
@@ -1872,13 +1962,13 @@ function MarketGroupedResults({
     }))
     .sort((a, z) => {
       if (sortMode === "savings") {
-        const sa = a.maxPrice - a.minPrice;
-        const sz = z.maxPrice - z.minPrice;
-        if (sa !== sz) return sz - sa;
+        if (a.savings !== z.savings) return z.savings - a.savings;
       }
+      if (a.bestCount !== z.bestCount) return z.bestCount - a.bestCount;
       if (a.minPrice !== z.minPrice) return a.minPrice - z.minPrice;
       return z.rows.length - a.rows.length;
     });
+
 
   if (allBuckets.length === 0) return null;
 
@@ -1934,8 +2024,12 @@ function MarketGroupedResults({
             brandColor={b.brandColor}
             kind={b.kind}
             minPrice={b.minPrice}
+            bestCount={b.bestCount}
+            savings={b.savings}
+            gapToBest={b.gapToBest}
             rows={b.rows}
             isCheapest={globalMin != null && b.minPrice === globalMin && idx === 0}
+
             fmt={fmt}
             highlightTokens={highlightTokens}
           />
@@ -1968,6 +2062,9 @@ function MarketBucketSection({
   brandColor,
   kind,
   minPrice,
+  bestCount,
+  savings,
+  gapToBest,
   rows,
   isCheapest,
   fmt,
@@ -1979,7 +2076,11 @@ function MarketBucketSection({
   brandColor: string | null;
   kind: string | null;
   minPrice: number;
-  rows: { productName: string; catalogId: string | null; price: PricePoint }[];
+  bestCount: number;
+  savings: number;
+  gapToBest: number;
+  rows: { productName: string; catalogId: string | null; price: PricePoint; isBest: boolean }[];
+
   isCheapest: boolean;
   fmt: (n: number | null | undefined) => string;
   highlightTokens: string[];
@@ -2038,6 +2139,32 @@ function MarketBucketSection({
             {rows.length} {rows.length === 1 ? "produto" : "produtos"} · a partir de{" "}
             <span className="font-semibold tabular-nums text-foreground">{fmt(minPrice)}</span>
           </p>
+
+          {/* Destaque de economia por mercado — leve, uma linha, sem caixas pesadas */}
+          {bestCount > 0 || savings > 0 || gapToBest > 0 ? (
+            <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] leading-none sm:text-[11.5px]">
+              {bestCount > 0 ? (
+                <span className="inline-flex items-center gap-1 rounded-full border border-[color-mix(in_oklab,var(--brand-gold)_45%,transparent)] bg-[color-mix(in_oklab,var(--brand-gold)_12%,transparent)] px-2 py-1 font-semibold text-[var(--pc-gold-ink)]">
+                  <Crown className="h-3 w-3" aria-hidden="true" />
+                  {bestCount} {bestCount === 1 ? "melhor preço" : "melhores preços"}
+                </span>
+              ) : null}
+              {savings > 0 ? (
+                <span className="inline-flex items-center gap-1 py-1 text-muted-foreground">
+                  economia de{" "}
+                  <strong className="font-semibold tabular-nums text-foreground">
+                    {fmt(savings)}
+                  </strong>{" "}
+                  vs. o mais caro
+                </span>
+              ) : null}
+              {gapToBest > 0 ? (
+                <span className="inline-flex items-center gap-1 py-1 tabular-nums text-muted-foreground">
+                  +{fmt(gapToBest)} acima do melhor
+                </span>
+              ) : null}
+            </p>
+          ) : null}
         </div>
       </header>
 
@@ -2054,10 +2181,18 @@ function MarketBucketSection({
             >
               <HighlightMatch text={r.productName} tokens={highlightTokens} />
             </Link>
+            {r.isBest ? (
+              <span
+                className="hidden shrink-0 rounded-full border border-[color-mix(in_oklab,var(--brand-gold)_45%,transparent)] px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.06em] text-[var(--pc-gold-ink)] sm:inline"
+                title="Menor preço desta busca para este produto"
+              >
+                melhor
+              </span>
+            ) : null}
             <span
               className={
                 "whitespace-nowrap rounded-md px-1.5 py-1 text-[13.5px] font-semibold leading-none tabular-nums tracking-[-0.02em] sm:px-2 sm:text-[15px] " +
-                (i === 0
+                (r.isBest
                   ? "bg-[color-mix(in_oklab,var(--brand-gold)_18%,transparent)] text-foreground"
                   : "text-foreground")
               }
@@ -2066,6 +2201,7 @@ function MarketBucketSection({
             </span>
           </li>
         ))}
+
       </ul>
 
 
