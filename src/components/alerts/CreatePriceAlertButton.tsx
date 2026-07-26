@@ -182,6 +182,34 @@ export function CreatePriceAlertButton({
               </SelectContent>
             </Select>
           </div>
+          <div>
+            <Label className="text-[11px] uppercase tracking-widest text-muted-foreground">
+              Frequência dos avisos
+            </Label>
+            <Select
+              value={
+                Number(thresholdPct) <= 1
+                  ? "1"
+                  : Number(thresholdPct) <= 5
+                    ? "5"
+                    : Number(thresholdPct) <= 10
+                      ? "10"
+                      : "15"
+              }
+              onValueChange={setThresholdPct}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="1">Toda variação (a partir de 1%)</SelectItem>
+                <SelectItem value="5">Variações relevantes (5%)</SelectItem>
+                <SelectItem value="10">Só variações fortes (10%)</SelectItem>
+                <SelectItem value="15">Apenas grandes variações (15%)</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
           <div className="grid grid-cols-2 gap-2">
             <div>
               <Label className="text-[11px] uppercase tracking-widest text-muted-foreground">
