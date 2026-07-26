@@ -15,23 +15,31 @@ import { describe, expect, it } from "vitest";
 
 const CSS = readFileSync(resolve(process.cwd(), "src/styles.css"), "utf8");
 
-function block(selector: string): string {
-  const i = CSS.indexOf(selector);
-  if (i === -1) throw new Error(`bloco ${selector} não encontrado em styles.css`);
-  const start = CSS.indexOf("{", i);
-  let depth = 0;
-  for (let j = start; j < CSS.length; j++) {
-    if (CSS[j] === "{") depth++;
-    else if (CSS[j] === "}") {
-      depth--;
-      if (depth === 0) return CSS.slice(start, j);
+/** Extrai o bloco do seletor que contém `marker` (styles.css tem vários `:root`). */
+function block(selector: string, marker: string): string {
+  const re = new RegExp(`(^|\\})\\s*${selector.replace(".", "\\.")}\\s*\\{`, "g");
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(CSS))) {
+    const start = CSS.indexOf("{", m.index);
+    let depth = 0;
+    for (let j = start; j < CSS.length; j++) {
+      if (CSS[j] === "{") depth++;
+      else if (CSS[j] === "}") {
+        depth--;
+        if (depth === 0) {
+          const body = CSS.slice(start, j);
+          if (body.includes(marker)) return body;
+          break;
+        }
+      }
     }
   }
-  throw new Error(`bloco ${selector} malformado`);
+  throw new Error(`bloco ${selector} contendo ${marker} não encontrado`);
 }
 
-const LIGHT = block(":root");
-const DARK = block(".dark");
+const MARKER = "--pc-home-hero-bg";
+const LIGHT = block(":root", MARKER);
+const DARK = block(".dark", MARKER);
 
 type RGBA = [number, number, number, number];
 
