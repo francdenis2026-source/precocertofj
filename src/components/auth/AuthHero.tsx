@@ -172,12 +172,12 @@ export function AuthHero({
       <div className="relative">
         <div className="flex items-center gap-2.5">
           <img
-            src="/logo-mark.png"
+            src="/logo-mark.png?v=5"
             alt=""
             aria-hidden
-            width={36}
-            height={36}
-            className="h-9 w-9 shrink-0 object-contain drop-shadow-[0_4px_12px_rgb(0_0_0/0.35)]"
+            width={44}
+            height={44}
+            className="h-11 w-11 shrink-0 object-contain drop-shadow-[0_4px_12px_rgb(0_0_0/0.35)]"
           />
 
           <span

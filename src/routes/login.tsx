@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, useMotionValue, useTransform, animate, AnimatePresence } from "framer-motion";
-import { ArrowRight, Loader2, User, Phone, MapPin, Hash, ShieldAlert, AlertCircle, Check, ShoppingCart, Ticket } from "lucide-react";
+import { ArrowRight, Loader2, User, Phone, MapPin, Hash, ShieldAlert, AlertCircle, Check, Ticket } from "lucide-react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useServerFn } from "@tanstack/react-start";
@@ -320,21 +320,23 @@ function LoginPage() {
         {/* RIGHT — Auth form */}
         <div className="p-4 sm:p-5 md:p-6" style={{ fontFamily: PC_BODY }}>
 
-          {/* Mobile-only compact brand row */}
+          {/* Mobile-only compact brand row — logomarca oficial */}
           <div className="mb-4 flex items-center gap-2 md:hidden">
-            <div
-              className="flex h-7 w-7 items-center justify-center rounded-md"
-              style={{ background: PC_EMERALD, color: PC_GOLD }}
-            >
-              <ShoppingCart className="h-3.5 w-3.5" strokeWidth={2.5} />
-            </div>
+            <img
+              src="/logo-mark.png?v=5"
+              alt="PreçoCerto"
+              width={34}
+              height={34}
+              className="h-[34px] w-[34px] shrink-0 object-contain"
+            />
             <span
-              className="text-[15px] font-bold tracking-tight text-foreground"
+              className="text-[16px] font-bold tracking-tight text-foreground"
               style={{ fontFamily: PC_DISPLAY }}
             >
               PreçoCerto
             </span>
           </div>
+
 
           <p className="text-[9.5px] font-bold uppercase tracking-[0.2em] text-[color:var(--pc-home-navy)] dark:text-[color:var(--pc-home-gold)]">
             {mode === "login" ? "Área do assinante" : "Comece grátis"}
