@@ -721,35 +721,49 @@ function StoreStat({ label, value, hint }: { label: string; value: string; hint?
   );
 }
 
-/** Chip de categoria — altura fixa 32px, contraste navy/gold. */
+/** Chip de categoria — 32px, contraste navy/gold e foco visível. */
 function CategoryChip({
   label,
   count,
   active,
+  tabIndex,
   onClick,
 }: {
   label: string;
   count: number;
   active: boolean;
+  tabIndex: number;
   onClick: () => void;
 }) {
   return (
     <button
       type="button"
       role="radio"
+      data-rail-item
       aria-checked={active}
+      aria-current={active ? "page" : undefined}
+      tabIndex={tabIndex}
       onClick={onClick}
       className={
-        active
-          ? "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border border-brand-gold bg-brand-gold px-3 text-[12px] font-semibold leading-none text-brand-navy"
-          : "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border border-border bg-card px-3 text-[12px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold"
+        "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[12px] font-semibold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-1 focus-visible:ring-offset-background " +
+        (active
+          ? "border-brand-gold bg-brand-gold text-brand-navy"
+          : "border-border bg-card text-foreground hover:border-brand-gold hover:bg-muted/60")
       }
     >
       {label}
-      <span className="text-[10px] font-bold tabular-nums opacity-70">{count}</span>
+      <span
+        className={
+          "text-[10px] font-bold tabular-nums " +
+          (active ? "text-brand-navy/70" : "text-muted-foreground")
+        }
+      >
+        {count}
+      </span>
     </button>
   );
 }
+
 
 /** Trilho de categorias com setas, arraste, roda e teclado (sem recortes). */
 function CategoryRail({
