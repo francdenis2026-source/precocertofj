@@ -414,10 +414,11 @@ function CategoryPage() {
                   to={Math.min(pageStart + perPage, products.length)}
                   total={products.length}
                   onPage={(n) => {
-                    setPage(n);
+                    setSearch({ page: n });
                     document.getElementById("cat-prod-search")?.scrollIntoView({ block: "center" });
                   }}
-                  onPerPage={setPerPage}
+                  onPerPage={(n) => setSearch({ per: n, page: 1 })}
+
                 />
               ) : (
                 products.length > limit && (
