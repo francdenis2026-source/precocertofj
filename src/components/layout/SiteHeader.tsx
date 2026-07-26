@@ -13,7 +13,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ThemeToggle } from "@/components/theme-toggle";
-import { ReadingModeToggle } from "@/components/layout/ReadingModeToggle";
 import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/layout/BackButton";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -241,7 +240,6 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
               className="hidden sm:inline-flex"
             />
           )}
-          <ReadingModeToggle tone={isOverlay ? "dark" : "light"} className="hidden sm:inline-flex" />
           {showThemeToggle && <ThemeToggle size="sm" tone={isOverlay ? "dark" : "light"} />}
           {loading ? (
             <div className={dsx("h-9 w-24 animate-pulse rounded-lg", isOverlay ? "bg-on-media-surface" : "bg-muted")} />
