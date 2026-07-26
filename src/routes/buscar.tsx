@@ -437,7 +437,7 @@ function SearchPage() {
 
             {/* Filtros — barra única compacta e fixa (sticky) abaixo do topo:
                 alternar filtros não desloca o conteúdo já renderizado. */}
-            <div className="sticky top-[var(--pc-search-top,44px)] z-20 -mx-1 min-h-[42px] bg-background/95 px-1 py-1 backdrop-blur supports-[backdrop-filter]:bg-background/80">
+            <div className="sticky top-[var(--pc-search-top,52px)] z-20 -mx-1 min-h-[42px] border-y border-border/60 bg-background/92 px-1 backdrop-blur supports-[backdrop-filter]:bg-background/75">
               <FiltersToolbar
                 open={filtersOpen}
                 onToggle={() => setFiltersOpen((v) => !v)}
