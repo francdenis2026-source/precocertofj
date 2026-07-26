@@ -228,9 +228,25 @@ async def main() -> int:
                         continue
                     await page.wait_for_timeout(900)
                     issues = await page.evaluate(PROBE)
+                    confirmed = []
                     for it in issues:
                         it.update(route=route, viewport=vp_name, theme=theme)
-                    failures.extend(issues)
+                        if it["clipped"]:
+                            confirmed.append(it)
+                            continue
+                        # verificação por pixel: descarta falsos positivos da
+                        # composição CSS (gradientes/backdrop-filter/camadas)
+                        try:
+                            shot = await page.locator(
+                                f'[data-ca-probe="{it["probe"]}"]'
+                            ).screenshot(timeout=4000)
+                            real = pixel_contrast(shot)
+                        except Exception:  # noqa: BLE001
+                            real = None
+                        it["pixel_cr"] = real
+                        if real is None or real < it["need"]:
+                            confirmed.append(it)
+                    failures.extend(confirmed)
             await ctx.close()
         await browser.close()
 
@@ -238,15 +254,16 @@ async def main() -> int:
         with open(args.json, "w", encoding="utf-8") as fh:
             json.dump(failures, fh, ensure_ascii=False, indent=2)
 
-    print(f"\n{len(failures)} ocorrência(s)")
+    print(f"\n{len(failures)} ocorrência(s) confirmada(s) por pixel")
     for f in failures:
         kind = "CLIP" if f["clipped"] else "CONTRAST"
         print(
             f"  [{kind}] {f['route']} {f['viewport']}/{f['theme']} "
-            f"cr={f['cr']} need={f['need']} size={f['size']} "
+            f"cr={f['cr']} pixel={f.get('pixel_cr')} need={f['need']} size={f['size']} "
             f"color={f['color']} :: {f['text']!r} :: {f['cls']}"
         )
     return 1 if failures else 0
+
 
 
 if __name__ == "__main__":
