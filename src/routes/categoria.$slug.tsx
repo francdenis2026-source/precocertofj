@@ -1,11 +1,15 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
   ArrowRight,
   Beef,
   Building2,
+  ChevronLeft,
+  ChevronRight,
+  LayoutGrid,
+  List,
   CalendarDays,
   Fuel,
   HardHat,
@@ -77,6 +81,7 @@ function CategoryPage() {
   const fetchHub = useServerFn(getCategoryHub);
   const [q, setQ] = useState("");
   const [limit, setLimit] = useState(24);
+  const [view, setView] = useState<"list" | "grid">("list");
 
   const { data, isLoading } = useQuery({
     queryKey: ["category-hub", slug],
@@ -86,6 +91,8 @@ function CategoryPage() {
   });
 
   const Icon = ICONS[slug] ?? Package;
+  const totalAll = data?.totals.products ?? 0;
+  const totalListed = data?.products.length ?? 0;
 
   const products = useMemo(() => {
     const list = data?.products ?? [];
@@ -147,38 +154,9 @@ function CategoryPage() {
           </dl>
         </header>
 
-        {/* Trilho de categorias — sem barra de rolagem visível, com fade nas bordas */}
-        <nav aria-label="Outras categorias" className="relative mt-2.5">
-          <div className="no-scrollbar -mx-3 overflow-x-auto px-3 sm:mx-0 sm:px-0">
-            <ul className="flex w-max gap-1.5 pr-6 sm:pr-0">
-              {CATEGORY_DEFS.map((c) => {
-                const CIcon = ICONS[c.slug] ?? Package;
-                const active = c.slug === slug;
-                return (
-                  <li key={c.slug}>
-                    <Link
-                      to="/categoria/$slug"
-                      params={{ slug: c.slug }}
-                      aria-current={active ? "page" : undefined}
-                      className={cn(
-                        "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[12px] font-semibold leading-none transition-colors",
-                        active
-                          ? "border-brand-gold bg-brand-gold text-brand-navy"
-                          : "border-border bg-card text-foreground hover:border-brand-gold",
-                      )}
-                    >
-                      <CIcon className="h-3.5 w-3.5" aria-hidden /> {c.short}
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
-          <span
-            aria-hidden
-            className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-background to-transparent sm:hidden"
-          />
-        </nav>
+        {/* Trilho de categorias — setas de navegação + roda do mouse horizontal */}
+        <CategoryRail current={slug} />
+
 
 
         {/* Plantão (só farmácias) */}
@@ -229,25 +207,61 @@ function CategoryPage() {
           <SectionTitle
             icon={Package}
             title="Produtos da categoria"
-            hint={`${products.length} resultado(s)`}
+            hint={
+              q
+                ? `${products.length} de ${totalListed.toLocaleString("pt-BR")} filtrado(s)`
+                : totalAll > totalListed
+                  ? `${totalListed.toLocaleString("pt-BR")} exibidos de ${totalAll.toLocaleString("pt-BR")}`
+                  : `${totalAll.toLocaleString("pt-BR")} produto(s)`
+            }
           />
-          <div className="relative mt-2">
-            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
-            <label htmlFor="cat-prod-search" className="sr-only">
-              Filtrar produtos da categoria
-            </label>
-            <input
-              id="cat-prod-search"
-              type="search"
-              value={q}
-              onChange={(e) => {
-                setQ(e.target.value);
-                setLimit(24);
-              }}
-              placeholder={`Filtrar em ${def.label.toLowerCase()}…`}
-              className="h-10 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13.5px] outline-none focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
-            />
+          <div className="mt-2 flex items-center gap-2">
+            <div className="relative min-w-0 flex-1">
+              <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" aria-hidden />
+              <label htmlFor="cat-prod-search" className="sr-only">
+                Filtrar produtos da categoria
+              </label>
+              <input
+                id="cat-prod-search"
+                type="search"
+                value={q}
+                onChange={(e) => {
+                  setQ(e.target.value);
+                  setLimit(24);
+                }}
+                placeholder={`Filtrar em ${def.label.toLowerCase()}…`}
+                className="h-10 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13.5px] outline-none focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
+              />
+            </div>
+            <div
+              role="group"
+              aria-label="Modo de exibição"
+              className="flex h-10 shrink-0 items-center gap-1 rounded-lg border border-border bg-card p-1"
+            >
+              {([
+                { id: "list", label: "Lista", Icon: List },
+                { id: "grid", label: "Grade", Icon: LayoutGrid },
+              ] as const).map(({ id, label, Icon: VIcon }) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => setView(id)}
+                  aria-pressed={view === id}
+                  title={label}
+                  className={cn(
+                    "grid h-8 w-8 place-items-center rounded-md transition-colors",
+                    view === id
+                      ? "bg-brand-gold text-brand-navy"
+                      : "text-muted-foreground hover:text-foreground",
+                  )}
+                >
+                  <VIcon className="h-4 w-4" aria-hidden />
+                  <span className="sr-only">{label}</span>
+                </button>
+              ))}
+            </div>
           </div>
+
 
           {isLoading ? (
             <SkeletonRow />
@@ -266,6 +280,33 @@ function CategoryPage() {
             />
           ) : (
             <>
+              {view === "grid" ? (
+                <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                  {products.slice(0, limit).map((p) => (
+                    <li key={p.key}>
+                      <Link
+                        to="/buscar"
+                        search={{ q: p.name } as never}
+                        className="flex h-full items-start gap-2.5 rounded-lg border border-border bg-card p-2.5 transition-colors hover:border-brand-gold"
+                      >
+                        <StoreBadge name={p.cheapestStore} logoUrl={p.cheapestLogo} size="xs" />
+                        <span className="min-w-0 flex-1">
+                          <span className="line-clamp-2 text-[13px] font-semibold leading-tight">
+                            {p.name}
+                          </span>
+                          <span className="mt-0.5 block truncate text-[11px] text-muted-foreground">
+                            {p.cheapestStore}
+                            {p.storeCount > 1 ? ` · ${p.storeCount} mercados` : ""}
+                          </span>
+                          <span className="mt-1 block text-[13.5px] font-bold tabular-nums text-foreground">
+                            {brl(p.minPrice)}
+                          </span>
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
               <ul className="mt-2 divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
                 {products.slice(0, limit).map((p) => (
                   <li key={p.key} className="flex items-center gap-2.5 px-2.5 py-2">
@@ -301,6 +342,7 @@ function CategoryPage() {
                   </li>
                 ))}
               </ul>
+              )}
               {products.length > limit && (
                 <button
                   type="button"
@@ -316,6 +358,127 @@ function CategoryPage() {
       </main>
       <SiteFooter />
     </div>
+  );
+}
+
+/** Trilho horizontal de categorias com setas, roda do mouse e fades. */
+function CategoryRail({ current }: { current: string }) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [canPrev, setCanPrev] = useState(false);
+  const [canNext, setCanNext] = useState(false);
+
+  const sync = useCallback(() => {
+    const el = ref.current;
+    if (!el) return;
+    setCanPrev(el.scrollLeft > 4);
+    setCanNext(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+  }, []);
+
+  useEffect(() => {
+    sync();
+    const el = ref.current;
+    if (!el) return;
+    const onWheel = (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      const before = el.scrollLeft;
+      el.scrollLeft += e.deltaY;
+      if (el.scrollLeft !== before) e.preventDefault();
+    };
+    el.addEventListener("wheel", onWheel, { passive: false });
+    window.addEventListener("resize", sync);
+    // centraliza a categoria ativa
+    el.querySelector<HTMLElement>('[aria-current="page"]')?.scrollIntoView({
+      inline: "center",
+      block: "nearest",
+    });
+    return () => {
+      el.removeEventListener("wheel", onWheel);
+      window.removeEventListener("resize", sync);
+    };
+  }, [sync, current]);
+
+  const scrollBy = (dir: -1 | 1) => {
+    const el = ref.current;
+    if (!el) return;
+    el.scrollBy({ left: dir * Math.max(180, el.clientWidth * 0.7), behavior: "smooth" });
+  };
+
+  return (
+    <nav aria-label="Outras categorias" className="relative mt-2.5">
+      <div
+        ref={ref}
+        onScroll={sync}
+        className="no-scrollbar overflow-x-auto scroll-smooth px-8"
+      >
+        <ul className="flex w-max gap-1.5">
+          {CATEGORY_DEFS.map((c) => {
+            const CIcon = ICONS[c.slug] ?? Package;
+            const active = c.slug === current;
+            return (
+              <li key={c.slug}>
+                <Link
+                  to="/categoria/$slug"
+                  params={{ slug: c.slug }}
+                  aria-current={active ? "page" : undefined}
+                  className={cn(
+                    "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[12px] font-semibold leading-none transition-colors",
+                    active
+                      ? "border-brand-gold bg-brand-gold text-brand-navy"
+                      : "border-border bg-card text-foreground hover:border-brand-gold",
+                  )}
+                >
+                  <CIcon className="h-3.5 w-3.5" aria-hidden /> {c.short}
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+
+      <span
+        aria-hidden
+        className={cn(
+          "pointer-events-none absolute inset-y-0 left-0 w-10 bg-gradient-to-r from-background to-transparent transition-opacity",
+          canPrev ? "opacity-100" : "opacity-0",
+        )}
+      />
+      <span
+        aria-hidden
+        className={cn(
+          "pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-background to-transparent transition-opacity",
+          canNext ? "opacity-100" : "opacity-0",
+        )}
+      />
+      <RailArrow side="left" onClick={() => scrollBy(-1)} disabled={!canPrev} />
+      <RailArrow side="right" onClick={() => scrollBy(1)} disabled={!canNext} />
+    </nav>
+  );
+}
+
+function RailArrow({
+  side,
+  onClick,
+  disabled,
+}: {
+  side: "left" | "right";
+  onClick: () => void;
+  disabled: boolean;
+}) {
+  const Icon = side === "left" ? ChevronLeft : ChevronRight;
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      disabled={disabled}
+      aria-label={side === "left" ? "Categorias anteriores" : "Próximas categorias"}
+      className={cn(
+        "absolute top-1/2 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-full border border-border bg-card text-foreground shadow-sm transition-opacity hover:border-brand-gold",
+        side === "left" ? "left-0" : "right-0",
+        disabled && "pointer-events-none opacity-0",
+      )}
+    >
+      <Icon className="h-4 w-4" aria-hidden />
+    </button>
   );
 }
 
