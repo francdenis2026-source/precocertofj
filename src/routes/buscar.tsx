@@ -26,7 +26,7 @@ import { BackButton } from "@/components/layout/BackButton";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 
 import { useReducedMotion } from "@/lib/reduced-motion";
-import { BellRing, Filter, Search, SlidersHorizontal, X } from "lucide-react";
+import { ArrowLeft, BellRing, Filter, Search, SlidersHorizontal, X } from "lucide-react";
 
 
 const searchSchema = z.object({
