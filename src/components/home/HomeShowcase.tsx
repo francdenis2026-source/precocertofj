@@ -98,7 +98,7 @@ export function HomeShowcaseSection() {
   } = useQuery<HomeShowcase>({
     queryKey: ["home-showcase"],
     queryFn: () => fetchData(),
-    staleTime: 10 * 60_000,
+    staleTime: 30 * 60_000,
     gcTime: 60 * 60_000,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
@@ -118,7 +118,7 @@ export function HomeShowcaseSection() {
       if (error) throw error;
       return (data as unknown as Comparison[]) ?? [];
     },
-    staleTime: 5 * 60_000,
+    staleTime: 30 * 60_000,
   });
 
   const products = data?.products ?? [];

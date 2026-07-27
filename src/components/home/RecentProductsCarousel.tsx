@@ -60,7 +60,7 @@ export function RecentProductsCarousel() {
   const { data, isLoading } = useQuery<HomeShowcase>({
     queryKey: ["home-showcase"],
     queryFn: () => fetchData(),
-    staleTime: 10 * 60_000,
+    staleTime: 30 * 60_000,
     gcTime: 60 * 60_000,
     refetchOnWindowFocus: false,
     placeholderData: (prev) => prev,
@@ -73,7 +73,7 @@ export function RecentProductsCarousel() {
       if (error) throw error;
       return (data as unknown as Comparison[]) ?? [];
     },
-    staleTime: 5 * 60_000,
+    staleTime: 30 * 60_000,
   });
 
   const products = data?.products ?? [];
