@@ -19,7 +19,7 @@ import sys
 ROUTES = [
     "/", "/buscar", "/estabelecimentos", "/mapa", "/planos", "/comparador",
     "/melhores-precos", "/colaborar", "/privacidade", "/fale-conosco",
-    "/login", "/signup", "/resgatar", "/farmacias",
+    "/login", "/cadastro", "/resgatar", "/farmacias",
 ]
 
 VIEWPORTS = [("mobile", 390, 844), ("desktop", 1280, 900)]

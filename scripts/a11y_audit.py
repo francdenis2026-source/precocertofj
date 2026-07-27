@@ -29,7 +29,7 @@ AXE_CDN = "https://cdn.jsdelivr.net/npm/axe-core@4.10.2/axe.min.js"
 ROUTES = [
     "/", "/planos", "/buscar", "/estabelecimentos", "/mapa", "/comparador",
     "/melhores-precos", "/colaborar", "/privacidade", "/fale-conosco",
-    "/login", "/signup", "/resgatar", "/farmacias",
+    "/login", "/cadastro", "/resgatar", "/farmacias",
 ]
 VIEWPORTS = [("mobile", 390, 844), ("desktop", 1440, 900)]
 
