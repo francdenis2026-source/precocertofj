@@ -618,7 +618,7 @@ function ComparisonCell({ value }: { value: string | boolean | undefined }) {
       </span>
     );
   }
-  return <span className="text-[12.5px] font-semibold text-foreground">{value}</span>;
+  return <span className="text-[13px] font-semibold text-foreground">{value}</span>;
 }
 
 function ComparisonMatrix({
