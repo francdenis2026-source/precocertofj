@@ -155,6 +155,7 @@ function PlansPage() {
   const promptSignIn = usePromptSignIn();
   const [buying, setBuying] = useState<string | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [openSheet, setOpenSheet] = useState<"compare" | "faq" | null>(null);
   
 
 
