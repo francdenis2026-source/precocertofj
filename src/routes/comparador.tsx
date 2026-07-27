@@ -969,6 +969,7 @@ function ComparadorPage() {
             {!quota.exceeded && <div className="pb-16" />}
           </div>
         )}
+        </FadeSwap>
       </section>
 
 
