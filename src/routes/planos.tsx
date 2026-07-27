@@ -364,7 +364,7 @@ function PlansPage() {
                   aria-controls="detalhes-panel"
                   onClick={() => setTab(t.id)}
                   className={dsx(
-                    "relative -mb-px min-h-10 px-3 text-[12.5px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+                    "relative -mb-px min-h-11 px-4 text-[13.5px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
                     tab === t.id
                       ? "text-foreground after:absolute after:inset-x-2 after:bottom-0 after:h-0.5 after:rounded-full after:bg-brand-gold"
                       : "text-muted-foreground hover:text-foreground",
@@ -379,7 +379,7 @@ function PlansPage() {
               id="detalhes-panel"
               role="tabpanel"
               aria-labelledby={`tab-${tab}`}
-              className="pc-rail min-h-0 flex-1 overflow-y-auto px-4 py-3"
+              className="pc-rail min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-5"
             >
               {tab === "comparativo" ? (
                 <ComparisonMatrix
@@ -389,22 +389,22 @@ function PlansPage() {
                   buying={buying}
                 />
               ) : (
-                <div className="divide-y divide-border/70">
+                <div className="mx-auto max-w-3xl divide-y divide-border/70">
                   {FAQ.map((item, i) => (
                     <details key={item.q} name="planos-faq" open={i === 0} className="group">
-                      <summary className="flex min-h-10 cursor-pointer list-none items-center justify-between gap-3 py-2 text-[12.5px] font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold">
+                      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 py-2.5 text-[14px] font-semibold text-foreground transition-colors hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold">
                         <span>{item.q}</span>
                         <ChevronDown
-                          className="h-3.5 w-3.5 shrink-0 text-muted-foreground transition group-open:rotate-180"
+                          className="h-4 w-4 shrink-0 text-muted-foreground transition group-open:rotate-180 group-open:text-brand-gold"
                           aria-hidden
                         />
                       </summary>
-                      <p className="pb-2.5 pr-6 text-[12px] leading-relaxed text-muted-foreground">
+                      <p className="pb-3.5 pr-6 text-[13.5px] leading-relaxed text-muted-foreground">
                         {item.a}
                       </p>
                     </details>
                   ))}
-                  <p className="pt-2.5 text-[12px] text-muted-foreground">
+                  <p className="pt-3.5 text-[13px] text-muted-foreground">
                     Já comprou e recebeu um código?{" "}
                     <Link
                       to="/resgatar"
