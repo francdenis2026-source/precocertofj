@@ -619,10 +619,10 @@ function HomePage() {
           </div>
 
           {/* ================= FAIXA INFERIOR ================= */}
-          <div className="grid gap-2 sm:gap-3 lg:grid-cols-12">
+          <div className="grid gap-2.5 sm:gap-3 lg:grid-cols-12">
             {/* Categorias */}
             <nav aria-label="Categorias" className="min-w-0 lg:col-span-8">
-              <div className="grid grid-cols-5 gap-1.5 sm:gap-2">
+              <div className="grid grid-cols-5 gap-2 sm:gap-2.5">
                 {CATEGORIES.map(({ key, label, full, Icon }) => (
                   <button
                     key={key}
@@ -630,7 +630,7 @@ function HomePage() {
                     onClick={() => navigate({ to: "/categoria/$slug", params: { slug: key } })}
                     aria-label={`Pesquisar em ${full}`}
                     data-reading-card
-                    className="group flex min-h-[54px] flex-col items-center justify-center gap-1 rounded-xl border px-1 py-2 text-center pc-tile focus-visible:outline-none focus-visible:ring-2"
+                    className={TILE}
                     style={{
                       background: "var(--pc-home-onhero-glass)",
                       borderColor: "var(--pc-home-onhero-border)",
@@ -638,9 +638,9 @@ function HomePage() {
                       "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
                     }}
                   >
-                    <Icon className="h-4 w-4" style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.2} aria-hidden />
+                    <Icon className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.1} aria-hidden />
                     <span
-                      className="w-full truncate text-[11.5px] font-semibold"
+                      className={TILE_LABEL}
                       style={{ color: "var(--pc-home-onhero-fg-90)" }}
                     >
                       {label}
@@ -653,7 +653,7 @@ function HomePage() {
                   aria-haspopup="dialog"
                   aria-label="Ver todas as categorias"
                   data-reading-card
-                  className="group flex min-h-[54px] flex-col items-center justify-center gap-1 rounded-xl border border-dashed px-1 py-2 text-center pc-tile focus-visible:outline-none focus-visible:ring-2"
+                  className={`${TILE} border-dashed`}
                   style={{
                     background: `color-mix(in oklab, ${P.gold} 16%, transparent)`,
                     borderColor: `color-mix(in oklab, ${P.gold} 55%, transparent)`,
@@ -661,8 +661,8 @@ function HomePage() {
                     "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
                   }}
                 >
-                  <Grid3x3 className="h-4 w-4" style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.4} aria-hidden />
-                  <span className="w-full truncate text-[11.5px] font-bold" style={{ color: "var(--pc-home-onhero-gold)" }}>
+                  <Grid3x3 className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.3} aria-hidden />
+                  <span className={`${TILE_LABEL} font-bold`} style={{ color: "var(--pc-home-onhero-gold)" }}>
                     Todas
                   </span>
                 </button>
@@ -670,7 +670,7 @@ function HomePage() {
             </nav>
 
             {/* Pilares + Explorar */}
-            <div className="grid min-w-0 grid-cols-4 gap-1.5 sm:gap-2 lg:col-span-4">
+            <div className="grid min-w-0 grid-cols-4 gap-2 sm:gap-2.5 lg:col-span-4">
               <PillarLink to="/melhores-precos" Icon={LineChart} label="Histórico" />
               <PillarLink to="/colaborar" Icon={Users} label="Colaborar" />
               <PillarLink to="/planos" Icon={Sparkles} label="Plus" emphasis />
@@ -679,7 +679,7 @@ function HomePage() {
                   <button
                     type="button"
                     data-reading-card
-                    className="flex min-h-[54px] flex-col items-center justify-center gap-1 rounded-xl border px-1 py-2 text-center pc-tile focus-visible:outline-none focus-visible:ring-2"
+                    className={TILE}
                     style={{
                       background: "var(--pc-home-onhero-glass)",
                       borderColor: "var(--pc-home-onhero-border)",
@@ -687,15 +687,16 @@ function HomePage() {
                       "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
                     }}
                   >
-                    <LayoutGrid className="h-4 w-4" style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.2} aria-hidden />
+                    <LayoutGrid className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.1} aria-hidden />
                     <span
-                      className="w-full truncate text-[11.5px] font-semibold"
+                      className={TILE_LABEL}
                       style={{ color: "var(--pc-home-onhero-fg-90)" }}
                     >
                       Explorar
                     </span>
                   </button>
                 </SheetTrigger>
+
                 <SheetContent
                   side="bottom"
                   className="flex h-[100dvh] max-h-[100dvh] flex-col overflow-hidden border-t-0 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-4 sm:px-6 before:fixed before:inset-0 before:-z-10 before:content-[''] before:bg-[var(--pc-home-explore-bg)]"
