@@ -45,6 +45,9 @@ import {
   LoadingGrid,
   LoadingList,
 } from "@/components/feedback";
+import { RankingSkeleton, FadeSwap } from "@/components/layout/LoadingSkeleton";
+import { tc } from "@/lib/typeclear";
+import { cn } from "@/lib/utils";
 import {
   Search,
   Store as StoreIcon,
