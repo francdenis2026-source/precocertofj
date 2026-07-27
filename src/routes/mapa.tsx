@@ -25,6 +25,8 @@ import { useSession } from "@/hooks/useSession";
 import { toast } from "sonner";
 import { EmptyState, LoadingSkeleton, PageShell, PageShellContent } from "@/components/layout";
 import mapaHero from "@/assets/mapa-hero.jpg";
+import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
+
 import { Link } from "@tanstack/react-router";
 import {
   Select,
