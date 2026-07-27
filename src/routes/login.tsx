@@ -586,12 +586,27 @@ function LoginPage() {
             </div>
           </form>
 
-          <p className="mt-4 border-t border-border pt-3 text-center text-[11px] text-muted-foreground">
-            Ao continuar, você concorda com nossos{" "}
-            <Link to="/termos" className="underline hover:text-foreground">Termos</Link> e{" "}
-            <Link to="/privacidade" className="underline hover:text-foreground">Privacidade</Link>.
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 border-t border-border pt-3 text-center text-[11px] text-muted-foreground">
+            <p>
+              Ao continuar, você concorda com nossos{" "}
+              <Link to="/termos" className="underline hover:text-foreground">Termos</Link> e{" "}
+              <Link to="/privacidade" className="underline hover:text-foreground">Privacidade</Link>.
+            </p>
+            <span aria-hidden className="hidden h-3 w-px bg-border sm:block" />
+            <Link
+              to="/admin-login"
+              aria-label="Acesso interno da equipe"
+              title="Acesso interno"
+              rel="nofollow"
+              className="group inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-muted-foreground/60 transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              <Lock className="h-3 w-3" strokeWidth={2.2} />
+              <span className="max-w-0 overflow-hidden whitespace-nowrap opacity-0 transition-all duration-300 group-hover:max-w-[110px] group-hover:opacity-100 group-focus-visible:max-w-[110px] group-focus-visible:opacity-100">
+                Acesso interno
+              </span>
+            </Link>
+          </div>
 
-          </p>
         </div>
       </motion.div>
     </div>
