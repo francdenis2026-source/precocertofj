@@ -3853,3 +3853,18 @@ html.dark :is(.hover\:text-primary):not(.primary-on-light):hover {
     padding-bottom: 0.25rem !important;
   }
 }
+
+/* Véu de vidro fosco da busca: desfoca o conteúdo abaixo da barra enquanto a
+   lista de sugestões está aberta. Intensidade média (8px) + leve escurecimento. */
+.pc-search-scrim {
+  background: color-mix(in oklab, var(--color-background) 42%, transparent);
+  backdrop-filter: blur(8px) saturate(115%);
+  animation: pc-scrim-in 160ms ease-out both;
+}
+@keyframes pc-scrim-in {
+  from { opacity: 0; backdrop-filter: blur(0px); }
+  to { opacity: 1; backdrop-filter: blur(8px) saturate(115%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pc-search-scrim { animation: none; }
+}
