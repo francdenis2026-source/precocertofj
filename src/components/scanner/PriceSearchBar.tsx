@@ -2855,7 +2855,7 @@ function MatrixCompareResults({
                     {rowMin != null && rowMax != null && rowMax > rowMin ? (
                       <p className="mt-0.5 text-[11px] text-muted-foreground">
                         Economia até{" "}
-                        <span className="font-semibold text-brand-gold tabular-nums">
+                        <span className="font-semibold text-[var(--pc-gold-ink)] tabular-nums">
                           {fmt(rowMax - rowMin)}
                         </span>
                       </p>
