@@ -194,12 +194,26 @@ async function runPriceSearch(data: {
       const bucket = decodeURIComponent(m[1]);
       const path = decodeURIComponent(m[2]);
       if (bucket !== "logos" && bucket !== "scans") return;
+      const key = `${bucket}/${path}`;
+      const cached = signedUrlCache.get(key);
+      if (cached && cached.expiresAt > Date.now()) {
+        s.imageUrl = cached.url;
+        return;
+      }
       const { data: signed } = await supabaseAdmin.storage
         .from(bucket)
         .createSignedUrl(path, 60 * 60 * 24 * 7);
-      if (signed?.signedUrl) s.imageUrl = signed.signedUrl;
+      if (signed?.signedUrl) {
+        s.imageUrl = signed.signedUrl;
+        // Renova 1 dia antes de expirar.
+        signedUrlCache.set(key, {
+          url: signed.signedUrl,
+          expiresAt: Date.now() + 6 * 24 * 60 * 60 * 1000,
+        });
+      }
     }),
   );
+
   const catalogIdByName = new Map(
     suggestions.map((s) => [normalize(s.displayName), s.id] as const),
   );
