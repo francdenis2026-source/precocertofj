@@ -197,6 +197,17 @@ function AdminPage() {
   });
   const dbPlans: PlanRow[] = plansQuery.data ?? [];
 
+  // Registra o acesso ao console na auditoria (uma vez por sessão de página).
+  const logAccess = useServerFn(logAdminAccess);
+  useEffect(() => {
+    let done = false;
+    if (done) return;
+    logAccess({ data: { area: "console" } }).catch(() => {});
+    return () => { done = true; };
+  }, [logAccess]);
+
+
+
   const kpis = useMemo(() => {
     const active = state.subscribers.filter((s) => s.status === "active" || s.status === "trial").length;
     const mrr = state.subscribers
