@@ -261,11 +261,11 @@ function NeighborhoodsPage() {
                 )}
               </div>
 
-              <div className="flex items-center gap-2 overflow-x-auto no-scrollbar md:overflow-visible">
+              <div className="grid grid-cols-2 items-center gap-2 md:flex md:w-auto">
                 <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortBy)}>
                   <SelectTrigger
                     aria-label="Ordenar bairros"
-                    className={`h-8 w-[8.5rem] shrink-0 border-border bg-card px-2.5 md:w-[10.5rem] ${tc.control} shadow-none`}
+                    className={`h-8 w-full shrink-0 border-border bg-card px-2.5 md:w-[11.5rem] ${tc.control} shadow-none`}
                   >
                     <SelectValue />
                   </SelectTrigger>
@@ -283,7 +283,7 @@ function NeighborhoodsPage() {
                 >
                   <SelectTrigger
                     aria-label="Filtrar por categoria"
-                    className={`h-8 w-[8.5rem] shrink-0 border-border bg-card px-2.5 md:w-[11rem] ${tc.control} shadow-none`}
+                    className={`h-8 w-full shrink-0 border-border bg-card px-2.5 md:w-[11.5rem] ${tc.control} shadow-none`}
                   >
                     <SelectValue />
                   </SelectTrigger>
