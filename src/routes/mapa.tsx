@@ -426,16 +426,17 @@ function NeighborhoodsPage() {
           )}
 
           {active && (
-            <div className="grid gap-2 min-w-0 md:gap-3 md:grid-cols-[16rem_minmax(0,1fr)] md:items-start">
+            <div className="grid min-h-0 flex-1 gap-2 min-w-0 md:gap-3 md:grid-cols-[16rem_minmax(0,1fr)] md:items-stretch">
               {/* Índice de bairros */}
               <nav
                 aria-label="Bairros"
-                className="min-w-0 rounded-lg border border-border bg-card md:max-h-[62svh] md:overflow-y-auto"
+                className="min-w-0 rounded-lg border border-border bg-card md:min-h-0 md:overflow-y-auto"
               >
                 <p className={`hidden border-b border-border/70 px-2.5 py-1.5 md:block ${tc.tableHead}`}>
                   Bairros
                 </p>
                 <ul className="flex snap-x snap-mandatory gap-1.5 overflow-x-auto p-1.5 no-scrollbar md:block md:snap-none md:gap-0 md:divide-y md:divide-border/60 md:overflow-x-visible md:p-0">
+
                   {filteredGroups.map((g) => {
                     const isActive = g.neighborhood === active.neighborhood;
                     const isFav = favKeys.has(g.neighborhood);
