@@ -361,70 +361,8 @@ function AdminPage() {
   );
 }
 
-/** Atalhos do console, agrupados por domínio operacional. */
-const ADMIN_SHORTCUT_GROUPS = [
-  {
-    label: "Clientes & acesso",
-    items: [
-      { to: "/admin/clientes", label: "Clientes", icon: Users },
-      { to: "/admin/auditoria-acessos", label: "Auditoria de acessos", icon: ShieldCheck },
-      { to: "/admin/gestao", label: "Gestão de licenças", icon: Key },
-      { to: "/admin/conversoes", label: "Conversão de planos", icon: Gauge },
-      { to: "/admin/reports", label: "Denúncias", icon: FileText },
-    ],
-  },
-  {
-    label: "Catálogo",
-    items: [
-      { to: "/admin/catalogo", label: "Catálogo de produtos", icon: Package },
-      { to: "/admin/image-jobs", label: "Fotos dos produtos", icon: ImageIcon },
-      { to: "/admin/categorizacao", label: "Categorização", icon: Sparkles },
-      { to: "/admin/importacoes", label: "Importações", icon: Package },
-      { to: "/admin/lote-inserir", label: "Scan Inteligente", icon: Plus },
-      { to: "/admin/cadastro-foto", label: "Cadastro por foto (IA)", icon: Sparkles },
-    ],
-  },
-  {
-    label: "Preços & cobertura",
-    items: [
-      { to: "/admin/preco-rapido", label: "Registro rápido de preços", icon: Plus },
-      { to: "/admin/precos", label: "Gestão de preços", icon: ShieldCheck },
-      { to: "/admin/historico-precos", label: "Histórico de preços", icon: Gauge },
-      { to: "/admin/cobertura", label: "Cobertura por mercado", icon: Store },
-      { to: "/admin/rank-check", label: "Validar ranking", icon: Trophy },
-      { to: "/admin/sinonimos", label: "Sinônimos da busca", icon: Languages },
-    ],
-  },
-  {
-    label: "Comercial & sistema",
-    items: [
-      { to: "/admin/promocoes-codigos", label: "Códigos de divulgação", icon: Ticket },
-      { to: "/admin/promocoes", label: "Cupons promocionais", icon: Ticket },
-      { to: "/admin/cupom", label: "Cupons (OCR)", icon: Ticket },
-      { to: "/admin/cupom-lote", label: "Cupons em lote", icon: Ticket },
-      { to: "/admin/webhooks", label: "Webhooks MP", icon: ShieldCheck },
-      { to: "/admin/metricas", label: "Métricas & cache", icon: Gauge },
-      { to: "/admin/consistencia", label: "Consistência", icon: AlertTriangle },
-      { to: "/admin/auditoria", label: "Auditoria do catálogo", icon: History },
-      { to: "/admin/auditoria-numeros", label: "Auditoria de números", icon: Gauge },
-      { to: "/admin/analytics", label: "Analytics", icon: Gauge },
-    ],
-  },
-] as const;
 
-function Kpi({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
-  return (
-    <div className="rounded-xl border border-border/70 bg-card px-3 py-2.5 transition-colors hover:border-primary/35">
-      <div className={cn(tc.tag, "flex items-center gap-1.5 text-muted-foreground")}>
-        {icon}
-        <span className="truncate">{label}</span>
-      </div>
-      <div className={cn(tc.num, "mt-1.5 text-[clamp(18px,1.2vw+14px,24px)] font-semibold text-foreground")}>
-        {value}
-      </div>
-    </div>
-  );
-}
+
 
 
 /* -------------------- Plans -------------------- */
