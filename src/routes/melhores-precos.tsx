@@ -11,6 +11,7 @@ import { PriceSpotlight } from "@/components/product/PriceSpotlight";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { tc } from "@/lib/typeclear";
 import { dsx } from "@/lib/ds";
+import { cn } from "@/lib/utils";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useSignedLogoUrls } from "@/hooks/use-signed-logo-urls";
