@@ -14,6 +14,7 @@ import {
 import { ProductImage } from "@/components/ds/ProductImage";
 import { StoreBadge } from "@/components/brand/StoreBadge";
 import { getPublicProduct } from "@/lib/public-product.functions";
+import { formatShortDate } from "@/components/product/TrustIndicator";
 import { dedupeByStorePrice, storeKey } from "@/lib/price-rank";
 
 const brl = (v: number) =>
