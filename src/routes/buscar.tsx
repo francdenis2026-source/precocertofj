@@ -513,9 +513,9 @@ function SearchPage() {
         </div>
       </div>
 
-      <SiteFooter />
-      <MobileNav />
-    </div>
+      </div>
+    </IsolatedPage>
+
   );
 }
 
