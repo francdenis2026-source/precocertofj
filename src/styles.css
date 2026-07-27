@@ -4033,3 +4033,31 @@ body::-webkit-scrollbar,
 body:has(.admin-scope)::before {
   display: none;
 }
+
+/* Boot do console: a marcação em <html> é aplicada por script inline antes da
+   primeira pintura, cobrindo também o carregamento lento/primeiro acesso. */
+html[data-admin-boot="1"] body::before {
+  display: none !important;
+}
+html[data-admin-boot="1"] body {
+  background-color: var(--color-background);
+}
+/* Console em página única: as áreas roláveis do painel (menu lateral, abas e
+   listas) já rolam internamente, então o documento não deve rolar. */
+html[data-admin-boot="1"],
+html[data-admin-boot="1"] body {
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Console admin: a navegação lateral rola dentro de si mesma, mantendo o
+   painel em uma única tela mesmo com muitos atalhos e em telas altas. */
+.admin-scope [data-sidebar="sidebar"] {
+  max-height: 100svh;
+}
+.admin-scope [data-sidebar="content"] {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}

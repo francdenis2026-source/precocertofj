@@ -15,8 +15,10 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Copy, Ticket, CheckCircle2, Clock, RefreshCw } from "lucide-react";
+import { AppShell } from "@/components/brand/AppShell";
 
 export const Route = createFileRoute("/admin_/promocoes-codigos")({
+  ssr: false,
   beforeLoad: adminBeforeLoad,
   head: () => ({
     meta: [
@@ -25,7 +27,11 @@ export const Route = createFileRoute("/admin_/promocoes-codigos")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: PromoCodesPage,
+  component: () => (
+    <AppShell scope="admin">
+      <PromoCodesPage />
+    </AppShell>
+  ),
 });
 
 function fmt(v: string | null | undefined) {

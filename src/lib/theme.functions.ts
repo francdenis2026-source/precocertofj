@@ -12,6 +12,17 @@ function normalize(value: unknown): ThemePreference {
   return value === "dark" ? "dark" : "light";
 }
 
+/**
+ * Retorna `null` quando o perfil não existe ou nunca gravou preferência.
+ * Isso é essencial: contas internas (admin) não possuem linha em `profiles`,
+ * e um fallback "light" aqui sobrescreveria o tema escuro escolhido no
+ * navegador a cada troca de rota.
+ */
+function normalizeOrNull(value: unknown): ThemePreference | null {
+  if (value === "dark" || value === "light") return value;
+  return null;
+}
+
 export const getMyThemePreference = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
@@ -21,7 +32,7 @@ export const getMyThemePreference = createServerFn({ method: "GET" })
       .eq("id", context.userId)
       .maybeSingle();
     if (error) throw new Error(error.message);
-    return { theme: normalize(data?.theme_preference) };
+    return { theme: normalizeOrNull(data?.theme_preference) };
   });
 
 export const updateMyThemePreference = createServerFn({ method: "POST" })

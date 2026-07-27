@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { AdminOnly } from "@/components/auth/AdminOnly";
+import { AppShell } from "@/components/brand/AppShell";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useMemo, useState } from "react";
@@ -63,9 +64,11 @@ export const Route = createFileRoute("/admin_/precos")({
     ],
   }),
   component: () => (
-    <AdminOnly>
-      <AdminPrecosPage />
-    </AdminOnly>
+    <AppShell scope="admin">
+      <AdminOnly>
+        <AdminPrecosPage />
+      </AdminOnly>
+    </AppShell>
   ),
 });
 

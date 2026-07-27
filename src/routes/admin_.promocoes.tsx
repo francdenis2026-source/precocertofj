@@ -22,6 +22,7 @@ import {
 } from "@/lib/checkout.functions";
 
 export const Route = createFileRoute("/admin_/promocoes")({
+  ssr: false,
   beforeLoad: adminBeforeLoad,
   head: () => ({
     meta: [
