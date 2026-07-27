@@ -246,7 +246,7 @@ function FarmaciasPage() {
                     <MapPin className="mt-0.5 h-3 w-3 shrink-0 text-brand-gold/80" aria-hidden />
                     {f.endereco} — {f.bairro}
                   </p>
-                  <div className="mt-1 flex flex-wrap gap-1">
+                  <div className="mt-1 flex flex-wrap items-center gap-1">
                     {f.telefones.map((t) => (
                       <a
                         key={t}
@@ -256,6 +256,14 @@ function FarmaciasPage() {
                         <Phone className="h-2.5 w-2.5 text-brand-gold" aria-hidden /> {t}
                       </a>
                     ))}
+                    <span className="ml-auto">
+                      <ShareButton
+                        size="sm"
+                        title={f.nome}
+                        text={`${f.nome} — ${f.endereco}, ${f.bairro}. Telefone: ${f.telefones[0] ?? ""}`}
+                        label="Compartilhar"
+                      />
+                    </span>
                   </div>
                 </li>
               ))}

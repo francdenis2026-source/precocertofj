@@ -34,6 +34,7 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { tc } from "@/lib/typeclear";
 import { StoreBadge } from "@/components/brand/StoreBadge";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
+import { AcougueCutsBar } from "@/components/ds/AcougueCutsBar";
 import { getCategoryHub } from "@/lib/category-hub.functions";
 import { CATEGORY_DEFS, categoryBySlug, norm } from "@/lib/category-hub";
 import { PLANTOES, diaDaSemana, diaVigente, farmaciaPorId } from "@/lib/farmacias-plantao";

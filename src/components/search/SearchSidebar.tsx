@@ -6,6 +6,7 @@ import { listPopularQueries } from "@/lib/search-popular.functions";
 import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 import { useConfirm } from "@/components/ui/confirm-provider";
 import { LazyImage } from "@/components/media/LazyImage";
+import { AcougueCutsBar } from "@/components/ds/AcougueCutsBar";
 
 
 const POPULAR_FALLBACK: string[] = [
@@ -68,6 +69,11 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
         MozOsxFontSmoothing: "grayscale",
       }}
     >
+
+      {/* Atalhos de cortes de açougue */}
+      <AcougueCutsBar variant="compact" />
+
+
 
       {/* Últimas buscas */}
       <SidebarSection
