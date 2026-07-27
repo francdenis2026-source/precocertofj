@@ -283,33 +283,33 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                 <DropdownMenuSeparator />
                 {isAdmin && (
                   <>
-                    <DropdownMenuItem onSelect={() => navigate({ to: "/admin" })}>
+                    <DropdownMenuItem onSelect={() => navigate({ to: "/admin" })} className="pc-nav-link pc-nav-link--row">
                       <ShieldCheck className="mr-2 h-4 w-4" /> Console administrativo
                     </DropdownMenuItem>
                     <DropdownMenuSeparator />
                   </>
                 )}
-                <DropdownMenuItem onSelect={() => navigate({ to: "/app" })}>
+                <DropdownMenuItem onSelect={() => navigate({ to: "/app" })} className="pc-nav-link pc-nav-link--row">
                   <LayoutDashboard className="mr-2 h-4 w-4" /> Meu painel
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => navigate({ to: "/minhas-licencas" })}>
+                <DropdownMenuItem onSelect={() => navigate({ to: "/minhas-licencas" })} className="pc-nav-link pc-nav-link--row">
                   <Key className="mr-2 h-4 w-4" /> Minhas licenças
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => navigate({ to: "/resgatar" })}>
+                <DropdownMenuItem onSelect={() => navigate({ to: "/resgatar" })} className="pc-nav-link pc-nav-link--row">
                   <Ticket className="mr-2 h-4 w-4" /> Resgatar código
                 </DropdownMenuItem>
 
-                <DropdownMenuItem onSelect={() => navigate({ to: "/meus-pedidos" })}>
+                <DropdownMenuItem onSelect={() => navigate({ to: "/meus-pedidos" })} className="pc-nav-link pc-nav-link--row">
                   <Receipt className="mr-2 h-4 w-4" /> Meus pedidos
                 </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => navigate({ to: "/perfil" })}>
+                <DropdownMenuItem onSelect={() => navigate({ to: "/perfil" })} className="pc-nav-link pc-nav-link--row">
                   <UserIcon className="mr-2 h-4 w-4" /> Meu perfil
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   onSelect={() => void signOut()}
                   disabled={signingOut}
-                  className="text-destructive focus:text-destructive"
+                  className="pc-nav-link pc-nav-link--row text-destructive focus:text-destructive"
                 >
                   <LogOut className="mr-2 h-4 w-4" />
                   {signingOut ? "Saindo…" : "Sair da conta"}
