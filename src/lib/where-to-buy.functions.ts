@@ -185,6 +185,7 @@ export type ProductRankRow = {
   price: number;
   diffPct: number;
   lastSeenAt: string | null;
+  butcherProtein?: ButcherProtein | null;
 };
 
 export type ProductHistoryPoint = {
