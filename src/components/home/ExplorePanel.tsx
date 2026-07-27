@@ -55,12 +55,6 @@ const QUOTES = [
   { quote: "Uso todo sábado antes da feira. Evita frustração no caixa.", name: "João Ferreira", role: "Segundo Distrito", initials: "JF" },
 ];
 
-const LINKS = [
-  { to: "/buscar", label: "Buscar preços" },
-  { to: "/estabelecimentos", label: "Mercados" },
-  { to: "/melhores-precos", label: "Histórico" },
-  { to: "/colaborar", label: "Colaborar" },
-];
 
 /** Ritmo compartilhado entre as colunas (hierarquia idêntica em todas as seções). */
 const HEAD = "flex items-baseline justify-between gap-3 border-b pb-1.5";
