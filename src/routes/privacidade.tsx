@@ -353,7 +353,7 @@ function PrivacidadePage() {
         </div>
       </main>
 
-      <SiteFooter />
-    </div>
+    </IsolatedPage>
+
   );
 }
