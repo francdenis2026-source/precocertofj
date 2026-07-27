@@ -327,9 +327,23 @@ function ComparadorPage() {
       .sort((a, b) => b.count - a.count);
   }, [allRows]);
 
+  // Cache local (por sessão) das linhas derivadas por chave de consulta.
+  // Evita reprocessar `filterAndSortComparisonRows` quando o usuário alterna
+  // entre filtros já vistos (categoria, ordenação, texto).
+  const derivedCacheRef = useRef<Map<string, ReturnType<typeof filterAndSortComparisonRows>>>(new Map());
   const rows = useMemo(() => {
-    return filterAndSortComparisonRows(allRows, q, cat);
-  }, [allRows, q, cat]);
+    const key = `${allRows.length}|${q}|${cat}|${sort}|${confFilter}`;
+    const cached = derivedCacheRef.current.get(key);
+    if (cached) return cached;
+    const next = filterAndSortComparisonRows(allRows, q, cat);
+    // Limita o cache para não crescer sem controle
+    if (derivedCacheRef.current.size > 24) {
+      const firstKey = derivedCacheRef.current.keys().next().value;
+      if (firstKey) derivedCacheRef.current.delete(firstKey);
+    }
+    derivedCacheRef.current.set(key, next);
+    return next;
+  }, [allRows, q, cat, sort, confFilter]);
 
   usePerceivedPerfTelemetry({
     route: "/comparador",
