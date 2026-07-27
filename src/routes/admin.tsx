@@ -267,7 +267,7 @@ function AdminPage() {
         </div>
       </header>
 
-      <section className="mx-auto flex h-[calc(100svh-3rem)] max-w-[1400px] flex-col gap-2 px-3 py-2 md:h-[calc(100svh-3.5rem)] md:px-6 md:py-3">
+      <section className="mx-auto flex h-[calc(100svh-6.5rem)] max-w-[1400px] flex-col gap-2 px-3 py-2 md:h-[calc(100svh-8rem)] md:px-6 md:py-3">
         {/* ---------- KPIs (faixa densa) ---------- */}
         <div className="grid shrink-0 grid-cols-2 gap-2 lg:grid-cols-4">
           <Kpi icon={<Users className="h-3.5 w-3.5" />} label="Assinantes ativos" value={kpis.active.toString()} />
