@@ -586,33 +586,54 @@ function HomePage() {
                   {/* Muro de logos: plaquetas claras (contraste garantido sobre o
                       navy) com as marcas em alta definição e recorte generoso. */}
                   <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
-                    {(storesQ.isLoading ? Array.from({ length: 5 }) : partners).map((s: any, i: number) => (
-                      <Link
-                        key={s?.id ?? i}
-                        to="/estabelecimentos"
-                        title={s?.name ?? undefined}
-                        aria-label={s?.name ? `Ver ${s.name}` : "Ver mercados parceiros"}
-                        className="group grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)] transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_18px_-6px_rgba(3,10,28,0.7)]"
-                        style={{ borderColor: "color-mix(in oklab, #ffffff 78%, transparent)" }}
-                      >
-                        {s?.logoUrl ? (
-                          <img
-                            src={s.logoUrl}
-                            alt={s?.name ?? ""}
-                            width={112}
-                            height={112}
-                            loading="lazy"
-                            decoding="async"
-                            className="h-full w-full object-contain"
-                          />
-                        ) : (
-                          <span
-                            className="h-full w-full rounded-lg bg-muted"
+                    {storesQ.isLoading
+                      ? Array.from({ length: 5 }).map((_, i) => (
+                          <div
+                            key={`sk-${i}`}
                             aria-hidden
-                          />
-                        )}
-                      </Link>
-                    ))}
+                            className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)]"
+                            style={{ borderColor: "color-mix(in oklab, #ffffff 78%, transparent)" }}
+                          >
+                            <span
+                              className="h-full w-full animate-pulse rounded-lg"
+                              style={{ background: "color-mix(in oklab, #0b1b3a 8%, #ffffff)" }}
+                            />
+                          </div>
+                        ))
+                      : partners.map((s: any, i: number) => (
+                          <Link
+                            key={s?.id ?? i}
+                            to="/estabelecimentos"
+                            title={s?.name ?? undefined}
+                            aria-label={s?.name ? `Ver ${s.name}` : "Ver mercados parceiros"}
+                            className="group grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)] transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_18px_-6px_rgba(3,10,28,0.7)]"
+                            style={{ borderColor: "color-mix(in oklab, #ffffff 78%, transparent)" }}
+                          >
+                            {s?.logoUrl ? (
+                              <img
+                                src={s.logoUrl}
+                                alt={s?.name ?? ""}
+                                width={112}
+                                height={112}
+                                loading="eager"
+                                decoding="async"
+                                className="h-full w-full object-contain"
+                              />
+                            ) : (
+                              <span
+                                className="grid h-full w-full place-items-center rounded-lg text-[15px] font-extrabold"
+                                style={{
+                                  background: "color-mix(in oklab, #0b1b3a 6%, #ffffff)",
+                                  color: "#0b1b3a",
+                                }}
+                                aria-hidden
+                              >
+                                {(s?.name ?? "?").trim().charAt(0).toUpperCase()}
+                              </span>
+                            )}
+                          </Link>
+                        ))}
+
 
                   </div>
 
