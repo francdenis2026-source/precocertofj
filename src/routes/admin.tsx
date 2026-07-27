@@ -219,6 +219,25 @@ function AdminPage() {
     return () => { done = true; };
   }, [logAccess]);
 
+  // Prefetch das rotas internas mais usadas quando o navegador estiver ocioso.
+  const router = useRouter();
+  useEffect(() => {
+    const targets = ADMIN_SHORTCUT_GROUPS.flatMap((g) => g.items.map((i) => i.to)).slice(0, 8);
+    const idle =
+      (window as unknown as { requestIdleCallback?: (cb: () => void) => number }).requestIdleCallback ??
+      ((cb: () => void) => window.setTimeout(cb, 1200));
+    const handle = idle(() => {
+      for (const to of targets) router.preloadRoute({ to }).catch(() => {});
+    });
+    return () => {
+      const cancel = (window as unknown as { cancelIdleCallback?: (h: number) => void }).cancelIdleCallback;
+      if (cancel) cancel(handle as number);
+      else window.clearTimeout(handle as number);
+    };
+  }, [router]);
+
+
+
 
 
   const kpis = useMemo(() => {
