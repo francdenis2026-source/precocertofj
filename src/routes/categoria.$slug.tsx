@@ -32,7 +32,6 @@ import {
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { tc } from "@/lib/typeclear";
-import { cn } from "@/lib/utils";
 import { StoreBadge } from "@/components/brand/StoreBadge";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
 import { getCategoryHub } from "@/lib/category-hub.functions";
