@@ -310,9 +310,20 @@ function FaleConoscoPage() {
                   <span className="truncate">{CONTACT_HOURS}</span>
                 </li>
               </ul>
+
+              <p className="mt-1.5 flex items-start gap-1.5 text-[11.5px] leading-[1.35] text-muted-foreground sm:hidden">
+                <ShieldCheck className="mt-[1px] h-3 w-3 shrink-0 text-brand-gold" />
+                <span>
+                  Nunca envie senhas ou dados bancários —{" "}
+                  <a href="/privacidade" className="font-semibold underline underline-offset-2">
+                    Privacidade
+                  </a>
+                  .
+                </span>
+              </p>
             </div>
 
-            <div className="rounded-xl border border-brand-gold/35 bg-brand-gold/10 p-2.5 md:p-3.5">
+            <div className="hidden rounded-xl border border-brand-gold/35 bg-brand-gold/10 p-2.5 sm:block md:p-3.5">
               <div className="flex items-center gap-1.5 text-[10.5px] font-bold uppercase tracking-[0.18em] text-brand-gold">
                 <ShieldCheck className="h-3.5 w-3.5" />
                 Privacidade
