@@ -424,6 +424,13 @@ function MelhoresPrecosPage() {
 
   }, [allRows, activeCategory, activeType, sortBy, minStores, minPrice, maxPrice, qNorm, estabsMap]);
 
+  usePerceivedPerfTelemetry({
+    route: "/melhores-precos",
+    isLoading,
+    isReady: !isLoading && !error && rows.length > 0,
+    count: rows.length,
+  });
+
   const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
   const pagedRows = useMemo(
