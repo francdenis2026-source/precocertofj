@@ -200,8 +200,8 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                         <Link
                           to={l.to}
                           onClick={() => setMenuOpen(false)}
-                          className="flex min-h-11 items-center rounded-lg px-3 text-[15.5px] font-semibold text-foreground outline-none transition-colors hover:bg-brand/10 hover:text-brand focus-visible:ring-2 focus-visible:ring-brand/60"
-                          activeProps={{ className: "bg-brand/12 text-brand", "aria-current": "page" } as any}
+                          className="pc-nav-link flex min-h-11 items-center rounded-lg px-3 text-[15.5px] font-semibold text-foreground outline-none"
+                          activeProps={{ "aria-current": "page" } as any}
                         >
                           {l.label}
                         </Link>
