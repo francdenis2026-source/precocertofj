@@ -3422,7 +3422,13 @@ html:not(.dark) :is(
   .text-brand-gold,
   .text-brand-gold\/90,
   .text-brand-gold\/80,
-  .text-brand-gold\/70
+  .text-brand-gold\/70,
+  .text-accent-strong,
+  .text-accent-strong\/90,
+  .text-accent-strong\/80,
+  .text-accent-strong\/70,
+  .text-accent-strong\/60,
+  .text-accent-strong\/50
 ):not(.gold-on-dark) {
   color: var(--pc-gold-ink);
 }
@@ -3430,7 +3436,8 @@ html:not(.dark) :is(
 html:not(.dark) :is(
   .hover\:text-brand,
   .hover\:text-brand-gold,
-  .hover\:text-brand-gold\/80
+  .hover\:text-brand-gold\/80,
+  .hover\:text-accent-strong
 ):not(.gold-on-dark):hover {
   color: var(--pc-gold-ink);
 }
@@ -3439,14 +3446,33 @@ html:not(.dark) .text-brand-gold-soft:not(.gold-on-dark) {
   color: var(--pc-gold-ink);
 }
 
+/* Dark: accent-strong é navy escuro (para fundos claros de badge),
+   mas como TEXTO/ÍCONE precisa da tinta clara --accent-ink (≈ 8.4:1 sobre o paper escuro). */
+html.dark :is(
+  .text-accent-strong,
+  .text-accent-strong\/90,
+  .text-accent-strong\/80,
+  .text-accent-strong\/70,
+  .text-accent-strong\/60,
+  .text-accent-strong\/50
+):not(.gold-on-dark) {
+  color: var(--accent-ink);
+}
+
+html.dark :is(.hover\:text-accent-strong):not(.gold-on-dark):hover {
+  color: var(--accent-ink);
+}
+
 /* Dourado sobre fundo navy/escuro permanece vivo mesmo no modo claro. */
 html:not(.dark) :is(.bg-brand-navy, .bg-brand-navy-2, [data-surface="navy"]) :is(
   .text-brand,
   .text-brand-gold,
-  .text-brand-gold-soft
+  .text-brand-gold-soft,
+  .text-accent-strong
 ) {
   color: var(--pc-home-gold);
 }
+
 
 
 /* ============================================================================
