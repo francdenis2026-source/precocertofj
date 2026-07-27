@@ -404,7 +404,7 @@ function FaleConoscoPage() {
                 <li className="flex min-w-0 items-center justify-between gap-2 rounded-lg border border-border bg-muted/40 px-2.5 py-1.5">
                   <a
                     href={`mailto:${CONTACT_EMAIL}`}
-                    className="flex min-w-0 items-center gap-1.5 text-[13px] font-semibold text-foreground hover:text-brand-gold"
+                    className="pc-focus flex min-w-0 items-center gap-1.5 text-[13px] font-semibold text-foreground hover:text-brand-gold rounded-md"
                   >
                     <Mail className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
                     <span className="truncate">{CONTACT_EMAIL}</span>
@@ -412,7 +412,7 @@ function FaleConoscoPage() {
                   <button
                     type="button"
                     onClick={() => copy("email", CONTACT_EMAIL, "E-mail")}
-                    className="inline-flex shrink-0 items-center gap-1 rounded-md border border-border bg-card px-2 py-1 text-[11.5px] font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
+                    className="pc-focus inline-flex shrink-0 items-center gap-1 rounded-md border border-border bg-card px-2 py-1 text-[11.5px] font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
                     aria-label="Copiar e-mail"
                   >
                     {copiedKey === "email" ? (
@@ -431,7 +431,7 @@ function FaleConoscoPage() {
                     href={`https://wa.me/${CONTACT_PHONE_RAW}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex min-w-0 items-center gap-1.5 text-[13px] font-semibold text-foreground hover:text-brand-gold"
+                    className="pc-focus flex min-w-0 items-center gap-1.5 text-[13px] font-semibold text-foreground hover:text-brand-gold rounded-md"
                   >
                     <Phone className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
                     <span className="truncate">{CONTACT_PHONE}</span>
@@ -439,7 +439,7 @@ function FaleConoscoPage() {
                   <button
                     type="button"
                     onClick={() => copy("phone", CONTACT_PHONE, "Telefone")}
-                    className="inline-flex shrink-0 items-center gap-1 rounded-md border border-border bg-card px-2 py-1 text-[11.5px] font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
+                    className="pc-focus inline-flex shrink-0 items-center gap-1 rounded-md border border-border bg-card px-2 py-1 text-[11.5px] font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
                     aria-label="Copiar telefone"
                   >
                     {copiedKey === "phone" ? (
