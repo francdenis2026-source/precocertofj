@@ -98,10 +98,14 @@ export function SiteFooter() {
             <ul className="flex min-w-0 items-center gap-x-0.5 -ml-2">
               {links.map((l, i) => (
                 <li key={l.to} className="inline-flex items-center">
-                  <Link to={l.to} className={linkClass}>
+                  <button
+                    type="button"
+                    onClick={() => navigate({ to: l.to })}
+                    className={linkClass}
+                  >
                     {l.label}
                     <span className="sr-only"> — {l.aria}</span>
-                  </Link>
+                  </button>
                   {i < links.length - 1 && (
                     <span aria-hidden className="text-border">
                       ·
