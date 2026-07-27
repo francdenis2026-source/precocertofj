@@ -34,9 +34,12 @@ export function SiteFooter() {
 
   return (
     <footer
-      aria-label="Rodapé do site"
+      aria-labelledby="site-footer-title"
       className="mt-0.5 border-t border-border bg-muted/50 text-foreground"
     >
+      <h2 id="site-footer-title" className="sr-only">
+        Rodapé — PreçoCerto, comparador de preços de Feijó (AC)
+      </h2>
       <div
         className={dsx(
           ds.container,
@@ -47,38 +50,55 @@ export function SiteFooter() {
           "text-[12.5px] leading-snug",
         )}
       >
-        <Link
-          to="/"
-          aria-label="PreçoCerto — página inicial"
-          className={dsx(
-            "flex min-w-0 shrink-0 items-center gap-1.5 rounded-md py-0.5 transition-colors",
-            focusRing,
-          )}
-        >
-          <img
-            src="/logo-mark.png"
-            alt=""
-            aria-hidden
-            width={20}
-            height={20}
-            className="h-5 w-5 shrink-0 object-contain"
-          />
-          <span className={dsx(serif, "truncate text-[14px] leading-none text-foreground")}>
-            Preço<span className="italic text-brand">Certo</span>
-          </span>
-        </Link>
+        {current === "/" ? (
+          <p className="flex min-w-0 shrink-0 items-center gap-1.5 py-0.5">
+            <img
+              src="/logo-mark.png"
+              alt=""
+              aria-hidden
+              width={20}
+              height={20}
+              className="h-5 w-5 shrink-0 object-contain"
+            />
+            <span className={dsx(serif, "truncate text-[14px] leading-none text-foreground")}>
+              Preço<span className="italic text-brand">Certo</span>
+            </span>
+          </p>
+        ) : (
+          <Link
+            to="/"
+            className={dsx(
+              "flex min-w-0 shrink-0 items-center gap-1.5 rounded-md py-0.5 transition-colors",
+              focusRing,
+            )}
+          >
+            <img
+              src="/logo-mark.png"
+              alt=""
+              aria-hidden
+              width={20}
+              height={20}
+              className="h-5 w-5 shrink-0 object-contain"
+            />
+            <span className={dsx(serif, "truncate text-[14px] leading-none text-foreground")}>
+              Preço<span className="italic text-brand">Certo</span>
+            </span>
+            <span className="sr-only">— página inicial</span>
+          </Link>
+        )}
 
-        <span className="justify-self-end whitespace-nowrap font-medium text-muted-foreground tabular-nums">
+        <p className="justify-self-end whitespace-nowrap font-medium text-muted-foreground tabular-nums">
           © {year} · Feijó/AC
-        </span>
+        </p>
 
         {links.length > 0 ? (
-          <nav aria-label="Links institucionais" className="min-w-0">
+          <nav aria-label="Institucional" className="min-w-0">
             <ul className="flex min-w-0 items-center gap-x-0.5 -ml-2">
               {links.map((l, i) => (
                 <li key={l.to} className="inline-flex items-center">
-                  <Link to={l.to} aria-label={l.aria} className={linkClass}>
+                  <Link to={l.to} className={linkClass}>
                     {l.label}
+                    <span className="sr-only"> — {l.aria}</span>
                   </Link>
                   {i < links.length - 1 && (
                     <span aria-hidden className="text-border">
@@ -93,9 +113,9 @@ export function SiteFooter() {
           <span aria-hidden />
         )}
 
-        <span className="justify-self-end whitespace-nowrap font-mono text-[11.5px] text-muted-foreground">
+        <p className="justify-self-end whitespace-nowrap font-mono text-[11.5px] text-muted-foreground">
           &lt;dev&gt; <span className="text-foreground">Franc D&apos;nis</span>
-        </span>
+        </p>
       </div>
     </footer>
   );
