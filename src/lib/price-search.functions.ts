@@ -76,12 +76,12 @@ export type PriceSearchResult = {
 };
 
 export const searchProductPrice = createServerFn({ method: "POST" })
-  .inputValidator((input: { query: string; mode?: SearchMode; pureOnly?: boolean }) => {
+  .inputValidator((input: { query: string; mode?: SearchMode; pureOnly?: boolean; fresh?: boolean }) => {
     const q = (input?.query ?? "").trim();
     if (q.length < 2) throw new Error("Digite ao menos 2 caracteres");
     if (q.length > 80) throw new Error("Busca muito longa");
     const mode: SearchMode = input?.mode === "loose" ? "loose" : "strict";
     const pureOnly = Boolean(input?.pureOnly);
-    return { query: q, mode, pureOnly };
+    return { query: q, mode, pureOnly, fresh: Boolean(input?.fresh) };
   })
   .handler(async ({ data }): Promise<PriceSearchResult> => performPriceSearch(data));

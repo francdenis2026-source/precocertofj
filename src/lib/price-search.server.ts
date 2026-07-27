@@ -33,10 +33,12 @@ export async function performPriceSearch(data: {
   query: string;
   mode: SearchMode;
   pureOnly: boolean;
+  /** Ignora o cache curto — usado quando chega preço novo em tempo real. */
+  fresh?: boolean;
 }): Promise<PriceSearchResult> {
   const cacheKey = `${data.query.trim().toLowerCase()}|${data.mode}|${data.pureOnly ? 1 : 0}`;
   const hit = searchResultCache.get(cacheKey);
-  if (hit && Date.now() - hit.at < SEARCH_CACHE_TTL_MS) return hit.value;
+  if (!data.fresh && hit && Date.now() - hit.at < SEARCH_CACHE_TTL_MS) return hit.value;
 
   const result = await runPriceSearch(data);
 
