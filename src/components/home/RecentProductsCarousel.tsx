@@ -67,9 +67,12 @@ export function RecentProductsCarousel() {
   });
 
   const { data: comparisons } = useQuery<Comparison[]>({
-    queryKey: ["price-comparisons-home"],
+    queryKey: ["price-comparisons-home", { limit: 100 }],
     queryFn: async () => {
-      const { data, error } = await supabase.rpc("get_price_comparisons");
+      const { data, error } = await supabase.rpc(
+        "get_price_comparisons",
+        { p_limit: 100 } as never,
+      );
       if (error) throw error;
       return (data as unknown as Comparison[]) ?? [];
     },
