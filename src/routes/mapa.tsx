@@ -16,6 +16,7 @@ import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { StoreLogoThumb } from "@/components/brand/StoreLogoThumb";
 import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 import { tc } from "@/lib/typeclear";
+import { StatCell, StatCellGroup, StatCellDivider } from "@/components/ds/StatCell";
 import {
   Select,
   SelectContent,
@@ -67,37 +68,6 @@ function highlight(text: string, term: string) {
 
 type SortBy = "price" | "markets" | "alpha" | "favorites";
 
-function StatCell({
-  value,
-  label,
-  accent = false,
-}: {
-  value: number;
-  label: string;
-  accent?: boolean;
-}) {
-  return (
-    <div className="flex min-w-[3.75rem] flex-col items-center justify-center px-3 py-1.5 sm:min-w-[4.75rem] sm:px-4 sm:py-2">
-      <span
-        className={
-          "font-serif font-semibold leading-none tabular-nums tracking-tight " +
-          "text-[1.55rem] sm:text-[1.9rem] " +
-          (accent ? "text-[var(--pc-gold-ink)]" : "text-foreground")
-        }
-      >
-        {value}
-      </span>
-      <span
-        className={
-          "mt-1 text-[0.62rem] font-semibold uppercase leading-none tracking-[0.18em] sm:text-[0.7rem] " +
-          (accent ? "text-[var(--pc-gold-ink)]/85" : "text-muted-foreground")
-        }
-      >
-        {label}
-      </span>
-    </div>
-  );
-}
 
 function NeighborhoodsPage() {
   const fetchNeighborhoods = useServerFn(listEstablishmentsByNeighborhood);
@@ -263,18 +233,14 @@ function NeighborhoodsPage() {
             </div>
 
             {/* Bloco editorial de contagem — tipografia serif, mais presente */}
-            <dl
-              aria-label="Resumo do guia"
-              className="flex shrink-0 items-stretch overflow-hidden rounded-lg border border-border/70 bg-background/60 shadow-sm backdrop-blur"
+            <StatCellGroup
+              label={`Resumo: ${filteredGroups.length} bairros e ${totalMarkets} mercados`}
             >
-              <StatCell
-                value={filteredGroups.length}
-                label="Bairros"
-                accent
-              />
-              <span aria-hidden className="w-px self-stretch bg-border/70" />
+              <StatCell value={filteredGroups.length} label="Bairros" accent />
+              <StatCellDivider />
               <StatCell value={totalMarkets} label="Mercados" />
-            </dl>
+            </StatCellGroup>
+
           </div>
         </header>
 
@@ -375,21 +341,66 @@ function NeighborhoodsPage() {
         {/* Painel principal: índice de bairros + detalhe — uma única tela */}
         <main className="pc-rail mx-auto min-h-0 w-full max-w-6xl flex-1 overflow-y-auto px-3 py-2.5 md:px-6 md:py-3">
           {groups.isLoading && (
-            <div className="grid gap-3 md:grid-cols-[16rem_1fr]" aria-busy="true">
-              <div className="space-y-1.5">
-                {[0, 1, 2, 3, 4].map((i) => (
-                  <div key={i} className="h-11 animate-pulse rounded-md bg-muted/60" />
+            <div
+              className="grid gap-3 min-w-0 md:grid-cols-[16rem_minmax(0,1fr)]"
+              aria-busy="true"
+              aria-live="polite"
+              role="status"
+            >
+              <span className="sr-only">Carregando bairros e mercados…</span>
+              {/* Índice — cartões editoriais */}
+              <div className="rounded-lg border border-border/70 bg-card p-1.5">
+                {[0, 1, 2, 3, 4, 5].map((i) => (
+                  <div key={i} className="flex items-center gap-2 px-2 py-2">
+                    <div className="h-2.5 w-2.5 rounded-full bg-brand-gold/25" />
+                    <div className="min-w-0 flex-1 space-y-1">
+                      <div className="h-3 w-2/3 animate-pulse rounded bg-muted/70" />
+                      <div className="h-2.5 w-1/2 animate-pulse rounded bg-muted/50" />
+                    </div>
+                  </div>
                 ))}
               </div>
-              <div className="h-[22rem] animate-pulse rounded-lg bg-muted/40" />
+              {/* Detalhe — cabeçalho + linhas de mercado */}
+              <div className="rounded-lg border border-border/70 bg-card">
+                <div className="flex items-baseline justify-between border-b border-border/60 px-3 py-2">
+                  <div className="h-4 w-40 animate-pulse rounded bg-muted/70" />
+                  <div className="h-3 w-20 animate-pulse rounded bg-muted/50" />
+                </div>
+                <ul className="divide-y divide-border/50">
+                  {[0, 1, 2, 3, 4].map((i) => (
+                    <li key={i} className="flex items-center gap-2.5 px-3 py-2.5">
+                      <div className="h-9 w-9 shrink-0 animate-pulse rounded-md bg-muted/60" />
+                      <div className="min-w-0 flex-1 space-y-1">
+                        <div className="h-3 w-1/2 animate-pulse rounded bg-muted/70" />
+                        <div className="h-2.5 w-2/3 animate-pulse rounded bg-muted/50" />
+                      </div>
+                      <div className="h-5 w-12 shrink-0 animate-pulse rounded-full bg-muted/50" />
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           )}
 
           {groups.error && (
-            <div className={`rounded-md border border-destructive/40 bg-destructive/5 p-3 ${tc.body} text-destructive`}>
-              Não foi possível carregar os bairros: {(groups.error as Error).message}
+            <div
+              role="alert"
+              className={`rounded-md border border-destructive/40 bg-destructive/5 p-3 ${tc.body} text-destructive`}
+            >
+              <p className="font-semibold">Não foi possível carregar os bairros.</p>
+              <p className="mt-0.5 text-destructive/80">
+                {(groups.error as Error).message}
+              </p>
+              <button
+                type="button"
+                onClick={() => groups.refetch()}
+                className={`mt-2 inline-flex items-center rounded-md border border-destructive/50 bg-background px-3 py-1 ${tc.chip} text-destructive hover:bg-destructive/10`}
+              >
+                Tentar novamente
+              </button>
             </div>
           )}
+
 
           {groups.data && filteredGroups.length === 0 && !groups.isLoading && (
             <EmptyState
