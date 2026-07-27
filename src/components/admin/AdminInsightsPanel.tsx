@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -14,9 +14,9 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Download, Loader2, RefreshCw, TrendingDown, Layers, Activity } from "lucide-react";
+import { Download, FileDown, CalendarRange, Loader2, RefreshCw, TrendingDown, Layers, Activity } from "lucide-react";
 import { getAdminInsights, type AdminInsights } from "@/lib/admin-insights.functions";
-import { exportRowsToCSV, stampedFilename } from "@/lib/export";
+import { exportRowsToCSV, exportRowsToPDF, stampedFilename } from "@/lib/export";
 import { Button } from "@/components/ui/button";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
@@ -128,7 +128,7 @@ export function AdminInsightsPanel() {
     setTo(isoDay(new Date()));
   };
   const toggleCat = (slug: string) =>
-    setCats((prev) => (prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]));
+    setCats((prev: string[]) => (prev.includes(slug) ? prev.filter((s: string) => s !== slug) : [...prev, slug]));
 
   const reportRows = useMemo(() => {
     if (!data) return [];
