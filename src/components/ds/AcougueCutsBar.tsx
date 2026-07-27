@@ -16,7 +16,7 @@ type Cut = {
 
 const CUTS: Cut[] = [
   { label: "Bovinos", query: "carne bovina", protein: "bovino" },
-  { label: "Frango", query: "frango", protein: "suino" === "suino" ? "frango" : "frango" },
+  { label: "Frango", query: "frango", protein: "frango" },
   { label: "Suínos", query: "porco", protein: "suino" },
 ];
 
