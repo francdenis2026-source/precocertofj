@@ -6,6 +6,7 @@
  * Ações: editar perfil, gerar código de reset de PIN, ver e-mail/último login auth.
  */
 import { createFileRoute } from "@tanstack/react-router";
+import { formatShortDate } from "@/components/product/TrustIndicator";
 import { useMutation, useQuery, useQueryClient, useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useMemo, useState } from "react";
