@@ -6,6 +6,8 @@ import { createServerFn } from "@tanstack/react-start";
  * estabelecimentos para filtrar por bairro/cidade.
  */
 
+import type { ButcherProtein } from "@/lib/butcher-cuts";
+
 export type WhereToBuyOffer = {
   establishmentId: string | null;
   storeName: string;
@@ -15,6 +17,8 @@ export type WhereToBuyOffer = {
   lastSeenAt: string | null;
   isCheapest: boolean;
   diffPct: number;
+  /** Preenchido quando a oferta vem de estabelecimento tipo `acougue`. */
+  butcherProtein?: ButcherProtein | null;
 };
 
 export type WhereToBuyProduct = {
@@ -86,7 +90,7 @@ export const searchWhereToBuy = createServerFn({ method: "POST" })
 
     const [cacheRes, storesRes] = await Promise.all([
       query.order("savings_pct", { ascending: false }).limit(400),
-      supabaseAdmin.from("establishments").select("id, name, neighborhood, city, active"),
+      supabaseAdmin.from("establishments").select("id, name, neighborhood, city, active, kind"),
     ]);
     if (cacheRes.error) throw new Error(cacheRes.error.message);
 
@@ -97,11 +101,14 @@ export const searchWhereToBuy = createServerFn({ method: "POST" })
         neighborhood: string | null;
         city: string | null;
         active: boolean | null;
+        kind: string | null;
       }>).map((s) => [s.id, s]),
     );
 
     const wantCity = data.city ? deaccent(data.city) : null;
     const wantHood = data.neighborhood ? deaccent(data.neighborhood) : null;
+
+    const { classifyButcherCut } = await import("@/lib/butcher-cuts");
 
     const products: WhereToBuyProduct[] = [];
 
@@ -109,11 +116,18 @@ export const searchWhereToBuy = createServerFn({ method: "POST" })
       const rawStores = Array.isArray(row.stores) ? (row.stores as Array<Record<string, unknown>>) : [];
       const offers: WhereToBuyOffer[] = [];
 
+      // Classifica o produto uma vez para decidir o filtro de açougue.
+      const productName = String(row.display_name ?? row.product_key ?? "");
+      const cut = classifyButcherCut(productName, null);
+
       for (const s of rawStores) {
         const id = s.establishment_id ? String(s.establishment_id) : null;
         const store = id ? storeById.get(id) : undefined;
         const neighborhood = store?.neighborhood ?? null;
         const city = store?.city ?? null;
+        const isButcher = store?.kind === "acougue";
+        // Regra de açougue: só entra em listagem quando o produto é corte.
+        if (isButcher && !cut) continue;
         if (wantCity && deaccent(city ?? "") !== wantCity) continue;
         if (wantHood && deaccent(neighborhood ?? "") !== wantHood) continue;
         const price = Number(s.price);
@@ -127,6 +141,7 @@ export const searchWhereToBuy = createServerFn({ method: "POST" })
           lastSeenAt: (s.last_seen_at as string | null) ?? null,
           isCheapest: false,
           diffPct: 0,
+          butcherProtein: isButcher ? cut : null,
         });
       }
 
@@ -170,6 +185,7 @@ export type ProductRankRow = {
   price: number;
   diffPct: number;
   lastSeenAt: string | null;
+  butcherProtein?: ButcherProtein | null;
 };
 
 export type ProductHistoryPoint = {
@@ -221,7 +237,7 @@ export const getProductComparison = createServerFn({ method: "POST" })
         .eq("product_key", data.productKey)
         .order("store_count", { ascending: false })
         .limit(20),
-      supabaseAdmin.from("establishments").select("id, name, neighborhood, city"),
+      supabaseAdmin.from("establishments").select("id, name, neighborhood, city, kind"),
       supabaseAdmin
         .from("product_price_history")
         .select("price, captured_at")
@@ -241,11 +257,16 @@ export const getProductComparison = createServerFn({ method: "POST" })
         name: string;
         neighborhood: string | null;
         city: string | null;
+        kind: string | null;
       }>).map((s) => [s.id, s]),
     );
 
     const wantCity = data.city ? deaccent(data.city) : null;
     const wantHood = data.neighborhood ? deaccent(data.neighborhood) : null;
+
+    const { classifyButcherCut } = await import("@/lib/butcher-cuts");
+    const headProductName = String(rows[0]?.display_name ?? data.productKey ?? "");
+    const productCut = classifyButcherCut(headProductName, null);
 
     // melhor oferta por estabelecimento entre todas as variações de tamanho
     const best = new Map<string, ProductRankRow>();
@@ -256,6 +277,8 @@ export const getProductComparison = createServerFn({ method: "POST" })
         const store = id ? storeById.get(id) : undefined;
         const neighborhood = store?.neighborhood ?? null;
         const city = store?.city ?? null;
+        const isButcher = store?.kind === "acougue";
+        if (isButcher && !productCut) continue;
         if (wantCity && deaccent(city ?? "") !== wantCity) continue;
         if (wantHood && deaccent(neighborhood ?? "") !== wantHood) continue;
         const price = Number(s.price);
@@ -273,6 +296,7 @@ export const getProductComparison = createServerFn({ method: "POST" })
             price,
             diffPct: 0,
             lastSeenAt: (s.last_seen_at as string | null) ?? null,
+            butcherProtein: isButcher ? productCut : null,
           });
         }
       }

@@ -38,6 +38,8 @@ import { LiveUpdateBadge, useLivePulse } from "@/components/ui/live-update-badge
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { submitPriceReport } from "@/lib/stores-public.functions";
 import { classifyProductType, PRODUCT_TYPE_LABEL } from "@/lib/product-type";
+import { applyButcherFilter } from "@/lib/butcher-filter";
+import { useButcherIds } from "@/hooks/useButcherIds";
 import { useSession } from "@/hooks/useSession";
 import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 
@@ -312,7 +314,11 @@ function MelhoresPrecosPage() {
     }
   };
 
-  const allRows = data ?? [];
+  const butcherIds = useButcherIds();
+  const allRows = useMemo(
+    () => applyButcherFilter(data ?? [], butcherIds, { requireMinStores: 2 }),
+    [data, butcherIds],
+  );
 
   const categoryCounts = useMemo(() => {
     const counts = new Map<string, number>();

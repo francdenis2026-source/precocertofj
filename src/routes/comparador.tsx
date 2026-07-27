@@ -49,6 +49,8 @@ import { RankingSkeleton, FadeSwap } from "@/components/layout/LoadingSkeleton";
 import { usePerceivedPerfTelemetry } from "@/lib/perf-telemetry";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
+import { applyButcherFilter } from "@/lib/butcher-filter";
+import { useButcherIds } from "@/hooks/useButcherIds";
 import {
   Search,
   Store as StoreIcon,
@@ -304,7 +306,11 @@ function ComparadorPage() {
     staleTime: 5 * 60_000,
   });
 
-  const allRows = data ?? [];
+  const butcherIds = useButcherIds();
+  const allRows = useMemo(
+    () => applyButcherFilter(data ?? [], butcherIds, { requireMinStores: 2 }),
+    [data, butcherIds],
+  );
 
   const categoryOptions = useMemo(() => {
     const counts = new Map<string, number>();

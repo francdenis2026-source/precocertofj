@@ -15,6 +15,7 @@ import { SearchDiscovery, pushRecentSearch } from "@/components/search/SearchDis
 import { SearchHighlights } from "@/components/search/SearchHighlights";
 
 import { SearchSidebar } from "@/components/search/SearchSidebar";
+import { MeatCutSuggestionStrip } from "@/components/search/MeatCutSuggestionStrip";
 import {
   clearSearchHistory,
   getSearchHistory,
@@ -468,6 +469,11 @@ function SearchPage() {
                 onClearFilters={activeFilterCount > 0 ? clearFilters : undefined}
               />
             </div>
+
+            {/* Sugestões de cortes de açougue — só aparece quando o termo é relacionado a carne. */}
+            {hasQuery && (
+              <MeatCutSuggestionStrip query={q} onPick={syncQueryToUrl} />
+            )}
 
             {/* Filtros — barra única compacta e fixa (sticky) abaixo do topo:
                 alternar filtros não desloca o conteúdo já renderizado. */}
