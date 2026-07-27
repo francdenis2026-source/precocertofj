@@ -1060,7 +1060,10 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
       to="/produto-publico/$slug"
       params={{ slug: detailSlug }}
       aria-label={`${row.display_name}${size ? ` (${size})` : ""} — abrir comparativo`}
-      className="hairline-gold group relative flex h-full flex-col overflow-hidden rounded-xl border border-border bg-card shadow-[0_1px_2px_color-mix(in_oklab,var(--color-foreground)_8%,transparent)] transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/50 hover:shadow-[0_12px_28px_-18px_color-mix(in_oklab,var(--color-primary)_35%,transparent)]"
+      className={cn(
+        "hairline-gold group relative flex h-full flex-col overflow-hidden",
+        rank === 1 ? "pc-surface-3-interactive" : "pc-surface-2-interactive",
+      )}
     >
 
       {/* Rank ribbon */}
