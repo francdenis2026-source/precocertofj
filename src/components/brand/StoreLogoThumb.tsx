@@ -37,17 +37,24 @@ export function StoreLogoThumb({
   imgClassName,
   initialsClassName,
   eager = false,
+  mono = false,
 }: StoreLogoThumbProps) {
+  const monoSrc = mono ? monoLogoSrc(src) : null;
+
   return (
     <span
       className={cn(
-        "grid shrink-0 place-items-center overflow-hidden rounded-md border border-border/70 bg-white p-1",
+        "grid shrink-0 place-items-center overflow-hidden rounded-md border p-1",
+        monoSrc ? "border-current/25 bg-transparent" : "border-border/70 bg-white",
         className,
       )}
     >
-      {src ? (
+      {monoSrc ? (
+        <StoreLogoMono src={monoSrc} name={name} className={cn("h-full w-full", imgClassName)} />
+      ) : src ? (
         <SmartLogoImage src={src} name={name} eager={eager} className={imgClassName} />
       ) : (
+
         <span
           aria-hidden
           className={cn(
