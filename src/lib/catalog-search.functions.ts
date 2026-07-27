@@ -177,17 +177,35 @@ export const searchCatalogAdvanced = createServerFn({ method: "POST" })
       lastSeen: string;
     };
     const byName = new Map<string, Agg>();
+    // 1.6) Pré-indexa catálogo por nome normalizado só para checar categoria
+    // no filtro de açougues (evita false-positives por regex de nome).
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const catPre = (await supabase
+      .from("product_catalog")
+      .select(sel("display_name, normalized_name, category"))
+      .limit(2000)) as { data: { display_name: string | null; normalized_name: string | null; category: string | null }[] | null };
+    const catCategoryByKey = new Map<string, string | null>();
+    for (const c of catPre.data ?? []) {
+      const k1 = c.display_name ? normalizeStr(c.display_name) : "";
+      const k2 = c.normalized_name ? normalizeStr(c.normalized_name) : "";
+      if (k1) catCategoryByKey.set(k1, c.category);
+      if (k2 && !catCategoryByKey.has(k2)) catCategoryByKey.set(k2, c.category);
+    }
+
     for (const r of scans) {
       const raw = (r.product_name ?? "").trim();
       if (!raw) continue;
-      // Filtro açougue: se o scan veio de um açougue e o produto NÃO é um
-      // corte de carne, descarta o registro. Produtos de mercados normais
-      // passam sem alteração.
-      if (r.establishment_id && butcherIds.has(r.establishment_id)) {
-        if (!classifyButcherCut(raw, r.unit)) continue;
-      }
       const key = normalizeStr(raw);
       if (!key) continue;
+      // Filtro açougue: em açougues só entram cortes de carne. Aceitamos se
+      // (a) regex de corte bate OU (b) catálogo classifica como "carnes".
+      // Se catálogo classifica como outra categoria explícita, descarta.
+      if (r.establishment_id && butcherIds.has(r.establishment_id)) {
+        const cut = classifyButcherCut(raw, r.unit);
+        const cat = catCategoryByKey.get(key) ?? null;
+        if (cat && cat !== "carnes") continue;
+        if (!cut && cat !== "carnes") continue;
+      }
       // Se veio termo, exige que TODOS os tokens estejam presentes.
       if (tokens.length > 0 && !tokens.every((t) => key.includes(t))) continue;
       const price = Number(r.price_captured);
