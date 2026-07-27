@@ -452,6 +452,7 @@ const ADMIN_SHORTCUT_GROUPS = [
   {
     label: "Preços & cobertura",
     items: [
+      { to: "/admin/preco-rapido", label: "Registro rápido de preços", icon: Plus },
       { to: "/admin/precos", label: "Gestão de preços", icon: ShieldCheck },
       { to: "/admin/historico-precos", label: "Histórico de preços", icon: Gauge },
       { to: "/admin/cobertura", label: "Cobertura por mercado", icon: Store },
