@@ -112,9 +112,14 @@ export function HomeShowcaseSection() {
     isError: errorCompare,
     refetch: refetchCompare,
   } = useQuery<Comparison[]>({
-    queryKey: ["price-comparisons-home"],
+    queryKey: ["price-comparisons-home", { limit: 100 }],
     queryFn: async () => {
-      const { data, error } = await supabase.rpc("get_price_comparisons");
+      // Home só precisa das 100 melhores comparações — evita puxar milhares
+      // de linhas em cada visita e reduz payload/tempo de resposta.
+      const { data, error } = await supabase.rpc(
+        "get_price_comparisons",
+        { p_limit: 100 } as never,
+      );
       if (error) throw error;
       return (data as unknown as Comparison[]) ?? [];
     },
