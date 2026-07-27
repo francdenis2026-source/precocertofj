@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { usePricesRealtime } from "@/hooks/usePricesRealtime";
+import { LiveUpdateBadge, useLivePulse } from "@/components/ui/live-update-badge";
 import { Link } from "@tanstack/react-router";
 import { searchProductPrice, type PriceSearchResult, type PriceSuggestion, type ProductGroup } from "@/lib/price-search.functions";
 import { suggestProducts, type ProductSuggestion } from "@/lib/product-suggest.functions";
@@ -250,10 +251,14 @@ export function PriceSearchBar({
   }, [sessionLoading, user]);
 
 
-  const runQuery = (q: string, opts?: { force?: boolean; fresh?: boolean }) => {
+  const runQuery = (q: string, opts?: { force?: boolean; fresh?: boolean; silent?: boolean }) => {
     setErr(null);
-    setShowSuggest(false);
-    setHistory(pushSearchHistory(q));
+    // `silent` = busca disparada enquanto o usuário ainda digita: não fecha a
+    // lista de sugestões, não grava histórico e não debita cota do visitante.
+    if (!opts?.silent) {
+      setShowSuggest(false);
+      setHistory(pushSearchHistory(q));
+    }
     // A busca em si é grátis — só bloqueamos quando o visitante já esgotou
     // a cota em outras ações (ex.: abrir detalhes de produtos). Isso evita
     // "queimar" créditos apenas por carregar a página com ?q=... na URL.
@@ -272,7 +277,7 @@ export function PriceSearchBar({
     lastSearchKey.current = key;
     // Só debita cota quando o visitante realmente digita e envia uma busca
     // manual — auto-run vindo da URL não custa (`consumeOnce` por termo).
-    if (isVisitor) quota.consumeOnce(`search:${q.toLowerCase()}`);
+    if (isVisitor && !opts?.silent) quota.consumeOnce(`search:${q.toLowerCase()}`);
     // Cancela a requisição anterior ainda em voo.
     searchAbort.current?.abort();
     const ctrl = new AbortController();
@@ -306,11 +311,24 @@ export function PriceSearchBar({
   // caches, sem recarregar a página.
   const queryRef = useRef("");
   queryRef.current = query;
+  const live = useLivePulse();
   usePricesRealtime(() => {
     const q = normalizeInput(queryRef.current).trim();
     if (q.length < 2) return;
+    live.ping();
     runQuery(q, { force: true, fresh: true });
   });
+
+  // Busca enquanto digita: a partir de 3 caracteres a consulta completa já
+  // roda em segundo plano (debounce + cancelamento), então ao parar de digitar
+  // os resultados já estão prontos — sem precisar apertar Enter.
+  useEffect(() => {
+    const q = normalizeInput(query).trim();
+    if (q.length < 3) return;
+    const t = window.setTimeout(() => runQuery(q, { silent: true }), 240);
+    return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query]);
 
   useEffect(() => {
     if (autoRan.current) return;
