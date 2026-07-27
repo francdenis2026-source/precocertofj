@@ -74,7 +74,10 @@ export const PriceSpotlight = memo(function PriceSpotlight({
           <p className={cn(tc.meta, "mt-1.5 text-muted-foreground")}>
             {storeName ? (
               <>
-                em <span className="font-semibold text-foreground">{shortenStoreName(storeName)}</span>
+                em{" "}
+                <span className={cn(tc.storeName, "align-baseline")}>
+                  {shortenStoreName(storeName)}
+                </span>
               </>
             ) : (
               "Menor preço atual"

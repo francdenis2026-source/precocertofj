@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { MapPin, Search, Store, TrendingDown } from "lucide-react";
+import { MapPin, PackageSearch, Search, Store, TrendingDown } from "lucide-react";
 
 import {
   getWhereToBuyRegions,
@@ -13,11 +13,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { IsolatedPage } from "@/components/layout/IsolatedPage";
+import { EmptyState } from "@/components/layout/EmptyState";
 import { FadeSwap, LocationsSkeleton } from "@/components/layout/LoadingSkeleton";
 import { BackButton } from "@/components/layout/BackButton";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
+import { usePerceivedPerfTelemetry } from "@/lib/perf-telemetry";
 
 export const Route = createFileRoute("/onde-comprar")({
   head: () => ({
