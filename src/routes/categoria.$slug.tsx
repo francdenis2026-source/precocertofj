@@ -409,42 +409,52 @@ function CategoryPage() {
                   })}
                 </ul>
               ) : (
-              <ul className="mt-2 divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
-                {visible.map((p) => (
+              <ul className="mt-2 space-y-1.5">
+                {visible.map((p, idx) => {
+                  const isTop = idx === 0 && safePage === 1;
+                  return (
                   <li key={p.key}>
                     <button
                       type="button"
                       onClick={() => openQuickView(p.name)}
                       aria-label={`Ver detalhes de ${p.name}`}
-                      className="flex w-full items-center gap-2.5 px-2.5 py-2 text-left transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
+                      className={cn(
+                        "flex w-full items-center gap-2.5 px-2.5 py-2 text-left",
+                        isTop ? "pc-surface-3-interactive" : "pc-surface-2-interactive",
+                      )}
                     >
                       <StoreBadge name={p.cheapestStore} logoUrl={p.cheapestLogo} size="xs" />
                       <span className="min-w-0 flex-1">
+                        {isTop && <span className={cn(tc.eyebrow, "mb-0.5 block")}>Menor oferta</span>}
                         <span className="block truncate text-[13px] font-semibold leading-tight">
                           {p.name}
                         </span>
-                        <span className="block truncate text-[11px] text-muted-foreground">
+                        <span className={cn("block truncate", tc.storeNameTight)}>
                           {p.cheapestStore}
                           {p.storeCount > 1 ? ` · ${p.storeCount} mercados` : ""}
                           {p.unit ? ` · ${p.unit}` : ""}
                         </span>
                       </span>
                       <span className="shrink-0 text-right">
-                        <span className="block text-[13.5px] font-bold tabular-nums text-foreground">
+                        <span className={cn("block", isTop ? tc.dataPrimary : "text-[13.5px] font-bold tabular-nums text-foreground")}>
                           {brl(p.minPrice)}
                         </span>
                         {p.storeCount > 1 && p.maxPrice > p.minPrice && (
-                          <span className="block text-[11px] tabular-nums text-muted-foreground">
+                          <span className={cn("block", tc.metaMuted)}>
                             até {brl(p.maxPrice)}
                           </span>
                         )}
                       </span>
-                      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-border text-brand-gold">
+                      <span className={cn(
+                        "grid h-7 w-7 shrink-0 place-items-center rounded-full",
+                        isTop ? "text-[var(--pc-gold-ink)]" : "border border-[var(--pc-surface-2-border)] text-brand-gold",
+                      )}>
                         <ArrowRight className="h-3.5 w-3.5" aria-hidden />
                       </span>
                     </button>
                   </li>
-                ))}
+                  );
+                })}
               </ul>
               )}
 
