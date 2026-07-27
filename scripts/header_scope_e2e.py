@@ -20,7 +20,7 @@ from playwright.async_api import async_playwright
 ROUTES = [
     "/", "/buscar", "/estabelecimentos", "/mapa", "/planos", "/comparador",
     "/melhores-precos", "/colaborar", "/privacidade", "/fale-conosco",
-    "/login", "/signup", "/resgatar", "/farmacias", "/favoritos",
+    "/login", "/cadastro", "/resgatar", "/farmacias", "/favoritos",
 ]
 
 VIEWPORTS = [("mobile", 390, 844), ("tablet", 768, 1024), ("desktop", 1440, 900)]

@@ -52,7 +52,7 @@ describe("Rotas públicas críticas mantêm navegação para a home", () => {
   const CRITICAL = [
     "buscar", "estabelecimentos", "mapa", "planos", "comparador",
     "melhores-precos", "colaborar", "privacidade", "fale-conosco",
-    "login", "signup", "resgatar", "farmacias", "favoritos",
+    "login", "cadastro", "resgatar", "farmacias", "favoritos",
   ];
 
   it.each(CRITICAL)("/%s tem header interno ou link para a home", (name) => {
