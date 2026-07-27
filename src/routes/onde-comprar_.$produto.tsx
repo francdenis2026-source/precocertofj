@@ -84,7 +84,7 @@ function ProdutoComparacaoPage() {
 
   return (
     <IsolatedPage className="bg-background">
-      <header className="border-b border-border/60 bg-card/60">
+      <header className="border-b border-[var(--pc-surface-1-border)] bg-[var(--pc-surface-1)]">
         <div className="mx-auto flex max-w-5xl items-center gap-3 px-4 py-3">
           <Button asChild variant="ghost" size="sm" className="h-8 px-2">
             <Link to="/onde-comprar">
@@ -100,35 +100,36 @@ function ProdutoComparacaoPage() {
         {detailQ.isLoading ? (
           <RankingSkeleton rows={6} />
         ) : !d ? (
-          <p className={cn(tc.meta, "rounded-xl border border-border/70 bg-card p-6 text-center")}>
+          <p className={cn(tc.meta, "pc-surface-2 p-6 text-center")}>
             Não encontramos preços para este produto com os filtros atuais.
           </p>
         ) : (
           <div className="space-y-2.5">
 
             {/* Cabeçalho + destaque do mais barato */}
-            <section className="rounded-xl border border-border/70 bg-card p-3">
-              <h1 className={cn(tc.h2, "mb-0.5")}>{d.productName}</h1>
-              <p className={cn(tc.meta, "mb-2")}>
+            <section className="pc-surface-2 p-3">
+              <p className={cn(tc.eyebrow, "mb-1")}>Produto</p>
+              <h1 className={cn(tc.sectionTitle, "mb-0.5")}>{d.productName}</h1>
+              <p className={cn(tc.metaMuted, "mb-2")}>
                 {d.ranking.length} {d.ranking.length === 1 ? "loja" : "lojas"} • média {brl(d.avgPrice)} • maior{" "}
                 {brl(d.maxPrice)}
                 {d.category ? ` • ${d.category}` : ""}
               </p>
 
-              <div className="flex flex-wrap items-center gap-2 rounded-lg border border-emerald-500/50 bg-emerald-500/5 p-2.5">
-                <Crown className="h-5 w-5 shrink-0 text-emerald-600" />
+              <div className="pc-surface-3 flex flex-wrap items-center gap-2 p-2.5">
+                <Crown className="h-5 w-5 shrink-0 text-[var(--pc-gold-ink)]" />
                 <div className="min-w-0 flex-1">
-                  <p className={cn(tc.meta, "font-semibold uppercase tracking-wide text-emerald-700")}>
+                  <p className={cn(tc.eyebrow)}>
                     Menor preço da plataforma
                   </p>
                   <p className={cn(tc.itemTitle, "truncate")}>
-                    {d.ranking[0].storeName}
+                    <span className={cn(tc.storeName)}>{d.ranking[0].storeName}</span>
                     {d.ranking[0].neighborhood ? ` — ${d.ranking[0].neighborhood}` : ""}
                   </p>
                 </div>
-                <p className="text-2xl font-bold text-emerald-600">{brl(d.minPrice)}</p>
+                <p className={cn(tc.dataPrimary, "text-[var(--pc-gold-ink)]")}>{brl(d.minPrice)}</p>
                 {d.savingsPct > 0 && (
-                  <span className="rounded-full bg-emerald-600/10 px-2 py-0.5 text-[12px] font-semibold text-emerald-700">
+                  <span className="rounded-full bg-[var(--pc-gold-ink)]/10 px-2 py-0.5 text-[12px] font-semibold text-[var(--pc-gold-ink)]">
                     até {d.savingsPct}% de economia
                   </span>
                 )}
@@ -136,7 +137,7 @@ function ProdutoComparacaoPage() {
             </section>
 
             {/* Filtros */}
-            <section className="flex flex-wrap items-center gap-1.5 rounded-xl border border-border/70 bg-card px-2.5 py-2">
+            <section className="flex flex-wrap items-center gap-1.5 pc-surface-2 px-2.5 py-2">
               <span className={cn(tc.meta, "inline-flex items-center gap-1 font-semibold")}>
                 <MapPin className="h-3.5 w-3.5" /> Região
               </span>
@@ -192,8 +193,8 @@ function ProdutoComparacaoPage() {
 
             <div className="grid gap-2.5 lg:grid-cols-2">
               {/* Ranking por estabelecimento */}
-              <section className="rounded-xl border border-border/70 bg-card p-2.5">
-                <p className={cn(tc.itemTitle, "mb-1.5")}>Ranking por estabelecimento</p>
+              <section className="pc-surface-2 p-2.5">
+                <p className={cn(tc.eyebrow, "mb-1")}>Ranking</p><p className={cn(tc.sectionTitle, "mb-1.5")}>Por estabelecimento</p>
                 <ul className="space-y-1">
                   {d.ranking.map((r) => (
                     <li
@@ -232,9 +233,9 @@ function ProdutoComparacaoPage() {
 
               <div className="space-y-2.5">
                 {/* Histórico de variação */}
-                <section className="rounded-xl border border-border/70 bg-card p-2.5">
+                <section className="pc-surface-2 p-2.5">
                   <div className="mb-1 flex items-center justify-between gap-2">
-                    <p className={cn(tc.itemTitle)}>Histórico de variação</p>
+                    <p className={cn(tc.sectionTitle)}>Histórico de variação</p>
                     {d.variationPct != null && (
                       <span
                         className={cn(
@@ -285,8 +286,8 @@ function ProdutoComparacaoPage() {
                 </section>
 
                 {/* Melhor preço por bairro */}
-                <section className="rounded-xl border border-border/70 bg-card p-2.5">
-                  <p className={cn(tc.itemTitle, "mb-1.5")}>Melhor preço por bairro</p>
+                <section className="pc-surface-2 p-2.5">
+                  <p className={cn(tc.eyebrow, "mb-1")}>Cobertura</p><p className={cn(tc.sectionTitle, "mb-1.5")}>Melhor preço por bairro</p>
                   <ul className="space-y-1">
                     {d.byNeighborhood.map((h) => (
                       <li

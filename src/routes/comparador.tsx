@@ -1077,7 +1077,7 @@ function ComparisonTable({
                   Produto
                 </button>
               </th>
-              <th scope="col" aria-sort={ariaSort("price-asc")} className="px-4 py-3 text-right">
+              <th scope="col" aria-sort={ariaSort("price-asc")} className="px-4 py-3 text-right border-l border-[color-mix(in_oklab,var(--pc-gold-ink)_35%,transparent)]">
                 <button type="button" className={headerBtn} onClick={() => onSortChange("price-asc")}>
                   Menor preço
                 </button>
@@ -1183,8 +1183,8 @@ function ComparisonTableRow({
           </p>
         )}
       </td>
-      <td className="px-4 py-3 text-right">
-        <p className="font-display text-lg font-extrabold leading-none tabular-nums text-primary">
+      <td className="px-4 py-3 text-right border-l border-[color-mix(in_oklab,var(--pc-gold-ink)_20%,transparent)] bg-[color-mix(in_oklab,var(--pc-gold-ink)_5%,transparent)]">
+        <p className="font-display text-lg font-extrabold leading-none tabular-nums text-[var(--pc-gold-ink)]">
           {formatBRL(Number(row.min_price))}
         </p>
         <p className={cn("mt-1 truncate", tc.storeNameTight)} title={row.cheapest_store}>

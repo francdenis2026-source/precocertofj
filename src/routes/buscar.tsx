@@ -471,21 +471,23 @@ function SearchPage() {
 
             {/* Filtros — barra única compacta e fixa (sticky) abaixo do topo:
                 alternar filtros não desloca o conteúdo já renderizado. */}
-            <div className="sticky top-[var(--pc-search-top,52px)] z-20 -mx-1 min-h-[42px] border-y border-border/60 bg-background/92 px-1 backdrop-blur supports-[backdrop-filter]:bg-background/75">
-              <FiltersToolbar
-                open={filtersOpen}
-                onToggle={() => setFiltersOpen((v) => !v)}
-                activeCount={activeFilterCount}
-                mode={mode}
-                onMode={chooseMode}
-                pureOnly={pureOnly}
-                onPure={setPure}
-                min={search.min ?? ""}
-                max={search.max ?? ""}
-                onMin={setMinPrice}
-                onMax={setMaxPrice}
-                onClear={clearFilters}
-              />
+            <div className="sticky top-[var(--pc-search-top,52px)] z-20 -mx-1 min-h-[42px] px-1">
+              <div className="pc-surface-1 !rounded-lg px-2 py-1.5 backdrop-blur supports-[backdrop-filter]:bg-[color-mix(in_oklab,var(--pc-surface-1)_88%,transparent)]">
+                <FiltersToolbar
+                  open={filtersOpen}
+                  onToggle={() => setFiltersOpen((v) => !v)}
+                  activeCount={activeFilterCount}
+                  mode={mode}
+                  onMode={chooseMode}
+                  pureOnly={pureOnly}
+                  onPure={setPure}
+                  min={search.min ?? ""}
+                  max={search.max ?? ""}
+                  onMin={setMinPrice}
+                  onMax={setMaxPrice}
+                  onClear={clearFilters}
+                />
+              </div>
             </div>
 
 
@@ -500,7 +502,7 @@ function SearchPage() {
           {/* Sidebar persistente — apenas na descoberta (desktop) */}
           {!hasQuery && (
             <aside className="hidden lg:block">
-              <div className="sticky top-14">
+              <div className="sticky top-14 pc-surface-1 p-3">
                 <SearchSidebar
                   recent={recent}
                   onPickQuery={pickQuery}

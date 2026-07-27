@@ -85,7 +85,7 @@ function OndeComprarPage() {
 
   return (
     <IsolatedPage className="bg-background">
-      <header className="border-b border-border/60 bg-card/60">
+      <header className="border-b border-[var(--pc-surface-1-border)] bg-[var(--pc-surface-1)]">
         <div className="mx-auto flex max-w-5xl items-center gap-3 px-4 py-3">
           <BackButton />
           <HomeBrandLink />
@@ -93,16 +93,18 @@ function OndeComprarPage() {
       </header>
 
       <main className="mx-auto max-w-5xl px-4 py-4">
-        <h1 className={cn(tc.h1, "mb-1")}>
+        <p className={cn(tc.eyebrow, "mb-1")}>Comparador geográfico</p>
+        <h1 className={cn(tc.sectionTitle, "mb-1")}>
           Onde comprar mais barato
         </h1>
-        <p className={cn(tc.meta, "mb-3")}>
+        <p className={cn(tc.metaMuted, "mb-3")}>
           Compare o preço de cada produto entre os mercados parceiros e filtre por bairro ou cidade.
         </p>
+        <hr className="pc-rule mb-3" aria-hidden />
 
         {/* Filtros */}
         <form
-          className="mb-3 space-y-2 rounded-xl border border-border/70 bg-card p-2.5"
+          className="mb-3 space-y-2 pc-surface-2 p-2.5"
           onSubmit={(e) => {
             e.preventDefault();
             setQuery(term.trim());
@@ -219,7 +221,7 @@ function OndeComprarPage() {
           ) : (
             <ul className="space-y-2">
               {products.map((p) => (
-                <li key={p.productKey} className="rounded-xl border border-border/70 bg-card p-2.5">
+                <li key={p.productKey} className="pc-surface-2 p-2.5">
                   <div className="mb-1.5 flex items-start gap-2">
                     <div className="min-w-0 flex-1">
                       <Link
@@ -244,23 +246,25 @@ function OndeComprarPage() {
                       <li
                         key={`${p.productKey}-${o.establishmentId ?? i}`}
                         className={cn(
-                          "flex items-center gap-2 rounded-lg border px-2 py-1.5",
-                          o.isCheapest ? "border-emerald-500/50 bg-emerald-500/5" : "border-border/60",
+                          "flex items-center gap-2 px-2 py-1.5",
+                          o.isCheapest
+                            ? "pc-surface-3"
+                            : "rounded-lg border border-[var(--pc-surface-2-border)]",
                         )}
                       >
-                        <Store className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                        <Store className={cn("h-3.5 w-3.5 shrink-0", o.isCheapest ? "text-[var(--pc-gold-ink)]" : "text-muted-foreground")} />
                         <span className="min-w-0 flex-1">
                           <span className={cn(tc.storeName, "block truncate")}>{o.storeName}</span>
-                          <span className={cn(tc.meta, "block truncate")}>
+                          <span className={cn(tc.metaMuted, "block truncate")}>
                             {[o.neighborhood, o.city].filter(Boolean).join(" • ") || "—"}
                           </span>
                         </span>
                         <span className="shrink-0 text-right">
-                          <span className={cn(tc.itemTitle, o.isCheapest && "text-emerald-600")}>
+                          <span className={cn(o.isCheapest ? tc.dataPrimary : tc.itemTitle, o.isCheapest && "text-[var(--pc-gold-ink)]")}>
                             {brl(o.price)}
                           </span>
                           {!o.isCheapest && o.diffPct > 0 && (
-                            <span className={cn(tc.meta, "block")}>+{o.diffPct}%</span>
+                            <span className={cn(tc.metaMuted, "block")}>+{o.diffPct}%</span>
                           )}
                         </span>
                       </li>
