@@ -31,6 +31,7 @@ import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
 import { computeUnitPrice } from "@/lib/unit-price";
 import { useMyRoles } from "@/hooks/useMyRoles";
 import { usePricesRealtime } from "@/hooks/usePricesRealtime";
+import { LiveUpdateBadge, useLivePulse } from "@/components/ui/live-update-badge";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { submitPriceReport } from "@/lib/stores-public.functions";
 import { classifyProductType, PRODUCT_TYPE_LABEL } from "@/lib/product-type";
@@ -256,7 +257,9 @@ function MelhoresPrecosPage() {
   });
 
   // Atualização em tempo real: novos preços invalidam o ranking na hora.
+  const live = useLivePulse();
   usePricesRealtime(() => {
+    live.ping();
     void queryClient.invalidateQueries({ queryKey: ["price-comparisons"] });
   });
 
@@ -468,7 +471,10 @@ function MelhoresPrecosPage() {
 
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-3">
             <div className="min-w-0">
-              <span className={tc.eyebrow}>Ranking de preços</span>
+              <span className="flex items-center gap-2">
+                <span className={tc.eyebrow}>Ranking de preços</span>
+                <LiveUpdateBadge active={live.active} />
+              </span>
               <h1 className={dsx(tc.h1, "mt-0.5")}>
                 Onde cada produto está{" "}
                 <em className="italic text-brand-gold">mais barato</em>
