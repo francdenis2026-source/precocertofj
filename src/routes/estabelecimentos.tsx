@@ -871,7 +871,7 @@ function EstablishmentsPage() {
                     </button>
                   </div>
                 ) : view === "list" ? (
-                <div className="overflow-x-auto">
+                <div className="pc-surface-1 overflow-x-auto">
                   <div className="min-w-[680px]">
                     {/* Cabeçalho tabular — colunas clicáveis para ordenar */}
                     <div className={`${LIST_GRID} border-b border-border/60 bg-muted/40 px-3 py-2 md:px-4 ${tc.tableHead} [&>*]:truncate`}>
