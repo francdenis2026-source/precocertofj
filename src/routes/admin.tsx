@@ -2295,6 +2295,8 @@ function EstablishmentsTab() {
   }, [list]);
 
   useEffect(() => { void load(); }, [load]);
+  useAdminEntitiesRealtime(() => { void load(); }, { tables: ["establishments"] });
+
 
   const filtered = useMemo(() => {
     const q = filter.trim().toLowerCase();
