@@ -333,19 +333,23 @@ function PrivacidadePage() {
 
       {/* CONTEÚDO — grade fina, cabe em uma tela */}
       <main className="mx-auto w-full max-w-5xl flex-1 px-3 py-3 sm:px-4 md:px-8 md:py-4">
-        <div className="grid gap-x-8 gap-y-2.5 sm:grid-cols-2 sm:gap-y-3 lg:grid-cols-3 [&>section]:border-t [&>section]:border-border/60 [&>section]:pt-2.5 sm:[&>section]:pt-3">
+        <div className="grid gap-x-8 gap-y-2.5 sm:grid-cols-2 sm:gap-y-3 lg:grid-cols-3">
           {items.map((item, i) => (
-            <ItemCard key={item.id} item={item} index={i} />
+            <div key={item.id} className="min-w-0">
+              {i > 0 && <hr className="pc-rule mb-2.5 sm:mb-3" />}
+              <ItemCard item={item} index={i} />
+            </div>
           ))}
         </div>
 
-        <div className="mt-4 flex flex-wrap items-center justify-between gap-2 border-t border-border/60 pt-2">
+        <hr className="pc-rule mt-4" />
+        <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
           <p className={tc.meta}>Atualizado em {UPDATED_AT}</p>
           <Link
             to="/fale-conosco"
             className={cn(
               tc.chip,
-              "inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)]",
+              "pc-focus inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)]",
             )}
           >
             Fale conosco
