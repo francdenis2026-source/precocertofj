@@ -3948,3 +3948,35 @@ body::-webkit-scrollbar,
   height: 0;
   background: transparent;
 }
+
+/* ==========================================================================
+   FOCO VISÍVEL EM REGIÕES ROLÁVEIS (a11y por teclado)
+   Toda área rolável recebe tabindex=0 via `setupScrollKeyboard`; aqui damos
+   o anel de foco padronizado e um leve realce da própria região.
+   ========================================================================== */
+[data-scrollable] {
+  scroll-behavior: smooth;
+}
+
+[data-scrollable]:focus {
+  outline: none;
+}
+
+[data-scrollable]:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+  border-radius: max(var(--radius-sm, 0.375rem), 0.375rem);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-ring) 22%, transparent);
+}
+
+/* Em superfícies navy o anel usa o dourado da marca para manter contraste. */
+:where([data-surface="navy"], .pc-on-navy) [data-scrollable]:focus-visible {
+  outline-color: var(--color-accent);
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--color-accent) 28%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-scrollable] {
+    scroll-behavior: auto;
+  }
+}

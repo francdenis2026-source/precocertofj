@@ -165,6 +165,16 @@ function RootComponent() {
     void import("@/lib/pwa").then((m) => m.setupServiceWorker());
   }, []);
 
+  // A11y: toda região rolável recebe foco por teclado + setas/PageUp/Home/End.
+  useEffect(() => {
+    let cleanup: (() => void) | undefined;
+    void import("@/lib/scroll-keyboard").then((m) => {
+      cleanup = m.setupScrollKeyboard();
+    });
+    return () => cleanup?.();
+  }, []);
+
+
 
 
 
