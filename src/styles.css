@@ -4442,3 +4442,21 @@ html.dark .pc-row-interactive:hover .pc-store-name {
   .pc-nav-link:hover { transform: none; letter-spacing: normal; }
 }
 
+/* Row variant — dropdown items, popover rows: keeps gold hover/underline + focus ring, no lift/tracking shift */
+.pc-nav-link--row {
+  transform: none !important;
+  letter-spacing: normal !important;
+}
+.pc-nav-link--row:hover,
+.pc-nav-link--row:focus-visible {
+  transform: none !important;
+  letter-spacing: normal !important;
+  background-color: color-mix(in oklab, var(--pc-gold-ink, #c9a84c) 10%, transparent);
+}
+.pc-nav-link--row::after {
+  left: 12px;
+  right: 12px;
+  bottom: 4px;
+}
+
+
