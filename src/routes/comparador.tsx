@@ -1183,8 +1183,8 @@ function ComparisonTableRow({
           </p>
         )}
       </td>
-      <td className="px-4 py-3 text-right">
-        <p className="font-display text-lg font-extrabold leading-none tabular-nums text-primary">
+      <td className="px-4 py-3 text-right border-l border-[color-mix(in_oklab,var(--pc-gold-ink)_20%,transparent)] bg-[color-mix(in_oklab,var(--pc-gold-ink)_5%,transparent)]">
+        <p className="font-display text-lg font-extrabold leading-none tabular-nums text-[var(--pc-gold-ink)]">
           {formatBRL(Number(row.min_price))}
         </p>
         <p className={cn("mt-1 truncate", tc.storeNameTight)} title={row.cheapest_store}>
