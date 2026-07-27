@@ -371,10 +371,12 @@ function SearchPage() {
 
 
   return (
-    <div
-      data-reduced-motion={reducedMotion ? "on" : "off"}
-      className={`pc-search-scope flex min-h-[100svh] flex-col bg-background text-foreground${reducedMotion ? " pc-reduce-motion" : ""}`}
+    <IsolatedPage
+      className={`pc-search-scope${reducedMotion ? " pc-reduce-motion" : ""}`}
+      contentClassName="flex flex-col"
     >
+      <div data-reduced-motion={reducedMotion ? "on" : "off"} className="contents">
+
 
       {/* BARRA DE COMANDO — editorial: hairline, respiro e rótulo micro */}
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/75">
