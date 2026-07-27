@@ -178,11 +178,12 @@ export function MetricSpotlightDialog({
             ).map(([label, value], i) => (
               <div
                 key={i}
-                className="rounded-lg border border-white/12 bg-white/[0.06] px-2 py-1.5"
+                className="rounded-lg border border-white/20 bg-white/[0.10] px-2 py-1.5"
               >
-                <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-white/65">
+                <div className="text-[11px] font-bold uppercase tracking-[0.12em] text-white/90">
                   {label}
                 </div>
+
                 <div
                   className="text-[15px] font-bold leading-tight tabular-nums"
                   style={{ color: i === 0 ? "var(--pc-home-gold)" : "#F5F6FA" }}
