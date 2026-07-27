@@ -43,8 +43,10 @@ import {
   CartesianGrid,
 } from "recharts";
 import { ShieldAlert, Activity, RefreshCw, TrendingUp, Ban, Shield } from "lucide-react";
+import { AppShell } from "@/components/brand/AppShell";
 
 export const Route = createFileRoute("/admin_/auditoria-acessos")({
+  ssr: false,
   beforeLoad: adminBeforeLoad,
   head: () => ({
     meta: [
@@ -56,7 +58,11 @@ export const Route = createFileRoute("/admin_/auditoria-acessos")({
       },
     ],
   }),
-  component: AuditoriaAcessosPage,
+  component: () => (
+    <AppShell scope="admin">
+      <AuditoriaAcessosPage />
+    </AppShell>
+  ),
 });
 
 function fmt(v: string | null | undefined) {

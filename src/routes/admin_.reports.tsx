@@ -22,6 +22,7 @@ import {
   type AdminPriceReport,
 } from "@/lib/stores-public.functions";
 import { purgeUnreferencedScanFiles } from "@/lib/storage-cleanup.functions";
+import { AppShell } from "@/components/brand/AppShell";
 
 export const Route = createFileRoute("/admin_/reports")({
   ssr: false,
@@ -33,7 +34,11 @@ export const Route = createFileRoute("/admin_/reports")({
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  component: AdminReportsGate,
+  component: () => (
+    <AppShell scope="admin">
+      <AdminReportsGate />
+    </AppShell>
+  ),
 });
 
 function AdminReportsGate() {

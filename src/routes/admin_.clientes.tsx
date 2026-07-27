@@ -42,6 +42,7 @@ import {
 } from "@/components/ui/table";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, KeyRound, Copy, RefreshCw, Search, ShieldCheck, Ban, CheckCircle2, Download } from "lucide-react";
+import { AppShell } from "@/components/brand/AppShell";
 
 const listOptions = (search: string, sort: "recent" | "logins" | "name" | "last_seen", limit: number, offset: number) =>
   queryOptions({
@@ -51,6 +52,7 @@ const listOptions = (search: string, sort: "recent" | "logins" | "name" | "last_
   });
 
 export const Route = createFileRoute("/admin_/clientes")({
+  ssr: false,
   beforeLoad: adminBeforeLoad,
   head: () => ({
     meta: [
@@ -61,7 +63,11 @@ export const Route = createFileRoute("/admin_/clientes")({
   loader: ({ context }) => {
     context.queryClient.ensureQueryData(listOptions("", "recent", 50, 0));
   },
-  component: ClientesPage,
+  component: () => (
+    <AppShell scope="admin">
+      <ClientesPage />
+    </AppShell>
+  ),
 });
 
 function fmtDate(v: string | null | undefined) {

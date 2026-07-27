@@ -11,6 +11,7 @@ import { TrendingUp, DollarSign, ShoppingCart, Percent } from "lucide-react";
 import { getPlanConversionMetrics, type PlanMetric } from "@/lib/checkout.functions";
 
 export const Route = createFileRoute("/admin_/conversoes")({
+  ssr: false,
   beforeLoad: adminBeforeLoad,
   head: () => ({
     meta: [

@@ -6,6 +6,7 @@ import { analyzeProductImage, type VisionProduct } from "@/lib/vision.functions"
 import { savePhotoToCatalog } from "@/lib/photo-catalog.functions";
 import { ArrowLeft, Camera, Loader2, Sparkles, Save, Trash2, Plus } from "lucide-react";
 import { toast } from "sonner";
+import { AppShell } from "@/components/brand/AppShell";
 
 export const Route = createFileRoute("/admin_/cadastro-foto")({
   ssr: false,
@@ -17,7 +18,11 @@ export const Route = createFileRoute("/admin_/cadastro-foto")({
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  component: CadastroFotoPage,
+  component: () => (
+    <AppShell scope="admin">
+      <CadastroFotoPage />
+    </AppShell>
+  ),
 });
 
 const CATEGORIES = [

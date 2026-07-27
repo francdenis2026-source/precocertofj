@@ -94,7 +94,10 @@ export function useTheme() {
         if (!sessionRes.session) return;
         const res = await fetchRemote();
         if (cancelled) return;
-        const remote: Theme = res?.theme === "dark" ? "dark" : "light";
+        // Sem preferência salva no perfil (ex.: contas internas/admin sem linha
+        // em `profiles`): mantém o tema local — nunca força "light".
+        if (res?.theme !== "dark" && res?.theme !== "light") return;
+        const remote: Theme = res.theme;
         hasHydratedFromRemoteRef.current = true;
         if (remote !== readStored()) {
           writeStored(remote);

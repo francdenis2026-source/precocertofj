@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -129,6 +130,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children:
           "try{var on=localStorage.getItem('pc:reading-mode')==='1';var r=document.documentElement;r.dataset.reading=on?'on':'off';r.style.setProperty('--tc-scale',on?'1.12':'1');}catch(e){}",
       },
+      {
+        // Console admin: marca o documento ANTES da primeira pintura para que a
+        // foto global de fundo nunca apareça (nem cortada) durante o boot.
+        children:
+          "try{var p=location.pathname;document.documentElement.dataset.adminBoot=(p==='/admin'||p.indexOf('/admin')===0)?'1':'0';}catch(e){}",
+      },
     ],
 
 
@@ -159,6 +166,15 @@ function RootComponent() {
   useAutoTranslate();
   useTheme();
   useReadingMode();
+
+  // Mantém a marcação do console admin em navegações client-side (SPA),
+  // evitando flash da foto de fundo entre rotas.
+  const adminPathname = useRouterState({ select: (st) => st.location.pathname });
+  useEffect(() => {
+    if (typeof document === "undefined") return;
+    const isAdmin = adminPathname.startsWith("/admin");
+    document.documentElement.dataset.adminBoot = isAdmin ? "1" : "0";
+  }, [adminPathname]);
 
   // PWA: registra o service worker (auto-update) apenas em produção real.
   useEffect(() => {
