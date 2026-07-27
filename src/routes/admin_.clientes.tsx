@@ -90,8 +90,14 @@ function ClientesPage() {
   const pageSize = 50;
   const [openId, setOpenId] = useState<string | null>(null);
 
+  const qc = useQueryClient();
   const list = useSuspenseQuery(listOptions(search, sort, pageSize, page * pageSize));
   const kpis = list.data.kpis;
+
+  useAdminEntitiesRealtime(
+    () => { qc.invalidateQueries({ queryKey: ["admin", "customers"] }); },
+    { tables: ["profiles"] },
+  );
 
   function applySearch() {
     setPage(0);
@@ -108,8 +114,12 @@ function ClientesPage() {
             Auditoria de acessos, edição de perfil e reset de PIN.
           </p>
         </div>
-        <Badge variant="outline" className="gap-1"><Users className="h-3.5 w-3.5" /> {kpis.total} no total</Badge>
+        <div className="flex items-center gap-2">
+          <NewCustomerDialog onCreated={() => qc.invalidateQueries({ queryKey: ["admin", "customers"] })} />
+          <Badge variant="outline" className="gap-1"><Users className="h-3.5 w-3.5" /> {kpis.total} no total</Badge>
+        </div>
       </header>
+
 
       <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <KpiCard label="Total cadastrados" value={kpis.total} />
