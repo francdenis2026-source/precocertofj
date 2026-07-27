@@ -72,24 +72,133 @@ const tooltipStyle = {
   color: "hsl(var(--popover-foreground))",
 } as const;
 
+const isoDay = (d: Date) => d.toISOString().slice(0, 10);
+const daysAgo = (n: number) => isoDay(new Date(Date.now() - n * 86_400_000));
+const PRESETS = [
+  { label: "7 dias", days: 7 },
+  { label: "30 dias", days: 30 },
+  { label: "90 dias", days: 90 },
+] as const;
+
+function InsightsSkeleton() {
+  return (
+    <div className="space-y-2" aria-busy="true" aria-live="polite">
+      <div className="h-7 w-full animate-pulse rounded-full bg-muted/60" />
+      <div className="grid gap-2.5 lg:grid-cols-3">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="rounded-xl border border-border/70 bg-card p-2.5">
+            <div className="mb-2 flex items-center gap-2">
+              <div className="h-6 w-6 shrink-0 animate-pulse rounded-md bg-muted/70" />
+              <div className="min-w-0 flex-1 space-y-1">
+                <div className="h-3 w-2/3 animate-pulse rounded bg-muted/70" />
+                <div className="h-2.5 w-1/2 animate-pulse rounded bg-muted/50" />
+              </div>
+            </div>
+            <div className="h-[132px] w-full animate-pulse rounded-lg bg-muted/40" />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function AdminInsightsPanel() {
   const fetchInsights = useServerFn(getAdminInsights);
+  const [from, setFrom] = useState(() => daysAgo(29));
+  const [to, setTo] = useState(() => isoDay(new Date()));
+  const [cats, setCats] = useState<string[]>([]);
+  const [exporting, setExporting] = useState(false);
+
   const query = useQuery<AdminInsights>({
-    queryKey: ["admin", "insights"],
-    queryFn: () => fetchInsights(),
+    queryKey: ["admin", "insights", from, to, cats.join(",")],
+    queryFn: () => fetchInsights({ data: { from, to, categories: cats } }),
     staleTime: 60_000,
+    placeholderData: (prev) => prev,
   });
 
   const data = query.data;
   const coverage = useMemo(() => (data?.coverage ?? []).slice(0, 7), [data]);
+  const activePreset = useMemo(() => {
+    if (to !== isoDay(new Date())) return null;
+    return PRESETS.find((p) => daysAgo(p.days - 1) === from)?.days ?? null;
+  }, [from, to]);
 
-  if (query.isLoading) {
-    return (
-      <div className="flex h-[172px] items-center justify-center rounded-xl border border-border/70 bg-card text-muted-foreground">
-        <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Carregando indicadores…
-      </div>
-    );
-  }
+  const applyPreset = (days: number) => {
+    setFrom(daysAgo(days - 1));
+    setTo(isoDay(new Date()));
+  };
+  const toggleCat = (slug: string) =>
+    setCats((prev) => (prev.includes(slug) ? prev.filter((s) => s !== slug) : [...prev, slug]));
+
+  const reportRows = useMemo(() => {
+    if (!data) return [];
+    const catLabels = data.categories.length
+      ? data.coverage
+          .filter((c) => data.categories.includes(c.slug))
+          .map((c) => c.label)
+          .join(", ")
+      : "Todas as categorias";
+    const rows: Array<{ section: string; metric: string; value: string }> = [
+      { section: "Resumo", metric: "Período", value: `${data.range.from} a ${data.range.to} (${data.range.days} dias)` },
+      { section: "Resumo", metric: "Categorias", value: catLabels },
+      { section: "KPI", metric: "Produtos distintos", value: String(data.totals.products) },
+      { section: "KPI", metric: "Registros de preço", value: String(data.totals.prices) },
+      { section: "KPI", metric: "Preços verificados", value: String(data.totals.verified) },
+      { section: "KPI", metric: "Lojas ativas", value: String(data.totals.stores) },
+      { section: "KPI", metric: "Novos preços (24h)", value: String(data.totals.last24h) },
+    ];
+    for (const c of data.coverage) {
+      rows.push({
+        section: "Cobertura",
+        metric: c.label,
+        value: `${c.products} produtos · ${c.stores} lojas · ${c.prices} preços · ${c.share}%`,
+      });
+    }
+    for (const t of data.trend) {
+      rows.push({
+        section: "Tendência",
+        metric: t.day,
+        value: `média ${brl(t.minPriceAvg)} · mínimo ${brl(t.minPrice)} · ${t.samples} registros`,
+      });
+    }
+    for (const r of data.recent) {
+      rows.push({ section: "Atualizações", metric: r.day, value: `${r.prices} preços · ${r.verified} verificados` });
+    }
+    return rows;
+  }, [data]);
+
+  const reportColumns = [
+    { key: "section", header: "Bloco", accessor: (r: { section: string }) => r.section },
+    { key: "metric", header: "Indicador", accessor: (r: { metric: string }) => r.metric },
+    { key: "value", header: "Valor", accessor: (r: { value: string }) => r.value },
+  ];
+
+  const filterLines = data
+    ? [
+        `Período: ${new Date(`${data.range.from}T12:00:00`).toLocaleDateString("pt-BR")} a ${new Date(`${data.range.to}T12:00:00`).toLocaleDateString("pt-BR")} (${data.range.days} dias)`,
+        `Categorias: ${
+          data.categories.length
+            ? data.coverage.filter((c) => data.categories.includes(c.slug)).map((c) => c.label).join(", ")
+            : "todas"
+        }`,
+      ]
+    : [];
+
+  const handlePDF = async () => {
+    if (!data) return;
+    setExporting(true);
+    try {
+      await exportRowsToPDF(stampedFilename("relatorio-kpis-admin"), reportColumns, reportRows, {
+        title: "Relatório de indicadores — Console administrativo",
+        subtitle: "KPIs, cobertura por categoria e evolução de preços",
+        filters: filterLines,
+      });
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  if (query.isLoading && !data) return <InsightsSkeleton />;
   if (query.isError || !data) {
     return (
       <div className="flex items-center justify-between gap-3 rounded-xl border border-destructive/40 bg-destructive/5 p-3">
@@ -103,35 +212,64 @@ export function AdminInsightsPanel() {
 
   return (
     <section aria-label="Indicadores comparativos" className="space-y-2">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <p className={cn(tc.tag, "text-muted-foreground")}>
-          Indicadores · {data.totals.products} produtos · {data.totals.prices} preços ·{" "}
-          {data.totals.last24h} nas últimas 24h
-        </p>
-        <div className="flex items-center gap-1.5">
+      <div className="flex flex-wrap items-center gap-1.5 rounded-xl border border-border/70 bg-card/60 p-1.5">
+        <CalendarRange className="ml-1 h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+        {PRESETS.map((p) => (
+          <button
+            key={p.days}
+            type="button"
+            onClick={() => applyPreset(p.days)}
+            aria-pressed={activePreset === p.days}
+            className={cn(
+              tc.control,
+              "h-7 rounded-full border px-2.5 transition-colors",
+              activePreset === p.days
+                ? "border-primary bg-primary text-primary-foreground"
+                : "border-border/70 bg-background text-muted-foreground hover:text-foreground",
+            )}
+          >
+            {p.label}
+          </button>
+        ))}
+        <input
+          type="date"
+          value={from}
+          max={to}
+          onChange={(e) => setFrom(e.target.value)}
+          aria-label="Data inicial do relatório"
+          className={cn(tc.control, "h-7 rounded-md border border-border/70 bg-background px-2")}
+        />
+        <span className={cn(tc.meta, "text-muted-foreground")}>até</span>
+        <input
+          type="date"
+          value={to}
+          min={from}
+          max={isoDay(new Date())}
+          onChange={(e) => setTo(e.target.value)}
+          aria-label="Data final do relatório"
+          className={cn(tc.control, "h-7 rounded-md border border-border/70 bg-background px-2")}
+        />
+        <div className="ml-auto flex items-center gap-1.5">
           <Button
             size="sm"
             variant="outline"
             className={cn(tc.control, "h-7 rounded-full px-2.5")}
-            onClick={() =>
-              exportRowsToCSV(
-                stampedFilename("kpis-admin"),
-                [
-                  { key: "metric", header: "Indicador", accessor: (r: { metric: string }) => r.metric },
-                  { key: "value", header: "Valor", accessor: (r: { value: string }) => r.value },
-                ],
-                [
-                  { metric: "Produtos distintos", value: String(data.totals.products) },
-                  { metric: "Registros de preço", value: String(data.totals.prices) },
-                  { metric: "Preços verificados", value: String(data.totals.verified) },
-                  { metric: "Lojas ativas", value: String(data.totals.stores) },
-                  { metric: "Novos preços (24h)", value: String(data.totals.last24h) },
-                  { metric: "Gerado em", value: new Date(data.generatedAt).toLocaleString("pt-BR") },
-                ],
-              )
-            }
+            onClick={() => exportRowsToCSV(stampedFilename("relatorio-kpis-admin"), reportColumns, reportRows)}
           >
-            <Download className="mr-1.5 h-3.5 w-3.5" /> CSV geral
+            <Download className="mr-1.5 h-3.5 w-3.5" /> CSV
+          </Button>
+          <Button
+            size="sm"
+            className={cn(tc.control, "h-7 rounded-full px-2.5")}
+            onClick={handlePDF}
+            disabled={exporting}
+          >
+            {exporting ? (
+              <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+            ) : (
+              <FileDown className="mr-1.5 h-3.5 w-3.5" />
+            )}
+            PDF
           </Button>
           <Button
             size="sm"
@@ -144,6 +282,44 @@ export function AdminInsightsPanel() {
           </Button>
         </div>
       </div>
+
+      <div className="flex flex-wrap items-center gap-1.5">
+        <p className={cn(tc.tag, "mr-1 text-muted-foreground")}>
+          {data.totals.products} produtos · {data.totals.prices} preços · {data.totals.last24h} em 24h
+        </p>
+        <button
+          type="button"
+          onClick={() => setCats([])}
+          aria-pressed={cats.length === 0}
+          className={cn(
+            tc.control,
+            "h-6 rounded-full border px-2",
+            cats.length === 0
+              ? "border-primary bg-primary/10 text-primary"
+              : "border-border/70 text-muted-foreground hover:text-foreground",
+          )}
+        >
+          Todas
+        </button>
+        {data.coverage.slice(0, 10).map((c) => (
+          <button
+            key={c.slug}
+            type="button"
+            onClick={() => toggleCat(c.slug)}
+            aria-pressed={cats.includes(c.slug)}
+            className={cn(
+              tc.control,
+              "h-6 rounded-full border px-2",
+              cats.includes(c.slug)
+                ? "border-primary bg-primary/10 text-primary"
+                : "border-border/70 text-muted-foreground hover:text-foreground",
+            )}
+          >
+            {c.label}
+          </button>
+        ))}
+      </div>
+
 
       <div className="grid gap-2.5 lg:grid-cols-3">
         <Panel
