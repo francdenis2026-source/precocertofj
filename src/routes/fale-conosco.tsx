@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { Mail, MessageSquare, Send, Copy, Check, ShieldCheck } from "lucide-react";
-import { SiteHeader } from "@/components/layout/SiteHeader";
+import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ds, dsx } from "@/lib/ds";
 import { toast } from "sonner";
@@ -90,7 +90,7 @@ function FaleConoscoPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <SiteHeader variant="solid" />
+      <div className="mx-auto w-full max-w-6xl px-4 pt-3"><HomeBrandLink /></div>
 
       <main className={dsx(ds.container, "py-8 md:py-14")}>
         <header className="max-w-2xl">

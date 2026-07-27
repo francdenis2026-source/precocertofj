@@ -63,6 +63,11 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
   const { signOut, loading: signingOut } = useSignOut();
   const navigate = useNavigate();
 
+  // O header global existe apenas na homepage: nas demais seções a navegação
+  // fica a cargo do PageHeader/InternalPageHeader (com HomeBrandLink) e da
+  // BottomTabBar, evitando duas barras empilhadas.
+  if (pathname !== "/") return null;
+
   const shellClass = isOverlay
     ? "absolute inset-x-0 top-0 z-30"
     : "sticky top-0 z-40 border-b border-border bg-card/95 text-foreground shadow-elev-1 backdrop-blur-md dark:bg-background/88";

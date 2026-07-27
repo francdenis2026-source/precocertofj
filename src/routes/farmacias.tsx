@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo } from "react";
 import { AlertTriangle, ArrowLeft, CalendarDays, Clock, MapPin, Phone, Pill, ShieldCheck } from "lucide-react";
-import { SiteHeader } from "@/components/layout/SiteHeader";
+import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import {
   AVISO_LEGAL,
@@ -44,7 +44,7 @@ function FarmaciasPage() {
 
   return (
     <div className="min-h-svh bg-background text-foreground">
-      <SiteHeader />
+      <div className="mx-auto w-full max-w-6xl px-4 pt-3"><HomeBrandLink /></div>
       <main className="mx-auto max-w-5xl px-4 pb-16 pt-6">
         <Link
           to="/estabelecimentos"

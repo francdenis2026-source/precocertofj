@@ -24,7 +24,6 @@ import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 import { useSession } from "@/hooks/useSession";
 import { toast } from "sonner";
 import { EmptyState, LoadingSkeleton, PageShell, PageShellContent } from "@/components/layout";
-import { SiteHeader } from "@/components/layout/SiteHeader";
 import mapaHero from "@/assets/mapa-hero.jpg";
 import { Link } from "@tanstack/react-router";
 import {

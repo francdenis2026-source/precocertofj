@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 
 import { toast } from "sonner";
-import { SiteHeader } from "@/components/layout/SiteHeader";
 
 import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
 import { ds, dsx } from "@/lib/ds";
@@ -124,7 +123,7 @@ const FAQ = [
   },
   {
     q: "Quem pode usar a IA e quantas análises tenho por mês?",
-    a: "O Scan Inteligente (leitura de nota, etiqueta e embalagem por foto) é exclusivo dos planos pagos: 30 análises/mês no Essencial, 150 no Trimestral e Anual e 600 no plano Comércio/Fundador. O plano de degustação não inclui IA. A cota renova todo mês e o saldo aparece no seu perfil.",
+    a: "No plano grátis/degustação você tem 1 análise de IA por mês (uma chamada para montar a cesta), sem possibilidade de ultrapassar. Nos planos pagos: 30 análises/mês no Essencial, 150 no Trimestral e Anual e 600 no plano Comércio/Fundador. A cota renova todo mês e o saldo aparece no seu perfil.",
   },
   {
     q: "E se eu precisar de mais análises?",
@@ -186,10 +185,6 @@ function PlansPage() {
 
   return (
     <div data-planos-shell className="flex h-[calc(100svh-64px)] flex-col overflow-hidden overscroll-none bg-background text-foreground md:h-[100svh]">
-      <div className="shrink-0">
-        <SiteHeader />
-      </div>
-
       <main className="flex min-h-0 flex-1 flex-col">
         {/* Cabeçalho compacto — altura fixa */}
         <section className={dsx(ds.container, "shrink-0 pt-2 pb-2 md:pt-3")}>
@@ -547,7 +542,7 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
     {
       label: "Scan Inteligente (IA) / mês",
       values: {
-        ...val("degustacao", "—"),
+        ...val("degustacao", "1 análise"),
         ...val("mensal", "30 análises"),
         ...val("trimestral", "150 análises"),
         ...val("anual", "150 análises"),
