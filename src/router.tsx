@@ -19,17 +19,34 @@ function DefaultErrorComponent({ error, reset }: { error: Error; reset: () => vo
 }
 
 export const getRouter = () => {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        // Respostas ficam "frescas" por 1 min e são reutilizadas por 30 min:
+        // evita refetch em cada navegação/foco (principal causa de lag).
+        staleTime: 60_000,
+        gcTime: 30 * 60_000,
+        refetchOnWindowFocus: false,
+        refetchOnReconnect: false,
+        retry: 1,
+        placeholderData: <T,>(prev: T) => prev,
+      },
+    },
+  });
 
   const router = createRouter({
     routeTree,
     context: { queryClient },
     scrollRestoration: true,
     defaultPreload: "intent",
-    defaultPreloadStaleTime: 30_000,
+    // O TanStack Query controla a validade dos dados; o router só pré-carrega
+    // o código/rota no hover, deixando a abertura de páginas instantânea.
+    defaultPreloadStaleTime: 0,
+    defaultPreloadDelay: 30,
     defaultPendingMs: 1200,
     defaultPendingMinMs: 0,
     defaultPendingComponent: () => <PageLoader fullScreen />,
+
     defaultErrorComponent: DefaultErrorComponent,
     defaultNotFoundComponent: () => <RouteNotFound />,
 
