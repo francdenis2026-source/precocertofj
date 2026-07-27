@@ -581,6 +581,7 @@ export function PriceSearchBar({
             aria-controls="price-search-suggestions"
             className="h-11 w-full rounded-full border-2 border-brand-navy/20 bg-background pl-9 pr-9 text-[14px] font-medium tracking-wide text-foreground placeholder:font-normal placeholder:text-muted-foreground/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] transition-colors hover:border-brand-gold/60 focus:border-brand-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40 dark:border-brand-gold/25"
             aria-label="Nome do produto"
+            data-dbg={`${showSuggest ? 1 : 0}:${suggestions.length}:${trimmed.length}`}
           />
 
           {query && (
