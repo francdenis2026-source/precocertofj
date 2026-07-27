@@ -495,7 +495,7 @@ function NeighborhoodsPage() {
 
               {/* Detalhe do bairro */}
               <section className="min-w-0 flex min-h-0 flex-col overflow-hidden rounded-lg border border-border bg-card">
-                <header className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-b border-border/70 px-3 py-2">
+                <header className="shrink-0 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-b border-border/70 px-3 py-2">
                   <div className="min-w-0">
                     <h2 className={`truncate ${tc.h2}`}>{active.neighborhood}</h2>
                     {active.city && <p className={tc.meta}>{active.city}</p>}
@@ -506,7 +506,8 @@ function NeighborhoodsPage() {
                   </p>
                 </header>
 
-                <div className="grid min-w-0 gap-0 lg:grid-cols-[minmax(0,1fr)_15rem]">
+                <div className="grid min-h-0 flex-1 min-w-0 gap-0 overflow-y-auto lg:grid-cols-[minmax(0,1fr)_15rem]">
+
                   {/* Mercados */}
                   <ul className="divide-y divide-border/60">
                     {active.establishments.map((est) => (
