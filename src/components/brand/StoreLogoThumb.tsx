@@ -1,4 +1,6 @@
 import { SmartLogoImage } from "@/components/brand/SmartLogo";
+import { StoreLogoMono } from "@/components/brand/StoreLogoMono";
+import { monoLogoSrc } from "@/lib/store-logo-mono";
 import { cn } from "@/lib/utils";
 
 export type StoreLogoThumbProps = {
@@ -12,7 +14,13 @@ export type StoreLogoThumbProps = {
   initialsClassName?: string;
   /** Acima da dobra: carrega imediatamente. Padrão: false (lazy + observer). */
   eager?: boolean;
+  /**
+   * Usa a versão vetorial monocromática (nítida em qualquer tamanho e pintada
+   * com `currentColor`). Cai para a logo colorida quando não existir vetor.
+   */
+  mono?: boolean;
 };
+
 
 /**
  * Miniatura padronizada de logomarca de estabelecimento.
