@@ -27,14 +27,14 @@ export function HomeBrandLink({
         src="/logo-mark.png"
         alt=""
         aria-hidden="true"
-        width={28}
-        height={28}
+        width={40}
+        height={40}
         loading="eager"
         decoding="async"
-        className="h-7 w-7 shrink-0 object-contain"
+        className="h-9 w-9 shrink-0 object-contain sm:h-10 sm:w-10"
       />
       {showWordmark && (
-        <span className="hidden truncate font-['Instrument_Serif',ui-serif,Georgia,serif] text-[17px] font-normal leading-none tracking-[-0.01em] text-foreground sm:inline">
+        <span className="hidden truncate font-['Instrument_Serif',ui-serif,Georgia,serif] text-[21px] font-normal leading-none tracking-[-0.01em] text-foreground sm:inline">
           Preço<span className="text-[var(--pc-gold-ink)]">Certo</span>
         </span>
       )}

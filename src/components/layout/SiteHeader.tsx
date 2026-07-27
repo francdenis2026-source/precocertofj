@@ -104,10 +104,10 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             src="/logo-mark.png"
             alt=""
             aria-hidden="true"
-            width={40}
-            height={40}
+            width={56}
+            height={56}
             className={dsx(
-              "h-10 w-10 shrink-0 object-contain sm:h-9 sm:w-9 md:h-10 md:w-10",
+              "h-12 w-12 shrink-0 object-contain sm:h-12 sm:w-12 md:h-[52px] md:w-[52px] lg:h-14 lg:w-14",
               isOverlay
                 ? "drop-shadow-[0_6px_18px_rgb(0_0_0/0.35)]"
                 : "drop-shadow-[0_2px_6px_rgb(11_22_44/0.22)]",
@@ -118,7 +118,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
             <span
               className={dsx(
                 serif,
-                "truncate text-[24px] font-medium leading-[0.95] tracking-[-0.015em] antialiased sm:text-[23px] md:text-[26px] lg:text-[28px]",
+                "truncate text-[26px] font-medium leading-[0.95] tracking-[-0.015em] antialiased sm:text-[26px] md:text-[29px] lg:text-[31px]",
                 brandTextClass,
                 isOverlay && "[text-shadow:0_1px_2px_rgb(0_0_0/0.35),0_0_1px_rgb(0_0_0/0.25)]",
               )}
@@ -144,13 +144,13 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
 
         {/* Primary nav — desktop */}
         {showNav && (
-          <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Navegação principal">
+          <nav className="hidden items-center gap-1 lg:flex" aria-label="Navegação principal">
             {NAV_LINKS.map((l) => (
               <Link
                 key={l.to}
                 to={l.to}
                 className={dsx(
-                  "rounded-lg px-2.5 py-1.5 text-[14px] font-semibold leading-[1.25] tracking-[-0.005em] antialiased outline-none transition-colors focus-visible:ring-2 xl:px-3 xl:text-[14.5px]",
+                  "rounded-lg px-3 py-2 text-[16px] font-semibold leading-[1.25] tracking-[-0.005em] antialiased outline-none transition-colors focus-visible:ring-2 xl:px-3.5 xl:text-[16.5px]",
                   navClass,
                 )}
                 activeProps={{ className: isOverlay ? "text-brand-soft bg-brand-soft/12" : "text-[var(--pc-gold-ink)] bg-brand/10", "aria-current": "page" } as any}
