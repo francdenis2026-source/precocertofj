@@ -72,6 +72,7 @@ import { Route as AdminRankCheckRouteImport } from './routes/admin_.rank-check'
 import { Route as AdminPromocoesCodigosRouteImport } from './routes/admin_.promocoes-codigos'
 import { Route as AdminPromocoesRouteImport } from './routes/admin_.promocoes'
 import { Route as AdminPrecosRouteImport } from './routes/admin_.precos'
+import { Route as AdminPrecoRapidoRouteImport } from './routes/admin_.preco-rapido'
 import { Route as AdminMetricasRouteImport } from './routes/admin_.metricas'
 import { Route as AdminLoteInserirRouteImport } from './routes/admin_.lote-inserir'
 import { Route as AdminImportacoesRouteImport } from './routes/admin_.importacoes'
@@ -419,6 +420,11 @@ const AdminPrecosRoute = AdminPrecosRouteImport.update({
   path: '/admin/precos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminPrecoRapidoRoute = AdminPrecoRapidoRouteImport.update({
+  id: '/admin_/preco-rapido',
+  path: '/admin/preco-rapido',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminMetricasRoute = AdminMetricasRouteImport.update({
   id: '/admin_/metricas',
   path: '/admin/metricas',
@@ -644,6 +650,7 @@ export interface FileRoutesByFullPath {
   '/admin/importacoes': typeof AdminImportacoesRoute
   '/admin/lote-inserir': typeof AdminLoteInserirRoute
   '/admin/metricas': typeof AdminMetricasRoute
+  '/admin/preco-rapido': typeof AdminPrecoRapidoRoute
   '/admin/precos': typeof AdminPrecosRoute
   '/admin/promocoes': typeof AdminPromocoesRoute
   '/admin/promocoes-codigos': typeof AdminPromocoesCodigosRoute
@@ -740,6 +747,7 @@ export interface FileRoutesByTo {
   '/admin/importacoes': typeof AdminImportacoesRoute
   '/admin/lote-inserir': typeof AdminLoteInserirRoute
   '/admin/metricas': typeof AdminMetricasRoute
+  '/admin/preco-rapido': typeof AdminPrecoRapidoRoute
   '/admin/precos': typeof AdminPrecosRoute
   '/admin/promocoes': typeof AdminPromocoesRoute
   '/admin/promocoes-codigos': typeof AdminPromocoesCodigosRoute
@@ -837,6 +845,7 @@ export interface FileRoutesById {
   '/admin_/importacoes': typeof AdminImportacoesRoute
   '/admin_/lote-inserir': typeof AdminLoteInserirRoute
   '/admin_/metricas': typeof AdminMetricasRoute
+  '/admin_/preco-rapido': typeof AdminPrecoRapidoRoute
   '/admin_/precos': typeof AdminPrecosRoute
   '/admin_/promocoes': typeof AdminPromocoesRoute
   '/admin_/promocoes-codigos': typeof AdminPromocoesCodigosRoute
@@ -935,6 +944,7 @@ export interface FileRouteTypes {
     | '/admin/importacoes'
     | '/admin/lote-inserir'
     | '/admin/metricas'
+    | '/admin/preco-rapido'
     | '/admin/precos'
     | '/admin/promocoes'
     | '/admin/promocoes-codigos'
@@ -1031,6 +1041,7 @@ export interface FileRouteTypes {
     | '/admin/importacoes'
     | '/admin/lote-inserir'
     | '/admin/metricas'
+    | '/admin/preco-rapido'
     | '/admin/precos'
     | '/admin/promocoes'
     | '/admin/promocoes-codigos'
@@ -1127,6 +1138,7 @@ export interface FileRouteTypes {
     | '/admin_/importacoes'
     | '/admin_/lote-inserir'
     | '/admin_/metricas'
+    | '/admin_/preco-rapido'
     | '/admin_/precos'
     | '/admin_/promocoes'
     | '/admin_/promocoes-codigos'
@@ -1223,6 +1235,7 @@ export interface RootRouteChildren {
   AdminImportacoesRoute: typeof AdminImportacoesRoute
   AdminLoteInserirRoute: typeof AdminLoteInserirRoute
   AdminMetricasRoute: typeof AdminMetricasRoute
+  AdminPrecoRapidoRoute: typeof AdminPrecoRapidoRoute
   AdminPrecosRoute: typeof AdminPrecosRoute
   AdminPromocoesRoute: typeof AdminPromocoesRoute
   AdminPromocoesCodigosRoute: typeof AdminPromocoesCodigosRoute
@@ -1694,6 +1707,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPrecosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin_/preco-rapido': {
+      id: '/admin_/preco-rapido'
+      path: '/admin/preco-rapido'
+      fullPath: '/admin/preco-rapido'
+      preLoaderRoute: typeof AdminPrecoRapidoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin_/metricas': {
       id: '/admin_/metricas'
       path: '/admin/metricas'
@@ -2037,6 +2057,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminImportacoesRoute: AdminImportacoesRoute,
   AdminLoteInserirRoute: AdminLoteInserirRoute,
   AdminMetricasRoute: AdminMetricasRoute,
+  AdminPrecoRapidoRoute: AdminPrecoRapidoRoute,
   AdminPrecosRoute: AdminPrecosRoute,
   AdminPromocoesRoute: AdminPromocoesRoute,
   AdminPromocoesCodigosRoute: AdminPromocoesCodigosRoute,
