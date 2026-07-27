@@ -123,7 +123,7 @@ const FAQ = [
   },
   {
     q: "Quem pode usar a IA e quantas análises tenho por mês?",
-    a: "O Scan Inteligente (leitura de nota, etiqueta e embalagem por foto) é exclusivo dos planos pagos: 30 análises/mês no Essencial, 150 no Trimestral e Anual e 600 no plano Comércio/Fundador. O plano de degustação não inclui IA. A cota renova todo mês e o saldo aparece no seu perfil.",
+    a: "No plano grátis/degustação você tem 1 análise de IA por mês (uma chamada para montar a cesta), sem possibilidade de ultrapassar. Nos planos pagos: 30 análises/mês no Essencial, 150 no Trimestral e Anual e 600 no plano Comércio/Fundador. A cota renova todo mês e o saldo aparece no seu perfil.",
   },
   {
     q: "E se eu precisar de mais análises?",
