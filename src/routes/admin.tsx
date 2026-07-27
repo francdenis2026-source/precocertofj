@@ -24,6 +24,7 @@ import { LogoQualityPanel } from "@/components/brand/LogoQualityPanel";
 
 import { claimFirstAdmin, listUsersWithRoles, grantRole, revokeRole, listRoleAuditLog, OWNER_EMAIL, type UserWithRoles, type RoleAuditEntry } from "@/lib/roles.functions";
 import { AppShell } from "@/components/brand/AppShell";
+import { useAdminEntitiesRealtime } from "@/hooks/useAdminEntitiesRealtime";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
 
@@ -2295,6 +2296,8 @@ function EstablishmentsTab() {
   }, [list]);
 
   useEffect(() => { void load(); }, [load]);
+  useAdminEntitiesRealtime(() => { void load(); }, { tables: ["establishments"] });
+
 
   const filtered = useMemo(() => {
     const q = filter.trim().toLowerCase();
@@ -2347,11 +2350,13 @@ function EstablishmentsTab() {
   const onDelete = async (id: string) => {
     const ok = await confirm({
       title: "Remover estabelecimento?",
-      description: "Esta ação não pode ser desfeita.",
-      confirmLabel: "Remover",
+      description:
+        "Todos os produtos, preços capturados, recibos e alertas ligados a este estabelecimento serão removidos permanentemente. Esta ação não pode ser desfeita.",
+      confirmLabel: "Remover tudo",
       destructive: true,
     });
     if (!ok) return;
+
     try {
       await remove({ data: { id } });
       toast.success("Removido");

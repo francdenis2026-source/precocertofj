@@ -94,8 +94,12 @@ import { forceRefreshCatalogImage } from "@/lib/image-import.functions";
 import { PhotoUploadDialog } from "@/components/admin/PhotoUploadDialog";
 import { WebImagePickerDialog } from "@/components/admin/WebImagePickerDialog";
 import { BulkPhotoUpdateDialog } from "@/components/admin/BulkPhotoUpdateDialog";
+import { NewProductDialog } from "@/components/admin/NewProductDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "@tanstack/react-router";
+import { useQueryClient } from "@tanstack/react-query";
+import { useAdminEntitiesRealtime } from "@/hooks/useAdminEntitiesRealtime";
+
 
 
 
@@ -129,6 +133,14 @@ async function fileToDataUrl(file: File): Promise<string> {
 }
 
 function CatalogoAdminPage() {
+  const qc = useQueryClient();
+  useAdminEntitiesRealtime(
+    () => {
+      qc.invalidateQueries({ queryKey: ["admin", "catalog"] });
+      qc.invalidateQueries({ queryKey: ["catalog"] });
+    },
+    { tables: ["product_catalog"] },
+  );
   return (
     <AppShell>
       <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
@@ -144,14 +156,23 @@ function CatalogoAdminPage() {
               </p>
             </div>
           </div>
-          <Button asChild variant="outline" size="sm">
-            <Link to="/admin">Voltar ao Admin</Link>
-          </Button>
+          <div className="flex items-center gap-2">
+            <NewProductDialog
+              onCreated={() => {
+                qc.invalidateQueries({ queryKey: ["admin", "catalog"] });
+                qc.invalidateQueries({ queryKey: ["catalog"] });
+              }}
+            />
+            <Button asChild variant="outline" size="sm">
+              <Link to="/admin">Voltar ao Admin</Link>
+            </Button>
+          </div>
         </header>
 
         <PlatformStatsBadge />
 
         <ScanQuickAction />
+
 
 
 
