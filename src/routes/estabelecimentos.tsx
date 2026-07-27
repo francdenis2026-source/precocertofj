@@ -421,7 +421,8 @@ function EstablishmentsPage() {
 
 
   return (
-    <div className="flex min-h-svh flex-col bg-background pb-24 md:pb-6">
+    <IsolatedPage className="bg-background" contentClassName="flex flex-col">
+
       {/* TOPO — mesma gramática editorial de /buscar: fio dourado, sem painéis pesados */}
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/92 backdrop-blur supports-[backdrop-filter]:bg-background/75">
         <span
