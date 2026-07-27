@@ -34,9 +34,15 @@ import { useSession } from "@/hooks/useSession";
 import homeHeroImg from "@/assets/home-hero.jpg";
 
 /* Conteúdo secundário: só carrega quando o painel "Explorar" abre */
+const importExplorePanel = () => import("@/components/home/ExplorePanel");
 const ExplorePanel = lazy(() =>
-  import("@/components/home/ExplorePanel").then((m) => ({ default: m.ExplorePanel })),
+  importExplorePanel().then((m) => ({ default: m.ExplorePanel })),
 );
+/* Pré-carrega o chunk no hover/foco para o painel já abrir pronto (sem flash). */
+const preloadExplorePanel = () => {
+  void importExplorePanel();
+};
+
 
 export const Route = createFileRoute("/")({
   loader: async ({ context }) => {
