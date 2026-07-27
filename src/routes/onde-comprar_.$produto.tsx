@@ -108,27 +108,28 @@ function ProdutoComparacaoPage() {
 
             {/* Cabeçalho + destaque do mais barato */}
             <section className="pc-surface-2 p-3">
-              <h1 className={cn(tc.h2, "mb-0.5")}>{d.productName}</h1>
-              <p className={cn(tc.meta, "mb-2")}>
+              <p className={cn(tc.eyebrow, "mb-1")}>Produto</p>
+              <h1 className={cn(tc.sectionTitle, "mb-0.5")}>{d.productName}</h1>
+              <p className={cn(tc.metaMuted, "mb-2")}>
                 {d.ranking.length} {d.ranking.length === 1 ? "loja" : "lojas"} • média {brl(d.avgPrice)} • maior{" "}
                 {brl(d.maxPrice)}
                 {d.category ? ` • ${d.category}` : ""}
               </p>
 
-              <div className="flex flex-wrap items-center gap-2 rounded-lg border border-emerald-500/50 bg-emerald-500/5 p-2.5">
-                <Crown className="h-5 w-5 shrink-0 text-emerald-600" />
+              <div className="pc-surface-3 flex flex-wrap items-center gap-2 p-2.5">
+                <Crown className="h-5 w-5 shrink-0 text-[var(--pc-gold-ink)]" />
                 <div className="min-w-0 flex-1">
-                  <p className={cn(tc.meta, "font-semibold uppercase tracking-wide text-emerald-700")}>
+                  <p className={cn(tc.eyebrow)}>
                     Menor preço da plataforma
                   </p>
                   <p className={cn(tc.itemTitle, "truncate")}>
-                    {d.ranking[0].storeName}
+                    <span className={cn(tc.storeName)}>{d.ranking[0].storeName}</span>
                     {d.ranking[0].neighborhood ? ` — ${d.ranking[0].neighborhood}` : ""}
                   </p>
                 </div>
-                <p className="text-2xl font-bold text-emerald-600">{brl(d.minPrice)}</p>
+                <p className={cn(tc.dataPrimary, "text-[var(--pc-gold-ink)]")}>{brl(d.minPrice)}</p>
                 {d.savingsPct > 0 && (
-                  <span className="rounded-full bg-emerald-600/10 px-2 py-0.5 text-[12px] font-semibold text-emerald-700">
+                  <span className="rounded-full bg-[var(--pc-gold-ink)]/10 px-2 py-0.5 text-[12px] font-semibold text-[var(--pc-gold-ink)]">
                     até {d.savingsPct}% de economia
                   </span>
                 )}
