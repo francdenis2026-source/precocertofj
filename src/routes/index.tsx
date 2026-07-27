@@ -690,25 +690,34 @@ function HomePage() {
                 </SheetTrigger>
                 <SheetContent
                   side="bottom"
-                  className="max-h-[92dvh] overflow-y-auto border-t-0 px-4 pb-4 pt-3 sm:px-6 sm:pb-5 before:fixed before:inset-0 before:-z-10 before:content-[''] before:bg-[var(--pc-home-explore-bg)]"
+                  className="flex h-[100dvh] max-h-[100dvh] flex-col overflow-hidden border-t-0 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-4 sm:px-6 before:fixed before:inset-0 before:-z-10 before:content-[''] before:bg-[var(--pc-home-explore-bg)]"
                   style={{
                     background: "var(--pc-home-explore-bg)",
                     color: "var(--pc-home-onhero-fg)",
                   }}
                 >
-
-
-                  <SheetHeader className="mx-auto mb-3 w-full max-w-6xl text-left">
+                  <SheetHeader
+                    className="mx-auto w-full max-w-6xl shrink-0 space-y-0 border-b pb-2 text-left"
+                    style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}
+                  >
+                    <p
+                      className="text-[10px] font-semibold uppercase tracking-[0.22em]"
+                      style={{ color: "var(--pc-home-onhero-gold)" }}
+                    >
+                      Guia rápido
+                    </p>
                     <SheetTitle
-                      className="font-serif text-[19px] font-normal leading-tight"
+                      className="font-serif text-[clamp(18px,2.2vw,24px)] font-normal leading-tight"
                       style={{ color: "var(--pc-home-onhero-fg)" }}
                     >
                       Explorar o PreçoCerto
                     </SheetTitle>
                   </SheetHeader>
-                  <Suspense fallback={<div className="h-40 animate-pulse rounded-lg bg-muted/20" />}>
-                    <ExplorePanel onNavigate={() => setExploreOpen(false)} />
-                  </Suspense>
+                  <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col overflow-y-auto py-3">
+                    <Suspense fallback={<div className="h-40 animate-pulse rounded-lg bg-muted/20" />}>
+                      <ExplorePanel onNavigate={() => setExploreOpen(false)} />
+                    </Suspense>
+                  </div>
                 </SheetContent>
               </Sheet>
             </div>

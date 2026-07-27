@@ -106,8 +106,8 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
   const fetchLive = useServerFn(getLiveTickerStats);
 
   const { data: recent } = useQuery({
-    queryKey: ["home", "recent-products", 5],
-    queryFn: () => fetchRecent({ data: { limit: 5 } }),
+    queryKey: ["home", "recent-products", 10],
+    queryFn: () => fetchRecent({ data: { limit: 10 } }),
     staleTime: 60_000,
   });
   const { data: live } = useQuery({
@@ -123,12 +123,12 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
   const glass = "var(--pc-home-onhero-glass)";
   const gold = "var(--pc-home-onhero-gold)";
 
-  const items = (recent ?? []).slice(0, 5);
+  const items = (recent ?? []).slice(0, 10);
 
   return (
-    <div className="mx-auto grid w-full max-w-6xl gap-x-6 gap-y-4 lg:grid-cols-12">
+    <div className="grid h-full w-full flex-1 content-start gap-x-8 gap-y-3 lg:gap-y-5 lg:grid-cols-12 lg:grid-rows-[minmax(0,1fr)_auto]">
       {/* ---------- Últimos preços ---------- */}
-      <section aria-labelledby="explore-prices" className="min-w-0 lg:col-span-7">
+      <section aria-labelledby="explore-prices" className="flex min-w-0 flex-col lg:col-span-7">
         <SectionHead
           id="explore-prices"
           kicker="Ao vivo"
@@ -152,9 +152,9 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
             : ""}
         </p>
 
-        <ul className={`${BODY_GAP} divide-y`} style={{ borderColor: line }}>
+        <ul className={`${BODY_GAP} min-h-0 flex-1 divide-y overflow-y-auto no-scrollbar [&>li:nth-child(n+5)]:hidden lg:[&>li:nth-child(n+5)]:block`} style={{ borderColor: line, maskImage: "linear-gradient(to bottom, #000 92%, transparent)", WebkitMaskImage: "linear-gradient(to bottom, #000 92%, transparent)" }}>
           {items.length === 0
-            ? Array.from({ length: 5 }).map((_, i) => (
+            ? Array.from({ length: 7 }).map((_, i) => (
                 <li key={i} className="flex items-center gap-3 py-2">
                   <div className="h-3 flex-1 animate-pulse rounded" style={{ background: glass }} />
                   <div className="h-3 w-16 animate-pulse rounded" style={{ background: glass }} />
@@ -190,7 +190,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
       </section>
 
       {/* ---------- Benefícios + prova social ---------- */}
-      <div className="min-w-0 space-y-4 lg:col-span-5">
+      <div className="flex min-w-0 flex-col gap-3 lg:col-span-5 lg:gap-4">
         <section aria-labelledby="explore-benefits">
           <SectionHead id="explore-benefits" kicker="Benefícios" title="Por que usar" />
           <ul className={`${BODY_GAP} grid grid-cols-2 gap-x-4 gap-y-2`}>
@@ -225,7 +225,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
               </span>
             }
           />
-          <ul className={`${BODY_GAP} space-y-2`}>
+          <ul className={`${BODY_GAP} space-y-2 [&>li:nth-child(n+2)]:hidden sm:[&>li:nth-child(n+2)]:flex`}>
             {QUOTES.map((t) => (
               <li key={t.name} className="flex min-w-0 gap-2.5">
                 <span
@@ -248,12 +248,33 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
           </ul>
         </section>
 
+        <section
+          aria-label="Números da plataforma"
+          className="mt-auto hidden grid-cols-3 gap-3 border-t pt-2.5 lg:grid"
+          style={{ borderColor: line }}
+        >
+          {[
+            ...(live?.checkedToday ? [{ label: "Conferidos hoje", value: String(live.checkedToday) }] : []),
+            { label: "Últimos 7 dias", value: String(live?.totalRecent ?? 0) },
+            { label: "Avaliação", value: PLATFORM_RATING.value.toLocaleString("pt-BR", { minimumFractionDigits: 1 }) },
+            { label: "Mercados", value: "6+" },
+          ].slice(0, 3).map((s) => (
+            <div key={s.label} className="min-w-0">
+              <p className={`${tc.num} font-semibold`} style={{ color: gold }}>
+                {s.value}
+              </p>
+              <p className={`${tc.meta} truncate`} style={{ color: fg70 }}>
+                {s.label}
+              </p>
+            </div>
+          ))}
+        </section>
       </div>
 
       {/* ---------- Atalhos ---------- */}
       <nav
         aria-label="Atalhos do PreçoCerto"
-        className="flex flex-wrap items-center gap-x-4 gap-y-1.5 border-t pt-2 lg:col-span-12"
+        className="mt-auto flex flex-wrap items-center gap-x-5 gap-y-1.5 border-t pt-2.5 lg:col-span-12"
         style={{ borderColor: line }}
       >
         {LINKS.map((l) => (
