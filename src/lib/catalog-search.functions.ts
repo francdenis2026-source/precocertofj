@@ -76,6 +76,8 @@ type ScanRow = {
   price_captured: number | string | null;
   market_name: string | null;
   created_at: string;
+  establishment_id: string | null;
+  unit: string | null;
 };
 
 function normalizeStr(s: string): string {
