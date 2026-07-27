@@ -542,7 +542,7 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
     {
       label: "Scan Inteligente (IA) / mês",
       values: {
-        ...val("degustacao", "—"),
+        ...val("degustacao", "1 análise"),
         ...val("mensal", "30 análises"),
         ...val("trimestral", "150 análises"),
         ...val("anual", "150 análises"),
