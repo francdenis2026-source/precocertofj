@@ -525,42 +525,52 @@ function EstablishmentsPage() {
           </div>
 
           {data && (
-            <dl className="mt-2.5 flex flex-wrap items-stretch gap-x-5 gap-y-1.5 border-t border-border/60 pt-2 md:gap-x-7">
-              <HeroMetric
-                icon={Store}
-                label="Comércios"
-                value={String(data.totalEstablishments)}
-                hint="Ver rede"
-                onClick={() => setMetricDetail("establishments")}
-              />
-              <HeroMetric
-                icon={Package}
-                label="Produtos"
-                value={data.totalProducts.toLocaleString("pt-BR")}
-                hint="Ver categorias"
-                onClick={() => setMetricDetail("products")}
-              />
-              <HeroMetric
-                icon={PiggyBank}
-                label="Maior economia"
-                value={
-                  data.totalMaxSavings > 0
-                    ? `R$ ${data.totalMaxSavings.toFixed(2).replace(".", ",")}`
-                    : "—"
-                }
-                hint="Onde economizar"
-                onClick={() => setMetricDetail("savings")}
-              />
-              <HeroMetric
-                icon={Radio}
-                label="Atualização"
-                value="ao vivo"
-                live
-                hint="Como funciona"
-                onClick={() => setMetricDetail("live")}
-              />
-            </dl>
+            <div className="mt-2.5 border-t border-border/60 pt-2">
+              <StatCellGroup
+                label={`Resumo: ${data.totalEstablishments} comércios e ${data.totalProducts.toLocaleString("pt-BR")} produtos`}
+                className="w-full flex-wrap sm:w-auto"
+              >
+                <HeroMetric
+                  icon={Store}
+                  label="Comércios"
+                  value={String(data.totalEstablishments)}
+                  accent
+                  hint="Ver rede"
+                  onClick={() => setMetricDetail("establishments")}
+                />
+                <StatCellDivider />
+                <HeroMetric
+                  icon={Package}
+                  label="Produtos"
+                  value={data.totalProducts.toLocaleString("pt-BR")}
+                  hint="Ver categorias"
+                  onClick={() => setMetricDetail("products")}
+                />
+                <StatCellDivider />
+                <HeroMetric
+                  icon={PiggyBank}
+                  label="Maior economia"
+                  value={
+                    data.totalMaxSavings > 0
+                      ? `R$ ${data.totalMaxSavings.toFixed(2).replace(".", ",")}`
+                      : "—"
+                  }
+                  hint="Onde economizar"
+                  onClick={() => setMetricDetail("savings")}
+                />
+                <StatCellDivider />
+                <HeroMetric
+                  icon={Radio}
+                  label="Atualização"
+                  value="ao vivo"
+                  live
+                  hint="Como funciona"
+                  onClick={() => setMetricDetail("live")}
+                />
+              </StatCellGroup>
+            </div>
           )}
+
         </div>
       </section>
 
