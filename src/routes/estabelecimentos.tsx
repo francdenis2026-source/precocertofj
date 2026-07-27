@@ -52,6 +52,7 @@ import {
 import { useRef } from "react";
 import { StoreLogoThumb } from "@/components/brand/StoreLogoThumb";
 import { tc } from "@/lib/typeclear";
+import { cn } from "@/lib/utils";
 
 
 import {
@@ -606,14 +607,15 @@ function EstablishmentsPage() {
                   key={e.id}
                   to="/estabelecimento/$slug"
                   params={{ slug: slugifyEstablishment(e.name) }}
-                  className={`group relative flex w-[236px] shrink-0 snap-start items-center gap-3 overflow-hidden rounded-lg border bg-card p-2 pl-3 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold ${
-                    idx === 0 ? "border-brand-gold/60" : "border-border/70 hover:border-brand-gold/60"
-                  }`}
+                  className={cn(
+                    "group relative flex w-[236px] shrink-0 snap-start items-center gap-3 overflow-hidden p-2 pl-3",
+                    idx === 0 ? "pc-surface-3-interactive" : "pc-surface-2-interactive",
+                  )}
                 >
                   {idx === 0 && (
                     <span
                       aria-hidden
-                      className="absolute inset-y-0 left-0 w-[3px] bg-brand-gold"
+                      className="absolute inset-y-0 left-0 w-[3px] bg-[var(--pc-gold-ink)]"
                     />
                   )}
                   <StoreLogoThumb
@@ -869,7 +871,7 @@ function EstablishmentsPage() {
                     </button>
                   </div>
                 ) : view === "list" ? (
-                <div className="overflow-x-auto">
+                <div className="pc-surface-1 overflow-x-auto">
                   <div className="min-w-[680px]">
                     {/* Cabeçalho tabular — colunas clicáveis para ordenar */}
                     <div className={`${LIST_GRID} border-b border-border/60 bg-muted/40 px-3 py-2 md:px-4 ${tc.tableHead} [&>*]:truncate`}>
@@ -920,7 +922,13 @@ function EstablishmentsPage() {
                         return (
                           <li
                             key={e.id}
-                            className={`${LIST_GRID} group px-3 py-2 transition-colors hover:bg-muted/50 md:px-4`}
+                            className={cn(
+                              LIST_GRID,
+                              "group px-3 py-2 transition-colors md:px-4",
+                              idx === 0
+                                ? "bg-[color-mix(in_oklab,var(--pc-gold-ink)_10%,transparent)] border-l-2 border-l-[var(--pc-gold-ink)]"
+                                : "hover:bg-muted/50",
+                            )}
                           >
                             <span className={`text-right font-bold text-foreground/60 ${tc.num}`}>
                               {String(idx + 1).padStart(2, "0")}

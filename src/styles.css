@@ -4175,3 +4175,65 @@ html[data-admin-boot="1"] body {
 /* Respiro vertical padronizado entre blocos editoriais. */
 @utility pc-section-gap { margin-block: clamp(20px, 3vw, 40px); }
 @utility pc-section-gap-sm { margin-block: clamp(14px, 2vw, 24px); }
+
+/* ============= Focus & interactive polish for surfaces =============
+   Consistent WCAG AA gold focus ring + interactive surface variants that
+   preserve the hierarchy on hover without shifting layout. */
+@utility pc-focus {
+  outline: none;
+}
+.pc-focus:focus-visible,
+.pc-surface-1:focus-visible,
+.pc-surface-2:focus-visible,
+.pc-surface-3:focus-visible,
+[data-pc-surface]:focus-visible {
+  outline: 2px solid var(--pc-gold-ink);
+  outline-offset: 2px;
+  box-shadow:
+    0 0 0 4px color-mix(in oklab, var(--pc-gold-ink) 22%, transparent),
+    var(--pc-surface-2-shadow);
+}
+@utility pc-surface-2-interactive {
+  background: var(--pc-surface-2);
+  border: 1px solid var(--pc-surface-2-border);
+  border-radius: 14px;
+  box-shadow: var(--pc-surface-2-shadow);
+  transition:
+    transform 160ms ease,
+    box-shadow 200ms ease,
+    border-color 160ms ease;
+}
+.pc-surface-2-interactive:hover {
+  border-color: color-mix(in oklab, var(--pc-gold-ink) 45%, var(--pc-surface-2-border));
+  transform: translateY(-1px);
+  box-shadow:
+    0 2px 4px rgb(8 18 42 / 0.06),
+    0 14px 32px -14px rgb(8 18 42 / 0.18);
+}
+@utility pc-surface-3-interactive {
+  background: var(--pc-surface-3);
+  border: 1px solid var(--pc-surface-3-border);
+  border-radius: 16px;
+  box-shadow: var(--pc-surface-3-shadow);
+  transition:
+    transform 160ms ease,
+    box-shadow 200ms ease,
+    border-color 160ms ease;
+}
+.pc-surface-3-interactive:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 2px 4px rgb(107 74 16 / 0.14),
+    0 18px 40px -14px rgb(107 74 16 / 0.34);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pc-surface-2-interactive,
+  .pc-surface-3-interactive { transition: none; }
+  .pc-surface-2-interactive:hover,
+  .pc-surface-3-interactive:hover { transform: none; }
+}
+
+/* Ensure body text on the gold spotlight keeps AA on both themes */
+.pc-surface-3 { color: var(--pc-home-navy); }
+.dark .pc-surface-3 { color: #fbf6e6; }

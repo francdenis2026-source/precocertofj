@@ -31,6 +31,7 @@ import {
 } from "lucide-react";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { tc } from "@/lib/typeclear";
 import { StoreBadge } from "@/components/brand/StoreBadge";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
 import { getCategoryHub } from "@/lib/category-hub.functions";
@@ -376,67 +377,84 @@ function CategoryPage() {
               {view === "grid" ? (
 
                 <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                  {visible.map((p) => (
+                  {visible.map((p, idx) => {
+                    const isTop = idx === 0 && safePage === 1;
+                    return (
                     <li key={p.key}>
                       <button
                         type="button"
                         onClick={() => openQuickView(p.name)}
-                        className="flex h-full w-full items-start gap-2.5 rounded-lg border border-border bg-card p-2.5 text-left transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                        className={cn(
+                          "flex h-full w-full items-start gap-2.5 p-2.5 text-left",
+                          isTop ? "pc-surface-3-interactive" : "pc-surface-2-interactive",
+                        )}
                       >
                         <StoreBadge name={p.cheapestStore} logoUrl={p.cheapestLogo} size="xs" />
                         <span className="min-w-0 flex-1">
+                          {isTop && <span className={cn(tc.eyebrow, "mb-0.5 block")}>Menor oferta</span>}
                           <span className="line-clamp-2 text-[13px] font-semibold leading-tight">
                             {p.name}
                           </span>
-                          <span className="mt-0.5 block truncate text-[11px] text-muted-foreground">
+                          <span className={cn("mt-0.5 block truncate", tc.storeNameTight)}>
                             {p.cheapestStore}
                             {p.storeCount > 1 ? ` · ${p.storeCount} mercados` : ""}
                           </span>
-                          <span className="mt-1 block text-[13.5px] font-bold tabular-nums text-foreground">
+                          <span className={cn("mt-1 block", isTop ? tc.dataPrimary : "text-[13.5px] font-bold tabular-nums text-foreground")}>
                             {brl(p.minPrice)}
                           </span>
                         </span>
                       </button>
                     </li>
-                  ))}
+                    );
+                  })}
                 </ul>
               ) : (
-              <ul className="mt-2 divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
-                {visible.map((p) => (
+              <ul className="mt-2 space-y-1.5">
+                {visible.map((p, idx) => {
+                  const isTop = idx === 0 && safePage === 1;
+                  return (
                   <li key={p.key}>
                     <button
                       type="button"
                       onClick={() => openQuickView(p.name)}
                       aria-label={`Ver detalhes de ${p.name}`}
-                      className="flex w-full items-center gap-2.5 px-2.5 py-2 text-left transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
+                      className={cn(
+                        "flex w-full items-center gap-2.5 px-2.5 py-2 text-left",
+                        isTop ? "pc-surface-3-interactive" : "pc-surface-2-interactive",
+                      )}
                     >
                       <StoreBadge name={p.cheapestStore} logoUrl={p.cheapestLogo} size="xs" />
                       <span className="min-w-0 flex-1">
+                        {isTop && <span className={cn(tc.eyebrow, "mb-0.5 block")}>Menor oferta</span>}
                         <span className="block truncate text-[13px] font-semibold leading-tight">
                           {p.name}
                         </span>
-                        <span className="block truncate text-[11px] text-muted-foreground">
+                        <span className={cn("block truncate", tc.storeNameTight)}>
                           {p.cheapestStore}
                           {p.storeCount > 1 ? ` · ${p.storeCount} mercados` : ""}
                           {p.unit ? ` · ${p.unit}` : ""}
                         </span>
                       </span>
                       <span className="shrink-0 text-right">
-                        <span className="block text-[13.5px] font-bold tabular-nums text-foreground">
+                        <span className={cn("block", isTop ? tc.dataPrimary : "text-[13.5px] font-bold tabular-nums text-foreground")}>
                           {brl(p.minPrice)}
                         </span>
                         {p.storeCount > 1 && p.maxPrice > p.minPrice && (
-                          <span className="block text-[11px] tabular-nums text-muted-foreground">
+                          <span className={cn("block", tc.metaMuted)}>
                             até {brl(p.maxPrice)}
                           </span>
                         )}
                       </span>
-                      <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full border border-border text-brand-gold">
+                      <span className={cn(
+                        "grid h-7 w-7 shrink-0 place-items-center rounded-full",
+                        isTop ? "text-[var(--pc-gold-ink)]" : "border border-[var(--pc-surface-2-border)] text-brand-gold",
+                      )}>
                         <ArrowRight className="h-3.5 w-3.5" aria-hidden />
                       </span>
                     </button>
                   </li>
-                ))}
+                  );
+                })}
               </ul>
               )}
 
@@ -843,10 +861,10 @@ function SectionTitle({
 }) {
   return (
     <div className="flex items-baseline justify-between gap-3">
-      <h2 className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-foreground">
-        <Icon className="h-3.5 w-3.5 text-brand-gold" aria-hidden /> {title}
+      <h2 className={cn("inline-flex items-center gap-1.5", tc.eyebrow)}>
+        <Icon className="h-3.5 w-3.5 text-[var(--pc-gold-ink)]" aria-hidden /> {title}
       </h2>
-      {hint && <span className="text-[11px] text-muted-foreground">{hint}</span>}
+      {hint && <span className={tc.metaMuted}>{hint}</span>}
     </div>
   );
 }
@@ -869,7 +887,7 @@ function EmptyCard({
   action?: { label: string; onClick: () => void };
 }) {
   return (
-    <div className="mt-2 rounded-lg border border-dashed border-border bg-card px-4 py-6 text-center">
+    <div className="pc-surface-1 mt-2 border-dashed px-4 py-6 text-center">
       <p className="text-[12.5px] text-muted-foreground">{text}</p>
       {action && (
         <button
