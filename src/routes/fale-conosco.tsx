@@ -1,12 +1,26 @@
 import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { Mail, MessageSquare, Send, Copy, Check, ShieldCheck } from "lucide-react";
+import {
+  Mail,
+  MessageSquare,
+  Send,
+  Copy,
+  Check,
+  ShieldCheck,
+  Phone,
+  Clock,
+  Loader2,
+} from "lucide-react";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { dsx } from "@/lib/ds";
 import { toast } from "sonner";
 
 const CONTACT_EMAIL = "precocerto-fj@proton.me";
+const CONTACT_PHONE = "(68) 99203-1340";
+const CONTACT_PHONE_RAW = "5568992031340";
+const CONTACT_HOURS = "Seg a Sex · 8h às 18h";
+
 
 export const Route = createFileRoute("/fale-conosco")({
   head: () => ({
