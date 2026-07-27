@@ -27,6 +27,7 @@ import { useTeaserQuota } from "@/hooks/use-teaser-quota";
 import { QuickFilterBar } from "@/components/search/QuickFilterBar";
 import { ErrorState, EmptyState as FeedbackEmptyState, LoadingGrid, RouteError } from "@/components/feedback";
 import { RankingSkeleton, FadeSwap } from "@/components/layout/LoadingSkeleton";
+import { usePerceivedPerfTelemetry } from "@/lib/perf-telemetry";
 
 import { ProductImage } from "@/components/product/ProductImage";
 import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
