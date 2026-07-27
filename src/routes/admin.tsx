@@ -264,6 +264,13 @@ function AdminPage() {
           <Kpi icon={<Mail className="h-3.5 w-3.5" />} label="E-mails enviados" value={kpis.emails.toString()} />
         </div>
 
+        {/* ---------- Busca global ---------- */}
+        <AdminGlobalSearch />
+
+        {/* ---------- Gráficos comparativos ---------- */}
+        <AdminInsightsPanel />
+
+
         {/* ---------- Atalhos agrupados ---------- */}
         <nav aria-label="Atalhos do painel" className="grid gap-2.5 md:grid-cols-2 xl:grid-cols-4">
           {ADMIN_SHORTCUT_GROUPS.map((group) => (
