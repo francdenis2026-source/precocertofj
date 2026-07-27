@@ -428,7 +428,7 @@ function HomePage() {
                               color: "#0f172a",
                             }}
                           >
-                            <Search className="h-3.5 w-3.5 shrink-0" style={{ color: P.goldSoft }} strokeWidth={2.4} />
+                            <Search className="h-3.5 w-3.5 shrink-0" style={{ color: P.navy }} strokeWidth={2.4} />
                             <span className="flex-1 truncate text-[14px] font-semibold">{s.name}</span>
                             {s.price != null && (
                               <span
