@@ -33,6 +33,15 @@ export type RecentUpdatePoint = {
   verified: number;
 };
 
+export type AdminInsightsFilters = {
+  /** ISO yyyy-mm-dd (inclusivo). */
+  from: string;
+  /** ISO yyyy-mm-dd (inclusivo). */
+  to: string;
+  /** Slugs de categoria; vazio = todas. */
+  categories: string[];
+};
+
 export type AdminInsights = {
   trend: TrendPoint[];
   coverage: CategoryCoverage[];
@@ -44,8 +53,11 @@ export type AdminInsights = {
     verified: number;
     last24h: number;
   };
+  range: { from: string; to: string; days: number };
+  categories: string[];
   generatedAt: string;
 };
+
 
 type ScanRow = {
   id: string;
