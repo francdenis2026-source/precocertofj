@@ -26,7 +26,7 @@ SLUGS = [
     "ultra",
     "vanderley",
 ]
-MAX_COLORS = 6
+MAX_COLORS = 5
 MIN_LAYER_PIXELS = 40
 
 
@@ -52,21 +52,21 @@ def lighten_for_dark(rgb: tuple[int, int, int]) -> tuple[int, int, int]:
 
 def trace(mask: np.ndarray) -> str:
     bmp = potrace.Bitmap(mask.astype(bool))
-    path = bmp.trace(turdsize=2, alphamax=1.0, opticurve=1, opttolerance=0.2)
+    path = bmp.trace(turdsize=6, alphamax=1.0, opticurve=1, opttolerance=0.8)
     out: list[str] = []
     for curve in path:
         sp = curve.start_point; sx, sy = sp.x, sp.y
-        d = [f"M{sx:.2f} {sy:.2f}"]
+        d = [f"M{sx:.1f} {sy:.1f}"]
         for seg in curve:
             if seg.is_corner:
                 cx, cy = seg.c.x, seg.c.y
                 ex, ey = seg.end_point.x, seg.end_point.y
-                d.append(f"L{cx:.2f} {cy:.2f}L{ex:.2f} {ey:.2f}")
+                d.append(f"L{cx:.1f} {cy:.1f}L{ex:.1f} {ey:.1f}")
             else:
                 c1x, c1y = seg.c1.x, seg.c1.y
                 c2x, c2y = seg.c2.x, seg.c2.y
                 ex, ey = seg.end_point.x, seg.end_point.y
-                d.append(f"C{c1x:.2f} {c1y:.2f} {c2x:.2f} {c2y:.2f} {ex:.2f} {ey:.2f}")
+                d.append(f"C{c1x:.1f} {c1y:.1f} {c2x:.1f} {c2y:.1f} {ex:.1f} {ey:.1f}")
         d.append("Z")
         out.append("".join(d))
     return " ".join(out)
@@ -76,7 +76,7 @@ def build(slug: str) -> None:
     src = LOGOS / f"{slug}-v6.webp"
     img = Image.open(src).convert("RGBA")
     w, h = img.size
-    scale = 512 / max(w, h)
+    scale = 256 / max(w, h)
     if scale < 1:
         img = img.resize((round(w * scale), round(h * scale)), Image.LANCZOS)
         w, h = img.size
