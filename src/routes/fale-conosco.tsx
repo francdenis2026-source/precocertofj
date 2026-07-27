@@ -58,11 +58,48 @@ const ASSUNTOS: Array<{ value: Assunto; label: string }> = [
   { value: "outro", label: "Outro" },
 ];
 
-const fieldClass =
-  "mt-0.5 w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-[13.5px] leading-tight sm:mt-1 sm:px-3 sm:py-2 sm:text-[14px] text-foreground outline-none transition placeholder:text-muted-foreground focus:border-brand focus:ring-2 focus:ring-brand/25";
+const fieldBase =
+  "mt-0.5 w-full rounded-lg border bg-background px-2.5 py-1.5 text-[13.5px] leading-tight sm:mt-1 sm:px-3 sm:py-2 sm:text-[14px] text-foreground outline-none transition placeholder:text-muted-foreground pc-focus";
 
-const labelClass =
-  "text-[10.5px] font-bold uppercase tracking-[0.16em] text-muted-foreground";
+const fieldClass = cn(
+  fieldBase,
+  "border-border focus:border-brand focus:ring-2 focus:ring-brand/25",
+);
+
+const fieldErrorClass = cn(
+  fieldBase,
+  "border-destructive/70 focus:border-destructive focus:ring-2 focus:ring-destructive/25",
+);
+
+const labelClass = cn(
+  tc.eyebrow,
+  "text-muted-foreground tracking-[0.16em]",
+);
+
+const contactSchema = z.object({
+  nome: z
+    .string()
+    .trim()
+    .min(2, "Informe seu nome (mínimo 2 caracteres).")
+    .max(80, "Nome muito longo (máximo 80 caracteres)."),
+  email: z
+    .string()
+    .trim()
+    .max(120, "E-mail muito longo.")
+    .refine(
+      (v) => v.length === 0 || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
+      "E-mail em formato inválido.",
+    )
+    .optional()
+    .or(z.literal("")),
+  mensagem: z
+    .string()
+    .trim()
+    .min(10, "Mensagem muito curta (mínimo 10 caracteres).")
+    .max(2000, "Mensagem muito longa (máximo 2000 caracteres)."),
+});
+
+type FormErrors = Partial<Record<"nome" | "email" | "mensagem", string>>;
 
 function FaleConoscoPage() {
   const [nome, setNome] = useState("");
@@ -71,8 +108,29 @@ function FaleConoscoPage() {
   const [mensagem, setMensagem] = useState("");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
 
-  const canSubmit = nome.trim().length >= 2 && mensagem.trim().length >= 10;
+  const nomeId = useId();
+  const emailId = useId();
+  const mensagemId = useId();
+  const errNomeId = `${nomeId}-err`;
+  const errEmailId = `${emailId}-err`;
+  const errMsgId = `${mensagemId}-err`;
+
+  const validate = (): FormErrors => {
+    const result = contactSchema.safeParse({ nome, email, mensagem });
+    if (result.success) return {};
+    const next: FormErrors = {};
+    for (const issue of result.error.issues) {
+      const key = issue.path[0] as keyof FormErrors;
+      if (key && !next[key]) next[key] = issue.message;
+    }
+    return next;
+  };
+
+  const canSubmit =
+    nome.trim().length >= 2 && mensagem.trim().length >= 10 && !sending;
 
   const mailtoHref = useMemo(() => {
     const subjectLabel = ASSUNTOS.find((a) => a.value === assunto)?.label ?? "Contato";
@@ -93,13 +151,24 @@ function FaleConoscoPage() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (sending) return;
-    if (!canSubmit) {
-      toast.error("Preencha nome e uma mensagem com pelo menos 10 caracteres.");
+    const next = validate();
+    setTouched({ nome: true, email: true, mensagem: true });
+    setErrors(next);
+    if (Object.keys(next).length > 0) {
+      toast.error("Revise os campos destacados.", {
+        description: Object.values(next)[0],
+      });
+      // Focus first invalid field
+      const firstKey = Object.keys(next)[0];
+      const el = document.getElementById(
+        firstKey === "nome" ? nomeId : firstKey === "email" ? emailId : mensagemId,
+      ) as HTMLElement | null;
+      el?.focus();
       return;
     }
     setSending(true);
     try {
-      await new Promise((r) => setTimeout(r, 350));
+      await new Promise((r) => setTimeout(r, 300));
       window.location.href = mailtoHref;
       toast.success("Abrindo seu app de e-mail…", {
         description: `Se nada abrir, escreva direto para ${CONTACT_EMAIL}.`,
@@ -123,6 +192,8 @@ function FaleConoscoPage() {
       toast.error(`Não foi possível copiar. Use: ${value}`);
     }
   };
+
+  const showErr = (k: keyof FormErrors) => touched[k] && errors[k];
 
 
   return (
