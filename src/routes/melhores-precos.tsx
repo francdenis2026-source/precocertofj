@@ -27,6 +27,7 @@ import { useTeaserQuota } from "@/hooks/use-teaser-quota";
 import { QuickFilterBar } from "@/components/search/QuickFilterBar";
 import { ErrorState, EmptyState as FeedbackEmptyState, LoadingGrid, RouteError } from "@/components/feedback";
 import { RankingSkeleton, FadeSwap } from "@/components/layout/LoadingSkeleton";
+import { usePerceivedPerfTelemetry } from "@/lib/perf-telemetry";
 
 import { ProductImage } from "@/components/product/ProductImage";
 import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
@@ -422,6 +423,13 @@ function MelhoresPrecosPage() {
     });
 
   }, [allRows, activeCategory, activeType, sortBy, minStores, minPrice, maxPrice, qNorm, estabsMap]);
+
+  usePerceivedPerfTelemetry({
+    route: "/melhores-precos",
+    isLoading,
+    isReady: !isLoading && !error && rows.length > 0,
+    count: rows.length,
+  });
 
   const totalPages = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
   const currentPage = Math.min(page, totalPages);
@@ -1485,7 +1493,24 @@ function EmptyState({ hasCategory }: { hasCategory: boolean }) {
     <FeedbackEmptyState
       icon={PackageSearch}
       title={hasCategory ? "Nenhum produto nesta categoria ainda" : "Ainda não há produtos cadastrados"}
-      message="Cadastre produtos com preço em algum mercado para vê-los aqui. Quando o mesmo item aparecer em mais de uma mercado, mostramos automaticamente o comparativo e a economia."
+      message="Dica: limpe filtros muito restritivos (preço mínimo/máximo, mercados) e tente uma categoria diferente. Você também pode contribuir enviando o preço que viu na prateleira — o ranking aparece assim que o mesmo item existir em duas ou mais mercados."
+      action={
+        <div className="flex flex-wrap justify-center gap-2">
+          <Link
+            to="/colaborar"
+            className="inline-flex h-9 items-center rounded-md bg-primary px-4 text-[13px] font-semibold text-primary-foreground shadow-sm transition-opacity hover:opacity-90"
+          >
+            Sugerir/registrar preço
+          </Link>
+          <Link
+            to="/buscar"
+            className="inline-flex h-9 items-center rounded-md border border-border/70 bg-background px-4 text-[13px] font-semibold text-foreground transition-colors hover:bg-muted/40"
+          >
+            Abrir busca completa
+          </Link>
+        </div>
+      }
     />
   );
 }
+

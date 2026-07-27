@@ -46,6 +46,7 @@ import {
   LoadingList,
 } from "@/components/feedback";
 import { RankingSkeleton, FadeSwap } from "@/components/layout/LoadingSkeleton";
+import { usePerceivedPerfTelemetry } from "@/lib/perf-telemetry";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
 import {
@@ -319,6 +320,14 @@ function ComparadorPage() {
   const rows = useMemo(() => {
     return filterAndSortComparisonRows(allRows, q, cat);
   }, [allRows, q, cat]);
+
+  usePerceivedPerfTelemetry({
+    route: "/comparador",
+    isLoading,
+    isReady: !isLoading && !error && rows.length > 0,
+    count: rows.length,
+  });
+
 
   /**
    * Grupo equivalente: mesmos termos buscados + mesmo tamanho + mesma

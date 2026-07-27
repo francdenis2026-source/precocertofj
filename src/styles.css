@@ -4061,3 +4061,40 @@ html[data-admin-boot="1"] body {
   overflow-y: auto;
   overscroll-behavior: contain;
 }
+
+/* ---------------------------------------------------------------------------
+   pc-store-emphasis — microinteração de hover/focus para nomes de
+   estabelecimentos exibidos com tc.storeName / tc.storeNameTight.
+   Ganha ênfase sem alterar o box model (usa text-shadow + text-decoration).
+--------------------------------------------------------------------------- */
+.pc-store-emphasis {
+  transition: color 180ms ease, text-shadow 180ms ease,
+    text-decoration-color 180ms ease;
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  border-radius: 2px;
+}
+.pc-store-emphasis:hover,
+.pc-store-emphasis:focus-visible,
+:where(a, button, [role="button"], li, tr):hover > .pc-store-emphasis,
+:where(a, button, [role="button"], li, tr):hover .pc-store-emphasis,
+:where(a, button, [role="button"], li, tr):focus-visible .pc-store-emphasis {
+  text-decoration-color: color-mix(in oklab, var(--pc-gold-ink) 55%, transparent);
+  text-shadow: 0 0 0.35px currentColor;
+  color: color-mix(in oklab, var(--pc-gold-ink) 92%, black 8%);
+}
+:where(html.dark) .pc-store-emphasis:hover,
+:where(html.dark) .pc-store-emphasis:focus-visible,
+:where(html.dark) :where(a, button, [role="button"], li, tr):hover .pc-store-emphasis,
+:where(html.dark) :where(a, button, [role="button"], li, tr):focus-visible .pc-store-emphasis {
+  color: color-mix(in oklab, var(--pc-gold-ink) 88%, white 12%);
+}
+.pc-store-emphasis:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--pc-gold-ink) 45%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .pc-store-emphasis { transition: none; }
+}

@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { MapPin, Search, Store, TrendingDown } from "lucide-react";
+import { MapPin, PackageSearch, Search, Store, TrendingDown } from "lucide-react";
 
 import {
   getWhereToBuyRegions,
@@ -13,11 +13,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { IsolatedPage } from "@/components/layout/IsolatedPage";
+import { EmptyState } from "@/components/layout/EmptyState";
 import { FadeSwap, LocationsSkeleton } from "@/components/layout/LoadingSkeleton";
 import { BackButton } from "@/components/layout/BackButton";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
+import { usePerceivedPerfTelemetry } from "@/lib/perf-telemetry";
 
 export const Route = createFileRoute("/onde-comprar")({
   head: () => ({
@@ -73,6 +75,13 @@ function OndeComprarPage() {
   const products = productsQ.data ?? [];
 
   const stateKey = productsQ.isLoading ? "loading" : products.length === 0 ? "empty" : "ready";
+
+  usePerceivedPerfTelemetry({
+    route: "/onde-comprar",
+    isLoading: productsQ.isLoading,
+    isReady: !productsQ.isLoading && products.length > 0,
+    count: products.length,
+  });
 
   return (
     <IsolatedPage className="bg-background">
@@ -181,9 +190,32 @@ function OndeComprarPage() {
           {productsQ.isLoading ? (
             <LocationsSkeleton rows={4} />
           ) : products.length === 0 ? (
-            <p className={cn(tc.meta, "rounded-xl border border-border/70 bg-card p-6 text-center")}>
-              Nenhum produto encontrado com esses filtros.
-            </p>
+            <EmptyState
+              icon={PackageSearch}
+              title={
+                query
+                  ? "Nenhum produto encontrado com esses filtros"
+                  : "Comece pela busca por um produto"
+              }
+              description={
+                <>
+                  Tente termos curtos (ex.: <span className="font-medium text-foreground">arroz</span>,{" "}
+                  <span className="font-medium text-foreground">café</span>,{" "}
+                  <span className="font-medium text-foreground">leite</span>) e limpe filtros de cidade/bairro.
+                  Não achou? Sugira o preço que você viu na prateleira — a base cresce com colaboração.
+                </>
+              }
+              action={
+                <div className="flex flex-wrap justify-center gap-2">
+                  <Button asChild size="sm" variant="default">
+                    <Link to="/colaborar">Sugerir/registrar preço</Link>
+                  </Button>
+                  <Button asChild size="sm" variant="outline">
+                    <Link to="/buscar">Abrir busca completa</Link>
+                  </Button>
+                </div>
+              }
+            />
           ) : (
             <ul className="space-y-2">
               {products.map((p) => (

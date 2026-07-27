@@ -24,7 +24,9 @@ export type AnalyticsEvent =
   | "user_view_search"
   | "user_open_comparador_drilldown"
   | "unlock_conversion"
-  | "search_query";
+  | "search_query"
+  | "perf_skeleton_shown"
+  | "perf_first_content";
 
 
 type Payload = Record<string, string | number | boolean | null | undefined>;
