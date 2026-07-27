@@ -244,23 +244,25 @@ function OndeComprarPage() {
                       <li
                         key={`${p.productKey}-${o.establishmentId ?? i}`}
                         className={cn(
-                          "flex items-center gap-2 rounded-lg border px-2 py-1.5",
-                          o.isCheapest ? "border-emerald-500/50 bg-emerald-500/5" : "border-border/60",
+                          "flex items-center gap-2 px-2 py-1.5",
+                          o.isCheapest
+                            ? "pc-surface-3"
+                            : "rounded-lg border border-[var(--pc-surface-2-border)]",
                         )}
                       >
-                        <Store className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                        <Store className={cn("h-3.5 w-3.5 shrink-0", o.isCheapest ? "text-[var(--pc-gold-ink)]" : "text-muted-foreground")} />
                         <span className="min-w-0 flex-1">
                           <span className={cn(tc.storeName, "block truncate")}>{o.storeName}</span>
-                          <span className={cn(tc.meta, "block truncate")}>
+                          <span className={cn(tc.metaMuted, "block truncate")}>
                             {[o.neighborhood, o.city].filter(Boolean).join(" • ") || "—"}
                           </span>
                         </span>
                         <span className="shrink-0 text-right">
-                          <span className={cn(tc.itemTitle, o.isCheapest && "text-emerald-600")}>
+                          <span className={cn(o.isCheapest ? tc.dataPrimary : tc.itemTitle, o.isCheapest && "text-[var(--pc-gold-ink)]")}>
                             {brl(o.price)}
                           </span>
                           {!o.isCheapest && o.diffPct > 0 && (
-                            <span className={cn(tc.meta, "block")}>+{o.diffPct}%</span>
+                            <span className={cn(tc.metaMuted, "block")}>+{o.diffPct}%</span>
                           )}
                         </span>
                       </li>
