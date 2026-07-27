@@ -870,9 +870,8 @@ function ComparadorPage() {
         aria-label="Resultados da comparação (atalho: R)"
         className="mx-auto max-w-7xl px-4 py-5 focus:outline-none md:px-6 md:py-10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
-        {isLoading && (view === "grid"
-          ? <LoadingGrid count={6} columns={3} />
-          : <LoadingList count={6} itemClassName="h-14" />)}
+        <FadeSwap showKey={isLoading ? "loading" : error ? "error" : rows.length === 0 ? "empty" : `ready-${view}-${visibleRows.length}`}>
+        {isLoading && <RankingSkeleton rows={view === "grid" ? 8 : 6} />}
 
         {!isLoading && error && (
           <ErrorState
