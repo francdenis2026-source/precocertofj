@@ -40,7 +40,10 @@ export type AdminInsightsFilters = {
   to: string;
   /** Slugs de categoria; vazio = todas. */
   categories: string[];
+  /** Ignora o cache do servidor e recalcula. */
+  refresh?: boolean;
 };
+
 
 export type AdminInsights = {
   trend: TrendPoint[];
