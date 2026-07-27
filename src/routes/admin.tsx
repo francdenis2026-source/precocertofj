@@ -312,80 +312,23 @@ function AdminPage() {
         </div>
       </header>
 
-      <section className="mx-auto flex h-[calc(100svh-6.5rem)] max-w-[1400px] flex-col gap-2 px-3 py-2 md:h-[calc(100svh-8rem)] md:px-6 md:py-3">
-        {/* ---------- KPIs (faixa densa) ---------- */}
-        <div className="grid shrink-0 grid-cols-2 gap-2 lg:grid-cols-4">
-          <Kpi icon={<Users className="h-3.5 w-3.5" />} label="Assinantes ativos" value={kpis.active.toString()} />
-          <Kpi icon={<CreditCard className="h-3.5 w-3.5" />} label="MRR estimado" value={kpis.mrr.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} />
-          <Kpi icon={<Gauge className="h-3.5 w-3.5" />} label="Total histórico" value={kpis.total.toString()} />
-          <Kpi icon={<Mail className="h-3.5 w-3.5" />} label="E-mails enviados" value={kpis.emails.toString()} />
+      <section className="mx-auto flex w-full max-w-[1400px] flex-col gap-3 px-3 py-3 md:gap-4 md:px-6 md:py-4">
+        {/* ---------- Indicadores executivos + busca global ---------- */}
+        <div className="space-y-3">
+          <Suspense fallback={<SectionSkeleton rows={2} label="Carregando busca global" />}>
+            <AdminGlobalSearch />
+          </Suspense>
+          <Suspense fallback={<SectionSkeleton rows={3} chart label="Carregando indicadores" />}>
+            <AdminInsightsPanel />
+          </Suspense>
+          <Suspense fallback={<SectionSkeleton rows={3} chart label="Carregando KPIs de preços" />}>
+            <AdminKpiBoard />
+          </Suspense>
         </div>
 
-        {/* ---------- Blocos recolhíveis: mantêm a página em uma única tela ---------- */}
-        <div className="grid shrink-0 gap-2 md:grid-cols-3">
-          <details className="group rounded-xl border border-border/70 bg-card md:col-span-2">
-            <summary className={cn(tc.control, "flex cursor-pointer list-none items-center justify-between gap-2 px-3 py-2 font-semibold")}>
-              <span className="inline-flex items-center gap-2">
-                <Gauge className="h-3.5 w-3.5 text-muted-foreground" /> Busca global e gráficos
-              </span>
-              <ChevronRight className="h-3.5 w-3.5 text-muted-foreground transition-transform group-open:rotate-90" />
-            </summary>
-            <div className="max-h-[46svh] space-y-2 overflow-y-auto border-t border-border/60 p-2.5">
-              <Suspense fallback={<SectionSkeleton rows={2} label="Carregando busca global" />}>
-                <AdminGlobalSearch />
-              </Suspense>
-              <Suspense fallback={<SectionSkeleton rows={3} chart label="Carregando indicadores" />}>
-                <AdminInsightsPanel />
-              </Suspense>
-              <Suspense fallback={<SectionSkeleton rows={3} chart label="Carregando KPIs de preços" />}>
-                <AdminKpiBoard />
-              </Suspense>
-
-            </div>
-          </details>
-
-          <details className="group rounded-xl border border-border/70 bg-card">
-            <summary className={cn(tc.control, "flex cursor-pointer list-none items-center justify-between gap-2 px-3 py-2 font-semibold")}>
-              <span className="inline-flex items-center gap-2">
-                <Package className="h-3.5 w-3.5 text-muted-foreground" /> Atalhos do console
-              </span>
-              <ChevronRight className="h-3.5 w-3.5 text-muted-foreground transition-transform group-open:rotate-90" />
-            </summary>
-            <nav
-              aria-label="Atalhos do painel"
-              className="max-h-[46svh] overflow-y-auto border-t border-border/60 p-2.5"
-            >
-              <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-1">
-                {ADMIN_SHORTCUT_GROUPS.map((group) => (
-                  <div key={group.label}>
-                    <p className={cn(tc.tag, "mb-1 px-0.5 text-muted-foreground")}>{group.label}</p>
-                    <ul className="flex flex-wrap gap-1">
-                      {group.items.map((item) => (
-                        <li key={item.to}>
-                          <Link
-                            to={item.to}
-                            preload="viewport"
-                            className={cn(
-                              tc.meta,
-                              "inline-flex items-center gap-1.5 rounded-lg border border-border/60 px-2 py-1 font-medium text-foreground/85 transition-colors hover:border-primary/40 hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                            )}
-                          >
-                            <item.icon className="h-3.5 w-3.5 shrink-0 text-muted-foreground" strokeWidth={2} />
-                            <span className="truncate">{item.label}</span>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </nav>
-          </details>
-        </div>
-
-        {/* ---------- Abas (área útil ocupa o restante da tela) ---------- */}
-        <Tabs defaultValue="plans" className="flex min-h-0 w-full flex-1 flex-col">
-          <div className="pc-tabs-rail -mx-1 shrink-0 overflow-x-auto px-1 pb-1">
+        {/* ---------- Abas de gestão detalhada ---------- */}
+        <Tabs defaultValue="plans" className="flex w-full flex-col">
+          <div className="pc-tabs-rail -mx-1 overflow-x-auto px-1 pb-1">
             <TabsList className="inline-flex h-auto w-max flex-nowrap gap-1 rounded-xl border border-border/70 bg-card p-1">
               {[
                 ["plans", "Planos"],
@@ -403,7 +346,7 @@ function AdminPage() {
                   value={value}
                   className={cn(
                     tc.control,
-                    "h-7 whitespace-nowrap rounded-lg px-2.5 text-muted-foreground",
+                    "h-8 whitespace-nowrap rounded-lg px-3 text-muted-foreground",
                     "data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm",
                   )}
                 >
@@ -413,7 +356,7 @@ function AdminPage() {
             </TabsList>
           </div>
 
-          <div className="mt-2 min-h-0 flex-1 overflow-y-auto rounded-xl border border-border/60 bg-card/40 p-2.5">
+          <div className="mt-3 rounded-xl border border-border/60 bg-card/40 p-3 md:p-4">
             <TabsContent value="plans"><PlansTab /></TabsContent>
             <TabsContent value="establishments"><EstablishmentsTab /></TabsContent>
             <TabsContent value="status"><StatusTab /></TabsContent>
@@ -433,6 +376,7 @@ function AdminPage() {
         </Tabs>
 
       </section>
+
     </AppShell>
   );
 }
