@@ -85,7 +85,7 @@ function OndeComprarPage() {
 
   return (
     <IsolatedPage className="bg-background">
-      <header className="border-b border-border/60 bg-card/60">
+      <header className="border-b border-[var(--pc-surface-1-border)] bg-[var(--pc-surface-1)]">
         <div className="mx-auto flex max-w-5xl items-center gap-3 px-4 py-3">
           <BackButton />
           <HomeBrandLink />
@@ -102,7 +102,7 @@ function OndeComprarPage() {
 
         {/* Filtros */}
         <form
-          className="mb-3 space-y-2 rounded-xl border border-border/70 bg-card p-2.5"
+          className="mb-3 space-y-2 pc-surface-2 p-2.5"
           onSubmit={(e) => {
             e.preventDefault();
             setQuery(term.trim());
@@ -219,7 +219,7 @@ function OndeComprarPage() {
           ) : (
             <ul className="space-y-2">
               {products.map((p) => (
-                <li key={p.productKey} className="rounded-xl border border-border/70 bg-card p-2.5">
+                <li key={p.productKey} className="pc-surface-2 p-2.5">
                   <div className="mb-1.5 flex items-start gap-2">
                     <div className="min-w-0 flex-1">
                       <Link
