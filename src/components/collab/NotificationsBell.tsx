@@ -138,7 +138,7 @@ export function NotificationsBell() {
                               if (!n.read_at) markMutation.mutate(n.id);
                               setOpen(false);
                             }}
-                            className="text-[11px] font-semibold text-primary hover:underline"
+                            className="pc-nav-link pc-nav-link--row rounded-md px-1.5 py-0.5 text-[11px] font-semibold text-primary outline-none"
                           >
                             Abrir
                           </a>
@@ -147,7 +147,7 @@ export function NotificationsBell() {
                           <button
                             type="button"
                             onClick={() => markMutation.mutate(n.id)}
-                            className="text-[11px] font-semibold text-muted-foreground hover:text-foreground"
+                            className="pc-nav-link pc-nav-link--row rounded-md px-1.5 py-0.5 text-[11px] font-semibold text-muted-foreground outline-none"
                           >
                             Marcar como lida
                           </button>
