@@ -263,7 +263,7 @@ function NeighborhoodsPage() {
             <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortBy)}>
               <SelectTrigger
                 aria-label="Ordenar bairros"
-                className={`h-8 w-[9.5rem] border-border bg-card px-2.5 ${tc.control} shadow-none`}
+                className={`h-8 w-[10.5rem] border-border bg-card px-2.5 ${tc.control} shadow-none`}
               >
                 <SelectValue />
               </SelectTrigger>
@@ -367,11 +367,11 @@ function NeighborhoodsPage() {
           )}
 
           {active && (
-            <div className="grid gap-3 md:grid-cols-[16rem_1fr] md:items-start">
+            <div className="grid gap-3 min-w-0 md:grid-cols-[16rem_minmax(0,1fr)] md:items-start">
               {/* Índice de bairros */}
               <nav
                 aria-label="Bairros"
-                className="rounded-lg border border-border bg-card md:max-h-[62svh] md:overflow-y-auto"
+                className="min-w-0 rounded-lg border border-border bg-card md:max-h-[62svh] md:overflow-y-auto"
               >
                 <p className={`border-b border-border/70 px-2.5 py-1.5 ${tc.tableHead}`}>Bairros</p>
                 <ul className="divide-y divide-border/60">
@@ -402,7 +402,7 @@ function NeighborhoodsPage() {
                             <span className={`block truncate ${tc.meta}`}>
                               {g.establishments.length}{" "}
                               {g.establishments.length === 1 ? "mercado" : "mercados"}
-                              {min != null ? ` · a partir de ${currency(min)}` : ""}
+                              {min != null ? ` · ${currency(min)}` : ""}
                             </span>
                           </span>
                         </button>
@@ -425,7 +425,7 @@ function NeighborhoodsPage() {
               </nav>
 
               {/* Detalhe do bairro */}
-              <section className="rounded-lg border border-border bg-card md:max-h-[62svh] md:overflow-y-auto">
+              <section className="min-w-0 rounded-lg border border-border bg-card md:max-h-[62svh] md:overflow-y-auto">
                 <header className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-b border-border/70 px-3 py-2">
                   <div className="min-w-0">
                     <h2 className={`truncate ${tc.h2}`}>{active.neighborhood}</h2>
@@ -437,7 +437,7 @@ function NeighborhoodsPage() {
                   </p>
                 </header>
 
-                <div className="grid gap-0 lg:grid-cols-[1fr_15rem]">
+                <div className="grid min-w-0 gap-0 lg:grid-cols-[minmax(0,1fr)_15rem]">
                   {/* Mercados */}
                   <ul className="divide-y divide-border/60">
                     {active.establishments.map((est) => (
