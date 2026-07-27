@@ -16,6 +16,7 @@ import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { StoreLogoThumb } from "@/components/brand/StoreLogoThumb";
 import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 import { tc } from "@/lib/typeclear";
+import { StatCell, StatCellGroup, StatCellDivider } from "@/components/ds/StatCell";
 import {
   Select,
   SelectContent,
