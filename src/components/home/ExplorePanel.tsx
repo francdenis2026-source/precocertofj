@@ -67,8 +67,8 @@ const HEAD = "flex items-baseline justify-between gap-3 border-b pb-1.5";
 const HEAD_LEFT = "flex min-w-0 items-baseline gap-2.5";
 const BODY_GAP = "mt-2";
 /** Altura fixa por linha de preço — base da virtualização (evita reflow). */
-const ROW_PX = 42;
-const ROW_H = "h-[42px]";
+const ROW_PX = 50;
+const ROW_H = "h-[50px]";
 
 function Kicker({ children }: { children: React.ReactNode }) {
   return (
@@ -132,7 +132,7 @@ const PriceRow = memo(function PriceRow({
         to="/produto/$slug"
         params={{ slug: p.slug }}
         onClick={onNavigate}
-        className={`group grid ${ROW_H} grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-1.5 transition-colors`}
+        className={`group grid ${ROW_H} grid-cols-[minmax(0,1fr)_auto] items-center gap-3 transition-colors`}
       >
         <div className="min-w-0">
           <p
@@ -162,7 +162,7 @@ const PriceRow = memo(function PriceRow({
 
 function RowSkeleton({ glass }: { glass: string }) {
   return (
-    <li className={`flex ${ROW_H} flex-col justify-center gap-1.5 py-1.5`}>
+    <li className={`flex ${ROW_H} flex-col justify-center gap-1.5`}>
       <div className="flex items-center gap-3">
         <div className="h-3 flex-1 animate-pulse rounded" style={{ background: glass }} />
         <div className="h-3 w-14 animate-pulse rounded" style={{ background: glass }} />
