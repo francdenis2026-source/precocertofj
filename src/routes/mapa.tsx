@@ -378,27 +378,35 @@ function NeighborhoodsPage() {
                 aria-label="Bairros"
                 className="min-w-0 rounded-lg border border-border bg-card md:max-h-[62svh] md:overflow-y-auto"
               >
-                <p className={`border-b border-border/70 px-2.5 py-1.5 ${tc.tableHead}`}>Bairros</p>
-                <ul className="divide-y divide-border/60">
+                <p className={`hidden border-b border-border/70 px-2.5 py-1.5 md:block ${tc.tableHead}`}>
+                  Bairros
+                </p>
+                <ul className="flex snap-x snap-mandatory gap-1.5 overflow-x-auto p-1.5 no-scrollbar md:block md:snap-none md:gap-0 md:divide-y md:divide-border/60 md:overflow-x-visible md:p-0">
                   {filteredGroups.map((g) => {
                     const isActive = g.neighborhood === active.neighborhood;
                     const isFav = favKeys.has(g.neighborhood);
                     const min = minPriceByNeighborhood.get(g.neighborhood) ?? null;
                     return (
-                      <li key={g.neighborhood} className="relative">
+                      <li
+                        key={g.neighborhood}
+                        className={
+                          "relative w-[9.5rem] shrink-0 snap-start rounded-md border md:w-auto md:shrink md:snap-align-none md:rounded-none md:border-0 " +
+                          (isActive ? "border-brand-gold/70 md:border-0" : "border-border md:border-0")
+                        }
+                      >
                         <button
                           type="button"
                           onClick={() => setSelected(g.neighborhood)}
                           aria-current={isActive ? "true" : undefined}
                           className={
-                            "flex w-full items-center gap-2 py-1.5 pl-3 pr-8 text-left transition-colors " +
+                            "flex w-full items-center gap-2 rounded-md py-1.5 pl-2.5 pr-7 text-left transition-colors md:rounded-none md:pl-3 md:pr-8 " +
                             (isActive ? "bg-brand-gold/10" : "hover:bg-muted/50")
                           }
                         >
                           <span
                             aria-hidden
                             className={
-                              "absolute inset-y-0 left-0 w-[3px] " +
+                              "absolute inset-y-0 left-0 hidden w-[3px] md:block " +
                               (isActive ? "bg-brand-gold" : "bg-transparent")
                             }
                           />
@@ -416,7 +424,7 @@ function NeighborhoodsPage() {
                           onClick={() => handleFavClick(g.neighborhood, g.city)}
                           aria-pressed={isFav}
                           aria-label={isFav ? `Remover ${g.neighborhood} dos favoritos` : `Favoritar ${g.neighborhood}`}
-                          className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:text-brand-gold"
+                          className="absolute right-1 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:text-brand-gold md:right-1.5"
                         >
                           <Star
                             className={"h-3.5 w-3.5 " + (isFav ? "fill-brand-gold text-brand-gold" : "")}
@@ -428,6 +436,7 @@ function NeighborhoodsPage() {
                   })}
                 </ul>
               </nav>
+
 
               {/* Detalhe do bairro */}
               <section className="min-w-0 rounded-lg border border-border bg-card md:max-h-[62svh] md:overflow-y-auto">
