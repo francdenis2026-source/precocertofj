@@ -106,8 +106,8 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
   const fetchLive = useServerFn(getLiveTickerStats);
 
   const { data: recent } = useQuery({
-    queryKey: ["home", "recent-products", 7],
-    queryFn: () => fetchRecent({ data: { limit: 7 } }),
+    queryKey: ["home", "recent-products", 10],
+    queryFn: () => fetchRecent({ data: { limit: 10 } }),
     staleTime: 60_000,
   });
   const { data: live } = useQuery({
@@ -123,12 +123,12 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
   const glass = "var(--pc-home-onhero-glass)";
   const gold = "var(--pc-home-onhero-gold)";
 
-  const items = (recent ?? []).slice(0, 7);
+  const items = (recent ?? []).slice(0, 10);
 
   return (
     <div className="grid h-full w-full flex-1 content-start gap-x-8 gap-y-5 lg:grid-cols-12 lg:grid-rows-[minmax(0,1fr)_auto]">
       {/* ---------- Últimos preços ---------- */}
-      <section aria-labelledby="explore-prices" className="min-w-0 lg:col-span-7">
+      <section aria-labelledby="explore-prices" className="flex min-w-0 flex-col lg:col-span-7">
         <SectionHead
           id="explore-prices"
           kicker="Ao vivo"
@@ -152,7 +152,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
             : ""}
         </p>
 
-        <ul className={`${BODY_GAP} divide-y`} style={{ borderColor: line }}>
+        <ul className={`${BODY_GAP} min-h-0 flex-1 divide-y overflow-y-auto no-scrollbar`} style={{ borderColor: line }}>
           {items.length === 0
             ? Array.from({ length: 7 }).map((_, i) => (
                 <li key={i} className="flex items-center gap-3 py-2">
@@ -254,10 +254,11 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
           style={{ borderColor: line }}
         >
           {[
-            { label: "Conferidos hoje", value: live?.checkedToday ?? 0 },
-            { label: "Últimos 7 dias", value: live?.totalRecent ?? 0 },
+            ...(live?.checkedToday ? [{ label: "Conferidos hoje", value: String(live.checkedToday) }] : []),
+            { label: "Últimos 7 dias", value: String(live?.totalRecent ?? 0) },
             { label: "Avaliação", value: PLATFORM_RATING.value.toLocaleString("pt-BR", { minimumFractionDigits: 1 }) },
-          ].map((s) => (
+            { label: "Mercados parceiros", value: "6+" },
+          ].slice(0, 3).map((s) => (
             <div key={s.label} className="min-w-0">
               <p className={`${tc.num} font-semibold`} style={{ color: gold }}>
                 {s.value}
