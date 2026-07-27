@@ -236,9 +236,9 @@ function NeighborhoodsPage() {
             <StatCellGroup
               label={`Resumo: ${filteredGroups.length} bairros e ${totalMarkets} mercados`}
             >
-              <StatCell value={filteredGroups.length} label="Bairros" accent />
+              <StatCell value={filteredGroups.length} label="Bairros" icon={Building2} accent />
               <StatCellDivider />
-              <StatCell value={totalMarkets} label="Mercados" />
+              <StatCell value={totalMarkets} label="Mercados" icon={Store} />
             </StatCellGroup>
 
           </div>
