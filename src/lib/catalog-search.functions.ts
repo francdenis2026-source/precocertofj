@@ -141,7 +141,7 @@ export const searchCatalogAdvanced = createServerFn({ method: "POST" })
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let scansQ: any = supabase
       .from("scans")
-      .select(sel("product_name, price_captured, market_name, created_at"))
+      .select(sel("product_name, price_captured, market_name, created_at, establishment_id, unit"))
       .not("price_captured", "is", null)
       .gt("price_captured", 0)
       .order("created_at", { ascending: false })
@@ -156,6 +156,18 @@ export const searchCatalogAdvanced = createServerFn({ method: "POST" })
     const scans = scanRows ?? [];
     if (scans.length === 0) return [];
 
+    // 1.5) Descobre quais estabelecimentos são AÇOUGUES.
+    // Regra: em açougues só mostramos cortes de carne (bovino/frango/suíno).
+    // Assim, produtos "diversos" cadastrados em açougues não poluem a busca.
+    const { data: butcherRows } = (await supabase
+      .from("establishments")
+      .select(sel("id"))
+      .eq("kind", "acougue")
+      .limit(200)) as { data: { id: string }[] | null; error: unknown };
+    const butcherIds = new Set((butcherRows ?? []).map((r) => r.id));
+
+    const { classifyButcherCut } = await import("@/lib/butcher-cuts");
+
     // 2) Agrupa scans por nome normalizado do produto.
     type Agg = {
       display: string;
@@ -168,6 +180,12 @@ export const searchCatalogAdvanced = createServerFn({ method: "POST" })
     for (const r of scans) {
       const raw = (r.product_name ?? "").trim();
       if (!raw) continue;
+      // Filtro açougue: se o scan veio de um açougue e o produto NÃO é um
+      // corte de carne, descarta o registro. Produtos de mercados normais
+      // passam sem alteração.
+      if (r.establishment_id && butcherIds.has(r.establishment_id)) {
+        if (!classifyButcherCut(raw, r.unit)) continue;
+      }
       const key = normalizeStr(raw);
       if (!key) continue;
       // Se veio termo, exige que TODOS os tokens estejam presentes.
