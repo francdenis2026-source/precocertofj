@@ -323,6 +323,10 @@ function AdminPage() {
               <Suspense fallback={<SectionSkeleton rows={3} chart label="Carregando indicadores" />}>
                 <AdminInsightsPanel />
               </Suspense>
+              <Suspense fallback={<SectionSkeleton rows={3} chart label="Carregando KPIs de preços" />}>
+                <AdminKpiBoard />
+              </Suspense>
+
             </div>
           </details>
 
