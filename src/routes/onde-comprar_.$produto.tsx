@@ -11,7 +11,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { ArrowLeft, Crown, Loader2, MapPin, TrendingDown, TrendingUp } from "lucide-react";
+import { ArrowLeft, Crown, MapPin, TrendingDown, TrendingUp } from "lucide-react";
 
 import {
   getProductComparison,
@@ -20,7 +20,8 @@ import {
   type WhereToBuyRegions,
 } from "@/lib/where-to-buy.functions";
 import { Button } from "@/components/ui/button";
-import { SiteFooter } from "@/components/layout/SiteFooter";
+import { IsolatedPage } from "@/components/layout/IsolatedPage";
+import { RankingSkeleton, FadeSwap } from "@/components/layout/LoadingSkeleton";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
