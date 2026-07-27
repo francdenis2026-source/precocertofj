@@ -16,6 +16,7 @@ import { Route as PrivacidadeRouteImport } from './routes/privacidade'
 import { Route as PrecosRouteImport } from './routes/precos'
 import { Route as PlanosRouteImport } from './routes/planos'
 import { Route as PerfilRouteImport } from './routes/perfil'
+import { Route as OndeComprarRouteImport } from './routes/onde-comprar'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as NotificacoesRouteImport } from './routes/notificacoes'
 import { Route as MinhasLicencasRouteImport } from './routes/minhas-licencas'
@@ -136,6 +137,11 @@ const PlanosRoute = PlanosRouteImport.update({
 const PerfilRoute = PerfilRouteImport.update({
   id: '/perfil',
   path: '/perfil',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OndeComprarRoute = OndeComprarRouteImport.update({
+  id: '/onde-comprar',
+  path: '/onde-comprar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OnboardingRoute = OnboardingRouteImport.update({
@@ -609,6 +615,7 @@ export interface FileRoutesByFullPath {
   '/minhas-licencas': typeof MinhasLicencasRoute
   '/notificacoes': typeof NotificacoesRoute
   '/onboarding': typeof OnboardingRoute
+  '/onde-comprar': typeof OndeComprarRoute
   '/perfil': typeof PerfilRoute
   '/planos': typeof PlanosRoute
   '/precos': typeof PrecosRoute
@@ -704,6 +711,7 @@ export interface FileRoutesByTo {
   '/minhas-licencas': typeof MinhasLicencasRoute
   '/notificacoes': typeof NotificacoesRoute
   '/onboarding': typeof OnboardingRoute
+  '/onde-comprar': typeof OndeComprarRoute
   '/perfil': typeof PerfilRoute
   '/planos': typeof PlanosRoute
   '/precos': typeof PrecosRoute
@@ -800,6 +808,7 @@ export interface FileRoutesById {
   '/minhas-licencas': typeof MinhasLicencasRoute
   '/notificacoes': typeof NotificacoesRoute
   '/onboarding': typeof OnboardingRoute
+  '/onde-comprar': typeof OndeComprarRoute
   '/perfil': typeof PerfilRoute
   '/planos': typeof PlanosRoute
   '/precos': typeof PrecosRoute
@@ -897,6 +906,7 @@ export interface FileRouteTypes {
     | '/minhas-licencas'
     | '/notificacoes'
     | '/onboarding'
+    | '/onde-comprar'
     | '/perfil'
     | '/planos'
     | '/precos'
@@ -992,6 +1002,7 @@ export interface FileRouteTypes {
     | '/minhas-licencas'
     | '/notificacoes'
     | '/onboarding'
+    | '/onde-comprar'
     | '/perfil'
     | '/planos'
     | '/precos'
@@ -1087,6 +1098,7 @@ export interface FileRouteTypes {
     | '/minhas-licencas'
     | '/notificacoes'
     | '/onboarding'
+    | '/onde-comprar'
     | '/perfil'
     | '/planos'
     | '/precos'
@@ -1183,6 +1195,7 @@ export interface RootRouteChildren {
   MinhasLicencasRoute: typeof MinhasLicencasRoute
   NotificacoesRoute: typeof NotificacoesRoute
   OnboardingRoute: typeof OnboardingRoute
+  OndeComprarRoute: typeof OndeComprarRoute
   PerfilRoute: typeof PerfilRoute
   PlanosRoute: typeof PlanosRoute
   PrecosRoute: typeof PrecosRoute
@@ -1287,6 +1300,13 @@ declare module '@tanstack/react-router' {
       path: '/perfil'
       fullPath: '/perfil'
       preLoaderRoute: typeof PerfilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onde-comprar': {
+      id: '/onde-comprar'
+      path: '/onde-comprar'
+      fullPath: '/onde-comprar'
+      preLoaderRoute: typeof OndeComprarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/onboarding': {
@@ -1989,6 +2009,7 @@ const rootRouteChildren: RootRouteChildren = {
   MinhasLicencasRoute: MinhasLicencasRoute,
   NotificacoesRoute: NotificacoesRoute,
   OnboardingRoute: OnboardingRoute,
+  OndeComprarRoute: OndeComprarRoute,
   PerfilRoute: PerfilRoute,
   PlanosRoute: PlanosRoute,
   PrecosRoute: PrecosRoute,

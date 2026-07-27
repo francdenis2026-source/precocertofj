@@ -81,7 +81,7 @@ function OndeComprarPage() {
       </header>
 
       <main className="mx-auto max-w-5xl px-4 py-4">
-        <h1 className={cn(tc.pageTitle ?? "text-xl font-bold", "mb-1")}>
+        <h1 className={cn(tc.h1, "mb-1")}>
           Onde comprar mais barato
         </h1>
         <p className={cn(tc.meta, "mb-3")}>
