@@ -223,39 +223,81 @@ function FaleConoscoPage() {
           {/* Formulário */}
           <form
             onSubmit={onSubmit}
-            className="rounded-xl border border-border bg-card p-2.5 shadow-sm md:p-4"
+            noValidate
+            aria-describedby="form-help"
+            className="pc-surface-1 p-2.5 md:p-4"
           >
             <div className="grid gap-1.5 sm:grid-cols-2 sm:gap-2.5">
-              <label className="block">
-                <span className={labelClass}>Nome</span>
+              <div className="block">
+                <label htmlFor={nomeId} className={labelClass}>
+                  Nome
+                </label>
                 <input
+                  id={nomeId}
                   type="text"
                   value={nome}
                   onChange={(e) => setNome(e.target.value)}
+                  onBlur={() => {
+                    setTouched((t) => ({ ...t, nome: true }));
+                    setErrors(validate());
+                  }}
                   required
                   minLength={2}
+                  maxLength={80}
                   autoComplete="name"
                   placeholder="Como podemos te chamar"
-                  className={fieldClass}
+                  aria-invalid={Boolean(showErr("nome"))}
+                  aria-describedby={showErr("nome") ? errNomeId : undefined}
+                  className={showErr("nome") ? fieldErrorClass : fieldClass}
                 />
-              </label>
+                {showErr("nome") && (
+                  <p
+                    id={errNomeId}
+                    role="alert"
+                    className="mt-1 flex items-center gap-1 text-[11.5px] font-medium text-destructive"
+                  >
+                    <AlertCircle className="h-3 w-3 shrink-0" aria-hidden />
+                    {errors.nome}
+                  </p>
+                )}
+              </div>
 
-              <label className="block">
-                <span className={labelClass}>E-mail (opcional)</span>
+              <div className="block">
+                <label htmlFor={emailId} className={labelClass}>
+                  E-mail (opcional)
+                </label>
                 <input
+                  id={emailId}
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  onBlur={() => {
+                    setTouched((t) => ({ ...t, email: true }));
+                    setErrors(validate());
+                  }}
                   autoComplete="email"
+                  maxLength={120}
                   placeholder="para resposta"
-                  className={fieldClass}
+                  aria-invalid={Boolean(showErr("email"))}
+                  aria-describedby={showErr("email") ? errEmailId : undefined}
+                  className={showErr("email") ? fieldErrorClass : fieldClass}
                 />
-              </label>
+                {showErr("email") && (
+                  <p
+                    id={errEmailId}
+                    role="alert"
+                    className="mt-1 flex items-center gap-1 text-[11.5px] font-medium text-destructive"
+                  >
+                    <AlertCircle className="h-3 w-3 shrink-0" aria-hidden />
+                    {errors.email}
+                  </p>
+                )}
+              </div>
             </div>
 
-            <div className="mt-2.5">
-              <span className={labelClass}>Assunto</span>
-              <div className="mt-1 flex flex-wrap gap-1.5">
+            <fieldset className="mt-2.5 border-0 p-0">
+              <legend className={labelClass}>Assunto</legend>
+              <div className="mt-1 flex flex-wrap gap-1.5" role="radiogroup" aria-label="Assunto do contato">
                 {ASSUNTOS.map((a) => {
                   const active = assunto === a.value;
                   return (
@@ -263,9 +305,10 @@ function FaleConoscoPage() {
                       key={a.value}
                       type="button"
                       onClick={() => setAssunto(a.value)}
-                      aria-pressed={active}
+                      role="radio"
+                      aria-checked={active}
                       className={dsx(
-                        "rounded-full border px-2.5 py-0.5 text-[11.5px] font-semibold transition sm:py-1 sm:text-[12px]",
+                        "pc-focus rounded-full border px-2.5 py-0.5 text-[11.5px] font-semibold transition sm:py-1 sm:text-[12px]",
                         active
                           ? "border-primary bg-primary text-primary-foreground"
                           : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground",
@@ -276,26 +319,56 @@ function FaleConoscoPage() {
                   );
                 })}
               </div>
-            </div>
+            </fieldset>
 
-            <label className="mt-2 block sm:mt-2.5">
-              <span className={labelClass}>Mensagem</span>
+            <div className="mt-2 block sm:mt-2.5">
+              <label htmlFor={mensagemId} className={labelClass}>
+                Mensagem
+              </label>
               <textarea
+                id={mensagemId}
                 value={mensagem}
                 onChange={(e) => setMensagem(e.target.value)}
+                onBlur={() => {
+                  setTouched((t) => ({ ...t, mensagem: true }));
+                  setErrors(validate());
+                }}
                 required
                 minLength={10}
+                maxLength={2000}
                 rows={3}
                 placeholder="Conte pra gente o que aconteceu, sua sugestão ou dúvida…"
-                className={dsx(
-                  fieldClass,
+                aria-invalid={Boolean(showErr("mensagem"))}
+                aria-describedby={showErr("mensagem") ? errMsgId : undefined}
+                className={cn(
+                  showErr("mensagem") ? fieldErrorClass : fieldClass,
                   "h-[60px] resize-none leading-[1.45] sm:h-[104px]",
                 )}
               />
-            </label>
+              <div className="mt-0.5 flex items-center justify-between gap-2">
+                {showErr("mensagem") ? (
+                  <p
+                    id={errMsgId}
+                    role="alert"
+                    className="flex items-center gap-1 text-[11.5px] font-medium text-destructive"
+                  >
+                    <AlertCircle className="h-3 w-3 shrink-0" aria-hidden />
+                    {errors.mensagem}
+                  </p>
+                ) : (
+                  <span aria-hidden />
+                )}
+                <span
+                  className="text-[10.5px] tabular-nums text-muted-foreground"
+                  aria-live="polite"
+                >
+                  {mensagem.trim().length}/2000
+                </span>
+              </div>
+            </div>
 
             <div className="mt-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:mt-2.5 sm:gap-3">
-              <p className="min-w-0 text-[11px] leading-snug text-muted-foreground">
+              <p id="form-help" className="min-w-0 text-[11px] leading-snug text-muted-foreground">
                 <span className="hidden sm:inline">
                   Mínimo 10 caracteres. Ao enviar, seu app de e-mail abre preenchido para{" "}
                 </span>
@@ -305,14 +378,14 @@ function FaleConoscoPage() {
 
               <button
                 type="submit"
-                disabled={!canSubmit || sending}
+                disabled={!canSubmit}
                 aria-busy={sending}
-                className="btn-gold btn-state-safe inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-[14px] font-bold shadow-sm transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
+                className="btn-gold btn-state-safe pc-focus inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-[14px] font-bold shadow-sm transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {sending ? (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
                 ) : (
-                  <Send className="h-3.5 w-3.5" />
+                  <Send className="h-3.5 w-3.5" aria-hidden />
                 )}
                 {sending ? "Enviando…" : "Enviar"}
               </button>
