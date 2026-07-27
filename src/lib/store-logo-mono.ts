@@ -45,3 +45,19 @@ export function monoLogoSrc(logoUrl?: string | null): string | null {
   const slug = monoLogoSlug(logoUrl);
   return slug ? `/logos/${slug}-mono.svg` : null;
 }
+
+/**
+ * Caminho público do SVG **colorido** da marca, por tema.
+ *
+ * São o mesmo traçado vetorial do mono, pintado com a cor real da marca e com
+ * a luminosidade calibrada para atingir contraste WCAG AA contra o fundo do
+ * tema (branco no claro, navy no escuro). Nítido em qualquer tamanho.
+ */
+export function colorLogoSrc(
+  logoUrl?: string | null,
+  theme: "light" | "dark" = "light",
+): string | null {
+  const slug = monoLogoSlug(logoUrl);
+  if (!slug) return null;
+  return theme === "dark" ? `/logos/${slug}-color-dark.svg` : `/logos/${slug}-color.svg`;
+}

@@ -1,6 +1,7 @@
 import { SmartLogoImage } from "@/components/brand/SmartLogo";
+import { StoreLogoColor } from "@/components/brand/StoreLogoColor";
 import { StoreLogoMono } from "@/components/brand/StoreLogoMono";
-import { monoLogoSrc } from "@/lib/store-logo-mono";
+import { colorLogoSrc, monoLogoSrc } from "@/lib/store-logo-mono";
 import { cn } from "@/lib/utils";
 
 export type StoreLogoThumbProps = {
@@ -19,6 +20,11 @@ export type StoreLogoThumbProps = {
    * com `currentColor`). Cai para a logo colorida quando não existir vetor.
    */
   mono?: boolean;
+  /**
+   * Usa a versão vetorial **colorida** da marca, com par claro/escuro já
+   * calibrado para contraste. Cai para a logo raster quando não existir vetor.
+   */
+  vector?: boolean;
 };
 
 
@@ -38,8 +44,10 @@ export function StoreLogoThumb({
   initialsClassName,
   eager = false,
   mono = false,
+  vector = false,
 }: StoreLogoThumbProps) {
   const monoSrc = mono ? monoLogoSrc(src) : null;
+  const vectorSrc = !mono && vector ? colorLogoSrc(src) : null;
 
   return (
     <span
@@ -51,6 +59,8 @@ export function StoreLogoThumb({
     >
       {monoSrc ? (
         <StoreLogoMono src={monoSrc} name={name} className={cn("h-full w-full", imgClassName)} />
+      ) : vectorSrc ? (
+        <StoreLogoColor src={src} name={name} eager={eager} className={imgClassName} />
       ) : src ? (
         <SmartLogoImage src={src} name={name} eager={eager} className={imgClassName} />
       ) : (
