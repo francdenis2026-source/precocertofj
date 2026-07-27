@@ -90,7 +90,7 @@ export const searchWhereToBuy = createServerFn({ method: "POST" })
 
     const [cacheRes, storesRes] = await Promise.all([
       query.order("savings_pct", { ascending: false }).limit(400),
-      supabaseAdmin.from("establishments").select("id, name, neighborhood, city, active"),
+      supabaseAdmin.from("establishments").select("id, name, neighborhood, city, active, kind"),
     ]);
     if (cacheRes.error) throw new Error(cacheRes.error.message);
 
@@ -101,11 +101,14 @@ export const searchWhereToBuy = createServerFn({ method: "POST" })
         neighborhood: string | null;
         city: string | null;
         active: boolean | null;
+        kind: string | null;
       }>).map((s) => [s.id, s]),
     );
 
     const wantCity = data.city ? deaccent(data.city) : null;
     const wantHood = data.neighborhood ? deaccent(data.neighborhood) : null;
+
+    const { classifyButcherCut } = await import("@/lib/butcher-cuts");
 
     const products: WhereToBuyProduct[] = [];
 
@@ -113,11 +116,18 @@ export const searchWhereToBuy = createServerFn({ method: "POST" })
       const rawStores = Array.isArray(row.stores) ? (row.stores as Array<Record<string, unknown>>) : [];
       const offers: WhereToBuyOffer[] = [];
 
+      // Classifica o produto uma vez para decidir o filtro de açougue.
+      const productName = String(row.display_name ?? row.product_key ?? "");
+      const cut = classifyButcherCut(productName, null);
+
       for (const s of rawStores) {
         const id = s.establishment_id ? String(s.establishment_id) : null;
         const store = id ? storeById.get(id) : undefined;
         const neighborhood = store?.neighborhood ?? null;
         const city = store?.city ?? null;
+        const isButcher = store?.kind === "acougue";
+        // Regra de açougue: só entra em listagem quando o produto é corte.
+        if (isButcher && !cut) continue;
         if (wantCity && deaccent(city ?? "") !== wantCity) continue;
         if (wantHood && deaccent(neighborhood ?? "") !== wantHood) continue;
         const price = Number(s.price);
@@ -131,6 +141,7 @@ export const searchWhereToBuy = createServerFn({ method: "POST" })
           lastSeenAt: (s.last_seen_at as string | null) ?? null,
           isCheapest: false,
           diffPct: 0,
+          butcherProtein: isButcher ? cut : null,
         });
       }
 
