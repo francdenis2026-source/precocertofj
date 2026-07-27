@@ -192,6 +192,9 @@
   --pc-home-ink: #08122a;
   --pc-home-card: #ffffff;
   --pc-home-navy: #0f1b3d;
+  /* Superfície navy canônica (heros internos). Definida para que qualquer
+     `bg-[var(--pc-navy)]` use o mesmo azul das utilitárias .bg-brand-navy. */
+  --pc-navy: #0f1b3d;
   --pc-home-navy-2: #324c73;
   --pc-home-gold: #b58a3c;
   --pc-home-gold-soft: #8a6218;
