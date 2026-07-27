@@ -377,29 +377,36 @@ function CategoryPage() {
               {view === "grid" ? (
 
                 <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                  {visible.map((p) => (
+                  {visible.map((p, idx) => {
+                    const isTop = idx === 0 && safePage === 1;
+                    return (
                     <li key={p.key}>
                       <button
                         type="button"
                         onClick={() => openQuickView(p.name)}
-                        className="flex h-full w-full items-start gap-2.5 rounded-lg border border-border bg-card p-2.5 text-left transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                        className={cn(
+                          "flex h-full w-full items-start gap-2.5 p-2.5 text-left",
+                          isTop ? "pc-surface-3-interactive" : "pc-surface-2-interactive",
+                        )}
                       >
                         <StoreBadge name={p.cheapestStore} logoUrl={p.cheapestLogo} size="xs" />
                         <span className="min-w-0 flex-1">
+                          {isTop && <span className={cn(tc.eyebrow, "mb-0.5 block")}>Menor oferta</span>}
                           <span className="line-clamp-2 text-[13px] font-semibold leading-tight">
                             {p.name}
                           </span>
-                          <span className="mt-0.5 block truncate text-[11px] text-muted-foreground">
+                          <span className={cn("mt-0.5 block truncate", tc.storeNameTight)}>
                             {p.cheapestStore}
                             {p.storeCount > 1 ? ` · ${p.storeCount} mercados` : ""}
                           </span>
-                          <span className="mt-1 block text-[13.5px] font-bold tabular-nums text-foreground">
+                          <span className={cn("mt-1 block", isTop ? tc.dataPrimary : "text-[13.5px] font-bold tabular-nums text-foreground")}>
                             {brl(p.minPrice)}
                           </span>
                         </span>
                       </button>
                     </li>
-                  ))}
+                    );
+                  })}
                 </ul>
               ) : (
               <ul className="mt-2 divide-y divide-border overflow-hidden rounded-lg border border-border bg-card">
