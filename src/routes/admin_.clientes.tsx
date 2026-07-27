@@ -44,6 +44,8 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, KeyRound, Copy, RefreshCw, Search, ShieldCheck, Ban, CheckCircle2, Download } from "lucide-react";
 import { AppShell } from "@/components/brand/AppShell";
+import { NewCustomerDialog } from "@/components/admin/NewCustomerDialog";
+import { useAdminEntitiesRealtime } from "@/hooks/useAdminEntitiesRealtime";
 
 const listOptions = (search: string, sort: "recent" | "logins" | "name" | "last_seen", limit: number, offset: number) =>
   queryOptions({
