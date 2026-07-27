@@ -1,17 +1,22 @@
 """Gera versões SVG coloridas (tema claro e escuro) das logomarcas.
 
-Cada master `public/logos/<slug>-v6.webp` é quantizado em poucas cores, e cada
-camada de cor é traçada com potrace, resultando num SVG vetorial fiel à marca.
-A variante `-dark` clareia tintas escuras para manter contraste sobre navy.
+Reutiliza o traçado vetorial já validado em `<slug>-mono.svg` e o pinta com a
+cor dominante real da marca (extraída do master em alta definição):
+
+- `<slug>-color.svg`      → cor da marca, para fundos claros
+- `<slug>-color-dark.svg` → mesma cor com brilho ajustado para fundos navy
+
+Assim o vetor continua nítido em qualquer tamanho e o contraste fica correto
+nos dois temas.
 """
 
 from __future__ import annotations
 
 import colorsys
 import pathlib
+import re
 
 import numpy as np
-import potrace
 from PIL import Image
 
 LOGOS = pathlib.Path("public/logos")
@@ -26,111 +31,98 @@ SLUGS = [
     "ultra",
     "vanderley",
 ]
-MAX_COLORS = 5
-MIN_LAYER_PIXELS = 40
+
+# contraste mínimo alvo (WCAG AA para elementos gráficos) contra cada fundo
+LIGHT_BG = (255, 255, 255)
+DARK_BG = (15, 27, 61)  # --pc-navy
 
 
-def luminance(rgb: tuple[int, int, int]) -> float:
-    r, g, b = (c / 255 for c in rgb)
+def rel_lum(rgb: tuple[int, int, int]) -> float:
+    def ch(c: float) -> float:
+        c = c / 255
+        return c / 12.92 if c <= 0.04045 else ((c + 0.055) / 1.055) ** 2.4
+
+    r, g, b = (ch(c) for c in rgb)
     return 0.2126 * r + 0.7152 * g + 0.0722 * b
 
 
-def lighten_for_dark(rgb: tuple[int, int, int]) -> tuple[int, int, int]:
-    """Clareia apenas tintas escuras demais para o fundo navy, preservando a marca."""
-    lum = luminance(rgb)
-    if lum >= 0.32:
+def contrast(a: tuple[int, int, int], b: tuple[int, int, int]) -> float:
+    la, lb = rel_lum(a), rel_lum(b)
+    hi, lo = max(la, lb), min(la, lb)
+    return (hi + 0.05) / (lo + 0.05)
+
+
+def shift_lightness(rgb: tuple[int, int, int], target_l: float) -> tuple[int, int, int]:
+    h, _, s = colorsys.rgb_to_hls(*(c / 255 for c in rgb))
+    r, g, b = colorsys.hls_to_rgb(h, max(0.0, min(1.0, target_l)), s)
+    return (round(r * 255), round(g * 255), round(b * 255))
+
+
+def fit_contrast(
+    rgb: tuple[int, int, int], bg: tuple[int, int, int], minimum: float, direction: int
+) -> tuple[int, int, int]:
+    """Ajusta a luminosidade da cor até atingir o contraste mínimo com o fundo."""
+    if contrast(rgb, bg) >= minimum:
         return rgb
-    r, g, b = (c / 255 for c in rgb)
-    h, l, s = colorsys.rgb_to_hls(r, g, b)
-    if s < 0.12:  # preto/cinza vira quase branco
-        target = 0.93
-    else:  # cores saturadas apenas ganham brilho
-        target = max(0.52, min(0.7, l + 0.3))
+    _, l, _ = colorsys.rgb_to_hls(*(c / 255 for c in rgb))
+    best = rgb
+    for step in range(1, 41):
+        cand = shift_lightness(rgb, l + direction * step * 0.02)
+        best = cand
+        if contrast(cand, bg) >= minimum:
+            return cand
+    return best
 
-    r2, g2, b2 = colorsys.hls_to_rgb(h, target, min(1.0, s * 1.05))
-    return (round(r2 * 255), round(g2 * 255), round(b2 * 255))
+
+def brand_color(slug: str) -> tuple[int, int, int]:
+    """Cor dominante da tinta da marca, ignorando o papel branco."""
+    img = Image.open(LOGOS / f"{slug}-v6.webp").convert("RGBA")
+    img.thumbnail((256, 256), Image.LANCZOS)
+    arr = np.array(img)
+    rgb = arr[:, :, :3].astype(np.float32)
+    alpha = arr[:, :, 3]
+    lum = rgb @ np.array([0.2126, 0.7152, 0.0722], dtype=np.float32)
+    mx = rgb.max(axis=2)
+    mn = rgb.min(axis=2)
+    sat = np.where(mx > 0, (mx - mn) / np.maximum(mx, 1), 0)
+
+    ink = (alpha > 128) & (lum < 240)
+    colorful = ink & (sat > 0.25) & (lum > 20)
+    pool = rgb[colorful] if colorful.sum() > 200 else rgb[ink]
+    if pool.size == 0:
+        return (15, 27, 61)
+
+    # cor modal via quantização grosseira, mais estável que a média
+    q = (pool // 24).astype(np.int32)
+    keys, counts = np.unique(q, axis=0, return_counts=True)
+    dominant = keys[counts.argmax()]
+    members = pool[np.all(q == dominant, axis=1)]
+    mean = members.mean(axis=0)
+    return (int(round(mean[0])), int(round(mean[1])), int(round(mean[2])))
 
 
-def trace(mask: np.ndarray) -> str:
-    bmp = potrace.Bitmap(mask.astype(bool))
-    path = bmp.trace(turdsize=6, alphamax=1.0, opticurve=1, opttolerance=0.8)
-    out: list[str] = []
-    for curve in path:
-        sp = curve.start_point; sx, sy = sp.x, sp.y
-        d = [f"M{sx:.1f} {sy:.1f}"]
-        for seg in curve:
-            if seg.is_corner:
-                cx, cy = seg.c.x, seg.c.y
-                ex, ey = seg.end_point.x, seg.end_point.y
-                d.append(f"L{cx:.1f} {cy:.1f}L{ex:.1f} {ey:.1f}")
-            else:
-                c1x, c1y = seg.c1.x, seg.c1.y
-                c2x, c2y = seg.c2.x, seg.c2.y
-                ex, ey = seg.end_point.x, seg.end_point.y
-                d.append(f"C{c1x:.1f} {c1y:.1f} {c2x:.1f} {c2y:.1f} {ex:.1f} {ey:.1f}")
-        d.append("Z")
-        out.append("".join(d))
-    return " ".join(out)
+def hexc(rgb: tuple[int, int, int]) -> str:
+    return f"#{rgb[0]:02x}{rgb[1]:02x}{rgb[2]:02x}"
 
 
 def build(slug: str) -> None:
-    src = LOGOS / f"{slug}-v6.webp"
-    img = Image.open(src).convert("RGBA")
-    w, h = img.size
-    scale = 256 / max(w, h)
-    if scale < 1:
-        img = img.resize((round(w * scale), round(h * scale)), Image.LANCZOS)
-        w, h = img.size
+    mono = (LOGOS / f"{slug}-mono.svg").read_text(encoding="utf-8")
+    base = brand_color(slug)
 
-    arr = np.array(img)
-    alpha = arr[:, :, 3]
-    rgb = arr[:, :, :3].astype(np.int16)
+    light = fit_contrast(base, LIGHT_BG, 3.5, -1)
+    dark = fit_contrast(base, DARK_BG, 4.0, +1)
 
-    opaque = alpha > 128
-    lum = rgb.astype(np.float32) @ np.array([0.2126, 0.7152, 0.0722], dtype=np.float32)
-    # o "papel" da marca (branco/quase branco) não vira camada vetorial
-    ink = opaque & (lum < 246)
-    if ink.sum() < MIN_LAYER_PIXELS:
-        ink = opaque
-
-    flat = Image.fromarray(np.where(ink[:, :, None], rgb, 255).astype(np.uint8), "RGB")
-    quant = flat.quantize(colors=MAX_COLORS, method=Image.MEDIANCUT, dither=Image.NONE)
-    idx = np.array(quant)
-    palette = np.array(quant.getpalette()[: MAX_COLORS * 3]).reshape(-1, 3)
-
-    layers: list[tuple[int, tuple[int, int, int], str]] = []
-    for i, color in enumerate(palette):
-        mask = (idx == i) & ink
-        area = int(mask.sum())
-        if area < MIN_LAYER_PIXELS:
-            continue
-        c = (int(color[0]), int(color[1]), int(color[2]))
-        if luminance(c) > 0.96:
-            continue
-        d = trace(mask)
-        if d:
-            layers.append((area, c, d))
-
-    # camadas maiores (chapadas/fundos da marca) primeiro; detalhes por cima
-    layers.sort(key=lambda item: -item[0])
-
-    for variant in ("light", "dark"):
-        paths = []
-        for _, c, d in layers:
-            col = lighten_for_dark(c) if variant == "dark" else c
-            paths.append(
-                f'<path fill="#{col[0]:02x}{col[1]:02x}{col[2]:02x}" fill-rule="evenodd" d="{d}"/>'
-            )
-
-        svg = (
-            f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" '
-            f'width="{w}" height="{h}" role="img" shape-rendering="geometricPrecision">'
-            + "".join(paths)
-            + "</svg>"
-        )
-        name = f"{slug}-color.svg" if variant == "light" else f"{slug}-color-dark.svg"
+    for name, color in ((f"{slug}-color.svg", light), (f"{slug}-color-dark.svg", dark)):
+        svg = re.sub(r'\sfill="currentColor"', f' fill="{hexc(color)}"', mono, count=1)
+        if 'fill="' not in svg.split(">", 1)[0]:
+            svg = svg.replace("<svg ", f'<svg fill="{hexc(color)}" ', 1)
         (LOGOS / name).write_text(svg, encoding="utf-8")
-        print(f"{name}: {len(layers)} camadas, {len(svg) // 1024} KB")
+
+    print(
+        f"{slug}: base {hexc(base)} → claro {hexc(light)} "
+        f"({contrast(light, LIGHT_BG):.1f}:1) | escuro {hexc(dark)} "
+        f"({contrast(dark, DARK_BG):.1f}:1)"
+    )
 
 
 if __name__ == "__main__":
