@@ -59,6 +59,11 @@ const LINKS = [
   { to: "/colaborar", label: "Colaborar" },
 ];
 
+/** Ritmo compartilhado entre as colunas (hierarquia idêntica em todas as seções). */
+const HEAD = "flex items-baseline justify-between gap-3 border-b pb-1.5";
+const HEAD_LEFT = "flex min-w-0 items-baseline gap-2.5";
+const BODY_GAP = "mt-1.5";
+
 function Kicker({ children }: { children: React.ReactNode }) {
   return (
     <p className={`${tc.eyebrow} shrink-0`} style={{ color: "var(--pc-home-onhero-gold)" }}>
@@ -66,6 +71,35 @@ function Kicker({ children }: { children: React.ReactNode }) {
     </p>
   );
 }
+
+function SectionHead({
+  id,
+  kicker,
+  title,
+  aside,
+}: {
+  id: string;
+  kicker: string;
+  title: string;
+  aside?: React.ReactNode;
+}) {
+  return (
+    <header className={HEAD} style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}>
+      <div className={HEAD_LEFT}>
+        <Kicker>{kicker}</Kicker>
+        <h3
+          id={id}
+          className={`${serif} ${tc.h2} truncate`}
+          style={{ color: "var(--pc-home-onhero-fg)" }}
+        >
+          {title}
+        </h3>
+      </div>
+      {aside}
+    </header>
+  );
+}
+
 
 export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
   const fetchRecent = useServerFn(getRecentProducts);
@@ -95,38 +129,30 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
     <div className="mx-auto grid w-full max-w-6xl gap-x-6 gap-y-4 lg:grid-cols-12">
       {/* ---------- Últimos preços ---------- */}
       <section aria-labelledby="explore-prices" className="min-w-0 lg:col-span-7">
-        <header
-          className="flex items-baseline justify-between gap-3 border-b pb-1.5"
-          style={{ borderColor: line }}
-        >
-          <div className="flex min-w-0 items-baseline gap-2.5">
-            <Kicker>Ao vivo</Kicker>
-            <h3
-              id="explore-prices"
-              className={`${serif} ${tc.h2} truncate`}
-              style={{ color: fg }}
+        <SectionHead
+          id="explore-prices"
+          kicker="Ao vivo"
+          title="Preços conferidos"
+          aside={
+            <Link
+              to="/buscar"
+              onClick={onNavigate}
+              className={`${tc.chip} inline-flex shrink-0 items-center gap-1 transition-opacity hover:opacity-80`}
+              style={{ color: gold }}
             >
-              Preços conferidos
-            </h3>
-          </div>
-          <Link
-            to="/buscar"
-            onClick={onNavigate}
-            className={`${tc.chip} inline-flex shrink-0 items-center gap-1 transition-opacity hover:opacity-80`}
-            style={{ color: gold }}
-          >
-            Ver mais <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
-          </Link>
-        </header>
+              Ver mais <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
+            </Link>
+          }
+        />
 
-        <p className={`${tc.meta} mt-1`} style={{ color: fg70 }}>
+        <p className={`${tc.meta} ${BODY_GAP}`} style={{ color: fg70 }}>
           {live?.lastUpdate ? `Última atualização ${relative(live.lastUpdate)}` : "Coletas recentes em Feijó"}
           {typeof live?.checkedToday === "number" && live.checkedToday > 0
             ? ` · ${live.checkedToday} hoje`
             : ""}
         </p>
 
-        <ul className="mt-1.5 divide-y" style={{ borderColor: line }}>
+        <ul className={`${BODY_GAP} divide-y`} style={{ borderColor: line }}>
           {items.length === 0
             ? Array.from({ length: 5 }).map((_, i) => (
                 <li key={i} className="flex items-center gap-3 py-2">
@@ -166,13 +192,8 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
       {/* ---------- Benefícios + prova social ---------- */}
       <div className="min-w-0 space-y-4 lg:col-span-5">
         <section aria-labelledby="explore-benefits">
-          <header className="flex items-baseline gap-2.5 border-b pb-1.5" style={{ borderColor: line }}>
-            <Kicker>Benefícios</Kicker>
-            <h3 id="explore-benefits" className={`${serif} ${tc.h2} truncate`} style={{ color: fg }}>
-              Por que usar
-            </h3>
-          </header>
-          <ul className="mt-2 grid grid-cols-2 gap-x-4 gap-y-2">
+          <SectionHead id="explore-benefits" kicker="Benefícios" title="Por que usar" />
+          <ul className={`${BODY_GAP} grid grid-cols-2 gap-x-4 gap-y-2`}>
             {BENEFITS.map(({ Icon, title, desc }) => (
               <li key={title} className="flex min-w-0 items-start gap-2">
                 <Icon className="mt-[3px] h-3.5 w-3.5 shrink-0" style={{ color: gold }} strokeWidth={2.2} aria-hidden />
@@ -180,7 +201,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
                   <p className={`${tc.itemTitle} truncate`} style={{ color: fg90 }}>
                     {title}
                   </p>
-                  <p className={`${tc.meta} leading-snug`} style={{ color: fg70 }}>
+                  <p className={tc.meta} style={{ color: fg70 }}>
                     {desc}
                   </p>
                 </div>
@@ -190,22 +211,21 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
         </section>
 
         <section aria-labelledby="explore-proof">
-          <header className="flex items-baseline justify-between gap-3 border-b pb-1.5" style={{ borderColor: line }}>
-            <div className="flex min-w-0 items-baseline gap-2.5">
-              <Kicker>Prova social</Kicker>
-              <h3 id="explore-proof" className={`${serif} ${tc.h2} truncate`} style={{ color: fg }}>
-                Quem economiza
-              </h3>
-            </div>
-            <span className={`${tc.num} inline-flex shrink-0 items-center gap-1`} style={{ color: gold }}>
-              <Star className="h-3.5 w-3.5 fill-current" aria-hidden />
-              {PLATFORM_RATING.value.toLocaleString("pt-BR", { minimumFractionDigits: 1 })}
-              <span className={tc.meta} style={{ color: fg70 }}>
-                ·{PLATFORM_RATING.count}
+          <SectionHead
+            id="explore-proof"
+            kicker="Prova social"
+            title="Quem economiza"
+            aside={
+              <span className={`${tc.num} inline-flex shrink-0 items-center gap-1`} style={{ color: gold }}>
+                <Star className="h-3.5 w-3.5 fill-current" aria-hidden />
+                {PLATFORM_RATING.value.toLocaleString("pt-BR", { minimumFractionDigits: 1 })}
+                <span className={tc.meta} style={{ color: fg70 }}>
+                  ·{PLATFORM_RATING.count}
+                </span>
               </span>
-            </span>
-          </header>
-          <ul className="mt-2 space-y-2">
+            }
+          />
+          <ul className={`${BODY_GAP} space-y-2`}>
             {QUOTES.map((t) => (
               <li key={t.name} className="flex min-w-0 gap-2.5">
                 <span
@@ -216,7 +236,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
                   {t.initials}
                 </span>
                 <div className="min-w-0">
-                  <p className={`${tc.meta} leading-snug`} style={{ color: fg90 }}>
+                  <p className={tc.body} style={{ color: fg90 }}>
                     “{t.quote}”
                   </p>
                   <p className={tc.meta} style={{ color: fg70 }}>
@@ -227,6 +247,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
             ))}
           </ul>
         </section>
+
       </div>
 
       {/* ---------- Atalhos ---------- */}
