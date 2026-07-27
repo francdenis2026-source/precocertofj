@@ -17,6 +17,8 @@ import { EmptyState } from "@/components/layout/EmptyState";
 import { FadeSwap, LocationsSkeleton } from "@/components/layout/LoadingSkeleton";
 import { BackButton } from "@/components/layout/BackButton";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
+import { ShareButton } from "@/components/ds";
+import { ButcherCutBadge } from "@/components/ds/ButcherCutBadge";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
 import { usePerceivedPerfTelemetry } from "@/lib/perf-telemetry";
@@ -89,6 +91,9 @@ function OndeComprarPage() {
         <div className="mx-auto flex max-w-5xl items-center gap-3 px-4 py-3">
           <BackButton />
           <HomeBrandLink />
+          <div className="ml-auto">
+            <ShareButton title="Onde comprar mais barato — PreçoCerto" />
+          </div>
         </div>
       </header>
 
@@ -246,21 +251,38 @@ function OndeComprarPage() {
                       <li
                         key={`${p.productKey}-${o.establishmentId ?? i}`}
                         className={cn(
-                          "flex items-center gap-2 px-2 py-1.5",
+                          "pc-row-interactive flex items-center gap-2 px-2 py-1.5",
                           o.isCheapest
                             ? "pc-surface-3"
                             : "rounded-lg border border-[var(--pc-surface-2-border)]",
                         )}
                       >
-                        <Store className={cn("h-3.5 w-3.5 shrink-0", o.isCheapest ? "text-[var(--pc-gold-ink)]" : "text-muted-foreground")} />
+                        <Store
+                          className={cn(
+                            "h-3.5 w-3.5 shrink-0",
+                            o.isCheapest ? "text-[var(--pc-gold-ink)]" : "text-muted-foreground",
+                          )}
+                        />
                         <span className="min-w-0 flex-1">
-                          <span className={cn(tc.storeName, "block truncate")}>{o.storeName}</span>
+                          <span className="flex flex-wrap items-center gap-1.5">
+                            <span className={cn(tc.storeName, "pc-store-name truncate")}>
+                              {o.storeName}
+                            </span>
+                            {o.butcherProtein ? (
+                              <ButcherCutBadge protein={o.butcherProtein} size="xs" />
+                            ) : null}
+                          </span>
                           <span className={cn(tc.metaMuted, "block truncate")}>
                             {[o.neighborhood, o.city].filter(Boolean).join(" • ") || "—"}
                           </span>
                         </span>
                         <span className="shrink-0 text-right">
-                          <span className={cn(o.isCheapest ? tc.dataPrimary : tc.itemTitle, o.isCheapest && "text-[var(--pc-gold-ink)]")}>
+                          <span
+                            className={cn(
+                              "pc-price-value text-[13.5px]",
+                              o.isCheapest && "pc-price-value--best",
+                            )}
+                          >
                             {brl(o.price)}
                           </span>
                           {!o.isCheapest && o.diffPct > 0 && (
