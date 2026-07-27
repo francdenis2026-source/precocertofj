@@ -246,41 +246,23 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
             : ""}
         </p>
 
-        <ul className={`${BODY_GAP} min-h-0 flex-1 divide-y overflow-y-auto no-scrollbar [&>li:nth-child(n+5)]:hidden lg:[&>li:nth-child(n+5)]:block`} style={{ borderColor: line, maskImage: "linear-gradient(to bottom, #000 92%, transparent)", WebkitMaskImage: "linear-gradient(to bottom, #000 92%, transparent)" }}>
-          {items.length === 0
-            ? Array.from({ length: 7 }).map((_, i) => (
-                <li key={i} className="flex items-center gap-3 py-2">
-                  <div className="h-3 flex-1 animate-pulse rounded" style={{ background: glass }} />
-                  <div className="h-3 w-16 animate-pulse rounded" style={{ background: glass }} />
-                </li>
-              ))
-            : items.map((p) => (
-                <li key={p.slug}>
-                  <Link
-                    to="/produto/$slug"
-                    params={{ slug: p.slug }}
-                    onClick={onNavigate}
-                    className="group grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-1.5 transition-colors"
-                  >
-                    <div className="min-w-0">
-                      <p
-                        className={`${tc.itemTitle} truncate group-hover:underline`}
-                        style={{ color: fg }}
-                      >
-                        {p.name}
-                      </p>
-                      <p className={`${tc.meta} truncate`} style={{ color: fg70 }}>
-                        {p.marketName ?? "Mercado parceiro"} · {relative(p.when)}
-                        {p.stores > 1 ? ` · ${p.stores} mercados` : ""}
-                      </p>
-                    </div>
-                    <span className={`${tc.num} shrink-0 font-semibold`} style={{ color: gold }}>
-                      {brl(p.price)}
-                    </span>
-                  </Link>
-                </li>
-              ))}
+        <ul
+          className={`${BODY_GAP} min-h-0 flex-1 divide-y overflow-y-auto no-scrollbar [&>li:nth-child(n+5)]:hidden lg:[&>li:nth-child(n+5)]:block`}
+          style={{
+            borderColor: line,
+            maskImage: "linear-gradient(to bottom, #000 92%, transparent)",
+            WebkitMaskImage: "linear-gradient(to bottom, #000 92%, transparent)",
+          }}
+          aria-busy={items.length === 0}
+        >
+          {items.map((p) => (
+            <PriceRow key={p.slug} p={p} onNavigate={onNavigate} />
+          ))}
+          {Array.from({ length: pendingRows }).map((_, i) => (
+            <RowSkeleton key={`sk-${i}`} glass={glass} />
+          ))}
         </ul>
+
       </section>
 
       {/* ---------- Benefícios + prova social ---------- */}
