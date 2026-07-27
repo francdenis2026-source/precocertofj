@@ -65,7 +65,8 @@ function FaleConoscoPage() {
   const [email, setEmail] = useState("");
   const [assunto, setAssunto] = useState<Assunto>("duvida");
   const [mensagem, setMensagem] = useState("");
-  const [copied, setCopied] = useState(false);
+  const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const [sending, setSending] = useState(false);
 
   const canSubmit = nome.trim().length >= 2 && mensagem.trim().length >= 10;
 
@@ -85,28 +86,40 @@ function FaleConoscoPage() {
     return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(bodyLines.join("\n"))}`;
   }, [nome, email, assunto, mensagem]);
 
-  const onSubmit = (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (sending) return;
     if (!canSubmit) {
       toast.error("Preencha nome e uma mensagem com pelo menos 10 caracteres.");
       return;
     }
-    window.location.href = mailtoHref;
-    toast.success("Abrindo seu app de e-mail…", {
-      description: `Se nada abrir, escreva direto para ${CONTACT_EMAIL}.`,
-    });
-  };
-
-  const onCopyEmail = async () => {
+    setSending(true);
     try {
-      await navigator.clipboard.writeText(CONTACT_EMAIL);
-      setCopied(true);
-      toast.success("E-mail copiado.");
-      setTimeout(() => setCopied(false), 1800);
+      await new Promise((r) => setTimeout(r, 350));
+      window.location.href = mailtoHref;
+      toast.success("Abrindo seu app de e-mail…", {
+        description: `Se nada abrir, escreva direto para ${CONTACT_EMAIL}.`,
+      });
     } catch {
-      toast.error("Não foi possível copiar. Copie manualmente: " + CONTACT_EMAIL);
+      toast.error("Não foi possível abrir seu app de e-mail.", {
+        description: `Escreva direto para ${CONTACT_EMAIL}.`,
+      });
+    } finally {
+      setTimeout(() => setSending(false), 800);
     }
   };
+
+  const copy = async (key: string, value: string, label: string) => {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopiedKey(key);
+      toast.success(`${label} copiado.`);
+      setTimeout(() => setCopiedKey((k) => (k === key ? null : k)), 1800);
+    } catch {
+      toast.error(`Não foi possível copiar. Use: ${value}`);
+    }
+  };
+
 
   return (
     <div className="flex min-h-[100svh] flex-col bg-background">
