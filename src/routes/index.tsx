@@ -735,15 +735,17 @@ function HomePage() {
 
         {/* ================= RODAPÉ COMPACTO ================= */}
         <footer
-          className="border-t px-4 py-2 sm:px-6 lg:px-8"
+          className="border-t px-4 py-2.5 sm:px-6 lg:px-8"
           style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}
         >
-          <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-3 gap-y-1">
-            <p className="text-[11px]" style={{ color: "var(--pc-home-onhero-fg-60)" }}>
+          <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-1.5">
+            <p className="text-[12.5px] leading-snug sm:text-[13px]" style={{ color: "var(--pc-home-onhero-fg-70)" }}>
               © {new Date().getFullYear()} PreçoCerto · Feijó/AC ·{" "}
-              <span style={{ color: "var(--pc-home-onhero-gold)" }}>&lt;dev&gt; Franc D&apos;nis</span>
+              <span className="font-semibold" style={{ color: "var(--pc-home-onhero-gold)" }}>
+                &lt;dev&gt; Franc D&apos;nis
+              </span>
             </p>
-            <nav aria-label="Links institucionais" className="flex flex-wrap items-center gap-x-3 gap-y-1">
+            <nav aria-label="Links institucionais" className="flex flex-wrap items-center gap-x-1 gap-y-1">
               {[
                 { to: "/estabelecimentos", label: "Mercados" },
                 { to: "/mapa", label: "Bairros" },
@@ -754,13 +756,14 @@ function HomePage() {
                 <Link
                   key={l.to}
                   to={l.to}
-                  className="text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors hover:brightness-125"
-                  style={{ color: "var(--pc-home-onhero-fg-70)" }}
+                  className="rounded-md px-2 py-1 text-[12.5px] font-semibold uppercase tracking-[0.1em] transition-colors hover:brightness-125 sm:text-[13px]"
+                  style={{ color: "var(--pc-home-onhero-fg-85)" }}
                 >
                   {l.label}
                 </Link>
               ))}
             </nav>
+
           </div>
         </footer>
       </div>
