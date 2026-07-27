@@ -233,18 +233,14 @@ function NeighborhoodsPage() {
             </div>
 
             {/* Bloco editorial de contagem — tipografia serif, mais presente */}
-            <dl
-              aria-label="Resumo do guia"
-              className="flex shrink-0 items-stretch overflow-hidden rounded-lg border border-border/70 bg-background/60 shadow-sm backdrop-blur"
+            <StatCellGroup
+              label={`Resumo: ${filteredGroups.length} bairros e ${totalMarkets} mercados`}
             >
-              <StatCell
-                value={filteredGroups.length}
-                label="Bairros"
-                accent
-              />
-              <span aria-hidden className="w-px self-stretch bg-border/70" />
+              <StatCell value={filteredGroups.length} label="Bairros" accent />
+              <StatCellDivider />
               <StatCell value={totalMarkets} label="Mercados" />
-            </dl>
+            </StatCellGroup>
+
           </div>
         </header>
 
