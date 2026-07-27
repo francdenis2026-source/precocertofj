@@ -91,7 +91,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
 
 
   return (
-    <header className={shellClass}>
+    <header className={shellClass} data-site-header="global">
       <div
         className={dsx(
           ds.container,
