@@ -8,7 +8,10 @@ import { useServerFn } from "@tanstack/react-start";
 import { Nav } from "@/components/brand/Nav";
 import { Footer } from "@/components/brand/Footer";
 import { Breadcrumbs } from "@/components/nav/Breadcrumbs";
-import { PageHeader, StatGrid, ListingShell, ListingCount } from "@/components/layout";
+import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
+import { tc } from "@/lib/typeclear";
+import { dsx } from "@/lib/ds";
+
 import { supabase } from "@/integrations/supabase/client";
 import { useSignedLogoUrls } from "@/hooks/use-signed-logo-urls";
 import { SlidersHorizontal, PackageSearch, Share2, TrendingDown, Trophy, Store as StoreIcon, ArrowRight, Clock, AlertTriangle, RefreshCw, Search as SearchIcon, ChevronLeft, ChevronRight, Flag, X } from "lucide-react";
