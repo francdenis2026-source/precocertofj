@@ -309,9 +309,9 @@ function ProdutoComparacaoPage() {
             </div>
           </div>
         )}
+        </FadeSwap>
       </main>
+    </IsolatedPage>
 
-      <SiteFooter />
-    </div>
   );
 }
