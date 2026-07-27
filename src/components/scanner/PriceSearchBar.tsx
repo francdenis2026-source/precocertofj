@@ -537,7 +537,7 @@ export function PriceSearchBar({
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[color-mix(in_oklab,var(--color-accent)_70%,transparent)] to-transparent"
       />
       <div className="mb-2 flex items-center gap-2">
-        <Search className="h-3.5 w-3.5 text-accent-strong" strokeWidth={1.5} aria-hidden="true" />
+        <Search className="h-4 w-4 text-brand-navy dark:text-brand-gold" strokeWidth={2.25} aria-hidden="true" />
         <span
           role="note"
           aria-label="Passo 01: Pesquisar preço"
@@ -555,8 +555,8 @@ export function PriceSearchBar({
         <div className="relative flex-1" ref={containerRef}>
           <Search
             aria-hidden="true"
-            strokeWidth={2}
-            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-navy/60 dark:text-brand-gold/70"
+            strokeWidth={2.25}
+            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-navy dark:text-brand-gold"
           />
           <input
             ref={inputRef}
