@@ -47,7 +47,7 @@ export function SiteFooter() {
           "grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1.5",
           "py-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]",
           "sm:flex sm:flex-wrap sm:justify-between sm:gap-x-4 sm:gap-y-1 sm:py-2",
-          "text-[12.5px] leading-snug",
+          "text-[13.5px] leading-snug",
         )}
       >
         {current === "/" ? (
@@ -56,11 +56,11 @@ export function SiteFooter() {
               src="/logo-mark.png"
               alt=""
               aria-hidden
-              width={20}
-              height={20}
-              className="h-5 w-5 shrink-0 object-contain"
+              width={28}
+              height={28}
+              className="h-7 w-7 shrink-0 object-contain"
             />
-            <span className={dsx(serif, "truncate text-[14px] leading-none text-foreground")}>
+            <span className={dsx(serif, "truncate text-[17px] leading-none text-foreground")}>
               Preço<span className="italic text-brand">Certo</span>
             </span>
           </p>
@@ -76,11 +76,11 @@ export function SiteFooter() {
               src="/logo-mark.png"
               alt=""
               aria-hidden
-              width={20}
-              height={20}
-              className="h-5 w-5 shrink-0 object-contain"
+              width={28}
+              height={28}
+              className="h-7 w-7 shrink-0 object-contain"
             />
-            <span className={dsx(serif, "truncate text-[14px] leading-none text-foreground")}>
+            <span className={dsx(serif, "truncate text-[17px] leading-none text-foreground")}>
               Preço<span className="italic text-brand">Certo</span>
             </span>
             <span className="sr-only">— página inicial</span>
@@ -113,7 +113,7 @@ export function SiteFooter() {
           <span aria-hidden />
         )}
 
-        <p className="justify-self-end whitespace-nowrap font-mono text-[11.5px] text-muted-foreground">
+        <p className="justify-self-end whitespace-nowrap font-mono text-[12.5px] text-muted-foreground">
           &lt;dev&gt; <span className="text-foreground">Franc D&apos;nis</span>
         </p>
       </div>
