@@ -60,6 +60,9 @@ import { SectionSkeleton } from "@/components/admin/SectionSkeleton";
 const AdminInsightsPanel = lazy(() =>
   import("@/components/admin/AdminInsightsPanel").then((m) => ({ default: m.AdminInsightsPanel })),
 );
+const AdminKpiBoard = lazy(() =>
+  import("@/components/admin/AdminKpiBoard").then((m) => ({ default: m.AdminKpiBoard })),
+);
 const AdminGlobalSearch = lazy(() =>
   import("@/components/admin/AdminGlobalSearch").then((m) => ({ default: m.AdminGlobalSearch })),
 );
@@ -323,6 +326,10 @@ function AdminPage() {
               <Suspense fallback={<SectionSkeleton rows={3} chart label="Carregando indicadores" />}>
                 <AdminInsightsPanel />
               </Suspense>
+              <Suspense fallback={<SectionSkeleton rows={3} chart label="Carregando KPIs de preços" />}>
+                <AdminKpiBoard />
+              </Suspense>
+
             </div>
           </details>
 
@@ -445,6 +452,7 @@ const ADMIN_SHORTCUT_GROUPS = [
   {
     label: "Preços & cobertura",
     items: [
+      { to: "/admin/preco-rapido", label: "Registro rápido de preços", icon: Plus },
       { to: "/admin/precos", label: "Gestão de preços", icon: ShieldCheck },
       { to: "/admin/historico-precos", label: "Histórico de preços", icon: Gauge },
       { to: "/admin/cobertura", label: "Cobertura por mercado", icon: Store },

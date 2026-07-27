@@ -16,6 +16,7 @@ import { Route as PrivacidadeRouteImport } from './routes/privacidade'
 import { Route as PrecosRouteImport } from './routes/precos'
 import { Route as PlanosRouteImport } from './routes/planos'
 import { Route as PerfilRouteImport } from './routes/perfil'
+import { Route as OndeComprarRouteImport } from './routes/onde-comprar'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as NotificacoesRouteImport } from './routes/notificacoes'
 import { Route as MinhasLicencasRouteImport } from './routes/minhas-licencas'
@@ -71,6 +72,7 @@ import { Route as AdminRankCheckRouteImport } from './routes/admin_.rank-check'
 import { Route as AdminPromocoesCodigosRouteImport } from './routes/admin_.promocoes-codigos'
 import { Route as AdminPromocoesRouteImport } from './routes/admin_.promocoes'
 import { Route as AdminPrecosRouteImport } from './routes/admin_.precos'
+import { Route as AdminPrecoRapidoRouteImport } from './routes/admin_.preco-rapido'
 import { Route as AdminMetricasRouteImport } from './routes/admin_.metricas'
 import { Route as AdminLoteInserirRouteImport } from './routes/admin_.lote-inserir'
 import { Route as AdminImportacoesRouteImport } from './routes/admin_.importacoes'
@@ -136,6 +138,11 @@ const PlanosRoute = PlanosRouteImport.update({
 const PerfilRoute = PerfilRouteImport.update({
   id: '/perfil',
   path: '/perfil',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OndeComprarRoute = OndeComprarRouteImport.update({
+  id: '/onde-comprar',
+  path: '/onde-comprar',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OnboardingRoute = OnboardingRouteImport.update({
@@ -413,6 +420,11 @@ const AdminPrecosRoute = AdminPrecosRouteImport.update({
   path: '/admin/precos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminPrecoRapidoRoute = AdminPrecoRapidoRouteImport.update({
+  id: '/admin_/preco-rapido',
+  path: '/admin/preco-rapido',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminMetricasRoute = AdminMetricasRouteImport.update({
   id: '/admin_/metricas',
   path: '/admin/metricas',
@@ -609,6 +621,7 @@ export interface FileRoutesByFullPath {
   '/minhas-licencas': typeof MinhasLicencasRoute
   '/notificacoes': typeof NotificacoesRoute
   '/onboarding': typeof OnboardingRoute
+  '/onde-comprar': typeof OndeComprarRoute
   '/perfil': typeof PerfilRoute
   '/planos': typeof PlanosRoute
   '/precos': typeof PrecosRoute
@@ -637,6 +650,7 @@ export interface FileRoutesByFullPath {
   '/admin/importacoes': typeof AdminImportacoesRoute
   '/admin/lote-inserir': typeof AdminLoteInserirRoute
   '/admin/metricas': typeof AdminMetricasRoute
+  '/admin/preco-rapido': typeof AdminPrecoRapidoRoute
   '/admin/precos': typeof AdminPrecosRoute
   '/admin/promocoes': typeof AdminPromocoesRoute
   '/admin/promocoes-codigos': typeof AdminPromocoesCodigosRoute
@@ -704,6 +718,7 @@ export interface FileRoutesByTo {
   '/minhas-licencas': typeof MinhasLicencasRoute
   '/notificacoes': typeof NotificacoesRoute
   '/onboarding': typeof OnboardingRoute
+  '/onde-comprar': typeof OndeComprarRoute
   '/perfil': typeof PerfilRoute
   '/planos': typeof PlanosRoute
   '/precos': typeof PrecosRoute
@@ -732,6 +747,7 @@ export interface FileRoutesByTo {
   '/admin/importacoes': typeof AdminImportacoesRoute
   '/admin/lote-inserir': typeof AdminLoteInserirRoute
   '/admin/metricas': typeof AdminMetricasRoute
+  '/admin/preco-rapido': typeof AdminPrecoRapidoRoute
   '/admin/precos': typeof AdminPrecosRoute
   '/admin/promocoes': typeof AdminPromocoesRoute
   '/admin/promocoes-codigos': typeof AdminPromocoesCodigosRoute
@@ -800,6 +816,7 @@ export interface FileRoutesById {
   '/minhas-licencas': typeof MinhasLicencasRoute
   '/notificacoes': typeof NotificacoesRoute
   '/onboarding': typeof OnboardingRoute
+  '/onde-comprar': typeof OndeComprarRoute
   '/perfil': typeof PerfilRoute
   '/planos': typeof PlanosRoute
   '/precos': typeof PrecosRoute
@@ -828,6 +845,7 @@ export interface FileRoutesById {
   '/admin_/importacoes': typeof AdminImportacoesRoute
   '/admin_/lote-inserir': typeof AdminLoteInserirRoute
   '/admin_/metricas': typeof AdminMetricasRoute
+  '/admin_/preco-rapido': typeof AdminPrecoRapidoRoute
   '/admin_/precos': typeof AdminPrecosRoute
   '/admin_/promocoes': typeof AdminPromocoesRoute
   '/admin_/promocoes-codigos': typeof AdminPromocoesCodigosRoute
@@ -897,6 +915,7 @@ export interface FileRouteTypes {
     | '/minhas-licencas'
     | '/notificacoes'
     | '/onboarding'
+    | '/onde-comprar'
     | '/perfil'
     | '/planos'
     | '/precos'
@@ -925,6 +944,7 @@ export interface FileRouteTypes {
     | '/admin/importacoes'
     | '/admin/lote-inserir'
     | '/admin/metricas'
+    | '/admin/preco-rapido'
     | '/admin/precos'
     | '/admin/promocoes'
     | '/admin/promocoes-codigos'
@@ -992,6 +1012,7 @@ export interface FileRouteTypes {
     | '/minhas-licencas'
     | '/notificacoes'
     | '/onboarding'
+    | '/onde-comprar'
     | '/perfil'
     | '/planos'
     | '/precos'
@@ -1020,6 +1041,7 @@ export interface FileRouteTypes {
     | '/admin/importacoes'
     | '/admin/lote-inserir'
     | '/admin/metricas'
+    | '/admin/preco-rapido'
     | '/admin/precos'
     | '/admin/promocoes'
     | '/admin/promocoes-codigos'
@@ -1087,6 +1109,7 @@ export interface FileRouteTypes {
     | '/minhas-licencas'
     | '/notificacoes'
     | '/onboarding'
+    | '/onde-comprar'
     | '/perfil'
     | '/planos'
     | '/precos'
@@ -1115,6 +1138,7 @@ export interface FileRouteTypes {
     | '/admin_/importacoes'
     | '/admin_/lote-inserir'
     | '/admin_/metricas'
+    | '/admin_/preco-rapido'
     | '/admin_/precos'
     | '/admin_/promocoes'
     | '/admin_/promocoes-codigos'
@@ -1183,6 +1207,7 @@ export interface RootRouteChildren {
   MinhasLicencasRoute: typeof MinhasLicencasRoute
   NotificacoesRoute: typeof NotificacoesRoute
   OnboardingRoute: typeof OnboardingRoute
+  OndeComprarRoute: typeof OndeComprarRoute
   PerfilRoute: typeof PerfilRoute
   PlanosRoute: typeof PlanosRoute
   PrecosRoute: typeof PrecosRoute
@@ -1210,6 +1235,7 @@ export interface RootRouteChildren {
   AdminImportacoesRoute: typeof AdminImportacoesRoute
   AdminLoteInserirRoute: typeof AdminLoteInserirRoute
   AdminMetricasRoute: typeof AdminMetricasRoute
+  AdminPrecoRapidoRoute: typeof AdminPrecoRapidoRoute
   AdminPrecosRoute: typeof AdminPrecosRoute
   AdminPromocoesRoute: typeof AdminPromocoesRoute
   AdminPromocoesCodigosRoute: typeof AdminPromocoesCodigosRoute
@@ -1287,6 +1313,13 @@ declare module '@tanstack/react-router' {
       path: '/perfil'
       fullPath: '/perfil'
       preLoaderRoute: typeof PerfilRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onde-comprar': {
+      id: '/onde-comprar'
+      path: '/onde-comprar'
+      fullPath: '/onde-comprar'
+      preLoaderRoute: typeof OndeComprarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/onboarding': {
@@ -1674,6 +1707,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminPrecosRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin_/preco-rapido': {
+      id: '/admin_/preco-rapido'
+      path: '/admin/preco-rapido'
+      fullPath: '/admin/preco-rapido'
+      preLoaderRoute: typeof AdminPrecoRapidoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin_/metricas': {
       id: '/admin_/metricas'
       path: '/admin/metricas'
@@ -1989,6 +2029,7 @@ const rootRouteChildren: RootRouteChildren = {
   MinhasLicencasRoute: MinhasLicencasRoute,
   NotificacoesRoute: NotificacoesRoute,
   OnboardingRoute: OnboardingRoute,
+  OndeComprarRoute: OndeComprarRoute,
   PerfilRoute: PerfilRoute,
   PlanosRoute: PlanosRoute,
   PrecosRoute: PrecosRoute,
@@ -2016,6 +2057,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminImportacoesRoute: AdminImportacoesRoute,
   AdminLoteInserirRoute: AdminLoteInserirRoute,
   AdminMetricasRoute: AdminMetricasRoute,
+  AdminPrecoRapidoRoute: AdminPrecoRapidoRoute,
   AdminPrecosRoute: AdminPrecosRoute,
   AdminPromocoesRoute: AdminPromocoesRoute,
   AdminPromocoesCodigosRoute: AdminPromocoesCodigosRoute,
