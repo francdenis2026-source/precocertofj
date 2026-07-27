@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { formatShortDate } from "@/components/product/TrustIndicator";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { AdminOnly } from "@/components/auth/AdminOnly";
 import { AppShell } from "@/components/brand/AppShell";
@@ -326,7 +327,7 @@ function AdminPrecosPage() {
                           )}
                         </TableCell>
                         <TableCell className="whitespace-nowrap text-xs text-muted-foreground">
-                          {new Date(s.created_at).toLocaleDateString("pt-BR")}
+                          {formatShortDate(s.created_at)}
                         </TableCell>
                         <TableCell className="text-right">
                           <div className="flex justify-end gap-1">

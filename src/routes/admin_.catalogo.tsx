@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { formatShortDate } from "@/components/product/TrustIndicator";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
@@ -440,7 +441,7 @@ function ItemsPanel() {
       accessor: (r) => new Date(r.updatedAt),
       cell: (r) => (
         <span className="text-[11px] text-muted-foreground tabular-nums">
-          {new Date(r.updatedAt).toLocaleDateString("pt-BR")}
+          {formatShortDate(r.updatedAt)}
         </span>
       ),
     },

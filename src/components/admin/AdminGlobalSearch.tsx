@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { formatShortDate } from "@/components/product/TrustIndicator";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { Search, SlidersHorizontal, Download, Loader2, X } from "lucide-react";
@@ -227,7 +228,7 @@ export function AdminGlobalSearch() {
                     ...data.prices.map((p) => ({
                       tipo: "Preço",
                       nome: p.productName,
-                      detalhe: `${p.storeName} · ${new Date(p.createdAt).toLocaleDateString("pt-BR")}`,
+                      detalhe: `${p.storeName} · ${formatShortDate(p.createdAt)}`,
                       valor: brl(p.price),
                     })),
                   ],
@@ -267,7 +268,7 @@ export function AdminGlobalSearch() {
                 items={data.prices.map((p) => ({
                   id: p.id,
                   primary: p.productName,
-                  secondary: `${p.storeName} · ${new Date(p.createdAt).toLocaleDateString("pt-BR")}${p.verified ? " · verificado" : ""}`,
+                  secondary: `${p.storeName} · ${formatShortDate(p.createdAt)}${p.verified ? " · verificado" : ""}`,
                   value: brl(p.price),
                 }))}
               />

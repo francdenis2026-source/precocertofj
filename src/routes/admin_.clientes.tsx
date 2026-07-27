@@ -76,7 +76,7 @@ function fmtDate(v: string | null | undefined) {
 }
 function fmtDateShort(v: string | null | undefined) {
   if (!v) return "—";
-  try { return new Date(v).toLocaleDateString("pt-BR"); } catch { return v; }
+  try { return formatShortDate(v); } catch { return v; }
 }
 
 function ClientesPage() {

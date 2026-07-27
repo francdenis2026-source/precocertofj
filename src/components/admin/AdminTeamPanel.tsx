@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { formatShortDate } from "@/components/product/TrustIndicator";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -201,7 +202,7 @@ export function AdminTeamPanel() {
                     </TableCell>
                     <TableCell className={tc.meta}>
                       {m.invited ? "Convite pendente" : m.lastSignInAt
-                        ? `Último acesso ${new Date(m.lastSignInAt).toLocaleDateString("pt-BR")}`
+                        ? `Último acesso ${formatShortDate(m.lastSignInAt)}`
                         : "Nunca acessou"}
                     </TableCell>
                     <TableCell className="text-center">
