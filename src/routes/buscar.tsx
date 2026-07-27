@@ -24,7 +24,7 @@ import {
 
 import { BackButton } from "@/components/layout/BackButton";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
-import { SiteFooter } from "@/components/layout/SiteFooter";
+import { IsolatedPage } from "@/components/layout/IsolatedPage";
 
 import { useReducedMotion } from "@/lib/reduced-motion";
 import { ArrowLeft, BellRing, Filter, Search, SlidersHorizontal, X } from "lucide-react";
