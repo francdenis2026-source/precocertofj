@@ -4485,4 +4485,41 @@ html.dark .pc-row-interactive:hover .pc-store-name {
   bottom: 4px;
 }
 
+/* =====================================================================
+   Ícone de lupa (Search) — contraste WCAG AA garantido em todos os temas
+   ---------------------------------------------------------------------
+   Regra defensiva: no modo escuro, quando `.lucide-search` cai dentro de
+   inputs/labels/campos com fundo escuro, o token `text-muted-foreground`
+   (oklch 0.78) já resolve; mas alguns componentes empilham opacidade
+   (/50, /60) ou colocam o ícone sobre `bg-card/blur`, reduzindo o
+   contraste. Elevamos o piso para AA (≥ 4.5:1) e reforçamos hover/focus/
+   loading sem sobrescrever cores explícitas definidas via
+   `style={{ color: ... }}` (que ganham por specificity).
+   ===================================================================== */
+.lucide-search { opacity: 1; }
+
+.dark .lucide-search {
+  color: oklch(0.88 0.025 250);
+  stroke-width: 2.1;
+}
+
+/* Hover/focus do container do input eleva o ícone para gold */
+:is(label, form, [role="search"]):hover > .lucide-search,
+:is(label, form, [role="search"]):focus-within > .lucide-search {
+  color: var(--pc-gold-ink, #c9a84c);
+}
+.dark :is(label, form, [role="search"]):hover > .lucide-search,
+.dark :is(label, form, [role="search"]):focus-within > .lucide-search {
+  color: #f2c66b;
+}
+
+/* Estado loading — pulse mantendo contraste */
+@keyframes pc-search-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.72; }
+}
+[aria-busy="true"] .lucide-search,
+[data-loading="true"] .lucide-search {
+  animation: pc-search-pulse 1.2s ease-in-out infinite;
+}
 
