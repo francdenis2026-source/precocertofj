@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { SiteFooter } from "@/components/layout/SiteFooter";
+import { IsolatedPage } from "@/components/layout/IsolatedPage";
 import { BackButton } from "@/components/layout/BackButton";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { tc } from "@/lib/typeclear";
@@ -263,7 +263,7 @@ function PrivacidadePage() {
   const items = tab === "privacidade" ? PRIVACIDADE : TERMOS;
 
   return (
-    <div className="flex min-h-[100svh] flex-col bg-background">
+    <IsolatedPage className="bg-background">
       {/* HEADER editorial */}
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/92 backdrop-blur supports-[backdrop-filter]:bg-background/75">
         <span
@@ -353,7 +353,7 @@ function PrivacidadePage() {
         </div>
       </main>
 
-      <SiteFooter />
-    </div>
+    </IsolatedPage>
+
   );
 }

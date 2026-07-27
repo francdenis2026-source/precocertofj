@@ -9,7 +9,7 @@ import {
   humanizeCategory,
   type EstablishmentsOverview,
 } from "@/lib/establishments-public.functions";
-import { MobileNav } from "@/components/nav/MobileNav";
+
 import { FavoriteMarketButton } from "@/components/market/FavoriteMarketButton";
 import { useSession } from "@/hooks/useSession";
 import { listFavoriteMarkets } from "@/lib/favorites.functions";
@@ -28,7 +28,7 @@ import { tokenizeQuery } from "@/lib/search-tokens";
 const LIST_GRID =
   "grid grid-cols-[28px_44px_minmax(0,1fr)_160px_80px_78px_120px_20px] items-center gap-3";
 
-import { SiteFooter } from "@/components/layout/SiteFooter";
+import { IsolatedPage } from "@/components/layout/IsolatedPage";
 import { BackButton } from "@/components/layout/BackButton";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import {
@@ -421,7 +421,8 @@ function EstablishmentsPage() {
 
 
   return (
-    <div className="flex min-h-svh flex-col bg-background pb-24 md:pb-6">
+    <IsolatedPage className="bg-background" contentClassName="flex flex-col">
+
       {/* TOPO — mesma gramática editorial de /buscar: fio dourado, sem painéis pesados */}
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/92 backdrop-blur supports-[backdrop-filter]:bg-background/75">
         <span
@@ -1101,17 +1102,16 @@ function EstablishmentsPage() {
         )}
       </main>
 
-      <SiteFooter />
-      <MobileNav />
-      {/* silence unused import */}
-      <LoadingSkeleton className="hidden" rows={0} />
       <MetricDetailDialog
         open={metricDetail !== null}
         which={metricDetail}
         onClose={() => setMetricDetail(null)}
         data={data ?? null}
       />
-    </div>
+      {/* silence unused import */}
+      <LoadingSkeleton className="hidden" rows={0} />
+    </IsolatedPage>
+
   );
 }
 

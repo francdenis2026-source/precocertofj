@@ -12,7 +12,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
-import { SiteFooter } from "@/components/layout/SiteFooter";
+import { IsolatedPage } from "@/components/layout/IsolatedPage";
 import { dsx } from "@/lib/ds";
 import { toast } from "sonner";
 
@@ -122,7 +122,7 @@ function FaleConoscoPage() {
 
 
   return (
-    <div className="flex min-h-[100svh] flex-col bg-background">
+    <IsolatedPage className="bg-background">
       <div className="mx-auto w-full max-w-6xl shrink-0 px-4 pt-1 md:pt-2">
         <HomeBrandLink />
       </div>
@@ -341,7 +341,7 @@ function FaleConoscoPage() {
         </div>
       </main>
 
-      <SiteFooter />
-    </div>
+    </IsolatedPage>
+
   );
 }

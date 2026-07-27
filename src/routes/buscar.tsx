@@ -3,7 +3,7 @@ import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PriceSearchBar } from "@/components/scanner/PriceSearchBar";
-import { MobileNav } from "@/components/nav/MobileNav";
+
 import type { SearchMode } from "@/lib/search-tokens";
 import { FreeQuotaBadge } from "@/components/paywall/FreeQuotaBadge";
 import { QuickFilterBar } from "@/components/search/QuickFilterBar";
@@ -24,7 +24,7 @@ import {
 
 import { BackButton } from "@/components/layout/BackButton";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
-import { SiteFooter } from "@/components/layout/SiteFooter";
+import { IsolatedPage } from "@/components/layout/IsolatedPage";
 
 import { useReducedMotion } from "@/lib/reduced-motion";
 import { ArrowLeft, BellRing, Filter, Search, SlidersHorizontal, X } from "lucide-react";
@@ -371,10 +371,12 @@ function SearchPage() {
 
 
   return (
-    <div
-      data-reduced-motion={reducedMotion ? "on" : "off"}
-      className={`pc-search-scope flex min-h-[100svh] flex-col bg-background text-foreground${reducedMotion ? " pc-reduce-motion" : ""}`}
+    <IsolatedPage
+      className={`pc-search-scope${reducedMotion ? " pc-reduce-motion" : ""}`}
+      contentClassName="flex flex-col"
     >
+      <div data-reduced-motion={reducedMotion ? "on" : "off"} className="contents">
+
 
       {/* BARRA DE COMANDO — editorial: hairline, respiro e rótulo micro */}
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/75">
@@ -511,9 +513,9 @@ function SearchPage() {
         </div>
       </div>
 
-      <SiteFooter />
-      <MobileNav />
-    </div>
+      </div>
+    </IsolatedPage>
+
   );
 }
 

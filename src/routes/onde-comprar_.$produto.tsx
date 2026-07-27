@@ -11,7 +11,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { ArrowLeft, Crown, Loader2, MapPin, TrendingDown, TrendingUp } from "lucide-react";
+import { ArrowLeft, Crown, MapPin, TrendingDown, TrendingUp } from "lucide-react";
 
 import {
   getProductComparison,
@@ -20,7 +20,8 @@ import {
   type WhereToBuyRegions,
 } from "@/lib/where-to-buy.functions";
 import { Button } from "@/components/ui/button";
-import { SiteFooter } from "@/components/layout/SiteFooter";
+import { IsolatedPage } from "@/components/layout/IsolatedPage";
+import { RankingSkeleton, FadeSwap } from "@/components/layout/LoadingSkeleton";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
@@ -79,8 +80,10 @@ function ProdutoComparacaoPage() {
   const d = detailQ.data ?? null;
   const hoods = (regionsQ.data?.neighborhoods ?? []).filter((h) => !city || h.city === city);
 
+  const stateKey = detailQ.isLoading ? "loading" : !d ? "empty" : "ready";
+
   return (
-    <div className="min-h-screen bg-background">
+    <IsolatedPage className="bg-background">
       <header className="border-b border-border/60 bg-card/60">
         <div className="mx-auto flex max-w-5xl items-center gap-3 px-4 py-3">
           <Button asChild variant="ghost" size="sm" className="h-8 px-2">
@@ -93,16 +96,16 @@ function ProdutoComparacaoPage() {
       </header>
 
       <main className="mx-auto max-w-5xl px-4 py-4">
+        <FadeSwap showKey={stateKey}>
         {detailQ.isLoading ? (
-          <div className="grid h-48 place-items-center rounded-xl border border-border/70 bg-card">
-            <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-          </div>
+          <RankingSkeleton rows={6} />
         ) : !d ? (
           <p className={cn(tc.meta, "rounded-xl border border-border/70 bg-card p-6 text-center")}>
             Não encontramos preços para este produto com os filtros atuais.
           </p>
         ) : (
           <div className="space-y-2.5">
+
             {/* Cabeçalho + destaque do mais barato */}
             <section className="rounded-xl border border-border/70 bg-card p-3">
               <h1 className={cn(tc.h2, "mb-0.5")}>{d.productName}</h1>
@@ -306,9 +309,9 @@ function ProdutoComparacaoPage() {
             </div>
           </div>
         )}
+        </FadeSwap>
       </main>
+    </IsolatedPage>
 
-      <SiteFooter />
-    </div>
   );
 }
