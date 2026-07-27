@@ -314,7 +314,11 @@ function MelhoresPrecosPage() {
     }
   };
 
-  const allRows = data ?? [];
+  const butcherIds = useButcherIds();
+  const allRows = useMemo(
+    () => applyButcherFilter(data ?? [], butcherIds, { requireMinStores: 2 }),
+    [data, butcherIds],
+  );
 
   const categoryCounts = useMemo(() => {
     const counts = new Map<string, number>();
