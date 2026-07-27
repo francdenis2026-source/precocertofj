@@ -861,10 +861,10 @@ function SectionTitle({
 }) {
   return (
     <div className="flex items-baseline justify-between gap-3">
-      <h2 className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-foreground">
-        <Icon className="h-3.5 w-3.5 text-brand-gold" aria-hidden /> {title}
+      <h2 className={cn("inline-flex items-center gap-1.5", tc.eyebrow)}>
+        <Icon className="h-3.5 w-3.5 text-[var(--pc-gold-ink)]" aria-hidden /> {title}
       </h2>
-      {hint && <span className="text-[11px] text-muted-foreground">{hint}</span>}
+      {hint && <span className={tc.metaMuted}>{hint}</span>}
     </div>
   );
 }
