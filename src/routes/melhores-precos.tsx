@@ -503,6 +503,10 @@ function MelhoresPrecosPage() {
 
             <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5">
               <FreeQuotaBadge variant="inline" />
+              <ShareButton
+                title="Ranking de preços — PreçoCerto"
+                text="Veja onde cada produto está mais barato em Feijó/AC"
+              />
               {isAdmin && (
                 <button
                   type="button"
