@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useId } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Mail,
@@ -10,10 +10,14 @@ import {
   Phone,
   Clock,
   Loader2,
+  AlertCircle,
 } from "lucide-react";
+import { z } from "zod";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { IsolatedPage } from "@/components/layout/IsolatedPage";
 import { dsx } from "@/lib/ds";
+import { tc } from "@/lib/typeclear";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 const CONTACT_EMAIL = "precocerto-fj@proton.me";
