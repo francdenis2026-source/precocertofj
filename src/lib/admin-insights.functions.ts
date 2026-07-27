@@ -133,26 +133,89 @@ export const getAdminInsights = createServerFn({ method: "POST" })
     }>;
     const storeById = new Map(stores.map((s) => [s.id, s]));
 
-    /* ---- Tendência de menor preço (45 dias) ---- */
+    /* ---- Cobertura por categoria (todo o período, sem filtro) ---- */
+    const distinctAll = new Map<
+      string,
+      { name: string; unit: string | null; stores: Set<string>; prices: number }
+    >();
+    for (const s of scans) {
+      const key = productKey(s.product_name ?? "");
+      if (!key) continue;
+      const entry = distinctAll.get(key) ?? {
+        name: s.product_name ?? "",
+        unit: s.unit ?? null,
+        stores: new Set<string>(),
+        prices: 0,
+      };
+      entry.prices += 1;
+      if (s.establishment_id) entry.stores.add(s.establishment_id);
+      distinctAll.set(key, entry);
+    }
+    const catalogSize = distinctAll.size;
+
+    const keysByCategory = new Map<string, Set<string>>();
+    const coverage: CategoryCoverage[] = CATEGORY_DEFS.map((def) => {
+      const nicheStoreIds = new Set(
+        stores
+          .filter((st) => storeInCategory(def, { name: st.name, kind: st.kind }))
+          .map((st) => st.id),
+      );
+      const keys = new Set<string>();
+      let prices = 0;
+      const usedStores = new Set<string>();
+      for (const [key, entry] of distinctAll.entries()) {
+        const fromNiche = [...entry.stores].some((id) => nicheStoreIds.has(id));
+        if (!productInCategory(def, { name: entry.name, unit: entry.unit }, fromNiche)) continue;
+        keys.add(key);
+        prices += entry.prices;
+        for (const id of entry.stores) usedStores.add(id);
+      }
+      keysByCategory.set(def.slug, keys);
+      return {
+        slug: def.slug,
+        label: def.short || def.label,
+        products: keys.size,
+        stores: usedStores.size,
+        prices,
+        share: catalogSize ? Number(((keys.size / catalogSize) * 100).toFixed(1)) : 0,
+      };
+    })
+      .filter((c) => c.products > 0)
+      .sort((a, b) => b.products - a.products);
+
+    /* ---- Filtro por categorias selecionadas ---- */
+    const selected = data.categories.filter((slug) => keysByCategory.has(slug));
+    const allowedKeys =
+      selected.length > 0
+        ? new Set(selected.flatMap((slug) => [...(keysByCategory.get(slug) ?? [])]))
+        : null;
+    const filtered = allowedKeys
+      ? scans.filter((s) => {
+          const key = productKey(s.product_name ?? "");
+          return key ? allowedKeys.has(key) : false;
+        })
+      : scans;
+
+    /* ---- Tendência de menor preço ---- */
     const byDay = new Map<string, Map<string, number>>();
     const dayCount = new Map<string, number>();
     const dayVerified = new Map<string, number>();
+    const distinct = new Set<string>();
 
-    for (const s of scans) {
+    for (const s of filtered) {
       const price = Number(s.price_captured);
       if (!Number.isFinite(price) || price <= 0) continue;
       const d = dayKey(s.created_at);
-      if (s.created_at >= since) {
-        const key = productKey(s.product_name ?? "");
-        if (key) {
-          const bucket = byDay.get(d) ?? new Map<string, number>();
-          const prev = bucket.get(key);
-          if (prev === undefined || price < prev) bucket.set(key, price);
-          byDay.set(d, bucket);
-        }
-        dayCount.set(d, (dayCount.get(d) ?? 0) + 1);
-        if (s.verified) dayVerified.set(d, (dayVerified.get(d) ?? 0) + 1);
+      const key = productKey(s.product_name ?? "");
+      if (key) {
+        distinct.add(key);
+        const bucket = byDay.get(d) ?? new Map<string, number>();
+        const prev = bucket.get(key);
+        if (prev === undefined || price < prev) bucket.set(key, price);
+        byDay.set(d, bucket);
       }
+      dayCount.set(d, (dayCount.get(d) ?? 0) + 1);
+      if (s.verified) dayVerified.set(d, (dayVerified.get(d) ?? 0) + 1);
     }
 
     const trend: TrendPoint[] = [...byDay.entries()]
@@ -167,59 +230,16 @@ export const getAdminInsights = createServerFn({ method: "POST" })
           samples: dayCount.get(day) ?? values.length,
         };
       })
-      .slice(-30);
+      .slice(-60);
 
-    /* ---- Atualizações recentes (14 dias, incluindo dias vazios) ---- */
+    /* ---- Atualizações recentes (últimos dias do período) ---- */
     const recent: RecentUpdatePoint[] = [];
-    for (let i = 13; i >= 0; i--) {
-      const d = new Date(Date.now() - i * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+    const window = Math.max(1, Math.min(14, rangeDays));
+    const endMs = Date.parse(`${data.to}T00:00:00Z`);
+    for (let i = window - 1; i >= 0; i--) {
+      const d = new Date(endMs - i * 86_400_000).toISOString().slice(0, 10);
       recent.push({ day: d, prices: dayCount.get(d) ?? 0, verified: dayVerified.get(d) ?? 0 });
     }
-
-    /* ---- Cobertura por categoria ---- */
-    const distinct = new Map<string, { name: string; unit: string | null; stores: Set<string>; prices: number }>();
-    for (const s of scans) {
-      const key = productKey(s.product_name ?? "");
-      if (!key) continue;
-      const entry = distinct.get(key) ?? {
-        name: s.product_name ?? "",
-        unit: s.unit ?? null,
-        stores: new Set<string>(),
-        prices: 0,
-      };
-      entry.prices += 1;
-      if (s.establishment_id) entry.stores.add(s.establishment_id);
-      distinct.set(key, entry);
-    }
-    const totalProducts = distinct.size;
-
-    const coverage: CategoryCoverage[] = CATEGORY_DEFS.map((def) => {
-      const nicheStoreIds = new Set(
-        stores
-          .filter((st) => storeInCategory(def, { name: st.name, kind: st.kind }))
-          .map((st) => st.id),
-      );
-      let products = 0;
-      let prices = 0;
-      const usedStores = new Set<string>();
-      for (const entry of distinct.values()) {
-        const fromNiche = [...entry.stores].some((id) => nicheStoreIds.has(id));
-        if (!productInCategory(def, { name: entry.name, unit: entry.unit }, fromNiche)) continue;
-        products += 1;
-        prices += entry.prices;
-        for (const id of entry.stores) usedStores.add(id);
-      }
-      return {
-        slug: def.slug,
-        label: def.short || def.label,
-        products,
-        stores: usedStores.size,
-        prices,
-        share: totalProducts ? Number(((products / totalProducts) * 100).toFixed(1)) : 0,
-      };
-    })
-      .filter((c) => c.products > 0)
-      .sort((a, b) => b.products - a.products);
 
     const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
@@ -228,14 +248,17 @@ export const getAdminInsights = createServerFn({ method: "POST" })
       coverage,
       recent,
       totals: {
-        products: totalProducts,
-        prices: scans.length,
+        products: distinct.size,
+        prices: filtered.length,
         stores: stores.filter((s) => s.active !== false).length,
-        verified: scans.filter((s) => s.verified).length,
-        last24h: scans.filter((s) => s.created_at >= dayAgo).length,
+        verified: filtered.filter((s) => s.verified).length,
+        last24h: filtered.filter((s) => s.created_at >= dayAgo).length,
       },
+      range: { from: data.from, to: data.to, days: rangeDays },
+      categories: selected,
       generatedAt: new Date().toISOString(),
     };
+
   });
 
 /* ------------------------------------------------------------------ */
