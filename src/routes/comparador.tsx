@@ -16,7 +16,7 @@ import { filterAndSortComparisonRows } from "@/lib/comparison-search";
 import { TeaserCard, useTeaserAccess } from "@/components/paywall/TeaserGate";
 import { PaywallInline } from "@/components/paywall/PaywallInline";
 import { FreeQuotaBadge } from "@/components/paywall/FreeQuotaBadge";
-import { PageHeader } from "@/components/brand/PageHeader";
+
 import { PriceHero } from "@/components/product/PriceHero";
 import { SavingsBadge } from "@/components/product/SavingsBadge";
 import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
@@ -65,7 +65,11 @@ import {
   SlidersHorizontal,
   Lock,
   Share2,
+  ArrowLeft,
+  BellRing,
 } from "lucide-react";
+import { BackButton } from "@/components/layout/BackButton";
+import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 
 type ViewMode = "grid" | "table";
 type SortKey = "relevance" | "price-asc" | "savings-desc" | "unit-asc" | "name" | "confidence-desc";
@@ -756,25 +760,49 @@ function ComparadorPage() {
       <Nav />
       <Breadcrumbs items={[{ label: "Comparador de preços" }]} />
 
+      {/* BARRA DE COMANDO — mesmo cabeçalho editorial sticky do /buscar */}
+      <header className="sticky top-0 z-30 border-b border-border/60 bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/75">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-2.5 md:gap-6 md:px-8 md:py-3">
+          <div className="flex min-w-0 items-center gap-1.5">
+            <BackButton fallbackTo="/" variant="ghost" />
+            <span aria-hidden className="h-5 w-px bg-border" />
+            <HomeBrandLink />
+          </div>
 
-      <PageHeader
-        eyebrow="Preços reais dos mercados"
-        title={<>Comparador de <em className="italic text-primary">preços</em></>}
-        description="Todos os produtos abaixo são preços reais capturados nos mercados cadastrados. Clique em um produto para ver a foto, a descrição e o preço em cada mercado, do mais barato ao mais caro."
-        compactMobile
-        meta={<FreeQuotaBadge variant="inline" />}
-        actions={
-          <button
-            type="button"
-            onClick={handleShare}
-            className="hidden md:inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-background px-4 py-2 font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-primary transition hover:border-primary hover:bg-primary/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-            aria-label="Compartilhar esta visualização do comparador"
-          >
-            <Share2 className="h-3.5 w-3.5" strokeWidth={2} />
-            Compartilhar
-          </button>
-        }
-      />
+          <div className="flex min-w-0 flex-col gap-0.5">
+            <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--pc-gold-ink)]">
+              Preços reais dos mercados
+            </span>
+            <h1 className="min-w-0 truncate whitespace-nowrap font-serif text-[17px] font-normal leading-tight tracking-tight text-foreground sm:text-[21px]">
+              Comparador<span className="hidden sm:inline"> de preços</span>
+            </h1>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={handleShare}
+              className="inline-flex h-7 items-center gap-1.5 rounded-full border border-border px-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+              aria-label="Compartilhar esta visualização do comparador"
+            >
+              <Share2 className="h-3.5 w-3.5" aria-hidden="true" />
+              <span className="hidden sm:inline">Compartilhar</span>
+            </button>
+            <Link
+              to="/alertas"
+              title="Criar alerta quando o preço cair"
+              className="inline-flex h-7 items-center gap-1.5 rounded-full border border-border px-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+            >
+              <BellRing className="h-3.5 w-3.5" aria-hidden="true" />
+              <span className="hidden sm:inline">Alertas de preço</span>
+            </Link>
+            <span aria-hidden className="hidden h-8 w-px bg-border md:block" />
+            <FreeQuotaBadge variant="inline" />
+          </div>
+        </div>
+      </header>
+
+
 
 
       <section className="mx-auto max-w-7xl px-4 pt-2.5 md:px-6 md:pt-8">

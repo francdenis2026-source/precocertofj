@@ -282,7 +282,7 @@ function PlansPage() {
                       </span>
                     )}
 
-                    <span className={cn(tc.eyebrow, "mb-1 block")}>
+                    <span className={cn(tc.eyebrow, "mb-1 block", (isRecommended || isFounder) && "pr-28")}>
                       {isRecommended ? "Mais escolhido" : isFounder ? "Edição fundador" : "Plano"}
                     </span>
                     <h2 className={cn(tc.sectionTitle, "pr-24")}>

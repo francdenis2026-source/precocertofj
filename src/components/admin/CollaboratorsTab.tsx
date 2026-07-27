@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { formatShortDate } from "@/components/product/TrustIndicator";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
@@ -47,7 +48,7 @@ const STATUS_TONE: Record<string, "default" | "secondary" | "outline" | "destruc
 function fmtDate(iso: string | null): string {
   if (!iso) return "—";
   try {
-    return new Date(iso).toLocaleDateString("pt-BR");
+    return formatShortDate(iso);
   } catch {
     return "—";
   }

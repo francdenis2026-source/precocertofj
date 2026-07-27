@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { formatShortDate } from "@/components/product/TrustIndicator";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
@@ -351,7 +352,7 @@ function PresentTable({ rows }: { rows: Array<{ product_key: string; display_nam
                 <TableCell className="text-right tabular-nums">{fmt(min)}</TableCell>
                 <TableCell className="text-right tabular-nums">{fmt(r.avg_price)}</TableCell>
                 <TableCell className="text-xs text-muted-foreground">
-                  {r.last_seen_at ? new Date(r.last_seen_at).toLocaleDateString("pt-BR") : "—"}
+                  {formatShortDate(r.last_seen_at)}
                 </TableCell>
               </TableRow>
             );

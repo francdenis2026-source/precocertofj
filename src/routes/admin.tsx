@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate, useRouter } from "@tanstack/react-router";
+import { formatShortDate } from "@/components/product/TrustIndicator";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useState, useMemo, useEffect, useCallback } from "react";
@@ -906,7 +907,7 @@ function SubscribersTab() {
                         {s.activationCode} <Copy className="h-3 w-3" />
                       </button>
                     </TableCell>
-                    <TableCell className="text-xs text-muted-foreground">{new Date(s.expiresAt).toLocaleDateString("pt-BR")}</TableCell>
+                    <TableCell className="text-xs text-muted-foreground">{formatShortDate(s.expiresAt)}</TableCell>
                     <TableCell className="text-right">
                       <Button variant="ghost" size="sm" onClick={async () => {
                         admin.resendCode(s.id);
@@ -1388,7 +1389,7 @@ function StatusTab() {
                               : `${daysLeft} dia${daysLeft === 1 ? "" : "s"}`}
                         </span>
                         <span className="text-muted-foreground">
-                          · {new Date(s.expiresAt).toLocaleDateString("pt-BR")}
+                          · {formatShortDate(s.expiresAt)}
                         </span>
                       </div>
                       <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-muted">
@@ -1617,7 +1618,7 @@ function WebhooksTab() {
                       <TableCell>{s.plan_id ?? "-"}</TableCell>
                       <TableCell><StatusPill status={s.status} /></TableCell>
                       <TableCell className="text-sm">
-                        {s.expires_at ? new Date(s.expires_at).toLocaleDateString("pt-BR") : "-"}
+                        {formatShortDate(s.expires_at)}
                       </TableCell>
                       <TableCell className="font-mono text-xs">{s.payment_id ?? "-"}</TableCell>
                       <TableCell>
@@ -1915,7 +1916,7 @@ function UsersTab() {
                           )}
                         </TableCell>
                         <TableCell className="text-xs text-muted-foreground">
-                          {new Date(u.createdAt).toLocaleDateString("pt-BR")}
+                          {formatShortDate(u.createdAt)}
                         </TableCell>
                         <TableCell className="text-xs text-muted-foreground">
                           {u.lastSignInAt ? new Date(u.lastSignInAt).toLocaleString("pt-BR") : "Nunca"}
