@@ -239,33 +239,50 @@ function PlansPage() {
                     key={plan.id}
                     data-planos-card
                     onClick={() => setSelectedId(plan.id)}
-                    className={dsx(
-                      "pc-lift relative flex h-[clamp(190px,26vh,238px)] w-[76%] shrink-0 snap-start cursor-pointer flex-col rounded-xl border border-border bg-card p-3.5 shadow-elev-1 sm:w-[46%] lg:h-auto lg:min-h-[214px] lg:w-auto lg:p-4",
-                      isRecommended && "border-brand-gold/70",
-                      isFounder && "border-brand-gold/50",
-                      isSelected && "border-brand-gold ring-2 ring-brand-gold/35",
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        setSelectedId(plan.id);
+                      }
+                    }}
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={isSelected}
+                    aria-label={`${plan.name}${isRecommended ? " · recomendado" : ""}${isFree ? " · grátis" : ` · ${centsToBRL(plan.price_cents)}`}`}
+                    className={cn(
+                      "pc-lift pc-focus relative flex h-[clamp(190px,26vh,238px)] w-[76%] shrink-0 snap-start cursor-pointer flex-col p-3.5 sm:w-[46%] lg:h-auto lg:min-h-[214px] lg:w-auto lg:p-4",
+                      isRecommended ? "pc-surface-3-interactive" : "pc-surface-2-interactive",
+                      isSelected && "ring-2 ring-brand-gold/45",
                     )}
                   >
                     {(isRecommended || isFounder) && (
                       <span
                         className={dsx(
-                          "absolute right-3 top-3 inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.12em]",
-                          isRecommended ? "badge-gold" : "badge-gold-outline",
+                          tc.eyebrow,
+                          "absolute right-3 top-3 inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5",
+                          isRecommended ? "badge-gold text-brand-navy" : "badge-gold-outline",
                         )}
                       >
-                        {isRecommended ? "Mais escolhido" : "Limitado"}
+                        {isRecommended ? "Recomendado" : "Limitado"}
                       </span>
                     )}
 
-                    <h2 className="pr-24 font-display text-[15px] font-semibold leading-tight tracking-tight text-foreground">
+                    <span className={cn(tc.eyebrow, "mb-1 block")}>
+                      {isRecommended ? "Mais escolhido" : isFounder ? "Edição fundador" : "Plano"}
+                    </span>
+                    <h2 className={cn(tc.sectionTitle, "pr-24")}>
                       {plan.name}
                     </h2>
 
                     <div className="mt-2">
-                      <span className="font-display text-[25px] font-semibold leading-none tracking-tight text-foreground">
+                      <span
+                        className={cn(
+                          isRecommended ? tc.dataPrimary : "font-display text-[25px] font-semibold leading-none tracking-tight text-foreground",
+                        )}
+                      >
                         {isFree ? "Grátis" : centsToBRL(plan.price_cents)}
                       </span>
-                      <p className="mt-1.5 text-[11.5px] leading-snug text-muted-foreground">
+                      <p className={cn(tc.meta, "mt-1.5")}>
                         {isFounder
                           ? "Pagamento único · vitalício"
                           : isFree
@@ -276,7 +293,7 @@ function PlansPage() {
                       </p>
                     </div>
 
-                    <div className="my-2.5 h-px bg-border/70" aria-hidden />
+                    <hr className="pc-rule my-2.5" />
 
                     <ul className="min-h-0 flex-1 space-y-1.5 overflow-hidden text-[12px] leading-snug">
                       {planHighlights(plan.slug).slice(0, 2).map((h) => (
@@ -301,7 +318,8 @@ function PlansPage() {
                       data-loading={buying === plan.id ? "true" : undefined}
                       className={dsx(
                         ds.btn.base,
-                        "btn-state-safe mt-2.5 h-10 w-full px-3 text-[12px] font-semibold uppercase tracking-[0.06em]",
+                        "btn-state-safe pc-focus mt-2.5 h-10 w-full px-3",
+                        tc.control,
                         isRecommended || isFounder
                           ? "btn-gold shadow-elev-1"
                           : "border border-border bg-card text-foreground hover:border-brand-gold hover:text-brand-gold",
