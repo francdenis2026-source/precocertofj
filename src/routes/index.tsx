@@ -583,33 +583,31 @@ function HomePage() {
                       Onde comparamos
                     </span>
                   </div>
-                  {/* Muro de logos: uma única faixa, marcas maiores e legíveis.
-                      Ocupa a mesma altura das duas linhas de chips anteriores. */}
-                  <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+                  {/* Muro de logos: plaquetas claras (contraste garantido sobre o
+                      navy) com as marcas em alta definição e recorte generoso. */}
+                  <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
                     {(storesQ.isLoading ? Array.from({ length: 5 }) : partners).map((s: any, i: number) => (
                       <Link
                         key={s?.id ?? i}
                         to="/estabelecimentos"
                         title={s?.name ?? undefined}
                         aria-label={s?.name ? `Ver ${s.name}` : "Ver mercados parceiros"}
-                        className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border p-1 pc-tile"
-                        style={{
-                          background: "var(--pc-home-onhero-glass-soft)",
-                          borderColor: "var(--pc-home-onhero-border-soft)",
-                        }}
+                        className="group grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)] transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_18px_-6px_rgba(3,10,28,0.7)]"
+                        style={{ borderColor: "color-mix(in oklab, #ffffff 78%, transparent)" }}
                       >
                         {s?.logoUrl ? (
                           <img
                             src={s.logoUrl}
                             alt={s?.name ?? ""}
+                            width={112}
+                            height={112}
                             loading="lazy"
                             decoding="async"
-                            className="h-full w-full rounded-lg object-contain"
+                            className="h-full w-full object-contain"
                           />
                         ) : (
                           <span
-                            className="h-full w-full rounded-lg"
-                            style={{ background: "var(--pc-home-onhero-border-soft)" }}
+                            className="h-full w-full rounded-lg bg-muted"
                             aria-hidden
                           />
                         )}
@@ -617,6 +615,7 @@ function HomePage() {
                     ))}
 
                   </div>
+
                 </div>
               </div>
             </aside>
