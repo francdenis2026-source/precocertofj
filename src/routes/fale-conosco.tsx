@@ -272,7 +272,7 @@ function FaleConoscoPage() {
                     ) : (
                       <Copy className="h-3 w-3" />
                     )}
-                    <span className="hidden sm:inline">
+                    <span className="hidden lg:inline">
                       {copiedKey === "email" ? "Copiado" : "Copiar"}
                     </span>
                   </button>
@@ -299,7 +299,7 @@ function FaleConoscoPage() {
                     ) : (
                       <Copy className="h-3 w-3" />
                     )}
-                    <span className="hidden sm:inline">
+                    <span className="hidden lg:inline">
                       {copiedKey === "phone" ? "Copiado" : "Copiar"}
                     </span>
                   </button>
