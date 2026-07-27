@@ -24,6 +24,20 @@ import { ds, dsx } from "@/lib/ds";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
 import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+
 
 export const Route = createFileRoute("/planos")({
   head: () => ({
