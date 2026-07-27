@@ -887,7 +887,7 @@ function EmptyCard({
   action?: { label: string; onClick: () => void };
 }) {
   return (
-    <div className="mt-2 rounded-lg border border-dashed border-border bg-card px-4 py-6 text-center">
+    <div className="pc-surface-1 mt-2 border-dashed px-4 py-6 text-center">
       <p className="text-[12.5px] text-muted-foreground">{text}</p>
       {action && (
         <button
