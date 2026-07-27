@@ -7,8 +7,11 @@ import { useServerFn } from "@tanstack/react-start";
 
 import { Nav } from "@/components/brand/Nav";
 import { Footer } from "@/components/brand/Footer";
-import { Breadcrumbs } from "@/components/nav/Breadcrumbs";
-import { PageHeader, StatGrid, ListingShell, ListingCount } from "@/components/layout";
+
+import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
+import { tc } from "@/lib/typeclear";
+import { dsx } from "@/lib/ds";
+
 import { supabase } from "@/integrations/supabase/client";
 import { useSignedLogoUrls } from "@/hooks/use-signed-logo-urls";
 import { SlidersHorizontal, PackageSearch, Share2, TrendingDown, Trophy, Store as StoreIcon, ArrowRight, Clock, AlertTriangle, RefreshCw, Search as SearchIcon, ChevronLeft, ChevronRight, Flag, X } from "lucide-react";
@@ -432,34 +435,60 @@ function MelhoresPrecosPage() {
 
 
   return (
-    <div className="min-h-screen">
+    <div className="flex min-h-screen flex-col">
       <Nav />
-      <Breadcrumbs items={[{ label: "Melhores preços" }]} />
 
-      <div className="mx-auto max-w-7xl px-4 md:px-6">
-        <PageHeader
-          breadcrumbs={[{ label: "Início", to: "/" }, { label: "Melhores preços" }]}
-          title={
-            <>
-              Onde cada produto está{" "}
-              <em className="italic text-primary">mais barato</em>
-            </>
-          }
-          description="Comparamos itens com o mesmo tamanho e unidade (ml, g, un). A economia é calculada em relação à média entre os mercados que vendem o item."
-          actions={
-            <>
+      <main className="mx-auto w-full max-w-7xl flex-1 px-4 pb-6 pt-1 md:px-6">
+        {/* ---------- Cabeçalho editorial compacto ---------- */}
+        <header className="border-b border-border/60 pb-2.5">
+          <div className="mb-1 flex min-w-0 items-center gap-2">
+            <HomeBrandLink className="-ml-1" />
+            <nav
+              aria-label="Trilha de navegação"
+              className={dsx(tc.meta, "hidden min-w-0 items-center gap-1 sm:flex")}
+            >
+              <span aria-hidden className="text-border">
+                /
+              </span>
+              <Link to="/" className="transition-colors hover:text-foreground">
+                Início
+              </Link>
+              <span aria-hidden className="opacity-50">
+                /
+              </span>
+              <span className="text-foreground">Ranking</span>
+            </nav>
+          </div>
+
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-3">
+            <div className="min-w-0">
+              <span className={tc.eyebrow}>Ranking de preços</span>
+              <h1 className={dsx(tc.h1, "mt-0.5")}>
+                Onde cada produto está{" "}
+                <em className="italic text-brand-gold">mais barato</em>
+              </h1>
+              <p className={dsx(tc.sectionNote, "mt-0.5 line-clamp-2 max-w-2xl")}>
+                Comparamos itens de mesmo tamanho e unidade (ml, g, un). A economia é medida
+                contra a média dos mercados que vendem o item.
+              </p>
+            </div>
+
+            <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5">
               <FreeQuotaBadge variant="inline" />
               {isAdmin && (
                 <button
                   type="button"
                   onClick={handleRefresh}
                   disabled={isFetching}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-accent/40 bg-background px-3 py-1.5 text-[13px] font-semibold text-foreground transition-colors hover:border-accent hover:bg-accent/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-60"
+                  className={dsx(
+                    tc.control,
+                    "inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-foreground transition-colors hover:border-brand-gold/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold disabled:cursor-not-allowed disabled:opacity-60",
+                  )}
                   aria-label="Atualizar preços"
                   title={dataUpdatedAt ? `Atualizado ${formatRelative(new Date(dataUpdatedAt).toISOString())}` : undefined}
                 >
                   <RefreshCw className={`h-3.5 w-3.5 ${isFetching ? "animate-spin" : ""}`} strokeWidth={2} />
-                  {isFetching ? "Atualizando" : "Atualizar"}
+                  <span className="hidden sm:inline">{isFetching ? "Atualizando" : "Atualizar"}</span>
                 </button>
               )}
               <button
@@ -486,254 +515,272 @@ function MelhoresPrecosPage() {
                     }
                   }
                 }}
-                className="inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-background px-3 py-1.5 text-[13px] font-semibold text-primary transition-colors hover:border-primary hover:bg-primary/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                className={dsx(
+                  tc.control,
+                  "inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-foreground transition-colors hover:border-brand-gold/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+                )}
                 aria-label="Compartilhar"
               >
                 <Share2 className="h-3.5 w-3.5" strokeWidth={2} />
-                Compartilhar
+                <span className="hidden sm:inline">Compartilhar</span>
               </button>
-            </>
-          }
-        />
+            </div>
+          </div>
+        </header>
 
-        {/* Stat strip compacto */}
-        <StatGrid
-          className="mb-4 lg:grid-cols-3"
-          stats={[
-            { label: "Produtos comparados", value: rows.length, icon: PackageSearch },
+        {/* ---------- Faixa de indicadores (linha fina, sem cards altos) ---------- */}
+        <dl className="mt-2 grid grid-cols-3 divide-x divide-border/60 overflow-hidden rounded-xl border border-border bg-card/50">
+          {[
             {
+              icon: PackageSearch,
+              label: "Produtos comparados",
+              value: String(rows.length),
+              hint: null as string | null,
+            },
+            {
+              icon: TrendingDown,
               label: "Economia acumulada",
               value: formatBRL(totalSavings),
-              icon: TrendingDown,
-              hint: "soma do mais barato vs média",
-              tone: "success",
+              hint: "mais barato vs média",
             },
             {
+              icon: Trophy,
               label: "Melhor economia",
               value: rows[0] ? `${rows[0].savings_pct.toFixed(1)}%` : "—",
-              icon: Trophy,
-              hint: rows[0]?.display_name,
-              tone: "primary",
+              hint: rows[0]?.display_name ?? null,
             },
-          ]}
-        />
-      </div>
+          ].map((s) => {
+            const Icon = s.icon;
+            return (
+              <div key={s.label} className="min-w-0 px-2.5 py-1.5 sm:px-3.5">
+                <dt className={dsx(tc.tag, "flex min-w-0 items-center gap-1.5 text-muted-foreground")}>
+                  <Icon className="h-3.5 w-3.5 shrink-0 text-brand-gold" strokeWidth={2} />
+                  <span className="truncate">{s.label}</span>
+                </dt>
+                <dd className={dsx(tc.num, "mt-0.5 truncate font-semibold text-foreground")}>
+                  {s.value}
+                </dd>
+                {s.hint && (
+                  <p className={dsx(tc.meta, "truncate")}>{s.hint}</p>
+                )}
+              </div>
+            );
+          })}
+        </dl>
 
-      {/* Filtros — categoria + busca por cidade/bairro + avançados */}
-      <section className="mx-auto max-w-7xl px-6 pt-5 space-y-3">
-        <CategoryTabs
-          active={activeCategory}
-          counts={categoryCounts}
-          total={allRows.length}
-          onChange={(c) => setSearch({ cat: c ?? "", type: "" })}
-        />
-
-        {/* Filtro por tipo de produto (subcategoria) — só aparece se houver
-            pelo menos 2 tipos disponíveis no escopo atual (respeita categoria). */}
-        {typeCounts.size > 1 && (
-          <QuickFilterBar
-            label="Tipo"
-            ariaLabel="Filtrar por tipo de produto"
-            options={Array.from(typeCounts.entries())
-              .sort((a, b) => b[1] - a[1])
-              .slice(0, 12)
-              .map(([key, count]) => ({
-                value: key,
-                label:
-                  PRODUCT_TYPE_LABEL[key as keyof typeof PRODUCT_TYPE_LABEL] ?? key,
-                count,
-              }))}
-            value={activeType}
-            onChange={(next) => setSearch({ type: next ?? "" })}
-            size="sm"
+        {/* ---------- Filtros ---------- */}
+        <section className="mt-2 space-y-1.5">
+          <CategoryTabs
+            active={activeCategory}
+            counts={categoryCounts}
+            total={allRows.length}
+            onChange={(c) => setSearch({ cat: c ?? "", type: "" })}
           />
-        )}
 
-
-        {/* Busca por cidade / bairro / mercado */}
-        <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center">
-          <div className="relative flex-1">
-            <SearchIcon
-              className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
-              aria-hidden
+          {typeCounts.size > 1 && (
+            <QuickFilterBar
+              label="Tipo"
+              ariaLabel="Filtrar por tipo de produto"
+              options={Array.from(typeCounts.entries())
+                .sort((a, b) => b[1] - a[1])
+                .slice(0, 12)
+                .map(([key, count]) => ({
+                  value: key,
+                  label:
+                    PRODUCT_TYPE_LABEL[key as keyof typeof PRODUCT_TYPE_LABEL] ?? key,
+                  count,
+                }))}
+              value={activeType}
+              onChange={(next) => setSearch({ type: next ?? "" })}
+              size="sm"
             />
-            <input
-              type="search"
-              inputMode="search"
-              autoComplete="off"
-              list="melhores-precos-locations"
-              value={q}
-              onChange={(e) => setSearch({ q: e.target.value })}
-              placeholder="Buscar por cidade, bairro ou mercado"
-              className="w-full rounded-full border border-border bg-background py-2 pl-8 pr-9 text-[12.5px] text-foreground placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/25"
-              aria-label="Buscar por cidade, bairro ou mercado"
-            />
-            {q && (
-              <button
-                type="button"
-                onClick={() => setSearch({ q: "" })}
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-                aria-label="Limpar busca"
-              >
-                <X className="h-3.5 w-3.5" />
-              </button>
-            )}
-          </div>
-          <datalist id="melhores-precos-locations">
-            {availableLocations.map((loc) => (
-              <option key={loc} value={loc} />
-            ))}
-          </datalist>
-          <p className="shrink-0 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground sm:pl-2">
-            {rows.length} {rows.length === 1 ? "produto" : "produtos"}
-            {q && ` • filtrado por “${q}”`}
-          </p>
-        </div>
+          )}
 
-
-        <details className="group mt-3 rounded-xl border border-border bg-card/40">
-          <summary className="flex cursor-pointer list-none items-center gap-2 px-3.5 py-2.5 text-[11px] font-semibold uppercase tracking-widest text-muted-foreground [&::-webkit-details-marker]:hidden">
-            <SlidersHorizontal className="h-3.5 w-3.5" />
-            Filtros avançados
-            {hasFilters && (
-              <span className="rounded-full bg-primary/10 px-1.5 py-0.5 text-[11px] font-bold tracking-wide text-primary">
-                ativos
-              </span>
-            )}
-            <span className="ml-auto flex items-center gap-2">
-              {hasFilters && (
+          <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center">
+            <div className="relative flex-1">
+              <SearchIcon
+                className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
+                aria-hidden
+              />
+              <input
+                type="search"
+                inputMode="search"
+                autoComplete="off"
+                list="melhores-precos-locations"
+                value={q}
+                onChange={(e) => setSearch({ q: e.target.value })}
+                placeholder="Buscar por cidade, bairro ou mercado"
+                className={dsx(
+                  tc.body,
+                  "w-full rounded-full border border-border bg-background py-1.5 pl-8 pr-9 placeholder:text-muted-foreground focus:border-brand-gold focus:outline-none focus:ring-2 focus:ring-brand-gold/25",
+                )}
+                aria-label="Buscar por cidade, bairro ou mercado"
+              />
+              {q && (
                 <button
                   type="button"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    navigate({ search: {} });
-                  }}
-                  className="rounded-full border border-border bg-background px-2.5 py-0.5 text-[11px] font-medium text-muted-foreground transition-colors hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                  onClick={() => setSearch({ q: "" })}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                  aria-label="Limpar busca"
                 >
-                  Limpar
+                  <X className="h-3.5 w-3.5" />
                 </button>
               )}
-              <span className="text-muted-foreground transition-transform group-open:rotate-180" aria-hidden>
-                ▾
-              </span>
-            </span>
-          </summary>
-
-          <div className="grid gap-4 border-t border-border px-3.5 py-3 md:grid-cols-3">
-            <div>
-              <QuickFilterBar<"savings" | "price" | "trend" | "unit" | "ticket">
-                label="Ordenar"
-                ariaLabel="Ordenar por"
-                value={sortBy}
-                onChange={(next) => setSearch({ sort: next ?? "savings" })}
-                options={[
-                  { value: "savings", label: "Maior economia %" },
-                  { value: "price", label: "Menor preço" },
-                  { value: "ticket", label: "Menor ticket médio" },
-                  { value: "unit", label: "Menor R$/kg ou R$/L" },
-                  { value: "trend", label: "Maior variação" },
-                ]}
-              />
-
             </div>
+            <datalist id="melhores-precos-locations">
+              {availableLocations.map((loc) => (
+                <option key={loc} value={loc} />
+              ))}
+            </datalist>
 
-            <div>
-              <label className="mb-1 block text-[11px] font-medium text-muted-foreground">
-                Mínimo de mercados com preço:{" "}
-                <span className="font-mono text-foreground">{minStores}</span>
-              </label>
-              <input
-                type="range"
-                min={1}
-                max={Math.max(2, maxStoreCount)}
-                step={1}
-                value={minStores}
-                onChange={(e) => setSearch({ stores: Number(e.target.value) })}
-                className="w-full accent-primary"
-                aria-label="Número mínimo de mercados com preço"
-              />
-              <div className="flex justify-between text-[11px] text-muted-foreground">
-                <span>1</span>
-                <span>{Math.max(2, maxStoreCount)}</span>
-              </div>
-            </div>
+            <div className="flex shrink-0 items-center gap-2 sm:pl-1">
+              <p className={dsx(tc.tag, "text-muted-foreground")}>
+                {rows.length} {rows.length === 1 ? "produto" : "produtos"}
+              </p>
+              <details className="group relative">
+                <summary
+                  className={dsx(
+                    tc.control,
+                    "flex cursor-pointer list-none items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-foreground transition-colors hover:border-brand-gold/60 [&::-webkit-details-marker]:hidden",
+                  )}
+                >
+                  <SlidersHorizontal className="h-3.5 w-3.5" />
+                  Filtros
+                  {hasFilters && (
+                    <span className="h-1.5 w-1.5 rounded-full bg-brand-gold" aria-label="filtros ativos" />
+                  )}
+                </summary>
 
-            <div>
-              <label className="mb-1 block text-[11px] font-medium text-muted-foreground">
-                Faixa de preço (R$)
-              </label>
-              <div className="flex items-center gap-2">
-                <input
-                  type="number"
-                  inputMode="decimal"
-                  min={0}
-                  step="0.01"
-                  value={minPrice || ""}
-                  placeholder={priceBounds.min ? String(priceBounds.min) : "min"}
-                  onChange={(e) => setSearch({ min: Number(e.target.value) || 0 })}
-                  className="w-full rounded-lg border border-border bg-background px-2 py-1 text-xs text-foreground focus:border-primary focus:outline-none"
-                  aria-label="Preço mínimo"
-                />
-                <span className="text-xs text-muted-foreground">até</span>
-                <input
-                  type="number"
-                  inputMode="decimal"
-                  min={0}
-                  step="0.01"
-                  value={maxPrice || ""}
-                  placeholder={priceBounds.max ? String(priceBounds.max) : "max"}
-                  onChange={(e) => setSearch({ max: Number(e.target.value) || 0 })}
-                  className="w-full rounded-lg border border-border bg-background px-2 py-1 text-xs text-foreground focus:border-primary focus:outline-none"
-                  aria-label="Preço máximo"
-                />
-              </div>
+                <div className="absolute right-0 z-30 mt-1.5 w-[min(92vw,560px)] rounded-xl border border-border bg-card p-3 shadow-lg">
+                  <div className="mb-2 flex items-center justify-between gap-2">
+                    <span className={dsx(tc.tag, "text-muted-foreground")}>Filtros avançados</span>
+                    {hasFilters && (
+                      <button
+                        type="button"
+                        onClick={() => navigate({ search: {} })}
+                        className={dsx(
+                          tc.tag,
+                          "rounded-full border border-border bg-background px-2.5 py-0.5 text-muted-foreground transition-colors hover:text-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+                        )}
+                      >
+                        Limpar
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <div className="sm:col-span-2">
+                      <QuickFilterBar<"savings" | "price" | "trend" | "unit" | "ticket">
+                        label="Ordenar"
+                        ariaLabel="Ordenar por"
+                        value={sortBy}
+                        onChange={(next) => setSearch({ sort: next ?? "savings" })}
+                        options={[
+                          { value: "savings", label: "Maior economia %" },
+                          { value: "price", label: "Menor preço" },
+                          { value: "ticket", label: "Menor ticket médio" },
+                          { value: "unit", label: "Menor R$/kg ou R$/L" },
+                          { value: "trend", label: "Maior variação" },
+                        ]}
+                        size="sm"
+                      />
+                    </div>
+
+                    <div>
+                      <label className={dsx(tc.meta, "mb-1 block font-medium")}>
+                        Mínimo de mercados:{" "}
+                        <span className="font-mono text-foreground">{minStores}</span>
+                      </label>
+                      <input
+                        type="range"
+                        min={1}
+                        max={Math.max(2, maxStoreCount)}
+                        step={1}
+                        value={minStores}
+                        onChange={(e) => setSearch({ stores: Number(e.target.value) })}
+                        className="w-full accent-[var(--pc-gold-ink)]"
+                        aria-label="Número mínimo de mercados com preço"
+                      />
+                    </div>
+
+                    <div>
+                      <label className={dsx(tc.meta, "mb-1 block font-medium")}>
+                        Faixa de preço (R$)
+                      </label>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          inputMode="decimal"
+                          min={0}
+                          step="0.01"
+                          value={minPrice || ""}
+                          placeholder={priceBounds.min ? String(priceBounds.min) : "min"}
+                          onChange={(e) => setSearch({ min: Number(e.target.value) || 0 })}
+                          className={dsx(
+                            tc.cell,
+                            "w-full rounded-lg border border-border bg-background px-2 py-1 text-foreground focus:border-brand-gold focus:outline-none",
+                          )}
+                          aria-label="Preço mínimo"
+                        />
+                        <span className={tc.meta}>até</span>
+                        <input
+                          type="number"
+                          inputMode="decimal"
+                          min={0}
+                          step="0.01"
+                          value={maxPrice || ""}
+                          placeholder={priceBounds.max ? String(priceBounds.max) : "max"}
+                          onChange={(e) => setSearch({ max: Number(e.target.value) || 0 })}
+                          className={dsx(
+                            tc.cell,
+                            "w-full rounded-lg border border-border bg-background px-2 py-1 text-foreground focus:border-brand-gold focus:outline-none",
+                          )}
+                          aria-label="Preço máximo"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </details>
             </div>
           </div>
-        </details>
-      </section>
+        </section>
 
+        {/* ---------- Resultados ---------- */}
+        <section className="mt-2.5" aria-live="polite">
+          {isLoading && <LoadingGrid count={12} columns={4} />}
 
-
-
-      <section className="mx-auto max-w-7xl px-6 py-6" aria-live="polite">
-        {isLoading && (
-          <LoadingGrid count={12} columns={4} />
-        )}
-
-        {error && (
-          <ErrorState
-            title="Não foi possível carregar as comparações"
-            message={(error as Error).message}
-            onRetry={() => window.location.reload()}
-          />
-        )}
-
-        {!isLoading && !error && rows.length === 0 && <EmptyState hasCategory={!!activeCategory} />}
-
-        {!isLoading && !error && rows.length > 0 && (
-          <>
-            <MelhoresList
-              rows={pagedRows}
-              startIndex={(currentPage - 1) * PAGE_SIZE}
+          {error && (
+            <ErrorState
+              title="Não foi possível carregar as comparações"
+              message={(error as Error).message}
+              onRetry={() => window.location.reload()}
             />
-            {totalPages > 1 && (
-              <Pagination
-                page={currentPage}
-                totalPages={totalPages}
-                total={rows.length}
-                onChange={(p) => setSearch({ page: p })}
-              />
-            )}
-          </>
-        )}
+          )}
 
-      </section>
+          {!isLoading && !error && rows.length === 0 && <EmptyState hasCategory={!!activeCategory} />}
+
+          {!isLoading && !error && rows.length > 0 && (
+            <>
+              <MelhoresList rows={pagedRows} startIndex={(currentPage - 1) * PAGE_SIZE} />
+              {totalPages > 1 && (
+                <Pagination
+                  page={currentPage}
+                  totalPages={totalPages}
+                  total={rows.length}
+                  onChange={(p) => setSearch({ page: p })}
+                />
+              )}
+            </>
+          )}
+        </section>
+      </main>
 
       <Footer />
     </div>
   );
 }
+
 
 function MelhoresList({ rows, startIndex = 0 }: { rows: Comparison[]; startIndex?: number }) {
   const signedImages = useSignedLogoUrls(useMemo(() => rows.map((r) => r.image_url), [rows]));
