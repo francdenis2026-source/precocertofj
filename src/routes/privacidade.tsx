@@ -317,7 +317,7 @@ function PrivacidadePage() {
                 aria-selected={tab === k}
                 onClick={() => setTab(k)}
                 className={cn(
-                  "flex-1 rounded-full px-3 py-1 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold md:flex-none",
+                  "pc-focus flex-1 rounded-full px-3 py-1 transition-colors md:flex-none",
                   tc.chip,
                   tab === k
                     ? "bg-brand-gold text-brand-navy"
