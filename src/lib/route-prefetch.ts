@@ -45,6 +45,18 @@ const prefetchers: Record<string, Prefetcher> = {
       staleTime: 5 * 60_000,
     });
   },
+  "/comparador": async (qc) => {
+    const { supabase } = await import("@/integrations/supabase/client");
+    return qc.prefetchQuery({
+      queryKey: ["price-comparisons"],
+      queryFn: async () => {
+        const { data, error } = await supabase.rpc("get_price_comparisons");
+        if (error) throw error;
+        return data ?? [];
+      },
+      staleTime: 5 * 60_000,
+    });
+  },
   "/onde-comprar": async (qc) => {
     const { getWhereToBuyRegions } = await import("@/lib/where-to-buy.functions");
     return qc.prefetchQuery({
@@ -69,7 +81,7 @@ export function prefetchRouteData(queryClient: QueryClient, path: string) {
 /** Aquece as rotas principais quando o navegador estiver ocioso. */
 export function warmMainRoutes(queryClient: QueryClient) {
   if (typeof window === "undefined") return;
-  const targets = ["/buscar", "/mapa", "/estabelecimentos", "/melhores-precos"];
+  const targets = ["/buscar", "/mapa", "/estabelecimentos", "/melhores-precos", "/comparador"];
   const idle =
     (window as unknown as { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number })
       .requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 1200));
