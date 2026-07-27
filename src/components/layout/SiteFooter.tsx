@@ -29,6 +29,7 @@ const linkClass = dsx(
 export function SiteFooter() {
   const year = new Date().getFullYear();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
   const current = pathname.replace(/\/+$/, "") || "/";
   const links = LEGAL_LINKS.filter((l) => l.to !== current);
 
