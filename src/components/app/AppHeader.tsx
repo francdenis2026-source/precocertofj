@@ -112,7 +112,10 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
           </Link>
         )}
         
+        {isAdminScope && <ThemeToggle size="sm" />}
+
         {isAdminScope ? (
+
           <Button
             type="button"
             variant="ghost"
