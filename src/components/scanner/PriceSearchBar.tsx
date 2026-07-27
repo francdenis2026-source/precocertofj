@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { usePricesRealtime } from "@/hooks/usePricesRealtime";
 import { LiveUpdateBadge, useLivePulse } from "@/components/ui/live-update-badge";
+import { SearchGlassScrim } from "@/components/search/SearchGlassScrim";
 import { Link } from "@tanstack/react-router";
 import { searchProductPrice, type PriceSearchResult, type PriceSuggestion, type ProductGroup } from "@/lib/price-search.functions";
 import { suggestProducts, type ProductSuggestion } from "@/lib/product-suggest.functions";
@@ -652,6 +653,12 @@ export function PriceSearchBar({
           </AnchoredDropdown>
 
 
+          <SearchGlassScrim
+            open={showList || showHistory}
+            anchorRef={containerRef}
+            onDismiss={() => setShowSuggest(false)}
+          />
+
           <AnchoredDropdown
             anchorRef={containerRef}
             open={showList}
@@ -972,7 +979,10 @@ export function PriceSearchBar({
                   <div className="overflow-hidden rounded-xl border border-white/10 bg-brand-navy text-white shadow-sm">
                     <div className="grid gap-3 px-3.5 py-3 sm:grid-cols-2 sm:gap-4">
                       <div className="min-w-0">
-                        <p className="text-[11px] font-medium text-brand-gold/90">Melhor preço agora</p>
+                        <p className="flex items-center gap-2 text-[11px] font-medium text-brand-gold/90">
+                          Melhor preço agora
+                          <LiveUpdateBadge active={live.active} tone="onDark" />
+                        </p>
                         <p className="mt-1 flex items-baseline gap-2 text-[26px] font-bold leading-none tabular-nums">
                           {fmt(result.cheapest?.price ?? result.min)}
                         </p>
