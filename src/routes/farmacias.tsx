@@ -52,9 +52,9 @@ function FarmaciasPage() {
   const amanha = hoje && PLANTOES[hoje + 1] ? farmaciaPorId(PLANTOES[hoje + 1]) : null;
 
   return (
-    <div className="min-h-svh bg-background text-foreground">
+    <div className="flex h-[100dvh] flex-col overflow-hidden bg-background text-foreground">
       {/* Barra superior compacta */}
-      <header className="sticky top-0 z-30 border-b border-border/60 bg-background/92 backdrop-blur-md">
+      <header className="shrink-0 border-b border-border/60 bg-background/92 backdrop-blur-md">
         <div className="mx-auto flex w-full max-w-6xl items-center gap-2 px-4 py-2.5">
           <Link
             to="/estabelecimentos"
@@ -74,7 +74,8 @@ function FarmaciasPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-4 pb-16 pt-5">
+      <main className="pc-rail mx-auto min-h-0 w-full max-w-6xl flex-1 overflow-y-auto px-4 pb-6 pt-4">
+
         {/* Cabeçalho editorial compacto */}
         <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
           <div>
