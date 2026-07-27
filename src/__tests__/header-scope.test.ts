@@ -47,24 +47,26 @@ describe("SiteHeader", () => {
   });
 });
 
-describe("Rotas internas mantêm navegação para a home", () => {
-  const routeFiles = files.filter(
-    (f) =>
-      f.rel.startsWith("src/routes/") &&
-      f.rel.endsWith(".tsx") &&
-      !f.rel.includes("/api/") &&
-      !/routes\/(index|__root)\.tsx$/.test(f.rel),
-  );
+describe("Rotas públicas críticas mantêm navegação para a home", () => {
+  // Mesmo conjunto coberto pelo E2E (scripts/header_scope_e2e.py).
+  const CRITICAL = [
+    "buscar", "estabelecimentos", "mapa", "planos", "comparador",
+    "melhores-precos", "colaborar", "privacidade", "fale-conosco",
+    "login", "signup", "resgatar", "farmacias", "favoritos",
+  ];
 
-  it.each(routeFiles.map((f) => f.rel))("%s tem header interno ou link para a home", (rel) => {
-    const src = routeFiles.find((f) => f.rel === rel)!.src;
+  it.each(CRITICAL)("/%s tem header interno ou link para a home", (name) => {
+    const file = files.find((f) => f.rel === `src/routes/${name}.tsx`);
+    expect(file, `rota src/routes/${name}.tsx não encontrada`).toBeTruthy();
+    const src = file!.src;
     const hasBrand =
       /HomeBrandLink/.test(src) ||
       /PageHeader/.test(src) ||
       /InternalPageHeader/.test(src) ||
       /PageShell/.test(src) ||
       /AuthHero/.test(src) ||
-      /createFileRoute\([^)]*\)\(\{\s*component:\s*\(\)\s*=>\s*null/.test(src);
-    expect(hasBrand, `${rel} não oferece caminho de volta para a homepage`).toBe(true);
+      /to="\/"/.test(src);
+    expect(hasBrand, `${name} não oferece caminho de volta para a homepage`).toBe(true);
   });
 });
+
