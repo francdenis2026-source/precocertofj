@@ -122,7 +122,7 @@ function FaleConoscoPage() {
 
 
   return (
-    <div className="flex min-h-[100svh] flex-col bg-background">
+    <IsolatedPage className="bg-background">
       <div className="mx-auto w-full max-w-6xl shrink-0 px-4 pt-1 md:pt-2">
         <HomeBrandLink />
       </div>
