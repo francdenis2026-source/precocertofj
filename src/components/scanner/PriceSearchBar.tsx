@@ -350,6 +350,12 @@ export function PriceSearchBar({
   }, [mode, pureOnly]);
 
   // Autocomplete com debounce + cancelamento da requisição anterior.
+  // `runSuggest` vem de `useServerFn` e muda de identidade a cada render; se
+  // entrasse nas dependências, qualquer re-render (sync de URL, chegada de
+  // resultados) reiniciaria o efeito e descartaria a resposta em voo — a lista
+  // nunca chegava a aparecer. Por isso ele fica numa ref.
+  const runSuggestRef = useRef(runSuggest);
+  runSuggestRef.current = runSuggest;
   useEffect(() => {
     const q = query.trim();
     if (q.length < 2) {
@@ -362,7 +368,8 @@ export function PriceSearchBar({
       suggestAbort.current?.abort();
       const ctrl = new AbortController();
       suggestAbort.current = ctrl;
-      runSuggest({ data: { query: q }, signal: ctrl.signal })
+      runSuggestRef
+        .current({ data: { query: q }, signal: ctrl.signal })
         .then((rows) => {
           if (seq !== suggestSeq.current) return;
           setSuggestions(rows);
@@ -374,7 +381,8 @@ export function PriceSearchBar({
         });
     }, 120);
     return () => window.clearTimeout(t);
-  }, [query, runSuggest]);
+  }, [query]);
+
 
 
   // Auto-correct: se resultado veio vazio e existe termo fuzzy próximo,
