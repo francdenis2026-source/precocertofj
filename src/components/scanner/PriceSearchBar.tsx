@@ -1002,10 +1002,10 @@ export function PriceSearchBar({
                       {hasGap ? (
                         <span
                           role="status"
+                          aria-label={`Economia estimada de ${pct} por cento comprando pelo menor preço.`}
                           className="inline-flex items-center gap-1 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-2 py-[2px] text-[10.5px] font-bold uppercase tracking-[0.08em] text-brand-gold"
                         >
-                          <span aria-hidden="true">Economize {pct}% hoje</span>
-                          <span className="sr-only">{`Economia estimada de ${pct}% comprando pelo menor preço.`}</span>
+                          Economize {pct}% hoje
                         </span>
                       ) : (
                         <span className="text-[10px] font-medium uppercase tracking-wider text-white/50">

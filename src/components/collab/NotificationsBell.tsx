@@ -138,7 +138,7 @@ export function NotificationsBell() {
                               if (!n.read_at) markMutation.mutate(n.id);
                               setOpen(false);
                             }}
-                            className="text-[11px] font-semibold text-primary hover:underline"
+                            className="pc-nav-link pc-nav-link--row rounded-md px-1.5 py-0.5 text-[11px] font-semibold text-primary outline-none"
                           >
                             Abrir
                           </a>
@@ -147,7 +147,7 @@ export function NotificationsBell() {
                           <button
                             type="button"
                             onClick={() => markMutation.mutate(n.id)}
-                            className="text-[11px] font-semibold text-muted-foreground hover:text-foreground"
+                            className="pc-nav-link pc-nav-link--row rounded-md px-1.5 py-0.5 text-[11px] font-semibold text-muted-foreground outline-none"
                           >
                             Marcar como lida
                           </button>
@@ -164,7 +164,7 @@ export function NotificationsBell() {
           <Link
             to="/notificacoes"
             onClick={() => setOpen(false)}
-            className="block w-full rounded-md py-1.5 text-center text-xs font-semibold text-primary hover:bg-muted"
+            className="pc-nav-link pc-nav-link--row block w-full rounded-md py-1.5 text-center text-xs font-semibold text-primary outline-none"
           >
             Ver todas as notificações
           </Link>

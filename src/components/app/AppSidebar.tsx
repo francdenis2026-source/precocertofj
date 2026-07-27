@@ -182,7 +182,7 @@ export function AppSidebar() {
                   isActive={active}
                   tooltip={n.label}
                   className={cn(
-                    "h-9 rounded-md px-2.5 text-sidebar-foreground/82 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                    "pc-nav-link pc-nav-link--row h-9 rounded-md px-2.5 text-sidebar-foreground/82 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                     active && "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm",
                   )}
                 >
@@ -257,7 +257,7 @@ export function AppSidebar() {
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild tooltip="Abrir painel administrativo">
+                  <SidebarMenuButton asChild tooltip="Abrir painel administrativo" className="pc-nav-link pc-nav-link--row">
                     <Link to="/admin" className="flex items-center gap-2.5">
                       <span className="grid h-6 w-6 place-items-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
                         <Shield className="h-3.5 w-3.5" />
@@ -279,7 +279,7 @@ export function AppSidebar() {
               onClick={signOut}
               disabled={signingOut}
               tooltip="Sair"
-              className="text-sidebar-foreground/80 hover:text-destructive"
+              className="pc-nav-link pc-nav-link--row text-sidebar-foreground/80 hover:text-destructive"
             >
               <LogOut className="h-4 w-4" />
               <span className="text-[13px] font-medium">
