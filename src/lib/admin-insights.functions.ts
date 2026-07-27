@@ -255,21 +255,26 @@ export const getAdminInsights = createServerFn({ method: "POST" })
 
     const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
-    return {
-      trend,
-      coverage,
-      recent,
-      totals: {
-        products: distinct.size,
-        prices: filtered.length,
-        stores: stores.filter((s) => s.active !== false).length,
-        verified: filtered.filter((s) => s.verified).length,
-        last24h: filtered.filter((s) => s.created_at >= dayAgo).length,
+    return setAdminCache<AdminInsights>(
+      cacheKey,
+      {
+        trend,
+        coverage,
+        recent,
+        totals: {
+          products: distinct.size,
+          prices: filtered.length,
+          stores: stores.filter((s) => s.active !== false).length,
+          verified: filtered.filter((s) => s.verified).length,
+          last24h: filtered.filter((s) => s.created_at >= dayAgo).length,
+        },
+        range: { from: data.from, to: data.to, days: rangeDays },
+        categories: selected,
+        generatedAt: new Date().toISOString(),
       },
-      range: { from: data.from, to: data.to, days: rangeDays },
-      categories: selected,
-      generatedAt: new Date().toISOString(),
-    };
+      90_000,
+    );
+
 
   });
 
