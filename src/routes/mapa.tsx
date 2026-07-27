@@ -341,21 +341,66 @@ function NeighborhoodsPage() {
         {/* Painel principal: índice de bairros + detalhe — uma única tela */}
         <main className="pc-rail mx-auto min-h-0 w-full max-w-6xl flex-1 overflow-y-auto px-3 py-2.5 md:px-6 md:py-3">
           {groups.isLoading && (
-            <div className="grid gap-3 md:grid-cols-[16rem_1fr]" aria-busy="true">
-              <div className="space-y-1.5">
-                {[0, 1, 2, 3, 4].map((i) => (
-                  <div key={i} className="h-11 animate-pulse rounded-md bg-muted/60" />
+            <div
+              className="grid gap-3 min-w-0 md:grid-cols-[16rem_minmax(0,1fr)]"
+              aria-busy="true"
+              aria-live="polite"
+              role="status"
+            >
+              <span className="sr-only">Carregando bairros e mercados…</span>
+              {/* Índice — cartões editoriais */}
+              <div className="rounded-lg border border-border/70 bg-card p-1.5">
+                {[0, 1, 2, 3, 4, 5].map((i) => (
+                  <div key={i} className="flex items-center gap-2 px-2 py-2">
+                    <div className="h-2.5 w-2.5 rounded-full bg-brand-gold/25" />
+                    <div className="min-w-0 flex-1 space-y-1">
+                      <div className="h-3 w-2/3 animate-pulse rounded bg-muted/70" />
+                      <div className="h-2.5 w-1/2 animate-pulse rounded bg-muted/50" />
+                    </div>
+                  </div>
                 ))}
               </div>
-              <div className="h-[22rem] animate-pulse rounded-lg bg-muted/40" />
+              {/* Detalhe — cabeçalho + linhas de mercado */}
+              <div className="rounded-lg border border-border/70 bg-card">
+                <div className="flex items-baseline justify-between border-b border-border/60 px-3 py-2">
+                  <div className="h-4 w-40 animate-pulse rounded bg-muted/70" />
+                  <div className="h-3 w-20 animate-pulse rounded bg-muted/50" />
+                </div>
+                <ul className="divide-y divide-border/50">
+                  {[0, 1, 2, 3, 4].map((i) => (
+                    <li key={i} className="flex items-center gap-2.5 px-3 py-2.5">
+                      <div className="h-9 w-9 shrink-0 animate-pulse rounded-md bg-muted/60" />
+                      <div className="min-w-0 flex-1 space-y-1">
+                        <div className="h-3 w-1/2 animate-pulse rounded bg-muted/70" />
+                        <div className="h-2.5 w-2/3 animate-pulse rounded bg-muted/50" />
+                      </div>
+                      <div className="h-5 w-12 shrink-0 animate-pulse rounded-full bg-muted/50" />
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           )}
 
           {groups.error && (
-            <div className={`rounded-md border border-destructive/40 bg-destructive/5 p-3 ${tc.body} text-destructive`}>
-              Não foi possível carregar os bairros: {(groups.error as Error).message}
+            <div
+              role="alert"
+              className={`rounded-md border border-destructive/40 bg-destructive/5 p-3 ${tc.body} text-destructive`}
+            >
+              <p className="font-semibold">Não foi possível carregar os bairros.</p>
+              <p className="mt-0.5 text-destructive/80">
+                {(groups.error as Error).message}
+              </p>
+              <button
+                type="button"
+                onClick={() => groups.refetch()}
+                className={`mt-2 inline-flex items-center rounded-md border border-destructive/50 bg-background px-3 py-1 ${tc.chip} text-destructive hover:bg-destructive/10`}
+              >
+                Tentar novamente
+              </button>
             </div>
           )}
+
 
           {groups.data && filteredGroups.length === 0 && !groups.isLoading && (
             <EmptyState
