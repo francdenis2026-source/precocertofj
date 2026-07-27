@@ -151,7 +151,8 @@ export function PriceSearchBar({
 
 
   const [suggestions, setSuggestions] = useState<ProductSuggestion[]>([]);
-  const [showSuggest, setShowSuggest] = useState(false);
+  const [showSuggest, setShowSuggestRaw] = useState(false);
+  const setShowSuggest = (v: any) => { (window as any).__ss = ((window as any).__ss||[]); (window as any).__ss.push([String(v), new Error().stack?.split("\n").slice(1,4).join(" | ")]); setShowSuggestRaw(v); };
   const [activeIdx, setActiveIdx] = useState(-1);
   const [history, setHistory] = useState<SearchHistoryEntry[]>([]);
   const [sortMode, setSortMode] = useLocalStorageState<SortMode>(
