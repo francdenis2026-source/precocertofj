@@ -36,9 +36,12 @@ const prefetchers: Record<string, Prefetcher> = {
   "/melhores-precos": async (qc) => {
     const { supabase } = await import("@/integrations/supabase/client");
     return qc.prefetchQuery({
-      queryKey: ["price-comparisons"],
+      queryKey: ["price-comparisons", { limit: 500 }],
       queryFn: async () => {
-        const { data, error } = await supabase.rpc("get_price_comparisons");
+        const { data, error } = await supabase.rpc(
+          "get_price_comparisons",
+          { p_limit: 500 } as never,
+        );
         if (error) throw error;
         return data ?? [];
       },
@@ -48,7 +51,7 @@ const prefetchers: Record<string, Prefetcher> = {
   "/comparador": async (qc) => {
     const { supabase } = await import("@/integrations/supabase/client");
     return qc.prefetchQuery({
-      queryKey: ["price-comparisons"],
+      queryKey: ["price-comparisons-all"],
       queryFn: async () => {
         const { data, error } = await supabase.rpc("get_price_comparisons");
         if (error) throw error;
