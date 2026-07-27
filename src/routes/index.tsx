@@ -642,6 +642,9 @@ function HomePage() {
             </aside>
           </div>
 
+          {/* Divisor editorial entre hero e faixa de categorias */}
+          <hr className="pc-rule my-3 sm:my-4" aria-hidden />
+
           {/* ================= FAIXA INFERIOR ================= */}
           <div className="grid gap-2.5 sm:gap-3 lg:grid-cols-12">
             {/* Categorias */}
