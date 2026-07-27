@@ -336,7 +336,7 @@ function NeighborhoodsPage() {
 
 
         {/* Painel principal: índice de bairros + detalhe — uma única tela */}
-        <main className="mx-auto w-full max-w-6xl px-3 py-2.5 md:px-6 md:py-3">
+        <main className="pc-rail mx-auto min-h-0 w-full max-w-6xl flex-1 overflow-y-auto px-3 py-2.5 md:px-6 md:py-3">
           {groups.isLoading && (
             <div className="grid gap-3 md:grid-cols-[16rem_1fr]" aria-busy="true">
               <div className="space-y-1.5">
