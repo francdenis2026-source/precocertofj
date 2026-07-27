@@ -152,6 +152,8 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
               <Link
                 key={l.to}
                 to={l.to}
+                onPointerEnter={() => prefetchRouteData(queryClient, String(l.to))}
+                onFocus={() => prefetchRouteData(queryClient, String(l.to))}
                 className={dsx(
                   "rounded-lg px-3 py-2 text-[16px] font-semibold leading-[1.25] tracking-[-0.005em] antialiased outline-none transition-colors focus-visible:ring-2 xl:px-3.5 xl:text-[16.5px]",
                   navClass,
