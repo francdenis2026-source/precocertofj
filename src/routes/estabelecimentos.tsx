@@ -1102,17 +1102,16 @@ function EstablishmentsPage() {
         )}
       </main>
 
-      <SiteFooter />
-      <MobileNav />
-      {/* silence unused import */}
-      <LoadingSkeleton className="hidden" rows={0} />
       <MetricDetailDialog
         open={metricDetail !== null}
         which={metricDetail}
         onClose={() => setMetricDetail(null)}
         data={data ?? null}
       />
-    </div>
+      {/* silence unused import */}
+      <LoadingSkeleton className="hidden" rows={0} />
+    </IsolatedPage>
+
   );
 }
 
