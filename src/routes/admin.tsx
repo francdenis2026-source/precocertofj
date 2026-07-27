@@ -202,17 +202,11 @@ const cycleLabel: Record<BillingCycle, string> = {
 };
 
 function AdminPage() {
-  const state = useAdmin();
   const navigate = useNavigate();
   const qc = useQueryClient();
   const [signingOut, setSigningOut] = useState(false);
 
-  const listAllPlansFn = useServerFn(listAllPlans);
-  const plansQuery = useQuery({
-    queryKey: ["admin", "plans"],
-    queryFn: () => listAllPlansFn(),
-  });
-  const dbPlans: PlanRow[] = plansQuery.data ?? [];
+
 
   // Registra o acesso ao console na auditoria (uma vez por sessão de página).
   const logAccess = useServerFn(logAdminAccess);
