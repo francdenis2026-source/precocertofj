@@ -59,6 +59,11 @@ const LINKS = [
   { to: "/colaborar", label: "Colaborar" },
 ];
 
+/** Ritmo compartilhado entre as colunas (hierarquia idêntica em todas as seções). */
+const HEAD = "flex items-baseline justify-between gap-3 border-b pb-1.5";
+const HEAD_LEFT = "flex min-w-0 items-baseline gap-2.5";
+const BODY_GAP = "mt-1.5";
+
 function Kicker({ children }: { children: React.ReactNode }) {
   return (
     <p className={`${tc.eyebrow} shrink-0`} style={{ color: "var(--pc-home-onhero-gold)" }}>
@@ -66,6 +71,35 @@ function Kicker({ children }: { children: React.ReactNode }) {
     </p>
   );
 }
+
+function SectionHead({
+  id,
+  kicker,
+  title,
+  aside,
+}: {
+  id: string;
+  kicker: string;
+  title: string;
+  aside?: React.ReactNode;
+}) {
+  return (
+    <header className={HEAD} style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}>
+      <div className={HEAD_LEFT}>
+        <Kicker>{kicker}</Kicker>
+        <h3
+          id={id}
+          className={`${serif} ${tc.h2} truncate`}
+          style={{ color: "var(--pc-home-onhero-fg)" }}
+        >
+          {title}
+        </h3>
+      </div>
+      {aside}
+    </header>
+  );
+}
+
 
 export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
   const fetchRecent = useServerFn(getRecentProducts);
