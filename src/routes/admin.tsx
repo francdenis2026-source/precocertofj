@@ -53,10 +53,22 @@ import { useConfirm } from "@/components/ui/confirm-provider";
 import { Copy, Key, Mail, Plus, RefreshCw, Trash2, XCircle, Sparkles, CreditCard, Users, Gauge, Clock, AlertTriangle, ShieldAlert, ShieldCheck, Loader2, History, ArrowUpDown, ChevronLeft, ChevronRight, LogOut, Package, ImageIcon, Ticket, FileText, Languages, Trophy, Store } from "lucide-react";
 import { useMyRoles } from "@/hooks/useMyRoles";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
-import { AdminInsightsPanel } from "@/components/admin/AdminInsightsPanel";
-import { AdminGlobalSearch } from "@/components/admin/AdminGlobalSearch";
-import { AdminActionsAudit } from "@/components/admin/AdminActionsAudit";
-import { AdminTeamPanel } from "@/components/admin/AdminTeamPanel";
+import { lazy, Suspense } from "react";
+import { SectionSkeleton } from "@/components/admin/SectionSkeleton";
+
+/* Seções pesadas carregam sob demanda (gráficos, tabelas e auditoria). */
+const AdminInsightsPanel = lazy(() =>
+  import("@/components/admin/AdminInsightsPanel").then((m) => ({ default: m.AdminInsightsPanel })),
+);
+const AdminGlobalSearch = lazy(() =>
+  import("@/components/admin/AdminGlobalSearch").then((m) => ({ default: m.AdminGlobalSearch })),
+);
+const AdminActionsAudit = lazy(() =>
+  import("@/components/admin/AdminActionsAudit").then((m) => ({ default: m.AdminActionsAudit })),
+);
+const AdminTeamPanel = lazy(() =>
+  import("@/components/admin/AdminTeamPanel").then((m) => ({ default: m.AdminTeamPanel })),
+);
 import { logAdminAccess } from "@/lib/admin-team.functions";
 
 export const Route = createFileRoute("/admin")({
@@ -286,8 +298,12 @@ function AdminPage() {
               <ChevronRight className="h-3.5 w-3.5 text-muted-foreground transition-transform group-open:rotate-90" />
             </summary>
             <div className="max-h-[46svh] space-y-2 overflow-y-auto border-t border-border/60 p-2.5">
-              <AdminGlobalSearch />
-              <AdminInsightsPanel />
+              <Suspense fallback={<SectionSkeleton rows={2} label="Carregando busca global" />}>
+                <AdminGlobalSearch />
+              </Suspense>
+              <Suspense fallback={<SectionSkeleton rows={3} chart label="Carregando indicadores" />}>
+                <AdminInsightsPanel />
+              </Suspense>
             </div>
           </details>
 
@@ -311,6 +327,7 @@ function AdminPage() {
                         <li key={item.to}>
                           <Link
                             to={item.to}
+                            preload="viewport"
                             className={cn(
                               tc.meta,
                               "inline-flex items-center gap-1.5 rounded-lg border border-border/60 px-2 py-1 font-medium text-foreground/85 transition-colors hover:border-primary/40 hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
@@ -368,11 +385,11 @@ function AdminPage() {
             <TabsContent value="webhooks"><WebhooksTab /></TabsContent>
             <TabsContent value="emails"><EmailsTab /></TabsContent>
             <TabsContent value="users" className="space-y-3">
-              <AdminTeamPanel />
+              <Suspense fallback={<SectionSkeleton rows={4} label="Carregando equipe" />}><AdminTeamPanel /></Suspense>
               <UsersTab />
             </TabsContent>
             <TabsContent value="audit" className="space-y-3">
-              <AdminActionsAudit />
+              <Suspense fallback={<SectionSkeleton rows={5} label="Carregando auditoria" />}><AdminActionsAudit /></Suspense>
               <AuditTab />
             </TabsContent>
           </div>
