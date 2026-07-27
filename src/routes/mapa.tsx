@@ -261,7 +261,7 @@ function NeighborhoodsPage() {
                 )}
               </div>
 
-              <div className="flex items-center gap-2 overflow-x-auto pc-no-scrollbar md:overflow-visible">
+              <div className="flex items-center gap-2 overflow-x-auto no-scrollbar md:overflow-visible">
                 <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortBy)}>
                   <SelectTrigger
                     aria-label="Ordenar bairros"
@@ -330,7 +330,7 @@ function NeighborhoodsPage() {
 
 
         {/* Painel principal: índice de bairros + detalhe — uma única tela */}
-        <main className="mx-auto w-full max-w-6xl px-4 py-3 md:px-6">
+        <main className="mx-auto w-full max-w-6xl px-3 py-2.5 md:px-6 md:py-3">
           {groups.isLoading && (
             <div className="grid gap-3 md:grid-cols-[16rem_1fr]" aria-busy="true">
               <div className="space-y-1.5">
