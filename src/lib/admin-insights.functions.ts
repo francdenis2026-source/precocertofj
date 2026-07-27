@@ -40,7 +40,10 @@ export type AdminInsightsFilters = {
   to: string;
   /** Slugs de categoria; vazio = todas. */
   categories: string[];
+  /** Ignora o cache do servidor e recalcula. */
+  refresh?: boolean;
 };
+
 
 export type AdminInsights = {
   trend: TrendPoint[];
@@ -95,10 +98,19 @@ export const getAdminInsights = createServerFn({ method: "POST" })
       categories: Array.isArray(input?.categories)
         ? input!.categories.filter((c) => typeof c === "string").slice(0, 30)
         : [],
+      refresh: input?.refresh === true,
     };
   })
   .handler(async ({ data }): Promise<AdminInsights> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { getAdminCache, setAdminCache, bumpAdminInsightsVersion } = await import(
+      "./admin-insights-cache.server"
+    );
+    if (data.refresh) bumpAdminInsightsVersion();
+    const cacheKey = `insights:${data.from}:${data.to}:${[...data.categories].sort().join("|")}`;
+    const cached = getAdminCache<AdminInsights>(cacheKey);
+    if (cached) return cached;
+
 
     const since = `${data.from}T00:00:00.000Z`;
     const until = `${data.to}T23:59:59.999Z`;
@@ -243,21 +255,26 @@ export const getAdminInsights = createServerFn({ method: "POST" })
 
     const dayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
 
-    return {
-      trend,
-      coverage,
-      recent,
-      totals: {
-        products: distinct.size,
-        prices: filtered.length,
-        stores: stores.filter((s) => s.active !== false).length,
-        verified: filtered.filter((s) => s.verified).length,
-        last24h: filtered.filter((s) => s.created_at >= dayAgo).length,
+    return setAdminCache<AdminInsights>(
+      cacheKey,
+      {
+        trend,
+        coverage,
+        recent,
+        totals: {
+          products: distinct.size,
+          prices: filtered.length,
+          stores: stores.filter((s) => s.active !== false).length,
+          verified: filtered.filter((s) => s.verified).length,
+          last24h: filtered.filter((s) => s.created_at >= dayAgo).length,
+        },
+        range: { from: data.from, to: data.to, days: rangeDays },
+        categories: selected,
+        generatedAt: new Date().toISOString(),
       },
-      range: { from: data.from, to: data.to, days: rangeDays },
-      categories: selected,
-      generatedAt: new Date().toISOString(),
-    };
+      90_000,
+    );
+
 
   });
 

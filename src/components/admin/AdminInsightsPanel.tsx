@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Area,
   AreaChart,
@@ -104,17 +104,76 @@ function InsightsSkeleton() {
 
 export function AdminInsightsPanel() {
   const fetchInsights = useServerFn(getAdminInsights);
+  const queryClient = useQueryClient();
   const [from, setFrom] = useState(() => daysAgo(29));
   const [to, setTo] = useState(() => isoDay(new Date()));
   const [cats, setCats] = useState<string[]>([]);
   const [exporting, setExporting] = useState(false);
 
-  const query = useQuery<AdminInsights>({
-    queryKey: ["admin", "insights", from, to, cats.join(",")],
-    queryFn: () => fetchInsights({ data: { from, to, categories: cats } }),
-    staleTime: 60_000,
-    placeholderData: (prev) => prev,
-  });
+  /* Alternância rápida de filtros não dispara uma chamada por clique:
+     só o último estado (após 320 ms parado) vira uma query. */
+  const [debounced, setDebounced] = useState(() => ({ from, to, cats: "" }));
+  useEffect(() => {
+    const t = setTimeout(() => setDebounced({ from, to, cats: [...cats].sort().join(",") }), 320);
+    return () => clearTimeout(t);
+  }, [from, to, cats]);
+
+  const insightsOptions = useMemo(
+    () => ({
+      queryKey: ["admin", "insights", debounced.from, debounced.to, debounced.cats] as const,
+      queryFn: () =>
+        fetchInsights({
+          data: {
+            from: debounced.from,
+            to: debounced.to,
+            categories: debounced.cats ? debounced.cats.split(",") : [],
+          },
+        }),
+      staleTime: 90_000,
+      gcTime: 30 * 60_000,
+      refetchOnWindowFocus: false,
+      refetchOnMount: false as const,
+      placeholderData: (prev?: AdminInsights) => prev,
+    }),
+    [debounced, fetchInsights],
+  );
+
+  const query = useQuery<AdminInsights>(insightsOptions);
+
+  /* Pré-aquece os presets vizinhos enquanto o admin lê o painel. */
+  useEffect(() => {
+    if (query.isFetching) return;
+    const id = window.setTimeout(() => {
+      for (const p of PRESETS) {
+        const f = daysAgo(p.days - 1);
+        const t = isoDay(new Date());
+        if (f === debounced.from && t === debounced.to && !debounced.cats) continue;
+        void queryClient.prefetchQuery({
+          queryKey: ["admin", "insights", f, t, debounced.cats],
+          queryFn: () =>
+            fetchInsights({
+              data: { from: f, to: t, categories: debounced.cats ? debounced.cats.split(",") : [] },
+            }),
+          staleTime: 90_000,
+          gcTime: 30 * 60_000,
+        });
+      }
+    }, 900);
+    return () => window.clearTimeout(id);
+  }, [debounced, fetchInsights, query.isFetching, queryClient]);
+
+  const hardRefresh = async () => {
+    await queryClient.invalidateQueries({ queryKey: ["admin", "insights"] });
+    await fetchInsights({
+      data: {
+        from: debounced.from,
+        to: debounced.to,
+        categories: debounced.cats ? debounced.cats.split(",") : [],
+        refresh: true,
+      },
+    }).then((fresh) => queryClient.setQueryData(insightsOptions.queryKey, fresh));
+  };
+
 
   const data = query.data;
   const coverage = useMemo(() => (data?.coverage ?? []).slice(0, 7), [data]);
@@ -275,7 +334,7 @@ export function AdminInsightsPanel() {
             size="sm"
             variant="ghost"
             className="h-7 px-2"
-            onClick={() => query.refetch()}
+            onClick={() => void hardRefresh()}
             aria-label="Atualizar indicadores"
           >
             <RefreshCw className={cn("h-3.5 w-3.5", query.isFetching && "animate-spin")} />
