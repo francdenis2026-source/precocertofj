@@ -34,14 +34,8 @@ import { useSession } from "@/hooks/useSession";
 import homeHeroImg from "@/assets/home-hero.jpg";
 
 /* Conteúdo secundário: só carrega quando o painel "Explorar" abre */
-const BenefitsSection = lazy(() =>
-  import("@/components/home/BenefitsSection").then((m) => ({ default: m.BenefitsSection })),
-);
-const SocialProofSection = lazy(() =>
-  import("@/components/home/SocialProofSection").then((m) => ({ default: m.SocialProofSection })),
-);
-const RecentProducts = lazy(() =>
-  import("@/components/home/RecentProducts").then((m) => ({ default: m.RecentProducts })),
+const ExplorePanel = lazy(() =>
+  import("@/components/home/ExplorePanel").then((m) => ({ default: m.ExplorePanel })),
 );
 
 export const Route = createFileRoute("/")({
@@ -696,25 +690,20 @@ function HomePage() {
                 </SheetTrigger>
                 <SheetContent
                   side="bottom"
-                  className="max-h-[88dvh] overflow-y-auto border-t-0 p-4 sm:p-6"
+                  className="max-h-[92dvh] overflow-y-auto border-t-0 px-4 pb-4 pt-3 sm:px-6 sm:pb-5"
                   style={{ background: "var(--pc-home-explore-bg)", color: "var(--pc-home-onhero-fg)" }}
                 >
-                  <SheetHeader className="text-left">
+                  <SheetHeader className="mx-auto mb-3 w-full max-w-6xl text-left">
                     <SheetTitle
-                      className="font-serif text-[19px] font-normal"
+                      className="font-serif text-[19px] font-normal leading-tight"
                       style={{ color: "var(--pc-home-onhero-fg)" }}
                     >
                       Explorar o PreçoCerto
                     </SheetTitle>
                   </SheetHeader>
-                  <div className="space-y-5 pb-6">
-
-                    <Suspense fallback={<div className="h-24 animate-pulse rounded-lg bg-muted" />}>
-                      <RecentProducts P={P} serif={serif} />
-                      <BenefitsSection />
-                      <SocialProofSection />
-                    </Suspense>
-                  </div>
+                  <Suspense fallback={<div className="h-40 animate-pulse rounded-lg bg-muted/20" />}>
+                    <ExplorePanel onNavigate={() => setExploreOpen(false)} />
+                  </Suspense>
                 </SheetContent>
               </Sheet>
             </div>
