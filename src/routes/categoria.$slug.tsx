@@ -243,7 +243,12 @@ function CategoryPage() {
         {/* Trilho de categorias — setas de navegação + roda do mouse horizontal */}
         <CategoryRail current={slug} />
 
-
+        {/* Atalhos por corte quando o usuário abre o hub de açougues */}
+        {slug === "acougues" && (
+          <div className="mt-4">
+            <AcougueCutsBar />
+          </div>
+        )}
 
         {/* Plantão (só farmácias) */}
         {slug === "farmacias" && <PlantaoStrip />}
