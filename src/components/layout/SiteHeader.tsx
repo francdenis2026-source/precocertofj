@@ -158,10 +158,10 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                 onPointerEnter={() => prefetchRouteData(queryClient, String(l.to))}
                 onFocus={() => prefetchRouteData(queryClient, String(l.to))}
                 className={dsx(
-                  "rounded-lg px-3 py-2 text-[16px] font-semibold leading-[1.25] tracking-[-0.005em] antialiased outline-none transition-colors focus-visible:ring-2 xl:px-3.5 xl:text-[16.5px]",
-                  navClass,
+                  "pc-nav-link rounded-lg px-3 py-2 text-[16px] font-semibold leading-[1.25] tracking-[-0.005em] antialiased outline-none xl:px-3.5 xl:text-[16.5px]",
+                  isOverlay ? "text-on-media-muted" : "text-foreground/80",
                 )}
-                activeProps={{ className: isOverlay ? "text-brand-soft bg-brand-soft/12" : "text-[var(--pc-gold-ink)] bg-brand/10", "aria-current": "page" } as any}
+                activeProps={{ "aria-current": "page" } as any}
               >
                 {l.label}
               </Link>
