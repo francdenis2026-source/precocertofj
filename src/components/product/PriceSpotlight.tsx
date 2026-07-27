@@ -50,7 +50,7 @@ export const PriceSpotlight = memo(function PriceSpotlight({
     <section
       aria-label="Menor preço em destaque"
       className={cn(
-        "relative overflow-hidden rounded-2xl border border-border/70 bg-card px-4 py-4 md:px-6 md:py-5",
+        "pc-surface-3 relative overflow-hidden px-4 py-4 md:px-6 md:py-5",
         className,
       )}
     >
