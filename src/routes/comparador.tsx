@@ -49,6 +49,8 @@ import { RankingSkeleton, FadeSwap } from "@/components/layout/LoadingSkeleton";
 import { usePerceivedPerfTelemetry } from "@/lib/perf-telemetry";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
+import { applyButcherFilter } from "@/lib/butcher-filter";
+import { useButcherIds } from "@/hooks/useButcherIds";
 import {
   Search,
   Store as StoreIcon,
