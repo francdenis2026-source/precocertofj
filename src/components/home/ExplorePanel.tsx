@@ -55,12 +55,6 @@ const QUOTES = [
   { quote: "Uso todo sábado antes da feira. Evita frustração no caixa.", name: "João Ferreira", role: "Segundo Distrito", initials: "JF" },
 ];
 
-const LINKS = [
-  { to: "/buscar", label: "Buscar preços" },
-  { to: "/estabelecimentos", label: "Mercados" },
-  { to: "/melhores-precos", label: "Histórico" },
-  { to: "/colaborar", label: "Colaborar" },
-];
 
 /** Ritmo compartilhado entre as colunas (hierarquia idêntica em todas as seções). */
 const HEAD = "flex items-baseline justify-between gap-3 border-b pb-1.5";
@@ -292,19 +286,45 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
 
       </section>
 
-      {/* ---------- Benefícios + prova social ---------- */}
-      <div className="flex min-w-0 flex-col gap-3 lg:col-span-5 lg:gap-4">
+      {/* ---------- Coluna editorial: Benefícios + prova social ----------
+          Tratada como um "recorte de revista": serif italicizado nas citações,
+          fundo levemente destacado e borda dourada vertical para separar
+          visualmente da coluna de dados à esquerda. */}
+      <aside
+        className="relative flex min-w-0 flex-col gap-4 lg:col-span-5 lg:gap-5 lg:pl-6"
+        style={{
+          // Sutil divisor vertical dourado apenas em desktop
+          backgroundImage:
+            "linear-gradient(var(--pc-home-onhero-gold), var(--pc-home-onhero-gold))",
+          backgroundRepeat: "no-repeat",
+          backgroundSize: "1px 100%",
+          backgroundPosition: "left top",
+        }}
+      >
         <section aria-labelledby="explore-benefits">
-          <SectionHead id="explore-benefits" kicker="Benefícios" title="Por que usar" />
-          <ul className={`${BODY_GAP} grid grid-cols-2 gap-x-4 gap-y-2`}>
+          <div className="flex items-baseline justify-between gap-3">
+            <Kicker>Benefícios</Kicker>
+            <span className={tc.meta} style={{ color: fg70 }}>
+              Por que usar
+            </span>
+          </div>
+          <ul className="mt-3 grid grid-cols-2 gap-x-5 gap-y-3">
             {BENEFITS.map(({ Icon, title, desc }) => (
-              <li key={title} className="flex min-w-0 items-start gap-2">
-                <Icon className="mt-[3px] h-3.5 w-3.5 shrink-0" style={{ color: gold }} strokeWidth={2.2} aria-hidden />
+              <li key={title} className="flex min-w-0 items-start gap-2.5">
+                <Icon
+                  className="mt-[3px] h-4 w-4 shrink-0"
+                  style={{ color: gold }}
+                  strokeWidth={2}
+                  aria-hidden
+                />
                 <div className="min-w-0">
-                  <p className={`${tc.itemTitle} truncate`} style={{ color: fg90 }}>
+                  <p
+                    className={`${serif} truncate text-[15px] leading-tight tracking-tight`}
+                    style={{ color: fg90 }}
+                  >
                     {title}
                   </p>
-                  <p className={tc.meta} style={{ color: fg70 }}>
+                  <p className={`${tc.meta} mt-0.5`} style={{ color: fg70 }}>
                     {desc}
                   </p>
                 </div>
@@ -314,85 +334,48 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
         </section>
 
         <section aria-labelledby="explore-proof">
-          <SectionHead
-            id="explore-proof"
-            kicker="Prova social"
-            title="Quem economiza"
-            aside={
-              <span className={`${tc.num} inline-flex shrink-0 items-center gap-1`} style={{ color: gold }}>
-                <Star className="h-3.5 w-3.5 fill-current" aria-hidden />
-                {PLATFORM_RATING.value.toLocaleString("pt-BR", { minimumFractionDigits: 1 })}
-                <span className={tc.meta} style={{ color: fg70 }}>
-                  ·{PLATFORM_RATING.count}
-                </span>
+          <div className="flex items-baseline justify-between gap-3">
+            <Kicker>Prova social</Kicker>
+            <span
+              className={`${tc.num} inline-flex shrink-0 items-center gap-1`}
+              style={{ color: gold }}
+            >
+              <Star className="h-3.5 w-3.5 fill-current" aria-hidden />
+              {PLATFORM_RATING.value.toLocaleString("pt-BR", { minimumFractionDigits: 1 })}
+              <span className={tc.meta} style={{ color: fg70 }}>
+                ·{PLATFORM_RATING.count}
               </span>
-            }
-          />
-          <ul className={`${BODY_GAP} space-y-2 [&>li:nth-child(n+2)]:hidden sm:[&>li:nth-child(n+2)]:flex`}>
+            </span>
+          </div>
+          <ul className="mt-3 space-y-3 [&>li:nth-child(n+2)]:hidden sm:[&>li:nth-child(n+2)]:flex">
             {QUOTES.map((t) => (
-              <li key={t.name} className="flex min-w-0 gap-2.5">
+              <li key={t.name} className="flex min-w-0 gap-3">
                 <span
-                  className={`${tc.tag} grid h-6 w-6 shrink-0 place-items-center rounded-full`}
+                  className={`${serif} grid h-7 w-7 shrink-0 place-items-center rounded-full text-[11px]`}
                   style={{ background: glass, color: gold, border: `1px solid ${line}` }}
                   aria-hidden
                 >
                   {t.initials}
                 </span>
                 <div className="min-w-0">
-                  <p className={tc.body} style={{ color: fg90 }}>
+                  <p
+                    className={`${serif} italic text-[15px] leading-snug`}
+                    style={{ color: fg90 }}
+                  >
                     “{t.quote}”
                   </p>
-                  <p className={tc.meta} style={{ color: fg70 }}>
-                    {t.name} · {t.role}
+                  <p
+                    className={`${tc.meta} mt-1 uppercase tracking-[0.14em]`}
+                    style={{ color: fg70 }}
+                  >
+                    {t.name} <span style={{ color: gold }}>·</span> {t.role}
                   </p>
                 </div>
               </li>
             ))}
           </ul>
         </section>
-
-        <section
-          aria-label="Números da plataforma"
-          className="mt-auto hidden grid-cols-3 gap-3 border-t pt-2.5 lg:grid"
-          style={{ borderColor: line }}
-        >
-          {[
-            ...(live?.checkedToday ? [{ label: "Conferidos hoje", value: String(live.checkedToday) }] : []),
-            { label: "Últimos 7 dias", value: String(live?.totalRecent ?? 0) },
-            { label: "Avaliação", value: PLATFORM_RATING.value.toLocaleString("pt-BR", { minimumFractionDigits: 1 }) },
-            { label: "Mercados", value: "6+" },
-          ].slice(0, 3).map((s) => (
-            <div key={s.label} className="min-w-0">
-              <p className={`${tc.num} font-semibold`} style={{ color: gold }}>
-                {s.value}
-              </p>
-              <p className={`${tc.meta} truncate`} style={{ color: fg70 }}>
-                {s.label}
-              </p>
-            </div>
-          ))}
-        </section>
-      </div>
-
-      {/* ---------- Atalhos ---------- */}
-      <nav
-        aria-label="Atalhos do PreçoCerto"
-        className="mt-auto flex flex-wrap items-center gap-x-5 gap-y-1.5 border-t pt-2.5 lg:col-span-12"
-        style={{ borderColor: line }}
-      >
-        {LINKS.map((l) => (
-          <Link
-            key={l.to}
-            to={l.to}
-            onClick={onNavigate}
-            className={`${tc.chip} inline-flex items-center gap-1 transition-opacity hover:opacity-80`}
-            style={{ color: fg90 }}
-          >
-            {l.label}
-            <ArrowUpRight className="h-3 w-3" style={{ color: gold }} aria-hidden />
-          </Link>
-        ))}
-      </nav>
+      </aside>
     </div>
   );
 }
