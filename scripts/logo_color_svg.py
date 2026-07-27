@@ -83,12 +83,12 @@ def build(slug: str) -> None:
 
     arr = np.array(img)
     alpha = arr[:, :, 3]
-    rgb = arr[:, :, :3]
+    rgb = arr[:, :, :3].astype(np.int16)
 
     opaque = alpha > 128
-    # fundo branco também é tratado como vazio (marcas vêm com fundo claro)
     lum = rgb.astype(np.float32) @ np.array([0.2126, 0.7152, 0.0722], dtype=np.float32)
-    ink = opaque & (lum < 244)
+    # o "papel" da marca (branco/quase branco) não vira camada vetorial
+    ink = opaque & (lum < 246)
     if ink.sum() < MIN_LAYER_PIXELS:
         ink = opaque
 
@@ -97,26 +97,30 @@ def build(slug: str) -> None:
     idx = np.array(quant)
     palette = np.array(quant.getpalette()[: MAX_COLORS * 3]).reshape(-1, 3)
 
-    layers: list[tuple[tuple[int, int, int], str]] = []
+    layers: list[tuple[int, tuple[int, int, int], str]] = []
     for i, color in enumerate(palette):
         mask = (idx == i) & ink
-        if mask.sum() < MIN_LAYER_PIXELS:
+        area = int(mask.sum())
+        if area < MIN_LAYER_PIXELS:
             continue
         c = (int(color[0]), int(color[1]), int(color[2]))
-        if luminance(c) > 0.95:
+        if luminance(c) > 0.96:
             continue
         d = trace(mask)
         if d:
-            layers.append((c, d))
+            layers.append((area, c, d))
 
-    # camadas escuras por último (traços/contornos ficam por cima)
-    layers.sort(key=lambda item: -luminance(item[0]))
+    # camadas maiores (chapadas/fundos da marca) primeiro; detalhes por cima
+    layers.sort(key=lambda item: -item[0])
 
     for variant in ("light", "dark"):
         paths = []
-        for c, d in layers:
+        for _, c, d in layers:
             col = lighten_for_dark(c) if variant == "dark" else c
-            paths.append(f'<path fill="#{col[0]:02x}{col[1]:02x}{col[2]:02x}" d="{d}"/>')
+            paths.append(
+                f'<path fill="#{col[0]:02x}{col[1]:02x}{col[2]:02x}" fill-rule="evenodd" d="{d}"/>'
+            )
+
         svg = (
             f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" '
             f'width="{w}" height="{h}" role="img" shape-rendering="geometricPrecision">'
