@@ -16,6 +16,7 @@ import {
 } from "@/lib/products-public.functions";
 import { PLATFORM_RATING } from "@/components/ds/RatingStars";
 import { tc } from "@/lib/typeclear";
+import { useVirtualRows } from "@/hooks/use-virtual-rows";
 
 
 /**
@@ -65,8 +66,9 @@ const LINKS = [
 const HEAD = "flex items-baseline justify-between gap-3 border-b pb-1.5";
 const HEAD_LEFT = "flex min-w-0 items-baseline gap-2.5";
 const BODY_GAP = "mt-2";
-/** Altura reservada por linha de preço — evita reflow entre placeholder e dado. */
-const ROW_H = "min-h-[42px]";
+/** Altura fixa por linha de preço — base da virtualização (evita reflow). */
+const ROW_PX = 42;
+const ROW_H = "h-[42px]";
 
 function Kicker({ children }: { children: React.ReactNode }) {
   return (
@@ -215,8 +217,29 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
   const glass = "var(--pc-home-onhero-glass)";
   const gold = "var(--pc-home-onhero-gold)";
 
-  const items = ((full.data ?? first.data ?? []) as PriceItem[]).slice(0, 10);
+  // Em telas pequenas a coluna mostra menos linhas; o resto fica só na rolagem.
+  const [maxRows, setMaxRows] = useState(10);
+  useEffect(() => {
+    const mq = window.matchMedia("(min-width: 1024px)");
+    const apply = () => setMaxRows(mq.matches ? 10 : 4);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
+
+  const items = ((full.data ?? first.data ?? []) as PriceItem[]).slice(0, maxRows);
   const pendingRows = items.length > 0 ? Math.max(0, 6 - items.length) : 6;
+
+  type Row = { kind: "item"; item: PriceItem } | { kind: "skeleton" };
+  const rows: Row[] = [
+    ...items.map((item) => ({ kind: "item" as const, item })),
+    ...Array.from({ length: pendingRows }, () => ({ kind: "skeleton" as const })),
+  ];
+
+  const { setRef: setListRef, start, end, padTop, padBottom } = useVirtualRows({
+    count: rows.length,
+    rowHeight: ROW_PX,
+  });
 
 
   return (
@@ -247,7 +270,8 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
         </p>
 
         <ul
-          className={`${BODY_GAP} min-h-0 flex-1 divide-y overflow-y-auto no-scrollbar [&>li:nth-child(n+5)]:hidden lg:[&>li:nth-child(n+5)]:block`}
+          ref={setListRef}
+          className={`${BODY_GAP} min-h-0 flex-1 divide-y overflow-y-auto no-scrollbar`}
           style={{
             borderColor: line,
             maskImage: "linear-gradient(to bottom, #000 92%, transparent)",
@@ -255,12 +279,15 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
           }}
           aria-busy={items.length === 0}
         >
-          {items.map((p) => (
-            <PriceRow key={p.slug} p={p} onNavigate={onNavigate} />
-          ))}
-          {Array.from({ length: pendingRows }).map((_, i) => (
-            <RowSkeleton key={`sk-${i}`} glass={glass} />
-          ))}
+          {padTop > 0 && <li aria-hidden style={{ height: padTop }} />}
+          {rows.slice(start, end).map((row, i) =>
+            row.kind === "item" ? (
+              <PriceRow key={row.item.slug} p={row.item} onNavigate={onNavigate} />
+            ) : (
+              <RowSkeleton key={`sk-${start + i}`} glass={glass} />
+            ),
+          )}
+          {padBottom > 0 && <li aria-hidden style={{ height: padBottom }} />}
         </ul>
 
       </section>
