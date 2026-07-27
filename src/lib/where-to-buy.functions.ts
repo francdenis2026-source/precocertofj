@@ -6,6 +6,8 @@ import { createServerFn } from "@tanstack/react-start";
  * estabelecimentos para filtrar por bairro/cidade.
  */
 
+import type { ButcherProtein } from "@/lib/butcher-cuts";
+
 export type WhereToBuyOffer = {
   establishmentId: string | null;
   storeName: string;
@@ -15,6 +17,8 @@ export type WhereToBuyOffer = {
   lastSeenAt: string | null;
   isCheapest: boolean;
   diffPct: number;
+  /** Preenchido quando a oferta vem de estabelecimento tipo `acougue`. */
+  butcherProtein?: ButcherProtein | null;
 };
 
 export type WhereToBuyProduct = {
