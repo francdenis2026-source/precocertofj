@@ -988,11 +988,7 @@ export function PriceSearchBar({
                 return (
                   <section
                     role="region"
-                    aria-label={
-                      hasGap
-                        ? `Melhor resultado: ${fmt(result.cheapest?.price ?? result.min)} — economize ${pct}% hoje`
-                        : `Melhor resultado: ${fmt(result.cheapest?.price ?? result.min)}`
-                    }
+                    aria-label={`Melhor resultado: ${fmt(result.cheapest?.price ?? result.min)}`}
                     tabIndex={0}
                     className="pc-best-result relative overflow-hidden rounded-xl border border-brand-gold/40 bg-brand-navy text-white ring-1 ring-brand-gold/20 shadow-[0_10px_40px_-18px_rgba(201,168,76,0.55)] outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   >
@@ -1005,10 +1001,11 @@ export function PriceSearchBar({
                       </span>
                       {hasGap ? (
                         <span
+                          role="status"
                           className="inline-flex items-center gap-1 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-2 py-[2px] text-[10.5px] font-bold uppercase tracking-[0.08em] text-brand-gold"
-                          aria-label={`Economize ${pct}% hoje comprando pelo menor preço`}
                         >
-                          Economize {pct}% hoje
+                          <span aria-hidden="true">Economize {pct}% hoje</span>
+                          <span className="sr-only">{`Economia estimada de ${pct}% comprando pelo menor preço.`}</span>
                         </span>
                       ) : (
                         <span className="text-[10px] font-medium uppercase tracking-wider text-white/50">
