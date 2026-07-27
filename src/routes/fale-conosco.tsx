@@ -123,18 +123,18 @@ function FaleConoscoPage() {
 
   return (
     <div className="flex min-h-[100svh] flex-col bg-background">
-      <div className="mx-auto w-full max-w-6xl shrink-0 px-4 pt-2">
+      <div className="mx-auto w-full max-w-6xl shrink-0 px-4 pt-1 md:pt-2">
         <HomeBrandLink />
       </div>
 
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-2 md:py-4">
         <header className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-3">
           <div className="min-w-0">
-            <span className="badge-gold-outline inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.18em]">
+            <span className="badge-gold-outline hidden items-center gap-1.5 sm:inline-flex rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.18em]">
               <MessageSquare className="h-3 w-3" />
               Fale Conosco
             </span>
-            <h1 className="mt-1.5 font-['Instrument_Serif',ui-serif,Georgia,serif] text-[clamp(19px,3.2vw,32px)] leading-[1.06] tracking-[-0.012em] text-foreground">
+            <h1 className="font-['Instrument_Serif',ui-serif,Georgia,serif] text-[clamp(19px,3.2vw,32px)] leading-[1.06] tracking-[-0.012em] text-foreground">
               Precisa falar com a equipe do{" "}
               <span className="italic text-brand-gold">PreçoCerto</span>?
             </h1>
