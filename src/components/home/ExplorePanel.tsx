@@ -126,11 +126,16 @@ const PriceRow = memo(function PriceRow({
         to="/produto/$slug"
         params={{ slug: p.slug }}
         onClick={onNavigate}
-        className={`group grid ${ROW_H} grid-cols-[minmax(0,1fr)_auto] items-center gap-3 transition-colors`}
+        className={`group relative grid ${ROW_H} grid-cols-[minmax(0,1fr)_auto] items-center gap-3 -mx-2 rounded-md px-2 transition-all duration-200 ease-out hover:bg-[var(--pc-home-onhero-glass)] hover:pl-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-onhero-gold)]`}
       >
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-y-1.5 left-0 w-[2px] rounded-full opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+          style={{ background: "var(--pc-home-onhero-gold)" }}
+        />
         <div className="min-w-0">
           <p
-            className={`${tc.itemTitle} truncate group-hover:underline`}
+            className={`${tc.itemTitle} truncate transition-colors group-hover:text-white`}
             style={{ color: "var(--pc-home-onhero-fg)" }}
           >
             {p.name}
@@ -139,12 +144,24 @@ const PriceRow = memo(function PriceRow({
             className={`${tc.meta} mt-0.5 truncate`}
             style={{ color: "var(--pc-home-onhero-fg-70)" }}
           >
-            {p.marketName ?? "Mercado parceiro"} · {relative(p.when)}
-            {p.stores > 1 ? ` · ${p.stores} mercados` : ""}
+            <span
+              className={`${serif} italic transition-[filter] group-hover:brightness-110`}
+              style={{ color: "var(--pc-home-onhero-gold)" }}
+            >
+              {p.marketName ?? "Mercado parceiro"}
+            </span>
+            <span className="mx-1 opacity-60">·</span>
+            {relative(p.when)}
+            {p.stores > 1 ? (
+              <>
+                <span className="mx-1 opacity-60">·</span>
+                {p.stores} mercados
+              </>
+            ) : null}
           </p>
         </div>
         <span
-          className={`${tc.num} shrink-0 font-semibold`}
+          className={`${tc.num} shrink-0 font-semibold tabular-nums transition-transform duration-200 group-hover:-translate-x-0.5`}
           style={{ color: "var(--pc-home-onhero-gold)" }}
         >
           {brl(p.price)}
