@@ -263,9 +263,10 @@ function PrivacidadePage() {
   const items = tab === "privacidade" ? PRIVACIDADE : TERMOS;
 
   return (
-    <IsolatedPage className="bg-background">
+    <IsolatedPage className="bg-background" contentClassName="flex h-[100dvh] flex-col overflow-hidden !pb-0">
       {/* HEADER editorial */}
-      <header className="sticky top-0 z-30 border-b border-border/60 bg-background/92 backdrop-blur supports-[backdrop-filter]:bg-background/75">
+      <header className="shrink-0 border-b border-border/60 bg-background/92 backdrop-blur supports-[backdrop-filter]:bg-background/75">
+
         <span
           aria-hidden
           className="block h-px w-full"
