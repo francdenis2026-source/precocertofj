@@ -202,17 +202,11 @@ const cycleLabel: Record<BillingCycle, string> = {
 };
 
 function AdminPage() {
-  const state = useAdmin();
   const navigate = useNavigate();
   const qc = useQueryClient();
   const [signingOut, setSigningOut] = useState(false);
 
-  const listAllPlansFn = useServerFn(listAllPlans);
-  const plansQuery = useQuery({
-    queryKey: ["admin", "plans"],
-    queryFn: () => listAllPlansFn(),
-  });
-  const dbPlans: PlanRow[] = plansQuery.data ?? [];
+
 
   // Registra o acesso ao console na auditoria (uma vez por sessão de página).
   const logAccess = useServerFn(logAdminAccess);
@@ -223,10 +217,19 @@ function AdminPage() {
     return () => { done = true; };
   }, [logAccess]);
 
-  // Prefetch das rotas internas mais usadas quando o navegador estiver ocioso.
+  // Prefetch das rotas administrativas mais usadas quando o navegador estiver ocioso.
   const router = useRouter();
   useEffect(() => {
-    const targets = ADMIN_SHORTCUT_GROUPS.flatMap((g) => g.items.map((i) => i.to)).slice(0, 8);
+    const targets = [
+      "/admin/catalogo",
+      "/admin/precos",
+      "/admin/clientes",
+      "/admin/gestao",
+      "/admin/metricas",
+      "/admin/cobertura",
+      "/admin/analytics",
+      "/admin/webhooks",
+    ];
     const idle =
       (window as unknown as { requestIdleCallback?: (cb: () => void) => number }).requestIdleCallback ??
       ((cb: () => void) => window.setTimeout(cb, 1200));
@@ -242,19 +245,6 @@ function AdminPage() {
 
 
 
-
-
-  const kpis = useMemo(() => {
-    const active = state.subscribers.filter((s) => s.status === "active" || s.status === "trial").length;
-    const mrr = state.subscribers
-      .filter((s) => s.status === "active")
-      .reduce((acc, s) => {
-        const plan = dbPlans.find((p) => p.id === s.planId);
-        if (!plan || plan.days === 0) return acc;
-        return acc + (plan.price / plan.days) * 30;
-      }, 0);
-    return { active, mrr, total: state.subscribers.length, emails: state.emails.length };
-  }, [state, dbPlans]);
 
   const handleSignOut = async () => {
     setSigningOut(true);
@@ -302,80 +292,23 @@ function AdminPage() {
         </div>
       </header>
 
-      <section className="mx-auto flex h-[calc(100svh-6.5rem)] max-w-[1400px] flex-col gap-2 px-3 py-2 md:h-[calc(100svh-8rem)] md:px-6 md:py-3">
-        {/* ---------- KPIs (faixa densa) ---------- */}
-        <div className="grid shrink-0 grid-cols-2 gap-2 lg:grid-cols-4">
-          <Kpi icon={<Users className="h-3.5 w-3.5" />} label="Assinantes ativos" value={kpis.active.toString()} />
-          <Kpi icon={<CreditCard className="h-3.5 w-3.5" />} label="MRR estimado" value={kpis.mrr.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} />
-          <Kpi icon={<Gauge className="h-3.5 w-3.5" />} label="Total histórico" value={kpis.total.toString()} />
-          <Kpi icon={<Mail className="h-3.5 w-3.5" />} label="E-mails enviados" value={kpis.emails.toString()} />
+      <section className="mx-auto flex w-full max-w-[1400px] flex-col gap-3 px-3 py-3 md:gap-4 md:px-6 md:py-4">
+        {/* ---------- Indicadores executivos + busca global ---------- */}
+        <div className="space-y-3">
+          <Suspense fallback={<SectionSkeleton rows={2} label="Carregando busca global" />}>
+            <AdminGlobalSearch />
+          </Suspense>
+          <Suspense fallback={<SectionSkeleton rows={3} chart label="Carregando indicadores" />}>
+            <AdminInsightsPanel />
+          </Suspense>
+          <Suspense fallback={<SectionSkeleton rows={3} chart label="Carregando KPIs de preços" />}>
+            <AdminKpiBoard />
+          </Suspense>
         </div>
 
-        {/* ---------- Blocos recolhíveis: mantêm a página em uma única tela ---------- */}
-        <div className="grid shrink-0 gap-2 md:grid-cols-3">
-          <details className="group rounded-xl border border-border/70 bg-card md:col-span-2">
-            <summary className={cn(tc.control, "flex cursor-pointer list-none items-center justify-between gap-2 px-3 py-2 font-semibold")}>
-              <span className="inline-flex items-center gap-2">
-                <Gauge className="h-3.5 w-3.5 text-muted-foreground" /> Busca global e gráficos
-              </span>
-              <ChevronRight className="h-3.5 w-3.5 text-muted-foreground transition-transform group-open:rotate-90" />
-            </summary>
-            <div className="max-h-[46svh] space-y-2 overflow-y-auto border-t border-border/60 p-2.5">
-              <Suspense fallback={<SectionSkeleton rows={2} label="Carregando busca global" />}>
-                <AdminGlobalSearch />
-              </Suspense>
-              <Suspense fallback={<SectionSkeleton rows={3} chart label="Carregando indicadores" />}>
-                <AdminInsightsPanel />
-              </Suspense>
-              <Suspense fallback={<SectionSkeleton rows={3} chart label="Carregando KPIs de preços" />}>
-                <AdminKpiBoard />
-              </Suspense>
-
-            </div>
-          </details>
-
-          <details className="group rounded-xl border border-border/70 bg-card">
-            <summary className={cn(tc.control, "flex cursor-pointer list-none items-center justify-between gap-2 px-3 py-2 font-semibold")}>
-              <span className="inline-flex items-center gap-2">
-                <Package className="h-3.5 w-3.5 text-muted-foreground" /> Atalhos do console
-              </span>
-              <ChevronRight className="h-3.5 w-3.5 text-muted-foreground transition-transform group-open:rotate-90" />
-            </summary>
-            <nav
-              aria-label="Atalhos do painel"
-              className="max-h-[46svh] overflow-y-auto border-t border-border/60 p-2.5"
-            >
-              <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-1">
-                {ADMIN_SHORTCUT_GROUPS.map((group) => (
-                  <div key={group.label}>
-                    <p className={cn(tc.tag, "mb-1 px-0.5 text-muted-foreground")}>{group.label}</p>
-                    <ul className="flex flex-wrap gap-1">
-                      {group.items.map((item) => (
-                        <li key={item.to}>
-                          <Link
-                            to={item.to}
-                            preload="viewport"
-                            className={cn(
-                              tc.meta,
-                              "inline-flex items-center gap-1.5 rounded-lg border border-border/60 px-2 py-1 font-medium text-foreground/85 transition-colors hover:border-primary/40 hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-                            )}
-                          >
-                            <item.icon className="h-3.5 w-3.5 shrink-0 text-muted-foreground" strokeWidth={2} />
-                            <span className="truncate">{item.label}</span>
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </div>
-            </nav>
-          </details>
-        </div>
-
-        {/* ---------- Abas (área útil ocupa o restante da tela) ---------- */}
-        <Tabs defaultValue="plans" className="flex min-h-0 w-full flex-1 flex-col">
-          <div className="pc-tabs-rail -mx-1 shrink-0 overflow-x-auto px-1 pb-1">
+        {/* ---------- Abas de gestão detalhada ---------- */}
+        <Tabs defaultValue="plans" className="flex w-full flex-col">
+          <div className="pc-tabs-rail -mx-1 overflow-x-auto px-1 pb-1">
             <TabsList className="inline-flex h-auto w-max flex-nowrap gap-1 rounded-xl border border-border/70 bg-card p-1">
               {[
                 ["plans", "Planos"],
@@ -393,7 +326,7 @@ function AdminPage() {
                   value={value}
                   className={cn(
                     tc.control,
-                    "h-7 whitespace-nowrap rounded-lg px-2.5 text-muted-foreground",
+                    "h-8 whitespace-nowrap rounded-lg px-3 text-muted-foreground",
                     "data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm",
                   )}
                 >
@@ -403,7 +336,7 @@ function AdminPage() {
             </TabsList>
           </div>
 
-          <div className="mt-2 min-h-0 flex-1 overflow-y-auto rounded-xl border border-border/60 bg-card/40 p-2.5">
+          <div className="mt-3 rounded-xl border border-border/60 bg-card/40 p-3 md:p-4">
             <TabsContent value="plans"><PlansTab /></TabsContent>
             <TabsContent value="establishments"><EstablishmentsTab /></TabsContent>
             <TabsContent value="status"><StatusTab /></TabsContent>
@@ -423,74 +356,13 @@ function AdminPage() {
         </Tabs>
 
       </section>
+
     </AppShell>
   );
 }
 
-/** Atalhos do console, agrupados por domínio operacional. */
-const ADMIN_SHORTCUT_GROUPS = [
-  {
-    label: "Clientes & acesso",
-    items: [
-      { to: "/admin/clientes", label: "Clientes", icon: Users },
-      { to: "/admin/auditoria-acessos", label: "Auditoria de acessos", icon: ShieldCheck },
-      { to: "/admin/gestao", label: "Gestão de licenças", icon: Key },
-      { to: "/admin/conversoes", label: "Conversão de planos", icon: Gauge },
-      { to: "/admin/reports", label: "Denúncias", icon: FileText },
-    ],
-  },
-  {
-    label: "Catálogo",
-    items: [
-      { to: "/admin/catalogo", label: "Catálogo de produtos", icon: Package },
-      { to: "/admin/image-jobs", label: "Fotos dos produtos", icon: ImageIcon },
-      { to: "/admin/categorizacao", label: "Categorização", icon: Sparkles },
-      { to: "/admin/importacoes", label: "Importações", icon: Package },
-      { to: "/admin/lote-inserir", label: "Scan Inteligente", icon: Plus },
-      { to: "/admin/cadastro-foto", label: "Cadastro por foto (IA)", icon: Sparkles },
-    ],
-  },
-  {
-    label: "Preços & cobertura",
-    items: [
-      { to: "/admin/preco-rapido", label: "Registro rápido de preços", icon: Plus },
-      { to: "/admin/precos", label: "Gestão de preços", icon: ShieldCheck },
-      { to: "/admin/historico-precos", label: "Histórico de preços", icon: Gauge },
-      { to: "/admin/cobertura", label: "Cobertura por mercado", icon: Store },
-      { to: "/admin/rank-check", label: "Validar ranking", icon: Trophy },
-      { to: "/admin/sinonimos", label: "Sinônimos da busca", icon: Languages },
-    ],
-  },
-  {
-    label: "Comercial & sistema",
-    items: [
-      { to: "/admin/promocoes-codigos", label: "Códigos de divulgação", icon: Ticket },
-      { to: "/admin/promocoes", label: "Cupons promocionais", icon: Ticket },
-      { to: "/admin/cupom", label: "Cupons (OCR)", icon: Ticket },
-      { to: "/admin/cupom-lote", label: "Cupons em lote", icon: Ticket },
-      { to: "/admin/webhooks", label: "Webhooks MP", icon: ShieldCheck },
-      { to: "/admin/metricas", label: "Métricas & cache", icon: Gauge },
-      { to: "/admin/consistencia", label: "Consistência", icon: AlertTriangle },
-      { to: "/admin/auditoria", label: "Auditoria do catálogo", icon: History },
-      { to: "/admin/auditoria-numeros", label: "Auditoria de números", icon: Gauge },
-      { to: "/admin/analytics", label: "Analytics", icon: Gauge },
-    ],
-  },
-] as const;
 
-function Kpi({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
-  return (
-    <div className="rounded-xl border border-border/70 bg-card px-3 py-2.5 transition-colors hover:border-primary/35">
-      <div className={cn(tc.tag, "flex items-center gap-1.5 text-muted-foreground")}>
-        {icon}
-        <span className="truncate">{label}</span>
-      </div>
-      <div className={cn(tc.num, "mt-1.5 text-[clamp(18px,1.2vw+14px,24px)] font-semibold text-foreground")}>
-        {value}
-      </div>
-    </div>
-  );
-}
+
 
 
 /* -------------------- Plans -------------------- */
