@@ -606,14 +606,15 @@ function EstablishmentsPage() {
                   key={e.id}
                   to="/estabelecimento/$slug"
                   params={{ slug: slugifyEstablishment(e.name) }}
-                  className={`group relative flex w-[236px] shrink-0 snap-start items-center gap-3 overflow-hidden rounded-lg border bg-card p-2 pl-3 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold ${
-                    idx === 0 ? "border-brand-gold/60" : "border-border/70 hover:border-brand-gold/60"
-                  }`}
+                  className={cn(
+                    "group relative flex w-[236px] shrink-0 snap-start items-center gap-3 overflow-hidden p-2 pl-3",
+                    idx === 0 ? "pc-surface-3-interactive" : "pc-surface-2-interactive",
+                  )}
                 >
                   {idx === 0 && (
                     <span
                       aria-hidden
-                      className="absolute inset-y-0 left-0 w-[3px] bg-brand-gold"
+                      className="absolute inset-y-0 left-0 w-[3px] bg-[var(--pc-gold-ink)]"
                     />
                   )}
                   <StoreLogoThumb
