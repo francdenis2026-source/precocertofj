@@ -237,7 +237,7 @@ export const getProductComparison = createServerFn({ method: "POST" })
         .eq("product_key", data.productKey)
         .order("store_count", { ascending: false })
         .limit(20),
-      supabaseAdmin.from("establishments").select("id, name, neighborhood, city"),
+      supabaseAdmin.from("establishments").select("id, name, neighborhood, city, kind"),
       supabaseAdmin
         .from("product_price_history")
         .select("price, captured_at")
@@ -257,11 +257,16 @@ export const getProductComparison = createServerFn({ method: "POST" })
         name: string;
         neighborhood: string | null;
         city: string | null;
+        kind: string | null;
       }>).map((s) => [s.id, s]),
     );
 
     const wantCity = data.city ? deaccent(data.city) : null;
     const wantHood = data.neighborhood ? deaccent(data.neighborhood) : null;
+
+    const { classifyButcherCut } = await import("@/lib/butcher-cuts");
+    const headProductName = String(rows[0]?.display_name ?? data.productKey ?? "");
+    const productCut = classifyButcherCut(headProductName, null);
 
     // melhor oferta por estabelecimento entre todas as variações de tamanho
     const best = new Map<string, ProductRankRow>();
@@ -272,6 +277,8 @@ export const getProductComparison = createServerFn({ method: "POST" })
         const store = id ? storeById.get(id) : undefined;
         const neighborhood = store?.neighborhood ?? null;
         const city = store?.city ?? null;
+        const isButcher = store?.kind === "acougue";
+        if (isButcher && !productCut) continue;
         if (wantCity && deaccent(city ?? "") !== wantCity) continue;
         if (wantHood && deaccent(neighborhood ?? "") !== wantHood) continue;
         const price = Number(s.price);
@@ -289,6 +296,7 @@ export const getProductComparison = createServerFn({ method: "POST" })
             price,
             diffPct: 0,
             lastSeenAt: (s.last_seen_at as string | null) ?? null,
+            butcherProtein: isButcher ? productCut : null,
           });
         }
       }
