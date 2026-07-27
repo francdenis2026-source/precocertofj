@@ -34,14 +34,8 @@ import { useSession } from "@/hooks/useSession";
 import homeHeroImg from "@/assets/home-hero.jpg";
 
 /* Conteúdo secundário: só carrega quando o painel "Explorar" abre */
-const BenefitsSection = lazy(() =>
-  import("@/components/home/BenefitsSection").then((m) => ({ default: m.BenefitsSection })),
-);
-const SocialProofSection = lazy(() =>
-  import("@/components/home/SocialProofSection").then((m) => ({ default: m.SocialProofSection })),
-);
-const RecentProducts = lazy(() =>
-  import("@/components/home/RecentProducts").then((m) => ({ default: m.RecentProducts })),
+const ExplorePanel = lazy(() =>
+  import("@/components/home/ExplorePanel").then((m) => ({ default: m.ExplorePanel })),
 );
 
 export const Route = createFileRoute("/")({
