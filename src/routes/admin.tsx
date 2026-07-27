@@ -325,8 +325,14 @@ function AdminPage() {
             <TabsContent value="subscribers"><SubscribersTab /></TabsContent>
             <TabsContent value="webhooks"><WebhooksTab /></TabsContent>
             <TabsContent value="emails"><EmailsTab /></TabsContent>
-            <TabsContent value="users"><UsersTab /></TabsContent>
-            <TabsContent value="audit"><AuditTab /></TabsContent>
+            <TabsContent value="users" className="space-y-3">
+              <AdminTeamPanel />
+              <UsersTab />
+            </TabsContent>
+            <TabsContent value="audit" className="space-y-3">
+              <AdminActionsAudit />
+              <AuditTab />
+            </TabsContent>
           </div>
         </Tabs>
       </section>
