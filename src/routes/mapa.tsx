@@ -211,121 +211,131 @@ function NeighborhoodsPage() {
       <PageShellContent>
         {/* Cabeçalho editorial compacto */}
         <header className="border-b border-border/70 bg-card/60">
-          <div className="mx-auto flex w-full max-w-6xl flex-wrap items-end justify-between gap-x-4 gap-y-1.5 px-4 py-2.5 md:px-6">
-            <div className="flex min-w-0 items-end gap-3">
-              <HomeBrandLink showWordmark={false} className="mb-0.5" />
+          <div className="mx-auto grid w-full max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 px-3 py-2 sm:items-end md:px-6 md:py-2.5">
+            <div className="flex min-w-0 items-center gap-2 sm:items-end sm:gap-3">
+              <HomeBrandLink showWordmark={false} className="shrink-0 sm:mb-0.5" />
               <div className="min-w-0">
-                <p className={tc.eyebrow}>Guia local · Feijó</p>
-                <h1 className={`mt-0.5 truncate ${tc.h1}`}>
+                <p className={`hidden sm:block ${tc.eyebrow}`}>Guia local · Feijó</p>
+                <h1 className={`truncate sm:mt-0.5 ${tc.h1}`}>
                   Mercados por <span className="italic text-[var(--pc-gold-ink)]">bairro</span>
                 </h1>
               </div>
             </div>
 
-            <dl className="flex items-center gap-4">
+            <dl className="flex shrink-0 items-center gap-2.5 tracking-normal sm:gap-4 sm:tracking-[inherit]">
               <div className="text-right">
                 <dd className={`${tc.num} text-[var(--pc-gold-ink)]`}>{filteredGroups.length}</dd>
-                <dt className={tc.tableHead}>Bairros</dt>
+                <dt className={`${tc.tableHead} text-[0.6rem] tracking-normal sm:text-[inherit] sm:tracking-[inherit]`}>
+                  Bairros
+                </dt>
               </div>
               <span aria-hidden className="h-6 w-px bg-border" />
               <div className="text-right">
                 <dd className={tc.num}>{totalMarkets}</dd>
-                <dt className={tc.tableHead}>Mercados</dt>
+                <dt className={`${tc.tableHead} text-[0.6rem] tracking-normal sm:text-[inherit] sm:tracking-[inherit]`}>
+                  Mercados
+                </dt>
               </div>
             </dl>
+
           </div>
         </header>
 
         {/* Barra de comando */}
         <div className="border-b border-border/70 bg-background">
-          <div className="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-2 px-4 py-2 md:px-6">
-            <div className="flex min-w-[200px] flex-1 items-center gap-2 rounded-md border border-border bg-card px-2.5 py-1.5 transition-colors focus-within:border-brand-gold">
-              <Search className="h-3.5 w-3.5 shrink-0 text-muted-foreground" strokeWidth={1.75} />
-              <input
-                value={term}
-                onChange={(e) => setTerm(e.target.value)}
-                placeholder="Buscar mercado…"
-                className={`min-w-0 flex-1 bg-transparent ${tc.body} placeholder:text-muted-foreground focus:outline-none`}
-                data-no-translate
-              />
-              {term && (
-                <button
-                  type="button"
-                  onClick={() => setTerm("")}
-                  aria-label="Limpar busca"
-                  className="rounded-full p-0.5 text-muted-foreground hover:text-brand-gold"
+          <div className="mx-auto w-full max-w-6xl px-3 py-2 md:px-6">
+            <div className="flex flex-col gap-2 md:flex-row md:flex-wrap md:items-center">
+              <div className="flex min-w-0 items-center gap-2 rounded-md border border-border bg-card px-2.5 py-1.5 transition-colors focus-within:border-brand-gold md:min-w-[200px] md:flex-1">
+                <Search className="h-3.5 w-3.5 shrink-0 text-muted-foreground" strokeWidth={1.75} />
+                <input
+                  value={term}
+                  onChange={(e) => setTerm(e.target.value)}
+                  placeholder="Buscar mercado…"
+                  className={`min-w-0 flex-1 bg-transparent ${tc.body} placeholder:text-muted-foreground focus:outline-none`}
+                  data-no-translate
+                />
+                {term && (
+                  <button
+                    type="button"
+                    onClick={() => setTerm("")}
+                    aria-label="Limpar busca"
+                    className="rounded-full p-0.5 text-muted-foreground hover:text-brand-gold"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 items-center gap-2 md:flex md:w-auto">
+                <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortBy)}>
+                  <SelectTrigger
+                    aria-label="Ordenar bairros"
+                    className={`h-8 w-full shrink-0 border-border bg-card px-2.5 md:w-[11.5rem] ${tc.control} shadow-none`}
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className={tc.control}>
+                    <SelectItem value="price">Menor preço</SelectItem>
+                    <SelectItem value="markets">Mais mercados</SelectItem>
+                    <SelectItem value="alpha">A–Z</SelectItem>
+                    {isAuthed && <SelectItem value="favorites">Favoritos</SelectItem>}
+                  </SelectContent>
+                </Select>
+
+                <Select
+                  value={category || "__all"}
+                  onValueChange={(v) => setCategory(v === "__all" ? "" : v)}
                 >
-                  <X className="h-3.5 w-3.5" />
-                </button>
-              )}
+                  <SelectTrigger
+                    aria-label="Filtrar por categoria"
+                    className={`h-8 w-full shrink-0 border-border bg-card px-2.5 md:w-[11.5rem] ${tc.control} shadow-none`}
+                  >
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className={`max-h-64 ${tc.control}`}>
+                    <SelectItem value="__all">Categorias</SelectItem>
+                    {availableCategories.map((c) => (
+                      <SelectItem key={c} value={c}>
+                        {c}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+
+                {isAuthed && (
+                  <button
+                    type="button"
+                    onClick={() => setOnlyFavs((v) => !v)}
+                    aria-pressed={onlyFavs}
+                    className={
+                      `inline-flex h-8 shrink-0 items-center gap-1.5 rounded-md border px-2.5 ${tc.control} transition-colors ` +
+                      (onlyFavs
+                        ? "border-brand-gold bg-brand-gold/15 text-[var(--pc-gold-ink)]"
+                        : "border-border bg-card text-muted-foreground hover:border-brand-gold/60")
+                    }
+                  >
+                    <Star className={"h-3.5 w-3.5 " + (onlyFavs ? "fill-brand-gold" : "")} />
+                    Favoritos
+                  </button>
+                )}
+
+                {hasActiveFilters && (
+                  <button
+                    type="button"
+                    onClick={clearFilters}
+                    className={`inline-flex h-8 shrink-0 items-center rounded-md border border-border bg-card px-2.5 ${tc.control} text-muted-foreground transition-colors hover:border-brand-gold/60 hover:text-[var(--pc-gold-ink)]`}
+                  >
+                    Limpar
+                  </button>
+                )}
+              </div>
             </div>
-
-            <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortBy)}>
-              <SelectTrigger
-                aria-label="Ordenar bairros"
-                className={`h-8 w-[10.5rem] border-border bg-card px-2.5 ${tc.control} shadow-none`}
-              >
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className={tc.control}>
-                <SelectItem value="price">Menor preço</SelectItem>
-                <SelectItem value="markets">Mais mercados</SelectItem>
-                <SelectItem value="alpha">A–Z</SelectItem>
-                {isAuthed && <SelectItem value="favorites">Favoritos</SelectItem>}
-              </SelectContent>
-            </Select>
-
-            <Select
-              value={category || "__all"}
-              onValueChange={(v) => setCategory(v === "__all" ? "" : v)}
-            >
-              <SelectTrigger
-                aria-label="Filtrar por categoria"
-                className={`h-8 w-[11rem] border-border bg-card px-2.5 ${tc.control} shadow-none`}
-              >
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className={`max-h-64 ${tc.control}`}>
-                <SelectItem value="__all">Categorias</SelectItem>
-                {availableCategories.map((c) => (
-                  <SelectItem key={c} value={c}>
-                    {c}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-
-            {isAuthed && (
-              <button
-                type="button"
-                onClick={() => setOnlyFavs((v) => !v)}
-                aria-pressed={onlyFavs}
-                className={
-                  `inline-flex h-8 items-center gap-1.5 rounded-md border px-2.5 ${tc.control} transition-colors ` +
-                  (onlyFavs
-                    ? "border-brand-gold bg-brand-gold/15 text-[var(--pc-gold-ink)]"
-                    : "border-border bg-card text-muted-foreground hover:border-brand-gold/60")
-                }
-              >
-                <Star className={"h-3.5 w-3.5 " + (onlyFavs ? "fill-brand-gold" : "")} />
-                Favoritos
-              </button>
-            )}
-
-            {hasActiveFilters && (
-              <button
-                type="button"
-                onClick={clearFilters}
-                className={`inline-flex h-8 items-center rounded-md border border-border bg-card px-2.5 ${tc.control} text-muted-foreground transition-colors hover:border-brand-gold/60 hover:text-[var(--pc-gold-ink)]`}
-              >
-                Limpar
-              </button>
-            )}
           </div>
         </div>
 
+
         {/* Painel principal: índice de bairros + detalhe — uma única tela */}
-        <main className="mx-auto w-full max-w-6xl px-4 py-3 md:px-6">
+        <main className="mx-auto w-full max-w-6xl px-3 py-2.5 md:px-6 md:py-3">
           {groups.isLoading && (
             <div className="grid gap-3 md:grid-cols-[16rem_1fr]" aria-busy="true">
               <div className="space-y-1.5">
@@ -367,33 +377,41 @@ function NeighborhoodsPage() {
           )}
 
           {active && (
-            <div className="grid gap-3 min-w-0 md:grid-cols-[16rem_minmax(0,1fr)] md:items-start">
+            <div className="grid gap-2 min-w-0 md:gap-3 md:grid-cols-[16rem_minmax(0,1fr)] md:items-start">
               {/* Índice de bairros */}
               <nav
                 aria-label="Bairros"
                 className="min-w-0 rounded-lg border border-border bg-card md:max-h-[62svh] md:overflow-y-auto"
               >
-                <p className={`border-b border-border/70 px-2.5 py-1.5 ${tc.tableHead}`}>Bairros</p>
-                <ul className="divide-y divide-border/60">
+                <p className={`hidden border-b border-border/70 px-2.5 py-1.5 md:block ${tc.tableHead}`}>
+                  Bairros
+                </p>
+                <ul className="flex snap-x snap-mandatory gap-1.5 overflow-x-auto p-1.5 no-scrollbar md:block md:snap-none md:gap-0 md:divide-y md:divide-border/60 md:overflow-x-visible md:p-0">
                   {filteredGroups.map((g) => {
                     const isActive = g.neighborhood === active.neighborhood;
                     const isFav = favKeys.has(g.neighborhood);
                     const min = minPriceByNeighborhood.get(g.neighborhood) ?? null;
                     return (
-                      <li key={g.neighborhood} className="relative">
+                      <li
+                        key={g.neighborhood}
+                        className={
+                          "relative w-[9.5rem] shrink-0 snap-start rounded-md border md:w-auto md:shrink md:snap-align-none md:rounded-none md:border-0 " +
+                          (isActive ? "border-brand-gold/70 md:border-0" : "border-border md:border-0")
+                        }
+                      >
                         <button
                           type="button"
                           onClick={() => setSelected(g.neighborhood)}
                           aria-current={isActive ? "true" : undefined}
                           className={
-                            "flex w-full items-center gap-2 py-1.5 pl-3 pr-8 text-left transition-colors " +
+                            "flex w-full items-center gap-2 rounded-md py-1.5 pl-2.5 pr-7 text-left transition-colors md:rounded-none md:pl-3 md:pr-8 " +
                             (isActive ? "bg-brand-gold/10" : "hover:bg-muted/50")
                           }
                         >
                           <span
                             aria-hidden
                             className={
-                              "absolute inset-y-0 left-0 w-[3px] " +
+                              "absolute inset-y-0 left-0 hidden w-[3px] md:block " +
                               (isActive ? "bg-brand-gold" : "bg-transparent")
                             }
                           />
@@ -411,7 +429,7 @@ function NeighborhoodsPage() {
                           onClick={() => handleFavClick(g.neighborhood, g.city)}
                           aria-pressed={isFav}
                           aria-label={isFav ? `Remover ${g.neighborhood} dos favoritos` : `Favoritar ${g.neighborhood}`}
-                          className="absolute right-1.5 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:text-brand-gold"
+                          className="absolute right-1 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:text-brand-gold md:right-1.5"
                         >
                           <Star
                             className={"h-3.5 w-3.5 " + (isFav ? "fill-brand-gold text-brand-gold" : "")}
@@ -424,8 +442,9 @@ function NeighborhoodsPage() {
                 </ul>
               </nav>
 
+
               {/* Detalhe do bairro */}
-              <section className="min-w-0 rounded-lg border border-border bg-card md:max-h-[62svh] md:overflow-y-auto">
+              <section className="min-w-0 max-h-[58svh] overflow-y-auto rounded-lg border border-border bg-card no-scrollbar md:max-h-[62svh]">
                 <header className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-b border-border/70 px-3 py-2">
                   <div className="min-w-0">
                     <h2 className={`truncate ${tc.h2}`}>{active.neighborhood}</h2>
