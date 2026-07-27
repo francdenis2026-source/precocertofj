@@ -53,6 +53,11 @@ import { useConfirm } from "@/components/ui/confirm-provider";
 import { Copy, Key, Mail, Plus, RefreshCw, Trash2, XCircle, Sparkles, CreditCard, Users, Gauge, Clock, AlertTriangle, ShieldAlert, ShieldCheck, Loader2, History, ArrowUpDown, ChevronLeft, ChevronRight, LogOut, Package, ImageIcon, Ticket, FileText, Languages, Trophy, Store } from "lucide-react";
 import { useMyRoles } from "@/hooks/useMyRoles";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
+import { AdminInsightsPanel } from "@/components/admin/AdminInsightsPanel";
+import { AdminGlobalSearch } from "@/components/admin/AdminGlobalSearch";
+import { AdminActionsAudit } from "@/components/admin/AdminActionsAudit";
+import { AdminTeamPanel } from "@/components/admin/AdminTeamPanel";
+import { logAdminAccess } from "@/lib/admin-team.functions";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
