@@ -1170,8 +1170,8 @@ function ComparisonTableRow({
   return (
     <tr
       className={
-        "group transition-colors " +
-        (selected ? "bg-primary/[0.06]" : "hover:bg-muted/40")
+        "pc-row-interactive group transition-colors " +
+        (selected ? "bg-primary/[0.06]" : "")
       }
     >
       <td className="px-4 py-3">
@@ -1190,10 +1190,10 @@ function ComparisonTableRow({
         )}
       </td>
       <td className="px-4 py-3 text-right border-l border-[color-mix(in_oklab,var(--pc-gold-ink)_20%,transparent)] bg-[color-mix(in_oklab,var(--pc-gold-ink)_5%,transparent)]">
-        <p className="font-display text-lg font-extrabold leading-none tabular-nums text-[var(--pc-gold-ink)]">
+        <p className="pc-price-value pc-price-value--best font-display text-lg font-extrabold leading-none tabular-nums">
           {formatBRL(Number(row.min_price))}
         </p>
-        <p className={cn("mt-1 truncate", tc.storeNameTight)} title={row.cheapest_store}>
+        <p className={cn("mt-1 truncate pc-store-emphasis", tc.storeNameTight)} title={row.cheapest_store}>
           {shortenStoreName(row.cheapest_store)}
         </p>
         <div className="mt-1 flex flex-wrap items-center justify-end gap-1">

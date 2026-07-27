@@ -9,6 +9,7 @@ import { Nav } from "@/components/brand/Nav";
 import { PriceSpotlight } from "@/components/product/PriceSpotlight";
 
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
+import { ShareButton } from "@/components/ds";
 import { tc } from "@/lib/typeclear";
 import { dsx } from "@/lib/ds";
 import { cn } from "@/lib/utils";
@@ -503,6 +504,10 @@ function MelhoresPrecosPage() {
 
             <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5">
               <FreeQuotaBadge variant="inline" />
+              <ShareButton
+                title="Ranking de preços — PreçoCerto"
+                text="Veja onde cada produto está mais barato em Feijó/AC"
+              />
               {isAdmin && (
                 <button
                   type="button"
