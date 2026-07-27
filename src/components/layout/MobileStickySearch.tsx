@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
  * para /buscar?q=... . Se esconde ao rolar para baixo e reaparece ao rolar
  * para cima. Oculta em rotas onde já existe um campo principal (ex.: /buscar).
  */
-const HIDE_ON_PREFIXES = ["/buscar", "/login", "/cadastro", "/onboarding", "/admin", "/checkout", "/auth", "/planos"];
+const HIDE_ON_PREFIXES = ["/buscar", "/mapa", "/login", "/cadastro", "/onboarding", "/admin", "/checkout", "/auth", "/planos"];
 
 export function MobileStickySearch() {
   const navigate = useNavigate();
