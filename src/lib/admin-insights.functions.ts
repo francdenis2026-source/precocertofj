@@ -75,12 +75,37 @@ const dayKey = (iso: string) => iso.slice(0, 10);
 /* KPIs / gráficos                                                     */
 /* ------------------------------------------------------------------ */
 
-export const getAdminInsights = createServerFn({ method: "GET" })
+const isoDay = (d: Date) => d.toISOString().slice(0, 10);
+const clampDay = (v: unknown, fallback: string) => {
+  const s = String(v ?? "");
+  return /^\d{4}-\d{2}-\d{2}$/.test(s) ? s : fallback;
+};
+
+export const getAdminInsights = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .handler(async (): Promise<AdminInsights> => {
+  .inputValidator((input: Partial<AdminInsightsFilters> | undefined): AdminInsightsFilters => {
+    const to = clampDay(input?.to, isoDay(new Date()));
+    const from = clampDay(
+      input?.from,
+      isoDay(new Date(Date.now() - 44 * 24 * 60 * 60 * 1000)),
+    );
+    return {
+      from: from <= to ? from : to,
+      to,
+      categories: Array.isArray(input?.categories)
+        ? input!.categories.filter((c) => typeof c === "string").slice(0, 30)
+        : [],
+    };
+  })
+  .handler(async ({ data }): Promise<AdminInsights> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    const since = new Date(Date.now() - 45 * 24 * 60 * 60 * 1000).toISOString();
+    const since = `${data.from}T00:00:00.000Z`;
+    const until = `${data.to}T23:59:59.999Z`;
+    const rangeDays =
+      Math.round(
+        (Date.parse(`${data.to}T00:00:00Z`) - Date.parse(`${data.from}T00:00:00Z`)) / 86_400_000,
+      ) + 1;
 
     const [{ data: scanRows, error: scanErr }, { data: storeRows, error: storeErr }] =
       await Promise.all([
@@ -89,12 +114,15 @@ export const getAdminInsights = createServerFn({ method: "GET" })
           .select("id, product_name, price_captured, created_at, establishment_id, unit, verified")
           .eq("status", "salvo")
           .not("price_captured", "is", null)
+          .gte("created_at", since)
+          .lte("created_at", until)
           .order("created_at", { ascending: false })
           .limit(20000),
         supabaseAdmin.from("establishments").select("id, name, kind, active"),
       ]);
     if (scanErr) throw new Error(scanErr.message);
     if (storeErr) throw new Error(storeErr.message);
+
 
     const scans = (scanRows ?? []) as unknown as ScanRow[];
     const stores = (storeRows ?? []) as unknown as Array<{
