@@ -3329,7 +3329,7 @@ export type Database = {
         }[]
       }
       get_price_comparisons: {
-        Args: { p_category?: string }
+        Args: { p_category?: string; p_limit?: number; p_offset?: number }
         Returns: {
           avg_price: number
           catalog_slug: string

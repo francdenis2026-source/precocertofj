@@ -334,9 +334,9 @@
   --pc-home-card: oklch(0.20 0.04 258);
   --pc-home-navy: #071126;
   --pc-home-navy-2: #172a4b;
-  --pc-home-gold: #d7ad54;
-  --pc-home-gold-soft: #ffe3a0;
-  --pc-gold-ink: #d7ad54;
+  --pc-home-gold: #f2c66b;         /* brighter gold p/ garantir contraste em fundos claros de popovers no dark */
+  --pc-home-gold-soft: #ffe9ab;
+  --pc-gold-ink: #f2c66b;
   --pc-home-line: oklch(0.31 0.045 258);
   --pc-hover-tint: color-mix(in oklab, var(--pc-home-gold) 16%, transparent);
 
