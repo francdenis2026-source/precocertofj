@@ -190,7 +190,11 @@ function RootComponent() {
     return () => cleanup?.();
   }, []);
 
-
+  // Aquece os dados das rotas principais no tempo ocioso: abrir Buscar,
+  // Bairros, Mercados ou Ranking passa a ser instantâneo.
+  useEffect(() => {
+    void import("@/lib/route-prefetch").then((m) => m.warmMainRoutes(queryClient));
+  }, [queryClient]);
 
 
 
