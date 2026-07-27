@@ -55,17 +55,17 @@ def trace(mask: np.ndarray) -> str:
     path = bmp.trace(turdsize=2, alphamax=1.0, opticurve=1, opttolerance=0.2)
     out: list[str] = []
     for curve in path:
-        sx, sy = curve.start_point
+        sp = curve.start_point; sx, sy = sp.x, sp.y
         d = [f"M{sx:.2f} {sy:.2f}"]
         for seg in curve:
             if seg.is_corner:
-                cx, cy = seg.c
-                ex, ey = seg.end_point
+                cx, cy = seg.c.x, seg.c.y
+                ex, ey = seg.end_point.x, seg.end_point.y
                 d.append(f"L{cx:.2f} {cy:.2f}L{ex:.2f} {ey:.2f}")
             else:
-                c1x, c1y = seg.c1
-                c2x, c2y = seg.c2
-                ex, ey = seg.end_point
+                c1x, c1y = seg.c1.x, seg.c1.y
+                c2x, c2y = seg.c2.x, seg.c2.y
+                ex, ey = seg.end_point.x, seg.end_point.y
                 d.append(f"C{c1x:.2f} {c1y:.2f} {c2x:.2f} {c2y:.2f} {ex:.2f} {ey:.2f}")
         d.append("Z")
         out.append("".join(d))
