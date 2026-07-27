@@ -211,10 +211,17 @@ function NeighborhoodsPage() {
       <PageShellContent className="flex h-[100dvh] flex-col overflow-hidden !pb-0">
         {/* Cabeçalho editorial compacto */}
         <header className="shrink-0 border-b border-border/70 bg-card/60">
-
-          <div className="mx-auto grid w-full max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 px-3 py-2 sm:items-end md:px-6 md:py-2.5">
-            <div className="flex min-w-0 items-center gap-2 sm:items-end sm:gap-3">
-              <HomeBrandLink showWordmark={false} className="shrink-0 sm:mb-0.5" />
+          <span
+            aria-hidden
+            className="block h-px w-full"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent, color-mix(in oklab, var(--brand-gold) 70%, transparent) 50%, transparent)",
+            }}
+          />
+          <div className="mx-auto grid w-full max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-1 px-3 py-2.5 md:px-6 md:py-3">
+            <div className="flex min-w-0 items-center gap-2 sm:gap-3">
+              <HomeBrandLink showWordmark={false} className="shrink-0" />
               <div className="min-w-0">
                 <p className={`hidden sm:block ${tc.eyebrow}`}>Guia local · Feijó</p>
                 <h1 className={`truncate sm:mt-0.5 ${tc.h1}`}>
@@ -223,24 +230,22 @@ function NeighborhoodsPage() {
               </div>
             </div>
 
-            <dl className="flex shrink-0 items-center gap-2.5 tracking-normal sm:gap-4 sm:tracking-[inherit]">
-              <div className="text-right">
-                <dd className={`${tc.num} text-[var(--pc-gold-ink)]`}>{filteredGroups.length}</dd>
-                <dt className={`${tc.tableHead} text-[0.6rem] tracking-normal sm:text-[inherit] sm:tracking-[inherit]`}>
-                  Bairros
-                </dt>
-              </div>
-              <span aria-hidden className="h-6 w-px bg-border" />
-              <div className="text-right">
-                <dd className={tc.num}>{totalMarkets}</dd>
-                <dt className={`${tc.tableHead} text-[0.6rem] tracking-normal sm:text-[inherit] sm:tracking-[inherit]`}>
-                  Mercados
-                </dt>
-              </div>
+            {/* Bloco editorial de contagem — tipografia serif, mais presente */}
+            <dl
+              aria-label="Resumo do guia"
+              className="flex shrink-0 items-stretch overflow-hidden rounded-lg border border-border/70 bg-background/60 shadow-sm backdrop-blur"
+            >
+              <StatCell
+                value={filteredGroups.length}
+                label="Bairros"
+                accent
+              />
+              <span aria-hidden className="w-px self-stretch bg-border/70" />
+              <StatCell value={totalMarkets} label="Mercados" />
             </dl>
-
           </div>
         </header>
+
 
         {/* Barra de comando */}
         <div className="border-b border-border/70 bg-background">
