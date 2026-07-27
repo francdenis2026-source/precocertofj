@@ -155,7 +155,7 @@ export function MetricSpotlightDialog({
                   {cfg.title}
                 </DialogTitle>
                 <DialogDescription
-                  className="mt-0.5 line-clamp-2 text-[12px] font-medium leading-snug"
+                  className="pc-on-navy mt-0.5 line-clamp-2 text-[12px] font-medium leading-snug"
                   style={{ color: "rgb(238 242 250 / 0.95)" }}
                 >
                   {cfg.subtitle}
