@@ -60,6 +60,9 @@ import { SectionSkeleton } from "@/components/admin/SectionSkeleton";
 const AdminInsightsPanel = lazy(() =>
   import("@/components/admin/AdminInsightsPanel").then((m) => ({ default: m.AdminInsightsPanel })),
 );
+const AdminKpiBoard = lazy(() =>
+  import("@/components/admin/AdminKpiBoard").then((m) => ({ default: m.AdminKpiBoard })),
+);
 const AdminGlobalSearch = lazy(() =>
   import("@/components/admin/AdminGlobalSearch").then((m) => ({ default: m.AdminGlobalSearch })),
 );
