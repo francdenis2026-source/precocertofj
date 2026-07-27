@@ -253,7 +253,7 @@ function FaleConoscoPage() {
               </div>
 
               <ul className="mt-1.5 grid gap-1">
-                <li className="flex items-center justify-between gap-2 rounded-lg border border-border bg-muted/40 px-2.5 py-1.5">
+                <li className="flex min-w-0 items-center justify-between gap-2 rounded-lg border border-border bg-muted/40 px-2.5 py-1.5">
                   <a
                     href={`mailto:${CONTACT_EMAIL}`}
                     className="flex min-w-0 items-center gap-1.5 text-[13px] font-semibold text-foreground hover:text-brand-gold"
@@ -278,7 +278,7 @@ function FaleConoscoPage() {
                   </button>
                 </li>
 
-                <li className="flex items-center justify-between gap-2 rounded-lg border border-border bg-muted/40 px-2.5 py-1.5">
+                <li className="flex min-w-0 items-center justify-between gap-2 rounded-lg border border-border bg-muted/40 px-2.5 py-1.5">
                   <a
                     href={`https://wa.me/${CONTACT_PHONE_RAW}`}
                     target="_blank"
@@ -305,7 +305,7 @@ function FaleConoscoPage() {
                   </button>
                 </li>
 
-                <li className="flex items-center gap-1.5 rounded-lg border border-dashed border-border px-2.5 py-1.5 text-[12.5px] font-medium text-muted-foreground">
+                <li className="flex min-w-0 items-center gap-1.5 rounded-lg border border-dashed border-border px-2.5 py-1.5 text-[12.5px] font-medium text-muted-foreground">
                   <Clock className="h-3.5 w-3.5 shrink-0" />
                   <span className="truncate">{CONTACT_HOURS}</span>
                 </li>
