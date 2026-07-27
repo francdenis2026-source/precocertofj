@@ -332,15 +332,17 @@ export function PriceSearchBar({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
 
+  // Auto-busca a partir de `?q=` — só na montagem. Depois disso a URL passa a
+  // ser espelho do que o usuário digita; reagir a ela aqui reabriria uma busca
+  // "não silenciosa" a cada tecla e fecharia a lista de sugestões.
   useEffect(() => {
     if (autoRan.current) return;
+    autoRan.current = true;
     const q = normalizeInput(initialQuery).trim();
-    if (q.length >= 2) {
-      autoRan.current = true;
-      runQuery(q);
-    }
+    if (q.length >= 2) runQuery(q);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialQuery]);
+  }, []);
+
 
   // Re-executa a busca quando o usuário troca modo/filtro após já ter resultado.
   useEffect(() => {
