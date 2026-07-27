@@ -986,7 +986,19 @@ export function PriceSearchBar({
                   : null;
 
                 return (
-                  <div className="overflow-hidden rounded-xl border border-white/10 bg-brand-navy text-white shadow-sm">
+                  <div className="pc-best-result relative overflow-hidden rounded-xl border border-brand-gold/40 bg-brand-navy text-white shadow-[0_10px_40px_-18px_rgba(201,168,76,0.55)] ring-1 ring-brand-gold/20">
+                    <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-gold/70 to-transparent" />
+                    <span aria-hidden className="pointer-events-none absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b from-brand-gold via-brand-gold/60 to-transparent" />
+                    <div className="flex items-center justify-between gap-2 border-b border-white/10 bg-white/[0.03] px-3.5 py-1.5">
+                      <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-gold">
+                        <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-brand-gold shadow-[0_0_8px_rgba(201,168,76,0.9)]" />
+                        Melhor resultado
+                      </span>
+                      <span className="text-[10px] font-medium uppercase tracking-wider text-white/50">
+                        destaque da busca
+                      </span>
+                    </div>
+
                     <div className="grid gap-3 px-3.5 py-3 sm:grid-cols-2 sm:gap-4">
                       <div className="min-w-0">
                         <p className="flex items-center gap-2 text-[11px] font-medium text-brand-gold/90">
