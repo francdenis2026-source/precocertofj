@@ -291,7 +291,7 @@ function ComparadorPage() {
       }
       return acc;
     },
-    staleTime: 60_000,
+    staleTime: 5 * 60_000,
   });
 
   const allRows = data ?? [];

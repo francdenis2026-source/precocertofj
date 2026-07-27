@@ -15,6 +15,7 @@ import {
   resolveSynonymGroup,
 } from "@/lib/search-synonyms";
 import { getSynonymGroupsCached } from "@/lib/search-synonyms.server";
+import { getSignedUrlCached } from "@/lib/signed-url-cache.server";
 import type {
   PriceSearchMarket,
   PriceSearchResult,
@@ -23,12 +24,37 @@ import type {
   ProductPricePoint,
 } from "@/lib/price-search.functions";
 
+/** Cache curto do resultado completo da busca (mesmo termo + filtros). */
+const searchResultCache = new Map<string, { at: number; value: PriceSearchResult }>();
+const SEARCH_CACHE_TTL_MS = 45_000;
+const SEARCH_CACHE_MAX = 120;
+
 export async function performPriceSearch(data: {
   query: string;
   mode: SearchMode;
   pureOnly: boolean;
 }): Promise<PriceSearchResult> {
+  const cacheKey = `${data.query.trim().toLowerCase()}|${data.mode}|${data.pureOnly ? 1 : 0}`;
+  const hit = searchResultCache.get(cacheKey);
+  if (hit && Date.now() - hit.at < SEARCH_CACHE_TTL_MS) return hit.value;
+
+  const result = await runPriceSearch(data);
+
+  if (searchResultCache.size >= SEARCH_CACHE_MAX) {
+    const oldest = searchResultCache.keys().next().value;
+    if (oldest) searchResultCache.delete(oldest);
+  }
+  searchResultCache.set(cacheKey, { at: Date.now(), value: result });
+  return result;
+}
+
+async function runPriceSearch(data: {
+  query: string;
+  mode: SearchMode;
+  pureOnly: boolean;
+}): Promise<PriceSearchResult> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
   const safe = data.query.replace(/[%_,]/g, " ").slice(0, 80);
   const mode = data.mode;
 
@@ -157,18 +183,11 @@ export async function performPriceSearch(data: {
 
   await Promise.all(
     suggestions.map(async (s) => {
-      if (!s.imageUrl) return;
-      const m = s.imageUrl.match(/\/storage\/v1\/object\/(?:public|sign|authenticated)\/([^/?#]+)\/([^?#]+)/);
-      if (!m) return;
-      const bucket = decodeURIComponent(m[1]);
-      const path = decodeURIComponent(m[2]);
-      if (bucket !== "logos" && bucket !== "scans") return;
-      const { data: signed } = await supabaseAdmin.storage
-        .from(bucket)
-        .createSignedUrl(path, 60 * 60 * 24 * 7);
-      if (signed?.signedUrl) s.imageUrl = signed.signedUrl;
+      const signed = await getSignedUrlCached(supabaseAdmin, s.imageUrl);
+      if (signed) s.imageUrl = signed;
     }),
   );
+
   const catalogIdByName = new Map(
     suggestions.map((s) => [normalize(s.displayName), s.id] as const),
   );
