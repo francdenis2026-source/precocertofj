@@ -49,7 +49,7 @@ import {
   SheetTitle,
   SheetDescription,
 } from "@/components/ui/sheet";
-import { SiteHeader } from "@/components/layout/SiteHeader";
+import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { StoreBadge } from "@/components/brand/StoreBadge";
 import {
@@ -332,7 +332,7 @@ function EstablishmentPage() {
 
   return (
     <div className="min-h-svh bg-background text-foreground">
-      <SiteHeader />
+      <div className="mx-auto w-full max-w-6xl px-4 pt-3"><HomeBrandLink /></div>
       <main className="mx-auto max-w-5xl px-3 pb-14 pt-3 sm:px-6">
         <Link
           to="/estabelecimentos"

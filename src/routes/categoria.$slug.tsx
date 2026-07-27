@@ -29,7 +29,7 @@ import {
   Wine,
   BookOpen,
 } from "lucide-react";
-import { SiteHeader } from "@/components/layout/SiteHeader";
+import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { StoreBadge } from "@/components/brand/StoreBadge";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
@@ -187,7 +187,7 @@ function CategoryPage() {
   if (!def) {
     return (
       <div className="min-h-svh bg-background text-foreground">
-        <SiteHeader />
+        <div className="mx-auto w-full max-w-6xl px-4 pt-3"><HomeBrandLink /></div>
         <main className="mx-auto max-w-3xl px-4 py-16 text-center">
           <h1 className="font-serif text-[24px] font-semibold">Categoria não encontrada</h1>
           <Link to="/" className="mt-4 inline-block text-[13px] font-semibold text-brand-gold underline">
@@ -201,7 +201,7 @@ function CategoryPage() {
 
   return (
     <div className="min-h-svh bg-background text-foreground">
-      <SiteHeader />
+      <div className="mx-auto w-full max-w-6xl px-4 pt-3"><HomeBrandLink /></div>
       <main className="mx-auto max-w-6xl px-3 pb-14 pt-3 sm:px-6">
         {/* Hero compacto — escala tipográfica única (eyebrow 10 / título 19-22 / meta 12 / stat 15) */}
         <header className="overflow-hidden rounded-xl border border-border/70 bg-[var(--pc-navy,#0b1e3f)] text-white shadow-sm">
