@@ -494,7 +494,7 @@ function NeighborhoodsPage() {
 
 
               {/* Detalhe do bairro */}
-              <section className="min-w-0 max-h-[58svh] overflow-y-auto rounded-lg border border-border bg-card no-scrollbar md:max-h-[62svh]">
+              <section className="min-w-0 flex min-h-0 flex-col overflow-hidden rounded-lg border border-border bg-card">
                 <header className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-b border-border/70 px-3 py-2">
                   <div className="min-w-0">
                     <h2 className={`truncate ${tc.h2}`}>{active.neighborhood}</h2>
