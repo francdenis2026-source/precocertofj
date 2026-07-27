@@ -152,7 +152,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
             : ""}
         </p>
 
-        <ul className={`${BODY_GAP} min-h-0 flex-1 divide-y overflow-y-auto no-scrollbar`} style={{ borderColor: line }}>
+        <ul className={`${BODY_GAP} min-h-0 flex-1 divide-y overflow-y-auto no-scrollbar`} style={{ borderColor: line, maskImage: "linear-gradient(to bottom, #000 92%, transparent)", WebkitMaskImage: "linear-gradient(to bottom, #000 92%, transparent)" }}>
           {items.length === 0
             ? Array.from({ length: 7 }).map((_, i) => (
                 <li key={i} className="flex items-center gap-3 py-2">
@@ -257,7 +257,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
             ...(live?.checkedToday ? [{ label: "Conferidos hoje", value: String(live.checkedToday) }] : []),
             { label: "Últimos 7 dias", value: String(live?.totalRecent ?? 0) },
             { label: "Avaliação", value: PLATFORM_RATING.value.toLocaleString("pt-BR", { minimumFractionDigits: 1 }) },
-            { label: "Mercados parceiros", value: "6+" },
+            { label: "Mercados", value: "6+" },
           ].slice(0, 3).map((s) => (
             <div key={s.label} className="min-w-0">
               <p className={`${tc.num} font-semibold`} style={{ color: gold }}>
