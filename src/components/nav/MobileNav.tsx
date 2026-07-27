@@ -69,12 +69,12 @@ export function MobileNav() {
               aria-label={showBadge ? `${it.label} (${cartCount})` : it.label}
               aria-current={active ? "page" : undefined}
               className={cn(
-                "group relative flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-1.5 transition-colors",
+                "pc-nav-link group relative flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-1.5",
                 active
                   ? it.accent
                     ? "text-accent-strong"
                     : "text-primary"
-                  : "text-muted-foreground hover:text-foreground",
+                  : "text-muted-foreground",
               )}
             >
               {active && (
@@ -114,8 +114,8 @@ export function MobileNav() {
             aria-label="Meu painel"
             aria-current={isAppActive ? "page" : undefined}
             className={cn(
-              "group relative flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-1.5 transition-colors",
-              isAppActive ? "text-primary" : "text-muted-foreground hover:text-foreground",
+              "pc-nav-link group relative flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-1.5",
+              isAppActive ? "text-primary" : "text-muted-foreground",
             )}
           >
             {isAppActive && (
@@ -128,7 +128,7 @@ export function MobileNav() {
           <a
             href={loginHref}
             aria-label="Entrar"
-            className="group flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-1.5 text-muted-foreground transition-colors hover:text-foreground"
+            className="pc-nav-link group flex min-h-11 flex-1 flex-col items-center justify-center gap-0.5 px-1 py-1.5 text-muted-foreground"
           >
             <User className="h-[22px] w-[22px]" strokeWidth={2} />
             <span className="text-[11px] font-semibold leading-none tracking-tight">Entrar</span>
