@@ -202,9 +202,10 @@ function CategoryPage() {
   }
 
   return (
-    <div className="min-h-svh bg-background text-foreground">
-      <div className="mx-auto w-full max-w-6xl px-4 pt-3"><HomeBrandLink /></div>
-      <main className="mx-auto max-w-6xl px-3 pb-14 pt-3 sm:px-6">
+    <div className="flex h-[100dvh] flex-col overflow-hidden bg-background text-foreground">
+      <div className="mx-auto w-full max-w-6xl shrink-0 px-4 pt-3"><HomeBrandLink /></div>
+      <main className="pc-rail mx-auto min-h-0 w-full max-w-6xl flex-1 overflow-y-auto px-3 pb-6 pt-3 sm:px-6">
+
         {/* Hero compacto — escala tipográfica única (eyebrow 11 / título 19-22 / meta 12 / stat 16).
             `data-surface="navy"` + `.gold-on-dark` garantem dourado vivo (AA) no modo claro. */}
         <header data-surface="navy" className="overflow-hidden rounded-xl border border-border/70 bg-[var(--pc-navy,#0f1b3d)] text-white shadow-sm">
