@@ -1,6 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Area,
   AreaChart,
@@ -334,7 +334,7 @@ export function AdminInsightsPanel() {
             size="sm"
             variant="ghost"
             className="h-7 px-2"
-            onClick={() => query.refetch()}
+            onClick={() => void hardRefresh()}
             aria-label="Atualizar indicadores"
           >
             <RefreshCw className={cn("h-3.5 w-3.5", query.isFetching && "animate-spin")} />
