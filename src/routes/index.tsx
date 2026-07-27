@@ -585,7 +585,7 @@ function HomePage() {
                   </div>
                   {/* Muro de logos: uma única faixa, marcas maiores e legíveis.
                       Ocupa a mesma altura das duas linhas de chips anteriores. */}
-                  <div className="flex items-center gap-1.5 overflow-x-auto pc-noscroll">
+                  <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
                     {(storesQ.isLoading ? Array.from({ length: 5 }) : partners).map((s: any, i: number) => (
                       <Link
                         key={s?.id ?? i}
