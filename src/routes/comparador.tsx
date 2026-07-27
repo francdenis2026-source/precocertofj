@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate, retainSearchParams } from "@tanstack/react-router";
 import { Nav } from "@/components/brand/Nav";
-import { Footer } from "@/components/brand/Footer";
+import { PriceSpotlight } from "@/components/product/PriceSpotlight";
 import { Breadcrumbs } from "@/components/nav/Breadcrumbs";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -811,23 +811,27 @@ function ComparadorPage() {
           </Sheet>
         </div>
 
-        <div className="mt-4 grid grid-cols-3 gap-2 md:mt-6 md:gap-3">
+        {/* Spotlight editorial — menor preço em destaque com hierarquia forte */}
+        {stats.cheapest != null && (
+          <div className="mt-4 md:mt-6">
+            <PriceSpotlight
+              kicker="Menor preço agora"
+              productName={stats.cheapestName ?? "Produto em destaque"}
+              price={Number(stats.cheapest)}
+              storeName={stats.cheapestStore}
+              storesAvailable={stats.storeCount}
+              detailSlug={equivalentRanking?.referenceRow?.catalog_slug ?? equivalentRanking?.referenceRow?.display_name ?? null}
+            />
+          </div>
+        )}
+
+        <div className="mt-3 grid grid-cols-2 gap-2 md:mt-4 md:gap-3">
           <StatCard label="Produtos encontrados" value={String(stats.productCount)} />
           <StatCard
             label="Mercados com preço"
             value={String(stats.storeCount)}
             hint="mercados cadastrados"
           />
-          <StatCard
-            label="Menor preço agora"
-            value={stats.cheapest != null ? formatBRL(Number(stats.cheapest)) : "—"}
-            hint={
-              stats.cheapestName
-                ? `${stats.cheapestName}${stats.cheapestStore ? ` — ${shortenStoreName(stats.cheapestStore)}` : ""}`
-                : undefined
-            }
-          />
-
         </div>
 
         <PriceAuditAlert report={auditReport} />
@@ -1011,10 +1015,11 @@ function ComparadorPage() {
         }
       />
 
-      <Footer />
     </div>
   );
 }
+
+// Footer removido: página isolada e compacta (padrão IsolatedPage).
 
 /**
  * Tabela responsiva para o comparador — reaproveita os mesmos dados que

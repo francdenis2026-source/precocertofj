@@ -6,7 +6,7 @@ import { z } from "zod";
 import { useServerFn } from "@tanstack/react-start";
 
 import { Nav } from "@/components/brand/Nav";
-import { Footer } from "@/components/brand/Footer";
+import { PriceSpotlight } from "@/components/product/PriceSpotlight";
 
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { tc } from "@/lib/typeclear";
@@ -540,6 +540,22 @@ function MelhoresPrecosPage() {
           </div>
         </header>
 
+        {/* ---------- Spotlight editorial — melhor economia do ranking ---------- */}
+        {rows[0] && (
+          <div className="mt-2">
+            <PriceSpotlight
+              kicker={`Top do ranking · ${rows[0].savings_pct.toFixed(1)}% de economia`}
+              productName={rows[0].display_name}
+              sizeLabel={rows[0].size_value != null ? `${rows[0].size_value} ${rows[0].size_unit}` : null}
+              price={Number(rows[0].min_price)}
+              storeName={rows[0].cheapest_store}
+              storesAvailable={rows[0].store_count}
+              detailSlug={rows[0].catalog_slug ?? rows[0].display_name}
+              ctaLabel="Abrir produto"
+            />
+          </div>
+        )}
+
         {/* ---------- Faixa de indicadores (linha fina, sem cards altos) ---------- */}
         <dl className="mt-2 grid grid-cols-3 divide-x divide-border/60 overflow-hidden rounded-xl border border-border bg-card/50">
           {[
@@ -788,7 +804,7 @@ function MelhoresPrecosPage() {
         </section>
       </main>
 
-      <Footer />
+      {/* Página isolada — sem footer (padrão IsolatedPage). */}
     </div>
   );
 }
