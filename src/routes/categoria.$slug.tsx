@@ -203,20 +203,21 @@ function CategoryPage() {
     <div className="min-h-svh bg-background text-foreground">
       <div className="mx-auto w-full max-w-6xl px-4 pt-3"><HomeBrandLink /></div>
       <main className="mx-auto max-w-6xl px-3 pb-14 pt-3 sm:px-6">
-        {/* Hero compacto — escala tipográfica única (eyebrow 10 / título 19-22 / meta 12 / stat 15) */}
-        <header data-surface="navy" className="overflow-hidden rounded-xl border border-border/70 bg-[var(--pc-navy,#0b1e3f)] text-white shadow-sm">
+        {/* Hero compacto — escala tipográfica única (eyebrow 11 / título 19-22 / meta 12 / stat 16).
+            `data-surface="navy"` + `.gold-on-dark` garantem dourado vivo (AA) no modo claro. */}
+        <header data-surface="navy" className="overflow-hidden rounded-xl border border-border/70 bg-[var(--pc-navy,#0f1b3d)] text-white shadow-sm">
           <div className="flex items-center gap-3 px-3.5 py-3 sm:px-4">
             <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-brand-gold text-brand-navy sm:h-10 sm:w-10">
               <Icon className="h-[18px] w-[18px] sm:h-5 sm:w-5" strokeWidth={2.2} aria-hidden />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="text-[11px] font-bold uppercase leading-none tracking-[0.18em] text-brand-gold">
+              <p className="gold-on-dark text-[11px] font-bold uppercase leading-none tracking-[0.18em] text-brand-gold">
                 Categoria
               </p>
-              <h1 className="mt-1 truncate font-serif text-[19px] font-semibold leading-[1.15] sm:text-[22px]">
+              <h1 className="mt-1 truncate font-serif text-[19px] font-semibold leading-[1.15] text-white sm:text-[22px]">
                 {def.label}
               </h1>
-              <p className="mt-0.5 truncate text-[12px] leading-snug text-white/70">{def.desc}</p>
+              <p className="mt-1 truncate text-[12px] leading-snug text-white/85">{def.desc}</p>
             </div>
             <dl className="hidden shrink-0 items-start gap-5 sm:flex">
               <Stat label="Produtos" value={data?.totals.products ?? 0} />
@@ -224,18 +225,19 @@ function CategoryPage() {
               <Stat label="Preços" value={data?.totals.prices ?? 0} />
             </dl>
           </div>
-          <dl className="grid grid-cols-3 divide-x divide-white/10 border-t border-white/10 sm:hidden">
-            <div className="px-3 py-1.5">
+          <dl className="grid grid-cols-3 divide-x divide-white/20 border-t border-white/20 sm:hidden">
+            <div className="px-3 py-2">
               <Stat label="Produtos" value={data?.totals.products ?? 0} align="left" />
             </div>
-            <div className="px-3 py-1.5">
+            <div className="px-3 py-2">
               <Stat label="Lojas" value={data?.totals.stores ?? 0} align="left" />
             </div>
-            <div className="px-3 py-1.5">
+            <div className="px-3 py-2">
               <Stat label="Preços" value={data?.totals.prices ?? 0} align="left" />
             </div>
           </dl>
         </header>
+
 
         {/* Trilho de categorias — setas de navegação + roda do mouse horizontal */}
         <CategoryRail current={slug} />
