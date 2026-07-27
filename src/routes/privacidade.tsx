@@ -36,7 +36,7 @@ export const Route = createFileRoute("/privacidade")({
   component: PrivacidadePage,
 });
 
-const UPDATED_AT = "12 fev 2026";
+const UPDATED_AT = "27 jul 2026";
 
 type Item = { id: string; title: string; body: React.ReactNode };
 type TabKey = "privacidade" | "termos";
