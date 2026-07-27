@@ -339,85 +339,36 @@ function PlansPage() {
           )}
         </section>
 
-        {/* Detalhes — ocupa a altura restante; a rolagem acontece AQUI dentro. */}
-        <section
-          id="detalhes"
-          className={dsx(ds.container, "flex min-h-0 flex-1 flex-col pb-2")}
-          aria-label="Detalhes dos planos"
-        >
-          <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border bg-card">
-            <div
-              role="tablist"
-              aria-label="Detalhes"
-              className="flex shrink-0 items-center gap-1 border-b border-border/70 px-2"
+        {/* Rodapé de referência — links leves para detalhes.
+            As abas "Comparar recursos" e "Perguntas frequentes" foram removidas
+            por comprimirem o painel; agora abrem em `/fale-conosco`. */}
+        <section className={dsx(ds.container, "shrink-0 pb-1")} aria-label="Ajuda e comparativo">
+          <div className="flex flex-wrap items-center justify-center gap-2 text-[12px]">
+            <Link
+              to="/fale-conosco"
+              className="pc-focus inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 font-semibold text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)]"
             >
-              {([
-                { id: "comparativo", label: "Comparar recursos", Icon: Sparkles },
-                { id: "faq", label: "Perguntas frequentes", Icon: ChevronDown },
-              ] as const).map((t) => (
-                <button
-                  key={t.id}
-                  type="button"
-                  role="tab"
-                  id={`tab-${t.id}`}
-                  aria-selected={tab === t.id}
-                  aria-controls="detalhes-panel"
-                  onClick={() => setTab(t.id)}
-                  className={dsx(
-                    "relative -mb-px min-h-11 px-4 text-[13.5px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
-                    tab === t.id
-                      ? "text-foreground after:absolute after:inset-x-2 after:bottom-0 after:h-0.5 after:rounded-full after:bg-brand-gold"
-                      : "text-muted-foreground hover:text-foreground",
-                  )}
-                >
-                  {t.label}
-                </button>
-              ))}
-            </div>
-
-            <div
-              id="detalhes-panel"
-              role="tabpanel"
-              aria-labelledby={`tab-${tab}`}
-              className="pc-rail min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-5"
+              <Sparkles className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+              Comparar recursos
+            </Link>
+            <Link
+              to="/fale-conosco"
+              className="pc-focus inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 font-semibold text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)]"
             >
-              {tab === "comparativo" ? (
-                <ComparisonMatrix
-                  plans={plans}
-                  recommendedSlug={recommendedSlug}
-                  onBuy={handleBuy}
-                  buying={buying}
-                />
-              ) : (
-                <div className="mx-auto max-w-3xl divide-y divide-border/70">
-                  {FAQ.map((item, i) => (
-                    <details key={item.q} name="planos-faq" open={i === 0} className="group">
-                      <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 py-2.5 text-[14px] font-semibold text-foreground transition-colors hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold">
-                        <span>{item.q}</span>
-                        <ChevronDown
-                          className="h-4 w-4 shrink-0 text-muted-foreground transition group-open:rotate-180 group-open:text-brand-gold"
-                          aria-hidden
-                        />
-                      </summary>
-                      <p className="pb-3.5 pr-6 text-[13.5px] leading-relaxed text-muted-foreground">
-                        {item.a}
-                      </p>
-                    </details>
-                  ))}
-                  <p className="pt-3.5 text-[13px] text-muted-foreground">
-                    Já comprou e recebeu um código?{" "}
-                    <Link
-                      to="/resgatar"
-                      className="font-semibold text-brand-gold hover:underline"
-                    >
-                      Ativar meu código
-                    </Link>
-                  </p>
-                </div>
-              )}
-            </div>
+              <ChevronDown className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+              Perguntas frequentes
+            </Link>
+            <Link
+              to="/resgatar"
+              className="pc-focus inline-flex h-8 items-center rounded-full px-3 font-semibold text-brand-gold hover:underline"
+            >
+              Já tenho código →
+            </Link>
           </div>
         </section>
+
+        <div className="flex-1" aria-hidden />
+
 
         {/* Barra de ação — em fluxo, sempre visível, nunca sobreposta. */}
         <div
