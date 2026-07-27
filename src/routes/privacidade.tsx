@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { SiteFooter } from "@/components/layout/SiteFooter";
+import { IsolatedPage } from "@/components/layout/IsolatedPage";
 import { BackButton } from "@/components/layout/BackButton";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { tc } from "@/lib/typeclear";
