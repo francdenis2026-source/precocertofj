@@ -502,7 +502,7 @@ function SearchPage() {
           {/* Sidebar persistente — apenas na descoberta (desktop) */}
           {!hasQuery && (
             <aside className="hidden lg:block">
-              <div className="sticky top-14">
+              <div className="sticky top-14 pc-surface-1 p-3">
                 <SearchSidebar
                   recent={recent}
                   onPickQuery={pickQuery}
