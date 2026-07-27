@@ -1077,7 +1077,7 @@ function ComparisonTable({
                   Produto
                 </button>
               </th>
-              <th scope="col" aria-sort={ariaSort("price-asc")} className="px-4 py-3 text-right">
+              <th scope="col" aria-sort={ariaSort("price-asc")} className="px-4 py-3 text-right border-l border-[color-mix(in_oklab,var(--pc-gold-ink)_35%,transparent)]">
                 <button type="button" className={headerBtn} onClick={() => onSortChange("price-asc")}>
                   Menor preço
                 </button>
