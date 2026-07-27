@@ -1510,6 +1510,39 @@ export type Database = {
         }
         Relationships: []
       }
+      platform_stats_cache: {
+        Row: {
+          active_comparisons: number
+          avg_savings: number
+          computed_at: string
+          establishments: number
+          id: boolean
+          price_drops_7d: number
+          total_savings: number
+          unique_products: number
+        }
+        Insert: {
+          active_comparisons?: number
+          avg_savings?: number
+          computed_at?: string
+          establishments?: number
+          id?: boolean
+          price_drops_7d?: number
+          total_savings?: number
+          unique_products?: number
+        }
+        Update: {
+          active_comparisons?: number
+          avg_savings?: number
+          computed_at?: string
+          establishments?: number
+          id?: boolean
+          price_drops_7d?: number
+          total_savings?: number
+          unique_products?: number
+        }
+        Relationships: []
+      }
       price_alert_subscriptions: {
         Row: {
           active: boolean
@@ -3396,6 +3429,17 @@ export type Database = {
         }[]
       }
       platform_public_stats: {
+        Args: never
+        Returns: {
+          active_comparisons: number
+          avg_savings: number
+          establishments: number
+          price_drops_7d: number
+          total_savings: number
+          unique_products: number
+        }[]
+      }
+      platform_public_stats_compute: {
         Args: never
         Returns: {
           active_comparisons: number
