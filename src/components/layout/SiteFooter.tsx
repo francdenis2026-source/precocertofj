@@ -66,8 +66,9 @@ export function SiteFooter() {
             </span>
           </p>
         ) : (
-          <Link
-            to="/"
+          <button
+            type="button"
+            onClick={() => navigate({ to: "/" })}
             className={dsx(
               "flex min-w-0 shrink-0 items-center gap-1.5 rounded-md py-0.5 transition-colors",
               focusRing,
@@ -84,8 +85,8 @@ export function SiteFooter() {
             <span className={dsx(serif, "truncate text-[17px] leading-none text-foreground")}>
               Preço<span className="italic text-brand">Certo</span>
             </span>
-            <span className="sr-only">— página inicial</span>
-          </Link>
+            <span className="sr-only">— ir para a página inicial</span>
+          </button>
         )}
 
         <p className="justify-self-end whitespace-nowrap font-medium text-muted-foreground tabular-nums">
