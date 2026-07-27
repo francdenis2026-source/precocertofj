@@ -53,6 +53,11 @@ import { useConfirm } from "@/components/ui/confirm-provider";
 import { Copy, Key, Mail, Plus, RefreshCw, Trash2, XCircle, Sparkles, CreditCard, Users, Gauge, Clock, AlertTriangle, ShieldAlert, ShieldCheck, Loader2, History, ArrowUpDown, ChevronLeft, ChevronRight, LogOut, Package, ImageIcon, Ticket, FileText, Languages, Trophy, Store } from "lucide-react";
 import { useMyRoles } from "@/hooks/useMyRoles";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
+import { AdminInsightsPanel } from "@/components/admin/AdminInsightsPanel";
+import { AdminGlobalSearch } from "@/components/admin/AdminGlobalSearch";
+import { AdminActionsAudit } from "@/components/admin/AdminActionsAudit";
+import { AdminTeamPanel } from "@/components/admin/AdminTeamPanel";
+import { logAdminAccess } from "@/lib/admin-team.functions";
 
 export const Route = createFileRoute("/admin")({
   ssr: false,
@@ -192,6 +197,17 @@ function AdminPage() {
   });
   const dbPlans: PlanRow[] = plansQuery.data ?? [];
 
+  // Registra o acesso ao console na auditoria (uma vez por sessão de página).
+  const logAccess = useServerFn(logAdminAccess);
+  useEffect(() => {
+    let done = false;
+    if (done) return;
+    logAccess({ data: { area: "console" } }).catch(() => {});
+    return () => { done = true; };
+  }, [logAccess]);
+
+
+
   const kpis = useMemo(() => {
     const active = state.subscribers.filter((s) => s.status === "active" || s.status === "trial").length;
     const mrr = state.subscribers
@@ -259,6 +275,13 @@ function AdminPage() {
           <Kpi icon={<Mail className="h-3.5 w-3.5" />} label="E-mails enviados" value={kpis.emails.toString()} />
         </div>
 
+        {/* ---------- Busca global ---------- */}
+        <AdminGlobalSearch />
+
+        {/* ---------- Gráficos comparativos ---------- */}
+        <AdminInsightsPanel />
+
+
         {/* ---------- Atalhos agrupados ---------- */}
         <nav aria-label="Atalhos do painel" className="grid gap-2.5 md:grid-cols-2 xl:grid-cols-4">
           {ADMIN_SHORTCUT_GROUPS.map((group) => (
@@ -325,8 +348,14 @@ function AdminPage() {
             <TabsContent value="subscribers"><SubscribersTab /></TabsContent>
             <TabsContent value="webhooks"><WebhooksTab /></TabsContent>
             <TabsContent value="emails"><EmailsTab /></TabsContent>
-            <TabsContent value="users"><UsersTab /></TabsContent>
-            <TabsContent value="audit"><AuditTab /></TabsContent>
+            <TabsContent value="users" className="space-y-3">
+              <AdminTeamPanel />
+              <UsersTab />
+            </TabsContent>
+            <TabsContent value="audit" className="space-y-3">
+              <AdminActionsAudit />
+              <AuditTab />
+            </TabsContent>
           </div>
         </Tabs>
       </section>
