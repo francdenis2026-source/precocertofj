@@ -1087,7 +1087,8 @@ export function PriceSearchBar({
                         </div>
                       ))}
                     </dl>
-                  </div>
+                  </section>
+
                 );
               })()}
 
