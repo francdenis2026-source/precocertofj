@@ -64,7 +64,9 @@ const LINKS = [
 /** Ritmo compartilhado entre as colunas (hierarquia idêntica em todas as seções). */
 const HEAD = "flex items-baseline justify-between gap-3 border-b pb-1.5";
 const HEAD_LEFT = "flex min-w-0 items-baseline gap-2.5";
-const BODY_GAP = "mt-1.5";
+const BODY_GAP = "mt-2";
+/** Altura reservada por linha de preço — evita reflow entre placeholder e dado. */
+const ROW_H = "min-h-[42px]";
 
 function Kicker({ children }: { children: React.ReactNode }) {
   return (
@@ -102,16 +104,105 @@ function SectionHead({
   );
 }
 
+type PriceItem = {
+  slug: string;
+  name: string;
+  price: number;
+  when: string;
+  stores: number;
+  marketName?: string | null;
+};
+
+/** Linha memoizada: só re-renderiza quando o próprio item muda. */
+const PriceRow = memo(function PriceRow({
+  p,
+  onNavigate,
+}: {
+  p: PriceItem;
+  onNavigate?: () => void;
+}) {
+  return (
+    <li
+      className={ROW_H}
+      style={{ contentVisibility: "auto", containIntrinsicSize: "42px" } as React.CSSProperties}
+    >
+      <Link
+        to="/produto/$slug"
+        params={{ slug: p.slug }}
+        onClick={onNavigate}
+        className={`group grid ${ROW_H} grid-cols-[minmax(0,1fr)_auto] items-center gap-3 py-1.5 transition-colors`}
+      >
+        <div className="min-w-0">
+          <p
+            className={`${tc.itemTitle} truncate group-hover:underline`}
+            style={{ color: "var(--pc-home-onhero-fg)" }}
+          >
+            {p.name}
+          </p>
+          <p
+            className={`${tc.meta} mt-0.5 truncate`}
+            style={{ color: "var(--pc-home-onhero-fg-70)" }}
+          >
+            {p.marketName ?? "Mercado parceiro"} · {relative(p.when)}
+            {p.stores > 1 ? ` · ${p.stores} mercados` : ""}
+          </p>
+        </div>
+        <span
+          className={`${tc.num} shrink-0 font-semibold`}
+          style={{ color: "var(--pc-home-onhero-gold)" }}
+        >
+          {brl(p.price)}
+        </span>
+      </Link>
+    </li>
+  );
+});
+
+function RowSkeleton({ glass }: { glass: string }) {
+  return (
+    <li className={`flex ${ROW_H} flex-col justify-center gap-1.5 py-1.5`}>
+      <div className="flex items-center gap-3">
+        <div className="h-3 flex-1 animate-pulse rounded" style={{ background: glass }} />
+        <div className="h-3 w-14 animate-pulse rounded" style={{ background: glass }} />
+      </div>
+      <div className="h-2.5 w-1/3 animate-pulse rounded" style={{ background: glass }} />
+    </li>
+  );
+}
 
 export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
   const fetchRecent = useServerFn(getRecentProducts);
   const fetchLive = useServerFn(getLiveTickerStats);
 
-  const { data: recent } = useQuery({
+  // Etapa 1: lote curto (rápido) já pinta a coluna.
+  const first = useQuery({
+    queryKey: ["home", "recent-products", 4],
+    queryFn: () => fetchRecent({ data: { limit: 4 } }),
+    staleTime: 60_000,
+  });
+
+  // Etapa 2: lote completo só depois que o painel está interativo (idle).
+  const [wantsFull, setWantsFull] = useState(false);
+  useEffect(() => {
+    const w = window as Window & {
+      requestIdleCallback?: (cb: () => void) => number;
+    };
+    if (w.requestIdleCallback) {
+      const id = w.requestIdleCallback(() => setWantsFull(true));
+      return () => (window as unknown as { cancelIdleCallback?: (id: number) => void })
+        .cancelIdleCallback?.(id);
+    }
+    const t = window.setTimeout(() => setWantsFull(true), 300);
+    return () => window.clearTimeout(t);
+  }, []);
+
+  const full = useQuery({
     queryKey: ["home", "recent-products", 10],
     queryFn: () => fetchRecent({ data: { limit: 10 } }),
     staleTime: 60_000,
+    enabled: wantsFull,
   });
+
   const { data: live } = useQuery({
     queryKey: ["home", "live-ticker-stats"],
     queryFn: () => fetchLive(),
@@ -119,13 +210,14 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
   });
 
   const line = "var(--pc-home-onhero-border-soft)";
-  const fg = "var(--pc-home-onhero-fg)";
   const fg70 = "var(--pc-home-onhero-fg-70)";
   const fg90 = "var(--pc-home-onhero-fg-90)";
   const glass = "var(--pc-home-onhero-glass)";
   const gold = "var(--pc-home-onhero-gold)";
 
-  const items = (recent ?? []).slice(0, 10);
+  const items = ((full.data ?? first.data ?? []) as PriceItem[]).slice(0, 10);
+  const pendingRows = items.length > 0 ? Math.max(0, 6 - items.length) : 6;
+
 
   return (
     <div className="grid h-full w-full flex-1 content-start gap-x-8 gap-y-3 lg:gap-y-5 lg:grid-cols-12 lg:grid-rows-[minmax(0,1fr)_auto]">
