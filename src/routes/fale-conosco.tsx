@@ -341,7 +341,7 @@ function FaleConoscoPage() {
         </div>
       </main>
 
-      <SiteFooter />
-    </div>
+    </IsolatedPage>
+
   );
 }
