@@ -23,7 +23,9 @@ import { LogoQualityPanel } from "@/components/brand/LogoQualityPanel";
 
 import { claimFirstAdmin, listUsersWithRoles, grantRole, revokeRole, listRoleAuditLog, OWNER_EMAIL, type UserWithRoles, type RoleAuditEntry } from "@/lib/roles.functions";
 import { AppShell } from "@/components/brand/AppShell";
-import { PageHeader } from "@/components/brand/PageHeader";
+import { cn } from "@/lib/utils";
+import { tc } from "@/lib/typeclear";
+
 import { StoreBadge, getStoreColor } from "@/components/brand/StoreBadge";
 import { admin, useAdmin } from "@/lib/admin-store";
 import {
@@ -216,123 +218,186 @@ function AdminPage() {
   };
 
   return (
-    <AppShell>
-      <PageHeader
-        breadcrumbs={[{ label: "Admin" }]}
-        eyebrow="Painel Executive"
-        title="Gestão do PreçoCerto"
-        description="Configure planos, integrações (Mercado Pago, Gemini, ChatGPT), assinantes e o envio automático dos códigos de ativação por e-mail."
-        icon={<ShieldCheck className="h-5 w-5" style={{ color: "#b58a3c" }} />}
-        goldRule
-        actions={
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleSignOut}
-            disabled={signingOut}
-            className="h-9"
-          >
-            {signingOut ? (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              <LogOut className="mr-2 h-4 w-4" />
-            )}
-            Sair da sessão
-          </Button>
-        }
-      />
-      <section className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8 space-y-6">
-        {/* Quick nav — subtelas admin */}
-        <nav aria-label="Atalhos do painel" className="flex flex-wrap gap-1.5">
-          {[
-            { to: "/admin/clientes", label: "Clientes", icon: Users },
-            { to: "/admin/auditoria-acessos", label: "Auditoria de acessos", icon: ShieldCheck },
-            { to: "/admin/gestao", label: "Gestão (licenças)", icon: Key },
-            { to: "/admin/promocoes-codigos", label: "Códigos de divulgação", icon: Ticket },
-
-            { to: "/admin/catalogo", label: "Catálogo de produtos", icon: Package },
-            { to: "/admin/image-jobs", label: "Fotos dos produtos", icon: ImageIcon },
-            { to: "/admin/auditoria", label: "Auditoria do catálogo", icon: History },
-            { to: "/admin/cupom", label: "Cupons (OCR)", icon: Ticket },
-            { to: "/admin/cupom-lote", label: "Cupons em lote", icon: Ticket },
-            { to: "/admin/promocoes", label: "Cupons promocionais", icon: Ticket },
-            { to: "/admin/conversoes", label: "Conversão de planos", icon: Gauge },
-            { to: "/admin/webhooks", label: "Webhooks MP", icon: ShieldCheck },
-            { to: "/admin/importacoes", label: "Importações", icon: Package },
-            { to: "/admin/categorizacao", label: "Categorização (revisão)", icon: Sparkles },
-            { to: "/admin/reports", label: "Denúncias", icon: FileText },
-            { to: "/admin/sinonimos", label: "Sinônimos da busca", icon: Languages },
-            { to: "/admin/rank-check", label: "Validar ranking", icon: Trophy },
-            { to: "/admin/metricas", label: "Métricas & cache", icon: Gauge },
-            { to: "/admin/precos", label: "Gestão de preços", icon: ShieldCheck },
-            { to: "/admin/consistencia", label: "Consistência", icon: AlertTriangle },
-            { to: "/admin/auditoria-numeros", label: "Auditoria de números", icon: Gauge },
-
-            { to: "/admin/cobertura", label: "Cobertura por estabelecimento", icon: Store },
-            { to: "/admin/lote-inserir", label: "Scan Inteligente", icon: Plus },
-            { to: "/admin/cadastro-foto", label: "Cadastro por foto (IA)", icon: Sparkles },
-            { to: "/admin/historico-precos", label: "Histórico de preços", icon: Gauge },
-            { to: "/admin/analytics", label: "Analytics", icon: Gauge },
-          ].map((item) => (
-            <Link
-              key={item.to}
-              to={item.to}
-              className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-1.5 text-[12px] font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary"
+    <AppShell scope="admin">
+      {/* ---------- Cabeçalho executivo compacto ---------- */}
+      <header className="sticky top-12 z-20 border-b border-border/60 bg-background/92 backdrop-blur md:top-14">
+        <div className="mx-auto flex max-w-[1400px] flex-wrap items-center gap-x-4 gap-y-2 px-3 py-2.5 md:px-6 md:py-3">
+          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-border bg-primary/10 text-primary">
+            <ShieldCheck className="h-[18px] w-[18px]" strokeWidth={2.2} />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className={tc.eyebrow}>Console administrativo</p>
+            <h1 className={cn(tc.h1, "mt-0.5 truncate font-sans font-semibold")}>
+              Gestão do PreçoCerto
+            </h1>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleSignOut}
+              disabled={signingOut}
+              className={cn(tc.control, "h-8 rounded-full px-3")}
             >
-              <item.icon className="h-3.5 w-3.5" />
-              {item.label}
-            </Link>
+              {signingOut ? (
+                <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <LogOut className="mr-1.5 h-3.5 w-3.5" />
+              )}
+              Sair
+            </Button>
+          </div>
+        </div>
+      </header>
+
+      <section className="mx-auto max-w-[1400px] space-y-4 px-3 py-4 md:px-6 md:py-5">
+        {/* ---------- KPIs ---------- */}
+        <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-4">
+          <Kpi icon={<Users className="h-3.5 w-3.5" />} label="Assinantes ativos" value={kpis.active.toString()} />
+          <Kpi icon={<CreditCard className="h-3.5 w-3.5" />} label="MRR estimado" value={kpis.mrr.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} />
+          <Kpi icon={<Gauge className="h-3.5 w-3.5" />} label="Total histórico" value={kpis.total.toString()} />
+          <Kpi icon={<Mail className="h-3.5 w-3.5" />} label="E-mails enviados" value={kpis.emails.toString()} />
+        </div>
+
+        {/* ---------- Atalhos agrupados ---------- */}
+        <nav aria-label="Atalhos do painel" className="grid gap-2.5 md:grid-cols-2 xl:grid-cols-4">
+          {ADMIN_SHORTCUT_GROUPS.map((group) => (
+            <div
+              key={group.label}
+              className="rounded-xl border border-border/70 bg-card p-2.5 transition-colors hover:border-primary/35"
+            >
+              <p className={cn(tc.tag, "mb-1.5 px-0.5 text-muted-foreground")}>{group.label}</p>
+              <ul className="flex flex-col gap-0.5">
+                {group.items.map((item) => (
+                  <li key={item.to}>
+                    <Link
+                      to={item.to}
+                      className={cn(
+                        tc.meta,
+                        "flex items-center gap-2 rounded-lg px-2 py-1.5 font-medium text-foreground/85 transition-colors hover:bg-primary/10 hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                      )}
+                    >
+                      <item.icon className="h-3.5 w-3.5 shrink-0 text-muted-foreground" strokeWidth={2} />
+                      <span className="truncate">{item.label}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
           ))}
         </nav>
 
-        {/* KPIs */}
-        <div className="grid gap-3 md:grid-cols-4">
-          <Kpi icon={<Users className="h-4 w-4" />} label="Assinantes ativos" value={kpis.active.toString()} />
-          <Kpi icon={<CreditCard className="h-4 w-4" />} label="MRR estimado" value={kpis.mrr.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} />
-          <Kpi icon={<Gauge className="h-4 w-4" />} label="Total histórico" value={kpis.total.toString()} />
-          <Kpi icon={<Mail className="h-4 w-4" />} label="E-mails enviados" value={kpis.emails.toString()} />
-        </div>
-
+        {/* ---------- Abas ---------- */}
         <Tabs defaultValue="plans" className="w-full">
-          <TabsList className="mb-5 flex-wrap gap-1 rounded-xl border border-border bg-card p-1">
-            <TabsTrigger value="plans" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Planos & Preços</TabsTrigger>
-            <TabsTrigger value="establishments" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Estabelecimentos</TabsTrigger>
-            <TabsTrigger value="status" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Status</TabsTrigger>
-            <TabsTrigger value="integrations" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Integrações & IA</TabsTrigger>
-            <TabsTrigger value="subscribers" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Assinantes</TabsTrigger>
-            <TabsTrigger value="webhooks" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Webhooks</TabsTrigger>
-            <TabsTrigger value="emails" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">E-mails</TabsTrigger>
-            <TabsTrigger value="users" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Usuários & Papéis</TabsTrigger>
-            <TabsTrigger value="audit" className="rounded-lg data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">Auditoria</TabsTrigger>
-          </TabsList>
+          <div className="pc-tabs-rail -mx-1 overflow-x-auto px-1 pb-1">
+            <TabsList className="inline-flex h-auto w-max flex-nowrap gap-1 rounded-xl border border-border/70 bg-card p-1">
+              {[
+                ["plans", "Planos"],
+                ["establishments", "Estabelecimentos"],
+                ["status", "Status"],
+                ["integrations", "Integrações & IA"],
+                ["subscribers", "Assinantes"],
+                ["webhooks", "Webhooks"],
+                ["emails", "E-mails"],
+                ["users", "Usuários & Papéis"],
+                ["audit", "Auditoria"],
+              ].map(([value, label]) => (
+                <TabsTrigger
+                  key={value}
+                  value={value}
+                  className={cn(
+                    tc.control,
+                    "h-8 whitespace-nowrap rounded-lg px-3 text-muted-foreground",
+                    "data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm",
+                  )}
+                >
+                  {label}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </div>
 
-          <TabsContent value="plans"><PlansTab /></TabsContent>
-          <TabsContent value="establishments"><EstablishmentsTab /></TabsContent>
-          <TabsContent value="status"><StatusTab /></TabsContent>
-          <TabsContent value="integrations"><IntegrationsTab /></TabsContent>
-          <TabsContent value="subscribers"><SubscribersTab /></TabsContent>
-          <TabsContent value="webhooks"><WebhooksTab /></TabsContent>
-          <TabsContent value="emails"><EmailsTab /></TabsContent>
-          <TabsContent value="users"><UsersTab /></TabsContent>
-          <TabsContent value="audit"><AuditTab /></TabsContent>
+          <div className="mt-3">
+            <TabsContent value="plans"><PlansTab /></TabsContent>
+            <TabsContent value="establishments"><EstablishmentsTab /></TabsContent>
+            <TabsContent value="status"><StatusTab /></TabsContent>
+            <TabsContent value="integrations"><IntegrationsTab /></TabsContent>
+            <TabsContent value="subscribers"><SubscribersTab /></TabsContent>
+            <TabsContent value="webhooks"><WebhooksTab /></TabsContent>
+            <TabsContent value="emails"><EmailsTab /></TabsContent>
+            <TabsContent value="users"><UsersTab /></TabsContent>
+            <TabsContent value="audit"><AuditTab /></TabsContent>
+          </div>
         </Tabs>
       </section>
     </AppShell>
   );
 }
 
+/** Atalhos do console, agrupados por domínio operacional. */
+const ADMIN_SHORTCUT_GROUPS = [
+  {
+    label: "Clientes & acesso",
+    items: [
+      { to: "/admin/clientes", label: "Clientes", icon: Users },
+      { to: "/admin/auditoria-acessos", label: "Auditoria de acessos", icon: ShieldCheck },
+      { to: "/admin/gestao", label: "Gestão de licenças", icon: Key },
+      { to: "/admin/conversoes", label: "Conversão de planos", icon: Gauge },
+      { to: "/admin/reports", label: "Denúncias", icon: FileText },
+    ],
+  },
+  {
+    label: "Catálogo",
+    items: [
+      { to: "/admin/catalogo", label: "Catálogo de produtos", icon: Package },
+      { to: "/admin/image-jobs", label: "Fotos dos produtos", icon: ImageIcon },
+      { to: "/admin/categorizacao", label: "Categorização", icon: Sparkles },
+      { to: "/admin/importacoes", label: "Importações", icon: Package },
+      { to: "/admin/lote-inserir", label: "Scan Inteligente", icon: Plus },
+      { to: "/admin/cadastro-foto", label: "Cadastro por foto (IA)", icon: Sparkles },
+    ],
+  },
+  {
+    label: "Preços & cobertura",
+    items: [
+      { to: "/admin/precos", label: "Gestão de preços", icon: ShieldCheck },
+      { to: "/admin/historico-precos", label: "Histórico de preços", icon: Gauge },
+      { to: "/admin/cobertura", label: "Cobertura por mercado", icon: Store },
+      { to: "/admin/rank-check", label: "Validar ranking", icon: Trophy },
+      { to: "/admin/sinonimos", label: "Sinônimos da busca", icon: Languages },
+    ],
+  },
+  {
+    label: "Comercial & sistema",
+    items: [
+      { to: "/admin/promocoes-codigos", label: "Códigos de divulgação", icon: Ticket },
+      { to: "/admin/promocoes", label: "Cupons promocionais", icon: Ticket },
+      { to: "/admin/cupom", label: "Cupons (OCR)", icon: Ticket },
+      { to: "/admin/cupom-lote", label: "Cupons em lote", icon: Ticket },
+      { to: "/admin/webhooks", label: "Webhooks MP", icon: ShieldCheck },
+      { to: "/admin/metricas", label: "Métricas & cache", icon: Gauge },
+      { to: "/admin/consistencia", label: "Consistência", icon: AlertTriangle },
+      { to: "/admin/auditoria", label: "Auditoria do catálogo", icon: History },
+      { to: "/admin/auditoria-numeros", label: "Auditoria de números", icon: Gauge },
+      { to: "/admin/analytics", label: "Analytics", icon: Gauge },
+    ],
+  },
+] as const;
+
 function Kpi({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <Card className="rounded-xl border-border">
-      <CardContent className="pt-5">
-        <div className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-          {icon}{label}
-        </div>
-        <div className="font-mono text-[22px] font-semibold tabular-nums tracking-tight">{value}</div>
-      </CardContent>
-    </Card>
+    <div className="rounded-xl border border-border/70 bg-card px-3 py-2.5 transition-colors hover:border-primary/35">
+      <div className={cn(tc.tag, "flex items-center gap-1.5 text-muted-foreground")}>
+        {icon}
+        <span className="truncate">{label}</span>
+      </div>
+      <div className={cn(tc.num, "mt-1.5 text-[clamp(18px,1.2vw+14px,24px)] font-semibold text-foreground")}>
+        {value}
+      </div>
+    </div>
   );
 }
+
 
 /* -------------------- Plans -------------------- */
 
