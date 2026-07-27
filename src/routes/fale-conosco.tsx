@@ -134,7 +134,7 @@ function FaleConoscoPage() {
               <MessageSquare className="h-3 w-3" />
               Fale Conosco
             </span>
-            <h1 className="font-['Instrument_Serif',ui-serif,Georgia,serif] text-[clamp(19px,3.2vw,32px)] leading-[1.06] tracking-[-0.012em] text-foreground">
+            <h1 className="sm:mt-1.5 font-['Instrument_Serif',ui-serif,Georgia,serif] text-[clamp(19px,3.2vw,32px)] leading-[1.06] tracking-[-0.012em] text-foreground">
               Precisa falar com a equipe do{" "}
               <span className="italic text-brand-gold">PreçoCerto</span>?
             </h1>
