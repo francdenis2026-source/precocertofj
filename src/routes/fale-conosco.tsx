@@ -210,17 +210,24 @@ function FaleConoscoPage() {
                 onChange={(e) => setMensagem(e.target.value)}
                 required
                 minLength={10}
-                rows={4}
+                rows={3}
                 placeholder="Conte pra gente o que aconteceu, sua sugestão ou dúvida…"
-                className={dsx(fieldClass, "resize-none leading-[1.45]")}
+                className={dsx(
+                  fieldClass,
+                  "h-[72px] resize-none leading-[1.45] sm:h-[104px]",
+                )}
               />
             </label>
 
             <div className="mt-2.5 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
               <p className="min-w-0 text-[11px] leading-snug text-muted-foreground">
-                Mínimo 10 caracteres. Ao enviar, seu app de e-mail abre preenchido para{" "}
+                <span className="hidden sm:inline">
+                  Mínimo 10 caracteres. Ao enviar, seu app de e-mail abre preenchido para{" "}
+                </span>
+                <span className="sm:hidden">Abre seu app de e-mail para </span>
                 <strong className="font-semibold text-foreground">{CONTACT_EMAIL}</strong>.
               </p>
+
               <button
                 type="submit"
                 disabled={!canSubmit || sending}
