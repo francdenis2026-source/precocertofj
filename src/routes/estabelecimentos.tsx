@@ -53,6 +53,7 @@ import { useRef } from "react";
 import { StoreLogoThumb } from "@/components/brand/StoreLogoThumb";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
+import { StatCellDivider, StatCellGroup } from "@/components/ds/StatCell";
 
 
 import {
@@ -524,42 +525,52 @@ function EstablishmentsPage() {
           </div>
 
           {data && (
-            <dl className="mt-2.5 flex flex-wrap items-stretch gap-x-5 gap-y-1.5 border-t border-border/60 pt-2 md:gap-x-7">
-              <HeroMetric
-                icon={Store}
-                label="Comércios"
-                value={String(data.totalEstablishments)}
-                hint="Ver rede"
-                onClick={() => setMetricDetail("establishments")}
-              />
-              <HeroMetric
-                icon={Package}
-                label="Produtos"
-                value={data.totalProducts.toLocaleString("pt-BR")}
-                hint="Ver categorias"
-                onClick={() => setMetricDetail("products")}
-              />
-              <HeroMetric
-                icon={PiggyBank}
-                label="Maior economia"
-                value={
-                  data.totalMaxSavings > 0
-                    ? `R$ ${data.totalMaxSavings.toFixed(2).replace(".", ",")}`
-                    : "—"
-                }
-                hint="Onde economizar"
-                onClick={() => setMetricDetail("savings")}
-              />
-              <HeroMetric
-                icon={Radio}
-                label="Atualização"
-                value="ao vivo"
-                live
-                hint="Como funciona"
-                onClick={() => setMetricDetail("live")}
-              />
-            </dl>
+            <div className="mt-2.5 border-t border-border/60 pt-2">
+              <StatCellGroup
+                label={`Resumo: ${data.totalEstablishments} comércios e ${data.totalProducts.toLocaleString("pt-BR")} produtos`}
+                className="w-full flex-wrap sm:w-auto"
+              >
+                <HeroMetric
+                  icon={Store}
+                  label="Comércios"
+                  value={String(data.totalEstablishments)}
+                  accent
+                  hint="Ver rede"
+                  onClick={() => setMetricDetail("establishments")}
+                />
+                <StatCellDivider />
+                <HeroMetric
+                  icon={Package}
+                  label="Produtos"
+                  value={data.totalProducts.toLocaleString("pt-BR")}
+                  hint="Ver categorias"
+                  onClick={() => setMetricDetail("products")}
+                />
+                <StatCellDivider />
+                <HeroMetric
+                  icon={PiggyBank}
+                  label="Maior economia"
+                  value={
+                    data.totalMaxSavings > 0
+                      ? `R$ ${data.totalMaxSavings.toFixed(2).replace(".", ",")}`
+                      : "—"
+                  }
+                  hint="Onde economizar"
+                  onClick={() => setMetricDetail("savings")}
+                />
+                <StatCellDivider />
+                <HeroMetric
+                  icon={Radio}
+                  label="Atualização"
+                  value="ao vivo"
+                  live
+                  hint="Como funciona"
+                  onClick={() => setMetricDetail("live")}
+                />
+              </StatCellGroup>
+            </div>
           )}
+
         </div>
       </section>
 
@@ -1130,6 +1141,7 @@ function HeroMetric({
   value,
   live,
   hint,
+  accent,
   onClick,
 }: {
   icon: typeof Store;
@@ -1137,6 +1149,7 @@ function HeroMetric({
   value: string;
   live?: boolean;
   hint?: string;
+  accent?: boolean;
   onClick?: () => void;
 }) {
   return (
@@ -1144,30 +1157,38 @@ function HeroMetric({
       type="button"
       onClick={onClick}
       aria-label={`${label}: ${value}. ${hint ?? "Abrir detalhes"}`}
-      className="group flex min-w-0 items-center gap-2 rounded-md px-1 py-0.5 text-left transition-colors hover:bg-muted/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+      className="group flex min-w-[6.25rem] flex-col items-center justify-center gap-1 px-3 py-1.5 text-center transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold sm:min-w-[7rem] sm:px-4 sm:py-2"
     >
-      <Icon className="h-4 w-4 shrink-0 text-[var(--pc-gold-ink)]" strokeWidth={1.75} aria-hidden />
-      <span className="min-w-0">
-        <span className="block truncate text-[11px] font-semibold uppercase leading-[1.25] tracking-[0.12em] text-muted-foreground">
-          {label}
-        </span>
-        <span className="mt-0.5 flex items-baseline gap-1.5 text-[16.5px] font-semibold leading-none tabular-nums text-foreground">
-          {live && (
-            <span className="relative inline-flex h-1.5 w-1.5 shrink-0 translate-y-[-2px]">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-gold/70" />
-              <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-gold" />
-            </span>
-          )}
-          <span className="truncate">{value}</span>
-        </span>
-      </span>
-      <ChevronRight
-        className="hidden h-3.5 w-3.5 shrink-0 text-muted-foreground/50 transition-colors group-hover:text-[var(--pc-gold-ink)] sm:block"
+      <span
         aria-hidden
-      />
+        className={cn(
+          "flex items-baseline gap-1.5 font-serif font-semibold leading-none tabular-nums tracking-tight",
+          "text-[1.5rem] sm:text-[1.85rem]",
+          accent ? "text-[var(--pc-gold-ink)]" : "text-foreground",
+        )}
+      >
+        {live && (
+          <span className="relative inline-flex h-1.5 w-1.5 shrink-0 translate-y-[-4px]">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-gold/70" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-brand-gold" />
+          </span>
+        )}
+        <span className="truncate">{value}</span>
+      </span>
+      <span
+        aria-hidden
+        className={cn(
+          "flex items-center gap-1 text-[0.65rem] font-semibold uppercase leading-none tracking-[0.18em] sm:text-[0.72rem]",
+          accent ? "text-[var(--pc-gold-ink)]/85" : "text-muted-foreground",
+        )}
+      >
+        <Icon className="h-3 w-3 shrink-0" strokeWidth={2} aria-hidden />
+        {label}
+      </span>
     </button>
   );
 }
+
 
 
 

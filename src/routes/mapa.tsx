@@ -339,7 +339,7 @@ function NeighborhoodsPage() {
 
 
         {/* Painel principal: índice de bairros + detalhe — uma única tela */}
-        <main className="pc-rail mx-auto min-h-0 w-full max-w-6xl flex-1 overflow-y-auto px-3 py-2.5 md:px-6 md:py-3">
+        <main className="pc-rail mx-auto flex min-h-0 w-full max-w-6xl flex-1 flex-col overflow-hidden px-3 py-2 md:px-6 md:py-2.5">
           {groups.isLoading && (
             <div
               className="grid gap-3 min-w-0 md:grid-cols-[16rem_minmax(0,1fr)]"
@@ -426,16 +426,17 @@ function NeighborhoodsPage() {
           )}
 
           {active && (
-            <div className="grid gap-2 min-w-0 md:gap-3 md:grid-cols-[16rem_minmax(0,1fr)] md:items-start">
+            <div className="grid min-h-0 flex-1 gap-2 min-w-0 md:gap-3 md:grid-cols-[16rem_minmax(0,1fr)] md:items-stretch">
               {/* Índice de bairros */}
               <nav
                 aria-label="Bairros"
-                className="min-w-0 rounded-lg border border-border bg-card md:max-h-[62svh] md:overflow-y-auto"
+                className="min-w-0 rounded-lg border border-border bg-card md:min-h-0 md:overflow-y-auto"
               >
                 <p className={`hidden border-b border-border/70 px-2.5 py-1.5 md:block ${tc.tableHead}`}>
                   Bairros
                 </p>
                 <ul className="flex snap-x snap-mandatory gap-1.5 overflow-x-auto p-1.5 no-scrollbar md:block md:snap-none md:gap-0 md:divide-y md:divide-border/60 md:overflow-x-visible md:p-0">
+
                   {filteredGroups.map((g) => {
                     const isActive = g.neighborhood === active.neighborhood;
                     const isFav = favKeys.has(g.neighborhood);
@@ -493,8 +494,8 @@ function NeighborhoodsPage() {
 
 
               {/* Detalhe do bairro */}
-              <section className="min-w-0 max-h-[58svh] overflow-y-auto rounded-lg border border-border bg-card no-scrollbar md:max-h-[62svh]">
-                <header className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-b border-border/70 px-3 py-2">
+              <section className="min-w-0 flex min-h-0 flex-col overflow-hidden rounded-lg border border-border bg-card">
+                <header className="shrink-0 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-b border-border/70 px-3 py-2">
                   <div className="min-w-0">
                     <h2 className={`truncate ${tc.h2}`}>{active.neighborhood}</h2>
                     {active.city && <p className={tc.meta}>{active.city}</p>}
@@ -505,7 +506,8 @@ function NeighborhoodsPage() {
                   </p>
                 </header>
 
-                <div className="grid min-w-0 gap-0 lg:grid-cols-[minmax(0,1fr)_15rem]">
+                <div className="grid min-h-0 flex-1 min-w-0 gap-0 overflow-y-auto lg:grid-cols-[minmax(0,1fr)_15rem]">
+
                   {/* Mercados */}
                   <ul className="divide-y divide-border/60">
                     {active.establishments.map((est) => (
