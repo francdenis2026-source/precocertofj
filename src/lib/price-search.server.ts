@@ -23,12 +23,43 @@ import type {
   ProductPricePoint,
 } from "@/lib/price-search.functions";
 
+/**
+ * Cache em memória (por worker) das URLs assinadas de imagens do catálogo.
+ * Antes, toda busca gerava até 8 chamadas ao storage — hoje só na 1ª vez.
+ */
+const signedUrlCache = new Map<string, { url: string; expiresAt: number }>();
+
+/** Cache curto do resultado completo da busca (mesmo termo + filtros). */
+const searchResultCache = new Map<string, { at: number; value: PriceSearchResult }>();
+const SEARCH_CACHE_TTL_MS = 45_000;
+const SEARCH_CACHE_MAX = 120;
+
 export async function performPriceSearch(data: {
   query: string;
   mode: SearchMode;
   pureOnly: boolean;
 }): Promise<PriceSearchResult> {
+  const cacheKey = `${data.query.trim().toLowerCase()}|${data.mode}|${data.pureOnly ? 1 : 0}`;
+  const hit = searchResultCache.get(cacheKey);
+  if (hit && Date.now() - hit.at < SEARCH_CACHE_TTL_MS) return hit.value;
+
+  const result = await runPriceSearch(data);
+
+  if (searchResultCache.size >= SEARCH_CACHE_MAX) {
+    const oldest = searchResultCache.keys().next().value;
+    if (oldest) searchResultCache.delete(oldest);
+  }
+  searchResultCache.set(cacheKey, { at: Date.now(), value: result });
+  return result;
+}
+
+async function runPriceSearch(data: {
+  query: string;
+  mode: SearchMode;
+  pureOnly: boolean;
+}): Promise<PriceSearchResult> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
   const safe = data.query.replace(/[%_,]/g, " ").slice(0, 80);
   const mode = data.mode;
 
