@@ -354,25 +354,27 @@ function PlansPage() {
           )}
         </section>
 
-        {/* Rodapé de referência — links leves para detalhes.
-            As abas "Comparar recursos" e "Perguntas frequentes" foram removidas
-            por comprimirem o painel; agora abrem em `/fale-conosco`. */}
+        {/* Rodapé — abrem em modais compactos, sem sair da página. */}
         <section className={dsx(ds.container, "shrink-0 pb-1")} aria-label="Ajuda e comparativo">
           <div className="flex flex-wrap items-center justify-center gap-2 text-[12px]">
-            <Link
-              to="/fale-conosco"
+            <button
+              type="button"
+              onClick={() => setOpenSheet("compare")}
+              aria-haspopup="dialog"
               className="pc-focus inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 font-semibold text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)]"
             >
               <Sparkles className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
               Comparar recursos
-            </Link>
-            <Link
-              to="/fale-conosco"
+            </button>
+            <button
+              type="button"
+              onClick={() => setOpenSheet("faq")}
+              aria-haspopup="dialog"
               className="pc-focus inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 font-semibold text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)]"
             >
               <ChevronDown className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
               Perguntas frequentes
-            </Link>
+            </button>
             <Link
               to="/resgatar"
               className="pc-focus inline-flex h-8 items-center rounded-full px-3 font-semibold text-brand-gold hover:underline"
@@ -381,6 +383,119 @@ function PlansPage() {
             </Link>
           </div>
         </section>
+
+        {/* Modal: Comparar recursos */}
+        <Dialog open={openSheet === "compare"} onOpenChange={(v) => !v && setOpenSheet(null)}>
+          <DialogContent className="max-w-3xl border-border/70 bg-card p-0">
+            <DialogHeader className="border-b border-border/70 px-5 py-3">
+              <span className={tc.eyebrow}>Documento oficial</span>
+              <DialogTitle className={cn(tc.h2, "mt-0.5")}>
+                Comparar <span className="italic text-[var(--pc-gold-ink)]">recursos</span>
+              </DialogTitle>
+              <DialogDescription className={tc.meta}>
+                Diferenças reais entre a degustação, os planos pagos e o plano vitalício.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="max-h-[70svh] overflow-y-auto px-5 py-3">
+              <table className="w-full border-collapse text-sm">
+                <thead>
+                  <tr className="border-b border-border/70">
+                    <th className={cn(tc.tableHead, "py-2 text-left")}>Recurso</th>
+                    <th className={cn(tc.tableHead, "py-2 text-center")}>Degustação</th>
+                    <th className={cn(tc.tableHead, "py-2 text-center")}>Mensal</th>
+                    <th className={cn(tc.tableHead, "py-2 text-center text-[var(--pc-gold-ink)]")}>
+                      Anual
+                    </th>
+                    <th className={cn(tc.tableHead, "py-2 text-center")}>Fundador</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-border/60">
+                  {[
+                    ["Busca de preços", true, true, true, true],
+                    ["Comparador entre mercados", true, true, true, true],
+                    ["Alertas de preço", false, true, true, true],
+                    ["Análises de IA / mês", "1", "30", "150", "600"],
+                    ["Ranking de bairros", true, true, true, true],
+                    ["Exportar CSV/PDF", false, true, true, true],
+                    ["Prioridade de suporte", false, false, true, true],
+                    ["Acesso vitalício", false, false, false, true],
+                  ].map(([label, ...cols], i) => (
+                    <tr key={i}>
+                      <th className={cn(tc.cell, "py-2 text-left font-medium text-foreground")}>
+                        {label as string}
+                      </th>
+                      {cols.map((c, j) => (
+                        <td key={j} className="py-2 text-center">
+                          {typeof c === "boolean" ? (
+                            c ? (
+                              <Check
+                                className="mx-auto h-4 w-4 text-[var(--pc-gold-ink)]"
+                                aria-label="Incluído"
+                              />
+                            ) : (
+                              <Minus
+                                className="mx-auto h-4 w-4 text-muted-foreground/60"
+                                aria-label="Não incluído"
+                              />
+                            )
+                          ) : (
+                            <span className={cn(tc.num, "tabular-nums")}>{c}</span>
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p className={cn(tc.meta, "mt-3 flex items-center gap-1.5")}>
+                <ShieldCheck className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+                Ativação imediata após confirmação de pagamento pelo Mercado Pago.
+              </p>
+            </div>
+          </DialogContent>
+        </Dialog>
+
+        {/* Modal: Perguntas frequentes */}
+        <Dialog open={openSheet === "faq"} onOpenChange={(v) => !v && setOpenSheet(null)}>
+          <DialogContent className="max-w-2xl border-border/70 bg-card p-0">
+            <DialogHeader className="border-b border-border/70 px-5 py-3">
+              <span className={tc.eyebrow}>Ajuda rápida</span>
+              <DialogTitle className={cn(tc.h2, "mt-0.5")}>
+                Perguntas <span className="italic text-[var(--pc-gold-ink)]">frequentes</span>
+              </DialogTitle>
+              <DialogDescription className={tc.meta}>
+                As dúvidas que mais recebemos sobre planos, pagamento e cota de IA.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="max-h-[70svh] overflow-y-auto px-5 py-2">
+              <Accordion type="single" collapsible className="w-full">
+                {FAQ.map((f, i) => (
+                  <AccordionItem key={i} value={`q-${i}`} className="border-border/60">
+                    <AccordionTrigger className={cn(tc.itemTitle, "text-left hover:no-underline")}>
+                      {f.q}
+                    </AccordionTrigger>
+                    <AccordionContent className={cn(tc.meta, "leading-relaxed text-foreground/85")}>
+                      {f.a}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+              <div className="mt-2 flex items-center justify-between border-t border-border/60 py-2">
+                <p className={tc.meta}>Não encontrou sua resposta?</p>
+                <Link
+                  to="/fale-conosco"
+                  className={cn(
+                    tc.chip,
+                    "pc-focus inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-muted-foreground hover:border-brand-gold hover:text-[var(--pc-gold-ink)]",
+                  )}
+                >
+                  Fale conosco →
+                </Link>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+
 
         <div className="flex-1" aria-hidden />
 
