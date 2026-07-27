@@ -34,9 +34,15 @@ import { useSession } from "@/hooks/useSession";
 import homeHeroImg from "@/assets/home-hero.jpg";
 
 /* Conteúdo secundário: só carrega quando o painel "Explorar" abre */
+const importExplorePanel = () => import("@/components/home/ExplorePanel");
 const ExplorePanel = lazy(() =>
-  import("@/components/home/ExplorePanel").then((m) => ({ default: m.ExplorePanel })),
+  importExplorePanel().then((m) => ({ default: m.ExplorePanel })),
 );
+/* Pré-carrega o chunk no hover/foco para o painel já abrir pronto (sem flash). */
+const preloadExplorePanel = () => {
+  void importExplorePanel();
+};
+
 
 export const Route = createFileRoute("/")({
   loader: async ({ context }) => {
@@ -680,6 +686,8 @@ function HomePage() {
                     type="button"
                     data-reading-card
                     className={TILE}
+                    onPointerEnter={preloadExplorePanel}
+                    onFocus={preloadExplorePanel}
                     style={{
                       background: "var(--pc-home-onhero-glass)",
                       borderColor: "var(--pc-home-onhero-border)",
@@ -699,7 +707,8 @@ function HomePage() {
 
                 <SheetContent
                   side="bottom"
-                  className="flex h-[100dvh] max-h-[100dvh] flex-col overflow-hidden border-t-0 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-4 sm:px-6 before:fixed before:inset-0 before:-z-10 before:content-[''] before:bg-[var(--pc-home-explore-bg)]"
+                  hideOverlay
+                  className="flex h-[100dvh] max-h-[100dvh] flex-col overflow-hidden border-t-0 px-4 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-4 sm:px-6"
                   style={{
                     background: "var(--pc-home-explore-bg)",
                     color: "var(--pc-home-onhero-fg)",
@@ -723,13 +732,14 @@ function HomePage() {
                     </SheetTitle>
                   </SheetHeader>
                   <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col overflow-y-auto py-3">
-                    <Suspense fallback={<div className="h-40 animate-pulse rounded-lg bg-muted/20" />}>
+                    <Suspense fallback={<div aria-hidden className="h-40" />}>
                       <ExplorePanel onNavigate={() => setExploreOpen(false)} />
                     </Suspense>
                   </div>
                 </SheetContent>
               </Sheet>
             </div>
+
           </div>
         </main>
 
