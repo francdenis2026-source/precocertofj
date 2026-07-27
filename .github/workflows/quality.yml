@@ -33,6 +33,8 @@ jobs:
           for i in $(seq 1 60); do curl -sf -o /dev/null http://localhost:8080/ && break; sleep 2; done
       - name: Auditoria de contraste (WCAG AA)
         run: python3 scripts/contrast_audit.py --base http://localhost:8080
+      - name: Contraste com axe-core (modo claro e escuro)
+        run: python3 scripts/axe_contrast.py --base http://localhost:8080
       - name: Auditoria de acessibilidade (axe-core)
         run: python3 scripts/a11y_audit.py --base http://localhost:8080
       - name: Escopo do header global

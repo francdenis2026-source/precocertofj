@@ -30,6 +30,7 @@ ROUTES = [
     "/", "/planos", "/buscar", "/estabelecimentos", "/mapa", "/comparador",
     "/melhores-precos", "/colaborar", "/privacidade", "/fale-conosco",
     "/login", "/cadastro", "/resgatar", "/farmacias",
+    "/categoria/supermercados", "/categoria/farmacias",
 ]
 VIEWPORTS = [("mobile", 390, 844), ("desktop", 1440, 900)]
 
