@@ -45,6 +45,9 @@ import {
   LoadingGrid,
   LoadingList,
 } from "@/components/feedback";
+import { RankingSkeleton, FadeSwap } from "@/components/layout/LoadingSkeleton";
+import { tc } from "@/lib/typeclear";
+import { cn } from "@/lib/utils";
 import {
   Search,
   Store as StoreIcon,
@@ -867,9 +870,8 @@ function ComparadorPage() {
         aria-label="Resultados da comparação (atalho: R)"
         className="mx-auto max-w-7xl px-4 py-5 focus:outline-none md:px-6 md:py-10 focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background"
       >
-        {isLoading && (view === "grid"
-          ? <LoadingGrid count={6} columns={3} />
-          : <LoadingList count={6} itemClassName="h-14" />)}
+        <FadeSwap showKey={isLoading ? "loading" : error ? "error" : rows.length === 0 ? "empty" : `ready-${view}-${visibleRows.length}`}>
+        {isLoading && <RankingSkeleton rows={view === "grid" ? 8 : 6} />}
 
         {!isLoading && error && (
           <ErrorState
@@ -967,6 +969,7 @@ function ComparadorPage() {
             {!quota.exceeded && <div className="pb-16" />}
           </div>
         )}
+        </FadeSwap>
       </section>
 
 
@@ -1175,7 +1178,7 @@ function ComparisonTableRow({
         <p className="font-display text-lg font-extrabold leading-none tabular-nums text-primary">
           {formatBRL(Number(row.min_price))}
         </p>
-        <p className="mt-1 truncate text-[11px] text-muted-foreground" title={row.cheapest_store}>
+        <p className={cn("mt-1 truncate", tc.storeNameTight)} title={row.cheapest_store}>
           {shortenStoreName(row.cheapest_store)}
         </p>
         <div className="mt-1 flex flex-wrap items-center justify-end gap-1">
@@ -1460,7 +1463,7 @@ function ProductCardBase({
                     <span className="h-1 w-1 shrink-0 rounded-full bg-accent/40" />
                   )}
                   <span
-                    className="truncate font-display text-[11px] font-medium leading-none text-foreground sm:text-[11px]"
+                    className={cn("truncate leading-none", tc.storeNameTight)}
                     title={s.store_name}
                   >
                     {shortenStoreName(s.store_name)}

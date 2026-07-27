@@ -81,7 +81,7 @@ export function prefetchRouteData(queryClient: QueryClient, path: string) {
 /** Aquece as rotas principais quando o navegador estiver ocioso. */
 export function warmMainRoutes(queryClient: QueryClient) {
   if (typeof window === "undefined") return;
-  const targets = ["/buscar", "/mapa", "/estabelecimentos", "/melhores-precos", "/comparador"];
+  const targets = ["/buscar", "/mapa", "/estabelecimentos", "/melhores-precos", "/comparador", "/onde-comprar"];
   const idle =
     (window as unknown as { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number })
       .requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 1200));

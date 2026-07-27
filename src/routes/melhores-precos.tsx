@@ -11,6 +11,7 @@ import { PriceSpotlight } from "@/components/product/PriceSpotlight";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { tc } from "@/lib/typeclear";
 import { dsx } from "@/lib/ds";
+import { cn } from "@/lib/utils";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useSignedLogoUrls } from "@/hooks/use-signed-logo-urls";
@@ -25,6 +26,7 @@ import { useTeaserQuota } from "@/hooks/use-teaser-quota";
 
 import { QuickFilterBar } from "@/components/search/QuickFilterBar";
 import { ErrorState, EmptyState as FeedbackEmptyState, LoadingGrid, RouteError } from "@/components/feedback";
+import { RankingSkeleton, FadeSwap } from "@/components/layout/LoadingSkeleton";
 
 import { ProductImage } from "@/components/product/ProductImage";
 import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
@@ -776,31 +778,33 @@ function MelhoresPrecosPage() {
 
         {/* ---------- Resultados ---------- */}
         <section className="mt-2.5" aria-live="polite">
-          {isLoading && <LoadingGrid count={12} columns={4} />}
+          <FadeSwap showKey={isLoading ? "loading" : error ? "error" : rows.length === 0 ? "empty" : `ready-${currentPage}`}>
+            {isLoading && <RankingSkeleton rows={8} />}
 
-          {error && (
-            <ErrorState
-              title="Não foi possível carregar as comparações"
-              message={(error as Error).message}
-              onRetry={() => window.location.reload()}
-            />
-          )}
+            {!isLoading && error && (
+              <ErrorState
+                title="Não foi possível carregar as comparações"
+                message={(error as Error).message}
+                onRetry={() => window.location.reload()}
+              />
+            )}
 
-          {!isLoading && !error && rows.length === 0 && <EmptyState hasCategory={!!activeCategory} />}
+            {!isLoading && !error && rows.length === 0 && <EmptyState hasCategory={!!activeCategory} />}
 
-          {!isLoading && !error && rows.length > 0 && (
-            <>
-              <MelhoresList rows={pagedRows} startIndex={(currentPage - 1) * PAGE_SIZE} />
-              {totalPages > 1 && (
-                <Pagination
-                  page={currentPage}
-                  totalPages={totalPages}
-                  total={rows.length}
-                  onChange={(p) => setSearch({ page: p })}
-                />
-              )}
-            </>
-          )}
+            {!isLoading && !error && rows.length > 0 && (
+              <>
+                <MelhoresList rows={pagedRows} startIndex={(currentPage - 1) * PAGE_SIZE} />
+                {totalPages > 1 && (
+                  <Pagination
+                    page={currentPage}
+                    totalPages={totalPages}
+                    total={rows.length}
+                    onChange={(p) => setSearch({ page: p })}
+                  />
+                )}
+              </>
+            )}
+          </FadeSwap>
         </section>
       </main>
 
@@ -1198,7 +1202,7 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
                   <span className="h-1 w-1 shrink-0 rounded-full bg-accent/40" />
                 )}
                 <span
-                  className="truncate font-display text-[11px] font-medium leading-none text-foreground sm:text-[11px]"
+                  className={cn("truncate leading-none", tc.storeNameTight)}
                   title={s.store_name}
                 >
                   {shortenStoreName(s.store_name)}

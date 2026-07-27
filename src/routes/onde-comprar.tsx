@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Loader2, MapPin, Search, Store, TrendingDown } from "lucide-react";
+import { MapPin, Search, Store, TrendingDown } from "lucide-react";
 
 import {
   getWhereToBuyRegions,
@@ -12,7 +12,8 @@ import {
 } from "@/lib/where-to-buy.functions";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { SiteFooter } from "@/components/layout/SiteFooter";
+import { IsolatedPage } from "@/components/layout/IsolatedPage";
+import { FadeSwap, LocationsSkeleton } from "@/components/layout/LoadingSkeleton";
 import { BackButton } from "@/components/layout/BackButton";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { tc } from "@/lib/typeclear";
@@ -71,8 +72,10 @@ function OndeComprarPage() {
 
   const products = productsQ.data ?? [];
 
+  const stateKey = productsQ.isLoading ? "loading" : products.length === 0 ? "empty" : "ready";
+
   return (
-    <div className="min-h-screen bg-background">
+    <IsolatedPage className="bg-background">
       <header className="border-b border-border/60 bg-card/60">
         <div className="mx-auto flex max-w-5xl items-center gap-3 px-4 py-3">
           <BackButton />
@@ -174,68 +177,68 @@ function OndeComprarPage() {
         </form>
 
         {/* Resultados */}
-        {productsQ.isLoading ? (
-          <div className="grid h-40 place-items-center rounded-xl border border-border/70 bg-card">
-            <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
-          </div>
-        ) : products.length === 0 ? (
-          <p className={cn(tc.meta, "rounded-xl border border-border/70 bg-card p-6 text-center")}>
-            Nenhum produto encontrado com esses filtros.
-          </p>
-        ) : (
-          <ul className="space-y-2">
-            {products.map((p) => (
-              <li key={p.productKey} className="rounded-xl border border-border/70 bg-card p-2.5">
-                <div className="mb-1.5 flex items-start gap-2">
-                  <div className="min-w-0 flex-1">
-                    <Link
-                      to="/onde-comprar/$produto"
-                      params={{ produto: encodeURIComponent(p.productKey) }}
-                      className={cn(tc.itemTitle, "block truncate hover:underline")}
-                    >
-                      {p.productName}
-                    </Link>
-                    <p className={cn(tc.meta)}>
-                      {p.storeCount} {p.storeCount === 1 ? "loja" : "lojas"} • média {brl(p.avgPrice)}
-                    </p>
+        <FadeSwap showKey={stateKey}>
+          {productsQ.isLoading ? (
+            <LocationsSkeleton rows={4} />
+          ) : products.length === 0 ? (
+            <p className={cn(tc.meta, "rounded-xl border border-border/70 bg-card p-6 text-center")}>
+              Nenhum produto encontrado com esses filtros.
+            </p>
+          ) : (
+            <ul className="space-y-2">
+              {products.map((p) => (
+                <li key={p.productKey} className="rounded-xl border border-border/70 bg-card p-2.5">
+                  <div className="mb-1.5 flex items-start gap-2">
+                    <div className="min-w-0 flex-1">
+                      <Link
+                        to="/onde-comprar/$produto"
+                        params={{ produto: encodeURIComponent(p.productKey) }}
+                        className={cn(tc.itemTitle, "block truncate hover:underline")}
+                      >
+                        {p.productName}
+                      </Link>
+                      <p className={cn(tc.meta)}>
+                        {p.storeCount} {p.storeCount === 1 ? "loja" : "lojas"} • média {brl(p.avgPrice)}
+                      </p>
+                    </div>
+                    {p.savingsPct > 0 && (
+                      <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11.5px] font-semibold text-emerald-600">
+                        <TrendingDown className="h-3 w-3" /> economize {p.savingsPct}%
+                      </span>
+                    )}
                   </div>
-                  {p.savingsPct > 0 && (
-                    <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11.5px] font-semibold text-emerald-600">
-                      <TrendingDown className="h-3 w-3" /> economize {p.savingsPct}%
-                    </span>
-                  )}
-                </div>
-                <ul className="grid gap-1 sm:grid-cols-2">
-                  {p.offers.map((o, i) => (
-                    <li
-                      key={`${p.productKey}-${o.establishmentId ?? i}`}
-                      className={cn(
-                        "flex items-center gap-2 rounded-lg border px-2 py-1.5",
-                        o.isCheapest ? "border-emerald-500/50 bg-emerald-500/5" : "border-border/60",
-                      )}
-                    >
-                      <Store className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-                      <span className="min-w-0 flex-1">
-                        <span className={cn(tc.itemTitle, "block truncate")}>{o.storeName}</span>
-                        <span className={cn(tc.meta, "block truncate")}>
-                          {[o.neighborhood, o.city].filter(Boolean).join(" • ") || "—"}
-                        </span>
-                      </span>
-                      <span className="shrink-0 text-right">
-                        <span className={cn(tc.itemTitle, o.isCheapest && "text-emerald-600")}>
-                          {brl(o.price)}
-                        </span>
-                        {!o.isCheapest && o.diffPct > 0 && (
-                          <span className={cn(tc.meta, "block")}>+{o.diffPct}%</span>
+                  <ul className="grid gap-1 sm:grid-cols-2">
+                    {p.offers.map((o, i) => (
+                      <li
+                        key={`${p.productKey}-${o.establishmentId ?? i}`}
+                        className={cn(
+                          "flex items-center gap-2 rounded-lg border px-2 py-1.5",
+                          o.isCheapest ? "border-emerald-500/50 bg-emerald-500/5" : "border-border/60",
                         )}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ))}
-          </ul>
-        )}
+                      >
+                        <Store className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                        <span className="min-w-0 flex-1">
+                          <span className={cn(tc.storeName, "block truncate")}>{o.storeName}</span>
+                          <span className={cn(tc.meta, "block truncate")}>
+                            {[o.neighborhood, o.city].filter(Boolean).join(" • ") || "—"}
+                          </span>
+                        </span>
+                        <span className="shrink-0 text-right">
+                          <span className={cn(tc.itemTitle, o.isCheapest && "text-emerald-600")}>
+                            {brl(o.price)}
+                          </span>
+                          {!o.isCheapest && o.diffPct > 0 && (
+                            <span className={cn(tc.meta, "block")}>+{o.diffPct}%</span>
+                          )}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </li>
+              ))}
+            </ul>
+          )}
+        </FadeSwap>
 
         <p className={cn(tc.meta, "mt-3")}>
           Precisa de uma visão por cesta?{" "}
@@ -245,8 +248,6 @@ function OndeComprarPage() {
           .
         </p>
       </main>
-
-      <SiteFooter />
-    </div>
+    </IsolatedPage>
   );
 }
