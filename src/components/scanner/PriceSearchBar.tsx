@@ -1242,13 +1242,36 @@ export function PriceSearchBar({
                           return (
                             <div key={cat} className="pc-results">
                               {showHeaders ? (
-                                <div className="flex items-center gap-2 px-0.5">
-                                  <span className="pc-res-label">{cat}</span>
-                                  <span className="h-px flex-1 bg-border" aria-hidden="true" />
-                                  <span className="pc-res-meta tabular-nums">
-                                    {sortedGroups.length} item{sortedGroups.length > 1 ? "s" : ""}
-                                  </span>
-                                </div>
+                                (() => {
+                                  const catMin = sortedGroups.reduce(
+                                    (m, g) => Math.min(m, g.min),
+                                    Number.POSITIVE_INFINITY,
+                                  );
+                                  return (
+                                    <div className="sticky top-0 z-10 -mx-0.5 flex items-center gap-2 rounded-md border border-border/60 bg-background/85 px-2 py-1.5 backdrop-blur-md supports-[backdrop-filter]:bg-background/70">
+                                      <span
+                                        className="font-serif text-[15px] italic leading-none text-[var(--pc-gold-ink)]"
+                                        data-no-translate
+                                      >
+                                        {cat}
+                                      </span>
+                                      {Number.isFinite(catMin) ? (
+                                        <span
+                                          className="inline-flex items-center gap-1 rounded-full border border-brand-gold/40 bg-brand-navy px-2 py-[2px] text-[10.5px] font-bold uppercase tracking-[0.08em] text-brand-gold"
+                                          title={`Menor preço nesta categoria: ${fmt(catMin)}`}
+                                          aria-label={`Menor preço na categoria ${cat}: ${fmt(catMin)}`}
+                                        >
+                                          <Crown className="h-3 w-3" strokeWidth={2} aria-hidden />
+                                          <span className="tabular-nums">{fmt(catMin)}</span>
+                                        </span>
+                                      ) : null}
+                                      <span className="h-px flex-1 bg-border" aria-hidden="true" />
+                                      <span className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground tabular-nums">
+                                        {sortedGroups.length} item{sortedGroups.length > 1 ? "s" : ""}
+                                      </span>
+                                    </div>
+                                  );
+                                })()
                               ) : null}
 
 
