@@ -126,7 +126,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
   const items = (recent ?? []).slice(0, 7);
 
   return (
-    <div className="grid w-full flex-1 content-start gap-x-8 gap-y-5 lg:grid-cols-12">
+    <div className="grid h-full w-full flex-1 content-start gap-x-8 gap-y-5 lg:grid-cols-12 lg:grid-rows-[minmax(0,1fr)_auto]">
       {/* ---------- Últimos preços ---------- */}
       <section aria-labelledby="explore-prices" className="min-w-0 lg:col-span-7">
         <SectionHead
@@ -190,7 +190,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
       </section>
 
       {/* ---------- Benefícios + prova social ---------- */}
-      <div className="min-w-0 space-y-4 lg:col-span-5">
+      <div className="flex min-w-0 flex-col gap-4 lg:col-span-5">
         <section aria-labelledby="explore-benefits">
           <SectionHead id="explore-benefits" kicker="Benefícios" title="Por que usar" />
           <ul className={`${BODY_GAP} grid grid-cols-2 gap-x-4 gap-y-2`}>
@@ -248,6 +248,26 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
           </ul>
         </section>
 
+        <section
+          aria-label="Números da plataforma"
+          className="mt-auto grid grid-cols-3 gap-3 border-t pt-2.5"
+          style={{ borderColor: line }}
+        >
+          {[
+            { label: "Conferidos hoje", value: live?.checkedToday ?? 0 },
+            { label: "Últimos 7 dias", value: live?.totalRecent ?? 0 },
+            { label: "Avaliação", value: PLATFORM_RATING.value.toLocaleString("pt-BR", { minimumFractionDigits: 1 }) },
+          ].map((s) => (
+            <div key={s.label} className="min-w-0">
+              <p className={`${tc.num} font-semibold`} style={{ color: gold }}>
+                {s.value}
+              </p>
+              <p className={`${tc.meta} truncate`} style={{ color: fg70 }}>
+                {s.label}
+              </p>
+            </div>
+          ))}
+        </section>
       </div>
 
       {/* ---------- Atalhos ---------- */}
