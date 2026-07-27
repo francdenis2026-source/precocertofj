@@ -1,5 +1,7 @@
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import { prefetchRouteData } from "@/lib/route-prefetch";
 import { LogOut, User as UserIcon, Key, Receipt, LayoutDashboard, ChevronDown, Search, Ticket, Menu, ShieldCheck } from "lucide-react";
 import { ds, dsx } from "@/lib/ds";
 import { useMyProfile } from "@/hooks/useMyProfile";
@@ -65,6 +67,7 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
 
   const { signOut, loading: signingOut } = useSignOut();
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
 
   // O header global existe apenas na homepage: nas demais seções a navegação
   // fica a cargo do PageHeader/InternalPageHeader (com HomeBrandLink) e da
@@ -152,6 +155,8 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
               <Link
                 key={l.to}
                 to={l.to}
+                onPointerEnter={() => prefetchRouteData(queryClient, String(l.to))}
+                onFocus={() => prefetchRouteData(queryClient, String(l.to))}
                 className={dsx(
                   "rounded-lg px-3 py-2 text-[16px] font-semibold leading-[1.25] tracking-[-0.005em] antialiased outline-none transition-colors focus-visible:ring-2 xl:px-3.5 xl:text-[16.5px]",
                   navClass,
