@@ -204,7 +204,7 @@ function CategoryPage() {
       <div className="mx-auto w-full max-w-6xl px-4 pt-3"><HomeBrandLink /></div>
       <main className="mx-auto max-w-6xl px-3 pb-14 pt-3 sm:px-6">
         {/* Hero compacto — escala tipográfica única (eyebrow 10 / título 19-22 / meta 12 / stat 15) */}
-        <header className="overflow-hidden rounded-xl border border-border/70 bg-[var(--pc-navy,#0b1e3f)] text-white shadow-sm">
+        <header data-surface="navy" className="overflow-hidden rounded-xl border border-border/70 bg-[var(--pc-navy,#0b1e3f)] text-white shadow-sm">
           <div className="flex items-center gap-3 px-3.5 py-3 sm:px-4">
             <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-brand-gold text-brand-navy sm:h-10 sm:w-10">
               <Icon className="h-[18px] w-[18px] sm:h-5 sm:w-5" strokeWidth={2.2} aria-hidden />
