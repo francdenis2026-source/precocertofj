@@ -650,7 +650,7 @@ function EstablishmentsPage() {
         </section>
       )}
 
-      <main className="mx-auto w-full max-w-6xl px-4 md:px-6 pt-4 md:pt-5">
+      <main className="pc-rail mx-auto min-h-0 w-full max-w-6xl flex-1 overflow-y-auto px-4 pb-6 pt-4 md:px-6 md:pt-5">
 
 
         {isLoading && view === "list" && (
