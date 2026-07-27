@@ -342,7 +342,7 @@ export function PriceSearchBar({
           if (seq !== suggestSeq.current || ctrl.signal.aborted) return;
           // Mantém as sugestões anteriores para não piscar a lista.
         });
-    }, 280);
+    }, 120);
     return () => window.clearTimeout(t);
   }, [query, runSuggest]);
 

@@ -15,6 +15,7 @@ import {
   resolveSynonymGroup,
 } from "@/lib/search-synonyms";
 import { getSynonymGroupsCached } from "@/lib/search-synonyms.server";
+import { getSignedUrlCached } from "@/lib/signed-url-cache.server";
 import type {
   PriceSearchMarket,
   PriceSearchResult,
@@ -22,12 +23,6 @@ import type {
   ProductGroup,
   ProductPricePoint,
 } from "@/lib/price-search.functions";
-
-/**
- * Cache em memória (por worker) das URLs assinadas de imagens do catálogo.
- * Antes, toda busca gerava até 8 chamadas ao storage — hoje só na 1ª vez.
- */
-const signedUrlCache = new Map<string, { url: string; expiresAt: number }>();
 
 /** Cache curto do resultado completo da busca (mesmo termo + filtros). */
 const searchResultCache = new Map<string, { at: number; value: PriceSearchResult }>();
@@ -188,29 +183,8 @@ async function runPriceSearch(data: {
 
   await Promise.all(
     suggestions.map(async (s) => {
-      if (!s.imageUrl) return;
-      const m = s.imageUrl.match(/\/storage\/v1\/object\/(?:public|sign|authenticated)\/([^/?#]+)\/([^?#]+)/);
-      if (!m) return;
-      const bucket = decodeURIComponent(m[1]);
-      const path = decodeURIComponent(m[2]);
-      if (bucket !== "logos" && bucket !== "scans") return;
-      const key = `${bucket}/${path}`;
-      const cached = signedUrlCache.get(key);
-      if (cached && cached.expiresAt > Date.now()) {
-        s.imageUrl = cached.url;
-        return;
-      }
-      const { data: signed } = await supabaseAdmin.storage
-        .from(bucket)
-        .createSignedUrl(path, 60 * 60 * 24 * 7);
-      if (signed?.signedUrl) {
-        s.imageUrl = signed.signedUrl;
-        // Renova 1 dia antes de expirar.
-        signedUrlCache.set(key, {
-          url: signed.signedUrl,
-          expiresAt: Date.now() + 6 * 24 * 60 * 60 * 1000,
-        });
-      }
+      const signed = await getSignedUrlCached(supabaseAdmin, s.imageUrl);
+      if (signed) s.imageUrl = signed;
     }),
   );
 
