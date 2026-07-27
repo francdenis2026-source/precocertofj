@@ -259,7 +259,7 @@ function MelhoresPrecosPage() {
       if (error) throw error;
       return (data as unknown as Comparison[]) ?? [];
     },
-    staleTime: 5 * 60_000,
+    staleTime: 30 * 60_000,
   });
 
   // Atualização em tempo real: novos preços invalidam o ranking na hora.
@@ -286,7 +286,7 @@ function MelhoresPrecosPage() {
         state: string | null;
       }>;
     },
-    staleTime: 10 * 60_000,
+    staleTime: 30 * 60_000,
   });
 
   const estabsMap = useMemo(() => {

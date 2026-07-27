@@ -14,7 +14,7 @@ const prefetchers: Record<string, Prefetcher> = {
     return qc.prefetchQuery({
       queryKey: ["search-highlights"],
       queryFn: () => getSearchHighlights(),
-      staleTime: 5 * 60_000,
+      staleTime: 30 * 60_000,
     });
   },
   "/mapa": async (qc) => {
@@ -42,7 +42,7 @@ const prefetchers: Record<string, Prefetcher> = {
         if (error) throw error;
         return data ?? [];
       },
-      staleTime: 5 * 60_000,
+      staleTime: 30 * 60_000,
     });
   },
   "/comparador": async (qc) => {
@@ -54,7 +54,7 @@ const prefetchers: Record<string, Prefetcher> = {
         if (error) throw error;
         return data ?? [];
       },
-      staleTime: 5 * 60_000,
+      staleTime: 30 * 60_000,
     });
   },
   "/onde-comprar": async (qc) => {
@@ -62,7 +62,7 @@ const prefetchers: Record<string, Prefetcher> = {
     return qc.prefetchQuery({
       queryKey: ["where-to-buy-regions"],
       queryFn: () => getWhereToBuyRegions(),
-      staleTime: 10 * 60_000,
+      staleTime: 30 * 60_000,
     });
   },
 };

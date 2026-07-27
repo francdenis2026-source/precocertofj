@@ -307,7 +307,7 @@ function ComparadorPage() {
       }
       return acc;
     },
-    staleTime: 5 * 60_000,
+    staleTime: 30 * 60_000,
   });
 
   const butcherIds = useButcherIds();
