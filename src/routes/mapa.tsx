@@ -67,6 +67,38 @@ function highlight(text: string, term: string) {
 
 type SortBy = "price" | "markets" | "alpha" | "favorites";
 
+function StatCell({
+  value,
+  label,
+  accent = false,
+}: {
+  value: number;
+  label: string;
+  accent?: boolean;
+}) {
+  return (
+    <div className="flex min-w-[3.75rem] flex-col items-center justify-center px-3 py-1.5 sm:min-w-[4.75rem] sm:px-4 sm:py-2">
+      <span
+        className={
+          "font-serif font-semibold leading-none tabular-nums tracking-tight " +
+          "text-[1.55rem] sm:text-[1.9rem] " +
+          (accent ? "text-[var(--pc-gold-ink)]" : "text-foreground")
+        }
+      >
+        {value}
+      </span>
+      <span
+        className={
+          "mt-1 text-[0.62rem] font-semibold uppercase leading-none tracking-[0.18em] sm:text-[0.7rem] " +
+          (accent ? "text-[var(--pc-gold-ink)]/85" : "text-muted-foreground")
+        }
+      >
+        {label}
+      </span>
+    </div>
+  );
+}
+
 function NeighborhoodsPage() {
   const fetchNeighborhoods = useServerFn(listEstablishmentsByNeighborhood);
   const fetchFavs = useServerFn(listFavoriteNeighborhoods);
