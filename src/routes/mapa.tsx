@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useMemo, useState } from "react";
-import { MapPin, Store, Package, Search, Star, X, Tag, TrendingUp } from "lucide-react";
+import { MapPin, Store, Package, Search, Star, X, Tag, TrendingUp, Building2 } from "lucide-react";
 import { listEstablishmentsByNeighborhood } from "@/lib/scans-history.functions";
 import {
   listFavoriteNeighborhoods,
@@ -236,9 +236,9 @@ function NeighborhoodsPage() {
             <StatCellGroup
               label={`Resumo: ${filteredGroups.length} bairros e ${totalMarkets} mercados`}
             >
-              <StatCell value={filteredGroups.length} label="Bairros" accent />
+              <StatCell value={filteredGroups.length} label="Bairros" icon={Building2} accent />
               <StatCellDivider />
-              <StatCell value={totalMarkets} label="Mercados" />
+              <StatCell value={totalMarkets} label="Mercados" icon={Store} />
             </StatCellGroup>
 
           </div>

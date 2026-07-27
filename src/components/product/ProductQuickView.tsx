@@ -14,6 +14,7 @@ import {
 import { ProductImage } from "@/components/ds/ProductImage";
 import { StoreBadge } from "@/components/brand/StoreBadge";
 import { getPublicProduct } from "@/lib/public-product.functions";
+import { formatShortDate } from "@/components/product/TrustIndicator";
 import { dedupeByStorePrice, storeKey } from "@/lib/price-rank";
 
 const brl = (v: number) =>
@@ -192,7 +193,7 @@ export function ProductQuickView({
                     </span>
                     <span className="block truncate text-[11px] text-muted-foreground">
                       {[m.neighborhood, m.city].filter(Boolean).join(" · ") || "Feijó/AC"} ·{" "}
-                      {new Date(m.lastSeen).toLocaleDateString("pt-BR")}
+                      {formatShortDate(m.lastSeen)}
                     </span>
                   </span>
                   <span className="shrink-0 text-right">
