@@ -73,7 +73,7 @@ export function RecentProductsCarousel() {
       if (error) throw error;
       return (data as unknown as Comparison[]) ?? [];
     },
-    staleTime: 60_000,
+    staleTime: 5 * 60_000,
   });
 
   const products = data?.products ?? [];
