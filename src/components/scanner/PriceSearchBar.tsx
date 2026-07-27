@@ -590,7 +590,7 @@ export function PriceSearchBar({
               type="button"
               onClick={clear}
               aria-label="Limpar"
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-muted-foreground hover:text-foreground"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <X className="h-3.5 w-3.5" />
             </button>
