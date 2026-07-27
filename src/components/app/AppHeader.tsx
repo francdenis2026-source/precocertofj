@@ -3,6 +3,8 @@ import { Activity, Globe, MapPin, PanelLeftClose, PanelLeftOpen, ShieldCheck, Sh
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 
 import { AuthNavToggle } from "@/components/nav/AuthNavToggle";
+import { ThemeToggle } from "@/components/theme-toggle";
+
 import { useMyProfile } from "@/hooks/useMyProfile";
 import { useSignOut } from "@/hooks/use-sign-out";
 import { Button } from "@/components/ui/button";
