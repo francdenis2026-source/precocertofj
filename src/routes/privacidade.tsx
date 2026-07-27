@@ -333,7 +333,7 @@ function PrivacidadePage() {
       </section>
 
       {/* CONTEÚDO — grade fina, cabe em uma tela */}
-      <main className="mx-auto w-full max-w-5xl flex-1 px-3 py-3 sm:px-4 md:px-8 md:py-4">
+      <main className="pc-rail mx-auto w-full max-w-5xl min-h-0 flex-1 overflow-y-auto px-3 py-3 sm:px-4 md:px-8 md:py-4">
         <div className="grid gap-x-8 gap-y-2.5 sm:grid-cols-2 sm:gap-y-3 lg:grid-cols-3">
           {items.map((item, i) => (
             <div key={item.id} className="min-w-0">
