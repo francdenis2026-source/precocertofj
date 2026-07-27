@@ -1,4 +1,4 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { ds, dsx } from "@/lib/ds";
 
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
@@ -29,6 +29,7 @@ const linkClass = dsx(
 export function SiteFooter() {
   const year = new Date().getFullYear();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
   const current = pathname.replace(/\/+$/, "") || "/";
   const links = LEGAL_LINKS.filter((l) => l.to !== current);
 
@@ -65,8 +66,9 @@ export function SiteFooter() {
             </span>
           </p>
         ) : (
-          <Link
-            to="/"
+          <button
+            type="button"
+            onClick={() => navigate({ to: "/" })}
             className={dsx(
               "flex min-w-0 shrink-0 items-center gap-1.5 rounded-md py-0.5 transition-colors",
               focusRing,
@@ -83,8 +85,8 @@ export function SiteFooter() {
             <span className={dsx(serif, "truncate text-[17px] leading-none text-foreground")}>
               Preço<span className="italic text-brand">Certo</span>
             </span>
-            <span className="sr-only">— página inicial</span>
-          </Link>
+            <span className="sr-only">— ir para a página inicial</span>
+          </button>
         )}
 
         <p className="justify-self-end whitespace-nowrap font-medium text-muted-foreground tabular-nums">
@@ -96,10 +98,14 @@ export function SiteFooter() {
             <ul className="flex min-w-0 items-center gap-x-0.5 -ml-2">
               {links.map((l, i) => (
                 <li key={l.to} className="inline-flex items-center">
-                  <Link to={l.to} className={linkClass}>
+                  <button
+                    type="button"
+                    onClick={() => navigate({ to: l.to })}
+                    className={linkClass}
+                  >
                     {l.label}
                     <span className="sr-only"> — {l.aria}</span>
-                  </Link>
+                  </button>
                   {i < links.length - 1 && (
                     <span aria-hidden className="text-border">
                       ·
