@@ -164,7 +164,7 @@ export function NotificationsBell() {
           <Link
             to="/notificacoes"
             onClick={() => setOpen(false)}
-            className="block w-full rounded-md py-1.5 text-center text-xs font-semibold text-primary hover:bg-muted"
+            className="pc-nav-link pc-nav-link--row block w-full rounded-md py-1.5 text-center text-xs font-semibold text-primary outline-none"
           >
             Ver todas as notificações
           </Link>
