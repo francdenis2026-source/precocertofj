@@ -9,7 +9,7 @@ import {
   humanizeCategory,
   type EstablishmentsOverview,
 } from "@/lib/establishments-public.functions";
-import { MobileNav } from "@/components/nav/MobileNav";
+
 import { FavoriteMarketButton } from "@/components/market/FavoriteMarketButton";
 import { useSession } from "@/hooks/useSession";
 import { listFavoriteMarkets } from "@/lib/favorites.functions";
