@@ -4237,3 +4237,25 @@ html[data-admin-boot="1"] body {
 /* Ensure body text on the gold spotlight keeps AA on both themes */
 .pc-surface-3 { color: var(--pc-home-navy); }
 .dark .pc-surface-3 { color: #fbf6e6; }
+
+/* ============= Admin scope · keyboard-first focus polish =============
+   Guarantee a visible, WCAG AA focus ring on every interactive element
+   inside the admin route, without touching any component code. */
+.admin-scope :is(button, a, [role="button"], [role="tab"], [role="option"],
+  [role="menuitem"], input, select, textarea, summary,
+  [tabindex]:not([tabindex="-1"])):focus-visible {
+  outline: 2px solid var(--pc-gold-ink);
+  outline-offset: 2px;
+  border-radius: 8px;
+  box-shadow: 0 0 0 4px color-mix(in oklab, var(--pc-gold-ink) 22%, transparent);
+}
+/* Table rows and cells become reachable landmarks when they are
+   themselves keyboard targets (data-nav rows). */
+.admin-scope tr[tabindex="0"]:focus-visible,
+.admin-scope [role="row"][tabindex="0"]:focus-visible {
+  outline: 2px solid var(--pc-gold-ink);
+  outline-offset: -2px;
+  background: color-mix(in oklab, var(--pc-gold-ink) 8%, transparent);
+}
+/* Skip: don't double-ring buttons already using .pc-focus */
+.admin-scope .pc-focus:focus-visible { border-radius: 8px; }
