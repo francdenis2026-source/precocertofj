@@ -126,7 +126,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
   const items = (recent ?? []).slice(0, 10);
 
   return (
-    <div className="grid h-full w-full flex-1 content-start gap-x-8 gap-y-5 lg:grid-cols-12 lg:grid-rows-[minmax(0,1fr)_auto]">
+    <div className="grid h-full w-full flex-1 content-start gap-x-8 gap-y-3 lg:gap-y-5 lg:grid-cols-12 lg:grid-rows-[minmax(0,1fr)_auto]">
       {/* ---------- Últimos preços ---------- */}
       <section aria-labelledby="explore-prices" className="flex min-w-0 flex-col lg:col-span-7">
         <SectionHead
@@ -152,7 +152,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
             : ""}
         </p>
 
-        <ul className={`${BODY_GAP} min-h-0 flex-1 divide-y overflow-y-auto no-scrollbar`} style={{ borderColor: line, maskImage: "linear-gradient(to bottom, #000 92%, transparent)", WebkitMaskImage: "linear-gradient(to bottom, #000 92%, transparent)" }}>
+        <ul className={`${BODY_GAP} min-h-0 flex-1 divide-y overflow-y-auto no-scrollbar [&>li:nth-child(n+5)]:hidden lg:[&>li:nth-child(n+5)]:block`} style={{ borderColor: line, maskImage: "linear-gradient(to bottom, #000 92%, transparent)", WebkitMaskImage: "linear-gradient(to bottom, #000 92%, transparent)" }}>
           {items.length === 0
             ? Array.from({ length: 7 }).map((_, i) => (
                 <li key={i} className="flex items-center gap-3 py-2">
@@ -190,7 +190,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
       </section>
 
       {/* ---------- Benefícios + prova social ---------- */}
-      <div className="flex min-w-0 flex-col gap-4 lg:col-span-5">
+      <div className="flex min-w-0 flex-col gap-3 lg:col-span-5 lg:gap-4">
         <section aria-labelledby="explore-benefits">
           <SectionHead id="explore-benefits" kicker="Benefícios" title="Por que usar" />
           <ul className={`${BODY_GAP} grid grid-cols-2 gap-x-4 gap-y-2`}>
