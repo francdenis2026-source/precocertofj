@@ -166,7 +166,7 @@ function CadastroPage() {
       />
 
       <header className="relative z-10 mx-auto flex w-full max-w-[900px] items-center justify-between px-5 py-2.5 md:px-6">
-        <Logo className="h-7 w-auto" href="/" />
+        <Logo className="h-7 w-auto" href="/" variant="on-light" />
 
         <Link
           to={loginHref}
@@ -181,7 +181,7 @@ function CadastroPage() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className="grid w-full max-w-[900px] grid-cols-1 overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
+          className="grid w-full max-w-[900px] grid-cols-1 overflow-hidden rounded-2xl border border-slate-900/10 bg-white text-slate-900 shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
         >
           {/* LEFT — Hero panel reutilizável (oculto no mobile, igual /login) */}
           <div className="hidden md:block">

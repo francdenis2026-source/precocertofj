@@ -1,0 +1,41 @@
+name: Qualidade — testes, contraste (WCAG AA) e header
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  unit:
+    name: Testes unitários e de integração
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bun run test
+
+  a11y:
+    name: WCAG AA (contraste modo claro/escuro) + escopo do header
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: bun install --frozen-lockfile
+      - run: pip install playwright && python -m playwright install --with-deps chromium
+      - name: Subir preview
+        run: |
+          bun run build
+          bun run preview --port 8080 &
+          for i in $(seq 1 60); do curl -sf -o /dev/null http://localhost:8080/ && break; sleep 2; done
+      - name: Auditoria de contraste (WCAG AA)
+        run: python3 scripts/contrast_audit.py --base http://localhost:8080
+      - name: Auditoria de acessibilidade (axe-core)
+        run: python3 scripts/a11y_audit.py --base http://localhost:8080
+      - name: Escopo do header global
+        run: python3 scripts/header_scope_e2e.py --base http://localhost:8080
+      - name: Planos em uma única tela
+        run: python3 scripts/planos_viewport_e2e.py --base http://localhost:8080

@@ -25,6 +25,8 @@ import { useSession } from "@/hooks/useSession";
 import { toast } from "sonner";
 import { EmptyState, LoadingSkeleton, PageShell, PageShellContent } from "@/components/layout";
 import mapaHero from "@/assets/mapa-hero.jpg";
+import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
+
 import { Link } from "@tanstack/react-router";
 import {
   Select,
@@ -276,8 +278,13 @@ function NeighborhoodsPage() {
 
   return (
     <PageShell>
-      
+
       <PageShellContent>
+
+      <div className="mx-auto w-full max-w-6xl px-4 pt-3">
+        <HomeBrandLink />
+      </div>
+
 
       {/* Hero editorial — foto aérea + camadas Navy/Gold */}
       <section className="relative isolate overflow-hidden border-b border-brand-gold/20 bg-brand-navy text-white">
