@@ -223,10 +223,19 @@ function AdminPage() {
     return () => { done = true; };
   }, [logAccess]);
 
-  // Prefetch das rotas internas mais usadas quando o navegador estiver ocioso.
+  // Prefetch das rotas administrativas mais usadas quando o navegador estiver ocioso.
   const router = useRouter();
   useEffect(() => {
-    const targets = ADMIN_SHORTCUT_GROUPS.flatMap((g) => g.items.map((i) => i.to)).slice(0, 8);
+    const targets = [
+      "/admin/catalogo",
+      "/admin/precos",
+      "/admin/clientes",
+      "/admin/gestao",
+      "/admin/metricas",
+      "/admin/cobertura",
+      "/admin/analytics",
+      "/admin/webhooks",
+    ];
     const idle =
       (window as unknown as { requestIdleCallback?: (cb: () => void) => number }).requestIdleCallback ??
       ((cb: () => void) => window.setTimeout(cb, 1200));
@@ -239,6 +248,7 @@ function AdminPage() {
       else window.clearTimeout(handle as number);
     };
   }, [router]);
+
 
 
 
