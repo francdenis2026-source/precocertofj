@@ -29,8 +29,8 @@ import { ShareButton } from "@/components/ui/share-button";
 import { cn } from "@/lib/utils";
 import { useMyRoles } from "@/hooks/useMyRoles";
 
-const dateFmt = (iso: string) =>
-  new Date(iso).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" });
+import { formatShortDate } from "@/components/product/TrustIndicator";
+const dateFmt = (iso: string) => formatShortDate(iso);
 
 const STALE_DAYS = 30;
 

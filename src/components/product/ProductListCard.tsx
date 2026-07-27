@@ -1,6 +1,7 @@
 import { Bell, History } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { formatShortDate, formatAbsoluteTooltip } from "@/components/product/TrustIndicator";
 import { cn } from "@/lib/utils";
 
 const brl = (n: number) =>
@@ -36,9 +37,8 @@ export function ProductListCard({
   className,
 }: ProductListCardProps) {
   const unit = unitLabel ? unitLabel.replace("R$", "").trim() || unitLabel : null;
-  const formattedDate = lastDate
-    ? new Date(lastDate).toLocaleDateString("pt-BR")
-    : null;
+  const formattedDate = lastDate ? formatShortDate(lastDate) : null;
+  const absoluteDate = lastDate ? formatAbsoluteTooltip(lastDate) : "";
 
   return (
     <Card interactive tabIndex={0} className={cn("group h-full", className)}>
@@ -68,7 +68,7 @@ export function ProductListCard({
         </div>
         {(formattedDate || onAlert || onHistory) && (
           <div className="flex items-center justify-between text-[11px] text-muted-foreground">
-            <span>{formattedDate ? `Atualizado ${formattedDate}` : ""}</span>
+            <span title={absoluteDate}>{formattedDate ? `Atualizado ${formattedDate}` : ""}</span>
             <div className="flex items-center gap-1">
               {onAlert ? (
                 <button

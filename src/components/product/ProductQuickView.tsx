@@ -192,7 +192,7 @@ export function ProductQuickView({
                     </span>
                     <span className="block truncate text-[11px] text-muted-foreground">
                       {[m.neighborhood, m.city].filter(Boolean).join(" · ") || "Feijó/AC"} ·{" "}
-                      {new Date(m.lastSeen).toLocaleDateString("pt-BR")}
+                      {formatShortDate(m.lastSeen)}
                     </span>
                   </span>
                   <span className="shrink-0 text-right">
