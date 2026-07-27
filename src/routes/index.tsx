@@ -690,15 +690,13 @@ function HomePage() {
                 </SheetTrigger>
                 <SheetContent
                   side="bottom"
-                  className="max-h-[92dvh] overflow-y-auto border-t-0 px-4 pb-4 pt-3 sm:px-6 sm:pb-5"
+                  className="max-h-[92dvh] overflow-y-auto border-t-0 px-4 pb-4 pt-3 sm:px-6 sm:pb-5 before:fixed before:inset-0 before:-z-10 before:content-[''] before:bg-[var(--pc-home-explore-bg)]"
                   style={{
                     background: "var(--pc-home-explore-bg)",
                     color: "var(--pc-home-onhero-fg)",
-                    // Cobre o restante da viewport com a mesma cor sólida,
-                    // eliminando o "manto" translúcido do overlay acima do painel.
-                    boxShadow: "0 -100vh 0 0 var(--pc-home-explore-bg)",
                   }}
                 >
+
 
                   <SheetHeader className="mx-auto mb-3 w-full max-w-6xl text-left">
                     <SheetTitle
