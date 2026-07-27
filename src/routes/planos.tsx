@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 
 import { toast } from "sonner";
-import { SiteHeader } from "@/components/layout/SiteHeader";
 
 import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
 import { ds, dsx } from "@/lib/ds";
@@ -186,10 +185,6 @@ function PlansPage() {
 
   return (
     <div data-planos-shell className="flex h-[calc(100svh-64px)] flex-col overflow-hidden overscroll-none bg-background text-foreground md:h-[100svh]">
-      <div className="shrink-0">
-        <SiteHeader />
-      </div>
-
       <main className="flex min-h-0 flex-1 flex-col">
         {/* Cabeçalho compacto — altura fixa */}
         <section className={dsx(ds.container, "shrink-0 pt-2 pb-2 md:pt-3")}>

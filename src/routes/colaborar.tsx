@@ -21,7 +21,6 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { PageShell, PageShellContent } from "@/components/layout/PageShell";
-import { SiteHeader } from "@/components/layout/SiteHeader";
 import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSession } from "@/hooks/useSession";
@@ -65,7 +64,6 @@ function CollaboratePage() {
 
   return (
     <PageShell>
-      <SiteHeader />
       <PageShellContent>
         <div className="container-page pt-3 pb-8 md:pt-4">
           <InternalPageHeader
