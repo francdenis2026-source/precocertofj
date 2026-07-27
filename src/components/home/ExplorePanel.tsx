@@ -1,3 +1,4 @@
+import { memo, useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -15,6 +16,7 @@ import {
 } from "@/lib/products-public.functions";
 import { PLATFORM_RATING } from "@/components/ds/RatingStars";
 import { tc } from "@/lib/typeclear";
+
 
 /**
  * Painel "Explorar o PreçoCerto" — versão compacta editorial.
