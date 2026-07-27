@@ -222,17 +222,22 @@ function NeighborhoodsPage() {
               </div>
             </div>
 
-            <dl className="flex shrink-0 items-center gap-2.5 sm:gap-4">
+            <dl className="flex shrink-0 items-center gap-2.5 tracking-normal sm:gap-4 sm:tracking-[inherit]">
               <div className="text-right">
                 <dd className={`${tc.num} text-[var(--pc-gold-ink)]`}>{filteredGroups.length}</dd>
-                <dt className={tc.tableHead}>Bairros</dt>
+                <dt className={`${tc.tableHead} text-[0.6rem] tracking-normal sm:text-[inherit] sm:tracking-[inherit]`}>
+                  Bairros
+                </dt>
               </div>
               <span aria-hidden className="h-6 w-px bg-border" />
               <div className="text-right">
                 <dd className={tc.num}>{totalMarkets}</dd>
-                <dt className={tc.tableHead}>Mercados</dt>
+                <dt className={`${tc.tableHead} text-[0.6rem] tracking-normal sm:text-[inherit] sm:tracking-[inherit]`}>
+                  Mercados
+                </dt>
               </div>
             </dl>
+
           </div>
         </header>
 
