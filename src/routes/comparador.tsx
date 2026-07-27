@@ -16,7 +16,7 @@ import { filterAndSortComparisonRows } from "@/lib/comparison-search";
 import { TeaserCard, useTeaserAccess } from "@/components/paywall/TeaserGate";
 import { PaywallInline } from "@/components/paywall/PaywallInline";
 import { FreeQuotaBadge } from "@/components/paywall/FreeQuotaBadge";
-import { PageHeader } from "@/components/brand/PageHeader";
+
 import { PriceHero } from "@/components/product/PriceHero";
 import { SavingsBadge } from "@/components/product/SavingsBadge";
 import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
