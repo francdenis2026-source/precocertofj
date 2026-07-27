@@ -98,10 +98,19 @@ export const getAdminInsights = createServerFn({ method: "POST" })
       categories: Array.isArray(input?.categories)
         ? input!.categories.filter((c) => typeof c === "string").slice(0, 30)
         : [],
+      refresh: input?.refresh === true,
     };
   })
   .handler(async ({ data }): Promise<AdminInsights> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { getAdminCache, setAdminCache, bumpAdminInsightsVersion } = await import(
+      "./admin-insights-cache.server"
+    );
+    if (data.refresh) bumpAdminInsightsVersion();
+    const cacheKey = `insights:${data.from}:${data.to}:${[...data.categories].sort().join("|")}`;
+    const cached = getAdminCache<AdminInsights>(cacheKey);
+    if (cached) return cached;
+
 
     const since = `${data.from}T00:00:00.000Z`;
     const until = `${data.to}T23:59:59.999Z`;
