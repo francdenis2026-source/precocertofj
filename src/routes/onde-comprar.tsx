@@ -93,12 +93,14 @@ function OndeComprarPage() {
       </header>
 
       <main className="mx-auto max-w-5xl px-4 py-4">
-        <h1 className={cn(tc.h1, "mb-1")}>
+        <p className={cn(tc.eyebrow, "mb-1")}>Comparador geográfico</p>
+        <h1 className={cn(tc.sectionTitle, "mb-1")}>
           Onde comprar mais barato
         </h1>
-        <p className={cn(tc.meta, "mb-3")}>
+        <p className={cn(tc.metaMuted, "mb-3")}>
           Compare o preço de cada produto entre os mercados parceiros e filtre por bairro ou cidade.
         </p>
+        <hr className="pc-rule mb-3" aria-hidden />
 
         {/* Filtros */}
         <form
