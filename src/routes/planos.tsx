@@ -21,6 +21,8 @@ import { toast } from "sonner";
 
 import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
 import { ds, dsx } from "@/lib/ds";
+import { tc } from "@/lib/typeclear";
+import { cn } from "@/lib/utils";
 import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 
 export const Route = createFileRoute("/planos")({
