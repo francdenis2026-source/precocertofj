@@ -3477,6 +3477,7 @@ export type Database = {
         Args: { _key: string }
         Returns: undefined
       }
+      refresh_platform_stats_cache: { Args: never; Returns: undefined }
       refresh_product_price_stats_all: {
         Args: never
         Returns: {
