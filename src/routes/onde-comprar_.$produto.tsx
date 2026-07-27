@@ -194,7 +194,7 @@ function ProdutoComparacaoPage() {
             <div className="grid gap-2.5 lg:grid-cols-2">
               {/* Ranking por estabelecimento */}
               <section className="pc-surface-2 p-2.5">
-                <p className={cn(tc.itemTitle, "mb-1.5")}>Ranking por estabelecimento</p>
+                <p className={cn(tc.eyebrow, "mb-1")}>Ranking</p><p className={cn(tc.sectionTitle, "mb-1.5")}>Por estabelecimento</p>
                 <ul className="space-y-1">
                   {d.ranking.map((r) => (
                     <li
@@ -235,7 +235,7 @@ function ProdutoComparacaoPage() {
                 {/* Histórico de variação */}
                 <section className="pc-surface-2 p-2.5">
                   <div className="mb-1 flex items-center justify-between gap-2">
-                    <p className={cn(tc.itemTitle)}>Histórico de variação</p>
+                    <p className={cn(tc.sectionTitle)}>Histórico de variação</p>
                     {d.variationPct != null && (
                       <span
                         className={cn(
@@ -287,7 +287,7 @@ function ProdutoComparacaoPage() {
 
                 {/* Melhor preço por bairro */}
                 <section className="pc-surface-2 p-2.5">
-                  <p className={cn(tc.itemTitle, "mb-1.5")}>Melhor preço por bairro</p>
+                  <p className={cn(tc.eyebrow, "mb-1")}>Cobertura</p><p className={cn(tc.sectionTitle, "mb-1.5")}>Melhor preço por bairro</p>
                   <ul className="space-y-1">
                     {d.byNeighborhood.map((h) => (
                       <li
