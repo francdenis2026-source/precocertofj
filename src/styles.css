@@ -4098,3 +4098,80 @@ html[data-admin-boot="1"] body {
 @media (prefers-reduced-motion: reduce) {
   .pc-store-emphasis { transition: none; }
 }
+
+/* ============= Surface layers (hierarchy system v1) =============
+   Purpose: give distinct luminosity + border to background/panel/card/spotlight
+   so pages stop reading as a single monolithic navy field.
+   Each surface adapts to light/dark automatically via the tokens below. */
+:root {
+  --pc-surface-0: transparent;                                          /* page background */
+  --pc-surface-1: color-mix(in oklab, var(--pc-home-navy) 3%, white);   /* panel/rail */
+  --pc-surface-2: #ffffff;                                              /* card */
+  --pc-surface-3: linear-gradient(180deg, #fbf5e6 0%, #f3e6bf 100%);    /* spotlight */
+  --pc-surface-1-border: color-mix(in oklab, var(--pc-home-navy) 12%, transparent);
+  --pc-surface-2-border: color-mix(in oklab, var(--pc-home-navy) 8%, transparent);
+  --pc-surface-3-border: color-mix(in oklab, var(--pc-home-gold) 55%, transparent);
+  --pc-surface-2-shadow: 0 1px 2px rgb(8 18 42 / 0.04), 0 8px 24px -12px rgb(8 18 42 / 0.10);
+  --pc-surface-3-shadow: 0 1px 2px rgb(107 74 16 / 0.10), 0 12px 32px -14px rgb(107 74 16 / 0.24);
+}
+.dark {
+  --pc-surface-0: transparent;
+  --pc-surface-1: color-mix(in oklab, var(--pc-home-navy) 88%, white 4%);
+  --pc-surface-2: color-mix(in oklab, var(--pc-home-navy) 78%, white 8%);
+  --pc-surface-3: linear-gradient(180deg,
+    color-mix(in oklab, var(--pc-home-gold) 18%, var(--pc-home-navy)) 0%,
+    color-mix(in oklab, var(--pc-home-gold) 8%, var(--pc-home-navy)) 100%);
+  --pc-surface-1-border: rgb(255 255 255 / 0.06);
+  --pc-surface-2-border: rgb(255 255 255 / 0.10);
+  --pc-surface-3-border: color-mix(in oklab, var(--pc-home-gold) 42%, transparent);
+  --pc-surface-2-shadow: 0 1px 2px rgb(0 0 0 / 0.35), 0 12px 32px -14px rgb(0 0 0 / 0.55);
+  --pc-surface-3-shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 14px 36px -14px rgb(107 74 16 / 0.35);
+}
+
+@utility pc-surface-1 {
+  background: var(--pc-surface-1);
+  border: 1px solid var(--pc-surface-1-border);
+  border-radius: 14px;
+}
+@utility pc-surface-2 {
+  background: var(--pc-surface-2);
+  border: 1px solid var(--pc-surface-2-border);
+  border-radius: 14px;
+  box-shadow: var(--pc-surface-2-shadow);
+}
+@utility pc-surface-3 {
+  background: var(--pc-surface-3);
+  border: 1px solid var(--pc-surface-3-border);
+  border-radius: 16px;
+  box-shadow: var(--pc-surface-3-shadow);
+}
+
+/* Editorial rule: hairline branca sobre linha gold — separa blocos sem
+   competir com bordas de card. Usa como <hr class="pc-rule"> ou wrapper. */
+@utility pc-rule {
+  border: 0;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    color-mix(in oklab, var(--pc-gold-ink) 60%, transparent) 20%,
+    color-mix(in oklab, var(--pc-gold-ink) 60%, transparent) 80%,
+    transparent 100%
+  );
+  position: relative;
+}
+@utility pc-rule-v {
+  width: 1px;
+  align-self: stretch;
+  background: linear-gradient(
+    to bottom,
+    transparent 0%,
+    color-mix(in oklab, var(--pc-gold-ink) 55%, transparent) 20%,
+    color-mix(in oklab, var(--pc-gold-ink) 55%, transparent) 80%,
+    transparent 100%
+  );
+}
+
+/* Respiro vertical padronizado entre blocos editoriais. */
+@utility pc-section-gap { margin-block: clamp(20px, 3vw, 40px); }
+@utility pc-section-gap-sm { margin-block: clamp(14px, 2vw, 24px); }

@@ -36,6 +36,12 @@ export const fluid = (minPx: number, maxPx: number, from = 380, to = 1280) => {
 export const tc = {
   /** Rótulo dourado acima de um título. */
   eyebrow: `${fluid(11, 12)} font-semibold uppercase leading-none tracking-[0.2em] text-[var(--pc-gold-ink)]`,
+  /** Título editorial de seção — serif Instrument, papel "section header". */
+  sectionTitle: `font-serif ${fluid(18, 22)} font-normal leading-[1.2] tracking-tight text-foreground`,
+  /** Dado primário grande (preço/valor em destaque, tabular). */
+  dataPrimary: `font-mono ${fluid(22, 32)} font-semibold leading-none tabular-nums text-foreground`,
+  /** Meta discreto (data, bairro, contagem). */
+  metaMuted: `${fluid(11.5, 12.5)} leading-[1.3] text-foreground/60`,
   /** Título principal da página (header fixo). */
   h1: `font-serif ${fluid(20, 26)} font-normal leading-[1.15] tracking-tight text-foreground`,
   /** Título de seção. */
