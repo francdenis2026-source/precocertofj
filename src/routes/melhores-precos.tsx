@@ -7,7 +7,7 @@ import { useServerFn } from "@tanstack/react-start";
 
 import { Nav } from "@/components/brand/Nav";
 import { Footer } from "@/components/brand/Footer";
-import { Breadcrumbs } from "@/components/nav/Breadcrumbs";
+
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { tc } from "@/lib/typeclear";
 import { dsx } from "@/lib/ds";
