@@ -2347,11 +2347,13 @@ function EstablishmentsTab() {
   const onDelete = async (id: string) => {
     const ok = await confirm({
       title: "Remover estabelecimento?",
-      description: "Esta ação não pode ser desfeita.",
-      confirmLabel: "Remover",
+      description:
+        "Todos os produtos, preços capturados, recibos e alertas ligados a este estabelecimento serão removidos permanentemente. Esta ação não pode ser desfeita.",
+      confirmLabel: "Remover tudo",
       destructive: true,
     });
     if (!ok) return;
+
     try {
       await remove({ data: { id } });
       toast.success("Removido");
