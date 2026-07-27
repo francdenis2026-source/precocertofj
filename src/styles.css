@@ -4368,10 +4368,77 @@ html.dark .pc-row-interactive:hover .pc-store-name {
   z-index: 0;
 }
 .pc-best-result > * { position: relative; z-index: 1; }
+/* Focus-visible ring — keyboard first, no low-contrast defaults */
+.pc-best-result:focus-visible {
+  box-shadow: 0 0 0 3px rgba(201,168,76,0.55), 0 12px 40px -18px rgba(201,168,76,0.6);
+}
+/* Motion is opt-in — respects reduced-motion & Windows forced colors */
 @media (prefers-reduced-motion: no-preference) {
   .pc-best-result { animation: pc-best-glow 6s ease-in-out infinite; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pc-best-result { animation: none !important; }
+  .pc-best-result::after { background: none; }
+}
+@media (forced-colors: active) {
+  .pc-best-result { border: 2px solid CanvasText; }
+  .pc-best-result::before, .pc-best-result::after { display: none; }
 }
 @keyframes pc-best-glow {
   0%, 100% { box-shadow: 0 10px 40px -18px rgba(201,168,76,0.45); }
   50%      { box-shadow: 0 14px 46px -16px rgba(201,168,76,0.7); }
 }
+
+/* Compact variant — for dense tables & lists: kills glow/shimmer, keeps gold rail */
+.pc-best-result--compact {
+  animation: none !important;
+  box-shadow: none !important;
+  border-radius: 8px;
+}
+.pc-best-result--compact::after { background: none; }
+.pc-best-result--compact::before {
+  background: linear-gradient(180deg, rgba(201,168,76,0.65), rgba(201,168,76,0.25));
+  padding: 1px;
+}
+
+/* Professional nav microinteraction — gold underline reveal + subtle lift */
+.pc-nav-link {
+  position: relative;
+  transition: color 200ms ease, transform 200ms ease, letter-spacing 200ms ease;
+}
+.pc-nav-link::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 2px;
+  height: 1.5px;
+  background: linear-gradient(90deg, transparent, var(--pc-gold-ink, #c9a84c), transparent);
+  transform: scaleX(0);
+  transform-origin: center;
+  transition: transform 260ms cubic-bezier(0.2, 0.7, 0.2, 1), opacity 200ms ease;
+  opacity: 0.9;
+  pointer-events: none;
+}
+.pc-nav-link:hover,
+.pc-nav-link:focus-visible {
+  color: var(--pc-gold-ink, #c9a84c) !important;
+  transform: translateY(-1px);
+  letter-spacing: 0.11em;
+}
+.pc-nav-link:hover::after,
+.pc-nav-link:focus-visible::after,
+.pc-nav-link[aria-current="page"]::after {
+  transform: scaleX(1);
+}
+.pc-nav-link:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px color-mix(in oklab, var(--pc-gold-ink, #c9a84c) 55%, transparent);
+  border-radius: 6px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pc-nav-link,
+  .pc-nav-link::after { transition: none; }
+  .pc-nav-link:hover { transform: none; letter-spacing: normal; }
+}
+

@@ -253,10 +253,12 @@ function OndeComprarPage() {
                         className={cn(
                           "pc-row-interactive flex items-center gap-2 px-2 py-1.5",
                           o.isCheapest
-                            ? "pc-surface-3"
+                            ? "pc-surface-3 pc-best-result pc-best-result--compact"
                             : "rounded-lg border border-[var(--pc-surface-2-border)]",
                         )}
+                        aria-label={o.isCheapest ? `Melhor preço: ${o.storeName}` : undefined}
                       >
+
                         <Store
                           className={cn(
                             "h-3.5 w-3.5 shrink-0",

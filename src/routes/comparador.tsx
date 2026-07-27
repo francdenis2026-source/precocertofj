@@ -1189,7 +1189,7 @@ function ComparisonTableRow({
           </p>
         )}
       </td>
-      <td className="px-4 py-3 text-right border-l border-[color-mix(in_oklab,var(--pc-gold-ink)_20%,transparent)] bg-[color-mix(in_oklab,var(--pc-gold-ink)_5%,transparent)]">
+      <td className="pc-best-result pc-best-result--compact px-4 py-3 text-right border-l border-[color-mix(in_oklab,var(--pc-gold-ink)_20%,transparent)] bg-[color-mix(in_oklab,var(--pc-gold-ink)_5%,transparent)]" aria-label="Menor preço do produto">
         <p className="pc-price-value pc-price-value--best font-display text-lg font-extrabold leading-none tabular-nums">
           {formatBRL(Number(row.min_price))}
         </p>

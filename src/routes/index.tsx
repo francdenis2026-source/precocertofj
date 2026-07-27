@@ -787,11 +787,12 @@ function HomePage() {
                 <Link
                   key={l.to}
                   to={l.to}
-                  className="rounded-md px-2 py-1 text-[12.5px] font-semibold uppercase tracking-[0.1em] transition-colors hover:brightness-125 sm:text-[13px]"
+                  className="pc-nav-link rounded-md px-2 py-1 text-[12.5px] font-semibold uppercase tracking-[0.1em] outline-none sm:text-[13px]"
                   style={{ color: "var(--pc-home-onhero-fg-85)" }}
                 >
                   {l.label}
                 </Link>
+
               ))}
             </nav>
 
