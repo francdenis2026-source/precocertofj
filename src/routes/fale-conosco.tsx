@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useId } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import {
   Mail,
@@ -10,10 +10,14 @@ import {
   Phone,
   Clock,
   Loader2,
+  AlertCircle,
 } from "lucide-react";
+import { z } from "zod";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { IsolatedPage } from "@/components/layout/IsolatedPage";
 import { dsx } from "@/lib/ds";
+import { tc } from "@/lib/typeclear";
+import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 
 const CONTACT_EMAIL = "precocerto-fj@proton.me";
@@ -54,11 +58,48 @@ const ASSUNTOS: Array<{ value: Assunto; label: string }> = [
   { value: "outro", label: "Outro" },
 ];
 
-const fieldClass =
-  "mt-0.5 w-full rounded-lg border border-border bg-background px-2.5 py-1.5 text-[13.5px] leading-tight sm:mt-1 sm:px-3 sm:py-2 sm:text-[14px] text-foreground outline-none transition placeholder:text-muted-foreground focus:border-brand focus:ring-2 focus:ring-brand/25";
+const fieldBase =
+  "mt-0.5 w-full rounded-lg border bg-background px-2.5 py-1.5 text-[13.5px] leading-tight sm:mt-1 sm:px-3 sm:py-2 sm:text-[14px] text-foreground outline-none transition placeholder:text-muted-foreground pc-focus";
 
-const labelClass =
-  "text-[10.5px] font-bold uppercase tracking-[0.16em] text-muted-foreground";
+const fieldClass = cn(
+  fieldBase,
+  "border-border focus:border-brand focus:ring-2 focus:ring-brand/25",
+);
+
+const fieldErrorClass = cn(
+  fieldBase,
+  "border-destructive/70 focus:border-destructive focus:ring-2 focus:ring-destructive/25",
+);
+
+const labelClass = cn(
+  tc.eyebrow,
+  "text-muted-foreground tracking-[0.16em]",
+);
+
+const contactSchema = z.object({
+  nome: z
+    .string()
+    .trim()
+    .min(2, "Informe seu nome (mínimo 2 caracteres).")
+    .max(80, "Nome muito longo (máximo 80 caracteres)."),
+  email: z
+    .string()
+    .trim()
+    .max(120, "E-mail muito longo.")
+    .refine(
+      (v) => v.length === 0 || /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v),
+      "E-mail em formato inválido.",
+    )
+    .optional()
+    .or(z.literal("")),
+  mensagem: z
+    .string()
+    .trim()
+    .min(10, "Mensagem muito curta (mínimo 10 caracteres).")
+    .max(2000, "Mensagem muito longa (máximo 2000 caracteres)."),
+});
+
+type FormErrors = Partial<Record<"nome" | "email" | "mensagem", string>>;
 
 function FaleConoscoPage() {
   const [nome, setNome] = useState("");
@@ -67,8 +108,29 @@ function FaleConoscoPage() {
   const [mensagem, setMensagem] = useState("");
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
 
-  const canSubmit = nome.trim().length >= 2 && mensagem.trim().length >= 10;
+  const nomeId = useId();
+  const emailId = useId();
+  const mensagemId = useId();
+  const errNomeId = `${nomeId}-err`;
+  const errEmailId = `${emailId}-err`;
+  const errMsgId = `${mensagemId}-err`;
+
+  const validate = (): FormErrors => {
+    const result = contactSchema.safeParse({ nome, email, mensagem });
+    if (result.success) return {};
+    const next: FormErrors = {};
+    for (const issue of result.error.issues) {
+      const key = issue.path[0] as keyof FormErrors;
+      if (key && !next[key]) next[key] = issue.message;
+    }
+    return next;
+  };
+
+  const canSubmit =
+    nome.trim().length >= 2 && mensagem.trim().length >= 10 && !sending;
 
   const mailtoHref = useMemo(() => {
     const subjectLabel = ASSUNTOS.find((a) => a.value === assunto)?.label ?? "Contato";
@@ -89,13 +151,24 @@ function FaleConoscoPage() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (sending) return;
-    if (!canSubmit) {
-      toast.error("Preencha nome e uma mensagem com pelo menos 10 caracteres.");
+    const next = validate();
+    setTouched({ nome: true, email: true, mensagem: true });
+    setErrors(next);
+    if (Object.keys(next).length > 0) {
+      toast.error("Revise os campos destacados.", {
+        description: Object.values(next)[0],
+      });
+      // Focus first invalid field
+      const firstKey = Object.keys(next)[0];
+      const el = document.getElementById(
+        firstKey === "nome" ? nomeId : firstKey === "email" ? emailId : mensagemId,
+      ) as HTMLElement | null;
+      el?.focus();
       return;
     }
     setSending(true);
     try {
-      await new Promise((r) => setTimeout(r, 350));
+      await new Promise((r) => setTimeout(r, 300));
       window.location.href = mailtoHref;
       toast.success("Abrindo seu app de e-mail…", {
         description: `Se nada abrir, escreva direto para ${CONTACT_EMAIL}.`,
@@ -119,6 +192,8 @@ function FaleConoscoPage() {
       toast.error(`Não foi possível copiar. Use: ${value}`);
     }
   };
+
+  const showErr = (k: keyof FormErrors) => touched[k] && errors[k];
 
 
   return (
@@ -148,39 +223,81 @@ function FaleConoscoPage() {
           {/* Formulário */}
           <form
             onSubmit={onSubmit}
-            className="rounded-xl border border-border bg-card p-2.5 shadow-sm md:p-4"
+            noValidate
+            aria-describedby="form-help"
+            className="pc-surface-1 p-2.5 md:p-4"
           >
             <div className="grid gap-1.5 sm:grid-cols-2 sm:gap-2.5">
-              <label className="block">
-                <span className={labelClass}>Nome</span>
+              <div className="block">
+                <label htmlFor={nomeId} className={labelClass}>
+                  Nome
+                </label>
                 <input
+                  id={nomeId}
                   type="text"
                   value={nome}
                   onChange={(e) => setNome(e.target.value)}
+                  onBlur={() => {
+                    setTouched((t) => ({ ...t, nome: true }));
+                    setErrors(validate());
+                  }}
                   required
                   minLength={2}
+                  maxLength={80}
                   autoComplete="name"
                   placeholder="Como podemos te chamar"
-                  className={fieldClass}
+                  aria-invalid={Boolean(showErr("nome"))}
+                  aria-describedby={showErr("nome") ? errNomeId : undefined}
+                  className={showErr("nome") ? fieldErrorClass : fieldClass}
                 />
-              </label>
+                {showErr("nome") && (
+                  <p
+                    id={errNomeId}
+                    role="alert"
+                    className="mt-1 flex items-center gap-1 text-[11.5px] font-medium text-destructive"
+                  >
+                    <AlertCircle className="h-3 w-3 shrink-0" aria-hidden />
+                    {errors.nome}
+                  </p>
+                )}
+              </div>
 
-              <label className="block">
-                <span className={labelClass}>E-mail (opcional)</span>
+              <div className="block">
+                <label htmlFor={emailId} className={labelClass}>
+                  E-mail (opcional)
+                </label>
                 <input
+                  id={emailId}
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  onBlur={() => {
+                    setTouched((t) => ({ ...t, email: true }));
+                    setErrors(validate());
+                  }}
                   autoComplete="email"
+                  maxLength={120}
                   placeholder="para resposta"
-                  className={fieldClass}
+                  aria-invalid={Boolean(showErr("email"))}
+                  aria-describedby={showErr("email") ? errEmailId : undefined}
+                  className={showErr("email") ? fieldErrorClass : fieldClass}
                 />
-              </label>
+                {showErr("email") && (
+                  <p
+                    id={errEmailId}
+                    role="alert"
+                    className="mt-1 flex items-center gap-1 text-[11.5px] font-medium text-destructive"
+                  >
+                    <AlertCircle className="h-3 w-3 shrink-0" aria-hidden />
+                    {errors.email}
+                  </p>
+                )}
+              </div>
             </div>
 
-            <div className="mt-2.5">
-              <span className={labelClass}>Assunto</span>
-              <div className="mt-1 flex flex-wrap gap-1.5">
+            <fieldset className="mt-2.5 border-0 p-0">
+              <legend className={labelClass}>Assunto</legend>
+              <div className="mt-1 flex flex-wrap gap-1.5" role="radiogroup" aria-label="Assunto do contato">
                 {ASSUNTOS.map((a) => {
                   const active = assunto === a.value;
                   return (
@@ -188,9 +305,10 @@ function FaleConoscoPage() {
                       key={a.value}
                       type="button"
                       onClick={() => setAssunto(a.value)}
-                      aria-pressed={active}
+                      role="radio"
+                      aria-checked={active}
                       className={dsx(
-                        "rounded-full border px-2.5 py-0.5 text-[11.5px] font-semibold transition sm:py-1 sm:text-[12px]",
+                        "pc-focus rounded-full border px-2.5 py-0.5 text-[11.5px] font-semibold transition sm:py-1 sm:text-[12px]",
                         active
                           ? "border-primary bg-primary text-primary-foreground"
                           : "border-border bg-card text-muted-foreground hover:border-primary/40 hover:text-foreground",
@@ -201,26 +319,56 @@ function FaleConoscoPage() {
                   );
                 })}
               </div>
-            </div>
+            </fieldset>
 
-            <label className="mt-2 block sm:mt-2.5">
-              <span className={labelClass}>Mensagem</span>
+            <div className="mt-2 block sm:mt-2.5">
+              <label htmlFor={mensagemId} className={labelClass}>
+                Mensagem
+              </label>
               <textarea
+                id={mensagemId}
                 value={mensagem}
                 onChange={(e) => setMensagem(e.target.value)}
+                onBlur={() => {
+                  setTouched((t) => ({ ...t, mensagem: true }));
+                  setErrors(validate());
+                }}
                 required
                 minLength={10}
+                maxLength={2000}
                 rows={3}
                 placeholder="Conte pra gente o que aconteceu, sua sugestão ou dúvida…"
-                className={dsx(
-                  fieldClass,
+                aria-invalid={Boolean(showErr("mensagem"))}
+                aria-describedby={showErr("mensagem") ? errMsgId : undefined}
+                className={cn(
+                  showErr("mensagem") ? fieldErrorClass : fieldClass,
                   "h-[60px] resize-none leading-[1.45] sm:h-[104px]",
                 )}
               />
-            </label>
+              <div className="mt-0.5 flex items-center justify-between gap-2">
+                {showErr("mensagem") ? (
+                  <p
+                    id={errMsgId}
+                    role="alert"
+                    className="flex items-center gap-1 text-[11.5px] font-medium text-destructive"
+                  >
+                    <AlertCircle className="h-3 w-3 shrink-0" aria-hidden />
+                    {errors.mensagem}
+                  </p>
+                ) : (
+                  <span aria-hidden />
+                )}
+                <span
+                  className="text-[10.5px] tabular-nums text-muted-foreground"
+                  aria-live="polite"
+                >
+                  {mensagem.trim().length}/2000
+                </span>
+              </div>
+            </div>
 
             <div className="mt-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 sm:mt-2.5 sm:gap-3">
-              <p className="min-w-0 text-[11px] leading-snug text-muted-foreground">
+              <p id="form-help" className="min-w-0 text-[11px] leading-snug text-muted-foreground">
                 <span className="hidden sm:inline">
                   Mínimo 10 caracteres. Ao enviar, seu app de e-mail abre preenchido para{" "}
                 </span>
@@ -230,14 +378,14 @@ function FaleConoscoPage() {
 
               <button
                 type="submit"
-                disabled={!canSubmit || sending}
+                disabled={!canSubmit}
                 aria-busy={sending}
-                className="btn-gold btn-state-safe inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-[14px] font-bold shadow-sm transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
+                className="btn-gold btn-state-safe pc-focus inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-[14px] font-bold shadow-sm transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
               >
                 {sending ? (
-                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
                 ) : (
-                  <Send className="h-3.5 w-3.5" />
+                  <Send className="h-3.5 w-3.5" aria-hidden />
                 )}
                 {sending ? "Enviando…" : "Enviar"}
               </button>
@@ -256,7 +404,7 @@ function FaleConoscoPage() {
                 <li className="flex min-w-0 items-center justify-between gap-2 rounded-lg border border-border bg-muted/40 px-2.5 py-1.5">
                   <a
                     href={`mailto:${CONTACT_EMAIL}`}
-                    className="flex min-w-0 items-center gap-1.5 text-[13px] font-semibold text-foreground hover:text-brand-gold"
+                    className="pc-focus flex min-w-0 items-center gap-1.5 text-[13px] font-semibold text-foreground hover:text-brand-gold rounded-md"
                   >
                     <Mail className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
                     <span className="truncate">{CONTACT_EMAIL}</span>
@@ -264,7 +412,7 @@ function FaleConoscoPage() {
                   <button
                     type="button"
                     onClick={() => copy("email", CONTACT_EMAIL, "E-mail")}
-                    className="inline-flex shrink-0 items-center gap-1 rounded-md border border-border bg-card px-2 py-1 text-[11.5px] font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
+                    className="pc-focus inline-flex shrink-0 items-center gap-1 rounded-md border border-border bg-card px-2 py-1 text-[11.5px] font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
                     aria-label="Copiar e-mail"
                   >
                     {copiedKey === "email" ? (
@@ -283,7 +431,7 @@ function FaleConoscoPage() {
                     href={`https://wa.me/${CONTACT_PHONE_RAW}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex min-w-0 items-center gap-1.5 text-[13px] font-semibold text-foreground hover:text-brand-gold"
+                    className="pc-focus flex min-w-0 items-center gap-1.5 text-[13px] font-semibold text-foreground hover:text-brand-gold rounded-md"
                   >
                     <Phone className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
                     <span className="truncate">{CONTACT_PHONE}</span>
@@ -291,7 +439,7 @@ function FaleConoscoPage() {
                   <button
                     type="button"
                     onClick={() => copy("phone", CONTACT_PHONE, "Telefone")}
-                    className="inline-flex shrink-0 items-center gap-1 rounded-md border border-border bg-card px-2 py-1 text-[11.5px] font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
+                    className="pc-focus inline-flex shrink-0 items-center gap-1 rounded-md border border-border bg-card px-2 py-1 text-[11.5px] font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
                     aria-label="Copiar telefone"
                   >
                     {copiedKey === "phone" ? (
