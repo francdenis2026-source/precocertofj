@@ -29,7 +29,6 @@ export const getRouter = () => {
         refetchOnWindowFocus: false,
         refetchOnReconnect: false,
         retry: 1,
-        placeholderData: <T,>(prev: T) => prev,
       },
     },
   });
