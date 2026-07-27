@@ -1,191 +1,70 @@
 import { Link } from "@tanstack/react-router";
 import { ds, dsx } from "@/lib/ds";
-import { MapPin, Mail, ShieldCheck } from "lucide-react";
 
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 
-const NAV_COLS: Array<{ title: string; links: Array<{ to: string; label: string }> }> = [
-  {
-    title: "Explorar",
-    links: [
-      { to: "/melhores-precos", label: "Rankings" },
-      { to: "/estabelecimentos", label: "Mercados" },
-      { to: "/mapa", label: "Bairros" },
-      { to: "/buscar", label: "Buscar produto" },
-    ],
-  },
-  {
-    title: "Conta",
-    links: [
-      { to: "/planos", label: "Planos" },
-      { to: "/resgatar", label: "Ativar código" },
-      { to: "/login", label: "Entrar" },
-      { to: "/cadastro", label: "Criar conta" },
-    ],
-  },
-  {
-    title: "Institucional",
-    links: [
-      { to: "/fale-conosco", label: "Fale conosco" },
-      { to: "/privacidade", label: "Privacidade" },
-    ],
-  },
-];
-
-// Flat link list for the compact mobile footer (grouped by intent)
-const MOBILE_LINKS: Array<{ to: string; label: string }> = [
-  { to: "/melhores-precos", label: "Rankings" },
-  { to: "/estabelecimentos", label: "Mercados" },
-  { to: "/planos", label: "Planos" },
-  { to: "/fale-conosco", label: "Contato" },
-  { to: "/privacidade", label: "Privacidade" },
-];
-
+/**
+ * SiteFooter — rodapé mínimo das páginas internas.
+ *
+ * A homepage tem seu próprio rodapé editorial completo. Nas demais seções
+ * mantemos apenas uma faixa legal enxuta (marca · local · legal · crédito),
+ * sem colunas de navegação nem blocos institucionais.
+ */
 export function SiteFooter() {
   const year = new Date().getFullYear();
 
   return (
-    <footer
-      className="mt-0.5 border-t border-border bg-muted/60 text-foreground"
-    >
-      {/* ============ MOBILE (ultra compact — 2 lines) ============ */}
+    <footer className="mt-0.5 border-t border-border bg-muted/50 text-foreground">
       <div
         className={dsx(
           ds.container,
-          "md:hidden pt-0.5 pb-[max(0.125rem,env(safe-area-inset-bottom))] px-[max(0.75rem,env(safe-area-inset-left))]",
+          "flex flex-wrap items-center justify-between gap-x-3 gap-y-0.5",
+          "py-1 pb-[max(0.25rem,env(safe-area-inset-bottom))] md:py-1.5",
+          "text-[11.5px] font-medium leading-none",
         )}
       >
-        {/* Row 1: brand + location + legal — single line */}
-        <div className="flex items-center justify-between gap-2 text-[clamp(11px,3vw,13px)] leading-none">
+        <Link
+          to="/"
+          className="flex shrink-0 items-center gap-1.5 rounded-md outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          aria-label="PreçoCerto — início"
+        >
+          <img
+            src="/logo-mark.png"
+            alt=""
+            aria-hidden
+            width={20}
+            height={20}
+            className="h-5 w-5 shrink-0 object-contain"
+          />
+          <span className={dsx(serif, "text-[14px] leading-none text-foreground")}>
+            Preço<span className="italic text-brand">Certo</span>
+          </span>
+        </Link>
+
+        <span className="text-foreground/75 tabular-nums">
+          © {year} · Feijó · Acre
+        </span>
+
+        <nav aria-label="Rodapé" className="flex items-center gap-x-1">
           <Link
-            to="/"
-            className="flex shrink-0 items-center gap-1.5 rounded-md outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-            aria-label="PreçoCerto — início"
+            to="/privacidade"
+            className="rounded-md px-1 py-0.5 text-foreground/85 outline-none transition-colors hover:bg-brand/10 hover:text-[var(--pc-gold-ink)] focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
           >
-            <img src="/logo-mark.png" alt="" aria-hidden width={20} height={20} className="h-5 w-5 shrink-0 object-contain" />
-
-            <span className={dsx(serif, "text-[clamp(13px,3.6vw,15px)] leading-none text-foreground")}>
-              Preço<span className="italic text-brand">Certo</span>
-            </span>
+            Privacidade
           </Link>
-          <span className="inline-flex items-center gap-1 font-semibold uppercase tracking-[0.1em] text-foreground/85">
-            <MapPin className="h-3.5 w-3.5 text-brand" aria-hidden />
-            Feijó·AC
-          </span>
-          <span className="font-semibold text-foreground/75 tabular-nums">© {year}</span>
-        </div>
-
-        {/* Row 2: nav chips com scroll horizontal p/ evitar corte */}
-        <nav
-          aria-label="Rodapé"
-          className="mt-1 -mx-2 flex items-center gap-x-1 overflow-x-auto whitespace-nowrap px-2 pb-0.5 text-[12px] font-semibold leading-none text-foreground [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-        >
-          {MOBILE_LINKS.map((l, i) => (
-            <span key={l.to} className="inline-flex shrink-0 items-center">
-              <Link
-                to={l.to}
-                className="rounded-md px-1 py-0.5 text-foreground/95 outline-none transition-colors hover:bg-brand/10 hover:text-brand active:text-brand-strong focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background [&.active]:text-[color:var(--pc-gold-ink)] dark:[&.active]:text-brand"
-              >
-                {l.label}
-              </Link>
-              {i < MOBILE_LINKS.length - 1 && (
-                <span aria-hidden className="px-0.5 text-brand/60">·</span>
-              )}
-            </span>
-          ))}
+          <span aria-hidden className="text-brand/60">·</span>
+          <Link
+            to="/fale-conosco"
+            className="rounded-md px-1 py-0.5 text-foreground/85 outline-none transition-colors hover:bg-brand/10 hover:text-[var(--pc-gold-ink)] focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          >
+            Contato
+          </Link>
         </nav>
-        {/* Row 3: dev credit isolado */}
-        <div className="mt-0.5 text-right font-mono text-[11px] font-medium text-muted-foreground">
+
+        <span className="whitespace-nowrap font-mono text-[11px] text-muted-foreground">
           &lt;dev&gt; <span className="text-foreground/85">Franc D&apos;nis</span>
-        </div>
-      </div>
-
-
-      {/* ============ DESKTOP / TABLET ============ */}
-      <div
-        className={dsx(
-          ds.container,
-          "hidden md:grid gap-2 py-1 sm:gap-3 md:grid-cols-[1.2fr_2fr] md:gap-4 md:py-1.5",
-        )}
-      >
-        {/* Brand block */}
-        <div className="max-w-sm">
-          <Link to="/" className="group flex items-center gap-2 rounded-lg outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background">
-            <img src="/logo-mark.png" alt="" aria-hidden width={28} height={28} className="h-7 w-7 shrink-0 object-contain md:h-8 md:w-8" />
-
-            <span
-              className={dsx(serif, "text-[16px] leading-none text-foreground md:text-[18px]")}
-            >
-              Preço<span className="italic text-brand">Certo</span>
-            </span>
-          </Link>
-
-          <p className="mt-1 text-[11.5px] font-medium leading-snug text-foreground/80">
-            Comparador colaborativo de preços dos mercados de Feijó — Acre.
-          </p>
-
-          <ul className="mt-1 space-y-0 text-[11.5px] font-medium text-foreground/90">
-            <li className="flex items-center gap-1.5">
-              <MapPin className="h-3 w-3 shrink-0 text-brand" />
-              Feijó · Acre · Brasil
-            </li>
-            <li className="flex items-center gap-1.5">
-              <Mail className="h-3 w-3 shrink-0 text-brand" />
-              <a
-                href="mailto:precocerto-fj@proton.me"
-                className="truncate rounded-md px-1 py-0 -mx-1 text-foreground outline-none transition-colors hover:bg-brand/10 hover:text-brand hover:underline underline-offset-4 decoration-brand/70 active:text-brand-strong focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-              >
-                precocerto-fj@proton.me
-              </a>
-            </li>
-            <li className="flex items-center gap-1.5">
-              <ShieldCheck className="h-3 w-3 shrink-0 text-brand" />
-              Dados protegidos · LGPD
-            </li>
-          </ul>
-        </div>
-
-        {/* Link columns */}
-        <div className="grid grid-cols-3 gap-x-3 gap-y-1 sm:gap-x-5">
-          {NAV_COLS.map((col) => (
-            <div key={col.title} className="min-w-0">
-              <div className="text-[11px] font-bold uppercase tracking-[0.18em] text-[var(--pc-gold-ink)] antialiased md:text-[11px]">
-                {col.title}
-              </div>
-              <ul className="mt-1 space-y-px border-t border-border/70 pt-1">
-                {col.links.map((l) => (
-                  <li key={l.to}>
-                    <Link
-                      to={l.to}
-                      className="inline-flex max-w-full items-center truncate rounded-md px-1.5 py-0.5 -mx-1.5 text-[12.5px] font-medium leading-[1.35] tracking-[-0.005em] text-foreground/85 antialiased outline-none transition-colors hover:bg-brand/10 hover:text-[var(--pc-gold-ink)] active:text-brand-strong focus-visible:ring-2 focus-visible:ring-brand/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background [&.active]:text-[var(--pc-gold-ink)] [&.active]:bg-brand/10"
-                    >
-                      <span className="truncate">{l.label}</span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Bottom legal strip — desktop only (mobile has its own inline strip) */}
-      <div className="hidden md:block border-t border-border bg-muted">
-        <div
-          className={dsx(
-            ds.container,
-            "flex flex-col items-start justify-between gap-0 py-0 text-[11px] font-medium leading-[1.15] text-foreground/85 sm:flex-row sm:items-center md:text-[11px]",
-          )}
-        >
-          <span className="whitespace-normal">© {year} <strong className="font-semibold text-foreground">PreçoCerto</strong> · Feijó · Acre</span>
-          <span className="whitespace-nowrap font-mono text-muted-foreground">
-            &lt;dev&gt; <span className="text-foreground/90">Franc D&apos;nis</span>
-          </span>
-        </div>
+        </span>
       </div>
     </footer>
   );
 }
-
-
-
