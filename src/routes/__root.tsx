@@ -92,18 +92,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     ],
     links: [
       { rel: "stylesheet", href: appCss },
-      { rel: "icon", href: "/favicon.ico?v=5", sizes: "16x16 24x24 32x32 48x48 64x64 128x128 256x256" },
-      { rel: "icon", href: "/logo-mark.svg?v=5", type: "image/svg+xml", sizes: "any" },
-      { rel: "icon", href: "/icon-192.png?v=5", sizes: "192x192", type: "image/png" },
-      { rel: "icon", href: "/icon-256.png?v=5", sizes: "256x256", type: "image/png" },
-      { rel: "icon", href: "/icon-384.png?v=5", sizes: "384x384", type: "image/png" },
-      { rel: "icon", href: "/icon-512.png?v=5", sizes: "512x512", type: "image/png" },
-      { rel: "icon", href: "/icon-1024.png?v=5", sizes: "1024x1024", type: "image/png" },
-      { rel: "apple-touch-icon", href: "/apple-touch-icon.png?v=5", sizes: "180x180" },
-      { rel: "apple-touch-icon", href: "/icon-167.png?v=5", sizes: "167x167" },
-      { rel: "apple-touch-icon", href: "/icon-152.png?v=5", sizes: "152x152" },
-      { rel: "apple-touch-icon", href: "/icon-120.png?v=5", sizes: "120x120" },
-      { rel: "mask-icon", href: "/logo-mark.svg?v=5", color: "#e2a520" },
+      // Favicons "full-bleed": a marca ocupa o máximo do quadro, ficando
+      // bem maior/legível na aba e na barra de endereços.
+      { rel: "icon", href: "/favicon.ico?v=6", sizes: "16x16 24x24 32x32 48x48 64x64 128x128 256x256" },
+      { rel: "icon", href: "/logo-mark.svg?v=6", type: "image/svg+xml", sizes: "any" },
+      { rel: "icon", href: "/favicon-32.png?v=6", sizes: "32x32", type: "image/png" },
+      { rel: "icon", href: "/favicon-48.png?v=6", sizes: "48x48", type: "image/png" },
+      { rel: "icon", href: "/favicon-96.png?v=6", sizes: "96x96", type: "image/png" },
+      { rel: "icon", href: "/favicon-512.png?v=6", sizes: "512x512", type: "image/png" },
+      { rel: "icon", href: "/icon-192.png?v=6", sizes: "192x192", type: "image/png" },
+      { rel: "icon", href: "/icon-512.png?v=6", sizes: "512x512", type: "image/png" },
+      { rel: "apple-touch-icon", href: "/favicon-180.png?v=6", sizes: "180x180" },
+      { rel: "apple-touch-icon", href: "/icon-167.png?v=6", sizes: "167x167" },
+      { rel: "apple-touch-icon", href: "/icon-152.png?v=6", sizes: "152x152" },
+      { rel: "apple-touch-icon", href: "/icon-120.png?v=6", sizes: "120x120" },
+      { rel: "mask-icon", href: "/logo-mark.svg?v=6", color: "#e2a520" },
+
 
 
 

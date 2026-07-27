@@ -3499,6 +3499,7 @@ export type Database = {
           similarity: number
         }[]
       }
+      search_norm: { Args: { txt: string }; Returns: string }
       search_scans_unaccented: {
         Args: { _limit?: number; _q: string }
         Returns: {

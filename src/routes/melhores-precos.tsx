@@ -30,6 +30,7 @@ import { ProductImage } from "@/components/product/ProductImage";
 import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
 import { computeUnitPrice } from "@/lib/unit-price";
 import { useMyRoles } from "@/hooks/useMyRoles";
+import { usePricesRealtime } from "@/hooks/usePricesRealtime";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { submitPriceReport } from "@/lib/stores-public.functions";
 import { classifyProductType, PRODUCT_TYPE_LABEL } from "@/lib/product-type";
@@ -252,6 +253,11 @@ function MelhoresPrecosPage() {
       return (data as unknown as Comparison[]) ?? [];
     },
     staleTime: 5 * 60_000,
+  });
+
+  // Atualização em tempo real: novos preços invalidam o ranking na hora.
+  usePricesRealtime(() => {
+    void queryClient.invalidateQueries({ queryKey: ["price-comparisons"] });
   });
 
   // Locais de todos os mercados ativos — usados para permitir busca por cidade/bairro.

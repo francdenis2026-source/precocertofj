@@ -3,7 +3,8 @@ import { Nav } from "@/components/brand/Nav";
 import { Footer } from "@/components/brand/Footer";
 import { Breadcrumbs } from "@/components/nav/Breadcrumbs";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { usePricesRealtime } from "@/hooks/usePricesRealtime";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { toast } from "sonner";
@@ -271,6 +272,11 @@ function ComparadorPage() {
   const setConfFilter = (next: ConfFilter) => {
     navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, conf: next }) });
   };
+
+  const queryClient = useQueryClient();
+  usePricesRealtime(() => {
+    void queryClient.invalidateQueries({ queryKey: ["price-comparisons-all"] });
+  });
 
   const { data, isLoading, error } = useQuery({
     queryKey: ["price-comparisons-all"],

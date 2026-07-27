@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
+import { usePricesRealtime } from "@/hooks/usePricesRealtime";
 import { Link } from "@tanstack/react-router";
 import { searchProductPrice, type PriceSearchResult, type PriceSuggestion, type ProductGroup } from "@/lib/price-search.functions";
 import { suggestProducts, type ProductSuggestion } from "@/lib/product-suggest.functions";
@@ -249,7 +250,7 @@ export function PriceSearchBar({
   }, [sessionLoading, user]);
 
 
-  const runQuery = (q: string, opts?: { force?: boolean }) => {
+  const runQuery = (q: string, opts?: { force?: boolean; fresh?: boolean }) => {
     setErr(null);
     setShowSuggest(false);
     setHistory(pushSearchHistory(q));
@@ -278,7 +279,7 @@ export function PriceSearchBar({
     searchAbort.current = ctrl;
     const seq = ++searchSeq.current;
     setIsSearching(true);
-    runSearch({ data: { query: q, mode, pureOnly }, signal: ctrl.signal })
+    runSearch({ data: { query: q, mode, pureOnly, fresh: !!opts?.fresh }, signal: ctrl.signal })
       .then((r) => {
         if (seq !== searchSeq.current) return; // resposta obsoleta
         setResult(r);
@@ -300,6 +301,16 @@ export function PriceSearchBar({
     },
     [],
   );
+
+  // Preços novos chegando (tempo real): reexecuta a busca atual ignorando
+  // caches, sem recarregar a página.
+  const queryRef = useRef("");
+  queryRef.current = query;
+  usePricesRealtime(() => {
+    const q = normalizeInput(queryRef.current).trim();
+    if (q.length < 2) return;
+    runQuery(q, { force: true, fresh: true });
+  });
 
   useEffect(() => {
     if (autoRan.current) return;

@@ -583,12 +583,16 @@ function HomePage() {
                       Onde comparamos
                     </span>
                   </div>
-                  <div className="flex flex-wrap gap-1.5">
+                  {/* Muro de logos: uma única faixa, marcas maiores e legíveis.
+                      Ocupa a mesma altura das duas linhas de chips anteriores. */}
+                  <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
                     {(storesQ.isLoading ? Array.from({ length: 5 }) : partners).map((s: any, i: number) => (
                       <Link
                         key={s?.id ?? i}
                         to="/estabelecimentos"
-                        className="inline-flex max-w-[46%] items-center gap-1.5 rounded-lg border px-2 py-1 pc-tile"
+                        title={s?.name ?? undefined}
+                        aria-label={s?.name ? `Ver ${s.name}` : "Ver mercados parceiros"}
+                        className="grid h-11 w-11 shrink-0 place-items-center rounded-xl border p-1 pc-tile"
                         style={{
                           background: "var(--pc-home-onhero-glass-soft)",
                           borderColor: "var(--pc-home-onhero-border-soft)",
@@ -597,27 +601,21 @@ function HomePage() {
                         {s?.logoUrl ? (
                           <img
                             src={s.logoUrl}
-                            alt=""
-                            aria-hidden
+                            alt={s?.name ?? ""}
                             loading="lazy"
                             decoding="async"
-                            className="h-4 w-4 shrink-0 rounded object-contain"
+                            className="h-full w-full rounded-lg object-contain"
                           />
                         ) : (
                           <span
-                            className="h-4 w-4 shrink-0 rounded"
+                            className="h-full w-full rounded-lg"
                             style={{ background: "var(--pc-home-onhero-border-soft)" }}
                             aria-hidden
                           />
                         )}
-                        <span
-                          className="truncate text-[11.5px] font-semibold"
-                          style={{ color: "var(--pc-home-onhero-fg-85)" }}
-                        >
-                          {s?.name ?? "—"}
-                        </span>
                       </Link>
                     ))}
+
                   </div>
                 </div>
               </div>
