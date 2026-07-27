@@ -320,9 +320,19 @@ function CategoryPage() {
               <input
                 id="cat-prod-search"
                 type="search"
+                name="pc-cat-search"
                 value={qInput}
                 onChange={(e) => setQInput(e.target.value)}
                 aria-controls="cat-prod-results"
+                autoComplete="off"
+                autoCorrect="off"
+                autoCapitalize="off"
+                spellCheck={false}
+                inputMode="search"
+                enterKeyHint="search"
+                data-form-type="other"
+                data-lpignore="true"
+                data-1p-ignore="true"
                 placeholder={`Filtrar em ${def.label.toLowerCase()}…`}
                 className="h-10 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13.5px] outline-none focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
               />
