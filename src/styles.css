@@ -2914,19 +2914,27 @@ input::placeholder, textarea::placeholder {
 
 /* 12) Contraste mínimo para texto secundário em toasts, tooltips e diálogos
        sobre superfícies escuras — evita o efeito "quase apagado". */
-[role="dialog"] .text-muted-foreground,
-[role="alertdialog"] .text-muted-foreground,
-[role="status"] .text-muted-foreground,
-[role="alert"] .text-muted-foreground,
-[data-sonner-toast] .text-muted-foreground,
-[data-radix-tooltip-content] .text-muted-foreground {
+[role="dialog"] .text-muted-foreground:not(.pc-on-navy),
+[role="alertdialog"] .text-muted-foreground:not(.pc-on-navy),
+[role="status"] .text-muted-foreground:not(.pc-on-navy),
+[role="alert"] .text-muted-foreground:not(.pc-on-navy),
+[data-sonner-toast] .text-muted-foreground:not(.pc-on-navy),
+[data-radix-tooltip-content] .text-muted-foreground:not(.pc-on-navy) {
   color: color-mix(in oklab, var(--foreground) 82%, transparent) !important;
+}
+
+/* Texto sobre superfícies navy fixas (heros de diálogo): sempre claro,
+   independente do tema — não pode herdar o muted do tema claro. */
+.pc-on-navy,
+[role="dialog"] .pc-on-navy,
+[role="alertdialog"] .pc-on-navy {
+  color: rgb(238 242 250 / 0.95) !important;
 }
 
 /* 13) Garante que qualquer texto ≤ 13px em superfícies dark nunca caia
        abaixo de 70% de contraste do foreground. */
-.dark [role="dialog"] p,
-.dark [role="dialog"] li,
+.dark [role="dialog"] p:not(.pc-on-navy),
+.dark [role="dialog"] li:not(.pc-on-navy),
 .dark [role="alertdialog"] p,
 .dark [role="alertdialog"] li,
 .dark [data-sonner-toast] p,
