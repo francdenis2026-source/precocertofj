@@ -225,7 +225,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
               </span>
             }
           />
-          <ul className={`${BODY_GAP} space-y-2`}>
+          <ul className={`${BODY_GAP} space-y-2 [&>li:nth-child(n+2)]:hidden sm:[&>li:nth-child(n+2)]:flex`}>
             {QUOTES.map((t) => (
               <li key={t.name} className="flex min-w-0 gap-2.5">
                 <span
@@ -250,7 +250,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
 
         <section
           aria-label="Números da plataforma"
-          className="mt-auto grid grid-cols-3 gap-3 border-t pt-2.5"
+          className="mt-auto hidden grid-cols-3 gap-3 border-t pt-2.5 lg:grid"
           style={{ borderColor: line }}
         >
           {[
