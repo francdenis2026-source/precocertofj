@@ -555,8 +555,8 @@ export function PriceSearchBar({
         <div className="relative flex-1" ref={containerRef}>
           <Search
             aria-hidden="true"
-            strokeWidth={2}
-            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-navy/60 dark:text-brand-gold/70"
+            strokeWidth={2.25}
+            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-navy dark:text-brand-gold"
           />
           <input
             ref={inputRef}
