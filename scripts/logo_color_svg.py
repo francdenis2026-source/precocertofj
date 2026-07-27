@@ -36,16 +36,17 @@ def luminance(rgb: tuple[int, int, int]) -> float:
 
 
 def lighten_for_dark(rgb: tuple[int, int, int]) -> tuple[int, int, int]:
-    """Garante que a tinta tenha luminância suficiente sobre fundo navy."""
+    """Clareia apenas tintas escuras demais para o fundo navy, preservando a marca."""
     lum = luminance(rgb)
-    if lum >= 0.55:
+    if lum >= 0.32:
         return rgb
     r, g, b = (c / 255 for c in rgb)
     h, l, s = colorsys.rgb_to_hls(r, g, b)
-    if s < 0.12:  # cinza/preto -> quase branco
-        target = 0.94
-    else:
-        target = max(0.66, min(0.82, l + 0.42))
+    if s < 0.12:  # preto/cinza vira quase branco
+        target = 0.93
+    else:  # cores saturadas apenas ganham brilho
+        target = max(0.52, min(0.7, l + 0.3))
+
     r2, g2, b2 = colorsys.hls_to_rgb(h, target, min(1.0, s * 1.05))
     return (round(r2 * 255), round(g2 * 255), round(b2 * 255))
 
