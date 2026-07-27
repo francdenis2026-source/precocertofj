@@ -922,7 +922,13 @@ function EstablishmentsPage() {
                         return (
                           <li
                             key={e.id}
-                            className={`${LIST_GRID} group px-3 py-2 transition-colors hover:bg-muted/50 md:px-4`}
+                            className={cn(
+                              LIST_GRID,
+                              "group px-3 py-2 transition-colors md:px-4",
+                              idx === 0
+                                ? "bg-[color-mix(in_oklab,var(--pc-gold-ink)_10%,transparent)] border-l-2 border-l-[var(--pc-gold-ink)]"
+                                : "hover:bg-muted/50",
+                            )}
                           >
                             <span className={`text-right font-bold text-foreground/60 ${tc.num}`}>
                               {String(idx + 1).padStart(2, "0")}
