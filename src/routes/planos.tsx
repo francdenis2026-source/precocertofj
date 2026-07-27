@@ -637,12 +637,12 @@ function ComparisonMatrix({
 
   return (
     <div className="overflow-x-auto rounded-xl border border-border bg-card shadow-elev-1">
-      <table className="w-full min-w-[640px] border-collapse text-left">
+      <table className="w-full min-w-[580px] border-collapse text-left">
         <thead>
           <tr className="border-b border-border">
             <th
               scope="col"
-              className="sticky left-0 z-[1] w-[38%] bg-card px-4 py-3 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground"
+              className="sticky left-0 z-[1] w-[34%] bg-card px-4 py-3.5 text-[11.5px] font-bold uppercase tracking-[0.14em] text-muted-foreground"
             >
               Recursos
             </th>
@@ -653,7 +653,7 @@ function ComparisonMatrix({
                   key={p.id}
                   scope="col"
                   className={dsx(
-                    "px-3 py-3 text-center align-top",
+                    "px-3 py-3.5 text-center align-top",
                     isRec && "relative bg-brand-gold/[0.08]",
                   )}
                 >
@@ -668,10 +668,10 @@ function ComparisonMatrix({
                       <Sparkles className="h-2.5 w-2.5" aria-hidden /> Ideal
                     </span>
                   )}
-                  <div className="font-display text-[13.5px] font-semibold text-foreground">
+                  <div className="font-display text-[14px] font-semibold text-foreground">
                     {p.name}
                   </div>
-                  <div className="mt-0.5 text-[11px] text-muted-foreground">
+                  <div className="mt-0.5 text-[11.5px] text-muted-foreground">
                     {p.price_cents === 0
                       ? "Grátis"
                       : `${centsToBRL(p.price_cents)}${
@@ -693,7 +693,7 @@ function ComparisonMatrix({
             >
               <th
                 scope="row"
-                className="sticky left-0 z-[1] whitespace-normal bg-inherit px-4 py-2.5 text-left text-[12.5px] font-medium text-foreground"
+                className="sticky left-0 z-[1] whitespace-normal bg-inherit px-4 py-3 text-left text-[13px] font-medium text-foreground"
               >
                 {row.label}
               </th>
