@@ -792,7 +792,7 @@ function PillarLink({
     <Link
       to={to}
       data-reading-card
-      className="flex min-h-[54px] flex-col items-center justify-center gap-1 rounded-xl border px-1 py-2 text-center pc-tile focus-visible:outline-none focus-visible:ring-2"
+      className={TILE}
       style={{
         background: emphasis ? "var(--pc-home-gold)" : "var(--pc-home-onhero-glass)",
         borderColor: emphasis
@@ -803,13 +803,13 @@ function PillarLink({
       }}
     >
       <Icon
-        className="h-4 w-4"
+        className={TILE_ICON}
         style={{ color: emphasis ? "var(--pc-home-navy)" : "var(--pc-home-onhero-gold)" }}
-        strokeWidth={2.2}
+        strokeWidth={2.1}
         aria-hidden
       />
       <span
-        className="w-full truncate text-[11.5px] font-semibold"
+        className={TILE_LABEL}
         style={{ color: emphasis ? "var(--pc-home-navy)" : "var(--pc-home-onhero-fg-90)" }}
       >
         {label}
