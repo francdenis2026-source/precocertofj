@@ -1,4 +1,4 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { useNavigate, useRouterState } from "@tanstack/react-router";
 import { ds, dsx } from "@/lib/ds";
 
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
