@@ -252,20 +252,6 @@ function AdminPage() {
 
 
 
-
-
-  const kpis = useMemo(() => {
-    const active = state.subscribers.filter((s) => s.status === "active" || s.status === "trial").length;
-    const mrr = state.subscribers
-      .filter((s) => s.status === "active")
-      .reduce((acc, s) => {
-        const plan = dbPlans.find((p) => p.id === s.planId);
-        if (!plan || plan.days === 0) return acc;
-        return acc + (plan.price / plan.days) * 30;
-      }, 0);
-    return { active, mrr, total: state.subscribers.length, emails: state.emails.length };
-  }, [state, dbPlans]);
-
   const handleSignOut = async () => {
     setSigningOut(true);
     try {
