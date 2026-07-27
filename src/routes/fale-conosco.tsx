@@ -223,39 +223,86 @@ function FaleConoscoPage() {
               </p>
               <button
                 type="submit"
-                disabled={!canSubmit}
-                className="btn-gold btn-state-safe inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-[14px] font-bold shadow-sm transition active:scale-[0.98] disabled:cursor-not-allowed"
+                disabled={!canSubmit || sending}
+                aria-busy={sending}
+                className="btn-gold btn-state-safe inline-flex shrink-0 items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-[14px] font-bold shadow-sm transition active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-70"
               >
-                <Send className="h-3.5 w-3.5" />
-                Enviar
+                {sending ? (
+                  <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                ) : (
+                  <Send className="h-3.5 w-3.5" />
+                )}
+                {sending ? "Enviando…" : "Enviar"}
               </button>
             </div>
           </form>
 
-          {/* Canal direto + privacidade */}
+          {/* Atalhos de contato + privacidade */}
           <aside className="grid gap-3 sm:grid-cols-2 md:grid-cols-1">
             <div className="rounded-xl border border-border bg-card p-3.5 shadow-sm">
               <div className="flex items-center gap-1.5 text-[10.5px] font-bold uppercase tracking-[0.18em] text-brand-gold">
                 <Mail className="h-3.5 w-3.5" />
-                Canal direto
+                Atalhos de contato
               </div>
-              <div className="mt-2 flex items-center justify-between gap-2 rounded-lg border border-border bg-muted/40 px-2.5 py-2">
-                <a
-                  href={`mailto:${CONTACT_EMAIL}`}
-                  className="truncate text-[13px] font-semibold text-foreground hover:text-brand-gold"
-                >
-                  {CONTACT_EMAIL}
-                </a>
-                <button
-                  type="button"
-                  onClick={onCopyEmail}
-                  className="inline-flex shrink-0 items-center gap-1 rounded-md border border-border bg-card px-2 py-1 text-[11.5px] font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
-                  aria-label="Copiar e-mail"
-                >
-                  {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-                  {copied ? "Copiado" : "Copiar"}
-                </button>
-              </div>
+
+              <ul className="mt-2 grid gap-1.5">
+                <li className="flex items-center justify-between gap-2 rounded-lg border border-border bg-muted/40 px-2.5 py-1.5">
+                  <a
+                    href={`mailto:${CONTACT_EMAIL}`}
+                    className="flex min-w-0 items-center gap-1.5 text-[13px] font-semibold text-foreground hover:text-brand-gold"
+                  >
+                    <Mail className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                    <span className="truncate">{CONTACT_EMAIL}</span>
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => copy("email", CONTACT_EMAIL, "E-mail")}
+                    className="inline-flex shrink-0 items-center gap-1 rounded-md border border-border bg-card px-2 py-1 text-[11.5px] font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
+                    aria-label="Copiar e-mail"
+                  >
+                    {copiedKey === "email" ? (
+                      <Check className="h-3 w-3" />
+                    ) : (
+                      <Copy className="h-3 w-3" />
+                    )}
+                    <span className="hidden sm:inline">
+                      {copiedKey === "email" ? "Copiado" : "Copiar"}
+                    </span>
+                  </button>
+                </li>
+
+                <li className="flex items-center justify-between gap-2 rounded-lg border border-border bg-muted/40 px-2.5 py-1.5">
+                  <a
+                    href={`https://wa.me/${CONTACT_PHONE_RAW}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex min-w-0 items-center gap-1.5 text-[13px] font-semibold text-foreground hover:text-brand-gold"
+                  >
+                    <Phone className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                    <span className="truncate">{CONTACT_PHONE}</span>
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => copy("phone", CONTACT_PHONE, "Telefone")}
+                    className="inline-flex shrink-0 items-center gap-1 rounded-md border border-border bg-card px-2 py-1 text-[11.5px] font-semibold text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
+                    aria-label="Copiar telefone"
+                  >
+                    {copiedKey === "phone" ? (
+                      <Check className="h-3 w-3" />
+                    ) : (
+                      <Copy className="h-3 w-3" />
+                    )}
+                    <span className="hidden sm:inline">
+                      {copiedKey === "phone" ? "Copiado" : "Copiar"}
+                    </span>
+                  </button>
+                </li>
+
+                <li className="flex items-center gap-1.5 rounded-lg border border-dashed border-border px-2.5 py-1.5 text-[12.5px] font-medium text-muted-foreground">
+                  <Clock className="h-3.5 w-3.5 shrink-0" />
+                  <span className="truncate">{CONTACT_HOURS}</span>
+                </li>
+              </ul>
             </div>
 
             <div className="rounded-xl border border-brand-gold/35 bg-brand-gold/10 p-3.5">
@@ -272,6 +319,7 @@ function FaleConoscoPage() {
               </p>
             </div>
           </aside>
+
         </div>
       </main>
 
