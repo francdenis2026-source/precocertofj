@@ -12,7 +12,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
-import { SiteFooter } from "@/components/layout/SiteFooter";
+import { IsolatedPage } from "@/components/layout/IsolatedPage";
 import { dsx } from "@/lib/ds";
 import { toast } from "sonner";
 
