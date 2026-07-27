@@ -1135,12 +1135,17 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
       </div>
 
       {/* Price hero */}
-      <div className="mt-1.5 border-y border-accent/25 bg-background/40 px-2.5 py-2 sm:px-3">
-        <span className="mb-0.5 block font-sans text-[11px] font-semibold uppercase leading-none tracking-[0.2em] text-muted-foreground">
+      <div className={cn(
+        "mt-1.5 border-y px-2.5 py-2 sm:px-3",
+        rank === 1
+          ? "border-[var(--pc-gold-ink)]/45 bg-transparent"
+          : "border-accent/25 bg-background/40",
+      )}>
+        <span className={cn(tc.eyebrow, "mb-0.5 block")}>
           Menor preço
         </span>
         <div className="flex items-baseline justify-between gap-2">
-          <span className="num font-display text-[15px] font-extrabold leading-none tabular-nums text-primary sm:text-[16px]">
+          <span className={cn(tc.dataPrimary, rank === 1 && "text-[var(--pc-gold-ink)]")}>
             {formatBRL(bestPrice)}
           </span>
           {isMulti && avgPrice > 0 && (
