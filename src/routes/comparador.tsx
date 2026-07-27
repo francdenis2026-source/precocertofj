@@ -1178,7 +1178,7 @@ function ComparisonTableRow({
         <p className="font-display text-lg font-extrabold leading-none tabular-nums text-primary">
           {formatBRL(Number(row.min_price))}
         </p>
-        <p className="mt-1 truncate text-[11px] text-muted-foreground" title={row.cheapest_store}>
+        <p className={cn("mt-1 truncate", tc.storeNameTight)} title={row.cheapest_store}>
           {shortenStoreName(row.cheapest_store)}
         </p>
         <div className="mt-1 flex flex-wrap items-center justify-end gap-1">
@@ -1463,7 +1463,7 @@ function ProductCardBase({
                     <span className="h-1 w-1 shrink-0 rounded-full bg-accent/40" />
                   )}
                   <span
-                    className="truncate font-display text-[11px] font-medium leading-none text-foreground sm:text-[11px]"
+                    className={cn("truncate leading-none", tc.storeNameTight)}
                     title={s.store_name}
                   >
                     {shortenStoreName(s.store_name)}
