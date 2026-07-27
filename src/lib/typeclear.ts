@@ -62,6 +62,10 @@ export const tc = {
   num: `font-mono ${fluid(13, 14.5)} leading-[1.2] tabular-nums`,
   /** Selo minúsculo. */
   tag: `${fluid(11, 12)} font-bold uppercase leading-none tracking-[0.12em]`,
+  /** Nome de estabelecimento em destaque — serif editorial em ouro. */
+  storeName: `font-serif ${fluid(12.5, 14)} font-medium italic leading-[1.25] tracking-[-0.005em] text-[var(--pc-gold-ink)]`,
+  /** Nome de estabelecimento compacto (matrizes/tabelas densas). */
+  storeNameTight: `font-serif ${fluid(11, 12.5)} font-medium italic leading-[1.2] tracking-[-0.005em] text-[var(--pc-gold-ink)]`,
 } as const;
 
 export type TcToken = keyof typeof tc;
