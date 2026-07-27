@@ -111,7 +111,7 @@ export function MetricSpotlightDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent
-        className="flex max-h-[88svh] w-[calc(100vw-1.5rem)] max-w-[30rem] flex-col gap-0 overflow-hidden rounded-2xl border border-border bg-card p-0 shadow-2xl [&>button:last-child]:right-3 [&>button:last-child]:top-3 [&>button:last-child]:text-white/85 [&>button:last-child]:hover:bg-white/15 [&>button:last-child]:hover:text-white"
+        className="flex max-h-[88svh] w-[calc(100vw-1.5rem)] max-w-[30rem] flex-col gap-0 overflow-hidden rounded-2xl border border-border bg-card p-0 shadow-2xl [&>button:last-child]:right-3 [&>button:last-child]:top-3 [&>button:last-child]:!text-white/85 [&>button:last-child]:hover:bg-white/15 [&>button:last-child]:hover:text-white"
       >
         {/* ===== HERO compacto: faixa navy de 2 linhas ===== */}
         <div
