@@ -53,6 +53,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ProdutoSlugRouteImport } from './routes/produto.$slug'
 import { Route as ProdutoIdRouteImport } from './routes/produto.$id'
 import { Route as ProdutoPublicoSlugRouteImport } from './routes/produto-publico.$slug'
+import { Route as OndeComprarProdutoRouteImport } from './routes/onde-comprar_.$produto'
 import { Route as LojaIdRouteImport } from './routes/loja.$id'
 import { Route as ListaProntaRouteImport } from './routes/lista_.pronta'
 import { Route as ListaNovaRouteImport } from './routes/lista_.nova'
@@ -323,6 +324,11 @@ const ProdutoIdRoute = ProdutoIdRouteImport.update({
 const ProdutoPublicoSlugRoute = ProdutoPublicoSlugRouteImport.update({
   id: '/produto-publico/$slug',
   path: '/produto-publico/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const OndeComprarProdutoRoute = OndeComprarProdutoRouteImport.update({
+  id: '/onde-comprar_/$produto',
+  path: '/onde-comprar/$produto',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LojaIdRoute = LojaIdRouteImport.update({
@@ -670,6 +676,7 @@ export interface FileRoutesByFullPath {
   '/lista/nova': typeof ListaNovaRoute
   '/lista/pronta': typeof ListaProntaRoute
   '/loja/$id': typeof LojaIdRouteWithChildren
+  '/onde-comprar/$produto': typeof OndeComprarProdutoRoute
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
   '/produto/$slug': typeof ProdutoSlugRoute
@@ -767,6 +774,7 @@ export interface FileRoutesByTo {
   '/lista/nova': typeof ListaNovaRoute
   '/lista/pronta': typeof ListaProntaRoute
   '/loja/$id': typeof LojaIdRouteWithChildren
+  '/onde-comprar/$produto': typeof OndeComprarProdutoRoute
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
   '/produto/$slug': typeof ProdutoSlugRoute
@@ -865,6 +873,7 @@ export interface FileRoutesById {
   '/lista_/nova': typeof ListaNovaRoute
   '/lista_/pronta': typeof ListaProntaRoute
   '/loja/$id': typeof LojaIdRouteWithChildren
+  '/onde-comprar_/$produto': typeof OndeComprarProdutoRoute
   '/produto-publico/$slug': typeof ProdutoPublicoSlugRoute
   '/produto/$id': typeof ProdutoIdRoute
   '/produto/$slug': typeof ProdutoSlugRoute
@@ -964,6 +973,7 @@ export interface FileRouteTypes {
     | '/lista/nova'
     | '/lista/pronta'
     | '/loja/$id'
+    | '/onde-comprar/$produto'
     | '/produto-publico/$slug'
     | '/produto/$id'
     | '/produto/$slug'
@@ -1061,6 +1071,7 @@ export interface FileRouteTypes {
     | '/lista/nova'
     | '/lista/pronta'
     | '/loja/$id'
+    | '/onde-comprar/$produto'
     | '/produto-publico/$slug'
     | '/produto/$id'
     | '/produto/$slug'
@@ -1158,6 +1169,7 @@ export interface FileRouteTypes {
     | '/lista_/nova'
     | '/lista_/pronta'
     | '/loja/$id'
+    | '/onde-comprar_/$produto'
     | '/produto-publico/$slug'
     | '/produto/$id'
     | '/produto/$slug'
@@ -1252,6 +1264,7 @@ export interface RootRouteChildren {
   ListaNovaRoute: typeof ListaNovaRoute
   ListaProntaRoute: typeof ListaProntaRoute
   LojaIdRoute: typeof LojaIdRouteWithChildren
+  OndeComprarProdutoRoute: typeof OndeComprarProdutoRoute
   ProdutoPublicoSlugRoute: typeof ProdutoPublicoSlugRoute
   ProdutoIdRoute: typeof ProdutoIdRoute
   ProdutoSlugRoute: typeof ProdutoSlugRoute
@@ -1572,6 +1585,13 @@ declare module '@tanstack/react-router' {
       path: '/produto-publico/$slug'
       fullPath: '/produto-publico/$slug'
       preLoaderRoute: typeof ProdutoPublicoSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/onde-comprar_/$produto': {
+      id: '/onde-comprar_/$produto'
+      path: '/onde-comprar/$produto'
+      fullPath: '/onde-comprar/$produto'
+      preLoaderRoute: typeof OndeComprarProdutoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/loja/$id': {
@@ -2074,6 +2094,7 @@ const rootRouteChildren: RootRouteChildren = {
   ListaNovaRoute: ListaNovaRoute,
   ListaProntaRoute: ListaProntaRoute,
   LojaIdRoute: LojaIdRouteWithChildren,
+  OndeComprarProdutoRoute: OndeComprarProdutoRoute,
   ProdutoPublicoSlugRoute: ProdutoPublicoSlugRoute,
   ProdutoIdRoute: ProdutoIdRoute,
   ProdutoSlugRoute: ProdutoSlugRoute,

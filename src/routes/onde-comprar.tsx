@@ -188,7 +188,13 @@ function OndeComprarPage() {
               <li key={p.productKey} className="rounded-xl border border-border/70 bg-card p-2.5">
                 <div className="mb-1.5 flex items-start gap-2">
                   <div className="min-w-0 flex-1">
-                    <p className={cn(tc.itemTitle, "truncate")}>{p.productName}</p>
+                    <Link
+                      to="/onde-comprar/$produto"
+                      params={{ produto: encodeURIComponent(p.productKey) }}
+                      className={cn(tc.itemTitle, "block truncate hover:underline")}
+                    >
+                      {p.productName}
+                    </Link>
                     <p className={cn(tc.meta)}>
                       {p.storeCount} {p.storeCount === 1 ? "loja" : "lojas"} • média {brl(p.avgPrice)}
                     </p>
