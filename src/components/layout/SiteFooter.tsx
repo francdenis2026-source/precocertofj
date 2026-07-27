@@ -67,7 +67,7 @@ export function SiteFooter() {
         {links.length > 0 && (
           <nav
             aria-label="Links do rodapé"
-            className="col-span-2 flex min-w-0 items-center gap-x-1 sm:col-auto"
+            className="flex min-w-0 items-center gap-x-1"
           >
             {links.map((l, i) => (
               <span key={l.to} className="inline-flex items-center">
@@ -84,7 +84,7 @@ export function SiteFooter() {
           </nav>
         )}
 
-        <span className="col-span-2 whitespace-nowrap font-mono text-[11.5px] text-muted-foreground sm:col-auto">
+        <span className="justify-self-end whitespace-nowrap font-mono text-[11.5px] text-muted-foreground">
           &lt;dev&gt; <span className="text-foreground">Franc D&apos;nis</span>
         </span>
       </div>
