@@ -784,16 +784,18 @@ function HomePage() {
                 { to: "/fale-conosco", label: "Fale conosco" },
                 { to: "/privacidade", label: "Privacidade" },
               ].map((l) => (
-                <Link
+                <button
                   key={l.to}
-                  to={l.to}
-                  className="pc-nav-link rounded-md px-2 py-1 text-[12.5px] font-semibold uppercase tracking-[0.1em] outline-none sm:text-[13px]"
+                  type="button"
+                  onClick={() => navigate({ to: l.to })}
+                  className="pc-nav-link cursor-pointer rounded-md border-0 bg-transparent px-2 py-1 text-[12.5px] font-semibold uppercase tracking-[0.1em] outline-none sm:text-[13px]"
                   style={{ color: "var(--pc-home-onhero-fg-85)" }}
                 >
                   {l.label}
-                </Link>
+                </button>
 
               ))}
+
             </nav>
 
           </div>
