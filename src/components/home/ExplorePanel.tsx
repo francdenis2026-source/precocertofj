@@ -129,36 +129,29 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
     <div className="mx-auto grid w-full max-w-6xl gap-x-6 gap-y-4 lg:grid-cols-12">
       {/* ---------- Últimos preços ---------- */}
       <section aria-labelledby="explore-prices" className="min-w-0 lg:col-span-7">
-        <header
-          className="flex items-baseline justify-between gap-3 border-b pb-1.5"
-          style={{ borderColor: line }}
-        >
-          <div className="flex min-w-0 items-baseline gap-2.5">
-            <Kicker>Ao vivo</Kicker>
-            <h3
-              id="explore-prices"
-              className={`${serif} ${tc.h2} truncate`}
-              style={{ color: fg }}
+        <SectionHead
+          id="explore-prices"
+          kicker="Ao vivo"
+          title="Preços conferidos"
+          aside={
+            <Link
+              to="/buscar"
+              onClick={onNavigate}
+              className={`${tc.chip} inline-flex shrink-0 items-center gap-1 transition-opacity hover:opacity-80`}
+              style={{ color: gold }}
             >
-              Preços conferidos
-            </h3>
-          </div>
-          <Link
-            to="/buscar"
-            onClick={onNavigate}
-            className={`${tc.chip} inline-flex shrink-0 items-center gap-1 transition-opacity hover:opacity-80`}
-            style={{ color: gold }}
-          >
-            Ver mais <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
-          </Link>
-        </header>
+              Ver mais <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
+            </Link>
+          }
+        />
 
-        <p className={`${tc.meta} mt-1`} style={{ color: fg70 }}>
+        <p className={`${tc.meta} ${BODY_GAP}`} style={{ color: fg70 }}>
           {live?.lastUpdate ? `Última atualização ${relative(live.lastUpdate)}` : "Coletas recentes em Feijó"}
           {typeof live?.checkedToday === "number" && live.checkedToday > 0
             ? ` · ${live.checkedToday} hoje`
             : ""}
         </p>
+
 
         <ul className="mt-1.5 divide-y" style={{ borderColor: line }}>
           {items.length === 0
