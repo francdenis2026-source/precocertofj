@@ -207,10 +207,11 @@ function NeighborhoodsPage() {
   };
 
   return (
-    <PageShell>
-      <PageShellContent>
+    <PageShell hideFooter>
+      <PageShellContent className="flex h-[100dvh] flex-col overflow-hidden !pb-0">
         {/* Cabeçalho editorial compacto */}
-        <header className="border-b border-border/70 bg-card/60">
+        <header className="shrink-0 border-b border-border/70 bg-card/60">
+
           <div className="mx-auto grid w-full max-w-6xl grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1 px-3 py-2 sm:items-end md:px-6 md:py-2.5">
             <div className="flex min-w-0 items-center gap-2 sm:items-end sm:gap-3">
               <HomeBrandLink showWordmark={false} className="shrink-0 sm:mb-0.5" />
