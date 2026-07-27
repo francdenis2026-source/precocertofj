@@ -116,3 +116,48 @@ export function FadeSwap({
     </div>
   );
 }
+
+/**
+ * LocationsSkeleton — placeholder para a página /onde-comprar
+ * (busca + chips de cidade/bairro + lista de ofertas por loja).
+ * Reproduz o rhythm real do layout para evitar CLS.
+ */
+export function LocationsSkeleton({
+  rows = 4,
+  className,
+}: {
+  rows?: number;
+  className?: string;
+}) {
+  return (
+    <div role="status" aria-label="Carregando locais e ofertas" className={cn("space-y-2", className)}>
+      {Array.from({ length: rows }).map((_, i) => (
+        <div
+          key={i}
+          className="animate-pulse rounded-xl border border-border/70 bg-card p-2.5"
+          style={{ opacity: 1 - i * 0.08 }}
+        >
+          <div className="mb-2 flex items-start gap-2">
+            <div className="min-w-0 flex-1 space-y-1.5">
+              <div className="h-3.5 w-3/5 rounded bg-muted" />
+              <div className="h-2.5 w-2/5 rounded bg-muted/70" />
+            </div>
+            <div className="h-5 w-24 rounded-full bg-emerald-500/15" />
+          </div>
+          <div className="grid gap-1 sm:grid-cols-2">
+            {Array.from({ length: 4 }).map((_, j) => (
+              <div key={j} className="flex items-center gap-2 rounded-lg border border-border/60 px-2 py-1.5">
+                <div className="h-3.5 w-3.5 shrink-0 rounded bg-muted" />
+                <div className="flex-1 space-y-1">
+                  <div className="h-2.5 w-2/3 rounded bg-muted" />
+                  <div className="h-2 w-1/2 rounded bg-muted/70" />
+                </div>
+                <div className="h-3.5 w-14 rounded bg-muted" />
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
