@@ -372,7 +372,7 @@ function NeighborhoodsPage() {
           )}
 
           {active && (
-            <div className="grid gap-3 min-w-0 md:grid-cols-[16rem_minmax(0,1fr)] md:items-start">
+            <div className="grid gap-2 min-w-0 md:gap-3 md:grid-cols-[16rem_minmax(0,1fr)] md:items-start">
               {/* Índice de bairros */}
               <nav
                 aria-label="Bairros"
