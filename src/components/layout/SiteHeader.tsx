@@ -1,8 +1,9 @@
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { LogOut, User as UserIcon, Key, Receipt, LayoutDashboard, ChevronDown, Search, Ticket, Menu } from "lucide-react";
+import { LogOut, User as UserIcon, Key, Receipt, LayoutDashboard, ChevronDown, Search, Ticket, Menu, ShieldCheck } from "lucide-react";
 import { ds, dsx } from "@/lib/ds";
 import { useMyProfile } from "@/hooks/useMyProfile";
+import { useMyRoles } from "@/hooks/useMyRoles";
 import { useSignOut } from "@/hooks/use-sign-out";
 import {
   DropdownMenu,
@@ -49,6 +50,8 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
   // Na homepage não há "tela anterior" dentro do app: o Voltar não faz sentido.
   const canShowBack = showBack && pathname !== "/";
   const { session, firstName, initials, loading } = useMyProfile();
+  // Contas internas (admin) precisam voltar ao console sem passar pelo /login.
+  const { isAdmin } = useMyRoles();
   const [q, setQ] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
   // Busca compacta no header aparece após o usuário rolar o hero (apenas overlay/landing).
@@ -273,6 +276,14 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
                   {firstName ? `Olá, ${firstName}` : "Minha conta"}
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                {isAdmin && (
+                  <>
+                    <DropdownMenuItem onSelect={() => navigate({ to: "/admin" })}>
+                      <ShieldCheck className="mr-2 h-4 w-4" /> Console administrativo
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                  </>
+                )}
                 <DropdownMenuItem onSelect={() => navigate({ to: "/app" })}>
                   <LayoutDashboard className="mr-2 h-4 w-4" /> Meu painel
                 </DropdownMenuItem>

@@ -4024,3 +4024,12 @@ body::-webkit-scrollbar,
   outline-offset: 2px;
   border-radius: 0.5rem;
 }
+
+/* ============================================================
+ * Console administrativo: superfície opaca.
+ * A foto global de fundo (body::before) aparecia "cortada" durante o
+ * carregamento do painel; no escopo admin ela é desativada por completo.
+ * ============================================================ */
+body:has(.admin-scope)::before {
+  display: none;
+}

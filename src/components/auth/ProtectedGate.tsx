@@ -47,13 +47,26 @@ export function ProtectedGate({ children }: { children: React.ReactNode }) {
     // usuário tentar novamente sem entrar em loop com o /login.
     if (accountQuery.isError) return;
     if (!acc) {
-      // Sessão existe mas o perfil sumiu: encerra a sessão órfã antes de
-      // redirecionar para evitar loop com o auto-redirect do /login.
-      void supabase.auth.signOut().finally(() => {
+      // Sessão válida sem perfil de cliente: pode ser uma conta interna
+      // (administrador). Nunca encerrar a sessão aqui — apenas encaminhar
+      // para a área correta.
+      void (async () => {
+        const { data: userData } = await supabase.auth.getUser();
+        if (userData.user) {
+          const { data: isAdmin } = await supabase.rpc("has_role", {
+            _user_id: userData.user.id,
+            _role: "admin",
+          });
+          if (isAdmin) {
+            navigate({ to: "/admin", replace: true });
+            return;
+          }
+        }
         navigate({ to: "/login", replace: true });
-      });
+      })();
       return;
     }
+
     if (acc.status === "expired") {
       navigate({ to: "/assinar", replace: true });
     }
