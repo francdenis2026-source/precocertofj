@@ -131,6 +131,8 @@ function SearchPage() {
     ? (search.sort as UrlSort)
     : "cheapest";
   const categoryValue = (search.categoria ?? "").trim() || null;
+  const focusProduct = (search.product ?? "").trim() || null;
+  const focusMarket = (search.market ?? "").trim() || null;
   const activeFilterCount =
     (mode === "loose" ? 1 : 0) +
     (pureOnly ? 0 : 1) +
@@ -166,6 +168,25 @@ function SearchPage() {
     },
     [navigate],
   );
+  const setFocusUrl = useCallback(
+    (product: string | null, market: string | null) => {
+      navigate({
+        search: (prev: Record<string, unknown>) => {
+          const s: Record<string, unknown> = {
+            ...prev,
+            product: product ?? "",
+            market: market ?? "",
+          };
+          if (!product) delete s.product;
+          if (!market) delete s.market;
+          return s;
+        },
+        replace: true,
+      });
+    },
+    [navigate],
+  );
+
 
 
   const setMinPrice = (next: string) =>
