@@ -25,7 +25,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import {
   KeyRound, Plus, Copy, Trash2, Pencil, Ban, RefreshCw, Users,
-  Clock, Search, ShieldOff,
+  Clock, Search, ShieldOff, Download, FileDown,
 } from "lucide-react";
 
 export const Route = createFileRoute("/admin_/acessos-temporarios")({
