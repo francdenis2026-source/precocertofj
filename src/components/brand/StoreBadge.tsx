@@ -162,12 +162,13 @@ export function StoreBadge({
       )}
 
       style={{ backgroundColor: color, color: readableTextOn(color) }}
-      aria-hidden
-      title={name}
+      aria-label={name}
+      role="img"
     >
       {initials(name)}
     </span>
   );
+
 
   // Tooltips foram removidos do sistema — o badge nunca mais é envolvido em Tooltip.
   // As informações de nome/distância/menor preço continuam disponíveis via aria-label
