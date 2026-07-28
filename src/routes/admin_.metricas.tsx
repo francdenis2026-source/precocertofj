@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AdminTabs } from "@/components/admin/AdminTabs";
+import { validateTabSearch } from "@/components/admin/adminTabs.utils";
 import { AnalyticsPage } from "./admin_.analytics";
 import { AdminReportsGate } from "./admin_.reports";
 import { ConversoesPage } from "./admin_.conversoes";

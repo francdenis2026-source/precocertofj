@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AdminTabs } from "@/components/admin/AdminTabs";
+import { validateTabSearch } from "@/components/admin/adminTabs.utils";
 import { PromoCodesPage } from "./admin_.promocoes-codigos";
 import { CupomPage } from "./admin_.cupom";
 import { CupomLotePage } from "./admin_.cupom-lote";
