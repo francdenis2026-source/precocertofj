@@ -5,6 +5,8 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireAdmin } from "@/lib/require-admin";
 
+type JsonValue = string | number | boolean | null | { [k: string]: JsonValue } | JsonValue[];
+
 export type BasketAuditEntry = {
   id: string;
   action: string;
@@ -12,14 +14,14 @@ export type BasketAuditEntry = {
   targetId: string | null;
   adminUserId: string;
   adminEmail: string | null;
-  before: unknown;
-  after: unknown;
+  before: JsonValue;
+  after: JsonValue;
   notes: string | null;
   createdAt: string;
 };
 
 export type BasketAuditFilters = {
-  action: string | null; // ex.: "basket_set.create" ou null (todas)
+  action: string | null;
   limit: number;
 };
 
