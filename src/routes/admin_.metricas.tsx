@@ -26,21 +26,17 @@ import { AdminOnly } from "@/components/auth/AdminOnly";
 
 type MetricasTab = "metricas" | "analytics" | "relatorios" | "conversoes";
 const METRICAS_TABS = [
-  { key: "metricas", label: "Métricas" },
-  { key: "analytics", label: "Analytics" },
-  { key: "relatorios", label: "Relatórios" },
-  { key: "conversoes", label: "Conversões" },
+  { key: "metricas" as const, label: "Métricas" },
+  { key: "analytics" as const, label: "Analytics" },
+  { key: "relatorios" as const, label: "Relatórios" },
+  { key: "conversoes" as const, label: "Conversões" },
 ];
 
 export const Route = createFileRoute("/admin_/metricas")({
   ssr: false,
   beforeLoad: adminBeforeLoad,
-  validateSearch: (s: Record<string, unknown>): { tab: MetricasTab } => {
-    const t = String(s.tab ?? "metricas");
-    const tab: MetricasTab =
-      t === "analytics" || t === "relatorios" || t === "conversoes" ? t : "metricas";
-    return { tab };
-  },
+  validateSearch: (s: Record<string, unknown>): { tab: MetricasTab } =>
+    validateTabSearch(s, METRICAS_TABS, "metricas"),
   head: () => ({
     meta: [
       { title: "Métricas por estabelecimento — Admin" },

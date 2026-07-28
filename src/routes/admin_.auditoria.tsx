@@ -39,19 +39,16 @@ import { AdminOnly } from "@/components/auth/AdminOnly";
 
 type AuditoriaTab = "auditoria" | "acessos" | "numeros";
 const AUDIT_TABS = [
-  { key: "auditoria", label: "Auditoria" },
-  { key: "acessos", label: "Acessos" },
-  { key: "numeros", label: "Números" },
+  { key: "auditoria" as const, label: "Auditoria" },
+  { key: "acessos" as const, label: "Acessos" },
+  { key: "numeros" as const, label: "Números" },
 ];
 
 export const Route = createFileRoute("/admin_/auditoria")({
   ssr: false,
   beforeLoad: adminBeforeLoad,
-  validateSearch: (s: Record<string, unknown>): { tab: AuditoriaTab } => {
-    const t = String(s.tab ?? "auditoria");
-    const tab: AuditoriaTab = t === "acessos" || t === "numeros" ? t : "auditoria";
-    return { tab };
-  },
+  validateSearch: (s: Record<string, unknown>): { tab: AuditoriaTab } =>
+    validateTabSearch(s, AUDIT_TABS, "auditoria"),
   head: () => ({
     meta: [
       { title: "Auditoria — Admin — PreçoCerto" },
