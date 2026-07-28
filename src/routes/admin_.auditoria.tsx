@@ -162,10 +162,10 @@ function AuditoriaPage() {
   return (
     <AppShell>
       <PageHeader
-        eyebrow="Painel · Catálogo"
+        eyebrow="Painel · Operação"
         title="Auditoria do catálogo"
         description="Histórico completo de alterações em produtos, fotos e mesclagens."
-        breadcrumbs={[{ label: "Admin", to: "/admin" }, { label: "Auditoria" }]}
+        breadcrumbs={[{ label: "Admin", to: "/admin" }, { label: "Operação", to: "/admin_/operacao" }, { label: "Auditoria" }]}
         icon={<History className="h-5 w-5" />}
         goldRule
         actions={
