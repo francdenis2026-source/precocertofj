@@ -1258,14 +1258,12 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
                 ) : null}
               </div>
               <span
-                className={
-                  "num shrink-0 tabular-nums leading-none " +
-                  (freshness?.stale
-                    ? "font-display text-[11px] text-muted-foreground line-through decoration-destructive/60 sm:text-[11px]"
-                    : isBest
-                      ? "font-display text-[11px] font-semibold text-savings sm:text-[11.5px]"
-                      : "font-display text-[11px] text-muted-foreground sm:text-[11px]")
-                }
+                className={cn(
+                  "pc-price pc-price--sm shrink-0 leading-none",
+                  freshness?.stale && "pc-price--strike",
+                  !freshness?.stale && isBest && "pc-price--savings",
+                  !freshness?.stale && !isBest && "text-muted-foreground",
+                )}
                 title={s.last_seen_at ? formatRelative(s.last_seen_at) : undefined}
               >
                 {formatBRL(Number(s.price))}
