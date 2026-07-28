@@ -228,7 +228,7 @@ function AdminPage() {
       "/admin/gestao",
       "/admin/metricas",
       "/admin/cobertura",
-      "/admin/analytics",
+      "/admin/metricas",
       "/admin/webhooks",
     ];
     const idle =
@@ -2478,12 +2478,12 @@ function EstablishmentsTab() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuLabel>Registro de preços</DropdownMenuLabel>
-              <DropdownMenuItem asChild><Link to="/admin/cupom">Cupom fiscal</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/admin/cupom-lote">Cupons em lote</Link></DropdownMenuItem>
-              <DropdownMenuItem asChild><Link to="/precos">Histórico de preços</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/admin/promocoes" search={{ tab: "cupons" } as never}>Cupom fiscal</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/admin/promocoes" search={{ tab: "cupons-lote" } as never}>Cupons em lote</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/admin/precos" search={{ tab: "historico" } as never}>Histórico de preços</Link></DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuLabel>Curadoria</DropdownMenuLabel>
-              <DropdownMenuItem asChild><Link to="/admin/reports">Reportes de preço</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/admin/metricas" search={{ tab: "relatorios" } as never}>Reportes de preço</Link></DropdownMenuItem>
               <DropdownMenuItem asChild><Link to="/admin/icones-categoria">Ícones de categoria</Link></DropdownMenuItem>
               <DropdownMenuItem asChild><Link to="/admin/ia">Configurações de IA</Link></DropdownMenuItem>
             </DropdownMenuContent>

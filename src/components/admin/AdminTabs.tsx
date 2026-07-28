@@ -33,7 +33,6 @@ export function AdminTabs({ to, items, active, className }: Props) {
             key={item.key}
             to={to}
             search={{ tab: item.key } as never}
-            replace
             className={cn(
               "whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-semibold transition-colors",
               "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",

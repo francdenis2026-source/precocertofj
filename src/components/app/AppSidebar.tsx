@@ -56,6 +56,8 @@ type NavItem = {
   label: string;
   icon: typeof Home;
   exact?: boolean;
+  /** Optional search params to pass to Link (used for consolidated tabbed hubs). */
+  search?: Record<string, string>;
 };
 
 type NavGroup = {
@@ -107,41 +109,41 @@ const adminGroups: readonly NavGroup[] = [
     items: [
       { to: "/admin", label: "Dashboard", icon: Shield, exact: true },
       { to: "/admin/cobertura", label: "Cobertura", icon: Boxes },
-      { to: "/admin/metricas", label: "Estabelecimentos", icon: Store },
-      { to: "/admin/analytics", label: "Analytics", icon: BarChart3 },
+      { to: "/admin/metricas", label: "Estabelecimentos", icon: Store, exact: true },
+      { to: "/admin/metricas", label: "Analytics", icon: BarChart3, search: { tab: "analytics" } },
     ],
   },
   {
     label: "Catálogo",
     items: [
       { to: "/admin/catalogo", label: "Produtos", icon: Database },
-      { to: "/admin/precos", label: "Preços", icon: Tags },
+      { to: "/admin/precos", label: "Preços", icon: Tags, exact: true },
       { to: "/admin/categorizacao", label: "Categorização", icon: Layers3 },
       { to: "/admin/cadastro-foto", label: "Cadastro por foto", icon: Camera },
       { to: "/admin/importacoes", label: "Importações", icon: UploadCloud },
       { to: "/admin/image-jobs", label: "Imagens", icon: ImageIcon },
       { to: "/admin/lote-inserir", label: "Inserção em lote", icon: ReceiptText },
-      { to: "/admin/historico-precos", label: "Histórico de preços", icon: History },
+      { to: "/admin/precos", label: "Histórico de preços", icon: History, search: { tab: "historico" } },
     ],
   },
   {
     label: "Comercial",
     items: [
       { to: "/admin/gestao", label: "Licenças", icon: KeyRound },
-      { to: "/admin/promocoes-codigos", label: "Promoções", icon: TicketPercent },
-      { to: "/admin/promocoes", label: "Cupons", icon: BadgeCheck },
+      { to: "/admin/promocoes", label: "Promoções", icon: TicketPercent, search: { tab: "codigos" } },
+      { to: "/admin/promocoes", label: "Cupons", icon: BadgeCheck, exact: true },
       { to: "/admin/webhooks", label: "Webhooks", icon: Webhook },
-      { to: "/admin/conversoes", label: "Conversões", icon: LineChart },
-      { to: "/admin/cupom", label: "Cupom fiscal", icon: ReceiptText },
+      { to: "/admin/metricas", label: "Conversões", icon: LineChart, search: { tab: "conversoes" } },
+      { to: "/admin/promocoes", label: "Cupom fiscal", icon: ReceiptText, search: { tab: "cupons" } },
     ],
   },
   {
     label: "Clientes",
     items: [
       { to: "/admin/clientes", label: "Clientes", icon: Users },
-      { to: "/admin/auditoria-acessos", label: "Auditoria de acessos", icon: Activity },
-      { to: "/admin/auditoria", label: "Auditoria geral", icon: ClipboardCheck },
-      { to: "/admin/reports", label: "Denúncias", icon: FileText },
+      { to: "/admin/auditoria", label: "Auditoria de acessos", icon: Activity, search: { tab: "acessos" } },
+      { to: "/admin/auditoria", label: "Auditoria geral", icon: ClipboardCheck, exact: true },
+      { to: "/admin/metricas", label: "Denúncias", icon: FileText, search: { tab: "relatorios" } },
     ],
   },
   {
@@ -158,13 +160,27 @@ const adminGroups: readonly NavGroup[] = [
 
 export function AppSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const searchTab = useRouterState({
+    select: (s) => {
+      const raw = (s.location.search as Record<string, unknown> | undefined)?.tab;
+      return typeof raw === "string" ? raw : undefined;
+    },
+  });
   const { signOut, loading: signingOut } = useSignOut();
   const { isAdmin, loading: rolesLoading } = useMyRoles();
   const isAdminArea = pathname.startsWith("/admin");
   const groups = isAdminArea ? (isAdmin ? adminGroups : []) : appGroups;
 
-  const isActive = (to: string, exact?: boolean) =>
-    exact ? pathname === to : pathname === to || pathname.startsWith(to + "/");
+  const isActive = (n: NavItem) => {
+    if (n.search?.tab !== undefined) {
+      return pathname === n.to && searchTab === n.search.tab;
+    }
+    if (n.exact) {
+      // For hubs that also have tabbed siblings, "exact" means the base view (no tab param).
+      return pathname === n.to && !searchTab;
+    }
+    return pathname === n.to || pathname.startsWith(n.to + "/");
+  };
 
   const renderGroup = (group: NavGroup) => (
     <SidebarGroup key={group.label} className="py-2">
@@ -174,9 +190,10 @@ export function AppSidebar() {
       <SidebarGroupContent>
         <SidebarMenu className="gap-0.5">
           {group.items.map((n) => {
-            const active = isActive(n.to, n.exact);
+            const active = isActive(n);
+            const key = `${n.to}?${n.search?.tab ?? ""}#${n.label}`;
             return (
-              <SidebarMenuItem key={n.to}>
+              <SidebarMenuItem key={key}>
                 <SidebarMenuButton
                   asChild
                   isActive={active}
@@ -186,7 +203,11 @@ export function AppSidebar() {
                     active && "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm",
                   )}
                 >
-                  <Link to={n.to} className="flex items-center gap-2.5">
+                  <Link
+                    to={n.to}
+                    search={n.search as never}
+                    className="flex items-center gap-2.5"
+                  >
                     <span
                       className={cn(
                         "grid h-6 w-6 shrink-0 place-items-center rounded-md border border-sidebar-border/60 bg-sidebar-accent/70 text-sidebar-foreground/75",
