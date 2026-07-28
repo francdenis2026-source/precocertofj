@@ -25,7 +25,7 @@ export const Route = createFileRoute("/admin_/cupom-lote")({
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  component: CupomLotePage,
+  component: () => <Navigate to="/admin/promocoes" search={{ tab: "cupons-lote" } as never} replace />,
 });
 
 type Status = "pendente" | "extraindo" | "pronto" | "salvando" | "salvo" | "erro";
