@@ -39,7 +39,7 @@ export const Route = createFileRoute("/admin_/historico-precos")({
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  component: Gate,
+  component: () => <Navigate to="/admin/precos" search={{ tab: "historico" } as never} replace />,
 });
 
 const fmtBRL = (v: number | null | undefined) =>
