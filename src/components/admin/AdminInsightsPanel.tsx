@@ -15,12 +15,23 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Download, FileDown, CalendarRange, Loader2, RefreshCw, TrendingDown, Layers, Activity } from "lucide-react";
+import { Download, FileDown, CalendarRange, Loader2, RefreshCw, TrendingDown, Layers, Activity, Rows2, Rows3 } from "lucide-react";
 import { getAdminInsights, type AdminInsights } from "@/lib/admin-insights.functions";
 import { exportRowsToCSV, exportRowsToPDF, stampedFilename } from "@/lib/export";
 import { Button } from "@/components/ui/button";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
+import {
+  chartMetrics,
+  chartTheme,
+  legendStyle,
+  tickStyle,
+  tooltipItemStyle,
+  tooltipLabelStyle,
+  tooltipStyle,
+  type ChartDensity,
+} from "@/lib/admin-chart-theme";
+import { ChartEmpty, ChartSkeleton } from "@/components/admin/ChartStates";
 
 const brl = (v: number) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 2 });
@@ -31,23 +42,25 @@ function Panel({
   title,
   note,
   onExport,
+  height,
   children,
 }: {
   icon: React.ReactNode;
   title: string;
   note: string;
   onExport: () => void;
+  height: number;
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-w-0 flex-col rounded-xl border border-border/70 bg-card p-2.5">
+    <div className="flex min-w-0 flex-col rounded-xl border border-border/70 bg-card p-2.5 text-card-foreground">
       <div className="mb-1.5 flex items-start gap-2">
-        <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-md bg-primary/10 text-primary">
+        <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-md bg-primary/15 text-primary">
           {icon}
         </span>
         <div className="min-w-0 flex-1">
-          <p className={cn(tc.itemTitle, "truncate")}>{title}</p>
-          <p className={cn(tc.meta, "truncate")}>{note}</p>
+          <p className={cn(tc.itemTitle, "truncate text-card-foreground")}>{title}</p>
+          <p className={cn(tc.meta, "truncate text-muted-foreground/90")}>{note}</p>
         </div>
         <Button
           type="button"
@@ -60,32 +73,11 @@ function Panel({
           <Download className="h-3.5 w-3.5" />
         </Button>
       </div>
-      <div className="h-[148px] w-full">{children}</div>
+      <div style={{ height }} className="w-full">{children}</div>
     </div>
   );
 }
 
-/* Paleta com contraste alto contra o card dark navy do admin.
-   Recharts não herda `color`, então precisa de fill/stroke explícitos. */
-const CHART_GRID = "hsl(var(--foreground) / 0.16)";
-const CHART_AXIS = "hsl(var(--foreground) / 0.80)";
-const CHART_PRIMARY = "hsl(var(--primary))";
-const CHART_ACCENT = "#e0b64d"; /* gold que combina com goldRule */
-const CHART_SOFT = "hsl(var(--foreground) / 0.55)";
-
-const tickStyle = { fontSize: 10, fill: CHART_AXIS } as const;
-
-const tooltipStyle = {
-  fontSize: 12,
-  borderRadius: 10,
-  border: "1px solid hsl(var(--border))",
-  background: "hsl(var(--popover))",
-  color: "hsl(var(--popover-foreground))",
-  boxShadow: "0 8px 24px hsl(0 0% 0% / 0.35)",
-} as const;
-const tooltipLabelStyle = { color: "hsl(var(--popover-foreground))", fontWeight: 600 };
-const tooltipItemStyle = { color: "hsl(var(--popover-foreground))" };
-const legendStyle = { fontSize: 10, color: CHART_AXIS, paddingTop: 2 } as const;
 
 const isoDay = (d: Date) => d.toISOString().slice(0, 10);
 const daysAgo = (n: number) => isoDay(new Date(Date.now() - n * 86_400_000));
@@ -117,6 +109,8 @@ function InsightsSkeleton() {
   );
 }
 
+const DENSITY_KEY = "pc.admin.insights.density";
+
 export function AdminInsightsPanel() {
   const fetchInsights = useServerFn(getAdminInsights);
   const queryClient = useQueryClient();
@@ -124,6 +118,15 @@ export function AdminInsightsPanel() {
   const [to, setTo] = useState(() => isoDay(new Date()));
   const [cats, setCats] = useState<string[]>([]);
   const [exporting, setExporting] = useState(false);
+  const [density, setDensity] = useState<ChartDensity>(() => {
+    if (typeof window === "undefined") return "normal";
+    return (window.localStorage.getItem(DENSITY_KEY) as ChartDensity) ?? "normal";
+  });
+  const metrics = chartMetrics(density);
+  useEffect(() => {
+    if (typeof window !== "undefined") window.localStorage.setItem(DENSITY_KEY, density);
+  }, [density]);
+
 
   /* Alternância rápida de filtros não dispara uma chamada por clique:
      só o último estado (após 320 ms parado) vira uma query. */
@@ -349,11 +352,23 @@ export function AdminInsightsPanel() {
             size="sm"
             variant="ghost"
             className="h-7 px-2"
+            onClick={() => setDensity((d) => (d === "compact" ? "normal" : "compact"))}
+            aria-label={density === "compact" ? "Aumentar altura dos gráficos" : "Reduzir altura dos gráficos"}
+            aria-pressed={density === "compact"}
+            title={density === "compact" ? "Modo compacto ativo" : "Modo compacto"}
+          >
+            {density === "compact" ? <Rows3 className="h-3.5 w-3.5" /> : <Rows2 className="h-3.5 w-3.5" />}
+          </Button>
+          <Button
+            size="sm"
+            variant="ghost"
+            className="h-7 px-2"
             onClick={() => void hardRefresh()}
             aria-label="Atualizar indicadores"
           >
             <RefreshCw className={cn("h-3.5 w-3.5", query.isFetching && "animate-spin")} />
           </Button>
+
         </div>
       </div>
 
@@ -399,7 +414,8 @@ export function AdminInsightsPanel() {
         <Panel
           icon={<TrendingDown className="h-3.5 w-3.5" />}
           title="Tendência de menor preço"
-          note="Média dos menores preços por produto (30 dias)"
+          note={`Média dos menores preços por produto (${data.range.days} dias)`}
+          height={metrics.height}
           onExport={() =>
             exportRowsToCSV(
               stampedFilename("tendencia-menor-preco"),
@@ -413,36 +429,47 @@ export function AdminInsightsPanel() {
             )
           }
         >
-          <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={data.trend} margin={{ top: 6, right: 6, bottom: 0, left: -14 }}>
-              <defs>
-                <linearGradient id="pcTrend" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor={CHART_PRIMARY} stopOpacity={0.55} />
-                  <stop offset="100%" stopColor={CHART_PRIMARY} stopOpacity={0.04} />
-                </linearGradient>
-              </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID} vertical={false} />
-              <XAxis dataKey="day" tickFormatter={shortDay} tick={tickStyle} tickLine={false} axisLine={{ stroke: CHART_GRID }} minTickGap={18} />
-              <YAxis tick={tickStyle} tickLine={false} axisLine={false} width={52} tickFormatter={(v) => brl(Number(v))} />
-              <Tooltip
-                contentStyle={tooltipStyle}
-                labelStyle={tooltipLabelStyle}
-                itemStyle={tooltipItemStyle}
-                cursor={{ stroke: CHART_ACCENT, strokeWidth: 1, strokeDasharray: "2 3" }}
-                labelFormatter={(l) => `Dia ${shortDay(String(l))}`}
-                formatter={(v: number, n) => [n === "samples" ? String(v) : brl(Number(v)), n === "minPriceAvg" ? "Média" : n === "minPrice" ? "Mínimo" : "Registros"]}
-              />
-              <Legend wrapperStyle={legendStyle} iconType="circle" iconSize={7} formatter={(n) => (n === "minPriceAvg" ? "Média" : "Mínimo")} />
-              <Area type="monotone" dataKey="minPriceAvg" stroke={CHART_PRIMARY} strokeWidth={2.2} fill="url(#pcTrend)" />
-              <Line type="monotone" dataKey="minPrice" stroke={CHART_ACCENT} strokeWidth={1.6} dot={false} />
-            </AreaChart>
-          </ResponsiveContainer>
+          {query.isFetching && !data.trend.length ? (
+            <ChartSkeleton height={metrics.height} label="Carregando tendência" />
+          ) : data.trend.length === 0 ? (
+            <ChartEmpty
+              height={metrics.height}
+              title="Sem preços coletados"
+              hint="Amplie o período ou remova filtros de categoria."
+            />
+          ) : (
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={data.trend} margin={{ top: metrics.marginTop, right: 6, bottom: 0, left: -14 }}>
+                <defs>
+                  <linearGradient id="pcTrend" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={chartTheme.primary} stopOpacity={0.55} />
+                    <stop offset="100%" stopColor={chartTheme.primary} stopOpacity={0.04} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} vertical={false} />
+                <XAxis dataKey="day" tickFormatter={shortDay} tick={{ ...tickStyle, fontSize: metrics.tickFontSize }} tickLine={false} axisLine={{ stroke: chartTheme.grid }} minTickGap={18} />
+                <YAxis tick={{ ...tickStyle, fontSize: metrics.tickFontSize }} tickLine={false} axisLine={false} width={metrics.yAxisWidth + 4} tickFormatter={(v) => brl(Number(v))} />
+                <Tooltip
+                  contentStyle={tooltipStyle}
+                  labelStyle={tooltipLabelStyle}
+                  itemStyle={tooltipItemStyle}
+                  cursor={{ stroke: chartTheme.accent, strokeWidth: 1, strokeDasharray: "2 3" }}
+                  labelFormatter={(l) => `Dia ${shortDay(String(l))}`}
+                  formatter={(v: number, n) => [n === "samples" ? String(v) : brl(Number(v)), n === "minPriceAvg" ? "Média" : n === "minPrice" ? "Mínimo" : "Registros"]}
+                />
+                <Legend wrapperStyle={legendStyle} iconType="circle" iconSize={7} formatter={(n) => (n === "minPriceAvg" ? "Média" : "Mínimo")} />
+                <Area type="monotone" dataKey="minPriceAvg" stroke={chartTheme.primary} strokeWidth={metrics.strokeWidth} fill="url(#pcTrend)" />
+                <Line type="monotone" dataKey="minPrice" stroke={chartTheme.accent} strokeWidth={metrics.strokeWidth - 0.5} dot={false} />
+              </AreaChart>
+            </ResponsiveContainer>
+          )}
         </Panel>
 
         <Panel
           icon={<Layers className="h-3.5 w-3.5" />}
           title="Cobertura por categoria"
           note="Produtos distintos monitorados em cada nicho"
+          height={metrics.height}
           onExport={() =>
             exportRowsToCSV(
               stampedFilename("cobertura-categorias"),
@@ -457,27 +484,38 @@ export function AdminInsightsPanel() {
             )
           }
         >
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={coverage} margin={{ top: 6, right: 6, bottom: 0, left: -14 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID} vertical={false} />
-              <XAxis dataKey="label" tick={tickStyle} tickLine={false} axisLine={{ stroke: CHART_GRID }} interval={0} angle={-18} textAnchor="end" height={38} />
-              <YAxis tick={tickStyle} tickLine={false} axisLine={false} width={36} allowDecimals={false} />
-              <Tooltip
-                contentStyle={tooltipStyle}
-                labelStyle={tooltipLabelStyle}
-                itemStyle={tooltipItemStyle}
-                cursor={{ fill: "hsl(var(--foreground) / 0.06)" }}
-                formatter={(v: number, n) => [String(v), n === "products" ? "Produtos" : "Lojas"]}
-              />
-              <Bar dataKey="products" fill={CHART_PRIMARY} radius={[4, 4, 0, 0]} maxBarSize={28} />
-            </BarChart>
-          </ResponsiveContainer>
+          {query.isFetching && !coverage.length ? (
+            <ChartSkeleton height={metrics.height} label="Carregando cobertura" />
+          ) : coverage.length === 0 ? (
+            <ChartEmpty
+              height={metrics.height}
+              title="Nenhuma categoria com produtos"
+              hint="Registre preços em pelo menos uma categoria."
+            />
+          ) : (
+            <ResponsiveContainer width="100%" height="100%">
+              <BarChart data={coverage} margin={{ top: metrics.marginTop, right: 6, bottom: 0, left: -14 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} vertical={false} />
+                <XAxis dataKey="label" tick={{ ...tickStyle, fontSize: metrics.tickFontSize }} tickLine={false} axisLine={{ stroke: chartTheme.grid }} interval={0} angle={-18} textAnchor="end" height={metrics.xAxisAngleHeight} />
+                <YAxis tick={{ ...tickStyle, fontSize: metrics.tickFontSize }} tickLine={false} axisLine={false} width={36} allowDecimals={false} />
+                <Tooltip
+                  contentStyle={tooltipStyle}
+                  labelStyle={tooltipLabelStyle}
+                  itemStyle={tooltipItemStyle}
+                  cursor={{ fill: "hsl(var(--foreground) / 0.06)" }}
+                  formatter={(v: number, n) => [String(v), n === "products" ? "Produtos" : "Lojas"]}
+                />
+                <Bar dataKey="products" fill={chartTheme.primary} radius={[4, 4, 0, 0]} maxBarSize={metrics.barMaxSize} />
+              </BarChart>
+            </ResponsiveContainer>
+          )}
         </Panel>
 
         <Panel
           icon={<Activity className="h-3.5 w-3.5" />}
           title="Atualizações recentes"
           note="Novos registros de preço por dia (14 dias)"
+          height={metrics.height}
           onExport={() =>
             exportRowsToCSV(
               stampedFilename("atualizacoes-recentes"),
@@ -490,26 +528,37 @@ export function AdminInsightsPanel() {
             )
           }
         >
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data.recent} margin={{ top: 6, right: 6, bottom: 0, left: -18 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID} vertical={false} />
-              <XAxis dataKey="day" tickFormatter={shortDay} tick={tickStyle} tickLine={false} axisLine={{ stroke: CHART_GRID }} minTickGap={14} />
-              <YAxis tick={tickStyle} tickLine={false} axisLine={false} width={34} allowDecimals={false} />
-              <Tooltip
-                contentStyle={tooltipStyle}
-                labelStyle={tooltipLabelStyle}
-                itemStyle={tooltipItemStyle}
-                cursor={{ stroke: CHART_ACCENT, strokeWidth: 1, strokeDasharray: "2 3" }}
-                labelFormatter={(l) => `Dia ${shortDay(String(l))}`}
-                formatter={(v: number, n) => [String(v), n === "prices" ? "Novos preços" : "Verificados"]}
-              />
-              <Legend wrapperStyle={legendStyle} iconType="circle" iconSize={7} formatter={(n) => (n === "prices" ? "Novos preços" : "Verificados")} />
-              <Line type="monotone" dataKey="prices" stroke={CHART_PRIMARY} strokeWidth={2.2} dot={false} />
-              <Line type="monotone" dataKey="verified" stroke={CHART_ACCENT} strokeWidth={1.8} strokeDasharray="4 3" dot={false} />
-            </LineChart>
-          </ResponsiveContainer>
+          {query.isFetching && !data.recent.length ? (
+            <ChartSkeleton height={metrics.height} label="Carregando atualizações" />
+          ) : data.recent.length === 0 ? (
+            <ChartEmpty
+              height={metrics.height}
+              title="Nenhuma atualização recente"
+              hint="Novos preços aparecerão aqui quando registrados."
+            />
+          ) : (
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={data.recent} margin={{ top: metrics.marginTop, right: 6, bottom: 0, left: -18 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} vertical={false} />
+                <XAxis dataKey="day" tickFormatter={shortDay} tick={{ ...tickStyle, fontSize: metrics.tickFontSize }} tickLine={false} axisLine={{ stroke: chartTheme.grid }} minTickGap={14} />
+                <YAxis tick={{ ...tickStyle, fontSize: metrics.tickFontSize }} tickLine={false} axisLine={false} width={34} allowDecimals={false} />
+                <Tooltip
+                  contentStyle={tooltipStyle}
+                  labelStyle={tooltipLabelStyle}
+                  itemStyle={tooltipItemStyle}
+                  cursor={{ stroke: chartTheme.accent, strokeWidth: 1, strokeDasharray: "2 3" }}
+                  labelFormatter={(l) => `Dia ${shortDay(String(l))}`}
+                  formatter={(v: number, n) => [String(v), n === "prices" ? "Novos preços" : "Verificados"]}
+                />
+                <Legend wrapperStyle={legendStyle} iconType="circle" iconSize={7} formatter={(n) => (n === "prices" ? "Novos preços" : "Verificados")} />
+                <Line type="monotone" dataKey="prices" stroke={chartTheme.primary} strokeWidth={metrics.strokeWidth} dot={false} />
+                <Line type="monotone" dataKey="verified" stroke={chartTheme.accent} strokeWidth={metrics.strokeWidth - 0.4} strokeDasharray="4 3" dot={false} />
+              </LineChart>
+            </ResponsiveContainer>
+          )}
         </Panel>
       </div>
+
     </section>
   );
 }
