@@ -113,12 +113,13 @@ export type BasketStore = {
   logoUrl: string | null;
   brandColor: string | null;
   city: string | null;
+  neighborhood: string | null;
   distanceKm: number | null;
   itemsFound: number;
   totalItems: number;
   total: number;
   coverage: number;
-  items: Array<{ key: EssentialKey; label: string; productName: string; price: number } | null>;
+  items: Array<{ key: EssentialKey; label: string; productName: string; price: number; when: string } | null>;
 };
 
 export type BasketMissing = {
