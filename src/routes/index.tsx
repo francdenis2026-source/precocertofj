@@ -429,14 +429,31 @@ function HomePage() {
                   </button>
                 </div>
 
-                {showSuggest && debouncedQ.length >= 2 && (suggestQ.isLoading || suggestions.length > 0) && (
+                {showSuggest && debouncedQ.length >= 2 && (
                   <ul
                     id="home-suggest-list"
                     role="listbox"
-                    className="absolute left-0 right-0 top-[calc(100%+8px)] z-40 max-h-[280px] overflow-auto rounded-2xl border border-border bg-popover text-popover-foreground text-left shadow-2xl animate-fade-in"
+                    aria-busy={suggestQ.isLoading}
+                    className="absolute left-0 right-0 top-[calc(100%+8px)] z-40 max-h-[320px] overflow-auto rounded-2xl border border-border bg-popover text-popover-foreground text-left shadow-2xl animate-fade-in"
                   >
                     {suggestQ.isLoading && suggestions.length === 0 ? (
-                      <li className="px-4 py-3 text-[13px] text-muted-foreground">Buscando…</li>
+                      <>
+                        {[0, 1, 2].map((i) => (
+                          <li key={i} className="flex items-center gap-3 px-4 py-2.5">
+                            <span className="h-3.5 w-3.5 shrink-0 rounded-full bg-muted animate-pulse" />
+                            <span className="h-3 flex-1 rounded bg-muted animate-pulse" />
+                            <span className="h-3 w-16 shrink-0 rounded bg-muted animate-pulse" />
+                          </li>
+                        ))}
+                        <li className="px-4 py-2 text-[12px] text-muted-foreground" aria-live="polite">
+                          Buscando…
+                        </li>
+                      </>
+                    ) : suggestions.length === 0 ? (
+                      <li className="px-4 py-4 text-[13px] text-muted-foreground" aria-live="polite">
+                        Nenhum produto encontrado para{" "}
+                        <span className="font-semibold text-foreground">"{debouncedQ}"</span>.
+                      </li>
                     ) : (
                       suggestions.map((s, i) => (
                         <li key={s.slug} id={`home-suggest-opt-${s.slug}`} role="option" aria-selected={i === activeIdx} ref={i === activeIdx ? (el) => el?.scrollIntoView({ block: "nearest" }) : undefined}>
@@ -453,9 +470,16 @@ function HomePage() {
                             )}
                           >
                             <Search className="h-3.5 w-3.5 shrink-0 text-muted-foreground" strokeWidth={2.4} />
-                            <span className="flex-1 truncate text-[14px] font-semibold">{s.name}</span>
+                            <span className="flex min-w-0 flex-1 flex-col">
+                              <span className="truncate text-[14px] font-semibold text-foreground">{s.name}</span>
+                              {s.marketName && (
+                                <span className="mt-0.5 inline-flex w-fit items-center rounded-full border border-border bg-muted px-1.5 py-0.5 text-[10.5px] font-medium uppercase tracking-[0.08em] text-muted-foreground">
+                                  {s.marketName}
+                                </span>
+                              )}
+                            </span>
                             {s.price != null && (
-                              <span className="pc-num shrink-0 text-[15px] font-bold text-foreground">
+                              <span className="pc-num shrink-0 rounded-md border border-border bg-accent/30 px-2 py-0.5 text-[14px] font-bold text-foreground">
                                 {new Intl.NumberFormat("pt-BR", {
                                   style: "currency",
                                   currency: "BRL",
