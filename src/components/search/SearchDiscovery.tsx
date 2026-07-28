@@ -119,7 +119,8 @@ export function SearchDiscovery({ onPickQuery }: Props) {
   const statsFailed = Boolean(stats.isError || (stats.data && !stats.data.ok));
 
   return (
-    <div className="grid h-full min-h-0 grid-rows-[auto_auto_auto_1fr] gap-2 lg:grid-cols-2 lg:grid-rows-[auto_1fr]">
+    <div className="grid h-full min-h-0 grid-rows-[auto_auto_auto_auto] gap-1.5 lg:grid-cols-2 lg:grid-rows-[auto_minmax(0,1fr)_auto]">
+
       {/* ============ CATEGORIAS — tinta DOURADA (ação/identidade) ============ */}
       <section
         aria-label="Categorias populares"
@@ -154,7 +155,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
       {/* ============ POPULARES — tinta ÂMBAR (calor/tendência) ============ */}
       <section
         aria-label="Buscas populares"
-        className="relative rounded-xl border border-amber-500/25 bg-amber-500/[0.06] p-2 dark:border-amber-400/25 dark:bg-amber-400/[0.06]"
+        className="relative min-h-0 overflow-hidden rounded-xl border border-amber-500/25 bg-amber-500/[0.06] p-2 dark:border-amber-400/25 dark:bg-amber-400/[0.06]"
       >
         <SectionHeader
           icon={<Flame className="h-3 w-3" strokeWidth={2.75} />}
@@ -180,7 +181,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
       {/* ============ RECENTES — tinta ÍNDIGO (histórico) ============ */}
       <section
         aria-label="Últimas buscas"
-        className="relative rounded-xl border border-indigo-500/25 bg-indigo-500/[0.05] p-2 dark:border-indigo-400/25 dark:bg-indigo-400/[0.06]"
+        className="relative min-h-0 overflow-hidden rounded-xl border border-indigo-500/25 bg-indigo-500/[0.05] p-2 dark:border-indigo-400/25 dark:bg-indigo-400/[0.06]"
       >
         <div className="flex items-center justify-between gap-2">
           <SectionHeader

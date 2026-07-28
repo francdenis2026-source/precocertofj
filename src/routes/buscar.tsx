@@ -533,7 +533,8 @@ function SearchPage() {
             CORPO — flex-1 min-h-0 para caber na viewport sem rolagem
             da página inteira. Rolagem interna só onde necessário.
         ================================================================= */}
-        <div className="mx-auto flex w-full min-h-0 max-w-[1360px] flex-1 flex-col gap-2.5 px-4 pb-[calc(var(--mobile-nav-height)+0.5rem)] pt-2.5 md:gap-3 md:px-6 md:pb-3 md:pt-3">
+        <div className="mx-auto flex w-full min-h-0 max-w-[1360px] flex-1 flex-col gap-1.5 px-3 pb-[calc(var(--mobile-nav-height)+0.25rem)] pt-1.5 md:gap-2 md:px-5 md:pb-2 md:pt-2">
+
           {hasQuery ? (
             /* ============ ESTADO: RESULTADOS ============
                 Barra de comando + filtros em faixas compactas (shrink-0) e
@@ -606,7 +607,7 @@ function SearchPage() {
             <>
               <section
                 aria-label="Busca por nome"
-                className="pc-surface-2 relative shrink-0 rounded-2xl border border-border/70 p-2.5 shadow-sm md:p-3"
+                className="pc-surface-2 relative shrink-0 rounded-xl border border-border/70 p-2 shadow-sm"
               >
                 <div
                   aria-hidden
@@ -628,7 +629,7 @@ function SearchPage() {
                   onSortChange={(m) => setSortUrl(m as UrlSort)}
                   onCategoryChange={setCategoryUrl}
                 />
-                <div className="mt-2 shrink-0 border-t border-border/50 pt-1.5">
+                <div className="mt-1.5 shrink-0 border-t border-border/50 pt-1">
                   <FiltersToolbar
                     open={filtersOpen}
                     onToggle={() => setFiltersOpen((v) => !v)}
