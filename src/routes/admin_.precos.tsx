@@ -58,23 +58,44 @@ import { PageHeader } from "@/components/brand/PageHeader";
 import { ScanEditDialog } from "@/components/admin/ScanEditDialog";
 import { AuditLogTable } from "@/components/admin/AuditLogTable";
 
+type PrecosTab = "completo" | "rapido" | "historico";
+const PRECOS_TABS = [
+  { key: "completo", label: "Modo completo" },
+  { key: "rapido", label: "Registro rápido" },
+  { key: "historico", label: "Histórico" },
+];
+
 export const Route = createFileRoute("/admin_/precos")({
   ssr: false,
   beforeLoad: adminBeforeLoad,
+  validateSearch: (s: Record<string, unknown>): { tab: PrecosTab } => {
+    const t = String(s.tab ?? "completo");
+    const tab: PrecosTab = t === "rapido" || t === "historico" ? t : "completo";
+    return { tab };
+  },
   head: () => ({
     meta: [
       { title: "Gestão de preços — Admin" },
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: () => (
+  component: PrecosShell,
+});
+
+function PrecosShell() {
+  const { tab } = Route.useSearch();
+  return (
     <AppShell scope="admin">
       <AdminOnly>
-        <AdminPrecosPage />
+        <AdminTabs to="/admin/precos" items={PRECOS_TABS} active={tab} />
+        {tab === "completo" && <AdminPrecosPage />}
+        {tab === "rapido" && <QuickPricePage />}
+        {tab === "historico" && <HistoricoPrecosPage />}
       </AdminOnly>
     </AppShell>
-  ),
-});
+  );
+}
+
 
 const brl = (v: number | null) =>
   v == null ? "—" : new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
