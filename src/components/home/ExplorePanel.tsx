@@ -108,6 +108,8 @@ type PriceItem = {
   when: string;
   stores: number;
   marketName?: string | null;
+  previousPrice?: number | null;
+  dropPct?: number | null;
 };
 
 /** Linha memoizada: só re-renderiza quando o próprio item muda. */
@@ -115,11 +117,15 @@ const PriceRow = memo(function PriceRow({
   p,
   onNavigate,
   flash,
+  best,
 }: {
   p: PriceItem;
   onNavigate?: () => void;
   flash?: boolean;
+  /** Marca a linha como "melhor oferta" (maior economia detectada). */
+  best?: boolean;
 }) {
+  const hasDrop = typeof p.dropPct === "number" && p.dropPct > 0 && p.previousPrice != null;
   return (
     <li
       className={ROW_H}
@@ -130,19 +136,38 @@ const PriceRow = memo(function PriceRow({
         params={{ slug: p.slug }}
         onClick={onNavigate}
         data-flash={flash ? "1" : undefined}
+        data-best={best ? "1" : undefined}
+        aria-label={
+          best
+            ? `${p.name} — melhor oferta agora, ${brl(p.price)}${hasDrop ? `, queda de ${p.dropPct}% em relação a ${brl(p.previousPrice!)}` : ""}`
+            : undefined
+        }
         className={`group relative grid ${ROW_H} grid-cols-[minmax(0,1fr)_auto] items-center gap-3 -mx-2 rounded-md px-2 transition-all duration-200 ease-out hover:bg-[var(--pc-home-onhero-glass)] hover:pl-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-onhero-gold)] ${flash ? "pc-live-flash" : ""}`}
       >
         <span
           aria-hidden
-          className={`pointer-events-none absolute inset-y-1.5 left-0 w-[2px] rounded-full transition-opacity duration-200 group-hover:opacity-100 ${flash ? "opacity-100" : "opacity-0"}`}
+          className={`pointer-events-none absolute inset-y-1.5 left-0 w-[2px] rounded-full transition-opacity duration-200 group-hover:opacity-100 ${flash || best ? "opacity-100" : "opacity-0"}`}
           style={{ background: "var(--pc-home-onhero-gold)" }}
         />
         <div className="min-w-0">
           <p
-            className={`${tc.itemTitle} truncate transition-colors group-hover:text-white`}
+            className={`${tc.itemTitle} flex items-center gap-1.5 truncate transition-colors group-hover:text-white`}
             style={{ color: "var(--pc-home-onhero-fg)" }}
           >
-            {p.name}
+            {best ? (
+              <span
+                className={`${tc.eyebrow} inline-flex shrink-0 items-center rounded-full px-1.5 py-0.5`}
+                style={{
+                  color: "#0b1b3a",
+                  background: "var(--pc-home-onhero-gold)",
+                  letterSpacing: "0.08em",
+                }}
+                aria-hidden
+              >
+                MELHOR
+              </span>
+            ) : null}
+            <span className="truncate">{p.name}</span>
           </p>
           <p
             className={`${tc.meta} mt-0.5 truncate`}
@@ -177,10 +202,59 @@ const PriceRow = memo(function PriceRow({
             ) : null}
           </p>
         </div>
-        <span
-          className={`pc-num pc-num--onhero ${tc.num} shrink-0 transition-transform duration-200 group-hover:-translate-x-0.5`}
-        >
-          {brl(p.price)}
+        <span className="relative flex shrink-0 flex-col items-end leading-tight">
+          <span
+            className={`pc-num pc-num--onhero ${tc.num} transition-transform duration-200 group-hover:-translate-x-0.5`}
+          >
+            {brl(p.price)}
+          </span>
+          {hasDrop ? (
+            <span
+              className={`${tc.meta} mt-0.5 inline-flex items-baseline gap-1`}
+              style={{ color: "var(--pc-home-onhero-fg-70)" }}
+            >
+              <span
+                aria-hidden
+                className="line-through"
+                style={{ color: "var(--pc-home-onhero-fg-60)" }}
+              >
+                {brl(p.previousPrice!)}
+              </span>
+              <span
+                className="font-semibold"
+                style={{ color: "var(--pc-home-onhero-gold)" }}
+              >
+                −{p.dropPct}%
+              </span>
+            </span>
+          ) : null}
+          {/* Mini-diff detalhado em hover/focus (não altera layout — abre em popover absoluto). */}
+          {hasDrop ? (
+            <span
+              role="tooltip"
+              className="pointer-events-none absolute right-0 top-full z-10 mt-1 origin-top-right scale-95 rounded-lg border px-2.5 py-1.5 opacity-0 shadow-[0_8px_24px_-8px_rgba(3,10,28,0.6)] transition-[opacity,transform] duration-150 ease-out group-hover:scale-100 group-hover:opacity-100 group-focus-visible:scale-100 group-focus-visible:opacity-100"
+              style={{
+                background: "var(--pc-home-onhero-glass)",
+                borderColor: "var(--pc-home-onhero-border-soft)",
+                color: "var(--pc-home-onhero-fg-90)",
+                backdropFilter: "blur(8px)",
+              }}
+            >
+              <span className={`${tc.meta} block whitespace-nowrap`}>
+                <span style={{ color: "var(--pc-home-onhero-fg-60)" }}>{brl(p.previousPrice!)}</span>
+                <span className="mx-1 opacity-60">→</span>
+                <span className="font-semibold" style={{ color: "var(--pc-home-onhero-fg)" }}>
+                  {brl(p.price)}
+                </span>
+              </span>
+              <span
+                className={`${tc.eyebrow} mt-0.5 block whitespace-nowrap`}
+                style={{ color: "var(--pc-home-onhero-gold)" }}
+              >
+                Economia de {p.dropPct}% ({brl(p.previousPrice! - p.price)})
+              </span>
+            </span>
+          ) : null}
         </span>
 
 
