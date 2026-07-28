@@ -51,7 +51,14 @@ export const getEstablishmentDeletionImpact = createServerFn({ method: "POST" })
     await Promise.all(
       TARGETS.map(async (t) => {
         try {
-          const { count } = await supabaseAdmin
+          const client = supabaseAdmin as unknown as {
+            from: (t: string) => {
+              select: (s: string, o: { count: "exact"; head: true }) => {
+                eq: (c: string, v: string) => Promise<{ count: number | null }>;
+              };
+            };
+          };
+          const { count } = await client
             .from(t.table)
             .select("*", { count: "exact", head: true })
             .eq(t.column, data.id);
@@ -63,6 +70,7 @@ export const getEstablishmentDeletionImpact = createServerFn({ method: "POST" })
         }
       }),
     );
+
 
     // Ordena pelas mais impactantes
     rows.sort((a, b) => b.count - a.count);
