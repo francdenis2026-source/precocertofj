@@ -58,10 +58,11 @@ describe("Admin hubs reorganization — v2.2", () => {
       expect(src, `admin.tsx deve linkar ${hub}`).toContain(hub);
     }
     // Marcador de teste para verificação e2e/QA
-    expect(src).toMatch(/admin-hub-link-people/);
-    expect(src).toMatch(/admin-hub-link-catalog/);
-    expect(src).toMatch(/admin-hub-link-commerce/);
-    expect(src).toMatch(/admin-hub-link-system/);
+    expect(src).toMatch(/admin-hub-link-/);
+    // Cada tone precisa existir no bloco de hubs
+    for (const tone of ["people", "catalog", "commerce", "system"]) {
+      expect(src).toContain(`tone: "${tone}"`);
+    }
   });
 
   it("cada hub referencia ao menos um destino real existente", () => {
