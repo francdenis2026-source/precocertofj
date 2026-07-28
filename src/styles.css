@@ -172,8 +172,8 @@
   --badge-primary-fg: var(--primary);
   --badge-warning-fg: var(--warning-foreground);
 
-  --border: oklch(0.828 0.014 250);
-  --input: oklch(0.828 0.014 250);
+  --border: oklch(0.86 0.012 250);
+  --input: oklch(0.83 0.014 250);
   --ring: oklch(0.72 0.14 82);  /* Gold — foco visível consistente com navy/gold */
 
   --capture: oklch(0.52 0.20 262);

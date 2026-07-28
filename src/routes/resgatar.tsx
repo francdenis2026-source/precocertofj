@@ -312,11 +312,11 @@ function RedeemPage() {
       {/* Aura de fundo — tokens semânticos */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-60 dark:opacity-70"
+        className="pointer-events-none absolute inset-0 opacity-50 dark:opacity-70"
         style={{
           background:
-            "radial-gradient(60% 40% at 15% 20%, color-mix(in oklab, var(--pc-navy) 10%, transparent), transparent 65%)," +
-            "radial-gradient(50% 40% at 85% 80%, color-mix(in oklab, var(--pc-gold-ink) 8%, transparent), transparent 65%)",
+            "radial-gradient(60% 40% at 15% 20%, color-mix(in oklab, var(--pc-navy) 9%, transparent), transparent 65%)," +
+            "radial-gradient(50% 40% at 85% 80%, color-mix(in oklab, var(--pc-navy) 6%, transparent), transparent 65%)",
         }}
       />
 
@@ -581,7 +581,7 @@ function RedeemPage() {
                     {validation.level === "ok" && <CheckCircle2 className="h-3 w-3 flex-none" aria-hidden />}
                     <span>{validation.message}</span>
                   </span>
-                  <span className="shrink-0 tabular-nums text-muted-foreground">
+                  <span className="pc-price pc-price--sm pc-price--muted shrink-0">
                     {clean.length}/{CANONICAL_LEN}
                   </span>
                 </div>
