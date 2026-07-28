@@ -23,11 +23,7 @@ export const Route = createFileRoute("/admin_/auditoria-numeros")({
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  component: () => (
-    <AdminOnly>
-      <NumberAuditPage />
-    </AdminOnly>
-  ),
+  component: () => <Navigate to="/admin/auditoria" search={{ tab: "numeros" } as never} replace />,
 });
 
 const statusTone: Record<AuditMetric["status"], string> = {
