@@ -100,6 +100,7 @@ import { Route as AdminAuditoriaNumerosRouteImport } from './routes/admin_.audit
 import { Route as AdminAuditoriaAcessosRouteImport } from './routes/admin_.auditoria-acessos'
 import { Route as AdminAuditoriaRouteImport } from './routes/admin_.auditoria'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin_.analytics'
+import { Route as AdminAcessosTemporariosRouteImport } from './routes/admin_.acessos-temporarios'
 import { Route as AdminGestaoRouteImport } from './routes/admin.gestao'
 import { Route as ApiPublicMpWebhookRouteImport } from './routes/api/public/mp-webhook'
 import { Route as ApiAdminCatalogImageRouteImport } from './routes/api/admin/catalog-image'
@@ -567,6 +568,11 @@ const AdminAnalyticsRoute = AdminAnalyticsRouteImport.update({
   path: '/admin/analytics',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminAcessosTemporariosRoute = AdminAcessosTemporariosRouteImport.update({
+  id: '/admin_/acessos-temporarios',
+  path: '/admin/acessos-temporarios',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminGestaoRoute = AdminGestaoRouteImport.update({
   id: '/gestao',
   path: '/gestao',
@@ -673,6 +679,7 @@ export interface FileRoutesByFullPath {
   '/sem-permissao': typeof SemPermissaoRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/gestao': typeof AdminGestaoRoute
+  '/admin/acessos-temporarios': typeof AdminAcessosTemporariosRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/auditoria-acessos': typeof AdminAuditoriaAcessosRoute
@@ -777,6 +784,7 @@ export interface FileRoutesByTo {
   '/sem-permissao': typeof SemPermissaoRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/gestao': typeof AdminGestaoRoute
+  '/admin/acessos-temporarios': typeof AdminAcessosTemporariosRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
   '/admin/auditoria': typeof AdminAuditoriaRoute
   '/admin/auditoria-acessos': typeof AdminAuditoriaAcessosRoute
@@ -882,6 +890,7 @@ export interface FileRoutesById {
   '/sem-permissao': typeof SemPermissaoRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin/gestao': typeof AdminGestaoRoute
+  '/admin_/acessos-temporarios': typeof AdminAcessosTemporariosRoute
   '/admin_/analytics': typeof AdminAnalyticsRoute
   '/admin_/auditoria': typeof AdminAuditoriaRoute
   '/admin_/auditoria-acessos': typeof AdminAuditoriaAcessosRoute
@@ -988,6 +997,7 @@ export interface FileRouteTypes {
     | '/sem-permissao'
     | '/sitemap.xml'
     | '/admin/gestao'
+    | '/admin/acessos-temporarios'
     | '/admin/analytics'
     | '/admin/auditoria'
     | '/admin/auditoria-acessos'
@@ -1092,6 +1102,7 @@ export interface FileRouteTypes {
     | '/sem-permissao'
     | '/sitemap.xml'
     | '/admin/gestao'
+    | '/admin/acessos-temporarios'
     | '/admin/analytics'
     | '/admin/auditoria'
     | '/admin/auditoria-acessos'
@@ -1196,6 +1207,7 @@ export interface FileRouteTypes {
     | '/sem-permissao'
     | '/sitemap.xml'
     | '/admin/gestao'
+    | '/admin_/acessos-temporarios'
     | '/admin_/analytics'
     | '/admin_/auditoria'
     | '/admin_/auditoria-acessos'
@@ -1300,6 +1312,7 @@ export interface RootRouteChildren {
   ResgatarRoute: typeof ResgatarRoute
   SemPermissaoRoute: typeof SemPermissaoRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  AdminAcessosTemporariosRoute: typeof AdminAcessosTemporariosRoute
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
   AdminAuditoriaRoute: typeof AdminAuditoriaRoute
   AdminAuditoriaAcessosRoute: typeof AdminAuditoriaAcessosRoute
@@ -1994,6 +2007,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminAnalyticsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin_/acessos-temporarios': {
+      id: '/admin_/acessos-temporarios'
+      path: '/admin/acessos-temporarios'
+      fullPath: '/admin/acessos-temporarios'
+      preLoaderRoute: typeof AdminAcessosTemporariosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin/gestao': {
       id: '/admin/gestao'
       path: '/gestao'
@@ -2178,6 +2198,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResgatarRoute: ResgatarRoute,
   SemPermissaoRoute: SemPermissaoRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  AdminAcessosTemporariosRoute: AdminAcessosTemporariosRoute,
   AdminAnalyticsRoute: AdminAnalyticsRoute,
   AdminAuditoriaRoute: AdminAuditoriaRoute,
   AdminAuditoriaAcessosRoute: AdminAuditoriaAcessosRoute,
