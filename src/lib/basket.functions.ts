@@ -257,6 +257,57 @@ async function computeMatrix() {
   return matrix;
 }
 
+/**
+ * Carrega overrides (enabled + quantity) da versão ativa em basket_items.
+ * Falha silenciosa retorna map vazio — comportamento cai no padrão hardcoded.
+ * Retornado: Map<key, { enabled, quantity, sortOrder }> apenas para keys
+ * conhecidas em ESSENTIALS (novas keys precisam de código).
+ */
+async function loadActiveOverrides(): Promise<
+  Map<EssentialKey, { enabled: boolean; quantity: number; sortOrder: number }>
+> {
+  const overrides = new Map<
+    EssentialKey,
+    { enabled: boolean; quantity: number; sortOrder: number }
+  >();
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const client = supabaseAdmin as unknown as {
+      from: (t: string) => any;
+    };
+    const setRes = await client
+      .from("basket_item_sets")
+      .select("id")
+      .eq("active", true)
+      .maybeSingle();
+    const setId = setRes?.data?.id as string | undefined;
+    if (!setId) return overrides;
+    const itemsRes = await client
+      .from("basket_items")
+      .select("key, enabled, quantity, sort_order")
+      .eq("set_id", setId);
+    const knownKeys = new Set(ESSENTIALS.map((e) => e.key));
+    for (const row of (itemsRes?.data ?? []) as Array<{
+      key: string;
+      enabled: boolean;
+      quantity: number | string;
+      sort_order: number;
+    }>) {
+      if (!knownKeys.has(row.key as EssentialKey)) continue;
+      overrides.set(row.key as EssentialKey, {
+        enabled: !!row.enabled,
+        quantity: Math.max(0.01, Number(row.quantity) || 1),
+        sortOrder: Number(row.sort_order) || 0,
+      });
+    }
+  } catch {
+    // silêncio — fallback ao array hardcoded
+  }
+  return overrides;
+}
+
+
+
 type ComparisonFilters = {
   originLat?: number | null;
   originLng?: number | null;
