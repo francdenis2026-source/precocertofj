@@ -376,7 +376,7 @@ function PlansPage() {
         </section>
 
         {/* Rodapé — abrem em modais compactos, sem sair da página. */}
-        <section className={dsx(ds.container, "shrink-0 pb-1")} aria-label="Ajuda e comparativo">
+        <section className={dsx(ds.container, "shrink-0 pb-0.5")} aria-label="Ajuda e comparativo">
           <div className="flex flex-wrap items-center justify-center gap-2 text-[12px]">
             <button
               type="button"
