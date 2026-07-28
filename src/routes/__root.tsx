@@ -20,6 +20,7 @@ import { useAutoTranslate } from "@/lib/pt-terms";
 import { UnlockConversionTracker } from "@/components/analytics/UnlockConversionTracker";
 import { useReadingMode } from "@/hooks/use-reading-mode";
 import { useTheme } from "@/hooks/use-theme";
+import { usePlansRealtime } from "@/hooks/usePlansRealtime";
 
 import { RouteError, RouteNotFound } from "@/components/feedback";
 import { BottomTabBar } from "@/components/layout/BottomTabBar";
@@ -166,6 +167,9 @@ function RootComponent() {
   useAutoTranslate();
   useTheme();
   useReadingMode();
+  // Realtime global: qualquer alteração em license_plans invalida os caches
+  // de planos em todas as rotas e abas (homepage, /planos, /assinar, admin).
+  usePlansRealtime();
 
   // Mantém a marcação do console admin em navegações client-side (SPA),
   // evitando flash da foto de fundo entre rotas.
