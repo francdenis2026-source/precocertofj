@@ -458,10 +458,10 @@
   }
   .font-editorial {
     font-family: var(--font-serif);
-    font-weight: 340;
-    letter-spacing: -0.028em;
+    font-weight: 360;
+    letter-spacing: -0.024em;
     font-optical-sizing: auto;
-    font-variation-settings: "opsz" 144, "SOFT" 30, "wght" 340;
+    font-variation-settings: "opsz" 144, "SOFT" 30, "wght" 360;
     text-rendering: geometricPrecision;
     -webkit-font-smoothing: antialiased;
     font-feature-settings: "ss01", "ss02", "kern";
