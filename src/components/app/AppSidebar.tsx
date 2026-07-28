@@ -148,19 +148,18 @@ const adminGroups: readonly NavGroup[] = [
       { to: "/admin/precos", label: "Histórico de preços", icon: History, search: { tab: "historico" } },
     ],
   },
-  {
-    label: "Comercial",
-    tone: "commerce",
-    items: [
-      { to: "/admin/gestao", label: "Licenças", icon: KeyRound },
-      { to: "/admin_/acessos-temporarios", label: "Acessos temporários", icon: Clock },
-      { to: "/admin/promocoes", label: "Promoções", icon: TicketPercent, search: { tab: "codigos" } },
-      { to: "/admin/promocoes", label: "Cupons", icon: BadgeCheck, exact: true },
-      { to: "/admin/webhooks", label: "Webhooks", icon: Webhook },
-      { to: "/admin/metricas", label: "Conversões", icon: LineChart, search: { tab: "conversoes" } },
-      { to: "/admin/promocoes", label: "Cupom fiscal", icon: ReceiptText, search: { tab: "cupons" } },
-    ],
-  },
+    {
+      label: "Comercial",
+      tone: "commerce",
+      items: [
+        { to: "/admin/gestao", label: "Licenças", icon: KeyRound },
+        { to: "/admin/promocoes", label: "Promoções", icon: TicketPercent, search: { tab: "codigos" } },
+        { to: "/admin/promocoes", label: "Cupons", icon: BadgeCheck, exact: true },
+        { to: "/admin/webhooks", label: "Webhooks", icon: Webhook },
+        { to: "/admin/metricas", label: "Conversões", icon: LineChart, search: { tab: "conversoes" } },
+        { to: "/admin/promocoes", label: "Cupom fiscal", icon: ReceiptText, search: { tab: "cupons" } },
+      ],
+    },
   {
     label: "Clientes",
     tone: "people",
