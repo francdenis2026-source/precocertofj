@@ -323,7 +323,7 @@ export function ProductCompareDialog({
               <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-savings">
                 Economia máxima
               </span>
-              <span className="font-display text-sm font-semibold tabular-nums text-savings">
+              <span className="pc-price pc-price--md pc-price--savings">
                 {fmt(totalSavings)}
               </span>
               <span className="font-mono text-[11px] text-muted-foreground">
