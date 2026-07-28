@@ -56,6 +56,8 @@ type NavItem = {
   label: string;
   icon: typeof Home;
   exact?: boolean;
+  /** Optional search params to pass to Link (used for consolidated tabbed hubs). */
+  search?: Record<string, string>;
 };
 
 type NavGroup = {
