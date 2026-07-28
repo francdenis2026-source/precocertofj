@@ -34,6 +34,7 @@ import {
   Trophy,
   ClipboardCheck,
   Camera,
+  Radio,
 } from "lucide-react";
 import {
   Sidebar,
@@ -78,6 +79,7 @@ const appGroups: readonly NavGroup[] = [
     items: [
       { to: "/melhores-precos", label: "Melhores preços", icon: Trophy },
       { to: "/comparador", label: "Comparar mercados", icon: BarChart3 },
+      { to: "/comparador-ao-vivo", label: "Comparador ao vivo", icon: Radio },
       { to: "/estabelecimentos", label: "Mercados", icon: Store },
       { to: "/mapa", label: "Bairros", icon: Boxes },
       { to: "/economia", label: "Economia", icon: Wallet },

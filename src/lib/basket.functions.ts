@@ -47,7 +47,7 @@ type EssentialDef = {
   exclude?: string[];
 };
 
-const ESSENTIALS: EssentialDef[] = [
+export const ESSENTIALS: EssentialDef[] = [
   { key: "arroz", label: "Arroz", category: "graos", patterns: ["arroz"], exclude: ["doce"] },
   { key: "feijao", label: "Feijão", category: "graos", patterns: ["feijao"] },
   { key: "oleo", label: "Óleo de soja", category: "mercearia", patterns: ["oleo de soja", "oleo soja"] },
@@ -113,12 +113,13 @@ export type BasketStore = {
   logoUrl: string | null;
   brandColor: string | null;
   city: string | null;
+  neighborhood: string | null;
   distanceKm: number | null;
   itemsFound: number;
   totalItems: number;
   total: number;
   coverage: number;
-  items: Array<{ key: EssentialKey; label: string; productName: string; price: number } | null>;
+  items: Array<{ key: EssentialKey; label: string; productName: string; price: number; when: string } | null>;
 };
 
 export type BasketMissing = {
@@ -161,6 +162,7 @@ type EstabRow = {
   logo_url: string | null;
   brand_color: string | null;
   city: string | null;
+  neighborhood: string | null;
   latitude: number | null;
   longitude: number | null;
   active: boolean;
@@ -222,7 +224,7 @@ async function loadEstablishments(ids: string[]) {
   };
   const { data, error } = await client
     .from("establishments")
-    .select("id, name, logo_url, brand_color, city, latitude, longitude, active")
+    .select("id, name, logo_url, brand_color, city, neighborhood, latitude, longitude, active")
     .in("id", ids);
   if (error) throw new Error(error.message);
   const map = new Map<string, EstabRow>();
@@ -329,7 +331,7 @@ export const getBasketComparison = createServerFn({ method: "POST" })
       for (const ess of ESSENTIALS) {
         const pick = inner.get(ess.key);
         if (pick) {
-          items.push({ key: ess.key, label: ess.label, productName: pick.productName, price: pick.price });
+          items.push({ key: ess.key, label: ess.label, productName: pick.productName, price: pick.price, when: pick.when });
           total += pick.price;
           found += 1;
         } else {
@@ -349,6 +351,7 @@ export const getBasketComparison = createServerFn({ method: "POST" })
         logoUrl: meta.logo_url,
         brandColor: meta.brand_color,
         city: meta.city,
+        neighborhood: meta.neighborhood,
         distanceKm,
         itemsFound: found,
         totalItems: totalEssentials,
