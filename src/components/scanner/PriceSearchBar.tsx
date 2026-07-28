@@ -1916,11 +1916,11 @@ function ProductGroupCard({
             <HighlightMatch text={productName} tokens={highlightTokens} />
           </p>
           <p className="pc-res-meta mt-0.5 truncate">
-            <span className="font-semibold text-foreground">menor</span> {fmt(min)}
+            <span className="font-semibold text-foreground">menor</span> <span className="pc-num font-bold text-foreground">{fmt(min)}</span>
             <span aria-hidden="true" className="mx-1 opacity-40">·</span>
-            média {fmt(avg)}
+            média <span className="pc-num text-foreground/85">{fmt(avg)}</span>
             <span aria-hidden="true" className="mx-1 opacity-40">·</span>
-            máx {fmt(max)}
+            máx <span className="pc-num text-foreground/85">{fmt(max)}</span>
             <span aria-hidden="true" className="mx-1 opacity-40">·</span>
             {samples} preço{samples > 1 ? "s" : ""}
           </p>
