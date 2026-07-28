@@ -31,7 +31,7 @@ export function usePlansRealtime(opts?: { enabled?: boolean; throttleMs?: number
     let timer: number | null = null;
     const invalidateAll = () => {
       const client = qcRef.current;
-      // Cover every known plan cache key in the codebase.
+      if (!client) return;
       client.invalidateQueries({ queryKey: ["public-plans"] });
       client.invalidateQueries({ queryKey: ["plans-active"] });
       client.invalidateQueries({ queryKey: ["license-plans"] });
@@ -39,6 +39,7 @@ export function usePlansRealtime(opts?: { enabled?: boolean; throttleMs?: number
       client.invalidateQueries({ queryKey: ["admin", "plans", "health"] });
       client.invalidateQueries({ queryKey: ["active-plan"] });
     };
+
     const schedule = () => {
       if (timer !== null) return;
       timer = window.setTimeout(() => {
