@@ -427,20 +427,25 @@ export const adminGlobalSearch = createServerFn({ method: "POST" })
       .map(({ storeSet, ...rest }) => ({ ...rest, stores: storeSet.size }))
       .sort((a, b) => b.prices - a.prices);
 
-    /* Estabelecimentos */
+    /* Estabelecimentos — correlaciona por nome/bairro/tipo E por scans que casam com o termo */
     const pricesByStore = new Map<string, number>();
+    const correlatedStoreIds = new Set<string>();
     for (const s of scans) {
       if (!s.establishment_id) continue;
       pricesByStore.set(s.establishment_id, (pricesByStore.get(s.establishment_id) ?? 0) + 1);
+      // scans já foram filtrados por `q` acima; qualquer loja aqui é correlacionada
+      if (q) correlatedStoreIds.add(s.establishment_id);
     }
     const storeHits: GlobalStoreHit[] = stores
-      .filter(
-        (s) =>
-          !q ||
+      .filter((s) => {
+        if (!q) return true;
+        if (correlatedStoreIds.has(s.id)) return true;
+        return (
           normalize(s.name).includes(q) ||
           normalize(s.neighborhood ?? "").includes(q) ||
-          normalize(s.kind ?? "").includes(q),
-      )
+          normalize(s.kind ?? "").includes(q)
+        );
+      })
       .filter((s) => !data.establishmentId || s.id === data.establishmentId)
       .map((s) => ({
         id: s.id,
