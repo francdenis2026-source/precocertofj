@@ -11,6 +11,7 @@ import { PriceSpotlight } from "@/components/product/PriceSpotlight";
 
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { ShareButton } from "@/components/ds";
+import { PrecoCertoMark } from "@/components/typography/PrecoCertoMark";
 import { tc } from "@/lib/typeclear";
 import { dsx } from "@/lib/ds";
 import { cn } from "@/lib/utils";

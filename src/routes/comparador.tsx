@@ -71,6 +71,7 @@ import {
 } from "lucide-react";
 import { BackButton } from "@/components/layout/BackButton";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
+import { PrecoCertoMark } from "@/components/typography/PrecoCertoMark";
 
 type ViewMode = "grid" | "table";
 type SortKey = "relevance" | "price-asc" | "savings-desc" | "unit-asc" | "name" | "confidence-desc";
