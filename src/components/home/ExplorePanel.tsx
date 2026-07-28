@@ -477,7 +477,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
           {padTop > 0 && <li aria-hidden style={{ height: padTop }} />}
           {rows.slice(start, end).map((row, i) =>
             row.kind === "item" ? (
-              <PriceRow key={row.item.slug} p={row.item} onNavigate={onNavigate} flash={isFlashing(row.item.slug)} />
+              <PriceRow key={row.item.slug} p={row.item} onNavigate={onNavigate} flash={isFlashing(row.item.slug)} best={row.item.slug === bestSlug} />
             ) : (
               <RowSkeleton key={`sk-${start + i}`} glass={glass} />
             ),
