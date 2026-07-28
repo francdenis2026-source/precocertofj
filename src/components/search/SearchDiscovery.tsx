@@ -15,6 +15,7 @@ import {
   Candy,
   Clock,
   CookingPot,
+  ChevronDown,
   type LucideIcon,
 } from "lucide-react";
 import { getPlatformStats } from "@/lib/stores-public.functions";
