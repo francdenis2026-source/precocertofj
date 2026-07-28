@@ -64,9 +64,14 @@ export function buildLivePanel(input: {
     (Boolean(input.statsError) || (stats != null && stats.ok === false) || stats == null);
 
   const markets = failed ? null : positive(stats?.establishments);
+  // "Produtos comparados" = SKUs únicos no catálogo (canônico).
+  // Prefere `products` (contagem única) para bater com /estabelecimentos e
+  // com a faixa de confiança da home. `totalItems`/`priceRecords` (leituras
+  // por mercado) servem apenas como último fallback.
   const priceCount = failed
     ? null
-    : (positive(stats?.totalItems) ?? positive(stats?.products) ?? positive(stats?.priceRecords));
+    : (positive(stats?.products) ?? positive(stats?.totalItems) ?? positive(stats?.priceRecords));
+
   const savings = failed || input.economyError ? null : positive(economy?.avgSavingsPct);
 
   const metrics: LivePanelMetric[] = [
