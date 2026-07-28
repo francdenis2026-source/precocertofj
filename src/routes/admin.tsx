@@ -27,6 +27,7 @@ import { AppShell } from "@/components/brand/AppShell";
 import { useAdminEntitiesRealtime, describeRealtimeChange } from "@/hooks/useAdminEntitiesRealtime";
 import { usePlansRealtime } from "@/hooks/usePlansRealtime";
 import { EstablishmentDeleteDialog } from "@/components/admin/EstablishmentDeleteDialog";
+import { BasketOverviewCard } from "@/components/admin/BasketOverviewCard";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
 
