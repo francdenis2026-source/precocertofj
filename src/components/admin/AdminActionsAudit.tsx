@@ -245,6 +245,18 @@ export function AdminActionsAudit() {
             </CardDescription>
           </div>
           <div className="flex flex-wrap items-center gap-1.5">
+            {pendingNew > 0 && (
+              <Button
+                size="sm"
+                variant="default"
+                className="h-8 animate-in fade-in slide-in-from-top-1"
+                onClick={loadPendingNew}
+                aria-label={`Carregar ${pendingNew} novos eventos`}
+              >
+                <Radio className="mr-1.5 h-3.5 w-3.5" />
+                {pendingNew} nov{pendingNew > 1 ? "os" : "o"}
+              </Button>
+            )}
             <Button
               size="sm"
               variant="outline"
