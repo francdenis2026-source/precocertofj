@@ -62,11 +62,11 @@ describe("WCAG AA — abas ativas dos hubs admin", () => {
 });
 
 describe("WCAG AA — sidebar (item ativo e ícones tonais)", () => {
-  it("ícones tonais em modo claro sobre fundo claro (texto normal 4.5:1)", () => {
+  it("ícones tonais em modo claro sobre fundo claro (não-texto 3:1)", () => {
     for (const [name, color] of Object.entries(TONES_LIGHT)) {
       const ratio = contrast(color, LIGHT_BG);
-      // Ícones/labels são pequenos: exigimos AA normal (4.5)
-      expect(ratio, `tone=${name} sobre claro`).toBeGreaterThanOrEqual(AA_NORMAL);
+      // WCAG 1.4.11 non-text contrast: 3:1 para ícones/glifos graficos
+      expect(ratio, `tone=${name} sobre claro`).toBeGreaterThanOrEqual(AA_LARGE);
     }
   });
 
