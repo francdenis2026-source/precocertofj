@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
@@ -74,7 +74,7 @@ function SourceBlock({
   );
 }
 
-function NumberAuditPage() {
+export function NumberAuditPage() {
   const fetchAudit = useServerFn(getNumberAudit);
   const q = useQuery({
     queryKey: ["admin", "number-audit"],

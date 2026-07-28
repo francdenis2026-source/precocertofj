@@ -4,7 +4,7 @@
  * Exibe tendências (série temporal), top IPs, motivos de falha e
  * uma tabela paginada com filtros por período, IP e motivo.
  */
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState } from "react";
@@ -83,7 +83,7 @@ function fmt(v: string | null | undefined) {
   }
 }
 
-function AuditoriaAcessosPage() {
+export function AuditoriaAcessosPage() {
   const [sinceDays, setSinceDays] = useState(14);
   const [ip, setIp] = useState("");
   const [reason, setReason] = useState("");

@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, Navigate } from "@tanstack/react-router";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
@@ -82,7 +82,7 @@ function Gate() {
   return <Page />;
 }
 
-function Page() {
+export function HistoricoPrecosPage() {
   const listFn = useServerFn(listPriceHistory);
   const seriesFn = useServerFn(getProductHistory);
 

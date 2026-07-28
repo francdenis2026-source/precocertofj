@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, Navigate } from "@tanstack/react-router";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
@@ -56,7 +56,7 @@ function findEstablishmentByCnpj(estabs: Establishment[], cnpj: string | null | 
   return estabs.find((e) => e.cnpj?.replace(/\D/g, "") === clean)?.id;
 }
 
-function CupomLotePage() {
+export function CupomLotePage() {
   const { user, loading, isAdmin } = useMyRoles();
   const navigate = useNavigate();
   const listEstab = useServerFn(listEstablishments);

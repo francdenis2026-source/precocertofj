@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
@@ -46,7 +46,7 @@ type RouteRow = {
   conversions: number;
 };
 
-function AnalyticsPage() {
+export function AnalyticsPage() {
   const [days, setDays] = useState(14);
   const dailyFn = useServerFn(getVisitorDailyMetrics);
   const routeFn = useServerFn(getUnlockRateByRoute);
