@@ -379,7 +379,7 @@ function PlansPage() {
                         ds.btn.base,
                         "btn-state-safe pc-focus mt-3 h-11 w-full px-3",
                         tc.control,
-                        isRecommended || isFounder
+                        isRecommended
                           ? "btn-gold shadow-elev-1"
                           : "border border-border bg-card text-foreground hover:border-brand-gold hover:text-brand-gold",
                       )}
