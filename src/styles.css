@@ -515,32 +515,27 @@
     display: inline-block;
     font-family: var(--font-editorial, var(--font-serif));
     font-style: normal;
-    font-weight: 520;
-    letter-spacing: -0.024em;
-    font-variation-settings: "opsz" 144, "SOFT" 20, "wght" 520;
-    background: linear-gradient(180deg,
-      color-mix(in oklab, var(--pc-home-onhero-gold, var(--pc-gold-ink)) 100%, transparent) 0%,
-      color-mix(in oklab, var(--pc-home-onhero-gold, var(--pc-gold-ink)) 82%, #7a4f00) 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
+    font-weight: 500;
+    letter-spacing: -0.022em;
+    font-variation-settings: "opsz" 144, "SOFT" 25, "wght" 500;
+    color: var(--pc-home-onhero-gold, var(--pc-gold-ink));
     padding-inline: 0.02em;
   }
   .pc-hero-mark::after {
     content: "";
     position: absolute;
-    left: 0.04em;
-    right: 0.04em;
-    bottom: -0.06em;
-    height: 0.09em;
+    left: 8%;
+    right: 8%;
+    bottom: -0.04em;
+    height: 0.055em;
     border-radius: 999px;
     background: linear-gradient(90deg,
       transparent 0%,
-      color-mix(in oklab, var(--pc-home-onhero-gold, var(--pc-gold-ink)) 90%, transparent) 20%,
-      color-mix(in oklab, var(--pc-home-onhero-gold, var(--pc-gold-ink)) 100%, transparent) 50%,
-      color-mix(in oklab, var(--pc-home-onhero-gold, var(--pc-gold-ink)) 90%, transparent) 80%,
+      color-mix(in oklab, var(--pc-home-onhero-gold, var(--pc-gold-ink)) 55%, transparent) 25%,
+      color-mix(in oklab, var(--pc-home-onhero-gold, var(--pc-gold-ink)) 80%, transparent) 50%,
+      color-mix(in oklab, var(--pc-home-onhero-gold, var(--pc-gold-ink)) 55%, transparent) 75%,
       transparent 100%);
-    opacity: 0.85;
+    opacity: 0.9;
   }
   /* Hero editorial — controla line-height, tracking e wrap por breakpoint sem
      precisar hard-code em cada rota. Aplique junto de .font-editorial. */
