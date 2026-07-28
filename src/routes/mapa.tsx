@@ -473,13 +473,14 @@ function NeighborhoodsPage() {
                               {g.establishments.length === 1 ? "mercado" : "mercados"}
                               {min != null ? (
                                 <>
-                                  {" · a partir de "}
-                                  <PrecoCertoMark
-                                    variant="label"
+                                  <span className="mx-1 text-muted-foreground/60" aria-hidden>·</span>
+                                  <span className="text-muted-foreground">a partir de </span>
+                                  <span
+                                    className="pc-price pc-price--sm"
                                     aria-label={`a partir de ${currency(min)}`}
                                   >
                                     {currency(min)}
-                                  </PrecoCertoMark>
+                                  </span>
                                 </>
                               ) : null}
                             </span>
