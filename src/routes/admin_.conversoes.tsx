@@ -19,7 +19,7 @@ export const Route = createFileRoute("/admin_/conversoes")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: ConversoesPage,
+  component: () => <Navigate to="/admin/metricas" search={{ tab: "conversoes" } as never} replace />,
 });
 
 function centsToBRL(cents: number): string {
