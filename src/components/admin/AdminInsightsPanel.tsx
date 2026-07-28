@@ -15,12 +15,23 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { Download, FileDown, CalendarRange, Loader2, RefreshCw, TrendingDown, Layers, Activity } from "lucide-react";
+import { Download, FileDown, CalendarRange, Loader2, RefreshCw, TrendingDown, Layers, Activity, Rows2, Rows3 } from "lucide-react";
 import { getAdminInsights, type AdminInsights } from "@/lib/admin-insights.functions";
 import { exportRowsToCSV, exportRowsToPDF, stampedFilename } from "@/lib/export";
 import { Button } from "@/components/ui/button";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
+import {
+  chartMetrics,
+  chartTheme,
+  legendStyle,
+  tickStyle,
+  tooltipItemStyle,
+  tooltipLabelStyle,
+  tooltipStyle,
+  type ChartDensity,
+} from "@/lib/admin-chart-theme";
+import { ChartEmpty, ChartSkeleton } from "@/components/admin/ChartStates";
 
 const brl = (v: number) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 2 });
