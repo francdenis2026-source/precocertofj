@@ -214,10 +214,10 @@ function PlansPage() {
 
 
   return (
-    <div data-planos-shell className="flex h-[calc(100svh-64px)] flex-col overflow-hidden overscroll-none bg-background text-foreground md:h-[100svh]">
+    <div data-planos-shell className="flex h-[calc(100svh-64px)] flex-col overflow-hidden overscroll-none bg-background text-foreground md:h-[calc(100svh-64px)]">
       <main className="flex min-h-0 flex-1 flex-col">
         {/* Cabeçalho compacto — altura fixa */}
-        <section className={dsx(ds.container, "shrink-0 pt-2 pb-2 md:pt-3")}>
+        <section className={dsx(ds.container, "shrink-0 pt-1.5 pb-1")}>
           <InternalPageHeader
             title="Planos e preços"
             highlight="preços"
@@ -240,21 +240,21 @@ function PlansPage() {
             Altura reservada: nunca empurra o restante da tela. */}
         <section
           id="planos"
-          className={dsx(ds.container, "shrink-0 pb-2")}
+          className={dsx(ds.container, "min-h-0 flex-1 overflow-hidden pb-1")}
           aria-label="Planos disponíveis"
         >
           {isLoading ? (
-            <div className="flex gap-3 overflow-hidden pt-2 lg:grid lg:grid-cols-4">
+            <div className="flex h-full gap-3 overflow-hidden pt-1 lg:grid lg:grid-cols-4">
               {[0, 1, 2, 3].map((i) => (
                 <div
                   key={i}
                   data-planos-card
-                  className="h-[clamp(190px,26vh,238px)] w-[76%] shrink-0 animate-pulse rounded-xl border border-border bg-muted/40 lg:w-auto"
+                  className="h-full min-h-[168px] w-[76%] shrink-0 animate-pulse rounded-xl border border-border bg-muted/40 lg:w-auto"
                 />
               ))}
             </div>
           ) : (
-            <div className="pc-rail flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1 pt-2.5 lg:grid lg:grid-cols-4 lg:overflow-visible">
+            <div className="pc-rail flex h-full snap-x snap-mandatory gap-3 overflow-x-auto pb-1 pt-1.5 lg:grid lg:grid-cols-4 lg:overflow-visible">
               {plans.map((plan) => {
                 const isRecommended = plan.slug === recommendedSlug;
                 const perMonth = pricePerMonth(plan.price_cents, plan.days);
@@ -278,7 +278,7 @@ function PlansPage() {
                     aria-pressed={isSelected}
                     aria-label={`${plan.name}${isRecommended ? " · recomendado" : ""}${isFree ? " · grátis" : ` · ${centsToBRL(plan.price_cents)}`}`}
                     className={cn(
-                      "pc-lift pc-focus relative flex h-[clamp(190px,26vh,238px)] w-[76%] shrink-0 snap-start cursor-pointer flex-col p-3.5 sm:w-[46%] lg:h-auto lg:min-h-[214px] lg:w-auto lg:p-4",
+                      "pc-lift pc-focus relative flex h-full min-h-[168px] w-[76%] shrink-0 snap-start cursor-pointer flex-col p-3 sm:w-[46%] lg:h-auto lg:min-h-[200px] lg:w-auto lg:p-3.5",
                       isRecommended ? "pc-surface-3-interactive" : "pc-surface-2-interactive",
                       isSelected && "ring-2 ring-brand-gold/45",
                     )}
@@ -376,7 +376,7 @@ function PlansPage() {
         </section>
 
         {/* Rodapé — abrem em modais compactos, sem sair da página. */}
-        <section className={dsx(ds.container, "shrink-0 pb-1")} aria-label="Ajuda e comparativo">
+        <section className={dsx(ds.container, "shrink-0 pb-0.5")} aria-label="Ajuda e comparativo">
           <div className="flex flex-wrap items-center justify-center gap-2 text-[12px]">
             <button
               type="button"
@@ -518,7 +518,7 @@ function PlansPage() {
         </Dialog>
 
 
-        <div className="flex-1" aria-hidden />
+
 
 
         {/* Barra de ação — em fluxo, sempre visível, nunca sobreposta. */}
