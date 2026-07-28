@@ -82,9 +82,19 @@ const AdminTeamPanel = lazy(() =>
 );
 import { logAdminAccess } from "@/lib/admin-team.functions";
 
+const ADMIN_TABS = [
+  "plans", "establishments", "status", "integrations",
+  "subscribers", "webhooks", "emails", "users", "audit",
+] as const;
+type AdminTab = (typeof ADMIN_TABS)[number];
+
 export const Route = createFileRoute("/admin")({
   ssr: false,
   beforeLoad: adminBeforeLoad,
+  validateSearch: (search: Record<string, unknown>): { tab?: AdminTab } => {
+    const t = String(search?.tab ?? "");
+    return ADMIN_TABS.includes(t as AdminTab) ? { tab: t as AdminTab } : {};
+  },
   head: () => ({
     meta: [
       { title: "Admin — PreçoCerto" },
