@@ -75,29 +75,30 @@ function pricePerMonth(cents: number, days: number): string | null {
   return centsToBRL(Math.round(cents / months));
 }
 
-function planHighlights(slug: string): string[] {
+/** Fallback highlights when the admin hasn't filled `features` in the DB. */
+function fallbackHighlights(slug: string, days: number): string[] {
   switch (slug) {
     case "degustacao":
       return [
-        "7 dias com tudo liberado",
+        `${days} dias com tudo liberado`,
         "Sem cartão de crédito",
         "Encerra sozinho — sem cobrança surpresa",
       ];
     case "mensal":
       return [
-        "Acesso completo por 30 dias",
+        `Acesso completo por ${days} dias`,
         "Cancele quando quiser, sem multa",
         "Ideal para testar antes de anual",
       ];
     case "trimestral":
       return [
-        "3 meses de acesso contínuo",
+        `${days} dias de acesso contínuo`,
         "Economia sobre 3 mensais",
         "Boa opção para famílias que fazem feira grande",
       ];
     case "anual":
       return [
-        "12 meses ininterruptos",
+        `${days} meses ininterruptos`,
         "O menor valor por mês da plataforma",
         "A escolha da maioria dos assinantes",
       ];
@@ -110,43 +111,50 @@ function planHighlights(slug: string): string[] {
       ];
     default:
       return [
-        "Acesso completo à plataforma",
+        `Acesso completo por ${days} dias`,
         "Suporte por e-mail em até 24h",
         "Novas funcionalidades incluídas",
       ];
   }
 }
 
-const FAQ = [
-  {
-    q: "Preciso de cartão de crédito para começar?",
-    a: "Não. O plano de degustação libera 7 dias sem cartão e encerra sozinho. Só cobramos se você escolher um plano pago depois.",
-  },
-  {
-    q: "Como funciona o pagamento?",
-    a: "Escolha o plano, entre com sua conta e pague pelo Mercado Pago — Pix aprova em segundos e também aceitamos cartão de crédito. Assim que o pagamento é confirmado, o código de licença aparece na tela e vai para o seu e-mail.",
-  },
-  {
-    q: "Tenho um cupom. Onde aplico?",
-    a: "Insira o código no checkout, antes de finalizar. O desconto aparece na hora e já entra no total.",
-  },
-  {
-    q: "E se eu quiser cancelar?",
-    a: "Pode cancelar quando quiser, direto no seu perfil. O acesso segue até o fim do período pago — sem multa, sem burocracia.",
-  },
-  {
-    q: "Posso trocar de plano depois?",
-    a: "Sim. Ative um novo código a qualquer momento e o novo período soma ao acesso atual.",
-  },
-  {
-    q: "Quem pode usar a IA e quantas análises tenho por mês?",
-    a: "No plano grátis/degustação você tem 1 análise de IA por mês (uma chamada para montar a cesta), sem possibilidade de ultrapassar. Nos planos pagos: 30 análises/mês no Essencial, 150 no Trimestral e Anual e 600 no plano Comércio/Fundador. A cota renova todo mês e o saldo aparece no seu perfil.",
-  },
-  {
-    q: "E se eu precisar de mais análises?",
-    a: "Você compra um pacote avulso de 50 análises por R$ 9,90, válido por 12 meses e cumulativo com a cota do plano. Mercados parceiros que catalogam vitrine inteira usam o plano Comércio, com cataloga\u00e7\u00e3o em lote e prioridade de processamento.",
-  },
-];
+function planHighlights(plan: PublicPlan): string[] {
+  if (plan.features && plan.features.length > 0) return plan.features;
+  return fallbackHighlights(plan.slug, plan.days);
+}
+
+function buildFaq(trialDays: number) {
+  return [
+    {
+      q: "Preciso de cartão de crédito para começar?",
+      a: `Não. O plano de degustação libera ${trialDays} dias sem cartão e encerra sozinho. Só cobramos se você escolher um plano pago depois.`,
+    },
+    {
+      q: "Como funciona o pagamento?",
+      a: "Escolha o plano, entre com sua conta e pague pelo Mercado Pago — Pix aprova em segundos e também aceitamos cartão de crédito. Assim que o pagamento é confirmado, o código de licença aparece na tela e vai para o seu e-mail.",
+    },
+    {
+      q: "Tenho um cupom. Onde aplico?",
+      a: "Insira o código no checkout, antes de finalizar. O desconto aparece na hora e já entra no total.",
+    },
+    {
+      q: "E se eu quiser cancelar?",
+      a: "Pode cancelar quando quiser, direto no seu perfil. O acesso segue até o fim do período pago — sem multa, sem burocracia.",
+    },
+    {
+      q: "Posso trocar de plano depois?",
+      a: "Sim. Ative um novo código a qualquer momento e o novo período soma ao acesso atual.",
+    },
+    {
+      q: "Quem pode usar a IA e quantas análises tenho por mês?",
+      a: "No plano grátis/degustação você tem 1 análise de IA por mês (uma chamada para montar a cesta), sem possibilidade de ultrapassar. Nos planos pagos: 30 análises/mês no Essencial, 150 no Trimestral e Anual e 600 no plano Comércio/Fundador. A cota renova todo mês e o saldo aparece no seu perfil.",
+    },
+    {
+      q: "E se eu precisar de mais análises?",
+      a: "Você compra um pacote avulso de 50 análises por R$ 9,90, válido por 12 meses e cumulativo com a cota do plano. Mercados parceiros que catalogam vitrine inteira usam o plano Comércio, com catalogação em lote e prioridade de processamento.",
+    },
+  ];
+}
 
 
 function PlansPage() {
@@ -201,6 +209,9 @@ function PlansPage() {
     plans.find((p) => p.slug === recommendedSlug) ??
     plans[0];
 
+  const trialPlan = plans.find((p) => p.slug === "degustacao" || p.price_cents === 0);
+  const trialDays = trialPlan?.days ?? 7;
+
 
   return (
     <div data-planos-shell className="flex h-[calc(100svh-64px)] flex-col overflow-hidden overscroll-none bg-background text-foreground md:h-[100svh]">
@@ -214,7 +225,7 @@ function PlansPage() {
             breadcrumbs={[{ label: "Início", to: "/" }, { label: "Planos" }]}
             description={
               <span data-short-hide className="inline-flex flex-wrap items-center gap-x-2 gap-y-1">
-                <span>Escolha o plano que combina com sua rotina — 7 dias grátis, sem cartão.</span>
+                <span>Escolha o plano que combina com sua rotina — {trialDays} dias grátis, sem cartão.</span>
                 <span className="inline-flex items-center gap-1 text-[11.5px] text-muted-foreground">
                   <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-brand-gold" aria-hidden />
                   Ativação imediata · Pix ou cartão
@@ -292,18 +303,26 @@ function PlansPage() {
                     </h2>
 
                     <div className="mt-2">
-                      <span
-                        className={cn(
-                          isRecommended ? tc.dataPrimary : "font-display text-[25px] font-semibold leading-none tracking-tight text-foreground",
-                        )}
-                      >
-                        {isFree ? "Grátis" : centsToBRL(plan.price_cents)}
-                      </span>
+                      <div className="flex items-baseline gap-2">
+                        <span
+                          className={cn(
+                            isRecommended ? tc.dataPrimary : "font-display text-[25px] font-semibold leading-none tracking-tight text-foreground",
+                          )}
+                        >
+                          {isFree ? "Grátis" : centsToBRL(plan.price_cents)}
+                        </span>
+                        {plan.original_price_cents != null &&
+                          plan.original_price_cents > plan.price_cents && (
+                            <span className="text-xs text-muted-foreground line-through">
+                              {centsToBRL(plan.original_price_cents)}
+                            </span>
+                          )}
+                      </div>
                       <p className={cn(tc.meta, "mt-1.5")}>
                         {isFounder
                           ? "Pagamento único · vitalício"
                           : isFree
-                            ? "7 dias · sem cartão"
+                            ? `${plan.days} dias · sem cartão`
                             : perMonth
                               ? `≈ ${perMonth}/mês · ${plan.days} dias`
                               : `${plan.days} dias de acesso`}
@@ -313,7 +332,7 @@ function PlansPage() {
                     <hr className="pc-rule my-2.5" />
 
                     <ul className="min-h-0 flex-1 space-y-1.5 overflow-hidden text-[12px] leading-snug">
-                      {planHighlights(plan.slug).slice(0, 2).map((h) => (
+                      {planHighlights(plan).slice(0, 2).map((h) => (
                         <li key={h} className="flex items-start gap-2">
                           <Check
                             className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-gold"
@@ -471,7 +490,7 @@ function PlansPage() {
             </DialogHeader>
             <div className="max-h-[70svh] overflow-y-auto px-5 py-2">
               <Accordion type="single" collapsible className="w-full">
-                {FAQ.map((f, i) => (
+                {buildFaq(trialDays).map((f, i) => (
                   <AccordionItem key={i} value={`q-${i}`} className="border-border/60">
                     <AccordionTrigger className={cn(tc.itemTitle, "text-left hover:no-underline")}>
                       {f.q}
@@ -518,9 +537,9 @@ function PlansPage() {
               </p>
               <p className="truncate text-[11.5px] text-muted-foreground">
                 {!selectedPlan
-                  ? "7 dias grátis, sem cartão"
+                  ? `${trialDays} dias grátis, sem cartão`
                   : selectedPlan.price_cents === 0
-                    ? "7 dias grátis · sem cartão"
+                    ? `${selectedPlan.days} dias grátis · sem cartão`
                     : `${centsToBRL(selectedPlan.price_cents)} · ${selectedPlan.days} dias`}
               </p>
             </div>

@@ -14,7 +14,10 @@ export type PublicPlan = {
   slug: string;
   days: number;
   price_cents: number;
+  original_price_cents: number | null;
   description: string | null;
+  features: string[];
+  highlight: boolean;
   sort_order: number;
 };
 
@@ -22,11 +25,24 @@ export const listPublicPlans = createServerFn({ method: "GET" }).handler(async (
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { data, error } = await supabaseAdmin
     .from("license_plans")
-    .select("id,name,slug,days,price_cents,description,sort_order")
+    .select("id,name,slug,days,price_cents,original_price_cents,description,features,highlight,sort_order")
     .eq("active", true)
     .order("sort_order", { ascending: true });
   if (error) throw new Error(error.message);
-  return (data ?? []) as PublicPlan[];
+  return (data ?? []).map((r: any) => ({
+    id: r.id,
+    name: r.name,
+    slug: r.slug,
+    days: Number(r.days ?? 0),
+    price_cents: Number(r.price_cents ?? 0),
+    original_price_cents: r.original_price_cents == null ? null : Number(r.original_price_cents),
+    description: r.description ?? null,
+    features: Array.isArray(r.features)
+      ? r.features.filter((f: unknown): f is string => typeof f === "string")
+      : [],
+    highlight: !!r.highlight,
+    sort_order: Number(r.sort_order ?? 100),
+  })) as PublicPlan[];
 });
 
 export const validatePromoCoupon = createServerFn({ method: "POST" })
