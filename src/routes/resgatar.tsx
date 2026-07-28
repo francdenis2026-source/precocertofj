@@ -1,5 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { motion } from "framer-motion";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -7,7 +8,6 @@ import { redeemMyLicenseCode, checkLicenseCodePublic } from "@/lib/licenses.func
 import { getMyAccount } from "@/lib/account.functions";
 import {
   Loader2,
-  Ticket,
   CheckCircle2,
   ArrowRight,
   ShieldCheck,
@@ -16,18 +16,20 @@ import {
   KeyRound,
   BadgeCheck,
   XCircle,
-  Lock,
 } from "lucide-react";
 import { toast } from "sonner";
-import { Logo } from "@/components/brand/Logo";
+import { AuthHero } from "@/components/auth/AuthHero";
 import { cn } from "@/lib/utils";
 
 /* ============================================================
-   /resgatar — Ativação de licença (v4 · compact editorial)
-   • Single card centralizado (max-w-[560px])
-   • Tokens semânticos do design system, sem cores fixas
-   • Header minimal + card + rodapé de confiança em uma tela
+   /resgatar — Ativação de licença (v5 · unified auth shell)
+   • Split-shell 880×560 idêntico a /login e /cadastro
+   • AuthHero variant="login" no lado esquerdo (desktop)
+   • Formulário no lado direito com typeclear do sistema
    ============================================================ */
+
+const PC_DISPLAY = "'Fraunces', 'Instrument Serif', ui-serif, Georgia, serif";
+const PC_BODY = "'Figtree', system-ui, sans-serif";
 
 const MONO = "'JetBrains Mono', ui-monospace, monospace";
 
