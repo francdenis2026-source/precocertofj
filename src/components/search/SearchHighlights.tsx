@@ -8,6 +8,7 @@ import { QuickFilterBar } from "@/components/search/QuickFilterBar";
 import { useSession } from "@/hooks/useSession";
 import { getSearchHistory } from "@/lib/search-history";
 import { listFavoriteItems } from "@/lib/favorites.functions";
+import { PrecoCertoMark } from "@/components/typography/PrecoCertoMark";
 
 const brl = (n: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n);
@@ -409,9 +410,13 @@ function OpportunityCard({ item, onPick }: { item: HighlightItem; onPick: () => 
       onClick={onPick}
       className="group flex h-full w-full flex-col gap-1.5 rounded-xl border border-border bg-background p-2.5 text-left transition-all hover:-translate-y-px hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
-      <span className="line-clamp-2 text-[12.5px] font-medium leading-snug tracking-tight text-foreground">
+      <PrecoCertoMark
+        as="span"
+        variant="card"
+        className="line-clamp-2 text-foreground"
+      >
         {item.name}
-      </span>
+      </PrecoCertoMark>
       <span className="flex items-baseline gap-1.5">
         <span className="text-[15px] font-semibold tabular-nums text-foreground">
           {brl(item.minPrice)}
