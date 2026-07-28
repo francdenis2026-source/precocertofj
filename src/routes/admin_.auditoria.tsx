@@ -63,7 +63,7 @@ function AuditoriaShell() {
   return (
     <AdminOnly>
       <div className="px-4">
-        <AdminTabs to="/admin/auditoria" title="Auditoria" items={AUDIT_TABS} active={tab} />
+        <AdminTabs to="/admin/auditoria" title="Auditoria" items={AUDIT_TABS} active={tab} tone="people" />
       </div>
       {tab === "auditoria" && <AuditoriaPage />}
       {tab === "acessos" && <AuditoriaAcessosPage />}
