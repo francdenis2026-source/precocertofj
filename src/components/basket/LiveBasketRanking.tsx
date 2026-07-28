@@ -352,6 +352,39 @@ export function LiveBasketRanking({
       .filter((x): x is { category: EssentialCategory; store: ScopedStore } => x != null);
   }, [favoritesSet, data, neighborhood]);
 
+  // ---- Substituições sugeridas (apenas com cesta completa) ----
+  const substitutionsByStore = useMemo<Map<string, BasketSubstitution[]>>(() => {
+    const map = new Map<string, BasketSubstitution[]>();
+    if (!data || category !== "all") return map;
+    for (const s of ranked) {
+      const subs = suggestSubstitutions(data, s.establishmentId);
+      if (subs.length > 0) map.set(s.establishmentId, subs);
+    }
+    return map;
+  }, [data, category, ranked]);
+
+  const hypotheticalVerdict = useMemo(() => {
+    if (!data || category !== "all" || ranked.length === 0) return null;
+    const projections = projectVerdictWithSubstitutions(data);
+    // Restringe às lojas atualmente no ranking (respeita filtro de bairro)
+    const inScope = new Set(ranked.map((s) => s.establishmentId));
+    const scoped = projections.filter((p) => inScope.has(p.storeId));
+    if (scoped.length === 0) return null;
+    const currentLeader = ranked[0];
+    const projectedLeader = scoped[0];
+    const changes = scoped.reduce((n, p) => n + p.substitutionsApplied, 0);
+    if (changes === 0) return null;
+    return {
+      currentLeaderId: currentLeader.establishmentId,
+      currentLeaderName: currentLeader.establishmentName,
+      projectedLeaderId: projectedLeader.storeId,
+      projectedLeaderName: projectedLeader.storeName,
+      projectedTotal: projectedLeader.hypotheticalTotal,
+      changed: projectedLeader.storeId !== currentLeader.establishmentId,
+      totalSubstitutions: changes,
+    };
+  }, [data, category, ranked]);
+
   // ---- Sparklines (últimos 7 dias) ----
   const storeIds = useMemo(() => ranked.slice(0, 10).map((s) => s.establishmentId), [ranked]);
   const sparklineQuery = useQuery<Record<string, Array<{ t: string; p: number }>>>({
