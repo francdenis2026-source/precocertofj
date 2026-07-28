@@ -15,6 +15,7 @@ import {
   Candy,
   Clock,
   CookingPot,
+  ChevronDown,
   type LucideIcon,
 } from "lucide-react";
 import { getPlatformStats } from "@/lib/stores-public.functions";
@@ -101,6 +102,29 @@ export function SearchDiscovery({ onPickQuery }: Props) {
     setRecent(removeSearchHistory(term).map((e) => e.query));
   };
 
+  // Colapsáveis: em telas pequenas (< sm = 640px) as seções "Categorias" e
+  // "KPIs" iniciam recolhidas para caberem sem rolagem; em sm+ ficam sempre
+  // abertas e o botão de disclosure some.
+  const [isSmall, setIsSmall] = useState<boolean>(() =>
+    typeof window !== "undefined" ? window.matchMedia("(max-width: 639px)").matches : false,
+  );
+  const [catsOpen, setCatsOpen] = useState<boolean>(!isSmall);
+  const [kpisOpen, setKpisOpen] = useState<boolean>(!isSmall);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(max-width: 639px)");
+    const sync = (e: MediaQueryList | MediaQueryListEvent) => {
+      const small = "matches" in e ? e.matches : mq.matches;
+      setIsSmall(small);
+      // Ao ampliar para sm+, garantimos que ambas expandam; ao reduzir, recolhem
+      // por padrão (o usuário pode reabrir com o toque).
+      setCatsOpen(!small);
+      setKpisOpen(!small);
+    };
+    sync(mq);
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   const stats = useQuery({
     queryKey: ["platform-stats-discovery"],
@@ -129,7 +153,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
           >
             <SearchIcon className="h-3.5 w-3.5" strokeWidth={2.75} />
           </span>
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <h2 className="font-serif text-[14px] font-semibold leading-tight tracking-tight text-foreground sm:text-[15px]">
               O que você quer comparar hoje?
             </h2>
@@ -137,16 +161,36 @@ export function SearchDiscovery({ onPickQuery }: Props) {
               Toque em uma categoria para começar — ou digite um produto acima.
             </p>
           </div>
+          {/* Disclosure — só aparece < sm; em sm+ as categorias ficam sempre abertas */}
+          <button
+            type="button"
+            onClick={() => setCatsOpen((v) => !v)}
+            aria-expanded={catsOpen}
+            aria-controls="discovery-categorias"
+            className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-border/70 bg-background text-foreground/70 transition-colors hover:border-brand-gold hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold sm:hidden"
+          >
+            <ChevronDown
+              className={`h-4 w-4 transition-transform ${catsOpen ? "rotate-180" : ""}`}
+              aria-hidden
+            />
+            <span className="sr-only">
+              {catsOpen ? "Recolher categorias" : "Expandir categorias"}
+            </span>
+          </button>
         </header>
 
-        {/* Categorias — grid no web, carrossel no mobile. */}
-        <div className="mt-2 -mx-1 flex snap-x snap-mandatory gap-1.5 overflow-x-auto px-1 pb-1 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-4 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+        {/* Categorias — grid no web, carrossel no mobile. Colapsável < sm. */}
+        <div
+          id="discovery-categorias"
+          hidden={!catsOpen}
+          className="mt-2 -mx-1 flex snap-x snap-mandatory gap-1.5 overflow-x-auto px-1 pb-1 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-4 sm:overflow-visible sm:px-0 lg:grid-cols-4"
+        >
           {CATEGORIES.map((c) => (
             <button
               key={c.q}
               type="button"
               onClick={() => onPickQuery(c.q)}
-              className="group snap-start inline-flex h-9 shrink-0 items-center gap-2 rounded-lg border border-border bg-background px-2.5 text-left text-[12.5px] font-medium tracking-tight text-foreground shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_10%,transparent)] transition-all hover:-translate-y-px hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] hover:shadow-sm active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="group snap-start inline-flex h-9 min-w-0 shrink-0 items-center gap-2 rounded-lg border border-border bg-background px-2.5 text-left text-[12.5px] font-medium tracking-tight text-foreground shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_10%,transparent)] transition-all hover:-translate-y-px hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] hover:shadow-sm active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <span
                 aria-hidden
@@ -239,14 +283,24 @@ export function SearchDiscovery({ onPickQuery }: Props) {
 
 
 
-      {/* Sinal de vida — cartão próprio, mesmo padrão dos HeroMetric */}
+      {/* Sinal de vida — cartão próprio, colapsável < sm */}
       <section className="border-t border-border/60 pt-2.5">
-        <div className="mb-1.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 px-0.5">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-border/70 px-2 py-0.5 text-[10.5px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
-            <Clock className="h-3 w-3 text-brand-gold" aria-hidden />
-            Janela: últimos {stats.data?.windowDays ?? 30} dias
-          </span>
-          <span className="text-[10.5px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
+        <div className="mb-1.5 flex flex-wrap items-center justify-between gap-x-2 gap-y-1 px-0.5">
+          <button
+            type="button"
+            onClick={() => setKpisOpen((v) => !v)}
+            aria-expanded={kpisOpen}
+            aria-controls="discovery-kpis"
+            className="inline-flex min-w-0 items-center gap-1.5 rounded-full border border-border/70 px-2 py-0.5 text-[10.5px] font-medium uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold sm:pointer-events-none sm:cursor-default"
+          >
+            <Clock className="h-3 w-3 shrink-0 text-brand-gold" aria-hidden />
+            <span className="truncate">Janela: últimos {stats.data?.windowDays ?? 30} dias</span>
+            <ChevronDown
+              className={`h-3.5 w-3.5 shrink-0 transition-transform sm:hidden ${kpisOpen ? "rotate-180" : ""}`}
+              aria-hidden
+            />
+          </button>
+          <span className="min-w-0 truncate text-[10.5px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
             {statsFailed
               ? "Dados indisponíveis"
               : stats.data?.generatedAt
@@ -254,7 +308,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
                 : "Atualizando…"}
           </span>
         </div>
-        {statsFailed && (
+        {statsFailed && kpisOpen && (
           <p
             role="status"
             className="mb-1.5 rounded-lg border border-border/70 px-2.5 py-1.5 text-[11.5px] leading-snug text-muted-foreground"
@@ -262,7 +316,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
             Não foi possível carregar os números do banco agora.
           </p>
         )}
-        <div className="grid grid-cols-3 gap-1.5">
+        <div id="discovery-kpis" hidden={!kpisOpen} className="grid grid-cols-3 gap-1.5">
           <StatCell
             icon={<TrendingDown className="h-3.5 w-3.5" aria-hidden />}
             label="Preços em queda"
