@@ -114,9 +114,11 @@ type PriceItem = {
 const PriceRow = memo(function PriceRow({
   p,
   onNavigate,
+  flash,
 }: {
   p: PriceItem;
   onNavigate?: () => void;
+  flash?: boolean;
 }) {
   return (
     <li
@@ -127,11 +129,12 @@ const PriceRow = memo(function PriceRow({
         to="/produto/$slug"
         params={{ slug: p.slug }}
         onClick={onNavigate}
-        className={`group relative grid ${ROW_H} grid-cols-[minmax(0,1fr)_auto] items-center gap-3 -mx-2 rounded-md px-2 transition-all duration-200 ease-out hover:bg-[var(--pc-home-onhero-glass)] hover:pl-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-onhero-gold)]`}
+        data-flash={flash ? "1" : undefined}
+        className={`group relative grid ${ROW_H} grid-cols-[minmax(0,1fr)_auto] items-center gap-3 -mx-2 rounded-md px-2 transition-all duration-200 ease-out hover:bg-[var(--pc-home-onhero-glass)] hover:pl-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-onhero-gold)] ${flash ? "pc-live-flash" : ""}`}
       >
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-y-1.5 left-0 w-[2px] rounded-full opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+          className={`pointer-events-none absolute inset-y-1.5 left-0 w-[2px] rounded-full transition-opacity duration-200 group-hover:opacity-100 ${flash ? "opacity-100" : "opacity-0"}`}
           style={{ background: "var(--pc-home-onhero-gold)" }}
         />
         <div className="min-w-0">
@@ -153,7 +156,20 @@ const PriceRow = memo(function PriceRow({
             </span>
             <span className="mx-1 opacity-60">·</span>
             {relative(p.when)}
-            {p.stores > 1 ? (
+            {flash ? (
+              <>
+                <span className="mx-1 opacity-60">·</span>
+                <span
+                  className={`${tc.eyebrow} rounded-full px-1.5 py-0.5`}
+                  style={{
+                    color: "var(--pc-home-onhero-gold)",
+                    border: "1px solid var(--pc-home-onhero-gold)",
+                  }}
+                >
+                  novo
+                </span>
+              </>
+            ) : p.stores > 1 ? (
               <>
                 <span className="mx-1 opacity-60">·</span>
                 {p.stores} mercados
