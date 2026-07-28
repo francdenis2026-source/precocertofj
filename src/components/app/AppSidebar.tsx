@@ -113,6 +113,7 @@ const appGroups: readonly NavGroup[] = [
 const adminGroups: readonly NavGroup[] = [
   {
     label: "Visão geral",
+    tone: "overview",
     items: [
       { to: "/admin", label: "Dashboard", icon: Shield, exact: true },
       { to: "/admin/cobertura", label: "Cobertura", icon: Boxes },
@@ -122,6 +123,7 @@ const adminGroups: readonly NavGroup[] = [
   },
   {
     label: "Catálogo",
+    tone: "catalog",
     items: [
       { to: "/admin/catalogo", label: "Produtos", icon: Database },
       { to: "/admin/precos", label: "Preços", icon: Tags, exact: true },
@@ -135,6 +137,7 @@ const adminGroups: readonly NavGroup[] = [
   },
   {
     label: "Comercial",
+    tone: "commerce",
     items: [
       { to: "/admin/gestao", label: "Licenças", icon: KeyRound },
       { to: "/admin/promocoes", label: "Promoções", icon: TicketPercent, search: { tab: "codigos" } },
@@ -146,6 +149,7 @@ const adminGroups: readonly NavGroup[] = [
   },
   {
     label: "Clientes",
+    tone: "people",
     items: [
       { to: "/admin/clientes", label: "Clientes", icon: Users },
       { to: "/admin/auditoria", label: "Auditoria de acessos", icon: Activity, search: { tab: "acessos" } },
@@ -155,6 +159,7 @@ const adminGroups: readonly NavGroup[] = [
   },
   {
     label: "Sistema",
+    tone: "system",
     items: [
       { to: "/admin/consistencia", label: "Consistência", icon: Gauge },
       { to: "/admin/sinonimos", label: "Sinônimos", icon: Languages },
@@ -163,6 +168,7 @@ const adminGroups: readonly NavGroup[] = [
     ],
   },
 ] as const;
+
 
 
 export function AppSidebar() {
