@@ -71,6 +71,15 @@ import { Sparkline } from "@/components/basket/Sparkline";
 
 type CategoryFilter = "all" | EssentialCategory;
 
+export type LiveBasketSort = "coverage" | "total" | "savings" | "recent";
+const SORT_STORAGE_KEY = "pc:live-basket:sort";
+const SORT_OPTIONS: { key: LiveBasketSort; label: string }[] = [
+  { key: "coverage", label: "Cobertura + menor total" },
+  { key: "total", label: "Menor total" },
+  { key: "savings", label: "Maior economia vs. líder" },
+  { key: "recent", label: "Atualização mais recente" },
+];
+
 export type LiveBasketFilters = {
   category: CategoryFilter;
   city: string; // "all" or city name
