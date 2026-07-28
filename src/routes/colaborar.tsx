@@ -22,7 +22,7 @@ import {
 import { toast } from "sonner";
 import { PageShell, PageShellContent } from "@/components/layout/PageShell";
 import { InternalPageHeader } from "@/components/layout/InternalPageHeader";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import { useSession } from "@/hooks/useSession";
 import { COLLAB_EMAIL, collabMailtoHref } from "@/lib/collab-mailto";
 import {
