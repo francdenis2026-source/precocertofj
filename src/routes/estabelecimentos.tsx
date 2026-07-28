@@ -527,7 +527,7 @@ function EstablishmentsPage() {
           {data && (
             <div className="mt-2.5 border-t border-border/60 pt-2">
               <StatCellGroup
-                label={`Resumo: ${data.totalEstablishments} comércios e ${data.totalProducts.toLocaleString("pt-BR")} produtos listados`}
+                label={`Resumo: ${data.totalEstablishments} comércios e ${data.totalProducts.toLocaleString("pt-BR")} produtos comparados`}
                 className="w-full flex-wrap sm:w-auto"
               >
                 <HeroMetric
@@ -541,11 +541,12 @@ function EstablishmentsPage() {
                 <StatCellDivider />
                 <HeroMetric
                   icon={Package}
-                  label="Produtos listados"
+                  label="Produtos comparados"
                   value={data.totalProducts.toLocaleString("pt-BR")}
                   hint="Ver categorias"
                   onClick={() => setMetricDetail("products")}
                 />
+
                 <StatCellDivider />
                 <HeroMetric
                   icon={PiggyBank}
