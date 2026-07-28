@@ -251,8 +251,8 @@ export function ProductCompareDialog({
                           >
                             <p
                               className={
-                                "font-display text-[15px] font-semibold tabular-nums " +
-                                (isMin ? "text-accent-strong" : "text-foreground")
+                                "pc-price pc-price--md " +
+                                (isMin ? "pc-price--best" : "")
                               }
                             >
                               {fmt(cell.price)}
