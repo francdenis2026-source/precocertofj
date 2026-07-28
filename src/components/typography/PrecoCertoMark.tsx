@@ -17,8 +17,8 @@ const variantCls: Record<Variant, string> = {
   // Inline (dentro de h1/h2 de página): herda a cor do título — leitura limpa —
   // com fio dourado sublinhando o trecho-chave.
   inline: "pc-editorial-accent",
-  // Hero (homepage): assinatura de marca em ouro sólido.
-  hero: "font-editorial pc-editorial-accent pc-editorial-accent--fill pc-hero-editorial",
+  // Hero (homepage): assinatura de marca em ouro sólido — Roman (sem itálico).
+  hero: "font-editorial pc-hero-mark pc-hero-editorial",
   // Banner: intermediário — mantém preenchimento dourado mas menor que o hero.
   banner:
     "font-editorial pc-editorial-accent pc-editorial-accent--fill text-[clamp(1.25rem,2.4vw,2rem)] leading-[1.05] tracking-tight",
