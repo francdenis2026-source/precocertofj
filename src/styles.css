@@ -3084,9 +3084,24 @@ cite, em, strong, small, sub, sup, mark, q, s, u, i, b, abbr {
   font-variation-settings: "opsz" 96, "SOFT" 30;
 }
 /* Eyebrows uppercase ganham peso e tracking equilibrados para leitura clara */
-.pc-eyebrow,
-h1, h2, h3, h4, h5, h6 {
-  font-family: "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
+.pc-eyebrow {
+  font-family: "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+/* Headings padrão em Work Sans, MAS respeitando classes editoriais serif. */
+h1:not(.font-serif):not(.font-display):not(.font-editorial),
+h2:not(.font-serif):not(.font-display):not(.font-editorial),
+h3:not(.font-serif):not(.font-display):not(.font-editorial),
+h4:not(.font-serif):not(.font-display):not(.font-editorial),
+h5:not(.font-serif):not(.font-display):not(.font-editorial),
+h6:not(.font-serif):not(.font-display):not(.font-editorial) {
+  font-family: "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+/* Reforço: classes serif/editorial sempre vencem, mesmo em h1..h6 e body. */
+.font-editorial,
+[class*="font-editorial"],
+.font-serif,
+.font-display {
+  font-family: var(--font-serif) !important;
 }
 /* Códigos: sempre IBM Plex Mono via token, nunca `monospace` do UA */
 code, pre, kbd, samp, tt, var,
