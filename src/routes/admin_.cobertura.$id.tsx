@@ -41,6 +41,7 @@ import {
   getMissingProducts,
   getPresentProducts,
 } from "@/lib/coverage.functions";
+import { CoverageErrorBanner } from "@/components/admin/CoverageDiagnosticsPanel";
 import { bulkInsertScans } from "@/lib/bulk-insert.functions";
 
 export const Route = createFileRoute("/admin_/cobertura/$id")({
