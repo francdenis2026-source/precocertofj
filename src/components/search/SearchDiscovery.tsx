@@ -115,44 +115,44 @@ export function SearchDiscovery({ onPickQuery }: Props) {
   const statsFailed = Boolean(stats.isError || (stats.data && !stats.data.ok));
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       {/* Bloco principal — surface sólida com contraste WCAG AA em ambos os modos */}
-      <section className="relative border-t border-border/60 pt-5">
+      <section className="relative border-t border-border/60 pt-2.5">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-brand-gold/45 to-transparent"
         />
-        <header className="flex items-start gap-3">
+        <header className="flex items-start gap-2.5">
           <span
             aria-hidden
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-gold text-[#0a1327] shadow-sm ring-1 ring-[#0a1327]/15"
+            className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-gold text-[#0a1327] shadow-sm ring-1 ring-[#0a1327]/15"
           >
-            <SearchIcon className="h-4 w-4" strokeWidth={2.75} />
+            <SearchIcon className="h-3.5 w-3.5" strokeWidth={2.75} />
           </span>
           <div className="min-w-0">
-            <h2 className="font-serif text-[15px] font-semibold leading-tight tracking-tight text-foreground sm:text-[17px]">
+            <h2 className="font-serif text-[14px] font-semibold leading-tight tracking-tight text-foreground sm:text-[15px]">
               O que você quer comparar hoje?
             </h2>
-            <p className="mt-0.5 text-[12.5px] leading-snug text-muted-foreground">
+            <p className="mt-0.5 text-[12px] leading-snug text-muted-foreground">
               Toque em uma categoria para começar — ou digite um produto acima.
             </p>
           </div>
         </header>
 
-        {/* Categorias — grid no web, carrossel no mobile. Alvos 44px. */}
-        <div className="mt-3 -mx-1 flex snap-x snap-mandatory gap-2 overflow-x-auto px-1 pb-1 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-4 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+        {/* Categorias — grid no web, carrossel no mobile. */}
+        <div className="mt-2 -mx-1 flex snap-x snap-mandatory gap-1.5 overflow-x-auto px-1 pb-1 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-4 sm:overflow-visible sm:px-0 lg:grid-cols-4">
           {CATEGORIES.map((c) => (
             <button
               key={c.q}
               type="button"
               onClick={() => onPickQuery(c.q)}
-              className="group snap-start inline-flex h-11 shrink-0 items-center gap-2 rounded-xl border border-border bg-background px-3 text-left text-[13px] font-medium tracking-tight text-foreground shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_10%,transparent)] transition-all hover:-translate-y-px hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] hover:shadow-sm active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="group snap-start inline-flex h-9 shrink-0 items-center gap-2 rounded-lg border border-border bg-background px-2.5 text-left text-[12.5px] font-medium tracking-tight text-foreground shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_10%,transparent)] transition-all hover:-translate-y-px hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] hover:shadow-sm active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <span
                 aria-hidden
-                className="grid h-7 w-7 flex-none place-items-center rounded-lg bg-brand-gold/15 text-brand-gold-soft transition-colors dark:text-brand-gold group-hover:bg-brand-gold group-hover:text-brand-navy dark:group-hover:text-brand-navy group-focus-visible:bg-brand-gold group-focus-visible:text-brand-navy dark:group-focus-visible:text-brand-navy"
+                className="grid h-6 w-6 flex-none place-items-center rounded-md bg-brand-gold/15 text-brand-gold-soft transition-colors dark:text-brand-gold group-hover:bg-brand-gold group-hover:text-brand-navy dark:group-hover:text-brand-navy group-focus-visible:bg-brand-gold group-focus-visible:text-brand-navy dark:group-focus-visible:text-brand-navy"
               >
-                <c.Icon className="h-4 w-4" strokeWidth={2.25} />
+                <c.Icon className="h-3.5 w-3.5" strokeWidth={2.25} />
               </span>
               <span className="truncate">{c.label}</span>
             </button>
