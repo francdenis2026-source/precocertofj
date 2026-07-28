@@ -34,6 +34,7 @@ import {
   Trophy,
   ClipboardCheck,
   Camera,
+  Radio,
 } from "lucide-react";
 import {
   Sidebar,
