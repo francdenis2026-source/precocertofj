@@ -1375,8 +1375,20 @@ export function PriceSearchBar({
                                             compareSelection.includes(g.productName) || compareSelection.length < 3
                                           }
                                           onToggleCompare={() => toggleCompare(g.productName)}
+                                          focused={
+                                            !!focusProduct &&
+                                            g.productName.toLowerCase() === focusProduct.toLowerCase()
+                                          }
+                                          focusedMarket={
+                                            !!focusProduct &&
+                                            g.productName.toLowerCase() === focusProduct.toLowerCase()
+                                              ? focusMarket
+                                              : null
+                                          }
+                                          onSelect={onFocusChange ?? undefined}
                                         />
                                       );
+
                                     })}
                                     {hidden > 0 ? (
                                       <AutoLoadMore
