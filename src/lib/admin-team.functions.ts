@@ -55,12 +55,21 @@ export const ADMIN_AUDIT_LABELS: Record<AdminAuditAction, string> = {
 /* Leitura do log                                                      */
 /* ------------------------------------------------------------------ */
 
+export type AdminAuditPage = {
+  rows: AdminAuditRow[];
+  total: number;
+  offset: number;
+  limit: number;
+};
+
 export const listAdminAuditLog = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
   .inputValidator((input?: {
     action?: string;
     days?: number;
     limit?: number;
+    offset?: number;
+    search?: string;
     targetType?: string;
     establishmentId?: string;
     actorEmail?: string;
@@ -69,14 +78,16 @@ export const listAdminAuditLog = createServerFn({ method: "POST" })
   }) => ({
     action: input?.action && input.action !== "all" ? String(input.action) : null,
     days: input?.days != null && Number.isFinite(Number(input.days)) ? Number(input.days) : null,
-    limit: Math.min(Math.max(Number(input?.limit ?? 300), 1), 1000),
+    limit: Math.min(Math.max(Number(input?.limit ?? 20), 1), 200),
+    offset: Math.max(Number(input?.offset ?? 0), 0),
+    search: input?.search ? String(input.search).trim() : null,
     targetType: input?.targetType && input.targetType !== "all" ? String(input.targetType) : null,
     establishmentId: input?.establishmentId ? String(input.establishmentId) : null,
     actorEmail: input?.actorEmail ? String(input.actorEmail).trim().toLowerCase() : null,
     from: input?.from ? String(input.from) : null,
     to: input?.to ? String(input.to) : null,
   }))
-  .handler(async ({ data }): Promise<AdminAuditRow[]> => {
+  .handler(async ({ data }): Promise<AdminAuditPage> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
     // Resolve actor email → user IDs (optional filter)
@@ -90,29 +101,40 @@ export const listAdminAuditLog = createServerFn({ method: "POST" })
         for (const [id, email] of emailById) {
           if (email && email.toLowerCase().includes(data.actorEmail)) actorIds.push(id);
         }
-        if (actorIds.length === 0) return []; // no match
+        if (actorIds.length === 0) {
+          return { rows: [], total: 0, offset: data.offset, limit: data.limit };
+        }
       }
     } catch {
       /* lista de e-mails é opcional */
     }
 
     const sel = (s: string): string => s;
-    let q = supabaseAdmin
-      .from("admin_audit_log")
-      .select(sel("id, action, target_type, target_id, notes, admin_user_id, created_at, before, after"))
-      .order("created_at", { ascending: false })
-      .limit(data.limit);
-    if (data.action) q = q.eq("action", data.action);
-    if (data.targetType) q = q.eq("target_type", data.targetType);
-    if (data.days != null) {
-      q = q.gte("created_at", new Date(Date.now() - data.days * 86400000).toISOString());
-    }
-    if (data.from) q = q.gte("created_at", new Date(data.from).toISOString());
-    if (data.to) q = q.lte("created_at", new Date(data.to).toISOString());
-    if (actorIds && actorIds.length > 0) q = q.in("admin_user_id", actorIds);
+    const eid = data.establishmentId;
+    const hasEstFilter = Boolean(eid);
+    // When filtering by establishment we must inspect before/after JSON payloads,
+    // which PostgREST cannot count exactly — fall back to over-fetch + client filter.
+    const useServerPagination = !hasEstFilter;
 
-    const { data: rows, error } = await q;
-    if (error) throw new Error(error.message);
+    const applyFilters = <T extends { eq: (...a: unknown[]) => T; in: (...a: unknown[]) => T; gte: (...a: unknown[]) => T; lte: (...a: unknown[]) => T; or: (...a: unknown[]) => T }>(q: T): T => {
+      let out: T = q;
+      if (data.action) out = out.eq("action", data.action);
+      if (data.targetType) out = out.eq("target_type", data.targetType);
+      if (data.days != null) {
+        out = out.gte("created_at", new Date(Date.now() - data.days * 86400000).toISOString());
+      }
+      if (data.from) out = out.gte("created_at", new Date(data.from).toISOString());
+      if (data.to) out = out.lte("created_at", new Date(data.to).toISOString());
+      if (actorIds && actorIds.length > 0) out = out.in("admin_user_id", actorIds);
+      if (data.search) {
+        const esc = data.search.replace(/[,()]/g, " ").trim();
+        if (esc) {
+          const term = `%${esc}%`;
+          out = out.or(`notes.ilike.${term},target_id.ilike.${term},action.ilike.${term},target_type.ilike.${term}`);
+        }
+      }
+      return out;
+    };
 
     type Row = {
       id: string;
@@ -125,32 +147,56 @@ export const listAdminAuditLog = createServerFn({ method: "POST" })
       before: Record<string, unknown> | null;
       after: Record<string, unknown> | null;
     };
-    let list = (rows ?? []) as unknown as Row[];
 
-    // Optional: filter by establishment id — either as direct target or referenced in before/after payload
-    if (data.establishmentId) {
-      const eid = data.establishmentId;
-      list = list.filter((r) => {
+    let list: Row[] = [];
+    let total = 0;
+
+    if (useServerPagination) {
+      const base = supabaseAdmin
+        .from("admin_audit_log")
+        .select(sel("id, action, target_type, target_id, notes, admin_user_id, created_at"), { count: "exact" })
+        .order("created_at", { ascending: false })
+        .range(data.offset, data.offset + data.limit - 1);
+      const q = applyFilters(base as unknown as Parameters<typeof applyFilters>[0]) as unknown as typeof base;
+      const { data: rows, error, count } = await q;
+      if (error) throw new Error(error.message);
+      list = (rows ?? []) as unknown as Row[];
+      total = count ?? list.length;
+    } else {
+      const base = supabaseAdmin
+        .from("admin_audit_log")
+        .select(sel("id, action, target_type, target_id, notes, admin_user_id, created_at, before, after"))
+        .order("created_at", { ascending: false })
+        .limit(1000);
+      const q = applyFilters(base as unknown as Parameters<typeof applyFilters>[0]) as unknown as typeof base;
+      const { data: rows, error } = await q;
+      if (error) throw new Error(error.message);
+      const all = ((rows ?? []) as unknown as Row[]).filter((r) => {
         if (r.target_type === "establishment" && r.target_id === eid) return true;
-        const b = r.before as Record<string, unknown> | null;
-        const a = r.after as Record<string, unknown> | null;
-        return (
-          (b && (b as { establishment_id?: unknown }).establishment_id === eid) ||
-          (a && (a as { establishment_id?: unknown }).establishment_id === eid)
-        );
+        const b = r.before as { establishment_id?: unknown } | null;
+        const a = r.after as { establishment_id?: unknown } | null;
+        return (b && b.establishment_id === eid) || (a && a.establishment_id === eid);
       });
+      total = all.length;
+      list = all.slice(data.offset, data.offset + data.limit);
     }
 
-    return list.map((r) => ({
-      id: r.id,
-      action: r.action,
-      targetType: r.target_type,
-      targetId: r.target_id,
-      notes: r.notes,
-      actorEmail: r.admin_user_id ? (emailById.get(r.admin_user_id) ?? null) : null,
-      createdAt: r.created_at,
-    }));
+    return {
+      rows: list.map((r) => ({
+        id: r.id,
+        action: r.action,
+        targetType: r.target_type,
+        targetId: r.target_id,
+        notes: r.notes,
+        actorEmail: r.admin_user_id ? (emailById.get(r.admin_user_id) ?? null) : null,
+        createdAt: r.created_at,
+      })),
+      total,
+      offset: data.offset,
+      limit: data.limit,
+    };
   });
+
 
 
 /* ------------------------------------------------------------------ */
