@@ -830,7 +830,8 @@ function MelhoresPrecosPage() {
       </main>
 
       {/* Página isolada — sem footer (padrão IsolatedPage). */}
-    </div>
+      </PageShellContent>
+    </PageShell>
   );
 }
 
