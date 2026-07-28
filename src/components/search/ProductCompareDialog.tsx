@@ -251,8 +251,8 @@ export function ProductCompareDialog({
                           >
                             <p
                               className={
-                                "font-display text-[15px] font-semibold tabular-nums " +
-                                (isMin ? "text-accent-strong" : "text-foreground")
+                                "pc-price pc-price--md " +
+                                (isMin ? "pc-price--best" : "")
                               }
                             >
                               {fmt(cell.price)}
@@ -287,8 +287,8 @@ export function ProductCompareDialog({
                           <>
                             <p
                               className={
-                                "font-display text-[15px] font-semibold tabular-nums " +
-                                (isBest ? "text-accent-strong" : "text-foreground")
+                                "pc-price pc-price--md " +
+                                (isBest ? "pc-price--best" : "")
                               }
                             >
                               {fmt(total)}
@@ -298,7 +298,7 @@ export function ProductCompareDialog({
                                 melhor total
                               </p>
                             ) : bestTotal != null ? (
-                              <p className="mt-1 font-mono text-[11px] tabular-nums text-muted-foreground">
+                              <p className="mt-1 pc-price pc-price--sm pc-price--muted">
                                 +{fmt(total - bestTotal)}
                               </p>
                             ) : null}
@@ -323,7 +323,7 @@ export function ProductCompareDialog({
               <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-savings">
                 Economia máxima
               </span>
-              <span className="font-display text-sm font-semibold tabular-nums text-savings">
+              <span className="pc-price pc-price--md pc-price--savings">
                 {fmt(totalSavings)}
               </span>
               <span className="font-mono text-[11px] text-muted-foreground">
@@ -364,11 +364,11 @@ export function ProductCompareDialog({
                   >
                     <span className="max-w-[160px] truncate">{x.name}</span>
                     <span className="text-muted-foreground">·</span>
-                    <span className="tabular-nums text-primary">{fmt(x.cheapest?.price)}</span>
+                    <span className="pc-price pc-price--sm pc-price--best">{fmt(x.cheapest?.price)}</span>
                     <span className="text-muted-foreground">em {x.cheapest?.marketName}</span>
                   </span>
                 ))}
-                <span className="ml-auto font-display text-sm font-semibold tabular-nums text-foreground">
+                <span className="ml-auto pc-price pc-price--md">
                   Σ {fmt(total)}
                 </span>
               </div>
