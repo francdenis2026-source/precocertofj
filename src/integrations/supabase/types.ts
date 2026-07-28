@@ -1299,12 +1299,15 @@ export type Database = {
       }
       license_codes: {
         Row: {
+          access_expires_at: string | null
           buyer_user_id: string | null
           code: string
           created_at: string
           created_by: string | null
+          duration_minutes: number | null
           expires_at: string
           id: string
+          is_trial_access: boolean
           mp_payment_id: string | null
           mp_preference_id: string | null
           notes: string | null
@@ -1316,12 +1319,15 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          access_expires_at?: string | null
           buyer_user_id?: string | null
           code: string
           created_at?: string
           created_by?: string | null
+          duration_minutes?: number | null
           expires_at: string
           id?: string
+          is_trial_access?: boolean
           mp_payment_id?: string | null
           mp_preference_id?: string | null
           notes?: string | null
@@ -1333,12 +1339,15 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          access_expires_at?: string | null
           buyer_user_id?: string | null
           code?: string
           created_at?: string
           created_by?: string | null
+          duration_minutes?: number | null
           expires_at?: string
           id?: string
+          is_trial_access?: boolean
           mp_payment_id?: string | null
           mp_preference_id?: string | null
           notes?: string | null
@@ -3473,6 +3482,22 @@ export type Database = {
           id: string
           notes: string
           target_id: string
+        }[]
+      }
+      list_trial_access_users: {
+        Args: { _include_ended?: boolean }
+        Returns: {
+          access_expires_at: string
+          code: string
+          duration_minutes: number
+          email: string
+          full_name: string
+          is_active: boolean
+          license_id: string
+          minutes_remaining: number
+          notes: string
+          redeemed_at: string
+          user_id: string
         }[]
       }
       my_ai_usage_summary: {
