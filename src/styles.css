@@ -264,9 +264,11 @@
   --pc-price-hover:      color-mix(in oklab, var(--pc-price-fg) 92%, var(--pc-gold-ink) 8%);
   --pc-price-loading:    color-mix(in oklab, var(--pc-price-fg) 45%, transparent);
   --pc-price-disabled:   color-mix(in oklab, var(--pc-price-fg) 55%, transparent);
-  --pc-price-font:       'Work Sans', ui-sans-serif, system-ui, sans-serif;
-  --pc-price-tracking:   -0.008em;
-  --pc-price-feature-settings: "tnum" 1, "lnum" 1, "cv11" 1, "ss01" 1;
+  /* Alinhado ao hero: preços agora usam a mesma família serif variável (Fraunces)
+     do .pc-hero-mark, mantendo tabular-nums para legibilidade dos dígitos. */
+  --pc-price-font:       'Fraunces', 'Instrument Serif', ui-serif, Georgia, 'Times New Roman', serif;
+  --pc-price-tracking:   -0.005em;
+  --pc-price-feature-settings: "tnum" 1, "lnum" 1, "ss01" 0, "ss02" 0;
 
 
 
