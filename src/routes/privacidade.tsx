@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { IsolatedPage } from "@/components/layout/IsolatedPage";
 import { BackButton } from "@/components/layout/BackButton";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
+import { LegalFooter } from "@/components/layout/LegalFooter";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
 
@@ -225,43 +226,7 @@ function PrivacidadePage() {
         </div>
       </main>
 
-      {/* RODAPÉ compacto: contato + créditos + parcerias */}
-      <footer className="shrink-0 border-t border-border/60 bg-background/92">
-        <div className="mx-auto flex w-full max-w-5xl flex-col gap-1.5 px-3 py-2 sm:px-4 md:flex-row md:items-center md:justify-between md:px-8">
-          <p className={cn(tc.meta, "leading-snug")}>
-            Idealizado por{" "}
-            <strong className="font-semibold text-foreground">Franc D&apos;nis</strong> — Feijó (AC).
-            Parcerias, delivery ou apps sob demanda:{" "}
-            <a
-              href="https://wa.me/5568992031340"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="whitespace-nowrap font-semibold text-[var(--pc-gold-ink)] underline underline-offset-2"
-            >
-              (68) 99203-1340
-            </a>{" "}
-            ·{" "}
-            <a
-              href="mailto:precocerto-fj@proton.me"
-              className="whitespace-nowrap font-semibold text-[var(--pc-gold-ink)] underline underline-offset-2"
-            >
-              precocerto-fj@proton.me
-            </a>
-          </p>
-          <div className="flex shrink-0 items-center gap-2">
-            <span className={cn(tc.meta, "whitespace-nowrap")}>Atualizado {UPDATED_AT}</span>
-            <Link
-              to="/fale-conosco"
-              className={cn(
-                tc.chip,
-                "pc-focus inline-flex h-7 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-border px-3 text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)]",
-              )}
-            >
-              Fale conosco
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <LegalFooter updatedAt={UPDATED_AT} />
     </IsolatedPage>
   );
 }
