@@ -2363,6 +2363,14 @@ function EstablishmentsTab() {
     );
   }, [items, filter]);
 
+  const totalPages = pageSize === 0 ? 1 : Math.max(1, Math.ceil(filtered.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+  useEffect(() => { setPage(1); }, [filter, pageSize]);
+  const paged = pageSize === 0 ? filtered : filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const rowPad = density === "compact" ? "[&_th]:h-9 [&_th]:py-1.5 [&_td]:py-1.5" : "[&_th]:h-10 [&_th]:py-2.5 [&_td]:py-2.5";
+  const rowText = density === "compact" ? "text-[13px]" : "text-sm";
+
+
   const openNew = () => { setForm(emptyForm); setOpen(true); };
   const openEdit = (e: Establishment) => { setForm(toForm(e)); setOpen(true); };
 
