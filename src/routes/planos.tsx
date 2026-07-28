@@ -280,7 +280,7 @@ function PlansPage() {
               {plans.map((plan) => {
                 const isRecommended = plan.slug === recommendedSlug;
                 const perMonth = pricePerMonth(plan.price_cents, plan.days);
-                const isFounder = plan.slug.includes("fundador");
+                const isFounder = false;
                 const isFree = plan.price_cents === 0;
                 const isSelected = selectedPlan?.id === plan.id;
                 const savings =
