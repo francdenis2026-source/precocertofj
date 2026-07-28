@@ -55,6 +55,7 @@ function AssinarPage() {
     staleTime: 60_000,
   });
   const selectedPlan = planQuery.data ?? null;
+  usePlansRealtime();
 
   const [waitingWebhook, setWaitingWebhook] = useState(false);
   const accountQuery = useQuery({
