@@ -32,6 +32,7 @@ import { MetricSpotlightDialog } from "@/components/home/MetricSpotlightDialog";
 import { AllCategoriesDialog } from "@/components/home/AllCategoriesDialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useSession } from "@/hooks/useSession";
+import { cn } from "@/lib/utils";
 import homeHeroImg from "@/assets/home-hero.jpg";
 
 /* Conteúdo secundário: só carrega quando o painel "Explorar" abre */
@@ -432,11 +433,10 @@ function HomePage() {
                   <ul
                     id="home-suggest-list"
                     role="listbox"
-                    className="absolute left-0 right-0 top-[calc(100%+8px)] z-40 max-h-[280px] overflow-auto rounded-2xl border text-left shadow-2xl animate-fade-in"
-                    style={{ background: "#ffffff", borderColor: "rgba(15,23,42,0.08)" }}
+                    className="absolute left-0 right-0 top-[calc(100%+8px)] z-40 max-h-[280px] overflow-auto rounded-2xl border border-border bg-popover text-popover-foreground text-left shadow-2xl animate-fade-in"
                   >
                     {suggestQ.isLoading && suggestions.length === 0 ? (
-                      <li className="px-4 py-3 text-[13px] text-slate-500">Buscando…</li>
+                      <li className="px-4 py-3 text-[13px] text-muted-foreground">Buscando…</li>
                     ) : (
                       suggestions.map((s, i) => (
                         <li key={s.slug} id={`home-suggest-opt-${s.slug}`} role="option" aria-selected={i === activeIdx} ref={i === activeIdx ? (el) => el?.scrollIntoView({ block: "nearest" }) : undefined}>
@@ -447,17 +447,15 @@ function HomePage() {
                               pickSuggestion(s.name);
                             }}
                             onMouseEnter={() => setActiveIdx(i)}
-                            className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition-colors"
-                            style={{
-                              background:
-                                i === activeIdx ? `color-mix(in oklab, ${P.gold} 12%, transparent)` : "transparent",
-                              color: "#0f172a",
-                            }}
+                            className={cn(
+                              "flex w-full items-center gap-3 px-4 py-2.5 text-left text-popover-foreground transition-colors",
+                              i === activeIdx ? "bg-accent/40" : "bg-transparent hover:bg-accent/20",
+                            )}
                           >
-                            <Search className="h-3.5 w-3.5 shrink-0" style={{ color: P.navy }} strokeWidth={2.4} />
+                            <Search className="h-3.5 w-3.5 shrink-0 text-muted-foreground" strokeWidth={2.4} />
                             <span className="flex-1 truncate text-[14px] font-semibold">{s.name}</span>
                             {s.price != null && (
-                              <span className="pc-num pc-price-value shrink-0 text-[15px] font-bold">
+                              <span className="pc-num shrink-0 text-[15px] font-bold text-foreground">
                                 {new Intl.NumberFormat("pt-BR", {
                                   style: "currency",
                                   currency: "BRL",
@@ -470,6 +468,7 @@ function HomePage() {
                     )}
                   </ul>
                 )}
+
               </form>
 
               {/* ---------- Populares + CTA ---------- */}
