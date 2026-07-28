@@ -264,9 +264,10 @@ function AdminPage() {
   return (
     <AppShell scope="admin">
       {/* ---------- Cabeçalho executivo compacto ---------- */}
-      <header className="sticky top-12 z-20 border-b border-border/60 bg-background/92 backdrop-blur md:top-14">
-        <div className="mx-auto flex max-w-[1400px] flex-wrap items-center gap-x-4 gap-y-2 px-3 py-2.5 md:px-6 md:py-3">
-          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-lg border border-border bg-primary/10 text-primary">
+      <header className="sticky top-12 z-20 border-b border-border/60 bg-background/94 backdrop-blur md:top-14">
+        <div className="mx-auto grid max-w-[1400px] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-2 md:px-5">
+          <div className="flex min-w-0 items-center gap-2.5">
+          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-border bg-primary/10 text-primary">
             <ShieldCheck className="h-[18px] w-[18px]" strokeWidth={2.2} />
           </span>
           <div className="min-w-0 flex-1">
@@ -274,6 +275,7 @@ function AdminPage() {
             <h1 className={cn(tc.h1, "mt-0.5 truncate font-sans font-semibold")}>
               Gestão do PreçoCerto
             </h1>
+          </div>
           </div>
           <div className="flex items-center gap-2">
             <Button
@@ -294,9 +296,9 @@ function AdminPage() {
         </div>
       </header>
 
-      <section className="mx-auto flex w-full max-w-[1400px] flex-col gap-3 px-3 py-3 md:gap-4 md:px-6 md:py-4">
+      <section className="mx-auto flex w-full max-w-[1400px] flex-col gap-2.5 px-3 py-2.5 md:px-5 md:py-3">
         {/* ---------- Indicadores executivos + busca global ---------- */}
-        <div className="space-y-3">
+        <div className="space-y-2.5" data-admin-region="overview">
           <Suspense fallback={<SectionSkeleton rows={2} label="Carregando busca global" />}>
             <AdminGlobalSearch />
           </Suspense>
@@ -309,7 +311,7 @@ function AdminPage() {
         </div>
 
         {/* ---------- Abas de gestão detalhada ---------- */}
-        <Tabs defaultValue="plans" className="flex w-full flex-col">
+        <Tabs defaultValue="plans" className="flex w-full flex-col" data-admin-region="management">
           <div className="pc-tabs-rail -mx-1 overflow-x-auto px-1 pb-1">
             <TabsList className="inline-flex h-auto w-max flex-nowrap gap-1 rounded-xl border border-border/70 bg-card p-1">
               {[
@@ -328,7 +330,7 @@ function AdminPage() {
                   value={value}
                   className={cn(
                     tc.control,
-                    "h-8 whitespace-nowrap rounded-lg px-3 text-muted-foreground",
+                    "h-7 whitespace-nowrap rounded-lg px-2.5 text-muted-foreground",
                     "data-[state=active]:bg-primary data-[state=active]:text-primary-foreground data-[state=active]:shadow-sm",
                   )}
                 >
@@ -338,7 +340,7 @@ function AdminPage() {
             </TabsList>
           </div>
 
-          <div className="mt-3 rounded-xl border border-border/60 bg-card/40 p-3 md:p-4">
+          <div className="mt-2 rounded-xl border border-border/60 bg-card/40 p-2.5 md:p-3">
             <TabsContent value="plans"><PlansTab /></TabsContent>
             <TabsContent value="establishments"><EstablishmentsTab /></TabsContent>
             <TabsContent value="status"><StatusTab /></TabsContent>
