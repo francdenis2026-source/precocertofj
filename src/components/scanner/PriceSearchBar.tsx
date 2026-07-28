@@ -1053,12 +1053,13 @@ export function PriceSearchBar({
                       {hasGap ? (
                         <div className="min-w-0 border-t border-white/10 pt-3 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-4">
                           <p className="text-[11px] font-medium text-brand-gold/90">Economia estimada</p>
-                          <p className="mt-1 text-[26px] font-bold leading-none tabular-nums">
+                          <p className="pc-num pc-num--onhero mt-1 text-[26px] font-bold leading-none">
                             {fmt(gap)}
-                            <span className="ml-1.5 align-middle text-[12px] font-bold text-brand-gold">
+                            <span className="pc-num pc-num--onhero ml-1.5 align-middle text-[12px] font-bold opacity-90">
                               −{pct}%
                             </span>
                           </p>
+
                           <p className="mt-1.5 truncate text-[12px] text-white/75 tabular-nums">
                             mesmo produto · mais caro {fmt(rMax)}
                             {priciestMarket ? (
