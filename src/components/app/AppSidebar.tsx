@@ -61,10 +61,15 @@ type NavItem = {
   search?: Record<string, string>;
 };
 
+type AdminTone = "overview" | "catalog" | "commerce" | "people" | "system";
+
 type NavGroup = {
   label: string;
   items: readonly NavItem[];
+  /** Optional semantic tone used in the admin area to color-code groups. */
+  tone?: AdminTone;
 };
+
 
 const appGroups: readonly NavGroup[] = [
   {
