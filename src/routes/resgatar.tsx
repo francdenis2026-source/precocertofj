@@ -490,8 +490,9 @@ function RedeemPage() {
             ) : (
               <form onSubmit={handleSubmit} noValidate>
                 <h2
-                  className="font-editorial text-[clamp(26px,3.4vw,36px)] font-normal leading-[1.05] tracking-[-0.018em] text-foreground"
+                  className="pc-hero-editorial font-editorial text-[clamp(26px,3.4vw,36px)] text-foreground"
                 >
+
                   Ativar meu{" "}
                   <span className="pc-editorial-accent pc-editorial-accent--fill">código</span>
                 </h2>
