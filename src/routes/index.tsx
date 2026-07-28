@@ -278,25 +278,35 @@ function HomePage() {
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
-          background: `linear-gradient(180deg, color-mix(in oklab, var(--pc-home-hero-bg) 82%, transparent) 0%, color-mix(in oklab, var(--pc-home-hero-bg) 66%, transparent) 42%, color-mix(in oklab, var(--pc-home-hero-bg) 94%, transparent) 100%)`,
+          background: `linear-gradient(180deg, color-mix(in oklab, var(--pc-home-hero-bg) 58%, transparent) 0%, color-mix(in oklab, var(--pc-home-hero-bg) 34%, transparent) 45%, color-mix(in oklab, var(--pc-home-hero-bg) 78%, transparent) 100%)`,
         }}
       />
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
-          background: `radial-gradient(115% 78% at 50% 38%, transparent 38%, color-mix(in oklab, var(--pc-home-hero-bg) 62%, transparent) 100%)`,
+          background: `radial-gradient(120% 82% at 50% 40%, transparent 42%, color-mix(in oklab, var(--pc-home-hero-bg) 45%, transparent) 100%)`,
         }}
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-40 -top-40 h-[460px] w-[460px] rounded-full"
+        className="pointer-events-none absolute -right-40 -top-40 h-[520px] w-[520px] rounded-full"
         style={{
-          background: `radial-gradient(circle, color-mix(in oklab, ${P.gold} 55%, transparent) 0%, transparent 65%)`,
-          filter: "blur(110px)",
-          opacity: 0.28,
+          background: `radial-gradient(circle, color-mix(in oklab, ${P.gold} 70%, transparent) 0%, transparent 65%)`,
+          filter: "blur(120px)",
+          opacity: 0.42,
         }}
       />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -left-40 bottom-[-160px] h-[420px] w-[420px] rounded-full"
+        style={{
+          background: `radial-gradient(circle, color-mix(in oklab, ${P.navy} 55%, transparent) 0%, transparent 70%)`,
+          filter: "blur(130px)",
+          opacity: 0.22,
+        }}
+      />
+
 
       <div className="relative z-10 flex min-h-[100dvh] flex-col">
         <SiteHeader variant="overlay" showThemeToggle />
