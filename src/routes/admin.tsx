@@ -2621,9 +2621,17 @@ function EstablishmentsTab() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <EstablishmentDeleteDialog
+        open={pendingDeleteId !== null}
+        establishmentId={pendingDeleteId}
+        onCancel={() => setPendingDeleteId(null)}
+        onConfirm={confirmDelete}
+      />
     </div>
   );
 }
+
 
 
 
