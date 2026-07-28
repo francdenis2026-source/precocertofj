@@ -14,6 +14,7 @@ export type PlanRow = {
   features: string[];
   active: boolean;
   highlight: boolean;
+  ai_monthly_quota: number;
 };
 
 export type PlansHealth = {
