@@ -27,6 +27,8 @@ import { AppShell } from "@/components/brand/AppShell";
 import { useAdminEntitiesRealtime, describeRealtimeChange } from "@/hooks/useAdminEntitiesRealtime";
 import { usePlansRealtime } from "@/hooks/usePlansRealtime";
 import { EstablishmentDeleteDialog } from "@/components/admin/EstablishmentDeleteDialog";
+import { BasketOverviewCard } from "@/components/admin/BasketOverviewCard";
+import { AdminChip } from "@/components/admin/AdminChip";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
 
@@ -261,9 +263,10 @@ function AdminPage() {
               </h1>
             </div>
           </div>
-          <span className={cn(tc.tag, "hidden rounded-full border border-border bg-secondary px-2.5 py-1 font-medium text-secondary-foreground sm:inline-flex")}>
+          <AdminChip tone="overview" size="md" className="hidden sm:inline-flex">
             Painel unificado
-          </span>
+          </AdminChip>
+
 
         </div>
       </header>
@@ -310,8 +313,12 @@ function AdminPage() {
 
         {/* ---------- Resumo — Console Administrativo ---------- */}
         <div className="space-y-4" data-admin-region="overview">
+          {/* Seção 0: Cesta Básica — panorama executivo */}
+          <BasketOverviewCard />
+
           {/* Seção 1: Descoberta — busca correlacionada */}
           <section aria-labelledby="admin-section-discovery" className="space-y-2">
+
             <header className="flex items-baseline justify-between gap-2 border-b border-border/50 pb-1">
               <h2 id="admin-section-discovery" className={cn(tc.itemTitle, "text-foreground")}>Descoberta</h2>
               <span className={cn(tc.meta, "text-muted-foreground")}>Buscar por produto, estabelecimento ou preço</span>
