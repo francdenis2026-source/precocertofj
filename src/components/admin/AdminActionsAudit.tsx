@@ -1,10 +1,11 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { Download, History, Loader2, RefreshCw, Search, X } from "lucide-react";
 import {
   listAdminAuditLog,
   ADMIN_AUDIT_LABELS,
+  type AdminAuditPage,
   type AdminAuditRow,
 } from "@/lib/admin-team.functions";
 import { listEstablishments } from "@/lib/establishments.functions";
@@ -43,8 +44,18 @@ const TARGET_TYPES: Array<{ value: string; label: string }> = [
   { value: "cache", label: "Cache" },
 ];
 
-const norm = (s: string) =>
-  (s ?? "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+const PAGE_SIZE = 20;
+const DEBOUNCE_MS = 300;
+const EXPORT_LIMIT = 500;
+
+function useDebounced<T>(value: T, delay = DEBOUNCE_MS): T {
+  const [v, setV] = useState(value);
+  useEffect(() => {
+    const t = setTimeout(() => setV(value), delay);
+    return () => clearTimeout(t);
+  }, [value, delay]);
+  return v;
+}
 
 export function AdminActionsAudit() {
   const fetchLog = useServerFn(listAdminAuditLog);
@@ -58,7 +69,14 @@ export function AdminActionsAudit() {
   const [days, setDays] = useState("30");
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
-  const pageSize = 20;
+  const [exporting, setExporting] = useState(false);
+
+  // Debounced values feed the query key — badge/filter count stays instant.
+  const dQuery = useDebounced(query);
+  const dActorEmail = useDebounced(actorEmail);
+
+  // Reset to page 1 whenever a filter that shrinks the result set changes.
+  useEffect(() => { setPage(1); }, [action, targetType, establishmentId, dActorEmail, dQuery, from, to, days]);
 
   const ests = useQuery({
     queryKey: ["admin", "audit", "establishments"],
@@ -67,42 +85,35 @@ export function AdminActionsAudit() {
   });
 
   const usingDateRange = from !== "" || to !== "";
-  const logQuery = useQuery<AdminAuditRow[]>({
-    queryKey: ["admin", "audit-actions", action, targetType, establishmentId, actorEmail, from, to, days, usingDateRange],
+  const offset = (page - 1) * PAGE_SIZE;
+
+  const logQuery = useQuery<AdminAuditPage>({
+    queryKey: ["admin", "audit-actions", action, targetType, establishmentId, dActorEmail, from, to, days, dQuery, offset],
     queryFn: () =>
       fetchLog({
         data: {
           action,
           targetType,
           establishmentId: establishmentId !== "all" ? establishmentId : undefined,
-          actorEmail: actorEmail.trim() || undefined,
+          actorEmail: dActorEmail.trim() || undefined,
+          search: dQuery.trim() || undefined,
           from: from || undefined,
           to: to ? new Date(`${to}T23:59:59`).toISOString() : undefined,
           days: usingDateRange || days === "all" ? undefined : Number(days),
-          limit: 500,
+          limit: PAGE_SIZE,
+          offset,
         },
       }),
     staleTime: 30_000,
+    placeholderData: keepPreviousData,
   });
 
-  const rows = logQuery.data ?? [];
-  const filtered = useMemo(() => {
-    const q = norm(query);
-    if (!q) return rows;
-    return rows.filter(
-      (r) =>
-        norm(r.actorEmail ?? "").includes(q) ||
-        norm(r.notes ?? "").includes(q) ||
-        norm(r.targetType).includes(q) ||
-        norm(r.targetId ?? "").includes(q) ||
-        norm(ADMIN_AUDIT_LABELS[r.action] ?? r.action).includes(q),
-    );
-  }, [rows, query]);
-
-  const totalPages = Math.max(1, Math.ceil(filtered.length / pageSize));
+  const rows: AdminAuditRow[] = logQuery.data?.rows ?? [];
+  const total = logQuery.data?.total ?? 0;
+  const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
   const current = Math.min(page, totalPages);
-  const paged = filtered.slice((current - 1) * pageSize, current * pageSize);
 
+  // Contagem de filtros ativos reflete o input imediato (não o valor com debounce).
   const activeFilters = [
     action !== "all",
     targetType !== "all",
@@ -112,10 +123,54 @@ export function AdminActionsAudit() {
     query.trim() !== "",
   ].filter(Boolean).length;
 
+  const searchPending = query !== dQuery || actorEmail !== dActorEmail;
+
   const clearAll = () => {
     setAction("all"); setTargetType("all"); setEstablishmentId("all");
     setActorEmail(""); setFrom(""); setTo(""); setQuery(""); setDays("30"); setPage(1);
   };
+
+  const handleExport = async () => {
+    setExporting(true);
+    try {
+      const full = await fetchLog({
+        data: {
+          action,
+          targetType,
+          establishmentId: establishmentId !== "all" ? establishmentId : undefined,
+          actorEmail: dActorEmail.trim() || undefined,
+          search: dQuery.trim() || undefined,
+          from: from || undefined,
+          to: to ? new Date(`${to}T23:59:59`).toISOString() : undefined,
+          days: usingDateRange || days === "all" ? undefined : Number(days),
+          limit: EXPORT_LIMIT,
+          offset: 0,
+        },
+      });
+      exportRowsToCSV(
+        stampedFilename("auditoria-admin"),
+        [
+          { key: "when", header: "Quando", accessor: (r: AdminAuditRow) => new Date(r.createdAt).toLocaleString("pt-BR") },
+          { key: "action", header: "Ação", accessor: (r) => ADMIN_AUDIT_LABELS[r.action] ?? r.action },
+          { key: "target", header: "Alvo", accessor: (r) => r.targetType },
+          { key: "targetId", header: "ID do alvo", accessor: (r) => r.targetId ?? "" },
+          { key: "notes", header: "Detalhes", accessor: (r) => r.notes ?? "" },
+          { key: "actor", header: "Executado por", accessor: (r) => r.actorEmail ?? "" },
+        ],
+        full.rows,
+      );
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  const busy = logQuery.isFetching || searchPending;
+  const rangeLabel = useMemo(() => {
+    if (total === 0) return "0 registros";
+    const start = offset + 1;
+    const end = Math.min(offset + rows.length, total);
+    return `${start}–${end} de ${total.toLocaleString("pt-BR")}`;
+  }, [offset, rows.length, total]);
 
   return (
     <Card>
@@ -139,25 +194,19 @@ export function AdminActionsAudit() {
               size="sm"
               variant="outline"
               className="h-8"
-              onClick={() =>
-                exportRowsToCSV(
-                  stampedFilename("auditoria-admin"),
-                  [
-                    { key: "when", header: "Quando", accessor: (r: AdminAuditRow) => new Date(r.createdAt).toLocaleString("pt-BR") },
-                    { key: "action", header: "Ação", accessor: (r) => ADMIN_AUDIT_LABELS[r.action] ?? r.action },
-                    { key: "target", header: "Alvo", accessor: (r) => r.targetType },
-                    { key: "targetId", header: "ID do alvo", accessor: (r) => r.targetId ?? "" },
-                    { key: "notes", header: "Detalhes", accessor: (r) => r.notes ?? "" },
-                    { key: "actor", header: "Executado por", accessor: (r) => r.actorEmail ?? "" },
-                  ],
-                  filtered,
-                )
-              }
+              onClick={handleExport}
+              disabled={exporting}
+              aria-label="Exportar auditoria para CSV"
             >
-              <Download className="mr-1.5 h-3.5 w-3.5" /> CSV
+              {exporting ? (
+                <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
+              ) : (
+                <Download className="mr-1.5 h-3.5 w-3.5" />
+              )}
+              CSV
             </Button>
             <Button size="sm" variant="ghost" className="h-8 px-2" onClick={() => logQuery.refetch()} aria-label="Atualizar auditoria">
-              <RefreshCw className={cn("h-3.5 w-3.5", logQuery.isFetching && "animate-spin")} />
+              <RefreshCw className={cn("h-3.5 w-3.5", busy && "animate-spin")} />
             </Button>
             {activeFilters > 0 && (
               <Button size="sm" variant="ghost" className="h-8 gap-1" onClick={clearAll}>
@@ -173,13 +222,16 @@ export function AdminActionsAudit() {
             <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
             <Input
               value={query}
-              onChange={(e) => { setQuery(e.target.value); setPage(1); }}
-              placeholder="Filtrar (texto livre nos resultados)…"
-              className="h-8 pl-8"
-              aria-label="Filtrar auditoria"
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="Buscar em detalhes, ID ou ação…"
+              className="h-8 pl-8 pr-8"
+              aria-label="Buscar na auditoria"
             />
+            {searchPending && query.trim() !== "" && (
+              <Loader2 className="pointer-events-none absolute right-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 animate-spin text-muted-foreground" />
+            )}
           </div>
-          <Select value={action} onValueChange={(v) => { setAction(v); setPage(1); }}>
+          <Select value={action} onValueChange={setAction}>
             <SelectTrigger className="h-8"><SelectValue placeholder="Ação" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todas as ações</SelectItem>
@@ -188,7 +240,7 @@ export function AdminActionsAudit() {
               ))}
             </SelectContent>
           </Select>
-          <Select value={targetType} onValueChange={(v) => { setTargetType(v); setPage(1); }}>
+          <Select value={targetType} onValueChange={setTargetType}>
             <SelectTrigger className="h-8"><SelectValue placeholder="Alvo" /></SelectTrigger>
             <SelectContent>
               {TARGET_TYPES.map((t) => (
@@ -196,7 +248,7 @@ export function AdminActionsAudit() {
               ))}
             </SelectContent>
           </Select>
-          <Select value={establishmentId} onValueChange={(v) => { setEstablishmentId(v); setPage(1); }}>
+          <Select value={establishmentId} onValueChange={setEstablishmentId}>
             <SelectTrigger className="h-8"><SelectValue placeholder="Estabelecimento" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todos os estabelecimentos</SelectItem>
@@ -207,7 +259,7 @@ export function AdminActionsAudit() {
           </Select>
           <Input
             value={actorEmail}
-            onChange={(e) => { setActorEmail(e.target.value); setPage(1); }}
+            onChange={(e) => setActorEmail(e.target.value)}
             placeholder="E-mail do admin…"
             className="h-8"
             aria-label="Filtrar por e-mail do executor"
@@ -220,7 +272,7 @@ export function AdminActionsAudit() {
             <Input
               type="date"
               value={from}
-              onChange={(e) => { setFrom(e.target.value); setPage(1); }}
+              onChange={(e) => setFrom(e.target.value)}
               className="h-8"
               max={to || undefined}
               aria-label="Data inicial"
@@ -231,7 +283,7 @@ export function AdminActionsAudit() {
             <Input
               type="date"
               value={to}
-              onChange={(e) => { setTo(e.target.value); setPage(1); }}
+              onChange={(e) => setTo(e.target.value)}
               className="h-8"
               min={from || undefined}
               aria-label="Data final"
@@ -241,7 +293,7 @@ export function AdminActionsAudit() {
             <label className={cn(tc.meta, "text-[11px] uppercase tracking-wider")}>Período rápido</label>
             <Select
               value={days}
-              onValueChange={(v) => { setDays(v); setPage(1); if (v !== "all") { setFrom(""); setTo(""); } }}
+              onValueChange={(v) => { setDays(v); if (v !== "all") { setFrom(""); setTo(""); } }}
               disabled={usingDateRange}
             >
               <SelectTrigger className="h-8"><SelectValue /></SelectTrigger>
@@ -260,7 +312,7 @@ export function AdminActionsAudit() {
           <div className="flex items-center justify-center py-8 text-muted-foreground">
             <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Carregando registros…
           </div>
-        ) : filtered.length === 0 ? (
+        ) : total === 0 ? (
           <p className={cn(tc.meta, "py-8 text-center")}>
             Nenhuma ação registrada para os filtros aplicados.
           </p>
@@ -276,8 +328,8 @@ export function AdminActionsAudit() {
                   <TableHead className={tc.tableHead}>Executado por</TableHead>
                 </TableRow>
               </TableHeader>
-              <TableBody>
-                {paged.map((r) => (
+              <TableBody className={cn(logQuery.isFetching && "opacity-70 transition-opacity")}>
+                {rows.map((r) => (
                   <TableRow key={r.id}>
                     <TableCell className={cn(tc.meta, "whitespace-nowrap")}>
                       {new Date(r.createdAt).toLocaleString("pt-BR")}
@@ -296,17 +348,19 @@ export function AdminActionsAudit() {
                 ))}
               </TableBody>
             </Table>
-            {totalPages > 1 && (
-              <div className="mt-2.5 flex items-center justify-between">
-                <p className={tc.meta}>
-                  Página {current} de {totalPages} · {filtered.length} registros
-                </p>
-                <div className="flex gap-1.5">
-                  <Button size="sm" variant="outline" className="h-7" disabled={current <= 1} onClick={() => setPage(current - 1)}>Anterior</Button>
-                  <Button size="sm" variant="outline" className="h-7" disabled={current >= totalPages} onClick={() => setPage(current + 1)}>Próxima</Button>
-                </div>
+            <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2">
+              <p className={tc.meta}>
+                {rangeLabel} · Página {current} de {totalPages}
+              </p>
+              <div className="flex gap-1.5">
+                <Button size="sm" variant="outline" className="h-7" disabled={current <= 1 || busy} onClick={() => setPage(current - 1)}>
+                  Anterior
+                </Button>
+                <Button size="sm" variant="outline" className="h-7" disabled={current >= totalPages || busy} onClick={() => setPage(current + 1)}>
+                  Próxima
+                </Button>
               </div>
-            )}
+            </div>
           </>
         )}
       </CardContent>
