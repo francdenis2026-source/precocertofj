@@ -227,6 +227,89 @@ export type Database = {
         }
         Relationships: []
       }
+      basket_item_sets: {
+        Row: {
+          active: boolean
+          created_at: string
+          created_by: string | null
+          id: string
+          label: string
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          label: string
+          updated_at?: string
+          version: number
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          label?: string
+          updated_at?: string
+          version?: number
+        }
+        Relationships: []
+      }
+      basket_items: {
+        Row: {
+          category: string
+          created_at: string
+          enabled: boolean
+          exclude_tokens: string[]
+          id: string
+          key: string
+          label: string
+          patterns: string[]
+          quantity: number
+          set_id: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          enabled?: boolean
+          exclude_tokens?: string[]
+          id?: string
+          key: string
+          label: string
+          patterns?: string[]
+          quantity?: number
+          set_id: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          enabled?: boolean
+          exclude_tokens?: string[]
+          id?: string
+          key?: string
+          label?: string
+          patterns?: string[]
+          quantity?: number
+          set_id?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "basket_items_set_id_fkey"
+            columns: ["set_id"]
+            isOneToOne: false
+            referencedRelation: "basket_item_sets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       blocked_ips: {
         Row: {
           blocked_until: string
