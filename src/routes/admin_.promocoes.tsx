@@ -1,4 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { AdminTabs } from "@/components/admin/AdminTabs";
+import { PromoCodesPage } from "./admin_.promocoes-codigos";
+import { CupomPage } from "./admin_.cupom";
+import { CupomLotePage } from "./admin_.cupom-lote";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
