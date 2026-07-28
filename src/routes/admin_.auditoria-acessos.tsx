@@ -181,24 +181,44 @@ function AuditoriaAcessosPage() {
         </CardHeader>
         <CardContent className="h-72">
           {stats.isLoading ? (
-            <div className="h-full w-full animate-pulse rounded bg-muted" />
+            <ChartSkeleton height={272} label="Carregando tendência de acessos" />
+          ) : (stats.data?.series?.length ?? 0) === 0 ? (
+            <ChartEmpty height={272} title="Sem acessos no período" />
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={stats.data?.series ?? []}>
-                <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
+                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
                 <XAxis
                   dataKey="day"
                   tickFormatter={(d: string) => d.slice(5)}
-                  fontSize={12}
+                  tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+                  tickLine={false}
+                  axisLine={{ stroke: "hsl(var(--border))" }}
                 />
-                <YAxis fontSize={12} allowDecimals={false} />
+                <YAxis
+                  tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+                  tickLine={false}
+                  axisLine={{ stroke: "hsl(var(--border))" }}
+                  allowDecimals={false}
+                />
                 <Tooltip
                   labelFormatter={(d) => `Dia ${d}`}
-                  contentStyle={{ fontSize: 12 }}
+                  contentStyle={{
+                    fontSize: 12,
+                    borderRadius: 10,
+                    border: "1px solid hsl(var(--border))",
+                    background: "hsl(var(--popover))",
+                    color: "hsl(var(--popover-foreground))",
+                    boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
+                  }}
+                  labelStyle={{ color: "hsl(var(--popover-foreground))", fontWeight: 600 }}
+                  itemStyle={{ color: "hsl(var(--popover-foreground))" }}
+                  cursor={{ fill: "rgba(148,163,184,0.12)" }}
                 />
-                <Legend wrapperStyle={{ fontSize: 12 }} />
-                <Bar dataKey="success" name="Sucessos" fill="#10b981" stackId="a" />
-                <Bar dataKey="failure" name="Falhas" fill="#ef4444" stackId="a" />
+                <Legend wrapperStyle={{ fontSize: 12, color: "hsl(var(--foreground))" }} />
+                {/* Cores com contraste ≥ 3:1 (WCAG 1.4.11) tanto em fundo claro como escuro. */}
+                <Bar dataKey="success" name="Sucessos" fill="#059669" stackId="a" />
+                <Bar dataKey="failure" name="Falhas" fill="#dc2626" stackId="a" />
               </BarChart>
             </ResponsiveContainer>
           )}
