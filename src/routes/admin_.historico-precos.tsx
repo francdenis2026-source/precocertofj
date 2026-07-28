@@ -79,7 +79,7 @@ function Gate() {
       </div>
     );
   }
-  return <Page />;
+  return <HistoricoPrecosPage />;
 }
 
 export function HistoricoPrecosPage() {
