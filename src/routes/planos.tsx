@@ -278,7 +278,7 @@ function PlansPage() {
                     aria-pressed={isSelected}
                     aria-label={`${plan.name}${isRecommended ? " · recomendado" : ""}${isFree ? " · grátis" : ` · ${centsToBRL(plan.price_cents)}`}`}
                     className={cn(
-                      "pc-lift pc-focus relative flex h-[clamp(190px,26vh,238px)] w-[76%] shrink-0 snap-start cursor-pointer flex-col p-3.5 sm:w-[46%] lg:h-auto lg:min-h-[214px] lg:w-auto lg:p-4",
+                      "pc-lift pc-focus relative flex h-full min-h-[168px] w-[76%] shrink-0 snap-start cursor-pointer flex-col p-3 sm:w-[46%] lg:h-auto lg:min-h-[200px] lg:w-auto lg:p-3.5",
                       isRecommended ? "pc-surface-3-interactive" : "pc-surface-2-interactive",
                       isSelected && "ring-2 ring-brand-gold/45",
                     )}
