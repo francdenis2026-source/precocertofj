@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, CheckCircle2, Loader2, RefreshCw, ShieldAlert, ShieldCheck, Wrench } from "lucide-react";
+import { grantSelfAdmin } from "@/lib/admin-maintenance.functions";
 import {
   getCoverageDiagnostics,
   parseCoverageError,
@@ -110,6 +112,13 @@ export function CoverageDiagnosticsPanel() {
         ) : q.data ? (
           <>
             <PermissionsBlock d={q.data} />
+            {q.data.isAdmin === false && (
+              <SelfHealAdminBlock
+                userId={q.data.authUid}
+                email={q.data.claimsSummary?.email ?? null}
+                onGranted={() => q.refetch()}
+              />
+            )}
             <RpcBlock rpcs={q.data.rpcs} />
             <p className="text-[11px] text-muted-foreground">
               Última verificação: {new Date(q.data.checkedAt).toLocaleString("pt-BR")}
@@ -234,6 +243,77 @@ function RpcBlock({
           </li>
         ))}
       </ul>
+    </div>
+  );
+}
+
+function SelfHealAdminBlock({
+  userId,
+  email,
+  onGranted,
+}: {
+  userId: string | null;
+  email: string | null;
+  onGranted: () => void;
+}) {
+  const call = useServerFn(grantSelfAdmin);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<string | null>(null);
+
+  async function handleGrant() {
+    setBusy(true);
+    setMsg(null);
+    try {
+      const r = await call();
+      setMsg(`Papel 'admin' concedido (motivo: ${r.reason}). Atualize a página se necessário.`);
+      onGranted();
+    } catch (e) {
+      setMsg(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const sqlSnippet =
+    userId
+      ? `-- Executar como service_role (SQL Editor do banco):\ninsert into public.user_roles (user_id, role)\nvalues ('${userId}', 'admin')\non conflict (user_id, role) do nothing;`
+      : `-- Faça login primeiro para obter seu auth.uid`;
+
+  return (
+    <div className="rounded border border-amber-500/50 bg-amber-500/5 p-3">
+      <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-amber-800 dark:text-amber-300">
+        <Wrench className="h-4 w-4" /> Correção guiada: conceder papel de admin
+      </div>
+      <p className="mb-3 text-xs text-muted-foreground">
+        Detectamos que <code className="rounded bg-background px-1">has_role('admin')</code> retornou{" "}
+        <strong>false</strong> para {email ? <code>{email}</code> : "este usuário"}. Isso significa que não há uma
+        linha em <code>public.user_roles</code> associando <code className="break-all">{userId ?? "auth.uid"}</code>{" "}
+        ao papel <code>admin</code>.
+      </p>
+
+      <div className="mb-3 space-y-2">
+        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Opção 1 — Aplicar automaticamente
+        </p>
+        <Button size="sm" onClick={handleGrant} disabled={busy || !userId}>
+          {busy ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ShieldCheck className="mr-2 h-4 w-4" />}
+          Conceder admin ao meu usuário
+        </Button>
+        <p className="text-[11px] text-muted-foreground">
+          Só funciona se ainda não existir nenhum admin cadastrado ou se seu e-mail estiver na allowlist do sistema.
+          Caso contrário, use a opção 2.
+        </p>
+        {msg && <p className="text-xs">{msg}</p>}
+      </div>
+
+      <div className="space-y-2">
+        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Opção 2 — Comando SQL para outro admin executar
+        </p>
+        <pre className="max-h-40 overflow-auto rounded bg-background p-2 text-[11px] leading-relaxed">
+{sqlSnippet}
+        </pre>
+      </div>
     </div>
   );
 }
