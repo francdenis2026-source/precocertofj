@@ -2377,7 +2377,7 @@ function EstablishmentsTab() {
       <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
         <div className="min-w-0">
           <h2 className={cn(tc.h2, "truncate font-serif")}>Estabelecimentos da cidade</h2>
-          <p className={cn(tc.caption, "truncate text-muted-foreground")}>
+          <p className={cn(tc.meta, "truncate")}>
             Cadastre mercados e atacados. Produtos são vinculados depois.
           </p>
         </div>
