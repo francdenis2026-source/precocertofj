@@ -27,6 +27,9 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useConfirm } from "@/components/ui/confirm-provider";
+import { BasketVerdictHero } from "@/components/basket/BasketVerdictHero";
+import { BasketSubstitutionPanel } from "@/components/basket/BasketSubstitutionPanel";
+
 import {
   getBasketComparison,
   buildBudgetBasket,
