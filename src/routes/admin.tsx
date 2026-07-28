@@ -2360,24 +2360,21 @@ function EstablishmentsTab() {
     }
   };
 
-  const onDelete = async (id: string) => {
-    const ok = await confirm({
-      title: "Remover estabelecimento?",
-      description:
-        "Todos os produtos, preços capturados, recibos e alertas ligados a este estabelecimento serão removidos permanentemente. Esta ação não pode ser desfeita.",
-      confirmLabel: "Remover tudo",
-      destructive: true,
-    });
-    if (!ok) return;
+  const onDelete = (id: string) => setPendingDeleteId(id);
 
+  const confirmDelete = async () => {
+    if (!pendingDeleteId) return;
+    const id = pendingDeleteId;
+    setPendingDeleteId(null);
     try {
       await remove({ data: { id } });
-      toast.success("Removido");
+      toast.success("Estabelecimento removido");
       await load();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Falha ao remover");
     }
   };
+
 
   const onToggle = async (e: Establishment) => {
     try {
