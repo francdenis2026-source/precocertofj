@@ -418,10 +418,10 @@ function OpportunityCard({ item, onPick }: { item: HighlightItem; onPick: () => 
         {item.name}
       </PrecoCertoMark>
       <span className="flex items-baseline gap-1.5">
-        <span className="text-[15px] font-semibold tabular-nums text-foreground">
+        <span className="pc-price pc-price--md">
           {brl(item.minPrice)}
         </span>
-        <span className="text-[11px] text-muted-foreground line-through tabular-nums">
+        <span className="pc-price pc-price--sm pc-price--strike">
           {brl(item.maxPrice)}
         </span>
       </span>
@@ -429,7 +429,7 @@ function OpportunityCard({ item, onPick }: { item: HighlightItem; onPick: () => 
         <span className="truncate text-[11px] text-muted-foreground">
           {item.cheapestStore ?? `${item.storeCount} mercados`}
         </span>
-        <span className="inline-flex shrink-0 items-center rounded-full bg-brand-gold px-1.5 py-0.5 text-[11px] font-bold tabular-nums text-brand-navy">
+        <span className="pc-price pc-price--sm inline-flex shrink-0 items-center rounded-full bg-brand-gold px-1.5 py-0.5 text-brand-navy" style={{ fontWeight: 700 }}>
           −{brl(item.savings)}
         </span>
       </span>
