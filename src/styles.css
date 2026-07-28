@@ -4763,3 +4763,27 @@ html.dark .pc-row-interactive:hover .pc-store-name {
 }
 .pc-tone-chip [data-tone-icon] { color: var(--tone) !important; }
 
+
+/* ============================================================
+   .pc-price — tipografia dos números de preço
+   Sans-serif tabular com alto contraste em light/dark.
+   NUNCA usar Fraunces italic dourado para valores numéricos:
+   perde contraste (WCAG) e legibilidade de dígitos.
+   ============================================================ */
+.pc-price {
+  font-family: 'Work Sans', ui-sans-serif, system-ui, sans-serif;
+  font-feature-settings: "tnum" 1, "lnum" 1, "cv11" 1;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  color: var(--foreground);
+  font-style: normal;
+}
+.pc-price--sm { font-size: 0.8125rem; line-height: 1.15; }
+.pc-price--md { font-size: 0.9375rem; line-height: 1.15; font-weight: 650; }
+.pc-price--lg { font-size: 1.125rem;  line-height: 1.1;  font-weight: 700; letter-spacing: -0.01em; }
+/* Contexto "a partir de" — leve, ainda AA (>= 4.5:1) */
+.pc-price--muted {
+  color: color-mix(in oklab, var(--foreground) 82%, transparent);
+  font-weight: 600;
+}
