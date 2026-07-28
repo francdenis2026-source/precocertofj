@@ -91,6 +91,7 @@ import { Route as AdminContasRouteImport } from './routes/admin_.contas'
 import { Route as AdminConsistenciaRouteImport } from './routes/admin_.consistencia'
 import { Route as AdminCoberturaRouteImport } from './routes/admin_.cobertura'
 import { Route as AdminClientesRouteImport } from './routes/admin_.clientes'
+import { Route as AdminCestaRouteImport } from './routes/admin_.cesta'
 import { Route as AdminCategorizacaoRouteImport } from './routes/admin_.categorizacao'
 import { Route as AdminCatalogoRouteImport } from './routes/admin_.catalogo'
 import { Route as AdminCadastroFotoRouteImport } from './routes/admin_.cadastro-foto'
@@ -520,6 +521,11 @@ const AdminClientesRoute = AdminClientesRouteImport.update({
   path: '/admin/clientes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminCestaRoute = AdminCestaRouteImport.update({
+  id: '/admin_/cesta',
+  path: '/admin/cesta',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminCategorizacaoRoute = AdminCategorizacaoRouteImport.update({
   id: '/admin_/categorizacao',
   path: '/admin/categorizacao',
@@ -668,6 +674,7 @@ export interface FileRoutesByFullPath {
   '/admin/cadastro-foto': typeof AdminCadastroFotoRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorizacao': typeof AdminCategorizacaoRoute
+  '/admin/cesta': typeof AdminCestaRoute
   '/admin/clientes': typeof AdminClientesRoute
   '/admin/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin/consistencia': typeof AdminConsistenciaRoute
@@ -770,6 +777,7 @@ export interface FileRoutesByTo {
   '/admin/cadastro-foto': typeof AdminCadastroFotoRoute
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorizacao': typeof AdminCategorizacaoRoute
+  '/admin/cesta': typeof AdminCestaRoute
   '/admin/clientes': typeof AdminClientesRoute
   '/admin/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin/consistencia': typeof AdminConsistenciaRoute
@@ -873,6 +881,7 @@ export interface FileRoutesById {
   '/admin_/cadastro-foto': typeof AdminCadastroFotoRoute
   '/admin_/catalogo': typeof AdminCatalogoRoute
   '/admin_/categorizacao': typeof AdminCategorizacaoRoute
+  '/admin_/cesta': typeof AdminCestaRoute
   '/admin_/clientes': typeof AdminClientesRoute
   '/admin_/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin_/consistencia': typeof AdminConsistenciaRoute
@@ -977,6 +986,7 @@ export interface FileRouteTypes {
     | '/admin/cadastro-foto'
     | '/admin/catalogo'
     | '/admin/categorizacao'
+    | '/admin/cesta'
     | '/admin/clientes'
     | '/admin/cobertura'
     | '/admin/consistencia'
@@ -1079,6 +1089,7 @@ export interface FileRouteTypes {
     | '/admin/cadastro-foto'
     | '/admin/catalogo'
     | '/admin/categorizacao'
+    | '/admin/cesta'
     | '/admin/clientes'
     | '/admin/cobertura'
     | '/admin/consistencia'
@@ -1181,6 +1192,7 @@ export interface FileRouteTypes {
     | '/admin_/cadastro-foto'
     | '/admin_/catalogo'
     | '/admin_/categorizacao'
+    | '/admin_/cesta'
     | '/admin_/clientes'
     | '/admin_/cobertura'
     | '/admin_/consistencia'
@@ -1283,6 +1295,7 @@ export interface RootRouteChildren {
   AdminCadastroFotoRoute: typeof AdminCadastroFotoRoute
   AdminCatalogoRoute: typeof AdminCatalogoRoute
   AdminCategorizacaoRoute: typeof AdminCategorizacaoRoute
+  AdminCestaRoute: typeof AdminCestaRoute
   AdminClientesRoute: typeof AdminClientesRoute
   AdminCoberturaRoute: typeof AdminCoberturaRouteWithChildren
   AdminConsistenciaRoute: typeof AdminConsistenciaRoute
@@ -1905,6 +1918,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminClientesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin_/cesta': {
+      id: '/admin_/cesta'
+      path: '/admin/cesta'
+      fullPath: '/admin/cesta'
+      preLoaderRoute: typeof AdminCestaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin_/categorizacao': {
       id: '/admin_/categorizacao'
       path: '/admin/categorizacao'
@@ -2145,6 +2165,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminCadastroFotoRoute: AdminCadastroFotoRoute,
   AdminCatalogoRoute: AdminCatalogoRoute,
   AdminCategorizacaoRoute: AdminCategorizacaoRoute,
+  AdminCestaRoute: AdminCestaRoute,
   AdminClientesRoute: AdminClientesRoute,
   AdminCoberturaRoute: AdminCoberturaRouteWithChildren,
   AdminConsistenciaRoute: AdminConsistenciaRoute,
