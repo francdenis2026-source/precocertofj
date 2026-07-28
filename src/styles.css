@@ -3075,11 +3075,13 @@ legend, label, table, th, td, li, dt, dd, blockquote, figcaption, address,
 cite, em, strong, small, sub, sup, mark, q, s, u, i, b, abbr {
   font-family: "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
-[class*="Instrument_Serif"],
-[class*="font-serif"],
-[class*="font-display"] {
-  font-family: "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif !important;
-  font-style: normal !important;
+/* Fraunces variable serif para destaques editoriais.
+   Classes inline com "Instrument_Serif" (legado) continuam pontando para o
+   mesmo stack serif, sem forçar sans-serif. */
+[class*="Instrument_Serif"] {
+  font-family: var(--font-serif);
+  font-optical-sizing: auto;
+  font-variation-settings: "opsz" 96, "SOFT" 30;
 }
 /* Eyebrows uppercase ganham peso e tracking equilibrados para leitura clara */
 .pc-eyebrow,
