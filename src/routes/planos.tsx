@@ -123,36 +123,38 @@ function planHighlights(plan: PublicPlan): string[] {
   return fallbackHighlights(plan.slug, plan.days);
 }
 
-const FAQ = [
-  {
-    q: "Preciso de cartão de crédito para começar?",
-    a: "Não. O plano de degustação libera 7 dias sem cartão e encerra sozinho. Só cobramos se você escolher um plano pago depois.",
-  },
-  {
-    q: "Como funciona o pagamento?",
-    a: "Escolha o plano, entre com sua conta e pague pelo Mercado Pago — Pix aprova em segundos e também aceitamos cartão de crédito. Assim que o pagamento é confirmado, o código de licença aparece na tela e vai para o seu e-mail.",
-  },
-  {
-    q: "Tenho um cupom. Onde aplico?",
-    a: "Insira o código no checkout, antes de finalizar. O desconto aparece na hora e já entra no total.",
-  },
-  {
-    q: "E se eu quiser cancelar?",
-    a: "Pode cancelar quando quiser, direto no seu perfil. O acesso segue até o fim do período pago — sem multa, sem burocracia.",
-  },
-  {
-    q: "Posso trocar de plano depois?",
-    a: "Sim. Ative um novo código a qualquer momento e o novo período soma ao acesso atual.",
-  },
-  {
-    q: "Quem pode usar a IA e quantas análises tenho por mês?",
-    a: "No plano grátis/degustação você tem 1 análise de IA por mês (uma chamada para montar a cesta), sem possibilidade de ultrapassar. Nos planos pagos: 30 análises/mês no Essencial, 150 no Trimestral e Anual e 600 no plano Comércio/Fundador. A cota renova todo mês e o saldo aparece no seu perfil.",
-  },
-  {
-    q: "E se eu precisar de mais análises?",
-    a: "Você compra um pacote avulso de 50 análises por R$ 9,90, válido por 12 meses e cumulativo com a cota do plano. Mercados parceiros que catalogam vitrine inteira usam o plano Comércio, com cataloga\u00e7\u00e3o em lote e prioridade de processamento.",
-  },
-];
+function buildFaq(trialDays: number) {
+  return [
+    {
+      q: "Preciso de cartão de crédito para começar?",
+      a: `Não. O plano de degustação libera ${trialDays} dias sem cartão e encerra sozinho. Só cobramos se você escolher um plano pago depois.`,
+    },
+    {
+      q: "Como funciona o pagamento?",
+      a: "Escolha o plano, entre com sua conta e pague pelo Mercado Pago — Pix aprova em segundos e também aceitamos cartão de crédito. Assim que o pagamento é confirmado, o código de licença aparece na tela e vai para o seu e-mail.",
+    },
+    {
+      q: "Tenho um cupom. Onde aplico?",
+      a: "Insira o código no checkout, antes de finalizar. O desconto aparece na hora e já entra no total.",
+    },
+    {
+      q: "E se eu quiser cancelar?",
+      a: "Pode cancelar quando quiser, direto no seu perfil. O acesso segue até o fim do período pago — sem multa, sem burocracia.",
+    },
+    {
+      q: "Posso trocar de plano depois?",
+      a: "Sim. Ative um novo código a qualquer momento e o novo período soma ao acesso atual.",
+    },
+    {
+      q: "Quem pode usar a IA e quantas análises tenho por mês?",
+      a: "No plano grátis/degustação você tem 1 análise de IA por mês (uma chamada para montar a cesta), sem possibilidade de ultrapassar. Nos planos pagos: 30 análises/mês no Essencial, 150 no Trimestral e Anual e 600 no plano Comércio/Fundador. A cota renova todo mês e o saldo aparece no seu perfil.",
+    },
+    {
+      q: "E se eu precisar de mais análises?",
+      a: "Você compra um pacote avulso de 50 análises por R$ 9,90, válido por 12 meses e cumulativo com a cota do plano. Mercados parceiros que catalogam vitrine inteira usam o plano Comércio, com catalogação em lote e prioridade de processamento.",
+    },
+  ];
+}
 
 
 function PlansPage() {
