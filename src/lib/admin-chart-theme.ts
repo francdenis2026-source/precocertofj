@@ -12,15 +12,24 @@
 export type ChartDensity = "normal" | "compact";
 
 /** Tokens de cor prontos para passar em stroke / fill do recharts. */
+/**
+ * Cores fixas (não tokens) — o admin roda em `.admin-scope` com fundo navy
+ * escuro e os tokens `--primary/--foreground` estão em oklch, que o Recharts
+ * não interpola via `hsl(var(...))`. Usamos literais garantidos para manter
+ * contraste WCAG AA contra o navy #0a1631/#0f1b3d.
+ */
 export const chartTheme = {
-  grid: "hsl(var(--foreground) / 0.16)",
-  axis: "hsl(var(--foreground) / 0.80)",
-  axisSoft: "hsl(var(--foreground) / 0.55)",
-  primary: "hsl(var(--primary))",
-  primaryStrong: "hsl(var(--primary) / 0.9)",
-  accent: "#e0b64d", // gold — combina com `goldRule` do PageHeader
+  grid: "rgba(226, 232, 240, 0.18)",
+  axis: "rgba(226, 232, 240, 0.92)",
+  axisSoft: "rgba(226, 232, 240, 0.68)",
+  primary: "#60a5fa",        // azul claro — visível no navy
+  primaryStrong: "#93c5fd",
+  accent: "#f4c46b",         // gold acessível
   emerald: "#34d399",
-  destructive: "hsl(var(--destructive))",
+  destructive: "#f87171",
+  tooltipBg: "#0b1226",
+  tooltipBorder: "rgba(244, 196, 107, 0.35)",
+  tooltipFg: "#f8fafc",
 } as const;
 
 export const tickStyle = { fontSize: 10, fill: chartTheme.axis } as const;
