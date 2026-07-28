@@ -102,13 +102,7 @@ function fallbackHighlights(slug: string, days: number): string[] {
         "O menor valor por mês da plataforma",
         "A escolha da maioria dos assinantes",
       ];
-    case "fundador-feijo":
-    case "fundador":
-      return [
-        "Acesso vitalício — pague uma única vez",
-        "Vagas limitadas para apoiadores locais",
-        "Seu nome ajuda o projeto a crescer em Feijó",
-      ];
+    // (planos vitalícios/fundador foram descontinuados)
     default:
       return [
         `Acesso completo por ${days} dias`,
@@ -147,11 +141,11 @@ function buildFaq(trialDays: number) {
     },
     {
       q: "Quem pode usar a IA e quantas análises tenho por mês?",
-      a: "No plano grátis/degustação você tem 1 análise de IA por mês (uma chamada para montar a cesta), sem possibilidade de ultrapassar. Nos planos pagos: 30 análises/mês no Essencial, 150 no Trimestral e Anual e 600 no plano Comércio/Fundador. A cota renova todo mês e o saldo aparece no seu perfil.",
+      a: "No plano grátis/degustação você tem 1 análise de IA por mês (uma chamada para montar a cesta), sem possibilidade de ultrapassar. Nos planos pagos: 30 análises/mês no Mensal e 150 análises/mês no Trimestral e no Anual. A cota renova todo mês e o saldo aparece no seu perfil.",
     },
     {
       q: "E se eu precisar de mais análises?",
-      a: "Você compra um pacote avulso de 50 análises por R$ 9,90, válido por 12 meses e cumulativo com a cota do plano. Mercados parceiros que catalogam vitrine inteira usam o plano Comércio, com catalogação em lote e prioridade de processamento.",
+      a: "Você compra um pacote avulso de 50 análises por R$ 9,90, válido por 12 meses e cumulativo com a cota do plano.",
     },
   ];
 }
