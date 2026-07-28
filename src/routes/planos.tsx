@@ -165,6 +165,7 @@ function PlansPage() {
     queryKey: ["public-plans"],
     queryFn: () => fetchPlans(),
   });
+  usePlansRealtime();
 
   async function handleBuy(plan: PublicPlan) {
     setBuying(plan.id);
