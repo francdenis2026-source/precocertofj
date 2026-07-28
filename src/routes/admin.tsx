@@ -310,8 +310,12 @@ function AdminPage() {
 
         {/* ---------- Resumo — Console Administrativo ---------- */}
         <div className="space-y-4" data-admin-region="overview">
+          {/* Seção 0: Cesta Básica — panorama executivo */}
+          <BasketOverviewCard />
+
           {/* Seção 1: Descoberta — busca correlacionada */}
           <section aria-labelledby="admin-section-discovery" className="space-y-2">
+
             <header className="flex items-baseline justify-between gap-2 border-b border-border/50 pb-1">
               <h2 id="admin-section-discovery" className={cn(tc.itemTitle, "text-foreground")}>Descoberta</h2>
               <span className={cn(tc.meta, "text-muted-foreground")}>Buscar por produto, estabelecimento ou preço</span>
