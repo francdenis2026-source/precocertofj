@@ -75,29 +75,30 @@ function pricePerMonth(cents: number, days: number): string | null {
   return centsToBRL(Math.round(cents / months));
 }
 
-function planHighlights(slug: string): string[] {
+/** Fallback highlights when the admin hasn't filled `features` in the DB. */
+function fallbackHighlights(slug: string, days: number): string[] {
   switch (slug) {
     case "degustacao":
       return [
-        "7 dias com tudo liberado",
+        `${days} dias com tudo liberado`,
         "Sem cartão de crédito",
         "Encerra sozinho — sem cobrança surpresa",
       ];
     case "mensal":
       return [
-        "Acesso completo por 30 dias",
+        `Acesso completo por ${days} dias`,
         "Cancele quando quiser, sem multa",
         "Ideal para testar antes de anual",
       ];
     case "trimestral":
       return [
-        "3 meses de acesso contínuo",
+        `${days} dias de acesso contínuo`,
         "Economia sobre 3 mensais",
         "Boa opção para famílias que fazem feira grande",
       ];
     case "anual":
       return [
-        "12 meses ininterruptos",
+        `${days} meses ininterruptos`,
         "O menor valor por mês da plataforma",
         "A escolha da maioria dos assinantes",
       ];
@@ -110,11 +111,16 @@ function planHighlights(slug: string): string[] {
       ];
     default:
       return [
-        "Acesso completo à plataforma",
+        `Acesso completo por ${days} dias`,
         "Suporte por e-mail em até 24h",
         "Novas funcionalidades incluídas",
       ];
   }
+}
+
+function planHighlights(plan: PublicPlan): string[] {
+  if (plan.features && plan.features.length > 0) return plan.features;
+  return fallbackHighlights(plan.slug, plan.days);
 }
 
 const FAQ = [
