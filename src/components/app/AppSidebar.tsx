@@ -124,6 +124,16 @@ const adminGroups: readonly NavGroup[] = [
     ],
   },
   {
+    label: "Cesta Básica",
+    tone: "commerce",
+    items: [
+      { to: "/admin/cesta", label: "Itens & versões", icon: ShoppingBasket, exact: true },
+      { to: "/admin/cesta-auditoria", label: "Auditoria da Cesta", icon: ClipboardCheck, exact: true },
+      { to: "/cesta-basica", label: "Veredito ao vivo", icon: Gavel, exact: true },
+      { to: "/admin/rank-check", label: "Ranking geral", icon: Trophy, exact: true },
+    ],
+  },
+  {
     label: "Catálogo",
     tone: "catalog",
     items: [
