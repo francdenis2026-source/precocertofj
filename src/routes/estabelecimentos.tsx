@@ -1,7 +1,9 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { useServerFn } from "@tanstack/react-start";
+import { zodValidator, fallback } from "@tanstack/zod-adapter";
+import { z } from "zod";
 import {
   Beef,
   ChevronRight,
@@ -43,7 +45,20 @@ import {
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
 
+const SORT_KEYS = ["products", "name", "neighborhood", "savings"] as const;
+type SortKey = (typeof SORT_KEYS)[number];
+
+const searchSchema = z.object({
+  q: fallback(z.string(), "").default(""),
+  kind: fallback(z.string(), "__all").default("__all"),
+  sort: fallback(z.string(), "products").default("products"),
+  bairro: fallback(z.string(), "__all").default("__all"),
+  fav: fallback(z.boolean(), false).default(false),
+  sel: fallback(z.string(), "").default(""),
+});
+
 export const Route = createFileRoute("/estabelecimentos")({
+  validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
       { title: "Mercados de Feijó — PreçoCerto" },
@@ -64,8 +79,6 @@ export const Route = createFileRoute("/estabelecimentos")({
   }),
   component: EstablishmentsPage,
 });
-
-type SortKey = "products" | "name" | "neighborhood" | "savings";
 
 const KIND_META: Record<
   string,
@@ -103,21 +116,67 @@ function EstablishmentsPage() {
     [favMarkets],
   );
 
-  const [q, setQ] = useState("");
-  const [kindFilter, setKindFilter] = useState<string>("__all");
-  const [sort, setSort] = useState<SortKey>("products");
-  const [onlyFavorites, setOnlyFavorites] = useState(false);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  // URL como fonte da verdade dos filtros + seleção (compartilhável / voltar-friendly).
+  const search = Route.useSearch();
+  const navigate = useNavigate({ from: Route.fullPath });
+
+  const q = search.q;
+  const kindFilter = search.kind;
+  const sort: SortKey = (SORT_KEYS as readonly string[]).includes(search.sort)
+    ? (search.sort as SortKey)
+    : "products";
+  const neighborhoodFilter = search.bairro;
+  const onlyFavorites = search.fav && !!user;
+  const selectedId = search.sel || null;
+
+  const updateSearch = useCallback(
+    (patch: Partial<z.infer<typeof searchSchema>>) => {
+      navigate({
+        search: (prev) => {
+          const next = { ...prev, ...patch };
+          // Limpa defaults para manter URL limpa
+          if (next.q === "") delete (next as Record<string, unknown>).q;
+          if (next.kind === "__all") delete (next as Record<string, unknown>).kind;
+          if (next.bairro === "__all") delete (next as Record<string, unknown>).bairro;
+          if (next.sort === "products") delete (next as Record<string, unknown>).sort;
+          if (!next.fav) delete (next as Record<string, unknown>).fav;
+          if (!next.sel) delete (next as Record<string, unknown>).sel;
+          return next;
+        },
+        replace: true,
+      });
+    },
+    [navigate],
+  );
+
   const [detailOpenMobile, setDetailOpenMobile] = useState(false);
+  const [qDraft, setQDraft] = useState(q);
+  // Sincroniza rascunho quando URL muda de fora (back/forward, link compartilhado).
+  useEffect(() => setQDraft(q), [q]);
+  // Debounce da digitação para não estourar history.replaceState a cada tecla.
+  useEffect(() => {
+    if (qDraft === q) return;
+    const t = window.setTimeout(() => updateSearch({ q: qDraft }), 220);
+    return () => window.clearTimeout(t);
+  }, [qDraft, q, updateSearch]);
 
   useEffect(() => {
-    if (!user) setOnlyFavorites(false);
-  }, [user]);
+    if (!user && search.fav) updateSearch({ fav: false });
+  }, [user, search.fav, updateSearch]);
 
   const kindsPresent = useMemo(() => {
     const s = new Set<string>();
     for (const it of data?.items ?? []) s.add(it.kind ?? "outro");
     return s;
+  }, [data]);
+
+  const neighborhoodsPresent = useMemo(() => {
+    const bairros = new Set<string>();
+    for (const it of data?.items ?? []) {
+      const b = (it.neighborhood ?? "").trim();
+      if (b) bairros.add(b);
+    }
+    return Array.from(bairros).sort((a, b) => a.localeCompare(b, "pt-BR"));
   }, [data]);
 
   const filtered = useMemo(() => {
@@ -126,6 +185,11 @@ function EstablishmentsPage() {
     let list = data.items.slice();
     if (onlyFavorites) list = list.filter((e) => favSet.has(e.name.trim().toLowerCase()));
     if (kindFilter !== "__all") list = list.filter((e) => (e.kind ?? "outro") === kindFilter);
+    if (neighborhoodFilter !== "__all") {
+      list = list.filter(
+        (e) => (e.neighborhood ?? "").trim().toLowerCase() === neighborhoodFilter.toLowerCase(),
+      );
+    }
     if (term) {
       list = list.filter((e) =>
         [e.name, e.neighborhood ?? "", e.city ?? ""].some((v) => v.toLowerCase().includes(term)),
@@ -149,23 +213,89 @@ function EstablishmentsPage() {
         list.sort((a, b) => b.productsCount - a.productsCount);
     }
     return list;
-  }, [data, q, kindFilter, sort, onlyFavorites, favSet]);
+  }, [data, q, kindFilter, neighborhoodFilter, sort, onlyFavorites, favSet]);
 
-  // Auto-selecionar primeiro item quando lista muda
+  // Auto-selecionar primeiro item quando lista muda / seleção some.
   useEffect(() => {
     if (filtered.length === 0) {
-      setSelectedId(null);
+      if (selectedId) updateSearch({ sel: "" });
       return;
     }
     if (!selectedId || !filtered.some((e) => e.id === selectedId)) {
-      setSelectedId(filtered[0].id);
+      updateSearch({ sel: filtered[0].id });
     }
-  }, [filtered, selectedId]);
+  }, [filtered, selectedId, updateSearch]);
 
   const selected = useMemo(
     () => filtered.find((e) => e.id === selectedId) ?? null,
     [filtered, selectedId],
   );
+
+  // Roving-tabindex + navegação por teclado na lista.
+  const listRef = useRef<HTMLUListElement | null>(null);
+  const itemRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
+  const registerItem = useCallback((id: string, el: HTMLButtonElement | null) => {
+    if (el) itemRefs.current.set(id, el);
+    else itemRefs.current.delete(id);
+  }, []);
+
+  const focusItem = useCallback((id: string | null) => {
+    if (!id) return;
+    const el = itemRefs.current.get(id);
+    el?.focus();
+    el?.scrollIntoView({ block: "nearest" });
+  }, []);
+
+  const selectAt = useCallback(
+    (idx: number, opts?: { focus?: boolean }) => {
+      if (filtered.length === 0) return;
+      const clamped = Math.max(0, Math.min(filtered.length - 1, idx));
+      const item = filtered[clamped];
+      updateSearch({ sel: item.id });
+      if (opts?.focus) focusItem(item.id);
+    },
+    [filtered, updateSearch, focusItem],
+  );
+
+  const currentIndex = useMemo(
+    () => filtered.findIndex((e) => e.id === selectedId),
+    [filtered, selectedId],
+  );
+
+  const onListKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLUListElement>) => {
+      if (filtered.length === 0) return;
+      const idx = currentIndex < 0 ? 0 : currentIndex;
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          selectAt(idx + 1, { focus: true });
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          selectAt(idx - 1, { focus: true });
+          break;
+        case "Home":
+          e.preventDefault();
+          selectAt(0, { focus: true });
+          break;
+        case "End":
+          e.preventDefault();
+          selectAt(filtered.length - 1, { focus: true });
+          break;
+        case "Enter":
+        case " ":
+          // Em mobile abre o painel; em desktop apenas confirma o foco no preview.
+          e.preventDefault();
+          setDetailOpenMobile(true);
+          window.setTimeout(() => detailHeadingRef.current?.focus(), 30);
+          break;
+      }
+    },
+    [filtered, currentIndex, selectAt],
+  );
+
+  const detailHeadingRef = useRef<HTMLHeadingElement | null>(null);
 
   return (
     <IsolatedPage fit className="bg-background" contentClassName="!pb-0">
@@ -217,7 +347,7 @@ function EstablishmentsPage() {
               />
             </>
           )}
-          <div className="ml-auto flex flex-wrap items-center gap-1.5">
+          <div className="ml-auto flex flex-wrap items-center gap-1.5" role="radiogroup" aria-label="Tipo de comércio">
             {(["__all", ...Object.keys(KIND_META)] as const).map((k) => {
               if (k !== "__all" && !kindsPresent.has(k)) return null;
               const meta = k === "__all" ? { label: "Todos", icon: Store } : KIND_META[k];
@@ -229,7 +359,7 @@ function EstablishmentsPage() {
                   type="button"
                   role="radio"
                   aria-checked={active}
-                  onClick={() => setKindFilter(k)}
+                  onClick={() => updateSearch({ kind: k })}
                   className={cn(
                     "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 transition-colors",
                     tc.chip,
@@ -249,7 +379,7 @@ function EstablishmentsPage() {
                 type="button"
                 role="switch"
                 aria-checked={onlyFavorites}
-                onClick={() => setOnlyFavorites((v) => !v)}
+                onClick={() => updateSearch({ fav: !onlyFavorites })}
                 className={cn(
                   "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 transition-colors",
                   tc.chip,
@@ -281,19 +411,43 @@ function EstablishmentsPage() {
                 aria-hidden
               />
               <Input
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
+                value={qDraft}
+                onChange={(e) => setQDraft(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "ArrowDown" && filtered.length > 0) {
+                    e.preventDefault();
+                    focusItem(filtered[0].id);
+                  }
+                }}
                 placeholder="Buscar por nome, bairro ou cidade…"
                 className="h-9 pl-8 text-[13.5px]"
                 aria-label="Buscar mercado"
+                aria-controls="mercados-listbox"
               />
             </div>
-            <div className="flex items-center justify-between gap-2">
-              <span className={cn("truncate", tc.metaMuted)}>
-                {filtered.length} {filtered.length === 1 ? "resultado" : "resultados"}
-              </span>
-              <Select value={sort} onValueChange={(v) => setSort(v as SortKey)}>
-                <SelectTrigger className="h-8 w-[160px] text-[12px]">
+            <div className="flex flex-wrap items-center gap-1.5">
+              <Select
+                value={neighborhoodFilter}
+                onValueChange={(v) => updateSearch({ bairro: v })}
+              >
+                <SelectTrigger
+                  className="h-8 flex-1 min-w-[140px] text-[12px]"
+                  aria-label="Filtrar por bairro"
+                >
+                  <MapPin className="mr-1 h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
+                  <SelectValue placeholder="Todos os bairros" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="__all">Todos os bairros</SelectItem>
+                  {neighborhoodsPresent.map((b) => (
+                    <SelectItem key={b} value={b}>
+                      {b}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <Select value={sort} onValueChange={(v) => updateSearch({ sort: v })}>
+                <SelectTrigger className="h-8 w-[150px] text-[12px]" aria-label="Ordenar lista">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -304,12 +458,32 @@ function EstablishmentsPage() {
                 </SelectContent>
               </Select>
             </div>
+            <div className="flex items-center justify-between gap-2">
+              <span className={cn("truncate", tc.metaMuted)} aria-live="polite">
+                {filtered.length} {filtered.length === 1 ? "resultado" : "resultados"}
+              </span>
+              {(q || kindFilter !== "__all" || neighborhoodFilter !== "__all" || onlyFavorites) && (
+                <button
+                  type="button"
+                  onClick={() =>
+                    updateSearch({ q: "", kind: "__all", bairro: "__all", fav: false })
+                  }
+                  className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground hover:text-[var(--pc-gold-ink)]"
+                >
+                  Limpar filtros
+                </button>
+              )}
+            </div>
           </div>
 
           <ul
-            className="pc-rail min-h-0 flex-1 divide-y divide-border/50 overflow-y-auto"
+            id="mercados-listbox"
+            ref={listRef}
+            className="pc-rail min-h-0 flex-1 divide-y divide-border/50 overflow-y-auto focus:outline-none"
             role="listbox"
             aria-label="Lista de mercados"
+            aria-activedescendant={selectedId ? `mercado-opt-${selectedId}` : undefined}
+            onKeyDown={onListKeyDown}
           >
             {isLoading &&
               Array.from({ length: 8 }).map((_, i) => (
@@ -340,16 +514,22 @@ function EstablishmentsPage() {
               return (
                 <li key={e.id}>
                   <button
+                    id={`mercado-opt-${e.id}`}
+                    ref={(el) => registerItem(e.id, el)}
                     type="button"
                     role="option"
                     aria-selected={active}
+                    tabIndex={active ? 0 : -1}
                     onClick={() => {
-                      setSelectedId(e.id);
+                      updateSearch({ sel: e.id });
                       setDetailOpenMobile(true);
+                    }}
+                    onFocus={() => {
+                      if (!active) updateSearch({ sel: e.id });
                     }}
                     className={cn(
                       "group flex w-full items-center gap-3 px-3 py-2.5 text-left transition-colors md:px-4",
-                      "focus-visible:outline-none focus-visible:bg-muted/50",
+                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold",
                       active
                         ? "bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)]"
                         : "hover:bg-muted/40",
@@ -398,12 +578,17 @@ function EstablishmentsPage() {
             detailOpenMobile ? "flex" : "hidden md:flex",
           )}
           aria-live="polite"
+          aria-label="Detalhes do mercado selecionado"
         >
           {selected ? (
             <DetailPanel
               item={selected}
               overview={data ?? null}
-              onCloseMobile={() => setDetailOpenMobile(false)}
+              headingRef={detailHeadingRef}
+              onCloseMobile={() => {
+                setDetailOpenMobile(false);
+                window.setTimeout(() => focusItem(selectedId), 30);
+              }}
             />
           ) : (
             <div className="flex flex-1 items-center justify-center p-8 text-center">
@@ -445,10 +630,12 @@ function DetailPanel({
   item,
   overview,
   onCloseMobile,
+  headingRef,
 }: {
   item: EstablishmentStat;
   overview: EstablishmentsOverview | null;
   onCloseMobile: () => void;
+  headingRef: React.MutableRefObject<HTMLHeadingElement | null>;
 }) {
   const meta = kindMeta(item.kind);
   const slug = slugifyEstablishment(item.name);
@@ -486,7 +673,11 @@ function DetailPanel({
                 {meta.label}
               </span>
             </div>
-            <h2 className={cn("mt-0.5 truncate", tc.h2, "text-[var(--pc-gold-ink)]")}>
+            <h2
+              ref={headingRef}
+              tabIndex={-1}
+              className={cn("mt-0.5 truncate focus:outline-none", tc.h2, "text-[var(--pc-gold-ink)]")}
+            >
               {item.name}
             </h2>
             <div className={cn("mt-0.5 flex items-center gap-1.5", tc.meta)}>
