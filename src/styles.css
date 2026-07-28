@@ -4848,18 +4848,19 @@ html.dark .pc-row-interactive:hover .pc-store-name {
 
 /* ============================================================
    .pc-price — tipografia dos números de preço
-   Sans-serif tabular com alto contraste em light/dark.
-   NUNCA usar Fraunces italic dourado para valores numéricos:
-   perde contraste (WCAG) e legibilidade de dígitos.
+   Alinhada à fonte do hero (.pc-hero-mark): Fraunces variable serif,
+   Roman upright, tabular-nums e ss desligado para uniformidade dos glifos.
    ============================================================ */
 .pc-price {
   font-family: var(--pc-price-font);
   font-feature-settings: var(--pc-price-feature-settings);
   font-variant-numeric: tabular-nums lining-nums;
-  font-weight: 600;
+  font-weight: 500;
+  font-style: normal;
+  font-optical-sizing: auto;
+  font-variation-settings: "opsz" 96, "SOFT" 0, "wght" 520;
   letter-spacing: var(--pc-price-tracking);
   color: var(--pc-price-fg);
-  font-style: normal;
 }
 
 .pc-price--sm { font-size: 0.8125rem; line-height: 1.15; }
