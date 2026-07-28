@@ -74,7 +74,9 @@ function Gestao() {
               <Wallet className="mr-1.5 h-3.5 w-3.5" />Pagamentos
             </TabsTrigger>
           </TabsList>
+          </div>
           <TabsContent value="licencas"><LicensesTab /></TabsContent>
+
           <TabsContent value="contas"><AccountsTab /></TabsContent>
           <TabsContent value="colaboradores"><CollaboratorsTab /></TabsContent>
           <TabsContent value="logins"><LoginsTab /></TabsContent>
