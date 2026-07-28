@@ -22,6 +22,8 @@ import {
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { PrecoCertoMark } from "@/components/typography/PrecoCertoMark";
+import { StoreCaption } from "@/components/brand/StoreCaption";
+
 import { buildLivePanel, type LivePanelMetric } from "@/lib/live-panel";
 import { getProductSuggestions } from "@/lib/products-suggest.functions";
 import { getPlatformStats, listPublicStores } from "@/lib/stores-public.functions";
