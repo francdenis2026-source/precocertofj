@@ -714,14 +714,14 @@ function HomePage() {
                             <li key={s?.id ?? i} className="shrink-0">
                               <Link
                                 to="/estabelecimentos"
-                                title={label}
                                 aria-label={`Ver produtos e preços de ${label}`}
-                                className="group relative flex h-16 w-16 flex-col items-stretch justify-between overflow-hidden rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--pc-home-onhero-gold)_55%,white)] hover:shadow-[0_10px_22px_-8px_rgba(3,10,28,0.75)] focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2"
+                                className="group relative flex h-16 w-16 flex-col items-stretch justify-between rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--pc-home-onhero-gold)_55%,white)] hover:shadow-[0_10px_22px_-8px_rgba(3,10,28,0.75)] focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2"
                                 style={{
                                   borderColor: "color-mix(in oklab, #ffffff 78%, transparent)",
                                   ["--tw-ring-color" as string]: "var(--pc-home-onhero-gold)",
                                 }}
                               >
+                                <span className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg">
                                 {s?.logoUrl ? (
                                   <img
                                     src={s.logoUrl}
@@ -744,22 +744,14 @@ function HomePage() {
                                     {label.trim().charAt(0).toUpperCase()}
                                   </span>
                                 )}
-                                {/* Cápsula com nome — aparece em hover/focus sem alterar layout. */}
-                                <span
-                                  aria-hidden
-                                  className="pointer-events-none absolute inset-x-1 bottom-1 truncate rounded-md px-1 py-[2px] text-center text-[9px] font-bold uppercase tracking-[0.08em] opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
-                                  style={{
-                                    color: "#ffffff",
-                                    background: "color-mix(in oklab, #0b1b3a 88%, transparent)",
-                                    backdropFilter: "blur(2px)",
-                                  }}
-                                >
-                                  {label}
                                 </span>
+                                {/* Caption profissional padrão do sistema */}
+                                <StoreCaption name={label} placement="top" />
                               </Link>
                             </li>
                           );
                         })}
+
                   </ul>
 
                 </div>
