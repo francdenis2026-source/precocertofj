@@ -25,11 +25,7 @@ export const Route = createFileRoute("/admin_/analytics")({
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  component: () => (
-    <AdminOnly>
-      <AnalyticsPage />
-    </AdminOnly>
-  ),
+  component: () => <Navigate to="/admin/metricas" search={{ tab: "analytics" } as never} replace />,
 });
 
 type DailyRow = {
