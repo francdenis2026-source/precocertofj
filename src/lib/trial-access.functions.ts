@@ -97,7 +97,7 @@ export const updateTrialCode = createServerFn({ method: "POST" })
       .eq("id", data.id).maybeSingle();
     if (!cur) throw new Error("Código não encontrado");
     if (cur.status === "redeemed") throw new Error("Código já resgatado — não pode ser editado.");
-    const patch: Record<string, unknown> = {};
+    const patch: { duration_minutes?: number; expires_at?: string; notes?: string | null } = {};
     if (data.durationMinutes !== undefined) patch.duration_minutes = data.durationMinutes;
     if (data.expiresAt) {
       const iso = new Date(data.expiresAt);
@@ -106,7 +106,7 @@ export const updateTrialCode = createServerFn({ method: "POST" })
     }
     if (data.notes !== undefined) patch.notes = data.notes;
     if (!Object.keys(patch).length) return { ok: true };
-    const { error } = await supabaseAdmin.from("license_codes").update(patch).eq("id", data.id);
+    const { error } = await (supabaseAdmin.from("license_codes") as any).update(patch).eq("id", data.id);
     if (error) throw new Error(error.message);
     await supabaseAdmin.from("admin_audit_log").insert({
       admin_user_id: context.userId, action: "update_trial_code",
