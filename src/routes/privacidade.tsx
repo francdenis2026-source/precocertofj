@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { IsolatedPage } from "@/components/layout/IsolatedPage";
 import { BackButton } from "@/components/layout/BackButton";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
+import { LegalFooter } from "@/components/layout/LegalFooter";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
 
