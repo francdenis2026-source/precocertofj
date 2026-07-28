@@ -389,9 +389,10 @@ function RedeemPage() {
               </div>
 
               <h1
-                className="mt-8 font-editorial text-[clamp(38px,4.6vw,60px)] font-normal leading-[1.02] tracking-[-0.02em]"
+                className="pc-hero-editorial mt-8 font-editorial text-[clamp(38px,4.6vw,60px)]"
                 style={{ color: "#f9f2df" }}
               >
+
                 Libere seu acesso
                 <br />
                 <span
