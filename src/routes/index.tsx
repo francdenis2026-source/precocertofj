@@ -314,9 +314,9 @@ function HomePage() {
           aria-labelledby="hero-title"
           className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center gap-2.5 px-3 py-2.5 sm:gap-4 sm:px-6 sm:py-4 lg:px-8"
         >
-          <div className="grid flex-1 items-center gap-4 lg:grid-cols-12 lg:gap-8">
+          <div className="grid flex-1 items-center gap-5 lg:grid-cols-12 lg:gap-12">
             {/* ---------- Coluna editorial ---------- */}
-            <div className="min-w-0 lg:col-span-7">
+            <div className="order-1 flex min-w-0 flex-col gap-3 sm:gap-4 lg:col-span-7 lg:pr-4">
               <span
                 className="inline-flex items-center gap-2 rounded-full border px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.2em]"
                 style={{
@@ -337,7 +337,7 @@ function HomePage() {
 
               <h1
                 id="hero-title"
-                className="font-editorial pc-hero-editorial mt-3 text-[clamp(2rem,5.4vw,4.25rem)] sm:mt-4"
+                className="font-editorial pc-hero-editorial text-[clamp(2rem,5.4vw,4.25rem)]"
                 style={{ color: "var(--pc-home-onhero-fg)" }}
               >
                 Onde cada real{" "}
@@ -345,7 +345,7 @@ function HomePage() {
               </h1>
 
               <p
-                className="tc-flow mt-3 max-w-xl text-[14px] font-light leading-relaxed sm:mt-4 sm:text-[16px] lg:text-[17px]"
+                className="tc-flow max-w-xl text-[14px] font-light leading-relaxed sm:text-[16px] lg:text-[17px]"
                 style={{ color: "var(--pc-home-onhero-fg-80)" }}
               >
                 Os mercados de Feijó, lado a lado e em tempo real. Você escolhe onde
@@ -353,7 +353,7 @@ function HomePage() {
               </p>
 
               {/* ---------- Busca ---------- */}
-              <form onSubmit={submitSearch} className="relative mt-3 max-w-2xl sm:mt-4" ref={searchBoxRef}>
+              <form onSubmit={submitSearch} className="relative max-w-2xl" ref={searchBoxRef}>
                 <div
                   className="pc-elite-frame flex items-center gap-1 rounded-2xl border p-1 shadow-2xl transition-all focus-within:ring-2 sm:p-1.5"
                   style={{
@@ -458,7 +458,7 @@ function HomePage() {
               </form>
 
               {/* ---------- Populares + CTA ---------- */}
-              <div className="mt-2.5 flex flex-wrap items-center gap-1.5 sm:mt-3">
+              <div className="flex flex-wrap items-center gap-1.5">
                 <span
                   className="text-[11px] font-bold uppercase tracking-[0.2em]"
                   style={{ color: "var(--pc-home-onhero-fg-60)" }}
@@ -506,19 +506,23 @@ function HomePage() {
             </div>
 
             {/* ---------- Coluna de dados ---------- */}
-            <aside className="min-w-0 lg:col-span-5" aria-label="Indicadores da plataforma">
+            <aside className="order-2 min-w-0 lg:col-span-5" aria-label="Indicadores da plataforma">
               <div
-                className="pc-elite-frame rounded-2xl border p-3 backdrop-blur-md sm:p-4"
+                className="pc-elite-frame rounded-2xl border p-3.5 backdrop-blur-md sm:p-4.5"
                 style={{
                   background: "var(--pc-home-onhero-glass)",
                   borderColor: "var(--pc-home-onhero-border)",
                 }}
               >
-                <div className="mb-2 flex items-center justify-between gap-2">
+                <header className="mb-3 flex items-center justify-between gap-2 border-b pb-2.5" style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}>
                   <span
-                    className="text-[11px] font-bold uppercase tracking-[0.2em]"
+                    className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em]"
                     style={{ color: "var(--pc-home-onhero-gold)" }}
                   >
+                    <span className="relative inline-flex h-1.5 w-1.5">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-70" style={{ background: P.gold }} />
+                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: P.gold }} />
+                    </span>
                     Painel ao vivo
                   </span>
                   <Link
@@ -528,7 +532,7 @@ function HomePage() {
                   >
                     Mercados <ArrowRight className="h-3 w-3" strokeWidth={2.6} />
                   </Link>
-                </div>
+                </header>
 
                 <div className="grid grid-cols-3 gap-2" data-reading-dense>
                   {metrics.map(({ kind, value, label, short, Icon }) => (
