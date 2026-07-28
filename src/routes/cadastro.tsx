@@ -87,6 +87,8 @@ function CadastroPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  /** True enquanto verificamos sessão para redirecionar sem flash do formulário. */
+  const [redirecting, setRedirecting] = useState(false);
   const [touched, setTouched] = useState({
     name: false, cpf: false, phone: false, password: false,
   });
@@ -102,12 +104,16 @@ function CadastroPage() {
   useEffect(() => {
     let mounted = true;
     supabase.auth.getSession().then(({ data }) => {
-      if (mounted && data.session) navigate({ to: safeRedirect, replace: true });
+      if (mounted && data.session) {
+        setRedirecting(true);
+        navigate({ to: safeRedirect, replace: true });
+      }
     });
     return () => {
       mounted = false;
     };
   }, [navigate, safeRedirect]);
+
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
