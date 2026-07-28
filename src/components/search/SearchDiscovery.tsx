@@ -183,11 +183,11 @@ export function SearchDiscovery({ onPickQuery }: Props) {
         </div>
       </section>
 
-      {/* Últimas buscas — trilha compacta de um único nível, sem quebra de linha */}
+      {/* Últimas buscas — trilha compacta (só mobile; desktop tem sidebar) */}
       {recent.length > 0 && (
         <section
           aria-label="Últimas buscas"
-          className="border-t border-border/60 px-0.5 py-3"
+          className="border-t border-border/60 px-0.5 py-2 lg:hidden"
         >
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
             <div className="flex min-w-0 items-center gap-2">
