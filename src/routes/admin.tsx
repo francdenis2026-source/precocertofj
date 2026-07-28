@@ -33,6 +33,7 @@ import { StoreBadge, getStoreColor } from "@/components/brand/StoreBadge";
 import { admin, useAdmin } from "@/lib/admin-store";
 import {
   listAllPlans,
+  getPlansHealth,
   upsertPlan as upsertPlanFn,
   togglePlanActive as togglePlanFn,
   deletePlan as deletePlanFn,
