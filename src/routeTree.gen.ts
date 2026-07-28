@@ -35,6 +35,7 @@ import { Route as FaleConoscoRouteImport } from './routes/fale-conosco'
 import { Route as EstabelecimentosRouteImport } from './routes/estabelecimentos'
 import { Route as EconomiaRouteImport } from './routes/economia'
 import { Route as ComprarLicencaRouteImport } from './routes/comprar-licenca'
+import { Route as ComparadorAoVivoRouteImport } from './routes/comparador-ao-vivo'
 import { Route as ComparadorRouteImport } from './routes/comparador'
 import { Route as ColaborarRouteImport } from './routes/colaborar'
 import { Route as CestaBasicaRouteImport } from './routes/cesta-basica'
@@ -234,6 +235,11 @@ const EconomiaRoute = EconomiaRouteImport.update({
 const ComprarLicencaRoute = ComprarLicencaRouteImport.update({
   id: '/comprar-licenca',
   path: '/comprar-licenca',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ComparadorAoVivoRoute = ComparadorAoVivoRouteImport.update({
+  id: '/comparador-ao-vivo',
+  path: '/comparador-ao-vivo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ComparadorRoute = ComparadorRouteImport.update({
@@ -609,6 +615,7 @@ export interface FileRoutesByFullPath {
   '/cesta-basica': typeof CestaBasicaRoute
   '/colaborar': typeof ColaborarRoute
   '/comparador': typeof ComparadorRoute
+  '/comparador-ao-vivo': typeof ComparadorAoVivoRoute
   '/comprar-licenca': typeof ComprarLicencaRoute
   '/economia': typeof EconomiaRoute
   '/estabelecimentos': typeof EstabelecimentosRoute
@@ -707,6 +714,7 @@ export interface FileRoutesByTo {
   '/cesta-basica': typeof CestaBasicaRoute
   '/colaborar': typeof ColaborarRoute
   '/comparador': typeof ComparadorRoute
+  '/comparador-ao-vivo': typeof ComparadorAoVivoRoute
   '/comprar-licenca': typeof ComprarLicencaRoute
   '/economia': typeof EconomiaRoute
   '/estabelecimentos': typeof EstabelecimentosRoute
@@ -806,6 +814,7 @@ export interface FileRoutesById {
   '/cesta-basica': typeof CestaBasicaRoute
   '/colaborar': typeof ColaborarRoute
   '/comparador': typeof ComparadorRoute
+  '/comparador-ao-vivo': typeof ComparadorAoVivoRoute
   '/comprar-licenca': typeof ComprarLicencaRoute
   '/economia': typeof EconomiaRoute
   '/estabelecimentos': typeof EstabelecimentosRoute
@@ -906,6 +915,7 @@ export interface FileRouteTypes {
     | '/cesta-basica'
     | '/colaborar'
     | '/comparador'
+    | '/comparador-ao-vivo'
     | '/comprar-licenca'
     | '/economia'
     | '/estabelecimentos'
@@ -1004,6 +1014,7 @@ export interface FileRouteTypes {
     | '/cesta-basica'
     | '/colaborar'
     | '/comparador'
+    | '/comparador-ao-vivo'
     | '/comprar-licenca'
     | '/economia'
     | '/estabelecimentos'
@@ -1102,6 +1113,7 @@ export interface FileRouteTypes {
     | '/cesta-basica'
     | '/colaborar'
     | '/comparador'
+    | '/comparador-ao-vivo'
     | '/comprar-licenca'
     | '/economia'
     | '/estabelecimentos'
@@ -1201,6 +1213,7 @@ export interface RootRouteChildren {
   CestaBasicaRoute: typeof CestaBasicaRoute
   ColaborarRoute: typeof ColaborarRoute
   ComparadorRoute: typeof ComparadorRoute
+  ComparadorAoVivoRoute: typeof ComparadorAoVivoRoute
   ComprarLicencaRoute: typeof ComprarLicencaRoute
   EconomiaRoute: typeof EconomiaRoute
   EstabelecimentosRoute: typeof EstabelecimentosRoute
@@ -1459,6 +1472,13 @@ declare module '@tanstack/react-router' {
       path: '/comprar-licenca'
       fullPath: '/comprar-licenca'
       preLoaderRoute: typeof ComprarLicencaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/comparador-ao-vivo': {
+      id: '/comparador-ao-vivo'
+      path: '/comparador-ao-vivo'
+      fullPath: '/comparador-ao-vivo'
+      preLoaderRoute: typeof ComparadorAoVivoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/comparador': {
@@ -2031,6 +2051,7 @@ const rootRouteChildren: RootRouteChildren = {
   CestaBasicaRoute: CestaBasicaRoute,
   ColaborarRoute: ColaborarRoute,
   ComparadorRoute: ComparadorRoute,
+  ComparadorAoVivoRoute: ComparadorAoVivoRoute,
   ComprarLicencaRoute: ComprarLicencaRoute,
   EconomiaRoute: EconomiaRoute,
   EstabelecimentosRoute: EstabelecimentosRoute,
