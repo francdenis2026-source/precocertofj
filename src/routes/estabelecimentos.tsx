@@ -132,7 +132,7 @@ function EstablishmentsPage() {
   const updateSearch = useCallback(
     (patch: Partial<z.infer<typeof searchSchema>>) => {
       navigate({
-        search: (prev) => {
+        search: (prev: z.infer<typeof searchSchema>) => {
           const next = { ...prev, ...patch };
           // Limpa defaults para manter URL limpa
           if (next.q === "") delete (next as Record<string, unknown>).q;
