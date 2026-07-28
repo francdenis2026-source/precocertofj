@@ -576,20 +576,14 @@ function RedeemPage() {
                     </Link>
                   </div>
                 </form>
-              )}
-            </div>
-          </div>
-
-          {/* Rodapé de confiança */}
-          <div className="mt-3 flex items-center justify-center gap-2 text-[11px] text-muted-foreground">
-            <Lock className="h-3 w-3 text-[color:var(--pc-home-gold)]" aria-hidden />
-            <span>Códigos assinados · vinculados ao CPF · uso único</span>
-          </div>
-        </div>
-      </main>
+            </>
+          )}
+        </section>
+      </motion.div>
     </div>
   );
 }
+
 
 /* ================== Sub-blocos ================== */
 
