@@ -177,6 +177,17 @@ export function LiveBasketRanking({
   );
   const { category, city, neighborhood } = filters;
 
+  // Modo de ordenação persistido em localStorage.
+  const [sortMode, setSortMode] = useState<LiveBasketSort>(() => {
+    if (typeof window === "undefined") return "coverage";
+    const raw = window.localStorage.getItem(SORT_STORAGE_KEY);
+    if (raw === "coverage" || raw === "total" || raw === "savings" || raw === "recent") return raw;
+    return "coverage";
+  });
+  useEffect(() => {
+    if (typeof window !== "undefined") window.localStorage.setItem(SORT_STORAGE_KEY, sortMode);
+  }, [sortMode]);
+
   const [detailStoreId, setDetailStoreId] = useState<string | null>(null);
 
   // Snapshot dos últimos preços por (estabelecimento, item) para calcular delta.
@@ -290,14 +301,26 @@ export function LiveBasketRanking({
       return true;
     });
     const scoped = filtered.map((s) => scopeStore(s, category));
-    scoped.sort((a, b) => {
-      const covA = a.scopedTotalItems > 0 ? a.scopedFound / a.scopedTotalItems : 0;
-      const covB = b.scopedTotalItems > 0 ? b.scopedFound / b.scopedTotalItems : 0;
-      if (covB !== covA) return covB - covA;
-      return a.scopedTotal - b.scopedTotal;
-    });
-    return scoped.filter((s) => s.scopedFound > 0 || category === "all");
-  }, [data, category, neighborhood]);
+    const eligible = scoped.filter((s) => s.scopedFound > 0 || category === "all");
+    // Máximo total dentro do escopo para calcular "economia vs. mais caro"
+    const maxTotal = eligible.reduce((m, s) => (s.scopedTotal > m ? s.scopedTotal : m), 0);
+    const lastUpdateOf = (s: ScopedStore) =>
+      s.scopedItems.reduce((mx, it) => (it && it.when > mx ? it.when : mx), "");
+
+    const sorters: Record<LiveBasketSort, (a: ScopedStore, b: ScopedStore) => number> = {
+      coverage: (a, b) => {
+        const covA = a.scopedTotalItems > 0 ? a.scopedFound / a.scopedTotalItems : 0;
+        const covB = b.scopedTotalItems > 0 ? b.scopedFound / b.scopedTotalItems : 0;
+        if (covB !== covA) return covB - covA;
+        return a.scopedTotal - b.scopedTotal;
+      },
+      total: (a, b) => a.scopedTotal - b.scopedTotal,
+      savings: (a, b) => (maxTotal - a.scopedTotal) < (maxTotal - b.scopedTotal) ? 1 : -1,
+      recent: (a, b) => (lastUpdateOf(b) || "").localeCompare(lastUpdateOf(a) || ""),
+    };
+    eligible.sort(sorters[sortMode]);
+    return eligible;
+  }, [data, category, neighborhood, sortMode]);
 
   const winner = ranked[0] ?? null;
   const scopeLabel =
