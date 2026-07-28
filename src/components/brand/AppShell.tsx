@@ -4,6 +4,7 @@ import { AppHeader } from "@/components/app/AppHeader";
 import { MobileNav } from "@/components/nav/MobileNav";
 import { AutoAdminBreadcrumb } from "@/components/admin/AutoAdminBreadcrumb";
 import { useRouterState } from "@tanstack/react-router";
+import { useInactivityLogout } from "@/hooks/use-inactivity-logout";
 
 /**
  * AppShell — Midnight Executive Dashboard
@@ -19,6 +20,7 @@ export function AppShell({ children, scope }: { children: React.ReactNode; scope
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const resolvedScope = scope ?? (pathname.startsWith("/admin") ? "admin" : "app");
   const isAdminScope = resolvedScope === "admin";
+  useInactivityLogout();
   return (
     <SidebarProvider defaultOpen={isAdminScope}>
       <div className={`contents ${isAdminScope ? "admin-scope" : "app-scope"}`}>
