@@ -36,21 +36,43 @@ import { PageHeader } from "@/components/brand/PageHeader";
 import { listCatalogAudit, type AuditLogEntry } from "@/lib/catalog-audit.functions";
 import { AdminOnly } from "@/components/auth/AdminOnly";
 
+type AuditoriaTab = "auditoria" | "acessos" | "numeros";
+const AUDIT_TABS = [
+  { key: "auditoria", label: "Auditoria" },
+  { key: "acessos", label: "Acessos" },
+  { key: "numeros", label: "Números" },
+];
+
 export const Route = createFileRoute("/admin_/auditoria")({
   ssr: false,
   beforeLoad: adminBeforeLoad,
+  validateSearch: (s: Record<string, unknown>): { tab: AuditoriaTab } => {
+    const t = String(s.tab ?? "auditoria");
+    const tab: AuditoriaTab = t === "acessos" || t === "numeros" ? t : "auditoria";
+    return { tab };
+  },
   head: () => ({
     meta: [
-      { title: "Auditoria de catálogo — Admin — PreçoCerto" },
+      { title: "Auditoria — Admin — PreçoCerto" },
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: () => (
-    <AdminOnly>
-      <AuditoriaPage />
-    </AdminOnly>
-  ),
+  component: AuditoriaShell,
 });
+
+function AuditoriaShell() {
+  const { tab } = Route.useSearch();
+  return (
+    <AdminOnly>
+      <div className="px-4">
+        <AdminTabs to="/admin/auditoria" items={AUDIT_TABS} active={tab} />
+      </div>
+      {tab === "auditoria" && <AuditoriaPage />}
+      {tab === "acessos" && <AuditoriaAcessosPage />}
+      {tab === "numeros" && <NumberAuditPage />}
+    </AdminOnly>
+  );
+}
 
 
 const ACTION_LABEL: Record<string, string> = {
