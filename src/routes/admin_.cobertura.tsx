@@ -3,7 +3,7 @@ import { formatShortDate } from "@/components/product/TrustIndicator";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AppShell } from "@/components/brand/AppShell";
 import { PageHeader } from "@/components/brand/PageHeader";
 import { AdminOnly } from "@/components/auth/AdminOnly";
@@ -12,12 +12,16 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ChevronRight, Download, Loader2, MapPin, RefreshCw, Search, Store, PackageX, PackageCheck } from "lucide-react";
 import { getCoverageOverview, getMissingProducts, getPresentProducts, type EstablishmentCoverage } from "@/lib/coverage.functions";
 import { CoverageDiagnosticsPanel, CoverageErrorBanner } from "@/components/admin/CoverageDiagnosticsPanel";
+import { RefreshBar as SharedRefreshBar } from "@/components/admin/RefreshBar";
+import { useWindowFocusRefresh } from "@/hooks/useWindowFocusRefresh";
 
 function formatQueryStatus(query: { isFetching: boolean; error: unknown; dataUpdatedAt: number; errorUpdatedAt: number }) {
   if (query.isFetching) return { label: "Consultando…", tone: "muted" as const };
@@ -148,11 +152,15 @@ function CoveragePage() {
           <CoverageDiagnosticsPanel />
         </div>
 
-        <RefreshBar
+        <CoverageAutoFocusRefresh onRefresh={() => overview.refetch()} />
+        <SharedRefreshBar
+          scope="coverage"
+          label="Ranking de cobertura"
+          rpc="get_coverage_overview"
           status={formatQueryStatus(overview)}
           disabled={overview.isFetching}
           onRefresh={() => overview.refetch()}
-          label="Ranking de cobertura"
+          trailing={<AutoFocusToggle scope="coverage" />}
         />
 
         {overview.isLoading ? (
@@ -213,11 +221,13 @@ function CoveragePage() {
                 </div>
 
                 <TabsContent value="faltando">
-                  <RefreshBar
+                  <SharedRefreshBar
+                    scope={`coverage-missing-${selected ?? "none"}`}
+                    label="Produtos faltantes"
+                    rpc="get_missing_products_for_establishment"
                     status={formatQueryStatus(missing)}
                     disabled={missing.isFetching || !selected}
                     onRefresh={() => missing.refetch()}
-                    label="Produtos faltantes"
                     compact
                   />
                   <div className="mt-3">
@@ -231,13 +241,16 @@ function CoveragePage() {
                   </div>
                 </TabsContent>
                 <TabsContent value="cadastrados">
-                  <RefreshBar
+                  <SharedRefreshBar
+                    scope={`coverage-present-${selected ?? "none"}`}
+                    label="Produtos cadastrados"
+                    rpc="get_present_products_for_establishment"
                     status={formatQueryStatus(present)}
                     disabled={present.isFetching || !selected}
                     onRefresh={() => present.refetch()}
-                    label="Produtos cadastrados"
                     compact
                   />
+
                   <div className="mt-3">
                     {present.isLoading ? (
                       <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Carregando produtos cadastrados…</div>
@@ -257,6 +270,62 @@ function CoveragePage() {
   );
 }
 
+const AUTO_KEY = "pc:refresh:auto:coverage";
+
+function readAuto(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return window.localStorage.getItem(AUTO_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function CoverageAutoFocusRefresh({ onRefresh }: { onRefresh: () => void | Promise<unknown> }) {
+  const [enabled, setEnabled] = useState<boolean>(readAuto);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handler = () => setEnabled(readAuto());
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, []);
+  useWindowFocusRefresh({ enabled, onRefresh });
+  return null;
+}
+
+function AutoFocusToggle({ scope: _scope }: { scope: string }) {
+  const [enabled, setEnabled] = useState<boolean>(readAuto);
+  const toggle = useCallback((next: boolean) => {
+    setEnabled(next);
+    try {
+      window.localStorage.setItem(AUTO_KEY, next ? "1" : "0");
+      window.dispatchEvent(new StorageEvent("storage", { key: AUTO_KEY }));
+    } catch {
+      /* ignora modo privado */
+    }
+  }, []);
+  return (
+    <div className="flex items-center gap-1.5">
+      <Switch
+        id="coverage-auto-focus"
+        checked={enabled}
+        onCheckedChange={toggle}
+        aria-label="Auto-atualizar ao focar a janela"
+      />
+      <Label
+        htmlFor="coverage-auto-focus"
+        className="cursor-pointer text-[11px] font-normal text-muted-foreground"
+      >
+        Auto ao focar
+      </Label>
+    </div>
+  );
+}
+
+/**
+ * @deprecated Preferir {@link SharedRefreshBar} de `@/components/admin/RefreshBar`.
+ * Mantido apenas para compat interna caso ainda haja consumidores.
+ */
 export function RefreshBar({
   status,
   onRefresh,
@@ -281,12 +350,12 @@ export function RefreshBar({
       className={`flex flex-wrap items-center justify-between gap-2 rounded-md border bg-card px-3 ${compact ? "py-1.5" : "py-2"}`}
       role="status"
       aria-live="polite"
-      data-testid="coverage-refresh-bar"
+      data-testid="coverage-refresh-bar-legacy"
     >
       <div className="flex items-center gap-2 text-xs text-muted-foreground">
         <span className={`inline-block h-2 w-2 rounded-full ${dotClass}`} aria-hidden />
         <span className="font-medium text-foreground/80">{label}</span>
-        <span data-testid="coverage-refresh-status">· {status.label}</span>
+        <span>· {status.label}</span>
       </div>
       <Button
         type="button"
@@ -295,7 +364,6 @@ export function RefreshBar({
         onClick={onRefresh}
         disabled={disabled}
         aria-label={`Atualizar ${label}`}
-        data-testid="coverage-refresh-button"
       >
         {disabled ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -305,6 +373,7 @@ export function RefreshBar({
         Atualizar
       </Button>
     </div>
+
   );
 }
 
