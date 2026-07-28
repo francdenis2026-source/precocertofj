@@ -1210,7 +1210,7 @@ export function PriceSearchBar({
                       onKind={setKindFilter}
                       categories={availableCategories}
                       categoryFilter={categoryFilter}
-                      onCategory={setCategoryFilter}
+                      onCategory={handleCategoryChange}
                       groupBy={groupBy}
                       onGroupBy={setGroupBy}
                       freshness={freshness}
