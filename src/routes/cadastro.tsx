@@ -176,7 +176,7 @@ function CadastroPage() {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="relative z-10 grid w-full max-w-[900px] grid-cols-1 overflow-hidden rounded-2xl border border-slate-900/10 bg-white text-slate-900 shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:h-[580px] md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
+        className="relative z-10 grid w-full max-w-[900px] grid-cols-1 overflow-hidden rounded-2xl border border-slate-900/10 bg-white text-slate-900 shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:h-[640px] md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
       >
         {/* LEFT — Hero panel reutilizável (oculto no mobile, igual /login) */}
         <div className="hidden md:block">
@@ -184,7 +184,7 @@ function CadastroPage() {
         </div>
 
         {/* RIGHT — Form */}
-        <section className="relative flex flex-col overflow-y-auto p-4 sm:p-5 md:p-6">
+        <section className="relative flex flex-col p-4 sm:p-5 md:p-6 md:overflow-hidden">
 
             {/* Header — kicker compacto (evita duplicação com AuthHero) */}
             <div className="mb-2.5">
