@@ -67,11 +67,7 @@ export const Route = createFileRoute("/admin_/auditoria-acessos")({
       },
     ],
   }),
-  component: () => (
-    <AppShell scope="admin">
-      <AuditoriaAcessosPage />
-    </AppShell>
-  ),
+  component: () => <Navigate to="/admin/auditoria" search={{ tab: "acessos" } as never} replace />,
 });
 
 function fmt(v: string | null | undefined) {
