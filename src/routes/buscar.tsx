@@ -657,23 +657,8 @@ function SearchPage() {
                 </div>
               </section>
 
-              <div className="grid min-h-0 flex-1 gap-3 md:gap-3 lg:grid-cols-[minmax(0,1fr)_296px]">
-                <div className="min-h-0 min-w-0 overflow-y-auto pc-scroll-fade pr-1">
-                  <SearchDiscovery onPickQuery={pickQuery} />
-                </div>
-
-                <aside className="hidden min-h-0 flex-col lg:flex">
-                  <div className="pc-surface-1 flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/70 p-3 shadow-sm">
-                    <div className="min-h-0 flex-1 overflow-y-auto pr-1">
-                      <SearchSidebar
-                        recent={recent}
-                        onPickQuery={pickQuery}
-                        onRemoveRecent={removeRecent}
-                        onClearRecent={clearRecent}
-                      />
-                    </div>
-                  </div>
-                </aside>
+              <div className="min-h-0 min-w-0 flex-1 overflow-hidden">
+                <SearchDiscovery onPickQuery={pickQuery} />
               </div>
             </>
           )}
