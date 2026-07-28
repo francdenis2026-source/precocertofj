@@ -102,6 +102,29 @@ export function SearchDiscovery({ onPickQuery }: Props) {
     setRecent(removeSearchHistory(term).map((e) => e.query));
   };
 
+  // Colapsáveis: em telas pequenas (< sm = 640px) as seções "Categorias" e
+  // "KPIs" iniciam recolhidas para caberem sem rolagem; em sm+ ficam sempre
+  // abertas e o botão de disclosure some.
+  const [isSmall, setIsSmall] = useState<boolean>(() =>
+    typeof window !== "undefined" ? window.matchMedia("(max-width: 639px)").matches : false,
+  );
+  const [catsOpen, setCatsOpen] = useState<boolean>(!isSmall);
+  const [kpisOpen, setKpisOpen] = useState<boolean>(!isSmall);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const mq = window.matchMedia("(max-width: 639px)");
+    const sync = (e: MediaQueryList | MediaQueryListEvent) => {
+      const small = "matches" in e ? e.matches : mq.matches;
+      setIsSmall(small);
+      // Ao ampliar para sm+, garantimos que ambas expandam; ao reduzir, recolhem
+      // por padrão (o usuário pode reabrir com o toque).
+      setCatsOpen(!small);
+      setKpisOpen(!small);
+    };
+    sync(mq);
+    mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
 
   const stats = useQuery({
     queryKey: ["platform-stats-discovery"],
