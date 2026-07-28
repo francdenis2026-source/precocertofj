@@ -197,6 +197,8 @@ function CoveragePage() {
                 <TabsContent value="faltando">
                   {missing.isLoading ? (
                     <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Carregando produtos faltantes…</div>
+                  ) : missing.error ? (
+                    <CoverageErrorBanner error={missing.error} onRetry={() => missing.refetch()} />
                   ) : (
                     <MissingTable rows={missing.data ?? []} />
                   )}
@@ -204,6 +206,8 @@ function CoveragePage() {
                 <TabsContent value="cadastrados">
                   {present.isLoading ? (
                     <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Carregando produtos cadastrados…</div>
+                  ) : present.error ? (
+                    <CoverageErrorBanner error={present.error} onRetry={() => present.refetch()} />
                   ) : (
                     <PresentTable rows={present.data ?? []} />
                   )}
