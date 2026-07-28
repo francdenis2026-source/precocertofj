@@ -79,8 +79,8 @@ export function buildLivePanel(input: {
     {
       kind: "products",
       value: priceCount != null ? nf(priceCount) : LIVE_PANEL_PLACEHOLDER,
-      label: "Preços cadastrados",
-      short: "Preços",
+      label: "Produtos comparados",
+      short: "Produtos",
     },
     {
       kind: "savings",
