@@ -90,6 +90,9 @@ export function PriceSearchBar({
   category: categoryProp,
   onSortChange,
   onCategoryChange,
+  focusProduct = null,
+  focusMarket = null,
+  onFocusChange,
 }: {
   initialQuery?: string;
   mode?: SearchMode;
@@ -108,7 +111,15 @@ export function PriceSearchBar({
   category?: string | null;
   onSortChange?: (mode: SortMode) => void;
   onCategoryChange?: (category: string | null) => void;
+  /** Produto selecionado (slug do nome). Quando definido, o card recebe
+   * scrollIntoView + foco de teclado, e o accordion abre expandido. */
+  focusProduct?: string | null;
+  /** Estabelecimento selecionado (nome normalizado) dentro do produto focado. */
+  focusMarket?: string | null;
+  /** Disparado quando o usuário clica num card para atualizar a URL. */
+  onFocusChange?: (product: string | null, market: string | null) => void;
 }) {
+
 
   const runSearch = useServerFn(searchProductPrice);
   const runSuggest = useServerFn(suggestProducts);
