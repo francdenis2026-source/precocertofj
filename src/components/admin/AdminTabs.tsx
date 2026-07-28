@@ -76,17 +76,18 @@ export function AdminTabs({ to, title, items, active, className, tone }: Props) 
               <Link
                 to={to}
                 search={{ tab: items[0]?.key } as never}
-                className="truncate hover:text-foreground"
+                className={cn("truncate hover:text-foreground", tone && "pc-admin-hub-crumb font-semibold")}
               >
                 {title}
               </Link>
             </>
           )}
           <ChevronRight className="h-3 w-3 shrink-0 opacity-60" aria-hidden />
-          <span className="truncate text-foreground" aria-current="page">
+          <span className={cn("truncate text-foreground", tone && "pc-admin-hub-crumb")} aria-current="page">
             {activeLabel}
           </span>
         </nav>
+
 
         <button
           type="button"
