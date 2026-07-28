@@ -15,7 +15,6 @@ import {
   Candy,
   Clock,
   CookingPot,
-  ChevronDown,
   type LucideIcon,
 } from "lucide-react";
 import { getPlatformStats } from "@/lib/stores-public.functions";
@@ -69,8 +68,6 @@ export function pushRecentSearch(q: string) {
 }
 
 
-
-
 type Props = {
   onPickQuery: (q: string) => void;
 };
@@ -91,6 +88,15 @@ const updatedLabel = (iso: string) => {
   }).format(d);
 };
 
+/**
+ * Cada seção recebe uma tinta semântica distinta para diferenciar visualmente
+ * dentro da mesma tela — sem cair em ruído. Tokens abaixo respeitam WCAG AA
+ * em ambos os modos:
+ *  - Categorias  → dourado (identidade/ação)
+ *  - Populares   → âmbar (calor/tendência)
+ *  - Recentes    → índigo (histórico/registro)
+ *  - Sinal vivo  → esmeralda (métricas/pulso)
+ */
 export function SearchDiscovery({ onPickQuery }: Props) {
   const [recent, setRecent] = useState<string[]>([]);
   useEffect(() => setRecent(readRecent()), []);
@@ -102,30 +108,6 @@ export function SearchDiscovery({ onPickQuery }: Props) {
     setRecent(removeSearchHistory(term).map((e) => e.query));
   };
 
-  // Colapsáveis: em telas pequenas (< sm = 640px) as seções "Categorias" e
-  // "KPIs" iniciam recolhidas para caberem sem rolagem; em sm+ ficam sempre
-  // abertas e o botão de disclosure some.
-  const [isSmall, setIsSmall] = useState<boolean>(() =>
-    typeof window !== "undefined" ? window.matchMedia("(max-width: 639px)").matches : false,
-  );
-  const [catsOpen, setCatsOpen] = useState<boolean>(!isSmall);
-  const [kpisOpen, setKpisOpen] = useState<boolean>(!isSmall);
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const mq = window.matchMedia("(max-width: 639px)");
-    const sync = (e: MediaQueryList | MediaQueryListEvent) => {
-      const small = "matches" in e ? e.matches : mq.matches;
-      setIsSmall(small);
-      // Ao ampliar para sm+, garantimos que ambas expandam; ao reduzir, recolhem
-      // por padrão (o usuário pode reabrir com o toque).
-      setCatsOpen(!small);
-      setKpisOpen(!small);
-    };
-    sync(mq);
-    mq.addEventListener("change", sync);
-    return () => mq.removeEventListener("change", sync);
-  }, []);
-
   const stats = useQuery({
     queryKey: ["platform-stats-discovery"],
     queryFn: () => getPlatformStats(),
@@ -133,70 +115,35 @@ export function SearchDiscovery({ onPickQuery }: Props) {
     retry: 1,
   });
 
-  // Números só são exibidos quando vieram do banco (`ok`). Falha ou carregamento
-  // mostram "—" + aviso, nunca valores estimados no cliente.
   const statsOk = Boolean(stats.data?.ok);
   const statsFailed = Boolean(stats.isError || (stats.data && !stats.data.ok));
 
   return (
-    <div className="space-y-2.5">
-      {/* Bloco principal — surface sólida com contraste WCAG AA em ambos os modos */}
-      <section className="relative border-t border-border/60 pt-2.5">
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-brand-gold/45 to-transparent"
+    <div className="grid h-full min-h-0 grid-rows-[auto_auto_auto_1fr] gap-2 lg:grid-cols-2 lg:grid-rows-[auto_1fr]">
+      {/* ============ CATEGORIAS — tinta DOURADA (ação/identidade) ============ */}
+      <section
+        aria-label="Categorias populares"
+        className="relative rounded-xl border border-brand-gold/30 bg-brand-gold/[0.06] p-2 lg:col-span-2 dark:bg-brand-gold/[0.08]"
+      >
+        <SectionHeader
+          icon={<SearchIcon className="h-3 w-3" strokeWidth={2.75} />}
+          tone="gold"
+          eyebrow="Categorias"
+          title="O que você quer comparar hoje?"
         />
-        <header className="flex items-start gap-2.5">
-          <span
-            aria-hidden
-            className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-gold text-[#0a1327] shadow-sm ring-1 ring-[#0a1327]/15"
-          >
-            <SearchIcon className="h-3.5 w-3.5" strokeWidth={2.75} />
-          </span>
-          <div className="min-w-0 flex-1">
-            <h2 className="font-serif text-[14px] font-semibold leading-tight tracking-tight text-foreground sm:text-[15px]">
-              O que você quer comparar hoje?
-            </h2>
-            <p className="mt-0.5 text-[12px] leading-snug text-muted-foreground">
-              Toque em uma categoria para começar — ou digite um produto acima.
-            </p>
-          </div>
-          {/* Disclosure — só aparece < sm; em sm+ as categorias ficam sempre abertas */}
-          <button
-            type="button"
-            onClick={() => setCatsOpen((v) => !v)}
-            aria-expanded={catsOpen}
-            aria-controls="discovery-categorias"
-            className="grid h-8 w-8 shrink-0 place-items-center rounded-md border border-border/70 bg-background text-foreground/70 transition-colors hover:border-brand-gold hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold sm:hidden"
-          >
-            <ChevronDown
-              className={`h-4 w-4 transition-transform ${catsOpen ? "rotate-180" : ""}`}
-              aria-hidden
-            />
-            <span className="sr-only">
-              {catsOpen ? "Recolher categorias" : "Expandir categorias"}
-            </span>
-          </button>
-        </header>
-
-        {/* Categorias — grid no web, carrossel no mobile. Colapsável < sm. */}
-        <div
-          id="discovery-categorias"
-          hidden={!catsOpen}
-          className="mt-2 -mx-1 flex snap-x snap-mandatory gap-1.5 overflow-x-auto px-1 pb-1 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-4 sm:overflow-visible sm:px-0 lg:grid-cols-4"
-        >
+        <div className="mt-1.5 -mx-1 flex snap-x snap-mandatory gap-1.5 overflow-x-auto px-1 pb-0.5 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-4 sm:overflow-visible sm:px-0 lg:grid-cols-8">
           {CATEGORIES.map((c) => (
             <button
               key={c.q}
               type="button"
               onClick={() => onPickQuery(c.q)}
-              className="group snap-start inline-flex h-9 min-w-0 shrink-0 items-center gap-2 rounded-lg border border-border bg-background px-2.5 text-left text-[12.5px] font-medium tracking-tight text-foreground shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_10%,transparent)] transition-all hover:-translate-y-px hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] hover:shadow-sm active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="group snap-start inline-flex h-8 min-w-0 shrink-0 items-center gap-1.5 rounded-lg border border-brand-gold/25 bg-background/95 px-2 text-left text-[12px] font-medium tracking-tight text-foreground transition-all hover:-translate-y-px hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <span
                 aria-hidden
-                className="grid h-6 w-6 flex-none place-items-center rounded-md bg-brand-gold/15 text-brand-gold-soft transition-colors dark:text-brand-gold group-hover:bg-brand-gold group-hover:text-brand-navy dark:group-hover:text-brand-navy group-focus-visible:bg-brand-gold group-focus-visible:text-brand-navy dark:group-focus-visible:text-brand-navy"
+                className="grid h-5 w-5 flex-none place-items-center rounded-md bg-brand-gold/20 text-brand-gold-soft transition-colors dark:text-brand-gold group-hover:bg-brand-gold group-hover:text-brand-navy dark:group-hover:text-brand-navy"
               >
-                <c.Icon className="h-3.5 w-3.5" strokeWidth={2.25} />
+                <c.Icon className="h-3 w-3" strokeWidth={2.25} />
               </span>
               <span className="truncate">{c.label}</span>
             </button>
@@ -204,173 +151,223 @@ export function SearchDiscovery({ onPickQuery }: Props) {
         </div>
       </section>
 
-      {/* Buscas populares — no desktop já aparecem na sidebar */}
-      <section className="lg:hidden">
-        <div className="mb-2 flex items-center gap-2 px-1">
-          <Flame className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
-          <h3 className="text-[12px] font-medium text-muted-foreground">
-            Buscas populares
-          </h3>
-        </div>
-        <div className="-mx-1 flex snap-x snap-mandatory gap-2 overflow-x-auto px-1 pb-1">
+      {/* ============ POPULARES — tinta ÂMBAR (calor/tendência) ============ */}
+      <section
+        aria-label="Buscas populares"
+        className="relative rounded-xl border border-amber-500/25 bg-amber-500/[0.06] p-2 dark:border-amber-400/25 dark:bg-amber-400/[0.06]"
+      >
+        <SectionHeader
+          icon={<Flame className="h-3 w-3" strokeWidth={2.75} />}
+          tone="amber"
+          eyebrow="Populares"
+          title="Termos mais buscados agora"
+        />
+        <div className="mt-1.5 flex flex-wrap gap-1">
           {POPULAR.map((p) => (
             <button
               key={p}
               type="button"
               onClick={() => onPickQuery(p)}
-              className="snap-start inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3.5 text-[12.5px] font-medium text-foreground shadow-sm transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="inline-flex h-7 shrink-0 items-center gap-1 rounded-full border border-amber-500/30 bg-background/95 px-2.5 text-[11.5px] font-medium text-foreground transition-colors hover:border-amber-500 hover:bg-amber-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 dark:border-amber-400/30 dark:hover:border-amber-400 dark:hover:bg-amber-400/10"
             >
-              <Sparkles className="h-3 w-3 text-brand-gold" aria-hidden />
+              <Sparkles className="h-3 w-3 text-amber-600 dark:text-amber-400" aria-hidden />
               {p}
             </button>
           ))}
         </div>
       </section>
 
-      {/* Últimas buscas — trilha compacta (só mobile; desktop tem sidebar) */}
-      {recent.length > 0 && (
-        <section
-          aria-label="Últimas buscas"
-          className="border-t border-border/60 px-0.5 py-2 lg:hidden"
-        >
-          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
-            <div className="flex min-w-0 items-center gap-2">
-              <span
-                aria-hidden
-                className="grid h-6 w-6 shrink-0 place-items-center rounded-md bg-brand-gold/15 text-brand-gold-soft dark:text-brand-gold"
-              >
-                <HistoryIcon className="h-3.5 w-3.5" />
-              </span>
-              <span className="shrink-0 text-[12px] font-medium text-muted-foreground">
-                Últimas buscas
-              </span>
-              <div className="-mx-1 flex min-w-0 flex-1 snap-x gap-1.5 overflow-x-auto px-1 py-0.5">
-                {recent.slice(0, 6).map((t) => (
-                  <span
-                    key={t}
-                    className="group inline-flex shrink-0 snap-start items-center gap-0.5 rounded-full border border-border bg-background py-0.5 pl-2.5 pr-0.5 text-[12px] text-foreground"
-                  >
-                    <button
-                      type="button"
-                      onClick={() => onPickQuery(t)}
-                      className="max-w-[9.5rem] truncate rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-                      title={t}
-                    >
-                      {t}
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => removeRecent(t)}
-                      className="grid h-5 w-5 place-items-center rounded-full text-muted-foreground hover:bg-[var(--pc-hover-tint)] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-                      aria-label={`Remover ${t}`}
-                    >
-                      <XIcon className="h-3 w-3" />
-                    </button>
-                  </span>
-                ))}
-              </div>
-            </div>
+      {/* ============ RECENTES — tinta ÍNDIGO (histórico) ============ */}
+      <section
+        aria-label="Últimas buscas"
+        className="relative rounded-xl border border-indigo-500/25 bg-indigo-500/[0.05] p-2 dark:border-indigo-400/25 dark:bg-indigo-400/[0.06]"
+      >
+        <div className="flex items-center justify-between gap-2">
+          <SectionHeader
+            icon={<HistoryIcon className="h-3 w-3" strokeWidth={2.75} />}
+            tone="indigo"
+            eyebrow="Recentes"
+            title="Suas últimas buscas"
+          />
+          {recent.length > 0 && (
             <button
               type="button"
               onClick={clearRecent}
-              className="shrink-0 rounded-md px-1.5 py-1 text-[12px] font-medium text-muted-foreground hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+              className="shrink-0 rounded-md px-1.5 py-0.5 text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
             >
               Limpar
             </button>
-          </div>
-        </section>
-      )}
+          )}
+        </div>
+        <div className="mt-1.5">
+          {recent.length === 0 ? (
+            <p className="text-[11.5px] leading-snug text-muted-foreground">
+              Nenhuma busca ainda — as próximas aparecem aqui para você reabrir com um clique.
+            </p>
+          ) : (
+            <div className="flex flex-wrap gap-1">
+              {recent.slice(0, 8).map((t) => (
+                <span
+                  key={t}
+                  className="group inline-flex shrink-0 items-center gap-0.5 rounded-full border border-indigo-500/30 bg-background/95 py-0.5 pl-2.5 pr-0.5 text-[11.5px] text-foreground dark:border-indigo-400/30"
+                >
+                  <button
+                    type="button"
+                    onClick={() => onPickQuery(t)}
+                    className="max-w-[8.5rem] truncate rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500"
+                    title={t}
+                  >
+                    {t}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => removeRecent(t)}
+                    className="grid h-4.5 w-4.5 place-items-center rounded-full text-muted-foreground hover:bg-destructive/10 hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                    aria-label={`Remover ${t}`}
+                  >
+                    <XIcon className="h-2.5 w-2.5" />
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
 
-
-
-      {/* Sinal de vida — cartão próprio, colapsável < sm */}
-      <section className="border-t border-border/60 pt-2.5">
-        <div className="mb-1.5 flex flex-wrap items-center justify-between gap-x-2 gap-y-1 px-0.5">
-          <button
-            type="button"
-            onClick={() => setKpisOpen((v) => !v)}
-            aria-expanded={kpisOpen}
-            aria-controls="discovery-kpis"
-            className="inline-flex min-w-0 items-center gap-1.5 rounded-full border border-border/70 px-2 py-0.5 text-[10.5px] font-medium uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold sm:pointer-events-none sm:cursor-default"
-          >
-            <Clock className="h-3 w-3 shrink-0 text-brand-gold" aria-hidden />
-            <span className="truncate">Janela: últimos {stats.data?.windowDays ?? 30} dias</span>
-            <ChevronDown
-              className={`h-3.5 w-3.5 shrink-0 transition-transform sm:hidden ${kpisOpen ? "rotate-180" : ""}`}
-              aria-hidden
-            />
-          </button>
-          <span className="min-w-0 truncate text-[10.5px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
+      {/* ============ SINAL DE VIDA — tinta ESMERALDA (métricas) ============ */}
+      <section
+        aria-label="Sinal de vida da plataforma"
+        className="relative rounded-xl border border-emerald-500/25 bg-emerald-500/[0.05] p-2 lg:col-span-2 dark:border-emerald-400/25 dark:bg-emerald-400/[0.06]"
+      >
+        <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
+          <SectionHeader
+            icon={<Clock className="h-3 w-3" strokeWidth={2.75} />}
+            tone="emerald"
+            eyebrow={`Últimos ${stats.data?.windowDays ?? 30} dias`}
+            title="Sinal de vida"
+          />
+          <span className="min-w-0 truncate text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
             {statsFailed
               ? "Dados indisponíveis"
               : stats.data?.generatedAt
-                ? `Atualizado em ${updatedLabel(stats.data.generatedAt)}`
+                ? `Atualizado ${updatedLabel(stats.data.generatedAt)}`
                 : "Atualizando…"}
           </span>
         </div>
-        {statsFailed && kpisOpen && (
-          <p
-            role="status"
-            className="mb-1.5 rounded-lg border border-border/70 px-2.5 py-1.5 text-[11.5px] leading-snug text-muted-foreground"
-          >
-            Não foi possível carregar os números do banco agora.
-          </p>
-        )}
-        <div id="discovery-kpis" hidden={!kpisOpen} className="grid grid-cols-3 gap-1.5">
+        <div className="mt-1.5 grid grid-cols-3 gap-1.5">
           <StatCell
-            icon={<TrendingDown className="h-3.5 w-3.5" aria-hidden />}
+            tone="emerald"
+            icon={<TrendingDown className="h-3 w-3" aria-hidden />}
             label="Preços em queda"
             value={statsOk ? int(stats.data!.priceDrops7d ?? 0) : "—"}
             hint={`${stats.data?.windowDays ?? 30} dias`}
           />
           <StatCell
-            icon={<Sparkles className="h-3.5 w-3.5" aria-hidden />}
+            tone="emerald"
+            icon={<Sparkles className="h-3 w-3" aria-hidden />}
             label="Monitorados"
             value={statsOk ? int(stats.data!.products ?? 0) : "—"}
             hint="preço público"
           />
           <StatCell
-            icon={<Flame className="h-3.5 w-3.5" aria-hidden />}
+            tone="emerald"
+            icon={<Flame className="h-3 w-3" aria-hidden />}
             label="Economia média"
             value={statsOk ? brl(stats.data!.estimatedSavings ?? 0) : "—"}
             hint="por produto"
           />
-
         </div>
       </section>
-
     </div>
   );
 }
+
+type Tone = "gold" | "amber" | "indigo" | "emerald";
+
+const TONE_BADGE: Record<Tone, string> = {
+  gold: "bg-brand-gold text-brand-navy ring-brand-navy/15",
+  amber: "bg-amber-500 text-white ring-amber-900/20 dark:bg-amber-400 dark:text-amber-950",
+  indigo: "bg-indigo-500 text-white ring-indigo-950/20 dark:bg-indigo-400 dark:text-indigo-950",
+  emerald: "bg-emerald-500 text-white ring-emerald-950/20 dark:bg-emerald-400 dark:text-emerald-950",
+};
+
+const TONE_EYEBROW: Record<Tone, string> = {
+  gold: "text-[var(--pc-gold-ink)]",
+  amber: "text-amber-700 dark:text-amber-300",
+  indigo: "text-indigo-700 dark:text-indigo-300",
+  emerald: "text-emerald-700 dark:text-emerald-300",
+};
+
+function SectionHeader({
+  icon,
+  eyebrow,
+  title,
+  tone,
+}: {
+  icon: React.ReactNode;
+  eyebrow: string;
+  title: string;
+  tone: Tone;
+}) {
+  return (
+    <div className="flex min-w-0 items-center gap-1.5">
+      <span
+        aria-hidden
+        className={`grid h-5 w-5 shrink-0 place-items-center rounded-md shadow-sm ring-1 ${TONE_BADGE[tone]}`}
+      >
+        {icon}
+      </span>
+      <div className="min-w-0 leading-none">
+        <div
+          className={`truncate text-[9.5px] font-bold uppercase tracking-[0.16em] ${TONE_EYEBROW[tone]}`}
+        >
+          {eyebrow}
+        </div>
+        <div className="mt-0.5 truncate text-[12px] font-semibold leading-tight text-foreground">
+          {title}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const TONE_STAT: Record<Tone, string> = {
+  gold: "bg-brand-gold/15 text-brand-gold-soft dark:text-brand-gold",
+  amber: "bg-amber-500/20 text-amber-700 dark:text-amber-300",
+  indigo: "bg-indigo-500/20 text-indigo-700 dark:text-indigo-300",
+  emerald: "bg-emerald-500/20 text-emerald-700 dark:text-emerald-300",
+};
 
 function StatCell({
   icon,
   label,
   value,
   hint,
+  tone,
 }: {
   icon: React.ReactNode;
   label: string;
   value: string;
   hint: string;
+  tone: Tone;
 }) {
   return (
-    <div className="min-w-0 rounded-lg border border-border/70 bg-background px-2 py-1.5">
+    <div className="min-w-0 rounded-lg border border-border/60 bg-background/95 px-2 py-1.5">
       <div className="flex items-center gap-1.5">
         <span
           aria-hidden
-          className="grid h-5 w-5 shrink-0 place-items-center rounded-md bg-brand-gold/15 text-brand-gold-soft dark:text-brand-gold"
+          className={`grid h-4.5 w-4.5 shrink-0 place-items-center rounded-md ${TONE_STAT[tone]}`}
         >
           {icon}
         </span>
-        <div className="truncate text-[10px] font-semibold uppercase leading-tight tracking-[0.1em] text-muted-foreground">
+        <div className="truncate text-[9.5px] font-semibold uppercase leading-tight tracking-[0.1em] text-muted-foreground">
           {label}
         </div>
       </div>
-      <div className="mt-1 truncate font-serif text-[15px] font-semibold tabular-nums leading-none tracking-tight text-foreground">
+      <div className="mt-0.5 truncate font-serif text-[14px] font-semibold tabular-nums leading-none tracking-tight text-foreground">
         {value}
       </div>
-      <div className="mt-0.5 truncate text-[10px] font-medium uppercase tracking-[0.1em] text-muted-foreground">
+      <div className="mt-0.5 truncate text-[9.5px] font-medium uppercase tracking-[0.1em] text-muted-foreground">
         {hint}
       </div>
     </div>
