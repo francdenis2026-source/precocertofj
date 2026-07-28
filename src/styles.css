@@ -258,6 +258,17 @@
   --pc-eyebrow-on-navy: #f2d689;   /* eyebrow gold sobre navy sólido → 9.4:1 */
   --pc-live:            #047857;   /* indicador ao-vivo sobre card claro → 5.8:1 */
 
+  /* ----- Tokens tipográficos para preços (typeclear) ----- */
+  --pc-price-fg:         var(--pc-price);              /* base — segue tema */
+  --pc-price-fg-onhero:  var(--pc-home-onhero-fg);     /* sobre overlay do hero */
+  --pc-price-hover:      color-mix(in oklab, var(--pc-price-fg) 92%, var(--pc-gold-ink) 8%);
+  --pc-price-loading:    color-mix(in oklab, var(--pc-price-fg) 45%, transparent);
+  --pc-price-disabled:   color-mix(in oklab, var(--pc-price-fg) 55%, transparent);
+  --pc-price-font:       'Work Sans', ui-sans-serif, system-ui, sans-serif;
+  --pc-price-tracking:   -0.008em;
+  --pc-price-feature-settings: "tnum" 1, "lnum" 1, "cv11" 1, "ss01" 1;
+
+
 
   color-scheme: light;
 
@@ -4790,14 +4801,15 @@ html.dark .pc-row-interactive:hover .pc-store-name {
    perde contraste (WCAG) e legibilidade de dígitos.
    ============================================================ */
 .pc-price {
-  font-family: 'Work Sans', ui-sans-serif, system-ui, sans-serif;
-  font-feature-settings: "tnum" 1, "lnum" 1, "cv11" 1;
+  font-family: var(--pc-price-font);
+  font-feature-settings: var(--pc-price-feature-settings);
   font-variant-numeric: tabular-nums lining-nums;
   font-weight: 600;
-  letter-spacing: -0.005em;
-  color: var(--foreground);
+  letter-spacing: var(--pc-price-tracking);
+  color: var(--pc-price-fg);
   font-style: normal;
 }
+
 .pc-price--sm { font-size: 0.8125rem; line-height: 1.15; }
 .pc-price--md { font-size: 0.9375rem; line-height: 1.15; font-weight: 650; }
 .pc-price--lg { font-size: 1.125rem;  line-height: 1.1;  font-weight: 700; letter-spacing: -0.01em; }
@@ -4819,3 +4831,42 @@ html.dark .pc-row-interactive:hover .pc-store-name {
 }
 .pc-price--strike { color: color-mix(in oklab, var(--foreground) 55%, transparent); text-decoration: line-through; font-weight: 500; }
 .pc-price--savings { color: hsl(var(--savings, 148 60% 34%)); font-weight: 700; }
+
+/* ============================================================
+   @utility pc-num — dígitos monetários typeclear
+   Fonte sans tabular + lining, cor de contraste alto.
+   Modificadores:
+     .pc-num--onhero  → sobre overlay do hero (light: navy / dark: white)
+     .pc-num--loading → estado skeleton (opacidade)
+     .pc-num--disabled → desabilitado (opacidade)
+   Estados nativos:
+     :hover           → leve elevação de contraste
+   ============================================================ */
+@utility pc-num {
+  font-family: var(--pc-price-font);
+  font-feature-settings: var(--pc-price-feature-settings);
+  font-variant-numeric: tabular-nums lining-nums;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: var(--pc-price-tracking);
+  color: var(--pc-price-fg);
+  transition: color 150ms ease;
+
+  &:hover { color: var(--pc-price-hover); }
+}
+
+@utility pc-num--onhero {
+  color: var(--pc-price-fg-onhero);
+  &:hover { color: var(--pc-price-fg-onhero); filter: brightness(1.08); }
+}
+
+@utility pc-num--loading {
+  color: var(--pc-price-loading);
+  cursor: progress;
+}
+
+@utility pc-num--disabled {
+  color: var(--pc-price-disabled);
+  cursor: not-allowed;
+}
+
