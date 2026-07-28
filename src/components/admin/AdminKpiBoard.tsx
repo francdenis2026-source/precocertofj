@@ -276,23 +276,32 @@ export function AdminKpiBoard() {
             }
           >
             <div className="h-36">
+              {shares.length === 0 ? (
+                <ChartEmpty height={144} title="Sem lojas no período" />
+              ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={shares} margin={{ top: 4, right: 6, bottom: 0, left: -18 }}>
-                  <CartesianGrid strokeDasharray="3 3" className="stroke-border/50" />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} vertical={false} />
                   <XAxis
                     dataKey="name"
-                    tick={{ fontSize: 9 }}
+                    tick={{ ...tickStyle, fontSize: 9 }}
+                    tickLine={false}
+                    axisLine={{ stroke: chartTheme.grid }}
                     tickFormatter={(v: string) => (v.length > 10 ? `${v.slice(0, 10)}…` : v)}
                     interval={0}
                   />
-                  <YAxis tick={{ fontSize: 10 }} width={44} unit="%" />
+                  <YAxis tick={tickStyle} tickLine={false} axisLine={{ stroke: chartTheme.grid }} width={44} unit="%" />
                   <Tooltip
                     formatter={(v: number) => [`${Number(v).toFixed(1)}%`, "Participação"]}
-                    contentStyle={{ fontSize: 12 }}
+                    contentStyle={tooltipStyle}
+                    labelStyle={tooltipLabelStyle}
+                    itemStyle={tooltipItemStyle}
+                    cursor={{ fill: "rgba(96,165,250,0.08)" }}
                   />
-                  <Bar dataKey="share" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="share" fill={chartTheme.primary} radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
+              )}
             </div>
           </Block>
 
