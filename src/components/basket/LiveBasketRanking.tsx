@@ -420,6 +420,20 @@ export function LiveBasketRanking({
             <CardDescription className="text-xs sm:text-sm">{description}</CardDescription>
           </div>
           <div className="flex items-center gap-2">
+            <Select value={sortMode} onValueChange={(v) => setSortMode(v as LiveBasketSort)}>
+              <SelectTrigger
+                data-testid="live-basket-sort"
+                className="h-7 w-[200px] gap-1 px-2 text-[11px]"
+                aria-label="Ordenar ranking"
+              >
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {SORT_OPTIONS.map((o) => (
+                  <SelectItem key={o.key} value={o.key} className="text-xs">{o.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <span
               className={cn(
                 "inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide transition-colors",
