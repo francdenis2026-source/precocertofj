@@ -654,13 +654,16 @@ function CompareMode({
     let missingWithoutAvg = 0;
     s.items.forEach((it, i) => {
       if (it) {
-        known += it.price;
+        known += it.price * (it.quantity ?? 1);
       } else {
-        const avg = data!.averagePrices[data!.essentials[i].key];
-        if (typeof avg === "number") missingAvg += avg;
+        const ess = data!.essentials[i];
+        const avg = data!.averagePrices[ess.key];
+        const q = ess.quantity ?? 1;
+        if (typeof avg === "number") missingAvg += avg * q;
         else missingWithoutAvg += 1;
       }
     });
+
     const minEstimate = known;
     const maxEstimate = known + missingAvg; // itens sem média conhecida ficam de fora do teto
     let displayTotal = known;
