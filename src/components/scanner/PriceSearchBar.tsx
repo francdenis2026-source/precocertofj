@@ -2124,18 +2124,43 @@ function ProductGroupCard({
         </div>
       </div>
 
-      <ul className="mt-1 border-t border-[color-mix(in_oklab,var(--color-border)_70%,transparent)]">
+      {focused && prices.length >= 2 ? (
+        <CompareMatrix
+          productName={productName}
+          prices={prices}
+          globalMin={globalMin ?? min}
+          globalMax={globalMax ?? max}
+          fmt={fmt}
+          onPick={(marketName) => onSelect?.(productName, marketName)}
+          focusedMarket={focusedMarket}
+        />
+      ) : null}
+
+      <ul
+        role="list"
+        aria-label={`Mercados com ${productName}`}
+        className="mt-1 border-t border-[color-mix(in_oklab,var(--color-border)_70%,transparent)]"
+      >
         {visiblePrices.map((p, i) => {
 
           const isCheapest = globalMin != null && p.price === globalMin;
           const isFocusedMarket =
             !!focusedMarket &&
             (p.marketName ?? "").toLowerCase() === focusedMarket.toLowerCase();
+          const handleSelect = () => onSelect?.(productName, p.marketName ?? null);
           return (
             <li
               key={`${p.marketName}-${p.when}-${i}`}
+              role={onSelect ? "button" : undefined}
+              tabIndex={onSelect ? 0 : undefined}
+              aria-label={
+                onSelect
+                  ? `${p.marketName ?? "Mercado"}: ${fmt(p.price)}${isCheapest ? " — menor preço" : ""}`
+                  : undefined
+              }
+              aria-current={isFocusedMarket ? "true" : undefined}
               className={
-                "pc-res-row relative cursor-pointer " +
+                "pc-res-row relative cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:z-10 " +
                 (isFocusedMarket ? "bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)]" : "")
               }
               data-cheapest={isCheapest ? "true" : "false"}
@@ -2144,9 +2169,18 @@ function ProductGroupCard({
                 if (!onSelect) return;
                 const target = e.target as HTMLElement;
                 if (target.closest("a,button,input,select,textarea,[role=button]")) return;
-                onSelect(productName, p.marketName ?? null);
+                handleSelect();
+              }}
+              onKeyDown={(e) => {
+                if (!onSelect) return;
+                if (e.key !== "Enter" && e.key !== " ") return;
+                const target = e.target as HTMLElement;
+                if (target !== e.currentTarget) return;
+                e.preventDefault();
+                handleSelect();
               }}
             >
+
 
               <StoreColorBar name={p.marketName} brandColor={p.marketBrandColor} />
               {isCheapest ? (
