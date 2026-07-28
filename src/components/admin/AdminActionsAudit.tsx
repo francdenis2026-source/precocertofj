@@ -1,7 +1,8 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
-import { keepPreviousData, useQuery } from "@tanstack/react-query";
-import { Download, History, Loader2, RefreshCw, Search, X } from "lucide-react";
+import { keepPreviousData, useQuery, useQueryClient } from "@tanstack/react-query";
+import { Download, History, Loader2, RefreshCw, Radio, Search, X } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 import {
   listAdminAuditLog,
   ADMIN_AUDIT_LABELS,
@@ -60,6 +61,7 @@ function useDebounced<T>(value: T, delay = DEBOUNCE_MS): T {
 export function AdminActionsAudit() {
   const fetchLog = useServerFn(listAdminAuditLog);
   const fetchEsts = useServerFn(listEstablishments);
+  const queryClient = useQueryClient();
   const [action, setAction] = useState("all");
   const [targetType, setTargetType] = useState("all");
   const [establishmentId, setEstablishmentId] = useState("all");
@@ -70,6 +72,10 @@ export function AdminActionsAudit() {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [exporting, setExporting] = useState(false);
+  const [liveConnected, setLiveConnected] = useState(false);
+  const [pendingNew, setPendingNew] = useState(0);
+  const flashUntilRef = useRef(0);
+  const [flashing, setFlashing] = useState(false);
 
   // Debounced values feed the query key — badge/filter count stays instant.
   const dQuery = useDebounced(query);
@@ -107,6 +113,43 @@ export function AdminActionsAudit() {
     staleTime: 30_000,
     placeholderData: keepPreviousData,
   });
+
+  // Realtime: assina novos INSERTs em admin_audit_log e atualiza sob demanda.
+  // Quando o usuário está na página 1 sem busca livre, recarrega automaticamente
+  // e faz um "flash" sutil. Nas demais páginas, acumula um badge "N novos".
+  useEffect(() => {
+    const channel = supabase
+      .channel("admin-audit-log-live")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "admin_audit_log" },
+        () => {
+          const onFirstPageNoSearch = page === 1 && dQuery.trim() === "";
+          if (onFirstPageNoSearch) {
+            queryClient.invalidateQueries({ queryKey: ["admin", "audit-actions"] });
+            flashUntilRef.current = Date.now() + 1400;
+            setFlashing(true);
+            setTimeout(() => {
+              if (Date.now() >= flashUntilRef.current) setFlashing(false);
+            }, 1500);
+          } else {
+            setPendingNew((n) => n + 1);
+          }
+        },
+      )
+      .subscribe((status) => {
+        setLiveConnected(status === "SUBSCRIBED");
+      });
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [queryClient, page, dQuery]);
+
+  const loadPendingNew = () => {
+    setPendingNew(0);
+    setPage(1);
+    queryClient.invalidateQueries({ queryKey: ["admin", "audit-actions"] });
+  };
 
   const rows: AdminAuditRow[] = logQuery.data?.rows ?? [];
   const total = logQuery.data?.total ?? 0;
@@ -173,12 +216,24 @@ export function AdminActionsAudit() {
   }, [offset, rows.length, total]);
 
   return (
-    <Card>
+    <Card className={cn("transition-shadow duration-500", flashing && "ring-2 ring-emerald-500/40 shadow-lg")}>
       <CardHeader className="pb-2.5">
         <div className="flex flex-wrap items-start justify-between gap-2.5">
           <div className="min-w-0">
             <CardTitle className="flex items-center gap-2 text-base">
               <History className="h-4 w-4" /> Auditoria de ações críticas
+              <span
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-medium",
+                  liveConnected
+                    ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                    : "border-muted-foreground/30 bg-muted text-muted-foreground",
+                )}
+                title={liveConnected ? "Conectado — novos eventos aparecem em tempo real" : "Conectando ao tempo real…"}
+              >
+                <Radio className={cn("h-2.5 w-2.5", liveConnected && "animate-pulse")} />
+                {liveConnected ? "Ao vivo" : "Conectando"}
+              </span>
               {activeFilters > 0 && (
                 <Badge variant="secondary" className={cn(tc.tag, "ml-1")}>
                   {activeFilters} filtro{activeFilters > 1 ? "s" : ""}
@@ -190,6 +245,18 @@ export function AdminActionsAudit() {
             </CardDescription>
           </div>
           <div className="flex flex-wrap items-center gap-1.5">
+            {pendingNew > 0 && (
+              <Button
+                size="sm"
+                variant="default"
+                className="h-8 animate-in fade-in slide-in-from-top-1"
+                onClick={loadPendingNew}
+                aria-label={`Carregar ${pendingNew} novos eventos`}
+              >
+                <Radio className="mr-1.5 h-3.5 w-3.5" />
+                {pendingNew} nov{pendingNew > 1 ? "os" : "o"}
+              </Button>
+            )}
             <Button
               size="sm"
               variant="outline"
