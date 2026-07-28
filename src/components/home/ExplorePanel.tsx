@@ -204,6 +204,7 @@ function RowSkeleton({ glass }: { glass: string }) {
 export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
   const fetchRecent = useServerFn(getRecentProducts);
   const fetchLive = useServerFn(getLiveTickerStats);
+  const queryClient = useQueryClient();
 
   // Etapa 1: lote curto (rápido) já pinta a coluna.
   const first = useQuery({
@@ -240,6 +241,15 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
     staleTime: 60_000,
   });
 
+  // Realtime: quando `scans` ou o cache de comparação mudam, revalidamos as
+  // duas queries sem recarregar a página. React Query cuida do refetch em
+  // background — a UI atualiza incrementalmente.
+  usePricesRealtime(() => {
+    queryClient.invalidateQueries({ queryKey: ["home", "recent-products", 4] });
+    queryClient.invalidateQueries({ queryKey: ["home", "recent-products", 10] });
+    queryClient.invalidateQueries({ queryKey: ["home", "live-ticker-stats"] });
+  });
+
   const line = "var(--pc-home-onhero-border-soft)";
   const fg70 = "var(--pc-home-onhero-fg-70)";
   const fg90 = "var(--pc-home-onhero-fg-90)";
@@ -258,6 +268,51 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
 
   const items = ((full.data ?? first.data ?? []) as PriceItem[]).slice(0, maxRows);
   const pendingRows = items.length > 0 ? Math.max(0, 6 - items.length) : 6;
+
+  // Detecção de mudanças: guardamos assinatura `slug|price` do último render
+  // para marcar como "flash" itens novos ou com preço alterado. O primeiro
+  // render não pisca (evita ruído visual ao carregar a página).
+  const seenRef = useRef<Map<string, number> | null>(null);
+  const flashUntilRef = useRef<Map<string, number>>(new Map());
+  const [, forceTick] = useState(0);
+
+  useMemo(() => {
+    if (items.length === 0) return;
+    const now = Date.now();
+    const next = new Map<string, number>();
+    for (const it of items) next.set(it.slug, it.price);
+
+    if (seenRef.current) {
+      const prev = seenRef.current;
+      for (const it of items) {
+        const prevPrice = prev.get(it.slug);
+        if (prevPrice === undefined || prevPrice !== it.price) {
+          flashUntilRef.current.set(it.slug, now + 3600);
+        }
+      }
+    }
+    seenRef.current = next;
+  }, [items]);
+
+  // Limpa marcações expiradas para permitir novo flash em atualizações futuras.
+  useEffect(() => {
+    if (flashUntilRef.current.size === 0) return;
+    const t = window.setTimeout(() => {
+      const now = Date.now();
+      let changed = false;
+      for (const [slug, until] of flashUntilRef.current) {
+        if (until <= now) {
+          flashUntilRef.current.delete(slug);
+          changed = true;
+        }
+      }
+      if (changed) forceTick((n) => n + 1);
+    }, 3800);
+    return () => window.clearTimeout(t);
+  }, [items]);
+
+  const now = Date.now();
+  const isFlashing = (slug: string) => (flashUntilRef.current.get(slug) ?? 0) > now;
 
   type Row = { kind: "item"; item: PriceItem } | { kind: "skeleton" };
   const rows: Row[] = [
