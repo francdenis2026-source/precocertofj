@@ -337,7 +337,7 @@ function HomePage() {
                 }}
               >
                 Encontre o{" "}
-                <span className="pc-editorial-accent">preço certo</span>{" "}
+                <PrecoCertoMark variant="hero">preço certo</PrecoCertoMark>{" "}
                 sem sair de casa.
               </h1>
 
