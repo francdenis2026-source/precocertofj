@@ -31,10 +31,11 @@ export const getCoverageOverview = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
+    // Use the authenticated (user-scoped) client so auth.uid() is set inside
+    // the SECURITY DEFINER function; supabaseAdmin uses service_role and
+    // auth.uid() would be NULL, causing the RPC to raise 'forbidden'.
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data, error } = await (supabaseAdmin.rpc as any)("get_coverage_overview");
+    const { data, error } = await (context.supabase.rpc as any)("get_coverage_overview");
     if (error) throw new Error(error.message);
     return (data ?? []) as EstablishmentCoverage[];
   });
@@ -44,10 +45,8 @@ export const getMissingProducts = createServerFn({ method: "POST" })
   .inputValidator((input: { establishmentId: string; search?: string; category?: string; limit?: number }) => input)
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: rows, error } = await (supabaseAdmin.rpc as any)("get_missing_products_for_establishment", {
+    const { data: rows, error } = await (context.supabase.rpc as any)("get_missing_products_for_establishment", {
       _establishment_id: data.establishmentId,
       _search: data.search ?? null,
       _category: data.category ?? null,
@@ -62,10 +61,8 @@ export const getPresentProducts = createServerFn({ method: "POST" })
   .inputValidator((input: { establishmentId: string; search?: string; category?: string; limit?: number }) => input)
   .handler(async ({ data, context }) => {
     await assertAdmin(context.supabase, context.userId);
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { data: rows, error } = await (supabaseAdmin.rpc as any)("get_present_products_for_establishment", {
+    const { data: rows, error } = await (context.supabase.rpc as any)("get_present_products_for_establishment", {
       _establishment_id: data.establishmentId,
       _search: data.search ?? null,
       _category: data.category ?? null,
@@ -74,3 +71,4 @@ export const getPresentProducts = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return (rows ?? []) as (MissingProduct & { local_price: number | null; last_seen_at: string | null })[];
   });
+
