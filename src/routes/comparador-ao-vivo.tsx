@@ -1,13 +1,25 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { zodValidator, fallback } from "@tanstack/zod-adapter";
+import { z } from "zod";
 import { Loader2, Lock, ArrowRight } from "lucide-react";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { AppShell } from "@/components/brand/AppShell";
 import { PageHeader } from "@/components/layout";
-import { LiveBasketRanking } from "@/components/basket/LiveBasketRanking";
+import {
+  LiveBasketRanking,
+  type LiveBasketFilters,
+} from "@/components/basket/LiveBasketRanking";
 import { useAppHomeData } from "@/hooks/useAppHomeData";
 import { getAccessStatus } from "@/lib/paywall";
 
+const searchSchema = z.object({
+  cat: fallback(z.string(), "all").default("all"),
+  city: fallback(z.string(), "all").default("all"),
+  bairro: fallback(z.string(), "all").default("all"),
+});
+
 export const Route = createFileRoute("/comparador-ao-vivo")({
+  validateSearch: zodValidator(searchSchema),
   head: () => ({
     meta: [
       { title: "Comparador ao vivo — PreçoCerto" },
@@ -37,6 +49,27 @@ function LiveComparatorPage() {
       : null,
   );
 
+  const search = Route.useSearch();
+  const navigate = useNavigate({ from: "/comparador-ao-vivo" });
+
+  const filters: LiveBasketFilters = {
+    category: search.cat as LiveBasketFilters["category"],
+    city: search.city,
+    neighborhood: search.bairro,
+  };
+
+  const onFiltersChange = (next: LiveBasketFilters) => {
+    navigate({
+      search: (prev: z.infer<typeof searchSchema>) => ({
+        ...prev,
+        cat: next.category,
+        city: next.city,
+        bairro: next.neighborhood,
+      }),
+      replace: true,
+    });
+  };
+
   return (
     <AppShell>
       <div className="mx-auto w-full max-w-4xl px-4 py-6 md:px-6">
@@ -52,7 +85,7 @@ function LiveComparatorPage() {
           </div>
         ) : status === "active" ? (
           <div className="mt-6">
-            <LiveBasketRanking />
+            <LiveBasketRanking value={filters} onChange={onFiltersChange} />
           </div>
         ) : (
           <PaywallPrompt trial={status === "trial"} />
