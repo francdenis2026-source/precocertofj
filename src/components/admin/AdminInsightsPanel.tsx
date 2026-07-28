@@ -352,11 +352,23 @@ export function AdminInsightsPanel() {
             size="sm"
             variant="ghost"
             className="h-7 px-2"
+            onClick={() => setDensity((d) => (d === "compact" ? "normal" : "compact"))}
+            aria-label={density === "compact" ? "Aumentar altura dos gráficos" : "Reduzir altura dos gráficos"}
+            aria-pressed={density === "compact"}
+            title={density === "compact" ? "Modo compacto ativo" : "Modo compacto"}
+          >
+            {density === "compact" ? <Rows3 className="h-3.5 w-3.5" /> : <Rows2 className="h-3.5 w-3.5" />}
+          </Button>
+          <Button
+            size="sm"
+            variant="ghost"
+            className="h-7 px-2"
             onClick={() => void hardRefresh()}
             aria-label="Atualizar indicadores"
           >
             <RefreshCw className={cn("h-3.5 w-3.5", query.isFetching && "animate-spin")} />
           </Button>
+
         </div>
       </div>
 
