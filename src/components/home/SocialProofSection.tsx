@@ -13,7 +13,7 @@ const P = {
   navy: "var(--pc-home-navy)",
 };
 
-const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
+const serif = "font-editorial";
 
 type Testimonial = {
   name: string;

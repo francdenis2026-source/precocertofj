@@ -27,7 +27,7 @@ import { useVirtualRows } from "@/hooks/use-virtual-rows";
  * TypeClear (tokens `tc`) e hierarquia por linhas finas, sem caixas pesadas.
  */
 
-const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
+const serif = "font-editorial";
 
 const brl = (n: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n);

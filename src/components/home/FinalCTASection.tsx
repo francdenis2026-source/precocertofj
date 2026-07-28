@@ -8,7 +8,7 @@ const P = {
   gold: "var(--pc-home-gold)",
 };
 
-const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
+const serif = "font-editorial";
 
 export function FinalCTASection() {
   const navigate = useNavigate();

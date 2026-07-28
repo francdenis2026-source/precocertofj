@@ -389,9 +389,10 @@ function RedeemPage() {
               </div>
 
               <h1
-                className="mt-8 font-editorial text-[clamp(38px,4.6vw,60px)] font-normal leading-[1.02] tracking-[-0.02em]"
+                className="pc-hero-editorial mt-8 font-editorial text-[clamp(38px,4.6vw,60px)]"
                 style={{ color: "#f9f2df" }}
               >
+
                 Libere seu acesso
                 <br />
                 <span
@@ -489,8 +490,9 @@ function RedeemPage() {
             ) : (
               <form onSubmit={handleSubmit} noValidate>
                 <h2
-                  className="font-editorial text-[clamp(26px,3.4vw,36px)] font-normal leading-[1.05] tracking-[-0.018em] text-foreground"
+                  className="pc-hero-editorial font-editorial text-[clamp(26px,3.4vw,36px)] text-foreground"
                 >
+
                   Ativar meu{" "}
                   <span className="pc-editorial-accent pc-editorial-accent--fill">código</span>
                 </h2>

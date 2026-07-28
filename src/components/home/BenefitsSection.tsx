@@ -8,7 +8,7 @@ const P = {
   body: "var(--pc-text-body)",
 };
 
-const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
+const serif = "font-editorial";
 
 const BENEFITS = [
   { icon: <Wallet className="h-4 w-4" strokeWidth={2} />, title: "Economia real", desc: "Menor preço da semana em segundos." },
