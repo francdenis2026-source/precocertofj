@@ -15,9 +15,18 @@ export const Route = createFileRoute("/api/public/hooks/retry-activation-emails"
   server: {
     handlers: {
       GET: async () => new Response("ok", { status: 200 }),
-      POST: async () => {
+      POST: async ({ request }) => {
+        const url = new URL(request.url);
+        const header = request.headers.get("x-cron-secret") ?? request.headers.get("x-collab-secret");
+        const token = header || url.searchParams.get("token");
+        const secret = process.env.CRON_SECRET ?? process.env.COLLAB_INBOUND_SECRET;
+        if (!secret) return new Response("not configured", { status: 500 });
+        if (!token || token !== secret) return new Response("unauthorized", { status: 401 });
+
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
         const { sendActivationEmail } = await import("@/lib/mercadopago.server");
+
+
 
         const { data: due, error } = await supabaseAdmin
           .from("email_send_queue")
