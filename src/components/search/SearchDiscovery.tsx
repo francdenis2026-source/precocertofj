@@ -119,7 +119,8 @@ export function SearchDiscovery({ onPickQuery }: Props) {
   const statsFailed = Boolean(stats.isError || (stats.data && !stats.data.ok));
 
   return (
-    <div className="grid h-full min-h-0 grid-rows-[auto_auto_auto_1fr] gap-2 lg:grid-cols-2 lg:grid-rows-[auto_1fr]">
+    <div className="grid h-full min-h-0 grid-rows-[auto_auto_auto_auto] gap-1.5 lg:grid-cols-2 lg:grid-rows-[auto_minmax(0,1fr)_auto]">
+
       {/* ============ CATEGORIAS — tinta DOURADA (ação/identidade) ============ */}
       <section
         aria-label="Categorias populares"
