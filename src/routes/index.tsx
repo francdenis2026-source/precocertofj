@@ -348,12 +348,12 @@ function HomePage() {
                   <strong className="pc-num font-semibold">{stats?.products ?? "—"}</strong>
                   <span className="text-[10px] opacity-80">produtos</span>
                 </span>
-                {economy?.percent != null ? (
+                {economy?.avgSavingsPct != null ? (
                   <>
                     <span aria-hidden style={{ color: `color-mix(in oklab, ${P.gold} 50%, transparent)` }}>·</span>
                     <span className="inline-flex items-center gap-1 normal-case tracking-normal" style={{ color: "var(--pc-home-onhero-fg)" }}>
                       <TrendingDown className="h-3 w-3" aria-hidden />
-                      <strong className="pc-num font-semibold">{Math.round(Number(economy.percent))}%</strong>
+                      <strong className="pc-num font-semibold">{Math.round(Number(economy.avgSavingsPct))}%</strong>
                       <span className="text-[10px] opacity-80">economia média</span>
                     </span>
                   </>
