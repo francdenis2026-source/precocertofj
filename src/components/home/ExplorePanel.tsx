@@ -1,7 +1,8 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+import { usePricesRealtime } from "@/hooks/usePricesRealtime";
 import {
   ArrowUpRight,
   MapPin,
@@ -113,9 +114,11 @@ type PriceItem = {
 const PriceRow = memo(function PriceRow({
   p,
   onNavigate,
+  flash,
 }: {
   p: PriceItem;
   onNavigate?: () => void;
+  flash?: boolean;
 }) {
   return (
     <li
@@ -126,11 +129,12 @@ const PriceRow = memo(function PriceRow({
         to="/produto/$slug"
         params={{ slug: p.slug }}
         onClick={onNavigate}
-        className={`group relative grid ${ROW_H} grid-cols-[minmax(0,1fr)_auto] items-center gap-3 -mx-2 rounded-md px-2 transition-all duration-200 ease-out hover:bg-[var(--pc-home-onhero-glass)] hover:pl-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-onhero-gold)]`}
+        data-flash={flash ? "1" : undefined}
+        className={`group relative grid ${ROW_H} grid-cols-[minmax(0,1fr)_auto] items-center gap-3 -mx-2 rounded-md px-2 transition-all duration-200 ease-out hover:bg-[var(--pc-home-onhero-glass)] hover:pl-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-onhero-gold)] ${flash ? "pc-live-flash" : ""}`}
       >
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-y-1.5 left-0 w-[2px] rounded-full opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+          className={`pointer-events-none absolute inset-y-1.5 left-0 w-[2px] rounded-full transition-opacity duration-200 group-hover:opacity-100 ${flash ? "opacity-100" : "opacity-0"}`}
           style={{ background: "var(--pc-home-onhero-gold)" }}
         />
         <div className="min-w-0">
@@ -152,7 +156,20 @@ const PriceRow = memo(function PriceRow({
             </span>
             <span className="mx-1 opacity-60">·</span>
             {relative(p.when)}
-            {p.stores > 1 ? (
+            {flash ? (
+              <>
+                <span className="mx-1 opacity-60">·</span>
+                <span
+                  className={`${tc.eyebrow} rounded-full px-1.5 py-0.5`}
+                  style={{
+                    color: "var(--pc-home-onhero-gold)",
+                    border: "1px solid var(--pc-home-onhero-gold)",
+                  }}
+                >
+                  novo
+                </span>
+              </>
+            ) : p.stores > 1 ? (
               <>
                 <span className="mx-1 opacity-60">·</span>
                 {p.stores} mercados
@@ -176,7 +193,17 @@ function RowSkeleton({ glass }: { glass: string }) {
   return (
     <li className={`flex ${ROW_H} flex-col justify-center gap-1.5`}>
       <div className="flex items-center gap-3">
-        <div className="h-3 flex-1 animate-pulse rounded" style={{ background: glass }} />
+        <div className="relative h-3 flex-1 overflow-hidden rounded" style={{ background: glass }}>
+          <span
+            aria-hidden
+            className="absolute inset-y-0 -left-full w-full"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--pc-home-onhero-gold) 30%, transparent) 50%, transparent 100%)",
+              animation: "skeleton-shimmer 1.6s ease-in-out infinite",
+            }}
+          />
+        </div>
         <div className="h-3 w-14 animate-pulse rounded" style={{ background: glass }} />
       </div>
       <div className="h-2.5 w-1/3 animate-pulse rounded" style={{ background: glass }} />
@@ -187,6 +214,7 @@ function RowSkeleton({ glass }: { glass: string }) {
 export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
   const fetchRecent = useServerFn(getRecentProducts);
   const fetchLive = useServerFn(getLiveTickerStats);
+  const queryClient = useQueryClient();
 
   // Etapa 1: lote curto (rápido) já pinta a coluna.
   const first = useQuery({
@@ -223,6 +251,15 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
     staleTime: 60_000,
   });
 
+  // Realtime: quando `scans` ou o cache de comparação mudam, revalidamos as
+  // duas queries sem recarregar a página. React Query cuida do refetch em
+  // background — a UI atualiza incrementalmente.
+  usePricesRealtime(() => {
+    queryClient.invalidateQueries({ queryKey: ["home", "recent-products", 4] });
+    queryClient.invalidateQueries({ queryKey: ["home", "recent-products", 10] });
+    queryClient.invalidateQueries({ queryKey: ["home", "live-ticker-stats"] });
+  });
+
   const line = "var(--pc-home-onhero-border-soft)";
   const fg70 = "var(--pc-home-onhero-fg-70)";
   const fg90 = "var(--pc-home-onhero-fg-90)";
@@ -241,6 +278,51 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
 
   const items = ((full.data ?? first.data ?? []) as PriceItem[]).slice(0, maxRows);
   const pendingRows = items.length > 0 ? Math.max(0, 6 - items.length) : 6;
+
+  // Detecção de mudanças: guardamos assinatura `slug|price` do último render
+  // para marcar como "flash" itens novos ou com preço alterado. O primeiro
+  // render não pisca (evita ruído visual ao carregar a página).
+  const seenRef = useRef<Map<string, number> | null>(null);
+  const flashUntilRef = useRef<Map<string, number>>(new Map());
+  const [, forceTick] = useState(0);
+
+  useMemo(() => {
+    if (items.length === 0) return;
+    const now = Date.now();
+    const next = new Map<string, number>();
+    for (const it of items) next.set(it.slug, it.price);
+
+    if (seenRef.current) {
+      const prev = seenRef.current;
+      for (const it of items) {
+        const prevPrice = prev.get(it.slug);
+        if (prevPrice === undefined || prevPrice !== it.price) {
+          flashUntilRef.current.set(it.slug, now + 3600);
+        }
+      }
+    }
+    seenRef.current = next;
+  }, [items]);
+
+  // Limpa marcações expiradas para permitir novo flash em atualizações futuras.
+  useEffect(() => {
+    if (flashUntilRef.current.size === 0) return;
+    const t = window.setTimeout(() => {
+      const now = Date.now();
+      let changed = false;
+      for (const [slug, until] of flashUntilRef.current) {
+        if (until <= now) {
+          flashUntilRef.current.delete(slug);
+          changed = true;
+        }
+      }
+      if (changed) forceTick((n) => n + 1);
+    }, 3800);
+    return () => window.clearTimeout(t);
+  }, [items]);
+
+  const now = Date.now();
+  const isFlashing = (slug: string) => (flashUntilRef.current.get(slug) ?? 0) > now;
 
   type Row = { kind: "item"; item: PriceItem } | { kind: "skeleton" };
   const rows: Row[] = [
@@ -294,7 +376,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
           {padTop > 0 && <li aria-hidden style={{ height: padTop }} />}
           {rows.slice(start, end).map((row, i) =>
             row.kind === "item" ? (
-              <PriceRow key={row.item.slug} p={row.item} onNavigate={onNavigate} />
+              <PriceRow key={row.item.slug} p={row.item} onNavigate={onNavigate} flash={isFlashing(row.item.slug)} />
             ) : (
               <RowSkeleton key={`sk-${start + i}`} glass={glass} />
             ),
