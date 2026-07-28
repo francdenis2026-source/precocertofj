@@ -72,6 +72,23 @@ export function BackButton({
     );
   }
 
+  // Sem histórico do router (deep link / refresh): tenta o histórico do navegador
+  // antes de cair no fallback, para nunca "pular" direto para a home quando o
+  // usuário abriu a tela vindo de outra rota interna.
+  if (hydrated && typeof window !== "undefined" && window.history.length > 1) {
+    return (
+      <button
+        type="button"
+        onClick={() => window.history.back()}
+        className={cls}
+        aria-label={label}
+      >
+        {content}
+      </button>
+    );
+  }
+
+
   return (
     <Link to={fallbackTo} className={cls} aria-label={label}>
       {content}
