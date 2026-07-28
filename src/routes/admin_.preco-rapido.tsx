@@ -35,11 +35,7 @@ export const Route = createFileRoute("/admin_/preco-rapido")({
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  component: () => (
-    <AppShell scope="admin">
-      <QuickPricePage />
-    </AppShell>
-  ),
+  component: () => <Navigate to="/admin/precos" search={{ tab: "rapido" } as never} replace />,
 });
 
 const brl = (v: number) =>
