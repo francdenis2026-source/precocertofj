@@ -61,9 +61,10 @@ const QUOTES = [
 const HEAD = "flex items-baseline justify-between gap-3 border-b pb-1.5";
 const HEAD_LEFT = "flex min-w-0 items-baseline gap-2.5";
 const BODY_GAP = "mt-2";
-/** Altura fixa por linha de preço — base da virtualização (evita reflow). */
-const ROW_PX = 50;
-const ROW_H = "h-[50px]";
+/** Altura fixa por linha de preço — base da virtualização (evita reflow).
+    56px acomoda título + meta + o riscado do preço anterior (mini-diff). */
+const ROW_PX = 56;
+const ROW_H = "h-[56px]";
 
 function Kicker({ children }: { children: React.ReactNode }) {
   return (
@@ -108,6 +109,8 @@ type PriceItem = {
   when: string;
   stores: number;
   marketName?: string | null;
+  previousPrice?: number | null;
+  dropPct?: number | null;
 };
 
 /** Linha memoizada: só re-renderiza quando o próprio item muda. */
@@ -115,11 +118,15 @@ const PriceRow = memo(function PriceRow({
   p,
   onNavigate,
   flash,
+  best,
 }: {
   p: PriceItem;
   onNavigate?: () => void;
   flash?: boolean;
+  /** Marca a linha como "melhor oferta" (maior economia detectada). */
+  best?: boolean;
 }) {
+  const hasDrop = typeof p.dropPct === "number" && p.dropPct > 0 && p.previousPrice != null;
   return (
     <li
       className={ROW_H}
@@ -130,19 +137,38 @@ const PriceRow = memo(function PriceRow({
         params={{ slug: p.slug }}
         onClick={onNavigate}
         data-flash={flash ? "1" : undefined}
+        data-best={best ? "1" : undefined}
+        aria-label={
+          best
+            ? `${p.name} — melhor oferta agora, ${brl(p.price)}${hasDrop ? `, queda de ${p.dropPct}% em relação a ${brl(p.previousPrice!)}` : ""}`
+            : undefined
+        }
         className={`group relative grid ${ROW_H} grid-cols-[minmax(0,1fr)_auto] items-center gap-3 -mx-2 rounded-md px-2 transition-all duration-200 ease-out hover:bg-[var(--pc-home-onhero-glass)] hover:pl-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-onhero-gold)] ${flash ? "pc-live-flash" : ""}`}
       >
         <span
           aria-hidden
-          className={`pointer-events-none absolute inset-y-1.5 left-0 w-[2px] rounded-full transition-opacity duration-200 group-hover:opacity-100 ${flash ? "opacity-100" : "opacity-0"}`}
+          className={`pointer-events-none absolute inset-y-1.5 left-0 w-[2px] rounded-full transition-opacity duration-200 group-hover:opacity-100 ${flash || best ? "opacity-100" : "opacity-0"}`}
           style={{ background: "var(--pc-home-onhero-gold)" }}
         />
         <div className="min-w-0">
           <p
-            className={`${tc.itemTitle} truncate transition-colors group-hover:text-white`}
+            className={`${tc.itemTitle} flex items-center gap-1.5 truncate transition-colors group-hover:text-white`}
             style={{ color: "var(--pc-home-onhero-fg)" }}
           >
-            {p.name}
+            {best ? (
+              <span
+                className={`${tc.eyebrow} inline-flex shrink-0 items-center rounded-full px-1.5 py-0.5`}
+                style={{
+                  color: "#0b1b3a",
+                  background: "var(--pc-home-onhero-gold)",
+                  letterSpacing: "0.08em",
+                }}
+                aria-hidden
+              >
+                MELHOR
+              </span>
+            ) : null}
+            <span className="truncate">{p.name}</span>
           </p>
           <p
             className={`${tc.meta} mt-0.5 truncate`}
@@ -177,10 +203,37 @@ const PriceRow = memo(function PriceRow({
             ) : null}
           </p>
         </div>
-        <span
-          className={`pc-num pc-num--onhero ${tc.num} shrink-0 transition-transform duration-200 group-hover:-translate-x-0.5`}
-        >
-          {brl(p.price)}
+        <span className="relative flex shrink-0 flex-col items-end leading-tight">
+          <span
+            className={`pc-num pc-num--onhero ${tc.num} transition-transform duration-200 group-hover:-translate-x-0.5`}
+          >
+            {brl(p.price)}
+          </span>
+          {hasDrop ? (
+            <span
+              className={`${tc.meta} mt-0.5 inline-flex items-baseline gap-1 whitespace-nowrap`}
+              style={{ color: "var(--pc-home-onhero-fg-70)" }}
+              aria-label={`Preço anterior ${brl(p.previousPrice!)}, queda de ${p.dropPct}%`}
+            >
+              {/* Preço antigo aparece só em hover/focus — evita ruído em repouso. */}
+              <span
+                aria-hidden
+                className="line-through opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
+                style={{ color: "var(--pc-home-onhero-fg-60)" }}
+              >
+                {brl(p.previousPrice!)}
+              </span>
+              <span aria-hidden className="opacity-0 transition-opacity duration-150 group-hover:opacity-80 group-focus-visible:opacity-80">
+                →
+              </span>
+              <span
+                className="font-semibold"
+                style={{ color: "var(--pc-home-onhero-gold)" }}
+              >
+                −{p.dropPct}%
+              </span>
+            </span>
+          ) : null}
         </span>
 
 
@@ -254,11 +307,19 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
   // Realtime: quando `scans` ou o cache de comparação mudam, revalidamos as
   // duas queries sem recarregar a página. React Query cuida do refetch em
   // background — a UI atualiza incrementalmente.
-  usePricesRealtime(() => {
-    queryClient.invalidateQueries({ queryKey: ["home", "recent-products", 4] });
-    queryClient.invalidateQueries({ queryKey: ["home", "recent-products", 10] });
-    queryClient.invalidateQueries({ queryKey: ["home", "live-ticker-stats"] });
-  });
+  usePricesRealtime(
+    ({ batchCount, reason }) => {
+      // Em lotes muito grandes (importações em massa), o `refetchType: "active"`
+      // já garante que só a query montada revalida — evitando trabalho duplo.
+      queryClient.invalidateQueries({ queryKey: ["home", "recent-products", 4], refetchType: "active" });
+      queryClient.invalidateQueries({ queryKey: ["home", "recent-products", 10], refetchType: "active" });
+      // As estatísticas só precisam de refresh no fim do lote, não em cada evento.
+      if (reason !== "leading" || batchCount === 1) {
+        queryClient.invalidateQueries({ queryKey: ["home", "live-ticker-stats"], refetchType: "active" });
+      }
+    },
+    { debounceMs: 900, maxWaitMs: 4500 },
+  );
 
   const line = "var(--pc-home-onhero-border-soft)";
   const fg70 = "var(--pc-home-onhero-fg-70)";
@@ -276,7 +337,25 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
     return () => mq.removeEventListener("change", apply);
   }, []);
 
-  const items = ((full.data ?? first.data ?? []) as PriceItem[]).slice(0, maxRows);
+  // Ordenação automática: melhor economia primeiro (maior dropPct), depois
+  // menor preço absoluto para desempate. Itens sem histórico caem para o fim
+  // ordenados por recência do preço (para preservar a sensação de "ao vivo").
+  const raw = (full.data ?? first.data ?? []) as PriceItem[];
+  const items = useMemo(() => {
+    const withScore = raw.map((it) => ({
+      it,
+      drop: typeof it.dropPct === "number" && it.dropPct > 0 ? it.dropPct : 0,
+      priceRank: typeof it.price === "number" ? it.price : Number.POSITIVE_INFINITY,
+      when: it.when ? new Date(it.when).getTime() : 0,
+    }));
+    withScore.sort((a, b) => {
+      if (b.drop !== a.drop) return b.drop - a.drop; // maior queda primeiro
+      if (a.priceRank !== b.priceRank) return a.priceRank - b.priceRank; // menor preço
+      return b.when - a.when; // mais recente primeiro
+    });
+    return withScore.map((x) => x.it).slice(0, maxRows);
+  }, [raw, maxRows]);
+  const bestSlug = items[0]?.dropPct && items[0].dropPct > 0 ? items[0].slug : null;
   const pendingRows = items.length > 0 ? Math.max(0, 6 - items.length) : 6;
 
   // Detecção de mudanças: guardamos assinatura `slug|price` do último render
@@ -376,7 +455,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
           {padTop > 0 && <li aria-hidden style={{ height: padTop }} />}
           {rows.slice(start, end).map((row, i) =>
             row.kind === "item" ? (
-              <PriceRow key={row.item.slug} p={row.item} onNavigate={onNavigate} flash={isFlashing(row.item.slug)} />
+              <PriceRow key={row.item.slug} p={row.item} onNavigate={onNavigate} flash={isFlashing(row.item.slug)} best={row.item.slug === bestSlug} />
             ) : (
               <RowSkeleton key={`sk-${start + i}`} glass={glass} />
             ),
