@@ -290,19 +290,18 @@ export function AdminInsightsPanel() {
   return (
     <section aria-label="Indicadores comparativos" className="space-y-2">
       <div className="flex flex-wrap items-center gap-1.5 rounded-xl border border-border/70 bg-card/60 p-1.5">
-        <CalendarRange className="ml-1 h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+        <CalendarRange className="ml-1 h-3.5 w-3.5 shrink-0 text-[color:var(--pc-tone-catalog)]" />
         {PRESETS.map((p) => (
           <button
             key={p.days}
             type="button"
             onClick={() => applyPreset(p.days)}
             aria-pressed={activePreset === p.days}
+            data-tone="catalog"
+            data-active={activePreset === p.days ? "true" : "false"}
             className={cn(
               tc.control,
-              "h-7 rounded-full border px-2.5 transition-colors",
-              activePreset === p.days
-                ? "border-primary bg-primary text-primary-foreground"
-                : "border-border/70 bg-background text-muted-foreground hover:text-foreground",
+              "pc-chip-tone h-7 rounded-full border border-border/70 bg-background px-2.5 text-muted-foreground transition-colors",
             )}
           >
             {p.label}
@@ -330,14 +329,18 @@ export function AdminInsightsPanel() {
           <Button
             size="sm"
             variant="outline"
-            className={cn(tc.control, "h-7 rounded-full px-2.5")}
+            data-tone="overview"
+            data-active="false"
+            className={cn(tc.control, "pc-chip-tone h-7 rounded-full border border-border/70 bg-background px-2.5")}
             onClick={() => exportRowsToCSV(stampedFilename("relatorio-kpis-admin"), reportColumns, reportRows)}
           >
             <Download className="mr-1.5 h-3.5 w-3.5" /> CSV
           </Button>
           <Button
             size="sm"
-            className={cn(tc.control, "h-7 rounded-full px-2.5")}
+            data-tone="commerce"
+            data-active="true"
+            className={cn(tc.control, "pc-chip-tone h-7 rounded-full border px-2.5")}
             onClick={handlePDF}
             disabled={exporting}
           >
