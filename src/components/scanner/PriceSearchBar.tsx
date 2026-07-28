@@ -194,6 +194,35 @@ export function PriceSearchBar({
     { validate: (v): v is "product" | "market" | "matrix" => v === "product" || v === "market" || v === "matrix" },
   );
 
+  // Sincroniza props controladas (URL) com o estado interno. Quando o pai
+  // envia `sort`/`category`, tratamos como fonte de verdade e propagamos as
+  // mudanças do usuário via callbacks (URL → estado → URL, sem loops).
+  useEffect(() => {
+    if (sortProp && sortProp !== sortMode) setSortMode(sortProp);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sortProp]);
+  useEffect(() => {
+    if (categoryProp !== undefined && categoryProp !== categoryFilter) {
+      setCategoryFilter(categoryProp);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoryProp]);
+
+  const handleSortChange = useCallback(
+    (next: SortMode) => {
+      setSortMode(next);
+      onSortChange?.(next);
+    },
+    [setSortMode, onSortChange],
+  );
+  const handleCategoryChange = useCallback(
+    (next: string | null) => {
+      setCategoryFilter(next);
+      onCategoryChange?.(next);
+    },
+    [setCategoryFilter, onCategoryChange],
+  );
+
 
   // Seleção para comparar produtos (2 a 3). Guarda o nome do grupo — a
   // busca já garante nomes únicos por catálogo dentro dos resultados.
