@@ -114,6 +114,43 @@ export function AdminActionsAudit() {
     placeholderData: keepPreviousData,
   });
 
+  // Realtime: assina novos INSERTs em admin_audit_log e atualiza sob demanda.
+  // Quando o usuário está na página 1 sem busca livre, recarrega automaticamente
+  // e faz um "flash" sutil. Nas demais páginas, acumula um badge "N novos".
+  useEffect(() => {
+    const channel = supabase
+      .channel("admin-audit-log-live")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "admin_audit_log" },
+        () => {
+          const onFirstPageNoSearch = page === 1 && dQuery.trim() === "";
+          if (onFirstPageNoSearch) {
+            queryClient.invalidateQueries({ queryKey: ["admin", "audit-actions"] });
+            flashUntilRef.current = Date.now() + 1400;
+            setFlashing(true);
+            setTimeout(() => {
+              if (Date.now() >= flashUntilRef.current) setFlashing(false);
+            }, 1500);
+          } else {
+            setPendingNew((n) => n + 1);
+          }
+        },
+      )
+      .subscribe((status) => {
+        setLiveConnected(status === "SUBSCRIBED");
+      });
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [queryClient, page, dQuery]);
+
+  const loadPendingNew = () => {
+    setPendingNew(0);
+    setPage(1);
+    queryClient.invalidateQueries({ queryKey: ["admin", "audit-actions"] });
+  };
+
   const rows: AdminAuditRow[] = logQuery.data?.rows ?? [];
   const total = logQuery.data?.total ?? 0;
   const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
