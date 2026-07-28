@@ -54,7 +54,15 @@ export function tokenizeQuery(query: string): string[] {
   const n = normalize(query);
   if (!n) return [];
   const raw = n.split(/[^a-z0-9]+/).filter(Boolean);
-  return raw.filter((t) => t.length >= 2 && !STOPWORDS.has(t));
+  return raw.filter((t) => {
+    if (t.length < 2) return false;
+    if (STOPWORDS.has(t)) return false;
+    // Tokens puramente numéricos não representam nome de produto (ruído,
+    // códigos, preço). "1kg"/"500ml" continuam válidos porque a unidade
+    // colada preserva as letras.
+    if (/^\d+$/.test(t)) return false;
+    return true;
+  });
 }
 
 /**
