@@ -387,6 +387,7 @@ function PlansTab() {
 
   return (
     <div className="space-y-4">
+      <PlansHealthCard />
       <div className="flex items-center justify-between">
         <div>
           <h2 className="font-serif text-2xl">Planos de assinatura</h2>
@@ -396,6 +397,7 @@ function PlansTab() {
           <Button size="sm"><Plus className="mr-2 h-4 w-4" />Novo plano</Button>
         </PlanDialog>
       </div>
+
 
       {isLoading ? (
         <Card><CardContent className="pt-6 text-sm text-muted-foreground">Carregando planos…</CardContent></Card>
