@@ -91,6 +91,7 @@ import { Route as AdminContasRouteImport } from './routes/admin_.contas'
 import { Route as AdminConsistenciaRouteImport } from './routes/admin_.consistencia'
 import { Route as AdminCoberturaRouteImport } from './routes/admin_.cobertura'
 import { Route as AdminClientesRouteImport } from './routes/admin_.clientes'
+import { Route as AdminCestaAuditoriaRouteImport } from './routes/admin_.cesta-auditoria'
 import { Route as AdminCestaRouteImport } from './routes/admin_.cesta'
 import { Route as AdminCategorizacaoRouteImport } from './routes/admin_.categorizacao'
 import { Route as AdminCatalogoRouteImport } from './routes/admin_.catalogo'
@@ -521,6 +522,11 @@ const AdminClientesRoute = AdminClientesRouteImport.update({
   path: '/admin/clientes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminCestaAuditoriaRoute = AdminCestaAuditoriaRouteImport.update({
+  id: '/admin_/cesta-auditoria',
+  path: '/admin/cesta-auditoria',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminCestaRoute = AdminCestaRouteImport.update({
   id: '/admin_/cesta',
   path: '/admin/cesta',
@@ -675,6 +681,7 @@ export interface FileRoutesByFullPath {
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorizacao': typeof AdminCategorizacaoRoute
   '/admin/cesta': typeof AdminCestaRoute
+  '/admin/cesta-auditoria': typeof AdminCestaAuditoriaRoute
   '/admin/clientes': typeof AdminClientesRoute
   '/admin/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin/consistencia': typeof AdminConsistenciaRoute
@@ -778,6 +785,7 @@ export interface FileRoutesByTo {
   '/admin/catalogo': typeof AdminCatalogoRoute
   '/admin/categorizacao': typeof AdminCategorizacaoRoute
   '/admin/cesta': typeof AdminCestaRoute
+  '/admin/cesta-auditoria': typeof AdminCestaAuditoriaRoute
   '/admin/clientes': typeof AdminClientesRoute
   '/admin/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin/consistencia': typeof AdminConsistenciaRoute
@@ -882,6 +890,7 @@ export interface FileRoutesById {
   '/admin_/catalogo': typeof AdminCatalogoRoute
   '/admin_/categorizacao': typeof AdminCategorizacaoRoute
   '/admin_/cesta': typeof AdminCestaRoute
+  '/admin_/cesta-auditoria': typeof AdminCestaAuditoriaRoute
   '/admin_/clientes': typeof AdminClientesRoute
   '/admin_/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin_/consistencia': typeof AdminConsistenciaRoute
@@ -987,6 +996,7 @@ export interface FileRouteTypes {
     | '/admin/catalogo'
     | '/admin/categorizacao'
     | '/admin/cesta'
+    | '/admin/cesta-auditoria'
     | '/admin/clientes'
     | '/admin/cobertura'
     | '/admin/consistencia'
@@ -1090,6 +1100,7 @@ export interface FileRouteTypes {
     | '/admin/catalogo'
     | '/admin/categorizacao'
     | '/admin/cesta'
+    | '/admin/cesta-auditoria'
     | '/admin/clientes'
     | '/admin/cobertura'
     | '/admin/consistencia'
@@ -1193,6 +1204,7 @@ export interface FileRouteTypes {
     | '/admin_/catalogo'
     | '/admin_/categorizacao'
     | '/admin_/cesta'
+    | '/admin_/cesta-auditoria'
     | '/admin_/clientes'
     | '/admin_/cobertura'
     | '/admin_/consistencia'
@@ -1296,6 +1308,7 @@ export interface RootRouteChildren {
   AdminCatalogoRoute: typeof AdminCatalogoRoute
   AdminCategorizacaoRoute: typeof AdminCategorizacaoRoute
   AdminCestaRoute: typeof AdminCestaRoute
+  AdminCestaAuditoriaRoute: typeof AdminCestaAuditoriaRoute
   AdminClientesRoute: typeof AdminClientesRoute
   AdminCoberturaRoute: typeof AdminCoberturaRouteWithChildren
   AdminConsistenciaRoute: typeof AdminConsistenciaRoute
@@ -1918,6 +1931,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminClientesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin_/cesta-auditoria': {
+      id: '/admin_/cesta-auditoria'
+      path: '/admin/cesta-auditoria'
+      fullPath: '/admin/cesta-auditoria'
+      preLoaderRoute: typeof AdminCestaAuditoriaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin_/cesta': {
       id: '/admin_/cesta'
       path: '/admin/cesta'
@@ -2166,6 +2186,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminCatalogoRoute: AdminCatalogoRoute,
   AdminCategorizacaoRoute: AdminCategorizacaoRoute,
   AdminCestaRoute: AdminCestaRoute,
+  AdminCestaAuditoriaRoute: AdminCestaAuditoriaRoute,
   AdminClientesRoute: AdminClientesRoute,
   AdminCoberturaRoute: AdminCoberturaRouteWithChildren,
   AdminConsistenciaRoute: AdminConsistenciaRoute,
