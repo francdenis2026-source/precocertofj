@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, Navigate } from "@tanstack/react-router";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
@@ -39,7 +39,7 @@ export const Route = createFileRoute("/admin_/historico-precos")({
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  component: Gate,
+  component: () => <Navigate to="/admin/precos" search={{ tab: "historico" } as never} replace />,
 });
 
 const fmtBRL = (v: number | null | undefined) =>
@@ -79,10 +79,10 @@ function Gate() {
       </div>
     );
   }
-  return <Page />;
+  return <HistoricoPrecosPage />;
 }
 
-function Page() {
+export function HistoricoPrecosPage() {
   const listFn = useServerFn(listPriceHistory);
   const seriesFn = useServerFn(getProductHistory);
 

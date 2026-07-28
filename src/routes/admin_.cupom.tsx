@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, Navigate } from "@tanstack/react-router";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -66,14 +66,14 @@ export const Route = createFileRoute("/admin_/cupom")({
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  component: CupomPage,
+  component: () => <Navigate to="/admin/promocoes" search={{ tab: "cupons" } as never} replace />,
 });
 
 type ItemDraft = ExtractedItem & { selected: boolean };
 
 const digitsOnly = (s: string | null | undefined) => (s ?? "").replace(/\D/g, "");
 
-function CupomPage() {
+export function CupomPage() {
   const { user, loading, isAdmin } = useMyRoles();
   const navigate = useNavigate();
   const listEstab = useServerFn(listEstablishments);

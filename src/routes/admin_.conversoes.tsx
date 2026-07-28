@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
@@ -19,14 +19,14 @@ export const Route = createFileRoute("/admin_/conversoes")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: ConversoesPage,
+  component: () => <Navigate to="/admin/metricas" search={{ tab: "conversoes" } as never} replace />,
 });
 
 function centsToBRL(cents: number): string {
   return (Number(cents) / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 }
 
-function ConversoesPage() {
+export function ConversoesPage() {
   const fetchMetrics = useServerFn(getPlanConversionMetrics);
   const { data: metrics = [], isLoading } = useQuery({
     queryKey: ["plan-conversion-metrics"],

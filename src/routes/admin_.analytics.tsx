@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
@@ -25,11 +25,7 @@ export const Route = createFileRoute("/admin_/analytics")({
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  component: () => (
-    <AdminOnly>
-      <AnalyticsPage />
-    </AdminOnly>
-  ),
+  component: () => <Navigate to="/admin/metricas" search={{ tab: "analytics" } as never} replace />,
 });
 
 type DailyRow = {
@@ -46,7 +42,7 @@ type RouteRow = {
   conversions: number;
 };
 
-function AnalyticsPage() {
+export function AnalyticsPage() {
   const [days, setDays] = useState(14);
   const dailyFn = useServerFn(getVisitorDailyMetrics);
   const routeFn = useServerFn(getUnlockRateByRoute);

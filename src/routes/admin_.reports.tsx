@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, Navigate } from "@tanstack/react-router";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
@@ -34,14 +34,10 @@ export const Route = createFileRoute("/admin_/reports")({
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  component: () => (
-    <AppShell scope="admin">
-      <AdminReportsGate />
-    </AppShell>
-  ),
+  component: () => <Navigate to="/admin/metricas" search={{ tab: "relatorios" } as never} replace />,
 });
 
-function AdminReportsGate() {
+export function AdminReportsGate() {
   const { user, loading, isAdmin } = useMyRoles();
   const navigate = useNavigate();
 

@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
@@ -35,11 +35,7 @@ export const Route = createFileRoute("/admin_/preco-rapido")({
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  component: () => (
-    <AppShell scope="admin">
-      <QuickPricePage />
-    </AppShell>
-  ),
+  component: () => <Navigate to="/admin/precos" search={{ tab: "rapido" } as never} replace />,
 });
 
 const brl = (v: number) =>
@@ -47,7 +43,7 @@ const brl = (v: number) =>
 
 type Saved = { name: string; price: number; store: string; at: number };
 
-function QuickPricePage() {
+export function QuickPricePage() {
   const suggest = useServerFn(quickSuggestProducts);
   const register = useServerFn(quickRegisterPrice);
   const analyze = useServerFn(analyzeProductImage);

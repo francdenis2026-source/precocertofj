@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, Navigate } from "@tanstack/react-router";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/admin_/cupom-lote")({
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  component: CupomLotePage,
+  component: () => <Navigate to="/admin/promocoes" search={{ tab: "cupons-lote" } as never} replace />,
 });
 
 type Status = "pendente" | "extraindo" | "pronto" | "salvando" | "salvo" | "erro";
@@ -56,7 +56,7 @@ function findEstablishmentByCnpj(estabs: Establishment[], cnpj: string | null | 
   return estabs.find((e) => e.cnpj?.replace(/\D/g, "") === clean)?.id;
 }
 
-function CupomLotePage() {
+export function CupomLotePage() {
   const { user, loading, isAdmin } = useMyRoles();
   const navigate = useNavigate();
   const listEstab = useServerFn(listEstablishments);

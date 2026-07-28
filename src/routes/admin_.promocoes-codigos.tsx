@@ -4,7 +4,7 @@
  * Mostra os 20 códigos ativos, quantos foram resgatados, por quem, e
  * permite copiar a lista para divulgação.
  */
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Navigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -27,11 +27,7 @@ export const Route = createFileRoute("/admin_/promocoes-codigos")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: () => (
-    <AppShell scope="admin">
-      <PromoCodesPage />
-    </AppShell>
-  ),
+  component: () => <Navigate to="/admin/promocoes" search={{ tab: "codigos" } as never} replace />,
 });
 
 function fmt(v: string | null | undefined) {
@@ -39,7 +35,7 @@ function fmt(v: string | null | undefined) {
   try { return new Date(v).toLocaleString("pt-BR"); } catch { return v; }
 }
 
-function PromoCodesPage() {
+export function PromoCodesPage() {
   const list = useServerFn(adminListPromoCodes);
   const q = useQuery({
     queryKey: ["admin", "promo-codes"],

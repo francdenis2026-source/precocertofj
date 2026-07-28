@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Navigate } from "@tanstack/react-router";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
@@ -23,11 +23,7 @@ export const Route = createFileRoute("/admin_/auditoria-numeros")({
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  component: () => (
-    <AdminOnly>
-      <NumberAuditPage />
-    </AdminOnly>
-  ),
+  component: () => <Navigate to="/admin/auditoria" search={{ tab: "numeros" } as never} replace />,
 });
 
 const statusTone: Record<AuditMetric["status"], string> = {
@@ -74,7 +70,7 @@ function SourceBlock({
   );
 }
 
-function NumberAuditPage() {
+export function NumberAuditPage() {
   const fetchAudit = useServerFn(getNumberAudit);
   const q = useQuery({
     queryKey: ["admin", "number-audit"],
