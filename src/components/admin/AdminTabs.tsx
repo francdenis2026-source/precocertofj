@@ -29,9 +29,10 @@ type Props = {
  * - Expõe botão "Copiar link" que copia a URL atual (com o `?tab=` selecionado).
  * - Usa <Link> com search={{ tab }} para preservar histórico do navegador.
  */
-export function AdminTabs({ to, title, items, active, className }: Props) {
+export function AdminTabs({ to, title, items, active, className, tone }: Props) {
   const activeLabel = tabLabel(items, active);
   const [copied, setCopied] = useState(false);
+
 
   const handleCopy = useCallback(async () => {
     try {
