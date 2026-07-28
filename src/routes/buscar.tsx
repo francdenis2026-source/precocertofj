@@ -113,12 +113,46 @@ function SearchPage() {
   const brandFilter = (search.brand ?? "").slice(0, 40);
   const priceMin = search.min ? Number(search.min) : NaN;
   const priceMax = search.max ? Number(search.max) : NaN;
+  const sortValue: UrlSort = SORT_VALUES.has(search.sort ?? "")
+    ? (search.sort as UrlSort)
+    : "cheapest";
+  const categoryValue = (search.categoria ?? "").trim() || null;
   const activeFilterCount =
     (mode === "loose" ? 1 : 0) +
     (pureOnly ? 0 : 1) +
     (brandFilter.trim() ? 1 : 0) +
     (Number.isFinite(priceMin) ? 1 : 0) +
-    (Number.isFinite(priceMax) ? 1 : 0);
+    (Number.isFinite(priceMax) ? 1 : 0) +
+    (sortValue !== "cheapest" ? 1 : 0) +
+    (categoryValue ? 1 : 0);
+
+  const setSortUrl = useCallback(
+    (next: UrlSort) => {
+      navigate({
+        search: (prev: Record<string, unknown>) => {
+          const s: Record<string, unknown> = { ...prev, sort: next };
+          if (next === "cheapest") delete s.sort;
+          return s;
+        },
+        replace: true,
+      });
+    },
+    [navigate],
+  );
+  const setCategoryUrl = useCallback(
+    (next: string | null) => {
+      navigate({
+        search: (prev: Record<string, unknown>) => {
+          const s: Record<string, unknown> = { ...prev, categoria: next ?? "" };
+          if (!next) delete s.categoria;
+          return s;
+        },
+        replace: true,
+      });
+    },
+    [navigate],
+  );
+
 
   const setMinPrice = (next: string) =>
     navigate({
