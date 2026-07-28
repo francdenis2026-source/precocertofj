@@ -301,23 +301,23 @@ function StatCell({
   hint: string;
 }) {
   return (
-    <div className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] items-center gap-x-2 gap-y-0 rounded-xl border border-border/70 bg-background px-2.5 py-2 sm:block">
-      <span
-        aria-hidden
-        className="grid h-7 w-7 place-items-center rounded-lg bg-brand-gold/15 text-brand-gold-soft dark:text-brand-gold sm:h-6 sm:w-6"
-      >
-        {icon}
-      </span>
-      <div className="min-w-0 sm:mt-1.5">
-        <div className="text-[11px] font-semibold uppercase leading-tight tracking-[0.12em] text-muted-foreground">
+    <div className="min-w-0 rounded-lg border border-border/70 bg-background px-2 py-1.5">
+      <div className="flex items-center gap-1.5">
+        <span
+          aria-hidden
+          className="grid h-5 w-5 shrink-0 place-items-center rounded-md bg-brand-gold/15 text-brand-gold-soft dark:text-brand-gold"
+        >
+          {icon}
+        </span>
+        <div className="truncate text-[10px] font-semibold uppercase leading-tight tracking-[0.1em] text-muted-foreground">
           {label}
         </div>
-        <div className="mt-0.5 truncate font-serif text-[17px] font-semibold tabular-nums leading-none tracking-tight text-foreground">
-          {value}
-        </div>
-        <div className="mt-0.5 text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
-          {hint}
-        </div>
+      </div>
+      <div className="mt-1 truncate font-serif text-[15px] font-semibold tabular-nums leading-none tracking-tight text-foreground">
+        {value}
+      </div>
+      <div className="mt-0.5 truncate text-[10px] font-medium uppercase tracking-[0.1em] text-muted-foreground">
+        {hint}
       </div>
     </div>
   );
