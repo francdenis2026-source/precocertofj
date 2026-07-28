@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useRef, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
   Loader2,
@@ -13,6 +13,11 @@ import {
   Filter,
   Eye,
   Minus,
+  Star,
+  Download,
+  FileText,
+  FileSpreadsheet,
+  Link2,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import {
@@ -24,6 +29,18 @@ import {
   type EssentialCategory,
   type EssentialKey,
 } from "@/lib/basket.functions";
+import { getBasketSparklines } from "@/lib/basket-sparklines.functions";
+import {
+  listFavoriteEstablishments,
+  toggleFavoriteEstablishment,
+} from "@/lib/favorite-establishments.functions";
+import {
+  exportRankingCsv,
+  exportRankingPdf,
+  exportStoreDetailsCsv,
+  exportStoreDetailsPdf,
+  type RankingExportRow,
+} from "@/lib/basket-export";
 import { brl } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
@@ -36,15 +53,29 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { Sparkline } from "@/components/basket/Sparkline";
 
 type CategoryFilter = "all" | EssentialCategory;
+
+export type LiveBasketFilters = {
+  category: CategoryFilter;
+  city: string; // "all" or city name
+  neighborhood: string; // "all" or neighborhood name
+};
 
 const CATEGORY_TABS: { key: CategoryFilter; label: string }[] = [
   { key: "all", label: "Cesta completa" },
@@ -55,7 +86,6 @@ const CATEGORY_TABS: { key: CategoryFilter; label: string }[] = [
   { key: "limpeza", label: CATEGORY_LABELS.limpeza },
 ];
 
-/** Map key → category derivado da fonte única (basket.functions ESSENTIALS). */
 const KEY_CATEGORY: Record<EssentialKey, EssentialCategory> = Object.fromEntries(
   ESSENTIALS.map((e) => [e.key, e.category]),
 ) as Record<EssentialKey, EssentialCategory>;
@@ -104,23 +134,47 @@ export function LiveBasketRanking({
   title = "Cesta básica ao vivo",
   description = "Atualização em tempo real conforme novos preços chegam.",
   compact = false,
+  value,
+  onChange,
 }: {
   title?: string;
   description?: string;
   compact?: boolean;
+  value?: LiveBasketFilters;
+  onChange?: (next: LiveBasketFilters) => void;
 }) {
   const qc = useQueryClient();
   const fetchComparison = useServerFn(getBasketComparison);
+  const fetchSparklines = useServerFn(getBasketSparklines);
+  const listFavs = useServerFn(listFavoriteEstablishments);
+  const toggleFav = useServerFn(toggleFavoriteEstablishment);
+
   const [pulse, setPulse] = useState(false);
-  const [category, setCategory] = useState<CategoryFilter>("all");
-  const [city, setCity] = useState<string>("all");
-  const [neighborhood, setNeighborhood] = useState<string>("all");
+
+  // ---- Filtros controlados/uncontrolled ----
+  const isControlled = !!value && !!onChange;
+  const [localFilters, setLocalFilters] = useState<LiveBasketFilters>({
+    category: "all",
+    city: "all",
+    neighborhood: "all",
+  });
+  const filters = isControlled ? value! : localFilters;
+  const setFilters = useCallback(
+    (updater: (prev: LiveBasketFilters) => LiveBasketFilters) => {
+      if (isControlled) onChange!(updater(value!));
+      else setLocalFilters(updater);
+    },
+    [isControlled, onChange, value],
+  );
+  const { category, city, neighborhood } = filters;
+
   const [detailStoreId, setDetailStoreId] = useState<string | null>(null);
 
   // Snapshot dos últimos preços por (estabelecimento, item) para calcular delta.
   const prevPricesRef = useRef<Map<string, number>>(new Map());
   const [deltas, setDeltas] = useState<Map<string, number>>(new Map());
 
+  // ---- Comparação principal ----
   const query = useQuery<BasketComparisonResult>({
     queryKey: ["basket-comparison", "live", city],
     queryFn: () => fetchComparison({ data: { city: city === "all" ? null : city } }),
@@ -128,7 +182,42 @@ export function LiveBasketRanking({
     refetchOnWindowFocus: true,
   });
 
-  // Realtime: invalida quando `scans` recebe INSERT/UPDATE
+  // ---- Favoritos ----
+  const favoritesQuery = useQuery<string[]>({
+    queryKey: ["favorite-establishments"],
+    queryFn: () => listFavs(),
+    staleTime: 60_000,
+    retry: false,
+  });
+  const favoritesSet = useMemo(
+    () => new Set<string>(favoritesQuery.data ?? []),
+    [favoritesQuery.data],
+  );
+  const canFavorite = favoritesQuery.isSuccess || favoritesQuery.isLoading;
+
+  const favMutation = useMutation({
+    mutationFn: (establishmentId: string) => toggleFav({ data: { establishmentId } }),
+    onMutate: async (establishmentId: string) => {
+      await qc.cancelQueries({ queryKey: ["favorite-establishments"] });
+      const prev = qc.getQueryData<string[]>(["favorite-establishments"]) ?? [];
+      const next = prev.includes(establishmentId)
+        ? prev.filter((id) => id !== establishmentId)
+        : [...prev, establishmentId];
+      qc.setQueryData(["favorite-establishments"], next);
+      return { prev };
+    },
+    onError: (_e, _id, ctx) => {
+      if (ctx?.prev) qc.setQueryData(["favorite-establishments"], ctx.prev);
+      toast.error("Não foi possível atualizar os favoritos.");
+    },
+    onSuccess: (res) => {
+      toast.success(
+        res.isFavorite ? "Estabelecimento favoritado." : "Removido dos favoritos.",
+      );
+    },
+  });
+
+  // ---- Realtime ----
   useEffect(() => {
     const channel = supabase
       .channel("scans-basket-live")
@@ -138,6 +227,7 @@ export function LiveBasketRanking({
         () => {
           setPulse(true);
           qc.invalidateQueries({ queryKey: ["basket-comparison", "live"] });
+          qc.invalidateQueries({ queryKey: ["basket-sparklines"] });
           window.setTimeout(() => setPulse(false), 1500);
         },
       )
@@ -147,7 +237,7 @@ export function LiveBasketRanking({
     };
   }, [qc]);
 
-  // Após cada fetch, calcula variação item a item comparando com o snapshot anterior.
+  // ---- Deltas ----
   useEffect(() => {
     if (!query.data) return;
     const nextMap = new Map<string, number>();
@@ -163,7 +253,6 @@ export function LiveBasketRanking({
         }
       }
     }
-    // Só atualiza deltas se houver algo (evita re-render inútil)
     if (nextDeltas.size > 0 || deltas.size > 0) setDeltas(nextDeltas);
     prevPricesRef.current = nextMap;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -171,7 +260,6 @@ export function LiveBasketRanking({
 
   const data = query.data;
 
-  // Cidades e bairros derivados do resultado atual.
   const cities = useMemo(() => {
     const set = new Set<string>();
     for (const s of data?.stores ?? []) if (s.city) set.add(s.city);
@@ -185,7 +273,7 @@ export function LiveBasketRanking({
     return Array.from(set).sort((a, b) => a.localeCompare(b, "pt-BR"));
   }, [data, city]);
 
-  // Ranking com filtros aplicados + escopo por categoria.
+  // ---- Ranking ----
   const ranked = useMemo<ScopedStore[]>(() => {
     if (!data) return [];
     const filtered = data.stores.filter((s) => {
@@ -193,14 +281,12 @@ export function LiveBasketRanking({
       return true;
     });
     const scoped = filtered.map((s) => scopeStore(s, category));
-    // Ordena: primeiro por cobertura no escopo, depois por menor total.
     scoped.sort((a, b) => {
       const covA = a.scopedTotalItems > 0 ? a.scopedFound / a.scopedTotalItems : 0;
       const covB = b.scopedTotalItems > 0 ? b.scopedFound / b.scopedTotalItems : 0;
       if (covB !== covA) return covB - covA;
       return a.scopedTotal - b.scopedTotal;
     });
-    // Remove estabelecimentos sem nenhum item na categoria escolhida.
     return scoped.filter((s) => s.scopedFound > 0 || category === "all");
   }, [data, category, neighborhood]);
 
@@ -208,11 +294,89 @@ export function LiveBasketRanking({
   const scopeLabel =
     category === "all" ? "cesta completa" : CATEGORY_LABELS[category].toLowerCase();
 
+  // Favoritos mais baratos por categoria (com base no ranked filtrado por região atual).
+  const favoritesByCategory = useMemo(() => {
+    if (favoritesSet.size === 0 || !data) return [];
+    const regionStores = data.stores.filter(
+      (s) => neighborhood === "all" || s.neighborhood === neighborhood,
+    );
+    const favStores = regionStores.filter((s) => favoritesSet.has(s.establishmentId));
+    if (favStores.length === 0) return [];
+    return (Object.keys(CATEGORY_LABELS) as EssentialCategory[])
+      .map((cat) => {
+        const scoped = favStores
+          .map((s) => scopeStore(s, cat))
+          .filter((s) => s.scopedFound > 0)
+          .sort((a, b) => a.scopedTotal - b.scopedTotal);
+        return scoped[0] ? { category: cat, store: scoped[0] } : null;
+      })
+      .filter((x): x is { category: EssentialCategory; store: ScopedStore } => x != null);
+  }, [favoritesSet, data, neighborhood]);
+
+  // ---- Sparklines (últimos 7 dias) ----
+  const storeIds = useMemo(() => ranked.slice(0, 10).map((s) => s.establishmentId), [ranked]);
+  const sparklineQuery = useQuery<Record<string, Array<{ t: string; p: number }>>>({
+    queryKey: ["basket-sparklines", storeIds],
+    queryFn: () => fetchSparklines({ data: { storeIds } }),
+    enabled: storeIds.length > 0,
+    staleTime: 60_000,
+    retry: false,
+  });
+  const sparklines = sparklineQuery.data ?? {};
+
   const detailStore = useMemo(() => {
     if (!detailStoreId) return null;
     return ranked.find((s) => s.establishmentId === detailStoreId) ?? null;
   }, [detailStoreId, ranked]);
 
+  // ---- Export helpers ----
+  const exportMeta = () => ({
+    categoryLabel: CATEGORY_TABS.find((t) => t.key === category)?.label ?? "Cesta completa",
+    cityLabel: city === "all" ? "Todas" : city,
+    neighborhoodLabel: neighborhood === "all" ? "Todos" : neighborhood,
+    generatedAt: new Date(),
+  });
+
+  const buildRows = (): RankingExportRow[] => {
+    const first = ranked[0];
+    return ranked.map((s, idx) => ({
+      position: idx + 1,
+      store: s,
+      diffToLeader: first ? Number((s.scopedTotal - first.scopedTotal).toFixed(2)) : 0,
+      isFavorite: favoritesSet.has(s.establishmentId),
+    }));
+  };
+
+  const handleExport = (format: "csv" | "pdf") => {
+    if (ranked.length === 0) {
+      toast.info("Nada para exportar ainda.");
+      return;
+    }
+    const rows = buildRows();
+    const meta = exportMeta();
+    if (format === "csv") exportRankingCsv(rows, meta);
+    else exportRankingPdf(rows, meta);
+    toast.success(`Ranking exportado em ${format.toUpperCase()}.`);
+  };
+
+  const handleExportDetails = (format: "csv" | "pdf") => {
+    if (!detailStore) return;
+    const meta = exportMeta();
+    if (format === "csv") exportStoreDetailsCsv(detailStore, deltas, meta);
+    else exportStoreDetailsPdf(detailStore, deltas, meta);
+    toast.success(`Detalhes exportados em ${format.toUpperCase()}.`);
+  };
+
+  const handleCopyLink = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      toast.success("Link copiado para a área de transferência.");
+    } catch {
+      toast.error("Não foi possível copiar o link.");
+    }
+  };
+
+  // ---- Render ----
   return (
     <>
       <Card className="pc-elite-frame overflow-hidden">
@@ -223,28 +387,54 @@ export function LiveBasketRanking({
             </CardTitle>
             <CardDescription className="text-xs sm:text-sm">{description}</CardDescription>
           </div>
-          <span
-            className={cn(
-              "inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide transition-colors",
-              pulse
-                ? "border-brand-gold bg-brand-gold/15 text-brand-navy"
-                : "border-border bg-background/60 text-muted-foreground",
+          <div className="flex items-center gap-2">
+            <span
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide transition-colors",
+                pulse
+                  ? "border-brand-gold bg-brand-gold/15 text-brand-navy"
+                  : "border-border bg-background/60 text-muted-foreground",
+              )}
+              aria-live="polite"
+            >
+              <Radio className={cn("h-3 w-3", pulse && "animate-pulse text-brand-gold")} aria-hidden />
+              {query.isFetching ? "Atualizando…" : "Ao vivo"}
+            </span>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline" size="sm" className="h-7 gap-1 px-2 text-xs">
+                  <Download className="h-3.5 w-3.5" aria-hidden />
+                  <span className="hidden sm:inline">Exportar</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onSelect={() => handleExport("csv")} className="gap-2 text-xs">
+                  <FileSpreadsheet className="h-3.5 w-3.5" aria-hidden /> Ranking em CSV
+                </DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => handleExport("pdf")} className="gap-2 text-xs">
+                  <FileText className="h-3.5 w-3.5" aria-hidden /> Ranking em PDF
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            {isControlled && (
+              <Button
+                variant="outline"
+                size="sm"
+                className="h-7 gap-1 px-2 text-xs"
+                onClick={handleCopyLink}
+                aria-label="Copiar link do ranking atual"
+              >
+                <Link2 className="h-3.5 w-3.5" aria-hidden />
+                <span className="hidden sm:inline">Copiar link</span>
+              </Button>
             )}
-            aria-live="polite"
-          >
-            <Radio className={cn("h-3 w-3", pulse && "animate-pulse text-brand-gold")} aria-hidden />
-            {query.isFetching ? "Atualizando…" : "Ao vivo"}
-          </span>
+          </div>
         </CardHeader>
 
         <CardContent className="space-y-4">
-          {/* Filtros: categoria + cidade + bairro */}
+          {/* Filtros */}
           <div className="space-y-3">
-            <div
-              className="flex flex-wrap gap-1.5"
-              role="tablist"
-              aria-label="Filtrar por categoria"
-            >
+            <div className="flex flex-wrap gap-1.5" role="tablist" aria-label="Filtrar por categoria">
               {CATEGORY_TABS.map((t) => {
                 const active = category === t.key;
                 return (
@@ -253,7 +443,7 @@ export function LiveBasketRanking({
                     type="button"
                     role="tab"
                     aria-selected={active}
-                    onClick={() => setCategory(t.key)}
+                    onClick={() => setFilters((prev) => ({ ...prev, category: t.key }))}
                     className={cn(
                       "rounded-full border px-3 py-1 text-[11.5px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
                       active
@@ -273,10 +463,9 @@ export function LiveBasketRanking({
                 <span className="sr-only">Cidade</span>
                 <Select
                   value={city}
-                  onValueChange={(v) => {
-                    setCity(v);
-                    setNeighborhood("all");
-                  }}
+                  onValueChange={(v) =>
+                    setFilters((prev) => ({ ...prev, city: v, neighborhood: "all" }))
+                  }
                 >
                   <SelectTrigger className="h-8 text-xs">
                     <SelectValue placeholder="Cidade" />
@@ -296,13 +485,11 @@ export function LiveBasketRanking({
                 <span className="sr-only">Bairro</span>
                 <Select
                   value={neighborhood}
-                  onValueChange={setNeighborhood}
+                  onValueChange={(v) => setFilters((prev) => ({ ...prev, neighborhood: v }))}
                   disabled={neighborhoods.length === 0}
                 >
                   <SelectTrigger className="h-8 text-xs">
-                    <SelectValue
-                      placeholder={neighborhoods.length ? "Bairro" : "Sem bairros"}
-                    />
+                    <SelectValue placeholder={neighborhoods.length ? "Bairro" : "Sem bairros"} />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">Todos os bairros</SelectItem>
@@ -316,6 +503,41 @@ export function LiveBasketRanking({
               </label>
             </div>
           </div>
+
+          {/* Barra de favoritos */}
+          {canFavorite && favoritesByCategory.length > 0 && (
+            <div className="rounded-lg border border-brand-gold/40 bg-brand-gold/5 p-3">
+              <p className="mb-2 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide text-brand-navy">
+                <Star className="h-3 w-3 fill-brand-gold text-brand-gold" aria-hidden />
+                Seus favoritos mais baratos por categoria
+              </p>
+              <div className="flex flex-wrap gap-1.5">
+                {favoritesByCategory.map(({ category: cat, store: s }) => {
+                  const active = category === cat;
+                  return (
+                    <button
+                      key={cat}
+                      type="button"
+                      onClick={() => setFilters((prev) => ({ ...prev, category: cat }))}
+                      className={cn(
+                        "group flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+                        active
+                          ? "border-brand-gold bg-brand-gold text-brand-navy"
+                          : "border-border bg-background text-foreground hover:border-brand-gold/60",
+                      )}
+                      aria-pressed={active}
+                    >
+                      <span className="text-muted-foreground group-aria-pressed:text-brand-navy/70">
+                        {CATEGORY_LABELS[cat]}:
+                      </span>
+                      <span className="max-w-[10rem] truncate">{s.establishmentName}</span>
+                      <span className="tabular-nums">{brl(s.scopedTotal)}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           {query.isLoading ? (
             <div className="flex items-center gap-2 py-6 text-sm text-muted-foreground">
@@ -371,20 +593,50 @@ export function LiveBasketRanking({
                 {ranked.slice(0, compact ? 5 : 10).map((s, idx) => {
                   const isWinner = idx === 0;
                   const diff = winner && !isWinner ? s.scopedTotal - winner.scopedTotal : 0;
-                  // Existe alguma variação para esta loja?
+                  const isFav = favoritesSet.has(s.establishmentId);
                   const hasDelta = s.items.some(
                     (it) => it && deltas.has(`${s.establishmentId}::${it.key}`),
                   );
+                  // Pega o item mais barato do escopo para exibir sparkline mini
+                  const cheapestScoped = s.scopedItems
+                    .filter((x): x is NonNullable<typeof x> => x != null)
+                    .sort((a, b) => a.price - b.price)[0];
+                  const sparkPts = cheapestScoped
+                    ? sparklines[`${s.establishmentId}::${cheapestScoped.key}`] ?? []
+                    : [];
+
                   return (
                     <li
                       key={s.establishmentId}
                       className={cn(
                         "flex items-center gap-3 rounded-lg border p-3 transition-colors",
-                        isWinner
-                          ? "border-brand-gold/60 bg-brand-gold/5"
-                          : "border-border bg-background hover:border-brand-gold/40",
+                        isFav
+                          ? "border-brand-gold/70 bg-brand-gold/10"
+                          : isWinner
+                            ? "border-brand-gold/60 bg-brand-gold/5"
+                            : "border-border bg-background hover:border-brand-gold/40",
                       )}
                     >
+                      {canFavorite && (
+                        <button
+                          type="button"
+                          aria-pressed={isFav}
+                          aria-label={isFav ? "Remover dos favoritos" : "Marcar como favorito"}
+                          onClick={() => favMutation.mutate(s.establishmentId)}
+                          disabled={favMutation.isPending}
+                          className={cn(
+                            "grid h-8 w-8 shrink-0 place-items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+                            isFav
+                              ? "bg-brand-gold/20 text-brand-gold"
+                              : "text-muted-foreground hover:bg-muted",
+                          )}
+                        >
+                          <Star
+                            className={cn("h-4 w-4", isFav && "fill-brand-gold")}
+                            aria-hidden
+                          />
+                        </button>
+                      )}
                       <span
                         className={cn(
                           "grid h-8 w-8 shrink-0 place-items-center rounded-full text-sm font-bold tabular-nums",
@@ -411,6 +663,14 @@ export function LiveBasketRanking({
                           {s.city ? ` · ${s.city}` : ""}
                         </p>
                       </div>
+                      {cheapestScoped && (
+                        <div
+                          className="hidden text-muted-foreground sm:block"
+                          title={`Tendência 7 dias — ${cheapestScoped.label}`}
+                        >
+                          <Sparkline points={sparkPts} width={44} height={14} />
+                        </div>
+                      )}
                       <div className="text-right">
                         <p className="text-sm font-semibold tabular-nums text-foreground">
                           {brl(s.scopedTotal)}
@@ -468,7 +728,7 @@ export function LiveBasketRanking({
         </CardContent>
       </Card>
 
-      {/* Modal de detalhes por estabelecimento */}
+      {/* Modal de detalhes */}
       <Dialog
         open={!!detailStore}
         onOpenChange={(o) => {
@@ -490,80 +750,110 @@ export function LiveBasketRanking({
                 </DialogDescription>
               </DialogHeader>
 
-              <div className="mt-2 rounded-lg border border-brand-gold/40 bg-brand-gold/5 p-3">
-                <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
-                  Total {category === "all" ? "da cesta" : `em ${scopeLabel}`}
-                </p>
-                <p className="text-xl font-bold tabular-nums text-brand-navy">
-                  {brl(detailStore.scopedTotal)}
-                </p>
+              <div className="mt-2 flex items-center justify-between gap-3 rounded-lg border border-brand-gold/40 bg-brand-gold/5 p-3">
+                <div>
+                  <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
+                    Total {category === "all" ? "da cesta" : `em ${scopeLabel}`}
+                  </p>
+                  <p className="text-xl font-bold tabular-nums text-brand-navy">
+                    {brl(detailStore.scopedTotal)}
+                  </p>
+                </div>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline" size="sm" className="h-7 gap-1 px-2 text-xs">
+                      <Download className="h-3.5 w-3.5" aria-hidden /> Exportar
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end">
+                    <DropdownMenuItem
+                      onSelect={() => handleExportDetails("csv")}
+                      className="gap-2 text-xs"
+                    >
+                      <FileSpreadsheet className="h-3.5 w-3.5" aria-hidden /> Detalhes em CSV
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      onSelect={() => handleExportDetails("pdf")}
+                      className="gap-2 text-xs"
+                    >
+                      <FileText className="h-3.5 w-3.5" aria-hidden /> Detalhes em PDF
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
 
               <ul className="mt-3 divide-y divide-border">
-                {ESSENTIALS.filter(
-                  (e) => category === "all" || e.category === category,
-                ).map((ess) => {
-                  const it = detailStore.items.find((x) => x?.key === ess.key) ?? null;
-                  const dKey = `${detailStore.establishmentId}::${ess.key}`;
-                  const delta = deltas.get(dKey) ?? 0;
-                  return (
-                    <li key={ess.key} className="flex items-start gap-3 py-2.5">
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm font-medium text-foreground">{ess.label}</p>
-                        {it ? (
-                          <p className="truncate text-[11px] text-muted-foreground">
-                            {it.productName}
-                            {it.when && (
-                              <>
-                                {" · "}
-                                <time dateTime={it.when}>
-                                  {new Date(it.when).toLocaleDateString("pt-BR", {
-                                    day: "2-digit",
-                                    month: "short",
-                                  })}
-                                </time>
-                              </>
-                            )}
-                          </p>
-                        ) : (
-                          <p className="text-[11px] italic text-muted-foreground">
-                            sem registro recente
-                          </p>
-                        )}
-                      </div>
-                      <div className="text-right">
-                        {it ? (
-                          <>
-                            <p className="text-sm font-semibold tabular-nums text-foreground">
-                              {brl(it.price)}
+                {ESSENTIALS.filter((e) => category === "all" || e.category === category).map(
+                  (ess) => {
+                    const it = detailStore.items.find((x) => x?.key === ess.key) ?? null;
+                    const dKey = `${detailStore.establishmentId}::${ess.key}`;
+                    const delta = deltas.get(dKey) ?? 0;
+                    const pts = sparklines[dKey] ?? [];
+                    return (
+                      <li key={ess.key} className="flex items-start gap-3 py-2.5">
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium text-foreground">{ess.label}</p>
+                          {it ? (
+                            <p className="truncate text-[11px] text-muted-foreground">
+                              {it.productName}
+                              {it.when && (
+                                <>
+                                  {" · "}
+                                  <time dateTime={it.when}>
+                                    {new Date(it.when).toLocaleDateString("pt-BR", {
+                                      day: "2-digit",
+                                      month: "short",
+                                    })}
+                                  </time>
+                                </>
+                              )}
                             </p>
-                            {delta !== 0 && (
-                              <p
-                                className={cn(
-                                  "inline-flex items-center gap-0.5 text-[11px] font-medium",
-                                  delta > 0 ? "text-destructive" : "text-emerald-600",
-                                )}
-                              >
-                                {delta > 0 ? (
-                                  <TrendingUp className="h-3 w-3" aria-hidden />
-                                ) : (
-                                  <TrendingDown className="h-3 w-3" aria-hidden />
-                                )}
-                                {delta > 0 ? "+" : ""}
-                                {brl(delta)}
+                          ) : (
+                            <p className="text-[11px] italic text-muted-foreground">
+                              sem registro recente
+                            </p>
+                          )}
+                        </div>
+                        <Sparkline
+                          points={pts}
+                          width={60}
+                          height={18}
+                          className="mt-0.5 hidden sm:inline-block"
+                        />
+                        <div className="text-right">
+                          {it ? (
+                            <>
+                              <p className="text-sm font-semibold tabular-nums text-foreground">
+                                {brl(it.price)}
                               </p>
-                            )}
-                          </>
-                        ) : (
-                          <Minus
-                            className="ml-auto h-4 w-4 text-muted-foreground/50"
-                            aria-hidden
-                          />
-                        )}
-                      </div>
-                    </li>
-                  );
-                })}
+                              {delta !== 0 && (
+                                <p
+                                  className={cn(
+                                    "inline-flex items-center gap-0.5 text-[11px] font-medium",
+                                    delta > 0 ? "text-destructive" : "text-emerald-600",
+                                  )}
+                                >
+                                  {delta > 0 ? (
+                                    <TrendingUp className="h-3 w-3" aria-hidden />
+                                  ) : (
+                                    <TrendingDown className="h-3 w-3" aria-hidden />
+                                  )}
+                                  {delta > 0 ? "+" : ""}
+                                  {brl(delta)}
+                                </p>
+                              )}
+                            </>
+                          ) : (
+                            <Minus
+                              className="ml-auto h-4 w-4 text-muted-foreground/50"
+                              aria-hidden
+                            />
+                          )}
+                        </div>
+                      </li>
+                    );
+                  },
+                )}
               </ul>
             </>
           )}
