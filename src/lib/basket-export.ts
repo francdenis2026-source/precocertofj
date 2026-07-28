@@ -9,6 +9,7 @@ export type RankingExportRow = {
     scopedTotal: number;
     scopedFound: number;
     scopedTotalItems: number;
+    scopedItems: BasketStore["items"];
   };
   diffToLeader: number;
   isFavorite: boolean;
