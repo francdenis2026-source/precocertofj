@@ -93,18 +93,17 @@ export const getBasketAdminOverview = createServerFn({ method: "GET" })
     let missingImpact = { storesAffected: 0, totalDelta: 0 };
 
     try {
-      const comparison = await getBasketComparison({
-        data: { limit: 20, missingPenalty: "average" },
-      });
+      const comparison = await getBasketComparison({ data: {} });
 
       if (comparison.stores.length > 0) {
         const top = comparison.stores[0];
         leader = {
           storeId: top.establishmentId,
           storeName: top.establishmentName,
-          total: top.scopedTotal,
-          coverage: { found: top.scopedFound, total: top.scopedItems },
+          total: top.total,
+          coverage: { found: top.itemsFound, total: top.totalItems },
         };
+
 
         const projections = projectVerdictWithSubstitutions(comparison);
         const top3 = new Set(
