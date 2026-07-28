@@ -61,9 +61,10 @@ const QUOTES = [
 const HEAD = "flex items-baseline justify-between gap-3 border-b pb-1.5";
 const HEAD_LEFT = "flex min-w-0 items-baseline gap-2.5";
 const BODY_GAP = "mt-2";
-/** Altura fixa por linha de preço — base da virtualização (evita reflow). */
-const ROW_PX = 50;
-const ROW_H = "h-[50px]";
+/** Altura fixa por linha de preço — base da virtualização (evita reflow).
+    56px acomoda título + meta + o riscado do preço anterior (mini-diff). */
+const ROW_PX = 56;
+const ROW_H = "h-[56px]";
 
 function Kicker({ children }: { children: React.ReactNode }) {
   return (
