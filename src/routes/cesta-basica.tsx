@@ -719,7 +719,12 @@ function CompareMode({
 
   return (
     <div className="space-y-4">
+      <BasketVerdictHero data={data} />
+      {expandedStore ? (
+        <BasketSubstitutionPanel data={data} storeId={expandedStore} />
+      ) : null}
       <section className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+
         <SummaryCard
           label="Cesta com o menor custo"
           value={fmt(best.total)}
