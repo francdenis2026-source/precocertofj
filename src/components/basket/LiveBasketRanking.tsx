@@ -704,7 +704,10 @@ export function LiveBasketRanking({
                           )}
                         </p>
                         <p className="text-[11px] text-muted-foreground">
-                          {s.scopedFound}/{s.scopedTotalItems} itens
+                          <span data-testid="row-coverage">{s.scopedFound}/{s.scopedTotalItems} itens</span>
+                          {s.scopedFound > 0 && (
+                            <> · <span title="Custo médio por item disponível">{brl(s.scopedTotal / s.scopedFound)}/item</span></>
+                          )}
                           {s.neighborhood ? ` · ${s.neighborhood}` : ""}
                           {s.city ? ` · ${s.city}` : ""}
                         </p>
