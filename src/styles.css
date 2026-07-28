@@ -258,6 +258,17 @@
   --pc-eyebrow-on-navy: #f2d689;   /* eyebrow gold sobre navy sólido → 9.4:1 */
   --pc-live:            #047857;   /* indicador ao-vivo sobre card claro → 5.8:1 */
 
+  /* ----- Tokens tipográficos para preços (typeclear) ----- */
+  --pc-price-fg:         var(--pc-price);              /* base — segue tema */
+  --pc-price-fg-onhero:  var(--pc-home-onhero-fg);     /* sobre overlay do hero */
+  --pc-price-hover:      color-mix(in oklab, var(--pc-price-fg) 92%, var(--pc-gold-ink) 8%);
+  --pc-price-loading:    color-mix(in oklab, var(--pc-price-fg) 45%, transparent);
+  --pc-price-disabled:   color-mix(in oklab, var(--pc-price-fg) 55%, transparent);
+  --pc-price-font:       'Work Sans', ui-sans-serif, system-ui, sans-serif;
+  --pc-price-tracking:   -0.008em;
+  --pc-price-feature-settings: "tnum" 1, "lnum" 1, "cv11" 1, "ss01" 1;
+
+
 
   color-scheme: light;
 
