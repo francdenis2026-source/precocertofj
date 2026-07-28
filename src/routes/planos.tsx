@@ -411,7 +411,7 @@ function PlansPage() {
                 Comparar <span className="italic text-[var(--pc-gold-ink)]">recursos</span>
               </DialogTitle>
               <DialogDescription className={tc.meta}>
-                Diferenças reais entre a degustação, os planos pagos e o plano vitalício.
+                Diferenças reais entre a degustação e os planos pagos.
               </DialogDescription>
             </DialogHeader>
             <div className="max-h-[70svh] overflow-y-auto px-5 py-3">
@@ -421,8 +421,8 @@ function PlansPage() {
                     <th className={cn(tc.tableHead, "py-2 text-left")}>Recurso</th>
                     <th className={cn(tc.tableHead, "py-2 text-center")}>Degustação</th>
                     <th className={cn(tc.tableHead, "py-2 text-center")}>Mensal</th>
+                    <th className={cn(tc.tableHead, "py-2 text-center")}>Trimestral</th>
                     <th className={cn(tc.tableHead, "py-2 text-center text-[var(--pc-gold-ink)]")}>Anual</th>
-                    <th className={cn(tc.tableHead, "py-2 text-center")}>Fundador</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border/60">
@@ -430,11 +430,10 @@ function PlansPage() {
                     ["Busca de preços", true, true, true, true],
                     ["Comparador entre mercados", true, true, true, true],
                     ["Alertas de preço", false, true, true, true],
-                    ["Análises de IA / mês", "1", "30", "150", "600"],
+                    ["Análises de IA / mês", "1", "30", "150", "150"],
                     ["Ranking de bairros", true, true, true, true],
                     ["Exportar CSV/PDF", false, true, true, true],
                     ["Prioridade de suporte", false, false, true, true],
-                    ["Acesso vitalício", false, false, false, true],
                   ].map(([label, ...cols], i) => (
                     <tr key={i}>
                       <th className={cn(tc.cell, "py-2 text-left font-medium text-foreground")}>
