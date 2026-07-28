@@ -307,107 +307,114 @@ function RedeemPage() {
                 : "idle";
 
   return (
-    <div className="relative flex h-[100svh] w-full flex-col overflow-hidden bg-background text-foreground">
-      {/* Aura de fundo sutil */}
+    <div
+      className="relative flex min-h-svh w-full items-center justify-center overflow-hidden px-4 py-4 sm:px-6 sm:py-6"
+      style={{ background: "var(--background)", fontFamily: PC_BODY }}
+    >
+      {/* Ambient brand glow — paridade com login/cadastro */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(60% 45% at 20% 15%, color-mix(in oklab, var(--pc-navy) 10%, transparent), transparent 70%)," +
-            "radial-gradient(50% 40% at 85% 90%, color-mix(in oklab, var(--pc-home-gold) 8%, transparent), transparent 70%)",
-        }}
-      />
+        className="pointer-events-none absolute inset-0 hidden overflow-hidden md:block"
+      >
+        <div
+          className="absolute -left-40 -top-40 h-[520px] w-[520px] rounded-full opacity-25 blur-3xl dark:opacity-20"
+          style={{ background: "radial-gradient(closest-side, color-mix(in oklab, var(--pc-navy) 35%, transparent), transparent)" }}
+        />
+        <div
+          className="absolute -bottom-40 -right-40 h-[520px] w-[520px] rounded-full opacity-25 blur-3xl dark:opacity-20"
+          style={{ background: "radial-gradient(closest-side, color-mix(in oklab, var(--pc-home-gold) 35%, transparent), transparent)" }}
+        />
+      </div>
 
-      {/* Header minimal */}
-      <header className="relative z-20 flex h-14 shrink-0 items-center justify-between border-b border-border/50 bg-background/80 px-4 backdrop-blur-md md:px-6">
-        <Link to="/" className="flex items-center gap-2" aria-label="PreçoCerto — home">
-          <Logo variant="default" className="h-7 w-auto" />
-        </Link>
-        <div className="flex items-center gap-2">
-          <Link
-            to="/planos"
-            className="hidden rounded-full border border-border px-3 py-1.5 text-[11px] font-semibold text-foreground/80 transition hover:bg-muted sm:inline-flex"
-          >
-            Comprar plano
-          </Link>
-          <Link
-            to="/"
-            className="inline-flex items-center gap-1 rounded-full border border-border px-3 py-1.5 text-[11px] font-semibold text-foreground/80 transition hover:bg-muted"
-          >
-            ← Início
-          </Link>
+      {/* Top-right link — mesma pílula das outras auth screens */}
+      <Link
+        to="/"
+        className="absolute right-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-full border border-border bg-card/80 px-2.5 py-1 text-[11px] font-semibold text-foreground backdrop-blur transition hover:bg-card sm:right-5 sm:top-5 sm:px-3 sm:py-1.5"
+      >
+        ← Voltar ao site
+      </Link>
+
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
+        className="relative z-10 grid w-full max-w-[880px] overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:h-[560px] md:grid-cols-[minmax(0,4fr)_minmax(0,6fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
+      >
+        {/* LEFT — Hero unificado (mesma arte de login/cadastro) */}
+        <div className="hidden md:block">
+          <AuthHero variant="redeem" />
         </div>
-      </header>
 
-      {/* Corpo — card único centrado */}
-      <main className="relative z-10 flex min-h-0 flex-1 items-center justify-center px-4 py-4 sm:py-6">
-        <div className="flex w-full max-w-[560px] flex-col">
-          {/* Chip categoria + título compacto */}
-          <div className="mb-3 flex items-center justify-between">
-            <div className="inline-flex items-center gap-1.5 rounded-full border border-[color:var(--pc-home-gold)]/45 bg-[color:var(--pc-home-gold)]/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-[0.22em] text-[color:var(--pc-home-gold)]">
-              <Ticket className="h-3 w-3" aria-hidden />
-              Ativação de licença
-            </div>
-            <span className="hidden items-center gap-1 text-[10.5px] font-semibold uppercase tracking-[0.18em] text-muted-foreground sm:inline-flex">
-              <ShieldCheck className="h-3 w-3" aria-hidden />
-              Seguro
+        {/* RIGHT — Form/estado */}
+        <section className="relative flex flex-col overflow-y-auto p-4 sm:p-5 md:p-6">
+          {/* Mobile-only compact brand row */}
+          <div className="mb-3 flex items-center gap-2 md:hidden">
+            <img
+              src="/logo-mark.png?v=5"
+              alt="PreçoCerto"
+              width={32}
+              height={32}
+              className="h-8 w-8 shrink-0 object-contain"
+            />
+            <span
+              className="text-[15px] font-bold tracking-tight text-foreground"
+              style={{ fontFamily: PC_DISPLAY }}
+            >
+              PreçoCerto
             </span>
           </div>
 
-          {/* Card principal */}
-          <div className="relative overflow-hidden rounded-2xl border border-border bg-card shadow-[0_20px_60px_-30px_color-mix(in_oklab,var(--pc-navy)_55%,transparent)]">
-            {/* Faixa dourada superior */}
-            <div
-              aria-hidden
-              className="h-[3px] w-full"
-              style={{
-                background:
-                  "linear-gradient(90deg, transparent, color-mix(in oklab, var(--pc-home-gold) 85%, transparent), transparent)",
-              }}
-            />
-            <div className="p-5 sm:p-6">
-              {authLoading ? (
-                <div className="flex min-h-[320px] items-center justify-center" aria-live="polite">
-                  <div className="flex flex-col items-center gap-2 text-muted-foreground">
-                    <Loader2 className="h-6 w-6 animate-spin text-primary" aria-label="Carregando sessão" />
-                    <span className="text-[11px] font-semibold uppercase tracking-[0.2em]">
-                      Carregando sessão…
-                    </span>
-                  </div>
-                </div>
-              ) : result?.ok ? (
-                <SuccessBody
-                  code={result.code ?? clean}
-                  addedDays={result.addedDays}
-                  newPaidUntil={result.newPaidUntil ?? accountQuery.data?.paidUntil ?? null}
-                  onGoApp={() => navigate({ to: "/app" })}
-                  onAnother={() => {
-                    setResult(null);
-                    setRaw("");
-                    setTouched(false);
-                    setTimeout(() => inputRef.current?.focus(), 30);
-                  }}
-                />
-              ) : (
-                <form onSubmit={handleSubmit} noValidate className="flex flex-col">
-                  <h1 className="text-[clamp(22px,2.6vw,28px)] font-extrabold leading-[1.1] tracking-tight text-foreground">
-                    Ativar meu{" "}
-                    <span className="text-[color:var(--pc-home-gold)]">código</span>
-                  </h1>
-                  <p className="mt-1.5 text-[12.5px] leading-snug text-muted-foreground">
-                    Cole o código do e-mail — formato{" "}
-                    <span className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[11px] font-semibold text-foreground" style={{ fontFamily: MONO }}>
-                      PC-XXXX-XXXX-XXXX
-                    </span>
-                    .
-                  </p>
+          <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[color:var(--pc-home-navy)] dark:text-[color:var(--pc-home-gold)]">
+            Ativação de licença
+          </p>
 
+          {authLoading ? (
+            <div className="mt-6 flex min-h-[320px] items-center justify-center" aria-live="polite">
+              <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                <Loader2 className="h-6 w-6 animate-spin text-primary" aria-label="Carregando sessão" />
+                <span className="text-[11px] font-semibold uppercase tracking-[0.2em]">
+                  Carregando sessão…
+                </span>
+              </div>
+            </div>
+          ) : result?.ok ? (
+            <div className="mt-3">
+              <SuccessBody
+                code={result.code ?? clean}
+                addedDays={result.addedDays}
+                newPaidUntil={result.newPaidUntil ?? accountQuery.data?.paidUntil ?? null}
+                onGoApp={() => navigate({ to: "/app" })}
+                onAnother={() => {
+                  setResult(null);
+                  setRaw("");
+                  setTouched(false);
+                  setTimeout(() => inputRef.current?.focus(), 30);
+                }}
+              />
+            </div>
+          ) : (
+            <>
+              <h1
+                className="mt-1 text-[22px] leading-[1.15] font-bold tracking-tight text-foreground"
+                style={{ fontFamily: PC_DISPLAY }}
+              >
+                Ativar meu <span className="text-[color:var(--pc-home-gold)]">código</span>
+              </h1>
+              <p className="mt-1.5 text-[12.5px] leading-snug text-muted-foreground">
+                Cole o código do e-mail — formato{" "}
+                <span className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[11px] font-semibold text-foreground">
+                  PC-XXXX-XXXX-XXXX
+                </span>
+                .
+              </p>
+
+              <form onSubmit={handleSubmit} noValidate className="mt-3 flex flex-col">
                   <label
                     htmlFor="license-code"
-                    className="mt-4 block text-[10.5px] font-bold uppercase tracking-[0.22em] text-foreground/80"
+                    className="block text-[10.5px] font-bold uppercase tracking-[0.22em] text-foreground/80"
                   >
                     Código de licença
+
                   </label>
                   <div className="mt-1.5 flex items-stretch gap-2">
                     <div className="relative flex-1">
