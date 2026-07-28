@@ -28,6 +28,7 @@ import { useAdminEntitiesRealtime, describeRealtimeChange } from "@/hooks/useAdm
 import { usePlansRealtime } from "@/hooks/usePlansRealtime";
 import { EstablishmentDeleteDialog } from "@/components/admin/EstablishmentDeleteDialog";
 import { BasketOverviewCard } from "@/components/admin/BasketOverviewCard";
+import { AdminChip } from "@/components/admin/AdminChip";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
 
