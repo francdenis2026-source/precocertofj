@@ -310,7 +310,7 @@ function CollaboratorWorkspace() {
                 <Receipt className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
                 Meus envios
                 {subs.length > 0 && (
-                  <span className="rounded-full bg-brand-gold/15 px-1.5 text-[10.5px] font-bold text-brand-gold">
+                  <span className="rounded-full bg-brand-gold/15 px-1.5 text-[10.5px] font-bold text-[var(--pc-gold-ink)]">
                     {subs.length}
                   </span>
                 )}
