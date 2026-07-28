@@ -2269,12 +2269,11 @@ function toForm(e: Establishment): EstablishmentForm {
 
 function EstablishmentsTab() {
   const qc = useQueryClient();
-  const { confirm } = useConfirm();
+  const { confirm: _confirm } = useConfirm(); void _confirm;
   const list = useServerFn(listEstablishments);
   const save = useServerFn(saveEstablishment);
   const remove = useServerFn(deleteEstablishment);
   const toggle = useServerFn(toggleEstablishmentActive);
-
 
   const [items, setItems] = useState<Establishment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -2282,6 +2281,7 @@ function EstablishmentsTab() {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<EstablishmentForm>(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -2296,7 +2296,19 @@ function EstablishmentsTab() {
   }, [list]);
 
   useEffect(() => { void load(); }, [load]);
-  useAdminEntitiesRealtime(() => { void load(); }, { tables: ["establishments"] });
+  useAdminEntitiesRealtime(
+    () => { void load(); },
+    {
+      tables: ["establishments"],
+      channelKey: "admin-tab-establishments",
+      onEvent: (payload) => {
+        const info = describeRealtimeChange(payload);
+        toast.info(info.title, { description: info.description });
+      },
+    },
+  );
+
+
 
 
   const filtered = useMemo(() => {
