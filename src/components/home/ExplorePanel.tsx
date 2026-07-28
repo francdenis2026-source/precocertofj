@@ -161,11 +161,12 @@ const PriceRow = memo(function PriceRow({
           </p>
         </div>
         <span
-          className={`${tc.num} shrink-0 font-semibold tabular-nums transition-transform duration-200 group-hover:-translate-x-0.5`}
-          style={{ color: "var(--pc-home-onhero-gold)" }}
+          className={`${tc.num} shrink-0 font-semibold tabular-nums tracking-tight transition-transform duration-200 group-hover:-translate-x-0.5`}
+          style={{ color: "var(--pc-home-onhero-fg)", fontFeatureSettings: '"tnum" 1, "lnum" 1' }}
         >
           {brl(p.price)}
         </span>
+
       </Link>
     </li>
   );
