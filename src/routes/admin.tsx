@@ -204,6 +204,8 @@ const cycleLabel: Record<BillingCycle, string> = {
 };
 
 function AdminPage() {
+  const [showAdvancedKpis, setShowAdvancedKpis] = useState(false);
+
   // Registra o acesso ao console na auditoria (uma vez por sessão de página).
   const logAccess = useServerFn(logAdminAccess);
   useEffect(() => {
@@ -271,9 +273,24 @@ function AdminPage() {
           <Suspense fallback={<SectionSkeleton rows={3} chart label="Carregando indicadores" />}>
             <AdminInsightsPanel />
           </Suspense>
-          <Suspense fallback={<SectionSkeleton rows={3} chart label="Carregando KPIs de preços" />}>
-            <AdminKpiBoard />
-          </Suspense>
+          <div className="flex items-center justify-between gap-2 rounded-xl border border-border/70 bg-card/70 px-2.5 py-1.5">
+            <p className={cn(tc.meta, "truncate")}>KPIs avançados ficam recolhidos para manter o painel principal legível.</p>
+            <Button
+              type="button"
+              size="sm"
+              variant={showAdvancedKpis ? "default" : "outline"}
+              className={cn(tc.control, "h-7 shrink-0 rounded-full px-2.5")}
+              onClick={() => setShowAdvancedKpis((v) => !v)}
+              aria-expanded={showAdvancedKpis}
+            >
+              {showAdvancedKpis ? "Ocultar KPIs" : "Ver KPIs"}
+            </Button>
+          </div>
+          {showAdvancedKpis && (
+            <Suspense fallback={<SectionSkeleton rows={3} chart label="Carregando KPIs de preços" />}>
+              <AdminKpiBoard />
+            </Suspense>
+          )}
         </div>
 
         {/* ---------- Abas de gestão detalhada ---------- */}
