@@ -440,12 +440,9 @@ function AdminManagementTabs() {
             </TabsContent>
           </div>
         </Tabs>
-
-      </section>
-
-    </AppShell>
   );
 }
+
 
 
 
