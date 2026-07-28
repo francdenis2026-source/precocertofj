@@ -155,7 +155,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
       {/* ============ POPULARES — tinta ÂMBAR (calor/tendência) ============ */}
       <section
         aria-label="Buscas populares"
-        className="relative rounded-xl border border-amber-500/25 bg-amber-500/[0.06] p-2 dark:border-amber-400/25 dark:bg-amber-400/[0.06]"
+        className="relative min-h-0 overflow-hidden rounded-xl border border-amber-500/25 bg-amber-500/[0.06] p-2 dark:border-amber-400/25 dark:bg-amber-400/[0.06]"
       >
         <SectionHeader
           icon={<Flame className="h-3 w-3" strokeWidth={2.75} />}
