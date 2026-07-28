@@ -47,20 +47,21 @@ export const createSubscriptionCheckout = createServerFn({ method: "POST" })
 
     if (data.planId) {
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-      const { data: plan, error: pErr } = await supabaseAdmin
-        .from("plans")
-        .select("id, name, description, price, days, cycle, active")
+      const { data: plan, error: pErr } = await (supabaseAdmin as any)
+        .from("license_plans")
+        .select("id, name, description, price_cents, days, cycle, active")
         .eq("id", data.planId)
         .eq("active", true)
         .maybeSingle();
       if (pErr) throw new Error(pErr.message);
       if (!plan) throw new Error("Plano indisponível");
-      if (plan.cycle === "trial" || Number(plan.price) <= 0) {
+      const planPrice = Number(plan.price_cents ?? 0) / 100;
+      if (plan.cycle === "trial" || planPrice <= 0) {
         throw new Error("Este plano não requer pagamento");
       }
-      planId = plan.id;
+      planId = plan.id as string;
       planDays = Math.max(1, Number(plan.days) || 30);
-      unitPrice = Number(plan.price);
+      unitPrice = planPrice;
       title = `PreçoCerto — ${plan.name}`;
       description =
         (plan.description as string | null) ??

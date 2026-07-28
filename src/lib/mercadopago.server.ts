@@ -302,8 +302,8 @@ export async function processMercadoPagoPayment(paymentId: string): Promise<{
       const planIdMeta = (meta["plan_id"] as string | undefined) ?? null;
       let planName: string | null = null;
       if (planIdMeta) {
-        const { data: plan } = await supabaseAdmin
-          .from("plans")
+        const { data: plan } = await (supabaseAdmin as any)
+          .from("license_plans")
           .select("name")
           .eq("id", planIdMeta)
           .maybeSingle();
@@ -402,8 +402,8 @@ export async function processMercadoPagoPayment(paymentId: string): Promise<{
     return { status: "failed", reason: "email/plan_id ausentes no pagamento" };
   }
 
-  const { data: plan } = await supabaseAdmin
-    .from("plans")
+  const { data: plan } = await (supabaseAdmin as any)
+    .from("license_plans")
     .select("id,name,days")
     .eq("id", planId)
     .maybeSingle();
