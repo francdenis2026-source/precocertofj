@@ -27,11 +27,7 @@ export const Route = createFileRoute("/admin_/promocoes-codigos")({
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: () => (
-    <AppShell scope="admin">
-      <PromoCodesPage />
-    </AppShell>
-  ),
+  component: () => <Navigate to="/admin/promocoes" search={{ tab: "codigos" } as never} replace />,
 });
 
 function fmt(v: string | null | undefined) {
