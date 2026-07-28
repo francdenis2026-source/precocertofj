@@ -266,112 +266,86 @@ function CollaboratorWorkspace() {
         </div>
       )}
 
-      {/* Ferramentas */}
-      <Tabs value={tab} onValueChange={setTab} className="w-full">
-        <TabsList className="h-9 w-full justify-start gap-1 overflow-x-auto">
-          <TabsTrigger value="enviar" className="h-7 gap-1.5 text-[12.5px]">
-            <Upload className="h-3.5 w-3.5" aria-hidden />
-            Enviar nota
-          </TabsTrigger>
-          <TabsTrigger value="envios" className="h-7 gap-1.5 text-[12.5px]">
-            <Receipt className="h-3.5 w-3.5" aria-hidden />
-            Meus envios
-            {subs.length > 0 && (
-              <span className="rounded-full bg-brand-gold/15 px-1.5 text-[11px] font-bold text-brand-gold">
-                {subs.length}
-              </span>
-            )}
-          </TabsTrigger>
-          <TabsTrigger value="regras" className="h-7 gap-1.5 text-[12.5px]">
-            <ShieldCheck className="h-3.5 w-3.5" aria-hidden />
-            Como funciona
-          </TabsTrigger>
-        </TabsList>
-
-        {/* Enviar */}
-        <TabsContent value="enviar" className="mt-3">
-          {capReached ? (
-            <div className="rounded-xl border border-border bg-card p-5 text-center shadow-elev-1">
-              <p className="text-[13px] text-muted-foreground">
-                Envios pausados até o próximo mês: o teto de {cap} dias já foi
-                creditado nesta conta.
+      {/* Layout em 2 colunas: envio à esquerda, histórico + regras à direita */}
+      <section className="grid gap-3 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
+        {/* Coluna 1 — Enviar nota */}
+        <div className="rounded-xl border border-border bg-card p-4 shadow-elev-1">
+          <div className="mb-2.5 flex flex-wrap items-start justify-between gap-2">
+            <div className="min-w-0">
+              <h2 className="text-[14.5px] font-semibold tracking-tight text-foreground">
+                <Upload className="mr-1 inline h-3.5 w-3.5 text-brand-gold" aria-hidden />
+                Enviar nota
+              </h2>
+              <p className="mt-0.5 text-[11.5px] leading-snug text-muted-foreground">
+                Anexe as fotos — a validação é feita pela equipe e o crédito entra automaticamente.
               </p>
             </div>
+            <a
+              href={token ? collabMailtoHref(token) : undefined}
+              aria-disabled={!token}
+              className={
+                "inline-flex h-8 items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 text-[11.5px] font-semibold text-foreground transition hover:border-brand-gold hover:text-brand-gold " +
+                (!token ? "pointer-events-none opacity-50" : "")
+              }
+            >
+              <Send className="h-3.5 w-3.5" aria-hidden />
+              E-mail
+            </a>
+          </div>
+          {capReached ? (
+            <p className="rounded-lg border border-dashed border-border bg-background/60 p-3 text-center text-[12.5px] text-muted-foreground">
+              Envios pausados até o próximo mês: o teto de {cap} dias já foi creditado.
+            </p>
           ) : (
-            <div className="rounded-xl border border-border bg-card p-4 shadow-elev-1 md:p-5">
-              <div className="mb-3 flex flex-wrap items-start justify-between gap-2">
-                <div className="min-w-0">
-                  <h2 className="text-[15px] font-semibold tracking-tight text-foreground">
-                    Enviar nota pelo app
-                  </h2>
-                  <p className="mt-0.5 text-[12px] leading-snug text-muted-foreground">
-                    Anexe as fotos da nota — a validação é feita pela equipe e o
-                    crédito entra automaticamente.
-                  </p>
-                </div>
-                <a
-                  href={token ? collabMailtoHref(token) : undefined}
-                  aria-disabled={!token}
-                  className={
-                    "inline-flex h-9 items-center gap-1.5 rounded-lg border border-border bg-card px-3 text-[12px] font-semibold text-foreground transition hover:border-brand-gold hover:text-brand-gold " +
-                    (!token ? "pointer-events-none opacity-50" : "")
-                  }
-                >
-                  <Send className="h-3.5 w-3.5" aria-hidden />
-                  Preferir e-mail
-                </a>
-              </div>
-              <CollaboratorUploadForm embedded />
-            </div>
+            <CollaboratorUploadForm embedded />
           )}
-        </TabsContent>
+        </div>
 
-        {/* Histórico */}
-        <TabsContent value="envios" className="mt-3">
-          <div className="rounded-xl border border-border bg-card p-4 shadow-elev-1 md:p-5">
+        {/* Coluna 2 — Envios + regras */}
+        <div className="space-y-3">
+          {/* Envios recentes */}
+          <div className="rounded-xl border border-border bg-card p-4 shadow-elev-1">
+            <div className="mb-2 flex items-center justify-between">
+              <h2 className="inline-flex items-center gap-1.5 text-[14.5px] font-semibold tracking-tight text-foreground">
+                <Receipt className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+                Meus envios
+                {subs.length > 0 && (
+                  <span className="rounded-full bg-brand-gold/15 px-1.5 text-[10.5px] font-bold text-brand-gold">
+                    {subs.length}
+                  </span>
+                )}
+              </h2>
+            </div>
             {subsQ.isLoading ? (
-              <div role="status" aria-busy="true" className="space-y-2">
+              <div role="status" aria-busy="true" className="space-y-1.5">
                 {[0, 1, 2].map((i) => (
-                  <div key={i} className="h-12 animate-pulse rounded-lg bg-muted" />
+                  <div key={i} className="h-10 animate-pulse rounded-lg bg-muted" />
                 ))}
-                <span className="sr-only">Carregando seus envios…</span>
               </div>
             ) : subsQ.isError ? (
-              <p role="alert" className="text-[12.5px] text-destructive">
-                Não foi possível carregar seus envios. Recarregue a página.
+              <p role="alert" className="text-[12px] text-destructive">
+                Não foi possível carregar. Recarregue a página.
               </p>
             ) : subs.length === 0 ? (
-              <div className="py-6 text-center">
-                <Receipt
-                  className="mx-auto h-5 w-5 text-muted-foreground"
-                  aria-hidden
-                />
-                <p className="mt-2 text-[12.5px] text-muted-foreground">
-                  Nenhum envio ainda. Comece na aba{" "}
-                  <button
-                    type="button"
-                    onClick={() => setTab("enviar")}
-                    className="font-semibold text-brand-gold underline"
-                  >
-                    Enviar nota
-                  </button>
-                  .
-                </p>
-              </div>
+              <p className="py-4 text-center text-[12px] text-muted-foreground">
+                Nenhum envio ainda. Comece pelo formulário ao lado.
+              </p>
             ) : (
-              <ul className="divide-y divide-border" aria-live="polite">
-                {subs.map((s) => (
+              <ul
+                className="max-h-[220px] divide-y divide-border overflow-y-auto pr-1"
+                aria-live="polite"
+              >
+                {subs.slice(0, 8).map((s) => (
                   <li
                     key={s.id}
-                    className="flex items-center justify-between gap-3 py-2.5 first:pt-0 last:pb-0"
+                    className="flex items-center justify-between gap-2 py-1.5 first:pt-0"
                   >
                     <div className="min-w-0">
-                      <p className="truncate text-[13px] font-medium text-foreground">
+                      <p className="truncate text-[12.5px] font-medium text-foreground">
                         {s.market_name ?? "Envio"}
                       </p>
-                      <p className="mt-0.5 text-[11.5px] text-muted-foreground">
-                        {formatDate(s.created_at)} · {s.city ?? "—"} ·{" "}
-                        {s.receipts_count} nota(s)
+                      <p className="mt-0.5 truncate text-[11px] text-muted-foreground">
+                        {formatDate(s.created_at)} · {s.receipts_count} nota(s)
                         {s.rejection_reason ? ` · ${s.rejection_reason}` : ""}
                       </p>
                     </div>
@@ -381,55 +355,33 @@ function CollaboratorWorkspace() {
               </ul>
             )}
           </div>
-        </TabsContent>
 
-        {/* Regras */}
-        <TabsContent value="regras" className="mt-3">
-          <div className="grid gap-3 md:grid-cols-2">
-            <div className="rounded-xl border border-border bg-card p-4 shadow-elev-1">
-              <h2 className="text-[11px] font-bold uppercase tracking-[0.16em] text-brand-gold">
-                Em 3 passos
-              </h2>
-              <ol className="mt-2.5 space-y-2.5">
-                <Step
-                  n={1}
-                  Icon={Camera}
-                  title="Fotografe a nota"
-                  text="Frente completa, mercado e preços legíveis."
-                />
-                <Step
-                  n={2}
-                  Icon={Upload}
-                  title="Envie pelo app"
-                  text="Ou por e-mail, mantendo seu token no assunto."
-                />
-                <Step
-                  n={3}
-                  Icon={Gift}
-                  title="Receba 7 dias"
-                  text="Crédito automático após a validação."
-                />
-              </ol>
-            </div>
-            <div className="rounded-xl border border-border bg-card p-4 shadow-elev-1">
-              <h2 className="text-[11px] font-bold uppercase tracking-[0.16em] text-brand-gold">
-                Regras
-              </h2>
-              <ul className="mt-2.5 space-y-1.5">
-                <Rule text="7 dias grátis por nota aprovada · teto de 30 dias/mês." />
-                <Rule text="Nota de mercado, farmácia ou distribuidora, com data visível." />
-                <Rule text="Compra feita nos últimos 60 dias." />
-                <Rule text="Ao menos 5 itens com preço claro por unidade ou kg/L." />
-                <Rule warn text="Notas ilegíveis, duplicadas ou adulteradas são rejeitadas." />
-              </ul>
-              <p className="mt-3 flex items-center gap-1.5 text-[11.5px] text-muted-foreground">
-                <Mail className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
-                Dúvidas? <Link to="/fale-conosco" className="underline">Fale conosco</Link>
-              </p>
-            </div>
+          {/* Regras compactas */}
+          <div className="rounded-xl border border-border bg-card p-4 shadow-elev-1">
+            <h2 className="inline-flex items-center gap-1.5 text-[14.5px] font-semibold tracking-tight text-foreground">
+              <ShieldCheck className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+              Como funciona
+            </h2>
+            <ol className="mt-2 grid grid-cols-3 gap-2">
+              <Step n={1} Icon={Camera} title="Fotografe" text="Nota legível." />
+              <Step n={2} Icon={Upload} title="Envie" text="App ou e-mail." />
+              <Step n={3} Icon={Gift} title="Receba" text="+7 dias grátis." />
+            </ol>
+            <ul className="mt-2.5 space-y-1">
+              <Rule text="7 dias por nota · teto 30 dias/mês." />
+              <Rule text="Compra dos últimos 60 dias, mín. 5 itens." />
+              <Rule warn text="Notas ilegíveis ou duplicadas são rejeitadas." />
+            </ul>
+            <p className="mt-2 flex items-center gap-1.5 text-[11px] text-muted-foreground">
+              <Mail className="h-3 w-3 text-brand-gold" aria-hidden />
+              Dúvidas?{" "}
+              <Link to="/fale-conosco" className="underline">
+                Fale conosco
+              </Link>
+            </p>
           </div>
-        </TabsContent>
-      </Tabs>
+        </div>
+      </section>
     </div>
   );
 }
