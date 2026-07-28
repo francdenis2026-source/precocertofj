@@ -336,8 +336,8 @@ function CadastroPage() {
             </p>
           </section>
         </motion.div>
-      </main>
     </div>
+
   );
 }
 
