@@ -10,13 +10,13 @@ import { supabase } from "@/integrations/supabase/client";
 export function usePlansRealtime(opts?: { enabled?: boolean; throttleMs?: number; queryClient?: QueryClient }) {
   const enabled = opts?.enabled ?? true;
   const throttleMs = opts?.throttleMs ?? 500;
-  // Fall back to context only when no explicit client is provided.
-  // This lets callers use the hook OUTSIDE a QueryClientProvider by
-  // passing the client directly (e.g. from route context during SSR).
-  const ctxQc = opts?.queryClient ? null : useQueryClient();
-  const qc = opts?.queryClient ?? (ctxQc as QueryClient);
+  // Always call the hook (rules of hooks); prefer explicit client when passed,
+  // so this can be used outside of a QueryClientProvider (e.g. during SSR at root).
+  const ctxQc = useQueryClient({ context: undefined } as never);
+  const qc = opts?.queryClient ?? ctxQc;
   const qcRef = useRef(qc);
   qcRef.current = qc;
+
 
 
   useEffect(() => {
