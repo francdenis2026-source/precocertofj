@@ -4560,3 +4560,107 @@ html.dark .pc-row-interactive:hover .pc-store-name {
 @media (prefers-reduced-motion: reduce) {
   .pc-elite-frame { transition: none; }
 }
+
+/* ============= ADMIN — Color coding per area =============
+   Semantic tones per admin group/hub. Keeps visual hierarchy consistent
+   between sidebar groups and hub tabs. Contrast preserved in dark mode. */
+:root {
+  /* Visão geral → azul institucional (primary) */
+  --pc-tone-overview:        #2563eb;
+  --pc-tone-overview-soft:   color-mix(in oklab, #2563eb 14%, transparent);
+  --pc-tone-overview-ink:    #1d4ed8;
+  /* Catálogo → esmeralda (dados/produtos) */
+  --pc-tone-catalog:         #059669;
+  --pc-tone-catalog-soft:    color-mix(in oklab, #059669 14%, transparent);
+  --pc-tone-catalog-ink:     #047857;
+  /* Comercial → dourado (dinheiro/vendas) */
+  --pc-tone-commerce:        #b58a3c;
+  --pc-tone-commerce-soft:   color-mix(in oklab, #b58a3c 16%, transparent);
+  --pc-tone-commerce-ink:    #6b4a12;
+  /* Clientes → violeta (pessoas) */
+  --pc-tone-people:          #7c3aed;
+  --pc-tone-people-soft:     color-mix(in oklab, #7c3aed 14%, transparent);
+  --pc-tone-people-ink:      #6d28d9;
+  /* Sistema → rosé (crítico/infra) */
+  --pc-tone-system:          #e11d48;
+  --pc-tone-system-soft:     color-mix(in oklab, #e11d48 12%, transparent);
+  --pc-tone-system-ink:      #be123c;
+}
+.dark {
+  --pc-tone-overview:        #60a5fa;
+  --pc-tone-overview-soft:   color-mix(in oklab, #60a5fa 22%, transparent);
+  --pc-tone-overview-ink:    #bfdbfe;
+  --pc-tone-catalog:         #34d399;
+  --pc-tone-catalog-soft:    color-mix(in oklab, #34d399 22%, transparent);
+  --pc-tone-catalog-ink:     #a7f3d0;
+  --pc-tone-commerce:        #f2c66b;
+  --pc-tone-commerce-soft:   color-mix(in oklab, #f2c66b 22%, transparent);
+  --pc-tone-commerce-ink:    #fde3a7;
+  --pc-tone-people:          #c4b5fd;
+  --pc-tone-people-soft:     color-mix(in oklab, #c4b5fd 22%, transparent);
+  --pc-tone-people-ink:      #e9d5ff;
+  --pc-tone-system:          #fb7185;
+  --pc-tone-system-soft:     color-mix(in oklab, #fb7185 22%, transparent);
+  --pc-tone-system-ink:      #fecdd3;
+}
+
+/* Applied via data-tone="overview|catalog|commerce|people|system" */
+[data-tone]                  { --tone: var(--pc-tone-overview); --tone-soft: var(--pc-tone-overview-soft); --tone-ink: var(--pc-tone-overview-ink); }
+[data-tone="catalog"]        { --tone: var(--pc-tone-catalog); --tone-soft: var(--pc-tone-catalog-soft); --tone-ink: var(--pc-tone-catalog-ink); }
+[data-tone="commerce"]       { --tone: var(--pc-tone-commerce); --tone-soft: var(--pc-tone-commerce-soft); --tone-ink: var(--pc-tone-commerce-ink); }
+[data-tone="people"]         { --tone: var(--pc-tone-people); --tone-soft: var(--pc-tone-people-soft); --tone-ink: var(--pc-tone-people-ink); }
+[data-tone="system"]         { --tone: var(--pc-tone-system); --tone-soft: var(--pc-tone-system-soft); --tone-ink: var(--pc-tone-system-ink); }
+
+/* Sidebar group label — thin left bar in tone */
+.pc-admin-group-label {
+  position: relative;
+  padding-left: 0.9rem;
+  color: var(--tone-ink) !important;
+}
+.pc-admin-group-label::before {
+  content: "";
+  position: absolute;
+  left: 0.25rem; top: 50%;
+  width: 3px; height: 12px;
+  border-radius: 2px;
+  background: var(--tone);
+  transform: translateY(-50%);
+  opacity: 0.9;
+}
+
+/* Icon chip inside a toned sidebar item (idle uses soft tone, active uses full tone) */
+.pc-admin-icon-chip {
+  background: var(--tone-soft);
+  color: var(--tone-ink);
+  border-color: color-mix(in oklab, var(--tone) 30%, transparent);
+}
+.pc-admin-icon-chip[data-active="true"] {
+  background: var(--tone);
+  color: #fff;
+  border-color: var(--tone);
+  box-shadow: 0 6px 14px -6px color-mix(in oklab, var(--tone) 60%, transparent);
+}
+.dark .pc-admin-icon-chip[data-active="true"] { color: #0b1220; }
+
+/* Active row: subtle left border + tinted background */
+.pc-admin-row[data-active="true"] {
+  background: var(--tone-soft) !important;
+  color: var(--tone-ink) !important;
+  box-shadow: inset 2px 0 0 0 var(--tone);
+}
+.pc-admin-row .pc-admin-active-dot {
+  background: var(--tone);
+}
+
+/* Hub tab active pill — colored per hub tone */
+.pc-admin-tab[data-active="true"] {
+  background: var(--tone) !important;
+  color: #ffffff !important;
+  box-shadow: 0 4px 10px -4px color-mix(in oklab, var(--tone) 55%, transparent);
+}
+.dark .pc-admin-tab[data-active="true"] { color: #0b1220 !important; }
+.pc-admin-tab[data-active="false"]:hover {
+  background: var(--tone-soft) !important;
+  color: var(--tone-ink) !important;
+}
+.pc-admin-hub-crumb { color: var(--tone-ink); }
