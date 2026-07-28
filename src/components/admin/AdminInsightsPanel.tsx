@@ -414,23 +414,27 @@ export function AdminInsightsPanel() {
           }
         >
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={data.trend} margin={{ top: 4, right: 4, bottom: 0, left: -18 }}>
+            <AreaChart data={data.trend} margin={{ top: 6, right: 6, bottom: 0, left: -14 }}>
               <defs>
                 <linearGradient id="pcTrend" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stopColor="hsl(var(--primary))" stopOpacity={0.35} />
-                  <stop offset="100%" stopColor="hsl(var(--primary))" stopOpacity={0.02} />
+                  <stop offset="0%" stopColor={CHART_PRIMARY} stopOpacity={0.55} />
+                  <stop offset="100%" stopColor={CHART_PRIMARY} stopOpacity={0.04} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-              <XAxis dataKey="day" tickFormatter={shortDay} tick={{ fontSize: 10 }} tickLine={false} axisLine={false} minTickGap={18} />
-              <YAxis tick={{ fontSize: 10 }} tickLine={false} axisLine={false} width={48} tickFormatter={(v) => brl(Number(v))} />
+              <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID} vertical={false} />
+              <XAxis dataKey="day" tickFormatter={shortDay} tick={tickStyle} tickLine={false} axisLine={{ stroke: CHART_GRID }} minTickGap={18} />
+              <YAxis tick={tickStyle} tickLine={false} axisLine={false} width={52} tickFormatter={(v) => brl(Number(v))} />
               <Tooltip
                 contentStyle={tooltipStyle}
+                labelStyle={tooltipLabelStyle}
+                itemStyle={tooltipItemStyle}
+                cursor={{ stroke: CHART_ACCENT, strokeWidth: 1, strokeDasharray: "2 3" }}
                 labelFormatter={(l) => `Dia ${shortDay(String(l))}`}
                 formatter={(v: number, n) => [n === "samples" ? String(v) : brl(Number(v)), n === "minPriceAvg" ? "Média" : n === "minPrice" ? "Mínimo" : "Registros"]}
               />
-              <Area type="monotone" dataKey="minPriceAvg" stroke="hsl(var(--primary))" strokeWidth={2} fill="url(#pcTrend)" />
-              <Line type="monotone" dataKey="minPrice" stroke="hsl(var(--muted-foreground))" strokeWidth={1} dot={false} />
+              <Legend wrapperStyle={legendStyle} iconType="circle" iconSize={7} formatter={(n) => (n === "minPriceAvg" ? "Média" : "Mínimo")} />
+              <Area type="monotone" dataKey="minPriceAvg" stroke={CHART_PRIMARY} strokeWidth={2.2} fill="url(#pcTrend)" />
+              <Line type="monotone" dataKey="minPrice" stroke={CHART_ACCENT} strokeWidth={1.6} dot={false} />
             </AreaChart>
           </ResponsiveContainer>
         </Panel>
@@ -454,12 +458,18 @@ export function AdminInsightsPanel() {
           }
         >
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={coverage} margin={{ top: 4, right: 4, bottom: 0, left: -18 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-              <XAxis dataKey="label" tick={{ fontSize: 10 }} tickLine={false} axisLine={false} interval={0} angle={-18} textAnchor="end" height={34} />
-              <YAxis tick={{ fontSize: 10 }} tickLine={false} axisLine={false} width={34} />
-              <Tooltip contentStyle={tooltipStyle} formatter={(v: number, n) => [String(v), n === "products" ? "Produtos" : "Lojas"]} />
-              <Bar dataKey="products" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} maxBarSize={26} />
+            <BarChart data={coverage} margin={{ top: 6, right: 6, bottom: 0, left: -14 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID} vertical={false} />
+              <XAxis dataKey="label" tick={tickStyle} tickLine={false} axisLine={{ stroke: CHART_GRID }} interval={0} angle={-18} textAnchor="end" height={38} />
+              <YAxis tick={tickStyle} tickLine={false} axisLine={false} width={36} allowDecimals={false} />
+              <Tooltip
+                contentStyle={tooltipStyle}
+                labelStyle={tooltipLabelStyle}
+                itemStyle={tooltipItemStyle}
+                cursor={{ fill: "hsl(var(--foreground) / 0.06)" }}
+                formatter={(v: number, n) => [String(v), n === "products" ? "Produtos" : "Lojas"]}
+              />
+              <Bar dataKey="products" fill={CHART_PRIMARY} radius={[4, 4, 0, 0]} maxBarSize={28} />
             </BarChart>
           </ResponsiveContainer>
         </Panel>
@@ -481,17 +491,21 @@ export function AdminInsightsPanel() {
           }
         >
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data.recent} margin={{ top: 4, right: 4, bottom: 0, left: -22 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
-              <XAxis dataKey="day" tickFormatter={shortDay} tick={{ fontSize: 10 }} tickLine={false} axisLine={false} minTickGap={14} />
-              <YAxis tick={{ fontSize: 10 }} tickLine={false} axisLine={false} width={32} allowDecimals={false} />
+            <LineChart data={data.recent} margin={{ top: 6, right: 6, bottom: 0, left: -18 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke={CHART_GRID} vertical={false} />
+              <XAxis dataKey="day" tickFormatter={shortDay} tick={tickStyle} tickLine={false} axisLine={{ stroke: CHART_GRID }} minTickGap={14} />
+              <YAxis tick={tickStyle} tickLine={false} axisLine={false} width={34} allowDecimals={false} />
               <Tooltip
                 contentStyle={tooltipStyle}
+                labelStyle={tooltipLabelStyle}
+                itemStyle={tooltipItemStyle}
+                cursor={{ stroke: CHART_ACCENT, strokeWidth: 1, strokeDasharray: "2 3" }}
                 labelFormatter={(l) => `Dia ${shortDay(String(l))}`}
                 formatter={(v: number, n) => [String(v), n === "prices" ? "Novos preços" : "Verificados"]}
               />
-              <Line type="monotone" dataKey="prices" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
-              <Line type="monotone" dataKey="verified" stroke="hsl(var(--muted-foreground))" strokeWidth={1.5} strokeDasharray="4 3" dot={false} />
+              <Legend wrapperStyle={legendStyle} iconType="circle" iconSize={7} formatter={(n) => (n === "prices" ? "Novos preços" : "Verificados")} />
+              <Line type="monotone" dataKey="prices" stroke={CHART_PRIMARY} strokeWidth={2.2} dot={false} />
+              <Line type="monotone" dataKey="verified" stroke={CHART_ACCENT} strokeWidth={1.8} strokeDasharray="4 3" dot={false} />
             </LineChart>
           </ResponsiveContainer>
         </Panel>
