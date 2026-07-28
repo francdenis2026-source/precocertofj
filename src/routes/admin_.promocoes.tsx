@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AdminTabs } from "@/components/admin/AdminTabs";
+import { validateTabSearch } from "@/components/admin/adminTabs.utils";
 import { PromoCodesPage } from "./admin_.promocoes-codigos";
 import { CupomPage } from "./admin_.cupom";
 import { CupomLotePage } from "./admin_.cupom-lote";
@@ -27,21 +28,17 @@ import {
 
 type PromocoesTab = "promocoes" | "codigos" | "cupons" | "cupons-lote";
 const PROMO_TABS = [
-  { key: "promocoes", label: "Promoções" },
-  { key: "codigos", label: "Códigos" },
-  { key: "cupons", label: "Cupons" },
-  { key: "cupons-lote", label: "Cupons em lote" },
+  { key: "promocoes" as const, label: "Promoções" },
+  { key: "codigos" as const, label: "Códigos" },
+  { key: "cupons" as const, label: "Cupons" },
+  { key: "cupons-lote" as const, label: "Cupons em lote" },
 ];
 
 export const Route = createFileRoute("/admin_/promocoes")({
   ssr: false,
   beforeLoad: adminBeforeLoad,
-  validateSearch: (s: Record<string, unknown>): { tab: PromocoesTab } => {
-    const t = String(s.tab ?? "promocoes");
-    const tab: PromocoesTab =
-      t === "codigos" || t === "cupons" || t === "cupons-lote" ? t : "promocoes";
-    return { tab };
-  },
+  validateSearch: (s: Record<string, unknown>): { tab: PromocoesTab } =>
+    validateTabSearch(s, PROMO_TABS, "promocoes"),
   head: () => ({
     meta: [
       { title: "Cupons promocionais — Admin" },
@@ -56,7 +53,7 @@ function PromocoesShell() {
   return (
     <>
       <div className="px-4">
-        <AdminTabs to="/admin/promocoes" items={PROMO_TABS} active={tab} />
+        <AdminTabs to="/admin/promocoes" title="Promoções" items={PROMO_TABS} active={tab} />
       </div>
       {tab === "promocoes" && <PromocoesPage />}
       {tab === "codigos" && <PromoCodesPage />}

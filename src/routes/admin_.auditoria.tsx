@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AdminTabs } from "@/components/admin/AdminTabs";
+import { validateTabSearch } from "@/components/admin/adminTabs.utils";
 import { AuditoriaAcessosPage } from "./admin_.auditoria-acessos";
 import { NumberAuditPage } from "./admin_.auditoria-numeros";
 import { adminBeforeLoad } from "@/lib/route-guards";
@@ -38,19 +39,16 @@ import { AdminOnly } from "@/components/auth/AdminOnly";
 
 type AuditoriaTab = "auditoria" | "acessos" | "numeros";
 const AUDIT_TABS = [
-  { key: "auditoria", label: "Auditoria" },
-  { key: "acessos", label: "Acessos" },
-  { key: "numeros", label: "Números" },
+  { key: "auditoria" as const, label: "Auditoria" },
+  { key: "acessos" as const, label: "Acessos" },
+  { key: "numeros" as const, label: "Números" },
 ];
 
 export const Route = createFileRoute("/admin_/auditoria")({
   ssr: false,
   beforeLoad: adminBeforeLoad,
-  validateSearch: (s: Record<string, unknown>): { tab: AuditoriaTab } => {
-    const t = String(s.tab ?? "auditoria");
-    const tab: AuditoriaTab = t === "acessos" || t === "numeros" ? t : "auditoria";
-    return { tab };
-  },
+  validateSearch: (s: Record<string, unknown>): { tab: AuditoriaTab } =>
+    validateTabSearch(s, AUDIT_TABS, "auditoria"),
   head: () => ({
     meta: [
       { title: "Auditoria — Admin — PreçoCerto" },
@@ -65,7 +63,7 @@ function AuditoriaShell() {
   return (
     <AdminOnly>
       <div className="px-4">
-        <AdminTabs to="/admin/auditoria" items={AUDIT_TABS} active={tab} />
+        <AdminTabs to="/admin/auditoria" title="Auditoria" items={AUDIT_TABS} active={tab} />
       </div>
       {tab === "auditoria" && <AuditoriaPage />}
       {tab === "acessos" && <AuditoriaAcessosPage />}

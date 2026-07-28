@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AdminTabs } from "@/components/admin/AdminTabs";
+import { validateTabSearch } from "@/components/admin/adminTabs.utils";
 import { AnalyticsPage } from "./admin_.analytics";
 import { AdminReportsGate } from "./admin_.reports";
 import { ConversoesPage } from "./admin_.conversoes";
@@ -25,21 +26,17 @@ import { AdminOnly } from "@/components/auth/AdminOnly";
 
 type MetricasTab = "metricas" | "analytics" | "relatorios" | "conversoes";
 const METRICAS_TABS = [
-  { key: "metricas", label: "Métricas" },
-  { key: "analytics", label: "Analytics" },
-  { key: "relatorios", label: "Relatórios" },
-  { key: "conversoes", label: "Conversões" },
+  { key: "metricas" as const, label: "Métricas" },
+  { key: "analytics" as const, label: "Analytics" },
+  { key: "relatorios" as const, label: "Relatórios" },
+  { key: "conversoes" as const, label: "Conversões" },
 ];
 
 export const Route = createFileRoute("/admin_/metricas")({
   ssr: false,
   beforeLoad: adminBeforeLoad,
-  validateSearch: (s: Record<string, unknown>): { tab: MetricasTab } => {
-    const t = String(s.tab ?? "metricas");
-    const tab: MetricasTab =
-      t === "analytics" || t === "relatorios" || t === "conversoes" ? t : "metricas";
-    return { tab };
-  },
+  validateSearch: (s: Record<string, unknown>): { tab: MetricasTab } =>
+    validateTabSearch(s, METRICAS_TABS, "metricas"),
   head: () => ({
     meta: [
       { title: "Métricas por estabelecimento — Admin" },
@@ -54,7 +51,7 @@ function MetricasShell() {
   return (
     <AdminOnly>
       <div className="px-4">
-        <AdminTabs to="/admin/metricas" items={METRICAS_TABS} active={tab} />
+        <AdminTabs to="/admin/metricas" title="Métricas" items={METRICAS_TABS} active={tab} />
       </div>
       {tab === "metricas" && <MetricasPage />}
       {tab === "analytics" && <AnalyticsPage />}
