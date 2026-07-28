@@ -329,24 +329,15 @@ function HomePage() {
 
               <h1
                 id="hero-title"
-                className="font-editorial mt-2 font-normal leading-[0.98] tracking-[-0.028em]"
+                className="font-editorial pc-hero-editorial mt-2 font-normal"
                 style={{
                   color: "var(--pc-home-onhero-fg)",
                   fontSize: "clamp(1.75rem, 4.8vw, 3.75rem)",
                   fontVariationSettings: '"opsz" 144, "SOFT" 20',
-                  textWrap: "balance",
                 }}
               >
                 Encontre o{" "}
-                <span
-                  className="font-editorial italic"
-                  style={{
-                    color: "var(--pc-home-onhero-gold)",
-                    fontVariationSettings: '"opsz" 144, "SOFT" 50',
-                  }}
-                >
-                  preço certo
-                </span>{" "}
+                <span className="pc-editorial-accent">preço certo</span>{" "}
                 sem sair de casa.
               </h1>
 

@@ -465,6 +465,34 @@
     text-rendering: geometricPrecision;
     -webkit-font-smoothing: antialiased;
   }
+  /* Destaque editorial italic — usado para trechos-chave dentro de hero/banner
+     (ex.: "preço certo"). Fraunces italic com opsz máximo e SOFT alto para uma
+     curvatura mais expressiva; underline gold sutil só no hover/focus do pai. */
+  .pc-editorial-accent {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 500;
+    letter-spacing: -0.028em;
+    font-optical-sizing: auto;
+    font-variation-settings: "opsz" 144, "SOFT" 60, "wght" 500;
+    color: var(--pc-home-onhero-gold, var(--pc-gold-ink));
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
+  }
+  /* Hero editorial — controla line-height, tracking e wrap por breakpoint sem
+     precisar hard-code em cada rota. Aplique junto de .font-editorial. */
+  .pc-hero-editorial {
+    line-height: 1.02;
+    letter-spacing: -0.022em;
+    text-wrap: balance;
+    hyphens: manual;
+  }
+  @media (min-width: 640px) {
+    .pc-hero-editorial { line-height: 1.0; letter-spacing: -0.026em; }
+  }
+  @media (min-width: 1024px) {
+    .pc-hero-editorial { line-height: 0.96; letter-spacing: -0.03em; }
+  }
   .font-mono {
     font-family: var(--font-mono);
     font-feature-settings: "tnum", "zero";

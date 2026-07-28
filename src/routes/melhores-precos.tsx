@@ -494,9 +494,9 @@ function MelhoresPrecosPage() {
                 <span className={tc.eyebrow}>Ranking de preços</span>
                 <LiveUpdateBadge active={live.active} />
               </span>
-              <h1 className={dsx(tc.h1, "mt-0.5")}>
+              <h1 className={dsx(tc.h1, "font-editorial pc-hero-editorial mt-0.5")} style={{ fontVariationSettings: '"opsz" 144, "SOFT" 25' }}>
                 Onde cada produto está{" "}
-                <em className="italic text-brand-gold">mais barato</em>
+                <em className="pc-editorial-accent">mais barato</em>
               </h1>
               <p className={dsx(tc.sectionNote, "mt-0.5 line-clamp-2 max-w-2xl")}>
                 Comparamos itens de mesmo tamanho e unidade (ml, g, un). A economia é medida
