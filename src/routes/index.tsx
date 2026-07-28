@@ -581,73 +581,122 @@ function HomePage() {
                   </p>
                 )}
 
-                {/* Faixa de parceiros — logos compactos */}
+                {/* ============ Parceiros ============
+                    Muro de plaquetas claras: hierarquia = eyebrow + contagem,
+                    depois cards com logo em alta densidade, nome do mercado
+                    em cápsula inferior (revela em hover para não competir
+                    com os preços) e um CTA "Ver todos" sempre visível. */}
                 <div
                   className="mt-3 hidden border-t pt-2.5 min-[360px]:block"
                   style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}
                 >
-                  <div className="mb-1.5 flex items-center gap-1.5">
-                    <MapPin className="h-3 w-3" style={{ color: P.goldSoft }} aria-hidden />
-                    <span
-                      className="text-[11px] font-bold uppercase tracking-[0.18em]"
-                      style={{ color: "var(--pc-home-onhero-fg-60)" }}
+                  <div className="mb-2 flex items-baseline justify-between gap-3">
+                    <div className="flex items-center gap-1.5">
+                      <MapPin className="h-3 w-3" style={{ color: P.goldSoft }} aria-hidden />
+                      <span
+                        className="text-[11px] font-bold uppercase tracking-[0.18em]"
+                        style={{ color: "var(--pc-home-onhero-fg-60)" }}
+                      >
+                        Onde comparamos
+                      </span>
+                      {partners.length > 0 && (
+                        <span
+                          className="rounded-full px-1.5 py-0.5 text-[10px] font-semibold tabular-nums"
+                          style={{
+                            color: "var(--pc-home-onhero-fg-80)",
+                            background: "var(--pc-home-onhero-glass-soft)",
+                            border: "1px solid var(--pc-home-onhero-border-soft)",
+                          }}
+                          aria-label={`${partners.length} mercados parceiros`}
+                        >
+                          {partners.length}
+                        </span>
+                      )}
+                    </div>
+                    <Link
+                      to="/estabelecimentos"
+                      aria-label="Ver todos os mercados parceiros"
+                      className="rounded-md px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2"
+                      style={{
+                        color: "var(--pc-home-onhero-gold)",
+                        ["--tw-ring-color" as string]: "var(--pc-home-onhero-gold)",
+                      }}
                     >
-                      Onde comparamos
-                    </span>
+                      Ver todos →
+                    </Link>
                   </div>
-                  {/* Muro de logos: plaquetas claras (contraste garantido sobre o
-                      navy) com as marcas em alta definição e recorte generoso. */}
-                  <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+
+                  <ul
+                    role="list"
+                    className="flex items-stretch gap-2 overflow-x-auto no-scrollbar py-0.5"
+                  >
                     {storesQ.isLoading
                       ? Array.from({ length: 5 }).map((_, i) => (
-                          <div
+                          <li
                             key={`sk-${i}`}
                             aria-hidden
-                            className="grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)]"
+                            className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)]"
                             style={{ borderColor: "color-mix(in oklab, #ffffff 78%, transparent)" }}
                           >
                             <span
                               className="h-full w-full animate-pulse rounded-lg"
                               style={{ background: "color-mix(in oklab, #0b1b3a 8%, #ffffff)" }}
                             />
-                          </div>
+                          </li>
                         ))
-                      : partners.map((s: any, i: number) => (
-                          <Link
-                            key={s?.id ?? i}
-                            to="/estabelecimentos"
-                            title={s?.name ?? undefined}
-                            aria-label={s?.name ? `Ver ${s.name}` : "Ver mercados parceiros"}
-                            className="group grid h-14 w-14 shrink-0 place-items-center overflow-hidden rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)] transition-transform duration-200 hover:-translate-y-0.5 hover:shadow-[0_6px_18px_-6px_rgba(3,10,28,0.7)]"
-                            style={{ borderColor: "color-mix(in oklab, #ffffff 78%, transparent)" }}
-                          >
-                            {s?.logoUrl ? (
-                              <img
-                                src={s.logoUrl}
-                                alt={s?.name ?? ""}
-                                width={112}
-                                height={112}
-                                loading="eager"
-                                decoding="async"
-                                className="h-full w-full object-contain"
-                              />
-                            ) : (
-                              <span
-                                className="grid h-full w-full place-items-center rounded-lg text-[15px] font-extrabold"
+                      : partners.map((s: any, i: number) => {
+                          const label = s?.name ?? "Mercado parceiro";
+                          return (
+                            <li key={s?.id ?? i} className="shrink-0">
+                              <Link
+                                to="/estabelecimentos"
+                                title={label}
+                                aria-label={`Ver produtos e preços de ${label}`}
+                                className="group relative flex h-16 w-16 flex-col items-stretch justify-between overflow-hidden rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--pc-home-onhero-gold)_55%,white)] hover:shadow-[0_10px_22px_-8px_rgba(3,10,28,0.75)] focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2"
                                 style={{
-                                  background: "color-mix(in oklab, #0b1b3a 6%, #ffffff)",
-                                  color: "#0b1b3a",
+                                  borderColor: "color-mix(in oklab, #ffffff 78%, transparent)",
+                                  ["--tw-ring-color" as string]: "var(--pc-home-onhero-gold)",
                                 }}
-                                aria-hidden
                               >
-                                {(s?.name ?? "?").trim().charAt(0).toUpperCase()}
-                              </span>
-                            )}
-                          </Link>
-                        ))}
-
-
-                  </div>
+                                {s?.logoUrl ? (
+                                  <img
+                                    src={s.logoUrl}
+                                    alt=""
+                                    width={128}
+                                    height={128}
+                                    loading="eager"
+                                    decoding="async"
+                                    className="h-full w-full object-contain transition-transform duration-300 group-hover:scale-[1.06]"
+                                  />
+                                ) : (
+                                  <span
+                                    className="grid h-full w-full place-items-center rounded-lg text-[16px] font-extrabold"
+                                    style={{
+                                      background: "color-mix(in oklab, #0b1b3a 6%, #ffffff)",
+                                      color: "#0b1b3a",
+                                    }}
+                                    aria-hidden
+                                  >
+                                    {label.trim().charAt(0).toUpperCase()}
+                                  </span>
+                                )}
+                                {/* Cápsula com nome — aparece em hover/focus sem alterar layout. */}
+                                <span
+                                  aria-hidden
+                                  className="pointer-events-none absolute inset-x-1 bottom-1 truncate rounded-md px-1 py-[2px] text-center text-[9px] font-bold uppercase tracking-[0.08em] opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
+                                  style={{
+                                    color: "#ffffff",
+                                    background: "color-mix(in oklab, #0b1b3a 88%, transparent)",
+                                    backdropFilter: "blur(2px)",
+                                  }}
+                                >
+                                  {label}
+                                </span>
+                              </Link>
+                            </li>
+                          );
+                        })}
+                  </ul>
 
                 </div>
               </div>
