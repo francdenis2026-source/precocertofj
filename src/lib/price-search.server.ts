@@ -65,6 +65,30 @@ async function runPriceSearch(data: {
   const tokenMatchers = effectiveTokens.map((t) => buildTokenMatcher(t, mode));
   const cacheTokens = effectiveTokens.length > 0 ? effectiveTokens : [];
 
+  // Segurança de relevância: se após tokenização não resta nenhum termo
+  // significativo (ex.: apenas stopwords/conectivos "de", "em", "kg"),
+  // não retornamos resultados — evita listar todo o catálogo.
+  if (effectiveTokens.length === 0) {
+    return {
+      query: data.query,
+      mode,
+      tokens: [],
+      samples: 0,
+      avg: null,
+      min: null,
+      max: null,
+      cheapest: null,
+      markets: [],
+      groups: [],
+      recent: [],
+      suggestions: [],
+      didYouMean: null,
+      canonicalGroup: null,
+      excludedByPureFilter: 0,
+    };
+  }
+
+
   const cacheClient = supabaseAdmin as unknown as {
     from: (t: string) => {
       select: (s: string) => {
