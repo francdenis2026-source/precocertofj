@@ -397,19 +397,10 @@ function SearchPage() {
     if (hasQuery) pushRecentSearch(q);
   }, [hasQuery, q]);
 
-  const [recent, setRecent] = useState<string[]>([]);
+  const [, setRecent] = useState<string[]>([]);
   useEffect(() => {
     setRecent(getSearchHistory().map((e) => e.query));
   }, [q]);
-
-  const removeRecent = (item: string) => {
-    setRecent(removeSearchHistory(item).map((e) => e.query));
-  };
-
-  const clearRecent = () => {
-    clearSearchHistory();
-    setRecent([]);
-  };
 
 
   // Restauração de rolagem: guardamos a posição por "estado" da página
