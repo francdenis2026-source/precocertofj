@@ -207,6 +207,9 @@ function PlansPage() {
     plans.find((p) => p.slug === recommendedSlug) ??
     plans[0];
 
+  const trialPlan = plans.find((p) => p.slug === "degustacao" || p.price_cents === 0);
+  const trialDays = trialPlan?.days ?? 7;
+
 
   return (
     <div data-planos-shell className="flex h-[calc(100svh-64px)] flex-col overflow-hidden overscroll-none bg-background text-foreground md:h-[100svh]">
@@ -220,7 +223,7 @@ function PlansPage() {
             breadcrumbs={[{ label: "Início", to: "/" }, { label: "Planos" }]}
             description={
               <span data-short-hide className="inline-flex flex-wrap items-center gap-x-2 gap-y-1">
-                <span>Escolha o plano que combina com sua rotina — 7 dias grátis, sem cartão.</span>
+                <span>Escolha o plano que combina com sua rotina — {trialDays} dias grátis, sem cartão.</span>
                 <span className="inline-flex items-center gap-1 text-[11.5px] text-muted-foreground">
                   <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-brand-gold" aria-hidden />
                   Ativação imediata · Pix ou cartão
