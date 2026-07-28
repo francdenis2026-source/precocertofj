@@ -13,6 +13,14 @@ import {
   YAxis,
 } from "recharts";
 import {
+  chartTheme,
+  tickStyle,
+  tooltipStyle,
+  tooltipLabelStyle,
+  tooltipItemStyle,
+} from "@/lib/admin-chart-theme";
+import { ChartSkeleton, ChartEmpty } from "@/components/admin/ChartStates";
+import {
   Activity,
   AlertTriangle,
   ArrowDownRight,
@@ -194,8 +202,10 @@ export function AdminKpiBoard() {
       </div>
 
       {boardQ.isLoading ? (
-        <div className="grid h-40 place-items-center rounded-xl border border-border/70 bg-card">
-          <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+        <div className="grid gap-2 lg:grid-cols-3">
+          <ChartSkeleton height={144} label="Carregando evolução" />
+          <ChartSkeleton height={144} label="Carregando participação" />
+          <ChartSkeleton height={144} label="Carregando alertas" />
         </div>
       ) : boardQ.isError ? (
         <p className={cn(tc.meta, "rounded-xl border border-destructive/40 bg-destructive/5 p-3")}>
@@ -210,20 +220,26 @@ export function AdminKpiBoard() {
             note={`${board.totals.prices} registros • ${board.totals.products} produtos`}
           >
             <div className="h-36">
+              {evolution.length === 0 ? (
+                <ChartEmpty height={144} title="Sem evolução no período" />
+              ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={evolution} margin={{ top: 4, right: 6, bottom: 0, left: -18 }}>
-                  <CartesianGrid strokeDasharray="3 3" className="stroke-border/50" />
-                  <XAxis dataKey="label" tick={{ fontSize: 10 }} interval="preserveStartEnd" />
-                  <YAxis tick={{ fontSize: 10 }} width={44} />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} vertical={false} />
+                  <XAxis dataKey="label" tick={tickStyle} tickLine={false} axisLine={{ stroke: chartTheme.grid }} interval="preserveStartEnd" />
+                  <YAxis tick={tickStyle} tickLine={false} axisLine={{ stroke: chartTheme.grid }} width={44} />
                   <Tooltip
                     formatter={(v: number, name) => [brl(Number(v)), name === "avgPrice" ? "Média" : "Menor"]}
-                    labelClassName="text-xs"
-                    contentStyle={{ fontSize: 12 }}
+                    contentStyle={tooltipStyle}
+                    labelStyle={tooltipLabelStyle}
+                    itemStyle={tooltipItemStyle}
+                    cursor={{ stroke: chartTheme.accent, strokeWidth: 1, strokeDasharray: "2 3" }}
                   />
-                  <Line type="monotone" dataKey="avgPrice" stroke="hsl(var(--primary))" strokeWidth={2} dot={false} />
-                  <Line type="monotone" dataKey="minPrice" stroke="hsl(var(--muted-foreground))" strokeWidth={1.5} dot={false} />
+                  <Line type="monotone" dataKey="avgPrice" stroke={chartTheme.primary} strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="minPrice" stroke={chartTheme.accent} strokeWidth={1.5} dot={false} />
                 </LineChart>
               </ResponsiveContainer>
+              )}
             </div>
           </Block>
 
@@ -260,23 +276,32 @@ export function AdminKpiBoard() {
             }
           >
             <div className="h-36">
+              {shares.length === 0 ? (
+                <ChartEmpty height={144} title="Sem lojas no período" />
+              ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={shares} margin={{ top: 4, right: 6, bottom: 0, left: -18 }}>
-                  <CartesianGrid strokeDasharray="3 3" className="stroke-border/50" />
+                  <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} vertical={false} />
                   <XAxis
                     dataKey="name"
-                    tick={{ fontSize: 9 }}
+                    tick={{ ...tickStyle, fontSize: 9 }}
+                    tickLine={false}
+                    axisLine={{ stroke: chartTheme.grid }}
                     tickFormatter={(v: string) => (v.length > 10 ? `${v.slice(0, 10)}…` : v)}
                     interval={0}
                   />
-                  <YAxis tick={{ fontSize: 10 }} width={44} unit="%" />
+                  <YAxis tick={tickStyle} tickLine={false} axisLine={{ stroke: chartTheme.grid }} width={44} unit="%" />
                   <Tooltip
                     formatter={(v: number) => [`${Number(v).toFixed(1)}%`, "Participação"]}
-                    contentStyle={{ fontSize: 12 }}
+                    contentStyle={tooltipStyle}
+                    labelStyle={tooltipLabelStyle}
+                    itemStyle={tooltipItemStyle}
+                    cursor={{ fill: "rgba(96,165,250,0.08)" }}
                   />
-                  <Bar dataKey="share" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                  <Bar dataKey="share" fill={chartTheme.primary} radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
+              )}
             </div>
           </Block>
 
