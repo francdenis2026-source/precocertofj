@@ -264,7 +264,7 @@ function SelfHealAdminBlock({
     setBusy(true);
     setMsg(null);
     try {
-      const r = await call({});
+      const r = await call();
       setMsg(`Papel 'admin' concedido (motivo: ${r.reason}). Atualize a página se necessário.`);
       onGranted();
     } catch (e) {
