@@ -640,7 +640,7 @@ function RedeemPage() {
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                     "disabled:cursor-not-allowed disabled:opacity-70",
                     canSubmit && !submitting
-                      ? "bg-[var(--pc-gold-ink)] text-primary shadow-[0_12px_28px_-10px_color-mix(in_oklab,var(--pc-gold-ink)_60%,transparent)] hover:brightness-105"
+                      ? "bg-[var(--pc-navy)] text-[color:var(--pc-home-gold)] ring-1 ring-[color:var(--pc-home-gold)]/60 shadow-[0_16px_36px_-14px_color-mix(in_oklab,var(--pc-navy)_70%,transparent)] hover:brightness-110"
                       : "bg-muted text-muted-foreground",
                   )}
                 >
