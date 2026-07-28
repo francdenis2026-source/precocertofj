@@ -176,6 +176,10 @@ function AuditoriaPage() {
       />
       <div className="mx-auto max-w-7xl px-4 py-8">
 
+        <div className="mb-6">
+          <ClearLogsPanel />
+        </div>
+
 
         <div className="mb-6 grid gap-3 md:grid-cols-4">
           <SummaryCard label="Total de eventos" value={rows.length} />
