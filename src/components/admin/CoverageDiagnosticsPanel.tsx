@@ -256,15 +256,9 @@ function SelfHealAdminBlock({
   email: string | null;
   onGranted: () => void;
 }) {
-  // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
-  const React = require("react") as typeof import("react");
-  const { grantSelfAdmin } = require("@/lib/admin-maintenance.functions") as typeof import("@/lib/admin-maintenance.functions");
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const call = useServerFn(grantSelfAdmin);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [busy, setBusy] = React.useState(false);
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [msg, setMsg] = React.useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [msg, setMsg] = useState<string | null>(null);
 
   async function handleGrant() {
     setBusy(true);
