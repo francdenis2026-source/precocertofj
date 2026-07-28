@@ -53,7 +53,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTr
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
 import { useConfirm } from "@/components/ui/confirm-provider";
-import { Copy, Key, Mail, Plus, RefreshCw, Trash2, XCircle, Sparkles, CreditCard, Users, Gauge, Clock, AlertTriangle, ShieldAlert, ShieldCheck, Loader2, History, ArrowUpDown, ChevronLeft, ChevronRight, LogOut, Package, ImageIcon, Ticket, FileText, Languages, Trophy, Store } from "lucide-react";
+import { Copy, Key, Mail, Plus, RefreshCw, Trash2, XCircle, Sparkles, CreditCard, Users, Gauge, Clock, AlertTriangle, ShieldAlert, ShieldCheck, Loader2, History, ArrowUpDown, ChevronLeft, ChevronRight, Package, ImageIcon, Ticket, FileText, Languages, Trophy, Store } from "lucide-react";
 import { useMyRoles } from "@/hooks/useMyRoles";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 import { lazy, Suspense } from "react";
@@ -205,8 +205,6 @@ const cycleLabel: Record<BillingCycle, string> = {
 
 function AdminPage() {
   const navigate = useNavigate();
-  const qc = useQueryClient();
-  const [signingOut, setSigningOut] = useState(false);
 
 
 
@@ -246,25 +244,10 @@ function AdminPage() {
   }, [router]);
 
 
-
-
-  const handleSignOut = async () => {
-    setSigningOut(true);
-    try {
-      await qc.cancelQueries();
-      qc.clear();
-      const { signOut } = await import("@/hooks/useSession");
-      await signOut();
-      toast.success("Sessão encerrada");
-    } finally {
-      navigate({ to: "/auth", replace: true });
-    }
-  };
-
   return (
     <AppShell scope="admin">
       {/* ---------- Cabeçalho executivo compacto ---------- */}
-      <header className="sticky top-12 z-20 border-b border-border/60 bg-background/94 backdrop-blur md:top-14">
+      <header className="sticky top-0 z-20 border-b border-border/60 bg-background/94 backdrop-blur">
         <div className="mx-auto grid max-w-[1400px] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-2 md:px-5">
           <div className="flex min-w-0 items-center gap-2.5">
           <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-border bg-primary/10 text-primary">
@@ -277,22 +260,9 @@ function AdminPage() {
             </h1>
           </div>
           </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleSignOut}
-              disabled={signingOut}
-              className={cn(tc.control, "h-8 rounded-full px-3")}
-            >
-              {signingOut ? (
-                <Loader2 className="mr-1.5 h-3.5 w-3.5 animate-spin" />
-              ) : (
-                <LogOut className="mr-1.5 h-3.5 w-3.5" />
-              )}
-              Sair
-            </Button>
-          </div>
+          <span className={cn(tc.tag, "hidden rounded-full border border-border bg-card px-2.5 py-1 text-muted-foreground sm:inline-flex")}>
+            Painel unificado
+          </span>
         </div>
       </header>
 
