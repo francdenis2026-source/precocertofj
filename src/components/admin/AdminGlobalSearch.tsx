@@ -115,6 +115,9 @@ export function AdminGlobalSearch() {
   });
 
   const clearAll = () => {
+    if (typeof window !== "undefined") {
+      try { window.localStorage.removeItem(STORAGE_KEY); } catch { /* noop */ }
+    }
     setRaw("");
     setQ("");
     setScope("all");
