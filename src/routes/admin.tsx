@@ -580,6 +580,9 @@ function PlansTab() {
                     )}
                   </div>
                   <p className="text-xs text-muted-foreground">{plan.days} dias de acesso</p>
+                  <p className="mt-0.5 inline-flex items-center gap-1 rounded-md border border-brand-gold/30 bg-brand-gold/10 px-1.5 py-0.5 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">
+                    IA · {plan.ai_monthly_quota > 0 ? `${plan.ai_monthly_quota}/mês` : "sem cota"}
+                  </p>
                 </div>
                 <ul className="space-y-1 text-xs text-muted-foreground">
                   {plan.features.map((f) => <li key={f}>• {f}</li>)}
