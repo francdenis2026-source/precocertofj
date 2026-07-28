@@ -1264,7 +1264,7 @@ export function PriceSearchBar({
                                           aria-label={`Menor preço na categoria ${cat}: ${fmt(catMin)}`}
                                         >
                                           <Crown className="h-3 w-3" strokeWidth={2} aria-hidden />
-                                          <span className="tabular-nums">{fmt(catMin)}</span>
+                                          <span className="pc-num">{fmt(catMin)}</span>
                                         </span>
                                       ) : null}
                                       <span className="h-px flex-1 bg-border" aria-hidden="true" />
