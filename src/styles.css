@@ -4830,3 +4830,42 @@ html.dark .pc-row-interactive:hover .pc-store-name {
 }
 .pc-price--strike { color: color-mix(in oklab, var(--foreground) 55%, transparent); text-decoration: line-through; font-weight: 500; }
 .pc-price--savings { color: hsl(var(--savings, 148 60% 34%)); font-weight: 700; }
+
+/* ============================================================
+   @utility pc-num — dígitos monetários typeclear
+   Fonte sans tabular + lining, cor de contraste alto.
+   Modificadores:
+     .pc-num--onhero  → sobre overlay do hero (light: navy / dark: white)
+     .pc-num--loading → estado skeleton (opacidade)
+     .pc-num--disabled → desabilitado (opacidade)
+   Estados nativos:
+     :hover           → leve elevação de contraste
+   ============================================================ */
+@utility pc-num {
+  font-family: var(--pc-price-font);
+  font-feature-settings: var(--pc-price-feature-settings);
+  font-variant-numeric: tabular-nums lining-nums;
+  font-style: normal;
+  font-weight: 600;
+  letter-spacing: var(--pc-price-tracking);
+  color: var(--pc-price-fg);
+  transition: color 150ms ease;
+
+  &:hover { color: var(--pc-price-hover); }
+}
+
+@utility pc-num--onhero {
+  color: var(--pc-price-fg-onhero);
+  &:hover { color: var(--pc-price-fg-onhero); filter: brightness(1.08); }
+}
+
+@utility pc-num--loading {
+  color: var(--pc-price-loading);
+  cursor: progress;
+}
+
+@utility pc-num--disabled {
+  color: var(--pc-price-disabled);
+  cursor: not-allowed;
+}
+
