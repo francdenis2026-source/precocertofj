@@ -329,11 +329,19 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
   // Realtime: quando `scans` ou o cache de comparação mudam, revalidamos as
   // duas queries sem recarregar a página. React Query cuida do refetch em
   // background — a UI atualiza incrementalmente.
-  usePricesRealtime(() => {
-    queryClient.invalidateQueries({ queryKey: ["home", "recent-products", 4] });
-    queryClient.invalidateQueries({ queryKey: ["home", "recent-products", 10] });
-    queryClient.invalidateQueries({ queryKey: ["home", "live-ticker-stats"] });
-  });
+  usePricesRealtime(
+    ({ batchCount, reason }) => {
+      // Em lotes muito grandes (importações em massa), o `refetchType: "active"`
+      // já garante que só a query montada revalida — evitando trabalho duplo.
+      queryClient.invalidateQueries({ queryKey: ["home", "recent-products", 4], refetchType: "active" });
+      queryClient.invalidateQueries({ queryKey: ["home", "recent-products", 10], refetchType: "active" });
+      // As estatísticas só precisam de refresh no fim do lote, não em cada evento.
+      if (reason !== "leading" || batchCount === 1) {
+        queryClient.invalidateQueries({ queryKey: ["home", "live-ticker-stats"], refetchType: "active" });
+      }
+    },
+    { debounceMs: 900, maxWaitMs: 4500 },
+  );
 
   const line = "var(--pc-home-onhero-border-soft)";
   const fg70 = "var(--pc-home-onhero-fg-70)";
@@ -351,7 +359,25 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
     return () => mq.removeEventListener("change", apply);
   }, []);
 
-  const items = ((full.data ?? first.data ?? []) as PriceItem[]).slice(0, maxRows);
+  // Ordenação automática: melhor economia primeiro (maior dropPct), depois
+  // menor preço absoluto para desempate. Itens sem histórico caem para o fim
+  // ordenados por recência do preço (para preservar a sensação de "ao vivo").
+  const raw = (full.data ?? first.data ?? []) as PriceItem[];
+  const items = useMemo(() => {
+    const withScore = raw.map((it) => ({
+      it,
+      drop: typeof it.dropPct === "number" && it.dropPct > 0 ? it.dropPct : 0,
+      priceRank: typeof it.price === "number" ? it.price : Number.POSITIVE_INFINITY,
+      when: it.when ? new Date(it.when).getTime() : 0,
+    }));
+    withScore.sort((a, b) => {
+      if (b.drop !== a.drop) return b.drop - a.drop; // maior queda primeiro
+      if (a.priceRank !== b.priceRank) return a.priceRank - b.priceRank; // menor preço
+      return b.when - a.when; // mais recente primeiro
+    });
+    return withScore.map((x) => x.it).slice(0, maxRows);
+  }, [raw, maxRows]);
+  const bestSlug = items[0]?.dropPct && items[0].dropPct > 0 ? items[0].slug : null;
   const pendingRows = items.length > 0 ? Math.max(0, 6 - items.length) : 6;
 
   // Detecção de mudanças: guardamos assinatura `slug|price` do último render
