@@ -25,17 +25,46 @@ import {
   type PromoCoupon,
 } from "@/lib/checkout.functions";
 
+type PromocoesTab = "promocoes" | "codigos" | "cupons" | "cupons-lote";
+const PROMO_TABS = [
+  { key: "promocoes", label: "Promoções" },
+  { key: "codigos", label: "Códigos" },
+  { key: "cupons", label: "Cupons" },
+  { key: "cupons-lote", label: "Cupons em lote" },
+];
+
 export const Route = createFileRoute("/admin_/promocoes")({
   ssr: false,
   beforeLoad: adminBeforeLoad,
+  validateSearch: (s: Record<string, unknown>): { tab: PromocoesTab } => {
+    const t = String(s.tab ?? "promocoes");
+    const tab: PromocoesTab =
+      t === "codigos" || t === "cupons" || t === "cupons-lote" ? t : "promocoes";
+    return { tab };
+  },
   head: () => ({
     meta: [
       { title: "Cupons promocionais — Admin" },
       { name: "robots", content: "noindex" },
     ],
   }),
-  component: PromocoesPage,
+  component: PromocoesShell,
 });
+
+function PromocoesShell() {
+  const { tab } = Route.useSearch();
+  return (
+    <>
+      <div className="px-4">
+        <AdminTabs to="/admin/promocoes" items={PROMO_TABS} active={tab} />
+      </div>
+      {tab === "promocoes" && <PromocoesPage />}
+      {tab === "codigos" && <PromoCodesPage />}
+      {tab === "cupons" && <CupomPage />}
+      {tab === "cupons-lote" && <CupomLotePage />}
+    </>
+  );
+}
 
 function PromocoesPage() {
   const qc = useQueryClient();
