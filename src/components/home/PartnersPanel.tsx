@@ -203,9 +203,8 @@ export const PartnerTile = forwardRef<HTMLAnchorElement, PartnerTileProps>(
         ref={ref as any}
         to={href}
         aria-label={`Ver preços de ${item.name}`}
-        title={item.name}
         className={cn(
-          "group relative flex h-[66px] w-full items-center justify-center overflow-hidden sm:h-[76px]",
+          "group relative flex h-[66px] w-full items-center justify-center sm:h-[76px]",
           "rounded-[14px] border",
           "px-2.5 py-2",
           "transition-all duration-200 will-change-transform",
@@ -214,8 +213,6 @@ export const PartnerTile = forwardRef<HTMLAnchorElement, PartnerTileProps>(
         )}
         style={
           {
-            // Uma única superfície por tile: placa pérola para marcas escuras,
-            // vidro sutil (integrado ao painel) para marcas de tinta clara.
             background: needsPlate
               ? PLATE_BG
               : "linear-gradient(180deg, color-mix(in oklab, var(--pc-home-heading) 8%, transparent) 0%, color-mix(in oklab, var(--pc-home-heading) 3%, transparent) 100%)",
@@ -249,16 +246,54 @@ export const PartnerTile = forwardRef<HTMLAnchorElement, PartnerTileProps>(
           <TileLabel name={item.name} />
         )}
 
-
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-x-0 bottom-0 h-[2px] origin-left scale-x-0 transition-transform duration-300 group-hover:scale-x-100 group-focus-visible:scale-x-100"
+          className="pointer-events-none absolute inset-x-0 bottom-0 h-[2px] origin-left scale-x-0 overflow-hidden rounded-b-[14px] transition-transform duration-300 group-hover:scale-x-100 group-focus-visible:scale-x-100"
           style={{ background: gold }}
         />
+
+        {/* Caption profissional: pílula flutuante com marcador SVG */}
+        <PartnerCaption name={item.name} />
       </Link>
     );
   },
 );
+
+/** Caption acessível e discreta que aparece no hover/focus. */
+function PartnerCaption({ name }: { name: string }) {
+  return (
+    <span
+      aria-hidden
+      className={cn(
+        "pointer-events-none absolute left-1/2 top-full z-30 mt-1.5 flex -translate-x-1/2 translate-y-1 items-center gap-1.5",
+        "whitespace-nowrap rounded-full border px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-[0.14em]",
+        "opacity-0 shadow-[0_6px_18px_-8px_rgba(8,18,42,0.55)] transition-all duration-200",
+        "group-hover:translate-y-0 group-hover:opacity-100 group-focus-visible:translate-y-0 group-focus-visible:opacity-100",
+      )}
+      style={{
+        background: "var(--pc-home-heading, #0a1c3d)",
+        color: "var(--pc-home-gold, #c9a84c)",
+        borderColor: "color-mix(in oklab, var(--pc-home-gold) 55%, transparent)",
+      }}
+    >
+      <svg
+        viewBox="0 0 24 24"
+        className="h-2.5 w-2.5"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      >
+        <path d="M3 9l1.5-4h15L21 9" />
+        <path d="M4 9v11h16V9" />
+        <path d="M9 20v-6h6v6" />
+      </svg>
+      {name}
+    </span>
+  );
+}
+
 
 function TileLabel({ name }: { name: string }) {
   // Nomes longos entram como duas linhas com quebra por palavra + truncate visual
