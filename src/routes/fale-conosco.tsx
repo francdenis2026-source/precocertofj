@@ -197,7 +197,7 @@ function FaleConoscoPage() {
 
 
   return (
-    <IsolatedPage className="bg-background">
+    <IsolatedPage fit className="bg-background">
       <div className="mx-auto w-full max-w-6xl shrink-0 px-4 pt-1 md:pt-2">
         <HomeBrandLink />
       </div>

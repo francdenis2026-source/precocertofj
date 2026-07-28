@@ -6,6 +6,7 @@ import { z } from "zod";
 import { useServerFn } from "@tanstack/react-start";
 
 import { Nav } from "@/components/brand/Nav";
+import { PageShell, PageShellContent } from "@/components/layout/PageShell";
 import { PriceSpotlight } from "@/components/product/PriceSpotlight";
 
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
@@ -461,9 +462,9 @@ function MelhoresPrecosPage() {
 
 
   return (
-    <div className="flex h-[100dvh] flex-col overflow-hidden">
+    <PageShell fit hideFooter>
       <Nav />
-
+      <PageShellContent fit className="!pb-0">
       <main className="mx-auto w-full max-w-7xl flex-1 min-h-0 overflow-y-auto px-4 pb-[calc(var(--mobile-nav-height)+1rem)] pt-1 md:px-6 md:pb-6">
 
         {/* ---------- Cabeçalho editorial compacto ---------- */}
@@ -829,7 +830,8 @@ function MelhoresPrecosPage() {
       </main>
 
       {/* Página isolada — sem footer (padrão IsolatedPage). */}
-    </div>
+      </PageShellContent>
+    </PageShell>
   );
 }
 
