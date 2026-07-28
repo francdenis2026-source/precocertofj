@@ -210,7 +210,7 @@
   --pc-home-on-navy: #f5f6fa;
   --pc-home-dot-opacity: 0.05;
   /* LIGHT: scrim horizontal — painel legível à esquerda (texto navy) e foto nítida à direita */
-  --pc-home-hero-overlay: linear-gradient(90deg, rgb(245 246 250 / 0.86) 0%, rgb(245 246 250 / 0.74) 28%, rgb(245 246 250 / 0.36) 52%, rgb(245 246 250 / 0.08) 72%, rgb(245 246 250 / 0.00) 100%), linear-gradient(180deg, rgb(245 246 250 / 0.28) 0%, rgb(245 246 250 / 0.10) 40%, rgb(245 246 250 / 0.55) 100%), radial-gradient(70% 55% at 84% 26%, rgb(37 99 235 / 0.10) 0%, transparent 62%);
+  --pc-home-hero-overlay: linear-gradient(90deg, rgb(245 246 250 / 0.88) 0%, rgb(245 246 250 / 0.64) 30%, rgb(245 246 250 / 0.28) 55%, rgb(245 246 250 / 0.06) 76%, rgb(245 246 250 / 0.00) 100%), linear-gradient(180deg, rgb(245 246 250 / 0.18) 0%, rgb(245 246 250 / 0.06) 42%, rgb(245 246 250 / 0.36) 100%), radial-gradient(80% 60% at 88% 24%, rgb(37 99 235 / 0.08) 0%, transparent 60%);
   --pc-home-explore-bg: #eef1f7;
   --pc-home-explore-overlay: linear-gradient(180deg, rgb(238 241 247 / 0.92) 0%, rgb(238 241 247 / 0.72) 45%, rgb(238 241 247 / 0.96) 100%);
   --pc-home-cta-gradient: linear-gradient(140deg, #f7ecd1 0%, #e9d59a 100%);
@@ -229,7 +229,7 @@
   --pc-home-onhero-fg-60: #38456a;
   --pc-home-onhero-gold: #6a4708;
   --pc-home-hero-bg: #fbfaf6;
-  --pc-home-hero-img-opacity: 0.18;
+  --pc-home-hero-img-opacity: 0.28;
 
   /* Semantic — nome de estabelecimento (unificado em todo o site) */
   --market-accent: #8a6218;
@@ -354,7 +354,7 @@
   --pc-home-heading: #f5f6fa;
   --pc-home-on-navy: #f5f6fa;
   --pc-home-dot-opacity: 0.10;
-  --pc-home-hero-overlay: linear-gradient(180deg, rgb(7 17 38 / 0.66) 0%, rgb(7 17 38 / 0.42) 46%, rgb(7 17 38 / 0.82) 100%), radial-gradient(78% 58% at 16% 42%, rgb(7 17 38 / 0.44) 0%, rgb(7 17 38 / 0.18) 48%, transparent 72%), radial-gradient(65% 55% at 84% 28%, rgb(37 99 235 / 0.20) 0%, transparent 64%);
+  --pc-home-hero-overlay: linear-gradient(180deg, rgb(7 17 38 / 0.54) 0%, rgb(7 17 38 / 0.30) 46%, rgb(7 17 38 / 0.72) 100%), radial-gradient(78% 58% at 16% 42%, rgb(7 17 38 / 0.34) 0%, rgb(7 17 38 / 0.12) 50%, transparent 72%), radial-gradient(65% 55% at 84% 28%, rgb(37 99 235 / 0.16) 0%, transparent 64%);
   --pc-home-explore-bg: #071126;
   --pc-home-explore-overlay: linear-gradient(180deg, rgb(7 17 38 / 0.98) 0%, rgb(7 17 38 / 0.88) 45%, rgb(7 17 38 / 0.98) 100%);
   --pc-home-cta-gradient: linear-gradient(140deg, #071126 0%, #172a4b 100%);
@@ -373,7 +373,7 @@
   --pc-home-onhero-fg-60: #b7c5dd;
   --pc-home-onhero-gold: #F0CE86;
   --pc-home-hero-bg: #071126;
-  --pc-home-hero-img-opacity: 0.34;
+  --pc-home-hero-img-opacity: 0.44;
 
   /* Semantic — nome de estabelecimento (dark) */
   --market-accent: #ffe3a0;
