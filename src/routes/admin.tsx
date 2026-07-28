@@ -204,10 +204,6 @@ const cycleLabel: Record<BillingCycle, string> = {
 };
 
 function AdminPage() {
-  const navigate = useNavigate();
-
-
-
   // Registra o acesso ao console na auditoria (uma vez por sessão de página).
   const logAccess = useServerFn(logAdminAccess);
   useEffect(() => {
@@ -250,15 +246,15 @@ function AdminPage() {
       <header className="sticky top-0 z-20 border-b border-border/60 bg-background/94 backdrop-blur">
         <div className="mx-auto grid max-w-[1400px] grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-2 md:px-5">
           <div className="flex min-w-0 items-center gap-2.5">
-          <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-border bg-primary/10 text-primary">
-            <ShieldCheck className="h-[18px] w-[18px]" strokeWidth={2.2} />
-          </span>
-          <div className="min-w-0 flex-1">
-            <p className={tc.eyebrow}>Console administrativo</p>
-            <h1 className={cn(tc.h1, "mt-0.5 truncate font-sans font-semibold")}>
-              Gestão do PreçoCerto
-            </h1>
-          </div>
+            <span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-border bg-primary/10 text-primary">
+              <ShieldCheck className="h-[18px] w-[18px]" strokeWidth={2.2} />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className={tc.eyebrow}>Console administrativo</p>
+              <h1 className={cn(tc.h1, "mt-0.5 truncate font-sans font-semibold")}>
+                Gestão do PreçoCerto
+              </h1>
+            </div>
           </div>
           <span className={cn(tc.tag, "hidden rounded-full border border-border bg-card px-2.5 py-1 text-muted-foreground sm:inline-flex")}>
             Painel unificado
