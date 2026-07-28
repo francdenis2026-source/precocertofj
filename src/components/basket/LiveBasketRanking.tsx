@@ -18,7 +18,14 @@ import {
   FileText,
   FileSpreadsheet,
   Link2,
+  ArrowRightLeft,
 } from "lucide-react";
+import {
+  suggestSubstitutions,
+  projectVerdictWithSubstitutions,
+  type BasketSubstitution,
+} from "@/lib/basket-suggestions";
+import { BasketSubstitutionPanel } from "@/components/basket/BasketSubstitutionPanel";
 import { supabase } from "@/integrations/supabase/client";
 import {
   getBasketComparison,
@@ -345,6 +352,39 @@ export function LiveBasketRanking({
       .filter((x): x is { category: EssentialCategory; store: ScopedStore } => x != null);
   }, [favoritesSet, data, neighborhood]);
 
+  // ---- Substituições sugeridas (apenas com cesta completa) ----
+  const substitutionsByStore = useMemo<Map<string, BasketSubstitution[]>>(() => {
+    const map = new Map<string, BasketSubstitution[]>();
+    if (!data || category !== "all") return map;
+    for (const s of ranked) {
+      const subs = suggestSubstitutions(data, s.establishmentId);
+      if (subs.length > 0) map.set(s.establishmentId, subs);
+    }
+    return map;
+  }, [data, category, ranked]);
+
+  const hypotheticalVerdict = useMemo(() => {
+    if (!data || category !== "all" || ranked.length === 0) return null;
+    const projections = projectVerdictWithSubstitutions(data);
+    // Restringe às lojas atualmente no ranking (respeita filtro de bairro)
+    const inScope = new Set(ranked.map((s) => s.establishmentId));
+    const scoped = projections.filter((p) => inScope.has(p.storeId));
+    if (scoped.length === 0) return null;
+    const currentLeader = ranked[0];
+    const projectedLeader = scoped[0];
+    const changes = scoped.reduce((n, p) => n + p.substitutionsApplied, 0);
+    if (changes === 0) return null;
+    return {
+      currentLeaderId: currentLeader.establishmentId,
+      currentLeaderName: currentLeader.establishmentName,
+      projectedLeaderId: projectedLeader.storeId,
+      projectedLeaderName: projectedLeader.storeName,
+      projectedTotal: projectedLeader.hypotheticalTotal,
+      changed: projectedLeader.storeId !== currentLeader.establishmentId,
+      totalSubstitutions: changes,
+    };
+  }, [data, category, ranked]);
+
   // ---- Sparklines (últimos 7 dias) ----
   const storeIds = useMemo(() => ranked.slice(0, 10).map((s) => s.establishmentId), [ranked]);
   const sparklineQuery = useQuery<Record<string, Array<{ t: string; p: number }>>>({
@@ -635,6 +675,54 @@ export function LiveBasketRanking({
                 </div>
               )}
 
+              {hypotheticalVerdict && (
+                <div
+                  data-testid="basket-hypothetical-verdict"
+                  className={cn(
+                    "flex flex-wrap items-start gap-3 rounded-xl border p-3 text-xs",
+                    hypotheticalVerdict.changed
+                      ? "border-amber-400/60 bg-amber-50/50 dark:border-amber-500/40 dark:bg-amber-500/5"
+                      : "border-border bg-muted/30",
+                  )}
+                >
+                  <ArrowRightLeft
+                    className={cn(
+                      "mt-0.5 h-4 w-4 shrink-0",
+                      hypotheticalVerdict.changed
+                        ? "text-amber-600 dark:text-amber-400"
+                        : "text-muted-foreground",
+                    )}
+                    aria-hidden
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="font-semibold text-foreground">
+                      Com {hypotheticalVerdict.totalSubstitutions} substituição
+                      {hypotheticalVerdict.totalSubstitutions > 1 ? "ões" : ""} sugerida
+                      {hypotheticalVerdict.totalSubstitutions > 1 ? "s" : ""} entre itens da mesma
+                      categoria,{" "}
+                      {hypotheticalVerdict.changed ? (
+                        <>
+                          o veredito mudaria para{" "}
+                          <span className="text-brand-navy dark:text-brand-gold">
+                            {hypotheticalVerdict.projectedLeaderName}
+                          </span>{" "}
+                          por {brl(hypotheticalVerdict.projectedTotal)}.
+                        </>
+                      ) : (
+                        <>
+                          {hypotheticalVerdict.currentLeaderName} continuaria líder por{" "}
+                          {brl(hypotheticalVerdict.projectedTotal)}.
+                        </>
+                      )}
+                    </p>
+                    <p className="mt-0.5 text-muted-foreground">
+                      Abra “Detalhes” em um mercado para ver quais trocas foram consideradas e o
+                      impacto no total.
+                    </p>
+                  </div>
+                </div>
+              )}
+
               <ol className="space-y-2">
                 {ranked.slice(0, compact ? 5 : 10).map((s, idx) => {
                   const isWinner = idx === 0;
@@ -711,6 +799,22 @@ export function LiveBasketRanking({
                           {s.neighborhood ? ` · ${s.neighborhood}` : ""}
                           {s.city ? ` · ${s.city}` : ""}
                         </p>
+                        {(() => {
+                          const subs = substitutionsByStore.get(s.establishmentId);
+                          if (!subs || subs.length === 0) return null;
+                          const extra = subs.reduce((sum, x) => sum + x.substitutePrice * x.substituteQuantity, 0);
+                          return (
+                            <button
+                              type="button"
+                              onClick={() => setDetailStoreId(s.establishmentId)}
+                              className="mt-1 inline-flex items-center gap-1 rounded-full border border-amber-400/60 bg-amber-50/60 px-2 py-0.5 text-[10px] font-semibold text-amber-800 transition-colors hover:bg-amber-100/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-300"
+                              aria-label={`Ver ${subs.length} sugestão${subs.length > 1 ? "ões" : ""} de substituição em ${s.establishmentName}`}
+                            >
+                              <ArrowRightLeft className="h-2.5 w-2.5" aria-hidden />
+                              {subs.length} substituição{subs.length > 1 ? "ões" : ""} · +{brl(extra)}
+                            </button>
+                          );
+                        })()}
                       </div>
                       {cheapestScoped && (
                         <div
@@ -830,6 +934,16 @@ export function LiveBasketRanking({
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
+
+              {category === "all" && data && (
+                <BasketSubstitutionPanel
+                  data={data}
+                  storeId={detailStore.establishmentId}
+                  className="mt-3"
+                />
+              )}
+
+
 
               <ul className="mt-3 divide-y divide-border">
                 {ESSENTIALS.filter((e) => category === "all" || e.category === category).map(
