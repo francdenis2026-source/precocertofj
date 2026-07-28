@@ -711,6 +711,11 @@ function RevokeDialog({ row, onClose, onDone }: { row: TrialCodeRow | null; onCl
     mutationFn: () => rev({ data: { id: row!.id, endAccessNow: true } }),
     onSuccess: () => {
       toast.success(isActive ? "Acesso encerrado" : "Código revogado");
+      // Notifica outras abas imediatamente (sem esperar polling)
+      try {
+        const bc = (window as unknown as { __pcTrialBc?: BroadcastChannel | null }).__pcTrialBc;
+        bc?.postMessage({ t: "revoke", id: row!.id, ts: Date.now() });
+      } catch { /* noop */ }
       onClose(); onDone();
     },
     onError: (e: Error) => toast.error(e.message),
