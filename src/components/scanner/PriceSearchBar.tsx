@@ -2101,12 +2101,26 @@ function ProductGroupCard({
         {visiblePrices.map((p, i) => {
 
           const isCheapest = globalMin != null && p.price === globalMin;
+          const isFocusedMarket =
+            !!focusedMarket &&
+            (p.marketName ?? "").toLowerCase() === focusedMarket.toLowerCase();
           return (
             <li
               key={`${p.marketName}-${p.when}-${i}`}
-              className="pc-res-row relative"
+              className={
+                "pc-res-row relative cursor-pointer " +
+                (isFocusedMarket ? "bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)]" : "")
+              }
               data-cheapest={isCheapest ? "true" : "false"}
+              data-focused-market={isFocusedMarket ? "true" : undefined}
+              onClick={(e) => {
+                if (!onSelect) return;
+                const target = e.target as HTMLElement;
+                if (target.closest("a,button,input,select,textarea,[role=button]")) return;
+                onSelect(productName, p.marketName ?? null);
+              }}
             >
+
               <StoreColorBar name={p.marketName} brandColor={p.marketBrandColor} />
               {isCheapest ? (
                 <span
