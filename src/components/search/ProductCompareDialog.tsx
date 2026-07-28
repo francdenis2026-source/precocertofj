@@ -287,8 +287,8 @@ export function ProductCompareDialog({
                           <>
                             <p
                               className={
-                                "font-display text-[15px] font-semibold tabular-nums " +
-                                (isBest ? "text-accent-strong" : "text-foreground")
+                                "pc-price pc-price--md " +
+                                (isBest ? "pc-price--best" : "")
                               }
                             >
                               {fmt(total)}
@@ -298,7 +298,7 @@ export function ProductCompareDialog({
                                 melhor total
                               </p>
                             ) : bestTotal != null ? (
-                              <p className="mt-1 font-mono text-[11px] tabular-nums text-muted-foreground">
+                              <p className="mt-1 pc-price pc-price--sm pc-price--muted">
                                 +{fmt(total - bestTotal)}
                               </p>
                             ) : null}
