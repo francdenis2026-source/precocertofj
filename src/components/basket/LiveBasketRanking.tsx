@@ -71,6 +71,15 @@ import { Sparkline } from "@/components/basket/Sparkline";
 
 type CategoryFilter = "all" | EssentialCategory;
 
+export type LiveBasketSort = "coverage" | "total" | "savings" | "recent";
+const SORT_STORAGE_KEY = "pc:live-basket:sort";
+const SORT_OPTIONS: { key: LiveBasketSort; label: string }[] = [
+  { key: "coverage", label: "Cobertura + menor total" },
+  { key: "total", label: "Menor total" },
+  { key: "savings", label: "Maior economia vs. líder" },
+  { key: "recent", label: "Atualização mais recente" },
+];
+
 export type LiveBasketFilters = {
   category: CategoryFilter;
   city: string; // "all" or city name
@@ -167,6 +176,17 @@ export function LiveBasketRanking({
     [isControlled, onChange, value],
   );
   const { category, city, neighborhood } = filters;
+
+  // Modo de ordenação persistido em localStorage.
+  const [sortMode, setSortMode] = useState<LiveBasketSort>(() => {
+    if (typeof window === "undefined") return "coverage";
+    const raw = window.localStorage.getItem(SORT_STORAGE_KEY);
+    if (raw === "coverage" || raw === "total" || raw === "savings" || raw === "recent") return raw;
+    return "coverage";
+  });
+  useEffect(() => {
+    if (typeof window !== "undefined") window.localStorage.setItem(SORT_STORAGE_KEY, sortMode);
+  }, [sortMode]);
 
   const [detailStoreId, setDetailStoreId] = useState<string | null>(null);
 
@@ -281,14 +301,26 @@ export function LiveBasketRanking({
       return true;
     });
     const scoped = filtered.map((s) => scopeStore(s, category));
-    scoped.sort((a, b) => {
-      const covA = a.scopedTotalItems > 0 ? a.scopedFound / a.scopedTotalItems : 0;
-      const covB = b.scopedTotalItems > 0 ? b.scopedFound / b.scopedTotalItems : 0;
-      if (covB !== covA) return covB - covA;
-      return a.scopedTotal - b.scopedTotal;
-    });
-    return scoped.filter((s) => s.scopedFound > 0 || category === "all");
-  }, [data, category, neighborhood]);
+    const eligible = scoped.filter((s) => s.scopedFound > 0 || category === "all");
+    // Máximo total dentro do escopo para calcular "economia vs. mais caro"
+    const maxTotal = eligible.reduce((m, s) => (s.scopedTotal > m ? s.scopedTotal : m), 0);
+    const lastUpdateOf = (s: ScopedStore) =>
+      s.scopedItems.reduce((mx, it) => (it && it.when > mx ? it.when : mx), "");
+
+    const sorters: Record<LiveBasketSort, (a: ScopedStore, b: ScopedStore) => number> = {
+      coverage: (a, b) => {
+        const covA = a.scopedTotalItems > 0 ? a.scopedFound / a.scopedTotalItems : 0;
+        const covB = b.scopedTotalItems > 0 ? b.scopedFound / b.scopedTotalItems : 0;
+        if (covB !== covA) return covB - covA;
+        return a.scopedTotal - b.scopedTotal;
+      },
+      total: (a, b) => a.scopedTotal - b.scopedTotal,
+      savings: (a, b) => (maxTotal - a.scopedTotal) < (maxTotal - b.scopedTotal) ? 1 : -1,
+      recent: (a, b) => (lastUpdateOf(b) || "").localeCompare(lastUpdateOf(a) || ""),
+    };
+    eligible.sort(sorters[sortMode]);
+    return eligible;
+  }, [data, category, neighborhood, sortMode]);
 
   const winner = ranked[0] ?? null;
   const scopeLabel =
@@ -388,6 +420,20 @@ export function LiveBasketRanking({
             <CardDescription className="text-xs sm:text-sm">{description}</CardDescription>
           </div>
           <div className="flex items-center gap-2">
+            <Select value={sortMode} onValueChange={(v) => setSortMode(v as LiveBasketSort)}>
+              <SelectTrigger
+                data-testid="live-basket-sort"
+                className="h-7 w-[200px] gap-1 px-2 text-[11px]"
+                aria-label="Ordenar ranking"
+              >
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {SORT_OPTIONS.map((o) => (
+                  <SelectItem key={o.key} value={o.key} className="text-xs">{o.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <span
               className={cn(
                 "inline-flex items-center gap-1.5 rounded-full border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide transition-colors",
@@ -658,7 +704,10 @@ export function LiveBasketRanking({
                           )}
                         </p>
                         <p className="text-[11px] text-muted-foreground">
-                          {s.scopedFound}/{s.scopedTotalItems} itens
+                          <span data-testid="row-coverage">{s.scopedFound}/{s.scopedTotalItems} itens</span>
+                          {s.scopedFound > 0 && (
+                            <> · <span title="Custo médio por item disponível">{brl(s.scopedTotal / s.scopedFound)}/item</span></>
+                          )}
                           {s.neighborhood ? ` · ${s.neighborhood}` : ""}
                           {s.city ? ` · ${s.city}` : ""}
                         </p>

@@ -88,6 +88,13 @@ const SECTIONS: HubSection[] = [
         icon: ShoppingBasket,
         to: "/admin_/cesta",
       },
+      {
+        key: "cesta-auditoria",
+        title: "Auditoria da Cesta",
+        description: "Histórico de mudanças no conjunto e nos itens da cesta básica.",
+        icon: ShoppingBasket,
+        to: "/admin_/cesta-auditoria",
+      },
     ],
 
   },

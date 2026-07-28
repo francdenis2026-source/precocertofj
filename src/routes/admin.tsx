@@ -307,33 +307,56 @@ function AdminPage() {
         </nav>
 
 
-        {/* ---------- Indicadores executivos + busca global ---------- */}
-        <div className="space-y-2.5" data-admin-region="overview">
-          <Suspense fallback={<SectionSkeleton rows={2} label="Carregando busca global" />}>
-            <AdminGlobalSearch />
-          </Suspense>
-          <Suspense fallback={<SectionSkeleton rows={3} chart label="Carregando indicadores" />}>
-            <AdminInsightsPanel />
-          </Suspense>
-          <div className="flex items-center justify-between gap-2 rounded-xl border border-border/70 bg-card/70 px-2.5 py-1.5">
-            <p className={cn(tc.meta, "truncate")}>KPIs avançados ficam recolhidos para manter o painel principal legível.</p>
-            <Button
-              type="button"
-              size="sm"
-              variant={showAdvancedKpis ? "default" : "outline"}
-              className={cn(tc.control, "h-7 shrink-0 rounded-full px-2.5")}
-              onClick={() => setShowAdvancedKpis((v) => !v)}
-              aria-expanded={showAdvancedKpis}
-            >
-              {showAdvancedKpis ? "Ocultar KPIs" : "Ver KPIs"}
-            </Button>
-          </div>
-          {showAdvancedKpis && (
-            <Suspense fallback={<SectionSkeleton rows={3} chart label="Carregando KPIs de preços" />}>
-              <AdminKpiBoard />
+        {/* ---------- Resumo — Console Administrativo ---------- */}
+        <div className="space-y-4" data-admin-region="overview">
+          {/* Seção 1: Descoberta — busca correlacionada */}
+          <section aria-labelledby="admin-section-discovery" className="space-y-2">
+            <header className="flex items-baseline justify-between gap-2 border-b border-border/50 pb-1">
+              <h2 id="admin-section-discovery" className={cn(tc.itemTitle, "text-foreground")}>Descoberta</h2>
+              <span className={cn(tc.meta, "text-muted-foreground")}>Buscar por produto, estabelecimento ou preço</span>
+            </header>
+            <Suspense fallback={<SectionSkeleton rows={2} label="Carregando busca global" />}>
+              <AdminGlobalSearch />
             </Suspense>
-          )}
+          </section>
+
+          {/* Seção 2: Indicadores operacionais */}
+          <section aria-labelledby="admin-section-indicators" className="space-y-2">
+            <header className="flex items-baseline justify-between gap-2 border-b border-border/50 pb-1">
+              <h2 id="admin-section-indicators" className={cn(tc.itemTitle, "text-foreground")}>Indicadores operacionais</h2>
+              <span className={cn(tc.meta, "text-muted-foreground")}>Cobertura, integridade e saúde do catálogo</span>
+            </header>
+            <Suspense fallback={<SectionSkeleton rows={3} chart label="Carregando indicadores" />}>
+              <AdminInsightsPanel />
+            </Suspense>
+          </section>
+
+          {/* Seção 3: KPIs de preços (recolhível) */}
+          <section aria-labelledby="admin-section-kpis" className="space-y-2">
+            <header className="flex items-center justify-between gap-2 border-b border-border/50 pb-1">
+              <div className="min-w-0">
+                <h2 id="admin-section-kpis" className={cn(tc.itemTitle, "text-foreground")}>KPIs de preços</h2>
+                <p className={cn(tc.meta, "text-muted-foreground")}>Evolução, comparativos e tendências avançadas</p>
+              </div>
+              <Button
+                type="button"
+                size="sm"
+                variant={showAdvancedKpis ? "default" : "outline"}
+                className={cn(tc.control, "h-7 shrink-0 rounded-full px-2.5")}
+                onClick={() => setShowAdvancedKpis((v) => !v)}
+                aria-expanded={showAdvancedKpis}
+              >
+                {showAdvancedKpis ? "Ocultar" : "Expandir"}
+              </Button>
+            </header>
+            {showAdvancedKpis && (
+              <Suspense fallback={<SectionSkeleton rows={3} chart label="Carregando KPIs de preços" />}>
+                <AdminKpiBoard />
+              </Suspense>
+            )}
+          </section>
         </div>
+
 
         {/* ---------- Abas de gestão detalhada ---------- */}
         <Tabs defaultValue="plans" className="flex w-full flex-col" data-admin-region="management">
