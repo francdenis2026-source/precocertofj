@@ -429,11 +429,11 @@ function PrecosPage() {
             {isAdmin && (
               <p className="text-xs text-muted-foreground">
                 Precisa registrar um novo cupom?{" "}
-                <Link to="/admin/cupom" className="underline">
+                <Link to="/admin/promocoes" search={{ tab: "cupons" } as never} className="underline">
                   Cupom individual
                 </Link>{" "}
                 ou{" "}
-                <Link to="/admin/cupom-lote" className="underline">
+                <Link to="/admin/promocoes" search={{ tab: "cupons-lote" } as never} className="underline">
                   em lote
                 </Link>
                 .
