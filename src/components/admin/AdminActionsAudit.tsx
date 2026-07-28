@@ -216,7 +216,7 @@ export function AdminActionsAudit() {
   }, [offset, rows.length, total]);
 
   return (
-    <Card>
+    <Card className={cn("transition-shadow duration-500", flashing && "ring-2 ring-emerald-500/40 shadow-lg")}>
       <CardHeader className="pb-2.5">
         <div className="flex flex-wrap items-start justify-between gap-2.5">
           <div className="min-w-0">
