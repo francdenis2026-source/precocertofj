@@ -1,5 +1,5 @@
-import { Link } from "@tanstack/react-router";
-import { ChevronRight, type LucideIcon } from "lucide-react";
+import { Link, useLocation } from "@tanstack/react-router";
+import { ChevronRight, Check, type LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
 import type { AdminTabTone } from "@/components/admin/AdminTabs";
