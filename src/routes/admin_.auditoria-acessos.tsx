@@ -45,6 +45,14 @@ import {
 import { ShieldAlert, Activity, RefreshCw, TrendingUp, Ban, Shield } from "lucide-react";
 import { AppShell } from "@/components/brand/AppShell";
 import { ChartSkeleton, ChartEmpty } from "@/components/admin/ChartStates";
+import {
+  chartTheme,
+  tickStyle,
+  tooltipStyle,
+  tooltipLabelStyle,
+  tooltipItemStyle,
+  legendStyle,
+} from "@/lib/admin-chart-theme";
 
 export const Route = createFileRoute("/admin_/auditoria-acessos")({
   ssr: false,
