@@ -162,6 +162,7 @@ type EstabRow = {
   logo_url: string | null;
   brand_color: string | null;
   city: string | null;
+  neighborhood: string | null;
   latitude: number | null;
   longitude: number | null;
   active: boolean;
