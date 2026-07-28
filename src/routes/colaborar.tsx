@@ -186,7 +186,7 @@ function CollaboratorWorkspace() {
     [subs],
   );
 
-  const [tab, setTab] = useState(capReached ? "envios" : "enviar");
+  
 
   return (
     <div className="space-y-3">
