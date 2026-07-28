@@ -323,7 +323,7 @@ function RedeemPage() {
       {/* Header minimal fixo */}
       <header className="relative z-20 flex h-14 items-center justify-between border-b border-border/40 bg-background/70 px-4 backdrop-blur-md md:px-6">
         <Link to="/" className="flex items-center gap-2" aria-label="Ir para a home PreçoCerto">
-          <Logo variant="auto" className="h-7 w-auto" />
+          <Logo variant="default" className="h-7 w-auto" />
         </Link>
         <div className="flex items-center gap-2">
           <Link
