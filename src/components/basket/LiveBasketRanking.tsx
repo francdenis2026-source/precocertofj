@@ -935,6 +935,16 @@ export function LiveBasketRanking({
                 </DropdownMenu>
               </div>
 
+              {category === "all" && data && (
+                <BasketSubstitutionPanel
+                  data={data}
+                  storeId={detailStore.establishmentId}
+                  className="mt-3"
+                />
+              )}
+
+
+
               <ul className="mt-3 divide-y divide-border">
                 {ESSENTIALS.filter((e) => category === "all" || e.category === category).map(
                   (ess) => {
