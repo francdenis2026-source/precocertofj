@@ -67,7 +67,7 @@ const PC_EMERALD_LIGHT = "#1e4a85";
 const PC_GOLD = "#f5b301";
 const PC_GOLD_DARK = "#c78d00";
 const PC_CREAM = "#f7f9fc";
-const PC_DISPLAY = "'Outfit', system-ui, sans-serif";
+const PC_DISPLAY = "'Fraunces', 'Instrument Serif', ui-serif, Georgia, serif";
 const PC_BODY = "'Figtree', system-ui, sans-serif";
 
 

@@ -164,7 +164,7 @@ function PrivacidadePage() {
           </div>
           <div className="flex min-w-0 flex-col gap-0.5">
             <span className={cn(tc.eyebrow, "hidden sm:block")}>Documento oficial</span>
-            <h1 className={cn(tc.h1, "truncate")}>Termos e Privacidade</h1>
+            <h1 className={cn(tc.h1, "font-editorial truncate")}>Termos e Privacidade</h1>
           </div>
           <span
             className={cn(
