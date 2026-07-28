@@ -38,19 +38,19 @@ export const tickStyleSoft = { fontSize: 10, fill: chartTheme.axisSoft } as cons
 export const tooltipStyle = {
   fontSize: 12,
   borderRadius: 10,
-  border: "1px solid hsl(var(--border))",
-  background: "hsl(var(--popover))",
-  color: "hsl(var(--popover-foreground))",
-  boxShadow: "0 8px 24px hsl(0 0% 0% / 0.35)",
+  border: `1px solid ${chartTheme.tooltipBorder}`,
+  background: chartTheme.tooltipBg,
+  color: chartTheme.tooltipFg,
+  boxShadow: "0 8px 24px rgba(0, 0, 0, 0.45)",
 } as const;
 
 export const tooltipLabelStyle = {
-  color: "hsl(var(--popover-foreground))",
+  color: chartTheme.tooltipFg,
   fontWeight: 600,
 } as const;
 
 export const tooltipItemStyle = {
-  color: "hsl(var(--popover-foreground))",
+  color: chartTheme.tooltipFg,
 } as const;
 
 export const legendStyle = {
