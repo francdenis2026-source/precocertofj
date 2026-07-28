@@ -65,21 +65,17 @@ function CollaboratePage() {
   return (
     <PageShell>
       <PageShellContent>
-        <div className="container-page pt-3 pb-8 md:pt-4">
+        <div className="container-page pt-2 pb-3 md:pt-3">
           <InternalPageHeader
             title="Área do colaborador"
             highlight="colaborador"
             breadcrumbs={[{ label: "Início", to: "/" }, { label: "Colaborar" }]}
             description="Envie a nota, a equipe valida e seus dias grátis entram automaticamente — 7 dias por nota, até 30 por mês."
-            className="mb-3"
+            className="mb-2"
           />
 
           {loading ? (
-            <div
-              role="status"
-              aria-busy="true"
-              className="flex justify-center py-14"
-            >
+            <div role="status" aria-busy="true" className="flex justify-center py-10">
               <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
               <span className="sr-only">Verificando sua sessão…</span>
             </div>
