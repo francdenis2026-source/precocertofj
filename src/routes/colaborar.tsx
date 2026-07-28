@@ -113,7 +113,7 @@ function AuthGate() {
       role="status"
       className="mx-auto max-w-md rounded-xl border border-border bg-card p-5 text-center shadow-elev-1"
     >
-      <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-brand-gold/12 text-brand-gold">
+      <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-brand-gold/15 text-[var(--pc-gold-ink)] ring-1 ring-brand-gold/30">
         <LogIn className="h-5 w-5" strokeWidth={2.2} />
       </span>
       <h2 className="mt-3 text-[16px] font-semibold tracking-tight text-foreground">
