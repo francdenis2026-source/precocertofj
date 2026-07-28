@@ -256,27 +256,14 @@ export const getPlansHealth = createServerFn({ method: "GET" })
     const licenseTotal = Number(totalRes.count ?? 0);
     const licenseActive = Number(activeRes.count ?? 0);
 
-    // Detecta a tabela legada `plans` tentando um HEAD count.
-    // Se a tabela não existe, o Supabase retorna erro (code 42P01) — tratamos como ausente.
-    let legacyPlansExists = false;
-    let legacyPlansCount = 0;
-    try {
-      const res = await (supabaseAdmin as any)
-        .from("plans")
-        .select("id", { count: "exact", head: true });
-      if (!res.error) {
-        legacyPlansExists = true;
-        legacyPlansCount = Number(res.count ?? 0);
-      }
-    } catch {
-      legacyPlansExists = false;
-    }
-
+    // A tabela legada `public.plans` foi removida na migração
+    // "unify_plans_into_license_plans". Não fazemos mais probe via PostgREST
+    // porque a resposta 404 do endpoint era interpretada como "existe com 0 registros".
+    const legacyPlansExists = false;
+    const legacyPlansCount = 0;
 
     const warnings: string[] = [];
     if (licenseActive === 0) warnings.push("Nenhum plano ativo em license_plans.");
-    if (legacyPlansExists) warnings.push("Tabela legada `plans` ainda existe — deve ser removida.");
-    if (legacyPlansCount > 0) warnings.push(`Tabela legada contém ${legacyPlansCount} registro(s).`);
 
     return {
       licenseActive,

@@ -68,6 +68,7 @@ export const checkProductCountConsistency = createServerFn({ method: "GET" }).ha
       price_drops_7d: number | null;
     } | undefined) : undefined;
 
+    // Métricas comparáveis (mesma população: total de produtos catalogados)
     const metrics: ConsistencyMetric[] = [
       {
         key: "cache_rows",
@@ -81,15 +82,20 @@ export const checkProductCountConsistency = createServerFn({ method: "GET" }).ha
         value: compsRows.length,
         source: "RPC usada pelo /comparador e Home",
       },
+    ];
+
+    // Métrica informativa (subconjunto — apenas produtos com 2+ estabelecimentos).
+    // Não entra no cálculo de divergência porque representa outra população.
+    const informationalMetrics: ConsistencyMetric[] = [
       {
         key: "active_comparisons",
         label: "platform_public_stats.active_comparisons",
         value: statsRow?.active_comparisons ?? 0,
-        source: "RPC platform_public_stats",
+        source: "Subconjunto — produtos com 2+ estabelecimentos (não comparável)",
       },
     ];
 
-    // Compara cada par
+    // Compara apenas métricas da mesma população
     const alerts: ConsistencyAlert[] = [];
     for (let i = 0; i < metrics.length; i++) {
       for (let j = i + 1; j < metrics.length; j++) {
@@ -121,7 +127,7 @@ export const checkProductCountConsistency = createServerFn({ method: "GET" }).ha
 
     return {
       checkedAt: new Date().toISOString(),
-      metrics,
+      metrics: [...metrics, ...informationalMetrics],
       alerts,
       worstDeltaPct,
     };
