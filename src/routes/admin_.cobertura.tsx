@@ -135,10 +135,14 @@ function CoveragePage() {
         goldRule
       />
       <section className="mx-auto max-w-7xl px-6 py-10">
-
+        <div className="mb-6">
+          <CoverageDiagnosticsPanel />
+        </div>
 
         {overview.isLoading ? (
           <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Carregando…</div>
+        ) : overview.error ? (
+          <CoverageErrorBanner error={overview.error} onRetry={() => overview.refetch()} />
         ) : (
           <OverviewTable rows={rows} onSelect={(id) => { setSelected(id); setSearch(""); setCategory("todos"); }} selected={selected} />
         )}
