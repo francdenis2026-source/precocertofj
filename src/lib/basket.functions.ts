@@ -47,7 +47,7 @@ type EssentialDef = {
   exclude?: string[];
 };
 
-const ESSENTIALS: EssentialDef[] = [
+export const ESSENTIALS: EssentialDef[] = [
   { key: "arroz", label: "Arroz", category: "graos", patterns: ["arroz"], exclude: ["doce"] },
   { key: "feijao", label: "Feijão", category: "graos", patterns: ["feijao"] },
   { key: "oleo", label: "Óleo de soja", category: "mercearia", patterns: ["oleo de soja", "oleo soja"] },
