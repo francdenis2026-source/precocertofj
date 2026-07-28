@@ -18,7 +18,14 @@ import {
   FileText,
   FileSpreadsheet,
   Link2,
+  ArrowRightLeft,
 } from "lucide-react";
+import {
+  suggestSubstitutions,
+  projectVerdictWithSubstitutions,
+  type BasketSubstitution,
+} from "@/lib/basket-suggestions";
+import { BasketSubstitutionPanel } from "@/components/basket/BasketSubstitutionPanel";
 import { supabase } from "@/integrations/supabase/client";
 import {
   getBasketComparison,
