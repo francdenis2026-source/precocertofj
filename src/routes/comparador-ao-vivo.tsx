@@ -60,7 +60,7 @@ function LiveComparatorPage() {
 
   const onFiltersChange = (next: LiveBasketFilters) => {
     navigate({
-      search: (prev) => ({
+      search: (prev: z.infer<typeof searchSchema>) => ({
         ...prev,
         cat: next.category,
         city: next.city,
