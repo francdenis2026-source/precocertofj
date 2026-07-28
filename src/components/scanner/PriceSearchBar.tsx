@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { usePricesRealtime } from "@/hooks/usePricesRealtime";
 import { LiveUpdateBadge, useLivePulse } from "@/components/ui/live-update-badge";
@@ -86,6 +86,10 @@ export function PriceSearchBar({
   filterShortcuts = [],
   activeFilterCount = 0,
   onClearFilters,
+  sort: sortProp,
+  category: categoryProp,
+  onSortChange,
+  onCategoryChange,
 }: {
   initialQuery?: string;
   mode?: SearchMode;
@@ -98,6 +102,12 @@ export function PriceSearchBar({
   filterShortcuts?: EmptyFilterShortcut[];
   activeFilterCount?: number;
   onClearFilters?: () => void;
+  /** Ordenação controlada externamente (URL). Quando ausente, cai no localStorage. */
+  sort?: SortMode;
+  /** Filtro de categoria controlado externamente (URL). Quando ausente, cai no localStorage. */
+  category?: string | null;
+  onSortChange?: (mode: SortMode) => void;
+  onCategoryChange?: (category: string | null) => void;
 }) {
 
   const runSearch = useServerFn(searchProductPrice);
@@ -182,6 +192,35 @@ export function PriceSearchBar({
     "pc:search:groupBy",
     "product",
     { validate: (v): v is "product" | "market" | "matrix" => v === "product" || v === "market" || v === "matrix" },
+  );
+
+  // Sincroniza props controladas (URL) com o estado interno. Quando o pai
+  // envia `sort`/`category`, tratamos como fonte de verdade e propagamos as
+  // mudanças do usuário via callbacks (URL → estado → URL, sem loops).
+  useEffect(() => {
+    if (sortProp && sortProp !== sortMode) setSortMode(sortProp);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sortProp]);
+  useEffect(() => {
+    if (categoryProp !== undefined && categoryProp !== categoryFilter) {
+      setCategoryFilter(categoryProp);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [categoryProp]);
+
+  const handleSortChange = useCallback(
+    (next: SortMode) => {
+      setSortMode(next);
+      onSortChange?.(next);
+    },
+    [setSortMode, onSortChange],
+  );
+  const handleCategoryChange = useCallback(
+    (next: string | null) => {
+      setCategoryFilter(next);
+      onCategoryChange?.(next);
+    },
+    [setCategoryFilter, onCategoryChange],
   );
 
 
@@ -1159,7 +1198,7 @@ export function PriceSearchBar({
                   <>
                     <QuickFilters
                       sortMode={sortMode}
-                      onSort={setSortMode}
+                      onSort={handleSortChange}
                       kinds={Array.from(
                         new Set(
                           result.markets
@@ -1171,7 +1210,7 @@ export function PriceSearchBar({
                       onKind={setKindFilter}
                       categories={availableCategories}
                       categoryFilter={categoryFilter}
-                      onCategory={setCategoryFilter}
+                      onCategory={handleCategoryChange}
                       groupBy={groupBy}
                       onGroupBy={setGroupBy}
                       freshness={freshness}

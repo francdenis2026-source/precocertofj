@@ -40,12 +40,33 @@ const searchSchema = z.object({
   brand: fallback(z.string(), "").default(""),
   min: fallback(z.string(), "").default(""),
   max: fallback(z.string(), "").default(""),
+  sort: fallback(z.string(), "cheapest").default("cheapest"),
 });
+
+const SORT_VALUES = new Set([
+  "relevance",
+  "cheapest",
+  "unit",
+  "recent",
+  "kind",
+  "spread",
+  "savings",
+]);
+type UrlSort =
+  | "relevance"
+  | "cheapest"
+  | "unit"
+  | "recent"
+  | "kind"
+  | "spread"
+  | "savings";
 
 export const Route = createFileRoute("/buscar")({
   validateSearch: zodValidator(searchSchema),
   search: {
-    middlewares: [retainSearchParams(["q", "categoria", "mode", "pure", "brand", "min", "max"])],
+    middlewares: [
+      retainSearchParams(["q", "categoria", "mode", "pure", "brand", "min", "max", "sort"]),
+    ],
   },
 
   head: () => ({
@@ -92,12 +113,46 @@ function SearchPage() {
   const brandFilter = (search.brand ?? "").slice(0, 40);
   const priceMin = search.min ? Number(search.min) : NaN;
   const priceMax = search.max ? Number(search.max) : NaN;
+  const sortValue: UrlSort = SORT_VALUES.has(search.sort ?? "")
+    ? (search.sort as UrlSort)
+    : "cheapest";
+  const categoryValue = (search.categoria ?? "").trim() || null;
   const activeFilterCount =
     (mode === "loose" ? 1 : 0) +
     (pureOnly ? 0 : 1) +
     (brandFilter.trim() ? 1 : 0) +
     (Number.isFinite(priceMin) ? 1 : 0) +
-    (Number.isFinite(priceMax) ? 1 : 0);
+    (Number.isFinite(priceMax) ? 1 : 0) +
+    (sortValue !== "cheapest" ? 1 : 0) +
+    (categoryValue ? 1 : 0);
+
+  const setSortUrl = useCallback(
+    (next: UrlSort) => {
+      navigate({
+        search: (prev: Record<string, unknown>) => {
+          const s: Record<string, unknown> = { ...prev, sort: next };
+          if (next === "cheapest") delete s.sort;
+          return s;
+        },
+        replace: true,
+      });
+    },
+    [navigate],
+  );
+  const setCategoryUrl = useCallback(
+    (next: string | null) => {
+      navigate({
+        search: (prev: Record<string, unknown>) => {
+          const s: Record<string, unknown> = { ...prev, categoria: next ?? "" };
+          if (!next) delete s.categoria;
+          return s;
+        },
+        replace: true,
+      });
+    },
+    [navigate],
+  );
+
 
   const setMinPrice = (next: string) =>
     navigate({
@@ -129,7 +184,16 @@ function SearchPage() {
       urlSyncTimer.current = null;
     }
     navigate({
-      search: (prev: Record<string, unknown>) => ({ ...prev, mode: "strict", pure: "1", brand: undefined, min: undefined, max: undefined }),
+      search: (prev: Record<string, unknown>) => ({
+        ...prev,
+        mode: "strict",
+        pure: "1",
+        brand: undefined,
+        min: undefined,
+        max: undefined,
+        sort: undefined,
+        categoria: undefined,
+      }),
       replace: true,
     });
   };
@@ -471,7 +535,12 @@ function SearchPage() {
                 filterShortcuts={emptyFilterShortcuts}
                 activeFilterCount={activeFilterCount}
                 onClearFilters={activeFilterCount > 0 ? clearFilters : undefined}
+                sort={sortValue}
+                category={categoryValue}
+                onSortChange={(m) => setSortUrl(m as UrlSort)}
+                onCategoryChange={setCategoryUrl}
               />
+
             </div>
             <div className="mt-2 shrink-0 border-t border-border/50 pt-1.5">
               <FiltersToolbar
