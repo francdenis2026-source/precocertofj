@@ -14,30 +14,29 @@ import {
   Clipboard,
   AlertCircle,
   KeyRound,
-  CalendarClock,
   BadgeCheck,
-  RefreshCcw,
   XCircle,
+  Sparkles,
+  Lock,
+  Zap,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Logo } from "@/components/brand/Logo";
-import { AuthHero } from "@/components/auth/AuthHero";
+import { cn } from "@/lib/utils";
 
-/* Ocean Modern — navy #0f2b52 + dourado #f5b301 (alinhado à homepage) */
-const NAVY = "#0f2b52";
-const NAVY2 = "#1e4a85";
-const INK = "#081b3a";
-const GOLD = "#f5b301";
-const GOLD_SOFT = "#ffe08a";
-const LINE = "#e5e7ef";
-const MUTED = "#475569";
+/* ============================================================
+   /resgatar — Ativação de licença
+   Design: single-viewport, split-screen dark cinematic.
+   • Esquerda: hero navy com aura dourada + assinatura editorial.
+   • Direita: painel de ativação sobre superfície semântica (card),
+     sem branco puro; tokens do tema — light/dark automáticos.
+   ============================================================ */
 
 const MONO = "'JetBrains Mono', ui-monospace, monospace";
 
-/* Aceita 8–24 chars alfanuméricos (códigos PC-XXXX-XXXX-XXXX = 14) */
 const MIN_LEN = 8;
 const MAX_LEN = 24;
-const CANONICAL_LEN = 14; // PC + 12 alfanum
+const CANONICAL_LEN = 14; // PC-XXXX-XXXX-XXXX
 
 type ValidationLevel = "empty" | "typing" | "warn" | "ok";
 type ValidationState = { level: ValidationLevel; message: string };
@@ -56,26 +55,17 @@ function validateCode(rawInput: string): ValidationState {
   }
   const stripped = rawInput.replace(/[\s-]/g, "").toUpperCase();
   if (stripped.length > 0 && /[^A-Z0-9]/.test(stripped)) {
-    return {
-      level: "warn",
-      message: "Caracteres inválidos foram removidos (use apenas letras e números).",
-    };
+    return { level: "warn", message: "Caracteres inválidos foram removidos (use apenas letras e números)." };
   }
   if (clean.length < MIN_LEN) {
     const faltam = MIN_LEN - clean.length;
-    return {
-      level: "typing",
-      message: `Continue digitando… faltam ${faltam} caractere${faltam === 1 ? "" : "s"}.`,
-    };
+    return { level: "typing", message: `Continue digitando… faltam ${faltam} caractere${faltam === 1 ? "" : "s"}.` };
   }
   if (clean.length === CANONICAL_LEN && !clean.startsWith("PC")) {
     return { level: "warn", message: "O formato oficial começa com PC-. Verifique o código copiado." };
   }
   if (clean.length > CANONICAL_LEN) {
-    return {
-      level: "warn",
-      message: `Você digitou ${clean.length} caracteres. O padrão tem ${CANONICAL_LEN} (PC-XXXX-XXXX-XXXX).`,
-    };
+    return { level: "warn", message: `Você digitou ${clean.length} caracteres. O padrão tem ${CANONICAL_LEN} (PC-XXXX-XXXX-XXXX).` };
   }
   if (clean.length === CANONICAL_LEN && clean.startsWith("PC")) {
     return { level: "ok", message: "Formato válido. Pronto para ativar." };
@@ -87,85 +77,77 @@ type RedeemErrorInfo = {
   title: string;
   detail: string;
   nextStep: string;
-  borderColor: string;
-  bgColor: string;
-  textColor: string;
+  tone: "danger" | "warn" | "info";
   actions: Array<{ to: string; label: string }>;
 };
 
 function classifyRedeemError(raw: string): RedeemErrorInfo {
   const m = (raw || "").toLowerCase();
-  // paletas
-  const RED = { borderColor: "#fca5a5", bgColor: "#fef2f2", textColor: "#991b1b" };
-  const AMBER = { borderColor: "#fcd34d", bgColor: "#fffbeb", textColor: "#92400e" };
-  const SLATE = { borderColor: "#cbd5e1", bgColor: "#f8fafc", textColor: NAVY };
-
   if (m.includes("já foi resgatado") || m.includes("ja foi resgatado") || m.includes("já utilizado")) {
     return {
-      ...AMBER,
+      tone: "warn",
       title: "Este código já foi usado",
       detail: "Cada código de licença só pode ser ativado uma vez, em uma única conta.",
-      nextStep: "Confira em ‘Minhas licenças’ se já está ativa. Se não for você quem resgatou, fale com o suporte.",
-      actions: [{ to: "/minhas-licencas", label: "Minhas licenças" }, { to: "/suporte", label: "Falar com suporte" }],
+      nextStep: "Confira em Minhas licenças se já está ativa. Se não for você quem resgatou, fale com o suporte.",
+      actions: [{ to: "/minhas-licencas", label: "Minhas licenças" }, { to: "/fale-conosco", label: "Suporte" }],
     };
   }
   if (m.includes("revogado")) {
     return {
-      ...RED,
+      tone: "danger",
       title: "Código revogado",
-      detail: "O administrador cancelou este código (ex.: estorno, fraude ou reemissão).",
+      detail: "O administrador cancelou este código (estorno, fraude ou reemissão).",
       nextStep: "Entre em contato com o suporte para verificar a situação ou solicitar reemissão.",
-      actions: [{ to: "/suporte", label: "Falar com suporte" }],
+      actions: [{ to: "/fale-conosco", label: "Falar com suporte" }],
     };
   }
   if (m.includes("expirad") || m.includes("expirou")) {
     return {
-      ...AMBER,
+      tone: "warn",
       title: "Código expirado",
       detail: "A validade deste código venceu antes da ativação.",
       nextStep: "Solicite a reemissão à equipe ou adquira um novo plano para continuar.",
-      actions: [{ to: "/suporte", label: "Solicitar reemissão" }, { to: "/planos", label: "Ver planos" }],
+      actions: [{ to: "/fale-conosco", label: "Solicitar reemissão" }, { to: "/planos", label: "Ver planos" }],
     };
   }
   if (m.includes("não foi pago") || m.includes("nao foi pago") || m.includes("pendente") || m.includes("aguardando")) {
     return {
-      ...AMBER,
+      tone: "warn",
       title: "Pagamento ainda não confirmado",
       detail: "Recebemos o código, mas o pagamento correspondente ainda não caiu no nosso sistema.",
-      nextStep: "Aguarde alguns minutos após pagar e tente de novo. Se já pagou há mais tempo, envie o comprovante ao suporte.",
-      actions: [{ to: "/suporte", label: "Enviar comprovante" }],
+      nextStep: "Aguarde alguns minutos após pagar e tente de novo. Se já pagou há mais tempo, envie o comprovante.",
+      actions: [{ to: "/fale-conosco", label: "Enviar comprovante" }],
     };
   }
   if (m.includes("não encontrado") || m.includes("nao encontrado") || m.includes("inválido") || m.includes("invalido")) {
     return {
-      ...RED,
+      tone: "danger",
       title: "Código não reconhecido",
-      detail: "Não localizamos esse código na nossa base. Pode ter erro de digitação, espaços extras ou caracteres parecidos (0/O, 1/I).",
-      nextStep: "Copie e cole diretamente do e-mail da compra. Se não achar o e-mail, verifique spam e promoções.",
-      actions: [{ to: "/planos", label: "Ver planos" }, { to: "/suporte", label: "Falar com suporte" }],
+      detail: "Não localizamos esse código. Pode ter erro de digitação ou caracteres parecidos (0/O, 1/I).",
+      nextStep: "Copie e cole diretamente do e-mail da compra. Se não achar, verifique spam e promoções.",
+      actions: [{ to: "/planos", label: "Ver planos" }, { to: "/fale-conosco", label: "Falar com suporte" }],
     };
   }
   return {
-    ...SLATE,
+    tone: "info",
     title: "Não foi possível ativar",
     detail: raw || "Erro desconhecido ao processar o código.",
-    nextStep: "Tente novamente em instantes. Se o problema persistir, entre em contato com o suporte.",
-    actions: [{ to: "/suporte", label: "Falar com suporte" }],
+    nextStep: "Tente novamente em instantes. Se persistir, fale com o suporte.",
+    actions: [{ to: "/fale-conosco", label: "Falar com suporte" }],
   };
 }
-
 
 export const Route = createFileRoute("/resgatar")({
   ssr: false,
   head: () => ({
     meta: [
       { title: "Ativar código de licença — PreçoCerto" },
-      {
-        name: "description",
-        content:
-          "Insira o código de licença enviado no e-mail da sua compra para ativar sua assinatura PreçoCerto.",
-      },
+      { name: "description", content: "Ative sua assinatura PreçoCerto com o código enviado no e-mail da compra." },
       { name: "robots", content: "noindex" },
+      { property: "og:title", content: "Ativar código de licença — PreçoCerto" },
+      { property: "og:description", content: "Ative sua assinatura PreçoCerto em segundos." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: RedeemPage,
@@ -194,7 +176,6 @@ function RedeemPage() {
   const validation = useMemo(() => validateCode(raw), [raw]);
   const formatOk = clean.length >= MIN_LEN && validation.level !== "warn";
 
-  // Debounce do valor limpo para a verificação no servidor
   const [debouncedCode, setDebouncedCode] = useState("");
   useEffect(() => {
     const t = setTimeout(() => setDebouncedCode(clean), 380);
@@ -239,7 +220,6 @@ function RedeemPage() {
     inputRef.current?.focus();
   }, []);
 
-
   const attemptedRef = useRef<string>("");
 
   async function handleSubmit(e?: React.FormEvent) {
@@ -267,7 +247,6 @@ function RedeemPage() {
       const res = await redeem({ data: { code: clean } });
       if (res.success) {
         toast.success(res.message || "Licença ativada!");
-        // Mostra tela de confirmação com validade + botão para o painel.
         setResult({
           ok: true,
           message: res.message,
@@ -277,8 +256,6 @@ function RedeemPage() {
         });
         return;
       }
-      // Falha (código já usado, expirado, revogado, inválido):
-      // libera imediatamente o campo para nova tentativa.
       setResult({ ok: false, message: res.message, code: clean });
       toast.error(res.message);
       setRaw("");
@@ -296,7 +273,6 @@ function RedeemPage() {
     }
   }
 
-  // Auto-envio: só depois do servidor confirmar que o código é resgatável
   useEffect(() => {
     if (!hasSession || submitting || result) return;
     if (clean.length !== CANONICAL_LEN || !clean.startsWith("PC")) return;
@@ -305,8 +281,6 @@ function RedeemPage() {
     handleSubmit();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clean, hasSession, submitting, result, serverVerified]);
-
-
 
   async function pasteFromClipboard() {
     try {
@@ -318,319 +292,419 @@ function RedeemPage() {
     }
   }
 
+  const serverStatus: "idle" | "checking" | "ok" | "rejected" | "notfound" | "error" =
+    clean.length < MIN_LEN || validation.level === "warn"
+      ? "idle"
+      : verifyQuery.isFetching
+        ? "checking"
+        : verifyQuery.isError
+          ? "error"
+          : serverVerified
+            ? "ok"
+            : serverRejected
+              ? "rejected"
+              : serverNotFound
+                ? "notfound"
+                : "idle";
+
   return (
-    <div
-      className="min-h-[100svh]"
-      style={{ background: "#f5f6fa", fontFamily: "'Figtree', system-ui, sans-serif", color: INK }}
-    >
-      {/* Header slim */}
-      <header className="mx-auto flex w-full max-w-4xl items-center justify-between px-4 py-4 md:px-6">
-        <Link to="/" className="flex items-center gap-2">
-          <Logo variant="on-light" className="h-7 w-auto" />
+    <div className="relative h-[100svh] w-full overflow-hidden bg-background text-foreground">
+      {/* Aura de fundo — tokens semânticos */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 opacity-70"
+        style={{
+          background:
+            "radial-gradient(60% 40% at 15% 20%, color-mix(in oklab, var(--primary) 18%, transparent), transparent 60%)," +
+            "radial-gradient(50% 40% at 85% 80%, color-mix(in oklab, var(--pc-gold-ink) 12%, transparent), transparent 60%)",
+        }}
+      />
+
+      {/* Header minimal fixo */}
+      <header className="relative z-20 flex h-14 items-center justify-between border-b border-border/40 bg-background/70 px-4 backdrop-blur-md md:px-6">
+        <Link to="/" className="flex items-center gap-2" aria-label="Ir para a home PreçoCerto">
+          <Logo variant="auto" className="h-7 w-auto" />
         </Link>
-        <Link
-          to="/"
-          className="rounded-full border px-3 py-1.5 text-[11px] font-semibold transition hover:bg-white"
-          style={{ borderColor: LINE, color: NAVY }}
-        >
-          ← Início
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            to="/planos"
+            className="hidden rounded-full border border-border px-3 py-1.5 text-[11px] font-semibold text-foreground/80 transition hover:bg-muted sm:inline-flex"
+          >
+            Comprar plano
+          </Link>
+          <Link
+            to="/"
+            className="inline-flex items-center gap-1 rounded-full border border-border px-3 py-1.5 text-[11px] font-semibold text-foreground/80 transition hover:bg-muted"
+          >
+            ← Início
+          </Link>
+        </div>
       </header>
 
-      <main className="mx-auto w-full max-w-4xl px-4 pb-12">
-        <div className="grid grid-cols-1 overflow-hidden rounded-2xl border bg-white shadow-[0_16px_48px_-24px_rgba(15,27,61,0.35)] md:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)]" style={{ borderColor: LINE }}>
-          {/* LEFT — Hero reutilizável */}
-          <AuthHero variant="redeem" />
-          {/* RIGHT — Card compacto branco */}
-          <div className="overflow-hidden bg-white">
-
-          {/* Faixa navy topo */}
+      {/* Split-screen */}
+      <main className="relative z-10 grid h-[calc(100svh-3.5rem)] w-full grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
+        {/* ============ ESQUERDA — HERO NAVY CINEMATIC ============ */}
+        <section
+          aria-label="Sobre o programa de licenças"
+          className="relative hidden overflow-hidden lg:flex"
+          style={{
+            background:
+              "linear-gradient(135deg, #0a1a3a 0%, #0f2b52 42%, #17356a 100%)",
+            color: "#f6efe1",
+          }}
+        >
+          {/* Grid dourado */}
           <div
-            className="flex items-center gap-3 px-5 py-3.5"
+            aria-hidden
+            className="absolute inset-0 opacity-[0.18]"
             style={{
-              background: `linear-gradient(90deg, ${NAVY} 0%, ${NAVY2} 100%)`,
-              color: "#fff",
+              backgroundImage:
+                "linear-gradient(#f5b30122 1px, transparent 1px), linear-gradient(90deg, #f5b30122 1px, transparent 1px)",
+              backgroundSize: "48px 48px",
+              maskImage:
+                "radial-gradient(ellipse at 30% 30%, black 30%, transparent 75%)",
             }}
-          >
-            <div
-              className="grid h-9 w-9 place-items-center rounded-lg"
-              style={{ background: `${GOLD}33`, color: GOLD_SOFT }}
-            >
-              <Ticket className="h-4 w-4" />
-            </div>
-            <div className="min-w-0 flex-1">
-              <div className="text-[11px] font-bold uppercase tracking-[0.22em]" style={{ color: GOLD_SOFT }}>
+          />
+          {/* Aura dourada */}
+          <div
+            aria-hidden
+            className="absolute -left-24 -top-24 h-96 w-96 rounded-full blur-3xl"
+            style={{ background: "radial-gradient(circle, #f5b30144, transparent 65%)" }}
+          />
+          {/* Linhas editoriais */}
+          <div
+            aria-hidden
+            className="absolute right-0 top-0 h-full w-px"
+            style={{ background: "linear-gradient(to bottom, transparent, #f5b30155, transparent)" }}
+          />
+
+          <div className="relative z-10 flex h-full w-full flex-col justify-between p-10 xl:p-14">
+            <div>
+              <div
+                className="inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-[10.5px] font-bold uppercase tracking-[0.22em]"
+                style={{ borderColor: "#f5b30155", color: "#ffe08a", background: "#f5b30110" }}
+              >
+                <Ticket className="h-3.5 w-3.5" aria-hidden />
                 Ativação de licença
               </div>
-              <div className="truncate text-[12.5px] font-medium text-white/90">
-                Código enviado no seu e-mail após a compra
+
+              <h1
+                className="mt-8 font-editorial text-[clamp(38px,4.6vw,60px)] font-normal leading-[1.02] tracking-[-0.02em]"
+                style={{ color: "#f9f2df" }}
+              >
+                Libere seu acesso
+                <br />
+                <span
+                  className="pc-editorial-accent pc-editorial-accent--fill"
+                  style={{ color: "#ffd166" }}
+                >
+                  em segundos.
+                </span>
+              </h1>
+
+              <p
+                className="mt-5 max-w-[42ch] text-[14.5px] leading-relaxed"
+                style={{ color: "#dfe5f4cc" }}
+              >
+                Informe o código{" "}
+                <span className="font-mono font-semibold" style={{ color: "#ffe08a", fontFamily: MONO }}>
+                  PC-XXXX-XXXX-XXXX
+                </span>{" "}
+                que você recebeu por e-mail. A ativação é imediata e fica vinculada ao seu CPF.
+              </p>
+
+              <ul className="mt-7 space-y-3 text-[13.5px]" style={{ color: "#eef2ff" }}>
+                {[
+                  { icon: Zap, label: "Ativação imediata após validar o código" },
+                  { icon: Sparkles, label: "Acumule códigos e estenda sua assinatura sem perder dias" },
+                  { icon: ShieldCheck, label: "Suporte prioritário para assinantes ativos" },
+                ].map(({ icon: Icon, label }) => (
+                  <li key={label} className="flex items-start gap-2.5">
+                    <span
+                      className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full"
+                      style={{ background: "#f5b30122", color: "#ffd166" }}
+                    >
+                      <Icon className="h-3 w-3" aria-hidden />
+                    </span>
+                    <span>{label}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Card de confiança */}
+            <div
+              className="mt-8 flex items-center gap-3 rounded-xl border p-3.5"
+              style={{ borderColor: "#f5b30133", background: "#00000033", backdropFilter: "blur(6px)" }}
+            >
+              <div
+                className="grid h-10 w-10 shrink-0 place-items-center rounded-lg"
+                style={{ background: "#f5b30122", color: "#ffd166" }}
+              >
+                <Lock className="h-4 w-4" aria-hidden />
+              </div>
+              <div className="min-w-0">
+                <div className="text-[12.5px] font-bold leading-tight" style={{ color: "#ffe08a" }}>
+                  Códigos assinados e rastreáveis
+                </div>
+                <div className="mt-0.5 text-[11.5px] leading-snug" style={{ color: "#c9d2e6" }}>
+                  Compra segura · vinculada ao seu CPF · uso único
+                </div>
               </div>
             </div>
           </div>
+        </section>
 
-          {authLoading ? (
-            <div className="flex items-center justify-center px-5 py-16">
-              <Loader2 className="h-5 w-5 animate-spin" style={{ color: NAVY }} />
+        {/* ============ DIREITA — PAINEL DE ATIVAÇÃO ============ */}
+        <section
+          aria-label="Formulário de ativação"
+          className="relative flex h-full items-center justify-center overflow-y-auto px-4 py-6 sm:px-8"
+        >
+          <div className="w-full max-w-[460px]">
+            {/* Chip mobile — replica identidade do hero em telas pequenas */}
+            <div className="mb-4 flex items-center justify-between lg:hidden">
+              <div className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-[0.2em] text-primary">
+                <Ticket className="h-3 w-3" aria-hidden />
+                Ativação de licença
+              </div>
             </div>
-          ) : result?.ok ? (
 
-            <SuccessBody
-              code={result.code ?? clean}
-              addedDays={result.addedDays}
-              newPaidUntil={result.newPaidUntil ?? accountQuery.data?.paidUntil ?? null}
-              onGoApp={() => navigate({ to: "/app" })}
-              onAnother={() => {
-                setResult(null);
-                setRaw("");
-                setTouched(false);
-                setTimeout(() => inputRef.current?.focus(), 30);
-              }}
-            />
-          ) : (
-            <form onSubmit={handleSubmit} className="px-5 py-5 sm:px-6 sm:py-6" noValidate>
-              <h1
-                className="font-editorial text-[clamp(19px,2.4vw,26px)] font-normal leading-tight"
-                style={{ color: INK, letterSpacing: "-0.015em" }}
-              >
-                Ativar meu <span className="pc-editorial-accent italic">código</span>
-              </h1>
-              <p className="mt-1 text-[12.5px]" style={{ color: MUTED }}>
-                Cole o código que chegou no seu e-mail — formato <span className="font-mono font-semibold" style={{ color: NAVY }}>PC-XXXX-XXXX-XXXX</span>. O acesso libera na hora.
-              </p>
-
-              {/* Campo único grande — legível e compacto */}
-              <label
-                htmlFor="license-code"
-                className="mt-4 block text-[11px] font-bold uppercase tracking-[0.18em]"
-                style={{ color: NAVY }}
-              >
-                Código de licença
-              </label>
-              <div className="mt-1.5 flex items-stretch gap-2">
-                <div className="relative flex-1">
-                  <KeyRound
-                    className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2"
-                    style={{ color: NAVY2 }}
-                  />
-                  <input
-                    id="license-code"
-                    ref={inputRef}
-                    value={display}
-                    onChange={(e) => {
-                      setRaw(e.target.value);
-                      if (result && !result.ok) setResult(null);
-                    }}
-                    onBlur={() => setTouched(true)}
-                    onPaste={(e) => {
-                      e.preventDefault();
-                      setRaw(e.clipboardData.getData("text"));
-                    }}
-                    inputMode="text"
-                    autoComplete="one-time-code"
-                    spellCheck={false}
-                    placeholder="PC-XXXX-XXXX-XXXX"
-                    aria-invalid={touched && validation.level === "warn"}
-                    aria-describedby="license-code-help"
-                    className="h-12 w-full rounded-lg border bg-white pl-9 pr-3 text-[15px] font-bold uppercase tracking-[0.14em] outline-none transition placeholder:font-semibold placeholder:tracking-[0.14em] placeholder:text-slate-400 focus:ring-2"
-                    style={{
-                      fontFamily: MONO,
-                      color: INK,
-                      borderColor:
-                        touched && validation.level === "warn"
-                          ? "#dc2626"
-                          : validation.level === "ok"
-                          ? "#16a34a"
-                          : "#cbd5e1",
-                    } as React.CSSProperties}
-
-                  />
-                </div>
-                <button
-                  type="button"
-                  onClick={pasteFromClipboard}
-                  className="inline-flex items-center gap-1.5 rounded-lg border-2 px-3 text-[12px] font-semibold transition hover:bg-slate-50"
-                  style={{ borderColor: "#cbd5e1", color: NAVY }}
-                  aria-label="Colar código da área de transferência"
-                >
-                  <Clipboard className="h-3.5 w-3.5" />
-                  <span className="hidden sm:inline">Colar</span>
-                </button>
+            {authLoading ? (
+              <div className="flex h-64 items-center justify-center">
+                <Loader2 className="h-6 w-6 animate-spin text-primary" />
               </div>
-
-              {/* Verificador compacto — checks em tempo real */}
-              <CodeVerifier
-                clean={clean}
-                submitting={submitting}
-                serverStatus={
-                  clean.length < MIN_LEN || validation.level === "warn"
-                    ? "idle"
-                    : verifyQuery.isFetching
-                    ? "checking"
-                    : verifyQuery.isError
-                    ? "error"
-                    : serverVerified
-                    ? "ok"
-                    : serverRejected
-                    ? "rejected"
-                    : serverNotFound
-                    ? "notfound"
-                    : "idle"
-                }
+            ) : result?.ok ? (
+              <SuccessBody
+                code={result.code ?? clean}
+                addedDays={result.addedDays}
+                newPaidUntil={result.newPaidUntil ?? accountQuery.data?.paidUntil ?? null}
+                onGoApp={() => navigate({ to: "/app" })}
+                onAnother={() => {
+                  setResult(null);
+                  setRaw("");
+                  setTouched(false);
+                  setTimeout(() => inputRef.current?.focus(), 30);
+                }}
               />
-
-              {/* Feedback em tempo real */}
-              <div
-                id="license-code-help"
-                aria-live="polite"
-                className="mt-1.5 flex items-start justify-between gap-3 text-[11px]"
-              >
-                <span
-                  className="flex items-center gap-1.5"
-                  style={{
-                    color:
-                      validation.level === "warn"
-                        ? "#dc2626"
-                        : validation.level === "ok"
-                        ? "#15803d"
-                        : MUTED,
-                  }}
+            ) : (
+              <form onSubmit={handleSubmit} noValidate>
+                <h2
+                  className="font-editorial text-[clamp(26px,3.4vw,36px)] font-normal leading-[1.05] tracking-[-0.018em] text-foreground"
                 >
-                  {validation.level === "warn" && <AlertCircle className="h-3 w-3 flex-none" />}
-                  {validation.level === "ok" && <CheckCircle2 className="h-3 w-3 flex-none" />}
-                  <span>{validation.message}</span>
-                </span>
-                <span className="shrink-0 tabular-nums" style={{ color: MUTED }}>
-                  {clean.length}/{CANONICAL_LEN}
-                </span>
-              </div>
+                  Ativar meu{" "}
+                  <span className="pc-editorial-accent pc-editorial-accent--fill">código</span>
+                </h2>
+                <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground">
+                  Cole o código que chegou no e-mail — formato{" "}
+                  <span className="rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-[11.5px] font-semibold text-foreground" style={{ fontFamily: MONO }}>
+                    PC-XXXX-XXXX-XXXX
+                  </span>
+                  . O acesso libera na hora.
+                </p>
 
-              {result && !result.ok && (() => {
-                const info = classifyRedeemError(result.message);
-                return (
-                  <div
-                    role="alert"
-                    className="mt-3 rounded-lg border px-3.5 py-3 text-[12.5px]"
-                    style={{ borderColor: info.borderColor, background: info.bgColor, color: info.textColor }}
+                <label
+                  htmlFor="license-code"
+                  className="mt-5 block text-[10.5px] font-bold uppercase tracking-[0.22em] text-foreground/70"
+                >
+                  Código de licença
+                </label>
+                <div className="mt-1.5 flex items-stretch gap-2">
+                  <div className="relative flex-1">
+                    <KeyRound
+                      className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-primary/70"
+                      aria-hidden
+                    />
+                    <input
+                      id="license-code"
+                      ref={inputRef}
+                      value={display}
+                      onChange={(e) => {
+                        setRaw(e.target.value);
+                        if (result && !result.ok) setResult(null);
+                      }}
+                      onBlur={() => setTouched(true)}
+                      onPaste={(e) => {
+                        e.preventDefault();
+                        setRaw(e.clipboardData.getData("text"));
+                      }}
+                      inputMode="text"
+                      autoComplete="one-time-code"
+                      spellCheck={false}
+                      placeholder="PC-XXXX-XXXX-XXXX"
+                      aria-invalid={touched && validation.level === "warn"}
+                      aria-describedby="license-code-help"
+                      className={cn(
+                        "h-12 w-full rounded-lg border bg-card pl-9 pr-3 text-[15px] font-bold uppercase tracking-[0.14em] text-foreground outline-none transition placeholder:font-semibold placeholder:tracking-[0.14em] placeholder:text-muted-foreground/60",
+                        "focus:border-primary focus:ring-2 focus:ring-primary/30",
+                        touched && validation.level === "warn"
+                          ? "border-destructive/70 focus:border-destructive focus:ring-destructive/30"
+                          : validation.level === "ok"
+                            ? "border-primary/50"
+                            : "border-border",
+                      )}
+                      style={{ fontFamily: MONO }}
+                    />
+                  </div>
+                  <button
+                    type="button"
+                    onClick={pasteFromClipboard}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 text-[12px] font-semibold text-foreground transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                    aria-label="Colar código da área de transferência"
                   >
-                    <div className="flex items-start gap-2">
-                      <AlertCircle className="mt-0.5 h-4 w-4 flex-none" />
-                      <div className="min-w-0 flex-1">
-                        <div className="font-bold leading-tight">{info.title}</div>
-                        <div className="mt-0.5 leading-snug opacity-90">{info.detail}</div>
-                        <div className="mt-1.5 text-[11.5px] font-semibold" style={{ color: info.textColor }}>
-                          Próximo passo: <span className="font-normal">{info.nextStep}</span>
-                        </div>
-                        {info.actions.length > 0 && (
-                          <div className="mt-2 flex flex-wrap gap-2">
-                            {info.actions.map((a: { to: string; label: string }) => (
-                              <Link
-                                key={a.to}
-                                to={a.to as never}
-                                className="inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-white"
-                                style={{ background: NAVY }}
-                              >
-                                {a.label}
-                              </Link>
-                            ))}
+                    <Clipboard className="h-3.5 w-3.5" />
+                    <span className="hidden sm:inline">Colar</span>
+                  </button>
+                </div>
 
+                <CodeVerifier
+                  clean={clean}
+                  submitting={submitting}
+                  serverStatus={serverStatus}
+                />
+
+                <div
+                  id="license-code-help"
+                  aria-live="polite"
+                  className="mt-1.5 flex items-start justify-between gap-3 text-[11.5px]"
+                >
+                  <span
+                    className={cn(
+                      "flex items-center gap-1.5",
+                      validation.level === "warn"
+                        ? "text-destructive"
+                        : validation.level === "ok"
+                          ? "text-primary"
+                          : "text-muted-foreground",
+                    )}
+                  >
+                    {validation.level === "warn" && <AlertCircle className="h-3 w-3 flex-none" aria-hidden />}
+                    {validation.level === "ok" && <CheckCircle2 className="h-3 w-3 flex-none" aria-hidden />}
+                    <span>{validation.message}</span>
+                  </span>
+                  <span className="shrink-0 tabular-nums text-muted-foreground">
+                    {clean.length}/{CANONICAL_LEN}
+                  </span>
+                </div>
+
+                {result && !result.ok && (() => {
+                  const info = classifyRedeemError(result.message);
+                  const toneClasses =
+                    info.tone === "danger"
+                      ? "border-destructive/40 bg-destructive/10 text-destructive"
+                      : info.tone === "warn"
+                        ? "border-warning/40 bg-warning/10 text-warning-foreground"
+                        : "border-border bg-muted text-foreground";
+                  return (
+                    <div
+                      role="alert"
+                      className={cn(
+                        "mt-3 rounded-lg border px-3.5 py-3 text-[12.5px]",
+                        toneClasses,
+                      )}
+                    >
+                      <div className="flex items-start gap-2">
+                        <AlertCircle className="mt-0.5 h-4 w-4 flex-none" aria-hidden />
+                        <div className="min-w-0 flex-1">
+                          <div className="font-bold leading-tight">{info.title}</div>
+                          <div className="mt-0.5 leading-snug opacity-90">{info.detail}</div>
+                          <div className="mt-1.5 text-[11.5px] font-semibold">
+                            Próximo passo:{" "}
+                            <span className="font-normal opacity-90">{info.nextStep}</span>
                           </div>
-                        )}
+                          {info.actions.length > 0 && (
+                            <div className="mt-2 flex flex-wrap gap-2">
+                              {info.actions.map((a) => (
+                                <Link
+                                  key={a.to}
+                                  to={a.to as never}
+                                  className="inline-flex items-center gap-1 rounded-md bg-primary px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-primary-foreground transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                                >
+                                  {a.label}
+                                </Link>
+                              ))}
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })()}
+                  );
+                })()}
 
-
-              <button
-                type="submit"
-                disabled={submitting || !canSubmit}
-                aria-disabled={submitting || !canSubmit}
-                className="group relative mt-4 inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-lg text-[13px] font-bold uppercase tracking-[0.14em] transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed"
-                style={{
-                  background:
+                <button
+                  type="submit"
+                  disabled={submitting || !canSubmit}
+                  aria-disabled={submitting || !canSubmit}
+                  className={cn(
+                    "group relative mt-4 inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-lg text-[12.5px] font-bold uppercase tracking-[0.16em] transition-all",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                    "disabled:cursor-not-allowed disabled:opacity-70",
                     canSubmit && !submitting
-                      ? GOLD
-                      : "#e6c877",
-                  color: INK,
-                  boxShadow:
-                    canSubmit && !submitting
-                      ? `0 12px 28px -10px ${GOLD}, inset 0 1px 0 rgba(255,255,255,0.35)`
-                      : `0 6px 14px -8px ${GOLD}, inset 0 1px 0 rgba(255,255,255,0.2)`,
-                  opacity: canSubmit || submitting ? 1 : 0.85,
-                  // @ts-expect-error css var for focus ring
-                  "--tw-ring-color": NAVY,
-                  "--tw-ring-offset-color": "#ffffff",
-                }}
-              >
-                {/* Navy accent bar for premium feel */}
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute inset-x-0 top-0 h-[2px]"
-                  style={{ background: `linear-gradient(90deg, transparent, ${NAVY}, transparent)` }}
-                />
-                {submitting ? (
-                  <><Loader2 className="h-4 w-4 animate-spin" /> Ativando…</>
-                ) : verifyQuery.isFetching && formatOk ? (
-                  <><Loader2 className="h-4 w-4 animate-spin" /> Verificando código…</>
-                ) : serverRejected || serverNotFound ? (
-                  <><XCircle className="h-4 w-4" style={{ color: "#7f1d1d" }} /> Código inválido</>
-                ) : !serverVerified && formatOk ? (
-                  <>Aguardando verificação…</>
-                ) : (
-                  <>
-                    Ativar licença
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" style={{ color: NAVY }} />
-                  </>
-                )}
-              </button>
+                      ? "bg-[var(--pc-gold-ink)] text-primary shadow-[0_12px_28px_-10px_color-mix(in_oklab,var(--pc-gold-ink)_60%,transparent)] hover:brightness-105"
+                      : "bg-muted text-muted-foreground",
+                  )}
+                >
+                  {submitting ? (
+                    <><Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Ativando…</>
+                  ) : verifyQuery.isFetching && formatOk ? (
+                    <><Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Verificando código…</>
+                  ) : serverRejected || serverNotFound ? (
+                    <><XCircle className="h-4 w-4" aria-hidden /> Código inválido</>
+                  ) : !serverVerified && formatOk ? (
+                    <>Aguardando verificação…</>
+                  ) : (
+                    <>
+                      Ativar licença
+                      <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" aria-hidden />
+                    </>
+                  )}
+                </button>
 
+                <div className="mt-2 flex items-center justify-between text-[11.5px]">
+                  <Link
+                    to="/planos"
+                    className="font-semibold text-muted-foreground hover:text-foreground hover:underline"
+                  >
+                    Ainda não comprei →
+                  </Link>
+                  <Link
+                    to="/minhas-licencas"
+                    className="font-semibold text-primary hover:underline"
+                  >
+                    Minhas licenças →
+                  </Link>
+                </div>
 
+                <ul className="mt-4 grid grid-cols-3 gap-2 border-t border-border pt-3 text-[10.5px] font-semibold text-foreground/70">
+                  <li className="flex items-center gap-1">
+                    <ShieldCheck className="h-3 w-3 text-primary" aria-hidden />
+                    Uso único
+                  </li>
+                  <li className="flex items-center gap-1">
+                    <KeyRound className="h-3 w-3 text-primary" aria-hidden />
+                    Ligado ao CPF
+                  </li>
+                  <li className="flex items-center gap-1">
+                    <CheckCircle2 className="h-3 w-3 text-primary" aria-hidden />
+                    Ativação imediata
+                  </li>
+                </ul>
 
-
-
-              <div className="mt-2 text-right">
-                <Link to="/minhas-licencas" className="text-[11px] font-semibold hover:underline" style={{ color: NAVY }}>
-                  Minhas licenças →
-                </Link>
-              </div>
-
-
-              {/* Garantias em linha compacta */}
-              <ul className="mt-4 grid grid-cols-3 gap-2 border-t pt-3 text-[11px] font-semibold" style={{ borderColor: "#cbd5e1", color: "#334155" }}>
-                <li className="flex items-center gap-1"><ShieldCheck className="h-3 w-3" style={{ color: NAVY }} />Uso único</li>
-                <li className="flex items-center gap-1"><KeyRound className="h-3 w-3" style={{ color: NAVY }} />Ligado ao CPF</li>
-                <li className="flex items-center gap-1"><CheckCircle2 className="h-3 w-3" style={{ color: NAVY }} />Ativação imediata</li>
-
-              </ul>
-            </form>
-          )}
-        </div>
-        </div>
-
-
-
-        {/* Nota fora do card */}
-        <p className="mt-4 text-center text-[11px]" style={{ color: MUTED }}>
-          Não achou o e-mail? Verifique <strong style={{ color: NAVY }}>spam / promoções</strong>. Códigos são
-          emitidos, validados e revogados pela equipe administrativa.
-        </p>
-        <div className="mt-2 flex items-center justify-center gap-3 text-[11.5px] font-semibold">
-          <Link to="/planos" className="hover:underline" style={{ color: NAVY }}>Ainda não comprei →</Link>
-          <span style={{ color: LINE }}>•</span>
-          <Link to="/minhas-licencas" className="hover:underline" style={{ color: NAVY }}>Minhas licenças</Link>
-        </div>
+                <p className="mt-4 text-center text-[10.5px] leading-snug text-muted-foreground">
+                  Não achou o e-mail? Verifique{" "}
+                  <strong className="font-semibold text-foreground">spam / promoções</strong>. Códigos são
+                  emitidos e revogados pela equipe administrativa.
+                </p>
+              </form>
+            )}
+          </div>
+        </section>
       </main>
     </div>
   );
 }
 
-/* ------- Sub-blocos ------- */
+/* ================== Sub-blocos ================== */
 
-/**
- * Verificador compacto de código: mostra 3 checks em tempo real.
- * Pequeno, profissional, sem ocupar espaço vertical.
- */
 function CodeVerifier({
   clean,
   submitting,
@@ -654,10 +728,10 @@ function CodeVerifier({
         clean.length === 0
           ? "pending"
           : hasPrefix && onlyAlphaNum && fullLength
-          ? "ok"
-          : clean.length < CANONICAL_LEN
-          ? "pending"
-          : "bad",
+            ? "ok"
+            : clean.length < CANONICAL_LEN
+              ? "pending"
+              : "bad",
     },
     {
       label: "Servidor",
@@ -665,110 +739,89 @@ function CodeVerifier({
         !fullLength && clean.length < MIN_LEN
           ? "pending"
           : serverChecking
-          ? "loading"
-          : serverOk
-          ? "ok"
-          : serverBad
-          ? "bad"
-          : "pending",
+            ? "loading"
+            : serverOk
+              ? "ok"
+              : serverBad
+                ? "bad"
+                : "pending",
     },
   ];
   const allOk = checks.every((c) => c.state === "ok");
 
   return (
     <div
-      className="mt-2 flex items-center gap-1.5 rounded-md border px-2 py-1.5"
-      style={{
-        borderColor: allOk ? "#86efac" : serverBad ? "#fca5a5" : "#cbd5e1",
-        background: allOk ? "#f0fdf4" : serverBad ? "#fef2f2" : "#f8fafc",
-      }}
+      className={cn(
+        "mt-2 flex items-center gap-1.5 rounded-md border px-2 py-1.5",
+        allOk
+          ? "border-primary/40 bg-primary/[0.06]"
+          : serverBad
+            ? "border-destructive/40 bg-destructive/[0.06]"
+            : "border-border bg-muted/50",
+      )}
       aria-label="Verificação do código"
       aria-live="polite"
     >
       <span
-        className="flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.14em]"
-        style={{ color: allOk ? "#166534" : serverBad ? "#991b1b" : INK }}
+        className={cn(
+          "flex items-center gap-1 text-[10.5px] font-bold uppercase tracking-[0.16em]",
+          allOk ? "text-primary" : serverBad ? "text-destructive" : "text-foreground/80",
+        )}
       >
         {submitting || serverChecking ? (
-          <Loader2 className="h-3 w-3 animate-spin" />
+          <Loader2 className="h-3 w-3 animate-spin" aria-hidden />
         ) : allOk ? (
-          <BadgeCheck className="h-3 w-3" />
+          <BadgeCheck className="h-3 w-3" aria-hidden />
         ) : serverBad ? (
-          <XCircle className="h-3 w-3" />
+          <XCircle className="h-3 w-3" aria-hidden />
         ) : (
-          <ShieldCheck className="h-3 w-3" />
+          <ShieldCheck className="h-3 w-3" aria-hidden />
         )}
         {submitting
           ? "Ativando"
           : serverChecking
-          ? "Verificando"
-          : allOk
-          ? "Verificado"
-          : serverBad
-          ? "Inválido"
-          : "Aguardando"}
+            ? "Verificando"
+            : allOk
+              ? "Verificado"
+              : serverBad
+                ? "Inválido"
+                : "Aguardando"}
       </span>
-      <span className="mx-1 h-3 w-px" style={{ background: LINE }} />
+      <span className="mx-1 h-3 w-px bg-border" aria-hidden />
       <div className="flex flex-1 items-center gap-1 overflow-hidden">
         {checks.map((c) => {
-          const palette =
+          const cls =
             c.state === "ok"
-              ? { color: "#166534", bg: "#dcfce7", dot: "#16a34a" }
+              ? "text-primary bg-primary/15"
               : c.state === "bad"
-              ? { color: "#991b1b", bg: "#fee2e2", dot: "#dc2626" }
-              : c.state === "loading"
-              ? { color: NAVY, bg: "#eef2ff", dot: "#6366f1" }
-              : { color: "#334155", bg: "#e2e8f0", dot: "#64748b" };
+                ? "text-destructive bg-destructive/15"
+                : c.state === "loading"
+                  ? "text-foreground bg-muted"
+                  : "text-muted-foreground bg-muted/70";
+          const dotCls =
+            c.state === "ok"
+              ? "bg-primary"
+              : c.state === "bad"
+                ? "bg-destructive"
+                : "bg-muted-foreground/60";
           return (
             <span
               key={c.label}
-              className="inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[11px] font-semibold"
-              style={{ color: palette.color, background: palette.bg }}
+              className={cn(
+                "inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 text-[10.5px] font-semibold",
+                cls,
+              )}
             >
               {c.state === "loading" ? (
                 <Loader2 className="h-2.5 w-2.5 animate-spin" aria-hidden />
               ) : (
-                <span className="h-1.5 w-1.5 rounded-full" style={{ background: palette.dot }} aria-hidden />
+                <span className={cn("h-1.5 w-1.5 rounded-full", dotCls)} aria-hidden />
               )}
               {c.label}
             </span>
           );
         })}
       </div>
-    </div>
-  );
-}
-
-
-
-
-function SignInGate() {
-  return (
-    <div className="px-5 py-6 sm:px-6">
-      <h2 className="text-[16px] font-bold" style={{ color: INK }}>
-        Faça login para ativar
-      </h2>
-      <p className="mt-1 text-[12.5px]" style={{ color: MUTED }}>
-        Você precisa estar autenticado com o CPF vinculado à compra para resgatar o código.
-      </p>
-      <div className="mt-4 grid grid-cols-2 gap-2">
-        <Link
-          to="/login"
-          search={{ redirect: "/resgatar" } as never}
-          className="inline-flex h-11 items-center justify-center rounded-lg text-[13px] font-bold uppercase tracking-[0.14em]"
-          style={{ background: GOLD, color: NAVY }}
-        >
-          Entrar
-        </Link>
-        <Link
-          to="/cadastro"
-          className="inline-flex h-11 items-center justify-center rounded-lg border text-[13px] font-bold uppercase tracking-[0.14em]"
-          style={{ borderColor: GOLD, color: NAVY, background: "#fffbeb" }}
-        >
-          Criar conta
-        </Link>
-      </div>
-
     </div>
   );
 }
@@ -790,181 +843,49 @@ function SuccessBody({
     ? new Date(newPaidUntil).toLocaleDateString("pt-BR", { day: "2-digit", month: "long", year: "numeric" })
     : null;
   return (
-    <div className="px-5 py-6 sm:px-6">
+    <div>
       <div className="flex items-start gap-3">
-        <div
-          className="grid h-10 w-10 shrink-0 place-items-center rounded-full"
-          style={{ background: "#dcfce7", color: "#15803d" }}
-        >
-          <CheckCircle2 className="h-5 w-5" />
+        <div className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-primary/15 text-primary">
+          <CheckCircle2 className="h-6 w-6" aria-hidden />
         </div>
         <div className="min-w-0 flex-1">
-          <h2 className="text-[16px] font-bold" style={{ color: INK }}>
-            Licença ativada com sucesso
+          <h2 className="font-editorial text-[26px] font-normal leading-[1.1] tracking-tight text-foreground">
+            Licença{" "}
+            <span className="pc-editorial-accent pc-editorial-accent--fill">ativada</span>
           </h2>
-          <p className="mt-0.5 text-[12.5px]" style={{ color: MUTED }}>
+          <p className="mt-1 text-[13px] leading-snug text-muted-foreground">
             {addedDays ? `${addedDays} dias adicionados à sua assinatura.` : "Sua assinatura foi atualizada."}
           </p>
         </div>
       </div>
 
-      <dl className="mt-4 grid grid-cols-1 gap-2 text-[12.5px]">
-        <div className="flex items-center justify-between rounded-lg border px-3 py-2" style={{ borderColor: LINE }}>
-          <dt style={{ color: MUTED }}>Código</dt>
-          <dd className="font-mono font-bold" style={{ color: INK }}>{code}</dd>
+      <dl className="mt-5 grid grid-cols-1 gap-2 text-[12.5px]">
+        <div className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2">
+          <dt className="text-muted-foreground">Código</dt>
+          <dd className="font-mono font-bold text-foreground" style={{ fontFamily: MONO }}>{code}</dd>
         </div>
         {paidUntilLabel && (
-          <div className="flex items-center justify-between rounded-lg border px-3 py-2" style={{ borderColor: LINE }}>
-            <dt style={{ color: MUTED }}>Válido até</dt>
-            <dd className="font-bold" style={{ color: NAVY }}>{paidUntilLabel}</dd>
+          <div className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2">
+            <dt className="text-muted-foreground">Válido até</dt>
+            <dd className="font-bold text-primary">{paidUntilLabel}</dd>
           </div>
         )}
       </dl>
 
-      <div className="mt-4 grid grid-cols-2 gap-2">
+      <div className="mt-5 grid grid-cols-2 gap-2">
         <button
           onClick={onGoApp}
-          className="inline-flex h-11 items-center justify-center gap-2 rounded-lg text-[13px] font-bold uppercase tracking-[0.14em] text-white"
-          style={{ background: NAVY }}
+          className="inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary text-[12.5px] font-bold uppercase tracking-[0.14em] text-primary-foreground transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
-          Ir para o app <ArrowRight className="h-4 w-4" />
+          Ir para o app <ArrowRight className="h-4 w-4" aria-hidden />
         </button>
         <button
           onClick={onAnother}
-          className="inline-flex h-11 items-center justify-center rounded-lg border text-[13px] font-bold uppercase tracking-[0.14em]"
-          style={{ borderColor: LINE, color: NAVY }}
+          className="inline-flex h-11 items-center justify-center rounded-lg border border-border bg-card text-[12.5px] font-bold uppercase tracking-[0.14em] text-foreground transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
         >
           Ativar outro
         </button>
       </div>
-    </div>
-  );
-}
-
-/* ------- Painel de detalhes do código (preview antes de enviar) ------- */
-function CodePreviewPanel({
-  loading,
-  data,
-  enabled,
-}: {
-  loading: boolean;
-  data: import("@/lib/licenses.functions").LicensePreview | null;
-  enabled: boolean;
-}) {
-  if (!enabled && !loading && !data) return null;
-
-  if (loading) {
-    return (
-      <div
-        className="mt-3 flex items-center gap-2 rounded-lg border px-3 py-2.5 text-[12px]"
-        style={{ borderColor: LINE, background: "#f8fafc", color: MUTED }}
-      >
-        <Loader2 className="h-3.5 w-3.5 animate-spin" style={{ color: NAVY }} />
-        Consultando código no sistema…
-      </div>
-    );
-  }
-  if (!data) return null;
-
-  if (!data.found) {
-    return (
-      <div
-        className="mt-3 flex items-start gap-2 rounded-lg border px-3 py-2.5 text-[12px]"
-        style={{ borderColor: "#fca5a5", background: "#fef2f2", color: "#991b1b" }}
-      >
-        <XCircle className="mt-0.5 h-4 w-4 flex-none" />
-        <span>{data.message}</span>
-      </div>
-    );
-  }
-
-  const good = data.redeemable;
-  const border = good ? "#bbf7d0" : "#fcd34d";
-  const bg = good ? "#f0fdf4" : "#fffbeb";
-  const ink = good ? "#166534" : "#92400e";
-  const badgeIcon = good ? <BadgeCheck className="h-4 w-4" /> : <AlertCircle className="h-4 w-4" />;
-
-  const expLabel = data.expiresAt
-    ? new Date(data.expiresAt).toLocaleDateString("pt-BR", { day: "2-digit", month: "short", year: "numeric" })
-    : "—";
-  const refundLabel = data.refundDeadline
-    ? new Date(data.refundDeadline).toLocaleDateString("pt-BR", { day: "2-digit", month: "short" })
-    : null;
-
-  return (
-    <div
-      className="mt-3 rounded-xl border p-3 text-[12px]"
-      style={{ borderColor: border, background: bg, color: INK }}
-    >
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em]" style={{ color: ink }}>
-          {badgeIcon}
-          {data.statusLabel}
-        </div>
-        {data.planName && (
-          <span
-            className="rounded-full border px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em]"
-            style={{ borderColor: border, color: ink, background: "#ffffff" }}
-          >
-            {data.planName}
-          </span>
-        )}
-      </div>
-
-      <dl className="mt-2.5 grid grid-cols-2 gap-2">
-        <div className="rounded-lg border bg-white px-2.5 py-1.5" style={{ borderColor: LINE }}>
-          <dt className="flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
-            <CalendarClock className="h-3 w-3" /> Validade
-          </dt>
-          <dd className="mt-0.5 text-[12.5px] font-bold" style={{ color: data.isExpired ? "#dc2626" : NAVY }}>
-            {expLabel}
-            {data.daysUntilExpiry != null && !data.isExpired && (
-              <span className="ml-1 text-[11px] font-normal" style={{ color: MUTED }}>
-                (em {data.daysUntilExpiry}d)
-              </span>
-            )}
-          </dd>
-        </div>
-        <div className="rounded-lg border bg-white px-2.5 py-1.5" style={{ borderColor: LINE }}>
-          <dt className="flex items-center gap-1 text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
-            <RefreshCcw className="h-3 w-3" /> Reembolso
-          </dt>
-          <dd
-            className="mt-0.5 text-[12.5px] font-bold"
-            style={{ color: data.refundable ? "#15803d" : "#991b1b" }}
-          >
-            {data.refundable
-              ? refundLabel
-                ? `Sim · até ${refundLabel}`
-                : "Sim"
-              : "Não disponível"}
-          </dd>
-        </div>
-        {data.planDays != null && (
-          <div className="rounded-lg border bg-white px-2.5 py-1.5" style={{ borderColor: LINE }}>
-            <dt className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
-              Duração
-            </dt>
-            <dd className="mt-0.5 text-[12.5px] font-bold" style={{ color: NAVY }}>
-              {data.planDays} dias
-            </dd>
-          </div>
-        )}
-        {data.priceCents != null && (
-          <div className="rounded-lg border bg-white px-2.5 py-1.5" style={{ borderColor: LINE }}>
-            <dt className="text-[11px] font-semibold uppercase tracking-[0.12em]" style={{ color: MUTED }}>
-              Valor
-            </dt>
-            <dd className="mt-0.5 text-[12.5px] font-bold" style={{ color: NAVY }}>
-              R$ {(data.priceCents / 100).toFixed(2).replace(".", ",")}
-            </dd>
-          </div>
-        )}
-      </dl>
-
-      <p className="mt-2.5 text-[11.5px] leading-snug" style={{ color: ink }}>
-        {data.message}
-      </p>
     </div>
   );
 }
