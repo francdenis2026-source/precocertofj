@@ -272,22 +272,29 @@ function HomePage() {
         fetchPriority="high"
         decoding="async"
         className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
-        style={{ opacity: "var(--pc-home-hero-img-opacity)" as unknown as number }}
+        style={{
+          opacity: "var(--pc-home-hero-img-opacity)" as unknown as number,
+          filter: "blur(6px) saturate(0.92)",
+          transform: "scale(1.06)", // compensa a borda suavizada pelo blur
+        }}
       />
+      {/* Véu editorial: gradiente vertical suave para equilíbrio de contraste */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
-          background: `linear-gradient(180deg, color-mix(in oklab, var(--pc-home-hero-bg) 58%, transparent) 0%, color-mix(in oklab, var(--pc-home-hero-bg) 34%, transparent) 45%, color-mix(in oklab, var(--pc-home-hero-bg) 78%, transparent) 100%)`,
+          background: `linear-gradient(180deg, color-mix(in oklab, var(--pc-home-hero-bg) 52%, transparent) 0%, color-mix(in oklab, var(--pc-home-hero-bg) 32%, transparent) 48%, color-mix(in oklab, var(--pc-home-hero-bg) 70%, transparent) 100%)`,
         }}
       />
+      {/* Vinheta radial para focar leitura no centro sem apagar as bordas */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
-          background: `radial-gradient(120% 82% at 50% 40%, transparent 42%, color-mix(in oklab, var(--pc-home-hero-bg) 45%, transparent) 100%)`,
+          background: `radial-gradient(115% 78% at 50% 42%, transparent 40%, color-mix(in oklab, var(--pc-home-hero-bg) 38%, transparent) 100%)`,
         }}
       />
+
       <div
         aria-hidden
         className="pointer-events-none absolute -right-40 -top-40 h-[520px] w-[520px] rounded-full"
