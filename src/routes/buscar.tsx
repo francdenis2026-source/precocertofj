@@ -533,7 +533,8 @@ function SearchPage() {
             CORPO — flex-1 min-h-0 para caber na viewport sem rolagem
             da página inteira. Rolagem interna só onde necessário.
         ================================================================= */}
-        <div className="mx-auto flex w-full min-h-0 max-w-[1360px] flex-1 flex-col gap-2.5 px-4 pb-[calc(var(--mobile-nav-height)+0.5rem)] pt-2.5 md:gap-3 md:px-6 md:pb-3 md:pt-3">
+        <div className="mx-auto flex w-full min-h-0 max-w-[1360px] flex-1 flex-col gap-1.5 px-3 pb-[calc(var(--mobile-nav-height)+0.25rem)] pt-1.5 md:gap-2 md:px-5 md:pb-2 md:pt-2">
+
           {hasQuery ? (
             /* ============ ESTADO: RESULTADOS ============
                 Barra de comando + filtros em faixas compactas (shrink-0) e
