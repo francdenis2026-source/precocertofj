@@ -86,6 +86,10 @@ export function PriceSearchBar({
   filterShortcuts = [],
   activeFilterCount = 0,
   onClearFilters,
+  sort: sortProp,
+  category: categoryProp,
+  onSortChange,
+  onCategoryChange,
 }: {
   initialQuery?: string;
   mode?: SearchMode;
@@ -98,6 +102,12 @@ export function PriceSearchBar({
   filterShortcuts?: EmptyFilterShortcut[];
   activeFilterCount?: number;
   onClearFilters?: () => void;
+  /** Ordenação controlada externamente (URL). Quando ausente, cai no localStorage. */
+  sort?: SortMode;
+  /** Filtro de categoria controlado externamente (URL). Quando ausente, cai no localStorage. */
+  category?: string | null;
+  onSortChange?: (mode: SortMode) => void;
+  onCategoryChange?: (category: string | null) => void;
 }) {
 
   const runSearch = useServerFn(searchProductPrice);
