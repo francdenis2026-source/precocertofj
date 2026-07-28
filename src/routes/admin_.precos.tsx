@@ -1,4 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { AdminTabs } from "@/components/admin/AdminTabs";
+import { QuickPricePage } from "./admin_.preco-rapido";
+import { HistoricoPrecosPage } from "./admin_.historico-precos";
 import { formatShortDate } from "@/components/product/TrustIndicator";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { AdminOnly } from "@/components/auth/AdminOnly";
