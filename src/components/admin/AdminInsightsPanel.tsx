@@ -42,23 +42,25 @@ function Panel({
   title,
   note,
   onExport,
+  height,
   children,
 }: {
   icon: React.ReactNode;
   title: string;
   note: string;
   onExport: () => void;
+  height: number;
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-w-0 flex-col rounded-xl border border-border/70 bg-card p-2.5">
+    <div className="flex min-w-0 flex-col rounded-xl border border-border/70 bg-card p-2.5 text-card-foreground">
       <div className="mb-1.5 flex items-start gap-2">
-        <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-md bg-primary/10 text-primary">
+        <span className="mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-md bg-primary/15 text-primary">
           {icon}
         </span>
         <div className="min-w-0 flex-1">
-          <p className={cn(tc.itemTitle, "truncate")}>{title}</p>
-          <p className={cn(tc.meta, "truncate")}>{note}</p>
+          <p className={cn(tc.itemTitle, "truncate text-card-foreground")}>{title}</p>
+          <p className={cn(tc.meta, "truncate text-muted-foreground/90")}>{note}</p>
         </div>
         <Button
           type="button"
@@ -71,32 +73,11 @@ function Panel({
           <Download className="h-3.5 w-3.5" />
         </Button>
       </div>
-      <div className="h-[148px] w-full">{children}</div>
+      <div style={{ height }} className="w-full">{children}</div>
     </div>
   );
 }
 
-/* Paleta com contraste alto contra o card dark navy do admin.
-   Recharts não herda `color`, então precisa de fill/stroke explícitos. */
-const CHART_GRID = "hsl(var(--foreground) / 0.16)";
-const CHART_AXIS = "hsl(var(--foreground) / 0.80)";
-const CHART_PRIMARY = "hsl(var(--primary))";
-const CHART_ACCENT = "#e0b64d"; /* gold que combina com goldRule */
-const CHART_SOFT = "hsl(var(--foreground) / 0.55)";
-
-const tickStyle = { fontSize: 10, fill: CHART_AXIS } as const;
-
-const tooltipStyle = {
-  fontSize: 12,
-  borderRadius: 10,
-  border: "1px solid hsl(var(--border))",
-  background: "hsl(var(--popover))",
-  color: "hsl(var(--popover-foreground))",
-  boxShadow: "0 8px 24px hsl(0 0% 0% / 0.35)",
-} as const;
-const tooltipLabelStyle = { color: "hsl(var(--popover-foreground))", fontWeight: 600 };
-const tooltipItemStyle = { color: "hsl(var(--popover-foreground))" };
-const legendStyle = { fontSize: 10, color: CHART_AXIS, paddingTop: 2 } as const;
 
 const isoDay = (d: Date) => d.toISOString().slice(0, 10);
 const daysAgo = (n: number) => isoDay(new Date(Date.now() - n * 86_400_000));
