@@ -101,7 +101,7 @@ const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 /* Ladrilhos da faixa inferior — maior presença sem alterar a altura da página
    (a área já reserva espaço livre acima do dock). */
 const TILE =
-  "group flex min-h-[64px] flex-col items-center justify-center gap-1.5 rounded-2xl border px-2 py-2.5 text-center pc-tile focus-visible:outline-none focus-visible:ring-2 sm:min-h-[72px] sm:gap-2 lg:min-h-[80px]";
+  "group flex min-h-[64px] flex-col items-center justify-center gap-1.5 rounded-2xl border px-2 py-2.5 text-center pc-tile pc-elite-frame focus-visible:outline-none focus-visible:ring-2 sm:min-h-[72px] sm:gap-2 lg:min-h-[80px]";
 const TILE_ICON = "h-[19px] w-[19px] sm:h-[21px] sm:w-[21px] lg:h-6 lg:w-6";
 const TILE_LABEL =
   "w-full truncate text-[12.5px] font-semibold leading-none tracking-[-0.005em] sm:text-[13.5px] lg:text-[14.5px]";
