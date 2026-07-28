@@ -187,25 +187,25 @@ function CatalogoAdminPage() {
         <Tabs defaultValue="items" className="space-y-4">
           <TabsList className="flex flex-wrap">
             <TabsTrigger value="items">
-              <Package className="mr-1 h-4 w-4" /> Produtos
+              <Package className="mr-1 h-4 w-4 text-[color:var(--pc-tone-catalog)]" /> Produtos
             </TabsTrigger>
             <TabsTrigger value="alerts">
-              <AlertTriangle className="mr-1 h-4 w-4" /> Alertas
+              <AlertTriangle className="mr-1 h-4 w-4 text-[color:var(--pc-tone-system)]" /> Alertas
             </TabsTrigger>
             <TabsTrigger value="merge">
-              <GitMerge className="mr-1 h-4 w-4" /> Mesclar
+              <GitMerge className="mr-1 h-4 w-4 text-[color:var(--pc-tone-people)]" /> Mesclar
             </TabsTrigger>
             <TabsTrigger value="images">
-              <Sparkles className="mr-1 h-4 w-4" /> Imagens IA
+              <Sparkles className="mr-1 h-4 w-4 text-[color:var(--pc-tone-commerce)]" /> Imagens IA
             </TabsTrigger>
             <TabsTrigger value="gallery">
-              <ImageIcon className="mr-1 h-4 w-4" /> Galeria
+              <ImageIcon className="mr-1 h-4 w-4 text-[color:var(--pc-tone-overview)]" /> Galeria
             </TabsTrigger>
             <TabsTrigger value="review">
-              <Eye className="mr-1 h-4 w-4" /> Revisão
+              <Eye className="mr-1 h-4 w-4 text-[color:var(--pc-tone-people)]" /> Revisão
             </TabsTrigger>
             <TabsTrigger value="audit">
-              <History className="mr-1 h-4 w-4" /> Auditoria
+              <History className="mr-1 h-4 w-4 text-muted-foreground" /> Auditoria
             </TabsTrigger>
           </TabsList>
 
