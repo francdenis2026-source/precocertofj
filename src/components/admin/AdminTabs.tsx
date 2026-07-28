@@ -7,6 +7,8 @@ import { tabLabel, type TabDef } from "./adminTabs.utils";
 
 export type AdminTabItem = TabDef;
 
+export type AdminTabTone = "overview" | "catalog" | "commerce" | "people" | "system";
+
 type Props = {
   /** Rota base do hub, ex.: `/admin/precos`. */
   to: string;
@@ -15,7 +17,10 @@ type Props = {
   items: AdminTabItem[];
   active: string;
   className?: string;
+  /** Tom semântico do hub, aplicado no breadcrumb, na aba ativa e no hover. */
+  tone?: AdminTabTone;
 };
+
 
 /**
  * Barra de abas compacta para páginas admin consolidadas.
@@ -24,9 +29,10 @@ type Props = {
  * - Expõe botão "Copiar link" que copia a URL atual (com o `?tab=` selecionado).
  * - Usa <Link> com search={{ tab }} para preservar histórico do navegador.
  */
-export function AdminTabs({ to, title, items, active, className }: Props) {
+export function AdminTabs({ to, title, items, active, className, tone }: Props) {
   const activeLabel = tabLabel(items, active);
   const [copied, setCopied] = useState(false);
+
 
   const handleCopy = useCallback(async () => {
     try {
@@ -57,7 +63,7 @@ export function AdminTabs({ to, title, items, active, className }: Props) {
   }, [to, active]);
 
   return (
-    <div className={cn("sticky top-0 z-20 -mx-4 mb-4 bg-background/95 backdrop-blur", className)}>
+    <div data-tone={tone} className={cn("sticky top-0 z-20 -mx-4 mb-4 bg-background/95 backdrop-blur", className)}>
       <div className="flex items-center justify-between gap-2 border-b border-border/40 px-4 pt-2 pb-1">
         <nav
           aria-label="Trilha de navegação"
@@ -70,17 +76,18 @@ export function AdminTabs({ to, title, items, active, className }: Props) {
               <Link
                 to={to}
                 search={{ tab: items[0]?.key } as never}
-                className="truncate hover:text-foreground"
+                className={cn("truncate hover:text-foreground", tone && "pc-admin-hub-crumb font-semibold")}
               >
                 {title}
               </Link>
             </>
           )}
           <ChevronRight className="h-3 w-3 shrink-0 opacity-60" aria-hidden />
-          <span className="truncate text-foreground" aria-current="page">
+          <span className={cn("truncate text-foreground", tone && "pc-admin-hub-crumb")} aria-current="page">
             {activeLabel}
           </span>
         </nav>
+
 
         <button
           type="button"
@@ -116,18 +123,22 @@ export function AdminTabs({ to, title, items, active, className }: Props) {
               key={item.key}
               to={to}
               search={{ tab: item.key } as never}
+              data-active={isActive ? "true" : "false"}
               className={cn(
                 "whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-semibold transition-colors",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                isActive
-                  ? "bg-foreground text-background shadow-sm"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                tone
+                  ? "pc-admin-tab text-muted-foreground"
+                  : isActive
+                    ? "bg-foreground text-background shadow-sm"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
               )}
               aria-current={isActive ? "page" : undefined}
             >
               {item.label}
             </Link>
           );
+
         })}
       </nav>
     </div>

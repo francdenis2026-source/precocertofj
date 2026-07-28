@@ -54,7 +54,7 @@ function MetricasShell() {
   return (
     <AdminOnly>
       <div className="px-4">
-        <AdminTabs to="/admin/metricas" title="Métricas" items={METRICAS_TABS} active={tab} />
+        <AdminTabs to="/admin/metricas" title="Métricas" items={METRICAS_TABS} active={tab} tone="overview" />
       </div>
       {tab === "metricas" && <MetricasPage />}
       {tab === "cesta-ao-vivo" && (

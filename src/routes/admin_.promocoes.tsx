@@ -53,7 +53,7 @@ function PromocoesShell() {
   return (
     <>
       <div className="px-4">
-        <AdminTabs to="/admin/promocoes" title="Promoções" items={PROMO_TABS} active={tab} />
+        <AdminTabs to="/admin/promocoes" title="Promoções" items={PROMO_TABS} active={tab} tone="commerce" />
       </div>
       {tab === "promocoes" && <PromocoesPage />}
       {tab === "codigos" && <PromoCodesPage />}

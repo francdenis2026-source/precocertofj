@@ -61,10 +61,15 @@ type NavItem = {
   search?: Record<string, string>;
 };
 
+type AdminTone = "overview" | "catalog" | "commerce" | "people" | "system";
+
 type NavGroup = {
   label: string;
   items: readonly NavItem[];
+  /** Optional semantic tone used in the admin area to color-code groups. */
+  tone?: AdminTone;
 };
+
 
 const appGroups: readonly NavGroup[] = [
   {
@@ -108,6 +113,7 @@ const appGroups: readonly NavGroup[] = [
 const adminGroups: readonly NavGroup[] = [
   {
     label: "Visão geral",
+    tone: "overview",
     items: [
       { to: "/admin", label: "Dashboard", icon: Shield, exact: true },
       { to: "/admin/cobertura", label: "Cobertura", icon: Boxes },
@@ -117,6 +123,7 @@ const adminGroups: readonly NavGroup[] = [
   },
   {
     label: "Catálogo",
+    tone: "catalog",
     items: [
       { to: "/admin/catalogo", label: "Produtos", icon: Database },
       { to: "/admin/precos", label: "Preços", icon: Tags, exact: true },
@@ -130,6 +137,7 @@ const adminGroups: readonly NavGroup[] = [
   },
   {
     label: "Comercial",
+    tone: "commerce",
     items: [
       { to: "/admin/gestao", label: "Licenças", icon: KeyRound },
       { to: "/admin/promocoes", label: "Promoções", icon: TicketPercent, search: { tab: "codigos" } },
@@ -141,6 +149,7 @@ const adminGroups: readonly NavGroup[] = [
   },
   {
     label: "Clientes",
+    tone: "people",
     items: [
       { to: "/admin/clientes", label: "Clientes", icon: Users },
       { to: "/admin/auditoria", label: "Auditoria de acessos", icon: Activity, search: { tab: "acessos" } },
@@ -150,6 +159,7 @@ const adminGroups: readonly NavGroup[] = [
   },
   {
     label: "Sistema",
+    tone: "system",
     items: [
       { to: "/admin/consistencia", label: "Consistência", icon: Gauge },
       { to: "/admin/sinonimos", label: "Sinônimos", icon: Languages },
@@ -158,6 +168,7 @@ const adminGroups: readonly NavGroup[] = [
     ],
   },
 ] as const;
+
 
 
 export function AppSidebar() {
@@ -185,8 +196,13 @@ export function AppSidebar() {
   };
 
   const renderGroup = (group: NavGroup) => (
-    <SidebarGroup key={group.label} className="py-2">
-      <SidebarGroupLabel className="px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-sidebar-foreground/55">
+    <SidebarGroup key={group.label} className="py-2" data-tone={group.tone}>
+      <SidebarGroupLabel
+        className={cn(
+          "px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-sidebar-foreground/55",
+          group.tone && "pc-admin-group-label",
+        )}
+      >
         {group.label}
       </SidebarGroupLabel>
       <SidebarGroupContent>
@@ -200,9 +216,11 @@ export function AppSidebar() {
                   asChild
                   isActive={active}
                   tooltip={n.label}
+                  data-active={active ? "true" : "false"}
                   className={cn(
                     "pc-nav-link pc-nav-link--row h-9 rounded-md px-2.5 text-sidebar-foreground/82 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
-                    active && "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm",
+                    group.tone && "pc-admin-row",
+                    active && !group.tone && "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm",
                   )}
                 >
                   <Link
@@ -211,17 +229,27 @@ export function AppSidebar() {
                     className="flex items-center gap-2.5"
                   >
                     <span
+                      data-active={active ? "true" : "false"}
                       className={cn(
                         "grid h-6 w-6 shrink-0 place-items-center rounded-md border border-sidebar-border/60 bg-sidebar-accent/70 text-sidebar-foreground/75",
-                        active && "border-sidebar-primary/50 bg-sidebar-primary text-sidebar-primary-foreground",
+                        group.tone && "pc-admin-icon-chip",
+                        active && !group.tone && "border-sidebar-primary/50 bg-sidebar-primary text-sidebar-primary-foreground",
                       )}
                     >
                       <n.icon className="h-3.5 w-3.5" strokeWidth={active ? 2.35 : 2} />
                     </span>
                     <span className="truncate text-[13px] font-medium">{n.label}</span>
-                    {active && <span className="ml-auto h-1.5 w-1.5 rounded-full bg-sidebar-primary" />}
+                    {active && (
+                      <span
+                        className={cn(
+                          "ml-auto h-1.5 w-1.5 rounded-full",
+                          group.tone ? "pc-admin-active-dot" : "bg-sidebar-primary",
+                        )}
+                      />
+                    )}
                   </Link>
                 </SidebarMenuButton>
+
               </SidebarMenuItem>
             );
           })}

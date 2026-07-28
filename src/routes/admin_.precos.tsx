@@ -85,7 +85,7 @@ function PrecosShell() {
   return (
     <AppShell scope="admin">
       <AdminOnly>
-        <AdminTabs to="/admin/precos" title="Preços" items={PRECOS_TABS} active={tab} />
+        <AdminTabs to="/admin/precos" title="Preços" items={PRECOS_TABS} active={tab} tone="catalog" />
         {tab === "completo" && <AdminPrecosPage />}
         {tab === "rapido" && <QuickPricePage />}
         {tab === "historico" && <HistoricoPrecosPage />}
