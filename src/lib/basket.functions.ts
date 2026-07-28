@@ -224,7 +224,7 @@ async function loadEstablishments(ids: string[]) {
   };
   const { data, error } = await client
     .from("establishments")
-    .select("id, name, logo_url, brand_color, city, latitude, longitude, active")
+    .select("id, name, logo_url, brand_color, city, neighborhood, latitude, longitude, active")
     .in("id", ids);
   if (error) throw new Error(error.message);
   const map = new Map<string, EstabRow>();
