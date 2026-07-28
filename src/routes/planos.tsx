@@ -518,7 +518,7 @@ function PlansPage() {
         </Dialog>
 
 
-        <div className="flex-1" aria-hidden />
+
 
 
         {/* Barra de ação — em fluxo, sempre visível, nunca sobreposta. */}
