@@ -35,6 +35,8 @@ import {
   ClipboardCheck,
   Camera,
   Radio,
+  ShoppingBasket,
+  Gavel,
 } from "lucide-react";
 import {
   Sidebar,
