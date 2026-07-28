@@ -248,31 +248,30 @@ export const getPlansHealth = createServerFn({ method: "GET" })
     await assertAdmin(context);
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
-    const [totalRes, activeRes, legacyCheck] = await Promise.all([
+    const [totalRes, activeRes] = await Promise.all([
       (supabaseAdmin as any).from("license_plans").select("id", { count: "exact", head: true }),
       (supabaseAdmin as any).from("license_plans").select("id", { count: "exact", head: true }).eq("active", true),
-      (supabaseAdmin as any).rpc("to_regclass_exists", { rel: "public.plans" }).then(
-        (r: any) => ({ exists: !!r.data, error: r.error }),
-        () => ({ exists: false, error: null }),
-      ),
     ]);
 
     const licenseTotal = Number(totalRes.count ?? 0);
     const licenseActive = Number(activeRes.count ?? 0);
 
+    // Detecta a tabela legada `plans` tentando um HEAD count.
+    // Se a tabela não existe, o Supabase retorna erro (code 42P01) — tratamos como ausente.
     let legacyPlansExists = false;
     let legacyPlansCount = 0;
-    if (legacyCheck && legacyCheck.exists) {
-      legacyPlansExists = true;
-      try {
-        const { count } = await (supabaseAdmin as any)
-          .from("plans")
-          .select("id", { count: "exact", head: true });
-        legacyPlansCount = Number(count ?? 0);
-      } catch {
-        legacyPlansCount = 0;
+    try {
+      const res = await (supabaseAdmin as any)
+        .from("plans")
+        .select("id", { count: "exact", head: true });
+      if (!res.error) {
+        legacyPlansExists = true;
+        legacyPlansCount = Number(res.count ?? 0);
       }
+    } catch {
+      legacyPlansExists = false;
     }
+
 
     const warnings: string[] = [];
     if (licenseActive === 0) warnings.push("Nenhum plano ativo em license_plans.");
