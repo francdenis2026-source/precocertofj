@@ -298,18 +298,26 @@ function PlansPage() {
                     </h2>
 
                     <div className="mt-2">
-                      <span
-                        className={cn(
-                          isRecommended ? tc.dataPrimary : "font-display text-[25px] font-semibold leading-none tracking-tight text-foreground",
-                        )}
-                      >
-                        {isFree ? "Grátis" : centsToBRL(plan.price_cents)}
-                      </span>
+                      <div className="flex items-baseline gap-2">
+                        <span
+                          className={cn(
+                            isRecommended ? tc.dataPrimary : "font-display text-[25px] font-semibold leading-none tracking-tight text-foreground",
+                          )}
+                        >
+                          {isFree ? "Grátis" : centsToBRL(plan.price_cents)}
+                        </span>
+                        {plan.original_price_cents != null &&
+                          plan.original_price_cents > plan.price_cents && (
+                            <span className="text-xs text-muted-foreground line-through">
+                              {centsToBRL(plan.original_price_cents)}
+                            </span>
+                          )}
+                      </div>
                       <p className={cn(tc.meta, "mt-1.5")}>
                         {isFounder
                           ? "Pagamento único · vitalício"
                           : isFree
-                            ? "7 dias · sem cartão"
+                            ? `${plan.days} dias · sem cartão`
                             : perMonth
                               ? `≈ ${perMonth}/mês · ${plan.days} dias`
                               : `${plan.days} dias de acesso`}
