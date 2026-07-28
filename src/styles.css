@@ -492,10 +492,10 @@
   .pc-editorial-accent--fill {
     color: var(--pc-home-onhero-gold, var(--pc-gold-ink));
     text-decoration: none;
-    font-weight: 520;
-    letter-spacing: -0.034em;
-    font-variation-settings: "opsz" 144, "SOFT" 80, "wght" 520;
-    padding-inline: 0.02em;
+    font-weight: 460;
+    letter-spacing: -0.022em;
+    font-variation-settings: "opsz" 144, "SOFT" 30, "wght" 460;
+    padding-inline: 0.015em;
   }
   /* Hero editorial — controla line-height, tracking e wrap por breakpoint sem
      precisar hard-code em cada rota. Aplique junto de .font-editorial. */
