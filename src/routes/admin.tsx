@@ -261,9 +261,10 @@ function AdminPage() {
               </h1>
             </div>
           </div>
-          <span className={cn(tc.tag, "hidden rounded-full border border-border bg-card px-2.5 py-1 text-muted-foreground sm:inline-flex")}>
+          <span className={cn(tc.tag, "hidden rounded-full border border-border bg-secondary px-2.5 py-1 font-medium text-secondary-foreground sm:inline-flex")}>
             Painel unificado
           </span>
+
         </div>
       </header>
 
