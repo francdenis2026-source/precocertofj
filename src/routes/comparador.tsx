@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate, retainSearchParams } from "@tanstack/react-router";
 import { Nav } from "@/components/brand/Nav";
+import { PageShell, PageShellContent } from "@/components/layout/PageShell";
 import { PriceSpotlight } from "@/components/product/PriceSpotlight";
 import { Breadcrumbs } from "@/components/nav/Breadcrumbs";
 import { memo, useEffect, useMemo, useRef, useState } from "react";
@@ -769,10 +770,11 @@ function ComparadorPage() {
   );
 
   return (
-    <div className="flex h-[100dvh] flex-col overflow-hidden">
+    <PageShell fit hideFooter>
       <Nav />
       <Breadcrumbs items={[{ label: "Comparador de preços" }]} />
 
+      <PageShellContent fit className="!pb-0">
       <div className="flex-1 min-h-0 overflow-y-auto pb-[calc(var(--mobile-nav-height)+1rem)] md:pb-0">
       {/* BARRA DE COMANDO — mesmo cabeçalho editorial sticky do /buscar */}
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/75">
@@ -1077,7 +1079,8 @@ function ComparadorPage() {
       />
 
       </div>
-    </div>
+      </PageShellContent>
+    </PageShell>
   );
 }
 

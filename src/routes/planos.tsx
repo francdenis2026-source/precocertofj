@@ -102,13 +102,7 @@ function fallbackHighlights(slug: string, days: number): string[] {
         "O menor valor por mês da plataforma",
         "A escolha da maioria dos assinantes",
       ];
-    case "fundador-feijo":
-    case "fundador":
-      return [
-        "Acesso vitalício — pague uma única vez",
-        "Vagas limitadas para apoiadores locais",
-        "Seu nome ajuda o projeto a crescer em Feijó",
-      ];
+    // (planos vitalícios/fundador foram descontinuados)
     default:
       return [
         `Acesso completo por ${days} dias`,
@@ -147,11 +141,11 @@ function buildFaq(trialDays: number) {
     },
     {
       q: "Quem pode usar a IA e quantas análises tenho por mês?",
-      a: "No plano grátis/degustação você tem 1 análise de IA por mês (uma chamada para montar a cesta), sem possibilidade de ultrapassar. Nos planos pagos: 30 análises/mês no Essencial, 150 no Trimestral e Anual e 600 no plano Comércio/Fundador. A cota renova todo mês e o saldo aparece no seu perfil.",
+      a: "No plano grátis/degustação você tem 1 análise de IA por mês (uma chamada para montar a cesta), sem possibilidade de ultrapassar. Nos planos pagos: 30 análises/mês no Mensal e 150 análises/mês no Trimestral e no Anual. A cota renova todo mês e o saldo aparece no seu perfil.",
     },
     {
       q: "E se eu precisar de mais análises?",
-      a: "Você compra um pacote avulso de 50 análises por R$ 9,90, válido por 12 meses e cumulativo com a cota do plano. Mercados parceiros que catalogam vitrine inteira usam o plano Comércio, com catalogação em lote e prioridade de processamento.",
+      a: "Você compra um pacote avulso de 50 análises por R$ 9,90, válido por 12 meses e cumulativo com a cota do plano.",
     },
   ];
 }
@@ -286,7 +280,7 @@ function PlansPage() {
               {plans.map((plan) => {
                 const isRecommended = plan.slug === recommendedSlug;
                 const perMonth = pricePerMonth(plan.price_cents, plan.days);
-                const isFounder = plan.slug.includes("fundador");
+                const isFounder = false;
                 const isFree = plan.price_cents === 0;
                 const isSelected = selectedPlan?.id === plan.id;
                 const savings =
@@ -417,7 +411,7 @@ function PlansPage() {
                 Comparar <span className="italic text-[var(--pc-gold-ink)]">recursos</span>
               </DialogTitle>
               <DialogDescription className={tc.meta}>
-                Diferenças reais entre a degustação, os planos pagos e o plano vitalício.
+                Diferenças reais entre a degustação e os planos pagos.
               </DialogDescription>
             </DialogHeader>
             <div className="max-h-[70svh] overflow-y-auto px-5 py-3">
@@ -427,8 +421,8 @@ function PlansPage() {
                     <th className={cn(tc.tableHead, "py-2 text-left")}>Recurso</th>
                     <th className={cn(tc.tableHead, "py-2 text-center")}>Degustação</th>
                     <th className={cn(tc.tableHead, "py-2 text-center")}>Mensal</th>
+                    <th className={cn(tc.tableHead, "py-2 text-center")}>Trimestral</th>
                     <th className={cn(tc.tableHead, "py-2 text-center text-[var(--pc-gold-ink)]")}>Anual</th>
-                    <th className={cn(tc.tableHead, "py-2 text-center")}>Fundador</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-border/60">
@@ -436,11 +430,10 @@ function PlansPage() {
                     ["Busca de preços", true, true, true, true],
                     ["Comparador entre mercados", true, true, true, true],
                     ["Alertas de preço", false, true, true, true],
-                    ["Análises de IA / mês", "1", "30", "150", "600"],
+                    ["Análises de IA / mês", "1", "30", "150", "150"],
                     ["Ranking de bairros", true, true, true, true],
                     ["Exportar CSV/PDF", false, true, true, true],
                     ["Prioridade de suporte", false, false, true, true],
-                    ["Acesso vitalício", false, false, false, true],
                   ].map(([label, ...cols], i) => (
                     <tr key={i}>
                       <th className={cn(tc.cell, "py-2 text-left font-medium text-foreground")}>
@@ -573,10 +566,7 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
     {
       label: "Duração",
       values: Object.fromEntries(
-        plans.map((p) => [
-          p.slug,
-          p.days >= 365 * 5 ? "Vitalício" : `${p.days} dias`,
-        ]),
+        plans.map((p) => [p.slug, `${p.days} dias`]),
       ),
     },
     {
@@ -601,8 +591,6 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
         ...val("mensal", true),
         ...val("trimestral", true),
         ...val("anual", true),
-        ...val("fundador-feijo", true),
-        ...val("fundador", true),
       },
     },
     {
@@ -612,8 +600,6 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
         ...val("mensal", true),
         ...val("trimestral", true),
         ...val("anual", true),
-        ...val("fundador-feijo", true),
-        ...val("fundador", true),
       },
     },
     {
@@ -623,8 +609,6 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
         ...val("mensal", true),
         ...val("trimestral", true),
         ...val("anual", true),
-        ...val("fundador-feijo", true),
-        ...val("fundador", true),
       },
     },
     {
@@ -634,8 +618,6 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
         ...val("mensal", true),
         ...val("trimestral", true),
         ...val("anual", true),
-        ...val("fundador-feijo", true),
-        ...val("fundador", true),
       },
     },
     {
@@ -645,8 +627,6 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
         ...val("mensal", false),
         ...val("trimestral", true),
         ...val("anual", true),
-        ...val("fundador-feijo", true),
-        ...val("fundador", true),
       },
     },
     {
@@ -656,8 +636,6 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
         ...val("mensal", "30 análises"),
         ...val("trimestral", "150 análises"),
         ...val("anual", "150 análises"),
-        ...val("fundador-feijo", "600 análises"),
-        ...val("fundador", "600 análises"),
       },
     },
     {
@@ -667,8 +645,6 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
         ...val("mensal", false),
         ...val("trimestral", true),
         ...val("anual", true),
-        ...val("fundador-feijo", true),
-        ...val("fundador", true),
       },
     },
     {
@@ -678,15 +654,6 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
         ...val("mensal", "R$ 9,90 / 50"),
         ...val("trimestral", "R$ 9,90 / 50"),
         ...val("anual", "R$ 9,90 / 50"),
-        ...val("fundador-feijo", "R$ 9,90 / 50"),
-        ...val("fundador", "R$ 9,90 / 50"),
-      },
-    },
-    {
-      label: "Selo de apoiador",
-      values: {
-        ...val("fundador-feijo", true),
-        ...val("fundador", true),
       },
     },
   ];
