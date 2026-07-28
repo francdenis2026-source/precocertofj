@@ -1,4 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { AdminTabs } from "@/components/admin/AdminTabs";
+import { AuditoriaAcessosPage } from "./admin_.auditoria-acessos";
+import { NumberAuditPage } from "./admin_.auditoria-numeros";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
