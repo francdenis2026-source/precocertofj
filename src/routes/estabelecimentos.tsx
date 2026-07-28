@@ -423,7 +423,7 @@ function EstablishmentsPage() {
 
 
   return (
-    <IsolatedPage className="bg-background" contentClassName="flex h-[100dvh] flex-col overflow-hidden !pb-0">
+    <IsolatedPage className="bg-background !min-h-0" contentClassName="!flex-initial flex h-[calc(100dvh-121px)] flex-col overflow-hidden !pb-0 md:h-[calc(100dvh-64px)]">
 
       {/* TOPO — mesma gramática editorial de /buscar: fio dourado, sem painéis pesados */}
       <header className="shrink-0 border-b border-border/60 bg-background/92 backdrop-blur supports-[backdrop-filter]:bg-background/75">
