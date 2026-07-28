@@ -222,6 +222,18 @@ export function AdminActionsAudit() {
           <div className="min-w-0">
             <CardTitle className="flex items-center gap-2 text-base">
               <History className="h-4 w-4" /> Auditoria de ações críticas
+              <span
+                className={cn(
+                  "inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-medium",
+                  liveConnected
+                    ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                    : "border-muted-foreground/30 bg-muted text-muted-foreground",
+                )}
+                title={liveConnected ? "Conectado — novos eventos aparecem em tempo real" : "Conectando ao tempo real…"}
+              >
+                <Radio className={cn("h-2.5 w-2.5", liveConnected && "animate-pulse")} />
+                {liveConnected ? "Ao vivo" : "Conectando"}
+              </span>
               {activeFilters > 0 && (
                 <Badge variant="secondary" className={cn(tc.tag, "ml-1")}>
                   {activeFilters} filtro{activeFilters > 1 ? "s" : ""}
