@@ -535,9 +535,9 @@ function PlansPage() {
               </p>
               <p className="truncate text-[11.5px] text-muted-foreground">
                 {!selectedPlan
-                  ? "7 dias grátis, sem cartão"
+                  ? `${trialDays} dias grátis, sem cartão`
                   : selectedPlan.price_cents === 0
-                    ? "7 dias grátis · sem cartão"
+                    ? `${selectedPlan.days} dias grátis · sem cartão`
                     : `${centsToBRL(selectedPlan.price_cents)} · ${selectedPlan.days} dias`}
               </p>
             </div>
