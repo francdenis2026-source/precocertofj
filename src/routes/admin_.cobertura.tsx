@@ -3,7 +3,7 @@ import { formatShortDate } from "@/components/product/TrustIndicator";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { AppShell } from "@/components/brand/AppShell";
 import { PageHeader } from "@/components/brand/PageHeader";
 import { AdminOnly } from "@/components/auth/AdminOnly";
@@ -12,12 +12,16 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ChevronRight, Download, Loader2, MapPin, RefreshCw, Search, Store, PackageX, PackageCheck } from "lucide-react";
 import { getCoverageOverview, getMissingProducts, getPresentProducts, type EstablishmentCoverage } from "@/lib/coverage.functions";
 import { CoverageDiagnosticsPanel, CoverageErrorBanner } from "@/components/admin/CoverageDiagnosticsPanel";
+import { RefreshBar as SharedRefreshBar } from "@/components/admin/RefreshBar";
+import { useWindowFocusRefresh } from "@/hooks/useWindowFocusRefresh";
 
 function formatQueryStatus(query: { isFetching: boolean; error: unknown; dataUpdatedAt: number; errorUpdatedAt: number }) {
   if (query.isFetching) return { label: "Consultando…", tone: "muted" as const };
