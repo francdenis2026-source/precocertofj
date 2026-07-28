@@ -66,7 +66,7 @@ export const Route = createFileRoute("/admin_/cupom")({
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  component: CupomPage,
+  component: () => <Navigate to="/admin/promocoes" search={{ tab: "cupons" } as never} replace />,
 });
 
 type ItemDraft = ExtractedItem & { selected: boolean };
