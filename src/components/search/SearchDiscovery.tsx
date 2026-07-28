@@ -283,14 +283,24 @@ export function SearchDiscovery({ onPickQuery }: Props) {
 
 
 
-      {/* Sinal de vida — cartão próprio, mesmo padrão dos HeroMetric */}
+      {/* Sinal de vida — cartão próprio, colapsável < sm */}
       <section className="border-t border-border/60 pt-2.5">
-        <div className="mb-1.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 px-0.5">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-border/70 px-2 py-0.5 text-[10.5px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
-            <Clock className="h-3 w-3 text-brand-gold" aria-hidden />
-            Janela: últimos {stats.data?.windowDays ?? 30} dias
-          </span>
-          <span className="text-[10.5px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
+        <div className="mb-1.5 flex flex-wrap items-center justify-between gap-x-2 gap-y-1 px-0.5">
+          <button
+            type="button"
+            onClick={() => setKpisOpen((v) => !v)}
+            aria-expanded={kpisOpen}
+            aria-controls="discovery-kpis"
+            className="inline-flex min-w-0 items-center gap-1.5 rounded-full border border-border/70 px-2 py-0.5 text-[10.5px] font-medium uppercase tracking-[0.12em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold sm:pointer-events-none sm:cursor-default"
+          >
+            <Clock className="h-3 w-3 shrink-0 text-brand-gold" aria-hidden />
+            <span className="truncate">Janela: últimos {stats.data?.windowDays ?? 30} dias</span>
+            <ChevronDown
+              className={`h-3.5 w-3.5 shrink-0 transition-transform sm:hidden ${kpisOpen ? "rotate-180" : ""}`}
+              aria-hidden
+            />
+          </button>
+          <span className="min-w-0 truncate text-[10.5px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
             {statsFailed
               ? "Dados indisponíveis"
               : stats.data?.generatedAt
@@ -298,7 +308,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
                 : "Atualizando…"}
           </span>
         </div>
-        {statsFailed && (
+        {statsFailed && kpisOpen && (
           <p
             role="status"
             className="mb-1.5 rounded-lg border border-border/70 px-2.5 py-1.5 text-[11.5px] leading-snug text-muted-foreground"
