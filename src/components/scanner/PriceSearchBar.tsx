@@ -1924,6 +1924,9 @@ function ProductGroupCard({
   isCompareSelected = false,
   canSelectCompare = true,
   onToggleCompare,
+  focused = false,
+  focusedMarket = null,
+  onSelect,
 }: {
   catalogId: string | null;
   productName: string;
@@ -1941,6 +1944,13 @@ function ProductGroupCard({
   isCompareSelected?: boolean;
   canSelectCompare?: boolean;
   onToggleCompare?: () => void;
+  /** Card em foco (via URL). Recebe scrollIntoView + foco de teclado. */
+  focused?: boolean;
+  /** Nome do mercado destacado dentro do card (via URL). */
+  focusedMarket?: string | null;
+  /** Disparado quando o usuário seleciona o card ou um mercado interno,
+   * para sincronizar `?product=&market=` na URL do container. */
+  onSelect?: (product: string, market: string | null) => void;
 }) {
   // Mercado mais barato dentro deste grupo — usado para destaque no cabeçalho.
   const cheapestInGroup = useMemo(() => {
@@ -1951,9 +1961,29 @@ function ProductGroupCard({
   // Mostra por padrão apenas os 3 melhores preços de cada produto: mantém a
   // página curta e legível; o restante fica a um clique de distância.
   const COLLAPSED = 3;
-  const [expanded, setExpanded] = useState(false);
-  const visiblePrices = expanded ? prices : prices.slice(0, COLLAPSED);
+  const [expanded, setExpanded] = useState(focused);
+  const visiblePrices = expanded || focused ? prices : prices.slice(0, COLLAPSED);
   const hiddenPrices = prices.length - visiblePrices.length;
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // Quando o card entra em foco por URL, expande, faz scroll suave e move o
+  // foco do teclado para o card — restaurando o estado da UI a partir do link.
+  useEffect(() => {
+    if (!focused) return;
+    const el = cardRef.current;
+    if (!el) return;
+    try {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+    } catch {
+      el.scrollIntoView();
+    }
+    // Foco só quando o card não está em nenhuma parte do documento com foco
+    // ainda; evita roubar foco do usuário no meio de outra interação.
+    if (!el.contains(document.activeElement)) {
+      window.setTimeout(() => el.focus({ preventScroll: true }), 60);
+    }
+  }, [focused]);
+
 
 
 
