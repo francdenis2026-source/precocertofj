@@ -139,7 +139,7 @@ function CestaAdminPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6">
-      <AdminBreadcrumb hub="Vitrine" hubHref="/admin_/vitrine" current="Cesta Básica" />
+      <AdminBreadcrumb hub="vitrine" page="Cesta Básica" />
 
       <header className="mt-4 flex flex-wrap items-start justify-between gap-4">
         <div>
