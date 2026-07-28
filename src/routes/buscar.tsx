@@ -26,6 +26,7 @@ import {
 import { BackButton } from "@/components/layout/BackButton";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { IsolatedPage } from "@/components/layout/IsolatedPage";
+import { PrecoCertoMark } from "@/components/typography/PrecoCertoMark";
 
 import { useReducedMotion } from "@/lib/reduced-motion";
 import { ArrowLeft, BellRing, Filter, Search, SlidersHorizontal, X } from "lucide-react";
@@ -416,8 +417,9 @@ function SearchPage() {
             <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--pc-gold-ink)]">
               Comparador de preços
             </span>
-            <h1 className="min-w-0 truncate whitespace-nowrap font-serif text-[17px] font-normal leading-tight tracking-tight text-foreground sm:text-[21px]">
-              Buscar preço<span className="hidden sm:inline"> por nome</span>
+            <h1 className="font-editorial min-w-0 truncate whitespace-nowrap text-[19px] font-normal leading-tight tracking-tight text-foreground sm:text-[24px]">
+              Buscar <PrecoCertoMark variant="inline">preço certo</PrecoCertoMark>
+              <span className="hidden sm:inline text-foreground"> por nome</span>
             </h1>
           </div>
           <div className="flex items-center gap-3">

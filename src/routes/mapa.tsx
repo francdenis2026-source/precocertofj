@@ -16,6 +16,7 @@ import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { StoreLogoThumb } from "@/components/brand/StoreLogoThumb";
 import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 import { tc } from "@/lib/typeclear";
+import { PrecoCertoMark } from "@/components/typography/PrecoCertoMark";
 import { StatCell, StatCellGroup, StatCellDivider } from "@/components/ds/StatCell";
 import {
   Select,
@@ -226,8 +227,8 @@ function NeighborhoodsPage() {
               <HomeBrandLink showWordmark={false} className="shrink-0" />
               <div className="min-w-0">
                 <p className={`hidden sm:block ${tc.eyebrow}`}>Guia local · Feijó</p>
-                <h1 className={`truncate sm:mt-0.5 ${tc.h1}`}>
-                  Mercados por <span className="italic text-[var(--pc-gold-ink)]">bairro</span>
+                <h1 className={`font-editorial truncate sm:mt-0.5 ${tc.h1}`}>
+                  Mercados por <PrecoCertoMark variant="inline">bairro</PrecoCertoMark>
                 </h1>
               </div>
             </div>
@@ -497,7 +498,7 @@ function NeighborhoodsPage() {
               <section className="min-w-0 flex min-h-0 flex-col overflow-hidden rounded-lg border border-border bg-card">
                 <header className="shrink-0 flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1 border-b border-border/70 px-3 py-2">
                   <div className="min-w-0">
-                    <h2 className={`truncate ${tc.h2}`}>{active.neighborhood}</h2>
+                    <h2 className={`font-editorial truncate ${tc.h2}`}>{active.neighborhood}</h2>
                     {active.city && <p className={tc.meta}>{active.city}</p>}
                   </div>
                   <p className={tc.tableHead}>
