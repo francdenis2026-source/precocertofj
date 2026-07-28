@@ -4,6 +4,7 @@ import { AppShell } from "@/components/brand/AppShell";
 import { PageHeader } from "@/components/brand/PageHeader";
 import { AdminOnly } from "@/components/auth/AdminOnly";
 import { useServerFn } from "@tanstack/react-start";
+import { usePlansRealtime } from "@/hooks/usePlansRealtime";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   listLicensePlans, generateLicenseCodes, listLicenseCodes, revokeLicenseCode,
