@@ -1205,8 +1205,39 @@ export function PriceSearchBar({
                   ? ordered.filter(([cat]) => cat === categoryFilter)
                   : ordered;
                 const showHeaders = filteredOrdered.length > 1;
+                const sortLabelMap: Record<SortMode, string> = {
+                  cheapest: "Menor preço",
+                  relevance: "Relevância",
+                  recent: "Novidade",
+                  savings: "Maior economia",
+                  unit: "Preço por unidade",
+                  kind: "Tipo de mercado",
+                  spread: "Maior variação",
+                };
+                const visibleCount = filteredOrdered.reduce(
+                  (n, [, gs]) => n + gs.length,
+                  0,
+                );
+                const announcement =
+                  visibleCount === 0
+                    ? `Nenhum resultado para "${query}"${
+                        categoryFilter ? ` na categoria ${categoryFilter}` : ""
+                      }. Ajuste os filtros ou tente outro termo.`
+                    : `${visibleCount} ${
+                        visibleCount === 1 ? "produto encontrado" : "produtos encontrados"
+                      } para "${query}", ordenados por ${sortLabelMap[sortMode] ?? sortMode}${
+                        categoryFilter ? `, filtrando por ${categoryFilter}` : ""
+                      }${kindFilter ? `, mercados do tipo ${kindFilter}` : ""}.`;
                 return (
                   <>
+                    <p
+                      role="status"
+                      aria-live="polite"
+                      aria-atomic="true"
+                      className="sr-only"
+                    >
+                      {announcement}
+                    </p>
                     <QuickFilters
                       sortMode={sortMode}
                       onSort={handleSortChange}
@@ -1963,12 +1994,17 @@ function CompareMatrix({
   onPick?: (marketName: string) => void;
   focusedMarket?: string | null;
 }) {
-  // Top 4 mercados por menor preço — cabe confortavelmente em uma linha até
-  // ~640px sem exigir scroll horizontal na maioria dos casos.
-  const top = useMemo(
-    () => [...prices].sort((a, b) => a.price - b.price).slice(0, 4),
+  // Por padrão exibimos os 4 mercados mais baratos — cabem em uma linha até
+  // ~640px sem exigir scroll horizontal. Usuário pode expandir para ver todos.
+  const [expanded, setExpanded] = useState(false);
+  const sorted = useMemo(
+    () => [...prices].sort((a, b) => a.price - b.price),
     [prices],
   );
+  const COLLAPSED_LIMIT = 4;
+  const canExpand = sorted.length > COLLAPSED_LIMIT;
+  const top = expanded ? sorted : sorted.slice(0, COLLAPSED_LIMIT);
+  const hiddenCount = Math.max(0, sorted.length - COLLAPSED_LIMIT);
   const cheapest = top[0]?.price ?? globalMin;
   const spreadPct =
     globalMax > 0 && globalMin > 0 ? ((globalMax - globalMin) / globalMax) * 100 : 0;
@@ -1998,8 +2034,16 @@ function CompareMatrix({
       <div
         role="table"
         aria-label="Preços por mercado"
-        className="grid gap-1.5 overflow-x-auto"
-        style={{ gridTemplateColumns: `repeat(${top.length}, minmax(140px, 1fr))` }}
+        className={
+          expanded
+            ? "grid gap-1.5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+            : "grid gap-1.5 overflow-x-auto"
+        }
+        style={
+          expanded
+            ? undefined
+            : { gridTemplateColumns: `repeat(${top.length}, minmax(140px, 1fr))` }
+        }
       >
         {top.map((p, i) => {
           const isCheapest = i === 0;
@@ -2093,6 +2137,30 @@ function CompareMatrix({
           );
         })}
       </div>
+      {canExpand ? (
+        <div className="mt-2 flex items-center justify-between gap-2 px-1">
+          <p
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            className="text-[11px] font-medium text-muted-foreground"
+          >
+            {expanded
+              ? `Mostrando todos os ${sorted.length} mercados`
+              : `Mostrando os ${COLLAPSED_LIMIT} mais baratos de ${sorted.length}`}
+          </p>
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            aria-expanded={expanded}
+            className="inline-flex h-7 items-center gap-1.5 rounded-full border border-brand-gold/60 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-2.5 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--pc-gold-ink)] transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+          >
+            {expanded
+              ? "Ver menos"
+              : `Ver todos (+${hiddenCount})`}
+          </button>
+        </div>
+      ) : null}
     </section>
   );
 }
