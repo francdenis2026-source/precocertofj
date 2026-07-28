@@ -1080,7 +1080,7 @@ export function PriceSearchBar({
                       ].map((s) => (
                         <div key={s.k} className="min-w-0 px-3.5 py-2">
                           <dt className="truncate text-[11px] font-medium text-white/60">{s.k}</dt>
-                          <dd className="mt-0.5 text-[15px] font-bold leading-none tabular-nums text-white">
+                          <dd className="pc-num pc-num--onhero mt-0.5 text-[15px] font-bold leading-none">
                             {s.v}
                           </dd>
                         </div>
