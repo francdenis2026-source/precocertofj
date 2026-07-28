@@ -331,7 +331,7 @@ export const getBasketComparison = createServerFn({ method: "POST" })
       for (const ess of ESSENTIALS) {
         const pick = inner.get(ess.key);
         if (pick) {
-          items.push({ key: ess.key, label: ess.label, productName: pick.productName, price: pick.price });
+          items.push({ key: ess.key, label: ess.label, productName: pick.productName, price: pick.price, when: pick.when });
           total += pick.price;
           found += 1;
         } else {
