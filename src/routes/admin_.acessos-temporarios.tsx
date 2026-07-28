@@ -94,13 +94,14 @@ function TrialAccessPage() {
     queryFn: () => list({ data: { status: statusFilter || undefined, search: search || undefined, limit: 300 } }),
     staleTime: 15_000,
   });
-  // Auditoria auto-refresh a cada 30s + inclui encerrados p/ análise histórica
+  // Auditoria: refresh mais responsivo (10s) + realtime + broadcast entre abas
   const [auditInclEnded, setAuditInclEnded] = useState(true);
   const usersQ = useQuery({
     queryKey: ["trial-users", auditInclEnded],
     queryFn: () => listUsers({ data: { includeEnded: auditInclEnded } }),
-    staleTime: 15_000,
-    refetchInterval: 30_000,
+    staleTime: 5_000,
+    refetchInterval: 10_000,
+    refetchOnWindowFocus: true,
   });
 
   // Ticker global (1s) para atualizar o contador de "restante"
@@ -114,6 +115,35 @@ function TrialAccessPage() {
     qc.invalidateQueries({ queryKey: ["trial-codes"] });
     qc.invalidateQueries({ queryKey: ["trial-users"] });
   };
+
+  // Realtime: qualquer INSERT/UPDATE/DELETE em license_codes reflete imediatamente
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const ch = supabase
+      .channel(`trial-codes-${Math.random().toString(36).slice(2, 8)}`)
+      .on(
+        "postgres_changes",
+        { event: "*", schema: "public", table: "license_codes" },
+        () => invalidate(),
+      )
+      .subscribe();
+
+    // Sincronização entre abas (revogação em uma aba propaga imediatamente)
+    let bc: BroadcastChannel | null = null;
+    if (typeof BroadcastChannel !== "undefined") {
+      bc = new BroadcastChannel("pc-trial-access");
+      bc.onmessage = () => invalidate();
+    }
+    (window as unknown as { __pcTrialBc?: BroadcastChannel | null }).__pcTrialBc = bc;
+
+    return () => {
+      supabase.removeChannel(ch);
+      bc?.close();
+      (window as unknown as { __pcTrialBc?: BroadcastChannel | null }).__pcTrialBc = null;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   const counts = useMemo(() => {
     const rows = codesQ.data ?? [];
