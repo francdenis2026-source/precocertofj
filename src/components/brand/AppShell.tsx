@@ -17,19 +17,31 @@ import { useRouterState } from "@tanstack/react-router";
 export function AppShell({ children, scope }: { children: React.ReactNode; scope?: "admin" | "app" }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const resolvedScope = scope ?? (pathname.startsWith("/admin") ? "admin" : "app");
+  const isAdminScope = resolvedScope === "admin";
   return (
-    <SidebarProvider defaultOpen={resolvedScope === "admin"}>
-      <div className={`contents ${resolvedScope === "admin" ? "admin-scope" : "app-scope"}`}>
+    <SidebarProvider defaultOpen={isAdminScope}>
+      <div className={`contents ${isAdminScope ? "admin-scope" : "app-scope"}`}>
         <AppSidebar />
-        <SidebarInset className={resolvedScope === "admin" ? "min-h-screen bg-muted/30" : "min-h-screen bg-background"}>
+        <SidebarInset
+          className={
+            isAdminScope
+              ? "h-dvh min-h-0 min-w-0 overflow-hidden bg-background"
+              : "min-h-screen bg-background"
+          }
+        >
           <AppHeader scope={resolvedScope} />
           <main
-            className={`flex-1 ${resolvedScope === "admin" ? "pb-0" : "pb-[calc(var(--mobile-nav-height)+1rem)] md:pb-0"}`}
+            data-admin-scroll={isAdminScope ? "main" : undefined}
+            className={
+              isAdminScope
+                ? "min-h-0 flex-1 overflow-y-auto overflow-x-hidden pb-10"
+                : "flex-1 pb-[calc(var(--mobile-nav-height)+1rem)] md:pb-0"
+            }
           >
             {children}
           </main>
         </SidebarInset>
-        {resolvedScope !== "admin" && <MobileNav />}
+        {!isAdminScope && <MobileNav />}
       </div>
     </SidebarProvider>
   );
