@@ -16,6 +16,15 @@ export type PlanRow = {
   highlight: boolean;
 };
 
+export type PlansHealth = {
+  licenseActive: number;
+  licenseTotal: number;
+  legacyPlansExists: boolean;
+  legacyPlansCount: number;
+  consistent: boolean;
+  warnings: string[];
+};
+
 /**
  * All plan reads/writes are now unified against `license_plans`.
  * The legacy `plans` table was removed in migration
