@@ -82,4 +82,49 @@ describe("AdminChip", () => {
     expect(el.className).toMatch(/bg-secondary/);
     expect(el.className).toMatch(/text-secondary-foreground/);
   });
+
+  it("todo tone define classe hover: para transição de fundo (não é estático)", () => {
+    for (const tone of TONES) {
+      const { unmount } = render(<AdminChip tone={tone}>h</AdminChip>);
+      const el = screen.getByText("h");
+      expect(el.className).toMatch(/hover:/);
+      unmount();
+    }
+  });
+
+  it("estados loading e disabled coexistem com classes de opacidade acessíveis", () => {
+    render(
+      <AdminChip tone="commerce" loading disabled>
+        dupla
+      </AdminChip>,
+    );
+    const el = screen.getByText("dupla");
+    expect(el.getAttribute("aria-busy")).toBe("true");
+    expect(el.getAttribute("aria-disabled")).toBe("true");
+    expect(el.className).toMatch(/data-\[state=loading\]:opacity-70/);
+    expect(el.className).toMatch(/aria-disabled:opacity-60/);
+    expect(el.className).toMatch(/aria-disabled:cursor-not-allowed/);
+  });
+
+  it("expõe anel de foco visível para navegação por teclado", () => {
+    render(<AdminChip tone="overview" tabIndex={0}>foco</AdminChip>);
+    const el = screen.getByText("foco");
+    expect(el.className).toMatch(/focus-visible:ring-2/);
+    expect(el.className).toMatch(/focus-visible:ring-ring/);
+  });
+
+  it("tamanhos sm/md/lg alteram apenas padding/tipografia", () => {
+    const sizes = ["sm", "md", "lg"] as const;
+    const patterns = {
+      sm: /px-2 py-0\.5 text-\[11px\]/,
+      md: /px-2\.5 py-1 text-xs/,
+      lg: /px-3 py-1\.5 text-sm/,
+    };
+    for (const s of sizes) {
+      const { unmount } = render(<AdminChip size={s}>{s}</AdminChip>);
+      const el = screen.getByText(s);
+      expect(el.className).toMatch(patterns[s]);
+      unmount();
+    }
+  });
 });

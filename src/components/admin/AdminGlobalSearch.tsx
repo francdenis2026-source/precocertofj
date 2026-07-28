@@ -29,24 +29,61 @@ type Scope = "all" | "products" | "stores" | "prices";
 const brl = (v: number) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
+const STORAGE_KEY = "admin.global-search.filters.v1";
+
+type PersistedFilters = {
+  raw: string;
+  scope: Scope;
+  storeId: string;
+  minPrice: string;
+  maxPrice: string;
+  days: string;
+  verifiedOnly: boolean;
+  showFilters: boolean;
+};
+
+function readPersisted(): Partial<PersistedFilters> {
+  if (typeof window === "undefined") return {};
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    return raw ? (JSON.parse(raw) as Partial<PersistedFilters>) : {};
+  } catch {
+    return {};
+  }
+}
+
 export function AdminGlobalSearch() {
   const runSearch = useServerFn(adminGlobalSearch);
   const listStores = useServerFn(listEstablishments);
 
-  const [raw, setRaw] = useState("");
-  const [q, setQ] = useState("");
-  const [scope, setScope] = useState<Scope>("all");
-  const [storeId, setStoreId] = useState<string>("all");
-  const [minPrice, setMinPrice] = useState("");
-  const [maxPrice, setMaxPrice] = useState("");
-  const [days, setDays] = useState<string>("all");
-  const [verifiedOnly, setVerifiedOnly] = useState(false);
-  const [showFilters, setShowFilters] = useState(false);
+  const initial = useMemo(() => readPersisted(), []);
+  const [raw, setRaw] = useState(initial.raw ?? "");
+  const [q, setQ] = useState((initial.raw ?? "").trim());
+  const [scope, setScope] = useState<Scope>(initial.scope ?? "all");
+  const [storeId, setStoreId] = useState<string>(initial.storeId ?? "all");
+  const [minPrice, setMinPrice] = useState(initial.minPrice ?? "");
+  const [maxPrice, setMaxPrice] = useState(initial.maxPrice ?? "");
+  const [days, setDays] = useState<string>(initial.days ?? "all");
+  const [verifiedOnly, setVerifiedOnly] = useState(initial.verifiedOnly ?? false);
+  const [showFilters, setShowFilters] = useState(initial.showFilters ?? false);
 
   useEffect(() => {
     const t = setTimeout(() => setQ(raw.trim()), 280);
     return () => clearTimeout(t);
   }, [raw]);
+
+  // Persistência dos filtros — sobrevive a recarregamentos e navegação entre hubs.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    try {
+      const payload: PersistedFilters = {
+        raw, scope, storeId, minPrice, maxPrice, days, verifiedOnly, showFilters,
+      };
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
+    } catch {
+      /* storage indisponível — segue sem persistir */
+    }
+  }, [raw, scope, storeId, minPrice, maxPrice, days, verifiedOnly, showFilters]);
 
   const storesQuery = useQuery({
     queryKey: ["admin", "search", "stores"],
@@ -78,6 +115,9 @@ export function AdminGlobalSearch() {
   });
 
   const clearAll = () => {
+    if (typeof window !== "undefined") {
+      try { window.localStorage.removeItem(STORAGE_KEY); } catch { /* noop */ }
+    }
     setRaw("");
     setQ("");
     setScope("all");
