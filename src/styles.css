@@ -4691,8 +4691,14 @@ html.dark .pc-row-interactive:hover .pc-store-name {
 
 /* Toned inline chip (topbar identity chips) */
 .pc-tone-chip {
-  background: var(--tone-soft) !important;
-  color: var(--tone-ink) !important;
-  border-color: color-mix(in oklab, var(--tone) 40%, transparent) !important;
+  background: color-mix(in oklab, var(--tone) 12%, transparent) !important;
+  color: var(--tone) !important;
+  border-color: color-mix(in oklab, var(--tone) 45%, transparent) !important;
+}
+.dark .pc-tone-chip {
+  background: color-mix(in oklab, var(--tone) 18%, transparent) !important;
+  color: var(--tone) !important;
+  border-color: color-mix(in oklab, var(--tone) 55%, transparent) !important;
 }
 .pc-tone-chip [data-tone-icon] { color: var(--tone) !important; }
+
