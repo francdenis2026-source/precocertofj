@@ -228,7 +228,7 @@ function AdminPage() {
       "/admin/gestao",
       "/admin/metricas",
       "/admin/cobertura",
-      "/admin/analytics",
+      "/admin/metricas",
       "/admin/webhooks",
     ];
     const idle =
