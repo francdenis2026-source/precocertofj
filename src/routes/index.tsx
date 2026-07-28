@@ -314,9 +314,9 @@ function HomePage() {
           aria-labelledby="hero-title"
           className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center gap-2.5 px-3 py-2.5 sm:gap-4 sm:px-6 sm:py-4 lg:px-8"
         >
-          <div className="grid flex-1 items-center gap-4 lg:grid-cols-12 lg:gap-8">
+          <div className="grid flex-1 items-center gap-5 lg:grid-cols-12 lg:gap-12">
             {/* ---------- Coluna editorial ---------- */}
-            <div className="min-w-0 lg:col-span-7">
+            <div className="order-1 flex min-w-0 flex-col gap-3 sm:gap-4 lg:col-span-7 lg:pr-4">
               <span
                 className="inline-flex items-center gap-2 rounded-full border px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.2em]"
                 style={{
