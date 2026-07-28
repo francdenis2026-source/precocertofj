@@ -176,7 +176,7 @@ function CadastroPage() {
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
-        className="relative z-10 grid w-full max-w-[900px] grid-cols-1 overflow-hidden rounded-2xl border border-slate-900/10 bg-white text-slate-900 shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
+        className="relative z-10 grid w-full max-w-[900px] grid-cols-1 overflow-hidden rounded-2xl border border-slate-900/10 bg-white text-slate-900 shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:h-[580px] md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
       >
         {/* LEFT — Hero panel reutilizável (oculto no mobile, igual /login) */}
         <div className="hidden md:block">
@@ -184,38 +184,25 @@ function CadastroPage() {
         </div>
 
         {/* RIGHT — Form */}
-        <section className="relative overflow-hidden p-4 sm:p-5 md:p-6">
+        <section className="relative flex flex-col overflow-y-auto p-4 sm:p-5 md:p-6">
 
-            {/* Header */}
-            <div className="mb-3 flex items-center gap-2.5">
-              <div
-                className="flex h-9 w-9 flex-none items-center justify-center rounded-lg"
-                style={{
-                  background: `linear-gradient(135deg, ${PC_EMERALD} 0%, ${PC_EMERALD_DEEP} 100%)`,
-                  boxShadow: `inset 0 0 0 1px ${PC_GOLD}66, 0 6px 14px -6px rgba(15,27,61,0.45)`,
-                }}
+            {/* Header — kicker compacto (evita duplicação com AuthHero) */}
+            <div className="mb-2.5">
+              <p
+                className="text-[11px] font-bold uppercase tracking-[0.22em]"
+                style={{ color: PC_EMERALD }}
               >
-                <UserPlus className="h-4 w-4 text-white" />
-              </div>
-              <div className="min-w-0">
-                <div
-                  className="text-[11px] font-bold uppercase tracking-[0.22em]"
-                  style={{ color: PC_EMERALD }}
-                >
-                  Novo assinante
-                </div>
-                <h2
-                  className="mt-0.5 text-[18px] leading-[1.05] tracking-tight"
-                  style={{ fontFamily: PC_DISPLAY, fontWeight: 700, color: "#0a1631" }}
-                >
-                  Criar conta
-                </h2>
-              </div>
+                Novo assinante
+              </p>
+              <h2
+                className="mt-0.5 text-[20px] leading-[1.1] tracking-tight"
+                style={{ fontFamily: PC_DISPLAY, fontWeight: 700, color: "#0a1631" }}
+              >
+                Criar conta
+              </h2>
             </div>
 
-
-
-            <form onSubmit={handleSubmit} className="space-y-2.5" noValidate>
+            <form onSubmit={handleSubmit} className="space-y-2" noValidate>
               <Field
                 label="Nome completo"
                 value={name}

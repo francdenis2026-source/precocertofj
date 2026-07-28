@@ -392,7 +392,6 @@ function RedeemPage() {
                 className="pc-hero-editorial mt-8 font-editorial text-[clamp(38px,4.6vw,60px)]"
                 style={{ color: "#f9f2df" }}
               >
-
                 Libere seu acesso
                 <br />
                 <span
@@ -489,10 +488,10 @@ function RedeemPage() {
               />
             ) : (
               <form onSubmit={handleSubmit} noValidate>
-                <h2
-                  className="pc-hero-editorial font-editorial text-[clamp(26px,3.4vw,36px)] text-foreground"
-                >
-
+                <p className="text-[10.5px] font-bold uppercase tracking-[0.24em] text-[color:var(--pc-home-gold)]">
+                  Ativação
+                </p>
+                <h2 className="pc-hero-editorial font-editorial mt-1 text-[clamp(26px,3.4vw,36px)] text-foreground">
                   Ativar meu{" "}
                   <span className="pc-editorial-accent pc-editorial-accent--fill">código</span>
                 </h2>
@@ -641,7 +640,7 @@ function RedeemPage() {
                     "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
                     "disabled:cursor-not-allowed disabled:opacity-70",
                     canSubmit && !submitting
-                      ? "bg-[var(--pc-gold-ink)] text-primary shadow-[0_12px_28px_-10px_color-mix(in_oklab,var(--pc-gold-ink)_60%,transparent)] hover:brightness-105"
+                      ? "bg-[var(--pc-navy)] text-[color:var(--pc-home-gold)] ring-1 ring-[color:var(--pc-home-gold)]/60 shadow-[0_16px_36px_-14px_color-mix(in_oklab,var(--pc-navy)_70%,transparent)] hover:brightness-110"
                       : "bg-muted text-muted-foreground",
                   )}
                 >
