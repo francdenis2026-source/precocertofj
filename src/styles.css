@@ -465,19 +465,34 @@
     text-rendering: geometricPrecision;
     -webkit-font-smoothing: antialiased;
   }
-  /* Destaque editorial italic — usado para trechos-chave dentro de hero/banner
-     (ex.: "preço certo"). Fraunces italic com opsz máximo e SOFT alto para uma
-     curvatura mais expressiva; underline gold sutil só no hover/focus do pai. */
+  /* Destaque editorial — DUAS FACES:
+     • Hero/banner (grande): Fraunces italic com preenchimento dourado (assinatura de marca).
+     • Inline/card/label (pequeno): mantém a cor de texto do contexto (contraste máximo)
+       e usa apenas um fio dourado como sublinhado — leitura limpa em qualquer fundo. */
   .pc-editorial-accent {
     font-family: var(--font-serif);
     font-style: italic;
     font-weight: 500;
-    letter-spacing: -0.028em;
+    letter-spacing: -0.012em;
     font-optical-sizing: auto;
-    font-variation-settings: "opsz" 144, "SOFT" 60, "wght" 500;
-    color: var(--pc-home-onhero-gold, var(--pc-gold-ink));
+    font-variation-settings: "opsz" 96, "SOFT" 40, "wght" 500;
+    color: inherit;
+    text-decoration-line: underline;
+    text-decoration-color: color-mix(in oklab, var(--pc-gold-ink) 70%, transparent);
+    text-decoration-thickness: 0.055em;
+    text-underline-offset: 0.16em;
+    text-decoration-skip-ink: auto;
     text-rendering: geometricPrecision;
     -webkit-font-smoothing: antialiased;
+  }
+  /* Assinatura editorial em grande — usada apenas no hero da homepage.
+     Preenchimento dourado clássico (Fraunces italic opsz 144). */
+  .pc-editorial-accent--fill {
+    color: var(--pc-home-onhero-gold, var(--pc-gold-ink));
+    text-decoration: none;
+    font-weight: 500;
+    letter-spacing: -0.028em;
+    font-variation-settings: "opsz" 144, "SOFT" 60, "wght" 500;
   }
   /* Hero editorial — controla line-height, tracking e wrap por breakpoint sem
      precisar hard-code em cada rota. Aplique junto de .font-editorial. */
@@ -4787,3 +4802,8 @@ html.dark .pc-row-interactive:hover .pc-store-name {
   color: color-mix(in oklab, var(--foreground) 82%, transparent);
   font-weight: 600;
 }
+
+/* Variantes adicionais de .pc-price */
+.pc-price--best   { color: var(--pc-gold-ink); font-weight: 700; letter-spacing: -0.01em; }
+.pc-price--strike { color: color-mix(in oklab, var(--foreground) 55%, transparent); text-decoration: line-through; font-weight: 500; }
+.pc-price--savings { color: hsl(var(--savings, 148 60% 34%)); font-weight: 700; }

@@ -127,7 +127,7 @@ function ProdutoComparacaoPage() {
                     {d.ranking[0].neighborhood ? ` — ${d.ranking[0].neighborhood}` : ""}
                   </p>
                 </div>
-                <p className={cn(tc.dataPrimary, "text-[var(--pc-gold-ink)]")}>{brl(d.minPrice)}</p>
+                <p className="pc-price pc-price--lg pc-price--best" style={{ fontSize: "clamp(22px, 3vw, 32px)" }}>{brl(d.minPrice)}</p>
                 {d.savingsPct > 0 && (
                   <span className="rounded-full bg-[var(--pc-gold-ink)]/10 px-2 py-0.5 text-[12px] font-semibold text-[var(--pc-gold-ink)]">
                     até {d.savingsPct}% de economia
@@ -222,7 +222,7 @@ function ProdutoComparacaoPage() {
                       </span>
                       <span className="shrink-0 text-right">
                         <span className={cn(tc.itemTitle, r.position === 1 && "text-emerald-600")}>
-                          {brl(r.price)}
+                          <span className="pc-price pc-price--md">{brl(r.price)}</span>
                         </span>
                         {r.diffPct > 0 && <span className={cn(tc.meta, "block")}>+{r.diffPct}%</span>}
                       </span>
@@ -301,7 +301,7 @@ function ProdutoComparacaoPage() {
                             {h.storeName} • {h.stores} {h.stores === 1 ? "loja" : "lojas"}
                           </span>
                         </span>
-                        <span className={cn(tc.itemTitle, "shrink-0")}>{brl(h.minPrice)}</span>
+                        <span className="pc-price pc-price--md shrink-0">{brl(h.minPrice)}</span>
                       </li>
                     ))}
                   </ul>
