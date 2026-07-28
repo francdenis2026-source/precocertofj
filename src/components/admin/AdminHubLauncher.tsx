@@ -53,6 +53,31 @@ export type HubLauncherProps = {
  *  - o `tone` propaga via `data-tone` para que `AdminTabs`, breadcrumbs e o
  *    anel de foco reutilizem exatamente a mesma paleta semântica.
  */
+/**
+ * Compara o card com a rota atual. Consideramos "ativo" quando:
+ *  - o `to` do card == pathname atual (ignorando barra final), OU
+ *  - `to` bate + todos os pares chave/valor de `item.search` estão presentes
+ *    no querystring atual (match parcial: outros params são preservados).
+ * Isso destaca automaticamente o card quando o usuário está em uma rota
+ * "legada" que faz redirect para o hub com `?tab=…`.
+ */
+function isCardActive(
+  item: HubDestination,
+  pathname: string,
+  searchStr: string,
+): boolean {
+  const target = String(item.to ?? "").replace(/\/$/, "");
+  const cur = pathname.replace(/\/$/, "");
+  if (!target || target !== cur) return false;
+  if (!item.search || typeof item.search !== "object") return true;
+  const params = new URLSearchParams(searchStr);
+  for (const [k, v] of Object.entries(item.search as Record<string, unknown>)) {
+    if (v == null) continue;
+    if (params.get(k) !== String(v)) return false;
+  }
+  return true;
+}
+
 export function AdminHubLauncher({
   eyebrow,
   title,
@@ -61,6 +86,20 @@ export function AdminHubLauncher({
   sections,
   headerCta,
 }: HubLauncherProps) {
+  const location = useLocation();
+  const pathname = location.pathname;
+  const searchStr =
+    typeof location.searchStr === "string"
+      ? location.searchStr
+      : new URLSearchParams(
+          Object.entries((location.search ?? {}) as Record<string, unknown>).reduce(
+            (acc, [k, v]) => {
+              if (v != null) acc[k] = String(v);
+              return acc;
+            },
+            {} as Record<string, string>,
+          ),
+        ).toString();
   return (
     <div
       data-tone={tone}
