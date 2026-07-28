@@ -280,7 +280,7 @@ function PlansPage() {
               {plans.map((plan) => {
                 const isRecommended = plan.slug === recommendedSlug;
                 const perMonth = pricePerMonth(plan.price_cents, plan.days);
-                const isFounder = false;
+                
                 const isFree = plan.price_cents === 0;
                 const isSelected = selectedPlan?.id === plan.id;
                 const savings =
@@ -309,24 +309,22 @@ function PlansPage() {
                       isSelected && "ring-2 ring-brand-gold/50",
                     )}
                   >
-                    {(isRecommended || isFounder || savings) && (
+                    {(isRecommended || savings) && (
                       <span
                         className={dsx(
                           tc.eyebrow,
                           "absolute right-3 top-3 inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5",
                           isRecommended
                             ? "badge-gold text-brand-navy"
-                            : isFounder
-                              ? "badge-gold-outline"
-                              : "border border-brand-gold/40 bg-brand-gold/10 text-[var(--pc-gold-ink)]",
+                            : "border border-brand-gold/40 bg-brand-gold/10 text-[var(--pc-gold-ink)]",
                         )}
                       >
-                        {isRecommended ? "Recomendado" : isFounder ? "Limitado" : `-${savings}%`}
+                        {isRecommended ? "Recomendado" : `-${savings}%`}
                       </span>
                     )}
 
-                    <span className={cn(tc.eyebrow, "mb-1 block", (isRecommended || isFounder || savings) && "pr-24")}>
-                      {isRecommended ? "Mais escolhido" : isFounder ? "Edição fundador" : isFree ? "Comece por aqui" : "Plano"}
+                    <span className={cn(tc.eyebrow, "mb-1 block", (isRecommended || savings) && "pr-24")}>
+                      {isRecommended ? "Mais escolhido" : isFree ? "Comece por aqui" : "Plano"}
                     </span>
                     <h2 className={cn(tc.sectionTitle, "pr-24")}>{plan.name}</h2>
 
@@ -349,13 +347,11 @@ function PlansPage() {
                           )}
                       </div>
                       <p className={cn(tc.meta, "mt-1.5")}>
-                        {isFounder
-                          ? "Pagamento único · vitalício"
-                          : isFree
-                            ? `${plan.days} dias · sem cartão`
-                            : perMonth
-                              ? `≈ ${perMonth}/mês · ${plan.days} dias`
-                              : `${plan.days} dias de acesso`}
+                        {isFree
+                          ? `${plan.days} dias · sem cartão`
+                          : perMonth
+                            ? `≈ ${perMonth}/mês · ${plan.days} dias`
+                            : `${plan.days} dias de acesso`}
                       </p>
                     </div>
 
@@ -383,7 +379,7 @@ function PlansPage() {
                         ds.btn.base,
                         "btn-state-safe pc-focus mt-3 h-11 w-full px-3",
                         tc.control,
-                        isRecommended || isFounder
+                        isRecommended
                           ? "btn-gold shadow-elev-1"
                           : "border border-border bg-card text-foreground hover:border-brand-gold hover:text-brand-gold",
                       )}
