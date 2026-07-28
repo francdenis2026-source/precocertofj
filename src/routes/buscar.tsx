@@ -449,25 +449,31 @@ function SearchPage() {
           {/* ---------------- BARRA DE COMANDO (sempre visível) ---------------- */}
           <section
             aria-label="Busca por nome"
-            className="pc-surface-2 relative shrink-0 rounded-2xl border border-border/70 p-2.5 shadow-sm md:p-3"
+            className={`pc-surface-2 relative rounded-2xl border border-border/70 shadow-sm ${
+              hasQuery
+                ? "flex min-h-0 flex-1 flex-col overflow-hidden p-2.5 md:p-3"
+                : "shrink-0 p-2.5 md:p-3"
+            }`}
           >
             <div
               aria-hidden
               className="pointer-events-none absolute inset-x-3 top-0 h-px bg-linear-to-r from-transparent via-brand-gold/60 to-transparent"
             />
-            <PriceSearchBar
-              initialQuery={q}
-              mode={mode}
-              pureOnly={pureOnly}
-              brandFilter={brandFilter}
-              priceMin={Number.isFinite(priceMin) ? priceMin : undefined}
-              priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
-              onQueryChange={syncQueryToUrl}
-              filterShortcuts={emptyFilterShortcuts}
-              activeFilterCount={activeFilterCount}
-              onClearFilters={activeFilterCount > 0 ? clearFilters : undefined}
-            />
-            <div className="mt-2 border-t border-border/50 pt-1.5">
+            <div className={hasQuery ? "min-h-0 flex-1 overflow-y-auto pc-scroll-fade pr-1" : ""}>
+              <PriceSearchBar
+                initialQuery={q}
+                mode={mode}
+                pureOnly={pureOnly}
+                brandFilter={brandFilter}
+                priceMin={Number.isFinite(priceMin) ? priceMin : undefined}
+                priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
+                onQueryChange={syncQueryToUrl}
+                filterShortcuts={emptyFilterShortcuts}
+                activeFilterCount={activeFilterCount}
+                onClearFilters={activeFilterCount > 0 ? clearFilters : undefined}
+              />
+            </div>
+            <div className="mt-2 shrink-0 border-t border-border/50 pt-1.5">
               <FiltersToolbar
                 open={filtersOpen}
                 onToggle={() => setFiltersOpen((v) => !v)}
@@ -484,6 +490,7 @@ function SearchPage() {
               />
             </div>
           </section>
+
 
           {hasQuery ? (
             /* ============ ESTADO: RESULTADOS ============ */
