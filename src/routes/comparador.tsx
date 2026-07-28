@@ -790,7 +790,7 @@ function ComparadorPage() {
             <span className="text-[11px] font-semibold uppercase tracking-[0.22em] text-[var(--pc-gold-ink)]">
               Preços reais dos mercados
             </span>
-            <h1 className="min-w-0 truncate whitespace-nowrap font-serif text-[17px] font-normal leading-tight tracking-tight text-foreground sm:text-[21px]">
+            <h1 className="font-editorial pc-hero-editorial min-w-0 truncate whitespace-nowrap text-[20px] font-normal text-foreground sm:text-[26px] lg:text-[30px]" style={{ fontVariationSettings: '"opsz" 144, "SOFT" 25' }}>
               Comparador<span className="hidden sm:inline"> de preços</span>
             </h1>
           </div>
