@@ -389,10 +389,10 @@ function RedeemPage() {
           ) : (
             <form onSubmit={handleSubmit} className="px-5 py-5 sm:px-6 sm:py-6" noValidate>
               <h1
-                className="text-[18px] font-bold leading-tight"
-                style={{ color: INK, letterSpacing: "-0.01em" }}
+                className="font-editorial text-[clamp(19px,2.4vw,26px)] font-normal leading-tight"
+                style={{ color: INK, letterSpacing: "-0.015em" }}
               >
-                Ativar meu código
+                Ativar meu <span className="pc-editorial-accent italic">código</span>
               </h1>
               <p className="mt-1 text-[12.5px]" style={{ color: MUTED }}>
                 Cole o código que chegou no seu e-mail — formato <span className="font-mono font-semibold" style={{ color: NAVY }}>PC-XXXX-XXXX-XXXX</span>. O acesso libera na hora.

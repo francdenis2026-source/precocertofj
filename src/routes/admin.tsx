@@ -580,6 +580,9 @@ function PlansTab() {
                     )}
                   </div>
                   <p className="text-xs text-muted-foreground">{plan.days} dias de acesso</p>
+                  <p className="mt-0.5 inline-flex items-center gap-1 rounded-md border border-brand-gold/30 bg-brand-gold/10 px-1.5 py-0.5 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">
+                    IA · {plan.ai_monthly_quota > 0 ? `${plan.ai_monthly_quota}/mês` : "sem cota"}
+                  </p>
                 </div>
                 <ul className="space-y-1 text-xs text-muted-foreground">
                   {plan.features.map((f) => <li key={f}>• {f}</li>)}
@@ -626,6 +629,7 @@ function PlanDialog({
     features: [],
     active: true,
     highlight: false,
+    ai_monthly_quota: 30,
   };
   const [form, setForm] = useState<PlanRow>(initial);
   const [featuresText, setFeaturesText] = useState(initial().features.join("\n"));
@@ -654,6 +658,7 @@ function PlanDialog({
           features: featuresText.split("\n").map((f) => f.trim()).filter(Boolean),
           active: form.active,
           highlight: form.highlight,
+          ai_monthly_quota: form.ai_monthly_quota,
         },
       });
       toast.success(plan ? "Plano atualizado" : "Plano criado");
@@ -692,14 +697,29 @@ function PlanDialog({
             </div>
             <div><Label>Dias</Label><Input type="number" value={form.days} onChange={(e) => setForm({ ...form, days: Number(e.target.value) })} /></div>
             <div><Label>Preço (R$)</Label><Input type="number" step="0.01" value={form.price} onChange={(e) => setForm({ ...form, price: Number(e.target.value) })} /></div>
-            <div className="md:col-span-2">
-              <Label>Preço original (opcional)</Label>
-              <Input
-                type="number"
-                step="0.01"
-                value={form.original_price ?? ""}
-                onChange={(e) => setForm({ ...form, original_price: e.target.value ? Number(e.target.value) : null })}
-              />
+            <div className="md:col-span-2 grid gap-3 md:grid-cols-2">
+              <div>
+                <Label>Preço original (opcional)</Label>
+                <Input
+                  type="number"
+                  step="0.01"
+                  value={form.original_price ?? ""}
+                  onChange={(e) => setForm({ ...form, original_price: e.target.value ? Number(e.target.value) : null })}
+                />
+              </div>
+              <div>
+                <Label>Cota mensal de IA</Label>
+                <Input
+                  type="number"
+                  min={0}
+                  step={1}
+                  value={form.ai_monthly_quota}
+                  onChange={(e) => setForm({ ...form, ai_monthly_quota: Math.max(0, Number(e.target.value) || 0) })}
+                />
+                <p className="mt-1 text-[11px] text-muted-foreground">
+                  0 = sem acesso à IA. Sugestões: Degustação 1 · Mensal 30 · Trimestral 40 · Anual 60.
+                </p>
+              </div>
             </div>
           </div>
           <div><Label>Descrição</Label><Textarea value={form.description} onChange={(e) => setForm({ ...form, description: e.target.value })} /></div>
