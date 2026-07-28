@@ -119,7 +119,7 @@ export type BasketStore = {
   totalItems: number;
   total: number;
   coverage: number;
-  items: Array<{ key: EssentialKey; label: string; productName: string; price: number; when: string } | null>;
+  items: Array<{ key: EssentialKey; label: string; productName: string; price: number; when: string; quantity: number } | null>;
 };
 
 export type BasketMissing = {
