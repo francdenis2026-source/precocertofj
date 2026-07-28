@@ -25,13 +25,13 @@ function read(file: string): string {
 describe("Admin hubs reorganization — v2.2", () => {
   it("cria os três novos hubs launcher", () => {
     const files = readdirSync(ROUTES_DIR);
-    for (const expected of ["admin_.contas.tsx", "admin_.gestao.tsx", "admin_.operacao.tsx"]) {
+    for (const expected of ["admin_.contas.tsx", "admin_.vitrine.tsx", "admin_.operacao.tsx"]) {
       expect(files).toContain(expected);
     }
   });
 
   it("cada hub declara adminBeforeLoad + AppShell + AdminHubLauncher", () => {
-    for (const file of ["admin_.contas.tsx", "admin_.gestao.tsx", "admin_.operacao.tsx"]) {
+    for (const file of ["admin_.contas.tsx", "admin_.vitrine.tsx", "admin_.operacao.tsx"]) {
       const src = read(file);
       expect(src, `${file} deve ser gated por admin`).toMatch(/adminBeforeLoad/);
       expect(src, `${file} deve montar dentro do AppShell admin`).toMatch(/AppShell/);
@@ -43,7 +43,7 @@ describe("Admin hubs reorganization — v2.2", () => {
   it("cada hub aplica o tom semântico correto", () => {
     const cases: Array<[string, string]> = [
       ["admin_.contas.tsx", "people"],
-      ["admin_.gestao.tsx", "catalog"],
+      ["admin_.vitrine.tsx", "catalog"],
       ["admin_.operacao.tsx", "system"],
     ];
     for (const [file, tone] of cases) {
@@ -71,7 +71,7 @@ describe("Admin hubs reorganization — v2.2", () => {
     // Adiciona a raiz e as rotas sem sufixo _
     known.add("/admin");
 
-    for (const file of ["admin_.contas.tsx", "admin_.gestao.tsx", "admin_.operacao.tsx"]) {
+    for (const file of ["admin_.contas.tsx", "admin_.vitrine.tsx", "admin_.operacao.tsx"]) {
       const src = read(file);
       const toMatches = Array.from(src.matchAll(/to:\s*["'](\/admin[^"']*)["']/g)).map((m) => m[1]);
       expect(toMatches.length, `${file} deve ter pelo menos um destino /admin*`).toBeGreaterThan(0);
