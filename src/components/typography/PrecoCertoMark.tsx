@@ -1,13 +1,13 @@
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-type Variant = "inline" | "hero" | "banner" | "card";
+type Variant = "inline" | "hero" | "banner" | "card" | "label";
 
 export interface PrecoCertoMarkProps
   extends React.HTMLAttributes<HTMLSpanElement> {
   /** Texto exibido — default "preço certo". */
   children?: React.ReactNode;
-  /** Hierarquia tipográfica: hero (opsz 144), banner (destaque médio), card (compacto) ou inline. */
+  /** Hierarquia tipográfica: hero (opsz 144), banner (destaque médio), card (compacto), label (badges/legendas) ou inline. */
   variant?: Variant;
   /** Envolver em <span> (default) ou <strong> para semântica de destaque. */
   as?: "span" | "strong" | "em";
@@ -20,6 +20,11 @@ const variantCls: Record<Variant, string> = {
     "font-editorial pc-editorial-accent text-[clamp(1.25rem,2.4vw,2rem)] leading-[1.05] tracking-tight",
   card:
     "font-editorial pc-editorial-accent text-[clamp(0.95rem,1.4vw,1.15rem)] leading-tight tracking-tight",
+  // Label: otimizada para badges, chips, tooltips e legendas pequenas.
+  // opsz mais baixo (60) preserva contraste dos traços em corpos pequenos;
+  // tracking neutro evita colisão entre glifos; peso 500 mantém presença sem virar título.
+  label:
+    "font-editorial pc-editorial-accent text-[0.72rem] leading-none tracking-[0.005em] [font-variation-settings:'opsz'_60,'SOFT'_25] font-medium",
 };
 
 /**

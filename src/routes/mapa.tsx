@@ -471,7 +471,12 @@ function NeighborhoodsPage() {
                             <span className={`block truncate ${tc.meta}`}>
                               {g.establishments.length}{" "}
                               {g.establishments.length === 1 ? "mercado" : "mercados"}
-                              {min != null ? ` · ${currency(min)}` : ""}
+                              {min != null ? (
+                                <>
+                                  {" · "}
+                                  <PrecoCertoMark variant="label">{currency(min)}</PrecoCertoMark>
+                                </>
+                              ) : null}
                             </span>
                           </span>
                         </button>
@@ -533,10 +538,12 @@ function NeighborhoodsPage() {
                           </span>
                           <span
                             className={`inline-flex shrink-0 items-center gap-1 rounded-full border border-border px-2 py-0.5 ${tc.tag} text-foreground/80`}
-                            title="Produtos cadastrados"
+                            title="Produtos com preço certo cadastrados"
                           >
                             <Package className="h-3 w-3 text-[var(--pc-gold-ink)]" aria-hidden />
                             <span className="tabular-nums">{est.productsCount}</span>
+                            <PrecoCertoMark variant="label" aria-hidden>·</PrecoCertoMark>
+                            <PrecoCertoMark variant="label">preço certo</PrecoCertoMark>
                           </span>
                         </Link>
                       </li>

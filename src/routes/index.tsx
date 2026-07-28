@@ -21,6 +21,7 @@ import {
 } from "lucide-react";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
+import { PrecoCertoMark } from "@/components/typography/PrecoCertoMark";
 import { buildLivePanel, type LivePanelMetric } from "@/lib/live-panel";
 import { getProductSuggestions } from "@/lib/products-suggest.functions";
 import { getPlatformStats, listPublicStores } from "@/lib/stores-public.functions";
@@ -337,7 +338,7 @@ function HomePage() {
                 }}
               >
                 Encontre o{" "}
-                <span className="pc-editorial-accent">preço certo</span>{" "}
+                <PrecoCertoMark variant="hero">preço certo</PrecoCertoMark>{" "}
                 sem sair de casa.
               </h1>
 

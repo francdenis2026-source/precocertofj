@@ -11,6 +11,7 @@ import { PriceSpotlight } from "@/components/product/PriceSpotlight";
 
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { ShareButton } from "@/components/ds";
+import { PrecoCertoMark } from "@/components/typography/PrecoCertoMark";
 import { tc } from "@/lib/typeclear";
 import { dsx } from "@/lib/ds";
 import { cn } from "@/lib/utils";
@@ -496,7 +497,7 @@ function MelhoresPrecosPage() {
               </span>
               <h1 className={dsx(tc.h1, "font-editorial pc-hero-editorial mt-0.5")} style={{ fontVariationSettings: '"opsz" 144, "SOFT" 25' }}>
                 Onde cada produto está{" "}
-                <em className="pc-editorial-accent">mais barato</em>
+                <PrecoCertoMark variant="inline" as="em">mais barato</PrecoCertoMark>
               </h1>
               <p className={dsx(tc.sectionNote, "mt-0.5 line-clamp-2 max-w-2xl")}>
                 Comparamos itens de mesmo tamanho e unidade (ml, g, un). A economia é medida
