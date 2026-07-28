@@ -265,7 +265,13 @@ function TrialAccessPage() {
         </TabsContent>
 
         <TabsContent value="audit" className="mt-4">
-          <AuditTable rows={usersQ.data ?? []} loading={usersQ.isPending} onRefresh={invalidate} />
+          <AuditTable
+            rows={usersQ.data ?? []}
+            loading={usersQ.isPending}
+            onRefresh={invalidate}
+            includeEnded={auditInclEnded}
+            onIncludeEndedChange={setAuditInclEnded}
+          />
         </TabsContent>
       </Tabs>
 
