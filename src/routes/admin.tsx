@@ -626,6 +626,7 @@ function PlanDialog({
     features: [],
     active: true,
     highlight: false,
+    ai_monthly_quota: 30,
   };
   const [form, setForm] = useState<PlanRow>(initial);
   const [featuresText, setFeaturesText] = useState(initial().features.join("\n"));
