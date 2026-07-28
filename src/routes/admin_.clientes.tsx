@@ -96,8 +96,16 @@ function ClientesPage() {
 
   useAdminEntitiesRealtime(
     () => { qc.invalidateQueries({ queryKey: ["admin", "customers"] }); },
-    { tables: ["profiles"] },
+    {
+      tables: ["profiles"],
+      channelKey: "admin-clientes",
+      onEvent: (payload) => {
+        const info = describeRealtimeChange(payload);
+        toast.info(info.title, { description: info.description });
+      },
+    },
   );
+
 
   function applySearch() {
     setPage(0);
