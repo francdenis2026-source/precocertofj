@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { AdminTabs } from "@/components/admin/AdminTabs";
+import { validateTabSearch } from "@/components/admin/adminTabs.utils";
 import { QuickPricePage } from "./admin_.preco-rapido";
 import { HistoricoPrecosPage } from "./admin_.historico-precos";
 import { formatShortDate } from "@/components/product/TrustIndicator";
@@ -60,19 +61,16 @@ import { AuditLogTable } from "@/components/admin/AuditLogTable";
 
 type PrecosTab = "completo" | "rapido" | "historico";
 const PRECOS_TABS = [
-  { key: "completo", label: "Modo completo" },
-  { key: "rapido", label: "Registro rápido" },
-  { key: "historico", label: "Histórico" },
+  { key: "completo" as const, label: "Modo completo" },
+  { key: "rapido" as const, label: "Registro rápido" },
+  { key: "historico" as const, label: "Histórico" },
 ];
 
 export const Route = createFileRoute("/admin_/precos")({
   ssr: false,
   beforeLoad: adminBeforeLoad,
-  validateSearch: (s: Record<string, unknown>): { tab: PrecosTab } => {
-    const t = String(s.tab ?? "completo");
-    const tab: PrecosTab = t === "rapido" || t === "historico" ? t : "completo";
-    return { tab };
-  },
+  validateSearch: (s: Record<string, unknown>): { tab: PrecosTab } =>
+    validateTabSearch(s, PRECOS_TABS, "completo"),
   head: () => ({
     meta: [
       { title: "Gestão de preços — Admin" },
@@ -87,7 +85,7 @@ function PrecosShell() {
   return (
     <AppShell scope="admin">
       <AdminOnly>
-        <AdminTabs to="/admin/precos" items={PRECOS_TABS} active={tab} />
+        <AdminTabs to="/admin/precos" title="Preços" items={PRECOS_TABS} active={tab} />
         {tab === "completo" && <AdminPrecosPage />}
         {tab === "rapido" && <QuickPricePage />}
         {tab === "historico" && <HistoricoPrecosPage />}
