@@ -31,11 +31,7 @@ export function AppShell({ children, scope }: { children: React.ReactNode; scope
           }
         >
           <AppHeader scope={resolvedScope} />
-          {isAdminScope && (
-            <div className="border-b border-border/60 bg-card/40 px-4 py-2 backdrop-blur-sm">
-              <AutoAdminBreadcrumb />
-            </div>
-          )}
+          {isAdminScope && <AutoAdminBreadcrumb className="border-b border-border/60 bg-card/40 px-4 py-2 backdrop-blur-sm" />}
           <main
             data-admin-scroll={isAdminScope ? "main" : undefined}
             className={
