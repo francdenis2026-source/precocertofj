@@ -240,3 +240,52 @@ export const deletePlan = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+/** Admin: auditoria de saúde dos planos. Confirma license_plans como fonte da verdade. */
+export const getPlansHealth = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<PlansHealth> => {
+    await assertAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const [totalRes, activeRes, legacyCheck] = await Promise.all([
+      (supabaseAdmin as any).from("license_plans").select("id", { count: "exact", head: true }),
+      (supabaseAdmin as any).from("license_plans").select("id", { count: "exact", head: true }).eq("active", true),
+      (supabaseAdmin as any).rpc("to_regclass_exists", { rel: "public.plans" }).then(
+        (r: any) => ({ exists: !!r.data, error: r.error }),
+        () => ({ exists: false, error: null }),
+      ),
+    ]);
+
+    const licenseTotal = Number(totalRes.count ?? 0);
+    const licenseActive = Number(activeRes.count ?? 0);
+
+    let legacyPlansExists = false;
+    let legacyPlansCount = 0;
+    if (legacyCheck && legacyCheck.exists) {
+      legacyPlansExists = true;
+      try {
+        const { count } = await (supabaseAdmin as any)
+          .from("plans")
+          .select("id", { count: "exact", head: true });
+        legacyPlansCount = Number(count ?? 0);
+      } catch {
+        legacyPlansCount = 0;
+      }
+    }
+
+    const warnings: string[] = [];
+    if (licenseActive === 0) warnings.push("Nenhum plano ativo em license_plans.");
+    if (legacyPlansExists) warnings.push("Tabela legada `plans` ainda existe — deve ser removida.");
+    if (legacyPlansCount > 0) warnings.push(`Tabela legada contém ${legacyPlansCount} registro(s).`);
+
+    return {
+      licenseActive,
+      licenseTotal,
+      legacyPlansExists,
+      legacyPlansCount,
+      consistent: warnings.length === 0,
+      warnings,
+    };
+  });
+
