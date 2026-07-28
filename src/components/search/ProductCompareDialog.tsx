@@ -364,11 +364,11 @@ export function ProductCompareDialog({
                   >
                     <span className="max-w-[160px] truncate">{x.name}</span>
                     <span className="text-muted-foreground">·</span>
-                    <span className="tabular-nums text-primary">{fmt(x.cheapest?.price)}</span>
+                    <span className="pc-price pc-price--sm pc-price--best">{fmt(x.cheapest?.price)}</span>
                     <span className="text-muted-foreground">em {x.cheapest?.marketName}</span>
                   </span>
                 ))}
-                <span className="ml-auto font-display text-sm font-semibold tabular-nums text-foreground">
+                <span className="ml-auto pc-price pc-price--md">
                   Σ {fmt(total)}
                 </span>
               </div>
