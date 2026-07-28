@@ -82,9 +82,19 @@ const AdminTeamPanel = lazy(() =>
 );
 import { logAdminAccess } from "@/lib/admin-team.functions";
 
+const ADMIN_TABS = [
+  "plans", "establishments", "status", "integrations",
+  "subscribers", "webhooks", "emails", "users", "audit",
+] as const;
+type AdminTab = (typeof ADMIN_TABS)[number];
+
 export const Route = createFileRoute("/admin")({
   ssr: false,
   beforeLoad: adminBeforeLoad,
+  validateSearch: (search: Record<string, unknown>): { tab?: AdminTab } => {
+    const t = String(search?.tab ?? "");
+    return ADMIN_TABS.includes(t as AdminTab) ? { tab: t as AdminTab } : {};
+  },
   head: () => ({
     meta: [
       { title: "Admin — PreçoCerto" },
@@ -367,7 +377,23 @@ function AdminPage() {
 
 
         {/* ---------- Abas de gestão detalhada ---------- */}
-        <Tabs defaultValue="plans" className="flex w-full flex-col" data-admin-region="management">
+        <AdminManagementTabs />
+      </section>
+    </AppShell>
+  );
+}
+
+function AdminManagementTabs() {
+  const search = Route.useSearch();
+  const navigate = useNavigate();
+  const tab = (search.tab ?? "plans") as AdminTab;
+  return (
+        <Tabs
+          value={tab}
+          onValueChange={(v) => navigate({ to: "/admin", search: { tab: v as AdminTab }, replace: true })}
+          className="flex w-full flex-col"
+          data-admin-region="management"
+        >
           <div className="pc-tabs-rail -mx-1 overflow-x-auto px-1 pb-1">
             <TabsList className="inline-flex h-auto w-max flex-nowrap gap-1 rounded-xl border border-border/70 bg-card p-1">
               {[
@@ -414,12 +440,9 @@ function AdminPage() {
             </TabsContent>
           </div>
         </Tabs>
-
-      </section>
-
-    </AppShell>
   );
 }
+
 
 
 
