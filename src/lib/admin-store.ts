@@ -120,7 +120,7 @@ const defaultPlans: Plan[] = [
     price: 179.9,
     originalPrice: 238.8,
     description: "Economize 24% pagando o ano inteiro.",
-    features: ["Tudo do Semestral", "Selo de fundador", "Beta de novos recursos", "Suporte VIP"],
+    features: ["Tudo do Semestral", "Beta de novos recursos", "Suporte VIP"],
     active: true,
   },
 ];

@@ -566,10 +566,7 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
     {
       label: "Duração",
       values: Object.fromEntries(
-        plans.map((p) => [
-          p.slug,
-          p.days >= 365 * 5 ? "Vitalício" : `${p.days} dias`,
-        ]),
+        plans.map((p) => [p.slug, `${p.days} dias`]),
       ),
     },
     {
@@ -594,8 +591,6 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
         ...val("mensal", true),
         ...val("trimestral", true),
         ...val("anual", true),
-        ...val("fundador-feijo", true),
-        ...val("fundador", true),
       },
     },
     {
@@ -605,8 +600,6 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
         ...val("mensal", true),
         ...val("trimestral", true),
         ...val("anual", true),
-        ...val("fundador-feijo", true),
-        ...val("fundador", true),
       },
     },
     {
@@ -616,8 +609,6 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
         ...val("mensal", true),
         ...val("trimestral", true),
         ...val("anual", true),
-        ...val("fundador-feijo", true),
-        ...val("fundador", true),
       },
     },
     {
@@ -627,8 +618,6 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
         ...val("mensal", true),
         ...val("trimestral", true),
         ...val("anual", true),
-        ...val("fundador-feijo", true),
-        ...val("fundador", true),
       },
     },
     {
@@ -638,8 +627,6 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
         ...val("mensal", false),
         ...val("trimestral", true),
         ...val("anual", true),
-        ...val("fundador-feijo", true),
-        ...val("fundador", true),
       },
     },
     {
@@ -649,8 +636,6 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
         ...val("mensal", "30 análises"),
         ...val("trimestral", "150 análises"),
         ...val("anual", "150 análises"),
-        ...val("fundador-feijo", "600 análises"),
-        ...val("fundador", "600 análises"),
       },
     },
     {
@@ -660,8 +645,6 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
         ...val("mensal", false),
         ...val("trimestral", true),
         ...val("anual", true),
-        ...val("fundador-feijo", true),
-        ...val("fundador", true),
       },
     },
     {
@@ -671,15 +654,6 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
         ...val("mensal", "R$ 9,90 / 50"),
         ...val("trimestral", "R$ 9,90 / 50"),
         ...val("anual", "R$ 9,90 / 50"),
-        ...val("fundador-feijo", "R$ 9,90 / 50"),
-        ...val("fundador", "R$ 9,90 / 50"),
-      },
-    },
-    {
-      label: "Selo de apoiador",
-      values: {
-        ...val("fundador-feijo", true),
-        ...val("fundador", true),
       },
     },
   ];
