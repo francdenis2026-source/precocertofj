@@ -1080,7 +1080,7 @@ export function PriceSearchBar({
                       ].map((s) => (
                         <div key={s.k} className="min-w-0 px-3.5 py-2">
                           <dt className="truncate text-[11px] font-medium text-white/60">{s.k}</dt>
-                          <dd className="mt-0.5 text-[15px] font-bold leading-none tabular-nums text-white">
+                          <dd className="pc-num pc-num--onhero mt-0.5 text-[15px] font-bold leading-none">
                             {s.v}
                           </dd>
                         </div>
@@ -1264,7 +1264,7 @@ export function PriceSearchBar({
                                           aria-label={`Menor preço na categoria ${cat}: ${fmt(catMin)}`}
                                         >
                                           <Crown className="h-3 w-3" strokeWidth={2} aria-hidden />
-                                          <span className="tabular-nums">{fmt(catMin)}</span>
+                                          <span className="pc-num">{fmt(catMin)}</span>
                                         </span>
                                       ) : null}
                                       <span className="h-px flex-1 bg-border" aria-hidden="true" />
@@ -1916,11 +1916,11 @@ function ProductGroupCard({
             <HighlightMatch text={productName} tokens={highlightTokens} />
           </p>
           <p className="pc-res-meta mt-0.5 truncate">
-            <span className="font-semibold text-foreground">menor</span> {fmt(min)}
+            <span className="font-semibold text-foreground">menor</span> <span className="pc-num font-bold text-foreground">{fmt(min)}</span>
             <span aria-hidden="true" className="mx-1 opacity-40">·</span>
-            média {fmt(avg)}
+            média <span className="pc-num text-foreground/85">{fmt(avg)}</span>
             <span aria-hidden="true" className="mx-1 opacity-40">·</span>
-            máx {fmt(max)}
+            máx <span className="pc-num text-foreground/85">{fmt(max)}</span>
             <span aria-hidden="true" className="mx-1 opacity-40">·</span>
             {samples} preço{samples > 1 ? "s" : ""}
           </p>

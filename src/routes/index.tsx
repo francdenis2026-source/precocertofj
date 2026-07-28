@@ -465,8 +465,10 @@ function HomePage() {
                             }}
                             onMouseEnter={() => setActiveIdx(i)}
                             className={cn(
-                              "flex w-full items-center gap-3 px-4 py-2.5 text-left text-popover-foreground transition-colors",
-                              i === activeIdx ? "bg-accent/40" : "bg-transparent hover:bg-accent/20",
+                              "flex w-full items-center gap-3 px-4 py-2.5 text-left text-popover-foreground transition-colors outline-none focus-visible:bg-accent/50 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset",
+                              i === activeIdx
+                                ? "bg-accent/60 border-l-[3px] border-primary pl-[calc(1rem-3px)]"
+                                : "bg-transparent border-l-[3px] border-transparent hover:bg-accent/25",
                             )}
                           >
                             <Search className="h-3.5 w-3.5 shrink-0 text-muted-foreground" strokeWidth={2.4} />
