@@ -32,6 +32,7 @@ import { MetricSpotlightDialog } from "@/components/home/MetricSpotlightDialog";
 import { AllCategoriesDialog } from "@/components/home/AllCategoriesDialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useSession } from "@/hooks/useSession";
+import { cn } from "@/lib/utils";
 import homeHeroImg from "@/assets/home-hero.jpg";
 
 /* Conteúdo secundário: só carrega quando o painel "Explorar" abre */
