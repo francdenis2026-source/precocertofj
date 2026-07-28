@@ -769,12 +769,14 @@ function ComparadorPage() {
   );
 
   return (
-    <div className="min-h-screen">
+    <div className="flex h-[100dvh] flex-col overflow-hidden">
       <Nav />
       <Breadcrumbs items={[{ label: "Comparador de preços" }]} />
 
+      <div className="flex-1 min-h-0 overflow-y-auto pb-[calc(var(--mobile-nav-height)+1rem)] md:pb-0">
       {/* BARRA DE COMANDO — mesmo cabeçalho editorial sticky do /buscar */}
       <header className="sticky top-0 z-30 border-b border-border/60 bg-background/90 backdrop-blur-md supports-[backdrop-filter]:bg-background/75">
+
         <div className="mx-auto grid w-full max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-2.5 md:gap-6 md:px-8 md:py-3">
           <div className="flex min-w-0 items-center gap-1.5">
             <BackButton fallbackTo="/" variant="ghost" />
