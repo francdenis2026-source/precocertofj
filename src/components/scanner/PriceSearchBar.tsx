@@ -1205,8 +1205,39 @@ export function PriceSearchBar({
                   ? ordered.filter(([cat]) => cat === categoryFilter)
                   : ordered;
                 const showHeaders = filteredOrdered.length > 1;
+                const sortLabelMap: Record<SortMode, string> = {
+                  cheapest: "Menor preço",
+                  relevance: "Relevância",
+                  recent: "Novidade",
+                  savings: "Maior economia",
+                  unit: "Preço por unidade",
+                  kind: "Tipo de mercado",
+                  spread: "Maior variação",
+                };
+                const visibleCount = filteredOrdered.reduce(
+                  (n, [, gs]) => n + gs.length,
+                  0,
+                );
+                const announcement =
+                  visibleCount === 0
+                    ? `Nenhum resultado para "${query}"${
+                        categoryFilter ? ` na categoria ${categoryFilter}` : ""
+                      }. Ajuste os filtros ou tente outro termo.`
+                    : `${visibleCount} ${
+                        visibleCount === 1 ? "produto encontrado" : "produtos encontrados"
+                      } para "${query}", ordenados por ${sortLabelMap[sortMode] ?? sortMode}${
+                        categoryFilter ? `, filtrando por ${categoryFilter}` : ""
+                      }${kindFilter ? `, mercados do tipo ${kindFilter}` : ""}.`;
                 return (
                   <>
+                    <p
+                      role="status"
+                      aria-live="polite"
+                      aria-atomic="true"
+                      className="sr-only"
+                    >
+                      {announcement}
+                    </p>
                     <QuickFilters
                       sortMode={sortMode}
                       onSort={handleSortChange}
