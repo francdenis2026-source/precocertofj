@@ -526,7 +526,12 @@ function SearchPage() {
                 filterShortcuts={emptyFilterShortcuts}
                 activeFilterCount={activeFilterCount}
                 onClearFilters={activeFilterCount > 0 ? clearFilters : undefined}
+                sort={sortValue}
+                category={categoryValue}
+                onSortChange={(m) => setSortUrl(m as UrlSort)}
+                onCategoryChange={setCategoryUrl}
               />
+
             </div>
             <div className="mt-2 shrink-0 border-t border-border/50 pt-1.5">
               <FiltersToolbar
