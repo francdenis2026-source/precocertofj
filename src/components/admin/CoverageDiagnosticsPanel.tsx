@@ -1,9 +1,11 @@
+import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { AlertTriangle, CheckCircle2, Loader2, RefreshCw, ShieldAlert, ShieldCheck, Wrench } from "lucide-react";
+import { grantSelfAdmin } from "@/lib/admin-maintenance.functions";
 import {
   getCoverageDiagnostics,
   parseCoverageError,
