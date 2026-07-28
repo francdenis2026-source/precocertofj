@@ -14,7 +14,7 @@ import { RouteError } from "@/components/feedback";
 import { SearchDiscovery, pushRecentSearch } from "@/components/search/SearchDiscovery";
 
 
-import { SearchSidebar } from "@/components/search/SearchSidebar";
+
 import { MeatCutSuggestionStrip } from "@/components/search/MeatCutSuggestionStrip";
 import {
   clearSearchHistory,
