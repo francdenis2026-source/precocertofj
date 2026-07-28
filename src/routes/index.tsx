@@ -347,7 +347,7 @@ function HomePage() {
               {/* ---------- Busca ---------- */}
               <form onSubmit={submitSearch} className="relative mt-3 max-w-2xl sm:mt-4" ref={searchBoxRef}>
                 <div
-                  className="flex items-center gap-1 rounded-2xl p-1 shadow-2xl transition-all focus-within:ring-2 sm:p-1.5"
+                  className="pc-elite-frame flex items-center gap-1 rounded-2xl border p-1 shadow-2xl transition-all focus-within:ring-2 sm:p-1.5"
                   style={{
                     background: "#ffffff",
                     // @ts-expect-error css var
