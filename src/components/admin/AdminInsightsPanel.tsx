@@ -502,7 +502,7 @@ export function AdminInsightsPanel() {
                   contentStyle={tooltipStyle}
                   labelStyle={tooltipLabelStyle}
                   itemStyle={tooltipItemStyle}
-                  cursor={{ fill: "hsl(var(--foreground) / 0.06)" }}
+                  cursor={{ fill: "rgba(226, 232, 240, 0.08)" }}
                   formatter={(v: number, n) => [String(v), n === "products" ? "Produtos" : "Lojas"]}
                 />
                 <Bar dataKey="products" fill={chartTheme.primary} radius={[4, 4, 0, 0]} maxBarSize={metrics.barMaxSize} />

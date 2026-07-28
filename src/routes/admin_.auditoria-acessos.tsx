@@ -45,6 +45,14 @@ import {
 import { ShieldAlert, Activity, RefreshCw, TrendingUp, Ban, Shield } from "lucide-react";
 import { AppShell } from "@/components/brand/AppShell";
 import { ChartSkeleton, ChartEmpty } from "@/components/admin/ChartStates";
+import {
+  chartTheme,
+  tickStyle,
+  tooltipStyle,
+  tooltipLabelStyle,
+  tooltipItemStyle,
+  legendStyle,
+} from "@/lib/admin-chart-theme";
 
 export const Route = createFileRoute("/admin_/auditoria-acessos")({
   ssr: false,
@@ -188,38 +196,31 @@ function AuditoriaAcessosPage() {
           ) : (
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={stats.data?.series ?? []}>
-                <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" vertical={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke={chartTheme.grid} vertical={false} />
                 <XAxis
                   dataKey="day"
                   tickFormatter={(d: string) => d.slice(5)}
-                  tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+                  tick={tickStyle}
                   tickLine={false}
-                  axisLine={{ stroke: "hsl(var(--border))" }}
+                  axisLine={{ stroke: chartTheme.grid }}
                 />
                 <YAxis
-                  tick={{ fontSize: 12, fill: "hsl(var(--muted-foreground))" }}
+                  tick={tickStyle}
                   tickLine={false}
-                  axisLine={{ stroke: "hsl(var(--border))" }}
+                  axisLine={{ stroke: chartTheme.grid }}
                   allowDecimals={false}
                 />
                 <Tooltip
                   labelFormatter={(d) => `Dia ${d}`}
-                  contentStyle={{
-                    fontSize: 12,
-                    borderRadius: 10,
-                    border: "1px solid hsl(var(--border))",
-                    background: "hsl(var(--popover))",
-                    color: "hsl(var(--popover-foreground))",
-                    boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
-                  }}
-                  labelStyle={{ color: "hsl(var(--popover-foreground))", fontWeight: 600 }}
-                  itemStyle={{ color: "hsl(var(--popover-foreground))" }}
+                  contentStyle={tooltipStyle}
+                  labelStyle={tooltipLabelStyle}
+                  itemStyle={tooltipItemStyle}
                   cursor={{ fill: "rgba(148,163,184,0.12)" }}
                 />
-                <Legend wrapperStyle={{ fontSize: 12, color: "hsl(var(--foreground))" }} />
-                {/* Cores com contraste ≥ 3:1 (WCAG 1.4.11) tanto em fundo claro como escuro. */}
-                <Bar dataKey="success" name="Sucessos" fill="#059669" stackId="a" />
-                <Bar dataKey="failure" name="Falhas" fill="#dc2626" stackId="a" />
+                <Legend wrapperStyle={legendStyle} />
+                {/* Semânticas via chartTheme — contraste WCAG AA garantido pelo teste automático. */}
+                <Bar dataKey="success" name="Sucessos" fill={chartTheme.emerald} stackId="a" />
+                <Bar dataKey="failure" name="Falhas" fill={chartTheme.destructive} stackId="a" />
               </BarChart>
             </ResponsiveContainer>
           )}
