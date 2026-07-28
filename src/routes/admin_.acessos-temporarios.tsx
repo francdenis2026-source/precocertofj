@@ -289,18 +289,131 @@ function Kpi({ label, value, tone }: { label: string; value: number; tone?: "eme
   );
 }
 
-function AuditTable({ rows, loading, onRefresh }: { rows: TrialUser[]; loading: boolean; onRefresh: () => void }) {
+function AuditTable({ rows, loading, onRefresh, includeEnded, onIncludeEndedChange }: {
+  rows: TrialUser[]; loading: boolean; onRefresh: () => void;
+  includeEnded: boolean; onIncludeEndedChange: (v: boolean) => void;
+}) {
+  const [q, setQ] = useState("");
+  const [statusF, setStatusF] = useState<"all" | "active" | "ended">("all");
+  const [dateFrom, setDateFrom] = useState("");
+  const [dateTo, setDateTo] = useState("");
+  const [minRemain, setMinRemain] = useState<string>("");
+
+  const filtered = useMemo(() => {
+    const qn = q.trim().toLowerCase();
+    const from = dateFrom ? new Date(dateFrom + "T00:00:00").getTime() : null;
+    const to = dateTo ? new Date(dateTo + "T23:59:59").getTime() : null;
+    const minR = minRemain ? Number(minRemain) : null;
+    return rows.filter((r) => {
+      if (qn) {
+        const hay = `${r.full_name ?? ""} ${r.email ?? ""} ${r.code ?? ""}`.toLowerCase();
+        if (!hay.includes(qn)) return false;
+      }
+      if (statusF === "active" && !r.is_active) return false;
+      if (statusF === "ended" && r.is_active) return false;
+      if (from && r.redeemed_at) {
+        if (new Date(r.redeemed_at).getTime() < from) return false;
+      }
+      if (to && r.redeemed_at) {
+        if (new Date(r.redeemed_at).getTime() > to) return false;
+      }
+      if (minR !== null && Number.isFinite(minR)) {
+        if ((r.minutes_remaining ?? 0) < minR) return false;
+      }
+      return true;
+    });
+  }, [rows, q, statusF, dateFrom, dateTo, minRemain]);
+
+  const exportCsv = () => {
+    const header = ["Nome", "Email", "Codigo", "AtivadoEm", "ExpiraEm", "MinutosRestantes", "Ativo"];
+    const lines = [header.join(";")];
+    for (const r of filtered) {
+      lines.push([
+        (r.full_name ?? "").replace(/;/g, ","),
+        (r.email ?? "").replace(/;/g, ","),
+        r.code, r.redeemed_at ?? "", r.access_expires_at ?? "",
+        String(r.minutes_remaining ?? 0), r.is_active ? "sim" : "nao",
+      ].join(";"));
+    }
+    const blob = new Blob(["\ufeff" + lines.join("\n")], { type: "text/csv;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = `acessos-temporarios-${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click(); URL.revokeObjectURL(url);
+  };
+
+  const exportPdf = () => {
+    const rowsHtml = filtered.map((r) => `<tr>
+      <td>${r.full_name ?? "—"}<br><small>${r.email ?? ""}</small></td>
+      <td>${r.code}</td><td>${fmtDate(r.redeemed_at)}</td>
+      <td>${fmtDuration(r.minutes_remaining)}</td>
+      <td>${fmtDate(r.access_expires_at)}</td>
+      <td>${r.is_active ? "Ativo" : "Encerrado"}</td>
+    </tr>`).join("");
+    const html = `<!doctype html><html><head><meta charset="utf-8"><title>Acessos temporários</title>
+      <style>body{font-family:system-ui,-apple-system,sans-serif;padding:24px;color:#111}
+      h1{font-size:18px;margin:0 0 4px}small{color:#666}
+      table{width:100%;border-collapse:collapse;margin-top:12px;font-size:12px}
+      th,td{border:1px solid #ddd;padding:6px 8px;text-align:left;vertical-align:top}
+      th{background:#f4f6f9}</style></head><body>
+      <h1>Auditoria — Acessos temporários</h1>
+      <small>Gerado em ${new Date().toLocaleString("pt-BR")} · ${filtered.length} registro(s)</small>
+      <table><thead><tr><th>Usuário</th><th>Código</th><th>Ativado em</th><th>Restante</th><th>Expira em</th><th>Status</th></tr></thead>
+      <tbody>${rowsHtml}</tbody></table>
+      <script>window.onload=()=>window.print()</script></body></html>`;
+    const w = window.open("", "_blank", "width=900,height=700");
+    if (!w) { toast.error("Habilite pop-ups para exportar PDF"); return; }
+    w.document.open(); w.document.write(html); w.document.close();
+  };
+
   return (
     <Card className="p-3">
-      <div className="mb-2 flex items-center justify-between">
-        <h2 className="text-sm font-semibold">Usuários com acesso temporário ativo</h2>
-        <Button variant="outline" size="sm" onClick={onRefresh}>
-          <RefreshCw className="mr-1.5 h-4 w-4" /> Atualizar
-        </Button>
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+        <h2 className="text-sm font-semibold">Auditoria — Acessos temporários</h2>
+        <div className="flex gap-1.5">
+          <Button variant="outline" size="sm" onClick={onRefresh}>
+            <RefreshCw className="mr-1.5 h-4 w-4" /> Atualizar
+          </Button>
+          <Button variant="outline" size="sm" onClick={exportCsv} disabled={!filtered.length}>
+            <Download className="mr-1.5 h-4 w-4" /> CSV
+          </Button>
+          <Button variant="outline" size="sm" onClick={exportPdf} disabled={!filtered.length}>
+            <FileDown className="mr-1.5 h-4 w-4" /> PDF
+          </Button>
+        </div>
       </div>
       <p className="mb-3 text-xs text-muted-foreground">
-        Estes usuários estão logados via código temporário. Bloqueio de IA aplicado automaticamente.
+        Auto-atualiza a cada 30s. Contadores em tempo real. Bloqueio de IA aplicado automaticamente.
       </p>
+
+      <div className="mb-3 grid grid-cols-1 gap-2 md:grid-cols-6">
+        <div className="md:col-span-2">
+          <div className="relative">
+            <Search className="pointer-events-none absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Input className="pl-8" placeholder="Nome, email ou código" value={q} onChange={(e) => setQ(e.target.value)} />
+          </div>
+        </div>
+        <select className="rounded-md border bg-background px-2 py-2 text-sm"
+          value={statusF} onChange={(e) => setStatusF(e.target.value as typeof statusF)}>
+          <option value="all">Todos</option>
+          <option value="active">Ativos agora</option>
+          <option value="ended">Encerrados</option>
+        </select>
+        <Input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} title="Ativado a partir de" />
+        <Input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} title="Ativado até" />
+        <Input type="number" min={0} placeholder="Mín. minutos restantes" value={minRemain} onChange={(e) => setMinRemain(e.target.value)} />
+      </div>
+
+      <div className="mb-2 flex items-center gap-2 text-xs text-muted-foreground">
+        <label className="inline-flex items-center gap-1.5 cursor-pointer">
+          <input type="checkbox" checked={includeEnded} onChange={(e) => onIncludeEndedChange(e.target.checked)} />
+          Incluir sessões encerradas (histórico)
+        </label>
+        <span className="ml-auto">
+          Mostrando <strong className="text-foreground">{filtered.length}</strong> de {rows.length}
+        </span>
+      </div>
+
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead className="bg-muted/40 text-left text-xs uppercase text-muted-foreground">
@@ -310,11 +423,11 @@ function AuditTable({ rows, loading, onRefresh }: { rows: TrialUser[]; loading: 
               <th className="p-2">Ativado em</th>
               <th className="p-2">Restante</th>
               <th className="p-2">Expira em</th>
-              <th className="p-2">IA</th>
+              <th className="p-2">Status</th>
             </tr>
           </thead>
           <tbody>
-            {rows.map((r) => (
+            {filtered.map((r) => (
               <tr key={r.license_id} className="border-t">
                 <td className="p-2">
                   <div className="font-medium">{r.full_name || "—"}</div>
@@ -323,22 +436,21 @@ function AuditTable({ rows, loading, onRefresh }: { rows: TrialUser[]; loading: 
                 <td className="p-2 font-mono text-xs">{r.code}</td>
                 <td className="p-2 text-muted-foreground">{fmtDate(r.redeemed_at)}</td>
                 <td className="p-2">
-                  <span className="inline-flex items-center gap-1 text-sm font-medium">
-                    <Clock className="h-3.5 w-3.5 text-muted-foreground" />
-                    {fmtDuration(r.minutes_remaining)}
-                  </span>
+                  <LiveRemaining expiresAt={r.access_expires_at} fallbackMinutes={r.minutes_remaining} />
                 </td>
                 <td className="p-2 text-muted-foreground">{fmtDate(r.access_expires_at)}</td>
                 <td className="p-2">
-                  <Badge variant="outline" className="bg-rose-50 text-rose-700 border-rose-200">
-                    <ShieldOff className="mr-1 h-3 w-3" /> Bloqueada
-                  </Badge>
+                  {r.is_active ? (
+                    <Badge variant="outline" className="bg-emerald-50 text-emerald-700 border-emerald-200">Ativo</Badge>
+                  ) : (
+                    <Badge variant="outline" className="bg-muted text-muted-foreground border-border">Encerrado</Badge>
+                  )}
                 </td>
               </tr>
             ))}
-            {!loading && rows.length === 0 && (
+            {!loading && filtered.length === 0 && (
               <tr><td colSpan={6} className="p-8 text-center text-sm text-muted-foreground">
-                Ninguém está usando código temporário no momento.
+                Nenhum acesso corresponde aos filtros.
               </td></tr>
             )}
           </tbody>
@@ -347,6 +459,28 @@ function AuditTable({ rows, loading, onRefresh }: { rows: TrialUser[]; loading: 
     </Card>
   );
 }
+
+function LiveRemaining({ expiresAt, fallbackMinutes }: { expiresAt: string | null; fallbackMinutes: number }) {
+  if (!expiresAt) return <span className="text-muted-foreground">—</span>;
+  const diffMs = new Date(expiresAt).getTime() - Date.now();
+  if (diffMs <= 0) return <Badge variant="outline" className="bg-rose-50 text-rose-700 border-rose-200">Expirado</Badge>;
+  const totalSec = Math.floor(diffMs / 1000);
+  const h = Math.floor(totalSec / 3600);
+  const m = Math.floor((totalSec % 3600) / 60);
+  const s = totalSec % 60;
+  const label = h > 0 ? `${h}h ${m}m ${String(s).padStart(2, "0")}s`
+    : m > 0 ? `${m}m ${String(s).padStart(2, "0")}s`
+    : `${s}s`;
+  const tone = totalSec < 300 ? "text-rose-700" : totalSec < 3600 ? "text-amber-700" : "text-foreground";
+  return (
+    <span className={`inline-flex items-center gap-1 tabular-nums text-sm font-medium ${tone}`}>
+      <Clock className="h-3.5 w-3.5 text-muted-foreground" />
+      {label}
+      <span className="sr-only">restante · referência {fallbackMinutes} min</span>
+    </span>
+  );
+}
+
 
 function CreateDialog({ open, onOpenChange, onDone }: { open: boolean; onOpenChange: (v: boolean) => void; onDone: () => void }) {
   const create = useServerFn(createTrialCodes);
