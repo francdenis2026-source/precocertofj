@@ -123,18 +123,22 @@ export function AdminTabs({ to, title, items, active, className, tone }: Props) 
               key={item.key}
               to={to}
               search={{ tab: item.key } as never}
+              data-active={isActive ? "true" : "false"}
               className={cn(
                 "whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-semibold transition-colors",
                 "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                isActive
-                  ? "bg-foreground text-background shadow-sm"
-                  : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                tone
+                  ? "pc-admin-tab text-muted-foreground"
+                  : isActive
+                    ? "bg-foreground text-background shadow-sm"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
               )}
               aria-current={isActive ? "page" : undefined}
             >
               {item.label}
             </Link>
           );
+
         })}
       </nav>
     </div>
