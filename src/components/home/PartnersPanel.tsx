@@ -17,6 +17,8 @@ import { ArrowRight } from "lucide-react";
 import { forwardRef, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { SmartLogoImage, useLogoPresentation } from "@/components/brand/SmartLogo";
+import { StoreCaption } from "@/components/brand/StoreCaption";
+
 
 export type PartnerTileItem = {
   id: string | number;
