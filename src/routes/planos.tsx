@@ -140,7 +140,7 @@ function buildFaq(trialDays: number) {
     },
     {
       q: "Quem pode usar a IA e quantas análises tenho por mês?",
-      a: "No plano grátis/degustação você tem 1 análise de IA por mês (uma chamada para montar a cesta), sem possibilidade de ultrapassar. Nos planos pagos: 30 análises/mês no Mensal e 150 análises/mês no Trimestral e no Anual. A cota renova todo mês e o saldo aparece no seu perfil.",
+      a: `Na degustação (${trialDays} dias) você tem 1 análise de IA no período total — ideal para experimentar a cesta inteligente uma vez. Nos planos pagos a cota é mensal e renova todo mês: Mensal 30, Trimestral 40 e Anual 60 análises por mês. O saldo aparece no seu perfil.`,
     },
     {
       q: "E se eu precisar de mais análises?",
@@ -629,10 +629,10 @@ function planFeatureMatrix(plans: PublicPlan[]): ComparisonRow[] {
     {
       label: "Scan Inteligente (IA) / mês",
       values: {
-        ...val("degustacao", "1 análise"),
-        ...val("mensal", "30 análises"),
-        ...val("trimestral", "150 análises"),
-        ...val("anual", "150 análises"),
+        ...val("degustacao", "1 análise (única)"),
+        ...val("mensal", "30 análises/mês"),
+        ...val("trimestral", "40 análises/mês"),
+        ...val("anual", "60 análises/mês"),
       },
     },
     {

@@ -1455,8 +1455,8 @@ function ProductCardBase({
 
         {/* Price hero */}
         <div className="mt-1.5 border-y border-accent/25 bg-background/40 px-2.5 py-2 sm:px-3">
-          <span className="mb-0.5 block font-sans text-[11px] font-semibold uppercase leading-none tracking-[0.2em] text-muted-foreground">
-            Menor preço
+          <span className="mb-0.5 flex items-baseline gap-1 font-sans text-[11px] font-semibold uppercase leading-none tracking-[0.2em] text-muted-foreground">
+            Menor <PrecoCertoMark variant="label">preço</PrecoCertoMark>
           </span>
           <PriceHero
             minPrice={Number(row.min_price)}
