@@ -12,7 +12,9 @@ import {
   Tags,
   ShieldAlert,
   History,
+  ShoppingBasket,
 } from "lucide-react";
+
 
 export const Route = createFileRoute("/admin_/vitrine")({
   ssr: false,
