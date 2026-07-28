@@ -41,6 +41,8 @@ const searchSchema = z.object({
   min: fallback(z.string(), "").default(""),
   max: fallback(z.string(), "").default(""),
   sort: fallback(z.string(), "cheapest").default("cheapest"),
+  product: fallback(z.string(), "").default(""),
+  market: fallback(z.string(), "").default(""),
 });
 
 const SORT_VALUES = new Set([
@@ -65,9 +67,21 @@ export const Route = createFileRoute("/buscar")({
   validateSearch: zodValidator(searchSchema),
   search: {
     middlewares: [
-      retainSearchParams(["q", "categoria", "mode", "pure", "brand", "min", "max", "sort"]),
+      retainSearchParams([
+        "q",
+        "categoria",
+        "mode",
+        "pure",
+        "brand",
+        "min",
+        "max",
+        "sort",
+        "product",
+        "market",
+      ]),
     ],
   },
+
 
   head: () => ({
     meta: [
