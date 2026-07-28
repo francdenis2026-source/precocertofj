@@ -14,7 +14,7 @@ import {
   History,
 } from "lucide-react";
 
-export const Route = createFileRoute("/admin_/gestao")({
+export const Route = createFileRoute("/admin_/vitrine")({
   ssr: false,
   beforeLoad: adminBeforeLoad,
   head: () => ({
