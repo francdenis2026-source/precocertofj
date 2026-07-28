@@ -1994,12 +1994,17 @@ function CompareMatrix({
   onPick?: (marketName: string) => void;
   focusedMarket?: string | null;
 }) {
-  // Top 4 mercados por menor preço — cabe confortavelmente em uma linha até
-  // ~640px sem exigir scroll horizontal na maioria dos casos.
-  const top = useMemo(
-    () => [...prices].sort((a, b) => a.price - b.price).slice(0, 4),
+  // Por padrão exibimos os 4 mercados mais baratos — cabem em uma linha até
+  // ~640px sem exigir scroll horizontal. Usuário pode expandir para ver todos.
+  const [expanded, setExpanded] = useState(false);
+  const sorted = useMemo(
+    () => [...prices].sort((a, b) => a.price - b.price),
     [prices],
   );
+  const COLLAPSED_LIMIT = 4;
+  const canExpand = sorted.length > COLLAPSED_LIMIT;
+  const top = expanded ? sorted : sorted.slice(0, COLLAPSED_LIMIT);
+  const hiddenCount = Math.max(0, sorted.length - COLLAPSED_LIMIT);
   const cheapest = top[0]?.price ?? globalMin;
   const spreadPct =
     globalMax > 0 && globalMin > 0 ? ((globalMax - globalMin) / globalMax) * 100 : 0;
