@@ -833,10 +833,11 @@ function SuccessBody({
           <CheckCircle2 className="h-6 w-6" aria-hidden />
         </div>
         <div className="min-w-0 flex-1">
-          <h2 className="font-editorial text-[26px] font-normal leading-[1.1] tracking-tight text-foreground">
+          <h2 className="text-[26px] font-extrabold leading-[1.1] tracking-tight text-foreground">
             Licença{" "}
-            <span className="pc-editorial-accent pc-editorial-accent--fill">ativada</span>
+            <span className="text-[color:var(--pc-home-gold)]">ativada</span>
           </h2>
+
           <p className="mt-1 text-[13px] leading-snug text-muted-foreground">
             {addedDays ? `${addedDays} dias adicionados à sua assinatura.` : "Sua assinatura foi atualizada."}
           </p>
