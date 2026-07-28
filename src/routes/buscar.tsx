@@ -373,8 +373,8 @@ function SearchPage() {
 
   return (
     <IsolatedPage
+      fit
       className={`pc-search-scope${reducedMotion ? " pc-reduce-motion" : ""}`}
-      contentClassName="flex flex-col"
     >
       <div data-reduced-motion={reducedMotion ? "on" : "off"} className="contents">
 

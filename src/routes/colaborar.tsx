@@ -63,9 +63,9 @@ function CollaboratePage() {
   const { user, loading } = useSession();
 
   return (
-    <PageShell>
-      <PageShellContent>
-        <div className="container-page pt-2 pb-3 md:pt-3">
+    <PageShell fit>
+      <PageShellContent fit>
+        <div className="container-page flex min-h-0 flex-1 flex-col overflow-y-auto pt-2 pb-3 md:pt-3">
           <InternalPageHeader
             title="Área do colaborador"
             highlight="colaborador"
