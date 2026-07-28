@@ -37,6 +37,7 @@ import {
   Radio,
   ShoppingBasket,
   Gavel,
+  Clock,
 } from "lucide-react";
 import {
   Sidebar,
@@ -152,6 +153,7 @@ const adminGroups: readonly NavGroup[] = [
     tone: "commerce",
     items: [
       { to: "/admin/gestao", label: "Licenças", icon: KeyRound },
+      { to: "/admin_/acessos-temporarios", label: "Acessos temporários", icon: Clock },
       { to: "/admin/promocoes", label: "Promoções", icon: TicketPercent, search: { tab: "codigos" } },
       { to: "/admin/promocoes", label: "Cupons", icon: BadgeCheck, exact: true },
       { to: "/admin/webhooks", label: "Webhooks", icon: Webhook },
