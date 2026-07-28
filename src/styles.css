@@ -4802,3 +4802,8 @@ html.dark .pc-row-interactive:hover .pc-store-name {
   color: color-mix(in oklab, var(--foreground) 82%, transparent);
   font-weight: 600;
 }
+
+/* Variantes adicionais de .pc-price */
+.pc-price--best   { color: var(--pc-gold-ink); font-weight: 700; letter-spacing: -0.01em; }
+.pc-price--strike { color: color-mix(in oklab, var(--foreground) 55%, transparent); text-decoration: line-through; font-weight: 500; }
+.pc-price--savings { color: hsl(var(--savings, 148 60% 34%)); font-weight: 700; }
