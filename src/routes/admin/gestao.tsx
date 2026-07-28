@@ -49,10 +49,12 @@ function Gestao() {
         icon={<Shield className="h-5 w-5" style={{ color: "#b58a3c" }} />}
         goldRule
       />
-      <div className="mx-auto max-w-6xl space-y-5 p-4 md:p-6">
+      <div className="mx-auto max-w-6xl space-y-5 p-4 pb-24 md:p-6 md:pb-28">
         <MetricsCards />
         <Tabs defaultValue="licencas" className="space-y-4">
-          <TabsList className="grid w-full grid-cols-3 gap-1 rounded-xl border border-border bg-card p-1 md:grid-cols-6">
+          <div className="overflow-x-auto">
+            <TabsList className="grid w-full min-w-[560px] grid-cols-6 gap-1 rounded-xl border border-border bg-card p-1 md:min-w-0">
+
             <TabsTrigger value="licencas" className="rounded-lg text-[12px] font-semibold data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
               <Ticket className="mr-1.5 h-3.5 w-3.5" />Licenças
             </TabsTrigger>
