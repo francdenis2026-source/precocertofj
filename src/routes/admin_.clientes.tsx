@@ -21,6 +21,7 @@ import {
   adminReactivateCustomer,
   adminExportCustomers,
 } from "@/lib/admin-customers.functions";
+import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -114,6 +115,7 @@ function ClientesPage() {
 
   return (
     <div className="mx-auto max-w-7xl space-y-6 px-4 py-8">
+      <AdminBreadcrumb hub="contas" page="Clientes" />
       <header className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="text-xs uppercase tracking-widest text-muted-foreground">Painel administrativo</p>

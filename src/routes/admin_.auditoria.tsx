@@ -34,6 +34,7 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import { PageHeader } from "@/components/brand/PageHeader";
+import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import { listCatalogAudit, type AuditLogEntry } from "@/lib/catalog-audit.functions";
 import { AdminOnly } from "@/components/auth/AdminOnly";
 import { ClearLogsPanel } from "@/components/admin/ClearLogsPanel";
@@ -161,10 +162,10 @@ function AuditoriaPage() {
   return (
     <AppShell>
       <PageHeader
-        eyebrow="Painel · Catálogo"
+        eyebrow="Painel · Operação"
         title="Auditoria do catálogo"
         description="Histórico completo de alterações em produtos, fotos e mesclagens."
-        breadcrumbs={[{ label: "Admin", to: "/admin" }, { label: "Auditoria" }]}
+        breadcrumbs={[{ label: "Admin", to: "/admin" }, { label: "Operação", to: "/admin_/operacao" }, { label: "Auditoria" }]}
         icon={<History className="h-5 w-5" />}
         goldRule
         actions={
@@ -175,6 +176,7 @@ function AuditoriaPage() {
         }
       />
       <div className="mx-auto max-w-7xl px-4 py-8">
+        <AdminBreadcrumb hub="operacao" page="Auditoria" className="mb-4" />
 
         <div className="mb-6">
           <ClearLogsPanel />

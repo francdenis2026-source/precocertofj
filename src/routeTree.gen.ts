@@ -98,7 +98,7 @@ import { Route as AdminAuditoriaNumerosRouteImport } from './routes/admin_.audit
 import { Route as AdminAuditoriaAcessosRouteImport } from './routes/admin_.auditoria-acessos'
 import { Route as AdminAuditoriaRouteImport } from './routes/admin_.auditoria'
 import { Route as AdminAnalyticsRouteImport } from './routes/admin_.analytics'
-import { Route as AdminGestaoRouteImport } from './routes/admin/gestao'
+import { Route as AdminGestaoRouteImport } from './routes/admin.gestao'
 import { Route as ApiPublicMpWebhookRouteImport } from './routes/api/public/mp-webhook'
 import { Route as ApiAdminCatalogImageRouteImport } from './routes/api/admin/catalog-image'
 import { Route as AdminCoberturaIdRouteImport } from './routes/admin_.cobertura.$id'
