@@ -80,7 +80,7 @@ const ADMIN_ROUTE_INDEX: ReadonlyArray<{ prefix: string; meta: RouteMeta }> = [
   { prefix: "/admin/cupom-lote",         meta: { page: "Cupons em lote",        hub: "precos",  category: "Comercial" } },
   { prefix: "/admin/cupom",              meta: { page: "Cupons",                hub: "precos",  category: "Comercial" } },
   { prefix: "/admin/gestao",             meta: { page: "Gestão de licenças",    hub: "precos",  category: "Comercial" } },
-  { prefix: "/admin_/acessos-temporarios", meta: { page: "Acessos temporários",  hub: "precos",  category: "Comercial" } },
+  
   { prefix: "/admin/conversoes",         meta: { page: "Conversões",            hub: "precos",  category: "Comercial" } },
 
   // ---------- Clientes / Contas ----------
