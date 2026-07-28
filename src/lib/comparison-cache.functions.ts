@@ -34,9 +34,11 @@ export const rebuildComparisonCache = createServerFn({ method: "POST" })
 export const getEstablishmentMetrics = createServerFn({ method: "GET" })
   .middleware([requireAdmin])
   .handler(async ({ context }) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const rpc = context.supabase.rpc as any;
-    const { data, error } = await rpc("establishment_metrics");
+    // `context.supabase.rpc` needs `this` bound to the client — extracting it
+    // to a local variable causes "Cannot read properties of undefined (reading 'rest')".
+    const { data, error } = await context.supabase
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      .rpc("establishment_metrics" as any);
     if (error) throw new Error(error.message);
     return (data ?? []) as EstablishmentMetric[];
   });
