@@ -675,6 +675,54 @@ export function LiveBasketRanking({
                 </div>
               )}
 
+              {hypotheticalVerdict && (
+                <div
+                  data-testid="basket-hypothetical-verdict"
+                  className={cn(
+                    "flex flex-wrap items-start gap-3 rounded-xl border p-3 text-xs",
+                    hypotheticalVerdict.changed
+                      ? "border-amber-400/60 bg-amber-50/50 dark:border-amber-500/40 dark:bg-amber-500/5"
+                      : "border-border bg-muted/30",
+                  )}
+                >
+                  <ArrowRightLeft
+                    className={cn(
+                      "mt-0.5 h-4 w-4 shrink-0",
+                      hypotheticalVerdict.changed
+                        ? "text-amber-600 dark:text-amber-400"
+                        : "text-muted-foreground",
+                    )}
+                    aria-hidden
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="font-semibold text-foreground">
+                      Com {hypotheticalVerdict.totalSubstitutions} substituição
+                      {hypotheticalVerdict.totalSubstitutions > 1 ? "ões" : ""} sugerida
+                      {hypotheticalVerdict.totalSubstitutions > 1 ? "s" : ""} entre itens da mesma
+                      categoria,{" "}
+                      {hypotheticalVerdict.changed ? (
+                        <>
+                          o veredito mudaria para{" "}
+                          <span className="text-brand-navy dark:text-brand-gold">
+                            {hypotheticalVerdict.projectedLeaderName}
+                          </span>{" "}
+                          por {brl(hypotheticalVerdict.projectedTotal)}.
+                        </>
+                      ) : (
+                        <>
+                          {hypotheticalVerdict.currentLeaderName} continuaria líder por{" "}
+                          {brl(hypotheticalVerdict.projectedTotal)}.
+                        </>
+                      )}
+                    </p>
+                    <p className="mt-0.5 text-muted-foreground">
+                      Abra “Detalhes” em um mercado para ver quais trocas foram consideradas e o
+                      impacto no total.
+                    </p>
+                  </div>
+                </div>
+              )}
+
               <ol className="space-y-2">
                 {ranked.slice(0, compact ? 5 : 10).map((s, idx) => {
                   const isWinner = idx === 0;
