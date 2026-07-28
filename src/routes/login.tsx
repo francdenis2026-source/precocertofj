@@ -308,7 +308,7 @@ function LoginPage() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 grid w-full max-w-[900px] overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
+        className="relative z-10 grid w-full max-w-[900px] overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:h-[580px] md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
       >
         {/* LEFT — Emerald benefit panel (hidden on mobile to reduce distraction) */}
         <div className="hidden md:block">
