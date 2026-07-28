@@ -20,6 +20,7 @@ import { useAutoTranslate } from "@/lib/pt-terms";
 import { UnlockConversionTracker } from "@/components/analytics/UnlockConversionTracker";
 import { useReadingMode } from "@/hooks/use-reading-mode";
 import { useTheme } from "@/hooks/use-theme";
+import { usePlansRealtime } from "@/hooks/usePlansRealtime";
 
 import { RouteError, RouteNotFound } from "@/components/feedback";
 import { BottomTabBar } from "@/components/layout/BottomTabBar";
