@@ -152,11 +152,15 @@ function CoveragePage() {
           <CoverageDiagnosticsPanel />
         </div>
 
-        <RefreshBar
+        <CoverageAutoFocusRefresh onRefresh={() => overview.refetch()} />
+        <SharedRefreshBar
+          scope="coverage"
+          label="Ranking de cobertura"
+          rpc="get_coverage_overview"
           status={formatQueryStatus(overview)}
           disabled={overview.isFetching}
           onRefresh={() => overview.refetch()}
-          label="Ranking de cobertura"
+          trailing={<AutoFocusToggle scope="coverage" />}
         />
 
         {overview.isLoading ? (
