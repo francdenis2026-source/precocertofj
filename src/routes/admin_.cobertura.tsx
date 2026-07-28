@@ -148,12 +148,21 @@ function CoveragePage() {
           <CoverageDiagnosticsPanel />
         </div>
 
+        <RefreshBar
+          status={formatQueryStatus(overview)}
+          disabled={overview.isFetching}
+          onRefresh={() => overview.refetch()}
+          label="Ranking de cobertura"
+        />
+
         {overview.isLoading ? (
-          <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Carregando…</div>
+          <div className="mt-4 flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Carregando…</div>
         ) : overview.error ? (
-          <CoverageErrorBanner error={overview.error} onRetry={() => overview.refetch()} />
+          <div className="mt-4"><CoverageErrorBanner error={overview.error} onRetry={() => overview.refetch()} /></div>
         ) : (
-          <OverviewTable rows={rows} onSelect={(id) => { setSelected(id); setSearch(""); setCategory("todos"); }} selected={selected} />
+          <div className="mt-4">
+            <OverviewTable rows={rows} onSelect={(id) => { setSelected(id); setSearch(""); setCategory("todos"); }} selected={selected} />
+          </div>
         )}
 
         {selected && selectedRow && (
