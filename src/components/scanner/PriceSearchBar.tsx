@@ -1988,8 +1988,29 @@ function ProductGroupCard({
 
 
   return (
-    <div className="pc-res-card relative">
+    <div
+      ref={cardRef}
+      id={`pc-group-${encodeURIComponent(productName)}`}
+      tabIndex={-1}
+      data-focused={focused ? "true" : undefined}
+      onClick={(e) => {
+        // Só marca o card como selecionado ao clicar no cabeçalho/vazio.
+        // Cliques em botões/links dentro do card continuam com o comportamento
+        // nativo (o handler dispara apenas quando o target é o próprio card).
+        if (!onSelect) return;
+        const target = e.target as HTMLElement;
+        if (target.closest("a,button,input,select,textarea,[role=button]")) return;
+        onSelect(productName, null);
+      }}
+      className={
+        "pc-res-card relative outline-none focus-visible:ring-2 focus-visible:ring-brand-gold " +
+        (focused
+          ? "ring-2 ring-brand-gold/70 shadow-[0_0_0_1px_var(--brand-gold)] scroll-mt-24"
+          : "")
+      }
+    >
       <div className="mb-1.5 flex flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
+
         <div className="min-w-0 flex-1 order-1">
 
           <p className="pc-res-title truncate">
