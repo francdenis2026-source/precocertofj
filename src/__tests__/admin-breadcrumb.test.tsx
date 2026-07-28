@@ -22,8 +22,8 @@ function renderWithRouter(ui: React.ReactNode) {
 describe("AdminBreadcrumb", () => {
   it("renderiza trilha Admin › Hub › Página com aria-current na atual", async () => {
     renderWithRouter(<AdminBreadcrumb hub="contas" page="Clientes" />);
-    expect(await screen.findByText("Admin")).toBeInTheDocument();
-    expect(screen.getByText("Contas")).toBeInTheDocument();
+    expect(await screen.findByText("Admin")).toBeTruthy();
+    expect(screen.getByText("Contas")).toBeTruthy();
     const current = screen.getByText("Clientes");
     expect(current.getAttribute("aria-current")).toBe("page");
   });
@@ -44,6 +44,6 @@ describe("AdminBreadcrumb", () => {
     renderWithRouter(
       <AdminBreadcrumb hub="operacao" page="raw" currentLabel="Cesta Básica" />,
     );
-    expect(await screen.findByText("Cesta Básica")).toBeInTheDocument();
+    expect(await screen.findByText("Cesta Básica")).toBeTruthy();
   });
 });
