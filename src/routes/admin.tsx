@@ -24,7 +24,8 @@ import { LogoQualityPanel } from "@/components/brand/LogoQualityPanel";
 
 import { claimFirstAdmin, listUsersWithRoles, grantRole, revokeRole, listRoleAuditLog, OWNER_EMAIL, type UserWithRoles, type RoleAuditEntry } from "@/lib/roles.functions";
 import { AppShell } from "@/components/brand/AppShell";
-import { useAdminEntitiesRealtime } from "@/hooks/useAdminEntitiesRealtime";
+import { useAdminEntitiesRealtime, describeRealtimeChange } from "@/hooks/useAdminEntitiesRealtime";
+import { EstablishmentDeleteDialog } from "@/components/admin/EstablishmentDeleteDialog";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
 
@@ -2269,12 +2270,11 @@ function toForm(e: Establishment): EstablishmentForm {
 
 function EstablishmentsTab() {
   const qc = useQueryClient();
-  const { confirm } = useConfirm();
+  const { confirm: _confirm } = useConfirm(); void _confirm;
   const list = useServerFn(listEstablishments);
   const save = useServerFn(saveEstablishment);
   const remove = useServerFn(deleteEstablishment);
   const toggle = useServerFn(toggleEstablishmentActive);
-
 
   const [items, setItems] = useState<Establishment[]>([]);
   const [loading, setLoading] = useState(true);
@@ -2282,6 +2282,7 @@ function EstablishmentsTab() {
   const [open, setOpen] = useState(false);
   const [form, setForm] = useState<EstablishmentForm>(emptyForm);
   const [saving, setSaving] = useState(false);
+  const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -2296,7 +2297,19 @@ function EstablishmentsTab() {
   }, [list]);
 
   useEffect(() => { void load(); }, [load]);
-  useAdminEntitiesRealtime(() => { void load(); }, { tables: ["establishments"] });
+  useAdminEntitiesRealtime(
+    () => { void load(); },
+    {
+      tables: ["establishments"],
+      channelKey: "admin-tab-establishments",
+      onEvent: (payload) => {
+        const info = describeRealtimeChange(payload);
+        toast.info(info.title, { description: info.description });
+      },
+    },
+  );
+
+
 
 
   const filtered = useMemo(() => {
@@ -2347,24 +2360,21 @@ function EstablishmentsTab() {
     }
   };
 
-  const onDelete = async (id: string) => {
-    const ok = await confirm({
-      title: "Remover estabelecimento?",
-      description:
-        "Todos os produtos, preços capturados, recibos e alertas ligados a este estabelecimento serão removidos permanentemente. Esta ação não pode ser desfeita.",
-      confirmLabel: "Remover tudo",
-      destructive: true,
-    });
-    if (!ok) return;
+  const onDelete = (id: string) => setPendingDeleteId(id);
 
+  const confirmDelete = async () => {
+    if (!pendingDeleteId) return;
+    const id = pendingDeleteId;
+    setPendingDeleteId(null);
     try {
       await remove({ data: { id } });
-      toast.success("Removido");
+      toast.success("Estabelecimento removido");
       await load();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Falha ao remover");
     }
   };
+
 
   const onToggle = async (e: Establishment) => {
     try {
@@ -2611,9 +2621,17 @@ function EstablishmentsTab() {
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <EstablishmentDeleteDialog
+        open={pendingDeleteId !== null}
+        establishmentId={pendingDeleteId}
+        onCancel={() => setPendingDeleteId(null)}
+        onConfirm={confirmDelete}
+      />
     </div>
   );
 }
+
 
 
 

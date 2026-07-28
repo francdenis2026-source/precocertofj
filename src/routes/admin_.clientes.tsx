@@ -45,7 +45,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Users, KeyRound, Copy, RefreshCw, Search, ShieldCheck, Ban, CheckCircle2, Download } from "lucide-react";
 import { AppShell } from "@/components/brand/AppShell";
 import { NewCustomerDialog } from "@/components/admin/NewCustomerDialog";
-import { useAdminEntitiesRealtime } from "@/hooks/useAdminEntitiesRealtime";
+import { useAdminEntitiesRealtime, describeRealtimeChange } from "@/hooks/useAdminEntitiesRealtime";
 
 const listOptions = (search: string, sort: "recent" | "logins" | "name" | "last_seen", limit: number, offset: number) =>
   queryOptions({
@@ -96,8 +96,16 @@ function ClientesPage() {
 
   useAdminEntitiesRealtime(
     () => { qc.invalidateQueries({ queryKey: ["admin", "customers"] }); },
-    { tables: ["profiles"] },
+    {
+      tables: ["profiles"],
+      channelKey: "admin-clientes",
+      onEvent: (payload) => {
+        const info = describeRealtimeChange(payload);
+        toast.info(info.title, { description: info.description });
+      },
+    },
   );
+
 
   function applySearch() {
     setPage(0);

@@ -98,7 +98,7 @@ import { NewProductDialog } from "@/components/admin/NewProductDialog";
 import { supabase } from "@/integrations/supabase/client";
 import { useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { useAdminEntitiesRealtime } from "@/hooks/useAdminEntitiesRealtime";
+import { useAdminEntitiesRealtime, describeRealtimeChange } from "@/hooks/useAdminEntitiesRealtime";
 
 
 
@@ -139,8 +139,16 @@ function CatalogoAdminPage() {
       qc.invalidateQueries({ queryKey: ["admin", "catalog"] });
       qc.invalidateQueries({ queryKey: ["catalog"] });
     },
-    { tables: ["product_catalog"] },
+    {
+      tables: ["product_catalog"],
+      channelKey: "admin-catalogo",
+      onEvent: (payload) => {
+        const info = describeRealtimeChange(payload);
+        toast.info(info.title, { description: info.description });
+      },
+    },
   );
+
   return (
     <AppShell>
       <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6">

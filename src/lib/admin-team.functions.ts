@@ -57,28 +57,64 @@ export const ADMIN_AUDIT_LABELS: Record<AdminAuditAction, string> = {
 
 export const listAdminAuditLog = createServerFn({ method: "POST" })
   .middleware([requireAdmin])
-  .inputValidator((input?: { action?: string; days?: number; limit?: number }) => ({
+  .inputValidator((input?: {
+    action?: string;
+    days?: number;
+    limit?: number;
+    targetType?: string;
+    establishmentId?: string;
+    actorEmail?: string;
+    from?: string;
+    to?: string;
+  }) => ({
     action: input?.action && input.action !== "all" ? String(input.action) : null,
     days: input?.days != null && Number.isFinite(Number(input.days)) ? Number(input.days) : null,
     limit: Math.min(Math.max(Number(input?.limit ?? 300), 1), 1000),
+    targetType: input?.targetType && input.targetType !== "all" ? String(input.targetType) : null,
+    establishmentId: input?.establishmentId ? String(input.establishmentId) : null,
+    actorEmail: input?.actorEmail ? String(input.actorEmail).trim().toLowerCase() : null,
+    from: input?.from ? String(input.from) : null,
+    to: input?.to ? String(input.to) : null,
   }))
   .handler(async ({ data }): Promise<AdminAuditRow[]> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 
+    // Resolve actor email → user IDs (optional filter)
+    let actorIds: string[] | null = null;
+    const emailById = new Map<string, string | null>();
+    try {
+      const { data: users } = await supabaseAdmin.auth.admin.listUsers({ page: 1, perPage: 200 });
+      for (const u of users?.users ?? []) emailById.set(u.id, u.email ?? null);
+      if (data.actorEmail) {
+        actorIds = [];
+        for (const [id, email] of emailById) {
+          if (email && email.toLowerCase().includes(data.actorEmail)) actorIds.push(id);
+        }
+        if (actorIds.length === 0) return []; // no match
+      }
+    } catch {
+      /* lista de e-mails é opcional */
+    }
+
+    const sel = (s: string): string => s;
     let q = supabaseAdmin
       .from("admin_audit_log")
-      .select("id, action, target_type, target_id, notes, admin_user_id, created_at")
+      .select(sel("id, action, target_type, target_id, notes, admin_user_id, created_at, before, after"))
       .order("created_at", { ascending: false })
       .limit(data.limit);
     if (data.action) q = q.eq("action", data.action);
+    if (data.targetType) q = q.eq("target_type", data.targetType);
     if (data.days != null) {
       q = q.gte("created_at", new Date(Date.now() - data.days * 86400000).toISOString());
     }
+    if (data.from) q = q.gte("created_at", new Date(data.from).toISOString());
+    if (data.to) q = q.lte("created_at", new Date(data.to).toISOString());
+    if (actorIds && actorIds.length > 0) q = q.in("admin_user_id", actorIds);
 
     const { data: rows, error } = await q;
     if (error) throw new Error(error.message);
 
-    const list = (rows ?? []) as unknown as Array<{
+    type Row = {
       id: string;
       action: AdminAuditAction;
       target_type: string;
@@ -86,14 +122,23 @@ export const listAdminAuditLog = createServerFn({ method: "POST" })
       notes: string | null;
       admin_user_id: string | null;
       created_at: string;
-    }>;
+      before: Record<string, unknown> | null;
+      after: Record<string, unknown> | null;
+    };
+    let list = (rows ?? []) as unknown as Row[];
 
-    const emailById = new Map<string, string | null>();
-    try {
-      const { data: users } = await supabaseAdmin.auth.admin.listUsers({ page: 1, perPage: 200 });
-      for (const u of users?.users ?? []) emailById.set(u.id, u.email ?? null);
-    } catch {
-      /* lista de e-mails é opcional */
+    // Optional: filter by establishment id — either as direct target or referenced in before/after payload
+    if (data.establishmentId) {
+      const eid = data.establishmentId;
+      list = list.filter((r) => {
+        if (r.target_type === "establishment" && r.target_id === eid) return true;
+        const b = r.before as Record<string, unknown> | null;
+        const a = r.after as Record<string, unknown> | null;
+        return (
+          (b && (b as { establishment_id?: unknown }).establishment_id === eid) ||
+          (a && (a as { establishment_id?: unknown }).establishment_id === eid)
+        );
+      });
     }
 
     return list.map((r) => ({
@@ -106,6 +151,7 @@ export const listAdminAuditLog = createServerFn({ method: "POST" })
       createdAt: r.created_at,
     }));
   });
+
 
 /* ------------------------------------------------------------------ */
 /* Registro de acesso ao painel                                        */
