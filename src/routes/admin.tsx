@@ -33,6 +33,7 @@ import { StoreBadge, getStoreColor } from "@/components/brand/StoreBadge";
 import { admin, useAdmin } from "@/lib/admin-store";
 import {
   listAllPlans,
+  getPlansHealth,
   upsertPlan as upsertPlanFn,
   togglePlanActive as togglePlanFn,
   deletePlan as deletePlanFn,
@@ -355,7 +356,55 @@ function AdminPage() {
 
 /* -------------------- Plans -------------------- */
 
+function PlansHealthCard() {
+  const healthFn = useServerFn(getPlansHealth);
+  const { data, isLoading } = useQuery({
+    queryKey: ["admin", "plans", "health"],
+    queryFn: () => healthFn(),
+    staleTime: 30_000,
+  });
+
+  if (isLoading || !data) {
+    return (
+      <Card><CardContent className="py-3 text-xs text-muted-foreground">Verificando integridade dos planos…</CardContent></Card>
+    );
+  }
+
+  const consistent = data.consistent;
+  return (
+    <Card className={cn(
+      "border",
+      consistent ? "border-emerald-500/30 bg-emerald-500/5" : "border-amber-500/40 bg-amber-500/10",
+    )}>
+      <CardContent className="flex flex-wrap items-center justify-between gap-3 py-3">
+        <div className="flex items-center gap-2 text-sm">
+          {consistent ? (
+            <ShieldCheck className="h-4 w-4 text-emerald-600" />
+          ) : (
+            <AlertTriangle className="h-4 w-4 text-amber-600" />
+          )}
+          <span className="font-medium">
+            {consistent ? "Planos consistentes" : "Inconsistência detectada"}
+          </span>
+          <span className="text-muted-foreground">
+            · license_plans: <b>{data.licenseActive}</b> ativos / {data.licenseTotal} total
+          </span>
+          <span className="text-muted-foreground">
+            · legada plans: {data.legacyPlansExists ? `${data.legacyPlansCount} registro(s)` : "removida ✓"}
+          </span>
+        </div>
+        {!consistent && (
+          <div className="w-full text-xs text-amber-700 dark:text-amber-400">
+            {data.warnings.join(" · ")}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 function PlansTab() {
+
   const qc = useQueryClient();
   const listFn = useServerFn(listAllPlans);
   const toggleFn = useServerFn(togglePlanFn);
@@ -386,6 +435,7 @@ function PlansTab() {
 
   return (
     <div className="space-y-4">
+      <PlansHealthCard />
       <div className="flex items-center justify-between">
         <div>
           <h2 className="font-serif text-2xl">Planos de assinatura</h2>
@@ -395,6 +445,7 @@ function PlansTab() {
           <Button size="sm"><Plus className="mr-2 h-4 w-4" />Novo plano</Button>
         </PlanDialog>
       </div>
+
 
       {isLoading ? (
         <Card><CardContent className="pt-6 text-sm text-muted-foreground">Carregando planos…</CardContent></Card>
@@ -2269,6 +2320,10 @@ function EstablishmentsTab() {
   const [form, setForm] = useState<EstablishmentForm>(emptyForm);
   const [saving, setSaving] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const [density, setDensity] = useState<"compact" | "comfortable">("compact");
+  const [pageSize, setPageSize] = useState<number>(25);
+  const [page, setPage] = useState(1);
+
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -2307,6 +2362,14 @@ function EstablishmentsTab() {
       ),
     );
   }, [items, filter]);
+
+  const totalPages = pageSize === 0 ? 1 : Math.max(1, Math.ceil(filtered.length / pageSize));
+  const currentPage = Math.min(page, totalPages);
+  useEffect(() => { setPage(1); }, [filter, pageSize]);
+  const paged = pageSize === 0 ? filtered : filtered.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+  const rowPad = density === "compact" ? "[&_th]:h-9 [&_th]:py-1.5 [&_td]:py-1.5" : "[&_th]:h-10 [&_th]:py-2.5 [&_td]:py-2.5";
+  const rowText = density === "compact" ? "text-[13px]" : "text-sm";
+
 
   const openNew = () => { setForm(emptyForm); setOpen(true); };
   const openEdit = (e: Establishment) => { setForm(toForm(e)); setOpen(true); };
@@ -2381,13 +2444,29 @@ function EstablishmentsTab() {
             Cadastre mercados e atacados. Produtos são vinculados depois.
           </p>
         </div>
-        <div className="flex shrink-0 items-center gap-2">
+        <div className="flex shrink-0 flex-wrap items-center gap-2">
           <Input
-            placeholder="Buscar por nome, cidade, CNPJ…"
+            placeholder="Buscar…"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="h-8 w-44 sm:w-56 md:w-64"
+            className="h-8 w-40 sm:w-48 md:w-56"
           />
+          <Select value={density} onValueChange={(v) => setDensity(v as "compact" | "comfortable")}>
+            <SelectTrigger className="h-8 w-[112px] text-xs"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="compact">Densa</SelectItem>
+              <SelectItem value="comfortable">Confortável</SelectItem>
+            </SelectContent>
+          </Select>
+          <Select value={String(pageSize)} onValueChange={(v) => setPageSize(Number(v))}>
+            <SelectTrigger className="h-8 w-[92px] text-xs"><SelectValue /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="10">10/pág</SelectItem>
+              <SelectItem value="25">25/pág</SelectItem>
+              <SelectItem value="50">50/pág</SelectItem>
+              <SelectItem value="0">Tudo</SelectItem>
+            </SelectContent>
+          </Select>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button size="sm" variant="outline" className="h-8 px-2">
@@ -2424,52 +2503,73 @@ function EstablishmentsTab() {
               Nenhum estabelecimento cadastrado ainda.
             </div>
           ) : (
-            <div className="max-h-[calc(100dvh-260px)] overflow-auto">
-              <Table className="text-[13px] [&_th]:h-9 [&_th]:py-1.5 [&_td]:py-1.5">
-                <TableHeader className="sticky top-0 z-10 bg-card/95 backdrop-blur">
-                  <TableRow>
-                    <TableHead className="min-w-[180px]">Nome</TableHead>
-                    <TableHead className="hidden md:table-cell">Tipo</TableHead>
-                    <TableHead className="hidden lg:table-cell">Cidade / UF</TableHead>
-                    <TableHead className="hidden xl:table-cell">Bairro</TableHead>
-                    <TableHead className="hidden xl:table-cell">Telefone</TableHead>
-                    <TableHead className="w-16 text-center">Ativo</TableHead>
-                    <TableHead className="w-28 text-right">Ações</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {filtered.map((e) => (
-                    <TableRow key={e.id}>
-                      <TableCell className="max-w-[240px]">
-                        <div className="truncate font-medium">{e.name}</div>
-                        <div className="truncate text-[11px] text-muted-foreground md:hidden">
-                          {kindLabel[e.kind]} · {e.city}/{e.state}
-                          {e.neighborhood ? ` · ${e.neighborhood}` : ""}
-                        </div>
-                        {e.cnpj && <div className="hidden text-[11px] text-muted-foreground md:block">{e.cnpj}</div>}
-                      </TableCell>
-                      <TableCell className="hidden md:table-cell">
-                        <Badge variant="outline" className="text-[11px]">{kindLabel[e.kind]}</Badge>
-                      </TableCell>
-                      <TableCell className="hidden truncate lg:table-cell">{e.city} / {e.state}</TableCell>
-                      <TableCell className="hidden truncate xl:table-cell">{e.neighborhood ?? "—"}</TableCell>
-                      <TableCell className="hidden truncate xl:table-cell">{e.phone ?? "—"}</TableCell>
-                      <TableCell className="text-center">
-                        <Switch checked={e.active} onCheckedChange={() => onToggle(e)} />
-                      </TableCell>
-                      <TableCell className="text-right">
-                        <Button variant="ghost" size="sm" className="h-7 px-2" onClick={() => openEdit(e)}>Editar</Button>
-                        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => onDelete(e.id)}>
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </Button>
-                      </TableCell>
+            <>
+              <div className="max-h-[calc(100dvh-320px)] min-h-[240px] overflow-auto">
+                <Table className={cn(rowText, rowPad)}>
+                  <TableHeader className="sticky top-0 z-10 bg-card/95 backdrop-blur">
+                    <TableRow>
+                      <TableHead className="min-w-[180px]">Nome</TableHead>
+                      <TableHead className="hidden md:table-cell">Tipo</TableHead>
+                      <TableHead className="hidden lg:table-cell">Cidade / UF</TableHead>
+                      <TableHead className="hidden xl:table-cell">Bairro</TableHead>
+                      <TableHead className="hidden xl:table-cell">Telefone</TableHead>
+                      <TableHead className="w-16 text-center">Ativo</TableHead>
+                      <TableHead className="w-28 text-right">Ações</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
+                  </TableHeader>
+                  <TableBody>
+                    {paged.map((e) => (
+                      <TableRow key={e.id}>
+                        <TableCell className="max-w-[240px]">
+                          <div className="truncate font-medium">{e.name}</div>
+                          <div className="truncate text-[11px] text-muted-foreground md:hidden">
+                            {kindLabel[e.kind]} · {e.city}/{e.state}
+                            {e.neighborhood ? ` · ${e.neighborhood}` : ""}
+                          </div>
+                          {e.cnpj && <div className="hidden text-[11px] text-muted-foreground md:block">{e.cnpj}</div>}
+                        </TableCell>
+                        <TableCell className="hidden md:table-cell">
+                          <Badge variant="outline" className="text-[11px]">{kindLabel[e.kind]}</Badge>
+                        </TableCell>
+                        <TableCell className="hidden truncate lg:table-cell">{e.city} / {e.state}</TableCell>
+                        <TableCell className="hidden truncate xl:table-cell">{e.neighborhood ?? "—"}</TableCell>
+                        <TableCell className="hidden truncate xl:table-cell">{e.phone ?? "—"}</TableCell>
+                        <TableCell className="text-center">
+                          <Switch checked={e.active} onCheckedChange={() => onToggle(e)} />
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Button variant="ghost" size="sm" className="h-7 px-2" onClick={() => openEdit(e)}>Editar</Button>
+                          <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => onDelete(e.id)}>
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+              <div className="flex items-center justify-between border-t px-3 py-2 text-xs text-muted-foreground">
+                <span>
+                  {pageSize === 0
+                    ? `${filtered.length} de ${filtered.length}`
+                    : `${(currentPage - 1) * pageSize + 1}–${Math.min(currentPage * pageSize, filtered.length)} de ${filtered.length}`}
+                </span>
+                {pageSize !== 0 && totalPages > 1 && (
+                  <div className="flex items-center gap-1">
+                    <Button size="icon" variant="ghost" className="h-7 w-7" disabled={currentPage <= 1} onClick={() => setPage((p) => Math.max(1, p - 1))}>
+                      <ChevronLeft className="h-3.5 w-3.5" />
+                    </Button>
+                    <span className="px-2">Pág. {currentPage}/{totalPages}</span>
+                    <Button size="icon" variant="ghost" className="h-7 w-7" disabled={currentPage >= totalPages} onClick={() => setPage((p) => Math.min(totalPages, p + 1))}>
+                      <ChevronRight className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                )}
+              </div>
+            </>
           )}
         </CardContent>
+
       </Card>
 
 

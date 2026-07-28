@@ -16,6 +16,15 @@ export type PlanRow = {
   highlight: boolean;
 };
 
+export type PlansHealth = {
+  licenseActive: number;
+  licenseTotal: number;
+  legacyPlansExists: boolean;
+  legacyPlansCount: number;
+  consistent: boolean;
+  warnings: string[];
+};
+
 /**
  * All plan reads/writes are now unified against `license_plans`.
  * The legacy `plans` table was removed in migration
@@ -231,3 +240,51 @@ export const deletePlan = createServerFn({ method: "POST" })
     if (error) throw new Error(error.message);
     return { ok: true };
   });
+
+/** Admin: auditoria de saúde dos planos. Confirma license_plans como fonte da verdade. */
+export const getPlansHealth = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }): Promise<PlansHealth> => {
+    await assertAdmin(context);
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const [totalRes, activeRes] = await Promise.all([
+      (supabaseAdmin as any).from("license_plans").select("id", { count: "exact", head: true }),
+      (supabaseAdmin as any).from("license_plans").select("id", { count: "exact", head: true }).eq("active", true),
+    ]);
+
+    const licenseTotal = Number(totalRes.count ?? 0);
+    const licenseActive = Number(activeRes.count ?? 0);
+
+    // Detecta a tabela legada `plans` tentando um HEAD count.
+    // Se a tabela não existe, o Supabase retorna erro (code 42P01) — tratamos como ausente.
+    let legacyPlansExists = false;
+    let legacyPlansCount = 0;
+    try {
+      const res = await (supabaseAdmin as any)
+        .from("plans")
+        .select("id", { count: "exact", head: true });
+      if (!res.error) {
+        legacyPlansExists = true;
+        legacyPlansCount = Number(res.count ?? 0);
+      }
+    } catch {
+      legacyPlansExists = false;
+    }
+
+
+    const warnings: string[] = [];
+    if (licenseActive === 0) warnings.push("Nenhum plano ativo em license_plans.");
+    if (legacyPlansExists) warnings.push("Tabela legada `plans` ainda existe — deve ser removida.");
+    if (legacyPlansCount > 0) warnings.push(`Tabela legada contém ${legacyPlansCount} registro(s).`);
+
+    return {
+      licenseActive,
+      licenseTotal,
+      legacyPlansExists,
+      legacyPlansCount,
+      consistent: warnings.length === 0,
+      warnings,
+    };
+  });
+
