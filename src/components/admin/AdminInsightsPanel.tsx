@@ -109,6 +109,8 @@ function InsightsSkeleton() {
   );
 }
 
+const DENSITY_KEY = "pc.admin.insights.density";
+
 export function AdminInsightsPanel() {
   const fetchInsights = useServerFn(getAdminInsights);
   const queryClient = useQueryClient();
@@ -116,6 +118,15 @@ export function AdminInsightsPanel() {
   const [to, setTo] = useState(() => isoDay(new Date()));
   const [cats, setCats] = useState<string[]>([]);
   const [exporting, setExporting] = useState(false);
+  const [density, setDensity] = useState<ChartDensity>(() => {
+    if (typeof window === "undefined") return "normal";
+    return (window.localStorage.getItem(DENSITY_KEY) as ChartDensity) ?? "normal";
+  });
+  const metrics = chartMetrics(density);
+  useEffect(() => {
+    if (typeof window !== "undefined") window.localStorage.setItem(DENSITY_KEY, density);
+  }, [density]);
+
 
   /* Alternância rápida de filtros não dispara uma chamada por clique:
      só o último estado (após 320 ms parado) vira uma query. */
