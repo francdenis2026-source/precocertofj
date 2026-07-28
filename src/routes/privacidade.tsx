@@ -236,25 +236,25 @@ function PrivacidadePage() {
               href="https://wa.me/5568992031340"
               target="_blank"
               rel="noopener noreferrer"
-              className="font-semibold text-[var(--pc-gold-ink)] underline underline-offset-2"
+              className="whitespace-nowrap font-semibold text-[var(--pc-gold-ink)] underline underline-offset-2"
             >
               (68) 99203-1340
             </a>{" "}
             ·{" "}
             <a
               href="mailto:precocerto-fj@proton.me"
-              className="font-semibold text-[var(--pc-gold-ink)] underline underline-offset-2"
+              className="whitespace-nowrap font-semibold text-[var(--pc-gold-ink)] underline underline-offset-2"
             >
               precocerto-fj@proton.me
             </a>
           </p>
-          <div className="flex items-center gap-2">
-            <span className={cn(tc.meta, "shrink-0")}>Atualizado {UPDATED_AT}</span>
+          <div className="flex shrink-0 items-center gap-2">
+            <span className={cn(tc.meta, "whitespace-nowrap")}>Atualizado {UPDATED_AT}</span>
             <Link
               to="/fale-conosco"
               className={cn(
                 tc.chip,
-                "pc-focus inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1 text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)]",
+                "pc-focus inline-flex h-7 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full border border-border px-3 text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)]",
               )}
             >
               Fale conosco
