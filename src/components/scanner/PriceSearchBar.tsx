@@ -2034,8 +2034,16 @@ function CompareMatrix({
       <div
         role="table"
         aria-label="Preços por mercado"
-        className="grid gap-1.5 overflow-x-auto"
-        style={{ gridTemplateColumns: `repeat(${top.length}, minmax(140px, 1fr))` }}
+        className={
+          expanded
+            ? "grid gap-1.5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5"
+            : "grid gap-1.5 overflow-x-auto"
+        }
+        style={
+          expanded
+            ? undefined
+            : { gridTemplateColumns: `repeat(${top.length}, minmax(140px, 1fr))` }
+        }
       >
         {top.map((p, i) => {
           const isCheapest = i === 0;
