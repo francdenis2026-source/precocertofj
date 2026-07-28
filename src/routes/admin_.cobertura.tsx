@@ -15,9 +15,18 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ChevronRight, Download, Loader2, MapPin, Search, Store, PackageX, PackageCheck } from "lucide-react";
+import { ChevronRight, Download, Loader2, MapPin, RefreshCw, Search, Store, PackageX, PackageCheck } from "lucide-react";
 import { getCoverageOverview, getMissingProducts, getPresentProducts, type EstablishmentCoverage } from "@/lib/coverage.functions";
 import { CoverageDiagnosticsPanel, CoverageErrorBanner } from "@/components/admin/CoverageDiagnosticsPanel";
+
+function formatQueryStatus(query: { isFetching: boolean; error: unknown; dataUpdatedAt: number; errorUpdatedAt: number }) {
+  if (query.isFetching) return { label: "Consultando…", tone: "muted" as const };
+  const ts = query.error ? query.errorUpdatedAt : query.dataUpdatedAt;
+  if (!ts) return { label: "Sem consulta ainda", tone: "muted" as const };
+  const rel = new Date(ts).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  if (query.error) return { label: `Falha às ${rel}`, tone: "error" as const };
+  return { label: `Atualizado às ${rel}`, tone: "ok" as const };
+}
 
 export const Route = createFileRoute("/admin_/cobertura")({
   ssr: false,
@@ -139,12 +148,21 @@ function CoveragePage() {
           <CoverageDiagnosticsPanel />
         </div>
 
+        <RefreshBar
+          status={formatQueryStatus(overview)}
+          disabled={overview.isFetching}
+          onRefresh={() => overview.refetch()}
+          label="Ranking de cobertura"
+        />
+
         {overview.isLoading ? (
-          <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Carregando…</div>
+          <div className="mt-4 flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Carregando…</div>
         ) : overview.error ? (
-          <CoverageErrorBanner error={overview.error} onRetry={() => overview.refetch()} />
+          <div className="mt-4"><CoverageErrorBanner error={overview.error} onRetry={() => overview.refetch()} /></div>
         ) : (
-          <OverviewTable rows={rows} onSelect={(id) => { setSelected(id); setSearch(""); setCategory("todos"); }} selected={selected} />
+          <div className="mt-4">
+            <OverviewTable rows={rows} onSelect={(id) => { setSelected(id); setSearch(""); setCategory("todos"); }} selected={selected} />
+          </div>
         )}
 
         {selected && selectedRow && (
@@ -195,22 +213,40 @@ function CoveragePage() {
                 </div>
 
                 <TabsContent value="faltando">
-                  {missing.isLoading ? (
-                    <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Carregando produtos faltantes…</div>
-                  ) : missing.error ? (
-                    <CoverageErrorBanner error={missing.error} onRetry={() => missing.refetch()} />
-                  ) : (
-                    <MissingTable rows={missing.data ?? []} />
-                  )}
+                  <RefreshBar
+                    status={formatQueryStatus(missing)}
+                    disabled={missing.isFetching || !selected}
+                    onRefresh={() => missing.refetch()}
+                    label="Produtos faltantes"
+                    compact
+                  />
+                  <div className="mt-3">
+                    {missing.isLoading ? (
+                      <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Carregando produtos faltantes…</div>
+                    ) : missing.error ? (
+                      <CoverageErrorBanner error={missing.error} onRetry={() => missing.refetch()} />
+                    ) : (
+                      <MissingTable rows={missing.data ?? []} />
+                    )}
+                  </div>
                 </TabsContent>
                 <TabsContent value="cadastrados">
-                  {present.isLoading ? (
-                    <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Carregando produtos cadastrados…</div>
-                  ) : present.error ? (
-                    <CoverageErrorBanner error={present.error} onRetry={() => present.refetch()} />
-                  ) : (
-                    <PresentTable rows={present.data ?? []} />
-                  )}
+                  <RefreshBar
+                    status={formatQueryStatus(present)}
+                    disabled={present.isFetching || !selected}
+                    onRefresh={() => present.refetch()}
+                    label="Produtos cadastrados"
+                    compact
+                  />
+                  <div className="mt-3">
+                    {present.isLoading ? (
+                      <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Carregando produtos cadastrados…</div>
+                    ) : present.error ? (
+                      <CoverageErrorBanner error={present.error} onRetry={() => present.refetch()} />
+                    ) : (
+                      <PresentTable rows={present.data ?? []} />
+                    )}
+                  </div>
                 </TabsContent>
               </Tabs>
             </CardContent>
@@ -220,6 +256,58 @@ function CoveragePage() {
     </AppShell>
   );
 }
+
+export function RefreshBar({
+  status,
+  onRefresh,
+  disabled,
+  label,
+  compact,
+}: {
+  status: { label: string; tone: "muted" | "ok" | "error" };
+  onRefresh: () => void;
+  disabled?: boolean;
+  label: string;
+  compact?: boolean;
+}) {
+  const dotClass =
+    status.tone === "ok"
+      ? "bg-emerald-500"
+      : status.tone === "error"
+        ? "bg-destructive"
+        : "bg-muted-foreground/40";
+  return (
+    <div
+      className={`flex flex-wrap items-center justify-between gap-2 rounded-md border bg-card px-3 ${compact ? "py-1.5" : "py-2"}`}
+      role="status"
+      aria-live="polite"
+      data-testid="coverage-refresh-bar"
+    >
+      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+        <span className={`inline-block h-2 w-2 rounded-full ${dotClass}`} aria-hidden />
+        <span className="font-medium text-foreground/80">{label}</span>
+        <span data-testid="coverage-refresh-status">· {status.label}</span>
+      </div>
+      <Button
+        type="button"
+        size="sm"
+        variant="outline"
+        onClick={onRefresh}
+        disabled={disabled}
+        aria-label={`Atualizar ${label}`}
+        data-testid="coverage-refresh-button"
+      >
+        {disabled ? (
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          <RefreshCw className="mr-2 h-4 w-4" />
+        )}
+        Atualizar
+      </Button>
+    </div>
+  );
+}
+
 
 function OverviewTable({
   rows,
