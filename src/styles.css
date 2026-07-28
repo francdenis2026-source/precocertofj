@@ -473,10 +473,10 @@
   .pc-editorial-accent {
     font-family: var(--font-serif);
     font-style: italic;
-    font-weight: 500;
-    letter-spacing: -0.012em;
+    font-weight: 460;
+    letter-spacing: -0.014em;
     font-optical-sizing: auto;
-    font-variation-settings: "opsz" 96, "SOFT" 40, "wght" 500;
+    font-variation-settings: "opsz" 96, "SOFT" 30, "wght" 460;
     color: inherit;
     text-decoration-line: underline;
     text-decoration-color: color-mix(in oklab, var(--pc-gold-ink) 70%, transparent);
