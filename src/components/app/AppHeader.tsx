@@ -55,20 +55,24 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
 
       <div className="flex min-w-0 flex-1 items-center gap-2">
         <span
-          className="hidden items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-foreground md:inline-flex"
+          data-tone={isAdminScope ? "catalog" : "overview"}
+          className="pc-tone-chip hidden items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] md:inline-flex"
           aria-label={isAdminScope ? "Área administrativa" : "Localização atual"}
         >
           {isAdminScope ? (
-            <ShieldCheck className="h-3.5 w-3.5 text-primary" strokeWidth={2.4} />
+            <ShieldCheck data-tone-icon className="h-3.5 w-3.5" strokeWidth={2.4} />
           ) : (
-            <MapPin className="h-3.5 w-3.5 text-primary" strokeWidth={2.4} />
+            <MapPin data-tone-icon className="h-3.5 w-3.5" strokeWidth={2.4} />
           )}
           {isAdminScope ? "Console seguro" : "Feijó · AC"}
         </span>
 
         {isAdminScope && (
-          <span className="hidden items-center gap-1.5 rounded-full border border-border bg-muted px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground lg:inline-flex">
-            <Activity className="h-3.5 w-3.5" />
+          <span
+            data-tone="commerce"
+            className="pc-tone-chip hidden items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] lg:inline-flex"
+          >
+            <Activity data-tone-icon className="h-3.5 w-3.5" />
             Administração do sistema
           </span>
         )}
