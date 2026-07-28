@@ -4808,6 +4808,14 @@ html.dark .pc-row-interactive:hover .pc-store-name {
 }
 
 /* Variantes adicionais de .pc-price */
-.pc-price--best   { color: var(--pc-gold-ink); font-weight: 700; letter-spacing: -0.01em; }
+.pc-price--best   {
+  color: var(--foreground);
+  font-weight: 750;
+  letter-spacing: -0.012em;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in oklab, var(--pc-gold-ink) 75%, transparent);
+  text-decoration-thickness: 0.09em;
+  text-underline-offset: 0.18em;
+}
 .pc-price--strike { color: color-mix(in oklab, var(--foreground) 55%, transparent); text-decoration: line-through; font-weight: 500; }
 .pc-price--savings { color: hsl(var(--savings, 148 60% 34%)); font-weight: 700; }
