@@ -4068,12 +4068,19 @@ html[data-admin-boot="1"] body::before {
 html[data-admin-boot="1"] body {
   background-color: var(--color-background);
 }
-/* Console em página única: as áreas roláveis do painel (menu lateral, abas e
-   listas) já rolam internamente, então o documento não deve rolar. */
+/* Console administrativo: permite rolagem real quando o conteúdo excede a
+   altura da tela. Antes o documento ficava travado em `overflow: hidden`, o
+   que cortava cards/tabelas em notebooks e telas com barra do sistema. */
 html[data-admin-boot="1"],
 html[data-admin-boot="1"] body {
-  height: 100%;
-  overflow: hidden;
+  min-height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.admin-scope [data-admin-scroll="main"] {
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
 }
 
 /* Console admin: a navegação lateral rola dentro de si mesma, mantendo o

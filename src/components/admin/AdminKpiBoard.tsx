@@ -203,9 +203,9 @@ export function AdminKpiBoard() {
 
       {boardQ.isLoading ? (
         <div className="grid gap-2 lg:grid-cols-3">
-          <ChartSkeleton height={144} label="Carregando evolução" />
-          <ChartSkeleton height={144} label="Carregando participação" />
-          <ChartSkeleton height={144} label="Carregando alertas" />
+          <ChartSkeleton height={120} label="Carregando evolução" />
+          <ChartSkeleton height={120} label="Carregando participação" />
+          <ChartSkeleton height={120} label="Carregando alertas" />
         </div>
       ) : boardQ.isError ? (
         <p className={cn(tc.meta, "rounded-xl border border-destructive/40 bg-destructive/5 p-3")}>
@@ -219,9 +219,9 @@ export function AdminKpiBoard() {
             title="Evolução de preços"
             note={`${board.totals.prices} registros • ${board.totals.products} produtos`}
           >
-            <div className="h-36">
+            <div className="h-[120px]">
               {evolution.length === 0 ? (
-                <ChartEmpty height={144} title="Sem evolução no período" />
+                <ChartEmpty height={120} title="Sem evolução no período" />
               ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <LineChart data={evolution} margin={{ top: 4, right: 6, bottom: 0, left: -18 }}>
@@ -275,9 +275,9 @@ export function AdminKpiBoard() {
               </Button>
             }
           >
-            <div className="h-36">
+            <div className="h-[120px]">
               {shares.length === 0 ? (
-                <ChartEmpty height={144} title="Sem lojas no período" />
+                <ChartEmpty height={120} title="Sem lojas no período" />
               ) : (
               <ResponsiveContainer width="100%" height="100%">
                 <BarChart data={shares} margin={{ top: 4, right: 6, bottom: 0, left: -18 }}>
@@ -336,7 +336,7 @@ export function AdminKpiBoard() {
               </Button>
             }
           >
-            <ul className="max-h-36 space-y-1 overflow-y-auto pr-1">
+            <ul className="max-h-[120px] space-y-1 overflow-y-auto pr-1">
               {board.alerts.length === 0 ? (
                 <li className={cn(tc.meta, "py-6 text-center")}>Nenhuma variação relevante no período.</li>
               ) : (

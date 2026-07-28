@@ -42,7 +42,13 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
   const isAdminScope = scope === "admin";
 
   return (
-    <header className="sticky top-0 z-30 flex h-12 items-center gap-2 border-b border-border/70 bg-background/88 px-3 backdrop-blur-xl md:h-14 md:px-6">
+    <header
+      className={
+        isAdminScope
+          ? "sticky top-0 z-30 flex h-10 shrink-0 items-center gap-2 border-b border-border/70 bg-background/92 px-3 backdrop-blur-xl md:h-11 md:px-5"
+          : "sticky top-0 z-30 flex h-12 items-center gap-2 border-b border-border/70 bg-background/88 px-3 backdrop-blur-xl md:h-14 md:px-6"
+      }
+    >
       {isAdminScope ? <AdminSidebarToggle /> : <SidebarTrigger className="text-foreground" />}
       <div className="hidden h-5 w-px bg-border md:block" />
 

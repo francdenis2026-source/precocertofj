@@ -66,15 +66,15 @@ export const legendStyle = {
 export function chartMetrics(density: ChartDensity) {
   const isCompact = density === "compact";
   return {
-    height: isCompact ? 112 : 156,
-    listHeight: isCompact ? 132 : 176,
+    height: isCompact ? 104 : 136,
+    listHeight: isCompact ? 118 : 156,
     padY: isCompact ? "py-2" : "py-2.5",
     padX: isCompact ? "px-2.5" : "px-3",
     tickFontSize: isCompact ? 9 : 10,
     barMaxSize: isCompact ? 22 : 28,
     legendHeight: isCompact ? 14 : 18,
-    xAxisAngleHeight: isCompact ? 30 : 38,
-    yAxisWidth: isCompact ? 40 : 48,
+    xAxisAngleHeight: isCompact ? 26 : 34,
+    yAxisWidth: isCompact ? 36 : 44,
     strokeWidth: isCompact ? 1.8 : 2.2,
     marginTop: isCompact ? 4 : 6,
   } as const;
