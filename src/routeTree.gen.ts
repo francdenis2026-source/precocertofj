@@ -68,6 +68,7 @@ import { Route as CheckoutIdRouteImport } from './routes/checkout.$id'
 import { Route as CategoriaSlugRouteImport } from './routes/categoria.$slug'
 import { Route as CShareIdRouteImport } from './routes/c.$shareId'
 import { Route as AdminWebhooksRouteImport } from './routes/admin_.webhooks'
+import { Route as AdminVitrineRouteImport } from './routes/admin_.vitrine'
 import { Route as AdminSinonimosRouteImport } from './routes/admin_.sinonimos'
 import { Route as AdminReportsRouteImport } from './routes/admin_.reports'
 import { Route as AdminRankCheckRouteImport } from './routes/admin_.rank-check'
@@ -75,6 +76,7 @@ import { Route as AdminPromocoesCodigosRouteImport } from './routes/admin_.promo
 import { Route as AdminPromocoesRouteImport } from './routes/admin_.promocoes'
 import { Route as AdminPrecosRouteImport } from './routes/admin_.precos'
 import { Route as AdminPrecoRapidoRouteImport } from './routes/admin_.preco-rapido'
+import { Route as AdminOperacaoRouteImport } from './routes/admin_.operacao'
 import { Route as AdminMetricasRouteImport } from './routes/admin_.metricas'
 import { Route as AdminLoteInserirRouteImport } from './routes/admin_.lote-inserir'
 import { Route as AdminImportacoesRouteImport } from './routes/admin_.importacoes'
@@ -85,6 +87,7 @@ import { Route as AdminHistoricoPrecosRouteImport } from './routes/admin_.histor
 import { Route as AdminCupomLoteRouteImport } from './routes/admin_.cupom-lote'
 import { Route as AdminCupomRouteImport } from './routes/admin_.cupom'
 import { Route as AdminConversoesRouteImport } from './routes/admin_.conversoes'
+import { Route as AdminContasRouteImport } from './routes/admin_.contas'
 import { Route as AdminConsistenciaRouteImport } from './routes/admin_.consistencia'
 import { Route as AdminCoberturaRouteImport } from './routes/admin_.cobertura'
 import { Route as AdminClientesRouteImport } from './routes/admin_.clientes'
@@ -402,6 +405,11 @@ const AdminWebhooksRoute = AdminWebhooksRouteImport.update({
   path: '/admin/webhooks',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminVitrineRoute = AdminVitrineRouteImport.update({
+  id: '/admin_/vitrine',
+  path: '/admin/vitrine',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminSinonimosRoute = AdminSinonimosRouteImport.update({
   id: '/admin_/sinonimos',
   path: '/admin/sinonimos',
@@ -435,6 +443,11 @@ const AdminPrecosRoute = AdminPrecosRouteImport.update({
 const AdminPrecoRapidoRoute = AdminPrecoRapidoRouteImport.update({
   id: '/admin_/preco-rapido',
   path: '/admin/preco-rapido',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminOperacaoRoute = AdminOperacaoRouteImport.update({
+  id: '/admin_/operacao',
+  path: '/admin/operacao',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminMetricasRoute = AdminMetricasRouteImport.update({
@@ -485,6 +498,11 @@ const AdminCupomRoute = AdminCupomRouteImport.update({
 const AdminConversoesRoute = AdminConversoesRouteImport.update({
   id: '/admin_/conversoes',
   path: '/admin/conversoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AdminContasRoute = AdminContasRouteImport.update({
+  id: '/admin_/contas',
+  path: '/admin/contas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AdminConsistenciaRoute = AdminConsistenciaRouteImport.update({
@@ -653,6 +671,7 @@ export interface FileRoutesByFullPath {
   '/admin/clientes': typeof AdminClientesRoute
   '/admin/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin/consistencia': typeof AdminConsistenciaRoute
+  '/admin/contas': typeof AdminContasRoute
   '/admin/conversoes': typeof AdminConversoesRoute
   '/admin/cupom': typeof AdminCupomRoute
   '/admin/cupom-lote': typeof AdminCupomLoteRoute
@@ -663,6 +682,7 @@ export interface FileRoutesByFullPath {
   '/admin/importacoes': typeof AdminImportacoesRoute
   '/admin/lote-inserir': typeof AdminLoteInserirRoute
   '/admin/metricas': typeof AdminMetricasRoute
+  '/admin/operacao': typeof AdminOperacaoRoute
   '/admin/preco-rapido': typeof AdminPrecoRapidoRoute
   '/admin/precos': typeof AdminPrecosRoute
   '/admin/promocoes': typeof AdminPromocoesRoute
@@ -670,6 +690,7 @@ export interface FileRoutesByFullPath {
   '/admin/rank-check': typeof AdminRankCheckRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/sinonimos': typeof AdminSinonimosRoute
+  '/admin/vitrine': typeof AdminVitrineRoute
   '/admin/webhooks': typeof AdminWebhooksRoute
   '/c/$shareId': typeof CShareIdRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
@@ -752,6 +773,7 @@ export interface FileRoutesByTo {
   '/admin/clientes': typeof AdminClientesRoute
   '/admin/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin/consistencia': typeof AdminConsistenciaRoute
+  '/admin/contas': typeof AdminContasRoute
   '/admin/conversoes': typeof AdminConversoesRoute
   '/admin/cupom': typeof AdminCupomRoute
   '/admin/cupom-lote': typeof AdminCupomLoteRoute
@@ -762,6 +784,7 @@ export interface FileRoutesByTo {
   '/admin/importacoes': typeof AdminImportacoesRoute
   '/admin/lote-inserir': typeof AdminLoteInserirRoute
   '/admin/metricas': typeof AdminMetricasRoute
+  '/admin/operacao': typeof AdminOperacaoRoute
   '/admin/preco-rapido': typeof AdminPrecoRapidoRoute
   '/admin/precos': typeof AdminPrecosRoute
   '/admin/promocoes': typeof AdminPromocoesRoute
@@ -769,6 +792,7 @@ export interface FileRoutesByTo {
   '/admin/rank-check': typeof AdminRankCheckRoute
   '/admin/reports': typeof AdminReportsRoute
   '/admin/sinonimos': typeof AdminSinonimosRoute
+  '/admin/vitrine': typeof AdminVitrineRoute
   '/admin/webhooks': typeof AdminWebhooksRoute
   '/c/$shareId': typeof CShareIdRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
@@ -852,6 +876,7 @@ export interface FileRoutesById {
   '/admin_/clientes': typeof AdminClientesRoute
   '/admin_/cobertura': typeof AdminCoberturaRouteWithChildren
   '/admin_/consistencia': typeof AdminConsistenciaRoute
+  '/admin_/contas': typeof AdminContasRoute
   '/admin_/conversoes': typeof AdminConversoesRoute
   '/admin_/cupom': typeof AdminCupomRoute
   '/admin_/cupom-lote': typeof AdminCupomLoteRoute
@@ -862,6 +887,7 @@ export interface FileRoutesById {
   '/admin_/importacoes': typeof AdminImportacoesRoute
   '/admin_/lote-inserir': typeof AdminLoteInserirRoute
   '/admin_/metricas': typeof AdminMetricasRoute
+  '/admin_/operacao': typeof AdminOperacaoRoute
   '/admin_/preco-rapido': typeof AdminPrecoRapidoRoute
   '/admin_/precos': typeof AdminPrecosRoute
   '/admin_/promocoes': typeof AdminPromocoesRoute
@@ -869,6 +895,7 @@ export interface FileRoutesById {
   '/admin_/rank-check': typeof AdminRankCheckRoute
   '/admin_/reports': typeof AdminReportsRoute
   '/admin_/sinonimos': typeof AdminSinonimosRoute
+  '/admin_/vitrine': typeof AdminVitrineRoute
   '/admin_/webhooks': typeof AdminWebhooksRoute
   '/c/$shareId': typeof CShareIdRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
@@ -953,6 +980,7 @@ export interface FileRouteTypes {
     | '/admin/clientes'
     | '/admin/cobertura'
     | '/admin/consistencia'
+    | '/admin/contas'
     | '/admin/conversoes'
     | '/admin/cupom'
     | '/admin/cupom-lote'
@@ -963,6 +991,7 @@ export interface FileRouteTypes {
     | '/admin/importacoes'
     | '/admin/lote-inserir'
     | '/admin/metricas'
+    | '/admin/operacao'
     | '/admin/preco-rapido'
     | '/admin/precos'
     | '/admin/promocoes'
@@ -970,6 +999,7 @@ export interface FileRouteTypes {
     | '/admin/rank-check'
     | '/admin/reports'
     | '/admin/sinonimos'
+    | '/admin/vitrine'
     | '/admin/webhooks'
     | '/c/$shareId'
     | '/categoria/$slug'
@@ -1052,6 +1082,7 @@ export interface FileRouteTypes {
     | '/admin/clientes'
     | '/admin/cobertura'
     | '/admin/consistencia'
+    | '/admin/contas'
     | '/admin/conversoes'
     | '/admin/cupom'
     | '/admin/cupom-lote'
@@ -1062,6 +1093,7 @@ export interface FileRouteTypes {
     | '/admin/importacoes'
     | '/admin/lote-inserir'
     | '/admin/metricas'
+    | '/admin/operacao'
     | '/admin/preco-rapido'
     | '/admin/precos'
     | '/admin/promocoes'
@@ -1069,6 +1101,7 @@ export interface FileRouteTypes {
     | '/admin/rank-check'
     | '/admin/reports'
     | '/admin/sinonimos'
+    | '/admin/vitrine'
     | '/admin/webhooks'
     | '/c/$shareId'
     | '/categoria/$slug'
@@ -1151,6 +1184,7 @@ export interface FileRouteTypes {
     | '/admin_/clientes'
     | '/admin_/cobertura'
     | '/admin_/consistencia'
+    | '/admin_/contas'
     | '/admin_/conversoes'
     | '/admin_/cupom'
     | '/admin_/cupom-lote'
@@ -1161,6 +1195,7 @@ export interface FileRouteTypes {
     | '/admin_/importacoes'
     | '/admin_/lote-inserir'
     | '/admin_/metricas'
+    | '/admin_/operacao'
     | '/admin_/preco-rapido'
     | '/admin_/precos'
     | '/admin_/promocoes'
@@ -1168,6 +1203,7 @@ export interface FileRouteTypes {
     | '/admin_/rank-check'
     | '/admin_/reports'
     | '/admin_/sinonimos'
+    | '/admin_/vitrine'
     | '/admin_/webhooks'
     | '/c/$shareId'
     | '/categoria/$slug'
@@ -1250,6 +1286,7 @@ export interface RootRouteChildren {
   AdminClientesRoute: typeof AdminClientesRoute
   AdminCoberturaRoute: typeof AdminCoberturaRouteWithChildren
   AdminConsistenciaRoute: typeof AdminConsistenciaRoute
+  AdminContasRoute: typeof AdminContasRoute
   AdminConversoesRoute: typeof AdminConversoesRoute
   AdminCupomRoute: typeof AdminCupomRoute
   AdminCupomLoteRoute: typeof AdminCupomLoteRoute
@@ -1260,6 +1297,7 @@ export interface RootRouteChildren {
   AdminImportacoesRoute: typeof AdminImportacoesRoute
   AdminLoteInserirRoute: typeof AdminLoteInserirRoute
   AdminMetricasRoute: typeof AdminMetricasRoute
+  AdminOperacaoRoute: typeof AdminOperacaoRoute
   AdminPrecoRapidoRoute: typeof AdminPrecoRapidoRoute
   AdminPrecosRoute: typeof AdminPrecosRoute
   AdminPromocoesRoute: typeof AdminPromocoesRoute
@@ -1267,6 +1305,7 @@ export interface RootRouteChildren {
   AdminRankCheckRoute: typeof AdminRankCheckRoute
   AdminReportsRoute: typeof AdminReportsRoute
   AdminSinonimosRoute: typeof AdminSinonimosRoute
+  AdminVitrineRoute: typeof AdminVitrineRoute
   AdminWebhooksRoute: typeof AdminWebhooksRoute
   CShareIdRoute: typeof CShareIdRoute
   CategoriaSlugRoute: typeof CategoriaSlugRoute
@@ -1705,6 +1744,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminWebhooksRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin_/vitrine': {
+      id: '/admin_/vitrine'
+      path: '/admin/vitrine'
+      fullPath: '/admin/vitrine'
+      preLoaderRoute: typeof AdminVitrineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin_/sinonimos': {
       id: '/admin_/sinonimos'
       path: '/admin/sinonimos'
@@ -1752,6 +1798,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/preco-rapido'
       fullPath: '/admin/preco-rapido'
       preLoaderRoute: typeof AdminPrecoRapidoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin_/operacao': {
+      id: '/admin_/operacao'
+      path: '/admin/operacao'
+      fullPath: '/admin/operacao'
+      preLoaderRoute: typeof AdminOperacaoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin_/metricas': {
@@ -1822,6 +1875,13 @@ declare module '@tanstack/react-router' {
       path: '/admin/conversoes'
       fullPath: '/admin/conversoes'
       preLoaderRoute: typeof AdminConversoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/admin_/contas': {
+      id: '/admin_/contas'
+      path: '/admin/contas'
+      fullPath: '/admin/contas'
+      preLoaderRoute: typeof AdminContasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin_/consistencia': {
@@ -2088,6 +2148,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminClientesRoute: AdminClientesRoute,
   AdminCoberturaRoute: AdminCoberturaRouteWithChildren,
   AdminConsistenciaRoute: AdminConsistenciaRoute,
+  AdminContasRoute: AdminContasRoute,
   AdminConversoesRoute: AdminConversoesRoute,
   AdminCupomRoute: AdminCupomRoute,
   AdminCupomLoteRoute: AdminCupomLoteRoute,
@@ -2098,6 +2159,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminImportacoesRoute: AdminImportacoesRoute,
   AdminLoteInserirRoute: AdminLoteInserirRoute,
   AdminMetricasRoute: AdminMetricasRoute,
+  AdminOperacaoRoute: AdminOperacaoRoute,
   AdminPrecoRapidoRoute: AdminPrecoRapidoRoute,
   AdminPrecosRoute: AdminPrecosRoute,
   AdminPromocoesRoute: AdminPromocoesRoute,
@@ -2105,6 +2167,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRankCheckRoute: AdminRankCheckRoute,
   AdminReportsRoute: AdminReportsRoute,
   AdminSinonimosRoute: AdminSinonimosRoute,
+  AdminVitrineRoute: AdminVitrineRoute,
   AdminWebhooksRoute: AdminWebhooksRoute,
   CShareIdRoute: CShareIdRoute,
   CategoriaSlugRoute: CategoriaSlugRoute,

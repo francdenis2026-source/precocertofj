@@ -268,6 +268,45 @@ function AdminPage() {
       </header>
 
       <section className="mx-auto flex w-full max-w-[1400px] flex-col gap-2.5 px-3 py-2.5 md:px-5 md:py-3">
+        {/* ---------- Hubs administrativos ---------- */}
+        <nav aria-label="Hubs administrativos" data-admin-region="hubs">
+          <p className={cn(tc.eyebrow, "mb-1.5 text-muted-foreground")}>Hubs dedicados</p>
+          <ul role="list" className="grid grid-cols-2 gap-2 lg:grid-cols-4">
+            {[
+              { to: "/admin_/contas",    tone: "people",    label: "Contas & Clientes",       hint: "Clientes, PIN, acessos, papéis" },
+              { to: "/admin_/vitrine",   tone: "catalog",   label: "Estabelecimentos & Catálogo", hint: "Lojas, produtos, cobertura, imagens" },
+              { to: "/admin_/precos",    tone: "commerce",  label: "Comércio & Preços",       hint: "Registro, importações, histórico" },
+              { to: "/admin_/operacao",  tone: "system",    label: "Sistema & Operação",      hint: "Planos, integrações, IA, auditoria" },
+            ].map((h) => (
+              <li key={h.to}>
+                <Link
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  to={h.to as any}
+                  data-tone={h.tone}
+                  data-testid={`admin-hub-link-${h.tone}`}
+                  className={cn(
+                    "group flex h-full items-start gap-2 rounded-xl border border-border/70 bg-card p-2.5 transition-all",
+                    "hover:-translate-y-0.5 hover:border-[color:var(--tone-ink,theme(colors.border))]/50 hover:shadow-md",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+                  )}
+                >
+                  <span
+                    aria-hidden
+                    className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-md border border-border/60 bg-[color:var(--tone-soft,transparent)] text-[color:var(--tone-ink,theme(colors.foreground))]"
+                  >
+                    <ChevronRight className="h-4 w-4" strokeWidth={2.2} />
+                  </span>
+                  <div className="min-w-0">
+                    <p className={cn(tc.itemTitle, "truncate text-foreground")}>{h.label}</p>
+                    <p className={cn(tc.meta, "truncate")}>{h.hint}</p>
+                  </div>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+
         {/* ---------- Indicadores executivos + busca global ---------- */}
         <div className="space-y-2.5" data-admin-region="overview">
           <Suspense fallback={<SectionSkeleton rows={2} label="Carregando busca global" />}>
@@ -2731,6 +2770,7 @@ function EstablishmentsTab() {
     </div>
   );
 }
+
 
 
 
