@@ -506,19 +506,23 @@ function HomePage() {
             </div>
 
             {/* ---------- Coluna de dados ---------- */}
-            <aside className="min-w-0 lg:col-span-5" aria-label="Indicadores da plataforma">
+            <aside className="order-2 min-w-0 lg:col-span-5" aria-label="Indicadores da plataforma">
               <div
-                className="pc-elite-frame rounded-2xl border p-3 backdrop-blur-md sm:p-4"
+                className="pc-elite-frame rounded-2xl border p-3.5 backdrop-blur-md sm:p-4.5"
                 style={{
                   background: "var(--pc-home-onhero-glass)",
                   borderColor: "var(--pc-home-onhero-border)",
                 }}
               >
-                <div className="mb-2 flex items-center justify-between gap-2">
+                <header className="mb-3 flex items-center justify-between gap-2 border-b pb-2.5" style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}>
                   <span
-                    className="text-[11px] font-bold uppercase tracking-[0.2em]"
+                    className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em]"
                     style={{ color: "var(--pc-home-onhero-gold)" }}
                   >
+                    <span className="relative inline-flex h-1.5 w-1.5">
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-70" style={{ background: P.gold }} />
+                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: P.gold }} />
+                    </span>
                     Painel ao vivo
                   </span>
                   <Link
@@ -528,7 +532,7 @@ function HomePage() {
                   >
                     Mercados <ArrowRight className="h-3 w-3" strokeWidth={2.6} />
                   </Link>
-                </div>
+                </header>
 
                 <div className="grid grid-cols-3 gap-2" data-reading-dense>
                   {metrics.map(({ kind, value, label, short, Icon }) => (
