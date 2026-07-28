@@ -64,6 +64,7 @@ function normalizeRow(r: any): PlanRow {
     features,
     active: !!r.active,
     highlight: !!r.highlight,
+    ai_monthly_quota: Number(r.ai_monthly_quota ?? 0),
   };
 }
 
