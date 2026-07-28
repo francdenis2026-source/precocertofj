@@ -14,17 +14,21 @@ export interface PrecoCertoMarkProps
 }
 
 const variantCls: Record<Variant, string> = {
-  inline: "font-editorial pc-editorial-accent",
-  hero: "font-editorial pc-editorial-accent pc-hero-editorial",
+  // Inline (dentro de h1/h2 de página): herda a cor do título — leitura limpa —
+  // com fio dourado sublinhando o trecho-chave.
+  inline: "pc-editorial-accent",
+  // Hero (homepage): assinatura de marca em ouro sólido.
+  hero: "font-editorial pc-editorial-accent pc-editorial-accent--fill pc-hero-editorial",
+  // Banner: intermediário — mantém preenchimento dourado mas menor que o hero.
   banner:
-    "font-editorial pc-editorial-accent text-[clamp(1.25rem,2.4vw,2rem)] leading-[1.05] tracking-tight",
+    "font-editorial pc-editorial-accent pc-editorial-accent--fill text-[clamp(1.25rem,2.4vw,2rem)] leading-[1.05] tracking-tight",
+  // Card: compacto, herda cor, com sublinhado ouro.
   card:
-    "font-editorial pc-editorial-accent text-[clamp(0.95rem,1.4vw,1.15rem)] leading-tight tracking-tight",
-  // Label: otimizada para badges, chips, tooltips e legendas pequenas.
-  // opsz mais baixo (60) preserva contraste dos traços em corpos pequenos;
-  // tracking neutro evita colisão entre glifos; peso 500 mantém presença sem virar título.
+    "pc-editorial-accent text-[clamp(0.95rem,1.4vw,1.15rem)] leading-tight tracking-tight",
+  // Label: badges/legendas — italic Fraunces roman, cor herdada, sem sublinhado
+  // (evita ruído em corpos pequenos). Peso 500 preserva presença.
   label:
-    "font-editorial pc-editorial-accent text-[0.72rem] leading-none tracking-[0.005em] [font-variation-settings:'opsz'_60,'SOFT'_25] font-medium",
+    "font-serif italic font-medium text-[0.78rem] leading-none tracking-[0.005em] [font-variation-settings:'opsz'_60,'SOFT'_25]",
 };
 
 /**
