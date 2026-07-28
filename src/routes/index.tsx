@@ -330,12 +330,8 @@ function HomePage() {
 
               <h1
                 id="hero-title"
-                className="font-editorial pc-hero-editorial mt-2 font-normal"
-                style={{
-                  color: "var(--pc-home-onhero-fg)",
-                  fontSize: "clamp(1.75rem, 4.8vw, 3.75rem)",
-                  fontVariationSettings: '"opsz" 144, "SOFT" 20',
-                }}
+                className="font-editorial pc-hero-editorial mt-2 text-[clamp(1.75rem,4.8vw,3.75rem)]"
+                style={{ color: "var(--pc-home-onhero-fg)" }}
               >
                 Encontre o{" "}
                 <PrecoCertoMark variant="hero">preço certo</PrecoCertoMark>{" "}
