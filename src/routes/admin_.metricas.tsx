@@ -24,9 +24,12 @@ import {
 
 import { AdminOnly } from "@/components/auth/AdminOnly";
 
-type MetricasTab = "metricas" | "analytics" | "relatorios" | "conversoes";
+import { LiveBasketRanking } from "@/components/basket/LiveBasketRanking";
+
+type MetricasTab = "metricas" | "cesta-ao-vivo" | "analytics" | "relatorios" | "conversoes";
 const METRICAS_TABS = [
   { key: "metricas" as const, label: "Métricas" },
+  { key: "cesta-ao-vivo" as const, label: "Cesta ao vivo" },
   { key: "analytics" as const, label: "Analytics" },
   { key: "relatorios" as const, label: "Relatórios" },
   { key: "conversoes" as const, label: "Conversões" },
@@ -54,6 +57,13 @@ function MetricasShell() {
         <AdminTabs to="/admin/metricas" title="Métricas" items={METRICAS_TABS} active={tab} />
       </div>
       {tab === "metricas" && <MetricasPage />}
+      {tab === "cesta-ao-vivo" && (
+        <AppShell>
+          <div className="mx-auto max-w-5xl px-4 py-6">
+            <LiveBasketRanking />
+          </div>
+        </AppShell>
+      )}
       {tab === "analytics" && <AnalyticsPage />}
       {tab === "relatorios" && <AdminReportsGate />}
       {tab === "conversoes" && <ConversoesPage />}
