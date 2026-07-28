@@ -240,21 +240,21 @@ function PlansPage() {
             Altura reservada: nunca empurra o restante da tela. */}
         <section
           id="planos"
-          className={dsx(ds.container, "shrink-0 pb-2")}
+          className={dsx(ds.container, "min-h-0 flex-1 overflow-hidden pb-1")}
           aria-label="Planos disponíveis"
         >
           {isLoading ? (
-            <div className="flex gap-3 overflow-hidden pt-2 lg:grid lg:grid-cols-4">
+            <div className="flex h-full gap-3 overflow-hidden pt-1 lg:grid lg:grid-cols-4">
               {[0, 1, 2, 3].map((i) => (
                 <div
                   key={i}
                   data-planos-card
-                  className="h-[clamp(190px,26vh,238px)] w-[76%] shrink-0 animate-pulse rounded-xl border border-border bg-muted/40 lg:w-auto"
+                  className="h-full min-h-[168px] w-[76%] shrink-0 animate-pulse rounded-xl border border-border bg-muted/40 lg:w-auto"
                 />
               ))}
             </div>
           ) : (
-            <div className="pc-rail flex snap-x snap-mandatory gap-3 overflow-x-auto pb-1 pt-2.5 lg:grid lg:grid-cols-4 lg:overflow-visible">
+            <div className="pc-rail flex h-full snap-x snap-mandatory gap-3 overflow-x-auto pb-1 pt-1.5 lg:grid lg:grid-cols-4 lg:overflow-visible">
               {plans.map((plan) => {
                 const isRecommended = plan.slug === recommendedSlug;
                 const perMonth = pricePerMonth(plan.price_cents, plan.days);
