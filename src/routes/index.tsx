@@ -374,17 +374,30 @@ function HomePage() {
                     }}
                     onFocus={() => setShowSuggest(true)}
                     onKeyDown={(e) => {
-                      if (!suggestions.length) return;
+                      const n = suggestions.length;
                       if (e.key === "ArrowDown") {
+                        if (!n) return;
                         e.preventDefault();
-                        setActiveIdx((i) => Math.min(suggestions.length - 1, i + 1));
+                        setShowSuggest(true);
+                        setActiveIdx((i) => (i + 1 >= n ? 0 : i + 1));
                       } else if (e.key === "ArrowUp") {
+                        if (!n) return;
                         e.preventDefault();
-                        setActiveIdx((i) => Math.max(-1, i - 1));
-                      } else if (e.key === "Enter" && activeIdx >= 0) {
+                        setShowSuggest(true);
+                        setActiveIdx((i) => (i <= 0 ? n - 1 : i - 1));
+                      } else if (e.key === "Home" && showSuggest && n) {
+                        e.preventDefault();
+                        setActiveIdx(0);
+                      } else if (e.key === "End" && showSuggest && n) {
+                        e.preventDefault();
+                        setActiveIdx(n - 1);
+                      } else if (e.key === "Enter" && activeIdx >= 0 && n) {
                         e.preventDefault();
                         pickSuggestion(suggestions[activeIdx].name);
                       } else if (e.key === "Escape") {
+                        setShowSuggest(false);
+                        setActiveIdx(-1);
+                      } else if (e.key === "Tab") {
                         setShowSuggest(false);
                       }
                     }}
@@ -396,6 +409,11 @@ function HomePage() {
                     aria-autocomplete="list"
                     aria-expanded={showSuggest && suggestions.length > 0}
                     aria-controls="home-suggest-list"
+                    aria-activedescendant={
+                      showSuggest && activeIdx >= 0 && suggestions[activeIdx]
+                        ? `home-suggest-opt-${suggestions[activeIdx].slug}`
+                        : undefined
+                    }
                     className="min-w-0 flex-1 bg-transparent px-2 py-2.5 text-[14.5px] font-medium outline-none placeholder:text-slate-400 sm:text-[15.5px]"
                     style={{ color: "#0f172a" }}
                   />
