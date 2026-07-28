@@ -115,44 +115,44 @@ export function SearchDiscovery({ onPickQuery }: Props) {
   const statsFailed = Boolean(stats.isError || (stats.data && !stats.data.ok));
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2.5">
       {/* Bloco principal — surface sólida com contraste WCAG AA em ambos os modos */}
-      <section className="relative border-t border-border/60 pt-5">
+      <section className="relative border-t border-border/60 pt-2.5">
         <div
           aria-hidden
           className="pointer-events-none absolute inset-x-0 top-0 h-px bg-linear-to-r from-transparent via-brand-gold/45 to-transparent"
         />
-        <header className="flex items-start gap-3">
+        <header className="flex items-start gap-2.5">
           <span
             aria-hidden
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-gold text-[#0a1327] shadow-sm ring-1 ring-[#0a1327]/15"
+            className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-brand-gold text-[#0a1327] shadow-sm ring-1 ring-[#0a1327]/15"
           >
-            <SearchIcon className="h-4 w-4" strokeWidth={2.75} />
+            <SearchIcon className="h-3.5 w-3.5" strokeWidth={2.75} />
           </span>
           <div className="min-w-0">
-            <h2 className="font-serif text-[15px] font-semibold leading-tight tracking-tight text-foreground sm:text-[17px]">
+            <h2 className="font-serif text-[14px] font-semibold leading-tight tracking-tight text-foreground sm:text-[15px]">
               O que você quer comparar hoje?
             </h2>
-            <p className="mt-0.5 text-[12.5px] leading-snug text-muted-foreground">
+            <p className="mt-0.5 text-[12px] leading-snug text-muted-foreground">
               Toque em uma categoria para começar — ou digite um produto acima.
             </p>
           </div>
         </header>
 
-        {/* Categorias — grid no web, carrossel no mobile. Alvos 44px. */}
-        <div className="mt-3 -mx-1 flex snap-x snap-mandatory gap-2 overflow-x-auto px-1 pb-1 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-4 sm:overflow-visible sm:px-0 lg:grid-cols-4">
+        {/* Categorias — grid no web, carrossel no mobile. */}
+        <div className="mt-2 -mx-1 flex snap-x snap-mandatory gap-1.5 overflow-x-auto px-1 pb-1 sm:mx-0 sm:grid sm:snap-none sm:grid-cols-4 sm:overflow-visible sm:px-0 lg:grid-cols-4">
           {CATEGORIES.map((c) => (
             <button
               key={c.q}
               type="button"
               onClick={() => onPickQuery(c.q)}
-              className="group snap-start inline-flex h-11 shrink-0 items-center gap-2 rounded-xl border border-border bg-background px-3 text-left text-[13px] font-medium tracking-tight text-foreground shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_10%,transparent)] transition-all hover:-translate-y-px hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] hover:shadow-sm active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="group snap-start inline-flex h-9 shrink-0 items-center gap-2 rounded-lg border border-border bg-background px-2.5 text-left text-[12.5px] font-medium tracking-tight text-foreground shadow-[0_1px_2px_-1px_color-mix(in_oklab,var(--brand-navy)_10%,transparent)] transition-all hover:-translate-y-px hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] hover:shadow-sm active:translate-y-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <span
                 aria-hidden
-                className="grid h-7 w-7 flex-none place-items-center rounded-lg bg-brand-gold/15 text-brand-gold-soft transition-colors dark:text-brand-gold group-hover:bg-brand-gold group-hover:text-brand-navy dark:group-hover:text-brand-navy group-focus-visible:bg-brand-gold group-focus-visible:text-brand-navy dark:group-focus-visible:text-brand-navy"
+                className="grid h-6 w-6 flex-none place-items-center rounded-md bg-brand-gold/15 text-brand-gold-soft transition-colors dark:text-brand-gold group-hover:bg-brand-gold group-hover:text-brand-navy dark:group-hover:text-brand-navy group-focus-visible:bg-brand-gold group-focus-visible:text-brand-navy dark:group-focus-visible:text-brand-navy"
               >
-                <c.Icon className="h-4 w-4" strokeWidth={2.25} />
+                <c.Icon className="h-3.5 w-3.5" strokeWidth={2.25} />
               </span>
               <span className="truncate">{c.label}</span>
             </button>
@@ -183,11 +183,11 @@ export function SearchDiscovery({ onPickQuery }: Props) {
         </div>
       </section>
 
-      {/* Últimas buscas — trilha compacta de um único nível, sem quebra de linha */}
+      {/* Últimas buscas — trilha compacta (só mobile; desktop tem sidebar) */}
       {recent.length > 0 && (
         <section
           aria-label="Últimas buscas"
-          className="border-t border-border/60 px-0.5 py-3"
+          className="border-t border-border/60 px-0.5 py-2 lg:hidden"
         >
           <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
             <div className="flex min-w-0 items-center gap-2">
@@ -240,13 +240,13 @@ export function SearchDiscovery({ onPickQuery }: Props) {
 
 
       {/* Sinal de vida — cartão próprio, mesmo padrão dos HeroMetric */}
-      <section className="border-t border-border/60 pt-5">
-        <div className="mb-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 px-0.5">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-border/70 px-2 py-0.5 text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
+      <section className="border-t border-border/60 pt-2.5">
+        <div className="mb-1.5 flex flex-wrap items-center justify-between gap-x-3 gap-y-1 px-0.5">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border/70 px-2 py-0.5 text-[10.5px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
             <Clock className="h-3 w-3 text-brand-gold" aria-hidden />
             Janela: últimos {stats.data?.windowDays ?? 30} dias
           </span>
-          <span className="text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
+          <span className="text-[10.5px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
             {statsFailed
               ? "Dados indisponíveis"
               : stats.data?.generatedAt
@@ -257,30 +257,29 @@ export function SearchDiscovery({ onPickQuery }: Props) {
         {statsFailed && (
           <p
             role="status"
-            className="mb-2 rounded-lg border border-border/70 px-2.5 py-2 text-[12px] leading-snug text-muted-foreground"
+            className="mb-1.5 rounded-lg border border-border/70 px-2.5 py-1.5 text-[11.5px] leading-snug text-muted-foreground"
           >
-            Não foi possível carregar os números do banco agora. Os indicadores abaixo
-            aparecem zerados até a conexão ser restabelecida.
+            Não foi possível carregar os números do banco agora.
           </p>
         )}
-        <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
+        <div className="grid grid-cols-3 gap-1.5">
           <StatCell
-            icon={<TrendingDown className="h-4 w-4" aria-hidden />}
+            icon={<TrendingDown className="h-3.5 w-3.5" aria-hidden />}
             label="Preços em queda"
             value={statsOk ? int(stats.data!.priceDrops7d ?? 0) : "—"}
-            hint={`últimos ${stats.data?.windowDays ?? 30} dias`}
+            hint={`${stats.data?.windowDays ?? 30} dias`}
           />
           <StatCell
-            icon={<Sparkles className="h-4 w-4" aria-hidden />}
-            label="Produtos monitorados"
+            icon={<Sparkles className="h-3.5 w-3.5" aria-hidden />}
+            label="Monitorados"
             value={statsOk ? int(stats.data!.products ?? 0) : "—"}
-            hint="com preço público"
+            hint="preço público"
           />
           <StatCell
-            icon={<Flame className="h-4 w-4" aria-hidden />}
+            icon={<Flame className="h-3.5 w-3.5" aria-hidden />}
             label="Economia média"
             value={statsOk ? brl(stats.data!.estimatedSavings ?? 0) : "—"}
-            hint="por produto comparado"
+            hint="por produto"
           />
 
         </div>
@@ -302,23 +301,23 @@ function StatCell({
   hint: string;
 }) {
   return (
-    <div className="grid min-w-0 grid-cols-[auto_minmax(0,1fr)] items-center gap-x-2 gap-y-0 rounded-xl border border-border/70 bg-background px-2.5 py-2 sm:block">
-      <span
-        aria-hidden
-        className="grid h-7 w-7 place-items-center rounded-lg bg-brand-gold/15 text-brand-gold-soft dark:text-brand-gold sm:h-6 sm:w-6"
-      >
-        {icon}
-      </span>
-      <div className="min-w-0 sm:mt-1.5">
-        <div className="text-[11px] font-semibold uppercase leading-tight tracking-[0.12em] text-muted-foreground">
+    <div className="min-w-0 rounded-lg border border-border/70 bg-background px-2 py-1.5">
+      <div className="flex items-center gap-1.5">
+        <span
+          aria-hidden
+          className="grid h-5 w-5 shrink-0 place-items-center rounded-md bg-brand-gold/15 text-brand-gold-soft dark:text-brand-gold"
+        >
+          {icon}
+        </span>
+        <div className="truncate text-[10px] font-semibold uppercase leading-tight tracking-[0.1em] text-muted-foreground">
           {label}
         </div>
-        <div className="mt-0.5 truncate font-serif text-[17px] font-semibold tabular-nums leading-none tracking-tight text-foreground">
-          {value}
-        </div>
-        <div className="mt-0.5 text-[11px] font-medium uppercase tracking-[0.12em] text-muted-foreground">
-          {hint}
-        </div>
+      </div>
+      <div className="mt-1 truncate font-serif text-[15px] font-semibold tabular-nums leading-none tracking-tight text-foreground">
+        {value}
+      </div>
+      <div className="mt-0.5 truncate text-[10px] font-medium uppercase tracking-[0.1em] text-muted-foreground">
+        {hint}
       </div>
     </div>
   );
