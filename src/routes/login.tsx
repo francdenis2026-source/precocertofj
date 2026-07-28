@@ -318,7 +318,7 @@ function LoginPage() {
 
 
         {/* RIGHT — Auth form */}
-        <div className="p-4 sm:p-5 md:p-6" style={{ fontFamily: PC_BODY }}>
+        <div className="flex flex-col overflow-y-auto p-4 sm:p-5 md:p-6" style={{ fontFamily: PC_BODY }}>
 
           {/* Mobile-only compact brand row — logomarca oficial */}
           <div className="mb-4 flex items-center gap-2 md:hidden">
