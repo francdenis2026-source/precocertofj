@@ -53,7 +53,8 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetDescription, SheetTr
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { toast } from "sonner";
 import { useConfirm } from "@/components/ui/confirm-provider";
-import { Copy, Key, Mail, Plus, RefreshCw, Trash2, XCircle, Sparkles, CreditCard, Users, Gauge, Clock, AlertTriangle, ShieldAlert, ShieldCheck, Loader2, History, ArrowUpDown, ChevronLeft, ChevronRight, Package, ImageIcon, Ticket, FileText, Languages, Trophy, Store } from "lucide-react";
+import { Copy, Key, Mail, Plus, RefreshCw, Trash2, XCircle, Sparkles, CreditCard, Users, Gauge, Clock, AlertTriangle, ShieldAlert, ShieldCheck, Loader2, History, ArrowUpDown, ChevronLeft, ChevronRight, Package, ImageIcon, Ticket, FileText, Languages, Trophy, Store, MoreHorizontal } from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useMyRoles } from "@/hooks/useMyRoles";
 import { useQueryClient, useQuery, useMutation } from "@tanstack/react-query";
 import { lazy, Suspense } from "react";
