@@ -581,8 +581,8 @@ function SearchPage() {
                     onFocusChange={(product, market) =>
                       setFocusUrl(product ?? null, market ?? null)
                     }
-                    renderMode="results-panel"
                   />
+
                 </div>
                 <div className="mt-2 shrink-0 border-t border-border/50 pt-1.5">
                   <FiltersToolbar
