@@ -383,12 +383,11 @@ export function AdminInsightsPanel() {
           type="button"
           onClick={() => setCats([])}
           aria-pressed={cats.length === 0}
+          data-tone="people"
+          data-active={cats.length === 0 ? "true" : "false"}
           className={cn(
             tc.control,
-            "h-6 rounded-full border px-2",
-            cats.length === 0
-              ? "border-primary bg-primary/10 text-primary"
-              : "border-border/70 text-muted-foreground hover:text-foreground",
+            "pc-chip-tone h-6 rounded-full border border-border/70 px-2 text-muted-foreground",
           )}
         >
           Todas
@@ -399,12 +398,11 @@ export function AdminInsightsPanel() {
             type="button"
             onClick={() => toggleCat(c.slug)}
             aria-pressed={cats.includes(c.slug)}
+            data-tone="people"
+            data-active={cats.includes(c.slug) ? "true" : "false"}
             className={cn(
               tc.control,
-              "h-6 rounded-full border px-2",
-              cats.includes(c.slug)
-                ? "border-primary bg-primary/10 text-primary"
-                : "border-border/70 text-muted-foreground hover:text-foreground",
+              "pc-chip-tone h-6 rounded-full border border-border/70 px-2 text-muted-foreground",
             )}
           >
             {c.label}
