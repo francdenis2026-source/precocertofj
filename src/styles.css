@@ -4664,3 +4664,35 @@ html.dark .pc-row-interactive:hover .pc-store-name {
   color: var(--tone-ink) !important;
 }
 .pc-admin-hub-crumb { color: var(--tone-ink); }
+
+/* Filter chip toned (period / category / sub-tab) — subtle idle, saturated active */
+.pc-chip-tone {
+  --tone: var(--pc-tone-catalog);
+  --tone-soft: var(--pc-tone-catalog-soft);
+  --tone-ink: var(--pc-tone-catalog-ink);
+}
+.pc-chip-tone[data-tone="overview"] { --tone: var(--pc-tone-overview); --tone-soft: var(--pc-tone-overview-soft); --tone-ink: var(--pc-tone-overview-ink); }
+.pc-chip-tone[data-tone="commerce"] { --tone: var(--pc-tone-commerce); --tone-soft: var(--pc-tone-commerce-soft); --tone-ink: var(--pc-tone-commerce-ink); }
+.pc-chip-tone[data-tone="people"]   { --tone: var(--pc-tone-people);   --tone-soft: var(--pc-tone-people-soft);   --tone-ink: var(--pc-tone-people-ink); }
+.pc-chip-tone[data-tone="system"]   { --tone: var(--pc-tone-system);   --tone-soft: var(--pc-tone-system-soft);   --tone-ink: var(--pc-tone-system-ink); }
+
+.pc-chip-tone[data-active="true"] {
+  background: var(--tone) !important;
+  color: #ffffff !important;
+  border-color: var(--tone) !important;
+  box-shadow: 0 4px 10px -4px color-mix(in oklab, var(--tone) 55%, transparent);
+}
+.dark .pc-chip-tone[data-active="true"] { color: #0b1220 !important; }
+.pc-chip-tone[data-active="false"]:hover {
+  background: var(--tone-soft) !important;
+  color: var(--tone-ink) !important;
+  border-color: color-mix(in oklab, var(--tone) 45%, transparent) !important;
+}
+
+/* Toned inline chip (topbar identity chips) */
+.pc-tone-chip {
+  background: var(--tone-soft) !important;
+  color: var(--tone-ink) !important;
+  border-color: color-mix(in oklab, var(--tone) 40%, transparent) !important;
+}
+.pc-tone-chip [data-tone-icon] { color: var(--tone) !important; }
