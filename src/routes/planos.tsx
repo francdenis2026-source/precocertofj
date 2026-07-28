@@ -24,6 +24,7 @@ import { ds, dsx } from "@/lib/ds";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
 import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
+import { usePlansRealtime } from "@/hooks/usePlansRealtime";
 import {
   Dialog,
   DialogContent,
@@ -164,6 +165,7 @@ function PlansPage() {
     queryKey: ["public-plans"],
     queryFn: () => fetchPlans(),
   });
+  usePlansRealtime();
 
   async function handleBuy(plan: PublicPlan) {
     setBuying(plan.id);

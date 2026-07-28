@@ -25,6 +25,7 @@ import { LogoQualityPanel } from "@/components/brand/LogoQualityPanel";
 import { claimFirstAdmin, listUsersWithRoles, grantRole, revokeRole, listRoleAuditLog, OWNER_EMAIL, type UserWithRoles, type RoleAuditEntry } from "@/lib/roles.functions";
 import { AppShell } from "@/components/brand/AppShell";
 import { useAdminEntitiesRealtime, describeRealtimeChange } from "@/hooks/useAdminEntitiesRealtime";
+import { usePlansRealtime } from "@/hooks/usePlansRealtime";
 import { EstablishmentDeleteDialog } from "@/components/admin/EstablishmentDeleteDialog";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
@@ -414,6 +415,7 @@ function PlansTab() {
     queryKey: ["admin", "plans"],
     queryFn: () => listFn(),
   });
+  usePlansRealtime();
 
   const invalidate = () => {
     qc.invalidateQueries({ queryKey: ["admin", "plans"] });
