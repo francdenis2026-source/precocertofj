@@ -1934,6 +1934,171 @@ function ProductDetailsCard({
 
 }
 
+// -----------------------------------------------------------------------------
+// CompareMatrix — visualização lado a lado dos mercados mais baratos do
+// produto selecionado. Exibida apenas quando o card está em foco (via URL) e
+// há pelo menos dois mercados para comparar. Mostra, por coluna:
+//   • nome do mercado (com destaque para o mais barato / focado);
+//   • preço com token .pc-price (alto contraste);
+//   • diferença absoluta contra o menor preço da lista;
+//   • economia percentual contra o maior preço da lista;
+//   • faixa mín↔máx do produto ao rodapé.
+// A grade rola horizontalmente em telas estreitas para preservar densidade
+// sem quebrar as métricas em várias linhas.
+// -----------------------------------------------------------------------------
+function CompareMatrix({
+  productName,
+  prices,
+  globalMin,
+  globalMax,
+  fmt,
+  onPick,
+  focusedMarket,
+}: {
+  productName: string;
+  prices: PricePoint[];
+  globalMin: number;
+  globalMax: number;
+  fmt: (n: number | null | undefined) => string;
+  onPick?: (marketName: string) => void;
+  focusedMarket?: string | null;
+}) {
+  // Top 4 mercados por menor preço — cabe confortavelmente em uma linha até
+  // ~640px sem exigir scroll horizontal na maioria dos casos.
+  const top = useMemo(
+    () => [...prices].sort((a, b) => a.price - b.price).slice(0, 4),
+    [prices],
+  );
+  const cheapest = top[0]?.price ?? globalMin;
+  const spreadPct =
+    globalMax > 0 && globalMin > 0 ? ((globalMax - globalMin) / globalMax) * 100 : 0;
+
+  return (
+    <section
+      aria-label={`Comparação lado a lado dos mercados mais baratos para ${productName}`}
+      className="mt-2 rounded-xl border border-brand-gold/40 bg-[color-mix(in_oklab,var(--brand-gold)_6%,var(--pc-surface-1))] p-2 shadow-sm"
+    >
+      <header className="mb-1.5 flex flex-wrap items-baseline justify-between gap-1.5 px-1">
+        <h4 className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">
+          Comparação lado a lado
+        </h4>
+        <p className="text-[11px] font-medium text-muted-foreground">
+          <span className="font-semibold text-foreground">Faixa</span>{" "}
+          <span className="pc-num tabular-nums">{fmt(globalMin)}</span>
+          <span aria-hidden className="mx-1 opacity-40">↔</span>
+          <span className="pc-num tabular-nums">{fmt(globalMax)}</span>
+          {spreadPct > 0 ? (
+            <span className="ml-1.5 rounded-full bg-accent-strong px-1.5 py-[1px] text-[10px] font-bold uppercase tracking-wider text-accent-foreground">
+              economia até {spreadPct.toFixed(0)}%
+            </span>
+          ) : null}
+        </p>
+      </header>
+
+      <div
+        role="table"
+        aria-label="Preços por mercado"
+        className="grid gap-1.5 overflow-x-auto"
+        style={{ gridTemplateColumns: `repeat(${top.length}, minmax(140px, 1fr))` }}
+      >
+        {top.map((p, i) => {
+          const isCheapest = i === 0;
+          const isFocused =
+            !!focusedMarket &&
+            (p.marketName ?? "").toLowerCase() === focusedMarket.toLowerCase();
+          const diffAbs = p.price - cheapest;
+          const savingsPct =
+            globalMax > 0 ? ((globalMax - p.price) / globalMax) * 100 : 0;
+          const label = `${p.marketName ?? "Mercado"}: ${fmt(p.price)}${
+            isCheapest ? ", menor preço" : `, ${fmt(diffAbs)} a mais que o menor`
+          }`;
+          return (
+            <button
+              key={`${p.marketName}-${i}`}
+              type="button"
+              role="cell"
+              aria-label={label}
+              aria-pressed={isFocused}
+              onClick={() => onPick?.(p.marketName ?? "")}
+              className={
+                "group flex flex-col gap-1 rounded-lg border p-2 text-left transition outline-none focus-visible:ring-2 focus-visible:ring-brand-gold " +
+                (isCheapest
+                  ? "border-brand-gold/70 bg-brand-navy text-white shadow-sm"
+                  : isFocused
+                    ? "border-brand-gold/60 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)]"
+                    : "border-border/70 bg-background hover:border-brand-gold/50")
+              }
+            >
+              <div className="flex items-center gap-1.5">
+                {isCheapest ? (
+                  <span
+                    aria-hidden
+                    className="grid h-4.5 w-4.5 place-items-center rounded-full bg-brand-gold text-brand-navy"
+                  >
+                    <Crown className="h-2.5 w-2.5" strokeWidth={2.5} />
+                  </span>
+                ) : (
+                  <span
+                    aria-hidden
+                    className="grid h-4.5 w-4.5 place-items-center rounded-full border border-border text-[10px] font-bold tabular-nums text-muted-foreground"
+                  >
+                    {i + 1}
+                  </span>
+                )}
+                <span
+                  className={
+                    "truncate text-[12px] font-semibold " +
+                    (isCheapest ? "text-white" : "text-foreground")
+                  }
+                  title={p.marketName ?? ""}
+                >
+                  {p.marketName ?? "—"}
+                </span>
+              </div>
+              <p
+                className={
+                  "pc-price text-[18px] leading-none " +
+                  (isCheapest ? "text-white" : "text-foreground")
+                }
+              >
+                {fmt(p.price)}
+              </p>
+              <div className="flex items-center gap-1.5 text-[10.5px] font-medium uppercase tracking-wider">
+                {isCheapest ? (
+                  <span
+                    className={
+                      "rounded-full bg-brand-gold px-1.5 py-[1px] text-[10px] font-bold text-brand-navy"
+                    }
+                  >
+                    Menor preço
+                  </span>
+                ) : (
+                  <span
+                    className="rounded-full border border-border/80 bg-background px-1.5 py-[1px] text-muted-foreground"
+                    title={`Você pagaria ${fmt(diffAbs)} a mais do que no mercado mais barato`}
+                  >
+                    +{fmt(diffAbs)}
+                  </span>
+                )}
+                {savingsPct > 0 && !isCheapest ? (
+                  <span
+                    className="rounded-full bg-emerald-100 px-1.5 py-[1px] text-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-200"
+                    title="Economia versus o maior preço da lista"
+                  >
+                    −{savingsPct.toFixed(0)}%
+                  </span>
+                ) : null}
+              </div>
+            </button>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+
+
 function ProductGroupCard({
   catalogId,
   productName,
@@ -2124,18 +2289,43 @@ function ProductGroupCard({
         </div>
       </div>
 
-      <ul className="mt-1 border-t border-[color-mix(in_oklab,var(--color-border)_70%,transparent)]">
+      {focused && prices.length >= 2 ? (
+        <CompareMatrix
+          productName={productName}
+          prices={prices}
+          globalMin={globalMin ?? min}
+          globalMax={globalMax ?? max}
+          fmt={fmt}
+          onPick={(marketName) => onSelect?.(productName, marketName)}
+          focusedMarket={focusedMarket}
+        />
+      ) : null}
+
+      <ul
+        role="list"
+        aria-label={`Mercados com ${productName}`}
+        className="mt-1 border-t border-[color-mix(in_oklab,var(--color-border)_70%,transparent)]"
+      >
         {visiblePrices.map((p, i) => {
 
           const isCheapest = globalMin != null && p.price === globalMin;
           const isFocusedMarket =
             !!focusedMarket &&
             (p.marketName ?? "").toLowerCase() === focusedMarket.toLowerCase();
+          const handleSelect = () => onSelect?.(productName, p.marketName ?? null);
           return (
             <li
               key={`${p.marketName}-${p.when}-${i}`}
+              role={onSelect ? "button" : undefined}
+              tabIndex={onSelect ? 0 : undefined}
+              aria-label={
+                onSelect
+                  ? `${p.marketName ?? "Mercado"}: ${fmt(p.price)}${isCheapest ? " — menor preço" : ""}`
+                  : undefined
+              }
+              aria-current={isFocusedMarket ? "true" : undefined}
               className={
-                "pc-res-row relative cursor-pointer " +
+                "pc-res-row relative cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:z-10 " +
                 (isFocusedMarket ? "bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)]" : "")
               }
               data-cheapest={isCheapest ? "true" : "false"}
@@ -2144,9 +2334,18 @@ function ProductGroupCard({
                 if (!onSelect) return;
                 const target = e.target as HTMLElement;
                 if (target.closest("a,button,input,select,textarea,[role=button]")) return;
-                onSelect(productName, p.marketName ?? null);
+                handleSelect();
+              }}
+              onKeyDown={(e) => {
+                if (!onSelect) return;
+                if (e.key !== "Enter" && e.key !== " ") return;
+                const target = e.target as HTMLElement;
+                if (target !== e.currentTarget) return;
+                e.preventDefault();
+                handleSelect();
               }}
             >
+
 
               <StoreColorBar name={p.marketName} brandColor={p.marketBrandColor} />
               {isCheapest ? (
