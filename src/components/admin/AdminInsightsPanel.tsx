@@ -119,8 +119,8 @@ export function AdminInsightsPanel() {
   const [cats, setCats] = useState<string[]>([]);
   const [exporting, setExporting] = useState(false);
   const [density, setDensity] = useState<ChartDensity>(() => {
-    if (typeof window === "undefined") return "normal";
-    return (window.localStorage.getItem(DENSITY_KEY) as ChartDensity) ?? "normal";
+    if (typeof window === "undefined") return "compact";
+    return (window.localStorage.getItem(DENSITY_KEY) as ChartDensity) ?? "compact";
   });
   const metrics = chartMetrics(density);
   useEffect(() => {
