@@ -1272,15 +1272,29 @@ export function PriceSearchBar({
 
                       <div className="pc-results">
                         {filteredOrdered.map(([cat, groups]) => {
-                          // Ordena grupos: se sortMode === "relevance", usa score de
-                          // correspondência (nome, marca, variações como 1L/integral);
-                          // caso contrário, mantém menor preço primeiro.
+                          // Ordena grupos com critérios explícitos por modo:
+                          //  • relevance → score de similaridade do nome (exato,
+                          //    marca, prefixo, tokens, variações) primeiro; preço
+                          //    e amostragem como desempate consistente.
+                          //  • recent    → data mais recente (lastSeen) primeiro,
+                          //    preço e amostragem como desempate.
+                          //  • savings   → maior amplitude (max−min) primeiro.
+                          //  • demais    → menor preço, depois mais amostras.
+                          const lastSeenTime = (g: ProductGroup) =>
+                            g.lastSeen ? new Date(g.lastSeen).getTime() : 0;
                           const sortedGroups = [...groups].sort((a, b) => {
                             if (sortMode === "relevance") {
-                              if (a.min !== b.min) return a.min - b.min;
                               const sa = scoreRelevance(a, query);
                               const sb = scoreRelevance(b, query);
                               if (sa !== sb) return sb - sa;
+                              if (a.min !== b.min) return a.min - b.min;
+                              return b.samples - a.samples;
+                            }
+                            if (sortMode === "recent") {
+                              const ta = lastSeenTime(a);
+                              const tb = lastSeenTime(b);
+                              if (ta !== tb) return tb - ta;
+                              if (a.min !== b.min) return a.min - b.min;
                               return b.samples - a.samples;
                             }
                             if (sortMode === "savings") {
@@ -1291,6 +1305,7 @@ export function PriceSearchBar({
                             if (a.min !== b.min) return a.min - b.min;
                             return b.samples - a.samples;
                           });
+
                           return (
                             <div key={cat} className="pc-results">
                               {showHeaders ? (
