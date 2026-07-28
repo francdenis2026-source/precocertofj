@@ -4947,3 +4947,23 @@ html.dark .pc-row-interactive:hover .pc-store-name {
   cursor: not-allowed;
 }
 
+
+/* ---------- Lupa (magnifying-glass) — contorno suave universal ----------
+ * Onde o ícone lucide-search aparece em cor clara (branco/gold sobre
+ * fundos claros ou fotos), aplicamos um leve "outline" via drop-shadow
+ * para destacar o traçado sem alterar a cor original. Efeito invisível
+ * em fundos escuros, presente onde há risco de perda de contraste.
+ */
+svg.lucide-search {
+  filter:
+    drop-shadow(0 0 0.35px rgba(15, 23, 42, 0.55))
+    drop-shadow(0 0.4px 0.6px rgba(15, 23, 42, 0.35));
+}
+/* Botões com fundo dourado: força a lupa para o navy do sistema,
+ * garantindo contraste WCAG AA sem depender do outline. */
+[style*="var(--pc-home-gold)"] svg.lucide-search,
+[class*="bg-brand"] svg.lucide-search,
+.btn-signal svg.lucide-search {
+  color: var(--pc-home-navy, #0f1b3d) !important;
+  filter: none;
+}
