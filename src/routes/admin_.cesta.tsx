@@ -29,7 +29,6 @@ import {
 } from "lucide-react";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { AppShell } from "@/components/brand/AppShell";
-import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -139,7 +138,6 @@ function CestaAdminPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-6">
-      <AdminBreadcrumb hub="vitrine" page="Cesta Básica" />
 
       <header className="mt-4 flex flex-wrap items-start justify-between gap-4">
         <div>

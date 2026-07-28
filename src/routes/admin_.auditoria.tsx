@@ -34,7 +34,6 @@ import {
   ShieldAlert,
 } from "lucide-react";
 import { PageHeader } from "@/components/brand/PageHeader";
-import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import { listCatalogAudit, type AuditLogEntry } from "@/lib/catalog-audit.functions";
 import { AdminOnly } from "@/components/auth/AdminOnly";
 import { ClearLogsPanel } from "@/components/admin/ClearLogsPanel";
@@ -176,7 +175,6 @@ function AuditoriaPage() {
         }
       />
       <div className="mx-auto max-w-7xl px-4 py-8">
-        <AdminBreadcrumb hub="operacao" page="Auditoria" className="mb-4" />
 
         <div className="mb-6">
           <ClearLogsPanel />

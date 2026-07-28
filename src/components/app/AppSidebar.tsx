@@ -35,6 +35,8 @@ import {
   ClipboardCheck,
   Camera,
   Radio,
+  ShoppingBasket,
+  Gavel,
 } from "lucide-react";
 import {
   Sidebar,
@@ -119,6 +121,16 @@ const adminGroups: readonly NavGroup[] = [
       { to: "/admin/cobertura", label: "Cobertura", icon: Boxes },
       { to: "/admin/metricas", label: "Estabelecimentos", icon: Store, exact: true },
       { to: "/admin/metricas", label: "Analytics", icon: BarChart3, search: { tab: "analytics" } },
+    ],
+  },
+  {
+    label: "Cesta Básica",
+    tone: "commerce",
+    items: [
+      { to: "/admin/cesta", label: "Itens & versões", icon: ShoppingBasket, exact: true },
+      { to: "/admin/cesta-auditoria", label: "Auditoria da Cesta", icon: ClipboardCheck, exact: true },
+      { to: "/cesta-basica", label: "Veredito ao vivo", icon: Gavel, exact: true },
+      { to: "/admin/rank-check", label: "Ranking geral", icon: Trophy, exact: true },
     ],
   },
   {
