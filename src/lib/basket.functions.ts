@@ -130,7 +130,7 @@ export type BasketMissing = {
 };
 
 export type BasketComparisonResult = {
-  essentials: Array<{ key: EssentialKey; label: string }>;
+  essentials: Array<{ key: EssentialKey; label: string; quantity: number }>;
   stores: BasketStore[];
   cheapest: {
     key: EssentialKey;
@@ -139,6 +139,7 @@ export type BasketComparisonResult = {
     productName: string;
     establishmentName: string;
     establishmentId: string;
+    quantity: number;
   }[];
   cheapestBasketTotal: number;
   totalEssentials: number;
@@ -154,7 +155,14 @@ export type BasketComparisonResult = {
     radiusKm: number | null;
     city: string | null;
   };
+  /**
+   * Overrides ativos aplicados a partir de basket_items (versão ativa).
+   * Presente quando há uma versão ativa no banco; ausente quando o motor
+   * caiu para o fallback hardcoded (ESSENTIALS + qty=1).
+   */
+  activeSet?: { version: number; label: string } | null;
 };
+
 
 type EstabRow = {
   id: string;
