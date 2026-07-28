@@ -319,7 +319,7 @@ function PlansPage() {
                     <hr className="pc-rule my-2.5" />
 
                     <ul className="min-h-0 flex-1 space-y-1.5 overflow-hidden text-[12px] leading-snug">
-                      {planHighlights(plan.slug).slice(0, 2).map((h) => (
+                      {planHighlights(plan).slice(0, 2).map((h) => (
                         <li key={h} className="flex items-start gap-2">
                           <Check
                             className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-gold"
