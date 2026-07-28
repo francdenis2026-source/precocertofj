@@ -458,12 +458,13 @@
   }
   .font-editorial {
     font-family: var(--font-serif);
-    font-weight: 400;
-    letter-spacing: -0.025em;
+    font-weight: 340;
+    letter-spacing: -0.028em;
     font-optical-sizing: auto;
-    font-variation-settings: "opsz" 144, "SOFT" 20;
+    font-variation-settings: "opsz" 144, "SOFT" 30, "wght" 340;
     text-rendering: geometricPrecision;
     -webkit-font-smoothing: antialiased;
+    font-feature-settings: "ss01", "ss02", "kern";
   }
   /* Destaque editorial — DUAS FACES:
      • Hero/banner (grande): Fraunces italic com preenchimento dourado (assinatura de marca).
@@ -486,28 +487,31 @@
     -webkit-font-smoothing: antialiased;
   }
   /* Assinatura editorial em grande — usada apenas no hero da homepage.
-     Preenchimento dourado clássico (Fraunces italic opsz 144). */
+     Fraunces italic opsz 144 com peso mais expressivo para contrastar
+     com o Roman leve (weight 340) do restante do título. */
   .pc-editorial-accent--fill {
     color: var(--pc-home-onhero-gold, var(--pc-gold-ink));
     text-decoration: none;
-    font-weight: 500;
-    letter-spacing: -0.028em;
-    font-variation-settings: "opsz" 144, "SOFT" 60, "wght" 500;
+    font-weight: 520;
+    letter-spacing: -0.034em;
+    font-variation-settings: "opsz" 144, "SOFT" 80, "wght" 520;
+    padding-inline: 0.02em;
   }
   /* Hero editorial — controla line-height, tracking e wrap por breakpoint sem
      precisar hard-code em cada rota. Aplique junto de .font-editorial. */
   .pc-hero-editorial {
-    line-height: 1.02;
-    letter-spacing: -0.022em;
+    line-height: 1.04;
+    letter-spacing: -0.024em;
     text-wrap: balance;
     hyphens: manual;
   }
   @media (min-width: 640px) {
-    .pc-hero-editorial { line-height: 1.0; letter-spacing: -0.026em; }
+    .pc-hero-editorial { line-height: 1.02; letter-spacing: -0.028em; }
   }
   @media (min-width: 1024px) {
-    .pc-hero-editorial { line-height: 0.96; letter-spacing: -0.03em; }
+    .pc-hero-editorial { line-height: 0.98; letter-spacing: -0.032em; }
   }
+
   .font-mono {
     font-family: var(--font-mono);
     font-feature-settings: "tnum", "zero";
