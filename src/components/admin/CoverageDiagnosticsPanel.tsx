@@ -110,6 +110,13 @@ export function CoverageDiagnosticsPanel() {
         ) : q.data ? (
           <>
             <PermissionsBlock d={q.data} />
+            {q.data.isAdmin === false && (
+              <SelfHealAdminBlock
+                userId={q.data.authUid}
+                email={q.data.claimsSummary?.email ?? null}
+                onGranted={() => q.refetch()}
+              />
+            )}
             <RpcBlock rpcs={q.data.rpcs} />
             <p className="text-[11px] text-muted-foreground">
               Última verificação: {new Date(q.data.checkedAt).toLocaleString("pt-BR")}
