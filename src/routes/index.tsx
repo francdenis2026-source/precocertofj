@@ -335,7 +335,7 @@ function HomePage() {
                   />
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: P.gold }} />
                 </span>
-                Economia colaborativa · Feijó/AC
+                Vitrine viva · Feijó/AC
               </span>
 
               <h1
@@ -343,17 +343,16 @@ function HomePage() {
                 className="font-editorial pc-hero-editorial mt-2 text-[clamp(1.75rem,4.8vw,3.75rem)]"
                 style={{ color: "var(--pc-home-onhero-fg)" }}
               >
-                Encontre o{" "}
-                <PrecoCertoMark variant="hero">preço certo</PrecoCertoMark>{" "}
-                sem sair de casa.
+                Feijó comparada,{" "}
+                <PrecoCertoMark variant="hero">centavo por centavo</PrecoCertoMark>.
               </h1>
 
               <p
                 className="tc-flow mt-2 hidden max-w-xl text-[13px] min-[360px]:block font-light leading-snug sm:text-[15px]"
                 style={{ color: "var(--pc-home-onhero-fg-80)" }}
               >
-                Compare os principais mercados de Feijó em tempo real e leve para casa a
-                melhor compra de cada semana.
+                Os mercados do seu bairro lado a lado — atualizados em tempo real por
+                quem faz a feira aqui.
               </p>
 
               {/* ---------- Busca ---------- */}
