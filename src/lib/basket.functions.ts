@@ -119,7 +119,7 @@ export type BasketStore = {
   totalItems: number;
   total: number;
   coverage: number;
-  items: Array<{ key: EssentialKey; label: string; productName: string; price: number; when: string } | null>;
+  items: Array<{ key: EssentialKey; label: string; productName: string; price: number; when: string; quantity: number } | null>;
 };
 
 export type BasketMissing = {
@@ -130,7 +130,7 @@ export type BasketMissing = {
 };
 
 export type BasketComparisonResult = {
-  essentials: Array<{ key: EssentialKey; label: string }>;
+  essentials: Array<{ key: EssentialKey; label: string; quantity: number }>;
   stores: BasketStore[];
   cheapest: {
     key: EssentialKey;
@@ -139,6 +139,7 @@ export type BasketComparisonResult = {
     productName: string;
     establishmentName: string;
     establishmentId: string;
+    quantity: number;
   }[];
   cheapestBasketTotal: number;
   totalEssentials: number;
@@ -154,7 +155,14 @@ export type BasketComparisonResult = {
     radiusKm: number | null;
     city: string | null;
   };
+  /**
+   * Overrides ativos aplicados a partir de basket_items (versão ativa).
+   * Presente quando há uma versão ativa no banco; ausente quando o motor
+   * caiu para o fallback hardcoded (ESSENTIALS + qty=1).
+   */
+  activeSet?: { version: number; label: string } | null;
 };
+
 
 type EstabRow = {
   id: string;
@@ -257,6 +265,57 @@ async function computeMatrix() {
   return matrix;
 }
 
+/**
+ * Carrega overrides (enabled + quantity) da versão ativa em basket_items.
+ * Falha silenciosa retorna map vazio — comportamento cai no padrão hardcoded.
+ * Retornado: Map<key, { enabled, quantity, sortOrder }> apenas para keys
+ * conhecidas em ESSENTIALS (novas keys precisam de código).
+ */
+async function loadActiveOverrides(): Promise<
+  Map<EssentialKey, { enabled: boolean; quantity: number; sortOrder: number }>
+> {
+  const overrides = new Map<
+    EssentialKey,
+    { enabled: boolean; quantity: number; sortOrder: number }
+  >();
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const client = supabaseAdmin as unknown as {
+      from: (t: string) => any;
+    };
+    const setRes = await client
+      .from("basket_item_sets")
+      .select("id")
+      .eq("active", true)
+      .maybeSingle();
+    const setId = setRes?.data?.id as string | undefined;
+    if (!setId) return overrides;
+    const itemsRes = await client
+      .from("basket_items")
+      .select("key, enabled, quantity, sort_order")
+      .eq("set_id", setId);
+    const knownKeys = new Set(ESSENTIALS.map((e) => e.key));
+    for (const row of (itemsRes?.data ?? []) as Array<{
+      key: string;
+      enabled: boolean;
+      quantity: number | string;
+      sort_order: number;
+    }>) {
+      if (!knownKeys.has(row.key as EssentialKey)) continue;
+      overrides.set(row.key as EssentialKey, {
+        enabled: !!row.enabled,
+        quantity: Math.max(0.01, Number(row.quantity) || 1),
+        sortOrder: Number(row.sort_order) || 0,
+      });
+    }
+  } catch {
+    // silêncio — fallback ao array hardcoded
+  }
+  return overrides;
+}
+
+
+
 type ComparisonFilters = {
   originLat?: number | null;
   originLng?: number | null;
@@ -277,6 +336,21 @@ export const getBasketComparison = createServerFn({ method: "POST" })
   .handler(async ({ data }): Promise<BasketComparisonResult> => {
     const matrix = await computeMatrix();
     const estabs = await loadEstablishments(Array.from(matrix.keys()));
+    const overrides = await loadActiveOverrides();
+
+    // Ordena os essenciais efetivos por sortOrder do override (fallback: ordem original)
+    const effectiveEssentials = ESSENTIALS
+      .filter((e) => {
+        const o = overrides.get(e.key);
+        return !o || o.enabled;
+      })
+      .slice()
+      .sort((a, b) => {
+        const oa = overrides.get(a.key)?.sortOrder ?? ESSENTIALS.findIndex((e) => e.key === a.key);
+        const ob = overrides.get(b.key)?.sortOrder ?? ESSENTIALS.findIndex((e) => e.key === b.key);
+        return oa - ob;
+      });
+    const qtyOf = (k: EssentialKey) => Math.max(0.01, overrides.get(k)?.quantity ?? 1);
 
     // Apply geographic filters
     const originValid =
@@ -291,13 +365,12 @@ export const getBasketComparison = createServerFn({ method: "POST" })
         );
         if (km > data.radiusKm!) continue;
       } else if (originValid) {
-        // Establishment without coords is excluded when radius filter is active
         continue;
       }
       filteredEstabIds.add(id);
     }
 
-    const totalEssentials = ESSENTIALS.length;
+    const totalEssentials = effectiveEssentials.length;
 
     const cheapestPerItem = new Map<
       EssentialKey,
@@ -308,6 +381,9 @@ export const getBasketComparison = createServerFn({ method: "POST" })
       const meta = estabs.get(estId);
       if (!meta) continue;
       for (const [k, v] of inner.entries()) {
+        // ignora keys desabilitadas
+        const eff = effectiveEssentials.find((e) => e.key === k);
+        if (!eff) continue;
         const cur = cheapestPerItem.get(k);
         if (!cur || v.price < cur.price) {
           cheapestPerItem.set(k, {
@@ -328,11 +404,19 @@ export const getBasketComparison = createServerFn({ method: "POST" })
       const items: BasketStore["items"] = [];
       let total = 0;
       let found = 0;
-      for (const ess of ESSENTIALS) {
+      for (const ess of effectiveEssentials) {
         const pick = inner.get(ess.key);
         if (pick) {
-          items.push({ key: ess.key, label: ess.label, productName: pick.productName, price: pick.price, when: pick.when });
-          total += pick.price;
+          const q = qtyOf(ess.key);
+          items.push({
+            key: ess.key,
+            label: ess.label,
+            productName: pick.productName,
+            price: pick.price,
+            when: pick.when,
+            quantity: q,
+          });
+          total += pick.price * q;
           found += 1;
         } else {
           items.push(null);
@@ -356,7 +440,7 @@ export const getBasketComparison = createServerFn({ method: "POST" })
         itemsFound: found,
         totalItems: totalEssentials,
         total: Number(total.toFixed(2)),
-        coverage: found / totalEssentials,
+        coverage: totalEssentials > 0 ? found / totalEssentials : 0,
         items,
       });
     }
@@ -367,7 +451,7 @@ export const getBasketComparison = createServerFn({ method: "POST" })
     });
 
     // Missing item report
-    const missingByItem: BasketMissing[] = ESSENTIALS.map((ess, i) => {
+    const missingByItem: BasketMissing[] = effectiveEssentials.map((ess, i) => {
       const missing: string[] = [];
       let available = 0;
       for (const s of stores) {
@@ -382,22 +466,26 @@ export const getBasketComparison = createServerFn({ method: "POST" })
       };
     });
 
-    const cheapest = ESSENTIALS.map((e) => {
-      const c = cheapestPerItem.get(e.key);
-      if (!c) return null;
-      return { key: e.key, label: e.label, ...c };
-    }).filter((x): x is NonNullable<typeof x> => x != null);
+    const cheapest = effectiveEssentials
+      .map((e) => {
+        const c = cheapestPerItem.get(e.key);
+        if (!c) return null;
+        return { key: e.key, label: e.label, quantity: qtyOf(e.key), ...c };
+      })
+      .filter((x): x is NonNullable<typeof x> => x != null);
 
-    const cheapestBasketTotal = Number(cheapest.reduce((s, r) => s + r.price, 0).toFixed(2));
+    const cheapestBasketTotal = Number(
+      cheapest.reduce((s, r) => s + r.price * r.quantity, 0).toFixed(2),
+    );
 
-    // Preço médio por essencial (média dos melhores preços por mercado)
+    // Preço médio unitário por essencial
     const averagePrices: Partial<Record<EssentialKey, number>> = {};
-    for (const ess of ESSENTIALS) {
+    for (let i = 0; i < effectiveEssentials.length; i += 1) {
+      const ess = effectiveEssentials[i];
       let sum = 0;
       let n = 0;
       for (const s of stores) {
-        const idx = ESSENTIALS.findIndex((e) => e.key === ess.key);
-        const it = s.items[idx];
+        const it = s.items[i];
         if (it) {
           sum += it.price;
           n += 1;
@@ -406,11 +494,33 @@ export const getBasketComparison = createServerFn({ method: "POST" })
       if (n > 0) averagePrices[ess.key] = Number((sum / n).toFixed(2));
     }
     const averageBasketTotal = Number(
-      ESSENTIALS.reduce((acc, e) => acc + (averagePrices[e.key] ?? 0), 0).toFixed(2),
+      effectiveEssentials
+        .reduce((acc, e) => acc + (averagePrices[e.key] ?? 0) * qtyOf(e.key), 0)
+        .toFixed(2),
     );
 
+    // Metadados da versão ativa (se houver)
+    let activeSet: BasketComparisonResult["activeSet"] = null;
+    if (overrides.size > 0) {
+      try {
+        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+        const r = await (supabaseAdmin as any)
+          .from("basket_item_sets")
+          .select("version, label")
+          .eq("active", true)
+          .maybeSingle();
+        if (r?.data) activeSet = { version: r.data.version, label: r.data.label };
+      } catch {
+        /* noop */
+      }
+    }
+
     return {
-      essentials: ESSENTIALS.map((e) => ({ key: e.key, label: e.label })),
+      essentials: effectiveEssentials.map((e) => ({
+        key: e.key,
+        label: e.label,
+        quantity: qtyOf(e.key),
+      })),
       stores,
       cheapest,
       cheapestBasketTotal,
@@ -425,8 +535,10 @@ export const getBasketComparison = createServerFn({ method: "POST" })
         radiusKm: data.radiusKm,
         city: data.city,
       },
+      activeSet,
     };
   });
+
 
 export type BudgetBasketResult = {
   budget: number;

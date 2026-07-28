@@ -12,7 +12,9 @@ import {
   Tags,
   ShieldAlert,
   History,
+  ShoppingBasket,
 } from "lucide-react";
+
 
 export const Route = createFileRoute("/admin_/vitrine")({
   ssr: false,
@@ -79,7 +81,15 @@ const SECTIONS: HubSection[] = [
         icon: Images,
         to: "/admin_/image-jobs",
       },
+      {
+        key: "cesta",
+        title: "Cesta Básica",
+        description: "Versione, edite e ative o conjunto de itens usado no comparador e no veredito.",
+        icon: ShoppingBasket,
+        to: "/admin_/cesta",
+      },
     ],
+
   },
   {
     key: "taxonomia",

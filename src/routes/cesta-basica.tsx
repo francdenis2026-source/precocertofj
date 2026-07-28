@@ -27,6 +27,9 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useConfirm } from "@/components/ui/confirm-provider";
+import { BasketVerdictHero } from "@/components/basket/BasketVerdictHero";
+import { BasketSubstitutionPanel } from "@/components/basket/BasketSubstitutionPanel";
+
 import {
   getBasketComparison,
   buildBudgetBasket,
@@ -654,13 +657,16 @@ function CompareMode({
     let missingWithoutAvg = 0;
     s.items.forEach((it, i) => {
       if (it) {
-        known += it.price;
+        known += it.price * (it.quantity ?? 1);
       } else {
-        const avg = data!.averagePrices[data!.essentials[i].key];
-        if (typeof avg === "number") missingAvg += avg;
+        const ess = data!.essentials[i];
+        const avg = data!.averagePrices[ess.key];
+        const q = ess.quantity ?? 1;
+        if (typeof avg === "number") missingAvg += avg * q;
         else missingWithoutAvg += 1;
       }
     });
+
     const minEstimate = known;
     const maxEstimate = known + missingAvg; // itens sem média conhecida ficam de fora do teto
     let displayTotal = known;
@@ -716,7 +722,12 @@ function CompareMode({
 
   return (
     <div className="space-y-4">
+      <BasketVerdictHero data={data} />
+      {expandedStore ? (
+        <BasketSubstitutionPanel data={data} storeId={expandedStore} />
+      ) : null}
       <section className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+
         <SummaryCard
           label="Cesta com o menor custo"
           value={fmt(best.total)}
