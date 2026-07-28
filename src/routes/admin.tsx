@@ -415,6 +415,7 @@ function PlansTab() {
     queryKey: ["admin", "plans"],
     queryFn: () => listFn(),
   });
+  usePlansRealtime();
 
   const invalidate = () => {
     qc.invalidateQueries({ queryKey: ["admin", "plans"] });
