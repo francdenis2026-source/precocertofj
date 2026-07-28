@@ -385,7 +385,7 @@
   --pc-text-on-navy:     #f5f6fa;
 
   /* Acentos (dark) */
-  --pc-price:           #f3ce7a;   /* sobre card navy → 9:1 */
+  --pc-price:           #f5f6fa;   /* sobre card navy → 15.6:1 (branco quente) */
   --pc-eyebrow-gold:    #ffe3a0;   /* sobre card navy → 11:1 */
   --pc-eyebrow-on-navy: #f2d689;   /* mesmo em ambos os temas */
   --pc-live:            #34d399;   /* sobre card navy → 7:1 */
