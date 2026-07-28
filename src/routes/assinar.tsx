@@ -9,6 +9,7 @@ import { getActivePlanById } from "@/lib/plans.functions";
 import { PRICE_LABEL, daysRemaining } from "@/lib/paywall";
 import { Loader2, Check, ArrowRight, CheckCircle2, Clock, XCircle } from "lucide-react";
 import { toast } from "sonner";
+import { usePlansRealtime } from "@/hooks/usePlansRealtime";
 
 type MpStatus = "success" | "pending" | "failure" | null;
 
