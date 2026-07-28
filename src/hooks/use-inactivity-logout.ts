@@ -20,12 +20,11 @@ const CHANNEL_NAME = "pc-user-activity";
 
 export function useInactivityLogout() {
   const { session } = useSession();
-  const { data: roles } = useMyRoles();
+  const { isAdmin } = useMyRoles();
   const navigate = useNavigate();
   const qc = useQueryClient();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
-  const isAdmin = !!roles?.isAdmin;
   const isAdminArea = pathname.startsWith("/admin");
   // Timeout mais estrito quando o usuário é admin ou está navegando na área admin.
   const timeoutMs = isAdmin || isAdminArea ? 10 * 60_000 : 30 * 60_000;
