@@ -17,9 +17,7 @@ import { SearchDiscovery, pushRecentSearch } from "@/components/search/SearchDis
 
 import { MeatCutSuggestionStrip } from "@/components/search/MeatCutSuggestionStrip";
 import {
-  clearSearchHistory,
   getSearchHistory,
-  removeSearchHistory,
   setSearchHistoryPersistence,
 } from "@/lib/search-history";
 
