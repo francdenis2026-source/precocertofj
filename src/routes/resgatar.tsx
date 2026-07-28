@@ -455,14 +455,14 @@ function RedeemPage() {
           </div>
         </section>
 
-        {/* ============ DIREITA — PAINEL DE ATIVAÇÃO ============ */}
+        {/* ============ DIREITA — PAINEL DE ATIVAÇÃO (single-viewport) ============ */}
         <section
           aria-label="Formulário de ativação"
-          className="relative flex h-full items-center justify-center overflow-y-auto px-4 py-6 sm:px-8"
+          className="relative flex h-full min-h-0 items-center justify-center overflow-hidden px-4 py-4 sm:px-8 sm:py-5"
         >
-          <div className="w-full max-w-[460px]">
+          <div className="flex max-h-full w-full max-w-[440px] flex-col">
             {/* Chip mobile — replica identidade do hero em telas pequenas */}
-            <div className="mb-4 flex items-center justify-between lg:hidden">
+            <div className="mb-3 flex items-center justify-between lg:hidden">
               <div className="inline-flex items-center gap-1.5 rounded-full border border-border bg-card px-2.5 py-1 text-[10.5px] font-bold uppercase tracking-[0.2em] text-primary">
                 <Ticket className="h-3 w-3" aria-hidden />
                 Ativação de licença
@@ -471,7 +471,7 @@ function RedeemPage() {
 
             {authLoading ? (
               <div className="flex h-64 items-center justify-center">
-                <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                <Loader2 className="h-6 w-6 animate-spin text-primary" aria-label="Carregando" />
               </div>
             ) : result?.ok ? (
               <SuccessBody
@@ -487,29 +487,29 @@ function RedeemPage() {
                 }}
               />
             ) : (
-              <form onSubmit={handleSubmit} noValidate>
+              <form onSubmit={handleSubmit} noValidate className="flex flex-col">
                 <p className="text-[10.5px] font-bold uppercase tracking-[0.24em] text-[color:var(--pc-home-gold)]">
                   Ativação
                 </p>
-                <h2 className="pc-hero-editorial font-editorial mt-1 text-[clamp(26px,3.4vw,36px)] text-foreground">
+                <h2 className="pc-hero-editorial font-editorial mt-1 text-[clamp(22px,2.6vw,30px)] leading-[1.05] text-foreground">
                   Ativar meu{" "}
                   <span className="pc-editorial-accent pc-editorial-accent--fill">código</span>
                 </h2>
-                <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground">
-                  Cole o código que chegou no e-mail — formato{" "}
-                  <span className="rounded-md border border-border bg-muted px-1.5 py-0.5 font-mono text-[11.5px] font-semibold text-foreground" style={{ fontFamily: MONO }}>
+                <p className="mt-1.5 text-[12.5px] leading-snug text-muted-foreground">
+                  Cole o código do e-mail — formato{" "}
+                  <span className="rounded border border-border bg-muted px-1 py-0.5 font-mono text-[11px] font-semibold text-foreground" style={{ fontFamily: MONO }}>
                     PC-XXXX-XXXX-XXXX
                   </span>
-                  . O acesso libera na hora.
+                  .
                 </p>
 
                 <label
                   htmlFor="license-code"
-                  className="mt-5 block text-[10.5px] font-bold uppercase tracking-[0.22em] text-foreground/70"
+                  className="mt-3 block text-[10.5px] font-bold uppercase tracking-[0.22em] text-foreground/80"
                 >
                   Código de licença
                 </label>
-                <div className="mt-1.5 flex items-stretch gap-2">
+                <div className="mt-1 flex items-stretch gap-2">
                   <div className="relative flex-1">
                     <KeyRound
                       className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-primary/70"
@@ -535,7 +535,7 @@ function RedeemPage() {
                       aria-invalid={touched && validation.level === "warn"}
                       aria-describedby="license-code-help"
                       className={cn(
-                        "h-12 w-full rounded-lg border bg-card pl-9 pr-3 text-[15px] font-bold uppercase tracking-[0.14em] text-foreground outline-none transition placeholder:font-semibold placeholder:tracking-[0.14em] placeholder:text-muted-foreground/60",
+                        "h-11 w-full rounded-lg border bg-card pl-9 pr-3 text-[15px] font-bold uppercase tracking-[0.14em] text-foreground outline-none transition placeholder:font-semibold placeholder:tracking-[0.14em] placeholder:text-muted-foreground/70",
                         "focus:border-primary focus:ring-2 focus:ring-primary/30",
                         touched && validation.level === "warn"
                           ? "border-destructive/70 focus:border-destructive focus:ring-destructive/30"
@@ -549,10 +549,10 @@ function RedeemPage() {
                   <button
                     type="button"
                     onClick={pasteFromClipboard}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 text-[12px] font-semibold text-foreground transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 text-[12px] font-semibold text-foreground transition hover:bg-muted hover:border-primary/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
                     aria-label="Colar código da área de transferência"
                   >
-                    <Clipboard className="h-3.5 w-3.5" />
+                    <Clipboard className="h-3.5 w-3.5" aria-hidden />
                     <span className="hidden sm:inline">Colar</span>
                   </button>
                 </div>
@@ -566,7 +566,7 @@ function RedeemPage() {
                 <div
                   id="license-code-help"
                   aria-live="polite"
-                  className="mt-1.5 flex items-start justify-between gap-3 text-[11.5px]"
+                  className="mt-1 flex items-start justify-between gap-3 text-[11.5px]"
                 >
                   <span
                     className={cn(
@@ -575,7 +575,7 @@ function RedeemPage() {
                         ? "text-destructive"
                         : validation.level === "ok"
                           ? "text-primary"
-                          : "text-muted-foreground",
+                          : "text-foreground/70",
                     )}
                   >
                     {validation.level === "warn" && <AlertCircle className="h-3 w-3 flex-none" aria-hidden />}
@@ -591,34 +591,30 @@ function RedeemPage() {
                   const info = classifyRedeemError(result.message);
                   const toneClasses =
                     info.tone === "danger"
-                      ? "border-destructive/40 bg-destructive/10 text-destructive"
+                      ? "border-destructive/50 bg-destructive/10 text-destructive"
                       : info.tone === "warn"
-                        ? "border-warning/40 bg-warning/10 text-warning-foreground"
+                        ? "border-warning/50 bg-warning/10 text-warning-foreground"
                         : "border-border bg-muted text-foreground";
                   return (
                     <div
                       role="alert"
                       className={cn(
-                        "mt-3 rounded-lg border px-3.5 py-3 text-[12.5px]",
+                        "mt-2 rounded-lg border px-3 py-2 text-[12px]",
                         toneClasses,
                       )}
                     >
                       <div className="flex items-start gap-2">
-                        <AlertCircle className="mt-0.5 h-4 w-4 flex-none" aria-hidden />
+                        <AlertCircle className="mt-0.5 h-3.5 w-3.5 flex-none" aria-hidden />
                         <div className="min-w-0 flex-1">
                           <div className="font-bold leading-tight">{info.title}</div>
-                          <div className="mt-0.5 leading-snug opacity-90">{info.detail}</div>
-                          <div className="mt-1.5 text-[11.5px] font-semibold">
-                            Próximo passo:{" "}
-                            <span className="font-normal opacity-90">{info.nextStep}</span>
-                          </div>
+                          <div className="mt-0.5 leading-snug">{info.detail}</div>
                           {info.actions.length > 0 && (
-                            <div className="mt-2 flex flex-wrap gap-2">
+                            <div className="mt-1.5 flex flex-wrap gap-1.5">
                               {info.actions.map((a) => (
                                 <Link
                                   key={a.to}
                                   to={a.to as never}
-                                  className="inline-flex items-center gap-1 rounded-md bg-primary px-2.5 py-1 text-[11px] font-bold uppercase tracking-[0.1em] text-primary-foreground transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+                                  className="inline-flex items-center gap-1 rounded-md bg-primary px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-[0.1em] text-primary-foreground transition hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
                                 >
                                   {a.label}
                                 </Link>
@@ -635,19 +631,21 @@ function RedeemPage() {
                   type="submit"
                   disabled={submitting || !canSubmit}
                   aria-disabled={submitting || !canSubmit}
+                  aria-busy={submitting || (verifyQuery.isFetching && formatOk)}
                   className={cn(
-                    "group relative mt-4 inline-flex h-12 w-full items-center justify-center gap-2 overflow-hidden rounded-lg text-[12.5px] font-bold uppercase tracking-[0.16em] transition-all",
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
-                    "disabled:cursor-not-allowed disabled:opacity-70",
+                    "group relative mt-3 inline-flex h-11 w-full items-center justify-center gap-2 overflow-hidden rounded-lg text-[12.5px] font-bold uppercase tracking-[0.16em] transition-all",
+                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                    "disabled:cursor-not-allowed",
                     canSubmit && !submitting
-                      ? "bg-[var(--pc-navy)] text-[color:var(--pc-home-gold)] ring-1 ring-[color:var(--pc-home-gold)]/60 shadow-[0_16px_36px_-14px_color-mix(in_oklab,var(--pc-navy)_70%,transparent)] hover:brightness-110"
-                      : "bg-muted text-muted-foreground",
+                      ? "bg-[var(--pc-navy)] text-[color:var(--pc-home-gold)] ring-1 ring-[color:var(--pc-home-gold)]/70 shadow-[0_16px_36px_-14px_color-mix(in_oklab,var(--pc-navy)_70%,transparent)] hover:brightness-110 hover:ring-[color:var(--pc-home-gold)]"
+                      // AAA-safe disabled: mantém contraste ≥7:1 usando foreground puro sobre muted
+                      : "bg-muted text-foreground/95 ring-1 ring-border",
                   )}
                 >
                   {submitting ? (
                     <><Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Ativando…</>
                   ) : verifyQuery.isFetching && formatOk ? (
-                    <><Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Verificando código…</>
+                    <><Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Verificando…</>
                   ) : serverRejected || serverNotFound ? (
                     <><XCircle className="h-4 w-4" aria-hidden /> Código inválido</>
                   ) : !serverVerified && formatOk ? (
@@ -663,38 +661,17 @@ function RedeemPage() {
                 <div className="mt-2 flex items-center justify-between text-[11.5px]">
                   <Link
                     to="/planos"
-                    className="font-semibold text-muted-foreground hover:text-foreground hover:underline"
+                    className="font-semibold text-foreground/80 hover:text-foreground hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 rounded"
                   >
                     Ainda não comprei →
                   </Link>
                   <Link
                     to="/minhas-licencas"
-                    className="font-semibold text-primary hover:underline"
+                    className="font-semibold text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 rounded"
                   >
                     Minhas licenças →
                   </Link>
                 </div>
-
-                <ul className="mt-4 grid grid-cols-3 gap-2 border-t border-border pt-3 text-[10.5px] font-semibold text-foreground/70">
-                  <li className="flex items-center gap-1">
-                    <ShieldCheck className="h-3 w-3 text-primary" aria-hidden />
-                    Uso único
-                  </li>
-                  <li className="flex items-center gap-1">
-                    <KeyRound className="h-3 w-3 text-primary" aria-hidden />
-                    Ligado ao CPF
-                  </li>
-                  <li className="flex items-center gap-1">
-                    <CheckCircle2 className="h-3 w-3 text-primary" aria-hidden />
-                    Ativação imediata
-                  </li>
-                </ul>
-
-                <p className="mt-4 text-center text-[10.5px] leading-snug text-muted-foreground">
-                  Não achou o e-mail? Verifique{" "}
-                  <strong className="font-semibold text-foreground">spam / promoções</strong>. Códigos são
-                  emitidos e revogados pela equipe administrativa.
-                </p>
               </form>
             )}
           </div>
