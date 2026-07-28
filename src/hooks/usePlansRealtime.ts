@@ -1,21 +1,23 @@
 import { useEffect, useRef } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient, type QueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
 /**
  * Subscribe to changes on `public.license_plans` and invalidate all
  * plan-related React Query caches so every surface (admin, /planos,
  * checkout, /assinar, /admin/gestao) reflects updates in real time.
- *
- * The channel is created once per mount and cleaned up on unmount to
- * avoid subscription leaks and reconnection loops.
  */
-export function usePlansRealtime(opts?: { enabled?: boolean; throttleMs?: number }) {
+export function usePlansRealtime(opts?: { enabled?: boolean; throttleMs?: number; queryClient?: QueryClient }) {
   const enabled = opts?.enabled ?? true;
   const throttleMs = opts?.throttleMs ?? 500;
-  const qc = useQueryClient();
+  // Fall back to context only when no explicit client is provided.
+  // This lets callers use the hook OUTSIDE a QueryClientProvider by
+  // passing the client directly (e.g. from route context during SSR).
+  const ctxQc = opts?.queryClient ? null : useQueryClient();
+  const qc = opts?.queryClient ?? (ctxQc as QueryClient);
   const qcRef = useRef(qc);
   qcRef.current = qc;
+
 
   useEffect(() => {
     if (!enabled || typeof window === "undefined") return;
