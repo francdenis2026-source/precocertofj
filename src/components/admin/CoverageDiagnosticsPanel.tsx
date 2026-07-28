@@ -244,3 +244,80 @@ function RpcBlock({
     </div>
   );
 }
+
+function SelfHealAdminBlock({
+  userId,
+  email,
+  onGranted,
+}: {
+  userId: string | null;
+  email: string | null;
+  onGranted: () => void;
+}) {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports, @typescript-eslint/no-var-requires
+  const React = require("react") as typeof import("react");
+  const { grantSelfAdmin } = require("@/lib/admin-maintenance.functions") as typeof import("@/lib/admin-maintenance.functions");
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const call = useServerFn(grantSelfAdmin);
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [busy, setBusy] = React.useState(false);
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [msg, setMsg] = React.useState<string | null>(null);
+
+  async function handleGrant() {
+    setBusy(true);
+    setMsg(null);
+    try {
+      const r = await call({});
+      setMsg(`Papel 'admin' concedido (motivo: ${r.reason}). Atualize a página se necessário.`);
+      onGranted();
+    } catch (e) {
+      setMsg(e instanceof Error ? e.message : String(e));
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const sqlSnippet =
+    userId
+      ? `-- Executar como service_role (SQL Editor do banco):\ninsert into public.user_roles (user_id, role)\nvalues ('${userId}', 'admin')\non conflict (user_id, role) do nothing;`
+      : `-- Faça login primeiro para obter seu auth.uid`;
+
+  return (
+    <div className="rounded border border-amber-500/50 bg-amber-500/5 p-3">
+      <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-amber-800 dark:text-amber-300">
+        <Wrench className="h-4 w-4" /> Correção guiada: conceder papel de admin
+      </div>
+      <p className="mb-3 text-xs text-muted-foreground">
+        Detectamos que <code className="rounded bg-background px-1">has_role('admin')</code> retornou{" "}
+        <strong>false</strong> para {email ? <code>{email}</code> : "este usuário"}. Isso significa que não há uma
+        linha em <code>public.user_roles</code> associando <code className="break-all">{userId ?? "auth.uid"}</code>{" "}
+        ao papel <code>admin</code>.
+      </p>
+
+      <div className="mb-3 space-y-2">
+        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Opção 1 — Aplicar automaticamente
+        </p>
+        <Button size="sm" onClick={handleGrant} disabled={busy || !userId}>
+          {busy ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ShieldCheck className="mr-2 h-4 w-4" />}
+          Conceder admin ao meu usuário
+        </Button>
+        <p className="text-[11px] text-muted-foreground">
+          Só funciona se ainda não existir nenhum admin cadastrado ou se seu e-mail estiver na allowlist do sistema.
+          Caso contrário, use a opção 2.
+        </p>
+        {msg && <p className="text-xs">{msg}</p>}
+      </div>
+
+      <div className="space-y-2">
+        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Opção 2 — Comando SQL para outro admin executar
+        </p>
+        <pre className="max-h-40 overflow-auto rounded bg-background p-2 text-[11px] leading-relaxed">
+{sqlSnippet}
+        </pre>
+      </div>
+    </div>
+  );
+}
