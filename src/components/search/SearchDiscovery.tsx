@@ -125,9 +125,9 @@ export function SearchDiscovery({ onPickQuery }: Props) {
         <header className="flex items-start gap-3">
           <span
             aria-hidden
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-gold text-brand-navy shadow-sm"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-gold text-[#0a1327] shadow-sm ring-1 ring-[#0a1327]/15"
           >
-            <SearchIcon className="h-4 w-4" strokeWidth={2.25} />
+            <SearchIcon className="h-4 w-4" strokeWidth={2.75} />
           </span>
           <div className="min-w-0">
             <h2 className="font-serif text-[15px] font-semibold leading-tight tracking-tight text-foreground sm:text-[17px]">

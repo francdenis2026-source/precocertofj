@@ -113,7 +113,7 @@ function AuthGate() {
       role="status"
       className="mx-auto max-w-md rounded-xl border border-border bg-card p-5 text-center shadow-elev-1"
     >
-      <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-brand-gold/12 text-brand-gold">
+      <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-brand-gold/15 text-[var(--pc-gold-ink)] ring-1 ring-brand-gold/30">
         <LogIn className="h-5 w-5" strokeWidth={2.2} />
       </span>
       <h2 className="mt-3 text-[16px] font-semibold tracking-tight text-foreground">
@@ -310,7 +310,7 @@ function CollaboratorWorkspace() {
                 <Receipt className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
                 Meus envios
                 {subs.length > 0 && (
-                  <span className="rounded-full bg-brand-gold/15 px-1.5 text-[10.5px] font-bold text-brand-gold">
+                  <span className="rounded-full bg-brand-gold/15 px-1.5 text-[10.5px] font-bold text-[var(--pc-gold-ink)]">
                     {subs.length}
                   </span>
                 )}
@@ -491,7 +491,7 @@ function Step({
 }) {
   return (
     <li className="flex gap-2.5">
-      <span className="flex h-7 w-7 flex-none items-center justify-center rounded-lg bg-brand-gold/12 text-brand-gold">
+      <span className="flex h-7 w-7 flex-none items-center justify-center rounded-lg bg-brand-gold/15 text-[var(--pc-gold-ink)] ring-1 ring-brand-gold/25">
         <Icon className="h-3.5 w-3.5" strokeWidth={2.2} aria-hidden />
       </span>
       <div className="min-w-0">
