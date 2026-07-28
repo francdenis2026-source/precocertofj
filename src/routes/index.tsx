@@ -458,7 +458,7 @@ function HomePage() {
               </form>
 
               {/* ---------- Populares + CTA ---------- */}
-              <div className="mt-2.5 flex flex-wrap items-center gap-1.5 sm:mt-3">
+              <div className="flex flex-wrap items-center gap-1.5">
                 <span
                   className="text-[11px] font-bold uppercase tracking-[0.2em]"
                   style={{ color: "var(--pc-home-onhero-fg-60)" }}
