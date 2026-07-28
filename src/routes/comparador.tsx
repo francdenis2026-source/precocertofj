@@ -1076,9 +1076,11 @@ function ComparadorPage() {
         }
       />
 
+      </div>
     </div>
   );
 }
+
 
 // Footer removido: página isolada e compacta (padrão IsolatedPage).
 
