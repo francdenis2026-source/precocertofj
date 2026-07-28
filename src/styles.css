@@ -435,20 +435,35 @@
   @media (max-width: 640px) {
     input, select, textarea { font-size: 16px; }
   }
-  /* Tipografia unificada: Work Sans para tudo (typeclear, sem serif distorcido).
-     Mantemos as classes .font-display / .font-serif para não quebrar imports,
-     mas ambas agora renderizam em sans-serif limpo e legível. */
+  /* Tipografia:
+     - .font-sans / body / botões / UI  → Work Sans (base do sistema, herdada de /planos).
+     - .font-serif / .font-display / h1-h3 editoriais → Fraunces (variable serif, opsz automático).
+     - .font-editorial → destaque premium (Fraunces com opsz alto + tracking negativo).
+     Fraunces é uma variable serif contemporânea (Undercase Type) com optical-sizing
+     nativo — em tamanhos grandes vira display elegante; em corpo mantém legibilidade. */
   .font-display {
-    font-family: var(--font-sans);
-    font-weight: 600;
-    letter-spacing: -0.015em;
+    font-family: var(--font-display);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    font-optical-sizing: auto;
+    font-variation-settings: "opsz" 72, "SOFT" 30;
     text-rendering: geometricPrecision;
-    font-feature-settings: "ss01", "cv11";
   }
   .font-serif {
-    font-family: var(--font-sans);
+    font-family: var(--font-serif);
     font-weight: 500;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
+    font-optical-sizing: auto;
+    font-variation-settings: "opsz" 48, "SOFT" 30;
+  }
+  .font-editorial {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    letter-spacing: -0.025em;
+    font-optical-sizing: auto;
+    font-variation-settings: "opsz" 144, "SOFT" 20;
+    text-rendering: geometricPrecision;
+    -webkit-font-smoothing: antialiased;
   }
   .font-mono {
     font-family: var(--font-mono);
@@ -456,7 +471,8 @@
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.02em;
   }
-  /* Headings padrão = Work Sans (UI). Use .font-display/.font-serif quando quiser editorial serif. */
+  /* Headings padrão continuam em Work Sans (UI limpa, como em /planos).
+     Use .font-serif ou .font-editorial explicitamente quando quiser destaque editorial. */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-sans);
     font-weight: 700;
