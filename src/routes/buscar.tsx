@@ -379,72 +379,87 @@ function SearchPage() {
     >
       <div
         data-reduced-motion={reducedMotion ? "on" : "off"}
-        className="flex h-full min-h-0 flex-col"
+        className="flex h-full min-h-0 flex-col bg-background"
       >
+        {/* ================================================================
+            RAIL SUPERIOR — linha única de 44px, hairline dourada abaixo.
+            Densidade tipográfica editorial, sem redundâncias.
+        ================================================================= */}
+        <header className="shrink-0 border-b border-border/60 bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80">
+          <div className="mx-auto grid w-full max-w-[1360px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-1.5 md:gap-6 md:px-6">
+            <div className="flex min-w-0 items-center gap-1.5">
+              {hasQuery ? (
+                <button
+                  type="button"
+                  onClick={() =>
+                    navigate({
+                      search: (prev: Record<string, unknown>) => ({ ...prev, q: "" }),
+                      replace: true,
+                    })
+                  }
+                  className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[12px] font-semibold uppercase tracking-[0.12em] text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                  aria-label="Voltar para a descoberta"
+                >
+                  <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
+                  <span className="hidden sm:inline">Nova busca</span>
+                </button>
+              ) : (
+                <BackButton fallbackTo="/" variant="ghost" />
+              )}
+              <span aria-hidden className="h-4 w-px bg-border" />
+              <HomeBrandLink />
+            </div>
 
-      {/* BARRA DE COMANDO — hairline compacto, single-line em desktop */}
-      <header className="shrink-0 border-b border-border/60 bg-background/95 backdrop-blur-md supports-[backdrop-filter]:bg-background/80">
-        <div className="mx-auto grid w-full max-w-7xl grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 px-4 py-2 md:gap-6 md:px-8 md:py-2.5">
-          <div className="flex min-w-0 items-center gap-1.5">
-            {hasQuery ? (
-              <button
-                type="button"
-                onClick={() =>
-                  navigate({
-                    search: (prev: Record<string, unknown>) => ({ ...prev, q: "" }),
-                    replace: true,
-                  })
-                }
-                className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[12.5px] font-medium text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-                aria-label="Voltar para a busca"
+            <div className="flex min-w-0 items-baseline gap-2">
+              <span className="hidden shrink-0 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--pc-gold-ink)] md:inline">
+                Pesquisa por preços
+              </span>
+              <span aria-hidden className="hidden h-3 w-px bg-border md:block" />
+              <h1 className="font-editorial min-w-0 truncate whitespace-nowrap text-[15px] font-normal leading-tight tracking-tight text-foreground sm:text-[17px]">
+                Buscar <PrecoCertoMark variant="inline">preço certo</PrecoCertoMark>
+                <span className="hidden text-muted-foreground sm:inline"> · por nome do produto</span>
+              </h1>
+            </div>
+
+            <div className="flex items-center gap-1.5">
+              {hasQuery && (
+                <ShareButton
+                  title={`PreçoCerto — ${q}`}
+                  text={`Veja preços comparados de "${q}" no PreçoCerto`}
+                />
+              )}
+              <Link
+                to="/alertas"
+                title="Criar alerta quando o preço cair"
+                className="inline-flex h-7 items-center gap-1.5 rounded-full border border-border px-2.5 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
               >
-                <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
-                <span>Voltar</span>
-              </button>
-            ) : (
-              <BackButton fallbackTo="/" variant="ghost" />
-            )}
-            <span aria-hidden className="h-5 w-px bg-border" />
-            <HomeBrandLink />
+                <BellRing className="h-3 w-3" aria-hidden="true" />
+                <span className="hidden sm:inline">Alertas</span>
+              </Link>
+              <FreeQuotaBadge variant="inline" />
+            </div>
           </div>
+        </header>
 
-          <div className="flex min-w-0 items-baseline gap-3">
-            <span className="hidden shrink-0 text-[10.5px] font-semibold uppercase tracking-[0.24em] text-[var(--pc-gold-ink)] md:inline">
-              Comparador
-            </span>
-            <span aria-hidden className="hidden h-4 w-px bg-border md:block" />
-            <h1 className="font-editorial min-w-0 truncate whitespace-nowrap text-[17px] font-normal leading-tight tracking-tight text-foreground sm:text-[20px]">
-              Buscar <PrecoCertoMark variant="inline">preço certo</PrecoCertoMark>
-              <span className="hidden text-foreground sm:inline"> por nome</span>
-            </h1>
-          </div>
-          <div className="flex items-center gap-2">
-            {hasQuery && (
-              <ShareButton
-                title={`PreçoCerto — ${q}`}
-                text={`Veja preços comparados de "${q}" no PreçoCerto`}
-              />
-            )}
-            <Link
-              to="/alertas"
-              title="Criar alerta quando o preço cair"
-              className="inline-flex h-7 items-center gap-1.5 rounded-full border border-border px-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-            >
-              <BellRing className="h-3.5 w-3.5" aria-hidden="true" />
-              <span className="hidden sm:inline">Alertas</span>
-            </Link>
-            <FreeQuotaBadge variant="inline" />
-          </div>
-        </div>
-      </header>
-
-      {/* CORPO — flex-1 + min-h-0 para conter em uma tela; scroll interno leve
-          apenas se ultrapassar a viewport. */}
-      <div className="mx-auto flex w-full min-h-0 max-w-7xl flex-1 flex-col [overflow-anchor:none] px-4 pb-[calc(var(--mobile-nav-height)+0.5rem)] pt-3 md:px-8 md:pb-4 md:pt-4">
-        {hasQuery ? (
-          /* ============ ESTADO: RESULTADOS ============ */
-          <div className="flex min-h-0 flex-1 flex-col gap-4">
-            <div className="relative border-t border-brand-gold/40 pt-3">
+        {/* ================================================================
+            CORPO — flex-1 min-h-0 para caber na viewport sem rolagem
+            da página inteira. Rolagem interna só onde necessário.
+        ================================================================= */}
+        <div className="mx-auto flex w-full min-h-0 max-w-[1360px] flex-1 flex-col gap-3 px-4 pb-[calc(var(--mobile-nav-height)+0.5rem)] pt-2.5 md:gap-3 md:px-6 md:pb-3 md:pt-3">
+          {/* ---------------- BARRA DE COMANDO (sempre visível) ---------------- */}
+          <section
+            aria-label="Busca por nome"
+            className={`pc-surface-2 relative rounded-2xl border border-border/70 shadow-sm ${
+              hasQuery
+                ? "flex min-h-0 flex-1 flex-col overflow-hidden p-2.5 md:p-3"
+                : "shrink-0 p-2.5 md:p-3"
+            }`}
+          >
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-3 top-0 h-px bg-linear-to-r from-transparent via-brand-gold/60 to-transparent"
+            />
+            <div className={hasQuery ? "min-h-0 flex-1 overflow-y-auto pc-scroll-fade pr-1" : ""}>
               <PriceSearchBar
                 initialQuery={q}
                 mode={mode}
@@ -458,8 +473,7 @@ function SearchPage() {
                 onClearFilters={activeFilterCount > 0 ? clearFilters : undefined}
               />
             </div>
-            <MeatCutSuggestionStrip query={q} onPick={syncQueryToUrl} />
-            <div className="pc-surface-1 !rounded-lg px-2 py-1.5">
+            <div className="mt-2 shrink-0 border-t border-border/50 pt-1.5">
               <FiltersToolbar
                 open={filtersOpen}
                 onToggle={() => setFiltersOpen((v) => !v)}
@@ -475,83 +489,41 @@ function SearchPage() {
                 onClear={clearFilters}
               />
             </div>
-            {!user && <SignupCTA context="save-comparison" />}
-          </div>
-        ) : (
-          /* ============ ESTADO: DESCOBERTA — single-viewport editorial ============
-              Grid 3 linhas: (1) busca+filtros | (2) categorias | (3) highlights.
-              Aside com histórico/populares fixado à direita em desktop. */
-          <div className="grid min-h-0 flex-1 gap-4 md:gap-5 lg:grid-cols-[minmax(0,1fr)_296px] lg:gap-6">
-            <div className="flex min-h-0 min-w-0 flex-col gap-3 md:gap-4">
-              {/* Bloco de comando — busca + filtros unificados em uma faixa */}
-              <section
-                aria-label="Busca por nome"
-                className="pc-surface-2 relative rounded-2xl border border-border/70 p-3 shadow-sm md:p-4"
-              >
-                <div className="mb-2 flex items-center justify-between gap-2">
-                  <span className="text-[10.5px] font-bold uppercase tracking-[0.22em] text-[var(--pc-gold-ink)]">
-                    Pesquisar preço
-                  </span>
-                  <span className="hidden text-[11px] text-muted-foreground sm:inline">
-                    Digite o nome do produto ou toque em uma categoria
-                  </span>
-                </div>
-                <PriceSearchBar
-                  initialQuery={q}
-                  mode={mode}
-                  pureOnly={pureOnly}
-                  brandFilter={brandFilter}
-                  priceMin={Number.isFinite(priceMin) ? priceMin : undefined}
-                  priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
-                  onQueryChange={syncQueryToUrl}
-                  filterShortcuts={emptyFilterShortcuts}
-                  activeFilterCount={activeFilterCount}
-                  onClearFilters={activeFilterCount > 0 ? clearFilters : undefined}
-                />
-                <div className="mt-3 border-t border-border/60 pt-2">
-                  <FiltersToolbar
-                    open={filtersOpen}
-                    onToggle={() => setFiltersOpen((v) => !v)}
-                    activeCount={activeFilterCount}
-                    mode={mode}
-                    onMode={chooseMode}
-                    pureOnly={pureOnly}
-                    onPure={setPure}
-                    min={search.min ?? ""}
-                    max={search.max ?? ""}
-                    onMin={setMinPrice}
-                    onMax={setMaxPrice}
-                    onClear={clearFilters}
-                  />
-                </div>
-              </section>
+          </section>
 
-              {/* Descoberta — categorias em destaque, altura contida */}
-              <div className="min-h-0 flex-1 overflow-y-auto pc-scroll-fade pr-1">
+
+          {hasQuery ? (
+            /* ============ ESTADO: RESULTADOS ============ */
+            <div className="flex min-h-0 flex-1 flex-col gap-2">
+              <MeatCutSuggestionStrip query={q} onPick={syncQueryToUrl} />
+              {!user && <SignupCTA context="save-comparison" />}
+            </div>
+          ) : (
+            /* ============ ESTADO: DESCOBERTA — grid editorial 3 colunas ============
+                Categorias (rail) | Descoberta central | Recentes + populares.
+                Cada painel cresce até a viewport com scroll interno leve. */
+            <div className="grid min-h-0 flex-1 gap-3 md:gap-3 lg:grid-cols-[minmax(0,1fr)_296px]">
+              <div className="min-h-0 min-w-0 overflow-y-auto pc-scroll-fade pr-1">
                 <SearchDiscovery onPickQuery={pickQuery} />
               </div>
-            </div>
 
-            {/* Sidebar — recentes + populares */}
-            <aside className="hidden min-h-0 flex-col lg:flex">
-              <div className="pc-surface-1 flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/70 p-3 shadow-sm">
-                <div className="min-h-0 flex-1 overflow-y-auto pr-1">
-                  <SearchSidebar
-                    recent={recent}
-                    onPickQuery={pickQuery}
-                    onRemoveRecent={removeRecent}
-                    onClearRecent={clearRecent}
-                  />
+              <aside className="hidden min-h-0 flex-col lg:flex">
+                <div className="pc-surface-1 flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/70 p-3 shadow-sm">
+                  <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+                    <SearchSidebar
+                      recent={recent}
+                      onPickQuery={pickQuery}
+                      onRemoveRecent={removeRecent}
+                      onClearRecent={clearRecent}
+                    />
+                  </div>
                 </div>
-              </div>
-            </aside>
-          </div>
-        )}
-      </div>
-
+              </aside>
+            </div>
+          )}
+        </div>
       </div>
     </IsolatedPage>
-
   );
 }
 
