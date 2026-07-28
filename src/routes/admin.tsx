@@ -2372,94 +2372,106 @@ function EstablishmentsTab() {
   };
 
   return (
-    <div className="space-y-4">
-      <div className="flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <h2 className="font-serif text-2xl">Estabelecimentos da cidade</h2>
-          <p className="text-sm text-muted-foreground">
-            Cadastre mercados, atacados e estabelecimentos. Os produtos são vinculados depois.
+    <div className="space-y-3">
+      {/* Cabeçalho compacto: título à esquerda, ferramentas colapsáveis à direita */}
+      <header className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+        <div className="min-w-0">
+          <h2 className={cn(tc.h2, "truncate font-serif")}>Estabelecimentos da cidade</h2>
+          <p className={cn(tc.caption, "truncate text-muted-foreground")}>
+            Cadastre mercados e atacados. Produtos são vinculados depois.
           </p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           <Input
             placeholder="Buscar por nome, cidade, CNPJ…"
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
-            className="w-64"
+            className="h-8 w-44 sm:w-56 md:w-64"
           />
-          <Button asChild size="sm" variant="outline">
-            <Link to="/admin/cupom">Registrar cupom fiscal</Link>
-          </Button>
-          <Button asChild size="sm" variant="outline">
-            <Link to="/admin/cupom-lote">Cupons em lote</Link>
-          </Button>
-          <Button asChild size="sm" variant="outline">
-            <Link to="/admin/reports">Reportes de preço</Link>
-          </Button>
-          <Button asChild size="sm" variant="outline">
-            <Link to="/precos">Histórico de preços</Link>
-          </Button>
-          <Button asChild size="sm" variant="outline">
-            <Link to="/admin/icones-categoria">Ícones de categoria</Link>
-          </Button>
-          <Button asChild size="sm" variant="outline">
-            <Link to="/admin/ia">Configurações de IA</Link>
-          </Button>
-
-          <Button size="sm" onClick={openNew}>
-            <Plus className="mr-2 h-4 w-4" /> Novo
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size="sm" variant="outline" className="h-8 px-2">
+                <MoreHorizontal className="h-4 w-4" />
+                <span className="ml-1 hidden sm:inline">Atalhos</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>Registro de preços</DropdownMenuLabel>
+              <DropdownMenuItem asChild><Link to="/admin/cupom">Cupom fiscal</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/admin/cupom-lote">Cupons em lote</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/precos">Histórico de preços</Link></DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>Curadoria</DropdownMenuLabel>
+              <DropdownMenuItem asChild><Link to="/admin/reports">Reportes de preço</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/admin/icones-categoria">Ícones de categoria</Link></DropdownMenuItem>
+              <DropdownMenuItem asChild><Link to="/admin/ia">Configurações de IA</Link></DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <Button size="sm" className="h-8" onClick={openNew}>
+            <Plus className="mr-1.5 h-3.5 w-3.5" /> Novo
           </Button>
         </div>
-      </div>
+      </header>
 
       <Card>
         <CardContent className="p-0">
           {loading ? (
-            <div className="flex items-center justify-center py-10 text-muted-foreground">
+            <div className="flex items-center justify-center py-8 text-sm text-muted-foreground">
               <Loader2 className="mr-2 h-4 w-4 animate-spin" /> Carregando…
             </div>
           ) : filtered.length === 0 ? (
-            <div className="py-10 text-center text-sm text-muted-foreground">
+            <div className="py-8 text-center text-sm text-muted-foreground">
               Nenhum estabelecimento cadastrado ainda.
             </div>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Nome</TableHead>
-                  <TableHead>Tipo</TableHead>
-                  <TableHead>Cidade / UF</TableHead>
-                  <TableHead>Bairro</TableHead>
-                  <TableHead>Telefone</TableHead>
-                  <TableHead>Ativo</TableHead>
-                  <TableHead className="text-right">Ações</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {filtered.map((e) => (
-                  <TableRow key={e.id}>
-                    <TableCell>
-                      <div className="font-medium">{e.name}</div>
-                      {e.cnpj && <div className="text-xs text-muted-foreground">{e.cnpj}</div>}
-                    </TableCell>
-                    <TableCell><Badge variant="outline">{kindLabel[e.kind]}</Badge></TableCell>
-                    <TableCell>{e.city} / {e.state}</TableCell>
-                    <TableCell>{e.neighborhood ?? "—"}</TableCell>
-                    <TableCell>{e.phone ?? "—"}</TableCell>
-                    <TableCell><Switch checked={e.active} onCheckedChange={() => onToggle(e)} /></TableCell>
-                    <TableCell className="text-right">
-                      <Button variant="ghost" size="sm" onClick={() => openEdit(e)}>Editar</Button>
-                      <Button variant="ghost" size="icon" onClick={() => onDelete(e.id)}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </TableCell>
+            <div className="max-h-[calc(100dvh-260px)] overflow-auto">
+              <Table className="text-[13px] [&_th]:h-9 [&_th]:py-1.5 [&_td]:py-1.5">
+                <TableHeader className="sticky top-0 z-10 bg-card/95 backdrop-blur">
+                  <TableRow>
+                    <TableHead className="min-w-[180px]">Nome</TableHead>
+                    <TableHead className="hidden md:table-cell">Tipo</TableHead>
+                    <TableHead className="hidden lg:table-cell">Cidade / UF</TableHead>
+                    <TableHead className="hidden xl:table-cell">Bairro</TableHead>
+                    <TableHead className="hidden xl:table-cell">Telefone</TableHead>
+                    <TableHead className="w-16 text-center">Ativo</TableHead>
+                    <TableHead className="w-28 text-right">Ações</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {filtered.map((e) => (
+                    <TableRow key={e.id}>
+                      <TableCell className="max-w-[240px]">
+                        <div className="truncate font-medium">{e.name}</div>
+                        <div className="truncate text-[11px] text-muted-foreground md:hidden">
+                          {kindLabel[e.kind]} · {e.city}/{e.state}
+                          {e.neighborhood ? ` · ${e.neighborhood}` : ""}
+                        </div>
+                        {e.cnpj && <div className="hidden text-[11px] text-muted-foreground md:block">{e.cnpj}</div>}
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        <Badge variant="outline" className="text-[11px]">{kindLabel[e.kind]}</Badge>
+                      </TableCell>
+                      <TableCell className="hidden truncate lg:table-cell">{e.city} / {e.state}</TableCell>
+                      <TableCell className="hidden truncate xl:table-cell">{e.neighborhood ?? "—"}</TableCell>
+                      <TableCell className="hidden truncate xl:table-cell">{e.phone ?? "—"}</TableCell>
+                      <TableCell className="text-center">
+                        <Switch checked={e.active} onCheckedChange={() => onToggle(e)} />
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <Button variant="ghost" size="sm" className="h-7 px-2" onClick={() => openEdit(e)}>Editar</Button>
+                        <Button variant="ghost" size="icon" className="h-7 w-7" onClick={() => onDelete(e.id)}>
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </CardContent>
       </Card>
+
 
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent className="max-w-2xl">
