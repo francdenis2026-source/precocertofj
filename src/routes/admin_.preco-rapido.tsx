@@ -43,7 +43,7 @@ const brl = (v: number) =>
 
 type Saved = { name: string; price: number; store: string; at: number };
 
-function QuickPricePage() {
+export function QuickPricePage() {
   const suggest = useServerFn(quickSuggestProducts);
   const register = useServerFn(quickRegisterPrice);
   const analyze = useServerFn(analyzeProductImage);
