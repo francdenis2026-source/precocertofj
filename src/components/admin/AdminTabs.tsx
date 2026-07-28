@@ -63,7 +63,7 @@ export function AdminTabs({ to, title, items, active, className, tone }: Props) 
   }, [to, active]);
 
   return (
-    <div className={cn("sticky top-0 z-20 -mx-4 mb-4 bg-background/95 backdrop-blur", className)}>
+    <div data-tone={tone} className={cn("sticky top-0 z-20 -mx-4 mb-4 bg-background/95 backdrop-blur", className)}>
       <div className="flex items-center justify-between gap-2 border-b border-border/40 px-4 pt-2 pb-1">
         <nav
           aria-label="Trilha de navegação"
