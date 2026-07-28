@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { AppShell } from "@/components/app/AppShell";
+import { AppShell } from "@/components/brand/AppShell";
 import { AdminBreadcrumb } from "@/components/admin/AdminBreadcrumb";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -74,9 +74,9 @@ function BasketAuditPage() {
   });
 
   return (
-    <AppShell>
+    <AppShell scope="admin">
       <section className="mx-auto max-w-6xl space-y-4 p-3 md:p-4">
-        <AdminBreadcrumb hub="vitrine" current="Auditoria da Cesta" />
+        <AdminBreadcrumb hub="vitrine" page="Auditoria da Cesta" />
 
         <header className="space-y-1">
           <h1 className="flex items-center gap-2 text-xl font-bold text-foreground">
