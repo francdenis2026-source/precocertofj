@@ -134,6 +134,7 @@ export const upsertPlan = createServerFn({ method: "POST" })
     features?: string[];
     active?: boolean;
     highlight?: boolean;
+    ai_monthly_quota?: number;
   }) => data)
   .handler(async ({ data, context }) => {
     await assertAdmin(context);
@@ -155,6 +156,10 @@ export const upsertPlan = createServerFn({ method: "POST" })
     const features = (data.features ?? []).map((f) => String(f).trim()).filter(Boolean);
     const active = data.active ?? true;
     const highlight = data.highlight ?? false;
+    const aiQuota =
+      data.ai_monthly_quota == null || Number.isNaN(Number(data.ai_monthly_quota))
+        ? 0
+        : Math.max(0, Math.floor(Number(data.ai_monthly_quota)));
 
     if (data.id) {
       const { error } = await admin
@@ -169,6 +174,7 @@ export const upsertPlan = createServerFn({ method: "POST" })
           features,
           active,
           highlight,
+          ai_monthly_quota: aiQuota,
         })
         .eq("id", data.id);
       if (error) throw new Error(error.message);
@@ -203,6 +209,7 @@ export const upsertPlan = createServerFn({ method: "POST" })
         features,
         active,
         highlight,
+        ai_monthly_quota: aiQuota,
       })
       .select("id")
       .single();
