@@ -272,22 +272,29 @@ function HomePage() {
         fetchPriority="high"
         decoding="async"
         className="pointer-events-none absolute inset-0 h-full w-full object-cover object-center"
-        style={{ opacity: "var(--pc-home-hero-img-opacity)" as unknown as number }}
+        style={{
+          opacity: "var(--pc-home-hero-img-opacity)" as unknown as number,
+          filter: "blur(6px) saturate(0.92)",
+          transform: "scale(1.06)", // compensa a borda suavizada pelo blur
+        }}
       />
+      {/* Véu editorial: gradiente vertical suave para equilíbrio de contraste */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
-          background: `linear-gradient(180deg, color-mix(in oklab, var(--pc-home-hero-bg) 58%, transparent) 0%, color-mix(in oklab, var(--pc-home-hero-bg) 34%, transparent) 45%, color-mix(in oklab, var(--pc-home-hero-bg) 78%, transparent) 100%)`,
+          background: `linear-gradient(180deg, color-mix(in oklab, var(--pc-home-hero-bg) 52%, transparent) 0%, color-mix(in oklab, var(--pc-home-hero-bg) 32%, transparent) 48%, color-mix(in oklab, var(--pc-home-hero-bg) 70%, transparent) 100%)`,
         }}
       />
+      {/* Vinheta radial para focar leitura no centro sem apagar as bordas */}
       <div
         aria-hidden
         className="pointer-events-none absolute inset-0"
         style={{
-          background: `radial-gradient(120% 82% at 50% 40%, transparent 42%, color-mix(in oklab, var(--pc-home-hero-bg) 45%, transparent) 100%)`,
+          background: `radial-gradient(115% 78% at 50% 42%, transparent 40%, color-mix(in oklab, var(--pc-home-hero-bg) 38%, transparent) 100%)`,
         }}
       />
+
       <div
         aria-hidden
         className="pointer-events-none absolute -right-40 -top-40 h-[520px] w-[520px] rounded-full"
@@ -335,7 +342,7 @@ function HomePage() {
                   />
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: P.gold }} />
                 </span>
-                Vitrine viva · Feijó/AC
+                Feira comparada · Feijó/AC
               </span>
 
               <h1
@@ -343,16 +350,16 @@ function HomePage() {
                 className="font-editorial pc-hero-editorial mt-2 text-[clamp(1.75rem,4.8vw,3.75rem)]"
                 style={{ color: "var(--pc-home-onhero-fg)" }}
               >
-                Feijó comparada,{" "}
-                <PrecoCertoMark variant="hero">centavo por centavo</PrecoCertoMark>.
+                Onde cada real{" "}
+                <PrecoCertoMark variant="hero">rende mais</PrecoCertoMark>.
               </h1>
 
               <p
                 className="tc-flow mt-2 hidden max-w-xl text-[13px] min-[360px]:block font-light leading-snug sm:text-[15px]"
                 style={{ color: "var(--pc-home-onhero-fg-80)" }}
               >
-                Os mercados do seu bairro lado a lado — atualizados em tempo real por
-                quem faz a feira aqui.
+                Os mercados de Feijó, lado a lado e em tempo real. Você escolhe onde
+                vale mais a pena — sem sair de casa.
               </p>
 
               {/* ---------- Busca ---------- */}
