@@ -154,7 +154,7 @@ function CadastroPage() {
 
   return (
     <div
-      className="relative min-h-[100svh] overflow-hidden"
+      className="relative flex min-h-svh w-full items-center justify-center overflow-hidden px-4 py-4 sm:px-6 sm:py-6"
       style={{ background: PC_CREAM, fontFamily: PC_BODY, color: "#0f172a" }}
     >
       <div
@@ -165,32 +165,27 @@ function CadastroPage() {
         }}
       />
 
-      <header className="relative z-10 mx-auto flex w-full max-w-[900px] items-center justify-between px-5 py-2.5 md:px-6">
-        <Logo className="h-7 w-auto" href="/" variant="on-light" />
+      <Link
+        to={loginHref}
+        className="absolute right-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-full border border-slate-900/10 bg-white/80 px-2.5 py-1 text-[11px] font-semibold text-slate-700 backdrop-blur transition hover:bg-white sm:right-5 sm:top-5 sm:px-3 sm:py-1.5"
+      >
+        Já tenho conta →
+      </Link>
 
-        <Link
-          to={loginHref}
-          className="rounded-full border border-slate-900/10 bg-white/70 px-3 py-1 text-[11.5px] font-semibold text-slate-700 backdrop-blur transition hover:bg-white"
-        >
-          Já tenho conta →
-        </Link>
-      </header>
+      <motion.div
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+        className="relative z-10 grid w-full max-w-[900px] grid-cols-1 overflow-hidden rounded-2xl border border-slate-900/10 bg-white text-slate-900 shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
+      >
+        {/* LEFT — Hero panel reutilizável (oculto no mobile, igual /login) */}
+        <div className="hidden md:block">
+          <AuthHero variant="signup" />
+        </div>
 
-      <main className="relative z-10 flex items-start justify-center px-4 pb-6 pt-2 md:items-center md:min-h-[calc(100dvh-72px)]">
-        <motion.div
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-          className="grid w-full max-w-[900px] grid-cols-1 overflow-hidden rounded-2xl border border-slate-900/10 bg-white text-slate-900 shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
-        >
-          {/* LEFT — Hero panel reutilizável (oculto no mobile, igual /login) */}
-          <div className="hidden md:block">
-            <AuthHero variant="signup" />
-          </div>
+        {/* RIGHT — Form */}
+        <section className="relative overflow-hidden p-4 sm:p-5 md:p-6">
 
-
-          {/* RIGHT — Form */}
-          <section className="relative overflow-hidden p-4 sm:p-5 md:p-6">
             {/* Header */}
             <div className="mb-3 flex items-center gap-2.5">
               <div
