@@ -457,10 +457,7 @@ function HomePage() {
                             <Search className="h-3.5 w-3.5 shrink-0" style={{ color: P.navy }} strokeWidth={2.4} />
                             <span className="flex-1 truncate text-[14px] font-semibold">{s.name}</span>
                             {s.price != null && (
-                              <span
-                                className={`${serif} shrink-0 tabular-nums text-[15px] font-semibold`}
-                                style={{ color: "#8a6410" }}
-                              >
+                              <span className="pc-num pc-price-value shrink-0 text-[15px] font-bold">
                                 {new Intl.NumberFormat("pt-BR", {
                                   style: "currency",
                                   currency: "BRL",
