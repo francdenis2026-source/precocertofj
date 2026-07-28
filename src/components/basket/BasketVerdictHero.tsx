@@ -57,6 +57,7 @@ export function BasketVerdictHero({ data, loading, eligibleCoverage = 0.6, class
 
   return (
     <section
+      data-testid="basket-verdict-hero"
       className={cn(
         "relative overflow-hidden rounded-3xl border border-border pc-elite-frame",
         "bg-gradient-to-br from-surface via-surface to-surface-2",
