@@ -316,7 +316,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
             Não foi possível carregar os números do banco agora.
           </p>
         )}
-        <div className="grid grid-cols-3 gap-1.5">
+        <div id="discovery-kpis" hidden={!kpisOpen} className="grid grid-cols-3 gap-1.5">
           <StatCell
             icon={<TrendingDown className="h-3.5 w-3.5" aria-hidden />}
             label="Preços em queda"
