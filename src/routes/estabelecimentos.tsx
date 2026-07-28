@@ -648,7 +648,7 @@ function EstablishmentsPage() {
                       )}
                     </div>
                     <div className={`truncate ${tc.meta}`}>
-                      <span className="font-semibold text-brand-gold tabular-nums">{e.productsCount}</span> produtos
+                      <span className="font-semibold text-[var(--pc-gold-ink)] tabular-nums">{e.productsCount}</span> produtos
                       {e.neighborhood ? ` · ${e.neighborhood}` : ""}
                     </div>
                   </div>
@@ -1237,7 +1237,7 @@ function MetricDetailDialog({
               <div className="grid h-9 w-9 shrink-0 place-items-center rounded-md bg-brand-gold text-brand-navy shadow-inner">
                 <Icon className="h-4 w-4" strokeWidth={2.5} aria-hidden />
               </div>
-              <DialogTitle className="text-[15px] font-extrabold uppercase tracking-[0.14em] text-brand-gold">
+              <DialogTitle className="text-[15px] font-extrabold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">
                 {cfg?.title}
               </DialogTitle>
             </div>
@@ -1260,7 +1260,7 @@ function MetricDetailDialog({
                   <div className="min-w-0 flex-1">
                     <div className={`truncate ${tc.itemTitle}`}>{e.name}</div>
                     <div className={`truncate ${tc.meta}`}>
-                      <span className="font-semibold text-brand-gold">{e.productsCount}</span> produtos
+                      <span className="font-semibold text-[var(--pc-gold-ink)]">{e.productsCount}</span> produtos
                       {e.neighborhood ? ` · ${e.neighborhood}` : ""}
                     </div>
                   </div>
@@ -1276,7 +1276,7 @@ function MetricDetailDialog({
           {which === "products" && data && (
             <div className="space-y-3">
               <div className="rounded-md border border-border/60 bg-muted/40 p-3 text-center">
-                <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-gold">Total monitorado</div>
+                <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">Total monitorado</div>
                 <div className="mt-1 text-[24px] font-extrabold tabular-nums text-foreground">
                   {data.totalProducts.toLocaleString("pt-BR")}
                 </div>
@@ -1291,10 +1291,10 @@ function MetricDetailDialog({
                     {data.topGlobalCategories.slice(0, 10).map((c) => (
                       <span
                         key={c.category}
-                        className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-gold/15 px-2.5 py-1 text-[12px] font-medium text-brand-gold"
+                        className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-gold/15 px-2.5 py-1 text-[12px] font-medium text-[var(--pc-gold-ink)]"
                       >
                         {humanizeCategory(c.category)}
-                        <span className="rounded-full bg-brand-gold/25 px-1.5 text-[11.5px] font-bold text-brand-gold">{c.count}</span>
+                        <span className="rounded-full bg-brand-gold/25 px-1.5 text-[11.5px] font-bold text-[var(--pc-gold-ink)]">{c.count}</span>
                       </span>
                     ))}
                   </div>
@@ -1306,10 +1306,10 @@ function MetricDetailDialog({
           {which === "savings" && data && (
             <div className="space-y-2.5">
               <div className="rounded-md border border-brand-gold/50 bg-brand-gold/10 p-3">
-                <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-gold">
+                <div className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">
                   Diferença máxima na rede
                 </div>
-                <div className="mt-0.5 text-[22px] font-extrabold tabular-nums text-brand-gold">
+                <div className="mt-0.5 text-[22px] font-extrabold tabular-nums text-[var(--pc-gold-ink)]">
                   R$ {data.totalMaxSavings.toFixed(2).replace(".", ",")}
                 </div>
                 <div className={tc.sectionNote}>
@@ -1324,7 +1324,7 @@ function MetricDetailDialog({
                         <div className="truncate text-[13px] font-semibold text-foreground">{e.name}</div>
                         <div className="truncate text-[11px] text-muted-foreground">{e.neighborhood || e.city || "—"}</div>
                       </div>
-                      <div className="shrink-0 rounded bg-brand-gold/15 px-2 py-0.5 text-[12.5px] font-bold tabular-nums text-brand-gold">
+                      <div className="shrink-0 rounded bg-brand-gold/15 px-2 py-0.5 text-[12.5px] font-bold tabular-nums text-[var(--pc-gold-ink)]">
                         até R$ {e.maxSavings.toFixed(2).replace(".", ",")}
                       </div>
                     </li>
