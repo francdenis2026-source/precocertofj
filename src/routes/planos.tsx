@@ -102,7 +102,6 @@ function fallbackHighlights(slug: string, days: number): string[] {
         "O menor valor por mês da plataforma",
         "A escolha da maioria dos assinantes",
       ];
-    // (planos vitalícios/fundador foram descontinuados)
     default:
       return [
         `Acesso completo por ${days} dias`,
