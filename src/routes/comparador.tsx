@@ -1239,7 +1239,7 @@ function ComparisonTableRow({
         )}
       </td>
       <td className="pc-best-result pc-best-result--compact px-4 py-3 text-right border-l border-[color-mix(in_oklab,var(--pc-gold-ink)_20%,transparent)] bg-[color-mix(in_oklab,var(--pc-gold-ink)_5%,transparent)]" aria-label="Menor preço do produto">
-        <p className="pc-price-value pc-price-value--best font-display text-lg font-extrabold leading-none tabular-nums">
+        <p className="pc-price pc-price--lg pc-price--best">
           {formatBRL(Number(row.min_price))}
         </p>
         <p className={cn("mt-1 truncate pc-store-emphasis", tc.storeNameTight)} title={row.cheapest_store}>
@@ -1267,11 +1267,11 @@ function ComparisonTableRow({
       </td>
       <td className="hidden px-4 py-3 text-right md:table-cell">
         {isMulti ? (
-          <span className="inline-flex flex-col items-end">
-            <span className="font-mono text-sm text-muted-foreground line-through">
+          <span className="inline-flex flex-col items-end gap-0.5">
+            <span className="pc-price pc-price--sm pc-price--strike">
               {formatBRL(Number(row.avg_price))}
             </span>
-            <span className="font-mono text-[11px] text-muted-foreground/80">
+            <span className="pc-price pc-price--sm pc-price--muted">
               maior {formatBRL(Number(row.max_price))}
             </span>
           </span>
@@ -1469,7 +1469,7 @@ function ProductCardBase({
           {isMulti && (
             <p className="mt-1 truncate text-[11px] leading-tight text-muted-foreground">
               Maior no município:{" "}
-              <span className="tabular-nums font-medium text-foreground/80">
+              <span className="pc-price pc-price--sm pc-price--muted">
                 {formatBRL(Number(row.max_price))}
               </span>
               {stores.length > 1 ? ` — ${shortenStoreName(stores[stores.length - 1].store_name)}` : ""}
@@ -1534,12 +1534,10 @@ function ProductCardBase({
                   </span>
                 </div>
                 <span
-                  className={
-                    "num shrink-0 tabular-nums leading-none " +
-                    (isBest
-                      ? "font-display text-[11px] font-semibold text-savings sm:text-[11.5px]"
-                      : "font-display text-[11px] text-muted-foreground sm:text-[11px]")
-                  }
+                  className={cn(
+                    "pc-price pc-price--sm shrink-0 leading-none",
+                    isBest ? "pc-price--savings" : "text-muted-foreground",
+                  )}
                 >
                   {formatBRL(Number(s.price))}
                 </span>

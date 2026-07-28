@@ -1160,11 +1160,11 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
           Menor preço
         </span>
         <div className="flex items-baseline justify-between gap-2">
-          <span className={cn(tc.dataPrimary, rank === 1 && "text-[var(--pc-gold-ink)]")}>
+          <span className={cn("pc-price pc-price--lg", rank === 1 && "pc-price--best")}>
             {formatBRL(bestPrice)}
           </span>
           {isMulti && avgPrice > 0 && (
-            <span className="num font-display text-[11px] italic leading-none text-muted-foreground line-through">
+            <span className="pc-price pc-price--sm pc-price--strike leading-none">
               {formatBRL(avgPrice)}
             </span>
           )}
@@ -1178,22 +1178,22 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
           />
         </div>
         {/* Métricas de ordenação — visíveis em todos os cards */}
-        <dl className="mt-1.5 grid grid-cols-3 gap-1 border-t border-accent/15 pt-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-muted-foreground">
+        <dl className="mt-1.5 grid grid-cols-3 gap-1 border-t border-accent/15 pt-1.5 text-[10.5px] uppercase tracking-[0.12em] text-muted-foreground">
           <div className="min-w-0">
             <dt className="truncate">Menor</dt>
-            <dd className="num truncate font-display text-[11px] font-bold not-italic tabular-nums text-primary">
+            <dd className="pc-price pc-price--sm pc-price--best truncate">
               {formatBRL(bestPrice)}
             </dd>
           </div>
           <div className="min-w-0">
             <dt className="truncate">Ticket médio</dt>
-            <dd className="num truncate font-display text-[11px] font-semibold not-italic tabular-nums text-foreground">
+            <dd className="pc-price pc-price--sm truncate">
               {avgPrice > 0 ? formatBRL(avgPrice) : "—"}
             </dd>
           </div>
           <div className="min-w-0">
             <dt className="truncate">Economia</dt>
-            <dd className="num truncate font-display text-[11px] font-bold not-italic tabular-nums text-savings">
+            <dd className="pc-price pc-price--sm pc-price--savings truncate">
               {isMulti ? `−${Number(row.savings_pct).toFixed(1)}%` : "—"}
             </dd>
           </div>
@@ -1371,7 +1371,7 @@ function PriceReportInlineButton({
                 </h3>
                 <p className="mt-0.5 text-[12px] text-muted-foreground">
                   {productName} em <strong className="text-foreground">{storeName}</strong> — preço atual{" "}
-                  <span className="font-mono tabular-nums">{formatBRL(currentPrice)}</span>
+                  <span className="pc-price pc-price--sm">{formatBRL(currentPrice)}</span>
                 </p>
               </div>
               <button

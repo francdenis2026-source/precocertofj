@@ -104,10 +104,12 @@ export function ProductQuickView({
                 "Detalhes do produto"}
             </DialogDescription>
             {product?.minPrice != null && (
-              <p className="mt-1.5 text-[17px] font-bold tabular-nums leading-none text-foreground">
-                {brl(product.minPrice)}
+              <p className="mt-1.5 leading-none">
+                <span className="pc-price pc-price--lg" style={{ fontSize: "17px" }}>
+                  {brl(product.minPrice)}
+                </span>
                 {product.maxPrice != null && product.maxPrice > product.minPrice && (
-                  <span className="ml-1.5 text-[11px] font-medium text-muted-foreground">
+                  <span className="ml-1.5 pc-price pc-price--sm pc-price--muted">
                     até {brl(product.maxPrice)}
                   </span>
                 )}
@@ -132,7 +134,7 @@ export function ProductQuickView({
                 </p>
                 <p className="truncate text-[12.5px] font-semibold">{cheapest.marketName}</p>
               </div>
-              <span className="shrink-0 text-[13.5px] font-bold tabular-nums">
+              <span className="pc-price pc-price--md pc-price--best shrink-0">
                 {brl(cheapest.priceMin)}
               </span>
             </div>
@@ -197,11 +199,11 @@ export function ProductQuickView({
                     </span>
                   </span>
                   <span className="shrink-0 text-right">
-                    <span className="block text-[13px] font-bold tabular-nums">
+                    <span className="block pc-price pc-price--md">
                       {brl(m.priceMin)}
                     </span>
                     {m.priceMax > m.priceMin && (
-                      <span className="block text-[11px] tabular-nums text-muted-foreground">
+                      <span className="block pc-price pc-price--sm pc-price--muted">
                         até {brl(m.priceMax)}
                       </span>
                     )}
@@ -214,7 +216,9 @@ export function ProductQuickView({
           {data?.min != null && data?.avg != null && data.avg > data.min && (
             <p className="mt-2 inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-[11px] font-semibold text-foreground">
               <TrendingDown className="h-3 w-3 text-brand-gold" aria-hidden />
-              Economia de até {brl(data.avg - data.min)} frente à média
+              Economia de até{" "}
+              <span className="pc-price pc-price--sm">{brl(data.avg - data.min)}</span>{" "}
+              frente à média
             </p>
           )}
         </div>

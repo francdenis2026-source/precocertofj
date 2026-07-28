@@ -237,7 +237,7 @@ function OndeComprarPage() {
                         {p.productName}
                       </Link>
                       <p className={cn(tc.meta)}>
-                        {p.storeCount} {p.storeCount === 1 ? "loja" : "lojas"} • média {brl(p.avgPrice)}
+                        {p.storeCount} {p.storeCount === 1 ? "loja" : "lojas"} • média <span className="pc-price pc-price--sm">{brl(p.avgPrice)}</span>
                       </p>
                     </div>
                     {p.savingsPct > 0 && (
