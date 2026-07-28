@@ -461,10 +461,11 @@ function MelhoresPrecosPage() {
 
 
   return (
-    <div className="flex min-h-screen flex-col">
+    <div className="flex h-[100dvh] flex-col overflow-hidden">
       <Nav />
 
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 pb-6 pt-1 md:px-6">
+      <main className="mx-auto w-full max-w-7xl flex-1 min-h-0 overflow-y-auto px-4 pb-[calc(var(--mobile-nav-height)+1rem)] pt-1 md:px-6 md:pb-6">
+
         {/* ---------- Cabeçalho editorial compacto ---------- */}
         <header className="border-b border-border/60 pb-2.5">
           <div className="mb-1 flex min-w-0 items-center gap-2">
