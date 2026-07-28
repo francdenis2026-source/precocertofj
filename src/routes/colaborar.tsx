@@ -491,7 +491,7 @@ function Step({
 }) {
   return (
     <li className="flex gap-2.5">
-      <span className="flex h-7 w-7 flex-none items-center justify-center rounded-lg bg-brand-gold/12 text-brand-gold">
+      <span className="flex h-7 w-7 flex-none items-center justify-center rounded-lg bg-brand-gold/15 text-[var(--pc-gold-ink)] ring-1 ring-brand-gold/25">
         <Icon className="h-3.5 w-3.5" strokeWidth={2.2} aria-hidden />
       </span>
       <div className="min-w-0">
