@@ -1198,7 +1198,7 @@ export function PriceSearchBar({
                   <>
                     <QuickFilters
                       sortMode={sortMode}
-                      onSort={setSortMode}
+                      onSort={handleSortChange}
                       kinds={Array.from(
                         new Set(
                           result.markets
