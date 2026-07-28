@@ -94,11 +94,21 @@ function TrialAccessPage() {
     queryFn: () => list({ data: { status: statusFilter || undefined, search: search || undefined, limit: 300 } }),
     staleTime: 15_000,
   });
+  // Auditoria auto-refresh a cada 30s + inclui encerrados p/ análise histórica
+  const [auditInclEnded, setAuditInclEnded] = useState(true);
   const usersQ = useQuery({
-    queryKey: ["trial-users"],
-    queryFn: () => listUsers({ data: { includeEnded: false } }),
+    queryKey: ["trial-users", auditInclEnded],
+    queryFn: () => listUsers({ data: { includeEnded: auditInclEnded } }),
     staleTime: 15_000,
+    refetchInterval: 30_000,
   });
+
+  // Ticker global (1s) para atualizar o contador de "restante"
+  const [, setTick] = useState(0);
+  useEffect(() => {
+    const id = window.setInterval(() => setTick((t) => t + 1), 1000);
+    return () => window.clearInterval(id);
+  }, []);
 
   const invalidate = () => {
     qc.invalidateQueries({ queryKey: ["trial-codes"] });
