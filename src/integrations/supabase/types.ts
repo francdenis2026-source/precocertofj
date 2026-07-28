@@ -1252,10 +1252,14 @@ export type Database = {
           active: boolean
           ai_monthly_quota: number
           created_at: string
+          cycle: string
           days: number
           description: string | null
+          features: Json
+          highlight: boolean
           id: string
           name: string
+          original_price_cents: number | null
           price_cents: number
           slug: string
           sort_order: number
@@ -1265,10 +1269,14 @@ export type Database = {
           active?: boolean
           ai_monthly_quota?: number
           created_at?: string
+          cycle?: string
           days: number
           description?: string | null
+          features?: Json
+          highlight?: boolean
           id?: string
           name: string
+          original_price_cents?: number | null
           price_cents: number
           slug: string
           sort_order?: number
@@ -1278,10 +1286,14 @@ export type Database = {
           active?: boolean
           ai_monthly_quota?: number
           created_at?: string
+          cycle?: string
           days?: number
           description?: string | null
+          features?: Json
+          highlight?: boolean
           id?: string
           name?: string
+          original_price_cents?: number | null
           price_cents?: number
           slug?: string
           sort_order?: number
@@ -1462,51 +1474,6 @@ export type Database = {
           phone_masked?: string
           request_ip?: string | null
           user_id?: string
-        }
-        Relationships: []
-      }
-      plans: {
-        Row: {
-          active: boolean
-          created_at: string
-          cycle: string
-          days: number
-          description: string
-          features: Json
-          highlight: boolean
-          id: string
-          name: string
-          original_price: number | null
-          price: number
-          updated_at: string
-        }
-        Insert: {
-          active?: boolean
-          created_at?: string
-          cycle: string
-          days: number
-          description?: string
-          features?: Json
-          highlight?: boolean
-          id: string
-          name: string
-          original_price?: number | null
-          price: number
-          updated_at?: string
-        }
-        Update: {
-          active?: boolean
-          created_at?: string
-          cycle?: string
-          days?: number
-          description?: string
-          features?: Json
-          highlight?: boolean
-          id?: string
-          name?: string
-          original_price?: number | null
-          price?: number
-          updated_at?: string
         }
         Relationships: []
       }
@@ -2765,15 +2732,7 @@ export type Database = {
           status?: string
           updated_at?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "subscribers_plan_id_fkey"
-            columns: ["plan_id"]
-            isOneToOne: false
-            referencedRelation: "plans"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
       user_notifications: {
         Row: {
@@ -2981,10 +2940,14 @@ export type Database = {
           active: boolean
           ai_monthly_quota: number
           created_at: string
+          cycle: string
           days: number
           description: string | null
+          features: Json
+          highlight: boolean
           id: string
           name: string
+          original_price_cents: number | null
           price_cents: number
           slug: string
           sort_order: number
