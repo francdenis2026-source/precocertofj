@@ -439,7 +439,7 @@ function HomePage() {
                       <li className="px-4 py-3 text-[13px] text-slate-500">Buscando…</li>
                     ) : (
                       suggestions.map((s, i) => (
-                        <li key={s.slug} role="option" aria-selected={i === activeIdx}>
+                        <li key={s.slug} id={`home-suggest-opt-${s.slug}`} role="option" aria-selected={i === activeIdx} ref={i === activeIdx ? (el) => el?.scrollIntoView({ block: "nearest" }) : undefined}>
                           <button
                             type="button"
                             onMouseDown={(e) => {
