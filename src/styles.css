@@ -514,43 +514,49 @@
     position: relative;
     display: inline-block;
     font-family: var(--font-editorial, var(--font-serif));
-    font-style: normal;
-    font-weight: 480;
-    letter-spacing: -0.014em;
-    font-variation-settings: "opsz" 144, "SOFT" 20, "wght" 480;
+    font-style: normal !important;
+    font-weight: 500;
+    letter-spacing: -0.012em;
+    font-optical-sizing: auto;
+    font-variation-settings: "opsz" 96, "SOFT" 0, "wght" 500;
+    /* Reset stylistic sets herdados de .font-editorial (ss01/ss02) que trocavam
+       glifos alternativos em algumas letras e quebravam a uniformidade. */
+    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+    font-variant-ligatures: common-ligatures;
     color: var(--pc-home-onhero-gold, var(--pc-gold-ink));
     padding-inline: 0.04em;
+    text-shadow: 0 1px 0 color-mix(in oklab, var(--pc-home-onhero-gold, var(--pc-gold-ink)) 18%, transparent);
   }
   /* Hairline dupla: fio principal + reflexo tênue, ambos afinados nas pontas */
   .pc-hero-mark::before,
   .pc-hero-mark::after {
     content: "";
     position: absolute;
-    left: 4%;
-    right: 4%;
+    left: 3%;
+    right: 3%;
     border-radius: 999px;
     pointer-events: none;
   }
   .pc-hero-mark::after {
-    bottom: -0.02em;
-    height: 0.038em;
+    bottom: -0.04em;
+    height: 0.05em;
     background: linear-gradient(90deg,
       transparent 0%,
-      color-mix(in oklab, var(--pc-home-onhero-gold, var(--pc-gold-ink)) 92%, transparent) 22%,
+      color-mix(in oklab, var(--pc-home-onhero-gold, var(--pc-gold-ink)) 95%, transparent) 20%,
       color-mix(in oklab, var(--pc-home-onhero-gold, var(--pc-gold-ink)) 100%, transparent) 50%,
-      color-mix(in oklab, var(--pc-home-onhero-gold, var(--pc-gold-ink)) 92%, transparent) 78%,
+      color-mix(in oklab, var(--pc-home-onhero-gold, var(--pc-gold-ink)) 95%, transparent) 80%,
       transparent 100%);
   }
   .pc-hero-mark::before {
-    bottom: -0.11em;
-    height: 0.018em;
+    bottom: -0.14em;
+    height: 0.02em;
     background: linear-gradient(90deg,
       transparent 0%,
-      color-mix(in oklab, var(--pc-home-onhero-gold, var(--pc-gold-ink)) 45%, transparent) 30%,
-      color-mix(in oklab, var(--pc-home-onhero-gold, var(--pc-gold-ink)) 55%, transparent) 50%,
-      color-mix(in oklab, var(--pc-home-onhero-gold, var(--pc-gold-ink)) 45%, transparent) 70%,
+      color-mix(in oklab, var(--pc-home-onhero-gold, var(--pc-gold-ink)) 50%, transparent) 30%,
+      color-mix(in oklab, var(--pc-home-onhero-gold, var(--pc-gold-ink)) 60%, transparent) 50%,
+      color-mix(in oklab, var(--pc-home-onhero-gold, var(--pc-gold-ink)) 50%, transparent) 70%,
       transparent 100%);
-    opacity: 0.7;
+    opacity: 0.6;
   }
   /* Hero editorial — controla line-height, tracking e wrap por breakpoint sem
      precisar hard-code em cada rota. Aplique junto de .font-editorial. */
