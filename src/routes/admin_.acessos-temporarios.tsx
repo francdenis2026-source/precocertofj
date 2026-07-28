@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { AppShell } from "@/components/brand/AppShell";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
