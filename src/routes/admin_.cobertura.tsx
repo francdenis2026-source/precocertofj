@@ -221,11 +221,13 @@ function CoveragePage() {
                 </div>
 
                 <TabsContent value="faltando">
-                  <RefreshBar
+                  <SharedRefreshBar
+                    scope={`coverage-missing-${selected ?? "none"}`}
+                    label="Produtos faltantes"
+                    rpc="get_missing_products_for_establishment"
                     status={formatQueryStatus(missing)}
                     disabled={missing.isFetching || !selected}
                     onRefresh={() => missing.refetch()}
-                    label="Produtos faltantes"
                     compact
                   />
                   <div className="mt-3">
@@ -239,13 +241,16 @@ function CoveragePage() {
                   </div>
                 </TabsContent>
                 <TabsContent value="cadastrados">
-                  <RefreshBar
+                  <SharedRefreshBar
+                    scope={`coverage-present-${selected ?? "none"}`}
+                    label="Produtos cadastrados"
+                    rpc="get_present_products_for_establishment"
                     status={formatQueryStatus(present)}
                     disabled={present.isFetching || !selected}
                     onRefresh={() => present.refetch()}
-                    label="Produtos cadastrados"
                     compact
                   />
+
                   <div className="mt-3">
                     {present.isLoading ? (
                       <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Carregando produtos cadastrados…</div>
