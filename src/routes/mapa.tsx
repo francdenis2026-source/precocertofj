@@ -210,7 +210,7 @@ function NeighborhoodsPage() {
 
   return (
     <PageShell hideFooter>
-      <PageShellContent className="!flex-initial flex h-[calc(100dvh-64px)] flex-col overflow-hidden !pb-0">
+      <PageShellContent className="!flex-initial flex h-[calc(100dvh-121px)] flex-col overflow-hidden !pb-0 md:h-[calc(100dvh-64px)]">
         {/* Cabeçalho editorial compacto */}
         <header className="shrink-0 border-b border-border/70 bg-card/60">
           <span
