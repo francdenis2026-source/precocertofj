@@ -7,6 +7,8 @@ import { tabLabel, type TabDef } from "./adminTabs.utils";
 
 export type AdminTabItem = TabDef;
 
+export type AdminTabTone = "overview" | "catalog" | "commerce" | "people" | "system";
+
 type Props = {
   /** Rota base do hub, ex.: `/admin/precos`. */
   to: string;
@@ -15,7 +17,10 @@ type Props = {
   items: AdminTabItem[];
   active: string;
   className?: string;
+  /** Tom semântico do hub, aplicado no breadcrumb, na aba ativa e no hover. */
+  tone?: AdminTabTone;
 };
+
 
 /**
  * Barra de abas compacta para páginas admin consolidadas.
