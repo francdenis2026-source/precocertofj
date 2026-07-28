@@ -337,7 +337,7 @@ function HomePage() {
 
               <h1
                 id="hero-title"
-                className="font-editorial pc-hero-editorial mt-3 text-[clamp(2rem,5.4vw,4.25rem)] sm:mt-4"
+                className="font-editorial pc-hero-editorial text-[clamp(2rem,5.4vw,4.25rem)]"
                 style={{ color: "var(--pc-home-onhero-fg)" }}
               >
                 Onde cada real{" "}
@@ -345,7 +345,7 @@ function HomePage() {
               </h1>
 
               <p
-                className="tc-flow mt-3 max-w-xl text-[14px] font-light leading-relaxed sm:mt-4 sm:text-[16px] lg:text-[17px]"
+                className="tc-flow max-w-xl text-[14px] font-light leading-relaxed sm:text-[16px] lg:text-[17px]"
                 style={{ color: "var(--pc-home-onhero-fg-80)" }}
               >
                 Os mercados de Feijó, lado a lado e em tempo real. Você escolhe onde
@@ -353,7 +353,7 @@ function HomePage() {
               </p>
 
               {/* ---------- Busca ---------- */}
-              <form onSubmit={submitSearch} className="relative mt-3 max-w-2xl sm:mt-4" ref={searchBoxRef}>
+              <form onSubmit={submitSearch} className="relative max-w-2xl" ref={searchBoxRef}>
                 <div
                   className="pc-elite-frame flex items-center gap-1 rounded-2xl border p-1 shadow-2xl transition-all focus-within:ring-2 sm:p-1.5"
                   style={{
