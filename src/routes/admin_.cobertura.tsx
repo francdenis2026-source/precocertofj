@@ -270,6 +270,62 @@ function CoveragePage() {
   );
 }
 
+const AUTO_KEY = "pc:refresh:auto:coverage";
+
+function readAuto(): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    return window.localStorage.getItem(AUTO_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function CoverageAutoFocusRefresh({ onRefresh }: { onRefresh: () => void | Promise<unknown> }) {
+  const [enabled, setEnabled] = useState<boolean>(readAuto);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const handler = () => setEnabled(readAuto());
+    window.addEventListener("storage", handler);
+    return () => window.removeEventListener("storage", handler);
+  }, []);
+  useWindowFocusRefresh({ enabled, onRefresh });
+  return null;
+}
+
+function AutoFocusToggle({ scope: _scope }: { scope: string }) {
+  const [enabled, setEnabled] = useState<boolean>(readAuto);
+  const toggle = useCallback((next: boolean) => {
+    setEnabled(next);
+    try {
+      window.localStorage.setItem(AUTO_KEY, next ? "1" : "0");
+      window.dispatchEvent(new StorageEvent("storage", { key: AUTO_KEY }));
+    } catch {
+      /* ignora modo privado */
+    }
+  }, []);
+  return (
+    <div className="flex items-center gap-1.5">
+      <Switch
+        id="coverage-auto-focus"
+        checked={enabled}
+        onCheckedChange={toggle}
+        aria-label="Auto-atualizar ao focar a janela"
+      />
+      <Label
+        htmlFor="coverage-auto-focus"
+        className="cursor-pointer text-[11px] font-normal text-muted-foreground"
+      >
+        Auto ao focar
+      </Label>
+    </div>
+  );
+}
+
+/**
+ * @deprecated Preferir {@link SharedRefreshBar} de `@/components/admin/RefreshBar`.
+ * Mantido apenas para compat interna caso ainda haja consumidores.
+ */
 export function RefreshBar({
   status,
   onRefresh,
@@ -294,12 +350,12 @@ export function RefreshBar({
       className={`flex flex-wrap items-center justify-between gap-2 rounded-md border bg-card px-3 ${compact ? "py-1.5" : "py-2"}`}
       role="status"
       aria-live="polite"
-      data-testid="coverage-refresh-bar"
+      data-testid="coverage-refresh-bar-legacy"
     >
       <div className="flex items-center gap-2 text-xs text-muted-foreground">
         <span className={`inline-block h-2 w-2 rounded-full ${dotClass}`} aria-hidden />
         <span className="font-medium text-foreground/80">{label}</span>
-        <span data-testid="coverage-refresh-status">· {status.label}</span>
+        <span>· {status.label}</span>
       </div>
       <Button
         type="button"
@@ -308,7 +364,6 @@ export function RefreshBar({
         onClick={onRefresh}
         disabled={disabled}
         aria-label={`Atualizar ${label}`}
-        data-testid="coverage-refresh-button"
       >
         {disabled ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -318,6 +373,7 @@ export function RefreshBar({
         Atualizar
       </Button>
     </div>
+
   );
 }
 
