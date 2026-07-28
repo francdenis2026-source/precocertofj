@@ -34,11 +34,7 @@ export const Route = createFileRoute("/admin_/reports")({
       { name: "robots", content: "noindex, nofollow" },
     ],
   }),
-  component: () => (
-    <AppShell scope="admin">
-      <AdminReportsGate />
-    </AppShell>
-  ),
+  component: () => <Navigate to="/admin/metricas" search={{ tab: "relatorios" } as never} replace />,
 });
 
 export function AdminReportsGate() {
