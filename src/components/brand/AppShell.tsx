@@ -2,6 +2,7 @@ import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app/AppSidebar";
 import { AppHeader } from "@/components/app/AppHeader";
 import { MobileNav } from "@/components/nav/MobileNav";
+import { AutoAdminBreadcrumb } from "@/components/admin/AutoAdminBreadcrumb";
 import { useRouterState } from "@tanstack/react-router";
 
 /**
