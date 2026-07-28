@@ -27,7 +27,7 @@ export function ChartSkeleton({
       )}
       style={{ height }}
     >
-      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,transparent,hsl(var(--foreground)/0.05),transparent)] bg-[length:200%_100%] animate-[shimmer_1.6s_infinite]" />
+      <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,transparent,hsl(var(--foreground)/0.05),transparent)] bg-[length:200%_100%] animate-[skeleton-shimmer_1.6s_infinite]" />
       <div className="relative flex flex-col items-center gap-1.5 text-muted-foreground">
         <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden />
         <span className={cn(tc.meta, "sr-only sm:not-sr-only")}>
