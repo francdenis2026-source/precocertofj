@@ -2320,6 +2320,10 @@ function EstablishmentsTab() {
   const [form, setForm] = useState<EstablishmentForm>(emptyForm);
   const [saving, setSaving] = useState(false);
   const [pendingDeleteId, setPendingDeleteId] = useState<string | null>(null);
+  const [density, setDensity] = useState<"compact" | "comfortable">("compact");
+  const [pageSize, setPageSize] = useState<number>(25);
+  const [page, setPage] = useState(1);
+
 
   const load = useCallback(async () => {
     setLoading(true);
