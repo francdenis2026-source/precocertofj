@@ -184,7 +184,16 @@ function SearchPage() {
       urlSyncTimer.current = null;
     }
     navigate({
-      search: (prev: Record<string, unknown>) => ({ ...prev, mode: "strict", pure: "1", brand: undefined, min: undefined, max: undefined }),
+      search: (prev: Record<string, unknown>) => ({
+        ...prev,
+        mode: "strict",
+        pure: "1",
+        brand: undefined,
+        min: undefined,
+        max: undefined,
+        sort: undefined,
+        categoria: undefined,
+      }),
       replace: true,
     });
   };
