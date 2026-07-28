@@ -106,19 +106,25 @@ export function AdminHubLauncher({
               role="list"
               className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 lg:grid-cols-3"
             >
-              {section.items.map((item) => (
+              {section.items.map((item) => {
+                const active = isCardActive(item, pathname, searchStr);
+                return (
                 <li key={item.key}>
                   <Link
                     to={item.to}
                     search={item.search}
                     data-testid={`hub-card-${item.key}`}
+                    data-active={active ? "true" : undefined}
+                    aria-current={active ? "page" : undefined}
                     className={cn(
                       "group relative flex h-full flex-col gap-2 rounded-xl border bg-card p-3 transition-all",
                       "hover:-translate-y-0.5 hover:shadow-md hover:border-[color:var(--tone,theme(colors.border))]",
                       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-                      item.primary
-                        ? "border-[color:var(--tone-ink,theme(colors.border))]/40 bg-[color:var(--tone-soft,transparent)]"
-                        : "border-border/70",
+                      active
+                        ? "border-[color:var(--pc-gold-600,theme(colors.amber.500))] shadow-[0_0_0_2px_var(--pc-focus,theme(colors.amber.400/30))] bg-[color:var(--tone-soft,transparent)]"
+                        : item.primary
+                          ? "border-[color:var(--tone-ink,theme(colors.border))]/40 bg-[color:var(--tone-soft,transparent)]"
+                          : "border-border/70",
                     )}
                   >
                     <div className="flex items-start justify-between gap-2">
@@ -131,33 +137,47 @@ export function AdminHubLauncher({
                       >
                         <item.icon className="h-4 w-4" strokeWidth={2.1} />
                       </span>
-                      {item.badge && (
-                        <span
-                          className={cn(
-                            tc.tag,
-                            "rounded-full px-2 py-0.5",
-                            item.badgeTone === "alert"
-                              ? "border border-destructive/40 bg-destructive/10 text-destructive"
-                              : item.badgeTone === "ok"
-                                ? "border border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
-                                : "border border-border/60 bg-muted text-muted-foreground",
-                          )}
-                        >
-                          {item.badge}
-                        </span>
-                      )}
+                      <div className="flex items-center gap-1.5">
+                        {active && (
+                          <span
+                            className={cn(
+                              tc.tag,
+                              "inline-flex items-center gap-1 rounded-full border border-[color:var(--pc-gold-600,theme(colors.amber.500))]/50 bg-[color:var(--pc-gold-50,theme(colors.amber.50))] px-2 py-0.5 text-[color:var(--pc-gold-700,theme(colors.amber.700))]",
+                            )}
+                          >
+                            <Check className="h-3 w-3" aria-hidden />
+                            Aberto
+                          </span>
+                        )}
+                        {item.badge && (
+                          <span
+                            className={cn(
+                              tc.tag,
+                              "rounded-full px-2 py-0.5",
+                              item.badgeTone === "alert"
+                                ? "border border-destructive/40 bg-destructive/10 text-destructive"
+                                : item.badgeTone === "ok"
+                                  ? "border border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
+                                  : "border border-border/60 bg-muted text-muted-foreground",
+                            )}
+                          >
+                            {item.badge}
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <div className="min-w-0 flex-1">
                       <h3 className={cn(tc.itemTitle, "truncate")}>{item.title}</h3>
                       <p className={cn(tc.meta, "mt-0.5 line-clamp-2")}>{item.description}</p>
                     </div>
                     <div className={cn(tc.control, "flex items-center gap-1 text-muted-foreground/80 group-hover:text-foreground")}>
-                      Abrir
+                      {active ? "Aberto agora" : "Abrir"}
                       <ChevronRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5" aria-hidden />
                     </div>
                   </Link>
                 </li>
-              ))}
+                );
+              })}
             </ul>
           </section>
         ))}
