@@ -508,6 +508,17 @@
     font-variation-settings: "opsz" 144, "SOFT" 30, "wght" 460;
     padding-inline: 0.015em;
   }
+  /* Hero mark — assinatura "preço certo" no hero da homepage.
+     Roman (sem itálico), ouro sólido, mesma família editorial do título. */
+  .pc-hero-mark {
+    font-family: var(--font-editorial, var(--font-serif));
+    font-style: normal;
+    font-weight: 480;
+    letter-spacing: -0.022em;
+    font-variation-settings: "opsz" 144, "SOFT" 20, "wght" 480;
+    color: var(--pc-home-onhero-gold, var(--pc-gold-ink));
+    text-decoration: none;
+    padding-inline: 0.015em;
   /* Hero editorial — controla line-height, tracking e wrap por breakpoint sem
      precisar hard-code em cada rota. Aplique junto de .font-editorial. */
   .pc-hero-editorial {
