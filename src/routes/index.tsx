@@ -318,23 +318,47 @@ function HomePage() {
           <div className="grid flex-1 items-center gap-5 lg:grid-cols-12 lg:gap-12">
             {/* ---------- Coluna editorial ---------- */}
             <div className="order-1 flex min-w-0 flex-col gap-3 sm:gap-4 lg:col-span-7 lg:pr-4">
-              <span
-                className="inline-flex items-center gap-2 rounded-full border px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.2em]"
+              <div
+                className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] backdrop-blur-sm"
                 style={{
-                  background: `color-mix(in oklab, ${P.gold} 12%, transparent)`,
-                  borderColor: `color-mix(in oklab, ${P.gold} 40%, transparent)`,
+                  background: `color-mix(in oklab, ${P.navy} 45%, transparent)`,
+                  borderColor: `color-mix(in oklab, ${P.gold} 38%, transparent)`,
                   color: "var(--pc-home-onhero-gold)",
                 }}
+                role="status"
+                aria-live="polite"
               >
-                <span className="relative flex h-1.5 w-1.5">
+                <span className="relative flex h-1.5 w-1.5" aria-hidden>
                   <span
                     className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
                     style={{ background: P.gold }}
                   />
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: P.gold }} />
                 </span>
-                Feira comparada · Feijó/AC
-              </span>
+                <span>Ao vivo · Feijó/AC</span>
+                <span aria-hidden style={{ color: `color-mix(in oklab, ${P.gold} 50%, transparent)` }}>·</span>
+                <span className="inline-flex items-center gap-1 normal-case tracking-normal" style={{ color: "var(--pc-home-onhero-fg)" }}>
+                  <ShieldCheck className="h-3 w-3" aria-hidden />
+                  <strong className="pc-num font-semibold">{stats?.markets ?? "—"}</strong>
+                  <span className="text-[10px] opacity-80">mercados</span>
+                </span>
+                <span aria-hidden style={{ color: `color-mix(in oklab, ${P.gold} 50%, transparent)` }}>·</span>
+                <span className="inline-flex items-center gap-1 normal-case tracking-normal" style={{ color: "var(--pc-home-onhero-fg)" }}>
+                  <Package className="h-3 w-3" aria-hidden />
+                  <strong className="pc-num font-semibold">{stats?.products ?? "—"}</strong>
+                  <span className="text-[10px] opacity-80">produtos</span>
+                </span>
+                {economy?.percent != null ? (
+                  <>
+                    <span aria-hidden style={{ color: `color-mix(in oklab, ${P.gold} 50%, transparent)` }}>·</span>
+                    <span className="inline-flex items-center gap-1 normal-case tracking-normal" style={{ color: "var(--pc-home-onhero-fg)" }}>
+                      <TrendingDown className="h-3 w-3" aria-hidden />
+                      <strong className="pc-num font-semibold">{Math.round(Number(economy.percent))}%</strong>
+                      <span className="text-[10px] opacity-80">economia média</span>
+                    </span>
+                  </>
+                ) : null}
+              </div>
 
               <h1
                 id="hero-title"
