@@ -17,6 +17,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ChevronRight, Download, Loader2, MapPin, Search, Store, PackageX, PackageCheck } from "lucide-react";
 import { getCoverageOverview, getMissingProducts, getPresentProducts, type EstablishmentCoverage } from "@/lib/coverage.functions";
+import { CoverageDiagnosticsPanel, CoverageErrorBanner } from "@/components/admin/CoverageDiagnosticsPanel";
 
 export const Route = createFileRoute("/admin_/cobertura")({
   ssr: false,
@@ -134,10 +135,14 @@ function CoveragePage() {
         goldRule
       />
       <section className="mx-auto max-w-7xl px-6 py-10">
-
+        <div className="mb-6">
+          <CoverageDiagnosticsPanel />
+        </div>
 
         {overview.isLoading ? (
           <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Carregando…</div>
+        ) : overview.error ? (
+          <CoverageErrorBanner error={overview.error} onRetry={() => overview.refetch()} />
         ) : (
           <OverviewTable rows={rows} onSelect={(id) => { setSelected(id); setSearch(""); setCategory("todos"); }} selected={selected} />
         )}
@@ -192,6 +197,8 @@ function CoveragePage() {
                 <TabsContent value="faltando">
                   {missing.isLoading ? (
                     <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Carregando produtos faltantes…</div>
+                  ) : missing.error ? (
+                    <CoverageErrorBanner error={missing.error} onRetry={() => missing.refetch()} />
                   ) : (
                     <MissingTable rows={missing.data ?? []} />
                   )}
@@ -199,6 +206,8 @@ function CoveragePage() {
                 <TabsContent value="cadastrados">
                   {present.isLoading ? (
                     <div className="flex items-center gap-2 text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin" /> Carregando produtos cadastrados…</div>
+                  ) : present.error ? (
+                    <CoverageErrorBanner error={present.error} onRetry={() => present.refetch()} />
                   ) : (
                     <PresentTable rows={present.data ?? []} />
                   )}

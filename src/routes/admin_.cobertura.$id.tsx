@@ -41,6 +41,7 @@ import {
   getMissingProducts,
   getPresentProducts,
 } from "@/lib/coverage.functions";
+import { CoverageErrorBanner } from "@/components/admin/CoverageDiagnosticsPanel";
 import { bulkInsertScans } from "@/lib/bulk-insert.functions";
 
 export const Route = createFileRoute("/admin_/cobertura/$id")({
@@ -316,6 +317,8 @@ function StoreCoverageDetail() {
               <TabsContent value="faltando" className="mt-0">
                 {isLoading ? (
                   <LoadingState label="Carregando produtos faltantes…" />
+                ) : missing.error ? (
+                  <CoverageErrorBanner error={missing.error} onRetry={() => missing.refetch()} />
                 ) : rows.length === 0 ? (
                   <EmptyState label="Nada faltando com esses filtros. 🎉" />
                 ) : (
@@ -328,6 +331,8 @@ function StoreCoverageDetail() {
               <TabsContent value="cadastrados" className="mt-0">
                 {isLoading ? (
                   <LoadingState label="Carregando produtos cadastrados…" />
+                ) : present.error ? (
+                  <CoverageErrorBanner error={present.error} onRetry={() => present.refetch()} />
                 ) : rows.length === 0 ? (
                   <EmptyState label="Nenhum produto cadastrado com esses filtros." />
                 ) : (
