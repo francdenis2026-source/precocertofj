@@ -115,6 +115,7 @@ function PlansTab() {
   const fetchPlans = useServerFn(listLicensePlans);
   const upsertFn = useServerFn(upsertLicensePlan);
   const { data: plans } = useQuery({ queryKey: ["license-plans"], queryFn: () => fetchPlans() });
+  usePlansRealtime();
   const [editing, setEditing] = useState<any | null>(null);
   const [creating, setCreating] = useState(false);
 
