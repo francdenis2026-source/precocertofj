@@ -15,9 +15,18 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ChevronRight, Download, Loader2, MapPin, Search, Store, PackageX, PackageCheck } from "lucide-react";
+import { ChevronRight, Download, Loader2, MapPin, RefreshCw, Search, Store, PackageX, PackageCheck } from "lucide-react";
 import { getCoverageOverview, getMissingProducts, getPresentProducts, type EstablishmentCoverage } from "@/lib/coverage.functions";
 import { CoverageDiagnosticsPanel, CoverageErrorBanner } from "@/components/admin/CoverageDiagnosticsPanel";
+
+function formatQueryStatus(query: { isFetching: boolean; error: unknown; dataUpdatedAt: number; errorUpdatedAt: number }) {
+  if (query.isFetching) return { label: "Consultando…", tone: "muted" as const };
+  const ts = query.error ? query.errorUpdatedAt : query.dataUpdatedAt;
+  if (!ts) return { label: "Sem consulta ainda", tone: "muted" as const };
+  const rel = new Date(ts).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  if (query.error) return { label: `Falha às ${rel}`, tone: "error" as const };
+  return { label: `Atualizado às ${rel}`, tone: "ok" as const };
+}
 
 export const Route = createFileRoute("/admin_/cobertura")({
   ssr: false,
