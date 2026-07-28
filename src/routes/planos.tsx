@@ -214,33 +214,61 @@ function PlansPage() {
 
 
   return (
-    <div data-planos-shell className="flex h-[calc(100svh-64px)] flex-col overflow-hidden overscroll-none bg-background text-foreground md:h-[calc(100svh-64px)]">
+    <div
+      data-planos-shell
+      className="flex h-[calc(100svh-64px)] flex-col overflow-hidden overscroll-none bg-background text-foreground md:h-[100svh]"
+    >
       <main className="flex min-h-0 flex-1 flex-col">
-        {/* Cabeçalho compacto — altura fixa */}
-        <section className={dsx(ds.container, "shrink-0 pt-1.5 pb-1")}>
-          <InternalPageHeader
-            title="Planos e preços"
-            highlight="preços"
-            showBack={false}
-            breadcrumbs={[{ label: "Início", to: "/" }, { label: "Planos" }]}
-            description={
-              <span data-short-hide className="inline-flex flex-wrap items-center gap-x-2 gap-y-1">
-                <span>Escolha o plano que combina com sua rotina — {trialDays} dias grátis, sem cartão.</span>
-                <span className="inline-flex items-center gap-1 text-[11.5px] text-muted-foreground">
-                  <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-brand-gold" aria-hidden />
-                  Ativação imediata · Pix ou cartão
+        {/* Cabeçalho compacto com atalhos à direita */}
+        <section className={dsx(ds.container, "shrink-0 pt-2 pb-1.5")}>
+          <div className="flex flex-wrap items-end justify-between gap-3">
+            <InternalPageHeader
+              title="Planos e preços"
+              highlight="preços"
+              showBack={false}
+              breadcrumbs={[{ label: "Início", to: "/" }, { label: "Planos" }]}
+              description={
+                <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <span>Assinatura mensal a partir de <strong className="text-foreground">R$ 29,90</strong> — economize até 30% no anual.</span>
+                  <span className="inline-flex items-center gap-1 text-[11.5px] text-muted-foreground">
+                    <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-brand-gold" aria-hidden />
+                    Pix instantâneo · Ativação imediata
+                  </span>
                 </span>
-              </span>
-            }
-            className="mb-0"
-          />
+              }
+              className="mb-0 flex-1 min-w-[240px]"
+            />
+            <div className="hidden items-center gap-1.5 md:flex">
+              <button
+                type="button"
+                onClick={() => setOpenSheet("compare")}
+                className="pc-focus inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[12px] font-semibold text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)]"
+              >
+                <Sparkles className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+                Comparar
+              </button>
+              <button
+                type="button"
+                onClick={() => setOpenSheet("faq")}
+                className="pc-focus inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[12px] font-semibold text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)]"
+              >
+                <ChevronDown className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+                Perguntas
+              </button>
+              <Link
+                to="/resgatar"
+                className="pc-focus inline-flex h-8 items-center rounded-full px-3 text-[12px] font-semibold text-brand-gold hover:underline"
+              >
+                Já tenho código →
+              </Link>
+            </div>
+          </div>
         </section>
 
-        {/* Planos — carrossel com snap no mobile, grade no desktop.
-            Altura reservada: nunca empurra o restante da tela. */}
+        {/* Planos — ocupam toda a altura disponível */}
         <section
-          id="planos"
-          className={dsx(ds.container, "min-h-0 flex-1 overflow-hidden pb-1")}
+          id="detalhes"
+          className={dsx(ds.container, "min-h-0 flex-1 overflow-hidden pb-1.5")}
           aria-label="Planos disponíveis"
         >
           {isLoading ? (
@@ -249,18 +277,22 @@ function PlansPage() {
                 <div
                   key={i}
                   data-planos-card
-                  className="h-full min-h-[168px] w-[76%] shrink-0 animate-pulse rounded-xl border border-border bg-muted/40 lg:w-auto"
+                  className="h-full w-[78%] shrink-0 animate-pulse rounded-2xl border border-border bg-muted/40 lg:w-auto"
                 />
               ))}
             </div>
           ) : (
-            <div className="pc-rail flex h-full snap-x snap-mandatory gap-3 overflow-x-auto pb-1 pt-1.5 lg:grid lg:grid-cols-4 lg:overflow-visible">
+            <div className="pc-rail flex h-full snap-x snap-mandatory gap-3 overflow-x-auto pb-1 pt-1 lg:grid lg:grid-cols-4 lg:gap-4 lg:overflow-visible">
               {plans.map((plan) => {
                 const isRecommended = plan.slug === recommendedSlug;
                 const perMonth = pricePerMonth(plan.price_cents, plan.days);
                 const isFounder = plan.slug.includes("fundador");
                 const isFree = plan.price_cents === 0;
                 const isSelected = selectedPlan?.id === plan.id;
+                const savings =
+                  plan.original_price_cents && plan.original_price_cents > plan.price_cents
+                    ? Math.round(((plan.original_price_cents - plan.price_cents) / plan.original_price_cents) * 100)
+                    : null;
 
                 return (
                   <article
@@ -278,42 +310,46 @@ function PlansPage() {
                     aria-pressed={isSelected}
                     aria-label={`${plan.name}${isRecommended ? " · recomendado" : ""}${isFree ? " · grátis" : ` · ${centsToBRL(plan.price_cents)}`}`}
                     className={cn(
-                      "pc-lift pc-focus relative flex h-full min-h-[168px] w-[76%] shrink-0 snap-start cursor-pointer flex-col p-3 sm:w-[46%] lg:h-auto lg:min-h-[200px] lg:w-auto lg:p-3.5",
+                      "pc-lift pc-focus relative flex h-full w-[78%] shrink-0 snap-start cursor-pointer flex-col p-4 sm:w-[48%] lg:h-auto lg:w-auto lg:p-5",
                       isRecommended ? "pc-surface-3-interactive" : "pc-surface-2-interactive",
-                      isSelected && "ring-2 ring-brand-gold/45",
+                      isSelected && "ring-2 ring-brand-gold/50",
                     )}
                   >
-                    {(isRecommended || isFounder) && (
+                    {(isRecommended || isFounder || savings) && (
                       <span
                         className={dsx(
                           tc.eyebrow,
                           "absolute right-3 top-3 inline-flex items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5",
-                          isRecommended ? "badge-gold text-brand-navy" : "badge-gold-outline",
+                          isRecommended
+                            ? "badge-gold text-brand-navy"
+                            : isFounder
+                              ? "badge-gold-outline"
+                              : "border border-brand-gold/40 bg-brand-gold/10 text-[var(--pc-gold-ink)]",
                         )}
                       >
-                        {isRecommended ? "Recomendado" : "Limitado"}
+                        {isRecommended ? "Recomendado" : isFounder ? "Limitado" : `-${savings}%`}
                       </span>
                     )}
 
-                    <span className={cn(tc.eyebrow, "mb-1 block", (isRecommended || isFounder) && "pr-28")}>
-                      {isRecommended ? "Mais escolhido" : isFounder ? "Edição fundador" : "Plano"}
+                    <span className={cn(tc.eyebrow, "mb-1 block", (isRecommended || isFounder || savings) && "pr-24")}>
+                      {isRecommended ? "Mais escolhido" : isFounder ? "Edição fundador" : isFree ? "Comece por aqui" : "Plano"}
                     </span>
-                    <h2 className={cn(tc.sectionTitle, "pr-24")}>
-                      {plan.name}
-                    </h2>
+                    <h2 className={cn(tc.sectionTitle, "pr-24")}>{plan.name}</h2>
 
-                    <div className="mt-2">
+                    <div className="mt-3">
                       <div className="flex items-baseline gap-2">
                         <span
                           className={cn(
-                            isRecommended ? tc.dataPrimary : "font-display text-[25px] font-semibold leading-none tracking-tight text-foreground",
+                            isRecommended
+                              ? "font-display text-[32px] font-bold leading-none tracking-tight text-foreground lg:text-[36px]"
+                              : "font-display text-[28px] font-semibold leading-none tracking-tight text-foreground lg:text-[32px]",
                           )}
                         >
                           {isFree ? "Grátis" : centsToBRL(plan.price_cents)}
                         </span>
                         {plan.original_price_cents != null &&
                           plan.original_price_cents > plan.price_cents && (
-                            <span className="text-xs text-muted-foreground line-through">
+                            <span className="text-[12px] text-muted-foreground line-through">
                               {centsToBRL(plan.original_price_cents)}
                             </span>
                           )}
@@ -329,15 +365,12 @@ function PlansPage() {
                       </p>
                     </div>
 
-                    <hr className="pc-rule my-2.5" />
+                    <hr className="pc-rule my-3" />
 
-                    <ul className="min-h-0 flex-1 space-y-1.5 overflow-hidden text-[12px] leading-snug">
-                      {planHighlights(plan).slice(0, 2).map((h) => (
+                    <ul className="min-h-0 flex-1 space-y-2 overflow-hidden text-[12.5px] leading-snug">
+                      {planHighlights(plan).slice(0, 4).map((h) => (
                         <li key={h} className="flex items-start gap-2">
-                          <Check
-                            className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-gold"
-                            aria-hidden
-                          />
+                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-gold" aria-hidden />
                           <span className="text-foreground/85">{h}</span>
                         </li>
                       ))}
@@ -354,7 +387,7 @@ function PlansPage() {
                       data-loading={buying === plan.id ? "true" : undefined}
                       className={dsx(
                         ds.btn.base,
-                        "btn-state-safe pc-focus mt-2.5 h-10 w-full px-3",
+                        "btn-state-safe pc-focus mt-3 h-11 w-full px-3",
                         tc.control,
                         isRecommended || isFounder
                           ? "btn-gold shadow-elev-1"
@@ -365,7 +398,7 @@ function PlansPage() {
                         ? "Iniciando…"
                         : isFree
                           ? "Começar grátis"
-                          : "Assinar"}
+                          : "Assinar agora"}
                       <ArrowRight className="h-3.5 w-3.5" aria-hidden />
                     </button>
                   </article>
@@ -373,36 +406,6 @@ function PlansPage() {
               })}
             </div>
           )}
-        </section>
-
-        {/* Rodapé — abrem em modais compactos, sem sair da página. */}
-        <section className={dsx(ds.container, "shrink-0 pb-0.5")} aria-label="Ajuda e comparativo">
-          <div className="flex flex-wrap items-center justify-center gap-2 text-[12px]">
-            <button
-              type="button"
-              onClick={() => setOpenSheet("compare")}
-              aria-haspopup="dialog"
-              className="pc-focus inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 font-semibold text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)]"
-            >
-              <Sparkles className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
-              Comparar recursos
-            </button>
-            <button
-              type="button"
-              onClick={() => setOpenSheet("faq")}
-              aria-haspopup="dialog"
-              className="pc-focus inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 font-semibold text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)]"
-            >
-              <ChevronDown className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
-              Perguntas frequentes
-            </button>
-            <Link
-              to="/resgatar"
-              className="pc-focus inline-flex h-8 items-center rounded-full px-3 font-semibold text-brand-gold hover:underline"
-            >
-              Já tenho código →
-            </Link>
-          </div>
         </section>
 
         {/* Modal: Comparar recursos */}
@@ -424,9 +427,7 @@ function PlansPage() {
                     <th className={cn(tc.tableHead, "py-2 text-left")}>Recurso</th>
                     <th className={cn(tc.tableHead, "py-2 text-center")}>Degustação</th>
                     <th className={cn(tc.tableHead, "py-2 text-center")}>Mensal</th>
-                    <th className={cn(tc.tableHead, "py-2 text-center text-[var(--pc-gold-ink)]")}>
-                      Anual
-                    </th>
+                    <th className={cn(tc.tableHead, "py-2 text-center text-[var(--pc-gold-ink)]")}>Anual</th>
                     <th className={cn(tc.tableHead, "py-2 text-center")}>Fundador</th>
                   </tr>
                 </thead>
@@ -449,15 +450,9 @@ function PlansPage() {
                         <td key={j} className="py-2 text-center">
                           {typeof c === "boolean" ? (
                             c ? (
-                              <Check
-                                className="mx-auto h-4 w-4 text-[var(--pc-gold-ink)]"
-                                aria-label="Incluído"
-                              />
+                              <Check className="mx-auto h-4 w-4 text-[var(--pc-gold-ink)]" aria-label="Incluído" />
                             ) : (
-                              <Minus
-                                className="mx-auto h-4 w-4 text-muted-foreground/60"
-                                aria-label="Não incluído"
-                              />
+                              <Minus className="mx-auto h-4 w-4 text-muted-foreground/60" aria-label="Não incluído" />
                             )
                           ) : (
                             <span className={cn(tc.num, "tabular-nums")}>{c}</span>
@@ -517,11 +512,7 @@ function PlansPage() {
           </DialogContent>
         </Dialog>
 
-
-
-
-
-        {/* Barra de ação — em fluxo, sempre visível, nunca sobreposta. */}
+        {/* Barra inferior: confiança + atalhos mobile (em fluxo, sempre visível) */}
         <div
           data-testid="planos-cta-bar"
           className={dsx(
@@ -529,37 +520,34 @@ function PlansPage() {
             "shrink-0 pb-[calc(env(safe-area-inset-bottom,0px)+0.5rem)] pt-1",
           )}
         >
-          <div className="flex min-h-[54px] items-center justify-between gap-3 rounded-xl border border-border bg-card px-3.5 py-2 shadow-elev-2">
-
-            <div className="min-w-0">
-              <p className="truncate text-[12.5px] font-semibold text-foreground">
-                {selectedPlan?.name ?? "Escolha um plano"}
-              </p>
-              <p className="truncate text-[11.5px] text-muted-foreground">
-                {!selectedPlan
-                  ? `${trialDays} dias grátis, sem cartão`
-                  : selectedPlan.price_cents === 0
-                    ? `${selectedPlan.days} dias grátis · sem cartão`
-                    : `${centsToBRL(selectedPlan.price_cents)} · ${selectedPlan.days} dias`}
-              </p>
+          <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border bg-card px-3.5 py-2 shadow-elev-1">
+            <p className="inline-flex items-center gap-1.5 text-[11.5px] text-muted-foreground">
+              <ShieldCheck className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+              Pagamento seguro Mercado Pago · Cancele quando quiser
+            </p>
+            <div className="flex items-center gap-1.5 md:hidden">
+              <button
+                type="button"
+                onClick={() => setOpenSheet("compare")}
+                className="pc-focus inline-flex h-8 items-center gap-1 rounded-full border border-border bg-background px-2.5 text-[11.5px] font-semibold text-muted-foreground hover:border-brand-gold hover:text-[var(--pc-gold-ink)]"
+              >
+                <Sparkles className="h-3 w-3 text-brand-gold" aria-hidden />
+                Comparar
+              </button>
+              <button
+                type="button"
+                onClick={() => setOpenSheet("faq")}
+                className="pc-focus inline-flex h-8 items-center gap-1 rounded-full border border-border bg-background px-2.5 text-[11.5px] font-semibold text-muted-foreground hover:border-brand-gold hover:text-[var(--pc-gold-ink)]"
+              >
+                FAQ
+              </button>
+              <Link
+                to="/resgatar"
+                className="pc-focus inline-flex h-8 items-center rounded-full px-2.5 text-[11.5px] font-semibold text-brand-gold hover:underline"
+              >
+                Código →
+              </Link>
             </div>
-            <button
-              type="button"
-              onClick={() => selectedPlan && handleBuy(selectedPlan)}
-              disabled={!selectedPlan || buying === selectedPlan.id}
-              data-loading={selectedPlan && buying === selectedPlan.id ? "true" : undefined}
-              className={dsx(
-                ds.btn.base,
-                "btn-gold btn-state-safe h-10 min-w-[8.5rem] shrink-0 px-4 text-[12px] font-bold uppercase tracking-[0.08em] shadow-elev-1 sm:min-w-[9.5rem]",
-              )}
-            >
-              {selectedPlan && buying === selectedPlan.id
-                ? "Iniciando…"
-                : selectedPlan?.price_cents === 0
-                  ? "Começar grátis"
-                  : "Assinar"}
-              <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-            </button>
           </div>
         </div>
       </main>
