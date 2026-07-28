@@ -257,6 +257,58 @@ function CoveragePage() {
   );
 }
 
+export function RefreshBar({
+  status,
+  onRefresh,
+  disabled,
+  label,
+  compact,
+}: {
+  status: { label: string; tone: "muted" | "ok" | "error" };
+  onRefresh: () => void;
+  disabled?: boolean;
+  label: string;
+  compact?: boolean;
+}) {
+  const dotClass =
+    status.tone === "ok"
+      ? "bg-emerald-500"
+      : status.tone === "error"
+        ? "bg-destructive"
+        : "bg-muted-foreground/40";
+  return (
+    <div
+      className={`flex flex-wrap items-center justify-between gap-2 rounded-md border bg-card px-3 ${compact ? "py-1.5" : "py-2"}`}
+      role="status"
+      aria-live="polite"
+      data-testid="coverage-refresh-bar"
+    >
+      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+        <span className={`inline-block h-2 w-2 rounded-full ${dotClass}`} aria-hidden />
+        <span className="font-medium text-foreground/80">{label}</span>
+        <span data-testid="coverage-refresh-status">· {status.label}</span>
+      </div>
+      <Button
+        type="button"
+        size="sm"
+        variant="outline"
+        onClick={onRefresh}
+        disabled={disabled}
+        aria-label={`Atualizar ${label}`}
+        data-testid="coverage-refresh-button"
+      >
+        {disabled ? (
+          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          <RefreshCw className="mr-2 h-4 w-4" />
+        )}
+        Atualizar
+      </Button>
+    </div>
+  );
+}
+
+
 function OverviewTable({
   rows,
   onSelect,
