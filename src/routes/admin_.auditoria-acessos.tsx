@@ -44,6 +44,7 @@ import {
 } from "recharts";
 import { ShieldAlert, Activity, RefreshCw, TrendingUp, Ban, Shield } from "lucide-react";
 import { AppShell } from "@/components/brand/AppShell";
+import { ChartSkeleton, ChartEmpty } from "@/components/admin/ChartStates";
 
 export const Route = createFileRoute("/admin_/auditoria-acessos")({
   ssr: false,
