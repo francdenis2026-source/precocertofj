@@ -2137,6 +2137,30 @@ function CompareMatrix({
           );
         })}
       </div>
+      {canExpand ? (
+        <div className="mt-2 flex items-center justify-between gap-2 px-1">
+          <p
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            className="text-[11px] font-medium text-muted-foreground"
+          >
+            {expanded
+              ? `Mostrando todos os ${sorted.length} mercados`
+              : `Mostrando os ${COLLAPSED_LIMIT} mais baratos de ${sorted.length}`}
+          </p>
+          <button
+            type="button"
+            onClick={() => setExpanded((v) => !v)}
+            aria-expanded={expanded}
+            className="inline-flex h-7 items-center gap-1.5 rounded-full border border-brand-gold/60 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-2.5 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--pc-gold-ink)] transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+          >
+            {expanded
+              ? "Ver menos"
+              : `Ver todos (+${hiddenCount})`}
+          </button>
+        </div>
+      ) : null}
     </section>
   );
 }
