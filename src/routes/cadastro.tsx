@@ -190,10 +190,23 @@ function CadastroPage() {
         </div>
 
         {/* RIGHT — Form */}
-        <section className="relative flex flex-col p-4 sm:p-5 md:p-6 md:overflow-hidden">
+        <section className="relative flex flex-col p-3.5 sm:p-4 md:p-5 md:overflow-hidden">
+
+            {redirecting && (
+              <div
+                className="absolute inset-0 z-30 grid place-items-center bg-white/85 backdrop-blur-sm"
+                aria-live="polite"
+                aria-busy="true"
+              >
+                <div className="flex items-center gap-2 text-[13px] font-semibold text-slate-700">
+                  <Loader2 className="h-4 w-4 animate-spin" />
+                  Entrando na sua conta…
+                </div>
+              </div>
+            )}
 
             {/* Header — kicker compacto (evita duplicação com AuthHero) */}
-            <div className="mb-2.5">
+            <div className="mb-2">
               <p
                 className="text-[11px] font-bold uppercase tracking-[0.22em]"
                 style={{ color: PC_EMERALD }}
@@ -201,12 +214,13 @@ function CadastroPage() {
                 Novo assinante
               </p>
               <h2
-                className="mt-0.5 text-[20px] leading-[1.1] tracking-tight"
+                className="mt-0.5 text-[19px] leading-[1.1] tracking-tight"
                 style={{ fontFamily: PC_DISPLAY, fontWeight: 700, color: "#0a1631" }}
               >
                 Criar conta
               </h2>
             </div>
+
 
             <form onSubmit={handleSubmit} className="space-y-2" noValidate>
               <Field
