@@ -470,8 +470,13 @@ function RedeemPage() {
             </div>
 
             {authLoading ? (
-              <div className="flex h-64 items-center justify-center">
-                <Loader2 className="h-6 w-6 animate-spin text-primary" aria-label="Carregando" />
+              <div className="flex min-h-[420px] flex-1 items-center justify-center" aria-live="polite">
+                <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                  <Loader2 className="h-6 w-6 animate-spin text-primary" aria-label="Carregando sessão" />
+                  <span className="text-[11.5px] font-semibold uppercase tracking-[0.2em]">
+                    Carregando sessão…
+                  </span>
+                </div>
               </div>
             ) : result?.ok ? (
               <SuccessBody
@@ -491,9 +496,9 @@ function RedeemPage() {
                 <p className="text-[10.5px] font-bold uppercase tracking-[0.24em] text-[color:var(--pc-home-gold)]">
                   Ativação
                 </p>
-                <h2 className="pc-hero-editorial font-editorial mt-1 text-[clamp(22px,2.6vw,30px)] leading-[1.05] text-foreground">
+                <h2 className="mt-1 text-[clamp(22px,2.6vw,30px)] font-extrabold leading-[1.1] tracking-tight text-foreground">
                   Ativar meu{" "}
-                  <span className="pc-editorial-accent pc-editorial-accent--fill">código</span>
+                  <span className="text-[color:var(--pc-home-gold)]">código</span>
                 </h2>
                 <p className="mt-1.5 text-[12.5px] leading-snug text-muted-foreground">
                   Cole o código do e-mail — formato{" "}
@@ -502,6 +507,7 @@ function RedeemPage() {
                   </span>
                   .
                 </p>
+
 
                 <label
                   htmlFor="license-code"
@@ -827,10 +833,11 @@ function SuccessBody({
           <CheckCircle2 className="h-6 w-6" aria-hidden />
         </div>
         <div className="min-w-0 flex-1">
-          <h2 className="font-editorial text-[26px] font-normal leading-[1.1] tracking-tight text-foreground">
+          <h2 className="text-[26px] font-extrabold leading-[1.1] tracking-tight text-foreground">
             Licença{" "}
-            <span className="pc-editorial-accent pc-editorial-accent--fill">ativada</span>
+            <span className="text-[color:var(--pc-home-gold)]">ativada</span>
           </h2>
+
           <p className="mt-1 text-[13px] leading-snug text-muted-foreground">
             {addedDays ? `${addedDays} dias adicionados à sua assinatura.` : "Sua assinatura foi atualizada."}
           </p>
