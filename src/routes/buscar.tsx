@@ -41,6 +41,8 @@ const searchSchema = z.object({
   min: fallback(z.string(), "").default(""),
   max: fallback(z.string(), "").default(""),
   sort: fallback(z.string(), "cheapest").default("cheapest"),
+  product: fallback(z.string(), "").default(""),
+  market: fallback(z.string(), "").default(""),
 });
 
 const SORT_VALUES = new Set([
@@ -65,9 +67,21 @@ export const Route = createFileRoute("/buscar")({
   validateSearch: zodValidator(searchSchema),
   search: {
     middlewares: [
-      retainSearchParams(["q", "categoria", "mode", "pure", "brand", "min", "max", "sort"]),
+      retainSearchParams([
+        "q",
+        "categoria",
+        "mode",
+        "pure",
+        "brand",
+        "min",
+        "max",
+        "sort",
+        "product",
+        "market",
+      ]),
     ],
   },
+
 
   head: () => ({
     meta: [
@@ -117,6 +131,8 @@ function SearchPage() {
     ? (search.sort as UrlSort)
     : "cheapest";
   const categoryValue = (search.categoria ?? "").trim() || null;
+  const focusProduct = (search.product ?? "").trim() || null;
+  const focusMarket = (search.market ?? "").trim() || null;
   const activeFilterCount =
     (mode === "loose" ? 1 : 0) +
     (pureOnly ? 0 : 1) +
@@ -152,6 +168,25 @@ function SearchPage() {
     },
     [navigate],
   );
+  const setFocusUrl = useCallback(
+    (product: string | null, market: string | null) => {
+      navigate({
+        search: (prev: Record<string, unknown>) => {
+          const s: Record<string, unknown> = {
+            ...prev,
+            product: product ?? "",
+            market: market ?? "",
+          };
+          if (!product) delete s.product;
+          if (!market) delete s.market;
+          return s;
+        },
+        replace: true,
+      });
+    },
+    [navigate],
+  );
+
 
 
   const setMinPrice = (next: string) =>
@@ -509,88 +544,141 @@ function SearchPage() {
             CORPO — flex-1 min-h-0 para caber na viewport sem rolagem
             da página inteira. Rolagem interna só onde necessário.
         ================================================================= */}
-        <div className="mx-auto flex w-full min-h-0 max-w-[1360px] flex-1 flex-col gap-3 px-4 pb-[calc(var(--mobile-nav-height)+0.5rem)] pt-2.5 md:gap-3 md:px-6 md:pb-3 md:pt-3">
-          {/* ---------------- BARRA DE COMANDO (sempre visível) ---------------- */}
-          <section
-            aria-label="Busca por nome"
-            className={`pc-surface-2 relative rounded-2xl border border-border/70 shadow-sm ${
-              hasQuery
-                ? "flex min-h-0 flex-1 flex-col overflow-hidden p-2.5 md:p-3"
-                : "shrink-0 p-2.5 md:p-3"
-            }`}
-          >
-            <div
-              aria-hidden
-              className="pointer-events-none absolute inset-x-3 top-0 h-px bg-linear-to-r from-transparent via-brand-gold/60 to-transparent"
-            />
-            <div className={hasQuery ? "min-h-0 flex-1 overflow-y-auto pc-scroll-fade pr-1" : ""}>
-              <PriceSearchBar
-                initialQuery={q}
-                mode={mode}
-                pureOnly={pureOnly}
-                brandFilter={brandFilter}
-                priceMin={Number.isFinite(priceMin) ? priceMin : undefined}
-                priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
-                onQueryChange={syncQueryToUrl}
-                filterShortcuts={emptyFilterShortcuts}
-                activeFilterCount={activeFilterCount}
-                onClearFilters={activeFilterCount > 0 ? clearFilters : undefined}
-                sort={sortValue}
-                category={categoryValue}
-                onSortChange={(m) => setSortUrl(m as UrlSort)}
-                onCategoryChange={setCategoryUrl}
-              />
-
-            </div>
-            <div className="mt-2 shrink-0 border-t border-border/50 pt-1.5">
-              <FiltersToolbar
-                open={filtersOpen}
-                onToggle={() => setFiltersOpen((v) => !v)}
-                activeCount={activeFilterCount}
-                mode={mode}
-                onMode={chooseMode}
-                pureOnly={pureOnly}
-                onPure={setPure}
-                min={search.min ?? ""}
-                max={search.max ?? ""}
-                onMin={setMinPrice}
-                onMax={setMaxPrice}
-                onClear={clearFilters}
-              />
-            </div>
-          </section>
-
-
+        <div className="mx-auto flex w-full min-h-0 max-w-[1360px] flex-1 flex-col gap-2.5 px-4 pb-[calc(var(--mobile-nav-height)+0.5rem)] pt-2.5 md:gap-3 md:px-6 md:pb-3 md:pt-3">
           {hasQuery ? (
-            /* ============ ESTADO: RESULTADOS ============ */
-            <div className="flex min-h-0 flex-1 flex-col gap-2">
-              <MeatCutSuggestionStrip query={q} onPick={syncQueryToUrl} />
-              {!user && <SignupCTA context="save-comparison" />}
-            </div>
-          ) : (
-            /* ============ ESTADO: DESCOBERTA — grid editorial 3 colunas ============
-                Categorias (rail) | Descoberta central | Recentes + populares.
-                Cada painel cresce até a viewport com scroll interno leve. */
-            <div className="grid min-h-0 flex-1 gap-3 md:gap-3 lg:grid-cols-[minmax(0,1fr)_296px]">
-              <div className="min-h-0 min-w-0 overflow-y-auto pc-scroll-fade pr-1">
-                <SearchDiscovery onPickQuery={pickQuery} />
+            /* ============ ESTADO: RESULTADOS ============
+                Barra de comando + filtros em faixas compactas (shrink-0) e
+                o painel de resultados ocupa toda a altura restante com
+                rolagem interna própria — assim o card de cada produto tem
+                espaço real para mostrar nome, faixa de preço e mercados. */
+            <>
+              <section
+                aria-label="Busca por nome"
+                className="pc-surface-2 relative shrink-0 rounded-2xl border border-border/70 p-2.5 shadow-sm md:p-3"
+              >
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-3 top-0 h-px bg-linear-to-r from-transparent via-brand-gold/60 to-transparent"
+                />
+                <div className="pc-search-compact">
+                  <PriceSearchBar
+                    initialQuery={q}
+                    mode={mode}
+                    pureOnly={pureOnly}
+                    brandFilter={brandFilter}
+                    priceMin={Number.isFinite(priceMin) ? priceMin : undefined}
+                    priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
+                    onQueryChange={syncQueryToUrl}
+                    filterShortcuts={emptyFilterShortcuts}
+                    activeFilterCount={activeFilterCount}
+                    onClearFilters={activeFilterCount > 0 ? clearFilters : undefined}
+                    sort={sortValue}
+                    category={categoryValue}
+                    onSortChange={(m) => setSortUrl(m as UrlSort)}
+                    onCategoryChange={setCategoryUrl}
+                    focusProduct={focusProduct}
+                    focusMarket={focusMarket}
+                    onFocusChange={(product, market) =>
+                      setFocusUrl(product ?? null, market ?? null)
+                    }
+                  />
+
+                </div>
+                <div className="mt-2 shrink-0 border-t border-border/50 pt-1.5">
+                  <FiltersToolbar
+                    open={filtersOpen}
+                    onToggle={() => setFiltersOpen((v) => !v)}
+                    activeCount={activeFilterCount}
+                    mode={mode}
+                    onMode={chooseMode}
+                    pureOnly={pureOnly}
+                    onPure={setPure}
+                    min={search.min ?? ""}
+                    max={search.max ?? ""}
+                    onMin={setMinPrice}
+                    onMax={setMaxPrice}
+                    onClear={clearFilters}
+                  />
+                </div>
+              </section>
+
+              <div className="shrink-0">
+                <MeatCutSuggestionStrip query={q} onPick={syncQueryToUrl} />
               </div>
 
-              <aside className="hidden min-h-0 flex-col lg:flex">
-                <div className="pc-surface-1 flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/70 p-3 shadow-sm">
-                  <div className="min-h-0 flex-1 overflow-y-auto pr-1">
-                    <SearchSidebar
-                      recent={recent}
-                      onPickQuery={pickQuery}
-                      onRemoveRecent={removeRecent}
-                      onClearRecent={clearRecent}
-                    />
-                  </div>
+              {!user && (
+                <div className="shrink-0">
+                  <SignupCTA context="save-comparison" />
                 </div>
-              </aside>
-            </div>
+              )}
+            </>
+          ) : (
+            /* ============ ESTADO: DESCOBERTA ============ */
+            <>
+              <section
+                aria-label="Busca por nome"
+                className="pc-surface-2 relative shrink-0 rounded-2xl border border-border/70 p-2.5 shadow-sm md:p-3"
+              >
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-x-3 top-0 h-px bg-linear-to-r from-transparent via-brand-gold/60 to-transparent"
+                />
+                <PriceSearchBar
+                  initialQuery={q}
+                  mode={mode}
+                  pureOnly={pureOnly}
+                  brandFilter={brandFilter}
+                  priceMin={Number.isFinite(priceMin) ? priceMin : undefined}
+                  priceMax={Number.isFinite(priceMax) ? priceMax : undefined}
+                  onQueryChange={syncQueryToUrl}
+                  filterShortcuts={emptyFilterShortcuts}
+                  activeFilterCount={activeFilterCount}
+                  onClearFilters={activeFilterCount > 0 ? clearFilters : undefined}
+                  sort={sortValue}
+                  category={categoryValue}
+                  onSortChange={(m) => setSortUrl(m as UrlSort)}
+                  onCategoryChange={setCategoryUrl}
+                />
+                <div className="mt-2 shrink-0 border-t border-border/50 pt-1.5">
+                  <FiltersToolbar
+                    open={filtersOpen}
+                    onToggle={() => setFiltersOpen((v) => !v)}
+                    activeCount={activeFilterCount}
+                    mode={mode}
+                    onMode={chooseMode}
+                    pureOnly={pureOnly}
+                    onPure={setPure}
+                    min={search.min ?? ""}
+                    max={search.max ?? ""}
+                    onMin={setMinPrice}
+                    onMax={setMaxPrice}
+                    onClear={clearFilters}
+                  />
+                </div>
+              </section>
+
+              <div className="grid min-h-0 flex-1 gap-3 md:gap-3 lg:grid-cols-[minmax(0,1fr)_296px]">
+                <div className="min-h-0 min-w-0 overflow-y-auto pc-scroll-fade pr-1">
+                  <SearchDiscovery onPickQuery={pickQuery} />
+                </div>
+
+                <aside className="hidden min-h-0 flex-col lg:flex">
+                  <div className="pc-surface-1 flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/70 p-3 shadow-sm">
+                    <div className="min-h-0 flex-1 overflow-y-auto pr-1">
+                      <SearchSidebar
+                        recent={recent}
+                        onPickQuery={pickQuery}
+                        onRemoveRecent={removeRecent}
+                        onClearRecent={clearRecent}
+                      />
+                    </div>
+                  </div>
+                </aside>
+              </div>
+            </>
           )}
         </div>
+
       </div>
     </IsolatedPage>
   );

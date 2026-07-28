@@ -90,6 +90,9 @@ export function PriceSearchBar({
   category: categoryProp,
   onSortChange,
   onCategoryChange,
+  focusProduct = null,
+  focusMarket = null,
+  onFocusChange,
 }: {
   initialQuery?: string;
   mode?: SearchMode;
@@ -108,7 +111,15 @@ export function PriceSearchBar({
   category?: string | null;
   onSortChange?: (mode: SortMode) => void;
   onCategoryChange?: (category: string | null) => void;
+  /** Produto selecionado (slug do nome). Quando definido, o card recebe
+   * scrollIntoView + foco de teclado, e o accordion abre expandido. */
+  focusProduct?: string | null;
+  /** Estabelecimento selecionado (nome normalizado) dentro do produto focado. */
+  focusMarket?: string | null;
+  /** Disparado quando o usuário clica num card para atualizar a URL. */
+  onFocusChange?: (product: string | null, market: string | null) => void;
 }) {
+
 
   const runSearch = useServerFn(searchProductPrice);
   const runSuggest = useServerFn(suggestProducts);
@@ -1261,15 +1272,29 @@ export function PriceSearchBar({
 
                       <div className="pc-results">
                         {filteredOrdered.map(([cat, groups]) => {
-                          // Ordena grupos: se sortMode === "relevance", usa score de
-                          // correspondência (nome, marca, variações como 1L/integral);
-                          // caso contrário, mantém menor preço primeiro.
+                          // Ordena grupos com critérios explícitos por modo:
+                          //  • relevance → score de similaridade do nome (exato,
+                          //    marca, prefixo, tokens, variações) primeiro; preço
+                          //    e amostragem como desempate consistente.
+                          //  • recent    → data mais recente (lastSeen) primeiro,
+                          //    preço e amostragem como desempate.
+                          //  • savings   → maior amplitude (max−min) primeiro.
+                          //  • demais    → menor preço, depois mais amostras.
+                          const lastSeenTime = (g: ProductGroup) =>
+                            g.lastSeen ? new Date(g.lastSeen).getTime() : 0;
                           const sortedGroups = [...groups].sort((a, b) => {
                             if (sortMode === "relevance") {
-                              if (a.min !== b.min) return a.min - b.min;
                               const sa = scoreRelevance(a, query);
                               const sb = scoreRelevance(b, query);
                               if (sa !== sb) return sb - sa;
+                              if (a.min !== b.min) return a.min - b.min;
+                              return b.samples - a.samples;
+                            }
+                            if (sortMode === "recent") {
+                              const ta = lastSeenTime(a);
+                              const tb = lastSeenTime(b);
+                              if (ta !== tb) return tb - ta;
+                              if (a.min !== b.min) return a.min - b.min;
                               return b.samples - a.samples;
                             }
                             if (sortMode === "savings") {
@@ -1280,6 +1305,7 @@ export function PriceSearchBar({
                             if (a.min !== b.min) return a.min - b.min;
                             return b.samples - a.samples;
                           });
+
                           return (
                             <div key={cat} className="pc-results">
                               {showHeaders ? (
@@ -1349,8 +1375,20 @@ export function PriceSearchBar({
                                             compareSelection.includes(g.productName) || compareSelection.length < 3
                                           }
                                           onToggleCompare={() => toggleCompare(g.productName)}
+                                          focused={
+                                            !!focusProduct &&
+                                            g.productName.toLowerCase() === focusProduct.toLowerCase()
+                                          }
+                                          focusedMarket={
+                                            !!focusProduct &&
+                                            g.productName.toLowerCase() === focusProduct.toLowerCase()
+                                              ? focusMarket
+                                              : null
+                                          }
+                                          onSelect={onFocusChange ?? undefined}
                                         />
                                       );
+
                                     })}
                                     {hidden > 0 ? (
                                       <AutoLoadMore
@@ -1913,6 +1951,9 @@ function ProductGroupCard({
   isCompareSelected = false,
   canSelectCompare = true,
   onToggleCompare,
+  focused = false,
+  focusedMarket = null,
+  onSelect,
 }: {
   catalogId: string | null;
   productName: string;
@@ -1930,6 +1971,13 @@ function ProductGroupCard({
   isCompareSelected?: boolean;
   canSelectCompare?: boolean;
   onToggleCompare?: () => void;
+  /** Card em foco (via URL). Recebe scrollIntoView + foco de teclado. */
+  focused?: boolean;
+  /** Nome do mercado destacado dentro do card (via URL). */
+  focusedMarket?: string | null;
+  /** Disparado quando o usuário seleciona o card ou um mercado interno,
+   * para sincronizar `?product=&market=` na URL do container. */
+  onSelect?: (product: string, market: string | null) => void;
 }) {
   // Mercado mais barato dentro deste grupo — usado para destaque no cabeçalho.
   const cheapestInGroup = useMemo(() => {
@@ -1940,15 +1988,56 @@ function ProductGroupCard({
   // Mostra por padrão apenas os 3 melhores preços de cada produto: mantém a
   // página curta e legível; o restante fica a um clique de distância.
   const COLLAPSED = 3;
-  const [expanded, setExpanded] = useState(false);
-  const visiblePrices = expanded ? prices : prices.slice(0, COLLAPSED);
+  const [expanded, setExpanded] = useState(focused);
+  const visiblePrices = expanded || focused ? prices : prices.slice(0, COLLAPSED);
   const hiddenPrices = prices.length - visiblePrices.length;
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // Quando o card entra em foco por URL, expande, faz scroll suave e move o
+  // foco do teclado para o card — restaurando o estado da UI a partir do link.
+  useEffect(() => {
+    if (!focused) return;
+    const el = cardRef.current;
+    if (!el) return;
+    try {
+      el.scrollIntoView({ behavior: "smooth", block: "center" });
+    } catch {
+      el.scrollIntoView();
+    }
+    // Foco só quando o card não está em nenhuma parte do documento com foco
+    // ainda; evita roubar foco do usuário no meio de outra interação.
+    if (!el.contains(document.activeElement)) {
+      window.setTimeout(() => el.focus({ preventScroll: true }), 60);
+    }
+  }, [focused]);
+
 
 
 
   return (
-    <div className="pc-res-card relative">
+    <div
+      ref={cardRef}
+      id={`pc-group-${encodeURIComponent(productName)}`}
+      tabIndex={-1}
+      data-focused={focused ? "true" : undefined}
+      onClick={(e) => {
+        // Só marca o card como selecionado ao clicar no cabeçalho/vazio.
+        // Cliques em botões/links dentro do card continuam com o comportamento
+        // nativo (o handler dispara apenas quando o target é o próprio card).
+        if (!onSelect) return;
+        const target = e.target as HTMLElement;
+        if (target.closest("a,button,input,select,textarea,[role=button]")) return;
+        onSelect(productName, null);
+      }}
+      className={
+        "pc-res-card relative outline-none focus-visible:ring-2 focus-visible:ring-brand-gold " +
+        (focused
+          ? "ring-2 ring-brand-gold/70 shadow-[0_0_0_1px_var(--brand-gold)] scroll-mt-24"
+          : "")
+      }
+    >
       <div className="mb-1.5 flex flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
+
         <div className="min-w-0 flex-1 order-1">
 
           <p className="pc-res-title truncate">
@@ -2039,12 +2128,26 @@ function ProductGroupCard({
         {visiblePrices.map((p, i) => {
 
           const isCheapest = globalMin != null && p.price === globalMin;
+          const isFocusedMarket =
+            !!focusedMarket &&
+            (p.marketName ?? "").toLowerCase() === focusedMarket.toLowerCase();
           return (
             <li
               key={`${p.marketName}-${p.when}-${i}`}
-              className="pc-res-row relative"
+              className={
+                "pc-res-row relative cursor-pointer " +
+                (isFocusedMarket ? "bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)]" : "")
+              }
               data-cheapest={isCheapest ? "true" : "false"}
+              data-focused-market={isFocusedMarket ? "true" : undefined}
+              onClick={(e) => {
+                if (!onSelect) return;
+                const target = e.target as HTMLElement;
+                if (target.closest("a,button,input,select,textarea,[role=button]")) return;
+                onSelect(productName, p.marketName ?? null);
+              }}
             >
+
               <StoreColorBar name={p.marketName} brandColor={p.marketBrandColor} />
               {isCheapest ? (
                 <span
