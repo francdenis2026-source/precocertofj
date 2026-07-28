@@ -211,48 +211,26 @@ const PriceRow = memo(function PriceRow({
           </span>
           {hasDrop ? (
             <span
-              className={`${tc.meta} mt-0.5 inline-flex items-baseline gap-1`}
+              className={`${tc.meta} mt-0.5 inline-flex items-baseline gap-1 whitespace-nowrap`}
               style={{ color: "var(--pc-home-onhero-fg-70)" }}
+              aria-label={`Preço anterior ${brl(p.previousPrice!)}, queda de ${p.dropPct}%`}
             >
+              {/* Preço antigo aparece só em hover/focus — evita ruído em repouso. */}
               <span
                 aria-hidden
-                className="line-through"
+                className="line-through opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
                 style={{ color: "var(--pc-home-onhero-fg-60)" }}
               >
                 {brl(p.previousPrice!)}
+              </span>
+              <span aria-hidden className="opacity-0 transition-opacity duration-150 group-hover:opacity-80 group-focus-visible:opacity-80">
+                →
               </span>
               <span
                 className="font-semibold"
                 style={{ color: "var(--pc-home-onhero-gold)" }}
               >
                 −{p.dropPct}%
-              </span>
-            </span>
-          ) : null}
-          {/* Mini-diff detalhado em hover/focus (não altera layout — abre em popover absoluto). */}
-          {hasDrop ? (
-            <span
-              role="tooltip"
-              className="pointer-events-none absolute right-0 top-full z-10 mt-1 origin-top-right scale-95 rounded-lg border px-2.5 py-1.5 opacity-0 shadow-[0_8px_24px_-8px_rgba(3,10,28,0.6)] transition-[opacity,transform] duration-150 ease-out group-hover:scale-100 group-hover:opacity-100 group-focus-visible:scale-100 group-focus-visible:opacity-100"
-              style={{
-                background: "var(--pc-home-onhero-glass)",
-                borderColor: "var(--pc-home-onhero-border-soft)",
-                color: "var(--pc-home-onhero-fg-90)",
-                backdropFilter: "blur(8px)",
-              }}
-            >
-              <span className={`${tc.meta} block whitespace-nowrap`}>
-                <span style={{ color: "var(--pc-home-onhero-fg-60)" }}>{brl(p.previousPrice!)}</span>
-                <span className="mx-1 opacity-60">→</span>
-                <span className="font-semibold" style={{ color: "var(--pc-home-onhero-fg)" }}>
-                  {brl(p.price)}
-                </span>
-              </span>
-              <span
-                className={`${tc.eyebrow} mt-0.5 block whitespace-nowrap`}
-                style={{ color: "var(--pc-home-onhero-gold)" }}
-              >
-                Economia de {p.dropPct}% ({brl(p.previousPrice! - p.price)})
               </span>
             </span>
           ) : null}
