@@ -1,4 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { AdminTabs } from "@/components/admin/AdminTabs";
+import { AnalyticsPage } from "./admin_.analytics";
+import { AdminReportsGate } from "./admin_.reports";
+import { ConversoesPage } from "./admin_.conversoes";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
