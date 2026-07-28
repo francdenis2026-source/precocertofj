@@ -19,7 +19,7 @@ export const ADMIN_HUBS: Record<AdminHubKey, HubMeta> = {
   contas: { label: "Contas", to: "/admin_/contas", tone: "people" },
   vitrine: { label: "Vitrine", to: "/admin_/vitrine", tone: "catalog" },
   operacao: { label: "Operação", to: "/admin_/operacao", tone: "system" },
-  precos: { label: "Preços", to: "/admin_/precos", tone: "money" },
+  precos: { label: "Preços", to: "/admin_/precos", tone: "commerce" },
 };
 
 type AdminBreadcrumbProps = {
