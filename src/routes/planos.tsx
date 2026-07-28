@@ -490,7 +490,7 @@ function PlansPage() {
             </DialogHeader>
             <div className="max-h-[70svh] overflow-y-auto px-5 py-2">
               <Accordion type="single" collapsible className="w-full">
-                {FAQ.map((f, i) => (
+                {buildFaq(trialDays).map((f, i) => (
                   <AccordionItem key={i} value={`q-${i}`} className="border-border/60">
                     <AccordionTrigger className={cn(tc.itemTitle, "text-left hover:no-underline")}>
                       {f.q}
