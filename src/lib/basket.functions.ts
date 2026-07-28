@@ -351,6 +351,7 @@ export const getBasketComparison = createServerFn({ method: "POST" })
         logoUrl: meta.logo_url,
         brandColor: meta.brand_color,
         city: meta.city,
+        neighborhood: meta.neighborhood,
         distanceKm,
         itemsFound: found,
         totalItems: totalEssentials,
