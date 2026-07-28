@@ -10,12 +10,18 @@ import { supabase } from "@/integrations/supabase/client";
 export function usePlansRealtime(opts?: { enabled?: boolean; throttleMs?: number; queryClient?: QueryClient }) {
   const enabled = opts?.enabled ?? true;
   const throttleMs = opts?.throttleMs ?? 500;
-  // Always call the hook (rules of hooks); prefer explicit client when passed,
-  // so this can be used outside of a QueryClientProvider (e.g. during SSR at root).
-  const ctxQc = useQueryClient({ context: undefined } as never);
+  // Try context first, but tolerate absence (e.g. when called at root BEFORE
+  // the QueryClientProvider mounts). Callers can pass an explicit client.
+  let ctxQc: QueryClient | undefined;
+  try {
+    ctxQc = useQueryClient();
+  } catch {
+    ctxQc = undefined;
+  }
   const qc = opts?.queryClient ?? ctxQc;
   const qcRef = useRef(qc);
   qcRef.current = qc;
+
 
 
 
@@ -25,7 +31,7 @@ export function usePlansRealtime(opts?: { enabled?: boolean; throttleMs?: number
     let timer: number | null = null;
     const invalidateAll = () => {
       const client = qcRef.current;
-      // Cover every known plan cache key in the codebase.
+      if (!client) return;
       client.invalidateQueries({ queryKey: ["public-plans"] });
       client.invalidateQueries({ queryKey: ["plans-active"] });
       client.invalidateQueries({ queryKey: ["license-plans"] });
@@ -33,6 +39,7 @@ export function usePlansRealtime(opts?: { enabled?: boolean; throttleMs?: number
       client.invalidateQueries({ queryKey: ["admin", "plans", "health"] });
       client.invalidateQueries({ queryKey: ["active-plan"] });
     };
+
     const schedule = () => {
       if (timer !== null) return;
       timer = window.setTimeout(() => {

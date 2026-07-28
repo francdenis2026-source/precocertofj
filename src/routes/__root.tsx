@@ -169,7 +169,7 @@ function RootComponent() {
   useReadingMode();
   // Realtime global: qualquer alteração em license_plans invalida os caches
   // de planos em todas as rotas e abas (homepage, /planos, /assinar, admin).
-  usePlansRealtime();
+  usePlansRealtime({ queryClient });
 
   // Mantém a marcação do console admin em navegações client-side (SPA),
   // evitando flash da foto de fundo entre rotas.
