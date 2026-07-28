@@ -5,7 +5,7 @@ import { join } from "node:path";
 /**
  * Regressão da reorganização de hubs administrativos (v2.1 → v2.2):
  *  - Contas & Clientes  → /admin_/contas   (tone people)
- *  - Estabelecimentos & Catálogo → /admin_/gestao (tone catalog)
+ *  - Estabelecimentos & Catálogo → /admin_/vitrine (tone catalog)
  *  - Comércio & Preços  → /admin_/precos   (tone commerce)
  *  - Sistema & Operação → /admin_/operacao (tone system)
  *
@@ -54,7 +54,7 @@ describe("Admin hubs reorganization — v2.2", () => {
 
   it("o dashboard raiz publica os 4 hubs como navegação primária", () => {
     const src = read("admin.tsx");
-    for (const hub of ["/admin_/contas", "/admin_/gestao", "/admin_/precos", "/admin_/operacao"]) {
+    for (const hub of ["/admin_/contas", "/admin_/vitrine", "/admin_/precos", "/admin_/operacao"]) {
       expect(src, `admin.tsx deve linkar ${hub}`).toContain(hub);
     }
     // Marcador de teste para verificação e2e/QA

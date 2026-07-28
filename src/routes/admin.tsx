@@ -274,7 +274,7 @@ function AdminPage() {
           <ul role="list" className="grid grid-cols-2 gap-2 lg:grid-cols-4">
             {[
               { to: "/admin_/contas",    tone: "people",    label: "Contas & Clientes",       hint: "Clientes, PIN, acessos, papéis" },
-              { to: "/admin_/gestao",    tone: "catalog",   label: "Estabelecimentos & Catálogo", hint: "Lojas, produtos, cobertura, imagens" },
+              { to: "/admin_/vitrine",    tone: "catalog",   label: "Estabelecimentos Estabelecimentos & Catálogo Catálogo", hint: "Lojas, produtos, cobertura, imagens" },
               { to: "/admin_/precos",    tone: "commerce",  label: "Comércio & Preços",       hint: "Registro, importações, histórico" },
               { to: "/admin_/operacao",  tone: "system",    label: "Sistema & Operação",      hint: "Planos, integrações, IA, auditoria" },
             ].map((h) => (
