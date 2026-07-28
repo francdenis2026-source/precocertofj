@@ -61,6 +61,7 @@ function useDebounced<T>(value: T, delay = DEBOUNCE_MS): T {
 export function AdminActionsAudit() {
   const fetchLog = useServerFn(listAdminAuditLog);
   const fetchEsts = useServerFn(listEstablishments);
+  const queryClient = useQueryClient();
   const [action, setAction] = useState("all");
   const [targetType, setTargetType] = useState("all");
   const [establishmentId, setEstablishmentId] = useState("all");
@@ -71,6 +72,10 @@ export function AdminActionsAudit() {
   const [query, setQuery] = useState("");
   const [page, setPage] = useState(1);
   const [exporting, setExporting] = useState(false);
+  const [liveConnected, setLiveConnected] = useState(false);
+  const [pendingNew, setPendingNew] = useState(0);
+  const flashUntilRef = useRef(0);
+  const [flashing, setFlashing] = useState(false);
 
   // Debounced values feed the query key — badge/filter count stays instant.
   const dQuery = useDebounced(query);
