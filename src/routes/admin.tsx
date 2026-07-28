@@ -356,7 +356,55 @@ function AdminPage() {
 
 /* -------------------- Plans -------------------- */
 
+function PlansHealthCard() {
+  const healthFn = useServerFn(getPlansHealth);
+  const { data, isLoading } = useQuery({
+    queryKey: ["admin", "plans", "health"],
+    queryFn: () => healthFn(),
+    staleTime: 30_000,
+  });
+
+  if (isLoading || !data) {
+    return (
+      <Card><CardContent className="py-3 text-xs text-muted-foreground">Verificando integridade dos planos…</CardContent></Card>
+    );
+  }
+
+  const consistent = data.consistent;
+  return (
+    <Card className={cn(
+      "border",
+      consistent ? "border-emerald-500/30 bg-emerald-500/5" : "border-amber-500/40 bg-amber-500/10",
+    )}>
+      <CardContent className="flex flex-wrap items-center justify-between gap-3 py-3">
+        <div className="flex items-center gap-2 text-sm">
+          {consistent ? (
+            <ShieldCheck className="h-4 w-4 text-emerald-600" />
+          ) : (
+            <AlertTriangle className="h-4 w-4 text-amber-600" />
+          )}
+          <span className="font-medium">
+            {consistent ? "Planos consistentes" : "Inconsistência detectada"}
+          </span>
+          <span className="text-muted-foreground">
+            · license_plans: <b>{data.licenseActive}</b> ativos / {data.licenseTotal} total
+          </span>
+          <span className="text-muted-foreground">
+            · legada plans: {data.legacyPlansExists ? `${data.legacyPlansCount} registro(s)` : "removida ✓"}
+          </span>
+        </div>
+        {!consistent && (
+          <div className="w-full text-xs text-amber-700 dark:text-amber-400">
+            {data.warnings.join(" · ")}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
 function PlansTab() {
+
   const qc = useQueryClient();
   const listFn = useServerFn(listAllPlans);
   const toggleFn = useServerFn(togglePlanFn);
