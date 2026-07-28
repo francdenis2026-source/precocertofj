@@ -193,7 +193,17 @@ function RowSkeleton({ glass }: { glass: string }) {
   return (
     <li className={`flex ${ROW_H} flex-col justify-center gap-1.5`}>
       <div className="flex items-center gap-3">
-        <div className="h-3 flex-1 animate-pulse rounded" style={{ background: glass }} />
+        <div className="relative h-3 flex-1 overflow-hidden rounded" style={{ background: glass }}>
+          <span
+            aria-hidden
+            className="absolute inset-y-0 -left-full w-full"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent 0%, color-mix(in oklab, var(--pc-home-onhero-gold) 30%, transparent) 50%, transparent 100%)",
+              animation: "skeleton-shimmer 1.6s ease-in-out infinite",
+            }}
+          />
+        </div>
         <div className="h-3 w-14 animate-pulse rounded" style={{ background: glass }} />
       </div>
       <div className="h-2.5 w-1/3 animate-pulse rounded" style={{ background: glass }} />
