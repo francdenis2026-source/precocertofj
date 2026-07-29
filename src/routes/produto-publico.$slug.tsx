@@ -594,7 +594,7 @@ function MarketCard({
           <div className="flex shrink-0 items-center gap-1.5">
             <span
               className={
-                "font-display font-semibold tabular-nums leading-none " +
+                "pc-price font-semibold leading-none " +
                 (isBest
                   ? "text-[22px] text-savings"
                   : "text-[16px] text-foreground")
