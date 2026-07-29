@@ -77,12 +77,26 @@ const chip = (active: boolean) =>
     ? "inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-3 text-[11px] font-bold uppercase leading-none tracking-[0.14em] text-brand-navy focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     : "inline-flex h-8 shrink-0 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[11px] font-semibold uppercase leading-none tracking-[0.14em] text-foreground transition-colors hover:border-brand-gold hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
-/** Separa os cortes de balcão do restante do catálogo. */
-export function splitButcherCuts(products: PublicStoreProduct[]) {
+/**
+ * Separa os cortes de balcão do restante do catálogo.
+ *
+ * Quando `isButcherStore=true` (loja com `kind='acougue'`), aplica-se a regra
+ * de associação automática: itens da categoria "Carnes & Frios" ou com tokens
+ * genéricos de açougue são sempre tratados como corte, garantindo que todo o
+ * balcão apareça no módulo de cortes.
+ */
+export function splitButcherCuts(
+  products: PublicStoreProduct[],
+  opts: { isButcherStore?: boolean } = {},
+) {
+  const assumeButcher = !!opts.isButcherStore;
   const cuts: Cut[] = [];
   const general: PublicStoreProduct[] = [];
   for (const p of products) {
-    const protein = classifyButcherCut(p.productName, p.unit);
+    const protein = classifyButcherCut(p.productName, p.unit, {
+      assumeButcher,
+      category: p.category,
+    });
     if (protein) cuts.push({ ...p, protein });
     else general.push(p);
   }
