@@ -1713,9 +1713,16 @@ type PricePoint = {
   marketKind: string | null;
   marketLogoUrl: string | null;
   marketBrandColor: string | null;
+  establishmentId?: string | null;
+  address?: string | null;
+  neighborhood?: string | null;
+  city?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
   price: number;
   when: string;
 };
+
 
 /** Dias inteiros desde a coleta do preço (0 = hoje). */
 function daysSince(when: string): number {
