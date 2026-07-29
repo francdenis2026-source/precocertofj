@@ -13,6 +13,7 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SemPermissaoRouteImport } from './routes/sem-permissao'
 import { Route as ResgatarRouteImport } from './routes/resgatar'
 import { Route as PrivacidadeRouteImport } from './routes/privacidade'
+import { Route as PrecosPorCategoriaRouteImport } from './routes/precos-por-categoria'
 import { Route as PrecosRouteImport } from './routes/precos'
 import { Route as PlanosRouteImport } from './routes/planos'
 import { Route as PerfilRouteImport } from './routes/perfil'
@@ -131,6 +132,11 @@ const ResgatarRoute = ResgatarRouteImport.update({
 const PrivacidadeRoute = PrivacidadeRouteImport.update({
   id: '/privacidade',
   path: '/privacidade',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrecosPorCategoriaRoute = PrecosPorCategoriaRouteImport.update({
+  id: '/precos-por-categoria',
+  path: '/precos-por-categoria',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PrecosRoute = PrecosRouteImport.update({
@@ -674,6 +680,7 @@ export interface FileRoutesByFullPath {
   '/perfil': typeof PerfilRoute
   '/planos': typeof PlanosRoute
   '/precos': typeof PrecosRoute
+  '/precos-por-categoria': typeof PrecosPorCategoriaRoute
   '/privacidade': typeof PrivacidadeRoute
   '/resgatar': typeof ResgatarRoute
   '/sem-permissao': typeof SemPermissaoRoute
@@ -779,6 +786,7 @@ export interface FileRoutesByTo {
   '/perfil': typeof PerfilRoute
   '/planos': typeof PlanosRoute
   '/precos': typeof PrecosRoute
+  '/precos-por-categoria': typeof PrecosPorCategoriaRoute
   '/privacidade': typeof PrivacidadeRoute
   '/resgatar': typeof ResgatarRoute
   '/sem-permissao': typeof SemPermissaoRoute
@@ -885,6 +893,7 @@ export interface FileRoutesById {
   '/perfil': typeof PerfilRoute
   '/planos': typeof PlanosRoute
   '/precos': typeof PrecosRoute
+  '/precos-por-categoria': typeof PrecosPorCategoriaRoute
   '/privacidade': typeof PrivacidadeRoute
   '/resgatar': typeof ResgatarRoute
   '/sem-permissao': typeof SemPermissaoRoute
@@ -992,6 +1001,7 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/planos'
     | '/precos'
+    | '/precos-por-categoria'
     | '/privacidade'
     | '/resgatar'
     | '/sem-permissao'
@@ -1097,6 +1107,7 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/planos'
     | '/precos'
+    | '/precos-por-categoria'
     | '/privacidade'
     | '/resgatar'
     | '/sem-permissao'
@@ -1202,6 +1213,7 @@ export interface FileRouteTypes {
     | '/perfil'
     | '/planos'
     | '/precos'
+    | '/precos-por-categoria'
     | '/privacidade'
     | '/resgatar'
     | '/sem-permissao'
@@ -1308,6 +1320,7 @@ export interface RootRouteChildren {
   PerfilRoute: typeof PerfilRoute
   PlanosRoute: typeof PlanosRoute
   PrecosRoute: typeof PrecosRoute
+  PrecosPorCategoriaRoute: typeof PrecosPorCategoriaRoute
   PrivacidadeRoute: typeof PrivacidadeRoute
   ResgatarRoute: typeof ResgatarRoute
   SemPermissaoRoute: typeof SemPermissaoRoute
@@ -1396,6 +1409,13 @@ declare module '@tanstack/react-router' {
       path: '/privacidade'
       fullPath: '/privacidade'
       preLoaderRoute: typeof PrivacidadeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/precos-por-categoria': {
+      id: '/precos-por-categoria'
+      path: '/precos-por-categoria'
+      fullPath: '/precos-por-categoria'
+      preLoaderRoute: typeof PrecosPorCategoriaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/precos': {
@@ -2194,6 +2214,7 @@ const rootRouteChildren: RootRouteChildren = {
   PerfilRoute: PerfilRoute,
   PlanosRoute: PlanosRoute,
   PrecosRoute: PrecosRoute,
+  PrecosPorCategoriaRoute: PrecosPorCategoriaRoute,
   PrivacidadeRoute: PrivacidadeRoute,
   ResgatarRoute: ResgatarRoute,
   SemPermissaoRoute: SemPermissaoRoute,
@@ -2258,3 +2279,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
