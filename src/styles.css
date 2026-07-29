@@ -34,7 +34,8 @@
  * Sistema visual moderno inspirado em Linear / Vercel / Notion.
  * Paleta: paper #f7f9fc + azul elétrico #2563eb (primary) + teal (accent)
  *   + verde-money #10b981 (economia) + âmbar/vermelho para alertas.
- * Tipografia: Fraunces (display editorial do hero), Inter (UI comercial — títulos, botões, tabelas, números), IBM Plex Mono (código).
+ * Tipografia: Fraunces (display editorial do hero), Inter (UI geral),
+ *   DM Sans (preços e números — legibilidade comercial), IBM Plex Mono (código).
  */
 
 @theme inline {
