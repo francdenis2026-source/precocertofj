@@ -2312,6 +2312,12 @@ function ProductGroupCard({
   const [expanded, setExpanded] = useState(focused);
   const visiblePrices = expanded || focused ? prices : prices.slice(0, COLLAPSED);
   const hiddenPrices = prices.length - visiblePrices.length;
+  // Conta quantos mercados empatam no menor preço global — permite destacar
+  // todos os vencedores e comunicar o empate por acessibilidade.
+  const cheapestCount = useMemo(
+    () => (globalMin == null ? 0 : prices.filter((p) => p.price === globalMin).length),
+    [prices, globalMin],
+  );
   // Painéis de detalhes abertos por mercado — uma expansão por linha permite
   // ver endereço, bairro, tipo do estabelecimento e validade da coleta sem
   // esconder outras informações da lista.
