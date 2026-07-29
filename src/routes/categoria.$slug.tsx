@@ -303,7 +303,11 @@ function CategoryPage() {
           <ButcherProteinChips
             active={search.corte}
             counts={proteinCounts}
+            onlyCuts={Boolean(search.so_cortes)}
             onChange={(v: string) => setSearch({ corte: v, page: 1 })}
+            onToggleOnlyCuts={() =>
+              setSearch({ so_cortes: search.so_cortes ? 0 : 1, page: 1 })
+            }
           />
         )}
 
