@@ -2516,7 +2516,10 @@ function ProductGroupCard({
               }
               aria-current={isFocusedMarket ? "true" : undefined}
               className={
-                "pc-res-row relative flex flex-col cursor-pointer rounded-lg border border-[color-mix(in_oklab,var(--color-border)_58%,transparent)] bg-background/75 px-1.5 outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-brand-gold " +
+                "pc-res-row relative flex flex-col cursor-pointer rounded-lg border px-1.5 outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-brand-gold " +
+                (isCheapest
+                  ? "border-brand-gold/70 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] shadow-[0_0_0_1px_var(--brand-gold)] ring-1 ring-brand-gold/40 "
+                  : "border-[color-mix(in_oklab,var(--color-border)_58%,transparent)] bg-background/75 ") +
                 (isFocusedMarket ? "bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)]" : "")
               }
               data-cheapest={isCheapest ? "true" : "false"}
