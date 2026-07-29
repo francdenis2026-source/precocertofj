@@ -550,7 +550,7 @@ function SearchPage() {
                   aria-hidden
                   className="pointer-events-none absolute inset-x-3 top-0 h-px bg-linear-to-r from-transparent via-brand-gold/60 to-transparent"
                 />
-                <div className="pc-search-compact">
+                <div className="pc-search-compact flex min-h-0 flex-1 flex-col">
                   <PriceSearchBar
                     initialQuery={q}
                     mode={mode}
