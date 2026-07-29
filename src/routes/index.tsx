@@ -123,13 +123,10 @@ function HomePage() {
   const isLoggedOut = !sessionLoading && !user;
 
   const [q, setQ] = useState("");
-  const [showSuggest, setShowSuggest] = useState(false);
-  const [activeIdx, setActiveIdx] = useState(-1);
   const [spotlight, setSpotlight] =
     useState<import("@/components/home/MetricSpotlightDialog").MetricKind | null>(null);
   const [allCatsOpen, setAllCatsOpen] = useState(false);
   const [exploreOpen, setExploreOpen] = useState(false);
-  const searchBoxRef = useRef<HTMLFormElement | null>(null);
 
   useEffect(() => {
     document.body.classList.add("no-page-bg", "pc-home-locked");
