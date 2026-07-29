@@ -76,8 +76,49 @@ export function FavoriteMarketButton({
     mutation.mutate();
   };
 
+  const gateDialog = (
+    <GuestGateDialog
+      open={gate.open}
+      onOpenChange={gate.setOpen}
+      action="favorite"
+      title="Favoritos são grátis para quem tem conta"
+      description="Crie sua conta grátis (7 dias sem cartão) para acompanhar seus mercados preferidos e comparar totais rapidamente."
+    />
+  );
+
   if (variant === "inline") {
     return (
+      <>
+        <button
+          type="button"
+          onClick={handle}
+          disabled={mutation.isPending}
+          aria-pressed={isFav}
+          aria-label={label}
+          title={label}
+          className={cn(
+            "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11.5px] font-semibold uppercase tracking-[0.14em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+            isFav
+              ? "border-brand-gold bg-brand-gold text-brand-navy"
+              : "border-border bg-card text-foreground hover:border-brand-gold/60",
+            mutation.isPending && "opacity-60",
+            className,
+          )}
+        >
+          <Star
+            className={cn("h-3.5 w-3.5", isFav && "fill-current")}
+            strokeWidth={2}
+            aria-hidden
+          />
+          {isFav ? "Favorito" : "Favoritar"}
+        </button>
+        {gateDialog}
+      </>
+    );
+  }
+
+  return (
+    <>
       <button
         type="button"
         onClick={handle}
@@ -86,42 +127,17 @@ export function FavoriteMarketButton({
         aria-label={label}
         title={label}
         className={cn(
-          "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11.5px] font-semibold uppercase tracking-[0.14em] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+          "inline-grid h-8 w-8 place-items-center rounded-full border shadow-sm backdrop-blur transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
           isFav
             ? "border-brand-gold bg-brand-gold text-brand-navy"
-            : "border-border bg-card text-foreground hover:border-brand-gold/60",
+            : "border-border/70 bg-background/90 text-muted-foreground hover:border-brand-gold hover:text-brand-gold",
           mutation.isPending && "opacity-60",
           className,
         )}
       >
-        <Star
-          className={cn("h-3.5 w-3.5", isFav && "fill-current")}
-          strokeWidth={2}
-          aria-hidden
-        />
-        {isFav ? "Favorito" : "Favoritar"}
+        <Star className={cn("h-4 w-4", isFav && "fill-current")} strokeWidth={2} aria-hidden />
       </button>
-    );
-  }
-
-  return (
-    <button
-      type="button"
-      onClick={handle}
-      disabled={mutation.isPending}
-      aria-pressed={isFav}
-      aria-label={label}
-      title={label}
-      className={cn(
-        "inline-grid h-8 w-8 place-items-center rounded-full border shadow-sm backdrop-blur transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
-        isFav
-          ? "border-brand-gold bg-brand-gold text-brand-navy"
-          : "border-border/70 bg-background/90 text-muted-foreground hover:border-brand-gold hover:text-brand-gold",
-        mutation.isPending && "opacity-60",
-        className,
-      )}
-    >
-      <Star className={cn("h-4 w-4", isFav && "fill-current")} strokeWidth={2} aria-hidden />
-    </button>
+      {gateDialog}
+    </>
   );
 }
