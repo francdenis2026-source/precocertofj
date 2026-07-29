@@ -2458,7 +2458,7 @@ function ProductGroupCard({
       <ul
         role="list"
         aria-label={`Mercados com ${productName}`}
-        className="mt-1 grid gap-1 md:grid-cols-2 xl:grid-cols-3"
+        className="pc-market-price-grid mt-1 grid gap-1 md:grid-cols-2 xl:grid-cols-3"
       >
         {visiblePrices.map((p, i) => {
 
