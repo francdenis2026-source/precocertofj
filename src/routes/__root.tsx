@@ -318,6 +318,10 @@ function RootComponent() {
           event !== "USER_UPDATED"
         )
           return;
+        if (event === "SIGNED_IN") {
+          // Ao autenticar, zera a cota gratuita do visitante.
+          void import("@/lib/guest-quota").then(({ resetGuestQuota }) => resetGuestQuota());
+        }
         router.invalidate();
         if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
       });

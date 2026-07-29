@@ -29,6 +29,8 @@ import { getPlatformStats, listPublicStores } from "@/lib/stores-public.function
 import { getEconomyStat } from "@/lib/products-public.functions";
 import { listPopularQueries } from "@/lib/search-popular.functions";
 import { StartFreeDialog } from "@/components/home/StartFreeDialog";
+import { GuestGateDialog } from "@/components/gate/GuestGateDialog";
+import { consumeGuest, guestRemaining, GUEST_LIMIT } from "@/lib/guest-quota";
 import { MetricSpotlightDialog } from "@/components/home/MetricSpotlightDialog";
 import { AllCategoriesDialog } from "@/components/home/AllCategoriesDialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -127,6 +129,7 @@ function HomePage() {
     useState<import("@/components/home/MetricSpotlightDialog").MetricKind | null>(null);
   const [allCatsOpen, setAllCatsOpen] = useState(false);
   const [exploreOpen, setExploreOpen] = useState(false);
+  const [gateOpen, setGateOpen] = useState(false);
 
   useEffect(() => {
     document.body.classList.add("no-page-bg", "pc-home-locked");
@@ -198,7 +201,25 @@ function HomePage() {
     e?.preventDefault();
     const query = q.trim();
     if (!query) return;
+    if (isLoggedOut) {
+      const { blocked } = consumeGuest("search", query);
+      if (blocked) {
+        setGateOpen(true);
+        return;
+      }
+    }
     navigate({ to: "/buscar", search: { q: query } as any });
+  };
+
+  const goToPopular = (term: string) => {
+    if (isLoggedOut) {
+      const { blocked } = consumeGuest("search", term);
+      if (blocked) {
+        setGateOpen(true);
+        return;
+      }
+    }
+    navigate({ to: "/buscar", search: { q: term } as any });
   };
 
 
@@ -373,6 +394,14 @@ function HomePage() {
                     <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
                   </button>
                 </div>
+                {isLoggedOut ? (
+                  <p
+                    className="mt-1.5 pl-2 text-[11px] font-medium"
+                    style={{ color: "var(--pc-home-onhero-fg-70)" }}
+                  >
+                    Modo visitante · restam <strong className="pc-num">{guestRemaining("search")}</strong> de {GUEST_LIMIT} buscas grátis
+                  </p>
+                ) : null}
               </form>
 
               {/* ---------- Populares + CTA ---------- */}
@@ -387,7 +416,7 @@ function HomePage() {
                   <button
                     key={t}
                     type="button"
-                    onClick={() => navigate({ to: "/buscar", search: { q: t } as any })}
+                    onClick={() => goToPopular(t)}
                     className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11.5px] font-medium capitalize pc-tile"
                     style={{
                       background: "var(--pc-home-onhero-glass-soft)",
@@ -780,6 +809,12 @@ function HomePage() {
           if (!v) setSpotlight(null);
         }}
         kind={spotlight}
+      />
+      <GuestGateDialog
+        open={gateOpen}
+        onOpenChange={setGateOpen}
+        action="search"
+        redirect="/buscar"
       />
     </div>
   );

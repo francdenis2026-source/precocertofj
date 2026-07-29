@@ -12,6 +12,8 @@ import { useSession } from "@/hooks/useSession";
 import { trackEvent } from "@/lib/analytics-events";
 import { RouteError } from "@/components/feedback";
 import { SearchDiscovery, pushRecentSearch } from "@/components/search/SearchDiscovery";
+import { GuestGateDialog } from "@/components/gate/GuestGateDialog";
+import { consumeGuest } from "@/lib/guest-quota";
 
 
 
@@ -241,6 +243,29 @@ function SearchPage() {
       trackEvent("visitor_view_search_aggregate", { has_query: true });
     }
   }, [hasQuery, user]);
+
+  // Gate para visitantes: consome 1 uso por termo único. Ao esgotar,
+  // limpa o termo da URL e abre o modal de cadastro.
+  const [gateOpen, setGateOpen] = useState(false);
+  useEffect(() => {
+    if (loading || user) return;
+    if (!hasQuery) return;
+    const { blocked } = consumeGuest("search", q);
+    if (blocked) {
+      setGateOpen(true);
+      navigate({
+        search: (prev: Record<string, unknown>) => {
+          const s = { ...prev };
+          delete s.q;
+          return s;
+        },
+        replace: true,
+      });
+    }
+    // Só reage a mudanças de q/estado de sessão — não incluir navigate.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [q, hasQuery, loading, user]);
+
 
   const hydratedRef = useRef(false);
   useEffect(() => {
@@ -663,9 +688,16 @@ function SearchPage() {
         </div>
 
       </div>
+      <GuestGateDialog
+        open={gateOpen}
+        onOpenChange={setGateOpen}
+        action="search"
+        redirect="/buscar"
+      />
     </IsolatedPage>
   );
 }
+
 
 
 // ============================================================================
