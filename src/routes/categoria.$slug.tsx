@@ -61,7 +61,7 @@ const ICONS: Record<string, typeof ShoppingCart> = {
 const brl = (v: number) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
-const SEARCH_DEFAULTS = { q: "", loja: "", view: "list", page: 1, per: 30, p: "" };
+const SEARCH_DEFAULTS = { q: "", loja: "", view: "list", page: 1, per: 30, p: "", corte: "" };
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
@@ -71,6 +71,8 @@ const searchSchema = z.object({
   per: fallback(z.number().int(), 30).default(30),
   /** Produto aberto no quick view (compartilhável e reversível pelo histórico). */
   p: fallback(z.string(), "").default(""),
+  /** Filtro de corte no hub de açougue: bovino | frango | suino | outros | "" */
+  corte: fallback(z.string(), "").default(""),
 });
 
 
