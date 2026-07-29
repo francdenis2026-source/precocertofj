@@ -324,5 +324,13 @@ export function CreatePriceAlertButton({
         </DialogFooter>
       </DialogContent>
     </Dialog>
+    <GuestGateDialog
+      open={gate.open}
+      onOpenChange={gate.setOpen}
+      action="alert"
+      title="Alertas de preço são grátis para quem tem conta"
+      description="Cadastre-se em 30 segundos (7 dias sem cartão) para receber avisos quando esse produto mudar de preço."
+    />
+    </>
   );
 }
