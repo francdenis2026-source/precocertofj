@@ -408,7 +408,7 @@ function HomePage() {
                   <button
                     key={t}
                     type="button"
-                    onClick={() => navigate({ to: "/buscar", search: { q: t } as any })}
+                    onClick={() => goToPopular(t)}
                     className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11.5px] font-medium capitalize pc-tile"
                     style={{
                       background: "var(--pc-home-onhero-glass-soft)",
