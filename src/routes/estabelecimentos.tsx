@@ -217,6 +217,18 @@ function EstablishmentsPage() {
     return list;
   }, [data, q, kindFilter, neighborhoodFilter, sort, onlyFavorites, favSet]);
 
+  // Reset page when filters change / list shrinks
+  useEffect(() => {
+    setPage(0);
+  }, [q, kindFilter, neighborhoodFilter, sort, onlyFavorites]);
+
+  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
+  const currentPage = Math.min(page, pageCount - 1);
+  const pageItems = useMemo(
+    () => filtered.slice(currentPage * PAGE_SIZE, currentPage * PAGE_SIZE + PAGE_SIZE),
+    [filtered, currentPage],
+  );
+
   // Auto-selecionar primeiro item quando lista muda / seleção some.
   useEffect(() => {
     if (filtered.length === 0) {
