@@ -2237,9 +2237,9 @@ function ProductGroupCard({
     return prices.reduce((best, cur) => (cur.price < best.price ? cur : best), prices[0]);
   }, [prices]);
 
-  // Mostra por padrão apenas os 3 melhores preços de cada produto: mantém a
-  // página curta e legível; o restante fica a um clique de distância.
-  const COLLAPSED = 3;
+  // Mostra por padrão mais mercados em uma grade compacta: o usuário precisa
+  // enxergar rapidamente onde o produto existe e quanto custa em cada lugar.
+  const COLLAPSED = 6;
   const [expanded, setExpanded] = useState(focused);
   const visiblePrices = expanded || focused ? prices : prices.slice(0, COLLAPSED);
   const hiddenPrices = prices.length - visiblePrices.length;
@@ -2388,10 +2388,28 @@ function ProductGroupCard({
         />
       ) : null}
 
+      <div className="mt-2 flex items-center justify-between gap-2 border-t border-[color-mix(in_oklab,var(--color-border)_70%,transparent)] pt-1.5">
+        <p className="pc-res-label text-foreground">
+          Onde tem este produto
+          <span className="ml-1 font-semibold tabular-nums text-muted-foreground">
+            {prices.length} estabelecimento{prices.length > 1 ? "s" : ""}
+          </span>
+        </p>
+        {!expanded && hiddenPrices > 0 ? (
+          <button
+            type="button"
+            onClick={() => setExpanded(true)}
+            className="rounded-full border border-brand-gold/45 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-2 py-0.5 text-[11px] font-semibold text-[var(--pc-gold-ink)] transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+          >
+            Ver todos
+          </button>
+        ) : null}
+      </div>
+
       <ul
         role="list"
         aria-label={`Mercados com ${productName}`}
-        className="mt-1 border-t border-[color-mix(in_oklab,var(--color-border)_70%,transparent)]"
+        className="mt-1 grid gap-1 md:grid-cols-2 xl:grid-cols-3"
       >
         {visiblePrices.map((p, i) => {
 
@@ -2412,7 +2430,7 @@ function ProductGroupCard({
               }
               aria-current={isFocusedMarket ? "true" : undefined}
               className={
-                "pc-res-row relative cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:z-10 " +
+                "pc-res-row relative cursor-pointer rounded-lg border border-[color-mix(in_oklab,var(--color-border)_58%,transparent)] bg-background/75 px-1.5 outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-brand-gold " +
                 (isFocusedMarket ? "bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)]" : "")
               }
               data-cheapest={isCheapest ? "true" : "false"}
@@ -2458,7 +2476,7 @@ function ProductGroupCard({
                 name={p.marketName}
                 logoUrl={p.marketLogoUrl}
                 brandColor={p.marketBrandColor}
-                size="sm"
+                size="xs"
                 className="my-auto"
                 isCheapest={isCheapest}
                 cheapestReason={isCheapest ? buildCheapestReason(p.price, globalAvg) : null}
@@ -2485,7 +2503,7 @@ function ProductGroupCard({
                 avg={globalAvg}
                 max={globalMax}
                 size="sm"
-                className="self-center"
+                className="hidden self-center xl:inline-flex"
               />
               <div className="shrink-0 self-center text-right">
                 {isCheapest && <p className="pc-res-label">Menor</p>}
