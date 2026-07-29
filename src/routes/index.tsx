@@ -30,6 +30,7 @@ import { getEconomyStat } from "@/lib/products-public.functions";
 import { listPopularQueries } from "@/lib/search-popular.functions";
 import { StartFreeDialog } from "@/components/home/StartFreeDialog";
 import { GuestGateDialog } from "@/components/gate/GuestGateDialog";
+import { HomeSearchSuggestions } from "@/components/home/HomeSearchSuggestions";
 import {
   consumeGuest,
   guestRemaining,
@@ -139,6 +140,7 @@ function HomePage() {
   const [allCatsOpen, setAllCatsOpen] = useState(false);
   const [exploreOpen, setExploreOpen] = useState(false);
   const [gateOpen, setGateOpen] = useState(false);
+  const [suggestOpen, setSuggestOpen] = useState(false);
 
   useEffect(() => {
     document.body.classList.add("no-page-bg", "pc-home-locked");
