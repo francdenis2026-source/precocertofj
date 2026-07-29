@@ -472,23 +472,29 @@ function EstablishmentsPage() {
               />
             </div>
             <div className="flex flex-wrap items-center gap-1.5">
-              <Select
-                value={neighborhoodFilter}
-                onValueChange={(v) => updateSearch({ bairro: v })}
-              >
-                <SelectTrigger
-                  className="h-8 flex-1 min-w-[140px] text-[12px]"
-                  aria-label="Filtrar por bairro"
-                >
+              {citiesPresent.length > 1 && (
+                <Select value={cityFilter} onValueChange={(v) => updateSearch({ cidade: v })}>
+                  <SelectTrigger className="h-8 min-w-[130px] flex-1 text-[12px]" aria-label="Filtrar por cidade">
+                    <MapPin className="mr-1 h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
+                    <SelectValue placeholder="Todas as cidades" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__all">Todas as cidades</SelectItem>
+                    {citiesPresent.map((c) => (
+                      <SelectItem key={c} value={c}>{c}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+              <Select value={neighborhoodFilter} onValueChange={(v) => updateSearch({ bairro: v })}>
+                <SelectTrigger className="h-8 flex-1 min-w-[140px] text-[12px]" aria-label="Filtrar por bairro">
                   <MapPin className="mr-1 h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
                   <SelectValue placeholder="Todos os bairros" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="__all">Todos os bairros</SelectItem>
                   {neighborhoodsPresent.map((b) => (
-                    <SelectItem key={b} value={b}>
-                      {b}
-                    </SelectItem>
+                    <SelectItem key={b} value={b}>{b}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -503,6 +509,33 @@ function EstablishmentsPage() {
                   <SelectItem value="neighborhood">Bairro (A→Z)</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+            <div className="flex flex-wrap items-center gap-1" role="radiogroup" aria-label="Faixa de economia">
+              {([
+                { k: "__all", l: "Toda economia" },
+                { k: "low", l: "Até R$5" },
+                { k: "mid", l: "R$5–R$20" },
+                { k: "high", l: "R$20+" },
+              ] as const).map((b) => {
+                const active = savingsFilter === b.k;
+                return (
+                  <button
+                    key={b.k}
+                    type="button"
+                    role="radio"
+                    aria-checked={active}
+                    onClick={() => updateSearch({ economia: b.k })}
+                    className={cn(
+                      "inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] transition-colors",
+                      active
+                        ? "border-brand-gold bg-brand-gold text-brand-navy"
+                        : "border-border bg-background text-muted-foreground hover:border-brand-gold hover:text-[var(--pc-gold-ink)]",
+                    )}
+                  >
+                    {b.l}
+                  </button>
+                );
+              })}
             </div>
             <div className="flex items-center justify-between gap-2">
               <span className={cn("truncate", tc.metaMuted)} aria-live="polite">
