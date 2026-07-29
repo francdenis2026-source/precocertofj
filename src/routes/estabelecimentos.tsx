@@ -45,13 +45,13 @@ import {
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
 
-const SORT_KEYS = ["products", "name", "neighborhood", "savings"] as const;
+const SORT_KEYS = ["relevance", "price", "savings", "products", "name", "neighborhood"] as const;
 type SortKey = (typeof SORT_KEYS)[number];
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
   kind: fallback(z.string(), "__all").default("__all"),
-  sort: fallback(z.string(), "products").default("products"),
+  sort: fallback(z.string(), "relevance").default("relevance"),
   bairro: fallback(z.string(), "__all").default("__all"),
   cidade: fallback(z.string(), "__all").default("__all"),
   economia: fallback(z.string(), "__all").default("__all"),
@@ -127,7 +127,7 @@ function EstablishmentsPage() {
   const kindFilter = search.kind;
   const sort: SortKey = (SORT_KEYS as readonly string[]).includes(search.sort)
     ? (search.sort as SortKey)
-    : "products";
+    : "relevance";
   const neighborhoodFilter = search.bairro;
   const cityFilter = search.cidade;
   const savingsFilter = search.economia;
@@ -145,7 +145,7 @@ function EstablishmentsPage() {
           if (next.bairro === "__all") delete (next as Record<string, unknown>).bairro;
           if (next.cidade === "__all") delete (next as Record<string, unknown>).cidade;
           if (next.economia === "__all") delete (next as Record<string, unknown>).economia;
-          if (next.sort === "products") delete (next as Record<string, unknown>).sort;
+          if (next.sort === "relevance") delete (next as Record<string, unknown>).sort;
           if (!next.fav) delete (next as Record<string, unknown>).fav;
           if (!next.sel) delete (next as Record<string, unknown>).sel;
           if (!next.pagina || next.pagina <= 1) delete (next as Record<string, unknown>).pagina;
@@ -227,6 +227,8 @@ function EstablishmentsPage() {
         [e.name, e.neighborhood ?? "", e.city ?? ""].some((v) => v.toLowerCase().includes(term)),
       );
     }
+    const maxProducts = Math.max(1, ...list.map((e) => e.productsCount));
+    const maxSavingsAll = Math.max(1, ...list.map((e) => e.maxSavings ?? 0));
     switch (sort) {
       case "name":
         list.sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
@@ -240,9 +242,24 @@ function EstablishmentsPage() {
       case "savings":
         list.sort((a, b) => b.maxSavings - a.maxSavings);
         break;
+      case "price":
+        list.sort((a, b) => {
+          const av = a.minPrice ?? Number.POSITIVE_INFINITY;
+          const bv = b.minPrice ?? Number.POSITIVE_INFINITY;
+          if (av !== bv) return av - bv;
+          return b.productsCount - a.productsCount;
+        });
+        break;
       case "products":
-      default:
         list.sort((a, b) => b.productsCount - a.productsCount);
+        break;
+      case "relevance":
+      default:
+        list.sort((a, b) => {
+          const sa = (a.productsCount / maxProducts) * 0.6 + ((a.maxSavings ?? 0) / maxSavingsAll) * 0.4;
+          const sb = (b.productsCount / maxProducts) * 0.6 + ((b.maxSavings ?? 0) / maxSavingsAll) * 0.4;
+          return sb - sa;
+        });
     }
     return list;
   }, [data, q, kindFilter, cityFilter, neighborhoodFilter, savingsFilter, sort, onlyFavorites, favSet]);
@@ -503,8 +520,10 @@ function EstablishmentsPage() {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="products">Mais produtos</SelectItem>
+                  <SelectItem value="relevance">Relevância</SelectItem>
+                  <SelectItem value="price">Menor preço</SelectItem>
                   <SelectItem value="savings">Maior economia</SelectItem>
+                  <SelectItem value="products">Mais produtos</SelectItem>
                   <SelectItem value="name">Nome (A→Z)</SelectItem>
                   <SelectItem value="neighborhood">Bairro (A→Z)</SelectItem>
                 </SelectContent>
