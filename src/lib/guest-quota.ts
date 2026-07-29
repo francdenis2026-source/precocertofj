@@ -209,6 +209,9 @@ export function consumeGuest(
   action: GuestAction,
   unique?: string,
 ): { blocked: boolean; count: number; remaining: number } {
+  if (GUEST_QUOTA_DISABLED) {
+    return { blocked: false, count: 0, remaining: GUEST_DAILY_LIMIT };
+  }
   const s = read();
   const key = unique ? `${action}:${unique.trim().toLowerCase()}` : undefined;
 
