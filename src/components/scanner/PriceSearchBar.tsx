@@ -2907,7 +2907,7 @@ function MarketGroupedResults({
             savings={b.savings}
             gapToBest={b.gapToBest}
             rows={b.rows}
-            isCheapest={globalMin != null && b.minPrice === globalMin && idx === 0}
+            isCheapest={globalMin != null && b.minPrice === globalMin}
 
             fmt={fmt}
             highlightTokens={highlightTokens}
