@@ -70,6 +70,9 @@ export function classifyButcherCut(
   const catNorm = norm(opts?.category ?? "");
   const isMeatCategory = catNorm.includes("carne");
 
+  // Rejeita industrializados/temperos/enlatados antes de qualquer classificação.
+  if (INDUSTRIAL_RE.test(n)) return null;
+
   // Produtos embalados normalmente não são corte — mas se a loja é açougue
   // e a categoria é carne (ex.: "Linguiça caseira 500g"), aceitamos.
   if (PACKAGED_RE.test(raw) && !(assume && (isMeatCategory || MEAT_GENERIC_RE.test(n)))) {
@@ -82,7 +85,8 @@ export function classifyButcherCut(
 
   // Fallback exclusivo para açougues: garante que todo item de balcão
   // apareça no módulo de cortes mesmo sem match de regex específico.
-  if (assume && (isMeatCategory || MEAT_GENERIC_RE.test(n) || byWeight)) {
+  // Exige venda por peso (kg) para evitar falso-positivo em mercados.
+  if (assume && byWeight && (isMeatCategory || MEAT_GENERIC_RE.test(n))) {
     if (/\b(frango|ave)\b/.test(n)) return "frango";
     if (/\b(porco|su[ií]n|bacon|toucinho)\b/.test(n)) return "suino";
     return "bovino";
