@@ -333,7 +333,7 @@ export function CheapestStoresRanking() {
                         )}
                         title="Vitórias / Comparações"
                       >
-                        <p className="font-display text-[15px] font-bold tabular-nums text-foreground md:text-lg">
+                        <p className="pc-price text-[15px] font-bold text-foreground md:text-lg">
                           {winRate}
                           <span className="ml-0.5 text-[11px] font-semibold text-muted-foreground">%</span>
                         </p>
@@ -348,7 +348,7 @@ export function CheapestStoresRanking() {
                         )}
                         title="Economia média vs. concorrentes"
                       >
-                        <p className="font-mono text-[11px] font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
+                        <p className="pc-price text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
                           {r.avgSavingsPct > 0 ? `−${r.avgSavingsPct.toFixed(1)}%` : "—"}
                         </p>
                         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
@@ -362,7 +362,7 @@ export function CheapestStoresRanking() {
                         )}
                         title="Ticket médio das vitórias"
                       >
-                        <p className="font-mono text-[11px] font-bold tabular-nums text-foreground">
+                        <p className="pc-price text-[11px] font-bold text-foreground">
                           {r.avgTicketWins > 0 ? brl(r.avgTicketWins) : "—"}
                         </p>
                         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
