@@ -649,7 +649,7 @@ function DetailPanel({
       : 0;
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
+    <div className="flex flex-col">
       {/* Cabeçalho do detalhe */}
       <div className="shrink-0 border-b border-border/60 px-4 py-3 md:px-6 md:py-4">
         <div className="flex items-start gap-3 md:gap-4">
