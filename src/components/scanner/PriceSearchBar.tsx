@@ -2510,11 +2510,6 @@ function ProductGroupCard({
           const detailsOpen = openDetails.has(rowKey);
           const localizacao = [p.neighborhood, p.city].filter(Boolean).join(" · ");
           const priceDate = new Date(p.when).toLocaleDateString("pt-BR");
-          return (
-            <li
-              key={rowKey}
-              role={onSelect ? "button" : undefined}
-              tabIndex={onSelect ? 0 : undefined}
           const tieSuffix =
             isCheapest && cheapestCount > 1 ? ` (empate com ${cheapestCount - 1} ${cheapestCount - 1 === 1 ? "mercado" : "mercados"})` : "";
           const rowAriaLabel = `${p.marketName ?? "Mercado"}: ${fmt(p.price)}${
