@@ -1402,6 +1402,12 @@ export function PriceSearchBar({
                               const sb = (b.max ?? b.min) - b.min;
                               if (sa !== sb) return sb - sa;
                             }
+                            if (sortMode === "highest") {
+                              const am = a.max ?? a.min;
+                              const bm = b.max ?? b.min;
+                              if (am !== bm) return bm - am;
+                              return b.samples - a.samples;
+                            }
                             if (a.min !== b.min) return a.min - b.min;
                             return b.samples - a.samples;
                           });
