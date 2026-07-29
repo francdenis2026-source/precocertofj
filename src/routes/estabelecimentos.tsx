@@ -45,7 +45,7 @@ import {
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
 
-const SORT_KEYS = ["products", "name", "neighborhood", "savings"] as const;
+const SORT_KEYS = ["relevance", "price", "savings", "products", "name", "neighborhood"] as const;
 type SortKey = (typeof SORT_KEYS)[number];
 
 const searchSchema = z.object({
