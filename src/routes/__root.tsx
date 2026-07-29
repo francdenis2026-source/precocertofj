@@ -25,6 +25,7 @@ import { usePlansRealtime } from "@/hooks/usePlansRealtime";
 import { RouteError, RouteNotFound } from "@/components/feedback";
 import { BottomTabBar } from "@/components/layout/BottomTabBar";
 import { MobileStickySearch } from "@/components/layout/MobileStickySearch";
+import { GuestGlobalPriceLock } from "@/components/gate/GuestGlobalPriceLock";
 
 function NotFoundComponent() {
   return <RouteNotFound />;
@@ -340,6 +341,7 @@ function RootComponent() {
         <div aria-hidden className="h-[64px] md:hidden" />
         <IdleLogoutMonitor />
         <UnlockConversionTracker />
+        <GuestGlobalPriceLock />
         
         <Toaster richColors position="top-right" />
       </ConfirmProvider>
