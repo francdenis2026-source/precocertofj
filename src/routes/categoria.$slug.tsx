@@ -182,9 +182,11 @@ function CategoryPage() {
         const bucket = prot ?? "outros";
         return { p, prot, bucket };
       });
-      const filtered = search.corte
-        ? enriched.filter((x) => x.bucket === search.corte)
-        : enriched;
+      const filtered = enriched.filter((x) => {
+        if (search.so_cortes && x.bucket === "outros") return false;
+        if (search.corte && x.bucket !== search.corte) return false;
+        return true;
+      });
       filtered.sort((a, b) => {
         const oa = ORDER[a.bucket] ?? 9;
         const ob = ORDER[b.bucket] ?? 9;
@@ -194,7 +196,7 @@ function CategoryPage() {
       return filtered.map((x) => x.p);
     }
     return list;
-  }, [data, q, storeFilter, slug, search.corte, classifyProtein]);
+  }, [data, q, storeFilter, slug, search.corte, search.so_cortes, classifyProtein]);
 
   // Contagem por bucket para os chips de filtro (independente do filtro corte ativo)
   const proteinCounts = useMemo(() => {
