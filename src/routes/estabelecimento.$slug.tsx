@@ -62,6 +62,7 @@ import { PreparoDicas } from "@/components/estabelecimento/PreparoDicas";
 import { FavoriteMarketButton } from "@/components/market/FavoriteMarketButton";
 import { RatingBadge, PLATFORM_RATING } from "@/components/ds/RatingStars";
 import { ProductQuickView, type QuickViewProduct } from "@/components/product/ProductQuickView";
+import { useButcherIds } from "@/hooks/useButcherIds";
 
 import { EmptyState, LoadingGrid, RouteError } from "@/components/feedback";
 
