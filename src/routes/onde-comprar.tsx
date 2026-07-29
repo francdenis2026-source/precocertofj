@@ -295,9 +295,31 @@ function OndeComprarPage() {
 
 const INITIAL_OFFERS = 4;
 
+const ACC_STORE_KEY = "pc:onde-comprar:acc";
+function readAccStore(): Record<string, { open?: boolean; all?: boolean }> {
+  if (typeof window === "undefined") return {};
+  try {
+    return JSON.parse(window.sessionStorage.getItem(ACC_STORE_KEY) || "{}") || {};
+  } catch {
+    return {};
+  }
+}
+function writeAccStore(key: string, patch: { open?: boolean; all?: boolean }) {
+  if (typeof window === "undefined") return;
+  try {
+    const s = readAccStore();
+    s[key] = { ...s[key], ...patch };
+    window.sessionStorage.setItem(ACC_STORE_KEY, JSON.stringify(s));
+  } catch {
+    /* ignore */
+  }
+}
+
 function ProductAccordion({ product: p }: { product: WhereToBuyProduct }) {
-  const [open, setOpen] = useState(false);
-  const [showAll, setShowAll] = useState(false);
+  const [open, setOpen] = useState<boolean>(() => !!readAccStore()[p.productKey]?.open);
+  const [showAll, setShowAll] = useState<boolean>(() => !!readAccStore()[p.productKey]?.all);
+  useEffect(() => writeAccStore(p.productKey, { open }), [p.productKey, open]);
+  useEffect(() => writeAccStore(p.productKey, { all: showAll }), [p.productKey, showAll]);
   const visible = showAll ? p.offers : p.offers.slice(0, INITIAL_OFFERS);
   const hidden = Math.max(0, p.offers.length - INITIAL_OFFERS);
   const best = p.offers.find((o) => o.isCheapest) ?? p.offers[0];
