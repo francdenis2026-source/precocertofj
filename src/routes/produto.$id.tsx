@@ -176,7 +176,7 @@ function ProductDetailPage() {
                   <p className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
                     Seu preço cadastrado
                   </p>
-                  <p className="mt-1 font-display text-3xl font-bold tabular-nums text-foreground">
+                  <p className="mt-1 pc-price text-3xl font-bold text-foreground">
                     {fmt(data.currentPrice)}
                   </p>
                 </div>
@@ -222,7 +222,7 @@ function ProductDetailPage() {
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="font-display text-4xl font-extrabold leading-none tabular-nums text-savings">
+                      <p className="pc-price text-4xl font-extrabold leading-none text-savings">
                         {fmt(data.cheapest.price)}
                       </p>
                     </div>
@@ -232,7 +232,7 @@ function ProductDetailPage() {
                       <TrendingDown className="h-3.5 w-3.5 text-savings" strokeWidth={2.5} />
                       <p className="font-sans text-xs text-foreground">
                         Economia de{" "}
-                        <span className="font-bold tabular-nums text-savings">
+                        <span className="pc-price font-bold text-savings">
                           {fmt(savings.diff)}
                         </span>{" "}
                         <span className="text-muted-foreground">
@@ -412,7 +412,7 @@ function PriceStat({
         {icon}
         {label}
       </p>
-      <p className={`mt-1.5 font-display font-bold tabular-nums ${toneClasses} ${
+      <p className={`mt-1.5 pc-price font-bold ${toneClasses} ${
         highlight ? "text-xl" : "text-base"
       }`}>
         {value}

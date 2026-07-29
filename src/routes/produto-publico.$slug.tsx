@@ -273,7 +273,7 @@ function ProductPublicPage() {
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
                     Melhor preço
                   </p>
-                  <p className="mt-1 font-display text-[22px] font-extrabold tabular-nums leading-none text-primary sm:text-[28px]">
+                  <p className="mt-1 pc-price text-[22px] font-extrabold leading-none text-primary sm:text-[28px]">
                     {fmt(bestPrice)}
                   </p>
                   {cheapest && (
@@ -463,7 +463,7 @@ function MiniStat({ label, value }: { label: string; value: string }) {
       <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
         {label}
       </p>
-      <p className="mt-1 font-display text-[17px] font-semibold tabular-nums leading-tight text-foreground">
+      <p className="mt-1 pc-price text-[17px] font-semibold leading-tight text-foreground">
         {value}
       </p>
     </div>
@@ -594,7 +594,7 @@ function MarketCard({
           <div className="flex shrink-0 items-center gap-1.5">
             <span
               className={
-                "font-display font-semibold tabular-nums leading-none " +
+                "pc-price font-semibold leading-none " +
                 (isBest
                   ? "text-[22px] text-savings"
                   : "text-[16px] text-foreground")
@@ -674,7 +674,7 @@ function Detail({
       <p
         className={
           highlight
-            ? "mt-1 truncate font-display text-[17px] font-semibold tabular-nums leading-tight text-foreground"
+            ? "mt-1 truncate pc-price text-[17px] font-semibold leading-tight text-foreground"
             : "mt-0.5 truncate text-xs font-semibold text-foreground"
         }
       >
