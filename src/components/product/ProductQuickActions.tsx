@@ -257,6 +257,13 @@ export function ProductQuickActions({
           )}
         </div>
       )}
+      <GuestGateDialog
+        open={favoriteGate.open}
+        onOpenChange={favoriteGate.setOpen}
+        action="favorite"
+        title="Favoritos são grátis para quem tem conta"
+        description="Crie sua conta grátis (7 dias sem cartão) para salvar produtos favoritos e receber alertas quando o preço mudar."
+      />
     </div>
   );
 }
