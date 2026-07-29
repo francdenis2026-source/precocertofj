@@ -462,13 +462,18 @@ function SearchPage() {
 
   return (
     <IsolatedPage
-      fit
+      fit={!hasQuery}
       className={`pc-search-scope${reducedMotion ? " pc-reduce-motion" : ""}`}
     >
       <div
         data-reduced-motion={reducedMotion ? "on" : "off"}
-        className="flex h-full min-h-0 flex-col bg-background"
+        className={
+          hasQuery
+            ? "flex min-h-svh flex-col bg-background"
+            : "flex h-full min-h-0 flex-col bg-background"
+        }
       >
+
         {/* ================================================================
             RAIL SUPERIOR — linha única de 44px, hairline dourada abaixo.
             Densidade tipográfica editorial, sem redundâncias.
@@ -544,13 +549,13 @@ function SearchPage() {
             <>
               <section
                 aria-label="Busca por nome"
-                className="pc-surface-2 relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/70 p-2 shadow-sm md:p-2.5"
+                className="pc-surface-2 relative flex flex-col rounded-2xl border border-border/70 p-2 shadow-sm md:p-2.5"
               >
                 <div
                   aria-hidden
                   className="pointer-events-none absolute inset-x-3 top-0 h-px bg-linear-to-r from-transparent via-brand-gold/60 to-transparent"
                 />
-                <div className="pc-search-compact flex min-h-0 flex-1 flex-col">
+                <div className="pc-search-compact flex flex-col">
                   <PriceSearchBar
                     initialQuery={q}
                     mode={mode}
@@ -571,8 +576,8 @@ function SearchPage() {
                     onFocusChange={(product, market) =>
                       setFocusUrl(product ?? null, market ?? null)
                     }
-                    fitResults
                   />
+
 
                 </div>
                 <div className="mt-1.5 shrink-0 border-t border-border/50 pt-1">

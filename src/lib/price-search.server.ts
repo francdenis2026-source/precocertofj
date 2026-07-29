@@ -269,7 +269,13 @@ async function runPriceSearch(data: {
     kind: string | null;
     logoUrl: string | null;
     brandColor: string | null;
+    address: string | null;
+    neighborhood: string | null;
+    city: string | null;
+    latitude: number | null;
+    longitude: number | null;
   };
+
   const metaByName = new Map<string, EstabMeta>();
   const metaKey = (n: string) =>
     (n ?? "")
@@ -309,6 +315,11 @@ async function runPriceSearch(data: {
                 kind: string | null;
                 logo_url: string | null;
                 brand_color: string | null;
+                address: string | null;
+                neighborhood: string | null;
+                city: string | null;
+                latitude: number | null;
+                longitude: number | null;
               }>
             | null;
           error: { message: string } | null;
@@ -316,13 +327,18 @@ async function runPriceSearch(data: {
       };
     })
       .from("establishments")
-      .select("id, name, kind, logo_url, brand_color");
+      .select("id, name, kind, logo_url, brand_color, address, neighborhood, city, latitude, longitude");
     for (const e of estabs ?? []) {
       const meta: EstabMeta = {
         id: e.id,
         kind: e.kind,
         logoUrl: e.logo_url,
         brandColor: e.brand_color,
+        address: e.address ?? null,
+        neighborhood: e.neighborhood ?? null,
+        city: e.city ?? null,
+        latitude: e.latitude ?? null,
+        longitude: e.longitude ?? null,
       };
       metaByName.set(e.name, meta);
       const key = metaKey(e.name);
@@ -333,6 +349,7 @@ async function runPriceSearch(data: {
     }
 
   }
+
 
 
   const prices = list.map((r) => Number(r.price_captured));
@@ -376,9 +393,15 @@ async function runPriceSearch(data: {
       marketLogoUrl: meta?.logoUrl ?? null,
       marketBrandColor: meta?.brandColor ?? null,
       establishmentId: meta?.id ?? null,
+      address: meta?.address ?? null,
+      neighborhood: meta?.neighborhood ?? null,
+      city: meta?.city ?? null,
+      latitude: meta?.latitude ?? null,
+      longitude: meta?.longitude ?? null,
       price: Number(r.price_captured),
       when: r.created_at,
     });
+
     byProduct.set(key, cur);
   }
 
@@ -455,9 +478,15 @@ async function runPriceSearch(data: {
               marketLogoUrl: meta?.logoUrl ?? null,
               marketBrandColor: meta?.brandColor ?? null,
               establishmentId: meta?.id ?? null,
+              address: meta?.address ?? null,
+              neighborhood: meta?.neighborhood ?? null,
+              city: meta?.city ?? null,
+              latitude: meta?.latitude ?? null,
+              longitude: meta?.longitude ?? null,
               price: Number(r.price_captured),
               when: r.created_at,
             } as ProductPricePoint;
+
           })
           .filter((x): x is ProductPricePoint => x != null);
 

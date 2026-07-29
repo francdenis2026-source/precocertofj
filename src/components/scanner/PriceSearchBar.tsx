@@ -15,7 +15,7 @@ import {
   type SearchHistoryEntry,
 } from "@/lib/search-history";
 
-import { Clock, Crown, Search, ShoppingBag, Sparkles, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Clock, Crown, MapPin, Search, ShoppingBag, Sparkles, X } from "lucide-react";
 import { FairPriceBadge } from "@/components/product/FairPriceBadge";
 import { CreatePriceAlertButton } from "@/components/alerts/CreatePriceAlertButton";
 
@@ -1713,9 +1713,16 @@ type PricePoint = {
   marketKind: string | null;
   marketLogoUrl: string | null;
   marketBrandColor: string | null;
+  establishmentId?: string | null;
+  address?: string | null;
+  neighborhood?: string | null;
+  city?: string | null;
+  latitude?: number | null;
+  longitude?: number | null;
   price: number;
   when: string;
 };
+
 
 /** Dias inteiros desde a coleta do preço (0 = hoje). */
 function daysSince(when: string): number {
@@ -2286,13 +2293,27 @@ function ProductGroupCard({
     return prices.reduce((best, cur) => (cur.price < best.price ? cur : best), prices[0]);
   }, [prices]);
 
-  // Mostra por padrão mais mercados em uma grade compacta: o usuário precisa
-  // enxergar rapidamente onde o produto existe e quanto custa em cada lugar.
-  const COLLAPSED = 6;
+  // Sem depender de rolagem interna: mostramos todos os mercados por padrão
+  // na visualização; se a lista for enorme, ainda mantemos um "colapso
+  // higiênico" acima de 24 itens para preservar densidade visual.
+  const COLLAPSED = 24;
   const [expanded, setExpanded] = useState(focused);
   const visiblePrices = expanded || focused ? prices : prices.slice(0, COLLAPSED);
   const hiddenPrices = prices.length - visiblePrices.length;
+  // Painéis de detalhes abertos por mercado — uma expansão por linha permite
+  // ver endereço, bairro, tipo do estabelecimento e validade da coleta sem
+  // esconder outras informações da lista.
+  const [openDetails, setOpenDetails] = useState<Set<string>>(() => new Set());
+  const toggleDetails = useCallback((key: string) => {
+    setOpenDetails((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  }, []);
   const cardRef = useRef<HTMLDivElement>(null);
+
 
   // Quando o card entra em foco por URL, expande, faz scroll suave e move o
   // foco do teclado para o card — restaurando o estado da UI a partir do link.
@@ -2467,9 +2488,13 @@ function ProductGroupCard({
             !!focusedMarket &&
             (p.marketName ?? "").toLowerCase() === focusedMarket.toLowerCase();
           const handleSelect = () => onSelect?.(productName, p.marketName ?? null);
+          const rowKey = `${p.marketName}-${p.when}-${i}`;
+          const detailsOpen = openDetails.has(rowKey);
+          const localizacao = [p.neighborhood, p.city].filter(Boolean).join(" · ");
+          const priceDate = new Date(p.when).toLocaleDateString("pt-BR");
           return (
             <li
-              key={`${p.marketName}-${p.when}-${i}`}
+              key={rowKey}
               role={onSelect ? "button" : undefined}
               tabIndex={onSelect ? 0 : undefined}
               aria-label={
@@ -2479,7 +2504,7 @@ function ProductGroupCard({
               }
               aria-current={isFocusedMarket ? "true" : undefined}
               className={
-                "pc-res-row relative cursor-pointer rounded-lg border border-[color-mix(in_oklab,var(--color-border)_58%,transparent)] bg-background/75 px-1.5 outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-brand-gold " +
+                "pc-res-row relative flex flex-col cursor-pointer rounded-lg border border-[color-mix(in_oklab,var(--color-border)_58%,transparent)] bg-background/75 px-1.5 outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-brand-gold " +
                 (isFocusedMarket ? "bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)]" : "")
               }
               data-cheapest={isCheapest ? "true" : "false"}
@@ -2499,69 +2524,152 @@ function ProductGroupCard({
                 handleSelect();
               }}
             >
-
-
-              <StoreColorBar name={p.marketName} brandColor={p.marketBrandColor} />
-              {isCheapest ? (
-                <span
-                  role="img"
-                  aria-label="Menor preço"
-                  title="Menor preço"
-                  className="my-auto grid h-5.5 w-5.5 shrink-0 place-items-center rounded-full bg-accent-strong text-accent-foreground"
-                >
-                  <Crown className="h-3 w-3" strokeWidth={2} aria-hidden="true" />
-                </span>
-              ) : (
-                <span
-                  role="img"
-                  aria-label={`Posição ${i + 1}`}
-                  className="my-auto grid h-5.5 w-5.5 shrink-0 place-items-center rounded-full border border-border bg-muted/40 text-[11px] font-semibold tabular-nums text-muted-foreground"
-                >
-                  <span aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
-                </span>
-              )}
-
-              <StoreBadge
-                name={p.marketName}
-                logoUrl={p.marketLogoUrl}
-                brandColor={p.marketBrandColor}
-                size="xs"
-                className="my-auto"
-                isCheapest={isCheapest}
-                cheapestReason={isCheapest ? buildCheapestReason(p.price, globalAvg) : null}
-              />
-              <div className="min-w-0 flex-1 self-center">
-                <p className="market-name pc-res-store truncate">{p.marketName}</p>
-                <p className="pc-res-meta truncate">
-                  {p.marketKind ?? "Estabelecimento"}
-                  <span aria-hidden="true" className="mx-1 opacity-40">·</span>
+              <div className="pc-res-row-main flex items-center gap-1.5">
+                <StoreColorBar name={p.marketName} brandColor={p.marketBrandColor} />
+                {isCheapest ? (
                   <span
-                    title={`Preço coletado em ${new Date(p.when).toLocaleDateString("pt-BR")}`}
-                    data-freshness={availabilityTone(p.when)}
-                    className="data-[freshness=stale]:opacity-60 data-[freshness=fresh]:text-[var(--pc-gold-ink)]"
+                    role="img"
+                    aria-label="Menor preço"
+                    title="Menor preço"
+                    className="my-auto grid h-5.5 w-5.5 shrink-0 place-items-center rounded-full bg-accent-strong text-accent-foreground"
                   >
-                    atualizado {freshnessLabel(p.when)}
+                    <Crown className="h-3 w-3" strokeWidth={2} aria-hidden="true" />
                   </span>
-                </p>
+                ) : (
+                  <span
+                    role="img"
+                    aria-label={`Posição ${i + 1}`}
+                    className="my-auto grid h-5.5 w-5.5 shrink-0 place-items-center rounded-full border border-border bg-muted/40 text-[11px] font-semibold tabular-nums text-muted-foreground"
+                  >
+                    <span aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
+                  </span>
+                )}
 
+                <StoreBadge
+                  name={p.marketName}
+                  logoUrl={p.marketLogoUrl}
+                  brandColor={p.marketBrandColor}
+                  size="xs"
+                  className="my-auto"
+                  isCheapest={isCheapest}
+                  cheapestReason={isCheapest ? buildCheapestReason(p.price, globalAvg) : null}
+                />
+                <div className="min-w-0 flex-1 self-center">
+                  <p className="market-name pc-res-store truncate">{p.marketName}</p>
+                  <p className="pc-res-meta truncate">
+                    {p.marketKind ?? "Estabelecimento"}
+                    <span aria-hidden="true" className="mx-1 opacity-40">·</span>
+                    <span
+                      title={`Preço coletado em ${priceDate}`}
+                      data-freshness={availabilityTone(p.when)}
+                      className="data-[freshness=stale]:opacity-60 data-[freshness=fresh]:text-[var(--pc-gold-ink)]"
+                    >
+                      atualizado {freshnessLabel(p.when)}
+                    </span>
+                  </p>
+                </div>
+
+                <FairPriceBadge
+                  price={p.price}
+                  min={globalMin}
+                  avg={globalAvg}
+                  max={globalMax}
+                  size="sm"
+                  className="hidden self-center xl:inline-flex"
+                />
+                <div className="shrink-0 self-center text-right">
+                  {isCheapest && <p className="pc-res-label">Menor</p>}
+                  <p className="pc-res-price">{fmt(p.price)}</p>
+                  <UnitPriceBadge price={p.price} productName={productName} className="mt-0.5" />
+                </div>
+                <button
+                  type="button"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    toggleDetails(rowKey);
+                  }}
+                  aria-expanded={detailsOpen}
+                  aria-controls={`pc-row-details-${encodeURIComponent(rowKey)}`}
+                  aria-label={detailsOpen ? "Recolher detalhes do produto neste mercado" : "Ver detalhes do produto neste mercado"}
+                  className="my-auto ml-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full border border-border text-muted-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                >
+                  {detailsOpen ? (
+                    <ChevronUp className="h-3.5 w-3.5" aria-hidden="true" />
+                  ) : (
+                    <ChevronDown className="h-3.5 w-3.5" aria-hidden="true" />
+                  )}
+                </button>
               </div>
 
-              <FairPriceBadge
-                price={p.price}
-                min={globalMin}
-                avg={globalAvg}
-                max={globalMax}
-                size="sm"
-                className="hidden self-center xl:inline-flex"
-              />
-              <div className="shrink-0 self-center text-right">
-                {isCheapest && <p className="pc-res-label">Menor</p>}
-                <p className="pc-res-price">{fmt(p.price)}</p>
-                <UnitPriceBadge price={p.price} productName={productName} className="mt-0.5" />
-              </div>
+              {detailsOpen ? (
+                <div
+                  id={`pc-row-details-${encodeURIComponent(rowKey)}`}
+                  className="mt-1.5 rounded-md border border-[color-mix(in_oklab,var(--brand-gold)_30%,transparent)] bg-[color-mix(in_oklab,var(--brand-gold)_6%,transparent)] px-2 py-1.5 text-[11.5px] leading-snug"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <dl className="grid grid-cols-1 gap-x-3 gap-y-0.5 sm:grid-cols-2">
+                    <div className="flex gap-1">
+                      <dt className="font-semibold text-muted-foreground">Produto:</dt>
+                      <dd className="min-w-0 flex-1 truncate text-foreground">{productName}</dd>
+                    </div>
+                    <div className="flex gap-1">
+                      <dt className="font-semibold text-muted-foreground">Preço:</dt>
+                      <dd className="pc-num font-semibold text-foreground">{fmt(p.price)}</dd>
+                    </div>
+                    <div className="flex gap-1">
+                      <dt className="font-semibold text-muted-foreground">Tipo:</dt>
+                      <dd className="truncate text-foreground">{p.marketKind ?? "Estabelecimento"}</dd>
+                    </div>
+                    <div className="flex gap-1">
+                      <dt className="font-semibold text-muted-foreground">Coletado em:</dt>
+                      <dd className="tabular-nums text-foreground">
+                        {priceDate}
+                        <span className="ml-1 text-muted-foreground">({freshnessLabel(p.when)})</span>
+                      </dd>
+                    </div>
+                    {localizacao ? (
+                      <div className="flex gap-1 sm:col-span-2">
+                        <dt className="font-semibold text-muted-foreground">
+                          <MapPin className="mr-0.5 inline h-3 w-3 -translate-y-px" aria-hidden="true" />
+                          Local:
+                        </dt>
+                        <dd className="min-w-0 flex-1 truncate text-foreground">{localizacao}</dd>
+                      </div>
+                    ) : null}
+                    {p.address ? (
+                      <div className="flex gap-1 sm:col-span-2">
+                        <dt className="font-semibold text-muted-foreground">Endereço:</dt>
+                        <dd className="min-w-0 flex-1 truncate text-foreground">{p.address}</dd>
+                      </div>
+                    ) : null}
+                  </dl>
+                  <p className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[11px] text-muted-foreground">
+                    <span>
+                      Marca, peso/embalagem e código de barras (quando houver) aparecem na ficha completa do produto.
+                    </span>
+                    <Link
+                      to="/produto-publico/$slug"
+                      params={{ slug: productName }}
+                      className="rounded-full border border-brand-gold/45 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-2 py-0.5 text-[10.5px] font-semibold uppercase tracking-[0.12em] text-[var(--pc-gold-ink)] transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                    >
+                      Ver ficha
+                    </Link>
+                    {p.establishmentId ? (
+                      <Link
+                        to="/loja/$id"
+                        params={{ id: p.establishmentId }}
+                        className="rounded-full border border-border bg-background px-2 py-0.5 text-[10.5px] font-semibold uppercase tracking-[0.12em] text-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                      >
+                        Ver mercado
+                      </Link>
+                    ) : null}
+                  </p>
+                </div>
+              ) : null}
             </li>
           );
         })}
+
       </ul>
       {hiddenPrices > 0 || expanded ? (
         <button
