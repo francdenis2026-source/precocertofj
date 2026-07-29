@@ -2539,6 +2539,15 @@ function ProductGroupCard({
                 handleSelect();
               }}
             >
+              {isCheapest ? (
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -top-2 right-2 z-10 inline-flex items-center gap-1 rounded-full border border-brand-gold/70 bg-brand-navy px-2 py-[2px] text-[10px] font-bold uppercase tracking-[0.14em] text-brand-gold shadow-sm"
+                >
+                  <Crown className="h-2.5 w-2.5" strokeWidth={2.25} />
+                  Melhor oferta
+                </span>
+              ) : null}
               <div className="pc-res-row-main flex items-center gap-1.5">
                 <StoreColorBar name={p.marketName} brandColor={p.marketBrandColor} />
                 {isCheapest ? (
