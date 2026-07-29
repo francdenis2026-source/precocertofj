@@ -29,9 +29,21 @@ export type ProductPricePoint = {
   marketLogoUrl: string | null;
   marketBrandColor: string | null;
   establishmentId: string | null;
+  /** Endereço completo (rua/número). Presente quando o estabelecimento
+   *  tiver o campo cadastrado. */
+  address: string | null;
+  /** Bairro do estabelecimento. */
+  neighborhood: string | null;
+  /** Cidade do estabelecimento. */
+  city: string | null;
+  /** Coordenadas — permitem calcular distância no cliente quando o
+   *  navegador tiver geolocalização autorizada. */
+  latitude: number | null;
+  longitude: number | null;
   price: number;
   when: string;
 };
+
 
 export type ProductGroup = {
   catalogId: string | null;
