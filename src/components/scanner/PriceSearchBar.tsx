@@ -2515,20 +2515,27 @@ function ProductGroupCard({
               key={rowKey}
               role={onSelect ? "button" : undefined}
               tabIndex={onSelect ? 0 : undefined}
-              aria-label={
-                onSelect
-                  ? `${p.marketName ?? "Mercado"}: ${fmt(p.price)}${isCheapest ? " — menor preço" : ""}`
-                  : undefined
-              }
+          const tieSuffix =
+            isCheapest && cheapestCount > 1 ? ` (empate com ${cheapestCount - 1} ${cheapestCount - 1 === 1 ? "mercado" : "mercados"})` : "";
+          const rowAriaLabel = `${p.marketName ?? "Mercado"}: ${fmt(p.price)}${
+            isCheapest ? ` — melhor oferta${tieSuffix}` : ""
+          }${localizacao ? `, ${localizacao}` : ""}`;
+          return (
+            <li
+              key={rowKey}
+              role={onSelect ? "button" : "listitem"}
+              tabIndex={onSelect ? 0 : undefined}
+              aria-label={rowAriaLabel}
               aria-current={isFocusedMarket ? "true" : undefined}
               className={
-                "pc-res-row relative flex flex-col cursor-pointer rounded-lg border px-1.5 outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-brand-gold " +
+                "pc-res-row relative flex flex-col cursor-pointer rounded-lg border px-1.5 outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:ring-brand-gold " +
                 (isCheapest
-                  ? "border-brand-gold/70 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] shadow-[0_0_0_1px_var(--brand-gold)] ring-1 ring-brand-gold/40 "
-                  : "border-[color-mix(in_oklab,var(--color-border)_58%,transparent)] bg-background/75 ") +
+                  ? "border-brand-gold bg-[color-mix(in_oklab,var(--brand-gold)_14%,transparent)] shadow-[0_0_0_1px_var(--brand-gold)] ring-1 ring-brand-gold/50 "
+                  : "border-[color-mix(in_oklab,var(--color-border)_58%,transparent)] bg-background/75 hover:border-brand-gold/40 ") +
                 (isFocusedMarket ? "bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)]" : "")
               }
               data-cheapest={isCheapest ? "true" : "false"}
+              data-cheapest-tie={isCheapest && cheapestCount > 1 ? "true" : undefined}
               data-focused-market={isFocusedMarket ? "true" : undefined}
               onClick={(e) => {
                 if (!onSelect) return;
@@ -2547,11 +2554,12 @@ function ProductGroupCard({
             >
               {isCheapest ? (
                 <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute -top-2 right-2 z-10 inline-flex items-center gap-1 rounded-full border border-brand-gold/70 bg-brand-navy px-2 py-[2px] text-[10px] font-bold uppercase tracking-[0.14em] text-brand-gold shadow-sm"
+                  role="img"
+                  aria-label={cheapestCount > 1 ? `Melhor oferta — empate com ${cheapestCount - 1} outro${cheapestCount - 1 === 1 ? "" : "s"}` : "Melhor oferta"}
+                  className="pointer-events-none absolute -top-2 right-2 z-10 inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-navy px-2 py-[2px] text-[10px] font-bold uppercase tracking-[0.14em] text-brand-gold shadow-sm"
                 >
-                  <Crown className="h-2.5 w-2.5" strokeWidth={2.25} />
-                  Melhor oferta
+                  <Crown className="h-2.5 w-2.5" strokeWidth={2.25} aria-hidden="true" />
+                  <span>{cheapestCount > 1 ? `Melhor oferta · empate ${cheapestCount}` : "Melhor oferta"}</span>
                 </span>
               ) : null}
               <div className="pc-res-row-main flex items-center gap-1.5">
@@ -2559,8 +2567,8 @@ function ProductGroupCard({
                 {isCheapest ? (
                   <span
                     role="img"
-                    aria-label="Menor preço"
-                    title="Menor preço"
+                    aria-label={cheapestCount > 1 ? "Menor preço (empate)" : "Menor preço"}
+                    title={cheapestCount > 1 ? "Menor preço — empate" : "Menor preço"}
                     className="my-auto grid h-5.5 w-5.5 shrink-0 place-items-center rounded-full bg-accent-strong text-accent-foreground"
                   >
                     <Crown className="h-3 w-3" strokeWidth={2} aria-hidden="true" />
