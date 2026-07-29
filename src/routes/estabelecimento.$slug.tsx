@@ -195,7 +195,18 @@ function EstablishmentPage() {
     ? (search.sort as SortKey)
     : "price-asc";
   const view: "grid" | "list" = search.view === "list" ? "list" : "grid";
-  const tab: "catalogo" | "acougue" = search.aba === "acougue" ? "acougue" : "catalogo";
+  const butcherIds = useButcherIds();
+  // Estabelecimento classificado como açougue (tabela establishments.kind='acougue'):
+  // o balcão de cortes vira a área principal e o "catálogo" fica como secundário.
+  const isButcherStore = butcherIds.has(storeId);
+  const tab: "catalogo" | "acougue" =
+    search.aba === "acougue"
+      ? "acougue"
+      : search.aba === "catalogo"
+        ? "catalogo"
+        : isButcherStore
+          ? "acougue"
+          : "catalogo";
   const selectedCategory = search.cat ? search.cat : null;
 
   const [q, setQ] = useState(search.q);
