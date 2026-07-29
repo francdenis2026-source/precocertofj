@@ -412,7 +412,7 @@ function PriceStat({
         {icon}
         {label}
       </p>
-      <p className={`mt-1.5 font-display font-bold tabular-nums ${toneClasses} ${
+      <p className={`mt-1.5 pc-price font-bold ${toneClasses} ${
         highlight ? "text-xl" : "text-base"
       }`}>
         {value}
