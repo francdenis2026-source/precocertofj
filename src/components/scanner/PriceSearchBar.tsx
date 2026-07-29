@@ -93,6 +93,7 @@ export function PriceSearchBar({
   focusProduct = null,
   focusMarket = null,
   onFocusChange,
+  fitResults = false,
 }: {
   initialQuery?: string;
   mode?: SearchMode;
@@ -118,6 +119,8 @@ export function PriceSearchBar({
   focusMarket?: string | null;
   /** Disparado quando o usuário clica num card para atualizar a URL. */
   onFocusChange?: (product: string | null, market: string | null) => void;
+  /** Faz a busca ocupar a altura disponível da rota, com resultados rolando internamente. */
+  fitResults?: boolean;
 }) {
 
 
@@ -581,7 +584,14 @@ export function PriceSearchBar({
 
 
   return (
-    <section className="pc-search-scope relative isolate z-40 rounded-2xl border border-[color-mix(in_oklab,var(--color-border)_55%,transparent)] bg-surface p-3 sm:rounded-3xl sm:p-4">
+    <section
+      className={
+        "pc-search-scope relative isolate z-40 " +
+        (fitResults
+          ? "flex h-full min-h-0 flex-col rounded-xl border-0 bg-transparent p-0"
+          : "rounded-2xl border border-[color-mix(in_oklab,var(--color-border)_55%,transparent)] bg-surface p-3 sm:rounded-3xl sm:p-4")
+      }
+    >
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[color-mix(in_oklab,var(--color-accent)_70%,transparent)] to-transparent"
@@ -870,7 +880,12 @@ export function PriceSearchBar({
       {/* Loading skeleton — espelha a hierarquia real dos resultados (resumo + cards) */}
       {isSearching && !result && !err && !quotaBlocked && (
         <div
-          className="pc-results mt-4 min-h-[640px] [content-visibility:auto]"
+          className={
+            "pc-results [content-visibility:auto] " +
+            (fitResults
+              ? "mt-2 min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1"
+              : "mt-4 min-h-[640px]")
+          }
           aria-busy="true"
           aria-live="polite"
           aria-label="Carregando resultados"
@@ -925,7 +940,11 @@ export function PriceSearchBar({
 
       {result && !err && !quotaBlocked && (
         <div
-          className={`mt-4 min-h-[640px] space-y-3 [overflow-anchor:none] transition-opacity duration-150 md:space-y-4 ${isSearching ? "opacity-70" : "opacity-100"}`}
+          className={`${
+            fitResults
+              ? "mt-2 min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain pr-1 md:space-y-2.5"
+              : "mt-4 min-h-[640px] space-y-3 md:space-y-4"
+          } [overflow-anchor:none] transition-opacity duration-150 ${isSearching ? "opacity-70" : "opacity-100"}`}
           aria-busy={isSearching || undefined}
           aria-live="polite"
         >
