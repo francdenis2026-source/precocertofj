@@ -15,6 +15,7 @@ export type EstablishmentStat = {
   topCategories: Array<{ category: string; count: number }>;
   lastUpdate: string | null;
   maxSavings: number;
+  minPrice: number | null;
 };
 
 export type EstablishmentsOverview = {
