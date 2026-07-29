@@ -75,6 +75,8 @@ import {
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { Sparkline } from "@/components/basket/Sparkline";
+import { useGuestGate } from "@/hooks/useGuestGate";
+import { GuestGateDialog } from "@/components/gate/GuestGateDialog";
 
 type CategoryFilter = "all" | EssentialCategory;
 
@@ -419,11 +421,14 @@ export function LiveBasketRanking({
     }));
   };
 
+  const exportGate = useGuestGate("export");
+
   const handleExport = (format: "csv" | "pdf") => {
     if (ranked.length === 0) {
       toast.info("Nada para exportar ainda.");
       return;
     }
+    if (!exportGate.allow(`ranking:${format}`)) return;
     const rows = buildRows();
     const meta = exportMeta();
     if (format === "csv") exportRankingCsv(rows, meta);
@@ -433,6 +438,7 @@ export function LiveBasketRanking({
 
   const handleExportDetails = (format: "csv" | "pdf") => {
     if (!detailStore) return;
+    if (!exportGate.allow(`ranking-details:${format}`)) return;
     const meta = exportMeta();
     if (format === "csv") exportStoreDetailsCsv(detailStore, deltas, meta);
     else exportStoreDetailsPdf(detailStore, deltas, meta);
