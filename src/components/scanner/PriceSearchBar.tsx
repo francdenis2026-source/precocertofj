@@ -1798,6 +1798,8 @@ function sortPrices(prices: PricePoint[], mode: SortMode, productName?: string):
     new Date(b.when).getTime() - new Date(a.when).getTime();
   if (mode === "cheapest" || mode === "relevance" || mode === "savings")
     arr.sort((a, b) => a.price - b.price || byRecency(a, b));
+  else if (mode === "highest")
+    arr.sort((a, b) => b.price - a.price || byRecency(a, b));
   else if (mode === "unit") {
     // Ordena por preço unitário normalizado (R$/kg ou R$/L). Itens sem
     // tamanho detectável ficam no fim, mantendo a ordem por menor preço.
