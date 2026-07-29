@@ -129,6 +129,10 @@ function HomePage() {
   const { user, loading: sessionLoading } = useSession();
   const isLoggedOut = !sessionLoading && !user;
 
+  // Reagrupa contador de cota (sincroniza entre abas via BroadcastChannel/storage).
+  const [, setQuotaTick] = useState(0);
+  useEffect(() => onGuestQuotaChange(() => setQuotaTick((t) => t + 1)), []);
+
   const [q, setQ] = useState("");
   const [spotlight, setSpotlight] =
     useState<import("@/components/home/MetricSpotlightDialog").MetricKind | null>(null);
@@ -404,7 +408,8 @@ function HomePage() {
                     className="mt-1.5 pl-2 text-[11px] font-medium"
                     style={{ color: "var(--pc-home-onhero-fg-70)" }}
                   >
-                    Modo visitante · restam <strong className="pc-num">{guestRemaining("search")}</strong> de {GUEST_LIMIT} buscas grátis
+                    Modo visitante · restam{" "}
+                    <strong className="pc-num">{guestRemaining()}</strong> de {GUEST_DAILY_LIMIT} usos grátis hoje
                   </p>
                 ) : null}
               </form>
