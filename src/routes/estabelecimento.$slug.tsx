@@ -237,7 +237,9 @@ function EstablishmentPage() {
 
 
   const { cuts, general } = useMemo(() => splitButcherCuts(data.products), [data.products]);
-  const hasButcher = cuts.length >= 5;
+  // Se a loja é açougue oficial, sempre exibimos a aba de cortes — mesmo com poucos
+  // itens registrados; para as demais lojas mantemos o gatilho por volume (≥5).
+  const hasButcher = isButcherStore ? cuts.length > 0 : cuts.length >= 5;
   const catalogProducts = hasButcher ? general : data.products;
 
   const filtered = useMemo(() => {
