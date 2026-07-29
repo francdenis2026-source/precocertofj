@@ -4,6 +4,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { analyzeProductImage, type VisionProduct } from "@/lib/vision.functions";
 import { savePhotoToCatalog } from "@/lib/photo-catalog.functions";
+import { fillMissingFromName } from "@/lib/auto-classify";
+
 import { ArrowLeft, Camera, Loader2, Sparkles, Save, Trash2, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/brand/AppShell";
@@ -100,10 +102,13 @@ function CadastroFotoPage() {
                 merged[idx] = { ...existing, ...patch };
               }
             } else {
-              merged.push({ ...p, _uid: `${Date.now()}-${i}` });
+              // Classificação automática local completa o que a IA deixou vazio
+              // (categoria, marca e unidade), reduzindo digitação manual.
+              merged.push(fillMissingFromName({ ...p, _uid: `${Date.now()}-${i}` }));
               added++;
             }
           });
+
 
           const parts: string[] = [];
           if (added) parts.push(`${added} novo(s)`);
@@ -279,7 +284,16 @@ function CadastroFotoPage() {
                     <Field
                       label="Nome"
                       value={d.productName ?? ""}
-                      onChange={(v) => updateDraft(d._uid, { productName: v })}
+                      onChange={(v) =>
+                        setDrafts((prev) =>
+                          prev.map((item) =>
+                            item._uid === d._uid
+                              ? fillMissingFromName({ ...item, productName: v })
+                              : item,
+                          ),
+                        )
+                      }
+
                       full
                     />
                     <Field label="Marca" value={d.brand ?? ""} onChange={(v) => updateDraft(d._uid, { brand: v })} />
