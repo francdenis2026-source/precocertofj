@@ -93,6 +93,7 @@ export function PriceSearchBar({
   focusProduct = null,
   focusMarket = null,
   onFocusChange,
+  fitResults = false,
 }: {
   initialQuery?: string;
   mode?: SearchMode;
@@ -118,6 +119,8 @@ export function PriceSearchBar({
   focusMarket?: string | null;
   /** Disparado quando o usuário clica num card para atualizar a URL. */
   onFocusChange?: (product: string | null, market: string | null) => void;
+  /** Faz a busca ocupar a altura disponível da rota, com resultados rolando internamente. */
+  fitResults?: boolean;
 }) {
 
 
@@ -581,7 +584,14 @@ export function PriceSearchBar({
 
 
   return (
-    <section className="pc-search-scope relative isolate z-40 rounded-2xl border border-[color-mix(in_oklab,var(--color-border)_55%,transparent)] bg-surface p-3 sm:rounded-3xl sm:p-4">
+    <section
+      className={
+        "pc-search-scope relative isolate z-40 " +
+        (fitResults
+          ? "flex h-full min-h-0 flex-col rounded-xl border-0 bg-transparent p-0"
+          : "rounded-2xl border border-[color-mix(in_oklab,var(--color-border)_55%,transparent)] bg-surface p-3 sm:rounded-3xl sm:p-4")
+      }
+    >
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[color-mix(in_oklab,var(--color-accent)_70%,transparent)] to-transparent"
@@ -870,7 +880,12 @@ export function PriceSearchBar({
       {/* Loading skeleton — espelha a hierarquia real dos resultados (resumo + cards) */}
       {isSearching && !result && !err && !quotaBlocked && (
         <div
-          className="pc-results mt-4 min-h-[640px] [content-visibility:auto]"
+          className={
+            "pc-results [content-visibility:auto] " +
+            (fitResults
+              ? "mt-2 min-h-0 flex-1 overflow-y-auto overscroll-contain pr-1"
+              : "mt-4 min-h-[640px]")
+          }
           aria-busy="true"
           aria-live="polite"
           aria-label="Carregando resultados"
@@ -925,7 +940,11 @@ export function PriceSearchBar({
 
       {result && !err && !quotaBlocked && (
         <div
-          className={`mt-4 min-h-[640px] space-y-3 [overflow-anchor:none] transition-opacity duration-150 md:space-y-4 ${isSearching ? "opacity-70" : "opacity-100"}`}
+          className={`${
+            fitResults
+              ? "mt-2 min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain pr-1 md:space-y-2.5"
+              : "mt-4 min-h-[640px] space-y-3 md:space-y-4"
+          } [overflow-anchor:none] transition-opacity duration-150 ${isSearching ? "opacity-70" : "opacity-100"}`}
           aria-busy={isSearching || undefined}
           aria-live="polite"
         >
@@ -1034,6 +1053,10 @@ export function PriceSearchBar({
                 const priciestMarket = refGroup
                   ? [...refGroup.prices].sort((a, b) => b.price - a.price)[0]?.marketName ?? null
                   : null;
+                const bestProductName = result.cheapest?.productName ?? refGroup?.productName ?? null;
+                const bestMarketPrices = refGroup
+                  ? [...refGroup.prices].sort((a, b) => a.price - b.price).slice(0, 6)
+                  : [];
 
                 return (
                   <section
@@ -1120,6 +1143,51 @@ export function PriceSearchBar({
                         </div>
                       ) : null}
                     </div>
+
+                    {bestProductName && bestMarketPrices.length > 1 ? (
+                      <div className="border-t border-white/10 bg-white/[0.025] px-3.5 py-2">
+                        <div className="mb-1.5 flex items-center justify-between gap-2">
+                          <p className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-brand-gold/90">
+                            Onde encontrar este produto
+                          </p>
+                          <p className="text-[10.5px] font-medium text-white/55 tabular-nums">
+                            {refGroup?.prices.length ?? 0} estabelecimento{(refGroup?.prices.length ?? 0) > 1 ? "s" : ""}
+                          </p>
+                        </div>
+                        <div className="grid gap-1.5 sm:grid-cols-2 lg:grid-cols-3">
+                          {bestMarketPrices.map((p, i) => (
+                            <button
+                              key={`${p.marketName}-${p.when}-${i}`}
+                              type="button"
+                              onClick={() => onFocusChange?.(bestProductName, p.marketName)}
+                              className={
+                                "grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-lg border px-2 py-1.5 text-left outline-none transition focus-visible:ring-2 focus-visible:ring-brand-gold " +
+                                (i === 0
+                                  ? "border-brand-gold/65 bg-brand-gold/12"
+                                  : "border-white/12 bg-white/[0.045] hover:border-brand-gold/35 hover:bg-white/[0.07]")
+                              }
+                              aria-label={`${p.marketName}: ${fmt(p.price)}${i === 0 ? ", menor preço" : ""}`}
+                            >
+                              <span className="flex min-w-0 items-center gap-1.5">
+                                {i === 0 ? (
+                                  <Crown className="h-3 w-3 shrink-0 text-brand-gold" strokeWidth={2.25} aria-hidden />
+                                ) : (
+                                  <span className="grid h-4 w-4 shrink-0 place-items-center rounded-full border border-white/18 text-[9.5px] font-bold text-white/65 tabular-nums">
+                                    {i + 1}
+                                  </span>
+                                )}
+                                <span className="truncate text-[12px] font-semibold text-white/90">
+                                  {p.marketName}
+                                </span>
+                              </span>
+                              <span className="pc-num pc-num--onhero text-[13px] font-bold leading-none text-brand-gold">
+                                {fmt(p.price)}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
 
                     {/* Estatísticas — faixa única, sem cards repetidos */}
                     <dl className="grid grid-cols-3 divide-x divide-white/10 border-t border-white/10 bg-white/[0.04]">
@@ -2218,9 +2286,9 @@ function ProductGroupCard({
     return prices.reduce((best, cur) => (cur.price < best.price ? cur : best), prices[0]);
   }, [prices]);
 
-  // Mostra por padrão apenas os 3 melhores preços de cada produto: mantém a
-  // página curta e legível; o restante fica a um clique de distância.
-  const COLLAPSED = 3;
+  // Mostra por padrão mais mercados em uma grade compacta: o usuário precisa
+  // enxergar rapidamente onde o produto existe e quanto custa em cada lugar.
+  const COLLAPSED = 6;
   const [expanded, setExpanded] = useState(focused);
   const visiblePrices = expanded || focused ? prices : prices.slice(0, COLLAPSED);
   const hiddenPrices = prices.length - visiblePrices.length;
@@ -2369,10 +2437,28 @@ function ProductGroupCard({
         />
       ) : null}
 
+      <div className="mt-2 flex items-center justify-between gap-2 border-t border-[color-mix(in_oklab,var(--color-border)_70%,transparent)] pt-1.5">
+        <p className="pc-res-label text-foreground">
+          Onde tem este produto
+          <span className="ml-1 font-semibold tabular-nums text-muted-foreground">
+            {prices.length} estabelecimento{prices.length > 1 ? "s" : ""}
+          </span>
+        </p>
+        {!expanded && hiddenPrices > 0 ? (
+          <button
+            type="button"
+            onClick={() => setExpanded(true)}
+            className="rounded-full border border-brand-gold/45 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-2 py-0.5 text-[11px] font-semibold text-[var(--pc-gold-ink)] transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+          >
+            Ver todos
+          </button>
+        ) : null}
+      </div>
+
       <ul
         role="list"
         aria-label={`Mercados com ${productName}`}
-        className="mt-1 border-t border-[color-mix(in_oklab,var(--color-border)_70%,transparent)]"
+        className="pc-market-price-grid mt-1 grid gap-1 md:grid-cols-2 xl:grid-cols-3"
       >
         {visiblePrices.map((p, i) => {
 
@@ -2393,7 +2479,7 @@ function ProductGroupCard({
               }
               aria-current={isFocusedMarket ? "true" : undefined}
               className={
-                "pc-res-row relative cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:z-10 " +
+                "pc-res-row relative cursor-pointer rounded-lg border border-[color-mix(in_oklab,var(--color-border)_58%,transparent)] bg-background/75 px-1.5 outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-brand-gold " +
                 (isFocusedMarket ? "bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)]" : "")
               }
               data-cheapest={isCheapest ? "true" : "false"}
@@ -2439,7 +2525,7 @@ function ProductGroupCard({
                 name={p.marketName}
                 logoUrl={p.marketLogoUrl}
                 brandColor={p.marketBrandColor}
-                size="sm"
+                size="xs"
                 className="my-auto"
                 isCheapest={isCheapest}
                 cheapestReason={isCheapest ? buildCheapestReason(p.price, globalAvg) : null}
@@ -2466,7 +2552,7 @@ function ProductGroupCard({
                 avg={globalAvg}
                 max={globalMax}
                 size="sm"
-                className="self-center"
+                className="hidden self-center xl:inline-flex"
               />
               <div className="shrink-0 self-center text-right">
                 {isCheapest && <p className="pc-res-label">Menor</p>}
