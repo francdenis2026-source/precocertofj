@@ -269,7 +269,13 @@ async function runPriceSearch(data: {
     kind: string | null;
     logoUrl: string | null;
     brandColor: string | null;
+    address: string | null;
+    neighborhood: string | null;
+    city: string | null;
+    latitude: number | null;
+    longitude: number | null;
   };
+
   const metaByName = new Map<string, EstabMeta>();
   const metaKey = (n: string) =>
     (n ?? "")
