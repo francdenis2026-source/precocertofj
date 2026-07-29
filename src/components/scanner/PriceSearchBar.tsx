@@ -2157,13 +2157,14 @@ function CompareMatrix({
               aria-pressed={isFocused}
               onClick={() => onPick?.(p.marketName ?? "")}
               className={
-                "group flex flex-col gap-1 rounded-lg border p-2 text-left transition outline-none focus-visible:ring-2 focus-visible:ring-brand-gold " +
+                "group flex flex-col gap-1 rounded-lg border p-2 text-left transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:ring-brand-gold " +
                 (isCheapest
-                  ? "border-brand-gold/70 bg-brand-navy text-white shadow-sm"
+                  ? "border-brand-gold bg-brand-navy text-white shadow-sm"
                   : isFocused
                     ? "border-brand-gold/60 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)]"
                     : "border-border/70 bg-background hover:border-brand-gold/50")
               }
+              data-cheapest={isCheapest ? "true" : "false"}
             >
               <div className="flex items-center gap-1.5">
                 {isCheapest ? (
