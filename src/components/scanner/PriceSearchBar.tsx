@@ -1053,6 +1053,10 @@ export function PriceSearchBar({
                 const priciestMarket = refGroup
                   ? [...refGroup.prices].sort((a, b) => b.price - a.price)[0]?.marketName ?? null
                   : null;
+                const bestProductName = result.cheapest?.productName ?? refGroup?.productName ?? null;
+                const bestMarketPrices = refGroup
+                  ? [...refGroup.prices].sort((a, b) => a.price - b.price).slice(0, 6)
+                  : [];
 
                 return (
                   <section
@@ -1139,6 +1143,51 @@ export function PriceSearchBar({
                         </div>
                       ) : null}
                     </div>
+
+                    {bestProductName && bestMarketPrices.length > 1 ? (
+                      <div className="border-t border-white/10 bg-white/[0.025] px-3.5 py-2">
+                        <div className="mb-1.5 flex items-center justify-between gap-2">
+                          <p className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-brand-gold/90">
+                            Onde encontrar este produto
+                          </p>
+                          <p className="text-[10.5px] font-medium text-white/55 tabular-nums">
+                            {refGroup?.prices.length ?? 0} estabelecimento{(refGroup?.prices.length ?? 0) > 1 ? "s" : ""}
+                          </p>
+                        </div>
+                        <div className="grid gap-1.5 sm:grid-cols-2 lg:grid-cols-3">
+                          {bestMarketPrices.map((p, i) => (
+                            <button
+                              key={`${p.marketName}-${p.when}-${i}`}
+                              type="button"
+                              onClick={() => onFocusChange?.(bestProductName, p.marketName)}
+                              className={
+                                "grid min-w-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-lg border px-2 py-1.5 text-left outline-none transition focus-visible:ring-2 focus-visible:ring-brand-gold " +
+                                (i === 0
+                                  ? "border-brand-gold/65 bg-brand-gold/12"
+                                  : "border-white/12 bg-white/[0.045] hover:border-brand-gold/35 hover:bg-white/[0.07]")
+                              }
+                              aria-label={`${p.marketName}: ${fmt(p.price)}${i === 0 ? ", menor preço" : ""}`}
+                            >
+                              <span className="flex min-w-0 items-center gap-1.5">
+                                {i === 0 ? (
+                                  <Crown className="h-3 w-3 shrink-0 text-brand-gold" strokeWidth={2.25} aria-hidden />
+                                ) : (
+                                  <span className="grid h-4 w-4 shrink-0 place-items-center rounded-full border border-white/18 text-[9.5px] font-bold text-white/65 tabular-nums">
+                                    {i + 1}
+                                  </span>
+                                )}
+                                <span className="truncate text-[12px] font-semibold text-white/90">
+                                  {p.marketName}
+                                </span>
+                              </span>
+                              <span className="pc-num pc-num--onhero text-[13px] font-bold leading-none text-brand-gold">
+                                {fmt(p.price)}
+                              </span>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    ) : null}
 
                     {/* Estatísticas — faixa única, sem cards repetidos */}
                     <dl className="grid grid-cols-3 divide-x divide-white/10 border-t border-white/10 bg-white/[0.04]">
