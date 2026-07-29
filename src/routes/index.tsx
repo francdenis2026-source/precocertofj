@@ -201,7 +201,25 @@ function HomePage() {
     e?.preventDefault();
     const query = q.trim();
     if (!query) return;
+    if (isLoggedOut) {
+      const { blocked } = consumeGuest("search", query);
+      if (blocked) {
+        setGateOpen(true);
+        return;
+      }
+    }
     navigate({ to: "/buscar", search: { q: query } as any });
+  };
+
+  const goToPopular = (term: string) => {
+    if (isLoggedOut) {
+      const { blocked } = consumeGuest("search", term);
+      if (blocked) {
+        setGateOpen(true);
+        return;
+      }
+    }
+    navigate({ to: "/buscar", search: { q: term } as any });
   };
 
 
