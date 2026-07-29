@@ -480,7 +480,7 @@ function EstablishmentsPage() {
           <ul
             id="mercados-listbox"
             ref={listRef}
-            className="pc-rail min-h-0 flex-1 divide-y divide-border/50 overflow-y-auto focus:outline-none"
+            className="pc-rail divide-y divide-border/50 focus:outline-none"
             role="listbox"
             aria-label="Lista de mercados"
             aria-activedescendant={selectedId ? `mercado-opt-${selectedId}` : undefined}
