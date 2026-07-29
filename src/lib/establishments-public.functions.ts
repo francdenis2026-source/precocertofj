@@ -187,10 +187,12 @@ export const listPublicEstablishments = createServerFn({ method: "GET" }).handle
             .map(([category, count]) => ({ category, count }))
         : [];
       let maxSavings = 0;
+      let minPrice: number | null = null;
       if (agg) {
         for (const [, p] of agg.prices) {
           const diff = p.max - p.min;
           if (diff > maxSavings) maxSavings = diff;
+          if (p.min > 0 && (minPrice === null || p.min < minPrice)) minPrice = p.min;
         }
       }
       return {
@@ -208,6 +210,7 @@ export const listPublicEstablishments = createServerFn({ method: "GET" }).handle
         topCategories: cats,
         lastUpdate: agg?.last ?? null,
         maxSavings: Math.round(maxSavings * 100) / 100,
+        minPrice: minPrice === null ? null : Math.round(minPrice * 100) / 100,
       };
     });
 
