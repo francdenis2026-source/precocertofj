@@ -962,60 +962,102 @@ function SkeletonRow() {
 function ButcherProteinChips({
   active,
   counts,
+  onlyCuts,
   onChange,
+  onToggleOnlyCuts,
 }: {
   active: string;
   counts: Record<string, number>;
+  onlyCuts: boolean;
   onChange: (v: string) => void;
+  onToggleOnlyCuts: () => void;
 }) {
   const CHIPS: { id: string; label: string; Icon: typeof Beef }[] = [
-    { id: "", label: "Todos os cortes", Icon: Beef },
+    { id: "", label: "Todos", Icon: Beef },
     { id: "bovino", label: "Bovinos", Icon: Beef },
     { id: "frango", label: "Frango", Icon: Bird },
     { id: "suino", label: "Suínos", Icon: Drumstick },
     { id: "outros", label: "Outros", Icon: Package },
   ];
-  const total = counts.bovino + counts.frango + counts.suino + counts.outros;
+  // Quando "só cortes" está ativo, escondemos o chip "Outros" e reduzimos o total.
+  const visibleChips = onlyCuts ? CHIPS.filter((c) => c.id !== "outros") : CHIPS;
+  const total = counts.bovino + counts.frango + counts.suino + (onlyCuts ? 0 : counts.outros);
   return (
     <section
       aria-label="Filtrar por corte"
-      className="mt-3 rounded-xl border border-brand-gold/50 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-3 py-2.5"
+      className="mt-3 rounded-xl border border-brand-gold/50 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-2.5 py-2 sm:px-3 sm:py-2.5"
     >
-      <div className="flex flex-wrap items-center gap-2">
-        <span className="inline-flex items-center gap-1.5 text-[10.5px] font-bold uppercase tracking-[0.18em] text-[var(--pc-gold-ink)]">
-          <Beef className="h-3 w-3" aria-hidden /> Açougue — cortes
+      {/* Cabeçalho: rótulo + toggle "Só cortes" — grid no mobile evita colisão com o trilho */}
+      <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+        <span className="inline-flex min-w-0 items-center gap-1.5 truncate text-[10.5px] font-bold uppercase tracking-[0.18em] text-[var(--pc-gold-ink)]">
+          <Beef className="h-3 w-3 shrink-0" aria-hidden /> Açougue — cortes
         </span>
-        <ul className="flex flex-wrap gap-1.5" role="list">
-          {CHIPS.map((c) => {
-            const n = c.id === "" ? total : (counts[c.id] ?? 0);
-            const isActive = active === c.id;
-            const disabled = n === 0 && c.id !== "";
-            return (
-              <li key={c.id || "all"}>
-                <button
-                  type="button"
-                  onClick={() => !disabled && onChange(c.id)}
-                  disabled={disabled}
-                  aria-pressed={isActive}
-                  className={cn(
-                    "inline-flex h-7 items-center gap-1 rounded-full border px-2.5 text-[11.5px] font-semibold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
-                    isActive
-                      ? "border-brand-gold bg-brand-gold text-brand-navy"
-                      : "border-brand-gold/50 bg-background text-foreground hover:border-brand-gold",
-                    disabled && "cursor-not-allowed opacity-40",
-                  )}
-                >
-                  <c.Icon className={cn("h-3 w-3", isActive ? "text-brand-navy" : "text-brand-gold")} aria-hidden />
-                  {c.label}
-                  <span className={cn("ml-0.5 tabular-nums", isActive ? "text-brand-navy/80" : "text-muted-foreground")}>
-                    {n}
-                  </span>
-                </button>
-              </li>
-            );
-          })}
-        </ul>
+        <button
+          type="button"
+          onClick={onToggleOnlyCuts}
+          role="switch"
+          aria-checked={onlyCuts}
+          title={onlyCuts ? "Mostrar temperos, molhos e afins" : "Esconder temperos e molhos"}
+          className={cn(
+            "inline-flex h-7 shrink-0 items-center gap-1 rounded-full border px-2.5 text-[11px] font-semibold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+            onlyCuts
+              ? "border-brand-gold bg-brand-gold text-brand-navy"
+              : "border-brand-gold/50 bg-background text-foreground hover:border-brand-gold",
+          )}
+        >
+          <span
+            aria-hidden
+            className={cn(
+              "grid h-3.5 w-6 place-items-start rounded-full p-0.5 transition-colors",
+              onlyCuts ? "bg-brand-navy/25" : "bg-muted",
+            )}
+          >
+            <span
+              className={cn(
+                "h-2.5 w-2.5 rounded-full bg-background transition-transform",
+                onlyCuts ? "translate-x-2.5" : "translate-x-0",
+              )}
+            />
+          </span>
+          <span className="hidden xs:inline">Só cortes</span>
+          <span className="xs:hidden">Cortes</span>
+        </button>
       </div>
+
+      {/* Trilho horizontal no mobile · wrap no desktop. no-scrollbar mantém o visual limpo. */}
+      <ul
+        role="list"
+        className="no-scrollbar mt-2 -mx-0.5 flex gap-1.5 overflow-x-auto px-0.5 pb-0.5 sm:flex-wrap sm:overflow-visible"
+      >
+        {visibleChips.map((c) => {
+          const n = c.id === "" ? total : (counts[c.id] ?? 0);
+          const isActive = active === c.id;
+          const disabled = n === 0 && c.id !== "";
+          return (
+            <li key={c.id || "all"} className="shrink-0">
+              <button
+                type="button"
+                onClick={() => !disabled && onChange(c.id)}
+                disabled={disabled}
+                aria-pressed={isActive}
+                className={cn(
+                  "inline-flex h-7 items-center gap-1 rounded-full border px-2.5 text-[11.5px] font-semibold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+                  isActive
+                    ? "border-brand-gold bg-brand-gold text-brand-navy"
+                    : "border-brand-gold/50 bg-background text-foreground hover:border-brand-gold",
+                  disabled && "cursor-not-allowed opacity-40",
+                )}
+              >
+                <c.Icon className={cn("h-3 w-3", isActive ? "text-brand-navy" : "text-brand-gold")} aria-hidden />
+                {c.label}
+                <span className={cn("ml-0.5 tabular-nums", isActive ? "text-brand-navy/80" : "text-muted-foreground")}>
+                  {n}
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
     </section>
   );
 }
