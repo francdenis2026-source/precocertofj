@@ -523,7 +523,7 @@ function EstablishmentsPage() {
               </li>
             )}
 
-            {filtered.map((e) => {
+            {pageItems.map((e) => {
               const active = e.id === selectedId;
               const meta = kindMeta(e.kind);
               return (
@@ -584,6 +584,33 @@ function EstablishmentsPage() {
               );
             })}
           </ul>
+
+          {pageCount > 1 && (
+            <nav
+              className="flex shrink-0 items-center justify-between gap-2 border-t border-border/60 px-3 py-2 md:px-4"
+              aria-label="Paginação de mercados"
+            >
+              <button
+                type="button"
+                onClick={() => setPage((p) => Math.max(0, p - 1))}
+                disabled={currentPage === 0}
+                className="inline-flex h-7 items-center gap-1 rounded-full border border-border px-2.5 text-[11.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                ← Anteriores
+              </button>
+              <span className={cn("tabular-nums", tc.metaMuted)}>
+                Página {currentPage + 1} de {pageCount}
+              </span>
+              <button
+                type="button"
+                onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
+                disabled={currentPage >= pageCount - 1}
+                className="inline-flex h-7 items-center gap-1 rounded-full border border-border px-2.5 text-[11.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                Próximos →
+              </button>
+            </nav>
+          )}
         </aside>
 
         {/* DETALHE (preview) */}
