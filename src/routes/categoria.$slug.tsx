@@ -299,7 +299,7 @@ function CategoryPage() {
           <ButcherProteinChips
             active={search.corte}
             counts={proteinCounts}
-            onChange={(v) => setSearch({ corte: v, page: 1 })}
+            onChange={(v: string) => setSearch({ corte: v, page: 1 })}
           />
         )}
 
