@@ -232,7 +232,7 @@ function ProductDetailPage() {
                       <TrendingDown className="h-3.5 w-3.5 text-savings" strokeWidth={2.5} />
                       <p className="font-sans text-xs text-foreground">
                         Economia de{" "}
-                        <span className="font-bold tabular-nums text-savings">
+                        <span className="pc-price font-bold text-savings">
                           {fmt(savings.diff)}
                         </span>{" "}
                         <span className="text-muted-foreground">
