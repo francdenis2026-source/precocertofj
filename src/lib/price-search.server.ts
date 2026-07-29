@@ -478,9 +478,15 @@ async function runPriceSearch(data: {
               marketLogoUrl: meta?.logoUrl ?? null,
               marketBrandColor: meta?.brandColor ?? null,
               establishmentId: meta?.id ?? null,
+              address: meta?.address ?? null,
+              neighborhood: meta?.neighborhood ?? null,
+              city: meta?.city ?? null,
+              latitude: meta?.latitude ?? null,
+              longitude: meta?.longitude ?? null,
               price: Number(r.price_captured),
               when: r.created_at,
             } as ProductPricePoint;
+
           })
           .filter((x): x is ProductPricePoint => x != null);
 
