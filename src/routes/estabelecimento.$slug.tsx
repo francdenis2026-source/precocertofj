@@ -62,6 +62,7 @@ import { PreparoDicas } from "@/components/estabelecimento/PreparoDicas";
 import { FavoriteMarketButton } from "@/components/market/FavoriteMarketButton";
 import { RatingBadge, PLATFORM_RATING } from "@/components/ds/RatingStars";
 import { ProductQuickView, type QuickViewProduct } from "@/components/product/ProductQuickView";
+import { useButcherIds } from "@/hooks/useButcherIds";
 
 import { EmptyState, LoadingGrid, RouteError } from "@/components/feedback";
 
@@ -194,7 +195,18 @@ function EstablishmentPage() {
     ? (search.sort as SortKey)
     : "price-asc";
   const view: "grid" | "list" = search.view === "list" ? "list" : "grid";
-  const tab: "catalogo" | "acougue" = search.aba === "acougue" ? "acougue" : "catalogo";
+  const butcherIds = useButcherIds();
+  // Estabelecimento classificado como açougue (tabela establishments.kind='acougue'):
+  // o balcão de cortes vira a área principal e o "catálogo" fica como secundário.
+  const isButcherStore = butcherIds.has(storeId);
+  const tab: "catalogo" | "acougue" =
+    search.aba === "acougue"
+      ? "acougue"
+      : search.aba === "catalogo"
+        ? "catalogo"
+        : isButcherStore
+          ? "acougue"
+          : "catalogo";
   const selectedCategory = search.cat ? search.cat : null;
 
   const [q, setQ] = useState(search.q);
@@ -225,7 +237,9 @@ function EstablishmentPage() {
 
 
   const { cuts, general } = useMemo(() => splitButcherCuts(data.products), [data.products]);
-  const hasButcher = cuts.length >= 5;
+  // Se a loja é açougue oficial, sempre exibimos a aba de cortes — mesmo com poucos
+  // itens registrados; para as demais lojas mantemos o gatilho por volume (≥5).
+  const hasButcher = isButcherStore ? cuts.length > 0 : cuts.length >= 5;
   const catalogProducts = hasButcher ? general : data.products;
 
   const filtered = useMemo(() => {
@@ -401,10 +415,16 @@ function EstablishmentPage() {
             aria-label="Áreas do estabelecimento"
             className="mt-2.5 flex flex-wrap gap-1.5"
           >
-            {([
-              { id: "catalogo" as const, label: "Catálogo", count: general.length },
-              { id: "acougue" as const, label: "Açougue", count: cuts.length },
-            ]).map((t) => {
+            {(isButcherStore
+              ? [
+                  { id: "acougue" as const, label: "Açougue · Cortes", count: cuts.length },
+                  { id: "catalogo" as const, label: "Outros produtos", count: general.length },
+                ]
+              : [
+                  { id: "catalogo" as const, label: "Catálogo", count: general.length },
+                  { id: "acougue" as const, label: "Açougue", count: cuts.length },
+                ]
+            ).map((t) => {
               const active = tab === t.id;
               return (
                 <button
