@@ -30,7 +30,12 @@ import { getEconomyStat } from "@/lib/products-public.functions";
 import { listPopularQueries } from "@/lib/search-popular.functions";
 import { StartFreeDialog } from "@/components/home/StartFreeDialog";
 import { GuestGateDialog } from "@/components/gate/GuestGateDialog";
-import { consumeGuest, guestRemaining, GUEST_LIMIT } from "@/lib/guest-quota";
+import {
+  consumeGuest,
+  guestRemaining,
+  GUEST_DAILY_LIMIT,
+  onGuestQuotaChange,
+} from "@/lib/guest-quota";
 import { MetricSpotlightDialog } from "@/components/home/MetricSpotlightDialog";
 import { AllCategoriesDialog } from "@/components/home/AllCategoriesDialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
@@ -123,6 +128,10 @@ function HomePage() {
   const queryClient = useQueryClient();
   const { user, loading: sessionLoading } = useSession();
   const isLoggedOut = !sessionLoading && !user;
+
+  // Reagrupa contador de cota (sincroniza entre abas via BroadcastChannel/storage).
+  const [, setQuotaTick] = useState(0);
+  useEffect(() => onGuestQuotaChange(() => setQuotaTick((t) => t + 1)), []);
 
   const [q, setQ] = useState("");
   const [spotlight, setSpotlight] =
@@ -399,7 +408,8 @@ function HomePage() {
                     className="mt-1.5 pl-2 text-[11px] font-medium"
                     style={{ color: "var(--pc-home-onhero-fg-70)" }}
                   >
-                    Modo visitante · restam <strong className="pc-num">{guestRemaining("search")}</strong> de {GUEST_LIMIT} buscas grátis
+                    Modo visitante · restam{" "}
+                    <strong className="pc-num">{guestRemaining()}</strong> de {GUEST_DAILY_LIMIT} usos grátis hoje
                   </p>
                 ) : null}
               </form>
