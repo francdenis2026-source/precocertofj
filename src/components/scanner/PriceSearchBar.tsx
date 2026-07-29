@@ -2293,13 +2293,27 @@ function ProductGroupCard({
     return prices.reduce((best, cur) => (cur.price < best.price ? cur : best), prices[0]);
   }, [prices]);
 
-  // Mostra por padrão mais mercados em uma grade compacta: o usuário precisa
-  // enxergar rapidamente onde o produto existe e quanto custa em cada lugar.
-  const COLLAPSED = 6;
+  // Sem depender de rolagem interna: mostramos todos os mercados por padrão
+  // na visualização; se a lista for enorme, ainda mantemos um "colapso
+  // higiênico" acima de 24 itens para preservar densidade visual.
+  const COLLAPSED = 24;
   const [expanded, setExpanded] = useState(focused);
   const visiblePrices = expanded || focused ? prices : prices.slice(0, COLLAPSED);
   const hiddenPrices = prices.length - visiblePrices.length;
+  // Painéis de detalhes abertos por mercado — uma expansão por linha permite
+  // ver endereço, bairro, tipo do estabelecimento e validade da coleta sem
+  // esconder outras informações da lista.
+  const [openDetails, setOpenDetails] = useState<Set<string>>(() => new Set());
+  const toggleDetails = useCallback((key: string) => {
+    setOpenDetails((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  }, []);
   const cardRef = useRef<HTMLDivElement>(null);
+
 
   // Quando o card entra em foco por URL, expande, faz scroll suave e move o
   // foco do teclado para o card — restaurando o estado da UI a partir do link.
