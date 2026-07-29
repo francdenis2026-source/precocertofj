@@ -265,11 +265,12 @@
   --pc-price-hover:      color-mix(in oklab, var(--pc-price-fg) 92%, var(--pc-gold-ink) 8%);
   --pc-price-loading:    color-mix(in oklab, var(--pc-price-fg) 45%, transparent);
   --pc-price-disabled:   color-mix(in oklab, var(--pc-price-fg) 55%, transparent);
-  /* Números/preços agora usam Inter (sans comercial, altamente legível)
-     com tabular-nums + lining figures para clareza em tabelas e cards. */
-  --pc-price-font:       'Inter', 'Work Sans', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* Números/preços agora usam DM Sans — fonte comercial com glifos numéricos
+     grandes, abertos e altamente legíveis, ideais para preços e tabelas. */
+  --pc-price-font:       'DM Sans', 'Inter', 'Work Sans', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --pc-price-tracking:   -0.01em;
-  --pc-price-feature-settings: "tnum" 1, "lnum" 1, "cv11" 1, "ss01" 1;
+  --pc-price-feature-settings: "tnum" 1, "lnum" 1, "ss01" 1;
+
 
 
 
