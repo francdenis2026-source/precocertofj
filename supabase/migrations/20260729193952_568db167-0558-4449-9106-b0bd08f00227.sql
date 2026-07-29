@@ -1,0 +1,1 @@
+UPDATE public.establishments SET brand_color = '#be185d', updated_at = now() WHERE cnpj = '09.302.968/0001-47';
