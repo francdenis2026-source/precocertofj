@@ -14,7 +14,10 @@
  * - Usuários autenticados nunca passam por essa checagem.
  */
 
-export const GUEST_DAILY_LIMIT = 5;
+// TEMP: limite de cota de visitante desativado a pedido do usuário.
+// Para reativar, restaure GUEST_DAILY_LIMIT = 5 e remova GUEST_QUOTA_DISABLED.
+export const GUEST_QUOTA_DISABLED = true;
+export const GUEST_DAILY_LIMIT = GUEST_QUOTA_DISABLED ? Number.MAX_SAFE_INTEGER : 5;
 /** @deprecated Alias mantido por compatibilidade. Use GUEST_DAILY_LIMIT. */
 export const GUEST_LIMIT = GUEST_DAILY_LIMIT;
 
@@ -192,6 +195,7 @@ export function guestRemaining(_action?: GuestAction): number {
 
 /** true quando o visitante já esgotou a cota diária. */
 export function isGuestAtLimit(_action?: GuestAction): boolean {
+  if (GUEST_QUOTA_DISABLED) return false;
   return read().used >= GUEST_DAILY_LIMIT;
 }
 
@@ -205,6 +209,9 @@ export function consumeGuest(
   action: GuestAction,
   unique?: string,
 ): { blocked: boolean; count: number; remaining: number } {
+  if (GUEST_QUOTA_DISABLED) {
+    return { blocked: false, count: 0, remaining: GUEST_DAILY_LIMIT };
+  }
   const s = read();
   const key = unique ? `${action}:${unique.trim().toLowerCase()}` : undefined;
 
