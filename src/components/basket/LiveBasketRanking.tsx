@@ -1028,6 +1028,14 @@ export function LiveBasketRanking({
           )}
         </DialogContent>
       </Dialog>
+      <GuestGateDialog
+        open={exportGate.open}
+        onOpenChange={exportGate.setOpen}
+        action="export"
+        title="Exportar em CSV/PDF é grátis para quem tem conta"
+        description="Cadastre-se em 30 segundos (7 dias sem cartão) para exportar ranking e detalhes por mercado sem limite."
+      />
     </>
   );
 }
+
