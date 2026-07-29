@@ -298,7 +298,7 @@ function EstablishmentsPage() {
   const detailHeadingRef = useRef<HTMLHeadingElement | null>(null);
 
   return (
-    <IsolatedPage fit className="bg-background" contentClassName="!pb-0">
+    <IsolatedPage className="bg-background" contentClassName="!pb-0">
       {/* HEADER compacto */}
       <header className="shrink-0 border-b border-border/60 bg-background/92 backdrop-blur">
         <span
