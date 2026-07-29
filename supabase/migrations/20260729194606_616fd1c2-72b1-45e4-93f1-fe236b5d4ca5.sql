@@ -1,0 +1,1 @@
+UPDATE public.establishments SET logo_url = '/logos/claudia-v7.webp', updated_at = now() WHERE name ILIKE '%claudia%';
