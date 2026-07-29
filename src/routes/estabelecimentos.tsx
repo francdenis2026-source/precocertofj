@@ -129,21 +129,26 @@ function EstablishmentsPage() {
     ? (search.sort as SortKey)
     : "products";
   const neighborhoodFilter = search.bairro;
+  const cityFilter = search.cidade;
+  const savingsFilter = search.economia;
   const onlyFavorites = search.fav && !!user;
   const selectedId = search.sel || null;
+  const pagesLoaded = Math.max(1, search.pagina | 0);
 
   const updateSearch = useCallback(
     (patch: Partial<z.infer<typeof searchSchema>>) => {
       navigate({
         search: (prev: z.infer<typeof searchSchema>) => {
           const next = { ...prev, ...patch };
-          // Limpa defaults para manter URL limpa
           if (next.q === "") delete (next as Record<string, unknown>).q;
           if (next.kind === "__all") delete (next as Record<string, unknown>).kind;
           if (next.bairro === "__all") delete (next as Record<string, unknown>).bairro;
+          if (next.cidade === "__all") delete (next as Record<string, unknown>).cidade;
+          if (next.economia === "__all") delete (next as Record<string, unknown>).economia;
           if (next.sort === "products") delete (next as Record<string, unknown>).sort;
           if (!next.fav) delete (next as Record<string, unknown>).fav;
           if (!next.sel) delete (next as Record<string, unknown>).sel;
+          if (!next.pagina || next.pagina <= 1) delete (next as Record<string, unknown>).pagina;
           return next;
         },
         replace: true,
@@ -153,7 +158,6 @@ function EstablishmentsPage() {
   );
 
   const [detailOpenMobile, setDetailOpenMobile] = useState(false);
-  const [page, setPage] = useState(0);
   const PAGE_SIZE = 8;
   const [qDraft, setQDraft] = useState(q);
   // Sincroniza rascunho quando URL muda de fora (back/forward, link compartilhado).
