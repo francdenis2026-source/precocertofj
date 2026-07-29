@@ -240,11 +240,44 @@ function OndeComprarPage() {
               }
             />
           ) : (
-            <ul className="space-y-2">
-              {products.map((p) => (
-                <ProductAccordion key={p.productKey} product={p} />
-              ))}
-            </ul>
+            <>
+              <div className="mb-2 flex items-center gap-2">
+                <div className="relative min-w-0 flex-1">
+                  <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    value={localFilter}
+                    onChange={(e) => setLocalFilter(e.target.value)}
+                    placeholder="Filtrar por produto ou estabelecimento…"
+                    className="h-8 pl-8 pr-8 text-[12.5px]"
+                    aria-label="Filtrar resultados"
+                  />
+                  {localFilter && (
+                    <button
+                      type="button"
+                      onClick={() => setLocalFilter("")}
+                      aria-label="Limpar filtro"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  )}
+                </div>
+                <span className={cn(tc.metaMuted, "shrink-0 tabular-nums")}>
+                  {products.length} de {allProducts.length}
+                </span>
+              </div>
+              {products.length === 0 ? (
+                <p className={cn(tc.meta, "px-2 py-3 text-center")}>
+                  Nenhum item corresponde a “{localFilter}”.
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {products.map((p) => (
+                    <ProductAccordion key={p.productKey} product={p} />
+                  ))}
+                </ul>
+              )}
+            </>
           )}
         </FadeSwap>
 
