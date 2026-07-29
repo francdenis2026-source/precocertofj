@@ -2132,7 +2132,7 @@ function CompareMatrix({
             : { gridTemplateColumns: `repeat(${top.length}, minmax(140px, 1fr))` }
         }
       >
-        {(() => null)()}
+        
         {top.map((p, i) => {
           const isCheapest = p.price === cheapest;
           const cheapestCount = top.filter((x) => x.price === cheapest).length;
