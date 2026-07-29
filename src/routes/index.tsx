@@ -810,6 +810,12 @@ function HomePage() {
         }}
         kind={spotlight}
       />
+      <GuestGateDialog
+        open={gateOpen}
+        onOpenChange={setGateOpen}
+        action="search"
+        redirect="/buscar"
+      />
     </div>
   );
 }
