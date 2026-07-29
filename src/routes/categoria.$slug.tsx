@@ -294,11 +294,13 @@ function CategoryPage() {
         {/* Trilho de categorias — setas de navegação + roda do mouse horizontal */}
         <CategoryRail current={slug} />
 
-        {/* Atalhos por corte quando o usuário abre o hub de açougues */}
-        {slug === "acougues" && (
-          <div className="mt-4">
-            <AcougueCutsBar />
-          </div>
+        {/* Filtro por corte quando o usuário abre o hub de açougues */}
+        {slug === "acougues" && proteinCounts && (
+          <ButcherProteinChips
+            active={search.corte}
+            counts={proteinCounts}
+            onChange={(v) => setSearch({ corte: v, page: 1 })}
+          />
         )}
 
         {/* Plantão (só farmácias) */}
