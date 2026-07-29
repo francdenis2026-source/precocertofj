@@ -100,10 +100,13 @@ function CadastroFotoPage() {
                 merged[idx] = { ...existing, ...patch };
               }
             } else {
-              merged.push({ ...p, _uid: `${Date.now()}-${i}` });
+              // Classificação automática local completa o que a IA deixou vazio
+              // (categoria, marca e unidade), reduzindo digitação manual.
+              merged.push(fillMissingFromName({ ...p, _uid: `${Date.now()}-${i}` }));
               added++;
             }
           });
+
 
           const parts: string[] = [];
           if (added) parts.push(`${added} novo(s)`);
