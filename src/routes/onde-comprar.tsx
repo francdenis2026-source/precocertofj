@@ -1,8 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { ChevronDown, MapPin, PackageSearch, Search, Store, TrendingDown } from "lucide-react";
+import { ChevronDown, MapPin, PackageSearch, Search, Store, TrendingDown, X } from "lucide-react";
 
 import {
   getWhereToBuyRegions,
@@ -55,6 +55,7 @@ function OndeComprarPage() {
   const [query, setQuery] = useState("");
   const [city, setCity] = useState<string | null>(null);
   const [neighborhood, setNeighborhood] = useState<string | null>(null);
+  const [localFilter, setLocalFilter] = useState("");
 
   const regionsQ = useQuery({
     queryKey: ["where-to-buy-regions"],
@@ -74,7 +75,22 @@ function OndeComprarPage() {
     return city ? list.filter((h) => h.city === city) : list;
   }, [regionsQ.data, city]);
 
-  const products = productsQ.data ?? [];
+  const norm = (s: string) =>
+    s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+  const allProducts = productsQ.data ?? [];
+  const products = useMemo(() => {
+    const q = norm(localFilter.trim());
+    if (!q) return allProducts;
+    return allProducts.filter((p) => {
+      if (norm(p.productName).includes(q)) return true;
+      return p.offers.some((o) =>
+        norm(o.storeName).includes(q) ||
+        norm(o.neighborhood ?? "").includes(q) ||
+        norm(o.city ?? "").includes(q),
+      );
+    });
+  }, [allProducts, localFilter]);
 
   const stateKey = productsQ.isLoading ? "loading" : products.length === 0 ? "empty" : "ready";
 
@@ -224,11 +240,44 @@ function OndeComprarPage() {
               }
             />
           ) : (
-            <ul className="space-y-2">
-              {products.map((p) => (
-                <ProductAccordion key={p.productKey} product={p} />
-              ))}
-            </ul>
+            <>
+              <div className="mb-2 flex items-center gap-2">
+                <div className="relative min-w-0 flex-1">
+                  <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    value={localFilter}
+                    onChange={(e) => setLocalFilter(e.target.value)}
+                    placeholder="Filtrar por produto ou estabelecimento…"
+                    className="h-8 pl-8 pr-8 text-[12.5px]"
+                    aria-label="Filtrar resultados"
+                  />
+                  {localFilter && (
+                    <button
+                      type="button"
+                      onClick={() => setLocalFilter("")}
+                      aria-label="Limpar filtro"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </button>
+                  )}
+                </div>
+                <span className={cn(tc.metaMuted, "shrink-0 tabular-nums")}>
+                  {products.length} de {allProducts.length}
+                </span>
+              </div>
+              {products.length === 0 ? (
+                <p className={cn(tc.meta, "px-2 py-3 text-center")}>
+                  Nenhum item corresponde a “{localFilter}”.
+                </p>
+              ) : (
+                <ul className="space-y-2">
+                  {products.map((p) => (
+                    <ProductAccordion key={p.productKey} product={p} />
+                  ))}
+                </ul>
+              )}
+            </>
           )}
         </FadeSwap>
 
@@ -246,9 +295,31 @@ function OndeComprarPage() {
 
 const INITIAL_OFFERS = 4;
 
+const ACC_STORE_KEY = "pc:onde-comprar:acc";
+function readAccStore(): Record<string, { open?: boolean; all?: boolean }> {
+  if (typeof window === "undefined") return {};
+  try {
+    return JSON.parse(window.sessionStorage.getItem(ACC_STORE_KEY) || "{}") || {};
+  } catch {
+    return {};
+  }
+}
+function writeAccStore(key: string, patch: { open?: boolean; all?: boolean }) {
+  if (typeof window === "undefined") return;
+  try {
+    const s = readAccStore();
+    s[key] = { ...s[key], ...patch };
+    window.sessionStorage.setItem(ACC_STORE_KEY, JSON.stringify(s));
+  } catch {
+    /* ignore */
+  }
+}
+
 function ProductAccordion({ product: p }: { product: WhereToBuyProduct }) {
-  const [open, setOpen] = useState(false);
-  const [showAll, setShowAll] = useState(false);
+  const [open, setOpen] = useState<boolean>(() => !!readAccStore()[p.productKey]?.open);
+  const [showAll, setShowAll] = useState<boolean>(() => !!readAccStore()[p.productKey]?.all);
+  useEffect(() => writeAccStore(p.productKey, { open }), [p.productKey, open]);
+  useEffect(() => writeAccStore(p.productKey, { all: showAll }), [p.productKey, showAll]);
   const visible = showAll ? p.offers : p.offers.slice(0, INITIAL_OFFERS);
   const hidden = Math.max(0, p.offers.length - INITIAL_OFFERS);
   const best = p.offers.find((o) => o.isCheapest) ?? p.offers[0];

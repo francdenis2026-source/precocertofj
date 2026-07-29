@@ -53,8 +53,11 @@ const searchSchema = z.object({
   kind: fallback(z.string(), "__all").default("__all"),
   sort: fallback(z.string(), "products").default("products"),
   bairro: fallback(z.string(), "__all").default("__all"),
+  cidade: fallback(z.string(), "__all").default("__all"),
+  economia: fallback(z.string(), "__all").default("__all"),
   fav: fallback(z.boolean(), false).default(false),
   sel: fallback(z.string(), "").default(""),
+  pagina: fallback(z.number().int(), 1).default(1),
 });
 
 export const Route = createFileRoute("/estabelecimentos")({
@@ -126,21 +129,26 @@ function EstablishmentsPage() {
     ? (search.sort as SortKey)
     : "products";
   const neighborhoodFilter = search.bairro;
+  const cityFilter = search.cidade;
+  const savingsFilter = search.economia;
   const onlyFavorites = search.fav && !!user;
   const selectedId = search.sel || null;
+  const pagesLoaded = Math.max(1, search.pagina | 0);
 
   const updateSearch = useCallback(
     (patch: Partial<z.infer<typeof searchSchema>>) => {
       navigate({
         search: (prev: z.infer<typeof searchSchema>) => {
           const next = { ...prev, ...patch };
-          // Limpa defaults para manter URL limpa
           if (next.q === "") delete (next as Record<string, unknown>).q;
           if (next.kind === "__all") delete (next as Record<string, unknown>).kind;
           if (next.bairro === "__all") delete (next as Record<string, unknown>).bairro;
+          if (next.cidade === "__all") delete (next as Record<string, unknown>).cidade;
+          if (next.economia === "__all") delete (next as Record<string, unknown>).economia;
           if (next.sort === "products") delete (next as Record<string, unknown>).sort;
           if (!next.fav) delete (next as Record<string, unknown>).fav;
           if (!next.sel) delete (next as Record<string, unknown>).sel;
+          if (!next.pagina || next.pagina <= 1) delete (next as Record<string, unknown>).pagina;
           return next;
         },
         replace: true,
@@ -150,7 +158,6 @@ function EstablishmentsPage() {
   );
 
   const [detailOpenMobile, setDetailOpenMobile] = useState(false);
-  const [page, setPage] = useState(0);
   const PAGE_SIZE = 8;
   const [qDraft, setQDraft] = useState(q);
   // Sincroniza rascunho quando URL muda de fora (back/forward, link compartilhado).
@@ -181,17 +188,40 @@ function EstablishmentsPage() {
     return Array.from(bairros).sort((a, b) => a.localeCompare(b, "pt-BR"));
   }, [data]);
 
+  const citiesPresent = useMemo(() => {
+    const cs = new Set<string>();
+    for (const it of data?.items ?? []) {
+      const c = (it.city ?? "").trim();
+      if (c) cs.add(c);
+    }
+    return Array.from(cs).sort((a, b) => a.localeCompare(b, "pt-BR"));
+  }, [data]);
+
+  const SAVINGS_BUCKETS: Record<string, (v: number) => boolean> = {
+    __all: () => true,
+    low: (v) => v <= 5,
+    mid: (v) => v > 5 && v <= 20,
+    high: (v) => v > 20,
+  };
+
   const filtered = useMemo(() => {
     if (!data) return [] as EstablishmentStat[];
     const term = q.trim().toLowerCase();
     let list = data.items.slice();
     if (onlyFavorites) list = list.filter((e) => favSet.has(e.name.trim().toLowerCase()));
     if (kindFilter !== "__all") list = list.filter((e) => (e.kind ?? "outro") === kindFilter);
+    if (cityFilter !== "__all") {
+      list = list.filter(
+        (e) => (e.city ?? "").trim().toLowerCase() === cityFilter.toLowerCase(),
+      );
+    }
     if (neighborhoodFilter !== "__all") {
       list = list.filter(
         (e) => (e.neighborhood ?? "").trim().toLowerCase() === neighborhoodFilter.toLowerCase(),
       );
     }
+    const bucket = SAVINGS_BUCKETS[savingsFilter] ?? SAVINGS_BUCKETS.__all;
+    list = list.filter((e) => bucket(e.maxSavings ?? 0));
     if (term) {
       list = list.filter((e) =>
         [e.name, e.neighborhood ?? "", e.city ?? ""].some((v) => v.toLowerCase().includes(term)),
@@ -215,18 +245,19 @@ function EstablishmentsPage() {
         list.sort((a, b) => b.productsCount - a.productsCount);
     }
     return list;
-  }, [data, q, kindFilter, neighborhoodFilter, sort, onlyFavorites, favSet]);
+  }, [data, q, kindFilter, cityFilter, neighborhoodFilter, savingsFilter, sort, onlyFavorites, favSet]);
 
-  // Reset page when filters change / list shrinks
+  // Reset pagination when filters shrink the list
   useEffect(() => {
-    setPage(0);
-  }, [q, kindFilter, neighborhoodFilter, sort, onlyFavorites]);
+    if (pagesLoaded > 1) updateSearch({ pagina: 1 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [q, kindFilter, cityFilter, neighborhoodFilter, savingsFilter, sort, onlyFavorites]);
 
-  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const currentPage = Math.min(page, pageCount - 1);
+  const visibleCount = Math.min(filtered.length, pagesLoaded * PAGE_SIZE);
+  const hasMore = filtered.length > visibleCount;
   const pageItems = useMemo(
-    () => filtered.slice(currentPage * PAGE_SIZE, currentPage * PAGE_SIZE + PAGE_SIZE),
-    [filtered, currentPage],
+    () => filtered.slice(0, visibleCount),
+    [filtered, visibleCount],
   );
 
   // Auto-selecionar primeiro item quando lista muda / seleção some.
@@ -441,23 +472,29 @@ function EstablishmentsPage() {
               />
             </div>
             <div className="flex flex-wrap items-center gap-1.5">
-              <Select
-                value={neighborhoodFilter}
-                onValueChange={(v) => updateSearch({ bairro: v })}
-              >
-                <SelectTrigger
-                  className="h-8 flex-1 min-w-[140px] text-[12px]"
-                  aria-label="Filtrar por bairro"
-                >
+              {citiesPresent.length > 1 && (
+                <Select value={cityFilter} onValueChange={(v) => updateSearch({ cidade: v })}>
+                  <SelectTrigger className="h-8 min-w-[130px] flex-1 text-[12px]" aria-label="Filtrar por cidade">
+                    <MapPin className="mr-1 h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
+                    <SelectValue placeholder="Todas as cidades" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="__all">Todas as cidades</SelectItem>
+                    {citiesPresent.map((c) => (
+                      <SelectItem key={c} value={c}>{c}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+              <Select value={neighborhoodFilter} onValueChange={(v) => updateSearch({ bairro: v })}>
+                <SelectTrigger className="h-8 flex-1 min-w-[140px] text-[12px]" aria-label="Filtrar por bairro">
                   <MapPin className="mr-1 h-3.5 w-3.5 shrink-0 text-muted-foreground" aria-hidden />
                   <SelectValue placeholder="Todos os bairros" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="__all">Todos os bairros</SelectItem>
                   {neighborhoodsPresent.map((b) => (
-                    <SelectItem key={b} value={b}>
-                      {b}
-                    </SelectItem>
+                    <SelectItem key={b} value={b}>{b}</SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -473,15 +510,42 @@ function EstablishmentsPage() {
                 </SelectContent>
               </Select>
             </div>
+            <div className="flex flex-wrap items-center gap-1" role="radiogroup" aria-label="Faixa de economia">
+              {([
+                { k: "__all", l: "Toda economia" },
+                { k: "low", l: "Até R$5" },
+                { k: "mid", l: "R$5–R$20" },
+                { k: "high", l: "R$20+" },
+              ] as const).map((b) => {
+                const active = savingsFilter === b.k;
+                return (
+                  <button
+                    key={b.k}
+                    type="button"
+                    role="radio"
+                    aria-checked={active}
+                    onClick={() => updateSearch({ economia: b.k })}
+                    className={cn(
+                      "inline-flex items-center rounded-full border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] transition-colors",
+                      active
+                        ? "border-brand-gold bg-brand-gold text-brand-navy"
+                        : "border-border bg-background text-muted-foreground hover:border-brand-gold hover:text-[var(--pc-gold-ink)]",
+                    )}
+                  >
+                    {b.l}
+                  </button>
+                );
+              })}
+            </div>
             <div className="flex items-center justify-between gap-2">
               <span className={cn("truncate", tc.metaMuted)} aria-live="polite">
                 {filtered.length} {filtered.length === 1 ? "resultado" : "resultados"}
               </span>
-              {(q || kindFilter !== "__all" || neighborhoodFilter !== "__all" || onlyFavorites) && (
+              {(q || kindFilter !== "__all" || neighborhoodFilter !== "__all" || cityFilter !== "__all" || savingsFilter !== "__all" || onlyFavorites) && (
                 <button
                   type="button"
                   onClick={() =>
-                    updateSearch({ q: "", kind: "__all", bairro: "__all", fav: false })
+                    updateSearch({ q: "", kind: "__all", bairro: "__all", cidade: "__all", economia: "__all", fav: false, pagina: 1 })
                   }
                   className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground hover:text-[var(--pc-gold-ink)]"
                 >
@@ -585,31 +649,19 @@ function EstablishmentsPage() {
             })}
           </ul>
 
-          {pageCount > 1 && (
-            <nav
-              className="flex shrink-0 items-center justify-between gap-2 border-t border-border/60 px-3 py-2 md:px-4"
-              aria-label="Paginação de mercados"
-            >
-              <button
-                type="button"
-                onClick={() => setPage((p) => Math.max(0, p - 1))}
-                disabled={currentPage === 0}
-                className="inline-flex h-7 items-center gap-1 rounded-full border border-border px-2.5 text-[11.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] disabled:cursor-not-allowed disabled:opacity-40"
-              >
-                ← Anteriores
-              </button>
+          {hasMore && (
+            <div className="flex shrink-0 items-center justify-between gap-2 border-t border-border/60 px-3 py-2 md:px-4">
               <span className={cn("tabular-nums", tc.metaMuted)}>
-                Página {currentPage + 1} de {pageCount}
+                {visibleCount} de {filtered.length}
               </span>
               <button
                 type="button"
-                onClick={() => setPage((p) => Math.min(pageCount - 1, p + 1))}
-                disabled={currentPage >= pageCount - 1}
-                className="inline-flex h-7 items-center gap-1 rounded-full border border-border px-2.5 text-[11.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] disabled:cursor-not-allowed disabled:opacity-40"
+                onClick={() => updateSearch({ pagina: pagesLoaded + 1 })}
+                className="inline-flex h-7 items-center gap-1 rounded-full border border-border px-3 text-[11.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)]"
               >
-                Próximos →
+                Carregar mais {Math.min(PAGE_SIZE, filtered.length - visibleCount)}
               </button>
-            </nav>
+            </div>
           )}
         </aside>
 
