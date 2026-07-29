@@ -394,6 +394,14 @@ function HomePage() {
                     <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
                   </button>
                 </div>
+                {isLoggedOut ? (
+                  <p
+                    className="mt-1.5 pl-2 text-[11px] font-medium"
+                    style={{ color: "var(--pc-home-onhero-fg-70)" }}
+                  >
+                    Modo visitante · restam <strong className="pc-num">{guestRemaining("search")}</strong> de {GUEST_LIMIT} buscas grátis
+                  </p>
+                ) : null}
               </form>
 
               {/* ---------- Populares + CTA ---------- */}
