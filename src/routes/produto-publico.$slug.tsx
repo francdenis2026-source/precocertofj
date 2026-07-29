@@ -463,7 +463,7 @@ function MiniStat({ label, value }: { label: string; value: string }) {
       <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
         {label}
       </p>
-      <p className="mt-1 font-display text-[17px] font-semibold tabular-nums leading-tight text-foreground">
+      <p className="mt-1 pc-price text-[17px] font-semibold leading-tight text-foreground">
         {value}
       </p>
     </div>
