@@ -4,6 +4,9 @@ import { Star } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { useSession } from "@/hooks/useSession";
+import { useGuestGate } from "@/hooks/useGuestGate";
+import { GuestGateDialog } from "@/components/gate/GuestGateDialog";
+import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 import {
   listFavoriteMarkets,
   toggleFavoriteMarket,
