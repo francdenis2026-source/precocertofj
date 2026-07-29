@@ -674,7 +674,7 @@ function Detail({
       <p
         className={
           highlight
-            ? "mt-1 truncate font-display text-[17px] font-semibold tabular-nums leading-tight text-foreground"
+            ? "mt-1 truncate pc-price text-[17px] font-semibold leading-tight text-foreground"
             : "mt-0.5 truncate text-xs font-semibold text-foreground"
         }
       >
