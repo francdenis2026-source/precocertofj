@@ -415,10 +415,16 @@ function EstablishmentPage() {
             aria-label="Áreas do estabelecimento"
             className="mt-2.5 flex flex-wrap gap-1.5"
           >
-            {([
-              { id: "catalogo" as const, label: "Catálogo", count: general.length },
-              { id: "acougue" as const, label: "Açougue", count: cuts.length },
-            ]).map((t) => {
+            {(isButcherStore
+              ? [
+                  { id: "acougue" as const, label: "Açougue · Cortes", count: cuts.length },
+                  { id: "catalogo" as const, label: "Outros produtos", count: general.length },
+                ]
+              : [
+                  { id: "catalogo" as const, label: "Catálogo", count: general.length },
+                  { id: "acougue" as const, label: "Açougue", count: cuts.length },
+                ]
+            ).map((t) => {
               const active = tab === t.id;
               return (
                 <button
