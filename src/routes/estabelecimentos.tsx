@@ -696,7 +696,7 @@ function DetailPanel({
       </div>
 
       {/* Conteúdo rolável */}
-      <div className="pc-rail min-h-0 flex-1 space-y-4 overflow-y-auto px-4 py-4 md:px-6 md:py-5">
+      <div className="space-y-4 px-4 py-4 md:px-6 md:py-5">
         <div className="grid grid-cols-3 gap-2">
           <StatBlock
             icon={Package}
