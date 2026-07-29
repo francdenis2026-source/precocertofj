@@ -393,7 +393,7 @@ export function AdvancedProductSearch() {
                         <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                           A partir de
                         </span>
-                        <p className="font-display text-base font-bold tabular-nums text-foreground md:text-lg">
+                        <p className="pc-price text-base font-bold text-foreground md:text-lg">
                           {fmtBRL(p.minPrice)}
                         </p>
                       </div>
