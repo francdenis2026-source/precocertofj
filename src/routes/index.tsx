@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -25,7 +25,6 @@ import { PrecoCertoMark } from "@/components/typography/PrecoCertoMark";
 import { StoreCaption } from "@/components/brand/StoreCaption";
 
 import { buildLivePanel, type LivePanelMetric } from "@/lib/live-panel";
-import { getProductSuggestions } from "@/lib/products-suggest.functions";
 import { getPlatformStats, listPublicStores } from "@/lib/stores-public.functions";
 import { getEconomyStat } from "@/lib/products-public.functions";
 import { listPopularQueries } from "@/lib/search-popular.functions";
