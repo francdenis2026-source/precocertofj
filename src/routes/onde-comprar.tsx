@@ -55,6 +55,7 @@ function OndeComprarPage() {
   const [query, setQuery] = useState("");
   const [city, setCity] = useState<string | null>(null);
   const [neighborhood, setNeighborhood] = useState<string | null>(null);
+  const [localFilter, setLocalFilter] = useState("");
 
   const regionsQ = useQuery({
     queryKey: ["where-to-buy-regions"],
@@ -74,7 +75,22 @@ function OndeComprarPage() {
     return city ? list.filter((h) => h.city === city) : list;
   }, [regionsQ.data, city]);
 
-  const products = productsQ.data ?? [];
+  const norm = (s: string) =>
+    s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+
+  const allProducts = productsQ.data ?? [];
+  const products = useMemo(() => {
+    const q = norm(localFilter.trim());
+    if (!q) return allProducts;
+    return allProducts.filter((p) => {
+      if (norm(p.productName).includes(q)) return true;
+      return p.offers.some((o) =>
+        norm(o.storeName).includes(q) ||
+        norm(o.neighborhood ?? "").includes(q) ||
+        norm(o.city ?? "").includes(q),
+      );
+    });
+  }, [allProducts, localFilter]);
 
   const stateKey = productsQ.isLoading ? "loading" : products.length === 0 ? "empty" : "ready";
 
