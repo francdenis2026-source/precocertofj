@@ -176,7 +176,7 @@ function ProductDetailPage() {
                   <p className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
                     Seu preço cadastrado
                   </p>
-                  <p className="mt-1 font-display text-3xl font-bold tabular-nums text-foreground">
+                  <p className="mt-1 pc-price text-3xl font-bold text-foreground">
                     {fmt(data.currentPrice)}
                   </p>
                 </div>
