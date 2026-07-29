@@ -73,7 +73,7 @@ function buildCheapestReason(price: number, avg: number | null | undefined): str
 
 
 
-type SortMode = "relevance" | "cheapest" | "unit" | "recent" | "kind" | "spread" | "savings";
+type SortMode = "relevance" | "cheapest" | "highest" | "unit" | "recent" | "kind" | "spread" | "savings";
 
 export function PriceSearchBar({
   initialQuery = "",
@@ -183,7 +183,7 @@ export function PriceSearchBar({
     "cheapest",
     {
       validate: (v): v is SortMode =>
-        v === "relevance" || v === "cheapest" || v === "unit" || v === "recent" || v === "kind" || v === "spread" || v === "savings",
+        v === "relevance" || v === "cheapest" || v === "highest" || v === "unit" || v === "recent" || v === "kind" || v === "spread" || v === "savings",
     },
   );
   const [kindFilter, setKindFilter] = useState<string | null>(null);
@@ -1275,6 +1275,7 @@ export function PriceSearchBar({
                 const showHeaders = filteredOrdered.length > 1;
                 const sortLabelMap: Record<SortMode, string> = {
                   cheapest: "Menor preço",
+                  highest: "Maior preço",
                   relevance: "Relevância",
                   recent: "Novidade",
                   savings: "Maior economia",
@@ -1400,6 +1401,12 @@ export function PriceSearchBar({
                               const sa = (a.max ?? a.min) - a.min;
                               const sb = (b.max ?? b.min) - b.min;
                               if (sa !== sb) return sb - sa;
+                            }
+                            if (sortMode === "highest") {
+                              const am = a.max ?? a.min;
+                              const bm = b.max ?? b.min;
+                              if (am !== bm) return bm - am;
+                              return b.samples - a.samples;
                             }
                             if (a.min !== b.min) return a.min - b.min;
                             return b.samples - a.samples;
@@ -1791,6 +1798,8 @@ function sortPrices(prices: PricePoint[], mode: SortMode, productName?: string):
     new Date(b.when).getTime() - new Date(a.when).getTime();
   if (mode === "cheapest" || mode === "relevance" || mode === "savings")
     arr.sort((a, b) => a.price - b.price || byRecency(a, b));
+  else if (mode === "highest")
+    arr.sort((a, b) => b.price - a.price || byRecency(a, b));
   else if (mode === "unit") {
     // Ordena por preço unitário normalizado (R$/kg ou R$/L). Itens sem
     // tamanho detectável ficam no fim, mantendo a ordem por menor preço.
@@ -1880,6 +1889,9 @@ function QuickFilters({
       </button>
       <button type="button" className={chip(sortMode === "cheapest")} onClick={() => onSort("cheapest")}>
         Menor preço
+      </button>
+      <button type="button" className={chip(sortMode === "highest")} onClick={() => onSort("highest")}>
+        Maior preço
       </button>
       <button
         type="button"
@@ -2504,7 +2516,10 @@ function ProductGroupCard({
               }
               aria-current={isFocusedMarket ? "true" : undefined}
               className={
-                "pc-res-row relative flex flex-col cursor-pointer rounded-lg border border-[color-mix(in_oklab,var(--color-border)_58%,transparent)] bg-background/75 px-1.5 outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-brand-gold " +
+                "pc-res-row relative flex flex-col cursor-pointer rounded-lg border px-1.5 outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-brand-gold " +
+                (isCheapest
+                  ? "border-brand-gold/70 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] shadow-[0_0_0_1px_var(--brand-gold)] ring-1 ring-brand-gold/40 "
+                  : "border-[color-mix(in_oklab,var(--color-border)_58%,transparent)] bg-background/75 ") +
                 (isFocusedMarket ? "bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)]" : "")
               }
               data-cheapest={isCheapest ? "true" : "false"}
@@ -2524,6 +2539,15 @@ function ProductGroupCard({
                 handleSelect();
               }}
             >
+              {isCheapest ? (
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -top-2 right-2 z-10 inline-flex items-center gap-1 rounded-full border border-brand-gold/70 bg-brand-navy px-2 py-[2px] text-[10px] font-bold uppercase tracking-[0.14em] text-brand-gold shadow-sm"
+                >
+                  <Crown className="h-2.5 w-2.5" strokeWidth={2.25} />
+                  Melhor oferta
+                </span>
+              ) : null}
               <div className="pc-res-row-main flex items-center gap-1.5">
                 <StoreColorBar name={p.marketName} brandColor={p.marketBrandColor} />
                 {isCheapest ? (
