@@ -12,6 +12,8 @@ import { useSession } from "@/hooks/useSession";
 import { trackEvent } from "@/lib/analytics-events";
 import { RouteError } from "@/components/feedback";
 import { SearchDiscovery, pushRecentSearch } from "@/components/search/SearchDiscovery";
+import { GuestGateDialog } from "@/components/gate/GuestGateDialog";
+import { consumeGuest } from "@/lib/guest-quota";
 
 
 
