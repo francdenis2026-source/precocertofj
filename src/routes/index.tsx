@@ -109,16 +109,6 @@ const TILE_ICON = "h-[19px] w-[19px] sm:h-[21px] sm:w-[21px] lg:h-6 lg:w-6";
 const TILE_LABEL =
   "w-full truncate text-[12.5px] font-semibold leading-none tracking-[-0.005em] sm:text-[13.5px] lg:text-[14.5px]";
 
-function useDebounced<T>(value: T, delay: number): T {
-  const [v, setV] = useState(value);
-  useEffect(() => {
-    const t = setTimeout(() => setV(value), delay);
-    return () => clearTimeout(t);
-  }, [value, delay]);
-  return v;
-}
-
-const CATEGORIES = [
   { key: "supermercados", label: "Mercado", full: "Supermercados", Icon: ShoppingCart },
   { key: "farmacias", label: "Farmácia", full: "Farmácias", Icon: Pill },
   { key: "acougues", label: "Açougue", full: "Açougues", Icon: Beef },
