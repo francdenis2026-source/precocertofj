@@ -80,7 +80,7 @@ export function HomeSearchSuggestions({
           base.map(async (s) => {
             try {
               const r: any = await runSearch({
-                data: { query: s.displayName, limit: 1 },
+                data: { query: s.displayName, pureOnly: true },
                 signal: ctrl.signal as any,
               } as any);
               const first = r?.groups?.[0];
