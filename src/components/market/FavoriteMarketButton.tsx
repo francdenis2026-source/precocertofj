@@ -69,7 +69,7 @@ export function FavoriteMarketButton({
     if (!user) {
       // Visitantes: consomem cota antes de sugerir cadastro.
       if (!gate.allow(`market:${marketName}`)) return;
-      void promptSignIn({ intent: "favorite-market", payload: { marketName } });
+      void promptSignIn({ intent: "favorite-item", payload: { marketName } });
       return;
     }
     if (mutation.isPending) return;
