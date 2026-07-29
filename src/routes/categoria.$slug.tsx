@@ -392,7 +392,7 @@ function CategoryPage() {
                 data-form-type="other"
                 data-lpignore="true"
                 data-1p-ignore="true"
-                placeholder={`Filtrar em ${def.label.toLowerCase()}…`}
+                placeholder={slug === "acougues" ? "Buscar corte: picanha, filé, costela…" : `Filtrar em ${def.label.toLowerCase()}…`}
                 className="h-10 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13.5px] outline-none focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
               />
             </div>
