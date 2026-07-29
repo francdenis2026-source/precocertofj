@@ -284,7 +284,16 @@ function CadastroFotoPage() {
                     <Field
                       label="Nome"
                       value={d.productName ?? ""}
-                      onChange={(v) => updateDraft(d._uid, { productName: v })}
+                      onChange={(v) =>
+                        setDrafts((prev) =>
+                          prev.map((item) =>
+                            item._uid === d._uid
+                              ? fillMissingFromName({ ...item, productName: v })
+                              : item,
+                          ),
+                        )
+                      }
+
                       full
                     />
                     <Field label="Marca" value={d.brand ?? ""} onChange={(v) => updateDraft(d._uid, { brand: v })} />
