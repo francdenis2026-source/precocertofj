@@ -12,6 +12,8 @@ import { toggleFavoriteItem } from "@/lib/favorites.functions";
 import { addListItem, listMyShoppingLists } from "@/lib/shopping-list.functions";
 import { cn } from "@/lib/utils";
 import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
+import { useGuestGate } from "@/hooks/useGuestGate";
+import { GuestGateDialog } from "@/components/gate/GuestGateDialog";
 
 export interface ProductQuickActionsProps {
   catalogId?: string | null;
