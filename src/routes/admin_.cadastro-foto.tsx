@@ -4,6 +4,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { analyzeProductImage, type VisionProduct } from "@/lib/vision.functions";
 import { savePhotoToCatalog } from "@/lib/photo-catalog.functions";
+import { fillMissingFromName } from "@/lib/auto-classify";
+
 import { ArrowLeft, Camera, Loader2, Sparkles, Save, Trash2, Plus } from "lucide-react";
 import { toast } from "sonner";
 import { AppShell } from "@/components/brand/AppShell";
