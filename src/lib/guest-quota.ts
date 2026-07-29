@@ -17,6 +17,7 @@ export type GuestAction =
   | "product-view"
   | "alert"
   | "export"
+  | "favorite"
   | "generic";
 
 type Store = {

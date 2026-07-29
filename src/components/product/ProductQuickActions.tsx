@@ -12,6 +12,8 @@ import { toggleFavoriteItem } from "@/lib/favorites.functions";
 import { addListItem, listMyShoppingLists } from "@/lib/shopping-list.functions";
 import { cn } from "@/lib/utils";
 import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
+import { useGuestGate } from "@/hooks/useGuestGate";
+import { GuestGateDialog } from "@/components/gate/GuestGateDialog";
 
 export interface ProductQuickActionsProps {
   catalogId?: string | null;
@@ -40,6 +42,7 @@ export function ProductQuickActions({
   const [favorited, setFavorited] = useState(false);
   const [listOpen, setListOpen] = useState(false);
   const [resolvedCatalogId, setResolvedCatalogId] = useState<string | null>(catalogId ?? null);
+  const favoriteGate = useGuestGate("favorite" as const);
 
   useEffect(() => {
     setResolvedCatalogId(catalogId ?? null);
@@ -149,6 +152,8 @@ export function ProductQuickActions({
             event.preventDefault();
             event.stopPropagation();
             if (!authed) {
+              // Visitantes: consomem cota antes de sugerir cadastro.
+              if (!favoriteGate.allow(slug ?? catalogId ?? label)) return;
               redirectToLogin();
               return;
             }
@@ -252,6 +257,13 @@ export function ProductQuickActions({
           )}
         </div>
       )}
+      <GuestGateDialog
+        open={favoriteGate.open}
+        onOpenChange={favoriteGate.setOpen}
+        action="favorite"
+        title="Favoritos são grátis para quem tem conta"
+        description="Crie sua conta grátis (7 dias sem cartão) para salvar produtos favoritos e receber alertas quando o preço mudar."
+      />
     </div>
   );
 }

@@ -28,6 +28,8 @@ import {
 } from "@/lib/price-alerts.functions";
 import { listPublicStores } from "@/lib/stores-public.functions";
 import { getMyAccount } from "@/lib/account.functions";
+import { useGuestGate } from "@/hooks/useGuestGate";
+import { GuestGateDialog } from "@/components/gate/GuestGateDialog";
 
 /**
  * Botão que abre um diálogo para criar uma assinatura de alerta de variação
@@ -68,6 +70,7 @@ export function CreatePriceAlertButton({
   const listStores = useServerFn(listPublicStores);
   const getAccount = useServerFn(getMyAccount);
   const qc = useQueryClient();
+  const gate = useGuestGate("alert");
   const [open, setOpen] = useState(false);
   const [direction, setDirection] = useState<AlertDirection>(defaultDirection);
   const [thresholdPct, setThresholdPct] = useState<string>(String(defaultThresholdPct));
@@ -130,8 +133,17 @@ export function CreatePriceAlertButton({
       toast.error(e instanceof Error ? e.message : "Falha ao criar alerta"),
   });
 
+  // Intercepta abertura para visitantes: consome cota antes de mostrar o formulário.
+  const handleOpenChange = (next: boolean) => {
+    if (next && !gate.authed && !gate.loading) {
+      if (!gate.allow(`alert:${productKey ?? productName ?? "generic"}`)) return;
+    }
+    setOpen(next);
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         {compact ? (
           <button
@@ -312,5 +324,13 @@ export function CreatePriceAlertButton({
         </DialogFooter>
       </DialogContent>
     </Dialog>
+    <GuestGateDialog
+      open={gate.open}
+      onOpenChange={gate.setOpen}
+      action="alert"
+      title="Alertas de preço são grátis para quem tem conta"
+      description="Cadastre-se em 30 segundos (7 dias sem cartão) para receber avisos quando esse produto mudar de preço."
+    />
+    </>
   );
 }
