@@ -395,15 +395,16 @@ function EstablishmentsPage() {
         </div>
       </section>
 
-      {/* MASTER-DETAIL — flex-1, sem scroll de página; cada painel rola internamente */}
-      <div className="mx-auto grid min-h-0 w-full max-w-7xl flex-1 grid-cols-1 gap-0 overflow-hidden md:grid-cols-[minmax(320px,380px)_minmax(0,1fr)]">
+      {/* MASTER-DETAIL — cresce com o conteúdo, sem forçar viewport */}
+      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-0 md:grid-cols-[minmax(320px,380px)_minmax(0,1fr)]">
         {/* LISTA (mestre) */}
         <aside
           className={cn(
-            "flex min-h-0 min-w-0 flex-col border-border/60 md:border-r",
+            "flex min-w-0 flex-col border-border/60 md:border-r",
             detailOpenMobile ? "hidden md:flex" : "flex",
           )}
         >
+
           <div className="shrink-0 space-y-2 border-b border-border/60 px-3 py-2 md:px-4">
             <div className="relative">
               <Search
