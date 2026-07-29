@@ -195,6 +195,7 @@ export function guestRemaining(_action?: GuestAction): number {
 
 /** true quando o visitante já esgotou a cota diária. */
 export function isGuestAtLimit(_action?: GuestAction): boolean {
+  if (GUEST_QUOTA_DISABLED) return false;
   return read().used >= GUEST_DAILY_LIMIT;
 }
 
