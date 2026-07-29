@@ -387,9 +387,12 @@ function HomePage() {
                   </span>
                   <input
                     value={q}
-                    onChange={(e) => setQ(e.target.value)}
+                    onChange={(e) => {
+                      setQ(e.target.value);
+                      setSuggestOpen(true);
+                    }}
                     onFocus={() => setSuggestOpen(true)}
-                    onBlur={() => window.setTimeout(() => setSuggestOpen(false), 150)}
+                    onBlur={() => window.setTimeout(() => setSuggestOpen(false), 180)}
                     type="search"
                     inputMode="search"
                     placeholder="O que você procura hoje? (ex.: Arroz, Feijão, Leite…)"
