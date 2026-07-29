@@ -14,7 +14,10 @@
  * - Usuários autenticados nunca passam por essa checagem.
  */
 
-export const GUEST_DAILY_LIMIT = 5;
+// TEMP: limite de cota de visitante desativado a pedido do usuário.
+// Para reativar, restaure GUEST_DAILY_LIMIT = 5 e remova GUEST_QUOTA_DISABLED.
+export const GUEST_QUOTA_DISABLED = true;
+export const GUEST_DAILY_LIMIT = GUEST_QUOTA_DISABLED ? Number.MAX_SAFE_INTEGER : 5;
 /** @deprecated Alias mantido por compatibilidade. Use GUEST_DAILY_LIMIT. */
 export const GUEST_LIMIT = GUEST_DAILY_LIMIT;
 
