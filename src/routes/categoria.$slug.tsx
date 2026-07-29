@@ -947,6 +947,71 @@ function SkeletonRow() {
   );
 }
 
+/**
+ * Chips de filtro por proteína no hub de açougues.
+ * Bovinos / Frango / Suínos / Outros — reflete o `?corte=` na URL.
+ */
+function ButcherProteinChips({
+  active,
+  counts,
+  onChange,
+}: {
+  active: string;
+  counts: Record<string, number>;
+  onChange: (v: string) => void;
+}) {
+  const CHIPS: { id: string; label: string; Icon: typeof Beef }[] = [
+    { id: "", label: "Todos os cortes", Icon: Beef },
+    { id: "bovino", label: "Bovinos", Icon: Beef },
+    { id: "frango", label: "Frango", Icon: Bird },
+    { id: "suino", label: "Suínos", Icon: Drumstick },
+    { id: "outros", label: "Outros", Icon: Package },
+  ];
+  const total = counts.bovino + counts.frango + counts.suino + counts.outros;
+  return (
+    <section
+      aria-label="Filtrar por corte"
+      className="mt-3 rounded-xl border border-brand-gold/50 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-3 py-2.5"
+    >
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="inline-flex items-center gap-1.5 text-[10.5px] font-bold uppercase tracking-[0.18em] text-[var(--pc-gold-ink)]">
+          <Beef className="h-3 w-3" aria-hidden /> Açougue — cortes
+        </span>
+        <ul className="flex flex-wrap gap-1.5" role="list">
+          {CHIPS.map((c) => {
+            const n = c.id === "" ? total : (counts[c.id] ?? 0);
+            const isActive = active === c.id;
+            const disabled = n === 0 && c.id !== "";
+            return (
+              <li key={c.id || "all"}>
+                <button
+                  type="button"
+                  onClick={() => !disabled && onChange(c.id)}
+                  disabled={disabled}
+                  aria-pressed={isActive}
+                  className={cn(
+                    "inline-flex h-7 items-center gap-1 rounded-full border px-2.5 text-[11.5px] font-semibold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+                    isActive
+                      ? "border-brand-gold bg-brand-gold text-brand-navy"
+                      : "border-brand-gold/50 bg-background text-foreground hover:border-brand-gold",
+                    disabled && "cursor-not-allowed opacity-40",
+                  )}
+                >
+                  <c.Icon className={cn("h-3 w-3", isActive ? "text-brand-navy" : "text-brand-gold")} aria-hidden />
+                  {c.label}
+                  <span className={cn("ml-0.5 tabular-nums", isActive ? "text-brand-navy/80" : "text-muted-foreground")}>
+                    {n}
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </section>
+  );
+}
+
 function EmptyCard({
   text,
   action,
