@@ -222,7 +222,7 @@ function ProductDetailPage() {
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="font-display text-4xl font-extrabold leading-none tabular-nums text-savings">
+                      <p className="pc-price text-4xl font-extrabold leading-none text-savings">
                         {fmt(data.cheapest.price)}
                       </p>
                     </div>
