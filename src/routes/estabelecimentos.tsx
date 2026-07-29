@@ -642,11 +642,11 @@ function EstablishmentsPage() {
                     <StoreLogoThumb
                       src={e.logoUrl}
                       name={e.name}
-                      className="h-11 w-11 shrink-0 border-border/60"
-                      initialsClassName="text-[12px]"
+                      className="h-14 w-14 shrink-0 border-border/60 p-0.5 shadow-sm"
+                      initialsClassName="text-[13px]"
                     />
                     <div className="min-w-0 flex-1">
-                      <div className={cn("truncate", tc.itemTitle)}>{e.name}</div>
+                      <div className={cn("truncate", tc.storeName)}>{e.name}</div>
                       <div className={cn("truncate", tc.metaMuted)}>
                         {meta.label}
                         {e.neighborhood ? ` · ${e.neighborhood}` : ""}
