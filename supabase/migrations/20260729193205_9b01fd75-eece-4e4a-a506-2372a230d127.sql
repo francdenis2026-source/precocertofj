@@ -1,0 +1,1 @@
+UPDATE public.establishments SET logo_url='/logos/claudia-v6.webp', updated_at=now() WHERE id='00cec83d-3cc2-444d-8443-9db114886450';
