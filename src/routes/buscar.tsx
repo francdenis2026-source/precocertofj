@@ -544,7 +544,7 @@ function SearchPage() {
             <>
               <section
                 aria-label="Busca por nome"
-                className="pc-surface-2 relative shrink-0 rounded-2xl border border-border/70 p-2.5 shadow-sm md:p-3"
+                className="pc-surface-2 relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/70 p-2 shadow-sm md:p-2.5"
               >
                 <div
                   aria-hidden
@@ -571,10 +571,11 @@ function SearchPage() {
                     onFocusChange={(product, market) =>
                       setFocusUrl(product ?? null, market ?? null)
                     }
+                    fitResults
                   />
 
                 </div>
-                <div className="mt-2 shrink-0 border-t border-border/50 pt-1.5">
+                <div className="mt-1.5 shrink-0 border-t border-border/50 pt-1">
                   <FiltersToolbar
                     open={filtersOpen}
                     onToggle={() => setFiltersOpen((v) => !v)}
