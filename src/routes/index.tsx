@@ -186,26 +186,6 @@ function HomePage() {
     [storesQ.data],
   );
 
-  const suggestFn = useServerFn(getProductSuggestions);
-  const debouncedQ = useDebounced(q.trim(), 180);
-  const suggestQ = useQuery({
-    queryKey: ["home", "suggest", debouncedQ],
-    queryFn: () => suggestFn({ data: { q: debouncedQ, limit: 5 } }),
-    enabled: debouncedQ.length >= 2,
-    staleTime: 30_000,
-  });
-  const suggestions = suggestQ.data ?? [];
-
-  useEffect(() => {
-    if (!showSuggest) return;
-    const onDoc = (e: MouseEvent) => {
-      if (!searchBoxRef.current) return;
-      if (!searchBoxRef.current.contains(e.target as Node)) setShowSuggest(false);
-    };
-    document.addEventListener("mousedown", onDoc);
-    return () => document.removeEventListener("mousedown", onDoc);
-  }, [showSuggest]);
-
   useEffect(() => {
     if (!exploreOpen) return;
     void queryClient.prefetchQuery({
@@ -218,15 +198,9 @@ function HomePage() {
     e?.preventDefault();
     const query = q.trim();
     if (!query) return;
-    setShowSuggest(false);
     navigate({ to: "/buscar", search: { q: query } as any });
   };
 
-  const pickSuggestion = (name: string) => {
-    setQ(name);
-    setShowSuggest(false);
-    navigate({ to: "/buscar", search: { q: name } as any });
-  };
 
   // Painel ao vivo: lógica pura e testada (src/lib/live-panel.ts) — placeholder
   // "—" + mensagem amigável quando a consulta falha, nunca números inventados.
