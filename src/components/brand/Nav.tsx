@@ -17,6 +17,7 @@ import { IconTile } from "@/components/ui/icon-tile";
 const links = [
   { to: "/comparador", label: "Comparador" },
   { to: "/melhores-precos", label: "Melhores preços" },
+  { to: "/precos-por-categoria", label: "Por categoria" },
   { to: "/#como-funciona", label: "Como funciona" },
   { to: "/#planos", label: "Planos" },
 ] as const;
