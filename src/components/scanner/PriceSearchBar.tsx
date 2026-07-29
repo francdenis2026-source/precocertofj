@@ -1275,6 +1275,7 @@ export function PriceSearchBar({
                 const showHeaders = filteredOrdered.length > 1;
                 const sortLabelMap: Record<SortMode, string> = {
                   cheapest: "Menor preço",
+                  highest: "Maior preço",
                   relevance: "Relevância",
                   recent: "Novidade",
                   savings: "Maior economia",
