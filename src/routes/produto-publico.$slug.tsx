@@ -273,7 +273,7 @@ function ProductPublicPage() {
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
                     Melhor preço
                   </p>
-                  <p className="mt-1 font-display text-[22px] font-extrabold tabular-nums leading-none text-primary sm:text-[28px]">
+                  <p className="mt-1 pc-price text-[22px] font-extrabold leading-none text-primary sm:text-[28px]">
                     {fmt(bestPrice)}
                   </p>
                   {cheapest && (
