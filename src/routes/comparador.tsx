@@ -38,6 +38,8 @@ import { auditPriceConsistency } from "@/lib/price-audit";
 import { PriceAuditAlert } from "@/components/product/PriceAuditAlert";
 
 import { useTeaserQuota } from "@/hooks/use-teaser-quota";
+import { useGuestGate } from "@/hooks/useGuestGate";
+import { GuestGateDialog } from "@/components/gate/GuestGateDialog";
 import { useSession } from "@/hooks/useSession";
 import { trackEvent } from "@/lib/analytics-events";
 import {
@@ -583,11 +585,14 @@ function ComparadorPage() {
     const value = next.join(",");
     navigate({ search: (prev: Record<string, unknown>) => ({ ...prev, sel: value }) });
   };
+  const compareGate = useGuestGate("compare");
   const toggleSelect = (key: string) => {
     if (selected.includes(key)) {
       setSelected(selected.filter((k) => k !== key));
     } else {
       if (selected.length >= MAX_SEL) return;
+      // Visitantes: cada produto único adicionado consome 1 uso da cota.
+      if (!compareGate.allow(`compare:${key}`)) return;
       setSelected([...selected, key]);
     }
   };
