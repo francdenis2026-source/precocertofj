@@ -150,6 +150,8 @@ function EstablishmentsPage() {
   );
 
   const [detailOpenMobile, setDetailOpenMobile] = useState(false);
+  const [page, setPage] = useState(0);
+  const PAGE_SIZE = 8;
   const [qDraft, setQDraft] = useState(q);
   // Sincroniza rascunho quando URL muda de fora (back/forward, link compartilhado).
   useEffect(() => setQDraft(q), [q]);
