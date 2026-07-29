@@ -1086,6 +1086,13 @@ function ComparadorPage() {
 
       </div>
       </PageShellContent>
+      <GuestGateDialog
+        open={compareGate.open}
+        onOpenChange={compareGate.setOpen}
+        action="compare"
+        title="Comparar produtos é grátis para quem tem conta"
+        description="Cadastre-se em 30 segundos (7 dias sem cartão) para montar sua cesta e comparar preços entre mercados sem limite."
+      />
     </PageShell>
   );
 }
