@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -25,7 +25,6 @@ import { PrecoCertoMark } from "@/components/typography/PrecoCertoMark";
 import { StoreCaption } from "@/components/brand/StoreCaption";
 
 import { buildLivePanel, type LivePanelMetric } from "@/lib/live-panel";
-import { getProductSuggestions } from "@/lib/products-suggest.functions";
 import { getPlatformStats, listPublicStores } from "@/lib/stores-public.functions";
 import { getEconomyStat } from "@/lib/products-public.functions";
 import { listPopularQueries } from "@/lib/search-popular.functions";
@@ -110,15 +109,6 @@ const TILE_ICON = "h-[19px] w-[19px] sm:h-[21px] sm:w-[21px] lg:h-6 lg:w-6";
 const TILE_LABEL =
   "w-full truncate text-[12.5px] font-semibold leading-none tracking-[-0.005em] sm:text-[13.5px] lg:text-[14.5px]";
 
-function useDebounced<T>(value: T, delay: number): T {
-  const [v, setV] = useState(value);
-  useEffect(() => {
-    const t = setTimeout(() => setV(value), delay);
-    return () => clearTimeout(t);
-  }, [value, delay]);
-  return v;
-}
-
 const CATEGORIES = [
   { key: "supermercados", label: "Mercado", full: "Supermercados", Icon: ShoppingCart },
   { key: "farmacias", label: "Farmácia", full: "Farmácias", Icon: Pill },
@@ -133,13 +123,10 @@ function HomePage() {
   const isLoggedOut = !sessionLoading && !user;
 
   const [q, setQ] = useState("");
-  const [showSuggest, setShowSuggest] = useState(false);
-  const [activeIdx, setActiveIdx] = useState(-1);
   const [spotlight, setSpotlight] =
     useState<import("@/components/home/MetricSpotlightDialog").MetricKind | null>(null);
   const [allCatsOpen, setAllCatsOpen] = useState(false);
   const [exploreOpen, setExploreOpen] = useState(false);
-  const searchBoxRef = useRef<HTMLFormElement | null>(null);
 
   useEffect(() => {
     document.body.classList.add("no-page-bg", "pc-home-locked");
@@ -199,26 +186,6 @@ function HomePage() {
     [storesQ.data],
   );
 
-  const suggestFn = useServerFn(getProductSuggestions);
-  const debouncedQ = useDebounced(q.trim(), 180);
-  const suggestQ = useQuery({
-    queryKey: ["home", "suggest", debouncedQ],
-    queryFn: () => suggestFn({ data: { q: debouncedQ, limit: 5 } }),
-    enabled: debouncedQ.length >= 2,
-    staleTime: 30_000,
-  });
-  const suggestions = suggestQ.data ?? [];
-
-  useEffect(() => {
-    if (!showSuggest) return;
-    const onDoc = (e: MouseEvent) => {
-      if (!searchBoxRef.current) return;
-      if (!searchBoxRef.current.contains(e.target as Node)) setShowSuggest(false);
-    };
-    document.addEventListener("mousedown", onDoc);
-    return () => document.removeEventListener("mousedown", onDoc);
-  }, [showSuggest]);
-
   useEffect(() => {
     if (!exploreOpen) return;
     void queryClient.prefetchQuery({
@@ -231,15 +198,9 @@ function HomePage() {
     e?.preventDefault();
     const query = q.trim();
     if (!query) return;
-    setShowSuggest(false);
     navigate({ to: "/buscar", search: { q: query } as any });
   };
 
-  const pickSuggestion = (name: string) => {
-    setQ(name);
-    setShowSuggest(false);
-    navigate({ to: "/buscar", search: { q: name } as any });
-  };
 
   // Painel ao vivo: lógica pura e testada (src/lib/live-panel.ts) — placeholder
   // "—" + mensagem amigável quando a consulta falha, nunca números inventados.
@@ -380,7 +341,7 @@ function HomePage() {
               </p>
 
               {/* ---------- Busca ---------- */}
-              <form onSubmit={submitSearch} className="relative max-w-2xl" ref={searchBoxRef}>
+              <form onSubmit={submitSearch} className="relative max-w-2xl">
                 <div
                   className="pc-elite-frame flex items-center gap-1 rounded-2xl border p-1 shadow-2xl transition-all focus-within:ring-2 sm:p-1.5"
                   style={{
@@ -394,53 +355,11 @@ function HomePage() {
                   </span>
                   <input
                     value={q}
-                    onChange={(e) => {
-                      setQ(e.target.value);
-                      setShowSuggest(true);
-                      setActiveIdx(-1);
-                    }}
-                    onFocus={() => setShowSuggest(true)}
-                    onKeyDown={(e) => {
-                      const n = suggestions.length;
-                      if (e.key === "ArrowDown") {
-                        if (!n) return;
-                        e.preventDefault();
-                        setShowSuggest(true);
-                        setActiveIdx((i) => (i + 1 >= n ? 0 : i + 1));
-                      } else if (e.key === "ArrowUp") {
-                        if (!n) return;
-                        e.preventDefault();
-                        setShowSuggest(true);
-                        setActiveIdx((i) => (i <= 0 ? n - 1 : i - 1));
-                      } else if (e.key === "Home" && showSuggest && n) {
-                        e.preventDefault();
-                        setActiveIdx(0);
-                      } else if (e.key === "End" && showSuggest && n) {
-                        e.preventDefault();
-                        setActiveIdx(n - 1);
-                      } else if (e.key === "Enter" && activeIdx >= 0 && n) {
-                        e.preventDefault();
-                        pickSuggestion(suggestions[activeIdx].name);
-                      } else if (e.key === "Escape") {
-                        setShowSuggest(false);
-                        setActiveIdx(-1);
-                      } else if (e.key === "Tab") {
-                        setShowSuggest(false);
-                      }
-                    }}
+                    onChange={(e) => setQ(e.target.value)}
                     type="search"
                     inputMode="search"
                     placeholder="O que você procura hoje? (ex.: Arroz, Feijão, Leite…)"
                     aria-label="Buscar produto"
-                    role="combobox"
-                    aria-autocomplete="list"
-                    aria-expanded={showSuggest && suggestions.length > 0}
-                    aria-controls="home-suggest-list"
-                    aria-activedescendant={
-                      showSuggest && activeIdx >= 0 && suggestions[activeIdx]
-                        ? `home-suggest-opt-${suggestions[activeIdx].slug}`
-                        : undefined
-                    }
                     className="min-w-0 flex-1 bg-transparent px-2 py-2.5 text-[14.5px] font-medium outline-none placeholder:text-slate-400 sm:text-[15.5px]"
                     style={{ color: "#0f172a" }}
                   />
@@ -454,180 +373,6 @@ function HomePage() {
                     <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
                   </button>
                 </div>
-
-                {showSuggest && debouncedQ.length >= 2 && (
-                  <ul
-                    id="home-suggest-list"
-                    role="listbox"
-                    aria-busy={suggestQ.isLoading}
-                    className="absolute left-0 right-0 top-[calc(100%+8px)] z-40 max-h-[440px] overflow-auto rounded-2xl border border-border bg-popover text-popover-foreground text-left shadow-2xl animate-fade-in"
-                  >
-                    {suggestQ.isLoading && suggestions.length === 0 ? (
-                      <>
-                        {[0, 1, 2].map((i) => (
-                          <li key={i} className="flex items-center gap-3 px-4 py-2.5">
-                            <span className="h-3.5 w-3.5 shrink-0 rounded-full bg-muted animate-pulse" />
-                            <span className="h-3 flex-1 rounded bg-muted animate-pulse" />
-                            <span className="h-3 w-16 shrink-0 rounded bg-muted animate-pulse" />
-                          </li>
-                        ))}
-                        <li className="px-4 py-2 text-[12px] text-muted-foreground" aria-live="polite">
-                          Buscando…
-                        </li>
-                      </>
-                    ) : suggestions.length === 0 ? (
-                      <li className="px-4 py-4 text-[13px] text-muted-foreground" aria-live="polite">
-                        Nenhum produto encontrado para{" "}
-                        <span className="font-semibold text-foreground">"{debouncedQ}"</span>.
-                      </li>
-                    ) : (
-                      suggestions.map((s, i) => {
-                        const isExpanded = i === activeIdx;
-                        const brl = (n: number) =>
-                          new Intl.NumberFormat("pt-BR", {
-                            style: "currency",
-                            currency: "BRL",
-                          }).format(n);
-                        const single = s.marketCount === 1;
-                        return (
-                          <li
-                            key={s.slug}
-                            id={`home-suggest-opt-${s.slug}`}
-                            role="option"
-                            aria-selected={isExpanded}
-                            ref={isExpanded ? (el) => el?.scrollIntoView({ block: "nearest" }) : undefined}
-                            className={cn(
-                              "border-b border-border/60 last:border-b-0",
-                              isExpanded ? "bg-accent/40" : "hover:bg-accent/20",
-                            )}
-                          >
-                            <button
-                              type="button"
-                              onMouseDown={(e) => {
-                                e.preventDefault();
-                                setActiveIdx(i);
-                              }}
-                              onMouseEnter={() => setActiveIdx(i)}
-                              className="flex w-full items-start gap-3 px-4 py-2.5 text-left outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset"
-                            >
-                              <Search className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground" strokeWidth={2.4} />
-                              <span className="flex min-w-0 flex-1 flex-col">
-                                <span className="truncate text-[14px] font-semibold text-foreground">{s.name}</span>
-                                <span className="mt-0.5 flex flex-wrap items-center gap-1.5 text-[11.5px] text-muted-foreground">
-                                  <span
-                                    className={cn(
-                                      "inline-flex items-center rounded-full px-1.5 py-0.5 font-semibold uppercase tracking-[0.06em]",
-                                      single
-                                        ? "bg-amber-500/15 text-amber-700 dark:text-amber-300"
-                                        : "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300",
-                                    )}
-                                  >
-                                    {single
-                                      ? "1 mercado"
-                                      : `${s.marketCount} mercados`}
-                                  </span>
-                                  {s.minPrice != null && (
-                                    <span>
-                                      a partir de{" "}
-                                      <span className="pc-num font-bold text-foreground">
-                                        {brl(s.minPrice)}
-                                      </span>
-                                    </span>
-                                  )}
-                                </span>
-                              </span>
-                              <span className="pc-num shrink-0 rounded-md border border-border bg-accent/30 px-2 py-0.5 text-[13.5px] font-bold text-foreground">
-                                {s.minPrice != null ? brl(s.minPrice) : "—"}
-                              </span>
-                            </button>
-
-                            {isExpanded && (
-                              <div className="px-4 pb-3 pt-1">
-                                {single && (
-                                  <div className="mb-2 rounded-lg border border-amber-500/40 bg-amber-500/10 px-2.5 py-2 text-[11.5px] leading-snug text-amber-900 dark:text-amber-100">
-                                    Só há esse cadastro no momento em{" "}
-                                    <span className="font-semibold">{s.markets[0]?.name}</span>.{" "}
-                                    <button
-                                      type="button"
-                                      onMouseDown={(e) => {
-                                        e.preventDefault();
-                                        navigate({ to: "/colaborar" });
-                                      }}
-                                      className="font-bold underline decoration-dotted underline-offset-2 hover:text-amber-700 dark:hover:text-amber-200"
-                                    >
-                                      Sugerir/registrar outro preço
-                                    </button>
-                                  </div>
-                                )}
-
-                                <ul className="space-y-1">
-                                  {s.markets.map((m, mi) => {
-                                    const isCheapest = m.price === s.minPrice;
-                                    const captured = new Date(m.capturedAt);
-                                    const validity = isNaN(captured.getTime())
-                                      ? null
-                                      : captured.toLocaleDateString("pt-BR", {
-                                          day: "2-digit",
-                                          month: "2-digit",
-                                        });
-                                    const unitLabel =
-                                      m.quantity && m.unit
-                                        ? `${m.quantity} ${m.unit}`
-                                        : m.unit ?? null;
-                                    return (
-                                      <li
-                                        key={`${m.establishmentId ?? m.name}-${mi}`}
-                                        className={cn(
-                                          "flex items-center gap-2 rounded-md border px-2 py-1.5 text-[12px]",
-                                          isCheapest
-                                            ? "border-amber-500/60 bg-amber-500/5"
-                                            : "border-border bg-background/50",
-                                        )}
-                                      >
-                                        <span className="min-w-0 flex-1 truncate font-semibold text-foreground">
-                                          {m.name}
-                                          {isCheapest && (
-                                            <span className="ml-1.5 inline-flex items-center rounded-full bg-amber-500/20 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-amber-700 dark:text-amber-300">
-                                              Melhor
-                                            </span>
-                                          )}
-                                        </span>
-                                        <span className="shrink-0 text-[11px] text-muted-foreground">
-                                          {[unitLabel, validity ? `atual. ${validity}` : null]
-                                            .filter(Boolean)
-                                            .join(" · ")}
-                                        </span>
-                                        <span className="pc-num shrink-0 font-bold text-foreground">
-                                          {brl(m.price)}
-                                        </span>
-                                      </li>
-                                    );
-                                  })}
-                                </ul>
-
-                                <div className="mt-2 flex justify-end">
-                                  <button
-                                    type="button"
-                                    onMouseDown={(e) => {
-                                      e.preventDefault();
-                                      pickSuggestion(s.name);
-                                    }}
-                                    className="inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-[12px] font-bold uppercase tracking-wide transition-all hover:brightness-95"
-                                    style={{ background: P.gold, color: P.navy }}
-                                  >
-                                    Ver comparação completa
-                                    <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.6} />
-                                  </button>
-                                </div>
-                              </div>
-                            )}
-                          </li>
-                        );
-                      })
-                    )}
-                  </ul>
-                )}
-
               </form>
 
               {/* ---------- Populares + CTA ---------- */}
