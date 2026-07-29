@@ -455,7 +455,7 @@ function SummaryTile({
         <p className="truncate font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
           {label}
         </p>
-        <p className="truncate font-display text-[15px] font-bold leading-tight text-foreground">
+        <p className="truncate pc-price text-[15px] font-bold leading-tight text-foreground">
           {value}
         </p>
         <p className="truncate text-[11px] leading-tight text-muted-foreground">{hint}</p>
