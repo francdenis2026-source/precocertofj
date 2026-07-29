@@ -34,9 +34,10 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { tc } from "@/lib/typeclear";
 import { StoreBadge } from "@/components/brand/StoreBadge";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
-import { AcougueCutsBar } from "@/components/ds/AcougueCutsBar";
 import { getCategoryHub } from "@/lib/category-hub.functions";
 import { CATEGORY_DEFS, categoryBySlug, norm } from "@/lib/category-hub";
+import { classifyButcherCut, type ButcherProtein } from "@/lib/butcher-cuts";
+import { Bird, Drumstick } from "lucide-react";
 import { PLANTOES, diaDaSemana, diaVigente, farmaciaPorId } from "@/lib/farmacias-plantao";
 import { useScrollRestoration } from "@/lib/use-scroll-restoration";
 import { createRailController } from "@/lib/rail-scroll";
@@ -60,7 +61,7 @@ const ICONS: Record<string, typeof ShoppingCart> = {
 const brl = (v: number) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
-const SEARCH_DEFAULTS = { q: "", loja: "", view: "list", page: 1, per: 30, p: "" };
+const SEARCH_DEFAULTS = { q: "", loja: "", view: "list", page: 1, per: 30, p: "", corte: "" };
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
@@ -70,6 +71,8 @@ const searchSchema = z.object({
   per: fallback(z.number().int(), 30).default(30),
   /** Produto aberto no quick view (compartilhável e reversível pelo histórico). */
   p: fallback(z.string(), "").default(""),
+  /** Filtro de corte no hub de açougue: bovino | frango | suino | outros | "" */
+  corte: fallback(z.string(), "").default(""),
 });
 
 
@@ -148,13 +151,59 @@ function CategoryPage() {
   const totalAll = data?.totals.products ?? 0;
   const totalListed = data?.products.length ?? 0;
 
+  // Conjunto de nomes de lojas do nicho (para ativar assumeButcher na classificação)
+  const nicheStoreNames = useMemo(
+    () => new Set((data?.stores ?? []).filter((s) => s.isNicheStore).map((s) => s.name)),
+    [data],
+  );
+
+  // Classifica cada produto por proteína (só faz sentido em /categoria/acougues)
+  const classifyProtein = useCallback(
+    (p: { name: string; unit: string | null; storeNames: string[] }): ButcherProtein | null => {
+      const assume = p.storeNames.some((n) => nicheStoreNames.has(n));
+      return classifyButcherCut(p.name, p.unit, assume ? { assumeButcher: true, category: null } : undefined);
+    },
+    [nicheStoreNames],
+  );
+
   const products = useMemo(() => {
     let list = data?.products ?? [];
     const term = norm(q.trim());
     if (term) list = list.filter((p) => norm(p.name).includes(term));
     if (storeFilter) list = list.filter((p) => p.storeNames.includes(storeFilter));
+
+    if (slug === "acougues") {
+      // Anexa a proteína classificada e reordena para cortes primeiro
+      const ORDER: Record<string, number> = { bovino: 0, frango: 1, suino: 2, outros: 3 };
+      const enriched = list.map((p) => {
+        const prot = classifyProtein(p);
+        const bucket = prot ?? "outros";
+        return { p, prot, bucket };
+      });
+      const filtered = search.corte
+        ? enriched.filter((x) => x.bucket === search.corte)
+        : enriched;
+      filtered.sort((a, b) => {
+        const oa = ORDER[a.bucket] ?? 9;
+        const ob = ORDER[b.bucket] ?? 9;
+        if (oa !== ob) return oa - ob;
+        return a.p.minPrice - b.p.minPrice;
+      });
+      return filtered.map((x) => x.p);
+    }
     return list;
-  }, [data, q, storeFilter]);
+  }, [data, q, storeFilter, slug, search.corte, classifyProtein]);
+
+  // Contagem por bucket para os chips de filtro (independente do filtro corte ativo)
+  const proteinCounts = useMemo(() => {
+    if (slug !== "acougues") return null;
+    const acc = { bovino: 0, frango: 0, suino: 0, outros: 0 } as Record<string, number>;
+    for (const p of data?.products ?? []) {
+      const prot = classifyProtein(p);
+      acc[prot ?? "outros"] += 1;
+    }
+    return acc;
+  }, [data, slug, classifyProtein]);
 
   // Quick view controlado pela URL (?p=nome): compartilhável e reversível
   // com voltar/avançar do navegador.
@@ -245,11 +294,13 @@ function CategoryPage() {
         {/* Trilho de categorias — setas de navegação + roda do mouse horizontal */}
         <CategoryRail current={slug} />
 
-        {/* Atalhos por corte quando o usuário abre o hub de açougues */}
-        {slug === "acougues" && (
-          <div className="mt-4">
-            <AcougueCutsBar />
-          </div>
+        {/* Filtro por corte quando o usuário abre o hub de açougues */}
+        {slug === "acougues" && proteinCounts && (
+          <ButcherProteinChips
+            active={search.corte}
+            counts={proteinCounts}
+            onChange={(v: string) => setSearch({ corte: v, page: 1 })}
+          />
         )}
 
         {/* Plantão (só farmácias) */}
@@ -893,6 +944,71 @@ function SkeletonRow() {
         <div key={i} className="h-12 animate-pulse rounded-lg bg-muted/50" />
       ))}
     </div>
+  );
+}
+
+/**
+ * Chips de filtro por proteína no hub de açougues.
+ * Bovinos / Frango / Suínos / Outros — reflete o `?corte=` na URL.
+ */
+function ButcherProteinChips({
+  active,
+  counts,
+  onChange,
+}: {
+  active: string;
+  counts: Record<string, number>;
+  onChange: (v: string) => void;
+}) {
+  const CHIPS: { id: string; label: string; Icon: typeof Beef }[] = [
+    { id: "", label: "Todos os cortes", Icon: Beef },
+    { id: "bovino", label: "Bovinos", Icon: Beef },
+    { id: "frango", label: "Frango", Icon: Bird },
+    { id: "suino", label: "Suínos", Icon: Drumstick },
+    { id: "outros", label: "Outros", Icon: Package },
+  ];
+  const total = counts.bovino + counts.frango + counts.suino + counts.outros;
+  return (
+    <section
+      aria-label="Filtrar por corte"
+      className="mt-3 rounded-xl border border-brand-gold/50 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-3 py-2.5"
+    >
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="inline-flex items-center gap-1.5 text-[10.5px] font-bold uppercase tracking-[0.18em] text-[var(--pc-gold-ink)]">
+          <Beef className="h-3 w-3" aria-hidden /> Açougue — cortes
+        </span>
+        <ul className="flex flex-wrap gap-1.5" role="list">
+          {CHIPS.map((c) => {
+            const n = c.id === "" ? total : (counts[c.id] ?? 0);
+            const isActive = active === c.id;
+            const disabled = n === 0 && c.id !== "";
+            return (
+              <li key={c.id || "all"}>
+                <button
+                  type="button"
+                  onClick={() => !disabled && onChange(c.id)}
+                  disabled={disabled}
+                  aria-pressed={isActive}
+                  className={cn(
+                    "inline-flex h-7 items-center gap-1 rounded-full border px-2.5 text-[11.5px] font-semibold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+                    isActive
+                      ? "border-brand-gold bg-brand-gold text-brand-navy"
+                      : "border-brand-gold/50 bg-background text-foreground hover:border-brand-gold",
+                    disabled && "cursor-not-allowed opacity-40",
+                  )}
+                >
+                  <c.Icon className={cn("h-3 w-3", isActive ? "text-brand-navy" : "text-brand-gold")} aria-hidden />
+                  {c.label}
+                  <span className={cn("ml-0.5 tabular-nums", isActive ? "text-brand-navy/80" : "text-muted-foreground")}>
+                    {n}
+                  </span>
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </section>
   );
 }
 
