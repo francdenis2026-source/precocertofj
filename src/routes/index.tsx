@@ -386,10 +386,13 @@ function HomePage() {
                   <input
                     value={q}
                     onChange={(e) => setQ(e.target.value)}
+                    onFocus={() => setSuggestOpen(true)}
+                    onBlur={() => window.setTimeout(() => setSuggestOpen(false), 150)}
                     type="search"
                     inputMode="search"
                     placeholder="O que você procura hoje? (ex.: Arroz, Feijão, Leite…)"
                     aria-label="Buscar produto"
+                    autoComplete="off"
                     className="min-w-0 flex-1 bg-transparent px-2 py-2.5 text-[14.5px] font-medium outline-none placeholder:text-slate-400 sm:text-[15.5px]"
                     style={{ color: "#0f172a" }}
                   />
@@ -403,6 +406,13 @@ function HomePage() {
                     <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
                   </button>
                 </div>
+                <HomeSearchSuggestions
+                  query={q}
+                  isLoggedOut={isLoggedOut}
+                  open={suggestOpen}
+                  onClose={() => setSuggestOpen(false)}
+                  onBlocked={() => setGateOpen(true)}
+                />
                 {isLoggedOut ? (
                   <p
                     className="mt-1.5 pl-2 text-[11px] font-medium"
@@ -413,6 +423,7 @@ function HomePage() {
                   </p>
                 ) : null}
               </form>
+
 
               {/* ---------- Populares + CTA ---------- */}
               <div className="flex flex-wrap items-center gap-1.5">
