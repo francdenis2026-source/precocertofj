@@ -226,75 +226,7 @@ function OndeComprarPage() {
           ) : (
             <ul className="space-y-2">
               {products.map((p) => (
-                <li key={p.productKey} className="pc-surface-2 p-2.5">
-                  <div className="mb-1.5 flex items-start gap-2">
-                    <div className="min-w-0 flex-1">
-                      <Link
-                        to="/onde-comprar/$produto"
-                        params={{ produto: encodeURIComponent(p.productKey) }}
-                        className={cn(tc.itemTitle, "block truncate hover:underline")}
-                      >
-                        {p.productName}
-                      </Link>
-                      <p className={cn(tc.meta)}>
-                        {p.storeCount} {p.storeCount === 1 ? "loja" : "lojas"} • média <span className="pc-price pc-price--sm">{brl(p.avgPrice)}</span>
-                      </p>
-                    </div>
-                    {p.savingsPct > 0 && (
-                      <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11.5px] font-semibold text-emerald-600">
-                        <TrendingDown className="h-3 w-3" /> economize {p.savingsPct}%
-                      </span>
-                    )}
-                  </div>
-                  <ul className="grid gap-1 sm:grid-cols-2">
-                    {p.offers.map((o, i) => (
-                      <li
-                        key={`${p.productKey}-${o.establishmentId ?? i}`}
-                        className={cn(
-                          "pc-row-interactive flex items-center gap-2 px-2 py-1.5",
-                          o.isCheapest
-                            ? "pc-surface-3 pc-best-result pc-best-result--compact"
-                            : "rounded-lg border border-[var(--pc-surface-2-border)]",
-                        )}
-                        aria-label={o.isCheapest ? `Melhor preço: ${o.storeName}` : undefined}
-                      >
-
-                        <Store
-                          className={cn(
-                            "h-3.5 w-3.5 shrink-0",
-                            o.isCheapest ? "text-[var(--pc-gold-ink)]" : "text-muted-foreground",
-                          )}
-                        />
-                        <span className="min-w-0 flex-1">
-                          <span className="flex flex-wrap items-center gap-1.5">
-                            <span className={cn(tc.storeName, "pc-store-name truncate")}>
-                              {o.storeName}
-                            </span>
-                            {o.butcherProtein ? (
-                              <ButcherCutBadge protein={o.butcherProtein} size="xs" />
-                            ) : null}
-                          </span>
-                          <span className={cn(tc.metaMuted, "block truncate")}>
-                            {[o.neighborhood, o.city].filter(Boolean).join(" • ") || "—"}
-                          </span>
-                        </span>
-                        <span className="shrink-0 text-right">
-                          <span
-                            className={cn(
-                              "pc-price-value text-[13.5px]",
-                              o.isCheapest && "pc-price-value--best",
-                            )}
-                          >
-                            {brl(o.price)}
-                          </span>
-                          {!o.isCheapest && o.diffPct > 0 && (
-                            <span className={cn(tc.metaMuted, "block")}>+{o.diffPct}%</span>
-                          )}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
+                <ProductAccordion key={p.productKey} product={p} />
               ))}
             </ul>
           )}
