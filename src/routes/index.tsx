@@ -129,6 +129,7 @@ function HomePage() {
     useState<import("@/components/home/MetricSpotlightDialog").MetricKind | null>(null);
   const [allCatsOpen, setAllCatsOpen] = useState(false);
   const [exploreOpen, setExploreOpen] = useState(false);
+  const [gateOpen, setGateOpen] = useState(false);
 
   useEffect(() => {
     document.body.classList.add("no-page-bg", "pc-home-locked");
