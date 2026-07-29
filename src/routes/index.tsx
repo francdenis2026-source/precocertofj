@@ -29,6 +29,8 @@ import { getPlatformStats, listPublicStores } from "@/lib/stores-public.function
 import { getEconomyStat } from "@/lib/products-public.functions";
 import { listPopularQueries } from "@/lib/search-popular.functions";
 import { StartFreeDialog } from "@/components/home/StartFreeDialog";
+import { GuestGateDialog } from "@/components/gate/GuestGateDialog";
+import { consumeGuest, guestRemaining, GUEST_LIMIT } from "@/lib/guest-quota";
 import { MetricSpotlightDialog } from "@/components/home/MetricSpotlightDialog";
 import { AllCategoriesDialog } from "@/components/home/AllCategoriesDialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
