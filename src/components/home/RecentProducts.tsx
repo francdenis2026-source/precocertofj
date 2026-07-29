@@ -248,8 +248,8 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                                 </div>
                               </div>
                               <span
-                                className={`${serif} tabular-nums shrink-0 text-[18px] font-semibold`}
-                                style={{ color: "var(--pc-price)", letterSpacing: "-0.02em" }}
+                                className="pc-price shrink-0 text-[18px] font-semibold"
+                                style={{ color: "var(--pc-price)" }}
                               >
                                 {brl(p.price)}
                               </span>
@@ -571,10 +571,9 @@ function SpotlightCard({
                 </span>
               )}
               <span
-                className={`${serif} tabular-nums font-semibold leading-none`}
+                className="pc-price font-semibold leading-none"
                 style={{
                   color: "var(--pc-price)",
-                  letterSpacing: "-0.02em",
                   fontSize: "clamp(1.5rem, 4.5vw, 2rem)",
                   textShadow: "0 2px 14px color-mix(in oklab, var(--pc-home-gold) 35%, transparent)",
                 }}
