@@ -462,13 +462,18 @@ function SearchPage() {
 
   return (
     <IsolatedPage
-      fit
+      fit={!hasQuery}
       className={`pc-search-scope${reducedMotion ? " pc-reduce-motion" : ""}`}
     >
       <div
         data-reduced-motion={reducedMotion ? "on" : "off"}
-        className="flex h-full min-h-0 flex-col bg-background"
+        className={
+          hasQuery
+            ? "flex min-h-svh flex-col bg-background"
+            : "flex h-full min-h-0 flex-col bg-background"
+        }
       >
+
         {/* ================================================================
             RAIL SUPERIOR — linha única de 44px, hairline dourada abaixo.
             Densidade tipográfica editorial, sem redundâncias.
