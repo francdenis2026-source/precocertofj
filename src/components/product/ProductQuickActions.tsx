@@ -151,6 +151,8 @@ export function ProductQuickActions({
             event.preventDefault();
             event.stopPropagation();
             if (!authed) {
+              // Visitantes: consomem cota antes de sugerir cadastro.
+              if (!favoriteGate.allow(slug ?? catalogId ?? label)) return;
               redirectToLogin();
               return;
             }
