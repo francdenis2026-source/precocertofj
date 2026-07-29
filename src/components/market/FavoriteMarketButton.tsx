@@ -32,6 +32,8 @@ export function FavoriteMarketButton({
   const qc = useQueryClient();
   const listFn = useServerFn(listFavoriteMarkets);
   const toggleFn = useServerFn(toggleFavoriteMarket);
+  const gate = useGuestGate("favorite");
+  const promptSignIn = usePromptSignIn();
 
   const { data: favorites } = useQuery({
     queryKey: ["favorite-markets"],
@@ -58,12 +60,18 @@ export function FavoriteMarketButton({
     onError: (err) => toast.error((err as Error).message ?? "Não foi possível salvar"),
   });
 
-  if (loading || !user) return null;
+  if (loading) return null;
 
   const label = isFav ? "Remover dos favoritos" : "Salvar como favorito";
   const handle = (e: React.MouseEvent | React.KeyboardEvent) => {
     e.preventDefault();
     e.stopPropagation();
+    if (!user) {
+      // Visitantes: consomem cota antes de sugerir cadastro.
+      if (!gate.allow(`market:${marketName}`)) return;
+      void promptSignIn({ intent: "favorite-market", payload: { marketName } });
+      return;
+    }
     if (mutation.isPending) return;
     mutation.mutate();
   };
