@@ -2132,16 +2132,21 @@ function CompareMatrix({
             : { gridTemplateColumns: `repeat(${top.length}, minmax(140px, 1fr))` }
         }
       >
+        {(() => null)()}
         {top.map((p, i) => {
-          const isCheapest = i === 0;
+          const isCheapest = p.price === cheapest;
+          const cheapestCount = top.filter((x) => x.price === cheapest).length;
           const isFocused =
             !!focusedMarket &&
             (p.marketName ?? "").toLowerCase() === focusedMarket.toLowerCase();
           const diffAbs = p.price - cheapest;
           const savingsPct =
             globalMax > 0 ? ((globalMax - p.price) / globalMax) * 100 : 0;
+          const tieSuffix = isCheapest && cheapestCount > 1
+            ? ` — empate com ${cheapestCount - 1} outro${cheapestCount - 1 === 1 ? "" : "s"}`
+            : "";
           const label = `${p.marketName ?? "Mercado"}: ${fmt(p.price)}${
-            isCheapest ? ", menor preço" : `, ${fmt(diffAbs)} a mais que o menor`
+            isCheapest ? `, menor preço${tieSuffix}` : `, ${fmt(diffAbs)} a mais que o menor`
           }`;
           return (
             <button
