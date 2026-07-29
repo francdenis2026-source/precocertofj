@@ -42,6 +42,7 @@ export function ProductQuickActions({
   const [favorited, setFavorited] = useState(false);
   const [listOpen, setListOpen] = useState(false);
   const [resolvedCatalogId, setResolvedCatalogId] = useState<string | null>(catalogId ?? null);
+  const favoriteGate = useGuestGate("favorite" as const);
 
   useEffect(() => {
     setResolvedCatalogId(catalogId ?? null);
