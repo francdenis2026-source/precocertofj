@@ -136,7 +136,7 @@ function PrecosPorCategoriaPage() {
   const q = (search.q || "").trim();
 
   const setSearch = (patch: Partial<z.infer<typeof searchSchema>>) => {
-    navigate({ search: (prev) => ({ ...prev, ...patch }) });
+    navigate({ search: (prev: z.infer<typeof searchSchema>) => ({ ...prev, ...patch }) });
   };
 
   const { data, isLoading, error } = useQuery({
