@@ -315,6 +315,11 @@ async function runPriceSearch(data: {
                 kind: string | null;
                 logo_url: string | null;
                 brand_color: string | null;
+                address: string | null;
+                neighborhood: string | null;
+                city: string | null;
+                latitude: number | null;
+                longitude: number | null;
               }>
             | null;
           error: { message: string } | null;
@@ -322,13 +327,18 @@ async function runPriceSearch(data: {
       };
     })
       .from("establishments")
-      .select("id, name, kind, logo_url, brand_color");
+      .select("id, name, kind, logo_url, brand_color, address, neighborhood, city, latitude, longitude");
     for (const e of estabs ?? []) {
       const meta: EstabMeta = {
         id: e.id,
         kind: e.kind,
         logoUrl: e.logo_url,
         brandColor: e.brand_color,
+        address: e.address ?? null,
+        neighborhood: e.neighborhood ?? null,
+        city: e.city ?? null,
+        latitude: e.latitude ?? null,
+        longitude: e.longitude ?? null,
       };
       metaByName.set(e.name, meta);
       const key = metaKey(e.name);
@@ -339,6 +349,7 @@ async function runPriceSearch(data: {
     }
 
   }
+
 
 
   const prices = list.map((r) => Number(r.price_captured));
