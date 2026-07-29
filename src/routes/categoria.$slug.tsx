@@ -151,13 +151,59 @@ function CategoryPage() {
   const totalAll = data?.totals.products ?? 0;
   const totalListed = data?.products.length ?? 0;
 
+  // Conjunto de nomes de lojas do nicho (para ativar assumeButcher na classificação)
+  const nicheStoreNames = useMemo(
+    () => new Set((data?.stores ?? []).filter((s) => s.isNicheStore).map((s) => s.name)),
+    [data],
+  );
+
+  // Classifica cada produto por proteína (só faz sentido em /categoria/acougues)
+  const classifyProtein = useCallback(
+    (p: { name: string; unit: string | null; storeNames: string[] }): ButcherProtein | null => {
+      const assume = p.storeNames.some((n) => nicheStoreNames.has(n));
+      return classifyButcherCut(p.name, p.unit, assume ? { assumeButcher: true, category: null } : undefined);
+    },
+    [nicheStoreNames],
+  );
+
   const products = useMemo(() => {
     let list = data?.products ?? [];
     const term = norm(q.trim());
     if (term) list = list.filter((p) => norm(p.name).includes(term));
     if (storeFilter) list = list.filter((p) => p.storeNames.includes(storeFilter));
+
+    if (slug === "acougues") {
+      // Anexa a proteína classificada e reordena para cortes primeiro
+      const ORDER: Record<string, number> = { bovino: 0, frango: 1, suino: 2, outros: 3 };
+      const enriched = list.map((p) => {
+        const prot = classifyProtein(p);
+        const bucket = prot ?? "outros";
+        return { p, prot, bucket };
+      });
+      const filtered = search.corte
+        ? enriched.filter((x) => x.bucket === search.corte)
+        : enriched;
+      filtered.sort((a, b) => {
+        const oa = ORDER[a.bucket] ?? 9;
+        const ob = ORDER[b.bucket] ?? 9;
+        if (oa !== ob) return oa - ob;
+        return a.p.minPrice - b.p.minPrice;
+      });
+      return filtered.map((x) => x.p);
+    }
     return list;
-  }, [data, q, storeFilter]);
+  }, [data, q, storeFilter, slug, search.corte, classifyProtein]);
+
+  // Contagem por bucket para os chips de filtro (independente do filtro corte ativo)
+  const proteinCounts = useMemo(() => {
+    if (slug !== "acougues") return null;
+    const acc = { bovino: 0, frango: 0, suino: 0, outros: 0 } as Record<string, number>;
+    for (const p of data?.products ?? []) {
+      const prot = classifyProtein(p);
+      acc[prot ?? "outros"] += 1;
+    }
+    return acc;
+  }, [data, slug, classifyProtein]);
 
   // Quick view controlado pela URL (?p=nome): compartilhável e reversível
   // com voltar/avançar do navegador.
