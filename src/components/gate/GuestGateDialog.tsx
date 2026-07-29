@@ -8,7 +8,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { GUEST_LIMIT, guestRemaining, type GuestAction } from "@/lib/guest-quota";
+import { GUEST_DAILY_LIMIT, guestRemaining, type GuestAction } from "@/lib/guest-quota";
 
 type Props = {
   open: boolean;
@@ -45,13 +45,13 @@ export function GuestGateDialog({
   const heading =
     title ??
     (usedAll
-      ? "Você já usou suas buscas grátis"
-      : `Restam ${remaining} de ${GUEST_LIMIT} usos grátis`);
+      ? "Você já usou seus 5 usos grátis de hoje"
+      : `Restam ${remaining} de ${GUEST_DAILY_LIMIT} usos grátis hoje`);
   const subtitle =
     description ??
     (usedAll
-      ? "Crie sua conta grátis (7 dias sem cartão) para continuar comparando preços sem limite."
-      : "Cadastre-se para liberar buscas ilimitadas, alertas de preço e o comparador entre mercados.");
+      ? "Crie sua conta grátis (7 dias sem cartão) para continuar sem limite. A cota do visitante zera automaticamente amanhã."
+      : "Cadastre-se para liberar buscas, comparações, favoritos e alertas sem limite diário.");
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
