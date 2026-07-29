@@ -15,7 +15,7 @@ import {
   type SearchHistoryEntry,
 } from "@/lib/search-history";
 
-import { Clock, Crown, Search, ShoppingBag, Sparkles, X } from "lucide-react";
+import { ChevronDown, ChevronUp, Clock, Crown, MapPin, Search, ShoppingBag, Sparkles, X } from "lucide-react";
 import { FairPriceBadge } from "@/components/product/FairPriceBadge";
 import { CreatePriceAlertButton } from "@/components/alerts/CreatePriceAlertButton";
 
