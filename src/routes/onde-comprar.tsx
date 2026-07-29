@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { MapPin, PackageSearch, Search, Store, TrendingDown } from "lucide-react";
+import { ChevronDown, MapPin, PackageSearch, Search, Store, TrendingDown } from "lucide-react";
 
 import {
   getWhereToBuyRegions,
@@ -226,75 +226,7 @@ function OndeComprarPage() {
           ) : (
             <ul className="space-y-2">
               {products.map((p) => (
-                <li key={p.productKey} className="pc-surface-2 p-2.5">
-                  <div className="mb-1.5 flex items-start gap-2">
-                    <div className="min-w-0 flex-1">
-                      <Link
-                        to="/onde-comprar/$produto"
-                        params={{ produto: encodeURIComponent(p.productKey) }}
-                        className={cn(tc.itemTitle, "block truncate hover:underline")}
-                      >
-                        {p.productName}
-                      </Link>
-                      <p className={cn(tc.meta)}>
-                        {p.storeCount} {p.storeCount === 1 ? "loja" : "lojas"} • média <span className="pc-price pc-price--sm">{brl(p.avgPrice)}</span>
-                      </p>
-                    </div>
-                    {p.savingsPct > 0 && (
-                      <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11.5px] font-semibold text-emerald-600">
-                        <TrendingDown className="h-3 w-3" /> economize {p.savingsPct}%
-                      </span>
-                    )}
-                  </div>
-                  <ul className="grid gap-1 sm:grid-cols-2">
-                    {p.offers.map((o, i) => (
-                      <li
-                        key={`${p.productKey}-${o.establishmentId ?? i}`}
-                        className={cn(
-                          "pc-row-interactive flex items-center gap-2 px-2 py-1.5",
-                          o.isCheapest
-                            ? "pc-surface-3 pc-best-result pc-best-result--compact"
-                            : "rounded-lg border border-[var(--pc-surface-2-border)]",
-                        )}
-                        aria-label={o.isCheapest ? `Melhor preço: ${o.storeName}` : undefined}
-                      >
-
-                        <Store
-                          className={cn(
-                            "h-3.5 w-3.5 shrink-0",
-                            o.isCheapest ? "text-[var(--pc-gold-ink)]" : "text-muted-foreground",
-                          )}
-                        />
-                        <span className="min-w-0 flex-1">
-                          <span className="flex flex-wrap items-center gap-1.5">
-                            <span className={cn(tc.storeName, "pc-store-name truncate")}>
-                              {o.storeName}
-                            </span>
-                            {o.butcherProtein ? (
-                              <ButcherCutBadge protein={o.butcherProtein} size="xs" />
-                            ) : null}
-                          </span>
-                          <span className={cn(tc.metaMuted, "block truncate")}>
-                            {[o.neighborhood, o.city].filter(Boolean).join(" • ") || "—"}
-                          </span>
-                        </span>
-                        <span className="shrink-0 text-right">
-                          <span
-                            className={cn(
-                              "pc-price-value text-[13.5px]",
-                              o.isCheapest && "pc-price-value--best",
-                            )}
-                          >
-                            {brl(o.price)}
-                          </span>
-                          {!o.isCheapest && o.diffPct > 0 && (
-                            <span className={cn(tc.metaMuted, "block")}>+{o.diffPct}%</span>
-                          )}
-                        </span>
-                      </li>
-                    ))}
-                  </ul>
-                </li>
+                <ProductAccordion key={p.productKey} product={p} />
               ))}
             </ul>
           )}
@@ -309,5 +241,132 @@ function OndeComprarPage() {
         </p>
       </main>
     </IsolatedPage>
+  );
+}
+
+const INITIAL_OFFERS = 4;
+
+function ProductAccordion({ product: p }: { product: WhereToBuyProduct }) {
+  const [open, setOpen] = useState(false);
+  const [showAll, setShowAll] = useState(false);
+  const visible = showAll ? p.offers : p.offers.slice(0, INITIAL_OFFERS);
+  const hidden = Math.max(0, p.offers.length - INITIAL_OFFERS);
+  const best = p.offers.find((o) => o.isCheapest) ?? p.offers[0];
+
+  return (
+    <li className="pc-surface-2 overflow-hidden">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        aria-expanded={open}
+        className="flex w-full items-start gap-2 p-2.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+      >
+        <ChevronDown
+          className={cn(
+            "mt-0.5 h-4 w-4 shrink-0 text-muted-foreground transition-transform",
+            open && "rotate-180",
+          )}
+          aria-hidden
+        />
+        <div className="min-w-0 flex-1">
+          <span className={cn(tc.itemTitle, "block truncate")}>{p.productName}</span>
+          <span className={cn(tc.meta, "block truncate")}>
+            {p.storeCount} {p.storeCount === 1 ? "loja" : "lojas"} • média{" "}
+            <span className="pc-price pc-price--sm">{brl(p.avgPrice)}</span>
+            {best ? (
+              <>
+                {" "}• melhor{" "}
+                <span className="pc-price pc-price--sm pc-price--best">{brl(best.price)}</span>{" "}
+                <span className={cn(tc.storeName)}>{best.storeName}</span>
+              </>
+            ) : null}
+          </span>
+        </div>
+        {p.savingsPct > 0 && (
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11.5px] font-semibold text-emerald-600">
+            <TrendingDown className="h-3 w-3" /> {p.savingsPct}%
+          </span>
+        )}
+      </button>
+
+      {open && (
+        <div className="border-t border-[var(--pc-surface-2-border)] p-2.5">
+          <ul
+            className="grid gap-2"
+            style={{ gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))" }}
+          >
+            {visible.map((o, i) => (
+              <li
+                key={`${p.productKey}-${o.establishmentId ?? i}`}
+                className={cn(
+                  "flex items-center gap-2 rounded-lg px-2 py-2",
+                  o.isCheapest
+                    ? "pc-surface-3 pc-best-result pc-best-result--compact"
+                    : "border border-[var(--pc-surface-2-border)] bg-background/40",
+                )}
+                aria-label={o.isCheapest ? `Melhor preço: ${o.storeName}` : undefined}
+              >
+                <Store
+                  className={cn(
+                    "h-3.5 w-3.5 shrink-0",
+                    o.isCheapest ? "text-[var(--pc-gold-ink)]" : "text-muted-foreground",
+                  )}
+                />
+                <span className="min-w-0 flex-1">
+                  <span className="flex flex-wrap items-center gap-1.5">
+                    <span className={cn(tc.storeName, "pc-store-name truncate")}>
+                      {o.storeName}
+                    </span>
+                    {o.butcherProtein ? (
+                      <ButcherCutBadge protein={o.butcherProtein} size="xs" />
+                    ) : null}
+                  </span>
+                  <span className={cn(tc.metaMuted, "block truncate")}>
+                    {[o.neighborhood, o.city].filter(Boolean).join(" • ") || "—"}
+                  </span>
+                </span>
+                <span className="shrink-0 text-right">
+                  <span
+                    className={cn(
+                      "pc-price-value text-[13.5px]",
+                      o.isCheapest && "pc-price-value--best",
+                    )}
+                  >
+                    {brl(o.price)}
+                  </span>
+                  {!o.isCheapest && o.diffPct > 0 && (
+                    <span className={cn(tc.metaMuted, "block")}>+{o.diffPct}%</span>
+                  )}
+                </span>
+              </li>
+            ))}
+          </ul>
+
+          {hidden > 0 && (
+            <div className="mt-2 flex justify-center">
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                className="h-8 px-3 text-[12px]"
+                onClick={() => setShowAll((v) => !v)}
+              >
+                {showAll ? "Mostrar menos" : `Ver mais ${hidden} ${hidden === 1 ? "estabelecimento" : "estabelecimentos"}`}
+              </Button>
+            </div>
+          )}
+
+          <div className="mt-2 flex justify-end">
+            <Link
+              to="/onde-comprar/$produto"
+              params={{ produto: encodeURIComponent(p.productKey) }}
+              className={cn(tc.meta, "font-semibold underline hover:text-foreground")}
+            >
+              Ver comparação completa →
+            </Link>
+          </div>
+        </div>
+      )}
+    </li>
   );
 }
