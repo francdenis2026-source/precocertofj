@@ -688,9 +688,16 @@ function SearchPage() {
         </div>
 
       </div>
+      <GuestGateDialog
+        open={gateOpen}
+        onOpenChange={setGateOpen}
+        action="search"
+        redirect="/buscar"
+      />
     </IsolatedPage>
   );
 }
+
 
 
 // ============================================================================
