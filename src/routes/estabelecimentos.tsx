@@ -541,11 +541,11 @@ function EstablishmentsPage() {
               <span className={cn("truncate", tc.metaMuted)} aria-live="polite">
                 {filtered.length} {filtered.length === 1 ? "resultado" : "resultados"}
               </span>
-              {(q || kindFilter !== "__all" || neighborhoodFilter !== "__all" || onlyFavorites) && (
+              {(q || kindFilter !== "__all" || neighborhoodFilter !== "__all" || cityFilter !== "__all" || savingsFilter !== "__all" || onlyFavorites) && (
                 <button
                   type="button"
                   onClick={() =>
-                    updateSearch({ q: "", kind: "__all", bairro: "__all", fav: false })
+                    updateSearch({ q: "", kind: "__all", bairro: "__all", cidade: "__all", economia: "__all", fav: false, pagina: 1 })
                   }
                   className="text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground hover:text-[var(--pc-gold-ink)]"
                 >
