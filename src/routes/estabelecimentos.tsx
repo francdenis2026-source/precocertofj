@@ -188,17 +188,40 @@ function EstablishmentsPage() {
     return Array.from(bairros).sort((a, b) => a.localeCompare(b, "pt-BR"));
   }, [data]);
 
+  const citiesPresent = useMemo(() => {
+    const cs = new Set<string>();
+    for (const it of data?.items ?? []) {
+      const c = (it.city ?? "").trim();
+      if (c) cs.add(c);
+    }
+    return Array.from(cs).sort((a, b) => a.localeCompare(b, "pt-BR"));
+  }, [data]);
+
+  const SAVINGS_BUCKETS: Record<string, (v: number) => boolean> = {
+    __all: () => true,
+    low: (v) => v <= 5,
+    mid: (v) => v > 5 && v <= 20,
+    high: (v) => v > 20,
+  };
+
   const filtered = useMemo(() => {
     if (!data) return [] as EstablishmentStat[];
     const term = q.trim().toLowerCase();
     let list = data.items.slice();
     if (onlyFavorites) list = list.filter((e) => favSet.has(e.name.trim().toLowerCase()));
     if (kindFilter !== "__all") list = list.filter((e) => (e.kind ?? "outro") === kindFilter);
+    if (cityFilter !== "__all") {
+      list = list.filter(
+        (e) => (e.city ?? "").trim().toLowerCase() === cityFilter.toLowerCase(),
+      );
+    }
     if (neighborhoodFilter !== "__all") {
       list = list.filter(
         (e) => (e.neighborhood ?? "").trim().toLowerCase() === neighborhoodFilter.toLowerCase(),
       );
     }
+    const bucket = SAVINGS_BUCKETS[savingsFilter] ?? SAVINGS_BUCKETS.__all;
+    list = list.filter((e) => bucket(e.maxSavings ?? 0));
     if (term) {
       list = list.filter((e) =>
         [e.name, e.neighborhood ?? "", e.city ?? ""].some((v) => v.toLowerCase().includes(term)),
@@ -222,18 +245,19 @@ function EstablishmentsPage() {
         list.sort((a, b) => b.productsCount - a.productsCount);
     }
     return list;
-  }, [data, q, kindFilter, neighborhoodFilter, sort, onlyFavorites, favSet]);
+  }, [data, q, kindFilter, cityFilter, neighborhoodFilter, savingsFilter, sort, onlyFavorites, favSet]);
 
-  // Reset page when filters change / list shrinks
+  // Reset pagination when filters shrink the list
   useEffect(() => {
-    setPage(0);
-  }, [q, kindFilter, neighborhoodFilter, sort, onlyFavorites]);
+    if (pagesLoaded > 1) updateSearch({ pagina: 1 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [q, kindFilter, cityFilter, neighborhoodFilter, savingsFilter, sort, onlyFavorites]);
 
-  const pageCount = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
-  const currentPage = Math.min(page, pageCount - 1);
+  const visibleCount = Math.min(filtered.length, pagesLoaded * PAGE_SIZE);
+  const hasMore = filtered.length > visibleCount;
   const pageItems = useMemo(
-    () => filtered.slice(currentPage * PAGE_SIZE, currentPage * PAGE_SIZE + PAGE_SIZE),
-    [filtered, currentPage],
+    () => filtered.slice(0, visibleCount),
+    [filtered, visibleCount],
   );
 
   // Auto-selecionar primeiro item quando lista muda / seleção some.
