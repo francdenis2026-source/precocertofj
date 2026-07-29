@@ -244,6 +244,29 @@ function SearchPage() {
     }
   }, [hasQuery, user]);
 
+  // Gate para visitantes: consome 1 uso por termo único. Ao esgotar,
+  // limpa o termo da URL e abre o modal de cadastro.
+  const [gateOpen, setGateOpen] = useState(false);
+  useEffect(() => {
+    if (loading || user) return;
+    if (!hasQuery) return;
+    const { blocked } = consumeGuest("search", q);
+    if (blocked) {
+      setGateOpen(true);
+      navigate({
+        search: (prev: Record<string, unknown>) => {
+          const s = { ...prev };
+          delete s.q;
+          return s;
+        },
+        replace: true,
+      });
+    }
+    // Só reage a mudanças de q/estado de sessão — não incluir navigate.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [q, hasQuery, loading, user]);
+
+
   const hydratedRef = useRef(false);
   useEffect(() => {
     if (hydratedRef.current) return;
