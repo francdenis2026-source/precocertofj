@@ -311,7 +311,7 @@ function PrecosPorCategoriaPage() {
         ) : totalShown === 0 ? (
           <FeedbackEmptyState
             title="Nenhum produto encontrado"
-            description="Ajuste a busca, a categoria ou o número mínimo de mercados."
+            message="Ajuste a busca, a categoria ou o número mínimo de mercados."
           />
         ) : (
           <div className="space-y-6">
