@@ -53,8 +53,11 @@ const searchSchema = z.object({
   kind: fallback(z.string(), "__all").default("__all"),
   sort: fallback(z.string(), "products").default("products"),
   bairro: fallback(z.string(), "__all").default("__all"),
+  cidade: fallback(z.string(), "__all").default("__all"),
+  economia: fallback(z.string(), "__all").default("__all"),
   fav: fallback(z.boolean(), false).default(false),
   sel: fallback(z.string(), "").default(""),
+  pagina: fallback(z.number().int(), 1).default(1),
 });
 
 export const Route = createFileRoute("/estabelecimentos")({
