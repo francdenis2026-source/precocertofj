@@ -2132,16 +2132,21 @@ function CompareMatrix({
             : { gridTemplateColumns: `repeat(${top.length}, minmax(140px, 1fr))` }
         }
       >
+        
         {top.map((p, i) => {
-          const isCheapest = i === 0;
+          const isCheapest = p.price === cheapest;
+          const cheapestCount = top.filter((x) => x.price === cheapest).length;
           const isFocused =
             !!focusedMarket &&
             (p.marketName ?? "").toLowerCase() === focusedMarket.toLowerCase();
           const diffAbs = p.price - cheapest;
           const savingsPct =
             globalMax > 0 ? ((globalMax - p.price) / globalMax) * 100 : 0;
+          const tieSuffix = isCheapest && cheapestCount > 1
+            ? ` — empate com ${cheapestCount - 1} outro${cheapestCount - 1 === 1 ? "" : "s"}`
+            : "";
           const label = `${p.marketName ?? "Mercado"}: ${fmt(p.price)}${
-            isCheapest ? ", menor preço" : `, ${fmt(diffAbs)} a mais que o menor`
+            isCheapest ? `, menor preço${tieSuffix}` : `, ${fmt(diffAbs)} a mais que o menor`
           }`;
           return (
             <button
@@ -2152,13 +2157,14 @@ function CompareMatrix({
               aria-pressed={isFocused}
               onClick={() => onPick?.(p.marketName ?? "")}
               className={
-                "group flex flex-col gap-1 rounded-lg border p-2 text-left transition outline-none focus-visible:ring-2 focus-visible:ring-brand-gold " +
+                "group flex flex-col gap-1 rounded-lg border p-2 text-left transition outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:ring-brand-gold " +
                 (isCheapest
-                  ? "border-brand-gold/70 bg-brand-navy text-white shadow-sm"
+                  ? "border-brand-gold bg-brand-navy text-white shadow-sm"
                   : isFocused
                     ? "border-brand-gold/60 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)]"
                     : "border-border/70 bg-background hover:border-brand-gold/50")
               }
+              data-cheapest={isCheapest ? "true" : "false"}
             >
               <div className="flex items-center gap-1.5">
                 {isCheapest ? (
@@ -2312,6 +2318,12 @@ function ProductGroupCard({
   const [expanded, setExpanded] = useState(focused);
   const visiblePrices = expanded || focused ? prices : prices.slice(0, COLLAPSED);
   const hiddenPrices = prices.length - visiblePrices.length;
+  // Conta quantos mercados empatam no menor preço global — permite destacar
+  // todos os vencedores e comunicar o empate por acessibilidade.
+  const cheapestCount = useMemo(
+    () => (globalMin == null ? 0 : prices.filter((p) => p.price === globalMin).length),
+    [prices, globalMin],
+  );
   // Painéis de detalhes abertos por mercado — uma expansão por linha permite
   // ver endereço, bairro, tipo do estabelecimento e validade da coleta sem
   // esconder outras informações da lista.
@@ -2504,25 +2516,27 @@ function ProductGroupCard({
           const detailsOpen = openDetails.has(rowKey);
           const localizacao = [p.neighborhood, p.city].filter(Boolean).join(" · ");
           const priceDate = new Date(p.when).toLocaleDateString("pt-BR");
+          const tieSuffix =
+            isCheapest && cheapestCount > 1 ? ` (empate com ${cheapestCount - 1} ${cheapestCount - 1 === 1 ? "mercado" : "mercados"})` : "";
+          const rowAriaLabel = `${p.marketName ?? "Mercado"}: ${fmt(p.price)}${
+            isCheapest ? ` — melhor oferta${tieSuffix}` : ""
+          }${localizacao ? `, ${localizacao}` : ""}`;
           return (
             <li
               key={rowKey}
-              role={onSelect ? "button" : undefined}
+              role={onSelect ? "button" : "listitem"}
               tabIndex={onSelect ? 0 : undefined}
-              aria-label={
-                onSelect
-                  ? `${p.marketName ?? "Mercado"}: ${fmt(p.price)}${isCheapest ? " — menor preço" : ""}`
-                  : undefined
-              }
+              aria-label={rowAriaLabel}
               aria-current={isFocusedMarket ? "true" : undefined}
               className={
-                "pc-res-row relative flex flex-col cursor-pointer rounded-lg border px-1.5 outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-brand-gold " +
+                "pc-res-row relative flex flex-col cursor-pointer rounded-lg border px-1.5 outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:ring-brand-gold " +
                 (isCheapest
-                  ? "border-brand-gold/70 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] shadow-[0_0_0_1px_var(--brand-gold)] ring-1 ring-brand-gold/40 "
-                  : "border-[color-mix(in_oklab,var(--color-border)_58%,transparent)] bg-background/75 ") +
+                  ? "border-brand-gold bg-[color-mix(in_oklab,var(--brand-gold)_14%,transparent)] shadow-[0_0_0_1px_var(--brand-gold)] ring-1 ring-brand-gold/50 "
+                  : "border-[color-mix(in_oklab,var(--color-border)_58%,transparent)] bg-background/75 hover:border-brand-gold/40 ") +
                 (isFocusedMarket ? "bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)]" : "")
               }
               data-cheapest={isCheapest ? "true" : "false"}
+              data-cheapest-tie={isCheapest && cheapestCount > 1 ? "true" : undefined}
               data-focused-market={isFocusedMarket ? "true" : undefined}
               onClick={(e) => {
                 if (!onSelect) return;
@@ -2541,11 +2555,12 @@ function ProductGroupCard({
             >
               {isCheapest ? (
                 <span
-                  aria-hidden="true"
-                  className="pointer-events-none absolute -top-2 right-2 z-10 inline-flex items-center gap-1 rounded-full border border-brand-gold/70 bg-brand-navy px-2 py-[2px] text-[10px] font-bold uppercase tracking-[0.14em] text-brand-gold shadow-sm"
+                  role="img"
+                  aria-label={cheapestCount > 1 ? `Melhor oferta — empate com ${cheapestCount - 1} outro${cheapestCount - 1 === 1 ? "" : "s"}` : "Melhor oferta"}
+                  className="pointer-events-none absolute -top-2 right-2 z-10 inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-navy px-2 py-[2px] text-[10px] font-bold uppercase tracking-[0.14em] text-brand-gold shadow-sm"
                 >
-                  <Crown className="h-2.5 w-2.5" strokeWidth={2.25} />
-                  Melhor oferta
+                  <Crown className="h-2.5 w-2.5" strokeWidth={2.25} aria-hidden="true" />
+                  <span>{cheapestCount > 1 ? `Melhor oferta · empate ${cheapestCount}` : "Melhor oferta"}</span>
                 </span>
               ) : null}
               <div className="pc-res-row-main flex items-center gap-1.5">
@@ -2553,8 +2568,8 @@ function ProductGroupCard({
                 {isCheapest ? (
                   <span
                     role="img"
-                    aria-label="Menor preço"
-                    title="Menor preço"
+                    aria-label={cheapestCount > 1 ? "Menor preço (empate)" : "Menor preço"}
+                    title={cheapestCount > 1 ? "Menor preço — empate" : "Menor preço"}
                     className="my-auto grid h-5.5 w-5.5 shrink-0 place-items-center rounded-full bg-accent-strong text-accent-foreground"
                   >
                     <Crown className="h-3 w-3" strokeWidth={2} aria-hidden="true" />
@@ -2892,7 +2907,7 @@ function MarketGroupedResults({
             savings={b.savings}
             gapToBest={b.gapToBest}
             rows={b.rows}
-            isCheapest={globalMin != null && b.minPrice === globalMin && idx === 0}
+            isCheapest={globalMin != null && b.minPrice === globalMin}
 
             fmt={fmt}
             highlightTokens={highlightTokens}
