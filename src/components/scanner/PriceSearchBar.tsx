@@ -183,7 +183,7 @@ export function PriceSearchBar({
     "cheapest",
     {
       validate: (v): v is SortMode =>
-        v === "relevance" || v === "cheapest" || v === "unit" || v === "recent" || v === "kind" || v === "spread" || v === "savings",
+        v === "relevance" || v === "cheapest" || v === "highest" || v === "unit" || v === "recent" || v === "kind" || v === "spread" || v === "savings",
     },
   );
   const [kindFilter, setKindFilter] = useState<string | null>(null);
