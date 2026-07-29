@@ -73,7 +73,7 @@ function buildCheapestReason(price: number, avg: number | null | undefined): str
 
 
 
-type SortMode = "relevance" | "cheapest" | "unit" | "recent" | "kind" | "spread" | "savings";
+type SortMode = "relevance" | "cheapest" | "highest" | "unit" | "recent" | "kind" | "spread" | "savings";
 
 export function PriceSearchBar({
   initialQuery = "",
