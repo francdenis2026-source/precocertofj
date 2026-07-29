@@ -46,6 +46,7 @@ const searchSchema = z.object({
 const SORT_VALUES = new Set([
   "relevance",
   "cheapest",
+  "highest",
   "unit",
   "recent",
   "kind",
@@ -55,6 +56,7 @@ const SORT_VALUES = new Set([
 type UrlSort =
   | "relevance"
   | "cheapest"
+  | "highest"
   | "unit"
   | "recent"
   | "kind"
