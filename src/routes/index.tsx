@@ -551,13 +551,13 @@ function HomePage() {
             {/* ---------- Coluna de dados ---------- */}
             <aside className="order-2 min-w-0 lg:col-span-5" aria-label="Indicadores da plataforma">
               <div
-                className="pc-elite-frame rounded-2xl border p-3.5 backdrop-blur-md sm:p-4.5"
+                className="pc-elite-frame rounded-2xl border p-3 backdrop-blur-md sm:p-3.5"
                 style={{
                   background: "var(--pc-home-onhero-glass)",
                   borderColor: "var(--pc-home-onhero-border)",
                 }}
               >
-                <header className="mb-3 flex items-center justify-between gap-2 border-b pb-2.5" style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}>
+                <header className="mb-2 flex items-center justify-between gap-2 border-b pb-2" style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}>
                   <span
                     className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em]"
                     style={{ color: "var(--pc-home-onhero-gold)" }}
@@ -584,7 +584,7 @@ function HomePage() {
                       type="button"
                       onClick={() => setSpotlight(kind)}
                       aria-label={`${value} — ${label}. Ver detalhes.`}
-                      className="group flex min-w-0 flex-col items-center gap-1 rounded-xl border px-1.5 py-[clamp(0.5rem,1.9vh,1.15rem)] text-center pc-tile focus-visible:outline-none focus-visible:ring-2"
+                      className="group flex min-w-0 flex-col items-center gap-0.5 rounded-xl border px-1.5 py-[clamp(0.4rem,1.2vh,0.75rem)] text-center pc-tile focus-visible:outline-none focus-visible:ring-2"
                       style={{
                         background: "var(--pc-home-onhero-glass-soft)",
                         borderColor: "var(--pc-home-onhero-border-soft)",
@@ -595,7 +595,7 @@ function HomePage() {
                       <Icon className="h-3.5 w-3.5" style={{ color: P.goldSoft }} aria-hidden />
                       <span
                         className={`${serif} tabular-nums leading-none`}
-                        style={{ color: "var(--pc-home-onhero-gold)", fontSize: "clamp(1.15rem, 2.6vw, 1.9rem)" }}
+                        style={{ color: "var(--pc-home-onhero-gold)", fontSize: "clamp(1.05rem, 2vw, 1.55rem)" }}
                       >
                         {value}
                       </span>
@@ -631,10 +631,10 @@ function HomePage() {
                     em cápsula inferior (revela em hover para não competir
                     com os preços) e um CTA "Ver todos" sempre visível. */}
                 <div
-                  className="mt-3 hidden border-t pt-2.5 min-[360px]:block"
+                  className="mt-2.5 hidden border-t pt-2 min-[360px]:block"
                   style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}
                 >
-                  <div className="mb-2 flex items-baseline justify-between gap-3">
+                  <div className="mb-1.5 flex items-baseline justify-between gap-3">
                     <div className="flex items-center gap-1.5">
                       <MapPin className="h-3 w-3" style={{ color: P.goldSoft }} aria-hidden />
                       <span
@@ -679,7 +679,7 @@ function HomePage() {
                           <li
                             key={`sk-${i}`}
                             aria-hidden
-                            className="grid h-[clamp(56px,7.2vh,76px)] w-[clamp(56px,7.2vh,76px)] shrink-0 place-items-center overflow-hidden rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)]"
+                            className="grid h-[clamp(48px,5.8vh,62px)] w-[clamp(48px,5.8vh,62px)] shrink-0 place-items-center overflow-hidden rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)]"
                             style={{ borderColor: "color-mix(in oklab, #ffffff 78%, transparent)" }}
                           >
                             <span
@@ -700,7 +700,7 @@ function HomePage() {
                                   : ({ to: "/estabelecimentos" } as const))}
                                 aria-label={`Ver produtos e preços de ${label}`}
 
-                                className="group relative flex h-[clamp(56px,7.2vh,76px)] w-[clamp(56px,7.2vh,76px)] flex-col items-stretch justify-between rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--pc-home-onhero-gold)_55%,white)] hover:shadow-[0_10px_22px_-8px_rgba(3,10,28,0.75)] focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2"
+                                className="group relative flex h-[clamp(48px,5.8vh,62px)] w-[clamp(48px,5.8vh,62px)] flex-col items-stretch justify-between rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--pc-home-onhero-gold)_55%,white)] hover:shadow-[0_10px_22px_-8px_rgba(3,10,28,0.75)] focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2"
                                 style={{
                                   borderColor: "color-mix(in oklab, #ffffff 78%, transparent)",
                                   ["--tw-ring-color" as string]: "var(--pc-home-onhero-gold)",
@@ -889,13 +889,18 @@ function HomePage() {
               <TrendingDown className="h-3.5 w-3.5" aria-hidden />
               Buscas em alta
             </span>
-            <ul role="list" className="flex min-w-0 flex-1 items-center gap-1.5 overflow-x-auto no-scrollbar">
+            <ul
+              role="list"
+              className="grid min-w-0 flex-1 gap-1.5"
+              style={{ gridTemplateColumns: "repeat(auto-fit, minmax(96px, 1fr))" }}
+            >
               {(popularAll.length > 10 ? popularAll.slice(4, 16) : popularAll.slice(0, 12)).map((t) => (
-                <li key={t} className="shrink-0">
+                <li key={t} className="min-w-0">
                   <button
                     type="button"
                     onClick={() => goToPopular(t)}
-                    className="inline-flex items-center rounded-full border px-2.5 py-1 text-[12px] font-medium capitalize pc-tile"
+                    title={t}
+                    className="inline-flex w-full items-center justify-center truncate rounded-full border px-2.5 py-1 text-[12px] font-medium capitalize pc-tile"
                     style={{
                       background: "var(--pc-home-onhero-glass)",
                       borderColor: "var(--pc-home-onhero-border-soft)",
@@ -907,13 +912,6 @@ function HomePage() {
                 </li>
               ))}
             </ul>
-            <Link
-              to="/melhores-precos"
-              className="shrink-0 rounded-md px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] transition-colors hover:brightness-125"
-              style={{ color: "var(--pc-home-onhero-fg-70)" }}
-            >
-              Rankings →
-            </Link>
           </div>
         </main>
 
