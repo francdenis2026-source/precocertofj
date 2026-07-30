@@ -262,9 +262,9 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             onClick={() => handlePick(q)}
             className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-[13px] font-medium hover:bg-slate-50"
           >
-            <Search className="h-4 w-4 text-slate-400" />
+            <Search className="h-4 w-4 text-slate-700" />
             Nenhum produto com esse nome — ver todos os resultados para “<strong>{q}</strong>”
-            <ArrowRight className="ml-auto h-4 w-4 text-slate-400" />
+            <ArrowRight className="ml-auto h-4 w-4 text-slate-600" />
           </button>
         ) : (
           <ul
@@ -292,8 +292,12 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                   }
                 >
                   <span
-                    className="grid h-7 w-7 shrink-0 place-items-center overflow-hidden rounded-md border bg-slate-50"
-                    style={{ borderColor: "#e2e8f0" }}
+                    className={
+                      "grid h-7 w-7 shrink-0 place-items-center overflow-hidden rounded-md border " +
+                      (active === i
+                        ? "bg-white/15 border-white/25"
+                        : "bg-slate-50 border-slate-200")
+                    }
                   >
                     {s.imageUrl ? (
                       <img
@@ -303,7 +307,12 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                         loading="lazy"
                       />
                     ) : (
-                      <Search className="h-3.5 w-3.5 text-slate-400" />
+                      <Search
+                        className={
+                          "h-3.5 w-3.5 " +
+                          (active === i ? "text-white" : "text-slate-700")
+                        }
+                      />
                     )}
                   </span>
                   <span className="min-w-0 flex-1">
