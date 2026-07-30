@@ -67,6 +67,6 @@ describe("Painel ao vivo — integração dados → UI", () => {
       economy: { avgSavingsPct: 9.4 },
     });
     expect(s.metrics[1].value).toBe("4.300");
-    expect(s.metrics[2].value).toBe("9%");
+    expect(s.metrics[2].value).toBe("9,4%");
   });
 });
