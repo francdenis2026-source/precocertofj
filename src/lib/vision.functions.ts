@@ -69,6 +69,8 @@ export const analyzeProductImage = createServerFn({ method: "POST" })
     const { assertAiRateLimit, logAiUsage } = await import("@/lib/ai-guard.server");
     const userId = context.userId;
     await assertAiRateLimit(userId, "analyzeProductImage", 60, 60);
+    const startedAt = Date.now();
+
 
     const apiKey = process.env.LOVABLE_API_KEY;
     if (!apiKey) throw new Error("LOVABLE_API_KEY ausente");
