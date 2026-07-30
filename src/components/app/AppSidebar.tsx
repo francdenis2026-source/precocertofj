@@ -277,26 +277,28 @@ export function AppSidebar() {
       className="border-r border-sidebar-border"
     >
       {/* Brand */}
-      <SidebarHeader className="border-b border-sidebar-border/60 px-3 py-4">
+      <SidebarHeader className="border-b border-sidebar-border/60 px-2.5 py-3">
         <Link
           to={isAdminArea ? "/admin" : "/"}
+          onClick={closeOnMobile}
           className="flex items-center gap-2.5 group-data-[collapsible=icon]:justify-center"
         >
           <span
-            className="relative grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-sidebar-border bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
+            className="relative grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-sidebar-border bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
             aria-hidden
           >
-            {isAdminArea ? <ShieldCheck className="h-5 w-5" strokeWidth={2.25} /> : <img src="/logo-mark.png" alt="" aria-hidden width={26} height={26} className="h-[26px] w-[26px] object-contain" />}
-            <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-accent ring-2 ring-sidebar" />
+            {isAdminArea ? <ShieldCheck className="h-4 w-4" strokeWidth={2.25} /> : <img src="/logo-mark.png" alt="" aria-hidden width={20} height={20} className="h-5 w-5 object-contain" />}
           </span>
           <span className="flex flex-col leading-none group-data-[collapsible=icon]:hidden">
-            <span className="text-[15px] font-semibold tracking-tight text-sidebar-foreground">
+            <span className="text-[14px] font-semibold tracking-tight text-sidebar-foreground">
               {isAdminArea ? "Console" : "PreçoCerto"}
             </span>
-            <span className="mt-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-sidebar-primary">
-              {isAdminArea ? "Administração" : "Aplicativo"}
+            <span className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-foreground/50">
+              {isAdminArea ? "Administração" : "Minha área"}
             </span>
           </span>
+        </Link>
+
         </Link>
       </SidebarHeader>
 
