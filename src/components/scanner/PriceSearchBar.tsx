@@ -2548,6 +2548,8 @@ function ProductGroupCard({
       id={`pc-group-${encodeURIComponent(productName)}`}
       data-result-card=""
       tabIndex={-1}
+      role="group"
+      aria-label={`${productName}. Menor preço ${fmt(min)} em ${prices.length} estabelecimento${prices.length > 1 ? "s" : ""}. Enter abre os detalhes.`}
       data-focused={focused ? "true" : undefined}
       onClick={(e) => {
         // Só marca o card como selecionado ao clicar no cabeçalho/vazio.
@@ -2559,12 +2561,13 @@ function ProductGroupCard({
         onSelect(productName, null);
       }}
       className={
-        "pc-res-card relative outline-none focus-visible:ring-2 focus-visible:ring-brand-gold " +
+        "pc-res-card relative outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background " +
         (focused
           ? "ring-2 ring-brand-gold/70 shadow-[0_0_0_1px_var(--brand-gold)] scroll-mt-24"
           : "")
       }
     >
+
       <div className="mb-1.5 flex flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
 
         <div className="min-w-0 flex-1 order-1">
