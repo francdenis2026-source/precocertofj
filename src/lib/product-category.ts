@@ -91,111 +91,163 @@ type Rule = { category: ProductCategory; re: RegExp };
  * `re` sempre roda sobre o texto normalizado (minúsculo, sem acento).
  */
 const RULES: readonly Rule[] = [
-  // 0) Cosmético capilar / dermocosmético — prioridade máxima.
-  // Esses nomes carregam sabores ("melancia", "acai", "uva") e palavras como
-  // "gelatina"/"chiclete" que puxavam o item para doces ou hortifruti.
+  // 1) Pet
   {
-    category: "perfumaria",
-    re: /(salon line|bio extratus|salon opus|carmesim|gela cola|banho de creme|creme de pentear|pasta modeladora|cera modeladora|gel fixador|ativador de cachos|to de cacho|finalizador|leave-?in|umectacao|progressiva|alisante|relaxante capilar|oleo de banana|cicatricure|cicaplast|la roche|antiestrias|gel facial|creme facial|creme corporal|protetor solar|fps ?\d+|neutrogena|nivea sun)/,
+    category: "pet",
+    re: /\b(racao|carrapaticida|antipulgas|veterinario|veterinaria)\b|(para caes|para gatos|petisco canino)/,
   },
 
-  // 0.1) Suplementos e acessórios esportivos (farmácia/saúde).
+  // 2) Bazar & utilidades (graxa "tinta nugget", incenso, velas, esponja de aço)
   {
-    category: "medicamentos",
-    re: /(creatina|whey|bcaa|max titanium|coqueteleira|hipercalorico|termogenico)/,
+    category: "bazar",
+    re: /\b(velas?|isqueiro|pilhas?|lampada|vassoura|rodo|balde|cabide|fosforo|graxa)\b|(tinta nugget|incenso|prendedor de roupa|esponja de aco|bombril|assolan|corda de varal)/,
   },
 
-  // 1) Farmácia/saúde — específico primeiro para não cair em "leite"/"oleo".
-  {
-    category: "medicamentos",
-    re: /\b(dipirona|paracetamol|ibuprofeno|analgesico|antitermico|xarope|comprimidos?|capsulas?|antigripal|cimegripe|resfenol|doralgina|aberalgina|neopiridin|vitaxon|vitergyl|tossexpec|apevitin|gastrogel|fisiofort|lavitan|nistatina|dorflex|buscopan|omeprazol|amoxicilina|loratadina|soro fisiologico|agua oxigenada|pomada|antisseptico|vitamina c|veterinario)\b/,
-  },
-
-
-  // 2) Infantil
-  {
-    category: "infantil",
-    re: /\b(fraldas?|mucilon|nanlac|nestogeno|neston|mamadeira|chupeta|nan comfor|formula infantil|farinha lactea|lenco umedecido|sustagen kids|nutren kids)\b/,
-  },
-
-  // 3) Papelaria/escolar
+  // 3) Papelaria / escolar
   {
     category: "papelaria",
-    re: /\b(caneta|lapis|lapiseira|caderno|regua|mochila|apontador|tesoura escolar|estojo|papel a4|cola em bastao|cola escolar|cola branca|lapis de cor|giz de cera)\b/,
+    re: /\b(caneta|lapis|lapiseira|caderno|regua|mochila|apontador|estojo)\b|(papel a4|cola em bastao|cola escolar|cola para isopor|cola branca|cola maxi|cola palhacinho|lapis de cor|giz de cera|tesoura escolar)/,
   },
 
-  // 4) Limpeza — TIPO de produto antes de qualquer aroma de fruta/ingrediente.
+  // 4) Infantil — antes de suplementos ("Sustagen Kids")
+  {
+    category: "infantil",
+    re: /\b(fraldas?|mucilon|nanlac|nestogeno|neston|mamadeira|chupeta)\b|(nan comfor|formula infantil|farinha lactea|lenco umedecido|sustagen kids|nutren kids|ninho fases)/,
+  },
+
+  // 5) Suplementos
+  {
+    category: "suplementos",
+    re: /\b(creatina|whey|bcaa|glutamina|hipercalorico|termogenico|lavitan|vitaxon|vitergyl|sustagen)\b|(max titanium|coqueteleira|polivitamin)/,
+  },
+
+  // 6) Medicamentos
+  {
+    category: "medicamentos",
+    re: /\b(dipirona|paracetamol|ibuprofeno|analgesico|antitermico|xarope|comprimidos?|capsulas?|antigripal|cimegripe|resfenol|doralgina|aberalgina|neopiridin|tossexpec|apevitin|gastrogel|fisiofort|nistatina|dorflex|buscopan|omeprazol|amoxicilina|loratadina)\b|(soro fisiologico|agua oxigenada|pomada|curativo|band-?aid|termometro|preservativo|seringa|gaze)/,
+  },
+
+  // 7) Higiene bucal
+  {
+    category: "bucal",
+    re: /(creme dental|gel dental|pasta de dente|enxaguante bucal|antisseptico bucal|fio dental|escova dental|escova de dente|colgate|sorriso|close ?up|kolynos|listerine|cepacol|dentrat|dentalclean|powerdent|jadepro|plax|periocare|tandy)/,
+  },
+
+  // 8) Cabelo — antes dos ingredientes: "Shampoo Melancia" não é hortifruti.
+  {
+    category: "cabelo",
+    re: /(shampoo|xampu|condicionador|creme de pentear|banho de creme|gela ?cola|gel fixador|ativador de cachos|to de cacho|finalizador|leave-?in|umectacao|progressiva|alisante|relaxante capilar|oleo de banana|pasta modeladora|cera modeladora|cera finalizadora|tintura|coloracao|descolorante|7 tons|salon line|salon opus|bio extratus|carmesim|elseve|dabelle|kerabrasil|darling|yamafix|ny looks|vita cap|coreton|niely|cor ?& ?ton|clear men|clear anticaspa|ultra fixacao|aqua fix|gelatina salon|creme seda)/,
+  },
+
+  // 9) Limpeza — antes de perfumaria ("amaciante 10x mais perfume")
   {
     category: "limpeza",
-    re: /\b(sabao|detergente|alvejante|amaciante|desinfetante|desinfetantes|agua sanitaria|multiuso|lava roupas?|lava loucas?|lava tudo|inseticida|repelente|limpa aluminio|limpa vidro|limpa forno|tira limo|pinho sol|derrete gordura|desengordurante|aromatizante|odorizador|odorizante|limpador|esponja|saco de lixo|vassoura|rodo|prendedor de roupa|cloro|agua sanit|bombril|assolan|veja|cif|omo|ariel|tixan|downy|comfort|minuano|brilhante amaciante|mon bijou|vanish)\b/,
+    re: /(sabao em po|sabao em barra|sabao liquido|sabao gliceri|lava roupas?|lava loucas?|detergente|alvejante|amaciante|desinfet|agua sanitaria|multiuso|inseticida|repelente|limpa aluminio|limpa vidro|limpa forno|tira limo|pinho sol|derrete gordura|desengord|aromatizante|odorizador|odorizante|limpador|soda caustica|passe bem|tira manchas)|\b(omo|ariel|ype|tixan|urca|downy|minuano|comfort|brilhante|surf|vanish|detefon|raid|baygon|mortein|sbp|limpol|politriz|citronela|xmax|uzzilim|cloro)\b|(mon bijou|buzz off|baby soft)/,
   },
 
-  // 5) Higiene pessoal — também antes de aromas ("Shampoo Maracujá").
+  // 10) Papel & descartáveis
+  {
+    category: "papel_descartaveis",
+    re: /(papel higienic|papel toalha|guardanapo|saco de lixo|copo descartavel|prato descartavel|talher descartavel|papel aluminio|filme pvc|papel manteiga)/,
+  },
+
+  // 11) Higiene pessoal — antes de perfumaria/pele ("desodorante talco")
   {
     category: "higiene",
-    re: /\b(shampoo|xampu|condicionador|creme dental|gel dental|pasta de dente|enxaguante bucal|fio dental|papel higienico|papel toalha|absorventes?|sabonete|desodorante|antitranspirante|cotonete|hastes flexiveis|algodao|escova de dente|aparelho de barbear|barbear|protetor diario|lenco de papel|colgate|sorriso|close ?up|listerine|cepacol|dentalclean|kolynos|powerdent|protex|lux|dove|monange|nivea|francis|phebo|palmolive|rexona|old spice|above|paloma|neve|personal|mili|intimus|always|sempre livre)\b/,
+    re: /\b(sabonete|desodorante|antitranspirante|absorventes?|cotonete|algodao|hastes|barbear|gilette|gillette)\b|(protetor diario|haste flexivel|hastes flexiveis|lenco de papel|absorvente interno|bucha banho|rexona|monange|herbissimo|protex|phebo|lux botanicals|francis|farnese|albany|labotrat|laborene|granado|johnson|old spice|tabu|carefree|intimus|always|sempre livre|cottonbaby|cotton line|ladysoft)/,
   },
 
-  // 6) Perfumaria/beleza
+  // 12) Cuidados com a pele
+  {
+    category: "cuidados_pele",
+    re: /(hidratante|creme corporal|creme facial|gel facial|protetor solar|fps ?\d+|cicatricure|cicaplast|la roche|antiestrias|esfoliante|leite de colonia|pos-?sol|sundown|neutrogena|nivea sun|ccskin|creme para as maos)/,
+  },
+
+  // 13) Perfumaria / maquiagem
   {
     category: "perfumaria",
-    re: /\b(esmalte|acetona|removedor de esmalte|batom|rimel|perfume|colonia|deo colonia|tintura|coloracao|descolorante|talco|hidratante corporal|creme de pentear|creme facial|gel fixador|cera modeladora|maquiagem|base liquida|niely|impala|elseve|salon line|dabelle|body splash)\b/,
+    re: /\b(esmalte|acetona|batom|rimel|perfume|colonia|talco|maquiagem|impala|colorama)\b|(removedor de esmalte|body splash|deo colonia|base liquida|top beauty)/,
   },
 
-  // 7) Biscoitos — antes de laticínios ("Cream Cracker Manteiga") e doces.
+  // 14) Salgadinhos
+  {
+    category: "snacks",
+    re: /\b(salgadinho|cheetos|fandangos|doritos|ruffles|pringles|torcida|baconzitos)\b|(amendoim japones|batata frita)/,
+  },
+
+  // 15) Biscoitos — antes de carnes/laticínios ("Club Social Presunto")
   {
     category: "biscoitos",
-    re: /\b(biscoitos?|bolachas?|wafer|cream cracker|cracker|oreo|club social|richester|marilan|minueto|vitarella|miragina|salgadinho|cheetos|fandangos|doritos|ruffles|pringles|torcida|baconzitos)\b/,
+    re: /(biscoit|bolach|wafer|cream cracker|cracker|oreo|club social|richester|marilan|minueto|vitarella|miragina|casaredo|chocosol|escureto|tortinhas|pit stop|delicita)/,
   },
 
-  // 8) Carnes e frios
+  // 16) Padaria
+  {
+    category: "padaria",
+    re: /\b(pao|paes|torrada|bolo|panetone|rosquinha|croissant|bauducco)\b|(mistura para bolo)/,
+  },
+
+  // 17) Prontos & enlatados
+  {
+    category: "prontos",
+    re: /(em conserva|sardinha|atum|feijoada|fiambre|milho verde lata|ervilha lata|seleta de legumes|macarrao instantaneo|miojo|lamen|cup noodles|sopao|creme de cebola)/,
+  },
+
+  // 18) Carnes
   {
     category: "carnes",
-    re: /\b(frango|carnes?|bovina|bovino|suina|suino|porco|peixe|tilapia|salmao|linguica|calabresa|salsichas?|presunto|mortadela|bacon|hamburguer|pernil|costela|coxao|acem|patinho|picanha|alcatra|charque|fiambre|feijoada|sardinha|atum)\b/,
+    re: /\b(frango|carnes?|bovin[a-z]*|suin[a-z]*|porco|peixe|tilapia|pirarucu|salmao|linguica|calabresa|salsichas?|presunto|mortadela|bacon|hamburguer|pernil|costela|coxao|acem|patinho|picanha|alcatra|charque|maminha|fraldinha|cupim|buchada|dobradinha)\b/,
   },
 
-  // 9) Laticínios
+  // 19) Laticínios
   {
     category: "laticinios",
-    re: /\b(leite|queijo|manteiga|margarina|iogurte|requeijao|nata|coalhada|danone|batavo|italac|itambe|qualy|vigor|claybom|mococa|piracanjuba|molico|ninho|elege|leite em po|creme de leite|leite condensado|composto lacteo|bebida lactea|mussarela)\b/,
+    re: /\b(leite|queijo|manteiga|margarina|iogurte|requeijao|nata|coalhada|danone|batavo|italac|itambe|qualy|vigor|claybom|mococa|ninho|molico|piracanjuba|elege|mussarela)\b|(creme de leite|doce de leite|composto lacteo|bebida lactea|leite condensado|soro de leite)/,
   },
 
-  // 10) Padaria
-  { category: "padaria", re: /\b(pao|paes|torrada|bolo|panetone|rosquinha|croissant)\b/ },
-
-  // 11) Doces
+  // 20) Doces
   {
     category: "doces",
-    re: /\b(chocolates?|bombom|balas?|brigadeiro|geleia|pacoca|goiabada|nutella|gelatina|marshmallow|pirulito|chiclete|doce de leite)\b/,
+    re: /\b(chocolates?|bombom|balas?|brigadeiro|geleia|pacoca|goiabada|nutella|gelatina|marshmallow|pirulito|chiclete|halls|trident)\b/,
   },
 
-  // 12) Bebidas prontas
+  // 21) Bebidas prontas
   {
     category: "bebidas",
-    re: /\b(refrigerante|coca cola|guarana|pepsi|fanta|sucos?|nectar|energetico|cerveja|vinho|whisky|vodka|cachaca|red bull|baly|refresco|agua mineral|agua de coco)\b/,
+    re: /\b(refrigerante|coca|guarana|pepsi|fanta|sucos?|nectar|energetico|cerveja|vinho|whisky|vodka|cachaca|antarctica|baly|refresco|dafruta)\b|(red bull|agua mineral|agua de coco|suco em po|refresco em po)/,
   },
 
-  // 13) Bebidas em pó / matinais
+  // 22) Bebidas em pó / matinais
   {
     category: "bebidas_em_po",
-    re: /\b(cafe|cappuccino|achocolatado|nescau|toddy|matte|mingau|sucrilhos|cereal matinal|aveia|pilao|brassuk|cremogema|arrozina|chas?|leite em po|corn flakes)\b/,
+    re: /\b(cafe|cappuccino|chocolatto|achocolatado|nescau|toddy|matte|mingau|sucrilhos|aveia|cremogema|arrozina|nescafe|pilao|brassuk)\b|(cereal matinal|corn flakes|cha preto|cha verde|cha leao|leite em po|cereal nestle)/,
   },
 
-  // 14) Congelados
-  { category: "congelados", re: /\b(congelados?|sorvete|nuggets?|polpa de fruta|pizza congelada)\b/ },
+  // 23) Congelados
+  {
+    category: "congelados",
+    re: /\b(sorvete|picole|congelados?|nuggets?|empanado)\b|(polpa de fruta|pizza congelada)/,
+  },
 
-  // 15) Hortifrúti — por último entre os ingredientes, evitando aromas.
+  // 24) Condimentos / molhos
+  {
+    category: "condimentos",
+    re: /(molho de tomate|molho ingles|molho de pimenta|extrato de tomate|ketchup|catchup|mostarda|maionese|vinagre|azeitona|tempero|colorau|colorif|pimenta do reino|shoyu|caldo de galinha|alho e sal|sazon)|\b(sal|oregano|cominho|acafrao|louro)\b/,
+  },
+
+  // 25) Hortifrúti — por último entre ingredientes, depois dos aromas.
   {
     category: "hortifruti",
-    re: /\b(tomate|batata|cebola|alface|cenoura|laranja|uva|melancia|mamao|abacaxi|limao|pimentao|verdura|legume|banana|maca|cheiro verde|coentro|couve|repolho|abobora|macaxeira|inhame|beterraba|chuchu|maracuja|manga|ovos?)\b/,
+    re: /\b(tomate|batata|cebola|alface|cenoura|laranja|uva|melancia|mamao|abacaxi|limao|pimentao|verdura|legume|banana|maca|cheiro verde|coentro|couve|repolho|abobora|macaxeira|inhame|beterraba|chuchu|maracuja|manga|ovos?)\b|(ovo de galinha|bandeja de ovos|batata lavada)/,
   },
 
-  // 16) Mercearia (catch-all de secos)
+  // 26) Mercearia (secos)
   {
     category: "mercearia",
-    re: /\b(arroz|feijao|acucar|adocante|farinha|mandioca|macarrao|espaguete|penne|parafuso|oleo|azeite|vinagre|sal|fuba|amido|fermento|tempero|colorau|colorifico|extrato|maionese|catchup|ketchup|mostarda|azeitona|milho|ervilha|seleta|cuscuz|canjica|flocao|lamen|noodles|sopao|molho de tomate|granola|nissin|quaker)\b/,
+    re: /\b(arroz|feijao|acucar|adocante|farinha|mandioca|macarrao|espaguete|penne|parafuso|oleo|azeite|fuba|amido|fermento|milho|ervilha|cuscuz|canjica|flocao|granola|rapadura|trigo|polvilho)\b|(leite de coco|coco ralado|proteina de soja)/,
   },
 ];
+
 
 /**
  * Categoria canônica inferida do nome do produto.
