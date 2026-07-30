@@ -2504,6 +2504,7 @@ function ProductGroupCard({
     <div
       ref={cardRef}
       id={`pc-group-${encodeURIComponent(productName)}`}
+      data-result-card=""
       tabIndex={-1}
       data-focused={focused ? "true" : undefined}
       onClick={(e) => {
