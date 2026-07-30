@@ -297,7 +297,7 @@ function CategoryPage() {
 
   useEffect(() => {
     setLimit(24);
-  }, [slug, q, storeFilter, perPage, view]);
+  }, [slug, q, storeFilter, perPage, view, search.sub]);
 
   // Restaura a rolagem e a categoria ativa ao usar voltar/avançar.
   useScrollRestoration(!isLoading && Boolean(def));
@@ -471,7 +471,7 @@ function CategoryPage() {
             hint={
               isLoading
                 ? "carregando…"
-                : q || storeFilter
+                : filtersActive
                   ? `${products.length.toLocaleString("pt-BR")} de ${totalListed.toLocaleString("pt-BR")} filtrado(s)`
                   : totalAll > totalListed
                     ? `${totalListed.toLocaleString("pt-BR")} exibidos de ${totalAll.toLocaleString("pt-BR")}`
