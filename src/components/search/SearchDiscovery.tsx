@@ -124,7 +124,8 @@ export function SearchDiscovery({ onPickQuery }: Props) {
       {/* ============ CATEGORIAS — tinta DOURADA (ação/identidade) ============ */}
       <section
         aria-label="Categorias populares"
-        className="relative rounded-xl border border-brand-gold/30 bg-brand-gold/[0.06] p-2 lg:col-span-2 dark:bg-brand-gold/[0.08]"
+        className="relative shrink-0 rounded-xl border border-brand-gold/30 bg-brand-gold/[0.06] p-2 dark:bg-brand-gold/[0.08]"
+
       >
         <SectionHeader
           icon={<SearchIcon className="h-3 w-3" strokeWidth={2.75} />}
