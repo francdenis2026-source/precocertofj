@@ -271,6 +271,50 @@ export function PriceSearchBar({
 
   const autoRan = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * Trilho de resultados: rolagem interna própria. Guardamos a posição por
+   * termo pesquisado (sessionStorage) para que voltar de um produto não jogue
+   * o usuário de volta ao topo da lista.
+   */
+  const resultsRef = useRef<HTMLDivElement>(null);
+  const resultsScrollKey = `pc:buscar:resultados:${
+    normalizeInput(query).trim().toLowerCase() || "vazio"
+  }`;
+  const { persistScroll } = useListScrollPersistence(
+    resultsRef,
+    resultsScrollKey,
+    !!rawResult,
+  );
+
+  /**
+   * Navegação por teclado entre os cards de produto. Setas movem o foco,
+   * Home/End vão para o primeiro/último. Ignoramos quando o foco está num
+   * campo de texto para não atrapalhar a digitação.
+   */
+  const onResultsKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Home" && e.key !== "End") {
+      return;
+    }
+    const root = resultsRef.current;
+    if (!root) return;
+    const target = e.target as HTMLElement | null;
+    if (target?.closest("input,textarea,select,[contenteditable='true']")) return;
+    const cards = Array.from(root.querySelectorAll<HTMLElement>("[data-result-card]"));
+    if (cards.length === 0) return;
+    const current = cards.findIndex((c) => c.contains(document.activeElement));
+    let next: number;
+    if (e.key === "ArrowDown") next = current < 0 ? 0 : Math.min(current + 1, cards.length - 1);
+    else if (e.key === "ArrowUp") next = current <= 0 ? 0 : current - 1;
+    else if (e.key === "Home") next = 0;
+    else next = cards.length - 1;
+    e.preventDefault();
+    const el = cards[next];
+    if (!el) return;
+    el.focus({ preventScroll: true });
+    el.scrollIntoView({ block: "nearest" });
+  };
+
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestSeq = useRef(0);
   const suggestAbort = useRef<AbortController | null>(null);
