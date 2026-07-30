@@ -131,6 +131,7 @@ export const analyzeProductImage = createServerFn({ method: "POST" })
       completionTokens: json.usage?.completion_tokens,
       totalTokens: json.usage?.total_tokens,
       success: true,
+      durationMs: Date.now() - startedAt,
     });
     const raw = json.choices?.[0]?.message?.content ?? "{}";
 
