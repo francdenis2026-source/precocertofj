@@ -878,15 +878,21 @@ function CategoryChip({
   label,
   count,
   active,
+  hubSlug,
+  hubLabel,
   tabIndex,
   onClick,
 }: {
   label: string;
   count: number;
   active: boolean;
+  /** Hub da homepage ao qual esta categoria de produto pertence. */
+  hubSlug?: string | null;
+  hubLabel?: string | null;
   tabIndex: number;
   onClick: () => void;
 }) {
+  const HubIcon = hubSlug ? categoryIcon(hubSlug) : null;
   return (
     <button
       type="button"
@@ -896,6 +902,7 @@ function CategoryChip({
       aria-current={active ? "page" : undefined}
       tabIndex={tabIndex}
       onClick={onClick}
+      title={hubLabel ? `${label} — faz parte de ${hubLabel}` : label}
       className={
         "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[12px] font-semibold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-1 focus-visible:ring-offset-background " +
         (active
@@ -903,6 +910,13 @@ function CategoryChip({
           : "border-border bg-card text-foreground hover:border-brand-gold hover:bg-muted/60")
       }
     >
+      {HubIcon && (
+        <HubIcon
+          className={"h-3.5 w-3.5 shrink-0 " + (active ? "text-brand-navy/80" : "text-brand-gold")}
+          strokeWidth={2.1}
+          aria-hidden
+        />
+      )}
       {label}
       <span
         className={
@@ -923,7 +937,13 @@ function CategoryRail({
   activeLabel,
   onSelect,
 }: {
-  categories: { key: string; label: string; count: number }[];
+  categories: {
+    key: string;
+    label: string;
+    count: number;
+    hubSlug?: string | null;
+    hubLabel?: string | null;
+  }[];
   activeLabel: string | null;
   onSelect: (label: string) => void;
 }) {
@@ -986,6 +1006,8 @@ function CategoryRail({
                   label={c.label}
                   count={c.count}
                   active={active}
+                  hubSlug={c.hubSlug}
+                  hubLabel={c.hubLabel}
                   tabIndex={i === activeIndex ? 0 : -1}
                   onClick={() => onSelect(c.label)}
                 />
