@@ -614,8 +614,9 @@ function EstablishmentsPage() {
           <ul
             id="mercados-listbox"
             ref={listRef}
-            className="pc-rail divide-y divide-border/50 focus:outline-none"
+            className="pc-rail divide-y divide-border/50 focus:outline-none md:min-h-0 md:flex-1 md:overflow-y-auto"
             role="listbox"
+
             aria-label="Lista de mercados"
             aria-activedescendant={selectedId ? `mercado-opt-${selectedId}` : undefined}
             onKeyDown={onListKeyDown}
