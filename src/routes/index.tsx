@@ -98,6 +98,10 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
+import { useCategoryLabelWithFallback } from "@/hooks/use-category-labels";
+import { categoryBySlug, hubCoverageLabel, type CategorySlug } from "@/lib/category-hub";
+import { categoryIcon } from "@/lib/category-icons";
+
 const P = {
   paper: "var(--pc-home-paper)",
   ink: "var(--pc-home-ink)",
@@ -146,10 +150,6 @@ const CATEGORIES = HOME_HUBS.map((slug) => {
   };
 });
 
-
-import { useCategoryLabelWithFallback } from "@/hooks/use-category-labels";
-import { categoryBySlug, hubCoverageLabel, type CategorySlug } from "@/lib/category-hub";
-import { categoryIcon } from "@/lib/category-icons";
 
 function HomePage() {
   const catLabel = useCategoryLabelWithFallback();
@@ -721,12 +721,13 @@ function HomePage() {
             {/* Categorias */}
             <nav aria-label="Categorias" className="min-w-0 lg:col-span-8">
               <div className="grid grid-cols-5 gap-2 sm:gap-2.5">
-                {CATEGORIES.map(({ key, label, full, Icon }) => (
+                {CATEGORIES.map(({ key, label, full, coverage, Icon }) => (
                   <button
                     key={key}
                     type="button"
                     onClick={() => navigate({ to: "/categoria/$slug", params: { slug: key } })}
                     aria-label={`Pesquisar em ${catLabel(key, full)}`}
+                    title={coverage ? `${catLabel(key, full)} — ${coverage}` : catLabel(key, full)}
                     data-reading-card
                     className={TILE}
                     style={{
