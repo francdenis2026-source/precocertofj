@@ -10,6 +10,7 @@ import { QuickFilterBar } from "@/components/search/QuickFilterBar";
 import { ShareButton, SignupCTA } from "@/components/ds";
 import { useSession } from "@/hooks/useSession";
 import { trackEvent } from "@/lib/analytics-events";
+import { getStoredRegionKey } from "@/lib/search-region";
 import { RouteError } from "@/components/feedback";
 import { SearchDiscovery, pushRecentSearch } from "@/components/search/SearchDiscovery";
 import { GuestGateDialog } from "@/components/gate/GuestGateDialog";
@@ -253,7 +254,7 @@ function SearchPage() {
     if (term.length < 2) return;
     if (trackedTerms.current.has(term)) return;
     trackedTerms.current.add(term);
-    const t = window.setTimeout(() => trackEvent("search_query", { q: term }), 600);
+    const t = window.setTimeout(() => trackEvent("search_query", { q: term, region: getStoredRegionKey() }), 600);
     return () => window.clearTimeout(t);
   }, [q]);
 

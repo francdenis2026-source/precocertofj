@@ -70,3 +70,20 @@ export const listTrendingSearches = createServerFn({ method: "GET" })
 
     return mapped.slice(0, limit).map(({ score: _score, ...rest }) => rest);
   });
+
+/**
+ * Série temporal das buscas reais (hoje / 7 dias / 30 dias), agregada por
+ * dia + termo + região. Mesma fonte do Realtime (`analytics_events` →
+ * `search_trends`), então a página de Tendências e a homepage nunca
+ * divergem.
+ */
+export const getSearchTrendsSeries = createServerFn({ method: "GET" })
+  .inputValidator((input: { days?: number } | undefined) => {
+    const raw = input?.days ?? 7;
+    const days = raw <= 1 ? 1 : raw <= 7 ? 7 : 30;
+    return { days };
+  })
+  .handler(async ({ data }) => {
+    const { fetchTrendPoints } = await import("@/lib/search-trends.server");
+    return fetchTrendPoints(data.days);
+  });

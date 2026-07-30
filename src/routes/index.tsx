@@ -26,6 +26,7 @@ import { getEconomyStat } from "@/lib/products-public.functions";
 import { listTrendingSearches } from "@/lib/search-trends.functions";
 import { useSearchTrendsRealtime } from "@/hooks/useSearchTrendsRealtime";
 import { trackEvent } from "@/lib/analytics-events";
+import { getStoredRegionKey } from "@/lib/search-region";
 import { StartFreeDialog } from "@/components/home/StartFreeDialog";
 import { GuestGateDialog } from "@/components/gate/GuestGateDialog";
 import {
@@ -306,7 +307,7 @@ function HomePage() {
       }
     }
     // Registra a busca real do cliente — alimenta "Buscas em alta" em tempo real.
-    trackEvent("search_query", { q: query.toLowerCase().slice(0, 60) });
+    trackEvent("search_query", { q: query.toLowerCase().slice(0, 60), region: getStoredRegionKey() });
     navigate({ to: "/buscar", search: { q: query } as any });
   };
 
@@ -326,7 +327,11 @@ function HomePage() {
         return;
       }
     }
-    trackEvent("search_query", { q: query.toLowerCase().slice(0, 60), from: "alta" });
+    trackEvent("search_query", {
+      q: query.toLowerCase().slice(0, 60),
+      from: "alta",
+      region: getStoredRegionKey(),
+    });
     void navigate({ to: "/buscar", search: { q: query, from: "alta" } as any }).finally(() =>
       setPendingTerm(null),
     );
@@ -1020,6 +1025,16 @@ function HomePage() {
               />
               <span className="sr-only">atualizando em tempo real</span>
             </span>
+            <Link
+              to="/tendencias"
+              className="shrink-0 rounded-full border px-2 py-0.5 text-[11.5px] font-semibold transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-onhero-gold)]"
+              style={{
+                borderColor: "color-mix(in oklab, var(--pc-home-onhero-gold) 55%, transparent)",
+                color: "var(--pc-home-onhero-gold)",
+              }}
+            >
+              Ver tendências
+            </Link>
             <ul
               role="list"
               className="grid min-w-0 flex-1 gap-2"

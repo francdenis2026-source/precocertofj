@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as TendenciasRouteImport } from './routes/tendencias'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as SemPermissaoRouteImport } from './routes/sem-permissao'
 import { Route as ResgatarRouteImport } from './routes/resgatar'
@@ -115,6 +116,11 @@ import { Route as ApiPublicHooksRefreshCatalogImagesRouteImport } from './routes
 import { Route as ApiPublicHooksDrainCatalogImagesRouteImport } from './routes/api/public/hooks/drain-catalog-images'
 import { Route as ApiPublicHooksCollabInboundRouteImport } from './routes/api/public/hooks/collab-inbound'
 
+const TendenciasRoute = TendenciasRouteImport.update({
+  id: '/tendencias',
+  path: '/tendencias',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
   id: '/sitemap.xml',
   path: '/sitemap.xml',
@@ -691,6 +697,7 @@ export interface FileRoutesByFullPath {
   '/resgatar': typeof ResgatarRoute
   '/sem-permissao': typeof SemPermissaoRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tendencias': typeof TendenciasRoute
   '/admin/gestao': typeof AdminGestaoRoute
   '/admin/acessos-temporarios': typeof AdminAcessosTemporariosRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
@@ -798,6 +805,7 @@ export interface FileRoutesByTo {
   '/resgatar': typeof ResgatarRoute
   '/sem-permissao': typeof SemPermissaoRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tendencias': typeof TendenciasRoute
   '/admin/gestao': typeof AdminGestaoRoute
   '/admin/acessos-temporarios': typeof AdminAcessosTemporariosRoute
   '/admin/analytics': typeof AdminAnalyticsRoute
@@ -906,6 +914,7 @@ export interface FileRoutesById {
   '/resgatar': typeof ResgatarRoute
   '/sem-permissao': typeof SemPermissaoRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/tendencias': typeof TendenciasRoute
   '/admin/gestao': typeof AdminGestaoRoute
   '/admin_/acessos-temporarios': typeof AdminAcessosTemporariosRoute
   '/admin_/analytics': typeof AdminAnalyticsRoute
@@ -1015,6 +1024,7 @@ export interface FileRouteTypes {
     | '/resgatar'
     | '/sem-permissao'
     | '/sitemap.xml'
+    | '/tendencias'
     | '/admin/gestao'
     | '/admin/acessos-temporarios'
     | '/admin/analytics'
@@ -1122,6 +1132,7 @@ export interface FileRouteTypes {
     | '/resgatar'
     | '/sem-permissao'
     | '/sitemap.xml'
+    | '/tendencias'
     | '/admin/gestao'
     | '/admin/acessos-temporarios'
     | '/admin/analytics'
@@ -1229,6 +1240,7 @@ export interface FileRouteTypes {
     | '/resgatar'
     | '/sem-permissao'
     | '/sitemap.xml'
+    | '/tendencias'
     | '/admin/gestao'
     | '/admin_/acessos-temporarios'
     | '/admin_/analytics'
@@ -1337,6 +1349,7 @@ export interface RootRouteChildren {
   ResgatarRoute: typeof ResgatarRoute
   SemPermissaoRoute: typeof SemPermissaoRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  TendenciasRoute: typeof TendenciasRoute
   AdminAcessosTemporariosRoute: typeof AdminAcessosTemporariosRoute
   AdminAnalyticsRoute: typeof AdminAnalyticsRoute
   AdminAuditoriaRoute: typeof AdminAuditoriaRoute
@@ -1396,6 +1409,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/tendencias': {
+      id: '/tendencias'
+      path: '/tendencias'
+      fullPath: '/tendencias'
+      preLoaderRoute: typeof TendenciasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sitemap.xml': {
       id: '/sitemap.xml'
       path: '/sitemap.xml'
@@ -2239,6 +2259,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResgatarRoute: ResgatarRoute,
   SemPermissaoRoute: SemPermissaoRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  TendenciasRoute: TendenciasRoute,
   AdminAcessosTemporariosRoute: AdminAcessosTemporariosRoute,
   AdminAnalyticsRoute: AdminAnalyticsRoute,
   AdminAuditoriaRoute: AdminAuditoriaRoute,
