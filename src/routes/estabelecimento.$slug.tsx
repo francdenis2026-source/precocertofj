@@ -384,20 +384,20 @@ function EstablishmentPage() {
               label="Compartilhar"
               title={`${data.store.name} — PreçoCerto`}
               text={`Veja os preços de ${data.store.name} no PreçoCerto`}
-              className="h-8 !text-[11px] font-bold uppercase tracking-[0.16em]"
+              className="h-8 !text-[12.5px] font-bold uppercase tracking-[0.16em]"
             />
 
             <Link
               to="/estabelecimentos"
-              className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[11px] font-bold uppercase leading-none tracking-[0.16em] text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+              className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[12.5px] font-bold uppercase leading-none tracking-[0.16em] text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
             >
-              <ArrowLeft className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+              <ArrowLeft className="h-3.5 w-3.5 text-muted-foreground" aria-hidden />
               <span className="hidden sm:inline">Estabelecimentos</span>
             </Link>
             <Link
               to="/catalogo/$slug"
               params={{ slug }}
-              className="inline-flex h-8 items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold/10 px-3 text-[11px] font-bold uppercase leading-none tracking-[0.16em] text-foreground transition-colors hover:bg-brand-gold/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+              className="inline-flex h-8 items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold/10 px-3 text-[12.5px] font-bold uppercase leading-none tracking-[0.16em] text-foreground transition-colors hover:bg-brand-gold/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
             >
               <PackageSearch className="h-3.5 w-3.5 text-brand-gold" aria-hidden /> Catálogo completo
             </Link>
@@ -416,11 +416,11 @@ function EstablishmentPage() {
               className="rounded-xl"
             />
             <div className="min-w-0">
-              <p className="text-[11px] font-bold uppercase leading-none tracking-[0.18em] text-brand-gold">
+              <p className="text-[12.5px] font-bold uppercase leading-none tracking-[0.18em] text-brand-gold">
                 Mercado parceiro
               </p>
               <div className="mt-1 flex flex-wrap items-center justify-between gap-2">
-                <h1 className="min-w-0 truncate font-serif text-[19px] font-semibold leading-[1.15] sm:text-[22px]">
+                <h1 className="min-w-0 truncate font-serif text-[21px] font-semibold leading-[1.15] sm:text-[25px]">
                   {data.store.name}
                 </h1>
                 <div className="flex shrink-0 items-center gap-1.5">
@@ -428,7 +428,7 @@ function EstablishmentPage() {
                   <FavoriteMarketButton marketName={data.store.name} variant="inline" />
                 </div>
               </div>
-              <p className="mt-0.5 truncate text-[12px] leading-snug text-white/70">
+              <p className="mt-0.5 truncate text-[13px] leading-snug text-white/85">
                 {[
                   data.store.address,
                   data.store.neighborhood ? `Bairro ${data.store.neighborhood}` : null,
@@ -439,7 +439,7 @@ function EstablishmentPage() {
               </p>
               <div className="mt-2 flex flex-wrap items-center gap-1.5">
                 {distance && (
-                  <span className="inline-flex h-6 items-center gap-1 rounded-full border border-brand-gold/45 bg-brand-gold/15 px-2.5 text-[11px] font-bold uppercase leading-none tracking-[0.14em] text-brand-gold">
+                  <span className="inline-flex h-6 items-center gap-1 rounded-full border border-brand-gold/45 bg-brand-gold/15 px-2.5 text-[12.5px] font-bold uppercase leading-none tracking-[0.14em] text-brand-gold">
                     <MapPin className="h-3 w-3" aria-hidden />
                     {formatDistance(distance.km)}{" "}
                     {distance.source === "exact" ? "de você" : "aprox."}
@@ -486,12 +486,12 @@ function EstablishmentPage() {
                   onClick={() => setSearch({ aba: t.id })}
                   className={
                     active
-                      ? "inline-flex h-8 items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-3 text-[12px] font-semibold leading-none text-brand-navy"
-                      : "inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[12px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold"
+                      ? "inline-flex h-8 items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold px-3 text-[13px] font-semibold leading-none text-brand-navy"
+                      : "inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[13px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold"
                   }
                 >
                   {t.label}
-                  <span className="text-[11px] font-bold tabular-nums opacity-70">{t.count}</span>
+                  <span className="text-[12.5px] font-bold tabular-nums opacity-70">{t.count}</span>
                 </button>
               );
             })}
@@ -501,13 +501,13 @@ function EstablishmentPage() {
         {/* Últimas atualizações — faixa única com rolagem horizontal (sem nuvem de chips). */}
         <section className="mt-2.5 overflow-hidden rounded-xl border border-border bg-card/70">
           <div className="flex items-center gap-2 border-b border-border/70 px-2.5 py-1.5">
-            <h2 className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase leading-none tracking-[0.16em] text-muted-foreground">
-              <History className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+            <h2 className="inline-flex items-center gap-1.5 text-[12.5px] font-bold uppercase leading-none tracking-[0.16em] text-muted-foreground">
+              <History className="h-3.5 w-3.5 text-muted-foreground" aria-hidden />
               Últimas atualizações
             </h2>
             <Link
               to="/colaborar"
-              className="ml-auto inline-flex h-7 shrink-0 items-center gap-1.5 rounded-full border border-brand-gold/70 bg-brand-gold/10 px-2.5 text-[11px] font-bold uppercase leading-none tracking-[0.14em] text-foreground transition-colors hover:bg-brand-gold hover:text-brand-navy"
+              className="ml-auto inline-flex h-7 shrink-0 items-center gap-1.5 rounded-full border border-border bg-background px-2.5 text-[12.5px] font-bold uppercase leading-none tracking-[0.14em] text-foreground transition-colors hover:bg-brand-gold hover:text-brand-navy"
             >
               <Camera className="h-3.5 w-3.5" aria-hidden />
               Enviar fotos
@@ -520,12 +520,12 @@ function EstablishmentPage() {
                   key={p.slug}
                   className="flex w-[190px] shrink-0 snap-start flex-col gap-0.5 rounded-lg border border-border bg-background px-2.5 py-1.5"
                 >
-                  <span className="truncate text-[12px] font-medium leading-tight text-foreground">
+                  <span className="truncate text-[13px] font-medium leading-tight text-foreground">
                     {p.productName}
                   </span>
                   <span className="flex items-baseline justify-between gap-2">
                     <Price value={p.price} size="xs" tone="best" />
-                    <span className="text-[11px] tabular-nums text-muted-foreground">
+                    <span className="text-[12.5px] tabular-nums text-muted-foreground">
                       {new Date(p.lastDate).toLocaleDateString("pt-BR")}
                     </span>
                   </span>
@@ -533,7 +533,7 @@ function EstablishmentPage() {
               ))}
             </ul>
           ) : (
-            <p className="px-2.5 py-2 text-[12px] leading-snug text-muted-foreground">
+            <p className="px-2.5 py-2 text-[13px] leading-snug text-muted-foreground">
               Ainda não há atualizações recentes. Envie fotos das etiquetas para começar.
             </p>
           )}
@@ -571,19 +571,19 @@ function EstablishmentPage() {
                     placeholder="Buscar produto (ignora acentos e ç/c)"
                     aria-label="Buscar produto"
                     inputMode="search"
-                    className="h-9 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13px] outline-none focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
+                    className="h-9 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[14px] outline-none focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
                   />
                 </div>
                 <Select value={sort} onValueChange={(v) => setSearch({ sort: v })}>
                   <SelectTrigger
                     aria-label="Ordenar por"
-                    className="h-9 w-full text-[12.5px] font-medium sm:w-[240px]"
+                    className="h-9 w-full text-[13.5px] font-medium sm:w-[240px]"
                   >
                     <SelectValue placeholder="Ordenar por" />
                   </SelectTrigger>
                   <SelectContent>
                     {(Object.keys(SORT_LABEL) as SortKey[]).map((k) => (
-                      <SelectItem key={k} value={k} className="text-[12.5px]">
+                      <SelectItem key={k} value={k} className="text-[13.5px]">
                         {SORT_LABEL[k]}
                       </SelectItem>
                     ))}
@@ -597,7 +597,7 @@ function EstablishmentPage() {
                 <Link
                   to="/categoria/$slug"
                   params={{ slug: activeHub.slug }}
-                  className="mt-2 inline-flex items-center gap-1.5 text-[12px] font-semibold text-brand-gold underline-offset-2 hover:underline"
+                  className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-brand-gold underline-offset-2 hover:underline"
                 >
                   Comparar {selectedCategory} em toda a cidade · {activeHub.label}
                   <ArrowRight className="h-3.5 w-3.5" aria-hidden />
@@ -607,10 +607,10 @@ function EstablishmentPage() {
 
 
             <div className="mt-2.5 flex items-baseline justify-between gap-3">
-              <h2 className="text-[11px] font-bold uppercase tracking-[0.16em] text-foreground">
+              <h2 className="text-[12.5px] font-bold uppercase tracking-[0.16em] text-foreground">
                 Produtos publicados
               </h2>
-              <span className="text-[11px] text-muted-foreground">
+              <span className="text-[12.5px] text-muted-foreground">
                 {filtered.length} de {catalogProducts.length}
                 {selectedCategory ? ` · ${selectedCategory}` : ""}
               </span>
@@ -634,16 +634,16 @@ function EstablishmentPage() {
                 ) : (
                   <div className="mt-2 overflow-hidden rounded-lg border border-border bg-card">
                     <div className="grid grid-cols-[minmax(0,1fr)_96px] items-center gap-3 border-b border-border bg-muted/60 px-2.5 py-1.5 sm:grid-cols-[minmax(0,1fr)_120px_96px_200px]">
-                      <span className="text-[11px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground">
+                      <span className="text-[12.5px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground">
                         Produto
                       </span>
-                      <span className="hidden text-[11px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground sm:block">
+                      <span className="hidden text-[12.5px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground sm:block">
                         Unidade
                       </span>
-                      <span className="text-right text-[11px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground">
+                      <span className="text-right text-[12.5px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground">
                         Preço
                       </span>
-                      <span className="hidden text-right text-[11px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground sm:block">
+                      <span className="hidden text-right text-[12.5px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground sm:block">
                         Ações
                       </span>
                     </div>
@@ -665,7 +665,7 @@ function EstablishmentPage() {
                   <button
                     type="button"
                     onClick={() => setLimit((l) => l + 30)}
-                    className="mt-2.5 h-9 w-full rounded-lg border border-border bg-card text-[12.5px] font-semibold text-foreground transition-colors hover:border-brand-gold"
+                    className="mt-2.5 h-9 w-full rounded-lg border border-border bg-card text-[13.5px] font-semibold text-foreground transition-colors hover:border-brand-gold"
                   >
                     Mostrar mais ({filtered.length - limit} restantes)
                   </button>
@@ -722,7 +722,7 @@ function EstablishmentPage() {
 
         {hasLocation && (
           <div className="mt-10 rounded-xl border border-border/70 bg-card p-4 shadow-sm">
-            <div className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            <div className="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
               Endereço do estabelecimento
             </div>
             <div className="mt-2 flex flex-wrap items-start gap-x-3 gap-y-1.5 text-sm">
@@ -733,12 +733,12 @@ function EstablishmentPage() {
                 </span>
               )}
               {data.store.neighborhood && (
-                <span className="inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-gold px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-navy">
+                <span className="inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-gold px-2.5 py-0.5 text-[12.5px] font-semibold uppercase tracking-[0.14em] text-brand-navy">
                   Bairro {data.store.neighborhood}
                 </span>
               )}
               {(data.store.city || data.store.state) && (
-                <span className="inline-flex items-center rounded-full border border-border bg-background px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground">
+                <span className="inline-flex items-center rounded-full border border-border bg-background px-2.5 py-0.5 text-[12.5px] font-semibold uppercase tracking-[0.14em] text-foreground">
                   {[data.store.city, data.store.state].filter(Boolean).join(" · ")}
                 </span>
               )}
@@ -747,7 +747,7 @@ function EstablishmentPage() {
         )}
 
 
-        <p className="mt-6 text-[11px] leading-relaxed text-muted-foreground">
+        <p className="mt-6 text-[12.5px] leading-relaxed text-muted-foreground">
           Preços e informações exibidos pertencem ao estabelecimento{" "}
           <strong className="text-foreground">{data.store.name}</strong> e são
           publicados na plataforma PreçoCerto para consulta da comunidade.
@@ -848,10 +848,10 @@ function PriceHistorySheet({
                 >
                   <div className="min-w-0">
                     <Price as="div" value={h.price} size="sm" />
-                    <div className="text-[11px] text-muted-foreground">
+                    <div className="text-[12.5px] text-muted-foreground">
                       {new Date(h.captured_at).toLocaleString("pt-BR")}
                     </div>
-                    <div className="mt-1 text-[11px] text-muted-foreground">
+                    <div className="mt-1 text-[12.5px] text-muted-foreground">
                       {h.source === "edit"
                         ? `Editado por ${h.changed_by_email ?? "administrador"}`
                         : "Registro automático"}
@@ -863,7 +863,7 @@ function PriceHistorySheet({
                     )}
                     {h.change_pct != null && (
                       <div
-                        className={`mt-0.5 inline-flex items-center gap-1 text-[11px] font-medium ${
+                        className={`mt-0.5 inline-flex items-center gap-1 text-[12.5px] font-medium ${
                           trend === "down"
                             ? "text-emerald-600 dark:text-emerald-400"
                             : trend === "up"
@@ -897,14 +897,14 @@ function PriceHistorySheet({
 function StoreStat({ label, value, hint }: { label: string; value: string; hint?: string | null }) {
   return (
     <div className="min-w-0 px-3 py-1.5">
-      <dt className="text-[11px] font-semibold uppercase leading-none tracking-[0.14em] text-white/70">
+      <dt className="text-[12.5px] font-semibold uppercase leading-none tracking-[0.14em] text-white/85">
         {label}
       </dt>
-      <dd className="mt-1 truncate text-[15px] font-bold leading-none tabular-nums text-brand-gold">
+      <dd className="mt-1 truncate text-[16.5px] font-bold leading-none tabular-nums text-brand-gold">
         {value}
       </dd>
       {hint ? (
-        <p className="mt-1 truncate text-[11px] leading-none text-white/75">{hint}</p>
+        <p className="mt-1 truncate text-[12.5px] leading-none text-white/85">{hint}</p>
       ) : null}
     </div>
   );
@@ -941,7 +941,7 @@ function CategoryChip({
       onClick={onClick}
       title={hubLabel ? `${label} — faz parte de ${hubLabel}` : label}
       className={
-        "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[12px] font-semibold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-1 focus-visible:ring-offset-background " +
+        "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[13px] font-semibold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-1 focus-visible:ring-offset-background " +
         (active
           ? "border-brand-gold bg-brand-gold text-brand-navy"
           : "border-border bg-card text-foreground hover:border-brand-gold hover:bg-muted/60")
@@ -957,7 +957,7 @@ function CategoryChip({
       {label}
       <span
         className={
-          "text-[11px] font-bold tabular-nums " +
+          "text-[12.5px] font-bold tabular-nums " +
           (active ? "text-brand-navy/70" : "text-muted-foreground")
         }
       >
@@ -1119,8 +1119,8 @@ function ViewToggle({
             onClick={() => onChange(id)}
             className={
               active
-                ? "inline-flex h-7 items-center gap-1 rounded-md bg-brand-gold px-2 text-[11.5px] font-bold leading-none text-brand-navy"
-                : "inline-flex h-7 items-center gap-1 rounded-md px-2 text-[11.5px] font-semibold leading-none text-muted-foreground transition-colors hover:text-foreground"
+                ? "inline-flex h-7 items-center gap-1 rounded-md bg-brand-gold px-2 text-[13px] font-bold leading-none text-brand-navy"
+                : "inline-flex h-7 items-center gap-1 rounded-md px-2 text-[13px] font-semibold leading-none text-muted-foreground transition-colors hover:text-foreground"
             }
           >
             <Icon className="h-3.5 w-3.5" aria-hidden /> {label}
@@ -1169,18 +1169,18 @@ function ProductTile({
         className="w-full px-3 pb-1.5 pt-2.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
       >
         <div className="flex items-start gap-2">
-          <h3 className="min-w-0 flex-1 text-[13px] font-semibold leading-snug text-foreground">
+          <h3 className="min-w-0 flex-1 text-[14px] font-semibold leading-snug text-foreground">
             {product.productName}
           </h3>
           <Price value={product.price} size="md" className="shrink-0" />
         </div>
-        <p className="mt-1 truncate text-[11px] leading-none text-muted-foreground">
+        <p className="mt-1 truncate text-[12.5px] leading-none text-muted-foreground">
           {[product.brand, product.category].filter(Boolean).join(" · ") || "Sem categoria"}
           <UnitSuffix product={product} />
         </p>
       </button>
       <div className="mx-3 mb-2.5 flex items-center justify-between gap-2 border-t border-border/70 pt-1.5">
-        <span className="truncate text-[11px] leading-none text-muted-foreground">
+        <span className="truncate text-[12.5px] leading-none text-muted-foreground">
           {product.lastDate
             ? `Atualizado ${new Date(product.lastDate).toLocaleDateString("pt-BR")}`
             : ""}
@@ -1190,7 +1190,7 @@ function ProductTile({
             type="button"
             onClick={onAlert}
             aria-label={`Criar alerta de preço para ${product.productName}`}
-            className="inline-flex h-6 items-center gap-1 rounded-full border border-border px-2 text-[11px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold"
+            className="inline-flex h-6 items-center gap-1 rounded-full border border-border px-2 text-[12.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold"
           >
             <Bell className="h-3 w-3 text-brand-gold" aria-hidden /> Alerta
           </button>
@@ -1198,7 +1198,7 @@ function ProductTile({
             type="button"
             onClick={onHistory}
             aria-label={`Ver histórico de preço de ${product.productName}`}
-            className="inline-flex h-6 items-center gap-1 rounded-full border border-border px-2 text-[11px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold"
+            className="inline-flex h-6 items-center gap-1 rounded-full border border-border px-2 text-[12.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold"
           >
             <History className="h-3 w-3 text-brand-gold" aria-hidden /> Histórico
           </button>
@@ -1231,15 +1231,15 @@ function ProductRow({
         aria-label={`Ver detalhes de ${product.productName}`}
         className="min-w-0 rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
       >
-        <span className="block truncate text-[12.5px] font-semibold leading-tight text-foreground">
+        <span className="block truncate text-[13.5px] font-semibold leading-tight text-foreground">
           {product.productName}
         </span>
-        <span className="block truncate text-[11px] leading-tight text-muted-foreground">
+        <span className="block truncate text-[12.5px] leading-tight text-muted-foreground">
           {[product.brand, product.category].filter(Boolean).join(" · ") || "Sem categoria"}
         </span>
       </button>
 
-      <span className="hidden min-w-0 truncate text-[11.5px] leading-tight text-muted-foreground sm:block">
+      <span className="hidden min-w-0 truncate text-[13px] leading-tight text-muted-foreground sm:block">
         {unit ? (
           <>
             {unit}
@@ -1265,7 +1265,7 @@ function ProductRow({
           type="button"
           onClick={onAlert}
           aria-label={`Criar alerta de preço para ${product.productName}`}
-          className="inline-flex h-7 items-center gap-1 rounded-full border border-border bg-background px-2 text-[11px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+          className="inline-flex h-7 items-center gap-1 rounded-full border border-border bg-background px-2 text-[12.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
         >
           <Bell className="h-3 w-3 text-brand-gold" aria-hidden /> Alerta
         </button>
@@ -1273,7 +1273,7 @@ function ProductRow({
           type="button"
           onClick={onHistory}
           aria-label={`Ver histórico de preço de ${product.productName}`}
-          className="inline-flex h-7 items-center gap-1 rounded-full border border-border bg-background px-2 text-[11px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+          className="inline-flex h-7 items-center gap-1 rounded-full border border-border bg-background px-2 text-[12.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
         >
           <History className="h-3 w-3 text-brand-gold" aria-hidden /> Histórico
         </button>
