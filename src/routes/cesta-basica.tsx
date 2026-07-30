@@ -3113,18 +3113,22 @@ function ManualMode({
                     )}
                   </div>
                   <div className="shrink-0 text-right">
-                    <p className="font-display text-[15px] font-bold tabular-nums text-foreground">
-                      {fmt(s.totalEstimated)}
-                      {!full && (
-                        <span className="ml-1 font-mono text-[11px] font-normal uppercase tracking-[0.16em] text-muted-foreground">
-                          est.
-                        </span>
-                      )}
-                    </p>
+                    <Price
+                      as="p"
+                      value={s.totalEstimated}
+                      size="md"
+                      suffix={!full ? " est." : undefined}
+                      className="justify-end"
+                    />
                     {!full && s.totalReal > 0 && (
-                      <p className="mt-0.5 font-mono text-[11px] tabular-nums text-muted-foreground">
-                        real: {fmt(s.totalReal)}
-                      </p>
+                      <Price
+                        as="p"
+                        value={s.totalReal}
+                        size="xs"
+                        tone="muted"
+                        prefix="real: R$"
+                        className="mt-0.5 justify-end"
+                      />
                     )}
                     {session.user && (
                       <button
@@ -3193,7 +3197,7 @@ function ManualMode({
                     {ess.label}
                   </p>
                   <p className="mt-0.5 font-mono text-[11px] tabular-nums text-muted-foreground">
-                    {c ? `${fmt(c.price)}/un` : "sem preço"}
+                    {c ? <Price value={c.price} size="xs" tone="muted" suffix="/un" /> : "sem preço"}
                   </p>
                 </div>
               </button>
@@ -3255,7 +3259,7 @@ function ManualMode({
               )}
               {active && subtotal != null && (
                 <p className="mt-1.5 font-mono text-[11px] tabular-nums font-semibold text-foreground">
-                  Subtotal: <span className="text-primary">{fmt(subtotal)}</span>
+                  Subtotal: <Price value={subtotal} size="xs" />
                 </p>
               )}
               {active && c && (
@@ -3354,25 +3358,31 @@ function EssentialPricesDialog({
                   <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                     Menor
                   </p>
-                  <p className="font-display text-[13px] font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
-                    {result.min != null ? fmt(result.min) : "—"}
-                  </p>
+                  <Price
+                    as="p"
+                    value={result.min}
+                    size="sm"
+                    tone="best"
+                    className="justify-center"
+                  />
                 </div>
                 <div>
                   <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                     Média
                   </p>
-                  <p className="font-display text-[13px] font-bold tabular-nums text-foreground">
-                    {result.avg != null ? fmt(result.avg) : "—"}
-                  </p>
+                  <Price as="p" value={result.avg} size="sm" className="justify-center" />
                 </div>
                 <div>
                   <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
                     Maior
                   </p>
-                  <p className="font-display text-[13px] font-bold tabular-nums text-amber-600 dark:text-amber-400">
-                    {result.max != null ? fmt(result.max) : "—"}
-                  </p>
+                  <Price
+                    as="p"
+                    value={result.max}
+                    size="sm"
+                    tone="muted"
+                    className="justify-center"
+                  />
                 </div>
               </div>
               <ul className="divide-y divide-border">
@@ -3397,9 +3407,7 @@ function EssentialPricesDialog({
                       </p>
                     </div>
                     <div className="flex shrink-0 items-center gap-2">
-                      <p className="font-display text-[15px] font-bold tabular-nums text-foreground">
-                        {fmt(r.price)}
-                      </p>
+                      <Price as="p" value={r.price} size="md" />
                       {onSelect ? (
                         <button
                           type="button"
