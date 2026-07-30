@@ -464,7 +464,14 @@ function Chip({
   );
 }
 
-function ProductCard({ product }: { product: PublicStoreProduct }) {
+function ProductCard({
+  product,
+  rank,
+}: {
+  product: PublicStoreProduct;
+  rank?: CatalogPriceRank;
+}) {
+  const isCheapest = rank?.rank === 1;
   return (
     <article className="flex h-full flex-col justify-between gap-2 rounded-xl border border-border/60 bg-card p-3 shadow-sm transition-colors hover:border-border">
       <div className="min-w-0">
@@ -483,6 +490,28 @@ function ProductCard({ product }: { product: PublicStoreProduct }) {
           </span>
         ) : null}
       </div>
+
+      {/* Ranking de menor preço entre mercados */}
+      {rank ? (
+        isCheapest ? (
+          <p
+            className={cn(
+              tc.meta,
+              "inline-flex items-center gap-1.5 rounded-md bg-primary/10 px-2 py-1 text-primary",
+            )}
+          >
+            <Trophy className="h-3.5 w-3.5 shrink-0" />
+            Menor preço entre {rank.offersCount} mercados
+          </p>
+        ) : (
+          <p className={cn(tc.metaMuted, "truncate")}>
+            {rank.rank}º de {rank.offersCount} · mais barato em{" "}
+            <span className={tc.storeName}>{rank.bestStoreName}</span> por{" "}
+            {formatBRL(rank.bestPrice)} ({rank.savingsPct.toFixed(0)}% menos)
+          </p>
+        )
+      ) : null}
     </article>
   );
 }
+
