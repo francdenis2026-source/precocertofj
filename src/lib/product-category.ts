@@ -169,13 +169,20 @@ export const HORTIFRUTI_TERMS = [
  * derruba a classificação, mesmo que o nome cite uma fruta/legume.
  */
 const HORTIFRUTI_BLOCKERS =
-  "(em calda|em conserva|conserva|sabor|aroma|chips|palha|salgadinho|saponaceo|refrigerante|refresco|nectar|\\bsuco\\b|polpa|geleia|doce de|\\bem po\\b|\\blata\\b|\\benlatad|\\bml\\b|\\blitro|congelad|desidratad|\\bseca\\b|farofa|tempero pronto|desodorante|shampoo|sabonete|sabao|detergente|amaciante|biscoito|bolacha|iogurte|leite|cereal|barra|bombom|picole|sorvete|racao)";
+  "(em calda|em conserva|conserva|sabor|aroma|chips|palha|salgadinho|saponaceo|refrigerante|refresco|nectar|\\bsuco\\b|polpa|geleia|doce de|\\bem po\\b|\\blata\\b|\\benlatad|\\bml\\b|\\blitro|congelad|desidratad|\\bseca\\b|farofa|tempero pronto|desodorante|shampoo|xampu|condicionador|sabonete|sabao|detergente|amaciante|biscoito|bolacha|sequilho|rosquinha|wafer|torrada|\\bbolo\\b|iogurte|leite|cereal|barra|bombom|bala|pirulito|chiclete|gelatina|achocolatado|picole|sorvete|racao" +
+  // Higiene/cosmético que cita fruta (\"Creme para Pentear ... Morango\").
+  "|\\bcreme\\b|pentear|\\bhair\\b|\\bgel\\b|hidratante|colonia|perfume|esmalte|creme dental" +
+  // Bebidas prontas e infusões (\"Chá Real Hortelã\").
+  "|\\bcha\\b|infusao|\\bcopo\\b|garrafa|\\bpet\\b|energetico|isotonico" +
+  // Embalagem industrial em gramas/ml: in natura é vendido por kg, un ou maço.
+  "|\\b\\d+\\s?(g|gr|grs|mg|ml)\\b)";
 
 const HORTIFRUTI_RE = new RegExp(
   `^(?!.*${HORTIFRUTI_BLOCKERS}).*\\b(${HORTIFRUTI_TERMS.map((t) =>
     t.replace(/ /g, "\\s+"),
   ).join("|")})\\b`,
 );
+
 
 
 const RULES: readonly Rule[] = [
@@ -231,7 +238,7 @@ const RULES: readonly Rule[] = [
   // 8) Cabelo — antes dos ingredientes: "Shampoo Melancia" não é hortifruti.
   {
     category: "cabelo",
-    re: /(shampoo|xampu|condicionador|creme de pentear|banho de creme|gela ?cola|gel fixador|ativador de cachos|to de cacho|finalizador|leave-?in|umectacao|progressiva|alisante|relaxante capilar|oleo de banana|pasta modeladora|cera modeladora|cera finalizadora|tintura|coloracao|descolorante|7 tons|salon line|salon opus|bio extratus|carmesim|elseve|dabelle|kerabrasil|darling|yamafix|ny looks|vita cap|coreton|niely|cor ?& ?ton|clear men|clear anticaspa|ultra fixacao|aqua fix|gelatina salon|creme seda)/,
+    re: /(shampoo|xampu|condicionador|creme de pentear|creme para pentear|natu hair|\bhair\b|banho de creme|gela ?cola|gel fixador|ativador de cachos|to de cacho|finalizador|leave-?in|umectacao|progressiva|alisante|relaxante capilar|oleo de banana|pasta modeladora|cera modeladora|cera finalizadora|tintura|coloracao|descolorante|7 tons|salon line|salon opus|bio extratus|carmesim|elseve|dabelle|kerabrasil|darling|yamafix|ny looks|vita cap|coreton|niely|cor ?& ?ton|clear men|clear anticaspa|ultra fixacao|aqua fix|gelatina salon|creme seda)/,
   },
 
   // 9) Limpeza — antes de perfumaria ("amaciante 10x mais perfume")
@@ -277,7 +284,7 @@ const RULES: readonly Rule[] = [
   // explícito (existe "Arroz Miragina", que não é bolacha).
   {
     category: "biscoitos",
-    re: /(biscoit|bolach|wafer|cream cracker|cracker|oreo|club social|tortinhas|pit stop|delicita)/,
+    re: /(biscoit|bolach|sequilho|wafer|cream cracker|cracker|oreo|club social|tortinhas|pit stop|delicita)/,
   },
   {
     category: "biscoitos",
@@ -294,7 +301,7 @@ const RULES: readonly Rule[] = [
   // 17) Prontos & enlatados — "em calda" evita "Abacaxi em Calda" em hortifrúti.
   {
     category: "prontos",
-    re: /(em conserva|em calda|sardinha|atum|feijoada|fiambre|milho verde lata|ervilha lata|seleta de legumes|macarrao instantaneo|miojo|lamen|cup noodles|sopao|creme de cebola)/,
+    re: /(em conserva|em calda|milho verde (lata|copo|conserva)|milho verde ole|sardinha|atum|feijoada|fiambre|milho verde lata|ervilha lata|seleta de legumes|macarrao instantaneo|miojo|lamen|cup noodles|sopao|creme de cebola)/,
   },
 
   // 18) Carnes
@@ -325,7 +332,7 @@ const RULES: readonly Rule[] = [
   // 22) Bebidas em pó / matinais
   {
     category: "bebidas_em_po",
-    re: /\b(cafe|cappuccino|chocolatto|achocolatado|nescau|toddy|matte|mingau|sucrilhos|aveia|cremogema|arrozina|nescafe|pilao|brassuk)\b|(cereal matinal|corn flakes|cha preto|cha verde|cha leao|leite em po|cereal nestle)/,
+    re: /\b(cafe|cappuccino|chocolatto|achocolatado|nescau|toddy|matte|mingau|sucrilhos|aveia|cremogema|arrozina|nescafe|pilao|brassuk)\b|\bchas?\b|(cereal matinal|corn flakes|cha preto|cha verde|cha leao|cha real|cha mate|leite em po|cereal nestle)/,
   },
 
   // 23) Congelados
