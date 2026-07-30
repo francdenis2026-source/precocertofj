@@ -1289,10 +1289,51 @@ export function PriceSearchBar({
                 // Disponibilidade: mantém só preços coletados dentro da janela
                 // escolhida e recalcula as estatísticas do grupo.
                 const maxAgeDays = freshness === "all" ? null : Number(freshness);
+                /* Deduplica grupos que representam o mesmo produto com grafias
+                   diferentes (acento/caixa/espaços). Sem isso, buscas vindas de
+                   "Buscas em alta" podiam listar o mesmo item mais de uma vez. */
+                const dedupedGroups = (() => {
+                  const byKey = new Map<string, ProductGroup>();
+                  for (const g of result.groups) {
+                    const key = normalizeNameKey(g.productName) || g.productName.toLowerCase();
+                    const cur = byKey.get(key);
+                    if (!cur) {
+                      byKey.set(key, g);
+                      continue;
+                    }
+                    const seen = new Set(
+                      cur.prices.map((p) => `${p.marketName}|${p.when}|${p.price}`),
+                    );
+                    const prices = [
+                      ...cur.prices,
+                      ...g.prices.filter(
+                        (p) => !seen.has(`${p.marketName}|${p.when}|${p.price}`),
+                      ),
+                    ];
+                    const vals = prices.map((p) => p.price);
+                    byKey.set(key, {
+                      ...cur,
+                      catalogId: cur.catalogId ?? g.catalogId,
+                      prices,
+                      samples: prices.length,
+                      min: Math.min(...vals),
+                      max: Math.max(...vals),
+                      avg: vals.reduce((s, v) => s + v, 0) / vals.length,
+                      lastSeen:
+                        new Date(g.lastSeen).getTime() > new Date(cur.lastSeen).getTime()
+                          ? g.lastSeen
+                          : cur.lastSeen,
+                      matchReasons: Array.from(
+                        new Set([...(cur.matchReasons ?? []), ...(g.matchReasons ?? [])]),
+                      ) as ProductGroup["matchReasons"],
+                    });
+                  }
+                  return Array.from(byKey.values());
+                })();
                 const visibleGroups =
                   maxAgeDays == null
-                    ? result.groups
-                    : result.groups
+                    ? dedupedGroups
+                    : dedupedGroups
                         .map((g) => {
                           const prices = g.prices.filter((p) => daysSince(p.when) <= maxAgeDays);
                           if (prices.length === 0) return null;
