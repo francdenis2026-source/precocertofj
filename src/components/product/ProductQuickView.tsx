@@ -66,6 +66,27 @@ export function ProductQuickView({
     lastSeen: m.lastSeen,
   }));
   const markets = allMarkets.slice(0, 8);
+
+  /**
+   * Ofertas separadas por embalagem (1L vs 2L vs 5L).
+   *
+   * Só entram em cena quando há mais de um tamanho conhecido — caso contrário a
+   * lista simples acima já é suficiente e evita ruído visual no modal.
+   */
+  const rawGroups = (data?.sizeGroups ?? []).filter((g) => g.markets.length > 0);
+  const sizeGroups =
+    rawGroups.length > 1
+      ? rawGroups.map((g) => ({
+          ...g,
+          markets: dedupeByStorePrice(g.markets, (m) => ({
+            store: m.marketName,
+            price: m.priceMin,
+            samples: m.samples,
+            lastSeen: m.lastSeen,
+          })).slice(0, 8),
+        }))
+      : [];
+
   // "Menor preço" sai sempre da mesma lista renderizada abaixo; com um único
   // estabelecimento o destaque repetiria a linha, então é omitido.
   const cheapest = allMarkets.length > 1 ? allMarkets[0] : null;
