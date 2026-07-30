@@ -454,6 +454,7 @@ function EstablishmentPage() {
             <StoreStat label="Categorias" value={String(data.categories.length)} />
             <StoreStat
               label="Menor preço"
+              accent
               value={cheapest ? brl(cheapest.price) : "—"}
               hint={cheapest?.productName}
             />
@@ -728,7 +729,7 @@ function EstablishmentPage() {
             <div className="mt-2 flex flex-wrap items-start gap-x-3 gap-y-1.5 text-sm">
               {data.store.address && (
                 <span className="inline-flex items-start gap-1.5 font-medium text-foreground">
-                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-brand-gold" aria-hidden />
+                  <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-muted-foreground" aria-hidden />
                   {data.store.address}
                 </span>
               )}
@@ -894,13 +895,28 @@ function PriceHistorySheet({
 }
 
 /** Estatística do hero — escala 10/15, contraste sobre navy. */
-function StoreStat({ label, value, hint }: { label: string; value: string; hint?: string | null }) {
+function StoreStat({
+  label,
+  value,
+  hint,
+  accent = false,
+}: {
+  label: string;
+  value: string;
+  hint?: string | null;
+  accent?: boolean;
+}) {
   return (
     <div className="min-w-0 px-3 py-1.5">
       <dt className="text-[12.5px] font-semibold uppercase leading-none tracking-[0.14em] text-white/85">
         {label}
       </dt>
-      <dd className="mt-1 truncate text-[16.5px] font-bold leading-none tabular-nums text-brand-gold">
+      <dd
+        className={
+          "mt-1 truncate text-[17px] font-bold leading-none tabular-nums " +
+          (accent ? "text-brand-gold" : "text-white")
+        }
+      >
         {value}
       </dd>
       {hint ? (
@@ -1084,7 +1100,7 @@ function RailArrow({
       aria-label={dir === -1 ? "Categorias anteriores" : "Próximas categorias"}
       className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-border bg-card text-foreground transition-colors hover:border-brand-gold disabled:opacity-35 disabled:hover:border-border"
     >
-      <Icon className="h-4 w-4 text-brand-gold" aria-hidden />
+      <Icon className="h-4 w-4 text-muted-foreground" aria-hidden />
     </button>
   );
 }
@@ -1192,7 +1208,7 @@ function ProductTile({
             aria-label={`Criar alerta de preço para ${product.productName}`}
             className="inline-flex h-6 items-center gap-1 rounded-full border border-border px-2 text-[12.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold"
           >
-            <Bell className="h-3 w-3 text-brand-gold" aria-hidden /> Alerta
+            <Bell className="h-3 w-3 text-muted-foreground" aria-hidden /> Alerta
           </button>
           <button
             type="button"
@@ -1200,7 +1216,7 @@ function ProductTile({
             aria-label={`Ver histórico de preço de ${product.productName}`}
             className="inline-flex h-6 items-center gap-1 rounded-full border border-border px-2 text-[12.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold"
           >
-            <History className="h-3 w-3 text-brand-gold" aria-hidden /> Histórico
+            <History className="h-3 w-3 text-muted-foreground" aria-hidden /> Histórico
           </button>
         </div>
       </div>
@@ -1267,7 +1283,7 @@ function ProductRow({
           aria-label={`Criar alerta de preço para ${product.productName}`}
           className="inline-flex h-7 items-center gap-1 rounded-full border border-border bg-background px-2 text-[12.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
         >
-          <Bell className="h-3 w-3 text-brand-gold" aria-hidden /> Alerta
+          <Bell className="h-3 w-3 text-muted-foreground" aria-hidden /> Alerta
         </button>
         <button
           type="button"
@@ -1275,7 +1291,7 @@ function ProductRow({
           aria-label={`Ver histórico de preço de ${product.productName}`}
           className="inline-flex h-7 items-center gap-1 rounded-full border border-border bg-background px-2 text-[12.5px] font-semibold leading-none text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
         >
-          <History className="h-3 w-3 text-brand-gold" aria-hidden /> Histórico
+          <History className="h-3 w-3 text-muted-foreground" aria-hidden /> Histórico
         </button>
       </div>
     </div>
