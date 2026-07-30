@@ -249,7 +249,7 @@ function AppHomeContent() {
       <StoreDetailsDrawer
         store={selectedStore}
         open={drawerOpen}
-        onOpenChange={setDrawerOpen}
+        onOpenChange={handleDrawerOpenChange}
       />
     </AppShell>
   );
