@@ -359,8 +359,40 @@ function EstablishmentsPage() {
 
   const detailHeadingRef = useRef<HTMLHeadingElement | null>(null);
 
+  /* ------------------------------------------------------------------
+   * Altura dinâmica do master-detail:
+   * a região ocupa exatamente o espaço restante da viewport (desktop),
+   * de modo que a lista role internamente e a PÁGINA nunca role.
+   * ------------------------------------------------------------------ */
+  const splitRef = useRef<HTMLDivElement | null>(null);
+  const [splitHeight, setSplitHeight] = useState<number | null>(null);
+
+  useEffect(() => {
+    const measure = () => {
+      const el = splitRef.current;
+      if (!el) return;
+      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+      if (!isDesktop) {
+        setSplitHeight(null);
+        return;
+      }
+      const top = el.getBoundingClientRect().top;
+      const avail = Math.max(320, window.innerHeight - top);
+      setSplitHeight(avail);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(measure) : null;
+    if (ro && splitRef.current?.parentElement) ro.observe(splitRef.current.parentElement);
+    return () => {
+      window.removeEventListener("resize", measure);
+      ro?.disconnect();
+    };
+  }, [data, kindFilter]);
+
   return (
     <IsolatedPage className="bg-background" contentClassName="!pb-0">
+
       {/* HEADER compacto */}
       <header className="shrink-0 border-b border-border/60 bg-background/92 backdrop-blur">
         <span
