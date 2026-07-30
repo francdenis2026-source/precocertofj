@@ -48,6 +48,11 @@ export type HubProduct = {
   cheapestLogo: string | null;
   /** todas as lojas que têm esse produto (para filtro por loja) */
   storeNames: string[];
+  /**
+   * Menor preço por loja deste produto. Permite recalcular a economia média
+   * no cliente quando o usuário filtra (ex.: subgrupos de hortifrúti).
+   */
+  storePrices: { id: string; name: string; price: number }[];
   updatedAt: string;
 };
 
