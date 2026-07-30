@@ -77,6 +77,7 @@ export const CATEGORY_DEFS: CategoryDef[] = [
     kinds: ["farmacia", "drogaria"],
     storeRe: /(farmac|drogaria|drogar)/i,
     allFromNicheStores: true,
+    canonical: ["medicamentos", "bucal", "cuidados_pele", "suplementos", "infantil"],
     productRe:
       /\b(dipirona|paracetamol|ibuprofeno|amoxicilina|antibiotic|pomada|xarope|comprimid|capsula|remedio|medicament|vitamina|lavitan|gripe|analgesic|soro fisiolog|curativo|band[- ]?aid|termometro|preservativo|fralda|absorvente|algodao|alcool 70|antisseptic|nistatina|omeprazol|loratadina|nimesulida)\b/,
   },
