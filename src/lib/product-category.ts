@@ -169,13 +169,20 @@ export const HORTIFRUTI_TERMS = [
  * derruba a classificação, mesmo que o nome cite uma fruta/legume.
  */
 const HORTIFRUTI_BLOCKERS =
-  "(em calda|em conserva|conserva|sabor|aroma|chips|palha|salgadinho|saponaceo|refrigerante|refresco|nectar|\\bsuco\\b|polpa|geleia|doce de|\\bem po\\b|\\blata\\b|\\benlatad|\\bml\\b|\\blitro|congelad|desidratad|\\bseca\\b|farofa|tempero pronto|desodorante|shampoo|sabonete|sabao|detergente|amaciante|biscoito|bolacha|iogurte|leite|cereal|barra|bombom|picole|sorvete|racao)";
+  "(em calda|em conserva|conserva|sabor|aroma|chips|palha|salgadinho|saponaceo|refrigerante|refresco|nectar|\\bsuco\\b|polpa|geleia|doce de|\\bem po\\b|\\blata\\b|\\benlatad|\\bml\\b|\\blitro|congelad|desidratad|\\bseca\\b|farofa|tempero pronto|desodorante|shampoo|xampu|condicionador|sabonete|sabao|detergente|amaciante|biscoito|bolacha|sequilho|rosquinha|wafer|torrada|\\bbolo\\b|iogurte|leite|cereal|barra|bombom|bala|pirulito|chiclete|gelatina|achocolatado|picole|sorvete|racao" +
+  // Higiene/cosmético que cita fruta (\"Creme para Pentear ... Morango\").
+  "|\\bcreme\\b|pentear|\\bhair\\b|\\bgel\\b|hidratante|colonia|perfume|esmalte|creme dental" +
+  // Bebidas prontas e infusões (\"Chá Real Hortelã\").
+  "|\\bcha\\b|infusao|\\bcopo\\b|garrafa|\\bpet\\b|energetico|isotonico" +
+  // Embalagem industrial em gramas/ml: in natura é vendido por kg, un ou maço.
+  "|\\b\\d+\\s?(g|gr|grs|mg|ml)\\b)";
 
 const HORTIFRUTI_RE = new RegExp(
   `^(?!.*${HORTIFRUTI_BLOCKERS}).*\\b(${HORTIFRUTI_TERMS.map((t) =>
     t.replace(/ /g, "\\s+"),
   ).join("|")})\\b`,
 );
+
 
 
 const RULES: readonly Rule[] = [
