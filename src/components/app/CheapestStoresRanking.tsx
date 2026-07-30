@@ -348,7 +348,7 @@ export function CheapestStoresRanking() {
                         )}
                         title="Economia média vs. concorrentes"
                       >
-                        <p className="pc-price text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
+                        <p className="pc-num text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
                           {r.avgSavingsPct > 0 ? `−${r.avgSavingsPct.toFixed(1)}%` : "—"}
                         </p>
                         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
