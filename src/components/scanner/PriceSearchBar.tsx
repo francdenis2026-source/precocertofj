@@ -2614,9 +2614,11 @@ function ProductGroupCard({
           {onToggleCompare ? (
             <button
               type="button"
+              data-card-compare=""
               onClick={onToggleCompare}
               disabled={!isCompareSelected && !canSelectCompare}
               aria-pressed={isCompareSelected}
+
               aria-label={
                 isCompareSelected
                   ? `Remover ${productName} da comparação`
