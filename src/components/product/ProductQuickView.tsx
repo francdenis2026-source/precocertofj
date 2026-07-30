@@ -74,6 +74,30 @@ export function ProductQuickView({
       ? (product?.cheapestLogo ?? null)
       : null;
 
+  /**
+   * "Melhor custo-benefício" no modal.
+   *
+   * Aqui todas as ofertas são do MESMO produto (mesma embalagem), então o
+   * vencedor por unidade coincide com o menor preço. O selo continua útil
+   * porque traduz a etiqueta em R$/kg ou R$/L — mas precisa dos mesmos
+   * guardas anti-ruído do `BestValueBadge`:
+   *  - `requireDifferentSizes: false` (comparação intra-produto);
+   *  - `pickBestValue` devolve null sem tamanho detectável, com bases
+   *    misturadas (kg vs L) ou com menos de 2 ofertas;
+   *  - `computeUnitPrice` (interno) não extrapola g/ml abaixo de 1kg/1L.
+   */
+  const bestValue = pickBestValue(
+    allMarkets.map((m) => ({
+      key: m.marketName,
+      price: m.priceMin,
+      name: product?.name ?? data?.displayName ?? "",
+      sizeUnit: product?.unit ?? data?.unit ?? null,
+    })),
+    { requireDifferentSizes: false },
+  );
+
+
+
   return (
     <Dialog open={Boolean(product)} onOpenChange={(v) => !v && onClose()}>
       <DialogContent
