@@ -10,6 +10,7 @@ import {
   updateAiSettings,
   setPlanAiQuota,
 } from "@/lib/ai-admin.functions";
+import { AiUsageObservabilityPanel } from "@/components/admin/AiUsageObservabilityPanel";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -158,6 +159,10 @@ function AiAdminPage() {
             </p>
           </div>
         </div>
+
+        <AiUsageObservabilityPanel />
+
+
 
         {isLoading && (
           <div className="flex justify-center py-10">

@@ -12,6 +12,8 @@ type UsageInput = {
   totalTokens?: number;
   success: boolean;
   errorMessage?: string | null;
+  /** Tempo total da chamada, em milissegundos (observabilidade). */
+  durationMs?: number | null;
 };
 
 /** Custo aproximado por 1k tokens (centavos) — usado só para relatórios. */
@@ -54,6 +56,10 @@ export async function logAiUsage(input: UsageInput): Promise<void> {
       credits_cents: Number(((total / 1000) * CENTS_PER_1K_TOKENS).toFixed(4)),
       success: input.success,
       error_message: input.errorMessage ? input.errorMessage.slice(0, 500) : null,
+      duration_ms:
+        typeof input.durationMs === "number" && Number.isFinite(input.durationMs)
+          ? Math.max(0, Math.round(input.durationMs))
+          : null,
     });
   } catch {
     // Auditoria nunca pode quebrar a resposta ao usuário.
