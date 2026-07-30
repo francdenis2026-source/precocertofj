@@ -67,6 +67,7 @@ import { Route as CotacaoIdRouteImport } from './routes/cotacao.$id'
 import { Route as ComprovanteIdRouteImport } from './routes/comprovante.$id'
 import { Route as CheckoutIdRouteImport } from './routes/checkout.$id'
 import { Route as CategoriaSlugRouteImport } from './routes/categoria.$slug'
+import { Route as CatalogoSlugRouteImport } from './routes/catalogo.$slug'
 import { Route as CShareIdRouteImport } from './routes/c.$shareId'
 import { Route as AdminWebhooksRouteImport } from './routes/admin_.webhooks'
 import { Route as AdminVitrineRouteImport } from './routes/admin_.vitrine'
@@ -404,6 +405,11 @@ const CategoriaSlugRoute = CategoriaSlugRouteImport.update({
   path: '/categoria/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CatalogoSlugRoute = CatalogoSlugRouteImport.update({
+  id: '/catalogo/$slug',
+  path: '/catalogo/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CShareIdRoute = CShareIdRouteImport.update({
   id: '/c/$shareId',
   path: '/c/$shareId',
@@ -721,6 +727,7 @@ export interface FileRoutesByFullPath {
   '/admin/vitrine': typeof AdminVitrineRoute
   '/admin/webhooks': typeof AdminWebhooksRoute
   '/c/$shareId': typeof CShareIdRoute
+  '/catalogo/$slug': typeof CatalogoSlugRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/checkout/$id': typeof CheckoutIdRoute
   '/comprovante/$id': typeof ComprovanteIdRoute
@@ -827,6 +834,7 @@ export interface FileRoutesByTo {
   '/admin/vitrine': typeof AdminVitrineRoute
   '/admin/webhooks': typeof AdminWebhooksRoute
   '/c/$shareId': typeof CShareIdRoute
+  '/catalogo/$slug': typeof CatalogoSlugRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/checkout/$id': typeof CheckoutIdRoute
   '/comprovante/$id': typeof ComprovanteIdRoute
@@ -934,6 +942,7 @@ export interface FileRoutesById {
   '/admin_/vitrine': typeof AdminVitrineRoute
   '/admin_/webhooks': typeof AdminWebhooksRoute
   '/c/$shareId': typeof CShareIdRoute
+  '/catalogo/$slug': typeof CatalogoSlugRoute
   '/categoria/$slug': typeof CategoriaSlugRoute
   '/checkout/$id': typeof CheckoutIdRoute
   '/comprovante/$id': typeof ComprovanteIdRoute
@@ -1042,6 +1051,7 @@ export interface FileRouteTypes {
     | '/admin/vitrine'
     | '/admin/webhooks'
     | '/c/$shareId'
+    | '/catalogo/$slug'
     | '/categoria/$slug'
     | '/checkout/$id'
     | '/comprovante/$id'
@@ -1148,6 +1158,7 @@ export interface FileRouteTypes {
     | '/admin/vitrine'
     | '/admin/webhooks'
     | '/c/$shareId'
+    | '/catalogo/$slug'
     | '/categoria/$slug'
     | '/checkout/$id'
     | '/comprovante/$id'
@@ -1254,6 +1265,7 @@ export interface FileRouteTypes {
     | '/admin_/vitrine'
     | '/admin_/webhooks'
     | '/c/$shareId'
+    | '/catalogo/$slug'
     | '/categoria/$slug'
     | '/checkout/$id'
     | '/comprovante/$id'
@@ -1360,6 +1372,7 @@ export interface RootRouteChildren {
   AdminVitrineRoute: typeof AdminVitrineRoute
   AdminWebhooksRoute: typeof AdminWebhooksRoute
   CShareIdRoute: typeof CShareIdRoute
+  CatalogoSlugRoute: typeof CatalogoSlugRoute
   CategoriaSlugRoute: typeof CategoriaSlugRoute
   CheckoutIdRoute: typeof CheckoutIdRoute
   ComprovanteIdRoute: typeof ComprovanteIdRoute
@@ -1787,6 +1800,13 @@ declare module '@tanstack/react-router' {
       path: '/categoria/$slug'
       fullPath: '/categoria/$slug'
       preLoaderRoute: typeof CategoriaSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/catalogo/$slug': {
+      id: '/catalogo/$slug'
+      path: '/catalogo/$slug'
+      fullPath: '/catalogo/$slug'
+      preLoaderRoute: typeof CatalogoSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/c/$shareId': {
@@ -2254,6 +2274,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminVitrineRoute: AdminVitrineRoute,
   AdminWebhooksRoute: AdminWebhooksRoute,
   CShareIdRoute: CShareIdRoute,
+  CatalogoSlugRoute: CatalogoSlugRoute,
   CategoriaSlugRoute: CategoriaSlugRoute,
   CheckoutIdRoute: CheckoutIdRoute,
   ComprovanteIdRoute: ComprovanteIdRoute,
