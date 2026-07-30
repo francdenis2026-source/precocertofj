@@ -273,11 +273,14 @@
   --pc-price-hover:      color-mix(in oklab, var(--pc-price-fg) 92%, var(--pc-gold-ink) 8%);
   --pc-price-loading:    color-mix(in oklab, var(--pc-price-fg) 45%, transparent);
   --pc-price-disabled:   color-mix(in oklab, var(--pc-price-fg) 55%, transparent);
-  /* Números/preços agora usam DM Sans — fonte comercial com glifos numéricos
-     grandes, abertos e altamente legíveis, ideais para preços e tabelas. */
-  --pc-price-font:       'DM Sans', 'Inter', 'Work Sans', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --pc-price-tracking:   -0.01em;
-  --pc-price-feature-settings: "tnum" 1, "lnum" 1, "ss01" 1;
+  /* Algarismos em Oswald (subset 0-9); símbolos "R$", "%" e demais caracteres
+     caem em DM Sans, que segue como fonte comercial de apoio. Como a Oswald é
+     condensada, o tracking negativo foi zerado — apertar uma condensada reduz
+     a legibilidade em vez de aumentá-la. */
+  --pc-price-font:       var(--font-numeric), 'DM Sans', 'Inter', 'Work Sans', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --pc-price-tracking:   0.005em;
+  --pc-price-feature-settings: "tnum" 1, "lnum" 1;
+
 
 
 
@@ -4900,8 +4903,23 @@ html.dark .pc-row-interactive:hover .pc-store-name {
 
 .pc-price--sm { font-size: 0.8125rem; line-height: 1.15; }
 .pc-price--md { font-size: 0.9375rem; line-height: 1.15; font-weight: 650; }
-.pc-price--lg { font-size: 1.125rem;  line-height: 1.1;  font-weight: 700; letter-spacing: -0.01em; }
+/* Preços grandes: a Oswald é condensada, então ganha peso 700 e um leve
+   afastamento entre dígitos (kerning positivo) — o oposto do que se faz com
+   uma sans normal. Isso evita que "11", "00" e "88" colem em tamanhos maiores. */
+.pc-price--lg {
+  font-size: 1.125rem;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: 0.012em;
+}
+.pc-price--xl {
+  font-size: clamp(1.5rem, 1.1vw + 1.15rem, 2.25rem);
+  line-height: 1.02;
+  font-weight: 700;
+  letter-spacing: 0.016em;
+}
 /* Contexto "a partir de" — leve, ainda AA (>= 4.5:1) */
+
 .pc-price--muted {
   color: color-mix(in oklab, var(--foreground) 82%, transparent);
   font-weight: 600;
@@ -4977,4 +4995,58 @@ svg.lucide-search {
 .btn-signal svg.lucide-search {
   color: var(--pc-home-navy, #0f1b3d) !important;
   filter: none;
+}
+
+/* ============================================================
+   Alinhamento numérico global — tabelas e listas de preço
+   Colunas de números só alinham quando todos os dígitos têm a
+   mesma largura. Aplicamos tabular-nums de forma abrangente em
+   tabelas e nos containers de preço, em todos os breakpoints.
+   Nenhuma cor é alterada aqui.
+   ============================================================ */
+table,
+thead,
+tbody,
+tfoot,
+tr,
+th,
+td,
+[role="table"],
+[role="row"],
+[role="rowheader"],
+[role="columnheader"],
+[role="gridcell"],
+[role="cell"],
+[data-price],
+[data-numeric],
+.pc-price,
+.pc-res-price,
+.pc-price-value,
+.pc-table,
+.price-list,
+.price-list li,
+.tabular-nums {
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+/* Células/valores monetários alinham à direita e não quebram no meio
+   do número — regra essencial em telas estreitas. */
+th[data-numeric],
+td[data-numeric],
+[role="columnheader"][data-numeric],
+[role="gridcell"][data-numeric],
+[role="cell"][data-numeric] {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Em telas pequenas, condensada + peso alto pode fechar demais os dígitos;
+   um pouco mais de tracking preserva a leitura sem alterar o layout. */
+@media (max-width: 480px) {
+  .pc-price--lg,
+  .pc-price--xl {
+    letter-spacing: 0.02em;
+  }
 }
