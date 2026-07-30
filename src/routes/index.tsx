@@ -23,7 +23,9 @@ import { StoreCaption } from "@/components/brand/StoreCaption";
 import { buildLivePanel, type LivePanelMetric } from "@/lib/live-panel";
 import { getPlatformStats, listPublicStores } from "@/lib/stores-public.functions";
 import { getEconomyStat } from "@/lib/products-public.functions";
-import { listPopularQueries } from "@/lib/search-popular.functions";
+import { listTrendingSearches } from "@/lib/search-trends.functions";
+import { useSearchTrendsRealtime } from "@/hooks/useSearchTrendsRealtime";
+import { trackEvent } from "@/lib/analytics-events";
 import { StartFreeDialog } from "@/components/home/StartFreeDialog";
 import { GuestGateDialog } from "@/components/gate/GuestGateDialog";
 import {
@@ -220,18 +222,39 @@ function HomePage() {
   });
   const economy = economyQ.data;
 
-  const popularFn = useServerFn(listPopularQueries);
+  /* Buscas reais dos clientes, agregadas em tempo real (`search_trends`). */
+  const trendingFn = useServerFn(listTrendingSearches);
+  const TRENDING_KEY = ["home-trending-searches"] as const;
   const popularQ = useQuery({
-    queryKey: ["home-popular-queries", 7, 24],
-    queryFn: () => popularFn({ data: { days: 7, limit: 24 } } as any),
-    staleTime: 45_000,
-    refetchOnWindowFocus: false,
+    queryKey: TRENDING_KEY,
+    queryFn: () => trendingFn({ data: { limit: 24 } } as any),
+    staleTime: 15_000,
+    refetchOnWindowFocus: true,
   });
+  useSearchTrendsRealtime([...TRENDING_KEY]);
+
   const POPULAR_FALLBACK = ["arroz", "feijão", "leite", "óleo", "café", "açúcar"];
+  const trendRows = useMemo(
+    () =>
+      (popularQ.data ?? [])
+        .map((p: any) => ({
+          query: String(p?.query ?? "").trim(),
+          count: Number(p?.count ?? 0),
+          dayCount: Number(p?.dayCount ?? 0),
+          hot: Boolean(p?.hot),
+        }))
+        .filter((p: { query: string }) => p.query.length >= 2),
+    [popularQ.data],
+  );
   const popularAll: string[] = useMemo(() => {
-    const real = (popularQ.data ?? []).map((p: any) => String(p?.query ?? "")).filter(Boolean);
+    const real = trendRows.map((p: { query: string }) => p.query);
     return real.length >= 3 ? real : POPULAR_FALLBACK;
-  }, [popularQ.data]);
+  }, [trendRows]);
+  const trendMeta = useMemo(() => {
+    const m = new Map<string, { count: number; dayCount: number; hot: boolean }>();
+    for (const r of trendRows) m.set(r.query, r);
+    return m;
+  }, [trendRows]);
 
   /* Hero e faixa "Buscas em alta" consomem a mesma fonte, mas nunca repetem
      termos: o hero fica com os 4 primeiros e a faixa com os seguintes. */
@@ -282,6 +305,8 @@ function HomePage() {
         return;
       }
     }
+    // Registra a busca real do cliente — alimenta "Buscas em alta" em tempo real.
+    trackEvent("search_query", { q: query.toLowerCase().slice(0, 60) });
     navigate({ to: "/buscar", search: { q: query } as any });
   };
 
@@ -301,6 +326,7 @@ function HomePage() {
         return;
       }
     }
+    trackEvent("search_query", { q: query.toLowerCase().slice(0, 60), from: "alta" });
     void navigate({ to: "/buscar", search: { q: query, from: "alta" } as any }).finally(() =>
       setPendingTerm(null),
     );
@@ -987,6 +1013,12 @@ function HomePage() {
             >
               <TrendingDown className="h-3.5 w-3.5" aria-hidden />
               Buscas em alta
+              <span
+                aria-hidden
+                className="ml-0.5 inline-flex h-1.5 w-1.5 shrink-0 animate-pulse rounded-full motion-reduce:animate-none"
+                style={{ background: "var(--pc-home-onhero-gold)" }}
+              />
+              <span className="sr-only">atualizando em tempo real</span>
             </span>
             <ul
               role="list"
@@ -995,6 +1027,8 @@ function HomePage() {
             >
               {trendingPopular.map((t) => {
                 const isActive = normalizeSearchText(t) === normalizeSearchText(q);
+                const meta = trendMeta.get(t);
+                const isHot = Boolean(meta?.hot);
                 return (
                 <li key={t} className="min-w-0">
                   <button
@@ -1041,6 +1075,24 @@ function HomePage() {
                       style={{ color: "var(--pc-home-onhero-gold)" }}
                     />
                     <span className="relative min-w-0 flex-1 truncate text-left">{t}</span>
+                    {meta && meta.count > 0 ? (
+                      <span
+                        className="relative shrink-0 rounded-full px-1.5 py-[1px] text-[11px] font-bold tabular-nums"
+                        title={
+                          isHot
+                            ? `${meta.dayCount} buscas hoje · ${meta.count} no total`
+                            : `${meta.count} buscas`
+                        }
+                        style={{
+                          background: isHot
+                            ? "color-mix(in oklab, var(--pc-home-onhero-gold) 34%, transparent)"
+                            : "color-mix(in oklab, var(--pc-home-onhero-gold) 16%, transparent)",
+                          color: "var(--pc-home-onhero-fg)",
+                        }}
+                      >
+                        {isHot ? `+${meta.dayCount}` : meta.count}
+                      </span>
+                    ) : null}
                     <ArrowRight
                       aria-hidden
                       className={

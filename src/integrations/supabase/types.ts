@@ -2610,6 +2610,30 @@ export type Database = {
         }
         Relationships: []
       }
+      search_trends: {
+        Row: {
+          day_bucket: string
+          day_count: number
+          last_at: string
+          query: string
+          total_count: number
+        }
+        Insert: {
+          day_bucket?: string
+          day_count?: number
+          last_at?: string
+          query: string
+          total_count?: number
+        }
+        Update: {
+          day_bucket?: string
+          day_count?: number
+          last_at?: string
+          query?: string
+          total_count?: number
+        }
+        Relationships: []
+      }
       shared_comparisons: {
         Row: {
           created_at: string
