@@ -299,7 +299,6 @@ export function AppSidebar() {
           </span>
         </Link>
 
-        </Link>
       </SidebarHeader>
 
       <SidebarContent className="px-2 py-3">
