@@ -16,6 +16,7 @@ import { cn } from "@/lib/utils";
 import { Price } from "@/components/ds/Price";
 import { Search as SearchIcon, TrendingDown, Store as StoreIcon, ArrowRight, Tags } from "lucide-react";
 import { CATEGORY_LABELS } from "@/lib/product-category";
+import { useCategoryLabelResolver } from "@/hooks/use-category-labels";
 
 /* ------------------------------------------------------------------ */
 /* Tipos                                                               */
@@ -112,6 +113,8 @@ export const Route = createFileRoute("/precos-por-categoria")({
 type SortKey = "price" | "savings" | "name";
 
 function PrecosPorCategoriaPage() {
+  // Rótulos podem ser personalizados pelo admin (overrides no banco).
+  const categoryLabel = useCategoryLabelResolver();
   const search = Route.useSearch();
   const navigate = Route.useNavigate();
 
@@ -145,7 +148,7 @@ function PrecosPorCategoriaPage() {
     return [...map.entries()]
       .map(([slug, count]) => ({ slug, label: categoryLabel(slug), count }))
       .sort((a, b) => b.count - a.count);
-  }, [data]);
+  }, [data, categoryLabel]);
 
   /** Agrupamento filtrado + ordenado. */
   const groups = useMemo(() => {
@@ -184,7 +187,7 @@ function PrecosPorCategoriaPage() {
         };
       })
       .sort((a, b) => a.label.localeCompare(b.label, "pt-BR"));
-  }, [data, q, minStores, search.cat, sort, perCategory]);
+  }, [data, q, minStores, search.cat, sort, perCategory, categoryLabel]);
 
   const totalShown = groups.reduce((s, g) => s + g.items.length, 0);
 
