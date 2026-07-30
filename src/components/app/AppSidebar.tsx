@@ -98,7 +98,7 @@ const appGroups: readonly NavGroup[] = [
       { to: "/planos", label: "Planos", icon: TicketPercent },
       { to: "/minhas-licencas", label: "Licenças", icon: KeyRound },
       { to: "/meus-pedidos", label: "Pedidos", icon: ReceiptText },
-      { to: "/resgatar", label: "Resgatar código", icon: BadgeCheck },
+      
     ],
   },
 ] as const;
