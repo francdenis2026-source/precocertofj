@@ -125,6 +125,13 @@ const TILE_ICON = "h-[clamp(18px,2.5vh,25px)] w-[clamp(18px,2.5vh,25px)]";
 const TILE_LABEL =
   "w-full truncate text-[clamp(11.5px,1.6vh,15px)] font-semibold leading-none tracking-[-0.005em]";
 
+/* Tokens tipográficos compartilhados da home: um único "eyebrow" (rótulo de
+   seção) e um único estilo de chip, para que hero, painel ao vivo e faixa de
+   buscas em alta tenham exatamente a mesma hierarquia e o mesmo respiro. */
+const EYEBROW = "text-[11px] font-bold uppercase tracking-[0.2em]";
+const CHIP =
+  "inline-flex items-center justify-center rounded-full border px-2.5 py-1 text-[12px] font-medium capitalize pc-tile focus-visible:outline-none focus-visible:ring-2";
+
 
 /**
  * Ladrilhos da home — derivados de `CATEGORY_DEFS`, a mesma fonte usada em
