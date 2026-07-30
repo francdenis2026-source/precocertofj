@@ -1,23 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { requireCronSecret } from "@/lib/cron-auth.server";
 
 /**
  * Endpoint público chamado por pg_cron para reprocessar imagens
  * automaticamente conforme configuração salva em `integrations.image_search`.
  *
- * Segurança: verifica `apikey` header contra SUPABASE_ANON_KEY (padrão Lovable).
+ * Segurança: header `x-cron-secret` === secret CRON_SECRET.
  */
 export const Route = createFileRoute("/api/public/hooks/refresh-catalog-images")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const apiKey = request.headers.get("apikey");
-        const expected = process.env.SUPABASE_ANON_KEY;
-        if (!apiKey || !expected || apiKey !== expected) {
-          return new Response(JSON.stringify({ error: "unauthorized" }), {
-            status: 401,
-            headers: { "Content-Type": "application/json" },
-          });
-        }
+        const denied = requireCronSecret(request);
+        if (denied) return denied;
+
 
         const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
 

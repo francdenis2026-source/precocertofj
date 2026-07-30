@@ -1,23 +1,18 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { requireCronSecret } from "@/lib/cron-auth.server";
 
 /**
  * Drena a fila de jobs de imagem do catálogo, processando até N por chamada.
  * Usa busca na web (mais barato); se falhar, cai para geração via IA.
- * Segurança: apikey === SUPABASE_ANON_KEY.
+ * Segurança: header `x-cron-secret` === secret CRON_SECRET.
  */
 export const Route = createFileRoute("/api/public/hooks/drain-catalog-images")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const apiKey = request.headers.get("apikey");
-        const expected =
-          process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.SUPABASE_ANON_KEY;
-        if (!apiKey || !expected || apiKey !== expected) {
-          return new Response(JSON.stringify({ error: "unauthorized" }), {
-            status: 401,
-            headers: { "Content-Type": "application/json" },
-          });
-        }
+        const denied = requireCronSecret(request);
+        if (denied) return denied;
+
 
         let body: { max?: number; mode?: "web" | "ai" | "web_then_ai" } = {};
         try {
