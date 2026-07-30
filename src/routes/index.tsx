@@ -962,7 +962,9 @@ function HomePage() {
 
                 </SheetContent>
               </Sheet>
-            </div>
+              </div>
+            </nav>
+
 
           </div>
 
