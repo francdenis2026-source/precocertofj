@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { requireAdmin } from "@/lib/require-admin";
 
 export type ConsistencyMetric = {
   key: string;
@@ -33,7 +34,9 @@ const CRITICAL_PCT = 10; // > 10% é alerta grave
  *   2. product_comparison_cache (o que aparece no /comparador)
  *   3. platform_public_stats.active_comparisons (o que a Home mostra)
  */
-export const checkProductCountConsistency = createServerFn({ method: "GET" }).handler(
+export const checkProductCountConsistency = createServerFn({ method: "GET" })
+  .middleware([requireAdmin])
+  .handler(
   async (): Promise<ConsistencyReport> => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const client = supabaseAdmin as unknown as {

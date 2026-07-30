@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { requireAdmin } from "@/lib/require-admin";
 
 export type AuditSource = {
   label: string;
@@ -59,7 +60,9 @@ function build(
  * origem (tabela/RPC), o escopo (filtros) e um cross-check independente,
  * sinalizando divergências.
  */
-export const getNumberAudit = createServerFn({ method: "GET" }).handler(
+export const getNumberAudit = createServerFn({ method: "GET" })
+  .middleware([requireAdmin])
+  .handler(
   async (): Promise<NumberAuditReport> => {
     const started = Date.now();
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
