@@ -29,6 +29,7 @@ import {
 } from "@/lib/stores-public.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { Price } from "@/components/ds/Price";
 
 const productQuery = (storeId: string, slug: string) =>
   queryOptions({
@@ -83,7 +84,6 @@ export const Route = createFileRoute("/loja/$id/produto/$slug")({
   component: ProductDetailPage,
 });
 
-const fmt = (n: number) => `R$ ${n.toFixed(2).replace(".", ",")}`;
 function bestReasonHeadline(r: BestOfferReason): string {
   if (r.rankedBy === "pricePerUnit" && r.ppuAdvantagePct != null && r.ppuAdvantagePct > 0.5) {
     return `Menor preço por unidade (−${r.ppuAdvantagePct.toFixed(1).replace(".", ",")}%)`;
@@ -195,9 +195,7 @@ function ProductDetailPage() {
                   <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
                     Último preço
                   </p>
-                  <p className="num font-display text-[24px] font-extrabold leading-none text-primary">
-                    {fmt(product.price)}
-                  </p>
+                  <Price as="p" value={product.price} size="xl" />
                   {product.pricePerUnit != null && product.unitLabel && (
                     <p className="num mt-0.5 text-[11px] text-muted-foreground">
                       {product.unitLabel} {product.pricePerUnit.toFixed(2).replace(".", ",")}
@@ -220,9 +218,15 @@ function ProductDetailPage() {
                     ) : (
                       <TrendingUp className="h-3 w-3" />
                     )}
-                    {trend === 0
-                      ? "estável"
-                      : `${trend < 0 ? "-" : "+"}${fmt(Math.abs(trend))}`}
+                    {trend === 0 ? (
+                      "estável"
+                    ) : (
+                      <Price
+                        value={Math.abs(trend)}
+                        size="xs"
+                        prefix={`${trend < 0 ? "-" : "+"}R$`}
+                      />
+                    )}
                   </div>
                 )}
               </div>
@@ -248,9 +252,9 @@ function ProductDetailPage() {
           </div>
 
           <div className="grid grid-cols-3 gap-2 border-t border-border p-3">
-            <Stat label="Mínimo" value={fmt(product.minPrice)} accent="savings" />
-            <Stat label="Média" value={fmt(product.avgPrice)} />
-            <Stat label="Máximo" value={fmt(product.maxPrice)} accent="destructive" />
+            <Stat label="Mínimo" value={product.minPrice} accent="savings" />
+            <Stat label="Média" value={product.avgPrice} />
+            <Stat label="Máximo" value={product.maxPrice} accent="destructive" />
           </div>
         </header>
 
@@ -293,9 +297,7 @@ function ProductDetailPage() {
                         )}
                       </p>
                     </div>
-                    <p className="num shrink-0 font-display text-[14px] font-bold text-primary">
-                      {fmt(v.price)}
-                    </p>
+                    <Price as="p" value={v.price} size="md" className="shrink-0" />
                   </Link>
                 </li>
               ))}
@@ -315,7 +317,7 @@ function ProductDetailPage() {
                 {[...history].reverse().slice(0, 10).map((h, i) => (
                   <li key={`${h.date}-${i}`} className="flex items-center justify-between py-2">
                     <span className="text-muted-foreground">{fmtDate(h.date)}</span>
-                    <span className="num font-semibold text-foreground">{fmt(h.price)}</span>
+                    <Price value={h.price} size="xs" />
                   </li>
                 ))}
               </ul>
@@ -377,21 +379,22 @@ function Stat({
   accent,
 }: {
   label: string;
-  value: string;
+  /** Valor monetário em reais — formatado pelo componente canônico <Price />. */
+  value: number | null | undefined;
   accent?: "savings" | "destructive";
 }) {
-  const color =
-    accent === "savings"
-      ? "text-savings"
-      : accent === "destructive"
-        ? "text-destructive"
-        : "text-foreground";
   return (
     <div className="rounded-xl border border-border bg-background px-2 py-2 text-center">
       <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
         {label}
       </p>
-      <p className={`num mt-0.5 font-display text-[13px] font-bold ${color}`}>{value}</p>
+      <Price
+        as="p"
+        value={value}
+        size="sm"
+        tone={accent === "savings" ? "best" : accent === "destructive" ? "muted" : "default"}
+        className="mt-0.5 justify-center"
+      />
     </div>
   );
 }
@@ -469,11 +472,12 @@ function CompareSection({
       {!currentIsBest && current && diff > 0 && (
         <div className="mb-2 rounded-2xl border border-savings/40 bg-savings/10 px-3 py-2.5 text-[11.5px] text-savings">
           <p className="font-semibold">
-            Economize {fmt(diff)}{" "}
+            Economize <Price value={diff} size="sm" tone="savings" />{" "}
             <span className="opacity-80">({diffPct.toFixed(1).replace(".", ",")}%)</span>
           </p>
           <p className="text-[11px] opacity-90">
-            Melhor oferta em <strong>{best.storeName}</strong> por {fmt(best.price)}.
+            Melhor oferta em <strong>{best.storeName}</strong> por{" "}
+            <Price value={best.price} size="xs" tone="savings" />.
           </p>
         </div>
       )}
@@ -583,11 +587,12 @@ function CompareSection({
                   </p>
                 </div>
                 <div className="text-right">
-                  <p
-                    className={`num font-display text-[14px] font-bold ${isBest ? "text-savings" : "text-foreground"}`}
-                  >
-                    {fmt(o.price)}
-                  </p>
+                  <Price
+                    as="p"
+                    value={o.price}
+                    size="md"
+                    tone={isBest ? "best" : "default"}
+                  />
                   {o.pricePerUnit != null && o.unitLabel && (
                     <p className="num text-[11px] text-muted-foreground">
                       {o.unitLabel} {o.pricePerUnit.toFixed(2).replace(".", ",")}
@@ -968,7 +973,7 @@ function ReportDialog({
 
         <p className="mb-3 rounded-lg bg-muted/60 px-3 py-2 text-[11.5px] text-muted-foreground">
           <span className="font-semibold text-foreground">{productName}</span> — atual{" "}
-          <span className="num font-semibold text-foreground">{fmt(currentPrice)}</span>
+          <Price value={currentPrice} size="xs" />
         </p>
 
         {authed === false && (
