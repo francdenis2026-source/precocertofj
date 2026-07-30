@@ -50,6 +50,10 @@ export function FavoritesDock({
   onRemoveMarket: (favoriteId: string) => void;
 }) {
   const [tab, setTab] = useState<Tab>("items");
+  const tabIndex = TABS.findIndex((t) => t.id === tab);
+  const roving = useRovingFocus(TABS.length, tabIndex, (i) =>
+    setTab(TABS[i].id),
+  );
 
   const itemIds = summary.favoriteItems.map((x) => x.favoriteId);
   const marketIds = summary.favoriteMarkets.map((x) => x.favoriteId);
@@ -68,15 +72,19 @@ export function FavoritesDock({
       <div
         role="tablist"
         aria-label="Seções do painel"
+        aria-orientation="horizontal"
         className="flex shrink-0 gap-1 border-b border-border/70 p-2"
       >
-        {TABS.map((t) => (
+        {TABS.map((t, i) => (
           <button
             key={t.id}
             type="button"
             role="tab"
+            id={`dock-tab-${t.id}`}
             aria-selected={tab === t.id}
+            aria-controls={`dock-panel-${t.id}`}
             onClick={() => setTab(t.id)}
+            {...roving.itemProps(i)}
             className={cn(
               "h-7 rounded-full px-3 text-[12.5px] font-semibold transition-colors",
               tab === t.id
@@ -90,7 +98,14 @@ export function FavoritesDock({
         ))}
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto">
+      <div
+        role="tabpanel"
+        id={`dock-panel-${tab}`}
+        aria-labelledby={`dock-tab-${tab}`}
+        tabIndex={0}
+        className="min-h-0 flex-1 overflow-y-auto"
+      >
+
         {tab === "items" &&
           (summary.favoriteItems.length === 0 ? (
             <Empty
