@@ -269,6 +269,29 @@ function EstablishmentsPage() {
     return list;
   }, [data, q, kindFilter, cityFilter, neighborhoodFilter, savingsFilter, sort, onlyFavorites, favSet]);
 
+  /**
+   * Resumo legível do que está sendo filtrado agora — evita que o usuário
+   * precise adivinhar por que a lista encolheu. Usa termos do domínio
+   * (nome, bairro, cidade) em vez de rótulos técnicos.
+   */
+  const filterSummary = useMemo(() => {
+    const parts: string[] = [];
+    if (q.trim()) parts.push(`nome, bairro ou cidade com “${q.trim()}”`);
+    if (cityFilter !== "__all") parts.push(`cidade ${cityFilter}`);
+    if (neighborhoodFilter !== "__all") parts.push(`bairro ${neighborhoodFilter}`);
+    if (kindFilter !== "__all") parts.push(`tipo ${kindFilter}`);
+    if (savingsFilter !== "__all") {
+      const map: Record<string, string> = {
+        low: "economia até R$ 5",
+        mid: "economia de R$ 5 a R$ 20",
+        high: "economia acima de R$ 20",
+      };
+      parts.push(map[savingsFilter] ?? "");
+    }
+    if (onlyFavorites) parts.push("somente favoritos");
+    return parts.filter(Boolean);
+  }, [q, cityFilter, neighborhoodFilter, kindFilter, savingsFilter, onlyFavorites]);
+
   // Reset pagination when filters shrink the list
   useEffect(() => {
     if (pagesLoaded > 1) updateSearch({ pagina: 1 });
