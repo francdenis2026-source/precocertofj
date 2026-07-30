@@ -842,7 +842,7 @@ function HomePage() {
                       Explorar o PreçoCerto
                     </SheetTitle>
                   </SheetHeader>
-                  <div className="mx-auto flex w-full min-h-0 max-w-6xl flex-1 flex-col overflow-hidden py-3">
+                  <div className="mx-auto flex w-full min-h-0 max-w-6xl flex-1 flex-col overflow-y-auto py-3 lg:overflow-hidden">
                     <Suspense fallback={<div aria-hidden className="h-40" />}>
                       <ExplorePanel onNavigate={() => setExploreOpen(false)} />
                     </Suspense>
