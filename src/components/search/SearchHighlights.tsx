@@ -206,7 +206,7 @@ export function SearchHighlights({ onPickQuery }: Props) {
             <h2 className="font-serif text-[14.5px] font-semibold leading-tight tracking-tight text-foreground">
               {title}
             </h2>
-            <p className="text-[11.5px] leading-snug text-muted-foreground">{subtitle}</p>
+            <p className="text-[13px] leading-snug text-muted-foreground">{subtitle}</p>
           </div>
         </div>
 
@@ -315,12 +315,12 @@ function EmptyHighlights({
       role="status"
       className="rounded-xl border border-dashed border-border bg-background/60 px-3 py-4 text-center"
     >
-      <p className="text-[12.5px] font-medium tracking-tight text-foreground">
+      <p className="text-[13.5px] font-medium tracking-tight text-foreground">
         {categoryLabel
           ? `Ainda não há destaques em ${categoryLabel}.`
           : "Ainda não há destaques por aqui."}
       </p>
-      <p className="mt-0.5 text-[11.5px] leading-snug text-muted-foreground">
+      <p className="mt-0.5 text-[13px] leading-snug text-muted-foreground">
         Busque um item específico ou ajude cadastrando um preço que você viu no mercado.
       </p>
 
@@ -345,12 +345,12 @@ function EmptyHighlights({
             value={term}
             onChange={(e) => setTerm(e.target.value)}
             placeholder="Ex.: arroz 5kg"
-            className="h-8 w-full rounded-full border border-border bg-background pl-8 pr-3 text-[12px] text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+            className="h-8 w-full rounded-full border border-border bg-background pl-8 pr-3 text-[13px] text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
           />
         </div>
         <button
           type="submit"
-          className="inline-flex h-8 shrink-0 items-center rounded-full bg-brand-gold px-3 text-[11.5px] font-semibold text-brand-navy transition-colors hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+          className="inline-flex h-8 shrink-0 items-center rounded-full bg-brand-gold px-3 text-[13px] font-semibold text-brand-navy transition-colors hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
         >
           Buscar
         </button>
@@ -361,14 +361,14 @@ function EmptyHighlights({
           <button
             type="button"
             onClick={onClearCategory}
-            className="inline-flex h-7 items-center rounded-full border border-border px-2.5 text-[11.5px] font-medium text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)]"
+            className="inline-flex h-7 items-center rounded-full border border-border px-2.5 text-[13px] font-medium text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)]"
           >
             Ver todas as categorias
           </button>
         )}
         <Link
           to="/colaborar"
-          className="inline-flex h-7 items-center gap-1 rounded-full border border-brand-gold px-2.5 text-[11.5px] font-semibold text-gold-ink-soft transition-colors hover:bg-brand-gold hover:text-brand-navy dark:text-gold-ink"
+          className="inline-flex h-7 items-center gap-1 rounded-full border border-brand-gold px-2.5 text-[13px] font-semibold text-gold-ink-soft transition-colors hover:bg-brand-gold hover:text-brand-navy dark:text-gold-ink"
         >
           <PlusCircle aria-hidden className="h-3.5 w-3.5" />
           Cadastrar um preço
@@ -394,7 +394,7 @@ function CategoryChip({
       type="button"
       onClick={onClick}
       aria-pressed={active}
-      className={`snap-start inline-flex h-7 shrink-0 items-center rounded-full border px-2.5 text-[11.5px] font-medium tracking-tight transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+      className={`snap-start inline-flex h-7 shrink-0 items-center rounded-full border px-2.5 text-[13px] font-medium tracking-tight transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
         active
           ? "border-brand-gold bg-brand-gold text-brand-navy"
           : "border-border bg-background text-foreground hover:border-brand-gold hover:bg-[var(--pc-hover-tint)]"
@@ -424,7 +424,7 @@ function OpportunityCard({ item, onPick }: { item: HighlightItem; onPick: () => 
         <Price value={item.maxPrice} size="sm" tone="strike" />
       </span>
       <span className="mt-auto flex items-center justify-between gap-2">
-        <span className="truncate text-[11px] text-muted-foreground">
+        <span className="truncate text-[12.5px] text-muted-foreground">
           {item.cheapestStore ?? `${item.storeCount} mercados`}
         </span>
         <Price
@@ -448,10 +448,10 @@ function CoveredRow({ item, onPick }: { item: HighlightItem; onPick: () => void 
       className="group grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-2 rounded-xl border border-border bg-background px-2.5 py-2 text-left transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       <span className="min-w-0">
-        <span className="block truncate text-[12.5px] font-medium tracking-tight text-foreground">
+        <span className="block truncate text-[13.5px] font-medium tracking-tight text-foreground">
           {item.name}
         </span>
-        <span className="block truncate text-[11px] text-muted-foreground">
+        <span className="block truncate text-[12.5px] text-muted-foreground">
           em {item.storeCount} mercados · a partir de{" "}
           <Price value={item.minPrice} size="xs" tone="muted" />
         </span>

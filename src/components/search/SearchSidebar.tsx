@@ -84,7 +84,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
             <button
               type="button"
               onClick={handleClearAll}
-              className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[12px] font-medium text-foreground/70 transition-colors hover:bg-destructive/10 hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+              className="inline-flex items-center gap-1 rounded-md px-2 py-1 text-[13px] font-medium text-foreground/70 transition-colors hover:bg-destructive/10 hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
               aria-label="Limpar histórico de buscas"
             >
               <Trash2 className="h-3.5 w-3.5" /> Limpar
@@ -93,7 +93,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
         }
       >
         {recent.length === 0 ? (
-          <p className="px-1 text-[13px] leading-relaxed text-foreground/70">
+          <p className="px-1 text-[14px] leading-relaxed text-foreground/70">
             Suas últimas consultas aparecem aqui.
           </p>
         ) : (
@@ -103,7 +103,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
                 <button
                   type="button"
                   onClick={() => onPickQuery(t)}
-                  className="min-w-0 flex-1 truncate rounded-md px-2 py-2 text-left text-[13.5px] font-medium text-foreground transition-colors hover:bg-[var(--pc-hover-tint)] hover:text-brand-navy dark:hover:text-gold-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                  className="min-w-0 flex-1 truncate rounded-md px-2 py-2 text-left text-[14.5px] font-medium text-foreground transition-colors hover:bg-[var(--pc-hover-tint)] hover:text-brand-navy dark:hover:text-gold-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                 >
                   {t}
                 </button>
@@ -133,7 +133,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
           useReal ? (
             <span
               title="Agregado dos últimos 30 dias"
-              className="inline-flex items-center gap-1 rounded-full bg-brand-gold px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-brand-navy shadow-sm"
+              className="inline-flex items-center gap-1 rounded-full bg-brand-gold px-2 py-0.5 text-[12.5px] font-bold uppercase tracking-[0.14em] text-brand-navy shadow-sm"
             >
               <span className="relative inline-flex h-1.5 w-1.5">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-brand-navy/60 opacity-75" />
@@ -150,9 +150,9 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
               <button
                 type="button"
                 onClick={() => onPickQuery(p)}
-                className="group flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-left text-[13.5px] font-medium text-foreground transition-colors hover:bg-[var(--pc-hover-tint)] hover:text-brand-navy dark:hover:text-gold-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                className="group flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-left text-[14.5px] font-medium text-foreground transition-colors hover:bg-[var(--pc-hover-tint)] hover:text-brand-navy dark:hover:text-gold-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
               >
-                <span className="grid h-5 w-5 place-items-center rounded-full bg-brand-gold text-[11px] font-bold tabular-nums text-brand-navy shadow-sm">
+                <span className="grid h-5 w-5 place-items-center rounded-full bg-brand-gold text-[12.5px] font-bold tabular-nums text-brand-navy shadow-sm">
                   {i + 1}
                 </span>
                 <span className="truncate">{p}</span>
@@ -169,7 +169,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
         action={
           <Link
             to="/estabelecimentos"
-            className="inline-flex shrink-0 items-center gap-0.5 whitespace-nowrap rounded text-[12px] font-medium text-gold-ink hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+            className="inline-flex shrink-0 items-center gap-0.5 whitespace-nowrap rounded text-[13px] font-medium text-gold-ink hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
           >
             Todos <ArrowRight className="h-3 w-3" />
           </Link>
@@ -203,11 +203,11 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
                     )}
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="truncate text-[13px] font-semibold text-foreground">
+                    <div className="truncate text-[14px] font-semibold text-foreground">
                       {s.name}
                     </div>
                     {s.neighborhood && (
-                      <div className="truncate text-[11.5px] text-foreground/70">
+                      <div className="truncate text-[13px] text-foreground/70">
                         {s.neighborhood}
                       </div>
                     )}
@@ -216,7 +216,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
               </li>
             ))}
             {list.length === 0 && (
-              <p className="px-1 text-[13px] text-foreground/70">
+              <p className="px-1 text-[14px] text-foreground/70">
                 Nenhum mercado disponível.
               </p>
             )}
@@ -245,7 +245,7 @@ function SidebarSection({
           <span className="grid h-6 w-6 flex-none place-items-center rounded-md bg-brand-gold/15 text-gold-ink-soft dark:text-gold-ink">
             {icon}
           </span>
-          <h3 className="truncate text-[12px] font-medium text-foreground">
+          <h3 className="truncate text-[13px] font-medium text-foreground">
             {title}
           </h3>
         </div>

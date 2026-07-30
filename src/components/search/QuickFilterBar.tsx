@@ -41,8 +41,8 @@ export function QuickFilterBar<T extends string>({
     Array.isArray(value) ? value : value ? [value] : [],
   );
   const sizes = {
-    sm: "h-8 min-h-8 px-3 text-[11px]",
-    md: "h-9 min-h-9 px-3.5 text-[11.5px]",
+    sm: "h-8 min-h-8 px-3 text-[12.5px]",
+    md: "h-9 min-h-9 px-3.5 text-[13px]",
   }[size];
 
   return (
@@ -52,7 +52,7 @@ export function QuickFilterBar<T extends string>({
       className={cn("flex flex-wrap items-center gap-1.5", className)}
     >
       {label && (
-        <span className="mr-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+        <span className="mr-1 text-[12.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
           {label}
         </span>
       )}
@@ -80,7 +80,7 @@ export function QuickFilterBar<T extends string>({
             {typeof opt.count === "number" && (
               <span
                 className={cn(
-                  "rounded-full px-1.5 py-0.5 text-[11px] font-bold tabular-nums",
+                  "rounded-full px-1.5 py-0.5 text-[12.5px] font-bold tabular-nums",
                   active ? "bg-brand-navy/15 text-brand-navy" : "bg-muted text-foreground/80",
                 )}
               >
