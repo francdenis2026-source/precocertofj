@@ -224,8 +224,11 @@ function EstablishmentsPage() {
     const bucket = SAVINGS_BUCKETS[savingsFilter] ?? SAVINGS_BUCKETS.__all;
     list = list.filter((e) => bucket(e.maxSavings ?? 0));
     if (term) {
+      // Busca sem acento/caixa em nome, bairro e cidade.
       list = list.filter((e) =>
-        [e.name, e.neighborhood ?? "", e.city ?? ""].some((v) => v.toLowerCase().includes(term)),
+        [e.name, e.neighborhood ?? "", e.city ?? ""].some((v) =>
+          normalizeSearchText(v).includes(term),
+        ),
       );
     }
     const maxProducts = Math.max(1, ...list.map((e) => e.productsCount));
