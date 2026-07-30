@@ -272,7 +272,6 @@ function buildProduct(
   const minPrice = Math.min(...nums);
   const maxPrice = Math.max(...nums);
   const avgPrice = nums.reduce((a, b) => a + b, 0) / nums.length;
-  const cat = categorize(productName);
   const parsed = parseSize(latestRow.unit, toNum(latestRow.quantity), productName);
   let pricePerUnit: number | null = null;
   let unitLabel: string | null = null;
@@ -280,13 +279,17 @@ function buildProduct(
     pricePerUnit = latestRow.price_captured != null ? toNum(latestRow.price_captured)! / parsed.normalized.value : null;
     unitLabel = parsed.normalized.base === "kg" ? "R$/kg" : parsed.normalized.base === "l" ? "R$/L" : "R$/un";
   }
-  const catalogImage = resolveImage(latestRow.barcode, productName);
+  // Catálogo é a fonte canônica de marca/categoria; regex local é só fallback.
+  const meta = resolveImage(latestRow.barcode, productName) ?? EMPTY_META;
+  const category = meta.categoryKey
+    ? (CATALOG_CATEGORY_LABELS[meta.categoryKey] ?? meta.categoryKey.replace(/_/g, " "))
+    : categorize(productName).label;
   return {
     slug: slugify(productName),
     productName,
     baseName: stripSize(productName),
-    brand: null,
-    category: cat.label,
+    brand: meta.brand,
+    category,
     price: toNum(latestRow.price_captured)!,
     minPrice,
     maxPrice,
@@ -297,7 +300,8 @@ function buildProduct(
     quantity: parsed.qty,
     lastDate: latestRow.created_at,
     historyCount: prices.length,
-    imageUrl: catalogImage,
+    imageUrl: meta.imageUrl,
+
     barcode: latestRow.barcode,
   };
 }
