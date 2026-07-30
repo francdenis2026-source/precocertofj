@@ -287,7 +287,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                   className={
                     "flex w-full items-center gap-2.5 border-l-[3px] px-3 py-2 text-left transition-colors " +
                     (active === i
-                      ? "border-l-[#d4a24c] bg-[#fff7e6]"
+                      ? "border-l-[#d4a24c] bg-[#0b2444] text-white"
                       : "border-l-transparent hover:bg-slate-50")
                   }
                 >
@@ -315,7 +315,12 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                     >
                       {s.displayName}
                     </span>
-                    <span className="mt-0.5 flex items-center gap-1.5 truncate text-[11px] leading-none text-slate-500">
+                    <span
+                      className={
+                        "mt-0.5 flex items-center gap-1.5 truncate text-[11px] leading-none " +
+                        (active === i ? "text-blue-100" : "text-slate-500")
+                      }
+                    >
                       {s.brand ? <span className="truncate">{s.brand}</span> : null}
                       {s.category ? (
                         <>
@@ -324,7 +329,14 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                         </>
                       ) : null}
                       {s.isFuzzy ? (
-                        <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-amber-800">
+                        <span
+                          className={
+                            "rounded-full px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-wide " +
+                            (active === i
+                              ? "bg-white/20 text-white"
+                              : "bg-amber-100 text-amber-800")
+                          }
+                        >
                           Similar
                         </span>
                       ) : null}
@@ -335,21 +347,26 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                       <span
                         className={
                           "inline-flex items-center gap-1 text-[13px] font-bold tabular-nums " +
-                          (blocked ? "select-none blur-sm" : "")
+                          (blocked ? "select-none blur-sm" : "") +
+                          (active === i ? " text-white" : "")
                         }
-                        style={{ color: "#0b2444" }}
+                        style={active === i ? { color: "#ffffff" } : { color: "#0b2444" }}
                       >
-                        <TrendingDown className="h-3.5 w-3.5" style={{ color: "#0ea36b" }} />
+                        <TrendingDown
+                          className="h-3.5 w-3.5"
+                          style={active === i ? { color: "#73d9a6" } : { color: "#0ea36b" }}
+                        />
                         {BRL(s.minPrice)}
                       </span>
                     ) : (
-                      <span className="text-[11px] text-slate-400">—</span>
+                      <span className={active === i ? "text-[11px] text-blue-100" : "text-[11px] text-slate-400"}>—</span>
                     )}
                     {s.market ? (
                       <span
                         className={
-                          "mt-0.5 max-w-[190px] truncate text-[11px] leading-none text-slate-500 " +
-                          (blocked ? "select-none blur-sm" : "")
+                          "mt-0.5 max-w-[190px] truncate text-[11px] leading-none " +
+                          (blocked ? "select-none blur-sm" : "") +
+                          (active === i ? " text-blue-100" : " text-slate-500")
                         }
                       >
                         {s.market}
