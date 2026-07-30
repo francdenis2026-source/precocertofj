@@ -75,7 +75,9 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
   if (pathname !== "/") return null;
 
   const shellClass = isOverlay
-    ? "absolute inset-x-0 top-0 z-30"
+    ? // Ocupa uma faixa real no fluxo (não `absolute`): sem isso o header
+      // flutua por cima do hero e a marca colide com o título/badge.
+      "relative z-30 w-full shrink-0"
     : "sticky top-0 z-40 border-b border-border bg-card/95 text-foreground shadow-elev-1 backdrop-blur-md dark:bg-background/88";
   const brandTextClass = isOverlay ? "text-on-media" : "text-foreground";
   const brandAccentClass = isOverlay ? "text-brand-soft" : "text-[var(--pc-gold-ink)]";

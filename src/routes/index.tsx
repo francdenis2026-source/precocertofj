@@ -31,6 +31,7 @@ import {
   consumeGuest,
   guestRemaining,
   GUEST_DAILY_LIMIT,
+  GUEST_QUOTA_DISABLED,
   onGuestQuotaChange,
 } from "@/lib/guest-quota";
 import { MetricSpotlightDialog } from "@/components/home/MetricSpotlightDialog";
@@ -110,13 +111,16 @@ const P = {
 };
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 
-/* Ladrilhos da faixa inferior — maior presença sem alterar a altura da página
-   (a área já reserva espaço livre acima do dock). */
+/* Ladrilhos da faixa inferior.
+   Altura em `clamp(px, vh, px)`: a célula acompanha a altura da janela sem
+   nunca estourar a tela nem encolher a ponto de cortar o rótulo. Todas as
+   células (categorias e atalhos) usam exatamente a mesma medida, de modo que
+   as duas colunas fecham as mesmas 2 linhas e nada fica desproporcional. */
 const TILE =
-  "group flex min-h-[64px] flex-col items-center justify-center gap-1.5 rounded-2xl border px-2 py-2.5 text-center pc-tile pc-elite-frame focus-visible:outline-none focus-visible:ring-2 sm:min-h-[72px] sm:gap-2 lg:min-h-[80px]";
-const TILE_ICON = "h-[19px] w-[19px] sm:h-[21px] sm:w-[21px] lg:h-6 lg:w-6";
+  "group flex h-[clamp(52px,7.4vh,78px)] flex-col items-center justify-center gap-1 rounded-2xl border px-2 text-center pc-tile pc-elite-frame focus-visible:outline-none focus-visible:ring-2 sm:gap-1.5";
+const TILE_ICON = "h-[clamp(16px,2.2vh,22px)] w-[clamp(16px,2.2vh,22px)]";
 const TILE_LABEL =
-  "w-full truncate text-[12.5px] font-semibold leading-none tracking-[-0.005em] sm:text-[13.5px] lg:text-[14.5px]";
+  "w-full truncate text-[clamp(11px,1.45vh,14px)] font-semibold leading-none tracking-[-0.005em]";
 
 /**
  * Ladrilhos da home — derivados de `CATEGORY_DEFS`, a mesma fonte usada em
@@ -276,7 +280,10 @@ function HomePage() {
 
   return (
     <div
-      className="pc-home relative flex min-h-[100dvh] w-full flex-col overflow-hidden antialiased"
+      /* O travamento em uma janela só vale a partir de `lg`: no mobile o
+         conteúdo é empilhado e precisa rolar normalmente, senão as faixas se
+         sobrepõem sob a barra inferior. */
+      className="pc-home relative flex min-h-[100dvh] w-full flex-col antialiased lg:h-[100dvh] lg:max-h-[100dvh] lg:min-h-0 lg:overflow-hidden"
       style={{
         background: "var(--pc-home-hero-bg)",
         color: "var(--pc-home-onhero-fg)",
@@ -325,18 +332,24 @@ function HomePage() {
       />
 
 
-      <div className="relative z-10 flex min-h-[100dvh] flex-col">
+      {/* Coluna mestra: header / palco / rodapé em três faixas rígidas.
+          `min-h-0` no palco é o que impede o conteúdo de empurrar o rodapé
+          para fora da janela. */}
+      <div className="relative z-10 flex min-h-0 flex-col lg:h-full">
         <SiteHeader variant="overlay" showThemeToggle />
 
         {/* ================= PALCO ÚNICO ================= */}
         <main
           id="hero"
           aria-labelledby="hero-title"
-          className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center gap-2.5 px-3 py-2.5 sm:gap-4 sm:px-6 sm:py-4 lg:px-8"
+          className="mx-auto flex w-full min-h-0 max-w-7xl flex-1 flex-col justify-center gap-[clamp(0.5rem,1.6vh,1.25rem)] px-3 py-[clamp(0.5rem,1.4vh,1rem)] sm:px-6 lg:overflow-hidden lg:px-8"
         >
-          <div className="grid flex-1 items-center gap-5 lg:grid-cols-12 lg:gap-12">
+          {/* Sem `flex-1` aqui: o conjunto hero + divisor + faixa é centrado
+              como um bloco só, distribuindo a folga igualmente acima e abaixo
+              em vez de acumular um vazio antes das categorias. */}
+          <div className="grid min-h-0 items-center gap-[clamp(0.75rem,2.2vh,1.5rem)] lg:grid-cols-12 lg:gap-10">
             {/* ---------- Coluna editorial ---------- */}
-            <div className="order-1 flex min-w-0 flex-col gap-3 sm:gap-4 lg:col-span-7 lg:pr-4">
+            <div className="order-1 flex min-w-0 flex-col gap-[clamp(0.5rem,1.5vh,1rem)] lg:col-span-7 lg:pr-4">
               <div
                 className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] backdrop-blur-sm"
                 style={{
@@ -390,9 +403,11 @@ function HomePage() {
 
               </div>
 
+              {/* Título e apoio escalam por largura E altura: em telas baixas
+                  (ex.: 1366x768) o texto encolhe em vez de empurrar a página. */}
               <h1
                 id="hero-title"
-                className="font-editorial pc-hero-editorial text-[clamp(2rem,5.4vw,4.25rem)]"
+                className="font-editorial pc-hero-editorial text-[clamp(1.75rem,2.6vw+2.2vh,4rem)]"
                 style={{ color: "var(--pc-home-onhero-fg)" }}
               >
                 Onde cada real{" "}
@@ -400,7 +415,7 @@ function HomePage() {
               </h1>
 
               <p
-                className="tc-flow max-w-xl text-[14px] font-light leading-relaxed sm:text-[16px] lg:text-[17px]"
+                className="tc-flow max-w-xl text-[clamp(13px,0.4vw+1.4vh,17px)] font-light leading-relaxed"
                 style={{ color: "var(--pc-home-onhero-fg-80)" }}
               >
                 Os mercados de Feijó, lado a lado e em tempo real. Você escolhe onde
@@ -433,7 +448,7 @@ function HomePage() {
                     placeholder="O que você procura hoje? (ex.: Arroz, Feijão, Leite…)"
                     aria-label="Buscar produto"
                     autoComplete="off"
-                    className="min-w-0 flex-1 bg-transparent px-2 py-2.5 text-[14.5px] font-medium outline-none placeholder:text-slate-400 sm:text-[15.5px]"
+                    className="min-w-0 flex-1 bg-transparent px-2 py-[clamp(0.6rem,1.9vh,1.1rem)] text-[clamp(14px,1.5vh,16.5px)] font-medium outline-none placeholder:text-slate-400"
                     style={{ color: "#0f172a" }}
                   />
                   <button
@@ -453,7 +468,10 @@ function HomePage() {
                   onClose={() => setSuggestOpen(false)}
                   onBlocked={() => setGateOpen(true)}
                 />
-                {isLoggedOut ? (
+                {/* Com a cota de visitante desativada, GUEST_DAILY_LIMIT vale
+                    Number.MAX_SAFE_INTEGER — mostrar "restam 9007199254740991"
+                    é ruído. Só exibe o contador quando o limite é real. */}
+                {isLoggedOut && !GUEST_QUOTA_DISABLED ? (
                   <p
                     className="mt-1.5 pl-2 text-[11px] font-medium"
                     style={{ color: "var(--pc-home-onhero-fg-70)" }}
@@ -549,7 +567,7 @@ function HomePage() {
                       type="button"
                       onClick={() => setSpotlight(kind)}
                       aria-label={`${value} — ${label}. Ver detalhes.`}
-                      className="group flex min-w-0 flex-col items-center gap-1 rounded-xl border px-1.5 py-2 text-center pc-tile focus-visible:outline-none focus-visible:ring-2"
+                      className="group flex min-w-0 flex-col items-center gap-1 rounded-xl border px-1.5 py-[clamp(0.5rem,1.9vh,1.15rem)] text-center pc-tile focus-visible:outline-none focus-visible:ring-2"
                       style={{
                         background: "var(--pc-home-onhero-glass-soft)",
                         borderColor: "var(--pc-home-onhero-border-soft)",
@@ -644,7 +662,7 @@ function HomePage() {
                           <li
                             key={`sk-${i}`}
                             aria-hidden
-                            className="grid h-16 w-16 shrink-0 place-items-center overflow-hidden rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)]"
+                            className="grid h-[clamp(56px,7.2vh,76px)] w-[clamp(56px,7.2vh,76px)] shrink-0 place-items-center overflow-hidden rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)]"
                             style={{ borderColor: "color-mix(in oklab, #ffffff 78%, transparent)" }}
                           >
                             <span
@@ -665,7 +683,7 @@ function HomePage() {
                                   : ({ to: "/estabelecimentos" } as const))}
                                 aria-label={`Ver produtos e preços de ${label}`}
 
-                                className="group relative flex h-16 w-16 flex-col items-stretch justify-between rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--pc-home-onhero-gold)_55%,white)] hover:shadow-[0_10px_22px_-8px_rgba(3,10,28,0.75)] focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2"
+                                className="group relative flex h-[clamp(56px,7.2vh,76px)] w-[clamp(56px,7.2vh,76px)] flex-col items-stretch justify-between rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--pc-home-onhero-gold)_55%,white)] hover:shadow-[0_10px_22px_-8px_rgba(3,10,28,0.75)] focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2"
                                 style={{
                                   borderColor: "color-mix(in oklab, #ffffff 78%, transparent)",
                                   ["--tw-ring-color" as string]: "var(--pc-home-onhero-gold)",
@@ -710,10 +728,14 @@ function HomePage() {
           </div>
 
           {/* Divisor editorial entre hero e faixa de categorias */}
-          <hr className="pc-rule my-3 sm:my-4" aria-hidden />
+          <hr className="pc-rule my-[clamp(0.35rem,1.2vh,0.9rem)]" aria-hidden />
 
-          {/* ================= FAIXA INFERIOR ================= */}
-          <div className="grid gap-2.5 sm:gap-3 lg:grid-cols-12">
+          {/* ================= FAIXA INFERIOR =================
+              Duas colunas, ambas com 2 linhas de células idênticas: 10 hubs à
+              esquerda (5 por linha) e 4 atalhos à direita (2 por linha). Antes
+              os atalhos ficavam em 1 linha dentro de um bloco de 2 linhas de
+              altura, o que esticava as células e desalinhava a faixa. */}
+          <div className="grid shrink-0 gap-2 sm:gap-2.5 lg:grid-cols-12">
             {/* Categorias */}
             <nav aria-label="Categorias" className="min-w-0 lg:col-span-8">
               <div className="grid grid-cols-5 gap-2 sm:gap-2.5">
@@ -765,7 +787,7 @@ function HomePage() {
             </nav>
 
             {/* Pilares + Explorar */}
-            <div className="grid min-w-0 grid-cols-4 gap-2 sm:gap-2.5 lg:col-span-4">
+            <div className="grid min-w-0 grid-cols-4 gap-2 sm:gap-2.5 lg:col-span-4 lg:grid-cols-2">
               <PillarLink to="/melhores-precos" Icon={LineChart} label="Histórico" />
               <PillarLink to="/colaborar" Icon={Users} label="Colaborar" />
               <PillarLink to="/planos" Icon={Sparkles} label="Plus" emphasis />
@@ -834,7 +856,7 @@ function HomePage() {
 
         {/* ================= RODAPÉ COMPACTO ================= */}
         <footer
-          className="border-t px-4 py-2.5 sm:px-6 lg:px-8"
+          className="shrink-0 border-t px-4 py-[clamp(0.35rem,1.1vh,0.7rem)] sm:px-6 lg:px-8"
           style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}
         >
           <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-1.5">
