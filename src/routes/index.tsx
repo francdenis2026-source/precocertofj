@@ -445,7 +445,7 @@ function HomePage() {
                     placeholder="O que você procura hoje? (ex.: Arroz, Feijão, Leite…)"
                     aria-label="Buscar produto"
                     autoComplete="off"
-                    className="min-w-0 flex-1 bg-transparent px-2 py-2.5 text-[14.5px] font-medium outline-none placeholder:text-slate-400 sm:text-[15.5px]"
+                    className="min-w-0 flex-1 bg-transparent px-2 py-[clamp(0.6rem,1.9vh,1.1rem)] text-[clamp(14px,1.5vh,16.5px)] font-medium outline-none placeholder:text-slate-400"
                     style={{ color: "#0f172a" }}
                   />
                   <button
