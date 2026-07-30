@@ -232,8 +232,6 @@ function EstablishmentsPage() {
         ),
       );
     }
-    const maxProducts = Math.max(1, ...list.map((e) => e.productsCount));
-    const maxSavingsAll = Math.max(1, ...list.map((e) => e.maxSavings ?? 0));
     switch (sort) {
       case "name":
         list.sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
