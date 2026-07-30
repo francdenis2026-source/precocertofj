@@ -153,7 +153,7 @@ function CategoryPage() {
 
   const [limit, setLimit] = useState(24);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isFetching } = useQuery({
     queryKey: ["category-hub", slug],
     queryFn: () => fetchHub({ data: { slug } }),
     enabled: Boolean(def),
@@ -353,9 +353,9 @@ function CategoryPage() {
               <Stat label="Produtos" value={data?.totals.products ?? 0} hint="Itens distintos cadastrados nesta categoria" />
               <Stat label="Lojas" value={data?.totals.stores ?? 0} hint="Estabelecimentos com produtos desta categoria" />
               <Stat
-                label="Cotações"
+                label="Registros de preço"
                 value={data?.totals.prices ?? 0}
-                hint="Registros de preço coletados nesta categoria"
+                hint="Preços coletados e conferidos nesta categoria"
               />
 
               <Stat
@@ -379,7 +379,7 @@ function CategoryPage() {
               <Stat label="Lojas" value={data?.totals.stores ?? 0} align="left" />
             </div>
             <div className="px-3 py-2">
-              <Stat label="Cotações" value={data?.totals.prices ?? 0} align="left" hint="Registros de preço coletados nesta categoria" />
+              <Stat label="Registros de preço" value={data?.totals.prices ?? 0} align="left" hint="Preços coletados e conferidos nesta categoria" />
             </div>
             <div className="px-3 py-2">
               <Stat
