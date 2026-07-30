@@ -335,7 +335,7 @@ function HomePage() {
       {/* Coluna mestra: header / palco / rodapé em três faixas rígidas.
           `min-h-0` no palco é o que impede o conteúdo de empurrar o rodapé
           para fora da janela. */}
-      <div className="relative z-10 flex h-full min-h-0 flex-col">
+      <div className="relative z-10 flex min-h-0 flex-col lg:h-full">
         <SiteHeader variant="overlay" showThemeToggle />
 
         {/* ================= PALCO ÚNICO ================= */}
