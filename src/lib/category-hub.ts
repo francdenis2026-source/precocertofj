@@ -99,6 +99,7 @@ export const CATEGORY_DEFS: CategoryDef[] = [
     kinds: ["padaria"],
     storeRe: /(padaria|panific)/i,
     allFromNicheStores: true,
+    canonical: ["padaria", "biscoitos"],
     productRe:
       /\b(pao|paes|panetone|torrada|bolo|biscoit|bolach|rosca|croissant|sonho|cuca|massa folhada|fermento|mistura para bolo)\b/,
   },
@@ -108,8 +109,11 @@ export const CATEGORY_DEFS: CategoryDef[] = [
     short: "Hortifrúti",
     desc: "Frutas, legumes, verduras e ovos",
     kinds: ["hortifruti", "sacolao"],
-    storeRe: /(hortifr|sacol[aã]o|feira)/i,
+    storeRe: /(hortifr|sacol[aã]o|feira livre)/i,
     allFromNicheStores: true,
+    // Só entra o que a classificação canônica considerar hortifruti — assim
+    // "Lava-Louças Maçã", "Tempero Alho e Sal" e "Molho de Tomate" ficam fora.
+    canonical: ["hortifruti"],
     productRe:
       /\b(banana|maca|ma[cç][aã]|laranja|limao|abacaxi|mamao|melancia|melao|uva|manga|abacate|goiaba|maracuja|tomate|cebola|batata|cenoura|alho|pimentao|repolho|alface|couve|cheiro verde|coentro|macaxeira|mandioca|inhame|abobora|jerimum|chuchu|beterraba|pepino|quiabo|maxixe|ovo|ovos)\b/,
   },
