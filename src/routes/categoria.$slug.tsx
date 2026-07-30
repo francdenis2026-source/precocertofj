@@ -38,6 +38,12 @@ import { getCategoryHub } from "@/lib/category-hub.functions";
 import { CATEGORY_DEFS, categoryBySlug, norm } from "@/lib/category-hub";
 import { useCategoryLabelWithFallback } from "@/hooks/use-category-labels";
 import { classifyButcherCut, type ButcherProtein } from "@/lib/butcher-cuts";
+import {
+  hortifrutiSubgroup,
+  HORTIFRUTI_SUBGROUP_LABELS,
+  type HortifrutiSubgroup,
+} from "@/lib/product-category";
+import { computeHubSavings } from "@/lib/hub-savings";
 import { Bird, Drumstick } from "lucide-react";
 import { PLANTOES, diaDaSemana, diaVigente, farmaciaPorId } from "@/lib/farmacias-plantao";
 import { useScrollRestoration } from "@/lib/use-scroll-restoration";
