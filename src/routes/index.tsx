@@ -130,9 +130,11 @@ const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
    (categorias e ações) usam a mesma medida para fechar 2 linhas alinhadas. */
 const TILE =
   "group flex h-[clamp(44px,5.4vh,58px)] short-h:h-[clamp(36px,5vh,44px)] w-full min-w-0 items-center gap-2 rounded-xl border pl-2 pr-2.5 text-left pc-tile pc-elite-frame focus-visible:outline-none focus-visible:ring-2";
-
-
-
+const TILE_ICONWRAP =
+  "grid shrink-0 place-items-center rounded-lg h-[clamp(24px,3vh,30px)] w-[clamp(24px,3vh,30px)] short-h:h-[22px] short-h:w-[22px]";
+const TILE_ICON = "h-[clamp(15px,1.9vh,19px)] w-[clamp(15px,1.9vh,19px)] short-h:h-[14px] short-h:w-[14px]";
+const TILE_LABEL =
+  "min-w-0 flex-1 truncate text-[clamp(11.5px,1.5vh,14px)] font-semibold leading-none tracking-[-0.005em]";
 /* Tokens tipográficos compartilhados da home: um único "eyebrow" (rótulo de
    seção) e um único estilo de chip, para que hero, painel ao vivo e faixa de
    buscas em alta tenham exatamente a mesma hierarquia e o mesmo respiro. */
