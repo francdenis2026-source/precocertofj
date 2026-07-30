@@ -90,6 +90,75 @@ type Rule = { category: ProductCategory; re: RegExp };
  * Regras avaliadas em ordem. A primeira que casar vence.
  * `re` sempre roda sobre o texto normalizado (minúsculo, sem acento).
  */
+/* ------------------------------------------------------------------ *
+ * Hortifrúti — definição fechada
+ * ------------------------------------------------------------------ */
+
+/** Frutas in natura. */
+const HF_FRUTAS = [
+  "banana", "maca", "macas", "laranja", "limao", "mamao", "manga", "abacaxi",
+  "melancia", "melao", "uva", "goiaba", "abacate", "morango", "acerola",
+  "maracuja", "caju", "pera", "kiwi", "tangerina", "mexerica", "ameixa",
+  "pessego", "figo", "jaca", "graviola", "cupuacu", "acai", "cajarana",
+  "tamarindo", "pinha", "fruta do conde", "carambola", "romã", "roma",
+];
+
+/** Verduras (folhas). */
+const HF_VERDURAS = [
+  "alface", "couve", "couve flor", "brocolis", "espinafre", "rucula",
+  "agriao", "repolho", "acelga", "chicoria", "almeirao",
+];
+
+/** Legumes e frutos rasteiros. */
+const HF_LEGUMES = [
+  "cenoura", "beterraba", "chuchu", "abobrinha", "abobora", "jerimum",
+  "pepino", "tomate", "cebola", "alho", "pimentao", "berinjela", "quiabo",
+  "maxixe", "jilo", "vagem", "ervilha fresca",
+];
+
+/** Tubérculos e raízes. */
+const HF_TUBERCULOS = [
+  "batata", "batata doce", "batata inglesa", "mandioca", "macaxeira", "aipim",
+  "inhame", "cara", "mandioquinha", "gengibre", "curcuma", "acafrao da terra",
+];
+
+/** Temperos e ervas frescas. */
+const HF_TEMPEROS = [
+  "cheiro verde", "salsa", "salsinha", "cebolinha", "coentro", "hortela",
+  "manjericao", "alecrim", "tomilho", "louro fresco", "oregano fresco",
+];
+
+/** Cogumelos e demais itens da seção. */
+const HF_OUTROS = [
+  "cogumelo", "cogumelos", "champignon fresco", "milho verde", "coco verde",
+  "coco seco", "broto de alfafa", "broto de feijao", "pimenta de cheiro",
+  "pimenta dedo de moca",
+];
+
+/** Todos os termos aceitos como hortifrúti (lista fechada). */
+export const HORTIFRUTI_TERMS = [
+  ...HF_FRUTAS,
+  ...HF_VERDURAS,
+  ...HF_LEGUMES,
+  ...HF_TUBERCULOS,
+  ...HF_TEMPEROS,
+  ...HF_OUTROS,
+] as const;
+
+/**
+ * Marcadores que descaracterizam o item como in natura. Um único match
+ * derruba a classificação, mesmo que o nome cite uma fruta/legume.
+ */
+const HORTIFRUTI_BLOCKERS =
+  "(em calda|em conserva|conserva|sabor|aroma|chips|palha|salgadinho|saponaceo|refrigerante|refresco|nectar|\\bsuco\\b|polpa|geleia|doce de|\\bem po\\b|\\blata\\b|\\benlatad|\\bml\\b|\\blitro|congelad|desidratad|\\bseca\\b|farofa|tempero pronto|desodorante|shampoo|sabonete|sabao|detergente|amaciante|biscoito|bolacha|iogurte|leite|cereal|barra|bombom|picole|sorvete|racao)";
+
+const HORTIFRUTI_RE = new RegExp(
+  `^(?!.*${HORTIFRUTI_BLOCKERS}).*\\b(${HORTIFRUTI_TERMS.map((t) =>
+    t.replace(/ /g, "\\s+"),
+  ).join("|")})\\b`,
+);
+
+
 const RULES: readonly Rule[] = [
   // 1) Pet
   {
@@ -275,74 +344,6 @@ const RULES: readonly Rule[] = [
   },
 
 ];
-
-/* ------------------------------------------------------------------ *
- * Hortifrúti — definição fechada
- * ------------------------------------------------------------------ */
-
-/** Frutas in natura. */
-const HF_FRUTAS = [
-  "banana", "maca", "macas", "laranja", "limao", "mamao", "manga", "abacaxi",
-  "melancia", "melao", "uva", "goiaba", "abacate", "morango", "acerola",
-  "maracuja", "caju", "pera", "kiwi", "tangerina", "mexerica", "ameixa",
-  "pessego", "figo", "jaca", "graviola", "cupuacu", "acai", "cajarana",
-  "tamarindo", "pinha", "fruta do conde", "carambola", "romã", "roma",
-];
-
-/** Verduras (folhas). */
-const HF_VERDURAS = [
-  "alface", "couve", "couve flor", "brocolis", "espinafre", "rucula",
-  "agriao", "repolho", "acelga", "chicoria", "almeirao",
-];
-
-/** Legumes e frutos rasteiros. */
-const HF_LEGUMES = [
-  "cenoura", "beterraba", "chuchu", "abobrinha", "abobora", "jerimum",
-  "pepino", "tomate", "cebola", "alho", "pimentao", "berinjela", "quiabo",
-  "maxixe", "jilo", "vagem", "ervilha fresca",
-];
-
-/** Tubérculos e raízes. */
-const HF_TUBERCULOS = [
-  "batata", "batata doce", "batata inglesa", "mandioca", "macaxeira", "aipim",
-  "inhame", "cara", "mandioquinha", "gengibre", "curcuma", "acafrao da terra",
-];
-
-/** Temperos e ervas frescas. */
-const HF_TEMPEROS = [
-  "cheiro verde", "salsa", "salsinha", "cebolinha", "coentro", "hortela",
-  "manjericao", "alecrim", "tomilho", "louro fresco", "oregano fresco",
-];
-
-/** Cogumelos e demais itens da seção. */
-const HF_OUTROS = [
-  "cogumelo", "cogumelos", "champignon fresco", "milho verde", "coco verde",
-  "coco seco", "broto de alfafa", "broto de feijao", "pimenta de cheiro",
-  "pimenta dedo de moca",
-];
-
-/** Todos os termos aceitos como hortifrúti (lista fechada). */
-export const HORTIFRUTI_TERMS = [
-  ...HF_FRUTAS,
-  ...HF_VERDURAS,
-  ...HF_LEGUMES,
-  ...HF_TUBERCULOS,
-  ...HF_TEMPEROS,
-  ...HF_OUTROS,
-] as const;
-
-/**
- * Marcadores que descaracterizam o item como in natura. Um único match
- * derruba a classificação, mesmo que o nome cite uma fruta/legume.
- */
-const HORTIFRUTI_BLOCKERS =
-  "(em calda|em conserva|conserva|sabor|aroma|chips|palha|salgadinho|saponaceo|refrigerante|refresco|nectar|\\bsuco\\b|polpa|geleia|doce de|\\bem po\\b|\\blata\\b|\\benlatad|\\bml\\b|\\blitro|congelad|desidratad|\\bseca\\b|farofa|tempero pronto|desodorante|shampoo|sabonete|sabao|detergente|amaciante|biscoito|bolacha|iogurte|leite|cereal|barra|bombom|picole|sorvete|racao)";
-
-const HORTIFRUTI_RE = new RegExp(
-  `^(?!.*${HORTIFRUTI_BLOCKERS}).*\\b(${HORTIFRUTI_TERMS.map((t) =>
-    t.replace(/ /g, "\\s+"),
-  ).join("|")})\\b`,
-);
 
 /** Subgrupos de hortifrúti (facilita cadastro, filtros e relatórios). */
 export type HortifrutiSubgroup =
