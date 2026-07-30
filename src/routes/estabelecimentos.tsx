@@ -489,15 +489,20 @@ function EstablishmentsPage() {
         </div>
       </section>
 
-      {/* MASTER-DETAIL — cresce com o conteúdo, sem forçar viewport */}
-      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-0 md:grid-cols-[minmax(320px,380px)_minmax(0,1fr)]">
+      {/* MASTER-DETAIL — ocupa o restante da viewport; rolagem só interna */}
+      <div
+        ref={splitRef}
+        className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-0 md:min-h-0 md:grid-cols-[minmax(320px,380px)_minmax(0,1fr)] md:overflow-hidden"
+        style={splitHeight ? { height: splitHeight } : undefined}
+      >
         {/* LISTA (mestre) */}
         <aside
           className={cn(
-            "flex min-w-0 flex-col border-border/60 md:border-r",
+            "flex min-w-0 flex-col border-border/60 md:h-full md:min-h-0 md:overflow-hidden md:border-r",
             detailOpenMobile ? "hidden md:flex" : "flex",
           )}
         >
+
 
           <div className="shrink-0 space-y-2 border-b border-border/60 px-3 py-2 md:px-4">
             <div className="relative">
