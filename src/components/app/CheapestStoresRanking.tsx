@@ -362,9 +362,12 @@ export function CheapestStoresRanking() {
                         )}
                         title="Ticket médio das vitórias"
                       >
-                        <p className="pc-price text-[11px] font-bold text-foreground">
-                          {r.avgTicketWins > 0 ? brl(r.avgTicketWins) : "—"}
-                        </p>
+                        <Price
+                          as="p"
+                          size="xs"
+                          value={r.avgTicketWins > 0 ? r.avgTicketWins : null}
+                          className="justify-end"
+                        />
                         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                           ticket médio
                         </p>
