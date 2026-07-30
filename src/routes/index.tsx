@@ -484,7 +484,7 @@ function HomePage() {
                   (ex.: 1366x768) o texto encolhe em vez de empurrar a página. */}
               <h1
                 id="hero-title"
-                className="font-editorial pc-hero-editorial text-[clamp(1.75rem,2.6vw+2.2vh,4rem)]"
+                className="font-editorial pc-hero-editorial text-[clamp(1.75rem,2.6vw+2.2vh,4rem)] short-h:text-[clamp(1.5rem,1.5vw+1.7vh,2.4rem)]"
                 style={{ color: "var(--pc-home-onhero-fg)" }}
               >
                 Onde cada real{" "}
