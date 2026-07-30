@@ -64,10 +64,11 @@ export const Route = createFileRoute("/")({
   loader: async ({ context }) => {
     await Promise.allSettled([
       context.queryClient.ensureQueryData({
-        queryKey: ["home-stats"],
+        queryKey: ["platform-stats"],
         queryFn: () => getPlatformStats({} as any),
-        staleTime: 60_000,
+        staleTime: 10 * 60_000,
       }),
+
       context.queryClient.ensureQueryData({
         queryKey: ["home-economy"],
         queryFn: () => getEconomyStat({} as any),
