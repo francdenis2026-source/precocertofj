@@ -489,7 +489,7 @@ function RedeemPage() {
                       {validation.level === "ok" && <CheckCircle2 className="h-3 w-3 flex-none" aria-hidden />}
                       <span>{validation.message}</span>
                     </span>
-                    <span className="pc-price pc-price--sm pc-price--muted shrink-0">
+                    <span className="pc-num shrink-0 text-muted-foreground">
                       {clean.length}/{CANONICAL_LEN}
                     </span>
                   </div>
