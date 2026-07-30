@@ -1,3 +1,4 @@
+import { ListRowsSkeleton } from "@/components/feedback";
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/brand/AppShell";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
@@ -208,8 +209,8 @@ function ListaContent() {
             </div>
             <ul className="divide-y divide-border">
               {listsQuery.isLoading && (
-                <li className="p-4 text-sm text-muted-foreground">
-                  <Loader2 className="mr-2 inline h-4 w-4 animate-spin" /> Carregando...
+                <li className="p-2">
+                  <ListRowsSkeleton rows={4} />
                 </li>
               )}
               {listsQuery.data?.length === 0 && (

@@ -7,8 +7,13 @@ import { ArrowLeft, Coins, PackageSearch, Search as SearchIcon, Tags, Trophy, X 
 
 import { Nav } from "@/components/brand/Nav";
 import { PageShell, PageShellContent } from "@/components/layout/PageShell";
-import { RouteError, EmptyState as FeedbackEmptyState } from "@/components/feedback";
-import { RankingSkeleton } from "@/components/layout/LoadingSkeleton";
+import {
+  RouteError,
+  CatalogGridSkeleton,
+  SmartErrorState,
+  IllustratedEmptyState,
+} from "@/components/feedback";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { resolveEstablishmentBySlug } from "@/lib/establishment-slug.functions";
 import { getPublicStoreCatalog, getStoreCatalogPriceRanking } from "@/lib/stores-public.functions";
@@ -125,7 +130,7 @@ function CatalogoPage() {
     navigate({ search: (prev: z.infer<typeof searchSchema>) => ({ ...prev, ...patch }) });
   };
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["public-store-catalog", storeId],
     queryFn: () => getPublicStoreCatalog({ data: { id: storeId } }),
     staleTime: 10 * 60_000,
@@ -368,16 +373,29 @@ function CatalogoPage() {
         {/* Resultados */}
         <div className="mt-5">
           {isLoading ? (
-            <RankingSkeleton />
+            <CatalogGridSkeleton count={9} className="lg:grid-cols-3 xl:grid-cols-3" />
           ) : error ? (
-            <RouteError message={(error as Error).message} />
+            <SmartErrorState error={error} onRetry={() => void refetch()} />
           ) : filtered.length === 0 ? (
-            <FeedbackEmptyState
+            <IllustratedEmptyState
+              kind="search"
               title="Nenhum produto encontrado"
               message="Ajuste a busca ou remova os filtros para ver mais itens deste catálogo."
-
+              action={
+                hasFilters ? (
+                  <Button
+                    size="sm"
+                    onClick={() =>
+                      setSearch({ q: "", cat: "", marca: "", min: 0, max: 0, best: false })
+                    }
+                  >
+                    Limpar filtros
+                  </Button>
+                ) : undefined
+              }
             />
           ) : (
+
             <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {filtered.map((p) => (
                 <li key={p.slug}>

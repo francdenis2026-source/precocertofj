@@ -1,3 +1,4 @@
+import { ListRowsSkeleton } from "@/components/feedback";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -211,8 +212,8 @@ function NotificacoesPage() {
       </div>
 
       {isLoading ? (
-        <div className="rounded-2xl border border-border bg-card p-8 text-center text-sm text-muted-foreground">
-          Carregando...
+        <div className="rounded-2xl border border-border bg-card p-2">
+          <ListRowsSkeleton rows={5} />
         </div>
       ) : filtered.length === 0 ? (
         <div className="rounded-2xl border border-dashed border-border bg-card p-10 text-center">

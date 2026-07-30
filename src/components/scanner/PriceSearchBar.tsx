@@ -2247,6 +2247,15 @@ function ProductDetailsCard({
             >
               Histórico
             </Link>
+            <Link
+              to="/comparador"
+              search={{ q: suggestion.displayName }}
+              className="rounded-full border border-border bg-background px-2.5 py-0.5 text-[12.5px] font-medium text-foreground hover:bg-primary/5"
+              title="Comparar este produto entre mercados"
+            >
+              Comparar
+            </Link>
+
           </div>
         </div>
       </div>
