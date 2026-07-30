@@ -22,6 +22,7 @@ import { FairPriceBadge } from "@/components/product/FairPriceBadge";
 import { CreatePriceAlertButton } from "@/components/alerts/CreatePriceAlertButton";
 
 import { HighlightMatch } from "@/components/search/HighlightMatch";
+import { normalizeNameKey } from "@/lib/text-normalize";
 import { AnchoredDropdown } from "@/components/search/AnchoredDropdown";
 import { MatchReasonBadges } from "@/components/search/MatchReasonBadges";
 import { SearchInterpretationSummary } from "@/components/search/SearchInterpretationSummary";
