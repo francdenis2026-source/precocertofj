@@ -237,6 +237,15 @@ export function productInCategory(
   }
 
   if (fromNicheStore && def.allFromNicheStores) return true;
+
+  // Portão canônico: a categoria oficial do produto manda.
+  if (def.canonical) {
+    const canonical = classifyCategory(product.name);
+    if (def.canonical.includes(canonical)) return true;
+    // Só produtos sem categoria conhecida podem entrar via palavra-chave.
+    return canonical === "outros" && !!def.productRe && def.productRe.test(n);
+  }
+
   if (def.productRe) return def.productRe.test(n);
   return false;
 }
