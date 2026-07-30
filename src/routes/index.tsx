@@ -550,7 +550,7 @@ function HomePage() {
                     <button
                       type="button"
                       aria-haspopup="dialog"
-                      className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11.5px] font-bold transition-all hover:brightness-95"
+                      className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[12px] font-bold transition-all hover:brightness-95"
                       style={{ background: P.gold, color: P.navy }}
                     >
                       Começar grátis
@@ -560,7 +560,7 @@ function HomePage() {
                 ) : (
                   <Link
                     to="/app"
-                    className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11.5px] font-bold transition-all hover:brightness-95"
+                    className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[12px] font-bold transition-all hover:brightness-95"
                     style={{ background: P.gold, color: P.navy }}
                   >
                     Ir para o painel
