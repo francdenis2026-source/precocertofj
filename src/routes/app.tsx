@@ -239,10 +239,11 @@ function AppHomeContent() {
 
         {summary && (
           <div className="grid min-h-0 flex-1 gap-3 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-            <div className="flex min-h-0 flex-col">
+            <div className="flex h-[62vh] min-h-[380px] flex-col lg:h-auto lg:min-h-0">
               <DashboardSearch />
             </div>
             <div className="grid min-h-0 gap-3 lg:grid-rows-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+
               <StoreRankStrip
                 storeNames={storeNameSet}
                 onOpenStore={openStoreByName}
