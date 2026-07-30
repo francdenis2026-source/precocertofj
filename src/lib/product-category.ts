@@ -97,6 +97,13 @@ const RULES: readonly Rule[] = [
     re: /\b(racao|carrapaticida|antipulgas|veterinario|veterinaria)\b|(para caes|para gatos|petisco canino)/,
   },
 
+  // 1.5) Sabões de limpeza — antes de bazar, senão marcas de esponja
+  // (assolan/bombril) puxam "Sabão em Pasta Assolan" para bazar.
+  {
+    category: "limpeza",
+    re: /\bsabao\b\s*(em\s*)?(pasta|barra|po|liquido|de coco|neutro|glicerinado)?/,
+  },
+
   // 2) Bazar & utilidades (graxa "tinta nugget", incenso, velas, esponja de aço)
   {
     category: "bazar",

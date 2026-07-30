@@ -173,8 +173,10 @@ export const CATEGORY_DEFS: CategoryDef[] = [
     kinds: ["papelaria"],
     storeRe: /(papelaria|livraria)/i,
     allFromNicheStores: true,
+    // Atenção: "pasta" sozinho é ambíguo em supermercado ("sabão em pasta",
+    // "doce de leite em pasta"), por isso exigimos qualificadores de papelaria.
     productRe:
-      /\b(caderno|caneta|lapis|borracha|apontador|cola branca|tesoura escolar|mochila|estojo|papel a4|pasta|fichario|regua|giz de cera|marca texto)\b/,
+      /\b(caderno|caneta|lapis|borracha escolar|apontador|cola branca|tesoura escolar|mochila|estojo|papel a4|fichario|regua|giz de cera|marca texto)\b|\bpasta (escolar|polionda|catalogo|plastica|de arquivo|sanfonada|com elastico|az)\b/,
   },
 ];
 
