@@ -19,8 +19,8 @@ import {
 import { EmptyState } from "@/components/feedback";
 import { normalize } from "@/lib/search-tokens";
 import type { PublicStoreProduct } from "@/lib/stores-public.functions";
-import {
 import { Price } from "@/components/ds/Price";
+import {
   BUTCHER_PROTEINS,
   classifyButcherCut,
   cutPricePerKg,
