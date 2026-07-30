@@ -337,24 +337,32 @@ function StorePage() {
   return (
     <div className="min-h-[100svh] bg-background pb-[calc(var(--mobile-nav-height)+5.5rem)] text-foreground">
       <div className="mx-auto max-w-md px-4 pt-[max(env(safe-area-inset-top),0.75rem)]">
-        {Route.useSearch().from === "ranking" ? (
-          <Link
-            to="/app"
-            hash="ranking-lojas"
-            className="inline-flex items-center gap-1.5 pt-2 text-[12px] font-semibold text-primary hover:underline"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Voltar ao ranking
-          </Link>
-        ) : (
-          <Link
-            to="/"
-            className="inline-flex items-center gap-1.5 pt-2 text-[12px] font-semibold text-muted-foreground hover:text-primary"
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Voltar
-          </Link>
-        )}
+        <div className="flex items-center justify-between gap-2">
+          {Route.useSearch().from === "ranking" ? (
+            <Link
+              to="/app"
+              hash="ranking-lojas"
+              className="inline-flex items-center gap-1.5 pt-2 text-[12px] font-semibold text-primary hover:underline"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              Voltar ao ranking
+            </Link>
+          ) : (
+            <Link
+              to="/"
+              className="inline-flex items-center gap-1.5 pt-2 text-[12px] font-semibold text-muted-foreground hover:text-primary"
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              Voltar
+            </Link>
+          )}
+          <ShareButton
+            size="sm"
+            title={`${store.name} — PreçoCerto`}
+            text={`Veja os preços de ${store.name} no PreçoCerto`}
+          />
+        </div>
+
 
 
         <header className="relative mt-3 overflow-hidden rounded-2xl border border-border bg-surface shadow-sm">
