@@ -3,7 +3,9 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
-@custom-variant tall-lg (@media (min-width: 1024px) and (min-height: 600px));
+@custom-variant tall-lg (@media (min-width: 1024px) and (min-height: 540px));
+/* Telas baixas (notebooks/preview): compacta a home para caber sem rolagem. */
+@custom-variant short-h (@media (max-height: 760px));
 
 /* Restore pointer cursor on interactive controls (Tailwind v4 preflight removes it) */
 @layer base {
