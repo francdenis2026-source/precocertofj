@@ -1500,6 +1500,11 @@ export function PriceSearchBar({
                                           catalogId={g.catalogId}
                                           highlightTokens={highlightTokens}
                                           matchReasons={g.matchReasons}
+                                          bestValue={
+                                            bestValue && bestValue.key === g.productName
+                                              ? bestValue
+                                              : null
+                                          }
                                           isCompareSelected={compareSelection.includes(g.productName)}
                                           canSelectCompare={
                                             compareSelection.includes(g.productName) || compareSelection.length < 3
@@ -2297,6 +2302,7 @@ function ProductGroupCard({
   fmt,
   highlightTokens,
   matchReasons,
+  bestValue = null,
   isCompareSelected = false,
   canSelectCompare = true,
   onToggleCompare,
@@ -2317,6 +2323,8 @@ function ProductGroupCard({
   fmt: (n: number | null | undefined) => string;
   highlightTokens: string[];
   matchReasons: MatchReason[];
+  /** Preenchido apenas no produto com melhor R$/unidade da categoria. */
+  bestValue?: BestValueResult | null;
   isCompareSelected?: boolean;
   canSelectCompare?: boolean;
   onToggleCompare?: () => void;
@@ -2447,6 +2455,7 @@ function ProductGroupCard({
           {matchReasons.length > 0 && (
             <MatchReasonBadges reasons={matchReasons} className="mt-1" />
           )}
+          {bestValue ? <BestValueBadge result={bestValue} className="mt-1" /> : null}
         </div>
 
         <div className="order-2 flex flex-wrap items-center gap-1 sm:shrink-0 sm:flex-nowrap sm:justify-end">
