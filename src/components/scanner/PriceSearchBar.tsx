@@ -487,8 +487,7 @@ export function PriceSearchBar({
       suggestAbort.current?.abort();
       const ctrl = new AbortController();
       suggestAbort.current = ctrl;
-      runSuggestRef
-        .current({ data: { query: q }, signal: ctrl.signal })
+      fetchSuggestions(qc, runSuggestRef.current as never, q, ctrl.signal)
         .then((rows) => {
           if (seq !== suggestSeq.current) return;
           setSuggestions(rows);
