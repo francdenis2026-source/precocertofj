@@ -224,7 +224,7 @@ const RULES: readonly Rule[] = [
   // 20) Doces
   {
     category: "doces",
-    re: /^(?!.*(cereal|nescau|toddy|achocolat|cappuccino)).*\b(chocolates?|bombom|balas?|brigadeiro|geleia|pacoca|goiabada|nutella|gelatina|marshmallow|pirulito|chiclete|halls|trident)\b/,
+    re: /^(?!.*(cereal|nescau|toddy|achocolat|cappuccino)).*(\b(chocolates?|bombom|balas?|brigadeiro|geleia|pacoca|goiabada|nutella|gelatina|marshmallow|pirulito|chiclete|halls|trident|cappellaro|fini|dori)\b|jujuba|goma de mascar)/,
   },
 
   // 21) Bebidas prontas — marcas regionais de refrigerante (sukita, tubaína…)
