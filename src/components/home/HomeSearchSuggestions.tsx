@@ -2,6 +2,8 @@ import * as React from "react";
 import { createPortal } from "react-dom";
 import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
+import { useQueryClient } from "@tanstack/react-query";
+import { fetchPriceSearch, fetchSuggestions } from "@/lib/search-cache";
 import { Search, ArrowRight, TrendingDown, Loader2, CornerDownLeft } from "lucide-react";
 import {
   suggestProducts,
@@ -58,6 +60,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
     const navigate = useNavigate();
     const runSuggest = useServerFn(suggestProducts);
     const runSearch = useServerFn(searchProductPrice);
+    const qc = useQueryClient();
 
     const [items, setItems] = React.useState<
       Array<ProductSuggestion & { minPrice?: number | null; market?: string | null }>
@@ -91,10 +94,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
         setLoading(true);
         setErr(null);
         try {
-          const suggestions = await runSuggest({
-            data: { query: q },
-            signal: ctrl.signal as any,
-          } as any);
+          const suggestions = await fetchSuggestions(qc, runSuggest as never, q, ctrl.signal);
           if (ctrl.signal.aborted) return;
           const base = (suggestions ?? []).slice(0, MAX_ITEMS);
           // Mostra os nomes imediatamente; o preço chega logo depois.
@@ -102,10 +102,12 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
           const enriched = await Promise.all(
             base.map(async (s) => {
               try {
-                const r: any = await runSearch({
-                  data: { query: s.displayName, pureOnly: true },
-                  signal: ctrl.signal as any,
-                } as any);
+                const r: any = await fetchPriceSearch<any>(
+                  qc,
+                  runSearch as never,
+                  { query: s.displayName, pureOnly: true },
+                  ctrl.signal,
+                );
                 const first = r?.groups?.[0];
                 const cheapest = first?.prices?.[0];
                 return {
@@ -132,7 +134,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
         clearTimeout(timer);
         ctrl.abort();
       };
-    }, [q, canQuery, runSuggest, runSearch]);
+    }, [q, canQuery, runSuggest, runSearch, qc]);
 
     const blocked = isLoggedOut && isGuestAtLimit();
 
