@@ -12,7 +12,9 @@ import {
 import { Price } from "@/components/ds/Price";
 import type { getAppSummary } from "@/lib/favorites.functions";
 import { AddToListButton } from "@/components/app/AddToListButton";
+import { useRovingFocus } from "@/hooks/use-roving-focus";
 import { cn } from "@/lib/utils";
+
 
 type Summary = NonNullable<Awaited<ReturnType<typeof getAppSummary>>>;
 
