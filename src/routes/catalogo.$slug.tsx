@@ -368,16 +368,29 @@ function CatalogoPage() {
         {/* Resultados */}
         <div className="mt-5">
           {isLoading ? (
-            <RankingSkeleton />
+            <CatalogGridSkeleton count={9} className="lg:grid-cols-3 xl:grid-cols-3" />
           ) : error ? (
-            <RouteError message={(error as Error).message} />
+            <SmartErrorState error={error} onRetry={() => void refetch()} />
           ) : filtered.length === 0 ? (
-            <FeedbackEmptyState
+            <IllustratedEmptyState
+              kind="search"
               title="Nenhum produto encontrado"
               message="Ajuste a busca ou remova os filtros para ver mais itens deste catálogo."
-
+              action={
+                hasFilters ? (
+                  <Button
+                    size="sm"
+                    onClick={() =>
+                      setSearch({ q: "", cat: "", marca: "", min: 0, max: 0, best: false })
+                    }
+                  >
+                    Limpar filtros
+                  </Button>
+                ) : undefined
+              }
             />
           ) : (
+
             <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {filtered.map((p) => (
                 <li key={p.slug}>
