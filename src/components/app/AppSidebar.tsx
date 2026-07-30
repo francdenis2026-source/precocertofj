@@ -1,11 +1,9 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   Home,
-  Search,
   ShoppingCart,
   Bell,
   User,
-  ShoppingBag,
   Shield,
   BarChart3,
   History,
@@ -34,7 +32,6 @@ import {
   Trophy,
   ClipboardCheck,
   Camera,
-  Radio,
   ShoppingBasket,
   Gavel,
 } from "lucide-react";
@@ -75,42 +72,36 @@ type NavGroup = {
 
 const appGroups: readonly NavGroup[] = [
   {
-    label: "Início",
-    items: [
-      { to: "/app", label: "Painel", icon: Home, exact: true },
-      { to: "/bem-vindo", label: "Boas-vindas", icon: BadgeCheck },
-    ],
-  },
-  {
     label: "Comprar melhor",
     items: [
+      { to: "/app", label: "Painel", icon: Home, exact: true },
       { to: "/melhores-precos", label: "Melhores preços", icon: Trophy },
-      { to: "/comparador", label: "Comparar mercados", icon: BarChart3 },
-      { to: "/comparador-ao-vivo", label: "Comparador ao vivo", icon: Radio },
+      { to: "/comparador", label: "Comparador", icon: BarChart3 },
       { to: "/estabelecimentos", label: "Mercados", icon: Store },
       { to: "/mapa", label: "Bairros", icon: Boxes },
-      { to: "/economia", label: "Economia", icon: Wallet },
     ],
   },
   {
     label: "Minha conta",
     items: [
-      { to: "/perfil", label: "Perfil", icon: User },
-      { to: "/meus-pedidos", label: "Meus pedidos", icon: ReceiptText },
-      { to: "/minhas-licencas", label: "Minhas licenças", icon: KeyRound },
       { to: "/lista", label: "Minha lista", icon: ShoppingCart },
       { to: "/alertas", label: "Alertas", icon: Bell },
       { to: "/historico", label: "Histórico", icon: History },
+      { to: "/economia", label: "Economia", icon: Wallet },
+      { to: "/perfil", label: "Perfil", icon: User },
     ],
   },
   {
-    label: "Ajuda",
+    label: "Assinatura",
     items: [
       { to: "/planos", label: "Planos", icon: TicketPercent },
+      { to: "/minhas-licencas", label: "Licenças", icon: KeyRound },
+      { to: "/meus-pedidos", label: "Pedidos", icon: ReceiptText },
       { to: "/resgatar", label: "Resgatar código", icon: BadgeCheck },
     ],
   },
 ] as const;
+
 
 const adminGroups: readonly NavGroup[] = [
   {

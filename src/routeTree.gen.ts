@@ -44,7 +44,6 @@ import { Route as CestaBasicaRouteImport } from './routes/cesta-basica'
 import { Route as CestaRouteImport } from './routes/cesta'
 import { Route as CadastroRouteImport } from './routes/cadastro'
 import { Route as BuscarRouteImport } from './routes/buscar'
-import { Route as BemVindoRouteImport } from './routes/bem-vindo'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AssinaturaRouteImport } from './routes/assinatura'
 import { Route as AssinarRouteImport } from './routes/assinar'
@@ -289,11 +288,6 @@ const CadastroRoute = CadastroRouteImport.update({
 const BuscarRoute = BuscarRouteImport.update({
   id: '/buscar',
   path: '/buscar',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BemVindoRoute = BemVindoRouteImport.update({
-  id: '/bem-vindo',
-  path: '/bem-vindo',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthRoute = AuthRouteImport.update({
@@ -662,7 +656,6 @@ export interface FileRoutesByFullPath {
   '/assinar': typeof AssinarRoute
   '/assinatura': typeof AssinaturaRoute
   '/auth': typeof AuthRoute
-  '/bem-vindo': typeof BemVindoRoute
   '/buscar': typeof BuscarRoute
   '/cadastro': typeof CadastroRoute
   '/cesta': typeof CestaRoute
@@ -770,7 +763,6 @@ export interface FileRoutesByTo {
   '/assinar': typeof AssinarRoute
   '/assinatura': typeof AssinaturaRoute
   '/auth': typeof AuthRoute
-  '/bem-vindo': typeof BemVindoRoute
   '/buscar': typeof BuscarRoute
   '/cadastro': typeof CadastroRoute
   '/cesta': typeof CestaRoute
@@ -879,7 +871,6 @@ export interface FileRoutesById {
   '/assinar': typeof AssinarRoute
   '/assinatura': typeof AssinaturaRoute
   '/auth': typeof AuthRoute
-  '/bem-vindo': typeof BemVindoRoute
   '/buscar': typeof BuscarRoute
   '/cadastro': typeof CadastroRoute
   '/cesta': typeof CestaRoute
@@ -989,7 +980,6 @@ export interface FileRouteTypes {
     | '/assinar'
     | '/assinatura'
     | '/auth'
-    | '/bem-vindo'
     | '/buscar'
     | '/cadastro'
     | '/cesta'
@@ -1097,7 +1087,6 @@ export interface FileRouteTypes {
     | '/assinar'
     | '/assinatura'
     | '/auth'
-    | '/bem-vindo'
     | '/buscar'
     | '/cadastro'
     | '/cesta'
@@ -1205,7 +1194,6 @@ export interface FileRouteTypes {
     | '/assinar'
     | '/assinatura'
     | '/auth'
-    | '/bem-vindo'
     | '/buscar'
     | '/cadastro'
     | '/cesta'
@@ -1314,7 +1302,6 @@ export interface RootRouteChildren {
   AssinarRoute: typeof AssinarRoute
   AssinaturaRoute: typeof AssinaturaRoute
   AuthRoute: typeof AuthRoute
-  BemVindoRoute: typeof BemVindoRoute
   BuscarRoute: typeof BuscarRoute
   CadastroRoute: typeof CadastroRoute
   CestaRoute: typeof CestaRoute
@@ -1652,13 +1639,6 @@ declare module '@tanstack/react-router' {
       path: '/buscar'
       fullPath: '/buscar'
       preLoaderRoute: typeof BuscarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/bem-vindo': {
-      id: '/bem-vindo'
-      path: '/bem-vindo'
-      fullPath: '/bem-vindo'
-      preLoaderRoute: typeof BemVindoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/auth': {
@@ -2224,7 +2204,6 @@ const rootRouteChildren: RootRouteChildren = {
   AssinarRoute: AssinarRoute,
   AssinaturaRoute: AssinaturaRoute,
   AuthRoute: AuthRoute,
-  BemVindoRoute: BemVindoRoute,
   BuscarRoute: BuscarRoute,
   CadastroRoute: CadastroRoute,
   CestaRoute: CestaRoute,

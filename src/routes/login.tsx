@@ -143,11 +143,8 @@ function LoginPage() {
     router.history.replace(target);
   }
 
-  function goToWelcomeThen() {
-    const target = resolvePostAuthTarget();
-    const url = `/bem-vindo?next=${encodeURIComponent(target)}`;
-    router.history.replace(url);
-  }
+
+
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -268,7 +265,7 @@ function LoginPage() {
         toast.success("Bem-vindo de volta!");
       }
       await router.invalidate();
-      goToWelcomeThen();
+      goToPostAuthTarget();
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Falha ao autenticar";
       setFormError(msg);
