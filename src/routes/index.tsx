@@ -305,6 +305,8 @@ function HomePage() {
         return;
       }
     }
+    // Registra a busca real do cliente — alimenta "Buscas em alta" em tempo real.
+    trackEvent("search_query", { q: query.toLowerCase().slice(0, 60) });
     navigate({ to: "/buscar", search: { q: query } as any });
   };
 
