@@ -26,7 +26,10 @@ import { getEconomyStat } from "@/lib/products-public.functions";
 import { listPopularQueries } from "@/lib/search-popular.functions";
 import { StartFreeDialog } from "@/components/home/StartFreeDialog";
 import { GuestGateDialog } from "@/components/gate/GuestGateDialog";
-import { HomeSearchSuggestions } from "@/components/home/HomeSearchSuggestions";
+import {
+  HomeSearchSuggestions,
+  type HomeSearchSuggestionsHandle,
+} from "@/components/home/HomeSearchSuggestions";
 import {
   consumeGuest,
   guestRemaining,
