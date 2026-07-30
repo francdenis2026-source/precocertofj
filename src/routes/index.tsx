@@ -631,10 +631,10 @@ function HomePage() {
                     em cápsula inferior (revela em hover para não competir
                     com os preços) e um CTA "Ver todos" sempre visível. */}
                 <div
-                  className="mt-3 hidden border-t pt-2.5 min-[360px]:block"
+                  className="mt-2.5 hidden border-t pt-2 min-[360px]:block"
                   style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}
                 >
-                  <div className="mb-2 flex items-baseline justify-between gap-3">
+                  <div className="mb-1.5 flex items-baseline justify-between gap-3">
                     <div className="flex items-center gap-1.5">
                       <MapPin className="h-3 w-3" style={{ color: P.goldSoft }} aria-hidden />
                       <span
