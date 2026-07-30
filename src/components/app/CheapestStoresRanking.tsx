@@ -54,8 +54,7 @@ const rankIcon = (idx: number) => {
   return Store;
 };
 
-const brl = (n: number) =>
-  n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
 
 /**
  * Ranking dos mercados mais baratos — agora com filtro por categoria e
