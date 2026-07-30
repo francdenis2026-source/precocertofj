@@ -333,7 +333,7 @@ export function CheapestStoresRanking() {
                         )}
                         title="Vitórias / Comparações"
                       >
-                        <p className="pc-price text-[15px] font-bold text-foreground md:text-lg">
+                        <p className="pc-num text-[15px] font-bold text-foreground md:text-lg">
                           {winRate}
                           <span className="ml-0.5 text-[11px] font-semibold text-muted-foreground">%</span>
                         </p>
