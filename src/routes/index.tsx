@@ -120,16 +120,19 @@ const P = {
 };
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 
-/* Ladrilhos da faixa inferior.
-   Altura em `clamp(px, vh, px)`: a célula acompanha a altura da janela sem
-   nunca estourar a tela nem encolher a ponto de cortar o rótulo. Todas as
-   células (categorias e atalhos) usam exatamente a mesma medida, de modo que
-   as duas colunas fecham as mesmas 2 linhas e nada fica desproporcional. */
+/* Ladrilhos da faixa inferior — layout horizontal (ícone à esquerda do rótulo).
+   A caixa ficou mais baixa e densa: com ícone e texto na mesma linha, a altura
+   antes reservada para o empilhamento virava espaço morto. `clamp(px, vh, px)`
+   segue acompanhando a altura da janela sem cortar o rótulo, e todas as células
+   (categorias e ações) usam a mesma medida para fechar 2 linhas alinhadas. */
 const TILE =
-  "group flex h-[clamp(58px,8.4vh,88px)] flex-col items-center justify-center gap-1 rounded-2xl border px-2 text-center pc-tile pc-elite-frame focus-visible:outline-none focus-visible:ring-2 sm:gap-1.5";
-const TILE_ICON = "h-[clamp(18px,2.5vh,25px)] w-[clamp(18px,2.5vh,25px)]";
+  "group flex h-[clamp(44px,5.4vh,58px)] w-full min-w-0 items-center gap-2 rounded-xl border pl-2 pr-2.5 text-left pc-tile pc-elite-frame focus-visible:outline-none focus-visible:ring-2";
+const TILE_ICONWRAP =
+  "grid shrink-0 place-items-center rounded-lg h-[clamp(24px,3vh,30px)] w-[clamp(24px,3vh,30px)]";
+const TILE_ICON = "h-[clamp(15px,1.9vh,19px)] w-[clamp(15px,1.9vh,19px)]";
 const TILE_LABEL =
-  "w-full truncate text-[clamp(11.5px,1.6vh,15px)] font-semibold leading-none tracking-[-0.005em]";
+  "min-w-0 flex-1 truncate text-[clamp(11.5px,1.5vh,14px)] font-semibold leading-none tracking-[-0.005em]";
+
 
 /* Tokens tipográficos compartilhados da home: um único "eyebrow" (rótulo de
    seção) e um único estilo de chip, para que hero, painel ao vivo e faixa de
@@ -785,13 +788,27 @@ function HomePage() {
           <hr className="pc-rule my-[clamp(0.35rem,1.2vh,0.9rem)]" aria-hidden />
 
           {/* ================= FAIXA INFERIOR =================
-              Duas colunas, ambas com 2 linhas de células idênticas: 10 hubs à
-              esquerda (5 por linha) e 4 atalhos à direita (2 por linha). Antes
-              os atalhos ficavam em 1 linha dentro de um bloco de 2 linhas de
-              altura, o que esticava as células e desalinhava a faixa. */}
+              Dois blocos com molduras próprias para não misturar conceitos:
+              à esquerda as CATEGORIAS (navegação por seção da loja), à direita
+              as AÇÕES do produto (Histórico, Colaborar, Plus, Explorar). Cada
+              bloco tem rótulo e contorno próprios; as células são horizontais
+              (ícone à esquerda do rótulo) e mais baixas, ganhando densidade. */}
           <div className="grid shrink-0 gap-2 sm:gap-2.5 lg:grid-cols-12">
             {/* Categorias */}
-            <nav aria-label="Categorias" className="min-w-0 lg:col-span-8">
+            <nav
+              aria-label="Categorias"
+              className="min-w-0 rounded-2xl border p-2 sm:p-2.5 lg:col-span-8"
+              style={{
+                background: "color-mix(in oklab, var(--pc-home-onhero-glass) 45%, transparent)",
+                borderColor: "var(--pc-home-onhero-border-soft)",
+              }}
+            >
+              <p
+                className={`${EYEBROW} mb-1.5 px-0.5`}
+                style={{ color: "var(--pc-home-onhero-fg-70, var(--pc-home-onhero-fg-90))" }}
+              >
+                Categorias
+              </p>
               <div className="grid grid-cols-5 gap-2 sm:gap-2.5">
                 {CATEGORIES.map(({ key, label, full, coverage, Icon }) => (
                   <button
@@ -809,7 +826,18 @@ function HomePage() {
                       "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
                     }}
                   >
-                    <Icon className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.1} aria-hidden />
+                    {/* Chip atrás do ícone: separa o dourado do fundo fotográfico
+                        e garante contraste legível sobre o glass. */}
+                    <span
+                      className={TILE_ICONWRAP}
+                      style={{
+                        background: `color-mix(in oklab, ${P.gold} 14%, transparent)`,
+                        border: `1px solid color-mix(in oklab, ${P.gold} 28%, transparent)`,
+                      }}
+                      aria-hidden
+                    >
+                      <Icon className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.2} aria-hidden />
+                    </span>
                     <span
                       className={TILE_LABEL}
                       style={{ color: "var(--pc-home-onhero-fg-90)" }}
@@ -826,13 +854,22 @@ function HomePage() {
                   data-reading-card
                   className={`${TILE} border-dashed`}
                   style={{
-                    background: `color-mix(in oklab, ${P.gold} 16%, transparent)`,
-                    borderColor: `color-mix(in oklab, ${P.gold} 55%, transparent)`,
+                    background: `color-mix(in oklab, ${P.gold} 20%, transparent)`,
+                    borderColor: `color-mix(in oklab, ${P.gold} 62%, transparent)`,
                     // @ts-expect-error css var
                     "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
                   }}
                 >
-                  <Grid3x3 className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.3} aria-hidden />
+                  <span
+                    className={TILE_ICONWRAP}
+                    style={{
+                      background: `color-mix(in oklab, ${P.gold} 26%, transparent)`,
+                      border: `1px solid color-mix(in oklab, ${P.gold} 45%, transparent)`,
+                    }}
+                    aria-hidden
+                  >
+                    <Grid3x3 className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.4} aria-hidden />
+                  </span>
                   <span className={`${TILE_LABEL} font-bold`} style={{ color: "var(--pc-home-onhero-gold)" }}>
                     Todas
                   </span>
@@ -840,35 +877,56 @@ function HomePage() {
               </div>
             </nav>
 
-            {/* Pilares + Explorar */}
-            <div className="grid min-w-0 grid-cols-4 gap-2 sm:gap-2.5 lg:col-span-4 lg:grid-cols-2">
-              <PillarLink to="/melhores-precos" Icon={LineChart} label="Histórico" />
-              <PillarLink to="/colaborar" Icon={Users} label="Colaborar" />
-              <PillarLink to="/planos" Icon={Sparkles} label="Plus" emphasis />
-              <Sheet open={exploreOpen} onOpenChange={setExploreOpen}>
-                <SheetTrigger asChild>
-                  <button
-                    type="button"
-                    data-reading-card
-                    className={TILE}
-                    onPointerEnter={preloadExplorePanel}
-                    onFocus={preloadExplorePanel}
-                    style={{
-                      background: "var(--pc-home-onhero-glass)",
-                      borderColor: "var(--pc-home-onhero-border)",
-                      // @ts-expect-error css var
-                      "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
-                    }}
-                  >
-                    <LayoutGrid className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.1} aria-hidden />
-                    <span
-                      className={TILE_LABEL}
-                      style={{ color: "var(--pc-home-onhero-fg-90)" }}
+            {/* Ações — moldura própria, separada das categorias */}
+            <nav
+              aria-label="Ações"
+              className="min-w-0 rounded-2xl border p-2 sm:p-2.5 lg:col-span-4"
+              style={{
+                background: `color-mix(in oklab, ${P.gold} 7%, var(--pc-home-onhero-glass))`,
+                borderColor: `color-mix(in oklab, ${P.gold} 32%, transparent)`,
+              }}
+            >
+              <p className={`${EYEBROW} mb-1.5 px-0.5`} style={{ color: "var(--pc-home-onhero-gold)" }}>
+                Ações
+              </p>
+              <div className="grid min-w-0 grid-cols-4 gap-2 sm:gap-2.5 lg:grid-cols-2">
+                <PillarLink to="/melhores-precos" Icon={LineChart} label="Histórico" />
+                <PillarLink to="/colaborar" Icon={Users} label="Colaborar" />
+                <PillarLink to="/planos" Icon={Sparkles} label="Plus" emphasis />
+                <Sheet open={exploreOpen} onOpenChange={setExploreOpen}>
+                  <SheetTrigger asChild>
+                    <button
+                      type="button"
+                      data-reading-card
+                      className={TILE}
+                      onPointerEnter={preloadExplorePanel}
+                      onFocus={preloadExplorePanel}
+                      style={{
+                        background: "var(--pc-home-onhero-glass)",
+                        borderColor: "var(--pc-home-onhero-border)",
+                        // @ts-expect-error css var
+                        "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
+                      }}
                     >
-                      Explorar
-                    </span>
-                  </button>
-                </SheetTrigger>
+                      <span
+                        className={TILE_ICONWRAP}
+                        style={{
+                          background: `color-mix(in oklab, ${P.gold} 14%, transparent)`,
+                          border: `1px solid color-mix(in oklab, ${P.gold} 28%, transparent)`,
+                        }}
+                        aria-hidden
+                      >
+                        <LayoutGrid className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.2} aria-hidden />
+                      </span>
+                      <span
+                        className={TILE_LABEL}
+                        style={{ color: "var(--pc-home-onhero-fg-90)" }}
+                      >
+                        Explorar
+                      </span>
+                    </button>
+                  </SheetTrigger>
+
 
                 <SheetContent
                   side="bottom"
@@ -904,7 +962,9 @@ function HomePage() {
 
                 </SheetContent>
               </Sheet>
-            </div>
+              </div>
+            </nav>
+
 
           </div>
 
@@ -1076,22 +1136,39 @@ function PillarLink({
         borderColor: emphasis
           ? "var(--pc-home-gold)"
           : "var(--pc-home-onhero-border)",
+        boxShadow: emphasis
+          ? "0 6px 18px -10px color-mix(in oklab, var(--pc-home-gold) 70%, transparent)"
+          : undefined,
         // @ts-expect-error css var
         "--tw-ring-color": "color-mix(in oklab, var(--pc-home-gold) 70%, transparent)",
       }}
     >
-      <Icon
-        className={TILE_ICON}
-        style={{ color: emphasis ? "var(--pc-home-navy)" : "var(--pc-home-onhero-gold)" }}
-        strokeWidth={2.1}
-        aria-hidden
-      />
       <span
-        className={TILE_LABEL}
+        className={TILE_ICONWRAP}
+        style={{
+          background: emphasis
+            ? "color-mix(in oklab, var(--pc-home-navy) 14%, transparent)"
+            : "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
+          border: emphasis
+            ? "1px solid color-mix(in oklab, var(--pc-home-navy) 22%, transparent)"
+            : "1px solid color-mix(in oklab, var(--pc-home-gold) 28%, transparent)",
+        }}
+        aria-hidden
+      >
+        <Icon
+          className={TILE_ICON}
+          style={{ color: emphasis ? "var(--pc-home-navy)" : "var(--pc-home-onhero-gold)" }}
+          strokeWidth={2.2}
+          aria-hidden
+        />
+      </span>
+      <span
+        className={`${TILE_LABEL}${emphasis ? " font-bold" : ""}`}
         style={{ color: emphasis ? "var(--pc-home-navy)" : "var(--pc-home-onhero-fg-90)" }}
       >
         {label}
       </span>
     </Link>
   );
+
 }
