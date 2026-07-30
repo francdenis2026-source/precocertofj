@@ -461,7 +461,10 @@ function HomePage() {
                   onClose={() => setSuggestOpen(false)}
                   onBlocked={() => setGateOpen(true)}
                 />
-                {isLoggedOut ? (
+                {/* Com a cota de visitante desativada, GUEST_DAILY_LIMIT vale
+                    Number.MAX_SAFE_INTEGER — mostrar "restam 9007199254740991"
+                    é ruído. Só exibe o contador quando o limite é real. */}
+                {isLoggedOut && !GUEST_QUOTA_DISABLED ? (
                   <p
                     className="mt-1.5 pl-2 text-[11px] font-medium"
                     style={{ color: "var(--pc-home-onhero-fg-70)" }}
