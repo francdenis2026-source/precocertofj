@@ -975,11 +975,14 @@ export const getPublicStoreCatalog = createServerFn({ method: "GET" })
 
     const catCounts = new Map<string, { label: string; count: number }>();
     for (const p of products) {
-      const c = categorize(p.productName);
-      const cur = catCounts.get(c.key) ?? { label: c.label, count: 0 };
+      // Usa a categoria já resolvida no produto (catálogo > regex) para que os
+      // filtros da loja batam exatamente com o rótulo exibido no card.
+      const key = p.category;
+      const cur = catCounts.get(key) ?? { label: p.category, count: 0 };
       cur.count += 1;
-      catCounts.set(c.key, cur);
+      catCounts.set(key, cur);
     }
+
     const categories = Array.from(catCounts.entries())
       .map(([key, v]) => ({ key, label: v.label, count: v.count }))
       .sort((a, b) => b.count - a.count);
