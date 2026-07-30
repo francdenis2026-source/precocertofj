@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { usePricesRealtime } from "@/hooks/usePricesRealtime";
 import { LiveUpdateBadge, useLivePulse } from "@/components/ui/live-update-badge";
 import { SearchGlassScrim } from "@/components/search/SearchGlassScrim";
+import { Price } from "@/components/ds/Price";
 import { Link } from "@tanstack/react-router";
 import { searchProductPrice, type PriceSearchResult, type PriceSuggestion, type ProductGroup } from "@/lib/price-search.functions";
 import { suggestProducts, type ProductSuggestion } from "@/lib/product-suggest.functions";
