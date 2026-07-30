@@ -530,75 +530,72 @@ function EstablishmentPage() {
           )}
         </section>
 
-
-
-
-
         {tab === "catalogo" && (
           <>
-            {data.categories.length > 0 && (
-              <CategoryRail
-                categories={[
-                  { key: "__all", label: "Todas", count: catalogProducts.length },
-                  ...data.categories,
-                ]}
-                activeLabel={selectedCategory}
-                onSelect={(label) => {
-                  setSearch({ cat: label === "Todas" ? "" : label });
-                }}
-              />
-            )}
-
-            {/* Ponte explícita entre a categoria de produto da loja e o hub
-                correspondente da homepage — mesmo vocabulário, um clique. */}
-            {activeHub && (
-              <Link
-                to="/categoria/$slug"
-                params={{ slug: activeHub.slug }}
-                className="mt-2 inline-flex items-center gap-1.5 text-[12px] font-semibold text-brand-gold underline-offset-2 hover:underline"
-              >
-                Comparar {selectedCategory} em toda a cidade · {activeHub.label}
-                <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-              </Link>
-            )}
-
-
-
-            <div className="mt-2.5 flex flex-col gap-2 sm:flex-row sm:items-center">
-              <div className="relative flex-1">
-                <Search
-                  className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-                  aria-hidden
-                />
-                <input
-                  value={q}
-                  onChange={(e) => {
-                    setQ(e.target.value);
-                    setLimit(30);
+            {/* Painel único de controles: categorias + busca + ordenação + visão. */}
+            <div className="mt-2.5 rounded-xl border border-border bg-card/70 p-2.5">
+              {data.categories.length > 0 && (
+                <CategoryRail
+                  categories={[
+                    { key: "__all", label: "Todas", count: catalogProducts.length },
+                    ...data.categories,
+                  ]}
+                  activeLabel={selectedCategory}
+                  onSelect={(label) => {
+                    setSearch({ cat: label === "Todas" ? "" : label });
                   }}
-                  placeholder="Buscar produto (ignora acentos e ç/c)"
-                  aria-label="Buscar produto"
-                  inputMode="search"
-                  className="h-9 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13px] outline-none focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
                 />
+              )}
+
+              <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center">
+                <div className="relative flex-1">
+                  <Search
+                    className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                    aria-hidden
+                  />
+                  <input
+                    value={q}
+                    onChange={(e) => {
+                      setQ(e.target.value);
+                      setLimit(30);
+                    }}
+                    placeholder="Buscar produto (ignora acentos e ç/c)"
+                    aria-label="Buscar produto"
+                    inputMode="search"
+                    className="h-9 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13px] outline-none focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
+                  />
+                </div>
+                <Select value={sort} onValueChange={(v) => setSearch({ sort: v })}>
+                  <SelectTrigger
+                    aria-label="Ordenar por"
+                    className="h-9 w-full text-[12.5px] font-medium sm:w-[240px]"
+                  >
+                    <SelectValue placeholder="Ordenar por" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {(Object.keys(SORT_LABEL) as SortKey[]).map((k) => (
+                      <SelectItem key={k} value={k} className="text-[12.5px]">
+                        {SORT_LABEL[k]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <ViewToggle value={view} onChange={(v) => setSearch({ view: v })} />
               </div>
-              <Select value={sort} onValueChange={(v) => setSearch({ sort: v })}>
-                <SelectTrigger
-                  aria-label="Ordenar por"
-                  className="h-9 w-full text-[12.5px] font-medium sm:w-[240px]"
+
+              {/* Ponte entre a categoria da loja e o hub correspondente da cidade. */}
+              {activeHub && (
+                <Link
+                  to="/categoria/$slug"
+                  params={{ slug: activeHub.slug }}
+                  className="mt-2 inline-flex items-center gap-1.5 text-[12px] font-semibold text-brand-gold underline-offset-2 hover:underline"
                 >
-                  <SelectValue placeholder="Ordenar por" />
-                </SelectTrigger>
-                <SelectContent>
-                  {(Object.keys(SORT_LABEL) as SortKey[]).map((k) => (
-                    <SelectItem key={k} value={k} className="text-[12.5px]">
-                      {SORT_LABEL[k]}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <ViewToggle value={view} onChange={(v) => setSearch({ view: v })} />
+                  Comparar {selectedCategory} em toda a cidade · {activeHub.label}
+                  <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+                </Link>
+              )}
             </div>
+
 
             <div className="mt-2.5 flex items-baseline justify-between gap-3">
               <h2 className="text-[11px] font-bold uppercase tracking-[0.16em] text-foreground">
