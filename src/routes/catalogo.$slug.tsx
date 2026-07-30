@@ -16,6 +16,7 @@ import type { CatalogPriceRank, PublicStoreProduct } from "@/lib/stores-public.f
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
 import { Price } from "@/components/ds/Price";
+import { CATEGORY_LABELS } from "@/lib/product-category";
 
 /* ------------------------------------------------------------------ */
 /* Helpers                                                             */
@@ -32,22 +33,6 @@ const norm = (s: string) =>
     .toLowerCase()
     .trim();
 
-const CATEGORY_LABELS: Record<string, string> = {
-  mercearia: "Mercearia",
-  graos: "Grãos",
-  bebidas: "Bebidas",
-  bebidas_em_po: "Bebidas em pó",
-  laticinios: "Laticínios",
-  carnes: "Carnes",
-  padaria: "Padaria",
-  hortifruti: "Hortifruti",
-  biscoitos: "Biscoitos",
-  doces: "Doces",
-  congelados: "Congelados",
-  higiene: "Higiene",
-  limpeza: "Limpeza",
-  outros: "Outros",
-};
 
 const categoryLabel = (slug: string) =>
   CATEGORY_LABELS[slug] ?? slug.replace(/_/g, " ").replace(/^./, (c) => c.toUpperCase());

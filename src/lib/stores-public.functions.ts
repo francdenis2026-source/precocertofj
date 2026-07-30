@@ -1,6 +1,6 @@
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { requireAdmin } from "@/lib/require-admin";
-import { categoryLabel, classifyWithLabel } from "@/lib/product-category";
+import { categoryLabel, classifyWithLabel, classifyCategory } from "@/lib/product-category";
 import { normalizeNameKey, slugifyText } from "@/lib/text-normalize";
 import { createServerFn } from "@tanstack/react-start";
 
@@ -495,22 +495,7 @@ type ScanRowRank = {
 
 // Classificação de categoria (leve, para não pagar RPC por linha).
 function classifyRank(name: string): string {
-  const n = name
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase();
-  if (/\b(leite|queijo|manteiga|margarina|iogurte|requeij|nata|coalh|danone|batavo|italac|itamb|qualy|vigor|piracanjuba|ninho)\b/.test(n)) return "laticinios";
-  if (/\b(shampoo|sabonete|creme dental|pasta de dente|desodorante|absorvente|papel higienic|fralda|escova|higiene|higiê|antisseptic)\b/.test(n)) return "higiene";
-  if (/\b(sabao|detergente|amaciante|agua sanit|desinfetante|multiuso|limp|lava roup|veja|omo|ariel|ype|ypê)\b/.test(n)) return "limpeza";
-  if (/\b(cafe|café|arroz|feijao|feijão|acucar|açúcar|oleo|óleo|macarr|farinha|sal|molho|extrato|azeite|vinagre|tempero|milho|ervilha|sardinha|atum|maionese|mostarda|ketchup)\b/.test(n)) return "mercearia";
-  if (/\b(biscoit|bolach|wafer|cookie|cracker)\b/.test(n)) return "biscoitos";
-  if (/\b(refrigerante|suco|agua mineral|cerveja|energetic|energético|isotonic|coca|guarana|pepsi|amstel|skol|brahma|heineken)\b/.test(n)) return "bebidas";
-  if (/\b(nescau|toddy|achocolatado|leite em po|leite po|nan|milkshake|cappuc|nescafe)\b/.test(n)) return "bebidas_em_po";
-  if (/\b(chocolate|bala|pirulito|goma|bombom|doce|geleia|marmelada|gelatina|pudim|creme de leite|leite condens)\b/.test(n)) return "doces";
-  if (/\b(carne|frango|peito|coxa|linguic|linguiç|salsich|bacon|hamburguer|hambúrguer|patinho|coxão|contra file|contra filé|picanha|acém|acem)\b/.test(n)) return "carnes";
-  if (/\b(pao|pão|panetone|torrada|bolo|croissant|rosca)\b/.test(n)) return "padaria";
-  if (/\b(congelado|nugget|batata palha|batata frita|pizza congel|acai|açaí)\b/.test(n)) return "congelados";
-  return "outros";
+  return classifyCategory(name);
 }
 
 function normRank(s: string): string {
@@ -644,24 +629,7 @@ export const getCheapestStoresRanking = createServerFn({ method: "GET" })
 
     // Classificação de categoria (espelha classify_product_category no DB para
     // não pagar RPC por linha; é uma heurística leve o suficiente).
-    const classify = (name: string): string => {
-      const n = name
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .toLowerCase();
-      if (/\b(leite|queijo|manteiga|margarina|iogurte|requeij|nata|coalh|danone|batavo|italac|itamb|qualy|vigor|piracanjuba|ninho)\b/.test(n)) return "laticinios";
-      if (/\b(shampoo|sabonete|creme dental|pasta de dente|desodorante|absorvente|papel higienic|fralda|escova|higiene|higiê|antisseptic)\b/.test(n)) return "higiene";
-      if (/\b(sabao|detergente|amaciante|agua sanit|desinfetante|multiuso|limp|lava roup|veja|omo|ariel|ype|ypê)\b/.test(n)) return "limpeza";
-      if (/\b(cafe|café|arroz|feijao|feijão|acucar|açúcar|oleo|óleo|macarr|farinha|sal|molho|extrato|azeite|vinagre|tempero|milho|ervilha|sardinha|atum|maionese|mostarda|ketchup)\b/.test(n)) return "mercearia";
-      if (/\b(biscoit|bolach|wafer|cookie|cracker)\b/.test(n)) return "biscoitos";
-      if (/\b(refrigerante|suco|agua mineral|cerveja|energetic|energético|isotonic|coca|guarana|pepsi|amstel|skol|brahma|heineken|chá|cha \b)\b/.test(n)) return "bebidas";
-      if (/\b(nescau|toddy|achocolatado|leite em po|leite po|nan|milkshake|cappuc|nescafe)\b/.test(n)) return "bebidas_em_po";
-      if (/\b(chocolate|bala|pirulito|goma|bombom|doce|geleia|marmelada|gelatina|pudim|creme de leite|leite condens)\b/.test(n)) return "doces";
-      if (/\b(carne|frango|peito|coxa|linguic|linguiç|salsich|bacon|hamburguer|hambúrguer|patinho|coxão|contra file|contra filé|picanha|acém|acem)\b/.test(n)) return "carnes";
-      if (/\b(pao|pão|panetone|torrada|bolo|croissant|rosca)\b/.test(n)) return "padaria";
-      if (/\b(congelado|nugget|batata palha|batata frita|pizza congel|acai|açaí)\b/.test(n)) return "congelados";
-      return "outros";
-    };
+    const classify = (name: string): string => classifyCategory(name);
 
     // Group scans by (normalized product key, establishment) -> min price
     const perProductStore = new Map<

@@ -46,6 +46,7 @@ import { useButcherIds } from "@/hooks/useButcherIds";
 import { useSession } from "@/hooks/useSession";
 import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
 import { Price } from "@/components/ds/Price";
+import { CATEGORY_LABELS } from "@/lib/product-category";
 
 
 
@@ -186,21 +187,6 @@ type Comparison = {
 };
 
 
-const CATEGORY_LABELS: Record<string, string> = {
-  mercearia: "Mercearia",
-  bebidas: "Bebidas",
-  bebidas_em_po: "Bebidas em pó",
-  laticinios: "Laticínios",
-  carnes: "Carnes",
-  padaria: "Padaria",
-  hortifruti: "Hortifruti",
-  biscoitos: "Biscoitos",
-  doces: "Doces",
-  congelados: "Congelados",
-  higiene: "Higiene",
-  limpeza: "Limpeza",
-  outros: "Outros",
-};
 
 function formatBRL(n: number): string {
   return n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });

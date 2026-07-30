@@ -51,7 +51,7 @@ Regras:
     É melhor null do que um código errado.
   * Nunca use o preço, o código interno da loja (PLU) ou a data de validade como barcode.
 - unit: ex. "1L", "500g", "pacote 5kg".
-- category: uma destas quando possível — "laticinios", "carnes", "padaria", "biscoitos", "doces", "bebidas", "bebidas_em_po", "limpeza", "higiene", "mercearia", "congelados", "outros". Se não souber, use null.
+- category: uma destas quando possível — "laticinios", "carnes", "padaria", "biscoitos", "snacks", "doces", "bebidas", "bebidas_em_po", "prontos", "condimentos", "hortifruti", "mercearia", "congelados", "limpeza", "papel_descartaveis", "higiene", "bucal", "cabelo", "cuidados_pele", "perfumaria", "medicamentos", "suplementos", "infantil", "pet", "bazar", "papelaria", "outros". Se não souber, use null.
 - brand: marca visível (ex.: "Nestlé", "Ypê"). Sem marca visível → null.
 - Se só houver 1 produto, retorne um array de 1 item.
 - Se nada legível, retorne { "products": [], "confidence": "low" }.`;

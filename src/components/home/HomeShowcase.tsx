@@ -32,25 +32,11 @@ import {
 import { TeaserCard } from "@/components/paywall/TeaserGate";
 import { PriceCard, Badge as DSBadge, formatBRL } from "@/components/ds";
 import { Price } from "@/components/ds/Price";
+import { CATEGORY_LABELS } from "@/lib/product-category";
 
 const fmt = (n: number) => `R$ ${n.toFixed(2).replace(".", ",")}`;
 
 
-const CATEGORY_LABELS: Record<string, string> = {
-  mercearia: "Mercearia",
-  bebidas: "Bebidas",
-  bebidas_em_po: "Bebidas em pó",
-  laticinios: "Laticínios",
-  carnes: "Carnes",
-  padaria: "Padaria",
-  hortifruti: "Hortifruti",
-  biscoitos: "Biscoitos",
-  doces: "Doces",
-  congelados: "Congelados",
-  higiene: "Higiene",
-  limpeza: "Limpeza",
-  outros: "Outros",
-};
 
 const MAX_SELECT = 5;
 const MIN_SELECT = 2;

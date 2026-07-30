@@ -47,8 +47,7 @@ const SYSTEM_PROMPT = `Você é um extrator de produtos para um comparador de pr
 A foto pode conter 1 ou vários produtos (prateleira, sacola, etiqueta, cupom).
 Extraia TODOS que estiverem legíveis. Nunca invente — se um campo não estiver claro, use null.
 
-Categorias possíveis: "laticinios", "carnes", "padaria", "biscoitos", "doces", "bebidas",
-"bebidas_em_po", "limpeza", "higiene", "mercearia", "congelados", "outros".
+Categorias possíveis: "laticinios", "carnes", "padaria", "biscoitos", "snacks", "doces", "bebidas", "bebidas_em_po", "prontos", "condimentos", "hortifruti", "mercearia", "congelados", "limpeza", "papel_descartaveis", "higiene", "bucal", "cabelo", "cuidados_pele", "perfumaria", "medicamentos", "suplementos", "infantil", "pet", "bazar", "papelaria", "outros".
 
 Responda apenas JSON:
 {

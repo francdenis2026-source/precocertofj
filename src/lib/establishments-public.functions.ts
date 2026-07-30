@@ -1,4 +1,6 @@
+import { classifyCategory } from "@/lib/product-category";
 import { createServerFn } from "@tanstack/react-start";
+import { CATEGORY_LABELS } from "@/lib/product-category";
 
 export type EstablishmentStat = {
   id: string;
@@ -27,25 +29,6 @@ export type EstablishmentsOverview = {
   items: EstablishmentStat[];
 };
 
-const CATEGORY_LABELS: Record<string, string> = {
-  laticinios: "Laticínios",
-  carnes: "Carnes",
-  padaria: "Padaria",
-  biscoitos: "Biscoitos",
-  doces: "Doces",
-  bebidas: "Bebidas",
-  bebidas_em_po: "Bebidas em pó",
-  limpeza: "Limpeza",
-  higiene: "Higiene",
-  mercearia: "Mercearia",
-  congelados: "Congelados",
-  hortifruti: "Hortifrúti",
-  infantil: "Infantil",
-  medicamentos: "Medicamentos",
-  papelaria: "Papelaria",
-  perfumaria: "Perfumaria",
-  outros: "Outros",
-};
 
 
 export const humanizeCategory = (c: string): string => CATEGORY_LABELS[c] ?? c;
@@ -128,31 +111,7 @@ export const listPublicEstablishments = createServerFn({ method: "GET" }).handle
     }
 
     // Classify locally with lightweight regex-mirror of classify_product_category
-    const classify = (name: string): string => {
-      const s = (name || "")
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "");
-      if (/\b(leite|queijo|manteiga|margarina|iogurte|requeij|nata|coalhad|danone|batavo|italac|itamb|qualy|vigor|claybom|mococa|ninho|piracanjuba|elege|batavinho)\b/.test(s))
-        return "laticinios";
-      if (/\b(frango|carne|carnes|bovin|suin|porco|peixe|tilapia|salmao|linguica|calabresa|salsicha|presunto|mortadela|bacon|hamburguer|pernil|costela)\b/.test(s))
-        return "carnes";
-      if (/\b(pao|torrada|bolo|panetone|rosquinha|croissant)\b/.test(s)) return "padaria";
-      if (/(biscoit|bolach|wafer|cream cracker|cracker|oreo|club social|richester|marilan|belma|vitarella)/.test(s))
-        return "biscoitos";
-      if (/\b(chocolat|bombom|bala|brigadeiro|geleia|pacoca)\b/.test(s)) return "doces";
-      if (/\b(refrigerante|coca|guarana|pepsi|fanta|suco|nectar|energetico|cerveja|vinho|whisky|vodka|cachaca)\b/.test(s))
-        return "bebidas";
-      if (/\b(cafe|achocolatado|nescau|toddy|matte|mingau|sucrilhos|cereal|aveia|pilao)\b/.test(s)) return "bebidas_em_po";
-      if (/(sabao|detergente|alvejante|amaciante|desinfet|agua sanitaria|multiuso|lava roupa|inseticida|repelente|pinho sol|omo|ariel|ype|tixan|urca|cif)/.test(s))
-        return "limpeza";
-      if (/(creme dental|enxaguante bucal|papel higienic|papel toalha|shampoo|condicionador|desodorante|absorvente|fralda|sabonete|colgate|sorriso|closeup|dove|nivea|protex)/.test(s))
-        return "higiene";
-      if (/\b(arroz|feijao|acucar|farinha|macarrao|espaguete|oleo|azeite|vinagre|sal|fuba|amido|fermento|tempero|maionese|ketchup|mostarda|atum|sardinha|azeitona|milho|ervilha|cuscuz)\b/.test(s))
-        return "mercearia";
-      if (/\b(sorvete|congelad|nugget)\b/.test(s)) return "congelados";
-      return "outros";
-    };
+    const classify = (name: string): string => classifyCategory(name);
 
     type Agg = { total: Set<string>; cats: Map<string, number>; last: string | null; prices: Map<string, { min: number; max: number }> };
     const byEst = new Map<string, Agg>();

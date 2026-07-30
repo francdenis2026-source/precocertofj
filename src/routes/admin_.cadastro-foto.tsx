@@ -1,3 +1,4 @@
+import { PRODUCT_CATEGORIES } from "@/lib/product-category";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
@@ -27,20 +28,7 @@ export const Route = createFileRoute("/admin_/cadastro-foto")({
   ),
 });
 
-const CATEGORIES = [
-  "laticinios",
-  "carnes",
-  "padaria",
-  "biscoitos",
-  "doces",
-  "bebidas",
-  "bebidas_em_po",
-  "limpeza",
-  "higiene",
-  "mercearia",
-  "congelados",
-  "outros",
-];
+const CATEGORIES = [...PRODUCT_CATEGORIES];
 
 type Draft = VisionProduct & { _uid: string; _saved?: boolean; _saving?: boolean };
 

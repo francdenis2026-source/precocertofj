@@ -1,3 +1,4 @@
+import { PRODUCT_CATEGORIES } from "@/lib/product-category";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { formatShortDate } from "@/components/product/TrustIndicator";
 import { adminBeforeLoad } from "@/lib/route-guards";
@@ -61,21 +62,7 @@ export const Route = createFileRoute("/admin_/cobertura/$id")({
   ),
 });
 
-const CATEGORIES = [
-  "todos",
-  "laticinios",
-  "carnes",
-  "padaria",
-  "biscoitos",
-  "doces",
-  "bebidas",
-  "bebidas_em_po",
-  "limpeza",
-  "higiene",
-  "mercearia",
-  "congelados",
-  "outros",
-];
+const CATEGORIES = ["todos", ...PRODUCT_CATEGORIES];
 
 const PAGE_SIZE = 20;
 
