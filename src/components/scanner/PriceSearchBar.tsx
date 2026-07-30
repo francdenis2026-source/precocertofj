@@ -26,6 +26,9 @@ import { MatchReasonBadges } from "@/components/search/MatchReasonBadges";
 import { SearchInterpretationSummary } from "@/components/search/SearchInterpretationSummary";
 import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
 import { computeUnitPrice } from "@/lib/unit-price";
+import { pickBestValue, type BestValueResult } from "@/lib/best-value";
+import { BestValueBadge } from "@/components/ds/BestValueBadge";
+
 import { ProductQuickActions } from "@/components/product/ProductQuickActions";
 import { StoreBadge, StoreColorBar } from "@/components/brand/StoreBadge";
 import { readableTextOn } from "@/lib/color-contrast";
