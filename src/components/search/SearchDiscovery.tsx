@@ -119,7 +119,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
   const statsFailed = Boolean(stats.isError || (stats.data && !stats.data.ok));
 
   return (
-    <div className="grid h-full min-h-0 grid-rows-[auto_auto_auto_auto] gap-1.5 lg:grid-cols-2 lg:grid-rows-[auto_minmax(0,1fr)_auto]">
+    <div className="flex h-full min-h-0 flex-col gap-1.5">
 
       {/* ============ CATEGORIAS — tinta DOURADA (ação/identidade) ============ */}
       <section
