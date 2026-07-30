@@ -311,7 +311,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                     ) : (
                       <span
                         aria-hidden
-                        className="font-heading text-[13px] font-semibold uppercase leading-none tracking-tight text-[#d4a24c]"
+                        className="font-condensed text-[13px] font-semibold uppercase leading-none tracking-tight text-[#d4a24c]"
                       >
                         {(s.displayName || "?").trim().charAt(0)}
                       </span>
