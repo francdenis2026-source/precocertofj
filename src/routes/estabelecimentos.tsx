@@ -620,6 +620,15 @@ function EstablishmentsPage() {
             aria-label="Lista de mercados"
             aria-activedescendant={selectedId ? `mercado-opt-${selectedId}` : undefined}
             onKeyDown={onListKeyDown}
+            onScroll={(ev) => {
+              // Carregamento progressivo dentro do trilho (sem rolar a página).
+              if (!hasMore) return;
+              const el = ev.currentTarget;
+              if (el.scrollTop + el.clientHeight >= el.scrollHeight - 120) {
+                updateSearch({ pagina: pagesLoaded + 1 });
+              }
+            }}
+
           >
             {isLoading &&
               Array.from({ length: 8 }).map((_, i) => (
