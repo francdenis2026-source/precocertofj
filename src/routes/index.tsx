@@ -788,13 +788,27 @@ function HomePage() {
           <hr className="pc-rule my-[clamp(0.35rem,1.2vh,0.9rem)]" aria-hidden />
 
           {/* ================= FAIXA INFERIOR =================
-              Duas colunas, ambas com 2 linhas de células idênticas: 10 hubs à
-              esquerda (5 por linha) e 4 atalhos à direita (2 por linha). Antes
-              os atalhos ficavam em 1 linha dentro de um bloco de 2 linhas de
-              altura, o que esticava as células e desalinhava a faixa. */}
+              Dois blocos com molduras próprias para não misturar conceitos:
+              à esquerda as CATEGORIAS (navegação por seção da loja), à direita
+              as AÇÕES do produto (Histórico, Colaborar, Plus, Explorar). Cada
+              bloco tem rótulo e contorno próprios; as células são horizontais
+              (ícone à esquerda do rótulo) e mais baixas, ganhando densidade. */}
           <div className="grid shrink-0 gap-2 sm:gap-2.5 lg:grid-cols-12">
             {/* Categorias */}
-            <nav aria-label="Categorias" className="min-w-0 lg:col-span-8">
+            <nav
+              aria-label="Categorias"
+              className="min-w-0 rounded-2xl border p-2 sm:p-2.5 lg:col-span-8"
+              style={{
+                background: "color-mix(in oklab, var(--pc-home-onhero-glass) 45%, transparent)",
+                borderColor: "var(--pc-home-onhero-border-soft)",
+              }}
+            >
+              <p
+                className={`${EYEBROW} mb-1.5 px-0.5`}
+                style={{ color: "var(--pc-home-onhero-fg-70, var(--pc-home-onhero-fg-90))" }}
+              >
+                Categorias
+              </p>
               <div className="grid grid-cols-5 gap-2 sm:gap-2.5">
                 {CATEGORIES.map(({ key, label, full, coverage, Icon }) => (
                   <button
@@ -812,7 +826,18 @@ function HomePage() {
                       "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
                     }}
                   >
-                    <Icon className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.1} aria-hidden />
+                    {/* Chip atrás do ícone: separa o dourado do fundo fotográfico
+                        e garante contraste legível sobre o glass. */}
+                    <span
+                      className={TILE_ICONWRAP}
+                      style={{
+                        background: `color-mix(in oklab, ${P.gold} 14%, transparent)`,
+                        border: `1px solid color-mix(in oklab, ${P.gold} 28%, transparent)`,
+                      }}
+                      aria-hidden
+                    >
+                      <Icon className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.2} aria-hidden />
+                    </span>
                     <span
                       className={TILE_LABEL}
                       style={{ color: "var(--pc-home-onhero-fg-90)" }}
@@ -829,13 +854,22 @@ function HomePage() {
                   data-reading-card
                   className={`${TILE} border-dashed`}
                   style={{
-                    background: `color-mix(in oklab, ${P.gold} 16%, transparent)`,
-                    borderColor: `color-mix(in oklab, ${P.gold} 55%, transparent)`,
+                    background: `color-mix(in oklab, ${P.gold} 20%, transparent)`,
+                    borderColor: `color-mix(in oklab, ${P.gold} 62%, transparent)`,
                     // @ts-expect-error css var
                     "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
                   }}
                 >
-                  <Grid3x3 className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.3} aria-hidden />
+                  <span
+                    className={TILE_ICONWRAP}
+                    style={{
+                      background: `color-mix(in oklab, ${P.gold} 26%, transparent)`,
+                      border: `1px solid color-mix(in oklab, ${P.gold} 45%, transparent)`,
+                    }}
+                    aria-hidden
+                  >
+                    <Grid3x3 className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.4} aria-hidden />
+                  </span>
                   <span className={`${TILE_LABEL} font-bold`} style={{ color: "var(--pc-home-onhero-gold)" }}>
                     Todas
                   </span>
@@ -843,35 +877,56 @@ function HomePage() {
               </div>
             </nav>
 
-            {/* Pilares + Explorar */}
-            <div className="grid min-w-0 grid-cols-4 gap-2 sm:gap-2.5 lg:col-span-4 lg:grid-cols-2">
-              <PillarLink to="/melhores-precos" Icon={LineChart} label="Histórico" />
-              <PillarLink to="/colaborar" Icon={Users} label="Colaborar" />
-              <PillarLink to="/planos" Icon={Sparkles} label="Plus" emphasis />
-              <Sheet open={exploreOpen} onOpenChange={setExploreOpen}>
-                <SheetTrigger asChild>
-                  <button
-                    type="button"
-                    data-reading-card
-                    className={TILE}
-                    onPointerEnter={preloadExplorePanel}
-                    onFocus={preloadExplorePanel}
-                    style={{
-                      background: "var(--pc-home-onhero-glass)",
-                      borderColor: "var(--pc-home-onhero-border)",
-                      // @ts-expect-error css var
-                      "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
-                    }}
-                  >
-                    <LayoutGrid className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.1} aria-hidden />
-                    <span
-                      className={TILE_LABEL}
-                      style={{ color: "var(--pc-home-onhero-fg-90)" }}
+            {/* Ações — moldura própria, separada das categorias */}
+            <nav
+              aria-label="Ações"
+              className="min-w-0 rounded-2xl border p-2 sm:p-2.5 lg:col-span-4"
+              style={{
+                background: `color-mix(in oklab, ${P.gold} 7%, var(--pc-home-onhero-glass))`,
+                borderColor: `color-mix(in oklab, ${P.gold} 32%, transparent)`,
+              }}
+            >
+              <p className={`${EYEBROW} mb-1.5 px-0.5`} style={{ color: "var(--pc-home-onhero-gold)" }}>
+                Ações
+              </p>
+              <div className="grid min-w-0 grid-cols-4 gap-2 sm:gap-2.5 lg:grid-cols-2">
+                <PillarLink to="/melhores-precos" Icon={LineChart} label="Histórico" />
+                <PillarLink to="/colaborar" Icon={Users} label="Colaborar" />
+                <PillarLink to="/planos" Icon={Sparkles} label="Plus" emphasis />
+                <Sheet open={exploreOpen} onOpenChange={setExploreOpen}>
+                  <SheetTrigger asChild>
+                    <button
+                      type="button"
+                      data-reading-card
+                      className={TILE}
+                      onPointerEnter={preloadExplorePanel}
+                      onFocus={preloadExplorePanel}
+                      style={{
+                        background: "var(--pc-home-onhero-glass)",
+                        borderColor: "var(--pc-home-onhero-border)",
+                        // @ts-expect-error css var
+                        "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
+                      }}
                     >
-                      Explorar
-                    </span>
-                  </button>
-                </SheetTrigger>
+                      <span
+                        className={TILE_ICONWRAP}
+                        style={{
+                          background: `color-mix(in oklab, ${P.gold} 14%, transparent)`,
+                          border: `1px solid color-mix(in oklab, ${P.gold} 28%, transparent)`,
+                        }}
+                        aria-hidden
+                      >
+                        <LayoutGrid className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.2} aria-hidden />
+                      </span>
+                      <span
+                        className={TILE_LABEL}
+                        style={{ color: "var(--pc-home-onhero-fg-90)" }}
+                      >
+                        Explorar
+                      </span>
+                    </button>
+                  </SheetTrigger>
+
 
                 <SheetContent
                   side="bottom"
