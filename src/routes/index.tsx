@@ -173,6 +173,7 @@ function HomePage() {
   const [gateOpen, setGateOpen] = useState(false);
   const [suggestOpen, setSuggestOpen] = useState(false);
   const suggestRef = useRef<HomeSearchSuggestionsHandle | null>(null);
+  const searchAnchorRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     document.body.classList.add("no-page-bg", "pc-home-locked");
@@ -429,6 +430,7 @@ function HomePage() {
               {/* ---------- Busca ---------- */}
               <form onSubmit={submitSearch} className="relative max-w-2xl">
                 <div
+                  ref={searchAnchorRef}
                   className="pc-elite-frame flex items-center gap-1 rounded-2xl border p-1 shadow-2xl transition-all focus-within:ring-2 sm:p-1.5"
                   style={{
                     background: "#ffffff",
@@ -475,6 +477,7 @@ function HomePage() {
                 </div>
                 <HomeSearchSuggestions
                   ref={suggestRef}
+                  anchorRef={searchAnchorRef}
                   query={q}
                   isLoggedOut={isLoggedOut}
                   open={suggestOpen}

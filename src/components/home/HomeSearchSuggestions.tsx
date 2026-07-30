@@ -272,7 +272,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             id={LISTBOX_ID}
             role="listbox"
             aria-label="Sugestões de produtos"
-            className="max-h-[min(40vh,272px)] overflow-y-auto overscroll-contain"
+            className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
           >
             {items.map((s, i) => (
               <li key={s.id}>
@@ -285,8 +285,10 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                   onMouseEnter={() => setActive(i)}
                   onClick={() => handlePick(s.displayName)}
                   className={
-                    "flex w-full items-center gap-2.5 px-3 py-2 text-left transition-colors " +
-                    (active === i ? "bg-slate-100" : "hover:bg-slate-50")
+                    "flex w-full items-center gap-2.5 border-l-[3px] px-3 py-2 text-left transition-colors " +
+                    (active === i
+                      ? "border-l-[#d4a24c] bg-[#fff7e6]"
+                      : "border-l-transparent hover:bg-slate-50")
                   }
                 >
                   <span
@@ -346,7 +348,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                     {s.market ? (
                       <span
                         className={
-                          "mt-0.5 max-w-[130px] truncate text-[11px] leading-none text-slate-500 " +
+                          "mt-0.5 max-w-[190px] truncate text-[11px] leading-none text-slate-500 " +
                           (blocked ? "select-none blur-sm" : "")
                         }
                       >
@@ -361,7 +363,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
         )}
 
         <div
-          className="flex items-center justify-between gap-2 border-t px-3 py-1.5 text-[11px]"
+          className="flex shrink-0 items-center justify-between gap-2 border-t px-3 py-1.5 text-[11px]"
           style={{ borderColor: "#e2e8f0", background: "#f8fafc" }}
         >
           <span className="truncate text-slate-500">
@@ -389,5 +391,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
         </div>
       </div>
     );
+
+    return createPortal(panel, document.body);
   },
 );
