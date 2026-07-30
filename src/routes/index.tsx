@@ -1069,6 +1069,24 @@ function HomePage() {
                       style={{ color: "var(--pc-home-onhero-gold)" }}
                     />
                     <span className="relative min-w-0 flex-1 truncate text-left">{t}</span>
+                    {meta && meta.count > 0 ? (
+                      <span
+                        className="relative shrink-0 rounded-full px-1.5 py-[1px] text-[11px] font-bold tabular-nums"
+                        title={
+                          isHot
+                            ? `${meta.dayCount} buscas hoje · ${meta.count} no total`
+                            : `${meta.count} buscas`
+                        }
+                        style={{
+                          background: isHot
+                            ? "color-mix(in oklab, var(--pc-home-onhero-gold) 34%, transparent)"
+                            : "color-mix(in oklab, var(--pc-home-onhero-gold) 16%, transparent)",
+                          color: "var(--pc-home-onhero-fg)",
+                        }}
+                      >
+                        {isHot ? `+${meta.dayCount}` : meta.count}
+                      </span>
+                    ) : null}
                     <ArrowRight
                       aria-hidden
                       className={
