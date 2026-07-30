@@ -471,27 +471,30 @@ export type Database = {
       category_icon_overrides: {
         Row: {
           created_at: string
-          kind: string
+          kind: string | null
+          label: string | null
           slug: string
           updated_at: string
           updated_by: string | null
-          value: string
+          value: string | null
         }
         Insert: {
           created_at?: string
-          kind: string
+          kind?: string | null
+          label?: string | null
           slug: string
           updated_at?: string
           updated_by?: string | null
-          value: string
+          value?: string | null
         }
         Update: {
           created_at?: string
-          kind?: string
+          kind?: string | null
+          label?: string | null
           slug?: string
           updated_at?: string
           updated_by?: string | null
-          value?: string
+          value?: string | null
         }
         Relationships: []
       }
