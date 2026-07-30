@@ -5151,3 +5151,38 @@ h3.font-display {
   letter-spacing: 0.01em;
   font-variant-numeric: tabular-nums lining-nums;
 }
+
+/* ============================================================
+   Oswald no mobile — kerning, tracking e altura de linha
+   Em telas estreitas os títulos condensados quebram em muitas
+   linhas e ficam apertados. Abrimos levemente o tracking e a
+   entrelinha, e desativamos qualquer tracking negativo herdado
+   de fontes não-condensadas. Nenhuma cor é alterada.
+   ============================================================ */
+@media (max-width: 640px) {
+  h1:not(.font-serif):not(.font-editorial),
+  h2:not(.font-serif):not(.font-editorial),
+  h3:not(.font-serif):not(.font-editorial),
+  h4:not(.font-serif):not(.font-editorial),
+  h5:not(.font-serif):not(.font-editorial),
+  h6:not(.font-serif):not(.font-editorial),
+  .font-display,
+  .font-condensed {
+    letter-spacing: 0.014em;
+    line-height: 1.18;
+    font-kerning: normal;
+    text-wrap: pretty;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Eyebrows/labels uppercase condensados precisam de mais respiro ainda */
+  .pc-eyebrow {
+    letter-spacing: 0.1em;
+    line-height: 1.35;
+  }
+
+  /* Preços grandes no mobile: entrelinha um pouco maior evita que o valor
+     encoste no rótulo logo abaixo dentro de cards compactos. */
+  .pc-price--lg { line-height: 1.16; }
+  .pc-price--xl { line-height: 1.1; }
+}
