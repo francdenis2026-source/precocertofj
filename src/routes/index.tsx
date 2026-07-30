@@ -23,7 +23,9 @@ import { StoreCaption } from "@/components/brand/StoreCaption";
 import { buildLivePanel, type LivePanelMetric } from "@/lib/live-panel";
 import { getPlatformStats, listPublicStores } from "@/lib/stores-public.functions";
 import { getEconomyStat } from "@/lib/products-public.functions";
-import { listPopularQueries } from "@/lib/search-popular.functions";
+import { listTrendingSearches } from "@/lib/search-trends.functions";
+import { useSearchTrendsRealtime } from "@/hooks/useSearchTrendsRealtime";
+import { trackEvent } from "@/lib/analytics-events";
 import { StartFreeDialog } from "@/components/home/StartFreeDialog";
 import { GuestGateDialog } from "@/components/gate/GuestGateDialog";
 import {
