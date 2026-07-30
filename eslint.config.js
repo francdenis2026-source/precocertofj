@@ -46,18 +46,16 @@ export default tseslint.config(
       "no-restricted-syntax": [
         "error",
         {
+          // Apenas conteúdo de JSX (texto renderizado). Atributos como
+          // aria-label={`... ${brl(x)}`} continuam livres, pois ali o valor
+          // precisa mesmo ser string.
           selector:
-            "JSXExpressionContainer > CallExpression[callee.name=/^(brl|fmt|fmtBRL|formatBRL|formatCents|formatPrice|formatMoney|currency)$/]",
+            ":matches(JSXElement, JSXFragment) > JSXExpressionContainer > CallExpression[callee.name=/^(brl|fmt|fmtBRL|formatBRL|formatCents|formatPrice|formatMoney|currency)$/]",
           message:
-            "Preço visual deve usar <Price value={...} /> (ou <PriceCents cents={...} />) em vez de brl()/formatBRL(). Para strings (aria-label, toast, export), extraia para uma variável antes do JSX.",
-        },
-        {
-          selector:
-            "JSXExpressionContainer > TemplateLiteral > CallExpression[callee.name=/^(brl|fmtBRL|formatBRL|formatCents|formatMoney)$/]",
-          message:
-            "Preço visual deve usar <Price /> / <PriceCents />; interpolar brl() em template literal dentro do JSX quebra a tipografia do design system.",
+            "Preço visual deve usar <Price value={...} /> (ou <PriceCents cents={...} />) em vez de brl()/fmt()/formatBRL(). Se o valor não for monetário (ex.: data), renomeie o helper ou adicione um eslint-disable-next-line explicando.",
         },
       ],
+
 
     },
   },
