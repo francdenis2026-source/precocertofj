@@ -46,6 +46,7 @@ import { PaywallInline } from "@/components/paywall/PaywallInline";
 import { useTeaserQuota } from "@/hooks/use-teaser-quota";
 import { useSession } from "@/hooks/useSession";
 import { LazyImage } from "@/components/media/LazyImage";
+import { useResultsKeyboardNav } from "@/hooks/use-results-keyboard-nav";
 
 
 
@@ -635,6 +636,14 @@ export function PriceSearchBar({
   }, [suggestions, trimmed]);
 
   const highlightTokens = useMemo(() => tokenizeQuery(query), [query]);
+
+  /* Navegação por teclado na lista de resultados (roving tabindex + atalhos). */
+  const resultsListRef = useRef<HTMLDivElement>(null);
+  const resultsNav = useResultsKeyboardNav({
+    containerRef: resultsListRef,
+    autoFocusFirst: autoFocusResults,
+    resultsKey: query,
+  });
 
 
 
@@ -1537,7 +1546,17 @@ export function PriceSearchBar({
 
                     {groupBy === "product" && visibleGroups.length > 0 ? (
 
-                      <div className="pc-results">
+                      <div
+                        ref={resultsListRef}
+                        onKeyDown={resultsNav.onKeyDown}
+                        role="list"
+                        aria-label={`Resultados para ${query}`}
+                        className="pc-results"
+                      >
+                        <p className="pc-res-label px-0.5 text-muted-foreground">
+                          Teclado: ↑ ↓ navegam pelos resultados · Enter abre os detalhes · C compara
+                          · E mostra todos os mercados
+                        </p>
                         {filteredOrdered.map(([cat, groups]) => {
                           // Ordena grupos com critérios explícitos por modo:
                           //  • relevance → score de similaridade do nome (exato,
