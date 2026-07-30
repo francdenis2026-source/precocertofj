@@ -42,6 +42,7 @@ import { AllCategoriesDialog } from "@/components/home/AllCategoriesDialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useSession } from "@/hooks/useSession";
 import { cn } from "@/lib/utils";
+import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 import homeHeroImg from "@/assets/home-hero.jpg";
 
 /* Conteúdo secundário: só carrega quando o painel "Explorar" abre */
@@ -633,11 +634,16 @@ function HomePage() {
                         ))
                       : partners.map((s: any, i: number) => {
                           const label = s?.name ?? "Mercado parceiro";
+                          // Slug determinístico (mesma regra do resolver de estabelecimentos)
+                          const storeSlug = s?.name ? slugifyEstablishment(s.name) : null;
                           return (
                             <li key={s?.id ?? i} className="shrink-0">
                               <Link
-                                to="/estabelecimentos"
+                                {...(storeSlug
+                                  ? ({ to: "/estabelecimento/$slug", params: { slug: storeSlug } } as const)
+                                  : ({ to: "/estabelecimentos" } as const))}
                                 aria-label={`Ver produtos e preços de ${label}`}
+                                title={`Abrir página de ${label}`}
                                 className="group relative flex h-16 w-16 flex-col items-stretch justify-between rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--pc-home-onhero-gold)_55%,white)] hover:shadow-[0_10px_22px_-8px_rgba(3,10,28,0.75)] focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2"
                                 style={{
                                   borderColor: "color-mix(in oklab, #ffffff 78%, transparent)",
