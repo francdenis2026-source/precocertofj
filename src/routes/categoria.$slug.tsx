@@ -311,6 +311,14 @@ function CategoryPage() {
   // Restaura a rolagem e a categoria ativa ao usar voltar/avançar.
   useScrollRestoration(!isLoading && Boolean(def));
 
+  // Ao trocar de categoria, mantemos a mesma "moldura" (altura do viewport,
+  // trilho e seções com altura mínima reservada) e apenas voltamos a rolagem
+  // interna ao topo — assim a página nunca encolhe/expande durante a troca.
+  const scrollRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 0 });
+  }, [slug]);
+
 
 
   if (!def) {
