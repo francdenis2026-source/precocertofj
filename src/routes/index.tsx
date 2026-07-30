@@ -328,18 +328,21 @@ function HomePage() {
       />
 
 
-      <div className="relative z-10 flex min-h-[100dvh] flex-col">
+      {/* Coluna mestra: header / palco / rodapé em três faixas rígidas.
+          `min-h-0` no palco é o que impede o conteúdo de empurrar o rodapé
+          para fora da janela. */}
+      <div className="relative z-10 flex h-full min-h-0 flex-col">
         <SiteHeader variant="overlay" showThemeToggle />
 
         {/* ================= PALCO ÚNICO ================= */}
         <main
           id="hero"
           aria-labelledby="hero-title"
-          className="mx-auto flex w-full max-w-7xl flex-1 flex-col justify-center gap-2.5 px-3 py-2.5 sm:gap-4 sm:px-6 sm:py-4 lg:px-8"
+          className="mx-auto flex w-full min-h-0 max-w-7xl flex-1 flex-col justify-center gap-[clamp(0.5rem,1.6vh,1.25rem)] overflow-hidden px-3 py-[clamp(0.5rem,1.4vh,1rem)] sm:px-6 lg:px-8"
         >
-          <div className="grid flex-1 items-center gap-5 lg:grid-cols-12 lg:gap-12">
+          <div className="grid min-h-0 flex-1 items-center gap-[clamp(0.75rem,2.2vh,1.5rem)] lg:grid-cols-12 lg:gap-10">
             {/* ---------- Coluna editorial ---------- */}
-            <div className="order-1 flex min-w-0 flex-col gap-3 sm:gap-4 lg:col-span-7 lg:pr-4">
+            <div className="order-1 flex min-w-0 flex-col gap-[clamp(0.5rem,1.5vh,1rem)] lg:col-span-7 lg:pr-4">
               <div
                 className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] backdrop-blur-sm"
                 style={{
