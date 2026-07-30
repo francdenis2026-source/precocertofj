@@ -1072,11 +1072,21 @@ function ViewToggle({
   );
 }
 
-function unitSuffix(product: PublicStoreProduct) {
+/**
+ * Sufixo de preço por unidade ("· R$ 12,90 /kg").
+ * Renderiza via <Price /> para manter a mesma tipografia monetária do site.
+ */
+function UnitSuffix({ product }: { product: PublicStoreProduct }) {
   const unit = product.unitLabel
     ? product.unitLabel.replace("R$", "").trim() || product.unitLabel
     : null;
-  return product.pricePerUnit != null && unit ? ` · ${brl(product.pricePerUnit)} ${unit}` : "";
+  if (product.pricePerUnit == null || !unit) return null;
+  return (
+    <>
+      {" · "}
+      <Price value={product.pricePerUnit} size="xs" tone="muted" suffix={` ${unit}`} />
+    </>
+  );
 }
 
 /** Cartão compacto de produto — clique abre o modal de detalhes. */
@@ -1107,7 +1117,7 @@ function ProductTile({
         </div>
         <p className="mt-1 truncate text-[11px] leading-none text-muted-foreground">
           {[product.brand, product.category].filter(Boolean).join(" · ") || "Sem categoria"}
-          {unitSuffix(product)}
+          <UnitSuffix product={product} />
         </p>
       </button>
       <div className="mx-3 mb-2.5 flex items-center justify-between gap-2 border-t border-border/70 pt-1.5">
