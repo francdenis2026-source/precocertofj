@@ -462,7 +462,7 @@ export function LiveBasketRanking({
         <CardHeader className="flex flex-row flex-wrap items-start justify-between gap-3">
           <div className="min-w-0">
             <CardTitle className="flex items-center gap-2 text-base sm:text-lg">
-              <Trophy className="h-4 w-4 text-brand-gold" aria-hidden /> {title}
+              <Trophy className="h-4 w-4 text-gold-ink" aria-hidden /> {title}
             </CardTitle>
             <CardDescription className="text-xs sm:text-sm">{description}</CardDescription>
           </div>
@@ -490,7 +490,7 @@ export function LiveBasketRanking({
               )}
               aria-live="polite"
             >
-              <Radio className={cn("h-3 w-3", pulse && "animate-pulse text-brand-gold")} aria-hidden />
+              <Radio className={cn("h-3 w-3", pulse && "animate-pulse text-gold-ink")} aria-hidden />
               {query.isFetching ? "Atualizando…" : "Ao vivo"}
             </span>
             <DropdownMenu>
@@ -601,7 +601,7 @@ export function LiveBasketRanking({
           {canFavorite && favoritesByCategory.length > 0 && (
             <div className="rounded-lg border border-brand-gold/40 bg-brand-gold/5 p-3">
               <p className="mb-2 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wide text-brand-navy">
-                <Star className="h-3 w-3 fill-brand-gold text-brand-gold" aria-hidden />
+                <Star className="h-3 w-3 fill-brand-gold text-gold-ink" aria-hidden />
                 Seus favoritos mais baratos por categoria
               </p>
               <div className="flex flex-wrap gap-1.5">
@@ -658,7 +658,7 @@ export function LiveBasketRanking({
                 >
                   <div className="flex flex-wrap items-center justify-between gap-2">
                     <div>
-                      <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-brand-gold">
+                      <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-gold-ink">
                         Mais barato agora — {scopeLabel}
                       </p>
                       <p className="mt-1 text-lg font-semibold text-foreground">
@@ -708,7 +708,7 @@ export function LiveBasketRanking({
                       {hypotheticalVerdict.changed ? (
                         <>
                           o veredito mudaria para{" "}
-                          <span className="text-brand-navy dark:text-brand-gold">
+                          <span className="text-brand-navy dark:text-gold-ink">
                             {hypotheticalVerdict.projectedLeaderName}
                           </span>{" "}
                           por <Price value={hypotheticalVerdict.projectedTotal} size="xs" />.
@@ -766,7 +766,7 @@ export function LiveBasketRanking({
                           className={cn(
                             "grid h-8 w-8 shrink-0 place-items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
                             isFav
-                              ? "bg-brand-gold/20 text-brand-gold"
+                              ? "bg-brand-gold/20 text-gold-ink"
                               : "text-muted-foreground hover:bg-muted",
                           )}
                         >
@@ -902,7 +902,7 @@ export function LiveBasketRanking({
             <>
               <DialogHeader>
                 <DialogTitle className="flex items-center gap-2 text-base">
-                  <Store className="h-4 w-4 text-brand-gold" aria-hidden />
+                  <Store className="h-4 w-4 text-gold-ink" aria-hidden />
                   {detailStore.establishmentName}
                 </DialogTitle>
                 <DialogDescription className="text-xs">

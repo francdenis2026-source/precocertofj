@@ -46,8 +46,8 @@ export function LiveUpdateBadge({
 }) {
   const palette =
     tone === "onDark"
-      ? "border-brand-gold/45 bg-white/10 text-brand-gold"
-      : "border-brand-gold/50 bg-brand-gold/10 text-[color:var(--pc-gold-ink,#6b4a12)] dark:text-brand-gold";
+      ? "border-brand-gold/45 bg-white/10 text-gold-ink"
+      : "border-brand-gold/50 bg-brand-gold/10 text-[color:var(--pc-gold-ink,#6b4a12)] dark:text-gold-ink";
 
   return (
     <span

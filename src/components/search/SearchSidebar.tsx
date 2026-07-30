@@ -103,7 +103,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
                 <button
                   type="button"
                   onClick={() => onPickQuery(t)}
-                  className="min-w-0 flex-1 truncate rounded-md px-2 py-2 text-left text-[13.5px] font-medium text-foreground transition-colors hover:bg-[var(--pc-hover-tint)] hover:text-brand-navy dark:hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                  className="min-w-0 flex-1 truncate rounded-md px-2 py-2 text-left text-[13.5px] font-medium text-foreground transition-colors hover:bg-[var(--pc-hover-tint)] hover:text-brand-navy dark:hover:text-gold-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                 >
                   {t}
                 </button>
@@ -150,7 +150,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
               <button
                 type="button"
                 onClick={() => onPickQuery(p)}
-                className="group flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-left text-[13.5px] font-medium text-foreground transition-colors hover:bg-[var(--pc-hover-tint)] hover:text-brand-navy dark:hover:text-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                className="group flex w-full items-center gap-2.5 rounded-md px-2 py-2 text-left text-[13.5px] font-medium text-foreground transition-colors hover:bg-[var(--pc-hover-tint)] hover:text-brand-navy dark:hover:text-gold-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
               >
                 <span className="grid h-5 w-5 place-items-center rounded-full bg-brand-gold text-[11px] font-bold tabular-nums text-brand-navy shadow-sm">
                   {i + 1}
@@ -169,7 +169,7 @@ export function SearchSidebar({ recent, onPickQuery, onRemoveRecent, onClearRece
         action={
           <Link
             to="/estabelecimentos"
-            className="inline-flex shrink-0 items-center gap-0.5 whitespace-nowrap rounded text-[12px] font-medium text-brand-gold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+            className="inline-flex shrink-0 items-center gap-0.5 whitespace-nowrap rounded text-[12px] font-medium text-gold-ink hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
           >
             Todos <ArrowRight className="h-3 w-3" />
           </Link>
@@ -242,7 +242,7 @@ function SidebarSection({
     <section className="border-t border-border/60 pt-5">
       <header className="mb-3 flex items-center justify-between gap-2">
         <div className="flex min-w-0 items-center gap-2">
-          <span className="grid h-6 w-6 flex-none place-items-center rounded-md bg-brand-gold/15 text-brand-gold-soft dark:text-brand-gold">
+          <span className="grid h-6 w-6 flex-none place-items-center rounded-md bg-brand-gold/15 text-gold-ink-soft dark:text-gold-ink">
             {icon}
           </span>
           <h3 className="truncate text-[12px] font-medium text-foreground">

@@ -60,7 +60,7 @@ function highlight(text: string, term: string) {
   return (
     <>
       {text.slice(0, idx)}
-      <mark className="rounded bg-brand-gold/25 px-0.5 text-brand-navy dark:text-brand-gold">
+      <mark className="rounded bg-brand-gold/25 px-0.5 text-brand-navy dark:text-gold-ink">
         {text.slice(idx, idx + term.length)}
       </mark>
       {text.slice(idx + term.length)}
@@ -265,7 +265,7 @@ function NeighborhoodsPage() {
                     type="button"
                     onClick={() => setTerm("")}
                     aria-label="Limpar busca"
-                    className="rounded-full p-0.5 text-muted-foreground hover:text-brand-gold"
+                    className="rounded-full p-0.5 text-muted-foreground hover:text-gold-ink"
                   >
                     <X className="h-3.5 w-3.5" />
                   </button>
@@ -492,10 +492,10 @@ function NeighborhoodsPage() {
                           onClick={() => handleFavClick(g.neighborhood, g.city)}
                           aria-pressed={isFav}
                           aria-label={isFav ? `Remover ${g.neighborhood} dos favoritos` : `Favoritar ${g.neighborhood}`}
-                          className="absolute right-1 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:text-brand-gold md:right-1.5"
+                          className="absolute right-1 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:text-gold-ink md:right-1.5"
                         >
                           <Star
-                            className={"h-3.5 w-3.5 " + (isFav ? "fill-brand-gold text-brand-gold" : "")}
+                            className={"h-3.5 w-3.5 " + (isFav ? "fill-brand-gold text-gold-ink" : "")}
                             strokeWidth={1.75}
                           />
                         </button>

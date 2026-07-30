@@ -130,7 +130,7 @@ export function FavoriteMarketButton({
           "inline-grid h-8 w-8 place-items-center rounded-full border shadow-sm backdrop-blur transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
           isFav
             ? "border-brand-gold bg-brand-gold text-brand-navy"
-            : "border-border/70 bg-background/90 text-muted-foreground hover:border-brand-gold hover:text-brand-gold",
+            : "border-border/70 bg-background/90 text-muted-foreground hover:border-brand-gold hover:text-gold-ink",
           mutation.isPending && "opacity-60",
           className,
         )}

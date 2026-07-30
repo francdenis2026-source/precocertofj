@@ -578,7 +578,7 @@ function LoginPage() {
             <div className="flex flex-col items-center gap-2 pt-1 text-[11.5px] text-muted-foreground">
               <Link
                 to="/resgatar"
-                className="inline-flex items-center gap-1.5 font-semibold text-brand-gold transition hover:underline"
+                className="inline-flex items-center gap-1.5 font-semibold text-gold-ink transition hover:underline"
               >
                 <Ticket className="h-3.5 w-3.5" />
                 Tenho um código promocional

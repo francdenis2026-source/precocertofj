@@ -135,7 +135,7 @@ function AuthGate() {
         <Link
           to="/cadastro"
           search={{ redirect: "/colaborar" }}
-          className="inline-flex h-10 items-center justify-center rounded-lg border border-border bg-card px-4 text-[12.5px] font-semibold text-foreground transition hover:border-brand-gold hover:text-brand-gold"
+          className="inline-flex h-10 items-center justify-center rounded-lg border border-border bg-card px-4 text-[12.5px] font-semibold text-foreground transition hover:border-brand-gold hover:text-gold-ink"
         >
           Criar conta grátis
         </Link>
@@ -194,7 +194,7 @@ function CollaboratorWorkspace() {
       <section className="grid gap-3 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
         {/* Token */}
         <div className="rounded-xl border border-border bg-card p-4 shadow-elev-1">
-          <p className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-brand-gold">
+          <p className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-gold-ink">
             <KeyRound className="h-3 w-3" strokeWidth={2.6} aria-hidden />
             Seu token
           </p>
@@ -209,7 +209,7 @@ function CollaboratorWorkspace() {
         {/* Progresso */}
         <div className="rounded-xl border border-border bg-card p-4 shadow-elev-1">
           <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-brand-gold">
+            <p className="text-[11px] font-bold uppercase tracking-[0.16em] text-gold-ink">
               Progresso do mês
             </p>
             <p
@@ -258,7 +258,7 @@ function CollaboratorWorkspace() {
             <strong>Teto do mês atingido.</strong> Você já recebeu {cap} dias
             grátis. Novos envios voltam a gerar crédito no próximo mês — acompanhe
             em{" "}
-            <Link to="/perfil" className="text-brand-gold underline">
+            <Link to="/perfil" className="text-gold-ink underline">
               Meu perfil
             </Link>
             .
@@ -273,7 +273,7 @@ function CollaboratorWorkspace() {
           <div className="mb-2.5 flex flex-wrap items-start justify-between gap-2">
             <div className="min-w-0">
               <h2 className="text-[14.5px] font-semibold tracking-tight text-foreground">
-                <Upload className="mr-1 inline h-3.5 w-3.5 text-brand-gold" aria-hidden />
+                <Upload className="mr-1 inline h-3.5 w-3.5 text-gold-ink" aria-hidden />
                 Enviar nota
               </h2>
               <p className="mt-0.5 text-[11.5px] leading-snug text-muted-foreground">
@@ -284,7 +284,7 @@ function CollaboratorWorkspace() {
               href={token ? collabMailtoHref(token) : undefined}
               aria-disabled={!token}
               className={
-                "inline-flex h-8 items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 text-[11.5px] font-semibold text-foreground transition hover:border-brand-gold hover:text-brand-gold " +
+                "inline-flex h-8 items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 text-[11.5px] font-semibold text-foreground transition hover:border-brand-gold hover:text-gold-ink " +
                 (!token ? "pointer-events-none opacity-50" : "")
               }
             >
@@ -307,7 +307,7 @@ function CollaboratorWorkspace() {
           <div className="rounded-xl border border-border bg-card p-4 shadow-elev-1">
             <div className="mb-2 flex items-center justify-between">
               <h2 className="inline-flex items-center gap-1.5 text-[14.5px] font-semibold tracking-tight text-foreground">
-                <Receipt className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+                <Receipt className="h-3.5 w-3.5 text-gold-ink" aria-hidden />
                 Meus envios
                 {subs.length > 0 && (
                   <span className="rounded-full bg-brand-gold/15 px-1.5 text-[10.5px] font-bold text-[var(--pc-gold-ink)]">
@@ -359,7 +359,7 @@ function CollaboratorWorkspace() {
           {/* Regras compactas */}
           <div className="rounded-xl border border-border bg-card p-4 shadow-elev-1">
             <h2 className="inline-flex items-center gap-1.5 text-[14.5px] font-semibold tracking-tight text-foreground">
-              <ShieldCheck className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+              <ShieldCheck className="h-3.5 w-3.5 text-gold-ink" aria-hidden />
               Como funciona
             </h2>
             <ol className="mt-2 grid grid-cols-3 gap-2">
@@ -373,7 +373,7 @@ function CollaboratorWorkspace() {
               <Rule warn text="Notas ilegíveis ou duplicadas são rejeitadas." />
             </ul>
             <p className="mt-2 flex items-center gap-1.5 text-[11px] text-muted-foreground">
-              <Mail className="h-3 w-3 text-brand-gold" aria-hidden />
+              <Mail className="h-3 w-3 text-gold-ink" aria-hidden />
               Dúvidas?{" "}
               <Link to="/fale-conosco" className="underline">
                 Fale conosco
@@ -433,7 +433,7 @@ function TokenDisplay({ token, loading }: { token: string; loading: boolean }) {
         onClick={copy}
         disabled={!token}
         aria-label="Copiar token de colaborador"
-        className="inline-flex h-8 items-center gap-1 rounded-lg border border-border bg-card px-2.5 text-[11.5px] font-semibold text-foreground transition hover:border-brand-gold hover:text-brand-gold disabled:opacity-40"
+        className="inline-flex h-8 items-center gap-1 rounded-lg border border-border bg-card px-2.5 text-[11.5px] font-semibold text-foreground transition hover:border-brand-gold hover:text-gold-ink disabled:opacity-40"
       >
         {copied ? (
           <CheckCircle2 className="h-3.5 w-3.5" strokeWidth={2.4} aria-hidden />
@@ -449,7 +449,7 @@ function TokenDisplay({ token, loading }: { token: string; loading: boolean }) {
 function StatusPill({ status, rewardDays }: { status: string; rewardDays: number }) {
   const map: Record<string, { label: string; cls: string }> = {
     received: { label: "Recebida", cls: "border-border bg-muted text-muted-foreground" },
-    review: { label: "Em análise", cls: "border-brand-gold/40 bg-brand-gold/10 text-brand-gold" },
+    review: { label: "Em análise", cls: "border-brand-gold/40 bg-brand-gold/10 text-gold-ink" },
     approved: {
       label: "Aprovada",
       cls: "border-emerald-600/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300",
@@ -496,7 +496,7 @@ function Step({
       </span>
       <div className="min-w-0">
         <p className="text-[13px] font-semibold text-foreground">
-          <span className="text-brand-gold">{n}.</span> {title}
+          <span className="text-gold-ink">{n}.</span> {title}
         </p>
         <p className="text-[11.5px] leading-snug text-muted-foreground">{text}</p>
       </div>
@@ -511,7 +511,7 @@ function Rule({ text, warn = false }: { text: string; warn?: boolean }) {
       <Icon
         className={
           "mt-0.5 h-3.5 w-3.5 flex-none " +
-          (warn ? "text-destructive" : "text-brand-gold")
+          (warn ? "text-destructive" : "text-gold-ink")
         }
         strokeWidth={2.2}
         aria-hidden

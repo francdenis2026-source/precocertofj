@@ -59,7 +59,7 @@ export function AcougueCutsBar({
                   search={{ q: c.query, cat: "acougue" } as never}
                   className="inline-flex h-7 items-center gap-1 rounded-full border border-brand-gold/50 bg-background px-2.5 text-[11.5px] font-semibold text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                 >
-                  <Icon className="h-3 w-3 text-brand-gold" aria-hidden />
+                  <Icon className="h-3 w-3 text-gold-ink" aria-hidden />
                   {c.label}
                 </Link>
               </li>

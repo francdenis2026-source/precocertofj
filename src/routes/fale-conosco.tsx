@@ -395,7 +395,7 @@ function FaleConoscoPage() {
           {/* Atalhos de contato + privacidade */}
           <aside className="grid gap-2 sm:grid-cols-2 sm:gap-3 md:grid-cols-1">
             <div className="rounded-xl border border-border bg-card p-2.5 shadow-sm md:p-3.5">
-              <div className="flex items-center gap-1.5 text-[10.5px] font-bold uppercase tracking-[0.18em] text-brand-gold">
+              <div className="flex items-center gap-1.5 text-[10.5px] font-bold uppercase tracking-[0.18em] text-gold-ink">
                 <Mail className="h-3.5 w-3.5" />
                 Atalhos de contato
               </div>
@@ -404,7 +404,7 @@ function FaleConoscoPage() {
                 <li className="flex min-w-0 items-center justify-between gap-2 rounded-lg border border-border bg-muted/40 px-2.5 py-1.5">
                   <a
                     href={`mailto:${CONTACT_EMAIL}`}
-                    className="pc-focus flex min-w-0 items-center gap-1.5 text-[13px] font-semibold text-foreground hover:text-brand-gold rounded-md"
+                    className="pc-focus flex min-w-0 items-center gap-1.5 text-[13px] font-semibold text-foreground hover:text-gold-ink rounded-md"
                   >
                     <Mail className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
                     <span className="truncate">{CONTACT_EMAIL}</span>
@@ -431,7 +431,7 @@ function FaleConoscoPage() {
                     href={`https://wa.me/${CONTACT_PHONE_RAW}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="pc-focus flex min-w-0 items-center gap-1.5 text-[13px] font-semibold text-foreground hover:text-brand-gold rounded-md"
+                    className="pc-focus flex min-w-0 items-center gap-1.5 text-[13px] font-semibold text-foreground hover:text-gold-ink rounded-md"
                   >
                     <Phone className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
                     <span className="truncate">{CONTACT_PHONE}</span>
@@ -460,7 +460,7 @@ function FaleConoscoPage() {
               </ul>
 
               <p className="mt-1.5 flex items-start gap-1.5 text-[11.5px] leading-[1.35] text-muted-foreground sm:hidden">
-                <ShieldCheck className="mt-[1px] h-3 w-3 shrink-0 text-brand-gold" />
+                <ShieldCheck className="mt-[1px] h-3 w-3 shrink-0 text-gold-ink" />
                 <span>
                   Nunca envie senhas ou dados bancários —{" "}
                   <a href="/privacidade" className="font-semibold underline underline-offset-2">
@@ -472,7 +472,7 @@ function FaleConoscoPage() {
             </div>
 
             <div className="hidden rounded-xl border border-brand-gold/35 bg-brand-gold/10 p-2.5 sm:block md:p-3.5">
-              <div className="flex items-center gap-1.5 text-[10.5px] font-bold uppercase tracking-[0.18em] text-brand-gold">
+              <div className="flex items-center gap-1.5 text-[10.5px] font-bold uppercase tracking-[0.18em] text-gold-ink">
                 <ShieldCheck className="h-3.5 w-3.5" />
                 Privacidade
               </div>

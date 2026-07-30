@@ -142,7 +142,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
             >
               <span
                 aria-hidden
-                className="grid h-5 w-5 flex-none place-items-center rounded-md bg-brand-gold/20 text-brand-gold-soft transition-colors dark:text-brand-gold group-hover:bg-brand-gold group-hover:text-brand-navy dark:group-hover:text-brand-navy"
+                className="grid h-5 w-5 flex-none place-items-center rounded-md bg-brand-gold/20 text-gold-ink-soft transition-colors dark:text-gold-ink group-hover:bg-brand-gold group-hover:text-brand-navy dark:group-hover:text-brand-navy"
               >
                 <c.Icon className="h-3 w-3" strokeWidth={2.25} />
               </span>
@@ -333,7 +333,7 @@ function SectionHeader({
 }
 
 const TONE_STAT: Record<Tone, string> = {
-  gold: "bg-brand-gold/15 text-brand-gold-soft dark:text-brand-gold",
+  gold: "bg-brand-gold/15 text-gold-ink-soft dark:text-gold-ink",
   amber: "bg-amber-500/20 text-amber-700 dark:text-amber-300",
   indigo: "bg-indigo-500/20 text-indigo-700 dark:text-indigo-300",
   emerald: "bg-emerald-500/20 text-emerald-700 dark:text-emerald-300",

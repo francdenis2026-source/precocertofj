@@ -48,7 +48,7 @@ export function InternalPageHeader({
     return (
       <>
         {title.slice(0, idx)}
-        <span className="text-brand-gold font-medium">
+        <span className="text-gold-ink font-medium">
           {title.slice(idx, idx + highlight.length)}
         </span>
         {title.slice(idx + highlight.length)}

@@ -169,7 +169,7 @@ function FarmaciasPage() {
             </p>
           </div>
           <p className="inline-flex items-center gap-1.5 self-start rounded-md border border-border bg-card px-2.5 py-1.5 text-[12px] font-medium text-foreground shadow-sm md:self-end">
-            <Clock className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+            <Clock className="h-3.5 w-3.5 text-gold-ink" aria-hidden />
             Balcão até 22h · após, sobreaviso
           </p>
         </div>
@@ -194,7 +194,7 @@ function FarmaciasPage() {
                 {plantaoHoje.nome}
               </h2>
               <p className="mt-1 inline-flex items-start gap-1.5 text-[12.5px] text-foreground">
-                <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-gold" aria-hidden />
+                <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold-ink" aria-hidden />
                 {plantaoHoje.endereco} — {plantaoHoje.bairro}
               </p>
               <div className="mt-2 flex flex-wrap gap-1.5">
@@ -204,7 +204,7 @@ function FarmaciasPage() {
                     href={`tel:${t.replace(/\D/g, "")}`}
                     className="inline-flex items-center gap-1 rounded-full border border-brand-gold/50 bg-background px-2.5 py-1 text-[12px] font-semibold text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                   >
-                    <Phone className="h-3 w-3 text-brand-gold" aria-hidden /> {t}
+                    <Phone className="h-3 w-3 text-gold-ink" aria-hidden /> {t}
                   </a>
                 ))}
               </div>
@@ -219,7 +219,7 @@ function FarmaciasPage() {
                   {amanha.nome}
                 </h2>
                 <p className="mt-1 inline-flex items-start gap-1.5 text-[12px] text-muted-foreground">
-                  <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-gold/80" aria-hidden />
+                  <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold-ink/80" aria-hidden />
                   {amanha.endereco} — {amanha.bairro}
                 </p>
                 <div className="mt-2 flex flex-wrap gap-1">
@@ -242,7 +242,7 @@ function FarmaciasPage() {
           </section>
         ) : (
           <p className="mt-4 inline-flex items-start gap-2 rounded-xl border border-border/70 bg-card p-4 text-[13px] text-muted-foreground shadow-sm">
-            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-brand-gold" aria-hidden />
+            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-gold-ink" aria-hidden />
             O calendário publicado abaixo é referente a {PLANTAO_MES.label}. Confirme com a
             Vigilância Sanitária a escala do mês corrente.
           </p>
@@ -252,7 +252,7 @@ function FarmaciasPage() {
         <div className="mt-6 grid gap-5 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
           <section aria-label="Calendário de plantões">
             <h2 className="flex items-center gap-2 font-serif text-[18px] font-semibold leading-tight">
-              <CalendarDays className="h-4 w-4 text-brand-gold" aria-hidden />
+              <CalendarDays className="h-4 w-4 text-gold-ink" aria-hidden />
               Calendário — {PLANTAO_MES.label}
             </h2>
             <div className="mt-2 overflow-hidden rounded-xl border border-border/70 shadow-sm">
@@ -375,7 +375,7 @@ function FarmaciasPage() {
                     {f.nome}
                   </h3>
                   <p className="mt-0.5 inline-flex items-start gap-1 text-[11.5px] text-muted-foreground">
-                    <MapPin className="mt-0.5 h-3 w-3 shrink-0 text-brand-gold/80" aria-hidden />
+                    <MapPin className="mt-0.5 h-3 w-3 shrink-0 text-gold-ink/80" aria-hidden />
                     {f.endereco} — {f.bairro}
                   </p>
                   <div className="mt-1 flex flex-wrap items-center gap-1">
@@ -385,7 +385,7 @@ function FarmaciasPage() {
                         href={`tel:${t.replace(/\D/g, "")}`}
                         className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2 py-0.5 text-[11px] font-semibold text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                       >
-                        <Phone className="h-2.5 w-2.5 text-brand-gold" aria-hidden /> {t}
+                        <Phone className="h-2.5 w-2.5 text-gold-ink" aria-hidden /> {t}
                       </a>
                     ))}
                     <span className="ml-auto">
@@ -409,7 +409,7 @@ function FarmaciasPage() {
           aria-label="Reclamações e base legal"
         >
           <h2 className="flex items-center gap-1.5 text-[11.5px] font-bold uppercase tracking-[0.16em] text-foreground">
-            <ShieldCheck className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+            <ShieldCheck className="h-3.5 w-3.5 text-gold-ink" aria-hidden />
             Reclamações e denúncias
           </h2>
           <ul className="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-[12.5px]">

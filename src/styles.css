@@ -123,6 +123,8 @@
   --color-brand-navy-2: var(--pc-home-navy-2);
   --color-brand-gold: var(--pc-home-gold);
   --color-brand-gold-soft: var(--pc-home-gold-soft);
+  /* Dourado legível como TEXTO/ÍCONE (AA >= 4.5 em ambos os temas) */
+  --color-gold-ink: var(--pc-gold-ink);
   --color-brand-ink: var(--pc-home-ink);
   --color-brand-paper: var(--pc-home-paper);
   --color-on-navy: var(--pc-text-on-navy);
@@ -219,7 +221,7 @@
   --badge-warning-fg: var(--warning-foreground);
 
   --border: oklch(0.86 0.012 250);
-  --input: oklch(0.83 0.014 250);
+  --input: oklch(0.66 0.018 250);
   --ring: oklch(0.72 0.14 82);  /* Gold — foco visível consistente com navy/gold */
 
   --capture: oklch(0.52 0.20 262);
@@ -351,7 +353,7 @@
   --popover-foreground: oklch(0.975 0.006 250);
 
   /* Primary navy institucional — mantém a identidade PreçoCerto no dark mode */
-  --primary: oklch(0.32 0.10 258);
+  --primary: oklch(0.48 0.13 258);
   --primary-foreground: oklch(0.985 0.005 250);
 
   --secondary: oklch(0.255 0.048 258);
@@ -386,8 +388,8 @@
   --destructive: oklch(0.70 0.20 25);
   --destructive-foreground: oklch(0.14 0.04 258);
 
-  --border: oklch(0.345 0.05 258);
-  --input: oklch(0.345 0.05 258);
+  --border: oklch(0.42 0.05 258);
+  --input: oklch(0.52 0.055 258);
   --ring: oklch(0.80 0.135 82);
 
   --capture: oklch(0.72 0.16 235);
@@ -3699,14 +3701,31 @@ html.dark :is(.hover\:text-accent-strong):not(.gold-on-dark):hover {
   color: var(--accent-ink);
 }
 
-/* Dourado sobre fundo navy/escuro permanece vivo mesmo no modo claro. */
-html:not(.dark) :is(.bg-brand-navy, .bg-brand-navy-2, [data-surface="navy"]) :is(
+/* Modo claro: gold médio (#b58a3c ≈ 3.1:1 no branco) não passa AA como texto.
+   Textos/ícones com .text-brand usam o gold-ink (≈ 7.5:1). */
+html:not(.dark) .text-brand:not([class*="bg-"]) {
+  color: var(--pc-gold-ink);
+}
+
+/* Dourado sobre fundo navy/escuro permanece vivo mesmo no modo claro.
+   Usa o gold claro (#f2d689 ≈ 11.9:1 sobre navy) em vez do gold médio,
+   que sobre navy fica abaixo de AA. */
+/* Títulos dentro de superfícies navy herdam a cor clara do container.
+   Sem isso, a regra global de heading aplica --foreground (navy) sobre navy
+   → ~1.3:1 no modo claro. */
+:is(.bg-brand-navy, .bg-brand-navy-2, [data-surface="navy"], .text-on-navy)
+  :is(h1, h2, h3, h4, h5, h6, dt):not([class*="text-brand"]):not([class*="text-gold"]):not([class*="text-muted"]) {
+  color: inherit;
+}
+
+:is(.bg-brand-navy, .bg-brand-navy-2, [data-surface="navy"]) :is(
   .text-brand,
   .text-brand-gold,
+  .text-gold-ink,
   .text-brand-gold-soft,
   .text-accent-strong
 ) {
-  color: var(--pc-home-gold);
+  color: var(--pc-eyebrow-on-navy);
 }
 
 
