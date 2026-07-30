@@ -125,6 +125,13 @@ const TILE_ICON = "h-[clamp(18px,2.5vh,25px)] w-[clamp(18px,2.5vh,25px)]";
 const TILE_LABEL =
   "w-full truncate text-[clamp(11.5px,1.6vh,15px)] font-semibold leading-none tracking-[-0.005em]";
 
+/* Tokens tipográficos compartilhados da home: um único "eyebrow" (rótulo de
+   seção) e um único estilo de chip, para que hero, painel ao vivo e faixa de
+   buscas em alta tenham exatamente a mesma hierarquia e o mesmo respiro. */
+const EYEBROW = "text-[11px] font-bold uppercase tracking-[0.2em]";
+const CHIP =
+  "inline-flex items-center justify-center rounded-full border px-2.5 py-1 text-[12px] font-medium capitalize pc-tile focus-visible:outline-none focus-visible:ring-2";
+
 
 /**
  * Ladrilhos da home — derivados de `CATEGORY_DEFS`, a mesma fonte usada em
@@ -214,6 +221,16 @@ function HomePage() {
     return real.length >= 3 ? real : POPULAR_FALLBACK;
   }, [popularQ.data]);
 
+  /* Hero e faixa "Buscas em alta" consomem a mesma fonte, mas nunca repetem
+     termos: o hero fica com os 4 primeiros e a faixa com os seguintes. */
+  const heroPopular = useMemo(() => popularAll.slice(0, 4), [popularAll]);
+  const trendingPopular = useMemo(() => {
+    const rest = popularAll.slice(4);
+    return (rest.length >= 4 ? rest : popularAll).slice(0, 12);
+  }, [popularAll]);
+
+
+
   const storesFn = useServerFn(listPublicStores);
   const storesQ = useQuery({
     queryKey: ["home-partner-stores"],
@@ -256,15 +273,21 @@ function HomePage() {
     navigate({ to: "/buscar", search: { q: query } as any });
   };
 
+  /* Clique em termo popular: preenche o campo de busca (feedback visual e
+     estado coerente ao voltar) e navega direto para os resultados. */
   const goToPopular = (term: string) => {
+    const query = term.trim();
+    if (!query) return;
+    setQ(query);
+    setSuggestOpen(false);
     if (isLoggedOut) {
-      const { blocked } = consumeGuest("search", term);
+      const { blocked } = consumeGuest("search", query);
       if (blocked) {
         setGateOpen(true);
         return;
       }
     }
-    navigate({ to: "/buscar", search: { q: term } as any });
+    navigate({ to: "/buscar", search: { q: query } as any });
   };
 
 
@@ -501,23 +524,22 @@ function HomePage() {
 
 
               {/* ---------- Populares + CTA ---------- */}
-              <div className="flex flex-wrap items-center gap-1.5">
-                <span
-                  className="text-[11px] font-bold uppercase tracking-[0.2em]"
-                  style={{ color: "var(--pc-home-onhero-fg-60)" }}
-                >
-                  Populares:
+              <div className="flex flex-wrap items-center gap-2">
+                <span className={EYEBROW} style={{ color: "var(--pc-home-onhero-fg-60)" }}>
+                  Populares
                 </span>
-                {popularAll.slice(0, 4).map((t) => (
+                {heroPopular.map((t) => (
                   <button
                     key={t}
                     type="button"
                     onClick={() => goToPopular(t)}
-                    className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11.5px] font-medium capitalize pc-tile"
+                    aria-label={`Buscar por ${t}`}
+                    className={CHIP}
                     style={{
                       background: "var(--pc-home-onhero-glass-soft)",
                       borderColor: "var(--pc-home-onhero-border-soft)",
                       color: "var(--pc-home-onhero-fg-85)",
+                      ["--tw-ring-color" as string]: "var(--pc-home-onhero-gold)",
                     }}
                   >
                     {t}
@@ -528,7 +550,7 @@ function HomePage() {
                     <button
                       type="button"
                       aria-haspopup="dialog"
-                      className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11.5px] font-bold transition-all hover:brightness-95"
+                      className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[12px] font-bold transition-all hover:brightness-95"
                       style={{ background: P.gold, color: P.navy }}
                     >
                       Começar grátis
@@ -538,7 +560,7 @@ function HomePage() {
                 ) : (
                   <Link
                     to="/app"
-                    className="inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11.5px] font-bold transition-all hover:brightness-95"
+                    className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[12px] font-bold transition-all hover:brightness-95"
                     style={{ background: P.gold, color: P.navy }}
                   >
                     Ir para o painel
@@ -559,7 +581,7 @@ function HomePage() {
               >
                 <header className="mb-2 flex items-center justify-between gap-2 border-b pb-2" style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}>
                   <span
-                    className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em]"
+                    className={`inline-flex items-center gap-1.5 ${EYEBROW}`}
                     style={{ color: "var(--pc-home-onhero-gold)" }}
                   >
                     <span className="relative inline-flex h-1.5 w-1.5">
@@ -638,7 +660,7 @@ function HomePage() {
                     <div className="flex items-center gap-1.5">
                       <MapPin className="h-3 w-3" style={{ color: P.goldSoft }} aria-hidden />
                       <span
-                        className="text-[11px] font-bold uppercase tracking-[0.18em]"
+                        className={EYEBROW}
                         style={{ color: "var(--pc-home-onhero-fg-60)" }}
                       >
                         Onde comparamos
@@ -874,16 +896,18 @@ function HomePage() {
           </div>
 
           {/* Faixa "Em alta": ocupa a folga entre os ladrilhos e o rodapé com
-              dado real (termos mais buscados nos últimos 7 dias). */}
-          <div
-            className="hidden shrink-0 items-center gap-2.5 overflow-hidden rounded-2xl border px-3.5 py-[clamp(0.5rem,1.3vh,0.85rem)] backdrop-blur-md lg:flex"
+              dado real (termos mais buscados nos últimos 7 dias). Clicar em um
+              termo preenche a busca do hero e abre os resultados. */}
+          <section
+            aria-label="Buscas em alta nos últimos 7 dias"
+            className="hidden shrink-0 items-center gap-3 overflow-hidden rounded-2xl border px-3.5 py-[clamp(0.5rem,1.3vh,0.85rem)] backdrop-blur-md lg:flex"
             style={{
               background: "var(--pc-home-onhero-glass)",
               borderColor: "var(--pc-home-onhero-border)",
             }}
           >
             <span
-              className="inline-flex shrink-0 items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em]"
+              className={`inline-flex shrink-0 items-center gap-1.5 ${EYEBROW}`}
               style={{ color: "var(--pc-home-onhero-gold)" }}
             >
               <TrendingDown className="h-3.5 w-3.5" aria-hidden />
@@ -891,20 +915,22 @@ function HomePage() {
             </span>
             <ul
               role="list"
-              className="grid min-w-0 flex-1 gap-1.5"
+              className="grid min-w-0 flex-1 gap-2"
               style={{ gridTemplateColumns: "repeat(auto-fit, minmax(96px, 1fr))" }}
             >
-              {(popularAll.length > 10 ? popularAll.slice(4, 16) : popularAll.slice(0, 12)).map((t) => (
+              {trendingPopular.map((t) => (
                 <li key={t} className="min-w-0">
                   <button
                     type="button"
                     onClick={() => goToPopular(t)}
-                    title={t}
-                    className="inline-flex w-full items-center justify-center truncate rounded-full border px-2.5 py-1 text-[12px] font-medium capitalize pc-tile"
+                    title={`Buscar por ${t}`}
+                    aria-label={`Buscar por ${t}`}
+                    className={`${CHIP} w-full truncate`}
                     style={{
-                      background: "var(--pc-home-onhero-glass)",
+                      background: "var(--pc-home-onhero-glass-soft)",
                       borderColor: "var(--pc-home-onhero-border-soft)",
                       color: "var(--pc-home-onhero-fg-85)",
+                      ["--tw-ring-color" as string]: "var(--pc-home-onhero-gold)",
                     }}
                   >
                     {t}
@@ -912,7 +938,7 @@ function HomePage() {
                 </li>
               ))}
             </ul>
-          </div>
+          </section>
         </main>
 
 
