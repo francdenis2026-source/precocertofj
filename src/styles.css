@@ -5241,3 +5241,10 @@ h3.font-display {
   .pc-price--xl { line-height: 1.1; }
   .pc-price--display { line-height: 1.06; }
 }
+
+/* Chips "Buscas em alta" da homepage — realce dourado no hover. */
+.pc-trend-chip:hover {
+  border-color: color-mix(in oklab, var(--pc-home-onhero-gold) 60%, transparent);
+  box-shadow: 0 6px 18px -8px color-mix(in oklab, var(--pc-home-onhero-gold) 55%, transparent);
+  color: var(--pc-home-onhero-fg);
+}
