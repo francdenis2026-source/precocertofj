@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { classifyCategory } from "@/lib/product-category";
 import { CATEGORY_DEFS } from "@/lib/category-hub";
+import { categoryBySlug, productInCategory } from "@/lib/category-hub";
 describe("regressão: \"pasta\" ambíguo", () => {
   it("sabão em pasta é limpeza, não bazar", () => {
     expect(classifyCategory("Sabão em Pasta Assolan 500ml")).toBe("limpeza");
