@@ -94,17 +94,37 @@ const WORD_REGEX = new RegExp(
 );
 
 
+/**
+ * Cache de traduções já calculadas.
+ *
+ * PERFORMANCE: os mesmos rótulos ("no mercado", "Ver preços"…) reaparecem
+ * centenas de vezes por tela. Sem cache, cada ocorrência roda ~30 regex.
+ * Com o Map, a segunda ocorrência em diante custa uma leitura de hash.
+ */
+const TRANSLATION_CACHE = new Map<string, string>();
+const TRANSLATION_CACHE_MAX = 5000;
+
 /** Substitui termos em uma string preservando capitalização. */
 export function translateTerms(input: string): string {
   if (!input) return input;
+
+  const cached = TRANSLATION_CACHE.get(input);
+  if (cached !== undefined) return cached;
+
   let out = input;
   for (const [re, rep] of PT_PHRASES) out = out.replace(re, rep);
   out = out.replace(WORD_REGEX, (match) => {
     const rep = PT_TERMS[match.toLowerCase()];
     return rep ? applyCase(match, rep) : match;
   });
+
+  if (TRANSLATION_CACHE.size >= TRANSLATION_CACHE_MAX) TRANSLATION_CACHE.clear();
+  TRANSLATION_CACHE.set(input, out);
+  // O resultado também é "estável": traduzir de novo não muda nada.
+  if (out !== input) TRANSLATION_CACHE.set(out, out);
   return out;
 }
+
 
 const SKIP_TAGS = new Set([
   "SCRIPT",
