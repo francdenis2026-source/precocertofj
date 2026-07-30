@@ -4933,6 +4933,10 @@ html.dark .pc-row-interactive:hover .pc-store-name {
    para máxima legibilidade em cards, tabelas e KPIs.
    ============================================================ */
 .pc-price {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.18em;
+  white-space: nowrap;
   font-family: var(--pc-price-font);
   font-feature-settings: var(--pc-price-feature-settings);
   font-variant-numeric: tabular-nums lining-nums;
@@ -4943,24 +4947,45 @@ html.dark .pc-row-interactive:hover .pc-store-name {
   color: var(--pc-price-fg);
 }
 
+/* Prefixo (R$) e sufixo (/kg, /un, /mês): sans do sistema, menores e mais
+   leves — o número condensado é sempre o protagonista da hierarquia. */
+.pc-price__prefix,
+.pc-price__suffix {
+  font-family: var(--font-sans);
+  font-size: 0.62em;
+  font-weight: 600;
+  letter-spacing: 0.015em;
+  line-height: 1;
+  color: color-mix(in oklab, currentColor 74%, transparent);
+  text-decoration: inherit;
+}
+.pc-price__suffix { font-weight: 500; }
+.pc-price__value {
+  font-family: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  text-decoration: inherit;
+}
 
-.pc-price--sm { font-size: 0.8125rem; line-height: 1.15; }
-.pc-price--md { font-size: 0.9375rem; line-height: 1.15; font-weight: 650; }
-/* Preços grandes: a Oswald é condensada, então ganha peso 700 e um leve
-   afastamento entre dígitos (kerning positivo) — o oposto do que se faz com
-   uma sans normal. Isso evita que "11", "00" e "88" colem em tamanhos maiores. */
+/* Escala única de tamanhos — xs → xl. Como a Oswald é condensada, o peso
+   sobe e o tracking abre à medida que o tamanho cresce, evitando dígitos
+   colados ("11", "00", "88") nos preços grandes. */
+.pc-price--xs { font-size: 0.75rem;   line-height: 1.2;  font-weight: 600; letter-spacing: 0.008em; }
+.pc-price--sm { font-size: 0.8125rem; line-height: 1.18; font-weight: 620; letter-spacing: 0.008em; }
+.pc-price--md { font-size: 0.9375rem; line-height: 1.16; font-weight: 650; letter-spacing: 0.01em; }
 .pc-price--lg {
   font-size: 1.125rem;
-  line-height: 1.1;
+  line-height: 1.12;
   font-weight: 700;
   letter-spacing: 0.012em;
 }
 .pc-price--xl {
   font-size: clamp(1.5rem, 1.1vw + 1.15rem, 2.25rem);
-  line-height: 1.02;
+  line-height: 1.04;
   font-weight: 700;
   letter-spacing: 0.016em;
 }
+
 /* Contexto "a partir de" — leve, ainda AA (>= 4.5:1) */
 
 .pc-price--muted {
@@ -4972,7 +4997,6 @@ html.dark .pc-row-interactive:hover .pc-store-name {
 .pc-price--best   {
   color: var(--foreground);
   font-weight: 750;
-  letter-spacing: -0.012em;
   text-decoration: underline;
   text-decoration-color: color-mix(in oklab, var(--pc-gold-ink) 75%, transparent);
   text-decoration-thickness: 0.09em;
@@ -4980,6 +5004,8 @@ html.dark .pc-row-interactive:hover .pc-store-name {
 }
 .pc-price--strike { color: color-mix(in oklab, var(--foreground) 55%, transparent); text-decoration: line-through; font-weight: 500; }
 .pc-price--savings { color: hsl(var(--savings, 148 60% 34%)); font-weight: 700; }
+.pc-price--onhero { color: var(--pc-price-fg-onhero); }
+
 
 /* ============================================================
    @utility pc-num — dígitos monetários typeclear
