@@ -1770,3 +1770,105 @@ export const compareStoreCart = createServerFn({ method: "POST" })
     return results;
   });
 
+
+/* ------------------------------------------------------------------ */
+/* Ranking de menor preço do catálogo (comparação entre mercados)      */
+/* ------------------------------------------------------------------ */
+
+export type CatalogPriceRank = {
+  /** slug do produto dentro do catálogo da loja de referência */
+  slug: string;
+  /** posição da loja de referência entre as ofertas (1 = menor preço) */
+  rank: number;
+  /** quantos mercados têm o mesmo produto catalogado */
+  offersCount: number;
+  /** menor preço encontrado entre todos os mercados */
+  bestPrice: number;
+  /** nome do mercado com o menor preço */
+  bestStoreName: string;
+  /** economia percentual em relação ao preço desta loja (0 quando ela é a mais barata) */
+  savingsPct: number;
+};
+
+/**
+ * Compara, de uma só vez, todos os produtos do catálogo de uma loja
+ * contra os demais mercados ativos. Retorna apenas os produtos que
+ * possuem oferta em mais de um mercado.
+ */
+export const getStoreCatalogPriceRanking = createServerFn({ method: "GET" })
+  .inputValidator((input: { storeId: string }) => {
+    if (!input?.storeId?.trim()) throw new Error("storeId obrigatório");
+    return input;
+  })
+  .handler(async ({ data }): Promise<CatalogPriceRank[]> => {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+
+    const resolveImage = await loadCatalogImageResolver();
+    const { scans: refScans } = await loadStoreAndScans(data.storeId);
+    const refProducts = aggregateProducts(refScans, resolveImage);
+    if (refProducts.length === 0) return [];
+
+    const estabTable = supabaseAdmin.from("establishments" as never) as unknown as {
+      select: (s: string) => {
+        eq: (
+          c: string,
+          v: boolean,
+        ) => Promise<{ data: Pick<EstabRow, "id" | "name">[] | null }>;
+      };
+    };
+    const { data: estabs } = await estabTable.select("id, name, active").eq("active", true);
+    const storeNames = new Map((estabs ?? []).map((e) => [e.id, e.name] as const));
+
+    const scansTable = supabaseAdmin.from("scans" as never) as unknown as {
+      select: (s: string) => {
+        not: (
+          c: string,
+          op: string,
+          v: unknown,
+        ) => {
+          order: (
+            c: string,
+            o: { ascending: boolean },
+          ) => Promise<{ data: ScanRow[] | null }>;
+        };
+      };
+    };
+    const { data: allScans } = await scansTable
+      .select("product_name, price_captured, unit, quantity, barcode, image_url, created_at, establishment_id")
+      .not("price_captured", "is", null)
+      .order("created_at", { ascending: false });
+
+    // Melhor (mais recente) preço por baseName + loja
+    type Offer = { storeId: string; price: number };
+    const byBase = new Map<string, Map<string, Offer>>();
+    for (const s of allScans ?? []) {
+      const storeId = s.establishment_id;
+      const name = s.product_name?.trim();
+      const price = toNum(s.price_captured);
+      if (!storeId || !name || price == null || !storeNames.has(storeId)) continue;
+      const base = stripSize(name).toUpperCase();
+      const perStore = byBase.get(base) ?? new Map<string, Offer>();
+      // scans já vêm ordenados do mais recente para o mais antigo
+      if (!perStore.has(storeId)) perStore.set(storeId, { storeId, price });
+      byBase.set(base, perStore);
+    }
+
+    const out: CatalogPriceRank[] = [];
+    for (const p of refProducts) {
+      const perStore = byBase.get(p.baseName.toUpperCase());
+      if (!perStore || perStore.size < 2) continue;
+      const offers = [...perStore.values()].sort((a, b) => a.price - b.price);
+      const best = offers[0];
+      const rank = offers.findIndex((o) => o.storeId === data.storeId) + 1;
+      if (rank === 0) continue;
+      out.push({
+        slug: p.slug,
+        rank,
+        offersCount: offers.length,
+        bestPrice: best.price,
+        bestStoreName: storeNames.get(best.storeId) ?? "Outro mercado",
+        savingsPct: p.price > 0 ? Math.max(0, ((p.price - best.price) / p.price) * 100) : 0,
+      });
+    }
+    return out;
+  });
