@@ -2192,14 +2192,13 @@ function CompareMatrix({
                   {p.marketName ?? "—"}
                 </span>
               </div>
-              <p
-                className={
-                  "pc-price text-[18px] leading-none " +
-                  (isCheapest ? "text-white" : "text-foreground")
-                }
-              >
-                {fmt(p.price)}
-              </p>
+              <Price
+                as="p"
+                size="lg"
+                value={p.price}
+                tone={isCheapest ? "onhero" : "default"}
+                className={isCheapest ? "text-white" : "text-foreground"}
+              />
               <div className="flex items-center gap-1.5 text-[10.5px] font-medium uppercase tracking-wider">
                 {isCheapest ? (
                   <span
