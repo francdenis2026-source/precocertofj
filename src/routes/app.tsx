@@ -178,7 +178,7 @@ function AppHomeContent() {
         </header>
 
         {/* Métricas do banco */}
-        <div className="grid shrink-0 gap-2 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid shrink-0 grid-cols-2 gap-2 xl:grid-cols-4">
           <Metric
             icon={ShoppingCart}
             label="Suas listas"
