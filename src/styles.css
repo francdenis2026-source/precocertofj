@@ -3714,7 +3714,7 @@ html:not(.dark) .text-brand:not([class*="bg-"]) {
    Sem isso, a regra global de heading aplica --foreground (navy) sobre navy
    → ~1.3:1 no modo claro. */
 :is(.bg-brand-navy, .bg-brand-navy-2, [data-surface="navy"], .text-on-navy)
-  :is(h1, h2, h3, h4, h5, h6, dt, dd, p, li, span, strong):not([class*="text-"]) {
+  :is(h1, h2, h3, h4, h5, h6, dt):not([class*="text-brand"]):not([class*="text-gold"]):not([class*="text-muted"]) {
   color: inherit;
 }
 
