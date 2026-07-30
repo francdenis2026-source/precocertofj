@@ -175,11 +175,18 @@ const RULES: readonly Rule[] = [
     re: /\b(salgadinho|cheetos|fandangos|doritos|ruffles|pringles|torcida|baconzitos)\b|(amendoim japones|batata frita)/,
   },
 
-  // 15) Biscoitos — antes de carnes/laticínios ("Club Social Presunto")
+  // 15) Biscoitos — antes de carnes/laticínios ("Club Social Presunto").
+  // Marcas de biscoito só valem quando o nome não traz um item de mercearia
+  // explícito (existe "Arroz Miragina", que não é bolacha).
   {
     category: "biscoitos",
-    re: /(biscoit|bolach|wafer|cream cracker|cracker|oreo|club social|richester|marilan|minueto|vitarella|miragina|casaredo|chocosol|escureto|tortinhas|pit stop|delicita)/,
+    re: /(biscoit|bolach|wafer|cream cracker|cracker|oreo|club social|tortinhas|pit stop|delicita)/,
   },
+  {
+    category: "biscoitos",
+    re: /^(?!.*\b(arroz|feijao|acucar|farinha|cafe|macarrao|oleo|leite)\b).*(richester|marilan|minueto|vitarella|miragina|casaredo|chocosol|escureto)/,
+  },
+
 
   // 16) Padaria
   {
