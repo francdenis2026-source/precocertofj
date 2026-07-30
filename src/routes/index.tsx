@@ -279,7 +279,7 @@ function HomePage() {
 
   return (
     <div
-      className="pc-home relative flex min-h-[100dvh] w-full flex-col overflow-hidden antialiased"
+      className="pc-home relative flex h-[100dvh] max-h-[100dvh] w-full flex-col overflow-hidden antialiased"
       style={{
         background: "var(--pc-home-hero-bg)",
         color: "var(--pc-home-onhero-fg)",
