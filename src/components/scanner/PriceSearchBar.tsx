@@ -989,6 +989,9 @@ export function PriceSearchBar({
 
       {result && !err && !quotaBlocked && (
         <div
+          ref={resultsRef}
+          onScroll={(e) => persistScroll(e.currentTarget)}
+          onKeyDown={onResultsKeyDown}
           className={`${
             fitResults
               ? "mt-2 min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain pr-1 md:space-y-2.5"
