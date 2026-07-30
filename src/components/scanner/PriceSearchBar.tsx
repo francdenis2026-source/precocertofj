@@ -26,6 +26,9 @@ import { MatchReasonBadges } from "@/components/search/MatchReasonBadges";
 import { SearchInterpretationSummary } from "@/components/search/SearchInterpretationSummary";
 import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
 import { computeUnitPrice } from "@/lib/unit-price";
+import { pickBestValue, type BestValueResult } from "@/lib/best-value";
+import { BestValueBadge } from "@/components/ds/BestValueBadge";
+
 import { ProductQuickActions } from "@/components/product/ProductQuickActions";
 import { StoreBadge, StoreColorBar } from "@/components/brand/StoreBadge";
 import { readableTextOn } from "@/lib/color-contrast";
@@ -1420,7 +1423,20 @@ export function PriceSearchBar({
                             return b.samples - a.samples;
                           });
 
+                          /* Melhor custo-benefício da categoria: menor R$/kg
+                             (ou R$/L) entre os produtos listados. Só aparece
+                             quando as embalagens têm tamanhos diferentes —
+                             ver src/lib/best-value.ts. */
+                          const bestValue = pickBestValue(
+                            sortedGroups.map((g) => ({
+                              key: g.productName,
+                              name: g.productName,
+                              price: g.min,
+                            })),
+                          );
+
                           return (
+
                             <div key={cat} className="pc-results">
                               {showHeaders ? (
                                 (() => {
@@ -1484,6 +1500,11 @@ export function PriceSearchBar({
                                           catalogId={g.catalogId}
                                           highlightTokens={highlightTokens}
                                           matchReasons={g.matchReasons}
+                                          bestValue={
+                                            bestValue && bestValue.key === g.productName
+                                              ? bestValue
+                                              : null
+                                          }
                                           isCompareSelected={compareSelection.includes(g.productName)}
                                           canSelectCompare={
                                             compareSelection.includes(g.productName) || compareSelection.length < 3
@@ -2281,6 +2302,7 @@ function ProductGroupCard({
   fmt,
   highlightTokens,
   matchReasons,
+  bestValue = null,
   isCompareSelected = false,
   canSelectCompare = true,
   onToggleCompare,
@@ -2301,6 +2323,8 @@ function ProductGroupCard({
   fmt: (n: number | null | undefined) => string;
   highlightTokens: string[];
   matchReasons: MatchReason[];
+  /** Preenchido apenas no produto com melhor R$/unidade da categoria. */
+  bestValue?: BestValueResult | null;
   isCompareSelected?: boolean;
   canSelectCompare?: boolean;
   onToggleCompare?: () => void;
@@ -2431,6 +2455,7 @@ function ProductGroupCard({
           {matchReasons.length > 0 && (
             <MatchReasonBadges reasons={matchReasons} className="mt-1" />
           )}
+          {bestValue ? <BestValueBadge result={bestValue} className="mt-1" /> : null}
         </div>
 
         <div className="order-2 flex flex-wrap items-center gap-1 sm:shrink-0 sm:flex-nowrap sm:justify-end">

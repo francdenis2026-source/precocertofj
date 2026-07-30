@@ -79,9 +79,13 @@ export function BasketVerdictHero({ data, loading, eligibleCoverage = 0.6, class
 
       <div className="mt-3 flex flex-col gap-1">
         <p className="text-sm text-muted-foreground">Mercado mais em conta agora</p>
-        <h2 className="text-2xl md:text-3xl font-serif italic text-[color:var(--pc-accent-gold,#c9a24a)] leading-tight">
+        <h2
+          data-testid="basket-verdict-champion"
+          className="text-2xl md:text-3xl font-serif italic text-[color:var(--pc-accent-gold,#c9a24a)] leading-tight"
+        >
           {champion.establishmentName}
         </h2>
+
         {champion.neighborhood || champion.city ? (
           <p className="text-xs text-muted-foreground">
             {[champion.neighborhood, champion.city].filter(Boolean).join(" · ")}
@@ -95,7 +99,7 @@ export function BasketVerdictHero({ data, loading, eligibleCoverage = 0.6, class
             <ShoppingBasket className="h-3.5 w-3.5" /> Total da cesta
           </dt>
           <dd className="mt-1 text-xl font-semibold tabular-nums text-foreground">
-            <Price value={champion.total} size="lg" tone="best" />
+            <Price data-testid="basket-verdict-total" value={champion.total} size="lg" tone="best" />
           </dd>
           <p className="mt-0.5 text-[11px] text-muted-foreground">
             {champion.itemsFound}/{champion.totalItems} itens · cobertura{" "}
@@ -108,7 +112,7 @@ export function BasketVerdictHero({ data, loading, eligibleCoverage = 0.6, class
             <TrendingDown className="h-3.5 w-3.5" /> Economia estimada
           </dt>
           <dd className="mt-1 text-xl font-semibold tabular-nums text-emerald-600 dark:text-emerald-400">
-            <Price value={savings} size="md" tone="savings" />
+            <Price data-testid="basket-verdict-savings" value={savings} size="md" tone="savings" />
           </dd>
           <p className="mt-0.5 text-[11px] text-muted-foreground">
             vs. {priciest.establishmentName}
