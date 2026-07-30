@@ -646,14 +646,14 @@ function HomePage() {
                   </Link>
                 </header>
 
-                <div className="grid grid-cols-3 gap-2" data-reading-dense>
+                <div className="grid grid-cols-3 gap-1.5" data-reading-dense>
                   {metrics.map(({ kind, value, label, short, Icon }) => (
                     <button
                       key={kind}
                       type="button"
                       onClick={() => setSpotlight(kind)}
                       aria-label={`${value} — ${label}. Ver detalhes.`}
-                      className="group flex min-w-0 flex-col items-center gap-0.5 rounded-xl border px-1.5 py-[clamp(0.4rem,1.2vh,0.75rem)] text-center pc-tile focus-visible:outline-none focus-visible:ring-2"
+                      className="group flex min-w-0 flex-col items-center gap-0.5 rounded-xl border px-1.5 py-[clamp(0.3rem,0.9vh,0.55rem)] text-center pc-tile focus-visible:outline-none focus-visible:ring-2"
                       style={{
                         background: "var(--pc-home-onhero-glass-soft)",
                         borderColor: "var(--pc-home-onhero-border-soft)",
@@ -661,15 +661,15 @@ function HomePage() {
                         "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
                       }}
                     >
-                      <Icon className="h-3.5 w-3.5" style={{ color: P.goldSoft }} aria-hidden />
+                      <Icon className="h-3 w-3" style={{ color: P.goldSoft }} aria-hidden />
                       <span
                         className={`${serif} tabular-nums leading-none`}
-                        style={{ color: "var(--pc-home-onhero-gold)", fontSize: "clamp(1.05rem, 2vw, 1.55rem)" }}
+                        style={{ color: "var(--pc-home-onhero-gold)", fontSize: "clamp(0.95rem, 1.6vw, 1.3rem)" }}
                       >
                         {value}
                       </span>
                       <span
-                        className="w-full text-balance break-words text-[11px] font-bold uppercase leading-[1.15] tracking-[0.06em]"
+                        className="w-full text-balance break-words text-[10.5px] font-bold uppercase leading-[1.1] tracking-[0.05em]"
                         style={{ color: "var(--pc-home-onhero-fg-70)" }}
                       >
                         {/* Rótulo completo em 2 linhas: nunca cortar palavras com reticências */}
