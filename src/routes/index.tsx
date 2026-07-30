@@ -581,7 +581,7 @@ function HomePage() {
               >
                 <header className="mb-2 flex items-center justify-between gap-2 border-b pb-2" style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}>
                   <span
-                    className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em]"
+                    className={`inline-flex items-center gap-1.5 ${EYEBROW}`}
                     style={{ color: "var(--pc-home-onhero-gold)" }}
                   >
                     <span className="relative inline-flex h-1.5 w-1.5">
