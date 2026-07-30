@@ -77,6 +77,7 @@ import { cn } from "@/lib/utils";
 import { Sparkline } from "@/components/basket/Sparkline";
 import { useGuestGate } from "@/hooks/useGuestGate";
 import { GuestGateDialog } from "@/components/gate/GuestGateDialog";
+import { Price } from "@/components/ds/Price";
 
 type CategoryFilter = "all" | EssentialCategory;
 
@@ -623,7 +624,7 @@ export function LiveBasketRanking({
                         {CATEGORY_LABELS[cat]}:
                       </span>
                       <span className="max-w-[10rem] truncate">{s.establishmentName}</span>
-                      <span className="tabular-nums">{brl(s.scopedTotal)}</span>
+                      <Price value={s.scopedTotal} size="xs" prefix={false} />
                     </button>
                   );
                 })}
@@ -673,9 +674,7 @@ export function LiveBasketRanking({
                       <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
                         Total estimado
                       </p>
-                      <p className="text-2xl font-bold tabular-nums text-brand-navy">
-                        {brl(winner.scopedTotal)}
-                      </p>
+                      <Price as="p" value={winner.scopedTotal} size="lg" />
                     </div>
                   </div>
                 </div>
@@ -712,12 +711,12 @@ export function LiveBasketRanking({
                           <span className="text-brand-navy dark:text-brand-gold">
                             {hypotheticalVerdict.projectedLeaderName}
                           </span>{" "}
-                          por {brl(hypotheticalVerdict.projectedTotal)}.
+                          por <Price value={hypotheticalVerdict.projectedTotal} size="xs" />.
                         </>
                       ) : (
                         <>
                           {hypotheticalVerdict.currentLeaderName} continuaria líder por{" "}
-                          {brl(hypotheticalVerdict.projectedTotal)}.
+                          <Price value={hypotheticalVerdict.projectedTotal} size="xs" />.
                         </>
                       )}
                     </p>
@@ -800,7 +799,16 @@ export function LiveBasketRanking({
                         <p className="text-[11px] text-muted-foreground">
                           <span data-testid="row-coverage">{s.scopedFound}/{s.scopedTotalItems} itens</span>
                           {s.scopedFound > 0 && (
-                            <> · <span title="Custo médio por item disponível">{brl(s.scopedTotal / s.scopedFound)}/item</span></>
+                            <>
+                              {" · "}
+                              <Price
+                                value={s.scopedTotal / s.scopedFound}
+                                size="xs"
+                                tone="muted"
+                                suffix="/item"
+                                title="Custo médio por item disponível"
+                              />
+                            </>
                           )}
                           {s.neighborhood ? ` · ${s.neighborhood}` : ""}
                           {s.city ? ` · ${s.city}` : ""}
@@ -817,7 +825,8 @@ export function LiveBasketRanking({
                               aria-label={`Ver ${subs.length} sugestão${subs.length > 1 ? "ões" : ""} de substituição em ${s.establishmentName}`}
                             >
                               <ArrowRightLeft className="h-2.5 w-2.5" aria-hidden />
-                              {subs.length} substituição{subs.length > 1 ? "ões" : ""} · +{brl(extra)}
+                              {subs.length} substituição{subs.length > 1 ? "ões" : ""} ·{" "}
+                              <Price value={extra} size="xs" prefix="+R$" />
                             </button>
                           );
                         })()}
@@ -831,13 +840,11 @@ export function LiveBasketRanking({
                         </div>
                       )}
                       <div className="text-right">
-                        <p className="text-sm font-semibold tabular-nums text-foreground">
-                          {brl(s.scopedTotal)}
-                        </p>
+                        <Price as="p" value={s.scopedTotal} size="sm" />
                         {diff > 0 && (
                           <p className="inline-flex items-center gap-1 text-[11px] font-medium text-destructive">
                             <TrendingUp className="h-3 w-3" aria-hidden />
-                            +{brl(diff)}
+                            <Price value={diff} size="xs" tone="muted" prefix="+R$" />
                           </p>
                         )}
                         {isWinner && (
@@ -868,17 +875,13 @@ export function LiveBasketRanking({
                     <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
                       Cesta ideal (menor preço por item)
                     </p>
-                    <p className="text-base font-bold tabular-nums text-brand-navy">
-                      {brl(data.cheapestBasketTotal)}
-                    </p>
+                    <Price as="p" value={data.cheapestBasketTotal} size="md" tone="best" />
                   </div>
                   <div className="text-right">
                     <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
                       Cesta média
                     </p>
-                    <p className="text-base font-bold tabular-nums text-foreground">
-                      {brl(data.averageBasketTotal)}
-                    </p>
+                    <Price as="p" value={data.averageBasketTotal} size="md" className="justify-end" />
                   </div>
                 </div>
               )}
@@ -914,9 +917,7 @@ export function LiveBasketRanking({
                   <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
                     Total {category === "all" ? "da cesta" : `em ${scopeLabel}`}
                   </p>
-                  <p className="text-xl font-bold tabular-nums text-brand-navy">
-                    {brl(detailStore.scopedTotal)}
-                  </p>
+                  <Price as="p" value={detailStore.scopedTotal} size="lg" />
                 </div>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -992,9 +993,7 @@ export function LiveBasketRanking({
                         <div className="text-right">
                           {it ? (
                             <>
-                              <p className="text-sm font-semibold tabular-nums text-foreground">
-                                {brl(it.price)}
-                              </p>
+                              <Price as="p" value={it.price} size="sm" className="justify-end" />
                               {delta !== 0 && (
                                 <p
                                   className={cn(
@@ -1007,8 +1006,11 @@ export function LiveBasketRanking({
                                   ) : (
                                     <TrendingDown className="h-3 w-3" aria-hidden />
                                   )}
-                                  {delta > 0 ? "+" : ""}
-                                  {brl(delta)}
+                                  <Price
+                                    value={Math.abs(delta)}
+                                    size="xs"
+                                    prefix={delta > 0 ? "+R$" : "-R$"}
+                                  />
                                 </p>
                               )}
                             </>
