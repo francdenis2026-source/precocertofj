@@ -1,5 +1,5 @@
-import { classifyCategory } from "@/lib/product-category";
 import { createServerFn } from "@tanstack/react-start";
+import { createClient } from "@supabase/supabase-js";
 import { CATEGORY_LABELS } from "@/lib/product-category";
 
 export type EstablishmentStat = {
@@ -29,182 +29,48 @@ export type EstablishmentsOverview = {
   items: EstablishmentStat[];
 };
 
-
-
 export const humanizeCategory = (c: string): string => CATEGORY_LABELS[c] ?? c;
 
+const EMPTY: EstablishmentsOverview = {
+  totalEstablishments: 0,
+  totalProducts: 0,
+  totalCategories: 0,
+  totalMaxSavings: 0,
+  topGlobalCategories: [],
+  items: [],
+};
+
+/**
+ * Dados públicos (RLS como `anon`): toda a agregação roda em uma única query
+ * no banco (`establishments_overview`) em vez de baixar ~3k linhas de `scans`
+ * e agregar em JS a cada requisição.
+ */
 export const listPublicEstablishments = createServerFn({ method: "GET" }).handler(
   async (): Promise<EstablishmentsOverview> => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const client = supabaseAdmin as unknown as {
-      from: (t: string) => {
-        select: (s: string) => {
-          eq: (c: string, v: unknown) => {
-            order: (c: string, o: { ascending: boolean }) => Promise<{
-            data: Array<{
-                id: string;
-                name: string;
-                city: string | null;
-                state: string | null;
-                neighborhood: string | null;
-                logo_url: string | null;
-                brand_color: string | null;
-                kind: string | null;
-                latitude: number | null;
-                longitude: number | null;
-              }> | null;
-              error: { message: string } | null;
-            }>;
-          };
-        };
-      };
-    };
+    const url = process.env.SUPABASE_URL;
+    const key = process.env.SUPABASE_PUBLISHABLE_KEY;
+    if (!url || !key) return EMPTY;
 
-    const { data: ests, error: eErr } = await client
-      .from("establishments")
-      .select("id, name, city, state, neighborhood, logo_url, brand_color, kind, latitude, longitude")
-      .eq("active", true)
-      .order("name", { ascending: true });
-    if (eErr) throw new Error(eErr.message);
-
-    // Aggregate scans → category counts per establishment.
-    // Supabase-js default row cap is 1000; total scans exceed that,
-    // so paginate explicitly to keep every establishment counted.
-    const scanClient = supabaseAdmin as unknown as {
-      from: (t: string) => {
-        select: (s: string) => {
-          eq: (c: string, v: unknown) => {
-            is: (c: string, v: null) => {
-              not: (c: string, op: string, v: unknown) => {
-                range: (from: number, to: number) => Promise<{
-                  data: Array<{
-                    establishment_id: string;
-                    product_name: string;
-                    created_at: string;
-                    price_captured: number | null;
-                  }> | null;
-                  error: { message: string } | null;
-                }>;
-              };
-            };
-          };
-        };
-      };
-    };
-
-    const PAGE = 1000;
-    let offset = 0;
-    const scans: Array<{ establishment_id: string; product_name: string; created_at: string; price_captured: number | null }> = [];
-    while (offset < 200_000) {
-      const { data, error: sErr } = await scanClient
-        .from("scans")
-        .select("establishment_id, product_name, created_at, price_captured")
-        .eq("status", "salvo")
-        .is("user_id", null)
-        .not("product_name", "is", null)
-        .range(offset, offset + PAGE - 1);
-      if (sErr) throw new Error(sErr.message);
-      const batch = data ?? [];
-      scans.push(...batch);
-      if (batch.length < PAGE) break;
-      offset += PAGE;
-    }
-
-    // Classify locally with lightweight regex-mirror of classify_product_category
-    const classify = (name: string): string => classifyCategory(name);
-
-    type Agg = { total: Set<string>; cats: Map<string, number>; last: string | null; prices: Map<string, { min: number; max: number }> };
-    const byEst = new Map<string, Agg>();
-    const globalPrices = new Map<string, { min: number; max: number }>();
-    for (const s of scans ?? []) {
-      let agg = byEst.get(s.establishment_id);
-      if (!agg) {
-        agg = { total: new Set(), cats: new Map(), last: null, prices: new Map() };
-        byEst.set(s.establishment_id, agg);
-      }
-      const key = s.product_name.toLowerCase().trim();
-      agg.total.add(key);
-      const cat = classify(s.product_name);
-      agg.cats.set(cat, (agg.cats.get(cat) ?? 0) + 1);
-      if (!agg.last || s.created_at > agg.last) agg.last = s.created_at;
-      if (typeof s.price_captured === "number" && s.price_captured > 0) {
-        const cur = agg.prices.get(key);
-        if (!cur) agg.prices.set(key, { min: s.price_captured, max: s.price_captured });
-        else {
-          if (s.price_captured < cur.min) cur.min = s.price_captured;
-          if (s.price_captured > cur.max) cur.max = s.price_captured;
-        }
-        const g = globalPrices.get(key);
-        if (!g) globalPrices.set(key, { min: s.price_captured, max: s.price_captured });
-        else {
-          if (s.price_captured < g.min) g.min = s.price_captured;
-          if (s.price_captured > g.max) g.max = s.price_captured;
-        }
-      }
-    }
-
-    const items: EstablishmentStat[] = (ests ?? []).map((e) => {
-      const agg = byEst.get(e.id);
-      const cats = agg
-        ? Array.from(agg.cats.entries())
-            .sort((a, b) => b[1] - a[1])
-            .slice(0, 4)
-            .map(([category, count]) => ({ category, count }))
-        : [];
-      let maxSavings = 0;
-      let minPrice: number | null = null;
-      if (agg) {
-        for (const [, p] of agg.prices) {
-          const diff = p.max - p.min;
-          if (diff > maxSavings) maxSavings = diff;
-          if (p.min > 0 && (minPrice === null || p.min < minPrice)) minPrice = p.min;
-        }
-      }
-      return {
-        id: e.id,
-        name: e.name,
-        city: e.city,
-        state: e.state,
-        neighborhood: e.neighborhood,
-        latitude: e.latitude ?? null,
-        longitude: e.longitude ?? null,
-        logoUrl: e.logo_url,
-        brandColor: e.brand_color,
-        kind: e.kind ?? null,
-        productsCount: agg?.total.size ?? 0,
-        topCategories: cats,
-        lastUpdate: agg?.last ?? null,
-        maxSavings: Math.round(maxSavings * 100) / 100,
-        minPrice: minPrice === null ? null : Math.round(minPrice * 100) / 100,
-      };
+    const supabase = createClient(url, key, {
+      auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
     });
 
-    items.sort((a, b) => b.productsCount - a.productsCount);
+    const { data, error } = await supabase.rpc("establishments_overview");
+    if (error) throw new Error(error.message);
 
-    // Global category ranking
-    const globalCats = new Map<string, number>();
-    for (const agg of byEst.values()) {
-      for (const [c, n] of agg.cats) globalCats.set(c, (globalCats.get(c) ?? 0) + n);
-    }
-    const topGlobalCategories = Array.from(globalCats.entries())
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 8)
-      .map(([category, count]) => ({ category, count }));
-
-    const totalProducts = items.reduce((s, i) => s + i.productsCount, 0);
-    let totalMaxSavings = 0;
-    for (const [, p] of globalPrices) {
-      const d = p.max - p.min;
-      if (d > totalMaxSavings) totalMaxSavings = d;
-    }
-
+    const raw = (data ?? {}) as Partial<EstablishmentsOverview>;
     return {
-      totalEstablishments: items.length,
-      totalProducts,
-      totalCategories: globalCats.size,
-      totalMaxSavings: Math.round(totalMaxSavings * 100) / 100,
-      topGlobalCategories,
-      items,
+      totalEstablishments: raw.totalEstablishments ?? 0,
+      totalProducts: raw.totalProducts ?? 0,
+      totalCategories: raw.totalCategories ?? 0,
+      totalMaxSavings: raw.totalMaxSavings ?? 0,
+      topGlobalCategories: raw.topGlobalCategories ?? [],
+      items: (raw.items ?? []).map((i) => ({
+        ...i,
+        productsCount: Number(i.productsCount ?? 0),
+        maxSavings: Number(i.maxSavings ?? 0),
+        minPrice: i.minPrice === null || i.minPrice === undefined ? null : Number(i.minPrice),
+      })),
     };
   },
 );

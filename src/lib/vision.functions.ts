@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { createClient } from "@supabase/supabase-js";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { normalizeBarcode } from "@/lib/barcode";
 
 export type VisionProduct = {
@@ -57,11 +57,19 @@ Regras:
 - Se nada legível, retorne { "products": [], "confidence": "low" }.`;
 
 export const analyzeProductImage = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: { image: string }) => {
     if (!input.image) throw new Error("image obrigatória");
+    if (typeof input.image !== "string" || input.image.length > 12_000_000) {
+      throw new Error("Imagem inválida ou muito grande");
+    }
     return input;
   })
-  .handler(async ({ data }): Promise<VisionExtract> => {
+  .handler(async ({ data, context }): Promise<VisionExtract> => {
+    const { assertAiRateLimit, logAiUsage } = await import("@/lib/ai-guard.server");
+    const userId = context.userId;
+    await assertAiRateLimit(userId, "analyzeProductImage", 60, 60);
+
     const apiKey = process.env.LOVABLE_API_KEY;
     if (!apiKey) throw new Error("LOVABLE_API_KEY ausente");
 
@@ -92,15 +100,37 @@ export const analyzeProductImage = createServerFn({ method: "POST" })
 
     if (!res.ok) {
       const body = await res.text();
-      if (res.status === 429) throw new Error("Limite de IA atingido. Tente em 1 min.");
-      if (res.status === 402) throw new Error("Créditos de IA esgotados.");
-      throw new Error(`IA falhou [${res.status}]: ${body.slice(0, 200)}`);
+      const msg =
+        res.status === 429
+          ? "Limite de IA atingido. Tente em 1 min."
+          : res.status === 402
+            ? "Créditos de IA esgotados."
+            : `IA falhou [${res.status}]: ${body.slice(0, 200)}`;
+      await logAiUsage({
+        userId,
+        functionName: "analyzeProductImage",
+        model: "google/gemini-2.5-flash",
+        success: false,
+        errorMessage: msg,
+      });
+      throw new Error(msg);
     }
 
     const json = (await res.json()) as {
       choices?: Array<{ message?: { content?: string } }>;
+      usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number };
     };
+    await logAiUsage({
+      userId,
+      functionName: "analyzeProductImage",
+      model: "google/gemini-2.5-flash",
+      promptTokens: json.usage?.prompt_tokens,
+      completionTokens: json.usage?.completion_tokens,
+      totalTokens: json.usage?.total_tokens,
+      success: true,
+    });
     const raw = json.choices?.[0]?.message?.content ?? "{}";
+
     let parsed: {
       products?: unknown;
       confidence?: unknown;
@@ -166,31 +196,27 @@ export const analyzeProductImage = createServerFn({ method: "POST" })
       new Set(products.map((p) => p.barcode).filter((b): b is string => Boolean(b))),
     );
     if (codes.length > 0) {
-      const url = process.env.SUPABASE_URL;
-      const publishableKey = process.env.SUPABASE_PUBLISHABLE_KEY;
-      if (url && publishableKey) {
-        try {
-          const supabase = createClient(url, publishableKey, {
-            auth: { persistSession: false, autoRefreshToken: false },
-          });
-          const { data: rows } = await supabase
-            .from("product_catalog")
-            .select("id, display_name, barcode")
-            .in("barcode", codes);
-          const byCode = new Map(
-            (rows ?? [])
-              .filter((r) => typeof r.barcode === "string" && r.barcode)
-              .map((r) => [r.barcode as string, { id: r.id, displayName: r.display_name }]),
-          );
-          products = products.map((p) => ({
-            ...p,
-            catalogMatch: p.barcode ? (byCode.get(p.barcode) ?? null) : null,
-          }));
-        } catch {
-          // Vínculo é um extra: falha aqui não pode derrubar a extração.
-        }
+      try {
+        const { data: rows } = await context.supabase
+          .from("product_catalog")
+          .select("id, display_name, barcode")
+          .in("barcode", codes);
+        const byCode = new Map<string, { id: string; displayName: string }>(
+          (rows ?? [])
+            .filter((r): r is { id: string; display_name: string; barcode: string } =>
+              typeof r.barcode === "string" && r.barcode.length > 0,
+            )
+            .map((r) => [r.barcode, { id: r.id, displayName: r.display_name }]),
+        );
+        products = products.map((p) => ({
+          ...p,
+          catalogMatch: p.barcode ? (byCode.get(p.barcode) ?? null) : null,
+        }));
+      } catch {
+        // Vínculo é um extra: falha aqui não pode derrubar a extração.
       }
     }
+
 
 
     const first = products[0] ?? {
