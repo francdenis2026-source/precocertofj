@@ -1136,22 +1136,39 @@ function PillarLink({
         borderColor: emphasis
           ? "var(--pc-home-gold)"
           : "var(--pc-home-onhero-border)",
+        boxShadow: emphasis
+          ? "0 6px 18px -10px color-mix(in oklab, var(--pc-home-gold) 70%, transparent)"
+          : undefined,
         // @ts-expect-error css var
         "--tw-ring-color": "color-mix(in oklab, var(--pc-home-gold) 70%, transparent)",
       }}
     >
-      <Icon
-        className={TILE_ICON}
-        style={{ color: emphasis ? "var(--pc-home-navy)" : "var(--pc-home-onhero-gold)" }}
-        strokeWidth={2.1}
-        aria-hidden
-      />
       <span
-        className={TILE_LABEL}
+        className={TILE_ICONWRAP}
+        style={{
+          background: emphasis
+            ? "color-mix(in oklab, var(--pc-home-navy) 14%, transparent)"
+            : "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
+          border: emphasis
+            ? "1px solid color-mix(in oklab, var(--pc-home-navy) 22%, transparent)"
+            : "1px solid color-mix(in oklab, var(--pc-home-gold) 28%, transparent)",
+        }}
+        aria-hidden
+      >
+        <Icon
+          className={TILE_ICON}
+          style={{ color: emphasis ? "var(--pc-home-navy)" : "var(--pc-home-onhero-gold)" }}
+          strokeWidth={2.2}
+          aria-hidden
+        />
+      </span>
+      <span
+        className={`${TILE_LABEL}${emphasis ? " font-bold" : ""}`}
         style={{ color: emphasis ? "var(--pc-home-navy)" : "var(--pc-home-onhero-fg-90)" }}
       >
         {label}
       </span>
     </Link>
   );
+
 }
