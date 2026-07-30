@@ -59,7 +59,9 @@ export function PageLoader({
       aria-busy="true"
       className={cn(
         "flex flex-col items-center justify-center gap-3 text-foreground/85",
-        fullScreen ? "min-h-[60dvh] w-full bg-background" : "py-16",
+        fullScreen
+          ? "fixed inset-0 z-40 min-h-[100dvh] w-full bg-background"
+          : "py-16",
         className,
       )}
 
