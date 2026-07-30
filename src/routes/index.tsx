@@ -359,7 +359,7 @@ function HomePage() {
       /* O travamento em uma janela só vale a partir de `lg`: no mobile o
          conteúdo é empilhado e precisa rolar normalmente, senão as faixas se
          sobrepõem sob a barra inferior. */
-      className="pc-home relative flex min-h-[100dvh] w-full flex-col antialiased [@media(min-width:1024px)_and_(min-height:760px)]:h-[100dvh] [@media(min-width:1024px)_and_(min-height:760px)]:max-h-[100dvh] [@media(min-width:1024px)_and_(min-height:760px)]:min-h-0 [@media(min-width:1024px)_and_(min-height:760px)]:overflow-hidden"
+      className="pc-home relative flex min-h-[100dvh] w-full flex-col antialiased tall-lg:h-[100dvh] tall-lg:max-h-[100dvh] tall-lg:min-h-0 tall-lg:overflow-hidden"
       style={{
         background: "var(--pc-home-hero-bg)",
         color: "var(--pc-home-onhero-fg)",
@@ -411,14 +411,14 @@ function HomePage() {
       {/* Coluna mestra: header / palco / rodapé em três faixas rígidas.
           `min-h-0` no palco é o que impede o conteúdo de empurrar o rodapé
           para fora da janela. */}
-      <div className="relative z-10 flex min-h-0 flex-col [@media(min-width:1024px)_and_(min-height:760px)]:h-full">
+      <div className="relative z-10 flex min-h-0 flex-col tall-lg:h-full">
         <SiteHeader variant="overlay" showThemeToggle />
 
         {/* ================= PALCO ÚNICO ================= */}
         <main
           id="hero"
           aria-labelledby="hero-title"
-          className="mx-auto flex w-full min-h-0 max-w-7xl flex-1 flex-col justify-center gap-[clamp(0.5rem,1.6vh,1.25rem)] px-3 py-[clamp(0.5rem,1.4vh,1rem)] sm:px-6 lg:px-8 [@media(min-width:1024px)_and_(min-height:760px)]:overflow-hidden"
+          className="mx-auto flex w-full min-h-0 max-w-7xl flex-1 flex-col justify-center gap-[clamp(0.5rem,1.6vh,1.25rem)] px-3 py-[clamp(0.5rem,1.4vh,1rem)] sm:px-6 lg:px-8 tall-lg:overflow-hidden"
         >
           {/* Sem `flex-1` aqui: o conjunto hero + divisor + faixa é centrado
               como um bloco só, distribuindo a folga igualmente acima e abaixo
