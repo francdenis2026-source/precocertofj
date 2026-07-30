@@ -148,6 +148,8 @@ const CATEGORIES = HOME_HUBS.map((slug) => {
 
 
 import { useCategoryLabelWithFallback } from "@/hooks/use-category-labels";
+import { categoryBySlug, hubCoverageLabel, type CategorySlug } from "@/lib/category-hub";
+import { categoryIcon } from "@/lib/category-icons";
 
 function HomePage() {
   const catLabel = useCategoryLabelWithFallback();
