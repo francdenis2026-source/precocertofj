@@ -243,7 +243,7 @@ const RULES: readonly Rule[] = [
   // 23) Congelados
   {
     category: "congelados",
-    re: /\b(sorvete|picole|congelados?|nuggets?|empanado)\b|(polpa de fruta|pizza congelada)/,
+    re: /\b(sorvete|picole|congelados?|nuggets?|empanado)\b|(polpa de |pizza congelada)/,
   },
 
   // 24) Condimentos / molhos
