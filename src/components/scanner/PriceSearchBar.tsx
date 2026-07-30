@@ -2683,12 +2683,14 @@ function ProductGroupCard({
         {!expanded && hiddenPrices > 0 ? (
           <button
             type="button"
+            data-card-expand=""
             onClick={() => setExpanded(true)}
             className="rounded-full border border-brand-gold/45 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-2 py-0.5 text-[12.5px] font-semibold text-[var(--pc-gold-ink)] transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
           >
             Ver todos
           </button>
         ) : null}
+
       </div>
 
       <ul
