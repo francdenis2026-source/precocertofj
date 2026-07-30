@@ -283,6 +283,18 @@ function EstablishmentPage() {
     return data.products.reduce((min, p) => (p.price < min.price ? p : min), data.products[0]);
   }, [data.products]);
 
+  /** Últimos produtos atualizados, para dar sinal de frescor do catálogo. */
+  const recentUpdates = useMemo(
+    () =>
+      [...data.products]
+        .filter((p) => Boolean(p.lastDate))
+        .sort((a, b) => (a.lastDate < b.lastDate ? 1 : -1))
+        .slice(0, 6),
+    [data.products],
+  );
+
+
+
   const hasLocation = Boolean(
     data.store.address || data.store.neighborhood || data.store.city,
   );
