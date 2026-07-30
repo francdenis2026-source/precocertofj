@@ -259,14 +259,132 @@ const RULES: readonly Rule[] = [
     re: /\b(arroz|feijao|acucar|adocante|farinha|mandioca|macarrao|massa|lasanha|talharim|espaguete|penne|parafuso|petybon|oleo|azeite|fuba|amido|fermento|milho|ervilha|cuscuz|canjica|flocao|granola|rapadura|trigo|polvilho)\b|(leite de coco|coco ralado|proteina de soja)/,
   },
 
-  // 26) Hortifrúti — por último: só entra quando o nome NÃO traz marcadores de
-  // produto processado/industrializado (lata, sabor, calda, chips, pó…).
+  // 26) Ovos — NÃO são hortifrúti (definição oficial adotada no sistema).
+  // Ficam em laticínios, como na seção "ovos e laticínios" dos mercados.
+  {
+    category: "laticinios",
+    re: /\b(ovos?|duzia de ovos)\b|cartela de ovos|bandeja de ovos|ovo de galinha|ovo de codorna/,
+  },
+
+  // 27) Hortifrúti — por último e por LISTA FECHADA (hortaliças + frutas
+  // in natura). Só entra quando o nome NÃO traz marcadores de produto
+  // processado/industrializado (lata, sabor, calda, chips, pó…).
   {
     category: "hortifruti",
-    re: /^(?!.*(em calda|em conserva|sabor|aroma|chips|salgadinho|saponaceo|refrigerante|refresco|\bsuco\b|polpa|geleia|\bdoce de\b|\bem po\b|\blata\b|\bml\b|desodorante|shampoo|sabonete|sabao|detergente)).*(\b(tomate|batata|cebola|alface|cenoura|laranja|uva|melancia|mamao|abacaxi|limao|pimentao|verdura|legume|banana|maca|cheiro verde|coentro|couve|repolho|abobora|macaxeira|inhame|beterraba|chuchu|maracuja|manga|ovos?)\b|ovo de galinha|bandeja de ovos|batata lavada)/,
+    re: HORTIFRUTI_RE,
   },
 
 ];
+
+/* ------------------------------------------------------------------ *
+ * Hortifrúti — definição fechada
+ * ------------------------------------------------------------------ */
+
+/** Frutas in natura. */
+const HF_FRUTAS = [
+  "banana", "maca", "macas", "laranja", "limao", "mamao", "manga", "abacaxi",
+  "melancia", "melao", "uva", "goiaba", "abacate", "morango", "acerola",
+  "maracuja", "caju", "pera", "kiwi", "tangerina", "mexerica", "ameixa",
+  "pessego", "figo", "jaca", "graviola", "cupuacu", "acai", "cajarana",
+  "tamarindo", "pinha", "fruta do conde", "carambola", "romã", "roma",
+];
+
+/** Verduras (folhas). */
+const HF_VERDURAS = [
+  "alface", "couve", "couve flor", "brocolis", "espinafre", "rucula",
+  "agriao", "repolho", "acelga", "chicoria", "almeirao",
+];
+
+/** Legumes e frutos rasteiros. */
+const HF_LEGUMES = [
+  "cenoura", "beterraba", "chuchu", "abobrinha", "abobora", "jerimum",
+  "pepino", "tomate", "cebola", "alho", "pimentao", "berinjela", "quiabo",
+  "maxixe", "jilo", "vagem", "ervilha fresca",
+];
+
+/** Tubérculos e raízes. */
+const HF_TUBERCULOS = [
+  "batata", "batata doce", "batata inglesa", "mandioca", "macaxeira", "aipim",
+  "inhame", "cara", "mandioquinha", "gengibre", "curcuma", "acafrao da terra",
+];
+
+/** Temperos e ervas frescas. */
+const HF_TEMPEROS = [
+  "cheiro verde", "salsa", "salsinha", "cebolinha", "coentro", "hortela",
+  "manjericao", "alecrim", "tomilho", "louro fresco", "oregano fresco",
+];
+
+/** Cogumelos e demais itens da seção. */
+const HF_OUTROS = [
+  "cogumelo", "cogumelos", "champignon fresco", "milho verde", "coco verde",
+  "coco seco", "broto de alfafa", "broto de feijao", "pimenta de cheiro",
+  "pimenta dedo de moca",
+];
+
+/** Todos os termos aceitos como hortifrúti (lista fechada). */
+export const HORTIFRUTI_TERMS = [
+  ...HF_FRUTAS,
+  ...HF_VERDURAS,
+  ...HF_LEGUMES,
+  ...HF_TUBERCULOS,
+  ...HF_TEMPEROS,
+  ...HF_OUTROS,
+] as const;
+
+/**
+ * Marcadores que descaracterizam o item como in natura. Um único match
+ * derruba a classificação, mesmo que o nome cite uma fruta/legume.
+ */
+const HORTIFRUTI_BLOCKERS =
+  "(em calda|em conserva|conserva|sabor|aroma|chips|palha|salgadinho|saponaceo|refrigerante|refresco|nectar|\\bsuco\\b|polpa|geleia|doce de|\\bem po\\b|\\blata\\b|\\benlatad|\\bml\\b|\\blitro|congelad|desidratad|\\bseca\\b|farofa|tempero pronto|desodorante|shampoo|sabonete|sabao|detergente|amaciante|biscoito|bolacha|iogurte|leite|cereal|barra|bombom|picole|sorvete|racao)";
+
+const HORTIFRUTI_RE = new RegExp(
+  `^(?!.*${HORTIFRUTI_BLOCKERS}).*\\b(${HORTIFRUTI_TERMS.map((t) =>
+    t.replace(/ /g, "\\s+"),
+  ).join("|")})\\b`,
+);
+
+/** Subgrupos de hortifrúti (facilita cadastro, filtros e relatórios). */
+export type HortifrutiSubgroup =
+  | "frutas"
+  | "verduras"
+  | "legumes"
+  | "tuberculos"
+  | "temperos"
+  | "cogumelos";
+
+export const HORTIFRUTI_SUBGROUP_LABELS: Record<HortifrutiSubgroup, string> = {
+  frutas: "Frutas",
+  verduras: "Verduras",
+  legumes: "Legumes",
+  tuberculos: "Tubérculos e raízes",
+  temperos: "Temperos e ervas",
+  cogumelos: "Cogumelos",
+};
+
+/**
+ * Subgrupo de hortifrúti do produto, ou `null` quando ele não pertence
+ * à categoria. Nunca lança — entradas inválidas devolvem `null`.
+ */
+export function hortifrutiSubgroup(
+  rawName: string | null | undefined,
+): HortifrutiSubgroup | null {
+  const text = normalizeSearchText(rawName);
+  if (!text || classifyCategory(rawName) !== "hortifruti") return null;
+
+  const has = (list: readonly string[]) =>
+    list.some((t) => new RegExp(`\\b${t.replace(/ /g, "\\s+")}\\b`).test(text));
+
+  // Ordem importa: "batata doce" é tubérculo antes de cair em legumes.
+  if (has(HF_TUBERCULOS)) return "tuberculos";
+  if (has(HF_TEMPEROS)) return "temperos";
+  if (has(HF_OUTROS) && /cogumelo|champignon/.test(text)) return "cogumelos";
+  if (has(HF_VERDURAS)) return "verduras";
+  if (has(HF_LEGUMES)) return "legumes";
+  if (has(HF_FRUTAS)) return "frutas";
+  return null;
+}
+
 
 
 /**
