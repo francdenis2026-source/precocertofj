@@ -559,13 +559,15 @@ function SpotlightCard({
 
             <div className="flex flex-col items-end leading-none shrink-0">
               {hasDrop && p.previousPrice && (
-                <span
-                  className="mb-0.5 text-[11px] font-medium text-muted-foreground line-through tabular-nums"
-                  aria-label={`Preço anterior ${brl(p.previousPrice)}`}
-                >
-                  {brl(p.previousPrice)}
-                </span>
+                <Price
+                  value={p.previousPrice}
+                  size="xs"
+                  tone="strike"
+                  className="mb-0.5"
+                  srLabel={`Preço anterior ${brl(p.previousPrice)}`}
+                />
               )}
+
               <Price
                 value={p.price}
                 size="xl"

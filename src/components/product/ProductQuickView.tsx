@@ -18,8 +18,6 @@ import { getPublicProduct } from "@/lib/public-product.functions";
 import { formatShortDate } from "@/components/product/TrustIndicator";
 import { dedupeByStorePrice, storeKey } from "@/lib/price-rank";
 
-const brl = (v: number) =>
-  v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
 export type QuickViewProduct = {
   name: string;
@@ -199,10 +197,16 @@ export function ProductQuickView({
                   <span className="shrink-0 text-right">
                     <Price value={m.priceMin} size="md" className="block" />
                     {m.priceMax > m.priceMin && (
-                      <span className="block pc-price pc-price--sm pc-price--muted">
-                        até {brl(m.priceMax)}
-                      </span>
+                      <Price
+                        as="span"
+                        value={m.priceMax}
+                        size="sm"
+                        tone="muted"
+                        prefix="até R$"
+                        className="mt-0.5 flex justify-end"
+                      />
                     )}
+
                   </span>
                 </li>
               ))}
@@ -213,7 +217,7 @@ export function ProductQuickView({
             <p className="mt-2 inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-[11px] font-semibold text-foreground">
               <TrendingDown className="h-3 w-3 text-brand-gold" aria-hidden />
               Economia de até{" "}
-              <span className="pc-price pc-price--sm">{brl(data.avg - data.min)}</span>{" "}
+              <Price value={data.avg - data.min} size="sm" tone="savings" />{" "}
               frente à média
             </p>
           )}

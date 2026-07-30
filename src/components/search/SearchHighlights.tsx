@@ -9,6 +9,8 @@ import { useSession } from "@/hooks/useSession";
 import { getSearchHistory } from "@/lib/search-history";
 import { listFavoriteItems } from "@/lib/favorites.functions";
 import { PrecoCertoMark } from "@/components/typography/PrecoCertoMark";
+import { Price } from "@/components/ds/Price";
+
 
 const brl = (n: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n);
@@ -418,21 +420,22 @@ function OpportunityCard({ item, onPick }: { item: HighlightItem; onPick: () => 
         {item.name}
       </PrecoCertoMark>
       <span className="flex items-baseline gap-1.5">
-        <span className="pc-price pc-price--md">
-          {brl(item.minPrice)}
-        </span>
-        <span className="pc-price pc-price--sm pc-price--strike">
-          {brl(item.maxPrice)}
-        </span>
+        <Price value={item.minPrice} size="md" tone="best" />
+        <Price value={item.maxPrice} size="sm" tone="strike" />
       </span>
       <span className="mt-auto flex items-center justify-between gap-2">
         <span className="truncate text-[11px] text-muted-foreground">
           {item.cheapestStore ?? `${item.storeCount} mercados`}
         </span>
-        <span className="pc-price pc-price--sm inline-flex shrink-0 items-center rounded-full bg-brand-gold px-1.5 py-0.5 text-brand-navy" style={{ fontWeight: 700 }}>
-          −{brl(item.savings)}
-        </span>
+        <Price
+          value={item.savings}
+          size="sm"
+          prefix="−R$"
+          className="inline-flex shrink-0 items-center rounded-full bg-brand-gold px-1.5 py-0.5 text-brand-navy"
+          srLabel={`Economia de ${brl(item.savings)}`}
+        />
       </span>
+
     </button>
   );
 }
