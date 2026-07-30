@@ -1025,6 +1025,16 @@ function HomePage() {
               />
               <span className="sr-only">atualizando em tempo real</span>
             </span>
+            <Link
+              to="/tendencias"
+              className="shrink-0 rounded-full border px-2 py-0.5 text-[11.5px] font-semibold transition-colors hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[color:var(--pc-home-onhero-gold)]"
+              style={{
+                borderColor: "color-mix(in oklab, var(--pc-home-onhero-gold) 55%, transparent)",
+                color: "var(--pc-home-onhero-gold)",
+              }}
+            >
+              Ver tendências
+            </Link>
             <ul
               role="list"
               className="grid min-w-0 flex-1 gap-2"
