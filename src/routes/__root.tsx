@@ -228,8 +228,6 @@ function RootComponent() {
 
     const removeBadge = () => {
       const selectors = [
-        "#lovable-badge",
-        "#lovable-badge-v2",
         '[id^="lovable-badge"]',
         'a[href*="lovable.dev"][target="_blank"]',
       ];
@@ -240,11 +238,35 @@ function RootComponent() {
 
     removeBadge();
 
-    const observer = new MutationObserver(() => removeBadge());
+    /* PERFORMANCE: o badge é injetado fora do React, então precisamos observar
+       o body. Mas varrer o documento inteiro a cada mutação (uma lista de 300
+       linhas dispara centenas) custava mais que o próprio render. Agora as
+       mutações são agrupadas em UM frame, e só as que adicionaram elementos
+       disparam a varredura. */
+    let frame: number | null = null;
+    const observer = new MutationObserver((mutations) => {
+      if (frame != null) return;
+      let hasAdded = false;
+      for (const m of mutations) {
+        if (m.addedNodes.length > 0) {
+          hasAdded = true;
+          break;
+        }
+      }
+      if (!hasAdded) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = null;
+        removeBadge();
+      });
+    });
     observer.observe(document.body, { childList: true, subtree: true });
 
-    return () => observer.disconnect();
+    return () => {
+      if (frame != null) window.cancelAnimationFrame(frame);
+      observer.disconnect();
+    };
   }, []);
+
 
   // Global guard: bloqueia números negativos em <input type="number"> (exceto quando
   // o input declara explicitamente allow-negative via data-allow-negative).
