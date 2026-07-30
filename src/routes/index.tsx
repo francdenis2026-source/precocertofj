@@ -110,13 +110,16 @@ const P = {
 };
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 
-/* Ladrilhos da faixa inferior — maior presença sem alterar a altura da página
-   (a área já reserva espaço livre acima do dock). */
+/* Ladrilhos da faixa inferior.
+   Altura em `clamp(px, vh, px)`: a célula acompanha a altura da janela sem
+   nunca estourar a tela nem encolher a ponto de cortar o rótulo. Todas as
+   células (categorias e atalhos) usam exatamente a mesma medida, de modo que
+   as duas colunas fecham as mesmas 2 linhas e nada fica desproporcional. */
 const TILE =
-  "group flex min-h-[64px] flex-col items-center justify-center gap-1.5 rounded-2xl border px-2 py-2.5 text-center pc-tile pc-elite-frame focus-visible:outline-none focus-visible:ring-2 sm:min-h-[72px] sm:gap-2 lg:min-h-[80px]";
-const TILE_ICON = "h-[19px] w-[19px] sm:h-[21px] sm:w-[21px] lg:h-6 lg:w-6";
+  "group flex h-[clamp(52px,7.4vh,78px)] flex-col items-center justify-center gap-1 rounded-2xl border px-2 text-center pc-tile pc-elite-frame focus-visible:outline-none focus-visible:ring-2 sm:gap-1.5";
+const TILE_ICON = "h-[clamp(16px,2.2vh,22px)] w-[clamp(16px,2.2vh,22px)]";
 const TILE_LABEL =
-  "w-full truncate text-[12.5px] font-semibold leading-none tracking-[-0.005em] sm:text-[13.5px] lg:text-[14.5px]";
+  "w-full truncate text-[clamp(11px,1.45vh,14px)] font-semibold leading-none tracking-[-0.005em]";
 
 /**
  * Ladrilhos da home — derivados de `CATEGORY_DEFS`, a mesma fonte usada em
