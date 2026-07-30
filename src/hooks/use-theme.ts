@@ -8,7 +8,15 @@ import {
 } from "@/lib/theme.functions";
 
 export type Theme = ThemePreference; // "light" | "dark"
-const STORAGE_KEY = "pc-theme";
+
+/** Chave legada (global do navegador) — usada por visitantes e migração. */
+const LEGACY_KEY = "pc-theme";
+/** Prefixo das chaves por usuário: `pc-theme.<userId>` (por dispositivo). */
+const KEY_PREFIX = "pc-theme";
+
+function storageKeyFor(userId: string | null): string {
+  return userId ? `${KEY_PREFIX}.${userId}` : LEGACY_KEY;
+}
 
 function resolveIsDark(mode: Theme): boolean {
   if (mode === "dark") return true;
@@ -23,17 +31,41 @@ function apply(mode: Theme) {
   document.documentElement.style.colorScheme = isDark ? "dark" : "light";
 }
 
-function readStored(): Theme {
+function parse(raw: string | null): Theme | null {
+  if (raw === "light" || raw === "dark") return raw;
+  return null;
+}
+
+/**
+ * Lê a preferência do dispositivo para o usuário informado.
+ * Se ainda não existir chave própria (primeiro acesso após login neste
+ * aparelho), herda o valor global legado — sem sobrescrever nada.
+ */
+function readStored(userId: string | null): Theme {
   if (typeof window === "undefined") return "dark";
-  const raw = window.localStorage.getItem(STORAGE_KEY);
-  if (raw === "light") return "light";
+  try {
+    const own = parse(window.localStorage.getItem(storageKeyFor(userId)));
+    if (own) return own;
+    if (userId) {
+      const legacy = parse(window.localStorage.getItem(LEGACY_KEY));
+      if (legacy) return legacy;
+    }
+  } catch {
+    /* storage indisponível */
+  }
   return "dark";
 }
 
-
-function writeStored(theme: Theme) {
+function writeStored(theme: Theme, userId: string | null) {
   if (typeof window === "undefined") return;
-  window.localStorage.setItem(STORAGE_KEY, theme);
+  try {
+    window.localStorage.setItem(storageKeyFor(userId), theme);
+    // Espelha no valor global para manter o tema estável em telas públicas
+    // (login, home) que renderizam antes da sessão ser conhecida.
+    window.localStorage.setItem(LEGACY_KEY, theme);
+  } catch {
+    /* ignore */
+  }
 }
 
 function notifyThemeChange(theme: Theme) {
@@ -43,34 +75,41 @@ function notifyThemeChange(theme: Theme) {
 
 /**
  * Hook único de tema.
- * - Padrão: modo claro.
- * - Modos: 'light' | 'dark' | 'system'.
- * - Persistência local: `localStorage["pc-theme"]`.
- * - Persistência remota: `profiles.theme_preference` quando o usuário está
- *   logado, sincronizada nas duas direções via server functions.
+ * - Modos: 'light' | 'dark'.
+ * - Persistência **por usuário e por dispositivo**:
+ *   `localStorage["pc-theme.<userId>"]` (visitantes usam `pc-theme`).
+ * - Persistência remota: `profiles.theme_preference` quando logado,
+ *   sincronizada nas duas direções via server functions — assim o tema
+ *   acompanha o usuário em um aparelho novo, mas cada aparelho pode manter
+ *   sua própria escolha depois disso.
  */
 export function useTheme() {
   const [theme, setThemeState] = useState<Theme>("dark");
   const [mounted, setMounted] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+  const userIdRef = useRef<string | null>(null);
+  userIdRef.current = userId;
 
   const fetchRemote = useServerFn(getMyThemePreference);
   const pushRemote = useServerFn(updateMyThemePreference);
   const hasHydratedFromRemoteRef = useRef(false);
 
-  // Boot local: aplica preferência salva no navegador antes de qualquer sync remoto.
+  // Boot local: aplica preferência salva neste dispositivo antes do sync remoto.
   useEffect(() => {
-    const initial = readStored();
+    const initial = readStored(userIdRef.current);
     setThemeState(initial);
     apply(initial);
     setMounted(true);
 
     const syncFromBrowser = (nextTheme?: Theme) => {
-      const next = nextTheme ?? readStored();
+      const next = nextTheme ?? readStored(userIdRef.current);
       setThemeState(next);
       apply(next);
     };
     const onStorage = (event: StorageEvent) => {
-      if (event.key === STORAGE_KEY) syncFromBrowser();
+      if (event.key === storageKeyFor(userIdRef.current) || event.key === LEGACY_KEY) {
+        syncFromBrowser();
+      }
     };
     const onCustomChange = (event: Event) => {
       const next = event instanceof CustomEvent ? event.detail : undefined;
@@ -84,24 +123,35 @@ export function useTheme() {
     };
   }, []);
 
-  // Boot remoto: quando o usuário estiver logado, puxa preferência do perfil.
-  // A preferência do servidor vence sobre a local (segue o usuário entre dispositivos).
+  // Sessão + boot remoto. A preferência do perfil só vence quando este
+  // dispositivo ainda não tem escolha própria para o usuário logado.
   useEffect(() => {
     let cancelled = false;
+
     async function pull() {
       try {
         const { data: sessionRes } = await supabase.auth.getSession();
-        if (!sessionRes.session) return;
+        const uid = sessionRes.session?.user?.id ?? null;
+        if (cancelled) return;
+        setUserId(uid);
+        userIdRef.current = uid;
+        if (!uid) return;
+
+        // 1) Preferência deste dispositivo para este usuário tem prioridade.
+        const deviceOwn = parse(window.localStorage.getItem(storageKeyFor(uid)));
+        if (deviceOwn) {
+          setThemeState(deviceOwn);
+          apply(deviceOwn);
+          return;
+        }
+
+        // 2) Primeiro acesso neste aparelho: herda o perfil.
         const res = await fetchRemote();
         if (cancelled) return;
-        // Sem preferência salva no perfil (ex.: contas internas/admin sem linha
-        // em `profiles`): mantém o tema local — nunca força "light".
         if (res?.theme !== "dark" && res?.theme !== "light") return;
         const remote: Theme = res.theme;
         hasHydratedFromRemoteRef.current = true;
-        if (remote !== readStored()) {
-          writeStored(remote);
-        }
+        writeStored(remote, uid);
         setThemeState(remote);
         apply(remote);
       } catch {
@@ -112,7 +162,14 @@ export function useTheme() {
 
     const { data: sub } = supabase.auth.onAuthStateChange((event) => {
       if (event === "SIGNED_IN" || event === "USER_UPDATED") void pull();
-      if (event === "SIGNED_OUT") hasHydratedFromRemoteRef.current = false;
+      if (event === "SIGNED_OUT") {
+        hasHydratedFromRemoteRef.current = false;
+        setUserId(null);
+        userIdRef.current = null;
+        const guest = readStored(null);
+        setThemeState(guest);
+        apply(guest);
+      }
     });
     return () => {
       cancelled = true;
@@ -122,11 +179,8 @@ export function useTheme() {
 
   const setTheme = useCallback(
     (t: Theme) => {
-      try {
-        writeStored(t);
-      } catch {
-        /* ignore */
-      }
+      const uid = userIdRef.current;
+      writeStored(t, uid);
       setThemeState(t);
       apply(t);
       notifyThemeChange(t);
@@ -153,5 +207,5 @@ export function useTheme() {
   }, [theme, setTheme]);
 
   const isDark = mounted && resolveIsDark(theme);
-  return { theme, setTheme, toggle, mounted, isDark };
+  return { theme, setTheme, toggle, mounted, isDark, userId };
 }
