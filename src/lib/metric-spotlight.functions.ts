@@ -1,6 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { setResponseHeader } from "@tanstack/react-start/server";
 import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
+import { CATEGORY_LABELS } from "@/lib/product-category";
 
 export type MetricStoreItem = {
   id: string;
@@ -56,26 +57,6 @@ export type MetricSpotlight = {
   topSavings: MetricSavingsHighlight[];
 };
 
-const CATEGORY_LABELS: Record<string, string> = {
-  mercearia: "Mercearia",
-  bebidas: "Bebidas",
-  laticinios: "Laticínios",
-  limpeza: "Limpeza",
-  higiene: "Higiene",
-  carnes: "Carnes & Frios",
-  padaria: "Padaria",
-  doces: "Doces",
-  congelados: "Congelados",
-  biscoitos: "Biscoitos",
-  bebidas_em_po: "Bebidas em pó",
-  hortifruti: "Hortifrúti",
-  infantil: "Infantil",
-  medicamentos: "Medicamentos",
-  papelaria: "Papelaria",
-  perfumaria: "Perfumaria",
-  pet: "Pet",
-  outros: "Outros",
-};
 
 
 export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(

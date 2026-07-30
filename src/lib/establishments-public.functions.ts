@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { CATEGORY_LABELS } from "@/lib/product-category";
 
 export type EstablishmentStat = {
   id: string;
@@ -27,25 +28,6 @@ export type EstablishmentsOverview = {
   items: EstablishmentStat[];
 };
 
-const CATEGORY_LABELS: Record<string, string> = {
-  laticinios: "Laticínios",
-  carnes: "Carnes",
-  padaria: "Padaria",
-  biscoitos: "Biscoitos",
-  doces: "Doces",
-  bebidas: "Bebidas",
-  bebidas_em_po: "Bebidas em pó",
-  limpeza: "Limpeza",
-  higiene: "Higiene",
-  mercearia: "Mercearia",
-  congelados: "Congelados",
-  hortifruti: "Hortifrúti",
-  infantil: "Infantil",
-  medicamentos: "Medicamentos",
-  papelaria: "Papelaria",
-  perfumaria: "Perfumaria",
-  outros: "Outros",
-};
 
 
 export const humanizeCategory = (c: string): string => CATEGORY_LABELS[c] ?? c;

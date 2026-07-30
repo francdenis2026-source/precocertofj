@@ -24,21 +24,8 @@ import { PRODUCT_TYPE_LABEL } from "@/lib/product-type";
 
 import { cn } from "@/lib/utils";
 import { Price } from "@/components/ds/Price";
+import { CATEGORY_LABELS as CATEGORY_LABEL } from "@/lib/product-category";
 
-const CATEGORY_LABEL: Record<string, string> = {
-  laticinios: "Laticínios",
-  higiene: "Higiene",
-  limpeza: "Limpeza",
-  mercearia: "Mercearia",
-  biscoitos: "Biscoitos",
-  bebidas: "Bebidas",
-  bebidas_em_po: "Bebidas em pó",
-  doces: "Doces",
-  carnes: "Carnes",
-  padaria: "Padaria",
-  congelados: "Congelados",
-  outros: "Outros",
-};
 
 const rankAccent = (idx: number) => {
   if (idx === 0) return "bg-amber-500/10 text-amber-700 dark:text-amber-300 ring-amber-500/40";
