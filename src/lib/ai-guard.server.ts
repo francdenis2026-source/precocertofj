@@ -56,6 +56,10 @@ export async function logAiUsage(input: UsageInput): Promise<void> {
       credits_cents: Number(((total / 1000) * CENTS_PER_1K_TOKENS).toFixed(4)),
       success: input.success,
       error_message: input.errorMessage ? input.errorMessage.slice(0, 500) : null,
+      duration_ms:
+        typeof input.durationMs === "number" && Number.isFinite(input.durationMs)
+          ? Math.max(0, Math.round(input.durationMs))
+          : null,
     });
   } catch {
     // Auditoria nunca pode quebrar a resposta ao usuário.
