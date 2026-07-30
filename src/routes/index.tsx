@@ -477,6 +477,7 @@ function HomePage() {
                 </div>
                 <HomeSearchSuggestions
                   ref={suggestRef}
+                  anchorRef={searchAnchorRef}
                   query={q}
                   isLoggedOut={isLoggedOut}
                   open={suggestOpen}
