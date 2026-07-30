@@ -62,7 +62,7 @@ export const PriceSpotlight = memo(function PriceSpotlight({
             <Trophy className="h-3 w-3" strokeWidth={2.4} aria-hidden />
             {kicker}
           </p>
-          <Price as="p" value={price} size="xl" className="mt-1" />
+          <Price as="p" value={price} size="display" className="mt-1" />
           <p className={cn(tc.meta, "mt-1.5 text-muted-foreground")}>
             {storeName ? (
               <>

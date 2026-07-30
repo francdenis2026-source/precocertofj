@@ -21,7 +21,7 @@
 import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
-export type PriceSize = "xs" | "sm" | "md" | "lg" | "xl";
+export type PriceSize = "xs" | "sm" | "md" | "lg" | "xl" | "display";
 export type PriceTone =
   | "default"
   | "best"
@@ -53,6 +53,7 @@ const SIZE_CLASS: Record<PriceSize, string> = {
   md: "pc-price--md",
   lg: "pc-price--lg",
   xl: "pc-price--xl",
+  display: "pc-price--display",
 };
 
 const TONE_CLASS: Record<PriceTone, string> = {

@@ -4994,6 +4994,13 @@ html.dark .pc-row-interactive:hover .pc-store-name {
   font-weight: 700;
   letter-spacing: 0.016em;
 }
+/* Escala de hero/spotlight — reservada a UM preço por tela. */
+.pc-price--display {
+  font-size: clamp(2.25rem, 2.6vw + 1.5rem, 3.5rem);
+  line-height: 1;
+  font-weight: 700;
+  letter-spacing: 0.014em;
+}
 
 /* Contexto "a partir de" — leve, ainda AA (>= 4.5:1) */
 
@@ -5124,7 +5131,8 @@ td[data-numeric],
    um pouco mais de tracking preserva a leitura sem alterar o layout. */
 @media (max-width: 480px) {
   .pc-price--lg,
-  .pc-price--xl {
+  .pc-price--xl,
+  .pc-price--display {
     letter-spacing: 0.02em;
   }
 }
@@ -5194,4 +5202,5 @@ h3.font-display {
      encoste no rótulo logo abaixo dentro de cards compactos. */
   .pc-price--lg { line-height: 1.16; }
   .pc-price--xl { line-height: 1.1; }
+  .pc-price--display { line-height: 1.06; }
 }
