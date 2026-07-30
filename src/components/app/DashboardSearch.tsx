@@ -76,6 +76,64 @@ export function DashboardSearch() {
   const results: CatalogSearchItem[] = resultsQ.data ?? [];
   const categories = (optionsQ.data?.categories ?? []).slice(0, 12);
 
+  // Foco itinerante nos chips (categorias) e na ordenação.
+  const chipIndex = category ? categories.indexOf(category) + 1 : 0;
+  const chipRoving = useRovingFocus(categories.length + 1, chipIndex, (i) =>
+    setCategory(i === 0 ? null : (categories[i - 1] ?? null)),
+  );
+  const sortRoving = useRovingFocus(
+    SORTS.length,
+    SORTS.findIndex((s) => s.id === sort),
+    (i) => setSort(SORTS[i].id),
+  );
+
+  // Navegação teclado entre campo de busca e lista de resultados.
+  const resultRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+
+  const focusResult = (i: number) => {
+    if (results.length === 0) return;
+    const next = (i + results.length) % results.length;
+    resultRefs.current[next]?.focus();
+  };
+
+  const onInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "ArrowDown" && results.length > 0) {
+      e.preventDefault();
+      focusResult(0);
+    } else if (e.key === "Escape" && input) {
+      e.preventDefault();
+      setInput("");
+    }
+  };
+
+  const onResultKeyDown = (e: React.KeyboardEvent, i: number) => {
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        focusResult(i + 1);
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        if (i === 0) inputRef.current?.focus();
+        else focusResult(i - 1);
+        break;
+      case "Home":
+        e.preventDefault();
+        focusResult(0);
+        break;
+      case "End":
+        e.preventDefault();
+        focusResult(results.length - 1);
+        break;
+      case "Escape":
+        e.preventDefault();
+        inputRef.current?.focus();
+        break;
+      default:
+    }
+  };
+
+
   return (
     <section
       aria-label="Buscar preços"
