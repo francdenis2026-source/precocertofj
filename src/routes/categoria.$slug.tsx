@@ -329,14 +329,15 @@ function CategoryPage() {
               <Stat label="Preços" value={data?.totals.prices ?? 0} />
               <Stat
                 label="Economia média"
-                value={data?.avgSavingPct ?? 0}
+                value={catAvgSaving ?? 0}
                 suffix="%"
                 hint={
-                  data?.comparableProducts
-                    ? `${data.comparableProducts} produto(s) comparável(is)`
+                  catComparable
+                    ? `${catComparable} produto(s) comparável(is)${filtersActive ? " no filtro atual" : ""}`
                     : "sem produtos em 2+ lojas"
                 }
               />
+
             </dl>
           </div>
           <dl className="grid grid-cols-2 divide-x divide-y divide-white/20 border-t border-white/20 sm:hidden">
