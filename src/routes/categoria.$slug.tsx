@@ -353,7 +353,7 @@ function CategoryPage() {
             <div className="px-3 py-2">
               <Stat
                 label="Economia média"
-                value={data?.avgSavingPct ?? 0}
+                value={catAvgSaving ?? 0}
                 suffix="%"
                 align="left"
               />
