@@ -185,32 +185,73 @@ function isReceiptImage(url: string | null | undefined): boolean {
   return RECEIPT_URL_RE.test(url);
 }
 
-type CatalogImageRow = { barcode: string | null; normalized_name: string | null; image_url: string | null };
-type ImageResolver = (barcode: string | null, baseName: string) => string | null;
+type CatalogRow = {
+  barcode: string | null;
+  normalized_name: string | null;
+  image_url: string | null;
+  brand: string | null;
+  category: string | null;
+};
+
+/** Metadados canônicos do catálogo aplicados ao produto exibido na loja. */
+export type CatalogMeta = {
+  imageUrl: string | null;
+  brand: string | null;
+  /** Chave canônica (product_catalog.category), quando conhecida. */
+  categoryKey: string | null;
+};
+
+type ImageResolver = (barcode: string | null, baseName: string) => CatalogMeta | null;
+
+const EMPTY_META: CatalogMeta = { imageUrl: null, brand: null, categoryKey: null };
 
 async function loadCatalogImageResolver(): Promise<ImageResolver> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const table = supabaseAdmin.from("product_catalog" as never) as unknown as {
-    select: (s: string) => {
-      not: (c: string, op: string, v: unknown) => Promise<{ data: CatalogImageRow[] | null }>;
-    };
+    select: (s: string) => Promise<{ data: CatalogRow[] | null }>;
   };
-  const { data } = await table.select("barcode, normalized_name, image_url").not("image_url", "is", null);
-  const byBarcode = new Map<string, string>();
-  const byName = new Map<string, string>();
+  const { data } = await table.select("barcode, normalized_name, image_url, brand, category");
+
+  const byBarcode = new Map<string, CatalogMeta>();
+  const byName = new Map<string, CatalogMeta>();
+
+  const toMeta = (r: CatalogRow): CatalogMeta => ({
+    // Fotos de nota fiscal nunca servem como imagem de produto.
+    imageUrl: r.image_url && !isReceiptImage(r.image_url) ? r.image_url : null,
+    brand: r.brand?.trim() || null,
+    categoryKey: r.category?.trim() || null,
+  });
+  // Preferimos o registro mais completo quando há colisão de nome.
+  const score = (m: CatalogMeta) =>
+    (m.imageUrl ? 4 : 0) + (m.brand ? 2 : 0) + (m.categoryKey ? 1 : 0);
+  const put = (map: Map<string, CatalogMeta>, key: string, meta: CatalogMeta) => {
+    const cur = map.get(key);
+    if (!cur || score(meta) > score(cur)) map.set(key, meta);
+  };
+
   for (const r of data ?? []) {
-    if (!r.image_url || isReceiptImage(r.image_url)) continue;
-    if (r.barcode) byBarcode.set(r.barcode, r.image_url);
-    if (r.normalized_name) byName.set(r.normalized_name.toUpperCase(), r.image_url);
+    const meta = toMeta(r);
+    if (score(meta) === 0) continue;
+    if (r.barcode) put(byBarcode, r.barcode, meta);
+    if (r.normalized_name) {
+      const full = r.normalized_name.toUpperCase();
+      put(byName, full, meta);
+      // Também indexa sem a gramagem para casar "Detergente Ypê" com "... 500ml".
+      const base = stripSize(r.normalized_name).toUpperCase();
+      if (base && base !== full) put(byName, base, meta);
+    }
   }
+
   return (barcode, baseName) => {
     if (barcode) {
       const hit = byBarcode.get(barcode);
       if (hit) return hit;
     }
-    return byName.get(stripSize(baseName).toUpperCase()) ?? null;
+    const full = baseName.toUpperCase();
+    return byName.get(full) ?? byName.get(stripSize(baseName).toUpperCase()) ?? null;
   };
 }
+
 
 // Aggregate one product bucket
 function buildProduct(
