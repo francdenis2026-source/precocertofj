@@ -9,6 +9,8 @@ import { useSession } from "@/hooks/useSession";
 import { getSearchHistory } from "@/lib/search-history";
 import { listFavoriteItems } from "@/lib/favorites.functions";
 import { PrecoCertoMark } from "@/components/typography/PrecoCertoMark";
+import { Price } from "@/components/ds/Price";
+
 
 const brl = (n: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n);
