@@ -262,7 +262,7 @@ function HomePage() {
   const heroPopular = useMemo(() => popularAll.slice(0, 4), [popularAll]);
   const trendingPopular = useMemo(() => {
     const rest = popularAll.slice(4);
-    return (rest.length >= 4 ? rest : popularAll).slice(0, 12);
+    return (rest.length >= 4 ? rest : popularAll).slice(0, 8);
   }, [popularAll]);
 
 
