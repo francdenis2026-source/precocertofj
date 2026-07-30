@@ -101,6 +101,11 @@ export const Route = createFileRoute("/")({
 import { useCategoryLabelWithFallback } from "@/hooks/use-category-labels";
 import { categoryBySlug, hubCoverageLabel, type CategorySlug } from "@/lib/category-hub";
 import { categoryIcon } from "@/lib/category-icons";
+import {
+  ProductCategoryIcon,
+  detectFoodCategory,
+} from "@/components/ds/ProductCategoryIcon";
+
 
 const P = {
   paper: "var(--pc-home-paper)",
@@ -916,7 +921,7 @@ function HomePage() {
             <ul
               role="list"
               className="grid min-w-0 flex-1 gap-2"
-              style={{ gridTemplateColumns: "repeat(auto-fit, minmax(96px, 1fr))" }}
+              style={{ gridTemplateColumns: "repeat(auto-fit, minmax(112px, 1fr))" }}
             >
               {trendingPopular.map((t) => (
                 <li key={t} className="min-w-0">
@@ -925,7 +930,7 @@ function HomePage() {
                     onClick={() => goToPopular(t)}
                     title={`Buscar por ${t}`}
                     aria-label={`Buscar por ${t}`}
-                    className={`${CHIP} w-full truncate`}
+                    className="pc-trend-chip group relative flex w-full items-center gap-1.5 overflow-hidden rounded-full border px-2.5 py-1.5 text-[12px] font-medium capitalize transition-all duration-200 hover:-translate-y-[1px] focus-visible:outline-none focus-visible:ring-2"
                     style={{
                       background: "var(--pc-home-onhero-glass-soft)",
                       borderColor: "var(--pc-home-onhero-border-soft)",
@@ -933,11 +938,31 @@ function HomePage() {
                       ["--tw-ring-color" as string]: "var(--pc-home-onhero-gold)",
                     }}
                   >
-                    {t}
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+                      style={{
+                        background:
+                          "linear-gradient(100deg, color-mix(in oklab, var(--pc-home-onhero-gold) 26%, transparent), transparent 70%)",
+                      }}
+                    />
+                    <ProductCategoryIcon
+                      category={detectFoodCategory(t)}
+                      aria-hidden
+                      className="relative h-4 w-4 shrink-0 opacity-70 transition-all duration-200 group-hover:scale-110 group-hover:opacity-100"
+                      style={{ color: "var(--pc-home-onhero-gold)" }}
+                    />
+                    <span className="relative min-w-0 flex-1 truncate text-left">{t}</span>
+                    <ArrowRight
+                      aria-hidden
+                      className="relative h-3.5 w-3.5 shrink-0 -translate-x-1 opacity-0 transition-all duration-200 group-hover:translate-x-0 group-hover:opacity-100"
+                      style={{ color: "var(--pc-home-onhero-gold)" }}
+                    />
                   </button>
                 </li>
               ))}
             </ul>
+
           </section>
         </main>
 
