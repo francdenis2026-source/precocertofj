@@ -331,7 +331,7 @@ const Icons: Record<FoodCategory, (p: IconProps) => ReactElement> = {
 };
 /* eslint-enable react/no-unknown-property */
 
-export function ProductCategoryIcon({
+function ProductCategoryIconBase({
   category,
   className,
   ...rest
@@ -339,3 +339,7 @@ export function ProductCategoryIcon({
   const Icon = Icons[category] ?? Icons.generic;
   return <Icon className={className} {...rest} />;
 }
+
+/* PERFORMANCE: ícone puro (props primitivas) — memoizado. */
+export const ProductCategoryIcon = memo(ProductCategoryIconBase);
+ProductCategoryIcon.displayName = "ProductCategoryIcon";

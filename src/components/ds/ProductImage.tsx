@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { memo, useState, useMemo } from "react";
 import { cn } from "@/lib/utils";
 import {
   ProductCategoryIcon,
@@ -49,7 +49,7 @@ function shortLabel(name: string, brand?: string | null, max = 22): string {
  * - Sem foto: SVG profissional da categoria + nome do produto.
  * - Se a URL falhar em runtime, degrada suavemente para o placeholder.
  */
-export function ProductImage({
+function ProductImageBase({
   src,
   alt,
   name,
@@ -138,3 +138,9 @@ export function ProductImage({
   );
 }
 
+/*
+ * PERFORMANCE: memoizado — em grades de 100+ produtos, uma mudança de filtro
+ * no pai deixa de re-renderizar todas as capas que não mudaram.
+ */
+export const ProductImage = memo(ProductImageBase);
+ProductImage.displayName = "ProductImage";
