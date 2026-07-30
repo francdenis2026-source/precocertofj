@@ -46,8 +46,17 @@ describe("nichos: construção e hortifrúti não misturam produtos", () => {
   });
 
   it("mantém hortifrúti real", () => {
-    for (const name of ["Banana Prata kg", "Tomate kg", "Ovos brancos 30un"]) {
+    for (const name of ["Banana Prata kg", "Tomate kg", "Cenoura kg"]) {
       expect(productInCategory(hortifruti, { name, unit: "kg" }, false)).toBe(true);
     }
   });
+
+  // Ovos deixaram o hortifrúti na taxonomia atual: são laticínios/derivados,
+  // como no vocabulário das páginas do comércio.
+  it("ovos não são hortifrúti", () => {
+    expect(productInCategory(hortifruti, { name: "Ovos brancos 30un", unit: null }, false)).toBe(
+      false,
+    );
+  });
+
 });

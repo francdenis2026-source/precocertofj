@@ -11,10 +11,6 @@ import {
   LineChart,
   Users,
   Sparkles,
-  ShoppingCart,
-  Pill,
-  Beef,
-  Fuel,
   Grid3x3,
   LayoutGrid,
   MapPin,
@@ -98,6 +94,10 @@ export const Route = createFileRoute("/")({
   component: HomePage,
 });
 
+import { useCategoryLabelWithFallback } from "@/hooks/use-category-labels";
+import { categoryBySlug, hubCoverageLabel, type CategorySlug } from "@/lib/category-hub";
+import { categoryIcon } from "@/lib/category-icons";
+
 const P = {
   paper: "var(--pc-home-paper)",
   ink: "var(--pc-home-ink)",
@@ -118,14 +118,34 @@ const TILE_ICON = "h-[19px] w-[19px] sm:h-[21px] sm:w-[21px] lg:h-6 lg:w-6";
 const TILE_LABEL =
   "w-full truncate text-[12.5px] font-semibold leading-none tracking-[-0.005em] sm:text-[13.5px] lg:text-[14.5px]";
 
-const CATEGORIES = [
-  { key: "supermercados", label: "Mercado", full: "Supermercados", Icon: ShoppingCart },
-  { key: "farmacias", label: "Farmácia", full: "Farmácias", Icon: Pill },
-  { key: "acougues", label: "Açougue", full: "Açougues", Icon: Beef },
-  { key: "postos", label: "Postos", full: "Postos", Icon: Fuel },
-] as const;
+/**
+ * Ladrilhos da home — derivados de `CATEGORY_DEFS`, a mesma fonte usada em
+ * `/categoria/:slug` e no mapeamento de categorias de produto das lojas.
+ * Nada de lista paralela: o que muda aqui é só quantos hubs cabem na faixa.
+ */
+const HOME_HUBS: CategorySlug[] = [
+  "supermercados",
+  "acougues",
+  "hortifruti",
+  "padarias",
+  "bebidas",
+  "limpeza",
+  "higiene",
+  "farmacias",
+  "pet",
+];
 
-import { useCategoryLabelWithFallback } from "@/hooks/use-category-labels";
+const CATEGORIES = HOME_HUBS.map((slug) => {
+  const def = categoryBySlug(slug)!;
+  return {
+    key: def.slug,
+    label: def.short,
+    full: def.label,
+    coverage: hubCoverageLabel(def.slug),
+    Icon: categoryIcon(def.slug),
+  };
+});
+
 
 function HomePage() {
   const catLabel = useCategoryLabelWithFallback();
@@ -697,12 +717,13 @@ function HomePage() {
             {/* Categorias */}
             <nav aria-label="Categorias" className="min-w-0 lg:col-span-8">
               <div className="grid grid-cols-5 gap-2 sm:gap-2.5">
-                {CATEGORIES.map(({ key, label, full, Icon }) => (
+                {CATEGORIES.map(({ key, label, full, coverage, Icon }) => (
                   <button
                     key={key}
                     type="button"
                     onClick={() => navigate({ to: "/categoria/$slug", params: { slug: key } })}
                     aria-label={`Pesquisar em ${catLabel(key, full)}`}
+                    title={coverage ? `${catLabel(key, full)} — ${coverage}` : catLabel(key, full)}
                     data-reading-card
                     className={TILE}
                     style={{

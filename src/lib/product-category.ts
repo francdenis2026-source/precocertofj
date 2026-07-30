@@ -84,6 +84,25 @@ export function categoryLabel(slug: string | null | undefined): string {
   return CATEGORY_LABELS[slug] ?? slug.replace(/_/g, " ");
 }
 
+/**
+ * Índice reverso rótulo → slug canônico. Necessário porque partes do sistema
+ * (ex.: catálogo público da loja) trafegam o rótulo já traduzido; sem isso
+ * seria impossível remapear para o hub correspondente.
+ */
+const CATEGORY_KEY_BY_LABEL: Record<string, string> = Object.fromEntries(
+  Object.entries(CATEGORY_LABELS).map(([key, label]) => [label.toLowerCase(), key]),
+);
+
+/** Converte rótulo OU slug de volta ao slug canônico (`outros` quando desconhecido). */
+export function categoryKeyOf(value: string | null | undefined): ProductCategory {
+  const raw = (value ?? "").trim();
+  if (!raw) return "outros";
+  if ((PRODUCT_CATEGORIES as readonly string[]).includes(raw)) return raw as ProductCategory;
+  const byLabel = CATEGORY_KEY_BY_LABEL[raw.toLowerCase()];
+  return (byLabel as ProductCategory) ?? "outros";
+}
+
+
 type Rule = { category: ProductCategory; re: RegExp };
 
 /**

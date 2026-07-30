@@ -7,48 +7,27 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  ShoppingCart,
-  Pill,
-  HardHat,
-  Fuel,
-  Croissant,
-  Beef,
-  Apple,
-  Wine,
-  PawPrint,
-  BookOpen,
-  Home as HomeIcon,
-  Sparkles,
-  Search,
-  ArrowRight,
-} from "lucide-react";
+import { ShoppingCart, Search, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-import { CATEGORY_DEFS } from "@/lib/category-hub";
+import { CATEGORY_DEFS, hubCoverageLabel } from "@/lib/category-hub";
+import { categoryIcon } from "@/lib/category-icons";
 
-const ICONS: Record<string, typeof ShoppingCart> = {
-  supermercados: ShoppingCart,
-  farmacias: Pill,
-  acougues: Beef,
-  padarias: Croissant,
-  hortifruti: Apple,
-  bebidas: Wine,
-  limpeza: HomeIcon,
-  higiene: Sparkles,
-  pet: PawPrint,
-  construcao: HardHat,
-  postos: Fuel,
-  papelaria: BookOpen,
+type Cat = {
+  slug: string;
+  label: string;
+  desc: string;
+  /** Categorias de produto cobertas — mesmo vocabulário das páginas do comércio. */
+  coverage: string;
+  Icon: typeof ShoppingCart;
 };
-
-type Cat = { slug: string; label: string; desc: string; Icon: typeof ShoppingCart };
 
 const CATEGORIES: Cat[] = CATEGORY_DEFS.map((c) => ({
   slug: c.slug,
   label: c.label,
   desc: c.desc,
-  Icon: ICONS[c.slug] ?? ShoppingCart,
+  coverage: hubCoverageLabel(c.slug),
+  Icon: categoryIcon(c.slug),
 }));
 
 // remove acentos + minúsculas p/ busca tolerante
@@ -69,7 +48,12 @@ export function AllCategoriesDialog({
     const q = norm(query.trim());
     if (!q) return CATEGORIES;
     return CATEGORIES.filter(
-      (c) => norm(c.label).includes(q) || norm(c.desc).includes(q),
+      (c) =>
+        norm(c.label).includes(q) ||
+        norm(c.desc).includes(q) ||
+        // Também casa pelo nome da categoria de produto (ex.: "laticínios"),
+        // que é o vocabulário usado nas páginas do comércio.
+        norm(c.coverage).includes(q),
     );
   }, [query]);
 
@@ -84,7 +68,7 @@ export function AllCategoriesDialog({
         <DialogHeader className="border-b border-border px-5 pt-5 pb-3">
           <DialogTitle className="text-[18px] font-bold">Todas as categorias</DialogTitle>
           <DialogDescription className="text-[13px]">
-            Escolha uma categoria ou pesquise pelo nome.
+            Escolha um nicho ou pesquise pela categoria de produto (ex.: laticínios).
           </DialogDescription>
           <div className="relative mt-3">
             <Search
@@ -145,6 +129,10 @@ export function AllCategoriesDialog({
                       </span>
                       <span className="block truncate text-[11.5px] text-muted-foreground">
                         {c.desc}
+                      </span>
+                      {/* Mapeamento explícito hub → categorias de produto da loja */}
+                      <span className="mt-0.5 block truncate text-[11px] text-muted-foreground/80">
+                        {c.coverage || "Sem categorias de produto vinculadas"}
                       </span>
                     </span>
                     <ArrowRight

@@ -9,9 +9,12 @@ import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { queryOptions, useSuspenseQuery, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+import { hubForCanonical } from "@/lib/category-hub";
+import { categoryIcon } from "@/lib/category-icons";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
+  ArrowRight,
   ArrowDown,
   ArrowUp,
   Camera,
@@ -212,6 +215,11 @@ function EstablishmentPage() {
           ? "acougue"
           : "catalogo";
   const selectedCategory = search.cat ? search.cat : null;
+  /** Hub da homepage correspondente à categoria de produto selecionada. */
+  const activeHub = useMemo(
+    () => (selectedCategory ? hubForCanonical(selectedCategory) : null),
+    [selectedCategory],
+  );
 
   const [q, setQ] = useState(search.q);
   const [historyFor, setHistoryFor] = useState<PublicStoreProduct | null>(null);
@@ -532,6 +540,21 @@ function EstablishmentPage() {
                 }}
               />
             )}
+
+            {/* Ponte explícita entre a categoria de produto da loja e o hub
+                correspondente da homepage — mesmo vocabulário, um clique. */}
+            {activeHub && (
+              <Link
+                to="/categoria/$slug"
+                params={{ slug: activeHub.slug }}
+                className="mt-2 inline-flex items-center gap-1.5 text-[12px] font-semibold text-brand-gold underline-offset-2 hover:underline"
+              >
+                Comparar {selectedCategory} em toda a cidade · {activeHub.label}
+                <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+              </Link>
+            )}
+
+
 
             <div className="mt-2.5 flex flex-col gap-2 sm:flex-row sm:items-center">
               <div className="relative flex-1">
@@ -878,15 +901,21 @@ function CategoryChip({
   label,
   count,
   active,
+  hubSlug,
+  hubLabel,
   tabIndex,
   onClick,
 }: {
   label: string;
   count: number;
   active: boolean;
+  /** Hub da homepage ao qual esta categoria de produto pertence. */
+  hubSlug?: string | null;
+  hubLabel?: string | null;
   tabIndex: number;
   onClick: () => void;
 }) {
+  const HubIcon = hubSlug ? categoryIcon(hubSlug) : null;
   return (
     <button
       type="button"
@@ -896,6 +925,7 @@ function CategoryChip({
       aria-current={active ? "page" : undefined}
       tabIndex={tabIndex}
       onClick={onClick}
+      title={hubLabel ? `${label} — faz parte de ${hubLabel}` : label}
       className={
         "inline-flex h-8 items-center gap-1.5 whitespace-nowrap rounded-full border px-3 text-[12px] font-semibold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-1 focus-visible:ring-offset-background " +
         (active
@@ -903,6 +933,13 @@ function CategoryChip({
           : "border-border bg-card text-foreground hover:border-brand-gold hover:bg-muted/60")
       }
     >
+      {HubIcon && (
+        <HubIcon
+          className={"h-3.5 w-3.5 shrink-0 " + (active ? "text-brand-navy/80" : "text-brand-gold")}
+          strokeWidth={2.1}
+          aria-hidden
+        />
+      )}
       {label}
       <span
         className={
@@ -923,7 +960,13 @@ function CategoryRail({
   activeLabel,
   onSelect,
 }: {
-  categories: { key: string; label: string; count: number }[];
+  categories: {
+    key: string;
+    label: string;
+    count: number;
+    hubSlug?: string | null;
+    hubLabel?: string | null;
+  }[];
   activeLabel: string | null;
   onSelect: (label: string) => void;
 }) {
@@ -986,6 +1029,8 @@ function CategoryRail({
                   label={c.label}
                   count={c.count}
                   active={active}
+                  hubSlug={c.hubSlug}
+                  hubLabel={c.hubLabel}
                   tabIndex={i === activeIndex ? 0 : -1}
                   onClick={() => onSelect(c.label)}
                 />

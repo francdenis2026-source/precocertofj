@@ -11,7 +11,12 @@
  * na área de Açougue.
  */
 import { classifyButcherCut } from "@/lib/butcher-cuts";
-import { classifyCategory, type ProductCategory } from "@/lib/product-category";
+import {
+  categoryKeyOf,
+  categoryLabel,
+  classifyCategory,
+  type ProductCategory,
+} from "@/lib/product-category";
 
 export type CategorySlug =
   | "supermercados"
@@ -214,9 +219,74 @@ export const CATEGORY_DEFS: CategoryDef[] = [
   },
 ];
 
+/**
+ * Mapeamento único entre a taxonomia canônica de produto
+ * (`product_catalog.category`, usada nas páginas do comércio) e os hubs
+ * exibidos na homepage / em `/categoria/:slug`.
+ *
+ * É a fonte de verdade da unificação: toda categoria canônica pertence a
+ * exatamente um hub "principal". Categorias que aparecem em mais de um nicho
+ * (ex.: papel & descartáveis, que também é aceito em Higiene) ficam no hub
+ * onde o usuário mais espera encontrá-las; a pertinência ampla continua
+ * definida por `canonical` em `CATEGORY_DEFS`.
+ */
+export const HUB_BY_CANONICAL: Record<ProductCategory, CategorySlug | null> = {
+  // Compra do mês
+  mercearia: "supermercados",
+  laticinios: "supermercados",
+  congelados: "supermercados",
+  prontos: "supermercados",
+  condimentos: "supermercados",
+  doces: "supermercados",
+  snacks: "supermercados",
+  // Nichos com hub próprio
+  carnes: "acougues",
+  hortifruti: "hortifruti",
+  padaria: "padarias",
+  biscoitos: "padarias",
+  bebidas: "bebidas",
+  bebidas_em_po: "bebidas",
+  limpeza: "limpeza",
+  bazar: "limpeza",
+  papel_descartaveis: "limpeza",
+  higiene: "higiene",
+  bucal: "higiene",
+  cabelo: "higiene",
+  cuidados_pele: "higiene",
+  perfumaria: "higiene",
+  medicamentos: "farmacias",
+  suplementos: "farmacias",
+  infantil: "farmacias",
+  pet: "pet",
+  papelaria: "papelaria",
+  // Sem hub: nada além de combustível/obra entra nesses nichos, e "outros"
+  // por definição não tem taxonomia resolvida.
+  outros: null,
+};
+
+/** Hub principal de uma categoria canônica (aceita rótulo ou slug). */
+export function hubForCanonical(category: string | null | undefined): CategoryDef | null {
+  const slug = HUB_BY_CANONICAL[categoryKeyOf(category)];
+  return slug ? categoryBySlug(slug) : null;
+}
+
+/** Categorias canônicas que compõem um hub, na ordem da taxonomia. */
+export function canonicalOfHub(slug: CategorySlug): ProductCategory[] {
+  return (Object.keys(HUB_BY_CANONICAL) as ProductCategory[]).filter(
+    (c) => HUB_BY_CANONICAL[c] === slug,
+  );
+}
+
+/** Resumo legível das categorias de produto cobertas pelo hub. */
+export function hubCoverageLabel(slug: CategorySlug): string {
+  const list = canonicalOfHub(slug).map((c) => categoryLabel(c));
+  return list.join(" · ");
+}
+
 export function categoryBySlug(slug: string): CategoryDef | null {
   return CATEGORY_DEFS.find((c) => c.slug === slug) ?? null;
 }
+
 
 /** Uma loja pertence ao nicho? */
 export function storeInCategory(

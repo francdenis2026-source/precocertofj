@@ -1,6 +1,7 @@
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { requireAdmin } from "@/lib/require-admin";
-import { categoryLabel, classifyWithLabel, classifyCategory } from "@/lib/product-category";
+import { categoryKeyOf, categoryLabel, classifyWithLabel, classifyCategory } from "@/lib/product-category";
+import { CATEGORY_DEFS, hubForCanonical } from "@/lib/category-hub";
 import { normalizeNameKey, slugifyText } from "@/lib/text-normalize";
 import { createServerFn } from "@tanstack/react-start";
 
@@ -27,6 +28,10 @@ export type PublicStoreProduct = {
   baseName: string;
   brand: string | null;
   category: string;
+  /** Slug canônico da categoria (`product_catalog.category`). */
+  categoryKey: string;
+  /** Hub correspondente na homepage / `/categoria/:slug` (null = sem hub). */
+  categoryHub: { slug: string; label: string } | null;
   price: number;
   minPrice: number;
   maxPrice: number;
@@ -44,7 +49,14 @@ export type PublicStoreProduct = {
 export type PublicStoreCatalog = {
   store: PublicStore;
   products: PublicStoreProduct[];
-  categories: { key: string; label: string; count: number }[];
+  categories: {
+    key: string;
+    label: string;
+    count: number;
+    /** Hub da homepage que cobre esta categoria de produto. */
+    hubSlug: string | null;
+    hubLabel: string | null;
+  }[];
 };
 
 export type PublicProductDetail = {
@@ -249,9 +261,11 @@ function buildProduct(
   }
   // Catálogo é a fonte canônica de marca/categoria; regex local é só fallback.
   const meta = resolveImage(latestRow.barcode, productName) ?? EMPTY_META;
-  const category = meta.categoryKey
-    ? categoryLabel(meta.categoryKey)
-    : categorize(productName).label;
+  const categoryKey = meta.categoryKey
+    ? categoryKeyOf(meta.categoryKey)
+    : categoryKeyOf(categorize(productName).label);
+  const category = categoryLabel(categoryKey);
+  const hub = hubForCanonical(categoryKey);
 
   return {
     slug: slugify(productName),
@@ -259,6 +273,8 @@ function buildProduct(
     baseName: stripSize(productName),
     brand: meta.brand,
     category,
+    categoryKey,
+    categoryHub: hub ? { slug: hub.slug, label: hub.label } : null,
     price: toNum(latestRow.price_captured)!,
     minPrice,
     maxPrice,
@@ -898,6 +914,13 @@ function aggregateProducts(scans: ScanRow[], resolveImage: ImageResolver): Publi
   return products;
 }
 
+/** Posição do hub na ordem oficial de `CATEGORY_DEFS` (sem hub vai para o fim). */
+function hubOrder(slug: string | null): number {
+  if (!slug) return 999;
+  const i = CATEGORY_DEFS.findIndex((c) => c.slug === slug);
+  return i < 0 ? 999 : i;
+}
+
 export const getPublicStoreCatalog = createServerFn({ method: "GET" })
   .inputValidator((input: { id: string }) => {
     if (!input.id?.trim()) throw new Error("id obrigatório");
@@ -920,9 +943,25 @@ export const getPublicStoreCatalog = createServerFn({ method: "GET" })
       catCounts.set(key, cur);
     }
 
+    // Ordena por hub (mesma ordem da homepage) e, dentro do hub, por volume —
+    // assim o filtro da loja reflete a mesma hierarquia de categorias do site.
     const categories = Array.from(catCounts.entries())
-      .map(([key, v]) => ({ key, label: v.label, count: v.count }))
-      .sort((a, b) => b.count - a.count);
+      .map(([key, v]) => {
+        const hub = hubForCanonical(key);
+        return {
+          key,
+          label: v.label,
+          count: v.count,
+          hubSlug: hub?.slug ?? null,
+          hubLabel: hub?.label ?? null,
+        };
+      })
+      .sort(
+        (a, b) =>
+          hubOrder(a.hubSlug) - hubOrder(b.hubSlug) ||
+          b.count - a.count ||
+          a.label.localeCompare(b.label, "pt-BR"),
+      );
 
     const lastUpdate = products.reduce<string | null>((acc, p) => {
       if (!acc) return p.lastDate;
