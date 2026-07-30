@@ -365,7 +365,7 @@ function StatCell({
           {label}
         </div>
       </div>
-      <div className="mt-0.5 truncate font-serif text-[15px] font-semibold tabular-nums leading-none tracking-tight text-foreground">
+      <div className="pc-num mt-1 truncate text-[20px] font-bold tabular-nums leading-none tracking-tight text-foreground">
         {value}
       </div>
       <div className="mt-0.5 truncate text-[11.5px] font-medium uppercase tracking-[0.1em] text-muted-foreground">
