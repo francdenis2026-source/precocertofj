@@ -65,15 +65,31 @@ const TONE_CLASS: Record<PriceTone, string> = {
   onhero: "pc-price--onhero",
 };
 
+/*
+ * PERFORMANCE: `Number.prototype.toLocaleString` cria um formatador Intl novo
+ * a cada chamada (operação cara). Numa tabela com 500 preços isso são 500
+ * formatadores por render. Aqui o formatador é criado UMA vez por sessão e o
+ * resultado de cada valor fica em cache.
+ */
+const BRL_DIGITS = new Intl.NumberFormat("pt-BR", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+});
+const DIGITS_CACHE = new Map<number, string>();
+
 /** Formata apenas os dígitos (sem símbolo), para separar prefixo do valor. */
 export function formatPriceDigits(value: number): string {
-  return value.toLocaleString("pt-BR", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  });
+  const cached = DIGITS_CACHE.get(value);
+  if (cached !== undefined) return cached;
+  const out = BRL_DIGITS.format(value);
+  if (DIGITS_CACHE.size >= 4000) DIGITS_CACHE.clear();
+  DIGITS_CACHE.set(value, out);
+  return out;
 }
 
-export function Price({
+const BLOCK_TAGS = new Set(["p", "div", "h1", "h2", "h3", "h4", "h5", "h6"]);
+
+function PriceBase({
   value,
   size = "md",
   tone = "default",
@@ -84,6 +100,7 @@ export function Price({
   className,
   ...rest
 }: PriceProps) {
+
   const Tag = (as ?? "span") as ElementType;
   /* .pc-price é inline-flex por padrão (para ficar no meio de uma frase).
      Quando o preço é renderizado como bloco (p/div/h*), ele precisa ocupar a
