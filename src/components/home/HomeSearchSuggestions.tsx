@@ -285,8 +285,10 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                   onMouseEnter={() => setActive(i)}
                   onClick={() => handlePick(s.displayName)}
                   className={
-                    "flex w-full items-center gap-2.5 px-3 py-2 text-left transition-colors " +
-                    (active === i ? "bg-slate-100" : "hover:bg-slate-50")
+                    "flex w-full items-center gap-2.5 border-l-[3px] px-3 py-2 text-left transition-colors " +
+                    (active === i
+                      ? "border-l-[#d4a24c] bg-[#fff7e6]"
+                      : "border-l-transparent hover:bg-slate-50")
                   }
                 >
                   <span
