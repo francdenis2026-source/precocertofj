@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo } from "react";
+import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import {
   AlertTriangle,
   ArrowLeft,
@@ -8,10 +8,14 @@ import {
   MapPin,
   Phone,
   Pill,
+  Search,
   ShieldCheck,
+  X,
 } from "lucide-react";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { ShareButton } from "@/components/ds";
+import { useListScrollPersistence } from "@/hooks/useListScrollPersistence";
+import { normalizeSearchText } from "@/lib/text-normalize";
 import {
   AVISO_LEGAL,
   CONTATOS_FISCALIZACAO,
