@@ -21,6 +21,7 @@ import { useSession } from "@/hooks/useSession";
 import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
 import { computeConfidence } from "@/components/product/ConfidenceBadge";
 import { cn } from "@/lib/utils";
+import { Price } from "@/components/ds/Price";
 
 /**
  * Estabelecimento com preço. Aceita variações vindas do comparador
@@ -229,8 +230,8 @@ export function ProductStoresDialog({
           <div className="px-3 pb-4 pt-1 sm:px-5">
             {stats.min != null && stats.avg != null ? (
               <div className="mb-3 grid grid-cols-3 gap-2">
-                <StatMini label="Menor" value={formatBRL(stats.min)} accent="savings" />
-                <StatMini label="Médio" value={formatBRL(stats.avg)} />
+                <StatMini label="Menor" amount={stats.min} accent="savings" />
+                <StatMini label="Médio" amount={stats.avg} />
                 <StatMini
                   label="Diferença"
                   value={spreadPct != null ? `${spreadPct.toFixed(0)}%` : "—"}
@@ -366,14 +367,12 @@ export function ProductStoresDialog({
                         </div>
                       </div>
                       <div className="shrink-0 text-right">
-                        <p
-                          className={cn(
-                            "font-display text-[15px] font-bold leading-none tabular-nums",
-                            isCheapest ? "text-savings" : "text-foreground",
-                          )}
-                        >
-                          {formatBRL(Number(s.price))}
-                        </p>
+                        <Price
+                          as="p"
+                          value={Number(s.price)}
+                          size="md"
+                          tone={isCheapest ? "best" : "default"}
+                        />
                         <UnitPriceBadge
                           price={Number(s.price)}
                           productName={productName}
@@ -501,11 +500,15 @@ function ConfidenceDot({ level }: { level: "alta" | "media" | "baixa" }) {
 function StatMini({
   label,
   value,
+  amount,
   hint,
   accent,
 }: {
   label: string;
-  value: string;
+  /** Texto simples para métricas não monetárias (ex.: percentuais). */
+  value?: string;
+  /** Valor monetário — renderizado pelo componente canônico <Price />. */
+  amount?: number | null;
   hint?: string;
   accent?: "savings";
 }) {
@@ -514,14 +517,19 @@ function StatMini({
       <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
         {label}
       </p>
-      <p
-        className={cn(
-          "mt-0.5 font-display text-[14px] font-bold leading-tight tabular-nums",
-          accent === "savings" ? "text-savings" : "text-foreground",
-        )}
-      >
-        {value}
-      </p>
+      {amount !== undefined ? (
+        <Price
+          as="p"
+          value={amount}
+          size="md"
+          tone={accent === "savings" ? "best" : "default"}
+          className="mt-0.5"
+        />
+      ) : (
+        <p className="pc-num mt-0.5 text-[14px] font-bold leading-tight text-foreground">
+          {value}
+        </p>
+      )}
       {hint ? (
         <p className="mt-0.5 font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
           {hint}
