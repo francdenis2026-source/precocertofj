@@ -836,17 +836,18 @@ function HomePage() {
                       Guia rápido
                     </p>
                     <SheetTitle
-                      className="font-serif text-[clamp(18px,2.2vw,24px)] font-normal leading-tight"
+                      className="font-editorial pc-hero-editorial text-[clamp(19px,1.1vw+1.8vh,30px)] font-normal leading-tight"
                       style={{ color: "var(--pc-home-onhero-fg)" }}
                     >
                       Explorar o PreçoCerto
                     </SheetTitle>
                   </SheetHeader>
-                  <div className="mx-auto flex w-full max-w-6xl flex-1 flex-col overflow-y-auto py-3">
+                  <div className="mx-auto flex w-full min-h-0 max-w-6xl flex-1 flex-col overflow-hidden py-3">
                     <Suspense fallback={<div aria-hidden className="h-40" />}>
                       <ExplorePanel onNavigate={() => setExploreOpen(false)} />
                     </Suspense>
                   </div>
+
                 </SheetContent>
               </Sheet>
             </div>
