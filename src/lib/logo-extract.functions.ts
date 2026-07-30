@@ -1,4 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export type LogoExtract = {
   name: string | null;
@@ -37,11 +38,19 @@ Regras:
 - Se algo não estiver claro, use null.`;
 
 export const extractLogoDetails = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
   .inputValidator((input: { image: string }) => {
     if (!input.image) throw new Error("image obrigatória");
+    if (typeof input.image !== "string" || input.image.length > 12_000_000) {
+      throw new Error("Imagem inválida ou muito grande");
+    }
     return input;
   })
-  .handler(async ({ data }): Promise<LogoExtract> => {
+  .handler(async ({ data, context }): Promise<LogoExtract> => {
+    const { assertAiRateLimit, logAiUsage } = await import("@/lib/ai-guard.server");
+    const userId = context.userId;
+    await assertAiRateLimit(userId, "extractLogoDetails", 20, 60);
+
     const apiKey = process.env.LOVABLE_API_KEY;
     if (!apiKey) throw new Error("LOVABLE_API_KEY ausente");
 
@@ -69,15 +78,37 @@ export const extractLogoDetails = createServerFn({ method: "POST" })
 
     if (!res.ok) {
       const body = await res.text();
-      if (res.status === 429) throw new Error("Limite de IA atingido. Tente em 1 min.");
-      if (res.status === 402) throw new Error("Créditos de IA esgotados.");
-      throw new Error(`IA falhou [${res.status}]: ${body.slice(0, 200)}`);
+      const msg =
+        res.status === 429
+          ? "Limite de IA atingido. Tente em 1 min."
+          : res.status === 402
+            ? "Créditos de IA esgotados."
+            : `IA falhou [${res.status}]: ${body.slice(0, 200)}`;
+      await logAiUsage({
+        userId,
+        functionName: "extractLogoDetails",
+        model: "google/gemini-2.5-flash",
+        success: false,
+        errorMessage: msg,
+      });
+      throw new Error(msg);
     }
 
     const json = (await res.json()) as {
       choices?: Array<{ message?: { content?: string } }>;
+      usage?: { prompt_tokens?: number; completion_tokens?: number; total_tokens?: number };
     };
+    await logAiUsage({
+      userId,
+      functionName: "extractLogoDetails",
+      model: "google/gemini-2.5-flash",
+      promptTokens: json.usage?.prompt_tokens,
+      completionTokens: json.usage?.completion_tokens,
+      totalTokens: json.usage?.total_tokens,
+      success: true,
+    });
     const raw = json.choices?.[0]?.message?.content ?? "{}";
+
 
     let parsed: Record<string, unknown> = {};
     try {

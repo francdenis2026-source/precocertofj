@@ -2494,9 +2494,10 @@ export type Database = {
         Row: {
           average_price: number | null
           barcode: string | null
+          category: string | null
           created_at: string
           diff_pct: number | null
-          establishment_id: string | null
+          establishment_id: string
           id: string
           image_url: string | null
           latitude: number | null
@@ -2518,9 +2519,10 @@ export type Database = {
         Insert: {
           average_price?: number | null
           barcode?: string | null
+          category?: string | null
           created_at?: string
           diff_pct?: number | null
-          establishment_id?: string | null
+          establishment_id: string
           id?: string
           image_url?: string | null
           latitude?: number | null
@@ -2542,9 +2544,10 @@ export type Database = {
         Update: {
           average_price?: number | null
           barcode?: string | null
+          category?: string | null
           created_at?: string
           diff_pct?: number | null
-          establishment_id?: string | null
+          establishment_id?: string
           id?: string
           image_url?: string | null
           latitude?: number | null
@@ -3201,6 +3204,15 @@ export type Database = {
           total: number
         }[]
       }
+      check_ai_rate_limit: {
+        Args: {
+          _function_name: string
+          _max_calls?: number
+          _user_id: string
+          _window_minutes?: number
+        }
+        Returns: Json
+      }
       classify_product_category: { Args: { name: string }; Returns: string }
       consume_ai_quota: {
         Args: { _amount?: number; _user_id: string }
@@ -3268,6 +3280,7 @@ export type Database = {
           unique_products: number
         }[]
       }
+      establishments_overview: { Args: never; Returns: Json }
       extract_product_size: {
         Args: { name: string }
         Returns: {
