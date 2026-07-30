@@ -722,10 +722,14 @@ function HomePage() {
           </div>
 
           {/* Divisor editorial entre hero e faixa de categorias */}
-          <hr className="pc-rule my-3 sm:my-4" aria-hidden />
+          <hr className="pc-rule my-[clamp(0.35rem,1.2vh,0.9rem)]" aria-hidden />
 
-          {/* ================= FAIXA INFERIOR ================= */}
-          <div className="grid gap-2.5 sm:gap-3 lg:grid-cols-12">
+          {/* ================= FAIXA INFERIOR =================
+              Duas colunas, ambas com 2 linhas de células idênticas: 10 hubs à
+              esquerda (5 por linha) e 4 atalhos à direita (2 por linha). Antes
+              os atalhos ficavam em 1 linha dentro de um bloco de 2 linhas de
+              altura, o que esticava as células e desalinhava a faixa. */}
+          <div className="grid shrink-0 gap-2 sm:gap-2.5 lg:grid-cols-12">
             {/* Categorias */}
             <nav aria-label="Categorias" className="min-w-0 lg:col-span-8">
               <div className="grid grid-cols-5 gap-2 sm:gap-2.5">
