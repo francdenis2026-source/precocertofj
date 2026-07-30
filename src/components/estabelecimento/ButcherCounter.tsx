@@ -682,6 +682,7 @@ const CutRow = memo(function CutRow({
         type="button"
         onClick={onOpen ? () => onOpen(cut) : undefined}
         aria-label={`Ver detalhes de ${cut.productName}`}
+        data-cut-open="true"
         className="min-w-0 rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
       >
         <span className="block truncate text-[12.5px] font-semibold leading-tight text-foreground">
