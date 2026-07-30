@@ -30,6 +30,7 @@ import { cn } from "@/lib/utils";
 import { useMyRoles } from "@/hooks/useMyRoles";
 
 import { formatShortDate } from "@/components/product/TrustIndicator";
+import { Price } from "@/components/ds/Price";
 const dateFmt = (iso: string) => formatShortDate(iso);
 
 const STALE_DAYS = 30;
@@ -265,9 +266,9 @@ export function ProductQuickModal({
                   className="pointer-events-none absolute inset-x-3 top-0 h-px bg-gradient-to-r from-transparent via-[color-mix(in_oklab,var(--color-accent)_55%,transparent)] to-transparent"
                 />
                 <div className="grid grid-cols-3 gap-2">
-                  <Stat label="Menor" value={brl(data.min)} accent />
-                  <Stat label="Média" value={brl(data.avg)} />
-                  <Stat label="Maior" value={brl(data.max)} />
+                  <Stat label="Menor" value={data.min} accent />
+                  <Stat label="Média" value={data.avg} />
+                  <Stat label="Maior" value={data.max} />
                 </div>
                 <div className="mt-2 flex flex-wrap items-center gap-1.5">
                   <UnitPriceBadge
@@ -495,9 +496,9 @@ export function ProductQuickModal({
                             </div>
 
                             <div className="grid shrink-0 grid-cols-3 gap-2 text-right sm:min-w-[260px]">
-                              <MiniStat label="Menor" value={brl(m.priceMin)} highlight />
-                              <MiniStat label="Média" value={brl(m.priceAvg)} />
-                              <MiniStat label="Maior" value={brl(m.priceMax)} />
+                              <MiniStat label="Menor" value={m.priceMin} highlight />
+                              <MiniStat label="Média" value={m.priceAvg} />
+                              <MiniStat label="Maior" value={m.priceMax} />
                             </div>
                           </li>
                         );
@@ -553,14 +554,12 @@ export function ProductQuickModal({
                           </p>
                         </div>
                         <div className="text-right">
-                          <p
-                            className={
-                              "font-display text-[15px] font-semibold leading-tight tabular-nums " +
-                              (i === 0 ? "text-savings" : "text-foreground")
-                            }
-                          >
-                            {brl(c.bestPrice)}
-                          </p>
+                          <Price
+                            as="p"
+                            value={c.bestPrice}
+                            size="md"
+                            tone={i === 0 ? "best" : "default"}
+                          />
                           <p className="mt-0 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
                             média {brl(c.avgPrice)}
                           </p>
@@ -604,7 +603,8 @@ function Stat({
   accent,
 }: {
   label: string;
-  value: string;
+  /** Valor monetário em reais — formatado pelo componente <Price />. */
+  value: number | null | undefined;
   accent?: boolean;
 }) {
   return (
@@ -612,14 +612,13 @@ function Stat({
       <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent-strong">
         {label}
       </p>
-      <p
-        className={
-          "mt-0.5 font-display text-[17px] font-semibold leading-tight tabular-nums tracking-tight " +
-          (accent ? "text-accent-strong" : "text-foreground")
-        }
-      >
-        {value}
-      </p>
+      <Price
+        as="p"
+        value={value}
+        size="lg"
+        tone={accent ? "best" : "default"}
+        className="mt-0.5 justify-center"
+      />
     </div>
   );
 }
@@ -630,7 +629,8 @@ function MiniStat({
   highlight,
 }: {
   label: string;
-  value: string;
+  /** Valor monetário em reais — formatado pelo componente <Price />. */
+  value: number | null | undefined;
   highlight?: boolean;
 }) {
   return (
@@ -638,14 +638,13 @@ function MiniStat({
       <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
         {label}
       </p>
-      <p
-        className={
-          "mt-0.5 font-display text-[12.5px] font-semibold leading-tight tabular-nums " +
-          (highlight ? "text-savings" : "text-foreground")
-        }
-      >
-        {value}
-      </p>
+      <Price
+        as="p"
+        value={value}
+        size="sm"
+        tone={highlight ? "best" : "default"}
+        className="mt-0.5"
+      />
     </div>
   );
 }

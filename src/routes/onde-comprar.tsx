@@ -21,6 +21,7 @@ import { ShareButton } from "@/components/ds";
 import { ButcherCutBadge } from "@/components/ds/ButcherCutBadge";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
+import { Price } from "@/components/ds/Price";
 import { usePerceivedPerfTelemetry } from "@/lib/perf-telemetry";
 
 export const Route = createFileRoute("/onde-comprar")({
@@ -343,11 +344,11 @@ function ProductAccordion({ product: p }: { product: WhereToBuyProduct }) {
           <span className={cn(tc.itemTitle, "block truncate")}>{p.productName}</span>
           <span className={cn(tc.meta, "block truncate")}>
             {p.storeCount} {p.storeCount === 1 ? "loja" : "lojas"} • média{" "}
-            <span className="pc-price pc-price--sm">{brl(p.avgPrice)}</span>
+            <Price value={p.avgPrice} size="sm" />
             {best ? (
               <>
                 {" "}• melhor{" "}
-                <span className="pc-price pc-price--sm pc-price--best">{brl(best.price)}</span>{" "}
+                <Price value={best.price} size="sm" tone="best" />{" "}
                 <span className={cn(tc.storeName)}>{best.storeName}</span>
               </>
             ) : null}
@@ -397,14 +398,11 @@ function ProductAccordion({ product: p }: { product: WhereToBuyProduct }) {
                   </span>
                 </span>
                 <span className="shrink-0 text-right">
-                  <span
-                    className={cn(
-                      "pc-price-value text-[13.5px]",
-                      o.isCheapest && "pc-price-value--best",
-                    )}
-                  >
-                    {brl(o.price)}
-                  </span>
+                  <Price
+                    value={o.price}
+                    size="sm"
+                    tone={o.isCheapest ? "best" : "default"}
+                  />
                   {!o.isCheapest && o.diffPct > 0 && (
                     <span className={cn(tc.metaMuted, "block")}>+{o.diffPct}%</span>
                   )}

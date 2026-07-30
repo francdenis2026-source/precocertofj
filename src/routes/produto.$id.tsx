@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PriceHistoryDrawer } from "@/components/scans/PriceHistoryDrawer";
+import { Price } from "@/components/ds/Price";
 
 export const Route = createFileRoute("/produto/$id")({
   head: () => ({
@@ -176,9 +177,7 @@ function ProductDetailPage() {
                   <p className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
                     Seu preço cadastrado
                   </p>
-                  <p className="mt-1 pc-price text-3xl font-bold text-foreground">
-                    {fmt(data.currentPrice)}
-                  </p>
+                  <Price as="p" value={data.currentPrice} size="lg" className="mt-1" />
                 </div>
                 {priceVsAvg !== null && Math.abs(priceVsAvg) >= 0.5 && (
                   <div
@@ -222,9 +221,7 @@ function ProductDetailPage() {
                       </p>
                     </div>
                     <div className="text-right">
-                      <p className="pc-price text-4xl font-extrabold leading-none text-savings">
-                        {fmt(data.cheapest.price)}
-                      </p>
+                      <Price as="p" value={data.cheapest.price} size="xl" tone="best" />
                     </div>
                   </div>
                   {savings && (
@@ -232,9 +229,7 @@ function ProductDetailPage() {
                       <TrendingDown className="h-3.5 w-3.5 text-savings" strokeWidth={2.5} />
                       <p className="font-sans text-xs text-foreground">
                         Economia de{" "}
-                        <span className="pc-price font-bold text-savings">
-                          {fmt(savings.diff)}
-                        </span>{" "}
+                        <Price value={savings.diff} size="sm" tone="savings" />{" "}
                         <span className="text-muted-foreground">
                           ({savings.pct.toFixed(0)}% abaixo da média)
                         </span>
@@ -266,15 +261,15 @@ function ProductDetailPage() {
               <div className="grid grid-cols-[1.4fr_1fr_1fr] gap-2">
                 <PriceStat
                   label="Mínimo"
-                  value={fmt(data.history.min)}
+                  value={data.history.min}
                   tone="savings"
                   icon={<TrendingDown className="h-3.5 w-3.5" strokeWidth={2.5} />}
                   highlight
                 />
-                <PriceStat label="Média" value={fmt(data.history.avg)} tone="primary" />
+                <PriceStat label="Média" value={data.history.avg} tone="primary" />
                 <PriceStat
                   label="Máximo"
-                  value={fmt(data.history.max)}
+                  value={data.history.max}
                   tone="muted"
                   icon={<TrendingUp className="h-3 w-3" strokeWidth={2} />}
                 />
@@ -302,8 +297,8 @@ function ProductDetailPage() {
                       )}
                     </div>
                     <div className="mt-1.5 flex justify-between font-mono text-[11px] tabular-nums text-muted-foreground">
-                      <span>{fmt(data.history.min)}</span>
-                      <span>{fmt(data.history.max)}</span>
+                      <Price value={data.history.min} size="xs" tone="muted" />
+                      <Price value={data.history.max} size="xs" tone="muted" />
                     </div>
                   </div>
                 )}
@@ -351,13 +346,12 @@ function ProductDetailPage() {
                           </p>
                         </div>
                         <div className="text-right">
-                          <p
-                            className={`font-display text-base font-bold tabular-nums ${
-                              isBest ? "text-savings" : "text-foreground"
-                            }`}
-                          >
-                            {fmt(m.priceAvg)}
-                          </p>
+                          <Price
+                            as="p"
+                            value={m.priceAvg}
+                            size="md"
+                            tone={isBest ? "best" : "default"}
+                          />
                           {isBest && (
                             <p className="font-mono text-[11px] font-semibold uppercase tracking-widest text-savings">
                               melhor preço
@@ -391,17 +385,12 @@ function PriceStat({
   highlight,
 }: {
   label: string;
-  value: string;
+  /** Valor numérico em reais; a formatação é do componente <Price />. */
+  value: number | null | undefined;
   tone: "savings" | "primary" | "muted";
   icon?: React.ReactNode;
   highlight?: boolean;
 }) {
-  const toneClasses =
-    tone === "savings"
-      ? "text-savings"
-      : tone === "primary"
-      ? "text-foreground"
-      : "text-muted-foreground";
   return (
     <div
       className={`rounded-2xl p-3 ${
@@ -412,11 +401,13 @@ function PriceStat({
         {icon}
         {label}
       </p>
-      <p className={`mt-1.5 pc-price font-bold ${toneClasses} ${
-        highlight ? "text-xl" : "text-base"
-      }`}>
-        {value}
-      </p>
+      <Price
+        as="p"
+        value={value}
+        size={highlight ? "lg" : "md"}
+        tone={tone === "savings" ? "savings" : tone === "muted" ? "muted" : "default"}
+        className="mt-1.5"
+      />
     </div>
   );
 }

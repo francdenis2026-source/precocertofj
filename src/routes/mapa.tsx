@@ -18,6 +18,7 @@ import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 import { tc } from "@/lib/typeclear";
 import { PrecoCertoMark } from "@/components/typography/PrecoCertoMark";
 import { StatCell, StatCellGroup, StatCellDivider } from "@/components/ds/StatCell";
+import { Price } from "@/components/ds/Price";
 import {
   Select,
   SelectContent,
@@ -475,12 +476,12 @@ function NeighborhoodsPage() {
                                 <>
                                   <span className="mx-1 text-muted-foreground/60" aria-hidden>·</span>
                                   <span className="text-muted-foreground">a partir de </span>
-                                  <span
-                                    className="pc-price pc-price--sm"
-                                    aria-label={`a partir de ${currency(min)}`}
-                                  >
-                                    {currency(min)}
-                                  </span>
+                                  <Price
+                                    value={min}
+                                    size="sm"
+                                    srLabel={`a partir de ${currency(min)}`}
+                                  />
+
                                 </>
                               ) : null}
                             </span>

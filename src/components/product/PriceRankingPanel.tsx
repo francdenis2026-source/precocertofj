@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { ArrowDown, Crown, Store as StoreIcon, TrendingUp } from "lucide-react";
 import { shortenStoreName } from "@/lib/store-name";
 import { cn } from "@/lib/utils";
+import { Price } from "@/components/ds/Price";
 
 export type RankingStore = {
   establishment_id?: string | null;
@@ -103,9 +104,7 @@ export function PriceRankingPanel({
           <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
             Menor preço do município
           </p>
-          <p className="mt-1 font-display text-xl font-extrabold tabular-nums leading-none text-savings">
-            {formatBRL(min)}
-          </p>
+          <Price as="p" value={min} size="lg" tone="best" className="mt-1" />
           <p className="mt-1 flex items-center gap-1 truncate text-[11.5px] font-medium text-foreground" title={cheapest.store_name}>
             <Crown className="h-3 w-3 shrink-0 text-accent" strokeWidth={2.2} />
             {shortenStoreName(cheapest.store_name)}
@@ -187,14 +186,12 @@ export function PriceRankingPanel({
                     {seen && <span className="hidden sm:inline">· atualizado {seen}</span>}
                   </span>
                 </span>
-                <span
-                  className={cn(
-                    "relative z-10 shrink-0 font-display text-[14.5px] font-bold tabular-nums",
-                    isMin ? "text-savings" : "text-foreground",
-                  )}
-                >
-                  {formatBRL(price)}
-                </span>
+                <Price
+                  value={price}
+                  size="md"
+                  tone={isMin ? "best" : "default"}
+                  className="relative z-10 shrink-0"
+                />
               </Row>
             </li>
           );

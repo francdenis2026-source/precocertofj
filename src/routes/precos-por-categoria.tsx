@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { shortenStoreName } from "@/lib/store-name";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
+import { Price } from "@/components/ds/Price";
 import { Search as SearchIcon, TrendingDown, Store as StoreIcon, ArrowRight, Tags } from "lucide-react";
 
 /* ------------------------------------------------------------------ */
@@ -324,9 +325,7 @@ function PrecosPorCategoriaPage() {
                   </h2>
                   <p className={tc.metaMuted}>
                     {g.total} {g.total === 1 ? "produto" : "produtos"} · a partir de{" "}
-                    <span className="pc-price font-semibold text-foreground">
-                      {formatBRL(g.cheapest)}
-                    </span>
+                    <Price value={g.cheapest} size="sm" />
                   </p>
                 </div>
 

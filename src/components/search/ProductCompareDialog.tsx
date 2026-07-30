@@ -3,6 +3,7 @@ import { computeUnitPrice } from "@/lib/unit-price";
 import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
 import { X, RefreshCw, Trophy, AlertTriangle, Clock } from "lucide-react";
 import { useMyRoles } from "@/hooks/useMyRoles";
+import { Price } from "@/components/ds/Price";
 
 
 /**
@@ -249,14 +250,12 @@ export function ProductCompareDialog({
                             key={i}
                             className={"px-3 py-2 align-top " + (isMin ? "bg-accent/10" : "")}
                           >
-                            <p
-                              className={
-                                "pc-price pc-price--md " +
-                                (isMin ? "pc-price--best" : "")
-                              }
-                            >
-                              {fmt(cell.price)}
-                            </p>
+                            <Price
+                              as="p"
+                              value={cell.price}
+                              size="md"
+                              tone={isMin ? "best" : "default"}
+                            />
                             <UnitPriceBadge
                               price={cell.price}
                               productName={entry.productName}
@@ -285,22 +284,25 @@ export function ProductCompareDialog({
                       <td className="px-3 py-2 text-right align-top">
                         {total != null ? (
                           <>
-                            <p
-                              className={
-                                "pc-price pc-price--md " +
-                                (isBest ? "pc-price--best" : "")
-                              }
-                            >
-                              {fmt(total)}
-                            </p>
+                            <Price
+                              as="p"
+                              value={total}
+                              size="md"
+                              tone={isBest ? "best" : "default"}
+                            />
                             {isBest ? (
                               <p className="mt-1 font-mono text-[11px] uppercase tracking-widest text-accent-strong">
                                 melhor total
                               </p>
                             ) : bestTotal != null ? (
-                              <p className="mt-1 pc-price pc-price--sm pc-price--muted">
-                                +{fmt(total - bestTotal)}
-                              </p>
+                              <Price
+                                as="p"
+                                value={total - bestTotal}
+                                size="sm"
+                                tone="muted"
+                                prefix="+R$"
+                                className="mt-1"
+                              />
                             ) : null}
                           </>
                         ) : (
@@ -323,9 +325,7 @@ export function ProductCompareDialog({
               <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-savings">
                 Economia máxima
               </span>
-              <span className="pc-price pc-price--md pc-price--savings">
-                {fmt(totalSavings)}
-              </span>
+              <Price value={totalSavings} size="md" tone="savings" />
               <span className="font-mono text-[11px] text-muted-foreground">
                 comparando o mais barato ao mais caro no mesmo carrinho
               </span>
@@ -364,13 +364,11 @@ export function ProductCompareDialog({
                   >
                     <span className="max-w-[160px] truncate">{x.name}</span>
                     <span className="text-muted-foreground">·</span>
-                    <span className="pc-price pc-price--sm pc-price--best">{fmt(x.cheapest?.price)}</span>
+                    <Price value={x.cheapest?.price} size="sm" tone="best" />
                     <span className="text-muted-foreground">em {x.cheapest?.marketName}</span>
                   </span>
                 ))}
-                <span className="ml-auto pc-price pc-price--md">
-                  Σ {fmt(total)}
-                </span>
+                <Price value={total} size="md" prefix="Σ R$" className="ml-auto" />
               </div>
             );
           })()}
