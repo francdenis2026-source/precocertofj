@@ -23,6 +23,7 @@ import { getCheapestStoresRanking } from "@/lib/stores-public.functions";
 import { PRODUCT_TYPE_LABEL } from "@/lib/product-type";
 
 import { cn } from "@/lib/utils";
+import { Price } from "@/components/ds/Price";
 
 const CATEGORY_LABEL: Record<string, string> = {
   laticinios: "Laticínios",
