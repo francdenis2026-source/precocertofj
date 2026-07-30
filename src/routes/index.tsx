@@ -1021,6 +1021,8 @@ function HomePage() {
             >
               {trendingPopular.map((t) => {
                 const isActive = normalizeSearchText(t) === normalizeSearchText(q);
+                const meta = trendMeta.get(t);
+                const isHot = Boolean(meta?.hot);
                 return (
                 <li key={t} className="min-w-0">
                   <button
