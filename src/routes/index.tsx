@@ -326,6 +326,7 @@ function HomePage() {
         return;
       }
     }
+    trackEvent("search_query", { q: query.toLowerCase().slice(0, 60), from: "alta" });
     void navigate({ to: "/buscar", search: { q: query, from: "alta" } as any }).finally(() =>
       setPendingTerm(null),
     );
