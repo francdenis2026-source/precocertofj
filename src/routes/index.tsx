@@ -902,13 +902,15 @@ function HomePage() {
 
           {/* Faixa "Em alta": ocupa a folga entre os ladrilhos e o rodapé com
               dado real (termos mais buscados nos últimos 7 dias). Clicar em um
-              termo preenche a busca do hero e abre os resultados. */}
+              termo preenche a busca do hero e abre os resultados.
+              Destaque sutil em dourado para diferenciá-la do painel ao vivo. */}
           <section
             aria-label="Buscas em alta nos últimos 7 dias"
             className="hidden shrink-0 items-center gap-3 overflow-hidden rounded-2xl border px-3.5 py-[clamp(0.5rem,1.3vh,0.85rem)] backdrop-blur-md lg:flex"
             style={{
-              background: "var(--pc-home-onhero-glass)",
-              borderColor: "var(--pc-home-onhero-border)",
+              background: `color-mix(in oklab, ${P.gold} 18%, var(--pc-home-onhero-glass))`,
+              borderColor: `color-mix(in oklab, ${P.gold} 65%, transparent)`,
+              boxShadow: `inset 0 1px 0 0 color-mix(in oklab, ${P.gold} 35%, transparent), 0 6px 18px -10px color-mix(in oklab, ${P.gold} 45%, transparent)`,
             }}
           >
             <span
@@ -933,8 +935,8 @@ function HomePage() {
                     className="pc-trend-chip group relative flex w-full items-center gap-1.5 overflow-hidden rounded-full border px-2.5 py-1.5 text-[12px] font-medium capitalize transition-all duration-200 hover:-translate-y-[1px] focus-visible:outline-none focus-visible:ring-2"
                     style={{
                       background: "var(--pc-home-onhero-glass-soft)",
-                      borderColor: "var(--pc-home-onhero-border-soft)",
-                      color: "var(--pc-home-onhero-fg-85)",
+                      borderColor: "color-mix(in oklab, var(--pc-home-onhero-gold) 45%, transparent)",
+                      color: "var(--pc-home-onhero-fg-90)",
                       ["--tw-ring-color" as string]: "var(--pc-home-onhero-gold)",
                     }}
                   >
@@ -943,7 +945,7 @@ function HomePage() {
                       className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
                       style={{
                         background:
-                          "linear-gradient(100deg, color-mix(in oklab, var(--pc-home-onhero-gold) 26%, transparent), transparent 70%)",
+                          "linear-gradient(100deg, color-mix(in oklab, var(--pc-home-onhero-gold) 30%, transparent), transparent 70%)",
                       }}
                     />
                     <ProductCategoryIcon
