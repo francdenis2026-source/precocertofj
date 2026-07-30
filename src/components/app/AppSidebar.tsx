@@ -199,10 +199,11 @@ export function AppSidebar() {
   };
 
   const renderGroup = (group: NavGroup) => (
-    <SidebarGroup key={group.label} className="py-2" data-tone={group.tone}>
+    <SidebarGroup key={group.label} className="py-1.5" data-tone={group.tone}>
       <SidebarGroupLabel
         className={cn(
-          "px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-sidebar-foreground/55",
+          "h-6 px-2.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-foreground/50",
+          "group-data-[collapsible=icon]:hidden",
           group.tone && "pc-admin-group-label",
         )}
       >
@@ -221,34 +222,37 @@ export function AppSidebar() {
                   tooltip={n.label}
                   data-active={active ? "true" : "false"}
                   className={cn(
-                    "pc-nav-link pc-nav-link--row h-9 rounded-md px-2.5 text-sidebar-foreground/82 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                    "pc-nav-link pc-nav-link--row relative h-8 rounded-md px-2 text-sidebar-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                     group.tone && "pc-admin-row",
-                    active && !group.tone && "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm",
+                    active && !group.tone && "bg-sidebar-accent font-semibold text-sidebar-accent-foreground",
                   )}
                 >
                   <Link
                     to={n.to}
                     search={n.search as never}
+                    onClick={closeOnMobile}
                     className="flex items-center gap-2.5"
                   >
+                    {active && !group.tone && (
+                      <span
+                        aria-hidden
+                        className="absolute left-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-r-full bg-sidebar-primary group-data-[collapsible=icon]:hidden"
+                      />
+                    )}
                     <span
                       data-active={active ? "true" : "false"}
                       className={cn(
-                        "grid h-6 w-6 shrink-0 place-items-center rounded-md border border-sidebar-border/60 bg-sidebar-accent/70 text-sidebar-foreground/75",
+                        "grid h-5 w-5 shrink-0 place-items-center rounded",
                         group.tone && "pc-admin-icon-chip",
-                        active && !group.tone && "border-sidebar-primary/50 bg-sidebar-primary text-sidebar-primary-foreground",
+                        !group.tone &&
+                          (active ? "text-sidebar-primary" : "text-sidebar-foreground/60"),
                       )}
                     >
-                      <n.icon className="h-3.5 w-3.5" strokeWidth={active ? 2.35 : 2} />
+                      <n.icon className="h-4 w-4" strokeWidth={active ? 2.3 : 1.9} />
                     </span>
-                    <span className="truncate text-[13px] font-medium">{n.label}</span>
-                    {active && (
-                      <span
-                        className={cn(
-                          "ml-auto h-1.5 w-1.5 rounded-full",
-                          group.tone ? "pc-admin-active-dot" : "bg-sidebar-primary",
-                        )}
-                      />
+                    <span className="truncate text-[13px] leading-none">{n.label}</span>
+                    {active && group.tone && (
+                      <span className="pc-admin-active-dot ml-auto h-1.5 w-1.5 rounded-full" />
                     )}
                   </Link>
                 </SidebarMenuButton>
@@ -260,6 +264,7 @@ export function AppSidebar() {
       </SidebarGroupContent>
     </SidebarGroup>
   );
+
 
   return (
     <Sidebar
