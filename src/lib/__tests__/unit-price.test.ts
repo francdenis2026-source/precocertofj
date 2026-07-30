@@ -61,10 +61,11 @@ describe("computeUnitPrice", () => {
   });
 
   it("R$/L para 2L", () => {
-    const u = computeUnitPrice(8, "Óleo de Soja 900ml");
+    const u = computeUnitPrice(8, "Refrigerante Cola 2L");
     expect(u?.base).toBe("L");
-    expect(u?.perBase).toBeCloseTo(8 / 0.9);
+    expect(u?.perBase).toBeCloseTo(4);
   });
+
 
   it("multipack: calcula perBase pelo total E perPack pela unidade", () => {
     const u = computeUnitPrice(24, "Refri Lata 6x350ml");
