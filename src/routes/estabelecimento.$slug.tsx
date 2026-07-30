@@ -72,6 +72,7 @@ import { useButcherIds } from "@/hooks/useButcherIds";
 
 import { EmptyState, LoadingGrid, RouteError } from "@/components/feedback";
 import { Price } from "@/components/ds/Price";
+import { ShareButton } from "@/components/ds/ShareButton";
 
 
 const brl = (v: number) =>
@@ -378,6 +379,14 @@ function EstablishmentPage() {
         <div className="mx-auto flex w-full max-w-5xl items-center gap-2 px-3 py-1.5 sm:px-6">
           <HomeBrandLink />
           <div className="ml-auto flex items-center gap-1.5">
+            <ShareButton
+              size="sm"
+              label="Compartilhar"
+              title={`${data.store.name} — PreçoCerto`}
+              text={`Veja os preços de ${data.store.name} no PreçoCerto`}
+              className="h-8 !text-[11px] font-bold uppercase tracking-[0.16em]"
+            />
+
             <Link
               to="/estabelecimentos"
               className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[11px] font-bold uppercase leading-none tracking-[0.16em] text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"

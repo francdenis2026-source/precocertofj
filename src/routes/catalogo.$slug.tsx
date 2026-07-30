@@ -17,6 +17,7 @@ import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
 import { Price } from "@/components/ds/Price";
 import { CATEGORY_LABELS } from "@/lib/product-category";
+import { ShareButton } from "@/components/ds/ShareButton";
 
 /* ------------------------------------------------------------------ */
 /* Helpers                                                             */
@@ -211,18 +212,26 @@ function CatalogoPage() {
       <Nav />
       <PageShellContent className="mx-auto w-full max-w-6xl px-4 py-6 sm:px-6">
         <header className="mb-5">
-          <Link
-            to="/estabelecimento/$slug"
-            params={{ slug }}
-            className={cn(
-              tc.meta,
-              "inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground",
-            )}
-          >
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Voltar ao estabelecimento
-          </Link>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <Link
+              to="/estabelecimento/$slug"
+              params={{ slug }}
+              className={cn(
+                tc.meta,
+                "inline-flex items-center gap-1.5 text-muted-foreground transition-colors hover:text-foreground",
+              )}
+            >
+              <ArrowLeft className="h-3.5 w-3.5" />
+              Voltar ao estabelecimento
+            </Link>
+            <ShareButton
+              size="sm"
+              title={`Catálogo de ${storeName} — PreçoCerto`}
+              text={`Veja o catálogo completo de ${storeName} no PreçoCerto`}
+            />
+          </div>
           <p className={cn(tc.eyebrow, "mt-3")}>Catálogo completo</p>
+
           <h1 className={cn(tc.h1, "mt-1")}>
             <span className={tc.storeName}>{storeName}</span>
           </h1>
