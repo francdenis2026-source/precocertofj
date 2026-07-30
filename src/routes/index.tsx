@@ -270,7 +270,7 @@ function HomePage() {
   }, []);
   const trendingPopular = useMemo(() => {
     const rest = popularAll.slice(4);
-    return (rest.length >= 4 ? rest : popularAll).slice(0, shortViewport ? 5 : 8);
+    return (rest.length >= 4 ? rest : popularAll).slice(0, shortViewport ? 4 : 8);
   }, [popularAll, shortViewport]);
 
 
