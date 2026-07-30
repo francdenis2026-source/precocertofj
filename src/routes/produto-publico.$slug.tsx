@@ -30,6 +30,7 @@ import { ShareButton, SignupCTA } from "@/components/ds";
 import { useSession } from "@/hooks/useSession";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { Price } from "@/components/ds/Price";
+import { searchKeys, SEARCH_STALE_TIME, SEARCH_GC_TIME } from "@/lib/search-cache";
 
 
 const fmt = (n: number | null | undefined) =>
@@ -42,9 +43,10 @@ const fmtDate = (iso: string) => {
 
 const productQuery = (slug: string, fn: (args: { data: { slug: string } }) => Promise<PublicProduct | null>) =>
   queryOptions({
-    queryKey: ["public-product", slug],
+    queryKey: searchKeys.product(slug),
     queryFn: () => fn({ data: { slug } }),
-    staleTime: 60_000,
+    staleTime: SEARCH_STALE_TIME,
+    gcTime: SEARCH_GC_TIME,
   });
 
 export const Route = createFileRoute("/produto-publico/$slug")({
