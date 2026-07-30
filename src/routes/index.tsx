@@ -280,7 +280,10 @@ function HomePage() {
 
   return (
     <div
-      className="pc-home relative flex h-[100dvh] max-h-[100dvh] w-full flex-col overflow-hidden antialiased"
+      /* O travamento em uma janela só vale a partir de `lg`: no mobile o
+         conteúdo é empilhado e precisa rolar normalmente, senão as faixas se
+         sobrepõem sob a barra inferior. */
+      className="pc-home relative flex min-h-[100dvh] w-full flex-col antialiased lg:h-[100dvh] lg:max-h-[100dvh] lg:min-h-0 lg:overflow-hidden"
       style={{
         background: "var(--pc-home-hero-bg)",
         color: "var(--pc-home-onhero-fg)",
