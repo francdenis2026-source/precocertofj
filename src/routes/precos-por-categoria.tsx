@@ -416,7 +416,7 @@ function ProductRow({ item }: { item: Comparison }) {
       </div>
 
       <div className="flex items-end justify-between gap-2">
-        <p className={cn(tc.dataPrimary, "text-foreground")}>{formatBRL(item.min_price)}</p>
+        <Price as="p" value={item.min_price} size="lg" />
         <p className={cn(tc.metaMuted, "flex items-center gap-1 text-right")}>
           <StoreIcon className="h-3.5 w-3.5" aria-hidden />
           <span className="font-medium text-[var(--pc-gold-ink)]">

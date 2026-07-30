@@ -42,6 +42,7 @@ import { Input } from "@/components/ui/input";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
+import { Price } from "@/components/ds/Price";
 
 const brl = (v: number) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 2 });
@@ -362,8 +363,13 @@ export function AdminKpiBoard() {
                     <span className="min-w-0 flex-1">
                       <span className={cn(tc.itemTitle, "block truncate")}>{a.productName}</span>
                       <span className={cn(tc.meta, "block truncate")}>
-                        {a.storeName} • {a.previousPrice != null ? `${brl(a.previousPrice)} → ` : ""}
-                        {brl(a.price)}
+                        {a.storeName} •{" "}
+                        {a.previousPrice != null ? (
+                          <>
+                            <Price value={a.previousPrice} size="xs" tone="strike" /> →{" "}
+                          </>
+                        ) : null}
+                        <Price value={a.price} size="xs" />
                       </span>
                     </span>
                     <span

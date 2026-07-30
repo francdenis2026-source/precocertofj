@@ -5,6 +5,7 @@ import { PanelCard } from "@/components/dashboard/PanelCard";
 import { DashboardEmptyState } from "@/components/dashboard/DashboardEmptyState";
 import { IconTile } from "@/components/ui/icon-tile";
 import { brl } from "@/lib/format";
+import { Price } from "@/components/ds/Price";
 
 type Summary = NonNullable<Awaited<ReturnType<typeof getAppSummary>>>;
 type SummaryList = Summary["lists"][number];
@@ -68,9 +69,7 @@ export function ListsPanel({ lists }: ListsPanelProps) {
                           {l.recommendedMarket}
                         </span>{" "}
                         por{" "}
-                        <span className="font-mono text-foreground">
-                          {brl(l.recommendedTotal ?? 0)}
-                        </span>
+                        <Price value={l.recommendedTotal ?? 0} size="xs" />
                       </>
                     )}
                   </p>
@@ -78,7 +77,7 @@ export function ListsPanel({ lists }: ListsPanelProps) {
                 {l.potentialSavings !== null && l.potentialSavings > 0 && (
                   <div className="inline-flex items-center gap-2 rounded-full bg-savings/20 px-3 py-1 text-xs text-savings-foreground">
                     <TrendingDown className="h-3 w-3" />
-                    economia até {brl(l.potentialSavings)}
+                    economia até <Price value={l.potentialSavings} size="xs" tone="savings" />
                   </div>
                 )}
               </div>
@@ -92,9 +91,7 @@ export function ListsPanel({ lists }: ListsPanelProps) {
                     >
                       <Star className="h-3 w-3 fill-current text-warning" />
                       {f.displayName}
-                      <span className="font-mono text-muted-foreground">
-                        {brl(f.bestPrice)}
-                      </span>
+                      <Price value={f.bestPrice} size="xs" tone="muted" />
                     </span>
                   ))}
                 </div>

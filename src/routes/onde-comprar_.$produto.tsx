@@ -112,8 +112,9 @@ function ProdutoComparacaoPage() {
               <p className={cn(tc.eyebrow, "mb-1")}>Produto</p>
               <h1 className={cn(tc.sectionTitle, "mb-0.5")}>{d.productName}</h1>
               <p className={cn(tc.metaMuted, "mb-2")}>
-                {d.ranking.length} {d.ranking.length === 1 ? "loja" : "lojas"} • média {brl(d.avgPrice)} • maior{" "}
-                {brl(d.maxPrice)}
+                {d.ranking.length} {d.ranking.length === 1 ? "loja" : "lojas"} • média{" "}
+                <Price value={d.avgPrice} size="xs" tone="muted" /> • maior{" "}
+                <Price value={d.maxPrice} size="xs" tone="muted" />
                 {d.category ? ` • ${d.category}` : ""}
               </p>
 
