@@ -83,10 +83,10 @@ export const clearAdminLogs = createServerFn({ method: "POST" })
   });
 
 /**
- * "Self-heal": concede o papel de admin ao próprio usuário autenticado.
- * SEGURANÇA: só aplica quando (a) não existe NENHUM admin cadastrado na tabela user_roles OU
- * (b) o e-mail do usuário está em ADMIN_EMAIL_ALLOWLIST.
- * Isto evita escalonamento de privilégio por qualquer usuário autenticado.
+ * "Bootstrap": concede o papel de admin ao próprio usuário autenticado APENAS quando
+ * ainda não existe nenhum admin no sistema (primeira configuração).
+ * SEGURANÇA: não há allowlist por e-mail — depois que existir 1 admin, a promoção
+ * só pode ser feita por um admin existente em user_roles.
  */
 export const grantSelfAdmin = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
@@ -101,20 +101,19 @@ export const grantSelfAdmin = createServerFn({ method: "POST" })
       .eq("role", "admin");
     if (countErr) throw new Error(countErr.message);
 
-    // 2) email do chamador
+    // 2) email do chamador (apenas para trilha de auditoria)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const email = String(((context.claims as any)?.email ?? "")).toLowerCase();
-    const ALLOWLIST = new Set(["francdenisbr@gmail.com"]);
 
     const canBootstrap = (adminCount ?? 0) === 0;
-    const inAllowlist = ALLOWLIST.has(email);
 
-    if (!canBootstrap && !inAllowlist) {
+    if (!canBootstrap) {
       throw new Error(
-        "Bloqueado: já existe pelo menos um admin no sistema e seu e-mail não está na allowlist. " +
+        "Bloqueado: já existe pelo menos um admin no sistema. " +
           "Peça a um admin existente para conceder o papel manualmente em user_roles.",
       );
     }
+
 
     const { error: insertErr } = await supabaseAdmin
       .from("user_roles")

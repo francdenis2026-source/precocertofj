@@ -72,15 +72,20 @@ export const Route = createFileRoute("/api/public/mercadopago/webhook")({
           .select("id")
           .single();
 
-        if (!signatureValid && secret) {
+        // Falha fechada: sem secret configurado OU assinatura inválida => não processa.
+        if (!secret || !signatureValid) {
           if (logRow) {
             await supabaseAdmin
               .from("webhook_events")
-              .update({ status: "failed", error: "assinatura inválida" })
+              .update({
+                status: "failed",
+                error: secret ? "assinatura inválida" : "MP_WEBHOOK_SECRET não configurado",
+              })
               .eq("id", logRow.id);
           }
           return new Response("Invalid signature", { status: 401, headers: CORS });
         }
+
 
         // Only payment events carry a payment id we can process
         const isPayment =
