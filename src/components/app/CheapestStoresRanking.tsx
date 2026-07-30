@@ -297,7 +297,7 @@ export function CheapestStoresRanking() {
                             aria-hidden="true"
                           />
                         </div>
-                        <span className="shrink-0 pc-price text-[11px] text-muted-foreground">
+                        <span className="shrink-0 pc-num text-[11px] text-muted-foreground">
                           {r.wins}/{r.productsCompared}
                         </span>
                       </div>
