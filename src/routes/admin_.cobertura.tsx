@@ -302,7 +302,7 @@ function AutoFocusToggle({ scope: _scope }: { scope: string }) {
       />
       <Label
         htmlFor="coverage-auto-focus"
-        className="cursor-pointer text-[11px] font-normal text-muted-foreground"
+        className="cursor-pointer text-[12.5px] font-normal text-muted-foreground"
       >
         Auto ao focar
       </Label>

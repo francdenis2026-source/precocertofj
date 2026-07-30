@@ -580,7 +580,7 @@ function PlansTab() {
                     )}
                   </div>
                   <p className="text-xs text-muted-foreground">{plan.days} dias de acesso</p>
-                  <p className="mt-0.5 inline-flex items-center gap-1 rounded-md border border-brand-gold/30 bg-brand-gold/10 px-1.5 py-0.5 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">
+                  <p className="mt-0.5 inline-flex items-center gap-1 rounded-md border border-brand-gold/30 bg-brand-gold/10 px-1.5 py-0.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">
                     IA · {plan.ai_monthly_quota > 0 ? `${plan.ai_monthly_quota}/mês` : "sem cota"}
                   </p>
                 </div>
@@ -716,7 +716,7 @@ function PlanDialog({
                   value={form.ai_monthly_quota}
                   onChange={(e) => setForm({ ...form, ai_monthly_quota: Math.max(0, Number(e.target.value) || 0) })}
                 />
-                <p className="mt-1 text-[11px] text-muted-foreground">
+                <p className="mt-1 text-[12.5px] text-muted-foreground">
                   0 = sem acesso à IA. Sugestões: Degustação 1 · Mensal 30 · Trimestral 40 · Anual 60.
                 </p>
               </div>
@@ -1703,11 +1703,11 @@ function WebhooksTab() {
                         <div className="flex flex-col gap-1">
                           <StatusPill status={ev.status} />
                           {!ev.signature_valid && (
-                            <span className="text-[11px] text-destructive">assinatura inválida</span>
+                            <span className="text-[12.5px] text-destructive">assinatura inválida</span>
                           )}
                         </div>
                       </TableCell>
-                      <TableCell className="font-mono text-[11px]">
+                      <TableCell className="font-mono text-[12.5px]">
                         {ev.subscriber_id ? ev.subscriber_id.slice(0, 8) : "-"}
                       </TableCell>
                       <TableCell className="text-center text-sm">{ev.attempts}</TableCell>
@@ -2637,14 +2637,14 @@ function EstablishmentsTab() {
                       <TableRow key={e.id}>
                         <TableCell className="max-w-[240px]">
                           <div className="truncate font-medium">{e.name}</div>
-                          <div className="truncate text-[11px] text-muted-foreground md:hidden">
+                          <div className="truncate text-[12.5px] text-muted-foreground md:hidden">
                             {kindLabel[e.kind]} · {e.city}/{e.state}
                             {e.neighborhood ? ` · ${e.neighborhood}` : ""}
                           </div>
-                          {e.cnpj && <div className="hidden text-[11px] text-muted-foreground md:block">{e.cnpj}</div>}
+                          {e.cnpj && <div className="hidden text-[12.5px] text-muted-foreground md:block">{e.cnpj}</div>}
                         </TableCell>
                         <TableCell className="hidden md:table-cell">
-                          <Badge variant="outline" className="text-[11px]">{kindLabel[e.kind]}</Badge>
+                          <Badge variant="outline" className="text-[12.5px]">{kindLabel[e.kind]}</Badge>
                         </TableCell>
                         <TableCell className="hidden truncate lg:table-cell">{e.city} / {e.state}</TableCell>
                         <TableCell className="hidden truncate xl:table-cell">{e.neighborhood ?? "—"}</TableCell>

@@ -279,7 +279,7 @@ function SuggestionRow({ suggestion, editable }: { suggestion: CatalogSuggestion
             type="button"
             onClick={() => aiM.mutate()}
             disabled={aiM.isPending}
-            className="mt-1 inline-flex items-center gap-1 text-[11px] text-primary hover:underline disabled:opacity-50"
+            className="mt-1 inline-flex items-center gap-1 text-[12.5px] text-primary hover:underline disabled:opacity-50"
           >
             {aiM.isPending ? <Loader2 className="h-3 w-3 animate-spin" /> : <Wand2 className="h-3 w-3" />}
             Reclassificar com IA

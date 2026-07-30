@@ -243,18 +243,18 @@ function Page() {
                     <DraftIcon draft={draft} />
                     <div className="min-w-0 flex-1 space-y-2">
                       <div className="flex items-center justify-between gap-2">
-                        <span className="truncate text-[11px] uppercase tracking-wider text-muted-foreground">
+                        <span className="truncate text-[12.5px] uppercase tracking-wider text-muted-foreground">
                           {c.slug}
                         </span>
                         {isDirty ? (
-                          <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
+                          <span className="shrink-0 rounded-full bg-primary/10 px-2 py-0.5 text-[12.5px] font-medium text-primary">
                             alterado
                           </span>
                         ) : null}
                       </div>
 
                       <div className="space-y-1">
-                        <Label htmlFor={`lbl-${c.slug}`} className="text-[11px] text-muted-foreground">
+                        <Label htmlFor={`lbl-${c.slug}`} className="text-[12.5px] text-muted-foreground">
                           Rótulo exibido
                         </Label>
                         <Input
@@ -301,11 +301,11 @@ function Page() {
                       </div>
 
                       {err ? (
-                        <p className="flex items-center gap-1 text-[11px] text-destructive">
+                        <p className="flex items-center gap-1 text-[12.5px] text-destructive">
                           <AlertTriangle className="h-3 w-3" /> {err}
                         </p>
                       ) : (
-                        <p className="truncate text-[11px] text-muted-foreground">
+                        <p className="truncate text-[12.5px] text-muted-foreground">
                           {draft.icon
                             ? draft.icon.kind === "url"
                               ? "Ícone: imagem"

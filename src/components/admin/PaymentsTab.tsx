@@ -124,7 +124,7 @@ export function PaymentsTab() {
               placeholder={cfg?.hasAccessToken ? "Deixe vazio para manter o atual" : "APP_USR-..."}
               autoComplete="off"
             />
-            <p className="text-[11px] text-muted-foreground mt-1">
+            <p className="text-[12.5px] text-muted-foreground mt-1">
               Use <code>-</code> para remover o token salvo.
             </p>
           </div>
@@ -142,7 +142,7 @@ export function PaymentsTab() {
               placeholder={cfg?.hasWebhookSecret ? "Deixe vazio para manter o atual" : "Chave secreta do painel MP"}
               autoComplete="off"
             />
-            <p className="text-[11px] text-muted-foreground mt-1">
+            <p className="text-[12.5px] text-muted-foreground mt-1">
               Configure a URL do webhook no painel MP como <code>/api/public/mercadopago/webhook</code>.
             </p>
           </div>

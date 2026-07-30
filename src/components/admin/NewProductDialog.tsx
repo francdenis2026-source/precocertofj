@@ -175,7 +175,7 @@ export function NewProductDialog({ onCreated }: { onCreated?: () => void }) {
               aria-invalid={displayName.length > 0 && normalizedName.length < 2}
             />
             {displayName && normalizedKey && (
-              <p className="flex items-center gap-1 text-[11px] text-muted-foreground">
+              <p className="flex items-center gap-1 text-[12.5px] text-muted-foreground">
                 <Info className="h-3 w-3" />
                 Chave de catálogo: <span className="font-mono text-foreground">{normalizedKey}</span>
               </p>
@@ -213,12 +213,12 @@ export function NewProductDialog({ onCreated }: { onCreated?: () => void }) {
               className={cn(ean.ok === false && "border-destructive focus-visible:ring-destructive")}
             />
             {ean.ok === true && (
-              <p className="flex items-center gap-1 text-[11px] text-emerald-600 dark:text-emerald-400">
+              <p className="flex items-center gap-1 text-[12.5px] text-emerald-600 dark:text-emerald-400">
                 <CheckCircle2 className="h-3 w-3" /> {ean.format} válido
               </p>
             )}
             {ean.ok === false && (
-              <p className="flex items-center gap-1 text-[11px] text-destructive">
+              <p className="flex items-center gap-1 text-[12.5px] text-destructive">
                 <AlertTriangle className="h-3 w-3" /> {ean.reason}
               </p>
             )}
@@ -249,12 +249,12 @@ export function NewProductDialog({ onCreated }: { onCreated?: () => void }) {
                 className={cn((priceIsLow || (priceIsHigh && !forceHighPrice)) && "border-amber-500")}
               />
               {priceIsLow && (
-                <p className="flex items-center gap-1 text-[11px] text-destructive">
+                <p className="flex items-center gap-1 text-[12.5px] text-destructive">
                   <AlertTriangle className="h-3 w-3" /> Preço mínimo R$ {MIN_PRICE.toFixed(2).replace(".", ",")}
                 </p>
               )}
               {priceIsHigh && (
-                <label className="flex items-start gap-1.5 text-[11px] text-amber-700 dark:text-amber-400">
+                <label className="flex items-start gap-1.5 text-[12.5px] text-amber-700 dark:text-amber-400">
                   <input
                     type="checkbox"
                     checked={forceHighPrice}

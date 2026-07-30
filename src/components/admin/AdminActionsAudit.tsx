@@ -224,7 +224,7 @@ export function AdminActionsAudit() {
               <History className="h-4 w-4" /> Auditoria de ações críticas
               <span
                 className={cn(
-                  "inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[11px] font-medium",
+                  "inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[12.5px] font-medium",
                   liveConnected
                     ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
                     : "border-muted-foreground/30 bg-muted text-muted-foreground",
@@ -335,7 +335,7 @@ export function AdminActionsAudit() {
 
         <div className="mt-2 grid gap-2 sm:grid-cols-3 lg:grid-cols-4">
           <div className="grid gap-1">
-            <label className={cn(tc.meta, "text-[11px] uppercase tracking-wider")}>De</label>
+            <label className={cn(tc.meta, "text-[12.5px] uppercase tracking-wider")}>De</label>
             <Input
               type="date"
               value={from}
@@ -346,7 +346,7 @@ export function AdminActionsAudit() {
             />
           </div>
           <div className="grid gap-1">
-            <label className={cn(tc.meta, "text-[11px] uppercase tracking-wider")}>Até</label>
+            <label className={cn(tc.meta, "text-[12.5px] uppercase tracking-wider")}>Até</label>
             <Input
               type="date"
               value={to}
@@ -357,7 +357,7 @@ export function AdminActionsAudit() {
             />
           </div>
           <div className="grid gap-1">
-            <label className={cn(tc.meta, "text-[11px] uppercase tracking-wider")}>Período rápido</label>
+            <label className={cn(tc.meta, "text-[12.5px] uppercase tracking-wider")}>Período rápido</label>
             <Select
               value={days}
               onValueChange={(v) => { setDays(v); if (v !== "all") { setFrom(""); setTo(""); } }}

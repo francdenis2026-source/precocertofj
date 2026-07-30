@@ -462,7 +462,7 @@ function Page() {
                 onChange={(v) => setManualForm((f) => ({ ...f, qty: v }))}
               />
               <div>
-                <div className="mb-1 text-[11px] uppercase tracking-wide text-muted-foreground">
+                <div className="mb-1 text-[12.5px] uppercase tracking-wide text-muted-foreground">
                   Un.
                 </div>
                 <Select
@@ -681,7 +681,7 @@ function Page() {
                         {hasExisting && (
                           <div className="grid gap-3 rounded-md border bg-background p-3 sm:grid-cols-2">
                             <div>
-                              <div className="mb-1 text-[11px] uppercase tracking-wide text-muted-foreground">
+                              <div className="mb-1 text-[12.5px] uppercase tracking-wide text-muted-foreground">
                                 Já cadastrado neste estabelecimento
                               </div>
                               <div className="text-sm font-medium">{r.existing!.productName}</div>
@@ -695,7 +695,7 @@ function Page() {
                               </div>
                             </div>
                             <div>
-                              <div className="mb-1 text-[11px] uppercase tracking-wide text-muted-foreground">
+                              <div className="mb-1 text-[12.5px] uppercase tracking-wide text-muted-foreground">
                                 IA leu (novo preço)
                               </div>
                               <div className={fieldClass(r.divergences.includes("name"))}>
@@ -743,7 +743,7 @@ function Page() {
                             }
                           />
                           <div>
-                            <div className="mb-1 text-[11px] uppercase tracking-wide text-muted-foreground">
+                            <div className="mb-1 text-[12.5px] uppercase tracking-wide text-muted-foreground">
                               Un.
                             </div>
                             <Select
@@ -871,7 +871,7 @@ function LabeledInput({
 }) {
   return (
     <div className={className}>
-      <div className="mb-1 text-[11px] uppercase tracking-wide text-muted-foreground">{label}</div>
+      <div className="mb-1 text-[12.5px] uppercase tracking-wide text-muted-foreground">{label}</div>
       <Input
         type={type}
         step={step}

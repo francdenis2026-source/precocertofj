@@ -38,7 +38,7 @@ const chipVariants = cva(
           "border-destructive/35 bg-destructive/12 text-destructive hover:bg-destructive/18",
       },
       size: {
-        sm: "px-2 py-0.5 text-[11px]",
+        sm: "px-2 py-0.5 text-[12.5px]",
         md: "px-2.5 py-1 text-xs",
         lg: "px-3 py-1.5 text-sm",
       },

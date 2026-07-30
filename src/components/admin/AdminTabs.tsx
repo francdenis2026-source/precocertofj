@@ -67,7 +67,7 @@ export function AdminTabs({ to, title, items, active, className, tone }: Props) 
       <div className="flex items-center justify-between gap-2 border-b border-border/40 px-4 pt-2 pb-1">
         <nav
           aria-label="Trilha de navegação"
-          className="flex min-w-0 items-center gap-1 text-[11px] font-medium text-muted-foreground"
+          className="flex min-w-0 items-center gap-1 text-[12.5px] font-medium text-muted-foreground"
         >
           <span>Admin</span>
           {title && (
@@ -93,7 +93,7 @@ export function AdminTabs({ to, title, items, active, className, tone }: Props) 
           type="button"
           onClick={handleCopy}
           className={cn(
-            "inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-border/60 px-2.5 py-1 text-[11px] font-semibold text-muted-foreground transition-colors",
+            "inline-flex items-center gap-1 whitespace-nowrap rounded-full border border-border/60 px-2.5 py-1 text-[12.5px] font-semibold text-muted-foreground transition-colors",
             "hover:bg-muted hover:text-foreground",
             "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
           )}

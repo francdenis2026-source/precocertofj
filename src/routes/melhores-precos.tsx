@@ -882,7 +882,7 @@ function Pagination({
       aria-label="Paginação"
       className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-card/60 px-4 py-3"
     >
-      <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
+      <p className="font-mono text-[12.5px] uppercase tracking-[0.16em] text-muted-foreground">
         {from}–{to} de {total}
       </p>
       <div className="flex items-center gap-1">
@@ -890,7 +890,7 @@ function Pagination({
           type="button"
           onClick={() => canPrev && onChange(page - 1)}
           disabled={!canPrev}
-          className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-1 text-[11px] font-semibold text-foreground transition-colors hover:border-primary/40 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-40"
+          className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-1 text-[12.5px] font-semibold text-foreground transition-colors hover:border-primary/40 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-40"
           aria-label="Página anterior"
         >
           <ChevronLeft className="h-3 w-3" />
@@ -915,7 +915,7 @@ function Pagination({
           type="button"
           onClick={() => canNext && onChange(page + 1)}
           disabled={!canNext}
-          className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-1 text-[11px] font-semibold text-foreground transition-colors hover:border-primary/40 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-40"
+          className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-1 text-[12.5px] font-semibold text-foreground transition-colors hover:border-primary/40 hover:text-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-40"
           aria-label="Próxima página"
         >
           Próxima
@@ -941,7 +941,7 @@ function PageButton({
       onClick={() => onClick(page)}
       aria-current={active ? "page" : undefined}
       className={
-        "min-w-[2rem] rounded-full border px-2 py-1 font-mono text-[11px] font-semibold tabular-nums transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background " +
+        "min-w-[2rem] rounded-full border px-2 py-1 font-mono text-[12.5px] font-semibold tabular-nums transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background " +
         (active
           ? "border-primary bg-primary text-primary-foreground"
           : "border-border bg-background text-muted-foreground hover:border-primary/40 hover:text-foreground")
@@ -1005,13 +1005,13 @@ function CategoryTabs({
 function StatCard({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <div className="hairline-gold rounded-xl border border-border bg-card px-4 py-3">
-      <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+      <p className="font-mono text-[12.5px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
         {label}
       </p>
       <p className="mt-1 font-display text-[20px] font-bold leading-tight tracking-tight text-foreground">
         {value}
       </p>
-      {hint && <p className="mt-0.5 truncate text-[11px] text-muted-foreground">{hint}</p>}
+      {hint && <p className="mt-0.5 truncate text-[12.5px] text-muted-foreground">{hint}</p>}
     </div>
   );
 }
@@ -1071,7 +1071,7 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
       {/* Rank ribbon */}
       <span
         aria-label={`Posição ${rank}`}
-        className="absolute left-2 top-2 z-10 inline-flex h-5 min-w-[1.75rem] items-center justify-center rounded-full border border-accent/60 bg-background/95 px-1.5 font-mono text-[11px] font-bold leading-none text-accent shadow-sm backdrop-blur"
+        className="absolute left-2 top-2 z-10 inline-flex h-5 min-w-[1.75rem] items-center justify-center rounded-full border border-accent/60 bg-background/95 px-1.5 font-mono text-[12.5px] font-bold leading-none text-accent shadow-sm backdrop-blur"
       >
         {rank.toString().padStart(2, "0")}
       </span>
@@ -1089,23 +1089,23 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
           sizes="(min-width: 1536px) 16vw, (min-width: 1280px) 20vw, (min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"
         />
         {isMulti ? (
-          <span className="absolute right-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-savings px-1.5 py-0.5 font-mono text-[11px] font-bold leading-none text-savings-foreground shadow-sm">
+          <span className="absolute right-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-savings px-1.5 py-0.5 font-mono text-[12.5px] font-bold leading-none text-savings-foreground shadow-sm">
             <TrendingDown className="h-2.5 w-2.5" strokeWidth={2.4} />
             −{Number(row.savings_pct).toFixed(0)}%
           </span>
         ) : (
-          <span className="absolute right-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-background/90 px-1.5 py-0.5 font-mono text-[11px] font-semibold leading-none text-muted-foreground shadow-sm">
+          <span className="absolute right-1.5 top-1.5 inline-flex items-center gap-1 rounded-full bg-background/90 px-1.5 py-0.5 font-mono text-[12.5px] font-semibold leading-none text-muted-foreground shadow-sm">
             <Trophy className="h-2.5 w-2.5 text-accent" strokeWidth={2.4} />
             único
           </span>
         )}
-        <span className="absolute right-1.5 bottom-1.5 inline-flex items-center gap-1 rounded-sm border border-accent/40 bg-background/90 px-1 py-0.5 font-display text-[11px] italic text-foreground backdrop-blur">
+        <span className="absolute right-1.5 bottom-1.5 inline-flex items-center gap-1 rounded-sm border border-accent/40 bg-background/90 px-1 py-0.5 font-display text-[12.5px] italic text-foreground backdrop-blur">
           <StoreIcon className="h-2.5 w-2.5 text-accent" /> {row.store_count}
         </span>
         {cardFreshness && (
           <span
             className={
-              "absolute left-1.5 bottom-1.5 inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 font-mono text-[11px] font-semibold leading-none shadow-sm backdrop-blur " +
+              "absolute left-1.5 bottom-1.5 inline-flex items-center gap-1 rounded-full px-1.5 py-0.5 font-mono text-[12.5px] font-semibold leading-none shadow-sm backdrop-blur " +
               (cardFreshness.stale
                 ? "bg-destructive/90 text-destructive-foreground"
                 : "bg-background/90 text-muted-foreground border border-accent/30")
@@ -1125,13 +1125,13 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
 
       {/* Header — alturas fixas */}
       <div className="flex flex-col gap-0.5 px-2.5 pt-2 sm:px-3 sm:pt-2.5">
-        <span className="h-3 truncate font-sans text-[11px] font-semibold uppercase leading-none tracking-[0.2em] text-accent">
+        <span className="h-3 truncate font-sans text-[12.5px] font-semibold uppercase leading-none tracking-[0.2em] text-accent">
           {catLabel || "\u00A0"}
         </span>
-        <h2 className="line-clamp-2 h-[2.4em] font-display text-[12px] font-semibold leading-[1.2] tracking-tight text-foreground sm:text-[12.5px]">
+        <h2 className="line-clamp-2 h-[2.4em] font-display text-[13px] font-semibold leading-[1.2] tracking-tight text-foreground sm:text-[12.5px]">
           {row.display_name}
         </h2>
-        <span className="h-3 truncate font-display text-[11px] italic leading-none text-muted-foreground">
+        <span className="h-3 truncate font-display text-[12.5px] italic leading-none text-muted-foreground">
           {size ?? "\u00A0"}
         </span>
       </div>
@@ -1161,7 +1161,7 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
           />
         </div>
         {/* Métricas de ordenação — visíveis em todos os cards */}
-        <dl className="mt-1.5 grid grid-cols-3 gap-1 border-t border-accent/15 pt-1.5 text-[10.5px] uppercase tracking-[0.12em] text-muted-foreground">
+        <dl className="mt-1.5 grid grid-cols-3 gap-1 border-t border-accent/15 pt-1.5 text-[12px] uppercase tracking-[0.12em] text-muted-foreground">
           <div className="min-w-0">
             <dt className="truncate">Menor</dt>
             <Price as="dd" value={bestPrice} size="sm" tone="best" className="truncate" />
@@ -1197,7 +1197,7 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
                 className="flex h-7 items-center px-2.5 sm:h-8 sm:px-3"
                 aria-hidden
               >
-                <span className="text-[11px] italic text-muted-foreground/50">—</span>
+                <span className="text-[12.5px] italic text-muted-foreground/50">—</span>
               </li>
             );
           }
@@ -1225,7 +1225,7 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
                 {freshness ? (
                   <span
                     className={
-                      "inline-flex shrink-0 items-center gap-0.5 rounded-full px-1 py-0.5 text-[11px] font-medium leading-none " +
+                      "inline-flex shrink-0 items-center gap-0.5 rounded-full px-1 py-0.5 text-[12.5px] font-medium leading-none " +
                       (freshness.stale
                         ? "bg-destructive/10 text-destructive"
                         : "bg-muted/60 text-muted-foreground")
@@ -1260,7 +1260,7 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
       </ul>
 
       {/* Footer CTA */}
-      <div className="flex h-7 items-center justify-between border-t border-accent/30 px-2.5 font-display text-[11px] italic leading-none text-primary sm:h-8 sm:px-3 sm:text-[11px]">
+      <div className="flex h-7 items-center justify-between border-t border-accent/30 px-2.5 font-display text-[12.5px] italic leading-none text-primary sm:h-8 sm:px-3 sm:text-[12.5px]">
         <span>Ver detalhes</span>
         <ArrowRight className="h-3 w-3 shrink-0 transition-transform group-hover:translate-x-0.5" />
       </div>
@@ -1325,7 +1325,7 @@ function PriceReportInlineButton({
         type="button"
         onClick={handleOpen}
         disabled={sessionLoading}
-        className="mt-1 inline-flex w-full items-center justify-center gap-1 rounded-md border border-border bg-background/70 px-2 py-1 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-muted-foreground transition hover:border-destructive/40 hover:bg-destructive/5 hover:text-destructive disabled:opacity-50"
+        className="mt-1 inline-flex w-full items-center justify-center gap-1 rounded-md border border-border bg-background/70 px-2 py-1 font-mono text-[12.5px] font-semibold uppercase tracking-[0.16em] text-muted-foreground transition hover:border-destructive/40 hover:bg-destructive/5 hover:text-destructive disabled:opacity-50"
         aria-label={user ? `Denunciar preço de ${productName} em ${storeName}` : `Entrar para denunciar preço de ${productName}`}
         title={user ? "Denunciar preço incorreto" : "É necessário entrar na conta para denunciar"}
       >
@@ -1353,7 +1353,7 @@ function PriceReportInlineButton({
                 >
                   Denunciar preço
                 </h3>
-                <p className="mt-0.5 text-[12px] text-muted-foreground">
+                <p className="mt-0.5 text-[13px] text-muted-foreground">
                   {productName} em <strong className="text-foreground">{storeName}</strong> — preço atual{" "}
                   <Price value={currentPrice} size="sm" />
                 </p>
@@ -1376,13 +1376,13 @@ function PriceReportInlineButton({
                 <p className="font-display text-sm font-bold text-foreground">
                   Denúncia registrada!
                 </p>
-                <p className="mt-1 text-[12px] text-muted-foreground">
+                <p className="mt-1 text-[13px] text-muted-foreground">
                   Nossa equipe vai revisar e atualizar o preço em breve. Obrigado por manter a base confiável.
                 </p>
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="mt-3 inline-flex items-center justify-center rounded-full border border-border bg-background px-4 py-1.5 text-[12px] font-semibold text-foreground hover:bg-muted"
+                  className="mt-3 inline-flex items-center justify-center rounded-full border border-border bg-background px-4 py-1.5 text-[13px] font-semibold text-foreground hover:bg-muted"
                 >
                   Fechar
                 </button>
@@ -1391,7 +1391,7 @@ function PriceReportInlineButton({
               <>
             <div className="mt-3 space-y-3">
               <div>
-                <label className="mb-1 block text-[11px] font-semibold text-muted-foreground">Motivo</label>
+                <label className="mb-1 block text-[12.5px] font-semibold text-muted-foreground">Motivo</label>
                 <select
                   value={reason}
                   onChange={(e) => setReason(e.target.value as typeof reason)}
@@ -1404,7 +1404,7 @@ function PriceReportInlineButton({
                 </select>
               </div>
               <div>
-                <label className="mb-1 block text-[11px] font-semibold text-muted-foreground">
+                <label className="mb-1 block text-[12.5px] font-semibold text-muted-foreground">
                   Preço correto (opcional)
                 </label>
                 <input
@@ -1419,7 +1419,7 @@ function PriceReportInlineButton({
                 />
               </div>
               <div>
-                <label className="mb-1 block text-[11px] font-semibold text-muted-foreground">
+                <label className="mb-1 block text-[12.5px] font-semibold text-muted-foreground">
                   Observação (opcional)
                 </label>
                 <textarea
@@ -1437,7 +1437,7 @@ function PriceReportInlineButton({
                 type="button"
                 onClick={() => setOpen(false)}
                 disabled={busy}
-                className="rounded-full border border-border bg-background px-3 py-1.5 text-[12px] font-semibold text-muted-foreground hover:text-foreground"
+                className="rounded-full border border-border bg-background px-3 py-1.5 text-[13px] font-semibold text-muted-foreground hover:text-foreground"
               >
                 Cancelar
               </button>
@@ -1478,7 +1478,7 @@ function PriceReportInlineButton({
                     setBusy(false);
                   }
                 }}
-                className="inline-flex items-center gap-1 rounded-full bg-destructive px-3 py-1.5 text-[12px] font-semibold text-destructive-foreground hover:bg-destructive/90 disabled:opacity-50"
+                className="inline-flex items-center gap-1 rounded-full bg-destructive px-3 py-1.5 text-[13px] font-semibold text-destructive-foreground hover:bg-destructive/90 disabled:opacity-50"
               >
                 <Flag className="h-3 w-3" />
                 {busy ? "Enviando…" : "Enviar denúncia"}

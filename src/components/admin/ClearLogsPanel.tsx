@@ -126,7 +126,7 @@ export function ClearLogsPanel() {
                   />
                   <Label htmlFor={`scope-${s.key}`} className="cursor-pointer">
                     <span className="font-medium">{s.label}</span>
-                    <span className="ml-2 font-mono text-[11px] text-muted-foreground">{s.key}</span>
+                    <span className="ml-2 font-mono text-[12.5px] text-muted-foreground">{s.key}</span>
                     <p className="mt-0.5 text-muted-foreground">{s.description}</p>
                   </Label>
                 </li>
@@ -147,7 +147,7 @@ export function ClearLogsPanel() {
               onChange={(e) => setOlderThan(e.target.value)}
               className="mt-1"
             />
-            <p className="mt-1 text-[11px] text-muted-foreground">
+            <p className="mt-1 text-[12.5px] text-muted-foreground">
               Deixe vazio para apagar <strong>todos</strong> os registros dos escopos selecionados.
             </p>
           </div>

@@ -88,7 +88,7 @@ export function EstablishmentDeleteDialog({
                         <span className="text-foreground">{r.label}</span>
                         <span className="font-mono text-muted-foreground">
                           {r.count.toLocaleString("pt-BR")}{" "}
-                          <span className="text-[11px]">({r.table})</span>
+                          <span className="text-[12.5px]">({r.table})</span>
                         </span>
                       </li>
                     ))}
@@ -107,7 +107,7 @@ export function EstablishmentDeleteDialog({
                         <span className="text-foreground">{r.label}</span>
                         <span className="font-mono text-muted-foreground">
                           {r.count.toLocaleString("pt-BR")}{" "}
-                          <span className="text-[11px]">({r.table})</span>
+                          <span className="text-[12.5px]">({r.table})</span>
                         </span>
                       </li>
                     ))}

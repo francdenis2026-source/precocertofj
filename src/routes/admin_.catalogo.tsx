@@ -416,7 +416,7 @@ function ItemsPanel() {
               className="h-full w-full object-cover"
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center text-[11px] text-muted-foreground">
+            <div className="flex h-full w-full items-center justify-center text-[12.5px] text-muted-foreground">
               sem
             </div>
           )}
@@ -431,7 +431,7 @@ function ItemsPanel() {
       cell: (r) => (
         <div className="min-w-0 max-w-[320px]">
           <div className="truncate text-[13px] font-medium text-foreground">{r.displayName}</div>
-          <div className="truncate text-[11px] text-muted-foreground">{r.normalizedName}</div>
+          <div className="truncate text-[12.5px] text-muted-foreground">{r.normalizedName}</div>
         </div>
       ),
     },
@@ -449,7 +449,7 @@ function ItemsPanel() {
       accessor: (r) => r.barcode ?? "",
       cell: (r) =>
         r.barcode ? (
-          <span className="font-mono text-[12px]">{r.barcode}</span>
+          <span className="font-mono text-[13px]">{r.barcode}</span>
         ) : (
           <span className="text-muted-foreground">—</span>
         ),
@@ -469,7 +469,7 @@ function ItemsPanel() {
       align: "right",
       accessor: (r) => new Date(r.updatedAt),
       cell: (r) => (
-        <span className="text-[11px] text-muted-foreground tabular-nums">
+        <span className="text-[12.5px] text-muted-foreground tabular-nums">
           {formatShortDate(r.updatedAt)}
         </span>
       ),
@@ -621,7 +621,7 @@ function ItemsPanel() {
                 />
               </div>
               <div className="flex items-center justify-between gap-2 pt-3">
-                <Badge variant="outline" className="max-w-[60%] truncate font-mono text-[11px]">
+                <Badge variant="outline" className="max-w-[60%] truncate font-mono text-[12.5px]">
                   {editingFor.normalizedName.slice(0, 40)}
                   {editingFor.normalizedName.length > 40 ? "…" : ""}
                 </Badge>
@@ -784,7 +784,7 @@ function AlertsPanel() {
                   )}
                   <div>
                     <div className="text-sm font-medium">{e.displayName}</div>
-                    <div className="text-[11px] text-muted-foreground">
+                    <div className="text-[12.5px] text-muted-foreground">
                       {e.brand ?? "—"} · {e.normalizedName}
                     </div>
                   </div>
@@ -934,7 +934,7 @@ function MergePanel() {
                       )}
                       <div>
                         <div className="text-sm font-medium">{e.displayName}</div>
-                        <div className="text-[11px] text-muted-foreground">
+                        <div className="text-[12.5px] text-muted-foreground">
                           {e.brand ?? "—"} · {e.normalizedName}
                         </div>
                       </div>
@@ -1233,7 +1233,7 @@ function ImagesPanel() {
             ) : null}
             Salvar limite
           </Button>
-          <div className="w-full text-[11px] text-muted-foreground">
+          <div className="w-full text-[12.5px] text-muted-foreground">
             Score combina nome (Jaccard), marca, código de barras e domínio do varejo.
             Match de código de barras força score ≥ 90%. Recomendado: 55–70%.
           </div>
@@ -1255,7 +1255,7 @@ function ImagesPanel() {
             >
               <div className="min-w-0">
                 <div className="text-sm font-medium">{r.displayName}</div>
-                <div className="text-[11px] text-muted-foreground">
+                <div className="text-[12.5px] text-muted-foreground">
                   {r.brand ?? "—"} ·{" "}
                   {pending ? (
                     <Badge variant="outline" className="ml-1">
@@ -1405,7 +1405,7 @@ function ReviewPanel() {
             <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
               <div className="min-w-0">
                 <div className="text-sm font-medium">{r.displayName}</div>
-                <div className="text-[11px] text-muted-foreground">
+                <div className="text-[12.5px] text-muted-foreground">
                   {r.brand ?? "—"} ·{" "}
                   <Badge variant="outline" className="uppercase">
                     {r.action === "image_generated" ? "IA" : "upload"}
@@ -1417,7 +1417,7 @@ function ReviewPanel() {
                   )}
                 </div>
               </div>
-              <div className="text-right text-[11px] text-muted-foreground">
+              <div className="text-right text-[12.5px] text-muted-foreground">
                 <div>{new Date(r.createdAt).toLocaleString("pt-BR")}</div>
                 <div>{r.actorEmail ?? "sistema"}</div>
               </div>
@@ -1425,7 +1425,7 @@ function ReviewPanel() {
 
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
-                <div className="mb-1 text-[11px] font-medium text-muted-foreground">
+                <div className="mb-1 text-[12.5px] font-medium text-muted-foreground">
                   Anterior
                 </div>
                 <div className="flex h-32 items-center justify-center overflow-hidden rounded border bg-muted">
@@ -1437,12 +1437,12 @@ function ReviewPanel() {
                       loading="lazy"
                     />
                   ) : (
-                    <span className="text-[11px] text-muted-foreground">sem foto</span>
+                    <span className="text-[12.5px] text-muted-foreground">sem foto</span>
                   )}
                 </div>
               </div>
               <div>
-                <div className="mb-1 text-[11px] font-medium text-muted-foreground">Atual</div>
+                <div className="mb-1 text-[12.5px] font-medium text-muted-foreground">Atual</div>
                 <div className="flex h-32 items-center justify-center overflow-hidden rounded border bg-muted">
                   {r.newImageUrl ? (
                     <img
@@ -1452,7 +1452,7 @@ function ReviewPanel() {
                       loading="lazy"
                     />
                   ) : (
-                    <span className="text-[11px] text-muted-foreground">sem foto</span>
+                    <span className="text-[12.5px] text-muted-foreground">sem foto</span>
                   )}
                 </div>
               </div>
@@ -1534,7 +1534,7 @@ function AuditPanel() {
       width: "170px",
       accessor: (r) => new Date(r.createdAt),
       cell: (r) => (
-        <span className="text-[11px] text-muted-foreground tabular-nums">
+        <span className="text-[12.5px] text-muted-foreground tabular-nums">
           {new Date(r.createdAt).toLocaleString("pt-BR")}
         </span>
       ),
@@ -1546,7 +1546,7 @@ function AuditPanel() {
       width: "110px",
       accessor: (r) => r.action,
       cell: (r) => (
-        <Badge variant="outline" className="text-[11px] uppercase">
+        <Badge variant="outline" className="text-[12.5px] uppercase">
           {r.action}
         </Badge>
       ),
@@ -1557,7 +1557,7 @@ function AuditPanel() {
       width: "130px",
       cell: (r) =>
         r.field ? (
-          <span className="font-mono text-[11px]">{r.field}</span>
+          <span className="font-mono text-[12.5px]">{r.field}</span>
         ) : (
           <span className="text-muted-foreground">—</span>
         ),
@@ -1569,7 +1569,7 @@ function AuditPanel() {
       accessor: (r) => r.catalogDisplayName ?? "",
       cell: (r) =>
         r.catalogDisplayName ? (
-          <span className="text-[12px]">{r.catalogDisplayName}</span>
+          <span className="text-[13px]">{r.catalogDisplayName}</span>
         ) : (
           <span className="text-muted-foreground">—</span>
         ),
@@ -1579,7 +1579,7 @@ function AuditPanel() {
       header: "Alteração",
       cell: (r) =>
         r.oldValue !== null || r.newValue !== null ? (
-          <span className="text-[11px] text-muted-foreground">
+          <span className="text-[12.5px] text-muted-foreground">
             <span className="line-through">{r.oldValue ?? "—"}</span>
             {" → "}
             <span className="text-foreground">{r.newValue ?? "—"}</span>
@@ -1596,7 +1596,7 @@ function AuditPanel() {
       width: "190px",
       accessor: (r) => r.actorEmail ?? r.actorUserId ?? "sistema",
       cell: (r) => (
-        <span className="text-[11px] text-muted-foreground">
+        <span className="text-[12.5px] text-muted-foreground">
           {r.actorEmail ?? r.actorUserId ?? "sistema"}
         </span>
       ),
@@ -1756,11 +1756,11 @@ function GalleryPanel() {
                   )}
                 </div>
                 <div className="flex flex-col gap-1 p-2">
-                  <div className="line-clamp-2 text-[12px] font-medium leading-tight text-foreground">
+                  <div className="line-clamp-2 text-[13px] font-medium leading-tight text-foreground">
                     {r.displayName}
                   </div>
                   {r.brand && (
-                    <div className="truncate text-[11px] text-muted-foreground">{r.brand}</div>
+                    <div className="truncate text-[12.5px] text-muted-foreground">{r.brand}</div>
                   )}
                 </div>
               </div>

@@ -120,7 +120,7 @@ export function CoverageDiagnosticsPanel() {
               />
             )}
             <RpcBlock rpcs={q.data.rpcs} />
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-[12.5px] text-muted-foreground">
               Última verificação: {new Date(q.data.checkedAt).toLocaleString("pt-BR")}
             </p>
           </>
@@ -299,7 +299,7 @@ function SelfHealAdminBlock({
           {busy ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <ShieldCheck className="mr-2 h-4 w-4" />}
           Conceder admin ao meu usuário
         </Button>
-        <p className="text-[11px] text-muted-foreground">
+        <p className="text-[12.5px] text-muted-foreground">
           Só funciona se ainda não existir nenhum admin cadastrado ou se seu e-mail estiver na allowlist do sistema.
           Caso contrário, use a opção 2.
         </p>
@@ -310,7 +310,7 @@ function SelfHealAdminBlock({
         <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
           Opção 2 — Comando SQL para outro admin executar
         </p>
-        <pre className="max-h-40 overflow-auto rounded bg-background p-2 text-[11px] leading-relaxed">
+        <pre className="max-h-40 overflow-auto rounded bg-background p-2 text-[12.5px] leading-relaxed">
 {sqlSnippet}
         </pre>
       </div>

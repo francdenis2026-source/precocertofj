@@ -233,20 +233,20 @@ function AdminReportCard({ report }: { report: AdminPriceReport }) {
               minute: "2-digit",
             })}
           </p>
-          <p className="mt-1 text-[11.5px] text-muted-foreground">
+          <p className="mt-1 text-[13px] text-muted-foreground">
             Reportado por {report.userEmail ?? "usuário anônimo"}
           </p>
         </div>
         <span
-          className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider ${meta.classes}`}
+          className={`shrink-0 rounded-full px-2 py-0.5 text-[12.5px] font-bold uppercase tracking-wider ${meta.classes}`}
         >
           {meta.label}
         </span>
       </div>
 
-      <div className="mt-3 grid grid-cols-2 gap-2 rounded-lg bg-muted/60 p-2.5 text-[11.5px] text-foreground">
+      <div className="mt-3 grid grid-cols-2 gap-2 rounded-lg bg-muted/60 p-2.5 text-[13px] text-foreground">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+          <p className="text-[12.5px] font-semibold uppercase tracking-widest text-muted-foreground">
             Motivo
           </p>
           <p className="font-semibold">
@@ -254,14 +254,14 @@ function AdminReportCard({ report }: { report: AdminPriceReport }) {
           </p>
         </div>
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+          <p className="text-[12.5px] font-semibold uppercase tracking-widest text-muted-foreground">
             Preço na base
           </p>
           <Price as="p" value={report.reportedPrice ?? null} size="md" />
         </div>
         {report.correctPrice != null && (
           <div>
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+            <p className="text-[12.5px] font-semibold uppercase tracking-widest text-muted-foreground">
               Preço sugerido
             </p>
             <Price as="p" value={report.correctPrice} size="md" tone="best" />
@@ -272,7 +272,7 @@ function AdminReportCard({ report }: { report: AdminPriceReport }) {
             <Link
               to="/loja/$id/produto/$slug"
               params={{ id: report.establishmentId, slug: report.productSlug }}
-              className="inline-flex items-center gap-1 text-[11px] font-semibold text-primary hover:underline"
+              className="inline-flex items-center gap-1 text-[12.5px] font-semibold text-primary hover:underline"
             >
               Ver produto <ExternalLink className="h-3 w-3" />
             </Link>
@@ -281,7 +281,7 @@ function AdminReportCard({ report }: { report: AdminPriceReport }) {
       </div>
 
       {report.notes && (
-        <p className="mt-2 rounded-lg bg-background px-3 py-2 text-[12px] italic text-muted-foreground">
+        <p className="mt-2 rounded-lg bg-background px-3 py-2 text-[13px] italic text-muted-foreground">
           "{report.notes}"
         </p>
       )}
@@ -290,7 +290,7 @@ function AdminReportCard({ report }: { report: AdminPriceReport }) {
         <button
           type="button"
           onClick={openEvidence}
-          className="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-1.5 text-[11.5px] font-semibold text-foreground hover:border-primary hover:text-primary"
+          className="mt-2 inline-flex items-center gap-1.5 rounded-lg border border-border bg-background px-3 py-1.5 text-[13px] font-semibold text-foreground hover:border-primary hover:text-primary"
         >
           <ExternalLink className="h-3 w-3" />
           Ver evidência
@@ -299,7 +299,7 @@ function AdminReportCard({ report }: { report: AdminPriceReport }) {
 
       <div className="mt-4 grid gap-3 border-t border-border pt-3 sm:grid-cols-2">
         <div>
-          <label className="mb-1 block text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+          <label className="mb-1 block text-[12.5px] font-semibold uppercase tracking-widest text-muted-foreground">
             Status
           </label>
           <select
@@ -314,7 +314,7 @@ function AdminReportCard({ report }: { report: AdminPriceReport }) {
           </select>
         </div>
         <div>
-          <label className="mb-1 block text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+          <label className="mb-1 block text-[12.5px] font-semibold uppercase tracking-widest text-muted-foreground">
             Ação tomada
           </label>
           <select
@@ -331,7 +331,7 @@ function AdminReportCard({ report }: { report: AdminPriceReport }) {
         </div>
       </div>
 
-      <label className="mt-3 mb-1 block text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+      <label className="mt-3 mb-1 block text-[12.5px] font-semibold uppercase tracking-widest text-muted-foreground">
         Notas do admin
       </label>
       <textarea
@@ -354,7 +354,7 @@ function AdminReportCard({ report }: { report: AdminPriceReport }) {
       </div>
 
       {report.resolvedAt && (
-        <p className="mt-2 text-[11px] text-muted-foreground">
+        <p className="mt-2 text-[12.5px] text-muted-foreground">
           Última resolução em{" "}
           {new Date(report.resolvedAt).toLocaleString("pt-BR", {
             day: "2-digit",
@@ -400,7 +400,7 @@ function EvidenceCleanupButton() {
       type="button"
       onClick={onClick}
       disabled={busy}
-      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-[11px] font-semibold text-muted-foreground hover:border-destructive/40 hover:text-destructive disabled:opacity-60"
+      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-[12.5px] font-semibold text-muted-foreground hover:border-destructive/40 hover:text-destructive disabled:opacity-60"
       title="Excluir evidências antigas (>30 dias) de reportes já finalizados"
     >
       {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />}
@@ -441,7 +441,7 @@ function ScansPurgeButton() {
       type="button"
       onClick={onClick}
       disabled={busy}
-      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-[11px] font-semibold text-muted-foreground hover:border-destructive/40 hover:text-destructive disabled:opacity-60"
+      className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface px-3 py-1.5 text-[12.5px] font-semibold text-muted-foreground hover:border-destructive/40 hover:text-destructive disabled:opacity-60"
       title="Deletar fisicamente arquivos do bucket scans que não são referenciados em nenhum registro"
     >
       {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />}

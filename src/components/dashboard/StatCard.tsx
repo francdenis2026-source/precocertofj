@@ -55,7 +55,7 @@ export function StatCard({
         }}
       />
       <div className="flex items-start justify-between gap-2">
-        <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+        <span className="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
           {label}
         </span>
         {icon ? (
@@ -70,7 +70,7 @@ export function StatCard({
         {trend ? (
           <span
             className={cn(
-              "rounded-full px-2 py-0.5 text-[11px] font-semibold leading-none",
+              "rounded-full px-2 py-0.5 text-[12.5px] font-semibold leading-none",
               trendBadge,
             )}
           >
