@@ -283,6 +283,18 @@ function EstablishmentPage() {
     return data.products.reduce((min, p) => (p.price < min.price ? p : min), data.products[0]);
   }, [data.products]);
 
+  /** Últimos produtos atualizados, para dar sinal de frescor do catálogo. */
+  const recentUpdates = useMemo(
+    () =>
+      [...data.products]
+        .filter((p) => Boolean(p.lastDate))
+        .sort((a, b) => (a.lastDate < b.lastDate ? 1 : -1))
+        .slice(0, 6),
+    [data.products],
+  );
+
+
+
   const hasLocation = Boolean(
     data.store.address || data.store.neighborhood || data.store.city,
   );
@@ -460,7 +472,16 @@ function EstablishmentPage() {
                 </button>
               );
             })}
-            {/* Atalho para o usuário contribuir com novas fotos de prateleira ou nota fiscal. */}
+          </div>
+        )}
+
+        {/* Últimas atualizações + atalho de colaboração (vale para qualquer loja). */}
+        <section className="mt-2.5 rounded-xl border border-border bg-card/70 p-2.5">
+          <div className="flex flex-wrap items-center gap-2">
+            <h2 className="inline-flex items-center gap-1.5 text-[12px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground">
+              <History className="h-3.5 w-3.5" aria-hidden />
+              Últimas atualizações
+            </h2>
             <Link
               to="/colaborar"
               className="ml-auto inline-flex h-8 items-center gap-1.5 rounded-full border border-brand-gold/70 bg-brand-gold/10 px-3 text-[12px] font-semibold leading-none text-foreground transition-colors hover:bg-brand-gold hover:text-brand-navy"
@@ -469,7 +490,31 @@ function EstablishmentPage() {
               Enviar fotos / nota
             </Link>
           </div>
-        )}
+          {recentUpdates.length > 0 ? (
+            <ul className="mt-2 flex flex-wrap gap-1.5">
+              {recentUpdates.map((p) => (
+                <li
+                  key={p.slug}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[12px] leading-none"
+                >
+                  <span className="max-w-[16rem] truncate font-medium text-foreground">
+                    {p.productName}
+                  </span>
+                  <span className="font-bold tabular-nums text-brand-gold">{brl(p.price)}</span>
+                  <span className="text-[11px] tabular-nums text-muted-foreground">
+                    {new Date(p.lastDate).toLocaleDateString("pt-BR")}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="mt-2 text-[12px] leading-snug text-muted-foreground">
+              Ainda não há atualizações recentes. Envie fotos das etiquetas para começar.
+            </p>
+          )}
+        </section>
+
+
 
 
         {tab === "catalogo" && (

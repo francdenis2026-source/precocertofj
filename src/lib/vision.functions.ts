@@ -1,4 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
+import { createClient } from "@supabase/supabase-js";
+import { normalizeBarcode } from "@/lib/barcode";
 
 export type VisionProduct = {
   productName: string | null;
@@ -7,7 +9,11 @@ export type VisionProduct = {
   unit: string | null;
   barcode: string | null;
   category: string | null;
+  /** Produto já existente no catálogo com o mesmo código de barras. */
+  catalogMatch?: { id: string; displayName: string } | null;
+
 };
+
 
 export type VisionExtract = {
   /** All products the AI could identify in the photo. */
@@ -37,7 +43,13 @@ Responda EXCLUSIVAMENTE em JSON válido:
 
 Regras:
 - price em reais como número (ex.: 12.90). "R$ 12,90" vira 12.90.
-- barcode apenas se o EAN/UPC estiver legível (só dígitos, 8 a 14 caracteres).
+- barcode: leia o EAN/UPC **impresso na etiqueta de gôndola ou na embalagem**, abaixo das barras.
+  * Copie apenas os dígitos, na ordem, sem espaços, pontos ou hífens.
+  * Formatos válidos: 8 dígitos (EAN-8/UPC-E), 12 (UPC-A), 13 (EAN-13) ou 14 (GTIN-14).
+  * A maioria dos produtos brasileiros começa com 789 ou 790.
+  * Se qualquer dígito estiver borrado, cortado ou você precisar adivinhar, use null.
+    É melhor null do que um código errado.
+  * Nunca use o preço, o código interno da loja (PLU) ou a data de validade como barcode.
 - unit: ex. "1L", "500g", "pacote 5kg".
 - category: uma destas quando possível — "laticinios", "carnes", "padaria", "biscoitos", "doces", "bebidas", "bebidas_em_po", "limpeza", "higiene", "mercearia", "congelados", "outros". Se não souber, use null.
 - brand: marca visível (ex.: "Nestlé", "Ypê"). Sem marca visível → null.
@@ -123,8 +135,11 @@ export const analyzeProductImage = createServerFn({ method: "POST" })
       brand: toStr(p.brand),
       unit: toStr(p.unit),
       price: toNum(p.price),
-      barcode: toStr(p.barcode),
+      // Descarta códigos que não passam no dígito verificador: um EAN errado
+      // vincularia produtos diferentes entre si.
+      barcode: normalizeBarcode(toStr(p.barcode)),
       category: toStr(p.category),
+      catalogMatch: null,
     });
 
     let products: VisionProduct[] = [];
@@ -145,6 +160,38 @@ export const analyzeProductImage = createServerFn({ method: "POST" })
         }),
       ];
     }
+
+    // Vincula automaticamente ao catálogo já existente pelos códigos válidos.
+    const codes = Array.from(
+      new Set(products.map((p) => p.barcode).filter((b): b is string => Boolean(b))),
+    );
+    if (codes.length > 0) {
+      const url = process.env.SUPABASE_URL;
+      const publishableKey = process.env.SUPABASE_PUBLISHABLE_KEY;
+      if (url && publishableKey) {
+        try {
+          const supabase = createClient(url, publishableKey, {
+            auth: { persistSession: false, autoRefreshToken: false },
+          });
+          const { data: rows } = await supabase
+            .from("product_catalog")
+            .select("id, display_name, barcode")
+            .in("barcode", codes);
+          const byCode = new Map(
+            (rows ?? [])
+              .filter((r) => typeof r.barcode === "string" && r.barcode)
+              .map((r) => [r.barcode as string, { id: r.id, displayName: r.display_name }]),
+          );
+          products = products.map((p) => ({
+            ...p,
+            catalogMatch: p.barcode ? (byCode.get(p.barcode) ?? null) : null,
+          }));
+        } catch {
+          // Vínculo é um extra: falha aqui não pode derrubar a extração.
+        }
+      }
+    }
+
 
     const first = products[0] ?? {
       productName: null,
