@@ -39,6 +39,7 @@ import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ProductListCard } from "@/components/product/ProductListCard";
 import { EmptyState, LoadingGrid, RouteError } from "@/components/feedback";
+import { Price } from "@/components/ds/Price";
 
 const brl = (v: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
@@ -171,7 +172,9 @@ function CategoryPage() {
           <h1 className="mt-1 text-2xl font-bold sm:text-3xl">{categoryLabel}</h1>
           <p className="mt-1 text-sm text-muted-foreground">
             {items.length} produto{items.length === 1 ? "" : "s"} nesta categoria
-            {cheapest && <> · menor preço {brl(cheapest.price)}</>}
+            {cheapest && (
+              <> · menor preço <Price value={cheapest.price} size="xs" tone="best" /></>
+            )}
           </p>
         </header>
 
@@ -302,16 +305,14 @@ function PriceHistorySheet({
               return (
                 <li key={h.id} className="flex items-start justify-between gap-3 rounded-lg border border-border p-3">
                   <div className="min-w-0">
-                    <div className="text-sm font-semibold tabular-nums">{brl(h.price)}</div>
+                    <Price as="div" value={h.price} size="sm" />
                     <div className="text-[11px] text-muted-foreground">
                       {new Date(h.captured_at).toLocaleString("pt-BR")}
                     </div>
                   </div>
                   <div className="shrink-0 text-right">
                     {h.previous_price != null && (
-                      <div className="text-[11px] text-muted-foreground line-through tabular-nums">
-                        {brl(h.previous_price)}
-                      </div>
+                      <Price as="div" value={h.previous_price} size="xs" tone="strike" />
                     )}
                     {h.change_pct != null && (
                       <div

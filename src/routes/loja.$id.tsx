@@ -36,6 +36,7 @@ import { exportStoreQuotePdf } from "@/lib/store-quote-pdf";
 import { cn } from "@/lib/utils";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { StoreSkeleton } from "@/components/loja/StoreSkeleton";
+import { Price } from "@/components/ds/Price";
 
 const storeCatalogQuery = (id: string) =>
   queryOptions({
@@ -149,7 +150,6 @@ export const Route = createFileRoute("/loja/$id")({
 });
 
 
-const fmt = (n: number) => `R$ ${n.toFixed(2).replace(".", ",")}`;
 const fmtPPU = (n: number, label: string) =>
   `${label} ${n < 10 ? n.toFixed(2).replace(".", ",") : n.toFixed(2).replace(".", ",")}`;
 
@@ -684,9 +684,7 @@ function StorePage() {
               <span className="text-[12px] font-semibold uppercase tracking-wider">
                 Ver cesta
               </span>
-              <span className="num ml-auto font-display text-[15px] font-bold">
-                {fmt(cart.total)}
-              </span>
+              <Price value={cart.total} size="md" className="ml-auto" />
             </button>
             <button
               type="button"
@@ -801,9 +799,7 @@ function ProductRow({
               <span className="num">{fmtPPU(p.pricePerUnit, p.unitLabel)}</span>
             )}
           </div>
-          <p className="num mt-0.5 font-display text-[14px] font-bold leading-tight text-primary">
-            {fmt(p.price)}
-          </p>
+          <Price as="p" value={p.price} size="md" className="mt-0.5" />
         </Link>
         <QtyControl qty={qty} onAdd={onAdd} onDec={onDec} />
       </div>
@@ -906,7 +902,7 @@ function FeaturedCard({
         >
           {p.productName}
         </Link>
-        <p className="num mt-auto font-display text-[13px] font-bold text-primary">{fmt(p.price)}</p>
+        <Price as="p" value={p.price} size="sm" className="mt-auto" />
         <div className="mt-0.5">
           <QtyControl qty={qty} onAdd={onAdd} onDec={onDec} />
         </div>
@@ -1081,9 +1077,7 @@ function CartDrawer({
             <span className="text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">
               Total
             </span>
-            <span className="num font-display text-[20px] font-bold text-primary">
-              {fmt(total)}
-            </span>
+            <Price value={total} size="lg" />
           </div>
           <button
             type="button"
@@ -1167,9 +1161,9 @@ function CartDrawer({
                       {row.productName}
                     </p>
                     <p className="num mt-0.5 text-[11px] text-muted-foreground">
-                      {fmt(row.price)} × {row.quantity} ={" "}
+                      <Price value={row.price} size="xs" tone="muted" /> × {row.quantity} ={" "}
                       <span className="font-semibold text-foreground">
-                        {fmt(row.price * row.quantity)}
+                        <Price value={row.price * row.quantity} size="xs" />
                       </span>
                     </p>
                   </div>
@@ -1362,14 +1356,12 @@ function CompareRow({
           </p>
         </div>
         <div className="shrink-0 text-right">
-          <p
-            className={cn(
-              "num font-display text-[15px] font-bold",
-              cheaper ? "text-savings dark:text-savings" : "text-foreground",
-            )}
-          >
-            {fmt(store.total)}
-          </p>
+          <Price
+            as="p"
+            value={store.total}
+            size="md"
+            tone={cheaper ? "best" : "default"}
+          />
           {!isCurrent && complete && refTotal > 0 && (
             <p
               className={cn(
@@ -1401,7 +1393,7 @@ function CompareRow({
                 </span>
                 {it.matched ? (
                   <span className="text-[11px] text-muted-foreground">
-                    {fmt(it.unitPrice ?? 0)} × {it.quantity}
+                    <Price value={it.unitPrice ?? 0} size="xs" tone="muted" /> × {it.quantity}
                     {it.matchedName && it.matchedName.toUpperCase() !== it.productName.toUpperCase()
                       ? ` · como "${it.matchedName}"`
                       : ""}
@@ -1412,14 +1404,11 @@ function CompareRow({
                   </span>
                 )}
               </span>
-              <span
-                className={cn(
-                  "num shrink-0 font-semibold",
-                  it.matched ? "text-foreground" : "text-muted-foreground",
-                )}
-              >
-                {it.matched ? fmt(it.subtotal ?? 0) : "—"}
-              </span>
+              {it.matched ? (
+                <Price value={it.subtotal ?? 0} size="xs" className="shrink-0" />
+              ) : (
+                <span className="shrink-0 font-semibold text-muted-foreground">—</span>
+              )}
               {it.matched && (
                 <Check
                   className="h-3.5 w-3.5 shrink-0 text-savings dark:text-savings"

@@ -68,6 +68,7 @@ import { ProductQuickView, type QuickViewProduct } from "@/components/product/Pr
 import { useButcherIds } from "@/hooks/useButcherIds";
 
 import { EmptyState, LoadingGrid, RouteError } from "@/components/feedback";
+import { Price } from "@/components/ds/Price";
 
 
 const brl = (v: number) =>
@@ -500,7 +501,7 @@ function EstablishmentPage() {
                   <span className="max-w-[16rem] truncate font-medium text-foreground">
                     {p.productName}
                   </span>
-                  <span className="font-bold tabular-nums text-brand-gold">{brl(p.price)}</span>
+                  <Price value={p.price} size="xs" tone="best" />
                   <span className="text-[11px] tabular-nums text-muted-foreground">
                     {new Date(p.lastDate).toLocaleDateString("pt-BR")}
                   </span>
@@ -809,7 +810,7 @@ function PriceHistorySheet({
                   className="flex items-start justify-between gap-3 rounded-lg border border-border p-3"
                 >
                   <div className="min-w-0">
-                    <div className="text-sm font-semibold tabular-nums">{brl(h.price)}</div>
+                    <Price as="div" value={h.price} size="sm" />
                     <div className="text-[11px] text-muted-foreground">
                       {new Date(h.captured_at).toLocaleString("pt-BR")}
                     </div>
@@ -821,9 +822,7 @@ function PriceHistorySheet({
                   </div>
                   <div className="shrink-0 text-right">
                     {h.previous_price != null && (
-                      <div className="text-[11px] text-muted-foreground line-through tabular-nums">
-                        {brl(h.previous_price)}
-                      </div>
+                      <Price as="div" value={h.previous_price} size="xs" tone="strike" />
                     )}
                     {h.change_pct != null && (
                       <div
@@ -1073,11 +1072,21 @@ function ViewToggle({
   );
 }
 
-function unitSuffix(product: PublicStoreProduct) {
+/**
+ * Sufixo de preço por unidade ("· R$ 12,90 /kg").
+ * Renderiza via <Price /> para manter a mesma tipografia monetária do site.
+ */
+function UnitSuffix({ product }: { product: PublicStoreProduct }) {
   const unit = product.unitLabel
     ? product.unitLabel.replace("R$", "").trim() || product.unitLabel
     : null;
-  return product.pricePerUnit != null && unit ? ` · ${brl(product.pricePerUnit)} ${unit}` : "";
+  if (product.pricePerUnit == null || !unit) return null;
+  return (
+    <>
+      {" · "}
+      <Price value={product.pricePerUnit} size="xs" tone="muted" suffix={` ${unit}`} />
+    </>
+  );
 }
 
 /** Cartão compacto de produto — clique abre o modal de detalhes. */
@@ -1104,13 +1113,11 @@ function ProductTile({
           <h3 className="min-w-0 flex-1 text-[13px] font-semibold leading-snug text-foreground">
             {product.productName}
           </h3>
-          <span className="shrink-0 text-[13.5px] font-bold leading-tight tabular-nums text-foreground">
-            {brl(product.price)}
-          </span>
+          <Price value={product.price} size="md" className="shrink-0" />
         </div>
         <p className="mt-1 truncate text-[11px] leading-none text-muted-foreground">
           {[product.brand, product.category].filter(Boolean).join(" · ") || "Sem categoria"}
-          {unitSuffix(product)}
+          <UnitSuffix product={product} />
         </p>
       </button>
       <div className="mx-3 mb-2.5 flex items-center justify-between gap-2 border-t border-border/70 pt-1.5">
@@ -1178,9 +1185,13 @@ function ProductRow({
           <>
             {unit}
             {product.pricePerUnit != null ? (
-              <span className="block truncate text-[11px] tabular-nums text-muted-foreground">
-                {brl(product.pricePerUnit)} / {unit}
-              </span>
+              <Price
+                value={product.pricePerUnit}
+                size="xs"
+                tone="muted"
+                suffix={`/${unit}`}
+                className="flex truncate"
+              />
             ) : null}
           </>
         ) : (
@@ -1188,9 +1199,7 @@ function ProductRow({
         )}
       </span>
 
-      <span className="whitespace-nowrap text-right text-[13px] font-bold tabular-nums leading-tight text-foreground">
-        {brl(product.price)}
-      </span>
+      <Price value={product.price} size="sm" className="justify-end whitespace-nowrap" />
 
       <div className="hidden items-center justify-end gap-1 sm:flex">
         <button
