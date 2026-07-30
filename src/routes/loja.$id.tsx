@@ -150,7 +150,6 @@ export const Route = createFileRoute("/loja/$id")({
 });
 
 
-const fmt = (n: number) => `R$ ${n.toFixed(2).replace(".", ",")}`;
 const fmtPPU = (n: number, label: string) =>
   `${label} ${n < 10 ? n.toFixed(2).replace(".", ",") : n.toFixed(2).replace(".", ",")}`;
 
@@ -1405,14 +1404,11 @@ function CompareRow({
                   </span>
                 )}
               </span>
-              <span
-                className={cn(
-                  "num shrink-0 font-semibold",
-                  it.matched ? "text-foreground" : "text-muted-foreground",
-                )}
-              >
-                {it.matched ? fmt(it.subtotal ?? 0) : "—"}
-              </span>
+              {it.matched ? (
+                <Price value={it.subtotal ?? 0} size="xs" className="shrink-0" />
+              ) : (
+                <span className="shrink-0 font-semibold text-muted-foreground">—</span>
+              )}
               {it.matched && (
                 <Check
                   className="h-3.5 w-3.5 shrink-0 text-savings dark:text-savings"
