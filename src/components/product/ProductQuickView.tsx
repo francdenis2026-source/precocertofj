@@ -18,8 +18,6 @@ import { getPublicProduct } from "@/lib/public-product.functions";
 import { formatShortDate } from "@/components/product/TrustIndicator";
 import { dedupeByStorePrice, storeKey } from "@/lib/price-rank";
 
-const brl = (v: number) =>
-  v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
 export type QuickViewProduct = {
   name: string;
