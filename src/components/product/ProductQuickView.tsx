@@ -14,9 +14,12 @@ import {
 } from "@/components/ui/dialog";
 import { ProductImage } from "@/components/ds/ProductImage";
 import { StoreBadge } from "@/components/brand/StoreBadge";
+import { BestValueBadge } from "@/components/ds/BestValueBadge";
+import { pickBestValue } from "@/lib/best-value";
 import { getPublicProduct } from "@/lib/public-product.functions";
 import { formatShortDate } from "@/components/product/TrustIndicator";
 import { dedupeByStorePrice, storeKey } from "@/lib/price-rank";
+
 
 
 export type QuickViewProduct = {
