@@ -206,7 +206,39 @@ function CategoryPage() {
       return filtered.map((x) => x.p);
     }
     return list;
-  }, [data, q, storeFilter, slug, search.corte, search.so_cortes, classifyProtein]);
+  }, [data, q, storeFilter, slug, search.corte, search.so_cortes, search.sub, classifyProtein]);
+
+  // Contagem por subgrupo de hortifrúti (não depende do subgrupo ativo, mas
+  // respeita busca e loja para não anunciar filtros que resultariam em vazio).
+  const subgroupCounts = useMemo(() => {
+    if (slug !== "hortifruti") return null;
+    const term = norm(q.trim());
+    const acc: Record<HortifrutiSubgroup, number> = {
+      frutas: 0,
+      verduras: 0,
+      legumes: 0,
+      tuberculos: 0,
+      temperos: 0,
+      cogumelos: 0,
+    };
+    for (const p of data?.products ?? []) {
+      if (term && !norm(p.name).includes(term)) continue;
+      if (storeFilter && !p.storeNames.includes(storeFilter)) continue;
+      const g = hortifrutiSubgroup(p.name);
+      if (g) acc[g] += 1;
+    }
+    return acc;
+  }, [data, slug, q, storeFilter]);
+
+  /**
+   * Economia média recalculada sobre os produtos realmente exibidos, para que
+   * cabeçalho e cartões de loja fiquem coerentes com os filtros ativos
+   * (mesma fórmula do servidor). Sem filtro, cai nos números do servidor.
+   */
+  const filtersActive = Boolean(q.trim() || storeFilter || search.sub || search.corte || search.so_cortes);
+  const savings = useMemo(() => computeHubSavings(products), [products]);
+  const catAvgSaving = filtersActive ? savings.avgSavingPct : (data?.avgSavingPct ?? null);
+  const catComparable = filtersActive ? savings.comparableProducts : (data?.comparableProducts ?? 0);
 
   // Contagem por bucket para os chips de filtro (independente do filtro corte ativo)
   const proteinCounts = useMemo(() => {
