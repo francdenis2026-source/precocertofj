@@ -92,6 +92,7 @@ export const extractLogoDetails = createServerFn({ method: "POST" })
         model: "google/gemini-2.5-flash",
         success: false,
         errorMessage: msg,
+        durationMs: Date.now() - startedAt,
       });
       throw new Error(msg);
     }
