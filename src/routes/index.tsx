@@ -396,9 +396,11 @@ function HomePage() {
 
               </div>
 
+              {/* Título e apoio escalam por largura E altura: em telas baixas
+                  (ex.: 1366x768) o texto encolhe em vez de empurrar a página. */}
               <h1
                 id="hero-title"
-                className="font-editorial pc-hero-editorial text-[clamp(2rem,5.4vw,4.25rem)]"
+                className="font-editorial pc-hero-editorial text-[clamp(1.75rem,2.6vw+2.2vh,4rem)]"
                 style={{ color: "var(--pc-home-onhero-fg)" }}
               >
                 Onde cada real{" "}
@@ -406,7 +408,7 @@ function HomePage() {
               </h1>
 
               <p
-                className="tc-flow max-w-xl text-[14px] font-light leading-relaxed sm:text-[16px] lg:text-[17px]"
+                className="tc-flow max-w-xl text-[clamp(13px,0.4vw+1.4vh,17px)] font-light leading-relaxed"
                 style={{ color: "var(--pc-home-onhero-fg-80)" }}
               >
                 Os mercados de Feijó, lado a lado e em tempo real. Você escolhe onde
