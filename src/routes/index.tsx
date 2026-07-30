@@ -447,6 +447,14 @@ function HomePage() {
                     }}
                     onFocus={() => setSuggestOpen(true)}
                     onBlur={() => window.setTimeout(() => setSuggestOpen(false), 180)}
+                    onKeyDown={(e) => {
+                      // O dropdown consome ↑/↓/Enter/Esc quando está aberto.
+                      suggestRef.current?.handleKeyDown(e);
+                    }}
+                    role="combobox"
+                    aria-expanded={suggestOpen && q.trim().length >= 2}
+                    aria-controls="home-search-suggestions"
+                    aria-autocomplete="list"
                     type="search"
                     inputMode="search"
                     placeholder="O que você procura hoje? (ex.: Arroz, Feijão, Leite…)"
