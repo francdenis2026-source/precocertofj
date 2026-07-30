@@ -243,11 +243,11 @@ function HomePage() {
           dayCount: Number(p?.dayCount ?? 0),
           hot: Boolean(p?.hot),
         }))
-        .filter((p) => p.query.length >= 2),
+        .filter((p: { query: string }) => p.query.length >= 2),
     [popularQ.data],
   );
   const popularAll: string[] = useMemo(() => {
-    const real = trendRows.map((p) => p.query);
+    const real = trendRows.map((p: { query: string }) => p.query);
     return real.length >= 3 ? real : POPULAR_FALLBACK;
   }, [trendRows]);
   const trendMeta = useMemo(() => {
