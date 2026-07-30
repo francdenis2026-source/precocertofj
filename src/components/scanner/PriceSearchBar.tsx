@@ -46,6 +46,7 @@ import { PaywallInline } from "@/components/paywall/PaywallInline";
 import { useTeaserQuota } from "@/hooks/use-teaser-quota";
 import { useSession } from "@/hooks/useSession";
 import { LazyImage } from "@/components/media/LazyImage";
+import { useResultsKeyboardNav } from "@/hooks/use-results-keyboard-nav";
 
 
 
@@ -100,6 +101,8 @@ export function PriceSearchBar({
   focusMarket = null,
   onFocusChange,
   fitResults = false,
+  autoFocusResults = false,
+
 }: {
   initialQuery?: string;
   mode?: SearchMode;
@@ -127,7 +130,10 @@ export function PriceSearchBar({
   onFocusChange?: (product: string | null, market: string | null) => void;
   /** Faz a busca ocupar a altura disponível da rota, com resultados rolando internamente. */
   fitResults?: boolean;
+  /** Move o foco do teclado para o primeiro resultado (ex.: busca vinda de "Buscas em alta"). */
+  autoFocusResults?: boolean;
 }) {
+
 
 
   const runSearch = useServerFn(searchProductPrice);
@@ -630,6 +636,14 @@ export function PriceSearchBar({
   }, [suggestions, trimmed]);
 
   const highlightTokens = useMemo(() => tokenizeQuery(query), [query]);
+
+  /* Navegação por teclado na lista de resultados (roving tabindex + atalhos). */
+  const resultsListRef = useRef<HTMLDivElement>(null);
+  const resultsNav = useResultsKeyboardNav({
+    containerRef: resultsListRef,
+    autoFocusFirst: autoFocusResults,
+    resultsKey: query,
+  });
 
 
 
@@ -1532,7 +1546,16 @@ export function PriceSearchBar({
 
                     {groupBy === "product" && visibleGroups.length > 0 ? (
 
-                      <div className="pc-results">
+                      <div
+                        ref={resultsListRef}
+                        onKeyDown={resultsNav.onKeyDown}
+                        aria-label={`Resultados para ${query}`}
+                        className="pc-results"
+                      >
+                        <p className="pc-res-label px-0.5 text-muted-foreground">
+                          Teclado: ↑ ↓ navegam pelos resultados · Enter abre os detalhes · C compara
+                          · E mostra todos os mercados
+                        </p>
                         {filteredOrdered.map(([cat, groups]) => {
                           // Ordena grupos com critérios explícitos por modo:
                           //  • relevance → score de similaridade do nome (exato,
@@ -2548,6 +2571,8 @@ function ProductGroupCard({
       id={`pc-group-${encodeURIComponent(productName)}`}
       data-result-card=""
       tabIndex={-1}
+      role="group"
+      aria-label={`${productName}. Menor preço ${fmt(min)} em ${prices.length} estabelecimento${prices.length > 1 ? "s" : ""}. Enter abre os detalhes.`}
       data-focused={focused ? "true" : undefined}
       onClick={(e) => {
         // Só marca o card como selecionado ao clicar no cabeçalho/vazio.
@@ -2559,12 +2584,13 @@ function ProductGroupCard({
         onSelect(productName, null);
       }}
       className={
-        "pc-res-card relative outline-none focus-visible:ring-2 focus-visible:ring-brand-gold " +
+        "pc-res-card relative outline-none focus-visible:z-10 focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background " +
         (focused
           ? "ring-2 ring-brand-gold/70 shadow-[0_0_0_1px_var(--brand-gold)] scroll-mt-24"
           : "")
       }
     >
+
       <div className="mb-1.5 flex flex-col gap-1.5 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
 
         <div className="min-w-0 flex-1 order-1">
@@ -2614,9 +2640,11 @@ function ProductGroupCard({
           {onToggleCompare ? (
             <button
               type="button"
+              data-card-compare=""
               onClick={onToggleCompare}
               disabled={!isCompareSelected && !canSelectCompare}
               aria-pressed={isCompareSelected}
+
               aria-label={
                 isCompareSelected
                   ? `Remover ${productName} da comparação`
@@ -2646,10 +2674,12 @@ function ProductGroupCard({
           <Link
             to="/produto-publico/$slug"
             params={{ slug: productName }}
+            data-card-open=""
             className="pc-res-label rounded-full border border-border bg-background px-2 py-1 text-foreground hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)]"
           >
             Detalhes
           </Link>
+
 
         </div>
       </div>
@@ -2676,12 +2706,14 @@ function ProductGroupCard({
         {!expanded && hiddenPrices > 0 ? (
           <button
             type="button"
+            data-card-expand=""
             onClick={() => setExpanded(true)}
             className="rounded-full border border-brand-gold/45 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-2 py-0.5 text-[12.5px] font-semibold text-[var(--pc-gold-ink)] transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
           >
             Ver todos
           </button>
         ) : null}
+
       </div>
 
       <ul

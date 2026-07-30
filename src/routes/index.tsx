@@ -298,7 +298,7 @@ function HomePage() {
         return;
       }
     }
-    void navigate({ to: "/buscar", search: { q: query } as any }).finally(() =>
+    void navigate({ to: "/buscar", search: { q: query, from: "alta" } as any }).finally(() =>
       setPendingTerm(null),
     );
   };

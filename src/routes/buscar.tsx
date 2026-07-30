@@ -43,6 +43,7 @@ const searchSchema = z.object({
   sort: fallback(z.string(), "cheapest").default("cheapest"),
   product: fallback(z.string(), "").default(""),
   market: fallback(z.string(), "").default(""),
+  from: fallback(z.string(), "").default(""),
 });
 
 const SORT_VALUES = new Set([
@@ -603,6 +604,7 @@ function SearchPage() {
                     onFocusChange={(product, market) =>
                       setFocusUrl(product ?? null, market ?? null)
                     }
+                    autoFocusResults={search.from === "alta"}
                   />
 
 
