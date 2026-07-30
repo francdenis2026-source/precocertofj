@@ -15,6 +15,7 @@ import { getPublicStoreCatalog, getStoreCatalogPriceRanking } from "@/lib/stores
 import type { CatalogPriceRank, PublicStoreProduct } from "@/lib/stores-public.functions";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
+import { Price } from "@/components/ds/Price";
 
 /* ------------------------------------------------------------------ */
 /* Helpers                                                             */
@@ -483,11 +484,14 @@ function ProductCard({
         </p>
       </div>
       <div className="flex items-end justify-between gap-2">
-        <span className={cn(tc.dataPrimary, "text-foreground")}>{formatBRL(product.price)}</span>
+        <Price value={product.price} size="lg" />
         {product.pricePerUnit && product.unitLabel ? (
-          <span className={tc.metaMuted}>
-            {formatBRL(product.pricePerUnit)} {product.unitLabel}
-          </span>
+          <Price
+            value={product.pricePerUnit}
+            size="xs"
+            tone="muted"
+            suffix={product.unitLabel}
+          />
         ) : null}
       </div>
 
@@ -507,7 +511,8 @@ function ProductCard({
           <p className={cn(tc.metaMuted, "truncate")}>
             {rank.rank}º de {rank.offersCount} · mais barato em{" "}
             <span className={tc.storeName}>{rank.bestStoreName}</span> por{" "}
-            {formatBRL(rank.bestPrice)} ({rank.savingsPct.toFixed(0)}% menos)
+            <Price value={rank.bestPrice} size="xs" tone="muted" /> ({rank.savingsPct.toFixed(0)}%
+            menos)
           </p>
         )
       ) : null}

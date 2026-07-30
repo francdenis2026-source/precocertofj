@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Badge, formatBRL } from "./Badge";
 import { ProductImage } from "./ProductImage";
 import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
+import { Price } from "@/components/ds/Price";
 
 export type PriceTrend = "down" | "up" | "flat";
 
@@ -126,7 +127,7 @@ export const PriceCard = forwardRef<HTMLElement, PriceCardProps>(function PriceC
         {savings > 0 ? (
           <span className="absolute right-2 top-2">
             <Badge variant="savings" size="sm">
-              −{formatBRL(savings)}
+              <Price value={savings} size="xs" tone="savings" prefix="−R$" />
             </Badge>
           </span>
         ) : null}
@@ -156,12 +157,10 @@ export const PriceCard = forwardRef<HTMLElement, PriceCardProps>(function PriceC
               compact ? "text-lg" : "text-price",
             )}
           >
-            {formatBRL(price)}
+            <Price value={price} size={compact ? "md" : "xl"} />
           </span>
           {previousPrice != null && previousPrice !== price ? (
-            <span className="text-xs text-muted-foreground line-through tabular-nums">
-              {formatBRL(previousPrice)}
-            </span>
+            <Price value={previousPrice} size="xs" tone="strike" />
           ) : null}
           <UnitPriceBadge price={price} productName={name} className="ml-auto" />
         </div>

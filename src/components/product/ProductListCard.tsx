@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { formatShortDate, formatAbsoluteTooltip } from "@/components/product/TrustIndicator";
 import { cn } from "@/lib/utils";
+import { Price } from "@/components/ds/Price";
 
 const brl = (n: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(n);
@@ -57,13 +58,9 @@ export function ProductListCard({
           <div className="text-[11px] text-muted-foreground">{brand}</div>
         ) : null}
         <div className="mt-auto flex items-baseline justify-between gap-2 pt-2">
-          <span className="text-xl font-bold tabular-nums text-emerald-600 dark:text-emerald-400">
-            {brl(price)}
-          </span>
+          <Price value={price} size="lg" tone="best" />
           {pricePerUnit != null && unit ? (
-            <span className="text-xs tabular-nums text-muted-foreground">
-              {brl(pricePerUnit)} {unit}
-            </span>
+            <Price value={pricePerUnit} size="xs" tone="muted" suffix={unit} />
           ) : null}
         </div>
         {(formattedDate || onAlert || onHistory) && (

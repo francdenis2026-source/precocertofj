@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { useSignedLogoUrl } from "@/hooks/use-signed-logo-urls";
 import { Badge, formatBRL } from "./Badge";
 import { ProductImage } from "./ProductImage";
+import { Price } from "@/components/ds/Price";
 
 /** Renderiza uma logo do bucket privado `logos` assinando-a on demand. */
 function SignedLogo({ url, alt }: { url: string | null | undefined; alt: string }) {
@@ -133,7 +134,7 @@ export const ComparisonCard = forwardRef<HTMLElement, ComparisonCardProps>(funct
         {savings > 0 ? (
           <Badge variant="savings" size="sm">
             <TrendingDown className="mr-1 h-3 w-3" aria-hidden />
-            economia {formatBRL(savings)}
+            economia <Price value={savings} size="xs" tone="savings" prefix="R$" />
           </Badge>
         ) : null}
       </header>
@@ -199,7 +200,7 @@ export const ComparisonCard = forwardRef<HTMLElement, ComparisonCardProps>(funct
                       freshness?.stale && "line-through decoration-destructive/60",
                     )}
                   >
-                    {formatBRL(row.price)}
+                    <Price value={row.price} size="sm" prefix="R$" />
                   </span>
                   {isBest && !freshness?.stale ? (
                     <span

@@ -19,6 +19,7 @@ import { getHomeShowcase, type HomeShowcase } from "@/lib/home-showcase.function
 import { supabase } from "@/integrations/supabase/client";
 import { shortenStoreName } from "@/lib/store-name";
 import { formatBRL } from "@/components/ds";
+import { Price } from "@/components/ds/Price";
 
 type StoreEntry = {
   establishment_id: string;
@@ -224,13 +225,9 @@ export function RecentProductsCarousel() {
                     {price != null ? (
                       <div className="pt-0.5">
                         <div className="flex items-baseline gap-1.5">
-                          <span className="text-[15px] font-extrabold tracking-tight text-foreground">
-                            {formatBRL(price)}
-                          </span>
+                          <Price value={price} size="md" />
                           {avg != null && avg > price && (
-                            <span className="text-[11px] font-medium text-muted-foreground line-through">
-                              {formatBRL(avg)}
-                            </span>
+                            <Price value={avg} size="xs" tone="strike" />
                           )}
                         </div>
                         {store && (
