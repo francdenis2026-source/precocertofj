@@ -246,7 +246,9 @@ export function DashboardSearch() {
         ) : (
           <ul
             role="listbox"
+            id="dashboard-search-results"
             aria-label="Resultados da busca"
+
             className="divide-y divide-border/60"
           >
             {results.map((r, i) => (
