@@ -379,6 +379,15 @@ function CategoryPage() {
           />
         )}
 
+        {/* Subgrupos do hortifrúti — mesma faixa rolável no desktop e no mobile */}
+        {slug === "hortifruti" && subgroupCounts && (
+          <HortifrutiSubgroupChips
+            active={search.sub}
+            counts={subgroupCounts}
+            onChange={(v: string) => setSearch({ sub: v, page: 1 })}
+          />
+        )}
+
         {/* Plantão (só farmácias) */}
         {slug === "farmacias" && <PlantaoStrip />}
 
