@@ -63,7 +63,7 @@ const ICONS: Record<string, typeof ShoppingCart> = {
 const brl = (v: number) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
-const SEARCH_DEFAULTS = { q: "", loja: "", view: "list", page: 1, per: 30, p: "", corte: "", so_cortes: 0 };
+const SEARCH_DEFAULTS = { q: "", loja: "", view: "list", page: 1, per: 30, p: "", corte: "", so_cortes: 0, sub: "" };
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
@@ -77,6 +77,8 @@ const searchSchema = z.object({
   corte: fallback(z.string(), "").default(""),
   /** Só cortes (esconde temperos/molhos) — hub de açougue. 0 = tudo, 1 = só cortes. */
   so_cortes: fallback(z.number().int().min(0).max(1), 0).default(0),
+  /** Subgrupo de hortifrúti: frutas | verduras | legumes | tuberculos | temperos | cogumelos */
+  sub: fallback(z.string(), "").default(""),
 });
 
 
