@@ -32,7 +32,7 @@ export function StoreRankStrip({
   return (
     <section
       aria-label="Mercados mais baratos"
-      className="flex min-h-0 flex-col overflow-hidden rounded-2xl border border-border/70 bg-card"
+      className="flex max-h-[46vh] min-h-0 flex-col overflow-hidden rounded-2xl border border-border/70 bg-card lg:max-h-none"
     >
       <header className="grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-border/70 px-3 py-2">
         <div className="min-w-0">
