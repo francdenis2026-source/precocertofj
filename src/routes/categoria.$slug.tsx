@@ -1190,6 +1190,82 @@ function ButcherProteinChips({
   );
 }
 
+/**
+ * Chips de subgrupo do hortifrúti (frutas, verduras, legumes, tubérculos,
+ * temperos, cogumelos). Mesma marcação em desktop e mobile: trilho rolável
+ * no mobile, wrap no desktop — sem divergência de ordem ou contagem.
+ */
+const HF_SUBGROUP_ORDER: HortifrutiSubgroup[] = [
+  "frutas",
+  "verduras",
+  "legumes",
+  "tuberculos",
+  "temperos",
+  "cogumelos",
+];
+
+function HortifrutiSubgroupChips({
+  active,
+  counts,
+  onChange,
+}: {
+  active: string;
+  counts: Record<HortifrutiSubgroup, number>;
+  onChange: (v: string) => void;
+}) {
+  const total = HF_SUBGROUP_ORDER.reduce((s, k) => s + (counts[k] ?? 0), 0);
+  const chips: { id: string; label: string; n: number }[] = [
+    { id: "", label: "Todos", n: total },
+    ...HF_SUBGROUP_ORDER.map((k) => ({
+      id: k,
+      label: HORTIFRUTI_SUBGROUP_LABELS[k],
+      n: counts[k] ?? 0,
+    })),
+  ];
+
+  return (
+    <section className="mt-3" aria-label="Filtrar por subgrupo do hortifrúti">
+      <p className="text-[11px] font-bold uppercase leading-none tracking-[0.16em] text-muted-foreground">
+        Subgrupos
+      </p>
+      <ul
+        role="list"
+        className="no-scrollbar mt-2 -mx-0.5 flex gap-1.5 overflow-x-auto px-0.5 pb-0.5 sm:flex-wrap sm:overflow-visible"
+      >
+        {chips.map((c) => {
+          const isActive = active === c.id;
+          const disabled = c.n === 0 && c.id !== "";
+          return (
+            <li key={c.id || "all"} className="shrink-0">
+              <button
+                type="button"
+                onClick={() => !disabled && onChange(isActive && c.id ? "" : c.id)}
+                disabled={disabled}
+                aria-pressed={isActive}
+                className={cn(
+                  "inline-flex h-7 items-center gap-1 rounded-full border px-2.5 text-[11.5px] font-semibold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+                  isActive
+                    ? "border-brand-gold bg-brand-gold text-brand-navy"
+                    : "border-brand-gold/50 bg-background text-foreground hover:border-brand-gold",
+                  disabled && "cursor-not-allowed opacity-40",
+                )}
+              >
+                <Apple className={cn("h-3 w-3", isActive ? "text-brand-navy" : "text-brand-gold")} aria-hidden />
+                {c.label}
+                <span className={cn("ml-0.5 tabular-nums", isActive ? "text-brand-navy/80" : "text-muted-foreground")}>
+                  {c.n}
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}
+
+
+
 function EmptyCard({
   text,
   action,
