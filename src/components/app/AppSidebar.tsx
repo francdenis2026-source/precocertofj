@@ -46,6 +46,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import { useSignOut } from "@/hooks/use-sign-out";
 import { useMyRoles } from "@/hooks/useMyRoles";
@@ -184,8 +185,12 @@ export function AppSidebar() {
   });
   const { signOut, loading: signingOut } = useSignOut();
   const { isAdmin, loading: rolesLoading } = useMyRoles();
+  const { isMobile, setOpenMobile } = useSidebar();
   const isAdminArea = pathname.startsWith("/admin");
   const groups = isAdminArea ? (isAdmin ? adminGroups : []) : appGroups;
+  const closeOnMobile = () => {
+    if (isMobile) setOpenMobile(false);
+  };
 
   const isActive = (n: NavItem) => {
     if (n.search?.tab !== undefined) {
@@ -199,10 +204,11 @@ export function AppSidebar() {
   };
 
   const renderGroup = (group: NavGroup) => (
-    <SidebarGroup key={group.label} className="py-2" data-tone={group.tone}>
+    <SidebarGroup key={group.label} className="py-1.5" data-tone={group.tone}>
       <SidebarGroupLabel
         className={cn(
-          "px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-sidebar-foreground/55",
+          "h-6 px-2.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-foreground/50",
+          "group-data-[collapsible=icon]:hidden",
           group.tone && "pc-admin-group-label",
         )}
       >
@@ -221,34 +227,37 @@ export function AppSidebar() {
                   tooltip={n.label}
                   data-active={active ? "true" : "false"}
                   className={cn(
-                    "pc-nav-link pc-nav-link--row h-9 rounded-md px-2.5 text-sidebar-foreground/82 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                    "pc-nav-link pc-nav-link--row relative h-8 rounded-md px-2 text-sidebar-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                     group.tone && "pc-admin-row",
-                    active && !group.tone && "bg-sidebar-accent text-sidebar-accent-foreground shadow-sm",
+                    active && !group.tone && "bg-sidebar-accent font-semibold text-sidebar-accent-foreground",
                   )}
                 >
                   <Link
                     to={n.to}
                     search={n.search as never}
+                    onClick={closeOnMobile}
                     className="flex items-center gap-2.5"
                   >
+                    {active && !group.tone && (
+                      <span
+                        aria-hidden
+                        className="absolute left-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-r-full bg-sidebar-primary group-data-[collapsible=icon]:hidden"
+                      />
+                    )}
                     <span
                       data-active={active ? "true" : "false"}
                       className={cn(
-                        "grid h-6 w-6 shrink-0 place-items-center rounded-md border border-sidebar-border/60 bg-sidebar-accent/70 text-sidebar-foreground/75",
+                        "grid h-5 w-5 shrink-0 place-items-center rounded",
                         group.tone && "pc-admin-icon-chip",
-                        active && !group.tone && "border-sidebar-primary/50 bg-sidebar-primary text-sidebar-primary-foreground",
+                        !group.tone &&
+                          (active ? "text-sidebar-primary" : "text-sidebar-foreground/60"),
                       )}
                     >
-                      <n.icon className="h-3.5 w-3.5" strokeWidth={active ? 2.35 : 2} />
+                      <n.icon className="h-4 w-4" strokeWidth={active ? 2.3 : 1.9} />
                     </span>
-                    <span className="truncate text-[13px] font-medium">{n.label}</span>
-                    {active && (
-                      <span
-                        className={cn(
-                          "ml-auto h-1.5 w-1.5 rounded-full",
-                          group.tone ? "pc-admin-active-dot" : "bg-sidebar-primary",
-                        )}
-                      />
+                    <span className="truncate text-[13px] leading-none">{n.label}</span>
+                    {active && group.tone && (
+                      <span className="pc-admin-active-dot ml-auto h-1.5 w-1.5 rounded-full" />
                     )}
                   </Link>
                 </SidebarMenuButton>
@@ -261,33 +270,35 @@ export function AppSidebar() {
     </SidebarGroup>
   );
 
+
   return (
     <Sidebar
       collapsible="icon"
       className="border-r border-sidebar-border"
     >
       {/* Brand */}
-      <SidebarHeader className="border-b border-sidebar-border/60 px-3 py-4">
+      <SidebarHeader className="border-b border-sidebar-border/60 px-2.5 py-3">
         <Link
           to={isAdminArea ? "/admin" : "/"}
+          onClick={closeOnMobile}
           className="flex items-center gap-2.5 group-data-[collapsible=icon]:justify-center"
         >
           <span
-            className="relative grid h-10 w-10 shrink-0 place-items-center rounded-lg border border-sidebar-border bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
+            className="relative grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-sidebar-border bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
             aria-hidden
           >
-            {isAdminArea ? <ShieldCheck className="h-5 w-5" strokeWidth={2.25} /> : <img src="/logo-mark.png" alt="" aria-hidden width={26} height={26} className="h-[26px] w-[26px] object-contain" />}
-            <span className="absolute -right-1 -top-1 h-2.5 w-2.5 rounded-full bg-accent ring-2 ring-sidebar" />
+            {isAdminArea ? <ShieldCheck className="h-4 w-4" strokeWidth={2.25} /> : <img src="/logo-mark.png" alt="" aria-hidden width={20} height={20} className="h-5 w-5 object-contain" />}
           </span>
           <span className="flex flex-col leading-none group-data-[collapsible=icon]:hidden">
-            <span className="text-[15px] font-semibold tracking-tight text-sidebar-foreground">
+            <span className="text-[14px] font-semibold tracking-tight text-sidebar-foreground">
               {isAdminArea ? "Console" : "PreçoCerto"}
             </span>
-            <span className="mt-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-sidebar-primary">
-              {isAdminArea ? "Administração" : "Aplicativo"}
+            <span className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-foreground/50">
+              {isAdminArea ? "Administração" : "Minha área"}
             </span>
           </span>
         </Link>
+
       </SidebarHeader>
 
       <SidebarContent className="px-2 py-3">
