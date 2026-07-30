@@ -287,7 +287,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                   className={
                     "flex w-full items-center gap-2.5 border-l-[3px] px-3 py-2 text-left transition-colors " +
                     (active === i
-                      ? "border-l-[#d4a24c] bg-[#fff7e6]"
+                      ? "border-l-[#d4a24c] bg-[#0b2444] text-white"
                       : "border-l-transparent hover:bg-slate-50")
                   }
                 >
