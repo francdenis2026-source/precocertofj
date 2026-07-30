@@ -232,15 +232,25 @@ async function loadCatalogImageResolver(): Promise<ImageResolver> {
     if (!cur || score(meta) > score(cur)) map.set(key, meta);
   };
 
+  // Chave sem acento e sem pontuação: o catálogo grava "AGUA SANITARIA YPE 1L"
+  // e o scan traz "Água Sanitária Ypê 1L" — sem normalizar, nunca casavam.
+  const nameKey = (s: string) =>
+    s
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toUpperCase()
+      .replace(/[^A-Z0-9]+/g, " ")
+      .trim();
+
   for (const r of data ?? []) {
     const meta = toMeta(r);
     if (score(meta) === 0) continue;
     if (r.barcode) put(byBarcode, r.barcode, meta);
     if (r.normalized_name) {
-      const full = r.normalized_name.toUpperCase();
-      put(byName, full, meta);
+      const full = nameKey(r.normalized_name);
+      if (full) put(byName, full, meta);
       // Também indexa sem a gramagem para casar "Detergente Ypê" com "... 500ml".
-      const base = stripSize(r.normalized_name).toUpperCase();
+      const base = nameKey(stripSize(r.normalized_name));
       if (base && base !== full) put(byName, base, meta);
     }
   }
@@ -250,9 +260,9 @@ async function loadCatalogImageResolver(): Promise<ImageResolver> {
       const hit = byBarcode.get(barcode);
       if (hit) return hit;
     }
-    const full = baseName.toUpperCase();
-    return byName.get(full) ?? byName.get(stripSize(baseName).toUpperCase()) ?? null;
+    return byName.get(nameKey(baseName)) ?? byName.get(nameKey(stripSize(baseName))) ?? null;
   };
+
 }
 
 
