@@ -896,16 +896,18 @@ function HomePage() {
           </div>
 
           {/* Faixa "Em alta": ocupa a folga entre os ladrilhos e o rodapé com
-              dado real (termos mais buscados nos últimos 7 dias). */}
-          <div
-            className="hidden shrink-0 items-center gap-2.5 overflow-hidden rounded-2xl border px-3.5 py-[clamp(0.5rem,1.3vh,0.85rem)] backdrop-blur-md lg:flex"
+              dado real (termos mais buscados nos últimos 7 dias). Clicar em um
+              termo preenche a busca do hero e abre os resultados. */}
+          <section
+            aria-label="Buscas em alta nos últimos 7 dias"
+            className="hidden shrink-0 items-center gap-3 overflow-hidden rounded-2xl border px-3.5 py-[clamp(0.5rem,1.3vh,0.85rem)] backdrop-blur-md lg:flex"
             style={{
               background: "var(--pc-home-onhero-glass)",
               borderColor: "var(--pc-home-onhero-border)",
             }}
           >
             <span
-              className="inline-flex shrink-0 items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em]"
+              className={`inline-flex shrink-0 items-center gap-1.5 ${EYEBROW}`}
               style={{ color: "var(--pc-home-onhero-gold)" }}
             >
               <TrendingDown className="h-3.5 w-3.5" aria-hidden />
@@ -913,20 +915,22 @@ function HomePage() {
             </span>
             <ul
               role="list"
-              className="grid min-w-0 flex-1 gap-1.5"
+              className="grid min-w-0 flex-1 gap-2"
               style={{ gridTemplateColumns: "repeat(auto-fit, minmax(96px, 1fr))" }}
             >
-              {(popularAll.length > 10 ? popularAll.slice(4, 16) : popularAll.slice(0, 12)).map((t) => (
+              {trendingPopular.map((t) => (
                 <li key={t} className="min-w-0">
                   <button
                     type="button"
                     onClick={() => goToPopular(t)}
-                    title={t}
-                    className="inline-flex w-full items-center justify-center truncate rounded-full border px-2.5 py-1 text-[12px] font-medium capitalize pc-tile"
+                    title={`Buscar por ${t}`}
+                    aria-label={`Buscar por ${t}`}
+                    className={`${CHIP} w-full truncate`}
                     style={{
-                      background: "var(--pc-home-onhero-glass)",
+                      background: "var(--pc-home-onhero-glass-soft)",
                       borderColor: "var(--pc-home-onhero-border-soft)",
                       color: "var(--pc-home-onhero-fg-85)",
+                      ["--tw-ring-color" as string]: "var(--pc-home-onhero-gold)",
                     }}
                   >
                     {t}
@@ -934,6 +938,7 @@ function HomePage() {
                 </li>
               ))}
             </ul>
+          </section>
           </div>
         </main>
 
