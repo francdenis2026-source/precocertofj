@@ -140,7 +140,7 @@ const RULES: readonly Rule[] = [
   // 9) Laticínios
   {
     category: "laticinios",
-    re: /\b(leite|queijo|manteiga|margarina|iogurte|requeijao|nata|coalhada|danone|batavo|italac|itambe|qualy|vigor|claybom|mococa|piracanjuba|elege|creme de leite|leite condensado|composto lacteo|bebida lactea|mussarela)\b/,
+    re: /\b(leite|queijo|manteiga|margarina|iogurte|requeijao|nata|coalhada|danone|batavo|italac|itambe|qualy|vigor|claybom|mococa|piracanjuba|molico|ninho|elege|leite em po|creme de leite|leite condensado|composto lacteo|bebida lactea|mussarela)\b/,
   },
 
   // 10) Padaria
@@ -176,7 +176,7 @@ const RULES: readonly Rule[] = [
   // 16) Mercearia (catch-all de secos)
   {
     category: "mercearia",
-    re: /\b(arroz|feijao|acucar|farinha|mandioca|macarrao|espaguete|penne|parafuso|oleo|azeite|vinagre|sal|fuba|amido|fermento|tempero|colorau|colorifico|extrato|maionese|catchup|ketchup|mostarda|azeitona|milho|ervilha|seleta|cuscuz|canjica|flocao|lamen|noodles|sopao|molho de tomate|granola|nissin|quaker)\b/,
+    re: /\b(arroz|feijao|acucar|adocante|farinha|mandioca|macarrao|espaguete|penne|parafuso|oleo|azeite|vinagre|sal|fuba|amido|fermento|tempero|colorau|colorifico|extrato|maionese|catchup|ketchup|mostarda|azeitona|milho|ervilha|seleta|cuscuz|canjica|flocao|lamen|noodles|sopao|molho de tomate|granola|nissin|quaker)\b/,
   },
 ];
 
