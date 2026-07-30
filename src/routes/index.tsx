@@ -660,7 +660,7 @@ function HomePage() {
                     <div className="flex items-center gap-1.5">
                       <MapPin className="h-3 w-3" style={{ color: P.goldSoft }} aria-hidden />
                       <span
-                        className="text-[11px] font-bold uppercase tracking-[0.18em]"
+                        className={EYEBROW}
                         style={{ color: "var(--pc-home-onhero-fg-60)" }}
                       >
                         Onde comparamos
