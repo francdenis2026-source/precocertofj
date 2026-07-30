@@ -739,56 +739,10 @@ function HomePage() {
 
                   </ul>
 
-            </div>
-          </div>
-
-          {/* Faixa de buscas em alta: ocupa a folga entre os ladrilhos e o
-              rodapé com dado real (termos mais buscados nos últimos 7 dias). */}
-          <div
-            className="hidden shrink-0 items-center gap-2 overflow-hidden rounded-2xl border px-3 py-[clamp(0.4rem,1.2vh,0.75rem)] lg:flex"
-            style={{
-              background: "var(--pc-home-onhero-glass-soft)",
-              borderColor: "var(--pc-home-onhero-border-soft)",
-            }}
-          >
-            <span
-              className="inline-flex shrink-0 items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em]"
-              style={{ color: "var(--pc-home-onhero-gold)" }}
-            >
-              <TrendingDown className="h-3.5 w-3.5" aria-hidden />
-              Em alta
-            </span>
-            <ul role="list" className="flex min-w-0 flex-1 items-center gap-1.5 overflow-x-auto no-scrollbar">
-              {popularAll.slice(4, 14).map((t) => (
-                <li key={t} className="shrink-0">
-                  <button
-                    type="button"
-                    onClick={() => goToPopular(t)}
-                    className="inline-flex items-center rounded-full border px-2.5 py-1 text-[12px] font-medium capitalize pc-tile"
-                    style={{
-                      background: "var(--pc-home-onhero-glass)",
-                      borderColor: "var(--pc-home-onhero-border-soft)",
-                      color: "var(--pc-home-onhero-fg-85)",
-                    }}
-                  >
-                    {t}
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <Link
-              to="/melhores-precos"
-              className="shrink-0 rounded-md px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] transition-colors hover:brightness-125"
-              style={{ color: "var(--pc-home-onhero-fg-70)" }}
-            >
-              Rankings →
-            </Link>
-          </div>
-
-        </main>
-
+              </div>
             </aside>
           </div>
+
 
           {/* Divisor editorial entre hero e faixa de categorias */}
           <hr className="pc-rule my-[clamp(0.35rem,1.2vh,0.9rem)]" aria-hidden />
