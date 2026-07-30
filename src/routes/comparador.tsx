@@ -1541,14 +1541,13 @@ function ProductCardBase({
                     {shortenStoreName(s.store_name)}
                   </span>
                 </div>
-                <span
-                  className={cn(
-                    "pc-price pc-price--sm shrink-0 leading-none",
-                    isBest ? "pc-price--savings" : "text-muted-foreground",
-                  )}
-                >
-                  {formatBRL(Number(s.price))}
-                </span>
+                <Price
+                  value={Number(s.price)}
+                  size="sm"
+                  tone={isBest ? "savings" : "muted"}
+                  className="shrink-0"
+                />
+
               </li>
             );
           })}
