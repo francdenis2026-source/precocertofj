@@ -650,7 +650,7 @@ export function PriceSearchBar({
         <span
           role="note"
           aria-label="Passo 01: Pesquisar preço"
-          className="inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-navy px-2 py-0.5 font-sans text-[11px] font-medium text-gold-ink gold-on-dark"
+          className="inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-navy px-2 py-0.5 font-sans text-[12.5px] font-medium text-gold-ink gold-on-dark"
         >
           <span aria-hidden="true" className="tabular-nums">01</span>
           <span aria-hidden="true" className="opacity-70">·</span>
@@ -690,7 +690,7 @@ export function PriceSearchBar({
             aria-expanded={showList || showHistory}
             aria-autocomplete="list"
             aria-controls="price-search-suggestions"
-            className="h-11 w-full rounded-full border-2 border-brand-navy/20 bg-background pl-9 pr-9 text-[14px] font-medium tracking-wide text-foreground placeholder:font-normal placeholder:text-muted-foreground/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] transition-colors hover:border-brand-gold/60 focus:border-brand-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40 dark:border-brand-gold/25"
+            className="h-11 w-full rounded-full border-2 border-brand-navy/20 bg-background pl-9 pr-9 text-[15px] font-medium tracking-wide text-foreground placeholder:font-normal placeholder:text-muted-foreground/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.4)] transition-colors hover:border-brand-gold/60 focus:border-brand-gold focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/40 dark:border-brand-gold/25"
             aria-label="Nome do produto"
           />
 
@@ -720,13 +720,13 @@ export function PriceSearchBar({
           >
             <div>
               <div className="flex items-center justify-between border-b border-border px-3 py-1.5">
-                <span className="text-[12px] font-medium text-muted-foreground">
+                <span className="text-[13px] font-medium text-muted-foreground">
                   Últimas buscas
                 </span>
                 <button
                   type="button"
                   onMouseDown={clearAllHistory}
-                  className="rounded px-1 text-[12px] font-medium text-muted-foreground hover:text-foreground"
+                  className="rounded px-1 text-[13px] font-medium text-muted-foreground hover:text-foreground"
                 >
                   Limpar
                 </button>
@@ -741,7 +741,7 @@ export function PriceSearchBar({
                     key={h.query}
                     role="option"
                     aria-selected={false}
-                    className="group inline-flex max-w-full items-center gap-1 rounded-full border border-border bg-background py-0.5 pl-2 pr-0.5 text-[12.5px] text-foreground"
+                    className="group inline-flex max-w-full items-center gap-1 rounded-full border border-border bg-background py-0.5 pl-2 pr-0.5 text-[13.5px] text-foreground"
                   >
                     <Clock className="h-3 w-3 shrink-0 text-muted-foreground" strokeWidth={1.75} />
                     <button
@@ -764,7 +764,7 @@ export function PriceSearchBar({
                 ))}
               </div>
               {isVisitor ? (
-                <p className="border-t border-border px-3 py-1.5 text-[11.5px] text-muted-foreground">
+                <p className="border-t border-border px-3 py-1.5 text-[13px] text-muted-foreground">
                   Sem conta, o histórico fica só nesta visita — entre para salvá-lo.
                 </p>
               ) : null}
@@ -795,10 +795,10 @@ export function PriceSearchBar({
                 >
                   <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 text-warning" strokeWidth={1.75} />
                   <div className="min-w-0 flex-1">
-                    <p className="text-[11.5px] font-medium text-warning dark:text-warning">
+                    <p className="text-[13px] font-medium text-warning dark:text-warning">
                       Você quis dizer
                     </p>
-                    <p className="truncate text-[13.5px] font-semibold text-foreground">
+                    <p className="truncate text-[14.5px] font-semibold text-foreground">
                       {didYouMean.displayName}?
                     </p>
                   </div>
@@ -836,11 +836,11 @@ export function PriceSearchBar({
                       </div>
                     )}
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-[13.5px] font-medium">
+                      <p className="truncate text-[14.5px] font-medium">
                         {/* "loose" destaca prefixos (ex.: "mante" em "Manteiga") */}
                         <HighlightMatch text={s.displayName} tokens={highlightTokens} mode="loose" />
                       </p>
-                      <p className="truncate font-mono text-[11px] text-muted-foreground">
+                      <p className="truncate font-mono text-[12.5px] text-muted-foreground">
                         {[s.brand, s.category].filter(Boolean).join(" · ") ? (
                           <HighlightMatch
                             text={[s.brand, s.category].filter(Boolean).join(" · ")}
@@ -867,7 +867,7 @@ export function PriceSearchBar({
           type="submit"
           disabled={isSearching}
           aria-label="Buscar"
-          className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-full border-2 border-brand-gold bg-brand-gold px-3.5 text-[12px] font-bold uppercase tracking-[0.14em] text-brand-navy shadow-[0_8px_20px_-10px_color-mix(in_oklab,var(--brand-gold)_80%,transparent)] transition-all duration-150 hover:-translate-y-px hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-60 sm:px-5"
+          className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-full border-2 border-brand-gold bg-brand-gold px-3.5 text-[13px] font-bold uppercase tracking-[0.14em] text-brand-navy shadow-[0_8px_20px_-10px_color-mix(in_oklab,var(--brand-gold)_80%,transparent)] transition-all duration-150 hover:-translate-y-px hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-60 sm:px-5"
         >
           <Search className="h-4 w-4" strokeWidth={2.25} aria-hidden="true" />
           <span className="hidden sm:inline">{isSearching ? "Buscando…" : "Buscar"}</span>
@@ -1021,7 +1021,7 @@ export function PriceSearchBar({
           {autoCorrected && (
             <div
               role="status"
-              className="flex flex-wrap items-center gap-2 rounded-lg border border-brand-gold/40 bg-brand-gold/10 px-3 py-2 text-[12px] text-foreground"
+              className="flex flex-wrap items-center gap-2 rounded-lg border border-brand-gold/40 bg-brand-gold/10 px-3 py-2 text-[13px] text-foreground"
             >
               <Sparkles className="h-3.5 w-3.5 text-gold-ink" aria-hidden="true" />
               <span>
@@ -1032,7 +1032,7 @@ export function PriceSearchBar({
               <button
                 type="button"
                 onClick={revertAutoCorrect}
-                className="ml-auto rounded-md border border-brand-gold/40 bg-background px-2 py-0.5 text-[12px] font-medium text-foreground hover:bg-brand-gold/20 focus-ring"
+                className="ml-auto rounded-md border border-brand-gold/40 bg-background px-2 py-0.5 text-[13px] font-medium text-foreground hover:bg-brand-gold/20 focus-ring"
               >
                 Buscar “{autoCorrected.from}” mesmo assim
               </button>
@@ -1047,7 +1047,7 @@ export function PriceSearchBar({
 
 
           {result.canonicalGroup && result.excludedByPureFilter > 0 && (
-            <p className="rounded-lg border border-primary/20 bg-primary/5 px-3 py-1.5 font-mono text-[11px] text-muted-foreground">
+            <p className="rounded-lg border border-primary/20 bg-primary/5 px-3 py-1.5 font-mono text-[12.5px] text-muted-foreground">
               Filtro <span className="text-primary">“{result.canonicalGroup}” puro</span> ativo — {result.excludedByPureFilter} item(s) com o termo apenas como ingrediente foram ocultados.
             </p>
           )}
@@ -1076,13 +1076,13 @@ export function PriceSearchBar({
                 >
                   <Sparkles className="mt-0.5 h-3.5 w-3.5 shrink-0 text-warning" strokeWidth={1.75} />
                   <div className="min-w-0 flex-1">
-                    <p className="text-[11.5px] font-medium text-warning dark:text-warning">
+                    <p className="text-[13px] font-medium text-warning dark:text-warning">
                       Você quis dizer
                     </p>
                     <p className="truncate text-sm font-semibold text-foreground">
                       {didYouMean.displayName}?
                     </p>
-                    <p className="font-mono text-[11px] text-muted-foreground">
+                    <p className="font-mono text-[12.5px] text-muted-foreground">
                       Clique para buscar com esta correção
                     </p>
                   </div>
@@ -1120,7 +1120,7 @@ export function PriceSearchBar({
                     <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-gold/70 to-transparent" />
                     <span aria-hidden className="pointer-events-none absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b from-brand-gold via-brand-gold/60 to-transparent" />
                     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 bg-white/[0.03] px-3.5 py-1.5">
-                      <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-gold-ink">
+                      <span className="inline-flex items-center gap-1.5 text-[12.5px] font-semibold uppercase tracking-[0.14em] text-gold-ink">
                         <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-brand-gold shadow-[0_0_8px_rgba(201,168,76,0.9)]" />
                         Melhor resultado
                       </span>
@@ -1128,12 +1128,12 @@ export function PriceSearchBar({
                         <span
                           role="status"
                           aria-label={`Economia estimada de ${pct} por cento comprando pelo menor preço.`}
-                          className="inline-flex items-center gap-1 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-2 py-[2px] text-[10.5px] font-bold uppercase tracking-[0.08em] text-gold-ink"
+                          className="inline-flex items-center gap-1 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-2 py-[2px] text-[12px] font-bold uppercase tracking-[0.08em] text-gold-ink"
                         >
                           Economize {pct}% hoje
                         </span>
                       ) : (
-                        <span className="text-[11px] font-medium uppercase tracking-wider text-white/50">
+                        <span className="text-[12.5px] font-medium uppercase tracking-wider text-white/85">
                           destaque da busca
                         </span>
                       )}
@@ -1142,7 +1142,7 @@ export function PriceSearchBar({
 
                     <div className="grid gap-3 px-3.5 py-3 sm:grid-cols-2 sm:gap-4">
                       <div className="min-w-0">
-                        <p className="flex items-center gap-2 text-[11px] font-medium text-gold-ink/90">
+                        <p className="flex items-center gap-2 text-[12.5px] font-medium text-gold-ink/90">
                           Menor preço agora
                           <LiveUpdateBadge active={live.active} tone="onDark" />
                         </p>
@@ -1155,7 +1155,7 @@ export function PriceSearchBar({
                         />
 
                         {result.cheapest ? (
-                          <p className="mt-1.5 flex min-w-0 items-center gap-1.5 text-[12px] text-white/75">
+                          <p className="mt-1.5 flex min-w-0 items-center gap-1.5 text-[13px] text-white/85">
                             <StoreBadge
                               name={result.cheapest.marketName}
                               logoUrl={result.cheapest.marketLogoUrl}
@@ -1182,15 +1182,15 @@ export function PriceSearchBar({
 
                       {hasGap ? (
                         <div className="min-w-0 border-t border-white/10 pt-3 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-4">
-                          <p className="text-[11px] font-medium text-gold-ink/90">Economia estimada</p>
+                          <p className="text-[12.5px] font-medium text-gold-ink/90">Economia estimada</p>
                           <p className="pc-num pc-num--onhero mt-1 text-[26px] font-bold leading-none">
                             <Price value={gap} size="sm" />
-                            <span className="pc-num pc-num--onhero ml-1.5 align-middle text-[12px] font-bold opacity-90">
+                            <span className="pc-num pc-num--onhero ml-1.5 align-middle text-[13px] font-bold opacity-90">
                               −{pct}%
                             </span>
                           </p>
 
-                          <p className="mt-1.5 truncate text-[12px] text-white/75 tabular-nums">
+                          <p className="mt-1.5 truncate text-[13px] text-white/85 tabular-nums">
                             mesmo produto · mais caro <Price value={rMax} size="xs" tone="muted" />
                             {priciestMarket ? (
                               <> em <span className="font-semibold text-white/90">{priciestMarket}</span></>
@@ -1203,10 +1203,10 @@ export function PriceSearchBar({
                     {bestProductName && bestMarketPrices.length > 1 ? (
                       <div className="border-t border-white/10 bg-white/[0.025] px-3.5 py-2">
                         <div className="mb-1.5 flex items-center justify-between gap-2">
-                          <p className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-gold-ink/90">
+                          <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-gold-ink/90">
                             Onde encontrar este produto
                           </p>
-                          <p className="text-[10.5px] font-medium text-white/55 tabular-nums">
+                          <p className="text-[12px] font-medium text-white/85 tabular-nums">
                             {refGroup?.prices.length ?? 0} estabelecimento{(refGroup?.prices.length ?? 0) > 1 ? "s" : ""}
                           </p>
                         </div>
@@ -1228,11 +1228,11 @@ export function PriceSearchBar({
                                 {i === 0 ? (
                                   <Crown className="h-3 w-3 shrink-0 text-gold-ink" strokeWidth={2.25} aria-hidden />
                                 ) : (
-                                  <span className="grid h-4 w-4 shrink-0 place-items-center rounded-full border border-white/18 text-[9.5px] font-bold text-white/65 tabular-nums">
+                                  <span className="grid h-4 w-4 shrink-0 place-items-center rounded-full border border-white/18 text-[11.5px] font-bold text-white/85 tabular-nums">
                                     {i + 1}
                                   </span>
                                 )}
-                                <span className="truncate text-[12px] font-semibold text-white/90">
+                                <span className="truncate text-[13px] font-semibold text-white/90">
                                   {p.marketName}
                                 </span>
                               </span>
@@ -1256,8 +1256,8 @@ export function PriceSearchBar({
                         { k: "Preços comparados", v: String(result.samples) },
                       ].map((s) => (
                         <div key={s.k} className="min-w-0 px-3.5 py-2">
-                          <dt className="truncate text-[11px] font-medium text-white/60">{s.k}</dt>
-                          <dd className="pc-num pc-num--onhero mt-0.5 text-[15px] font-bold leading-none">
+                          <dt className="truncate text-[12.5px] font-medium text-white/85">{s.k}</dt>
+                          <dd className="pc-num pc-num--onhero mt-0.5 text-[16px] font-bold leading-none">
                             {s.v}
                           </dd>
                         </div>
@@ -1409,7 +1409,7 @@ export function PriceSearchBar({
                       const canReset =
                         !!categoryFilter || !!kindFilter || !!marketFilter || freshness !== "all";
                       return (
-                        <p className="flex flex-wrap items-center gap-x-1.5 gap-y-1 px-0.5 text-[11.5px] leading-snug text-muted-foreground">
+                        <p className="flex flex-wrap items-center gap-x-1.5 gap-y-1 px-0.5 text-[13px] leading-snug text-muted-foreground">
                           <span className="font-semibold text-foreground tabular-nums">
                             {visibleCount}
                           </span>
@@ -1437,7 +1437,7 @@ export function PriceSearchBar({
                                 setMarketFilter(null);
                                 setFreshness("all");
                               }}
-                              className="ml-auto rounded-full border border-border px-2 py-[1px] text-[11px] font-semibold text-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                              className="ml-auto rounded-full border border-border px-2 py-[1px] text-[12.5px] font-semibold text-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                             >
                               Limpar filtros da lista
                             </button>
@@ -1556,14 +1556,14 @@ export function PriceSearchBar({
                                   return (
                                     <div className="sticky top-0 z-10 -mx-0.5 flex items-center gap-2 rounded-md border border-border/60 bg-background/85 px-2 py-1.5 backdrop-blur-md supports-[backdrop-filter]:bg-background/70">
                                       <span
-                                        className="font-serif text-[15px] italic leading-none text-[var(--pc-gold-ink)]"
+                                        className="font-serif text-[16px] italic leading-none text-[var(--pc-gold-ink)]"
                                         data-no-translate
                                       >
                                         {cat}
                                       </span>
                                       {Number.isFinite(catMin) ? (
                                         <span
-                                          className="inline-flex items-center gap-1 rounded-full border border-brand-gold/40 bg-brand-navy px-2 py-[2px] text-[10.5px] font-bold uppercase tracking-[0.08em] text-gold-ink"
+                                          className="inline-flex items-center gap-1 rounded-full border border-brand-gold/40 bg-brand-navy px-2 py-[2px] text-[12px] font-bold uppercase tracking-[0.08em] text-gold-ink"
                                           title={`Menor preço nesta categoria: ${fmt(catMin)}`}
                                           aria-label={`Menor preço na categoria ${cat}: ${fmt(catMin)}`}
                                         >
@@ -1572,7 +1572,7 @@ export function PriceSearchBar({
                                         </span>
                                       ) : null}
                                       <span className="h-px flex-1 bg-border" aria-hidden="true" />
-                                      <span className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground tabular-nums">
+                                      <span className="text-[12px] font-semibold uppercase tracking-[0.14em] text-muted-foreground tabular-nums">
                                         {sortedGroups.length} item{sortedGroups.length > 1 ? "s" : ""}
                                       </span>
                                     </div>
@@ -1690,7 +1690,7 @@ export function PriceSearchBar({
                           <span
                             role="img"
                             aria-label={`Posição ${mi + 1}`}
-                            className="my-auto grid h-7 w-7 shrink-0 place-items-center rounded-full border border-accent-strong/40 bg-accent/10 font-sans text-[11px] font-semibold tabular-nums text-accent-strong"
+                            className="my-auto grid h-7 w-7 shrink-0 place-items-center rounded-full border border-accent-strong/40 bg-accent/10 font-sans text-[12.5px] font-semibold tabular-nums text-accent-strong"
                           >
                             <span aria-hidden="true">{String(mi + 1).padStart(2, "0")}</span>
                           </span>
@@ -1707,12 +1707,12 @@ export function PriceSearchBar({
                             }
                           />
                           <div className="min-w-0 flex-1 self-center">
-                            <p className="market-name truncate text-[13px]">
+                            <p className="market-name truncate text-[14px]">
                               {m.marketName}
                             </p>
 
 
-                            <p className="text-[11.5px] font-medium text-muted-foreground">
+                            <p className="text-[13px] font-medium text-muted-foreground">
                               {m.samples} scan{m.samples > 1 ? "s" : ""}
                               <span aria-hidden="true" className="mx-1 text-accent-strong/50">·</span>
                               média <Price value={m.priceAvg} size="xs" tone="muted" />
@@ -1734,11 +1734,11 @@ export function PriceSearchBar({
                           />
                           <div className="shrink-0 self-center text-right">
                             {isCheapest && (
-                              <p className="text-[11px] font-medium text-accent-strong">
+                              <p className="text-[12.5px] font-medium text-accent-strong">
                                 Menor
                               </p>
                             )}
-                            <p className="font-display text-[16px] font-semibold leading-tight tabular-nums text-foreground">
+                            <p className="font-display text-[17px] font-semibold leading-tight tabular-nums text-foreground">
                               <Price value={m.priceMin} size="sm" />
                             </p>
                           </div>
@@ -1839,7 +1839,7 @@ function AutoLoadMore({
     <button
       type="button"
       onClick={onLoad}
-      className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-1.5 text-[12px] font-medium text-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+      className="mt-1 w-full rounded-lg border border-border bg-background px-3 py-1.5 text-[13px] font-medium text-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
       aria-label={`Mostrar mais itens em ${category}`}
     >
       Mostrar mais {Math.min(pageSize, hidden)} de {hidden} restantes
@@ -2000,13 +2000,13 @@ function QuickFilters({
   onFreshness: (v: "all" | "30" | "7") => void;
 }) {
   const chip = (active: boolean) =>
-    "rounded-full border px-2.5 py-1 font-mono text-[11px] tracking-wide transition " +
+    "rounded-full border px-2.5 py-1 font-mono text-[12.5px] tracking-wide transition " +
     (active
       ? "border-primary bg-primary/15 text-primary"
       : "border-border bg-background text-muted-foreground hover:text-foreground");
   return (
     <div className="flex flex-wrap items-center gap-1.5">
-      <span className="text-[11.5px] font-medium text-muted-foreground">
+      <span className="text-[13px] font-medium text-muted-foreground">
         Agrupar
       </span>
       <button type="button" className={chip(groupBy === "product")} onClick={() => onGroupBy("product")}>
@@ -2018,7 +2018,7 @@ function QuickFilters({
       <button type="button" className={chip(groupBy === "matrix")} onClick={() => onGroupBy("matrix")}>
         Comparar lado a lado
       </button>
-      <span className="ml-2 text-[11.5px] font-medium text-muted-foreground">
+      <span className="ml-2 text-[13px] font-medium text-muted-foreground">
         Ordenar
       </span>
 
@@ -2080,7 +2080,7 @@ function QuickFilters({
       )}
       {categories.length > 1 && (
         <>
-          <span className="ml-2 text-[11.5px] font-medium text-muted-foreground">
+          <span className="ml-2 text-[13px] font-medium text-muted-foreground">
             Categoria
           </span>
           <button
@@ -2104,7 +2104,7 @@ function QuickFilters({
       )}
       {kinds.length > 0 && (
         <>
-          <span className="ml-2 text-[11.5px] font-medium text-muted-foreground">
+          <span className="ml-2 text-[13px] font-medium text-muted-foreground">
             Tipo
           </span>
           <button type="button" className={chip(kindFilter === null)} onClick={() => onKind(null)}>
@@ -2151,11 +2151,11 @@ function ProductDetailsCard({
         )}
         <div className="min-w-0">
           <div className="flex min-w-0 flex-wrap items-center gap-x-2 gap-y-0.5">
-            <p className="truncate text-[13.5px] font-semibold tracking-tight text-foreground">
+            <p className="truncate text-[14.5px] font-semibold tracking-tight text-foreground">
               <HighlightMatch text={suggestion.displayName} tokens={highlightTokens} />
             </p>
             {([suggestion.brand, suggestion.category].filter(Boolean).join(" · ") || "") && (
-              <span className="truncate text-[11.5px] text-muted-foreground">
+              <span className="truncate text-[13px] text-muted-foreground">
                 {[suggestion.brand, suggestion.category].filter(Boolean).join(" · ")}
               </span>
             )}
@@ -2170,7 +2170,7 @@ function ProductDetailsCard({
             <Link
               to="/produto-publico/$slug"
               params={{ slug: suggestion.displayName }}
-              className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary hover:bg-primary/20"
+              className="rounded-full border border-primary/30 bg-primary/10 px-2.5 py-0.5 text-[12.5px] font-medium text-primary hover:bg-primary/20"
             >
               Detalhes
             </Link>
@@ -2178,7 +2178,7 @@ function ProductDetailsCard({
               to="/produto-publico/$slug"
               params={{ slug: suggestion.displayName }}
               hash="historico"
-              className="rounded-full border border-border bg-background px-2.5 py-0.5 text-[11px] font-medium text-foreground hover:bg-primary/5"
+              className="rounded-full border border-border bg-background px-2.5 py-0.5 text-[12.5px] font-medium text-foreground hover:bg-primary/5"
             >
               Histórico
             </Link>
@@ -2240,16 +2240,16 @@ function CompareMatrix({
       className="mt-2 rounded-xl border border-brand-gold/40 bg-[color-mix(in_oklab,var(--brand-gold)_6%,var(--pc-surface-1))] p-2 shadow-sm"
     >
       <header className="mb-1.5 flex flex-wrap items-baseline justify-between gap-1.5 px-1">
-        <h4 className="text-[11px] font-bold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">
+        <h4 className="text-[12.5px] font-bold uppercase tracking-[0.14em] text-[var(--pc-gold-ink)]">
           Comparação lado a lado
         </h4>
-        <p className="text-[11px] font-medium text-muted-foreground">
+        <p className="text-[12.5px] font-medium text-muted-foreground">
           <span className="font-semibold text-foreground">Faixa</span>{" "}
           <span className="pc-num tabular-nums"><Price value={globalMin} size="sm" /></span>
           <span aria-hidden className="mx-1 opacity-40">↔</span>
           <span className="pc-num tabular-nums"><Price value={globalMax} size="sm" /></span>
           {spreadPct > 0 ? (
-            <span className="ml-1.5 rounded-full bg-accent-strong px-1.5 py-[1px] text-[11px] font-bold uppercase tracking-wider text-accent-foreground">
+            <span className="ml-1.5 rounded-full bg-accent-strong px-1.5 py-[1px] text-[12.5px] font-bold uppercase tracking-wider text-accent-foreground">
               economia até {spreadPct.toFixed(0)}%
             </span>
           ) : null}
@@ -2315,14 +2315,14 @@ function CompareMatrix({
                 ) : (
                   <span
                     aria-hidden
-                    className="grid h-4.5 w-4.5 place-items-center rounded-full border border-border text-[11px] font-bold tabular-nums text-muted-foreground"
+                    className="grid h-4.5 w-4.5 place-items-center rounded-full border border-border text-[12.5px] font-bold tabular-nums text-muted-foreground"
                   >
                     {i + 1}
                   </span>
                 )}
                 <span
                   className={
-                    "truncate text-[12px] font-semibold " +
+                    "truncate text-[13px] font-semibold " +
                     (isCheapest ? "text-white" : "text-foreground")
                   }
                   title={p.marketName ?? ""}
@@ -2337,11 +2337,11 @@ function CompareMatrix({
                 tone={isCheapest ? "onhero" : "default"}
                 className={isCheapest ? "text-white" : "text-foreground"}
               />
-              <div className="flex items-center gap-1.5 text-[10.5px] font-medium uppercase tracking-wider">
+              <div className="flex items-center gap-1.5 text-[12px] font-medium uppercase tracking-wider">
                 {isCheapest ? (
                   <span
                     className={
-                      "rounded-full bg-brand-gold px-1.5 py-[1px] text-[11px] font-bold text-brand-navy"
+                      "rounded-full bg-brand-gold px-1.5 py-[1px] text-[12.5px] font-bold text-brand-navy"
                     }
                   >
                     Menor preço
@@ -2373,7 +2373,7 @@ function CompareMatrix({
             role="status"
             aria-live="polite"
             aria-atomic="true"
-            className="text-[11px] font-medium text-muted-foreground"
+            className="text-[12.5px] font-medium text-muted-foreground"
           >
             {expanded
               ? `Mostrando todos os ${sorted.length} mercados`
@@ -2383,7 +2383,7 @@ function CompareMatrix({
             type="button"
             onClick={() => setExpanded((v) => !v)}
             aria-expanded={expanded}
-            className="inline-flex h-7 items-center gap-1.5 rounded-full border border-brand-gold/60 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-2.5 text-[11px] font-bold uppercase tracking-[0.12em] text-[var(--pc-gold-ink)] transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+            className="inline-flex h-7 items-center gap-1.5 rounded-full border border-brand-gold/60 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-2.5 text-[12.5px] font-bold uppercase tracking-[0.12em] text-[var(--pc-gold-ink)] transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
           >
             {expanded
               ? "Ver menos"
@@ -2635,7 +2635,7 @@ function ProductGroupCard({
           <button
             type="button"
             onClick={() => setExpanded(true)}
-            className="rounded-full border border-brand-gold/45 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-2 py-0.5 text-[11px] font-semibold text-[var(--pc-gold-ink)] transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+            className="rounded-full border border-brand-gold/45 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-2 py-0.5 text-[12.5px] font-semibold text-[var(--pc-gold-ink)] transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
           >
             Ver todos
           </button>
@@ -2699,7 +2699,7 @@ function ProductGroupCard({
                 <span
                   role="img"
                   aria-label={cheapestCount > 1 ? `Menor preço — empate com ${cheapestCount - 1} outro${cheapestCount - 1 === 1 ? "" : "s"}` : "Menor preço"}
-                  className="pointer-events-none absolute -top-2 right-2 z-10 inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-navy px-2 py-[2px] text-[11px] font-bold uppercase tracking-[0.14em] text-gold-ink shadow-sm"
+                  className="pointer-events-none absolute -top-2 right-2 z-10 inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-navy px-2 py-[2px] text-[12.5px] font-bold uppercase tracking-[0.14em] text-gold-ink shadow-sm"
                 >
                   <Crown className="h-2.5 w-2.5" strokeWidth={2.25} aria-hidden="true" />
                   <span>{cheapestCount > 1 ? `Menor preço · empate ${cheapestCount}` : "Menor preço"}</span>
@@ -2720,7 +2720,7 @@ function ProductGroupCard({
                   <span
                     role="img"
                     aria-label={`Posição ${i + 1}`}
-                    className="my-auto grid h-5.5 w-5.5 shrink-0 place-items-center rounded-full border border-border bg-muted/40 text-[11px] font-semibold tabular-nums text-muted-foreground"
+                    className="my-auto grid h-5.5 w-5.5 shrink-0 place-items-center rounded-full border border-border bg-muted/40 text-[12.5px] font-semibold tabular-nums text-muted-foreground"
                   >
                     <span aria-hidden="true">{String(i + 1).padStart(2, "0")}</span>
                   </span>
@@ -2787,7 +2787,7 @@ function ProductGroupCard({
               {detailsOpen ? (
                 <div
                   id={`pc-row-details-${encodeURIComponent(rowKey)}`}
-                  className="mt-1.5 rounded-md border border-[color-mix(in_oklab,var(--brand-gold)_30%,transparent)] bg-[color-mix(in_oklab,var(--brand-gold)_6%,transparent)] px-2 py-1.5 text-[11.5px] leading-snug"
+                  className="mt-1.5 rounded-md border border-[color-mix(in_oklab,var(--brand-gold)_30%,transparent)] bg-[color-mix(in_oklab,var(--brand-gold)_6%,transparent)] px-2 py-1.5 text-[13px] leading-snug"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <dl className="grid grid-cols-1 gap-x-3 gap-y-0.5 sm:grid-cols-2">
@@ -2826,14 +2826,14 @@ function ProductGroupCard({
                       </div>
                     ) : null}
                   </dl>
-                  <p className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[11px] text-muted-foreground">
+                  <p className="mt-1.5 flex flex-wrap items-center gap-1.5 text-[12.5px] text-muted-foreground">
                     <span>
                       Marca, peso/embalagem e código de barras (quando houver) aparecem na ficha completa do produto.
                     </span>
                     <Link
                       to="/produto-publico/$slug"
                       params={{ slug: productName }}
-                      className="rounded-full border border-brand-gold/45 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-2 py-0.5 text-[10.5px] font-semibold uppercase tracking-[0.12em] text-[var(--pc-gold-ink)] transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                      className="rounded-full border border-brand-gold/45 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-2 py-0.5 text-[12px] font-semibold uppercase tracking-[0.12em] text-[var(--pc-gold-ink)] transition hover:brightness-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                     >
                       Ver ficha
                     </Link>
@@ -2841,7 +2841,7 @@ function ProductGroupCard({
                       <Link
                         to="/loja/$id"
                         params={{ id: p.establishmentId }}
-                        className="rounded-full border border-border bg-background px-2 py-0.5 text-[10.5px] font-semibold uppercase tracking-[0.12em] text-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                        className="rounded-full border border-border bg-background px-2 py-0.5 text-[12px] font-semibold uppercase tracking-[0.12em] text-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                       >
                         Ver mercado
                       </Link>
@@ -2859,7 +2859,7 @@ function ProductGroupCard({
           type="button"
           onClick={() => setExpanded((v) => !v)}
           aria-expanded={expanded}
-          className="mt-1 w-full rounded-lg border border-border bg-background px-2.5 py-1 text-[12px] font-medium text-muted-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
+          className="mt-1 w-full rounded-lg border border-border bg-background px-2.5 py-1 text-[13px] font-medium text-muted-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/30"
         >
           {expanded
             ? "Ver menos mercados"
@@ -3006,12 +3006,12 @@ function MarketGroupedResults({
       {/* Filtro rápido por estabelecimento — compacta a lista sem rolar */}
       {allBuckets.length > 1 ? (
         <div className="flex items-center gap-1.5 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-          <span className="shrink-0 text-[11.5px] font-medium text-muted-foreground">Mercado</span>
+          <span className="shrink-0 text-[13px] font-medium text-muted-foreground">Mercado</span>
           <button
             type="button"
             onClick={() => setOnlyMarket(null)}
             className={
-              "shrink-0 rounded-full border px-2.5 py-1 text-[11px] font-medium transition " +
+              "shrink-0 rounded-full border px-2.5 py-1 text-[12.5px] font-medium transition " +
               (onlyMarket === null
                 ? "border-brand-gold bg-brand-gold text-brand-navy"
                 : "border-border bg-background text-muted-foreground hover:text-foreground")
@@ -3025,7 +3025,7 @@ function MarketGroupedResults({
               type="button"
               onClick={() => setOnlyMarket(onlyMarket === b.marketName ? null : b.marketName)}
               className={
-                "shrink-0 max-w-[46vw] truncate rounded-full border px-2.5 py-1 text-[11px] font-medium transition sm:max-w-none " +
+                "shrink-0 max-w-[46vw] truncate rounded-full border px-2.5 py-1 text-[12.5px] font-medium transition sm:max-w-none " +
                 (onlyMarket === b.marketName
                   ? "border-brand-gold bg-brand-gold text-brand-navy"
                   : "border-border bg-background text-muted-foreground hover:text-foreground")
@@ -3063,7 +3063,7 @@ function MarketGroupedResults({
         <button
           type="button"
           onClick={() => setMarketPage((v) => v + 4)}
-          className="w-full rounded-lg border border-[color-mix(in_oklab,var(--color-border)_55%,transparent)] px-3 py-2 text-[12px] font-medium text-muted-foreground transition hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+          className="w-full rounded-lg border border-[color-mix(in_oklab,var(--color-border)_55%,transparent)] px-3 py-2 text-[13px] font-medium text-muted-foreground transition hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
         >
           Ver mais {Math.min(4, hiddenMarkets)} de {hiddenMarkets} mercados
         </button>
@@ -3144,20 +3144,20 @@ function MarketBucketSection({
 
         <div className="min-w-0 flex-1">
           <div className="flex min-w-0 items-center gap-1.5 sm:gap-2">
-            <span className="market-name truncate text-[13.5px] font-semibold leading-tight tracking-[-0.012em] text-foreground sm:text-[15px]">
+            <span className="market-name truncate text-[14.5px] font-semibold leading-tight tracking-[-0.012em] text-foreground sm:text-[16px]">
               {marketName}
             </span>
             {isCheapest ? (
-              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-brand-gold px-1.5 py-0.5 text-[11px] font-semibold text-brand-navy sm:px-2 sm:text-[11px]">
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-brand-gold px-1.5 py-0.5 text-[12.5px] font-semibold text-brand-navy sm:px-2 sm:text-[12.5px]">
                 <Crown className="h-3 w-3" aria-hidden="true" /> Menor preço
               </span>
             ) : (
-              <span className="shrink-0 rounded-full border border-[color-mix(in_oklab,var(--color-border)_60%,transparent)] px-1.5 py-0.5 text-[11px] font-medium tabular-nums text-muted-foreground sm:text-[11px]">
+              <span className="shrink-0 rounded-full border border-[color-mix(in_oklab,var(--color-border)_60%,transparent)] px-1.5 py-0.5 text-[12.5px] font-medium tabular-nums text-muted-foreground sm:text-[12.5px]">
                 {rank}º
               </span>
             )}
           </div>
-          <p className="mt-0.5 truncate text-[11.5px] leading-relaxed text-muted-foreground sm:text-[12px]">
+          <p className="mt-0.5 truncate text-[13px] leading-relaxed text-muted-foreground sm:text-[13px]">
             {kind ? <span className="capitalize">{kind}</span> : "Estabelecimento"} ·{" "}
             {rows.length} {rows.length === 1 ? "produto" : "produtos"} · a partir de{" "}
             <span className="font-semibold tabular-nums text-foreground"><Price value={minPrice} size="sm" /></span>
@@ -3165,7 +3165,7 @@ function MarketBucketSection({
 
           {/* Destaque de economia por mercado — leve, uma linha, sem caixas pesadas */}
           {bestCount > 0 || savings > 0 || gapToBest > 0 ? (
-            <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px] leading-none sm:text-[11.5px]">
+            <p className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] leading-none sm:text-[13px]">
               {bestCount > 0 ? (
                 <span className="inline-flex items-center gap-1 rounded-full border border-[color-mix(in_oklab,var(--brand-gold)_45%,transparent)] bg-[color-mix(in_oklab,var(--brand-gold)_12%,transparent)] px-2 py-1 font-semibold text-[var(--pc-gold-ink)]">
                   <Crown className="h-3 w-3" aria-hidden="true" />
@@ -3200,13 +3200,13 @@ function MarketBucketSection({
             <Link
               to="/produto/$slug"
               params={{ slug: r.productName }}
-              className="min-w-0 flex-1 truncate rounded text-[12.5px] font-medium leading-relaxed text-foreground hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold sm:text-[13.5px]"
+              className="min-w-0 flex-1 truncate rounded text-[13.5px] font-medium leading-relaxed text-foreground hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold sm:text-[14.5px]"
             >
               <HighlightMatch text={r.productName} tokens={highlightTokens} />
             </Link>
             {r.isBest ? (
               <span
-                className="hidden shrink-0 rounded-full border border-[color-mix(in_oklab,var(--brand-gold)_45%,transparent)] px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.06em] text-[var(--pc-gold-ink)] sm:inline"
+                className="hidden shrink-0 rounded-full border border-[color-mix(in_oklab,var(--brand-gold)_45%,transparent)] px-1.5 py-0.5 text-[12.5px] font-semibold uppercase tracking-[0.06em] text-[var(--pc-gold-ink)] sm:inline"
                 title="Menor preço desta busca para este produto"
               >
                 melhor
@@ -3215,7 +3215,7 @@ function MarketBucketSection({
             <span
               data-freshness={availabilityTone(r.price.when)}
               title={`Preço coletado em ${new Date(r.price.when).toLocaleDateString("pt-BR")}`}
-              className="hidden shrink-0 text-[11px] text-muted-foreground data-[freshness=stale]:opacity-60 sm:inline"
+              className="hidden shrink-0 text-[12.5px] text-muted-foreground data-[freshness=stale]:opacity-60 sm:inline"
             >
               {freshnessLabel(r.price.when)}
             </span>
@@ -3241,7 +3241,7 @@ function MarketBucketSection({
           type="button"
           onClick={() => setExpanded((v) => !v)}
           aria-expanded={expanded}
-          className="w-full border-t border-[color-mix(in_oklab,var(--color-border)_45%,transparent)] px-3 py-2 text-[11.5px] font-medium text-muted-foreground transition hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold sm:px-4"
+          className="w-full border-t border-[color-mix(in_oklab,var(--color-border)_45%,transparent)] px-3 py-2 text-[13px] font-medium text-muted-foreground transition hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold sm:px-4"
         >
           {expanded
             ? `Mostrar apenas ${COLLAPSED} produtos`
@@ -3451,7 +3451,7 @@ function MatrixCompareResults({
 
   if (allMarkets.length < 2) {
     return (
-      <div className="rounded-xl border border-border/60 bg-card/70 px-3 py-3 text-[12.5px] text-muted-foreground">
+      <div className="rounded-xl border border-border/60 bg-card/70 px-3 py-3 text-[13.5px] text-muted-foreground">
         Comparação lado a lado precisa de pelo menos 2 mercados com o mesmo produto. Ajuste os filtros
         para incluir mais estabelecimentos.
       </div>
@@ -3463,7 +3463,7 @@ function MatrixCompareResults({
       {/* Toolbar: seletor de mercados + navegação + exportar */}
       <div className="flex flex-wrap items-center gap-2 rounded-xl border border-border/60 bg-card/60 px-2.5 py-2">
         <div className="flex items-center gap-1.5">
-          <span className="text-[12px] font-medium text-muted-foreground">
+          <span className="text-[13px] font-medium text-muted-foreground">
             Colunas
           </span>
           <div className="flex flex-wrap gap-1" role="group" aria-label="Selecionar mercados visíveis">
@@ -3486,7 +3486,7 @@ function MatrixCompareResults({
                     });
                   }}
                   className={
-                    "focus-ring inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] font-medium transition " +
+                    "focus-ring inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[12.5px] font-medium transition " +
                     (active
                       ? "border-brand-gold/50 bg-brand-gold/15 text-foreground"
                       : "border-border bg-background text-muted-foreground hover:bg-background/80 line-through")
@@ -3537,7 +3537,7 @@ function MatrixCompareResults({
             disabled={!isAuthenticated || exporting}
             aria-label={isAuthenticated ? "Exportar comparação em PDF" : "Entre para exportar em PDF"}
             title={isAuthenticated ? "Exportar em PDF" : "Disponível para usuários cadastrados"}
-            className="focus-ring inline-flex items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-gold/15 px-2.5 py-1 text-[11px] font-semibold text-foreground hover:bg-brand-gold/25 disabled:cursor-not-allowed disabled:opacity-50"
+            className="focus-ring inline-flex items-center gap-1.5 rounded-full border border-brand-gold/40 bg-brand-gold/15 px-2.5 py-1 text-[12.5px] font-semibold text-foreground hover:bg-brand-gold/25 disabled:cursor-not-allowed disabled:opacity-50"
           >
             {exporting ? "Gerando…" : isAuthenticated ? "Exportar PDF" : "Exportar PDF (login)"}
           </button>
@@ -3557,7 +3557,7 @@ function MatrixCompareResults({
           aria-rowcount={products.length + 1}
           aria-colcount={markets.length + 1}
           onKeyDown={onGridKeyDown}
-          className="w-full min-w-[560px] border-collapse text-[13px]"
+          className="w-full min-w-[560px] border-collapse text-[14px]"
         >
           <thead>
             <tr role="row" aria-rowindex={1} className="bg-background/40 text-left">
@@ -3568,7 +3568,7 @@ function MatrixCompareResults({
                 data-row={0}
                 data-col={0}
                 tabIndex={0}
-                className="focus-ring sticky left-0 z-10 min-w-[180px] border-b border-border/60 bg-background/80 px-3 py-2.5 text-[12px] font-medium text-muted-foreground backdrop-blur"
+                className="focus-ring sticky left-0 z-10 min-w-[180px] border-b border-border/60 bg-background/80 px-3 py-2.5 text-[13px] font-medium text-muted-foreground backdrop-blur"
               >
                 Produto
               </th>
@@ -3594,7 +3594,7 @@ function MatrixCompareResults({
                         size="sm"
                         className="flex-none"
                       />
-                      <span className="market-name truncate text-[12.5px] font-semibold text-foreground">
+                      <span className="market-name truncate text-[13.5px] font-semibold text-foreground">
 
                         {m.name}
                       </span>
@@ -3636,12 +3636,12 @@ function MatrixCompareResults({
                       type="button"
                       onClick={() => openProduct(g.productName)}
                       aria-label={productLabel}
-                      className="block w-full truncate text-left text-[13px] font-medium text-foreground hover:text-gold-ink focus:outline-none rounded"
+                      className="block w-full truncate text-left text-[14px] font-medium text-foreground hover:text-gold-ink focus:outline-none rounded"
                     >
                       <HighlightMatch text={g.productName} tokens={highlightTokens} />
                     </button>
                     {rowMin != null && rowMax != null && rowMax > rowMin ? (
-                      <p className="mt-0.5 text-[11px] text-muted-foreground">
+                      <p className="mt-0.5 text-[12.5px] text-muted-foreground">
                         Economia até{" "}
                         <span className="font-semibold text-[var(--pc-gold-ink)] tabular-nums">
                           <Price value={rowMax - rowMin} size="sm" tone="savings" />
@@ -3676,7 +3676,7 @@ function MatrixCompareResults({
                         className={
                           "focus-ring cursor-pointer px-3 py-2 align-middle tabular-nums " +
                           (v == null
-                            ? "text-center text-[12px] text-muted-foreground/60"
+                            ? "text-center text-[13px] text-muted-foreground/60"
                             : isMin
                               ? "bg-brand-gold/15 text-foreground font-bold"
                               : isMax
@@ -3695,7 +3695,7 @@ function MatrixCompareResults({
                             {rowMin != null && v > rowMin ? (
                               <span
                                 title={`${(((v - rowMin) / rowMin) * 100).toFixed(0)}% acima do menor preço`}
-                                className="text-[11px] font-semibold text-muted-foreground"
+                                className="text-[12.5px] font-semibold text-muted-foreground"
                               >
                                 +{(((v - rowMin) / rowMin) * 100).toFixed(0)}%
                               </span>
@@ -3703,7 +3703,7 @@ function MatrixCompareResults({
                             {isMin && rowMax != null && rowMax > v ? (
                               <span
                                 title="Economia frente ao mais caro desta linha"
-                                className="text-[11px] font-semibold text-[var(--pc-gold-ink)]"
+                                className="text-[12.5px] font-semibold text-[var(--pc-gold-ink)]"
                               >
                                 −{(((rowMax - v) / rowMax) * 100).toFixed(0)}%
                               </span>
@@ -3715,7 +3715,7 @@ function MatrixCompareResults({
                                 openProduct(g.productName);
                               }}
                               aria-label={`Abrir ${g.productName} em ${m.name}`}
-                              className="ml-auto rounded-full border border-border px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)]"
+                              className="ml-auto rounded-full border border-border px-1.5 py-0.5 text-[12.5px] font-semibold uppercase tracking-[0.08em] text-muted-foreground transition hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)]"
                             >
                               Abrir
                             </button>
@@ -3732,7 +3732,7 @@ function MatrixCompareResults({
         </table>
       </div>
 
-      <p className="text-[11px] text-muted-foreground">
+      <p className="text-[12.5px] text-muted-foreground">
         Dica: navegue com as setas do teclado (↑ ↓ ← →), Home/End e PageUp/PageDown. Enter abre os detalhes.
       </p>
 
@@ -3789,7 +3789,7 @@ function MarketLegend({
       aria-label="Filtrar por estabelecimento"
       className="flex flex-wrap items-center gap-1.5 rounded-lg border border-border/60 bg-background/60 px-2 py-1.5"
     >
-      <span className="pl-1 pr-1 text-[11.5px] font-medium text-muted-foreground">
+      <span className="pl-1 pr-1 text-[13px] font-medium text-muted-foreground">
         Mercados
       </span>
       {markets.map((m) => {
@@ -3804,7 +3804,7 @@ function MarketLegend({
             aria-pressed={isActive}
             title={`${m.name} — ${m.count} preço(s)`}
             className={
-              "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[11px] font-semibold transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold " +
+              "inline-flex items-center gap-1.5 rounded-full border px-2.5 py-0.5 text-[12.5px] font-semibold transition-opacity focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold " +
               (isDim ? "opacity-50 hover:opacity-100" : "opacity-100")
             }
             style={{
@@ -3816,7 +3816,7 @@ function MarketLegend({
           >
             <span className="max-w-[120px] truncate">{m.name}</span>
             <span
-              className="rounded-full px-1 text-[11px] tabular-nums"
+              className="rounded-full px-1 text-[12.5px] tabular-nums"
               style={{ backgroundColor: `${fg === "#ffffff" ? "rgba(0,0,0,0.22)" : "rgba(255,255,255,0.35)"}`, color: fg }}
             >
               {m.count}
@@ -3828,7 +3828,7 @@ function MarketLegend({
         <button
           type="button"
           onClick={() => onPick(active)}
-          className="ml-auto rounded-md px-2 py-0.5 text-[12px] font-medium text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+          className="ml-auto rounded-md px-2 py-0.5 text-[13px] font-medium text-muted-foreground hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
         >
           Limpar
         </button>

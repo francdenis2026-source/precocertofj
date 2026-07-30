@@ -122,7 +122,7 @@ export function ProductCompareDialog({
       >
         <header className="flex items-center justify-between gap-2 border-b border-border px-4 py-2.5">
           <div className="min-w-0">
-            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent-strong">
+            <p className="font-mono text-[12.5px] uppercase tracking-[0.22em] text-accent-strong">
               Comparar produtos
             </p>
             <h2
@@ -163,13 +163,13 @@ export function ProductCompareDialog({
           <table className="w-full border-collapse text-sm">
             <thead className="sticky top-0 bg-background/95 backdrop-blur">
               <tr className="border-b border-border">
-                <th className="px-3 py-2 text-left font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
+                <th className="px-3 py-2 text-left font-mono text-[12.5px] uppercase tracking-widest text-muted-foreground">
                   Estabelecimento
                 </th>
                 {entries.map((e) => (
                   <th
                     key={e.productName}
-                    className="min-w-[160px] px-3 py-2 text-left font-mono text-[11px] uppercase tracking-widest text-muted-foreground"
+                    className="min-w-[160px] px-3 py-2 text-left font-mono text-[12.5px] uppercase tracking-widest text-muted-foreground"
                   >
                     <div className="flex items-start justify-between gap-2">
                       <span className="line-clamp-2 normal-case tracking-tight text-foreground">
@@ -186,7 +186,7 @@ export function ProductCompareDialog({
                     </div>
                   </th>
                 ))}
-                <th className="min-w-[110px] px-3 py-2 text-right font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
+                <th className="min-w-[110px] px-3 py-2 text-right font-mono text-[12.5px] uppercase tracking-widest text-muted-foreground">
                   Total
                 </th>
               </tr>
@@ -196,7 +196,7 @@ export function ProductCompareDialog({
                 <tr>
                   <td
                     colSpan={entries.length + 2}
-                    className="px-3 py-6 text-center font-mono text-[11px] text-muted-foreground"
+                    className="px-3 py-6 text-center font-mono text-[12.5px] text-muted-foreground"
                   >
                     Nenhum estabelecimento em comum.
                   </td>
@@ -217,15 +217,15 @@ export function ProductCompareDialog({
                           {isBest ? (
                             <Trophy className="h-3.5 w-3.5 text-accent-strong" strokeWidth={2.4} />
                           ) : total != null ? (
-                            <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-muted/60 font-mono text-[11px] font-bold text-muted-foreground">
+                            <span className="inline-flex h-4 w-4 items-center justify-center rounded-full bg-muted/60 font-mono text-[12.5px] font-bold text-muted-foreground">
                               {rowIdx + 1}
                             </span>
                           ) : (
-                            <span aria-hidden="true" className="inline-flex h-4 w-4 items-center justify-center rounded-full text-[11px] text-muted-foreground">
+                            <span aria-hidden="true" className="inline-flex h-4 w-4 items-center justify-center rounded-full text-[12.5px] text-muted-foreground">
                               ·
                             </span>
                           )}
-                          <span className="font-display text-[13px] font-medium tracking-tight text-foreground">
+                          <span className="font-display text-[14px] font-medium tracking-tight text-foreground">
                             {market}
                           </span>
                         </div>
@@ -236,7 +236,7 @@ export function ProductCompareDialog({
                           return (
                             <td
                               key={i}
-                              className="px-3 py-2 align-top font-mono text-[11px] text-muted-foreground"
+                              className="px-3 py-2 align-top font-mono text-[12.5px] text-muted-foreground"
                             >
                               —
                             </td>
@@ -264,7 +264,7 @@ export function ProductCompareDialog({
                             {fresh ? (
                               <p
                                 className={
-                                  "mt-1 inline-flex items-center gap-1 font-mono text-[11px] uppercase tracking-widest " +
+                                  "mt-1 inline-flex items-center gap-1 font-mono text-[12.5px] uppercase tracking-widest " +
                                   (fresh.stale
                                     ? "text-destructive"
                                     : "text-muted-foreground")
@@ -291,7 +291,7 @@ export function ProductCompareDialog({
                               tone={isBest ? "best" : "default"}
                             />
                             {isBest ? (
-                              <p className="mt-1 font-mono text-[11px] uppercase tracking-widest text-accent-strong">
+                              <p className="mt-1 font-mono text-[12.5px] uppercase tracking-widest text-accent-strong">
                                 melhor total
                               </p>
                             ) : bestTotal != null ? (
@@ -306,7 +306,7 @@ export function ProductCompareDialog({
                             ) : null}
                           </>
                         ) : (
-                          <span className="font-mono text-[11px] text-muted-foreground">
+                          <span className="font-mono text-[12.5px] text-muted-foreground">
                             parcial
                           </span>
                         )}
@@ -322,16 +322,16 @@ export function ProductCompareDialog({
         <footer className="border-t border-border px-4 py-2.5">
           {totalSavings != null ? (
             <div className="mb-2 flex flex-wrap items-center gap-2 rounded-lg border border-savings/30 bg-savings/[0.06] px-3 py-2">
-              <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-savings">
+              <span className="font-mono text-[12.5px] uppercase tracking-[0.2em] text-savings">
                 Economia máxima
               </span>
               <Price value={totalSavings} size="md" tone="savings" />
-              <span className="font-mono text-[11px] text-muted-foreground">
+              <span className="font-mono text-[12.5px] text-muted-foreground">
                 comparando o mais barato ao mais caro no mesmo carrinho
               </span>
             </div>
           ) : null}
-          <p className="font-mono text-[11px] text-muted-foreground">
+          <p className="font-mono text-[12.5px] text-muted-foreground">
             Ranking por custo total (somando o preço mais baixo de cada item por
             estabelecimento). Preço unitário em{" "}
             <span className="text-accent-strong">R$/kg</span> ou{" "}
@@ -354,13 +354,13 @@ export function ProductCompareDialog({
             );
             return (
               <div className="mt-2 flex flex-wrap items-center gap-2 rounded-lg border border-primary/20 bg-primary/[0.04] px-3 py-2">
-                <span className="font-mono text-[11px] uppercase tracking-[0.2em] text-accent-strong">
+                <span className="font-mono text-[12.5px] uppercase tracking-[0.2em] text-accent-strong">
                   Melhor combinação
                 </span>
                 {bestSummary.map((x) => (
                   <span
                     key={x.name}
-                    className="inline-flex items-center gap-1 font-mono text-[11px] text-foreground"
+                    className="inline-flex items-center gap-1 font-mono text-[12.5px] text-foreground"
                   >
                     <span className="max-w-[160px] truncate">{x.name}</span>
                     <span className="text-muted-foreground">·</span>
@@ -394,29 +394,29 @@ export function CompareTray({
       aria-label="Bandeja de comparação"
       className="pointer-events-auto fixed inset-x-0 bottom-3 z-40 mx-auto flex w-fit items-center gap-2 rounded-full border border-primary/30 bg-background/95 px-3 py-2 shadow-lg backdrop-blur"
     >
-      <span className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">
+      <span className="font-mono text-[12.5px] uppercase tracking-widest text-muted-foreground">
         Comparar
       </span>
-      <span className="inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-primary px-1.5 font-mono text-[11px] font-bold tabular-nums text-primary-foreground">
+      <span className="inline-flex h-5 min-w-[20px] items-center justify-center rounded-full bg-primary px-1.5 font-mono text-[12.5px] font-bold tabular-nums text-primary-foreground">
         {count}
       </span>
       <button
         type="button"
         onClick={onOpen}
         disabled={count < 2}
-        className="rounded-full bg-primary px-3 py-1 font-mono text-[11px] font-bold uppercase tracking-widest text-primary-foreground transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
+        className="rounded-full bg-primary px-3 py-1 font-mono text-[12.5px] font-bold uppercase tracking-widest text-primary-foreground transition hover:brightness-110 disabled:cursor-not-allowed disabled:opacity-50"
       >
         Ver comparação
       </button>
       <button
         type="button"
         onClick={onClear}
-        className="rounded-full border border-border px-2 py-1 font-mono text-[11px] uppercase tracking-widest text-muted-foreground hover:text-foreground"
+        className="rounded-full border border-border px-2 py-1 font-mono text-[12.5px] uppercase tracking-widest text-muted-foreground hover:text-foreground"
       >
         Limpar
       </button>
       {count < 2 ? (
-        <span className="font-mono text-[11px] text-muted-foreground">
+        <span className="font-mono text-[12.5px] text-muted-foreground">
           selecione ao menos 2
         </span>
       ) : null}

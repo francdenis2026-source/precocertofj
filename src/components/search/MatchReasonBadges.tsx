@@ -33,7 +33,7 @@ export function MatchReasonBadges({
         <span
           key={`${r.token}-${r.kind}`}
           className={
-            "inline-flex h-4 max-w-[8rem] items-center truncate rounded-full border px-1.5 font-mono text-[11px] font-semibold uppercase leading-none tracking-wider " +
+            "inline-flex h-4 max-w-[8rem] items-center truncate rounded-full border px-1.5 font-mono text-[12.5px] font-semibold uppercase leading-none tracking-wider " +
             badgeClass(r.kind)
           }
           title={`${r.token} — ${label(r.kind)}`}

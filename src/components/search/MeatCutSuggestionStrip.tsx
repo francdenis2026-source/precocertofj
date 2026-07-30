@@ -52,11 +52,11 @@ export function MeatCutSuggestionStrip({
       className="rounded-lg border border-brand-gold/40 bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] px-3 py-2"
     >
       <div className="flex flex-wrap items-center gap-2">
-        <span className="inline-flex items-center gap-1.5 text-[10.5px] font-bold uppercase tracking-[0.18em] text-[var(--pc-gold-ink)]">
+        <span className="inline-flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-[0.18em] text-[var(--pc-gold-ink)]">
           <Beef className="h-3 w-3" aria-hidden />
           {hint === "cut" ? "Corte identificado" : "Buscando por carnes?"}
         </span>
-        <span className="text-[12px] text-foreground">
+        <span className="text-[13px] text-foreground">
           {hint === "cut"
             ? "Priorizamos açougues e supermercados com esse corte."
             : "Filtre por cortes populares — resultados só incluem açougues quando o item for corte."}
@@ -72,7 +72,7 @@ export function MeatCutSuggestionStrip({
                   onClick={() => onPick(c.query)}
                   aria-pressed={active}
                   className={
-                    "inline-flex h-6 items-center gap-1 rounded-full border px-2 text-[11.5px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold " +
+                    "inline-flex h-6 items-center gap-1 rounded-full border px-2 text-[13px] font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold " +
                     (active
                       ? "border-brand-gold bg-brand-gold text-brand-navy"
                       : "border-brand-gold/40 bg-background text-foreground hover:border-brand-gold hover:bg-[var(--pc-hover-tint)]")
@@ -88,7 +88,7 @@ export function MeatCutSuggestionStrip({
             <Link
               to="/melhores-precos"
               search={{ q: query, cat: "acougue" } as never}
-              className="inline-flex h-6 items-center gap-1 rounded-full border border-border bg-background px-2 text-[11.5px] font-semibold text-muted-foreground transition-colors hover:border-brand-gold hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+              className="inline-flex h-6 items-center gap-1 rounded-full border border-border bg-background px-2 text-[13px] font-semibold text-muted-foreground transition-colors hover:border-brand-gold hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
             >
               Ranking açougues
             </Link>

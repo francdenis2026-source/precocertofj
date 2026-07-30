@@ -93,7 +93,7 @@ export function SearchEmptyState({
         <span className="mb-2 grid h-11 w-11 place-items-center rounded-full border border-[color-mix(in_oklab,var(--brand-gold)_45%,transparent)] bg-[color-mix(in_oklab,var(--brand-gold)_10%,transparent)] text-[var(--pc-gold-ink)]">
           <Search className="h-5 w-5" strokeWidth={1.75} aria-hidden="true" />
         </span>
-        <h2 className="text-[15px] font-semibold tracking-tight text-foreground">
+        <h2 className="text-[16px] font-semibold tracking-tight text-foreground">
           {query.trim()
             ? `Nenhum preço para “${query.trim()}”`
             : "Nenhum preço encontrado"}

@@ -517,7 +517,7 @@ function SearchPage() {
                       replace: true,
                     })
                   }
-                  className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[12px] font-semibold uppercase tracking-[0.12em] text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                  className="inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-[13px] font-semibold uppercase tracking-[0.12em] text-muted-foreground transition hover:bg-muted hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                   aria-label="Voltar para a descoberta"
                 >
                   <ArrowLeft className="h-3.5 w-3.5" aria-hidden="true" />
@@ -531,11 +531,11 @@ function SearchPage() {
             </div>
 
             <div className="flex min-w-0 items-baseline gap-2">
-              <span className="hidden shrink-0 text-[11px] font-bold uppercase tracking-[0.28em] text-[var(--pc-gold-ink)] md:inline">
+              <span className="hidden shrink-0 text-[12.5px] font-bold uppercase tracking-[0.28em] text-[var(--pc-gold-ink)] md:inline">
                 Pesquisa por preços
               </span>
               <span aria-hidden className="hidden h-3 w-px bg-border md:block" />
-              <h1 className="font-editorial min-w-0 truncate whitespace-nowrap text-[15px] font-normal leading-tight tracking-tight text-foreground sm:text-[17px]">
+              <h1 className="font-editorial min-w-0 truncate whitespace-nowrap text-[16px] font-normal leading-tight tracking-tight text-foreground sm:text-[17px]">
                 Buscar <PrecoCertoMark variant="inline">preço certo</PrecoCertoMark>
                 <span className="hidden text-muted-foreground sm:inline"> · por nome do produto</span>
               </h1>
@@ -551,7 +551,7 @@ function SearchPage() {
               <Link
                 to="/alertas"
                 title="Criar alerta quando o preço cair"
-                className="inline-flex h-7 items-center gap-1.5 rounded-full border border-border px-2.5 text-[10.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                className="inline-flex h-7 items-center gap-1.5 rounded-full border border-border px-2.5 text-[12px] font-semibold uppercase tracking-[0.14em] text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
               >
                 <BellRing className="h-3 w-3" aria-hidden="true" />
                 <span className="hidden sm:inline">Alertas</span>
@@ -739,11 +739,11 @@ function FiltersToolbar({
       className="bg-transparent px-0.5 py-2"
     >
       <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
-        <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.22em] text-[var(--pc-gold-ink)]">
+        <div className="flex items-center gap-1.5 text-[12.5px] font-bold uppercase tracking-[0.22em] text-[var(--pc-gold-ink)]">
           <SlidersHorizontal className="h-3.5 w-3.5" aria-hidden />
           Filtrar por
           {activeCount > 0 && (
-            <span className="inline-flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-brand-gold px-1.5 text-[11px] font-bold tabular-nums text-brand-navy">
+            <span className="inline-flex h-4.5 min-w-4.5 items-center justify-center rounded-full bg-brand-gold px-1.5 text-[12.5px] font-bold tabular-nums text-brand-navy">
               {activeCount}
             </span>
           )}
@@ -753,7 +753,7 @@ function FiltersToolbar({
         <button
           type="button"
           onClick={onToggle}
-          className="ml-auto inline-flex h-7 items-center gap-1 rounded-md border border-border bg-background px-2 text-[11px] font-semibold uppercase tracking-[0.1em] text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold md:hidden"
+          className="ml-auto inline-flex h-7 items-center gap-1 rounded-md border border-border bg-background px-2 text-[12.5px] font-semibold uppercase tracking-[0.1em] text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold md:hidden"
           aria-expanded={open}
         >
           <Filter className="h-3 w-3" aria-hidden />
@@ -796,7 +796,7 @@ function FiltersToolbar({
             <button
               type="button"
               onClick={onClear}
-              className="inline-flex h-7 items-center gap-1 rounded-md px-2 text-[11px] font-semibold uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+              className="inline-flex h-7 items-center gap-1 rounded-md px-2 text-[12.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
             >
               <X className="h-3 w-3" aria-hidden /> Limpar
             </button>
@@ -830,7 +830,7 @@ function PriceRangeInputs({ min, max, onMin, onMax }: PriceRangeInputsProps) {
   };
 
   const inputBase =
-    "h-7 w-[74px] rounded-md border-0 bg-transparent px-1.5 text-[12px] font-medium text-foreground tabular-nums placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50 transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
+    "h-7 w-[74px] rounded-md border-0 bg-transparent px-1.5 text-[13px] font-medium text-foreground tabular-nums placeholder:text-muted-foreground focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50 transition-colors [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none";
 
   return (
     <div

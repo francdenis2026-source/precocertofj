@@ -138,7 +138,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
               key={c.q}
               type="button"
               onClick={() => onPickQuery(c.q)}
-              className="group snap-start inline-flex h-8 min-w-0 shrink-0 items-center gap-1.5 rounded-lg border border-brand-gold/25 bg-background/95 px-2 text-left text-[12px] font-medium tracking-tight text-foreground transition-all hover:-translate-y-px hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              className="group snap-start inline-flex h-8 min-w-0 shrink-0 items-center gap-1.5 rounded-lg border border-brand-gold/25 bg-background/95 px-2 text-left text-[13px] font-medium tracking-tight text-foreground transition-all hover:-translate-y-px hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               <span
                 aria-hidden
@@ -169,7 +169,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
               key={p}
               type="button"
               onClick={() => onPickQuery(p)}
-              className="inline-flex h-7 shrink-0 items-center gap-1 rounded-full border border-amber-500/30 bg-background/95 px-2.5 text-[11.5px] font-medium text-foreground transition-colors hover:border-amber-500 hover:bg-amber-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 dark:border-amber-400/30 dark:hover:border-amber-400 dark:hover:bg-amber-400/10"
+              className="inline-flex h-7 shrink-0 items-center gap-1 rounded-full border border-amber-500/30 bg-background/95 px-2.5 text-[13px] font-medium text-foreground transition-colors hover:border-amber-500 hover:bg-amber-500/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 dark:border-amber-400/30 dark:hover:border-amber-400 dark:hover:bg-amber-400/10"
             >
               <Sparkles className="h-3 w-3 text-amber-600 dark:text-amber-400" aria-hidden />
               {p}
@@ -194,7 +194,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
             <button
               type="button"
               onClick={clearRecent}
-              className="shrink-0 rounded-md px-1.5 py-0.5 text-[10.5px] font-semibold uppercase tracking-[0.1em] text-muted-foreground hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+              className="shrink-0 rounded-md px-1.5 py-0.5 text-[12px] font-semibold uppercase tracking-[0.1em] text-muted-foreground hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
             >
               Limpar
             </button>
@@ -202,7 +202,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
         </div>
         <div className="mt-1.5">
           {recent.length === 0 ? (
-            <p className="text-[11.5px] leading-snug text-muted-foreground">
+            <p className="text-[13px] leading-snug text-muted-foreground">
               Nenhuma busca ainda — as próximas aparecem aqui para você reabrir com um clique.
             </p>
           ) : (
@@ -210,7 +210,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
               {recent.slice(0, 8).map((t) => (
                 <span
                   key={t}
-                  className="group inline-flex shrink-0 items-center gap-0.5 rounded-full border border-indigo-500/30 bg-background/95 py-0.5 pl-2.5 pr-0.5 text-[11.5px] text-foreground dark:border-indigo-400/30"
+                  className="group inline-flex shrink-0 items-center gap-0.5 rounded-full border border-indigo-500/30 bg-background/95 py-0.5 pl-2.5 pr-0.5 text-[13px] text-foreground dark:border-indigo-400/30"
                 >
                   <button
                     type="button"
@@ -247,7 +247,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
             eyebrow={`Últimos ${stats.data?.windowDays ?? 30} dias`}
             title="Sinal de vida"
           />
-          <span className="min-w-0 truncate text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+          <span className="min-w-0 truncate text-[12.5px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
             {statsFailed
               ? "Dados indisponíveis"
               : stats.data?.generatedAt
@@ -320,11 +320,11 @@ function SectionHeader({
       </span>
       <div className="min-w-0 leading-none">
         <div
-          className={`truncate text-[9.5px] font-bold uppercase tracking-[0.16em] ${TONE_EYEBROW[tone]}`}
+          className={`truncate text-[11.5px] font-bold uppercase tracking-[0.16em] ${TONE_EYEBROW[tone]}`}
         >
           {eyebrow}
         </div>
-        <div className="mt-0.5 truncate text-[12px] font-semibold leading-tight text-foreground">
+        <div className="mt-0.5 truncate text-[13px] font-semibold leading-tight text-foreground">
           {title}
         </div>
       </div>
@@ -361,14 +361,14 @@ function StatCell({
         >
           {icon}
         </span>
-        <div className="truncate text-[9.5px] font-semibold uppercase leading-tight tracking-[0.1em] text-muted-foreground">
+        <div className="truncate text-[11.5px] font-semibold uppercase leading-tight tracking-[0.1em] text-muted-foreground">
           {label}
         </div>
       </div>
-      <div className="mt-0.5 truncate font-serif text-[14px] font-semibold tabular-nums leading-none tracking-tight text-foreground">
+      <div className="pc-num mt-1 truncate text-[20px] font-bold tabular-nums leading-none tracking-tight text-foreground">
         {value}
       </div>
-      <div className="mt-0.5 truncate text-[9.5px] font-medium uppercase tracking-[0.1em] text-muted-foreground">
+      <div className="mt-0.5 truncate text-[11.5px] font-medium uppercase tracking-[0.1em] text-muted-foreground">
         {hint}
       </div>
     </div>
