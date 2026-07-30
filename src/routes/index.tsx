@@ -120,10 +120,11 @@ const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
    células (categorias e atalhos) usam exatamente a mesma medida, de modo que
    as duas colunas fecham as mesmas 2 linhas e nada fica desproporcional. */
 const TILE =
-  "group flex h-[clamp(52px,7.4vh,78px)] flex-col items-center justify-center gap-1 rounded-2xl border px-2 text-center pc-tile pc-elite-frame focus-visible:outline-none focus-visible:ring-2 sm:gap-1.5";
-const TILE_ICON = "h-[clamp(16px,2.2vh,22px)] w-[clamp(16px,2.2vh,22px)]";
+  "group flex h-[clamp(58px,8.4vh,88px)] flex-col items-center justify-center gap-1 rounded-2xl border px-2 text-center pc-tile pc-elite-frame focus-visible:outline-none focus-visible:ring-2 sm:gap-1.5";
+const TILE_ICON = "h-[clamp(18px,2.5vh,25px)] w-[clamp(18px,2.5vh,25px)]";
 const TILE_LABEL =
-  "w-full truncate text-[clamp(11px,1.45vh,14px)] font-semibold leading-none tracking-[-0.005em]";
+  "w-full truncate text-[clamp(11.5px,1.6vh,15px)] font-semibold leading-none tracking-[-0.005em]";
+
 
 /**
  * Ladrilhos da home — derivados de `CATEGORY_DEFS`, a mesma fonte usada em
@@ -740,8 +741,10 @@ function HomePage() {
 
                 </div>
               </div>
+
             </aside>
           </div>
+
 
           {/* Divisor editorial entre hero e faixa de categorias */}
           <hr className="pc-rule my-[clamp(0.35rem,1.2vh,0.9rem)]" aria-hidden />
@@ -869,7 +872,51 @@ function HomePage() {
             </div>
 
           </div>
+
+          {/* Faixa "Em alta": ocupa a folga entre os ladrilhos e o rodapé com
+              dado real (termos mais buscados nos últimos 7 dias). */}
+          <div
+            className="hidden shrink-0 items-center gap-2.5 overflow-hidden rounded-2xl border px-3.5 py-[clamp(0.5rem,1.3vh,0.85rem)] backdrop-blur-md lg:flex"
+            style={{
+              background: "var(--pc-home-onhero-glass)",
+              borderColor: "var(--pc-home-onhero-border)",
+            }}
+          >
+            <span
+              className="inline-flex shrink-0 items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em]"
+              style={{ color: "var(--pc-home-onhero-gold)" }}
+            >
+              <TrendingDown className="h-3.5 w-3.5" aria-hidden />
+              Buscas em alta
+            </span>
+            <ul role="list" className="flex min-w-0 flex-1 items-center gap-1.5 overflow-x-auto no-scrollbar">
+              {(popularAll.length > 10 ? popularAll.slice(4, 16) : popularAll.slice(0, 12)).map((t) => (
+                <li key={t} className="shrink-0">
+                  <button
+                    type="button"
+                    onClick={() => goToPopular(t)}
+                    className="inline-flex items-center rounded-full border px-2.5 py-1 text-[12px] font-medium capitalize pc-tile"
+                    style={{
+                      background: "var(--pc-home-onhero-glass)",
+                      borderColor: "var(--pc-home-onhero-border-soft)",
+                      color: "var(--pc-home-onhero-fg-85)",
+                    }}
+                  >
+                    {t}
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <Link
+              to="/melhores-precos"
+              className="shrink-0 rounded-md px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] transition-colors hover:brightness-125"
+              style={{ color: "var(--pc-home-onhero-fg-70)" }}
+            >
+              Rankings →
+            </Link>
+          </div>
         </main>
+
 
         {/* ================= RODAPÉ COMPACTO ================= */}
         <footer
