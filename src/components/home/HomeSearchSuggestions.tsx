@@ -348,7 +348,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                     {s.market ? (
                       <span
                         className={
-                          "mt-0.5 max-w-[130px] truncate text-[11px] leading-none text-slate-500 " +
+                          "mt-0.5 max-w-[190px] truncate text-[11px] leading-none text-slate-500 " +
                           (blocked ? "select-none blur-sm" : "")
                         }
                       >
