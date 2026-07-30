@@ -43,7 +43,13 @@ Responda EXCLUSIVAMENTE em JSON válido:
 
 Regras:
 - price em reais como número (ex.: 12.90). "R$ 12,90" vira 12.90.
-- barcode apenas se o EAN/UPC estiver legível (só dígitos, 8 a 14 caracteres).
+- barcode: leia o EAN/UPC **impresso na etiqueta de gôndola ou na embalagem**, abaixo das barras.
+  * Copie apenas os dígitos, na ordem, sem espaços, pontos ou hífens.
+  * Formatos válidos: 8 dígitos (EAN-8/UPC-E), 12 (UPC-A), 13 (EAN-13) ou 14 (GTIN-14).
+  * A maioria dos produtos brasileiros começa com 789 ou 790.
+  * Se qualquer dígito estiver borrado, cortado ou você precisar adivinhar, use null.
+    É melhor null do que um código errado.
+  * Nunca use o preço, o código interno da loja (PLU) ou a data de validade como barcode.
 - unit: ex. "1L", "500g", "pacote 5kg".
 - category: uma destas quando possível — "laticinios", "carnes", "padaria", "biscoitos", "doces", "bebidas", "bebidas_em_po", "limpeza", "higiene", "mercearia", "congelados", "outros". Se não souber, use null.
 - brand: marca visível (ex.: "Nestlé", "Ypê"). Sem marca visível → null.
