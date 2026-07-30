@@ -1,4 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
+import { createClient } from "@supabase/supabase-js";
+import { normalizeBarcode } from "@/lib/barcode";
 
 export type VisionProduct = {
   productName: string | null;
@@ -7,7 +9,10 @@ export type VisionProduct = {
   unit: string | null;
   barcode: string | null;
   category: string | null;
+  /** Produto já existente no catálogo com o mesmo código de barras. */
+  catalogMatch: { id: string; displayName: string } | null;
 };
+
 
 export type VisionExtract = {
   /** All products the AI could identify in the photo. */
