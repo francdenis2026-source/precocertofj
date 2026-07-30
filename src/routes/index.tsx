@@ -1013,6 +1013,12 @@ function HomePage() {
             >
               <TrendingDown className="h-3.5 w-3.5" aria-hidden />
               Buscas em alta
+              <span
+                aria-hidden
+                className="ml-0.5 inline-flex h-1.5 w-1.5 shrink-0 animate-pulse rounded-full motion-reduce:animate-none"
+                style={{ background: "var(--pc-home-onhero-gold)" }}
+              />
+              <span className="sr-only">atualizando em tempo real</span>
             </span>
             <ul
               role="list"
