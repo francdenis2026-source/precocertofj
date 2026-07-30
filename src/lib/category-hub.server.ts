@@ -250,7 +250,15 @@ export async function buildCategoryHub(slug: string): Promise<CategoryHub> {
         comparedProducts: sv.length,
       };
     })
-    .sort((a, b) => Number(b.isNicheStore) - Number(a.isNicheStore) || b.productCount - a.productCount);
+    // Ordem única (desktop e mobile): lojas de nicho primeiro, depois maior
+    // "Economia média aqui". Lojas sem economia calculada vão para o fim.
+    .sort(
+      (a, b) =>
+        Number(b.isNicheStore) - Number(a.isNicheStore) ||
+        (b.avgSavingPct ?? -1) - (a.avgSavingPct ?? -1) ||
+        b.comparedProducts - a.comparedProducts ||
+        b.productCount - a.productCount,
+    );
 
 
   return {
