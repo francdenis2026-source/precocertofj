@@ -397,7 +397,12 @@ export function PriceSearchBar({
     searchAbort.current = ctrl;
     const seq = ++searchSeq.current;
     setIsSearching(true);
-    runSearch({ data: { query: q, mode, pureOnly, fresh: !!opts?.fresh }, signal: ctrl.signal })
+    fetchPriceSearch<PriceSearchResult>(
+      qc,
+      runSearch as never,
+      { query: q, mode, pureOnly, fresh: !!opts?.fresh },
+      ctrl.signal,
+    )
       .then((r) => {
         if (seq !== searchSeq.current) return; // resposta obsoleta
         setResult(r);
