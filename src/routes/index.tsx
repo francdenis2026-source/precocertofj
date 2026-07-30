@@ -1091,7 +1091,7 @@ function HomePage() {
                       }
                       style={{ color: "var(--pc-home-onhero-gold)" }}
                     />
-                    <span className="relative min-w-0 flex-1 text-left [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] overflow-hidden break-words">{t}</span>
+                    <span className="relative min-w-0 flex-1 text-left line-clamp-2 break-words">{t}</span>
                     {meta && meta.count > 0 ? (
                       <span
                         className="relative shrink-0 rounded-full px-1.5 py-[1px] text-[11px] font-bold tabular-nums"
