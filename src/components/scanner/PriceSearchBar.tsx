@@ -1095,9 +1095,13 @@ export function PriceSearchBar({
                           Melhor preço agora
                           <LiveUpdateBadge active={live.active} tone="onDark" />
                         </p>
-                        <p className="pc-num pc-num--onhero mt-1 flex items-baseline gap-2 text-[26px] font-bold leading-none">
-                          {fmt(result.cheapest?.price ?? result.min)}
-                        </p>
+                        <Price
+                          as="p"
+                          size="xl"
+                          tone="onhero"
+                          value={result.cheapest?.price ?? result.min}
+                          className="mt-1"
+                        />
 
                         {result.cheapest ? (
                           <p className="mt-1.5 flex min-w-0 items-center gap-1.5 text-[12px] text-white/75">
