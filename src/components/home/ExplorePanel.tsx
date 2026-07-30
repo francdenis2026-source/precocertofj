@@ -448,146 +448,152 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
   });
 
 
+  const liveAccent = "var(--pc-explore-live-accent)";
+  const benefitAccent = "var(--pc-explore-benefit-accent)";
+  const proofAccent = "var(--pc-explore-proof-accent)";
+
   return (
-    <div className="grid h-full w-full flex-1 content-start gap-x-8 gap-y-3 lg:gap-y-5 lg:grid-cols-12 lg:grid-rows-[minmax(0,1fr)_auto]">
-      {/* ---------- Últimos preços ---------- */}
-      <section aria-labelledby="explore-prices" className="flex min-w-0 flex-col lg:col-span-7">
-        <SectionHead
-          id="explore-prices"
-          kicker="Ao vivo"
-          title="Preços conferidos"
-          aside={
-            <Link
-              to="/buscar"
-              onClick={onNavigate}
-              className={`${tc.chip} inline-flex shrink-0 items-center gap-1 transition-opacity hover:opacity-80`}
-              style={{ color: gold }}
-            >
-              Ver mais <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
-            </Link>
-          }
-        />
-
-        <p className={`${tc.meta} ${BODY_GAP}`} style={{ color: fg70 }}>
-          {live?.lastUpdate ? `Última atualização ${relative(live.lastUpdate)}` : "Coletas recentes em Feijó"}
-          {typeof live?.checkedToday === "number" && live.checkedToday > 0
-            ? ` · ${live.checkedToday} hoje`
-            : ""}
-        </p>
-
-        <ul
-          ref={setListRef}
-          className={`${BODY_GAP} min-h-0 flex-1 divide-y overflow-y-auto no-scrollbar`}
-          style={{
-            borderColor: line,
-            maskImage: "linear-gradient(to bottom, #000 92%, transparent)",
-            WebkitMaskImage: "linear-gradient(to bottom, #000 92%, transparent)",
-          }}
-          aria-busy={items.length === 0}
-        >
-          {padTop > 0 && <li aria-hidden style={{ height: padTop }} />}
-          {rows.slice(start, end).map((row, i) =>
-            row.kind === "item" ? (
-              <PriceRow key={row.item.slug} p={row.item} onNavigate={onNavigate} flash={isFlashing(row.item.slug)} best={row.item.slug === bestSlug} />
-            ) : (
-              <RowSkeleton key={`sk-${start + i}`} glass={glass} />
-            ),
-          )}
-          {padBottom > 0 && <li aria-hidden style={{ height: padBottom }} />}
-        </ul>
-
-      </section>
-
-      {/* ---------- Coluna editorial: Benefícios + prova social ----------
-          Tratada como um "recorte de revista": serif italicizado nas citações,
-          fundo levemente destacado e borda dourada vertical para separar
-          visualmente da coluna de dados à esquerda. */}
-      <aside
-        className="relative flex min-w-0 flex-col gap-4 lg:col-span-5 lg:gap-5 lg:pl-6"
-        style={{
-          // Sutil divisor vertical dourado apenas em desktop
-          backgroundImage:
-            "linear-gradient(var(--pc-home-onhero-gold), var(--pc-home-onhero-gold))",
-          backgroundRepeat: "no-repeat",
-          backgroundSize: "1px 100%",
-          backgroundPosition: "left top",
-        }}
+    <div className="grid h-full min-h-0 w-full grid-rows-[minmax(0,1fr)] gap-3 lg:grid-cols-12 lg:gap-5">
+      {/* ---------- Zona 1: Ao vivo (azul) ---------- */}
+      <Zone
+        accent={liveAccent}
+        bg="var(--pc-explore-live-bg)"
+        className="flex min-w-0 flex-col lg:col-span-7"
       >
-        <section aria-labelledby="explore-benefits">
-          <div className="flex items-baseline justify-between gap-3">
-            <Kicker>Benefícios</Kicker>
-            <span className={tc.meta} style={{ color: fg70 }}>
-              Por que usar
-            </span>
-          </div>
-          <ul className="mt-3 grid grid-cols-2 gap-x-5 gap-y-3">
-            {BENEFITS.map(({ Icon, title, desc }) => (
-              <li key={title} className="flex min-w-0 items-start gap-2.5">
-                <Icon
-                  className="mt-[3px] h-4 w-4 shrink-0"
-                  style={{ color: gold }}
-                  strokeWidth={2}
-                  aria-hidden
-                />
-                <div className="min-w-0">
-                  <p
-                    className={`${serif} truncate text-[15px] leading-tight tracking-tight`}
-                    style={{ color: fg90 }}
-                  >
-                    {title}
-                  </p>
-                  <p className={`${tc.meta} mt-0.5`} style={{ color: fg70 }}>
-                    {desc}
-                  </p>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </section>
+        <section aria-labelledby="explore-prices" className="flex min-h-0 flex-1 flex-col">
+          <SectionHead
+            id="explore-prices"
+            kicker="Ao vivo"
+            title="Preços conferidos"
+            accent={liveAccent}
+            aside={
+              <Link
+                to="/buscar"
+                onClick={onNavigate}
+                className={`${tc.chip} inline-flex shrink-0 items-center gap-1 transition-opacity hover:opacity-80`}
+                style={{ color: liveAccent }}
+              >
+                Ver mais <ArrowUpRight className="h-3.5 w-3.5" aria-hidden />
+              </Link>
+            }
+          />
 
-        <section aria-labelledby="explore-proof">
-          <div className="flex items-baseline justify-between gap-3">
-            <Kicker>Prova social</Kicker>
-            <span
-              className={`${tc.num} inline-flex shrink-0 items-center gap-1`}
-              style={{ color: gold }}
-            >
-              <Star className="h-3.5 w-3.5 fill-current" aria-hidden />
-              {PLATFORM_RATING.value.toLocaleString("pt-BR", { minimumFractionDigits: 1 })}
-              <span className={tc.meta} style={{ color: fg70 }}>
-                ·{PLATFORM_RATING.count}
-              </span>
-            </span>
-          </div>
-          <ul className="mt-3 space-y-3 [&>li:nth-child(n+2)]:hidden sm:[&>li:nth-child(n+2)]:flex">
-            {QUOTES.map((t) => (
-              <li key={t.name} className="flex min-w-0 gap-3">
-                <span
-                  className={`${serif} grid h-7 w-7 shrink-0 place-items-center rounded-full text-[11px]`}
-                  style={{ background: glass, color: gold, border: `1px solid ${line}` }}
-                  aria-hidden
-                >
-                  {t.initials}
-                </span>
-                <div className="min-w-0">
-                  <p
-                    className={`${serif} italic text-[15px] leading-snug`}
-                    style={{ color: fg90 }}
-                  >
-                    “{t.quote}”
-                  </p>
-                  <p
-                    className={`${tc.meta} mt-1 uppercase tracking-[0.14em]`}
-                    style={{ color: fg70 }}
-                  >
-                    {t.name} <span style={{ color: gold }}>·</span> {t.role}
-                  </p>
-                </div>
-              </li>
-            ))}
+          <p className={`${tc.meta} mt-1.5`} style={{ color: fg70 }}>
+            {live?.lastUpdate ? `Última atualização ${relative(live.lastUpdate)}` : "Coletas recentes em Feijó"}
+            {typeof live?.checkedToday === "number" && live.checkedToday > 0
+              ? ` · ${live.checkedToday} hoje`
+              : ""}
+          </p>
+
+          <ul
+            ref={setListRef}
+            className={`${BODY_GAP} min-h-0 flex-1 divide-y overflow-y-auto no-scrollbar`}
+            style={{
+              borderColor: line,
+              maskImage: "linear-gradient(to bottom, #000 92%, transparent)",
+              WebkitMaskImage: "linear-gradient(to bottom, #000 92%, transparent)",
+            }}
+            aria-busy={items.length === 0}
+          >
+            {padTop > 0 && <li aria-hidden style={{ height: padTop }} />}
+            {rows.slice(start, end).map((row, i) =>
+              row.kind === "item" ? (
+                <PriceRow key={row.item.slug} p={row.item} onNavigate={onNavigate} flash={isFlashing(row.item.slug)} best={row.item.slug === bestSlug} />
+              ) : (
+                <RowSkeleton key={`sk-${start + i}`} glass={glass} />
+              ),
+            )}
+            {padBottom > 0 && <li aria-hidden style={{ height: padBottom }} />}
           </ul>
         </section>
-      </aside>
+      </Zone>
+
+      {/* ---------- Coluna editorial: Benefícios (verde) + prova social (dourado) ---------- */}
+      <div className="grid min-h-0 grid-rows-[auto_minmax(0,1fr)] gap-3 lg:col-span-5 lg:gap-4">
+        <Zone accent={benefitAccent} bg="var(--pc-explore-benefit-bg)">
+          <section aria-labelledby="explore-benefits">
+            <div className={HEAD} style={{ borderColor: `color-mix(in oklab, ${benefitAccent} 32%, transparent)` }}>
+              <Kicker accent={benefitAccent}>Benefícios</Kicker>
+              <span className={tc.meta} style={{ color: fg70 }}>
+                Por que usar
+              </span>
+            </div>
+            <ul className="mt-2.5 grid grid-cols-2 gap-x-4 gap-y-2.5">
+              {BENEFITS.map(({ Icon, title, desc }) => (
+                <li key={title} className="flex min-w-0 items-start gap-2">
+                  <Icon
+                    className="mt-[3px] h-4 w-4 shrink-0"
+                    style={{ color: benefitAccent }}
+                    strokeWidth={2}
+                    aria-hidden
+                  />
+                  <div className="min-w-0">
+                    <p
+                      className={`${serif} truncate text-[clamp(13px,0.3vw+1.2vh,15px)] leading-tight tracking-tight`}
+                      style={{ color: fg90 }}
+                    >
+                      {title}
+                    </p>
+                    <p className={`${tc.meta} mt-0.5`} style={{ color: fg70 }}>
+                      {desc}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </Zone>
+
+        <Zone accent={proofAccent} bg="var(--pc-explore-proof-bg)" className="flex min-h-0 flex-col">
+          <section aria-labelledby="explore-proof" className="flex min-h-0 flex-1 flex-col">
+            <div className={HEAD} style={{ borderColor: `color-mix(in oklab, ${proofAccent} 32%, transparent)` }}>
+              <Kicker accent={proofAccent}>Prova social</Kicker>
+              <span
+                className={`${tc.num} inline-flex shrink-0 items-center gap-1`}
+                style={{ color: proofAccent }}
+              >
+                <Star className="h-3.5 w-3.5 fill-current" aria-hidden />
+                {PLATFORM_RATING.value.toLocaleString("pt-BR", { minimumFractionDigits: 1 })}
+                <span className={tc.meta} style={{ color: fg70 }}>
+                  ·{PLATFORM_RATING.count}
+                </span>
+              </span>
+            </div>
+            <ul className="mt-2.5 min-h-0 flex-1 space-y-2.5 overflow-y-auto no-scrollbar [&>li:nth-child(n+2)]:hidden sm:[&>li:nth-child(n+2)]:flex">
+              {QUOTES.map((t) => (
+                <li key={t.name} className="flex min-w-0 gap-2.5">
+                  <span
+                    className={`${serif} grid h-7 w-7 shrink-0 place-items-center rounded-full text-[11px]`}
+                    style={{
+                      background: glass,
+                      color: proofAccent,
+                      border: `1px solid color-mix(in oklab, ${proofAccent} 40%, transparent)`,
+                    }}
+                    aria-hidden
+                  >
+                    {t.initials}
+                  </span>
+                  <div className="min-w-0">
+                    <p
+                      className={`${serif} italic text-[clamp(13px,0.3vw+1.2vh,15px)] leading-snug`}
+                      style={{ color: fg90 }}
+                    >
+                      “{t.quote}”
+                    </p>
+                    <p
+                      className={`${tc.meta} mt-1 uppercase tracking-[0.14em]`}
+                      style={{ color: fg70 }}
+                    >
+                      {t.name} <span style={{ color: proofAccent }}>·</span> {t.role}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </section>
+        </Zone>
+      </div>
     </div>
   );
 }
+
