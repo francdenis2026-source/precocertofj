@@ -42,6 +42,7 @@ import { AllCategoriesDialog } from "@/components/home/AllCategoriesDialog";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { useSession } from "@/hooks/useSession";
 import { cn } from "@/lib/utils";
+import { normalizeSearchText } from "@/lib/text-normalize";
 import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 import homeHeroImg from "@/assets/home-hero.jpg";
 
@@ -184,6 +185,9 @@ function HomePage() {
   const [allCatsOpen, setAllCatsOpen] = useState(false);
   const [exploreOpen, setExploreOpen] = useState(false);
   const [gateOpen, setGateOpen] = useState(false);
+  /* Termo de "Buscas em alta" em navegação — evita cliques duplicados que
+     disparavam a mesma busca duas vezes. */
+  const [pendingTerm, setPendingTerm] = useState<string | null>(null);
   const [suggestOpen, setSuggestOpen] = useState(false);
   const suggestRef = useRef<HomeSearchSuggestionsHandle | null>(null);
   const searchAnchorRef = useRef<HTMLDivElement | null>(null);
@@ -282,17 +286,21 @@ function HomePage() {
      estado coerente ao voltar) e navega direto para os resultados. */
   const goToPopular = (term: string) => {
     const query = term.trim();
-    if (!query) return;
+    if (!query || pendingTerm) return;
+    setPendingTerm(query);
     setQ(query);
     setSuggestOpen(false);
     if (isLoggedOut) {
       const { blocked } = consumeGuest("search", query);
       if (blocked) {
+        setPendingTerm(null);
         setGateOpen(true);
         return;
       }
     }
-    navigate({ to: "/buscar", search: { q: query } as any });
+    void navigate({ to: "/buscar", search: { q: query } as any }).finally(() =>
+      setPendingTerm(null),
+    );
   };
 
 
