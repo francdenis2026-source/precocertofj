@@ -295,8 +295,10 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                     className={
                       "grid h-7 w-7 shrink-0 place-items-center overflow-hidden rounded-md border " +
                       (active === i
-                        ? "bg-white/15 border-white/25"
-                        : "bg-slate-50 border-slate-200")
+                        ? "border-white/30 bg-white/15"
+                        : s.imageUrl
+                          ? "border-slate-200 bg-slate-50"
+                          : "border-[#0b2444] bg-[#0b2444]")
                     }
                   >
                     {s.imageUrl ? (
@@ -307,14 +309,15 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                         loading="lazy"
                       />
                     ) : (
-                      <Search
-                        className={
-                          "h-3.5 w-3.5 " +
-                          (active === i ? "text-white" : "text-slate-700")
-                        }
-                      />
+                      <span
+                        aria-hidden
+                        className="font-heading text-[13px] font-semibold uppercase leading-none tracking-tight text-[#d4a24c]"
+                      >
+                        {(s.displayName || "?").trim().charAt(0)}
+                      </span>
                     )}
                   </span>
+
                   <span className="min-w-0 flex-1">
                     <span
                       className={
