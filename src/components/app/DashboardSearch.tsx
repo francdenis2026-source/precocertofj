@@ -229,7 +229,17 @@ export function DashboardSearch() {
       </div>
 
 
-      <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]">
+      <p id="dashboard-search-help" className="sr-only">
+        Use seta para baixo para entrar na lista de resultados, setas para
+        navegar, Enter para abrir e Esc para voltar ao campo de busca.
+      </p>
+
+      <div
+        className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]"
+        aria-live="polite"
+        aria-busy={resultsQ.isLoading}
+      >
+
         {!active ? (
           <p className="p-6 text-center text-[13px] text-muted-foreground">
             Digite ao menos 2 letras ou escolha uma categoria para ver os preços
