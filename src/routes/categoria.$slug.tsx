@@ -282,9 +282,19 @@ function CategoryPage() {
               <Stat label="Produtos" value={data?.totals.products ?? 0} />
               <Stat label="Lojas" value={data?.totals.stores ?? 0} />
               <Stat label="Preços" value={data?.totals.prices ?? 0} />
+              <Stat
+                label="Economia média"
+                value={data?.avgSavingPct ?? 0}
+                suffix="%"
+                hint={
+                  data?.comparableProducts
+                    ? `${data.comparableProducts} produto(s) comparável(is)`
+                    : "sem produtos em 2+ lojas"
+                }
+              />
             </dl>
           </div>
-          <dl className="grid grid-cols-3 divide-x divide-white/20 border-t border-white/20 sm:hidden">
+          <dl className="grid grid-cols-2 divide-x divide-y divide-white/20 border-t border-white/20 sm:hidden">
             <div className="px-3 py-2">
               <Stat label="Produtos" value={data?.totals.products ?? 0} align="left" />
             </div>
@@ -294,7 +304,16 @@ function CategoryPage() {
             <div className="px-3 py-2">
               <Stat label="Preços" value={data?.totals.prices ?? 0} align="left" />
             </div>
+            <div className="px-3 py-2">
+              <Stat
+                label="Economia média"
+                value={data?.avgSavingPct ?? 0}
+                suffix="%"
+                align="left"
+              />
+            </div>
           </dl>
+
         </header>
 
 
@@ -339,8 +358,22 @@ function CategoryPage() {
                       <span className="block truncate text-[11.5px] text-muted-foreground">
                         {s.neighborhood ?? "Feijó/AC"} · {s.productCount} item(ns) na categoria
                       </span>
+                      {/* Economia média desta loja vs. maior preço, ao lado da média
+                          geral da categoria — mostra onde o usuário ganha mais. */}
+                      {s.avgSavingPct !== null && (
+                        <span
+                          className="mt-0.5 block truncate text-[11px] font-semibold tabular-nums text-brand-gold"
+                          title={`Média em ${s.comparedProducts} produto(s) presentes em 2+ lojas. Média da categoria: ${data!.avgSavingPct ?? 0}%`}
+                        >
+                          Economia média aqui: {s.avgSavingPct.toLocaleString("pt-BR", { maximumFractionDigits: 1 })}%
+                          <span className="font-medium text-muted-foreground">
+                            {" "}· categoria {(data!.avgSavingPct ?? 0).toLocaleString("pt-BR", { maximumFractionDigits: 1 })}%
+                          </span>
+                        </span>
+                      )}
                     </span>
                     <ArrowRight className="h-4 w-4 shrink-0 text-brand-gold" aria-hidden />
+
                   </Link>
                   {slug === "acougues" && !s.isNicheStore && (
                     <Link
@@ -920,22 +953,30 @@ function Stat({
   label,
   value,
   align = "right",
+  suffix,
+  hint,
 }: {
   label: string;
   value: number;
   align?: "left" | "right";
+  /** sufixo exibido junto ao número (ex.: "%") */
+  suffix?: string;
+  /** texto auxiliar em `title` para explicar a métrica */
+  hint?: string;
 }) {
   return (
     // Rótulo em white/85 (≈ 9:1 sobre navy) e número dourado marcado como
     // `gold-on-dark` para não cair no ink escuro do modo claro.
-    <div className={align === "left" ? "text-left" : "text-right"}>
+    <div className={align === "left" ? "text-left" : "text-right"} title={hint}>
       <dt className="text-[11px] font-semibold uppercase leading-none tracking-[0.16em] text-white/85">
         {label}
       </dt>
       <dd className="gold-on-dark mt-1.5 text-[16px] font-bold leading-none tabular-nums text-brand-gold">
-        {value.toLocaleString("pt-BR")}
+        {value.toLocaleString("pt-BR", suffix === "%" ? { maximumFractionDigits: 1 } : undefined)}
+        {suffix ? <span className="text-[12px] font-semibold">{suffix}</span> : null}
       </dd>
     </div>
+
 
   );
 }

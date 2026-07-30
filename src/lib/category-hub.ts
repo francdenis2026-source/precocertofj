@@ -46,6 +46,12 @@ export type CategoryDef = {
    * em Construção.
    */
   canonical?: ProductCategory[];
+  /**
+   * Quando `true`, apenas a categoria canônica vale — nem produtos "outros"
+   * entram por palavra-chave. Usado em Hortifrúti, onde termos como "uva",
+   * "banana" ou "batata" aparecem em refrigerantes, granolas e salgadinhos.
+   */
+  canonicalOnly?: boolean;
   /** produtos a excluir mesmo quando a loja é do nicho */
   excludeRe?: RegExp;
   /** true → todo produto de uma loja do nicho entra */
@@ -114,6 +120,7 @@ export const CATEGORY_DEFS: CategoryDef[] = [
     // Só entra o que a classificação canônica considerar hortifruti — assim
     // "Lava-Louças Maçã", "Tempero Alho e Sal" e "Molho de Tomate" ficam fora.
     canonical: ["hortifruti"],
+    canonicalOnly: true,
     productRe:
       /\b(banana|maca|ma[cç][aã]|laranja|limao|abacaxi|mamao|melancia|melao|uva|manga|abacate|goiaba|maracuja|tomate|cebola|batata|cenoura|alho|pimentao|repolho|alface|couve|cheiro verde|coentro|macaxeira|mandioca|inhame|abobora|jerimum|chuchu|beterraba|pepino|quiabo|maxixe|ovo|ovos)\b/,
   },
@@ -242,6 +249,7 @@ export function productInCategory(
   if (def.canonical) {
     const canonical = classifyCategory(product.name);
     if (def.canonical.includes(canonical)) return true;
+    if (def.canonicalOnly) return false;
     // Só produtos sem categoria conhecida podem entrar via palavra-chave.
     return canonical === "outros" && !!def.productRe && def.productRe.test(n);
   }

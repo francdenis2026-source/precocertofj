@@ -149,7 +149,7 @@ const RULES: readonly Rule[] = [
   // 9) Limpeza — antes de perfumaria ("amaciante 10x mais perfume")
   {
     category: "limpeza",
-    re: /(sabao em po|sabao em barra|sabao liquido|sabao gliceri|lava roupas?|lava loucas?|detergente|alvejante|amaciante|desinfet|agua sanitaria|multiuso|inseticida|repelente|limpa aluminio|limpa vidro|limpa forno|tira limo|pinho sol|derrete gordura|desengord|aromatizante|odorizador|odorizante|limpador|soda caustica|passe bem|tira manchas)|\b(omo|ariel|ype|tixan|urca|downy|minuano|comfort|brilhante|surf|vanish|detefon|raid|baygon|mortein|sbp|limpol|politriz|citronela|xmax|uzzilim|cloro)\b|(mon bijou|buzz off|baby soft)/,
+    re: /(sabao em po|sabao em barra|sabao liquido|sabao gliceri|lava roupas?|lava loucas?|detergente|alvejante|amaciante|desinfet|agua sanitaria|multiuso|inseticida|repelente|limpa aluminio|limpa vidro|limpa forno|tira limo|pinho sol|derrete gordura|desengord|aromatizante|odorizador|odorizante|limpador|soda caustica|passe bem|tira manchas|saponaceo|sapolio)|\b(omo|ariel|ype|tixan|urca|downy|minuano|comfort|brilhante|surf|vanish|detefon|raid|baygon|mortein|sbp|limpol|politriz|citronela|xmax|uzzilim|cloro|cif|veja)\b|(mon bijou|buzz off|baby soft)/,
   },
 
   // 10) Papel & descartáveis
@@ -176,11 +176,13 @@ const RULES: readonly Rule[] = [
     re: /\b(esmalte|acetona|batom|rimel|perfume|colonia|talco|maquiagem|impala|colorama)\b|(removedor de esmalte|body splash|deo colonia|base liquida|top beauty)/,
   },
 
-  // 14) Salgadinhos
+  // 14) Salgadinhos — "chips" cobre PointChips/Ruffles Chips e evita que
+  // "Batata PointChips" caia em hortifrúti.
   {
     category: "snacks",
-    re: /\b(salgadinho|cheetos|fandangos|doritos|ruffles|pringles|torcida|baconzitos)\b|(amendoim japones|batata frita)/,
+    re: /\b(salgadinho|cheetos|fandangos|doritos|ruffles|pringles|torcida|baconzitos|chips)\b|(point ?chips|amendoim japones|batata frita|batata palha|batata chips)/,
   },
+
 
   // 15) Biscoitos — antes de carnes/laticínios ("Club Social Presunto").
   // Marcas de biscoito só valem quando o nome não traz um item de mercearia
@@ -201,10 +203,10 @@ const RULES: readonly Rule[] = [
     re: /\b(pao|paes|torrada|bolo|panetone|rosquinha|croissant|bauducco)\b|(mistura para bolo)/,
   },
 
-  // 17) Prontos & enlatados
+  // 17) Prontos & enlatados — "em calda" evita "Abacaxi em Calda" em hortifrúti.
   {
     category: "prontos",
-    re: /(em conserva|sardinha|atum|feijoada|fiambre|milho verde lata|ervilha lata|seleta de legumes|macarrao instantaneo|miojo|lamen|cup noodles|sopao|creme de cebola)/,
+    re: /(em conserva|em calda|sardinha|atum|feijoada|fiambre|milho verde lata|ervilha lata|seleta de legumes|macarrao instantaneo|miojo|lamen|cup noodles|sopao|creme de cebola)/,
   },
 
   // 18) Carnes
@@ -225,10 +227,11 @@ const RULES: readonly Rule[] = [
     re: /^(?!.*(cereal|nescau|toddy|achocolat|cappuccino)).*\b(chocolates?|bombom|balas?|brigadeiro|geleia|pacoca|goiabada|nutella|gelatina|marshmallow|pirulito|chiclete|halls|trident)\b/,
   },
 
-  // 21) Bebidas prontas
+  // 21) Bebidas prontas — marcas regionais de refrigerante (sukita, tubaína…)
+  // vêm antes de hortifrúti para "Sukita Uva/Laranja" não virar fruta.
   {
     category: "bebidas",
-    re: /\b(refrigerante|coca|guarana|pepsi|fanta|sucos?|nectar|energetico|cerveja|vinho|whisky|vodka|cachaca|antarctica|baly|refresco|dafruta)\b|(red bull|agua mineral|agua de coco|suco em po|refresco em po)/,
+    re: /\b(refrigerante|coca|guarana|pepsi|fanta|sprite|sukita|tubaina|itubaina|dolly|kuat|schin|soda|sucos?|nectar|energetico|cerveja|vinho|whisky|vodka|cachaca|antarctica|baly|refresco|dafruta)\b|(red bull|del valle|agua mineral|agua de coco|suco em po|refresco em po)/,
   },
 
   // 22) Bebidas em pó / matinais
@@ -249,17 +252,20 @@ const RULES: readonly Rule[] = [
     re: /(molho de tomate|molho ingles|molho de pimenta|extrato de tomate|ketchup|catchup|mostarda|maionese|vinagre|azeitona|tempero|colorau|colorif|pimenta do reino|shoyu|caldo de galinha|alho e sal|sazon)|\b(sal|oregano|cominho|acafrao|louro)\b/,
   },
 
-  // 25) Hortifrúti — por último entre ingredientes, depois dos aromas.
-  {
-    category: "hortifruti",
-    re: /\b(tomate|batata|cebola|alface|cenoura|laranja|uva|melancia|mamao|abacaxi|limao|pimentao|verdura|legume|banana|maca|cheiro verde|coentro|couve|repolho|abobora|macaxeira|inhame|beterraba|chuchu|maracuja|manga|ovos?)\b|(ovo de galinha|bandeja de ovos|batata lavada)/,
-  },
-
-  // 26) Mercearia (secos)
+  // 25) Mercearia (secos) — antes de hortifrúti: "Macarrão com Ovos" e
+  // "Granola com Banana" são secos, não frutas/legumes in natura.
   {
     category: "mercearia",
     re: /\b(arroz|feijao|acucar|adocante|farinha|mandioca|macarrao|espaguete|penne|parafuso|oleo|azeite|fuba|amido|fermento|milho|ervilha|cuscuz|canjica|flocao|granola|rapadura|trigo|polvilho)\b|(leite de coco|coco ralado|proteina de soja)/,
   },
+
+  // 26) Hortifrúti — por último: só entra quando o nome NÃO traz marcadores de
+  // produto processado/industrializado (lata, sabor, calda, chips, pó…).
+  {
+    category: "hortifruti",
+    re: /^(?!.*(em calda|em conserva|sabor|aroma|chips|salgadinho|saponaceo|refrigerante|refresco|\bsuco\b|polpa|geleia|\bdoce de\b|\bem po\b|\blata\b|\bml\b|desodorante|shampoo|sabonete|sabao|detergente)).*(\b(tomate|batata|cebola|alface|cenoura|laranja|uva|melancia|mamao|abacaxi|limao|pimentao|verdura|legume|banana|maca|cheiro verde|coentro|couve|repolho|abobora|macaxeira|inhame|beterraba|chuchu|maracuja|manga|ovos?)\b|ovo de galinha|bandeja de ovos|batata lavada)/,
+  },
+
 ];
 
 

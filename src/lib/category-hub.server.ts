@@ -23,7 +23,18 @@ export type HubStore = {
   productCount: number;
   /** loja é do próprio nicho (ex.: açougue) ou só tem itens do nicho */
   isNicheStore: boolean;
+  /**
+   * Economia média (%) ao comprar nesta loja: média de
+   * (maiorPreço − preçoDaLoja) / maiorPreço entre os produtos da categoria
+   * que existem em 2+ estabelecimentos. `null` quando não há comparáveis.
+   */
+  avgSavingPct: number | null;
+  /** quantos produtos comparáveis entraram nessa média */
+  comparedProducts: number;
 };
+
+
+
 
 export type HubProduct = {
   key: string;
@@ -49,6 +60,10 @@ export type CategoryHub = {
   /** quantos produtos vieram na lista (pode ser menor que totals.products) */
   returned: number;
   totals: { products: number; prices: number; stores: number };
+  /** economia média (%) da categoria: média de (maior−menor)/maior por produto */
+  avgSavingPct: number | null;
+  /** produtos comparáveis (presentes em 2+ estabelecimentos) */
+  comparableProducts: number;
 };
 
 type ScanRow = {
@@ -186,21 +201,57 @@ export async function buildCategoryHub(slug: string): Promise<CategoryHub> {
     })
     .sort((a, b) => a.minPrice - b.minPrice || b.storeCount - a.storeCount);
 
+  /**
+   * Economia por produto comparável (2+ lojas):
+   *  • categoria → (maior − menor) / maior;
+   *  • loja      → (maior − preçoDaLoja) / maior, acumulado por loja.
+   * Usamos o maior preço como base para responder "quanto deixo de gastar".
+   */
+  const catSavings: number[] = [];
+  const storeSavings = new Map<string, number[]>();
+  for (const g of groups.values()) {
+    // um preço por loja (o último) → dedupe defensivo por establishment
+    const byStore = new Map<string, { price: number }>();
+    for (const e of g.entries) {
+      const prev = byStore.get(e.store.id);
+      if (!prev || e.price < prev.price) byStore.set(e.store.id, { price: e.price });
+    }
+    if (byStore.size < 2) continue;
+    const prices = [...byStore.values()].map((v) => v.price);
+    const max = Math.max(...prices);
+    const min = Math.min(...prices);
+    if (!(max > 0)) continue;
+    catSavings.push(((max - min) / max) * 100);
+    for (const [storeId, v] of byStore) {
+      const arr = storeSavings.get(storeId) ?? [];
+      arr.push(((max - v.price) / max) * 100);
+      storeSavings.set(storeId, arr);
+    }
+  }
+  const avg = (xs: number[]): number | null =>
+    xs.length ? Math.round((xs.reduce((s, x) => s + x, 0) / xs.length) * 10) / 10 : null;
+
   const stores: HubStore[] = estabs
     .filter((e) => nicheStoreIds.has(e.id) || (storeProducts.get(e.id)?.size ?? 0) > 0)
-    .map((e) => ({
-      id: e.id,
-      name: e.name,
-      slug: nEstablishment(e.name),
-      logoUrl: e.logo_url,
-      brandColor: e.brand_color,
-      neighborhood: e.neighborhood,
-      address: e.address,
-      kind: e.kind,
-      productCount: storeProducts.get(e.id)?.size ?? 0,
-      isNicheStore: nicheStoreIds.has(e.id),
-    }))
+    .map((e) => {
+      const sv = storeSavings.get(e.id) ?? [];
+      return {
+        id: e.id,
+        name: e.name,
+        slug: nEstablishment(e.name),
+        logoUrl: e.logo_url,
+        brandColor: e.brand_color,
+        neighborhood: e.neighborhood,
+        address: e.address,
+        kind: e.kind,
+        productCount: storeProducts.get(e.id)?.size ?? 0,
+        isNicheStore: nicheStoreIds.has(e.id),
+        avgSavingPct: avg(sv),
+        comparedProducts: sv.length,
+      };
+    })
     .sort((a, b) => Number(b.isNicheStore) - Number(a.isNicheStore) || b.productCount - a.productCount);
+
 
   return {
     slug: def.slug,
@@ -210,5 +261,7 @@ export async function buildCategoryHub(slug: string): Promise<CategoryHub> {
     products: products.slice(0, MAX_LIST),
     returned: Math.min(products.length, MAX_LIST),
     totals: { products: products.length, prices: priceCount, stores: stores.length },
+    avgSavingPct: avg(catSavings),
+    comparableProducts: catSavings.length,
   };
 }
