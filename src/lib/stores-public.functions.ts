@@ -334,19 +334,25 @@ export const listPublicStores = createServerFn({ method: "GET" }).handler(
       counts.set(s.establishment_id, (counts.get(s.establishment_id) ?? 0) + 1);
     }
 
-    return (estabs ?? []).map((e) => ({
-      id: e.id,
-      name: e.name,
-      city: e.city,
-      state: e.state,
-      neighborhood: e.neighborhood,
-      address: e.address,
-      latitude: e.latitude ?? null,
-      longitude: e.longitude ?? null,
-      logoUrl: e.logo_url,
-      productCount: counts.get(e.id) ?? 0,
-      lastUpdate: null,
-    }));
+    // Ordem canônica do sistema: quem tem mais produtos cadastrados lidera.
+    return (estabs ?? [])
+      .map((e) => ({
+        id: e.id,
+        name: e.name,
+        city: e.city,
+        state: e.state,
+        neighborhood: e.neighborhood,
+        address: e.address,
+        latitude: e.latitude ?? null,
+        longitude: e.longitude ?? null,
+        logoUrl: e.logo_url,
+        productCount: counts.get(e.id) ?? 0,
+        lastUpdate: null,
+      }))
+      .sort(
+        (a, b) =>
+          b.productCount - a.productCount || a.name.localeCompare(b.name, "pt-BR"),
+      );
   },
 );
 
