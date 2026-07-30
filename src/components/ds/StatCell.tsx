@@ -65,7 +65,7 @@ export function StatCell({
       <span
         aria-hidden
         className={cn(
-          "flex items-center gap-1 text-[0.65rem] font-semibold uppercase leading-none tracking-[0.18em] sm:text-[0.72rem]",
+          "flex items-center gap-1 text-[0.6875rem] font-semibold uppercase leading-tight tracking-[0.14em] sm:text-[0.75rem]",
           accent ? "text-[var(--pc-gold-ink)]/85" : "text-muted-foreground",
         )}
       >

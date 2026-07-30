@@ -381,7 +381,7 @@ function Page() {
 function DraftIcon({ draft }: { draft: Draft }) {
   if (draft.icon?.kind === "url") {
     return (
-      <IconTile size="lg" tone="brand">
+      <IconTile size="lg" tone="accent">
         <img src={draft.icon.value} alt="" className="h-6 w-6 object-contain" />
       </IconTile>
     );
@@ -389,7 +389,7 @@ function DraftIcon({ draft }: { draft: Draft }) {
   const Icon = draft.icon?.kind === "lucide" ? resolveLucide(draft.icon.value) : null;
   const Fallback = Icon ?? Package;
   return (
-    <IconTile size="lg" tone="brand">
+    <IconTile size="lg" tone="accent">
       <Fallback className="h-5 w-5" aria-hidden />
     </IconTile>
   );
