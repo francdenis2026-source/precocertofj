@@ -489,44 +489,47 @@ function EstablishmentPage() {
           </div>
         )}
 
-        {/* Últimas atualizações + atalho de colaboração (vale para qualquer loja). */}
-        <section className="mt-2.5 rounded-xl border border-border bg-card/70 p-2.5">
-          <div className="flex flex-wrap items-center gap-2">
-            <h2 className="inline-flex items-center gap-1.5 text-[12px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground">
-              <History className="h-3.5 w-3.5" aria-hidden />
+        {/* Últimas atualizações — faixa única com rolagem horizontal (sem nuvem de chips). */}
+        <section className="mt-2.5 overflow-hidden rounded-xl border border-border bg-card/70">
+          <div className="flex items-center gap-2 border-b border-border/70 px-2.5 py-1.5">
+            <h2 className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase leading-none tracking-[0.16em] text-muted-foreground">
+              <History className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
               Últimas atualizações
             </h2>
             <Link
               to="/colaborar"
-              className="ml-auto inline-flex h-8 items-center gap-1.5 rounded-full border border-brand-gold/70 bg-brand-gold/10 px-3 text-[12px] font-semibold leading-none text-foreground transition-colors hover:bg-brand-gold hover:text-brand-navy"
+              className="ml-auto inline-flex h-7 shrink-0 items-center gap-1.5 rounded-full border border-brand-gold/70 bg-brand-gold/10 px-2.5 text-[11px] font-bold uppercase leading-none tracking-[0.14em] text-foreground transition-colors hover:bg-brand-gold hover:text-brand-navy"
             >
               <Camera className="h-3.5 w-3.5" aria-hidden />
-              Enviar fotos / nota
+              Enviar fotos
             </Link>
           </div>
           {recentUpdates.length > 0 ? (
-            <ul className="mt-2 flex flex-wrap gap-1.5">
+            <ul className="flex snap-x gap-1.5 overflow-x-auto px-2.5 py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {recentUpdates.map((p) => (
                 <li
                   key={p.slug}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[12px] leading-none"
+                  className="flex w-[190px] shrink-0 snap-start flex-col gap-0.5 rounded-lg border border-border bg-background px-2.5 py-1.5"
                 >
-                  <span className="max-w-[16rem] truncate font-medium text-foreground">
+                  <span className="truncate text-[12px] font-medium leading-tight text-foreground">
                     {p.productName}
                   </span>
-                  <Price value={p.price} size="xs" tone="best" />
-                  <span className="text-[11px] tabular-nums text-muted-foreground">
-                    {new Date(p.lastDate).toLocaleDateString("pt-BR")}
+                  <span className="flex items-baseline justify-between gap-2">
+                    <Price value={p.price} size="xs" tone="best" />
+                    <span className="text-[11px] tabular-nums text-muted-foreground">
+                      {new Date(p.lastDate).toLocaleDateString("pt-BR")}
+                    </span>
                   </span>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="mt-2 text-[12px] leading-snug text-muted-foreground">
+            <p className="px-2.5 py-2 text-[12px] leading-snug text-muted-foreground">
               Ainda não há atualizações recentes. Envie fotos das etiquetas para começar.
             </p>
           )}
         </section>
+
 
 
 
