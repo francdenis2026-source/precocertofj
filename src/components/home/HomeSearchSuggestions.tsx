@@ -203,17 +203,51 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
       [handlePick, onClose],
     );
 
-    if (!visible) return null;
+    // Mede a âncora (campo de busca) para posicionar o painel em `position: fixed`.
+    const [rect, setRect] = React.useState<{ left: number; top: number; width: number; maxH: number } | null>(
+      null,
+    );
+    React.useEffect(() => {
+      if (!visible) return;
+      const measure = () => {
+        const el = anchorRef.current;
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        const gap = 8;
+        const top = r.bottom + gap;
+        setRect({
+          left: r.left,
+          top,
+          width: r.width,
+          maxH: Math.max(180, window.innerHeight - top - 16),
+        });
+      };
+      measure();
+      window.addEventListener("resize", measure);
+      window.addEventListener("scroll", measure, true);
+      return () => {
+        window.removeEventListener("resize", measure);
+        window.removeEventListener("scroll", measure, true);
+      };
+    }, [visible, anchorRef, items.length, loading]);
 
-    return (
+    if (!visible || typeof document === "undefined") return null;
+
+    const panel = (
       <div
-        className="absolute left-0 right-0 top-[calc(100%+6px)] z-30 overflow-hidden rounded-xl border shadow-2xl"
+        className="fixed z-[80] flex flex-col overflow-hidden rounded-xl border shadow-2xl"
         style={{
+          left: rect?.left ?? 0,
+          top: rect?.top ?? 0,
+          width: rect?.width ?? 0,
+          maxHeight: rect?.maxH ?? 320,
+          visibility: rect ? "visible" : "hidden",
           background: "#ffffff",
           borderColor: "color-mix(in oklab, #d4a24c 45%, transparent)",
           color: "#0f172a",
         }}
       >
+
         {loading && items.length === 0 ? (
           <div className="flex items-center gap-2 px-3 py-2.5 text-[12.5px] text-slate-500">
             <Loader2 className="h-3.5 w-3.5 animate-spin" />
