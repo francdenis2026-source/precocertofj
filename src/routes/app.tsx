@@ -272,37 +272,77 @@ function AppHomeContent() {
   );
 }
 
+type MetricTone = "primary" | "brand" | "savings" | "warning";
+
+const METRIC_TONES: Record<
+  MetricTone,
+  { card: string; chip: string; rail: string }
+> = {
+  primary: {
+    card: "border-primary/25 bg-primary/[0.06]",
+    chip: "bg-primary/12 text-primary",
+    rail: "bg-primary",
+  },
+  brand: {
+    card: "border-brand/35 bg-brand/[0.10]",
+    chip: "bg-brand/20 text-brand-soft",
+    rail: "bg-brand",
+  },
+  savings: {
+    card: "border-savings/30 bg-savings/[0.08]",
+    chip: "bg-savings/15 text-savings",
+    rail: "bg-savings",
+  },
+  warning: {
+    card: "border-warning/35 bg-warning/[0.10]",
+    chip: "bg-warning/20 text-accent-ink",
+    rail: "bg-warning",
+  },
+};
+
 function Metric({
   icon: Icon,
   label,
   value,
   hint,
-  tone,
+  tone = "primary",
 }: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   value: React.ReactNode;
   hint: string;
-  tone?: "success";
+  tone?: MetricTone;
 }) {
+  const t = METRIC_TONES[tone];
   return (
-    <article className="rounded-2xl border border-border/70 bg-card px-3.5 py-2.5">
+    <article
+      className={cn(
+        "relative overflow-hidden rounded-2xl border px-3.5 py-2.5 transition-colors",
+        t.card,
+      )}
+    >
+      <span
+        aria-hidden
+        className={cn("absolute inset-y-0 left-0 w-[3px]", t.rail)}
+      />
       <div className="flex items-center justify-between gap-2">
         <p className="truncate text-[12px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
           {label}
         </p>
-        <Icon
+        <span
           className={cn(
-            "h-4 w-4 shrink-0",
-            tone === "success" ? "text-savings-foreground" : "text-muted-foreground",
+            "grid h-6 w-6 shrink-0 place-items-center rounded-lg",
+            t.chip,
           )}
-          aria-hidden
-        />
+        >
+          <Icon className="h-3.5 w-3.5" aria-hidden />
+        </span>
       </div>
       <p className="pc-num mt-1 text-[26px] font-semibold leading-none text-foreground">
         {value}
       </p>
       <p className="mt-1 truncate text-[12px] text-muted-foreground">{hint}</p>
+
     </article>
   );
 }
