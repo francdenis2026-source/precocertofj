@@ -36,6 +36,7 @@ import { StoreBadge } from "@/components/brand/StoreBadge";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
 import { getCategoryHub } from "@/lib/category-hub.functions";
 import { CATEGORY_DEFS, categoryBySlug, norm } from "@/lib/category-hub";
+import { useCategoryLabelWithFallback } from "@/hooks/use-category-labels";
 import { classifyButcherCut, type ButcherProtein } from "@/lib/butcher-cuts";
 import { Bird, Drumstick } from "lucide-react";
 import { PLANTOES, diaDaSemana, diaVigente, farmaciaPorId } from "@/lib/farmacias-plantao";
@@ -272,7 +273,7 @@ function CategoryPage() {
                 Categoria
               </p>
               <h1 className="mt-1 truncate font-serif text-[19px] font-semibold leading-[1.15] text-white sm:text-[22px]">
-                {def.label}
+                {catLabel(def.slug, def.label)}
               </h1>
               <p className="mt-1 truncate text-[12px] leading-snug text-white/85">{def.desc}</p>
             </div>
@@ -856,7 +857,7 @@ function CategoryRail({ current }: { current: string }) {
                       : "border-border bg-card text-foreground hover:border-brand-gold",
                   )}
                 >
-                  <CIcon className="h-3.5 w-3.5" aria-hidden /> {c.short}
+                  <CIcon className="h-3.5 w-3.5" aria-hidden /> {railLabel(c.slug, c.short)}
                 </Link>
               </li>
             );

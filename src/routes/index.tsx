@@ -124,7 +124,10 @@ const CATEGORIES = [
   { key: "postos", label: "Postos", full: "Postos", Icon: Fuel },
 ] as const;
 
+import { useCategoryLabelWithFallback } from "@/hooks/use-category-labels";
+
 function HomePage() {
+  const catLabel = useCategoryLabelWithFallback();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { user, loading: sessionLoading } = useSession();
@@ -692,7 +695,7 @@ function HomePage() {
                     key={key}
                     type="button"
                     onClick={() => navigate({ to: "/categoria/$slug", params: { slug: key } })}
-                    aria-label={`Pesquisar em ${full}`}
+                    aria-label={`Pesquisar em ${catLabel(key, full)}`}
                     data-reading-card
                     className={TILE}
                     style={{
@@ -707,7 +710,7 @@ function HomePage() {
                       className={TILE_LABEL}
                       style={{ color: "var(--pc-home-onhero-fg-90)" }}
                     >
-                      {label}
+                      {catLabel(key, label)}
                     </span>
                   </button>
                 ))}
