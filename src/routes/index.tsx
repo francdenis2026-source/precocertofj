@@ -129,14 +129,12 @@ const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
    segue acompanhando a altura da janela sem cortar o rótulo, e todas as células
    (categorias e ações) usam a mesma medida para fechar 2 linhas alinhadas. */
 const TILE =
-  "group flex h-[clamp(44px,5.4vh,58px)] w-full min-w-0 items-center gap-2 rounded-xl border pl-2 pr-2.5 text-left pc-tile pc-elite-frame focus-visible:outline-none focus-visible:ring-2";
+  "group flex h-[clamp(44px,5.4vh,58px)] short-h:h-[clamp(36px,5vh,44px)] w-full min-w-0 items-center gap-2 rounded-xl border pl-2 pr-2.5 text-left pc-tile pc-elite-frame focus-visible:outline-none focus-visible:ring-2";
 const TILE_ICONWRAP =
-  "grid shrink-0 place-items-center rounded-lg h-[clamp(24px,3vh,30px)] w-[clamp(24px,3vh,30px)]";
-const TILE_ICON = "h-[clamp(15px,1.9vh,19px)] w-[clamp(15px,1.9vh,19px)]";
+  "grid shrink-0 place-items-center rounded-lg h-[clamp(24px,3vh,30px)] w-[clamp(24px,3vh,30px)] short-h:h-[22px] short-h:w-[22px]";
+const TILE_ICON = "h-[clamp(15px,1.9vh,19px)] w-[clamp(15px,1.9vh,19px)] short-h:h-[14px] short-h:w-[14px]";
 const TILE_LABEL =
   "min-w-0 flex-1 truncate text-[clamp(11.5px,1.5vh,14px)] font-semibold leading-none tracking-[-0.005em]";
-
-
 /* Tokens tipográficos compartilhados da home: um único "eyebrow" (rótulo de
    seção) e um único estilo de chip, para que hero, painel ao vivo e faixa de
    buscas em alta tenham exatamente a mesma hierarquia e o mesmo respiro. */
@@ -260,10 +258,20 @@ function HomePage() {
   /* Hero e faixa "Buscas em alta" consomem a mesma fonte, mas nunca repetem
      termos: o hero fica com os 4 primeiros e a faixa com os seguintes. */
   const heroPopular = useMemo(() => popularAll.slice(0, 4), [popularAll]);
+  /* Em janelas baixas mostramos apenas uma linha de chips: a home precisa
+     caber inteira na viewport, sem rolagem nem corte. */
+  const [shortViewport, setShortViewport] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-height: 760px)");
+    const apply = () => setShortViewport(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
   const trendingPopular = useMemo(() => {
     const rest = popularAll.slice(4);
-    return (rest.length >= 4 ? rest : popularAll).slice(0, 8);
-  }, [popularAll]);
+    return (rest.length >= 4 ? rest : popularAll).slice(0, shortViewport ? 4 : 8);
+  }, [popularAll, shortViewport]);
 
 
 
@@ -484,7 +492,7 @@ function HomePage() {
                   (ex.: 1366x768) o texto encolhe em vez de empurrar a página. */}
               <h1
                 id="hero-title"
-                className="font-editorial pc-hero-editorial text-[clamp(1.75rem,2.6vw+2.2vh,4rem)]"
+                className="font-editorial pc-hero-editorial text-[clamp(1.75rem,2.6vw+2.2vh,4rem)] short-h:text-[clamp(1.5rem,1.5vw+1.7vh,2.4rem)]"
                 style={{ color: "var(--pc-home-onhero-fg)" }}
               >
                 Onde cada real{" "}
@@ -1040,8 +1048,7 @@ function HomePage() {
             </Link>
             <ul
               role="list"
-              className="grid min-w-0 flex-1 auto-rows-fr gap-2"
-              style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}
+              className="grid min-w-0 flex-1 auto-rows-fr gap-2 [grid-template-columns:repeat(auto-fit,minmax(200px,1fr))] short-h:[grid-template-columns:repeat(auto-fit,minmax(140px,1fr))]"
             >
               {trendingPopular.map((t) => {
                 const isActive = normalizeSearchText(t) === normalizeSearchText(q);
@@ -1061,7 +1068,7 @@ function HomePage() {
                       isActive ? `Termo selecionado: ${t}` : `Buscar por ${t}`
                     }
                     data-active={isActive ? "true" : undefined}
-                    className="pc-trend-chip group relative flex h-full min-h-[40px] w-full items-center gap-1.5 overflow-hidden rounded-xl border px-2.5 py-1.5 text-left text-[12px] leading-[1.2] font-semibold capitalize transition-all duration-200 hover:-translate-y-[1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
+                    className="pc-trend-chip group relative flex h-full min-h-[40px] short-h:min-h-[32px] w-full items-center gap-1.5 overflow-hidden rounded-xl border px-2.5 py-1.5 short-h:py-1 text-left text-[12px] short-h:text-[11.5px] leading-[1.2] font-semibold capitalize transition-all duration-200 hover:-translate-y-[1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
                     style={{
                       background: isActive
                         ? "color-mix(in oklab, var(--pc-home-onhero-gold) 26%, var(--pc-home-onhero-glass-soft))"
