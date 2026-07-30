@@ -12,7 +12,9 @@ import {
   searchCatalogAdvanced,
   type CatalogSearchItem,
 } from "@/lib/catalog-search.functions";
+import { useRovingFocus } from "@/hooks/use-roving-focus";
 import { cn } from "@/lib/utils";
+
 
 type SortKey = "cheapest" | "priciest" | "recent";
 
@@ -74,6 +76,64 @@ export function DashboardSearch() {
   const results: CatalogSearchItem[] = resultsQ.data ?? [];
   const categories = (optionsQ.data?.categories ?? []).slice(0, 12);
 
+  // Foco itinerante nos chips (categorias) e na ordenação.
+  const chipIndex = category ? categories.indexOf(category) + 1 : 0;
+  const chipRoving = useRovingFocus(categories.length + 1, chipIndex, (i) =>
+    setCategory(i === 0 ? null : (categories[i - 1] ?? null)),
+  );
+  const sortRoving = useRovingFocus(
+    SORTS.length,
+    SORTS.findIndex((s) => s.id === sort),
+    (i) => setSort(SORTS[i].id),
+  );
+
+  // Navegação teclado entre campo de busca e lista de resultados.
+  const resultRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+
+  const focusResult = (i: number) => {
+    if (results.length === 0) return;
+    const next = (i + results.length) % results.length;
+    resultRefs.current[next]?.focus();
+  };
+
+  const onInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "ArrowDown" && results.length > 0) {
+      e.preventDefault();
+      focusResult(0);
+    } else if (e.key === "Escape" && input) {
+      e.preventDefault();
+      setInput("");
+    }
+  };
+
+  const onResultKeyDown = (e: React.KeyboardEvent, i: number) => {
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        focusResult(i + 1);
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        if (i === 0) inputRef.current?.focus();
+        else focusResult(i - 1);
+        break;
+      case "Home":
+        e.preventDefault();
+        focusResult(0);
+        break;
+      case "End":
+        e.preventDefault();
+        focusResult(results.length - 1);
+        break;
+      case "Escape":
+        e.preventDefault();
+        inputRef.current?.focus();
+        break;
+      default:
+    }
+  };
+
+
   return (
     <section
       aria-label="Buscar preços"
@@ -96,7 +156,13 @@ export function DashboardSearch() {
               maxLength={80}
               inputMode="search"
               autoComplete="off"
+              onKeyDown={onInputKeyDown}
+              role="combobox"
+              aria-expanded={active && results.length > 0}
+              aria-controls="dashboard-search-results"
+              aria-describedby="dashboard-search-help"
             />
+
             {input && (
               <button
                 type="button"
@@ -111,13 +177,19 @@ export function DashboardSearch() {
               </button>
             )}
           </label>
-          <div className="flex shrink-0 items-center gap-1">
-            {SORTS.map((s) => (
+          <div
+            role="radiogroup"
+            aria-label="Ordenar resultados"
+            className="flex shrink-0 items-center gap-1"
+          >
+            {SORTS.map((s, i) => (
               <button
                 key={s.id}
                 type="button"
+                role="radio"
+                aria-checked={sort === s.id}
                 onClick={() => setSort(s.id)}
-                aria-pressed={sort === s.id}
+                {...sortRoving.itemProps(i)}
                 className={cn(
                   "h-8 rounded-full border px-2.5 text-[12px] font-semibold transition-colors",
                   sort === s.id
@@ -131,15 +203,24 @@ export function DashboardSearch() {
           </div>
         </div>
 
-        <div className="flex gap-1.5 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]{display:none}">
-          <Chip active={!category} onClick={() => setCategory(null)}>
+        <div
+          role="radiogroup"
+          aria-label="Filtrar por categoria"
+          className="flex gap-1.5 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]{display:none}"
+        >
+          <Chip
+            active={!category}
+            onClick={() => setCategory(null)}
+            {...chipRoving.itemProps(0)}
+          >
             Todas
           </Chip>
-          {categories.map((c) => (
+          {categories.map((c, i) => (
             <Chip
               key={c}
               active={category === c}
               onClick={() => setCategory(category === c ? null : c)}
+              {...chipRoving.itemProps(i + 1)}
             >
               {categoryLabel(c)}
             </Chip>
@@ -147,7 +228,18 @@ export function DashboardSearch() {
         </div>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]">
+
+      <p id="dashboard-search-help" className="sr-only">
+        Use seta para baixo para entrar na lista de resultados, setas para
+        navegar, Enter para abrir e Esc para voltar ao campo de busca.
+      </p>
+
+      <div
+        className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]"
+        aria-live="polite"
+        aria-busy={resultsQ.isLoading}
+      >
+
         {!active ? (
           <p className="p-6 text-center text-[13px] text-muted-foreground">
             Digite ao menos 2 letras ou escolha uma categoria para ver os preços
@@ -162,11 +254,23 @@ export function DashboardSearch() {
             Nenhum produto encontrado para esse filtro.
           </p>
         ) : (
-          <ul className="divide-y divide-border/60">
-            {results.map((r) => (
-              <li key={r.catalogId}>
+          <ul
+            role="listbox"
+            id="dashboard-search-results"
+            aria-label="Resultados da busca"
+
+            className="divide-y divide-border/60"
+          >
+            {results.map((r, i) => (
+              <li key={r.catalogId} role="presentation">
                 <Link
                   to="/buscar"
+                  role="option"
+                  aria-selected={false}
+                  ref={(el: HTMLAnchorElement | null) => {
+                    resultRefs.current[i] = el;
+                  }}
+                  onKeyDown={(e) => onResultKeyDown(e, i)}
                   search={{ q: r.displayName } as never}
                   className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-2 transition-colors hover:bg-muted/50"
                 >
@@ -198,6 +302,7 @@ export function DashboardSearch() {
             ))}
           </ul>
         )}
+
       </div>
 
       {active && results.length > 0 && (
@@ -214,16 +319,21 @@ function Chip({
   active,
   onClick,
   children,
+  ...rest
 }: {
   active: boolean;
   onClick: () => void;
   children: React.ReactNode;
-}) {
+} & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onClick" | "children"> & {
+    ref?: React.Ref<HTMLButtonElement>;
+  }) {
   return (
     <button
       type="button"
+      role="radio"
       onClick={onClick}
-      aria-pressed={active}
+      aria-checked={active}
+      {...rest}
       className={cn(
         "h-7 shrink-0 whitespace-nowrap rounded-full border px-2.5 text-[12px] font-semibold transition-colors",
         active
@@ -235,3 +345,4 @@ function Chip({
     </button>
   );
 }
+
