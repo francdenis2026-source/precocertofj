@@ -179,6 +179,11 @@ function CategoryPage() {
     if (term) list = list.filter((p) => norm(p.name).includes(term));
     if (storeFilter) list = list.filter((p) => p.storeNames.includes(storeFilter));
 
+    // Hortifrúti: subgrupos (frutas, verduras, legumes, tubérculos, temperos, cogumelos)
+    if (slug === "hortifruti" && search.sub) {
+      list = list.filter((p) => hortifrutiSubgroup(p.name) === search.sub);
+    }
+
     if (slug === "acougues") {
       // Anexa a proteína classificada e reordena para cortes primeiro
       const ORDER: Record<string, number> = { bovino: 0, frango: 1, suino: 2, outros: 3 };
