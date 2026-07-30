@@ -1,3 +1,4 @@
+import { PRODUCT_CATEGORIES, categoryLabel } from "@/lib/product-category";
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
@@ -23,20 +24,9 @@ import { toast } from "sonner";
 import { ArrowLeft, Loader2, Upload, Link as LinkIcon, RotateCcw, Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const CATEGORIES: { slug: string; label: string }[] = [
-  { slug: "hortifruti", label: "Hortifruti" },
-  { slug: "carnes", label: "Carnes" },
-  { slug: "mercearia", label: "Mercearia" },
-  { slug: "laticinios", label: "Laticínios" },
-  { slug: "padaria", label: "Padaria" },
-  { slug: "bebidas", label: "Bebidas" },
-  { slug: "bebidas_em_po", label: "Bebidas em pó" },
-  { slug: "biscoitos", label: "Biscoitos" },
-  { slug: "doces", label: "Doces" },
-  { slug: "congelados", label: "Congelados" },
-  { slug: "higiene", label: "Higiene" },
-  { slug: "limpeza", label: "Limpeza" },
-];
+const CATEGORIES: { slug: string; label: string }[] = PRODUCT_CATEGORIES.filter(
+  (slug) => slug !== "outros",
+).map((slug) => ({ slug, label: categoryLabel(slug) }));
 
 export const Route = createFileRoute("/admin_/icones-categoria")({
   ssr: false,
