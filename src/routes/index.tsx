@@ -1038,7 +1038,7 @@ function HomePage() {
             <ul
               role="list"
               className="grid min-w-0 flex-1 gap-2"
-              style={{ gridTemplateColumns: "repeat(auto-fit, minmax(112px, 1fr))" }}
+              style={{ gridTemplateColumns: "repeat(auto-fit, minmax(168px, 1fr))" }}
             >
               {trendingPopular.map((t) => {
                 const isActive = normalizeSearchText(t) === normalizeSearchText(q);
