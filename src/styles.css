@@ -38,17 +38,54 @@
  *   DM Sans (preços e números — legibilidade comercial), IBM Plex Mono (código).
  */
 
+/*
+ * "Oswald Digits" é a Oswald restrita (via unicode-range) aos glifos 0-9:
+ * usada nas pilhas de texto para que apenas os algarismos saiam condensados.
+ * A família "Oswald" completa fica reservada para display (títulos, stats, CTAs).
+ */
+@font-face {
+  font-family: "Oswald Digits";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  unicode-range: U+0030-0039;
+  src: url(https://fonts.gstatic.com/s/oswald/v57/TK3_WkUHHAIjg75cFRf3bXL8LICs1_FvgUE.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Oswald Digits";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  unicode-range: U+0030-0039;
+  src: url(https://fonts.gstatic.com/s/oswald/v57/TK3_WkUHHAIjg75cFRf3bXL8LICs18NvgUE.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Oswald Digits";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  unicode-range: U+0030-0039;
+  src: url(https://fonts.gstatic.com/s/oswald/v57/TK3_WkUHHAIjg75cFRf3bXL8LICs1y9ogUE.ttf) format("truetype");
+}
+@font-face {
+  font-family: "Oswald Digits";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  unicode-range: U+0030-0039;
+  src: url(https://fonts.gstatic.com/s/oswald/v57/TK3_WkUHHAIjg75cFRf3bXL8LICs1xZogUE.ttf) format("truetype");
+}
+
 @theme inline {
-  /*
-   * "Oswald" aqui só possui glifos de 0-9 (subset carregado no __root),
-   * portanto funciona como fonte exclusiva dos algarismos: qualquer letra
-   * ou símbolo cai na próxima família da pilha. Cores permanecem as do tema.
-   */
-  --font-numeric: "Oswald";
-  --font-display: var(--font-numeric), "Fraunces", "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
+  --font-numeric: "Oswald Digits";
+  /* Oswald completa — display secundária: títulos, stats, CTAs, badges. */
+  --font-condensed: "Oswald", "Oswald Digits", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-condensed);
+  --font-editorial: var(--font-numeric), "Fraunces", "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
   --font-sans: var(--font-numeric), "Inter", "Work Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-serif: var(--font-numeric), "Fraunces", "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
   --font-mono: var(--font-numeric), "IBM Plex Mono", ui-monospace, SFMono-Regular, "JetBrains Mono", monospace;
+
 
 
 
@@ -3224,7 +3261,8 @@ cite, em, strong, small, sub, sup, mark, q, s, u, i, b, abbr {
 }
 /* Eyebrows uppercase ganham peso e tracking equilibrados para leitura clara */
 .pc-eyebrow {
-  font-family: var(--font-numeric), "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--font-condensed);
+  letter-spacing: 0.08em;
 }
 /* Headings padrão em Work Sans, MAS respeitando classes editoriais serif. */
 h1:not(.font-serif):not(.font-display):not(.font-editorial),
@@ -3233,14 +3271,19 @@ h3:not(.font-serif):not(.font-display):not(.font-editorial),
 h4:not(.font-serif):not(.font-display):not(.font-editorial),
 h5:not(.font-serif):not(.font-display):not(.font-editorial),
 h6:not(.font-serif):not(.font-display):not(.font-editorial) {
-  font-family: var(--font-numeric), "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--font-condensed);
+  letter-spacing: 0.005em;
 }
 /* Reforço: classes serif/editorial sempre vencem, mesmo em h1..h6 e body. */
 .font-editorial,
 [class*="font-editorial"],
-.font-serif,
-.font-display {
+.font-serif {
   font-family: var(--font-serif) !important;
+}
+.font-display {
+  font-family: var(--font-condensed) !important;
+  letter-spacing: 0.005em;
+  font-variation-settings: normal;
 }
 /* Códigos: sempre IBM Plex Mono via token, nunca `monospace` do UA */
 code, pre, kbd, samp, tt, var,
@@ -5049,4 +5092,36 @@ td[data-numeric],
   .pc-price--xl {
     letter-spacing: 0.02em;
   }
+}
+
+/* ---------------------------------------------------------------------------
+   Oswald como display secundária
+   A Oswald é condensada: em títulos e labels ela precisa de um leve tracking
+   positivo para respirar. Cores e tamanhos seguem o design system.
+--------------------------------------------------------------------------- */
+.font-display,
+.pc-display,
+h1.font-display,
+h2.font-display,
+h3.font-display {
+  letter-spacing: 0.005em;
+}
+
+.font-condensed {
+  font-family: var(--font-condensed);
+  letter-spacing: 0.01em;
+}
+
+.font-editorial {
+  font-family: var(--font-editorial);
+}
+
+/* Stats / KPIs e labels de destaque em Oswald cheia */
+.pc-stat,
+.pc-stat-value,
+.pc-kpi-value,
+[data-display="condensed"] {
+  font-family: var(--font-condensed);
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums lining-nums;
 }
