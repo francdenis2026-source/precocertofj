@@ -32,6 +32,7 @@ import {
 } from "@/lib/favorites.functions";
 import { listPublicStores } from "@/lib/stores-public.functions";
 import { PriceAlertSubscriptions } from "@/components/alerts/PriceAlertSubscriptions";
+import { NearbyDropAlertsCard } from "@/components/alerts/NearbyDropAlertsCard";
 import {
   PageHeader,
   SectionCard,
@@ -282,6 +283,10 @@ function Alertas() {
             )}
           </div>
         </SectionCard>
+
+        <div className="mt-6">
+          <NearbyDropAlertsCard />
+        </div>
 
         <div className="mt-6">
           <PriceAlertSubscriptions />
