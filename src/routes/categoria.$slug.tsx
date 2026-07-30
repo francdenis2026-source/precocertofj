@@ -246,6 +246,23 @@ function CategoryPage() {
   const catAvgSaving = filtersActive ? savings.avgSavingPct : (data?.avgSavingPct ?? null);
   const catComparable = filtersActive ? savings.comparableProducts : (data?.comparableProducts ?? 0);
 
+  /** Lojas com a economia do recorte atual, na mesma ordem em desktop e mobile. */
+  const displayStores = useMemo(() => {
+    const list = data?.stores ?? [];
+    if (!filtersActive) return list;
+    return [...list]
+      .map((s) => {
+        const f = savings.byStore.get(s.id);
+        return { ...s, avgSavingPct: f?.avgSavingPct ?? null, comparedProducts: f?.comparedProducts ?? 0 };
+      })
+      .sort(
+        (a, b) =>
+          Number(b.isNicheStore) - Number(a.isNicheStore) ||
+          (b.avgSavingPct ?? -1) - (a.avgSavingPct ?? -1) ||
+          b.productCount - a.productCount,
+      );
+  }, [data, savings, filtersActive]);
+
   // Contagem por bucket para os chips de filtro (independente do filtro corte ativo)
   const proteinCounts = useMemo(() => {
     if (slug !== "acougues") return null;
