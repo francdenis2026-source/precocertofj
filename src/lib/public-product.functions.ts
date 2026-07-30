@@ -2,6 +2,8 @@ import { createServerFn } from "@tanstack/react-start";
 import { setResponseHeader } from "@tanstack/react-start/server";
 import { normalizeProductName, signStorageImageUrl } from "@/lib/product-image-utils";
 import { comparePriceEntries, sortByPriceStable } from "@/lib/price-rank";
+import { sizeGroupOf } from "@/lib/product-size-group";
+
 
 export type PublicProductMarket = {
   marketName: string;
@@ -15,6 +17,17 @@ export type PublicProductMarket = {
   lastSeen: string;
   history: Array<{ date: string; min: number }>;
 };
+
+/** Ofertas de um mesmo produto agrupadas por embalagem (1L, 2L, 5kg…). */
+export type PublicProductSizeGroup = {
+  /** Chave estável do tamanho. */
+  key: string;
+  /** Rótulo curto exibido no cabeçalho do grupo ("1L", "500g"). */
+  label: string;
+  /** Estabelecimentos com aquele tamanho, do menor para o maior preço. */
+  markets: PublicProductMarket[];
+};
+
 
 export type PublicProductCityRank = {
   city: string;
@@ -41,7 +54,10 @@ export type PublicProduct = {
   min: number | null;
   max: number | null;
   markets: PublicProductMarket[];
+  /** Mesma base de ofertas, separada por gramagem/volume. */
+  sizeGroups: PublicProductSizeGroup[];
   citiesRanking: PublicProductCityRank[];
+
   history: Array<{ date: string; min: number; avg: number }>;
   recent: Array<{
     price: number;
@@ -105,6 +121,7 @@ export const getPublicProduct = createServerFn({ method: "POST" })
     const queryText = stripSize(displayName).slice(0, 120);
 
     type Row = {
+      product_name?: string | null;
       price_captured: number | null;
       market_name: string | null;
       created_at: string;
@@ -114,13 +131,15 @@ export const getPublicProduct = createServerFn({ method: "POST" })
     if (barcode) {
       const { data: byBar } = await supabaseAdmin
         .from("scans")
-        .select("price_captured, market_name, created_at")
+        // `product_name` é necessário para separar as ofertas por gramagem.
+        .select("product_name, price_captured, market_name, created_at")
         .eq("barcode", barcode)
         .not("price_captured", "is", null)
         .order("created_at", { ascending: false })
         .limit(300);
       rows = (byBar ?? []) as Row[];
     }
+
 
     if (rows.length === 0) {
       const { data: rpcRows } = await supabaseAdmin.rpc("search_scans_unaccented", {
@@ -271,6 +290,81 @@ export const getPublicProduct = createServerFn({ method: "POST" })
         ),
       )
       .slice(0, 12);
+
+    /**
+     * Ofertas separadas por gramagem/volume.
+     *
+     * A lista `markets` acima continua com uma linha por estabelecimento (menor
+     * preço registrado). Já os grupos abaixo isolam 1L, 2L e 5L do mesmo
+     * produto — comparar valores de embalagens diferentes confundia o usuário.
+     */
+    const bySize = new Map<
+      string,
+      { label: string; sort: number; byStore: Map<string, { min: number; max: number; total: number; count: number; lastSeen: string }> }
+    >();
+    for (const r of list) {
+      const store = (r.market_name ?? "").trim();
+      if (!store) continue;
+      const price = Number(r.price_captured);
+      const group = sizeGroupOf(r.product_name ?? displayName, {
+        sizeUnit: cat?.default_unit ?? null,
+      });
+      const bucket =
+        bySize.get(group.key) ??
+        { label: group.label, sort: group.sort, byStore: new Map() };
+      const cur = bucket.byStore.get(store) ?? {
+        min: price,
+        max: price,
+        total: 0,
+        count: 0,
+        lastSeen: r.created_at,
+      };
+      cur.total += price;
+      cur.count += 1;
+      if (price < cur.min) cur.min = price;
+      if (price > cur.max) cur.max = price;
+      if (new Date(r.created_at) > new Date(cur.lastSeen)) cur.lastSeen = r.created_at;
+      bucket.byStore.set(store, cur);
+      bySize.set(group.key, bucket);
+    }
+
+    const sizeGroups: PublicProductSizeGroup[] = Array.from(bySize.entries())
+      .map(([key, v]) => ({
+        key,
+        label: v.label,
+        markets: Array.from(v.byStore.entries())
+          .map(([marketName, s]) => {
+            const geo = geoByName.get(marketName) ?? {
+              city: null,
+              neighborhood: null,
+              state: null,
+            };
+            return {
+              marketName,
+              city: geo.city,
+              neighborhood: geo.neighborhood,
+              state: geo.state,
+              priceAvg: Number((s.total / s.count).toFixed(2)),
+              priceMin: Number(s.min.toFixed(2)),
+              priceMax: Number(s.max.toFixed(2)),
+              samples: s.count,
+              lastSeen: s.lastSeen,
+              history: [],
+            } satisfies PublicProductMarket;
+          })
+          .sort((a, b) =>
+            comparePriceEntries(
+              { store: a.marketName, price: a.priceMin, samples: a.samples, lastSeen: a.lastSeen },
+              { store: b.marketName, price: b.priceMin, samples: b.samples, lastSeen: b.lastSeen },
+            ),
+          )
+          .slice(0, 12),
+        sort: v.sort,
+      }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ key, label, markets: ms }) => ({ key, label, markets: ms }));
+
+
 
     // Ranking segmentado por cidade
     const byCity = new Map<
