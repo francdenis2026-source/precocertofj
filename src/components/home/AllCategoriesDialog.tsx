@@ -7,48 +7,27 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import {
-  ShoppingCart,
-  Pill,
-  HardHat,
-  Fuel,
-  Croissant,
-  Beef,
-  Apple,
-  Wine,
-  PawPrint,
-  BookOpen,
-  Home as HomeIcon,
-  Sparkles,
-  Search,
-  ArrowRight,
-} from "lucide-react";
+import { ShoppingCart, Search, ArrowRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-import { CATEGORY_DEFS } from "@/lib/category-hub";
+import { CATEGORY_DEFS, hubCoverageLabel } from "@/lib/category-hub";
+import { categoryIcon } from "@/lib/category-icons";
 
-const ICONS: Record<string, typeof ShoppingCart> = {
-  supermercados: ShoppingCart,
-  farmacias: Pill,
-  acougues: Beef,
-  padarias: Croissant,
-  hortifruti: Apple,
-  bebidas: Wine,
-  limpeza: HomeIcon,
-  higiene: Sparkles,
-  pet: PawPrint,
-  construcao: HardHat,
-  postos: Fuel,
-  papelaria: BookOpen,
+type Cat = {
+  slug: string;
+  label: string;
+  desc: string;
+  /** Categorias de produto cobertas — mesmo vocabulário das páginas do comércio. */
+  coverage: string;
+  Icon: typeof ShoppingCart;
 };
-
-type Cat = { slug: string; label: string; desc: string; Icon: typeof ShoppingCart };
 
 const CATEGORIES: Cat[] = CATEGORY_DEFS.map((c) => ({
   slug: c.slug,
   label: c.label,
   desc: c.desc,
-  Icon: ICONS[c.slug] ?? ShoppingCart,
+  coverage: hubCoverageLabel(c.slug),
+  Icon: categoryIcon(c.slug),
 }));
 
 // remove acentos + minúsculas p/ busca tolerante
