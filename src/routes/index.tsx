@@ -262,7 +262,7 @@ function HomePage() {
   const heroPopular = useMemo(() => popularAll.slice(0, 4), [popularAll]);
   const trendingPopular = useMemo(() => {
     const rest = popularAll.slice(4);
-    return (rest.length >= 4 ? rest : popularAll).slice(0, 12);
+    return (rest.length >= 4 ? rest : popularAll).slice(0, 8);
   }, [popularAll]);
 
 
@@ -620,7 +620,7 @@ function HomePage() {
             {/* ---------- Coluna de dados ---------- */}
             <aside className="order-2 min-w-0 lg:col-span-5" aria-label="Indicadores da plataforma">
               <div
-                className="pc-elite-frame rounded-2xl border p-3 backdrop-blur-md sm:p-3.5"
+                className="pc-elite-frame rounded-2xl border p-2.5 backdrop-blur-md sm:p-3"
                 style={{
                   background: "var(--pc-home-onhero-glass)",
                   borderColor: "var(--pc-home-onhero-border)",
@@ -646,14 +646,14 @@ function HomePage() {
                   </Link>
                 </header>
 
-                <div className="grid grid-cols-3 gap-2" data-reading-dense>
+                <div className="grid grid-cols-3 gap-1.5" data-reading-dense>
                   {metrics.map(({ kind, value, label, short, Icon }) => (
                     <button
                       key={kind}
                       type="button"
                       onClick={() => setSpotlight(kind)}
                       aria-label={`${value} — ${label}. Ver detalhes.`}
-                      className="group flex min-w-0 flex-col items-center gap-0.5 rounded-xl border px-1.5 py-[clamp(0.4rem,1.2vh,0.75rem)] text-center pc-tile focus-visible:outline-none focus-visible:ring-2"
+                      className="group flex min-w-0 flex-col items-center gap-0.5 rounded-xl border px-1.5 py-[clamp(0.3rem,0.9vh,0.55rem)] text-center pc-tile focus-visible:outline-none focus-visible:ring-2"
                       style={{
                         background: "var(--pc-home-onhero-glass-soft)",
                         borderColor: "var(--pc-home-onhero-border-soft)",
@@ -661,15 +661,15 @@ function HomePage() {
                         "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
                       }}
                     >
-                      <Icon className="h-3.5 w-3.5" style={{ color: P.goldSoft }} aria-hidden />
+                      <Icon className="h-3 w-3" style={{ color: P.goldSoft }} aria-hidden />
                       <span
                         className={`${serif} tabular-nums leading-none`}
-                        style={{ color: "var(--pc-home-onhero-gold)", fontSize: "clamp(1.05rem, 2vw, 1.55rem)" }}
+                        style={{ color: "var(--pc-home-onhero-gold)", fontSize: "clamp(0.95rem, 1.6vw, 1.3rem)" }}
                       >
                         {value}
                       </span>
                       <span
-                        className="w-full text-balance break-words text-[11px] font-bold uppercase leading-[1.15] tracking-[0.06em]"
+                        className="w-full text-balance break-words text-[10.5px] font-bold uppercase leading-[1.1] tracking-[0.05em]"
                         style={{ color: "var(--pc-home-onhero-fg-70)" }}
                       >
                         {/* Rótulo completo em 2 linhas: nunca cortar palavras com reticências */}
@@ -748,8 +748,8 @@ function HomePage() {
                           <li
                             key={`sk-${i}`}
                             aria-hidden
-                            className="grid h-[clamp(48px,5.8vh,62px)] w-[clamp(48px,5.8vh,62px)] shrink-0 place-items-center overflow-hidden rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)]"
-                            style={{ borderColor: "color-mix(in oklab, #ffffff 78%, transparent)" }}
+                            className="grid shrink-0 place-items-center overflow-hidden rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)]"
+                            style={{ borderColor: "color-mix(in oklab, #ffffff 78%, transparent)", height: "clamp(42px, 4.6vh, 52px)", width: "clamp(42px, 4.6vh, 52px)" }}
                           >
                             <span
                               className="h-full w-full animate-pulse rounded-lg"
@@ -769,10 +769,12 @@ function HomePage() {
                                   : ({ to: "/estabelecimentos" } as const))}
                                 aria-label={`Ver produtos e preços de ${label}`}
 
-                                className="group relative flex h-[clamp(48px,5.8vh,62px)] w-[clamp(48px,5.8vh,62px)] flex-col items-stretch justify-between rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--pc-home-onhero-gold)_55%,white)] hover:shadow-[0_10px_22px_-8px_rgba(3,10,28,0.75)] focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2"
+                                className="group relative flex flex-col items-stretch justify-between rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--pc-home-onhero-gold)_55%,white)] hover:shadow-[0_10px_22px_-8px_rgba(3,10,28,0.75)] focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2"
                                 style={{
                                   borderColor: "color-mix(in oklab, #ffffff 78%, transparent)",
                                   ["--tw-ring-color" as string]: "var(--pc-home-onhero-gold)",
+                                  height: "clamp(42px, 4.6vh, 52px)",
+                                  width: "clamp(42px, 4.6vh, 52px)",
                                 }}
                               >
                                 <span className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg">
@@ -1038,7 +1040,7 @@ function HomePage() {
             <ul
               role="list"
               className="grid min-w-0 flex-1 gap-2"
-              style={{ gridTemplateColumns: "repeat(auto-fit, minmax(112px, 1fr))" }}
+              style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}
             >
               {trendingPopular.map((t) => {
                 const isActive = normalizeSearchText(t) === normalizeSearchText(q);
@@ -1057,7 +1059,7 @@ function HomePage() {
                       isActive ? `Termo selecionado: ${t}` : `Buscar por ${t}`
                     }
                     data-active={isActive ? "true" : undefined}
-                    className="pc-trend-chip group relative flex w-full items-center gap-1.5 overflow-hidden rounded-full border px-2.5 py-1.5 text-[12px] font-semibold capitalize transition-all duration-200 hover:-translate-y-[1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
+                    className="pc-trend-chip group relative flex w-full items-center gap-1.5 overflow-hidden rounded-xl border px-2.5 py-1.5 text-left text-[12px] leading-[1.2] font-semibold capitalize transition-all duration-200 hover:-translate-y-[1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
                     style={{
                       background: isActive
                         ? "color-mix(in oklab, var(--pc-home-onhero-gold) 26%, var(--pc-home-onhero-glass-soft))"
@@ -1089,7 +1091,7 @@ function HomePage() {
                       }
                       style={{ color: "var(--pc-home-onhero-gold)" }}
                     />
-                    <span className="relative min-w-0 flex-1 truncate text-left">{t}</span>
+                    <span className="relative min-w-0 flex-1 text-left line-clamp-2 break-words">{t}</span>
                     {meta && meta.count > 0 ? (
                       <span
                         className="relative shrink-0 rounded-full px-1.5 py-[1px] text-[11px] font-bold tabular-nums"
