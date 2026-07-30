@@ -1,4 +1,5 @@
 import * as React from "react";
+import { createPortal } from "react-dom";
 import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Search, ArrowRight, TrendingDown, Loader2, CornerDownLeft } from "lucide-react";
@@ -24,15 +25,22 @@ type Props = {
   /** Quando true, o dropdown fica visível (input em foco). */
   open: boolean;
   onClose: () => void;
+  /**
+   * Elemento âncora (a moldura do campo de busca). O painel é renderizado em
+   * portal no `body` porque a homepage usa containers com `overflow-hidden`
+   * que cortavam o dropdown posicionado de forma absoluta.
+   */
+  anchorRef: React.RefObject<HTMLElement | null>;
 };
 
 const BRL = (n: number) =>
   n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
 /** Máximo de sugestões — lista curta cabe na tela sem cobrir o conteúdo. */
-const MAX_ITEMS = 5;
+const MAX_ITEMS = 6;
 const LISTBOX_ID = "home-search-suggestions";
 const optionId = (i: number) => `${LISTBOX_ID}-opt-${i}`;
+
 
 /**
  * Dropdown de autocomplete com preços — aparece embaixo do campo de busca
