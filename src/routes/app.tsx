@@ -63,13 +63,22 @@ function AppHomeContent() {
 
   const [selectedStore, setSelectedStore] = useState<PublicStore | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  // Guarda o gatilho para devolver o foco ao fechar o drawer (WCAG 2.4.3).
+  const drawerTriggerRef = useRef<HTMLElement | null>(null);
 
   const openStoreByName = (name: string) => {
     const store = storesByName.get(name.trim().toLowerCase());
     if (!store) return;
+    drawerTriggerRef.current = document.activeElement as HTMLElement | null;
     setSelectedStore(store);
     setDrawerOpen(true);
   };
+
+  const handleDrawerOpenChange = (open: boolean) => {
+    setDrawerOpen(open);
+    if (!open) drawerTriggerRef.current?.focus?.();
+  };
+
 
   const firstName =
     (accountQuery.data?.fullName ?? "").split(" ")[0] || "cliente";
