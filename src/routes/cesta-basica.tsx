@@ -1,3 +1,9 @@
+import {
+  ComparisonSkeleton,
+  PriceListSkeleton,
+  ListRowsSkeleton,
+  IllustratedEmptyState,
+} from "@/components/feedback";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -619,9 +625,7 @@ function CompareMode({
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-8 text-sm text-muted-foreground">
-        <Loader2 className="h-4 w-4 animate-spin" /> Carregando comparação…
-      </div>
+      <ComparisonSkeleton columns={3} rows={6} />
     );
   }
   if (!data || data.stores.length === 0) {
@@ -2743,9 +2747,7 @@ function ManualMode({
 
   if (loading || !data) {
     return (
-      <div className="flex items-center justify-center gap-2 rounded-2xl border border-border bg-surface p-8 text-sm text-muted-foreground">
-        <Loader2 className="h-4 w-4 animate-spin" /> Carregando essenciais…
-      </div>
+      <PriceListSkeleton rows={7} />
     );
   }
 
@@ -3342,8 +3344,8 @@ function EssentialPricesDialog({
         </div>
         <div className="max-h-[70vh] overflow-y-auto">
           {loading && (
-            <div className="flex items-center justify-center gap-2 p-8 text-sm text-muted-foreground">
-              <Loader2 className="h-4 w-4 animate-spin" /> Carregando preços…
+            <div className="p-3">
+              <PriceListSkeleton rows={5} />
             </div>
           )}
           {!loading && result && result.rows.length === 0 && (
@@ -3571,11 +3573,15 @@ function SavedBasketsPanel() {
         )}
       </div>
       {isLoading ? (
-        <p className="mt-3 text-xs text-muted-foreground">Carregando…</p>
+        <ListRowsSkeleton rows={3} className="mt-3" />
       ) : (data?.length ?? 0) === 0 ? (
-        <p className="mt-3 text-xs text-muted-foreground">
-          Você ainda não salvou nenhuma cesta. Use "Salvar com nome" no modo de comparação, orçamento ou seleção manual.
-        </p>
+        <IllustratedEmptyState
+          kind="basket"
+          compact
+          className="mt-3"
+          title="Nenhuma cesta salva ainda"
+          message={'Monte sua comparação e use "Salvar com nome" para guardar a cesta e acompanhar a economia.'}
+        />
       ) : (
         <ul className="mt-3 divide-y divide-border/60">
           {data!.map((b) => {
