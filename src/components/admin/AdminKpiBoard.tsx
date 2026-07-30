@@ -262,7 +262,7 @@ export function AdminKpiBoard() {
                     [
                       { key: "name", header: "Estabelecimento", accessor: (r) => r.name },
                       { key: "neighborhood", header: "Bairro", accessor: (r) => r.neighborhood ?? "—" },
-                      { key: "prices", header: "Preços", accessor: (r) => r.prices },
+                      { key: "prices", header: "Registros de preço", accessor: (r) => r.prices },
                       { key: "share", header: "Participação %", accessor: (r) => r.share },
                       { key: "products", header: "Produtos", accessor: (r) => r.products },
                       { key: "avgPrice", header: "Preço médio", accessor: (r) => r.avgPrice.toFixed(2) },

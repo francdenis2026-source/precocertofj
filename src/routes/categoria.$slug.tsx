@@ -390,7 +390,7 @@ function CategoryPage() {
               <Stat label="Lojas" value={data?.totals.stores ?? 0} align="left" />
             </div>
             <div className="px-3 py-2">
-              <Stat label="Registros" value={data?.totals.prices ?? 0} align="left" hint="Preços coletados e conferidos nesta categoria" />
+              <Stat label="Registros de preço" value={data?.totals.prices ?? 0} align="left" hint="Preços coletados e conferidos nesta categoria" />
             </div>
             <div className="px-3 py-2">
               <Stat

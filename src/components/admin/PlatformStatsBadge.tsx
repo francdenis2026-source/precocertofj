@@ -27,7 +27,7 @@ export function PlatformStatsBadge() {
       />
       <StatChip
         icon={<ScanLine className="h-3.5 w-3.5" />}
-        label="Scans"
+        label="Registros de preço"
         value={s ? fmt(s.scanCount) : "…"}
       />
       <StatChip

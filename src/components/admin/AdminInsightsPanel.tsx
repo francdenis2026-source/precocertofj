@@ -424,7 +424,7 @@ export function AdminInsightsPanel() {
                 { key: "day", header: "Dia", accessor: (r) => r.day },
                 { key: "avg", header: "Média menor preço", accessor: (r) => r.minPriceAvg },
                 { key: "min", header: "Menor preço", accessor: (r) => r.minPrice },
-                { key: "samples", header: "Registros", accessor: (r) => r.samples },
+                { key: "samples", header: "Registros de preço", accessor: (r) => r.samples },
               ],
               data.trend,
             )
@@ -456,7 +456,7 @@ export function AdminInsightsPanel() {
                   itemStyle={tooltipItemStyle}
                   cursor={{ stroke: chartTheme.accent, strokeWidth: 1, strokeDasharray: "2 3" }}
                   labelFormatter={(l) => `Dia ${shortDay(String(l))}`}
-                  formatter={(v: number, n) => [n === "samples" ? String(v) : brl(Number(v)), n === "minPriceAvg" ? "Média" : n === "minPrice" ? "Mínimo" : "Registros"]}
+                  formatter={(v: number, n) => [n === "samples" ? String(v) : brl(Number(v)), n === "minPriceAvg" ? "Média" : n === "minPrice" ? "Mínimo" : "Registros de preço"]}
                 />
                 <Legend wrapperStyle={legendStyle} iconType="circle" iconSize={7} formatter={(n) => (n === "minPriceAvg" ? "Média" : "Mínimo")} />
                 <Area type="monotone" dataKey="minPriceAvg" stroke={chartTheme.primary} strokeWidth={metrics.strokeWidth} fill="url(#pcTrend)" />
@@ -478,7 +478,7 @@ export function AdminInsightsPanel() {
                 { key: "label", header: "Categoria", accessor: (r) => r.label },
                 { key: "products", header: "Produtos", accessor: (r) => r.products },
                 { key: "stores", header: "Lojas", accessor: (r) => r.stores },
-                { key: "prices", header: "Preços", accessor: (r) => r.prices },
+                { key: "prices", header: "Registros de preço", accessor: (r) => r.prices },
                 { key: "share", header: "% do catálogo", accessor: (r) => r.share },
               ],
               data.coverage,

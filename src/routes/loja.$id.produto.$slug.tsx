@@ -261,7 +261,7 @@ function ProductDetailPage() {
         {/* Meta */}
         <section className="mt-4 grid grid-cols-2 gap-2">
           <MetaBox label="Tamanho" value={product.unit ?? "—"} />
-          <MetaBox label="Registros" value={String(product.historyCount)} />
+          <MetaBox label="Registros de preço" value={String(product.historyCount)} />
           {product.barcode && <MetaBox label="Código" value={product.barcode} />}
           <MetaBox label="Atualizado" value={fmtDate(product.lastDate)} />
         </section>
