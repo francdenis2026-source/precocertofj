@@ -3701,14 +3701,17 @@ html.dark :is(.hover\:text-accent-strong):not(.gold-on-dark):hover {
   color: var(--accent-ink);
 }
 
-/* Dourado sobre fundo navy/escuro permanece vivo mesmo no modo claro. */
-html:not(.dark) :is(.bg-brand-navy, .bg-brand-navy-2, [data-surface="navy"]) :is(
+/* Dourado sobre fundo navy/escuro permanece vivo mesmo no modo claro.
+   Usa o gold claro (#f2d689 ≈ 11.9:1 sobre navy) em vez do gold médio,
+   que sobre navy fica abaixo de AA. */
+:is(.bg-brand-navy, .bg-brand-navy-2, [data-surface="navy"]) :is(
   .text-brand,
   .text-brand-gold,
+  .text-gold-ink,
   .text-brand-gold-soft,
   .text-accent-strong
 ) {
-  color: var(--pc-home-gold);
+  color: var(--pc-eyebrow-on-navy);
 }
 
 
