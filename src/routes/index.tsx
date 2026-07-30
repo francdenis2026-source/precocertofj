@@ -781,7 +781,7 @@ function HomePage() {
             </nav>
 
             {/* Pilares + Explorar */}
-            <div className="grid min-w-0 grid-cols-4 gap-2 sm:gap-2.5 lg:col-span-4">
+            <div className="grid min-w-0 grid-cols-4 gap-2 sm:gap-2.5 lg:col-span-4 lg:grid-cols-2">
               <PillarLink to="/melhores-precos" Icon={LineChart} label="Histórico" />
               <PillarLink to="/colaborar" Icon={Users} label="Colaborar" />
               <PillarLink to="/planos" Icon={Sparkles} label="Plus" emphasis />
