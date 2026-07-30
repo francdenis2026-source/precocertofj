@@ -379,7 +379,8 @@ export function hortifrutiSubgroup(
   // Ordem importa: "batata doce" é tubérculo antes de cair em legumes.
   if (has(HF_TUBERCULOS)) return "tuberculos";
   if (has(HF_TEMPEROS)) return "temperos";
-  if (has(HF_OUTROS) && /cogumelo|champignon/.test(text)) return "cogumelos";
+  if (/cogumelo|champignon/.test(text)) return "cogumelos";
+  if (has(HF_OUTROS)) return "legumes";
   if (has(HF_VERDURAS)) return "verduras";
   if (has(HF_LEGUMES)) return "legumes";
   if (has(HF_FRUTAS)) return "frutas";
