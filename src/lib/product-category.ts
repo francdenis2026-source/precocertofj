@@ -15,24 +15,32 @@ import { normalizeSearchText } from "@/lib/text-normalize";
 
 /** Slugs válidos em `product_catalog.category`. */
 export const PRODUCT_CATEGORIES = [
-  "medicamentos",
-  "infantil",
+  "pet",
+  "bazar",
   "papelaria",
+  "infantil",
+  "suplementos",
+  "medicamentos",
+  "bucal",
+  "cabelo",
   "limpeza",
+  "papel_descartaveis",
   "higiene",
+  "cuidados_pele",
   "perfumaria",
+  "snacks",
   "biscoitos",
+  "padaria",
+  "prontos",
   "carnes",
   "laticinios",
-  "padaria",
   "doces",
   "bebidas",
   "bebidas_em_po",
   "congelados",
+  "condimentos",
   "hortifruti",
   "mercearia",
-  "prontos",
-  "condimentos",
   "outros",
 ] as const;
 
@@ -40,12 +48,16 @@ export type ProductCategory = (typeof PRODUCT_CATEGORIES)[number];
 
 /** Rótulos exibidos na interface para cada slug canônico. */
 export const CATEGORY_LABELS: Record<string, string> = {
+  bazar: "Bazar & utilidades",
   bebidas: "Bebidas",
   bebidas_em_po: "Bebidas em pó",
   biscoitos: "Biscoitos",
+  bucal: "Higiene bucal",
+  cabelo: "Cabelo",
   carnes: "Carnes",
   condimentos: "Condimentos",
   congelados: "Congelados",
+  cuidados_pele: "Cuidados com a pele",
   doces: "Doces",
   higiene: "Higiene",
   hortifruti: "Hortifruti",
@@ -56,10 +68,15 @@ export const CATEGORY_LABELS: Record<string, string> = {
   mercearia: "Mercearia",
   outros: "Outros",
   padaria: "Padaria",
+  papel_descartaveis: "Papel & descartáveis",
   papelaria: "Papelaria",
   perfumaria: "Perfumaria",
+  pet: "Pet",
   prontos: "Prontos & Enlatados",
+  snacks: "Salgadinhos",
+  suplementos: "Suplementos",
 };
+
 
 /** Rótulo amigável de um slug (aceita valores desconhecidos sem quebrar). */
 export function categoryLabel(slug: string | null | undefined): string {
