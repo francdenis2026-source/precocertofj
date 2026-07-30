@@ -43,6 +43,7 @@ import {
 } from "@/lib/coverage.functions";
 import { CoverageErrorBanner } from "@/components/admin/CoverageDiagnosticsPanel";
 import { bulkInsertScans } from "@/lib/bulk-insert.functions";
+import { Price } from "@/components/ds/Price";
 
 export const Route = createFileRoute("/admin_/cobertura/$id")({
   ssr: false,
@@ -420,9 +421,15 @@ function MissingTable({
                 <Badge variant="outline" className="text-xs">{r.category ?? "—"}</Badge>
               </TableCell>
               <TableCell className="text-right tabular-nums">{r.stores_count}</TableCell>
-              <TableCell className="text-right tabular-nums">{brl(r.min_price)}</TableCell>
-              <TableCell className="text-right tabular-nums">{brl(r.avg_price)}</TableCell>
-              <TableCell className="text-right tabular-nums">{brl(r.max_price)}</TableCell>
+              <TableCell className="text-right">
+                <Price value={r.min_price} size="sm" tone="best" className="justify-end" />
+              </TableCell>
+              <TableCell className="text-right">
+                <Price value={r.avg_price} size="sm" className="justify-end" />
+              </TableCell>
+              <TableCell className="text-right">
+                <Price value={r.max_price} size="sm" tone="muted" className="justify-end" />
+              </TableCell>
               <TableCell className="text-right">
                 <Button size="sm" onClick={() => onRegister(r)}>
                   <Plus className="mr-1.5 h-3.5 w-3.5" />
@@ -462,16 +469,20 @@ function PresentTable({ rows }: { rows: PresentRow[] }) {
                 <TableCell>
                   <Badge variant="outline" className="text-xs">{r.category ?? "—"}</Badge>
                 </TableCell>
-                <TableCell className="text-right tabular-nums">
-                  {brl(local)}
+                <TableCell className="text-right">
+                  <Price value={local} size="sm" className="justify-end" />
                   {diff != null && Math.abs(diff) > 0.5 && (
                     <span className={`ml-2 text-xs ${diff > 0 ? "text-destructive" : "text-emerald-600"}`}>
                       {diff > 0 ? "+" : ""}{diff.toFixed(1)}%
                     </span>
                   )}
                 </TableCell>
-                <TableCell className="text-right tabular-nums">{brl(min)}</TableCell>
-                <TableCell className="text-right tabular-nums">{brl(r.avg_price)}</TableCell>
+                <TableCell className="text-right">
+                  <Price value={min} size="sm" tone="best" className="justify-end" />
+                </TableCell>
+                <TableCell className="text-right">
+                  <Price value={r.avg_price} size="sm" className="justify-end" />
+                </TableCell>
                 <TableCell className="text-xs text-muted-foreground">
                   {formatShortDate(r.last_seen_at)}
                 </TableCell>
@@ -585,7 +596,8 @@ function RegisterDialog({
               <div className="mt-2 rounded-md border bg-muted/40 p-2 text-xs text-foreground">
                 <span className="font-medium">{row.display_name}</span>
                 <span className="ml-2 text-muted-foreground">
-                  · sugestão: {brl(row.avg_price)} (mín {brl(row.min_price)})
+                  · sugestão: <Price value={row.avg_price} size="xs" /> (mín{" "}
+                  <Price value={row.min_price} size="xs" tone="best" />)
                 </span>
               </div>
             )}

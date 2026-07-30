@@ -22,6 +22,7 @@ import { getCoverageOverview, getMissingProducts, getPresentProducts, type Estab
 import { CoverageDiagnosticsPanel, CoverageErrorBanner } from "@/components/admin/CoverageDiagnosticsPanel";
 import { RefreshBar as SharedRefreshBar } from "@/components/admin/RefreshBar";
 import { useWindowFocusRefresh } from "@/hooks/useWindowFocusRefresh";
+import { Price } from "@/components/ds/Price";
 
 function formatQueryStatus(query: { isFetching: boolean; error: unknown; dataUpdatedAt: number; errorUpdatedAt: number }) {
   if (query.isFetching) return { label: "Consultando…", tone: "muted" as const };
@@ -470,9 +471,15 @@ function MissingTable({ rows }: { rows: Array<{ product_key: string; display_nam
               <TableCell className="font-medium">{r.display_name}</TableCell>
               <TableCell><Badge variant="outline" className="text-xs">{r.category ?? "—"}</Badge></TableCell>
               <TableCell className="text-right tabular-nums">{r.stores_count}</TableCell>
-              <TableCell className="text-right tabular-nums">{fmt(r.min_price)}</TableCell>
-              <TableCell className="text-right tabular-nums">{fmt(r.avg_price)}</TableCell>
-              <TableCell className="text-right tabular-nums">{fmt(r.max_price)}</TableCell>
+              <TableCell className="text-right">
+                <Price value={r.min_price} size="sm" tone="best" className="justify-end" />
+              </TableCell>
+              <TableCell className="text-right">
+                <Price value={r.avg_price} size="sm" className="justify-end" />
+              </TableCell>
+              <TableCell className="text-right">
+                <Price value={r.max_price} size="sm" tone="muted" className="justify-end" />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -507,16 +514,20 @@ function PresentTable({ rows }: { rows: Array<{ product_key: string; display_nam
               <TableRow key={r.product_key}>
                 <TableCell className="font-medium">{r.display_name}</TableCell>
                 <TableCell><Badge variant="outline" className="text-xs">{r.category ?? "—"}</Badge></TableCell>
-                <TableCell className="text-right tabular-nums">
-                  {fmt(local)}
+                <TableCell className="text-right">
+                  <Price value={local} size="sm" className="justify-end" />
                   {diff != null && Math.abs(diff) > 0.5 && (
                     <span className={`ml-2 text-xs ${diff > 0 ? "text-destructive" : "text-emerald-600"}`}>
                       {diff > 0 ? "+" : ""}{diff.toFixed(1)}%
                     </span>
                   )}
                 </TableCell>
-                <TableCell className="text-right tabular-nums">{fmt(min)}</TableCell>
-                <TableCell className="text-right tabular-nums">{fmt(r.avg_price)}</TableCell>
+                <TableCell className="text-right">
+                  <Price value={min} size="sm" tone="best" className="justify-end" />
+                </TableCell>
+                <TableCell className="text-right">
+                  <Price value={r.avg_price} size="sm" className="justify-end" />
+                </TableCell>
                 <TableCell className="text-xs text-muted-foreground">
                   {formatShortDate(r.last_seen_at)}
                 </TableCell>
