@@ -83,22 +83,57 @@ const toNum = (v: unknown): number | null => {
 
 // ---------- helpers ----------
 
+// Ordem importa: as regras mais específicas (limpeza/higiene) vêm antes das
+// genéricas — "Água Sanitária" jamais deve cair em "Bebidas" por causa de "água".
 const CATEGORY_RULES: { key: string; label: string; kws: RegExp }[] = [
-  { key: "bebidas", label: "Bebidas & Café", kws: /\b(caf[eé]|ch[aá]|nescau|achocolatado|suco|refrigerante|cerveja|vinho|[aá]gua)\b/i },
-  { key: "laticinios", label: "Laticínios", kws: /\b(manteiga|queijo|leite|iogurte|requeij[aã]o|creme de leite|nata)\b/i },
-  { key: "carnes", label: "Carnes & Frios", kws: /\b(salsicha|fiambre|almondega|linguic|presunto|mortadela|salame|carne|frango|peixe|bacon)\b/i },
-  { key: "mercearia", label: "Mercearia", kws: /\b(arroz|feij[aã]o|farinha|macarr[aã]o|espaguete|penne|[oó]leo|a[cç][uú]car|sal|fub[aá]|flocao|floc[aã]o|amido|sagu|mistura bolo|maisena)\b/i },
-  { key: "prontos", label: "Prontos & Enlatados", kws: /\b(sop[aã]o|feijoada|nissin|cup noodles|molho|extrato|conserva|azeitona|ervilha|milho|sardinha|at[uú]m)\b/i },
-  { key: "condimentos", label: "Condimentos", kws: /\b(ketchup|maionese|mostarda|azeite|vinagre|molho|tempero|shoyu)\b/i },
-  { key: "padaria", label: "Padaria & Doces", kws: /\b(p[aã]o|biscoito|bolacha|bolo|torta|chocolate|doce|geleia|mel)\b/i },
-  { key: "limpeza", label: "Limpeza", kws: /\b(sab[aã]o|detergente|amaciante|desinfetante|[aá]gua sanit|multiuso|esponja)\b/i },
+  { key: "limpeza", label: "Limpeza", kws: /\b(sabao|detergente|amaciante|desinfetante|agua sanit|multiuso|esponja|lava roupas|limpador|odorizador|saco de lixo|vassoura)\b/i },
   { key: "higiene", label: "Higiene", kws: /\b(shampoo|condicionador|sabonete|creme dental|pasta de dente|papel higi|absorvente|fralda|desodorante)\b/i },
+  { key: "laticinios", label: "Laticínios", kws: /\b(manteiga|queijo|leite|iogurte|requeijao|creme de leite|nata)\b/i },
+  { key: "carnes", label: "Carnes & Frios", kws: /\b(salsicha|fiambre|almondega|linguic|presunto|mortadela|salame|carne|frango|peixe|bacon)\b/i },
+  { key: "mercearia", label: "Mercearia", kws: /\b(arroz|feijao|farinha|macarrao|espaguete|penne|oleo|acucar|sal|fuba|flocao|amido|sagu|mistura bolo|maisena)\b/i },
+  { key: "prontos", label: "Prontos & Enlatados", kws: /\b(sopao|feijoada|nissin|cup noodles|extrato|conserva|azeitona|ervilha|milho|sardinha|atum)\b/i },
+  { key: "condimentos", label: "Condimentos", kws: /\b(ketchup|maionese|mostarda|azeite|vinagre|molho|tempero|shoyu)\b/i },
+  { key: "padaria", label: "Padaria & Doces", kws: /\b(pao|biscoito|bolacha|bolo|torta|chocolate|doce|geleia|mel)\b/i },
+  { key: "bebidas", label: "Bebidas & Café", kws: /\b(cafe|cha|nescau|achocolatado|suco|refrigerante|cerveja|vinho|agua)\b/i },
 ];
 
+
+/** Rótulos das categorias canônicas do catálogo (product_catalog.category). */
+const CATALOG_CATEGORY_LABELS: Record<string, string> = {
+  bebidas: "Bebidas",
+  bebidas_em_po: "Bebidas em pó",
+  biscoitos: "Biscoitos",
+  carnes: "Carnes",
+  condimentos: "Condimentos",
+  congelados: "Congelados",
+  doces: "Doces",
+  higiene: "Higiene",
+  hortifruti: "Hortifruti",
+  infantil: "Infantil",
+  laticinios: "Laticínios",
+  limpeza: "Limpeza",
+  medicamentos: "Medicamentos",
+  mercearia: "Mercearia",
+  outros: "Outros",
+  padaria: "Padaria",
+  papelaria: "Papelaria",
+  perfumaria: "Perfumaria",
+  prontos: "Prontos & Enlatados",
+};
+
+/**
+ * Remove acentos antes de aplicar as regras.
+ *
+ * As regexes usam `\b`, que em JS só considera [A-Za-z0-9_]. Nomes iniciados
+ * por letra acentuada ("Água Sanitária Ypê 1L") nunca casavam e caíam em
+ * "Outros". Normalizar o texto elimina essa classe inteira de falso-negativo.
+ */
 function categorize(name: string): { key: string; label: string } {
-  for (const r of CATEGORY_RULES) if (r.kws.test(name)) return { key: r.key, label: r.label };
+  const plain = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  for (const r of CATEGORY_RULES) if (r.kws.test(plain)) return { key: r.key, label: r.label };
   return { key: "outros", label: "Outros" };
 }
+
 
 const SIZE_RE = /\b(\d+(?:[.,]\d+)?)\s*(kg|g|mg|l|ml|un|unidades?|cx|caixa|lata|pct|pacote|garrafa)\b/i;
 
@@ -153,32 +188,83 @@ function isReceiptImage(url: string | null | undefined): boolean {
   return RECEIPT_URL_RE.test(url);
 }
 
-type CatalogImageRow = { barcode: string | null; normalized_name: string | null; image_url: string | null };
-type ImageResolver = (barcode: string | null, baseName: string) => string | null;
+type CatalogRow = {
+  barcode: string | null;
+  normalized_name: string | null;
+  image_url: string | null;
+  brand: string | null;
+  category: string | null;
+};
+
+/** Metadados canônicos do catálogo aplicados ao produto exibido na loja. */
+export type CatalogMeta = {
+  imageUrl: string | null;
+  brand: string | null;
+  /** Chave canônica (product_catalog.category), quando conhecida. */
+  categoryKey: string | null;
+};
+
+type ImageResolver = (barcode: string | null, baseName: string) => CatalogMeta | null;
+
+const EMPTY_META: CatalogMeta = { imageUrl: null, brand: null, categoryKey: null };
 
 async function loadCatalogImageResolver(): Promise<ImageResolver> {
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const table = supabaseAdmin.from("product_catalog" as never) as unknown as {
-    select: (s: string) => {
-      not: (c: string, op: string, v: unknown) => Promise<{ data: CatalogImageRow[] | null }>;
-    };
+    select: (s: string) => Promise<{ data: CatalogRow[] | null }>;
   };
-  const { data } = await table.select("barcode, normalized_name, image_url").not("image_url", "is", null);
-  const byBarcode = new Map<string, string>();
-  const byName = new Map<string, string>();
+  const { data } = await table.select("barcode, normalized_name, image_url, brand, category");
+
+  const byBarcode = new Map<string, CatalogMeta>();
+  const byName = new Map<string, CatalogMeta>();
+
+  const toMeta = (r: CatalogRow): CatalogMeta => ({
+    // Fotos de nota fiscal nunca servem como imagem de produto.
+    imageUrl: r.image_url && !isReceiptImage(r.image_url) ? r.image_url : null,
+    brand: r.brand?.trim() || null,
+    categoryKey: r.category?.trim() || null,
+  });
+  // Preferimos o registro mais completo quando há colisão de nome.
+  const score = (m: CatalogMeta) =>
+    (m.imageUrl ? 4 : 0) + (m.brand ? 2 : 0) + (m.categoryKey ? 1 : 0);
+  const put = (map: Map<string, CatalogMeta>, key: string, meta: CatalogMeta) => {
+    const cur = map.get(key);
+    if (!cur || score(meta) > score(cur)) map.set(key, meta);
+  };
+
+  // Chave sem acento e sem pontuação: o catálogo grava "AGUA SANITARIA YPE 1L"
+  // e o scan traz "Água Sanitária Ypê 1L" — sem normalizar, nunca casavam.
+  const nameKey = (s: string) =>
+    s
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .toUpperCase()
+      .replace(/[^A-Z0-9]+/g, " ")
+      .trim();
+
   for (const r of data ?? []) {
-    if (!r.image_url || isReceiptImage(r.image_url)) continue;
-    if (r.barcode) byBarcode.set(r.barcode, r.image_url);
-    if (r.normalized_name) byName.set(r.normalized_name.toUpperCase(), r.image_url);
+    const meta = toMeta(r);
+    if (score(meta) === 0) continue;
+    if (r.barcode) put(byBarcode, r.barcode, meta);
+    if (r.normalized_name) {
+      const full = nameKey(r.normalized_name);
+      if (full) put(byName, full, meta);
+      // Também indexa sem a gramagem para casar "Detergente Ypê" com "... 500ml".
+      const base = nameKey(stripSize(r.normalized_name));
+      if (base && base !== full) put(byName, base, meta);
+    }
   }
+
   return (barcode, baseName) => {
     if (barcode) {
       const hit = byBarcode.get(barcode);
       if (hit) return hit;
     }
-    return byName.get(stripSize(baseName).toUpperCase()) ?? null;
+    return byName.get(nameKey(baseName)) ?? byName.get(nameKey(stripSize(baseName))) ?? null;
   };
+
 }
+
 
 // Aggregate one product bucket
 function buildProduct(
@@ -199,7 +285,6 @@ function buildProduct(
   const minPrice = Math.min(...nums);
   const maxPrice = Math.max(...nums);
   const avgPrice = nums.reduce((a, b) => a + b, 0) / nums.length;
-  const cat = categorize(productName);
   const parsed = parseSize(latestRow.unit, toNum(latestRow.quantity), productName);
   let pricePerUnit: number | null = null;
   let unitLabel: string | null = null;
@@ -207,13 +292,17 @@ function buildProduct(
     pricePerUnit = latestRow.price_captured != null ? toNum(latestRow.price_captured)! / parsed.normalized.value : null;
     unitLabel = parsed.normalized.base === "kg" ? "R$/kg" : parsed.normalized.base === "l" ? "R$/L" : "R$/un";
   }
-  const catalogImage = resolveImage(latestRow.barcode, productName);
+  // Catálogo é a fonte canônica de marca/categoria; regex local é só fallback.
+  const meta = resolveImage(latestRow.barcode, productName) ?? EMPTY_META;
+  const category = meta.categoryKey
+    ? (CATALOG_CATEGORY_LABELS[meta.categoryKey] ?? meta.categoryKey.replace(/_/g, " "))
+    : categorize(productName).label;
   return {
     slug: slugify(productName),
     productName,
     baseName: stripSize(productName),
-    brand: null,
-    category: cat.label,
+    brand: meta.brand,
+    category,
     price: toNum(latestRow.price_captured)!,
     minPrice,
     maxPrice,
@@ -224,7 +313,8 @@ function buildProduct(
     quantity: parsed.qty,
     lastDate: latestRow.created_at,
     historyCount: prices.length,
-    imageUrl: catalogImage,
+    imageUrl: meta.imageUrl,
+
     barcode: latestRow.barcode,
   };
 }
@@ -898,11 +988,14 @@ export const getPublicStoreCatalog = createServerFn({ method: "GET" })
 
     const catCounts = new Map<string, { label: string; count: number }>();
     for (const p of products) {
-      const c = categorize(p.productName);
-      const cur = catCounts.get(c.key) ?? { label: c.label, count: 0 };
+      // Usa a categoria já resolvida no produto (catálogo > regex) para que os
+      // filtros da loja batam exatamente com o rótulo exibido no card.
+      const key = p.category;
+      const cur = catCounts.get(key) ?? { label: p.category, count: 0 };
       cur.count += 1;
-      catCounts.set(c.key, cur);
+      catCounts.set(key, cur);
     }
+
     const categories = Array.from(catCounts.entries())
       .map(([key, v]) => ({ key, label: v.label, count: v.count }))
       .sort((a, b) => b.count - a.count);
