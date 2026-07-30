@@ -621,9 +621,11 @@ function EstablishmentsPage() {
             aria-activedescendant={selectedId ? `mercado-opt-${selectedId}` : undefined}
             onKeyDown={onListKeyDown}
             onScroll={(ev) => {
+              const el = ev.currentTarget;
+              // Persiste a posição para restaurar ao voltar/atualizar filtros.
+              persistScroll(el);
               // Carregamento progressivo dentro do trilho (sem rolar a página).
               if (!hasMore) return;
-              const el = ev.currentTarget;
               if (el.scrollTop + el.clientHeight >= el.scrollHeight - 120) {
                 updateSearch({ pagina: pagesLoaded + 1 });
               }
