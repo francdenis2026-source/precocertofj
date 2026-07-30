@@ -126,7 +126,7 @@ function ItemCard({ item, index }: { item: Item; index: number }) {
           aria-hidden
           className={cn(
             tc.num,
-            "mt-px grid h-4 w-4 shrink-0 place-items-center rounded-md border border-brand-gold/30 bg-brand-gold/10 text-[10px] font-bold leading-none text-[var(--pc-gold-ink)]",
+            "mt-px grid h-4 w-4 shrink-0 place-items-center rounded-md border border-brand-gold/30 bg-brand-gold/10 text-[11px] font-bold leading-none text-[var(--pc-gold-ink)]",
           )}
         >
           {String(index + 1).padStart(2, "0")}

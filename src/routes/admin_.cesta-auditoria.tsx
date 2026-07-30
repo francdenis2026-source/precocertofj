@@ -121,7 +121,7 @@ function BasketAuditPage() {
               <ul className="divide-y divide-border/60">
                 {query.data.map((r) => (
                   <li key={r.id} className="flex flex-wrap items-start gap-3 p-3 hover:bg-muted/30">
-                    <Badge variant="outline" className={cn("shrink-0 text-[10px] uppercase", toneClass(actionTone(r.action)))}>
+                    <Badge variant="outline" className={cn("shrink-0 text-[11px] uppercase", toneClass(actionTone(r.action)))}>
                       {actionLabel(r.action)}
                     </Badge>
                     <div className="min-w-0 flex-1">
@@ -139,10 +139,10 @@ function BasketAuditPage() {
                             Ver diff (before/after)
                           </summary>
                           <div className="mt-1 grid gap-2 sm:grid-cols-2">
-                            <pre className="max-h-40 overflow-auto rounded border border-border/50 bg-muted/40 p-2 text-[10px]">
+                            <pre className="max-h-40 overflow-auto rounded border border-border/50 bg-muted/40 p-2 text-[11px]">
                               {JSON.stringify(r.before ?? null, null, 2)}
                             </pre>
-                            <pre className="max-h-40 overflow-auto rounded border border-border/50 bg-muted/40 p-2 text-[10px]">
+                            <pre className="max-h-40 overflow-auto rounded border border-border/50 bg-muted/40 p-2 text-[11px]">
                               {JSON.stringify(r.after ?? null, null, 2)}
                             </pre>
                           </div>

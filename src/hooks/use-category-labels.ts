@@ -24,3 +24,23 @@ export function useCategoryLabelResolver(): (slug: string) => string {
     [data],
   );
 }
+
+/**
+ * Variante para taxonomias que possuem rótulo local próprio (ex.: nichos da
+ * home e de `/categoria/:slug`). O override do admin tem prioridade; sem
+ * override, mantém o rótulo local informado (nunca o canônico de produto).
+ */
+export function useCategoryLabelWithFallback(): (
+  slug: string,
+  fallback: string,
+) => string {
+  const { data } = useCategoryIconOverrides();
+  return useCallback(
+    (slug: string, fallback: string) => {
+      const custom = data?.get(slug)?.label;
+      if (typeof custom === "string" && custom.trim()) return custom.trim();
+      return fallback;
+    },
+    [data],
+  );
+}

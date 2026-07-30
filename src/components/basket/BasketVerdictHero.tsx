@@ -71,7 +71,7 @@ export function BasketVerdictHero({ data, loading, eligibleCoverage = 0.6, class
         <Trophy className="h-3.5 w-3.5 text-[color:var(--pc-accent-gold,#c9a24a)]" />
         Veredito da cesta
         {set ? (
-          <span className="ml-auto rounded-full border border-border px-2 py-0.5 text-[10px] font-normal normal-case tracking-normal text-muted-foreground">
+          <span className="ml-auto rounded-full border border-border px-2 py-0.5 text-[11px] font-normal normal-case tracking-normal text-muted-foreground">
             Conjunto ativo · v{set.version} · {set.label}
           </span>
         ) : null}

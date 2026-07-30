@@ -124,7 +124,10 @@ const CATEGORIES = [
   { key: "postos", label: "Postos", full: "Postos", Icon: Fuel },
 ] as const;
 
+import { useCategoryLabelWithFallback } from "@/hooks/use-category-labels";
+
 function HomePage() {
+  const catLabel = useCategoryLabelWithFallback();
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const { user, loading: sessionLoading } = useSession();
@@ -335,13 +338,13 @@ function HomePage() {
                 <span className="inline-flex items-center gap-1 normal-case tracking-normal" style={{ color: "var(--pc-home-onhero-fg)" }}>
                   <ShieldCheck className="h-3 w-3" aria-hidden />
                   <strong className="pc-num font-semibold">{stats?.markets ?? "—"}</strong>
-                  <span className="text-[10px] opacity-80">mercados</span>
+                  <span className="text-[11px] opacity-80">mercados</span>
                 </span>
                 <span aria-hidden style={{ color: `color-mix(in oklab, ${P.gold} 50%, transparent)` }}>·</span>
                 <span className="inline-flex items-center gap-1 normal-case tracking-normal" style={{ color: "var(--pc-home-onhero-fg)" }}>
                   <Package className="h-3 w-3" aria-hidden />
                   <strong className="pc-num font-semibold">{stats?.products ?? "—"}</strong>
-                  <span className="text-[10px] opacity-80">produtos</span>
+                  <span className="text-[11px] opacity-80">produtos</span>
                 </span>
                 {Number(economy?.avgSavingsPct ?? 0) > 0 ? (
                   <>
@@ -359,7 +362,7 @@ function HomePage() {
                         })}
                         %
                       </strong>
-                      <span className="text-[10px] opacity-80">de economia média</span>
+                      <span className="text-[11px] opacity-80">de economia média</span>
                     </span>
                   </>
                 ) : null}
@@ -585,7 +588,7 @@ function HomePage() {
                       </span>
                       {partners.length > 0 && (
                         <span
-                          className="rounded-full px-1.5 py-0.5 text-[10px] font-semibold tabular-nums"
+                          className="rounded-full px-1.5 py-0.5 text-[11px] font-semibold tabular-nums"
                           style={{
                             color: "var(--pc-home-onhero-fg-80)",
                             background: "var(--pc-home-onhero-glass-soft)",
@@ -692,7 +695,7 @@ function HomePage() {
                     key={key}
                     type="button"
                     onClick={() => navigate({ to: "/categoria/$slug", params: { slug: key } })}
-                    aria-label={`Pesquisar em ${full}`}
+                    aria-label={`Pesquisar em ${catLabel(key, full)}`}
                     data-reading-card
                     className={TILE}
                     style={{
@@ -707,7 +710,7 @@ function HomePage() {
                       className={TILE_LABEL}
                       style={{ color: "var(--pc-home-onhero-fg-90)" }}
                     >
-                      {label}
+                      {catLabel(key, label)}
                     </span>
                   </button>
                 ))}
@@ -777,7 +780,7 @@ function HomePage() {
                     style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}
                   >
                     <p
-                      className="text-[10px] font-semibold uppercase tracking-[0.22em]"
+                      className="text-[11px] font-semibold uppercase tracking-[0.22em]"
                       style={{ color: "var(--pc-home-onhero-gold)" }}
                     >
                       Guia rápido

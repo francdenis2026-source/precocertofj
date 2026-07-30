@@ -108,7 +108,7 @@ function FarmaciasPage() {
                 <div className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-[var(--pc-gold-ink)]">
                   Hoje · dia {String(hoje).padStart(2, "0")} · {diaDaSemana(hoje!)}
                 </div>
-                <span className="rounded-full bg-brand-gold px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-brand-navy">
+                <span className="rounded-full bg-brand-gold px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-brand-navy">
                   Plantão
                 </span>
               </div>
@@ -217,7 +217,7 @@ function FarmaciasPage() {
                         <td className="px-2.5 py-1.5">
                           <span className="font-medium text-foreground">{f?.nome ?? "—"}</span>
                           {atual && (
-                            <span className="ml-2 rounded-full bg-brand-gold px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-brand-navy">
+                            <span className="ml-2 rounded-full bg-brand-gold px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-brand-navy">
                               hoje
                             </span>
                           )}

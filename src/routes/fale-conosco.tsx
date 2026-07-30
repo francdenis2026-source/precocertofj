@@ -205,7 +205,7 @@ function FaleConoscoPage() {
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-2 md:py-4">
         <header className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-3">
           <div className="min-w-0">
-            <span className="badge-gold-outline hidden items-center gap-1.5 sm:inline-flex rounded-full border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.18em]">
+            <span className="badge-gold-outline hidden items-center gap-1.5 sm:inline-flex rounded-full border px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.18em]">
               <MessageSquare className="h-3 w-3" />
               Fale Conosco
             </span>

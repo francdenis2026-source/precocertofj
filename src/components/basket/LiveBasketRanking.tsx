@@ -821,7 +821,7 @@ export function LiveBasketRanking({
                             <button
                               type="button"
                               onClick={() => setDetailStoreId(s.establishmentId)}
-                              className="mt-1 inline-flex items-center gap-1 rounded-full border border-amber-400/60 bg-amber-50/60 px-2 py-0.5 text-[10px] font-semibold text-amber-800 transition-colors hover:bg-amber-100/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-300"
+                              className="mt-1 inline-flex items-center gap-1 rounded-full border border-amber-400/60 bg-amber-50/60 px-2 py-0.5 text-[11px] font-semibold text-amber-800 transition-colors hover:bg-amber-100/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold dark:border-amber-500/40 dark:bg-amber-500/10 dark:text-amber-300"
                               aria-label={`Ver ${subs.length} sugestão${subs.length > 1 ? "ões" : ""} de substituição em ${s.establishmentName}`}
                             >
                               <ArrowRightLeft className="h-2.5 w-2.5" aria-hidden />
@@ -872,13 +872,13 @@ export function LiveBasketRanking({
               {data && (
                 <div className="grid grid-cols-2 gap-3 border-t border-border pt-3 text-xs">
                   <div>
-                    <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                    <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
                       Cesta ideal (menor preço por item)
                     </p>
                     <Price as="p" value={data.cheapestBasketTotal} size="md" tone="best" />
                   </div>
                   <div className="text-right">
-                    <p className="text-[10px] uppercase tracking-wide text-muted-foreground">
+                    <p className="text-[11px] uppercase tracking-wide text-muted-foreground">
                       Cesta média
                     </p>
                     <Price as="p" value={data.averageBasketTotal} size="md" className="justify-end" />

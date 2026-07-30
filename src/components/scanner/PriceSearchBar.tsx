@@ -1072,7 +1072,7 @@ export function PriceSearchBar({
                     <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-gold/70 to-transparent" />
                     <span aria-hidden className="pointer-events-none absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b from-brand-gold via-brand-gold/60 to-transparent" />
                     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 bg-white/[0.03] px-3.5 py-1.5">
-                      <span className="inline-flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-brand-gold">
+                      <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-gold">
                         <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-brand-gold shadow-[0_0_8px_rgba(201,168,76,0.9)]" />
                         Melhor resultado
                       </span>
@@ -1085,7 +1085,7 @@ export function PriceSearchBar({
                           Economize {pct}% hoje
                         </span>
                       ) : (
-                        <span className="text-[10px] font-medium uppercase tracking-wider text-white/50">
+                        <span className="text-[11px] font-medium uppercase tracking-wider text-white/50">
                           destaque da busca
                         </span>
                       )}
@@ -2140,7 +2140,7 @@ function CompareMatrix({
           <span aria-hidden className="mx-1 opacity-40">↔</span>
           <span className="pc-num tabular-nums"><Price value={globalMax} size="sm" /></span>
           {spreadPct > 0 ? (
-            <span className="ml-1.5 rounded-full bg-accent-strong px-1.5 py-[1px] text-[10px] font-bold uppercase tracking-wider text-accent-foreground">
+            <span className="ml-1.5 rounded-full bg-accent-strong px-1.5 py-[1px] text-[11px] font-bold uppercase tracking-wider text-accent-foreground">
               economia até {spreadPct.toFixed(0)}%
             </span>
           ) : null}
@@ -2206,7 +2206,7 @@ function CompareMatrix({
                 ) : (
                   <span
                     aria-hidden
-                    className="grid h-4.5 w-4.5 place-items-center rounded-full border border-border text-[10px] font-bold tabular-nums text-muted-foreground"
+                    className="grid h-4.5 w-4.5 place-items-center rounded-full border border-border text-[11px] font-bold tabular-nums text-muted-foreground"
                   >
                     {i + 1}
                   </span>
@@ -2232,7 +2232,7 @@ function CompareMatrix({
                 {isCheapest ? (
                   <span
                     className={
-                      "rounded-full bg-brand-gold px-1.5 py-[1px] text-[10px] font-bold text-brand-navy"
+                      "rounded-full bg-brand-gold px-1.5 py-[1px] text-[11px] font-bold text-brand-navy"
                     }
                   >
                     Menor preço
@@ -2589,7 +2589,7 @@ function ProductGroupCard({
                 <span
                   role="img"
                   aria-label={cheapestCount > 1 ? `Menor preço — empate com ${cheapestCount - 1} outro${cheapestCount - 1 === 1 ? "" : "s"}` : "Menor preço"}
-                  className="pointer-events-none absolute -top-2 right-2 z-10 inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-navy px-2 py-[2px] text-[10px] font-bold uppercase tracking-[0.14em] text-brand-gold shadow-sm"
+                  className="pointer-events-none absolute -top-2 right-2 z-10 inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-navy px-2 py-[2px] text-[11px] font-bold uppercase tracking-[0.14em] text-brand-gold shadow-sm"
                 >
                   <Crown className="h-2.5 w-2.5" strokeWidth={2.25} aria-hidden="true" />
                   <span>{cheapestCount > 1 ? `Menor preço · empate ${cheapestCount}` : "Menor preço"}</span>

@@ -247,7 +247,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
             eyebrow={`Últimos ${stats.data?.windowDays ?? 30} dias`}
             title="Sinal de vida"
           />
-          <span className="min-w-0 truncate text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+          <span className="min-w-0 truncate text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
             {statsFailed
               ? "Dados indisponíveis"
               : stats.data?.generatedAt

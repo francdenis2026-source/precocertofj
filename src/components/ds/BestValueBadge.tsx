@@ -39,7 +39,7 @@ export function BestValueBadge({ result, compact = false, className }: BestValue
       title={title}
       className={cn(
         "inline-flex max-w-full items-center gap-1 rounded-full border border-primary/45",
-        "bg-primary/10 px-2 py-[2px] text-[10px] font-bold uppercase tracking-[0.12em] text-primary",
+        "bg-primary/10 px-2 py-[2px] text-[11px] font-bold uppercase tracking-[0.12em] text-primary",
         className,
       )}
     >

@@ -36,6 +36,7 @@ import { StoreBadge } from "@/components/brand/StoreBadge";
 import { ProductQuickView } from "@/components/product/ProductQuickView";
 import { getCategoryHub } from "@/lib/category-hub.functions";
 import { CATEGORY_DEFS, categoryBySlug, norm } from "@/lib/category-hub";
+import { useCategoryLabelWithFallback } from "@/hooks/use-category-labels";
 import { classifyButcherCut, type ButcherProtein } from "@/lib/butcher-cuts";
 import { Bird, Drumstick } from "lucide-react";
 import { PLANTOES, diaDaSemana, diaVigente, farmaciaPorId } from "@/lib/farmacias-plantao";
@@ -105,6 +106,7 @@ export const Route = createFileRoute("/categoria/$slug")({
 });
 
 function CategoryPage() {
+  const catLabel = useCategoryLabelWithFallback();
   const { slug } = Route.useParams();
   const search = Route.useSearch();
   const navigate = useNavigate();
@@ -272,7 +274,7 @@ function CategoryPage() {
                 Categoria
               </p>
               <h1 className="mt-1 truncate font-serif text-[19px] font-semibold leading-[1.15] text-white sm:text-[22px]">
-                {def.label}
+                {catLabel(def.slug, def.label)}
               </h1>
               <p className="mt-1 truncate text-[12px] leading-snug text-white/85">{def.desc}</p>
             </div>
@@ -790,6 +792,7 @@ function Pagination({
 
 /** Trilho horizontal de categorias com setas, roda do mouse, arraste e teclado. */
 function CategoryRail({ current }: { current: string }) {
+  const railLabel = useCategoryLabelWithFallback();
   const ref = useRef<HTMLDivElement | null>(null);
   const ctrl = useRef<ReturnType<typeof createRailController> | null>(null);
   const [{ canPrev, canNext }, setState] = useState({ canPrev: false, canNext: false });
@@ -856,7 +859,7 @@ function CategoryRail({ current }: { current: string }) {
                       : "border-border bg-card text-foreground hover:border-brand-gold",
                   )}
                 >
-                  <CIcon className="h-3.5 w-3.5" aria-hidden /> {c.short}
+                  <CIcon className="h-3.5 w-3.5" aria-hidden /> {railLabel(c.slug, c.short)}
                 </Link>
               </li>
             );
@@ -926,7 +929,7 @@ function Stat({
     // Rótulo em white/85 (≈ 9:1 sobre navy) e número dourado marcado como
     // `gold-on-dark` para não cair no ink escuro do modo claro.
     <div className={align === "left" ? "text-left" : "text-right"}>
-      <dt className="text-[10px] font-semibold uppercase leading-none tracking-[0.16em] text-white/85">
+      <dt className="text-[11px] font-semibold uppercase leading-none tracking-[0.16em] text-white/85">
         {label}
       </dt>
       <dd className="gold-on-dark mt-1.5 text-[16px] font-bold leading-none tabular-nums text-brand-gold">

@@ -206,7 +206,7 @@ function CestaAdminPage() {
                           v{s.version} · {s.label}
                         </span>
                         {s.active ? (
-                          <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700 dark:text-emerald-400">
+                          <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400">
                             <CheckCircle2 className="h-3 w-3" /> ativa
                           </span>
                         ) : null}
