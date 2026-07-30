@@ -157,6 +157,7 @@ export type Database = {
           completion_tokens: number
           created_at: string
           credits_cents: number
+          duration_ms: number | null
           error_message: string | null
           function_name: string
           id: string
@@ -170,6 +171,7 @@ export type Database = {
           completion_tokens?: number
           created_at?: string
           credits_cents?: number
+          duration_ms?: number | null
           error_message?: string | null
           function_name: string
           id?: string
@@ -183,6 +185,7 @@ export type Database = {
           completion_tokens?: number
           created_at?: string
           credits_cents?: number
+          duration_ms?: number | null
           error_message?: string | null
           function_name?: string
           id?: string
@@ -3035,6 +3038,7 @@ export type Database = {
       }
     }
     Functions: {
+      admin_ai_usage_overview: { Args: { _hours?: number }; Returns: Json }
       admin_log_action: {
         Args: {
           _action: string
