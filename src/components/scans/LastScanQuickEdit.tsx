@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Price } from "@/components/ds/Price";
 import { useServerFn } from "@tanstack/react-start";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -99,7 +100,7 @@ export function LastScanQuickEdit({ scan, onUpdated }: Props) {
           </div>
           <div className="text-right">
             <p className="font-mono text-xl font-bold text-primary">
-              {brl(scan.priceCaptured)}
+              <Price value={scan.priceCaptured} size="md" />
             </p>
           </div>
         </div>

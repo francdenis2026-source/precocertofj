@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Price } from "@/components/ds/Price";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "@tanstack/react-router";
 import {
@@ -556,7 +557,7 @@ function ProductsRecentList({
                 className="shrink-0 text-[13.5px] font-bold tabular-nums"
                 style={{ color: "var(--pc-home-gold)" }}
               >
-                {currency(u.price)}
+                <Price value={u.price} size="sm" />
               </div>
             </li>
           ))}
@@ -652,13 +653,13 @@ function SavingsList({
               </div>
               <div className="shrink-0 text-right leading-tight">
                 <div className="text-[11px] line-through text-muted-foreground">
-                  {currency(s.maxPrice)}
+                  <Price value={s.maxPrice} size="sm" tone="muted" />
                 </div>
                 <div
                   className="text-[13.5px] font-bold tabular-nums"
                   style={{ color: "var(--pc-home-gold)" }}
                 >
-                  {currency(s.minPrice)}
+                  <Price value={s.minPrice} size="sm" tone="best" />
                 </div>
               </div>
               {s.catalogSlug && (

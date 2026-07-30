@@ -1,4 +1,5 @@
 import { Link } from "@tanstack/react-router";
+import { Price } from "@/components/ds/Price";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -237,7 +238,7 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
                     {lowest.productName}
                   </p>
                   <p className="num mt-0.5 font-display text-[20px] font-black text-savings">
-                    {fmtBRL(lowest.price)}
+                    <Price value={lowest.price} size="sm" tone="best" />
                   </p>
                 </div>
                 <ArrowRight
@@ -314,7 +315,7 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
                           ariaLabel={`Tendência de preço de ${p.productName} nos últimos 30 dias`}
                         />
                         <span className="num shrink-0 font-display text-[13.5px] font-black text-foreground">
-                          {fmtBRL(p.price)}
+                          <Price value={p.price} size="sm" />
                         </span>
                       </Link>
                     </li>
@@ -349,7 +350,7 @@ export function StoreDetailsDrawer({ store, open, onOpenChange }: Props) {
                           {p.productName}
                         </span>
                         <span className="num shrink-0 font-display text-[13.5px] font-black text-foreground">
-                          {fmtBRL(p.price)}
+                          <Price value={p.price} size="sm" />
                         </span>
                       </Link>
                     </li>

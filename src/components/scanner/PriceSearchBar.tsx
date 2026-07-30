@@ -1133,14 +1133,14 @@ export function PriceSearchBar({
                         <div className="min-w-0 border-t border-white/10 pt-3 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-4">
                           <p className="text-[11px] font-medium text-brand-gold/90">Economia estimada</p>
                           <p className="pc-num pc-num--onhero mt-1 text-[26px] font-bold leading-none">
-                            {fmt(gap)}
+                            <Price value={gap} size="sm" />
                             <span className="pc-num pc-num--onhero ml-1.5 align-middle text-[12px] font-bold opacity-90">
                               −{pct}%
                             </span>
                           </p>
 
                           <p className="mt-1.5 truncate text-[12px] text-white/75 tabular-nums">
-                            mesmo produto · mais caro {fmt(rMax)}
+                            mesmo produto · mais caro <Price value={rMax} size="xs" tone="muted" />
                             {priciestMarket ? (
                               <> em <span className="font-semibold text-white/90">{priciestMarket}</span></>
                             ) : null}
@@ -1443,7 +1443,7 @@ export function PriceSearchBar({
                                           aria-label={`Menor preço na categoria ${cat}: ${fmt(catMin)}`}
                                         >
                                           <Crown className="h-3 w-3" strokeWidth={2} aria-hidden />
-                                          <span className="pc-num">{fmt(catMin)}</span>
+                                          <span className="pc-num"><Price value={catMin} size="sm" /></span>
                                         </span>
                                       ) : null}
                                       <span className="h-px flex-1 bg-border" aria-hidden="true" />
@@ -1585,7 +1585,7 @@ export function PriceSearchBar({
                             <p className="text-[11.5px] font-medium text-muted-foreground">
                               {m.samples} scan{m.samples > 1 ? "s" : ""}
                               <span aria-hidden="true" className="mx-1 text-accent-strong/50">·</span>
-                              média {fmt(m.priceAvg)}
+                              média <Price value={m.priceAvg} size="xs" tone="muted" />
                               {m.establishmentId ? (
                                 <>
                                   <span aria-hidden="true" className="mx-1 text-accent-strong/50">·</span>
@@ -1609,7 +1609,7 @@ export function PriceSearchBar({
                               </p>
                             )}
                             <p className="font-display text-[16px] font-semibold leading-tight tabular-nums text-foreground">
-                              {fmt(m.priceMin)}
+                              <Price value={m.priceMin} size="sm" />
                             </p>
                           </div>
                         </>
@@ -2115,9 +2115,9 @@ function CompareMatrix({
         </h4>
         <p className="text-[11px] font-medium text-muted-foreground">
           <span className="font-semibold text-foreground">Faixa</span>{" "}
-          <span className="pc-num tabular-nums">{fmt(globalMin)}</span>
+          <span className="pc-num tabular-nums"><Price value={globalMin} size="sm" /></span>
           <span aria-hidden className="mx-1 opacity-40">↔</span>
-          <span className="pc-num tabular-nums">{fmt(globalMax)}</span>
+          <span className="pc-num tabular-nums"><Price value={globalMax} size="sm" /></span>
           {spreadPct > 0 ? (
             <span className="ml-1.5 rounded-full bg-accent-strong px-1.5 py-[1px] text-[10px] font-bold uppercase tracking-wider text-accent-foreground">
               economia até {spreadPct.toFixed(0)}%
@@ -2221,7 +2221,7 @@ function CompareMatrix({
                     className="rounded-full border border-border/80 bg-background px-1.5 py-[1px] text-muted-foreground"
                     title={`Você pagaria ${fmt(diffAbs)} a mais do que no mercado mais barato`}
                   >
-                    +{fmt(diffAbs)}
+                    +<Price value={diffAbs} size="sm" />
                   </span>
                 )}
                 {savingsPct > 0 && !isCheapest ? (
@@ -2397,11 +2397,11 @@ function ProductGroupCard({
             <HighlightMatch text={productName} tokens={highlightTokens} />
           </p>
           <p className="pc-res-meta mt-0.5 truncate">
-            <span className="font-semibold text-foreground">menor</span> <span className="pc-num font-bold text-foreground">{fmt(min)}</span>
+            <span className="font-semibold text-foreground">menor</span> <span className="pc-num font-bold text-foreground"><Price value={min} size="sm" /></span>
             <span aria-hidden="true" className="mx-1 opacity-40">·</span>
-            média <span className="pc-num text-foreground/85">{fmt(avg)}</span>
+            média <span className="pc-num text-foreground/85"><Price value={avg} size="xs" tone="muted" /></span>
             <span aria-hidden="true" className="mx-1 opacity-40">·</span>
-            máx <span className="pc-num text-foreground/85">{fmt(max)}</span>
+            máx <span className="pc-num text-foreground/85"><Price value={max} size="xs" tone="muted" /></span>
             <span aria-hidden="true" className="mx-1 opacity-40">·</span>
             {samples} preço{samples > 1 ? "s" : ""}
           </p>
@@ -2423,7 +2423,7 @@ function ProductGroupCard({
                 <span className="market-name">{cheapestInGroup.marketName}</span>{" "}
                 ·{" "}
                 <span className="font-semibold tabular-nums">
-                  {fmt(cheapestInGroup.price)}
+                  <Price value={cheapestInGroup.price} size="sm" />
                 </span>
               </span>
             </p>
@@ -2662,7 +2662,7 @@ function ProductGroupCard({
                     </div>
                     <div className="flex gap-1">
                       <dt className="font-semibold text-muted-foreground">Preço:</dt>
-                      <dd className="pc-num font-semibold text-foreground">{fmt(p.price)}</dd>
+                      <dd className="pc-num font-semibold text-foreground"><Price value={p.price} size="sm" /></dd>
                     </div>
                     <div className="flex gap-1">
                       <dt className="font-semibold text-muted-foreground">Tipo:</dt>
@@ -3025,7 +3025,7 @@ function MarketBucketSection({
           <p className="mt-0.5 truncate text-[11.5px] leading-relaxed text-muted-foreground sm:text-[12px]">
             {kind ? <span className="capitalize">{kind}</span> : "Estabelecimento"} ·{" "}
             {rows.length} {rows.length === 1 ? "produto" : "produtos"} · a partir de{" "}
-            <span className="font-semibold tabular-nums text-foreground">{fmt(minPrice)}</span>
+            <span className="font-semibold tabular-nums text-foreground"><Price value={minPrice} size="sm" /></span>
           </p>
 
           {/* Destaque de economia por mercado — leve, uma linha, sem caixas pesadas */}
@@ -3041,14 +3041,14 @@ function MarketBucketSection({
                 <span className="inline-flex items-center gap-1 py-1 text-muted-foreground">
                   economia de{" "}
                   <strong className="font-semibold tabular-nums text-foreground">
-                    {fmt(savings)}
+                    <Price value={savings} size="sm" tone="savings" />
                   </strong>{" "}
                   vs. o mais caro
                 </span>
               ) : null}
               {gapToBest > 0 ? (
                 <span className="inline-flex items-center gap-1 py-1 tabular-nums text-muted-foreground">
-                  +{fmt(gapToBest)} acima do melhor
+                  +<Price value={gapToBest} size="sm" /> acima do melhor
                 </span>
               ) : null}
             </p>
@@ -3509,7 +3509,7 @@ function MatrixCompareResults({
                       <p className="mt-0.5 text-[11px] text-muted-foreground">
                         Economia até{" "}
                         <span className="font-semibold text-[var(--pc-gold-ink)] tabular-nums">
-                          {fmt(rowMax - rowMin)}
+                          <Price value={rowMax - rowMin} size="sm" tone="savings" />
                         </span>
                       </p>
                     ) : null}
@@ -3556,7 +3556,7 @@ function MatrixCompareResults({
                             {isMin ? (
                               <Crown className="h-3 w-3 text-brand-gold" aria-hidden="true" />
                             ) : null}
-                            <span>{fmt(v)}</span>
+                            <span><Price value={v} size="xs" /></span>
                             {rowMin != null && v > rowMin ? (
                               <span
                                 title={`${(((v - rowMin) / rowMin) * 100).toFixed(0)}% acima do menor preço`}

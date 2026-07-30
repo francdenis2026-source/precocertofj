@@ -292,7 +292,7 @@ function ProductPublicPage() {
                         <TrendingUp className="h-3 w-3" />
                       )}
                       {delta < 0 ? "" : "+"}
-                      {fmt(delta)}
+                      <Price value={delta} size="sm" />
                       {deltaPct != null && (
                         <span className="opacity-80">
                           {" "}({deltaPct > 0 ? "+" : ""}
@@ -597,11 +597,11 @@ function MarketCard({
                   </span>
                 ) : diff > 0 ? (
                   <>
-                    <span className="font-semibold text-destructive">+{fmt(diff)}</span>
+                    <span className="font-semibold text-destructive">+<Price value={diff} size="sm" /></span>
                     <span className="opacity-90"> ({diffPct.toFixed(0)}% acima)</span>
                   </>
                 ) : (
-                  <>Média {fmt(m.priceAvg)}</>
+                  <>Média <Price value={m.priceAvg} size="xs" tone="muted" /></>
                 )}
               </p>
             </div>
@@ -787,7 +787,7 @@ function Sparkline({
       {!compact && (
         <div className="mt-1 flex items-center justify-between text-[11px] text-muted-foreground">
           <span>
-            {fmtDate(first.x)} · {fmt(first.y)}
+            {fmtDate(first.x)} · <Price value={first.y} size="xs" tone="muted" />
           </span>
           <span
             className={
@@ -807,7 +807,7 @@ function Sparkline({
             {trend === 0 ? "estável" : `${trend > 0 ? "+" : ""}${fmt(trend)}`}
           </span>
           <span>
-            {fmtDate(last.x)} · {fmt(last.y)}
+            {fmtDate(last.x)} · <Price value={last.y} size="xs" tone="muted" />
           </span>
         </div>
       )}

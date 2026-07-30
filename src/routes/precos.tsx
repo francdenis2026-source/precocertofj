@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { Price } from "@/components/ds/Price";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -230,7 +231,7 @@ function PrecosPage() {
                         <div className="min-w-0 flex-1 space-y-1">
                           <span className="line-clamp-2 text-sm font-medium">{p.displayName}</span>
                           <div className="flex items-center justify-between gap-2 text-xs text-muted-foreground">
-                            <span className="font-mono">{fmtBRL(p.lastPrice)}</span>
+                            <span className="font-mono"><Price value={p.lastPrice} size="sm" /></span>
                             <VariationBadge pct={p.variationPct} />
                           </div>
                           <span className="block text-[11px] text-muted-foreground">
@@ -410,7 +411,7 @@ function PrecosPage() {
                                 <tr key={`${p.date}-${idx}`} className="border-b last:border-0">
                                   <td className="px-4 py-2 font-mono text-xs">{fmtDateTime(p.date)}</td>
                                   <td className="px-4 py-2">{p.marketName ?? "—"}</td>
-                                  <td className="px-4 py-2 text-right font-mono">{fmtBRL(p.price)}</td>
+                                  <td className="px-4 py-2 text-right font-mono"><Price value={p.price} size="sm" /></td>
                                   <td className="px-4 py-2 text-right">
                                     <VariationBadge pct={pct} />
                                   </td>

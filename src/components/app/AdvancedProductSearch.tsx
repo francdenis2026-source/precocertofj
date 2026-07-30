@@ -247,7 +247,7 @@ export function AdvancedProductSearch() {
                 Preço mínimo
                 {bounds && (
                   <span className="ml-1 font-normal normal-case text-muted-foreground/70">
-                    (a partir de {fmtBRL(bounds.min)})
+                    (a partir de <Price value={bounds.min} size="xs" tone="muted" />)
                   </span>
                 )}
               </label>
@@ -270,7 +270,7 @@ export function AdvancedProductSearch() {
                 Preço máximo
                 {bounds && (
                   <span className="ml-1 font-normal normal-case text-muted-foreground/70">
-                    (até {fmtBRL(bounds.max)})
+                    (até <Price value={bounds.max} size="xs" tone="muted" />)
                   </span>
                 )}
               </label>

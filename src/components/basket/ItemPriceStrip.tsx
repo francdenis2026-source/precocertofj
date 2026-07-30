@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import { Price } from "@/components/ds/Price";
 import { Crown, Repeat } from "lucide-react";
 
 /**
@@ -88,7 +89,7 @@ export function ItemPriceStrip({
                   (isCheapest ? "text-accent-strong" : "text-foreground")
                 }
               >
-                {fmt(r.price)}
+                <Price value={r.price} size="sm" />
               </p>
               <p className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
                 {isCheapest ? "menor" : `+${pctVsMin.toFixed(0)}%`}

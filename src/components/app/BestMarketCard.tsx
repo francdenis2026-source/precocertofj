@@ -1,4 +1,5 @@
 import { Sparkles } from "lucide-react";
+import { Price } from "@/components/ds/Price";
 import { PanelCard } from "@/components/dashboard/PanelCard";
 import { IconTile } from "@/components/ui/icon-tile";
 import { brl } from "@/lib/format";
@@ -46,7 +47,7 @@ export function BestMarketCard({
           )}
           <p className="mt-1 text-sm text-muted-foreground">
             Melhor mercado para levar seus favoritos —{" "}
-            <span className="font-mono text-foreground">{brl(total ?? 0)}</span>
+            <span className="font-mono text-foreground"><Price value={total ?? 0} size="sm" /></span>
           </p>
         </>
       ) : (
