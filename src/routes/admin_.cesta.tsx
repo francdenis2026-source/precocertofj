@@ -206,12 +206,12 @@ function CestaAdminPage() {
                           v{s.version} · {s.label}
                         </span>
                         {s.active ? (
-                          <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[11px] font-semibold text-emerald-700 dark:text-emerald-400">
+                          <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-1.5 py-0.5 text-[12.5px] font-semibold text-emerald-700 dark:text-emerald-400">
                             <CheckCircle2 className="h-3 w-3" /> ativa
                           </span>
                         ) : null}
                       </div>
-                      <p className="mt-0.5 text-[11px] text-muted-foreground">
+                      <p className="mt-0.5 text-[12.5px] text-muted-foreground">
                         {new Date(s.created_at).toLocaleDateString("pt-BR")}
                       </p>
                     </button>
@@ -290,7 +290,7 @@ function CestaAdminPage() {
                         <p className="text-sm font-medium text-foreground truncate">
                           {it.label}
                         </p>
-                        <p className="text-[11px] text-muted-foreground">
+                        <p className="text-[12.5px] text-muted-foreground">
                           chave: {it.key}
                         </p>
                       </div>

@@ -346,7 +346,7 @@ function SummaryCard({
         : "border-border bg-card";
   return (
     <div className={"rounded-xl border p-4 " + toneCls}>
-      <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+      <p className="text-[12.5px] font-semibold uppercase tracking-widest text-muted-foreground">
         {label}
       </p>
       <p className="mt-1 font-display text-2xl font-bold tabular-nums text-foreground">{value}</p>

@@ -176,7 +176,7 @@ export function BulkPhotoUpdateDialog({
               onChange={(e) => setLimit(Number(e.target.value))}
               className="w-full"
             />
-            <div className="flex justify-between text-[11px] text-muted-foreground">
+            <div className="flex justify-between text-[12.5px] text-muted-foreground">
               <span>10</span>
               <span>500</span>
             </div>

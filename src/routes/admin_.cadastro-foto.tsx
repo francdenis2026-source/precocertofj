@@ -183,7 +183,7 @@ function CadastroFotoPage() {
           </Link>
           <div className="flex-1">
             <h1 className="text-base font-semibold text-foreground">Cadastro por foto (IA)</h1>
-            <p className="text-[11px] text-muted-foreground">
+            <p className="text-[12.5px] text-muted-foreground">
               Envie uma foto do produto — a IA sugere nome, marca, categoria e código de barras.
             </p>
           </div>
@@ -209,7 +209,7 @@ function CadastroFotoPage() {
               <>
                 <Camera className="h-8 w-8 text-muted-foreground" />
                 <p className="text-sm font-semibold text-foreground">Tirar foto ou escolher imagem</p>
-                <p className="text-[11px] text-muted-foreground">JPG/PNG até 8MB · produto único ou prateleira</p>
+                <p className="text-[12.5px] text-muted-foreground">JPG/PNG até 8MB · produto único ou prateleira</p>
               </>
             )}
           </label>
@@ -223,7 +223,7 @@ function CadastroFotoPage() {
 
           {preview && !analyzing && (
             <div className="mt-4 space-y-2">
-              <label className="block text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+              <label className="block text-[12.5px] font-semibold uppercase tracking-wide text-muted-foreground">
                 URL da imagem para o catálogo (opcional)
               </label>
               <input

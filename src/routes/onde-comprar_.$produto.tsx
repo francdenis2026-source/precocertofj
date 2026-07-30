@@ -131,7 +131,7 @@ function ProdutoComparacaoPage() {
                 </div>
                 <Price as="p" value={d.minPrice} size="xl" tone="best" />
                 {d.savingsPct > 0 && (
-                  <span className="rounded-full bg-[var(--pc-gold-ink)]/10 px-2 py-0.5 text-[12px] font-semibold text-[var(--pc-gold-ink)]">
+                  <span className="rounded-full bg-[var(--pc-gold-ink)]/10 px-2 py-0.5 text-[13px] font-semibold text-[var(--pc-gold-ink)]">
                     até {d.savingsPct}% de economia
                   </span>
                 )}
@@ -208,7 +208,7 @@ function ProdutoComparacaoPage() {
                     >
                       <span
                         className={cn(
-                          "grid h-6 w-6 shrink-0 place-items-center rounded-md text-[12px] font-bold",
+                          "grid h-6 w-6 shrink-0 place-items-center rounded-md text-[13px] font-bold",
                           r.position === 1
                             ? "bg-emerald-600 text-white"
                             : "bg-muted text-muted-foreground",

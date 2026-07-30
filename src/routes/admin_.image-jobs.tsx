@@ -264,7 +264,7 @@ function ImageJobsPage() {
                     e clique em <span className="font-medium">Reenfileirar falhas</span> para retomar.
                   </p>
                   {lastQuotaError && (
-                    <p className="mt-1 max-w-full truncate font-mono text-[11px] opacity-70">
+                    <p className="mt-1 max-w-full truncate font-mono text-[12.5px] opacity-70">
                       {lastQuotaError.slice(0, 180)}
                     </p>
                   )}
@@ -641,7 +641,7 @@ function SourcesPanel() {
                   key={d}
                   className="flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2"
                 >
-                  <Badge variant="outline" className="font-mono text-[11px]">
+                  <Badge variant="outline" className="font-mono text-[12.5px]">
                     #{idx + 1}
                   </Badge>
                   <span className="flex-1 font-mono text-sm">{d}</span>
@@ -797,7 +797,7 @@ function SchedulePanel() {
                 <code>pg_cron</code> uma única vez. Peça ao suporte para executar o SQL abaixo
                 (ele chama nosso endpoint público conforme a frequência escolhida acima).
               </p>
-              <pre className="mt-2 overflow-x-auto rounded bg-background p-3 text-[11px]">
+              <pre className="mt-2 overflow-x-auto rounded bg-background p-3 text-[12.5px]">
                 {`SELECT cron.schedule(
   'refresh-catalog-images-${eFreq}',
   '${eFreq === "weekly" ? "0 3 * * 0" : "0 3 1 * *"}',
@@ -1006,7 +1006,7 @@ function ProviderStatsCard({
                   <div className="mb-3 flex items-center gap-2">
                     <span className={`inline-block h-2 w-2 rounded-full ${dot}`} />
                     <span className="font-medium">{providerLabel(p.provider)}</span>
-                    <Badge variant="outline" className="ml-auto text-[11px]">
+                    <Badge variant="outline" className="ml-auto text-[12.5px]">
                       {p.total} job{p.total === 1 ? "" : "s"}
                     </Badge>
                   </div>
@@ -1087,19 +1087,19 @@ function JobRow({ job, onRetry }: { job: ImageJob; onRetry: (id: string) => void
           {isCreditError && (
             <Badge
               variant="outline"
-              className="border-warning/40 bg-warning/10 text-[11px] text-warning dark:text-warning"
+              className="border-warning/40 bg-warning/10 text-[12.5px] text-warning dark:text-warning"
             >
               <Coins className="mr-1 h-3 w-3" /> sem créditos
             </Badge>
           )}
-          <Badge variant="outline" className="text-[11px]">
+          <Badge variant="outline" className="text-[12.5px]">
             prioridade {job.priority}
           </Badge>
           {job.provider && (
             <Badge
               variant="outline"
               className={
-                "text-[11px] " +
+                "text-[12.5px] " +
                 (job.provider.startsWith("gemini_direct")
                   ? "border-savings/40 bg-savings/10 text-savings dark:text-savings"
                   : "border-primary/40 bg-primary/10 text-primary dark:text-primary")
@@ -1109,13 +1109,13 @@ function JobRow({ job, onRetry }: { job: ImageJob; onRetry: (id: string) => void
             </Badge>
           )}
           {job.durationMs != null && (
-            <span className="text-[11px] text-muted-foreground">
+            <span className="text-[12.5px] text-muted-foreground">
               <Clock className="mr-1 inline h-3 w-3" />
               {fmtMs(job.durationMs)}
             </span>
           )}
           {job.attempts > 0 && (
-            <span className="text-[11px] text-muted-foreground">
+            <span className="text-[12.5px] text-muted-foreground">
               {job.attempts} tentativa{job.attempts > 1 ? "s" : ""}
             </span>
           )}

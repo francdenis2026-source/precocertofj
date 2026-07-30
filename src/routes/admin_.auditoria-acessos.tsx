@@ -488,7 +488,7 @@ function BlockedIpsCard() {
             >
               <div>
                 <p className="font-mono text-xs">{row.ip}</p>
-                <p className="text-[11px] text-muted-foreground">
+                <p className="text-[12.5px] text-muted-foreground">
                   até {new Date(row.blocked_until).toLocaleString("pt-BR")}
                   {row.reason ? ` · ${row.reason}` : ""}
                 </p>

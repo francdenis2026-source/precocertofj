@@ -227,7 +227,7 @@ function GroupCard({ group, onChanged }: { group: SynonymGroupRow; onChanged: ()
 function TokenLine({ label, tokens, tone }: { label: string; tokens: string[]; tone: "primary" | "destructive" }) {
   return (
     <div className="flex flex-wrap items-baseline gap-1.5">
-      <span className="font-mono text-[11px] uppercase tracking-widest text-muted-foreground">{label}</span>
+      <span className="font-mono text-[12.5px] uppercase tracking-widest text-muted-foreground">{label}</span>
       {tokens.length === 0 ? (
         <span className="text-xs italic text-muted-foreground">nenhum</span>
       ) : (
@@ -235,7 +235,7 @@ function TokenLine({ label, tokens, tone }: { label: string; tokens: string[]; t
           <span
             key={t}
             className={
-              "rounded-full border px-2 py-0.5 text-[11px] " +
+              "rounded-full border px-2 py-0.5 text-[12.5px] " +
               (tone === "primary"
                 ? "border-primary/30 bg-primary/10 text-primary"
                 : "border-destructive/30 bg-destructive/10 text-destructive")
@@ -318,7 +318,7 @@ function GroupDialog({
               placeholder="ex.: sal"
               autoFocus={!group}
             />
-            <p className="mt-1 text-[11px] text-muted-foreground">
+            <p className="mt-1 text-[12.5px] text-muted-foreground">
               Palavra base que o usuário provavelmente digita.
             </p>
           </div>
@@ -330,7 +330,7 @@ function GroupDialog({
               onChange={(e) => setSynonymsText(e.target.value)}
               placeholder={"sal\nsal refinado\nsal grosso"}
             />
-            <p className="mt-1 text-[11px] text-muted-foreground">
+            <p className="mt-1 text-[12.5px] text-muted-foreground">
               Expressões equivalentes que também devem casar (inclua o próprio canônico).
             </p>
           </div>
@@ -342,7 +342,7 @@ function GroupDialog({
               onChange={(e) => setExcludeText(e.target.value)}
               placeholder={"margarina\nbiscoito\nsalsicha"}
             />
-            <p className="mt-1 text-[11px] text-muted-foreground">
+            <p className="mt-1 text-[12.5px] text-muted-foreground">
               Se o nome do produto contiver qualquer uma dessas palavras, o item é filtrado
               quando o usuário liga "Somente item puro".
             </p>

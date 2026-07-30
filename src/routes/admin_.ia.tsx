@@ -223,7 +223,7 @@ function AiAdminPage() {
                       value={defaultQuota}
                       onChange={(e) => setDefaultQuota(e.target.value)}
                     />
-                    <p className="text-[11px] text-muted-foreground">
+                    <p className="text-[12.5px] text-muted-foreground">
                       Usada quando o usuário não tem plano resgatado.
                     </p>
                   </div>
@@ -237,7 +237,7 @@ function AiAdminPage() {
                       onChange={(e) => setThresholds(e.target.value)}
                       placeholder="75, 95"
                     />
-                    <p className="text-[11px] text-muted-foreground">
+                    <p className="text-[12.5px] text-muted-foreground">
                       Ex.: 75, 95 → avisa em 15/20 e 19/20.
                     </p>
                   </div>
@@ -276,7 +276,7 @@ function AiAdminPage() {
                         <span className="text-sm font-semibold text-foreground">{p.name}</span>
                         {!p.active && <Badge variant="outline">inativo</Badge>}
                       </div>
-                      <p className="text-[11px] text-muted-foreground">
+                      <p className="text-[12.5px] text-muted-foreground">
                         {p.days} dias · R${" "}
                         {(p.priceCents / 100).toFixed(2).replace(".", ",")}
                       </p>

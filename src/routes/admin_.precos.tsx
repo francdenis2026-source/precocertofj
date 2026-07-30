@@ -326,7 +326,7 @@ function AdminPrecosPage() {
                         <TableCell className="max-w-[280px]">
                           <div className="truncate text-sm font-medium">{s.product_name ?? "—"}</div>
                           {s.barcode && (
-                            <div className="font-mono text-[11px] text-muted-foreground">{s.barcode}</div>
+                            <div className="font-mono text-[12.5px] text-muted-foreground">{s.barcode}</div>
                           )}
                         </TableCell>
                         <TableCell className="max-w-[200px] truncate text-sm">
@@ -468,7 +468,7 @@ function AdminPrecosPage() {
                   </div>
                 </div>
               </div>
-              <p className="text-[11px] text-muted-foreground">
+              <p className="text-[12.5px] text-muted-foreground">
                 <Filter className="mr-1 inline h-3 w-3" />
                 Rebuild global normaliza a contagem exibida na Home e nas métricas administrativas.
               </p>

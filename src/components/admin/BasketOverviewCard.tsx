@@ -129,7 +129,7 @@ export function BasketOverviewCard({ className }: { className?: string }) {
           <Link
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             to={"/admin_/cesta" as any}
-            className="text-[11px] font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded"
+            className="text-[12.5px] font-medium text-primary hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded"
           >
             Gerenciar cesta →
           </Link>
@@ -200,7 +200,7 @@ export function BasketOverviewCard({ className }: { className?: string }) {
                 >
                   {k.value}
                 </p>
-                <p className="text-[11px] text-muted-foreground">{k.hint}</p>
+                <p className="text-[12.5px] text-muted-foreground">{k.hint}</p>
               </li>
             );
           })}

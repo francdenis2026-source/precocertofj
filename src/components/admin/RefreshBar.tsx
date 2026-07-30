@@ -138,14 +138,14 @@ export function RefreshBar({
               <TooltipTrigger asChild>
                 <button
                   type="button"
-                  className="ml-1 inline-flex items-center gap-1 rounded px-1 text-[11px] text-muted-foreground/70 hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                  className="ml-1 inline-flex items-center gap-1 rounded px-1 text-[12.5px] text-muted-foreground/70 hover:text-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
                   aria-label="Histórico de atualizações"
                 >
                   <HistoryIcon className="h-3 w-3" aria-hidden />
                   {last.durationMs}ms
                 </button>
               </TooltipTrigger>
-              <TooltipContent side="bottom" className="whitespace-pre text-[11px]">
+              <TooltipContent side="bottom" className="whitespace-pre text-[12.5px]">
                 {tooltipContent}
               </TooltipContent>
             </Tooltip>

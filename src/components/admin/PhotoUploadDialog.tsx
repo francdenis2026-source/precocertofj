@@ -462,14 +462,14 @@ export function PhotoUploadDialog({
                       >
                         <Upload className="h-5 w-5" />
                         <span>Arraste ou clique</span>
-                        <span className="text-[11px]">
+                        <span className="text-[12.5px]">
                           JPG · PNG · WEBP · até {maxSizeMb}MB
                         </span>
                       </button>
                       <button
                         type="button"
                         onClick={() => void pasteFromClipboardButton()}
-                        className="mt-1 inline-flex items-center gap-1 rounded border border-border/60 bg-background px-2 py-0.5 text-[11px] hover:border-foreground/40"
+                        className="mt-1 inline-flex items-center gap-1 rounded border border-border/60 bg-background px-2 py-0.5 text-[12.5px] hover:border-foreground/40"
                         title="Cole com Ctrl+V ou clique aqui"
                       >
                         <ClipboardPaste className="h-3 w-3" />
@@ -507,7 +507,7 @@ export function PhotoUploadDialog({
                   )}
                 </div>
                 <Progress value={progress?.percent ?? 0} />
-                <div className="flex justify-between text-[11px] text-muted-foreground">
+                <div className="flex justify-between text-[12.5px] text-muted-foreground">
                   <span>
                     {progress
                       ? `${humanBytes(progress.loaded)} de ${humanBytes(progress.total)}`
@@ -549,7 +549,7 @@ export function PhotoUploadDialog({
                       {errInfo.action}
                     </p>
                     {errMsg && (
-                      <p className="mt-1 font-mono text-[11px] text-muted-foreground">
+                      <p className="mt-1 font-mono text-[12.5px] text-muted-foreground">
                         {errMsg}
                       </p>
                     )}
@@ -696,16 +696,16 @@ function HistoryList({
                 )}
                 <span className="font-medium">{actionLabel(r.action)}</span>
                 {r.errorCode && (
-                  <span className="rounded bg-destructive/10 px-1 py-0.5 font-mono text-[11px] text-destructive">
+                  <span className="rounded bg-destructive/10 px-1 py-0.5 font-mono text-[12.5px] text-destructive">
                     {r.errorCode}
                   </span>
                 )}
               </div>
-              <span className="text-[11px] text-muted-foreground">
+              <span className="text-[12.5px] text-muted-foreground">
                 {new Date(r.createdAt).toLocaleString("pt-BR")}
               </span>
             </div>
-            <div className="mt-1 flex flex-wrap items-center gap-2 text-[11px] text-muted-foreground">
+            <div className="mt-1 flex flex-wrap items-center gap-2 text-[12.5px] text-muted-foreground">
               <span>{r.actorEmail ?? "sistema"}</span>
               {r.newImageUrl && (
                 <img
@@ -729,7 +729,7 @@ function HistoryList({
           </div>
         );
       })}
-      <p className="pt-2 text-center text-[11px] text-muted-foreground">
+      <p className="pt-2 text-center text-[12.5px] text-muted-foreground">
         <Sparkles className="mr-1 inline h-3 w-3" />
         Mostrando as {rows.length} tentativas mais recentes.
       </p>

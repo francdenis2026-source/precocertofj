@@ -136,7 +136,7 @@ function FarmaciasPage() {
         <div className="mx-auto flex w-full max-w-6xl items-center gap-2 px-4 py-2.5">
           <Link
             to="/estabelecimentos"
-            className="inline-flex h-8 items-center gap-1 rounded-full border border-border bg-background px-2.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+            className="inline-flex h-8 items-center gap-1 rounded-full border border-border bg-background px-2.5 text-[12.5px] font-semibold uppercase tracking-[0.14em] text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
           >
             <ArrowLeft className="h-3 w-3" aria-hidden /> Voltar
           </Link>
@@ -157,7 +157,7 @@ function FarmaciasPage() {
         {/* Cabeçalho editorial compacto */}
         <div className="grid gap-3 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
           <div>
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold/60 bg-[color-mix(in_oklab,var(--brand-gold)_14%,transparent)] px-2 py-0.5 text-[10.5px] font-bold uppercase tracking-[0.18em] text-[var(--pc-gold-ink)]">
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-brand-gold/60 bg-[color-mix(in_oklab,var(--brand-gold)_14%,transparent)] px-2 py-0.5 text-[12px] font-bold uppercase tracking-[0.18em] text-[var(--pc-gold-ink)]">
               <Pill className="h-3 w-3" aria-hidden /> Informativo público
             </span>
             <h1 className="mt-1.5 font-serif text-[24px] font-semibold leading-tight tracking-tight sm:text-[28px]">
@@ -168,7 +168,7 @@ function FarmaciasPage() {
               Secretaria Municipal de Saúde — Vigilância Sanitária.
             </p>
           </div>
-          <p className="inline-flex items-center gap-1.5 self-start rounded-md border border-border bg-card px-2.5 py-1.5 text-[12px] font-medium text-foreground shadow-sm md:self-end">
+          <p className="inline-flex items-center gap-1.5 self-start rounded-md border border-border bg-card px-2.5 py-1.5 text-[13px] font-medium text-foreground shadow-sm md:self-end">
             <Clock className="h-3.5 w-3.5 text-gold-ink" aria-hidden />
             Balcão até 22h · após, sobreaviso
           </p>
@@ -183,10 +183,10 @@ function FarmaciasPage() {
                 className="absolute inset-y-3 left-0 w-[3px] rounded-full bg-brand-gold"
               />
               <div className="flex items-center justify-between">
-                <div className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-[var(--pc-gold-ink)]">
+                <div className="text-[12px] font-bold uppercase tracking-[0.18em] text-[var(--pc-gold-ink)]">
                   Hoje · dia {String(hoje).padStart(2, "0")} · {diaDaSemana(hoje!)}
                 </div>
-                <span className="rounded-full bg-brand-gold px-2 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-brand-navy">
+                <span className="rounded-full bg-brand-gold px-2 py-0.5 text-[12.5px] font-bold uppercase tracking-[0.14em] text-brand-navy">
                   Plantão
                 </span>
               </div>
@@ -202,7 +202,7 @@ function FarmaciasPage() {
                   <a
                     key={t}
                     href={`tel:${t.replace(/\D/g, "")}`}
-                    className="inline-flex items-center gap-1 rounded-full border border-brand-gold/50 bg-background px-2.5 py-1 text-[12px] font-semibold text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                    className="inline-flex items-center gap-1 rounded-full border border-brand-gold/50 bg-background px-2.5 py-1 text-[13px] font-semibold text-foreground transition-colors hover:border-brand-gold hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                   >
                     <Phone className="h-3 w-3 text-gold-ink" aria-hidden /> {t}
                   </a>
@@ -212,13 +212,13 @@ function FarmaciasPage() {
 
             {amanha ? (
               <article className="rounded-xl border border-border/70 bg-card p-4 shadow-sm">
-                <div className="text-[10.5px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
+                <div className="text-[12px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
                   Amanhã · dia {String(hoje! + 1).padStart(2, "0")} · {diaDaSemana(hoje! + 1)}
                 </div>
                 <h2 className="mt-1 font-serif text-[18px] font-semibold leading-tight">
                   {amanha.nome}
                 </h2>
-                <p className="mt-1 inline-flex items-start gap-1.5 text-[12px] text-muted-foreground">
+                <p className="mt-1 inline-flex items-start gap-1.5 text-[13px] text-muted-foreground">
                   <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold-ink/80" aria-hidden />
                   {amanha.endereco} — {amanha.bairro}
                 </p>
@@ -227,7 +227,7 @@ function FarmaciasPage() {
                     <a
                       key={t}
                       href={`tel:${t.replace(/\D/g, "")}`}
-                      className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2 py-0.5 text-[11.5px] font-medium text-foreground transition-colors hover:border-brand-gold"
+                      className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2 py-0.5 text-[13px] font-medium text-foreground transition-colors hover:border-brand-gold"
                     >
                       <Phone className="h-3 w-3" aria-hidden /> {t}
                     </a>
@@ -262,13 +262,13 @@ function FarmaciasPage() {
                 </caption>
                 <thead className="bg-muted/60">
                   <tr>
-                    <th scope="col" className="px-2.5 py-1.5 text-[10.5px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+                    <th scope="col" className="px-2.5 py-1.5 text-[12px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
                       Dia
                     </th>
-                    <th scope="col" className="px-2.5 py-1.5 text-[10.5px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+                    <th scope="col" className="px-2.5 py-1.5 text-[12px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
                       Semana
                     </th>
-                    <th scope="col" className="px-2.5 py-1.5 text-[10.5px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+                    <th scope="col" className="px-2.5 py-1.5 text-[12px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
                       Farmácia de plantão
                     </th>
                   </tr>
@@ -295,7 +295,7 @@ function FarmaciasPage() {
                         <td className="px-2.5 py-1.5">
                           <span className="font-medium text-foreground">{f?.nome ?? "—"}</span>
                           {atual && (
-                            <span className="ml-2 rounded-full bg-brand-gold px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-[0.14em] text-brand-navy">
+                            <span className="ml-2 rounded-full bg-brand-gold px-1.5 py-0.5 text-[12.5px] font-bold uppercase tracking-[0.14em] text-brand-navy">
                               hoje
                             </span>
                           )}
@@ -313,7 +313,7 @@ function FarmaciasPage() {
               <h2 className="font-serif text-[18px] font-semibold leading-tight">
                 Farmácias e drogarias da cidade
               </h2>
-              <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+              <span className="text-[12.5px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                 {filtradas.length} de {FARMACIAS.length}
               </span>
             </div>
@@ -374,7 +374,7 @@ function FarmaciasPage() {
                   <h3 className="text-[13.5px] font-semibold leading-tight text-foreground group-hover:text-[var(--pc-gold-ink)]">
                     {f.nome}
                   </h3>
-                  <p className="mt-0.5 inline-flex items-start gap-1 text-[11.5px] text-muted-foreground">
+                  <p className="mt-0.5 inline-flex items-start gap-1 text-[13px] text-muted-foreground">
                     <MapPin className="mt-0.5 h-3 w-3 shrink-0 text-gold-ink/80" aria-hidden />
                     {f.endereco} — {f.bairro}
                   </p>
@@ -383,7 +383,7 @@ function FarmaciasPage() {
                       <a
                         key={t}
                         href={`tel:${t.replace(/\D/g, "")}`}
-                        className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2 py-0.5 text-[11px] font-semibold text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                        className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2 py-0.5 text-[12.5px] font-semibold text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
                       >
                         <Phone className="h-2.5 w-2.5 text-gold-ink" aria-hidden /> {t}
                       </a>
@@ -408,7 +408,7 @@ function FarmaciasPage() {
           className="mt-6 rounded-xl border border-border/70 bg-card p-3 shadow-sm"
           aria-label="Reclamações e base legal"
         >
-          <h2 className="flex items-center gap-1.5 text-[11.5px] font-bold uppercase tracking-[0.16em] text-foreground">
+          <h2 className="flex items-center gap-1.5 text-[13px] font-bold uppercase tracking-[0.16em] text-foreground">
             <ShieldCheck className="h-3.5 w-3.5 text-gold-ink" aria-hidden />
             Reclamações e denúncias
           </h2>
@@ -425,8 +425,8 @@ function FarmaciasPage() {
               </li>
             ))}
           </ul>
-          <p className="mt-2 text-[11px] leading-relaxed text-muted-foreground">{AVISO_LEGAL}</p>
-          <p className="mt-1 text-[10.5px] leading-relaxed text-muted-foreground/80">
+          <p className="mt-2 text-[12.5px] leading-relaxed text-muted-foreground">{AVISO_LEGAL}</p>
+          <p className="mt-1 text-[12px] leading-relaxed text-muted-foreground/80">
             Reproduzido do calendário oficial da Prefeitura Municipal de Feijó — Vigilância
             Sanitária. Em caso de divergência, vale a publicação oficial.
           </p>

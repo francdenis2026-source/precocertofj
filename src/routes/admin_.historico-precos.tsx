@@ -248,7 +248,7 @@ export function HistoricoPrecosPage() {
                           {fmtDT(r.capturedAt)}
                         </td>
                         <td className="p-3">
-                          <Badge variant="outline" className="h-5 text-[11px]">
+                          <Badge variant="outline" className="h-5 text-[12.5px]">
                             {r.source}
                           </Badge>
                         </td>

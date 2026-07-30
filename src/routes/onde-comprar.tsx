@@ -355,7 +355,7 @@ function ProductAccordion({ product: p }: { product: WhereToBuyProduct }) {
           </span>
         </div>
         {p.savingsPct > 0 && (
-          <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[11.5px] font-semibold text-emerald-600">
+          <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[13px] font-semibold text-emerald-600">
             <TrendingDown className="h-3 w-3" /> {p.savingsPct}%
           </span>
         )}
@@ -417,7 +417,7 @@ function ProductAccordion({ product: p }: { product: WhereToBuyProduct }) {
                 type="button"
                 size="sm"
                 variant="outline"
-                className="h-8 px-3 text-[12px]"
+                className="h-8 px-3 text-[13px]"
                 onClick={() => setShowAll((v) => !v)}
               >
                 {showAll ? "Mostrar menos" : `Ver mais ${hidden} ${hidden === 1 ? "estabelecimento" : "estabelecimentos"}`}

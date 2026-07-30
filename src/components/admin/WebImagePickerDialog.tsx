@@ -192,7 +192,7 @@ export function WebImagePickerDialog({
                   >
                     <div className="aspect-square bg-muted">
                       {failed ? (
-                        <div className="flex h-full w-full items-center justify-center p-2 text-center text-[11px] text-muted-foreground">
+                        <div className="flex h-full w-full items-center justify-center p-2 text-center text-[12.5px] text-muted-foreground">
                           Miniatura indisponível
                         </div>
                       ) : (
@@ -218,13 +218,13 @@ export function WebImagePickerDialog({
                     )}
                     <div className="space-y-1 border-t p-2">
                       {c.title && (
-                        <div className="line-clamp-1 text-[11px] font-medium">
+                        <div className="line-clamp-1 text-[12.5px] font-medium">
                           {c.title}
                         </div>
                       )}
-                      <div className="flex items-center justify-between text-[11px] text-muted-foreground">
+                      <div className="flex items-center justify-between text-[12.5px] text-muted-foreground">
                         {c.confidence && (
-                          <Badge variant="outline" className="text-[11px] uppercase">
+                          <Badge variant="outline" className="text-[12.5px] uppercase">
                             {c.confidence}
                           </Badge>
                         )}
@@ -251,7 +251,7 @@ export function WebImagePickerDialog({
           {selected && currentImageUrl && !applying && !success && (
             <div className="grid grid-cols-2 gap-2 rounded-md border bg-muted/30 p-2">
               <div>
-                <p className="mb-1 text-[11px] font-medium text-muted-foreground">
+                <p className="mb-1 text-[12.5px] font-medium text-muted-foreground">
                   Foto atual
                 </p>
                 <img
@@ -261,7 +261,7 @@ export function WebImagePickerDialog({
                 />
               </div>
               <div>
-                <p className="mb-1 text-[11px] font-medium text-muted-foreground">
+                <p className="mb-1 text-[12.5px] font-medium text-muted-foreground">
                   Nova foto
                 </p>
                 <img
@@ -300,7 +300,7 @@ export function WebImagePickerDialog({
                     <span className="font-medium text-foreground">Ação:</span> {errInfo.action}
                   </p>
                   {errMsg && (
-                    <p className="mt-1 font-mono text-[11px] text-muted-foreground">
+                    <p className="mt-1 font-mono text-[12.5px] text-muted-foreground">
                       {errMsg}
                     </p>
                   )}

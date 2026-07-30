@@ -53,12 +53,12 @@ function SourceBlock({
 }) {
   return (
     <div className="rounded-lg border border-border bg-muted/30 p-3">
-      <div className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+      <div className="text-[12.5px] font-semibold uppercase tracking-wide text-muted-foreground">
         {title}
       </div>
       <div className="mt-1 text-2xl font-bold tabular-nums">{value.toLocaleString("pt-BR")}</div>
       <div className="mt-1 text-xs font-medium">{label}</div>
-      <div className="mt-2 space-y-0.5 text-[11px] text-muted-foreground">
+      <div className="mt-2 space-y-0.5 text-[12.5px] text-muted-foreground">
         <div>
           <span className="font-semibold">Origem:</span> <code className="font-mono">{origin}</code>
         </div>

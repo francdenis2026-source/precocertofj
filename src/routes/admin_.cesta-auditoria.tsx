@@ -121,28 +121,28 @@ function BasketAuditPage() {
               <ul className="divide-y divide-border/60">
                 {query.data.map((r) => (
                   <li key={r.id} className="flex flex-wrap items-start gap-3 p-3 hover:bg-muted/30">
-                    <Badge variant="outline" className={cn("shrink-0 text-[11px] uppercase", toneClass(actionTone(r.action)))}>
+                    <Badge variant="outline" className={cn("shrink-0 text-[12.5px] uppercase", toneClass(actionTone(r.action)))}>
                       {actionLabel(r.action)}
                     </Badge>
                     <div className="min-w-0 flex-1">
                       <p className="text-sm font-medium text-foreground">
                         {r.adminEmail ?? r.adminUserId.slice(0, 8) + "…"}
                       </p>
-                      <p className="text-[11px] text-muted-foreground">
+                      <p className="text-[12.5px] text-muted-foreground">
                         {formatDate(r.createdAt)}
                         {r.targetId ? ` · alvo ${r.targetId.slice(0, 8)}…` : ""}
                         {r.notes ? ` · ${r.notes}` : ""}
                       </p>
                       {(r.before || r.after) && (
                         <details className="mt-1.5">
-                          <summary className="cursor-pointer text-[11px] text-muted-foreground hover:text-foreground">
+                          <summary className="cursor-pointer text-[12.5px] text-muted-foreground hover:text-foreground">
                             Ver diff (before/after)
                           </summary>
                           <div className="mt-1 grid gap-2 sm:grid-cols-2">
-                            <pre className="max-h-40 overflow-auto rounded border border-border/50 bg-muted/40 p-2 text-[11px]">
+                            <pre className="max-h-40 overflow-auto rounded border border-border/50 bg-muted/40 p-2 text-[12.5px]">
                               {JSON.stringify(r.before ?? null, null, 2)}
                             </pre>
-                            <pre className="max-h-40 overflow-auto rounded border border-border/50 bg-muted/40 p-2 text-[11px]">
+                            <pre className="max-h-40 overflow-auto rounded border border-border/50 bg-muted/40 p-2 text-[12.5px]">
                               {JSON.stringify(r.after ?? null, null, 2)}
                             </pre>
                           </div>

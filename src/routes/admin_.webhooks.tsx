@@ -382,7 +382,7 @@ function WebhooksPage() {
               )}
               <div>
                 <div className="mb-1 text-muted-foreground">Payload</div>
-                <pre className="max-h-72 overflow-auto rounded border bg-muted/40 p-2 font-mono text-[11px]">
+                <pre className="max-h-72 overflow-auto rounded border bg-muted/40 p-2 font-mono text-[12.5px]">
                   {JSON.stringify(selected.payload, null, 2)}
                 </pre>
               </div>
