@@ -10,7 +10,8 @@ export type VisionProduct = {
   barcode: string | null;
   category: string | null;
   /** Produto já existente no catálogo com o mesmo código de barras. */
-  catalogMatch: { id: string; displayName: string } | null;
+  catalogMatch?: { id: string; displayName: string } | null;
+
 };
 
 
