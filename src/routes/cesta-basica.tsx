@@ -75,6 +75,7 @@ import { ItemPriceStrip, type PriceStripRow } from "@/components/basket/ItemPric
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { AiCostEstimate } from "@/components/ai/AiCostEstimate";
 import { AiQuotaWarning } from "@/components/ai/AiQuotaWarning";
+import { Price } from "@/components/ds/Price";
 
 
 export const Route = createFileRoute("/cesta-basica")({
@@ -730,12 +731,12 @@ function CompareMode({
 
         <SummaryCard
           label="Cesta com o menor custo"
-          value={fmt(best.total)}
+          amount={best.total}
           hint={`${best.establishmentName} · ${best.itemsFound}/${best.totalItems} itens`}
         />
         <SummaryCard
           label="Cesta teórica (menor por item)"
-          value={fmt(data.cheapestBasketTotal)}
+          amount={data.cheapestBasketTotal}
           hint="Combinando o menor preço em qualquer mercado"
         />
         <SummaryCard
@@ -849,12 +850,11 @@ function CompareMode({
                           Mais barato
                         </p>
                       )}
-                      <p className="font-display text-[19px] font-semibold leading-tight tabular-nums text-foreground">
-                        {fmt(est.displayTotal)}
-                      </p>
+                      <Price as="p" value={est.displayTotal} size="lg" />
                       {missingCount > 0 && est.maxEstimate > est.minEstimate ? (
                         <p className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-                          faixa {fmt(est.minEstimate)} — <span className="text-warning">{fmt(est.maxEstimate)}</span>
+                          faixa <Price value={est.minEstimate} size="xs" tone="muted" /> —{" "}
+                          <Price value={est.maxEstimate} size="xs" tone="muted" className="text-warning" />
                         </p>
                       ) : (
                         <p className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
@@ -900,9 +900,7 @@ function CompareMode({
                             if (it) {
                               productName = it.productName;
                               priceCell = (
-                                <span className="tabular-nums text-primary">
-                                  {fmt(it.price)}
-                                </span>
+                                <Price value={it.price} size="xs" />
                               );
                             } else if (missingMode === "ignore") {
                               priceCell = <span className="italic">ignorado</span>;
@@ -912,9 +910,7 @@ function CompareMode({
                             ) {
                               productName = "média do mercado";
                               priceCell = (
-                                <span className="tabular-nums text-accent-strong">
-                                  ~{fmt(avg)}
-                                </span>
+                                <Price value={avg} size="xs" prefix="~R$" tone="muted" />
                               );
                             }
                             return (
@@ -936,8 +932,8 @@ function CompareMode({
                               Total usado no cálculo
                             </td>
                             <td className="px-3 py-2" />
-                            <td className="px-3 py-2 text-right font-display text-[13px] font-semibold tabular-nums text-primary">
-                              {fmt(est.displayTotal)}
+                            <td className="px-3 py-2 text-right">
+                              <Price value={est.displayTotal} size="sm" className="justify-end" />
                             </td>
                           </tr>
                         </tbody>
@@ -956,7 +952,7 @@ function CompareMode({
                             >
                               <span className="h-1.5 w-1.5 rounded-full bg-primary" aria-hidden />
                               <span className="max-w-[110px] truncate">{label}</span>
-                              <span className="tabular-nums text-primary">{fmt(it.price)}</span>
+                              <Price value={it.price} size="xs" />
                             </span>
                           );
                         }
@@ -980,7 +976,7 @@ function CompareMode({
                             >
                               <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
                               <span className="max-w-[110px] truncate">{label}</span>
-                              <span className="tabular-nums">~{fmt(avg)}</span>
+                              <Price value={avg} size="xs" prefix="~R$" tone="muted" />
                             </span>
                           );
                         }
@@ -1044,9 +1040,7 @@ function CompareMode({
                     {c.establishmentName} · {c.productName}
                   </p>
                 </div>
-                <p className="shrink-0 font-display text-[15px] font-semibold tabular-nums text-primary">
-                  {fmt(c.price)}
-                </p>
+                <Price as="p" value={c.price} size="md" className="shrink-0" />
               </li>
             ))}
           </ul>
@@ -1858,7 +1852,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                           <EssentialGlyph k={e.key} className="h-3 w-3" />
                           {e.label}
                           {typeof e.avgPrice === "number" && (
-                            <span className="opacity-60">· {fmt(e.avgPrice)}</span>
+                            <Price value={e.avgPrice} size="xs" tone="muted" prefix="· R$" />
                           )}
                         </button>
                       );
@@ -1906,11 +1900,12 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                 )}
               </p>
               <h3 className="mt-0.5 font-display text-[13px] font-semibold text-foreground">
-                {previewData.count} {previewData.count === 1 ? "item" : "itens"} · custo estimado {fmt(previewData.minSum)}
+                {previewData.count} {previewData.count === 1 ? "item" : "itens"} · custo estimado{" "}
+                <Price value={previewData.minSum} size="sm" />
                 {previewData.avgSum > previewData.minSum && (
                   <span className="text-muted-foreground font-normal">
                     {" "}
-                    – {fmt(previewData.avgSum)}
+                    – <Price value={previewData.avgSum} size="xs" tone="muted" />
                   </span>
                 )}
               </h3>
@@ -1950,9 +1945,9 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                   <span className="w-24 shrink-0 text-right font-mono text-[11px] tabular-nums">
                     {r.minPrice != null ? (
                       <>
-                        <span className="text-primary">{fmt(r.minPrice)}</span>
+                        <Price value={r.minPrice} size="xs" tone="best" />
                         {r.avgPrice != null && r.avgPrice > r.minPrice && (
-                          <span className="text-muted-foreground"> / {fmt(r.avgPrice)}</span>
+                          <Price value={r.avgPrice} size="xs" tone="muted" prefix="/ R$" />
                         )}
                       </>
                     ) : (
@@ -1976,8 +1971,9 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                   Custo estimado acima do orçamento
                 </p>
                 <p className="mt-0.5 text-[11.5px] leading-snug text-muted-foreground">
-                  Piso {fmt(previewData.minSum)} · teto {fmt(previewData.avgSum)} vs orçamento{" "}
-                  <span className="font-medium text-foreground">{fmt(budgetValue)}</span>.
+                  Piso <Price value={previewData.minSum} size="xs" tone="muted" /> · teto{" "}
+                  <Price value={previewData.avgSum} size="xs" tone="muted" /> vs orçamento{" "}
+                  <Price value={budgetValue} size="xs" />.
                   Desmarque categorias ou aumente o valor para caber tudo.
                 </p>
               </div>
@@ -2083,7 +2079,8 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                 Uso do orçamento
               </p>
               <p className="font-display text-[13px] font-semibold tabular-nums text-foreground">
-                {fmt(visibleResult.total)} <span className="text-muted-foreground font-normal">/ {fmt(visibleResult.budget)}</span>
+                <Price value={visibleResult.total} size="sm" />{" "}
+                <Price value={visibleResult.budget} size="xs" tone="muted" prefix="/ R$" />
               </p>
             </div>
             <div className="mt-2 h-2 w-full overflow-hidden rounded-full bg-border/60">
@@ -2213,11 +2210,11 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                           className="block font-display text-[14px] font-semibold tabular-nums text-primary hover:underline"
                           title="Ver na mercado"
                         >
-                          {fmt(it.price)}
+                          <Price value={it.price} size="md" />
                         </Link>
                         {qtyValue > 1 ? (
                           <p className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
-                            × {qtyValue} = <span className="text-foreground">{fmt(lineTotal)}</span>
+                            × {qtyValue} = <Price value={lineTotal} size="xs" />
                           </p>
                         ) : null}
                       </div>
@@ -2309,7 +2306,7 @@ function BudgetMode({ initialBudget }: { initialBudget?: number }) {
                       className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-2.5 py-1 font-mono text-[11px] text-muted-foreground transition hover:border-primary/40 hover:text-foreground"
                     >
                       <EssentialGlyph k={k} className="h-3 w-3" />
-                      {orig.label} <span className="opacity-60">· {fmt(orig.price)}</span>
+                      {orig.label} <Price value={orig.price} size="xs" tone="muted" prefix="· R$" />
                     </button>
                   );
                 })}
@@ -2762,16 +2759,15 @@ function ManualMode({
           <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
             Sua cesta
           </p>
-          <p className="font-display text-[20px] font-bold tabular-nums text-foreground leading-none">
-            {fmt(totals.sum)}
-          </p>
+          <Price as="p" value={totals.sum} size="lg" />
           <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.14em] text-muted-foreground">
             {selectedCount} tipo(s) · {totals.items} unidade(s)
             {totals.missing > 0 && ` · ${totals.missing} sem preço`}
           </p>
           {totals.savings > 0 && (
             <p className="mt-1 font-mono text-[11px] uppercase tracking-[0.14em] text-emerald-600 dark:text-emerald-400">
-              Economia: {fmt(totals.savings)} vs. média do mercado ({fmt(totals.avgSum)})
+              Economia: <Price value={totals.savings} size="xs" tone="savings" /> vs. média do
+              mercado (<Price value={totals.avgSum} size="xs" tone="muted" />)
             </p>
           )}
         </div>
@@ -3039,9 +3035,7 @@ function ManualMode({
                       {s.itemCount} item(ns) · {s.units} unidade(s) · {share.toFixed(0)}% da cesta
                     </p>
                   </div>
-                  <p className="shrink-0 font-display text-[15px] font-bold tabular-nums text-foreground">
-                    {fmt(s.total)}
-                  </p>
+                  <Price as="p" value={s.total} size="md" className="shrink-0" />
                 </li>
               );
             })}
@@ -3771,7 +3765,11 @@ function CompareBasketsDialog({
                     : "text-amber-600 dark:text-amber-400")
               }
             >
-              {delta === 0 ? "empate" : `${delta > 0 ? "+" : ""}${fmt(delta)}`}
+              {delta === 0 ? (
+                "empate"
+              ) : (
+                <Price value={Math.abs(delta)} size="md" prefix={delta > 0 ? "+R$" : "-R$"} />
+              )}
             </p>
             <p className="mt-1 text-[11px] leading-snug text-muted-foreground">
               {cheaper === null
@@ -3815,10 +3813,18 @@ function CompareBasketsDialog({
                     <tr key={row.label}>
                       <td className="px-3 py-2 text-foreground">{row.label}</td>
                       <td className="whitespace-nowrap px-3 py-2 text-right tabular-nums text-foreground">
-                        {row.priceA != null ? fmt(row.priceA) : "—"}
+                        {row.priceA != null ? (
+                          <Price value={row.priceA} size="sm" className="justify-end" />
+                        ) : (
+                          "—"
+                        )}
                       </td>
                       <td className="whitespace-nowrap px-3 py-2 text-right tabular-nums text-foreground">
-                        {row.priceB != null ? fmt(row.priceB) : "—"}
+                        {row.priceB != null ? (
+                          <Price value={row.priceB} size="sm" className="justify-end" />
+                        ) : (
+                          "—"
+                        )}
                       </td>
                       <td
                         className={
@@ -3832,11 +3838,18 @@ function CompareBasketsDialog({
                                 : "text-amber-600 dark:text-amber-400")
                         }
                       >
-                        {row.delta == null
-                          ? "—"
-                          : row.delta === 0
-                            ? "0"
-                            : `${row.delta > 0 ? "+" : ""}${fmt(row.delta)}`}
+                        {row.delta == null ? (
+                          "—"
+                        ) : row.delta === 0 ? (
+                          "0"
+                        ) : (
+                          <Price
+                            value={Math.abs(row.delta)}
+                            size="sm"
+                            prefix={row.delta > 0 ? "+R$" : "-R$"}
+                            className="justify-end"
+                          />
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -3890,9 +3903,7 @@ function BasketSummaryCard({
       <p className="mt-0.5 truncate font-display text-[13px] font-semibold text-foreground">
         {name}
       </p>
-      <p className="mt-1 font-display text-lg font-bold tabular-nums text-foreground">
-        {fmt(total)}
-      </p>
+      <Price as="p" value={total} size="lg" className="mt-1" />
       <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
         {count} {count === 1 ? "item" : "itens"}
       </p>
@@ -4269,9 +4280,7 @@ function BasketDetailDialog({
                       </td>
                       <td className="px-3 py-2 text-right tabular-nums">
                         {r.lineTotal != null ? (
-                          <span className="text-primary">
-                            {fmt(r.lineTotal)}
-                          </span>
+                          <Price value={r.lineTotal} size="sm" className="justify-end" />
                         ) : (
                           <span className="text-warning">—</span>
                         )}
@@ -4282,8 +4291,8 @@ function BasketDetailDialog({
                     <td colSpan={3} className="px-3 py-2 font-display text-[12.5px] font-semibold text-foreground">
                       Total estimado
                     </td>
-                    <td className="px-3 py-2 text-right font-display text-[14px] font-semibold tabular-nums text-primary">
-                      {fmt(parsed.total)}
+                    <td className="px-3 py-2 text-right">
+                      <Price value={parsed.total} size="md" className="justify-end" />
                     </td>
                   </tr>
                 </tbody>
@@ -4564,13 +4573,29 @@ function AssistantSidePanel({
   );
 }
 
-function SummaryCard({ label, value, hint }: { label: string; value: string; hint?: string }) {
+function SummaryCard({
+  label,
+  value,
+  amount,
+  hint,
+}: {
+  label: string;
+  /** Texto simples para métricas não monetárias. */
+  value?: string;
+  /** Valor monetário em reais — renderizado pelo componente canônico <Price />. */
+  amount?: number | null;
+  hint?: string;
+}) {
   return (
     <div className="rounded-2xl border border-border bg-surface p-4">
       <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">{label}</p>
-      <p className="mt-1 font-display text-[22px] font-semibold tabular-nums tracking-tight text-foreground">
-        {value}
-      </p>
+      {amount !== undefined ? (
+        <Price as="p" value={amount} size="xl" className="mt-1" />
+      ) : (
+        <p className="pc-num mt-1 text-[22px] font-semibold tracking-tight text-foreground">
+          {value}
+        </p>
+      )}
       {hint && (
         <p className="mt-0.5 font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
           {hint}
