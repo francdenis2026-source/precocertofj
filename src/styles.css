@@ -277,6 +277,15 @@
   --pc-home-hero-bg: #fbfaf6;
   --pc-home-hero-img-opacity: 0.28;
 
+  /* Zonas cromáticas do painel "Explorar" (guia rápido) — LIGHT */
+  --pc-explore-live-accent: #1d4ed8;
+  --pc-explore-live-bg: rgb(29 78 216 / 0.06);
+  --pc-explore-benefit-accent: #0f766e;
+  --pc-explore-benefit-bg: rgb(15 118 110 / 0.07);
+  --pc-explore-proof-accent: #7c3f12;
+  --pc-explore-proof-bg: rgb(181 138 60 / 0.12);
+
+
   /* Semantic — nome de estabelecimento (unificado em todo o site) */
   --market-accent: #8a6218;
   --market-accent-hover: #6b4a10;
@@ -427,6 +436,15 @@
   --pc-home-onhero-gold: #F0CE86;
   --pc-home-hero-bg: #071126;
   --pc-home-hero-img-opacity: 0.44;
+
+  /* Zonas cromáticas do painel "Explorar" (guia rápido) — DARK */
+  --pc-explore-live-accent: #93c5fd;
+  --pc-explore-live-bg: rgb(147 197 253 / 0.10);
+  --pc-explore-benefit-accent: #7ee0cf;
+  --pc-explore-benefit-bg: rgb(126 224 207 / 0.09);
+  --pc-explore-proof-accent: #F0CE86;
+  --pc-explore-proof-bg: rgb(240 206 134 / 0.10);
+
 
   /* Semantic — nome de estabelecimento (dark) */
   --market-accent: #ffe3a0;
