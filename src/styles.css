@@ -39,10 +39,17 @@
  */
 
 @theme inline {
-  --font-display: "Fraunces", "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
-  --font-sans: "Inter", "Work Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-serif: "Fraunces", "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, "JetBrains Mono", monospace;
+  /*
+   * "Oswald" aqui só possui glifos de 0-9 (subset carregado no __root),
+   * portanto funciona como fonte exclusiva dos algarismos: qualquer letra
+   * ou símbolo cai na próxima família da pilha. Cores permanecem as do tema.
+   */
+  --font-numeric: "Oswald";
+  --font-display: var(--font-numeric), "Fraunces", "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-numeric), "Inter", "Work Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-serif: var(--font-numeric), "Fraunces", "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
+  --font-mono: var(--font-numeric), "IBM Plex Mono", ui-monospace, SFMono-Regular, "JetBrains Mono", monospace;
+
 
 
   --radius-sm: calc(var(--radius) - 6px);
