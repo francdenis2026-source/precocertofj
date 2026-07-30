@@ -157,7 +157,7 @@ export function CollaboratorUploadForm({ embedded = false }: { embedded?: boolea
             id="upload-title"
             className="flex items-center gap-2 text-[15.5px] font-semibold tracking-tight text-foreground"
           >
-            <Upload className="h-4 w-4 text-brand-gold" strokeWidth={2.2} />
+            <Upload className="h-4 w-4 text-gold-ink" strokeWidth={2.2} />
             Enviar direto pelo app
           </h2>
           <p className="mt-0.5 text-[12.5px] leading-snug text-muted-foreground">

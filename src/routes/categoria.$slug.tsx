@@ -327,7 +327,7 @@ function CategoryPage() {
         <div className="mx-auto w-full max-w-6xl px-4 pt-3"><HomeBrandLink /></div>
         <main className="mx-auto max-w-3xl px-4 py-16 text-center">
           <h1 className="font-serif text-[24px] font-semibold">Categoria não encontrada</h1>
-          <Link to="/" className="mt-4 inline-block text-[13px] font-semibold text-brand-gold underline">
+          <Link to="/" className="mt-4 inline-block text-[13px] font-semibold text-gold-ink underline">
             Voltar à página inicial
           </Link>
         </main>
@@ -352,7 +352,7 @@ function CategoryPage() {
               <Icon className="h-[18px] w-[18px] sm:h-5 sm:w-5" strokeWidth={2.2} aria-hidden />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="gold-on-dark text-[11px] font-bold uppercase leading-none tracking-[0.18em] text-brand-gold">
+              <p className="gold-on-dark text-[11px] font-bold uppercase leading-none tracking-[0.18em] text-gold-ink">
                 Categoria
               </p>
               <h1 className="mt-1 truncate font-serif text-[19px] font-semibold leading-[1.15] text-white sm:text-[22px]">
@@ -459,7 +459,7 @@ function CategoryPage() {
                           geral da categoria — mostra onde o usuário ganha mais. */}
                       {s.avgSavingPct !== null && (
                         <span
-                          className="mt-0.5 block truncate text-[11px] font-semibold tabular-nums text-brand-gold"
+                          className="mt-0.5 block truncate text-[11px] font-semibold tabular-nums text-gold-ink"
                           title={`Média em ${s.comparedProducts} produto(s) presentes em 2+ lojas. Média da categoria: ${catAvgSaving ?? 0}%`}
                         >
                           Economia média aqui: {s.avgSavingPct.toLocaleString("pt-BR", { maximumFractionDigits: 1 })}%
@@ -469,7 +469,7 @@ function CategoryPage() {
                         </span>
                       )}
                     </span>
-                    <ArrowRight className="h-4 w-4 shrink-0 text-brand-gold" aria-hidden />
+                    <ArrowRight className="h-4 w-4 shrink-0 text-gold-ink" aria-hidden />
 
                   </Link>
                   {slug === "acougues" && !s.isNicheStore && (
@@ -479,7 +479,7 @@ function CategoryPage() {
                       search={{ aba: "acougue" } as never}
                       className="mt-1 inline-flex h-7 items-center gap-1 rounded-full border border-border px-2.5 text-[11px] font-semibold text-foreground hover:border-brand-gold"
                     >
-                      <Beef className="h-3 w-3 text-brand-gold" aria-hidden /> Ver açougue do mercado
+                      <Beef className="h-3 w-3 text-gold-ink" aria-hidden /> Ver açougue do mercado
                     </Link>
                   )}
                 </li>
@@ -673,7 +673,7 @@ function CategoryPage() {
                       </span>
                       <span className={cn(
                         "grid h-7 w-7 shrink-0 place-items-center rounded-full",
-                        isTop ? "text-[var(--pc-gold-ink)]" : "border border-[var(--pc-surface-2-border)] text-brand-gold",
+                        isTop ? "text-[var(--pc-gold-ink)]" : "border border-[var(--pc-surface-2-border)] text-gold-ink",
                       )}>
                         <ArrowRight className="h-3.5 w-3.5" aria-hidden />
                       </span>
@@ -1074,7 +1074,7 @@ function Stat({
       <dt className="text-[11px] font-semibold uppercase leading-none tracking-[0.16em] text-white/85">
         {label}
       </dt>
-      <dd className="gold-on-dark mt-1.5 text-[16px] font-bold leading-none tabular-nums text-brand-gold">
+      <dd className="gold-on-dark mt-1.5 text-[16px] font-bold leading-none tabular-nums text-gold-ink">
         {value.toLocaleString("pt-BR", suffix === "%" ? { maximumFractionDigits: 1 } : undefined)}
         {suffix ? <span className="text-[12px] font-semibold">{suffix}</span> : null}
       </dd>
@@ -1207,7 +1207,7 @@ function ButcherProteinChips({
                   disabled && "cursor-not-allowed opacity-40",
                 )}
               >
-                <c.Icon className={cn("h-3 w-3", isActive ? "text-brand-navy" : "text-brand-gold")} aria-hidden />
+                <c.Icon className={cn("h-3 w-3", isActive ? "text-brand-navy" : "text-gold-ink")} aria-hidden />
                 {c.label}
                 <span className={cn("ml-0.5 tabular-nums", isActive ? "text-brand-navy/80" : "text-muted-foreground")}>
                   {n}
@@ -1281,7 +1281,7 @@ function HortifrutiSubgroupChips({
                   disabled && "cursor-not-allowed opacity-40",
                 )}
               >
-                <Apple className={cn("h-3 w-3", isActive ? "text-brand-navy" : "text-brand-gold")} aria-hidden />
+                <Apple className={cn("h-3 w-3", isActive ? "text-brand-navy" : "text-gold-ink")} aria-hidden />
                 {c.label}
                 <span className={cn("ml-0.5 tabular-nums", isActive ? "text-brand-navy/80" : "text-muted-foreground")}>
                   {c.n}
@@ -1357,7 +1357,7 @@ function PlantaoStrip() {
               href={`tel:${f.telefones[0].replace(/\D/g, "")}`}
               className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-background px-3 text-[11.5px] font-semibold leading-none whitespace-nowrap text-foreground transition-colors hover:border-brand-gold"
             >
-              <Phone className="h-3 w-3 text-brand-gold" aria-hidden /> {f.telefones[0]}
+              <Phone className="h-3 w-3 text-gold-ink" aria-hidden /> {f.telefones[0]}
             </a>
           )}
           <Link

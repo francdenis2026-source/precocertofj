@@ -597,7 +597,7 @@ const ActionButtons = memo(function ActionButtons({
           aria-label={`Criar alerta de preço para ${cut.productName}`}
           className={cls}
         >
-          <Bell className="h-3 w-3 text-brand-gold" aria-hidden /> Alerta
+          <Bell className="h-3 w-3 text-gold-ink" aria-hidden /> Alerta
         </button>
       )}
       {onHistory && (
@@ -607,7 +607,7 @@ const ActionButtons = memo(function ActionButtons({
           aria-label={`Ver histórico de preço de ${cut.productName}`}
           className={cls}
         >
-          <History className="h-3 w-3 text-brand-gold" aria-hidden /> Histórico
+          <History className="h-3 w-3 text-gold-ink" aria-hidden /> Histórico
         </button>
       )}
     </div>

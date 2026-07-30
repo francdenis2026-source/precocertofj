@@ -54,7 +54,7 @@ export function Logo({
             )}
           >
             Preço
-            <span className={onLight ? "text-[#6b4a12]" : "text-brand-gold"}>
+            <span className={onLight ? "text-[#6b4a12]" : "text-gold-ink"}>
               Certo
             </span>
           </span>
@@ -73,7 +73,7 @@ export function Logo({
                 aria-hidden="true"
                 className="inline-block h-[2px] w-4 rounded-full bg-brand-gold"
               />
-              Feijó <span className="text-brand-gold">•</span> Acre
+              Feijó <span className="text-gold-ink">•</span> Acre
             </span>
           )}
         </span>

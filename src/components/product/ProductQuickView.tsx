@@ -175,7 +175,7 @@ export function ProductQuickView({
             <div className="mb-3 flex items-center gap-2.5 rounded-lg border border-brand-gold/40 bg-brand-gold/10 p-2.5">
               <StoreBadge name={cheapest.marketName} logoUrl={cheapestLogo} size="xs" />
               <div className="min-w-0 flex-1">
-                <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-brand-gold">
+                <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-gold-ink">
                   Menor preço
                 </p>
                 <p className="truncate text-[12.5px] font-semibold">{cheapest.marketName}</p>
@@ -217,7 +217,7 @@ export function ProductQuickView({
               role="alert"
               className="rounded-lg border border-dashed border-border bg-card/60 px-3 py-4 text-center"
             >
-              <AlertTriangle className="mx-auto h-4 w-4 text-brand-gold" aria-hidden />
+              <AlertTriangle className="mx-auto h-4 w-4 text-gold-ink" aria-hidden />
               <p className="mt-1.5 text-[12.5px] font-semibold text-foreground">
                 Não foi possível carregar os preços
               </p>
@@ -283,7 +283,7 @@ export function ProductQuickView({
 
           {data?.min != null && data?.avg != null && data.avg > data.min && (
             <p className="mt-2 inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-[11px] font-semibold text-foreground">
-              <TrendingDown className="h-3 w-3 text-brand-gold" aria-hidden />
+              <TrendingDown className="h-3 w-3 text-gold-ink" aria-hidden />
               Economia de até{" "}
               <Price value={data.avg - data.min} size="sm" tone="savings" />{" "}
               frente à média

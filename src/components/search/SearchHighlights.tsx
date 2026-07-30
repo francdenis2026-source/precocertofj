@@ -192,7 +192,7 @@ export function SearchHighlights({ onPickQuery }: Props) {
         <div className="flex min-w-0 items-center gap-2">
           <span
             aria-hidden
-            className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-brand-gold/15 text-brand-gold-soft dark:text-brand-gold"
+            className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-brand-gold/15 text-gold-ink-soft dark:text-gold-ink"
           >
             {isPersonal ? (
               <Sparkles className="h-4 w-4" strokeWidth={2.25} />
@@ -368,7 +368,7 @@ function EmptyHighlights({
         )}
         <Link
           to="/colaborar"
-          className="inline-flex h-7 items-center gap-1 rounded-full border border-brand-gold px-2.5 text-[11.5px] font-semibold text-brand-gold-soft transition-colors hover:bg-brand-gold hover:text-brand-navy dark:text-brand-gold"
+          className="inline-flex h-7 items-center gap-1 rounded-full border border-brand-gold px-2.5 text-[11.5px] font-semibold text-gold-ink-soft transition-colors hover:bg-brand-gold hover:text-brand-navy dark:text-gold-ink"
         >
           <PlusCircle aria-hidden className="h-3.5 w-3.5" />
           Cadastrar um preço
@@ -458,7 +458,7 @@ function CoveredRow({ item, onPick }: { item: HighlightItem; onPick: () => void 
       </span>
       <ArrowRight
         aria-hidden
-        className="h-3.5 w-3.5 shrink-0 text-muted-foreground transition-colors group-hover:text-brand-gold"
+        className="h-3.5 w-3.5 shrink-0 text-muted-foreground transition-colors group-hover:text-gold-ink"
       />
     </button>
   );

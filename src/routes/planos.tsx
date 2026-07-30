@@ -224,7 +224,7 @@ function PlansPage() {
                 <span className="inline-flex flex-wrap items-center gap-x-2 gap-y-1">
                   <span>Assinatura mensal a partir de <strong className="text-foreground">R$ 29,90</strong> — economize até 30% no anual.</span>
                   <span className="inline-flex items-center gap-1 text-[11.5px] text-muted-foreground">
-                    <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-brand-gold" aria-hidden />
+                    <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-gold-ink" aria-hidden />
                     Pix instantâneo · Ativação imediata
                   </span>
                 </span>
@@ -237,7 +237,7 @@ function PlansPage() {
                 onClick={() => setOpenSheet("compare")}
                 className="pc-focus inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[12px] font-semibold text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)]"
               >
-                <Sparkles className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+                <Sparkles className="h-3.5 w-3.5 text-gold-ink" aria-hidden />
                 Comparar
               </button>
               <button
@@ -245,12 +245,12 @@ function PlansPage() {
                 onClick={() => setOpenSheet("faq")}
                 className="pc-focus inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[12px] font-semibold text-muted-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)]"
               >
-                <ChevronDown className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+                <ChevronDown className="h-3.5 w-3.5 text-gold-ink" aria-hidden />
                 Perguntas
               </button>
               <Link
                 to="/resgatar"
-                className="pc-focus inline-flex h-8 items-center rounded-full px-3 text-[12px] font-semibold text-brand-gold hover:underline"
+                className="pc-focus inline-flex h-8 items-center rounded-full px-3 text-[12px] font-semibold text-gold-ink hover:underline"
               >
                 Já tenho código →
               </Link>
@@ -361,7 +361,7 @@ function PlansPage() {
                     <ul className="min-h-0 flex-1 space-y-2 overflow-hidden text-[12.5px] leading-snug">
                       {planHighlights(plan).slice(0, 4).map((h) => (
                         <li key={h} className="flex items-start gap-2">
-                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-brand-gold" aria-hidden />
+                          <Check className="mt-0.5 h-3.5 w-3.5 shrink-0 text-gold-ink" aria-hidden />
                           <span className="text-foreground/85">{h}</span>
                         </li>
                       ))}
@@ -382,7 +382,7 @@ function PlansPage() {
                         tc.control,
                         isRecommended
                           ? "btn-gold shadow-elev-1"
-                          : "border border-border bg-card text-foreground hover:border-brand-gold hover:text-brand-gold",
+                          : "border border-border bg-card text-foreground hover:border-brand-gold hover:text-gold-ink",
                       )}
                     >
                       {buying === plan.id
@@ -454,7 +454,7 @@ function PlansPage() {
                 </tbody>
               </table>
               <p className={cn(tc.meta, "mt-3 flex items-center gap-1.5")}>
-                <ShieldCheck className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+                <ShieldCheck className="h-3.5 w-3.5 text-gold-ink" aria-hidden />
                 Ativação imediata após confirmação de pagamento pelo Mercado Pago.
               </p>
             </div>
@@ -512,7 +512,7 @@ function PlansPage() {
         >
           <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border bg-card px-3.5 py-2 shadow-elev-1">
             <p className="inline-flex items-center gap-1.5 text-[11.5px] text-muted-foreground">
-              <ShieldCheck className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+              <ShieldCheck className="h-3.5 w-3.5 text-gold-ink" aria-hidden />
               Pagamento seguro Mercado Pago · Cancele quando quiser
             </p>
             <div className="flex items-center gap-1.5 md:hidden">
@@ -521,7 +521,7 @@ function PlansPage() {
                 onClick={() => setOpenSheet("compare")}
                 className="pc-focus inline-flex h-8 items-center gap-1 rounded-full border border-border bg-background px-2.5 text-[11.5px] font-semibold text-muted-foreground hover:border-brand-gold hover:text-[var(--pc-gold-ink)]"
               >
-                <Sparkles className="h-3 w-3 text-brand-gold" aria-hidden />
+                <Sparkles className="h-3 w-3 text-gold-ink" aria-hidden />
                 Comparar
               </button>
               <button
@@ -533,7 +533,7 @@ function PlansPage() {
               </button>
               <Link
                 to="/resgatar"
-                className="pc-focus inline-flex h-8 items-center rounded-full px-2.5 text-[11.5px] font-semibold text-brand-gold hover:underline"
+                className="pc-focus inline-flex h-8 items-center rounded-full px-2.5 text-[11.5px] font-semibold text-gold-ink hover:underline"
               >
                 Código →
               </Link>
@@ -661,7 +661,7 @@ function ComparisonCell({ value }: { value: string | boolean | undefined }) {
   if (value === true) {
     return (
       <span className="inline-flex items-center justify-center">
-        <Check className="h-4 w-4 text-brand-gold" strokeWidth={2.5} aria-label="Incluído" />
+        <Check className="h-4 w-4 text-gold-ink" strokeWidth={2.5} aria-label="Incluído" />
       </span>
     );
   }
@@ -786,7 +786,7 @@ function ComparisonMatrix({
                       "inline-flex min-h-10 w-full items-center justify-center gap-1 rounded-lg px-2 py-2 text-[11px] font-bold uppercase tracking-[0.08em] transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold disabled:cursor-wait disabled:opacity-70",
                       isRec
                         ? "bg-brand-gold text-brand-navy shadow-elev-1 hover:brightness-105"
-                        : "border border-border bg-background text-foreground hover:border-brand-gold hover:text-brand-gold",
+                        : "border border-border bg-background text-foreground hover:border-brand-gold hover:text-gold-ink",
                     )}
                   >
                     {buying === p.id

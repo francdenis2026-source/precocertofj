@@ -593,7 +593,7 @@ function MelhoresPrecosPage() {
             return (
               <div key={s.label} className="min-w-0 px-2.5 py-1.5 sm:px-3.5">
                 <dt className={dsx(tc.tag, "flex min-w-0 items-center gap-1.5 text-muted-foreground")}>
-                  <Icon className="h-3.5 w-3.5 shrink-0 text-brand-gold" strokeWidth={2} />
+                  <Icon className="h-3.5 w-3.5 shrink-0 text-gold-ink" strokeWidth={2} />
                   <span className="truncate">{s.label}</span>
                 </dt>
                 <dd className={dsx(tc.num, "mt-0.5 truncate font-semibold text-foreground")}>

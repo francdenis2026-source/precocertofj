@@ -646,11 +646,11 @@ export function PriceSearchBar({
         className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[color-mix(in_oklab,var(--color-accent)_70%,transparent)] to-transparent"
       />
       <div className="mb-2 flex items-center gap-2">
-        <Search className="h-4 w-4 text-brand-navy dark:text-brand-gold" strokeWidth={2.25} aria-hidden="true" />
+        <Search className="h-4 w-4 text-brand-navy dark:text-gold-ink" strokeWidth={2.25} aria-hidden="true" />
         <span
           role="note"
           aria-label="Passo 01: Pesquisar preço"
-          className="inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-navy px-2 py-0.5 font-sans text-[11px] font-medium text-brand-gold gold-on-dark"
+          className="inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-navy px-2 py-0.5 font-sans text-[11px] font-medium text-gold-ink gold-on-dark"
         >
           <span aria-hidden="true" className="tabular-nums">01</span>
           <span aria-hidden="true" className="opacity-70">·</span>
@@ -665,7 +665,7 @@ export function PriceSearchBar({
           <Search
             aria-hidden="true"
             strokeWidth={2.25}
-            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-navy dark:text-brand-gold"
+            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-brand-navy dark:text-gold-ink"
           />
           <input
             ref={inputRef}
@@ -1023,7 +1023,7 @@ export function PriceSearchBar({
               role="status"
               className="flex flex-wrap items-center gap-2 rounded-lg border border-brand-gold/40 bg-brand-gold/10 px-3 py-2 text-[12px] text-foreground"
             >
-              <Sparkles className="h-3.5 w-3.5 text-brand-gold" aria-hidden="true" />
+              <Sparkles className="h-3.5 w-3.5 text-gold-ink" aria-hidden="true" />
               <span>
                 Corrigido para{" "}
                 <strong className="font-semibold">“{autoCorrected.to}”</strong>. Você digitou{" "}
@@ -1120,7 +1120,7 @@ export function PriceSearchBar({
                     <span aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-brand-gold/70 to-transparent" />
                     <span aria-hidden className="pointer-events-none absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b from-brand-gold via-brand-gold/60 to-transparent" />
                     <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 bg-white/[0.03] px-3.5 py-1.5">
-                      <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-gold">
+                      <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-gold-ink">
                         <span aria-hidden className="inline-block h-1.5 w-1.5 rounded-full bg-brand-gold shadow-[0_0_8px_rgba(201,168,76,0.9)]" />
                         Melhor resultado
                       </span>
@@ -1128,7 +1128,7 @@ export function PriceSearchBar({
                         <span
                           role="status"
                           aria-label={`Economia estimada de ${pct} por cento comprando pelo menor preço.`}
-                          className="inline-flex items-center gap-1 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-2 py-[2px] text-[10.5px] font-bold uppercase tracking-[0.08em] text-brand-gold"
+                          className="inline-flex items-center gap-1 rounded-full border border-brand-gold/40 bg-brand-gold/10 px-2 py-[2px] text-[10.5px] font-bold uppercase tracking-[0.08em] text-gold-ink"
                         >
                           Economize {pct}% hoje
                         </span>
@@ -1142,7 +1142,7 @@ export function PriceSearchBar({
 
                     <div className="grid gap-3 px-3.5 py-3 sm:grid-cols-2 sm:gap-4">
                       <div className="min-w-0">
-                        <p className="flex items-center gap-2 text-[11px] font-medium text-brand-gold/90">
+                        <p className="flex items-center gap-2 text-[11px] font-medium text-gold-ink/90">
                           Menor preço agora
                           <LiveUpdateBadge active={live.active} tone="onDark" />
                         </p>
@@ -1182,7 +1182,7 @@ export function PriceSearchBar({
 
                       {hasGap ? (
                         <div className="min-w-0 border-t border-white/10 pt-3 sm:border-t-0 sm:border-l sm:pt-0 sm:pl-4">
-                          <p className="text-[11px] font-medium text-brand-gold/90">Economia estimada</p>
+                          <p className="text-[11px] font-medium text-gold-ink/90">Economia estimada</p>
                           <p className="pc-num pc-num--onhero mt-1 text-[26px] font-bold leading-none">
                             <Price value={gap} size="sm" />
                             <span className="pc-num pc-num--onhero ml-1.5 align-middle text-[12px] font-bold opacity-90">
@@ -1203,7 +1203,7 @@ export function PriceSearchBar({
                     {bestProductName && bestMarketPrices.length > 1 ? (
                       <div className="border-t border-white/10 bg-white/[0.025] px-3.5 py-2">
                         <div className="mb-1.5 flex items-center justify-between gap-2">
-                          <p className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-brand-gold/90">
+                          <p className="text-[10.5px] font-semibold uppercase tracking-[0.14em] text-gold-ink/90">
                             Onde encontrar este produto
                           </p>
                           <p className="text-[10.5px] font-medium text-white/55 tabular-nums">
@@ -1226,7 +1226,7 @@ export function PriceSearchBar({
                             >
                               <span className="flex min-w-0 items-center gap-1.5">
                                 {i === 0 ? (
-                                  <Crown className="h-3 w-3 shrink-0 text-brand-gold" strokeWidth={2.25} aria-hidden />
+                                  <Crown className="h-3 w-3 shrink-0 text-gold-ink" strokeWidth={2.25} aria-hidden />
                                 ) : (
                                   <span className="grid h-4 w-4 shrink-0 place-items-center rounded-full border border-white/18 text-[9.5px] font-bold text-white/65 tabular-nums">
                                     {i + 1}
@@ -1240,7 +1240,7 @@ export function PriceSearchBar({
                                 size="sm"
                                 tone="onhero"
                                 value={p.price}
-                                className="text-brand-gold"
+                                className="text-gold-ink"
                               />
                             </button>
                           ))}
@@ -1563,7 +1563,7 @@ export function PriceSearchBar({
                                       </span>
                                       {Number.isFinite(catMin) ? (
                                         <span
-                                          className="inline-flex items-center gap-1 rounded-full border border-brand-gold/40 bg-brand-navy px-2 py-[2px] text-[10.5px] font-bold uppercase tracking-[0.08em] text-brand-gold"
+                                          className="inline-flex items-center gap-1 rounded-full border border-brand-gold/40 bg-brand-navy px-2 py-[2px] text-[10.5px] font-bold uppercase tracking-[0.08em] text-gold-ink"
                                           title={`Menor preço nesta categoria: ${fmt(catMin)}`}
                                           aria-label={`Menor preço na categoria ${cat}: ${fmt(catMin)}`}
                                         >
@@ -2699,7 +2699,7 @@ function ProductGroupCard({
                 <span
                   role="img"
                   aria-label={cheapestCount > 1 ? `Menor preço — empate com ${cheapestCount - 1} outro${cheapestCount - 1 === 1 ? "" : "s"}` : "Menor preço"}
-                  className="pointer-events-none absolute -top-2 right-2 z-10 inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-navy px-2 py-[2px] text-[11px] font-bold uppercase tracking-[0.14em] text-brand-gold shadow-sm"
+                  className="pointer-events-none absolute -top-2 right-2 z-10 inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-navy px-2 py-[2px] text-[11px] font-bold uppercase tracking-[0.14em] text-gold-ink shadow-sm"
                 >
                   <Crown className="h-2.5 w-2.5" strokeWidth={2.25} aria-hidden="true" />
                   <span>{cheapestCount > 1 ? `Menor preço · empate ${cheapestCount}` : "Menor preço"}</span>
@@ -3636,7 +3636,7 @@ function MatrixCompareResults({
                       type="button"
                       onClick={() => openProduct(g.productName)}
                       aria-label={productLabel}
-                      className="block w-full truncate text-left text-[13px] font-medium text-foreground hover:text-brand-gold focus:outline-none rounded"
+                      className="block w-full truncate text-left text-[13px] font-medium text-foreground hover:text-gold-ink focus:outline-none rounded"
                     >
                       <HighlightMatch text={g.productName} tokens={highlightTokens} />
                     </button>
@@ -3689,7 +3689,7 @@ function MatrixCompareResults({
                         ) : (
                           <div className="flex items-center gap-1.5">
                             {isMin ? (
-                              <Crown className="h-3 w-3 text-brand-gold" aria-hidden="true" />
+                              <Crown className="h-3 w-3 text-gold-ink" aria-hidden="true" />
                             ) : null}
                             <span><Price value={v} size="xs" /></span>
                             {rowMin != null && v > rowMin ? (

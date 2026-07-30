@@ -78,7 +78,7 @@ function BasketAuditPage() {
 
         <header className="space-y-1">
           <h1 className="flex items-center gap-2 text-xl font-bold text-foreground">
-            <History className="h-5 w-5 text-brand-gold" aria-hidden /> Auditoria da Cesta Básica
+            <History className="h-5 w-5 text-gold-ink" aria-hidden /> Auditoria da Cesta Básica
           </h1>
           <p className="text-sm text-muted-foreground">
             Histórico de criações, ativações e edições dos itens da cesta. Somente admins.

@@ -399,7 +399,7 @@ function EstablishmentPage() {
               params={{ slug }}
               className="inline-flex h-8 items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold/10 px-3 text-[12.5px] font-bold uppercase leading-none tracking-[0.16em] text-foreground transition-colors hover:bg-brand-gold/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
             >
-              <PackageSearch className="h-3.5 w-3.5 text-brand-gold" aria-hidden /> Catálogo completo
+              <PackageSearch className="h-3.5 w-3.5 text-gold-ink" aria-hidden /> Catálogo completo
             </Link>
           </div>
         </div>
@@ -416,7 +416,7 @@ function EstablishmentPage() {
               className="rounded-xl"
             />
             <div className="min-w-0">
-              <p className="text-[12.5px] font-bold uppercase leading-none tracking-[0.18em] text-brand-gold">
+              <p className="text-[12.5px] font-bold uppercase leading-none tracking-[0.18em] text-gold-ink">
                 Mercado parceiro
               </p>
               <div className="mt-1 flex flex-wrap items-center justify-between gap-2">
@@ -439,7 +439,7 @@ function EstablishmentPage() {
               </p>
               <div className="mt-2 flex flex-wrap items-center gap-1.5">
                 {distance && (
-                  <span className="inline-flex h-6 items-center gap-1 rounded-full border border-brand-gold/45 bg-brand-gold/15 px-2.5 text-[12.5px] font-bold uppercase leading-none tracking-[0.14em] text-brand-gold">
+                  <span className="inline-flex h-6 items-center gap-1 rounded-full border border-brand-gold/45 bg-brand-gold/15 px-2.5 text-[12.5px] font-bold uppercase leading-none tracking-[0.14em] text-gold-ink">
                     <MapPin className="h-3 w-3" aria-hidden />
                     {formatDistance(distance.km)}{" "}
                     {distance.source === "exact" ? "de você" : "aprox."}
@@ -598,7 +598,7 @@ function EstablishmentPage() {
                 <Link
                   to="/categoria/$slug"
                   params={{ slug: activeHub.slug }}
-                  className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-brand-gold underline-offset-2 hover:underline"
+                  className="mt-2 inline-flex items-center gap-1.5 text-[13px] font-semibold text-gold-ink underline-offset-2 hover:underline"
                 >
                   Comparar {selectedCategory} em toda a cidade · {activeHub.label}
                   <ArrowRight className="h-3.5 w-3.5" aria-hidden />
@@ -914,7 +914,7 @@ function StoreStat({
       <dd
         className={
           "mt-1 truncate text-[17px] font-bold leading-none tabular-nums " +
-          (accent ? "text-brand-gold" : "text-white")
+          (accent ? "text-gold-ink" : "text-white")
         }
       >
         {value}
@@ -965,7 +965,7 @@ function CategoryChip({
     >
       {HubIcon && (
         <HubIcon
-          className={"h-3.5 w-3.5 shrink-0 " + (active ? "text-brand-navy/80" : "text-brand-gold")}
+          className={"h-3.5 w-3.5 shrink-0 " + (active ? "text-brand-navy/80" : "text-gold-ink")}
           strokeWidth={2.1}
           aria-hidden
         />
