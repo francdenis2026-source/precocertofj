@@ -258,10 +258,20 @@ function HomePage() {
   /* Hero e faixa "Buscas em alta" consomem a mesma fonte, mas nunca repetem
      termos: o hero fica com os 4 primeiros e a faixa com os seguintes. */
   const heroPopular = useMemo(() => popularAll.slice(0, 4), [popularAll]);
+  /* Em janelas baixas mostramos apenas uma linha de chips: a home precisa
+     caber inteira na viewport, sem rolagem nem corte. */
+  const [shortViewport, setShortViewport] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-height: 760px)");
+    const apply = () => setShortViewport(mq.matches);
+    apply();
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, []);
   const trendingPopular = useMemo(() => {
     const rest = popularAll.slice(4);
-    return (rest.length >= 4 ? rest : popularAll).slice(0, 8);
-  }, [popularAll]);
+    return (rest.length >= 4 ? rest : popularAll).slice(0, shortViewport ? 5 : 8);
+  }, [popularAll, shortViewport]);
 
 
 
