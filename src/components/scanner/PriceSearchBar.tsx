@@ -100,6 +100,8 @@ export function PriceSearchBar({
   focusMarket = null,
   onFocusChange,
   fitResults = false,
+  autoFocusResults = false,
+
 }: {
   initialQuery?: string;
   mode?: SearchMode;
