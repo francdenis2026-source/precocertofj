@@ -1058,7 +1058,7 @@ function HomePage() {
                       isActive ? `Termo selecionado: ${t}` : `Buscar por ${t}`
                     }
                     data-active={isActive ? "true" : undefined}
-                    className="pc-trend-chip group relative flex h-full min-h-[40px] w-full items-center gap-1.5 overflow-hidden rounded-xl border px-2.5 py-1.5 text-left text-[12px] leading-[1.2] font-semibold capitalize transition-all duration-200 hover:-translate-y-[1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
+                    className="pc-trend-chip group relative flex h-full min-h-[40px] short-h:min-h-[32px] w-full items-center gap-1.5 overflow-hidden rounded-xl border px-2.5 py-1.5 short-h:py-1 text-left text-[12px] short-h:text-[11.5px] leading-[1.2] font-semibold capitalize transition-all duration-200 hover:-translate-y-[1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
                     style={{
                       background: isActive
                         ? "color-mix(in oklab, var(--pc-home-onhero-gold) 26%, var(--pc-home-onhero-glass-soft))"
