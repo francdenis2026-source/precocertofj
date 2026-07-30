@@ -21,6 +21,7 @@ import { FreeQuotaBadge } from "@/components/paywall/FreeQuotaBadge";
 import { PriceHero } from "@/components/product/PriceHero";
 import { SavingsBadge } from "@/components/product/SavingsBadge";
 import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
+import { Price } from "@/components/ds/Price";
 import { ConfidenceBadge, computeConfidence } from "@/components/product/ConfidenceBadge";
 import { computeUnitPrice } from "@/lib/unit-price";
 import {
@@ -1251,9 +1252,7 @@ function ComparisonTableRow({
         )}
       </td>
       <td className="pc-best-result pc-best-result--compact px-4 py-3 text-right border-l border-[color-mix(in_oklab,var(--pc-gold-ink)_20%,transparent)] bg-[color-mix(in_oklab,var(--pc-gold-ink)_5%,transparent)]" aria-label="Menor preço do produto">
-        <p className="pc-price pc-price--lg pc-price--best">
-          {formatBRL(Number(row.min_price))}
-        </p>
+        <Price as="p" value={Number(row.min_price)} size="lg" tone="best" />
         <p className={cn("mt-1 truncate pc-store-emphasis", tc.storeNameTight)} title={row.cheapest_store}>
           {shortenStoreName(row.cheapest_store)}
         </p>
@@ -1280,11 +1279,10 @@ function ComparisonTableRow({
       <td className="hidden px-4 py-3 text-right md:table-cell">
         {isMulti ? (
           <span className="inline-flex flex-col items-end gap-0.5">
-            <span className="pc-price pc-price--sm pc-price--strike">
-              {formatBRL(Number(row.avg_price))}
-            </span>
-            <span className="pc-price pc-price--sm pc-price--muted">
-              maior {formatBRL(Number(row.max_price))}
+            <Price value={Number(row.avg_price)} size="sm" tone="strike" />
+            <span className="inline-flex items-baseline gap-1 text-[11px] text-muted-foreground">
+              maior
+              <Price value={Number(row.max_price)} size="sm" tone="muted" />
             </span>
           </span>
         ) : (
@@ -1481,9 +1479,7 @@ function ProductCardBase({
           {isMulti && (
             <p className="mt-1 truncate text-[11px] leading-tight text-muted-foreground">
               Maior no município:{" "}
-              <span className="pc-price pc-price--sm pc-price--muted">
-                {formatBRL(Number(row.max_price))}
-              </span>
+              <Price value={Number(row.max_price)} size="sm" tone="muted" />
               {stores.length > 1 ? ` — ${shortenStoreName(stores[stores.length - 1].store_name)}` : ""}
             </p>
           )}
@@ -1545,14 +1541,13 @@ function ProductCardBase({
                     {shortenStoreName(s.store_name)}
                   </span>
                 </div>
-                <span
-                  className={cn(
-                    "pc-price pc-price--sm shrink-0 leading-none",
-                    isBest ? "pc-price--savings" : "text-muted-foreground",
-                  )}
-                >
-                  {formatBRL(Number(s.price))}
-                </span>
+                <Price
+                  value={Number(s.price)}
+                  size="sm"
+                  tone={isBest ? "savings" : "muted"}
+                  className="shrink-0"
+                />
+
               </li>
             );
           })}

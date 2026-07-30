@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate, Navigate } from "@tanstack/react-router";
+import { Price } from "@/components/ds/Price";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useEffect, useMemo, useState } from "react";
@@ -256,20 +257,14 @@ function AdminReportCard({ report }: { report: AdminPriceReport }) {
           <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
             Preço na base
           </p>
-          <p className="num font-semibold">
-            {report.reportedPrice != null
-              ? `R$ ${report.reportedPrice.toFixed(2).replace(".", ",")}`
-              : "—"}
-          </p>
+          <Price as="p" value={report.reportedPrice ?? null} size="md" />
         </div>
         {report.correctPrice != null && (
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
               Preço sugerido
             </p>
-            <p className="num font-semibold text-primary">
-              R$ {report.correctPrice.toFixed(2).replace(".", ",")}
-            </p>
+            <Price as="p" value={report.correctPrice} size="md" tone="best" />
           </div>
         )}
         {report.productSlug && (

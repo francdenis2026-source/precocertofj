@@ -1,10 +1,7 @@
 import { shortenStoreName } from "@/lib/store-name";
 import { cn } from "@/lib/utils";
 import { SavingsBadge } from "@/components/product/SavingsBadge";
-
-function formatBRL(n: number): string {
-  return n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-}
+import { Price, type PriceSize } from "@/components/ds/Price";
 
 /**
  * Bloco unificado de "preço em destaque" — usado no ProductCard do
@@ -37,11 +34,8 @@ export function PriceHero({
   eyebrow?: string;
 }) {
   const label = eyebrow ?? (isMulti ? "Menor preço" : "Preço");
-  const numeralSize = {
-    sm: "text-lg",
-    md: "text-2xl",
-    lg: "text-3xl",
-  }[size];
+  /* Escala única de preço do design system (evita text-lg/2xl ad-hoc). */
+  const numeralSize: PriceSize = ({ sm: "md", md: "lg", lg: "xl" } as const)[size];
 
   return (
     <div
@@ -55,14 +49,7 @@ export function PriceHero({
         <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.22em] text-muted-foreground">
           {label}
         </p>
-        <p
-          className={cn(
-            "mt-0.5 font-display font-extrabold leading-none tabular-nums text-primary",
-            numeralSize,
-          )}
-        >
-          {formatBRL(Number(minPrice))}
-        </p>
+        <Price as="p" value={Number(minPrice)} size={numeralSize} className="mt-0.5" />
         {cheapestStore && (
           <p className="mt-1 truncate text-[11px] text-muted-foreground">
             em{" "}
@@ -79,9 +66,7 @@ export function PriceHero({
               <p className="font-mono text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
                 Média
               </p>
-              <p className="font-mono text-sm text-muted-foreground line-through">
-                {formatBRL(Number(avgPrice))}
-              </p>
+              <Price value={Number(avgPrice)} size="sm" tone="strike" as="p" />
             </>
           )}
           {savingsPct != null && Number(savingsPct) > 0 && (

@@ -10,3 +10,4 @@ export { Badge, formatBRL, type BadgeProps } from "./Badge";
 export { ProductImage, type ProductImageProps } from "./ProductImage";
 export { ShareButton } from "./ShareButton";
 export { SignupCTA } from "./SignupCTA";
+export { Price, formatPriceDigits, type PriceProps, type PriceSize, type PriceTone } from "./Price";

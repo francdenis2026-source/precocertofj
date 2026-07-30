@@ -4,12 +4,9 @@ import { Link } from "@tanstack/react-router";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
 import { shortenStoreName } from "@/lib/store-name";
+import { Price } from "@/components/ds/Price";
 
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
-
-function formatBRL(n: number): string {
-  return n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-}
 
 /**
  * PriceSpotlight — bloco editorial de destaque para o menor preço.
@@ -58,19 +55,14 @@ export const PriceSpotlight = memo(function PriceSpotlight({
         {/* Coluna 1 — Preço em destaque */}
         <div className="min-w-0">
           <p
-            className={cn(tc.eyebrow, "inline-flex items-center gap-1.5 text-accent")}
+            /* Sem override de cor: tc.eyebrow já usa --pc-gold-ink, que mantém
+               contraste AA sobre a superfície navy do spotlight. */
+            className={cn(tc.eyebrow, "inline-flex items-center gap-1.5")}
           >
             <Trophy className="h-3 w-3" strokeWidth={2.4} aria-hidden />
             {kicker}
           </p>
-          <p
-            className={cn(
-              serif,
-              "mt-1 text-[42px] font-normal leading-none tracking-tight tabular-nums text-primary md:text-[56px]",
-            )}
-          >
-            {formatBRL(price)}
-          </p>
+          <Price as="p" value={price} size="display" className="mt-1" />
           <p className={cn(tc.meta, "mt-1.5 text-muted-foreground")}>
             {storeName ? (
               <>

@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { Price } from "@/components/ds/Price";
 import { useEffect, useRef } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
@@ -105,12 +106,11 @@ export function ProductQuickView({
             </DialogDescription>
             {product?.minPrice != null && (
               <p className="mt-1.5 leading-none">
-                <span className="pc-price pc-price--lg" style={{ fontSize: "17px" }}>
-                  {brl(product.minPrice)}
-                </span>
+                <Price value={product.minPrice} size="lg" />
                 {product.maxPrice != null && product.maxPrice > product.minPrice && (
-                  <span className="ml-1.5 pc-price pc-price--sm pc-price--muted">
-                    até {brl(product.maxPrice)}
+                  <span className="ml-1.5 inline-flex items-baseline gap-1 text-[11px] text-muted-foreground">
+                    até
+                    <Price value={product.maxPrice} size="sm" tone="muted" />
                   </span>
                 )}
               </p>
@@ -134,9 +134,7 @@ export function ProductQuickView({
                 </p>
                 <p className="truncate text-[12.5px] font-semibold">{cheapest.marketName}</p>
               </div>
-              <span className="pc-price pc-price--md pc-price--best shrink-0">
-                {brl(cheapest.priceMin)}
-              </span>
+              <Price value={cheapest.priceMin} size="md" tone="best" className="shrink-0" />
             </div>
           )}
 
@@ -199,9 +197,7 @@ export function ProductQuickView({
                     </span>
                   </span>
                   <span className="shrink-0 text-right">
-                    <span className="block pc-price pc-price--md">
-                      {brl(m.priceMin)}
-                    </span>
+                    <Price value={m.priceMin} size="md" className="block" />
                     {m.priceMax > m.priceMin && (
                       <span className="block pc-price pc-price--sm pc-price--muted">
                         até {brl(m.priceMax)}

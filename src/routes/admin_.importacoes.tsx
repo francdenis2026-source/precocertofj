@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Price } from "@/components/ds/Price";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -334,8 +335,8 @@ function BatchDetailDialog({
                 {(itemsQ.data ?? []).map((i: ImportItem) => (
                   <TableRow key={i.id}>
                     <TableCell className="text-sm">{i.product_name}</TableCell>
-                    <TableCell className="text-right tabular-nums">
-                      {i.price != null ? `R$ ${Number(i.price).toFixed(2)}` : "—"}
+                    <TableCell className="text-right">
+                      <Price value={i.price != null ? Number(i.price) : null} size="sm" className="w-full justify-end" />
                     </TableCell>
                     <TableCell className="text-xs">
                       {i.quantity != null ? `${i.quantity} ${i.unit ?? ""}` : "—"}
