@@ -120,16 +120,19 @@ const P = {
 };
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 
-/* Ladrilhos da faixa inferior.
-   Altura em `clamp(px, vh, px)`: a célula acompanha a altura da janela sem
-   nunca estourar a tela nem encolher a ponto de cortar o rótulo. Todas as
-   células (categorias e atalhos) usam exatamente a mesma medida, de modo que
-   as duas colunas fecham as mesmas 2 linhas e nada fica desproporcional. */
+/* Ladrilhos da faixa inferior — layout horizontal (ícone à esquerda do rótulo).
+   A caixa ficou mais baixa e densa: com ícone e texto na mesma linha, a altura
+   antes reservada para o empilhamento virava espaço morto. `clamp(px, vh, px)`
+   segue acompanhando a altura da janela sem cortar o rótulo, e todas as células
+   (categorias e ações) usam a mesma medida para fechar 2 linhas alinhadas. */
 const TILE =
-  "group flex h-[clamp(58px,8.4vh,88px)] flex-col items-center justify-center gap-1 rounded-2xl border px-2 text-center pc-tile pc-elite-frame focus-visible:outline-none focus-visible:ring-2 sm:gap-1.5";
-const TILE_ICON = "h-[clamp(18px,2.5vh,25px)] w-[clamp(18px,2.5vh,25px)]";
+  "group flex h-[clamp(44px,5.4vh,58px)] w-full min-w-0 items-center gap-2 rounded-xl border pl-2 pr-2.5 text-left pc-tile pc-elite-frame focus-visible:outline-none focus-visible:ring-2";
+const TILE_ICONWRAP =
+  "grid shrink-0 place-items-center rounded-lg h-[clamp(24px,3vh,30px)] w-[clamp(24px,3vh,30px)]";
+const TILE_ICON = "h-[clamp(15px,1.9vh,19px)] w-[clamp(15px,1.9vh,19px)]";
 const TILE_LABEL =
-  "w-full truncate text-[clamp(11.5px,1.6vh,15px)] font-semibold leading-none tracking-[-0.005em]";
+  "min-w-0 flex-1 truncate text-[clamp(11.5px,1.5vh,14px)] font-semibold leading-none tracking-[-0.005em]";
+
 
 /* Tokens tipográficos compartilhados da home: um único "eyebrow" (rótulo de
    seção) e um único estilo de chip, para que hero, painel ao vivo e faixa de
