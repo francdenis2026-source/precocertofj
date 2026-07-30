@@ -25,6 +25,7 @@ import {
   Loader2,
   Store,
   Bell,
+  PackageSearch,
 } from "lucide-react";
 import { getPublicStoreCatalog, type PublicStoreProduct } from "@/lib/stores-public.functions";
 import { getPublicPriceHistory } from "@/lib/store-public-history.functions";
