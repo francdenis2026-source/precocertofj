@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/select";
 import { EmptyState } from "@/components/feedback";
 import { normalize } from "@/lib/search-tokens";
+import { useListScrollPersistence } from "@/hooks/useListScrollPersistence";
 import type { PublicStoreProduct } from "@/lib/stores-public.functions";
 import { Price } from "@/components/ds/Price";
 import {
@@ -203,6 +204,43 @@ export function ButcherCounter({
   const shown = useMemo(() => filtered.slice(0, limit), [filtered, limit]);
 
 
+  /** Resumo legível dos filtros ativos — sem jargão, direto ao ponto. */
+  const filterSummary = useMemo(() => {
+    const parts: string[] = [];
+    if (q.trim()) parts.push(`nome do corte com “${q.trim()}”`);
+    if (protein) parts.push(`proteína ${proteinLabel(protein).toLowerCase()}`);
+    parts.push(SORT_LABEL[sort].toLowerCase());
+    return parts;
+  }, [q, protein, sort]);
+
+  // Rolagem interna persistida na sessão (mesmo padrão de /estabelecimentos).
+  const railScrollRef = useRef<HTMLDivElement | null>(null);
+  const { persistScroll } = useListScrollPersistence(
+    railScrollRef,
+    "pc:acougue:cortes-scroll",
+    !loading && !error && filtered.length > 0,
+  );
+
+  /** Navegação por teclado entre os cortes (↑↓ / Home / End / Enter). */
+  const onListKeyDown = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+    const root = railScrollRef.current;
+    if (!root) return;
+    const nodes = Array.from(
+      root.querySelectorAll<HTMLButtonElement>("[data-cut-open='true']"),
+    );
+    if (nodes.length === 0) return;
+    const cur = nodes.indexOf(document.activeElement as HTMLButtonElement);
+    let next: number | null = null;
+    if (e.key === "ArrowDown" || e.key === "ArrowRight") next = Math.min(nodes.length - 1, cur + 1);
+    else if (e.key === "ArrowUp" || e.key === "ArrowLeft") next = Math.max(0, cur - 1);
+    else if (e.key === "Home") next = 0;
+    else if (e.key === "End") next = nodes.length - 1;
+    if (next === null) return;
+    e.preventDefault();
+    nodes[next]?.focus();
+    nodes[next]?.scrollIntoView({ block: "nearest" });
+  }, []);
+
   // Trilho de proteína: navegação por teclado (←/→/Home/End) com foco móvel.
   const railRef = useRef<HTMLDivElement | null>(null);
   // Proteínas visíveis: as que têm cortes + a ativa vinda da URL (mesmo vazia),
@@ -337,7 +375,7 @@ export function ButcherCounter({
               setDraft(e.target.value);
               patchState({ q: e.target.value });
             }}
-            placeholder="Buscar corte (picanha, coxa, costela…)"
+            placeholder="Buscar pelo nome do corte (picanha, coxa, costela…)"
             aria-label="Buscar corte"
             inputMode="search"
             className="h-9 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13px] text-foreground outline-none placeholder:text-muted-foreground focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
@@ -400,13 +438,19 @@ export function ButcherCounter({
 
       </div>
 
-      <div className="mt-2.5 flex items-baseline justify-between gap-3">
+      <div className="mt-2.5 flex items-start justify-between gap-3">
         <h3 className="text-[11px] font-bold uppercase tracking-[0.16em] text-foreground">
           Cortes de balcão
         </h3>
-        <span className="text-[11px] text-muted-foreground" aria-hidden>
-          {filtered.length} de {cuts.length}
-          {protein ? ` · ${proteinLabel(protein)}` : ""}
+        <span className="min-w-0 text-right text-[11px] leading-snug text-muted-foreground" aria-hidden>
+          {filtered.length === 0
+            ? "Nenhum corte encontrado"
+            : `${filtered.length} de ${cuts.length} cortes`}
+          {filterSummary.length > 0 && (
+            <span className="block text-[11px] text-muted-foreground">
+              Filtrando por {filterSummary.join(" · ")}
+            </span>
+          )}
         </span>
       </div>
 
@@ -442,7 +486,12 @@ export function ButcherCounter({
         />
         </div>
       ) : filtered.length > 0 ? (
-        <>
+        <div
+          ref={railScrollRef}
+          onScroll={(e) => persistScroll(e.currentTarget)}
+          onKeyDown={onListKeyDown}
+          className="mt-1 max-h-[min(62vh,560px)] overflow-y-auto overscroll-contain pr-1"
+        >
           {view === "grid" ? (
             <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
               {shown.map((p) => (
@@ -486,7 +535,7 @@ export function ButcherCounter({
               Mostrar mais ({filtered.length - limit} restantes)
             </button>
           )}
-        </>
+        </div>
       ) : (
         <EmptyState
           role="status"
@@ -584,6 +633,7 @@ const CutTile = memo(function CutTile({
         type="button"
         onClick={onOpen ? () => onOpen(cut) : undefined}
         aria-label={`Ver detalhes de ${cut.productName}`}
+        data-cut-open="true"
         className="w-full px-3 pb-1.5 pt-2.5 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
       >
         <div className="flex items-start gap-2">
@@ -632,6 +682,7 @@ const CutRow = memo(function CutRow({
         type="button"
         onClick={onOpen ? () => onOpen(cut) : undefined}
         aria-label={`Ver detalhes de ${cut.productName}`}
+        data-cut-open="true"
         className="min-w-0 rounded-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-gold"
       >
         <span className="block truncate text-[12.5px] font-semibold leading-tight text-foreground">

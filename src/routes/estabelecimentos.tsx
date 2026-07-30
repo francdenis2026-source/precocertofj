@@ -43,6 +43,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { normalizeSearchText } from "@/lib/text-normalize";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
 
@@ -207,7 +208,7 @@ function EstablishmentsPage() {
 
   const filtered = useMemo(() => {
     if (!data) return [] as EstablishmentStat[];
-    const term = q.trim().toLowerCase();
+    const term = normalizeSearchText(q);
     let list = data.items.slice();
     if (onlyFavorites) list = list.filter((e) => favSet.has(e.name.trim().toLowerCase()));
     if (kindFilter !== "__all") list = list.filter((e) => (e.kind ?? "outro") === kindFilter);
@@ -224,8 +225,11 @@ function EstablishmentsPage() {
     const bucket = SAVINGS_BUCKETS[savingsFilter] ?? SAVINGS_BUCKETS.__all;
     list = list.filter((e) => bucket(e.maxSavings ?? 0));
     if (term) {
+      // Busca sem acento/caixa em nome, bairro e cidade.
       list = list.filter((e) =>
-        [e.name, e.neighborhood ?? "", e.city ?? ""].some((v) => v.toLowerCase().includes(term)),
+        [e.name, e.neighborhood ?? "", e.city ?? ""].some((v) =>
+          normalizeSearchText(v).includes(term),
+        ),
       );
     }
     const maxProducts = Math.max(1, ...list.map((e) => e.productsCount));
@@ -264,6 +268,29 @@ function EstablishmentsPage() {
     }
     return list;
   }, [data, q, kindFilter, cityFilter, neighborhoodFilter, savingsFilter, sort, onlyFavorites, favSet]);
+
+  /**
+   * Resumo legível do que está sendo filtrado agora — evita que o usuário
+   * precise adivinhar por que a lista encolheu. Usa termos do domínio
+   * (nome, bairro, cidade) em vez de rótulos técnicos.
+   */
+  const filterSummary = useMemo(() => {
+    const parts: string[] = [];
+    if (q.trim()) parts.push(`nome, bairro ou cidade com “${q.trim()}”`);
+    if (cityFilter !== "__all") parts.push(`cidade ${cityFilter}`);
+    if (neighborhoodFilter !== "__all") parts.push(`bairro ${neighborhoodFilter}`);
+    if (kindFilter !== "__all") parts.push(`tipo ${kindFilter}`);
+    if (savingsFilter !== "__all") {
+      const map: Record<string, string> = {
+        low: "economia até R$ 5",
+        mid: "economia de R$ 5 a R$ 20",
+        high: "economia acima de R$ 20",
+      };
+      parts.push(map[savingsFilter] ?? "");
+    }
+    if (onlyFavorites) parts.push("somente favoritos");
+    return parts.filter(Boolean);
+  }, [q, cityFilter, neighborhoodFilter, kindFilter, savingsFilter, onlyFavorites]);
 
   // Reset pagination when filters shrink the list
   useEffect(() => {
@@ -601,9 +628,16 @@ function EstablishmentsPage() {
                 );
               })}
             </div>
-            <div className="flex items-center justify-between gap-2">
-              <span className={cn("truncate", tc.metaMuted)} aria-live="polite">
-                {filtered.length} {filtered.length === 1 ? "resultado" : "resultados"}
+            <div className="flex items-start justify-between gap-2">
+              <span className={cn("min-w-0", tc.metaMuted)} aria-live="polite">
+                {filtered.length === 0
+                  ? "Nenhum estabelecimento encontrado"
+                  : `${filtered.length} ${filtered.length === 1 ? "estabelecimento encontrado" : "estabelecimentos encontrados"}`}
+                {filterSummary.length > 0 && (
+                  <span className="mt-0.5 block text-[11px] leading-snug text-muted-foreground">
+                    Filtrando por {filterSummary.join(" · ")}
+                  </span>
+                )}
               </span>
               {(q || kindFilter !== "__all" || neighborhoodFilter !== "__all" || cityFilter !== "__all" || savingsFilter !== "__all" || onlyFavorites) && (
                 <button

@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { lazy, Suspense, useEffect, useMemo, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -26,7 +26,10 @@ import { getEconomyStat } from "@/lib/products-public.functions";
 import { listPopularQueries } from "@/lib/search-popular.functions";
 import { StartFreeDialog } from "@/components/home/StartFreeDialog";
 import { GuestGateDialog } from "@/components/gate/GuestGateDialog";
-import { HomeSearchSuggestions } from "@/components/home/HomeSearchSuggestions";
+import {
+  HomeSearchSuggestions,
+  type HomeSearchSuggestionsHandle,
+} from "@/components/home/HomeSearchSuggestions";
 import {
   consumeGuest,
   guestRemaining,
@@ -169,6 +172,7 @@ function HomePage() {
   const [exploreOpen, setExploreOpen] = useState(false);
   const [gateOpen, setGateOpen] = useState(false);
   const [suggestOpen, setSuggestOpen] = useState(false);
+  const suggestRef = useRef<HomeSearchSuggestionsHandle | null>(null);
 
   useEffect(() => {
     document.body.classList.add("no-page-bg", "pc-home-locked");
@@ -443,6 +447,14 @@ function HomePage() {
                     }}
                     onFocus={() => setSuggestOpen(true)}
                     onBlur={() => window.setTimeout(() => setSuggestOpen(false), 180)}
+                    onKeyDown={(e) => {
+                      // O dropdown consome ↑/↓/Enter/Esc quando está aberto.
+                      suggestRef.current?.handleKeyDown(e);
+                    }}
+                    role="combobox"
+                    aria-expanded={suggestOpen && q.trim().length >= 2}
+                    aria-controls="home-search-suggestions"
+                    aria-autocomplete="list"
                     type="search"
                     inputMode="search"
                     placeholder="O que você procura hoje? (ex.: Arroz, Feijão, Leite…)"
@@ -462,6 +474,7 @@ function HomePage() {
                   </button>
                 </div>
                 <HomeSearchSuggestions
+                  ref={suggestRef}
                   query={q}
                   isLoggedOut={isLoggedOut}
                   open={suggestOpen}
