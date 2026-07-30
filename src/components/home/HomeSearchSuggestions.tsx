@@ -315,7 +315,12 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                     >
                       {s.displayName}
                     </span>
-                    <span className="mt-0.5 flex items-center gap-1.5 truncate text-[11px] leading-none text-slate-500">
+                    <span
+                      className={
+                        "mt-0.5 flex items-center gap-1.5 truncate text-[11px] leading-none " +
+                        (active === i ? "text-blue-100" : "text-slate-500")
+                      }
+                    >
                       {s.brand ? <span className="truncate">{s.brand}</span> : null}
                       {s.category ? (
                         <>
@@ -324,7 +329,14 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                         </>
                       ) : null}
                       {s.isFuzzy ? (
-                        <span className="rounded-full bg-amber-100 px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-amber-800">
+                        <span
+                          className={
+                            "rounded-full px-1.5 py-0.5 text-[11px] font-bold uppercase tracking-wide " +
+                            (active === i
+                              ? "bg-white/20 text-white"
+                              : "bg-amber-100 text-amber-800")
+                          }
+                        >
                           Similar
                         </span>
                       ) : null}
