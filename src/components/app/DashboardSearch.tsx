@@ -113,13 +113,19 @@ export function DashboardSearch() {
               </button>
             )}
           </label>
-          <div className="flex shrink-0 items-center gap-1">
-            {SORTS.map((s) => (
+          <div
+            role="radiogroup"
+            aria-label="Ordenar resultados"
+            className="flex shrink-0 items-center gap-1"
+          >
+            {SORTS.map((s, i) => (
               <button
                 key={s.id}
                 type="button"
+                role="radio"
+                aria-checked={sort === s.id}
                 onClick={() => setSort(s.id)}
-                aria-pressed={sort === s.id}
+                {...sortRoving.itemProps(i)}
                 className={cn(
                   "h-8 rounded-full border px-2.5 text-[12px] font-semibold transition-colors",
                   sort === s.id
@@ -133,21 +139,31 @@ export function DashboardSearch() {
           </div>
         </div>
 
-        <div className="flex gap-1.5 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]{display:none}">
-          <Chip active={!category} onClick={() => setCategory(null)}>
+        <div
+          role="radiogroup"
+          aria-label="Filtrar por categoria"
+          className="flex gap-1.5 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]{display:none}"
+        >
+          <Chip
+            active={!category}
+            onClick={() => setCategory(null)}
+            {...chipRoving.itemProps(0)}
+          >
             Todas
           </Chip>
-          {categories.map((c) => (
+          {categories.map((c, i) => (
             <Chip
               key={c}
               active={category === c}
               onClick={() => setCategory(category === c ? null : c)}
+              {...chipRoving.itemProps(i + 1)}
             >
               {categoryLabel(c)}
             </Chip>
           ))}
         </div>
       </div>
+
 
       <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]">
         {!active ? (
