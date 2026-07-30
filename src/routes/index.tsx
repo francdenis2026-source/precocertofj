@@ -120,10 +120,11 @@ const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
    células (categorias e atalhos) usam exatamente a mesma medida, de modo que
    as duas colunas fecham as mesmas 2 linhas e nada fica desproporcional. */
 const TILE =
-  "group flex h-[clamp(52px,7.4vh,78px)] flex-col items-center justify-center gap-1 rounded-2xl border px-2 text-center pc-tile pc-elite-frame focus-visible:outline-none focus-visible:ring-2 sm:gap-1.5";
-const TILE_ICON = "h-[clamp(16px,2.2vh,22px)] w-[clamp(16px,2.2vh,22px)]";
+  "group flex h-[clamp(58px,8.4vh,88px)] flex-col items-center justify-center gap-1 rounded-2xl border px-2 text-center pc-tile pc-elite-frame focus-visible:outline-none focus-visible:ring-2 sm:gap-1.5";
+const TILE_ICON = "h-[clamp(18px,2.5vh,25px)] w-[clamp(18px,2.5vh,25px)]";
 const TILE_LABEL =
-  "w-full truncate text-[clamp(11px,1.45vh,14px)] font-semibold leading-none tracking-[-0.005em]";
+  "w-full truncate text-[clamp(11.5px,1.6vh,15px)] font-semibold leading-none tracking-[-0.005em]";
+
 
 /**
  * Ladrilhos da home — derivados de `CATEGORY_DEFS`, a mesma fonte usada em
