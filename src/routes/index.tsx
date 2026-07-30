@@ -564,7 +564,7 @@ function HomePage() {
                       type="button"
                       onClick={() => setSpotlight(kind)}
                       aria-label={`${value} — ${label}. Ver detalhes.`}
-                      className="group flex min-w-0 flex-col items-center gap-1 rounded-xl border px-1.5 py-2 text-center pc-tile focus-visible:outline-none focus-visible:ring-2"
+                      className="group flex min-w-0 flex-col items-center gap-1 rounded-xl border px-1.5 py-[clamp(0.5rem,1.9vh,1.15rem)] text-center pc-tile focus-visible:outline-none focus-visible:ring-2"
                       style={{
                         background: "var(--pc-home-onhero-glass-soft)",
                         borderColor: "var(--pc-home-onhero-border-soft)",
