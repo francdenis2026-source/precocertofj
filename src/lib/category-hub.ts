@@ -38,6 +38,14 @@ export type CategoryDef = {
   storeRe?: RegExp;
   /** regex de produtos do nicho (aplicada ao nome normalizado) */
   productRe?: RegExp;
+  /**
+   * Categorias canônicas (`classifyCategory`) aceitas no nicho.
+   * Quando definido, é a autoridade: um produto só entra se sua categoria
+   * canônica estiver na lista, ou se for `outros` e casar com `productRe`.
+   * Evita que "Lava-Louças Maçã" caia em Hortifrúti ou "Macarrão Parafuso"
+   * em Construção.
+   */
+  canonical?: ProductCategory[];
   /** produtos a excluir mesmo quando a loja é do nicho */
   excludeRe?: RegExp;
   /** true → todo produto de uma loja do nicho entra */
