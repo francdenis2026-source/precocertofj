@@ -205,11 +205,16 @@ function HomePage() {
 
   const platformStats = useServerFn(getPlatformStats);
   const statsQ = useQuery({
-    queryKey: ["home-stats"],
+    queryKey: ["platform-stats"],
     queryFn: () => platformStats({} as any),
-    staleTime: 60_000,
+    // Cache do banco é recalculado a cada 10 min por cron; alinhar evita
+    // chamadas repetidas da RPC mais cara do projeto.
+    staleTime: 10 * 60_000,
+    gcTime: 30 * 60_000,
     refetchOnWindowFocus: false,
+    refetchOnMount: false,
   });
+
   const stats: any = statsQ.data ?? {};
 
   const economyFn = useServerFn(getEconomyStat);
