@@ -221,6 +221,16 @@ function HomePage() {
     return real.length >= 3 ? real : POPULAR_FALLBACK;
   }, [popularQ.data]);
 
+  /* Hero e faixa "Buscas em alta" consomem a mesma fonte, mas nunca repetem
+     termos: o hero fica com os 4 primeiros e a faixa com os seguintes. */
+  const heroPopular = useMemo(() => popularAll.slice(0, 4), [popularAll]);
+  const trendingPopular = useMemo(() => {
+    const rest = popularAll.slice(4);
+    return (rest.length >= 4 ? rest : popularAll).slice(0, 12);
+  }, [popularAll]);
+
+
+
   const storesFn = useServerFn(listPublicStores);
   const storesQ = useQuery({
     queryKey: ["home-partner-stores"],
