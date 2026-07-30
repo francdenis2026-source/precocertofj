@@ -15,7 +15,6 @@ import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
 import { Price } from "@/components/ds/Price";
 import { Search as SearchIcon, TrendingDown, Store as StoreIcon, ArrowRight, Tags } from "lucide-react";
-import { CATEGORY_LABELS } from "@/lib/product-category";
 import { useCategoryLabelResolver } from "@/hooks/use-category-labels";
 
 /* ------------------------------------------------------------------ */
@@ -39,8 +38,6 @@ interface Comparison {
 }
 
 
-const categoryLabel = (slug: string) =>
-  CATEGORY_LABELS[slug] ?? slug.replace(/_/g, " ").replace(/^./, (c) => c.toUpperCase());
 
 const formatBRL = (n: number) =>
   n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });

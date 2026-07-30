@@ -20,7 +20,6 @@ import { uploadImageDataUrl } from "@/lib/storage.functions";
 import { LUCIDE_PRESET, LUCIDE_PRESET_NAMES, resolveLucide } from "@/lib/category-icons-preset";
 import { useMyRoles } from "@/hooks/useMyRoles";
 import { AppShell } from "@/components/brand/AppShell";
-import { IconTile } from "@/components/ui/icon-tile";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -379,19 +378,17 @@ function Page() {
 
 /** Pré-visualização do ícone conforme o rascunho atual. */
 function DraftIcon({ draft }: { draft: Draft }) {
-  if (draft.icon?.kind === "url") {
-    return (
-      <IconTile size="lg" tone="accent">
-        <img src={draft.icon.value} alt="" className="h-6 w-6 object-contain" />
-      </IconTile>
-    );
-  }
   const Icon = draft.icon?.kind === "lucide" ? resolveLucide(draft.icon.value) : null;
-  const Fallback = Icon ?? Package;
   return (
-    <IconTile size="lg" tone="accent">
-      <Fallback className="h-5 w-5" aria-hidden />
-    </IconTile>
+    <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border bg-secondary text-foreground">
+      {draft.icon?.kind === "url" ? (
+        <img src={draft.icon.value} alt="" className="h-7 w-7 object-contain" />
+      ) : Icon ? (
+        <Icon className="h-6 w-6" aria-hidden />
+      ) : (
+        <Package className="h-6 w-6 text-muted-foreground" aria-hidden />
+      )}
+    </span>
   );
 }
 
