@@ -125,6 +125,7 @@ export const CATEGORY_DEFS: CategoryDef[] = [
     kinds: ["distribuidora", "adega"],
     storeRe: /(adega|distribuidora|bebidas)/i,
     allFromNicheStores: true,
+    canonical: ["bebidas"],
     productRe:
       /\b(refrigerante|coca|guarana|pepsi|fanta|sprite|suco|nectar|agua mineral|agua com gas|cerveja|skol|brahma|antarctica|itaipava|heineken|amstel|budweiser|vinho|energetic|energetico|red bull|isotonic|gatorade|cachaca|whisky|vodka|refresco|tang|cha gelado|ice tea)\b/,
   },
@@ -135,6 +136,7 @@ export const CATEGORY_DEFS: CategoryDef[] = [
     desc: "Produtos de limpeza, bazar e utilidades",
     kinds: [],
     allFromNicheStores: false,
+    canonical: ["limpeza", "bazar", "papel_descartaveis"],
     productRe:
       /\b(sabao|detergente|amaciante|desinfetante|agua sanit|multiuso|limpa|lustra|desengordur|esponja|vassoura|rodo|saco de lixo|alvejante|cloro|veja|omo|ype|brilhante|pinho sol|candida)\b/,
   },
@@ -145,6 +147,7 @@ export const CATEGORY_DEFS: CategoryDef[] = [
     desc: "Cuidados pessoais, cabelo e higiene bucal",
     kinds: [],
     allFromNicheStores: false,
+    canonical: ["higiene", "cabelo", "bucal", "cuidados_pele", "perfumaria", "papel_descartaveis"],
     productRe:
       /\b(shampoo|condicionador|sabonete|creme dental|gel dental|pasta de dente|escova dental|enxaguante|desodorante|hidratante|papel higien|absorvente|fralda|lamina|barbear|talco|colonia|perfume|coloracao|tintura|creme de pentear)\b/,
   },
@@ -154,8 +157,9 @@ export const CATEGORY_DEFS: CategoryDef[] = [
     short: "Pet",
     desc: "Ração, higiene e acessórios para animais",
     kinds: ["petshop", "pet"],
-    storeRe: /(pet)/i,
+    storeRe: /(pet ?shop)/i,
     allFromNicheStores: true,
+    canonical: ["pet"],
     productRe: /\b(racao|ra[cç][aã]o|pedigree|whiskas|golden|petisco|antipulga|vermifugo|areia higienica|osso para cachorro)\b/,
   },
   {
@@ -164,10 +168,15 @@ export const CATEGORY_DEFS: CategoryDef[] = [
     short: "Construção",
     desc: "Materiais básicos, ferramentas e elétrica",
     kinds: ["construcao", "material_construcao"],
-    storeRe: /(constru|material|ferragem|deposito)/i,
+    // "material"/"deposito" sozinhos casavam com mercados comuns.
+    storeRe: /(material de constru|constru[cç][aã]o|ferragem|dep[oó]sito de material)/i,
     allFromNicheStores: true,
+    // Nenhuma categoria canônica é de construção: só entram itens sem
+    // categoria ("outros") que casem com o vocabulário de obra. Isso evita
+    // "Macarrão Parafuso", "Tinta Nugget" e "Lâmpada" (bazar) no nicho.
+    canonical: [],
     productRe:
-      /\b(cimento|areia|brita|tijolo|telha|cal |argamassa|rejunte|tinta|pincel|rolo de la|cano|tubo pvc|joelho|conexao|prego|parafuso|arame|treliça|vergalhao|fio flexivel|disjuntor|tomada|interruptor|lampada|luminaria|serra|martelo|furadeira)\b/,
+      /\b(cimento|areia lavada|brita|tijolo|telha|argamassa|rejunte|tinta (acrilica|latex|esmalte|pva)|pincel|rolo de la|tubo pvc|joelho pvc|prego|parafuso (de |para |philips|sextavado)|arame|trelica|vergalhao|fio flexivel|disjuntor|interruptor|luminaria|serra|martelo|furadeira|cal hidratada)\b/,
   },
   {
     slug: "postos",
@@ -177,6 +186,7 @@ export const CATEGORY_DEFS: CategoryDef[] = [
     kinds: ["posto", "posto_combustivel"],
     storeRe: /(posto|combust)/i,
     allFromNicheStores: true,
+    canonical: [],
     productRe: /\b(gasolina|etanol|alcool comum|diesel|s10|gnv|oleo lubrificante|lubrificante|arla)\b/,
   },
   {
@@ -187,6 +197,7 @@ export const CATEGORY_DEFS: CategoryDef[] = [
     kinds: ["papelaria"],
     storeRe: /(papelaria|livraria)/i,
     allFromNicheStores: true,
+    canonical: ["papelaria"],
     // Atenção: "pasta" sozinho é ambíguo em supermercado ("sabão em pasta",
     // "doce de leite em pasta"), por isso exigimos qualificadores de papelaria.
     productRe:
