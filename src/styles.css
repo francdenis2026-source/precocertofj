@@ -5087,3 +5087,35 @@ td[data-numeric],
     letter-spacing: 0.02em;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Oswald como display secundária
+   A Oswald é condensada: em títulos e labels ela precisa de um leve tracking
+   positivo para respirar. Cores e tamanhos seguem o design system.
+--------------------------------------------------------------------------- */
+.font-display,
+.pc-display,
+h1.font-display,
+h2.font-display,
+h3.font-display {
+  letter-spacing: 0.005em;
+}
+
+.font-condensed {
+  font-family: var(--font-condensed);
+  letter-spacing: 0.01em;
+}
+
+.font-editorial {
+  font-family: var(--font-editorial);
+}
+
+/* Stats / KPIs e labels de destaque em Oswald cheia */
+.pc-stat,
+.pc-stat-value,
+.pc-kpi-value,
+[data-display="condensed"] {
+  font-family: var(--font-condensed);
+  letter-spacing: 0.01em;
+  font-variant-numeric: tabular-nums lining-nums;
+}
