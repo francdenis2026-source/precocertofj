@@ -23,6 +23,7 @@ import { getCheapestStoresRanking } from "@/lib/stores-public.functions";
 import { PRODUCT_TYPE_LABEL } from "@/lib/product-type";
 
 import { cn } from "@/lib/utils";
+import { Price } from "@/components/ds/Price";
 
 const CATEGORY_LABEL: Record<string, string> = {
   laticinios: "Laticínios",
@@ -53,8 +54,7 @@ const rankIcon = (idx: number) => {
   return Store;
 };
 
-const brl = (n: number) =>
-  n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+
 
 /**
  * Ranking dos mercados mais baratos — agora com filtro por categoria e
@@ -297,7 +297,7 @@ export function CheapestStoresRanking() {
                             aria-hidden="true"
                           />
                         </div>
-                        <span className="shrink-0 pc-price text-[11px] text-muted-foreground">
+                        <span className="shrink-0 pc-num text-[11px] text-muted-foreground">
                           {r.wins}/{r.productsCompared}
                         </span>
                       </div>
@@ -333,7 +333,7 @@ export function CheapestStoresRanking() {
                         )}
                         title="Vitórias / Comparações"
                       >
-                        <p className="pc-price text-[15px] font-bold text-foreground md:text-lg">
+                        <p className="pc-num text-[15px] font-bold text-foreground md:text-lg">
                           {winRate}
                           <span className="ml-0.5 text-[11px] font-semibold text-muted-foreground">%</span>
                         </p>
@@ -348,7 +348,7 @@ export function CheapestStoresRanking() {
                         )}
                         title="Economia média vs. concorrentes"
                       >
-                        <p className="pc-price text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
+                        <p className="pc-num text-[11px] font-bold text-emerald-600 dark:text-emerald-400">
                           {r.avgSavingsPct > 0 ? `−${r.avgSavingsPct.toFixed(1)}%` : "—"}
                         </p>
                         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
@@ -362,9 +362,12 @@ export function CheapestStoresRanking() {
                         )}
                         title="Ticket médio das vitórias"
                       >
-                        <p className="pc-price text-[11px] font-bold text-foreground">
-                          {r.avgTicketWins > 0 ? brl(r.avgTicketWins) : "—"}
-                        </p>
+                        <Price
+                          as="p"
+                          size="xs"
+                          value={r.avgTicketWins > 0 ? r.avgTicketWins : null}
+                          className="justify-end"
+                        />
                         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
                           ticket médio
                         </p>
@@ -455,7 +458,7 @@ function SummaryTile({
         <p className="truncate font-mono text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
           {label}
         </p>
-        <p className="truncate pc-price text-[15px] font-bold leading-tight text-foreground">
+        <p className="truncate pc-num text-[15px] font-bold leading-tight text-foreground">
           {value}
         </p>
         <p className="truncate text-[11px] leading-tight text-muted-foreground">{hint}</p>

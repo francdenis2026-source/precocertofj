@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { usePricesRealtime } from "@/hooks/usePricesRealtime";
 import { LiveUpdateBadge, useLivePulse } from "@/components/ui/live-update-badge";
 import { SearchGlassScrim } from "@/components/search/SearchGlassScrim";
+import { Price } from "@/components/ds/Price";
 import { Link } from "@tanstack/react-router";
 import { searchProductPrice, type PriceSearchResult, type PriceSuggestion, type ProductGroup } from "@/lib/price-search.functions";
 import { suggestProducts, type ProductSuggestion } from "@/lib/product-suggest.functions";
@@ -1094,9 +1095,13 @@ export function PriceSearchBar({
                           Melhor preço agora
                           <LiveUpdateBadge active={live.active} tone="onDark" />
                         </p>
-                        <p className="pc-num pc-num--onhero mt-1 flex items-baseline gap-2 text-[26px] font-bold leading-none">
-                          {fmt(result.cheapest?.price ?? result.min)}
-                        </p>
+                        <Price
+                          as="p"
+                          size="xl"
+                          tone="onhero"
+                          value={result.cheapest?.price ?? result.min}
+                          className="mt-1"
+                        />
 
                         {result.cheapest ? (
                           <p className="mt-1.5 flex min-w-0 items-center gap-1.5 text-[12px] text-white/75">
@@ -1180,9 +1185,12 @@ export function PriceSearchBar({
                                   {p.marketName}
                                 </span>
                               </span>
-                              <span className="pc-num pc-num--onhero text-[13px] font-bold leading-none text-brand-gold">
-                                {fmt(p.price)}
-                              </span>
+                              <Price
+                                size="sm"
+                                tone="onhero"
+                                value={p.price}
+                                className="text-brand-gold"
+                              />
                             </button>
                           ))}
                         </div>
@@ -2192,14 +2200,13 @@ function CompareMatrix({
                   {p.marketName ?? "—"}
                 </span>
               </div>
-              <p
-                className={
-                  "pc-price text-[18px] leading-none " +
-                  (isCheapest ? "text-white" : "text-foreground")
-                }
-              >
-                {fmt(p.price)}
-              </p>
+              <Price
+                as="p"
+                size="lg"
+                value={p.price}
+                tone={isCheapest ? "onhero" : "default"}
+                className={isCheapest ? "text-white" : "text-foreground"}
+              />
               <div className="flex items-center gap-1.5 text-[10.5px] font-medium uppercase tracking-wider">
                 {isCheapest ? (
                   <span
@@ -2618,7 +2625,7 @@ function ProductGroupCard({
                 />
                 <div className="shrink-0 self-center text-right">
                   {isCheapest && <p className="pc-res-label">Menor</p>}
-                  <p className="pc-res-price">{fmt(p.price)}</p>
+                  <Price as="p" size="md" value={p.price} className="justify-end" />
                   <UnitPriceBadge price={p.price} productName={productName} className="mt-0.5" />
                 </div>
                 <button
@@ -3076,16 +3083,16 @@ function MarketBucketSection({
               {freshnessLabel(r.price.when)}
             </span>
 
-            <span
+            <Price
+              size="sm"
+              value={r.price.price}
               className={
-                "whitespace-nowrap rounded-md px-1.5 py-1 text-[13.5px] font-semibold leading-none tabular-nums tracking-[-0.02em] sm:px-2 sm:text-[15px] " +
+                "whitespace-nowrap rounded-md px-1.5 py-1 sm:px-2 " +
                 (r.isBest
-                  ? "bg-[color-mix(in_oklab,var(--brand-gold)_18%,transparent)] text-foreground"
-                  : "text-foreground")
+                  ? "bg-[color-mix(in_oklab,var(--brand-gold)_18%,transparent)]"
+                  : "")
               }
-            >
-              {fmt(r.price.price)}
-            </span>
+            />
           </li>
         ))}
 
