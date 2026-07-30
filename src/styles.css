@@ -3710,6 +3710,14 @@ html:not(.dark) .text-brand:not([class*="bg-"]) {
 /* Dourado sobre fundo navy/escuro permanece vivo mesmo no modo claro.
    Usa o gold claro (#f2d689 ≈ 11.9:1 sobre navy) em vez do gold médio,
    que sobre navy fica abaixo de AA. */
+/* Títulos dentro de superfícies navy herdam a cor clara do container.
+   Sem isso, a regra global de heading aplica --foreground (navy) sobre navy
+   → ~1.3:1 no modo claro. */
+:is(.bg-brand-navy, .bg-brand-navy-2, [data-surface="navy"], .text-on-navy)
+  :is(h1, h2, h3, h4, h5, h6, dt, dd, p, li, span, strong):not([class*="text-"]) {
+  color: inherit;
+}
+
 :is(.bg-brand-navy, .bg-brand-navy-2, [data-surface="navy"]) :is(
   .text-brand,
   .text-brand-gold,
