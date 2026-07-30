@@ -12,7 +12,9 @@ import {
   searchCatalogAdvanced,
   type CatalogSearchItem,
 } from "@/lib/catalog-search.functions";
+import { useRovingFocus } from "@/hooks/use-roving-focus";
 import { cn } from "@/lib/utils";
+
 
 type SortKey = "cheapest" | "priciest" | "recent";
 
