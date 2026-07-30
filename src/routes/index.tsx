@@ -220,18 +220,39 @@ function HomePage() {
   });
   const economy = economyQ.data;
 
-  const popularFn = useServerFn(listPopularQueries);
+  /* Buscas reais dos clientes, agregadas em tempo real (`search_trends`). */
+  const trendingFn = useServerFn(listTrendingSearches);
+  const TRENDING_KEY = ["home-trending-searches"] as const;
   const popularQ = useQuery({
-    queryKey: ["home-popular-queries", 7, 24],
-    queryFn: () => popularFn({ data: { days: 7, limit: 24 } } as any),
-    staleTime: 45_000,
-    refetchOnWindowFocus: false,
+    queryKey: TRENDING_KEY,
+    queryFn: () => trendingFn({ data: { limit: 24 } } as any),
+    staleTime: 15_000,
+    refetchOnWindowFocus: true,
   });
+  useSearchTrendsRealtime([...TRENDING_KEY]);
+
   const POPULAR_FALLBACK = ["arroz", "feijão", "leite", "óleo", "café", "açúcar"];
+  const trendRows = useMemo(
+    () =>
+      (popularQ.data ?? [])
+        .map((p: any) => ({
+          query: String(p?.query ?? "").trim(),
+          count: Number(p?.count ?? 0),
+          dayCount: Number(p?.dayCount ?? 0),
+          hot: Boolean(p?.hot),
+        }))
+        .filter((p) => p.query.length >= 2),
+    [popularQ.data],
+  );
   const popularAll: string[] = useMemo(() => {
-    const real = (popularQ.data ?? []).map((p: any) => String(p?.query ?? "")).filter(Boolean);
+    const real = trendRows.map((p) => p.query);
     return real.length >= 3 ? real : POPULAR_FALLBACK;
-  }, [popularQ.data]);
+  }, [trendRows]);
+  const trendMeta = useMemo(() => {
+    const m = new Map<string, { count: number; dayCount: number; hot: boolean }>();
+    for (const r of trendRows) m.set(r.query, r);
+    return m;
+  }, [trendRows]);
 
   /* Hero e faixa "Buscas em alta" consomem a mesma fonte, mas nunca repetem
      termos: o hero fica com os 4 primeiros e a faixa com os seguintes. */
