@@ -1,11 +1,9 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   Home,
-  Search,
   ShoppingCart,
   Bell,
   User,
-  ShoppingBag,
   Shield,
   BarChart3,
   History,
@@ -34,7 +32,6 @@ import {
   Trophy,
   ClipboardCheck,
   Camera,
-  Radio,
   ShoppingBasket,
   Gavel,
 } from "lucide-react";
