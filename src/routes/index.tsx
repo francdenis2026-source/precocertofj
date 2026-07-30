@@ -545,9 +545,10 @@ function HomePage() {
                         {value}
                       </span>
                       <span
-                        className="w-full truncate text-[11px] font-bold uppercase tracking-[0.12em]"
+                        className="w-full text-balance break-words text-[11px] font-bold uppercase leading-[1.15] tracking-[0.06em]"
                         style={{ color: "var(--pc-home-onhero-fg-70)" }}
                       >
+                        {/* Rótulo completo em 2 linhas: nunca cortar palavras com reticências */}
                         <span className="sm:hidden">{short}</span>
                         <span className="hidden sm:inline">{label}</span>
                       </span>
