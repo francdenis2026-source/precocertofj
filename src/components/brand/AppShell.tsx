@@ -3,8 +3,11 @@ import { AppSidebar } from "@/components/app/AppSidebar";
 import { AppHeader } from "@/components/app/AppHeader";
 import { MobileNav } from "@/components/nav/MobileNav";
 import { AutoAdminBreadcrumb } from "@/components/admin/AutoAdminBreadcrumb";
+import { AppBreadcrumb } from "@/components/app/AppBreadcrumb";
 import { useRouterState } from "@tanstack/react-router";
 import { useInactivityLogout } from "@/hooks/use-inactivity-logout";
+import { usePersistentSidebar } from "@/hooks/use-persistent-sidebar";
+
 
 /**
  * AppShell — Midnight Executive Dashboard
