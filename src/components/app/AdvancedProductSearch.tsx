@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { Price } from "@/components/ds/Price";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
@@ -393,9 +394,7 @@ export function AdvancedProductSearch() {
                         <span className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                           A partir de
                         </span>
-                        <p className="pc-price text-base font-bold text-foreground md:text-lg">
-                          {fmtBRL(p.minPrice)}
-                        </p>
+                        <Price as="p" value={p.minPrice} size="lg" />
                       </div>
                       {p.storesCount > 0 && (
                         <span className="inline-flex items-center gap-0.5 text-[11px] text-muted-foreground">

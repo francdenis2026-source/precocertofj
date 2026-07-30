@@ -248,10 +248,10 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                                 </div>
                               </div>
                               <span
-                                className="pc-price shrink-0 text-[18px] font-semibold"
-                                style={{ color: "var(--pc-price)" }}
+                                className="pc-price pc-price--lg shrink-0"
                               >
-                                {brl(p.price)}
+                                <span className="pc-price__prefix" aria-hidden>R$</span>
+                                <span className="pc-price__value">{brl(p.price).replace("R$", "").trim()}</span>
                               </span>
                             </Link>
                           </li>
