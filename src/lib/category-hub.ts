@@ -11,6 +11,7 @@
  * na área de Açougue.
  */
 import { classifyButcherCut } from "@/lib/butcher-cuts";
+import { classifyCategory, type ProductCategory } from "@/lib/product-category";
 
 export type CategorySlug =
   | "supermercados"
