@@ -118,25 +118,22 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "manifest", href: "/site.webmanifest" },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
+      /*
+       * PERFORMANCE: uma ÚNICA folha do Google Fonts com todas as famílias
+       * (antes eram duas requisições bloqueantes em série). Oswald entra aqui
+       * junto — o styles.css continua usando "Oswald Digits" (unicode-range
+       * 0-9) para condensar só os algarismos dentro de parágrafos.
+       */
       {
         rel: "preload",
         as: "style",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&family=Instrument+Serif:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&family=Instrument+Serif:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Oswald:wght@400;500;600;700&display=swap",
       },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&family=Instrument+Serif:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600;700&family=Instrument+Serif:ital@0;1&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,400;1,9..144,500&family=Oswald:wght@400;500;600;700&display=swap",
       },
-      /*
-       * Oswald completa (condensada) — display secundária: títulos, stats,
-       * CTAs e preços. Para o corpo de texto, o styles.css usa a família
-       * "Oswald Digits" (@font-face com unicode-range 0-9), garantindo que
-       * apenas os algarismos fiquem condensados dentro de parágrafos.
-       */
-      {
-        rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&display=swap",
-      },
+
 
 
 
