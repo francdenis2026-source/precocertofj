@@ -301,16 +301,21 @@ function Chip({
   active,
   onClick,
   children,
+  ...rest
 }: {
   active: boolean;
   onClick: () => void;
   children: React.ReactNode;
-}) {
+} & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "onClick" | "children"> & {
+    ref?: React.Ref<HTMLButtonElement>;
+  }) {
   return (
     <button
       type="button"
+      role="radio"
       onClick={onClick}
-      aria-pressed={active}
+      aria-checked={active}
+      {...rest}
       className={cn(
         "h-7 shrink-0 whitespace-nowrap rounded-full border px-2.5 text-[12px] font-semibold transition-colors",
         active
@@ -322,3 +327,4 @@ function Chip({
     </button>
   );
 }
+
