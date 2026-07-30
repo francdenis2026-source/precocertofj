@@ -164,11 +164,21 @@ export function DashboardSearch() {
             Nenhum produto encontrado para esse filtro.
           </p>
         ) : (
-          <ul className="divide-y divide-border/60">
-            {results.map((r) => (
-              <li key={r.catalogId}>
+          <ul
+            role="listbox"
+            aria-label="Resultados da busca"
+            className="divide-y divide-border/60"
+          >
+            {results.map((r, i) => (
+              <li key={r.catalogId} role="presentation">
                 <Link
                   to="/buscar"
+                  role="option"
+                  aria-selected={false}
+                  ref={(el: HTMLAnchorElement | null) => {
+                    resultRefs.current[i] = el;
+                  }}
+                  onKeyDown={(e) => onResultKeyDown(e, i)}
                   search={{ q: r.displayName } as never}
                   className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-2 transition-colors hover:bg-muted/50"
                 >
@@ -200,6 +210,7 @@ export function DashboardSearch() {
             ))}
           </ul>
         )}
+
       </div>
 
       {active && results.length > 0 && (
