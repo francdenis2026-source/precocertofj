@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type KeyboardEvent }
 import { useServerFn } from "@tanstack/react-start";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
+import { useListScrollPersistence } from "@/hooks/useListScrollPersistence";
 import {
   Beef,
   ChevronRight,
@@ -359,6 +360,13 @@ function EstablishmentsPage() {
 
   const detailHeadingRef = useRef<HTMLHeadingElement | null>(null);
 
+  // Persistência da rolagem interna da lista (sessão atual).
+  const { persistScroll } = useListScrollPersistence(
+    listRef,
+    "pc:estabelecimentos:list-scroll",
+    !isLoading && filtered.length > 0,
+  );
+
   /* ------------------------------------------------------------------
    * Altura dinâmica do master-detail:
    * a região ocupa exatamente o espaço restante da viewport (desktop),
@@ -621,9 +629,11 @@ function EstablishmentsPage() {
             aria-activedescendant={selectedId ? `mercado-opt-${selectedId}` : undefined}
             onKeyDown={onListKeyDown}
             onScroll={(ev) => {
+              const el = ev.currentTarget;
+              // Persiste a posição para restaurar ao voltar/atualizar filtros.
+              persistScroll(el);
               // Carregamento progressivo dentro do trilho (sem rolar a página).
               if (!hasMore) return;
-              const el = ev.currentTarget;
               if (el.scrollTop + el.clientHeight >= el.scrollHeight - 120) {
                 updateSearch({ pagina: pagesLoaded + 1 });
               }

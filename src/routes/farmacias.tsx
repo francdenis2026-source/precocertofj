@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo } from "react";
+import { useCallback, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import {
   AlertTriangle,
   ArrowLeft,
@@ -8,10 +8,14 @@ import {
   MapPin,
   Phone,
   Pill,
+  Search,
   ShieldCheck,
+  X,
 } from "lucide-react";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { ShareButton } from "@/components/ds";
+import { useListScrollPersistence } from "@/hooks/useListScrollPersistence";
+import { normalizeSearchText } from "@/lib/text-normalize";
 import {
   AVISO_LEGAL,
   CONTATOS_FISCALIZACAO,
@@ -50,6 +54,80 @@ function FarmaciasPage() {
   const dias = useMemo(() => Object.keys(PLANTOES).map(Number).sort((a, b) => a - b), []);
   const plantaoHoje = hoje ? farmaciaPorId(PLANTOES[hoje]) : null;
   const amanha = hoje && PLANTOES[hoje + 1] ? farmaciaPorId(PLANTOES[hoje + 1]) : null;
+
+  /* ------------------------------------------------------------------
+   * Busca rápida + navegação por teclado na lista de farmácias.
+   * A filtragem é local (lista pequena e estática), acento-insensível,
+   * e nunca provoca rolagem da página — apenas do trilho interno.
+   * ------------------------------------------------------------------ */
+  const [q, setQ] = useState("");
+  const [activeId, setActiveId] = useState<string | null>(FARMACIAS[0]?.id ?? null);
+
+  const filtradas = useMemo(() => {
+    const term = normalizeSearchText(q);
+    if (!term) return FARMACIAS;
+    return FARMACIAS.filter((f) =>
+      normalizeSearchText(`${f.nome} ${f.endereco} ${f.bairro}`).includes(term),
+    );
+  }, [q]);
+
+  const listRef = useRef<HTMLUListElement | null>(null);
+  const itemRefs = useRef<Map<string, HTMLLIElement>>(new Map());
+  const { persistScroll } = useListScrollPersistence(
+    listRef,
+    "pc:farmacias:list-scroll",
+    filtradas.length > 0,
+  );
+
+  const focusAt = useCallback(
+    (index: number) => {
+      if (filtradas.length === 0) return;
+      const clamped = Math.max(0, Math.min(filtradas.length - 1, index));
+      const target = filtradas[clamped];
+      setActiveId(target.id);
+      const el = itemRefs.current.get(target.id);
+      el?.focus();
+      el?.scrollIntoView({ block: "nearest" });
+    },
+    [filtradas],
+  );
+
+  const onListKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLUListElement>) => {
+      if (filtradas.length === 0) return;
+      const current = Math.max(
+        0,
+        filtradas.findIndex((f) => f.id === activeId),
+      );
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          focusAt(current + 1);
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          focusAt(current - 1);
+          break;
+        case "Home":
+          e.preventDefault();
+          focusAt(0);
+          break;
+        case "End":
+          e.preventDefault();
+          focusAt(filtradas.length - 1);
+          break;
+        case "Enter": {
+          e.preventDefault();
+          const tel = filtradas[current]?.telefones[0];
+          if (tel) window.location.href = `tel:${tel.replace(/\D/g, "")}`;
+          break;
+        }
+      }
+    },
+    [filtradas, activeId, focusAt],
+  );
+
+
 
   return (
     <div className="flex h-[100dvh] flex-col overflow-hidden bg-background text-foreground">
@@ -231,15 +309,68 @@ function FarmaciasPage() {
           </section>
 
           <section aria-label="Farmácias e drogarias de Feijó">
-            <h2 className="font-serif text-[18px] font-semibold leading-tight">
-              Farmácias e drogarias da cidade
-            </h2>
-            <ul className="mt-2 grid grid-cols-1 gap-2">
-              {FARMACIAS.map((f) => (
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h2 className="font-serif text-[18px] font-semibold leading-tight">
+                Farmácias e drogarias da cidade
+              </h2>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                {filtradas.length} de {FARMACIAS.length}
+              </span>
+            </div>
+
+            {/* Busca rápida — filtra em memória, sem rolar a página */}
+            <div className="relative mt-2">
+              <Search
+                className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
+                aria-hidden
+              />
+              <input
+                type="search"
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder="Filtrar por nome, endereço ou bairro"
+                aria-label="Filtrar farmácias"
+                aria-controls="farmacias-listbox"
+                className="h-9 w-full rounded-lg border border-border bg-card pl-8 pr-8 text-[12.5px] text-foreground placeholder:text-muted-foreground focus-visible:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50"
+              />
+              {q && (
+                <button
+                  type="button"
+                  onClick={() => setQ("")}
+                  aria-label="Limpar filtro"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                >
+                  <X className="h-3.5 w-3.5" aria-hidden />
+                </button>
+              )}
+            </div>
+
+            <ul
+              id="farmacias-listbox"
+              ref={listRef}
+              onKeyDown={onListKeyDown}
+              onScroll={(ev) => persistScroll(ev.currentTarget)}
+              className="pc-rail mt-2 grid max-h-[52vh] grid-cols-1 gap-2 overflow-y-auto pr-0.5 focus:outline-none"
+            >
+              {filtradas.length === 0 && (
+                <li className="rounded-lg border border-dashed border-border/70 bg-card/60 p-4 text-center text-[12.5px] text-muted-foreground">
+                  Nenhuma farmácia encontrada para “{q}”.
+                </li>
+              )}
+              {filtradas.map((f) => (
                 <li
                   key={f.id}
-                  className="group rounded-lg border border-border/70 bg-card p-2.5 shadow-sm transition-colors hover:border-brand-gold/60 hover:bg-[var(--pc-hover-tint)]"
+                  ref={(el) => {
+                    if (el) itemRefs.current.set(f.id, el);
+                    else itemRefs.current.delete(f.id);
+                  }}
+                  tabIndex={f.id === activeId ? 0 : -1}
+                  onFocus={() => setActiveId(f.id)}
+                  className={`group rounded-lg border bg-card p-2.5 shadow-sm transition-colors hover:border-brand-gold/60 hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold ${
+                    f.id === activeId ? "border-brand-gold/60" : "border-border/70"
+                  }`}
                 >
+
                   <h3 className="text-[13.5px] font-semibold leading-tight text-foreground group-hover:text-[var(--pc-gold-ink)]">
                     {f.nome}
                   </h3>
