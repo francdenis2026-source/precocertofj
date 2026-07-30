@@ -272,7 +272,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             id={LISTBOX_ID}
             role="listbox"
             aria-label="Sugestões de produtos"
-            className="max-h-[min(40vh,272px)] overflow-y-auto overscroll-contain"
+            className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
           >
             {items.map((s, i) => (
               <li key={s.id}>
