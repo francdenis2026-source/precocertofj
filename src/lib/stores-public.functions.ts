@@ -83,17 +83,20 @@ const toNum = (v: unknown): number | null => {
 
 // ---------- helpers ----------
 
+// Ordem importa: as regras mais específicas (limpeza/higiene) vêm antes das
+// genéricas — "Água Sanitária" jamais deve cair em "Bebidas" por causa de "água".
 const CATEGORY_RULES: { key: string; label: string; kws: RegExp }[] = [
-  { key: "bebidas", label: "Bebidas & Café", kws: /\b(cafe|cha|nescau|achocolatado|suco|refrigerante|cerveja|vinho|agua)\b/i },
+  { key: "limpeza", label: "Limpeza", kws: /\b(sabao|detergente|amaciante|desinfetante|agua sanit|multiuso|esponja|lava roupas|limpador|odorizador|saco de lixo|vassoura)\b/i },
+  { key: "higiene", label: "Higiene", kws: /\b(shampoo|condicionador|sabonete|creme dental|pasta de dente|papel higi|absorvente|fralda|desodorante)\b/i },
   { key: "laticinios", label: "Laticínios", kws: /\b(manteiga|queijo|leite|iogurte|requeijao|creme de leite|nata)\b/i },
   { key: "carnes", label: "Carnes & Frios", kws: /\b(salsicha|fiambre|almondega|linguic|presunto|mortadela|salame|carne|frango|peixe|bacon)\b/i },
   { key: "mercearia", label: "Mercearia", kws: /\b(arroz|feijao|farinha|macarrao|espaguete|penne|oleo|acucar|sal|fuba|flocao|amido|sagu|mistura bolo|maisena)\b/i },
-  { key: "prontos", label: "Prontos & Enlatados", kws: /\b(sopao|feijoada|nissin|cup noodles|molho|extrato|conserva|azeitona|ervilha|milho|sardinha|atum)\b/i },
+  { key: "prontos", label: "Prontos & Enlatados", kws: /\b(sopao|feijoada|nissin|cup noodles|extrato|conserva|azeitona|ervilha|milho|sardinha|atum)\b/i },
   { key: "condimentos", label: "Condimentos", kws: /\b(ketchup|maionese|mostarda|azeite|vinagre|molho|tempero|shoyu)\b/i },
   { key: "padaria", label: "Padaria & Doces", kws: /\b(pao|biscoito|bolacha|bolo|torta|chocolate|doce|geleia|mel)\b/i },
-  { key: "limpeza", label: "Limpeza", kws: /\b(sabao|detergente|amaciante|desinfetante|agua sanit|multiuso|esponja)\b/i },
-  { key: "higiene", label: "Higiene", kws: /\b(shampoo|condicionador|sabonete|creme dental|pasta de dente|papel higi|absorvente|fralda|desodorante)\b/i },
+  { key: "bebidas", label: "Bebidas & Café", kws: /\b(cafe|cha|nescau|achocolatado|suco|refrigerante|cerveja|vinho|agua)\b/i },
 ];
+
 
 /** Rótulos das categorias canônicas do catálogo (product_catalog.category). */
 const CATALOG_CATEGORY_LABELS: Record<string, string> = {
