@@ -14,9 +14,12 @@ import {
 } from "@/components/ui/dialog";
 import { ProductImage } from "@/components/ds/ProductImage";
 import { StoreBadge } from "@/components/brand/StoreBadge";
+import { BestValueBadge } from "@/components/ds/BestValueBadge";
+import { pickBestValue } from "@/lib/best-value";
 import { getPublicProduct } from "@/lib/public-product.functions";
 import { formatShortDate } from "@/components/product/TrustIndicator";
 import { dedupeByStorePrice, storeKey } from "@/lib/price-rank";
+
 
 
 export type QuickViewProduct = {
@@ -70,6 +73,30 @@ export function ProductQuickView({
     cheapest && storeKey(cheapest.marketName) === storeKey(product?.cheapestStore)
       ? (product?.cheapestLogo ?? null)
       : null;
+
+  /**
+   * "Melhor custo-benefício" no modal.
+   *
+   * Aqui todas as ofertas são do MESMO produto (mesma embalagem), então o
+   * vencedor por unidade coincide com o menor preço. O selo continua útil
+   * porque traduz a etiqueta em R$/kg ou R$/L — mas precisa dos mesmos
+   * guardas anti-ruído do `BestValueBadge`:
+   *  - `requireDifferentSizes: false` (comparação intra-produto);
+   *  - `pickBestValue` devolve null sem tamanho detectável, com bases
+   *    misturadas (kg vs L) ou com menos de 2 ofertas;
+   *  - `computeUnitPrice` (interno) não extrapola g/ml abaixo de 1kg/1L.
+   */
+  const bestValue = pickBestValue(
+    allMarkets.map((m) => ({
+      key: m.marketName,
+      price: m.priceMin,
+      name: product?.name ?? data?.displayName ?? "",
+      sizeUnit: product?.unit ?? data?.unit ?? null,
+    })),
+    { requireDifferentSizes: false },
+  );
+
+
 
   return (
     <Dialog open={Boolean(product)} onOpenChange={(v) => !v && onClose()}>
@@ -135,6 +162,14 @@ export function ProductQuickView({
               <Price value={cheapest.priceMin} size="md" tone="best" className="shrink-0" />
             </div>
           )}
+
+          {bestValue && (
+            <div className="mb-3 -mt-1.5">
+              <BestValueBadge result={bestValue} />
+            </div>
+          )}
+
+
 
 
           <p className="mb-1.5 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">

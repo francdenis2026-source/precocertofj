@@ -39,8 +39,14 @@ const CATEGORY_LABELS: Record<string, string> = {
   higiene: "Higiene",
   mercearia: "Mercearia",
   congelados: "Congelados",
+  hortifruti: "Hortifrúti",
+  infantil: "Infantil",
+  medicamentos: "Medicamentos",
+  papelaria: "Papelaria",
+  perfumaria: "Perfumaria",
   outros: "Outros",
 };
+
 
 export const humanizeCategory = (c: string): string => CATEGORY_LABELS[c] ?? c;
 

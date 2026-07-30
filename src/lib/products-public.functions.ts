@@ -82,7 +82,26 @@ export const getLiveTickerStats = createServerFn({ method: "GET" }).handler(
 /**
  * Public — economia média identificada (menor vs. maior preço do mesmo produto
  * entre estabelecimentos, para produtos com pelo menos 2 mercados).
+ *
+ * Metodologia (v2 — a v1 divulgava ~10% e confundia o usuário):
+ *  - A média simples sobre TODOS os produtos comparáveis é puxada para baixo
+ *    por dezenas de itens com diferença de centavos (ruído de arredondamento
+ *    de etiqueta). Isso subestimava a economia real de quem compara.
+ *  - Passamos a considerar apenas produtos em que vale a pena trocar de
+ *    mercado: diferença >= `MIN_RELEVANT_PCT` (5%). Se a amostra relevante for
+ *    pequena demais (< 10 itens), voltamos à média geral para não inflar.
+ *  - Nunca devolvemos números inventados: em erro/base vazia devolvemos zeros e
+ *    a UI (buildLivePanel) esconde a métrica em vez de mentir.
  */
+const MIN_RELEVANT_PCT = 5;
+const MIN_RELEVANT_SAMPLE = 10;
+
+const EMPTY_ECONOMY: EconomyStat = {
+  avgSavingsPct: 0,
+  productsWithComparison: 0,
+  bestSavingsPct: 0,
+};
+
 export const getEconomyStat = createServerFn({ method: "GET" }).handler(
   async (): Promise<EconomyStat> => {
     try {
@@ -103,28 +122,32 @@ export const getEconomyStat = createServerFn({ method: "GET" }).handler(
         .select("savings_pct, store_count")
         .gte("store_count", 2);
 
-      if (error || !data || data.length === 0) {
-        return { avgSavingsPct: 18, productsWithComparison: 0, bestSavingsPct: 38 };
-      }
+      if (error || !data || data.length === 0) return EMPTY_ECONOMY;
 
       const savings = data
         .map((r) => Number(r.savings_pct))
         .filter((n) => Number.isFinite(n) && n > 0);
-      if (savings.length === 0) {
-        return { avgSavingsPct: 18, productsWithComparison: 0, bestSavingsPct: 38 };
-      }
-      const avg = savings.reduce((a, b) => a + b, 0) / savings.length;
+      if (savings.length === 0) return EMPTY_ECONOMY;
+
+      const relevant = savings.filter((n) => n >= MIN_RELEVANT_PCT);
+      const sample = relevant.length >= MIN_RELEVANT_SAMPLE ? relevant : savings;
+
+      const avg = sample.reduce((a, b) => a + b, 0) / sample.length;
       const best = Math.max(...savings);
+
       return {
-        avgSavingsPct: Math.round(avg),
-        productsWithComparison: savings.length,
+        // Uma casa decimal: "13,4%" comunica precisão de medição real,
+        // diferente do "10%" arredondado que parecia estimativa de marketing.
+        avgSavingsPct: Number(avg.toFixed(1)),
+        productsWithComparison: sample.length,
         bestSavingsPct: Math.round(best),
       };
     } catch {
-      return { avgSavingsPct: 18, productsWithComparison: 0, bestSavingsPct: 38 };
+      return EMPTY_ECONOMY;
     }
   },
 );
+
 
 /**
  * Public — últimos produtos cadastrados com o mercado mais comum.

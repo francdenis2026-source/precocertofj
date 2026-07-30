@@ -69,9 +69,14 @@ const CATEGORY_LABELS: Record<string, string> = {
   biscoitos: "Biscoitos",
   bebidas_em_po: "Bebidas em pó",
   hortifruti: "Hortifrúti",
+  infantil: "Infantil",
+  medicamentos: "Medicamentos",
+  papelaria: "Papelaria",
+  perfumaria: "Perfumaria",
   pet: "Pet",
   outros: "Outros",
 };
+
 
 export const getMetricSpotlight = createServerFn({ method: "GET" }).handler(
   async (): Promise<MetricSpotlight> => {

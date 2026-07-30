@@ -89,10 +89,15 @@ export function buildLivePanel(input: {
     },
     {
       kind: "savings",
-      value: savings != null ? `${Math.round(savings)}%` : LIVE_PANEL_PLACEHOLDER,
-      label: "Economia média",
+      // Uma casa decimal em pt-BR ("13,4%"): número medido, não estimativa.
+      value:
+        savings != null
+          ? `${savings.toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%`
+          : LIVE_PANEL_PLACEHOLDER,
+      label: "Economia média por produto",
       short: "Economia",
     },
+
   ];
 
   return {

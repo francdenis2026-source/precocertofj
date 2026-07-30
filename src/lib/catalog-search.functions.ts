@@ -25,14 +25,21 @@ const CATEGORY_LABELS: Record<string, string> = {
   bebidas_em_po: "Bebidas em pó",
   biscoitos: "Biscoitos",
   carnes: "Carnes",
+  congelados: "Congelados",
   doces: "Doces",
   higiene: "Higiene",
   hortifruti: "Hortifruti",
+  infantil: "Infantil",
   laticinios: "Laticínios",
+  limpeza: "Limpeza",
+  medicamentos: "Medicamentos",
   mercearia: "Mercearia",
   outros: "Outros",
   padaria: "Padaria",
+  papelaria: "Papelaria",
+  perfumaria: "Perfumaria",
 };
+
 
 export function categoryLabel(key: string | null | undefined): string {
   if (!key) return "Outros";

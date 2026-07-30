@@ -452,8 +452,10 @@ function CategoryPage() {
                 }`}
               </p>
               {view === "grid" ? (
+                // Grade densa: 2 colunas já no mobile — cards de 1 coluna
+                // ficavam exageradamente grandes e exigiam muita rolagem.
+                <ul className="mt-2 grid grid-cols-2 gap-1.5 sm:grid-cols-3 sm:gap-2 lg:grid-cols-4">
 
-                <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
                   {visible.map((p, idx) => {
                     const isTop = idx === 0 && safePage === 1;
                     return (
@@ -462,14 +464,14 @@ function CategoryPage() {
                         type="button"
                         onClick={() => openQuickView(p.name)}
                         className={cn(
-                          "flex h-full w-full items-start gap-2.5 p-2.5 text-left",
+                          "flex h-full w-full items-start gap-2 p-2 text-left",
                           isTop ? "pc-surface-3-interactive" : "pc-surface-2-interactive",
                         )}
                       >
                         <StoreBadge name={p.cheapestStore} logoUrl={p.cheapestLogo} size="xs" />
                         <span className="min-w-0 flex-1">
                           {isTop && <span className={cn(tc.eyebrow, "mb-0.5 block")}>Menor oferta</span>}
-                          <span className="line-clamp-2 text-[13px] font-semibold leading-tight">
+                          <span className="line-clamp-2 text-[12.5px] font-semibold leading-tight">
                             {p.name}
                           </span>
                           <span className={cn("mt-0.5 block truncate", tc.storeNameTight)}>
@@ -479,9 +481,9 @@ function CategoryPage() {
                           <Price
                             as="div"
                             value={p.minPrice}
-                            size={isTop ? "lg" : "sm"}
+                            size={isTop ? "md" : "sm"}
                             tone={isTop ? "best" : "default"}
-                            className="mt-1"
+                            className="mt-0.5"
                           />
                         </span>
                       </button>
@@ -489,6 +491,7 @@ function CategoryPage() {
                     );
                   })}
                 </ul>
+
               ) : (
               <ul className="mt-2 space-y-1.5">
                 {visible.map((p, idx) => {
