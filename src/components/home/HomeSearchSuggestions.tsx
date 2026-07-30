@@ -49,12 +49,12 @@ const optionId = (i: number) => `${LISTBOX_ID}-opt-${i}`;
  * Regras:
  * - Só aparece com query ≥ 2 caracteres.
  * - Live search com debounce curto (140ms) e cancelamento (AbortController).
- * - Lista curta (5 itens) e compacta: nunca ultrapassa ~40% da viewport.
+ * - Lista curta (6 itens) renderizada em portal para não ser cortada.
  * - Navegação por teclado: ↓/↑ movem, Enter abre o item ativo, Esc fecha.
  * - Visitantes com cota esgotada veem os nomes borrados + CTA.
  */
 export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandle, Props>(
-  function HomeSearchSuggestions({ query, isLoggedOut, onBlocked, open, onClose }, ref) {
+  function HomeSearchSuggestions({ query, isLoggedOut, onBlocked, open, onClose, anchorRef }, ref) {
     const navigate = useNavigate();
     const runSuggest = useServerFn(suggestProducts);
     const runSearch = useServerFn(searchProductPrice);
