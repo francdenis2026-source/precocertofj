@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/dialog";
 import { TeaserCard } from "@/components/paywall/TeaserGate";
 import { PriceCard, Badge as DSBadge, formatBRL } from "@/components/ds";
+import { Price } from "@/components/ds/Price";
 
 const fmt = (n: number) => `R$ ${n.toFixed(2).replace(".", ",")}`;
 
@@ -574,9 +575,7 @@ function CheapestComparisonsBlock({ rows }: { rows: Comparison[] }) {
                       Menor
                     </p>
                     <div className="flex items-baseline justify-between gap-1">
-                      <p className="num font-display text-[12.5px] font-extrabold leading-none tracking-tight text-primary">
-                        {fmt(Number(r.min_price))}
-                      </p>
+                      <Price value={Number(r.min_price)} size="sm" as="p" />
                       <p
                         className="line-clamp-1 font-display text-[11px] italic text-muted-foreground"
                         title={r.cheapest_store}
@@ -755,18 +754,12 @@ function CompareDialog({
                         )}
                       </div>
                     </div>
-                    <p
-                      className={
-                        "font-mono text-base font-bold tabular-nums " +
-                        (isBest
-                          ? "text-savings"
-                          : isWorst
-                            ? "text-muted-foreground line-through"
-                            : "text-foreground")
-                      }
-                    >
-                      {fmt(Number(s.price))}
-                    </p>
+                    <Price
+                      as="p"
+                      value={Number(s.price)}
+                      size="md"
+                      tone={isBest ? "best" : isWorst ? "strike" : "default"}
+                    />
                   </li>
                 );
               })}
@@ -833,9 +826,7 @@ function RankingDialog({
                 </p>
               </div>
               <div className="text-right">
-                <p className="font-mono text-sm font-bold text-primary">
-                  {fmt(Number(r.min_price))}
-                </p>
+                <Price as="p" value={Number(r.min_price)} size="md" />
                 {Number(r.store_count) > 1 && (
                   <p className="inline-flex items-center gap-0.5 text-[11px] font-semibold text-savings">
                     <TrendingDown className="h-2.5 w-2.5" />
@@ -850,22 +841,26 @@ function RankingDialog({
         <div className="grid grid-cols-3 gap-2 rounded-xl bg-muted/40 p-3 text-center text-[11px]">
           <div>
             <p className="uppercase tracking-wider text-muted-foreground">Menor total</p>
-            <p className="mt-0.5 font-mono text-sm font-bold text-primary">{fmt(totalMin)}</p>
+            <Price as="p" value={totalMin} size="md" className="mt-0.5 justify-center" />
           </div>
           <div>
             <p className="uppercase tracking-wider text-muted-foreground">Média</p>
-            <p className="mt-0.5 font-mono text-sm text-foreground">{fmt(totalAvg)}</p>
+            <Price as="p" value={totalAvg} size="sm" className="mt-0.5 justify-center" />
           </div>
           <div>
             <p className="uppercase tracking-wider text-muted-foreground">Maior total</p>
-            <p className="mt-0.5 font-mono text-sm text-muted-foreground line-through">
-              {fmt(totalMax)}
-            </p>
+            <Price
+              as="p"
+              value={totalMax}
+              size="sm"
+              tone="strike"
+              className="mt-0.5 justify-center"
+            />
           </div>
         </div>
         <p className="text-center text-[11px] text-muted-foreground">
           Economia potencial:{" "}
-          <span className="font-bold text-savings">{fmt(Math.max(0, totalAvg - totalMin))}</span>{" "}
+          <Price value={Math.max(0, totalAvg - totalMin)} size="sm" tone="savings" />{" "}
           em relação à média
         </p>
       </DialogContent>
