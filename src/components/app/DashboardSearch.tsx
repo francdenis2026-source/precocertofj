@@ -156,7 +156,13 @@ export function DashboardSearch() {
               maxLength={80}
               inputMode="search"
               autoComplete="off"
+              onKeyDown={onInputKeyDown}
+              role="combobox"
+              aria-expanded={active && results.length > 0}
+              aria-controls="dashboard-search-results"
+              aria-describedby="dashboard-search-help"
             />
+
             {input && (
               <button
                 type="button"
