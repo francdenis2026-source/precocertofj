@@ -262,9 +262,9 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             onClick={() => handlePick(q)}
             className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-[13px] font-medium hover:bg-slate-50"
           >
-            <Search className="h-4 w-4 text-slate-400" />
+            <Search className="h-4 w-4 text-slate-700" />
             Nenhum produto com esse nome — ver todos os resultados para “<strong>{q}</strong>”
-            <ArrowRight className="ml-auto h-4 w-4 text-slate-400" />
+            <ArrowRight className="ml-auto h-4 w-4 text-slate-600" />
           </button>
         ) : (
           <ul
