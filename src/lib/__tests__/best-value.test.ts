@@ -59,18 +59,21 @@ describe("pickBestValue — melhor custo-benefício (R$/unidade)", () => {
     expect(r?.base).toBe("L");
   });
 
-  it("mantém o selo quando o vencedor também é o de menor preço absoluto", () => {
+  it("identifica corretamente vencedor por unidade vs etiqueta mais barata", () => {
     const r = pickBestValue([
-      { key: "gde", name: "Leite em pó 800g", price: 22.0 },
-      { key: "peq", name: "Leite em pó 1kg", price: 20.0 },
+      { key: "gde", name: "Açúcar 2kg", price: 9.0 },
+      { key: "peq", name: "Açúcar 1kg", price: 6.0 },
     ]);
-    expect(r?.key).toBe("peq");
-    expect(r?.differsFromCheapest).toBe(false);
+    // 1kg a R$ 6,00 = R$ 6,00/kg vence 2kg a R$ 9,00 = R$ 4,50/kg? Não:
+    // 4,50/kg é menor → vence a embalagem de 2kg, que NÃO é a mais barata.
+    expect(r?.key).toBe("gde");
+    expect(r?.cheapestKey).toBe("peq");
+    expect(r?.differsFromCheapest).toBe(true);
   });
 
   it("usa o tamanho persistido quando o nome não traz medida", () => {
     const r = pickBestValue([
-      { key: "a", name: "Detergente", price: 3.0, sizeValue: 500, sizeUnit: "ml" },
+      { key: "a", name: "Detergente", price: 6.0, sizeValue: 1000, sizeUnit: "ml" },
       { key: "b", name: "Detergente refil", price: 9.0, sizeValue: 2000, sizeUnit: "ml" },
     ]);
     expect(r?.key).toBe("b");
