@@ -417,7 +417,7 @@ function CategoryPage() {
             <EmptyCard text="Nenhum estabelecimento desta categoria cadastrado ainda." />
           ) : (
             <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              {data!.stores.map((s) => (
+              {displayStores.map((s) => (
                 <li key={s.id}>
                   <Link
                     to="/estabelecimento/$slug"
@@ -435,11 +435,11 @@ function CategoryPage() {
                       {s.avgSavingPct !== null && (
                         <span
                           className="mt-0.5 block truncate text-[11px] font-semibold tabular-nums text-brand-gold"
-                          title={`Média em ${s.comparedProducts} produto(s) presentes em 2+ lojas. Média da categoria: ${data!.avgSavingPct ?? 0}%`}
+                          title={`Média em ${s.comparedProducts} produto(s) presentes em 2+ lojas. Média da categoria: ${catAvgSaving ?? 0}%`}
                         >
                           Economia média aqui: {s.avgSavingPct.toLocaleString("pt-BR", { maximumFractionDigits: 1 })}%
                           <span className="font-medium text-muted-foreground">
-                            {" "}· categoria {(data!.avgSavingPct ?? 0).toLocaleString("pt-BR", { maximumFractionDigits: 1 })}%
+                            {" "}· categoria {(catAvgSaving ?? 0).toLocaleString("pt-BR", { maximumFractionDigits: 1 })}%
                           </span>
                         </span>
                       )}
@@ -521,7 +521,7 @@ function CategoryPage() {
                 active={storeFilter === ""}
                 onClick={() => setSearch({ loja: "", page: 1 })}
               />
-              {data!.stores.map((s2) => (
+              {displayStores.map((s2) => (
                 <FilterChip
                   key={s2.id}
                   label={s2.name}
