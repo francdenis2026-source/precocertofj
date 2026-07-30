@@ -4996,3 +4996,57 @@ svg.lucide-search {
   color: var(--pc-home-navy, #0f1b3d) !important;
   filter: none;
 }
+
+/* ============================================================
+   Alinhamento numérico global — tabelas e listas de preço
+   Colunas de números só alinham quando todos os dígitos têm a
+   mesma largura. Aplicamos tabular-nums de forma abrangente em
+   tabelas e nos containers de preço, em todos os breakpoints.
+   Nenhuma cor é alterada aqui.
+   ============================================================ */
+table,
+thead,
+tbody,
+tfoot,
+tr,
+th,
+td,
+[role="table"],
+[role="row"],
+[role="rowheader"],
+[role="columnheader"],
+[role="gridcell"],
+[role="cell"],
+[data-price],
+[data-numeric],
+.pc-price,
+.pc-res-price,
+.pc-price-value,
+.pc-table,
+.price-list,
+.price-list li,
+.tabular-nums {
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+/* Células/valores monetários alinham à direita e não quebram no meio
+   do número — regra essencial em telas estreitas. */
+th[data-numeric],
+td[data-numeric],
+[role="columnheader"][data-numeric],
+[role="gridcell"][data-numeric],
+[role="cell"][data-numeric] {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Em telas pequenas, condensada + peso alto pode fechar demais os dígitos;
+   um pouco mais de tracking preserva a leitura sem alterar o layout. */
+@media (max-width: 480px) {
+  .pc-price--lg,
+  .pc-price--xl {
+    letter-spacing: 0.02em;
+  }
+}
