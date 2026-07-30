@@ -429,6 +429,7 @@ function HomePage() {
               {/* ---------- Busca ---------- */}
               <form onSubmit={submitSearch} className="relative max-w-2xl">
                 <div
+                  ref={searchAnchorRef}
                   className="pc-elite-frame flex items-center gap-1 rounded-2xl border p-1 shadow-2xl transition-all focus-within:ring-2 sm:p-1.5"
                   style={{
                     background: "#ffffff",
