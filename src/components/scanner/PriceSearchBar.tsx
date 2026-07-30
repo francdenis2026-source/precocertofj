@@ -3083,16 +3083,16 @@ function MarketBucketSection({
               {freshnessLabel(r.price.when)}
             </span>
 
-            <span
+            <Price
+              size="sm"
+              value={r.price.price}
               className={
-                "whitespace-nowrap rounded-md px-1.5 py-1 text-[13.5px] font-semibold leading-none tabular-nums tracking-[-0.02em] sm:px-2 sm:text-[15px] " +
+                "whitespace-nowrap rounded-md px-1.5 py-1 sm:px-2 " +
                 (r.isBest
-                  ? "bg-[color-mix(in_oklab,var(--brand-gold)_18%,transparent)] text-foreground"
-                  : "text-foreground")
+                  ? "bg-[color-mix(in_oklab,var(--brand-gold)_18%,transparent)]"
+                  : "")
               }
-            >
-              {fmt(r.price.price)}
-            </span>
+            />
           </li>
         ))}
 
