@@ -30,7 +30,7 @@ export const Route = createFileRoute("/admin_/promocoes-codigos")({
   component: () => <Navigate to="/admin/promocoes" search={{ tab: "codigos" } as never} replace />,
 });
 
-function fmt(v: string | null | undefined) {
+function fmtDateTime(v: string | null | undefined) {
   if (!v) return "—";
   try { return new Date(v).toLocaleString("pt-BR"); } catch { return v; }
 }
@@ -152,8 +152,8 @@ export function PromoCodesPage() {
                             </>
                           ) : "—"}
                         </TableCell>
-                        <TableCell className="text-xs">{fmt(c.redeemed_at)}</TableCell>
-                        <TableCell className="text-xs">{fmt(c.expires_at)}</TableCell>
+                        <TableCell className="text-xs">{fmtDateTime(c.redeemed_at)}</TableCell>
+                        <TableCell className="text-xs">{fmtDateTime(c.expires_at)}</TableCell>
                         <TableCell className="text-right text-xs tabular-nums">
                           {!isRedeemed ? (
                             <span className="text-muted-foreground">—</span>
