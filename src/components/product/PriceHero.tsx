@@ -3,10 +3,6 @@ import { cn } from "@/lib/utils";
 import { SavingsBadge } from "@/components/product/SavingsBadge";
 import { Price, type PriceSize } from "@/components/ds/Price";
 
-function formatBRL(n: number): string {
-  return n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-}
-
 /**
  * Bloco unificado de "preço em destaque" — usado no ProductCard do
  * comparador e da rota /melhores-precos para garantir a mesma
