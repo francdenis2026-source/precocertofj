@@ -294,10 +294,63 @@ function CatalogoPage() {
           />
         )}
 
+        {/* Faixa de preço */}
+        <div className="mt-3">
+          <p className={cn(tc.control, "mb-1.5 flex items-center gap-1.5 text-muted-foreground")}>
+            <Coins className="h-3.5 w-3.5" />
+            Faixa de preço
+          </p>
+          <div className="flex flex-wrap items-center gap-1.5">
+            <Chip label="Todos" isActive={!minPrice && !maxPrice} onClick={() => setSearch({ min: 0, max: 0 })} />
+            {PRICE_BANDS.map((band) => (
+              <Chip
+                key={band.label}
+                label={band.label}
+                isActive={minPrice === band.min && maxPrice === band.max}
+                onClick={() =>
+                  setSearch(
+                    minPrice === band.min && maxPrice === band.max
+                      ? { min: 0, max: 0 }
+                      : { min: band.min, max: band.max },
+                  )
+                }
+              />
+            ))}
+            <span className={cn(tc.metaMuted, "ml-1")}>ou</span>
+            <Input
+              type="number"
+              inputMode="decimal"
+              min={0}
+              value={minPrice || ""}
+              onChange={(e) => setSearch({ min: Math.max(0, Number(e.target.value) || 0) })}
+              placeholder="mín."
+              aria-label="Preço mínimo"
+              className="h-9 w-24"
+            />
+            <Input
+              type="number"
+              inputMode="decimal"
+              min={0}
+              value={maxPrice || ""}
+              onChange={(e) => setSearch({ max: Math.max(0, Number(e.target.value) || 0) })}
+              placeholder="máx."
+              aria-label="Preço máximo"
+              className="h-9 w-24"
+            />
+            {cheapestCount > 0 && (
+              <Chip
+                label={`🏆 Menor preço da cidade (${cheapestCount})`}
+                isActive={search.best}
+                onClick={() => setSearch({ best: !search.best })}
+              />
+            )}
+          </div>
+        </div>
+
         {hasFilters && (
           <button
             type="button"
-            onClick={() => setSearch({ q: "", cat: "", marca: "" })}
+            onClick={() => setSearch({ q: "", cat: "", marca: "", min: 0, max: 0, best: false })}
             className={cn(
               tc.meta,
               "mt-3 inline-flex items-center gap-1.5 rounded-full border border-border/60 px-3 py-1 text-muted-foreground transition-colors hover:text-foreground",
@@ -324,10 +377,11 @@ function CatalogoPage() {
             <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
               {filtered.map((p) => (
                 <li key={p.slug}>
-                  <ProductCard product={p} />
+                  <ProductCard product={p} rank={rankMap.get(p.slug)} />
                 </li>
               ))}
             </ul>
+
           )}
         </div>
       </PageShellContent>
