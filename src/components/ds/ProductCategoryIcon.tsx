@@ -3,7 +3,7 @@
  * Detecção heurística por palavras-chave no nome do produto (pt-BR).
  * Traço fino, monocromático, herda `currentColor`.
  */
-import type { ReactElement, SVGProps } from "react";
+import { memo, type ReactElement, type SVGProps } from "react";
 
 export type FoodCategory =
   | "arroz"
