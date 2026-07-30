@@ -557,7 +557,7 @@ function HomePage() {
                   borderColor: "var(--pc-home-onhero-border)",
                 }}
               >
-                <header className="mb-3 flex items-center justify-between gap-2 border-b pb-2.5" style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}>
+                <header className="mb-2 flex items-center justify-between gap-2 border-b pb-2" style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}>
                   <span
                     className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em]"
                     style={{ color: "var(--pc-home-onhero-gold)" }}
