@@ -1092,7 +1092,7 @@ export function PriceSearchBar({
                     <div className="grid gap-3 px-3.5 py-3 sm:grid-cols-2 sm:gap-4">
                       <div className="min-w-0">
                         <p className="flex items-center gap-2 text-[11px] font-medium text-brand-gold/90">
-                          Melhor preço agora
+                          Menor preço agora
                           <LiveUpdateBadge active={live.active} tone="onDark" />
                         </p>
                         <Price
@@ -2526,7 +2526,7 @@ function ProductGroupCard({
           const tieSuffix =
             isCheapest && cheapestCount > 1 ? ` (empate com ${cheapestCount - 1} ${cheapestCount - 1 === 1 ? "mercado" : "mercados"})` : "";
           const rowAriaLabel = `${p.marketName ?? "Mercado"}: ${fmt(p.price)}${
-            isCheapest ? ` — melhor oferta${tieSuffix}` : ""
+            isCheapest ? ` — menor preço${tieSuffix}` : ""
           }${localizacao ? `, ${localizacao}` : ""}`;
           return (
             <li
@@ -2563,11 +2563,11 @@ function ProductGroupCard({
               {isCheapest ? (
                 <span
                   role="img"
-                  aria-label={cheapestCount > 1 ? `Melhor oferta — empate com ${cheapestCount - 1} outro${cheapestCount - 1 === 1 ? "" : "s"}` : "Melhor oferta"}
+                  aria-label={cheapestCount > 1 ? `Menor preço — empate com ${cheapestCount - 1} outro${cheapestCount - 1 === 1 ? "" : "s"}` : "Menor preço"}
                   className="pointer-events-none absolute -top-2 right-2 z-10 inline-flex items-center gap-1 rounded-full border border-brand-gold bg-brand-navy px-2 py-[2px] text-[10px] font-bold uppercase tracking-[0.14em] text-brand-gold shadow-sm"
                 >
                   <Crown className="h-2.5 w-2.5" strokeWidth={2.25} aria-hidden="true" />
-                  <span>{cheapestCount > 1 ? `Melhor oferta · empate ${cheapestCount}` : "Melhor oferta"}</span>
+                  <span>{cheapestCount > 1 ? `Menor preço · empate ${cheapestCount}` : "Menor preço"}</span>
                 </span>
               ) : null}
               <div className="pc-res-row-main flex items-center gap-1.5">
