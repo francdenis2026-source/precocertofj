@@ -108,12 +108,17 @@ export function SearchDiscovery({ onPickQuery }: Props) {
     setRecent(removeSearchHistory(term).map((e) => e.query));
   };
 
+  // Mesma chave da home: o cache é compartilhado e a RPC não é chamada de novo.
   const stats = useQuery({
-    queryKey: ["platform-stats-discovery"],
+    queryKey: ["platform-stats"],
     queryFn: () => getPlatformStats(),
-    staleTime: 5 * 60_000,
+    staleTime: 10 * 60_000,
+    gcTime: 30 * 60_000,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
     retry: 1,
   });
+
 
   const statsOk = Boolean(stats.data?.ok);
   const statsFailed = Boolean(stats.isError || (stats.data && !stats.data.ok));
