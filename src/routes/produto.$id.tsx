@@ -297,8 +297,8 @@ function ProductDetailPage() {
                       )}
                     </div>
                     <div className="mt-1.5 flex justify-between font-mono text-[11px] tabular-nums text-muted-foreground">
-                      <span>{fmt(data.history.min)}</span>
-                      <span>{fmt(data.history.max)}</span>
+                      <Price value={data.history.min} size="xs" tone="muted" />
+                      <Price value={data.history.max} size="xs" tone="muted" />
                     </div>
                   </div>
                 )}
@@ -346,13 +346,12 @@ function ProductDetailPage() {
                           </p>
                         </div>
                         <div className="text-right">
-                          <p
-                            className={`font-display text-base font-bold tabular-nums ${
-                              isBest ? "text-savings" : "text-foreground"
-                            }`}
-                          >
-                            {fmt(m.priceAvg)}
-                          </p>
+                          <Price
+                            as="p"
+                            value={m.priceAvg}
+                            size="md"
+                            tone={isBest ? "best" : "default"}
+                          />
                           {isBest && (
                             <p className="font-mono text-[11px] font-semibold uppercase tracking-widest text-savings">
                               melhor preço
@@ -392,12 +391,6 @@ function PriceStat({
   icon?: React.ReactNode;
   highlight?: boolean;
 }) {
-  const toneClasses =
-    tone === "savings"
-      ? "text-savings"
-      : tone === "primary"
-      ? "text-foreground"
-      : "text-muted-foreground";
   return (
     <div
       className={`rounded-2xl p-3 ${
