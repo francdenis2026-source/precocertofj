@@ -256,7 +256,7 @@ const RULES: readonly Rule[] = [
   // "Granola com Banana" são secos, não frutas/legumes in natura.
   {
     category: "mercearia",
-    re: /\b(arroz|feijao|acucar|adocante|farinha|mandioca|macarrao|espaguete|penne|parafuso|oleo|azeite|fuba|amido|fermento|milho|ervilha|cuscuz|canjica|flocao|granola|rapadura|trigo|polvilho)\b|(leite de coco|coco ralado|proteina de soja)/,
+    re: /\b(arroz|feijao|acucar|adocante|farinha|mandioca|macarrao|massa|lasanha|talharim|espaguete|penne|parafuso|petybon|oleo|azeite|fuba|amido|fermento|milho|ervilha|cuscuz|canjica|flocao|granola|rapadura|trigo|polvilho)\b|(leite de coco|coco ralado|proteina de soja)/,
   },
 
   // 26) Hortifrúti — por último: só entra quando o nome NÃO traz marcadores de
