@@ -309,15 +309,68 @@ function FarmaciasPage() {
           </section>
 
           <section aria-label="Farmácias e drogarias de Feijó">
-            <h2 className="font-serif text-[18px] font-semibold leading-tight">
-              Farmácias e drogarias da cidade
-            </h2>
-            <ul className="mt-2 grid grid-cols-1 gap-2">
-              {FARMACIAS.map((f) => (
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h2 className="font-serif text-[18px] font-semibold leading-tight">
+                Farmácias e drogarias da cidade
+              </h2>
+              <span className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                {filtradas.length} de {FARMACIAS.length}
+              </span>
+            </div>
+
+            {/* Busca rápida — filtra em memória, sem rolar a página */}
+            <div className="relative mt-2">
+              <Search
+                className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
+                aria-hidden
+              />
+              <input
+                type="search"
+                value={q}
+                onChange={(e) => setQ(e.target.value)}
+                placeholder="Filtrar por nome, endereço ou bairro"
+                aria-label="Filtrar farmácias"
+                aria-controls="farmacias-listbox"
+                className="h-9 w-full rounded-lg border border-border bg-card pl-8 pr-8 text-[12.5px] text-foreground placeholder:text-muted-foreground focus-visible:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/50"
+              />
+              {q && (
+                <button
+                  type="button"
+                  onClick={() => setQ("")}
+                  aria-label="Limpar filtro"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                >
+                  <X className="h-3.5 w-3.5" aria-hidden />
+                </button>
+              )}
+            </div>
+
+            <ul
+              id="farmacias-listbox"
+              ref={listRef}
+              onKeyDown={onListKeyDown}
+              onScroll={(ev) => persistScroll(ev.currentTarget)}
+              className="pc-rail mt-2 grid max-h-[52vh] grid-cols-1 gap-2 overflow-y-auto pr-0.5 focus:outline-none"
+            >
+              {filtradas.length === 0 && (
+                <li className="rounded-lg border border-dashed border-border/70 bg-card/60 p-4 text-center text-[12.5px] text-muted-foreground">
+                  Nenhuma farmácia encontrada para “{q}”.
+                </li>
+              )}
+              {filtradas.map((f) => (
                 <li
                   key={f.id}
-                  className="group rounded-lg border border-border/70 bg-card p-2.5 shadow-sm transition-colors hover:border-brand-gold/60 hover:bg-[var(--pc-hover-tint)]"
+                  ref={(el) => {
+                    if (el) itemRefs.current.set(f.id, el);
+                    else itemRefs.current.delete(f.id);
+                  }}
+                  tabIndex={f.id === activeId ? 0 : -1}
+                  onFocus={() => setActiveId(f.id)}
+                  className={`group rounded-lg border bg-card p-2.5 shadow-sm transition-colors hover:border-brand-gold/60 hover:bg-[var(--pc-hover-tint)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold ${
+                    f.id === activeId ? "border-brand-gold/60" : "border-border/70"
+                  }`}
                 >
+
                   <h3 className="text-[13.5px] font-semibold leading-tight text-foreground group-hover:text-[var(--pc-gold-ink)]">
                     {f.nome}
                   </h3>
