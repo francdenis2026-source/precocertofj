@@ -219,7 +219,7 @@ export function ProductQuickView({
             <p className="mt-2 inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-[11px] font-semibold text-foreground">
               <TrendingDown className="h-3 w-3 text-brand-gold" aria-hidden />
               Economia de até{" "}
-              <span className="pc-price pc-price--sm">{brl(data.avg - data.min)}</span>{" "}
+              <Price value={data.avg - data.min} size="sm" tone="savings" />{" "}
               frente à média
             </p>
           )}
