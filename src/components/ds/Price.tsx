@@ -97,7 +97,7 @@ export function Price({
     return (
       <Tag
         {...rest}
-        className={cn("pc-price", SIZE_CLASS[size], "pc-price--muted", className)}
+        className={cn("pc-price", SIZE_CLASS[size], "pc-price--muted", layoutClass, className)}
         aria-label={srLabel ?? "Preço indisponível"}
       >
         <span className="pc-price__value">—</span>
@@ -110,7 +110,7 @@ export function Price({
   return (
     <Tag
       {...rest}
-      className={cn("pc-price", SIZE_CLASS[size], TONE_CLASS[tone], className)}
+      className={cn("pc-price", SIZE_CLASS[size], TONE_CLASS[tone], layoutClass, className)}
       aria-label={srLabel ?? `${digits.replace(",", " reais e ")} centavos`}
     >
       {prefix !== false && <span className="pc-price__prefix" aria-hidden="true">{prefix}</span>}
