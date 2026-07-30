@@ -2646,10 +2646,12 @@ function ProductGroupCard({
           <Link
             to="/produto-publico/$slug"
             params={{ slug: productName }}
+            data-card-open=""
             className="pc-res-label rounded-full border border-border bg-background px-2 py-1 text-foreground hover:border-[var(--pc-gold-ink)] hover:text-[var(--pc-gold-ink)]"
           >
             Detalhes
           </Link>
+
 
         </div>
       </div>
