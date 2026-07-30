@@ -475,12 +475,12 @@ function NeighborhoodsPage() {
                                 <>
                                   <span className="mx-1 text-muted-foreground/60" aria-hidden>·</span>
                                   <span className="text-muted-foreground">a partir de </span>
-                                  <span
-                                    className="pc-price pc-price--sm"
-                                    aria-label={`a partir de ${currency(min)}`}
-                                  >
-                                    {currency(min)}
-                                  </span>
+                                  <Price
+                                    value={min}
+                                    size="sm"
+                                    srLabel={`a partir de ${currency(min)}`}
+                                  />
+
                                 </>
                               ) : null}
                             </span>
