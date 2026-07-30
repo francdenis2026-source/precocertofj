@@ -142,4 +142,12 @@ function PriceBase({
   );
 }
 
+/*
+ * PERFORMANCE: memoizado. Como as props são primitivas, o React pula o render
+ * de todos os preços que não mudaram quando a lista pai re-renderiza.
+ */
+export const Price = memo(PriceBase);
+Price.displayName = "Price";
+
 export default Price;
+
