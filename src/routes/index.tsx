@@ -1040,7 +1040,7 @@ function HomePage() {
             <ul
               role="list"
               className="grid min-w-0 flex-1 gap-2"
-              style={{ gridTemplateColumns: "repeat(auto-fit, minmax(168px, 1fr))" }}
+              style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}
             >
               {trendingPopular.map((t) => {
                 const isActive = normalizeSearchText(t) === normalizeSearchText(q);
@@ -1059,7 +1059,7 @@ function HomePage() {
                       isActive ? `Termo selecionado: ${t}` : `Buscar por ${t}`
                     }
                     data-active={isActive ? "true" : undefined}
-                    className="pc-trend-chip group relative flex w-full items-center gap-1.5 overflow-hidden rounded-full border px-2.5 py-1.5 text-[12px] font-semibold capitalize transition-all duration-200 hover:-translate-y-[1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
+                    className="pc-trend-chip group relative flex w-full items-center gap-1.5 overflow-hidden rounded-xl border px-2.5 py-1.5 text-left text-[12px] leading-[1.2] font-semibold capitalize transition-all duration-200 hover:-translate-y-[1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
                     style={{
                       background: isActive
                         ? "color-mix(in oklab, var(--pc-home-onhero-gold) 26%, var(--pc-home-onhero-glass-soft))"
@@ -1091,7 +1091,7 @@ function HomePage() {
                       }
                       style={{ color: "var(--pc-home-onhero-gold)" }}
                     />
-                    <span className="relative min-w-0 flex-1 truncate text-left">{t}</span>
+                    <span className="relative min-w-0 flex-1 text-left [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2] overflow-hidden break-words">{t}</span>
                     {meta && meta.count > 0 ? (
                       <span
                         className="relative shrink-0 rounded-full px-1.5 py-[1px] text-[11px] font-bold tabular-nums"
