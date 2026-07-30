@@ -22,6 +22,7 @@ import { FairPriceBadge } from "@/components/product/FairPriceBadge";
 import { CreatePriceAlertButton } from "@/components/alerts/CreatePriceAlertButton";
 
 import { HighlightMatch } from "@/components/search/HighlightMatch";
+import { normalizeNameKey } from "@/lib/text-normalize";
 import { AnchoredDropdown } from "@/components/search/AnchoredDropdown";
 import { MatchReasonBadges } from "@/components/search/MatchReasonBadges";
 import { SearchInterpretationSummary } from "@/components/search/SearchInterpretationSummary";
@@ -1289,10 +1290,51 @@ export function PriceSearchBar({
                 // Disponibilidade: mantém só preços coletados dentro da janela
                 // escolhida e recalcula as estatísticas do grupo.
                 const maxAgeDays = freshness === "all" ? null : Number(freshness);
+                /* Deduplica grupos que representam o mesmo produto com grafias
+                   diferentes (acento/caixa/espaços). Sem isso, buscas vindas de
+                   "Buscas em alta" podiam listar o mesmo item mais de uma vez. */
+                const dedupedGroups = (() => {
+                  const byKey = new Map<string, ProductGroup>();
+                  for (const g of result.groups) {
+                    const key = normalizeNameKey(g.productName) || g.productName.toLowerCase();
+                    const cur = byKey.get(key);
+                    if (!cur) {
+                      byKey.set(key, g);
+                      continue;
+                    }
+                    const seen = new Set(
+                      cur.prices.map((p) => `${p.marketName}|${p.when}|${p.price}`),
+                    );
+                    const prices = [
+                      ...cur.prices,
+                      ...g.prices.filter(
+                        (p) => !seen.has(`${p.marketName}|${p.when}|${p.price}`),
+                      ),
+                    ];
+                    const vals = prices.map((p) => p.price);
+                    byKey.set(key, {
+                      ...cur,
+                      catalogId: cur.catalogId ?? g.catalogId,
+                      prices,
+                      samples: prices.length,
+                      min: Math.min(...vals),
+                      max: Math.max(...vals),
+                      avg: vals.reduce((s, v) => s + v, 0) / vals.length,
+                      lastSeen:
+                        new Date(g.lastSeen).getTime() > new Date(cur.lastSeen).getTime()
+                          ? g.lastSeen
+                          : cur.lastSeen,
+                      matchReasons: Array.from(
+                        new Set([...(cur.matchReasons ?? []), ...(g.matchReasons ?? [])]),
+                      ) as ProductGroup["matchReasons"],
+                    });
+                  }
+                  return Array.from(byKey.values());
+                })();
                 const visibleGroups =
                   maxAgeDays == null
-                    ? result.groups
-                    : result.groups
+                    ? dedupedGroups
+                    : dedupedGroups
                         .map((g) => {
                           const prices = g.prices.filter((p) => daysSince(p.when) <= maxAgeDays);
                           if (prices.length === 0) return null;
@@ -2528,7 +2570,7 @@ function ProductGroupCard({
         <div className="min-w-0 flex-1 order-1">
 
           <p className="pc-res-title truncate">
-            <HighlightMatch text={productName} tokens={highlightTokens} />
+            <HighlightMatch text={productName} tokens={highlightTokens} mode="loose" />
           </p>
           <p className="pc-res-meta mt-0.5 truncate">
             <span className="font-semibold text-foreground">menor</span> <span className="pc-num font-bold text-foreground"><Price value={min} size="sm" /></span>
@@ -3202,7 +3244,7 @@ function MarketBucketSection({
               params={{ slug: r.productName }}
               className="min-w-0 flex-1 truncate rounded text-[13.5px] font-medium leading-relaxed text-foreground hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold sm:text-[14.5px]"
             >
-              <HighlightMatch text={r.productName} tokens={highlightTokens} />
+              <HighlightMatch text={r.productName} tokens={highlightTokens} mode="loose" />
             </Link>
             {r.isBest ? (
               <span
@@ -3638,7 +3680,7 @@ function MatrixCompareResults({
                       aria-label={productLabel}
                       className="block w-full truncate text-left text-[14px] font-medium text-foreground hover:text-gold-ink focus:outline-none rounded"
                     >
-                      <HighlightMatch text={g.productName} tokens={highlightTokens} />
+                      <HighlightMatch text={g.productName} tokens={highlightTokens} mode="loose" />
                     </button>
                     {rowMin != null && rowMax != null && rowMax > rowMin ? (
                       <p className="mt-0.5 text-[12.5px] text-muted-foreground">

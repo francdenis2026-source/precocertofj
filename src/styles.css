@@ -5243,8 +5243,30 @@ h3.font-display {
 }
 
 /* Chips "Buscas em alta" da homepage — realce dourado no hover. */
-.pc-trend-chip:hover {
+.pc-trend-chip:hover:not(:disabled) {
   border-color: color-mix(in oklab, var(--pc-home-onhero-gold) 60%, transparent);
   box-shadow: 0 6px 18px -8px color-mix(in oklab, var(--pc-home-onhero-gold) 55%, transparent);
   color: var(--pc-home-onhero-fg);
 }
+
+/* Estado ativo: indica qual termo de "Buscas em alta" está aplicado na busca. */
+.pc-trend-chip[data-active="true"] {
+  box-shadow:
+    inset 0 0 0 1px color-mix(in oklab, var(--pc-home-onhero-gold) 55%, transparent),
+    0 6px 18px -8px color-mix(in oklab, var(--pc-home-onhero-gold) 60%, transparent);
+}
+
+/* Foco de teclado sempre visível, mesmo sobre a faixa dourada. */
+.pc-trend-chip:focus-visible {
+  color: var(--pc-home-onhero-fg);
+  border-color: var(--pc-home-onhero-gold);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pc-trend-chip,
+  .pc-trend-chip * {
+    transition: none !important;
+    transform: none !important;
+  }
+}
+

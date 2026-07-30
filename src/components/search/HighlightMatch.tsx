@@ -89,7 +89,7 @@ export function HighlightMatch({
         key={`m${i}`}
         className={
           className ??
-          "rounded bg-accent/25 px-0.5 font-bold text-foreground"
+          "rounded bg-[color-mix(in_oklab,var(--brand-gold)_38%,transparent)] px-0.5 font-bold text-foreground underline decoration-[color-mix(in_oklab,var(--brand-gold)_75%,transparent)] decoration-2 underline-offset-2"
         }
       >
         {text.slice(s, e)}
