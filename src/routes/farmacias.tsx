@@ -55,6 +55,80 @@ function FarmaciasPage() {
   const plantaoHoje = hoje ? farmaciaPorId(PLANTOES[hoje]) : null;
   const amanha = hoje && PLANTOES[hoje + 1] ? farmaciaPorId(PLANTOES[hoje + 1]) : null;
 
+  /* ------------------------------------------------------------------
+   * Busca rápida + navegação por teclado na lista de farmácias.
+   * A filtragem é local (lista pequena e estática), acento-insensível,
+   * e nunca provoca rolagem da página — apenas do trilho interno.
+   * ------------------------------------------------------------------ */
+  const [q, setQ] = useState("");
+  const [activeId, setActiveId] = useState<string | null>(FARMACIAS[0]?.id ?? null);
+
+  const filtradas = useMemo(() => {
+    const term = normalizeSearchText(q);
+    if (!term) return FARMACIAS;
+    return FARMACIAS.filter((f) =>
+      normalizeSearchText(`${f.nome} ${f.endereco} ${f.bairro}`).includes(term),
+    );
+  }, [q]);
+
+  const listRef = useRef<HTMLUListElement | null>(null);
+  const itemRefs = useRef<Map<string, HTMLLIElement>>(new Map());
+  const { persistScroll } = useListScrollPersistence(
+    listRef,
+    "pc:farmacias:list-scroll",
+    filtradas.length > 0,
+  );
+
+  const focusAt = useCallback(
+    (index: number) => {
+      if (filtradas.length === 0) return;
+      const clamped = Math.max(0, Math.min(filtradas.length - 1, index));
+      const target = filtradas[clamped];
+      setActiveId(target.id);
+      const el = itemRefs.current.get(target.id);
+      el?.focus();
+      el?.scrollIntoView({ block: "nearest" });
+    },
+    [filtradas],
+  );
+
+  const onListKeyDown = useCallback(
+    (e: KeyboardEvent<HTMLUListElement>) => {
+      if (filtradas.length === 0) return;
+      const current = Math.max(
+        0,
+        filtradas.findIndex((f) => f.id === activeId),
+      );
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          focusAt(current + 1);
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          focusAt(current - 1);
+          break;
+        case "Home":
+          e.preventDefault();
+          focusAt(0);
+          break;
+        case "End":
+          e.preventDefault();
+          focusAt(filtradas.length - 1);
+          break;
+        case "Enter": {
+          e.preventDefault();
+          const tel = filtradas[current]?.telefones[0];
+          if (tel) window.location.href = `tel:${tel.replace(/\D/g, "")}`;
+          break;
+        }
+      }
+    },
+    [filtradas, activeId, focusAt],
+  );
+
+
+
   return (
     <div className="flex h-[100dvh] flex-col overflow-hidden bg-background text-foreground">
       {/* Barra superior compacta */}
