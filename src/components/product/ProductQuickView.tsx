@@ -199,10 +199,16 @@ export function ProductQuickView({
                   <span className="shrink-0 text-right">
                     <Price value={m.priceMin} size="md" className="block" />
                     {m.priceMax > m.priceMin && (
-                      <span className="block pc-price pc-price--sm pc-price--muted">
-                        até {brl(m.priceMax)}
-                      </span>
+                      <Price
+                        as="span"
+                        value={m.priceMax}
+                        size="sm"
+                        tone="muted"
+                        prefix="até R$"
+                        className="mt-0.5 flex justify-end"
+                      />
                     )}
+
                   </span>
                 </li>
               ))}
