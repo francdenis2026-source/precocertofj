@@ -1,0 +1,2 @@
+DELETE FROM public.product_price_stats WHERE product_key = 'garrafa leite plastica' OR display_name ILIKE 'Leite (garrafa pl%';
+DELETE FROM public.product_comparison_cache WHERE display_name ILIKE 'Leite (garrafa pl%';
