@@ -8,7 +8,11 @@
  * seguras para uso no cliente e fáceis de testar.
  */
 
+import { classifyCategoryOrNull } from "@/lib/product-category";
+import { stripAccents } from "@/lib/text-normalize";
+
 export type AutoUnit = "g" | "kg" | "ml" | "L" | "un";
+
 
 export interface AutoClassification {
   /** Categoria sugerida (slug usado no cadastro). */
@@ -21,13 +25,11 @@ export interface AutoClassification {
   quantity: number | null;
 }
 
-/** Remove acentos e normaliza para comparação. */
+/** Remove acentos e normaliza para comparação (pipeline compartilhado). */
 function norm(value: string): string {
-  return value
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase();
+  return stripAccents(value).toLowerCase();
 }
+
 
 /** Marcas conhecidas no catálogo local (ordem importa: mais específica primeiro). */
 const BRANDS: readonly string[] = [
@@ -42,26 +44,10 @@ const BRANDS: readonly string[] = [
   "Fofinho", "Baly", "Maped", "Bazze", "Mentos", "Bic", "Impala", "Almasuper",
 ];
 
-/** Palavras-chave por categoria (avaliadas em ordem). */
-const CATEGORY_RULES: ReadonlyArray<{ category: string; keywords: readonly string[] }> = [
-  // Farmácia primeiro: termos mais específicos evitam falsos positivos em "leite"/"oleo".
-  { category: "medicamentos", keywords: ["dipirona", "paracetamol", "ibuprofeno", "analgesico", "antitermico", "xarope", "comprimido", "doralgina", "aberalgina", "resfenol", "neopiridin", "vitaxon", "vitergyl", "tossexpec", "apevitin", "gastrogel", "fisiofort", "pomada", "antigripal", "soro fisiologico", "creatina", "suplemento"] },
-  { category: "infantil", keywords: ["fralda", "mucilon", "nan comfor", "nanlac", "nestogeno", "formula infantil", "ninho", "neston", "farinha lactea", "cremogema", "arrozina", "sustagen kids", "nutren kids", "lenco umedecido", "mamadeira", "kids"] },
-  { category: "perfumaria", keywords: ["esmalte", "removedor", "batom", "tintura", "coloracao", "cor&ton", "perfume", "colonia", "hidratante", "protetor solar", "cicatricure", "cicaplast", "creme facial", "gel fixador", "gelatina", "cera modeladora", "pasta modeladora", "acetona"] },
-  { category: "hortifruti", keywords: ["tomate", "maca", "banana", "batata", "cebola", "alface", "cenoura", "laranja", "uva", "melancia", "mamao", "abacaxi", "limao", "pimentao", "verdura", "legume"] },
+// As palavras-chave por categoria vivem em `@/lib/product-category` (fonte
+// única, espelhando `public.classify_product_category`). Este módulo cuida
+// apenas de marca, unidade e quantidade.
 
-  { category: "carnes", keywords: ["carne", "picanha", "alcatra", "coxao", "patinho", "acem", "costela", "frango", "peito", "coxa", "linguica", "bacon", "peixe", "file"] },
-  { category: "laticinios", keywords: ["leite", "queijo", "requeijao", "manteiga", "iogurte", "creme de leite", "mussarela", "presunto", "margarina"] },
-  { category: "limpeza", keywords: ["lava roupas", "sabao", "amaciante", "detergente", "desinfetante", "agua sanitaria", "alcool", "limpador", "odorizante", "odorizador", "saco de lixo", "vassoura", "esponja"] },
-  { category: "higiene", keywords: ["papel higienico", "sabonete", "shampoo", "creme dental", "escova", "barbear", "absorvente", "fralda", "desodorante"] },
-  { category: "bebidas", keywords: ["suco", "refrigerante", "energetico", "cerveja", "vinho", "agua mineral", "cha gelado"] },
-  { category: "biscoitos", keywords: ["biscoito", "bolacha", "cream cracker", "recheado", "wafer"] },
-  { category: "doces", keywords: ["chocolate", "bala", "goiabada", "doce de", "achocolatado em barra"] },
-  { category: "congelados", keywords: ["congelado", "polpa", "sorvete", "hamburguer", "nuggets"] },
-  { category: "padaria", keywords: ["pao", "bolo", "rosquinha", "torrada"] },
-  { category: "papelaria", keywords: ["caneta", "lapis", "lapiseira", "caderno", "papel a4", "cola", "borracha", "regua", "mochila"] },
-  { category: "mercearia", keywords: ["arroz", "feijao", "macarrao", "espaguete", "parafuso", "acucar", "cafe", "oleo", "sal", "farinha", "molho", "milho", "ervilha", "tempero", "canela", "pimenta", "lasanha"] },
-];
 
 /**
  * Detecta unidade e quantidade a partir do texto do produto.
@@ -101,14 +87,18 @@ export function detectBrand(rawName: string): string | null {
   return null;
 }
 
-/** Detecta a categoria a partir de palavras-chave do nome. */
+/**
+ * Detecta a categoria a partir do nome.
+ *
+ * Delega para o classificador canônico compartilhado (`@/lib/product-category`),
+ * que espelha as regras do banco e normaliza acentos antes de casar as palavras.
+ * Mantemos o retorno `null` (em vez de "outros") porque o formulário de cadastro
+ * usa `null` como "não sugerido", preservando a escolha manual do operador.
+ */
 export function detectCategory(rawName: string): string | null {
-  const text = norm(rawName);
-  for (const rule of CATEGORY_RULES) {
-    if (rule.keywords.some((keyword) => text.includes(keyword))) return rule.category;
-  }
-  return null;
+  return classifyCategoryOrNull(rawName);
 }
+
 
 /**
  * Classificação completa. Nunca lança — entradas inválidas devolvem campos nulos.

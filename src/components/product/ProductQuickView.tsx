@@ -66,6 +66,27 @@ export function ProductQuickView({
     lastSeen: m.lastSeen,
   }));
   const markets = allMarkets.slice(0, 8);
+
+  /**
+   * Ofertas separadas por embalagem (1L vs 2L vs 5L).
+   *
+   * Só entram em cena quando há mais de um tamanho conhecido — caso contrário a
+   * lista simples acima já é suficiente e evita ruído visual no modal.
+   */
+  const rawGroups = (data?.sizeGroups ?? []).filter((g) => g.markets.length > 0);
+  const sizeGroups =
+    rawGroups.length > 1
+      ? rawGroups.map((g) => ({
+          ...g,
+          markets: dedupeByStorePrice(g.markets, (m) => ({
+            store: m.marketName,
+            price: m.priceMin,
+            samples: m.samples,
+            lastSeen: m.lastSeen,
+          })).slice(0, 8),
+        }))
+      : [];
+
   // "Menor preço" sai sempre da mesma lista renderizada abaixo; com um único
   // estabelecimento o destaque repetiria a linha, então é omitido.
   const cheapest = allMarkets.length > 1 ? allMarkets[0] : null;
@@ -217,36 +238,48 @@ export function ProductQuickView({
               Ainda não há outros preços registrados para este produto.
             </p>
           ) : (
-            <ul className="divide-y divide-border overflow-hidden rounded-lg border border-border">
-              {markets.map((m) => (
-                <li key={m.marketName} className="flex items-center gap-2 px-2.5 py-2">
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-[12.5px] font-semibold">
-                      {m.marketName}
-                    </span>
-                    <span className="block truncate text-[11px] text-muted-foreground">
-                      {[m.neighborhood, m.city].filter(Boolean).join(" · ") || "Feijó/AC"} ·{" "}
-                      {formatShortDate(m.lastSeen)}
-                    </span>
-                  </span>
-                  <span className="shrink-0 text-right">
-                    <Price value={m.priceMin} size="md" className="block" />
-                    {m.priceMax > m.priceMin && (
-                      <Price
-                        as="span"
-                        value={m.priceMax}
-                        size="sm"
-                        tone="muted"
-                        prefix="até R$"
-                        className="mt-0.5 flex justify-end"
-                      />
-                    )}
-
-                  </span>
-                </li>
-              ))}
-            </ul>
+            (sizeGroups.length > 0
+              ? sizeGroups
+              : [{ key: "__all__", label: "", markets }]
+            ).map((group) => (
+              <div key={group.key} className="mt-2 first:mt-0">
+                {group.label && (
+                  <p className="mb-1 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                    {group.label}
+                  </p>
+                )}
+                <ul className="divide-y divide-border overflow-hidden rounded-lg border border-border">
+                  {group.markets.map((m) => (
+                    <li key={m.marketName} className="flex items-center gap-2 px-2.5 py-2">
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-[12.5px] font-semibold">
+                          {m.marketName}
+                        </span>
+                        <span className="block truncate text-[11px] text-muted-foreground">
+                          {[m.neighborhood, m.city].filter(Boolean).join(" · ") || "Feijó/AC"} ·{" "}
+                          {formatShortDate(m.lastSeen)}
+                        </span>
+                      </span>
+                      <span className="shrink-0 text-right">
+                        <Price value={m.priceMin} size="md" className="block" />
+                        {m.priceMax > m.priceMin && (
+                          <Price
+                            as="span"
+                            value={m.priceMax}
+                            size="sm"
+                            tone="muted"
+                            prefix="até R$"
+                            className="mt-0.5 flex justify-end"
+                          />
+                        )}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))
           )}
+
 
           {data?.min != null && data?.avg != null && data.avg > data.min && (
             <p className="mt-2 inline-flex items-center gap-1 rounded-full bg-muted px-2 py-1 text-[11px] font-semibold text-foreground">
