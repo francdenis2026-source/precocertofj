@@ -351,12 +351,22 @@ function EstablishmentPage() {
     <div className="min-h-svh bg-background text-foreground">
       <div className="mx-auto w-full max-w-6xl px-4 pt-3"><HomeBrandLink /></div>
       <main className="mx-auto max-w-5xl px-3 pb-14 pt-3 sm:px-6">
-        <Link
-          to="/estabelecimentos"
-          className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[11px] font-bold uppercase leading-none tracking-[0.16em] text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-        >
-          <ArrowLeft className="h-3.5 w-3.5 text-brand-gold" aria-hidden /> Estabelecimentos
-        </Link>
+        <div className="flex flex-wrap items-center gap-2">
+          <Link
+            to="/estabelecimentos"
+            className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[11px] font-bold uppercase leading-none tracking-[0.16em] text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+          >
+            <ArrowLeft className="h-3.5 w-3.5 text-brand-gold" aria-hidden /> Estabelecimentos
+          </Link>
+          <Link
+            to="/catalogo/$slug"
+            params={{ slug }}
+            className="inline-flex h-8 items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold/10 px-3 text-[11px] font-bold uppercase leading-none tracking-[0.16em] text-foreground transition-colors hover:bg-brand-gold/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+          >
+            <PackageSearch className="h-3.5 w-3.5 text-brand-gold" aria-hidden /> Ver catálogo completo
+          </Link>
+        </div>
+
 
         {/* Hero compacto — escala: eyebrow 10 / título 19-22 / meta 12 / stat 15 */}
         <header className="mt-2.5 overflow-hidden rounded-xl border border-border/70 bg-brand-navy text-white shadow-sm">
