@@ -3,7 +3,7 @@
  * Detecção heurística por palavras-chave no nome do produto (pt-BR).
  * Traço fino, monocromático, herda `currentColor`.
  */
-import type { ReactElement, SVGProps } from "react";
+import { memo, type ReactElement, type SVGProps } from "react";
 
 export type FoodCategory =
   | "arroz"
@@ -331,7 +331,7 @@ const Icons: Record<FoodCategory, (p: IconProps) => ReactElement> = {
 };
 /* eslint-enable react/no-unknown-property */
 
-export function ProductCategoryIcon({
+function ProductCategoryIconBase({
   category,
   className,
   ...rest
@@ -339,3 +339,7 @@ export function ProductCategoryIcon({
   const Icon = Icons[category] ?? Icons.generic;
   return <Icon className={className} {...rest} />;
 }
+
+/* PERFORMANCE: ícone puro (props primitivas) — memoizado. */
+export const ProductCategoryIcon = memo(ProductCategoryIconBase);
+ProductCategoryIcon.displayName = "ProductCategoryIcon";
