@@ -249,7 +249,7 @@ const RULES: readonly Rule[] = [
   // 24) Condimentos / molhos
   {
     category: "condimentos",
-    re: /(molho de tomate|molho ingles|molho de pimenta|extrato de tomate|ketchup|catchup|mostarda|maionese|vinagre|azeitona|tempero|colorau|colorif|pimenta do reino|shoyu|caldo de galinha|alho e sal|sazon)|\b(sal|oregano|cominho|acafrao|louro)\b/,
+    re: /(molho de tomate|molho ingles|molho de pimenta|extrato de tomate|ketchup|catchup|mostarda|maionese|vinagre|azeitona|tempero|colorau|colorif|pimenta do reino|shoyu|caldo de galinha|alho e sal|alho picado|alho triturado|sazon)|\b(sal|oregano|cominho|acafrao|louro)\b/,
   },
 
   // 25) Mercearia (secos) — antes de hortifrúti: "Macarrão com Ovos" e
