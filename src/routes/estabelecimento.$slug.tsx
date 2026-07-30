@@ -9,9 +9,12 @@ import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { queryOptions, useSuspenseQuery, useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
+import { hubForCanonical } from "@/lib/category-hub";
+import { categoryIcon } from "@/lib/category-icons";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   ArrowLeft,
+  ArrowRight,
   ArrowDown,
   ArrowUp,
   Camera,
@@ -212,6 +215,11 @@ function EstablishmentPage() {
           ? "acougue"
           : "catalogo";
   const selectedCategory = search.cat ? search.cat : null;
+  /** Hub da homepage correspondente à categoria de produto selecionada. */
+  const activeHub = useMemo(
+    () => (selectedCategory ? hubForCanonical(selectedCategory) : null),
+    [selectedCategory],
+  );
 
   const [q, setQ] = useState(search.q);
   const [historyFor, setHistoryFor] = useState<PublicStoreProduct | null>(null);
