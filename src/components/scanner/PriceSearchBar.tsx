@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
+import { useQueryClient } from "@tanstack/react-query";
+import { fetchPriceSearch, fetchSuggestions } from "@/lib/search-cache";
 import { usePricesRealtime } from "@/hooks/usePricesRealtime";
 import { useListScrollPersistence } from "@/hooks/useListScrollPersistence";
 import { LiveUpdateBadge, useLivePulse } from "@/components/ui/live-update-badge";
@@ -138,6 +140,7 @@ export function PriceSearchBar({
 
   const runSearch = useServerFn(searchProductPrice);
   const runSuggest = useServerFn(suggestProducts);
+  const qc = useQueryClient();
 
 
 
@@ -394,7 +397,12 @@ export function PriceSearchBar({
     searchAbort.current = ctrl;
     const seq = ++searchSeq.current;
     setIsSearching(true);
-    runSearch({ data: { query: q, mode, pureOnly, fresh: !!opts?.fresh }, signal: ctrl.signal })
+    fetchPriceSearch<PriceSearchResult>(
+      qc,
+      runSearch as never,
+      { query: q, mode, pureOnly, fresh: !!opts?.fresh },
+      ctrl.signal,
+    )
       .then((r) => {
         if (seq !== searchSeq.current) return; // resposta obsoleta
         setResult(r);
@@ -479,8 +487,7 @@ export function PriceSearchBar({
       suggestAbort.current?.abort();
       const ctrl = new AbortController();
       suggestAbort.current = ctrl;
-      runSuggestRef
-        .current({ data: { query: q }, signal: ctrl.signal })
+      fetchSuggestions(qc, runSuggestRef.current as never, q, ctrl.signal)
         .then((rows) => {
           if (seq !== suggestSeq.current) return;
           setSuggestions(rows);

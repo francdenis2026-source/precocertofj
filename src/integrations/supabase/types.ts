@@ -1901,7 +1901,9 @@ export type Database = {
           image_url: string | null
           normalized_name: string
           product_key: string | null
+          size_key: string | null
           updated_at: string
+          variant_key: string | null
         }
         Insert: {
           barcode?: string | null
@@ -1917,7 +1919,9 @@ export type Database = {
           image_url?: string | null
           normalized_name: string
           product_key?: string | null
+          size_key?: string | null
           updated_at?: string
+          variant_key?: string | null
         }
         Update: {
           barcode?: string | null
@@ -1933,7 +1937,9 @@ export type Database = {
           image_url?: string | null
           normalized_name?: string
           product_key?: string | null
+          size_key?: string | null
           updated_at?: string
+          variant_key?: string | null
         }
         Relationships: []
       }
@@ -3556,6 +3562,9 @@ export type Database = {
       }
       normalize_product_key: { Args: { name: string }; Returns: string }
       normalize_product_name: { Args: { p_name: string }; Returns: string }
+      pc_deaccent: { Args: { txt: string }; Returns: string }
+      pc_size_key: { Args: { name: string; unit?: string }; Returns: string }
+      pc_variant_key: { Args: { name: string }; Returns: string }
       plan_conversion_metrics: {
         Args: never
         Returns: {
