@@ -3209,7 +3209,7 @@ input::placeholder, textarea::placeholder {
 html, body, #root, button, input, textarea, select, optgroup, fieldset,
 legend, label, table, th, td, li, dt, dd, blockquote, figcaption, address,
 cite, em, strong, small, sub, sup, mark, q, s, u, i, b, abbr {
-  font-family: "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--font-numeric), "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 /* Fraunces variable serif para destaques editoriais.
    Classes inline com "Instrument_Serif" (legado) continuam pontando para o
@@ -3221,7 +3221,7 @@ cite, em, strong, small, sub, sup, mark, q, s, u, i, b, abbr {
 }
 /* Eyebrows uppercase ganham peso e tracking equilibrados para leitura clara */
 .pc-eyebrow {
-  font-family: "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--font-numeric), "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 /* Headings padrão em Work Sans, MAS respeitando classes editoriais serif. */
 h1:not(.font-serif):not(.font-display):not(.font-editorial),
@@ -3230,7 +3230,7 @@ h3:not(.font-serif):not(.font-display):not(.font-editorial),
 h4:not(.font-serif):not(.font-display):not(.font-editorial),
 h5:not(.font-serif):not(.font-display):not(.font-editorial),
 h6:not(.font-serif):not(.font-display):not(.font-editorial) {
-  font-family: "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-family: var(--font-numeric), "Work Sans", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 /* Reforço: classes serif/editorial sempre vencem, mesmo em h1..h6 e body. */
 .font-editorial,
