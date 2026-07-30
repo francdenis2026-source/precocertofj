@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { PriceCents, formatCentsText } from "@/components/ds/PriceCents";
 import { useEffect } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
@@ -37,9 +38,8 @@ export const Route = createFileRoute("/meus-pedidos")({
   component: MeusPedidos,
 });
 
-function brl(cents: number | null | undefined) {
-  return ((cents ?? 0) / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-}
+/** Texto puro em BRL — usar só em exportações/aria-labels (a UI usa <PriceCents />). */
+const brl = formatCentsText;
 
 function statusPill(status: string) {
   const map: Record<string, { label: string; cls: string; icon: React.ReactNode }> = {
@@ -173,7 +173,7 @@ function MeusPedidos() {
                   </CardTitle>
                   <p className="mt-0.5 text-xs text-muted-foreground">
                     {o.plan_days ? `${o.plan_days} dias · ` : ""}
-                    {brl(o.final_cents)} · pedido{" "}
+                    <PriceCents cents={o.final_cents} size="xs" tone="muted" zeroWhenEmpty /> · pedido{" "}
                     <span className="font-mono">{o.id.slice(0, 8)}</span>
                   </p>
                 </div>
