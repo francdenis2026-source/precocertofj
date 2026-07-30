@@ -45,6 +45,7 @@ import { applyButcherFilter } from "@/lib/butcher-filter";
 import { useButcherIds } from "@/hooks/useButcherIds";
 import { useSession } from "@/hooks/useSession";
 import { usePromptSignIn } from "@/components/auth/usePromptSignIn";
+import { Price } from "@/components/ds/Price";
 
 
 

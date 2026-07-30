@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PriceHistoryDrawer } from "@/components/scans/PriceHistoryDrawer";
+import { Price } from "@/components/ds/Price";
 
 export const Route = createFileRoute("/produto/$id")({
   head: () => ({

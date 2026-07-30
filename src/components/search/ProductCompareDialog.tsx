@@ -3,6 +3,7 @@ import { computeUnitPrice } from "@/lib/unit-price";
 import { UnitPriceBadge } from "@/components/product/UnitPriceBadge";
 import { X, RefreshCw, Trophy, AlertTriangle, Clock } from "lucide-react";
 import { useMyRoles } from "@/hooks/useMyRoles";
+import { Price } from "@/components/ds/Price";
 
 
 /**

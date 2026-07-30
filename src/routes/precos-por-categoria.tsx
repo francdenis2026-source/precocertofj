@@ -13,6 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { shortenStoreName } from "@/lib/store-name";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
+import { Price } from "@/components/ds/Price";
 import { Search as SearchIcon, TrendingDown, Store as StoreIcon, ArrowRight, Tags } from "lucide-react";
 
 /* ------------------------------------------------------------------ */

@@ -29,6 +29,7 @@ import { useTeaserQuota } from "@/hooks/use-teaser-quota";
 import { ShareButton, SignupCTA } from "@/components/ds";
 import { useSession } from "@/hooks/useSession";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
+import { Price } from "@/components/ds/Price";
 
 
 const fmt = (n: number | null | undefined) =>

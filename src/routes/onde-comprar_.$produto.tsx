@@ -25,6 +25,7 @@ import { RankingSkeleton, FadeSwap } from "@/components/layout/LoadingSkeleton";
 import { HomeBrandLink } from "@/components/layout/HomeBrandLink";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
+import { Price } from "@/components/ds/Price";
 
 export const Route = createFileRoute("/onde-comprar_/$produto")({
   head: ({ params }) => {

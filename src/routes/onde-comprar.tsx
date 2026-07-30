@@ -21,6 +21,7 @@ import { ShareButton } from "@/components/ds";
 import { ButcherCutBadge } from "@/components/ds/ButcherCutBadge";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
+import { Price } from "@/components/ds/Price";
 import { usePerceivedPerfTelemetry } from "@/lib/perf-telemetry";
 
 export const Route = createFileRoute("/onde-comprar")({

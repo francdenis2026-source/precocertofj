@@ -18,6 +18,7 @@ import { slugifyEstablishment } from "@/lib/establishment-slug.functions";
 import { tc } from "@/lib/typeclear";
 import { PrecoCertoMark } from "@/components/typography/PrecoCertoMark";
 import { StatCell, StatCellGroup, StatCellDivider } from "@/components/ds/StatCell";
+import { Price } from "@/components/ds/Price";
 import {
   Select,
   SelectContent,
