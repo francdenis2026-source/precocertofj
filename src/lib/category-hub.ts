@@ -113,16 +113,18 @@ export const CATEGORY_DEFS: CategoryDef[] = [
     slug: "hortifruti",
     label: "Hortifrúti",
     short: "Hortifrúti",
-    desc: "Frutas, legumes, verduras e ovos",
+    desc: "Frutas, verduras, legumes, tubérculos, temperos e cogumelos",
     kinds: ["hortifruti", "sacolao"],
     storeRe: /(hortifr|sacol[aã]o|feira livre)/i,
     allFromNicheStores: true,
     // Só entra o que a classificação canônica considerar hortifruti — assim
-    // "Lava-Louças Maçã", "Tempero Alho e Sal" e "Molho de Tomate" ficam fora.
+    // "Lava-Louças Maçã", "Tempero Alho e Sal", "Molho de Tomate" e ovos
+    // (que pertencem a laticínios) ficam fora.
     canonical: ["hortifruti"],
     canonicalOnly: true,
     productRe:
-      /\b(banana|maca|ma[cç][aã]|laranja|limao|abacaxi|mamao|melancia|melao|uva|manga|abacate|goiaba|maracuja|tomate|cebola|batata|cenoura|alho|pimentao|repolho|alface|couve|cheiro verde|coentro|macaxeira|mandioca|inhame|abobora|jerimum|chuchu|beterraba|pepino|quiabo|maxixe|ovo|ovos)\b/,
+      /\b(banana|maca|ma[cç][aã]|laranja|limao|abacaxi|mamao|melancia|melao|uva|manga|abacate|goiaba|maracuja|tomate|cebola|batata|cenoura|alho|pimentao|repolho|alface|couve|rucula|agriao|espinafre|cheiro verde|coentro|salsa|cebolinha|hortela|macaxeira|mandioca|inhame|abobora|jerimum|chuchu|beterraba|pepino|quiabo|maxixe|jilo|vagem|berinjela|abobrinha|gengibre|cogumelo)\b/,
+
   },
   {
     slug: "bebidas",
