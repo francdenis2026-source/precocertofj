@@ -53,6 +53,15 @@ const categoryLabel = (slug: string) =>
 
 type SortKey = "price" | "name" | "recent";
 
+/** Faixas de preço pré-definidas (max = 0 significa "sem teto"). */
+const PRICE_BANDS: Array<{ label: string; min: number; max: number }> = [
+  { label: "Até R$ 5", min: 0, max: 5 },
+  { label: "R$ 5–10", min: 5, max: 10 },
+  { label: "R$ 10–20", min: 10, max: 20 },
+  { label: "R$ 20–50", min: 20, max: 50 },
+  { label: "Acima de R$ 50", min: 50, max: 0 },
+];
+
 /* ------------------------------------------------------------------ */
 /* Rota                                                                */
 /* ------------------------------------------------------------------ */
