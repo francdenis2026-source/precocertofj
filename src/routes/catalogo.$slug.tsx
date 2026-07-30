@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { fallback, zodValidator } from "@tanstack/zod-adapter";
 import { z } from "zod";
-import { ArrowLeft, PackageSearch, Search as SearchIcon, Tags, X } from "lucide-react";
+import { ArrowLeft, Coins, PackageSearch, Search as SearchIcon, Tags, Trophy, X } from "lucide-react";
 
 import { Nav } from "@/components/brand/Nav";
 import { PageShell, PageShellContent } from "@/components/layout/PageShell";
