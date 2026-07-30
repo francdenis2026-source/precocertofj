@@ -106,6 +106,7 @@ export const Route = createFileRoute("/categoria/$slug")({
 });
 
 function CategoryPage() {
+  const catLabel = useCategoryLabelWithFallback();
   const { slug } = Route.useParams();
   const search = Route.useSearch();
   const navigate = useNavigate();
@@ -791,6 +792,7 @@ function Pagination({
 
 /** Trilho horizontal de categorias com setas, roda do mouse, arraste e teclado. */
 function CategoryRail({ current }: { current: string }) {
+  const railLabel = useCategoryLabelWithFallback();
   const ref = useRef<HTMLDivElement | null>(null);
   const ctrl = useRef<ReturnType<typeof createRailController> | null>(null);
   const [{ canPrev, canNext }, setState] = useState({ canPrev: false, canNext: false });
