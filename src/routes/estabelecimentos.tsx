@@ -359,8 +359,40 @@ function EstablishmentsPage() {
 
   const detailHeadingRef = useRef<HTMLHeadingElement | null>(null);
 
+  /* ------------------------------------------------------------------
+   * Altura dinâmica do master-detail:
+   * a região ocupa exatamente o espaço restante da viewport (desktop),
+   * de modo que a lista role internamente e a PÁGINA nunca role.
+   * ------------------------------------------------------------------ */
+  const splitRef = useRef<HTMLDivElement | null>(null);
+  const [splitHeight, setSplitHeight] = useState<number | null>(null);
+
+  useEffect(() => {
+    const measure = () => {
+      const el = splitRef.current;
+      if (!el) return;
+      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+      if (!isDesktop) {
+        setSplitHeight(null);
+        return;
+      }
+      const top = el.getBoundingClientRect().top;
+      const avail = Math.max(320, window.innerHeight - top);
+      setSplitHeight(avail);
+    };
+    measure();
+    window.addEventListener("resize", measure);
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(measure) : null;
+    if (ro && splitRef.current?.parentElement) ro.observe(splitRef.current.parentElement);
+    return () => {
+      window.removeEventListener("resize", measure);
+      ro?.disconnect();
+    };
+  }, [data, kindFilter]);
+
   return (
     <IsolatedPage className="bg-background" contentClassName="!pb-0">
+
       {/* HEADER compacto */}
       <header className="shrink-0 border-b border-border/60 bg-background/92 backdrop-blur">
         <span
@@ -457,15 +489,20 @@ function EstablishmentsPage() {
         </div>
       </section>
 
-      {/* MASTER-DETAIL — cresce com o conteúdo, sem forçar viewport */}
-      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-0 md:grid-cols-[minmax(320px,380px)_minmax(0,1fr)]">
+      {/* MASTER-DETAIL — ocupa o restante da viewport; rolagem só interna */}
+      <div
+        ref={splitRef}
+        className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-0 md:min-h-0 md:grid-cols-[minmax(320px,380px)_minmax(0,1fr)] md:overflow-hidden"
+        style={splitHeight ? { height: splitHeight } : undefined}
+      >
         {/* LISTA (mestre) */}
         <aside
           className={cn(
-            "flex min-w-0 flex-col border-border/60 md:border-r",
+            "flex min-w-0 flex-col border-border/60 md:h-full md:min-h-0 md:overflow-hidden md:border-r",
             detailOpenMobile ? "hidden md:flex" : "flex",
           )}
         >
+
 
           <div className="shrink-0 space-y-2 border-b border-border/60 px-3 py-2 md:px-4">
             <div className="relative">
@@ -577,11 +614,21 @@ function EstablishmentsPage() {
           <ul
             id="mercados-listbox"
             ref={listRef}
-            className="pc-rail divide-y divide-border/50 focus:outline-none"
+            className="pc-rail divide-y divide-border/50 focus:outline-none md:min-h-0 md:flex-1 md:overflow-y-auto"
             role="listbox"
+
             aria-label="Lista de mercados"
             aria-activedescendant={selectedId ? `mercado-opt-${selectedId}` : undefined}
             onKeyDown={onListKeyDown}
+            onScroll={(ev) => {
+              // Carregamento progressivo dentro do trilho (sem rolar a página).
+              if (!hasMore) return;
+              const el = ev.currentTarget;
+              if (el.scrollTop + el.clientHeight >= el.scrollHeight - 120) {
+                updateSearch({ pagina: pagesLoaded + 1 });
+              }
+            }}
+
           >
             {isLoading &&
               Array.from({ length: 8 }).map((_, i) => (
@@ -687,9 +734,10 @@ function EstablishmentsPage() {
         {/* DETALHE (preview) */}
         <section
           className={cn(
-            "min-w-0 flex-col",
+            "pc-rail min-w-0 flex-col md:h-full md:min-h-0 md:overflow-y-auto",
             detailOpenMobile ? "flex" : "hidden md:flex",
           )}
+
 
           aria-live="polite"
           aria-label="Detalhes do mercado selecionado"
