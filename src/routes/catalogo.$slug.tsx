@@ -135,6 +135,19 @@ function CatalogoPage() {
     staleTime: 10 * 60_000,
   });
 
+  /** Ranking de menor preço entre mercados (opcional — não bloqueia a lista). */
+  const { data: rankRows } = useQuery({
+    queryKey: ["store-catalog-price-rank", storeId],
+    queryFn: () => getStoreCatalogPriceRanking({ data: { storeId } }),
+    staleTime: 10 * 60_000,
+  });
+
+  const rankMap = useMemo(() => {
+    const map = new Map<string, CatalogPriceRank>();
+    for (const r of rankRows ?? []) map.set(r.slug, r);
+    return map;
+  }, [rankRows]);
+
   const products = useMemo(() => data?.products ?? [], [data]);
 
   /** Categorias com contagem — sempre do dataset completo. */
@@ -163,11 +176,18 @@ function CatalogoPage() {
       .sort((a, b) => b.count - a.count || a.name.localeCompare(b.name, "pt-BR"));
   }, [products, search.cat]);
 
+  // Faixa de preço aplicada (0 = sem limite), sempre sanitizada.
+  const minPrice = Math.max(0, search.min || 0);
+  const maxPrice = Math.max(0, search.max || 0);
+
   const filtered = useMemo(() => {
     const nq = norm(search.q);
     const rows = products.filter((p) => {
       if (search.cat && (p.category || "outros").toLowerCase() !== search.cat) return false;
       if (search.marca && norm(p.brand ?? "") !== norm(search.marca)) return false;
+      if (minPrice > 0 && p.price < minPrice) return false;
+      if (maxPrice > 0 && p.price > maxPrice) return false;
+      if (search.best && rankMap.get(p.slug)?.rank !== 1) return false;
       if (nq) {
         const haystack = norm(`${p.productName} ${p.brand ?? ""} ${p.barcode ?? ""}`);
         if (!haystack.includes(nq)) return false;
@@ -179,9 +199,17 @@ function CatalogoPage() {
       if (sort === "recent") return new Date(b.lastDate).getTime() - new Date(a.lastDate).getTime();
       return a.productName.localeCompare(b.productName, "pt-BR");
     });
-  }, [products, search.q, search.cat, search.marca, sort]);
+  }, [products, search.q, search.cat, search.marca, search.best, minPrice, maxPrice, rankMap, sort]);
 
-  const hasFilters = Boolean(search.q || search.cat || search.marca);
+  const cheapestCount = useMemo(
+    () => (rankRows ?? []).filter((r) => r.rank === 1).length,
+    [rankRows],
+  );
+
+  const hasFilters = Boolean(
+    search.q || search.cat || search.marca || minPrice || maxPrice || search.best,
+  );
+
 
   return (
     <PageShell>
