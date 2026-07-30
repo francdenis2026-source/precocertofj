@@ -341,7 +341,10 @@ function HomePage() {
           aria-labelledby="hero-title"
           className="mx-auto flex w-full min-h-0 max-w-7xl flex-1 flex-col justify-center gap-[clamp(0.5rem,1.6vh,1.25rem)] overflow-hidden px-3 py-[clamp(0.5rem,1.4vh,1rem)] sm:px-6 lg:px-8"
         >
-          <div className="grid min-h-0 flex-1 items-center gap-[clamp(0.75rem,2.2vh,1.5rem)] lg:grid-cols-12 lg:gap-10">
+          {/* Sem `flex-1` aqui: o conjunto hero + divisor + faixa é centrado
+              como um bloco só, distribuindo a folga igualmente acima e abaixo
+              em vez de acumular um vazio antes das categorias. */}
+          <div className="grid min-h-0 items-center gap-[clamp(0.75rem,2.2vh,1.5rem)] lg:grid-cols-12 lg:gap-10">
             {/* ---------- Coluna editorial ---------- */}
             <div className="order-1 flex min-w-0 flex-col gap-[clamp(0.5rem,1.5vh,1rem)] lg:col-span-7 lg:pr-4">
               <div
