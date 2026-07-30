@@ -748,8 +748,8 @@ function HomePage() {
                           <li
                             key={`sk-${i}`}
                             aria-hidden
-                            className="grid size-[--pc-logo] shrink-0 place-items-center overflow-hidden rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)]"
-                            style={{ borderColor: "color-mix(in oklab, #ffffff 78%, transparent)", ["--pc-logo" as string]: "clamp(42px, 4.6vh, 52px)" }}
+                            className="grid shrink-0 place-items-center overflow-hidden rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)]"
+                            style={{ borderColor: "color-mix(in oklab, #ffffff 78%, transparent)", height: "clamp(42px, 4.6vh, 52px)", width: "clamp(42px, 4.6vh, 52px)" }}
                           >
                             <span
                               className="h-full w-full animate-pulse rounded-lg"
@@ -769,11 +769,12 @@ function HomePage() {
                                   : ({ to: "/estabelecimentos" } as const))}
                                 aria-label={`Ver produtos e preços de ${label}`}
 
-                                className="group relative flex size-[--pc-logo] flex-col items-stretch justify-between rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--pc-home-onhero-gold)_55%,white)] hover:shadow-[0_10px_22px_-8px_rgba(3,10,28,0.75)] focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2"
+                                className="group relative flex flex-col items-stretch justify-between rounded-xl border bg-white p-1.5 shadow-[0_2px_10px_-4px_rgba(3,10,28,0.55)] transition-[transform,box-shadow,border-color] duration-200 ease-out hover:-translate-y-0.5 hover:border-[color-mix(in_oklab,var(--pc-home-onhero-gold)_55%,white)] hover:shadow-[0_10px_22px_-8px_rgba(3,10,28,0.75)] focus-visible:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2"
                                 style={{
                                   borderColor: "color-mix(in oklab, #ffffff 78%, transparent)",
                                   ["--tw-ring-color" as string]: "var(--pc-home-onhero-gold)",
-                                  ["--pc-logo" as string]: "clamp(42px, 4.6vh, 52px)",
+                                  height: "clamp(42px, 4.6vh, 52px)",
+                                  width: "clamp(42px, 4.6vh, 52px)",
                                 }}
                               >
                                 <span className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-lg">
