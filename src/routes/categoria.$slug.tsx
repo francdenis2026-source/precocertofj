@@ -341,9 +341,14 @@ function CategoryPage() {
               <p className="mt-1 truncate text-[12px] leading-snug text-white/85">{def.desc}</p>
             </div>
             <dl className="hidden shrink-0 items-start gap-5 sm:flex">
-              <Stat label="Produtos" value={data?.totals.products ?? 0} />
-              <Stat label="Lojas" value={data?.totals.stores ?? 0} />
-              <Stat label="Preços" value={data?.totals.prices ?? 0} />
+              <Stat label="Produtos" value={data?.totals.products ?? 0} hint="Itens distintos cadastrados nesta categoria" />
+              <Stat label="Lojas" value={data?.totals.stores ?? 0} hint="Estabelecimentos com produtos desta categoria" />
+              <Stat
+                label="Cotações"
+                value={data?.totals.prices ?? 0}
+                hint="Registros de preço coletados nesta categoria"
+              />
+
               <Stat
                 label="Economia média"
                 value={catAvgSaving ?? 0}
@@ -365,7 +370,7 @@ function CategoryPage() {
               <Stat label="Lojas" value={data?.totals.stores ?? 0} align="left" />
             </div>
             <div className="px-3 py-2">
-              <Stat label="Preços" value={data?.totals.prices ?? 0} align="left" />
+              <Stat label="Cotações" value={data?.totals.prices ?? 0} align="left" hint="Registros de preço coletados nesta categoria" />
             </div>
             <div className="px-3 py-2">
               <Stat
