@@ -2625,7 +2625,7 @@ function ProductGroupCard({
                 />
                 <div className="shrink-0 self-center text-right">
                   {isCheapest && <p className="pc-res-label">Menor</p>}
-                  <p className="pc-res-price">{fmt(p.price)}</p>
+                  <Price as="p" size="md" value={p.price} className="justify-end" />
                   <UnitPriceBadge price={p.price} productName={productName} className="mt-0.5" />
                 </div>
                 <button
