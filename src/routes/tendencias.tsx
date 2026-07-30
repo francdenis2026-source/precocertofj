@@ -196,7 +196,7 @@ function TrendsPage() {
         <PageHeader
           title="Tendências de busca"
           description="O que os clientes estão procurando agora — atualizado em tempo real."
-          crumbs={[{ label: "Início", to: "/" }, { label: "Tendências" }]}
+          breadcrumbs={[{ label: "Início", to: "/" }, { label: "Tendências" }]}
         />
 
         {/* Filtros */}
