@@ -18,7 +18,7 @@
  *  - cores: sempre tokens semânticos (--pc-price-fg e derivados).
  */
 
-import type { ComponentPropsWithoutRef, ElementType, ReactNode } from "react";
+import { memo, type ComponentPropsWithoutRef, type ElementType, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 export type PriceSize = "xs" | "sm" | "md" | "lg" | "xl" | "display";
