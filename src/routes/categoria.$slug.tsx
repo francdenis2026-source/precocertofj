@@ -452,10 +452,10 @@ function CategoryPage() {
                 }`}
               </p>
               {view === "grid" ? (
-
-                {/* Grade densa: 2 colunas já no mobile — cards de 1 coluna
-                    ficavam exageradamente grandes e exigiam muita rolagem. */}
+                // Grade densa: 2 colunas já no mobile — cards de 1 coluna
+                // ficavam exageradamente grandes e exigiam muita rolagem.
                 <ul className="mt-2 grid grid-cols-2 gap-1.5 sm:grid-cols-3 sm:gap-2 lg:grid-cols-4">
+
                   {visible.map((p, idx) => {
                     const isTop = idx === 0 && safePage === 1;
                     return (
