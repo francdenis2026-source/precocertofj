@@ -12,7 +12,7 @@ export function useCategoryIconOverrides() {
     queryFn: async () => {
       const { data, error } = await supabase
         .from("category_icon_overrides")
-        .select("slug, kind, value, updated_at");
+        .select("slug, kind, value, label, updated_at");
       if (error) throw error;
       const map = new Map<string, CategoryIconOverride>();
       for (const row of (data ?? []) as CategoryIconOverride[]) {
