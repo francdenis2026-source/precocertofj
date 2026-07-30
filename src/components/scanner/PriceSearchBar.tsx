@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { usePricesRealtime } from "@/hooks/usePricesRealtime";
+import { useListScrollPersistence } from "@/hooks/useListScrollPersistence";
 import { LiveUpdateBadge, useLivePulse } from "@/components/ui/live-update-badge";
 import { SearchGlassScrim } from "@/components/search/SearchGlassScrim";
 import { Price } from "@/components/ds/Price";
@@ -270,6 +271,50 @@ export function PriceSearchBar({
 
   const autoRan = useRef(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  /**
+   * Trilho de resultados: rolagem interna própria. Guardamos a posição por
+   * termo pesquisado (sessionStorage) para que voltar de um produto não jogue
+   * o usuário de volta ao topo da lista.
+   */
+  const resultsRef = useRef<HTMLDivElement>(null);
+  const resultsScrollKey = `pc:buscar:resultados:${
+    normalizeInput(query).trim().toLowerCase() || "vazio"
+  }`;
+  const { persistScroll } = useListScrollPersistence(
+    resultsRef,
+    resultsScrollKey,
+    !!rawResult,
+  );
+
+  /**
+   * Navegação por teclado entre os cards de produto. Setas movem o foco,
+   * Home/End vão para o primeiro/último. Ignoramos quando o foco está num
+   * campo de texto para não atrapalhar a digitação.
+   */
+  const onResultsKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    if (e.key !== "ArrowDown" && e.key !== "ArrowUp" && e.key !== "Home" && e.key !== "End") {
+      return;
+    }
+    const root = resultsRef.current;
+    if (!root) return;
+    const target = e.target as HTMLElement | null;
+    if (target?.closest("input,textarea,select,[contenteditable='true']")) return;
+    const cards = Array.from(root.querySelectorAll<HTMLElement>("[data-result-card]"));
+    if (cards.length === 0) return;
+    const current = cards.findIndex((c) => c.contains(document.activeElement));
+    let next: number;
+    if (e.key === "ArrowDown") next = current < 0 ? 0 : Math.min(current + 1, cards.length - 1);
+    else if (e.key === "ArrowUp") next = current <= 0 ? 0 : current - 1;
+    else if (e.key === "Home") next = 0;
+    else next = cards.length - 1;
+    e.preventDefault();
+    const el = cards[next];
+    if (!el) return;
+    el.focus({ preventScroll: true });
+    el.scrollIntoView({ block: "nearest" });
+  };
+
   const inputRef = useRef<HTMLInputElement>(null);
   const suggestSeq = useRef(0);
   const suggestAbort = useRef<AbortController | null>(null);
@@ -944,6 +989,9 @@ export function PriceSearchBar({
 
       {result && !err && !quotaBlocked && (
         <div
+          ref={resultsRef}
+          onScroll={(e) => persistScroll(e.currentTarget)}
+          onKeyDown={onResultsKeyDown}
           className={`${
             fitResults
               ? "mt-2 min-h-0 flex-1 space-y-2 overflow-y-auto overscroll-contain pr-1 md:space-y-2.5"
@@ -1338,6 +1386,67 @@ export function PriceSearchBar({
                       freshness={freshness}
                       onFreshness={setFreshness}
                     />
+
+                    {/* Resumo do que está sendo filtrado — linguagem simples,
+                        sem jargão, sempre visível acima dos resultados. */}
+                    {(() => {
+                      const parts: string[] = [];
+                      const term = normalizeInput(query).trim();
+                      if (term) parts.push(`nome com “${term}”`);
+                      if (categoryFilter) parts.push(`categoria ${categoryFilter}`);
+                      if (kindFilter) parts.push(`tipo de mercado ${kindFilter}`);
+                      if (marketFilter) parts.push(`mercado ${marketFilter}`);
+                      if (brandFilter.trim()) parts.push(`marca ${brandFilter.trim()}`);
+                      if (typeof priceMin === "number" && Number.isFinite(priceMin)) {
+                        parts.push(`a partir de R$ ${priceMin.toFixed(2).replace(".", ",")}`);
+                      }
+                      if (typeof priceMax === "number" && Number.isFinite(priceMax)) {
+                        parts.push(`até R$ ${priceMax.toFixed(2).replace(".", ",")}`);
+                      }
+                      if (freshness !== "all") {
+                        parts.push(`preços dos últimos ${freshness} dias`);
+                      }
+                      const canReset =
+                        !!categoryFilter || !!kindFilter || !!marketFilter || freshness !== "all";
+                      return (
+                        <p className="flex flex-wrap items-center gap-x-1.5 gap-y-1 px-0.5 text-[11.5px] leading-snug text-muted-foreground">
+                          <span className="font-semibold text-foreground tabular-nums">
+                            {visibleCount}
+                          </span>
+                          <span>
+                            {visibleCount === 1 ? "produto encontrado" : "produtos encontrados"}
+                          </span>
+                          <span aria-hidden className="opacity-40">
+                            ·
+                          </span>
+                          <span>
+                            {parts.length > 0
+                              ? `filtrando por ${parts.join(" · ")}`
+                              : "sem filtros ativos"}
+                          </span>
+                          <span aria-hidden className="opacity-40">
+                            ·
+                          </span>
+                          <span>ordenado por {sortLabelMap[sortMode] ?? sortMode}</span>
+                          {canReset && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                handleCategoryChange(null);
+                                setKindFilter(null);
+                                setMarketFilter(null);
+                                setFreshness("all");
+                              }}
+                              className="ml-auto rounded-full border border-border px-2 py-[1px] text-[11px] font-semibold text-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                            >
+                              Limpar filtros da lista
+                            </button>
+                          )}
+                        </p>
+                      );
+                    })()}
+
+
 
                     {result.groups.length > 0 && visibleGroups.length === 0 ? (
                       <div className="pc-res-card mt-2">
@@ -2395,6 +2504,7 @@ function ProductGroupCard({
     <div
       ref={cardRef}
       id={`pc-group-${encodeURIComponent(productName)}`}
+      data-result-card=""
       tabIndex={-1}
       data-focused={focused ? "true" : undefined}
       onClick={(e) => {
