@@ -373,27 +373,32 @@ function EstablishmentPage() {
 
   return (
     <div className="min-h-svh bg-background text-foreground">
-      <div className="mx-auto w-full max-w-6xl px-4 pt-3"><HomeBrandLink /></div>
-      <main className="mx-auto max-w-5xl px-3 pb-14 pt-3 sm:px-6">
-        <div className="flex flex-wrap items-center gap-2">
-          <Link
-            to="/estabelecimentos"
-            className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[11px] font-bold uppercase leading-none tracking-[0.16em] text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-          >
-            <ArrowLeft className="h-3.5 w-3.5 text-brand-gold" aria-hidden /> Estabelecimentos
-          </Link>
-          <Link
-            to="/catalogo/$slug"
-            params={{ slug }}
-            className="inline-flex h-8 items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold/10 px-3 text-[11px] font-bold uppercase leading-none tracking-[0.16em] text-foreground transition-colors hover:bg-brand-gold/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
-          >
-            <PackageSearch className="h-3.5 w-3.5 text-brand-gold" aria-hidden /> Ver catálogo completo
-          </Link>
+      {/* Barra superior única: marca + navegação na mesma linha (sem espaço morto). */}
+      <div className="sticky top-0 z-30 border-b border-border/70 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/75">
+        <div className="mx-auto flex w-full max-w-5xl items-center gap-2 px-3 py-1.5 sm:px-6">
+          <HomeBrandLink />
+          <div className="ml-auto flex items-center gap-1.5">
+            <Link
+              to="/estabelecimentos"
+              className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[11px] font-bold uppercase leading-none tracking-[0.16em] text-foreground transition-colors hover:border-brand-gold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+            >
+              <ArrowLeft className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
+              <span className="hidden sm:inline">Estabelecimentos</span>
+            </Link>
+            <Link
+              to="/catalogo/$slug"
+              params={{ slug }}
+              className="inline-flex h-8 items-center gap-1.5 rounded-full border border-brand-gold bg-brand-gold/10 px-3 text-[11px] font-bold uppercase leading-none tracking-[0.16em] text-foreground transition-colors hover:bg-brand-gold/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+            >
+              <PackageSearch className="h-3.5 w-3.5 text-brand-gold" aria-hidden /> Catálogo completo
+            </Link>
+          </div>
         </div>
-
+      </div>
+      <main className="mx-auto max-w-5xl px-3 pb-14 pt-3 sm:px-6">
 
         {/* Hero compacto — escala: eyebrow 10 / título 19-22 / meta 12 / stat 15 */}
-        <header className="mt-2.5 overflow-hidden rounded-xl border border-border/70 bg-brand-navy text-white shadow-sm">
+        <header className="overflow-hidden rounded-xl border border-border/70 bg-brand-navy text-white shadow-sm">
           <div className="grid grid-cols-[auto_minmax(0,1fr)] items-start gap-3 px-3.5 py-3 sm:px-4">
             <StoreBadge
               name={data.store.name}
@@ -484,113 +489,113 @@ function EstablishmentPage() {
           </div>
         )}
 
-        {/* Últimas atualizações + atalho de colaboração (vale para qualquer loja). */}
-        <section className="mt-2.5 rounded-xl border border-border bg-card/70 p-2.5">
-          <div className="flex flex-wrap items-center gap-2">
-            <h2 className="inline-flex items-center gap-1.5 text-[12px] font-bold uppercase leading-none tracking-[0.14em] text-muted-foreground">
-              <History className="h-3.5 w-3.5" aria-hidden />
+        {/* Últimas atualizações — faixa única com rolagem horizontal (sem nuvem de chips). */}
+        <section className="mt-2.5 overflow-hidden rounded-xl border border-border bg-card/70">
+          <div className="flex items-center gap-2 border-b border-border/70 px-2.5 py-1.5">
+            <h2 className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase leading-none tracking-[0.16em] text-muted-foreground">
+              <History className="h-3.5 w-3.5 text-brand-gold" aria-hidden />
               Últimas atualizações
             </h2>
             <Link
               to="/colaborar"
-              className="ml-auto inline-flex h-8 items-center gap-1.5 rounded-full border border-brand-gold/70 bg-brand-gold/10 px-3 text-[12px] font-semibold leading-none text-foreground transition-colors hover:bg-brand-gold hover:text-brand-navy"
+              className="ml-auto inline-flex h-7 shrink-0 items-center gap-1.5 rounded-full border border-brand-gold/70 bg-brand-gold/10 px-2.5 text-[11px] font-bold uppercase leading-none tracking-[0.14em] text-foreground transition-colors hover:bg-brand-gold hover:text-brand-navy"
             >
               <Camera className="h-3.5 w-3.5" aria-hidden />
-              Enviar fotos / nota
+              Enviar fotos
             </Link>
           </div>
           {recentUpdates.length > 0 ? (
-            <ul className="mt-2 flex flex-wrap gap-1.5">
+            <ul className="flex snap-x gap-1.5 overflow-x-auto px-2.5 py-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               {recentUpdates.map((p) => (
                 <li
                   key={p.slug}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2.5 py-1 text-[12px] leading-none"
+                  className="flex w-[190px] shrink-0 snap-start flex-col gap-0.5 rounded-lg border border-border bg-background px-2.5 py-1.5"
                 >
-                  <span className="max-w-[16rem] truncate font-medium text-foreground">
+                  <span className="truncate text-[12px] font-medium leading-tight text-foreground">
                     {p.productName}
                   </span>
-                  <Price value={p.price} size="xs" tone="best" />
-                  <span className="text-[11px] tabular-nums text-muted-foreground">
-                    {new Date(p.lastDate).toLocaleDateString("pt-BR")}
+                  <span className="flex items-baseline justify-between gap-2">
+                    <Price value={p.price} size="xs" tone="best" />
+                    <span className="text-[11px] tabular-nums text-muted-foreground">
+                      {new Date(p.lastDate).toLocaleDateString("pt-BR")}
+                    </span>
                   </span>
                 </li>
               ))}
             </ul>
           ) : (
-            <p className="mt-2 text-[12px] leading-snug text-muted-foreground">
+            <p className="px-2.5 py-2 text-[12px] leading-snug text-muted-foreground">
               Ainda não há atualizações recentes. Envie fotos das etiquetas para começar.
             </p>
           )}
         </section>
 
-
-
-
         {tab === "catalogo" && (
           <>
-            {data.categories.length > 0 && (
-              <CategoryRail
-                categories={[
-                  { key: "__all", label: "Todas", count: catalogProducts.length },
-                  ...data.categories,
-                ]}
-                activeLabel={selectedCategory}
-                onSelect={(label) => {
-                  setSearch({ cat: label === "Todas" ? "" : label });
-                }}
-              />
-            )}
-
-            {/* Ponte explícita entre a categoria de produto da loja e o hub
-                correspondente da homepage — mesmo vocabulário, um clique. */}
-            {activeHub && (
-              <Link
-                to="/categoria/$slug"
-                params={{ slug: activeHub.slug }}
-                className="mt-2 inline-flex items-center gap-1.5 text-[12px] font-semibold text-brand-gold underline-offset-2 hover:underline"
-              >
-                Comparar {selectedCategory} em toda a cidade · {activeHub.label}
-                <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-              </Link>
-            )}
-
-
-
-            <div className="mt-2.5 flex flex-col gap-2 sm:flex-row sm:items-center">
-              <div className="relative flex-1">
-                <Search
-                  className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-                  aria-hidden
-                />
-                <input
-                  value={q}
-                  onChange={(e) => {
-                    setQ(e.target.value);
-                    setLimit(30);
+            {/* Painel único de controles: categorias + busca + ordenação + visão. */}
+            <div className="mt-2.5 rounded-xl border border-border bg-card/70 p-2.5">
+              {data.categories.length > 0 && (
+                <CategoryRail
+                  categories={[
+                    { key: "__all", label: "Todas", count: catalogProducts.length },
+                    ...data.categories,
+                  ]}
+                  activeLabel={selectedCategory}
+                  onSelect={(label) => {
+                    setSearch({ cat: label === "Todas" ? "" : label });
                   }}
-                  placeholder="Buscar produto (ignora acentos e ç/c)"
-                  aria-label="Buscar produto"
-                  inputMode="search"
-                  className="h-9 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13px] outline-none focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
                 />
+              )}
+
+              <div className="mt-2 flex flex-col gap-2 sm:flex-row sm:items-center">
+                <div className="relative flex-1">
+                  <Search
+                    className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+                    aria-hidden
+                  />
+                  <input
+                    value={q}
+                    onChange={(e) => {
+                      setQ(e.target.value);
+                      setLimit(30);
+                    }}
+                    placeholder="Buscar produto (ignora acentos e ç/c)"
+                    aria-label="Buscar produto"
+                    inputMode="search"
+                    className="h-9 w-full rounded-lg border border-border bg-background pl-9 pr-3 text-[13px] outline-none focus-visible:border-brand-gold focus-visible:ring-2 focus-visible:ring-brand-gold/50"
+                  />
+                </div>
+                <Select value={sort} onValueChange={(v) => setSearch({ sort: v })}>
+                  <SelectTrigger
+                    aria-label="Ordenar por"
+                    className="h-9 w-full text-[12.5px] font-medium sm:w-[240px]"
+                  >
+                    <SelectValue placeholder="Ordenar por" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {(Object.keys(SORT_LABEL) as SortKey[]).map((k) => (
+                      <SelectItem key={k} value={k} className="text-[12.5px]">
+                        {SORT_LABEL[k]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <ViewToggle value={view} onChange={(v) => setSearch({ view: v })} />
               </div>
-              <Select value={sort} onValueChange={(v) => setSearch({ sort: v })}>
-                <SelectTrigger
-                  aria-label="Ordenar por"
-                  className="h-9 w-full text-[12.5px] font-medium sm:w-[240px]"
+
+              {/* Ponte entre a categoria da loja e o hub correspondente da cidade. */}
+              {activeHub && (
+                <Link
+                  to="/categoria/$slug"
+                  params={{ slug: activeHub.slug }}
+                  className="mt-2 inline-flex items-center gap-1.5 text-[12px] font-semibold text-brand-gold underline-offset-2 hover:underline"
                 >
-                  <SelectValue placeholder="Ordenar por" />
-                </SelectTrigger>
-                <SelectContent>
-                  {(Object.keys(SORT_LABEL) as SortKey[]).map((k) => (
-                    <SelectItem key={k} value={k} className="text-[12.5px]">
-                      {SORT_LABEL[k]}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-              <ViewToggle value={view} onChange={(v) => setSearch({ view: v })} />
+                  Comparar {selectedCategory} em toda a cidade · {activeHub.label}
+                  <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+                </Link>
+              )}
             </div>
+
 
             <div className="mt-2.5 flex items-baseline justify-between gap-3">
               <h2 className="text-[11px] font-bold uppercase tracking-[0.16em] text-foreground">
