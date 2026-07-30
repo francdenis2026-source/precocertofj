@@ -84,21 +84,53 @@ const toNum = (v: unknown): number | null => {
 // ---------- helpers ----------
 
 const CATEGORY_RULES: { key: string; label: string; kws: RegExp }[] = [
-  { key: "bebidas", label: "Bebidas & Café", kws: /\b(caf[eé]|ch[aá]|nescau|achocolatado|suco|refrigerante|cerveja|vinho|[aá]gua)\b/i },
-  { key: "laticinios", label: "Laticínios", kws: /\b(manteiga|queijo|leite|iogurte|requeij[aã]o|creme de leite|nata)\b/i },
+  { key: "bebidas", label: "Bebidas & Café", kws: /\b(cafe|cha|nescau|achocolatado|suco|refrigerante|cerveja|vinho|agua)\b/i },
+  { key: "laticinios", label: "Laticínios", kws: /\b(manteiga|queijo|leite|iogurte|requeijao|creme de leite|nata)\b/i },
   { key: "carnes", label: "Carnes & Frios", kws: /\b(salsicha|fiambre|almondega|linguic|presunto|mortadela|salame|carne|frango|peixe|bacon)\b/i },
-  { key: "mercearia", label: "Mercearia", kws: /\b(arroz|feij[aã]o|farinha|macarr[aã]o|espaguete|penne|[oó]leo|a[cç][uú]car|sal|fub[aá]|flocao|floc[aã]o|amido|sagu|mistura bolo|maisena)\b/i },
-  { key: "prontos", label: "Prontos & Enlatados", kws: /\b(sop[aã]o|feijoada|nissin|cup noodles|molho|extrato|conserva|azeitona|ervilha|milho|sardinha|at[uú]m)\b/i },
+  { key: "mercearia", label: "Mercearia", kws: /\b(arroz|feijao|farinha|macarrao|espaguete|penne|oleo|acucar|sal|fuba|flocao|amido|sagu|mistura bolo|maisena)\b/i },
+  { key: "prontos", label: "Prontos & Enlatados", kws: /\b(sopao|feijoada|nissin|cup noodles|molho|extrato|conserva|azeitona|ervilha|milho|sardinha|atum)\b/i },
   { key: "condimentos", label: "Condimentos", kws: /\b(ketchup|maionese|mostarda|azeite|vinagre|molho|tempero|shoyu)\b/i },
-  { key: "padaria", label: "Padaria & Doces", kws: /\b(p[aã]o|biscoito|bolacha|bolo|torta|chocolate|doce|geleia|mel)\b/i },
-  { key: "limpeza", label: "Limpeza", kws: /\b(sab[aã]o|detergente|amaciante|desinfetante|[aá]gua sanit|multiuso|esponja)\b/i },
+  { key: "padaria", label: "Padaria & Doces", kws: /\b(pao|biscoito|bolacha|bolo|torta|chocolate|doce|geleia|mel)\b/i },
+  { key: "limpeza", label: "Limpeza", kws: /\b(sabao|detergente|amaciante|desinfetante|agua sanit|multiuso|esponja)\b/i },
   { key: "higiene", label: "Higiene", kws: /\b(shampoo|condicionador|sabonete|creme dental|pasta de dente|papel higi|absorvente|fralda|desodorante)\b/i },
 ];
 
+/** Rótulos das categorias canônicas do catálogo (product_catalog.category). */
+const CATALOG_CATEGORY_LABELS: Record<string, string> = {
+  bebidas: "Bebidas",
+  bebidas_em_po: "Bebidas em pó",
+  biscoitos: "Biscoitos",
+  carnes: "Carnes",
+  condimentos: "Condimentos",
+  congelados: "Congelados",
+  doces: "Doces",
+  higiene: "Higiene",
+  hortifruti: "Hortifruti",
+  infantil: "Infantil",
+  laticinios: "Laticínios",
+  limpeza: "Limpeza",
+  medicamentos: "Medicamentos",
+  mercearia: "Mercearia",
+  outros: "Outros",
+  padaria: "Padaria",
+  papelaria: "Papelaria",
+  perfumaria: "Perfumaria",
+  prontos: "Prontos & Enlatados",
+};
+
+/**
+ * Remove acentos antes de aplicar as regras.
+ *
+ * As regexes usam `\b`, que em JS só considera [A-Za-z0-9_]. Nomes iniciados
+ * por letra acentuada ("Água Sanitária Ypê 1L") nunca casavam e caíam em
+ * "Outros". Normalizar o texto elimina essa classe inteira de falso-negativo.
+ */
 function categorize(name: string): { key: string; label: string } {
-  for (const r of CATEGORY_RULES) if (r.kws.test(name)) return { key: r.key, label: r.label };
+  const plain = name.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  for (const r of CATEGORY_RULES) if (r.kws.test(plain)) return { key: r.key, label: r.label };
   return { key: "outros", label: "Outros" };
 }
+
 
 const SIZE_RE = /\b(\d+(?:[.,]\d+)?)\s*(kg|g|mg|l|ml|un|unidades?|cx|caixa|lata|pct|pacote|garrafa)\b/i;
 
