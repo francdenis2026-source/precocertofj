@@ -207,13 +207,13 @@ export function SearchDiscovery({ onPickQuery }: Props) {
             </button>
           )}
         </div>
-        <div className="mt-1.5">
+        <div className="mt-1.5 min-h-0 flex-1 overflow-y-auto pr-0.5 [scrollbar-width:thin]">
           {recent.length === 0 ? (
             <p className="text-[13px] leading-snug text-muted-foreground">
               Nenhuma busca ainda — as próximas aparecem aqui para você reabrir com um clique.
             </p>
           ) : (
-            <div className="flex flex-wrap gap-1">
+            <div className="flex flex-wrap content-start gap-1">
               {recent.slice(0, 8).map((t) => (
                 <span
                   key={t}
@@ -241,6 +241,10 @@ export function SearchDiscovery({ onPickQuery }: Props) {
           )}
         </div>
       </section>
+
+      </div>
+
+
 
       {/* ============ SINAL DE VIDA — tinta ESMERALDA (métricas) ============ */}
       <section
