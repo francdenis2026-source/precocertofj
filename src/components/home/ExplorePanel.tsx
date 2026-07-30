@@ -67,11 +67,38 @@ const BODY_GAP = "mt-2";
 const ROW_PX = 56;
 const ROW_H = "h-[56px]";
 
-function Kicker({ children }: { children: React.ReactNode }) {
+function Kicker({ children, accent }: { children: React.ReactNode; accent?: string }) {
   return (
-    <p className={`${tc.eyebrow} shrink-0`} style={{ color: "var(--pc-home-onhero-gold)" }}>
+    <p className={`${tc.eyebrow} shrink-0`} style={{ color: accent ?? "var(--pc-home-onhero-gold)" }}>
       {children}
     </p>
+  );
+}
+
+/** Envelope cromático: cada bloco ganha tinta + faixa de acento próprios. */
+function Zone({
+  accent,
+  bg,
+  className = "",
+  children,
+}: {
+  accent: string;
+  bg: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div
+      className={`relative min-h-0 overflow-hidden rounded-xl border px-3 py-2.5 sm:px-4 sm:py-3 ${className}`}
+      style={{ background: bg, borderColor: `color-mix(in oklab, ${accent} 30%, transparent)` }}
+    >
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 left-0 w-[3px]"
+        style={{ background: accent }}
+      />
+      {children}
+    </div>
   );
 }
 
@@ -80,19 +107,21 @@ function SectionHead({
   kicker,
   title,
   aside,
+  accent,
 }: {
   id: string;
   kicker: string;
   title: string;
   aside?: React.ReactNode;
+  accent?: string;
 }) {
   return (
-    <header className={HEAD} style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}>
+    <header className={HEAD} style={{ borderColor: `color-mix(in oklab, ${accent ?? "var(--pc-home-onhero-gold)"} 32%, transparent)` }}>
       <div className={HEAD_LEFT}>
-        <Kicker>{kicker}</Kicker>
+        <Kicker accent={accent}>{kicker}</Kicker>
         <h3
           id={id}
-          className={`${serif} ${tc.h2} truncate`}
+          className={`${serif} pc-hero-editorial truncate text-[clamp(15px,0.6vw+1.5vh,21px)] leading-tight`}
           style={{ color: "var(--pc-home-onhero-fg)" }}
         >
           {title}
@@ -102,6 +131,7 @@ function SectionHead({
     </header>
   );
 }
+
 
 type PriceItem = {
   slug: string;
