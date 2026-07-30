@@ -273,11 +273,14 @@
   --pc-price-hover:      color-mix(in oklab, var(--pc-price-fg) 92%, var(--pc-gold-ink) 8%);
   --pc-price-loading:    color-mix(in oklab, var(--pc-price-fg) 45%, transparent);
   --pc-price-disabled:   color-mix(in oklab, var(--pc-price-fg) 55%, transparent);
-  /* Números/preços agora usam DM Sans — fonte comercial com glifos numéricos
-     grandes, abertos e altamente legíveis, ideais para preços e tabelas. */
-  --pc-price-font:       'DM Sans', 'Inter', 'Work Sans', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --pc-price-tracking:   -0.01em;
-  --pc-price-feature-settings: "tnum" 1, "lnum" 1, "ss01" 1;
+  /* Algarismos em Oswald (subset 0-9); símbolos "R$", "%" e demais caracteres
+     caem em DM Sans, que segue como fonte comercial de apoio. Como a Oswald é
+     condensada, o tracking negativo foi zerado — apertar uma condensada reduz
+     a legibilidade em vez de aumentá-la. */
+  --pc-price-font:       var(--font-numeric), 'DM Sans', 'Inter', 'Work Sans', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --pc-price-tracking:   0.005em;
+  --pc-price-feature-settings: "tnum" 1, "lnum" 1;
+
 
 
 
