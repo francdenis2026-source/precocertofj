@@ -184,8 +184,12 @@ export function AppSidebar() {
   });
   const { signOut, loading: signingOut } = useSignOut();
   const { isAdmin, loading: rolesLoading } = useMyRoles();
+  const { isMobile, setOpenMobile } = useSidebar();
   const isAdminArea = pathname.startsWith("/admin");
   const groups = isAdminArea ? (isAdmin ? adminGroups : []) : appGroups;
+  const closeOnMobile = () => {
+    if (isMobile) setOpenMobile(false);
+  };
 
   const isActive = (n: NavItem) => {
     if (n.search?.tab !== undefined) {
