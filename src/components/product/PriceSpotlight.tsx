@@ -8,10 +8,6 @@ import { Price } from "@/components/ds/Price";
 
 const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
 
-function formatBRL(n: number): string {
-  return n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-}
-
 /**
  * PriceSpotlight — bloco editorial de destaque para o menor preço.
  *
