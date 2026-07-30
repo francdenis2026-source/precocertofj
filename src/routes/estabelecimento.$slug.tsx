@@ -533,6 +533,21 @@ function EstablishmentPage() {
               />
             )}
 
+            {/* Ponte explícita entre a categoria de produto da loja e o hub
+                correspondente da homepage — mesmo vocabulário, um clique. */}
+            {activeHub && (
+              <Link
+                to="/categoria/$slug"
+                params={{ slug: activeHub.slug }}
+                className="mt-2 inline-flex items-center gap-1.5 text-[12px] font-semibold text-brand-gold underline-offset-2 hover:underline"
+              >
+                Comparar {selectedCategory} em toda a cidade · {activeHub.label}
+                <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+              </Link>
+            )}
+
+
+
             <div className="mt-2.5 flex flex-col gap-2 sm:flex-row sm:items-center">
               <div className="relative flex-1">
                 <Search
