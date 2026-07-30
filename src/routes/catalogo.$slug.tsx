@@ -7,8 +7,13 @@ import { ArrowLeft, Coins, PackageSearch, Search as SearchIcon, Tags, Trophy, X 
 
 import { Nav } from "@/components/brand/Nav";
 import { PageShell, PageShellContent } from "@/components/layout/PageShell";
-import { RouteError, EmptyState as FeedbackEmptyState } from "@/components/feedback";
-import { RankingSkeleton } from "@/components/layout/LoadingSkeleton";
+import {
+  RouteError,
+  CatalogGridSkeleton,
+  SmartErrorState,
+  IllustratedEmptyState,
+} from "@/components/feedback";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { resolveEstablishmentBySlug } from "@/lib/establishment-slug.functions";
 import { getPublicStoreCatalog, getStoreCatalogPriceRanking } from "@/lib/stores-public.functions";
@@ -125,7 +130,7 @@ function CatalogoPage() {
     navigate({ search: (prev: z.infer<typeof searchSchema>) => ({ ...prev, ...patch }) });
   };
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["public-store-catalog", storeId],
     queryFn: () => getPublicStoreCatalog({ data: { id: storeId } }),
     staleTime: 10 * 60_000,
