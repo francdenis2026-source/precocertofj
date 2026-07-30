@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { Price } from "@/components/ds/Price";
 import { AdminTabs } from "@/components/admin/AdminTabs";
 import { validateTabSearch } from "@/components/admin/adminTabs.utils";
 import { QuickPricePage } from "./admin_.preco-rapido";
@@ -334,8 +335,8 @@ function AdminPrecosPage() {
                         <TableCell className="max-w-[200px] truncate text-sm">
                           {s.market_name ?? "—"}
                         </TableCell>
-                        <TableCell className="text-right tabular-nums">
-                          {brl(s.price_captured)}
+                        <TableCell className="text-right">
+                          <Price value={Number(s.price_captured)} size="sm" className="justify-end" />
                         </TableCell>
                         <TableCell>
                           {s.verified ? (

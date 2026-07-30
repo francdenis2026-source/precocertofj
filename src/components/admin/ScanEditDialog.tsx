@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Price } from "@/components/ds/Price";
 import {
   Dialog,
   DialogContent,
@@ -115,9 +116,7 @@ export function ScanEditDialog({
               </div>
               <div className="mt-1 text-xs text-muted-foreground">
                 Preço atual:{" "}
-                <span className="tabular-nums">
-                  R$ {(scan.price_captured ?? 0).toFixed(2).replace(".", ",")}
-                </span>
+                <Price value={Number(scan.price_captured ?? 0)} size="xs" />
               </div>
             </div>
             <div>
