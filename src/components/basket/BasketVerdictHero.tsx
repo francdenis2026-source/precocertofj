@@ -12,6 +12,7 @@
  */
 
 import { Trophy, TrendingDown, ShoppingBasket } from "lucide-react";
+import { Price } from "@/components/ds/Price";
 import type { BasketComparisonResult } from "@/lib/basket.functions";
 import { cn } from "@/lib/utils";
 
@@ -94,7 +95,7 @@ export function BasketVerdictHero({ data, loading, eligibleCoverage = 0.6, class
             <ShoppingBasket className="h-3.5 w-3.5" /> Total da cesta
           </dt>
           <dd className="mt-1 text-xl font-semibold tabular-nums text-foreground">
-            {fmtBRL(champion.total)}
+            <Price value={champion.total} size="lg" tone="best" />
           </dd>
           <p className="mt-0.5 text-[11px] text-muted-foreground">
             {champion.itemsFound}/{champion.totalItems} itens · cobertura{" "}
@@ -107,7 +108,7 @@ export function BasketVerdictHero({ data, loading, eligibleCoverage = 0.6, class
             <TrendingDown className="h-3.5 w-3.5" /> Economia estimada
           </dt>
           <dd className="mt-1 text-xl font-semibold tabular-nums text-emerald-600 dark:text-emerald-400">
-            {fmtBRL(savings)}
+            <Price value={savings} size="md" tone="savings" />
           </dd>
           <p className="mt-0.5 text-[11px] text-muted-foreground">
             vs. {priciest.establishmentName}

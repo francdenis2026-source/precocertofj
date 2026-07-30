@@ -308,7 +308,7 @@ function CheapestSpotlightRow({ rows }: { rows: Comparison[] }) {
           <DSBadge variant="savingsSoft" size="sm">
             {top.length} destaques
           </DSBadge>
-          <span>economia média de {formatBRL(top.reduce((s, r) => s + (Number(r.avg_price) - Number(r.min_price)), 0) / top.length)}</span>
+          <span>economia média de <Price value={top.reduce((s, r) => s + (Number(r.avg_price) - Number(r.min_price)), 0) / top.length} size="xs" tone="savings" /></span>
         </p>
       )}
     </ShowcaseRow>
@@ -765,8 +765,8 @@ function CompareDialog({
               })}
             </ul>
             <div className="flex items-center justify-between rounded-xl bg-muted/40 px-3 py-2 text-[11px] text-muted-foreground">
-              <span>Média: {fmt(Number(row.avg_price))}</span>
-              <span>Máx: {fmt(Number(row.max_price))}</span>
+              <span>Média: <Price value={Number(row.avg_price)} size="xs" tone="muted" /></span>
+              <span>Máx: <Price value={Number(row.max_price)} size="xs" tone="muted" /></span>
             </div>
           </>
         )}

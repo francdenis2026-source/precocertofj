@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Price } from "@/components/ds/Price";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -605,7 +606,7 @@ function Page() {
                               {r.category && <span>· {r.category}</span>}
                               {r.barcode && <span>· EAN {r.barcode}</span>}
                               <span className="ml-auto font-medium text-foreground">
-                                {fmtBRL(r.editedPrice)}
+                                <Price value={r.editedPrice} size="sm" />
                               </span>
                             </div>
                           </div>
@@ -690,7 +691,7 @@ function Page() {
                               </div>
                               <div className="mt-1 text-sm">
                                 Preço anterior:{" "}
-                                <span className="font-medium">{fmtBRL(r.existing!.price)}</span>
+                                <span className="font-medium"><Price value={r.existing!.price} size="sm" /></span>
                               </div>
                             </div>
                             <div>
@@ -711,7 +712,7 @@ function Page() {
                                 </span>
                               </div>
                               <div className={`mt-1 text-sm ${fieldClass(r.divergences.includes("price"))}`}>
-                                Preço novo: <span className="font-medium">{fmtBRL(r.editedPrice)}</span>
+                                Preço novo: <span className="font-medium"><Price value={r.editedPrice} size="sm" /></span>
                               </div>
                             </div>
                           </div>

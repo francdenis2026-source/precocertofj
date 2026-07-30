@@ -7,6 +7,7 @@
  */
 
 import { useMemo } from "react";
+import { Price } from "@/components/ds/Price";
 import { ArrowRightLeft, AlertTriangle } from "lucide-react";
 import type { BasketComparisonResult } from "@/lib/basket.functions";
 import { suggestSubstitutions } from "@/lib/basket-suggestions";
@@ -68,7 +69,7 @@ export function BasketSubstitutionPanel({ data, storeId, className }: Props) {
               </span>
               {s.referencePrice != null ? (
                 <span className="ml-2 text-[11px] tabular-nums">
-                  ~{fmtBRL(s.referencePrice)}
+                  ~<Price value={s.referencePrice} size="xs" tone="muted" />
                 </span>
               ) : (
                 <span className="ml-2 text-[11px]">sem referência</span>
@@ -78,7 +79,7 @@ export function BasketSubstitutionPanel({ data, storeId, className }: Props) {
             <div>
               <span className="font-medium text-foreground">{s.substituteLabel}</span>
               <span className="ml-2 tabular-nums text-[11px] text-muted-foreground">
-                {fmtBRL(s.substitutePrice)}
+                <Price value={s.substitutePrice} size="sm" />
                 {s.substituteQuantity !== 1 ? ` × ${s.substituteQuantity}` : ""}
               </span>
             </div>
@@ -92,7 +93,7 @@ export function BasketSubstitutionPanel({ data, storeId, className }: Props) {
               title="Impacto estimado no total do mercado"
             >
               {s.deltaVsAverage > 0 ? "+" : ""}
-              {fmtBRL(s.deltaVsAverage)}
+              <Price value={s.deltaVsAverage} size="xs" tone="savings" />
             </div>
           </li>
         ))}

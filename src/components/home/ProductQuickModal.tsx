@@ -561,7 +561,7 @@ export function ProductQuickModal({
                             tone={i === 0 ? "best" : "default"}
                           />
                           <p className="mt-0 font-mono text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
-                            média {brl(c.avgPrice)}
+                            média <Price value={c.avgPrice} size="xs" tone="muted" />
                           </p>
                         </div>
                       </li>

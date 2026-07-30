@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Price } from "@/components/ds/Price";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
@@ -217,12 +218,12 @@ function ResultView({ result }: { result: PriceSearchResult }) {
                           ) : null}
                         </td>
                         <td className="py-2 pr-3 text-right font-semibold">
-                          {fmtBRL(m.priceMin)}
+                          <Price value={m.priceMin} size="sm" tone="best" />
                           {outOfOrder ? (
                             <Badge variant="destructive" className="ml-2">↑</Badge>
                           ) : null}
                         </td>
-                        <td className="py-2 pr-3 text-right">{fmtBRL(m.priceAvg)}</td>
+                        <td className="py-2 pr-3 text-right"><Price value={m.priceAvg} size="sm" tone="muted" /></td>
                         <td className="py-2 pr-3 text-right">{m.samples}</td>
                         <td className="py-2 pr-3 text-muted-foreground">{fmtDate(m.lastSeen)}</td>
                       </tr>
@@ -247,7 +248,7 @@ function ResultView({ result }: { result: PriceSearchResult }) {
                 <div className="flex items-center justify-between gap-2">
                   <span className="font-medium">{g.productName}</span>
                   <span className="text-muted-foreground">
-                    {fmtBRL(g.min)} · {g.samples} amostras · {g.prices.length} estabelecimentos
+                    <Price value={g.min} size="sm" /> · {g.samples} amostras · {g.prices.length} estabelecimentos
                   </span>
                 </div>
               </div>

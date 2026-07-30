@@ -19,7 +19,7 @@ function diffJson(before: unknown, after: unknown): FieldChange[] {
     .map((k) => ({ field: k, before: b[k], after: a[k] }));
 }
 
-function fmt(v: unknown): string {
+function fmtAuditValue(v: unknown): string {
   if (v === null || v === undefined) return "—";
   if (typeof v === "object") return JSON.stringify(v);
   return String(v);
@@ -107,9 +107,9 @@ function AuditDrawer({
                         {changes.map((c) => (
                           <li key={c.field} className="flex flex-wrap items-baseline gap-1">
                             <span className="font-semibold text-foreground">{c.field}:</span>
-                            <span className="text-muted-foreground line-through">{fmt(c.before)}</span>
+                            <span className="text-muted-foreground line-through">{fmtAuditValue(c.before)}</span>
                             <span className="text-muted-foreground">→</span>
-                            <span className="text-primary">{fmt(c.after)}</span>
+                            <span className="text-primary">{fmtAuditValue(c.after)}</span>
                           </li>
                         ))}
                       </ul>

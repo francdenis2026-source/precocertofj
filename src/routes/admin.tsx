@@ -1069,7 +1069,7 @@ function VerifyResult({ state }: { state: VerifyState }) {
   if (state.kind === "idle") return null;
 
   const shell = "rounded-lg border p-3 text-sm";
-  const fmt = (iso: string) =>
+  const fmtDateTime = (iso: string) =>
     iso ? new Date(iso).toLocaleString("pt-BR", { dateStyle: "long", timeStyle: "short" }) : "-";
 
   if (state.kind === "valid") {
@@ -1109,7 +1109,7 @@ function VerifyResult({ state }: { state: VerifyState }) {
           <Clock className="h-4 w-4" /> Código expirado
         </div>
         <p className="mt-1 text-xs text-muted-foreground">
-          Este código expirou em <strong>{fmt(state.expiresAt)}</strong>. Códigos são
+          Este código expirou em <strong>{fmtDateTime(state.expiresAt)}</strong>. Códigos são
           válidos por 24 horas após o envio. Gere um novo em <em>Assinantes → Reenviar código</em>.
         </p>
       </div>
@@ -1123,7 +1123,7 @@ function VerifyResult({ state }: { state: VerifyState }) {
           <XCircle className="h-4 w-4" /> Código já utilizado
         </div>
         <p className="mt-1 text-xs text-muted-foreground">
-          Este código foi consumido em <strong>{fmt(state.usedAt)}</strong>. Ele só pode ser
+          Este código foi consumido em <strong>{fmtDateTime(state.usedAt)}</strong>. Ele só pode ser
           usado uma única vez — se o assinante perdeu o acesso, gere um novo código.
         </p>
       </div>

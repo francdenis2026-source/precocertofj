@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { Price } from "@/components/ds/Price";
 import { supabase } from "@/integrations/supabase/client";
 import { useSignOut } from "@/hooks/use-sign-out";
 import { AppShell } from "@/components/brand/AppShell";
@@ -755,7 +756,7 @@ function MyStoreQuotesPanel() {
                 </p>
                 <p className="text-[11px] text-muted-foreground">
                   {q.itemCount} {q.itemCount === 1 ? "item" : "itens"} ·{" "}
-                  <span className="num font-semibold text-foreground">{fmt(q.total)}</span> ·{" "}
+                  <span className="num font-semibold text-foreground"><Price value={q.total} size="sm" /></span> ·{" "}
                   {new Date(q.createdAt).toLocaleDateString("pt-BR", {
                     day: "2-digit",
                     month: "short",

@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate, Navigate } from "@tanstack/react-router";
+import { Price } from "@/components/ds/Price";
 import { adminBeforeLoad } from "@/lib/route-guards";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
@@ -238,8 +239,8 @@ export function HistoricoPrecosPage() {
                           )}
                         </td>
                         <td className="p-3 text-muted-foreground">{r.establishmentName ?? "—"}</td>
-                        <td className="p-3 text-right tabular-nums">{fmtBRL(r.previousPrice)}</td>
-                        <td className="p-3 text-right font-medium tabular-nums">{fmtBRL(r.price)}</td>
+                        <td className="p-3 text-right tabular-nums"><Price value={r.previousPrice} size="sm" tone="muted" /></td>
+                        <td className="p-3 text-right font-medium tabular-nums"><Price value={r.price} size="sm" /></td>
                         <td className="p-3 text-right">
                           <DeltaBadge pct={r.changePct} />
                         </td>
@@ -304,7 +305,7 @@ export function HistoricoPrecosPage() {
                       {[...series.data].reverse().map((s) => (
                         <tr key={s.id} className="border-b">
                           <td className="p-2 text-xs text-muted-foreground">{fmtDT(s.capturedAt)}</td>
-                          <td className="p-2 text-right tabular-nums">{fmtBRL(s.price)}</td>
+                          <td className="p-2 text-right tabular-nums"><Price value={s.price} size="sm" /></td>
                           <td className="p-2 text-right">
                             <DeltaBadge pct={s.changePct} />
                           </td>

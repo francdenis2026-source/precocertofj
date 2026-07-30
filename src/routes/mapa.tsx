@@ -599,7 +599,7 @@ function NeighborhoodsPage() {
                             <li key={p.name} className="flex items-baseline justify-between gap-2 py-1">
                               <span className={`min-w-0 flex-1 truncate ${tc.cell}`}>{p.name}</span>
                               <span className={`${tc.num} text-[var(--pc-gold-ink)]`}>
-                                {currency(p.minPrice)}
+                                <Price value={p.minPrice} size="sm" />
                               </span>
                             </li>
                           ))}

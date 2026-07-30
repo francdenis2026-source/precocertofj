@@ -1,4 +1,5 @@
 import { createFileRoute, useParams } from "@tanstack/react-router";
+import { Price } from "@/components/ds/Price";
 import { useEffect, useState } from "react";
 import {
   getSharedComparison,
@@ -172,11 +173,11 @@ function SharePage() {
                   <div className="flex items-start justify-between gap-3">
                     <p className="min-w-0 flex-1 text-sm text-foreground">{it.productName}</p>
                     <p className="shrink-0 font-mono text-sm font-bold text-neon">
-                      {fmt(it.price)}
+                      <Price value={it.price} size="sm" />
                     </p>
                   </div>
                   <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-3">
-                    <Meta label="Média">{fmt(it.average ?? null)}</Meta>
+                    <Meta label="Média"><Price value={it.average ?? null} size="xs" tone="muted" /></Meta>
                     <Meta label="Veredito">
                       {it.verdict
                         ? verdictLabel[it.verdict as Verdict] ?? it.verdict
@@ -184,7 +185,7 @@ function SharePage() {
                     </Meta>
                     {it.cheaperElsewhere && (
                       <Meta label="+ barato em">
-                        {it.cheaperElsewhere.marketName} · {fmt(it.cheaperElsewhere.price)}
+                        {it.cheaperElsewhere.marketName} · <Price value={it.cheaperElsewhere.price} size="xs" tone="best" />
                       </Meta>
                     )}
                   </div>

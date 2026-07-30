@@ -70,7 +70,7 @@ export const Route = createFileRoute("/admin_/auditoria-acessos")({
   component: () => <Navigate to="/admin/auditoria" search={{ tab: "acessos" } as never} replace />,
 });
 
-function fmt(v: string | null | undefined) {
+function fmtDateTime(v: string | null | undefined) {
   if (!v) return "—";
   try {
     return new Date(v).toLocaleString("pt-BR");
@@ -331,7 +331,7 @@ export function AuditoriaAcessosPage() {
                 ) : (
                   (events.data ?? []).map((e) => (
                     <TableRow key={e.id}>
-                      <TableCell className="text-xs">{fmt(e.created_at)}</TableCell>
+                      <TableCell className="text-xs">{fmtDateTime(e.created_at)}</TableCell>
                       <TableCell className="text-xs">{e.email ?? "—"}</TableCell>
                       <TableCell className="font-mono text-xs">{e.cpf_masked ?? "—"}</TableCell>
                       <TableCell className="font-mono text-xs">{e.ip_address ?? "—"}</TableCell>

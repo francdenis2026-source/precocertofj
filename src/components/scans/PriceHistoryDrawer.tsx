@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Price } from "@/components/ds/Price";
 import { useServerFn } from "@tanstack/react-start";
 import {
   Sheet,
@@ -126,11 +127,11 @@ export function PriceHistoryDrawer({
                           </div>
                           <div className="text-right">
                             <p className="font-mono text-lg font-bold">
-                              {brl(m.lastPrice)}
+                              <Price value={m.lastPrice} size="sm" />
                             </p>
                             <p className="flex items-center justify-end gap-1 text-[11px] text-muted-foreground">
                               <Icon className="h-3 w-3" />
-                              {brl(m.minPrice)} — {brl(m.maxPrice)}
+                              <Price value={m.minPrice} size="xs" tone="muted" /> — <Price value={m.maxPrice} size="xs" tone="muted" />
                             </p>
                           </div>
                         </div>

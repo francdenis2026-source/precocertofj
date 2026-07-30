@@ -1,4 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { PriceCents } from "@/components/ds/PriceCents";
 import { useEffect } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -24,10 +25,6 @@ export const Route = createFileRoute("/minhas-licencas")({
 });
 
 type LicenseRow = Awaited<ReturnType<typeof listMyLicenses>>[number];
-
-function brl(cents: number | null | undefined) {
-  return ((cents ?? 0) / 100).toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
-}
 
 function statusMeta(s: string): { label: string; variant: "default" | "secondary" | "outline" | "destructive" } {
   const map: Record<string, { label: string; variant: "default" | "secondary" | "outline" | "destructive" }> = {
@@ -96,7 +93,8 @@ function MinhasLicencas() {
             {r.plan_name ?? "—"}
           </div>
           <div className="text-[11px] text-muted-foreground">
-            {r.plan_days ? `${r.plan_days} dias` : "—"} · {brl(r.price_cents)}
+            {r.plan_days ? `${r.plan_days} dias` : "—"} ·{" "}
+            <PriceCents cents={r.price_cents} size="xs" tone="muted" zeroWhenEmpty />
           </div>
         </div>
       ),

@@ -1,4 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { Price } from "@/components/ds/Price";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { ArrowLeft, FileDown, ShoppingBag, Scale } from "lucide-react";
 import { getPublicStoreQuote } from "@/lib/store-quotes.functions";
@@ -105,7 +106,7 @@ function PublicQuotePage() {
                 Total nesta mercado
               </p>
               <p className="num mt-0.5 font-display text-[16px] font-bold text-primary">
-                {fmt(data.total)}
+                <Price value={data.total} size="lg" />
               </p>
             </div>
           </div>
@@ -138,11 +139,11 @@ function PublicQuotePage() {
                     {it.productName}
                   </p>
                   <p className="num text-[11px] text-muted-foreground">
-                    {fmt(it.price)} × {it.quantity}
+                    <Price value={it.price} size="sm" /> × {it.quantity}
                   </p>
                 </div>
                 <span className="num shrink-0 font-display text-[13px] font-bold text-foreground">
-                  {fmt(it.price * it.quantity)}
+                  <Price value={it.price * it.quantity} size="sm" />
                 </span>
               </li>
             ))}
@@ -186,7 +187,7 @@ function PublicQuotePage() {
                             : "text-foreground",
                         )}
                       >
-                        {fmt(r.total)}
+                        <Price value={r.total} size="sm" />
                       </p>
                       {!r.isReference && (
                         <p
