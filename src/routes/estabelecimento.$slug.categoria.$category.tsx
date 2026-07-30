@@ -160,13 +160,21 @@ function CategoryPage() {
     <div className="min-h-svh bg-background text-foreground">
       <div className="mx-auto w-full max-w-6xl px-4 pt-3"><HomeBrandLink /></div>
       <main className="mx-auto max-w-5xl px-4 pb-16 pt-6">
-        <Link
-          to="/estabelecimento/$slug"
-          params={{ slug }}
-          className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-        >
-          <ArrowLeft className="h-4 w-4" /> Voltar ao catálogo de {data.store.name}
-        </Link>
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+          <Link
+            to="/estabelecimento/$slug"
+            params={{ slug }}
+            className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
+          >
+            <ArrowLeft className="h-4 w-4" /> Voltar ao catálogo de {data.store.name}
+          </Link>
+          <ShareButton
+            size="sm"
+            title={`${categoryLabel} em ${data.store.name} — PreçoCerto`}
+            text={`Veja os preços de ${categoryLabel} em ${data.store.name}`}
+          />
+        </div>
+
 
         <header className="mb-6">
           <p className="text-xs uppercase tracking-wide text-muted-foreground">{data.store.name}</p>
