@@ -343,16 +343,27 @@ function HomePage() {
                   <strong className="pc-num font-semibold">{stats?.products ?? "—"}</strong>
                   <span className="text-[10px] opacity-80">produtos</span>
                 </span>
-                {economy?.avgSavingsPct != null ? (
+                {Number(economy?.avgSavingsPct ?? 0) > 0 ? (
                   <>
                     <span aria-hidden style={{ color: `color-mix(in oklab, ${P.gold} 50%, transparent)` }}>·</span>
-                    <span className="inline-flex items-center gap-1 normal-case tracking-normal" style={{ color: "var(--pc-home-onhero-fg)" }}>
+                    <span
+                      className="inline-flex items-center gap-1 normal-case tracking-normal"
+                      style={{ color: "var(--pc-home-onhero-fg)" }}
+                      title="Diferença média entre o menor e o maior preço do mesmo produto, considerando itens com diferença relevante entre mercados."
+                    >
                       <TrendingDown className="h-3 w-3" aria-hidden />
-                      <strong className="pc-num font-semibold">{Math.round(Number(economy.avgSavingsPct))}%</strong>
-                      <span className="text-[10px] opacity-80">economia média</span>
+                      <strong className="pc-num font-semibold">
+                        {Number(economy!.avgSavingsPct).toLocaleString("pt-BR", {
+                          minimumFractionDigits: 1,
+                          maximumFractionDigits: 1,
+                        })}
+                        %
+                      </strong>
+                      <span className="text-[10px] opacity-80">de economia média</span>
                     </span>
                   </>
                 ) : null}
+
               </div>
 
               <h1
