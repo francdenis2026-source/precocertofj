@@ -172,6 +172,7 @@ function HomePage() {
   const [exploreOpen, setExploreOpen] = useState(false);
   const [gateOpen, setGateOpen] = useState(false);
   const [suggestOpen, setSuggestOpen] = useState(false);
+  const suggestRef = useRef<HomeSearchSuggestionsHandle | null>(null);
 
   useEffect(() => {
     document.body.classList.add("no-page-bg", "pc-home-locked");
