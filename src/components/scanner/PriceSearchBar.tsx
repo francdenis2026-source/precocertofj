@@ -2570,7 +2570,7 @@ function ProductGroupCard({
         <div className="min-w-0 flex-1 order-1">
 
           <p className="pc-res-title truncate">
-            <HighlightMatch text={productName} tokens={highlightTokens} />
+            <HighlightMatch text={productName} tokens={highlightTokens} mode="loose" />
           </p>
           <p className="pc-res-meta mt-0.5 truncate">
             <span className="font-semibold text-foreground">menor</span> <span className="pc-num font-bold text-foreground"><Price value={min} size="sm" /></span>
@@ -3244,7 +3244,7 @@ function MarketBucketSection({
               params={{ slug: r.productName }}
               className="min-w-0 flex-1 truncate rounded text-[13.5px] font-medium leading-relaxed text-foreground hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold sm:text-[14.5px]"
             >
-              <HighlightMatch text={r.productName} tokens={highlightTokens} />
+              <HighlightMatch text={r.productName} tokens={highlightTokens} mode="loose" />
             </Link>
             {r.isBest ? (
               <span
@@ -3680,7 +3680,7 @@ function MatrixCompareResults({
                       aria-label={productLabel}
                       className="block w-full truncate text-left text-[14px] font-medium text-foreground hover:text-gold-ink focus:outline-none rounded"
                     >
-                      <HighlightMatch text={g.productName} tokens={highlightTokens} />
+                      <HighlightMatch text={g.productName} tokens={highlightTokens} mode="loose" />
                     </button>
                     {rowMin != null && rowMax != null && rowMax > rowMin ? (
                       <p className="mt-0.5 text-[12.5px] text-muted-foreground">
