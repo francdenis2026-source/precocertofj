@@ -43,6 +43,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { normalizeSearchText } from "@/lib/text-normalize";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
 
@@ -207,7 +208,7 @@ function EstablishmentsPage() {
 
   const filtered = useMemo(() => {
     if (!data) return [] as EstablishmentStat[];
-    const term = q.trim().toLowerCase();
+    const term = normalizeSearchText(q);
     let list = data.items.slice();
     if (onlyFavorites) list = list.filter((e) => favSet.has(e.name.trim().toLowerCase()));
     if (kindFilter !== "__all") list = list.filter((e) => (e.kind ?? "outro") === kindFilter);
