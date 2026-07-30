@@ -12,6 +12,8 @@ type UsageInput = {
   totalTokens?: number;
   success: boolean;
   errorMessage?: string | null;
+  /** Tempo total da chamada, em milissegundos (observabilidade). */
+  durationMs?: number | null;
 };
 
 /** Custo aproximado por 1k tokens (centavos) — usado só para relatórios. */
