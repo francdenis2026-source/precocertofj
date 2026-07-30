@@ -363,7 +363,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
         )}
 
         <div
-          className="flex items-center justify-between gap-2 border-t px-3 py-1.5 text-[11px]"
+          className="flex shrink-0 items-center justify-between gap-2 border-t px-3 py-1.5 text-[11px]"
           style={{ borderColor: "#e2e8f0", background: "#f8fafc" }}
         >
           <span className="truncate text-slate-500">
@@ -391,5 +391,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
         </div>
       </div>
     );
+
+    return createPortal(panel, document.body);
   },
 );
