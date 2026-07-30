@@ -18,6 +18,7 @@ import {
 import { PLATFORM_RATING } from "@/components/ds/RatingStars";
 import { tc } from "@/lib/typeclear";
 import { useVirtualRows } from "@/hooks/use-virtual-rows";
+import { Price } from "@/components/ds/Price";
 
 
 /**
@@ -204,11 +205,12 @@ const PriceRow = memo(function PriceRow({
           </p>
         </div>
         <span className="relative flex shrink-0 flex-col items-end leading-tight">
-          <span
-            className={`pc-num pc-num--onhero ${tc.num} transition-transform duration-200 group-hover:-translate-x-0.5`}
-          >
-            {brl(p.price)}
-          </span>
+          <Price
+            value={p.price}
+            size="sm"
+            tone="onhero"
+            className={`${tc.num} transition-transform duration-200 group-hover:-translate-x-0.5`}
+          />
           {hasDrop ? (
             <span
               className={`${tc.meta} mt-0.5 inline-flex items-baseline gap-1 whitespace-nowrap`}
@@ -216,13 +218,14 @@ const PriceRow = memo(function PriceRow({
               aria-label={`Preço anterior ${brl(p.previousPrice!)}, queda de ${p.dropPct}%`}
             >
               {/* Preço antigo aparece só em hover/focus — evita ruído em repouso. */}
-              <span
+              <Price
                 aria-hidden
-                className="line-through opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
+                value={p.previousPrice!}
+                size="xs"
+                tone="strike"
+                className="opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
                 style={{ color: "var(--pc-home-onhero-fg-60)" }}
-              >
-                {brl(p.previousPrice!)}
-              </span>
+              />
               <span aria-hidden className="opacity-0 transition-opacity duration-150 group-hover:opacity-80 group-focus-visible:opacity-80">
                 →
               </span>

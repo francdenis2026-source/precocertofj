@@ -6,6 +6,7 @@ import { ProductImage } from "@/components/ds/ProductImage";
 import { Store, TrendingDown, Loader2, AlertCircle, ExternalLink } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useMemo } from "react";
+import { Price } from "@/components/ds/Price";
 
 const brl = (v: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(Math.max(0, v));
@@ -128,13 +129,9 @@ export function RadarCategorySheet({
                           </p>
 
                           <div className="mt-1.5 flex items-baseline gap-2">
-                            <span className="font-display text-lg font-bold tabular-nums text-emerald-300">
-                              {brl(p.minPrice)}
-                            </span>
+                            <Price value={p.minPrice} size="lg" tone="onhero" />
                             {p.maxPrice > p.minPrice && (
-                              <span className="text-[11px] text-white/75 line-through tabular-nums">
-                                {brl(p.maxPrice)}
-                              </span>
+                              <Price value={p.maxPrice} size="xs" tone="strike" />
                             )}
                           </div>
 
@@ -167,7 +164,7 @@ export function RadarCategorySheet({
                           <div className="mt-1.5 flex items-center gap-3 text-[11px] text-white/80">
                             <span className="inline-flex items-center gap-1">
                               <TrendingDown className="h-3 w-3 text-emerald-300" />
-                              economia {brl(savings)}
+                              economia <Price value={savings} size="xs" tone="onhero" />
                             </span>
                             <span>· {p.storeCount} mercados</span>
                             <span className="ml-auto font-semibold text-emerald-300/80">

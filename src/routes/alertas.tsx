@@ -42,6 +42,7 @@ import {
   type Stat,
 } from "@/components/layout";
 import { Button } from "@/components/ui/button";
+import { Price } from "@/components/ds/Price";
 
 export const Route = createFileRoute("/alertas")({
   head: () => ({
@@ -664,9 +665,7 @@ function FavoriteRow({
             favorite.currentPrice !== null ? (
               <>
                 <p className="mt-1 text-xs">
-                  <span className="font-mono font-semibold text-foreground">
-                    {brl(favorite.currentPrice)}
-                  </span>
+                  <Price value={favorite.currentPrice} size="sm" />
                   <span className="text-muted-foreground">
                     {" "}
                     em {favorite.preferredEstablishmentName ?? "estabelecimento"}
@@ -687,11 +686,12 @@ function FavoriteRow({
                           (down ? "text-savings" : "text-destructive")
                         }
                       >
-                        {down ? "▼" : "▲"} {brl(Math.abs(diff))} ({pct > 0 ? "+" : ""}
+                        {down ? "▼" : "▲"}{" "}
+                        <Price value={Math.abs(diff)} size="xs" prefix={false} /> ({pct > 0 ? "+" : ""}
                         {pct.toFixed(1)}%)
                         <span className="text-muted-foreground">
                           {" "}vs.{" "}
-                          {brl(favorite.previousPrice)}
+                          <Price value={favorite.previousPrice} size="xs" tone="muted" />
                           {favorite.previousPriceAt
                             ? ` · ${new Date(favorite.previousPriceAt).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" })}`
                             : ""}

@@ -45,6 +45,7 @@ import { ProductImage } from "@/components/product/ProductImage";
 import { useSession } from "@/hooks/useSession";
 import { useConfirm } from "@/components/ui/confirm-provider";
 import { ListaVisitorPreview } from "@/components/paywall/ListaVisitorPreview";
+import { Price } from "@/components/ds/Price";
 
 
 
@@ -1055,8 +1056,8 @@ function SplitRoutePanel({
               <TrendingDown className="h-3 w-3" strokeWidth={3} />
               -{route.savingsPct.toFixed(1)}%
             </p>
-            <p className="mt-1 num font-mono text-sm font-bold text-savings">
-              economia {brl(route.savings)}
+            <p className="mt-1 inline-flex items-baseline gap-1 text-sm font-bold text-savings">
+              economia <Price value={route.savings} size="sm" tone="savings" />
             </p>
           </div>
         )}
@@ -1096,9 +1097,7 @@ function SplitRoutePanel({
                     className={`h-4 w-4 ${favMarketSet.has(a.marketName) ? "fill-current" : ""}`}
                   />
                 </button>
-                <span className="num font-mono text-[13.5px] font-black text-foreground">
-                  {brl(a.subtotal)}
-                </span>
+                <Price value={a.subtotal} size="sm" />
               </div>
               <ul className="divide-y divide-border/60">
                 {a.items.map((it) => (
@@ -1112,9 +1111,7 @@ function SplitRoutePanel({
                         × {it.quantity}
                       </span>
                     </span>
-                    <span className="num font-mono text-foreground">
-                      {brl(it.unitPrice * it.quantity)}
-                    </span>
+                    <Price value={it.unitPrice * it.quantity} size="xs" />
                   </li>
                 ))}
               </ul>
@@ -1127,9 +1124,7 @@ function SplitRoutePanel({
             <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
               Roteiro
             </p>
-            <p className="mt-1 num font-display text-2xl font-black text-savings">
-              {brl(route.total)}
-            </p>
+            <Price as="p" value={route.total} size="xl" tone="savings" className="mt-1" />
             <p className="mt-0.5 text-[11px] text-muted-foreground">
               {route.itemsCovered} de {route.itemsTotal} itens
             </p>
@@ -1140,15 +1135,13 @@ function SplitRoutePanel({
               <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                 Uma mercado só
               </p>
-              <p className="mt-1 num font-mono text-lg font-bold text-foreground">
-                {brl(route.singleMarketTotal)}
-              </p>
+              <Price as="p" value={route.singleMarketTotal} size="lg" className="mt-1" />
               <p className="mt-0.5 truncate text-[11px] text-muted-foreground">
                 em {route.singleMarketName}
               </p>
               {hasSavings ? (
                 <p className="mt-2 rounded-full bg-savings/15 px-2 py-1 text-center text-[11px] font-bold text-savings">
-                  Economize {brl(route.savings)}
+                  Economize <Price value={route.savings} size="xs" tone="savings" />
                 </p>
               ) : (
                 <p className="mt-2 text-[11px] text-muted-foreground">

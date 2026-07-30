@@ -2624,7 +2624,9 @@ function ProductGroupCard({
                   className="hidden self-center xl:inline-flex"
                 />
                 <div className="shrink-0 self-center text-right">
-                  {isCheapest && <p className="pc-res-label">Menor</p>}
+                  {/* O selo "Melhor oferta" (coroa, canto superior) já comunica o
+                      menor preço; um rótulo extra aqui duplicava a informação e
+                      colidia com o selo absoluto. */}
                   <Price as="p" size="md" value={p.price} className="justify-end" />
                   <UnitPriceBadge price={p.price} productName={productName} className="mt-0.5" />
                 </div>

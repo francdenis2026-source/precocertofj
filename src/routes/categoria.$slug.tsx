@@ -42,6 +42,7 @@ import { PLANTOES, diaDaSemana, diaVigente, farmaciaPorId } from "@/lib/farmacia
 import { useScrollRestoration } from "@/lib/use-scroll-restoration";
 import { createRailController } from "@/lib/rail-scroll";
 import { cn } from "@/lib/utils";
+import { Price } from "@/components/ds/Price";
 
 const ICONS: Record<string, typeof ShoppingCart> = {
   supermercados: ShoppingCart,
@@ -475,9 +476,13 @@ function CategoryPage() {
                             {p.cheapestStore}
                             {p.storeCount > 1 ? ` · ${p.storeCount} mercados` : ""}
                           </span>
-                          <span className={cn("mt-1 block", isTop ? tc.dataPrimary : "text-[13.5px] font-bold tabular-nums text-foreground")}>
-                            {brl(p.minPrice)}
-                          </span>
+                          <Price
+                            as="div"
+                            value={p.minPrice}
+                            size={isTop ? "lg" : "sm"}
+                            tone={isTop ? "best" : "default"}
+                            className="mt-1"
+                          />
                         </span>
                       </button>
                     </li>
@@ -512,12 +517,16 @@ function CategoryPage() {
                         </span>
                       </span>
                       <span className="shrink-0 text-right">
-                        <span className={cn("block", isTop ? tc.dataPrimary : "text-[13.5px] font-bold tabular-nums text-foreground")}>
-                          {brl(p.minPrice)}
-                        </span>
+                        <Price
+                          as="div"
+                          value={p.minPrice}
+                          size={isTop ? "lg" : "sm"}
+                          tone={isTop ? "best" : "default"}
+                          className="justify-end"
+                        />
                         {p.storeCount > 1 && p.maxPrice > p.minPrice && (
                           <span className={cn("block", tc.metaMuted)}>
-                            até {brl(p.maxPrice)}
+                            até <Price value={p.maxPrice} size="xs" tone="muted" />
                           </span>
                         )}
                       </span>

@@ -452,7 +452,8 @@ function CoveredRow({ item, onPick }: { item: HighlightItem; onPick: () => void 
           {item.name}
         </span>
         <span className="block truncate text-[11px] text-muted-foreground">
-          em {item.storeCount} mercados · a partir de {brl(item.minPrice)}
+          em {item.storeCount} mercados · a partir de{" "}
+          <Price value={item.minPrice} size="xs" tone="muted" />
         </span>
       </span>
       <ArrowRight

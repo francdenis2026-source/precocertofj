@@ -93,7 +93,7 @@ export function PriceRankingPanel({
         {!single && diff > 0 && (
           <span className="inline-flex items-center gap-1 rounded-full border border-savings/30 bg-savings/10 px-2.5 py-1 font-mono text-[11px] font-bold uppercase tracking-wider text-savings">
             <ArrowDown className="h-3 w-3" strokeWidth={2.4} />
-            economize {formatBRL(diff)} ({diffPct.toFixed(0)}%)
+            economize <Price value={diff} size="xs" tone="savings" /> ({diffPct.toFixed(0)}%)
           </span>
         )}
       </header>
@@ -114,9 +114,7 @@ export function PriceRankingPanel({
           <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
             Maior preço do município
           </p>
-          <p className="mt-1 font-display text-xl font-semibold tabular-nums leading-none text-muted-foreground">
-            {single ? "—" : formatBRL(max)}
-          </p>
+          <Price as="p" value={single ? null : max} size="lg" tone="muted" className="mt-1" />
           <p className="mt-1 truncate text-[11.5px] font-medium text-muted-foreground" title={priciest.store_name}>
             {single ? "apenas 1 mercado com este item" : shortenStoreName(priciest.store_name)}
           </p>
@@ -182,7 +180,11 @@ export function PriceRankingPanel({
                         <TrendingUp className="h-2.5 w-2.5" /> maior preço
                       </span>
                     )}
-                    {!isMin && overMin > 0 && <span>+{formatBRL(overMin)} vs. menor</span>}
+                    {!isMin && overMin > 0 && (
+                      <span className="inline-flex items-baseline gap-1">
+                        <Price value={overMin} size="xs" tone="muted" prefix="+R$" /> vs. menor
+                      </span>
+                    )}
                     {seen && <span className="hidden sm:inline">· atualizado {seen}</span>}
                   </span>
                 </span>
@@ -200,7 +202,8 @@ export function PriceRankingPanel({
 
       <div className="mt-2.5 flex flex-wrap items-center justify-between gap-2">
         <p className="inline-flex items-center gap-1 text-[11px] text-muted-foreground">
-          <StoreIcon className="h-3 w-3" /> Média do município: {formatBRL(avg)}
+          <StoreIcon className="h-3 w-3" /> Média do município:{" "}
+          <Price value={avg} size="xs" tone="muted" />
         </p>
         {ranked.length > initialVisible && (
           <button

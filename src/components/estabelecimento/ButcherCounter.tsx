@@ -19,6 +19,7 @@ import {
 import { EmptyState } from "@/components/feedback";
 import { normalize } from "@/lib/search-tokens";
 import type { PublicStoreProduct } from "@/lib/stores-public.functions";
+import { Price } from "@/components/ds/Price";
 import {
   BUTCHER_PROTEINS,
   classifyButcherCut,
@@ -257,9 +258,12 @@ export function ButcherCounter({
               Menor preço por kg
             </span>
             <strong className="font-semibold text-foreground">{cheapest.productName}</strong>
-            <span className="font-bold tabular-nums text-[var(--pc-gold-ink)]">
-              {brl(cutPricePerKg(cheapest) ?? cheapest.price)}/kg
-            </span>
+            <Price
+              value={cutPricePerKg(cheapest) ?? cheapest.price}
+              size="sm"
+              tone="best"
+              suffix="/kg"
+            />
           </div>
         )}
       </div>
@@ -586,14 +590,17 @@ const CutTile = memo(function CutTile({
           <h4 className="min-w-0 flex-1 text-[13px] font-semibold leading-snug text-foreground">
             {cut.productName}
           </h4>
-          <span className="shrink-0 text-[13.5px] font-bold leading-tight tabular-nums text-foreground">
-            {brl(cut.price)}
-          </span>
+          <Price value={cut.price} size="sm" className="shrink-0" />
         </div>
         <p className="mt-1 truncate text-[11px] leading-none text-muted-foreground">
           {proteinLabel(cut.protein)}
           {cut.brand ? ` · ${cut.brand}` : ""}
-          {kg ? ` · ${brl(kg)} / kg` : ""}
+          {kg ? (
+            <>
+              {" · "}
+              <Price value={kg} size="xs" tone="muted" suffix="/kg" />
+            </>
+          ) : null}
         </p>
       </button>
       <div className="mx-3 mb-2.5 flex items-center justify-between gap-2 border-t border-border/70 pt-1.5">
@@ -636,13 +643,11 @@ const CutRow = memo(function CutRow({
         </span>
       </button>
 
-      <span className="hidden truncate text-[11.5px] tabular-nums leading-tight text-muted-foreground sm:block">
-        {kg ? `${brl(kg)} / kg` : "—"}
+      <span className="hidden truncate leading-tight sm:block">
+        <Price value={kg ?? null} size="xs" tone="muted" suffix={kg ? "/kg" : undefined} />
       </span>
 
-      <span className="whitespace-nowrap text-right text-[13px] font-bold tabular-nums leading-tight text-foreground">
-        {brl(cut.price)}
-      </span>
+      <Price value={cut.price} size="sm" className="justify-end" />
 
       <div className="hidden items-center justify-end sm:flex">
         <ActionButtons cut={cut} onAlert={onAlert} onHistory={onHistory} size="md" />

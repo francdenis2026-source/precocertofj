@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
+import { Price } from "@/components/ds/Price";
 
 export const Route = createFileRoute("/admin_/preco-rapido")({
   ssr: false,
@@ -243,7 +244,7 @@ export function QuickPricePage() {
                       </span>
                     </span>
                     {s.lastPrice != null && (
-                      <span className={cn(tc.meta, "shrink-0 font-semibold")}>{brl(s.lastPrice)}</span>
+                      <Price value={s.lastPrice} size="xs" className="shrink-0" />
                     )}
                   </button>
                 </li>
@@ -335,7 +336,7 @@ export function QuickPricePage() {
                     <span className={cn(tc.itemTitle, "block truncate")}>{s.name}</span>
                     <span className={cn(tc.meta, "block truncate")}>{s.store}</span>
                   </span>
-                  <span className={cn(tc.meta, "shrink-0 font-semibold")}>{brl(s.price)}</span>
+                  <Price value={s.price} size="xs" className="shrink-0" />
                 </li>
               ))}
             </ul>

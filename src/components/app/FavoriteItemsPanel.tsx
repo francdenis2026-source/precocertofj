@@ -15,6 +15,7 @@ import { DashboardEmptyState } from "@/components/dashboard/DashboardEmptyState"
 import { AddToListButton } from "@/components/app/AddToListButton";
 import { IconTile } from "@/components/ui/icon-tile";
 import { brl } from "@/lib/format";
+import { Price } from "@/components/ds/Price";
 
 type Summary = NonNullable<Awaited<ReturnType<typeof getAppSummary>>>;
 type FavoriteItem = Summary["favoriteItems"][number];
@@ -126,21 +127,19 @@ export function FavoriteItemsPanel({
                     {dropped && (
                       <span className="inline-flex items-center gap-1 rounded-full bg-savings/20 px-2 py-0.5 text-[11px] font-medium text-savings-foreground">
                         <TrendingDown className="h-3 w-3" />
-                        caiu de {brl(it.lastPrice!)}
+                        caiu de <Price value={it.lastPrice!} size="xs" tone="savings" />
                       </span>
                     )}
                     {it.targetPrice !== null && (
                       <span className="text-[11px] text-muted-foreground">
-                        alvo {brl(it.targetPrice)}
+                        alvo <Price value={it.targetPrice} size="xs" tone="muted" />
                       </span>
                     )}
                   </p>
                 </div>
                 <div className="text-right">
                   {it.best ? (
-                    <p className="font-mono text-base font-semibold text-foreground">
-                      {brl(it.best.price)}
-                    </p>
+                    <Price as="p" value={it.best.price} size="md" className="justify-end" />
                   ) : (
                     <p className="text-xs text-muted-foreground">—</p>
                   )}

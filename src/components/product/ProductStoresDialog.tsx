@@ -352,8 +352,14 @@ export function ProductStoresDialog({
                                 Menor preço
                               </span>
                             ) : stats.min != null && stats.min > 0 ? (
-                              <span className="font-mono text-[11px] text-muted-foreground">
-                                +{formatBRL(Number(s.price) - stats.min)} vs. menor
+                              <span className="inline-flex items-baseline gap-1 text-[11px] text-muted-foreground">
+                                <Price
+                                  value={Number(s.price) - stats.min}
+                                  size="xs"
+                                  tone="muted"
+                                  prefix="+R$"
+                                />{" "}
+                                vs. menor
                               </span>
                             ) : null}
                             <ConfidenceDot level={confidence} />
@@ -593,7 +599,7 @@ function VisitorLockPanel({
             {minPrice != null ? (
               <>
                 {" "}— a partir de{" "}
-                <strong className="font-display text-foreground">{formatBRL(minPrice)}</strong>.
+                <Price value={minPrice} size="sm" />.
               </>
             ) : (
               "."
