@@ -1,4 +1,5 @@
 import * as React from "react";
+import { createPortal } from "react-dom";
 import { useNavigate } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { Search, ArrowRight, TrendingDown, Loader2, CornerDownLeft } from "lucide-react";
@@ -24,15 +25,22 @@ type Props = {
   /** Quando true, o dropdown fica visível (input em foco). */
   open: boolean;
   onClose: () => void;
+  /**
+   * Elemento âncora (a moldura do campo de busca). O painel é renderizado em
+   * portal no `body` porque a homepage usa containers com `overflow-hidden`
+   * que cortavam o dropdown posicionado de forma absoluta.
+   */
+  anchorRef: React.RefObject<HTMLElement | null>;
 };
 
 const BRL = (n: number) =>
   n.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
 /** Máximo de sugestões — lista curta cabe na tela sem cobrir o conteúdo. */
-const MAX_ITEMS = 5;
+const MAX_ITEMS = 6;
 const LISTBOX_ID = "home-search-suggestions";
 const optionId = (i: number) => `${LISTBOX_ID}-opt-${i}`;
+
 
 /**
  * Dropdown de autocomplete com preços — aparece embaixo do campo de busca
@@ -41,12 +49,12 @@ const optionId = (i: number) => `${LISTBOX_ID}-opt-${i}`;
  * Regras:
  * - Só aparece com query ≥ 2 caracteres.
  * - Live search com debounce curto (140ms) e cancelamento (AbortController).
- * - Lista curta (5 itens) e compacta: nunca ultrapassa ~40% da viewport.
+ * - Lista curta (6 itens) renderizada em portal para não ser cortada.
  * - Navegação por teclado: ↓/↑ movem, Enter abre o item ativo, Esc fecha.
  * - Visitantes com cota esgotada veem os nomes borrados + CTA.
  */
 export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandle, Props>(
-  function HomeSearchSuggestions({ query, isLoggedOut, onBlocked, open, onClose }, ref) {
+  function HomeSearchSuggestions({ query, isLoggedOut, onBlocked, open, onClose, anchorRef }, ref) {
     const navigate = useNavigate();
     const runSuggest = useServerFn(suggestProducts);
     const runSearch = useServerFn(searchProductPrice);
@@ -195,17 +203,51 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
       [handlePick, onClose],
     );
 
-    if (!visible) return null;
+    // Mede a âncora (campo de busca) para posicionar o painel em `position: fixed`.
+    const [rect, setRect] = React.useState<{ left: number; top: number; width: number; maxH: number } | null>(
+      null,
+    );
+    React.useEffect(() => {
+      if (!visible) return;
+      const measure = () => {
+        const el = anchorRef.current;
+        if (!el) return;
+        const r = el.getBoundingClientRect();
+        const gap = 8;
+        const top = r.bottom + gap;
+        setRect({
+          left: r.left,
+          top,
+          width: r.width,
+          maxH: Math.max(180, window.innerHeight - top - 16),
+        });
+      };
+      measure();
+      window.addEventListener("resize", measure);
+      window.addEventListener("scroll", measure, true);
+      return () => {
+        window.removeEventListener("resize", measure);
+        window.removeEventListener("scroll", measure, true);
+      };
+    }, [visible, anchorRef, items.length, loading]);
 
-    return (
+    if (!visible || typeof document === "undefined") return null;
+
+    const panel = (
       <div
-        className="absolute left-0 right-0 top-[calc(100%+6px)] z-30 overflow-hidden rounded-xl border shadow-2xl"
+        className="fixed z-[80] flex flex-col overflow-hidden rounded-xl border shadow-2xl"
         style={{
+          left: rect?.left ?? 0,
+          top: rect?.top ?? 0,
+          width: rect?.width ?? 0,
+          maxHeight: rect?.maxH ?? 320,
+          visibility: rect ? "visible" : "hidden",
           background: "#ffffff",
           borderColor: "color-mix(in oklab, #d4a24c 45%, transparent)",
           color: "#0f172a",
         }}
       >
+
         {loading && items.length === 0 ? (
           <div className="flex items-center gap-2 px-3 py-2.5 text-[12.5px] text-slate-500">
             <Loader2 className="h-3.5 w-3.5 animate-spin" />
