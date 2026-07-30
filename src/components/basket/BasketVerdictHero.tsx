@@ -79,9 +79,13 @@ export function BasketVerdictHero({ data, loading, eligibleCoverage = 0.6, class
 
       <div className="mt-3 flex flex-col gap-1">
         <p className="text-sm text-muted-foreground">Mercado mais em conta agora</p>
-        <h2 className="text-2xl md:text-3xl font-serif italic text-[color:var(--pc-accent-gold,#c9a24a)] leading-tight">
+        <h2
+          data-testid="basket-verdict-champion"
+          className="text-2xl md:text-3xl font-serif italic text-[color:var(--pc-accent-gold,#c9a24a)] leading-tight"
+        >
           {champion.establishmentName}
         </h2>
+
         {champion.neighborhood || champion.city ? (
           <p className="text-xs text-muted-foreground">
             {[champion.neighborhood, champion.city].filter(Boolean).join(" · ")}
