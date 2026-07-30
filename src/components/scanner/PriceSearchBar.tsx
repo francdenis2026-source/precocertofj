@@ -1549,7 +1549,6 @@ export function PriceSearchBar({
                       <div
                         ref={resultsListRef}
                         onKeyDown={resultsNav.onKeyDown}
-                        role="list"
                         aria-label={`Resultados para ${query}`}
                         className="pc-results"
                       >
