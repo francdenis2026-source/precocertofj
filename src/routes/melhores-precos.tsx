@@ -1161,13 +1161,9 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
           Menor preço
         </span>
         <div className="flex items-baseline justify-between gap-2">
-          <span className={cn("pc-price pc-price--lg", rank === 1 && "pc-price--best")}>
-            {formatBRL(bestPrice)}
-          </span>
+          <Price value={bestPrice} size="lg" tone={rank === 1 ? "best" : "default"} />
           {isMulti && avgPrice > 0 && (
-            <span className="pc-price pc-price--sm pc-price--strike leading-none">
-              {formatBRL(avgPrice)}
-            </span>
+            <Price value={avgPrice} size="sm" tone="strike" />
           )}
         </div>
         <div className="mt-1 h-4 flex items-center">
@@ -1182,19 +1178,20 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
         <dl className="mt-1.5 grid grid-cols-3 gap-1 border-t border-accent/15 pt-1.5 text-[10.5px] uppercase tracking-[0.12em] text-muted-foreground">
           <div className="min-w-0">
             <dt className="truncate">Menor</dt>
-            <dd className="pc-price pc-price--sm pc-price--best truncate">
-              {formatBRL(bestPrice)}
-            </dd>
+            <Price as="dd" value={bestPrice} size="sm" tone="best" className="truncate" />
           </div>
           <div className="min-w-0">
             <dt className="truncate">Ticket médio</dt>
-            <dd className="pc-price pc-price--sm truncate">
-              {avgPrice > 0 ? formatBRL(avgPrice) : "—"}
-            </dd>
+            <Price
+              as="dd"
+              value={avgPrice > 0 ? avgPrice : null}
+              size="sm"
+              className="truncate"
+            />
           </div>
           <div className="min-w-0">
             <dt className="truncate">Economia</dt>
-            <dd className="pc-price pc-price--sm pc-price--savings truncate">
+            <dd className="pc-num truncate text-savings">
               {isMulti ? `−${Number(row.savings_pct).toFixed(1)}%` : "—"}
             </dd>
           </div>
@@ -1258,17 +1255,19 @@ function ComparisonCard({ row, rank, imageOverride }: { row: Comparison; rank: n
                   </span>
                 ) : null}
               </div>
-              <span
-                className={cn(
-                  "pc-price pc-price--sm shrink-0 leading-none",
-                  freshness?.stale && "pc-price--strike",
-                  !freshness?.stale && isBest && "pc-price--savings",
-                  !freshness?.stale && !isBest && "text-muted-foreground",
-                )}
+              <Price
+                value={Number(s.price)}
+                size="sm"
+                tone={
+                  freshness?.stale
+                    ? "strike"
+                    : isBest
+                      ? "savings"
+                      : "muted"
+                }
+                className="shrink-0"
                 title={s.last_seen_at ? formatRelative(s.last_seen_at) : undefined}
-              >
-                {formatBRL(Number(s.price))}
-              </span>
+              />
             </li>
           );
         })}
@@ -1370,7 +1369,7 @@ function PriceReportInlineButton({
                 </h3>
                 <p className="mt-0.5 text-[12px] text-muted-foreground">
                   {productName} em <strong className="text-foreground">{storeName}</strong> — preço atual{" "}
-                  <span className="pc-price pc-price--sm">{formatBRL(currentPrice)}</span>
+                  <Price value={currentPrice} size="sm" />
                 </p>
               </div>
               <button
