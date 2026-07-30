@@ -26,6 +26,7 @@ import { getEconomyStat } from "@/lib/products-public.functions";
 import { listTrendingSearches } from "@/lib/search-trends.functions";
 import { useSearchTrendsRealtime } from "@/hooks/useSearchTrendsRealtime";
 import { trackEvent } from "@/lib/analytics-events";
+import { getStoredRegionKey } from "@/lib/search-region";
 import { StartFreeDialog } from "@/components/home/StartFreeDialog";
 import { GuestGateDialog } from "@/components/gate/GuestGateDialog";
 import {
@@ -306,7 +307,7 @@ function HomePage() {
       }
     }
     // Registra a busca real do cliente — alimenta "Buscas em alta" em tempo real.
-    trackEvent("search_query", { q: query.toLowerCase().slice(0, 60) });
+    trackEvent("search_query", { q: query.toLowerCase().slice(0, 60), region: getStoredRegionKey() });
     navigate({ to: "/buscar", search: { q: query } as any });
   };
 
@@ -326,7 +327,11 @@ function HomePage() {
         return;
       }
     }
-    trackEvent("search_query", { q: query.toLowerCase().slice(0, 60), from: "alta" });
+    trackEvent("search_query", {
+      q: query.toLowerCase().slice(0, 60),
+      from: "alta",
+      region: getStoredRegionKey(),
+    });
     void navigate({ to: "/buscar", search: { q: query, from: "alta" } as any }).finally(() =>
       setPendingTerm(null),
     );
