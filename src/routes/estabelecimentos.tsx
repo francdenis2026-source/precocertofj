@@ -725,9 +725,10 @@ function EstablishmentsPage() {
         {/* DETALHE (preview) */}
         <section
           className={cn(
-            "min-w-0 flex-col",
+            "pc-rail min-w-0 flex-col md:h-full md:min-h-0 md:overflow-y-auto",
             detailOpenMobile ? "flex" : "hidden md:flex",
           )}
+
 
           aria-live="polite"
           aria-label="Detalhes do mercado selecionado"
