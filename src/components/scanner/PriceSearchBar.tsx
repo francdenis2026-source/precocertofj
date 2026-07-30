@@ -140,6 +140,7 @@ export function PriceSearchBar({
 
   const runSearch = useServerFn(searchProductPrice);
   const runSuggest = useServerFn(suggestProducts);
+  const qc = useQueryClient();
 
 
 
