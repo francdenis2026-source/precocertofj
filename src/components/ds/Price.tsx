@@ -84,7 +84,14 @@ export function Price({
   ...rest
 }: PriceProps) {
   const Tag = (as ?? "span") as ElementType;
+  /* .pc-price é inline-flex por padrão (para ficar no meio de uma frase).
+     Quando o preço é renderizado como bloco (p/div/h*), ele precisa ocupar a
+     própria linha — senão encosta no eyebrow/label anterior. */
+  const blockish =
+    typeof Tag === "string" && ["p", "div", "h1", "h2", "h3", "h4", "h5", "h6"].includes(Tag);
+  const layoutClass = blockish ? "flex" : undefined;
   const numeric = typeof value === "number" && Number.isFinite(value) ? value : null;
+
 
   if (numeric === null) {
     return (
