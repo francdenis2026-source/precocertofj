@@ -11,8 +11,8 @@ import { RouteError, EmptyState as FeedbackEmptyState } from "@/components/feedb
 import { RankingSkeleton } from "@/components/layout/LoadingSkeleton";
 import { Input } from "@/components/ui/input";
 import { resolveEstablishmentBySlug } from "@/lib/establishment-slug.functions";
-import { getPublicStoreCatalog } from "@/lib/stores-public.functions";
-import type { PublicStoreProduct } from "@/lib/stores-public.functions";
+import { getPublicStoreCatalog, getStoreCatalogPriceRanking } from "@/lib/stores-public.functions";
+import type { CatalogPriceRank, PublicStoreProduct } from "@/lib/stores-public.functions";
 import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
 
