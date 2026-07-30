@@ -101,6 +101,11 @@ export const Route = createFileRoute("/")({
 import { useCategoryLabelWithFallback } from "@/hooks/use-category-labels";
 import { categoryBySlug, hubCoverageLabel, type CategorySlug } from "@/lib/category-hub";
 import { categoryIcon } from "@/lib/category-icons";
+import {
+  ProductCategoryIcon,
+  detectFoodCategory,
+} from "@/components/ds/ProductCategoryIcon";
+
 
 const P = {
   paper: "var(--pc-home-paper)",
