@@ -31,6 +31,7 @@ import {
   consumeGuest,
   guestRemaining,
   GUEST_DAILY_LIMIT,
+  GUEST_QUOTA_DISABLED,
   onGuestQuotaChange,
 } from "@/lib/guest-quota";
 import { MetricSpotlightDialog } from "@/components/home/MetricSpotlightDialog";
