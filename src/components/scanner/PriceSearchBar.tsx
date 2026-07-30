@@ -129,7 +129,10 @@ export function PriceSearchBar({
   onFocusChange?: (product: string | null, market: string | null) => void;
   /** Faz a busca ocupar a altura disponível da rota, com resultados rolando internamente. */
   fitResults?: boolean;
+  /** Move o foco do teclado para o primeiro resultado (ex.: busca vinda de "Buscas em alta"). */
+  autoFocusResults?: boolean;
 }) {
+
 
 
   const runSearch = useServerFn(searchProductPrice);
