@@ -19,7 +19,7 @@ describe("Painel ao vivo — integração dados → UI", () => {
     const s = buildLivePanel({ stats: OK_STATS, economy: { avgSavingsPct: 18 } });
     expect(s.failed).toBe(false);
     expect(s.errorMessage).toBeNull();
-    expect(s.metrics.map((m) => m.value)).toEqual(["9", "1.520", "18%"]);
+    expect(s.metrics.map((m) => m.value)).toEqual(["9", "1.520", "18,0%"]);
     expect(s.metrics.map((m) => m.kind)).toEqual(["markets", "products", "savings"]);
   });
 
