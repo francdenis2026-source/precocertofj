@@ -48,7 +48,12 @@ export function AllCategoriesDialog({
     const q = norm(query.trim());
     if (!q) return CATEGORIES;
     return CATEGORIES.filter(
-      (c) => norm(c.label).includes(q) || norm(c.desc).includes(q),
+      (c) =>
+        norm(c.label).includes(q) ||
+        norm(c.desc).includes(q) ||
+        // Também casa pelo nome da categoria de produto (ex.: "laticínios"),
+        // que é o vocabulário usado nas páginas do comércio.
+        norm(c.coverage).includes(q),
     );
   }, [query]);
 
@@ -63,7 +68,7 @@ export function AllCategoriesDialog({
         <DialogHeader className="border-b border-border px-5 pt-5 pb-3">
           <DialogTitle className="text-[18px] font-bold">Todas as categorias</DialogTitle>
           <DialogDescription className="text-[13px]">
-            Escolha uma categoria ou pesquise pelo nome.
+            Escolha um nicho ou pesquise pela categoria de produto (ex.: laticínios).
           </DialogDescription>
           <div className="relative mt-3">
             <Search
@@ -124,6 +129,10 @@ export function AllCategoriesDialog({
                       </span>
                       <span className="block truncate text-[11.5px] text-muted-foreground">
                         {c.desc}
+                      </span>
+                      {/* Mapeamento explícito hub → categorias de produto da loja */}
+                      <span className="mt-0.5 block truncate text-[11px] text-muted-foreground/80">
+                        {c.coverage || "Sem categorias de produto vinculadas"}
                       </span>
                     </span>
                     <ArrowRight
