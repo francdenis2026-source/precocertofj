@@ -274,9 +274,7 @@ function ProductPublicPage() {
                   <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
                     Melhor preço
                   </p>
-                  <p className="mt-1 pc-price text-[22px] font-extrabold leading-none text-primary sm:text-[28px]">
-                    {fmt(bestPrice)}
-                  </p>
+                  <Price as="p" value={bestPrice} size="xl" tone="best" className="mt-1" />
                   {cheapest && (
                     <p className="mt-1 truncate text-[11px] text-muted-foreground">
                       em <span className="font-semibold text-foreground">{cheapest.marketName}</span>
@@ -314,8 +312,8 @@ function ProductPublicPage() {
 
               {data.samples > 0 && (
                 <div className="mt-2 grid grid-cols-3 gap-1.5">
-                  <MiniStat label="Média" value={fmt(data.avg)} />
-                  <MiniStat label="Mínimo" value={fmt(data.min)} />
+                  <MiniStat label="Média" amount={data.avg} />
+                  <MiniStat label="Mínimo" amount={data.min} tone="best" />
                   <MiniStat label="Amostras" value={String(data.samples)} />
                 </div>
               )}
@@ -458,15 +456,31 @@ function ProductPublicPage() {
   );
 }
 
-function MiniStat({ label, value }: { label: string; value: string }) {
+function MiniStat({
+  label,
+  value,
+  amount,
+  tone = "default",
+}: {
+  label: string;
+  /** Texto simples (usado para valores não monetários, ex.: contagens). */
+  value?: string;
+  /** Valor monetário — renderizado pelo componente canônico <Price />. */
+  amount?: number | null;
+  tone?: "default" | "best";
+}) {
   return (
     <div className="rounded-lg border border-border bg-background px-2 py-1.5">
       <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
         {label}
       </p>
-      <p className="mt-1 pc-price text-[17px] font-semibold leading-tight text-foreground">
-        {value}
-      </p>
+      {amount !== undefined ? (
+        <Price as="p" value={amount} size="md" tone={tone} className="mt-1" />
+      ) : (
+        <p className="pc-num mt-1 text-[17px] font-semibold leading-tight text-foreground">
+          {value}
+        </p>
+      )}
     </div>
   );
 }
@@ -593,16 +607,11 @@ function MarketCard({
             </div>
           </div>
           <div className="flex shrink-0 items-center gap-1.5">
-            <span
-              className={
-                "pc-price font-semibold leading-none " +
-                (isBest
-                  ? "text-[22px] text-savings"
-                  : "text-[16px] text-foreground")
-              }
-            >
-              {fmt(m.priceMin)}
-            </span>
+            <Price
+              value={m.priceMin}
+              size={isBest ? "lg" : "md"}
+              tone={isBest ? "best" : "default"}
+            />
             <ChevronDown
               className={
                 "h-4 w-4 text-muted-foreground transition-transform " +
@@ -622,9 +631,9 @@ function MarketCard({
             <Detail label="Unidade" value={unit ?? "—"} />
             <Detail label="Amostras" value={String(m.samples)} />
             <Detail label="Variação" value={`${variation.toFixed(0)}%`} />
-            <Detail label="Preço médio" value={fmt(m.priceAvg)} highlight />
-            <Detail label="Menor preço" value={fmt(m.priceMin)} highlight />
-            <Detail label="Maior preço" value={fmt(m.priceMax)} highlight />
+            <Detail label="Preço médio" amount={m.priceAvg} />
+            <Detail label="Menor preço" amount={m.priceMin} tone="best" />
+            <Detail label="Maior preço" amount={m.priceMax} tone="muted" />
             <Detail label="Último scan" value={fmtDate(m.lastSeen)} />
           </div>
 
@@ -661,26 +670,26 @@ function MarketCard({
 function Detail({
   label,
   value,
-  highlight = false,
+  amount,
+  tone = "default",
 }: {
   label: string;
-  value: string;
-  highlight?: boolean;
+  /** Texto simples para atributos não monetários. */
+  value?: string;
+  /** Valor monetário — renderizado pelo componente canônico <Price />. */
+  amount?: number | null;
+  tone?: "default" | "best" | "muted";
 }) {
   return (
     <div className="rounded-md border border-border bg-card px-2 py-1.5">
       <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-accent-strong">
         {label}
       </p>
-      <p
-        className={
-          highlight
-            ? "mt-1 truncate pc-price text-[17px] font-semibold leading-tight text-foreground"
-            : "mt-0.5 truncate text-xs font-semibold text-foreground"
-        }
-      >
-        {value}
-      </p>
+      {amount !== undefined ? (
+        <Price as="p" value={amount} size="md" tone={tone} className="mt-1" />
+      ) : (
+        <p className="mt-0.5 truncate text-xs font-semibold text-foreground">{value}</p>
+      )}
     </div>
   );
 }
