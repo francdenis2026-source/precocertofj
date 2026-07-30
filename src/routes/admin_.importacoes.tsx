@@ -336,7 +336,7 @@ function BatchDetailDialog({
                   <TableRow key={i.id}>
                     <TableCell className="text-sm">{i.product_name}</TableCell>
                     <TableCell className="text-right">
-                      <Price value={i.price != null ? Number(i.price) : null} size="sm" className="justify-end" />
+                      <Price value={i.price != null ? Number(i.price) : null} size="sm" className="w-full justify-end" />
                     </TableCell>
                     <TableCell className="text-xs">
                       {i.quantity != null ? `${i.quantity} ${i.unit ?? ""}` : "—"}

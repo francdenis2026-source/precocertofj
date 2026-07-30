@@ -336,7 +336,7 @@ function AdminPrecosPage() {
                           {s.market_name ?? "—"}
                         </TableCell>
                         <TableCell className="text-right">
-                          <Price value={Number(s.price_captured)} size="sm" className="justify-end" />
+                          <Price value={Number(s.price_captured)} size="sm" className="w-full justify-end" />
                         </TableCell>
                         <TableCell>
                           {s.verified ? (
