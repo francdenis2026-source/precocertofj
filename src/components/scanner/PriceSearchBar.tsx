@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { usePricesRealtime } from "@/hooks/usePricesRealtime";
+import { useListScrollPersistence } from "@/hooks/useListScrollPersistence";
 import { LiveUpdateBadge, useLivePulse } from "@/components/ui/live-update-badge";
 import { SearchGlassScrim } from "@/components/search/SearchGlassScrim";
 import { Price } from "@/components/ds/Price";
