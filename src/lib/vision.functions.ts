@@ -135,8 +135,11 @@ export const analyzeProductImage = createServerFn({ method: "POST" })
       brand: toStr(p.brand),
       unit: toStr(p.unit),
       price: toNum(p.price),
-      barcode: toStr(p.barcode),
+      // Descarta códigos que não passam no dígito verificador: um EAN errado
+      // vincularia produtos diferentes entre si.
+      barcode: normalizeBarcode(toStr(p.barcode)),
       category: toStr(p.category),
+      catalogMatch: null,
     });
 
     let products: VisionProduct[] = [];
@@ -157,6 +160,38 @@ export const analyzeProductImage = createServerFn({ method: "POST" })
         }),
       ];
     }
+
+    // Vincula automaticamente ao catálogo já existente pelos códigos válidos.
+    const codes = Array.from(
+      new Set(products.map((p) => p.barcode).filter((b): b is string => Boolean(b))),
+    );
+    if (codes.length > 0) {
+      const url = process.env.SUPABASE_URL;
+      const publishableKey = process.env.SUPABASE_PUBLISHABLE_KEY;
+      if (url && publishableKey) {
+        try {
+          const supabase = createClient(url, publishableKey, {
+            auth: { persistSession: false, autoRefreshToken: false },
+          });
+          const { data: rows } = await supabase
+            .from("product_catalog")
+            .select("id, display_name, barcode")
+            .in("barcode", codes);
+          const byCode = new Map(
+            (rows ?? [])
+              .filter((r) => typeof r.barcode === "string" && r.barcode)
+              .map((r) => [r.barcode as string, { id: r.id, displayName: r.display_name }]),
+          );
+          products = products.map((p) => ({
+            ...p,
+            catalogMatch: p.barcode ? (byCode.get(p.barcode) ?? null) : null,
+          }));
+        } catch {
+          // Vínculo é um extra: falha aqui não pode derrubar a extração.
+        }
+      }
+    }
+
 
     const first = products[0] ?? {
       productName: null,
