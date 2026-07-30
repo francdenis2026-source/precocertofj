@@ -96,9 +96,6 @@ function PrecosShell() {
 }
 
 
-const brl = (v: number | null) =>
-  v == null ? "—" : new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);
-
 function AdminPrecosPage() {
   const qc = useQueryClient();
   const { prompt } = useConfirm();
