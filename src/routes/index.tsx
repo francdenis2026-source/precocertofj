@@ -524,23 +524,22 @@ function HomePage() {
 
 
               {/* ---------- Populares + CTA ---------- */}
-              <div className="flex flex-wrap items-center gap-1.5">
-                <span
-                  className="text-[11px] font-bold uppercase tracking-[0.2em]"
-                  style={{ color: "var(--pc-home-onhero-fg-60)" }}
-                >
-                  Populares:
+              <div className="flex flex-wrap items-center gap-2">
+                <span className={EYEBROW} style={{ color: "var(--pc-home-onhero-fg-60)" }}>
+                  Populares
                 </span>
-                {popularAll.slice(0, 4).map((t) => (
+                {heroPopular.map((t) => (
                   <button
                     key={t}
                     type="button"
                     onClick={() => goToPopular(t)}
-                    className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11.5px] font-medium capitalize pc-tile"
+                    aria-label={`Buscar por ${t}`}
+                    className={CHIP}
                     style={{
                       background: "var(--pc-home-onhero-glass-soft)",
                       borderColor: "var(--pc-home-onhero-border-soft)",
                       color: "var(--pc-home-onhero-fg-85)",
+                      ["--tw-ring-color" as string]: "var(--pc-home-onhero-gold)",
                     }}
                   >
                     {t}
