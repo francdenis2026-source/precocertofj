@@ -281,7 +281,8 @@ function CatalogoPage() {
           ) : filtered.length === 0 ? (
             <FeedbackEmptyState
               title="Nenhum produto encontrado"
-              description="Ajuste a busca ou remova os filtros para ver mais itens deste catálogo."
+              message="Ajuste a busca ou remova os filtros para ver mais itens deste catálogo."
+
             />
           ) : (
             <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
