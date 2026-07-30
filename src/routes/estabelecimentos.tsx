@@ -359,6 +359,13 @@ function EstablishmentsPage() {
 
   const detailHeadingRef = useRef<HTMLHeadingElement | null>(null);
 
+  // Persistência da rolagem interna da lista (sessão atual).
+  const { persistScroll } = useListScrollPersistence(
+    listRef,
+    "pc:estabelecimentos:list-scroll",
+    !isLoading && filtered.length > 0,
+  );
+
   /* ------------------------------------------------------------------
    * Altura dinâmica do master-detail:
    * a região ocupa exatamente o espaço restante da viewport (desktop),
