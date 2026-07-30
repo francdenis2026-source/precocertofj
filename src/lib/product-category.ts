@@ -208,7 +208,7 @@ const RULES: readonly Rule[] = [
   // 20) Doces
   {
     category: "doces",
-    re: /\b(chocolates?|bombom|balas?|brigadeiro|geleia|pacoca|goiabada|nutella|gelatina|marshmallow|pirulito|chiclete|halls|trident)\b/,
+    re: /^(?!.*(cereal|nescau|toddy|achocolat|cappuccino)).*\b(chocolates?|bombom|balas?|brigadeiro|geleia|pacoca|goiabada|nutella|gelatina|marshmallow|pirulito|chiclete|halls|trident)\b/,
   },
 
   // 21) Bebidas prontas
