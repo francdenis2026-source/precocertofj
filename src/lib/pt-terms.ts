@@ -172,11 +172,26 @@ function walk(root: Node) {
   nodes.forEach(translateNode);
 }
 
+/** Agenda trabalho para o tempo ocioso do navegador (fallback: timeout curto). */
+function scheduleIdle(cb: () => void): number {
+  const ric = (
+    window as unknown as {
+      requestIdleCallback?: (fn: () => void, o?: { timeout: number }) => number;
+    }
+  ).requestIdleCallback;
+  return ric ? ric(cb, { timeout: 250 }) : window.setTimeout(cb, 50);
+}
+
 /**
  * Hook global: escuta mutações no `document.body` e reescreve nós de texto
  * puros usando o dicionário PT_TERMS/PT_PHRASES. É idempotente e conservador
  * (ignora inputs, editors, code, etc.). Deve ser montado uma única vez no
  * componente raiz, apenas no cliente.
+ *
+ * PERFORMANCE: as mutações NÃO são processadas uma a uma. Elas entram numa
+ * fila deduplicada e são varridas em um único lote no tempo ocioso. Assim,
+ * uma lista que renderiza 300 linhas gera 1 varredura em vez de 300, e a
+ * varredura acontece depois da pintura (não bloqueia o frame).
  */
 export function useAutoTranslate() {
   useEffect(() => {
@@ -184,14 +199,41 @@ export function useAutoTranslate() {
 
     walk(document.body);
 
+    /* Fila de raízes pendentes: nós filhos de uma raiz já enfileirada são
+       descartados, evitando varrer a mesma subárvore várias vezes. */
+    let pending: Node[] = [];
+    let scheduled = false;
+
+    const flush = () => {
+      scheduled = false;
+      const batch = pending;
+      pending = [];
+      for (const node of batch) {
+        if (!node.isConnected) continue;
+        if (node.nodeType === Node.TEXT_NODE) translateNode(node);
+        else walk(node);
+      }
+    };
+
+    const enqueue = (node: Node) => {
+      // Se um ancestral já está na fila, a subárvore será coberta por ele.
+      for (const queued of pending) {
+        if (queued === node || (queued.contains?.(node) ?? false)) return;
+      }
+      pending.push(node);
+      if (!scheduled) {
+        scheduled = true;
+        scheduleIdle(flush);
+      }
+    };
+
     const observer = new MutationObserver((mutations) => {
       for (const m of mutations) {
-        if (m.type === "characterData" && m.target) {
-          translateNode(m.target);
+        if (m.type === "characterData") {
+          if (m.target) enqueue(m.target);
         } else if (m.type === "childList") {
           m.addedNodes.forEach((n) => {
-            if (n.nodeType === Node.TEXT_NODE) translateNode(n);
-            else if (n.nodeType === Node.ELEMENT_NODE) walk(n);
+            if (n.nodeType === Node.TEXT_NODE || n.nodeType === Node.ELEMENT_NODE) enqueue(n);
           });
         }
       }
@@ -204,5 +246,6 @@ export function useAutoTranslate() {
     });
 
     return () => observer.disconnect();
+
   }, []);
 }
