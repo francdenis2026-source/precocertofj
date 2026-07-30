@@ -74,11 +74,26 @@ type Rule = { category: ProductCategory; re: RegExp };
  * `re` sempre roda sobre o texto normalizado (minúsculo, sem acento).
  */
 const RULES: readonly Rule[] = [
+  // 0) Cosmético capilar / dermocosmético — prioridade máxima.
+  // Esses nomes carregam sabores ("melancia", "acai", "uva") e palavras como
+  // "gelatina"/"chiclete" que puxavam o item para doces ou hortifruti.
+  {
+    category: "perfumaria",
+    re: /(salon line|bio extratus|salon opus|carmesim|gela cola|banho de creme|creme de pentear|pasta modeladora|cera modeladora|gel fixador|ativador de cachos|to de cacho|finalizador|leave-?in|umectacao|progressiva|alisante|relaxante capilar|oleo de banana|cicatricure|cicaplast|la roche|antiestrias|gel facial|creme facial|creme corporal|protetor solar|fps ?\d+|neutrogena|nivea sun)/,
+  },
+
+  // 0.1) Suplementos e acessórios esportivos (farmácia/saúde).
+  {
+    category: "medicamentos",
+    re: /(creatina|whey|bcaa|max titanium|coqueteleira|hipercalorico|termogenico)/,
+  },
+
   // 1) Farmácia/saúde — específico primeiro para não cair em "leite"/"oleo".
   {
     category: "medicamentos",
-    re: /\b(dipirona|paracetamol|ibuprofeno|analgesico|antitermico|xarope|comprimidos?|capsulas?|antigripal|cimegripe|resfenol|doralgina|aberalgina|neopiridin|vitaxon|vitergyl|tossexpec|apevitin|gastrogel|fisiofort|lavitan|nistatina|dorflex|buscopan|omeprazol|amoxicilina|loratadina|soro fisiologico|agua oxigenada|pomada|antisseptico|vitamina c|protetor solar|veterinario)\b/,
+    re: /\b(dipirona|paracetamol|ibuprofeno|analgesico|antitermico|xarope|comprimidos?|capsulas?|antigripal|cimegripe|resfenol|doralgina|aberalgina|neopiridin|vitaxon|vitergyl|tossexpec|apevitin|gastrogel|fisiofort|lavitan|nistatina|dorflex|buscopan|omeprazol|amoxicilina|loratadina|soro fisiologico|agua oxigenada|pomada|antisseptico|vitamina c|veterinario)\b/,
   },
+
 
   // 2) Infantil
   {
