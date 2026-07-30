@@ -359,7 +359,7 @@ function HomePage() {
       /* O travamento em uma janela só vale a partir de `lg`: no mobile o
          conteúdo é empilhado e precisa rolar normalmente, senão as faixas se
          sobrepõem sob a barra inferior. */
-      className="pc-home relative flex min-h-[100dvh] w-full flex-col antialiased lg:h-[100dvh] lg:max-h-[100dvh] lg:min-h-0 lg:overflow-hidden"
+      className="pc-home relative flex min-h-[100dvh] w-full flex-col antialiased tall-lg:h-[100dvh] tall-lg:max-h-[100dvh] tall-lg:min-h-0 tall-lg:overflow-hidden"
       style={{
         background: "var(--pc-home-hero-bg)",
         color: "var(--pc-home-onhero-fg)",
@@ -411,19 +411,20 @@ function HomePage() {
       {/* Coluna mestra: header / palco / rodapé em três faixas rígidas.
           `min-h-0` no palco é o que impede o conteúdo de empurrar o rodapé
           para fora da janela. */}
-      <div className="relative z-10 flex min-h-0 flex-col lg:h-full">
+      <div className="relative z-10 flex min-h-0 flex-col tall-lg:h-full">
         <SiteHeader variant="overlay" showThemeToggle />
 
         {/* ================= PALCO ÚNICO ================= */}
         <main
           id="hero"
           aria-labelledby="hero-title"
-          className="mx-auto flex w-full min-h-0 max-w-7xl flex-1 flex-col justify-center gap-[clamp(0.5rem,1.6vh,1.25rem)] px-3 py-[clamp(0.5rem,1.4vh,1rem)] sm:px-6 lg:overflow-hidden lg:px-8"
+          className="mx-auto flex w-full min-h-0 max-w-7xl flex-1 flex-col justify-center gap-[clamp(0.5rem,1.6vh,1.25rem)] px-3 py-[clamp(0.5rem,1.4vh,1rem)] sm:px-6 lg:px-8 tall-lg:overflow-hidden"
         >
           {/* Sem `flex-1` aqui: o conjunto hero + divisor + faixa é centrado
               como um bloco só, distribuindo a folga igualmente acima e abaixo
               em vez de acumular um vazio antes das categorias. */}
-          <div className="grid min-h-0 items-center gap-[clamp(0.75rem,2.2vh,1.5rem)] lg:grid-cols-12 lg:gap-10">
+          <div className="grid min-h-0 shrink-0 items-center gap-[clamp(0.75rem,2.2vh,1.5rem)] lg:grid-cols-12 lg:gap-10">
+
             {/* ---------- Coluna editorial ---------- */}
             <div className="order-1 flex min-w-0 flex-col gap-[clamp(0.5rem,1.5vh,1rem)] lg:col-span-7 lg:pr-4">
               <div
@@ -1039,7 +1040,7 @@ function HomePage() {
             </Link>
             <ul
               role="list"
-              className="grid min-w-0 flex-1 gap-2"
+              className="grid min-w-0 flex-1 auto-rows-fr gap-2"
               style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}
             >
               {trendingPopular.map((t) => {
@@ -1048,6 +1049,7 @@ function HomePage() {
                 const isHot = Boolean(meta?.hot);
                 return (
                 <li key={t} className="min-w-0">
+
                   <button
                     type="button"
                     onClick={() => goToPopular(t)}
@@ -1059,7 +1061,7 @@ function HomePage() {
                       isActive ? `Termo selecionado: ${t}` : `Buscar por ${t}`
                     }
                     data-active={isActive ? "true" : undefined}
-                    className="pc-trend-chip group relative flex w-full items-center gap-1.5 overflow-hidden rounded-xl border px-2.5 py-1.5 text-left text-[12px] leading-[1.2] font-semibold capitalize transition-all duration-200 hover:-translate-y-[1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
+                    className="pc-trend-chip group relative flex h-full min-h-[40px] w-full items-center gap-1.5 overflow-hidden rounded-xl border px-2.5 py-1.5 text-left text-[12px] leading-[1.2] font-semibold capitalize transition-all duration-200 hover:-translate-y-[1px] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60 disabled:hover:translate-y-0"
                     style={{
                       background: isActive
                         ? "color-mix(in oklab, var(--pc-home-onhero-gold) 26%, var(--pc-home-onhero-glass-soft))"

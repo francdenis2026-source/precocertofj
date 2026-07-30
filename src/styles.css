@@ -3,6 +3,7 @@
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
+@custom-variant tall-lg (@media (min-width: 1024px) and (min-height: 760px));
 
 /* Restore pointer cursor on interactive controls (Tailwind v4 preflight removes it) */
 @layer base {
