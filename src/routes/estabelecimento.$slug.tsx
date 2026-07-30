@@ -14,6 +14,8 @@ import {
   ArrowLeft,
   ArrowDown,
   ArrowUp,
+  Camera,
+
   ChevronLeft,
   ChevronRight,
   History,
