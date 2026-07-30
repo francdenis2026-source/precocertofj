@@ -100,17 +100,48 @@ describe("computeUnitPrice", () => {
     expect(u?.label).toMatch(/0,40\/kg/);
   });
 
-  it("não extrapola R$/kg para porções < 100g (temperos, sachês)", () => {
+  // ---------------------------------------------------------------------
+  // Limite de extrapolação — regra vigente em src/lib/unit-price.ts:
+  // rótulos em g/ml só viram R$/kg ou R$/L quando o TOTAL alcança 1 kg / 1 L.
+  // Abaixo disso a projeção é enganosa (um sachê de 60g não vale R$ 41,66/kg
+  // no mundo real), então `computeUnitPrice` devolve null.
+  // Rótulos nativos (kg, L, litro) e contagem (un) NÃO sofrem esse corte.
+  // ---------------------------------------------------------------------
+  it("não extrapola R$/kg para totais abaixo de 1kg (temperos, sachês, pacotes pequenos)", () => {
     expect(computeUnitPrice(2.5, "Tempero Sazón 60g")).toBeNull();
     expect(computeUnitPrice(1.2, "Fermento em pó 25g")).toBeNull();
+    // 200g e 500g também ficam abaixo do limite de 1kg
+    expect(computeUnitPrice(4, "Biscoito 200g")).toBeNull();
+    expect(computeUnitPrice(9, "Café Torrado 500g")).toBeNull();
   });
 
-  it("não extrapola R$/L para porções < 100ml (essências, sachês)", () => {
+  it("não extrapola R$/L para totais abaixo de 1L (essências, sachês, garrafas pequenas)", () => {
     expect(computeUnitPrice(3, "Essência de baunilha 30ml")).toBeNull();
+    expect(computeUnitPrice(8, "Óleo de Soja 900ml")).toBeNull();
+    expect(computeUnitPrice(5, "Suco 500ml")).toBeNull();
   });
 
-  it("mantém extrapolação para porções ≥ 100g / 100ml", () => {
-    expect(computeUnitPrice(4, "Biscoito 200g")?.base).toBe("kg");
-    expect(computeUnitPrice(5, "Suco 500ml")?.base).toBe("L");
+  it("extrapola quando o total em g/ml alcança 1kg / 1L", () => {
+    expect(computeUnitPrice(10, "Feijão Carioca 1000g")?.base).toBe("kg");
+    expect(computeUnitPrice(12, "Detergente 1500ml")?.base).toBe("L");
+  });
+
+  it("multipack soma o total antes de aplicar o limite", () => {
+    // 2 x 300g = 600g → abaixo de 1kg, sem R$/kg
+    expect(computeUnitPrice(7, "Presunto pack 2x300g")).toBeNull();
+    // 6 x 350ml = 2,1L → acima de 1L, calcula normalmente
+    expect(computeUnitPrice(24, "Refri Lata 6x350ml")?.base).toBe("L");
+  });
+
+  it("rótulos nativos em kg/L ignoram o limite (0,5kg, meio litro)", () => {
+    expect(computeUnitPrice(6, "Picanha 0,5kg")?.base).toBe("kg");
+    expect(computeUnitPrice(4, "Leite 0,5L")?.base).toBe("L");
+  });
+
+  it("contagem em unidades nunca é cortada pelo limite", () => {
+    const u = computeUnitPrice(6, "Pilha AA 4un");
+    expect(u?.base).toBe("un");
+    expect(u?.perBase).toBeCloseTo(1.5);
   });
 });
+
