@@ -4950,6 +4950,12 @@ html.dark .pc-row-interactive:hover .pc-store-name {
   color: var(--pc-price-fg);
 }
 
+/* Variante em bloco: usada quando o <Price /> é renderizado como p/div/h*,
+   para que ocupe a própria linha em vez de encostar no rótulo anterior. */
+.pc-price.pc-price--block {
+  display: flex;
+}
+
 /* Prefixo (R$) e sufixo (/kg, /un, /mês): sans do sistema, menores e mais
    leves — o número condensado é sempre o protagonista da hierarquia. */
 .pc-price__prefix,

@@ -89,7 +89,7 @@ export function Price({
      própria linha — senão encosta no eyebrow/label anterior. */
   const blockish =
     typeof Tag === "string" && ["p", "div", "h1", "h2", "h3", "h4", "h5", "h6"].includes(Tag);
-  const layoutClass = blockish ? "flex" : undefined;
+  const layoutClass = blockish ? "pc-price--block" : undefined;
   const numeric = typeof value === "number" && Number.isFinite(value) ? value : null;
 
 
