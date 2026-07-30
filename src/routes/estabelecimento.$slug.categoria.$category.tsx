@@ -40,6 +40,7 @@ import { SiteFooter } from "@/components/layout/SiteFooter";
 import { ProductListCard } from "@/components/product/ProductListCard";
 import { EmptyState, LoadingGrid, RouteError } from "@/components/feedback";
 import { Price } from "@/components/ds/Price";
+import { ShareButton } from "@/components/ds/ShareButton";
 
 const brl = (v: number) =>
   new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" }).format(v);

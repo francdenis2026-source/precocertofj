@@ -37,6 +37,7 @@ import { cn } from "@/lib/utils";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { StoreSkeleton } from "@/components/loja/StoreSkeleton";
 import { Price } from "@/components/ds/Price";
+import { ShareButton } from "@/components/ds/ShareButton";
 
 const storeCatalogQuery = (id: string) =>
   queryOptions({

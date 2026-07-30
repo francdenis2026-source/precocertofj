@@ -72,6 +72,7 @@ import { useButcherIds } from "@/hooks/useButcherIds";
 
 import { EmptyState, LoadingGrid, RouteError } from "@/components/feedback";
 import { Price } from "@/components/ds/Price";
+import { ShareButton } from "@/components/ds/ShareButton";
 
 
 const brl = (v: number) =>

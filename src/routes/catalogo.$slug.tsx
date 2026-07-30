@@ -17,6 +17,7 @@ import { tc } from "@/lib/typeclear";
 import { cn } from "@/lib/utils";
 import { Price } from "@/components/ds/Price";
 import { CATEGORY_LABELS } from "@/lib/product-category";
+import { ShareButton } from "@/components/ds/ShareButton";
 
 /* ------------------------------------------------------------------ */
 /* Helpers                                                             */
