@@ -273,15 +273,21 @@ function HomePage() {
     navigate({ to: "/buscar", search: { q: query } as any });
   };
 
+  /* Clique em termo popular: preenche o campo de busca (feedback visual e
+     estado coerente ao voltar) e navega direto para os resultados. */
   const goToPopular = (term: string) => {
+    const query = term.trim();
+    if (!query) return;
+    setQ(query);
+    setSuggestOpen(false);
     if (isLoggedOut) {
-      const { blocked } = consumeGuest("search", term);
+      const { blocked } = consumeGuest("search", query);
       if (blocked) {
         setGateOpen(true);
         return;
       }
     }
-    navigate({ to: "/buscar", search: { q: term } as any });
+    navigate({ to: "/buscar", search: { q: query } as any });
   };
 
 
