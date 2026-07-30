@@ -245,6 +245,18 @@ function SearchPage() {
     }
   }, [hasQuery, user]);
 
+  /* Cada termo consultado alimenta o ranking "Buscas em alta" (em tempo real).
+     Só um evento por termo por montagem, para não inflar a contagem. */
+  const trackedTerms = useRef<Set<string>>(new Set());
+  useEffect(() => {
+    const term = (q ?? "").trim().toLowerCase().slice(0, 60);
+    if (term.length < 2) return;
+    if (trackedTerms.current.has(term)) return;
+    trackedTerms.current.add(term);
+    const t = window.setTimeout(() => trackEvent("search_query", { q: term }), 600);
+    return () => window.clearTimeout(t);
+  }, [q]);
+
   // Gate para visitantes: consome 1 uso por termo único. Ao esgotar,
   // limpa o termo da URL e abre o modal de cadastro.
   const [gateOpen, setGateOpen] = useState(false);
