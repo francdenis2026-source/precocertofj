@@ -739,7 +739,9 @@ function HomePage() {
 
                   </ul>
 
+                </div>
               </div>
+
             </aside>
           </div>
 
