@@ -628,9 +628,16 @@ function EstablishmentsPage() {
                 );
               })}
             </div>
-            <div className="flex items-center justify-between gap-2">
-              <span className={cn("truncate", tc.metaMuted)} aria-live="polite">
-                {filtered.length} {filtered.length === 1 ? "resultado" : "resultados"}
+            <div className="flex items-start justify-between gap-2">
+              <span className={cn("min-w-0", tc.metaMuted)} aria-live="polite">
+                {filtered.length === 0
+                  ? "Nenhum estabelecimento encontrado"
+                  : `${filtered.length} ${filtered.length === 1 ? "estabelecimento encontrado" : "estabelecimentos encontrados"}`}
+                {filterSummary.length > 0 && (
+                  <span className="mt-0.5 block text-[11px] leading-snug text-muted-foreground">
+                    Filtrando por {filterSummary.join(" · ")}
+                  </span>
+                )}
               </span>
               {(q || kindFilter !== "__all" || neighborhoodFilter !== "__all" || cityFilter !== "__all" || savingsFilter !== "__all" || onlyFavorites) && (
                 <button
