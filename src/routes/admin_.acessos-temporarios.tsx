@@ -589,7 +589,7 @@ function CreateDialog({ open, onOpenChange, onDone }: { open: boolean; onOpenCha
             <div>
               <Label>Reserva (dias)</Label>
               <Input type="number" min={1} max={730} value={reservationDays} onChange={(e) => setReservationDays(Math.max(1, Math.min(730, Number(e.target.value) || 1)))} />
-              <p className="mt-1 text-[10px] text-muted-foreground">Prazo p/ o código ser ativado</p>
+              <p className="mt-1 text-[11px] text-muted-foreground">Prazo p/ o código ser ativado</p>
             </div>
           </div>
 

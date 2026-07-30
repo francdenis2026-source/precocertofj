@@ -254,7 +254,7 @@ export function AnalyticsPage() {
                           <TableCell className="py-1.5 text-right tabular-nums">
                             <Badge
                               variant={ctr >= 5 ? "default" : "secondary"}
-                              className="px-1.5 py-0 text-[10px]"
+                              className="px-1.5 py-0 text-[11px]"
                             >
                               {ctr.toFixed(1)}%
                             </Badge>
@@ -265,7 +265,7 @@ export function AnalyticsPage() {
                           <TableCell className="py-1.5 text-right tabular-nums">
                             <Badge
                               variant={cr >= 20 ? "default" : "outline"}
-                              className="px-1.5 py-0 text-[10px]"
+                              className="px-1.5 py-0 text-[11px]"
                             >
                               {cr.toFixed(1)}%
                             </Badge>
@@ -298,7 +298,7 @@ function StatCard({
       <CardContent className="flex items-center gap-3 p-3">
         <div className="rounded-full bg-primary/10 p-2 text-primary">{icon}</div>
         <div className="min-w-0">
-          <p className="truncate text-[10px] uppercase tracking-wide text-muted-foreground">
+          <p className="truncate text-[11px] uppercase tracking-wide text-muted-foreground">
             {label}
           </p>
           <p className="text-lg font-semibold tabular-nums">

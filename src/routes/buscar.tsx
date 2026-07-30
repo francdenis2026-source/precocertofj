@@ -531,7 +531,7 @@ function SearchPage() {
             </div>
 
             <div className="flex min-w-0 items-baseline gap-2">
-              <span className="hidden shrink-0 text-[10px] font-bold uppercase tracking-[0.28em] text-[var(--pc-gold-ink)] md:inline">
+              <span className="hidden shrink-0 text-[11px] font-bold uppercase tracking-[0.28em] text-[var(--pc-gold-ink)] md:inline">
                 Pesquisa por preços
               </span>
               <span aria-hidden className="hidden h-3 w-px bg-border md:block" />

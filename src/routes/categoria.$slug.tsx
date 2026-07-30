@@ -926,7 +926,7 @@ function Stat({
     // Rótulo em white/85 (≈ 9:1 sobre navy) e número dourado marcado como
     // `gold-on-dark` para não cair no ink escuro do modo claro.
     <div className={align === "left" ? "text-left" : "text-right"}>
-      <dt className="text-[10px] font-semibold uppercase leading-none tracking-[0.16em] text-white/85">
+      <dt className="text-[11px] font-semibold uppercase leading-none tracking-[0.16em] text-white/85">
         {label}
       </dt>
       <dd className="gold-on-dark mt-1.5 text-[16px] font-bold leading-none tabular-nums text-brand-gold">

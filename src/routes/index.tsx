@@ -335,13 +335,13 @@ function HomePage() {
                 <span className="inline-flex items-center gap-1 normal-case tracking-normal" style={{ color: "var(--pc-home-onhero-fg)" }}>
                   <ShieldCheck className="h-3 w-3" aria-hidden />
                   <strong className="pc-num font-semibold">{stats?.markets ?? "—"}</strong>
-                  <span className="text-[10px] opacity-80">mercados</span>
+                  <span className="text-[11px] opacity-80">mercados</span>
                 </span>
                 <span aria-hidden style={{ color: `color-mix(in oklab, ${P.gold} 50%, transparent)` }}>·</span>
                 <span className="inline-flex items-center gap-1 normal-case tracking-normal" style={{ color: "var(--pc-home-onhero-fg)" }}>
                   <Package className="h-3 w-3" aria-hidden />
                   <strong className="pc-num font-semibold">{stats?.products ?? "—"}</strong>
-                  <span className="text-[10px] opacity-80">produtos</span>
+                  <span className="text-[11px] opacity-80">produtos</span>
                 </span>
                 {Number(economy?.avgSavingsPct ?? 0) > 0 ? (
                   <>
@@ -359,7 +359,7 @@ function HomePage() {
                         })}
                         %
                       </strong>
-                      <span className="text-[10px] opacity-80">de economia média</span>
+                      <span className="text-[11px] opacity-80">de economia média</span>
                     </span>
                   </>
                 ) : null}
@@ -585,7 +585,7 @@ function HomePage() {
                       </span>
                       {partners.length > 0 && (
                         <span
-                          className="rounded-full px-1.5 py-0.5 text-[10px] font-semibold tabular-nums"
+                          className="rounded-full px-1.5 py-0.5 text-[11px] font-semibold tabular-nums"
                           style={{
                             color: "var(--pc-home-onhero-fg-80)",
                             background: "var(--pc-home-onhero-glass-soft)",
@@ -777,7 +777,7 @@ function HomePage() {
                     style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}
                   >
                     <p
-                      className="text-[10px] font-semibold uppercase tracking-[0.22em]"
+                      className="text-[11px] font-semibold uppercase tracking-[0.22em]"
                       style={{ color: "var(--pc-home-onhero-gold)" }}
                     >
                       Guia rápido

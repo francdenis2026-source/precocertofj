@@ -224,7 +224,7 @@ export function AdminActionsAudit() {
               <History className="h-4 w-4" /> Auditoria de ações críticas
               <span
                 className={cn(
-                  "inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[10px] font-medium",
+                  "inline-flex items-center gap-1 rounded-full border px-1.5 py-0.5 text-[11px] font-medium",
                   liveConnected
                     ? "border-emerald-500/40 bg-emerald-500/10 text-emerald-700 dark:text-emerald-300"
                     : "border-muted-foreground/30 bg-muted text-muted-foreground",
