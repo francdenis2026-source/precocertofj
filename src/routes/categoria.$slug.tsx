@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate, stripSearchParams } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { z } from "zod";
 import { useServerFn } from "@tanstack/react-start";
@@ -158,6 +158,9 @@ function CategoryPage() {
     queryFn: () => fetchHub({ data: { slug } }),
     enabled: Boolean(def),
     staleTime: 60_000,
+    // Mantém o conteúdo anterior enquanto a nova categoria carrega, evitando
+    // que a página encolha/expanda a cada troca de categoria.
+    placeholderData: keepPreviousData,
   });
 
   const Icon = ICONS[slug] ?? Package;
