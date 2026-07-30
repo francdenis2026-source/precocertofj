@@ -551,7 +551,7 @@ function HomePage() {
             {/* ---------- Coluna de dados ---------- */}
             <aside className="order-2 min-w-0 lg:col-span-5" aria-label="Indicadores da plataforma">
               <div
-                className="pc-elite-frame rounded-2xl border p-3.5 backdrop-blur-md sm:p-4.5"
+                className="pc-elite-frame rounded-2xl border p-3 backdrop-blur-md sm:p-3.5"
                 style={{
                   background: "var(--pc-home-onhero-glass)",
                   borderColor: "var(--pc-home-onhero-border)",
