@@ -1,4 +1,5 @@
 import { lazy, Suspense, useState } from "react";
+import { Price } from "@/components/ds/Price";
 import { Link } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -247,12 +248,7 @@ export function RecentProducts({ P, serif }: { P: Palette; serif: string }) {
                                   <span className="text-muted-foreground">{relative(p.when)}</span>
                                 </div>
                               </div>
-                              <span
-                                className="pc-price pc-price--lg shrink-0"
-                              >
-                                <span className="pc-price__prefix" aria-hidden>R$</span>
-                                <span className="pc-price__value">{brl(p.price).replace("R$", "").trim()}</span>
-                              </span>
+                              <Price value={p.price} size="lg" className="shrink-0" />
                             </Link>
                           </li>
                         );
@@ -570,16 +566,13 @@ function SpotlightCard({
                   {brl(p.previousPrice)}
                 </span>
               )}
-              <span
-                className="pc-price font-semibold leading-none"
+              <Price
+                value={p.price}
+                size="xl"
                 style={{
-                  color: "var(--pc-price)",
-                  fontSize: "clamp(1.5rem, 4.5vw, 2rem)",
                   textShadow: "0 2px 14px color-mix(in oklab, var(--pc-home-gold) 35%, transparent)",
                 }}
-              >
-                {brl(p.price)}
-              </span>
+              />
             </div>
           </div>
         </button>
