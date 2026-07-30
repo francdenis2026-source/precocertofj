@@ -1,0 +1,12 @@
+REVOKE EXECUTE ON FUNCTION public.apply_paid_license(uuid, text) FROM PUBLIC, anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.cancel_checkout_order(uuid, text, text) FROM PUBLIC, anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.approve_checkout_order(uuid, text) FROM PUBLIC, anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.consume_ai_quota(uuid, integer) FROM PUBLIC, anon, authenticated;
+REVOKE EXECUTE ON FUNCTION public.find_user_by_collab_token(text) FROM PUBLIC, anon;
+REVOKE EXECUTE ON FUNCTION public.enqueue_catalog_image_refresh_internal(boolean, integer) FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.apply_paid_license(uuid, text) TO service_role;
+GRANT EXECUTE ON FUNCTION public.cancel_checkout_order(uuid, text, text) TO service_role;
+GRANT EXECUTE ON FUNCTION public.approve_checkout_order(uuid, text) TO service_role;
+GRANT EXECUTE ON FUNCTION public.consume_ai_quota(uuid, integer) TO service_role;
+GRANT EXECUTE ON FUNCTION public.find_user_by_collab_token(text) TO authenticated, service_role;
+GRANT EXECUTE ON FUNCTION public.enqueue_catalog_image_refresh_internal(boolean, integer) TO service_role;
