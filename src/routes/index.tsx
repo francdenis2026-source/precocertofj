@@ -118,12 +118,34 @@ const TILE_ICON = "h-[19px] w-[19px] sm:h-[21px] sm:w-[21px] lg:h-6 lg:w-6";
 const TILE_LABEL =
   "w-full truncate text-[12.5px] font-semibold leading-none tracking-[-0.005em] sm:text-[13.5px] lg:text-[14.5px]";
 
-const CATEGORIES = [
-  { key: "supermercados", label: "Mercado", full: "Supermercados", Icon: ShoppingCart },
-  { key: "farmacias", label: "Farmácia", full: "Farmácias", Icon: Pill },
-  { key: "acougues", label: "Açougue", full: "Açougues", Icon: Beef },
-  { key: "postos", label: "Postos", full: "Postos", Icon: Fuel },
-] as const;
+/**
+ * Ladrilhos da home — derivados de `CATEGORY_DEFS`, a mesma fonte usada em
+ * `/categoria/:slug` e no mapeamento de categorias de produto das lojas.
+ * Nada de lista paralela: o que muda aqui é só quantos hubs cabem na faixa.
+ */
+const HOME_HUBS: CategorySlug[] = [
+  "supermercados",
+  "acougues",
+  "hortifruti",
+  "padarias",
+  "bebidas",
+  "limpeza",
+  "higiene",
+  "farmacias",
+  "pet",
+];
+
+const CATEGORIES = HOME_HUBS.map((slug) => {
+  const def = categoryBySlug(slug)!;
+  return {
+    key: def.slug,
+    label: def.short,
+    full: def.label,
+    coverage: hubCoverageLabel(def.slug),
+    Icon: categoryIcon(def.slug),
+  };
+});
+
 
 import { useCategoryLabelWithFallback } from "@/hooks/use-category-labels";
 
