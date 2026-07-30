@@ -347,21 +347,26 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                       <span
                         className={
                           "inline-flex items-center gap-1 text-[13px] font-bold tabular-nums " +
-                          (blocked ? "select-none blur-sm" : "")
+                          (blocked ? "select-none blur-sm" : "") +
+                          (active === i ? " text-white" : "")
                         }
-                        style={{ color: "#0b2444" }}
+                        style={active === i ? { color: "#ffffff" } : { color: "#0b2444" }}
                       >
-                        <TrendingDown className="h-3.5 w-3.5" style={{ color: "#0ea36b" }} />
+                        <TrendingDown
+                          className="h-3.5 w-3.5"
+                          style={active === i ? { color: "#73d9a6" } : { color: "#0ea36b" }}
+                        />
                         {BRL(s.minPrice)}
                       </span>
                     ) : (
-                      <span className="text-[11px] text-slate-400">—</span>
+                      <span className={active === i ? "text-[11px] text-blue-100" : "text-[11px] text-slate-400"}>—</span>
                     )}
                     {s.market ? (
                       <span
                         className={
-                          "mt-0.5 max-w-[190px] truncate text-[11px] leading-none text-slate-500 " +
-                          (blocked ? "select-none blur-sm" : "")
+                          "mt-0.5 max-w-[190px] truncate text-[11px] leading-none " +
+                          (blocked ? "select-none blur-sm" : "") +
+                          (active === i ? " text-blue-100" : " text-slate-500")
                         }
                       >
                         {s.market}
