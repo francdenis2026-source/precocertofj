@@ -163,6 +163,14 @@ export function ProductQuickView({
             </div>
           )}
 
+          {bestValue && (
+            <div className="mb-3 -mt-1.5">
+              <BestValueBadge result={bestValue} />
+            </div>
+          )}
+
+
+
 
           <p className="mb-1.5 flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
             <Store className="h-3.5 w-3.5" aria-hidden /> Preço por estabelecimento
