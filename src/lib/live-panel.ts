@@ -94,7 +94,7 @@ export function buildLivePanel(input: {
         savings != null
           ? `${savings.toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 })}%`
           : LIVE_PANEL_PLACEHOLDER,
-      label: "Economia média por produto",
+      label: "Economia média",
       short: "Economia",
     },
 
