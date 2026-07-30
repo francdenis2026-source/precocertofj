@@ -61,12 +61,20 @@ const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
   cat: fallback(z.string(), "").default(""),
   marca: fallback(z.string(), "").default(""),
-  sort: fallback(z.string(), "name").default("name"),
+  sort: fallback(z.string(), "price").default("price"),
+  /** faixa de preço (R$) — vazio = sem limite */
+  min: fallback(z.number(), 0).default(0),
+  max: fallback(z.number(), 0).default(0),
+  /** somente itens em que esta loja tem o menor preço */
+  best: fallback(z.boolean(), false).default(false),
 });
 
 export const Route = createFileRoute("/catalogo/$slug")({
   validateSearch: zodValidator(searchSchema),
-  search: { middlewares: [retainSearchParams(["q", "cat", "marca", "sort"])] },
+  search: {
+    middlewares: [retainSearchParams(["q", "cat", "marca", "sort", "min", "max", "best"])],
+  },
+
   loader: async ({ params }) => {
     const match = await resolveEstablishmentBySlug({ data: { slug: params.slug } });
     if (!match) throw notFound();
