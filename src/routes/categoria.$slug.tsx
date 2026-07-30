@@ -434,7 +434,7 @@ function CategoryPage() {
         {slug === "farmacias" && <PlantaoStrip />}
 
         {/* Lojas do nicho */}
-        <section className="mt-5" aria-label={`Estabelecimentos — ${def.label}`}>
+        <section className="mt-5 min-h-[132px]" aria-label={`Estabelecimentos — ${def.label}`}>
           <SectionTitle icon={Building2} title="Estabelecimentos" hint={`${data?.stores.length ?? 0} no nicho`} />
           {isLoading ? (
             <SkeletonRow />
@@ -489,7 +489,13 @@ function CategoryPage() {
         </section>
 
         {/* Produtos do nicho */}
-        <section className="mt-5" aria-label={`Produtos — ${def.label}`}>
+        <section
+          className={cn(
+            "mt-5 min-h-[420px] transition-opacity duration-150",
+            isFetching && !isLoading ? "opacity-70" : "opacity-100",
+          )}
+          aria-label={`Produtos — ${def.label}`}
+        >
           <SectionTitle
             icon={Package}
             title="Produtos da categoria"
