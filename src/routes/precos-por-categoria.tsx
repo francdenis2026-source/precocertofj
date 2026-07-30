@@ -325,9 +325,7 @@ function PrecosPorCategoriaPage() {
                   </h2>
                   <p className={tc.metaMuted}>
                     {g.total} {g.total === 1 ? "produto" : "produtos"} · a partir de{" "}
-                    <span className="pc-price font-semibold text-foreground">
-                      {formatBRL(g.cheapest)}
-                    </span>
+                    <Price value={g.cheapest} size="sm" />
                   </p>
                 </div>
 
