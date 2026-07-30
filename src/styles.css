@@ -4903,8 +4903,23 @@ html.dark .pc-row-interactive:hover .pc-store-name {
 
 .pc-price--sm { font-size: 0.8125rem; line-height: 1.15; }
 .pc-price--md { font-size: 0.9375rem; line-height: 1.15; font-weight: 650; }
-.pc-price--lg { font-size: 1.125rem;  line-height: 1.1;  font-weight: 700; letter-spacing: -0.01em; }
+/* Preços grandes: a Oswald é condensada, então ganha peso 700 e um leve
+   afastamento entre dígitos (kerning positivo) — o oposto do que se faz com
+   uma sans normal. Isso evita que "11", "00" e "88" colem em tamanhos maiores. */
+.pc-price--lg {
+  font-size: 1.125rem;
+  line-height: 1.1;
+  font-weight: 700;
+  letter-spacing: 0.012em;
+}
+.pc-price--xl {
+  font-size: clamp(1.5rem, 1.1vw + 1.15rem, 2.25rem);
+  line-height: 1.02;
+  font-weight: 700;
+  letter-spacing: 0.016em;
+}
 /* Contexto "a partir de" — leve, ainda AA (>= 4.5:1) */
+
 .pc-price--muted {
   color: color-mix(in oklab, var(--foreground) 82%, transparent);
   font-weight: 600;
