@@ -44,7 +44,12 @@ const BRANDS: readonly string[] = [
 
 /** Palavras-chave por categoria (avaliadas em ordem). */
 const CATEGORY_RULES: ReadonlyArray<{ category: string; keywords: readonly string[] }> = [
+  // Farmácia primeiro: termos mais específicos evitam falsos positivos em "leite"/"oleo".
+  { category: "medicamentos", keywords: ["dipirona", "paracetamol", "ibuprofeno", "analgesico", "antitermico", "xarope", "comprimido", "doralgina", "aberalgina", "resfenol", "neopiridin", "vitaxon", "vitergyl", "tossexpec", "apevitin", "gastrogel", "fisiofort", "pomada", "antigripal", "soro fisiologico", "creatina", "suplemento"] },
+  { category: "infantil", keywords: ["fralda", "mucilon", "nan comfor", "nanlac", "nestogeno", "formula infantil", "ninho", "neston", "farinha lactea", "cremogema", "arrozina", "sustagen kids", "nutren kids", "lenco umedecido", "mamadeira", "kids"] },
+  { category: "perfumaria", keywords: ["esmalte", "removedor", "batom", "tintura", "coloracao", "cor&ton", "perfume", "colonia", "hidratante", "protetor solar", "cicatricure", "cicaplast", "creme facial", "gel fixador", "gelatina", "cera modeladora", "pasta modeladora", "acetona"] },
   { category: "hortifruti", keywords: ["tomate", "maca", "banana", "batata", "cebola", "alface", "cenoura", "laranja", "uva", "melancia", "mamao", "abacaxi", "limao", "pimentao", "verdura", "legume"] },
+
   { category: "carnes", keywords: ["carne", "picanha", "alcatra", "coxao", "patinho", "acem", "costela", "frango", "peito", "coxa", "linguica", "bacon", "peixe", "file"] },
   { category: "laticinios", keywords: ["leite", "queijo", "requeijao", "manteiga", "iogurte", "creme de leite", "mussarela", "presunto", "margarina"] },
   { category: "limpeza", keywords: ["lava roupas", "sabao", "amaciante", "detergente", "desinfetante", "agua sanitaria", "alcool", "limpador", "odorizante", "odorizador", "saco de lixo", "vassoura", "esponja"] },

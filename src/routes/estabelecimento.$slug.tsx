@@ -14,6 +14,8 @@ import {
   ArrowLeft,
   ArrowDown,
   ArrowUp,
+  Camera,
+
   ChevronLeft,
   ChevronRight,
   History,
@@ -458,8 +460,17 @@ function EstablishmentPage() {
                 </button>
               );
             })}
+            {/* Atalho para o usuário contribuir com novas fotos de prateleira ou nota fiscal. */}
+            <Link
+              to="/colaborar"
+              className="ml-auto inline-flex h-8 items-center gap-1.5 rounded-full border border-brand-gold/70 bg-brand-gold/10 px-3 text-[12px] font-semibold leading-none text-foreground transition-colors hover:bg-brand-gold hover:text-brand-navy"
+            >
+              <Camera className="h-3.5 w-3.5" aria-hidden />
+              Enviar fotos / nota
+            </Link>
           </div>
         )}
+
 
         {tab === "catalogo" && (
           <>
