@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { PriceCents, formatCentsText } from "@/components/ds/PriceCents";
+import { PriceCents } from "@/components/ds/PriceCents";
 import { useEffect } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
@@ -25,9 +25,6 @@ export const Route = createFileRoute("/minhas-licencas")({
 });
 
 type LicenseRow = Awaited<ReturnType<typeof listMyLicenses>>[number];
-
-/** Texto puro em BRL — usar só em exportações/aria-labels (a UI usa <PriceCents />). */
-const brl = formatCentsText;
 
 function statusMeta(s: string): { label: string; variant: "default" | "secondary" | "outline" | "destructive" } {
   const map: Record<string, { label: string; variant: "default" | "secondary" | "outline" | "destructive" }> = {

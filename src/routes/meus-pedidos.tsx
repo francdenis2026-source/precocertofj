@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { PriceCents, formatCentsText } from "@/components/ds/PriceCents";
+import { PriceCents } from "@/components/ds/PriceCents";
 import { useEffect } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
@@ -37,9 +37,6 @@ export const Route = createFileRoute("/meus-pedidos")({
   }),
   component: MeusPedidos,
 });
-
-/** Texto puro em BRL — usar só em exportações/aria-labels (a UI usa <PriceCents />). */
-const brl = formatCentsText;
 
 function statusPill(status: string) {
   const map: Record<string, { label: string; cls: string; icon: React.ReactNode }> = {
