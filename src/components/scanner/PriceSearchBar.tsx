@@ -1387,6 +1387,67 @@ export function PriceSearchBar({
                       onFreshness={setFreshness}
                     />
 
+                    {/* Resumo do que está sendo filtrado — linguagem simples,
+                        sem jargão, sempre visível acima dos resultados. */}
+                    {(() => {
+                      const parts: string[] = [];
+                      const term = normalizeInput(query).trim();
+                      if (term) parts.push(`nome com “${term}”`);
+                      if (categoryFilter) parts.push(`categoria ${categoryFilter}`);
+                      if (kindFilter) parts.push(`tipo de mercado ${kindFilter}`);
+                      if (marketFilter) parts.push(`mercado ${marketFilter}`);
+                      if (brandFilter.trim()) parts.push(`marca ${brandFilter.trim()}`);
+                      if (typeof priceMin === "number" && Number.isFinite(priceMin)) {
+                        parts.push(`a partir de R$ ${priceMin.toFixed(2).replace(".", ",")}`);
+                      }
+                      if (typeof priceMax === "number" && Number.isFinite(priceMax)) {
+                        parts.push(`até R$ ${priceMax.toFixed(2).replace(".", ",")}`);
+                      }
+                      if (freshness !== "all") {
+                        parts.push(`preços dos últimos ${freshness} dias`);
+                      }
+                      const canReset =
+                        !!categoryFilter || !!kindFilter || !!marketFilter || freshness !== "all";
+                      return (
+                        <p className="flex flex-wrap items-center gap-x-1.5 gap-y-1 px-0.5 text-[11.5px] leading-snug text-muted-foreground">
+                          <span className="font-semibold text-foreground tabular-nums">
+                            {visibleCount}
+                          </span>
+                          <span>
+                            {visibleCount === 1 ? "produto encontrado" : "produtos encontrados"}
+                          </span>
+                          <span aria-hidden className="opacity-40">
+                            ·
+                          </span>
+                          <span>
+                            {parts.length > 0
+                              ? `filtrando por ${parts.join(" · ")}`
+                              : "sem filtros ativos"}
+                          </span>
+                          <span aria-hidden className="opacity-40">
+                            ·
+                          </span>
+                          <span>ordenado por {sortLabelMap[sortMode] ?? sortMode}</span>
+                          {canReset && (
+                            <button
+                              type="button"
+                              onClick={() => {
+                                handleCategoryChange(null);
+                                setKindFilter(null);
+                                setMarketFilter(null);
+                                setFreshness("all");
+                              }}
+                              className="ml-auto rounded-full border border-border px-2 py-[1px] text-[11px] font-semibold text-foreground transition-colors hover:border-brand-gold hover:text-[var(--pc-gold-ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold"
+                            >
+                              Limpar filtros da lista
+                            </button>
+                          )}
+                        </p>
+                      );
+                    })()}
+
+
+
                     {result.groups.length > 0 && visibleGroups.length === 0 ? (
                       <div className="pc-res-card mt-2">
                         <p className="pc-res-title">Nenhum preço nessa janela de tempo</p>
