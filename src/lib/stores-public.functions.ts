@@ -334,7 +334,9 @@ export const listPublicStores = createServerFn({ method: "GET" }).handler(
       counts.set(s.establishment_id, (counts.get(s.establishment_id) ?? 0) + 1);
     }
 
-    return (estabs ?? []).map((e) => ({
+    // Ordem canônica do sistema: quem tem mais produtos cadastrados lidera.
+    return (estabs ?? [])
+      .map((e) => ({
       id: e.id,
       name: e.name,
       city: e.city,
