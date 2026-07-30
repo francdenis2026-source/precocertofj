@@ -153,7 +153,7 @@ function CategoryPage() {
 
   const [limit, setLimit] = useState(24);
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, isFetching } = useQuery({
     queryKey: ["category-hub", slug],
     queryFn: () => fetchHub({ data: { slug } }),
     enabled: Boolean(def),
@@ -311,6 +311,14 @@ function CategoryPage() {
   // Restaura a rolagem e a categoria ativa ao usar voltar/avançar.
   useScrollRestoration(!isLoading && Boolean(def));
 
+  // Ao trocar de categoria, mantemos a mesma "moldura" (altura do viewport,
+  // trilho e seções com altura mínima reservada) e apenas voltamos a rolagem
+  // interna ao topo — assim a página nunca encolhe/expande durante a troca.
+  const scrollRef = useRef<HTMLElement | null>(null);
+  useEffect(() => {
+    scrollRef.current?.scrollTo({ top: 0 });
+  }, [slug]);
+
 
 
   if (!def) {
@@ -331,7 +339,10 @@ function CategoryPage() {
   return (
     <div className="flex h-[100dvh] flex-col overflow-hidden bg-background text-foreground">
       <div className="mx-auto w-full max-w-6xl shrink-0 px-4 pt-3"><HomeBrandLink /></div>
-      <main className="pc-rail mx-auto min-h-0 w-full max-w-6xl flex-1 overflow-y-auto px-3 pb-6 pt-3 [scrollbar-gutter:stable] sm:px-6">
+      <main
+        ref={scrollRef}
+        className="pc-rail mx-auto min-h-0 w-full max-w-6xl flex-1 overflow-y-auto overflow-x-hidden px-3 pb-6 pt-3 [overflow-anchor:none] [scrollbar-gutter:stable] sm:px-6"
+      >
 
         {/* Hero compacto — escala tipográfica única (eyebrow 11 / título 19-22 / meta 12 / stat 16).
             `data-surface="navy"` + `.gold-on-dark` garantem dourado vivo (AA) no modo claro. */}
@@ -353,9 +364,9 @@ function CategoryPage() {
               <Stat label="Produtos" value={data?.totals.products ?? 0} hint="Itens distintos cadastrados nesta categoria" />
               <Stat label="Lojas" value={data?.totals.stores ?? 0} hint="Estabelecimentos com produtos desta categoria" />
               <Stat
-                label="Cotações"
+                label="Registros de preço"
                 value={data?.totals.prices ?? 0}
-                hint="Registros de preço coletados nesta categoria"
+                hint="Preços coletados e conferidos nesta categoria"
               />
 
               <Stat
@@ -379,7 +390,7 @@ function CategoryPage() {
               <Stat label="Lojas" value={data?.totals.stores ?? 0} align="left" />
             </div>
             <div className="px-3 py-2">
-              <Stat label="Cotações" value={data?.totals.prices ?? 0} align="left" hint="Registros de preço coletados nesta categoria" />
+              <Stat label="Registros" value={data?.totals.prices ?? 0} align="left" hint="Preços coletados e conferidos nesta categoria" />
             </div>
             <div className="px-3 py-2">
               <Stat
@@ -423,7 +434,7 @@ function CategoryPage() {
         {slug === "farmacias" && <PlantaoStrip />}
 
         {/* Lojas do nicho */}
-        <section className="mt-5" aria-label={`Estabelecimentos — ${def.label}`}>
+        <section className="mt-5 min-h-[132px]" aria-label={`Estabelecimentos — ${def.label}`}>
           <SectionTitle icon={Building2} title="Estabelecimentos" hint={`${data?.stores.length ?? 0} no nicho`} />
           {isLoading ? (
             <SkeletonRow />
@@ -478,7 +489,13 @@ function CategoryPage() {
         </section>
 
         {/* Produtos do nicho */}
-        <section className="mt-5" aria-label={`Produtos — ${def.label}`}>
+        <section
+          className={cn(
+            "mt-5 min-h-[420px] transition-opacity duration-150",
+            isFetching && !isLoading ? "opacity-70" : "opacity-100",
+          )}
+          aria-label={`Produtos — ${def.label}`}
+        >
           <SectionTitle
             icon={Package}
             title="Produtos da categoria"
