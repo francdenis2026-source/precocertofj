@@ -38,6 +38,12 @@ import { getCategoryHub } from "@/lib/category-hub.functions";
 import { CATEGORY_DEFS, categoryBySlug, norm } from "@/lib/category-hub";
 import { useCategoryLabelWithFallback } from "@/hooks/use-category-labels";
 import { classifyButcherCut, type ButcherProtein } from "@/lib/butcher-cuts";
+import {
+  hortifrutiSubgroup,
+  HORTIFRUTI_SUBGROUP_LABELS,
+  type HortifrutiSubgroup,
+} from "@/lib/product-category";
+import { computeHubSavings } from "@/lib/hub-savings";
 import { Bird, Drumstick } from "lucide-react";
 import { PLANTOES, diaDaSemana, diaVigente, farmaciaPorId } from "@/lib/farmacias-plantao";
 import { useScrollRestoration } from "@/lib/use-scroll-restoration";
@@ -63,7 +69,7 @@ const ICONS: Record<string, typeof ShoppingCart> = {
 const brl = (v: number) =>
   v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
 
-const SEARCH_DEFAULTS = { q: "", loja: "", view: "list", page: 1, per: 30, p: "", corte: "", so_cortes: 0 };
+const SEARCH_DEFAULTS = { q: "", loja: "", view: "list", page: 1, per: 30, p: "", corte: "", so_cortes: 0, sub: "" };
 
 const searchSchema = z.object({
   q: fallback(z.string(), "").default(""),
@@ -77,6 +83,8 @@ const searchSchema = z.object({
   corte: fallback(z.string(), "").default(""),
   /** Só cortes (esconde temperos/molhos) — hub de açougue. 0 = tudo, 1 = só cortes. */
   so_cortes: fallback(z.number().int().min(0).max(1), 0).default(0),
+  /** Subgrupo de hortifrúti: frutas | verduras | legumes | tuberculos | temperos | cogumelos */
+  sub: fallback(z.string(), "").default(""),
 });
 
 
@@ -177,6 +185,11 @@ function CategoryPage() {
     if (term) list = list.filter((p) => norm(p.name).includes(term));
     if (storeFilter) list = list.filter((p) => p.storeNames.includes(storeFilter));
 
+    // Hortifrúti: subgrupos (frutas, verduras, legumes, tubérculos, temperos, cogumelos)
+    if (slug === "hortifruti" && search.sub) {
+      list = list.filter((p) => hortifrutiSubgroup(p.name) === search.sub);
+    }
+
     if (slug === "acougues") {
       // Anexa a proteína classificada e reordena para cortes primeiro
       const ORDER: Record<string, number> = { bovino: 0, frango: 1, suino: 2, outros: 3 };
@@ -199,7 +212,56 @@ function CategoryPage() {
       return filtered.map((x) => x.p);
     }
     return list;
-  }, [data, q, storeFilter, slug, search.corte, search.so_cortes, classifyProtein]);
+  }, [data, q, storeFilter, slug, search.corte, search.so_cortes, search.sub, classifyProtein]);
+
+  // Contagem por subgrupo de hortifrúti (não depende do subgrupo ativo, mas
+  // respeita busca e loja para não anunciar filtros que resultariam em vazio).
+  const subgroupCounts = useMemo(() => {
+    if (slug !== "hortifruti") return null;
+    const term = norm(q.trim());
+    const acc: Record<HortifrutiSubgroup, number> = {
+      frutas: 0,
+      verduras: 0,
+      legumes: 0,
+      tuberculos: 0,
+      temperos: 0,
+      cogumelos: 0,
+    };
+    for (const p of data?.products ?? []) {
+      if (term && !norm(p.name).includes(term)) continue;
+      if (storeFilter && !p.storeNames.includes(storeFilter)) continue;
+      const g = hortifrutiSubgroup(p.name);
+      if (g) acc[g] += 1;
+    }
+    return acc;
+  }, [data, slug, q, storeFilter]);
+
+  /**
+   * Economia média recalculada sobre os produtos realmente exibidos, para que
+   * cabeçalho e cartões de loja fiquem coerentes com os filtros ativos
+   * (mesma fórmula do servidor). Sem filtro, cai nos números do servidor.
+   */
+  const filtersActive = Boolean(q.trim() || storeFilter || search.sub || search.corte || search.so_cortes);
+  const savings = useMemo(() => computeHubSavings(products), [products]);
+  const catAvgSaving = filtersActive ? savings.avgSavingPct : (data?.avgSavingPct ?? null);
+  const catComparable = filtersActive ? savings.comparableProducts : (data?.comparableProducts ?? 0);
+
+  /** Lojas com a economia do recorte atual, na mesma ordem em desktop e mobile. */
+  const displayStores = useMemo(() => {
+    const list = data?.stores ?? [];
+    if (!filtersActive) return list;
+    return [...list]
+      .map((s) => {
+        const f = savings.byStore.get(s.id);
+        return { ...s, avgSavingPct: f?.avgSavingPct ?? null, comparedProducts: f?.comparedProducts ?? 0 };
+      })
+      .sort(
+        (a, b) =>
+          Number(b.isNicheStore) - Number(a.isNicheStore) ||
+          (b.avgSavingPct ?? -1) - (a.avgSavingPct ?? -1) ||
+          b.productCount - a.productCount,
+      );
+  }, [data, savings, filtersActive]);
 
   // Contagem por bucket para os chips de filtro (independente do filtro corte ativo)
   const proteinCounts = useMemo(() => {
@@ -235,7 +297,7 @@ function CategoryPage() {
 
   useEffect(() => {
     setLimit(24);
-  }, [slug, q, storeFilter, perPage, view]);
+  }, [slug, q, storeFilter, perPage, view, search.sub]);
 
   // Restaura a rolagem e a categoria ativa ao usar voltar/avançar.
   useScrollRestoration(!isLoading && Boolean(def));
@@ -284,14 +346,15 @@ function CategoryPage() {
               <Stat label="Preços" value={data?.totals.prices ?? 0} />
               <Stat
                 label="Economia média"
-                value={data?.avgSavingPct ?? 0}
+                value={catAvgSaving ?? 0}
                 suffix="%"
                 hint={
-                  data?.comparableProducts
-                    ? `${data.comparableProducts} produto(s) comparável(is)`
+                  catComparable
+                    ? `${catComparable} produto(s) comparável(is)${filtersActive ? " no filtro atual" : ""}`
                     : "sem produtos em 2+ lojas"
                 }
               />
+
             </dl>
           </div>
           <dl className="grid grid-cols-2 divide-x divide-y divide-white/20 border-t border-white/20 sm:hidden">
@@ -307,7 +370,7 @@ function CategoryPage() {
             <div className="px-3 py-2">
               <Stat
                 label="Economia média"
-                value={data?.avgSavingPct ?? 0}
+                value={catAvgSaving ?? 0}
                 suffix="%"
                 align="left"
               />
@@ -333,6 +396,15 @@ function CategoryPage() {
           />
         )}
 
+        {/* Subgrupos do hortifrúti — mesma faixa rolável no desktop e no mobile */}
+        {slug === "hortifruti" && subgroupCounts && (
+          <HortifrutiSubgroupChips
+            active={search.sub}
+            counts={subgroupCounts}
+            onChange={(v: string) => setSearch({ sub: v, page: 1 })}
+          />
+        )}
+
         {/* Plantão (só farmácias) */}
         {slug === "farmacias" && <PlantaoStrip />}
 
@@ -345,7 +417,7 @@ function CategoryPage() {
             <EmptyCard text="Nenhum estabelecimento desta categoria cadastrado ainda." />
           ) : (
             <ul className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              {data!.stores.map((s) => (
+              {displayStores.map((s) => (
                 <li key={s.id}>
                   <Link
                     to="/estabelecimento/$slug"
@@ -363,11 +435,11 @@ function CategoryPage() {
                       {s.avgSavingPct !== null && (
                         <span
                           className="mt-0.5 block truncate text-[11px] font-semibold tabular-nums text-brand-gold"
-                          title={`Média em ${s.comparedProducts} produto(s) presentes em 2+ lojas. Média da categoria: ${data!.avgSavingPct ?? 0}%`}
+                          title={`Média em ${s.comparedProducts} produto(s) presentes em 2+ lojas. Média da categoria: ${catAvgSaving ?? 0}%`}
                         >
                           Economia média aqui: {s.avgSavingPct.toLocaleString("pt-BR", { maximumFractionDigits: 1 })}%
                           <span className="font-medium text-muted-foreground">
-                            {" "}· categoria {(data!.avgSavingPct ?? 0).toLocaleString("pt-BR", { maximumFractionDigits: 1 })}%
+                            {" "}· categoria {(catAvgSaving ?? 0).toLocaleString("pt-BR", { maximumFractionDigits: 1 })}%
                           </span>
                         </span>
                       )}
@@ -399,7 +471,7 @@ function CategoryPage() {
             hint={
               isLoading
                 ? "carregando…"
-                : q || storeFilter
+                : filtersActive
                   ? `${products.length.toLocaleString("pt-BR")} de ${totalListed.toLocaleString("pt-BR")} filtrado(s)`
                   : totalAll > totalListed
                     ? `${totalListed.toLocaleString("pt-BR")} exibidos de ${totalAll.toLocaleString("pt-BR")}`
@@ -449,7 +521,7 @@ function CategoryPage() {
                 active={storeFilter === ""}
                 onClick={() => setSearch({ loja: "", page: 1 })}
               />
-              {data!.stores.map((s2) => (
+              {displayStores.map((s2) => (
                 <FilterChip
                   key={s2.id}
                   label={s2.name}
@@ -1117,6 +1189,82 @@ function ButcherProteinChips({
     </section>
   );
 }
+
+/**
+ * Chips de subgrupo do hortifrúti (frutas, verduras, legumes, tubérculos,
+ * temperos, cogumelos). Mesma marcação em desktop e mobile: trilho rolável
+ * no mobile, wrap no desktop — sem divergência de ordem ou contagem.
+ */
+const HF_SUBGROUP_ORDER: HortifrutiSubgroup[] = [
+  "frutas",
+  "verduras",
+  "legumes",
+  "tuberculos",
+  "temperos",
+  "cogumelos",
+];
+
+function HortifrutiSubgroupChips({
+  active,
+  counts,
+  onChange,
+}: {
+  active: string;
+  counts: Record<HortifrutiSubgroup, number>;
+  onChange: (v: string) => void;
+}) {
+  const total = HF_SUBGROUP_ORDER.reduce((s, k) => s + (counts[k] ?? 0), 0);
+  const chips: { id: string; label: string; n: number }[] = [
+    { id: "", label: "Todos", n: total },
+    ...HF_SUBGROUP_ORDER.map((k) => ({
+      id: k,
+      label: HORTIFRUTI_SUBGROUP_LABELS[k],
+      n: counts[k] ?? 0,
+    })),
+  ];
+
+  return (
+    <section className="mt-3" aria-label="Filtrar por subgrupo do hortifrúti">
+      <p className="text-[11px] font-bold uppercase leading-none tracking-[0.16em] text-muted-foreground">
+        Subgrupos
+      </p>
+      <ul
+        role="list"
+        className="no-scrollbar mt-2 -mx-0.5 flex gap-1.5 overflow-x-auto px-0.5 pb-0.5 sm:flex-wrap sm:overflow-visible"
+      >
+        {chips.map((c) => {
+          const isActive = active === c.id;
+          const disabled = c.n === 0 && c.id !== "";
+          return (
+            <li key={c.id || "all"} className="shrink-0">
+              <button
+                type="button"
+                onClick={() => !disabled && onChange(isActive && c.id ? "" : c.id)}
+                disabled={disabled}
+                aria-pressed={isActive}
+                className={cn(
+                  "inline-flex h-7 items-center gap-1 rounded-full border px-2.5 text-[11.5px] font-semibold leading-none transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-gold",
+                  isActive
+                    ? "border-brand-gold bg-brand-gold text-brand-navy"
+                    : "border-brand-gold/50 bg-background text-foreground hover:border-brand-gold",
+                  disabled && "cursor-not-allowed opacity-40",
+                )}
+              >
+                <Apple className={cn("h-3 w-3", isActive ? "text-brand-navy" : "text-brand-gold")} aria-hidden />
+                {c.label}
+                <span className={cn("ml-0.5 tabular-nums", isActive ? "text-brand-navy/80" : "text-muted-foreground")}>
+                  {c.n}
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}
+
+
 
 function EmptyCard({
   text,

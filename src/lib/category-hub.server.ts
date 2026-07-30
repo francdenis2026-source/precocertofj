@@ -48,6 +48,11 @@ export type HubProduct = {
   cheapestLogo: string | null;
   /** todas as lojas que têm esse produto (para filtro por loja) */
   storeNames: string[];
+  /**
+   * Menor preço por loja deste produto. Permite recalcular a economia média
+   * no cliente quando o usuário filtra (ex.: subgrupos de hortifrúti).
+   */
+  storePrices: { id: string; name: string; price: number }[];
   updatedAt: string;
 };
 
@@ -196,6 +201,17 @@ export async function buildCategoryHub(slug: string): Promise<CategoryHub> {
         cheapestSlug: nEstablishment(cheapest.store.name),
         cheapestLogo: cheapest.store.logo_url,
         storeNames: [...new Set(g.entries.map((e) => e.store.name))],
+        storePrices: [
+          ...g.entries
+            .reduce((m, e) => {
+              const prev = m.get(e.store.id);
+              if (!prev || e.price < prev.price) {
+                m.set(e.store.id, { id: e.store.id, name: e.store.name, price: e.price });
+              }
+              return m;
+            }, new Map<string, { id: string; name: string; price: number }>())
+            .values(),
+        ],
         updatedAt: g.entries.reduce((m, e) => (e.at > m ? e.at : m), g.entries[0].at),
       };
     })
