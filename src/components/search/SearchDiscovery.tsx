@@ -249,7 +249,7 @@ export function SearchDiscovery({ onPickQuery }: Props) {
       {/* ============ SINAL DE VIDA — tinta ESMERALDA (métricas) ============ */}
       <section
         aria-label="Sinal de vida da plataforma"
-        className="relative rounded-xl border border-emerald-500/25 bg-emerald-500/[0.05] p-2 lg:col-span-2 dark:border-emerald-400/25 dark:bg-emerald-400/[0.06]"
+        className="relative shrink-0 rounded-xl border border-emerald-500/25 bg-emerald-500/[0.05] p-2 dark:border-emerald-400/25 dark:bg-emerald-400/[0.06]"
       >
         <div className="flex flex-wrap items-center justify-between gap-x-2 gap-y-1">
           <SectionHeader
