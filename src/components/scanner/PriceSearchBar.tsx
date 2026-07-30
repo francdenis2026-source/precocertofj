@@ -1420,7 +1420,20 @@ export function PriceSearchBar({
                             return b.samples - a.samples;
                           });
 
+                          /* Melhor custo-benefício da categoria: menor R$/kg
+                             (ou R$/L) entre os produtos listados. Só aparece
+                             quando as embalagens têm tamanhos diferentes —
+                             ver src/lib/best-value.ts. */
+                          const bestValue = pickBestValue(
+                            sortedGroups.map((g) => ({
+                              key: g.productName,
+                              name: g.productName,
+                              price: g.min,
+                            })),
+                          );
+
                           return (
+
                             <div key={cat} className="pc-results">
                               {showHeaders ? (
                                 (() => {
