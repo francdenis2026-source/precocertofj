@@ -876,10 +876,10 @@ function HomePage() {
           {/* Faixa "Em alta": ocupa a folga entre os ladrilhos e o rodapé com
               dado real (termos mais buscados nos últimos 7 dias). */}
           <div
-            className="hidden shrink-0 items-center gap-2 overflow-hidden rounded-2xl border px-3 py-[clamp(0.4rem,1.1vh,0.7rem)] lg:flex"
+            className="hidden shrink-0 items-center gap-2.5 overflow-hidden rounded-2xl border px-3.5 py-[clamp(0.5rem,1.3vh,0.85rem)] backdrop-blur-md lg:flex"
             style={{
-              background: "var(--pc-home-onhero-glass-soft)",
-              borderColor: "var(--pc-home-onhero-border-soft)",
+              background: "var(--pc-home-onhero-glass)",
+              borderColor: "var(--pc-home-onhero-border)",
             }}
           >
             <span
@@ -887,10 +887,10 @@ function HomePage() {
               style={{ color: "var(--pc-home-onhero-gold)" }}
             >
               <TrendingDown className="h-3.5 w-3.5" aria-hidden />
-              Em alta
+              Buscas em alta
             </span>
             <ul role="list" className="flex min-w-0 flex-1 items-center gap-1.5 overflow-x-auto no-scrollbar">
-              {(popularAll.length > 4 ? popularAll.slice(4, 14) : popularAll.slice(0, 10)).map((t) => (
+              {(popularAll.length > 10 ? popularAll.slice(4, 16) : popularAll.slice(0, 12)).map((t) => (
                 <li key={t} className="shrink-0">
                   <button
                     type="button"
