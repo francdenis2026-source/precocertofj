@@ -595,7 +595,7 @@ function HomePage() {
                       <Icon className="h-3.5 w-3.5" style={{ color: P.goldSoft }} aria-hidden />
                       <span
                         className={`${serif} tabular-nums leading-none`}
-                        style={{ color: "var(--pc-home-onhero-gold)", fontSize: "clamp(1.15rem, 2.6vw, 1.9rem)" }}
+                        style={{ color: "var(--pc-home-onhero-gold)", fontSize: "clamp(1.05rem, 2vw, 1.55rem)" }}
                       >
                         {value}
                       </span>
