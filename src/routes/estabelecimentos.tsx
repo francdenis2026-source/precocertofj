@@ -260,11 +260,14 @@ function EstablishmentsPage() {
         break;
       case "relevance":
       default:
-        list.sort((a, b) => {
-          const sa = (a.productsCount / maxProducts) * 0.6 + ((a.maxSavings ?? 0) / maxSavingsAll) * 0.4;
-          const sb = (b.productsCount / maxProducts) * 0.6 + ((b.maxSavings ?? 0) / maxSavingsAll) * 0.4;
-          return sb - sa;
-        });
+        // Ordem canônica do sistema: quem tem mais produtos cadastrados lidera.
+        list.sort(
+          (a, b) =>
+            b.productsCount - a.productsCount ||
+            (b.maxSavings ?? 0) - (a.maxSavings ?? 0) ||
+            a.name.localeCompare(b.name, "pt-BR"),
+        );
+
     }
     return list;
   }, [data, q, kindFilter, cityFilter, neighborhoodFilter, savingsFilter, sort, onlyFavorites, favSet]);
