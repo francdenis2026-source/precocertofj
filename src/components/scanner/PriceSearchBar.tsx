@@ -1185,9 +1185,12 @@ export function PriceSearchBar({
                                   {p.marketName}
                                 </span>
                               </span>
-                              <span className="pc-num pc-num--onhero text-[13px] font-bold leading-none text-brand-gold">
-                                {fmt(p.price)}
-                              </span>
+                              <Price
+                                size="sm"
+                                tone="onhero"
+                                value={p.price}
+                                className="text-brand-gold"
+                              />
                             </button>
                           ))}
                         </div>
