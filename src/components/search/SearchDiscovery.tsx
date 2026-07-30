@@ -153,10 +153,14 @@ export function SearchDiscovery({ onPickQuery }: Props) {
         </div>
       </section>
 
+      {/* Faixa central — ocupa toda a altura restante, com rolagem interna
+          própria em cada painel (evita conteúdo cortado). */}
+      <div className="grid min-h-0 flex-1 gap-1.5 lg:grid-cols-2">
+
       {/* ============ POPULARES — tinta ÂMBAR (calor/tendência) ============ */}
       <section
         aria-label="Buscas populares"
-        className="relative min-h-0 overflow-hidden rounded-xl border border-amber-500/25 bg-amber-500/[0.06] p-2 dark:border-amber-400/25 dark:bg-amber-400/[0.06]"
+        className="relative flex min-h-0 flex-col overflow-hidden rounded-xl border border-amber-500/25 bg-amber-500/[0.06] p-2 dark:border-amber-400/25 dark:bg-amber-400/[0.06]"
       >
         <SectionHeader
           icon={<Flame className="h-3 w-3" strokeWidth={2.75} />}
@@ -164,7 +168,8 @@ export function SearchDiscovery({ onPickQuery }: Props) {
           eyebrow="Populares"
           title="Termos mais buscados agora"
         />
-        <div className="mt-1.5 flex flex-wrap gap-1">
+        <div className="mt-1.5 flex min-h-0 flex-1 flex-wrap content-start gap-1 overflow-y-auto pr-0.5 [scrollbar-width:thin]">
+
           {POPULAR.map((p) => (
             <button
               key={p}
