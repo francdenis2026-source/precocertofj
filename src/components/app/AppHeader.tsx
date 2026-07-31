@@ -172,6 +172,10 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
   // ("Feijó · AC", "Melhores preços") encolhem.
   const tight = !isMobile && sidebarState === "expanded";
   const isAdminScope = scope === "admin";
+  // Publica a altura real da barra em --pc-appbar-h (ResizeObserver):
+  // o conteúdo nunca fica sob o header ao redimensionar a janela.
+  const barRef = useMeasuredBar<HTMLElement>("--pc-appbar-h");
+
 
   return (
     <header
