@@ -450,23 +450,41 @@ export function AppSidebar() {
             <LicenseStatusChip />
           </div>
         )}
-        <SidebarMenu>
+
+        <SidebarSeparator className="mx-3 my-1 w-auto bg-sidebar-border/60" />
+
+        <SidebarMenu className="px-2 pb-2">
           <SidebarMenuItem>
             <Tooltip>
               <TooltipTrigger asChild>
                 <SidebarMenuButton
                   onClick={signOut}
                   disabled={signingOut}
-                  aria-label="Sair da conta"
-                  className="pc-nav-link pc-nav-link--row text-sidebar-foreground hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar disabled:pointer-events-none disabled:opacity-100 disabled:text-sidebar-muted-foreground"
+                  aria-label={signingOut ? "Encerrando sessão" : "Sair da conta"}
+                  className="group/logout relative h-8 rounded-md px-2 text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar disabled:pointer-events-none disabled:text-sidebar-muted-foreground disabled:opacity-100"
                 >
-                  <LogOut className="h-4 w-4" />
-                  <span className="text-[13px] font-medium">
+                  <span
+                    className={cn(
+                      "grid h-7 w-7 shrink-0 place-items-center rounded-md border border-transparent transition-colors",
+                      "text-sidebar-muted-foreground group-hover/logout:border-destructive/25 group-hover/logout:bg-destructive/10 group-hover/logout:text-destructive",
+                      "group-focus-visible/logout:border-destructive/25 group-focus-visible/logout:bg-destructive/10 group-focus-visible/logout:text-destructive",
+                    )}
+                  >
+                    {signingOut ? (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    ) : (
+                      <LogOut className="h-3.5 w-3.5" strokeWidth={2} />
+                    )}
+                  </span>
+                  <span className="truncate text-[13px] font-medium leading-none">
                     {signingOut ? "Saindo..." : "Sair"}
                   </span>
                 </SidebarMenuButton>
               </TooltipTrigger>
-              <TooltipContent side="right">Encerrar a sessão</TooltipContent>
+              <TooltipContent side="right" align="center" className="flex items-center gap-2">
+                <span className="font-semibold">Encerrar sessão</span>
+                <kbd className="pc-nav-kbd rounded border px-1.5 py-0.5 text-[10px] font-semibold">Alt+Q</kbd>
+              </TooltipContent>
             </Tooltip>
           </SidebarMenuItem>
         </SidebarMenu>
