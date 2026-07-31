@@ -271,8 +271,27 @@ export function DashboardSearch() {
 
       <p id="dashboard-search-help" className="sr-only">
         Use seta para baixo para entrar na lista de resultados, setas para navegar, Enter para abrir
-        e Esc para voltar ao campo de busca.
+        e Esc para voltar ao campo de busca. Alt mais B foca a busca, Alt mais O troca a ordenação e
+        Alt mais L limpa os filtros.
       </p>
+
+      {/* Cabeçalho de colunas: produto (relevância) · mercados · menor preço */}
+      {active && results.length > 0 && (
+        <div
+          aria-hidden
+          className={cn(
+            tc.tableHead,
+            "pc-cols-search shrink-0 border-b border-border/60 bg-muted/30 px-3 py-1",
+          )}
+        >
+          <span className="truncate">Produto</span>
+          <span data-col="stores" className="text-center">
+            Mercados
+          </span>
+          <span className="text-right">Menor preço</span>
+        </div>
+      )}
+
 
       <div
         className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]"
