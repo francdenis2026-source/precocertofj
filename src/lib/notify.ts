@@ -8,29 +8,128 @@ type NotifyOptions = {
   duration?: number;
 };
 
+type Variant = "success" | "error" | "warning" | "info" | "loading";
+
+/* ------------------------------------------------------------------
+   Fila de toasts
+   - no máximo MAX_VISIBLE toasts simultâneos (os mais antigos saem);
+   - intervalo mínimo entre entradas para a animação nunca "piscar";
+   - deduplicação por conteúdo dentro de uma janela curta, o que evita
+     toasts repetidos durante navegação rápida entre rotas.
+------------------------------------------------------------------- */
+const MAX_VISIBLE = 2;
+const MIN_GAP_MS = 200;
+const DEDUPE_MS = 1600;
+
+type Job = { variant: Variant; title: string; opts: NotifyOptions; id: string | number };
+
+const queue: Job[] = [];
+const active: (string | number)[] = [];
+const recent = new Map<string, number>();
+let lastShownAt = 0;
+let timer: ReturnType<typeof setTimeout> | null = null;
+
+const DURATIONS: Record<Variant, number> = {
+  success: 3500,
+  error: 6000,
+  warning: 5000,
+  info: 4000,
+  loading: Infinity,
+};
+
+function present(job: Job) {
+  const { variant, title, opts, id } = job;
+  const payload = {
+    duration: DURATIONS[variant],
+    ...opts,
+    id,
+    onDismiss: () => release(id),
+    onAutoClose: () => release(id),
+  };
+
+  if (!active.includes(id)) {
+    active.push(id);
+    while (active.length > MAX_VISIBLE) {
+      const oldest = active.shift();
+      if (oldest !== undefined && oldest !== id) toast.dismiss(oldest);
+    }
+  }
+
+  lastShownAt = Date.now();
+  return toast[variant](title, payload);
+}
+
+function release(id: string | number) {
+  const i = active.indexOf(id);
+  if (i >= 0) active.splice(i, 1);
+}
+
+function drain() {
+  timer = null;
+  const job = queue.shift();
+  if (!job) return;
+  present(job);
+  if (queue.length > 0) timer = setTimeout(drain, MIN_GAP_MS);
+}
+
+function enqueue(variant: Variant, title: string, opts: NotifyOptions) {
+  const key = `${variant}|${title}|${opts.description ?? ""}`;
+  const now = Date.now();
+
+  // Deduplicação: mesma mensagem em sequência reaproveita o mesmo id, então o
+  // sonner atualiza o toast existente em vez de empilhar outro.
+  const seenAt = recent.get(key);
+  const id = opts.id ?? (seenAt && now - seenAt < DEDUPE_MS ? key : `${key}#${now}`);
+  recent.set(key, now);
+  for (const [k, t] of recent) if (now - t > DEDUPE_MS * 4) recent.delete(k);
+
+  // Já visível com esse id → atualiza na hora (sem enfileirar, sem flash).
+  const isUpdate = active.includes(id) || queue.some((j) => j.id === id);
+  if (isUpdate) {
+    const pending = queue.find((j) => j.id === id);
+    if (pending) {
+      pending.variant = variant;
+      pending.title = title;
+      pending.opts = opts;
+      return id;
+    }
+    present({ variant, title, opts, id });
+    return id;
+  }
+
+  // Loading é imediato: ele acompanha uma ação em andamento.
+  const elapsed = now - lastShownAt;
+  if (variant === "loading" || (queue.length === 0 && elapsed >= MIN_GAP_MS)) {
+    present({ variant, title, opts, id });
+    return id;
+  }
+
+  queue.push({ variant, title, opts, id });
+  if (!timer) timer = setTimeout(drain, Math.max(MIN_GAP_MS - elapsed, 0));
+  return id;
+}
+
 /**
  * API única de notificações do app. Sempre use `notify.*` em vez de chamar o
- * sonner diretamente, para manter tamanhos, cores, ícones e durações iguais
- * em todas as páginas.
+ * sonner diretamente, para manter tamanhos, cores, ícones, durações e a fila
+ * (limite simultâneo + deduplicação) iguais em todas as páginas.
  */
 export const notify = {
-  success(title: string, opts: NotifyOptions = {}) {
-    return toast.success(title, { duration: 3500, ...opts });
-  },
-  error(title: string, opts: NotifyOptions = {}) {
-    return toast.error(title, { duration: 6000, ...opts });
-  },
-  warning(title: string, opts: NotifyOptions = {}) {
-    return toast.warning(title, { duration: 5000, ...opts });
-  },
-  info(title: string, opts: NotifyOptions = {}) {
-    return toast.info(title, { duration: 4000, ...opts });
-  },
+  success: (title: string, opts: NotifyOptions = {}) => enqueue("success", title, opts),
+  error: (title: string, opts: NotifyOptions = {}) => enqueue("error", title, opts),
+  warning: (title: string, opts: NotifyOptions = {}) => enqueue("warning", title, opts),
+  info: (title: string, opts: NotifyOptions = {}) => enqueue("info", title, opts),
   /** Estado de carregamento — feche com `notify.success/error` usando o mesmo id. */
-  loading(title: string, opts: NotifyOptions = {}) {
-    return toast.loading(title, { duration: Infinity, ...opts });
-  },
+  loading: (title: string, opts: NotifyOptions = {}) => enqueue("loading", title, opts),
   dismiss(id?: string | number) {
+    if (id === undefined) {
+      queue.length = 0;
+      active.length = 0;
+    } else {
+      release(id);
+      const i = queue.findIndex((j) => j.id === id);
+      if (i >= 0) queue.splice(i, 1);
+    }
     toast.dismiss(id);
   },
 };
