@@ -62,8 +62,8 @@ export function AppShell({ children, scope }: { children: React.ReactNode; scope
             data-admin-scroll={isAdminScope ? "main" : undefined}
             className={
               isAdminScope
-                ? "min-h-0 flex-1 overflow-y-auto overflow-x-hidden pb-10"
-                : "relative min-h-0 flex-1 overflow-y-auto overflow-x-hidden bg-transparent pb-[calc(var(--mobile-nav-height)+0.5rem)] md:pb-2"
+                ? "pc-scroll-main min-h-0 flex-1 overflow-y-auto overflow-x-hidden pb-10"
+                : "pc-scroll-main relative min-h-0 flex-1 overflow-y-auto overflow-x-hidden bg-transparent pb-[calc(var(--mobile-nav-height)+0.5rem)] md:pb-2"
             }
           >
             {children}
