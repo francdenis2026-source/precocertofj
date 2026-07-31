@@ -1226,7 +1226,7 @@ html[data-density="compact"] .pc-col { min-height: calc(var(--pc-panel-min) - 1r
    então o primeiro card sempre começa abaixo da barra — nunca sob ela. */
 .pc-page-header {
   position: sticky;
-  top: calc(var(--pc-appbar-h, 2.5rem) * 0);
+  top: 0;
   z-index: 20;
   scroll-margin-top: var(--pc-appbar-h, 2.5rem);
 }
