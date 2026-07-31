@@ -260,7 +260,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
                 onSelect={() => void signOut()}
                 disabled={signingOut}
                 variant="destructive"
-                className="cursor-pointer"
+                className="cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive"
               >
                 <LogOut className="h-4 w-4" aria-hidden />
                 {signingOut ? "Saindo..." : "Sair da conta"}
