@@ -88,35 +88,36 @@ const appGroups: readonly NavGroup[] = [
   {
     label: "Comprar melhor",
     items: [
-      { to: "/app", label: "Painel", icon: Home, exact: true },
-      { to: "/app/produtos", label: "Produtos", icon: ShoppingCart },
-      { to: "/app/estabelecimentos", label: "Mercados", icon: Store },
-      { to: "/melhores-precos", label: "Melhores preços", icon: Trophy },
-      { to: "/comparador", label: "Comparador", icon: BarChart3 },
-      { to: "/mapa", label: "Bairros", icon: Boxes },
+      { to: "/app", label: "Painel", icon: Home, exact: true, shortcut: "1", hint: "Resumo da sua economia" },
+      { to: "/app/produtos", label: "Produtos", icon: ShoppingCart, shortcut: "2", hint: "Buscar e comparar preços" },
+      { to: "/app/estabelecimentos", label: "Mercados", icon: Store, shortcut: "3", hint: "Lojas cadastradas" },
+      { to: "/melhores-precos", label: "Melhores preços", icon: Trophy, shortcut: "4", hint: "Ranking do menor preço" },
+      { to: "/comparador", label: "Comparador", icon: BarChart3, shortcut: "5", hint: "Comparação lado a lado" },
+      { to: "/mapa", label: "Bairros", icon: Boxes, shortcut: "6", hint: "Cobertura por bairro" },
 
     ],
   },
   {
     label: "Minha conta",
     items: [
-      { to: "/lista", label: "Minha lista", icon: ShoppingCart },
-      { to: "/alertas", label: "Alertas", icon: Bell },
-      { to: "/historico", label: "Histórico", icon: History },
-      { to: "/economia", label: "Economia", icon: Wallet },
-      { to: "/perfil", label: "Perfil", icon: User },
+      { to: "/lista", label: "Minha lista", icon: ShoppingCart, shortcut: "7", hint: "Sua lista de compras" },
+      { to: "/alertas", label: "Alertas", icon: Bell, shortcut: "8", hint: "Avisos de queda de preço" },
+      { to: "/historico", label: "Histórico", icon: History, shortcut: "9", hint: "Suas buscas e consultas" },
+      { to: "/economia", label: "Economia", icon: Wallet, hint: "Quanto você economizou" },
+      { to: "/perfil", label: "Perfil", icon: User, shortcut: "0", hint: "Dados e preferências" },
     ],
   },
   {
     label: "Assinatura",
     items: [
-      { to: "/planos", label: "Planos", icon: TicketPercent },
-      { to: "/minhas-licencas", label: "Licenças", icon: KeyRound },
-      { to: "/meus-pedidos", label: "Pedidos", icon: ReceiptText },
+      { to: "/planos", label: "Planos", icon: TicketPercent, hint: "Comparar planos" },
+      { to: "/minhas-licencas", label: "Licenças", icon: KeyRound, hint: "Chaves e validade" },
+      { to: "/meus-pedidos", label: "Pedidos", icon: ReceiptText, hint: "Histórico de pagamentos" },
       
     ],
   },
 ] as const;
+
 
 
 const adminGroups: readonly NavGroup[] = [
