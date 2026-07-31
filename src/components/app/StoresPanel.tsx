@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Info, Loader2, Search as SearchIcon, Store } from "lucide-react";
+import { Info, Loader2, Search as SearchIcon, Store } from "lucide-react";
 import { EmptyState } from "@/components/layout";
 
 
