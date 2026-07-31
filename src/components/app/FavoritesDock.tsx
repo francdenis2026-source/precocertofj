@@ -367,6 +367,7 @@ export function FavoritesDock({
                         <div className="min-w-0">
                           <Link
                             to="/lista"
+                            search={{ id: l.id }}
                             title={l.name}
                             className={cn(tc.itemTitle, "block truncate hover:text-primary")}
                           >

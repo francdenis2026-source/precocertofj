@@ -56,6 +56,7 @@ export function ListsPanel({ lists }: ListsPanelProps) {
                 <div className="min-w-0">
                   <Link
                     to="/lista"
+                    search={{ id: l.id }}
                     className="font-medium text-foreground hover:text-primary"
                   >
                     {l.name}
