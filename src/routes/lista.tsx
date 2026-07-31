@@ -121,6 +121,7 @@ function ListaContent() {
     void navigate({ search: id ? { id } : {}, replace: true });
   };
   const [newName, setNewName] = useState("");
+  const [listFilter, setListFilter] = useState("");
   const [renameId, setRenameId] = useState<string | null>(null);
   const [renameText, setRenameText] = useState("");
 
