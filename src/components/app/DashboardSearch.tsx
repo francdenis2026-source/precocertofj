@@ -146,16 +146,42 @@ export function DashboardSearch() {
     }
   };
 
+  // Atalhos de teclado do painel de busca.
+  useHotkeys({
+    "alt+b": () => inputRef.current?.focus(),
+    "/": () => inputRef.current?.focus(),
+    "alt+o": () => {
+      const i = SORTS.findIndex((s) => s.id === sort);
+      setSort(SORTS[(i + 1) % SORTS.length].id);
+    },
+    "alt+l": () => {
+      setCategory(null);
+      setInput("");
+    },
+    escape: () => {
+      if (compareKey) setCompareKey(null);
+    },
+  });
+
   return (
     <section
       aria-label="Buscar preços"
       className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
     >
       <div className="shrink-0 space-y-2 border-b border-border/70 p-3">
-        <div className="min-w-0">
-          <h2 className={cn(tc.panelTitle, "truncate")}>Buscar produtos e preços</h2>
-          <p className={cn(tc.panelNote, "truncate")}>Menores preços dos mercados de Feijó</p>
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+          <div className="min-w-0">
+            <h2 className={cn(tc.panelTitle, "truncate")}>Buscar produtos e preços</h2>
+            <p className={cn(tc.panelNote, "truncate")}>Menores preços dos mercados de Feijó</p>
+          </div>
+          <kbd
+            className="hidden shrink-0 rounded border border-border/70 bg-muted/60 px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground sm:inline-block"
+            title="Atalhos: Alt+B busca · Alt+O ordena · Alt+L limpa"
+          >
+            Alt + B
+          </kbd>
         </div>
+
         <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
           <label className="relative min-w-0">
             <span className="sr-only">Buscar produto</span>
