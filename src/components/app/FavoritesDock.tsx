@@ -1,8 +1,10 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   ArrowDown,
   ArrowUp,
+  ChevronLeft,
+  ChevronRight,
   ShoppingCart,
   Star,
   Store,
@@ -20,6 +22,9 @@ import { tc } from "@/lib/typeclear";
 type Summary = NonNullable<Awaited<ReturnType<typeof getAppSummary>>>;
 
 type Tab = "items" | "markets" | "lists";
+
+/** Itens exibidos por página em cada aba da dock. */
+const PAGE_SIZE = 6;
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "items", label: "Favoritos" },
@@ -53,10 +58,13 @@ export function FavoritesDock({
   onRemoveMarket: (favoriteId: string) => void;
 }) {
   const [tab, setTab] = useState<Tab>("items");
+  const [page, setPage] = useState(0);
+  const changeTab = (id: Tab) => {
+    setTab(id);
+    setPage(0);
+  };
   const tabIndex = TABS.findIndex((t) => t.id === tab);
-  const roving = useRovingFocus(TABS.length, tabIndex, (i) =>
-    setTab(TABS[i].id),
-  );
+  const roving = useRovingFocus(TABS.length, tabIndex, (i) => changeTab(TABS[i].id));
 
   const itemIds = summary.favoriteItems.map((x) => x.favoriteId);
   const marketIds = summary.favoriteMarkets.map((x) => x.favoriteId);
@@ -67,6 +75,22 @@ export function FavoritesDock({
     lists: summary.lists.length,
   };
 
+  // Paginação: mantém a altura da dock estável, sem estourar a janela.
+  const total = counts[tab];
+  const pageCount = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const safePage = Math.min(page, pageCount - 1);
+  const start = safePage * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+  const pagedItems = useMemo(
+    () => summary.favoriteItems.slice(start, end),
+    [summary.favoriteItems, start, end],
+  );
+  const pagedMarkets = useMemo(
+    () => summary.favoriteMarkets.slice(start, end),
+    [summary.favoriteMarkets, start, end],
+  );
+  const pagedLists = useMemo(() => summary.lists.slice(start, end), [summary.lists, start, end]);
+
   return (
     <section
       aria-label="Seus favoritos e listas"
@@ -76,7 +100,7 @@ export function FavoritesDock({
         role="tablist"
         aria-label="Seções do painel"
         aria-orientation="horizontal"
-        className="flex shrink-0 gap-1 border-b border-border/70 p-2"
+        className="flex shrink-0 gap-1 border-b border-border/70 px-2 py-1.5"
       >
         {TABS.map((t, i) => (
           <button
@@ -86,7 +110,7 @@ export function FavoritesDock({
             id={`dock-tab-${t.id}`}
             aria-selected={tab === t.id}
             aria-controls={`dock-panel-${t.id}`}
-            onClick={() => setTab(t.id)}
+            onClick={() => changeTab(t.id)}
             {...roving.itemProps(i)}
             className={cn(
                "h-7 rounded-md px-2.5 text-[12px] font-medium transition-colors",
@@ -117,13 +141,15 @@ export function FavoritesDock({
             />
           ) : (
             <ul className="divide-y divide-border/60">
-              {summary.favoriteItems.map((f, idx) => (
+              {pagedItems.map((f, i) => {
+                const idx = start + i;
+                return (
                 <li
                   key={f.favoriteId}
-                     className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-3 py-1.5"
+                     className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-2.5 py-1"
                 >
                   <div className="min-w-0">
-                     <p className={cn(tc.itemTitle, "truncate")}>
+                     <p className={cn(tc.itemTitle, "truncate")} title={f.displayName}>
                       {f.displayName}
                     </p>
                      <p className={cn(tc.metaMuted, "truncate")}>
@@ -166,7 +192,8 @@ export function FavoritesDock({
                     />
                   </div>
                 </li>
-              ))}
+                );
+              })}
             </ul>
           ))}
 
@@ -178,20 +205,22 @@ export function FavoritesDock({
             />
           ) : (
             <ul className="divide-y divide-border/60">
-              {summary.favoriteMarkets.map((m, idx) => {
+              {pagedMarkets.map((m, i) => {
+                const idx = start + i;
                 const clickable = storeNames.has(
                   m.marketName.trim().toLowerCase(),
                 );
                 return (
                   <li
                     key={m.favoriteId}
-                     className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-3 py-1.5"
+                     className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-2.5 py-1"
                   >
                     <div className="min-w-0">
                       <button
                         type="button"
                         disabled={!clickable}
                         onClick={() => onOpenStore(m.marketName)}
+                        title={m.marketName}
                          className={cn(tc.storeName, "block max-w-full truncate text-left enabled:hover:text-primary disabled:cursor-default")}
                       >
                         {m.marketName}
@@ -233,12 +262,13 @@ export function FavoritesDock({
             />
           ) : (
             <ul className="divide-y divide-border/60">
-              {summary.lists.map((l) => (
-                 <li key={l.id} className="px-3 py-1.5">
+              {pagedLists.map((l) => (
+                 <li key={l.id} className="px-2.5 py-1">
                   <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
                     <div className="min-w-0">
                       <Link
                         to="/lista"
+                        title={l.name}
                          className={cn(tc.itemTitle, "block truncate hover:text-primary")}
                       >
                         {l.name}
@@ -276,7 +306,33 @@ export function FavoritesDock({
             </ul>
           ))}
       </div>
+
+      {total > PAGE_SIZE && (
+        <div className="flex shrink-0 items-center justify-between gap-2 border-t border-border/70 px-2 py-1">
+          <p className="truncate text-[11px] text-muted-foreground">
+            {start + 1}–{Math.min(end, total)} de {total}
+          </p>
+          <div className="flex shrink-0 items-center gap-1">
+            <IconBtn
+              label="Página anterior"
+              onClick={() => setPage(Math.max(0, safePage - 1))}
+              icon={ChevronLeft}
+              disabled={safePage === 0}
+            />
+            <span className="text-[11px] tabular-nums text-muted-foreground">
+              {safePage + 1}/{pageCount}
+            </span>
+            <IconBtn
+              label="Próxima página"
+              onClick={() => setPage(Math.min(pageCount - 1, safePage + 1))}
+              icon={ChevronRight}
+              disabled={safePage >= pageCount - 1}
+            />
+          </div>
+        </div>
+      )}
     </section>
+
   );
 }
 
@@ -300,11 +356,13 @@ function IconBtn({
   onClick,
   icon: Icon,
   danger,
+  disabled,
 }: {
   label: string;
   onClick: () => void;
   icon: React.ComponentType<{ className?: string }>;
   danger?: boolean;
+  disabled?: boolean;
 }) {
   return (
     <button
@@ -312,8 +370,9 @@ function IconBtn({
       aria-label={label}
       title={label}
       onClick={onClick}
+      disabled={disabled}
       className={cn(
-        "grid h-7 w-7 place-items-center rounded-md transition-colors",
+        "grid h-7 w-7 place-items-center rounded-md transition-colors disabled:pointer-events-none disabled:text-muted-foreground/50",
         danger
           ? "text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
           : "text-muted-foreground hover:bg-muted hover:text-foreground",

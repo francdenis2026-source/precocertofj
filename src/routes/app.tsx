@@ -100,7 +100,7 @@ function AppHomeContent() {
     <AppShell>
       <div className="app-dashboard mx-auto flex w-full max-w-[1540px] flex-col gap-1.5 px-3 py-1.5 md:px-4 lg:h-full lg:min-h-0 lg:overflow-hidden">
         {/* Cabeçalho compacto */}
-        <header className="relative shrink-0 overflow-hidden rounded-lg border border-primary/30 bg-primary/95 px-3 py-1.5 text-primary-foreground shadow-sm backdrop-blur-md md:px-3.5">
+        <header className="sticky top-0 z-20 shrink-0 overflow-hidden rounded-lg lg:static border border-primary/30 bg-primary/95 px-3 py-1.5 text-primary-foreground shadow-sm backdrop-blur-md md:px-3.5">
           <span
             aria-hidden
             className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-brand/20 blur-3xl"
@@ -137,7 +137,7 @@ function AppHomeContent() {
         </header>
 
         {/* Métricas do banco */}
-        <div className="grid shrink-0 grid-cols-2 gap-1.5 lg:grid-cols-4">
+        <div className="sticky top-[58px] z-10 grid shrink-0 grid-cols-2 gap-1.5 bg-background/85 py-0.5 backdrop-blur-sm lg:static lg:bg-transparent lg:py-0 lg:backdrop-blur-none lg:grid-cols-4">
           <Metric
             icon={ShoppingCart}
             label="Suas listas"
@@ -292,13 +292,17 @@ function Metric({
     >
       <span aria-hidden className={cn("absolute inset-y-0 left-0 w-[3px]", t.rail)} />
       <div className="flex items-center justify-between gap-2">
-        <p className={cn(tc.tableHead, "truncate")}>{label}</p>
+        <p className={cn(tc.tableHead, "truncate")} title={label}>
+          {label}
+        </p>
         <span className={cn("grid h-5 w-5 shrink-0 place-items-center rounded-md", t.chip)}>
           <Icon className="h-3 w-3" aria-hidden />
         </span>
       </div>
       <p className={cn(tc.dataPrimary, "text-[18px] leading-tight text-foreground")}>{value}</p>
-      <p className={cn(tc.metaMuted, "truncate leading-tight")}>{hint}</p>
+      <p className={cn(tc.metaMuted, "truncate leading-tight")} title={hint}>
+        {hint}
+      </p>
     </article>
   );
 }
