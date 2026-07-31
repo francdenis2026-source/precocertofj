@@ -634,6 +634,8 @@ function ListDetail({ listId }: { listId: string }) {
     staleTime: 30_000,
     retry: 1,
   });
+  const detailStalled = useStalled(detailQuery.isLoading && !detailQuery.data);
+
 
   const bestQuery = useQuery({
     queryKey: ["shopping-list-best", listId, detailQuery.data?.items.length ?? 0],
