@@ -5826,15 +5826,14 @@ h3.font-display {
 
 /* Itens do header (topo) reagindo em dourado como a sidebar */
 .pc-topnav-item {
-  transition: color .18s ease, background-color .18s ease,
-              border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+  transition: color .16s ease, background-color .16s ease, border-color .16s ease;
 }
 .pc-topnav-item:hover {
   color: var(--pc-gold-ink);
   background-color: var(--pc-hover-tint);
-  border-color: color-mix(in oklab, var(--pc-home-gold) 45%, transparent);
-  box-shadow: 0 1px 6px -2px color-mix(in oklab, var(--pc-home-gold) 55%, transparent);
-  transform: translateY(-0.5px);
+  border-color: color-mix(in oklab, var(--pc-home-gold) 32%, transparent);
+  box-shadow: none;
+  transform: none;
 }
 .pc-topnav-item:focus-visible {
   outline: 2px solid var(--pc-gold-ink);
