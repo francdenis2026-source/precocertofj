@@ -190,13 +190,13 @@ function AppStorePage() {
           )}
         </header>
 
-        <div className="grid gap-2 lg:grid-cols-12">
+        <div className="pc-grid">
           {/* Lista de produtos */}
           <section
             aria-label="Produtos do estabelecimento"
-            className="flex flex-col gap-2 lg:col-span-7 xl:col-span-8"
+            className="flex min-w-0 flex-col gap-[var(--pc-row-gap)] md:col-span-2 xl:col-span-8"
           >
-            <div className="space-y-1.5 rounded-lg border border-border/70 bg-card/94 p-2 shadow-sm backdrop-blur-md">
+            <div className="pc-pad-sm space-y-1.5 rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md">
               <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
                 <label className="relative min-w-0">
                   <span className="sr-only">Buscar produto na loja</span>
@@ -376,7 +376,7 @@ function AppStorePage() {
           </section>
 
           {/* Comparação da seleção */}
-          <section aria-label="Comparar seleção" className="lg:col-span-5 xl:col-span-4">
+          <section aria-label="Comparar seleção" className="min-w-0 md:col-span-2 xl:col-span-4">
             <div className="sticky top-3 space-y-2 rounded-lg border border-border/70 bg-card/94 p-3 shadow-sm backdrop-blur-md">
               <div>
                 <h2 className={tc.itemTitle}>Comparar seleção</h2>

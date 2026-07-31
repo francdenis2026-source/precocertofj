@@ -119,7 +119,7 @@ function ProductsPage() {
         {/* Filtros */}
         <section
           aria-label="Filtros de produtos"
-          className="space-y-1.5 rounded-lg border border-border/70 bg-card/94 p-2 shadow-sm backdrop-blur-md"
+          className="pc-pad-sm space-y-1.5 rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
         >
           <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
             <label className="relative min-w-0">
