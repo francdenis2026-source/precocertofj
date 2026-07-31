@@ -98,7 +98,7 @@ function AppHomeContent() {
 
   return (
     <AppShell>
-      <div className="app-dashboard mx-auto flex w-full max-w-[1540px] flex-col gap-3 px-3 py-3 md:px-4">
+      <div className="app-dashboard mx-auto flex w-full max-w-[1540px] flex-col gap-2 px-3 py-2 md:px-4">
         {/* Cabeçalho compacto */}
         <header className="relative shrink-0 overflow-hidden rounded-lg border border-primary/30 bg-primary/95 px-3 py-2 text-primary-foreground shadow-sm backdrop-blur-md md:px-3.5">
           <span
@@ -135,7 +135,7 @@ function AppHomeContent() {
         </header>
 
         {/* Métricas do banco */}
-        <div className="grid grid-cols-2 gap-2 xl:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
           <Metric
             icon={ShoppingCart}
             label="Suas listas"
@@ -194,19 +194,19 @@ function AppHomeContent() {
         )}
 
         {/* Grid responsiva: busca de preços à esquerda, lojas e favoritos à direita */}
-        <div className="grid gap-3 lg:grid-cols-12">
-          <div className="flex min-h-[520px] flex-col lg:col-span-7 xl:col-span-8">
+        <div className="grid gap-2 lg:grid-cols-12">
+          <div className="flex min-h-[360px] flex-col lg:col-span-7 xl:col-span-8">
             <DashboardSearch />
           </div>
-          <div className="grid content-start gap-3 lg:col-span-5 xl:col-span-4">
-            <div className="flex max-h-[420px] min-h-[260px] flex-col">
+          <div className="grid content-start gap-2 lg:col-span-5 xl:col-span-4">
+            <div className="flex max-h-[260px] min-h-[180px] flex-col">
               <StoresPanel
                 stores={publicStoresQuery.data ?? []}
                 loading={publicStoresQuery.isLoading}
                 onOpenDetails={openStoreByName}
               />
             </div>
-            <div className="flex max-h-[360px] min-h-[220px] flex-col">
+            <div className="flex max-h-[220px] min-h-[160px] flex-col">
               <StoreRankStrip storeNames={storeNameSet} onOpenStore={openStoreByName} />
             </div>
           </div>
@@ -224,7 +224,7 @@ function AppHomeContent() {
                 onRemoveMarket={(id) => removeMarket.mutate(id)}
               />
             ) : (
-              <div className="h-48 animate-pulse rounded-lg border border-border bg-card/80 backdrop-blur-md" />
+              <div className="h-32 animate-pulse rounded-lg border border-border bg-card/80 backdrop-blur-md" />
             )}
           </div>
         </div>
@@ -281,7 +281,7 @@ function Metric({
   return (
     <article
       className={cn(
-        "relative overflow-hidden rounded-lg border px-3 py-2 shadow-sm backdrop-blur-md transition-colors",
+        "relative overflow-hidden rounded-lg border px-2.5 py-1.5 shadow-sm backdrop-blur-md transition-colors",
         t.card,
       )}
     >
@@ -292,8 +292,8 @@ function Metric({
           <Icon className="h-3.5 w-3.5" aria-hidden />
         </span>
       </div>
-      <p className={cn(tc.dataPrimary, "mt-1 text-foreground")}>{value}</p>
-      <p className={cn(tc.metaMuted, "mt-1 truncate")}>{hint}</p>
+      <p className={cn(tc.dataPrimary, "mt-0.5 text-foreground")}>{value}</p>
+      <p className={cn(tc.metaMuted, "truncate")}>{hint}</p>
     </article>
   );
 }
