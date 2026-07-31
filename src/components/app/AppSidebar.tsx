@@ -48,9 +48,16 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useSignOut } from "@/hooks/use-sign-out";
 import { useMyRoles } from "@/hooks/useMyRoles";
 import { LicenseStatusChip } from "@/components/app/LicenseStatusChip";
+import { AppSidebarSkeleton } from "@/components/app/AppSidebarSkeleton";
 import { cn } from "@/lib/utils";
 
 type NavItem = {
@@ -60,6 +67,10 @@ type NavItem = {
   exact?: boolean;
   /** Optional search params to pass to Link (used for consolidated tabbed hubs). */
   search?: Record<string, string>;
+  /** Atalho de teclado (Alt + tecla) exibido no tooltip. */
+  shortcut?: string;
+  /** Descrição curta exibida no tooltip. */
+  hint?: string;
 };
 
 type AdminTone = "overview" | "catalog" | "commerce" | "people" | "system";
@@ -70,6 +81,7 @@ type NavGroup = {
   /** Optional semantic tone used in the admin area to color-code groups. */
   tone?: AdminTone;
 };
+
 
 
 const appGroups: readonly NavGroup[] = [
