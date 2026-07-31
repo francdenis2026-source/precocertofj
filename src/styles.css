@@ -1348,6 +1348,44 @@ html[data-density="compact"] .app-scope { --pc-card-min: 3.35rem; }
 .app-scope .app-dashboard { font-size: 0.9rem; }
 .app-scope .app-dashboard [data-slot="card-title"] { font-size: 0.95rem; }
 
+/* Piso de legibilidade: nenhum texto do painel abaixo de 12px, mesmo quando
+   uma utilidade pedir 10/11px (WCAG 1.4.4 — leitura em telas pequenas). */
+.app-scope .app-dashboard [class*="text-[10"],
+.app-scope .app-dashboard [class*="text-[11"] {
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+/* Contraste: textos de apoio do painel aproximam-se do texto principal para
+   permanecerem AA sobre cards translúcidos, sem perder a hierarquia. */
+.app-scope .app-dashboard .text-muted-foreground {
+  color: color-mix(in oklab, var(--muted-foreground) 82%, var(--foreground));
+}
+
+/* Faixa "Meu painel": fica ancorada logo abaixo do header medido e nunca
+   sobrepõe o conteúdo — a altura real vem do ResizeObserver. */
+@media (max-width: 1023px) {
+  .app-scope .app-dashboard.pc-page > header {
+    position: sticky;
+    top: 0;
+    z-index: 15;
+    background-color: var(--card);
+  }
+  .app-scope .app-dashboard .pc-grid > .pc-col {
+    scroll-margin-top: calc(
+      var(--pc-appbar-h, 2.5rem) + var(--pc-panelbar-h, 0px) + var(--pc-pad-y, 0.5rem)
+    );
+  }
+}
+
+/* Navegação por teclado: o card inteiro sinaliza quando algo dentro dele
+   recebe foco, então o usuário sempre sabe em qual painel está. */
+.app-scope .app-dashboard .pc-col > *:focus-within {
+  outline: 1px solid color-mix(in oklab, var(--ring) 55%, transparent);
+  outline-offset: 1px;
+}
+
+
 
 
 
