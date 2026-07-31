@@ -5761,16 +5761,15 @@ h3.font-display {
    ============================================================ */
 .pc-nav-icon {
   border-color: transparent;
-  transition: color .18s ease, background-color .18s ease,
-              border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+  transition: color .16s ease, background-color .16s ease, border-color .16s ease;
 }
 [data-sidebar="menu-button"]:hover .pc-nav-icon,
 [data-sidebar="menu-button"]:focus-visible .pc-nav-icon {
   color: var(--pc-gold-ink);
   background-color: var(--pc-hover-tint);
-  border-color: color-mix(in oklab, var(--pc-home-gold) 45%, transparent);
-  box-shadow: 0 1px 6px -2px color-mix(in oklab, var(--pc-home-gold) 55%, transparent);
-  transform: translateY(-0.5px);
+  border-color: color-mix(in oklab, var(--pc-home-gold) 32%, transparent);
+  box-shadow: none;
+  transform: none;
 }
 .app-scope [data-collapsible="icon"] [data-sidebar="menu-button"] .pc-nav-icon {
   background-color: transparent;
