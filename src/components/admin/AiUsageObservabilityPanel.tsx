@@ -8,6 +8,7 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { PriceCents } from "@/components/ds/PriceCents";
 import { Activity, AlertTriangle, Clock, Coins, Loader2, Users } from "lucide-react";
 
 const RANGES = [
@@ -16,17 +17,11 @@ const RANGES = [
   { label: "30d", hours: 24 * 30 },
 ] as const;
 
-function formatCents(cents: number) {
-  return `R$ ${(Number(cents || 0) / 100).toLocaleString("pt-BR", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
-}
-
 function formatMs(ms: number) {
   const value = Number(ms || 0);
   return value >= 1000 ? `${(value / 1000).toFixed(1)}s` : `${Math.round(value)}ms`;
 }
+
 
 function failureRate(calls: number, failures: number) {
   if (!calls) return 0;
