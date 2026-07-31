@@ -7,7 +7,9 @@ import { ArrowLeft, ArrowRight, MapPin, Search as SearchIcon, Store } from "luci
 import { AppShell } from "@/components/brand/AppShell";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { Input } from "@/components/ui/input";
+import { StoreLogo } from "@/components/app/StoreLogo";
 import { useSignedLogoUrls } from "@/hooks/use-signed-logo-urls";
+
 import { listPublicStores } from "@/lib/stores-public.functions";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
