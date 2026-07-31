@@ -270,55 +270,61 @@ export function AppSidebar() {
           {group.items.map((n) => {
             const active = isActive(n);
             const key = `${n.to}?${n.search?.tab ?? ""}#${n.label}`;
+            const row = (
+              <SidebarMenuButton
+                asChild
+                isActive={active}
+                data-active={active ? "true" : "false"}
+                className="pcsb-row"
+              >
+                <Link
+                  to={n.to}
+                  search={n.search as never}
+                  onClick={closeOnMobile}
+                  title={compact ? n.label : undefined}
+                  aria-current={active ? "page" : undefined}
+                  aria-keyshortcuts={n.shortcut ? `Alt+${n.shortcut}` : undefined}
+                >
+                  <span aria-hidden className="pcsb-rail" />
+                  {compact && (
+                    <span aria-hidden className="pcsb-ico">
+                      <n.icon className="h-[17px] w-[17px]" strokeWidth={active ? 2.1 : 1.75} />
+                    </span>
+                  )}
+                  <span className="pcsb-label">{n.label}</span>
+                  {n.shortcut && (
+                    <kbd aria-hidden className="pcsb-kbd">
+                      {n.shortcut}
+                    </kbd>
+                  )}
+                </Link>
+              </SidebarMenuButton>
+            );
+
             return (
               <SidebarMenuItem key={key}>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <SidebarMenuButton
-                      asChild
-                      isActive={active}
-                      data-active={active ? "true" : "false"}
-                      className="pcsb-row"
-                    >
-                      <Link
-                        to={n.to}
-                        search={n.search as never}
-                        onClick={closeOnMobile}
-                        aria-current={active ? "page" : undefined}
-                        aria-keyshortcuts={n.shortcut ? `Alt+${n.shortcut}` : undefined}
-                      >
-                        <span aria-hidden className="pcsb-rail" />
-                        <span aria-hidden className="pcsb-ico">
-                          <n.icon
-                            className="h-[17px] w-[17px]"
-                            strokeWidth={active ? 2.15 : 1.75}
-                          />
-                        </span>
-                        <span className="pcsb-label">{n.label}</span>
-                        {n.shortcut && (
-                          <kbd aria-hidden className="pcsb-kbd">
-                            {n.shortcut}
-                          </kbd>
+                {compact ? (
+                  <Tooltip>
+                    <TooltipTrigger asChild>{row}</TooltipTrigger>
+                    <TooltipContent side="right" align="center" className="max-w-56">
+                      <span className="flex flex-col gap-0.5">
+                        <span className="font-semibold">{n.label}</span>
+                        {n.hint && (
+                          <span className="text-[11px] font-normal text-muted-foreground">
+                            {n.hint}
+                          </span>
                         )}
-                      </Link>
-                    </SidebarMenuButton>
-                  </TooltipTrigger>
-                  <TooltipContent side="right" align="center" className="max-w-56">
-                    <span className="flex flex-col gap-0.5">
-                      <span className="font-semibold">{n.label}</span>
-                      {n.hint && (
-                        <span className="text-[11px] font-normal text-muted-foreground">
-                          {n.hint}
-                        </span>
-                      )}
-                      {n.shortcut && (
-                        <span className="text-[10.5px] font-medium uppercase tracking-wider text-muted-foreground">
-                          Alt + {n.shortcut}
-                        </span>
-                      )}
-                    </span>
-                  </TooltipContent>
-                </Tooltip>
+                        {n.shortcut && (
+                          <span className="text-[10.5px] font-medium uppercase tracking-wider text-muted-foreground">
+                            Alt + {n.shortcut}
+                          </span>
+                        )}
+                      </span>
+                    </TooltipContent>
+                  </Tooltip>
+                ) : (
+                  row
+                )}
               </SidebarMenuItem>
             );
           })}
@@ -326,6 +332,7 @@ export function AppSidebar() {
       </SidebarGroupContent>
     </SidebarGroup>
   );
+
 
   return (
     <TooltipProvider delayDuration={250} skipDelayDuration={300}>
