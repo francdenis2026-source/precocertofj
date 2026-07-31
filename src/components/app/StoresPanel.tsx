@@ -55,15 +55,13 @@ export function StoresPanel({
       <header className="shrink-0 space-y-2 border-b border-border/70 px-3 py-2">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
           <div className="min-w-0">
-            <h2 className={cn(tc.itemTitle, "truncate")}>Estabelecimentos</h2>
-            <p className={cn(tc.metaMuted, "truncate")}>
-              {stores.length} lojas · abra para ver produtos e preços
-            </p>
+            <h2 className={cn(tc.panelTitle, "truncate")}>Estabelecimentos</h2>
+            <p className={cn(tc.panelNote, "truncate")}>{stores.length} lojas com preços</p>
           </div>
           <Link
             to="/app/estabelecimentos"
             className={cn(
-              tc.control,
+              tc.filter,
               "shrink-0 rounded-md border border-border px-2.5 py-1 text-primary transition-colors hover:border-primary/50",
             )}
           >

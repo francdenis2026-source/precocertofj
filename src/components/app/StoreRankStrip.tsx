@@ -37,10 +37,8 @@ export function StoreRankStrip({
     >
       <header className="grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-border/70 px-3 py-2">
         <div className="min-w-0">
-           <h2 className={cn(tc.itemTitle, "truncate")}>
-            Mercados mais baratos
-          </h2>
-           <p className={cn(tc.metaMuted, "truncate")}>
+           <h2 className={cn(tc.panelTitle, "truncate")}>Mercados mais baratos</h2>
+           <p className={cn(tc.panelNote, "truncate")}>
             {summary
               ? `${summary.totalProductsCompared} produtos comparados · ${summary.windowDays} dias`
               : "últimos 7 dias"}
