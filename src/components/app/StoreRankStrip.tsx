@@ -4,6 +4,8 @@ import { Link } from "@tanstack/react-router";
 import { Loader2, TrendingDown } from "lucide-react";
 
 import { Price } from "@/components/ds/Price";
+import { EmptyState } from "@/components/layout";
+
 import { getCheapestStoresRanking } from "@/lib/stores-public.functions";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
