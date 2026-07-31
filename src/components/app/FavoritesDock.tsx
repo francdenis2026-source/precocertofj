@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Link, useRouter } from "@tanstack/react-router";
 import {
   ArrowDown,
   ArrowUp,
@@ -17,6 +17,7 @@ import { AddToListButton } from "@/components/app/AddToListButton";
 import { useRovingFocus } from "@/hooks/use-roving-focus";
 import { useVirtualRows } from "@/hooks/use-virtual-rows";
 import { useLocalStorageState } from "@/hooks/use-local-storage";
+import { useScrollMemory } from "@/hooks/use-scroll-memory";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
 
@@ -68,11 +69,15 @@ export function FavoritesDock({
   const [tab, setTab] = useLocalStorageState<Tab>("app:dock:tab", "items", {
     validate: isTab,
   });
-  const [page, setPage] = useState(0);
-  const changeTab = (id: Tab) => {
-    setTab(id);
-    setPage(0);
-  };
+  // Página corrente por aba: voltar para uma aba devolve o usuário ao ponto
+  // exato onde ele parou (página + rolagem).
+  const [pages, setPages] = useState<Record<Tab, number>>({ items: 0, markets: 0, lists: 0 });
+  const page = pages[tab];
+  const setPage = useCallback(
+    (next: number) => setPages((prev) => ({ ...prev, [tab]: Math.max(0, next) })),
+    [tab],
+  );
+  const changeTab = (id: Tab) => setTab(id);
   const tabIndex = TABS.findIndex((t) => t.id === tab);
   const roving = useRovingFocus(TABS.length, Math.max(0, tabIndex), (i) =>
     changeTab(TABS[i].id),
@@ -111,10 +116,51 @@ export function FavoritesDock({
   const vStart = virtual.start;
   const vEnd = virtual.end;
 
-  // Ao trocar de página/aba volta ao topo da área rolável.
+  // Memória de rolagem por aba/página (sobrevive a troca de rota e reload).
+  const scroll = useScrollMemory<HTMLDivElement>(`${tab}:${safePage}`, "app:dock:scroll");
+  const setPanelRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      virtual.setRef(node);
+      scroll.setRef(node);
+    },
+    [virtual, scroll],
+  );
+
+  // Mantém a página dentro do intervalo válido quando a lista encolhe.
   useEffect(() => {
-    setPage((p) => (p > pageCount - 1 ? 0 : p));
-  }, [pageCount]);
+    if (page > pageCount - 1) setPage(pageCount - 1);
+  }, [page, pageCount, setPage]);
+
+  // Pré-carrega a próxima página: as linhas seguintes já ficam materializadas
+  // e as rotas de destino são pré-buscadas no ocioso, cortando a espera.
+  const router = useRouter();
+  const nextStart = end;
+  const nextItems = useMemo(
+    () => summary.favoriteItems.slice(nextStart, nextStart + PAGE_SIZE),
+    [summary.favoriteItems, nextStart],
+  );
+  const nextMarkets = useMemo(
+    () => summary.favoriteMarkets.slice(nextStart, nextStart + PAGE_SIZE),
+    [summary.favoriteMarkets, nextStart],
+  );
+  const nextLists = useMemo(
+    () => summary.lists.slice(nextStart, nextStart + PAGE_SIZE),
+    [summary.lists, nextStart],
+  );
+  const prefetchedCount =
+    tab === "items" ? nextItems.length : tab === "markets" ? nextMarkets.length : nextLists.length;
+
+  const prefetchRoutes = useCallback(() => {
+    const targets = ["/app/produtos", "/app/estabelecimentos", "/lista"] as const;
+    for (const to of targets) void router.preloadRoute({ to }).catch(() => {});
+  }, [router]);
+
+  useEffect(() => {
+    if (loading) return;
+    const idle = window.setTimeout(prefetchRoutes, 400);
+    return () => window.clearTimeout(idle);
+  }, [loading, prefetchRoutes]);
+
 
   return (
     <section
@@ -156,7 +202,7 @@ export function FavoritesDock({
         id={`dock-panel-${tab}`}
         aria-labelledby={`dock-tab-${tab}`}
         tabIndex={0}
-        ref={virtual.setRef as unknown as React.Ref<HTMLDivElement>}
+        ref={setPanelRef}
         className="min-h-0 flex-1 overflow-y-auto"
       >
         {loading && total === 0 ? (
@@ -337,6 +383,9 @@ export function FavoritesDock({
         <div className="flex shrink-0 items-center justify-between gap-2 border-t border-border/70 px-2 py-1">
           <p className="truncate text-[11px] text-muted-foreground">
             {start + 1}–{Math.min(end, total)} de {total}
+            {prefetchedCount > 0 && (
+              <span className="ml-1 opacity-70">· próxima pronta</span>
+            )}
           </p>
           <div className="flex shrink-0 items-center gap-1">
             <IconBtn
@@ -351,6 +400,7 @@ export function FavoritesDock({
             <IconBtn
               label="Próxima página"
               onClick={() => setPage(Math.min(pageCount - 1, safePage + 1))}
+              onHoverPrefetch={prefetchRoutes}
               icon={ChevronRight}
               disabled={safePage >= pageCount - 1}
             />
@@ -408,12 +458,14 @@ function Empty({
 function IconBtn({
   label,
   onClick,
+  onHoverPrefetch,
   icon: Icon,
   danger,
   disabled,
 }: {
   label: string;
   onClick: () => void;
+  onHoverPrefetch?: () => void;
   icon: React.ComponentType<{ className?: string }>;
   danger?: boolean;
   disabled?: boolean;
@@ -424,6 +476,8 @@ function IconBtn({
       aria-label={label}
       title={label}
       onClick={onClick}
+      onMouseEnter={onHoverPrefetch}
+      onFocus={onHoverPrefetch}
       disabled={disabled}
       className={cn(
         "grid h-7 w-7 place-items-center rounded-md transition-colors disabled:pointer-events-none disabled:text-muted-foreground/50",
