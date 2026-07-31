@@ -3218,10 +3218,9 @@ input::placeholder, textarea::placeholder {
   color: color-mix(in oklab, var(--pc-toast-fg) 78%, transparent) !important;
 }
 
-.pc-toast-icon {
-  margin: 1px 0 0;
-  align-self: flex-start;
-  color: var(--pc-toast-accent) !important;
+.pc-toast-icon,
+[data-sonner-toast].pc-toast [data-icon] {
+  display: none !important;
 }
 
 .pc-toast-action,

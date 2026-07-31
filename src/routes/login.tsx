@@ -243,9 +243,9 @@ function LoginPage() {
         });
         if (error) throw error;
         clearAttempts(digits);
-        notify.success("Conta criada com sucesso", {
+        notify.success("Conta criada", {
           id: "auth-session",
-          description: "Seus 30 dias grátis já estão liberados. Redirecionando…",
+          description: "30 dias de acesso completo liberados. Abrindo sua área.",
         });
       } else {
         const { hiddenEmail } = await resolveEmailFn({ data: { cpf: digits } });
@@ -266,9 +266,9 @@ function LoginPage() {
           );
         }
         clearAttempts(digits);
-        notify.success("Bem-vindo de volta", {
+        notify.success("Acesso liberado", {
           id: "auth-session",
-          description: "Login confirmado. Abrindo sua área…",
+          description: "Identidade confirmada. Abrindo sua área.",
         });
       }
       await router.invalidate();
@@ -276,7 +276,7 @@ function LoginPage() {
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Falha ao autenticar";
       setFormError(msg);
-      notify.error("Não foi possível entrar", { id: "auth-session", description: msg });
+      notify.error("Acesso negado", { id: "auth-session", description: msg });
     } finally {
       setLoading(false);
     }
