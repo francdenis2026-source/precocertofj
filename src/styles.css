@@ -1504,6 +1504,12 @@ html[data-density="compact"] .app-scope .app-dashboard [data-slot="card"] { --pc
   height: 2rem;
   border-radius: 0.6rem;
 }
+/* O trilho da sidebar PreçoCerto não é um chip de ícone: nunca vira quadrado. */
+.app-scope [data-sidebar="menu-button"] span.pcsb-rail {
+  width: 3px;
+  height: 0;
+  border-radius: 999px;
+}
 .app-scope [data-sidebar="header"] a > span:first-child {
   width: 2rem;
   height: 2rem;
