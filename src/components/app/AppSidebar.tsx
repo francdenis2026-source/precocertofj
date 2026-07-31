@@ -199,6 +199,7 @@ export function AppSidebar() {
       return typeof raw === "string" ? raw : undefined;
     },
   });
+  const navigate = useNavigate();
   const { signOut, loading: signingOut } = useSignOut();
   const { isAdmin, loading: rolesLoading } = useMyRoles();
   const { isMobile, setOpenMobile } = useSidebar();
@@ -207,6 +208,29 @@ export function AppSidebar() {
   const closeOnMobile = () => {
     if (isMobile) setOpenMobile(false);
   };
+
+  // Atalhos de teclado (Alt + dígito) para as áreas do cliente.
+  useEffect(() => {
+    if (isAdminArea) return;
+    const map = new Map<string, string>();
+    for (const g of appGroups) {
+      for (const item of g.items) if (item.shortcut) map.set(item.shortcut, item.to);
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (!e.altKey || e.ctrlKey || e.metaKey) return;
+      const target = e.target as HTMLElement | null;
+      if (target && /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) return;
+      if (target?.isContentEditable) return;
+      const to = map.get(e.key);
+      if (!to) return;
+      e.preventDefault();
+      setOpenMobile(false);
+      void navigate({ to });
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isAdminArea, navigate, setOpenMobile]);
+
 
   const isActive = (n: NavItem) => {
     if (n.search?.tab !== undefined) {
