@@ -29,7 +29,7 @@ export function AppBrand({
   const wordSize = size === "sm" ? "text-[15px]" : "text-[16px]";
 
   return (
-    <span className={cn("flex min-w-0 items-center gap-2.5", className)}>
+    <span className={cn("group/brand flex min-w-0 items-center gap-2.5", className)}>
       {admin ? (
         <span
           aria-hidden
@@ -66,12 +66,15 @@ export function AppBrand({
               "Console"
             ) : (
               <>
-                Preço<span className="text-gold-ink">Certo</span>
+                Preço
+                <span className="text-gold-ink underline decoration-transparent decoration-2 underline-offset-4 transition-colors group-hover/brand:decoration-current">
+                  Certo
+                </span>
               </>
             )}
           </span>
           {subtitle && (
-            <span className="mt-1 truncate text-[10px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+            <span className="mt-1 truncate text-[10px] font-semibold uppercase tracking-[0.2em] text-foreground/70">
               {subtitle}
             </span>
           )}

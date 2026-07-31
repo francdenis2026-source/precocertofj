@@ -210,9 +210,10 @@ export function AppSidebar() {
     <SidebarGroup key={group.label} className="px-0 py-1.5" data-tone={group.tone}>
       <SidebarGroupLabel
         className={cn(
-          "h-6 px-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-foreground/50",
+          "h-6 px-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-foreground/75",
           "group-data-[collapsible=icon]:hidden",
           group.tone && "pc-admin-group-label",
+
         )}
       >
         {group.label}
@@ -230,12 +231,13 @@ export function AppSidebar() {
                   tooltip={n.label}
                   data-active={active ? "true" : "false"}
                   className={cn(
-                    "relative h-9 rounded-md px-2 text-sidebar-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                    "relative h-9 rounded-md px-2 text-sidebar-foreground/90 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 focus-visible:ring-sidebar-ring",
                     group.tone && "pc-admin-row",
                     active &&
                       !group.tone &&
                       "bg-sidebar-accent font-semibold text-sidebar-accent-foreground",
                   )}
+
                 >
                   <Link
                     to={n.to}
@@ -256,8 +258,9 @@ export function AppSidebar() {
                         group.tone && "pc-admin-icon-chip",
                         !group.tone &&
                           (active
-                            ? "border-sidebar-primary/40 bg-sidebar-primary/15 text-sidebar-primary"
-                            : "border-transparent text-sidebar-foreground/60"),
+                            ? "border-sidebar-primary/50 bg-sidebar-primary/20 text-sidebar-accent-foreground"
+                            : "border-transparent text-sidebar-foreground/80"),
+
                       )}
                     >
                       <n.icon className="h-4 w-4" strokeWidth={active ? 2.3 : 1.9} />
@@ -288,8 +291,10 @@ export function AppSidebar() {
         <Link
           to={isAdminArea ? "/admin" : "/"}
           onClick={closeOnMobile}
-          className="flex items-center gap-2.5 rounded-md px-2 py-1 transition-colors hover:bg-sidebar-accent group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+          aria-label="PreçoCerto — Feijó, Acre"
+          className="group/brand flex items-center gap-2.5 rounded-md px-2 py-1 outline-none transition-colors hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-sidebar-ring group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
         >
+
           {isAdminArea ? (
             <span
               className="relative grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-sidebar-border bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
@@ -313,12 +318,16 @@ export function AppSidebar() {
                 "Console"
               ) : (
                 <>
-                  Preço<span className="text-gold-ink">Certo</span>
+                  Preço
+                  <span className="text-gold-ink underline decoration-transparent decoration-2 underline-offset-4 transition-colors group-hover/brand:decoration-current">
+                    Certo
+                  </span>
                 </>
               )}
             </span>
-            <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-foreground/70">
+            <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-foreground/80">
               {isAdminArea ? "Administração" : "Minha área"}
+
             </span>
           </span>
         </Link>
