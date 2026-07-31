@@ -2,7 +2,9 @@ import { Link } from "@tanstack/react-router";
 import { Activity, Globe, MapPin, PanelLeftClose, PanelLeftOpen, ShieldCheck, ShoppingBag, User } from "lucide-react";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 
+import { AppBrand } from "@/components/app/AppBrand";
 import { AuthNavToggle } from "@/components/nav/AuthNavToggle";
+
 import { ThemeToggle } from "@/components/theme-toggle";
 
 import { useMyProfile } from "@/hooks/useMyProfile";
