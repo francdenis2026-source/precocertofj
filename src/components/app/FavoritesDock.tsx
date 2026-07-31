@@ -176,7 +176,7 @@ export function FavoritesDock({
     <section
       aria-label="Seus favoritos e listas"
       aria-busy={loading || undefined}
-      className="flex h-[34vh] min-h-[208px] flex-1 flex-col overflow-hidden rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md lg:h-full lg:min-h-0"
+      className="flex h-full min-h-[420px] flex-1 flex-col overflow-hidden rounded-xl border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
     >
       <div
         role="tablist"

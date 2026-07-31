@@ -282,16 +282,16 @@ function Metric({
   const t = METRIC_TONES[tone];
   const body = (
     <>
-      <span aria-hidden className={cn("absolute inset-y-2 left-0 w-[3px] rounded-full", t.rail)} />
+      <span aria-hidden className={cn("absolute inset-y-3 left-0 w-[3px] rounded-full", t.rail)} />
       <div className="flex items-center gap-1.5">
-        <span className={cn("grid h-5 w-5 shrink-0 place-items-center rounded-md", t.chip)}>
-          <Icon className="h-3 w-3" aria-hidden />
+        <span className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-md", t.chip)}>
+          <Icon className="h-3.5 w-3.5" aria-hidden />
         </span>
         <p className={cn(tc.tableHead, "truncate")} title={label}>
           {label}
         </p>
       </div>
-      <p className={cn(tc.dataPrimary, "mt-0.5 text-[21px] leading-none text-foreground")}>
+      <p className={cn(tc.dataPrimary, "mt-1.5 text-[26px] leading-none text-foreground")}>
         {value}
       </p>
       <p className={cn(tc.metaMuted, "mt-1 truncate leading-tight")} title={hint}>
@@ -303,14 +303,14 @@ function Metric({
     return (
       <Link
         to={to}
-        className="relative block min-w-0 px-3 py-2 transition hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60"
+        className="relative block min-w-0 px-4 py-3.5 transition hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60"
       >
         {body}
       </Link>
     );
   }
   return (
-    <article className="relative min-w-0 px-3 py-2">{body}</article>
+    <article className="relative min-w-0 px-4 py-3.5">{body}</article>
   );
 }
 
