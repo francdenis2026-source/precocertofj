@@ -15,6 +15,7 @@ import { Price } from "@/components/ds/Price";
 import type { getAppSummary } from "@/lib/favorites.functions";
 import { AddToListButton } from "@/components/app/AddToListButton";
 import { useRovingFocus } from "@/hooks/use-roving-focus";
+import { useHotkeys } from "@/hooks/use-hotkeys";
 import { useVirtualRows } from "@/hooks/use-virtual-rows";
 import { useLocalStorageState } from "@/hooks/use-local-storage";
 import { useScrollMemory } from "@/hooks/use-scroll-memory";
@@ -161,6 +162,15 @@ export function FavoritesDock({
     return () => window.clearTimeout(idle);
   }, [loading, prefetchRoutes]);
 
+
+  // Atalhos: alternar abas e paginar sem tirar as mãos do teclado.
+  useHotkeys({
+    "alt+shift+f": () => changeTab("items"),
+    "alt+shift+m": () => changeTab("markets"),
+    "alt+shift+l": () => changeTab("lists"),
+    "alt+arrowright": () => setPage(Math.min(pageCount - 1, safePage + 1)),
+    "alt+arrowleft": () => setPage(Math.max(0, safePage - 1)),
+  });
 
   return (
     <section
