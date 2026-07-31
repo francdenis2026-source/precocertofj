@@ -399,15 +399,19 @@ export function AppSidebar() {
 
       <SidebarContent className="px-2 py-2">
         {isAdminArea && (rolesLoading || !isAdmin) ? (
-          <SidebarGroup className="py-3">
-            <div className="space-y-2 px-3">
-              <div className="h-3 w-24 rounded-full bg-sidebar-accent" />
-              <div className="h-9 rounded-md bg-sidebar-accent/70" />
-              <div className="h-9 rounded-md bg-sidebar-accent/50" />
-            </div>
-          </SidebarGroup>
+          <AppSidebarSkeleton
+            groups={[
+              { label: "Visão geral", items: 4 },
+              { label: "Catálogo", items: 5 },
+              { label: "Sistema", items: 3 },
+            ]}
+          />
+        ) : !isAdminArea && rolesLoading ? (
+          <AppSidebarSkeleton />
         ) : (
-          groups.map(renderGroup)
+          <div className="animate-in fade-in-0 slide-in-from-left-1 duration-200 motion-reduce:animate-none">
+            {groups.map(renderGroup)}
+          </div>
         )}
 
         {!isAdminArea && !rolesLoading && isAdmin && (
@@ -418,14 +422,19 @@ export function AppSidebar() {
             <SidebarGroupContent>
               <SidebarMenu>
                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild tooltip="Abrir painel administrativo" className="pc-nav-link pc-nav-link--row">
-                    <Link to="/admin" className="flex items-center gap-2.5">
-                      <span className="grid h-6 w-6 place-items-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
-                        <Shield className="h-3.5 w-3.5" />
-                      </span>
-                      <span className="text-[13px] font-medium">Painel administrativo</span>
-                    </Link>
-                  </SidebarMenuButton>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <SidebarMenuButton asChild className="pc-nav-link pc-nav-link--row focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar">
+                        <Link to="/admin" className="flex items-center gap-2.5">
+                          <span className="pc-nav-icon grid h-6 w-6 place-items-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
+                            <Shield className="h-3.5 w-3.5" />
+                          </span>
+                          <span className="pc-nav-label text-[13px] font-medium">Painel administrativo</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </TooltipTrigger>
+                    <TooltipContent side="right">Abrir painel administrativo</TooltipContent>
+                  </Tooltip>
                 </SidebarMenuItem>
               </SidebarMenu>
             </SidebarGroupContent>
@@ -441,20 +450,27 @@ export function AppSidebar() {
         )}
         <SidebarMenu>
           <SidebarMenuItem>
-            <SidebarMenuButton
-              onClick={signOut}
-              disabled={signingOut}
-              tooltip="Sair"
-              className="pc-nav-link pc-nav-link--row text-sidebar-foreground hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar disabled:pointer-events-none disabled:opacity-100 disabled:text-sidebar-muted-foreground"
-            >
-              <LogOut className="h-4 w-4" />
-              <span className="text-[13px] font-medium">
-                {signingOut ? "Saindo..." : "Sair"}
-              </span>
-            </SidebarMenuButton>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <SidebarMenuButton
+                  onClick={signOut}
+                  disabled={signingOut}
+                  aria-label="Sair da conta"
+                  className="pc-nav-link pc-nav-link--row text-sidebar-foreground hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar disabled:pointer-events-none disabled:opacity-100 disabled:text-sidebar-muted-foreground"
+                >
+                  <LogOut className="h-4 w-4" />
+                  <span className="text-[13px] font-medium">
+                    {signingOut ? "Saindo..." : "Sair"}
+                  </span>
+                </SidebarMenuButton>
+              </TooltipTrigger>
+              <TooltipContent side="right">Encerrar a sessão</TooltipContent>
+            </Tooltip>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarFooter>
     </Sidebar>
+    </TooltipProvider>
   );
+
 }
