@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
+import { ArrowUpRight, Store, TrendingDown } from "lucide-react";
+
 
 import { StoresPanel } from "@/components/app/StoresPanel";
 import { StoreRankStrip } from "@/components/app/StoreRankStrip";
