@@ -383,7 +383,7 @@ export function AppSidebar() {
               onClick={signOut}
               disabled={signingOut}
               tooltip="Sair"
-              className="pc-nav-link pc-nav-link--row text-sidebar-foreground/80 hover:text-destructive"
+              className="pc-nav-link pc-nav-link--row text-sidebar-foreground hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar disabled:pointer-events-none disabled:opacity-100 disabled:text-sidebar-muted-foreground"
             >
               <LogOut className="h-4 w-4" />
               <span className="text-[13px] font-medium">
