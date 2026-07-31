@@ -6154,9 +6154,10 @@ h3.font-display {
   --pcsb-ink: var(--sidebar-foreground);
   --pcsb-dim: var(--sidebar-muted-foreground);
   --pcsb-line: color-mix(in oklab, var(--sidebar-border) 82%, transparent);
-  --pcsb-mark-a: var(--pc-navy, oklch(0.28 0.06 258));
-  --pcsb-mark-b: color-mix(in oklab, var(--sidebar-primary) 70%, var(--sidebar-foreground));
-  --pcsb-mark-hole: var(--sidebar);
+  --pcsb-mark-a: var(--pc-home-gold);
+  --pcsb-mark-b: color-mix(in oklab, var(--pc-home-gold) 72%, white);
+  --pcsb-mark-hole: var(--pc-navy, #0f1b3d);
+  --pcsb-mark-ink: var(--pc-navy, #0f1b3d);
 }
 .pcsb [data-sidebar="sidebar"] {
   background:
