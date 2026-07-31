@@ -30,11 +30,20 @@ export function useInactivityLogout() {
   const timeoutMs = isAdmin || isAdminArea ? 10 * 60_000 : 30 * 60_000;
 
   const [warning, setWarning] = useState(false);
+  /** Espelho síncrono de `warning` — evita setState em cada evento de mouse. */
+  const warningRef = useRef(false);
   const lastActivityRef = useRef<number>(Date.now());
   const warnTimerRef = useRef<number | null>(null);
   const logoutTimerRef = useRef<number | null>(null);
   const bcRef = useRef<BroadcastChannel | null>(null);
   const toastIdRef = useRef<string | number | null>(null);
+
+  const setWarningState = useCallback((next: boolean) => {
+    if (warningRef.current === next) return;
+    warningRef.current = next;
+    setWarning(next);
+  }, []);
+
 
   const clearTimers = useCallback(() => {
     if (warnTimerRef.current !== null) window.clearTimeout(warnTimerRef.current);
@@ -64,13 +73,13 @@ export function useInactivityLogout() {
 
   const scheduleTimers = useCallback(() => {
     clearTimers();
-    setWarning(false);
+    setWarningState(false);
     if (toastIdRef.current !== null) {
       toast.dismiss(toastIdRef.current);
       toastIdRef.current = null;
     }
     warnTimerRef.current = window.setTimeout(() => {
-      setWarning(true);
+      setWarningState(true);
       toastIdRef.current = toast.warning("Você ainda está aí?", {
         description: "Sua sessão será encerrada em 1 minuto por inatividade.",
         duration: WARN_BEFORE_MS,
@@ -87,21 +96,38 @@ export function useInactivityLogout() {
     logoutTimerRef.current = window.setTimeout(() => {
       void doLogout();
     }, timeoutMs);
-  }, [timeoutMs, doLogout, clearTimers]);
+  }, [timeoutMs, doLogout, clearTimers, setWarningState]);
+
+  /**
+   * Throttle de atividade.
+   *
+   * `mousemove`, `scroll` e `wheel` disparam dezenas de vezes por segundo.
+   * Sem throttle, cada evento reagendava dois timers, publicava no
+   * BroadcastChannel e chamava `setWarning(false)` — um setState que
+   * re-renderizava o AppShell inteiro (sidebar + conteúdo). Era essa
+   * tempestade de renders que travava a navegação do painel.
+   *
+   * Agora só reagendamos a cada 20s de atividade contínua (ou imediatamente
+   * quando o aviso de expiração está na tela).
+   */
+  const ACTIVITY_THROTTLE_MS = 20_000;
 
   const markActive = useCallback(
     (broadcast = true) => {
-      lastActivityRef.current = Date.now();
+      const now = Date.now();
+      if (!warningRef.current && now - lastActivityRef.current < ACTIVITY_THROTTLE_MS) return;
+      lastActivityRef.current = now;
       scheduleTimers();
       if (broadcast) bcRef.current?.postMessage({ t: lastActivityRef.current });
     },
     [scheduleTimers],
   );
 
+
   useEffect(() => {
     if (!session) {
       clearTimers();
-      setWarning(false);
+      setWarningState(false);
       return;
     }
 
