@@ -22,11 +22,12 @@ import { tc } from "@/lib/typeclear";
 
 type SortKey = "cheapest" | "priciest" | "recent";
 
-const SORTS: { id: SortKey; label: string }[] = [
-  { id: "cheapest", label: "Menor preço" },
-  { id: "priciest", label: "Maior preço" },
-  { id: "recent", label: "Recentes" },
+const SORTS: { id: SortKey; label: string; shortLabel: string }[] = [
+  { id: "cheapest", label: "Menor preço", shortLabel: "Menor" },
+  { id: "priciest", label: "Maior preço", shortLabel: "Maior" },
+  { id: "recent", label: "Recentes", shortLabel: "Novos" },
 ];
+
 
 /**
  * Busca do painel do cliente — live (debounce 250ms), com filtro de
