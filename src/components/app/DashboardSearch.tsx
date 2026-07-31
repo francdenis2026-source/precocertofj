@@ -224,11 +224,11 @@ export function DashboardSearch() {
           )}
         </label>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           <div
             role="radiogroup"
             aria-label="Filtrar por categoria"
-            className="flex min-w-0 flex-1 gap-1.5 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]{display:none}"
+            className="flex min-w-0 flex-1 gap-1.5 overflow-x-auto rounded-lg border border-border/60 bg-muted/25 px-1.5 py-1 transition-colors hover:border-primary/40 hover:bg-primary/[0.04] focus-within:border-primary/50 [scrollbar-width:none] [&::-webkit-scrollbar]{display:none}"
           >
             <Chip active={!category} onClick={() => setCategory(null)} {...chipRoving.itemProps(0)}>
               Todas
@@ -248,7 +248,7 @@ export function DashboardSearch() {
           <div
             role="radiogroup"
             aria-label="Ordenar resultados"
-            className="flex shrink-0 items-center gap-1 border-l border-border/60 pl-2"
+            className="flex shrink-0 items-center gap-0.5 rounded-lg border border-border/60 bg-muted/25 p-0.5 transition-colors hover:border-primary/40"
           >
             {SORTS.map((s, i) => (
               <button
@@ -256,21 +256,25 @@ export function DashboardSearch() {
                 type="button"
                 role="radio"
                 aria-checked={sort === s.id}
+                aria-label={s.label}
+                title={s.label}
                 onClick={() => setSort(s.id)}
                 {...sortRoving.itemProps(i)}
                 className={cn(
                   tc.filter,
-                  "h-8 rounded-md border px-2.5 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+                  "h-7 whitespace-nowrap rounded-md px-2 text-[11.5px] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
                   sort === s.id
-                    ? "border-primary bg-primary text-primary-foreground shadow-sm"
-                    : "border-border/70 bg-background text-muted-foreground hover:border-primary/50 hover:bg-primary/10 hover:text-primary",
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "text-muted-foreground hover:bg-primary/10 hover:text-primary",
                 )}
               >
-                {s.label}
+                <span className="sm:hidden">{s.shortLabel}</span>
+                <span className="hidden sm:inline">{s.label}</span>
               </button>
             ))}
           </div>
         </div>
+
 
       </div>
 
