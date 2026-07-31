@@ -116,10 +116,51 @@ export function FavoritesDock({
   const vStart = virtual.start;
   const vEnd = virtual.end;
 
-  // Ao trocar de página/aba volta ao topo da área rolável.
+  // Memória de rolagem por aba/página (sobrevive a troca de rota e reload).
+  const scroll = useScrollMemory<HTMLDivElement>(`${tab}:${safePage}`, "app:dock:scroll");
+  const setPanelRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      virtual.setRef(node);
+      scroll.setRef(node);
+    },
+    [virtual, scroll],
+  );
+
+  // Mantém a página dentro do intervalo válido quando a lista encolhe.
   useEffect(() => {
-    setPage((p) => (p > pageCount - 1 ? 0 : p));
-  }, [pageCount]);
+    if (page > pageCount - 1) setPage(pageCount - 1);
+  }, [page, pageCount, setPage]);
+
+  // Pré-carrega a próxima página: as linhas seguintes já ficam materializadas
+  // e as rotas de destino são pré-buscadas no ocioso, cortando a espera.
+  const router = useRouter();
+  const nextStart = end;
+  const nextItems = useMemo(
+    () => summary.favoriteItems.slice(nextStart, nextStart + PAGE_SIZE),
+    [summary.favoriteItems, nextStart],
+  );
+  const nextMarkets = useMemo(
+    () => summary.favoriteMarkets.slice(nextStart, nextStart + PAGE_SIZE),
+    [summary.favoriteMarkets, nextStart],
+  );
+  const nextLists = useMemo(
+    () => summary.lists.slice(nextStart, nextStart + PAGE_SIZE),
+    [summary.lists, nextStart],
+  );
+  const prefetchedCount =
+    tab === "items" ? nextItems.length : tab === "markets" ? nextMarkets.length : nextLists.length;
+
+  const prefetchRoutes = useCallback(() => {
+    const targets = ["/app/produtos", "/app/estabelecimentos", "/lista"] as const;
+    for (const to of targets) void router.preloadRoute({ to }).catch(() => {});
+  }, [router]);
+
+  useEffect(() => {
+    if (loading) return;
+    const idle = window.setTimeout(prefetchRoutes, 400);
+    return () => window.clearTimeout(idle);
+  }, [loading, prefetchRoutes]);
+
 
   return (
     <section
