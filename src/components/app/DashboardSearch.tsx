@@ -187,7 +187,7 @@ export function DashboardSearch() {
         <label className="relative block min-w-0">
           <span className="sr-only">Buscar produto</span>
           <SearchIcon
-            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+            className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
             aria-hidden
           />
           <Input
