@@ -192,6 +192,7 @@ export function ProductCompareSheet({
 
                   {r.establishmentId && (
                     <>
+                      <div className="mt-1.5 flex flex-wrap items-center gap-2">
                       <button
                         type="button"
                         aria-expanded={openStore === r.establishmentId}
@@ -200,7 +201,7 @@ export function ProductCompareSheet({
                         }
                         className={cn(
                           tc.metaMuted,
-                          "mt-1.5 inline-flex items-center gap-1 rounded-md px-1 py-0.5 hover:text-foreground",
+                          "inline-flex items-center gap-1 rounded-md px-1 py-0.5 hover:text-foreground",
                         )}
                       >
                         <ChevronDown
@@ -212,6 +213,14 @@ export function ProductCompareSheet({
                         />
                         Histórico neste mercado
                       </button>
+                      <PriceDropAlertToggle
+                        variant="chip"
+                        productName={detail.productName}
+                        establishmentId={r.establishmentId}
+                        storeName={r.storeName}
+                        targetPrice={r.price}
+                      />
+                      </div>
                       {openStore === r.establishmentId && (
                         <ProductPriceHistory
                           className="mt-1.5"
