@@ -16,9 +16,12 @@ import { tc } from "@/lib/typeclear";
 export function StoreRankStrip({
   onOpenStore,
   storeNames,
+  bare = false,
 }: {
   onOpenStore: (name: string) => void;
   storeNames: Set<string>;
+  /** Sem moldura própria — usado dentro do painel unificado com abas. */
+  bare?: boolean;
 }) {
   const fetchRanking = useServerFn(getCheapestStoresRanking);
   const q = useQuery({
@@ -33,24 +36,41 @@ export function StoreRankStrip({
   return (
     <section
       aria-label="Mercados mais baratos"
-       className="flex max-h-[46vh] min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md lg:max-h-none"
+      className={cn(
+        "flex min-h-0 flex-1 flex-col overflow-hidden",
+        bare
+          ? ""
+          : "max-h-[46vh] rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md lg:max-h-none",
+      )}
     >
-      <header className="grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-border/70 px-3 py-2">
-        <div className="min-w-0">
-           <h2 className={cn(tc.panelTitle, "truncate")}>Mercados mais baratos</h2>
-           <p className={cn(tc.panelNote, "truncate")}>
-            {summary
-              ? `${summary.totalProductsCompared} produtos comparados · ${summary.windowDays} dias`
-              : "últimos 7 dias"}
-          </p>
-        </div>
-        <Link
-          to="/melhores-precos"
-           className={cn(tc.filter, "shrink-0 rounded-md border border-border px-2.5 py-1 text-primary hover:border-primary/50")}
-        >
-          Ver todos
-        </Link>
-      </header>
+      {bare ? (
+        <p className={cn(tc.panelNote, "shrink-0 truncate border-b border-border/70 px-3 py-1.5")}>
+          {summary
+            ? `${summary.totalProductsCompared} produtos comparados · ${summary.windowDays} dias`
+            : "últimos 7 dias"}
+        </p>
+      ) : (
+        <header className="grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-border/70 px-3 py-2">
+          <div className="min-w-0">
+            <h2 className={cn(tc.panelTitle, "truncate")}>Mercados mais baratos</h2>
+            <p className={cn(tc.panelNote, "truncate")}>
+              {summary
+                ? `${summary.totalProductsCompared} produtos comparados · ${summary.windowDays} dias`
+                : "últimos 7 dias"}
+            </p>
+          </div>
+          <Link
+            to="/melhores-precos"
+            className={cn(
+              tc.filter,
+              "shrink-0 rounded-md border border-border px-2.5 py-1 text-primary hover:border-primary/50",
+            )}
+          >
+            Ver todos
+          </Link>
+        </header>
+      )}
+
 
       <div className="min-h-0 flex-1 overflow-y-auto">
         {q.isLoading ? (
