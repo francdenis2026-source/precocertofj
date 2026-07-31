@@ -92,3 +92,27 @@ export function setupVersionWatcher(): () => void {
     document.removeEventListener("visibilitychange", onFocus);
   };
 }
+
+/**
+ * Ação manual: força a busca da versão publicada, limpa caches/service workers
+ * e recarrega o app imediatamente (mesmo que o build id seja igual).
+ */
+export async function forceAppUpdate(): Promise<void> {
+  if (typeof window === "undefined") return;
+
+  const remote = (await fetchRemoteBuildId()) ?? String(Date.now());
+
+  try {
+    // Remove a trava de reload para que a nova versão possa ser aplicada agora.
+    sessionStorage.removeItem(RELOAD_GUARD_KEY);
+  } catch {
+    /* sessionStorage bloqueado */
+  }
+
+  await unregisterServiceWorkers();
+  await clearAllAppCaches();
+
+  const url = new URL(window.location.href);
+  url.searchParams.set("v", remote);
+  window.location.replace(url.toString());
+}

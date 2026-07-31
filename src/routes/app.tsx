@@ -18,6 +18,7 @@ import type { PublicStore } from "@/lib/stores-public.functions";
 import { DashboardSearch } from "@/components/app/DashboardSearch";
 import { StoreRankStrip } from "@/components/app/StoreRankStrip";
 import { FavoritesDock } from "@/components/app/FavoritesDock";
+import { ForceUpdateButton } from "@/components/app/ForceUpdateButton";
 import { Price } from "@/components/ds/Price";
 import { useAppHomeData } from "@/hooks/useAppHomeData";
 import { getAccessStatus, daysRemaining } from "@/lib/paywall";
@@ -165,6 +166,7 @@ function AppHomeContent() {
               >
                 Nova lista <ArrowRight className="h-3.5 w-3.5" aria-hidden />
               </Link>
+              <ForceUpdateButton />
               <Link
                 to="/alertas"
                 aria-label="Alertas de preço"
