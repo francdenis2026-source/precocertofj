@@ -54,9 +54,11 @@ const Toaster = ({ ...props }: ToasterProps) => {
       className="toaster group pc-toaster"
       position="bottom-right"
       offset={24}
+      mobileOffset={{ bottom: 88, left: 12, right: 12 }}
       gap={10}
       duration={4000}
-      visibleToasts={3}
+      visibleToasts={2}
+      expand={false}
       icons={{
         success: <IconCheck />,
         error: <IconDanger />,
