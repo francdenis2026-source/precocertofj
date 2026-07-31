@@ -155,8 +155,9 @@ export function AiUsageObservabilityPanel() {
                         {formatMs(f.avgDurationMs)}
                       </span>
                       <span className="font-mono tabular-nums text-foreground">
-                        {formatCents(f.creditsCents)}
+                        <PriceCents cents={f.creditsCents} />
                       </span>
+
                       {f.failures > 0 && (
                         <Badge variant="destructive">{f.failures} falha(s)</Badge>
                       )}
