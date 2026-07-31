@@ -1,7 +1,6 @@
 import { ListRowsSkeleton } from "@/components/feedback";
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/brand/AppShell";
-import { useSessionGate } from "@/hooks/use-session-gate";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocalStorageState } from "@/hooks/use-local-storage";
@@ -99,7 +98,7 @@ function ListaPage() {
 
 function ListaContent() {
   const qc = useQueryClient();
-  const { hasSession } = useSessionGate();
+  const { session } = useSession();
   const { confirm } = useConfirm();
   const listsFn = useServerFn(listMyShoppingLists);
   const createFn = useServerFn(createShoppingList);
@@ -147,7 +146,9 @@ function ListaContent() {
   const listsQuery = useQuery({
     queryKey: ["shopping-lists"],
     queryFn: () => listsFn(),
-    enabled: hasSession,
+    enabled: Boolean(session),
+    staleTime: 60_000,
+    retry: 1,
   });
 
   useEffect(() => {
@@ -454,7 +455,26 @@ function ListaContent() {
                   <ListRowsSkeleton rows={4} />
                 </li>
               )}
-              {lists.length === 0 && !listsQuery.isLoading && (
+              {listsQuery.isError && (
+                <li className="p-3">
+                  <div role="alert" className="rounded-xl border border-destructive/30 bg-destructive/5 p-3">
+                    <p className="text-[12px] font-semibold text-foreground">
+                      Não foi possível carregar suas listas.
+                    </p>
+                    <p className="mt-0.5 text-[11px] text-muted-foreground">
+                      Sua sessão continua segura. Tente sincronizar novamente.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => void listsQuery.refetch()}
+                      className="mt-2 inline-flex h-7 items-center rounded-lg bg-primary px-3 text-[11px] font-semibold text-primary-foreground"
+                    >
+                      Tentar novamente
+                    </button>
+                  </div>
+                </li>
+              )}
+              {lists.length === 0 && !listsQuery.isLoading && !listsQuery.isError && (
                 <li className="p-4 text-[13px] text-muted-foreground">
                   {listFilter
                     ? `Nenhuma lista com "${listFilter}".`
@@ -591,6 +611,7 @@ function ListaContent() {
 
 function ListDetail({ listId }: { listId: string }) {
   const qc = useQueryClient();
+  const { session } = useSession();
   const { prompt } = useConfirm();
   const detailFn = useServerFn(getShoppingList);
   const addFn = useServerFn(addListItem);
@@ -605,6 +626,9 @@ function ListDetail({ listId }: { listId: string }) {
   const detailQuery = useQuery({
     queryKey: ["shopping-list", listId],
     queryFn: () => detailFn({ data: { id: listId } }),
+    enabled: Boolean(session && listId),
+    staleTime: 30_000,
+    retry: 1,
   });
 
   const bestQuery = useQuery({
@@ -737,8 +761,31 @@ function ListDetail({ listId }: { listId: string }) {
       </div>
     );
   }
+  if (detailQuery.isError) {
+    return (
+      <div role="alert" className="rounded-2xl border border-destructive/30 bg-card p-6 text-center">
+        <p className="text-sm font-semibold text-foreground">Não foi possível abrir esta lista.</p>
+        <p className="mt-1 text-xs text-muted-foreground">
+          A conexão foi interrompida ou a lista não está mais disponível.
+        </p>
+        <button
+          type="button"
+          onClick={() => void detailQuery.refetch()}
+          className="mt-4 inline-flex h-8 items-center rounded-lg bg-primary px-4 text-xs font-semibold text-primary-foreground"
+        >
+          Tentar novamente
+        </button>
+      </div>
+    );
+  }
   const detail = detailQuery.data;
-  if (!detail) return null;
+  if (!detail) {
+    return (
+      <div className="rounded-2xl border border-dashed border-border bg-card p-6 text-center text-xs text-muted-foreground">
+        Lista não encontrada. Selecione outra lista ao lado.
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-3">

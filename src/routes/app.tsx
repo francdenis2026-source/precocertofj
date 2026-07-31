@@ -84,6 +84,16 @@ function AppHomeContent() {
     (acc, l) => acc + (l.potentialSavings ?? 0),
     0,
   );
+  const estimatedTotal = summary?.totals.estimatedCartTotal ?? 0;
+  const savingsRate = estimatedTotal > 0 ? Math.min(100, (potentialSavings / estimatedTotal) * 100) : 0;
+  const savingsHint =
+    potentialSavings <= 0
+      ? "adicione itens para estimar"
+      : savingsRate >= 20
+        ? `até ${Math.round(savingsRate)}% nas listas ativas`
+        : savingsRate >= 5
+          ? `${Math.round(savingsRate)}% estimados nas listas`
+          : "estimativa das listas ativas";
 
   const moveItem = (ids: string[], idx: number, dir: -1 | 1) => {
     const next = swap(ids, idx, dir);
@@ -198,8 +208,8 @@ function AppHomeContent() {
                   "—"
                 )
               }
-              hint="somando suas listas ativas"
-              tone="warning"
+               hint={savingsHint}
+               tone="savings"
             />
           </div>
         </header>
@@ -283,19 +293,19 @@ function Metric({
   const body = (
     <>
       <span aria-hidden className={cn("absolute inset-y-2 left-0 w-[3px] rounded-full", t.rail)} />
-      <span className={cn("grid h-7 w-7 shrink-0 place-items-center rounded-md", t.chip)}>
+      <span className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-md sm:h-7 sm:w-7", t.chip)}>
         <Icon className="h-3.5 w-3.5" aria-hidden />
       </span>
       <div className="min-w-0 flex-1">
-        <div className="flex min-w-0 items-baseline justify-between gap-2">
+        <div className="flex min-w-0 items-baseline justify-between gap-1.5">
           <p className={cn(tc.tableHead, "truncate")} title={label}>
             {label}
           </p>
-          <p className={cn(tc.dataPrimary, "shrink-0 text-[17px] leading-none text-foreground")}>
+          <p className={cn(tc.dataPrimary, "max-w-[48%] shrink-0 truncate text-right text-[15px] leading-none text-foreground sm:text-[17px]")}>
             {value}
           </p>
         </div>
-        <p className={cn(tc.metaMuted, "mt-0.5 truncate text-[10.5px] leading-tight")} title={hint}>
+        <p className={cn(tc.metaMuted, "mt-0.5 line-clamp-1 text-[10px] leading-tight sm:text-[10.5px]")} title={hint}>
           {hint}
         </p>
       </div>
@@ -305,13 +315,13 @@ function Metric({
     return (
       <Link
         to={to}
-        className="relative flex min-w-0 items-center gap-2 px-3 py-2 transition hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60"
+        className="relative flex min-h-12 min-w-0 items-center gap-1.5 px-2 py-1.5 transition hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60 sm:gap-2 sm:px-3 sm:py-2"
       >
         {body}
       </Link>
     );
   }
-  return <article className="relative flex min-w-0 items-center gap-2 px-3 py-2">{body}</article>;
+  return <article className="relative flex min-h-12 min-w-0 items-center gap-1.5 px-2 py-1.5 sm:gap-2 sm:px-3 sm:py-2">{body}</article>;
 }
 
 
