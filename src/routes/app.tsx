@@ -16,6 +16,7 @@ import { MetricRailSkeleton, PanelBlockSkeleton, StalledNotice } from "@/compone
 import { ErrorState } from "@/components/feedback";
 import { Price } from "@/components/ds/Price";
 import { useAppHomeData } from "@/hooks/useAppHomeData";
+import { useMeasuredBar } from "@/hooks/use-measured-bar";
 import { useStalled } from "@/hooks/use-stalled";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
