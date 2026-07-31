@@ -43,8 +43,9 @@ export default defineConfig({
               handler: "NetworkFirst",
               options: {
                 cacheName: "pc-html",
-                networkTimeoutSeconds: 4,
-                expiration: { maxEntries: 32, maxAgeSeconds: 60 * 60 * 24 },
+                networkTimeoutSeconds: 3,
+                // Fallback curto: se a rede falhar, o HTML só é reaproveitado por 1h.
+                expiration: { maxEntries: 32, maxAgeSeconds: 60 * 60 },
               },
             },
             {
