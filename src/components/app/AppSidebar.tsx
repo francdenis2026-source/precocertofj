@@ -240,9 +240,10 @@ export function AppSidebar() {
       if (target?.isContentEditable) return;
       if (e.key.toLowerCase() === "q") {
         e.preventDefault();
-        if (!signingOut) void signOut();
+        if (!signingOut) setConfirmOpen(true);
         return;
       }
+
       const to = map.get(e.key);
       if (!to) return;
       e.preventDefault();
