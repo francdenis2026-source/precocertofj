@@ -458,12 +458,14 @@ function Empty({
 function IconBtn({
   label,
   onClick,
+  onHoverPrefetch,
   icon: Icon,
   danger,
   disabled,
 }: {
   label: string;
   onClick: () => void;
+  onHoverPrefetch?: () => void;
   icon: React.ComponentType<{ className?: string }>;
   danger?: boolean;
   disabled?: boolean;
@@ -474,6 +476,8 @@ function IconBtn({
       aria-label={label}
       title={label}
       onClick={onClick}
+      onMouseEnter={onHoverPrefetch}
+      onFocus={onHoverPrefetch}
       disabled={disabled}
       className={cn(
         "grid h-7 w-7 place-items-center rounded-md transition-colors disabled:pointer-events-none disabled:text-muted-foreground/50",
