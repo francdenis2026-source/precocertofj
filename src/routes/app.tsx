@@ -204,13 +204,15 @@ function AppHomeContent() {
           </div>
         </header>
 
-        {/* Grid responsiva: busca | lojas | favoritos — alturas confortáveis, sem espremer */}
-        <div className="grid gap-4 lg:grid-cols-12">
-          <div className="flex min-h-[520px] flex-col lg:col-span-6 lg:h-[calc(100dvh-19rem)] lg:min-h-[560px]">
+        {/* Grade responsiva: busca | lojas | favoritos.
+            Mobile: 1 coluna · Tablet: 2 colunas (busca ocupa a linha toda)
+            Desktop: 12 colunas — todas com a mesma altura e rolagem interna. */}
+        <div className="pc-grid">
+          <div className="pc-col md:col-span-2 xl:col-span-6">
             <DashboardSearch />
           </div>
 
-          <div className="flex min-h-[420px] flex-col lg:col-span-3 lg:h-[calc(100dvh-19rem)] lg:min-h-[560px]">
+          <div className="pc-col xl:col-span-3">
             <StoresColumn
               stores={publicStoresQuery.data ?? []}
               loading={publicStoresQuery.isLoading}
@@ -219,7 +221,8 @@ function AppHomeContent() {
             />
           </div>
 
-          <div className="flex min-h-[420px] flex-col lg:col-span-3 lg:h-[calc(100dvh-19rem)] lg:min-h-[560px]">
+          <div className="pc-col xl:col-span-3">
+
             {summary ? (
               <FavoritesDock
                 summary={summary}
