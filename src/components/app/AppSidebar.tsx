@@ -258,8 +258,9 @@ export function AppSidebar() {
                         group.tone && "pc-admin-icon-chip",
                         !group.tone &&
                           (active
-                            ? "border-sidebar-primary/40 bg-sidebar-primary/15 text-sidebar-primary"
-                            : "border-transparent text-sidebar-foreground/60"),
+                            ? "border-sidebar-primary/50 bg-sidebar-primary/20 text-sidebar-accent-foreground"
+                            : "border-transparent text-sidebar-foreground/80"),
+
                       )}
                     >
                       <n.icon className="h-4 w-4" strokeWidth={active ? 2.3 : 1.9} />
