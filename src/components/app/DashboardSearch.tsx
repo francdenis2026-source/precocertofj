@@ -169,10 +169,14 @@ export function DashboardSearch() {
   return (
     <section
       aria-label="Buscar preços"
-      className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
+      data-panel="search"
+      className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border/70 border-l-[3px] border-l-primary bg-card/94 shadow-sm backdrop-blur-md"
     >
-      <div className="shrink-0 space-y-2 border-b border-border/70 p-3">
-        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+      <div className="shrink-0 space-y-2 border-b border-border/70 bg-primary/[0.06] p-3">
+        <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2">
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-primary/15 text-primary">
+            <SearchIcon className="h-4 w-4" aria-hidden />
+          </span>
           <div className="min-w-0">
             <h2 className={cn(tc.panelTitle, "truncate")}>Buscar produtos e preços</h2>
             <p className={cn(tc.panelNote, "truncate")}>Menores preços dos mercados de Feijó</p>
@@ -184,6 +188,7 @@ export function DashboardSearch() {
             Alt + B
           </kbd>
         </div>
+
 
         <label className="relative block min-w-0">
           <span className="sr-only">Buscar produto</span>
