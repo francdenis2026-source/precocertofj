@@ -197,25 +197,25 @@ function AppHomeContent() {
           </div>
         </header>
 
-
         {/* Grid responsiva de altura total: busca | lojas+ranking | favoritos */}
-        <div className="grid gap-1.5 lg:min-h-0 lg:flex-1 lg:grid-cols-12">
-          <div className="flex min-h-[320px] flex-col lg:col-span-5 lg:min-h-0">
+        <div className="grid gap-2 lg:min-h-0 lg:flex-1 lg:grid-cols-12">
+          <div className="flex min-h-[340px] flex-col lg:col-span-5 lg:min-h-0">
             <DashboardSearch />
           </div>
 
-          <div className="grid content-start gap-1.5 lg:col-span-3 lg:min-h-0 lg:grid-rows-2 lg:content-stretch">
-            <div className="flex max-h-[240px] min-h-[170px] flex-col lg:max-h-none lg:min-h-0">
+          <div className="grid content-start gap-2 lg:col-span-3 lg:min-h-0 lg:grid-rows-2 lg:content-stretch">
+            <div className="flex max-h-[260px] min-h-[180px] flex-col lg:max-h-none lg:min-h-0">
               <StoresPanel
                 stores={publicStoresQuery.data ?? []}
                 loading={publicStoresQuery.isLoading}
                 onOpenDetails={openStoreByName}
               />
             </div>
-            <div className="flex max-h-[220px] min-h-[160px] flex-col lg:max-h-none lg:min-h-0">
+            <div className="flex max-h-[240px] min-h-[170px] flex-col lg:max-h-none lg:min-h-0">
               <StoreRankStrip storeNames={storeNameSet} onOpenStore={openStoreByName} />
             </div>
           </div>
+
 
           <div className="flex min-h-0 flex-col lg:col-span-4">
             {summary ? (
