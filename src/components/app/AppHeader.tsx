@@ -45,7 +45,9 @@ function HeaderStats() {
   const { data } = useQuery({
     queryKey: ["public-stores"],
     queryFn: () => listPublicStores(),
-    staleTime: 60_000,
+    // Contagens por estabelecimento são caras no servidor; 10 min de cache
+    // evita repetir a consulta a cada troca de página do painel.
+    staleTime: 10 * 60_000,
   });
   const stores = data ?? [];
   if (stores.length === 0) return null;

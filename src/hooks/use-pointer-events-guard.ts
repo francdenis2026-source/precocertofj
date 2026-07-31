@@ -25,9 +25,11 @@ export function usePointerEventsGuard() {
     };
 
     const observer = new MutationObserver(release);
-    observer.observe(body, { attributes: true, attributeFilter: ["style"], childList: true });
+    // Só atributos: observar `childList` fazia o watchdog rodar a cada portal
+    // montado (tooltip, dropdown, toast) e pesava na navegação.
+    observer.observe(body, { attributes: true, attributeFilter: ["style"] });
 
-    const interval = window.setInterval(release, 700);
+    const interval = window.setInterval(release, 1500);
     window.addEventListener("focus", release);
 
     return () => {

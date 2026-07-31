@@ -54,7 +54,7 @@ export function useAppHomeData() {
   const publicStoresQuery = useQuery({
     queryKey: ["public-stores"],
     queryFn: () => listPublicStores(),
-    staleTime: 60_000,
+    staleTime: 10 * 60_000,
   });
 
   const storesByName = useMemo(() => {
