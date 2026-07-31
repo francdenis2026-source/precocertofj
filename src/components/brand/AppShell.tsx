@@ -27,6 +27,8 @@ export function AppShell({ children, scope }: { children: React.ReactNode; scope
   const resolvedScope = scope ?? (pathname.startsWith("/admin") ? "admin" : "app");
   const isAdminScope = resolvedScope === "admin";
   useInactivityLogout();
+  usePointerEventsGuard();
+
   const { open, onOpenChange } = usePersistentSidebar(resolvedScope, isAdminScope);
   return (
     <SidebarProvider open={open} onOpenChange={onOpenChange}>
