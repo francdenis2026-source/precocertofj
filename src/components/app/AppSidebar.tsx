@@ -1,4 +1,16 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   Home,
@@ -206,6 +218,8 @@ export function AppSidebar() {
   const { signOut, loading: signingOut } = useSignOut();
   const { isAdmin, loading: rolesLoading } = useMyRoles();
   const { isMobile, setOpenMobile } = useSidebar();
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
   const isAdminArea = pathname.startsWith("/admin");
   const groups = isAdminArea ? (isAdmin ? adminGroups : []) : appGroups;
   const closeOnMobile = () => {
@@ -226,9 +240,10 @@ export function AppSidebar() {
       if (target?.isContentEditable) return;
       if (e.key.toLowerCase() === "q") {
         e.preventDefault();
-        if (!signingOut) void signOut();
+        if (!signingOut) setConfirmOpen(true);
         return;
       }
+
       const to = map.get(e.key);
       if (!to) return;
       e.preventDefault();
@@ -331,12 +346,8 @@ export function AppSidebar() {
                         </span>
                       )}
                     </span>
-                    {n.shortcut && (
-                      <kbd className="pc-nav-kbd ml-auto rounded border px-1.5 py-0.5 text-[10px] font-semibold">
-                        Alt+{n.shortcut}
-                      </kbd>
-                    )}
                   </TooltipContent>
+
                 </Tooltip>
               </SidebarMenuItem>
             );
@@ -458,41 +469,74 @@ export function AppSidebar() {
 
         <SidebarSeparator className="mx-3 my-1 w-auto bg-sidebar-border/60" />
 
-        <SidebarMenu className="px-2 pb-2">
+        <SidebarMenu className="px-2 pb-2 group-data-[collapsible=icon]:px-1">
           <SidebarMenuItem>
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <SidebarMenuButton
-                  onClick={signOut}
-                  disabled={signingOut}
-                  aria-label={signingOut ? "Encerrando sessão" : "Sair da conta"}
-                  className="group/logout relative h-8 rounded-md px-2 text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar disabled:pointer-events-none disabled:text-sidebar-muted-foreground disabled:opacity-100"
-                >
-                  <span
-                    className={cn(
-                      "grid h-7 w-7 shrink-0 place-items-center rounded-md border border-transparent transition-colors",
-                      "text-sidebar-muted-foreground group-hover/logout:border-destructive/25 group-hover/logout:bg-destructive/10 group-hover/logout:text-destructive",
-                      "group-focus-visible/logout:border-destructive/25 group-focus-visible/logout:bg-destructive/10 group-focus-visible/logout:text-destructive",
-                    )}
+            <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <AlertDialogTrigger asChild>
+                    <SidebarMenuButton
+                      disabled={signingOut}
+                      aria-label={signingOut ? "Encerrando sessão" : "Sair da conta"}
+                      className="group/logout relative h-8 rounded-md px-2 text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar disabled:pointer-events-none disabled:text-sidebar-muted-foreground disabled:opacity-100 group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+                    >
+                      <span
+                        className={cn(
+                          "grid h-7 w-7 shrink-0 place-items-center rounded-md border border-transparent transition-colors",
+                          "text-sidebar-muted-foreground group-hover/logout:border-destructive/25 group-hover/logout:bg-destructive/10 group-hover/logout:text-destructive",
+                          "group-focus-visible/logout:border-destructive/25 group-focus-visible/logout:bg-destructive/10 group-focus-visible/logout:text-destructive",
+                        )}
+                      >
+                        {signingOut ? (
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                        ) : (
+                          <LogOut className="h-3.5 w-3.5" strokeWidth={2} />
+                        )}
+                      </span>
+                      <span className="truncate text-[13px] font-medium leading-none group-data-[collapsible=icon]:hidden">
+                        {signingOut ? "Saindo..." : "Sair"}
+                      </span>
+                    </SidebarMenuButton>
+                  </AlertDialogTrigger>
+                </TooltipTrigger>
+                <TooltipContent side="right" align="center">
+                  <span className="font-semibold">Encerrar sessão</span>
+                </TooltipContent>
+              </Tooltip>
+
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Encerrar sessão?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    Você sairá desta conta neste dispositivo. Suas listas, favoritos e alertas
+                    continuam salvos. Pressione Enter para confirmar ou Esc para cancelar.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel disabled={signingOut}>Cancelar</AlertDialogCancel>
+                  <AlertDialogAction
+                    autoFocus
+                    disabled={signingOut}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      void signOut();
+                    }}
+                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
                   >
                     {signingOut ? (
-                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                      <span className="inline-flex items-center gap-2">
+                        <Loader2 className="h-3.5 w-3.5 animate-spin" /> Saindo...
+                      </span>
                     ) : (
-                      <LogOut className="h-3.5 w-3.5" strokeWidth={2} />
+                      "Sair da conta"
                     )}
-                  </span>
-                  <span className="truncate text-[13px] font-medium leading-none">
-                    {signingOut ? "Saindo..." : "Sair"}
-                  </span>
-                </SidebarMenuButton>
-              </TooltipTrigger>
-              <TooltipContent side="right" align="center" className="flex items-center gap-2">
-                <span className="font-semibold">Encerrar sessão</span>
-                <kbd className="pc-nav-kbd rounded border px-1.5 py-0.5 text-[10px] font-semibold">Alt+Q</kbd>
-              </TooltipContent>
-            </Tooltip>
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </SidebarMenuItem>
         </SidebarMenu>
+
       </SidebarFooter>
     </Sidebar>
     </TooltipProvider>

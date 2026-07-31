@@ -7,7 +7,9 @@ import { ArrowLeft, ArrowRight, MapPin, Search as SearchIcon, Store } from "luci
 import { AppShell } from "@/components/brand/AppShell";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { Input } from "@/components/ui/input";
+import { StoreLogo } from "@/components/app/StoreLogo";
 import { useSignedLogoUrls } from "@/hooks/use-signed-logo-urls";
+
 import { listPublicStores } from "@/lib/stores-public.functions";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
@@ -143,18 +145,7 @@ function StoresPage() {
                       params={{ id: s.id }}
                       className="grid min-h-[64px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2.5 rounded-lg border border-border/70 bg-card/94 p-2.5 shadow-sm backdrop-blur-md transition-colors hover:border-primary/40 hover:bg-muted/40 active:bg-muted/60"
                     >
-                      <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md border border-border/70 bg-background">
-                        {logo ? (
-                          <img
-                            src={logo}
-                            alt=""
-                            loading="lazy"
-                            className="h-full w-full object-contain"
-                          />
-                        ) : (
-                          <Store className="h-5 w-5 text-muted-foreground" aria-hidden />
-                        )}
-                      </span>
+                      <StoreLogo src={logo} name={s.name} className="h-9 w-9" />
                       <span className="min-w-0">
                         <span className={cn(tc.storeName, "block truncate")}>{s.name}</span>
                         <span className={cn(tc.metaMuted, "flex items-center gap-1 truncate")}>
@@ -162,10 +153,18 @@ function StoresPage() {
                           {s.neighborhood ? `${s.neighborhood} · ` : ""}
                           {s.city}
                         </span>
-                        <span className={cn(tc.metaMuted, "block truncate")}>
-                          {s.productCount} {s.productCount === 1 ? "produto" : "produtos"} com preço
+                        <span
+                          className={cn(
+                            "mt-0.5 inline-flex items-center rounded-full px-1.5 py-px text-[10px] font-bold tabular-nums",
+                            s.productCount > 0
+                              ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
+                              : "bg-muted text-muted-foreground",
+                          )}
+                        >
+                          {s.productCount} {s.productCount === 1 ? "produto" : "produtos"}
                         </span>
                       </span>
+
                       <ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden />
                     </Link>
                   </li>

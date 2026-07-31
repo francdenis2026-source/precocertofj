@@ -312,27 +312,41 @@ export const listPublicStores = createServerFn({ method: "GET" }).handler(
       .order("name");
     if (error) throw new Error(error.message);
 
-    const scansTable = supabaseAdmin.from("scans" as never) as unknown as {
-      select: (s: string) => {
-        not: (
-          c: string,
-          op: string,
-          v: unknown,
-        ) => Promise<{
-          data: { establishment_id: string | null }[] | null;
-          error: { message: string } | null;
-        }>;
+    // Contagem exata por estabelecimento. Usar `select("establishment_id")`
+    // sem paginação truncava em 1000 linhas (limite padrão do Data API) e
+    // deixava as contagens dessincronizadas com o banco.
+    const counts = new Map<string, number>();
+    const countClient = supabaseAdmin as unknown as {
+      from: (t: string) => {
+        select: (
+          s: string,
+          o: { count: "exact"; head: true },
+        ) => {
+          eq: (
+            c: string,
+            v: string,
+          ) => {
+            not: (
+              c: string,
+              op: string,
+              v: unknown,
+            ) => Promise<{ count: number | null; error: { message: string } | null }>;
+          };
+        };
       };
     };
-    const { data: scans } = await scansTable
-      .select("establishment_id")
-      .not("price_captured", "is", null);
+    await Promise.all(
+      (estabs ?? []).map(async (e) => {
+        const { count } = await countClient
+          .from("scans")
+          .select("id", { count: "exact", head: true })
+          .eq("establishment_id", e.id)
+          .not("price_captured", "is", null);
+        counts.set(e.id, count ?? 0);
+      }),
+    );
 
-    const counts = new Map<string, number>();
-    for (const s of scans ?? []) {
-      if (!s.establishment_id) continue;
-      counts.set(s.establishment_id, (counts.get(s.establishment_id) ?? 0) + 1);
-    }
+
 
     // Ordem canônica do sistema: quem tem mais produtos cadastrados lidera.
     return (estabs ?? [])
