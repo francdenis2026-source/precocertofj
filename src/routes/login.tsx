@@ -19,6 +19,7 @@ import {
   type BlockStatus,
 } from "@/lib/login-rate-limit";
 import { toast } from "sonner";
+import { notify } from "@/lib/notify";
 import { useQuery } from "@tanstack/react-query";
 import { getLoginPanelMetrics } from "@/lib/login-panel.functions";
 import { pickEditorialBackground } from "@/lib/editorial-background";
@@ -242,7 +243,10 @@ function LoginPage() {
         });
         if (error) throw error;
         clearAttempts(digits);
-        toast.success("Conta criada! 30 dias grátis liberados.");
+        notify.success("Conta criada com sucesso", {
+          id: "auth-session",
+          description: "Seus 30 dias grátis já estão liberados. Redirecionando…",
+        });
       } else {
         const { hiddenEmail } = await resolveEmailFn({ data: { cpf: digits } });
         const { error } = await supabase.auth.signInWithPassword({
@@ -262,14 +266,17 @@ function LoginPage() {
           );
         }
         clearAttempts(digits);
-        toast.success("Bem-vindo de volta!");
+        notify.success("Bem-vindo de volta", {
+          id: "auth-session",
+          description: "Login confirmado. Abrindo sua área…",
+        });
       }
       await router.invalidate();
       goToPostAuthTarget();
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Falha ao autenticar";
       setFormError(msg);
-      toast.error(msg);
+      notify.error("Não foi possível entrar", { id: "auth-session", description: msg });
     } finally {
       setLoading(false);
     }
