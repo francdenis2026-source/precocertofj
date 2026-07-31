@@ -61,22 +61,17 @@ const preloadExplorePanel = () => {
 
 
 export const Route = createFileRoute("/")({
-  loader: async ({ context }) => {
-    await Promise.allSettled([
-      context.queryClient.ensureQueryData({
-        queryKey: ["platform-stats"],
-        queryFn: () => getPlatformStats({} as any),
-        staleTime: 10 * 60_000,
-      }),
-
-      context.queryClient.ensureQueryData({
-        queryKey: ["home-economy"],
-        queryFn: () => getEconomyStat({} as any),
-        staleTime: 5 * 60_000,
-      }),
+  loader: async () => {
+    const [statsResult, economyResult] = await Promise.allSettled([
+      getPlatformStats({} as any),
+      getEconomyStat({} as any),
     ]);
-    return null;
+    return {
+      stats: statsResult.status === "fulfilled" ? statsResult.value : undefined,
+      economy: economyResult.status === "fulfilled" ? economyResult.value : undefined,
+    };
   },
+
   head: () => ({
     meta: [
       { title: "PreçoCerto — Comparador inteligente de mercados em Feijó/AC" },
