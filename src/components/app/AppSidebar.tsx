@@ -48,56 +48,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Link, useRouterState } from "@tanstack/react-router";
-import {
-  Home,
-  ShoppingCart,
-  Bell,
-  User,
-  Shield,
-  BarChart3,
-  History,
-  Store,
-  LogOut,
-  Wallet,
-  KeyRound,
-  Users,
-  Activity,
-  Database,
-  Tags,
-  ReceiptText,
-  ImageIcon,
-  UploadCloud,
-  Layers3,
-  FileText,
-  TicketPercent,
-  BadgeCheck,
-  Webhook,
-  LineChart,
-  Settings2,
-  ShieldCheck,
-  Boxes,
-  Gauge,
-  Languages,
-  Trophy,
-  ClipboardCheck,
-  Camera,
-  ShoppingBasket,
-  Gavel,
-} from "lucide-react";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  useSidebar,
-} from "@/components/ui/sidebar";
 import { useSignOut } from "@/hooks/use-sign-out";
 import { useMyRoles } from "@/hooks/useMyRoles";
 import { LicenseStatusChip } from "@/components/app/LicenseStatusChip";
@@ -389,6 +339,11 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border/60">
+        {!isAdminArea && (
+          <div className="px-2.5 py-2 group-data-[collapsible=icon]:hidden">
+            <LicenseStatusChip />
+          </div>
+        )}
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
