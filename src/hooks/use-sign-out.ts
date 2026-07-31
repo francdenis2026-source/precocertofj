@@ -25,13 +25,13 @@ export function useSignOut() {
       await supabase.auth.signOut();
       notify.success("Sessão encerrada", {
         id: "auth-session",
-        description: "Você saiu da sua conta com segurança. Seus dados continuam salvos.",
+        description: "Você saiu com segurança. Suas listas e favoritos continuam salvos.",
       });
     } catch (err) {
       console.error("[signOut]", err);
-      notify.error("Não conseguimos encerrar a sessão por completo", {
+      notify.error("Falha ao encerrar a sessão", {
         id: "auth-session",
-        description: "Feche o navegador ou tente sair novamente para garantir a saída.",
+        description: "Tente sair novamente. Se persistir, feche o navegador.",
       });
     } finally {
       setLoading(false);
