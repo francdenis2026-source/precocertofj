@@ -210,7 +210,7 @@ export function AppSidebar() {
     <SidebarGroup key={group.label} className="px-0 py-1.5" data-tone={group.tone}>
       <SidebarGroupLabel
         className={cn(
-          "h-6 px-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-foreground/75",
+          "h-6 px-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-muted-foreground",
           "group-data-[collapsible=icon]:hidden",
           group.tone && "pc-admin-group-label",
 
