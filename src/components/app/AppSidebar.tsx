@@ -292,7 +292,7 @@ export function AppSidebar() {
           to={isAdminArea ? "/admin" : "/"}
           onClick={closeOnMobile}
           aria-label="PreçoCerto — Feijó, Acre"
-          className="group/brand flex items-center gap-2.5 rounded-md px-2 py-1 outline-none transition-colors hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-sidebar-ring group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+          className="group/brand flex items-center gap-2.5 rounded-md px-2 py-1 outline-none transition-colors hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
         >
 
           {isAdminArea ? (
