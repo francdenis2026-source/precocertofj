@@ -91,31 +91,10 @@ function AppHomeContent() {
 
   const firstName =
     (accountQuery.data?.fullName ?? "").split(" ")[0] || "cliente";
-  const status = getAccessStatus(
-    accountQuery.data
-      ? {
-          trial_ends_at: accountQuery.data.trialEndsAt,
-          paid_until: accountQuery.data.paidUntil,
-        }
-      : null,
-  );
-  const trialDays =
-    status === "trial" ? daysRemaining(accountQuery.data?.trialEndsAt ?? null) : 0;
-  const paidDays =
-    status === "active" ? daysRemaining(accountQuery.data?.paidUntil ?? null) : 0;
-
-  const statusLine =
-    status === "trial"
-      ? `Teste grátis · ${trialDays} ${trialDays === 1 ? "dia" : "dias"}`
-      : status === "active"
-        ? `Ativa · ${paidDays}d`
-        : status === "expired"
-          ? "Vencida · reative"
-          : "Acesso liberado";
-
 
   const summary = summaryQuery.data;
   const loading = summaryQuery.isLoading;
+
 
   const potentialSavings = (summary?.lists ?? []).reduce(
     (acc, l) => acc + (l.potentialSavings ?? 0),
