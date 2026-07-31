@@ -1264,6 +1264,38 @@ html[data-density="compact"] .pc-col { min-height: calc(var(--pc-panel-min) - 1r
 .app-scope { --pc-card-min: 4.75rem; }
 html[data-density="compact"] .app-scope { --pc-card-min: 3.9rem; }
 
+/* ── Ritmo tipográfico único da área do cliente ──────────────────────────
+   Mesma hierarquia (título → subtítulo → corpo) e o mesmo espaçamento
+   vertical em todas as páginas do painel, sem tocar em cada rota. */
+.app-scope h1,
+.app-scope h2,
+.app-scope h3 {
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+.app-scope h1 { line-height: 1.18; }
+.app-scope h2 { line-height: 1.22; }
+.app-scope h3 { line-height: 1.28; }
+.app-scope h1 + p,
+.app-scope h2 + p,
+.app-scope h3 + p {
+  margin-top: 0.2rem;
+}
+.app-scope p { overflow-wrap: anywhere; }
+.app-scope [data-slot="card-header"] { padding: var(--pc-panel-pad) calc(var(--pc-panel-pad) + 0.25rem); }
+.app-scope [data-slot="card-content"] { padding: var(--pc-panel-pad) calc(var(--pc-panel-pad) + 0.25rem); }
+
+/* Telas menores: cards/métricas mantêm alinhamento sem espremer. */
+@media (max-width: 767px) {
+  .app-scope .pc-card-grid {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 13.5rem), 1fr));
+  }
+  .app-scope [data-slot="card"] > * { min-width: 0; }
+  .app-scope .pc-page { padding-inline: max(var(--pc-pad-x), 0.85rem); }
+  .app-scope .pc-col { max-height: none; }
+}
+
+
 /* ── Densidade aplicada a barra lateral, cabeçalho e controles menores ──── */
 html[data-density="compact"] .app-scope [data-sidebar="header"] { padding: 0.4rem 0.45rem; }
 html[data-density="compact"] .app-scope [data-sidebar="content"] { padding: 0.35rem 0.4rem; }
