@@ -20,6 +20,7 @@ import {
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 
 import { AppBrand } from "@/components/app/AppBrand";
+import { DensityToggle } from "@/components/app/DensityToggle";
 
 import { useMyProfile } from "@/hooks/useMyProfile";
 import { useSignOut } from "@/hooks/use-sign-out";
@@ -281,6 +282,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
       </div>
 
       <div className="flex items-center gap-1 md:gap-1.5">
+        {!isAdminScope && <DensityToggle className="hidden sm:inline-flex" />}
         {!isAdminScope && <ScopeNav />}
 
         {!isAdminScope && (
