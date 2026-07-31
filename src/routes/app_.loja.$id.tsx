@@ -6,6 +6,7 @@ import {
   ArrowLeft,
   BarChart3,
   CalendarClock,
+  LineChart,
   Clock,
   Crown,
   MapPin,
@@ -18,6 +19,8 @@ import {
 import { AppShell } from "@/components/brand/AppShell";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { ProductCompareSheet } from "@/components/app/ProductCompareSheet";
+import { ProductPriceHistory } from "@/components/app/ProductPriceHistory";
+import { formatUpdatedAt } from "@/components/app/PriceTrend";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Price } from "@/components/ds/Price";
@@ -82,6 +85,7 @@ function AppStorePage() {
   const [sort, setSort] = useState<SortKey>("price-asc");
   const [selected, setSelected] = useState<string[]>([]);
   const [compareKey, setCompareKey] = useState<string | null>(null);
+  const [historyFor, setHistoryFor] = useState<string | null>(null);
 
   const catalogQ = useQuery({
     queryKey: ["public-store", id],
@@ -307,32 +311,55 @@ function AppStorePage() {
                   {list.map((p) => {
                     const checked = selected.includes(p.productName);
                     return (
-                      <li
-                        key={p.slug}
-                        className="grid grid-cols-[auto_minmax(0,1fr)_auto_auto] items-center gap-2.5 px-3 py-2 transition-colors hover:bg-muted/40"
-                      >
-                        <Checkbox
-                          checked={checked}
-                          onCheckedChange={() => toggle(p.productName)}
-                          aria-label={`Selecionar ${p.productName} para comparar`}
-                        />
-                        <div className="min-w-0">
-                          <p className={cn(tc.itemTitle, "truncate")}>{p.productName}</p>
-                          <p className={cn(tc.metaMuted, "truncate")}>
-                            {p.category}
-                            {p.brand ? ` · ${p.brand}` : ""} ·{" "}
-                            {new Date(p.lastDate).toLocaleDateString("pt-BR")}
-                          </p>
+                      <li key={p.slug} className="px-3 py-2 transition-colors hover:bg-muted/40">
+                        <div className="grid grid-cols-[auto_minmax(0,1fr)_auto_auto_auto] items-center gap-2.5">
+                          <Checkbox
+                            checked={checked}
+                            onCheckedChange={() => toggle(p.productName)}
+                            aria-label={`Selecionar ${p.productName} para comparar`}
+                          />
+                          <div className="min-w-0">
+                            <p className={cn(tc.itemTitle, "truncate")}>{p.productName}</p>
+                            <p className={cn(tc.metaMuted, "truncate")}>
+                              {p.category}
+                              {p.brand ? ` · ${p.brand}` : ""} · atualizado{" "}
+                              {formatUpdatedAt(p.lastDate)}
+                            </p>
+                          </div>
+                          <Price value={p.price} size="sm" />
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setHistoryFor(historyFor === p.productName ? null : p.productName)
+                            }
+                            aria-expanded={historyFor === p.productName}
+                            aria-label={`Ver histórico de preços de ${p.productName}`}
+                            className={cn(
+                              "grid h-8 w-8 place-items-center rounded-md transition-colors",
+                              historyFor === p.productName
+                                ? "bg-primary text-primary-foreground"
+                                : "bg-muted text-muted-foreground hover:text-foreground",
+                            )}
+                          >
+                            <LineChart className="h-3.5 w-3.5" aria-hidden />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setCompareKey(p.productName)}
+                            aria-label={`Comparar preços de ${p.productName}`}
+                            className="grid h-8 w-8 place-items-center rounded-md bg-primary/10 text-primary transition-colors hover:bg-primary/20"
+                          >
+                            <BarChart3 className="h-3.5 w-3.5" aria-hidden />
+                          </button>
                         </div>
-                        <Price value={p.price} size="sm" />
-                        <button
-                          type="button"
-                          onClick={() => setCompareKey(p.productName)}
-                          aria-label={`Comparar preços de ${p.productName}`}
-                          className="grid h-8 w-8 place-items-center rounded-md bg-primary/10 text-primary transition-colors hover:bg-primary/20"
-                        >
-                          <BarChart3 className="h-3.5 w-3.5" aria-hidden />
-                        </button>
+
+                        {historyFor === p.productName && (
+                          <ProductPriceHistory
+                            className="mt-2 rounded-md border border-border/60 bg-muted/20 p-2"
+                            establishmentId={id}
+                            productName={p.productName}
+                          />
+                        )}
                       </li>
                     );
                   })}
