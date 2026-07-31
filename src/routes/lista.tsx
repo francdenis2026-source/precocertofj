@@ -360,14 +360,17 @@ function ListaContent() {
                 <button
                   type="submit"
                   disabled={createMut.isPending || !newName.trim()}
-                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground disabled:opacity-50"
-                  aria-label="Criar lista"
+                  className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-primary px-3 text-[12.5px] font-semibold text-primary-foreground transition hover:opacity-90 disabled:opacity-50"
+                  aria-label="Criar nova lista"
+                  aria-keyshortcuts="Alt+N"
+                  title="Nova lista (Alt+N)"
                 >
                   {createMut.isPending ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
                     <Plus className="h-4 w-4" />
                   )}
+                  Nova lista
                 </button>
               </form>
               <div className="relative mt-2">
