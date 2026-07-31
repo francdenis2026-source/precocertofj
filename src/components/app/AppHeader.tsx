@@ -211,7 +211,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
                 type="button"
                 aria-label={fullName ? `Conta — ${fullName}` : "Conta"}
                 title={fullName ?? "Conta"}
-                className="pc-topnav-item ml-auto inline-flex h-7 min-w-0 max-w-[160px] items-center gap-1.5 rounded-full border border-border bg-card pl-1 pr-1.5 text-[11px] font-semibold text-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand-gold/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:border-brand-gold/50 data-[state=open]:bg-secondary sm:max-w-[180px]"
+                className="group pc-topnav-item ml-auto inline-flex h-7 min-w-0 max-w-[160px] items-center gap-1.5 rounded-full border border-border bg-card pl-1 pr-1.5 text-[11px] font-semibold text-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand-gold/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:border-brand-gold/50 data-[state=open]:bg-secondary sm:max-w-[180px]"
               >
                 {avatarUrl ? (
                   <img src={avatarUrl} alt="" className="h-5 w-5 rounded-full object-cover" />
