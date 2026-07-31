@@ -47,8 +47,10 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarSeparator,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Loader2 } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
