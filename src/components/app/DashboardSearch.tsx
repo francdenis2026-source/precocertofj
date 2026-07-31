@@ -14,6 +14,7 @@ import {
 } from "@/lib/catalog-search.functions";
 import { useRovingFocus } from "@/hooks/use-roving-focus";
 import { cn } from "@/lib/utils";
+import { tc } from "@/lib/typeclear";
 
 
 type SortKey = "cheapest" | "priciest" | "recent";
@@ -137,9 +138,9 @@ export function DashboardSearch() {
   return (
     <section
       aria-label="Buscar preços"
-      className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-border/70 bg-card"
+      className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
     >
-      <div className="shrink-0 space-y-2 border-b border-border/70 p-3">
+      <div className="shrink-0 space-y-2 border-b border-border/70 p-2.5">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
           <label className="relative min-w-0">
             <span className="sr-only">Buscar produto</span>
@@ -152,7 +153,7 @@ export function DashboardSearch() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Buscar produto: arroz, café, sabão…"
-              className="h-9 pl-9 pr-8 text-[13px]"
+              className="h-9 rounded-md bg-background/80 pl-9 pr-8 text-[13px]"
               maxLength={80}
               inputMode="search"
               autoComplete="off"
@@ -191,7 +192,7 @@ export function DashboardSearch() {
                 onClick={() => setSort(s.id)}
                 {...sortRoving.itemProps(i)}
                 className={cn(
-                  "h-8 rounded-full border px-2.5 text-[12px] font-semibold transition-colors",
+                   "h-8 rounded-md border px-2.5 text-[12px] font-medium transition-colors",
                   sort === s.id
                     ? "border-primary bg-primary text-primary-foreground"
                     : "border-border/70 bg-background text-muted-foreground hover:text-foreground",
@@ -241,16 +242,16 @@ export function DashboardSearch() {
       >
 
         {!active ? (
-          <p className="p-6 text-center text-[13px] text-muted-foreground">
+           <p className={cn(tc.meta, "p-6 text-center")}>
             Digite ao menos 2 letras ou escolha uma categoria para ver os preços
             mais recentes dos mercados de Feijó.
           </p>
         ) : resultsQ.isLoading ? (
-          <div className="flex items-center gap-2 p-6 text-[13px] text-muted-foreground">
+           <div className={cn(tc.meta, "flex items-center gap-2 p-6")}>
             <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Buscando…
           </div>
         ) : results.length === 0 ? (
-          <p className="p-6 text-center text-[13px] text-muted-foreground">
+           <p className={cn(tc.meta, "p-6 text-center")}>
             Nenhum produto encontrado para esse filtro.
           </p>
         ) : (
@@ -272,13 +273,13 @@ export function DashboardSearch() {
                   }}
                   onKeyDown={(e) => onResultKeyDown(e, i)}
                   search={{ q: r.displayName } as never}
-                  className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-2 transition-colors hover:bg-muted/50"
+                   className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-1.5 transition-colors hover:bg-muted/50 focus-visible:bg-muted/50"
                 >
                   <div className="min-w-0">
-                    <p className="truncate text-[13px] font-semibold text-foreground">
+                     <p className={cn(tc.itemTitle, "truncate")}>
                       {r.displayName}
                     </p>
-                    <p className="mt-0.5 flex items-center gap-1.5 truncate text-[12px] text-muted-foreground">
+                     <p className={cn(tc.metaMuted, "mt-0.5 flex items-center gap-1.5 truncate")}>
                       {r.brand && <span className="truncate">{r.brand}</span>}
                       {r.brand && <span aria-hidden>·</span>}
                       <Store className="h-3 w-3 shrink-0" aria-hidden />
@@ -335,7 +336,7 @@ function Chip({
       aria-checked={active}
       {...rest}
       className={cn(
-        "h-7 shrink-0 whitespace-nowrap rounded-full border px-2.5 text-[12px] font-semibold transition-colors",
+        "h-7 shrink-0 whitespace-nowrap rounded-md border px-2.5 text-[12px] font-medium transition-colors",
         active
           ? "border-primary/60 bg-primary/10 text-primary"
           : "border-border/70 bg-background text-muted-foreground hover:text-foreground",

@@ -14,6 +14,7 @@ import type { getAppSummary } from "@/lib/favorites.functions";
 import { AddToListButton } from "@/components/app/AddToListButton";
 import { useRovingFocus } from "@/hooks/use-roving-focus";
 import { cn } from "@/lib/utils";
+import { tc } from "@/lib/typeclear";
 
 
 type Summary = NonNullable<Awaited<ReturnType<typeof getAppSummary>>>;
@@ -69,7 +70,7 @@ export function FavoritesDock({
   return (
     <section
       aria-label="Seus favoritos e listas"
-      className="flex h-[52vh] min-h-[300px] flex-1 flex-col overflow-hidden rounded-2xl border border-border/70 bg-card lg:h-auto lg:min-h-0"
+       className="flex h-[52vh] min-h-[300px] flex-1 flex-col overflow-hidden rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md lg:h-auto lg:min-h-0"
     >
       <div
         role="tablist"
@@ -88,7 +89,7 @@ export function FavoritesDock({
             onClick={() => setTab(t.id)}
             {...roving.itemProps(i)}
             className={cn(
-              "h-7 rounded-full px-3 text-[12.5px] font-semibold transition-colors",
+               "h-7 rounded-md px-2.5 text-[12px] font-medium transition-colors",
               tab === t.id
                 ? "bg-primary text-primary-foreground"
                 : "text-muted-foreground hover:bg-muted hover:text-foreground",
@@ -119,13 +120,13 @@ export function FavoritesDock({
               {summary.favoriteItems.map((f, idx) => (
                 <li
                   key={f.favoriteId}
-                  className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-3 py-2"
+                     className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-3 py-1.5"
                 >
                   <div className="min-w-0">
-                    <p className="truncate text-[13px] font-semibold text-foreground">
+                     <p className={cn(tc.itemTitle, "truncate")}>
                       {f.displayName}
                     </p>
-                    <p className="truncate text-[12px] text-muted-foreground">
+                     <p className={cn(tc.metaMuted, "truncate")}>
                       {f.best ? (
                         <>
                           melhor em{" "}
@@ -184,18 +185,18 @@ export function FavoritesDock({
                 return (
                   <li
                     key={m.favoriteId}
-                    className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-3 py-2"
+                     className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-3 py-1.5"
                   >
                     <div className="min-w-0">
                       <button
                         type="button"
                         disabled={!clickable}
                         onClick={() => onOpenStore(m.marketName)}
-                        className="block max-w-full truncate text-left text-[13px] font-semibold text-foreground enabled:hover:text-primary disabled:cursor-default"
+                         className={cn(tc.storeName, "block max-w-full truncate text-left enabled:hover:text-primary disabled:cursor-default")}
                       >
                         {m.marketName}
                       </button>
-                      <p className="truncate text-[12px] text-muted-foreground">
+                       <p className={cn(tc.metaMuted, "truncate")}>
                         {m.itemsCovered} itens · total{" "}
                         <Price value={m.total} size="xs" />
                       </p>
@@ -233,16 +234,16 @@ export function FavoritesDock({
           ) : (
             <ul className="divide-y divide-border/60">
               {summary.lists.map((l) => (
-                <li key={l.id} className="px-3 py-2">
+                 <li key={l.id} className="px-3 py-1.5">
                   <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
                     <div className="min-w-0">
                       <Link
                         to="/lista"
-                        className="block truncate text-[13px] font-semibold text-foreground hover:text-primary"
+                         className={cn(tc.itemTitle, "block truncate hover:text-primary")}
                       >
                         {l.name}
                       </Link>
-                      <p className="truncate text-[12px] text-muted-foreground">
+                       <p className={cn(tc.metaMuted, "truncate")}>
                         {l.itemCount} {l.itemCount === 1 ? "item" : "itens"}
                         {l.recommendedMarket && (
                           <>

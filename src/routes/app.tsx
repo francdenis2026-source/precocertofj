@@ -23,6 +23,7 @@ import { Price } from "@/components/ds/Price";
 import { useAppHomeData } from "@/hooks/useAppHomeData";
 import { getAccessStatus, daysRemaining } from "@/lib/paywall";
 import { cn } from "@/lib/utils";
+import { tc } from "@/lib/typeclear";
 
 export const Route = createFileRoute("/app")({
   head: () => ({
@@ -34,6 +35,13 @@ export const Route = createFileRoute("/app")({
           "Painel do cliente PreçoCerto: compare preços dos mercados de Feijó, acompanhe favoritos e monte listas mais baratas.",
       },
       { name: "robots", content: "noindex" },
+      { property: "og:title", content: "Meu painel — PreçoCerto Feijó" },
+      {
+        property: "og:description",
+        content: "Compare preços, acompanhe favoritos e organize suas listas no painel PreçoCerto.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: AppHome,
@@ -126,9 +134,9 @@ function AppHomeContent() {
 
   return (
     <AppShell>
-      <div className="mx-auto flex w-full max-w-[1600px] flex-col gap-3 px-3 py-3 md:px-5 lg:h-[calc(100dvh-3.5rem)] lg:overflow-hidden">
+      <div className="app-dashboard mx-auto flex w-full max-w-[1540px] flex-col gap-2.5 px-3 py-3 md:px-4 lg:h-[calc(100dvh-3.5rem)] lg:overflow-hidden">
         {/* Cabeçalho: faixa navy com acento dourado */}
-        <header className="relative shrink-0 overflow-hidden rounded-2xl border border-primary/30 bg-primary px-4 py-3.5 text-primary-foreground shadow-sm md:px-5">
+        <header className="relative shrink-0 overflow-hidden rounded-lg border border-primary/30 bg-primary/95 px-3.5 py-2.5 text-primary-foreground shadow-sm backdrop-blur-md md:px-4">
           <span
             aria-hidden
             className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-brand/25 blur-3xl"
@@ -139,20 +147,20 @@ function AppHomeContent() {
           />
           <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
             <div className="min-w-0">
-              <p className="text-[11px] font-bold uppercase tracking-[0.22em] text-brand">
+              <p className={cn(tc.eyebrow, "text-brand")}>
                 Meu painel
               </p>
-              <h1 className="truncate font-display text-[22px] font-extrabold leading-tight tracking-tight md:text-[26px]">
+              <h1 className="truncate font-display text-[22px] font-semibold leading-tight md:text-[25px]">
                 Olá, {firstName}
               </h1>
-              <p className="mt-0.5 truncate text-[12px] text-primary-foreground/75 sm:hidden">
+              <p className="mt-0.5 truncate text-[12px] leading-snug text-primary-foreground/80 sm:hidden">
                 {statusLine}
               </p>
             </div>
             <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
               <span
                 className={cn(
-                  "hidden rounded-full border px-2.5 py-1 text-[12px] font-semibold sm:inline-flex",
+                  "hidden rounded-md border px-2.5 py-1 text-[12px] font-medium sm:inline-flex",
                   status === "expired"
                     ? "border-destructive/50 bg-destructive/20 text-primary-foreground"
                     : "border-primary-foreground/25 bg-primary-foreground/10 text-primary-foreground/90",
@@ -162,7 +170,7 @@ function AppHomeContent() {
               </span>
               <Link
                 to="/lista/nova"
-                className="inline-flex h-9 items-center gap-1.5 rounded-xl bg-brand px-3.5 text-[13px] font-bold text-brand-foreground transition hover:bg-brand-strong"
+                className="inline-flex h-8 items-center gap-1.5 rounded-md bg-brand px-3 text-[12px] font-semibold text-brand-foreground transition hover:bg-brand-strong"
               >
                 Nova lista <ArrowRight className="h-3.5 w-3.5" aria-hidden />
               </Link>
@@ -170,7 +178,7 @@ function AppHomeContent() {
               <Link
                 to="/alertas"
                 aria-label="Alertas de preço"
-                className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-primary-foreground/30 bg-primary-foreground/10 px-3 text-[13px] font-semibold text-primary-foreground transition hover:bg-primary-foreground/20"
+                className="inline-flex h-8 items-center gap-1.5 rounded-md border border-primary-foreground/30 bg-primary-foreground/10 px-2.5 text-[12px] font-medium text-primary-foreground transition hover:bg-primary-foreground/20"
               >
                 <Bell className="h-3.5 w-3.5" aria-hidden />
                 <span className="hidden md:inline">Alertas</span>
@@ -180,7 +188,7 @@ function AppHomeContent() {
         </header>
 
         {/* Métricas do banco */}
-        <div className="grid shrink-0 grid-cols-2 gap-2 xl:grid-cols-4">
+        <div className="grid shrink-0 grid-cols-2 gap-1.5 xl:grid-cols-4">
           <Metric
             icon={ShoppingCart}
             label="Suas listas"
@@ -233,17 +241,17 @@ function AppHomeContent() {
 
 
         {loading && (
-          <div className="flex items-center gap-2 text-[13px] text-muted-foreground">
+          <div className={cn(tc.meta, "flex items-center gap-2")}>
             <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Puxando os
             preços mais recentes…
           </div>
         )}
 
-        <div className="grid min-h-0 flex-1 gap-3 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+        <div className="grid min-h-0 flex-1 gap-2.5 lg:grid-cols-[minmax(0,1.42fr)_minmax(320px,0.86fr)]">
           <div className="flex h-[62vh] min-h-[380px] flex-col lg:h-auto lg:min-h-0">
             <DashboardSearch />
           </div>
-          <div className="grid min-h-0 gap-3 lg:grid-rows-[minmax(0,0.9fr)_minmax(0,1.1fr)]">
+          <div className="grid min-h-0 gap-2.5 lg:grid-rows-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
             <StoreRankStrip
               storeNames={storeNameSet}
               onOpenStore={openStoreByName}
@@ -261,7 +269,7 @@ function AppHomeContent() {
                 onRemoveMarket={(id) => removeMarket.mutate(id)}
               />
             ) : (
-              <div className="min-h-0 animate-pulse rounded-2xl border border-border bg-muted/30" />
+               <div className="min-h-0 animate-pulse rounded-lg border border-border bg-card/80 backdrop-blur-md" />
             )}
           </div>
         </div>
@@ -322,7 +330,7 @@ function Metric({
   return (
     <article
       className={cn(
-        "relative overflow-hidden rounded-2xl border px-3.5 py-2.5 transition-colors",
+        "relative overflow-hidden rounded-lg border px-3 py-2 shadow-sm backdrop-blur-md transition-colors",
         t.card,
       )}
     >
@@ -331,22 +339,22 @@ function Metric({
         className={cn("absolute inset-y-0 left-0 w-[3px]", t.rail)}
       />
       <div className="flex items-center justify-between gap-2">
-        <p className="truncate text-[12px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+        <p className="truncate text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
           {label}
         </p>
         <span
           className={cn(
-            "grid h-6 w-6 shrink-0 place-items-center rounded-lg",
+            "grid h-6 w-6 shrink-0 place-items-center rounded-md",
             t.chip,
           )}
         >
           <Icon className="h-3.5 w-3.5" aria-hidden />
         </span>
       </div>
-      <p className="pc-num mt-1 text-[26px] font-semibold leading-none text-foreground">
+      <p className="pc-num mt-0.5 text-[22px] font-semibold leading-none text-foreground">
         {value}
       </p>
-      <p className="mt-1 truncate text-[12px] text-muted-foreground">{hint}</p>
+      <p className="mt-0.5 truncate text-[11px] leading-snug text-muted-foreground">{hint}</p>
 
     </article>
   );

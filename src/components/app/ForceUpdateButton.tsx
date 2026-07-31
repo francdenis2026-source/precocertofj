@@ -4,6 +4,7 @@ import { toast } from "sonner";
 
 import { forceAppUpdate, APP_BUILD_ID } from "@/lib/app-version";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 
 /**
  * Ação manual para forçar a atualização do site depois de um Publish:
@@ -27,14 +28,14 @@ export function ForceUpdateButton({ className }: { className?: string }) {
   };
 
   return (
-    <button
+    <Button
       type="button"
       onClick={run}
       disabled={busy}
       title={`Versão atual: ${APP_BUILD_ID}`}
       aria-label="Forçar atualização do site e recarregar"
       className={cn(
-        "inline-flex h-9 items-center gap-1.5 rounded-xl border border-primary-foreground/30 bg-primary-foreground/10 px-3 text-[13px] font-semibold text-primary-foreground transition hover:bg-primary-foreground/20 disabled:opacity-60",
+        "h-8 rounded-md border border-primary-foreground/30 bg-primary-foreground/10 px-2.5 text-[12px] font-medium text-primary-foreground shadow-none hover:bg-primary-foreground/20 disabled:opacity-60",
         className,
       )}
     >
@@ -45,6 +46,6 @@ export function ForceUpdateButton({ className }: { className?: string }) {
       <span className="hidden md:inline">
         {busy ? "Atualizando…" : "Atualizar"}
       </span>
-    </button>
+    </Button>
   );
 }
