@@ -6427,3 +6427,22 @@ h3.font-display {
   .pcsb-row, .pcsb-ico, .pcsb-rail, .pcsb-kbd, .pcsb-brand { transition: none; }
 }
 
+/* Altura/respiro das linhas vence os defaults de .app-scope. */
+.app-scope .pcsb [data-sidebar="menu-button"].pcsb-row,
+.pcsb [data-sidebar="menu-button"].pcsb-row {
+  min-height: 2.4rem;
+  height: 2.4rem;
+  padding-inline: 0.5rem;
+  border-radius: 0.55rem;
+}
+.app-scope .pcsb [data-sidebar="menu-button"].pcsb-row--logout,
+.pcsb [data-sidebar="menu-button"].pcsb-row--logout {
+  min-height: 2.3rem;
+  height: 2.3rem;
+}
+[data-collapsible="icon"] .pcsb [data-sidebar="menu-button"].pcsb-row,
+.pcsb [data-collapsible="icon"] [data-sidebar="menu-button"].pcsb-row {
+  width: 2.4rem;
+  padding-inline: 0;
+}
+
