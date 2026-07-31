@@ -6135,12 +6135,19 @@ h3.font-display {
 
 /* Janela única: o container rolável principal não rola quando o dashboard
    já ocupa toda a altura disponível (evita 1–2px de "scroll fantasma"). */
+/* Janela única: o container principal esconde a barra visual, mas continua
+   rolável — antes ficava `overflow: hidden` e a roda do mouse morria quando o
+   conteúdo passava um pouco da altura da tela. */
 @media (min-width: 1024px) and (min-height: 620px) {
   .app-scope .pc-scroll-main:has(.app-dashboard) {
-    overflow: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
     padding-bottom: 0;
   }
+  .app-scope .pc-scroll-main:has(.app-dashboard)::-webkit-scrollbar { width: 0; height: 0; }
 }
+
 
 /* ============================================================
    PAINEL LATERAL — "Prestige Rail"
