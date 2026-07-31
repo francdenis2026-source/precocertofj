@@ -135,58 +135,46 @@ function AppHomeContent() {
 
   return (
     <AppShell>
-      <div className="app-dashboard mx-auto flex w-full max-w-[1540px] flex-col gap-2.5 px-3 py-3 md:px-4 lg:h-[calc(100dvh-3.5rem)] lg:overflow-hidden">
-        {/* Cabeçalho: faixa navy com acento dourado */}
-        <header className="relative shrink-0 overflow-hidden rounded-lg border border-primary/30 bg-primary/95 px-3.5 py-2.5 text-primary-foreground shadow-sm backdrop-blur-md md:px-4">
+      <div className="app-dashboard mx-auto flex w-full max-w-[1540px] flex-col gap-2 px-3 py-2 md:px-4 lg:h-[calc(100dvh-3.5rem)] lg:overflow-hidden">
+        {/* Cabeçalho compacto */}
+        <header className="relative shrink-0 overflow-hidden rounded-lg border border-primary/30 bg-primary/95 px-3 py-2 text-primary-foreground shadow-sm backdrop-blur-md md:px-3.5">
           <span
             aria-hidden
-            className="pointer-events-none absolute -right-16 -top-20 h-56 w-56 rounded-full bg-brand/25 blur-3xl"
+            className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-brand/20 blur-3xl"
           />
           <span
             aria-hidden
             className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-brand/60"
           />
-          <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+          <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
             <div className="min-w-0">
               <p className={cn(tc.eyebrow, "text-brand")}>
                 Meu painel
               </p>
-              <h1 className="truncate font-display text-[22px] font-semibold leading-tight md:text-[25px]">
+              <h1 className="truncate font-display text-[18px] font-semibold leading-tight md:text-[20px]">
                 Olá, {firstName}
               </h1>
-              <p className="mt-0.5 truncate text-[12px] leading-snug text-primary-foreground/80 sm:hidden">
-                {statusLine}
-              </p>
             </div>
-            <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
-              <span
-                className={cn(
-                  "hidden rounded-md border px-2.5 py-1 text-[12px] font-medium sm:inline-flex",
-                  status === "expired"
-                    ? "border-destructive/50 bg-destructive/20 text-primary-foreground"
-                    : "border-primary-foreground/25 bg-primary-foreground/10 text-primary-foreground/90",
-                )}
-              >
-                {statusLine}
-              </span>
+            <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5">
               <Link
                 to="/lista/nova"
-                className="inline-flex h-8 items-center gap-1.5 rounded-md bg-brand px-3 text-[12px] font-semibold text-brand-foreground transition hover:bg-brand-strong"
+                className="inline-flex h-7 items-center gap-1 rounded-md bg-brand px-2.5 text-[11px] font-semibold text-brand-foreground transition hover:bg-brand-strong"
               >
-                Nova lista <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+                Nova lista <ArrowRight className="h-3 w-3" aria-hidden />
               </Link>
               <ForceUpdateButton />
               <Link
                 to="/alertas"
                 aria-label="Alertas de preço"
-                className="inline-flex h-8 items-center gap-1.5 rounded-md border border-primary-foreground/30 bg-primary-foreground/10 px-2.5 text-[12px] font-medium text-primary-foreground transition hover:bg-primary-foreground/20"
+                className="inline-flex h-7 items-center gap-1 rounded-md border border-primary-foreground/30 bg-primary-foreground/10 px-2 text-[11px] font-medium text-primary-foreground transition hover:bg-primary-foreground/20"
               >
-                <Bell className="h-3.5 w-3.5" aria-hidden />
+                <Bell className="h-3 w-3" aria-hidden />
                 <span className="hidden md:inline">Alertas</span>
               </Link>
             </div>
           </div>
         </header>
+
 
         {/* Métricas do banco */}
         <div className="grid shrink-0 grid-cols-2 gap-1.5 xl:grid-cols-4">
