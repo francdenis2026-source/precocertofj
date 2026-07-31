@@ -1219,6 +1219,15 @@ html[data-density="compact"] .pc-col { min-height: calc(var(--pc-panel-min) - 1r
 
 /* Superfície padrão de card/seção do painel (mesma moldura em toda a área). */
 .pc-pad { padding: var(--pc-panel-pad) calc(var(--pc-panel-pad) + 0.25rem); }
+
+/* Cabeçalho da página acompanha a rolagem interna do painel: em telas
+   pequenas o usuário mantém título, voltar e ações sempre à vista. */
+.pc-page-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
 .pc-pad-sm { padding: calc(var(--pc-panel-pad) * 0.7); }
 
 /* Grade de cards com altura uniforme — todos os itens da linha se igualam. */

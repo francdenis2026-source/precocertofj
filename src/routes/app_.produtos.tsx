@@ -103,7 +103,7 @@ function ProductsPage() {
   return (
     <AppShell>
       <div className="app-dashboard pc-page">
-        <header className="pc-pad rounded-xl border border-border/70 bg-card/94 shadow-sm backdrop-blur-md">
+        <header className="pc-page-header pc-pad rounded-xl border border-border/70 bg-card/94 shadow-sm backdrop-blur-md">
           <Link
             to="/app"
             className={cn(tc.metaMuted, "inline-flex items-center gap-1 hover:text-foreground")}
