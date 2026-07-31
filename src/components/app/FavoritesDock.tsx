@@ -192,6 +192,7 @@ export function FavoritesDock({
             id={`dock-tab-${t.id}`}
             aria-selected={tab === t.id}
             aria-controls={`dock-panel-${t.id}`}
+            title={`${t.label} (Alt + Shift + ${t.id === "items" ? "F" : t.id === "markets" ? "M" : "L"})`}
             onClick={() => changeTab(t.id)}
             {...roving.itemProps(i)}
             className={cn(
