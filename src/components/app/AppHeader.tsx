@@ -170,7 +170,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
       className={
         isAdminScope
           ? "sticky top-0 z-30 flex h-9 shrink-0 items-center gap-2 border-b border-border/70 bg-background/92 px-3 backdrop-blur-xl md:h-10 md:px-5"
-          : "sticky top-0 z-30 flex h-9 shrink-0 items-center gap-2 border-b border-border/70 bg-background/88 px-3 backdrop-blur-xl md:h-10 md:px-4"
+          : "pc-appbar sticky top-0 z-30 flex shrink-0 items-center gap-2 border-b border-border/70 bg-background/88 px-3 backdrop-blur-xl md:px-4"
       }
     >
       {isAdminScope ? <AdminSidebarToggle /> : <SidebarTrigger className="text-foreground" />}

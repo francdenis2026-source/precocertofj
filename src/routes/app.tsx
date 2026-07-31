@@ -236,7 +236,7 @@ function AppHomeContent() {
                 onRemoveMarket={(id) => removeMarket.mutate(id)}
               />
             ) : (
-              <div className="h-full min-h-[420px] animate-pulse rounded-xl border border-border bg-card/80 backdrop-blur-md" />
+              <div className="h-full min-h-0 flex-1 animate-pulse rounded-xl border border-border bg-card/80 backdrop-blur-md" />
             )}
           </div>
         </div>

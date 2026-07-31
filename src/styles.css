@@ -1177,20 +1177,95 @@ html[data-density="compact"] .app-scope {
 @media (min-width: 1280px) {
   .pc-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
 }
-/* Cada coluna é uma pilha flexível de altura previsível. */
+/* Cada coluna é uma pilha flexível de altura previsível: nunca estoura a tela
+   e sempre rola por dentro em vez de esticar a página. */
 .pc-col {
   display: flex;
   min-width: 0;
   min-height: var(--pc-panel-min);
+  max-height: 80dvh;
   flex-direction: column;
+}
+@media (min-width: 768px) {
+  .pc-col {
+    height: clamp(24rem, 62dvh, 40rem);
+    min-height: 0;
+    max-height: none;
+  }
 }
 @media (min-width: 1280px) {
   .pc-col {
     height: clamp(30rem, calc(100dvh - 17rem), 46rem);
-    min-height: 0;
   }
 }
 html[data-density="compact"] .pc-col { min-height: calc(var(--pc-panel-min) - 1rem); }
+
+/* Painel/coluna com rolagem interna: o cabeçalho fica fixo e só o corpo rola,
+   então nenhuma coluna corta conteúdo nem cresce além da altura da grade. */
+.pc-panel {
+  display: flex;
+  min-height: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  overflow: hidden;
+}
+.pc-panel-body {
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Superfície padrão de card/seção do painel (mesma moldura em toda a área). */
+.pc-pad { padding: var(--pc-panel-pad) calc(var(--pc-panel-pad) + 0.25rem); }
+.pc-pad-sm { padding: calc(var(--pc-panel-pad) * 0.7); }
+
+/* Grade de cards com altura uniforme — todos os itens da linha se igualam. */
+.pc-card-grid {
+  display: grid;
+  gap: var(--pc-gap);
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17rem), 1fr));
+  grid-auto-rows: 1fr;
+}
+.pc-card-grid > li { display: flex; min-width: 0; }
+.pc-card-grid > li > * {
+  flex: 1 1 auto;
+  min-height: var(--pc-card-min, 4.75rem);
+}
+.app-scope { --pc-card-min: 4.75rem; }
+html[data-density="compact"] .app-scope { --pc-card-min: 3.9rem; }
+
+/* ── Densidade aplicada a barra lateral, cabeçalho e controles menores ──── */
+html[data-density="compact"] .app-scope [data-sidebar="header"] { padding: 0.4rem 0.45rem; }
+html[data-density="compact"] .app-scope [data-sidebar="content"] { padding: 0.35rem 0.4rem; }
+html[data-density="compact"] .app-scope [data-sidebar="footer"] { padding: 0.35rem 0.4rem; }
+html[data-density="compact"] .app-scope [data-sidebar="group"] { padding: 0.1rem 0; }
+html[data-density="compact"] .app-scope [data-sidebar="group-label"] { height: 1.2rem; }
+html[data-density="compact"] .app-scope [data-sidebar="menu"] { gap: 0.1rem; }
+html[data-density="compact"] .app-scope [data-sidebar="menu-button"] {
+  min-height: 2rem;
+  height: 2rem;
+  gap: 0.45rem;
+  padding-inline: 0.4rem;
+}
+html[data-density="compact"] .app-scope [data-sidebar="menu-button"] span:first-child,
+html[data-density="compact"] .app-scope [data-sidebar="header"] a > span:first-child {
+  width: 1.75rem;
+  height: 1.75rem;
+}
+/* Barra superior do painel acompanha a densidade sem perder alvo de toque. */
+.pc-appbar { height: 2.5rem; }
+@media (min-width: 768px) { .pc-appbar { height: 2.75rem; } }
+html[data-density="compact"] .pc-appbar { height: 2.25rem; }
+@media (min-width: 768px) {
+  html[data-density="compact"] .pc-appbar { height: 2.4rem; }
+}
+/* Trilha de navegação e seções internas seguem o mesmo ritmo. */
+html[data-density="compact"] .app-scope [data-slot="breadcrumb-wrap"] { padding-block: 0.15rem; }
+html[data-density="compact"] .app-scope .app-dashboard [data-slot="card"] { --pc-panel-pad: 0.5rem; }
+
+
 
 /* Colunas proporcionais das listas do painel: rótulo | apoio | dado | ações.
    O cabeçalho e as linhas compartilham o mesmo template, então tudo alinha

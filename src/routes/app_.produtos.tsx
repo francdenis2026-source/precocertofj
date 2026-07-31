@@ -103,7 +103,7 @@ function ProductsPage() {
   return (
     <AppShell>
       <div className="app-dashboard pc-page">
-        <header className="rounded-xl border border-border/70 bg-card/94 px-4 py-3.5 shadow-sm backdrop-blur-md">
+        <header className="pc-pad rounded-xl border border-border/70 bg-card/94 shadow-sm backdrop-blur-md">
           <Link
             to="/app"
             className={cn(tc.metaMuted, "inline-flex items-center gap-1 hover:text-foreground")}
@@ -119,7 +119,7 @@ function ProductsPage() {
         {/* Filtros */}
         <section
           aria-label="Filtros de produtos"
-          className="space-y-1.5 rounded-lg border border-border/70 bg-card/94 p-2 shadow-sm backdrop-blur-md"
+          className="pc-pad-sm space-y-1.5 rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
         >
           <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
             <label className="relative min-w-0">
@@ -197,7 +197,7 @@ function ProductsPage() {
         {/* Resultados */}
         <section aria-live="polite" aria-busy={resultsQ.isFetching}>
           {showSkeleton ? (
-            <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+            <ul className="pc-card-grid">
               {Array.from({ length: 9 }).map((_, i) => (
                 <li
                   key={i}
@@ -232,7 +232,7 @@ function ProductsPage() {
             </div>
           ) : (
             <>
-              <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+              <ul className="pc-card-grid">
                 {results.map((r) => (
                   <li key={r.catalogId} className="relative">
                     <button

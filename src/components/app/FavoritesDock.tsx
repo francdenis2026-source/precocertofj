@@ -80,9 +80,7 @@ export function FavoritesDock({
   );
   const changeTab = (id: Tab) => setTab(id);
   const tabIndex = TABS.findIndex((t) => t.id === tab);
-  const roving = useRovingFocus(TABS.length, Math.max(0, tabIndex), (i) =>
-    changeTab(TABS[i].id),
-  );
+  const roving = useRovingFocus(TABS.length, Math.max(0, tabIndex), (i) => changeTab(TABS[i].id));
 
   const itemIds = summary.favoriteItems.map((x) => x.favoriteId);
   const marketIds = summary.favoriteMarkets.map((x) => x.favoriteId);
@@ -110,7 +108,11 @@ export function FavoritesDock({
   const pagedLists = useMemo(() => summary.lists.slice(start, end), [summary.lists, start, end]);
 
   const pageLength =
-    tab === "items" ? pagedItems.length : tab === "markets" ? pagedMarkets.length : pagedLists.length;
+    tab === "items"
+      ? pagedItems.length
+      : tab === "markets"
+        ? pagedMarkets.length
+        : pagedLists.length;
 
   // Lazy-render por viewport dentro da página atual.
   const virtual = useVirtualRows({ count: pageLength, rowHeight: ROW_H, overscan: 4 });
@@ -162,7 +164,6 @@ export function FavoritesDock({
     return () => window.clearTimeout(idle);
   }, [loading, prefetchRoutes]);
 
-
   // Atalhos: alternar abas e paginar sem tirar as mãos do teclado.
   useHotkeys({
     "alt+shift+f": () => changeTab("items"),
@@ -176,7 +177,7 @@ export function FavoritesDock({
     <section
       aria-label="Seus favoritos e listas"
       aria-busy={loading || undefined}
-      className="flex h-full min-h-[420px] flex-1 flex-col overflow-hidden rounded-xl border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
+      className="flex h-full min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
     >
       <div
         role="tablist"
@@ -237,7 +238,10 @@ export function FavoritesDock({
                   to="/app/produtos"
                 />
               ) : (
-                <ul className="divide-y divide-border/60" style={{ paddingTop: virtual.padTop, paddingBottom: virtual.padBottom }}>
+                <ul
+                  className="divide-y divide-border/60"
+                  style={{ paddingTop: virtual.padTop, paddingBottom: virtual.padBottom }}
+                >
                   {pagedItems.slice(vStart, vEnd).map((f, i) => {
                     const idx = start + vStart + i;
                     return (
@@ -300,7 +304,10 @@ export function FavoritesDock({
                   to="/app/estabelecimentos"
                 />
               ) : (
-                <ul className="divide-y divide-border/60" style={{ paddingTop: virtual.padTop, paddingBottom: virtual.padBottom }}>
+                <ul
+                  className="divide-y divide-border/60"
+                  style={{ paddingTop: virtual.padTop, paddingBottom: virtual.padBottom }}
+                >
                   {pagedMarkets.slice(vStart, vEnd).map((m, i) => {
                     const idx = start + vStart + i;
                     const clickable = storeNames.has(m.marketName.trim().toLowerCase());
@@ -360,7 +367,10 @@ export function FavoritesDock({
                   to="/lista"
                 />
               ) : (
-                <ul className="divide-y divide-border/60" style={{ paddingTop: virtual.padTop, paddingBottom: virtual.padBottom }}>
+                <ul
+                  className="divide-y divide-border/60"
+                  style={{ paddingTop: virtual.padTop, paddingBottom: virtual.padBottom }}
+                >
                   {pagedLists.slice(vStart, vEnd).map((l) => (
                     <li key={l.id} style={{ height: ROW_H }} className="px-2">
                       <div className="grid h-full grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
@@ -386,8 +396,7 @@ export function FavoritesDock({
                         </div>
                         {l.potentialSavings !== null && l.potentialSavings > 0 && (
                           <span className="shrink-0 rounded-full bg-savings/15 px-2 py-0.5 text-[11.5px] font-semibold text-savings-foreground">
-                            economize{" "}
-                            <Price value={l.potentialSavings} size="xs" tone="savings" />
+                            economize <Price value={l.potentialSavings} size="xs" tone="savings" />
                           </span>
                         )}
                       </div>
@@ -403,9 +412,7 @@ export function FavoritesDock({
         <div className="flex shrink-0 items-center justify-between gap-2 border-t border-border/70 px-2 py-0.5">
           <p className="truncate text-[11px] text-muted-foreground">
             {start + 1}–{Math.min(end, total)} de {total}
-            {prefetchedCount > 0 && (
-              <span className="ml-1 opacity-70">· próxima pronta</span>
-            )}
+            {prefetchedCount > 0 && <span className="ml-1 opacity-70">· próxima pronta</span>}
           </p>
           <div className="flex shrink-0 items-center gap-1">
             <IconBtn
