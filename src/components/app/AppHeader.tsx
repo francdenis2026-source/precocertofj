@@ -22,6 +22,7 @@ import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 
 import { AppBrand } from "@/components/app/AppBrand";
 import { useMyProfile } from "@/hooks/useMyProfile";
+import { useMeasuredBar } from "@/hooks/use-measured-bar";
 import { useSignOut } from "@/hooks/use-sign-out";
 import { listPublicStores } from "@/lib/stores-public.functions";
 import { Button } from "@/components/ui/button";
