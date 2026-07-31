@@ -184,47 +184,68 @@ export function DashboardSearch() {
           </kbd>
         </div>
 
-        <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
-          <label className="relative min-w-0">
-            <span className="sr-only">Buscar produto</span>
-            <SearchIcon
-              className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
-              aria-hidden
-            />
-            <Input
-              ref={inputRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Buscar produto: arroz, café, sabão…"
-              className={cn(tc.body, "h-10 rounded-md bg-background/80 pl-9 pr-8")}
-              maxLength={80}
-              inputMode="search"
-              autoComplete="off"
-              onKeyDown={onInputKeyDown}
-              role="combobox"
-              aria-expanded={active && results.length > 0}
-              aria-controls="dashboard-search-results"
-              aria-describedby="dashboard-search-help"
-            />
+        <label className="relative block min-w-0">
+          <span className="sr-only">Buscar produto</span>
+          <SearchIcon
+            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+            aria-hidden
+          />
+          <Input
+            ref={inputRef}
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Buscar produto: arroz, café, sabão…"
+            className={cn(tc.body, "h-11 w-full rounded-md bg-background/80 pl-9 pr-9 text-[14px]")}
+            maxLength={80}
+            inputMode="search"
+            autoComplete="off"
+            onKeyDown={onInputKeyDown}
+            role="combobox"
+            aria-expanded={active && results.length > 0}
+            aria-controls="dashboard-search-results"
+            aria-describedby="dashboard-search-help"
+          />
 
-            {input && (
-              <button
-                type="button"
-                aria-label="Limpar busca"
-                onClick={() => {
-                  setInput("");
-                  inputRef.current?.focus();
-                }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground hover:text-foreground"
+          {input && (
+            <button
+              type="button"
+              aria-label="Limpar busca"
+              onClick={() => {
+                setInput("");
+                inputRef.current?.focus();
+              }}
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-1 text-muted-foreground transition-colors hover:bg-primary/10 hover:text-primary"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          )}
+        </label>
+
+        <div className="flex items-center gap-2">
+          <div
+            role="radiogroup"
+            aria-label="Filtrar por categoria"
+            className="flex min-w-0 flex-1 gap-1.5 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]{display:none}"
+          >
+            <Chip active={!category} onClick={() => setCategory(null)} {...chipRoving.itemProps(0)}>
+              Todas
+            </Chip>
+            {categories.map((c, i) => (
+              <Chip
+                key={c}
+                active={category === c}
+                onClick={() => setCategory(category === c ? null : c)}
+                {...chipRoving.itemProps(i + 1)}
               >
-                <X className="h-3.5 w-3.5" />
-              </button>
-            )}
-          </label>
+                {categoryLabel(c)}
+              </Chip>
+            ))}
+          </div>
+
           <div
             role="radiogroup"
             aria-label="Ordenar resultados"
-            className="flex shrink-0 flex-wrap items-center gap-1"
+            className="flex shrink-0 items-center gap-1 border-l border-border/60 pl-2"
           >
             {SORTS.map((s, i) => (
               <button
@@ -236,10 +257,10 @@ export function DashboardSearch() {
                 {...sortRoving.itemProps(i)}
                 className={cn(
                   tc.filter,
-                  "h-9 rounded-md border px-3 transition-colors",
+                  "h-8 rounded-md border px-2.5 transition-colors",
                   sort === s.id
                     ? "border-primary bg-primary text-primary-foreground"
-                    : "border-border/70 bg-background text-muted-foreground hover:text-foreground",
+                    : "border-border/70 bg-background text-muted-foreground hover:border-primary/50 hover:bg-primary/10 hover:text-primary",
                 )}
               >
                 {s.label}
@@ -248,25 +269,6 @@ export function DashboardSearch() {
           </div>
         </div>
 
-        <div
-          role="radiogroup"
-          aria-label="Filtrar por categoria"
-          className="flex gap-1.5 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]{display:none}"
-        >
-          <Chip active={!category} onClick={() => setCategory(null)} {...chipRoving.itemProps(0)}>
-            Todas
-          </Chip>
-          {categories.map((c, i) => (
-            <Chip
-              key={c}
-              active={category === c}
-              onClick={() => setCategory(category === c ? null : c)}
-              {...chipRoving.itemProps(i + 1)}
-            >
-              {categoryLabel(c)}
-            </Chip>
-          ))}
-        </div>
       </div>
 
       <p id="dashboard-search-help" className="sr-only">
