@@ -431,10 +431,11 @@ function Chip({
       {...rest}
       className={cn(
         tc.filter,
-        "h-8 shrink-0 whitespace-nowrap rounded-md border px-2.5 transition-colors",
+        "h-8 shrink-0 whitespace-nowrap rounded-md border px-2.5 transition-colors duration-150",
         active
           ? "border-primary/60 bg-primary/10 text-primary"
-          : "border-border/70 bg-background text-muted-foreground hover:text-foreground",
+          : "border-border/70 bg-background text-muted-foreground hover:border-primary/50 hover:bg-primary/10 hover:text-primary",
+
       )}
     >
       {children}
