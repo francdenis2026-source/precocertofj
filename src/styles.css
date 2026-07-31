@@ -1185,22 +1185,23 @@ html[data-density="compact"] .app-scope {
   display: flex;
   min-width: 0;
   min-height: var(--pc-panel-min);
-  max-height: 80dvh;
+  max-height: 78dvh;
   flex-direction: column;
 }
 @media (min-width: 768px) {
   .pc-col {
-    height: clamp(24rem, 62dvh, 40rem);
+    height: clamp(18rem, 52dvh, 34rem);
     min-height: 0;
     max-height: none;
   }
 }
 @media (min-width: 1280px) {
   .pc-col {
-    height: clamp(30rem, calc(100dvh - 17rem), 46rem);
+    height: clamp(22rem, calc(100dvh - 14rem), 44rem);
   }
 }
 html[data-density="compact"] .pc-col { min-height: calc(var(--pc-panel-min) - 1rem); }
+
 
 /* Painel/coluna com rolagem interna: o cabeçalho fica fixo e só o corpo rola,
    então nenhuma coluna corta conteúdo nem cresce além da altura da grade. */
