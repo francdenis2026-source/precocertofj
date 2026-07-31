@@ -5462,3 +5462,9 @@ h3.font-display {
   }
 }
 
+
+/* Barra de progresso indeterminada do gate do painel */
+@keyframes pc-gate-slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
