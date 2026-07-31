@@ -1119,6 +1119,79 @@ main :is(p, li, dt, dd, td, th, label, a, button, input, textarea, figcaption) {
   outline-offset: -2px;
 }
 
+/* ── Densidade da área do cliente ─────────────────────────────────────────
+   Um único conjunto de variáveis controla espaçamentos do painel. Trocar
+   `html[data-density]` reescala paddings/gaps/alturas SEM mexer na
+   tipografia — a hierarquia visual permanece idêntica nos dois modos. */
+.app-scope {
+  --pc-gap: 1rem;
+  --pc-pad-x: 1rem;
+  --pc-pad-y: 1rem;
+  --pc-panel-min: 22rem;
+  --pc-panel-pad: 0.75rem;
+  --pc-row-gap: 0.5rem;
+}
+@media (min-width: 768px) {
+  .app-scope {
+    --pc-pad-x: 1.5rem;
+    --pc-pad-y: 1.25rem;
+  }
+}
+html[data-density="compact"] .app-scope {
+  --pc-gap: 0.625rem;
+  --pc-pad-x: 0.75rem;
+  --pc-pad-y: 0.625rem;
+  --pc-panel-min: 18rem;
+  --pc-panel-pad: 0.5rem;
+  --pc-row-gap: 0.3rem;
+}
+@media (min-width: 768px) {
+  html[data-density="compact"] .app-scope {
+    --pc-pad-x: 1rem;
+    --pc-pad-y: 0.75rem;
+  }
+}
+
+/* Container de página do painel — respeita a densidade escolhida. */
+.pc-page {
+  width: 100%;
+  max-width: 1500px;
+  margin-inline: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--pc-gap);
+  padding-inline: var(--pc-pad-x);
+  padding-block: var(--pc-pad-y);
+}
+/* Grade de painéis: todas as colunas com a MESMA altura e rolagem interna,
+   evitando conteúdo espremido em tablet/mobile. */
+.pc-grid {
+  display: grid;
+  gap: var(--pc-gap);
+  align-items: stretch;
+  grid-template-columns: minmax(0, 1fr);
+}
+@media (min-width: 768px) {
+  .pc-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width: 1280px) {
+  .pc-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+}
+/* Cada coluna é uma pilha flexível de altura previsível. */
+.pc-col {
+  display: flex;
+  min-width: 0;
+  min-height: var(--pc-panel-min);
+  flex-direction: column;
+}
+@media (min-width: 1280px) {
+  .pc-col {
+    height: clamp(30rem, calc(100dvh - 17rem), 46rem);
+    min-height: 0;
+  }
+}
+html[data-density="compact"] .pc-col { min-height: calc(var(--pc-panel-min) - 1rem); }
+
 /* Colunas proporcionais das listas do painel: rótulo | apoio | dado | ações.
    O cabeçalho e as linhas compartilham o mesmo template, então tudo alinha
    verticalmente sem tabela e sem estourar a largura da janela. */

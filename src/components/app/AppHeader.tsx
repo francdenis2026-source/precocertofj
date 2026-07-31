@@ -20,6 +20,7 @@ import {
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 
 import { AppBrand } from "@/components/app/AppBrand";
+import { DensityToggle } from "@/components/app/DensityToggle";
 
 import { useMyProfile } from "@/hooks/useMyProfile";
 import { useSignOut } from "@/hooks/use-sign-out";
@@ -84,7 +85,6 @@ function HeaderStats() {
   );
 }
 
-
 /**
  * Navegação segmentada compacta: Início (site) / Painel (área logada).
  * Substitui os botões grandes de escopo por um pill group estilo dashboard.
@@ -92,7 +92,8 @@ function HeaderStats() {
 function ScopeNav({ className }: { className?: string }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isPanel = pathname === "/app" || pathname.startsWith("/app/");
-  const isHome = pathname === "/" || pathname.startsWith("/buscar") || pathname.startsWith("/produto");
+  const isHome =
+    pathname === "/" || pathname.startsWith("/buscar") || pathname.startsWith("/produto");
 
   return (
     <nav
@@ -180,11 +181,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
         aria-label={isAdminScope ? "Console administrativo" : "PreçoCerto — minha área"}
         className="mr-0.5 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/60"
       >
-        <AppBrand
-          admin={isAdminScope}
-          size="sm"
-          className="[&_span]:whitespace-nowrap"
-        />
+        <AppBrand admin={isAdminScope} size="sm" className="[&_span]:whitespace-nowrap" />
       </Link>
 
       {/* Local + status micro-badges */}
@@ -220,7 +217,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
                     {initials ?? <User className="h-3 w-3" />}
                   </span>
                 )}
-                <span className="truncate">{loading ? "..." : firstName ?? "Conta"}</span>
+                <span className="truncate">{loading ? "..." : (firstName ?? "Conta")}</span>
                 <ChevronDown
                   className="h-3 w-3 shrink-0 opacity-70 transition-transform duration-150 group-data-[state=open]:rotate-180"
                   aria-hidden
@@ -269,7 +266,6 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
               <DropdownMenuItem
                 onSelect={() => void signOut()}
                 disabled={signingOut}
-                
                 className="cursor-pointer text-destructive focus:bg-destructive/10 focus:text-destructive"
               >
                 <LogOut className="h-4 w-4" aria-hidden />
@@ -281,6 +277,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
       </div>
 
       <div className="flex items-center gap-1 md:gap-1.5">
+        {!isAdminScope && <DensityToggle />}
         {!isAdminScope && <ScopeNav />}
 
         {!isAdminScope && (
@@ -292,7 +289,6 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
             <ShoppingBag className="h-3 w-3" strokeWidth={2} />
           </Link>
         )}
-
       </div>
     </header>
   );

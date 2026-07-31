@@ -143,7 +143,7 @@ function AppStorePage() {
 
   return (
     <AppShell>
-      <div className="mx-auto flex w-full max-w-[1500px] flex-col gap-4 px-4 py-4 md:px-6 md:py-5">
+      <div className="app-dashboard pc-page">
         <header className="rounded-xl border border-border/70 bg-card/94 px-4 py-3.5 shadow-sm backdrop-blur-md">
           <Link
             to="/app/estabelecimentos"

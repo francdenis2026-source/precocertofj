@@ -98,7 +98,7 @@ function AppHomeContent() {
 
   return (
     <AppShell>
-      <div className="app-dashboard mx-auto flex w-full max-w-[1500px] flex-col gap-4 px-4 py-4 md:px-6 md:py-5">
+      <div className="app-dashboard pc-page">
         <p className="sr-only">
           Atalhos do painel: Alt mais B foca a busca, Alt mais O troca a ordenação, Alt mais L limpa
           os filtros, Alt mais E busca estabelecimentos, Alt mais Shift mais F, M ou L alterna as
@@ -204,13 +204,15 @@ function AppHomeContent() {
           </div>
         </header>
 
-        {/* Grid responsiva: busca | lojas | favoritos — alturas confortáveis, sem espremer */}
-        <div className="grid gap-4 lg:grid-cols-12">
-          <div className="flex min-h-[520px] flex-col lg:col-span-6 lg:h-[calc(100dvh-19rem)] lg:min-h-[560px]">
+        {/* Grade responsiva: busca | lojas | favoritos.
+            Mobile: 1 coluna · Tablet: 2 colunas (busca ocupa a linha toda)
+            Desktop: 12 colunas — todas com a mesma altura e rolagem interna. */}
+        <div className="pc-grid">
+          <div className="pc-col md:col-span-2 xl:col-span-6">
             <DashboardSearch />
           </div>
 
-          <div className="flex min-h-[420px] flex-col lg:col-span-3 lg:h-[calc(100dvh-19rem)] lg:min-h-[560px]">
+          <div className="pc-col xl:col-span-3">
             <StoresColumn
               stores={publicStoresQuery.data ?? []}
               loading={publicStoresQuery.isLoading}
@@ -219,7 +221,7 @@ function AppHomeContent() {
             />
           </div>
 
-          <div className="flex min-h-[420px] flex-col lg:col-span-3 lg:h-[calc(100dvh-19rem)] lg:min-h-[560px]">
+          <div className="pc-col xl:col-span-3">
             {summary ? (
               <FavoritesDock
                 summary={summary}
@@ -239,8 +241,6 @@ function AppHomeContent() {
           </div>
         </div>
       </div>
-
-
 
       <StoreDetailsDrawer
         store={selectedStore}
@@ -309,11 +309,8 @@ function Metric({
       </Link>
     );
   }
-  return (
-    <article className="relative min-w-0 px-4 py-3.5">{body}</article>
-  );
+  return <article className="relative min-w-0 px-4 py-3.5">{body}</article>;
 }
-
 
 function swap(ids: string[], idx: number, dir: -1 | 1): string[] | null {
   const target = idx + dir;
