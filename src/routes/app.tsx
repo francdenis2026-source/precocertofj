@@ -106,12 +106,13 @@ function AppHomeContent() {
 
   const statusLine =
     status === "trial"
-      ? `Teste grátis · ${trialDays} ${trialDays === 1 ? "dia" : "dias"} restantes`
+      ? `Teste grátis · ${trialDays} ${trialDays === 1 ? "dia" : "dias"}`
       : status === "active"
-        ? `Assinatura ativa · renova em ${paidDays} ${paidDays === 1 ? "dia" : "dias"}`
+        ? `Ativa · ${paidDays}d`
         : status === "expired"
-          ? "Assinatura vencida · reative para continuar"
+          ? "Vencida · reative"
           : "Acesso liberado";
+
 
   const summary = summaryQuery.data;
   const loading = summaryQuery.isLoading;
