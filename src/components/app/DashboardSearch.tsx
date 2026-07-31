@@ -260,9 +260,9 @@ export function DashboardSearch() {
                 {...sortRoving.itemProps(i)}
                 className={cn(
                   tc.filter,
-                  "h-8 rounded-md border px-2.5 transition-colors",
+                  "h-8 rounded-md border px-2.5 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
                   sort === s.id
-                    ? "border-primary bg-primary text-primary-foreground"
+                    ? "border-primary bg-primary text-primary-foreground shadow-sm"
                     : "border-border/70 bg-background text-muted-foreground hover:border-primary/50 hover:bg-primary/10 hover:text-primary",
                 )}
               >
