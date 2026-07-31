@@ -139,6 +139,18 @@ function LoginPage() {
     return "/app";
   }
 
+  /** Rótulo legível da área para onde o login vai levar o usuário. */
+  function postAuthAreaLabel(target: string): string {
+    if (target.startsWith("/admin")) return "Painel administrativo";
+    if (target.startsWith("/app")) return "Painel do cliente";
+    if (target.startsWith("/buscar")) return "Buscar preços";
+    if (target.startsWith("/mercados") || target.startsWith("/estabelecimentos"))
+      return "Mercados de Feijó";
+    if (target.startsWith("/colaborador")) return "Área do colaborador";
+    if (target === "/" || target === "") return "Página inicial";
+    return "Área restrita";
+  }
+
   function goToPostAuthTarget() {
     const target = resolvePostAuthTarget();
     router.history.replace(target);
@@ -243,9 +255,9 @@ function LoginPage() {
         });
         if (error) throw error;
         clearAttempts(digits);
-        notify.success("Cadastro concluído", {
+        notify.success(`Cadastro confirmado — abrindo ${postAuthAreaLabel(resolvePostAuthTarget())}`, {
           id: "auth-session",
-          description: "Seu acesso completo está ativo por 30 dias. Abrindo o painel com os preços de Feijó.",
+          description: `Conta criada para o CPF ${formatCpf(digits)} com acesso completo por 30 dias.`,
         });
       } else {
         const { hiddenEmail } = await resolveEmailFn({ data: { cpf: digits } });
@@ -266,9 +278,9 @@ function LoginPage() {
           );
         }
         clearAttempts(digits);
-        notify.success("Sessão iniciada", {
+        notify.success(`Login aprovado — abrindo ${postAuthAreaLabel(resolvePostAuthTarget())}`, {
           id: "auth-session",
-          description: "CPF e PIN confirmados. Carregando suas listas, favoritos e alertas de preço.",
+          description: `CPF ${formatCpf(digits)} verificado. Carregando suas listas, favoritos e alertas de preço.`,
         });
       }
       await router.invalidate();
@@ -276,7 +288,7 @@ function LoginPage() {
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Falha ao autenticar";
       setFormError(msg);
-      notify.error("Não foi possível iniciar a sessão", {
+      notify.error(`Login recusado — ${postAuthAreaLabel(resolvePostAuthTarget())} continua bloqueada`, {
         id: "auth-session",
         description: msg,
       });
