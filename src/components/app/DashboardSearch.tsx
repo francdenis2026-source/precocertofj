@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
-import { Search as SearchIcon, Store, X } from "lucide-react";
+import { ArrowUpDown, Search as SearchIcon, Store, X } from "lucide-react";
 
 import { Price } from "@/components/ds/Price";
 import { ProductCompareSheet } from "@/components/app/ProductCompareSheet";
