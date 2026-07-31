@@ -122,7 +122,7 @@ export function StoresPanel({
         )}
       >
         <span className="w-10" />
-        <span className="truncate">Estabelecimento</span>
+        <span className="truncate">Loja</span>
         <span data-col="items" className="text-center">
           Itens
         </span>
