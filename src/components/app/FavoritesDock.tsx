@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import {
   ArrowDown,
@@ -20,6 +20,9 @@ import { tc } from "@/lib/typeclear";
 type Summary = NonNullable<Awaited<ReturnType<typeof getAppSummary>>>;
 
 type Tab = "items" | "markets" | "lists";
+
+/** Itens exibidos por página em cada aba da dock. */
+const PAGE_SIZE = 6;
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "items", label: "Favoritos" },
@@ -53,10 +56,13 @@ export function FavoritesDock({
   onRemoveMarket: (favoriteId: string) => void;
 }) {
   const [tab, setTab] = useState<Tab>("items");
+  const [page, setPage] = useState(0);
+  const changeTab = (id: Tab) => {
+    setTab(id);
+    setPage(0);
+  };
   const tabIndex = TABS.findIndex((t) => t.id === tab);
-  const roving = useRovingFocus(TABS.length, tabIndex, (i) =>
-    setTab(TABS[i].id),
-  );
+  const roving = useRovingFocus(TABS.length, tabIndex, (i) => changeTab(TABS[i].id));
 
   const itemIds = summary.favoriteItems.map((x) => x.favoriteId);
   const marketIds = summary.favoriteMarkets.map((x) => x.favoriteId);
@@ -66,6 +72,22 @@ export function FavoritesDock({
     markets: summary.favoriteMarkets.length,
     lists: summary.lists.length,
   };
+
+  // Paginação: mantém a altura da dock estável, sem estourar a janela.
+  const total = counts[tab];
+  const pageCount = Math.max(1, Math.ceil(total / PAGE_SIZE));
+  const safePage = Math.min(page, pageCount - 1);
+  const start = safePage * PAGE_SIZE;
+  const end = start + PAGE_SIZE;
+  const pagedItems = useMemo(
+    () => summary.favoriteItems.slice(start, end),
+    [summary.favoriteItems, start, end],
+  );
+  const pagedMarkets = useMemo(
+    () => summary.favoriteMarkets.slice(start, end),
+    [summary.favoriteMarkets, start, end],
+  );
+  const pagedLists = useMemo(() => summary.lists.slice(start, end), [summary.lists, start, end]);
 
   return (
     <section
@@ -86,7 +108,7 @@ export function FavoritesDock({
             id={`dock-tab-${t.id}`}
             aria-selected={tab === t.id}
             aria-controls={`dock-panel-${t.id}`}
-            onClick={() => setTab(t.id)}
+            onClick={() => changeTab(t.id)}
             {...roving.itemProps(i)}
             className={cn(
                "h-7 rounded-md px-2.5 text-[12px] font-medium transition-colors",
@@ -117,7 +139,9 @@ export function FavoritesDock({
             />
           ) : (
             <ul className="divide-y divide-border/60">
-              {summary.favoriteItems.map((f, idx) => (
+              {pagedItems.map((f, i) => {
+                const idx = start + i;
+                return (
                 <li
                   key={f.favoriteId}
                      className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-3 py-1.5"
@@ -166,7 +190,8 @@ export function FavoritesDock({
                     />
                   </div>
                 </li>
-              ))}
+                );
+              })}
             </ul>
           ))}
 
@@ -178,7 +203,8 @@ export function FavoritesDock({
             />
           ) : (
             <ul className="divide-y divide-border/60">
-              {summary.favoriteMarkets.map((m, idx) => {
+              {pagedMarkets.map((m, i) => {
+                const idx = start + i;
                 const clickable = storeNames.has(
                   m.marketName.trim().toLowerCase(),
                 );
@@ -233,7 +259,7 @@ export function FavoritesDock({
             />
           ) : (
             <ul className="divide-y divide-border/60">
-              {summary.lists.map((l) => (
+              {pagedLists.map((l) => (
                  <li key={l.id} className="px-3 py-1.5">
                   <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
                     <div className="min-w-0">
