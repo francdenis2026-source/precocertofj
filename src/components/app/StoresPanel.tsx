@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowRight, Info, Loader2, Search as SearchIcon } from "lucide-react";
 
@@ -7,6 +7,7 @@ import { useSignedLogoUrls } from "@/hooks/use-signed-logo-urls";
 import type { PublicStore } from "@/lib/stores-public.functions";
 
 import { Input } from "@/components/ui/input";
+import { useHotkeys } from "@/hooks/use-hotkeys";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
 
@@ -32,6 +33,11 @@ export function StoresPanel({
   onOpenDetails: (name: string) => void;
 }) {
   const [q, setQ] = useState("");
+  const searchRef = useRef<HTMLInputElement>(null);
+
+  useHotkeys({
+    "alt+e": () => searchRef.current?.focus(),
+  });
 
   const logos = useSignedLogoUrls(useMemo(() => stores.map((s) => s.logoUrl), [stores]));
 
@@ -75,7 +81,14 @@ export function StoresPanel({
             aria-hidden
           />
           <Input
+            ref={searchRef}
             value={q}
+            onKeyDown={(e) => {
+              if (e.key === "Escape" && q) {
+                e.preventDefault();
+                setQ("");
+              }
+            }}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Buscar mercado, farmácia, bairro…"
             className={cn(tc.body, "h-9 rounded-md bg-background/80 pl-9")}
@@ -84,6 +97,21 @@ export function StoresPanel({
           />
         </label>
       </header>
+
+      <div
+        aria-hidden
+        className={cn(
+          tc.tableHead,
+          "pc-cols-stores shrink-0 border-b border-border/60 bg-muted/30 px-3 py-1",
+        )}
+      >
+        <span className="w-8" />
+        <span className="truncate">Estabelecimento</span>
+        <span data-col="items" className="text-center">
+          Itens
+        </span>
+        <span className="w-[3.75rem] text-right">Abrir</span>
+      </div>
 
       <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]">
         {loading ? (
@@ -99,7 +127,7 @@ export function StoresPanel({
               return (
                 <li
                   key={s.id}
-                  className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2.5 px-3 py-1.5 transition-colors hover:bg-muted/50"
+                  className="pc-cols-stores px-3 py-1.5 transition-colors hover:bg-muted/50"
                 >
                   <StoreLogo src={logo} name={s.name} className="h-8 w-8" />
                   <Link
