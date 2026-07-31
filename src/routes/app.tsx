@@ -82,6 +82,9 @@ function AppHomeContent() {
   };
 
   const firstName = (accountQuery.data?.fullName ?? "").split(" ")[0] || "cliente";
+  // Altura real da faixa "Meu painel" publicada em --pc-panelbar-h, para que
+  // a grade abaixo se ajuste sem sobreposição em qualquer largura.
+  const panelBarRef = useMeasuredBar<HTMLElement>("--pc-panelbar-h");
 
   const summary = summaryQuery.data;
   const loading = summaryQuery.isLoading;
