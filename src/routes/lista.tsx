@@ -408,6 +408,29 @@ function ListaContent() {
                   </button>
                 )}
               </div>
+              <div className="mt-2 flex items-center gap-1.5" role="group" aria-label="Ordenar listas">
+                <span className="text-[10.5px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Ordenar
+                </span>
+                {([
+                  { id: "updated", label: "Recentes" },
+                  { id: "name", label: "A–Z" },
+                ] as const).map((o) => (
+                  <button
+                    key={o.id}
+                    type="button"
+                    onClick={() => setListSort(o.id)}
+                    aria-pressed={listSort === o.id}
+                    className={`h-6 rounded-full border px-2.5 text-[11.5px] font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
+                      listSort === o.id
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border text-muted-foreground hover:bg-primary/10 hover:text-foreground"
+                    }`}
+                  >
+                    {o.label}
+                  </button>
+                ))}
+              </div>
               <p className="mt-1.5 text-[11px] text-muted-foreground">
                 {allLists.length > 0 && (
                   <>
@@ -424,7 +447,7 @@ function ListaContent() {
             <ul
               role="listbox"
               aria-label="Minhas listas salvas"
-              className="max-h-[52vh] divide-y divide-border overflow-y-auto"
+              className="max-h-[52vh] space-y-1.5 overflow-y-auto p-2"
             >
               {listsQuery.isLoading && (
                 <li className="p-2">
