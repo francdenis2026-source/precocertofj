@@ -153,10 +153,8 @@ export function DashboardSearch() {
     >
       <div className="shrink-0 space-y-2 border-b border-border/70 p-3">
         <div className="min-w-0">
-          <h2 className={cn(tc.itemTitle, "truncate")}>Buscar produtos e preços</h2>
-          <p className={cn(tc.metaMuted, "truncate")}>
-            Compare os menores preços dos estabelecimentos de Feijó
-          </p>
+          <h2 className={cn(tc.panelTitle, "truncate")}>Buscar produtos e preços</h2>
+          <p className={cn(tc.panelNote, "truncate")}>Menores preços dos mercados de Feijó</p>
         </div>
         <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
           <label className="relative min-w-0">
@@ -209,7 +207,7 @@ export function DashboardSearch() {
                 onClick={() => setSort(s.id)}
                 {...sortRoving.itemProps(i)}
                 className={cn(
-                  tc.control,
+                  tc.filter,
                   "h-9 rounded-md border px-3 transition-colors",
                   sort === s.id
                     ? "border-primary bg-primary text-primary-foreground"
@@ -344,7 +342,7 @@ export function DashboardSearch() {
         <Link
           to="/app/produtos"
           className={cn(
-            tc.control,
+            tc.filter,
             "shrink-0 rounded-md border border-border px-2.5 py-1 text-primary",
           )}
         >
@@ -377,7 +375,7 @@ function Chip({
       aria-checked={active}
       {...rest}
       className={cn(
-        tc.chip,
+        tc.filter,
         "h-8 shrink-0 whitespace-nowrap rounded-md border px-2.5 transition-colors",
         active
           ? "border-primary/60 bg-primary/10 text-primary"

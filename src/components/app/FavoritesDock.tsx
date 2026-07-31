@@ -185,14 +185,22 @@ export function FavoritesDock({
             onClick={() => changeTab(t.id)}
             {...roving.itemProps(i)}
             className={cn(
-              "h-7 rounded-md px-2.5 text-[12px] font-medium transition-colors",
+              tc.filter,
+              "inline-flex h-7 items-center gap-1.5 rounded-md px-2.5 transition-colors",
               tab === t.id
                 ? "bg-primary text-primary-foreground"
                 : "text-muted-foreground hover:bg-muted hover:text-foreground",
             )}
           >
             {t.label}
-            <span className="ml-1 opacity-75">{counts[t.id]}</span>
+            <span
+              className={cn(
+                "rounded-full px-1.5 text-[11px] font-semibold tabular-nums",
+                tab === t.id ? "bg-primary-foreground/20" : "bg-muted-foreground/15",
+              )}
+            >
+              {counts[t.id]}
+            </span>
           </button>
         ))}
       </div>

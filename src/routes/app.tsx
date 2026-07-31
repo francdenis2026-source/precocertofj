@@ -111,7 +111,7 @@ function AppHomeContent() {
               <h1
                 className={cn(
                   tc.h1,
-                  "truncate text-[17px] leading-tight text-primary-foreground md:text-[19px]",
+                  "truncate text-[16px] leading-tight text-primary-foreground md:text-[17.5px]",
                 )}
               >
                 Olá, {firstName}
@@ -286,10 +286,10 @@ function Metric({
           {label}
         </p>
       </div>
-      <p className={cn(tc.dataPrimary, "mt-0.5 text-[20px] leading-tight text-foreground")}>
+      <p className={cn(tc.dataPrimary, "mt-0.5 text-[21px] leading-none text-foreground")}>
         {value}
       </p>
-      <p className={cn(tc.metaMuted, "truncate leading-tight")} title={hint}>
+      <p className={cn(tc.metaMuted, "mt-1 truncate leading-tight")} title={hint}>
         {hint}
       </p>
     </article>
