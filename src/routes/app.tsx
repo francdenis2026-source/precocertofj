@@ -286,19 +286,19 @@ function Metric({
   return (
     <article
       className={cn(
-        "relative overflow-hidden rounded-lg border px-2.5 py-1.5 shadow-sm backdrop-blur-md transition-colors",
+        "relative overflow-hidden rounded-lg border px-2.5 py-1 shadow-sm backdrop-blur-md transition-colors",
         t.card,
       )}
     >
       <span aria-hidden className={cn("absolute inset-y-0 left-0 w-[3px]", t.rail)} />
       <div className="flex items-center justify-between gap-2">
         <p className={cn(tc.tableHead, "truncate")}>{label}</p>
-        <span className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-md", t.chip)}>
-          <Icon className="h-3.5 w-3.5" aria-hidden />
+        <span className={cn("grid h-5 w-5 shrink-0 place-items-center rounded-md", t.chip)}>
+          <Icon className="h-3 w-3" aria-hidden />
         </span>
       </div>
-      <p className={cn(tc.dataPrimary, "mt-0.5 text-foreground")}>{value}</p>
-      <p className={cn(tc.metaMuted, "truncate")}>{hint}</p>
+      <p className={cn(tc.dataPrimary, "text-[18px] leading-tight text-foreground")}>{value}</p>
+      <p className={cn(tc.metaMuted, "truncate leading-tight")}>{hint}</p>
     </article>
   );
 }

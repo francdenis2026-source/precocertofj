@@ -50,7 +50,7 @@ export function StoresPanel({
   return (
     <section
       aria-label="Estabelecimentos"
-      className="flex min-h-0 flex-col overflow-hidden rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
+      className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
     >
       <header className="shrink-0 space-y-2 border-b border-border/70 px-3 py-2">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
