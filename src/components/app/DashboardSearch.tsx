@@ -342,7 +342,7 @@ export function DashboardSearch() {
         <Link
           to="/app/produtos"
           className={cn(
-            tc.control,
+            tc.filter,
             "shrink-0 rounded-md border border-border px-2.5 py-1 text-primary",
           )}
         >
