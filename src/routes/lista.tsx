@@ -183,7 +183,14 @@ function ListaContent() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const lists = listsQuery.data ?? [];
+  const allLists = listsQuery.data ?? [];
+  const norm = (s: string) =>
+    s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+  const lists = useMemo(() => {
+    const q = norm(listFilter);
+    if (!q) return allLists;
+    return allLists.filter((l) => norm(l.name).includes(q));
+  }, [allLists, listFilter]);
 
   const startRename = (l: { id: string; name: string }) => {
     setRenameId(l.id);
