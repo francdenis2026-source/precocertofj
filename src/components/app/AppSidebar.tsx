@@ -211,7 +211,9 @@ export function AppSidebar() {
   const navigate = useNavigate();
   const { signOut, loading: signingOut } = useSignOut();
   const { isAdmin, loading: rolesLoading } = useMyRoles();
-  const { isMobile, setOpenMobile } = useSidebar();
+  const { isMobile, setOpenMobile, state } = useSidebar();
+  /** Rail estreito: só nele os ícones aparecem (e os tooltips são criados). */
+  const compact = state === "collapsed" && !isMobile;
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   const isAdminArea = pathname.startsWith("/admin");
