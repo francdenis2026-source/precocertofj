@@ -8,9 +8,9 @@ import { StoreDetailsDrawer } from "@/components/stores/StoreDetailsDrawer";
 import type { PublicStore } from "@/lib/stores-public.functions";
 
 import { DashboardSearch } from "@/components/app/DashboardSearch";
-import { StoreRankStrip } from "@/components/app/StoreRankStrip";
-import { StoresPanel } from "@/components/app/StoresPanel";
+import { StoresColumn } from "@/components/app/StoresColumn";
 import { FavoritesDock } from "@/components/app/FavoritesDock";
+
 import { ForceUpdateButton } from "@/components/app/ForceUpdateButton";
 import { Price } from "@/components/ds/Price";
 import { useAppHomeData } from "@/hooks/useAppHomeData";
