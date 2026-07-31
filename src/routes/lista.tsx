@@ -761,8 +761,31 @@ function ListDetail({ listId }: { listId: string }) {
       </div>
     );
   }
+  if (detailQuery.isError) {
+    return (
+      <div role="alert" className="rounded-2xl border border-destructive/30 bg-card p-6 text-center">
+        <p className="text-sm font-semibold text-foreground">Não foi possível abrir esta lista.</p>
+        <p className="mt-1 text-xs text-muted-foreground">
+          A conexão foi interrompida ou a lista não está mais disponível.
+        </p>
+        <button
+          type="button"
+          onClick={() => void detailQuery.refetch()}
+          className="mt-4 inline-flex h-8 items-center rounded-lg bg-primary px-4 text-xs font-semibold text-primary-foreground"
+        >
+          Tentar novamente
+        </button>
+      </div>
+    );
+  }
   const detail = detailQuery.data;
-  if (!detail) return null;
+  if (!detail) {
+    return (
+      <div className="rounded-2xl border border-dashed border-border bg-card p-6 text-center text-xs text-muted-foreground">
+        Lista não encontrada. Selecione outra lista ao lado.
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-3">
