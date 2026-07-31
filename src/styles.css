@@ -6310,13 +6310,15 @@ h3.font-display {
   left: -0.15rem;
   top: 50%;
   height: 0;
-  width: 2px;
+  width: 3px !important;
+  min-width: 3px;
+  max-width: 3px;
   border-radius: 999px;
-  background: var(--sidebar-foreground);
+  background: var(--sidebar-ring, var(--sidebar-foreground));
   transform: translateY(-50%);
   transition: height 0.18s ease;
 }
-.pcsb-row[data-active="true"] .pcsb-rail { height: 1.05rem; }
+.pcsb-row[data-active="true"] .pcsb-rail { height: 1.15rem; }
 /* Ícone só existe no rail compacto — sem chip colorido, sem borrão azul. */
 .pcsb-ico {
   display: grid;
