@@ -252,7 +252,7 @@ export function AppSidebar() {
                     <span
                       data-active={active ? "true" : "false"}
                       className={cn(
-                        "grid h-7 w-7 shrink-0 place-items-center rounded-md border transition-colors",
+                        "grid h-8 w-8 shrink-0 place-items-center rounded-md border transition-colors",
                         group.tone && "pc-admin-icon-chip",
                         !group.tone &&
                           (active
@@ -284,11 +284,11 @@ export function AppSidebar() {
       className="border-r border-sidebar-border"
     >
       {/* Brand */}
-      <SidebarHeader className="border-b border-sidebar-border/60 px-2.5 py-3">
+      <SidebarHeader className="border-b border-sidebar-border/60 px-2 py-2.5">
         <Link
           to={isAdminArea ? "/admin" : "/"}
           onClick={closeOnMobile}
-          className="flex items-center gap-2.5 group-data-[collapsible=icon]:justify-center"
+          className="flex items-center gap-2.5 rounded-md px-2 py-1 transition-colors hover:bg-sidebar-accent group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
         >
           <span
             className="relative grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-sidebar-border bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
@@ -308,7 +308,7 @@ export function AppSidebar() {
 
       </SidebarHeader>
 
-      <SidebarContent className="px-2 py-3">
+      <SidebarContent className="px-2 py-2">
         {isAdminArea && (rolesLoading || !isAdmin) ? (
           <SidebarGroup className="py-3">
             <div className="space-y-2 px-3">
