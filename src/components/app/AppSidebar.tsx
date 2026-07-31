@@ -291,8 +291,10 @@ export function AppSidebar() {
         <Link
           to={isAdminArea ? "/admin" : "/"}
           onClick={closeOnMobile}
-          className="flex items-center gap-2.5 rounded-md px-2 py-1 transition-colors hover:bg-sidebar-accent group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+          aria-label="PreçoCerto — Feijó, Acre"
+          className="group/brand flex items-center gap-2.5 rounded-md px-2 py-1 outline-none transition-colors hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-sidebar-ring group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
         >
+
           {isAdminArea ? (
             <span
               className="relative grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-sidebar-border bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
