@@ -325,7 +325,7 @@ export function AppSidebar() {
                 </>
               )}
             </span>
-            <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-foreground/80">
+            <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-muted-foreground">i
               {isAdminArea ? "Administração" : "Minha área"}
 
             </span>
