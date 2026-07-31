@@ -25,7 +25,7 @@ function AdminSidebarToggle() {
       aria-label={label}
       aria-pressed={!collapsed}
       title={`${label}${isMobile ? "" : " (⌘/Ctrl + B)"}`}
-      className="inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-2 text-[11.5px] font-semibold text-foreground transition hover:border-primary/40 hover:text-primary md:px-3"
+      className="pc-topnav-item inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-2 text-[11.5px] font-semibold text-foreground md:px-3"
     >
       <Icon className="h-4 w-4" strokeWidth={2.2} />
       <span className="hidden md:inline">{label}</span>
@@ -98,7 +98,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
             to={isAdminScope ? "/admin" : "/perfil"}
             aria-label={fullName ? `Meu perfil — ${fullName}` : "Meu perfil"}
             title={fullName ?? "Meu perfil"}
-            className="inline-flex h-8 min-w-0 max-w-[180px] items-center gap-1.5 rounded-full border border-border bg-card pl-1 pr-2.5 text-[11.5px] font-semibold text-foreground transition-colors hover:border-primary/40 hover:text-primary sm:max-w-[220px]"
+            className="pc-topnav-item inline-flex h-8 min-w-0 max-w-[180px] items-center gap-1.5 rounded-full border border-border bg-card pl-1 pr-2.5 text-[11.5px] font-semibold text-foreground sm:max-w-[220px]"
           >
             {avatarUrl ? (
               <img
@@ -125,7 +125,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
           to="/"
           aria-label="Ir para a homepage"
           title="Ir para a homepage"
-          className="hidden h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[11.5px] font-medium text-foreground transition-colors hover:border-primary/40 hover:text-primary sm:inline-flex"
+          className="pc-topnav-item hidden h-8 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-[11.5px] font-medium text-foreground sm:inline-flex"
         >
           <Globe className="h-3.5 w-3.5" />
           Site
@@ -134,7 +134,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
           <Link
             to="/cesta"
             aria-label="Cesta"
-            className="inline-flex h-8 w-8 items-center justify-center rounded-full border border-border bg-card text-foreground transition hover:border-primary/40 hover:text-primary"
+            className="pc-topnav-item inline-flex h-8 w-8 items-center justify-center rounded-full border border-border bg-card text-foreground"
           >
             <ShoppingBag className="h-3.5 w-3.5" strokeWidth={2} />
           </Link>
@@ -149,7 +149,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
             variant="ghost"
             onClick={signOut}
             disabled={signingOut}
-            className="hidden h-8 items-center rounded-full border border-border bg-card px-3 text-[11.5px] font-semibold text-foreground transition hover:border-primary/40 hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-100 disabled:text-muted-foreground sm:inline-flex"
+            className="pc-topnav-item hidden h-8 items-center rounded-full border border-border bg-card px-3 text-[11.5px] font-semibold text-foreground disabled:pointer-events-none disabled:opacity-100 disabled:text-muted-foreground sm:inline-flex"
           >
             {signingOut ? "Saindo..." : "Sair"}
           </Button>
