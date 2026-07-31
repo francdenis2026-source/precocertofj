@@ -220,6 +220,7 @@ function AppHomeContent() {
                 summary={summary}
                 lists={listsQuery.data ?? []}
                 storeNames={storeNameSet}
+                loading={loading}
                 onOpenStore={openStoreByName}
                 onMoveItem={moveItem}
                 onRemoveItem={(id) => removeItem.mutate(id)}

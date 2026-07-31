@@ -387,7 +387,7 @@ function Empty({
   text: string;
   icon: React.ComponentType<{ className?: string }>;
   actionLabel?: string;
-  to?: string;
+  to?: "/app/produtos" | "/app/estabelecimentos" | "/lista";
 }) {
   return (
     <div className="flex h-full flex-col items-center justify-center gap-2 p-6 text-center">
