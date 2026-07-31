@@ -1,9 +1,11 @@
 import { useMemo, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Info, Loader2, Search as SearchIcon, Store } from "lucide-react";
+import { ArrowRight, Info, Loader2, Search as SearchIcon } from "lucide-react";
 
+import { StoreLogo } from "@/components/app/StoreLogo";
 import { useSignedLogoUrls } from "@/hooks/use-signed-logo-urls";
 import type { PublicStore } from "@/lib/stores-public.functions";
+
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
