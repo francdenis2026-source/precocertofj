@@ -22,6 +22,7 @@ import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 
 import { AppBrand } from "@/components/app/AppBrand";
 import { useMyProfile } from "@/hooks/useMyProfile";
+import { useMeasuredBar } from "@/hooks/use-measured-bar";
 import { useSignOut } from "@/hooks/use-sign-out";
 import { listPublicStores } from "@/lib/stores-public.functions";
 import { Button } from "@/components/ui/button";
@@ -172,9 +173,14 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
   // ("Feijó · AC", "Melhores preços") encolhem.
   const tight = !isMobile && sidebarState === "expanded";
   const isAdminScope = scope === "admin";
+  // Publica a altura real da barra em --pc-appbar-h (ResizeObserver):
+  // o conteúdo nunca fica sob o header ao redimensionar a janela.
+  const barRef = useMeasuredBar<HTMLElement>("--pc-appbar-h");
+
 
   return (
     <header
+      ref={barRef}
       className={
         isAdminScope
           ? "sticky top-0 z-30 flex h-9 shrink-0 items-center gap-2 border-b border-border/70 bg-background/92 px-3 backdrop-blur-xl md:h-10 md:px-5"

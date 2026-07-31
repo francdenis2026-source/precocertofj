@@ -16,6 +16,7 @@ import { MetricRailSkeleton, PanelBlockSkeleton, StalledNotice } from "@/compone
 import { ErrorState } from "@/components/feedback";
 import { Price } from "@/components/ds/Price";
 import { useAppHomeData } from "@/hooks/useAppHomeData";
+import { useMeasuredBar } from "@/hooks/use-measured-bar";
 import { useStalled } from "@/hooks/use-stalled";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
@@ -81,6 +82,9 @@ function AppHomeContent() {
   };
 
   const firstName = (accountQuery.data?.fullName ?? "").split(" ")[0] || "cliente";
+  // Altura real da faixa "Meu painel" publicada em --pc-panelbar-h, para que
+  // a grade abaixo se ajuste sem sobreposição em qualquer largura.
+  const panelBarRef = useMeasuredBar<HTMLElement>("--pc-panelbar-h");
 
   const summary = summaryQuery.data;
   const loading = summaryQuery.isLoading;
@@ -123,7 +127,11 @@ function AppHomeContent() {
         </p>
         {/* Bloco único: saudação + ações + métricas */}
 
-        <header className="overflow-hidden rounded-2xl border border-border/70 bg-card/95 shadow-sm backdrop-blur-md">
+        <header
+          ref={panelBarRef}
+          data-testid="panel-band"
+          className="overflow-hidden rounded-2xl border border-border/70 bg-card/95 shadow-sm backdrop-blur-md"
+        >
           <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-border/60 bg-primary/95 px-3 py-1 text-primary-foreground md:px-4 md:py-1.5">
             <span
               aria-hidden
