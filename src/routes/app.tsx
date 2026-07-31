@@ -117,7 +117,7 @@ function AppHomeContent() {
         {/* Bloco único: saudação + ações + métricas */}
 
         <header className="overflow-hidden rounded-2xl border border-border/70 bg-card/95 shadow-sm backdrop-blur-md">
-          <div className="relative flex flex-wrap items-center justify-between gap-2 border-b border-border/60 bg-primary/95 px-3.5 py-2 text-primary-foreground md:px-4 md:py-2.5">
+          <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-border/60 bg-primary/95 px-3.5 py-2 text-primary-foreground md:px-4 md:py-2.5">
             <span
               aria-hidden
               className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-brand/20 blur-3xl"
