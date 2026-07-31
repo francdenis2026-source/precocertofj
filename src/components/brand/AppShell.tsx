@@ -7,6 +7,7 @@ import { AppBreadcrumb } from "@/components/app/AppBreadcrumb";
 import { useRouterState } from "@tanstack/react-router";
 import { useInactivityLogout } from "@/hooks/use-inactivity-logout";
 import { usePersistentSidebar } from "@/hooks/use-persistent-sidebar";
+import painelLoadingBg from "@/assets/painel-loading-bg.jpg";
 
 
 /**
@@ -36,6 +37,16 @@ export function AppShell({ children, scope }: { children: React.ReactNode; scope
               : "min-h-screen bg-background"
           }
         >
+          {!isAdminScope && (
+            <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden>
+              <img
+                src={painelLoadingBg}
+                alt=""
+                className="h-full w-full object-cover opacity-[0.13] saturate-[0.7] dark:opacity-[0.16]"
+              />
+              <div className="absolute inset-0 bg-background/88 backdrop-blur-[2px] dark:bg-background/90" />
+            </div>
+          )}
           <AppHeader scope={resolvedScope} />
           {isAdminScope ? (
             <AutoAdminBreadcrumb className="border-b border-border/60 bg-card/40 px-4 py-2 backdrop-blur-sm" />
@@ -48,7 +59,7 @@ export function AppShell({ children, scope }: { children: React.ReactNode; scope
             className={
               isAdminScope
                 ? "min-h-0 flex-1 overflow-y-auto overflow-x-hidden pb-10"
-                : "flex-1 pb-[calc(var(--mobile-nav-height)+1rem)] md:pb-0"
+                : "relative flex-1 bg-transparent pb-[calc(var(--mobile-nav-height)+1rem)] md:pb-0"
             }
           >
             {children}

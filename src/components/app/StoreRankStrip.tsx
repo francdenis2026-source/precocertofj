@@ -6,6 +6,7 @@ import { Loader2, TrendingDown } from "lucide-react";
 import { Price } from "@/components/ds/Price";
 import { getCheapestStoresRanking } from "@/lib/stores-public.functions";
 import { cn } from "@/lib/utils";
+import { tc } from "@/lib/typeclear";
 
 /**
  * Ranking compacto dos mercados mais baratos (7 dias) para o painel do
@@ -32,14 +33,14 @@ export function StoreRankStrip({
   return (
     <section
       aria-label="Mercados mais baratos"
-      className="flex max-h-[46vh] min-h-0 flex-col overflow-hidden rounded-2xl border border-border/70 bg-card lg:max-h-none"
+       className="flex max-h-[46vh] min-h-0 flex-col overflow-hidden rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md lg:max-h-none"
     >
       <header className="grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-border/70 px-3 py-2">
         <div className="min-w-0">
-          <h2 className="truncate text-[13px] font-bold text-foreground">
+           <h2 className={cn(tc.itemTitle, "truncate")}>
             Mercados mais baratos
           </h2>
-          <p className="truncate text-[12px] text-muted-foreground">
+           <p className={cn(tc.metaMuted, "truncate")}>
             {summary
               ? `${summary.totalProductsCompared} produtos comparados · ${summary.windowDays} dias`
               : "últimos 7 dias"}
@@ -47,7 +48,7 @@ export function StoreRankStrip({
         </div>
         <Link
           to="/melhores-precos"
-          className="shrink-0 rounded-full border border-border px-2.5 py-1 text-[11.5px] font-semibold text-primary hover:border-primary/50"
+           className="shrink-0 rounded-md border border-border px-2.5 py-1 text-[12px] font-medium text-primary hover:border-primary/50"
         >
           Ver todos
         </Link>
@@ -72,7 +73,7 @@ export function StoreRankStrip({
                     type="button"
                     onClick={() => clickable && onOpenStore(r.storeName)}
                     disabled={!clickable}
-                    className="grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2.5 px-3 py-2 text-left transition-colors enabled:hover:bg-muted/50 disabled:cursor-default"
+                     className="grid w-full grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2.5 px-3 py-1.5 text-left transition-colors enabled:hover:bg-muted/50 disabled:cursor-default"
                   >
                     <span
                       className={cn(
@@ -85,10 +86,10 @@ export function StoreRankStrip({
                       {i + 1}
                     </span>
                     <span className="min-w-0">
-                      <span className="block truncate text-[13px] font-semibold text-foreground">
+                       <span className={cn(tc.storeName, "block truncate")}>
                         {r.storeName}
                       </span>
-                      <span className="block truncate text-[12px] text-muted-foreground">
+                       <span className={cn(tc.metaMuted, "block truncate")}>
                         {r.wins} menores preços · ticket médio{" "}
                         <Price value={r.avgTicketWins} size="xs" tone="muted" />
                       </span>
