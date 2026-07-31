@@ -101,29 +101,28 @@ export function StoresPanel({
                   key={s.id}
                   className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2.5 px-3 py-1.5 transition-colors hover:bg-muted/50"
                 >
-                  <span className="grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-md border border-border/70 bg-background">
-                    {logo ? (
-                      <img
-                        src={logo}
-                        alt=""
-                        loading="lazy"
-                        className="h-full w-full object-contain"
-                      />
-                    ) : (
-                      <Store className="h-4 w-4 text-muted-foreground" aria-hidden />
-                    )}
-                  </span>
+                  <StoreLogo src={logo} name={s.name} className="h-8 w-8" />
                   <Link
                     to="/app/loja/$id"
                     params={{ id: s.id }}
                     className="min-w-0 focus-visible:underline"
                   >
                     <span className={cn(tc.storeName, "block truncate")}>{s.name}</span>
-                    <span className={cn(tc.metaMuted, "block truncate")}>
-                      {s.neighborhood ? `${s.neighborhood} · ` : ""}
-                      {s.productCount} {s.productCount === 1 ? "produto" : "produtos"}
+                    <span className={cn(tc.metaMuted, "flex items-center gap-1.5 truncate")}>
+                      {s.neighborhood ? <span className="truncate">{s.neighborhood}</span> : null}
+                      <span
+                        className={cn(
+                          "inline-flex shrink-0 items-center rounded-full px-1.5 py-px text-[10px] font-bold tabular-nums",
+                          s.productCount > 0
+                            ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
+                            : "bg-muted text-muted-foreground",
+                        )}
+                      >
+                        {s.productCount} {s.productCount === 1 ? "item" : "itens"}
+                      </span>
                     </span>
                   </Link>
+
                   <span className="flex shrink-0 items-center gap-1">
                     <button
                       type="button"
