@@ -1,4 +1,7 @@
 import { ListRowsSkeleton } from "@/components/feedback";
+import { ListDetailSkeleton, StalledNotice } from "@/components/app/PanelSkeletons";
+import { useStalled } from "@/hooks/use-stalled";
+
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/brand/AppShell";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
@@ -75,8 +78,8 @@ function ListaPage() {
   if (loading) {
     return (
       <AppShell>
-        <div className="flex min-h-[60vh] items-center justify-center">
-          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        <div className="pc-page space-y-3">
+          <ListDetailSkeleton />
         </div>
       </AppShell>
     );
@@ -94,6 +97,7 @@ function ListaPage() {
     </ProtectedGate>
   );
 }
+
 
 
 function ListaContent() {
@@ -150,6 +154,8 @@ function ListaContent() {
     staleTime: 60_000,
     retry: 1,
   });
+  const listsStalled = useStalled(listsQuery.isLoading && !listsQuery.data);
+
 
   useEffect(() => {
     if (!listsQuery.data) return;
@@ -453,8 +459,15 @@ function ListaContent() {
               {listsQuery.isLoading && (
                 <li className="p-2">
                   <ListRowsSkeleton rows={4} />
+                  {listsStalled && (
+                    <StalledNotice
+                      onRetry={() => void listsQuery.refetch()}
+                      message="Suas listas estão demorando a carregar."
+                    />
+                  )}
                 </li>
               )}
+
               {listsQuery.isError && (
                 <li className="p-3">
                   <div role="alert" className="rounded-xl border border-destructive/30 bg-destructive/5 p-3">
@@ -630,6 +643,8 @@ function ListDetail({ listId }: { listId: string }) {
     staleTime: 30_000,
     retry: 1,
   });
+  const detailStalled = useStalled(detailQuery.isLoading && !detailQuery.data);
+
 
   const bestQuery = useQuery({
     queryKey: ["shopping-list-best", listId, detailQuery.data?.items.length ?? 0],
@@ -756,11 +771,18 @@ function ListDetail({ listId }: { listId: string }) {
 
   if (detailQuery.isLoading) {
     return (
-      <div className="rounded-2xl border border-border bg-card p-12 text-center">
-        <Loader2 className="mx-auto h-6 w-6 animate-spin text-muted-foreground" />
+      <div>
+        <ListDetailSkeleton />
+        {detailStalled && (
+          <StalledNotice
+            onRetry={() => void detailQuery.refetch()}
+            message="A lista está demorando para abrir."
+          />
+        )}
       </div>
     );
   }
+
   if (detailQuery.isError) {
     return (
       <div role="alert" className="rounded-2xl border border-destructive/30 bg-card p-6 text-center">
