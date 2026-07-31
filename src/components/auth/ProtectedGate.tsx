@@ -16,6 +16,9 @@ import { Loader2 } from "lucide-react";
 export function ProtectedGate({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
   const fetchAccount = useServerFn(getMyAccount);
+  // Contas internas (admin) não têm perfil de cliente, mas podem visualizar
+  // o painel do cliente normalmente.
+  const [allowWithoutProfile, setAllowWithoutProfile] = useState(false);
 
   const sessionQuery = useQuery({
     queryKey: ["auth-session"],
