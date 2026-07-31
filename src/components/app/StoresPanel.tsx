@@ -1,6 +1,8 @@
 import { useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Info, Loader2, Search as SearchIcon } from "lucide-react";
+import { ArrowRight, Info, Loader2, Search as SearchIcon, Store } from "lucide-react";
+import { EmptyState } from "@/components/layout";
+
 
 import { StoreLogo } from "@/components/app/StoreLogo";
 import { useSignedLogoUrls } from "@/hooks/use-signed-logo-urls";
