@@ -95,7 +95,11 @@ export const READABLE_TOKENS: TcToken[] = [
   "control",
   "cell",
   "itemTitle",
+  "panelTitle",
+  "panelNote",
+  "filter",
   "num",
+
 ];
 
 /** Extrai o `min` (px) declarado no clamp de um token. */
