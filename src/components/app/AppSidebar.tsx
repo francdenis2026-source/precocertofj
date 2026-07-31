@@ -238,58 +238,78 @@ export function AppSidebar() {
             const key = `${n.to}?${n.search?.tab ?? ""}#${n.label}`;
             return (
               <SidebarMenuItem key={key}>
-                <SidebarMenuButton
-                  asChild
-                  isActive={active}
-                  tooltip={n.label}
-                  data-active={active ? "true" : "false"}
-                  className={cn(
-                    "relative h-9 rounded-md px-2 text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar aria-disabled:pointer-events-none aria-disabled:text-sidebar-muted-foreground aria-disabled:opacity-100",
-                    group.tone && "pc-admin-row",
-                    active &&
-                      !group.tone &&
-                      "bg-sidebar-accent font-semibold text-sidebar-accent-foreground",
-                  )}
-
-                >
-                  <Link
-                    to={n.to}
-                    search={n.search as never}
-                    onClick={closeOnMobile}
-                    className="flex items-center gap-2.5"
-                  >
-                    {active && !group.tone && (
-                      <span
-                        aria-hidden
-                        className="pc-nav-rail absolute inset-y-1 left-0 w-[3px] rounded-full group-data-[collapsible=icon]:hidden"
-                      />
-                    )}
-                    <span
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={active}
                       data-active={active ? "true" : "false"}
                       className={cn(
-                        "grid h-8 w-8 shrink-0 place-items-center rounded-md border transition-colors",
-                        group.tone && "pc-admin-icon-chip",
-                        !group.tone &&
-                          cn(
-                            "pc-nav-icon",
-                            active ? "" : "border-transparent text-sidebar-muted-foreground",
-                          ),
+                        "relative h-9 rounded-md px-2 text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar aria-disabled:pointer-events-none aria-disabled:text-sidebar-muted-foreground aria-disabled:opacity-100",
+                        group.tone && "pc-admin-row",
+                        active &&
+                          !group.tone &&
+                          "bg-sidebar-accent font-semibold text-sidebar-accent-foreground",
                       )}
-                    >
-                      <n.icon className="h-4 w-4" strokeWidth={active ? 2.3 : 1.9} />
-                    </span>
-                    <span className="pc-nav-label truncate text-[13px] leading-none transition-colors">
-                      {n.label}
-                    </span>
-                    {active && group.tone && (
-                      <span className="pc-admin-active-dot ml-auto h-1.5 w-1.5 rounded-full" />
-                    )}
-                  </Link>
-                </SidebarMenuButton>
 
+                    >
+                      <Link
+                        to={n.to}
+                        search={n.search as never}
+                        onClick={closeOnMobile}
+                        aria-current={active ? "page" : undefined}
+                        aria-keyshortcuts={n.shortcut ? `Alt+${n.shortcut}` : undefined}
+                        className="flex items-center gap-2.5"
+                      >
+                        {active && !group.tone && (
+                          <span
+                            aria-hidden
+                            className="pc-nav-rail absolute inset-y-1 left-0 w-[3px] rounded-full group-data-[collapsible=icon]:hidden"
+                          />
+                        )}
+                        <span
+                          data-active={active ? "true" : "false"}
+                          className={cn(
+                            "grid h-8 w-8 shrink-0 place-items-center rounded-md border transition-colors",
+                            group.tone && "pc-admin-icon-chip",
+                            !group.tone &&
+                              cn(
+                                "pc-nav-icon",
+                                active ? "" : "border-transparent text-sidebar-muted-foreground",
+                              ),
+                          )}
+                        >
+                          <n.icon className="h-4 w-4" strokeWidth={active ? 2.3 : 1.9} />
+                        </span>
+                        <span className="pc-nav-label truncate text-[13px] leading-none transition-colors">
+                          {n.label}
+                        </span>
+                        {active && group.tone && (
+                          <span className="pc-admin-active-dot ml-auto h-1.5 w-1.5 rounded-full" />
+                        )}
+                      </Link>
+                    </SidebarMenuButton>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" align="center" className="flex items-center gap-2">
+                    <span className="flex flex-col">
+                      <span className="font-semibold">{n.label}</span>
+                      {n.hint && (
+                        <span className="text-[11px] font-normal text-muted-foreground">
+                          {n.hint}
+                        </span>
+                      )}
+                    </span>
+                    {n.shortcut && (
+                      <kbd className="pc-nav-kbd ml-auto rounded border px-1.5 py-0.5 text-[10px] font-semibold">
+                        Alt+{n.shortcut}
+                      </kbd>
+                    )}
+                  </TooltipContent>
+                </Tooltip>
               </SidebarMenuItem>
             );
           })}
+
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
