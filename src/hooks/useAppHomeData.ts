@@ -92,6 +92,7 @@ export function useAppHomeData() {
     accountQuery,
     listsQuery,
     storesByName,
+    publicStoresQuery,
     mutations: { removeItem, removeMarket, reorderItems, reorderMarkets, addToList },
   };
 }
