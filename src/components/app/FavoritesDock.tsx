@@ -69,11 +69,15 @@ export function FavoritesDock({
   const [tab, setTab] = useLocalStorageState<Tab>("app:dock:tab", "items", {
     validate: isTab,
   });
-  const [page, setPage] = useState(0);
-  const changeTab = (id: Tab) => {
-    setTab(id);
-    setPage(0);
-  };
+  // Página corrente por aba: voltar para uma aba devolve o usuário ao ponto
+  // exato onde ele parou (página + rolagem).
+  const [pages, setPages] = useState<Record<Tab, number>>({ items: 0, markets: 0, lists: 0 });
+  const page = pages[tab];
+  const setPage = useCallback(
+    (next: number) => setPages((prev) => ({ ...prev, [tab]: Math.max(0, next) })),
+    [tab],
+  );
+  const changeTab = (id: Tab) => setTab(id);
   const tabIndex = TABS.findIndex((t) => t.id === tab);
   const roving = useRovingFocus(TABS.length, Math.max(0, tabIndex), (i) =>
     changeTab(TABS[i].id),
