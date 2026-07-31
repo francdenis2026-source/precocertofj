@@ -127,6 +127,7 @@ function ListaContent() {
 
   // Navegação por teclado nas listas salvas (roving tabindex + atalhos).
   const newNameRef = useRef<HTMLInputElement | null>(null);
+  const filterRef = useRef<HTMLInputElement | null>(null);
   const rowRefs = useRef(new Map<string, HTMLButtonElement>());
   const registerRow = (id: string) => (el: HTMLButtonElement | null) => {
     if (el) rowRefs.current.set(id, el);
