@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Activity, Globe, MapPin, PanelLeftClose, PanelLeftOpen, ShieldCheck, ShoppingBag, User } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { Activity, Globe, MapPin, PanelLeftClose, PanelLeftOpen, ShieldCheck, ShoppingBag, Store, Tags, User } from "lucide-react";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 
 import { AppBrand } from "@/components/app/AppBrand";
@@ -9,7 +10,49 @@ import { ThemeToggle } from "@/components/theme-toggle";
 
 import { useMyProfile } from "@/hooks/useMyProfile";
 import { useSignOut } from "@/hooks/use-sign-out";
+import { listPublicStores } from "@/lib/stores-public.functions";
 import { Button } from "@/components/ui/button";
+
+/**
+ * Chips coloridos que preenchem o espaço vazio da barra e trazem números
+ * vivos da base (mercados ativos e preços cadastrados).
+ */
+function HeaderStats() {
+  const { data } = useQuery({
+    queryKey: ["public-stores"],
+    queryFn: () => listPublicStores(),
+    staleTime: 60_000,
+  });
+  const stores = data ?? [];
+  if (stores.length === 0) return null;
+  const prices = stores.reduce((acc, s) => acc + s.productCount, 0);
+  const top = [...stores].sort((a, b) => b.productCount - a.productCount)[0];
+
+  return (
+    <>
+      <Link
+        to="/app/estabelecimentos"
+        className="hidden items-center gap-1 rounded-full border border-sky-500/25 bg-sky-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-sky-700 transition-colors hover:bg-sky-500/20 dark:text-sky-300 sm:inline-flex"
+      >
+        <Store className="h-3 w-3" aria-hidden />
+        {stores.length} mercados
+      </Link>
+      <Link
+        to="/app/produtos"
+        className="hidden items-center gap-1 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-emerald-700 transition-colors hover:bg-emerald-500/20 dark:text-emerald-300 lg:inline-flex"
+      >
+        <Tags className="h-3 w-3" aria-hidden />
+        {prices.toLocaleString("pt-BR")} preços
+      </Link>
+      {top && (
+        <span className="hidden items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-amber-700 dark:text-amber-300 xl:inline-flex">
+          Maior catálogo · {top.name}
+        </span>
+      )}
+    </>
+  );
+}
+
 
 /** Trigger enriquecido para o console admin: rótulo + atalho ⌘/Ctrl+B. */
 function AdminSidebarToggle() {
