@@ -47,9 +47,12 @@ export function useAppHomeData() {
     staleTime: 5 * 60_000,
   });
   const listsQuery = useQuery({
-    queryKey: ["my-lists"],
+    // Compartilha o mesmo cache da página /lista; evita uma segunda chamada
+    // protegida quando o usuário abre "Minha lista" pelo menu lateral.
+    queryKey: ["shopping-lists"],
     queryFn: () => listsFn(),
     staleTime: 60_000,
+    retry: 1,
   });
   const publicStoresQuery = useQuery({
     queryKey: ["public-stores"],
@@ -67,7 +70,7 @@ export function useAppHomeData() {
 
   const invalidate = () => {
     qc.invalidateQueries({ queryKey: ["app-summary"] });
-    qc.invalidateQueries({ queryKey: ["my-lists"] });
+    qc.invalidateQueries({ queryKey: ["shopping-lists"] });
   };
 
   const removeItem = useMutation({

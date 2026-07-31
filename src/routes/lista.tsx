@@ -455,7 +455,26 @@ function ListaContent() {
                   <ListRowsSkeleton rows={4} />
                 </li>
               )}
-              {lists.length === 0 && !listsQuery.isLoading && (
+              {listsQuery.isError && (
+                <li className="p-3">
+                  <div role="alert" className="rounded-xl border border-destructive/30 bg-destructive/5 p-3">
+                    <p className="text-[12px] font-semibold text-foreground">
+                      Não foi possível carregar suas listas.
+                    </p>
+                    <p className="mt-0.5 text-[11px] text-muted-foreground">
+                      Sua sessão continua segura. Tente sincronizar novamente.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => void listsQuery.refetch()}
+                      className="mt-2 inline-flex h-7 items-center rounded-lg bg-primary px-3 text-[11px] font-semibold text-primary-foreground"
+                    >
+                      Tentar novamente
+                    </button>
+                  </div>
+                </li>
+              )}
+              {lists.length === 0 && !listsQuery.isLoading && !listsQuery.isError && (
                 <li className="p-4 text-[13px] text-muted-foreground">
                   {listFilter
                     ? `Nenhuma lista com "${listFilter}".`
@@ -592,6 +611,7 @@ function ListaContent() {
 
 function ListDetail({ listId }: { listId: string }) {
   const qc = useQueryClient();
+  const { session } = useSession();
   const { prompt } = useConfirm();
   const detailFn = useServerFn(getShoppingList);
   const addFn = useServerFn(addListItem);
@@ -606,6 +626,9 @@ function ListDetail({ listId }: { listId: string }) {
   const detailQuery = useQuery({
     queryKey: ["shopping-list", listId],
     queryFn: () => detailFn({ data: { id: listId } }),
+    enabled: Boolean(session && listId),
+    staleTime: 30_000,
+    retry: 1,
   });
 
   const bestQuery = useQuery({
