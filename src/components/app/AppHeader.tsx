@@ -175,6 +175,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
 
   return (
     <header
+      ref={barRef}
       className={
         isAdminScope
           ? "sticky top-0 z-30 flex h-9 shrink-0 items-center gap-2 border-b border-border/70 bg-background/92 px-3 backdrop-blur-xl md:h-10 md:px-5"
