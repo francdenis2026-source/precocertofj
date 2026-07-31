@@ -3,6 +3,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
 import { notify } from "@/lib/notify";
 import { supabase } from "@/integrations/supabase/client";
+import { markPanelUnverified } from "@/components/auth/ProtectedGate";
 
 /**
  * Fluxo canônico de sign-out. Usado em qualquer lugar da UI que
@@ -28,6 +29,7 @@ export function useSignOut() {
     setLoading(true);
     // Redireciona imediatamente para a homepage — não faz o usuário
     // esperar a chamada de rede terminar.
+    markPanelUnverified();
     navigate({ to: "/", replace: true });
     try {
       await qc.cancelQueries();
