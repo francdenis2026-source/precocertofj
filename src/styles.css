@@ -1177,17 +1177,25 @@ html[data-density="compact"] .app-scope {
 @media (min-width: 1280px) {
   .pc-grid { grid-template-columns: repeat(12, minmax(0, 1fr)); }
 }
-/* Cada coluna é uma pilha flexível de altura previsível. */
+/* Cada coluna é uma pilha flexível de altura previsível: nunca estoura a tela
+   e sempre rola por dentro em vez de esticar a página. */
 .pc-col {
   display: flex;
   min-width: 0;
   min-height: var(--pc-panel-min);
+  max-height: 80dvh;
   flex-direction: column;
+}
+@media (min-width: 768px) {
+  .pc-col {
+    height: clamp(24rem, 62dvh, 40rem);
+    min-height: 0;
+    max-height: none;
+  }
 }
 @media (min-width: 1280px) {
   .pc-col {
     height: clamp(30rem, calc(100dvh - 17rem), 46rem);
-    min-height: 0;
   }
 }
 html[data-density="compact"] .pc-col { min-height: calc(var(--pc-panel-min) - 1rem); }
