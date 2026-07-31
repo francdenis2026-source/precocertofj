@@ -293,36 +293,45 @@ function Metric({
   const body = (
     <>
       <span aria-hidden className={cn("absolute inset-y-2 left-0 w-[3px] rounded-full", t.rail)} />
-      <span className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-md sm:h-7 sm:w-7", t.chip)}>
+      <span className={cn("grid h-7 w-7 shrink-0 place-items-center rounded-md", t.chip)}>
         <Icon className="h-3.5 w-3.5" aria-hidden />
       </span>
-      <div className="min-w-0 flex-1">
-        <div className="flex min-w-0 items-baseline justify-between gap-1.5">
-          <p className={cn(tc.tableHead, "truncate")} title={label}>
-            {label}
-          </p>
-          <p className={cn(tc.dataPrimary, "max-w-[48%] shrink-0 truncate text-right text-[15px] leading-none text-foreground sm:text-[17px]")}>
-            {value}
-          </p>
-        </div>
-        <p className={cn(tc.metaMuted, "mt-0.5 line-clamp-1 text-[10px] leading-tight sm:text-[10.5px]")} title={hint}>
+      <div className="grid min-w-0 flex-1 gap-0.5">
+        <p className={cn(tc.tableHead, "truncate")} title={label}>
+          {label}
+        </p>
+        <p
+          className={cn(
+            tc.dataPrimary,
+            "min-w-0 truncate text-[16px] leading-none text-foreground sm:text-[17px]",
+          )}
+        >
+          {value}
+        </p>
+        <p className={cn(tc.metaMuted, "line-clamp-1 text-[10.5px] leading-tight")} title={hint}>
           {hint}
         </p>
       </div>
     </>
   );
+  const shell =
+    "relative flex min-h-[3.75rem] min-w-0 items-center gap-2 px-2.5 py-2 sm:px-3 sm:py-2.5";
   if (to) {
     return (
       <Link
         to={to}
-        className="relative flex min-h-12 min-w-0 items-center gap-1.5 px-2 py-1.5 transition hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60 sm:gap-2 sm:px-3 sm:py-2"
+        className={cn(
+          shell,
+          "transition hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60",
+        )}
       >
         {body}
       </Link>
     );
   }
-  return <article className="relative flex min-h-12 min-w-0 items-center gap-1.5 px-2 py-1.5 sm:gap-2 sm:px-3 sm:py-2">{body}</article>;
+  return <article className={shell}>{body}</article>;
 }
+
 
 
 function swap(ids: string[], idx: number, dir: -1 | 1): string[] | null {
