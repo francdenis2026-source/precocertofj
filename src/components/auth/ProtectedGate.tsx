@@ -5,13 +5,25 @@
  * - status "expired"      → /assinar
  * - status "trial|active" → renderiza children
  */
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { getMyAccount, type AccountView } from "@/lib/account.functions";
 import painelLoadingBg from "@/assets/painel-loading-bg.jpg";
+
+/**
+ * Uma vez que a sessão + assinatura foram validadas nesta aba, as páginas
+ * seguintes do painel não voltam a exibir a tela cheia de verificação: os
+ * dados já estão em cache e o bloqueio só causava travamento visual a cada
+ * navegação. A flag é resetada no logout (ver `use-sign-out`).
+ */
+let alreadyVerified = false;
+
+export function markPanelUnverified() {
+  alreadyVerified = false;
+}
 
 export function ProtectedGate({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
@@ -20,13 +32,15 @@ export function ProtectedGate({ children }: { children: React.ReactNode }) {
   // o painel do cliente normalmente.
   const [allowWithoutProfile, setAllowWithoutProfile] = useState(false);
 
+  const verifiedRef = useRef(alreadyVerified);
+
   const sessionQuery = useQuery({
     queryKey: ["auth-session"],
     queryFn: async () => {
       const { data } = await supabase.auth.getSession();
       return data.session ?? null;
     },
-    staleTime: 30_000,
+    staleTime: 5 * 60_000,
   });
 
   const hasSession = !!sessionQuery.data;
@@ -35,7 +49,7 @@ export function ProtectedGate({ children }: { children: React.ReactNode }) {
     queryKey: ["my-account"],
     queryFn: () => fetchAccount(),
     enabled: hasSession,
-    staleTime: 30_000,
+    staleTime: 5 * 60_000,
   });
 
   useEffect(() => {
@@ -82,14 +96,26 @@ export function ProtectedGate({ children }: { children: React.ReactNode }) {
     navigate,
   ]);
 
-  if (
+  const ready =
+    !sessionQuery.isPending &&
+    hasSession &&
+    !!accountQuery.data &&
+    accountQuery.data.status !== "expired";
+  if (ready && !alreadyVerified) {
+    alreadyVerified = true;
+  }
+
+  const blocking =
     !allowWithoutProfile &&
     (sessionQuery.isPending ||
       (hasSession &&
         !accountQuery.isError &&
         (accountQuery.isPending || !accountQuery.data)) ||
-      accountQuery.data?.status === "expired")
-  ) {
+      accountQuery.data?.status === "expired");
+
+  // Se esta aba já validou a conta antes, mantemos o painel na tela enquanto
+  // a revalidação acontece em segundo plano (sem tela cheia intermediária).
+  if (blocking && !(verifiedRef.current && accountQuery.data?.status !== "expired")) {
     return (
       <div className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-background px-6">
         <img
