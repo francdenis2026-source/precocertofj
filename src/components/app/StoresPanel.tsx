@@ -136,20 +136,25 @@ export function StoresPanel({
                     className="min-w-0 focus-visible:underline"
                   >
                     <span className={cn(tc.storeName, "block truncate")}>{s.name}</span>
-                    <span className={cn(tc.metaMuted, "flex items-center gap-1.5 truncate")}>
-                      {s.neighborhood ? <span className="truncate">{s.neighborhood}</span> : null}
-                      <span
-                        className={cn(
-                          "inline-flex shrink-0 items-center rounded-full px-1.5 py-px text-[10px] font-bold tabular-nums",
-                          s.productCount > 0
-                            ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
-                            : "bg-muted text-muted-foreground",
-                        )}
-                      >
-                        {s.productCount} {s.productCount === 1 ? "item" : "itens"}
-                      </span>
+                    <span className={cn(tc.metaMuted, "block truncate")}>
+                      {s.neighborhood ?? s.city}
                     </span>
                   </Link>
+
+                  <span
+                    data-col="items"
+                    title={`${s.productCount} ${s.productCount === 1 ? "item cadastrado" : "itens cadastrados"}`}
+                    className={cn(
+                      "mx-auto inline-flex items-center rounded-full px-1.5 py-px text-[11px] font-bold tabular-nums",
+                      s.productCount > 0
+                        ? "bg-emerald-500/15 text-emerald-700 dark:text-emerald-300"
+                        : "bg-muted text-muted-foreground",
+                    )}
+                  >
+                    {s.productCount}
+                  </span>
+
+
 
                   <span className="flex shrink-0 items-center gap-1">
                     <button
