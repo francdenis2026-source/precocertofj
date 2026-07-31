@@ -469,8 +469,10 @@ function ListaContent() {
                     key={l.id}
                     role="option"
                     aria-selected={isActive}
-                    className={`flex items-center gap-1.5 px-2.5 py-2 ${
-                      isActive ? "bg-muted/50" : ""
+                    className={`flex items-center gap-1.5 rounded-xl border px-2.5 py-2 transition ${
+                      isActive
+                        ? "border-primary/50 bg-primary/10 shadow-sm"
+                        : "border-border bg-background hover:border-primary/30 hover:bg-muted/40"
                     }`}
                   >
                     {isRenaming ? (
