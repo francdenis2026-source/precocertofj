@@ -5938,3 +5938,25 @@ h3.font-display {
     line-height: 1.2;
   }
 }
+
+/* ============================================================
+   Painel do cliente — tipografia de UI mais legível e sóbria
+   (Inter para menu lateral e barra superior; sem brilhos)
+   ============================================================ */
+.app-scope [data-slot="sidebar"],
+.admin-scope [data-slot="sidebar"],
+[data-sidebar="sidebar"],
+.pc-appbar {
+  font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  letter-spacing: 0;
+  font-feature-settings: "cv05" 1, "ss01" 1;
+}
+.pc-nav-label {
+  font-family: inherit;
+  font-weight: 500;
+  letter-spacing: 0.002em;
+}
+[data-sidebar="menu-button"][data-active="true"] .pc-nav-label,
+[aria-current="page"] .pc-nav-label {
+  font-weight: 600;
+}
