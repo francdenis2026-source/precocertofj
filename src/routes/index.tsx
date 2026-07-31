@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, useLoaderData } from "@tanstack/react-router";
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
@@ -61,22 +61,17 @@ const preloadExplorePanel = () => {
 
 
 export const Route = createFileRoute("/")({
-  loader: async ({ context }) => {
-    await Promise.allSettled([
-      context.queryClient.ensureQueryData({
-        queryKey: ["platform-stats"],
-        queryFn: () => getPlatformStats({} as any),
-        staleTime: 10 * 60_000,
-      }),
-
-      context.queryClient.ensureQueryData({
-        queryKey: ["home-economy"],
-        queryFn: () => getEconomyStat({} as any),
-        staleTime: 5 * 60_000,
-      }),
+  loader: async () => {
+    const [statsResult, economyResult] = await Promise.allSettled([
+      getPlatformStats({} as any),
+      getEconomyStat({} as any),
     ]);
-    return null;
+    return {
+      stats: statsResult.status === "fulfilled" ? statsResult.value : undefined,
+      economy: economyResult.status === "fulfilled" ? economyResult.value : undefined,
+    };
   },
+
   head: () => ({
     meta: [
       { title: "PreçoCerto — Comparador inteligente de mercados em Feijó/AC" },
@@ -204,28 +199,13 @@ function HomePage() {
     };
   }, []);
 
-  const platformStats = useServerFn(getPlatformStats);
-  const statsQ = useQuery({
-    queryKey: ["platform-stats"],
-    queryFn: () => platformStats({} as any),
-    // Cache do banco é recalculado a cada 10 min por cron; alinhar evita
-    // chamadas repetidas da RPC mais cara do projeto.
-    staleTime: 10 * 60_000,
-    gcTime: 30 * 60_000,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-  });
+  const { stats, economy } = useLoaderData({ from: "/" }) as {
+    stats: any;
+    economy: any;
+  };
 
-  const stats: any = statsQ.data ?? {};
+  /* Buscas reais dos clientes, agregadas em tempo real (`search_trends`). */
 
-  const economyFn = useServerFn(getEconomyStat);
-  const economyQ = useQuery({
-    queryKey: ["home-economy"],
-    queryFn: () => economyFn({} as any),
-    staleTime: 5 * 60_000,
-    refetchOnWindowFocus: false,
-  });
-  const economy = economyQ.data;
 
   /* Buscas reais dos clientes, agregadas em tempo real (`search_trends`). */
   const trendingFn = useServerFn(listTrendingSearches);
@@ -357,10 +337,10 @@ function HomePage() {
   const livePanel = buildLivePanel({
     stats,
     economy,
-    statsLoading: statsQ.isLoading,
-    economyLoading: economyQ.isLoading,
-    statsError: statsQ.isError,
-    economyError: economyQ.isError,
+    statsLoading: false,
+    economyLoading: false,
+    statsError: stats == null,
+    economyError: economy == null,
   });
   const METRIC_ICONS = { markets: ShieldCheck, products: Package, savings: TrendingDown } as const;
   const metrics = livePanel.metrics.map((m: LivePanelMetric) => ({
