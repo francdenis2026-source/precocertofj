@@ -70,6 +70,7 @@ import { Route as CategoriaSlugRouteImport } from './routes/categoria.$slug'
 import { Route as CatalogoSlugRouteImport } from './routes/catalogo.$slug'
 import { Route as CShareIdRouteImport } from './routes/c.$shareId'
 import { Route as AppProdutosRouteImport } from './routes/app_.produtos'
+import { Route as AppEstabelecimentosRouteImport } from './routes/app_.estabelecimentos'
 import { Route as AdminWebhooksRouteImport } from './routes/admin_.webhooks'
 import { Route as AdminVitrineRouteImport } from './routes/admin_.vitrine'
 import { Route as AdminSinonimosRouteImport } from './routes/admin_.sinonimos'
@@ -422,6 +423,11 @@ const AppProdutosRoute = AppProdutosRouteImport.update({
   path: '/app/produtos',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AppEstabelecimentosRoute = AppEstabelecimentosRouteImport.update({
+  id: '/app_/estabelecimentos',
+  path: '/app/estabelecimentos',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminWebhooksRoute = AdminWebhooksRouteImport.update({
   id: '/admin_/webhooks',
   path: '/admin/webhooks',
@@ -738,6 +744,7 @@ export interface FileRoutesByFullPath {
   '/admin/sinonimos': typeof AdminSinonimosRoute
   '/admin/vitrine': typeof AdminVitrineRoute
   '/admin/webhooks': typeof AdminWebhooksRoute
+  '/app/estabelecimentos': typeof AppEstabelecimentosRoute
   '/app/produtos': typeof AppProdutosRoute
   '/c/$shareId': typeof CShareIdRoute
   '/catalogo/$slug': typeof CatalogoSlugRoute
@@ -847,6 +854,7 @@ export interface FileRoutesByTo {
   '/admin/sinonimos': typeof AdminSinonimosRoute
   '/admin/vitrine': typeof AdminVitrineRoute
   '/admin/webhooks': typeof AdminWebhooksRoute
+  '/app/estabelecimentos': typeof AppEstabelecimentosRoute
   '/app/produtos': typeof AppProdutosRoute
   '/c/$shareId': typeof CShareIdRoute
   '/catalogo/$slug': typeof CatalogoSlugRoute
@@ -957,6 +965,7 @@ export interface FileRoutesById {
   '/admin_/sinonimos': typeof AdminSinonimosRoute
   '/admin_/vitrine': typeof AdminVitrineRoute
   '/admin_/webhooks': typeof AdminWebhooksRoute
+  '/app_/estabelecimentos': typeof AppEstabelecimentosRoute
   '/app_/produtos': typeof AppProdutosRoute
   '/c/$shareId': typeof CShareIdRoute
   '/catalogo/$slug': typeof CatalogoSlugRoute
@@ -1068,6 +1077,7 @@ export interface FileRouteTypes {
     | '/admin/sinonimos'
     | '/admin/vitrine'
     | '/admin/webhooks'
+    | '/app/estabelecimentos'
     | '/app/produtos'
     | '/c/$shareId'
     | '/catalogo/$slug'
@@ -1177,6 +1187,7 @@ export interface FileRouteTypes {
     | '/admin/sinonimos'
     | '/admin/vitrine'
     | '/admin/webhooks'
+    | '/app/estabelecimentos'
     | '/app/produtos'
     | '/c/$shareId'
     | '/catalogo/$slug'
@@ -1286,6 +1297,7 @@ export interface FileRouteTypes {
     | '/admin_/sinonimos'
     | '/admin_/vitrine'
     | '/admin_/webhooks'
+    | '/app_/estabelecimentos'
     | '/app_/produtos'
     | '/c/$shareId'
     | '/catalogo/$slug'
@@ -1395,6 +1407,7 @@ export interface RootRouteChildren {
   AdminSinonimosRoute: typeof AdminSinonimosRoute
   AdminVitrineRoute: typeof AdminVitrineRoute
   AdminWebhooksRoute: typeof AdminWebhooksRoute
+  AppEstabelecimentosRoute: typeof AppEstabelecimentosRoute
   AppProdutosRoute: typeof AppProdutosRoute
   CShareIdRoute: typeof CShareIdRoute
   CatalogoSlugRoute: typeof CatalogoSlugRoute
@@ -1847,6 +1860,13 @@ declare module '@tanstack/react-router' {
       path: '/app/produtos'
       fullPath: '/app/produtos'
       preLoaderRoute: typeof AppProdutosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app_/estabelecimentos': {
+      id: '/app_/estabelecimentos'
+      path: '/app/estabelecimentos'
+      fullPath: '/app/estabelecimentos'
+      preLoaderRoute: typeof AppEstabelecimentosRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/admin_/webhooks': {
@@ -2313,6 +2333,7 @@ const rootRouteChildren: RootRouteChildren = {
   AdminSinonimosRoute: AdminSinonimosRoute,
   AdminVitrineRoute: AdminVitrineRoute,
   AdminWebhooksRoute: AdminWebhooksRoute,
+  AppEstabelecimentosRoute: AppEstabelecimentosRoute,
   AppProdutosRoute: AppProdutosRoute,
   CShareIdRoute: CShareIdRoute,
   CatalogoSlugRoute: CatalogoSlugRoute,
