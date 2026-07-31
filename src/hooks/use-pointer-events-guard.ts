@@ -2,7 +2,24 @@ import { useEffect } from "react";
 import { useRouterState } from "@tanstack/react-router";
 
 const MODAL_SELECTOR =
-  '[role="dialog"][data-state="open"], [data-radix-dialog-content][data-state="open"], [data-radix-popper-content-wrapper], [vaul-drawer][data-state="open"], [data-radix-alert-dialog-content][data-state="open"]';
+  '[role="dialog"][data-state="open"], [data-radix-dialog-content][data-state="open"], [vaul-drawer][data-state="open"], [data-radix-alert-dialog-content][data-state="open"]';
+
+const LOCK_ATTRIBUTES = ["data-scroll-locked", "data-aria-hidden"] as const;
+
+function hasOpenModal() {
+  return document.querySelector(MODAL_SELECTOR) !== null;
+}
+
+/** Único ponto responsável por remover locks residuais de overlays. */
+function releaseResidualOverlayLock() {
+  if (hasOpenModal()) return;
+  const body = document.body;
+  body.style.removeProperty("pointer-events");
+  body.style.removeProperty("overflow");
+  body.style.removeProperty("padding-right");
+  for (const attribute of LOCK_ATTRIBUTES) body.removeAttribute(attribute);
+  document.documentElement.style.removeProperty("overflow");
+}
 
 /**
  * Watchdog contra travamento de navegação.
@@ -18,51 +35,38 @@ const MODAL_SELECTOR =
  * também a cada troca de rota (que é justamente quando o vazamento ocorre).
  */
 export function usePointerEventsGuard() {
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const locationKey = useRouterState({
+    select: (s) => `${s.location.pathname}${s.location.searchStr}${s.location.hash}`,
+  });
 
   useEffect(() => {
-    const body = document.body;
-
-    const release = () => {
-      const locked =
-        body.style.pointerEvents === "none" ||
-        body.hasAttribute("data-scroll-locked") ||
-        body.style.overflow === "hidden";
-      if (!locked) return;
-      if (document.querySelector(MODAL_SELECTOR)) return;
-      body.style.removeProperty("pointer-events");
-      body.style.removeProperty("overflow");
-      body.removeAttribute("data-scroll-locked");
-    };
-
-    const observer = new MutationObserver(release);
-    observer.observe(body, {
+    const observer = new MutationObserver(releaseResidualOverlayLock);
+    observer.observe(document.body, {
       attributes: true,
       attributeFilter: ["style", "data-scroll-locked"],
     });
 
-    const interval = window.setInterval(release, 1000);
-    window.addEventListener("focus", release);
-    window.addEventListener("pointerdown", release, true);
+    window.addEventListener("focus", releaseResidualOverlayLock);
+    window.addEventListener("pageshow", releaseResidualOverlayLock);
+    document.addEventListener("visibilitychange", releaseResidualOverlayLock);
 
     return () => {
       observer.disconnect();
-      window.clearInterval(interval);
-      window.removeEventListener("focus", release);
-      window.removeEventListener("pointerdown", release, true);
+      window.removeEventListener("focus", releaseResidualOverlayLock);
+      window.removeEventListener("pageshow", releaseResidualOverlayLock);
+      document.removeEventListener("visibilitychange", releaseResidualOverlayLock);
     };
   }, []);
 
   // Toda navegação libera o body: overlays desmontados no meio da transição
   // são a causa mais comum do "mouse parou de funcionar".
   useEffect(() => {
-    const body = document.body;
-    const t = window.setTimeout(() => {
-      if (document.querySelector(MODAL_SELECTOR)) return;
-      body.style.removeProperty("pointer-events");
-      body.style.removeProperty("overflow");
-      body.removeAttribute("data-scroll-locked");
-    }, 60);
-    return () => window.clearTimeout(t);
-  }, [pathname]);
+    releaseResidualOverlayLock();
+    const frame = window.requestAnimationFrame(releaseResidualOverlayLock);
+    const timeout = window.setTimeout(releaseResidualOverlayLock, 180);
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearTimeout(timeout);
+    };
+  }, [locationKey]);
 }

@@ -12,6 +12,7 @@ import {
   PanelLeftOpen,
   ShieldCheck,
   ShoppingBag,
+  Search,
   Store,
   Tags,
   TrendingDown,
@@ -20,8 +21,6 @@ import {
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 
 import { AppBrand } from "@/components/app/AppBrand";
-import { DensityToggle } from "@/components/app/DensityToggle";
-
 import { useMyProfile } from "@/hooks/useMyProfile";
 import { useSignOut } from "@/hooks/use-sign-out";
 import { listPublicStores } from "@/lib/stores-public.functions";
@@ -170,7 +169,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
   const { signOut, loading: signingOut } = useSignOut();
   const { state: sidebarState, isMobile } = useSidebar();
   // Com o menu lateral expandido sobra pouca largura: os rótulos longos
-  // ("Feijó · AC", "Melhores preços", "Confortável/Compacta") encolhem.
+  // ("Feijó · AC", "Melhores preços") encolhem.
   const tight = !isMobile && sidebarState === "expanded";
   const isAdminScope = scope === "admin";
 
@@ -289,7 +288,17 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
       </div>
 
       <div className="flex items-center gap-1 md:gap-1.5">
-        {!isAdminScope && <DensityToggle labels={!tight} />}
+        {!isAdminScope && (
+          <Link
+            to="/app/produtos"
+            aria-label="Buscar produtos e preços"
+            title="Buscar produtos e preços"
+            className="pc-topnav-item inline-flex h-7 items-center gap-1.5 rounded-full border border-border bg-card px-2 text-[11px] font-semibold text-foreground md:px-2.5"
+          >
+            <Search className="h-3.5 w-3.5" strokeWidth={2.1} aria-hidden />
+            <span className={tight ? "hidden xl:inline" : "hidden md:inline"}>Buscar preços</span>
+          </Link>
+        )}
         {!isAdminScope && <ScopeNav />}
 
         {!isAdminScope && (

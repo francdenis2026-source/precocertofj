@@ -1,7 +1,6 @@
 import { ListRowsSkeleton } from "@/components/feedback";
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/brand/AppShell";
-import { useSessionGate } from "@/hooks/use-session-gate";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useLocalStorageState } from "@/hooks/use-local-storage";
@@ -99,7 +98,7 @@ function ListaPage() {
 
 function ListaContent() {
   const qc = useQueryClient();
-  const { hasSession } = useSessionGate();
+  const { session } = useSession();
   const { confirm } = useConfirm();
   const listsFn = useServerFn(listMyShoppingLists);
   const createFn = useServerFn(createShoppingList);
@@ -147,7 +146,9 @@ function ListaContent() {
   const listsQuery = useQuery({
     queryKey: ["shopping-lists"],
     queryFn: () => listsFn(),
-    enabled: hasSession,
+    enabled: Boolean(session),
+    staleTime: 60_000,
+    retry: 1,
   });
 
   useEffect(() => {
