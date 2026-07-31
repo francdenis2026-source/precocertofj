@@ -317,7 +317,7 @@ export function AppSidebar() {
                         <span
                           data-active={active ? "true" : "false"}
                           className={cn(
-                            "grid h-8 w-8 shrink-0 place-items-center rounded-md border transition-colors",
+                            "grid h-9 w-9 shrink-0 place-items-center rounded-lg border transition-colors",
                             group.tone && "pc-admin-icon-chip",
                             !group.tone &&
                               cn(
@@ -326,9 +326,9 @@ export function AppSidebar() {
                               ),
                           )}
                         >
-                          <n.icon className="h-4 w-4" strokeWidth={active ? 2.3 : 1.9} />
+                          <n.icon className="h-[19px] w-[19px]" strokeWidth={active ? 2.1 : 1.8} />
                         </span>
-                        <span className="pc-nav-label truncate text-[13px] leading-none transition-colors">
+                        <span className="pc-nav-label truncate text-[13.5px] leading-none transition-colors">
                           {n.label}
                         </span>
                         {active && group.tone && (
@@ -444,7 +444,7 @@ export function AppSidebar() {
                     <TooltipTrigger asChild>
                       <SidebarMenuButton asChild className="pc-nav-link pc-nav-link--row focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar">
                         <Link to="/admin" className="flex items-center gap-2.5">
-                          <span className="pc-nav-icon grid h-6 w-6 place-items-center rounded-md bg-sidebar-primary text-sidebar-primary-foreground">
+                          <span className="pc-nav-icon grid h-9 w-9 place-items-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
                             <Shield className="h-3.5 w-3.5" />
                           </span>
                           <span className="pc-nav-label text-[13px] font-medium">Painel administrativo</span>
