@@ -258,8 +258,8 @@ export function AppSidebar() {
                         group.tone && "pc-admin-icon-chip",
                         !group.tone &&
                           (active
-                            ? "border-sidebar-primary/50 bg-sidebar-primary/20 text-sidebar-accent-foreground"
-                            : "border-transparent text-sidebar-foreground/80"),
+                            ? "border-sidebar-primary/60 bg-sidebar-primary/25 text-sidebar-accent-foreground"
+                            : "border-transparent text-sidebar-muted-foreground group-hover/menu-item:text-sidebar-accent-foreground"),
 
                       )}
                     >
