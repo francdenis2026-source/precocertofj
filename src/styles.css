@@ -1402,7 +1402,7 @@ html[data-density="compact"] .app-scope [data-sidebar="menu-button"] {
   gap: 0.45rem;
   padding-inline: 0.4rem;
 }
-html[data-density="compact"] .app-scope [data-sidebar="menu-button"] span:first-child,
+html[data-density="compact"] .app-scope [data-sidebar="menu-button"] span:first-child:not(.pcsb-rail),
 html[data-density="compact"] .app-scope [data-sidebar="header"] a > span:first-child {
   width: 1.75rem;
   height: 1.75rem;
@@ -1498,7 +1498,7 @@ html[data-density="compact"] .app-scope .app-dashboard [data-slot="card"] { --pc
 .app-scope [data-sidebar="menu-button"][data-active="true"] span:last-child {
   font-weight: var(--fw-semibold, 600);
 }
-.app-scope [data-sidebar="menu-button"] span:first-child,
+.app-scope [data-sidebar="menu-button"] span:first-child:not(.pcsb-rail),
 .app-scope [data-sidebar="header"] a > span:first-child {
   width: 2rem;
   height: 2rem;
@@ -1585,7 +1585,7 @@ html[data-density="compact"] .app-scope .app-dashboard [data-slot="card"] { --pc
     justify-content: center;
     border-radius: 0.7rem;
   }
-  .app-scope [data-collapsible="icon"] [data-sidebar="menu-button"] span:first-child,
+  .app-scope [data-collapsible="icon"] [data-sidebar="menu-button"] span:first-child:not(.pcsb-rail),
   .app-scope [data-collapsible="icon"] [data-sidebar="header"] a > span:first-child {
     width: 2.05rem;
     height: 2.05rem;
@@ -1616,7 +1616,7 @@ html[data-density="compact"] .app-scope .app-dashboard [data-slot="card"] { --pc
     gap: 0.5rem;
     padding-inline: 0.35rem;
   }
-  .app-scope [data-sidebar="menu-button"] span:first-child {
+  .app-scope [data-sidebar="menu-button"] span:first-child:not(.pcsb-rail) {
     width: 1.85rem;
     height: 1.85rem;
     border-radius: 0.55rem;
@@ -1659,7 +1659,7 @@ html[data-density="compact"] .app-scope .app-dashboard [data-slot="card"] { --pc
     height: 2.5rem;
     font-size: 0.875rem;
   }
-  .app-scope [data-sidebar="menu-button"] span:first-child {
+  .app-scope [data-sidebar="menu-button"] span:first-child:not(.pcsb-rail) {
     width: 2rem;
     height: 2rem;
   }
