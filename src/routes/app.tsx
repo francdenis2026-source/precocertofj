@@ -84,6 +84,8 @@ function AppHomeContent() {
 
   const summary = summaryQuery.data;
   const loading = summaryQuery.isLoading;
+  const summaryStalled = useStalled(loading && !summaryQuery.data);
+
 
   const potentialSavings = (summary?.lists ?? []).reduce(
     (acc, l) => acc + (l.potentialSavings ?? 0),
