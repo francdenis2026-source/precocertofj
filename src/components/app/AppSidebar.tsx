@@ -331,12 +331,8 @@ export function AppSidebar() {
                         </span>
                       )}
                     </span>
-                    {n.shortcut && (
-                      <kbd className="pc-nav-kbd ml-auto rounded border px-1.5 py-0.5 text-[10px] font-semibold">
-                        Alt+{n.shortcut}
-                      </kbd>
-                    )}
                   </TooltipContent>
+
                 </Tooltip>
               </SidebarMenuItem>
             );
