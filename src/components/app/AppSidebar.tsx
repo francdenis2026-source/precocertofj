@@ -342,10 +342,12 @@ export function AppSidebar() {
 
 
   return (
+    <TooltipProvider delayDuration={250} skipDelayDuration={300}>
     <Sidebar
       collapsible="icon"
       className="border-r border-sidebar-border"
     >
+
       {/* Brand */}
       <SidebarHeader className="border-b border-sidebar-border/60 px-2 py-2.5">
         <Link
