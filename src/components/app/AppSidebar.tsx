@@ -210,7 +210,7 @@ export function AppSidebar() {
     <SidebarGroup key={group.label} className="px-0 py-1.5" data-tone={group.tone}>
       <SidebarGroupLabel
         className={cn(
-          "h-6 px-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-foreground/75",
+          "h-6 px-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-muted-foreground",
           "group-data-[collapsible=icon]:hidden",
           group.tone && "pc-admin-group-label",
 
@@ -231,7 +231,7 @@ export function AppSidebar() {
                   tooltip={n.label}
                   data-active={active ? "true" : "false"}
                   className={cn(
-                    "relative h-9 rounded-md px-2 text-sidebar-foreground/90 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 focus-visible:ring-sidebar-ring",
+                    "relative h-9 rounded-md px-2 text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar aria-disabled:pointer-events-none aria-disabled:text-sidebar-muted-foreground aria-disabled:opacity-100",
                     group.tone && "pc-admin-row",
                     active &&
                       !group.tone &&
@@ -258,8 +258,8 @@ export function AppSidebar() {
                         group.tone && "pc-admin-icon-chip",
                         !group.tone &&
                           (active
-                            ? "border-sidebar-primary/50 bg-sidebar-primary/20 text-sidebar-accent-foreground"
-                            : "border-transparent text-sidebar-foreground/80"),
+                            ? "border-sidebar-primary/60 bg-sidebar-primary/25 text-sidebar-accent-foreground"
+                            : "border-transparent text-sidebar-muted-foreground group-hover/menu-item:text-sidebar-accent-foreground"),
 
                       )}
                     >
@@ -292,7 +292,7 @@ export function AppSidebar() {
           to={isAdminArea ? "/admin" : "/"}
           onClick={closeOnMobile}
           aria-label="PreçoCerto — Feijó, Acre"
-          className="group/brand flex items-center gap-2.5 rounded-md px-2 py-1 outline-none transition-colors hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-sidebar-ring group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
+          className="group/brand flex items-center gap-2.5 rounded-md px-2 py-1 outline-none transition-colors hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
         >
 
           {isAdminArea ? (
@@ -325,7 +325,7 @@ export function AppSidebar() {
                 </>
               )}
             </span>
-            <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-foreground/80">
+            <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-muted-foreground">
               {isAdminArea ? "Administração" : "Minha área"}
 
             </span>
@@ -350,7 +350,7 @@ export function AppSidebar() {
 
         {!isAdminArea && !rolesLoading && isAdmin && (
           <SidebarGroup className="py-2">
-            <SidebarGroupLabel className="px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-sidebar-foreground/55">
+            <SidebarGroupLabel className="px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-sidebar-muted-foreground">
               Administração
             </SidebarGroupLabel>
             <SidebarGroupContent>
@@ -383,7 +383,7 @@ export function AppSidebar() {
               onClick={signOut}
               disabled={signingOut}
               tooltip="Sair"
-              className="pc-nav-link pc-nav-link--row text-sidebar-foreground/80 hover:text-destructive"
+              className="pc-nav-link pc-nav-link--row text-sidebar-foreground hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar disabled:pointer-events-none disabled:opacity-100 disabled:text-sidebar-muted-foreground"
             >
               <LogOut className="h-4 w-4" />
               <span className="text-[13px] font-medium">

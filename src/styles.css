@@ -158,6 +158,7 @@
 
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-muted-foreground: var(--sidebar-muted-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
   --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
   --color-sidebar-accent: var(--sidebar-accent);
@@ -232,6 +233,8 @@
 
   --sidebar: oklch(0.995 0.003 248);
   --sidebar-foreground: oklch(0.22 0.045 258);
+  /* AA-safe secondary text on sidebar surface (~5.6:1 on light) */
+  --sidebar-muted-foreground: oklch(0.44 0.035 258);
   --sidebar-primary: oklch(0.54 0.205 260);
   --sidebar-primary-foreground: oklch(0.99 0.002 250);
   --sidebar-accent: oklch(0.940 0.018 248);
@@ -400,6 +403,8 @@
 
   --sidebar: oklch(0.12 0.035 258);
   --sidebar-foreground: oklch(0.97 0.006 250);
+  /* AA-safe secondary text on dark sidebar (~6.9:1) */
+  --sidebar-muted-foreground: oklch(0.80 0.018 250);
   --sidebar-primary: oklch(0.75 0.12 210);
   --sidebar-primary-foreground: oklch(0.14 0.04 258);
   --sidebar-accent: oklch(0.23 0.045 258);
