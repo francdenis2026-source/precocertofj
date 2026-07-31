@@ -121,13 +121,14 @@ export function StoresPanel({
           "pc-cols-stores shrink-0 border-b border-border/60 bg-muted/30 px-3 py-1",
         )}
       >
-        <span className="w-8" />
+        <span className="w-10" />
         <span className="truncate">Estabelecimento</span>
         <span data-col="items" className="text-center">
           Itens
         </span>
-        <span className="w-[3.75rem] text-right">Abrir</span>
+        <span className="w-7 text-right">+</span>
       </div>
+
 
       <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]">
         {loading ? (
