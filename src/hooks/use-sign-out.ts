@@ -25,13 +25,13 @@ export function useSignOut() {
       await supabase.auth.signOut();
       notify.success("Sessão encerrada", {
         id: "auth-session",
-        description: "Você saiu com segurança. Suas listas e favoritos continuam salvos.",
+        description: "Sua sessão foi encerrada neste dispositivo. Listas, favoritos e alertas seguem salvos na sua conta.",
       });
     } catch (err) {
       console.error("[signOut]", err);
       notify.error("Falha ao encerrar a sessão", {
         id: "auth-session",
-        description: "Tente sair novamente. Se persistir, feche o navegador.",
+        description: "Sua sessão local foi limpa, mas o servidor não confirmou a saída. Tente sair novamente neste dispositivo.",
       });
     } finally {
       setLoading(false);
