@@ -1,8 +1,12 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
+  Bell,
+  ChevronDown,
+  CreditCard,
   Home,
   LayoutDashboard,
+  LogOut,
   MapPin,
   PanelLeftClose,
   PanelLeftOpen,
@@ -10,6 +14,7 @@ import {
   ShoppingBag,
   Store,
   Tags,
+  TrendingDown,
   User,
 } from "lucide-react";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
@@ -20,11 +25,20 @@ import { useMyProfile } from "@/hooks/useMyProfile";
 import { useSignOut } from "@/hooks/use-sign-out";
 import { listPublicStores } from "@/lib/stores-public.functions";
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 
 /**
  * Micro badges de status do mercado local. Cada badge é um pequeno
  * pill com ícone + número, sem rótulos longos, para ocupar pouco espaço.
+ * O segundo badge informa explicitamente os ITENS CADASTRADOS.
  */
 function HeaderStats() {
   const { data } = useQuery({
@@ -34,13 +48,15 @@ function HeaderStats() {
   });
   const stores = data ?? [];
   if (stores.length === 0) return null;
-  const prices = stores.reduce((acc, s) => acc + s.productCount, 0);
-  const top = [...stores].sort((a, b) => b.productCount - a.productCount)[0];
+  const items = stores.reduce((acc, s) => acc + s.productCount, 0);
+  const avg = Math.round(items / stores.length);
 
   return (
     <>
       <Link
         to="/app/estabelecimentos"
+        title={`${stores.length} estabelecimentos`}
+        aria-label={`${stores.length} estabelecimentos`}
         className="hidden items-center gap-1 rounded-full border border-sky-500/25 bg-sky-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-sky-700 transition-colors hover:bg-sky-500/20 dark:text-sky-300 sm:inline-flex"
       >
         <Store className="h-3 w-3" aria-hidden />
@@ -48,19 +64,26 @@ function HeaderStats() {
       </Link>
       <Link
         to="/app/produtos"
+        title={`${items.toLocaleString("pt-BR")} itens cadastrados`}
+        aria-label={`${items.toLocaleString("pt-BR")} itens cadastrados`}
         className="hidden items-center gap-1 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-emerald-700 transition-colors hover:bg-emerald-500/20 dark:text-emerald-300 lg:inline-flex"
       >
         <Tags className="h-3 w-3" aria-hidden />
-        {prices.toLocaleString("pt-BR")}
+        {items.toLocaleString("pt-BR")}
+        <span className="font-semibold opacity-80">itens</span>
       </Link>
-      {top && (
-        <span className="hidden items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-amber-700 dark:text-amber-300 xl:inline-flex">
-          {top.name}
-        </span>
-      )}
+      <Link
+        to="/melhores-precos"
+        title={`Média de ${avg.toLocaleString("pt-BR")} itens por estabelecimento`}
+        className="hidden items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-amber-700 transition-colors hover:bg-amber-500/20 dark:text-amber-300 xl:inline-flex"
+      >
+        <TrendingDown className="h-3 w-3" aria-hidden />
+        Melhores preços
+      </Link>
     </>
   );
 }
+
 
 /**
  * Navegação segmentada compacta: Início (site) / Painel (área logada).
