@@ -142,13 +142,8 @@ function AppHomeContent() {
               className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-brand/20 blur-3xl"
             />
             <div className="relative flex min-w-0 items-baseline gap-2">
-              <p className={cn(tc.eyebrow, "shrink-0 text-brand")}>Meu painel</p>
-              <h1
-                className={cn(
-                  tc.h1,
-                  "truncate text-[13.5px] leading-tight text-primary-foreground md:text-[15px]",
-                )}
-              >
+              <p className={cn(tc.eyebrow, "hidden shrink-0 text-brand sm:block")}>Meu painel</p>
+              <h1 className="truncate whitespace-nowrap text-[14px] font-semibold leading-tight tracking-[-0.01em] text-primary-foreground md:text-[15.5px]">
                 Olá, {firstName}
               </h1>
             </div>
@@ -353,19 +348,17 @@ function Metric({
       <span className={cn("grid h-7 w-7 shrink-0 place-items-center rounded-md", t.chip)}>
         <Icon className="h-3.5 w-3.5" aria-hidden />
       </span>
-      <div className="grid min-w-0 flex-1 gap-0.5">
-        <p className={cn(tc.tableHead, "truncate")} title={label}>
+      <div className="grid min-w-0 flex-1 gap-px">
+        <p
+          className="truncate text-[11px] font-semibold uppercase leading-none tracking-[0.08em] text-muted-foreground"
+          title={label}
+        >
           {label}
         </p>
-        <p
-          className={cn(
-            tc.dataPrimary,
-            "min-w-0 truncate text-[16px] leading-none text-foreground sm:text-[17px]",
-          )}
-        >
+        <p className="pc-price min-w-0 truncate text-[19px] font-bold leading-tight text-foreground sm:text-[21px]">
           {value}
         </p>
-        <p className={cn(tc.metaMuted, "line-clamp-1 text-[10.5px] leading-tight")} title={hint}>
+        <p className="line-clamp-1 text-[11.5px] leading-tight text-foreground/55" title={hint}>
           {hint}
         </p>
       </div>
