@@ -3140,7 +3140,7 @@ input::placeholder, textarea::placeholder {
 [role="alertdialog"] .text-muted-foreground:not(.pc-on-navy),
 [role="status"] .text-muted-foreground:not(.pc-on-navy),
 [role="alert"] .text-muted-foreground:not(.pc-on-navy),
-[data-sonner-toast] .text-muted-foreground:not(.pc-on-navy),
+[data-sonner-toast]:not([data-rich-colors="true"]) .text-muted-foreground:not(.pc-on-navy),
 [data-radix-tooltip-content] .text-muted-foreground:not(.pc-on-navy) {
   color: color-mix(in oklab, var(--foreground) 82%, transparent) !important;
 }
@@ -3159,10 +3159,22 @@ input::placeholder, textarea::placeholder {
 .dark [role="dialog"] li:not(.pc-on-navy),
 .dark [role="alertdialog"] p,
 .dark [role="alertdialog"] li,
-.dark [data-sonner-toast] p,
-.dark [data-sonner-toast] div {
+.dark [data-sonner-toast]:not([data-rich-colors="true"]) p,
+.dark [data-sonner-toast]:not([data-rich-colors="true"]) div {
   color: color-mix(in oklab, var(--foreground) 88%, transparent);
 }
+
+/* Toasts com richColors (sucesso/erro/aviso) mantêm o texto da própria
+   paleta do sonner — nunca herdam o foreground do tema (texto sumia). */
+[data-sonner-toast][data-rich-colors="true"],
+[data-sonner-toast][data-rich-colors="true"] * {
+  color: inherit;
+}
+[data-sonner-toast][data-rich-colors="true"] [data-title],
+[data-sonner-toast][data-rich-colors="true"] [data-description] {
+  color: currentColor;
+}
+
 
 
 /* ============================================================
