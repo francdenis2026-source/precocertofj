@@ -1,4 +1,5 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import {
   Home,
   ShoppingCart,
