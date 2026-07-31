@@ -158,10 +158,11 @@ function AppHomeContent() {
               value={summary ? String(summary.totals.listsCount) : "—"}
               hint={
                 summary
-                  ? `${summary.totals.itemsCount} ${summary.totals.itemsCount === 1 ? "item" : "itens"} para comprar`
+                  ? `${summary.totals.itemsCount} ${summary.totals.itemsCount === 1 ? "item" : "itens"} · abrir listas`
                   : "carregando"
               }
               tone="primary"
+              to="/lista"
             />
             <Metric
               icon={Star}
