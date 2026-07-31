@@ -29,8 +29,9 @@ export default defineConfig({
         // A única registradora é src/lib/pwa.ts (com guardas de preview).
         injectRegister: null,
         workbox: {
-          globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,woff2}"],
-          navigateFallback: "/",
+          // HTML NUNCA é pré-cacheado: o app é SSR e o shell precisa vir da rede,
+          // senão o navegador continua servindo a versão antiga do site.
+          globPatterns: ["**/*.{js,css,ico,png,svg,webmanifest,woff2}"],
           navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//],
           cleanupOutdatedCaches: true,
           clientsClaim: true,
@@ -42,8 +43,9 @@ export default defineConfig({
               handler: "NetworkFirst",
               options: {
                 cacheName: "pc-html",
-                networkTimeoutSeconds: 4,
-                expiration: { maxEntries: 32, maxAgeSeconds: 60 * 60 * 24 },
+                networkTimeoutSeconds: 3,
+                // Fallback curto: se a rede falhar, o HTML só é reaproveitado por 1h.
+                expiration: { maxEntries: 32, maxAgeSeconds: 60 * 60 },
               },
             },
             {
