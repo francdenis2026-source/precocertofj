@@ -89,14 +89,31 @@ export function useInactivityLogout() {
     }, timeoutMs);
   }, [timeoutMs, doLogout, clearTimers]);
 
+  /**
+   * Throttle de atividade.
+   *
+   * `mousemove`, `scroll` e `wheel` disparam dezenas de vezes por segundo.
+   * Sem throttle, cada evento reagendava dois timers, publicava no
+   * BroadcastChannel e chamava `setWarning(false)` — um setState que
+   * re-renderizava o AppShell inteiro (sidebar + conteúdo). Era essa
+   * tempestade de renders que travava a navegação do painel.
+   *
+   * Agora só reagendamos a cada 20s de atividade contínua (ou imediatamente
+   * quando o aviso de expiração está na tela).
+   */
+  const ACTIVITY_THROTTLE_MS = 20_000;
+
   const markActive = useCallback(
     (broadcast = true) => {
-      lastActivityRef.current = Date.now();
+      const now = Date.now();
+      if (!warningRef.current && now - lastActivityRef.current < ACTIVITY_THROTTLE_MS) return;
+      lastActivityRef.current = now;
       scheduleTimers();
       if (broadcast) bcRef.current?.postMessage({ t: lastActivityRef.current });
     },
     [scheduleTimers],
   );
+
 
   useEffect(() => {
     if (!session) {
