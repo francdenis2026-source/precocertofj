@@ -215,15 +215,27 @@ function AppHomeContent() {
           </div>
         )}
 
-        <div className="grid min-h-0 flex-1 gap-2.5 lg:grid-cols-[minmax(0,1.42fr)_minmax(320px,0.86fr)]">
-          <div className="flex h-[62vh] min-h-[380px] flex-col lg:h-auto lg:min-h-0">
+        {/* Grid responsiva: busca de preços à esquerda, lojas e favoritos à direita */}
+        <div className="grid gap-3 lg:grid-cols-12">
+          <div className="flex min-h-[520px] flex-col lg:col-span-7 xl:col-span-8">
             <DashboardSearch />
           </div>
-          <div className="grid min-h-0 gap-2.5 lg:grid-rows-[minmax(0,0.82fr)_minmax(0,1.18fr)]">
-            <StoreRankStrip
-              storeNames={storeNameSet}
-              onOpenStore={openStoreByName}
-            />
+          <div className="grid content-start gap-3 lg:col-span-5 xl:col-span-4">
+            <div className="flex max-h-[420px] min-h-[260px] flex-col">
+              <StoresPanel
+                stores={publicStoresQuery.data ?? []}
+                loading={publicStoresQuery.isLoading}
+                onOpenDetails={openStoreByName}
+              />
+            </div>
+            <div className="flex max-h-[360px] min-h-[220px] flex-col">
+              <StoreRankStrip
+                storeNames={storeNameSet}
+                onOpenStore={openStoreByName}
+              />
+            </div>
+          </div>
+          <div className="lg:col-span-12">
             {summary ? (
               <FavoritesDock
                 summary={summary}
@@ -237,10 +249,11 @@ function AppHomeContent() {
                 onRemoveMarket={(id) => removeMarket.mutate(id)}
               />
             ) : (
-               <div className="min-h-0 animate-pulse rounded-lg border border-border bg-card/80 backdrop-blur-md" />
+              <div className="h-48 animate-pulse rounded-lg border border-border bg-card/80 backdrop-blur-md" />
             )}
           </div>
         </div>
+
 
       </div>
 
