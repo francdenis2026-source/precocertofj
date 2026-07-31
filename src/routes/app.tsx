@@ -205,11 +205,11 @@ function AppHomeContent() {
 
         {/* Grid responsiva de altura total: busca | lojas+ranking | favoritos */}
         <div className="grid gap-2 lg:min-h-0 lg:flex-1 lg:grid-cols-12">
-          <div className="flex min-h-[340px] flex-col lg:col-span-5 lg:min-h-0">
+          <div className="flex min-h-[360px] flex-col lg:col-span-6 lg:min-h-0">
             <DashboardSearch />
           </div>
 
-          <div className="flex min-h-[300px] flex-col lg:col-span-3 lg:min-h-0">
+          <div className="flex min-h-[280px] flex-col lg:col-span-3 lg:min-h-0">
             <StoresColumn
               stores={publicStoresQuery.data ?? []}
               loading={publicStoresQuery.isLoading}
@@ -220,7 +220,8 @@ function AppHomeContent() {
 
 
 
-          <div className="flex min-h-0 flex-col lg:col-span-4">
+          <div className="flex min-h-0 flex-col lg:col-span-3">
+
             {summary ? (
               <FavoritesDock
                 summary={summary}
