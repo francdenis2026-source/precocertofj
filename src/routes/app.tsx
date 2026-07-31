@@ -21,9 +21,9 @@ import { FavoritesDock } from "@/components/app/FavoritesDock";
 import { ForceUpdateButton } from "@/components/app/ForceUpdateButton";
 import { Price } from "@/components/ds/Price";
 import { useAppHomeData } from "@/hooks/useAppHomeData";
-import { getAccessStatus, daysRemaining } from "@/lib/paywall";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
+
 
 export const Route = createFileRoute("/app")({
   head: () => ({
