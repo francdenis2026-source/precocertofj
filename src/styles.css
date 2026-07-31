@@ -1315,6 +1315,40 @@ html[data-density="compact"] .app-scope { --pc-card-min: 3.35rem; }
   .app-scope .app-dashboard [role="tablist"] { flex-wrap: nowrap; }
 }
 
+/* ── Janela única do painel ───────────────────────────────────────────────
+   Em telas com altura suficiente, o dashboard ocupa exatamente a altura da
+   área de conteúdo: a faixa "Meu painel" fica fixa no topo e SOMENTE as
+   listas internas (.pc-panel-body) rolam. Nada de rolagem geral da página,
+   nada de corte/transbordo nos cards. */
+@media (min-width: 1024px) and (min-height: 620px) {
+  .app-scope .app-dashboard.pc-page {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .app-scope .app-dashboard.pc-page > header { flex: 0 0 auto; }
+  .app-scope .app-dashboard .pc-grid {
+    flex: 1 1 auto;
+    min-height: 0;
+    align-content: stretch;
+  }
+  .app-scope .app-dashboard .pc-col {
+    height: 100%;
+    min-height: 0;
+    max-height: none;
+  }
+  /* Cards da grade nunca transbordam: só o corpo interno rola. */
+  .app-scope .app-dashboard .pc-col > * {
+    min-height: 0;
+    max-height: 100%;
+  }
+}
+
+/* Tipografia levemente mais densa no painel, mantendo legibilidade AA. */
+.app-scope .app-dashboard { font-size: 0.9rem; }
+.app-scope .app-dashboard [data-slot="card-title"] { font-size: 0.95rem; }
+
+
 
 
 /* ── Densidade aplicada a barra lateral, cabeçalho e controles menores ──── */
