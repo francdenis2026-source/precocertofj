@@ -4,6 +4,7 @@ import { AppShell } from "@/components/brand/AppShell";
 import { useSessionGate } from "@/hooks/use-session-gate";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useLocalStorageState } from "@/hooks/use-local-storage";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
