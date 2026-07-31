@@ -6412,6 +6412,8 @@ h3.font-display {
   backdrop-filter: none;
 }
 .pcsb .pcsb-ico > svg {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
   color: currentColor;
   fill: none;
   filter: none;
@@ -6429,7 +6431,7 @@ h3.font-display {
 }
 
 /* Expandir/recolher sem animar largura evita relayout contínuo do dashboard. */
-.group:has(> .pcsb) > div {
+.group:has(.pcsb) > div {
   transition-duration: 0ms;
 }
 
