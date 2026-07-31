@@ -69,19 +69,21 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
 
 
 
-      <div className="flex min-w-0 flex-1 items-center gap-2">
+      <div className="flex min-w-0 flex-1 items-center gap-1.5">
         <span
           data-tone={isAdminScope ? "catalog" : "overview"}
-          className="pc-tone-chip hidden items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.12em] md:inline-flex"
+          className="pc-tone-chip hidden items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] md:inline-flex"
           aria-label={isAdminScope ? "Área administrativa" : "Localização atual"}
         >
           {isAdminScope ? (
-            <ShieldCheck data-tone-icon className="h-3.5 w-3.5" strokeWidth={2.4} />
+            <ShieldCheck data-tone-icon className="h-3 w-3" strokeWidth={2.4} />
           ) : (
-            <MapPin data-tone-icon className="h-3.5 w-3.5" strokeWidth={2.4} />
+            <MapPin data-tone-icon className="h-3 w-3" strokeWidth={2.4} />
           )}
           {isAdminScope ? "Console seguro" : "Feijó · AC"}
         </span>
+
+        {!isAdminScope && <HeaderStats />}
 
         {isAdminScope && (
           <span
@@ -92,6 +94,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
             Administração do sistema
           </span>
         )}
+
 
         {session && (
           <Link
