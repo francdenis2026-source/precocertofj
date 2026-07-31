@@ -6386,6 +6386,36 @@ h3.font-display {
   padding-top: 0.4rem;
 }
 
+/* ── Ícones: só o desenho ──────────────────────────────────────────────── */
+/* Sem chip, sem fundo colorido, sem sombra: apenas o traço herdando a cor. */
+.pcsb .pcsb-ico,
+.pcsb [data-sidebar="menu-button"] .pcsb-ico {
+  background: none !important;
+  background-image: none !important;
+  box-shadow: none !important;
+  border: 0 !important;
+  border-radius: 0;
+  backdrop-filter: none;
+}
+.pcsb .pcsb-ico > svg {
+  color: currentColor;
+  fill: none;
+  filter: none;
+}
+/* Neutraliza o realce padrão do shadcn nos ícones do rail. */
+.pcsb [data-sidebar="menu-button"] > svg,
+.pcsb [data-sidebar="menu-sub-button"] > svg {
+  color: inherit;
+}
+
+/* A barra lateral cuida da própria rolagem (sem encadear com a página). */
+.pcsb-content {
+  overscroll-behavior: contain;
+  scroll-behavior: auto;
+  will-change: scroll-position;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .pcsb-row, .pcsb-ico, .pcsb-rail, .pcsb-kbd, .pcsb-brand { transition: none; }
 }
+
