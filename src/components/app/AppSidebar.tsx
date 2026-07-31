@@ -50,6 +50,7 @@ import {
 } from "@/components/ui/sidebar";
 import { useSignOut } from "@/hooks/use-sign-out";
 import { useMyRoles } from "@/hooks/useMyRoles";
+import { LicenseStatusChip } from "@/components/app/LicenseStatusChip";
 import { cn } from "@/lib/utils";
 
 type NavItem = {
@@ -338,6 +339,11 @@ export function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="border-t border-sidebar-border/60">
+        {!isAdminArea && (
+          <div className="px-2.5 py-2 group-data-[collapsible=icon]:hidden">
+            <LicenseStatusChip />
+          </div>
+        )}
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton

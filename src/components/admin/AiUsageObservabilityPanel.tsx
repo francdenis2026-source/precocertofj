@@ -8,6 +8,7 @@ import {
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { PriceCents } from "@/components/ds/PriceCents";
 import { Activity, AlertTriangle, Clock, Coins, Loader2, Users } from "lucide-react";
 
 const RANGES = [
@@ -16,17 +17,11 @@ const RANGES = [
   { label: "30d", hours: 24 * 30 },
 ] as const;
 
-function formatCents(cents: number) {
-  return `R$ ${(Number(cents || 0) / 100).toLocaleString("pt-BR", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
-  })}`;
-}
-
 function formatMs(ms: number) {
   const value = Number(ms || 0);
   return value >= 1000 ? `${(value / 1000).toFixed(1)}s` : `${Math.round(value)}ms`;
 }
+
 
 function failureRate(calls: number, failures: number) {
   if (!calls) return 0;
@@ -124,9 +119,10 @@ export function AiUsageObservabilityPanel() {
               <Metric
                 icon={<Coins className="h-4 w-4 text-primary" />}
                 label="Custo estimado"
-                value={formatCents(totals?.creditsCents ?? 0)}
+                value={totals ? <PriceCents cents={totals.creditsCents} /> : "—"}
                 hint={`${(totals?.tokens ?? 0).toLocaleString("pt-BR")} tokens`}
               />
+
               <Metric
                 icon={<AlertTriangle className="h-4 w-4 text-primary" />}
                 label="Falhas"
@@ -159,8 +155,9 @@ export function AiUsageObservabilityPanel() {
                         {formatMs(f.avgDurationMs)}
                       </span>
                       <span className="font-mono tabular-nums text-foreground">
-                        {formatCents(f.creditsCents)}
+                        <PriceCents cents={f.creditsCents} />
                       </span>
+
                       {f.failures > 0 && (
                         <Badge variant="destructive">{f.failures} falha(s)</Badge>
                       )}
@@ -185,8 +182,9 @@ export function AiUsageObservabilityPanel() {
                       </span>
                       <span className="font-mono text-muted-foreground">{u.calls} chamadas</span>
                       <span className="font-mono tabular-nums text-foreground">
-                        {formatCents(u.creditsCents)}
+                        <PriceCents cents={u.creditsCents} />
                       </span>
+
                       {u.failures > 0 && <Badge variant="outline">{u.failures} falha(s)</Badge>}
                     </li>
                   ))}
@@ -235,8 +233,9 @@ function Metric({
 }: {
   icon: React.ReactNode;
   label: string;
-  value: string;
+  value: React.ReactNode;
   hint?: string;
+
 }) {
   return (
     <div className="rounded-xl border border-border bg-surface p-3">
