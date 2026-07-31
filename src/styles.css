@@ -5564,3 +5564,54 @@ h3.font-display {
   .pc-nav-icon { transition: none; transform: none; }
   [data-sidebar="menu-button"]:hover .pc-nav-icon { transform: none; }
 }
+
+/* ── Sidebar: skeleton, tooltip kbd e sincronia dourada do menu superior ── */
+.pc-nav-skel {
+  display: inline-block;
+  background: linear-gradient(
+    90deg,
+    color-mix(in oklab, var(--sidebar-accent) 70%, transparent) 0%,
+    color-mix(in oklab, var(--pc-home-gold) 12%, var(--sidebar-accent)) 50%,
+    color-mix(in oklab, var(--sidebar-accent) 70%, transparent) 100%
+  );
+  background-size: 200% 100%;
+  animation: pc-nav-shimmer 1.4s ease-in-out infinite;
+}
+@keyframes pc-nav-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+.pc-nav-kbd {
+  border-color: color-mix(in oklab, var(--pc-home-gold) 45%, transparent);
+  background: color-mix(in oklab, var(--pc-home-gold) 12%, transparent);
+  color: var(--pc-gold-ink);
+}
+
+/* Itens do header (topo) reagindo em dourado como a sidebar */
+.pc-topnav-item {
+  transition: color .18s ease, background-color .18s ease,
+              border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.pc-topnav-item:hover {
+  color: var(--pc-gold-ink);
+  background-color: var(--pc-hover-tint);
+  border-color: color-mix(in oklab, var(--pc-home-gold) 45%, transparent);
+  box-shadow: 0 1px 6px -2px color-mix(in oklab, var(--pc-home-gold) 55%, transparent);
+  transform: translateY(-0.5px);
+}
+.pc-topnav-item:focus-visible {
+  outline: 2px solid var(--pc-gold-ink);
+  outline-offset: 2px;
+  color: var(--pc-gold-ink);
+  border-color: color-mix(in oklab, var(--pc-home-gold) 55%, transparent);
+}
+.pc-topnav-item[aria-current="page"] {
+  color: var(--pc-gold-ink);
+  border-color: color-mix(in oklab, var(--pc-home-gold) 55%, transparent);
+  background-color: color-mix(in oklab, var(--pc-home-gold) 14%, transparent);
+}
+@media (prefers-reduced-motion: reduce) {
+  .pc-nav-skel { animation: none; }
+  .pc-topnav-item { transition: none; }
+  .pc-topnav-item:hover { transform: none; }
+}
