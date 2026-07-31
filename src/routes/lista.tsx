@@ -183,6 +183,100 @@ function ListaContent() {
     onError: (e: Error) => toast.error(e.message),
   });
 
+  const lists = listsQuery.data ?? [];
+
+  const startRename = (l: { id: string; name: string }) => {
+    setRenameId(l.id);
+    setRenameText(l.name);
+  };
+
+  const cancelRename = () => {
+    const id = renameId;
+    setRenameId(null);
+    if (id) focusRow(id);
+  };
+
+  const askDelete = async (l: { id: string; name: string }) => {
+    const ok = await confirm({
+      title: `Excluir a lista "${l.name}"?`,
+      description: "Esta ação não pode ser desfeita.",
+      confirmLabel: "Excluir",
+      destructive: true,
+    });
+    if (ok) deleteMut.mutate(l.id);
+  };
+
+  // Setas navegam, Enter abre, F2 renomeia, Delete exclui, Esc sai da lista.
+  const onListKeyDown = (e: React.KeyboardEvent, index: number) => {
+    const l = lists[index];
+    if (!l) return;
+    const go = (i: number) => {
+      const next = lists[(i + lists.length) % lists.length];
+      if (!next) return;
+      selectList(next.id);
+      focusRow(next.id);
+    };
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        go(index + 1);
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        go(index - 1);
+        break;
+      case "Home":
+        e.preventDefault();
+        go(0);
+        break;
+      case "End":
+        e.preventDefault();
+        go(lists.length - 1);
+        break;
+      case "Enter":
+      case " ":
+        e.preventDefault();
+        selectList(l.id);
+        break;
+      case "F2":
+        e.preventDefault();
+        startRename(l);
+        break;
+      case "Delete":
+        e.preventDefault();
+        void askDelete(l);
+        break;
+      case "Escape":
+        e.preventDefault();
+        (e.currentTarget as HTMLElement).blur();
+        break;
+      default:
+        break;
+    }
+  };
+
+  // Atalhos globais da página: Alt+L foca a lista selecionada, Alt+N cria.
+  useEffect(() => {
+    const onKey = (ev: KeyboardEvent) => {
+      if (!ev.altKey || ev.ctrlKey || ev.metaKey) return;
+      const key = ev.key.toLowerCase();
+      if (key === "n") {
+        ev.preventDefault();
+        newNameRef.current?.focus();
+        return;
+      }
+      if (key === "l") {
+        ev.preventDefault();
+        const target = selectedId ?? lists[0]?.id;
+        if (target) focusRow(target);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [lists, selectedId]);
+
+
+
   return (
     <AppShell>
       <div className="mx-auto max-w-7xl px-4 py-3 md:py-4">
