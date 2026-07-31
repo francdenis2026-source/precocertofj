@@ -343,6 +343,12 @@ function AppStorePage() {
                           >
                             <LineChart className="h-3.5 w-3.5" aria-hidden />
                           </button>
+                          <PriceDropAlertToggle
+                            productName={p.productName}
+                            establishmentId={id}
+                            storeName={info.data?.name ?? null}
+                            targetPrice={p.price}
+                          />
                           <button
                             type="button"
                             onClick={() => setCompareKey(p.productName)}
