@@ -318,12 +318,16 @@ export function AppSidebar() {
                 "Console"
               ) : (
                 <>
-                  Preço<span className="text-gold-ink">Certo</span>
+                  Preço
+                  <span className="text-gold-ink underline decoration-transparent decoration-2 underline-offset-4 transition-colors group-hover/brand:decoration-current">
+                    Certo
+                  </span>
                 </>
               )}
             </span>
-            <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-foreground/70">
+            <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-foreground/80">
               {isAdminArea ? "Administração" : "Minha área"}
+
             </span>
           </span>
         </Link>
