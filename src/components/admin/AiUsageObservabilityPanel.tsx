@@ -182,8 +182,9 @@ export function AiUsageObservabilityPanel() {
                       </span>
                       <span className="font-mono text-muted-foreground">{u.calls} chamadas</span>
                       <span className="font-mono tabular-nums text-foreground">
-                        {formatCents(u.creditsCents)}
+                        <PriceCents cents={u.creditsCents} />
                       </span>
+
                       {u.failures > 0 && <Badge variant="outline">{u.failures} falha(s)</Badge>}
                     </li>
                   ))}
