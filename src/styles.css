@@ -1265,8 +1265,9 @@ html[data-density="compact"] .pc-col { min-height: calc(var(--pc-panel-min) - 1r
   flex: 1 1 auto;
   min-height: var(--pc-card-min, 4.75rem);
 }
-.app-scope { --pc-card-min: 4.75rem; }
-html[data-density="compact"] .app-scope { --pc-card-min: 3.9rem; }
+.app-scope { --pc-card-min: 3.9rem; }
+html[data-density="compact"] .app-scope { --pc-card-min: 3.35rem; }
+
 
 /* ── Ritmo tipográfico único da área do cliente ──────────────────────────
    Mesma hierarquia (título → subtítulo → corpo) e o mesmo espaçamento
