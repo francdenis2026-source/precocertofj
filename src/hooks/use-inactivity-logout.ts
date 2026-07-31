@@ -30,11 +30,20 @@ export function useInactivityLogout() {
   const timeoutMs = isAdmin || isAdminArea ? 10 * 60_000 : 30 * 60_000;
 
   const [warning, setWarning] = useState(false);
+  /** Espelho síncrono de `warning` — evita setState em cada evento de mouse. */
+  const warningRef = useRef(false);
   const lastActivityRef = useRef<number>(Date.now());
   const warnTimerRef = useRef<number | null>(null);
   const logoutTimerRef = useRef<number | null>(null);
   const bcRef = useRef<BroadcastChannel | null>(null);
   const toastIdRef = useRef<string | number | null>(null);
+
+  const setWarningState = useCallback((next: boolean) => {
+    if (warningRef.current === next) return;
+    warningRef.current = next;
+    setWarning(next);
+  }, []);
+
 
   const clearTimers = useCallback(() => {
     if (warnTimerRef.current !== null) window.clearTimeout(warnTimerRef.current);
