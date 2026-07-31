@@ -250,29 +250,17 @@ function AppHomeContent() {
 
 type MetricTone = "primary" | "brand" | "savings" | "warning";
 
-const METRIC_TONES: Record<MetricTone, { card: string; chip: string; rail: string }> = {
-  primary: {
-    card: "border-primary/25 bg-primary/[0.06]",
-    chip: "bg-primary/12 text-primary",
-    rail: "bg-primary",
-  },
-  brand: {
-    card: "border-brand/35 bg-brand/[0.10]",
-    chip: "bg-brand/20 text-brand-soft",
-    rail: "bg-brand",
-  },
-  savings: {
-    card: "border-savings/30 bg-savings/[0.08]",
-    chip: "bg-savings/15 text-savings",
-    rail: "bg-savings",
-  },
-  warning: {
-    card: "border-warning/35 bg-warning/[0.10]",
-    chip: "bg-warning/20 text-accent-ink",
-    rail: "bg-warning",
-  },
+const METRIC_TONES: Record<MetricTone, { chip: string; rail: string }> = {
+  primary: { chip: "bg-primary/12 text-primary", rail: "bg-primary" },
+  brand: { chip: "bg-brand/20 text-brand-soft", rail: "bg-brand" },
+  savings: { chip: "bg-savings/15 text-savings", rail: "bg-savings" },
+  warning: { chip: "bg-warning/20 text-accent-ink", rail: "bg-warning" },
 };
 
+/**
+ * Célula de métrica dentro da faixa única do topo do painel.
+ * Proporção: rótulo pequeno, número em destaque, apoio discreto.
+ */
 function Metric({
   icon: Icon,
   label,
@@ -288,28 +276,26 @@ function Metric({
 }) {
   const t = METRIC_TONES[tone];
   return (
-    <article
-      className={cn(
-        "relative overflow-hidden rounded-lg border px-2.5 py-1 shadow-sm backdrop-blur-md transition-colors",
-        t.card,
-      )}
-    >
-      <span aria-hidden className={cn("absolute inset-y-0 left-0 w-[3px]", t.rail)} />
-      <div className="flex items-center justify-between gap-2">
-        <p className={cn(tc.tableHead, "truncate")} title={label}>
-          {label}
-        </p>
+    <article className="relative min-w-0 px-3 py-2">
+      <span aria-hidden className={cn("absolute inset-y-2 left-0 w-[3px] rounded-full", t.rail)} />
+      <div className="flex items-center gap-1.5">
         <span className={cn("grid h-5 w-5 shrink-0 place-items-center rounded-md", t.chip)}>
           <Icon className="h-3 w-3" aria-hidden />
         </span>
+        <p className={cn(tc.tableHead, "truncate")} title={label}>
+          {label}
+        </p>
       </div>
-      <p className={cn(tc.dataPrimary, "text-[18px] leading-tight text-foreground")}>{value}</p>
+      <p className={cn(tc.dataPrimary, "mt-0.5 text-[20px] leading-tight text-foreground")}>
+        {value}
+      </p>
       <p className={cn(tc.metaMuted, "truncate leading-tight")} title={hint}>
         {hint}
       </p>
     </article>
   );
 }
+
 
 function swap(ids: string[], idx: number, dir: -1 | 1): string[] | null {
   const target = idx + dir;
