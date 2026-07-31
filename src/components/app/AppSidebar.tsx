@@ -248,7 +248,7 @@ export function AppSidebar() {
                     {active && !group.tone && (
                       <span
                         aria-hidden
-                        className="absolute inset-y-1 left-0 w-[3px] rounded-full bg-sidebar-primary group-data-[collapsible=icon]:hidden"
+                        className="pc-nav-rail absolute inset-y-1 left-0 w-[3px] rounded-full group-data-[collapsible=icon]:hidden"
                       />
                     )}
                     <span
@@ -257,15 +257,17 @@ export function AppSidebar() {
                         "grid h-8 w-8 shrink-0 place-items-center rounded-md border transition-colors",
                         group.tone && "pc-admin-icon-chip",
                         !group.tone &&
-                          (active
-                            ? "border-sidebar-primary/60 bg-sidebar-primary/25 text-sidebar-accent-foreground"
-                            : "border-transparent text-sidebar-muted-foreground group-hover/menu-item:text-sidebar-accent-foreground"),
-
+                          cn(
+                            "pc-nav-icon",
+                            active ? "" : "border-transparent text-sidebar-muted-foreground",
+                          ),
                       )}
                     >
                       <n.icon className="h-4 w-4" strokeWidth={active ? 2.3 : 1.9} />
                     </span>
-                    <span className="truncate text-[13px] leading-none">{n.label}</span>
+                    <span className="pc-nav-label truncate text-[13px] leading-none transition-colors">
+                      {n.label}
+                    </span>
                     {active && group.tone && (
                       <span className="pc-admin-active-dot ml-auto h-1.5 w-1.5 rounded-full" />
                     )}
