@@ -15,6 +15,8 @@ import {
 } from "@/lib/catalog-search.functions";
 import { useLocalStorageState } from "@/hooks/use-local-storage";
 import { useRovingFocus } from "@/hooks/use-roving-focus";
+import { useHotkeys } from "@/hooks/use-hotkeys";
+
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
 
