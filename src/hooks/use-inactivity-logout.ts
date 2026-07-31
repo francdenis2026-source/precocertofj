@@ -127,7 +127,7 @@ export function useInactivityLogout() {
   useEffect(() => {
     if (!session) {
       clearTimers();
-      setWarning(false);
+      setWarningState(false);
       return;
     }
 
