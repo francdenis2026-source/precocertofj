@@ -403,6 +403,8 @@
 
   --sidebar: oklch(0.12 0.035 258);
   --sidebar-foreground: oklch(0.97 0.006 250);
+  /* AA-safe secondary text on dark sidebar (~6.9:1) */
+  --sidebar-muted-foreground: oklch(0.80 0.018 250);
   --sidebar-primary: oklch(0.75 0.12 210);
   --sidebar-primary-foreground: oklch(0.14 0.04 258);
   --sidebar-accent: oklch(0.23 0.045 258);
