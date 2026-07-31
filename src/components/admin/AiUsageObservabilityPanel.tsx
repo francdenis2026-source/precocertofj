@@ -119,9 +119,10 @@ export function AiUsageObservabilityPanel() {
               <Metric
                 icon={<Coins className="h-4 w-4 text-primary" />}
                 label="Custo estimado"
-                value={formatCents(totals?.creditsCents ?? 0)}
+                value={totals ? <PriceCents cents={totals.creditsCents} /> : "—"}
                 hint={`${(totals?.tokens ?? 0).toLocaleString("pt-BR")} tokens`}
               />
+
               <Metric
                 icon={<AlertTriangle className="h-4 w-4 text-primary" />}
                 label="Falhas"
