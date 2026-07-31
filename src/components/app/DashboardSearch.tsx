@@ -230,8 +230,8 @@ export function DashboardSearch() {
           )}
         </label>
 
-        <div className="flex items-center gap-1.5">
         <div className="flex flex-wrap items-stretch gap-2">
+
           <div className="flex min-w-0 flex-1 items-center gap-1.5 rounded-lg border border-border/60 bg-background/70 px-1.5 py-1 transition-colors focus-within:border-primary/50">
             <span className="shrink-0 rounded bg-muted px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
               Categoria
