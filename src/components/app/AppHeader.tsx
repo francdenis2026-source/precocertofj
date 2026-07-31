@@ -168,6 +168,10 @@ function AdminSidebarToggle() {
 export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
   const { firstName, fullName, initials, avatarUrl, session, loading } = useMyProfile();
   const { signOut, loading: signingOut } = useSignOut();
+  const { state: sidebarState, isMobile } = useSidebar();
+  // Com o menu lateral expandido sobra pouca largura: os rótulos longos
+  // ("Feijó · AC", "Melhores preços", "Confortável/Compacta") encolhem.
+  const tight = !isMobile && sidebarState === "expanded";
   const isAdminScope = scope === "admin";
 
   return (
@@ -193,7 +197,10 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
       <div className="flex min-w-0 flex-1 items-center gap-1.5">
         <span
           data-tone={isAdminScope ? "catalog" : "overview"}
-          className="pc-tone-chip hidden items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] md:inline-flex"
+          className={cn(
+            "pc-tone-chip hidden items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em]",
+            tight ? "xl:inline-flex" : "md:inline-flex",
+          )}
           aria-label={isAdminScope ? "Área administrativa" : "Localização atual"}
         >
           {isAdminScope ? (
@@ -204,7 +211,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
           {isAdminScope ? "Console" : "Feijó · AC"}
         </span>
 
-        {!isAdminScope && <HeaderStats />}
+        {!isAdminScope && <HeaderStats compact={tight} />}
 
         {session && (
           <DropdownMenu>
@@ -282,7 +289,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
       </div>
 
       <div className="flex items-center gap-1 md:gap-1.5">
-        {!isAdminScope && <DensityToggle />}
+        {!isAdminScope && <DensityToggle labels={!tight} />}
         {!isAdminScope && <ScopeNav />}
 
         {!isAdminScope && (
