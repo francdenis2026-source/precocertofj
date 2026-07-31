@@ -337,10 +337,10 @@ function HomePage() {
   const livePanel = buildLivePanel({
     stats,
     economy,
-    statsLoading: statsQ.isLoading,
-    economyLoading: economyQ.isLoading,
-    statsError: statsQ.isError,
-    economyError: economyQ.isError,
+    statsLoading: false,
+    economyLoading: false,
+    statsError: stats == null,
+    economyError: economy == null,
   });
   const METRIC_ICONS = { markets: ShieldCheck, products: Package, savings: TrendingDown } as const;
   const metrics = livePanel.metrics.map((m: LivePanelMetric) => ({
