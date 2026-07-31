@@ -109,7 +109,7 @@ export function ProtectedGate({ children }: { children: React.ReactNode }) {
           aria-live="polite"
           className="relative w-full max-w-md rounded-3xl border border-white/12 bg-black/28 p-8 shadow-[0_28px_70px_-30px_rgba(0,0,0,0.85)] backdrop-blur-xl"
         >
-          <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/12 px-3 py-1 text-[10.5px] font-semibold uppercase tracking-[0.22em] text-white">
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/12 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-white">
             <span className="live-dot" aria-hidden />
             PreçoCerto
           </span>
