@@ -75,8 +75,8 @@ function ListaPage() {
   if (loading) {
     return (
       <AppShell>
-        <div className="flex min-h-[60vh] items-center justify-center">
-          <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+        <div className="pc-page space-y-3">
+          <ListDetailSkeleton />
         </div>
       </AppShell>
     );
@@ -94,6 +94,7 @@ function ListaPage() {
     </ProtectedGate>
   );
 }
+
 
 
 function ListaContent() {
