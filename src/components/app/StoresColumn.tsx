@@ -32,12 +32,17 @@ export function StoresColumn({
       aria-label="Estabelecimentos e ranking"
       className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
     >
-      <div className="grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-border/70 px-1.5 py-1">
+      <div className="grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-1.5 border-b border-border/70 px-1.5 py-1">
         <div role="tablist" aria-label="Visões de estabelecimentos" className="flex min-w-0 gap-1">
           {(
             [
-              { id: "stores" as const, label: "Estabelecimentos", count: stores.length },
-              { id: "rank" as const, label: "Mais baratos" },
+              {
+                id: "stores" as const,
+                label: "Estabelecimentos",
+                short: "Lojas",
+                count: stores.length,
+              },
+              { id: "rank" as const, label: "Mais baratos", short: "Baratos" },
             ]
           ).map((t) => (
             <button
@@ -45,20 +50,22 @@ export function StoresColumn({
               type="button"
               role="tab"
               aria-selected={tab === t.id}
+              aria-label={t.label}
               onClick={() => setTab(t.id)}
               className={cn(
                 tc.filter,
-                "inline-flex h-6.5 shrink-0 items-center gap-1.5 rounded-full px-2.5 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+                "inline-flex h-6.5 min-w-0 items-center gap-1 rounded-full px-2 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 sm:gap-1.5 sm:px-2.5",
                 tab === t.id
                   ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:bg-primary/10 hover:text-primary",
               )}
             >
-              {t.label}
+              <span className="truncate min-[380px]:hidden">{t.short}</span>
+              <span className="hidden truncate min-[380px]:inline">{t.label}</span>
               {typeof t.count === "number" && (
                 <span
                   className={cn(
-                    "rounded-full px-1.5 text-[11px] font-semibold tabular-nums",
+                    "shrink-0 rounded-full px-1.5 text-[11px] font-semibold tabular-nums",
                     tab === t.id ? "bg-primary-foreground/20" : "bg-muted-foreground/15",
                   )}
                 >
@@ -70,14 +77,17 @@ export function StoresColumn({
         </div>
         <Link
           to={tab === "stores" ? "/app/estabelecimentos" : "/melhores-precos"}
+          aria-label="Ver todos"
           className={cn(
             tc.filter,
-            "shrink-0 rounded-full px-2 py-0.5 text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+            "shrink-0 whitespace-nowrap rounded-full px-2 py-0.5 text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
           )}
         >
-          Ver todos
+          <span className="min-[380px]:hidden">Todos</span>
+          <span className="hidden min-[380px]:inline">Ver todos</span>
         </Link>
       </div>
+
 
       <div className="flex min-h-0 flex-1 flex-col">
         {tab === "stores" ? (
