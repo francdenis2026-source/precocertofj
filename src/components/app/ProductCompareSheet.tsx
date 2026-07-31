@@ -100,9 +100,16 @@ export function ProductCompareSheet({
             >
               <div className="flex items-center justify-between gap-2">
                 <h3 className={tc.tableHead}>Tendência de preço</h3>
-                <span className={tc.metaMuted}>
-                  atualizado {formatUpdatedAt(detail.lastSeenAt)}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className={tc.metaMuted}>
+                    atualizado {formatUpdatedAt(detail.lastSeenAt)}
+                  </span>
+                  <PriceDropAlertToggle
+                    variant="chip"
+                    productName={detail.productName}
+                    targetPrice={detail.minPrice}
+                  />
+                </div>
               </div>
               <MiniTrend
                 className="mt-1.5"
