@@ -272,9 +272,17 @@ function AppHomeContent() {
                 onMoveMarket={moveMarket}
                 onRemoveMarket={(id) => removeMarket.mutate(id)}
               />
+            ) : summaryQuery.isError ? (
+              <ErrorState
+                title="Favoritos indisponíveis"
+                message="Não conseguimos carregar seus favoritos agora."
+                onRetry={() => void summaryQuery.refetch()}
+                className="h-full"
+              />
             ) : (
-              <div className="h-full min-h-0 flex-1 animate-pulse rounded-xl border border-border bg-card/80 backdrop-blur-md" />
+              <PanelBlockSkeleton label="Carregando favoritos" />
             )}
+
           </div>
         </div>
       </div>
