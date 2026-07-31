@@ -20,6 +20,7 @@ import { AppShell } from "@/components/brand/AppShell";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { ProductCompareSheet } from "@/components/app/ProductCompareSheet";
 import { ProductPriceHistory } from "@/components/app/ProductPriceHistory";
+import { PriceDropAlertToggle } from "@/components/app/PriceDropAlertToggle";
 import { formatUpdatedAt } from "@/components/app/PriceTrend";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -346,7 +347,7 @@ function AppStorePage() {
                           <PriceDropAlertToggle
                             productName={p.productName}
                             establishmentId={id}
-                            storeName={info.data?.name ?? null}
+                            storeName={contactQ.data?.name ?? null}
                             targetPrice={p.price}
                           />
                           <button
