@@ -78,9 +78,13 @@ export function StoreRankStrip({
             <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Calculando…
           </div>
         ) : rows.length === 0 ? (
-          <p className={cn(tc.meta, "p-4")}>
-            Ainda não temos comparações suficientes nesta região.
-          </p>
+          <EmptyState
+            icon={TrendingDown}
+            title="Sem comparações suficientes"
+            description="Assim que houver mais preços cadastrados nesta região, o ranking aparece aqui."
+            className="m-3 border border-dashed border-border/70 py-6"
+          />
+
         ) : (
           <ul className="divide-y divide-border/60">
             {rows.map((r, i) => {
