@@ -83,11 +83,12 @@ export function ProtectedGate({ children }: { children: React.ReactNode }) {
   ]);
 
   if (
-    sessionQuery.isPending ||
-    (hasSession &&
-      !accountQuery.isError &&
-      (accountQuery.isPending || !accountQuery.data)) ||
-    accountQuery.data?.status === "expired"
+    !allowWithoutProfile &&
+    (sessionQuery.isPending ||
+      (hasSession &&
+        !accountQuery.isError &&
+        (accountQuery.isPending || !accountQuery.data)) ||
+      accountQuery.data?.status === "expired")
   ) {
     return (
       <div className="flex min-h-[100svh] items-center justify-center bg-background px-6">
