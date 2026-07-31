@@ -37,14 +37,19 @@ export function useAppHomeData() {
   const summaryQuery = useQuery({
     queryKey: ["app-summary"],
     queryFn: () => summaryFn(),
+    staleTime: 60_000,
   });
   const accountQuery = useQuery({
-    queryKey: ["account"],
+    // Mesma chave usada pelo ProtectedGate/header: uma única requisição de
+    // conta por navegação em vez de três.
+    queryKey: ["my-account"],
     queryFn: () => accountFn(),
+    staleTime: 5 * 60_000,
   });
   const listsQuery = useQuery({
     queryKey: ["my-lists"],
     queryFn: () => listsFn(),
+    staleTime: 60_000,
   });
   const publicStoresQuery = useQuery({
     queryKey: ["public-stores"],
