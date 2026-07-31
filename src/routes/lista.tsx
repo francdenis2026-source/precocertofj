@@ -4,6 +4,7 @@ import { AppShell } from "@/components/brand/AppShell";
 import { useSessionGate } from "@/hooks/use-session-gate";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useLocalStorageState } from "@/hooks/use-local-storage";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import {
@@ -122,6 +123,11 @@ function ListaContent() {
   };
   const [newName, setNewName] = useState("");
   const [listFilter, setListFilter] = useState("");
+  const [listSort, setListSort] = useLocalStorageState<"updated" | "name">(
+    "app:lists:sort",
+    "updated",
+    { validate: (v): v is "updated" | "name" => v === "updated" || v === "name" },
+  );
   const [renameId, setRenameId] = useState<string | null>(null);
   const [renameText, setRenameText] = useState("");
 
@@ -190,9 +196,13 @@ function ListaContent() {
     s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
   const lists = useMemo(() => {
     const q = norm(listFilter);
-    if (!q) return allLists;
-    return allLists.filter((l) => norm(l.name).includes(q));
-  }, [allLists, listFilter]);
+    const base = q ? allLists.filter((l) => norm(l.name).includes(q)) : allLists.slice();
+    return base.sort((a, b) =>
+      listSort === "name"
+        ? a.name.localeCompare(b.name, "pt-BR")
+        : new Date(b.updatedAt ?? 0).getTime() - new Date(a.updatedAt ?? 0).getTime(),
+    );
+  }, [allLists, listFilter, listSort]);
 
   const startRename = (l: { id: string; name: string }) => {
     setRenameId(l.id);
@@ -350,14 +360,17 @@ function ListaContent() {
                 <button
                   type="submit"
                   disabled={createMut.isPending || !newName.trim()}
-                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground disabled:opacity-50"
-                  aria-label="Criar lista"
+                  className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-full bg-primary px-3 text-[12.5px] font-semibold text-primary-foreground transition hover:opacity-90 disabled:opacity-50"
+                  aria-label="Criar nova lista"
+                  aria-keyshortcuts="Alt+N"
+                  title="Nova lista (Alt+N)"
                 >
                   {createMut.isPending ? (
                     <Loader2 className="h-4 w-4 animate-spin" />
                   ) : (
                     <Plus className="h-4 w-4" />
                   )}
+                  Nova lista
                 </button>
               </form>
               <div className="relative mt-2">
@@ -395,6 +408,29 @@ function ListaContent() {
                   </button>
                 )}
               </div>
+              <div className="mt-2 flex items-center gap-1.5" role="group" aria-label="Ordenar listas">
+                <span className="text-[10.5px] font-semibold uppercase tracking-wider text-muted-foreground">
+                  Ordenar
+                </span>
+                {([
+                  { id: "updated", label: "Recentes" },
+                  { id: "name", label: "A–Z" },
+                ] as const).map((o) => (
+                  <button
+                    key={o.id}
+                    type="button"
+                    onClick={() => setListSort(o.id)}
+                    aria-pressed={listSort === o.id}
+                    className={`h-6 rounded-full border px-2.5 text-[11.5px] font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40 ${
+                      listSort === o.id
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-border text-muted-foreground hover:bg-primary/10 hover:text-foreground"
+                    }`}
+                  >
+                    {o.label}
+                  </button>
+                ))}
+              </div>
               <p className="mt-1.5 text-[11px] text-muted-foreground">
                 {allLists.length > 0 && (
                   <>
@@ -411,7 +447,7 @@ function ListaContent() {
             <ul
               role="listbox"
               aria-label="Minhas listas salvas"
-              className="max-h-[52vh] divide-y divide-border overflow-y-auto"
+              className="max-h-[52vh] space-y-1.5 overflow-y-auto p-2"
             >
               {listsQuery.isLoading && (
                 <li className="p-2">
@@ -433,8 +469,10 @@ function ListaContent() {
                     key={l.id}
                     role="option"
                     aria-selected={isActive}
-                    className={`flex items-center gap-1.5 px-2.5 py-2 ${
-                      isActive ? "bg-muted/50" : ""
+                    className={`flex items-center gap-1.5 rounded-xl border px-2.5 py-2 transition ${
+                      isActive
+                        ? "border-primary/50 bg-primary/10 shadow-sm"
+                        : "border-border bg-background hover:border-primary/30 hover:bg-muted/40"
                     }`}
                   >
                     {isRenaming ? (
@@ -488,8 +526,17 @@ function ListaContent() {
                           <p className="truncate text-[13px] font-medium text-foreground">
                             {l.name}
                           </p>
-                          <p className="text-[11px] text-muted-foreground">
+                          <p className="truncate text-[11px] text-muted-foreground">
                             {l.itemCount} {l.itemCount === 1 ? "item" : "itens"}
+                            {l.updatedAt && (
+                              <>
+                                {" · "}
+                                {new Date(l.updatedAt).toLocaleDateString("pt-BR", {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                })}
+                              </>
+                            )}
                           </p>
                         </button>
                         <button
