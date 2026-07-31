@@ -98,102 +98,105 @@ function AppHomeContent() {
 
   return (
     <AppShell>
-      <div className="app-dashboard mx-auto flex w-full max-w-[1540px] flex-col gap-1.5 px-3 py-1.5 md:px-4 lg:h-full lg:min-h-0 lg:overflow-hidden">
-        {/* Cabeçalho compacto */}
-        <header className="sticky top-0 z-20 shrink-0 overflow-hidden rounded-lg lg:static border border-primary/30 bg-primary/95 px-3 py-1.5 text-primary-foreground shadow-sm backdrop-blur-md md:px-3.5">
-          <span
-            aria-hidden
-            className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-brand/20 blur-3xl"
-          />
-          <span
-            aria-hidden
-            className="pointer-events-none absolute inset-x-0 bottom-0 h-px bg-brand/60"
-          />
-          <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
-            <div className="min-w-0">
+      <div className="app-dashboard mx-auto flex w-full max-w-[1540px] flex-col gap-2 px-3 py-2 md:px-4 lg:h-full lg:min-h-0 lg:overflow-hidden">
+        {/* Bloco único: saudação + ações + métricas */}
+        <header className="sticky top-0 z-20 shrink-0 overflow-hidden rounded-xl border border-border/70 bg-card/95 shadow-sm backdrop-blur-md lg:static">
+          <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border/60 bg-primary/95 px-3 py-2 text-primary-foreground md:px-4">
+            <span
+              aria-hidden
+              className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-brand/20 blur-3xl"
+            />
+            <div className="relative min-w-0">
               <p className={cn(tc.eyebrow, "text-brand")}>Meu painel</p>
-              <h1 className={cn(tc.h1, "truncate text-[16px] leading-tight text-primary-foreground md:text-[18px]")}>
+              <h1
+                className={cn(
+                  tc.h1,
+                  "truncate text-[17px] leading-tight text-primary-foreground md:text-[19px]",
+                )}
+              >
                 Olá, {firstName}
               </h1>
             </div>
-            <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5">
-              <Link
-                to="/lista/nova"
-                className="inline-flex h-7 items-center gap-1 rounded-md bg-brand px-2.5 text-[11px] font-semibold text-brand-foreground transition hover:bg-brand-strong"
-              >
-                Nova lista <ArrowRight className="h-3 w-3" aria-hidden />
-              </Link>
-              <ForceUpdateButton />
+            <div className="relative flex shrink-0 items-center gap-1.5">
+              {loading && (
+                <Loader2
+                  className="h-3.5 w-3.5 animate-spin text-primary-foreground/70"
+                  aria-label="Atualizando preços"
+                />
+              )}
               <Link
                 to="/alertas"
                 aria-label="Alertas de preço"
-                className="inline-flex h-7 items-center gap-1 rounded-md border border-primary-foreground/30 bg-primary-foreground/10 px-2 text-[11px] font-medium text-primary-foreground transition hover:bg-primary-foreground/20"
+                className="inline-flex h-8 items-center gap-1.5 rounded-md border border-primary-foreground/30 bg-primary-foreground/10 px-2.5 text-[12px] font-medium text-primary-foreground transition hover:bg-primary-foreground/20"
               >
-                <Bell className="h-3 w-3" aria-hidden />
+                <Bell className="h-3.5 w-3.5" aria-hidden />
                 <span className="hidden md:inline">Alertas</span>
               </Link>
+              <Link
+                to="/lista/nova"
+                className="inline-flex h-8 items-center gap-1.5 rounded-md bg-brand px-3 text-[12px] font-semibold text-brand-foreground transition hover:bg-brand-strong"
+              >
+                Nova lista <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+              </Link>
+              <span className="hidden lg:inline-flex">
+                <ForceUpdateButton />
+              </span>
             </div>
+          </div>
+
+          {/* Métricas do banco */}
+          <div className="grid grid-cols-2 divide-x divide-y divide-border/60 sm:grid-cols-4 sm:divide-y-0">
+            <Metric
+              icon={ShoppingCart}
+              label="Suas listas"
+              value={summary ? String(summary.totals.listsCount) : "—"}
+              hint={
+                summary
+                  ? `${summary.totals.itemsCount} ${summary.totals.itemsCount === 1 ? "item" : "itens"} para comprar`
+                  : "carregando"
+              }
+              tone="primary"
+            />
+            <Metric
+              icon={Star}
+              label="Favoritos"
+              value={summary ? String(summary.totals.favoritesCount) : "—"}
+              hint="preços acompanhados por você"
+              tone="brand"
+            />
+            <Metric
+              icon={TrendingDown}
+              label="Cesta mais barata"
+              value={
+                summary?.totals.estimatedCartTotal != null ? (
+                  <Price value={summary.totals.estimatedCartTotal} size="sm" />
+                ) : (
+                  "—"
+                )
+              }
+              hint={
+                summary?.totals.estimatedCartMarket
+                  ? `hoje em ${summary.totals.estimatedCartMarket}`
+                  : "favorite produtos para calcular"
+              }
+              tone="savings"
+            />
+            <Metric
+              icon={Wallet}
+              label="Economia potencial"
+              value={
+                potentialSavings > 0 ? (
+                  <Price value={potentialSavings} size="sm" tone="savings" />
+                ) : (
+                  "—"
+                )
+              }
+              hint="somando suas listas ativas"
+              tone="warning"
+            />
           </div>
         </header>
 
-        {/* Métricas do banco */}
-        <div className="sticky top-[58px] z-10 grid shrink-0 grid-cols-2 gap-1.5 bg-background/85 py-0.5 backdrop-blur-sm lg:static lg:bg-transparent lg:py-0 lg:backdrop-blur-none lg:grid-cols-4">
-          <Metric
-            icon={ShoppingCart}
-            label="Suas listas"
-            value={summary ? String(summary.totals.listsCount) : "—"}
-            hint={
-              summary
-                ? `${summary.totals.itemsCount} ${summary.totals.itemsCount === 1 ? "item" : "itens"} para comprar`
-                : "carregando"
-            }
-            tone="primary"
-          />
-          <Metric
-            icon={Star}
-            label="Produtos favoritos"
-            value={summary ? String(summary.totals.favoritesCount) : "—"}
-            hint="preços acompanhados por você"
-            tone="brand"
-          />
-          <Metric
-            icon={TrendingDown}
-            label="Cesta mais barata"
-            value={
-              summary?.totals.estimatedCartTotal != null ? (
-                <Price value={summary.totals.estimatedCartTotal} size="sm" />
-              ) : (
-                "—"
-              )
-            }
-            hint={
-              summary?.totals.estimatedCartMarket
-                ? `hoje em ${summary.totals.estimatedCartMarket}`
-                : "favorite produtos para calcular"
-            }
-            tone="savings"
-          />
-          <Metric
-            icon={Wallet}
-            label="Economia potencial"
-            value={
-              potentialSavings > 0 ? (
-                <Price value={potentialSavings} size="sm" tone="savings" />
-              ) : (
-                "—"
-              )
-            }
-            hint="somando suas listas ativas"
-            tone="warning"
-          />
-        </div>
-
-        {loading && (
-          <div className={cn(tc.meta, "flex shrink-0 items-center gap-2")}>
-            <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden /> Puxando os preços mais
-            recentes…
-          </div>
-        )}
 
         {/* Grid responsiva de altura total: busca | lojas+ranking | favoritos */}
         <div className="grid gap-1.5 lg:min-h-0 lg:flex-1 lg:grid-cols-12">
