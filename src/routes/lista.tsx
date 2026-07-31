@@ -190,9 +190,13 @@ function ListaContent() {
     s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
   const lists = useMemo(() => {
     const q = norm(listFilter);
-    if (!q) return allLists;
-    return allLists.filter((l) => norm(l.name).includes(q));
-  }, [allLists, listFilter]);
+    const base = q ? allLists.filter((l) => norm(l.name).includes(q)) : allLists.slice();
+    return base.sort((a, b) =>
+      listSort === "name"
+        ? a.name.localeCompare(b.name, "pt-BR")
+        : new Date(b.updatedAt ?? 0).getTime() - new Date(a.updatedAt ?? 0).getTime(),
+    );
+  }, [allLists, listFilter, listSort]);
 
   const startRename = (l: { id: string; name: string }) => {
     setRenameId(l.id);
