@@ -13,7 +13,7 @@ const OPTIONS: { id: Density; label: string; short: string; Icon: typeof Rows2 }
  * troca apenas os espaçamentos (nunca a tipografia), com preferência
  * persistida em localStorage.
  */
-export function DensityToggle({ className }: { className?: string }) {
+export function DensityToggle({ className, labels = true }: { className?: string; labels?: boolean }) {
   const { density, setDensity, hydrated } = useDensity();
 
   return (
@@ -43,7 +43,7 @@ export function DensityToggle({ className }: { className?: string }) {
             )}
           >
             <Icon className="h-3.5 w-3.5" strokeWidth={active ? 2.4 : 2} aria-hidden />
-            <span className="hidden lg:inline">{short}</span>
+            <span className={labels ? "hidden lg:inline" : "hidden"}>{short}</span>
           </button>
         );
       })}
