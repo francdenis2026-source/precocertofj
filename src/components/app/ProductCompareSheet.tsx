@@ -15,6 +15,7 @@ import { Price } from "@/components/ds/Price";
 import { getProductComparison } from "@/lib/where-to-buy.functions";
 import { MiniTrend, formatUpdatedAt } from "@/components/app/PriceTrend";
 import { ProductPriceHistory } from "@/components/app/ProductPriceHistory";
+import { PriceDropAlertToggle } from "@/components/app/PriceDropAlertToggle";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
 
