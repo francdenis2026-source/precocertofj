@@ -762,11 +762,18 @@ function ListDetail({ listId }: { listId: string }) {
 
   if (detailQuery.isLoading) {
     return (
-      <div className="rounded-2xl border border-border bg-card p-12 text-center">
-        <Loader2 className="mx-auto h-6 w-6 animate-spin text-muted-foreground" />
+      <div>
+        <ListDetailSkeleton />
+        {detailStalled && (
+          <StalledNotice
+            onRetry={() => void detailQuery.refetch()}
+            message="A lista está demorando para abrir."
+          />
+        )}
       </div>
     );
   }
+
   if (detailQuery.isError) {
     return (
       <div role="alert" className="rounded-2xl border border-destructive/30 bg-card p-6 text-center">
