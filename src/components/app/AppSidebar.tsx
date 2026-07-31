@@ -401,9 +401,11 @@ export function AppSidebar() {
                         <SidebarMenuButton asChild className="pcsb-row">
                           <Link to="/admin" onClick={closeOnMobile}>
                             <span aria-hidden className="pcsb-rail" />
-                            <span aria-hidden className="pcsb-ico">
-                              <Shield className="h-[17px] w-[17px]" strokeWidth={1.85} />
-                            </span>
+                            {compact && (
+                              <span aria-hidden className="pcsb-ico">
+                                <Shield className="h-[17px] w-[17px]" strokeWidth={1.85} />
+                              </span>
+                            )}
                             <span className="pcsb-label">Painel administrativo</span>
                           </Link>
                         </SidebarMenuButton>
