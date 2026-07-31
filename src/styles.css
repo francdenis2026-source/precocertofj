@@ -6163,7 +6163,7 @@ h3.font-display {
    os temas. Todas as cores derivam de tokens do design system.
    ============================================================ */
 .pcsb {
-  --pcsb-accent: var(--pc-home-gold);
+  --pcsb-accent: var(--sidebar-foreground);
   --pcsb-ink: var(--sidebar-foreground);
   --pcsb-dim: var(--sidebar-muted-foreground);
   --pcsb-line: color-mix(in oklab, var(--sidebar-border) 82%, transparent);
@@ -6186,7 +6186,15 @@ h3.font-display {
 .pcsb [data-tone="catalog"],
 .pcsb [data-tone="commerce"],
 .pcsb [data-tone="people"],
-.pcsb [data-tone="system"] { --pcsb-accent: var(--pc-home-gold); }
+.pcsb [data-tone="system"] { --pcsb-accent: var(--sidebar-foreground); }
+
+/* Texto nítido: rendering otimizado para telas de alta densidade. */
+.pcsb,
+.pcsb [data-sidebar="sidebar"] {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
 
 /* ── Marca ─────────────────────────────────────────────────────────────── */
 .pcsb-header {
