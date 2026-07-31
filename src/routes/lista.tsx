@@ -52,6 +52,10 @@ import { Price } from "@/components/ds/Price";
 
 
 export const Route = createFileRoute("/lista")({
+  // Deep link: /lista?id=<uuid> abre e edita direto a lista escolhida.
+  validateSearch: (search: Record<string, unknown>): { id?: string } => ({
+    id: typeof search.id === "string" && search.id ? search.id : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Lista de compras — PreçoCerto" },
@@ -102,7 +106,20 @@ function ListaContent() {
   const deleteFn = useServerFn(deleteShoppingList);
 
 
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const navigate = Route.useNavigate();
+  const { id: searchId } = Route.useSearch();
+
+  const [selectedId, setSelectedId] = useState<string | null>(searchId ?? null);
+
+  // URL manda: ao chegar com ?id=, seleciona a lista correspondente.
+  useEffect(() => {
+    if (searchId && searchId !== selectedId) setSelectedId(searchId);
+  }, [searchId, selectedId]);
+
+  const selectList = (id: string | null) => {
+    setSelectedId(id);
+    void navigate({ search: id ? { id } : {}, replace: true });
+  };
   const [newName, setNewName] = useState("");
   const [renameId, setRenameId] = useState<string | null>(null);
   const [renameText, setRenameText] = useState("");
@@ -114,8 +131,11 @@ function ListaContent() {
   });
 
   useEffect(() => {
-    if (!selectedId && listsQuery.data && listsQuery.data.length > 0) {
-      setSelectedId(listsQuery.data[0].id);
+    if (!listsQuery.data) return;
+    // ?id inválido (lista removida) cai na primeira lista disponível.
+    const exists = selectedId && listsQuery.data.some((l) => l.id === selectedId);
+    if (!exists && listsQuery.data.length > 0) {
+      selectList(listsQuery.data[0].id);
     }
   }, [listsQuery.data, selectedId]);
 
@@ -123,7 +143,7 @@ function ListaContent() {
     mutationFn: (name: string) => createFn({ data: { name } }),
     onSuccess: (r) => {
       setNewName("");
-      setSelectedId(r.id);
+      selectList(r.id);
       qc.invalidateQueries({ queryKey: ["shopping-lists"] });
       toast.success("Lista criada");
     },
@@ -144,7 +164,7 @@ function ListaContent() {
   const deleteMut = useMutation({
     mutationFn: (id: string) => deleteFn({ data: { id } }),
     onSuccess: (_r, id) => {
-      if (selectedId === id) setSelectedId(null);
+      if (selectedId === id) selectList(null);
       qc.invalidateQueries({ queryKey: ["shopping-lists"] });
       toast.success("Lista excluída");
     },
@@ -265,7 +285,7 @@ function ListaContent() {
                     ) : (
                       <>
                         <button
-                          onClick={() => setSelectedId(l.id)}
+                          onClick={() => selectList(l.id)}
                           className="flex-1 text-left"
                         >
                           <p className="text-sm font-medium text-foreground">
