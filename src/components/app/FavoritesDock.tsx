@@ -29,7 +29,7 @@ type Tab = "items" | "markets" | "lists";
 /** Itens por página em cada aba (dentro da página as linhas são virtualizadas). */
 const PAGE_SIZE = 24;
 /** Altura fixa de cada linha — base da virtualização. */
-const ROW_H = 40;
+const ROW_H = 36;
 
 const TABS: { id: Tab; label: string }[] = [
   { id: "items", label: "Favoritos" },
@@ -176,13 +176,13 @@ export function FavoritesDock({
     <section
       aria-label="Seus favoritos e listas"
       aria-busy={loading || undefined}
-      className="flex h-[42vh] min-h-[240px] flex-1 flex-col overflow-hidden rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md lg:h-full lg:min-h-0"
+      className="flex h-[34vh] min-h-[208px] flex-1 flex-col overflow-hidden rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md lg:h-full lg:min-h-0"
     >
       <div
         role="tablist"
         aria-label="Seções do painel"
         aria-orientation="horizontal"
-        className="flex shrink-0 gap-1 border-b border-border/70 px-2 py-1"
+        className="flex shrink-0 gap-1 border-b border-border/70 px-1.5 py-1"
       >
         {TABS.map((t, i) => (
           <button
@@ -197,7 +197,7 @@ export function FavoritesDock({
             {...roving.itemProps(i)}
             className={cn(
               tc.filter,
-              "inline-flex h-7 items-center gap-1.5 rounded-md px-2.5 transition-colors",
+              "inline-flex h-6.5 items-center gap-1.5 rounded-full px-2.5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
               tab === t.id
                 ? "bg-primary text-primary-foreground"
                 : "text-muted-foreground hover:bg-primary/10 hover:text-primary",
@@ -244,7 +244,7 @@ export function FavoritesDock({
                       <li
                         key={f.favoriteId}
                         style={{ height: ROW_H }}
-                        className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-2.5"
+                        className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-2"
                       >
                         <div className="min-w-0">
                           <p className={cn(tc.itemTitle, "truncate")} title={f.displayName}>
@@ -308,7 +308,7 @@ export function FavoritesDock({
                       <li
                         key={m.favoriteId}
                         style={{ height: ROW_H }}
-                        className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-2.5"
+                        className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-2"
                       >
                         <div className="min-w-0">
                           <button
@@ -362,7 +362,7 @@ export function FavoritesDock({
               ) : (
                 <ul className="divide-y divide-border/60" style={{ paddingTop: virtual.padTop, paddingBottom: virtual.padBottom }}>
                   {pagedLists.slice(vStart, vEnd).map((l) => (
-                    <li key={l.id} style={{ height: ROW_H }} className="px-2.5">
+                    <li key={l.id} style={{ height: ROW_H }} className="px-2">
                       <div className="grid h-full grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
                         <div className="min-w-0">
                           <Link
@@ -399,7 +399,7 @@ export function FavoritesDock({
       </div>
 
       {total > PAGE_SIZE && (
-        <div className="flex shrink-0 items-center justify-between gap-2 border-t border-border/70 px-2 py-1">
+        <div className="flex shrink-0 items-center justify-between gap-2 border-t border-border/70 px-2 py-0.5">
           <p className="truncate text-[11px] text-muted-foreground">
             {start + 1}–{Math.min(end, total)} de {total}
             {prefetchedCount > 0 && (
@@ -459,7 +459,7 @@ function Empty({
   to?: "/app/produtos" | "/app/estabelecimentos" | "/lista";
 }) {
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-1.5 px-3 py-4 text-center">
+    <div className="flex h-full flex-col items-center justify-center gap-1 px-3 py-3 text-center">
       <Icon className="h-5 w-5 text-muted-foreground" aria-hidden />
       <p className="max-w-[15rem] text-[12px] leading-snug text-muted-foreground">{text}</p>
       {actionLabel && to && (

@@ -187,7 +187,7 @@ export function DashboardSearch() {
         <label className="relative block min-w-0">
           <span className="sr-only">Buscar produto</span>
           <SearchIcon
-            className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
+            className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"
             aria-hidden
           />
           <Input
@@ -195,7 +195,10 @@ export function DashboardSearch() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Buscar produto: arroz, café, sabão…"
-            className={cn(tc.body, "h-11 w-full rounded-md bg-background/80 pl-9 pr-9 text-[14px]")}
+            className={cn(
+              tc.body,
+              "h-12 w-full rounded-lg border-border/80 bg-background/90 pl-10 pr-10 text-[15px] shadow-sm transition-shadow focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+            )}
             maxLength={80}
             inputMode="search"
             autoComplete="off"
@@ -257,9 +260,9 @@ export function DashboardSearch() {
                 {...sortRoving.itemProps(i)}
                 className={cn(
                   tc.filter,
-                  "h-8 rounded-md border px-2.5 transition-colors",
+                  "h-8 rounded-md border px-2.5 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
                   sort === s.id
-                    ? "border-primary bg-primary text-primary-foreground"
+                    ? "border-primary bg-primary text-primary-foreground shadow-sm"
                     : "border-border/70 bg-background text-muted-foreground hover:border-primary/50 hover:bg-primary/10 hover:text-primary",
                 )}
               >
@@ -431,11 +434,10 @@ function Chip({
       {...rest}
       className={cn(
         tc.filter,
-        "h-8 shrink-0 whitespace-nowrap rounded-md border px-2.5 transition-colors duration-150",
+        "group relative h-8 shrink-0 whitespace-nowrap rounded-full border px-3 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
         active
-          ? "border-primary/60 bg-primary/10 text-primary"
-          : "border-border/70 bg-background text-muted-foreground hover:border-primary/50 hover:bg-primary/10 hover:text-primary",
-
+          ? "border-primary bg-primary text-primary-foreground shadow-sm"
+          : "border-border/70 bg-background text-muted-foreground hover:-translate-y-px hover:border-primary/60 hover:bg-primary/10 hover:text-primary hover:shadow-sm",
       )}
     >
       {children}
