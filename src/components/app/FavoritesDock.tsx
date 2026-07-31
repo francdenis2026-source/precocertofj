@@ -3,6 +3,8 @@ import { Link } from "@tanstack/react-router";
 import {
   ArrowDown,
   ArrowUp,
+  ChevronLeft,
+  ChevronRight,
   ShoppingCart,
   Star,
   Store,
@@ -352,11 +354,13 @@ function IconBtn({
   onClick,
   icon: Icon,
   danger,
+  disabled,
 }: {
   label: string;
   onClick: () => void;
   icon: React.ComponentType<{ className?: string }>;
   danger?: boolean;
+  disabled?: boolean;
 }) {
   return (
     <button
@@ -364,8 +368,9 @@ function IconBtn({
       aria-label={label}
       title={label}
       onClick={onClick}
+      disabled={disabled}
       className={cn(
-        "grid h-7 w-7 place-items-center rounded-md transition-colors",
+        "grid h-7 w-7 place-items-center rounded-md transition-colors disabled:pointer-events-none disabled:text-muted-foreground/50",
         danger
           ? "text-muted-foreground hover:bg-destructive/10 hover:text-destructive"
           : "text-muted-foreground hover:bg-muted hover:text-foreground",
