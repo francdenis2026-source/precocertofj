@@ -157,6 +157,8 @@ export const notify = {
     if (id === undefined) {
       queue.length = 0;
       active.length = 0;
+      for (const t of closers.values()) clearTimeout(t);
+      closers.clear();
     } else {
       release(id);
       const i = queue.findIndex((j) => j.id === id);
