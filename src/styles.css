@@ -1145,79 +1145,86 @@ main :is(p, li, dt, dd, td, th, label, a, button, input, textarea, figcaption) {
 .app-scope th { height: 2.85rem; font-size: clamp(0.78rem, 0.15vw + 0.74rem, 0.88rem); letter-spacing: .04em; }
 .app-scope td { padding-block: .78rem; }
 
-/* Sidebar do cliente — barra, ícones e textos maiores */
+/* Sidebar do cliente — escala compacta e profissional (TypeClear).
+   Rótulos legíveis sem exagero: 13–14px em vez de 16–19px. */
 .app-scope [data-slot="sidebar"],
 .app-scope [data-sidebar="sidebar"] {
-  font-size: clamp(1rem, 0.35vw + 0.9rem, 1.18rem);
+  font-size: 0.8125rem;
 }
 .app-scope [data-sidebar="header"] {
-  padding: 1rem 0.85rem;
+  padding: 0.6rem 0.6rem;
 }
 .app-scope [data-sidebar="content"] {
-  padding: 0.85rem 0.7rem;
+  padding: 0.55rem 0.5rem;
 }
 .app-scope [data-sidebar="footer"] {
-  padding: 0.85rem 0.7rem;
+  padding: 0.5rem 0.5rem;
 }
 .app-scope [data-sidebar="group"] {
-  padding: 0.3rem 0;
-  gap: 0.15rem;
+  padding: 0.2rem 0;
+  gap: 0.1rem;
 }
 .app-scope [data-sidebar="group-label"] {
-  height: 1.9rem;
-  padding-inline: 0.55rem;
-  font-size: clamp(0.78rem, 0.18vw + 0.72rem, 0.9rem);
+  height: 1.45rem;
+  padding-inline: 0.45rem;
+  font-size: 0.625rem;
   font-weight: 700;
-  letter-spacing: .1em;
+  letter-spacing: .16em;
 }
 .app-scope [data-sidebar="menu"] {
-  gap: 0.22rem;
+  gap: 0.15rem;
 }
 .app-scope [data-sidebar="menu-button"] {
-  min-height: 2.8rem;
-  height: 2.8rem;
-  gap: 0.75rem;
-  padding-inline: 0.72rem;
-  border-radius: 0.78rem;
-  font-size: clamp(1rem, 0.35vw + 0.9rem, 1.16rem);
-  font-weight: var(--fw-semibold);
+  min-height: 2.1rem;
+  height: 2.1rem;
+  gap: 0.55rem;
+  padding-inline: 0.5rem;
+  border-radius: 0.6rem;
+  font-size: 0.8125rem;
+  font-weight: var(--fw-medium, 500);
 }
 .app-scope [data-sidebar="menu-button"] > a,
 .app-scope [data-sidebar="menu-button"] > span {
-  gap: 0.75rem;
+  gap: 0.55rem;
 }
 .app-scope [data-sidebar="menu-button"] span:last-child {
   font-size: inherit;
-  font-weight: var(--fw-semibold);
+  font-weight: inherit;
+}
+.app-scope [data-sidebar="menu-button"][data-active="true"] span:last-child {
+  font-weight: var(--fw-semibold, 600);
 }
 .app-scope [data-sidebar="menu-button"] span:first-child,
 .app-scope [data-sidebar="header"] a > span:first-child {
-  width: 2.35rem;
-  height: 2.35rem;
-  border-radius: 0.8rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 0.55rem;
 }
 .app-scope [data-sidebar="header"] a > span:first-child {
-  width: 3.1rem;
-  height: 3.1rem;
+  width: 2rem;
+  height: 2rem;
 }
 .app-scope [data-sidebar="menu-button"] svg {
-  width: 1.25rem;
-  height: 1.25rem;
+  width: 1rem;
+  height: 1rem;
 }
 .app-scope [data-sidebar="header"] svg {
-  width: 1.35rem;
-  height: 1.35rem;
+  width: 1.05rem;
+  height: 1.05rem;
 }
-.app-scope [data-sidebar="header"] a span[class*="text-[15px]"] {
-  font-size: clamp(1.05rem, 0.4vw + 0.95rem, 1.25rem);
+.app-scope [data-sidebar="header"] a span[class*="text-[15px]"],
+.app-scope [data-sidebar="header"] a span[class*="text-[16px]"] {
+  font-size: 0.9375rem;
   font-weight: 700;
 }
-.app-scope [data-sidebar="header"] a span[class*="text-[11px]"] {
-  font-size: clamp(0.7rem, 0.12vw + 0.66rem, 0.78rem);
+.app-scope [data-sidebar="header"] a span[class*="text-[11px]"],
+.app-scope [data-sidebar="header"] a span[class*="text-[10px]"] {
+  font-size: 0.5875rem;
 }
 .app-scope [data-sidebar="footer"] [data-sidebar="menu-button"] {
-  min-height: 2.9rem;
+  min-height: 2rem;
 }
+
 
 .app-scope header {
   min-height: 3.75rem;
@@ -1241,18 +1248,18 @@ main :is(p, li, dt, dd, td, th, label, a, button, input, textarea, figcaption) {
 
 @media (min-width: 768px) {
   .app-scope {
-    --sidebar-width: 18rem;
-    --sidebar-width-icon: 4.6rem;
+    --sidebar-width: 14.5rem;
+    --sidebar-width-icon: 3.5rem;
   }
   .app-scope [data-collapsible="icon"] [data-sidebar="header"],
   .app-scope [data-collapsible="icon"] [data-sidebar="content"],
   .app-scope [data-collapsible="icon"] [data-sidebar="footer"] {
     width: 100%;
-    padding-inline: 0.55rem;
+    padding-inline: 0.4rem;
   }
   .app-scope [data-collapsible="icon"] [data-sidebar="menu"] {
     align-items: stretch;
-    gap: 0.35rem;
+    gap: 0.25rem;
   }
   .app-scope [data-collapsible="icon"] [data-sidebar="menu-item"] {
     width: 100%;
@@ -1260,42 +1267,46 @@ main :is(p, li, dt, dd, td, th, label, a, button, input, textarea, figcaption) {
     justify-content: center;
   }
   .app-scope [data-collapsible="icon"] [data-sidebar="menu-button"] {
-    width: 3.45rem !important;
-    height: 3.45rem !important;
-    min-width: 3.45rem;
+    width: 2.5rem !important;
+    height: 2.5rem !important;
+    min-width: 2.5rem;
     padding: 0 !important;
     justify-content: center;
-    border-radius: 0.95rem;
+    border-radius: 0.7rem;
   }
   .app-scope [data-collapsible="icon"] [data-sidebar="menu-button"] span:first-child,
   .app-scope [data-collapsible="icon"] [data-sidebar="header"] a > span:first-child {
-    width: 2.65rem;
-    height: 2.65rem;
+    width: 1.9rem;
+    height: 1.9rem;
   }
   .app-scope [data-collapsible="icon"] [data-sidebar="menu-button"] svg {
-    width: 1.35rem;
-    height: 1.35rem;
+    width: 1.05rem;
+    height: 1.05rem;
   }
 }
 @media (min-width: 1280px) {
   .app-scope {
-    --sidebar-width: 19rem;
-    --sidebar-width-icon: 4.85rem;
+    --sidebar-width: 15.25rem;
+    --sidebar-width-icon: 3.5rem;
   }
 }
+
 @media (max-width: 767px) {
   .app-scope {
-    font-size: 16px;
+    font-size: 15px;
   }
+  /* alvo de toque confortável, mas sem tipografia exagerada */
   .app-scope [data-sidebar="menu-button"] {
-    min-height: 3rem;
-    height: 3rem;
+    min-height: 2.5rem;
+    height: 2.5rem;
+    font-size: 0.875rem;
   }
   .app-scope [data-sidebar="menu-button"] span:first-child {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2rem;
+    height: 2rem;
   }
 }
+
 
 /* Sombras discretas — apenas 2 níveis (Stripe/Linear-like) */
 @utility shadow-elev-1 {
