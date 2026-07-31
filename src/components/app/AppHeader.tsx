@@ -282,7 +282,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
       </div>
 
       <div className="flex items-center gap-1 md:gap-1.5">
-        {!isAdminScope && <DensityToggle className="hidden sm:inline-flex" />}
+        {!isAdminScope && <DensityToggle />}
         {!isAdminScope && <ScopeNav />}
 
         {!isAdminScope && (
