@@ -257,7 +257,7 @@ function LoginPage() {
         clearAttempts(digits);
         notify.success(`Cadastro confirmado — abrindo ${postAuthAreaLabel(resolvePostAuthTarget())}`, {
           id: "auth-session",
-          description: `Conta criada para o CPF ${formatCpf(digits)} com acesso completo por 30 dias.`,
+          description: `Conta criada para o CPF ${maskCpf(digits)} com acesso completo por 30 dias.`,
         });
       } else {
         const { hiddenEmail } = await resolveEmailFn({ data: { cpf: digits } });
@@ -280,7 +280,7 @@ function LoginPage() {
         clearAttempts(digits);
         notify.success(`Login aprovado — abrindo ${postAuthAreaLabel(resolvePostAuthTarget())}`, {
           id: "auth-session",
-          description: `CPF ${formatCpf(digits)} verificado. Carregando suas listas, favoritos e alertas de preço.`,
+          description: `CPF ${maskCpf(digits)} verificado. Carregando suas listas, favoritos e alertas de preço.`,
         });
       }
       await router.invalidate();
