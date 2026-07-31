@@ -77,10 +77,12 @@ const appGroups: readonly NavGroup[] = [
     label: "Comprar melhor",
     items: [
       { to: "/app", label: "Painel", icon: Home, exact: true },
+      { to: "/app/produtos", label: "Produtos", icon: ShoppingCart },
+      { to: "/app/estabelecimentos", label: "Mercados", icon: Store },
       { to: "/melhores-precos", label: "Melhores preços", icon: Trophy },
       { to: "/comparador", label: "Comparador", icon: BarChart3 },
-      { to: "/estabelecimentos", label: "Mercados", icon: Store },
       { to: "/mapa", label: "Bairros", icon: Boxes },
+
     ],
   },
   {

@@ -2,9 +2,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
-import { Loader2, Search as SearchIcon, Store, X } from "lucide-react";
+import { Search as SearchIcon, Store, X } from "lucide-react";
 
 import { Price } from "@/components/ds/Price";
+import { ProductCompareSheet } from "@/components/app/ProductCompareSheet";
 import { Input } from "@/components/ui/input";
 import {
   categoryLabel,
@@ -38,6 +39,7 @@ export function DashboardSearch() {
   const [category, setCategory] = useState<string | null>(null);
   const [sort, setSort] = useState<SortKey>("cheapest");
   const inputRef = useRef<HTMLInputElement>(null);
+  const [compareKey, setCompareKey] = useState<string | null>(null);
 
   useEffect(() => {
     const id = setTimeout(() => setTerm(input.trim()), 250);
@@ -88,7 +90,7 @@ export function DashboardSearch() {
   );
 
   // Navegação teclado entre campo de busca e lista de resultados.
-  const resultRefs = useRef<Array<HTMLAnchorElement | null>>([]);
+  const resultRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
   const focusResult = (i: number) => {
     if (results.length === 0) return;
@@ -246,8 +248,28 @@ export function DashboardSearch() {
             mercados de Feijó.
           </p>
         ) : resultsQ.isLoading ? (
-          <div className={cn(tc.meta, "flex items-center gap-2 p-6")}>
-            <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Buscando…
+          <ul className="space-y-2 p-3" aria-label="Buscando produtos">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <li
+                key={i}
+                className="h-12 animate-pulse rounded-md border border-border/60 bg-muted/50"
+                style={{ opacity: 1 - i * 0.1 }}
+              />
+            ))}
+          </ul>
+        ) : resultsQ.isError ? (
+          <div className="p-6 text-center">
+            <p className={tc.meta}>Não conseguimos buscar agora.</p>
+            <button
+              type="button"
+              onClick={() => resultsQ.refetch()}
+              className={cn(
+                tc.control,
+                "mt-2 h-9 rounded-md border border-border px-3 hover:bg-muted",
+              )}
+            >
+              Tentar novamente
+            </button>
           </div>
         ) : results.length === 0 ? (
           <p className={cn(tc.meta, "p-6 text-center")}>
@@ -262,16 +284,16 @@ export function DashboardSearch() {
           >
             {results.map((r, i) => (
               <li key={r.catalogId} role="presentation">
-                <Link
-                  to="/buscar"
+                <button
+                  type="button"
                   role="option"
                   aria-selected={false}
-                  ref={(el: HTMLAnchorElement | null) => {
+                  ref={(el: HTMLButtonElement | null) => {
                     resultRefs.current[i] = el;
                   }}
                   onKeyDown={(e) => onResultKeyDown(e, i)}
-                  search={{ q: r.displayName } as never}
-                  className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-2 transition-colors hover:bg-muted/50 focus-visible:bg-muted/50"
+                  onClick={() => setCompareKey(r.displayName)}
+                  className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-2 text-left transition-colors hover:bg-muted/50 focus-visible:bg-muted/50"
                 >
                   <div className="min-w-0">
                     <p className={cn(tc.itemTitle, "truncate")}>{r.displayName}</p>
@@ -290,19 +312,36 @@ export function DashboardSearch() {
                       </p>
                     )}
                   </div>
-                </Link>
+                </button>
               </li>
             ))}
           </ul>
         )}
       </div>
 
-      {active && results.length > 0 && (
-        <div className={cn(tc.metaMuted, "shrink-0 border-t border-border/70 px-3 py-2")}>
-          {results.length} {results.length === 1 ? "produto" : "produtos"} · preços de registros
-          verificados
-        </div>
-      )}
+      <div
+        className={cn(
+          tc.metaMuted,
+          "flex shrink-0 items-center justify-between gap-2 border-t border-border/70 px-3 py-2",
+        )}
+      >
+        <span className="truncate">
+          {active && results.length > 0
+            ? `${results.length} ${results.length === 1 ? "produto" : "produtos"} · preços verificados`
+            : "Toque em um produto para comparar entre mercados"}
+        </span>
+        <Link
+          to="/app/produtos"
+          className={cn(
+            tc.control,
+            "shrink-0 rounded-md border border-border px-2.5 py-1 text-primary",
+          )}
+        >
+          Ver todos
+        </Link>
+      </div>
+
+      <ProductCompareSheet productKey={compareKey} onClose={() => setCompareKey(null)} />
     </section>
   );
 }
