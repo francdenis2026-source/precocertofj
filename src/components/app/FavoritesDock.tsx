@@ -17,6 +17,7 @@ import { AddToListButton } from "@/components/app/AddToListButton";
 import { useRovingFocus } from "@/hooks/use-roving-focus";
 import { useVirtualRows } from "@/hooks/use-virtual-rows";
 import { useLocalStorageState } from "@/hooks/use-local-storage";
+import { useScrollMemory } from "@/hooks/use-scroll-memory";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
 
