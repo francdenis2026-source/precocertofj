@@ -124,23 +124,24 @@ function AppHomeContent() {
         {/* Bloco único: saudação + ações + métricas */}
 
         <header className="overflow-hidden rounded-2xl border border-border/70 bg-card/95 shadow-sm backdrop-blur-md">
-          <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-border/60 bg-primary/95 px-3.5 py-2 text-primary-foreground md:px-4 md:py-2.5">
+          <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-border/60 bg-primary/95 px-3 py-1 text-primary-foreground md:px-4 md:py-1.5">
             <span
               aria-hidden
               className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-brand/20 blur-3xl"
             />
-            <div className="relative min-w-0">
-              <p className={cn(tc.eyebrow, "text-brand")}>Meu painel</p>
+            <div className="relative flex min-w-0 items-baseline gap-2">
+              <p className={cn(tc.eyebrow, "shrink-0 text-brand")}>Meu painel</p>
               <h1
                 className={cn(
                   tc.h1,
-                  "truncate text-[16px] leading-tight text-primary-foreground md:text-[17.5px]",
+                  "truncate text-[13.5px] leading-tight text-primary-foreground md:text-[15px]",
                 )}
               >
                 Olá, {firstName}
               </h1>
             </div>
-            <div className="relative flex shrink-0 items-center gap-2">
+            <div className="relative flex shrink-0 items-center gap-1.5">
+
               {loading && (
                 <Loader2
                   className="h-4 w-4 animate-spin text-primary-foreground/70"
