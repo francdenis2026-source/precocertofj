@@ -17,7 +17,6 @@ export function SidebarBrandMark({
 }) {
   const uid = useId().replace(/:/g, "");
   const g = `pcsb-g-${uid}`;
-  const gold = `pcsb-gold-${uid}`;
 
   return (
     <svg viewBox="0 0 40 40" role="img" aria-hidden className={className} focusable="false">
