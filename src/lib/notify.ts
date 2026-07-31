@@ -37,11 +37,36 @@ const DURATIONS: Record<Variant, number> = {
   loading: Infinity,
 };
 
+/**
+ * Watchdog de fechamento.
+ *
+ * O sonner pausa o cronômetro do toast quando a aba perde foco ou quando a
+ * árvore que disparou o toast desmonta no meio da navegação (é o caso do
+ * logout: o painel some e a homepage entra). Nesses casos o toast ficava
+ * preso na tela. Aqui garantimos o fechamento por tempo, sempre.
+ */
+const closers = new Map<string | number, ReturnType<typeof setTimeout>>();
+
+function armCloser(id: string | number, duration: number) {
+  const existing = closers.get(id);
+  if (existing) clearTimeout(existing);
+  if (!Number.isFinite(duration)) return;
+  closers.set(
+    id,
+    setTimeout(() => {
+      closers.delete(id);
+      release(id);
+      toast.dismiss(id);
+    }, duration + 600),
+  );
+}
+
 function present(job: Job) {
   const { variant, title, opts, id } = job;
+  const duration = opts.duration ?? DURATIONS[variant];
   const payload = {
-    duration: DURATIONS[variant],
     ...opts,
+    duration,
     id,
     onDismiss: () => release(id),
     onAutoClose: () => release(id),
@@ -56,13 +81,20 @@ function present(job: Job) {
   }
 
   lastShownAt = Date.now();
+  armCloser(id, duration);
   return toast[variant](title, payload);
 }
 
 function release(id: string | number) {
   const i = active.indexOf(id);
   if (i >= 0) active.splice(i, 1);
+  const t = closers.get(id);
+  if (t) {
+    clearTimeout(t);
+    closers.delete(id);
+  }
 }
+
 
 function drain() {
   timer = null;
@@ -125,6 +157,8 @@ export const notify = {
     if (id === undefined) {
       queue.length = 0;
       active.length = 0;
+      for (const t of closers.values()) clearTimeout(t);
+      closers.clear();
     } else {
       release(id);
       const i = queue.findIndex((j) => j.id === id);
