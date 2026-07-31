@@ -140,8 +140,14 @@ export function DashboardSearch() {
       aria-label="Buscar preços"
       className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
     >
-      <div className="shrink-0 space-y-2 border-b border-border/70 p-2.5">
-        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+      <div className="shrink-0 space-y-2 border-b border-border/70 p-3">
+        <div className="min-w-0">
+          <h2 className={cn(tc.itemTitle, "truncate")}>Buscar produtos e preços</h2>
+          <p className={cn(tc.metaMuted, "truncate")}>
+            Compare os menores preços dos estabelecimentos de Feijó
+          </p>
+        </div>
+        <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
           <label className="relative min-w-0">
             <span className="sr-only">Buscar produto</span>
             <SearchIcon
@@ -153,7 +159,7 @@ export function DashboardSearch() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Buscar produto: arroz, café, sabão…"
-              className="h-9 rounded-md bg-background/80 pl-9 pr-8 text-[13px]"
+              className={cn(tc.body, "h-10 rounded-md bg-background/80 pl-9 pr-8")}
               maxLength={80}
               inputMode="search"
               autoComplete="off"
@@ -181,7 +187,7 @@ export function DashboardSearch() {
           <div
             role="radiogroup"
             aria-label="Ordenar resultados"
-            className="flex shrink-0 items-center gap-1"
+            className="flex shrink-0 flex-wrap items-center gap-1"
           >
             {SORTS.map((s, i) => (
               <button
@@ -192,7 +198,8 @@ export function DashboardSearch() {
                 onClick={() => setSort(s.id)}
                 {...sortRoving.itemProps(i)}
                 className={cn(
-                   "h-8 rounded-md border px-2.5 text-[12px] font-medium transition-colors",
+                  tc.control,
+                  "h-9 rounded-md border px-3 transition-colors",
                   sort === s.id
                     ? "border-primary bg-primary text-primary-foreground"
                     : "border-border/70 bg-background text-muted-foreground hover:text-foreground",
@@ -273,7 +280,7 @@ export function DashboardSearch() {
                   }}
                   onKeyDown={(e) => onResultKeyDown(e, i)}
                   search={{ q: r.displayName } as never}
-                   className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-1.5 transition-colors hover:bg-muted/50 focus-visible:bg-muted/50"
+                   className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-2 transition-colors hover:bg-muted/50 focus-visible:bg-muted/50"
                 >
                   <div className="min-w-0">
                      <p className={cn(tc.itemTitle, "truncate")}>
@@ -292,7 +299,7 @@ export function DashboardSearch() {
                     {r.maxPrice != null &&
                       r.minPrice != null &&
                       r.maxPrice > r.minPrice && (
-                        <p className="text-[11.5px] text-muted-foreground">
+                        <p className={cn(tc.metaMuted)}>
                           até{" "}
                           <Price value={r.maxPrice} size="xs" tone="muted" />
                         </p>
@@ -307,7 +314,7 @@ export function DashboardSearch() {
       </div>
 
       {active && results.length > 0 && (
-        <div className="shrink-0 border-t border-border/70 px-3 py-1.5 text-[12px] text-muted-foreground">
+        <div className={cn(tc.metaMuted, "shrink-0 border-t border-border/70 px-3 py-2")}>
           {results.length} {results.length === 1 ? "produto" : "produtos"} ·
           preços de registros verificados
         </div>
@@ -336,7 +343,8 @@ function Chip({
       aria-checked={active}
       {...rest}
       className={cn(
-        "h-7 shrink-0 whitespace-nowrap rounded-md border px-2.5 text-[12px] font-medium transition-colors",
+        tc.chip,
+        "h-8 shrink-0 whitespace-nowrap rounded-md border px-2.5 transition-colors",
         active
           ? "border-primary/60 bg-primary/10 text-primary"
           : "border-border/70 bg-background text-muted-foreground hover:text-foreground",
