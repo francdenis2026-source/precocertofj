@@ -165,7 +165,6 @@ function StoresPage() {
                         <span className={cn(tc.metaMuted, "block truncate")}>
                           {s.productCount} {s.productCount === 1 ? "produto" : "produtos"} com preço
                         </span>
-
                       </span>
                       <ArrowRight className="h-4 w-4 shrink-0 text-primary" aria-hidden />
                     </Link>

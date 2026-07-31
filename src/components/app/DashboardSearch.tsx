@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
-import { Loader2, Search as SearchIcon, Store, X } from "lucide-react";
+import { Search as SearchIcon, Store, X } from "lucide-react";
 
 import { Price } from "@/components/ds/Price";
 import { ProductCompareSheet } from "@/components/app/ProductCompareSheet";
@@ -263,7 +263,10 @@ export function DashboardSearch() {
             <button
               type="button"
               onClick={() => resultsQ.refetch()}
-              className={cn(tc.control, "mt-2 h-9 rounded-md border border-border px-3 hover:bg-muted")}
+              className={cn(
+                tc.control,
+                "mt-2 h-9 rounded-md border border-border px-3 hover:bg-muted",
+              )}
             >
               Tentar novamente
             </button>
@@ -329,7 +332,10 @@ export function DashboardSearch() {
         </span>
         <Link
           to="/app/produtos"
-          className={cn(tc.control, "shrink-0 rounded-md border border-border px-2.5 py-1 text-primary")}
+          className={cn(
+            tc.control,
+            "shrink-0 rounded-md border border-border px-2.5 py-1 text-primary",
+          )}
         >
           Ver todos
         </Link>

@@ -297,7 +297,9 @@ function AppStorePage() {
                   <Store className="mx-auto h-6 w-6 text-muted-foreground" aria-hidden />
                   <p className={cn(tc.itemTitle, "mt-2")}>Nenhum produto encontrado</p>
                   <p className={cn(tc.meta, "mt-1")}>
-                    {q ? `Nada para “${q}” nesta loja.` : "Este local ainda não tem produtos nesta categoria."}
+                    {q
+                      ? `Nada para “${q}” nesta loja.`
+                      : "Este local ainda não tem produtos nesta categoria."}
                   </p>
                 </div>
               ) : (
@@ -340,10 +342,7 @@ function AppStorePage() {
           </section>
 
           {/* Comparação da seleção */}
-          <section
-            aria-label="Comparar seleção"
-            className="lg:col-span-5 xl:col-span-4"
-          >
+          <section aria-label="Comparar seleção" className="lg:col-span-5 xl:col-span-4">
             <div className="sticky top-3 space-y-2 rounded-lg border border-border/70 bg-card/94 p-3 shadow-sm backdrop-blur-md">
               <div>
                 <h2 className={tc.itemTitle}>Comparar seleção</h2>
@@ -415,7 +414,12 @@ function AppStorePage() {
               )}
 
               {compareMut.isError && (
-                <p className={cn(tc.meta, "rounded-lg border border-destructive/40 bg-destructive/5 p-3")}>
+                <p
+                  className={cn(
+                    tc.meta,
+                    "rounded-lg border border-destructive/40 bg-destructive/5 p-3",
+                  )}
+                >
                   Não foi possível comparar agora. Tente de novo em instantes.
                 </p>
               )}

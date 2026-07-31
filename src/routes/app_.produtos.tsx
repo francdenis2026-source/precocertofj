@@ -241,7 +241,9 @@ function ProductsPage() {
                     >
                       <span className="min-w-0">
                         <span className={cn(tc.itemTitle, "block truncate")}>{r.displayName}</span>
-                        <span className={cn(tc.metaMuted, "mt-0.5 flex items-center gap-1.5 truncate")}>
+                        <span
+                          className={cn(tc.metaMuted, "mt-0.5 flex items-center gap-1.5 truncate")}
+                        >
                           {r.brand && <span className="truncate">{r.brand}</span>}
                           {r.brand && <span aria-hidden>·</span>}
                           <Store className="h-3 w-3 shrink-0" aria-hidden />
