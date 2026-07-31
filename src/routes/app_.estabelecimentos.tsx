@@ -75,7 +75,7 @@ function StoresPage() {
   return (
     <AppShell>
       <div className="app-dashboard pc-page">
-        <header className="rounded-xl border border-border/70 bg-card/94 px-4 py-3.5 shadow-sm backdrop-blur-md">
+        <header className="pc-pad rounded-xl border border-border/70 bg-card/94 shadow-sm backdrop-blur-md">
           <Link
             to="/app"
             className={cn(tc.metaMuted, "inline-flex items-center gap-1 hover:text-foreground")}
@@ -105,7 +105,7 @@ function StoresPage() {
 
         <section aria-live="polite" aria-busy={storesQ.isLoading}>
           {storesQ.isLoading ? (
-            <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+            <ul className="pc-card-grid">
               {Array.from({ length: 6 }).map((_, i) => (
                 <li
                   key={i}
@@ -135,7 +135,7 @@ function StoresPage() {
               <p className={cn(tc.meta, "mt-1")}>Tente outro nome ou bairro.</p>
             </div>
           ) : (
-            <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+            <ul className="pc-card-grid">
               {filtered.map((s) => {
                 const logo = s.logoUrl ? (logos[s.logoUrl] ?? s.logoUrl) : null;
                 return (
