@@ -18,6 +18,8 @@ import { Price } from "@/components/ds/Price";
 import { useAppHomeData } from "@/hooks/useAppHomeData";
 import { useStalled } from "@/hooks/use-stalled";
 import { cn } from "@/lib/utils";
+import { tc } from "@/lib/typeclear";
+
 
 
 export const Route = createFileRoute("/app")({
