@@ -231,12 +231,13 @@ export function AppSidebar() {
                   tooltip={n.label}
                   data-active={active ? "true" : "false"}
                   className={cn(
-                    "relative h-9 rounded-md px-2 text-sidebar-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                    "relative h-9 rounded-md px-2 text-sidebar-foreground/90 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 focus-visible:ring-sidebar-ring",
                     group.tone && "pc-admin-row",
                     active &&
                       !group.tone &&
                       "bg-sidebar-accent font-semibold text-sidebar-accent-foreground",
                   )}
+
                 >
                   <Link
                     to={n.to}
