@@ -34,7 +34,7 @@ export function AppShell({ children, scope }: { children: React.ReactNode; scope
           className={
             isAdminScope
               ? "h-dvh min-h-0 min-w-0 overflow-hidden bg-background"
-              : "min-h-screen bg-background"
+              : "h-dvh min-h-0 min-w-0 overflow-hidden bg-background"
           }
         >
           {!isAdminScope && (
@@ -51,7 +51,7 @@ export function AppShell({ children, scope }: { children: React.ReactNode; scope
           {isAdminScope ? (
             <AutoAdminBreadcrumb className="border-b border-border/60 bg-card/40 px-4 py-2 backdrop-blur-sm" />
           ) : (
-            <AppBreadcrumb className="border-b border-border/60 bg-card/40 px-3 py-2 backdrop-blur-sm md:px-6" />
+            <AppBreadcrumb className="shrink-0 border-b border-border/60 bg-card/40 px-3 py-1 backdrop-blur-sm md:px-6" />
           )}
 
           <main
@@ -59,7 +59,7 @@ export function AppShell({ children, scope }: { children: React.ReactNode; scope
             className={
               isAdminScope
                 ? "min-h-0 flex-1 overflow-y-auto overflow-x-hidden pb-10"
-                : "relative flex-1 bg-transparent pb-[calc(var(--mobile-nav-height)+1rem)] md:pb-0"
+                : "relative min-h-0 flex-1 overflow-y-auto overflow-x-hidden bg-transparent pb-[calc(var(--mobile-nav-height)+0.5rem)] md:pb-2"
             }
           >
             {children}
