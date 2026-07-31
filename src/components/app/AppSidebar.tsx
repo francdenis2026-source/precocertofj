@@ -207,10 +207,10 @@ export function AppSidebar() {
   };
 
   const renderGroup = (group: NavGroup) => (
-    <SidebarGroup key={group.label} className="py-1.5" data-tone={group.tone}>
+    <SidebarGroup key={group.label} className="px-0 py-1.5" data-tone={group.tone}>
       <SidebarGroupLabel
         className={cn(
-          "h-6 px-2.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-foreground/50",
+          "h-6 px-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-foreground/50",
           "group-data-[collapsible=icon]:hidden",
           group.tone && "pc-admin-group-label",
         )}
@@ -230,9 +230,11 @@ export function AppSidebar() {
                   tooltip={n.label}
                   data-active={active ? "true" : "false"}
                   className={cn(
-                    "pc-nav-link pc-nav-link--row relative h-8 rounded-md px-2 text-sidebar-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                    "relative h-9 rounded-md px-2 text-sidebar-foreground/80 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                     group.tone && "pc-admin-row",
-                    active && !group.tone && "bg-sidebar-accent font-semibold text-sidebar-accent-foreground",
+                    active &&
+                      !group.tone &&
+                      "bg-sidebar-accent font-semibold text-sidebar-accent-foreground",
                   )}
                 >
                   <Link
@@ -244,16 +246,18 @@ export function AppSidebar() {
                     {active && !group.tone && (
                       <span
                         aria-hidden
-                        className="absolute left-0 top-1/2 h-4 w-[3px] -translate-y-1/2 rounded-r-full bg-sidebar-primary group-data-[collapsible=icon]:hidden"
+                        className="absolute inset-y-1 left-0 w-[3px] rounded-full bg-sidebar-primary group-data-[collapsible=icon]:hidden"
                       />
                     )}
                     <span
                       data-active={active ? "true" : "false"}
                       className={cn(
-                        "grid h-5 w-5 shrink-0 place-items-center rounded",
+                        "grid h-8 w-8 shrink-0 place-items-center rounded-md border transition-colors",
                         group.tone && "pc-admin-icon-chip",
                         !group.tone &&
-                          (active ? "text-sidebar-primary" : "text-sidebar-foreground/60"),
+                          (active
+                            ? "border-sidebar-primary/40 bg-sidebar-primary/15 text-sidebar-primary"
+                            : "border-transparent text-sidebar-foreground/60"),
                       )}
                     >
                       <n.icon className="h-4 w-4" strokeWidth={active ? 2.3 : 1.9} />
@@ -280,11 +284,11 @@ export function AppSidebar() {
       className="border-r border-sidebar-border"
     >
       {/* Brand */}
-      <SidebarHeader className="border-b border-sidebar-border/60 px-2.5 py-3">
+      <SidebarHeader className="border-b border-sidebar-border/60 px-2 py-2.5">
         <Link
           to={isAdminArea ? "/admin" : "/"}
           onClick={closeOnMobile}
-          className="flex items-center gap-2.5 group-data-[collapsible=icon]:justify-center"
+          className="flex items-center gap-2.5 rounded-md px-2 py-1 transition-colors hover:bg-sidebar-accent group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
         >
           <span
             className="relative grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-sidebar-border bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
@@ -304,7 +308,7 @@ export function AppSidebar() {
 
       </SidebarHeader>
 
-      <SidebarContent className="px-2 py-3">
+      <SidebarContent className="px-2 py-2">
         {isAdminArea && (rolesLoading || !isAdmin) ? (
           <SidebarGroup className="py-3">
             <div className="space-y-2 px-3">
