@@ -122,6 +122,11 @@ function ListaContent() {
   };
   const [newName, setNewName] = useState("");
   const [listFilter, setListFilter] = useState("");
+  const [listSort, setListSort] = useLocalStorageState<"updated" | "name">(
+    "app:lists:sort",
+    "updated",
+    { validate: (v): v is "updated" | "name" => v === "updated" || v === "name" },
+  );
   const [renameId, setRenameId] = useState<string | null>(null);
   const [renameText, setRenameText] = useState("");
 
