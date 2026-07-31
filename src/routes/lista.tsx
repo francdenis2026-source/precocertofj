@@ -526,8 +526,17 @@ function ListaContent() {
                           <p className="truncate text-[13px] font-medium text-foreground">
                             {l.name}
                           </p>
-                          <p className="text-[11px] text-muted-foreground">
+                          <p className="truncate text-[11px] text-muted-foreground">
                             {l.itemCount} {l.itemCount === 1 ? "item" : "itens"}
+                            {l.updatedAt && (
+                              <>
+                                {" · "}
+                                {new Date(l.updatedAt).toLocaleDateString("pt-BR", {
+                                  day: "2-digit",
+                                  month: "2-digit",
+                                })}
+                              </>
+                            )}
                           </p>
                         </button>
                         <button
