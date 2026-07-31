@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "2478b798-b77b-4ed8-ab98-f00004e0ebec",
-  "project_id": "1b5cbba5-752c-4b2c-977b-781e86551914",
-  "url": "/__l5e/assets-v1/2478b798-b77b-4ed8-ab98-f00004e0ebec/comercial-vanderley-logo.png",
-  "r2_key": "a/v1/1b5cbba5-752c-4b2c-977b-781e86551914/2478b798-b77b-4ed8-ab98-f00004e0ebec/comercial-vanderley-logo.png",
-  "original_filename": "comercial-vanderley-logo.png",
-  "size": 270206,
   "content_type": "image/png",
-  "created_at": "2026-07-22T02:56:15Z"
+  "created_at": "2026-07-22T02:56:15Z",
+  "original_filename": "comercial-vanderley-logo.png",
+  "project_id": "d37812ee-a936-4775-a576-cbc900f84790",
+  "r2_key": "a/v1/d37812ee-a936-4775-a576-cbc900f84790/2478b798-b77b-4ed8-ab98-f00004e0ebec/comercial-vanderley-logo.png",
+  "size": 270206,
+  "url": "/__l5e/assets-v1/2478b798-b77b-4ed8-ab98-f00004e0ebec/comercial-vanderley-logo.png",
+  "version": 1
 }

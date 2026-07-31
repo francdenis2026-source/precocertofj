@@ -1,11 +1,11 @@
 {
-  "version": 1,
   "asset_id": "ac84a598-5a44-48f0-87e8-88c839451322",
-  "project_id": "1b5cbba5-752c-4b2c-977b-781e86551914",
-  "url": "/__l5e/assets-v1/ac84a598-5a44-48f0-87e8-88c839451322/central-super-storefront.png",
-  "r2_key": "a/v1/1b5cbba5-752c-4b2c-977b-781e86551914/ac84a598-5a44-48f0-87e8-88c839451322/central-super-storefront.png",
-  "original_filename": "central-super-storefront.png",
-  "size": 375205,
   "content_type": "image/png",
-  "created_at": "2026-07-22T21:33:18Z"
+  "created_at": "2026-07-22T21:33:18Z",
+  "original_filename": "central-super-storefront.png",
+  "project_id": "d37812ee-a936-4775-a576-cbc900f84790",
+  "r2_key": "a/v1/d37812ee-a936-4775-a576-cbc900f84790/ac84a598-5a44-48f0-87e8-88c839451322/central-super-storefront.png",
+  "size": 375205,
+  "url": "/__l5e/assets-v1/ac84a598-5a44-48f0-87e8-88c839451322/central-super-storefront.png",
+  "version": 1
 }
