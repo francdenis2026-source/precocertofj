@@ -73,13 +73,13 @@ export function useInactivityLogout() {
 
   const scheduleTimers = useCallback(() => {
     clearTimers();
-    setWarning(false);
+    setWarningState(false);
     if (toastIdRef.current !== null) {
       toast.dismiss(toastIdRef.current);
       toastIdRef.current = null;
     }
     warnTimerRef.current = window.setTimeout(() => {
-      setWarning(true);
+      setWarningState(true);
       toastIdRef.current = toast.warning("Você ainda está aí?", {
         description: "Sua sessão será encerrada em 1 minuto por inatividade.",
         duration: WARN_BEFORE_MS,
@@ -96,7 +96,7 @@ export function useInactivityLogout() {
     logoutTimerRef.current = window.setTimeout(() => {
       void doLogout();
     }, timeoutMs);
-  }, [timeoutMs, doLogout, clearTimers]);
+  }, [timeoutMs, doLogout, clearTimers, setWarningState]);
 
   /**
    * Throttle de atividade.
