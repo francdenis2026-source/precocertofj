@@ -3249,22 +3249,70 @@ input::placeholder, textarea::placeholder {
 }
 
 /* Posicionamento: canto inferior direito, longe do cabeçalho fixo.
-   No mobile sobe acima da BottomTabBar (64px) e respeita a safe-area. */
+   No mobile sobe acima da BottomTabBar e de qualquer barra de ação fixa,
+   com offsets responsivos + safe-area. */
 .pc-toaster[data-sonner-toaster] {
   z-index: 90;
 }
 
+/* Telas médias (tablet): ainda sem BottomTabBar, mas com menos largura. */
+@media (max-width: 1023px) and (min-width: 768px) {
+  .pc-toaster[data-sonner-toaster] {
+    --width: min(380px, calc(100vw - 32px));
+    right: 16px !important;
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+}
+
+/* Mobile: acima da BottomTabBar (56–64px) + folga para barras de ação. */
 @media (max-width: 767px) {
   .pc-toaster[data-sonner-toaster] {
     --width: calc(100vw - 24px);
+    --pc-toast-bottom-safe: 88px;
     right: 12px !important;
     left: 12px !important;
-    bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+    bottom: calc(var(--pc-toast-bottom-safe) + env(safe-area-inset-bottom, 0px)) !important;
   }
   [data-sonner-toast].pc-toast {
     max-width: none;
+    padding: 11px 13px;
   }
 }
+
+/* Telas muito estreitas: encosta um pouco mais nas bordas. */
+@media (max-width: 359px) {
+  .pc-toaster[data-sonner-toaster] {
+    --width: calc(100vw - 16px);
+    right: 8px !important;
+    left: 8px !important;
+  }
+}
+
+/* Mobile deitado (pouca altura): reduz o afastamento inferior. */
+@media (max-height: 480px) and (orientation: landscape) {
+  .pc-toaster[data-sonner-toaster] {
+    --pc-toast-bottom-safe: 16px;
+  }
+}
+
+/* Animações consistentes de entrada/saída — sem flash e sem "salto". */
+@media (prefers-reduced-motion: no-preference) {
+  [data-sonner-toast].pc-toast {
+    transition:
+      transform 320ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 220ms ease,
+      height 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  [data-sonner-toast].pc-toast[data-mounted="false"],
+  [data-sonner-toast].pc-toast[data-removed="true"] {
+    opacity: 0;
+  }
+  [data-sonner-toast].pc-toast[data-visible="false"] {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
 
 .pc-toast-action,
 .pc-toast-cancel {
