@@ -59,7 +59,7 @@ export function StoresPanel({
             </p>
           </div>
           <Link
-            to="/estabelecimentos"
+            to="/app/estabelecimentos"
             className={cn(
               tc.control,
               "shrink-0 rounded-md border border-border px-2.5 py-1 text-primary transition-colors hover:border-primary/50",
@@ -114,7 +114,7 @@ export function StoresPanel({
                     )}
                   </span>
                   <Link
-                    to="/loja/$id"
+                    to="/app/loja/$id"
                     params={{ id: s.id }}
                     className="min-w-0 focus-visible:underline"
                   >
@@ -134,7 +134,7 @@ export function StoresPanel({
                       <Info className="h-3.5 w-3.5" aria-hidden />
                     </button>
                     <Link
-                      to="/loja/$id"
+                      to="/app/loja/$id"
                       params={{ id: s.id }}
                       aria-label={`Abrir página de ${s.name}`}
                       className="grid h-7 w-7 place-items-center rounded-md bg-primary/10 text-primary transition-colors hover:bg-primary/20"
