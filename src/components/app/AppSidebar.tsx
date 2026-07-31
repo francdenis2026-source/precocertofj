@@ -218,6 +218,8 @@ export function AppSidebar() {
   const { signOut, loading: signingOut } = useSignOut();
   const { isAdmin, loading: rolesLoading } = useMyRoles();
   const { isMobile, setOpenMobile } = useSidebar();
+  const [confirmOpen, setConfirmOpen] = useState(false);
+
   const isAdminArea = pathname.startsWith("/admin");
   const groups = isAdminArea ? (isAdmin ? adminGroups : []) : appGroups;
   const closeOnMobile = () => {
