@@ -280,24 +280,24 @@ function ListaContent() {
   return (
     <AppShell>
       <div className="mx-auto max-w-7xl px-4 py-3 md:py-4">
-        {/* Editorial hero */}
-        <section className="relative mb-8 overflow-hidden rounded-3xl bg-primary p-5 text-primary-foreground md:p-10">
+        {/* Editorial hero — compacto */}
+        <section className="relative mb-5 overflow-hidden rounded-2xl bg-primary p-4 text-primary-foreground md:p-6">
           <div
-            className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-accent"
+            className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-accent"
             aria-hidden
           />
           <div
-            className="absolute -right-24 top-20 h-32 w-32 rounded-full bg-white/10 blur-3xl"
+            className="absolute -right-24 top-16 h-28 w-28 rounded-full bg-white/10 blur-3xl"
             aria-hidden
           />
           <div className="relative">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] backdrop-blur">
+            <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] backdrop-blur">
               <ShoppingCart className="h-3 w-3" /> Suas listas
             </span>
-            <h1 className="mt-5 font-display text-[40px] font-extrabold leading-[0.95] md:text-5xl">
-              Lista de compras,<br />sem surpresa no caixa.
+            <h1 className="mt-3 font-display text-[22px] font-bold leading-tight md:text-[26px]">
+              Lista de compras, sem surpresa no caixa.
             </h1>
-            <p className="mt-3 max-w-lg text-sm leading-relaxed text-primary-foreground/85">
+            <p className="mt-1.5 max-w-lg text-[13px] leading-relaxed text-primary-foreground/85">
               Adicione produtos do catálogo, marque o que já comprou e descubra
               o melhor mercado para todo o carrinho.
             </p>
@@ -305,10 +305,10 @@ function ListaContent() {
         </section>
 
 
-        <div className="grid gap-3 lg:grid-cols-[320px_1fr]">
+        <div className="grid gap-3 lg:grid-cols-[300px_1fr]">
           {/* Sidebar */}
           <aside className="rounded-2xl border border-border bg-card">
-            <div className="border-b border-border p-4">
+            <div className="border-b border-border p-3">
               <form
                 onSubmit={(e) => {
                   e.preventDefault();
@@ -317,15 +317,25 @@ function ListaContent() {
                 className="flex items-center gap-2"
               >
                 <input
+                  ref={newNameRef}
                   value={newName}
                   onChange={(e) => setNewName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Escape") {
+                      e.preventDefault();
+                      setNewName("");
+                      e.currentTarget.blur();
+                    }
+                  }}
                   placeholder="Nova lista..."
-                  className="flex-1 rounded-full border border-border bg-background px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-primary/40"
+                  aria-label="Nome da nova lista"
+                  aria-keyshortcuts="Alt+N"
+                  className="h-9 flex-1 rounded-full border border-border bg-background px-3.5 text-[13px] outline-none focus:ring-2 focus:ring-primary/40"
                 />
                 <button
                   type="submit"
                   disabled={createMut.isPending || !newName.trim()}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-primary text-primary-foreground disabled:opacity-50"
+                  className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-primary-foreground disabled:opacity-50"
                   aria-label="Criar lista"
                 >
                   {createMut.isPending ? (
@@ -335,25 +345,36 @@ function ListaContent() {
                   )}
                 </button>
               </form>
+              <p className="mt-1.5 text-[11px] text-muted-foreground">
+                Atalhos: <kbd>Alt</kbd>+<kbd>N</kbd> nova · <kbd>Alt</kbd>+
+                <kbd>L</kbd> listas · <kbd>F2</kbd> renomear · <kbd>Del</kbd>{" "}
+                excluir · <kbd>Esc</kbd> fechar
+              </p>
             </div>
-            <ul className="divide-y divide-border">
+            <ul
+              role="listbox"
+              aria-label="Minhas listas salvas"
+              className="divide-y divide-border"
+            >
               {listsQuery.isLoading && (
                 <li className="p-2">
                   <ListRowsSkeleton rows={4} />
                 </li>
               )}
-              {listsQuery.data?.length === 0 && (
-                <li className="p-4 text-sm text-muted-foreground">
+              {lists.length === 0 && !listsQuery.isLoading && (
+                <li className="p-4 text-[13px] text-muted-foreground">
                   Nenhuma lista ainda. Crie a primeira acima.
                 </li>
               )}
-              {listsQuery.data?.map((l) => {
+              {lists.map((l, index) => {
                 const isActive = l.id === selectedId;
                 const isRenaming = renameId === l.id;
                 return (
                   <li
                     key={l.id}
-                    className={`flex items-center gap-2 p-3 ${
+                    role="option"
+                    aria-selected={isActive}
+                    className={`flex items-center gap-1.5 px-2.5 py-2 ${
                       isActive ? "bg-muted/50" : ""
                     }`}
                   >
@@ -364,13 +385,20 @@ function ListaContent() {
                           if (renameText.trim())
                             renameMut.mutate({ id: l.id, name: renameText.trim() });
                         }}
-                        className="flex flex-1 items-center gap-2"
+                        className="flex flex-1 items-center gap-1.5"
                       >
                         <input
                           autoFocus
                           value={renameText}
                           onChange={(e) => setRenameText(e.target.value)}
-                          className="flex-1 rounded-md border border-border bg-background px-2 py-1 text-sm"
+                          onKeyDown={(e) => {
+                            if (e.key === "Escape") {
+                              e.preventDefault();
+                              cancelRename();
+                            }
+                          }}
+                          aria-label={`Novo nome para ${l.name}`}
+                          className="h-8 flex-1 rounded-md border border-border bg-background px-2 text-[13px]"
                         />
                         <button
                           type="submit"
@@ -381,7 +409,7 @@ function ListaContent() {
                         </button>
                         <button
                           type="button"
-                          onClick={() => setRenameId(null)}
+                          onClick={cancelRename}
                           className="text-muted-foreground"
                           aria-label="Cancelar"
                         >
@@ -391,40 +419,37 @@ function ListaContent() {
                     ) : (
                       <>
                         <button
+                          ref={registerRow(l.id)}
                           onClick={() => selectList(l.id)}
-                          className="flex-1 text-left"
+                          onKeyDown={(e) => onListKeyDown(e, index)}
+                          tabIndex={isActive || (!selectedId && index === 0) ? 0 : -1}
+                          aria-current={isActive ? "true" : undefined}
+                          className="min-w-0 flex-1 rounded-md px-1 py-0.5 text-left"
                         >
-                          <p className="text-sm font-medium text-foreground">
+                          <p className="truncate text-[13px] font-medium text-foreground">
                             {l.name}
                           </p>
-                          <p className="text-xs text-muted-foreground">
+                          <p className="text-[11px] text-muted-foreground">
                             {l.itemCount} {l.itemCount === 1 ? "item" : "itens"}
                           </p>
                         </button>
                         <button
-                          onClick={() => {
-                            setRenameId(l.id);
-                            setRenameText(l.name);
-                          }}
-                          className="text-muted-foreground hover:text-foreground"
-                          aria-label="Renomear"
+                          onClick={() => startRename(l)}
+                          className="shrink-0 rounded-md p-1 text-muted-foreground hover:text-foreground"
+                          aria-label={`Renomear ${l.name}`}
+                          aria-keyshortcuts="F2"
+                          title="Renomear (F2)"
                         >
-                          <Pencil className="h-4 w-4" />
+                          <Pencil className="h-3.5 w-3.5" />
                         </button>
                         <button
-                          onClick={async () => {
-                            const ok = await confirm({
-                              title: `Excluir a lista "${l.name}"?`,
-                              description: "Esta ação não pode ser desfeita.",
-                              confirmLabel: "Excluir",
-                              destructive: true,
-                            });
-                            if (ok) deleteMut.mutate(l.id);
-                          }}
-                          className="text-muted-foreground hover:text-destructive"
-                          aria-label="Excluir"
+                          onClick={() => void askDelete(l)}
+                          className="shrink-0 rounded-md p-1 text-muted-foreground hover:text-destructive"
+                          aria-label={`Excluir ${l.name}`}
+                          aria-keyshortcuts="Delete"
+                          title="Excluir (Del)"
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="h-3.5 w-3.5" />
                         </button>
                       </>
                     )}
@@ -433,6 +458,7 @@ function ListaContent() {
               })}
             </ul>
           </aside>
+
 
           {/* Main */}
           <section>
