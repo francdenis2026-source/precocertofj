@@ -13,10 +13,10 @@ export function useMyProfile() {
   const fetchAccount = useServerFn(getMyAccount);
 
   const query = useQuery({
-    queryKey: ["my-account-header", session?.user?.id],
+    queryKey: ["my-account"],
     queryFn: () => fetchAccount(),
     enabled: !!session,
-    staleTime: 60_000,
+    staleTime: 5 * 60_000,
   });
 
   const fullName = query.data?.fullName ?? null;
@@ -32,7 +32,7 @@ export function useMyProfile() {
 
   return {
     session,
-    loading: sessionLoading || query.isLoading,
+    loading: sessionLoading || (!!session && query.isLoading),
     fullName,
     firstName,
     initials,
