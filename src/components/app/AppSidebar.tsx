@@ -231,7 +231,7 @@ export function AppSidebar() {
                   tooltip={n.label}
                   data-active={active ? "true" : "false"}
                   className={cn(
-                    "relative h-9 rounded-md px-2 text-sidebar-foreground/90 transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 focus-visible:ring-sidebar-ring",
+                    "relative h-9 rounded-md px-2 text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar aria-disabled:pointer-events-none aria-disabled:text-sidebar-muted-foreground aria-disabled:opacity-100",
                     group.tone && "pc-admin-row",
                     active &&
                       !group.tone &&
