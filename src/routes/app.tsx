@@ -117,6 +117,9 @@ function AppHomeContent() {
 
   const storeNameSet = new Set(storesByName.keys());
 
+  /** Roda do mouse sobre cabeçalhos/cards rola o painel interno mais próximo. */
+  const wheelRootRef = useWheelScrollForward<HTMLDivElement>();
+
   return (
     <AppShell>
       <div className="app-dashboard pc-page" ref={wheelRootRef}>
