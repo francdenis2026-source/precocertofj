@@ -159,7 +159,7 @@ export function StoresPanel({
                     aria-label={`Abrir página de ${s.name}`}
                     className="shrink-0 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   >
-                    <StoreLogo src={logo} name={s.name} className="h-11 w-11 p-1.5" />
+                    <StoreLogo src={logo} name={s.name} className="h-9 w-9 p-1" />
                   </Link>
                   <Link
                     to="/app/loja/$id"
@@ -167,12 +167,7 @@ export function StoresPanel({
                     title={s.name}
                     className="min-w-0 focus-visible:underline"
                   >
-                    <span
-                      className={cn(
-                        tc.storeName,
-                        "block truncate leading-tight group-hover:text-primary",
-                      )}
-                    >
+                    <span className={cn(tc.storeName, "block line-clamp-2 leading-[1.25]")}>
                       {s.name}
                     </span>
                     <span className={cn(tc.metaMuted, "block truncate leading-tight")}>
