@@ -107,7 +107,7 @@ function AppHomeContent() {
         {/* Bloco único: saudação + ações + métricas */}
 
         <header className="overflow-hidden rounded-2xl border border-border/70 bg-card/95 shadow-sm backdrop-blur-md">
-          <div className="relative flex flex-wrap items-center justify-between gap-3 border-b border-border/60 bg-primary/95 px-4 py-3 text-primary-foreground md:px-5 md:py-3.5">
+          <div className="relative flex flex-wrap items-center justify-between gap-2 border-b border-border/60 bg-primary/95 px-3.5 py-2 text-primary-foreground md:px-4 md:py-2.5">
             <span
               aria-hidden
               className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-brand/20 blur-3xl"
@@ -117,7 +117,7 @@ function AppHomeContent() {
               <h1
                 className={cn(
                   tc.h1,
-                  "truncate text-[18px] leading-tight text-primary-foreground md:text-[20px]",
+                  "truncate text-[16px] leading-tight text-primary-foreground md:text-[17.5px]",
                 )}
               >
                 Olá, {firstName}
@@ -133,14 +133,14 @@ function AppHomeContent() {
               <Link
                 to="/alertas"
                 aria-label="Alertas de preço"
-                className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-primary-foreground/30 bg-primary-foreground/10 px-3 text-[12.5px] font-medium text-primary-foreground transition hover:bg-primary-foreground/20"
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-primary-foreground/30 bg-primary-foreground/10 px-3 text-[12.5px] font-medium text-primary-foreground transition hover:bg-primary-foreground/20"
               >
                 <Bell className="h-4 w-4" aria-hidden />
                 <span className="hidden md:inline">Alertas</span>
               </Link>
               <Link
                 to="/lista/nova"
-                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-brand px-3.5 text-[12.5px] font-semibold text-brand-foreground transition hover:bg-brand-strong"
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-brand px-3.5 text-[12.5px] font-semibold text-brand-foreground transition hover:bg-brand-strong"
               >
                 Nova lista <ArrowRight className="h-4 w-4" aria-hidden />
               </Link>
