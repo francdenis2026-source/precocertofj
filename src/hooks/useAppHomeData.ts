@@ -24,6 +24,9 @@ import {
  */
 export function useAppHomeData() {
   const qc = useQueryClient();
+  // Só chama server functions protegidas quando existe sessão: sem token o
+  // servidor responde "Unauthorized: No authorization header provided".
+  const { hasSession } = useSessionGate();
 
   const summaryFn = useServerFn(getAppSummary);
   const accountFn = useServerFn(getMyAccount);
@@ -37,14 +40,17 @@ export function useAppHomeData() {
   const summaryQuery = useQuery({
     queryKey: ["app-summary"],
     queryFn: () => summaryFn(),
+    enabled: hasSession,
   });
   const accountQuery = useQuery({
     queryKey: ["account"],
     queryFn: () => accountFn(),
+    enabled: hasSession,
   });
   const listsQuery = useQuery({
     queryKey: ["my-lists"],
     queryFn: () => listsFn(),
+    enabled: hasSession,
   });
   const publicStoresQuery = useQuery({
     queryKey: ["public-stores"],
