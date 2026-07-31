@@ -199,28 +199,13 @@ function HomePage() {
     };
   }, []);
 
-  const platformStats = useServerFn(getPlatformStats);
-  const statsQ = useQuery({
-    queryKey: ["platform-stats"],
-    queryFn: () => platformStats({} as any),
-    // Cache do banco é recalculado a cada 10 min por cron; alinhar evita
-    // chamadas repetidas da RPC mais cara do projeto.
-    staleTime: 10 * 60_000,
-    gcTime: 30 * 60_000,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-  });
+  const { stats, economy } = useLoaderData({ from: "/" }) as {
+    stats: any;
+    economy: any;
+  };
 
-  const stats: any = statsQ.data ?? {};
+  /* Buscas reais dos clientes, agregadas em tempo real (`search_trends`). */
 
-  const economyFn = useServerFn(getEconomyStat);
-  const economyQ = useQuery({
-    queryKey: ["home-economy"],
-    queryFn: () => economyFn({} as any),
-    staleTime: 5 * 60_000,
-    refetchOnWindowFocus: false,
-  });
-  const economy = economyQ.data;
 
   /* Buscas reais dos clientes, agregadas em tempo real (`search_trends`). */
   const trendingFn = useServerFn(listTrendingSearches);
