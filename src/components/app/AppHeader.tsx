@@ -41,7 +41,7 @@ import { cn } from "@/lib/utils";
  * pill com ícone + número, sem rótulos longos, para ocupar pouco espaço.
  * O segundo badge informa explicitamente os ITENS CADASTRADOS.
  */
-function HeaderStats() {
+function HeaderStats({ compact = false }: { compact?: boolean }) {
   const { data } = useQuery({
     queryKey: ["public-stores"],
     queryFn: () => listPublicStores(),
@@ -69,7 +69,7 @@ function HeaderStats() {
         to="/app/produtos"
         title={`${items.toLocaleString("pt-BR")} itens cadastrados`}
         aria-label={`${items.toLocaleString("pt-BR")} itens cadastrados`}
-        className="hidden items-center gap-1 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-emerald-700 transition-colors hover:bg-emerald-500/20 dark:text-emerald-300 lg:inline-flex"
+        className={"hidden items-center gap-1 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-emerald-700 transition-colors hover:bg-emerald-500/20 dark:text-emerald-300" + (compact ? " hidden" : " lg:inline-flex")}
       >
         <Tags className="h-3 w-3" aria-hidden />
         {items.toLocaleString("pt-BR")}
@@ -78,7 +78,10 @@ function HeaderStats() {
       <Link
         to="/melhores-precos"
         title={`Média de ${avg.toLocaleString("pt-BR")} itens por estabelecimento`}
-        className="hidden items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-amber-700 transition-colors hover:bg-amber-500/20 dark:text-amber-300 xl:inline-flex"
+        className={cn(
+          "items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-amber-700 transition-colors hover:bg-amber-500/20 dark:text-amber-300",
+          compact ? "hidden" : "hidden xl:inline-flex",
+        )}
       >
         <TrendingDown className="h-3 w-3" aria-hidden />
         Melhores preços
