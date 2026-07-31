@@ -29,8 +29,9 @@ export default defineConfig({
         // A única registradora é src/lib/pwa.ts (com guardas de preview).
         injectRegister: null,
         workbox: {
-          globPatterns: ["**/*.{js,css,html,ico,png,svg,webmanifest,woff2}"],
-          navigateFallback: "/",
+          // HTML NUNCA é pré-cacheado: o app é SSR e o shell precisa vir da rede,
+          // senão o navegador continua servindo a versão antiga do site.
+          globPatterns: ["**/*.{js,css,ico,png,svg,webmanifest,woff2}"],
           navigateFallbackDenylist: [/^\/~oauth/, /^\/api\//],
           cleanupOutdatedCaches: true,
           clientsClaim: true,
