@@ -1504,6 +1504,12 @@ html[data-density="compact"] .app-scope .app-dashboard [data-slot="card"] { --pc
   height: 2rem;
   border-radius: 0.6rem;
 }
+/* O trilho da sidebar PreçoCerto não é um chip de ícone: nunca vira quadrado. */
+.app-scope [data-sidebar="menu-button"] span.pcsb-rail {
+  width: 3px;
+  height: 0;
+  border-radius: 999px;
+}
 .app-scope [data-sidebar="header"] a > span:first-child {
   width: 2rem;
   height: 2rem;
@@ -6157,7 +6163,7 @@ h3.font-display {
    os temas. Todas as cores derivam de tokens do design system.
    ============================================================ */
 .pcsb {
-  --pcsb-accent: var(--pc-home-gold);
+  --pcsb-accent: var(--sidebar-foreground);
   --pcsb-ink: var(--sidebar-foreground);
   --pcsb-dim: var(--sidebar-muted-foreground);
   --pcsb-line: color-mix(in oklab, var(--sidebar-border) 82%, transparent);
@@ -6167,9 +6173,7 @@ h3.font-display {
   --pcsb-mark-ink: var(--pc-navy, #0f1b3d);
 }
 .pcsb [data-sidebar="sidebar"] {
-  background:
-    radial-gradient(120% 60% at 0% 0%, color-mix(in oklab, var(--pcsb-accent) 7%, transparent), transparent 62%),
-    linear-gradient(180deg, color-mix(in oklab, var(--sidebar) 100%, transparent), var(--sidebar));
+  background: var(--sidebar);
   border-right: 1px solid var(--pcsb-line);
 }
 
@@ -6180,7 +6184,15 @@ h3.font-display {
 .pcsb [data-tone="catalog"],
 .pcsb [data-tone="commerce"],
 .pcsb [data-tone="people"],
-.pcsb [data-tone="system"] { --pcsb-accent: var(--pc-home-gold); }
+.pcsb [data-tone="system"] { --pcsb-accent: var(--sidebar-foreground); }
+
+/* Texto nítido: rendering otimizado para telas de alta densidade. */
+.pcsb,
+.pcsb [data-sidebar="sidebar"] {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
 
 /* ── Marca ─────────────────────────────────────────────────────────────── */
 .pcsb-header {
@@ -6255,30 +6267,26 @@ h3.font-display {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  height: 1.4rem;
-  padding: 0 0.4rem;
-  font-size: 9.5px;
-  font-weight: 700;
-  letter-spacing: 0.2em;
+  height: 1.75rem;
+  padding: 0 0.45rem;
+  font-size: 10.5px;
+  font-weight: 650;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
   color: var(--pcsb-dim);
 }
 .pcsb-grouprule {
   height: 1px;
   flex: 1 1 auto;
-  background: linear-gradient(
-    90deg,
-    color-mix(in oklab, var(--pcsb-accent) 42%, transparent),
-    transparent 85%
-  );
+  background: var(--pcsb-line);
 }
 
 /* ── Linhas de navegação ───────────────────────────────────────────────── */
 .pcsb-row {
   position: relative;
-  height: 2.15rem;
-  border-radius: 0.6rem;
-  padding: 0 0.4rem;
+  height: 2.4rem;
+  border-radius: 0.55rem;
+  padding: 0 0.5rem;
   color: var(--pcsb-ink);
   transition: background-color 0.15s ease, color 0.15s ease;
 }
@@ -6288,27 +6296,27 @@ h3.font-display {
   align-items: center;
   gap: 0.55rem;
 }
-.pcsb-row:hover { background: color-mix(in oklab, var(--pcsb-accent) 11%, transparent); }
+.pcsb-row:hover { background: color-mix(in oklab, var(--sidebar-foreground) 8%, transparent); }
 .pcsb-row:focus-visible {
   outline: 2px solid var(--sidebar-ring);
   outline-offset: 1px;
 }
 .pcsb-row[data-active="true"] {
-  background: color-mix(in oklab, var(--pcsb-accent) 15%, transparent);
-  box-shadow: inset 0 0 0 1px color-mix(in oklab, var(--pcsb-accent) 30%, transparent);
+  background: color-mix(in oklab, var(--sidebar-foreground) 12%, transparent);
+  box-shadow: none;
 }
 .pcsb-rail {
   position: absolute;
-  left: -0.4rem;
+  left: -0.15rem;
   top: 50%;
   height: 0;
-  width: 3px;
+  width: 2px;
   border-radius: 999px;
-  background: linear-gradient(180deg, var(--pcsb-accent), color-mix(in oklab, var(--pcsb-accent) 55%, transparent));
+  background: var(--sidebar-foreground);
   transform: translateY(-50%);
   transition: height 0.18s ease;
 }
-.pcsb-row[data-active="true"] .pcsb-rail { height: 1.15rem; }
+.pcsb-row[data-active="true"] .pcsb-rail { height: 1.05rem; }
 /* Ícone só existe no rail compacto — sem chip colorido, sem borrão azul. */
 .pcsb-ico {
   display: grid;
@@ -6331,26 +6339,26 @@ h3.font-display {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  font-size: 12.8px;
+  font-size: 13.5px;
   font-weight: 500;
-  line-height: 1.1;
-  letter-spacing: 0.003em;
+  line-height: 1.2;
+  letter-spacing: -0.005em;
 }
-.pcsb-row[data-active="true"] .pcsb-label { font-weight: 650; }
+.pcsb-row[data-active="true"] .pcsb-label { font-weight: 600; }
 .pcsb-kbd {
   flex: 0 0 auto;
-  min-width: 1.05rem;
+  min-width: 1.15rem;
   border-radius: 0.3rem;
   padding: 0.1rem 0.24rem;
   font-family: var(--font-numeric, inherit);
-  font-size: 9.5px;
+  font-size: 10px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   line-height: 1.25;
   text-align: center;
   color: var(--pcsb-dim);
-  border: 1px solid color-mix(in oklab, var(--pcsb-accent) 26%, transparent);
-  background: color-mix(in oklab, var(--pcsb-accent) 8%, transparent);
+  border: 1px solid var(--pcsb-line);
+  background: color-mix(in oklab, var(--sidebar-foreground) 6%, transparent);
   opacity: 0;
   transition: opacity 0.15s ease;
 }
@@ -6417,5 +6425,24 @@ h3.font-display {
 
 @media (prefers-reduced-motion: reduce) {
   .pcsb-row, .pcsb-ico, .pcsb-rail, .pcsb-kbd, .pcsb-brand { transition: none; }
+}
+
+/* Altura/respiro das linhas vence os defaults de .app-scope. */
+.app-scope .pcsb [data-sidebar="menu-button"].pcsb-row,
+.pcsb [data-sidebar="menu-button"].pcsb-row {
+  min-height: 2.4rem;
+  height: 2.4rem;
+  padding-inline: 0.5rem;
+  border-radius: 0.55rem;
+}
+.app-scope .pcsb [data-sidebar="menu-button"].pcsb-row--logout,
+.pcsb [data-sidebar="menu-button"].pcsb-row--logout {
+  min-height: 2.3rem;
+  height: 2.3rem;
+}
+[data-collapsible="icon"] .pcsb [data-sidebar="menu-button"].pcsb-row,
+.pcsb [data-collapsible="icon"] [data-sidebar="menu-button"].pcsb-row {
+  width: 2.4rem;
+  padding-inline: 0;
 }
 
