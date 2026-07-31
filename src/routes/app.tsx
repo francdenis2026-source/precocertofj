@@ -98,7 +98,7 @@ function AppHomeContent() {
 
   return (
     <AppShell>
-      <div className="app-dashboard mx-auto flex w-full max-w-[1500px] flex-col gap-4 px-4 py-4 md:px-6 md:py-5">
+      <div className="app-dashboard pc-page">
         <p className="sr-only">
           Atalhos do painel: Alt mais B foca a busca, Alt mais O troca a ordenação, Alt mais L limpa
           os filtros, Alt mais E busca estabelecimentos, Alt mais Shift mais F, M ou L alterna as
