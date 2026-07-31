@@ -134,13 +134,12 @@ export function StoresPanel({
           </div>
         ) : filtered.length === 0 ? (
           <EmptyState
-            size="sm"
-            role="status"
             icon={Store}
             title="Nenhum estabelecimento encontrado"
-            message="Ajuste a busca ou veja o diretório completo de mercados."
-            className="m-3 border-dashed"
+            description="Ajuste a busca ou veja o diretório completo de mercados."
+            className="m-3 border border-dashed border-border/70 py-6"
           />
+
 
         ) : (
           <ul className="divide-y divide-border/60">
