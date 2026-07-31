@@ -32,7 +32,7 @@ export function StoresColumn({
       aria-label="Estabelecimentos e ranking"
       className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
     >
-      <div className="grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-border/70 px-2 py-1.5">
+      <div className="grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-border/70 px-1.5 py-1">
         <div role="tablist" aria-label="Visões de estabelecimentos" className="flex min-w-0 gap-1">
           {(
             [
@@ -48,7 +48,7 @@ export function StoresColumn({
               onClick={() => setTab(t.id)}
               className={cn(
                 tc.filter,
-                "inline-flex h-7 shrink-0 items-center gap-1.5 rounded-md px-2.5 transition-colors duration-150",
+                "inline-flex h-6.5 shrink-0 items-center gap-1.5 rounded-full px-2.5 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
                 tab === t.id
                   ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:bg-primary/10 hover:text-primary",
@@ -72,7 +72,7 @@ export function StoresColumn({
           to={tab === "stores" ? "/app/estabelecimentos" : "/melhores-precos"}
           className={cn(
             tc.filter,
-            "shrink-0 rounded-md border border-border px-2.5 py-1 text-primary transition-colors hover:border-primary/50 hover:bg-primary/10",
+            "shrink-0 rounded-full px-2 py-0.5 text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
           )}
         >
           Ver todos
