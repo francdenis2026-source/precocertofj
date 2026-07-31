@@ -349,26 +349,32 @@ export function DashboardSearch() {
                   }}
                   onKeyDown={(e) => onResultKeyDown(e, i)}
                   onClick={() => setCompareKey(r.displayName)}
-                  className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-2 text-left transition-colors hover:bg-muted/50 focus-visible:bg-muted/50"
+                  className="pc-cols-search w-full px-3 py-1.5 text-left transition-colors hover:bg-muted/50 focus-visible:bg-muted/50"
                 >
-                  <div className="min-w-0">
-                    <p className={cn(tc.itemTitle, "truncate")}>{r.displayName}</p>
-                    <p className={cn(tc.metaMuted, "mt-0.5 flex items-center gap-1.5 truncate")}>
-                      {r.brand && <span className="truncate">{r.brand}</span>}
-                      {r.brand && <span aria-hidden>·</span>}
-                      <Store className="h-3 w-3 shrink-0" aria-hidden />
-                      {r.storesCount} {r.storesCount === 1 ? "mercado" : "mercados"}
-                    </p>
-                  </div>
-                  <div className="shrink-0 text-right">
+                  <span className="min-w-0">
+                    <span className={cn(tc.itemTitle, "block truncate")}>{r.displayName}</span>
+                    <span className={cn(tc.metaMuted, "block truncate")}>
+                      {r.brand ? r.brand : categoryLabel(r.category ?? "")}
+                    </span>
+                  </span>
+                  <span
+                    data-col="stores"
+                    className={cn(tc.num, "flex items-center justify-center gap-1 text-muted-foreground")}
+                    title={`${r.storesCount} ${r.storesCount === 1 ? "mercado" : "mercados"}`}
+                  >
+                    <Store className="h-3 w-3 shrink-0" aria-hidden />
+                    {r.storesCount}
+                  </span>
+                  <span className="text-right">
                     <Price value={r.minPrice ?? 0} size="sm" />
                     {r.maxPrice != null && r.minPrice != null && r.maxPrice > r.minPrice && (
-                      <p className={cn(tc.metaMuted)}>
+                      <span className={cn(tc.metaMuted, "block")}>
                         até <Price value={r.maxPrice} size="xs" tone="muted" />
-                      </p>
+                      </span>
                     )}
-                  </div>
+                  </span>
                 </button>
+
               </li>
             ))}
           </ul>
