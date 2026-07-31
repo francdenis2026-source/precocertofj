@@ -182,7 +182,7 @@ export function FavoritesDock({
         role="tablist"
         aria-label="Seções do painel"
         aria-orientation="horizontal"
-        className="flex shrink-0 gap-1 border-b border-border/70 px-2 py-1.5"
+        className="flex shrink-0 gap-1 border-b border-border/70 px-2 py-1"
       >
         {TABS.map((t, i) => (
           <button
@@ -200,7 +200,7 @@ export function FavoritesDock({
               "inline-flex h-7 items-center gap-1.5 rounded-md px-2.5 transition-colors",
               tab === t.id
                 ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                : "text-muted-foreground hover:bg-primary/10 hover:text-primary",
             )}
           >
             {t.label}
@@ -459,9 +459,9 @@ function Empty({
   to?: "/app/produtos" | "/app/estabelecimentos" | "/lista";
 }) {
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-2 p-6 text-center">
-      <Icon className="h-6 w-6 text-muted-foreground" aria-hidden />
-      <p className="max-w-xs text-[12.5px] text-muted-foreground">{text}</p>
+    <div className="flex h-full flex-col items-center justify-center gap-1.5 px-3 py-4 text-center">
+      <Icon className="h-5 w-5 text-muted-foreground" aria-hidden />
+      <p className="max-w-[15rem] text-[12px] leading-snug text-muted-foreground">{text}</p>
       {actionLabel && to && (
         <Link
           to={to}

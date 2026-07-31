@@ -27,10 +27,13 @@ export function StoresPanel({
   stores,
   loading,
   onOpenDetails,
+  bare = false,
 }: {
   stores: PublicStore[];
   loading?: boolean;
   onOpenDetails: (name: string) => void;
+  /** Sem moldura própria — usado dentro do painel unificado com abas. */
+  bare?: boolean;
 }) {
   const [q, setQ] = useState("");
   const searchRef = useRef<HTMLInputElement>(null);
@@ -56,24 +59,34 @@ export function StoresPanel({
   return (
     <section
       aria-label="Estabelecimentos"
-      className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
+      className={cn(
+        "flex min-h-0 flex-1 flex-col overflow-hidden",
+        !bare && "rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md",
+      )}
     >
-      <header className="shrink-0 space-y-2 border-b border-border/70 px-3 py-2">
-        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
-          <div className="min-w-0">
-            <h2 className={cn(tc.panelTitle, "truncate")}>Estabelecimentos</h2>
-            <p className={cn(tc.panelNote, "truncate")}>{stores.length} lojas com preços</p>
+      <header
+        className={cn(
+          "shrink-0 border-b border-border/70 px-3",
+          bare ? "py-1.5" : "space-y-2 py-2",
+        )}
+      >
+        {!bare && (
+          <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+            <div className="min-w-0">
+              <h2 className={cn(tc.panelTitle, "truncate")}>Estabelecimentos</h2>
+              <p className={cn(tc.panelNote, "truncate")}>{stores.length} lojas com preços</p>
+            </div>
+            <Link
+              to="/app/estabelecimentos"
+              className={cn(
+                tc.filter,
+                "shrink-0 rounded-md border border-border px-2.5 py-1 text-primary transition-colors hover:border-primary/50",
+              )}
+            >
+              Ver todos
+            </Link>
           </div>
-          <Link
-            to="/app/estabelecimentos"
-            className={cn(
-              tc.filter,
-              "shrink-0 rounded-md border border-border px-2.5 py-1 text-primary transition-colors hover:border-primary/50",
-            )}
-          >
-            Ver todos
-          </Link>
-        </div>
+        )}
         <label className="relative block">
           <span className="sr-only">Buscar estabelecimento</span>
           <SearchIcon
@@ -97,6 +110,7 @@ export function StoresPanel({
           />
         </label>
       </header>
+
 
       <div
         aria-hidden

@@ -8,9 +8,9 @@ import { StoreDetailsDrawer } from "@/components/stores/StoreDetailsDrawer";
 import type { PublicStore } from "@/lib/stores-public.functions";
 
 import { DashboardSearch } from "@/components/app/DashboardSearch";
-import { StoreRankStrip } from "@/components/app/StoreRankStrip";
-import { StoresPanel } from "@/components/app/StoresPanel";
+import { StoresColumn } from "@/components/app/StoresColumn";
 import { FavoritesDock } from "@/components/app/FavoritesDock";
+
 import { ForceUpdateButton } from "@/components/app/ForceUpdateButton";
 import { Price } from "@/components/ds/Price";
 import { useAppHomeData } from "@/hooks/useAppHomeData";
@@ -209,18 +209,15 @@ function AppHomeContent() {
             <DashboardSearch />
           </div>
 
-          <div className="grid content-start gap-2 lg:col-span-3 lg:min-h-0 lg:grid-rows-2 lg:content-stretch">
-            <div className="flex max-h-[260px] min-h-[180px] flex-col lg:max-h-none lg:min-h-0">
-              <StoresPanel
-                stores={publicStoresQuery.data ?? []}
-                loading={publicStoresQuery.isLoading}
-                onOpenDetails={openStoreByName}
-              />
-            </div>
-            <div className="flex max-h-[240px] min-h-[170px] flex-col lg:max-h-none lg:min-h-0">
-              <StoreRankStrip storeNames={storeNameSet} onOpenStore={openStoreByName} />
-            </div>
+          <div className="flex min-h-[300px] flex-col lg:col-span-3 lg:min-h-0">
+            <StoresColumn
+              stores={publicStoresQuery.data ?? []}
+              loading={publicStoresQuery.isLoading}
+              onOpenDetails={openStoreByName}
+              storeNames={storeNameSet}
+            />
           </div>
+
 
 
           <div className="flex min-h-0 flex-col lg:col-span-4">
