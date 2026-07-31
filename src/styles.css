@@ -5615,3 +5615,90 @@ h3.font-display {
   .pc-topnav-item { transition: none; }
   .pc-topnav-item:hover { transform: none; }
 }
+
+/* ============================================================
+   Painéis (cliente e administrador) — Oswald TypeClear
+   Oswald condensada assume os papéis de display: títulos, rótulos
+   de navegação/abas, cabeçalhos de tabela, selos e KPIs. O corpo
+   de leitura permanece na sans para conforto de leitura.
+   Nenhum tamanho/espacamento é alterado — apenas família, peso e
+   tracking, calibrados para a condensada.
+   ============================================================ */
+.app-scope h1,
+.app-scope h2,
+.app-scope h3,
+.app-scope h4,
+.admin-scope h1,
+.admin-scope h2,
+.admin-scope h3,
+.admin-scope h4 {
+  font-family: var(--font-condensed);
+  letter-spacing: 0.012em;
+  font-kerning: normal;
+}
+
+/* Serif editorial continua tendo prioridade onde foi escolhida. */
+.app-scope h1.font-serif,
+.app-scope h2.font-serif,
+.app-scope h3.font-serif,
+.app-scope h4.font-serif,
+.app-scope .font-serif,
+.admin-scope h1.font-serif,
+.admin-scope h2.font-serif,
+.admin-scope h3.font-serif,
+.admin-scope h4.font-serif,
+.admin-scope .font-serif {
+  font-family: var(--font-editorial);
+  letter-spacing: -0.005em;
+}
+
+/* Títulos e rótulos de cards */
+.app-scope [data-slot="card-title"],
+.admin-scope [data-slot="card-title"] {
+  font-family: var(--font-condensed);
+  font-weight: 600;
+  letter-spacing: 0.014em;
+}
+
+/* Navegação: sidebar, abas, breadcrumb e labels de comando */
+.app-scope [data-sidebar="menu-button"],
+.app-scope [data-sidebar="menu-sub-button"],
+.app-scope [data-sidebar="group-label"],
+.app-scope [role="tab"],
+.admin-scope [data-sidebar="menu-button"],
+.admin-scope [data-sidebar="menu-sub-button"],
+.admin-scope [data-sidebar="group-label"],
+.admin-scope [role="tab"] {
+  font-family: var(--font-condensed);
+  letter-spacing: 0.022em;
+}
+
+/* Cabeçalhos de tabela e selos */
+.app-scope th,
+.app-scope [data-slot="badge"],
+.admin-scope th,
+.admin-scope [data-slot="badge"] {
+  font-family: var(--font-condensed);
+  letter-spacing: 0.05em;
+}
+
+/* KPIs, contagens e números tabulares dos painéis */
+.app-scope .pc-num,
+.app-scope .pc-price,
+.app-scope .tabular-nums,
+.admin-scope .pc-num,
+.admin-scope .pc-price,
+.admin-scope .tabular-nums {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* Mobile: condensada precisa de mais respiro nos rótulos de navegação. */
+@media (max-width: 640px) {
+  .app-scope [data-sidebar="menu-button"],
+  .app-scope [role="tab"],
+  .admin-scope [data-sidebar="menu-button"],
+  .admin-scope [role="tab"] {
+    letter-spacing: 0.03em;
+    line-height: 1.2;
+  }
+}
