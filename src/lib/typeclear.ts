@@ -64,6 +64,13 @@ export const tc = {
   cell: `${fluid(13, 14.5)} leading-[1.35] text-foreground/80`,
   /** Nome/título de item em lista. */
   itemTitle: `${fluid(13.5, 15.5)} font-semibold leading-[1.3] text-foreground`,
+  /** Título de painel (cabeçalho de card do painel) — um degrau acima das linhas da lista. */
+  panelTitle: `${fluid(14.5, 16.5)} font-semibold leading-[1.25] tracking-[-0.01em] text-foreground`,
+  /** Apoio do título de painel — discreto, uma linha. */
+  panelNote: `${fluid(12, 13)} leading-[1.3] text-muted-foreground`,
+  /** Rótulo de filtro/ordenação em caixa normal (menos ruído que caixa alta). */
+  filter: `${fluid(12.5, 13.5)} font-medium leading-none tracking-normal`,
+
   /** Números (contagens, distâncias, preços). */
   num: `pc-price ${fluid(13, 14.5)} leading-[1.2]`,
   /** Selo minúsculo. */
