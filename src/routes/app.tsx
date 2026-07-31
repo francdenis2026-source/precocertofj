@@ -192,9 +192,11 @@ function AppHomeContent() {
                 label="Suas listas"
                 value={summary ? String(summary.totals.listsCount) : "—"}
                 hint={
-                  summary
-                    ? `${summary.totals.itemsCount} ${summary.totals.itemsCount === 1 ? "item" : "itens"} · abrir listas`
-                    : "sem dados por enquanto"
+                  !summary
+                    ? "sem dados por enquanto"
+                    : summary.totals.listsCount === 0
+                      ? "crie sua primeira lista"
+                      : `${summary.totals.itemsCount} ${summary.totals.itemsCount === 1 ? "item" : "itens"} · abrir listas`
                 }
                 tone="primary"
                 to="/lista"
@@ -203,14 +205,19 @@ function AppHomeContent() {
                 icon={Star}
                 label="Favoritos"
                 value={summary ? String(summary.totals.favoritesCount) : "—"}
-                hint="preços acompanhados por você"
+                hint={
+                  summary && summary.totals.favoritesCount === 0
+                    ? "favorite produtos para acompanhar"
+                    : "preços acompanhados por você"
+                }
                 tone="brand"
+                to="/favoritos"
               />
               <Metric
                 icon={TrendingDown}
                 label="Cesta mais barata"
                 value={
-                  summary?.totals.estimatedCartTotal != null ? (
+                  summary?.totals.estimatedCartTotal ? (
                     <Price value={summary.totals.estimatedCartTotal} size="sm" />
                   ) : (
                     "—"
@@ -222,7 +229,9 @@ function AppHomeContent() {
                     : "favorite produtos para calcular"
                 }
                 tone="savings"
+                to="/app/produtos"
               />
+
               <Metric
                 icon={Wallet}
                 label="Economia potencial"
