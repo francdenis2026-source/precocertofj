@@ -100,7 +100,7 @@ export function FavoritesDock({
         role="tablist"
         aria-label="Seções do painel"
         aria-orientation="horizontal"
-        className="flex shrink-0 gap-1 border-b border-border/70 p-2"
+        className="flex shrink-0 gap-1 border-b border-border/70 px-2 py-1.5"
       >
         {TABS.map((t, i) => (
           <button
@@ -146,10 +146,10 @@ export function FavoritesDock({
                 return (
                 <li
                   key={f.favoriteId}
-                     className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-3 py-1.5"
+                     className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-2.5 py-1"
                 >
                   <div className="min-w-0">
-                     <p className={cn(tc.itemTitle, "truncate")}>
+                     <p className={cn(tc.itemTitle, "truncate")} title={f.displayName}>
                       {f.displayName}
                     </p>
                      <p className={cn(tc.metaMuted, "truncate")}>
@@ -213,13 +213,14 @@ export function FavoritesDock({
                 return (
                   <li
                     key={m.favoriteId}
-                     className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-3 py-1.5"
+                     className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2 px-2.5 py-1"
                   >
                     <div className="min-w-0">
                       <button
                         type="button"
                         disabled={!clickable}
                         onClick={() => onOpenStore(m.marketName)}
+                        title={m.marketName}
                          className={cn(tc.storeName, "block max-w-full truncate text-left enabled:hover:text-primary disabled:cursor-default")}
                       >
                         {m.marketName}
@@ -262,11 +263,12 @@ export function FavoritesDock({
           ) : (
             <ul className="divide-y divide-border/60">
               {pagedLists.map((l) => (
-                 <li key={l.id} className="px-3 py-1.5">
+                 <li key={l.id} className="px-2.5 py-1">
                   <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
                     <div className="min-w-0">
                       <Link
                         to="/lista"
+                        title={l.name}
                          className={cn(tc.itemTitle, "block truncate hover:text-primary")}
                       >
                         {l.name}
