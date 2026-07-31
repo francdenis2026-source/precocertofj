@@ -119,7 +119,7 @@ function AppHomeContent() {
 
   return (
     <AppShell>
-      <div className="app-dashboard pc-page">
+      <div className="app-dashboard pc-page" ref={wheelRootRef}>
         <p className="sr-only">
           Atalhos do painel: Alt mais B foca a busca, Alt mais O troca a ordenação, Alt mais L limpa
           os filtros, Alt mais E busca estabelecimentos, Alt mais Shift mais F, M ou L alterna as
