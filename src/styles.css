@@ -6236,7 +6236,20 @@ h3.font-display {
 }
 
 /* ── Grupos ────────────────────────────────────────────────────────────── */
-.pcsb-content { padding: 0.5rem 0.45rem; gap: 0; }
+/* A lista de navegação rola sozinha e não empurra a rolagem para a página. */
+.pcsb-content {
+  padding: 0.5rem 0.45rem;
+  gap: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in oklab, var(--pcsb-accent) 45%, transparent) transparent;
+}
+.pcsb-content::-webkit-scrollbar { width: 6px; }
+.pcsb-content::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--pcsb-accent) 42%, transparent);
+}
 .pcsb-group { padding: 0.15rem 0 0.4rem; }
 .pcsb-grouplabel {
   display: flex;
