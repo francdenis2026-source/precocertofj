@@ -457,8 +457,15 @@ function ListaContent() {
               {listsQuery.isLoading && (
                 <li className="p-2">
                   <ListRowsSkeleton rows={4} />
+                  {listsStalled && (
+                    <StalledNotice
+                      onRetry={() => void listsQuery.refetch()}
+                      message="Suas listas estão demorando a carregar."
+                    />
+                  )}
                 </li>
               )}
+
               {listsQuery.isError && (
                 <li className="p-3">
                   <div role="alert" className="rounded-xl border border-destructive/30 bg-destructive/5 p-3">
