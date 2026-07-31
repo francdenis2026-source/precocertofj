@@ -24,7 +24,6 @@ type SessionState = {
 let state: SessionState = { session: null, user: null, loading: true };
 const listeners = new Set<() => void>();
 let started = false;
-let unsubscribe: (() => void) | null = null;
 
 const serverState: SessionState = { session: null, user: null, loading: true };
 
@@ -49,7 +48,7 @@ function start() {
   const { data: sub } = supabase.auth.onAuthStateChange((_event, s) => {
     emit({ session: s, user: s?.user ?? null, loading: false });
   });
-  unsubscribe = () => sub.subscription.unsubscribe();
+  void sub;
 
   void supabase.auth.getSession().then(({ data }) => {
     emit({ session: data.session, user: data.session?.user ?? null, loading: false });
@@ -59,11 +58,10 @@ function start() {
 function subscribe(listener: () => void) {
   listeners.add(listener);
   start();
+  // A assinatura do Supabase é mantida viva de propósito: recriá-la a cada
+  // navegação reintroduziria o custo que este store existe para eliminar.
   return () => {
     listeners.delete(listener);
-    // A assinatura do Supabase é mantida viva de propósito: recriá-la a cada
-    // navegação reintroduziria o custo que este store existe para eliminar.
-    if (listeners.size === 0 && unsubscribe && false) unsubscribe();
   };
 }
 
