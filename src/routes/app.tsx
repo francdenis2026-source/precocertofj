@@ -18,6 +18,7 @@ import { Price } from "@/components/ds/Price";
 import { useAppHomeData } from "@/hooks/useAppHomeData";
 import { useMeasuredBar } from "@/hooks/use-measured-bar";
 import { useStalled } from "@/hooks/use-stalled";
+import { useWheelScrollForward } from "@/hooks/use-wheel-scroll-forward";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
 
