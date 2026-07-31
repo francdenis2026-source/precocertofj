@@ -302,7 +302,33 @@ export function FavoritesDock({
             </ul>
           ))}
       </div>
+
+      {total > PAGE_SIZE && (
+        <div className="flex shrink-0 items-center justify-between gap-2 border-t border-border/70 px-2 py-1">
+          <p className="truncate text-[11px] text-muted-foreground">
+            {start + 1}–{Math.min(end, total)} de {total}
+          </p>
+          <div className="flex shrink-0 items-center gap-1">
+            <IconBtn
+              label="Página anterior"
+              onClick={() => setPage(Math.max(0, safePage - 1))}
+              icon={ChevronLeft}
+              disabled={safePage === 0}
+            />
+            <span className="text-[11px] tabular-nums text-muted-foreground">
+              {safePage + 1}/{pageCount}
+            </span>
+            <IconBtn
+              label="Próxima página"
+              onClick={() => setPage(Math.min(pageCount - 1, safePage + 1))}
+              icon={ChevronRight}
+              disabled={safePage >= pageCount - 1}
+            />
+          </div>
+        </div>
+      )}
     </section>
+
   );
 }
 
