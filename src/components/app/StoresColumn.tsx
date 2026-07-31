@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
+import { ArrowUpRight, Store, TrendingDown } from "lucide-react";
+
 
 import { StoresPanel } from "@/components/app/StoresPanel";
 import { StoreRankStrip } from "@/components/app/StoreRankStrip";
@@ -30,19 +32,20 @@ export function StoresColumn({
   return (
     <section
       aria-label="Estabelecimentos e ranking"
-      className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
+      data-panel="stores"
+      className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border/70 border-l-[3px] border-l-brand bg-card/94 shadow-sm backdrop-blur-md"
     >
-      <div className="grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-1.5 border-b border-border/70 px-1.5 py-1">
+      <div className="grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-1 border-b border-border/70 bg-brand/[0.09] px-1.5 py-1">
         <div role="tablist" aria-label="Visões de estabelecimentos" className="flex min-w-0 gap-1">
           {(
             [
               {
                 id: "stores" as const,
-                label: "Estabelecimentos",
-                short: "Lojas",
+                label: "Lojas",
+                icon: Store,
                 count: stores.length,
               },
-              { id: "rank" as const, label: "Mais baratos", short: "Baratos" },
+              { id: "rank" as const, label: "Mais baratos", icon: TrendingDown },
             ]
           ).map((t) => (
             <button
@@ -50,18 +53,19 @@ export function StoresColumn({
               type="button"
               role="tab"
               aria-selected={tab === t.id}
-              aria-label={t.label}
+              aria-label={t.id === "stores" ? "Estabelecimentos" : "Mercados mais baratos"}
+              title={t.id === "stores" ? "Estabelecimentos" : "Mercados mais baratos"}
               onClick={() => setTab(t.id)}
               className={cn(
                 tc.filter,
-                "inline-flex h-6.5 min-w-0 items-center gap-1 rounded-full px-2 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1 sm:gap-1.5 sm:px-2.5",
+                "inline-flex h-7 min-w-0 items-center gap-1 rounded-full px-2 transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
                 tab === t.id
                   ? "bg-primary text-primary-foreground"
                   : "text-muted-foreground hover:bg-primary/10 hover:text-primary",
               )}
             >
-              <span className="truncate min-[380px]:hidden">{t.short}</span>
-              <span className="hidden truncate min-[380px]:inline">{t.label}</span>
+              <t.icon className="h-3.5 w-3.5 shrink-0" aria-hidden />
+              <span className="truncate">{t.label}</span>
               {typeof t.count === "number" && (
                 <span
                   className={cn(
@@ -78,15 +82,13 @@ export function StoresColumn({
         <Link
           to={tab === "stores" ? "/app/estabelecimentos" : "/melhores-precos"}
           aria-label="Ver todos"
-          className={cn(
-            tc.filter,
-            "shrink-0 whitespace-nowrap rounded-full px-2 py-0.5 text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
-          )}
+          title="Ver todos"
+          className="grid h-7 w-7 shrink-0 place-items-center rounded-full text-primary transition-colors hover:bg-primary/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1"
         >
-          <span className="min-[380px]:hidden">Todos</span>
-          <span className="hidden min-[380px]:inline">Ver todos</span>
+          <ArrowUpRight className="h-4 w-4" aria-hidden />
         </Link>
       </div>
+
 
 
       <div className="flex min-h-0 flex-1 flex-col">

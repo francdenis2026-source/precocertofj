@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { Link } from "@tanstack/react-router";
-import { Search as SearchIcon, Store, X } from "lucide-react";
+import { ArrowUpDown, Search as SearchIcon, Store, X } from "lucide-react";
 
 import { Price } from "@/components/ds/Price";
 import { ProductCompareSheet } from "@/components/app/ProductCompareSheet";
@@ -169,10 +169,14 @@ export function DashboardSearch() {
   return (
     <section
       aria-label="Buscar preços"
-      className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
+      data-panel="search"
+      className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border/70 border-l-[3px] border-l-primary bg-card/94 shadow-sm backdrop-blur-md"
     >
-      <div className="shrink-0 space-y-2 border-b border-border/70 p-3">
-        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+      <div className="shrink-0 space-y-2 border-b border-border/70 bg-primary/[0.06] p-3">
+        <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2">
+          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-md bg-primary/15 text-primary">
+            <SearchIcon className="h-4 w-4" aria-hidden />
+          </span>
           <div className="min-w-0">
             <h2 className={cn(tc.panelTitle, "truncate")}>Buscar produtos e preços</h2>
             <p className={cn(tc.panelNote, "truncate")}>Menores preços dos mercados de Feijó</p>
@@ -184,6 +188,7 @@ export function DashboardSearch() {
             Alt + B
           </kbd>
         </div>
+
 
         <label className="relative block min-w-0">
           <span className="sr-only">Buscar produto</span>
@@ -225,59 +230,74 @@ export function DashboardSearch() {
           )}
         </label>
 
-        <div className="flex items-center gap-1.5">
-          <div
-            role="radiogroup"
-            aria-label="Filtrar por categoria"
-            className="flex min-w-0 flex-1 gap-1.5 overflow-x-auto rounded-lg border border-border/60 bg-muted/25 px-1.5 py-1 transition-colors hover:border-primary/40 hover:bg-primary/[0.04] focus-within:border-primary/50 [scrollbar-width:none] [&::-webkit-scrollbar]{display:none}"
-          >
-            <Chip active={!category} onClick={() => setCategory(null)} {...chipRoving.itemProps(0)}>
-              Todas
-            </Chip>
-            {categories.map((c, i) => (
+        <div className="flex flex-wrap items-stretch gap-2">
+
+          <div className="flex min-w-0 flex-1 items-center gap-1.5 rounded-lg border border-border/60 bg-background/70 px-1.5 py-1 transition-colors focus-within:border-primary/50">
+            <span className="shrink-0 rounded bg-muted px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-muted-foreground">
+              Categoria
+            </span>
+            <div
+              role="radiogroup"
+              aria-label="Filtrar por categoria"
+              className="flex min-w-0 flex-1 gap-1.5 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]{display:none}"
+            >
               <Chip
-                key={c}
-                active={category === c}
-                onClick={() => setCategory(category === c ? null : c)}
-                {...chipRoving.itemProps(i + 1)}
+                active={!category}
+                onClick={() => setCategory(null)}
+                {...chipRoving.itemProps(0)}
               >
-                {categoryLabel(c)}
+                Todas
               </Chip>
-            ))}
+              {categories.map((c, i) => (
+                <Chip
+                  key={c}
+                  active={category === c}
+                  onClick={() => setCategory(category === c ? null : c)}
+                  {...chipRoving.itemProps(i + 1)}
+                >
+                  {categoryLabel(c)}
+                </Chip>
+              ))}
+            </div>
           </div>
 
-          <div
-            role="radiogroup"
-            aria-label="Ordenar resultados"
-            className="flex shrink-0 items-center gap-0.5 rounded-lg border border-border/60 bg-muted/25 p-0.5 transition-colors hover:border-primary/40"
-          >
-            {SORTS.map((s, i) => (
-              <button
-                key={s.id}
-                type="button"
-                role="radio"
-                aria-checked={sort === s.id}
-                aria-label={s.label}
-                title={s.label}
-                onClick={() => setSort(s.id)}
-                {...sortRoving.itemProps(i)}
-                className={cn(
-                  tc.filter,
-                  "h-7 whitespace-nowrap rounded-md px-2 text-[11.5px] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
-                  sort === s.id
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-muted-foreground hover:bg-primary/10 hover:text-primary",
-                )}
-              >
-                <span className="sm:hidden">{s.shortLabel}</span>
-                <span className="hidden sm:inline">{s.label}</span>
-              </button>
-            ))}
+          <div className="flex shrink-0 items-center gap-1.5 rounded-lg border border-accent/40 bg-accent/[0.08] px-1.5 py-1">
+            <span className="shrink-0 inline-flex items-center gap-1 rounded bg-accent/20 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-[0.14em] text-accent-ink">
+              <ArrowUpDown className="h-3 w-3" aria-hidden />
+              Ordenar
+            </span>
+            <div
+              role="radiogroup"
+              aria-label="Ordenar resultados"
+              className="flex shrink-0 items-center gap-0.5"
+            >
+              {SORTS.map((s, i) => (
+                <button
+                  key={s.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={sort === s.id}
+                  aria-label={s.label}
+                  title={s.label}
+                  onClick={() => setSort(s.id)}
+                  {...sortRoving.itemProps(i)}
+                  className={cn(
+                    tc.filter,
+                    "h-7 whitespace-nowrap rounded-md px-2 text-[11.5px] transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+                    sort === s.id
+                      ? "bg-foreground text-background shadow-sm"
+                      : "text-muted-foreground hover:bg-foreground/10 hover:text-foreground",
+                  )}
+                >
+                  <span className="sm:hidden">{s.shortLabel}</span>
+                  <span className="hidden sm:inline">{s.label}</span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
-
-
       </div>
+
 
       <p id="dashboard-search-help" className="sr-only">
         Use seta para baixo para entrar na lista de resultados, setas para navegar, Enter para abrir

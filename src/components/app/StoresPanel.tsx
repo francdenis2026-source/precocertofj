@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Info, Loader2, Search as SearchIcon, Store } from "lucide-react";
+import { Info, Loader2, Search as SearchIcon, Store } from "lucide-react";
 import { EmptyState } from "@/components/layout";
 
 
@@ -121,13 +121,14 @@ export function StoresPanel({
           "pc-cols-stores shrink-0 border-b border-border/60 bg-muted/30 px-3 py-1",
         )}
       >
-        <span className="w-8" />
+        <span className="w-10" />
         <span className="truncate">Estabelecimento</span>
         <span data-col="items" className="text-center">
           Itens
         </span>
-        <span className="w-[3.75rem] text-right">Abrir</span>
+        <span className="w-7 text-right">+</span>
       </div>
+
 
       <div className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]">
         {loading ? (
@@ -150,16 +151,31 @@ export function StoresPanel({
               return (
                 <li
                   key={s.id}
-                  className="pc-cols-stores px-3 py-1.5 transition-colors hover:bg-muted/50"
+                  className="pc-cols-stores group px-3 py-2 transition-colors hover:bg-muted/50"
                 >
-                  <StoreLogo src={logo} name={s.name} className="h-8 w-8" />
                   <Link
                     to="/app/loja/$id"
                     params={{ id: s.id }}
+                    aria-label={`Abrir página de ${s.name}`}
+                    className="shrink-0 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  >
+                    <StoreLogo src={logo} name={s.name} className="h-11 w-11 p-1.5" />
+                  </Link>
+                  <Link
+                    to="/app/loja/$id"
+                    params={{ id: s.id }}
+                    title={s.name}
                     className="min-w-0 focus-visible:underline"
                   >
-                    <span className={cn(tc.storeName, "block truncate")}>{s.name}</span>
-                    <span className={cn(tc.metaMuted, "block truncate")}>
+                    <span
+                      className={cn(
+                        tc.storeName,
+                        "block truncate leading-tight group-hover:text-primary",
+                      )}
+                    >
+                      {s.name}
+                    </span>
+                    <span className={cn(tc.metaMuted, "block truncate leading-tight")}>
                       {s.neighborhood ?? s.city}
                     </span>
                   </Link>
@@ -177,30 +193,20 @@ export function StoresPanel({
                     {s.productCount}
                   </span>
 
-
-
-                  <span className="flex shrink-0 items-center gap-1">
-                    <button
-                      type="button"
-                      aria-label={`Resumo rápido de ${s.name}`}
-                      onClick={() => onOpenDetails(s.name)}
-                      className="grid h-7 w-7 place-items-center rounded-md border border-border/70 text-muted-foreground transition-colors hover:text-foreground"
-                    >
-                      <Info className="h-3.5 w-3.5" aria-hidden />
-                    </button>
-                    <Link
-                      to="/app/loja/$id"
-                      params={{ id: s.id }}
-                      aria-label={`Abrir página de ${s.name}`}
-                      className="grid h-7 w-7 place-items-center rounded-md bg-primary/10 text-primary transition-colors hover:bg-primary/20"
-                    >
-                      <ArrowRight className="h-3.5 w-3.5" aria-hidden />
-                    </Link>
-                  </span>
+                  <button
+                    type="button"
+                    aria-label={`Resumo rápido de ${s.name}`}
+                    title={`Resumo rápido de ${s.name}`}
+                    onClick={() => onOpenDetails(s.name)}
+                    className="grid h-7 w-7 shrink-0 place-items-center rounded-md border border-border/70 text-muted-foreground transition-colors hover:border-primary/50 hover:text-primary"
+                  >
+                    <Info className="h-3.5 w-3.5" aria-hidden />
+                  </button>
                 </li>
               );
             })}
           </ul>
+
         )}
       </div>
     </section>
