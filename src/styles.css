@@ -6094,3 +6094,12 @@ h3.font-display {
 [aria-current="page"] .pc-nav-label {
   font-weight: 600;
 }
+
+/* Janela única: o container rolável principal não rola quando o dashboard
+   já ocupa toda a altura disponível (evita 1–2px de "scroll fantasma"). */
+@media (min-width: 1024px) and (min-height: 620px) {
+  .app-scope .pc-scroll-main:has(.app-dashboard) {
+    overflow: hidden;
+    padding-bottom: 0;
+  }
+}
