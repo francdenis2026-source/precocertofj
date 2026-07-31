@@ -1124,33 +1124,35 @@ main :is(p, li, dt, dd, td, th, label, a, button, input, textarea, figcaption) {
    `html[data-density]` reescala paddings/gaps/alturas SEM mexer na
    tipografia — a hierarquia visual permanece idêntica nos dois modos. */
 .app-scope {
-  --pc-gap: 1rem;
-  --pc-pad-x: 1rem;
-  --pc-pad-y: 1rem;
-  --pc-panel-min: 22rem;
-  --pc-panel-pad: 0.75rem;
-  --pc-row-gap: 0.5rem;
+  --pc-gap: 0.7rem;
+  --pc-pad-x: 0.75rem;
+  --pc-pad-y: 0.5rem;
+  --pc-panel-min: 15rem;
+  --pc-panel-pad: 0.6rem;
+  --pc-row-gap: 0.35rem;
 }
 @media (min-width: 768px) {
   .app-scope {
-    --pc-pad-x: 1.5rem;
-    --pc-pad-y: 1.25rem;
+    --pc-gap: 0.8rem;
+    --pc-pad-x: 1.1rem;
+    --pc-pad-y: 0.6rem;
   }
 }
 html[data-density="compact"] .app-scope {
-  --pc-gap: 0.625rem;
-  --pc-pad-x: 0.75rem;
-  --pc-pad-y: 0.625rem;
-  --pc-panel-min: 18rem;
-  --pc-panel-pad: 0.5rem;
-  --pc-row-gap: 0.3rem;
+  --pc-gap: 0.5rem;
+  --pc-pad-x: 0.6rem;
+  --pc-pad-y: 0.4rem;
+  --pc-panel-min: 13rem;
+  --pc-panel-pad: 0.45rem;
+  --pc-row-gap: 0.25rem;
 }
 @media (min-width: 768px) {
   html[data-density="compact"] .app-scope {
-    --pc-pad-x: 1rem;
-    --pc-pad-y: 0.75rem;
+    --pc-pad-x: 0.8rem;
+    --pc-pad-y: 0.5rem;
   }
 }
+
 
 /* Container de página do painel — respeita a densidade escolhida. */
 .pc-page {
