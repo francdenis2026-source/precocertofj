@@ -198,9 +198,15 @@ function RootComponent() {
     document.documentElement.dataset.adminBoot = isAdmin ? "1" : "0";
   }, [adminPathname]);
 
-  // PWA: registra o service worker (auto-update) apenas em produção real.
+  // Cache-busting: remove service workers/caches antigos e monitora a versão
+  // publicada — quando um novo Publish sobe, a página se atualiza sozinha.
   useEffect(() => {
     void import("@/lib/pwa").then((m) => m.setupServiceWorker());
+    let cleanup: (() => void) | undefined;
+    void import("@/lib/app-version").then((m) => {
+      cleanup = m.setupVersionWatcher();
+    });
+    return () => cleanup?.();
   }, []);
 
   // A11y: toda região rolável recebe foco por teclado + setas/PageUp/Home/End.
