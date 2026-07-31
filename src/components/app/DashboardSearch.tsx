@@ -16,7 +16,6 @@ import { useRovingFocus } from "@/hooks/use-roving-focus";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
 
-
 type SortKey = "cheapest" | "priciest" | "recent";
 
 const SORTS: { id: SortKey; label: string }[] = [
@@ -134,7 +133,6 @@ export function DashboardSearch() {
     }
   };
 
-
   return (
     <section
       aria-label="Buscar preços"
@@ -216,11 +214,7 @@ export function DashboardSearch() {
           aria-label="Filtrar por categoria"
           className="flex gap-1.5 overflow-x-auto pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]{display:none}"
         >
-          <Chip
-            active={!category}
-            onClick={() => setCategory(null)}
-            {...chipRoving.itemProps(0)}
-          >
+          <Chip active={!category} onClick={() => setCategory(null)} {...chipRoving.itemProps(0)}>
             Todas
           </Chip>
           {categories.map((c, i) => (
@@ -236,10 +230,9 @@ export function DashboardSearch() {
         </div>
       </div>
 
-
       <p id="dashboard-search-help" className="sr-only">
-        Use seta para baixo para entrar na lista de resultados, setas para
-        navegar, Enter para abrir e Esc para voltar ao campo de busca.
+        Use seta para baixo para entrar na lista de resultados, setas para navegar, Enter para abrir
+        e Esc para voltar ao campo de busca.
       </p>
 
       <div
@@ -247,18 +240,17 @@ export function DashboardSearch() {
         aria-live="polite"
         aria-busy={resultsQ.isLoading}
       >
-
         {!active ? (
-           <p className={cn(tc.meta, "p-6 text-center")}>
-            Digite ao menos 2 letras ou escolha uma categoria para ver os preços
-            mais recentes dos mercados de Feijó.
+          <p className={cn(tc.meta, "p-6 text-center")}>
+            Digite ao menos 2 letras ou escolha uma categoria para ver os preços mais recentes dos
+            mercados de Feijó.
           </p>
         ) : resultsQ.isLoading ? (
-           <div className={cn(tc.meta, "flex items-center gap-2 p-6")}>
+          <div className={cn(tc.meta, "flex items-center gap-2 p-6")}>
             <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Buscando…
           </div>
         ) : results.length === 0 ? (
-           <p className={cn(tc.meta, "p-6 text-center")}>
+          <p className={cn(tc.meta, "p-6 text-center")}>
             Nenhum produto encontrado para esse filtro.
           </p>
         ) : (
@@ -266,7 +258,6 @@ export function DashboardSearch() {
             role="listbox"
             id="dashboard-search-results"
             aria-label="Resultados da busca"
-
             className="divide-y divide-border/60"
           >
             {results.map((r, i) => (
@@ -280,43 +271,36 @@ export function DashboardSearch() {
                   }}
                   onKeyDown={(e) => onResultKeyDown(e, i)}
                   search={{ q: r.displayName } as never}
-                   className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-2 transition-colors hover:bg-muted/50 focus-visible:bg-muted/50"
+                  className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-2 transition-colors hover:bg-muted/50 focus-visible:bg-muted/50"
                 >
                   <div className="min-w-0">
-                     <p className={cn(tc.itemTitle, "truncate")}>
-                      {r.displayName}
-                    </p>
-                     <p className={cn(tc.metaMuted, "mt-0.5 flex items-center gap-1.5 truncate")}>
+                    <p className={cn(tc.itemTitle, "truncate")}>{r.displayName}</p>
+                    <p className={cn(tc.metaMuted, "mt-0.5 flex items-center gap-1.5 truncate")}>
                       {r.brand && <span className="truncate">{r.brand}</span>}
                       {r.brand && <span aria-hidden>·</span>}
                       <Store className="h-3 w-3 shrink-0" aria-hidden />
-                      {r.storesCount}{" "}
-                      {r.storesCount === 1 ? "mercado" : "mercados"}
+                      {r.storesCount} {r.storesCount === 1 ? "mercado" : "mercados"}
                     </p>
                   </div>
                   <div className="shrink-0 text-right">
                     <Price value={r.minPrice ?? 0} size="sm" />
-                    {r.maxPrice != null &&
-                      r.minPrice != null &&
-                      r.maxPrice > r.minPrice && (
-                        <p className={cn(tc.metaMuted)}>
-                          até{" "}
-                          <Price value={r.maxPrice} size="xs" tone="muted" />
-                        </p>
-                      )}
+                    {r.maxPrice != null && r.minPrice != null && r.maxPrice > r.minPrice && (
+                      <p className={cn(tc.metaMuted)}>
+                        até <Price value={r.maxPrice} size="xs" tone="muted" />
+                      </p>
+                    )}
                   </div>
                 </Link>
               </li>
             ))}
           </ul>
         )}
-
       </div>
 
       {active && results.length > 0 && (
         <div className={cn(tc.metaMuted, "shrink-0 border-t border-border/70 px-3 py-2")}>
-          {results.length} {results.length === 1 ? "produto" : "produtos"} ·
-          preços de registros verificados
+          {results.length} {results.length === 1 ? "produto" : "produtos"} · preços de registros
+          verificados
         </div>
       )}
     </section>
@@ -354,4 +338,3 @@ function Chip({
     </button>
   );
 }
-

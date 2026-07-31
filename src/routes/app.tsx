@@ -1,14 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useRef, useState } from "react";
-import {
-  ArrowRight,
-  Bell,
-  Loader2,
-  ShoppingCart,
-  Star,
-  TrendingDown,
-  Wallet,
-} from "lucide-react";
+import { ArrowRight, Bell, Loader2, ShoppingCart, Star, TrendingDown, Wallet } from "lucide-react";
 
 import { AppShell } from "@/components/brand/AppShell";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
@@ -24,7 +16,6 @@ import { Price } from "@/components/ds/Price";
 import { useAppHomeData } from "@/hooks/useAppHomeData";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
-
 
 export const Route = createFileRoute("/app")({
   head: () => ({
@@ -63,13 +54,7 @@ function AppHomeContent() {
     listsQuery,
     storesByName,
     publicStoresQuery,
-    mutations: {
-      removeItem,
-      removeMarket,
-      reorderItems,
-      reorderMarkets,
-      addToList,
-    },
+    mutations: { removeItem, removeMarket, reorderItems, reorderMarkets, addToList },
   } = useAppHomeData();
 
   const [selectedStore, setSelectedStore] = useState<PublicStore | null>(null);
@@ -90,13 +75,10 @@ function AppHomeContent() {
     if (!open) drawerTriggerRef.current?.focus?.();
   };
 
-
-  const firstName =
-    (accountQuery.data?.fullName ?? "").split(" ")[0] || "cliente";
+  const firstName = (accountQuery.data?.fullName ?? "").split(" ")[0] || "cliente";
 
   const summary = summaryQuery.data;
   const loading = summaryQuery.isLoading;
-
 
   const potentialSavings = (summary?.lists ?? []).reduce(
     (acc, l) => acc + (l.potentialSavings ?? 0),
@@ -129,12 +111,8 @@ function AppHomeContent() {
           />
           <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
             <div className="min-w-0">
-              <p className={cn(tc.eyebrow, "text-brand")}>
-                Meu painel
-              </p>
-              <h1 className={cn(tc.h1, "truncate text-primary-foreground")}>
-                Olá, {firstName}
-              </h1>
+              <p className={cn(tc.eyebrow, "text-brand")}>Meu painel</p>
+              <h1 className={cn(tc.h1, "truncate text-primary-foreground")}>Olá, {firstName}</h1>
             </div>
             <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5">
               <Link
@@ -155,7 +133,6 @@ function AppHomeContent() {
             </div>
           </div>
         </header>
-
 
         {/* Métricas do banco */}
         <div className="grid grid-cols-2 gap-2 xl:grid-cols-4">
@@ -209,11 +186,10 @@ function AppHomeContent() {
           />
         </div>
 
-
         {loading && (
           <div className={cn(tc.meta, "flex items-center gap-2")}>
-            <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Puxando os
-            preços mais recentes…
+            <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Puxando os preços mais
+            recentes…
           </div>
         )}
 
@@ -231,10 +207,7 @@ function AppHomeContent() {
               />
             </div>
             <div className="flex max-h-[360px] min-h-[220px] flex-col">
-              <StoreRankStrip
-                storeNames={storeNameSet}
-                onOpenStore={openStoreByName}
-              />
+              <StoreRankStrip storeNames={storeNameSet} onOpenStore={openStoreByName} />
             </div>
           </div>
           <div className="lg:col-span-12">
@@ -255,8 +228,6 @@ function AppHomeContent() {
             )}
           </div>
         </div>
-
-
       </div>
 
       <StoreDetailsDrawer
@@ -270,10 +241,7 @@ function AppHomeContent() {
 
 type MetricTone = "primary" | "brand" | "savings" | "warning";
 
-const METRIC_TONES: Record<
-  MetricTone,
-  { card: string; chip: string; rail: string }
-> = {
+const METRIC_TONES: Record<MetricTone, { card: string; chip: string; rail: string }> = {
   primary: {
     card: "border-primary/25 bg-primary/[0.06]",
     chip: "bg-primary/12 text-primary",
@@ -317,28 +285,15 @@ function Metric({
         t.card,
       )}
     >
-      <span
-        aria-hidden
-        className={cn("absolute inset-y-0 left-0 w-[3px]", t.rail)}
-      />
+      <span aria-hidden className={cn("absolute inset-y-0 left-0 w-[3px]", t.rail)} />
       <div className="flex items-center justify-between gap-2">
-        <p className={cn(tc.tableHead, "truncate")}>
-          {label}
-        </p>
-        <span
-          className={cn(
-            "grid h-6 w-6 shrink-0 place-items-center rounded-md",
-            t.chip,
-          )}
-        >
+        <p className={cn(tc.tableHead, "truncate")}>{label}</p>
+        <span className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-md", t.chip)}>
           <Icon className="h-3.5 w-3.5" aria-hidden />
         </span>
       </div>
-      <p className={cn(tc.dataPrimary, "mt-1 text-foreground")}>
-        {value}
-      </p>
+      <p className={cn(tc.dataPrimary, "mt-1 text-foreground")}>{value}</p>
       <p className={cn(tc.metaMuted, "mt-1 truncate")}>{hint}</p>
-
     </article>
   );
 }

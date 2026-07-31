@@ -91,9 +91,7 @@ export function StoresPanel({
             <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Carregando lojas…
           </div>
         ) : filtered.length === 0 ? (
-          <p className={cn(tc.meta, "p-4 text-center")}>
-            Nenhum estabelecimento encontrado.
-          </p>
+          <p className={cn(tc.meta, "p-4 text-center")}>Nenhum estabelecimento encontrado.</p>
         ) : (
           <ul className="divide-y divide-border/60">
             {filtered.map((s) => {
