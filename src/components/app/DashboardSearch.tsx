@@ -195,7 +195,10 @@ export function DashboardSearch() {
             value={input}
             onChange={(e) => setInput(e.target.value)}
             placeholder="Buscar produto: arroz, café, sabão…"
-            className={cn(tc.body, "h-11 w-full rounded-md bg-background/80 pl-9 pr-9 text-[14px]")}
+            className={cn(
+              tc.body,
+              "h-12 w-full rounded-lg border-border/80 bg-background/90 pl-10 pr-10 text-[15px] shadow-sm transition-shadow focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
+            )}
             maxLength={80}
             inputMode="search"
             autoComplete="off"
