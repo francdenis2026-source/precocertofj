@@ -97,9 +97,7 @@ export function ProductPriceHistory({
         ))}
       </ol>
 
-      {rows.length > 8 && (
-        <p className={tc.metaMuted}>+{rows.length - 8} registros anteriores</p>
-      )}
+      {rows.length > 8 && <p className={tc.metaMuted}>+{rows.length - 8} registros anteriores</p>}
     </div>
   );
 }

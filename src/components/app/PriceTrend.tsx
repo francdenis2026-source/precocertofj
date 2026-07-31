@@ -22,7 +22,11 @@ export function formatUpdatedAt(date: string | null | undefined): string {
   const d = new Date(date);
   if (Number.isNaN(d.getTime())) return "sem registro";
   const days = Math.floor((Date.now() - d.getTime()) / 86_400_000);
-  const label = d.toLocaleDateString("pt-BR", { day: "2-digit", month: "2-digit", year: "2-digit" });
+  const label = d.toLocaleDateString("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "2-digit",
+  });
   if (days <= 0) return `hoje · ${label}`;
   if (days === 1) return `ontem · ${label}`;
   if (days < 30) return `há ${days} dias · ${label}`;

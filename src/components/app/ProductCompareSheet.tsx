@@ -64,13 +64,23 @@ export function ProductCompareSheet({
         )}
 
         {!q.isLoading && q.isError && (
-          <p className={cn(tc.meta, "mt-6 rounded-lg border border-destructive/40 bg-destructive/5 p-3")}>
+          <p
+            className={cn(
+              tc.meta,
+              "mt-6 rounded-lg border border-destructive/40 bg-destructive/5 p-3",
+            )}
+          >
             Não foi possível carregar a comparação. Tente novamente em instantes.
           </p>
         )}
 
         {!q.isLoading && !q.isError && (!detail || detail.ranking.length === 0) && (
-          <p className={cn(tc.meta, "mt-6 rounded-lg border border-border/70 bg-muted/30 p-4 text-center")}>
+          <p
+            className={cn(
+              tc.meta,
+              "mt-6 rounded-lg border border-border/70 bg-muted/30 p-4 text-center",
+            )}
+          >
             Ainda não há preços suficientes deste produto para comparar.
           </p>
         )}
@@ -125,47 +135,51 @@ export function ProductCompareSheet({
                   )}
                 >
                   <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2.5">
-                  <span className="grid h-7 w-7 place-items-center rounded-md bg-muted text-[12px] font-bold">
-                    {r.position === 1 ? (
-                      <Crown className="h-3.5 w-3.5 text-savings" aria-hidden />
-                    ) : (
-                      r.position
-                    )}
-                  </span>
-                  <span className="min-w-0">
-                    {r.establishmentId ? (
-                      <Link
-                        to="/app/loja/$id"
-                        params={{ id: r.establishmentId }}
-                        className={cn(tc.storeName, "block truncate hover:underline")}
-                      >
-                        {r.storeName}
-                      </Link>
-                    ) : (
-                      <span className={cn(tc.storeName, "block truncate")}>{r.storeName}</span>
-                    )}
-                    <span className={cn(tc.metaMuted, "flex items-center gap-1 truncate")}>
-                      {r.neighborhood ? (
-                        <>
-                          <MapPin className="h-3 w-3 shrink-0" aria-hidden />
-                          {r.neighborhood}
-                        </>
+                    <span className="grid h-7 w-7 place-items-center rounded-md bg-muted text-[12px] font-bold">
+                      {r.position === 1 ? (
+                        <Crown className="h-3.5 w-3.5 text-savings" aria-hidden />
                       ) : (
-                        <>
-                          <Store className="h-3 w-3 shrink-0" aria-hidden />
-                          {r.city ?? "Feijó"}
-                        </>
+                        r.position
                       )}
-                      <span aria-hidden>·</span>
-                      <span className="truncate">{formatUpdatedAt(r.lastSeenAt)}</span>
                     </span>
-                  </span>
-                  <span className="text-right">
-                    <Price value={r.price} size="sm" tone={r.position === 1 ? "best" : "default"} />
-                    {r.diffPct > 0 && (
-                      <span className={cn(tc.metaMuted, "block")}>+{r.diffPct.toFixed(0)}%</span>
-                    )}
-                  </span>
+                    <span className="min-w-0">
+                      {r.establishmentId ? (
+                        <Link
+                          to="/app/loja/$id"
+                          params={{ id: r.establishmentId }}
+                          className={cn(tc.storeName, "block truncate hover:underline")}
+                        >
+                          {r.storeName}
+                        </Link>
+                      ) : (
+                        <span className={cn(tc.storeName, "block truncate")}>{r.storeName}</span>
+                      )}
+                      <span className={cn(tc.metaMuted, "flex items-center gap-1 truncate")}>
+                        {r.neighborhood ? (
+                          <>
+                            <MapPin className="h-3 w-3 shrink-0" aria-hidden />
+                            {r.neighborhood}
+                          </>
+                        ) : (
+                          <>
+                            <Store className="h-3 w-3 shrink-0" aria-hidden />
+                            {r.city ?? "Feijó"}
+                          </>
+                        )}
+                        <span aria-hidden>·</span>
+                        <span className="truncate">{formatUpdatedAt(r.lastSeenAt)}</span>
+                      </span>
+                    </span>
+                    <span className="text-right">
+                      <Price
+                        value={r.price}
+                        size="sm"
+                        tone={r.position === 1 ? "best" : "default"}
+                      />
+                      {r.diffPct > 0 && (
+                        <span className={cn(tc.metaMuted, "block")}>+{r.diffPct.toFixed(0)}%</span>
+                      )}
+                    </span>
                   </div>
 
                   {r.establishmentId && (
@@ -209,15 +223,7 @@ export function ProductCompareSheet({
   );
 }
 
-function Stat({
-  label,
-  value,
-  tone,
-}: {
-  label: string;
-  value: number;
-  tone?: "best" | "muted";
-}) {
+function Stat({ label, value, tone }: { label: string; value: number; tone?: "best" | "muted" }) {
   return (
     <div className="rounded-lg border border-border/70 bg-card px-2 py-1.5 text-center">
       <p className={tc.tableHead}>{label}</p>
