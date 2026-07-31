@@ -388,7 +388,7 @@ function RootComponent() {
         <UnlockConversionTracker />
         <GuestGlobalPriceLock />
         
-        <Toaster richColors position="top-right" />
+        <Toaster />
       </ConfirmProvider>
     </QueryClientProvider>
   );

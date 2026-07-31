@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { notify } from "@/lib/notify";
 import { supabase } from "@/integrations/supabase/client";
 
 /**
@@ -23,10 +23,16 @@ export function useSignOut() {
       await qc.cancelQueries();
       qc.clear();
       await supabase.auth.signOut();
-      toast.success("Você saiu da sua conta.");
+      notify.success("Sessão encerrada", {
+        id: "auth-session",
+        description: "Você saiu da sua conta com segurança. Seus dados continuam salvos.",
+      });
     } catch (err) {
       console.error("[signOut]", err);
-      toast.error("Não foi possível encerrar a sessão totalmente.");
+      notify.error("Não conseguimos encerrar a sessão por completo", {
+        id: "auth-session",
+        description: "Feche o navegador ou tente sair novamente para garantir a saída.",
+      });
     } finally {
       setLoading(false);
     }

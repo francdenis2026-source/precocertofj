@@ -3138,9 +3138,8 @@ input::placeholder, textarea::placeholder {
        sobre superfícies escuras — evita o efeito "quase apagado". */
 [role="dialog"] .text-muted-foreground:not(.pc-on-navy),
 [role="alertdialog"] .text-muted-foreground:not(.pc-on-navy),
-[role="status"] .text-muted-foreground:not(.pc-on-navy),
-[role="alert"] .text-muted-foreground:not(.pc-on-navy),
-[data-sonner-toast]:not([data-rich-colors="true"]) .text-muted-foreground:not(.pc-on-navy),
+[role="status"]:not([data-sonner-toast]) .text-muted-foreground:not(.pc-on-navy),
+[role="alert"]:not([data-sonner-toast]) .text-muted-foreground:not(.pc-on-navy),
 [data-radix-tooltip-content] .text-muted-foreground:not(.pc-on-navy) {
   color: color-mix(in oklab, var(--foreground) 82%, transparent) !important;
 }
@@ -3158,22 +3157,158 @@ input::placeholder, textarea::placeholder {
 .dark [role="dialog"] p:not(.pc-on-navy),
 .dark [role="dialog"] li:not(.pc-on-navy),
 .dark [role="alertdialog"] p,
-.dark [role="alertdialog"] li,
-.dark [data-sonner-toast]:not([data-rich-colors="true"]) p,
-.dark [data-sonner-toast]:not([data-rich-colors="true"]) div {
+.dark [role="alertdialog"] li {
   color: color-mix(in oklab, var(--foreground) 88%, transparent);
 }
 
-/* Toasts com richColors (sucesso/erro/aviso) mantêm o texto da própria
-   paleta do sonner — nunca herdam o foreground do tema (texto sumia). */
-[data-sonner-toast][data-rich-colors="true"],
-[data-sonner-toast][data-rich-colors="true"] * {
+/* ============================================================
+   Toasts padronizados (sonner) — tamanhos, cores, ícones e
+   animações consistentes em todas as páginas e temas.
+   Regra de ouro: o texto SEMPRE usa a cor do próprio toast
+   (--pc-toast-fg), nunca herda o foreground do tema.
+   ============================================================ */
+.pc-toaster {
+  --pc-toast-bg: var(--card);
+  --pc-toast-fg: var(--card-foreground);
+  --pc-toast-accent: var(--muted-foreground);
+  --pc-toast-border: var(--border);
+}
+
+[data-sonner-toast].pc-toast {
+  width: 100%;
+  max-width: 380px;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--pc-toast-bg) !important;
+  color: var(--pc-toast-fg) !important;
+  border: 1px solid var(--pc-toast-border) !important;
+  box-shadow:
+    0 12px 32px -12px color-mix(in oklab, var(--foreground) 34%, transparent),
+    0 2px 6px -2px color-mix(in oklab, var(--foreground) 18%, transparent);
+  backdrop-filter: none;
+}
+
+/* Faixa lateral de estado — reforça a leitura da variante */
+[data-sonner-toast].pc-toast::before {
+  content: "";
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  border-radius: 14px 0 0 14px;
+  background: var(--pc-toast-accent);
+}
+
+[data-sonner-toast].pc-toast * {
   color: inherit;
 }
-[data-sonner-toast][data-rich-colors="true"] [data-title],
-[data-sonner-toast][data-rich-colors="true"] [data-description] {
-  color: currentColor;
+
+.pc-toast-title {
+  font-size: 13.5px;
+  font-weight: 650;
+  line-height: 1.35;
+  letter-spacing: -0.005em;
+  color: var(--pc-toast-fg) !important;
 }
+
+.pc-toast-description {
+  font-size: 12.5px;
+  line-height: 1.45;
+  margin-top: 2px;
+  color: color-mix(in oklab, var(--pc-toast-fg) 78%, transparent) !important;
+}
+
+.pc-toast-icon {
+  margin: 1px 0 0;
+  align-self: flex-start;
+  color: var(--pc-toast-accent) !important;
+}
+
+.pc-toast-action,
+.pc-toast-cancel {
+  height: 28px;
+  border-radius: 8px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.pc-toast-action {
+  background: var(--pc-toast-accent) !important;
+  color: var(--pc-toast-bg) !important;
+}
+
+.pc-toast-cancel {
+  background: color-mix(in oklab, var(--pc-toast-fg) 10%, transparent) !important;
+  color: var(--pc-toast-fg) !important;
+}
+
+.pc-toast-close {
+  background: var(--pc-toast-bg) !important;
+  color: color-mix(in oklab, var(--pc-toast-fg) 70%, transparent) !important;
+  border-color: var(--pc-toast-border) !important;
+}
+
+/* Variantes — fundo suave + texto e ícone de alto contraste */
+[data-sonner-toast].pc-toast[data-type="success"] {
+  --pc-toast-bg: color-mix(in oklab, oklch(0.62 0.15 155) 12%, var(--card));
+  --pc-toast-fg: oklch(0.3 0.09 155);
+  --pc-toast-accent: oklch(0.52 0.15 155);
+  --pc-toast-border: color-mix(in oklab, oklch(0.52 0.15 155) 34%, transparent);
+}
+.dark [data-sonner-toast].pc-toast[data-type="success"],
+.pc-toaster [data-sonner-toast].pc-toast[data-type="success"]:where(.dark *) {
+  --pc-toast-bg: oklch(0.24 0.05 155);
+  --pc-toast-fg: oklch(0.93 0.05 155);
+  --pc-toast-accent: oklch(0.78 0.14 155);
+}
+
+[data-sonner-toast].pc-toast[data-type="error"] {
+  --pc-toast-bg: color-mix(in oklab, oklch(0.6 0.19 25) 12%, var(--card));
+  --pc-toast-fg: oklch(0.34 0.13 25);
+  --pc-toast-accent: oklch(0.53 0.19 25);
+  --pc-toast-border: color-mix(in oklab, oklch(0.53 0.19 25) 34%, transparent);
+}
+.dark [data-sonner-toast].pc-toast[data-type="error"] {
+  --pc-toast-bg: oklch(0.25 0.07 25);
+  --pc-toast-fg: oklch(0.94 0.05 25);
+  --pc-toast-accent: oklch(0.76 0.16 25);
+}
+
+[data-sonner-toast].pc-toast[data-type="warning"] {
+  --pc-toast-bg: color-mix(in oklab, oklch(0.75 0.14 80) 16%, var(--card));
+  --pc-toast-fg: oklch(0.34 0.09 70);
+  --pc-toast-accent: oklch(0.58 0.13 70);
+  --pc-toast-border: color-mix(in oklab, oklch(0.58 0.13 70) 34%, transparent);
+}
+.dark [data-sonner-toast].pc-toast[data-type="warning"] {
+  --pc-toast-bg: oklch(0.26 0.06 75);
+  --pc-toast-fg: oklch(0.94 0.05 85);
+  --pc-toast-accent: oklch(0.82 0.14 85);
+}
+
+[data-sonner-toast].pc-toast[data-type="info"],
+[data-sonner-toast].pc-toast[data-type="loading"] {
+  --pc-toast-bg: color-mix(in oklab, var(--primary) 10%, var(--card));
+  --pc-toast-fg: var(--card-foreground);
+  --pc-toast-accent: var(--primary);
+  --pc-toast-border: color-mix(in oklab, var(--primary) 30%, transparent);
+}
+
+/* Animação de entrada/saída suave — sem "flash" */
+@media (prefers-reduced-motion: no-preference) {
+  [data-sonner-toast].pc-toast {
+    transition:
+      transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+      opacity 200ms ease;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  [data-sonner-toast].pc-toast {
+    transition: none !important;
+  }
+}
+
 
 
 
