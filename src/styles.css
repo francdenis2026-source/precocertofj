@@ -6253,7 +6253,8 @@ h3.font-display {
   padding: 0.5rem 0.45rem;
   gap: 0;
   overflow-y: auto;
-  overscroll-behavior: contain;
+  overscroll-behavior-y: auto;
+  -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
   scrollbar-color: color-mix(in oklab, var(--pcsb-accent) 45%, transparent) transparent;
 }
@@ -6323,15 +6324,18 @@ h3.font-display {
 .pcsb-ico {
   display: grid;
   place-items: center;
-  height: 1.55rem;
-  width: 1.55rem;
+  height: 1.8rem;
+  width: 1.8rem;
   flex: 0 0 auto;
   border-radius: 0.5rem;
   color: var(--pcsb-dim);
-  transition: color 0.15s ease;
+  transition: color 0.15s ease, transform 0.15s ease;
 }
-.pcsb-row:hover .pcsb-ico { color: var(--pcsb-ink); }
-.pcsb-row[data-active="true"] .pcsb-ico { color: var(--pcsb-ink); }
+.pcsb-row:hover .pcsb-ico {
+  color: var(--sidebar-primary);
+  transform: translateX(1px);
+}
+.pcsb-row[data-active="true"] .pcsb-ico { color: var(--sidebar-primary); }
 /* Sem ícone no modo expandido: o rótulo recebe um respiro à esquerda. */
 .pcsb-row > a { padding-left: 0.2rem; }
 [data-collapsible="icon"] .pcsb-row > a { padding-left: 0; }
@@ -6408,6 +6412,8 @@ h3.font-display {
   backdrop-filter: none;
 }
 .pcsb .pcsb-ico > svg {
+  width: 1.25rem !important;
+  height: 1.25rem !important;
   color: currentColor;
   fill: none;
   filter: none;
@@ -6418,11 +6424,15 @@ h3.font-display {
   color: inherit;
 }
 
-/* A barra lateral cuida da própria rolagem (sem encadear com a página). */
+/* Rolagem nativa, sem camada de composição permanente: evita engasgos da roda. */
 .pcsb-content {
-  overscroll-behavior: contain;
+  overscroll-behavior-y: auto;
   scroll-behavior: auto;
-  will-change: scroll-position;
+}
+
+/* Expandir/recolher sem animar largura evita relayout contínuo do dashboard. */
+.group:has(.pcsb) > div {
+  transition-duration: 0ms;
 }
 
 @media (prefers-reduced-motion: reduce) {

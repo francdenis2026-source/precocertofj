@@ -288,11 +288,9 @@ export function AppSidebar() {
                   aria-keyshortcuts={n.shortcut ? `Alt+${n.shortcut}` : undefined}
                 >
                   <span aria-hidden className="pcsb-rail" />
-                  {compact && (
-                    <span aria-hidden className="pcsb-ico">
-                      <n.icon className="h-[17px] w-[17px]" strokeWidth={active ? 2.1 : 1.75} />
-                    </span>
-                  )}
+                   <span aria-hidden className="pcsb-ico">
+                     <n.icon className="h-5 w-5" strokeWidth={active ? 2.15 : 1.9} />
+                   </span>
                   <span className="pcsb-label">{n.label}</span>
                   {n.shortcut && (
                     <kbd aria-hidden className="pcsb-kbd">
@@ -305,28 +303,24 @@ export function AppSidebar() {
 
             return (
               <SidebarMenuItem key={key}>
-                {compact ? (
-                  <Tooltip>
-                    <TooltipTrigger asChild>{row}</TooltipTrigger>
-                    <TooltipContent side="right" align="center" className="max-w-56">
-                      <span className="flex flex-col gap-0.5">
-                        <span className="font-semibold">{n.label}</span>
-                        {n.hint && (
-                          <span className="text-[11px] font-normal text-muted-foreground">
-                            {n.hint}
-                          </span>
-                        )}
-                        {n.shortcut && (
-                          <span className="text-[10.5px] font-medium uppercase tracking-wider text-muted-foreground">
-                            Alt + {n.shortcut}
-                          </span>
-                        )}
-                      </span>
-                    </TooltipContent>
-                  </Tooltip>
-                ) : (
-                  row
-                )}
+                 <Tooltip open={compact ? undefined : false}>
+                   <TooltipTrigger asChild>{row}</TooltipTrigger>
+                   <TooltipContent side="right" align="center" className="max-w-56">
+                     <span className="flex flex-col gap-0.5">
+                       <span className="font-semibold">{n.label}</span>
+                       {n.hint && (
+                         <span className="text-[11px] font-normal text-muted-foreground">
+                           {n.hint}
+                         </span>
+                       )}
+                       {n.shortcut && (
+                         <span className="text-[10.5px] font-medium uppercase tracking-wider text-muted-foreground">
+                           Alt + {n.shortcut}
+                         </span>
+                       )}
+                     </span>
+                   </TooltipContent>
+                 </Tooltip>
               </SidebarMenuItem>
             );
           })}
@@ -401,11 +395,9 @@ export function AppSidebar() {
                         <SidebarMenuButton asChild className="pcsb-row">
                           <Link to="/admin" onClick={closeOnMobile}>
                             <span aria-hidden className="pcsb-rail" />
-                            {compact && (
-                              <span aria-hidden className="pcsb-ico">
-                                <Shield className="h-[17px] w-[17px]" strokeWidth={1.85} />
-                              </span>
-                            )}
+                             <span aria-hidden className="pcsb-ico">
+                               <Shield className="h-5 w-5" strokeWidth={1.9} />
+                             </span>
                             <span className="pcsb-label">Painel administrativo</span>
                           </Link>
                         </SidebarMenuButton>
