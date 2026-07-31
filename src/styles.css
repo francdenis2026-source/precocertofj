@@ -6165,13 +6165,14 @@ h3.font-display {
   border-right: 1px solid var(--pcsb-line);
 }
 
-/* Cores semânticas por grupo — o trilho e o ícone ativo mudam de tom. */
-.pcsb [data-tone="brand"]    { --pcsb-accent: var(--pc-home-gold); }
-.pcsb [data-tone="overview"] { --pcsb-accent: var(--sidebar-primary); }
-.pcsb [data-tone="catalog"]  { --pcsb-accent: var(--savings); }
-.pcsb [data-tone="commerce"] { --pcsb-accent: var(--pc-home-gold); }
-.pcsb [data-tone="people"]   { --pcsb-accent: var(--sidebar-primary); }
-.pcsb [data-tone="system"]   { --pcsb-accent: color-mix(in oklab, var(--sidebar-foreground) 55%, var(--sidebar-primary)); }
+/* Paleta única (ouro da marca). Antes cada grupo tinha um tom próprio e o
+   azul dos ícones virava um borrão na barra — agora tudo usa o mesmo acento. */
+.pcsb [data-tone="brand"],
+.pcsb [data-tone="overview"],
+.pcsb [data-tone="catalog"],
+.pcsb [data-tone="commerce"],
+.pcsb [data-tone="people"],
+.pcsb [data-tone="system"] { --pcsb-accent: var(--pc-home-gold); }
 
 /* ── Marca ─────────────────────────────────────────────────────────────── */
 .pcsb-header {
