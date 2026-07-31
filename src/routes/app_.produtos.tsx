@@ -6,6 +6,7 @@ import { ArrowLeft, BarChart3, Search as SearchIcon, Store, X } from "lucide-rea
 
 import { AppShell } from "@/components/brand/AppShell";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
+import { PriceDropAlertToggle } from "@/components/app/PriceDropAlertToggle";
 import { ProductCompareSheet } from "@/components/app/ProductCompareSheet";
 import { Input } from "@/components/ui/input";
 import { Price } from "@/components/ds/Price";
