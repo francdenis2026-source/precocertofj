@@ -1104,6 +1104,43 @@ main :is(p, li, dt, dd, td, th, label, a, button, input, textarea, figcaption) {
   letter-spacing: 0;
 }
 .app-scope .app-dashboard p { line-height: 1.35; }
+
+/* Foco visível consistente em todos os controles do painel (WCAG 2.4.7).
+   Um único anel dourado com offset, independente do componente. */
+.app-scope .app-dashboard :is(a, button, input, select, textarea, summary,
+  [role="tab"], [role="radio"], [role="option"], [role="menuitem"],
+  [tabindex]):focus-visible {
+  outline: var(--ring-width, 2px) solid var(--ring);
+  outline-offset: var(--ring-offset-width, 2px);
+  border-radius: 0.375rem;
+}
+/* Painéis roláveis também mostram foco ao serem alcançados por Tab. */
+.app-scope .app-dashboard [role="tabpanel"]:focus-visible {
+  outline-offset: -2px;
+}
+
+/* Colunas proporcionais das listas do painel: rótulo | apoio | dado | ações.
+   O cabeçalho e as linhas compartilham o mesmo template, então tudo alinha
+   verticalmente sem tabela e sem estourar a largura da janela. */
+.pc-cols-search {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 4.25rem minmax(4.5rem, auto);
+  align-items: center;
+  gap: 0.5rem;
+}
+.pc-cols-stores {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) 3.5rem auto;
+  align-items: center;
+  gap: 0.5rem;
+}
+@media (max-width: 480px) {
+  .pc-cols-search { grid-template-columns: minmax(0, 1fr) minmax(4.5rem, auto); }
+  .pc-cols-search > [data-col="stores"] { display: none; }
+  .pc-cols-stores { grid-template-columns: auto minmax(0, 1fr) auto; }
+  .pc-cols-stores > [data-col="items"] { display: none; }
+}
+
 .app-scope table { font-size: clamp(0.94rem, 0.25vw + 0.86rem, 1.04rem); }
 .app-scope th { height: 2.85rem; font-size: clamp(0.78rem, 0.15vw + 0.74rem, 0.88rem); letter-spacing: .04em; }
 .app-scope td { padding-block: .78rem; }

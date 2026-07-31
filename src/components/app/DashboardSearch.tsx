@@ -15,6 +15,8 @@ import {
 } from "@/lib/catalog-search.functions";
 import { useLocalStorageState } from "@/hooks/use-local-storage";
 import { useRovingFocus } from "@/hooks/use-roving-focus";
+import { useHotkeys } from "@/hooks/use-hotkeys";
+
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
 
@@ -146,16 +148,42 @@ export function DashboardSearch() {
     }
   };
 
+  // Atalhos de teclado do painel de busca.
+  useHotkeys({
+    "alt+b": () => inputRef.current?.focus(),
+    "/": () => inputRef.current?.focus(),
+    "alt+o": () => {
+      const i = SORTS.findIndex((s) => s.id === sort);
+      setSort(SORTS[(i + 1) % SORTS.length].id);
+    },
+    "alt+l": () => {
+      setCategory(null);
+      setInput("");
+    },
+    escape: () => {
+      if (compareKey) setCompareKey(null);
+    },
+  });
+
   return (
     <section
       aria-label="Buscar preços"
       className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
     >
       <div className="shrink-0 space-y-2 border-b border-border/70 p-3">
-        <div className="min-w-0">
-          <h2 className={cn(tc.panelTitle, "truncate")}>Buscar produtos e preços</h2>
-          <p className={cn(tc.panelNote, "truncate")}>Menores preços dos mercados de Feijó</p>
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
+          <div className="min-w-0">
+            <h2 className={cn(tc.panelTitle, "truncate")}>Buscar produtos e preços</h2>
+            <p className={cn(tc.panelNote, "truncate")}>Menores preços dos mercados de Feijó</p>
+          </div>
+          <kbd
+            className="hidden shrink-0 rounded border border-border/70 bg-muted/60 px-1.5 py-0.5 text-[11px] font-medium text-muted-foreground sm:inline-block"
+            title="Atalhos: Alt+B busca · Alt+O ordena · Alt+L limpa"
+          >
+            Alt + B
+          </kbd>
         </div>
+
         <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
           <label className="relative min-w-0">
             <span className="sr-only">Buscar produto</span>
@@ -243,8 +271,27 @@ export function DashboardSearch() {
 
       <p id="dashboard-search-help" className="sr-only">
         Use seta para baixo para entrar na lista de resultados, setas para navegar, Enter para abrir
-        e Esc para voltar ao campo de busca.
+        e Esc para voltar ao campo de busca. Alt mais B foca a busca, Alt mais O troca a ordenação e
+        Alt mais L limpa os filtros.
       </p>
+
+      {/* Cabeçalho de colunas: produto (relevância) · mercados · menor preço */}
+      {active && results.length > 0 && (
+        <div
+          aria-hidden
+          className={cn(
+            tc.tableHead,
+            "pc-cols-search shrink-0 border-b border-border/60 bg-muted/30 px-3 py-1",
+          )}
+        >
+          <span className="truncate">Produto</span>
+          <span data-col="stores" className="text-center">
+            Mercados
+          </span>
+          <span className="text-right">Menor preço</span>
+        </div>
+      )}
+
 
       <div
         className="min-h-0 flex-1 overflow-y-auto [scrollbar-gutter:stable]"
@@ -302,26 +349,32 @@ export function DashboardSearch() {
                   }}
                   onKeyDown={(e) => onResultKeyDown(e, i)}
                   onClick={() => setCompareKey(r.displayName)}
-                  className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-3 px-3 py-2 text-left transition-colors hover:bg-muted/50 focus-visible:bg-muted/50"
+                  className="pc-cols-search w-full px-3 py-1.5 text-left transition-colors hover:bg-muted/50 focus-visible:bg-muted/50"
                 >
-                  <div className="min-w-0">
-                    <p className={cn(tc.itemTitle, "truncate")}>{r.displayName}</p>
-                    <p className={cn(tc.metaMuted, "mt-0.5 flex items-center gap-1.5 truncate")}>
-                      {r.brand && <span className="truncate">{r.brand}</span>}
-                      {r.brand && <span aria-hidden>·</span>}
-                      <Store className="h-3 w-3 shrink-0" aria-hidden />
-                      {r.storesCount} {r.storesCount === 1 ? "mercado" : "mercados"}
-                    </p>
-                  </div>
-                  <div className="shrink-0 text-right">
+                  <span className="min-w-0">
+                    <span className={cn(tc.itemTitle, "block truncate")}>{r.displayName}</span>
+                    <span className={cn(tc.metaMuted, "block truncate")}>
+                      {r.brand ? r.brand : categoryLabel(r.category ?? "")}
+                    </span>
+                  </span>
+                  <span
+                    data-col="stores"
+                    className={cn(tc.num, "flex items-center justify-center gap-1 text-muted-foreground")}
+                    title={`${r.storesCount} ${r.storesCount === 1 ? "mercado" : "mercados"}`}
+                  >
+                    <Store className="h-3 w-3 shrink-0" aria-hidden />
+                    {r.storesCount}
+                  </span>
+                  <span className="text-right">
                     <Price value={r.minPrice ?? 0} size="sm" />
                     {r.maxPrice != null && r.minPrice != null && r.maxPrice > r.minPrice && (
-                      <p className={cn(tc.metaMuted)}>
+                      <span className={cn(tc.metaMuted, "block")}>
                         até <Price value={r.maxPrice} size="xs" tone="muted" />
-                      </p>
+                      </span>
                     )}
-                  </div>
+                  </span>
                 </button>
+
               </li>
             ))}
           </ul>

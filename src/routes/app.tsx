@@ -99,7 +99,13 @@ function AppHomeContent() {
   return (
     <AppShell>
       <div className="app-dashboard mx-auto flex w-full max-w-[1540px] flex-col gap-2 px-3 py-2 md:px-4 lg:h-full lg:min-h-0 lg:overflow-hidden">
+        <p className="sr-only">
+          Atalhos do painel: Alt mais B foca a busca, Alt mais O troca a ordenação, Alt mais L limpa
+          os filtros, Alt mais E busca estabelecimentos, Alt mais Shift mais F, M ou L alterna as
+          abas de favoritos, Alt mais setas troca de página e Esc fecha menus e painéis abertos.
+        </p>
         {/* Bloco único: saudação + ações + métricas */}
+
         <header className="sticky top-0 z-20 shrink-0 overflow-hidden rounded-xl border border-border/70 bg-card/95 shadow-sm backdrop-blur-md lg:static">
           <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border/60 bg-primary/95 px-3 py-2 text-primary-foreground md:px-4">
             <span
