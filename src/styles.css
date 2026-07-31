@@ -3220,7 +3220,50 @@ input::placeholder, textarea::placeholder {
 
 .pc-toast-icon,
 [data-sonner-toast].pc-toast [data-icon] {
-  display: none !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  align-self: flex-start;
+  padding-top: 1px;
+  color: var(--pc-toast-accent) !important;
+}
+
+.pc-toast-svg {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .pc-toast-svg-spin {
+    animation: pc-toast-spin 900ms linear infinite;
+    transform-origin: 50% 50%;
+  }
+}
+
+@keyframes pc-toast-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Posicionamento: canto inferior direito, longe do cabeçalho fixo.
+   No mobile sobe acima da BottomTabBar (64px) e respeita a safe-area. */
+.pc-toaster[data-sonner-toaster] {
+  z-index: 90;
+}
+
+@media (max-width: 767px) {
+  .pc-toaster[data-sonner-toaster] {
+    --width: calc(100vw - 24px);
+    right: 12px !important;
+    left: 12px !important;
+    bottom: calc(76px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+  [data-sonner-toast].pc-toast {
+    max-width: none;
+  }
 }
 
 .pc-toast-action,
@@ -5419,3 +5462,9 @@ h3.font-display {
   }
 }
 
+
+/* Barra de progresso indeterminada do gate do painel */
+@keyframes pc-gate-slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}

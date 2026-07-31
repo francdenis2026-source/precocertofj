@@ -11,7 +11,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { supabase } from "@/integrations/supabase/client";
 import { getMyAccount, type AccountView } from "@/lib/account.functions";
-import { Loader2 } from "lucide-react";
+import painelLoadingBg from "@/assets/painel-loading-bg.jpg";
 
 export function ProtectedGate({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
@@ -91,28 +91,46 @@ export function ProtectedGate({ children }: { children: React.ReactNode }) {
       accountQuery.data?.status === "expired")
   ) {
     return (
-      <div className="flex min-h-[100svh] items-center justify-center bg-background px-6">
-        <div className="relative w-full max-w-sm overflow-hidden rounded-3xl bg-primary p-8 text-primary-foreground">
-          <div
-            className="absolute -right-16 -top-16 h-40 w-40 rounded-full bg-accent"
-            aria-hidden
-          />
-          <div className="relative">
-            <span className="inline-flex items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] backdrop-blur">
-              <span className="live-dot" aria-hidden />
-              PreçoCerto
-            </span>
-            <p className="mt-5 font-display text-3xl font-extrabold leading-tight">
-              Abrindo seu<br />painel...
-            </p>
-            <div className="mt-6 flex items-center gap-2 text-sm text-primary-foreground/85">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              Carregando favoritos e melhores preços
-            </div>
+      <div className="relative flex min-h-[100svh] items-center justify-center overflow-hidden bg-background px-6">
+        <img
+          src={painelLoadingBg}
+          alt=""
+          aria-hidden
+          width={1600}
+          height={1200}
+          className="pointer-events-none absolute inset-0 h-full w-full object-cover"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,color-mix(in_oklab,var(--primary)_78%,black)_0%,color-mix(in_oklab,var(--primary)_62%,black)_55%,color-mix(in_oklab,black_86%,transparent)_100%)] opacity-[0.92]"
+        />
+        <div
+          role="status"
+          aria-live="polite"
+          className="relative w-full max-w-md rounded-3xl border border-white/12 bg-black/28 p-8 shadow-[0_28px_70px_-30px_rgba(0,0,0,0.85)] backdrop-blur-xl"
+        >
+          <span className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/12 px-3 py-1 text-[10.5px] font-semibold uppercase tracking-[0.22em] text-white">
+            <span className="live-dot" aria-hidden />
+            PreçoCerto
+          </span>
+          <p className="mt-5 font-display text-[26px] font-extrabold leading-[1.15] text-white sm:text-[30px]">
+            Verificando sua assinatura e preparando o painel
+          </p>
+          <p className="mt-3 text-[13px] leading-relaxed text-white/80">
+            Estamos validando sua sessão com segurança e sincronizando as listas,
+            favoritos e os preços mais recentes dos mercados de Feijó.
+          </p>
+          <div className="mt-6 h-1 w-full overflow-hidden rounded-full bg-white/15">
+            <div className="h-full w-1/3 animate-[pc-gate-slide_1.4s_ease-in-out_infinite] rounded-full bg-white/85" />
           </div>
+          <p className="mt-3 text-[11.5px] uppercase tracking-[0.16em] text-white/65">
+            Conexão segura · leva poucos segundos
+          </p>
         </div>
       </div>
     );
+
+
 
   }
 

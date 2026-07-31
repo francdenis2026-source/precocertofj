@@ -243,9 +243,9 @@ function LoginPage() {
         });
         if (error) throw error;
         clearAttempts(digits);
-        notify.success("Conta criada", {
+        notify.success("Cadastro concluído", {
           id: "auth-session",
-          description: "30 dias de acesso completo liberados. Abrindo sua área.",
+          description: "Seu acesso completo está ativo por 30 dias. Abrindo o painel com os preços de Feijó.",
         });
       } else {
         const { hiddenEmail } = await resolveEmailFn({ data: { cpf: digits } });
@@ -266,9 +266,9 @@ function LoginPage() {
           );
         }
         clearAttempts(digits);
-        notify.success("Acesso liberado", {
+        notify.success("Sessão iniciada", {
           id: "auth-session",
-          description: "Identidade confirmada. Abrindo sua área.",
+          description: "CPF e PIN confirmados. Carregando suas listas, favoritos e alertas de preço.",
         });
       }
       await router.invalidate();
@@ -276,7 +276,10 @@ function LoginPage() {
     } catch (err) {
       const msg = err instanceof Error ? err.message : "Falha ao autenticar";
       setFormError(msg);
-      notify.error("Acesso negado", { id: "auth-session", description: msg });
+      notify.error("Não foi possível iniciar a sessão", {
+        id: "auth-session",
+        description: msg,
+      });
     } finally {
       setLoading(false);
     }
