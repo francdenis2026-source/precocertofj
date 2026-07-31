@@ -1124,33 +1124,35 @@ main :is(p, li, dt, dd, td, th, label, a, button, input, textarea, figcaption) {
    `html[data-density]` reescala paddings/gaps/alturas SEM mexer na
    tipografia — a hierarquia visual permanece idêntica nos dois modos. */
 .app-scope {
-  --pc-gap: 1rem;
-  --pc-pad-x: 1rem;
-  --pc-pad-y: 1rem;
-  --pc-panel-min: 22rem;
-  --pc-panel-pad: 0.75rem;
-  --pc-row-gap: 0.5rem;
+  --pc-gap: 0.7rem;
+  --pc-pad-x: 0.75rem;
+  --pc-pad-y: 0.5rem;
+  --pc-panel-min: 15rem;
+  --pc-panel-pad: 0.6rem;
+  --pc-row-gap: 0.35rem;
 }
 @media (min-width: 768px) {
   .app-scope {
-    --pc-pad-x: 1.5rem;
-    --pc-pad-y: 1.25rem;
+    --pc-gap: 0.8rem;
+    --pc-pad-x: 1.1rem;
+    --pc-pad-y: 0.6rem;
   }
 }
 html[data-density="compact"] .app-scope {
-  --pc-gap: 0.625rem;
-  --pc-pad-x: 0.75rem;
-  --pc-pad-y: 0.625rem;
-  --pc-panel-min: 18rem;
-  --pc-panel-pad: 0.5rem;
-  --pc-row-gap: 0.3rem;
+  --pc-gap: 0.5rem;
+  --pc-pad-x: 0.6rem;
+  --pc-pad-y: 0.4rem;
+  --pc-panel-min: 13rem;
+  --pc-panel-pad: 0.45rem;
+  --pc-row-gap: 0.25rem;
 }
 @media (min-width: 768px) {
   html[data-density="compact"] .app-scope {
-    --pc-pad-x: 1rem;
-    --pc-pad-y: 0.75rem;
+    --pc-pad-x: 0.8rem;
+    --pc-pad-y: 0.5rem;
   }
 }
+
 
 /* Container de página do painel — respeita a densidade escolhida. */
 .pc-page {
@@ -1183,22 +1185,23 @@ html[data-density="compact"] .app-scope {
   display: flex;
   min-width: 0;
   min-height: var(--pc-panel-min);
-  max-height: 80dvh;
+  max-height: 78dvh;
   flex-direction: column;
 }
 @media (min-width: 768px) {
   .pc-col {
-    height: clamp(24rem, 62dvh, 40rem);
+    height: clamp(18rem, 52dvh, 34rem);
     min-height: 0;
     max-height: none;
   }
 }
 @media (min-width: 1280px) {
   .pc-col {
-    height: clamp(30rem, calc(100dvh - 17rem), 46rem);
+    height: clamp(22rem, calc(100dvh - 14rem), 44rem);
   }
 }
 html[data-density="compact"] .pc-col { min-height: calc(var(--pc-panel-min) - 1rem); }
+
 
 /* Painel/coluna com rolagem interna: o cabeçalho fica fixo e só o corpo rola,
    então nenhuma coluna corta conteúdo nem cresce além da altura da grade. */
@@ -1230,13 +1233,14 @@ html[data-density="compact"] .pc-col { min-height: calc(var(--pc-panel-min) - 1r
   z-index: 20;
   scroll-margin-top: var(--pc-appbar-h, 2.5rem);
 }
-/* Em telas pequenas o fundo fica opaco para o conteúdo não “vazar” por trás. */
-@media (max-width: 767px) {
+/* Até tablet o fundo fica opaco para o conteúdo não “vazar” por trás. */
+@media (max-width: 1023px) {
   .pc-page-header {
     background-color: var(--card);
     box-shadow: 0 6px 16px -12px oklch(0 0 0 / 0.55);
   }
 }
+
 /* Área rolável do painel: qualquer âncora/foco para dentro do conteúdo para
    abaixo das barras fixas, em qualquer densidade. */
 .pc-scroll-main {
@@ -1261,8 +1265,9 @@ html[data-density="compact"] .pc-col { min-height: calc(var(--pc-panel-min) - 1r
   flex: 1 1 auto;
   min-height: var(--pc-card-min, 4.75rem);
 }
-.app-scope { --pc-card-min: 4.75rem; }
-html[data-density="compact"] .app-scope { --pc-card-min: 3.9rem; }
+.app-scope { --pc-card-min: 3.9rem; }
+html[data-density="compact"] .app-scope { --pc-card-min: 3.35rem; }
+
 
 /* ── Ritmo tipográfico único da área do cliente ──────────────────────────
    Mesma hierarquia (título → subtítulo → corpo) e o mesmo espaçamento
@@ -1309,6 +1314,40 @@ html[data-density="compact"] .app-scope { --pc-card-min: 3.9rem; }
   .app-scope .pc-page { padding-inline: 0.6rem; }
   .app-scope .app-dashboard [role="tablist"] { flex-wrap: nowrap; }
 }
+
+/* ── Janela única do painel ───────────────────────────────────────────────
+   Em telas com altura suficiente, o dashboard ocupa exatamente a altura da
+   área de conteúdo: a faixa "Meu painel" fica fixa no topo e SOMENTE as
+   listas internas (.pc-panel-body) rolam. Nada de rolagem geral da página,
+   nada de corte/transbordo nos cards. */
+@media (min-width: 1024px) and (min-height: 620px) {
+  .app-scope .app-dashboard.pc-page {
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .app-scope .app-dashboard.pc-page > header { flex: 0 0 auto; }
+  .app-scope .app-dashboard .pc-grid {
+    flex: 1 1 auto;
+    min-height: 0;
+    align-content: stretch;
+  }
+  .app-scope .app-dashboard .pc-col {
+    height: 100%;
+    min-height: 0;
+    max-height: none;
+  }
+  /* Cards da grade nunca transbordam: só o corpo interno rola. */
+  .app-scope .app-dashboard .pc-col > * {
+    min-height: 0;
+    max-height: 100%;
+  }
+}
+
+/* Tipografia levemente mais densa no painel, mantendo legibilidade AA. */
+.app-scope .app-dashboard { font-size: 0.9rem; }
+.app-scope .app-dashboard [data-slot="card-title"] { font-size: 0.95rem; }
+
 
 
 
@@ -6054,4 +6093,13 @@ h3.font-display {
 [data-sidebar="menu-button"][data-active="true"] .pc-nav-label,
 [aria-current="page"] .pc-nav-label {
   font-weight: 600;
+}
+
+/* Janela única: o container rolável principal não rola quando o dashboard
+   já ocupa toda a altura disponível (evita 1–2px de "scroll fantasma"). */
+@media (min-width: 1024px) and (min-height: 620px) {
+  .app-scope .pc-scroll-main:has(.app-dashboard) {
+    overflow: hidden;
+    padding-bottom: 0;
+  }
 }
