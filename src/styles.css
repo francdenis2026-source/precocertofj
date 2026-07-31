@@ -1285,6 +1285,15 @@ html[data-density="compact"] .app-scope { --pc-card-min: 3.9rem; }
 .app-scope [data-slot="card-header"] { padding: var(--pc-panel-pad) calc(var(--pc-panel-pad) + 0.25rem); }
 .app-scope [data-slot="card-content"] { padding: var(--pc-panel-pad) calc(var(--pc-panel-pad) + 0.25rem); }
 
+/* Painel do cliente: a faixa "Meu painel" encosta quase na barra superior. */
+.app-scope .app-dashboard.pc-page { padding-block-start: 0.3rem; }
+
+/* Nenhum card/métrica pode vazar horizontalmente em telas estreitas. */
+.app-scope .pc-page,
+.app-scope .pc-grid,
+.app-scope .pc-col { min-width: 0; }
+.app-scope .pc-page { overflow-x: clip; }
+
 /* Telas menores: cards/métricas mantêm alinhamento sem espremer. */
 @media (max-width: 767px) {
   .app-scope .pc-card-grid {
@@ -1294,6 +1303,13 @@ html[data-density="compact"] .app-scope { --pc-card-min: 3.9rem; }
   .app-scope .pc-page { padding-inline: max(var(--pc-pad-x), 0.85rem); }
   .app-scope .pc-col { max-height: none; }
 }
+
+/* 360px: reduz respiro lateral e evita overflow em faixas com muitos itens. */
+@media (max-width: 400px) {
+  .app-scope .pc-page { padding-inline: 0.6rem; }
+  .app-scope .app-dashboard [role="tablist"] { flex-wrap: nowrap; }
+}
+
 
 
 /* ── Densidade aplicada a barra lateral, cabeçalho e controles menores ──── */

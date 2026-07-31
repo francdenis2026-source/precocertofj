@@ -1,6 +1,8 @@
 import { useMemo, useRef, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { ArrowRight, Info, Loader2, Search as SearchIcon } from "lucide-react";
+import { ArrowRight, Info, Loader2, Search as SearchIcon, Store } from "lucide-react";
+import { EmptyState } from "@/components/layout";
+
 
 import { StoreLogo } from "@/components/app/StoreLogo";
 import { useSignedLogoUrls } from "@/hooks/use-signed-logo-urls";
@@ -133,7 +135,14 @@ export function StoresPanel({
             <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Carregando lojas…
           </div>
         ) : filtered.length === 0 ? (
-          <p className={cn(tc.meta, "p-4 text-center")}>Nenhum estabelecimento encontrado.</p>
+          <EmptyState
+            icon={Store}
+            title="Nenhum estabelecimento encontrado"
+            description="Ajuste a busca ou veja o diretório completo de mercados."
+            className="m-3 border border-dashed border-border/70 py-6"
+          />
+
+
         ) : (
           <ul className="divide-y divide-border/60">
             {filtered.map((s) => {
