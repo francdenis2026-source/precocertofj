@@ -149,7 +149,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
             variant="ghost"
             onClick={signOut}
             disabled={signingOut}
-            className="hidden h-8 items-center rounded-full border border-border bg-card px-3 text-[11.5px] font-semibold text-foreground transition hover:border-primary/40 hover:text-primary disabled:opacity-60 sm:inline-flex"
+            className="hidden h-8 items-center rounded-full border border-border bg-card px-3 text-[11.5px] font-semibold text-foreground transition hover:border-primary/40 hover:text-primary focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-100 disabled:text-muted-foreground sm:inline-flex"
           >
             {signingOut ? "Saindo..." : "Sair"}
           </Button>
