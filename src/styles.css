@@ -1221,12 +1221,31 @@ html[data-density="compact"] .pc-col { min-height: calc(var(--pc-panel-min) - 1r
 .pc-pad { padding: var(--pc-panel-pad) calc(var(--pc-panel-pad) + 0.25rem); }
 
 /* Cabeçalho da página acompanha a rolagem interna do painel: em telas
-   pequenas o usuário mantém título, voltar e ações sempre à vista. */
+   pequenas o usuário mantém título, voltar e ações sempre à vista.
+   O deslocamento usa a altura real da barra superior (por densidade),
+   então o primeiro card sempre começa abaixo da barra — nunca sob ela. */
 .pc-page-header {
   position: sticky;
-  top: 0;
+  top: calc(var(--pc-appbar-h, 2.5rem) * 0);
   z-index: 20;
+  scroll-margin-top: var(--pc-appbar-h, 2.5rem);
 }
+/* Em telas pequenas o fundo fica opaco para o conteúdo não “vazar” por trás. */
+@media (max-width: 767px) {
+  .pc-page-header {
+    background-color: var(--card);
+    box-shadow: 0 6px 16px -12px oklch(0 0 0 / 0.55);
+  }
+}
+/* Área rolável do painel: qualquer âncora/foco para dentro do conteúdo para
+   abaixo das barras fixas, em qualquer densidade. */
+.pc-scroll-main {
+  scroll-padding-top: calc(var(--pc-appbar-h, 2.5rem) + var(--pc-pad-y, 0.75rem));
+}
+.pc-scroll-main .pc-page > * {
+  scroll-margin-top: calc(var(--pc-appbar-h, 2.5rem) + var(--pc-pad-y, 0.75rem));
+}
+
 
 .pc-pad-sm { padding: calc(var(--pc-panel-pad) * 0.7); }
 
