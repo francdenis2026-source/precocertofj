@@ -67,7 +67,7 @@ function HeaderStats() {
  * Substitui os botões grandes de escopo por um pill group estilo dashboard.
  */
 function ScopeNav({ className }: { className?: string }) {
-  const pathname = window.location.pathname;
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isPanel = pathname === "/app" || pathname.startsWith("/app/");
   const isHome = pathname === "/" || pathname.startsWith("/buscar") || pathname.startsWith("/produto");
 
