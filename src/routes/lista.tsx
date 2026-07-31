@@ -274,6 +274,12 @@ function ListaContent() {
         newNameRef.current?.focus();
         return;
       }
+      if (key === "f") {
+        ev.preventDefault();
+        filterRef.current?.focus();
+        filterRef.current?.select();
+        return;
+      }
       if (key === "l") {
         ev.preventDefault();
         const target = selectedId ?? lists[0]?.id;
