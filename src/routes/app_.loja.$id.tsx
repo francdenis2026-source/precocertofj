@@ -312,7 +312,7 @@ function AppStorePage() {
                     const checked = selected.includes(p.productName);
                     return (
                       <li key={p.slug} className="px-3 py-2 transition-colors hover:bg-muted/40">
-                        <div className="grid grid-cols-[auto_minmax(0,1fr)_auto_auto_auto_auto] items-center gap-2.5">metaplaceholder
+                        <div className="grid grid-cols-[auto_minmax(0,1fr)_auto_auto_auto_auto] items-center gap-2.5">
                           <Checkbox
                             checked={checked}
                             onCheckedChange={() => toggle(p.productName)}
