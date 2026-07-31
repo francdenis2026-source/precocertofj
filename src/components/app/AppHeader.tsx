@@ -2,7 +2,9 @@ import { Link } from "@tanstack/react-router";
 import { Activity, Globe, MapPin, PanelLeftClose, PanelLeftOpen, ShieldCheck, ShoppingBag, User } from "lucide-react";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 
+import { AppBrand } from "@/components/app/AppBrand";
 import { AuthNavToggle } from "@/components/nav/AuthNavToggle";
+
 import { ThemeToggle } from "@/components/theme-toggle";
 
 import { useMyProfile } from "@/hooks/useMyProfile";
@@ -51,6 +53,20 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
     >
       {isAdminScope ? <AdminSidebarToggle /> : <SidebarTrigger className="text-foreground" />}
       <div className="hidden h-5 w-px bg-border md:block" />
+
+      <Link
+        to={isAdminScope ? "/admin" : "/app"}
+        aria-label={isAdminScope ? "Console administrativo" : "PreçoCerto — minha área"}
+        className="mr-1 rounded-md outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/60"
+      >
+        <AppBrand
+          admin={isAdminScope}
+          size="sm"
+          className="[&_span]:whitespace-nowrap"
+        />
+      </Link>
+
+
 
 
       <div className="flex min-w-0 flex-1 items-center gap-2">
