@@ -153,9 +153,9 @@ function ListaContent() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-7xl px-6 py-8 md:py-10">
+      <div className="mx-auto max-w-7xl px-4 py-3 md:py-4">
         {/* Editorial hero */}
-        <section className="relative mb-8 overflow-hidden rounded-3xl bg-primary p-8 text-primary-foreground md:p-10">
+        <section className="relative mb-8 overflow-hidden rounded-3xl bg-primary p-5 text-primary-foreground md:p-10">
           <div
             className="absolute -right-16 -top-16 h-48 w-48 rounded-full bg-accent"
             aria-hidden
@@ -179,7 +179,7 @@ function ListaContent() {
         </section>
 
 
-        <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
+        <div className="grid gap-3 lg:grid-cols-[320px_1fr]">
           {/* Sidebar */}
           <aside className="rounded-2xl border border-border bg-card">
             <div className="border-b border-border p-4">
@@ -483,7 +483,7 @@ function ListDetail({ listId }: { listId: string }) {
   if (!detail) return null;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       <div className="rounded-2xl border border-border bg-card">
         <div className="border-b border-border p-5">
           <h2 className="font-display text-2xl text-foreground">{detail.name}</h2>
@@ -506,7 +506,7 @@ function ListDetail({ listId }: { listId: string }) {
 
         <ul className="divide-y divide-border">
           {detail.items.length === 0 && (
-            <li className="p-8 text-center text-sm text-muted-foreground">
+            <li className="p-5 text-center text-sm text-muted-foreground">
               Nenhum item ainda. Use a busca acima para adicionar produtos do
               catálogo.
             </li>
@@ -915,13 +915,13 @@ function BestPricesPanel({
       </div>
 
       {loading && (
-        <div className="p-8 text-center text-sm text-muted-foreground">
+        <div className="p-5 text-center text-sm text-muted-foreground">
           <Loader2 className="mx-auto mb-2 h-5 w-5 animate-spin" /> Calculando...
         </div>
       )}
 
       {!loading && data && (
-        <div className="grid gap-6 p-5 lg:grid-cols-2">
+        <div className="grid gap-3 p-5 lg:grid-cols-2">
           {/* Best cart */}
           <div>
             <p className="mb-3 text-xs uppercase tracking-widest text-muted-foreground">

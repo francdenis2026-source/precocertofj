@@ -235,8 +235,8 @@ function Perfil() {
           title="Meu perfil"
           description="Atualize sua foto, dados pessoais e endereço de entrega."
         />
-        <div className="grid gap-6 pb-10 md:grid-cols-[1fr_2fr]">
-          <div className="rounded-2xl border border-border bg-card p-6 text-center">
+        <div className="grid gap-3 pb-4 md:grid-cols-[1fr_2fr]">
+          <div className="rounded-2xl border border-border bg-card p-4 text-center">
             <div className="relative mx-auto h-24 w-24">
               <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-primary to-[oklch(0.36_0.11_255)] font-display text-4xl text-primary-foreground shadow-[0_10px_24px_-12px_oklch(0.44_0.12_252/0.55)] ring-1 ring-inset ring-accent/30">
                 {avatarUrl ? (
@@ -338,7 +338,7 @@ function Perfil() {
             </div>
 
             {/* CPF */}
-            <form onSubmit={handleSaveCpf} className="rounded-2xl border border-border bg-card p-6">
+            <form onSubmit={handleSaveCpf} className="rounded-2xl border border-border bg-card p-4">
               <p className="font-display text-lg text-foreground">CPF</p>
               <p className="mt-1 text-xs text-muted-foreground">
                 Usado para acessar sua conta.
@@ -369,7 +369,7 @@ function Perfil() {
             </form>
 
             {/* Nome, telefone, endereço */}
-            <form onSubmit={handleSaveProfile} className="rounded-2xl border border-border bg-card p-6 space-y-4">
+            <form onSubmit={handleSaveProfile} className="rounded-2xl border border-border bg-card p-4 space-y-4">
               <div>
                 <p className="font-display text-lg text-foreground">Dados pessoais</p>
                 <p className="mt-1 text-xs text-muted-foreground">
@@ -458,7 +458,7 @@ function Perfil() {
             </form>
 
             <div className="rounded-2xl border border-border bg-card">
-              <div className="border-b border-border px-6 py-4">
+              <div className="border-b border-border px-4 py-3">
                 <p className="font-display text-lg text-foreground">Minha lista de compras</p>
               </div>
               <ul className="divide-y divide-border">

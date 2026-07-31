@@ -181,7 +181,7 @@ function MinhasLicencas() {
         }
       />
 
-      <div className="mx-auto w-full max-w-5xl px-4 py-6 md:px-6 md:py-8">
+      <div className="mx-auto w-full max-w-5xl px-4 py-3 md:px-6 md:py-4">
         <DataTable<LicenseRow>
           data={list}
           columns={columns}

@@ -72,7 +72,7 @@ function LiveComparatorPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto w-full max-w-4xl px-4 py-6 md:px-6">
+      <div className="mx-auto w-full max-w-4xl px-4 py-3 md:px-6">
         <PageHeader
           breadcrumbs={[{ label: "Meu painel", to: "/app" }, { label: "Comparador ao vivo" }]}
           title="Comparador ao vivo"
@@ -97,7 +97,7 @@ function LiveComparatorPage() {
 
 function PaywallPrompt({ trial }: { trial: boolean }) {
   return (
-    <div className="pc-elite-frame mt-6 rounded-2xl border bg-card p-6 text-center">
+    <div className="pc-elite-frame mt-6 rounded-2xl border bg-card p-4 text-center">
       <div className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-brand-gold/15 text-[var(--pc-gold-ink)] ring-1 ring-brand-gold/30">
         <Lock className="h-5 w-5" aria-hidden />
       </div>

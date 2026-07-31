@@ -190,7 +190,7 @@ function NovaListaWizard() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-3xl px-4 py-8 md:py-10">
+      <div className="mx-auto max-w-3xl px-4 py-4 md:py-4">
         {/* Cabeçalho + progresso */}
         <div className="mb-6 flex items-center justify-between gap-4">
           <Link
@@ -228,7 +228,7 @@ function NovaListaWizard() {
 
         {/* ------------------------- STEP 1 ------------------------- */}
         {step === 1 && (
-          <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
+          <section className="rounded-2xl border border-border bg-card p-4 md:p-5">
             <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
               <Sparkles className="h-3 w-3" /> Começando
             </span>
@@ -292,9 +292,9 @@ function NovaListaWizard() {
 
         {/* ------------------------- STEP 2 ------------------------- */}
         {step === 2 && (
-          <section className="space-y-5">
+          <section className="space-y-3">
             {/* Busca no catálogo */}
-            <div className="rounded-2xl border border-border bg-card p-5 md:p-6">
+            <div className="rounded-2xl border border-border bg-card p-5 md:p-4">
               <div className="flex items-center gap-2">
                 <div className="relative flex-1">
                   <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -354,7 +354,7 @@ function NovaListaWizard() {
             </div>
 
             {/* Essenciais agrupados */}
-            <div className="rounded-2xl border border-border bg-card p-5 md:p-6">
+            <div className="rounded-2xl border border-border bg-card p-5 md:p-4">
               <div className="flex items-center gap-2">
                 <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
                   <ShoppingCart className="h-3 w-3" /> Sugestões populares
@@ -451,7 +451,7 @@ function NovaListaWizard() {
 
         {/* ------------------------- STEP 3 ------------------------- */}
         {step === 3 && (
-          <section className="rounded-2xl border border-border bg-card p-6 md:p-8">
+          <section className="rounded-2xl border border-border bg-card p-4 md:p-5">
             <span className="inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
               <ListChecks className="h-3 w-3" /> Revisão
             </span>
@@ -494,7 +494,7 @@ function NovaListaWizard() {
                 </button>
               </div>
               {items.length === 0 ? (
-                <div className="p-6 text-center text-sm text-muted-foreground">Nenhum item selecionado.</div>
+                <div className="p-4 text-center text-sm text-muted-foreground">Nenhum item selecionado.</div>
               ) : (
                 <ul className="divide-y divide-border">
                   {items.map((it) => (
@@ -579,7 +579,7 @@ function NovaListaWizard() {
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-sm rounded-2xl border border-border bg-card p-6 shadow-xl"
+              className="w-full max-w-sm rounded-2xl border border-border bg-card p-4 shadow-xl"
             >
               <div className="flex items-center gap-2 text-primary">
                 <Camera className="h-5 w-5" />

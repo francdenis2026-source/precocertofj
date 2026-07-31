@@ -187,7 +187,7 @@ function FinancasPage() {
         <header className="relative mb-5 overflow-hidden rounded-2xl border bg-gradient-to-br from-primary/5 via-card to-card px-4 py-4 md:px-6 md:py-5">
           <svg
             aria-hidden="true"
-            className="pointer-events-none absolute -right-6 -top-6 h-32 w-32 opacity-[0.08] text-primary"
+            className="pointer-events-none absolute -right-6 -top-4 h-32 w-32 opacity-[0.08] text-primary"
             viewBox="0 0 100 100"
             fill="none"
           >
@@ -249,7 +249,7 @@ function FinancasPage() {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="dashboard" className="space-y-6">
+          <TabsContent value="dashboard" className="space-y-3">
             <DashboardView
               monthTotal={monthTotal}
               prevTotal={prevTotal}
@@ -380,7 +380,7 @@ function DashboardView({
     .reduce((s, c) => s + c.total, 0);
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-3">
       {/* Quick food CTA */}
       <button
         type="button"
@@ -480,7 +480,7 @@ function DashboardView({
         />
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-3 lg:grid-cols-3">
         <PanelCard className="lg:col-span-2" title="Evolução diária" description="Gasto por dia vs mês anterior">
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
@@ -506,7 +506,7 @@ function DashboardView({
 
         <PanelCard title="Por categoria" description={`${donutData.length} categorias com gasto`}>
           {donutData.length === 0 ? (
-            <p className="py-8 text-center text-sm text-muted-foreground">Sem lançamentos no mês.</p>
+            <p className="py-4 text-center text-sm text-muted-foreground">Sem lançamentos no mês.</p>
           ) : (
             <>
               <div className="h-48 w-full">
@@ -608,9 +608,9 @@ function TransactionsView({
         actions={<Button size="sm" onClick={onNew} className="btn-signal"><Plus className="mr-1 h-4 w-4" /> Novo</Button>}
       >
         {loading ? (
-          <p className="py-8 text-center text-sm text-muted-foreground">Carregando…</p>
+          <p className="py-4 text-center text-sm text-muted-foreground">Carregando…</p>
         ) : transactions.length === 0 ? (
-          <p className="py-8 text-center text-sm text-muted-foreground">Nenhum lançamento neste mês.</p>
+          <p className="py-4 text-center text-sm text-muted-foreground">Nenhum lançamento neste mês.</p>
         ) : (
           <div className="overflow-x-auto">
             <table className="w-full text-sm">

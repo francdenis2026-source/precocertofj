@@ -51,7 +51,7 @@ function MyAiPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto w-full max-w-3xl space-y-5 px-4 py-6">
+      <div className="mx-auto w-full max-w-3xl space-y-3 px-4 py-3">
         <header className="space-y-1">
           <h1 className="font-display text-xl font-semibold text-foreground">Meu uso de IA</h1>
           <p className="text-xs text-muted-foreground">
@@ -125,12 +125,12 @@ function MyAiPage() {
           </CardHeader>
           <CardContent>
             {isLoading && (
-              <div className="flex justify-center py-8">
+              <div className="flex justify-center py-4">
                 <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
               </div>
             )}
             {usage && usage.items.length === 0 && (
-              <p className="py-6 text-center text-sm text-muted-foreground">
+              <p className="py-3 text-center text-sm text-muted-foreground">
                 Você ainda não fez perguntas ao assistente.
               </p>
             )}
