@@ -350,7 +350,7 @@ export function AppSidebar() {
 
         {!isAdminArea && !rolesLoading && isAdmin && (
           <SidebarGroup className="py-2">
-            <SidebarGroupLabel className="px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-sidebar-foreground/55">
+            <SidebarGroupLabel className="px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-sidebar-muted-foreground">
               Administração
             </SidebarGroupLabel>
             <SidebarGroupContent>
