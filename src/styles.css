@@ -1293,17 +1293,20 @@ main :is(p, li, dt, dd, td, th, label, a, button, input, textarea, figcaption) {
 
 @media (max-width: 767px) {
   .app-scope {
-    font-size: 16px;
+    font-size: 15px;
   }
+  /* alvo de toque confortável, mas sem tipografia exagerada */
   .app-scope [data-sidebar="menu-button"] {
-    min-height: 3rem;
-    height: 3rem;
+    min-height: 2.5rem;
+    height: 2.5rem;
+    font-size: 0.875rem;
   }
   .app-scope [data-sidebar="menu-button"] span:first-child {
-    width: 2.5rem;
-    height: 2.5rem;
+    width: 2rem;
+    height: 2rem;
   }
 }
+
 
 /* Sombras discretas — apenas 2 níveis (Stripe/Linear-like) */
 @utility shadow-elev-1 {
