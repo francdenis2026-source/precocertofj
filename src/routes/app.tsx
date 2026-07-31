@@ -161,57 +161,77 @@ function AppHomeContent() {
           </div>
 
           {/* Métricas do banco */}
-          <div className="grid grid-cols-1 divide-y divide-border/60 min-[420px]:grid-cols-2 min-[420px]:divide-x sm:grid-cols-4 sm:divide-y-0">
-            <Metric
-              icon={ShoppingCart}
-              label="Suas listas"
-              value={summary ? String(summary.totals.listsCount) : "—"}
-              hint={
-                summary
-                  ? `${summary.totals.itemsCount} ${summary.totals.itemsCount === 1 ? "item" : "itens"} · abrir listas`
-                  : "carregando"
-              }
-              tone="primary"
-              to="/lista"
-            />
-            <Metric
-              icon={Star}
-              label="Favoritos"
-              value={summary ? String(summary.totals.favoritesCount) : "—"}
-              hint="preços acompanhados por você"
-              tone="brand"
-            />
-            <Metric
-              icon={TrendingDown}
-              label="Cesta mais barata"
-              value={
-                summary?.totals.estimatedCartTotal != null ? (
-                  <Price value={summary.totals.estimatedCartTotal} size="sm" />
-                ) : (
-                  "—"
-                )
-              }
-              hint={
-                summary?.totals.estimatedCartMarket
-                  ? `hoje em ${summary.totals.estimatedCartMarket}`
-                  : "favorite produtos para calcular"
-              }
-              tone="savings"
-            />
-            <Metric
-              icon={Wallet}
-              label="Economia potencial"
-              value={
-                potentialSavings > 0 ? (
-                  <Price value={potentialSavings} size="sm" tone="savings" />
-                ) : (
-                  "—"
-                )
-              }
-               hint={savingsHint}
-               tone="savings"
-            />
-          </div>
+          {summaryQuery.isError ? (
+            <div className="p-3.5 md:p-4">
+              <ErrorState
+                title="Não foi possível carregar seu painel"
+                message="A conexão falhou ao buscar suas listas e favoritos."
+                onRetry={() => void summaryQuery.refetch()}
+              />
+            </div>
+          ) : !summary && loading ? (
+            <>
+              <MetricRailSkeleton />
+              {summaryStalled && (
+                <div className="px-3.5 pb-3 md:px-4">
+                  <StalledNotice onRetry={() => void summaryQuery.refetch()} />
+                </div>
+              )}
+            </>
+          ) : (
+            <div className="grid grid-cols-1 divide-y divide-border/60 min-[420px]:grid-cols-2 min-[420px]:divide-x sm:grid-cols-4 sm:divide-y-0">
+              <Metric
+                icon={ShoppingCart}
+                label="Suas listas"
+                value={summary ? String(summary.totals.listsCount) : "—"}
+                hint={
+                  summary
+                    ? `${summary.totals.itemsCount} ${summary.totals.itemsCount === 1 ? "item" : "itens"} · abrir listas`
+                    : "sem dados por enquanto"
+                }
+                tone="primary"
+                to="/lista"
+              />
+              <Metric
+                icon={Star}
+                label="Favoritos"
+                value={summary ? String(summary.totals.favoritesCount) : "—"}
+                hint="preços acompanhados por você"
+                tone="brand"
+              />
+              <Metric
+                icon={TrendingDown}
+                label="Cesta mais barata"
+                value={
+                  summary?.totals.estimatedCartTotal != null ? (
+                    <Price value={summary.totals.estimatedCartTotal} size="sm" />
+                  ) : (
+                    "—"
+                  )
+                }
+                hint={
+                  summary?.totals.estimatedCartMarket
+                    ? `hoje em ${summary.totals.estimatedCartMarket}`
+                    : "favorite produtos para calcular"
+                }
+                tone="savings"
+              />
+              <Metric
+                icon={Wallet}
+                label="Economia potencial"
+                value={
+                  potentialSavings > 0 ? (
+                    <Price value={potentialSavings} size="sm" tone="savings" />
+                  ) : (
+                    "—"
+                  )
+                }
+                hint={savingsHint}
+                tone="savings"
+              />
+            </div>
+          )}
+
         </header>
 
         {/* Grade responsiva: busca | lojas | favoritos.
