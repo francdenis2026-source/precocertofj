@@ -154,6 +154,8 @@ function ListaContent() {
     staleTime: 60_000,
     retry: 1,
   });
+  const listsStalled = useStalled(listsQuery.isLoading && !listsQuery.data);
+
 
   useEffect(() => {
     if (!listsQuery.data) return;
