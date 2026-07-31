@@ -12,10 +12,13 @@ import { StoresColumn } from "@/components/app/StoresColumn";
 import { FavoritesDock } from "@/components/app/FavoritesDock";
 
 import { ForceUpdateButton } from "@/components/app/ForceUpdateButton";
+import { MetricRailSkeleton, PanelBlockSkeleton, StalledNotice } from "@/components/app/PanelSkeletons";
+import { ErrorState } from "@/components/feedback";
 import { Price } from "@/components/ds/Price";
 import { useAppHomeData } from "@/hooks/useAppHomeData";
+import { useStalled } from "@/hooks/use-stalled";
 import { cn } from "@/lib/utils";
-import { tc } from "@/lib/typeclear";
+
 
 export const Route = createFileRoute("/app")({
   head: () => ({
