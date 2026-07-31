@@ -47,9 +47,9 @@ export function ProtectedGate({ children }: { children: React.ReactNode }) {
     // usuário tentar novamente sem entrar em loop com o /login.
     if (accountQuery.isError) return;
     if (!acc) {
-      // Sessão válida sem perfil de cliente: pode ser uma conta interna
-      // (administrador). Nunca encerrar a sessão aqui — apenas encaminhar
-      // para a área correta.
+      // Sessão válida sem perfil de cliente: contas internas (admin) podem
+      // continuar no painel do cliente; sem sessão de cliente nem admin,
+      // volta para o login. Nunca encerrar a sessão aqui.
       void (async () => {
         const { data: userData } = await supabase.auth.getUser();
         if (userData.user) {
@@ -58,7 +58,7 @@ export function ProtectedGate({ children }: { children: React.ReactNode }) {
             _role: "admin",
           });
           if (isAdmin) {
-            navigate({ to: "/admin", replace: true });
+            setAllowWithoutProfile(true);
             return;
           }
         }
