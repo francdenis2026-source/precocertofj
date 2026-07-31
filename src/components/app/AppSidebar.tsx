@@ -224,6 +224,11 @@ export function AppSidebar() {
       const target = e.target as HTMLElement | null;
       if (target && /^(INPUT|TEXTAREA|SELECT)$/.test(target.tagName)) return;
       if (target?.isContentEditable) return;
+      if (e.key.toLowerCase() === "q") {
+        e.preventDefault();
+        if (!signingOut) void signOut();
+        return;
+      }
       const to = map.get(e.key);
       if (!to) return;
       e.preventDefault();
@@ -232,7 +237,7 @@ export function AppSidebar() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [isAdminArea, navigate, setOpenMobile]);
+  }, [isAdminArea, navigate, setOpenMobile, signOut, signingOut]);
 
 
   const isActive = (n: NavItem) => {
