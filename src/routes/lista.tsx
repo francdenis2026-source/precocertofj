@@ -1,4 +1,7 @@
 import { ListRowsSkeleton } from "@/components/feedback";
+import { ListDetailSkeleton, StalledNotice } from "@/components/app/PanelSkeletons";
+import { useStalled } from "@/hooks/use-stalled";
+
 import { createFileRoute } from "@tanstack/react-router";
 import { AppShell } from "@/components/brand/AppShell";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
