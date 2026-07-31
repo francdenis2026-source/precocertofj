@@ -290,21 +290,39 @@ export function AppSidebar() {
           onClick={closeOnMobile}
           className="flex items-center gap-2.5 rounded-md px-2 py-1 transition-colors hover:bg-sidebar-accent group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
         >
-          <span
-            className="relative grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-sidebar-border bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
-            aria-hidden
-          >
-            {isAdminArea ? <ShieldCheck className="h-4 w-4" strokeWidth={2.25} /> : <img src="/logo-mark.png" alt="" aria-hidden width={20} height={20} className="h-5 w-5 object-contain" />}
-          </span>
-          <span className="flex flex-col leading-none group-data-[collapsible=icon]:hidden">
-            <span className="text-[14px] font-semibold tracking-tight text-sidebar-foreground">
-              {isAdminArea ? "Console" : "PreçoCerto"}
+          {isAdminArea ? (
+            <span
+              className="relative grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-sidebar-border bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
+              aria-hidden
+            >
+              <ShieldCheck className="h-4 w-4" strokeWidth={2.25} />
             </span>
-            <span className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-foreground/50">
+          ) : (
+            <img
+              src="/logo-mark.png"
+              alt=""
+              aria-hidden
+              width={32}
+              height={32}
+              className="h-8 w-8 shrink-0 object-contain drop-shadow-[0_1px_0_rgba(11,30,58,0.25)]"
+            />
+          )}
+          <span className="flex flex-col leading-none group-data-[collapsible=icon]:hidden">
+            <span className="font-display text-[16px] font-bold tracking-tight text-sidebar-foreground">
+              {isAdminArea ? (
+                "Console"
+              ) : (
+                <>
+                  Preço<span className="text-gold-ink">Certo</span>
+                </>
+              )}
+            </span>
+            <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-foreground/70">
               {isAdminArea ? "Administração" : "Minha área"}
             </span>
           </span>
         </Link>
+
 
       </SidebarHeader>
 
