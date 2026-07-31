@@ -75,10 +75,10 @@ export const tc = {
   num: `pc-price ${fluid(13, 14.5)} leading-[1.2]`,
   /** Selo minúsculo. */
   tag: `${fluid(11, 12)} font-bold uppercase leading-none tracking-[0.12em]`,
-  /** Nome de estabelecimento em destaque — serif editorial em ouro, roman (não italic) para legibilidade. */
-  storeName: `pc-store-emphasis font-serif ${fluid(12.5, 14)} font-semibold leading-[1.25] tracking-[-0.005em] text-[var(--pc-gold-ink)]`,
+  /** Nome de estabelecimento — sans nítido; o ouro entra apenas no hover/foco. */
+  storeName: `pc-store-emphasis ${fluid(13, 14.5)} font-semibold leading-[1.3] tracking-[-0.005em] text-foreground`,
   /** Nome de estabelecimento compacto (matrizes/tabelas densas). */
-  storeNameTight: `pc-store-emphasis font-serif ${fluid(11, 12.5)} font-semibold leading-[1.2] tracking-[-0.005em] text-[var(--pc-gold-ink)]`,
+  storeNameTight: `pc-store-emphasis ${fluid(12, 13)} font-semibold leading-[1.25] tracking-[-0.005em] text-foreground`,
 } as const;
 
 export type TcToken = keyof typeof tc;

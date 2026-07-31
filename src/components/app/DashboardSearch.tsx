@@ -329,7 +329,7 @@ export function DashboardSearch() {
         aria-busy={resultsQ.isLoading}
       >
         {!active ? (
-          <p className={cn(tc.meta, "p-6 text-center")}>
+          <p className={cn(tc.meta, "mx-auto max-w-[36ch] px-4 py-5 text-center")}>
             Digite ao menos 2 letras ou escolha uma categoria para ver os preços mais recentes dos
             mercados de Feijó.
           </p>
