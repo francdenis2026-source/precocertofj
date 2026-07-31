@@ -18,6 +18,7 @@ import { Price } from "@/components/ds/Price";
 import { useAppHomeData } from "@/hooks/useAppHomeData";
 import { useMeasuredBar } from "@/hooks/use-measured-bar";
 import { useStalled } from "@/hooks/use-stalled";
+import { useWheelScrollForward } from "@/hooks/use-wheel-scroll-forward";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
 
@@ -117,9 +118,12 @@ function AppHomeContent() {
 
   const storeNameSet = new Set(storesByName.keys());
 
+  /** Roda do mouse sobre cabeçalhos/cards rola o painel interno mais próximo. */
+  const wheelRootRef = useWheelScrollForward<HTMLDivElement>();
+
   return (
     <AppShell>
-      <div className="app-dashboard pc-page">
+      <div className="app-dashboard pc-page" ref={wheelRootRef}>
         <p className="sr-only">
           Atalhos do painel: Alt mais B foca a busca, Alt mais O troca a ordenação, Alt mais L limpa
           os filtros, Alt mais E busca estabelecimentos, Alt mais Shift mais F, M ou L alterna as
