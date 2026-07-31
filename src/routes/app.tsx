@@ -107,7 +107,7 @@ function AppHomeContent() {
         {/* Bloco único: saudação + ações + métricas */}
 
         <header className="overflow-hidden rounded-2xl border border-border/70 bg-card/95 shadow-sm backdrop-blur-md">
-          <div className="relative flex flex-wrap items-center justify-between gap-3 border-b border-border/60 bg-primary/95 px-4 py-3 text-primary-foreground md:px-5 md:py-3.5">
+          <div className="relative flex flex-wrap items-center justify-between gap-2 border-b border-border/60 bg-primary/95 px-3.5 py-2 text-primary-foreground md:px-4 md:py-2.5">
             <span
               aria-hidden
               className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-brand/20 blur-3xl"
@@ -117,7 +117,7 @@ function AppHomeContent() {
               <h1
                 className={cn(
                   tc.h1,
-                  "truncate text-[18px] leading-tight text-primary-foreground md:text-[20px]",
+                  "truncate text-[16px] leading-tight text-primary-foreground md:text-[17.5px]",
                 )}
               >
                 Olá, {firstName}
@@ -133,14 +133,14 @@ function AppHomeContent() {
               <Link
                 to="/alertas"
                 aria-label="Alertas de preço"
-                className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-primary-foreground/30 bg-primary-foreground/10 px-3 text-[12.5px] font-medium text-primary-foreground transition hover:bg-primary-foreground/20"
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg border border-primary-foreground/30 bg-primary-foreground/10 px-3 text-[12.5px] font-medium text-primary-foreground transition hover:bg-primary-foreground/20"
               >
                 <Bell className="h-4 w-4" aria-hidden />
                 <span className="hidden md:inline">Alertas</span>
               </Link>
               <Link
                 to="/lista/nova"
-                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-brand px-3.5 text-[12.5px] font-semibold text-brand-foreground transition hover:bg-brand-strong"
+                className="inline-flex h-8 items-center gap-1.5 rounded-lg bg-brand px-3.5 text-[12.5px] font-semibold text-brand-foreground transition hover:bg-brand-strong"
               >
                 Nova lista <ArrowRight className="h-4 w-4" aria-hidden />
               </Link>
@@ -282,35 +282,38 @@ function Metric({
   const t = METRIC_TONES[tone];
   const body = (
     <>
-      <span aria-hidden className={cn("absolute inset-y-3 left-0 w-[3px] rounded-full", t.rail)} />
-      <div className="flex items-center gap-1.5">
-        <span className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-md", t.chip)}>
-          <Icon className="h-3.5 w-3.5" aria-hidden />
-        </span>
-        <p className={cn(tc.tableHead, "truncate")} title={label}>
-          {label}
+      <span aria-hidden className={cn("absolute inset-y-2 left-0 w-[3px] rounded-full", t.rail)} />
+      <span className={cn("grid h-7 w-7 shrink-0 place-items-center rounded-md", t.chip)}>
+        <Icon className="h-3.5 w-3.5" aria-hidden />
+      </span>
+      <div className="min-w-0 flex-1">
+        <div className="flex min-w-0 items-baseline justify-between gap-2">
+          <p className={cn(tc.tableHead, "truncate")} title={label}>
+            {label}
+          </p>
+          <p className={cn(tc.dataPrimary, "shrink-0 text-[17px] leading-none text-foreground")}>
+            {value}
+          </p>
+        </div>
+        <p className={cn(tc.metaMuted, "mt-0.5 truncate text-[10.5px] leading-tight")} title={hint}>
+          {hint}
         </p>
       </div>
-      <p className={cn(tc.dataPrimary, "mt-1.5 text-[26px] leading-none text-foreground")}>
-        {value}
-      </p>
-      <p className={cn(tc.metaMuted, "mt-1 truncate leading-tight")} title={hint}>
-        {hint}
-      </p>
     </>
   );
   if (to) {
     return (
       <Link
         to={to}
-        className="relative block min-w-0 px-4 py-3.5 transition hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60"
+        className="relative flex min-w-0 items-center gap-2 px-3 py-2 transition hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60"
       >
         {body}
       </Link>
     );
   }
-  return <article className="relative min-w-0 px-4 py-3.5">{body}</article>;
+  return <article className="relative flex min-w-0 items-center gap-2 px-3 py-2">{body}</article>;
 }
+
 
 function swap(ids: string[], idx: number, dir: -1 | 1): string[] | null {
   const target = idx + dir;

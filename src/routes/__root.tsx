@@ -13,6 +13,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { Toaster } from "@/components/ui/sonner";
+import { usePointerEventsGuard } from "@/hooks/use-pointer-events-guard";
 import { ConfirmProvider } from "@/components/ui/confirm-provider";
 import { IdleLogoutMonitor } from "@/components/auth/IdleLogoutMonitor";
 import { useAutoTranslate } from "@/lib/pt-terms";
@@ -185,6 +186,9 @@ function RootComponent() {
   useAutoTranslate();
   useTheme();
   useReadingMode();
+  // Watchdog global: libera pointer-events/scroll-lock presos no <body>
+  // por overlays desmontados durante a navegação (em QUALQUER rota).
+  usePointerEventsGuard();
   // Realtime global: qualquer alteração em license_plans invalida os caches
   // de planos em todas as rotas e abas (homepage, /planos, /assinar, admin).
   usePlansRealtime({ queryClient });

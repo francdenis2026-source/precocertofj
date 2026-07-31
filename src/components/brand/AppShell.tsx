@@ -6,7 +6,6 @@ import { AutoAdminBreadcrumb } from "@/components/admin/AutoAdminBreadcrumb";
 import { AppBreadcrumb } from "@/components/app/AppBreadcrumb";
 import { useRouterState } from "@tanstack/react-router";
 import { useInactivityLogout } from "@/hooks/use-inactivity-logout";
-import { usePointerEventsGuard } from "@/hooks/use-pointer-events-guard";
 import { usePersistentSidebar } from "@/hooks/use-persistent-sidebar";
 
 import painelLoadingBg from "@/assets/painel-loading-bg.jpg";
@@ -27,7 +26,6 @@ export function AppShell({ children, scope }: { children: React.ReactNode; scope
   const resolvedScope = scope ?? (pathname.startsWith("/admin") ? "admin" : "app");
   const isAdminScope = resolvedScope === "admin";
   useInactivityLogout();
-  usePointerEventsGuard();
 
   const { open, onOpenChange } = usePersistentSidebar(resolvedScope, isAdminScope);
   return (
