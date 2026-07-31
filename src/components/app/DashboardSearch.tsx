@@ -13,6 +13,7 @@ import {
   searchCatalogAdvanced,
   type CatalogSearchItem,
 } from "@/lib/catalog-search.functions";
+import { useLocalStorageState } from "@/hooks/use-local-storage";
 import { useRovingFocus } from "@/hooks/use-roving-focus";
 import { cn } from "@/lib/utils";
 import { tc } from "@/lib/typeclear";
@@ -36,8 +37,18 @@ export function DashboardSearch() {
 
   const [input, setInput] = useState("");
   const [term, setTerm] = useState("");
-  const [category, setCategory] = useState<string | null>(null);
-  const [sort, setSort] = useState<SortKey>("cheapest");
+  // Filtros persistidos: sobrevivem a recarregamentos e trocas de rota.
+  const [category, setCategory] = useLocalStorageState<string | null>(
+    "app:dashboard-search:category",
+    null,
+    { validate: (v): v is string | null => v === null || typeof v === "string" },
+  );
+  const [sort, setSort] = useLocalStorageState<SortKey>(
+    "app:dashboard-search:sort",
+    "cheapest",
+    { validate: (v): v is SortKey => SORTS.some((s) => s.id === v) },
+  );
+
   const inputRef = useRef<HTMLInputElement>(null);
   const [compareKey, setCompareKey] = useState<string | null>(null);
 
