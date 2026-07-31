@@ -202,7 +202,7 @@ export function FavoritesDock({
         id={`dock-panel-${tab}`}
         aria-labelledby={`dock-tab-${tab}`}
         tabIndex={0}
-        ref={virtual.setRef as unknown as React.Ref<HTMLDivElement>}
+        ref={setPanelRef}
         className="min-h-0 flex-1 overflow-y-auto"
       >
         {loading && total === 0 ? (
@@ -383,6 +383,9 @@ export function FavoritesDock({
         <div className="flex shrink-0 items-center justify-between gap-2 border-t border-border/70 px-2 py-1">
           <p className="truncate text-[11px] text-muted-foreground">
             {start + 1}–{Math.min(end, total)} de {total}
+            {prefetchedCount > 0 && (
+              <span className="ml-1 opacity-70">· próxima pronta</span>
+            )}
           </p>
           <div className="flex shrink-0 items-center gap-1">
             <IconBtn
@@ -397,6 +400,7 @@ export function FavoritesDock({
             <IconBtn
               label="Próxima página"
               onClick={() => setPage(Math.min(pageCount - 1, safePage + 1))}
+              onHoverPrefetch={prefetchRoutes}
               icon={ChevronRight}
               disabled={safePage >= pageCount - 1}
             />
