@@ -434,11 +434,10 @@ function Chip({
       {...rest}
       className={cn(
         tc.filter,
-        "h-8 shrink-0 whitespace-nowrap rounded-md border px-2.5 transition-colors duration-150",
+        "group relative h-8 shrink-0 whitespace-nowrap rounded-full border px-3 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-1",
         active
-          ? "border-primary/60 bg-primary/10 text-primary"
-          : "border-border/70 bg-background text-muted-foreground hover:border-primary/50 hover:bg-primary/10 hover:text-primary",
-
+          ? "border-primary bg-primary text-primary-foreground shadow-sm"
+          : "border-border/70 bg-background text-muted-foreground hover:-translate-y-px hover:border-primary/60 hover:bg-primary/10 hover:text-primary hover:shadow-sm",
       )}
     >
       {children}
