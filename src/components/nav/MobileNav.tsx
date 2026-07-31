@@ -45,12 +45,33 @@ export function MobileNav() {
   );
   const isAppActive = isAuthed && (pathname === "/app" || pathname.startsWith("/app/"));
 
-  const items: Item[] = [
-    { to: "/", label: "Início", icon: Home, match: (p) => p === "/" },
-    { to: "/buscar", label: "Buscar", icon: Search, match: () => isSearchActive },
-    { to: "/lista", label: "Lista", icon: ShoppingCart, match: (p) => p === "/lista" || p.startsWith("/lista/"), accent: true },
-    { to: "/cesta", label: "Cesta", icon: ShoppingBag, match: (p) => p === "/cesta" },
-  ];
+  // No painel do cliente a barra inferior vira a navegação lateral: mantém
+  // "Minha lista" e "Favoritos" sempre visíveis em telas pequenas.
+  const items: Item[] = isAppActive || (isAuthed && pathname === "/favoritos")
+    ? [
+        { to: "/app", label: "Painel", icon: Home, match: () => pathname === "/app" },
+        {
+          to: "/app/produtos",
+          label: "Buscar",
+          icon: Search,
+          match: (p) => p.startsWith("/app/produtos"),
+        },
+        {
+          to: "/lista",
+          label: "Minha lista",
+          icon: ShoppingCart,
+          match: (p) => p === "/lista" || p.startsWith("/lista/"),
+          accent: true,
+        },
+        { to: "/favoritos", label: "Favoritos", icon: Star, match: (p) => p === "/favoritos" },
+      ]
+    : [
+        { to: "/", label: "Início", icon: Home, match: (p) => p === "/" },
+        { to: "/buscar", label: "Buscar", icon: Search, match: () => isSearchActive },
+        { to: "/lista", label: "Lista", icon: ShoppingCart, match: (p) => p === "/lista" || p.startsWith("/lista/"), accent: true },
+        { to: "/cesta", label: "Cesta", icon: ShoppingBag, match: (p) => p === "/cesta" },
+      ];
+
 
   return (
     <nav
