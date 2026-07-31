@@ -38,7 +38,6 @@ import {
   Webhook,
   LineChart,
   Settings2,
-  ShieldCheck,
   Boxes,
   Gauge,
   Languages,
@@ -60,7 +59,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarSeparator,
   useSidebar,
 } from "@/components/ui/sidebar";
 import {
@@ -73,6 +71,7 @@ import { useSignOut } from "@/hooks/use-sign-out";
 import { useMyRoles } from "@/hooks/useMyRoles";
 import { LicenseStatusChip } from "@/components/app/LicenseStatusChip";
 import { AppSidebarSkeleton } from "@/components/app/AppSidebarSkeleton";
+import { SidebarBrandMark } from "@/components/app/SidebarBrandMark";
 import { cn } from "@/lib/utils";
 
 type NavItem = {
@@ -88,20 +87,19 @@ type NavItem = {
   hint?: string;
 };
 
-type AdminTone = "overview" | "catalog" | "commerce" | "people" | "system";
+type NavTone = "brand" | "overview" | "catalog" | "commerce" | "people" | "system";
 
 type NavGroup = {
   label: string;
   items: readonly NavItem[];
-  /** Optional semantic tone used in the admin area to color-code groups. */
-  tone?: AdminTone;
+  /** Cor semântica do grupo — pinta trilho, ícone ativo e rótulo. */
+  tone?: NavTone;
 };
-
-
 
 const appGroups: readonly NavGroup[] = [
   {
     label: "Comprar melhor",
+    tone: "brand",
     items: [
       { to: "/app", label: "Painel", icon: Home, exact: true, shortcut: "1", hint: "Resumo da sua economia" },
       { to: "/app/produtos", label: "Produtos", icon: ShoppingCart, shortcut: "2", hint: "Buscar e comparar preços" },
@@ -109,11 +107,11 @@ const appGroups: readonly NavGroup[] = [
       { to: "/melhores-precos", label: "Melhores preços", icon: Trophy, shortcut: "4", hint: "Ranking do menor preço" },
       { to: "/comparador", label: "Comparador", icon: BarChart3, shortcut: "5", hint: "Comparação lado a lado" },
       { to: "/mapa", label: "Bairros", icon: Boxes, shortcut: "6", hint: "Cobertura por bairro" },
-
     ],
   },
   {
     label: "Minha conta",
+    tone: "people",
     items: [
       { to: "/lista", label: "Minha lista", icon: ShoppingCart, shortcut: "7", hint: "Sua lista de compras" },
       { to: "/alertas", label: "Alertas", icon: Bell, shortcut: "8", hint: "Avisos de queda de preço" },
@@ -124,16 +122,14 @@ const appGroups: readonly NavGroup[] = [
   },
   {
     label: "Assinatura",
+    tone: "commerce",
     items: [
       { to: "/planos", label: "Planos", icon: TicketPercent, hint: "Comparar planos" },
       { to: "/minhas-licencas", label: "Licenças", icon: KeyRound, hint: "Chaves e validade" },
       { to: "/meus-pedidos", label: "Pedidos", icon: ReceiptText, hint: "Histórico de pagamentos" },
-      
     ],
   },
 ] as const;
-
-
 
 const adminGroups: readonly NavGroup[] = [
   {
@@ -170,18 +166,18 @@ const adminGroups: readonly NavGroup[] = [
       { to: "/admin/precos", label: "Histórico de preços", icon: History, search: { tab: "historico" } },
     ],
   },
-    {
-      label: "Comercial",
-      tone: "commerce",
-      items: [
-        { to: "/admin/gestao", label: "Licenças", icon: KeyRound },
-        { to: "/admin/promocoes", label: "Promoções", icon: TicketPercent, search: { tab: "codigos" } },
-        { to: "/admin/promocoes", label: "Cupons", icon: BadgeCheck, exact: true },
-        { to: "/admin/webhooks", label: "Webhooks", icon: Webhook },
-        { to: "/admin/metricas", label: "Conversões", icon: LineChart, search: { tab: "conversoes" } },
-        { to: "/admin/promocoes", label: "Cupom fiscal", icon: ReceiptText, search: { tab: "cupons" } },
-      ],
-    },
+  {
+    label: "Comercial",
+    tone: "commerce",
+    items: [
+      { to: "/admin/gestao", label: "Licenças", icon: KeyRound },
+      { to: "/admin/promocoes", label: "Promoções", icon: TicketPercent, search: { tab: "codigos" } },
+      { to: "/admin/promocoes", label: "Cupons", icon: BadgeCheck, exact: true },
+      { to: "/admin/webhooks", label: "Webhooks", icon: Webhook },
+      { to: "/admin/metricas", label: "Conversões", icon: LineChart, search: { tab: "conversoes" } },
+      { to: "/admin/promocoes", label: "Cupom fiscal", icon: ReceiptText, search: { tab: "cupons" } },
+    ],
+  },
   {
     label: "Clientes",
     tone: "people",
@@ -203,8 +199,6 @@ const adminGroups: readonly NavGroup[] = [
     ],
   },
 ] as const;
-
-
 
 export function AppSidebar() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -254,7 +248,6 @@ export function AppSidebar() {
     return () => window.removeEventListener("keydown", onKey);
   }, [isAdminArea, navigate, setOpenMobile, signOut, signingOut]);
 
-
   const isActive = (n: NavItem) => {
     if (n.search?.tab !== undefined) {
       return pathname === n.to && searchTab === n.search.tab;
@@ -267,19 +260,13 @@ export function AppSidebar() {
   };
 
   const renderGroup = (group: NavGroup) => (
-    <SidebarGroup key={group.label} className="px-0 py-1.5" data-tone={group.tone}>
-      <SidebarGroupLabel
-        className={cn(
-          "h-6 px-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-muted-foreground",
-          "group-data-[collapsible=icon]:hidden",
-          group.tone && "pc-admin-group-label",
-
-        )}
-      >
-        {group.label}
+    <SidebarGroup key={group.label} className="pcsb-group" data-tone={group.tone ?? "brand"}>
+      <SidebarGroupLabel className="pcsb-grouplabel group-data-[collapsible=icon]:hidden">
+        <span>{group.label}</span>
+        <span aria-hidden className="pcsb-grouprule" />
       </SidebarGroupLabel>
       <SidebarGroupContent>
-        <SidebarMenu className="gap-0.5">
+        <SidebarMenu className="gap-[3px]">
           {group.items.map((n) => {
             const active = isActive(n);
             const key = `${n.to}?${n.search?.tab ?? ""}#${n.label}`;
@@ -291,14 +278,7 @@ export function AppSidebar() {
                       asChild
                       isActive={active}
                       data-active={active ? "true" : "false"}
-                      className={cn(
-                        "relative h-10 rounded-md px-2 text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar aria-disabled:pointer-events-none aria-disabled:text-sidebar-muted-foreground aria-disabled:opacity-100",
-                        group.tone && "pc-admin-row",
-                        active &&
-                          !group.tone &&
-                          "bg-sidebar-accent font-semibold text-sidebar-accent-foreground",
-                      )}
-
+                      className="pcsb-row"
                     >
                       <Link
                         to={n.to}
@@ -306,240 +286,201 @@ export function AppSidebar() {
                         onClick={closeOnMobile}
                         aria-current={active ? "page" : undefined}
                         aria-keyshortcuts={n.shortcut ? `Alt+${n.shortcut}` : undefined}
-                        className="flex items-center gap-2.5"
                       >
-                        {active && !group.tone && (
-                          <span
-                            aria-hidden
-                            className="pc-nav-rail absolute inset-y-1 left-0 w-[3px] rounded-full group-data-[collapsible=icon]:hidden"
+                        <span aria-hidden className="pcsb-rail" />
+                        <span aria-hidden className="pcsb-ico">
+                          <n.icon
+                            className="h-[17px] w-[17px]"
+                            strokeWidth={active ? 2.15 : 1.75}
                           />
-                        )}
-                        <span
-                          data-active={active ? "true" : "false"}
-                          className={cn(
-                            "grid h-9 w-9 shrink-0 place-items-center rounded-lg border transition-colors",
-                            group.tone && "pc-admin-icon-chip",
-                            !group.tone &&
-                              cn(
-                                "pc-nav-icon",
-                                active ? "" : "border-transparent text-sidebar-muted-foreground",
-                              ),
-                          )}
-                        >
-                          <n.icon className="h-[19px] w-[19px]" strokeWidth={active ? 2.1 : 1.8} />
                         </span>
-                        <span className="pc-nav-label truncate text-[13.5px] leading-none transition-colors">
-                          {n.label}
-                        </span>
-                        {active && group.tone && (
-                          <span className="pc-admin-active-dot ml-auto h-1.5 w-1.5 rounded-full" />
+                        <span className="pcsb-label">{n.label}</span>
+                        {n.shortcut && (
+                          <kbd aria-hidden className="pcsb-kbd">
+                            {n.shortcut}
+                          </kbd>
                         )}
                       </Link>
                     </SidebarMenuButton>
                   </TooltipTrigger>
-                  <TooltipContent side="right" align="center" className="flex items-center gap-2">
-                    <span className="flex flex-col">
+                  <TooltipContent side="right" align="center" className="max-w-56">
+                    <span className="flex flex-col gap-0.5">
                       <span className="font-semibold">{n.label}</span>
                       {n.hint && (
                         <span className="text-[11px] font-normal text-muted-foreground">
                           {n.hint}
                         </span>
                       )}
+                      {n.shortcut && (
+                        <span className="text-[10.5px] font-medium uppercase tracking-wider text-muted-foreground">
+                          Alt + {n.shortcut}
+                        </span>
+                      )}
                     </span>
                   </TooltipContent>
-
                 </Tooltip>
               </SidebarMenuItem>
             );
           })}
-
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
   );
 
-
   return (
     <TooltipProvider delayDuration={250} skipDelayDuration={300}>
-    <Sidebar
-      collapsible="icon"
-      className="border-r border-sidebar-border"
-    >
-
-      {/* Brand */}
-      <SidebarHeader className="border-b border-sidebar-border/60 px-2 py-2.5">
-        <Link
-          to={isAdminArea ? "/admin" : "/"}
-          onClick={closeOnMobile}
-          aria-label="PreçoCerto — Feijó, Acre"
-          className="group/brand flex items-center gap-2.5 rounded-md px-2 py-1 outline-none transition-colors hover:bg-sidebar-accent focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
-        >
-
-          {isAdminArea ? (
-            <span
-              className="relative grid h-8 w-8 shrink-0 place-items-center rounded-lg border border-sidebar-border bg-sidebar-primary text-sidebar-primary-foreground shadow-sm"
-              aria-hidden
-            >
-              <ShieldCheck className="h-4 w-4" strokeWidth={2.25} />
+      <Sidebar collapsible="icon" className="pcsb">
+        {/* Marca */}
+        <SidebarHeader className="pcsb-header">
+          <Link
+            to={isAdminArea ? "/admin" : "/"}
+            onClick={closeOnMobile}
+            aria-label="PreçoCerto — Feijó, Acre"
+            className="pcsb-brand group/brand"
+          >
+            <span className="pcsb-brandmark" aria-hidden>
+              <SidebarBrandMark
+                className="h-[26px] w-[26px]"
+                variant={isAdminArea ? "admin" : "app"}
+              />
             </span>
-          ) : (
-            <img
-              src="/logo-mark.png"
-              alt=""
-              aria-hidden
-              width={32}
-              height={32}
-              className="h-8 w-8 shrink-0 object-contain drop-shadow-[0_1px_0_rgba(11,30,58,0.25)]"
+            <span className="pcsb-brandtext group-data-[collapsible=icon]:hidden">
+              <span className="pcsb-wordmark">
+                {isAdminArea ? (
+                  "Console"
+                ) : (
+                  <>
+                    Preço<em className="pcsb-wordmark-accent">Certo</em>
+                  </>
+                )}
+              </span>
+              <span className="pcsb-kicker">
+                {isAdminArea ? "Administração" : "Feijó · Acre"}
+              </span>
+            </span>
+          </Link>
+        </SidebarHeader>
+
+        <SidebarContent className="pcsb-content">
+          {isAdminArea && (rolesLoading || !isAdmin) ? (
+            <AppSidebarSkeleton
+              groups={[
+                { label: "Visão geral", items: 4 },
+                { label: "Catálogo", items: 5 },
+                { label: "Sistema", items: 3 },
+              ]}
             />
+          ) : !isAdminArea && rolesLoading ? (
+            <AppSidebarSkeleton />
+          ) : (
+            <div className="animate-in fade-in-0 slide-in-from-left-1 duration-200 motion-reduce:animate-none">
+              {groups.map(renderGroup)}
+            </div>
           )}
-          <span className="flex flex-col leading-none group-data-[collapsible=icon]:hidden">
-            <span className="font-display text-[16px] font-bold tracking-tight text-sidebar-foreground">
-              {isAdminArea ? (
-                "Console"
-              ) : (
-                <>
-                  Preço
-                  <span className="text-gold-ink underline decoration-transparent decoration-2 underline-offset-4 transition-colors group-hover/brand:decoration-current">
-                    Certo
-                  </span>
-                </>
-              )}
-            </span>
-            <span className="mt-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-sidebar-muted-foreground">
-              {isAdminArea ? "Administração" : "Minha área"}
 
-            </span>
-          </span>
-        </Link>
+          {!isAdminArea && !rolesLoading && isAdmin && (
+            <SidebarGroup className="pcsb-group" data-tone="system">
+              <SidebarGroupLabel className="pcsb-grouplabel group-data-[collapsible=icon]:hidden">
+                <span>Administração</span>
+                <span aria-hidden className="pcsb-grouprule" />
+              </SidebarGroupLabel>
+              <SidebarGroupContent>
+                <SidebarMenu>
+                  <SidebarMenuItem>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <SidebarMenuButton asChild className="pcsb-row">
+                          <Link to="/admin" onClick={closeOnMobile}>
+                            <span aria-hidden className="pcsb-rail" />
+                            <span aria-hidden className="pcsb-ico">
+                              <Shield className="h-[17px] w-[17px]" strokeWidth={1.85} />
+                            </span>
+                            <span className="pcsb-label">Painel administrativo</span>
+                          </Link>
+                        </SidebarMenuButton>
+                      </TooltipTrigger>
+                      <TooltipContent side="right">Abrir painel administrativo</TooltipContent>
+                    </Tooltip>
+                  </SidebarMenuItem>
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          )}
+        </SidebarContent>
 
+        <SidebarFooter className="pcsb-footer">
+          {!isAdminArea && (
+            <div className="px-1 pb-1 group-data-[collapsible=icon]:hidden">
+              <LicenseStatusChip />
+            </div>
+          )}
 
-      </SidebarHeader>
-
-      <SidebarContent className="px-2 py-2">
-        {isAdminArea && (rolesLoading || !isAdmin) ? (
-          <AppSidebarSkeleton
-            groups={[
-              { label: "Visão geral", items: 4 },
-              { label: "Catálogo", items: 5 },
-              { label: "Sistema", items: 3 },
-            ]}
-          />
-        ) : !isAdminArea && rolesLoading ? (
-          <AppSidebarSkeleton />
-        ) : (
-          <div className="animate-in fade-in-0 slide-in-from-left-1 duration-200 motion-reduce:animate-none">
-            {groups.map(renderGroup)}
-          </div>
-        )}
-
-        {!isAdminArea && !rolesLoading && isAdmin && (
-          <SidebarGroup className="py-2">
-            <SidebarGroupLabel className="px-3 text-[11px] font-semibold uppercase tracking-[0.18em] text-sidebar-muted-foreground">
-              Administração
-            </SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <SidebarMenuButton asChild className="pc-nav-link pc-nav-link--row focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar">
-                        <Link to="/admin" className="flex items-center gap-2.5">
-                          <span className="pc-nav-icon grid h-9 w-9 place-items-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                            <Shield className="h-3.5 w-3.5" />
-                          </span>
-                          <span className="pc-nav-label text-[13px] font-medium">Painel administrativo</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </TooltipTrigger>
-                    <TooltipContent side="right">Abrir painel administrativo</TooltipContent>
-                  </Tooltip>
-                </SidebarMenuItem>
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
-        )}
-      </SidebarContent>
-
-      <SidebarFooter className="border-t border-sidebar-border/60">
-        {!isAdminArea && (
-          <div className="px-2.5 py-2 group-data-[collapsible=icon]:hidden">
-            <LicenseStatusChip />
-          </div>
-        )}
-
-        <SidebarSeparator className="mx-3 my-1 w-auto bg-sidebar-border/60" />
-
-        <SidebarMenu className="px-2 pb-2 group-data-[collapsible=icon]:px-1">
-          <SidebarMenuItem>
-            <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <AlertDialogTrigger asChild>
-                    <SidebarMenuButton
-                      disabled={signingOut}
-                      aria-label={signingOut ? "Encerrando sessão" : "Sair da conta"}
-                      className="group/logout relative h-8 rounded-md px-2 text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-destructive focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar disabled:pointer-events-none disabled:text-sidebar-muted-foreground disabled:opacity-100 group-data-[collapsible=icon]:w-8 group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:px-0"
-                    >
-                      <span
-                        className={cn(
-                          "grid h-7 w-7 shrink-0 place-items-center rounded-md border border-transparent transition-colors",
-                          "text-sidebar-muted-foreground group-hover/logout:border-destructive/25 group-hover/logout:bg-destructive/10 group-hover/logout:text-destructive",
-                          "group-focus-visible/logout:border-destructive/25 group-focus-visible/logout:bg-destructive/10 group-focus-visible/logout:text-destructive",
-                        )}
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <AlertDialogTrigger asChild>
+                      <SidebarMenuButton
+                        disabled={signingOut}
+                        aria-label={signingOut ? "Encerrando sessão" : "Sair da conta"}
+                        className={cn("pcsb-row pcsb-row--logout")}
                       >
-                        {signingOut ? (
-                          <Loader2 className="h-3.5 w-3.5 animate-spin" />
-                        ) : (
-                          <LogOut className="h-3.5 w-3.5" strokeWidth={2} />
-                        )}
-                      </span>
-                      <span className="truncate text-[13px] font-medium leading-none group-data-[collapsible=icon]:hidden">
-                        {signingOut ? "Saindo..." : "Sair"}
-                      </span>
-                    </SidebarMenuButton>
-                  </AlertDialogTrigger>
-                </TooltipTrigger>
-                <TooltipContent side="right" align="center">
-                  <span className="font-semibold">Encerrar sessão</span>
-                </TooltipContent>
-              </Tooltip>
+                        <span aria-hidden className="pcsb-ico">
+                          {signingOut ? (
+                            <Loader2 className="h-[16px] w-[16px] animate-spin" />
+                          ) : (
+                            <LogOut className="h-[16px] w-[16px]" strokeWidth={1.9} />
+                          )}
+                        </span>
+                        <span className="pcsb-label">
+                          {signingOut ? "Saindo..." : "Sair da conta"}
+                        </span>
+                        <kbd aria-hidden className="pcsb-kbd">
+                          Q
+                        </kbd>
+                      </SidebarMenuButton>
+                    </AlertDialogTrigger>
+                  </TooltipTrigger>
+                  <TooltipContent side="right" align="center">
+                    <span className="font-semibold">Encerrar sessão</span>
+                  </TooltipContent>
+                </Tooltip>
 
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Encerrar sessão?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    Você sairá desta conta neste dispositivo. Suas listas, favoritos e alertas
-                    continuam salvos. Pressione Enter para confirmar ou Esc para cancelar.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel disabled={signingOut}>Cancelar</AlertDialogCancel>
-                  <AlertDialogAction
-                    autoFocus
-                    disabled={signingOut}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      void signOut();
-                    }}
-                    className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-                  >
-                    {signingOut ? (
-                      <span className="inline-flex items-center gap-2">
-                        <Loader2 className="h-3.5 w-3.5 animate-spin" /> Saindo...
-                      </span>
-                    ) : (
-                      "Sair da conta"
-                    )}
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
-          </SidebarMenuItem>
-        </SidebarMenu>
-
-      </SidebarFooter>
-    </Sidebar>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>Encerrar sessão?</AlertDialogTitle>
+                    <AlertDialogDescription>
+                      Você sairá desta conta neste dispositivo. Suas listas, favoritos e alertas
+                      continuam salvos. Pressione Enter para confirmar ou Esc para cancelar.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel disabled={signingOut}>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction
+                      autoFocus
+                      disabled={signingOut}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        void signOut();
+                      }}
+                      className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+                    >
+                      {signingOut ? (
+                        <span className="inline-flex items-center gap-2">
+                          <Loader2 className="h-3.5 w-3.5 animate-spin" /> Saindo...
+                        </span>
+                      ) : (
+                        "Sair da conta"
+                      )}
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        </SidebarFooter>
+      </Sidebar>
     </TooltipProvider>
   );
-
 }
