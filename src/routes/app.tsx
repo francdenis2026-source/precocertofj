@@ -17,6 +17,7 @@ import type { PublicStore } from "@/lib/stores-public.functions";
 
 import { DashboardSearch } from "@/components/app/DashboardSearch";
 import { StoreRankStrip } from "@/components/app/StoreRankStrip";
+import { StoresPanel } from "@/components/app/StoresPanel";
 import { FavoritesDock } from "@/components/app/FavoritesDock";
 import { ForceUpdateButton } from "@/components/app/ForceUpdateButton";
 import { Price } from "@/components/ds/Price";
@@ -61,6 +62,7 @@ function AppHomeContent() {
     accountQuery,
     listsQuery,
     storesByName,
+    publicStoresQuery,
     mutations: {
       removeItem,
       removeMarket,
@@ -114,7 +116,7 @@ function AppHomeContent() {
 
   return (
     <AppShell>
-      <div className="app-dashboard mx-auto flex w-full max-w-[1540px] flex-col gap-2 px-3 py-2 md:px-4 lg:h-[calc(100dvh-3.5rem)] lg:overflow-hidden">
+      <div className="app-dashboard mx-auto flex w-full max-w-[1540px] flex-col gap-3 px-3 py-3 md:px-4">
         {/* Cabeçalho compacto */}
         <header className="relative shrink-0 overflow-hidden rounded-lg border border-primary/30 bg-primary/95 px-3 py-2 text-primary-foreground shadow-sm backdrop-blur-md md:px-3.5">
           <span
@@ -130,7 +132,7 @@ function AppHomeContent() {
               <p className={cn(tc.eyebrow, "text-brand")}>
                 Meu painel
               </p>
-              <h1 className="truncate font-display text-[18px] font-semibold leading-tight md:text-[20px]">
+              <h1 className={cn(tc.h1, "truncate text-primary-foreground")}>
                 Olá, {firstName}
               </h1>
             </div>
@@ -156,7 +158,7 @@ function AppHomeContent() {
 
 
         {/* Métricas do banco */}
-        <div className="grid shrink-0 grid-cols-2 gap-1.5 xl:grid-cols-4">
+        <div className="grid grid-cols-2 gap-2 xl:grid-cols-4">
           <Metric
             icon={ShoppingCart}
             label="Suas listas"
@@ -320,7 +322,7 @@ function Metric({
         className={cn("absolute inset-y-0 left-0 w-[3px]", t.rail)}
       />
       <div className="flex items-center justify-between gap-2">
-        <p className="truncate text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+        <p className={cn(tc.tableHead, "truncate")}>
           {label}
         </p>
         <span
@@ -332,10 +334,10 @@ function Metric({
           <Icon className="h-3.5 w-3.5" aria-hidden />
         </span>
       </div>
-      <p className="pc-num mt-0.5 text-[22px] font-semibold leading-none text-foreground">
+      <p className={cn(tc.dataPrimary, "mt-1 text-foreground")}>
         {value}
       </p>
-      <p className="mt-0.5 truncate text-[11px] leading-snug text-muted-foreground">{hint}</p>
+      <p className={cn(tc.metaMuted, "mt-1 truncate")}>{hint}</p>
 
     </article>
   );
