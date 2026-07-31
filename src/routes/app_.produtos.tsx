@@ -102,8 +102,8 @@ function ProductsPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto flex w-full max-w-[1540px] flex-col gap-3 px-3 py-3 md:px-4">
-        <header className="rounded-lg border border-border/70 bg-card/94 px-3 py-2.5 shadow-sm backdrop-blur-md">
+      <div className="mx-auto flex w-full max-w-[1540px] flex-col gap-2 px-3 py-2 md:px-4">
+        <header className="rounded-lg border border-border/70 bg-card/94 px-3 py-2 shadow-sm backdrop-blur-md">
           <Link
             to="/app"
             className={cn(tc.metaMuted, "inline-flex items-center gap-1 hover:text-foreground")}
@@ -119,7 +119,7 @@ function ProductsPage() {
         {/* Filtros */}
         <section
           aria-label="Filtros de produtos"
-          className="space-y-2 rounded-lg border border-border/70 bg-card/94 p-3 shadow-sm backdrop-blur-md"
+          className="space-y-1.5 rounded-lg border border-border/70 bg-card/94 p-2 shadow-sm backdrop-blur-md"
         >
           <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
             <label className="relative min-w-0">
@@ -132,7 +132,7 @@ function ProductsPage() {
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Buscar produto: arroz, café, sabão…"
-                className={cn(tc.body, "h-10 rounded-md bg-background/80 pl-9 pr-8")}
+                className={cn(tc.body, "h-9 rounded-md bg-background/80 pl-9 pr-8")}
                 maxLength={80}
                 inputMode="search"
                 autoComplete="off"
@@ -162,7 +162,7 @@ function ProductsPage() {
                   onClick={() => setSort(s.id)}
                   className={cn(
                     tc.control,
-                    "h-9 rounded-md border px-3 transition-colors",
+                    "h-8 rounded-md border px-2.5 transition-colors",
                     sort === s.id
                       ? "border-primary bg-primary text-primary-foreground"
                       : "border-border/70 bg-background text-muted-foreground hover:text-foreground",
@@ -197,17 +197,17 @@ function ProductsPage() {
         {/* Resultados */}
         <section aria-live="polite" aria-busy={resultsQ.isFetching}>
           {showSkeleton ? (
-            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3">
+            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
               {Array.from({ length: 9 }).map((_, i) => (
                 <li
                   key={i}
-                  className="h-[86px] animate-pulse rounded-lg border border-border/60 bg-card/70"
+                  className="h-[72px] animate-pulse rounded-lg border border-border/60 bg-card/70"
                   style={{ opacity: 1 - i * 0.05 }}
                 />
               ))}
             </ul>
           ) : resultsQ.isError ? (
-            <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-6 text-center">
+            <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-4 text-center">
               <p className={tc.body}>Não conseguimos carregar os produtos agora.</p>
               <button
                 type="button"
@@ -221,7 +221,7 @@ function ProductsPage() {
               </button>
             </div>
           ) : results.length === 0 ? (
-            <div className="rounded-lg border border-border/70 bg-card/94 p-8 text-center backdrop-blur-md">
+            <div className="rounded-lg border border-border/70 bg-card/94 p-5 text-center backdrop-blur-md">
               <SearchIcon className="mx-auto h-6 w-6 text-muted-foreground" aria-hidden />
               <p className={cn(tc.itemTitle, "mt-2")}>Nenhum produto encontrado</p>
               <p className={cn(tc.meta, "mt-1")}>
@@ -232,7 +232,7 @@ function ProductsPage() {
             </div>
           ) : (
             <>
-              <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3">
+              <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                 {results.map((r) => (
                   <li key={r.catalogId} className="relative">
                     <button
@@ -320,7 +320,7 @@ function Chip({
       onClick={onClick}
       className={cn(
         tc.chip,
-        "h-8 shrink-0 rounded-full border px-3 transition-colors",
+        "h-7 shrink-0 rounded-full border px-2.5 transition-colors",
         active
           ? "border-primary bg-primary text-primary-foreground"
           : "border-border/70 bg-background text-muted-foreground hover:text-foreground",

@@ -143,8 +143,8 @@ function AppStorePage() {
 
   return (
     <AppShell>
-      <div className="mx-auto flex w-full max-w-[1540px] flex-col gap-3 px-3 py-3 md:px-4">
-        <header className="rounded-lg border border-border/70 bg-card/94 px-3 py-2.5 shadow-sm backdrop-blur-md">
+      <div className="mx-auto flex w-full max-w-[1540px] flex-col gap-2 px-3 py-2 md:px-4">
+        <header className="rounded-lg border border-border/70 bg-card/94 px-3 py-2 shadow-sm backdrop-blur-md">
           <Link
             to="/app/estabelecimentos"
             className={cn(tc.metaMuted, "inline-flex items-center gap-1 hover:text-foreground")}
@@ -190,13 +190,13 @@ function AppStorePage() {
           )}
         </header>
 
-        <div className="grid gap-3 lg:grid-cols-12">
+        <div className="grid gap-2 lg:grid-cols-12">
           {/* Lista de produtos */}
           <section
             aria-label="Produtos do estabelecimento"
             className="flex flex-col gap-2 lg:col-span-7 xl:col-span-8"
           >
-            <div className="space-y-2 rounded-lg border border-border/70 bg-card/94 p-3 shadow-sm backdrop-blur-md">
+            <div className="space-y-1.5 rounded-lg border border-border/70 bg-card/94 p-2 shadow-sm backdrop-blur-md">
               <div className="grid gap-2 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center">
                 <label className="relative min-w-0">
                   <span className="sr-only">Buscar produto na loja</span>
@@ -208,7 +208,7 @@ function AppStorePage() {
                     value={q}
                     onChange={(e) => setQ(e.target.value)}
                     placeholder="Buscar produto nesta loja…"
-                    className={cn(tc.body, "h-10 rounded-md bg-background/80 pl-9 pr-8")}
+                    className={cn(tc.body, "h-9 rounded-md bg-background/80 pl-9 pr-8")}
                     maxLength={80}
                     inputMode="search"
                     autoComplete="off"
@@ -238,7 +238,7 @@ function AppStorePage() {
                       onClick={() => setSort(s.id)}
                       className={cn(
                         tc.control,
-                        "h-9 rounded-md border px-2.5 transition-colors",
+                        "h-8 rounded-md border px-2 transition-colors",
                         sort === s.id
                           ? "border-primary bg-primary text-primary-foreground"
                           : "border-border/70 bg-background text-muted-foreground hover:text-foreground",
@@ -284,7 +284,7 @@ function AppStorePage() {
                   ))}
                 </ul>
               ) : catalogQ.isError ? (
-                <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-6 text-center">
+                <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-4 text-center">
                   <p className={tc.body}>Não conseguimos carregar os produtos desta loja.</p>
                   <button
                     type="button"
@@ -298,7 +298,7 @@ function AppStorePage() {
                   </button>
                 </div>
               ) : list.length === 0 ? (
-                <div className="rounded-lg border border-border/70 bg-card/94 p-8 text-center backdrop-blur-md">
+                <div className="rounded-lg border border-border/70 bg-card/94 p-5 text-center backdrop-blur-md">
                   <Store className="mx-auto h-6 w-6 text-muted-foreground" aria-hidden />
                   <p className={cn(tc.itemTitle, "mt-2")}>Nenhum produto encontrado</p>
                   <p className={cn(tc.meta, "mt-1")}>
@@ -537,7 +537,7 @@ function Chip({
       onClick={onClick}
       className={cn(
         tc.chip,
-        "h-8 shrink-0 rounded-full border px-3 transition-colors",
+        "h-7 shrink-0 rounded-full border px-2.5 transition-colors",
         active
           ? "border-primary bg-primary text-primary-foreground"
           : "border-border/70 bg-background text-muted-foreground hover:text-foreground",

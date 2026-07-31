@@ -186,7 +186,7 @@ function CheckoutPage() {
   if (isLoading) {
     return (
       <AppShell>
-        <div className="mx-auto max-w-2xl p-6">
+        <div className="mx-auto max-w-2xl p-4">
           <div className="h-6 w-40 animate-pulse rounded bg-muted" />
           <div className="mt-4 h-40 animate-pulse rounded-lg bg-muted" />
         </div>
@@ -197,9 +197,9 @@ function CheckoutPage() {
   if (!order) {
     return (
       <AppShell>
-        <div className="mx-auto max-w-2xl p-6">
+        <div className="mx-auto max-w-2xl p-4">
           <Card>
-            <CardContent className="p-6 text-center">
+            <CardContent className="p-4 text-center">
               <ShieldAlert className="mx-auto h-8 w-8 text-muted-foreground" />
               <p className="mt-2">Pedido não encontrado.</p>
               <Button asChild variant="outline" className="mt-4">

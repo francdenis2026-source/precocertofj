@@ -73,7 +73,7 @@ function ListaProntaPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-3xl px-4 py-8 md:py-10">
+      <div className="mx-auto max-w-3xl px-4 py-4 md:py-4">
         {/* Cabeçalho */}
         <div className="text-center">
           <div className="mx-auto inline-flex h-14 w-14 items-center justify-center rounded-full bg-primary/10 text-primary">
@@ -99,7 +99,7 @@ function ListaProntaPage() {
         </div>
 
         {/* Melhor mercado (auto) */}
-        <div className="mt-6 rounded-2xl border border-border bg-card p-5 md:p-6">
+        <div className="mt-6 rounded-2xl border border-border bg-card p-5 md:p-4">
           <div className="flex items-center gap-2 text-primary">
             <Sparkles className="h-4 w-4" />
             <span className="text-[11px] font-bold uppercase tracking-[0.18em]">
@@ -151,7 +151,7 @@ function ListaProntaPage() {
         </div>
 
         {/* Checklist do próximo passo */}
-        <div className="mt-6 rounded-2xl border border-border bg-card p-5 md:p-6">
+        <div className="mt-6 rounded-2xl border border-border bg-card p-5 md:p-4">
           <div className="flex items-center gap-2 text-foreground">
             <ListChecks className="h-4 w-4 text-primary" />
             <span className="text-[11px] font-bold uppercase tracking-[0.18em] text-primary">
@@ -196,7 +196,7 @@ function ListaProntaPage() {
 
         {/* Detalhes por mercado (top 3) */}
         {best.data && best.data.markets.length > 1 && (
-          <div className="mt-6 rounded-2xl border border-border bg-card p-5 md:p-6">
+          <div className="mt-6 rounded-2xl border border-border bg-card p-5 md:p-4">
             <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-muted-foreground">
               Outros mercados comparados
             </p>

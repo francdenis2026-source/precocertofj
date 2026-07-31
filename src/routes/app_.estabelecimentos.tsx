@@ -72,8 +72,8 @@ function StoresPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto flex w-full max-w-[1540px] flex-col gap-3 px-3 py-3 md:px-4">
-        <header className="rounded-lg border border-border/70 bg-card/94 px-3 py-2.5 shadow-sm backdrop-blur-md">
+      <div className="mx-auto flex w-full max-w-[1540px] flex-col gap-2 px-3 py-2 md:px-4">
+        <header className="rounded-lg border border-border/70 bg-card/94 px-3 py-2 shadow-sm backdrop-blur-md">
           <Link
             to="/app"
             className={cn(tc.metaMuted, "inline-flex items-center gap-1 hover:text-foreground")}
@@ -94,7 +94,7 @@ function StoresPage() {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Buscar mercado, farmácia, bairro…"
-              className={cn(tc.body, "h-10 rounded-md bg-background/80 pl-9")}
+              className={cn(tc.body, "h-9 rounded-md bg-background/80 pl-9")}
               maxLength={60}
               autoComplete="off"
             />
@@ -103,17 +103,17 @@ function StoresPage() {
 
         <section aria-live="polite" aria-busy={storesQ.isLoading}>
           {storesQ.isLoading ? (
-            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3">
+            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
               {Array.from({ length: 6 }).map((_, i) => (
                 <li
                   key={i}
-                  className="h-[92px] animate-pulse rounded-lg border border-border/60 bg-card/70"
+                  className="h-[72px] animate-pulse rounded-lg border border-border/60 bg-card/70"
                   style={{ opacity: 1 - i * 0.08 }}
                 />
               ))}
             </ul>
           ) : storesQ.isError ? (
-            <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-6 text-center">
+            <div className="rounded-lg border border-destructive/40 bg-destructive/5 p-4 text-center">
               <p className={tc.body}>Não conseguimos carregar os estabelecimentos.</p>
               <button
                 type="button"
@@ -127,13 +127,13 @@ function StoresPage() {
               </button>
             </div>
           ) : filtered.length === 0 ? (
-            <div className="rounded-lg border border-border/70 bg-card/94 p-8 text-center backdrop-blur-md">
+            <div className="rounded-lg border border-border/70 bg-card/94 p-5 text-center backdrop-blur-md">
               <Store className="mx-auto h-6 w-6 text-muted-foreground" aria-hidden />
               <p className={cn(tc.itemTitle, "mt-2")}>Nenhum estabelecimento encontrado</p>
               <p className={cn(tc.meta, "mt-1")}>Tente outro nome ou bairro.</p>
             </div>
           ) : (
-            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3">
+            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
               {filtered.map((s) => {
                 const logo = s.logoUrl ? (logos[s.logoUrl] ?? s.logoUrl) : null;
                 return (
@@ -141,9 +141,9 @@ function StoresPage() {
                     <Link
                       to="/app/loja/$id"
                       params={{ id: s.id }}
-                      className="grid min-h-[76px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-3 rounded-lg border border-border/70 bg-card/94 p-3 shadow-sm backdrop-blur-md transition-colors hover:border-primary/40 hover:bg-muted/40 active:bg-muted/60"
+                      className="grid min-h-[64px] grid-cols-[auto_minmax(0,1fr)_auto] items-center gap-2.5 rounded-lg border border-border/70 bg-card/94 p-2.5 shadow-sm backdrop-blur-md transition-colors hover:border-primary/40 hover:bg-muted/40 active:bg-muted/60"
                     >
-                      <span className="grid h-11 w-11 shrink-0 place-items-center overflow-hidden rounded-md border border-border/70 bg-background">
+                      <span className="grid h-9 w-9 shrink-0 place-items-center overflow-hidden rounded-md border border-border/70 bg-background">
                         {logo ? (
                           <img
                             src={logo}

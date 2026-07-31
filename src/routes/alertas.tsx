@@ -340,7 +340,7 @@ function Alertas() {
                 />
               </ul>
 
-              <div className="mt-6 space-y-5 border-t border-border pt-6">
+              <div className="mt-6 space-y-3 border-t border-border pt-6">
                 <ThresholdField
                   icon={TrendingDown}
                   label="Alerta de queda em itens"
@@ -527,7 +527,7 @@ function FavoritesSection({
   });
 
   return (
-    <div className="mt-10 rounded-2xl border border-border bg-card p-6">
+    <div className="mt-10 rounded-2xl border border-border bg-card p-4">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <p className="text-xs uppercase tracking-widest text-muted-foreground">

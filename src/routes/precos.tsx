@@ -145,7 +145,7 @@ function PrecosPage() {
 
   return (
     <AppShell>
-      <section className="mx-auto max-w-6xl px-4 py-8 sm:px-6">
+      <section className="mx-auto max-w-6xl px-4 py-4 sm:px-6">
         <header className="mb-6 flex items-center gap-3">
           <div className="rounded-lg bg-primary/10 p-2 text-primary">
             <LineChartIcon className="h-5 w-5" aria-hidden />
@@ -177,7 +177,7 @@ function PrecosPage() {
           />
         )}
 
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
+        <div className="grid gap-3 lg:grid-cols-[minmax(0,320px)_minmax(0,1fr)]">
           {/* Lista de produtos */}
           <Card className="max-h-[70vh] overflow-hidden">
             <CardHeader className="pb-3">
@@ -358,7 +358,7 @@ function PrecosPage() {
                       </div>
                     )}
                     {!loadingSeries && chartData.length === 0 && (
-                      <p className="py-8 text-center text-sm text-muted-foreground">
+                      <p className="py-4 text-center text-sm text-muted-foreground">
                         Sem leituras registradas.
                       </p>
                     )}
