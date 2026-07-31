@@ -205,27 +205,68 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
         {!isAdminScope && <HeaderStats />}
 
         {session && (
-          <Link
-            to={isAdminScope ? "/admin" : "/perfil"}
-            aria-label={fullName ? `Meu perfil — ${fullName}` : "Meu perfil"}
-            title={fullName ?? "Meu perfil"}
-            className="pc-topnav-item ml-auto inline-flex h-7 min-w-0 max-w-[160px] items-center gap-1.5 rounded-full border border-border bg-card pl-1 pr-2 text-[11px] font-semibold text-foreground sm:max-w-[180px]"
-          >
-            {avatarUrl ? (
-              <img
-                src={avatarUrl}
-                alt=""
-                className="h-5 w-5 rounded-full object-cover"
-              />
-            ) : (
-              <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
-                {initials ?? <User className="h-3 w-3" />}
-              </span>
-            )}
-            <span className="truncate">
-              {loading ? "..." : firstName ?? "Perfil"}
-            </span>
-          </Link>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                aria-label={fullName ? `Conta — ${fullName}` : "Conta"}
+                title={fullName ?? "Conta"}
+                className="pc-topnav-item ml-auto inline-flex h-7 min-w-0 max-w-[160px] items-center gap-1.5 rounded-full border border-border bg-card pl-1 pr-1.5 text-[11px] font-semibold text-foreground outline-none focus-visible:ring-2 focus-visible:ring-brand-gold/60 data-[state=open]:bg-secondary sm:max-w-[180px]"
+              >
+                {avatarUrl ? (
+                  <img src={avatarUrl} alt="" className="h-5 w-5 rounded-full object-cover" />
+                ) : (
+                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
+                    {initials ?? <User className="h-3 w-3" />}
+                  </span>
+                )}
+                <span className="truncate">{loading ? "..." : firstName ?? "Conta"}</span>
+                <ChevronDown className="h-3 w-3 shrink-0 opacity-70" aria-hidden />
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-56">
+              <DropdownMenuLabel className="truncate text-[11.5px]">
+                {fullName ?? "Minha conta"}
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link to="/perfil" className="cursor-pointer">
+                  <User className="h-4 w-4" aria-hidden />
+                  Perfil e preferências
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/alertas" className="cursor-pointer">
+                  <Bell className="h-4 w-4" aria-hidden />
+                  Alertas de preço
+                </Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link to="/minhas-licencas" className="cursor-pointer">
+                  <CreditCard className="h-4 w-4" aria-hidden />
+                  Assinatura e licenças
+                </Link>
+              </DropdownMenuItem>
+              {isAdminScope && (
+                <DropdownMenuItem asChild>
+                  <Link to="/admin" className="cursor-pointer">
+                    <ShieldCheck className="h-4 w-4" aria-hidden />
+                    Console administrativo
+                  </Link>
+                </DropdownMenuItem>
+              )}
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onSelect={() => void signOut()}
+                disabled={signingOut}
+                variant="destructive"
+                className="cursor-pointer"
+              >
+                <LogOut className="h-4 w-4" aria-hidden />
+                {signingOut ? "Saindo..." : "Sair da conta"}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         )}
       </div>
 
@@ -242,17 +283,6 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
           </Link>
         )}
 
-        {isAdminScope && (
-          <Button
-            type="button"
-            variant="ghost"
-            onClick={signOut}
-            disabled={signingOut}
-            className="pc-topnav-item hidden h-8 items-center rounded-full border border-border bg-card px-3 text-[11.5px] font-semibold text-foreground disabled:pointer-events-none disabled:opacity-100 disabled:text-muted-foreground sm:inline-flex"
-          >
-            {signingOut ? "Saindo..." : "Sair"}
-          </Button>
-        )}
       </div>
     </header>
   );
