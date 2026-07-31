@@ -30,13 +30,19 @@ export function useSignOut() {
     // Redireciona imediatamente para a homepage — não faz o usuário
     // esperar a chamada de rede terminar.
     markPanelUnverified();
+    notify.dismiss("auth-session");
     navigate({ to: "/", replace: true });
     try {
       await qc.cancelQueries();
       qc.clear();
-      await supabase.auth.signOut();
+      // `scope: "local"` encerra a sessão deste dispositivo mesmo quando o
+      // token já expirou — o logout global falhava e deixava o usuário
+      // "preso" na homepage ainda autenticado.
+      const { error } = await supabase.auth.signOut({ scope: "local" });
+      if (error) throw error;
       notify.success(`Você saiu ${from}`, {
         id: "auth-session",
+        duration: 3500,
         description:
           "Sessão encerrada neste dispositivo e dados em cache limpos. Listas, favoritos e alertas continuam salvos na sua conta.",
       });
@@ -44,6 +50,7 @@ export function useSignOut() {
       console.error("[signOut]", err);
       notify.error(`Saída ${from} não foi confirmada`, {
         id: "auth-session",
+        duration: 5000,
         description:
           "Removemos a sessão deste dispositivo, mas o servidor não respondeu. Refaça o logout quando estiver on-line para encerrar a sessão em todos os aparelhos.",
       });
@@ -51,6 +58,7 @@ export function useSignOut() {
       setLoading(false);
     }
   };
+
 
   return { signOut, loading };
 }
