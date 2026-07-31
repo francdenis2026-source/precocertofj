@@ -1282,13 +1282,16 @@ html[data-density="compact"] .app-scope [data-sidebar="header"] a > span:first-c
   width: 1.75rem;
   height: 1.75rem;
 }
-/* Barra superior do painel acompanha a densidade sem perder alvo de toque. */
-.pc-appbar { height: 2.5rem; }
-@media (min-width: 768px) { .pc-appbar { height: 2.75rem; } }
-html[data-density="compact"] .pc-appbar { height: 2.25rem; }
+/* Barra superior do painel acompanha a densidade sem perder alvo de toque.
+   A altura vive num token para que o conteúdo saiba exatamente onde começar. */
+:root { --pc-appbar-h: 2.5rem; }
+@media (min-width: 768px) { :root { --pc-appbar-h: 2.75rem; } }
+html[data-density="compact"] { --pc-appbar-h: 2.25rem; }
 @media (min-width: 768px) {
-  html[data-density="compact"] .pc-appbar { height: 2.4rem; }
+  html[data-density="compact"] { --pc-appbar-h: 2.4rem; }
 }
+.pc-appbar { height: var(--pc-appbar-h); }
+
 /* Trilha de navegação e seções internas seguem o mesmo ritmo. */
 html[data-density="compact"] .app-scope [data-slot="breadcrumb-wrap"] { padding-block: 0.15rem; }
 html[data-density="compact"] .app-scope .app-dashboard [data-slot="card"] { --pc-panel-pad: 0.5rem; }
