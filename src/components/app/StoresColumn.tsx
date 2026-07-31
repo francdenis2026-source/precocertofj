@@ -30,7 +30,7 @@ export function StoresColumn({
   return (
     <section
       aria-label="Estabelecimentos e ranking"
-      className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
+      className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
     >
       <div className="grid shrink-0 grid-cols-[minmax(0,1fr)_auto] items-center gap-2 border-b border-border/70 px-1.5 py-1">
         <div role="tablist" aria-label="Visões de estabelecimentos" className="flex min-w-0 gap-1">

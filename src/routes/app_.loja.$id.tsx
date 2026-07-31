@@ -143,8 +143,8 @@ function AppStorePage() {
 
   return (
     <AppShell>
-      <div className="mx-auto flex w-full max-w-[1540px] flex-col gap-2 px-3 py-2 md:px-4">
-        <header className="rounded-lg border border-border/70 bg-card/94 px-3 py-2 shadow-sm backdrop-blur-md">
+      <div className="mx-auto flex w-full max-w-[1500px] flex-col gap-4 px-4 py-4 md:px-6 md:py-5">
+        <header className="rounded-xl border border-border/70 bg-card/94 px-4 py-3.5 shadow-sm backdrop-blur-md">
           <Link
             to="/app/estabelecimentos"
             className={cn(tc.metaMuted, "inline-flex items-center gap-1 hover:text-foreground")}

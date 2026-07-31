@@ -168,7 +168,7 @@ export function DashboardSearch() {
   return (
     <section
       aria-label="Buscar preços"
-      className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
+      className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-xl border border-border/70 bg-card/94 shadow-sm backdrop-blur-md"
     >
       <div className="shrink-0 space-y-2 border-b border-border/70 p-3">
         <div className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">

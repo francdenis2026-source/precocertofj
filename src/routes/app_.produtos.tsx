@@ -102,8 +102,8 @@ function ProductsPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto flex w-full max-w-[1540px] flex-col gap-2 px-3 py-2 md:px-4">
-        <header className="rounded-lg border border-border/70 bg-card/94 px-3 py-2 shadow-sm backdrop-blur-md">
+      <div className="mx-auto flex w-full max-w-[1500px] flex-col gap-4 px-4 py-4 md:px-6 md:py-5">
+        <header className="rounded-xl border border-border/70 bg-card/94 px-4 py-3.5 shadow-sm backdrop-blur-md">
           <Link
             to="/app"
             className={cn(tc.metaMuted, "inline-flex items-center gap-1 hover:text-foreground")}
@@ -197,7 +197,7 @@ function ProductsPage() {
         {/* Resultados */}
         <section aria-live="polite" aria-busy={resultsQ.isFetching}>
           {showSkeleton ? (
-            <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+            <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
               {Array.from({ length: 9 }).map((_, i) => (
                 <li
                   key={i}
@@ -232,13 +232,13 @@ function ProductsPage() {
             </div>
           ) : (
             <>
-              <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+              <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
                 {results.map((r) => (
                   <li key={r.catalogId} className="relative">
                     <button
                       type="button"
                       onClick={() => setCompareKey(r.displayName)}
-                      className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-lg border border-border/70 bg-card/94 px-3 py-2.5 pb-8 text-left shadow-sm backdrop-blur-md transition-colors hover:border-primary/40 hover:bg-muted/40"
+                      className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-xl border border-border/70 bg-card/94 px-4 py-3 pb-8 text-left shadow-sm backdrop-blur-md transition-colors hover:border-primary/40 hover:bg-muted/40"
                     >
                       <span className="min-w-0">
                         <span className={cn(tc.itemTitle, "block truncate")}>{r.displayName}</span>

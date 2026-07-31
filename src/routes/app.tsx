@@ -98,7 +98,7 @@ function AppHomeContent() {
 
   return (
     <AppShell>
-      <div className="app-dashboard mx-auto flex w-full max-w-[1540px] flex-col gap-2 px-3 py-2 md:px-4 lg:h-full lg:min-h-0 lg:overflow-hidden">
+      <div className="app-dashboard mx-auto flex w-full max-w-[1500px] flex-col gap-4 px-4 py-4 md:px-6 md:py-5">
         <p className="sr-only">
           Atalhos do painel: Alt mais B foca a busca, Alt mais O troca a ordenação, Alt mais L limpa
           os filtros, Alt mais E busca estabelecimentos, Alt mais Shift mais F, M ou L alterna as
@@ -106,8 +106,8 @@ function AppHomeContent() {
         </p>
         {/* Bloco único: saudação + ações + métricas */}
 
-        <header className="sticky top-0 z-20 shrink-0 overflow-hidden rounded-xl border border-border/70 bg-card/95 shadow-sm backdrop-blur-md lg:static">
-          <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3 border-b border-border/60 bg-primary/95 px-3 py-2 text-primary-foreground md:px-4">
+        <header className="overflow-hidden rounded-2xl border border-border/70 bg-card/95 shadow-sm backdrop-blur-md">
+          <div className="relative flex flex-wrap items-center justify-between gap-3 border-b border-border/60 bg-primary/95 px-4 py-3 text-primary-foreground md:px-5 md:py-3.5">
             <span
               aria-hidden
               className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-brand/20 blur-3xl"
@@ -117,32 +117,32 @@ function AppHomeContent() {
               <h1
                 className={cn(
                   tc.h1,
-                  "truncate text-[16px] leading-tight text-primary-foreground md:text-[17.5px]",
+                  "truncate text-[18px] leading-tight text-primary-foreground md:text-[20px]",
                 )}
               >
                 Olá, {firstName}
               </h1>
             </div>
-            <div className="relative flex shrink-0 items-center gap-1.5">
+            <div className="relative flex shrink-0 items-center gap-2">
               {loading && (
                 <Loader2
-                  className="h-3.5 w-3.5 animate-spin text-primary-foreground/70"
+                  className="h-4 w-4 animate-spin text-primary-foreground/70"
                   aria-label="Atualizando preços"
                 />
               )}
               <Link
                 to="/alertas"
                 aria-label="Alertas de preço"
-                className="inline-flex h-8 items-center gap-1.5 rounded-md border border-primary-foreground/30 bg-primary-foreground/10 px-2.5 text-[12px] font-medium text-primary-foreground transition hover:bg-primary-foreground/20"
+                className="inline-flex h-9 items-center gap-1.5 rounded-lg border border-primary-foreground/30 bg-primary-foreground/10 px-3 text-[12.5px] font-medium text-primary-foreground transition hover:bg-primary-foreground/20"
               >
-                <Bell className="h-3.5 w-3.5" aria-hidden />
+                <Bell className="h-4 w-4" aria-hidden />
                 <span className="hidden md:inline">Alertas</span>
               </Link>
               <Link
                 to="/lista/nova"
-                className="inline-flex h-8 items-center gap-1.5 rounded-md bg-brand px-3 text-[12px] font-semibold text-brand-foreground transition hover:bg-brand-strong"
+                className="inline-flex h-9 items-center gap-1.5 rounded-lg bg-brand px-3.5 text-[12.5px] font-semibold text-brand-foreground transition hover:bg-brand-strong"
               >
-                Nova lista <ArrowRight className="h-3.5 w-3.5" aria-hidden />
+                Nova lista <ArrowRight className="h-4 w-4" aria-hidden />
               </Link>
               <span className="hidden lg:inline-flex">
                 <ForceUpdateButton />
@@ -204,13 +204,13 @@ function AppHomeContent() {
           </div>
         </header>
 
-        {/* Grid responsiva de altura total: busca | lojas+ranking | favoritos */}
-        <div className="grid gap-2 lg:min-h-0 lg:flex-1 lg:grid-cols-12">
-          <div className="flex min-h-[360px] flex-col lg:col-span-6 lg:min-h-0">
+        {/* Grid responsiva: busca | lojas | favoritos — alturas confortáveis, sem espremer */}
+        <div className="grid gap-4 lg:grid-cols-12">
+          <div className="flex min-h-[520px] flex-col lg:col-span-6 lg:h-[calc(100dvh-19rem)] lg:min-h-[560px]">
             <DashboardSearch />
           </div>
 
-          <div className="flex min-h-[280px] flex-col lg:col-span-3 lg:min-h-0">
+          <div className="flex min-h-[420px] flex-col lg:col-span-3 lg:h-[calc(100dvh-19rem)] lg:min-h-[560px]">
             <StoresColumn
               stores={publicStoresQuery.data ?? []}
               loading={publicStoresQuery.isLoading}
@@ -219,10 +219,7 @@ function AppHomeContent() {
             />
           </div>
 
-
-
-          <div className="flex min-h-0 flex-col lg:col-span-3">
-
+          <div className="flex min-h-[420px] flex-col lg:col-span-3 lg:h-[calc(100dvh-19rem)] lg:min-h-[560px]">
             {summary ? (
               <FavoritesDock
                 summary={summary}
@@ -237,11 +234,12 @@ function AppHomeContent() {
                 onRemoveMarket={(id) => removeMarket.mutate(id)}
               />
             ) : (
-              <div className="h-32 animate-pulse rounded-lg border border-border bg-card/80 backdrop-blur-md lg:h-full" />
+              <div className="h-full min-h-[420px] animate-pulse rounded-xl border border-border bg-card/80 backdrop-blur-md" />
             )}
           </div>
         </div>
       </div>
+
 
 
       <StoreDetailsDrawer
@@ -284,16 +282,16 @@ function Metric({
   const t = METRIC_TONES[tone];
   const body = (
     <>
-      <span aria-hidden className={cn("absolute inset-y-2 left-0 w-[3px] rounded-full", t.rail)} />
+      <span aria-hidden className={cn("absolute inset-y-3 left-0 w-[3px] rounded-full", t.rail)} />
       <div className="flex items-center gap-1.5">
-        <span className={cn("grid h-5 w-5 shrink-0 place-items-center rounded-md", t.chip)}>
-          <Icon className="h-3 w-3" aria-hidden />
+        <span className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-md", t.chip)}>
+          <Icon className="h-3.5 w-3.5" aria-hidden />
         </span>
         <p className={cn(tc.tableHead, "truncate")} title={label}>
           {label}
         </p>
       </div>
-      <p className={cn(tc.dataPrimary, "mt-0.5 text-[21px] leading-none text-foreground")}>
+      <p className={cn(tc.dataPrimary, "mt-1.5 text-[26px] leading-none text-foreground")}>
         {value}
       </p>
       <p className={cn(tc.metaMuted, "mt-1 truncate leading-tight")} title={hint}>
@@ -305,14 +303,14 @@ function Metric({
     return (
       <Link
         to={to}
-        className="relative block min-w-0 px-3 py-2 transition hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60"
+        className="relative block min-w-0 px-4 py-3.5 transition hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60"
       >
         {body}
       </Link>
     );
   }
   return (
-    <article className="relative min-w-0 px-3 py-2">{body}</article>
+    <article className="relative min-w-0 px-4 py-3.5">{body}</article>
   );
 }
 
