@@ -222,7 +222,6 @@ function AppHomeContent() {
           </div>
 
           <div className="pc-col xl:col-span-3">
-
             {summary ? (
               <FavoritesDock
                 summary={summary}
@@ -242,8 +241,6 @@ function AppHomeContent() {
           </div>
         </div>
       </div>
-
-
 
       <StoreDetailsDrawer
         store={selectedStore}
@@ -312,11 +309,8 @@ function Metric({
       </Link>
     );
   }
-  return (
-    <article className="relative min-w-0 px-4 py-3.5">{body}</article>
-  );
+  return <article className="relative min-w-0 px-4 py-3.5">{body}</article>;
 }
-
 
 function swap(ids: string[], idx: number, dir: -1 | 1): string[] | null {
   const target = idx + dir;
