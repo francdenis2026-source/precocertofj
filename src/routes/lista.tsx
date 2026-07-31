@@ -121,11 +121,13 @@ function ListaContent() {
     void navigate({ search: id ? { id } : {}, replace: true });
   };
   const [newName, setNewName] = useState("");
+  const [listFilter, setListFilter] = useState("");
   const [renameId, setRenameId] = useState<string | null>(null);
   const [renameText, setRenameText] = useState("");
 
   // Navegação por teclado nas listas salvas (roving tabindex + atalhos).
   const newNameRef = useRef<HTMLInputElement | null>(null);
+  const filterRef = useRef<HTMLInputElement | null>(null);
   const rowRefs = useRef(new Map<string, HTMLButtonElement>());
   const registerRow = (id: string) => (el: HTMLButtonElement | null) => {
     if (el) rowRefs.current.set(id, el);
@@ -183,7 +185,14 @@ function ListaContent() {
     onError: (e: Error) => toast.error(e.message),
   });
 
-  const lists = listsQuery.data ?? [];
+  const allLists = listsQuery.data ?? [];
+  const norm = (s: string) =>
+    s.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+  const lists = useMemo(() => {
+    const q = norm(listFilter);
+    if (!q) return allLists;
+    return allLists.filter((l) => norm(l.name).includes(q));
+  }, [allLists, listFilter]);
 
   const startRename = (l: { id: string; name: string }) => {
     setRenameId(l.id);
@@ -263,6 +272,12 @@ function ListaContent() {
       if (key === "n") {
         ev.preventDefault();
         newNameRef.current?.focus();
+        return;
+      }
+      if (key === "f") {
+        ev.preventDefault();
+        filterRef.current?.focus();
+        filterRef.current?.select();
         return;
       }
       if (key === "l") {
@@ -345,16 +360,58 @@ function ListaContent() {
                   )}
                 </button>
               </form>
+              <div className="relative mt-2">
+                <Search
+                  className="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground"
+                  aria-hidden
+                />
+                <input
+                  ref={filterRef}
+                  value={listFilter}
+                  onChange={(e) => setListFilter(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Escape") {
+                      e.preventDefault();
+                      setListFilter("");
+                      e.currentTarget.blur();
+                    }
+                  }}
+                  placeholder="Filtrar minhas listas..."
+                  aria-label="Filtrar minhas listas salvas"
+                  aria-keyshortcuts="Alt+F"
+                  className="h-8 w-full rounded-full border border-border bg-background pl-8 pr-8 text-[12.5px] outline-none focus:ring-2 focus:ring-primary/40"
+                />
+                {listFilter && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setListFilter("");
+                      filterRef.current?.focus();
+                    }}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-muted-foreground hover:text-foreground"
+                    aria-label="Limpar filtro"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                )}
+              </div>
               <p className="mt-1.5 text-[11px] text-muted-foreground">
-                Atalhos: <kbd>Alt</kbd>+<kbd>N</kbd> nova · <kbd>Alt</kbd>+
-                <kbd>L</kbd> listas · <kbd>F2</kbd> renomear · <kbd>Del</kbd>{" "}
-                excluir · <kbd>Esc</kbd> fechar
+                {allLists.length > 0 && (
+                  <>
+                    {listFilter
+                      ? `${lists.length} de ${allLists.length} listas`
+                      : `${allLists.length} ${allLists.length === 1 ? "lista salva" : "listas salvas"}`}{" "}
+                    ·{" "}
+                  </>
+                )}
+                <kbd>Alt</kbd>+<kbd>N</kbd> nova · <kbd>Alt</kbd>+<kbd>F</kbd>{" "}
+                filtrar · <kbd>F2</kbd> renomear · <kbd>Del</kbd> excluir
               </p>
             </div>
             <ul
               role="listbox"
               aria-label="Minhas listas salvas"
-              className="divide-y divide-border"
+              className="max-h-[52vh] divide-y divide-border overflow-y-auto"
             >
               {listsQuery.isLoading && (
                 <li className="p-2">
@@ -363,7 +420,9 @@ function ListaContent() {
               )}
               {lists.length === 0 && !listsQuery.isLoading && (
                 <li className="p-4 text-[13px] text-muted-foreground">
-                  Nenhuma lista ainda. Crie a primeira acima.
+                  {listFilter
+                    ? `Nenhuma lista com "${listFilter}".`
+                    : "Nenhuma lista ainda. Crie a primeira acima."}
                 </li>
               )}
               {lists.map((l, index) => {

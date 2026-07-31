@@ -158,10 +158,11 @@ function AppHomeContent() {
               value={summary ? String(summary.totals.listsCount) : "—"}
               hint={
                 summary
-                  ? `${summary.totals.itemsCount} ${summary.totals.itemsCount === 1 ? "item" : "itens"} para comprar`
+                  ? `${summary.totals.itemsCount} ${summary.totals.itemsCount === 1 ? "item" : "itens"} · abrir listas`
                   : "carregando"
               }
               tone="primary"
+              to="/lista"
             />
             <Metric
               icon={Star}
@@ -271,16 +272,18 @@ function Metric({
   value,
   hint,
   tone = "primary",
+  to,
 }: {
   icon: React.ComponentType<{ className?: string }>;
   label: string;
   value: React.ReactNode;
   hint: string;
   tone?: MetricTone;
+  to?: string;
 }) {
   const t = METRIC_TONES[tone];
-  return (
-    <article className="relative min-w-0 px-3 py-2">
+  const body = (
+    <>
       <span aria-hidden className={cn("absolute inset-y-2 left-0 w-[3px] rounded-full", t.rail)} />
       <div className="flex items-center gap-1.5">
         <span className={cn("grid h-5 w-5 shrink-0 place-items-center rounded-md", t.chip)}>
@@ -296,7 +299,20 @@ function Metric({
       <p className={cn(tc.metaMuted, "mt-1 truncate leading-tight")} title={hint}>
         {hint}
       </p>
-    </article>
+    </>
+  );
+  if (to) {
+    return (
+      <Link
+        to={to}
+        className="relative block min-w-0 px-3 py-2 transition hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand/60"
+      >
+        {body}
+      </Link>
+    );
+  }
+  return (
+    <article className="relative min-w-0 px-3 py-2">{body}</article>
   );
 }
 
