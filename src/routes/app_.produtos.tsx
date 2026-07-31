@@ -6,6 +6,7 @@ import { ArrowLeft, BarChart3, Search as SearchIcon, Store, X } from "lucide-rea
 
 import { AppShell } from "@/components/brand/AppShell";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
+import { PriceDropAlertToggle } from "@/components/app/PriceDropAlertToggle";
 import { ProductCompareSheet } from "@/components/app/ProductCompareSheet";
 import { Input } from "@/components/ui/input";
 import { Price } from "@/components/ds/Price";
@@ -233,11 +234,11 @@ function ProductsPage() {
             <>
               <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2 xl:grid-cols-3">
                 {results.map((r) => (
-                  <li key={r.catalogId}>
+                  <li key={r.catalogId} className="relative">
                     <button
                       type="button"
                       onClick={() => setCompareKey(r.displayName)}
-                      className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-lg border border-border/70 bg-card/94 px-3 py-2.5 text-left shadow-sm backdrop-blur-md transition-colors hover:border-primary/40 hover:bg-muted/40"
+                      className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-3 rounded-lg border border-border/70 bg-card/94 px-3 py-2.5 pb-8 text-left shadow-sm backdrop-blur-md transition-colors hover:border-primary/40 hover:bg-muted/40"
                     >
                       <span className="min-w-0">
                         <span className={cn(tc.itemTitle, "block truncate")}>{r.displayName}</span>
@@ -267,6 +268,12 @@ function ProductsPage() {
                         )}
                       </span>
                     </button>
+                    <PriceDropAlertToggle
+                      variant="chip"
+                      className="absolute bottom-2 left-3"
+                      productName={r.displayName}
+                      targetPrice={r.minPrice}
+                    />
                   </li>
                 ))}
               </ul>

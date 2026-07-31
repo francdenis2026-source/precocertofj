@@ -20,6 +20,7 @@ import { AppShell } from "@/components/brand/AppShell";
 import { ProtectedGate } from "@/components/auth/ProtectedGate";
 import { ProductCompareSheet } from "@/components/app/ProductCompareSheet";
 import { ProductPriceHistory } from "@/components/app/ProductPriceHistory";
+import { PriceDropAlertToggle } from "@/components/app/PriceDropAlertToggle";
 import { formatUpdatedAt } from "@/components/app/PriceTrend";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -312,7 +313,7 @@ function AppStorePage() {
                     const checked = selected.includes(p.productName);
                     return (
                       <li key={p.slug} className="px-3 py-2 transition-colors hover:bg-muted/40">
-                        <div className="grid grid-cols-[auto_minmax(0,1fr)_auto_auto_auto] items-center gap-2.5">
+                        <div className="grid grid-cols-[auto_minmax(0,1fr)_auto_auto_auto_auto] items-center gap-2.5">
                           <Checkbox
                             checked={checked}
                             onCheckedChange={() => toggle(p.productName)}
@@ -343,6 +344,12 @@ function AppStorePage() {
                           >
                             <LineChart className="h-3.5 w-3.5" aria-hidden />
                           </button>
+                          <PriceDropAlertToggle
+                            productName={p.productName}
+                            establishmentId={id}
+                            storeName={contactQ.data?.name ?? null}
+                            targetPrice={p.price}
+                          />
                           <button
                             type="button"
                             onClick={() => setCompareKey(p.productName)}
