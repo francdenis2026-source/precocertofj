@@ -98,9 +98,9 @@ function AppHomeContent() {
 
   return (
     <AppShell>
-      <div className="app-dashboard mx-auto flex w-full max-w-[1540px] flex-col gap-2 px-3 py-2 md:px-4">
+      <div className="app-dashboard mx-auto flex w-full max-w-[1540px] flex-col gap-1.5 px-3 py-1.5 md:px-4 lg:h-full lg:min-h-0 lg:overflow-hidden">
         {/* Cabeçalho compacto */}
-        <header className="relative shrink-0 overflow-hidden rounded-lg border border-primary/30 bg-primary/95 px-3 py-2 text-primary-foreground shadow-sm backdrop-blur-md md:px-3.5">
+        <header className="relative shrink-0 overflow-hidden rounded-lg border border-primary/30 bg-primary/95 px-3 py-1.5 text-primary-foreground shadow-sm backdrop-blur-md md:px-3.5">
           <span
             aria-hidden
             className="pointer-events-none absolute -right-16 -top-20 h-48 w-48 rounded-full bg-brand/20 blur-3xl"
@@ -112,7 +112,9 @@ function AppHomeContent() {
           <div className="relative grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
             <div className="min-w-0">
               <p className={cn(tc.eyebrow, "text-brand")}>Meu painel</p>
-              <h1 className={cn(tc.h1, "truncate text-primary-foreground")}>Olá, {firstName}</h1>
+              <h1 className={cn(tc.h1, "truncate text-[16px] leading-tight text-primary-foreground md:text-[18px]")}>
+                Olá, {firstName}
+              </h1>
             </div>
             <div className="flex shrink-0 flex-wrap items-center justify-end gap-1.5">
               <Link
@@ -135,7 +137,7 @@ function AppHomeContent() {
         </header>
 
         {/* Métricas do banco */}
-        <div className="grid grid-cols-2 gap-2 lg:grid-cols-4">
+        <div className="grid shrink-0 grid-cols-2 gap-1.5 lg:grid-cols-4">
           <Metric
             icon={ShoppingCart}
             label="Suas listas"
@@ -159,7 +161,7 @@ function AppHomeContent() {
             label="Cesta mais barata"
             value={
               summary?.totals.estimatedCartTotal != null ? (
-                <Price value={summary.totals.estimatedCartTotal} size="lg" />
+                <Price value={summary.totals.estimatedCartTotal} size="sm" />
               ) : (
                 "—"
               )
@@ -176,7 +178,7 @@ function AppHomeContent() {
             label="Economia potencial"
             value={
               potentialSavings > 0 ? (
-                <Price value={potentialSavings} size="lg" tone="savings" />
+                <Price value={potentialSavings} size="sm" tone="savings" />
               ) : (
                 "—"
               )
@@ -187,30 +189,32 @@ function AppHomeContent() {
         </div>
 
         {loading && (
-          <div className={cn(tc.meta, "flex items-center gap-2")}>
-            <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> Puxando os preços mais
+          <div className={cn(tc.meta, "flex shrink-0 items-center gap-2")}>
+            <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden /> Puxando os preços mais
             recentes…
           </div>
         )}
 
-        {/* Grid responsiva: busca de preços à esquerda, lojas e favoritos à direita */}
-        <div className="grid gap-2 lg:grid-cols-12">
-          <div className="flex min-h-[360px] flex-col lg:col-span-7 xl:col-span-8">
+        {/* Grid responsiva de altura total: busca | lojas+ranking | favoritos */}
+        <div className="grid gap-1.5 lg:min-h-0 lg:flex-1 lg:grid-cols-12">
+          <div className="flex min-h-[320px] flex-col lg:col-span-5 lg:min-h-0">
             <DashboardSearch />
           </div>
-          <div className="grid content-start gap-2 lg:col-span-5 xl:col-span-4">
-            <div className="flex max-h-[260px] min-h-[180px] flex-col">
+
+          <div className="grid content-start gap-1.5 lg:col-span-3 lg:min-h-0 lg:grid-rows-2 lg:content-stretch">
+            <div className="flex max-h-[240px] min-h-[170px] flex-col lg:max-h-none lg:min-h-0">
               <StoresPanel
                 stores={publicStoresQuery.data ?? []}
                 loading={publicStoresQuery.isLoading}
                 onOpenDetails={openStoreByName}
               />
             </div>
-            <div className="flex max-h-[220px] min-h-[160px] flex-col">
+            <div className="flex max-h-[220px] min-h-[160px] flex-col lg:max-h-none lg:min-h-0">
               <StoreRankStrip storeNames={storeNameSet} onOpenStore={openStoreByName} />
             </div>
           </div>
-          <div className="lg:col-span-12">
+
+          <div className="flex min-h-0 flex-col lg:col-span-4">
             {summary ? (
               <FavoritesDock
                 summary={summary}
@@ -224,11 +228,12 @@ function AppHomeContent() {
                 onRemoveMarket={(id) => removeMarket.mutate(id)}
               />
             ) : (
-              <div className="h-32 animate-pulse rounded-lg border border-border bg-card/80 backdrop-blur-md" />
+              <div className="h-32 animate-pulse rounded-lg border border-border bg-card/80 backdrop-blur-md lg:h-full" />
             )}
           </div>
         </div>
       </div>
+
 
       <StoreDetailsDrawer
         store={selectedStore}
@@ -281,19 +286,19 @@ function Metric({
   return (
     <article
       className={cn(
-        "relative overflow-hidden rounded-lg border px-2.5 py-1.5 shadow-sm backdrop-blur-md transition-colors",
+        "relative overflow-hidden rounded-lg border px-2.5 py-1 shadow-sm backdrop-blur-md transition-colors",
         t.card,
       )}
     >
       <span aria-hidden className={cn("absolute inset-y-0 left-0 w-[3px]", t.rail)} />
       <div className="flex items-center justify-between gap-2">
         <p className={cn(tc.tableHead, "truncate")}>{label}</p>
-        <span className={cn("grid h-6 w-6 shrink-0 place-items-center rounded-md", t.chip)}>
-          <Icon className="h-3.5 w-3.5" aria-hidden />
+        <span className={cn("grid h-5 w-5 shrink-0 place-items-center rounded-md", t.chip)}>
+          <Icon className="h-3 w-3" aria-hidden />
         </span>
       </div>
-      <p className={cn(tc.dataPrimary, "mt-0.5 text-foreground")}>{value}</p>
-      <p className={cn(tc.metaMuted, "truncate")}>{hint}</p>
+      <p className={cn(tc.dataPrimary, "text-[18px] leading-tight text-foreground")}>{value}</p>
+      <p className={cn(tc.metaMuted, "truncate leading-tight")}>{hint}</p>
     </article>
   );
 }

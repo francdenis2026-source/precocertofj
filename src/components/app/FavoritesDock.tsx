@@ -70,7 +70,7 @@ export function FavoritesDock({
   return (
     <section
       aria-label="Seus favoritos e listas"
-       className="flex h-[52vh] min-h-[300px] flex-1 flex-col overflow-hidden rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md lg:h-auto lg:min-h-0"
+       className="flex h-[42vh] min-h-[240px] flex-1 flex-col overflow-hidden rounded-lg border border-border/70 bg-card/94 shadow-sm backdrop-blur-md lg:h-full lg:min-h-0"
     >
       <div
         role="tablist"
