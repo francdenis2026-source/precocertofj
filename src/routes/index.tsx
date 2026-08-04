@@ -561,57 +561,44 @@ function HomePage() {
                   borderColor: "var(--pc-home-onhero-border)",
                 }}
               >
-                <header className="mb-2 flex items-center justify-between gap-2 border-b pb-2" style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}>
-                  <span
-                    className={`inline-flex items-center gap-1.5 ${EYEBROW}`}
-                    style={{ color: "var(--pc-home-onhero-gold)" }}
-                  >
-                    <span className="relative inline-flex h-1.5 w-1.5">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-70" style={{ background: P.gold }} />
-                      <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: P.gold }} />
-                    </span>
-                    Painel ao vivo
-                  </span>
-                  <Link
-                    to="/estabelecimentos"
-                    className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-[0.14em] transition-colors hover:brightness-125"
-                    style={{ color: "var(--pc-home-onhero-fg-70)" }}
-                  >
-                    Mercados <ArrowRight className="h-3 w-3" strokeWidth={2.6} />
-                  </Link>
-                </header>
-
-                <div className="grid grid-cols-3 gap-1.5" data-reading-dense>
-                  {metrics.map(({ kind, value, label, short, Icon }) => (
-                    <button
-                      key={kind}
-                      type="button"
-                      onClick={() => setSpotlight(kind)}
-                      aria-label={`${value} — ${label}. Ver detalhes.`}
-                      className="group flex min-w-0 flex-col items-center gap-0.5 rounded-xl border px-1.5 py-[clamp(0.3rem,0.9vh,0.55rem)] text-center pc-tile focus-visible:outline-none focus-visible:ring-2"
-                      style={{
-                        background: "var(--pc-home-onhero-glass-soft)",
-                        borderColor: "var(--pc-home-onhero-border-soft)",
-                        // @ts-expect-error css var
-                        "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
-                      }}
+                <div
+                  className="grid grid-cols-1 gap-3 sm:grid-cols-3 lg:grid-cols-1 lg:gap-4"
+                  role="region"
+                  aria-label="Painel de economia em tempo real"
+                >
+                  {metrics.map((m) => (
+                    <div
+                      key={m.kind}
+                      className="pc-elite-frame group relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-4 backdrop-blur-md transition-all hover:border-white/20 hover:bg-white/10 cursor-pointer"
+                      onClick={() => setSpotlight(m.kind as any)}
+                      role="button"
+                      tabIndex={0}
                     >
-                      <Icon className="h-3 w-3" style={{ color: P.goldSoft }} aria-hidden />
-                      <span
-                        className={`${serif} tabular-nums leading-none`}
-                        style={{ color: "var(--pc-home-onhero-gold)", fontSize: "clamp(0.95rem, 1.6vw, 1.3rem)" }}
-                      >
-                        {value}
-                      </span>
-                      <span
-                        className="w-full text-balance break-words text-[10.5px] font-bold uppercase leading-[1.1] tracking-[0.05em]"
-                        style={{ color: "var(--pc-home-onhero-fg-70)" }}
-                      >
-                        {/* Rótulo completo em 2 linhas: nunca cortar palavras com reticências */}
-                        <span className="sm:hidden">{short}</span>
-                        <span className="hidden sm:inline">{label}</span>
-                      </span>
-                    </button>
+                      <div className="flex items-start justify-between">
+                        <div className="flex flex-col gap-1">
+                          <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-white/50">
+                            {m.label}
+                          </span>
+                          <div className="flex items-baseline gap-1.5">
+                            <span className="pc-num text-2xl font-bold text-white sm:text-3xl">
+                              {m.value}
+                            </span>
+                            <span className="text-[13px] font-medium text-brand">
+                              {m.trend}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="rounded-xl bg-white/5 p-2 text-white/80 transition-colors group-hover:bg-brand/20 group-hover:text-brand">
+                          <m.Icon className="h-5 w-5 sm:h-6 sm:w-6" />
+                        </div>
+                      </div>
+                      <p className="mt-2 text-[13px] leading-snug text-white/60">
+                        {m.sublabel}
+                      </p>
+                      
+                      {/* Efeito de brilho no hover */}
+                      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-brand/5 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                    </div>
                   ))}
                 </div>
 
