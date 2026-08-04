@@ -474,143 +474,84 @@ function HomePage() {
 
               </div>
 
-              {/* Título e apoio escalam por largura E altura: em telas baixas
-                  (ex.: 1366x768) o texto encolhe em vez de empurrar a página. */}
               <h1
                 id="hero-title"
-                className="font-editorial pc-hero-editorial text-[clamp(1.75rem,2.6vw+2.2vh,4rem)] short-h:text-[clamp(1.5rem,1.5vw+1.7vh,2.4rem)]"
+                className="max-w-[18ch] text-[clamp(2.2rem,7vw,4.2rem)] leading-[0.92] font-editorial tracking-[-0.035em] sm:text-[clamp(3rem,8vw,5.2rem)]"
                 style={{ color: "var(--pc-home-onhero-fg)" }}
               >
-                Onde cada real{" "}
-                <PrecoCertoMark variant="hero">rende mais</PrecoCertoMark>.
+                Economize de verdade em <span className="pc-hero-mark italic font-normal text-[var(--pc-home-onhero-gold)]">cada compra</span>
               </h1>
 
               <p
-                className="tc-flow max-w-xl text-[clamp(13px,0.4vw+1.4vh,17px)] font-light leading-relaxed"
-                style={{ color: "var(--pc-home-onhero-fg-80)" }}
+                className="max-w-[42ch] text-[clamp(0.95rem,2vw,1.2rem)] font-medium leading-[1.45] tracking-[-0.015em] opacity-90 sm:text-[clamp(1.1rem,2.4vw,1.4rem)]"
+                style={{ color: "var(--pc-home-onhero-fg)" }}
               >
-                Os mercados de Feijó, lado a lado e em tempo real. Você escolhe onde
-                vale mais a pena — sem sair de casa.
+                Compare os preços dos supermercados de Feijó em tempo real. Cesta básica, quedas do dia e economia real — direto no seu celular.
               </p>
 
-              {/* ---------- Busca ---------- */}
-              <form onSubmit={submitSearch} className="relative max-w-2xl">
-                <div
-                  ref={searchAnchorRef}
-                  className="pc-elite-frame flex items-center gap-1 rounded-2xl border p-1 shadow-2xl transition-all focus-within:ring-2 sm:p-1.5"
-                  style={{
-                    background: "#ffffff",
-                    // @ts-expect-error css var
-                    "--tw-ring-color": `color-mix(in oklab, ${P.gold} 65%, transparent)`,
-                  }}
+              {/* ---------- Busca centralizada ---------- */}
+              <div className="relative mt-2 w-full max-w-2xl lg:mt-4" ref={searchAnchorRef}>
+                <form
+                  onSubmit={submitSearch}
+                  className="group relative flex items-center transition-transform duration-300 focus-within:scale-[1.01]"
                 >
-                  <span className="pl-3 sm:pl-4">
-                    <Search className="h-5 w-5" style={{ color: "#94a3b8" }} strokeWidth={2.2} />
-                  </span>
+                  <div
+                    className="absolute inset-y-0 left-0 flex items-center pl-5 text-muted-foreground transition-colors group-focus-within:text-brand"
+                    aria-hidden
+                  >
+                    <Search className="h-5 w-5 sm:h-6 sm:w-6" strokeWidth={2.5} />
+                  </div>
                   <input
+                    type="search"
                     value={q}
                     onChange={(e) => {
                       setQ(e.target.value);
                       setSuggestOpen(true);
                     }}
                     onFocus={() => setSuggestOpen(true)}
-                    onBlur={() => window.setTimeout(() => setSuggestOpen(false), 180)}
-                    onKeyDown={(e) => {
-                      // O dropdown consome ↑/↓/Enter/Esc quando está aberto.
-                      suggestRef.current?.handleKeyDown(e);
-                    }}
-                    role="combobox"
-                    aria-expanded={suggestOpen && q.trim().length >= 2}
-                    aria-controls="home-search-suggestions"
-                    aria-autocomplete="list"
-                    type="search"
-                    inputMode="search"
-                    placeholder="O que você procura hoje? (ex.: Arroz, Feijão, Leite…)"
-                    aria-label="Buscar produto"
-                    autoComplete="off"
-                    className="min-w-0 flex-1 bg-transparent px-2 py-[clamp(0.6rem,1.9vh,1.1rem)] text-[clamp(14px,1.5vh,16.5px)] font-medium outline-none placeholder:text-slate-400"
-                    style={{ color: "#0f172a" }}
+                    placeholder="O que você precisa comprar hoje?"
+                    className="h-14 w-full rounded-2xl border-2 border-white/20 bg-white/10 pl-14 pr-32 text-[17px] font-semibold text-white placeholder:text-white/50 backdrop-blur-xl transition-all hover:bg-white/15 focus:border-brand/60 focus:bg-white/20 focus:outline-none focus:ring-4 focus:ring-brand/10 sm:h-16 sm:pl-16 sm:text-[19px]"
                   />
-                  <button
-                    type="submit"
-                    aria-label="Buscar preço"
-                    className="inline-flex shrink-0 items-center gap-2 rounded-xl px-3.5 py-2.5 text-[13.5px] font-bold uppercase tracking-wide transition-all hover:brightness-95 active:scale-95 sm:px-6 sm:text-[14px]"
-                    style={{ background: P.gold, color: P.navy }}
-                  >
-                    <span className="hidden sm:inline">Buscar</span>
-                    <ArrowRight className="h-4 w-4" strokeWidth={2.5} />
-                  </button>
-                </div>
+                  <div className="absolute right-2 top-2 h-10 sm:right-2.5 sm:top-2.5 sm:h-11">
+                    <Button
+                      type="submit"
+                      disabled={!q.trim()}
+                      className="h-full rounded-xl bg-brand px-5 text-[15px] font-bold text-brand-foreground shadow-lg transition-all hover:bg-brand-strong hover:shadow-xl active:scale-95 disabled:opacity-0 sm:px-8 sm:text-[16px]"
+                    >
+                      Buscar
+                    </Button>
+                  </div>
+                </form>
+
+                {/* Sugestões de busca flutuantes */}
                 <HomeSearchSuggestions
                   ref={suggestRef}
-                  anchorRef={searchAnchorRef}
-                  query={q}
-                  isLoggedOut={isLoggedOut}
                   open={suggestOpen}
-                  onClose={() => setSuggestOpen(false)}
-                  onBlocked={() => setGateOpen(true)}
+                  onOpenChange={setSuggestOpen}
+                  query={q}
+                  onSelect={(term) => {
+                    setQ(term);
+                    submitSearch();
+                  }}
+                  anchorRef={searchAnchorRef}
                 />
-                {/* Com a cota de visitante desativada, GUEST_DAILY_LIMIT vale
-                    Number.MAX_SAFE_INTEGER — mostrar "restam 9007199254740991"
-                    é ruído. Só exibe o contador quando o limite é real. */}
-                {isLoggedOut && !GUEST_QUOTA_DISABLED ? (
-                  <p
-                    className="mt-1.5 pl-2 text-[11px] font-medium"
-                    style={{ color: "var(--pc-home-onhero-fg-70)" }}
-                  >
-                    Modo visitante · restam{" "}
-                    <strong className="pc-num">{guestRemaining()}</strong> de {GUEST_DAILY_LIMIT} usos grátis hoje
-                  </p>
-                ) : null}
-              </form>
+              </div>
 
-
-              {/* ---------- Populares + CTA ---------- */}
-              <div className="flex flex-wrap items-center gap-2">
-                <span className={EYEBROW} style={{ color: "var(--pc-home-onhero-fg-60)" }}>
-                  Populares
-                </span>
-                {heroPopular.map((t) => (
+              {/* Buscas em alta no Hero */}
+              <div className="flex flex-wrap items-center gap-2 pt-2 sm:gap-3">
+                <span className="text-[12px] font-bold uppercase tracking-wider opacity-60">Popular:</span>
+                {heroPopular.map((term) => (
                   <button
-                    key={t}
-                    type="button"
-                    onClick={() => goToPopular(t)}
-                    aria-label={`Buscar por ${t}`}
-                    className={CHIP}
-                    style={{
-                      background: "var(--pc-home-onhero-glass-soft)",
-                      borderColor: "var(--pc-home-onhero-border-soft)",
-                      color: "var(--pc-home-onhero-fg-85)",
-                      ["--tw-ring-color" as string]: "var(--pc-home-onhero-gold)",
-                    }}
+                    key={term}
+                    onClick={() => goToPopular(term)}
+                    className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[13.5px] font-medium text-white/90 backdrop-blur-sm transition-all hover:border-white/30 hover:bg-white/15 hover:text-white active:scale-95"
                   >
-                    {t}
+                    {term}
                   </button>
                 ))}
-                {isLoggedOut ? (
-                  <StartFreeDialog>
-                    <button
-                      type="button"
-                      aria-haspopup="dialog"
-                      className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[12px] font-bold transition-all hover:brightness-95"
-                      style={{ background: P.gold, color: P.navy }}
-                    >
-                      Começar grátis
-                      <ArrowRight className="h-3 w-3" strokeWidth={2.6} />
-                    </button>
-                  </StartFreeDialog>
-                ) : (
-                  <Link
-                    to="/app"
-                    className="inline-flex items-center gap-1 rounded-full px-3 py-1 text-[12px] font-bold transition-all hover:brightness-95"
-                    style={{ background: P.gold, color: P.navy }}
-                  >
-                    Ir para o painel
-                    <ArrowRight className="h-3 w-3" strokeWidth={2.6} />
-                  </Link>
-                )}
               </div>
             </div>
+
 
             {/* ---------- Coluna de dados ---------- */}
             <aside className="order-2 min-w-0 lg:col-span-5" aria-label="Indicadores da plataforma">
