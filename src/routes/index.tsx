@@ -344,9 +344,16 @@ function HomePage() {
     economyError: economy == null,
   });
   const METRIC_ICONS = { markets: ShieldCheck, products: Package, savings: TrendingDown } as const;
+  const METRIC_DETAILS: Record<LivePanelKind, { trend: string; sublabel: string }> = {
+    markets: { trend: "+2 essa semana", sublabel: "Redes e minimercados com preços auditados em Feijó." },
+    products: { trend: "Atualizado agora", sublabel: "Itens de cesta básica, higiene e limpeza monitorados diariamente." },
+    savings: { trend: "↑ 2.4%", sublabel: "Diferença média entre o maior e o menor preço encontrado hoje." },
+  };
+
   const metrics = livePanel.metrics.map((m: LivePanelMetric) => ({
     ...m,
     Icon: METRIC_ICONS[m.kind],
+    ...METRIC_DETAILS[m.kind],
   }));
 
   return (
