@@ -18,6 +18,7 @@ import {
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { PrecoCertoMark } from "@/components/typography/PrecoCertoMark";
+import { Button } from "@/components/ui/button";
 import { StoreCaption } from "@/components/brand/StoreCaption";
 
 import { buildLivePanel, type LivePanelMetric } from "@/lib/live-panel";
@@ -527,12 +528,10 @@ function HomePage() {
                 <HomeSearchSuggestions
                   ref={suggestRef}
                   open={suggestOpen}
-                  onOpenChange={setSuggestOpen}
+                  onClose={() => setSuggestOpen(false)}
                   query={q}
-                  onSelect={(term) => {
-                    setQ(term);
-                    submitSearch();
-                  }}
+                  isLoggedOut={isLoggedOut}
+                  onBlocked={() => setGateOpen(true)}
                   anchorRef={searchAnchorRef}
                 />
               </div>
