@@ -21,7 +21,7 @@ import { PrecoCertoMark } from "@/components/typography/PrecoCertoMark";
 import { Button } from "@/components/ui/button";
 import { StoreCaption } from "@/components/brand/StoreCaption";
 
-import { buildLivePanel, type LivePanelMetric } from "@/lib/live-panel";
+import { buildLivePanel, type LivePanelMetric, type LivePanelKind } from "@/lib/live-panel";
 import { getPlatformStats, listPublicStores } from "@/lib/stores-public.functions";
 import { getEconomyStat } from "@/lib/products-public.functions";
 import { listTrendingSearches } from "@/lib/search-trends.functions";
