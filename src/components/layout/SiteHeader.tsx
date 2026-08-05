@@ -1,6 +1,7 @@
 import { Link, useNavigate, useLocation } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
+import { cn } from "@/lib/utils";
 import { prefetchRouteData } from "@/lib/route-prefetch";
 import { LogOut, User as UserIcon, Key, Receipt, LayoutDashboard, ChevronDown, Search, Ticket, Menu, ShieldCheck } from "lucide-react";
 import { ds, dsx } from "@/lib/ds";
@@ -20,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import { BackButton } from "@/components/layout/BackButton";
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
-const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
+const serif = "font-sans";
 
 type Variant = "overlay" | "solid";
 
@@ -125,13 +126,11 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
           <div className="flex min-w-0 flex-col leading-none">
             <span
               className={dsx(
-                serif,
-                "truncate text-[26px] font-medium leading-[0.95] tracking-[-0.015em] antialiased sm:text-[26px] md:text-[29px] lg:text-[31px]",
+                "truncate text-[22px] font-bold leading-tight tracking-[-0.04em] antialiased sm:text-[24px] md:text-[26px]",
                 brandTextClass,
-                isOverlay && "[text-shadow:0_1px_2px_rgb(0_0_0/0.35),0_0_1px_rgb(0_0_0/0.25)]",
               )}
             >
-              Preço<span className={dsx("italic font-normal -ml-[0.06em] tracking-[-0.01em]", brandAccentClass)}>Certo</span>
+              Preço<span className={cn("text-primary ml-px", brandAccentClass)}>Certo</span>
             </span>
             <span
               className={dsx(

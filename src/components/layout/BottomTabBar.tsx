@@ -64,14 +64,14 @@ export function BottomTabBar() {
                 className={cn(
                   "pc-nav-link group flex min-h-[56px] flex-col items-center justify-center gap-0.5 px-2 pt-1.5 pb-1",
                   "text-[11px] font-semibold leading-none outline-none",
-                  active ? "text-[var(--pc-gold-ink)]" : "text-muted-foreground",
+                  active ? "text-primary" : "text-muted-foreground",
                 )}
               >
                 <span
                   className={cn(
                     "grid h-8 w-8 place-items-center rounded-xl transition-colors",
                     active
-                      ? "bg-brand/12 text-[var(--pc-gold-ink)]"
+                      ? "bg-primary/10 text-primary"
                       : "text-current group-hover:bg-muted/60",
                   )}
                 >

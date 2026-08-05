@@ -80,14 +80,13 @@
 }
 
 @theme inline {
-  --font-numeric: "Oswald Digits";
-  /* Oswald completa — display secundária: títulos, stats, CTAs, badges. */
-  --font-condensed: "Oswald", "Oswald Digits", "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-condensed);
-  --font-editorial: var(--font-numeric), "Fraunces", "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
-  --font-sans: var(--font-numeric), "Inter", "Work Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-serif: var(--font-numeric), "Fraunces", "Instrument Serif", ui-serif, Georgia, "Times New Roman", serif;
-  --font-mono: var(--font-numeric), "IBM Plex Mono", ui-monospace, SFMono-Regular, "JetBrains Mono", monospace;
+  --font-numeric: "Inter", sans-serif;
+  --font-condensed: "Plus Jakarta Sans", sans-serif;
+  --font-display: "Plus Jakarta Sans", sans-serif;
+  --font-editorial: "Plus Jakarta Sans", sans-serif;
+  --font-sans: "Inter", "Plus Jakarta Sans", sans-serif;
+  --font-serif: "Plus Jakarta Sans", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
 
 
 
@@ -173,19 +172,19 @@
   --mobile-nav-height: calc(4.75rem + env(safe-area-inset-bottom, 0px));
 
   /* LIGHT — paleta sincronizada com o background navy+dourado */
-  --background: oklch(0.986 0.008 250);
-  --foreground: oklch(0.17 0.05 258);
+  --background: oklch(0.985 0.005 240); /* Clean Slate Off-white */
+  --foreground: oklch(0.20 0.04 250);   /* Slate 900-ish */
   --surface: oklch(1 0 0);
-  --ink: oklch(0.15 0.052 258);
+  --ink: oklch(0.15 0.05 250);
 
   --card: oklch(1 0 0);
-  --card-foreground: oklch(0.17 0.05 258);
+  --card-foreground: oklch(0.20 0.04 250);
   --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.17 0.05 258);
+  --popover-foreground: oklch(0.20 0.04 250);
 
   /* Primary alinhado ao navy do background (hue 258) — azul-marinho premium */
-  --primary: oklch(0.50 0.19 258);
-  --primary-foreground: oklch(0.99 0.002 250);
+  --primary: oklch(0.55 0.20 255); /* Electric Indigo */
+  --primary-foreground: oklch(0.99 0.01 250);
 
   --secondary: oklch(0.955 0.016 250);
   --secondary-foreground: oklch(0.22 0.05 258);
@@ -200,8 +199,8 @@
   /* tinta legível derivada do accent (AA em texto pequeno) */
   --accent-ink: #6b4a12;
   /* Brand dourado harmonizado com o bokeh do fundo */
-  --brand: oklch(0.70 0.135 80);
-  --brand-foreground: oklch(0.16 0.05 258);
+  --brand: oklch(0.75 0.18 65); /* Vibrant Amber/Orange */
+  --brand-foreground: oklch(0.15 0.05 250);
   /* LIGHT: sobre mídia clara o dourado precisa ser "ink" (AA ≥ 4.5), não pastel. */
   --brand-soft: oklch(0.45 0.095 78);
 
@@ -250,10 +249,10 @@
      `bg-[var(--pc-navy)]` use o mesmo azul das utilitárias .bg-brand-navy. */
   --pc-navy: #0f1b3d;
   --pc-home-navy-2: #324c73;
-  --pc-home-gold: #b58a3c;
-  --pc-home-gold-soft: #8a6218;
+  --pc-home-gold: var(--primary);
+  --pc-home-gold-soft: var(--primary);
   /* Gold legível como texto/ícone sobre superfícies claras (AA ≥ 4.5) */
-  --pc-gold-ink: #6b4a12;
+  --pc-gold-ink: var(--primary);
   --pc-home-line: #dfe3ec;
   /* Tint dourado uniforme para hover de chips, links de sidebar e alvos leves.
      Light: ~10% do gold sobre fundo claro (contraste elegante sem sujar).
@@ -281,9 +280,9 @@
   --pc-home-onhero-border-hover: rgb(15 27 61 / 0.50);
   --pc-home-onhero-fg-70: #2a3757;
   --pc-home-onhero-fg-60: #38456a;
-  --pc-home-onhero-gold: #6a4708;
+  --pc-home-onhero-gold: var(--primary);
   --pc-home-hero-bg: #fbfaf6;
-  --pc-home-hero-img-opacity: 0.22;
+  --pc-home-hero-img-opacity: 0.12;
 
   /* Zonas cromáticas do painel "Explorar" (guia rápido) — LIGHT */
   --pc-explore-live-accent: #1d4ed8;
@@ -295,8 +294,8 @@
 
 
   /* Semantic — nome de estabelecimento (unificado em todo o site) */
-  --market-accent: #8a6218;
-  --market-accent-hover: #6b4a10;
+  --market-accent: var(--primary);
+  --market-accent-hover: var(--primary);
 
   /* ============= Semantic TEXT tokens (WCAG-safe) — LIGHT =============
      Baseline ink #08122a sobre superfícies claras (#ffffff / #f5f6fa / #eef1f7).
@@ -317,9 +316,9 @@
 
   /* Acentos com contraste garantido em superfícies claras */
   --pc-price:           #08122a;   /* preço/valor sobre card branco → 19.8:1 (navy strong) */
-  --pc-eyebrow-gold:    #6b4a10;   /* eyebrow gold sobre card branco → 7.5:1 */
-  --pc-eyebrow-on-navy: #f2d689;   /* eyebrow gold sobre navy sólido → 9.4:1 */
-  --pc-live:            #047857;   /* indicador ao-vivo sobre card claro → 5.8:1 */
+  --pc-eyebrow-gold:    var(--primary);
+  --pc-eyebrow-on-navy: var(--primary-foreground);
+  --pc-live:            oklch(0.60 0.20 150);
 
   /* ----- Tokens tipográficos para preços (typeclear) ----- */
   --pc-price-fg:         var(--pc-price);              /* base — segue tema */
@@ -331,7 +330,7 @@
      caem em DM Sans, que segue como fonte comercial de apoio. Como a Oswald é
      condensada, o tracking negativo foi zerado — apertar uma condensada reduz
      a legibilidade em vez de aumentá-la. */
-  --pc-price-font:       var(--font-numeric), 'DM Sans', 'Inter', 'Work Sans', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --pc-price-font: "Inter", "Work Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --pc-price-tracking:   0.005em;
   --pc-price-feature-settings: "tnum" 1, "lnum" 1;
 
@@ -348,19 +347,19 @@
 /* ============= DARK — Deep Ocean ============= */
 .dark {
   /* DARK — mesma família navy, contrastes reforçados para ícones/links/botões */
-  --background: oklch(0.145 0.038 258);
-  --foreground: oklch(0.975 0.006 250);
-  --surface: oklch(0.205 0.042 258);
-  --ink: oklch(0.975 0.006 250);
+  --background: oklch(0.12 0.02 250); /* Deep Slate Black */
+  --foreground: oklch(0.98 0.01 240);
+  --surface: oklch(0.18 0.03 250);
+  --ink: oklch(0.98 0.01 240);
 
-  --card: oklch(0.205 0.042 258);
-  --card-foreground: oklch(0.975 0.006 250);
-  --popover: oklch(0.205 0.042 258);
-  --popover-foreground: oklch(0.975 0.006 250);
+  --card: oklch(0.18 0.03 250);
+  --card-foreground: oklch(0.98 0.01 240);
+  --popover: oklch(0.18 0.03 250);
+  --popover-foreground: oklch(0.98 0.01 240);
 
   /* Primary navy institucional — mantém a identidade PreçoCerto no dark mode */
-  --primary: oklch(0.48 0.13 258);
-  --primary-foreground: oklch(0.985 0.005 250);
+  --primary: oklch(0.65 0.22 255); /* Brighter Indigo for Dark */
+  --primary-foreground: oklch(0.10 0.02 250);
 
   --secondary: oklch(0.255 0.048 258);
   --secondary-foreground: oklch(0.975 0.006 250);
@@ -374,8 +373,8 @@
   --accent-strong: oklch(0.38 0.055 258);
   --accent-ink: #e8be72;
   /* Brand dourado casando com o bokeh do background */
-  --brand: oklch(0.80 0.135 82);
-  --brand-foreground: oklch(0.13 0.04 258);
+  --brand: oklch(0.85 0.16 70); /* Soft Amber for Dark */
+  --brand-foreground: oklch(0.10 0.02 250);
   --brand-soft: oklch(0.90 0.09 82);
   --brand-strong: oklch(0.68 0.15 80);
   --on-media: oklch(0.99 0.002 250);
@@ -417,9 +416,9 @@
   --pc-home-card: oklch(0.20 0.04 258);
   --pc-home-navy: #071126;
   --pc-home-navy-2: #172a4b;
-  --pc-home-gold: #f2c66b;         /* brighter gold p/ garantir contraste em fundos claros de popovers no dark */
-  --pc-home-gold-soft: #ffe9ab;
-  --pc-gold-ink: #f2c66b;
+  --pc-home-gold: var(--primary);
+  --pc-home-gold-soft: var(--primary);
+  --pc-gold-ink: var(--primary);
   --pc-home-line: oklch(0.31 0.045 258);
   --pc-hover-tint: color-mix(in oklab, var(--pc-home-gold) 16%, transparent);
 
@@ -443,7 +442,7 @@
   --pc-home-onhero-border-hover: rgb(255 255 255 / 0.45);
   --pc-home-onhero-fg-70: #cbd6e8;
   --pc-home-onhero-fg-60: #b7c5dd;
-  --pc-home-onhero-gold: #F0CE86;
+  --pc-home-onhero-gold: var(--primary);
   --pc-home-hero-bg: #071126;
   --pc-home-hero-img-opacity: 0.44;
 
@@ -457,8 +456,8 @@
 
 
   /* Semantic — nome de estabelecimento (dark) */
-  --market-accent: #ffe3a0;
-  --market-accent-hover: #fff2cc;
+  --market-accent: var(--primary);
+  --market-accent-hover: var(--primary);
 
   /* ============= Semantic TEXT tokens (WCAG-safe) — DARK =============
      Baseline ink near-white sobre navy card (#0f1b3d / oklch 0.20).
@@ -478,9 +477,9 @@
 
   /* Acentos (dark) */
   --pc-price:           #f5f6fa;   /* sobre card navy → 15.6:1 (branco quente) */
-  --pc-eyebrow-gold:    #ffe3a0;   /* sobre card navy → 11:1 */
-  --pc-eyebrow-on-navy: #f2d689;   /* mesmo em ambos os temas */
-  --pc-live:            #34d399;   /* sobre card navy → 7:1 */
+  --pc-eyebrow-gold:    var(--primary);
+  --pc-eyebrow-on-navy: var(--primary-foreground);
+  --pc-live:            oklch(0.70 0.18 150);
 
 
 

@@ -40,14 +40,7 @@ export function AppShell({ children, scope }: { children: React.ReactNode; scope
           }
         >
           {!isAdminScope && (
-            <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden" aria-hidden>
-              <img
-                src={painelLoadingBg}
-                alt=""
-                className="h-full w-full object-cover opacity-[0.13] saturate-[0.7] dark:opacity-[0.16]"
-              />
-              <div className="absolute inset-0 bg-background/88 backdrop-blur-[2px] dark:bg-background/90" />
-            </div>
+            <div className="pointer-events-none fixed inset-0 -z-10 overflow-hidden bg-background" aria-hidden />
           )}
           <AppHeader scope={resolvedScope} />
           {isAdminScope ? (

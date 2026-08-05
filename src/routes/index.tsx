@@ -14,6 +14,8 @@ import {
   Grid3x3,
   LayoutGrid,
   MapPin,
+  ShoppingCart,
+  Store,
 } from "lucide-react";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
@@ -118,23 +120,17 @@ const P = {
   line: "var(--pc-home-line)",
   heading: "var(--pc-home-heading)",
 };
-const serif = "font-['Instrument_Serif',ui-serif,Georgia,serif]";
+const serif = "font-sans";
 
-/* Ladrilhos da faixa inferior — layout horizontal (ícone à esquerda do rótulo).
-   A caixa ficou mais baixa e densa: com ícone e texto na mesma linha, a altura
-   antes reservada para o empilhamento virava espaço morto. `clamp(px, vh, px)`
-   segue acompanhando a altura da janela sem cortar o rótulo, e todas as células
-   (categorias e ações) usam a mesma medida para fechar 2 linhas alinhadas. */
-const TILE = "group flex h-[4.5rem] w-full min-w-0 items-center gap-3.5 rounded-2xl border pl-4 pr-5 text-left pc-tile pc-elite-frame transition-all hover:shadow-xl hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2";
-const TILE_ICONWRAP = "grid shrink-0 place-items-center rounded-xl h-11 w-11";
-const TILE_ICON = "h-6 w-6";
-const TILE_LABEL = "min-w-0 flex-1 truncate text-[16px] font-bold leading-none tracking-tight";
+const TILE = "group flex h-14 w-full min-w-0 items-center gap-3.5 rounded-2xl border border-border/50 bg-card/50 pl-4 pr-5 text-left transition-all hover:bg-card hover:border-primary/30 hover:shadow-xl hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20";
+const TILE_ICONWRAP = "grid shrink-0 place-items-center rounded-xl h-10 w-10 bg-primary/5 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors";
+const TILE_ICON = "h-5 w-5";
+const TILE_LABEL = "min-w-0 flex-1 truncate text-[15px] font-bold tracking-tight text-foreground/80 group-hover:text-foreground";
 /* Tokens tipográficos compartilhados da home: um único "eyebrow" (rótulo de
-   seção) e um único estilo de chip, para que hero, painel ao vivo e faixa de
-   buscas em alta tenham exatamente a mesma hierarquia e o mesmo respiro. */
-const EYEBROW = "text-[11px] font-bold uppercase tracking-[0.2em]";
+   seção) e um único estilo de chip. */
+const EYEBROW = "text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground/60";
 const CHIP =
-  "inline-flex items-center justify-center rounded-full border px-2.5 py-1 text-[12px] font-medium capitalize pc-tile focus-visible:outline-none focus-visible:ring-2";
+  "inline-flex items-center justify-center rounded-full border border-border bg-card px-2.5 py-1 text-[11.5px] font-semibold text-foreground/70 transition-colors hover:bg-primary/5 hover:text-primary";
 
 
 /**
@@ -191,10 +187,8 @@ function HomePage() {
   const searchAnchorRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    document.body.classList.add("no-page-bg", "pc-home-locked", "overflow-hidden");
-    return () => {
-      document.body.classList.remove("no-page-bg", "pc-home-locked", "overflow-hidden");
-    };
+    // No body classes needed anymore, layout is standard and expansive.
+    return () => {};
   }, []);
 
   const { stats, economy } = useLoaderData({ from: "/" }) as {
@@ -347,13 +341,10 @@ function HomePage() {
 
   return (
     <div
-      /* O travamento em uma janela só vale a partir de `lg`: no mobile o
-         conteúdo é empilhado e precisa rolar normalmente, senão as faixas se
-         sobrepõem sob a barra inferior. */
-      className="pc-home relative flex min-h-[100dvh] w-full flex-col antialiased"
+      className="pc-home relative flex min-h-screen w-full flex-col overflow-x-hidden scroll-smooth"
       style={{
-        background: "var(--pc-home-hero-bg)",
-        color: "var(--pc-home-onhero-fg)",
+        background: "var(--background)",
+        color: "var(--foreground)",
         fontFamily: "var(--font-sans)",
       }}
     >
@@ -409,7 +400,7 @@ function HomePage() {
         <main
           id="hero"
           aria-labelledby="hero-title"
-          className="mx-auto flex w-full min-h-0 max-w-7xl flex-1 flex-col justify-center gap-[clamp(1.5rem,4vh,3rem)] px-3 py-10 sm:px-6 lg:px-8"
+          className="mx-auto flex w-full max-w-7xl flex-col justify-center gap-[clamp(2rem,6vh,4rem)] px-4 py-16 sm:px-6 lg:px-8"
         >
           {/* Sem `flex-1` aqui: o conjunto hero + divisor + faixa é centrado
               como um bloco só, distribuindo a folga igualmente acima e abaixo
@@ -421,9 +412,9 @@ function HomePage() {
               <div
                 className="inline-flex max-w-full flex-wrap items-center gap-x-2 gap-y-1 self-start rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] backdrop-blur-sm"
                 style={{
-                  background: `color-mix(in oklab, ${P.navy} 45%, transparent)`,
-                  borderColor: `color-mix(in oklab, ${P.gold} 38%, transparent)`,
-                  color: "var(--pc-home-onhero-gold)",
+                  background: `var(--primary)`,
+                  borderColor: `var(--primary)`,
+                  color: "var(--primary-foreground)",
                 }}
                 role="status"
                 aria-live="polite"
@@ -431,9 +422,9 @@ function HomePage() {
                 <span className="relative flex h-1.5 w-1.5" aria-hidden>
                   <span
                     className="absolute inline-flex h-full w-full animate-ping rounded-full opacity-75"
-                    style={{ background: P.gold }}
+                    style={{ background: "white" }}
                   />
-                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: P.gold }} />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full" style={{ background: "white" }} />
                 </span>
                 <span>Ao vivo · Feijó/AC</span>
                 <span aria-hidden style={{ color: `color-mix(in oklab, ${P.gold} 50%, transparent)` }}>·</span>
@@ -473,17 +464,16 @@ function HomePage() {
 
               <h1
                 id="hero-title"
-                className="max-w-[15ch] text-[clamp(2.4rem,8vw,4.8rem)] leading-[0.9] font-editorial tracking-[-0.04em] sm:text-[clamp(3.2rem,9vw,5.8rem)]"
-                style={{ color: "var(--pc-home-onhero-fg)" }}
+                className="max-w-[14ch] text-[clamp(2.8rem,9vw,5.5rem)] font-extrabold leading-[1] tracking-[-0.05em] sm:text-[clamp(3.5rem,10vw,6.5rem)]"
+                style={{ color: "var(--foreground)" }}
               >
-                Inteligência real para <span className="pc-hero-mark italic font-normal text-[var(--pc-home-onhero-gold)]">economizar mais</span>
+                Inteligência real para <span className="text-primary italic">economizar</span>
               </h1>
 
               <p
-                className="max-w-[46ch] text-[clamp(1rem,2.2vw,1.25rem)] font-medium leading-[1.5] tracking-[-0.01em] opacity-85 sm:text-[clamp(1.15rem,2.5vw,1.5rem)]"
-                style={{ color: "var(--pc-home-onhero-fg)" }}
+                className="max-w-[48ch] text-[clamp(1rem,2vw,1.2rem)] font-medium leading-relaxed tracking-tight text-muted-foreground sm:text-[clamp(1.1rem,2.2vw,1.4rem)]"
               >
-                A primeira plataforma de monitoramento de preços em tempo real de Feijó. Compare, escolha o melhor mercado e economize de verdade em cada item da sua lista.
+                A primeira plataforma de monitoramento de preços em tempo real de Feijó. Compare mercados e economize em cada item da sua lista.
               </p>
 
               {/* ---------- Busca centralizada ---------- */}
@@ -506,14 +496,14 @@ function HomePage() {
                       setSuggestOpen(true);
                     }}
                     onFocus={() => setSuggestOpen(true)}
-                    placeholder="O que você precisa comprar hoje?"
-                    className="h-14 w-full rounded-2xl border-2 border-white/20 bg-white/5 pl-14 pr-32 text-[17px] font-semibold text-white placeholder:text-white/40 backdrop-blur-2xl transition-all hover:bg-white/10 focus:border-brand/40 focus:bg-white/15 focus:outline-none focus:ring-8 focus:ring-brand/5 sm:h-16 sm:pl-16 sm:text-[19px]"
+                    placeholder="Buscar produto ou mercado…"
+                    className="h-14 w-full rounded-2xl border border-border bg-white/50 dark:bg-slate-900/50 pl-14 pr-32 text-[17px] font-semibold text-foreground placeholder:text-muted-foreground/60 backdrop-blur-2xl transition-all hover:bg-white dark:hover:bg-slate-900 focus:border-primary/50 focus:bg-white dark:focus:bg-slate-900 focus:outline-none focus:ring-8 focus:ring-primary/5 sm:h-16 sm:pl-16 sm:text-[19px]"
                   />
                   <div className="absolute right-2 top-2 h-10 sm:right-2.5 sm:top-2.5 sm:h-11">
                     <Button
                       type="submit"
                       disabled={!q.trim()}
-                      className="h-full rounded-xl bg-brand px-5 text-[15px] font-bold text-brand-foreground shadow-lg transition-all hover:bg-brand-strong hover:shadow-xl active:scale-95 disabled:opacity-0 sm:px-8 sm:text-[16px]"
+                      className="h-full rounded-xl bg-primary px-6 text-[15px] font-bold text-primary-foreground shadow-lg transition-all hover:bg-primary/90 hover:shadow-xl active:scale-95 disabled:opacity-0 sm:px-8 sm:text-[16px]"
                     >
                       Buscar
                     </Button>
@@ -534,12 +524,12 @@ function HomePage() {
 
               {/* Buscas em alta no Hero */}
               <div className="flex flex-wrap items-center gap-2 pt-2 sm:gap-3">
-                <span className="text-[12px] font-bold uppercase tracking-wider opacity-60">Popular:</span>
+                <span className="text-[12px] font-bold uppercase tracking-wider text-muted-foreground/60">Destaques:</span>
                 {heroPopular.map((term) => (
                   <button
                     key={term}
                     onClick={() => goToPopular(term)}
-                    className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[13.5px] font-medium text-white/90 backdrop-blur-sm transition-all hover:border-white/30 hover:bg-white/15 hover:text-white active:scale-95"
+                    className="rounded-full border border-border bg-card px-3.5 py-1.5 text-[13px] font-semibold text-foreground/80 shadow-sm transition-all hover:border-primary/30 hover:bg-primary/5 hover:text-primary active:scale-95"
                   >
                     {term}
                   </button>
@@ -551,11 +541,7 @@ function HomePage() {
             {/* ---------- Coluna de dados ---------- */}
             <aside className="order-2 min-w-0 lg:col-span-5" aria-label="Indicadores da plataforma">
               <div
-                className="pc-elite-frame overflow-hidden rounded-3xl border p-1 shadow-2xl transition-all"
-                style={{
-                  background: "rgba(255, 255, 255, 0.92)",
-                  borderColor: "rgba(15, 27, 61, 0.08)",
-                }}
+                className="rounded-3xl border border-border/50 p-6 backdrop-blur-xl shadow-2xl bg-card/60"
               >
                 <div
                   className="grid grid-cols-1 gap-1 sm:grid-cols-3 lg:grid-cols-1"
@@ -565,18 +551,18 @@ function HomePage() {
                   {metrics.map((m) => (
                     <div
                       key={m.kind}
-                      className="pc-elite-frame group relative overflow-hidden rounded-[1.25rem] border border-transparent bg-transparent p-5 transition-all hover:bg-white cursor-pointer active:scale-[0.98]"
+                      className="group relative overflow-hidden rounded-2xl border border-border/40 bg-card p-5 transition-all hover:bg-card hover:border-primary/40 cursor-pointer shadow-sm active:scale-[0.98]"
                       onClick={() => setSpotlight(m.kind as any)}
                       role="button"
                       tabIndex={0}
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex flex-col gap-1">
-                          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-brand-navy/50">
+                          <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/60">
                             {m.label}
                           </span>
                           <div className="flex items-baseline gap-1">
-                            <span className="pc-num text-2xl font-bold text-brand-navy sm:text-3xl tracking-tight">
+                            <span className="pc-num text-2xl font-extrabold text-foreground sm:text-3xl tracking-tighter">
                               {m.value}
                             </span>
                              <span className="text-[11.5px] font-bold text-brand bg-brand/10 px-2 py-0.5 rounded-lg border border-brand/20">
@@ -584,16 +570,16 @@ function HomePage() {
                             </span>
                           </div>
                         </div>
-                        <div className="rounded-lg bg-brand-navy/5 p-2 text-brand-navy/50 transition-colors group-hover:bg-brand/10 group-hover:text-brand">
+                        <div className="rounded-xl bg-primary/5 p-2 text-primary/60 transition-colors group-hover:bg-primary/10 group-hover:text-primary">
                           <m.Icon className="h-4.5 w-4.5 sm:h-5 sm:w-5" strokeWidth={2.2} />
                         </div>
                       </div>
-                      <p className="mt-2 text-[13px] leading-relaxed font-medium text-brand-navy/70">
+                      <p className="mt-3 text-[13px] leading-relaxed font-medium text-muted-foreground">
                         {m.sublabel}
                       </p>
                       
                       {/* Efeito de brilho no hover */}
-                      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-brand/5 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                      <div className="absolute inset-0 -z-10 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
                     </div>
                   ))}
                 </div>
@@ -601,12 +587,7 @@ function HomePage() {
                 {livePanel.failed && (
                   <p
                     role="status"
-                    className="mt-2 rounded-lg border px-2 py-1.5 text-[11.5px] leading-snug"
-                    style={{
-                      color: "var(--pc-home-onhero-fg-80)",
-                      borderColor: "var(--pc-home-onhero-border-soft)",
-                      background: "var(--pc-home-onhero-glass-soft)",
-                    }}
+                    className="mt-3 rounded-xl border border-destructive/20 px-3 py-2 text-[11.5px] leading-snug bg-destructive/5 text-destructive/80"
                   >
                     {livePanel.errorMessage}
                   </p>
@@ -618,14 +599,13 @@ function HomePage() {
                     em cápsula inferior (revela em hover para não competir
                     com os preços) e um CTA "Ver todos" sempre visível. */}
                 <div
-                  className="mx-1 mb-1 mt-1 rounded-2xl bg-brand-navy/[0.03] border border-brand-navy/[0.05] p-4 hidden min-[360px]:block"
+                  className="mx-1 mb-1 mt-1 rounded-2xl bg-muted/30 border border-border/40 p-4 hidden min-[360px]:block"
                 >
                   <div className="mb-1.5 flex items-baseline justify-between gap-3">
                     <div className="flex items-center gap-1.5">
-                      <MapPin className="h-3 w-3" style={{ color: P.goldSoft }} aria-hidden />
+                      <MapPin className="h-3 w-3 text-primary/60" aria-hidden />
                       <span
                         className={EYEBROW}
-                        style={{ color: "var(--pc-home-onhero-fg-60)" }}
                       >
                         Onde comparamos
                       </span>
@@ -633,9 +613,9 @@ function HomePage() {
                         <span
                           className="rounded-full px-1.5 py-0.5 text-[11px] font-semibold tabular-nums"
                           style={{
-                            color: "var(--pc-home-onhero-fg-80)",
-                            background: "var(--pc-home-onhero-glass-soft)",
-                            border: "1px solid var(--pc-home-onhero-border-soft)",
+                            color: "var(--foreground)",
+                            background: "var(--muted)",
+                            border: "1px solid var(--border)",
                           }}
                           aria-label={`${partners.length} mercados parceiros`}
                         >
@@ -648,8 +628,7 @@ function HomePage() {
                       aria-label="Ver todos os mercados parceiros"
                       className="rounded-md px-1.5 py-0.5 text-[11px] font-semibold uppercase tracking-[0.14em] transition-colors hover:text-white focus-visible:outline-none focus-visible:ring-2"
                       style={{
-                        color: "var(--pc-home-onhero-gold)",
-                        ["--tw-ring-color" as string]: "var(--pc-home-onhero-gold)",
+                        color: "var(--primary)",
                       }}
                     >
                       Ver todos →
@@ -735,7 +714,7 @@ function HomePage() {
 
 
           {/* Divisor editorial entre hero e faixa de categorias */}
-          <hr className="pc-rule my-4 opacity-10" aria-hidden />
+          <hr className="my-8 border-border/10" aria-hidden />
 
           {/* ================= FAIXA INFERIOR =================
               Dois blocos com molduras próprias para não misturar conceitos:
@@ -747,15 +726,11 @@ function HomePage() {
             {/* Categorias */}
             <nav
               aria-label="Categorias"
-              className="min-w-0 rounded-3xl border p-6 lg:col-span-8 shadow-2xl"
-              style={{
-                background: "rgba(255, 255, 255, 0.95)",
-                borderColor: "rgba(15, 27, 61, 0.08)",
-              }}
+              className="min-w-0 rounded-3xl border border-border/50 p-6 lg:col-span-8 shadow-2xl bg-card/40 backdrop-blur-sm"
             >
               <p
                 className={`${EYEBROW} mb-1.5 px-0.5`}
-                style={{ color: "var(--pc-home-onhero-fg-70, var(--pc-home-onhero-fg-90))" }}
+                style={{ color: "var(--muted-foreground)" }}
               >
                 Categorias
               </p>
@@ -769,12 +744,6 @@ function HomePage() {
                     title={coverage ? `${catLabel(key, full)} — ${coverage}` : catLabel(key, full)}
                     data-reading-card
                     className={TILE}
-                    style={{
-                      background: "white",
-                      borderColor: "rgba(15, 27, 61, 0.12)",
-                      // @ts-expect-error css var
-                      "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
-                    }}
                   >
                     {/* Chip atrás do ícone: separa o dourado do fundo fotográfico
                         e garante contraste legível sobre o glass. */}
@@ -786,7 +755,7 @@ function HomePage() {
                       }}
                       aria-hidden
                     >
-                      <Icon className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.2} aria-hidden />
+                      <Icon className={TILE_ICON} style={{ color: "var(--primary)" }} strokeWidth={2.2} aria-hidden />
                     </span>
                     <span
                       className={TILE_LABEL}
@@ -802,25 +771,15 @@ function HomePage() {
                   aria-haspopup="dialog"
                   aria-label="Ver todas as categorias"
                   data-reading-card
-                  className={`${TILE} border-dashed`}
-                  style={{
-                    background: `color-mix(in oklab, ${P.gold} 20%, transparent)`,
-                    borderColor: `color-mix(in oklab, ${P.gold} 62%, transparent)`,
-                    // @ts-expect-error css var
-                    "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
-                  }}
+                  className={`${TILE} border-dashed bg-primary/5 border-primary/20 hover:bg-primary/10`}
                 >
                   <span
                     className={TILE_ICONWRAP}
-                    style={{
-                      background: `color-mix(in oklab, ${P.gold} 26%, transparent)`,
-                      border: `1px solid color-mix(in oklab, ${P.gold} 45%, transparent)`,
-                    }}
                     aria-hidden
                   >
-                    <Grid3x3 className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.4} aria-hidden />
+                    <Grid3x3 className={TILE_ICON} strokeWidth={2.4} aria-hidden />
                   </span>
-                  <span className={`${TILE_LABEL} font-bold`} style={{ color: "var(--pc-home-onhero-gold)" }}>
+                  <span className={`${TILE_LABEL} font-bold`}>
                     Todas
                   </span>
                 </button>
@@ -830,13 +789,9 @@ function HomePage() {
             {/* Ações — moldura própria, separada das categorias */}
             <nav
               aria-label="Ações"
-              className="min-w-0 rounded-2xl border p-4 sm:p-5 lg:col-span-4 shadow-xl"
-              style={{
-                background: "rgba(255, 255, 255, 0.95)",
-                borderColor: "rgba(15, 27, 61, 0.12)",
-              }}
+              className="min-w-0 rounded-3xl border border-border/50 p-6 lg:col-span-4 shadow-2xl bg-card/40 backdrop-blur-sm"
             >
-              <p className={`${EYEBROW} mb-1.5 px-0.5`} style={{ color: "var(--pc-home-onhero-gold)" }}>
+              <p className={`${EYEBROW} mb-1.5 px-0.5`}>
                 Ações
               </p>
               <div className="grid min-w-0 grid-cols-4 gap-2 sm:gap-2.5 lg:grid-cols-2">
@@ -851,26 +806,14 @@ function HomePage() {
                       className={TILE}
                       onPointerEnter={preloadExplorePanel}
                       onFocus={preloadExplorePanel}
-                      style={{
-                        background: "white",
-                        borderColor: "rgba(15, 27, 61, 0.12)",
-                        // @ts-expect-error css var
-                        "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
-                      }}
                     >
                       <span
                         className={TILE_ICONWRAP}
-                        style={{
-                          background: `color-mix(in oklab, ${P.gold} 14%, transparent)`,
-                          border: `1px solid color-mix(in oklab, ${P.gold} 28%, transparent)`,
-                        }}
-                        aria-hidden
                       >
-                        <LayoutGrid className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.2} aria-hidden />
+                        <LayoutGrid className={TILE_ICON} strokeWidth={2.2} aria-hidden />
                       </span>
                       <span
                         className={TILE_LABEL}
-                        style={{ color: "var(--pc-home-onhero-fg-90)" }}
                       >
                         Explorar
                       </span>
@@ -1045,7 +988,82 @@ function HomePage() {
         </main>
 
 
-        {/* ================= RODAPÉ COMPACTO ================= */}
+        {/* ================= SEÇÃO: COMO FUNCIONA ================= */}
+        <section className="py-24 bg-card/30">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-4">Economize em 3 passos simples</h2>
+              <p className="text-muted-foreground text-lg max-w-2xl mx-auto">A tecnologia que você precisava para nunca mais pagar caro no mercado.</p>
+            </div>
+            <div className="grid md:grid-cols-3 gap-12">
+              <div className="flex flex-col items-center text-center group">
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <Search className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-bold mb-3">Busque o Produto</h3>
+                <p className="text-muted-foreground">Digite o nome do que você precisa. Nosso sistema varre todos os mercados de Feijó em segundos.</p>
+              </div>
+              <div className="flex flex-col items-center text-center group">
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <LineChart className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-bold mb-3">Compare e Escolha</h3>
+                <p className="text-muted-foreground">Veja onde está mais barato hoje. Confira o histórico de preços e evite promoções falsas.</p>
+              </div>
+              <div className="flex flex-col items-center text-center group">
+                <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+                  <ShoppingCart className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-bold mb-3">Monte sua Lista</h3>
+                <p className="text-muted-foreground">Adicione à sua lista e saiba o valor total antes de sair de casa. Economia garantida.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ================= SEÇÃO: DESTAQUES ================= */}
+        <section className="py-24 border-t border-border/50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
+              <div>
+                <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-2">Oportunidades do dia</h2>
+                <p className="text-muted-foreground">Produtos com a maior variação de preço entre os mercados hoje.</p>
+              </div>
+              <Button variant="outline" className="rounded-xl" onClick={() => navigate({ to: '/buscar' })}>
+                Ver todos os preços <ArrowRight className="ml-2 w-4 h-4" />
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                { name: "Arroz agulha T1 5kg", savings: "R$ 8,40", price: "R$ 24,90", store: "Mercado Central" },
+                { name: "Leite Integral 1L", savings: "R$ 1,20", price: "R$ 4,75", store: "Super Econômico" },
+                { name: "Feijão Carioca 1kg", savings: "R$ 2,15", price: "R$ 7,90", store: "Açougue & Cia" },
+                { name: "Óleo de Soja 900ml", savings: "R$ 0,95", price: "R$ 6,30", store: "Varejão do Povo" },
+              ].map((p, i) => (
+                <div key={i} className="group bg-card border border-border/50 rounded-2xl p-5 hover:border-primary/50 transition-all hover:shadow-xl">
+                  <div className="flex justify-between items-start mb-4">
+                    <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center">
+                      <Package className="w-6 h-6 text-muted-foreground" />
+                    </div>
+                    <span className="bg-green-500/10 text-green-600 dark:text-green-400 text-[11px] font-bold px-2 py-1 rounded-lg border border-green-500/20">
+                      -{p.savings}
+                    </span>
+                  </div>
+                  <h4 className="font-bold text-lg mb-1 truncate">{p.name}</h4>
+                  <p className="text-[13px] text-muted-foreground mb-4">Melhor preço: <span className="text-foreground font-semibold">{p.price}</span></p>
+                  <div className="flex items-center gap-2 text-[12px] text-muted-foreground pb-4 border-b border-border/50 mb-4">
+                    <Store className="w-3.5 h-3.5" />
+                    {p.store}
+                  </div>
+                  <Button variant="ghost" className="w-full justify-between h-9 text-primary hover:bg-primary/5 font-bold text-[13px] rounded-lg">
+                    Ver detalhes <ArrowRight className="w-4 h-4" />
+                  </Button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
         <footer
           className="shrink-0 border-t px-4 py-8 sm:px-6 lg:px-8 mt-12 bg-white/50 backdrop-blur-sm"
         >
@@ -1115,41 +1133,19 @@ function PillarLink({
     <Link
       to={to}
       data-reading-card
-      className={TILE}
-      style={{
-        background: emphasis ? "var(--pc-home-gold)" : "var(--pc-home-onhero-glass)",
-        borderColor: emphasis
-          ? "var(--pc-home-gold)"
-          : "var(--pc-home-onhero-border)",
-        boxShadow: emphasis
-          ? "0 6px 18px -10px color-mix(in oklab, var(--pc-home-gold) 70%, transparent)"
-          : undefined,
-        // @ts-expect-error css var
-        "--tw-ring-color": "color-mix(in oklab, var(--pc-home-gold) 70%, transparent)",
-      }}
+      className={cn(TILE, emphasis && "bg-primary border-primary hover:bg-primary/90")}
     >
       <span
-        className={TILE_ICONWRAP}
-        style={{
-          background: emphasis
-            ? "color-mix(in oklab, var(--pc-home-navy) 14%, transparent)"
-            : "color-mix(in oklab, var(--pc-home-gold) 14%, transparent)",
-          border: emphasis
-            ? "1px solid color-mix(in oklab, var(--pc-home-navy) 22%, transparent)"
-            : "1px solid color-mix(in oklab, var(--pc-home-gold) 28%, transparent)",
-        }}
-        aria-hidden
+        className={cn(TILE_ICONWRAP, emphasis && "bg-white/20 text-white")}
       >
         <Icon
           className={TILE_ICON}
-          style={{ color: emphasis ? "var(--pc-home-navy)" : "var(--pc-home-onhero-gold)" }}
           strokeWidth={2.2}
           aria-hidden
         />
       </span>
       <span
-        className={`${TILE_LABEL}${emphasis ? " font-bold" : ""}`}
-        style={{ color: emphasis ? "var(--pc-home-navy)" : "var(--pc-home-onhero-fg-90)" }}
+        className={cn(TILE_LABEL, emphasis && "text-white")}
       >
         {label}
       </span>
