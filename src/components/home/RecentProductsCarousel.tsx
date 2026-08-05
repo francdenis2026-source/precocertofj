@@ -168,79 +168,87 @@ export function RecentProductsCarousel() {
             return (
               <CarouselItem
                 key={p.id}
-                className="basis-[46%] pl-2.5 sm:basis-[32%] md:basis-[24%] lg:basis-[19%]"
+                className="basis-[85%] pl-4 sm:basis-[45%] md:basis-[30%] lg:basis-[25%]"
               >
                 <Link
                   to="/produto-publico/$slug"
                   params={{ slug }}
                   aria-label={`Ver ${p.displayName}`}
-                  className="group/card relative block h-full overflow-hidden rounded-2xl border border-white/40 bg-background/85 shadow-sm transition-[transform,border-color,box-shadow] duration-200 hover:-translate-y-1 hover:border-primary/50 hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary dark:border-white/10 dark:bg-background/40"
+                  className="group/card relative block h-full overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-5 shadow-2xl backdrop-blur-3xl transition-all duration-500 hover:-translate-y-2 hover:bg-white/[0.07] hover:border-indigo-500/40 hover:shadow-indigo-500/10"
                 >
-                  {/* Glass highlight on top edge */}
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/70 to-transparent dark:via-white/25"
-                  />
-                  {/* Corner halo — curiosity accent */}
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-primary/25 blur-2xl opacity-0 transition-opacity duration-500 group-hover/card:opacity-100"
-                  />
-                  {/* Sheen sweep on hover */}
-                  <span
-                    aria-hidden
-                    className="pointer-events-none absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/25 to-transparent transition-transform duration-[900ms] ease-out group-hover/card:translate-x-full dark:via-white/10"
-                  />
+                  {/* Scanning Effect for "Eyeing the product" feature */}
+                  <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden rounded-[32px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-500">
+                    <div className="animate-scan absolute left-0 right-0 h-0.5 bg-indigo-400/50 shadow-[0_0_15px_rgba(99,102,241,0.8)]" />
+                  </div>
 
-                  {/* NEW badge */}
-                  <span className="absolute left-2 top-2 z-10 inline-flex items-center gap-1 rounded-full bg-foreground/90 px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-background backdrop-blur">
-                    <Clock3 className="h-2.5 w-2.5" strokeWidth={2.8} aria-hidden />
-                    {timeAgo(p.createdAt)}
-                  </span>
-                  {savings >= 8 && (
-                    <span className="absolute right-2 top-2 z-10 rounded-full bg-primary px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider text-primary-foreground shadow">
-                      -{savings}%
+                  {/* Corner Glow */}
+                  <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-indigo-500/10 blur-[40px] opacity-0 transition-opacity duration-500 group-hover/card:opacity-100" />
+
+                  <header className="relative z-10 flex items-center justify-between mb-4">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-2.5 py-1 text-[9px] font-black uppercase tracking-widest text-white/40 backdrop-blur">
+                      <Clock3 className="h-2.5 w-2.5" strokeWidth={3} />
+                      {timeAgo(p.createdAt)}
                     </span>
-                  )}
+                    {savings >= 5 && (
+                      <span className="rounded-full bg-emerald-500/10 border border-emerald-500/20 px-2.5 py-1 text-[10px] font-black text-emerald-400">
+                        ↓ {savings}%
+                      </span>
+                    )}
+                  </header>
 
-                  <div className="relative aspect-square w-full overflow-hidden bg-gradient-to-br from-muted/30 to-muted/5">
+                  <div className="relative z-10 aspect-square w-full overflow-hidden rounded-2xl bg-white/[0.02] p-4 transition-transform duration-700 group-hover/card:scale-105">
                     <ProductImage
                       src={cmp?.image_url ?? p.imageUrl}
                       alt={p.displayName}
                       width={320}
                       height={320}
-                      className="h-full w-full object-contain p-2.5 transition-transform duration-500 group-hover/card:scale-105"
+                      className="h-full w-full object-contain drop-shadow-2xl"
                     />
                   </div>
 
-                  <div className="space-y-1 p-2.5">
-                    {p.brand && (
-                      <p className="truncate text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-                        {p.brand}
-                      </p>
-                    )}
-                    <p className="line-clamp-2 min-h-[2.4em] text-[12px] font-semibold leading-tight text-foreground">
-                      {p.displayName}
-                    </p>
-                    {price != null ? (
-                      <div className="pt-0.5">
-                        <div className="flex items-baseline gap-1.5">
-                          <Price value={price} size="md" />
-                          {avg != null && avg > price && (
-                            <Price value={avg} size="xs" tone="strike" />
-                          )}
-                        </div>
-                        {store && (
-                          <p className="truncate text-[11px] text-muted-foreground">
-                            em <span className="font-semibold text-foreground/80">{store}</span>
-                          </p>
+                  <div className="relative z-10 mt-5 space-y-3">
+                    <div>
+                      {p.brand && (
+                        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-400/60 mb-1">
+                          {p.brand}
+                        </p>
+                      )}
+                      <h3 className="line-clamp-2 text-base font-black leading-tight tracking-tight text-white group-hover/card:text-indigo-300 transition-colors">
+                        {p.displayName}
+                      </h3>
+                    </div>
+
+                    <div className="flex items-end justify-between pt-2">
+                      <div className="flex flex-col">
+                        {price != null ? (
+                          <>
+                            <div className="flex items-baseline gap-2">
+                              <span className="text-2xl font-black tracking-tighter text-white">
+                                {formatBRL(price)}
+                              </span>
+                              {avg != null && avg > price && (
+                                <span className="text-xs font-bold text-white/20 line-through">
+                                  {formatBRL(avg)}
+                                </span>
+                              )}
+                            </div>
+                            {store && (
+                              <p className="text-[10px] font-bold text-white/30 truncate max-w-[120px]">
+                                no <span className="text-white/50">{store}</span>
+                              </p>
+                            )}
+                          </>
+                        ) : (
+                          <span className="text-xs font-bold text-white/20 italic">
+                            Monitorando...
+                          </span>
                         )}
                       </div>
-                    ) : (
-                      <p className="pt-0.5 text-[11px] font-medium text-muted-foreground">
-                        Preços em breve
-                      </p>
-                    )}
+                      
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-indigo-400 transition-all duration-300 group-hover/card:bg-indigo-500 group-hover/card:text-white group-hover/card:shadow-[0_0_20px_rgba(99,102,241,0.5)]">
+                        <ArrowRight className="h-5 w-5" />
+                      </div>
+                    </div>
                   </div>
                 </Link>
               </CarouselItem>
