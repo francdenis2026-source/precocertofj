@@ -169,7 +169,7 @@ function HomePage() {
                 <HomeSearchSuggestions ref={suggestRef} query={q} isLoggedOut={isLoggedOut} onBlocked={() => setGateOpen(true)} open={suggestOpen} onClose={() => setSuggestOpen(false)} anchorRef={searchAnchorRef} />
               </motion.div>
               <div className="flex flex-wrap items-center gap-4">
-                <Button size="xl" onClick={() => navigate({ to: "/app" })} className="h-14 rounded-2xl px-8 text-lg font-bold">Acessar Aplicativo <LayoutGrid className="ml-2 h-5 w-5" /></Button>
+                <Button size="lg" onClick={() => navigate({ to: "/app" })} className="h-14 rounded-2xl px-8 text-lg font-bold">Acessar Aplicativo <LayoutGrid className="ml-2 h-5 w-5" /></Button>
               </div>
             </motion.div>
             <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="order-2 grid grid-cols-1 gap-4 lg:col-span-5">
