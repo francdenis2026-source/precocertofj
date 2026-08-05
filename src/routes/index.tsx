@@ -70,7 +70,7 @@ const CATEGORIES = HOME_HUBS.map((slug) => {
 });
 
 const SECTION_TITLE = "text-[10px] font-black uppercase tracking-[0.25em] text-indigo-400/80 mb-4";
-const GLASS_CARD = "rounded-[24px] border border-white/10 bg-white/[0.04] backdrop-blur-3xl shadow-[0_24px_48px_-12px_rgba(0,0,0,0.5)] transition-all duration-700 hover:bg-white/[0.06] hover:border-white/20";
+const GLASS_CARD = "rounded-[24px] border border-slate-700 bg-slate-800 shadow-xl transition-all duration-300 hover:border-indigo-500/50 hover:shadow-indigo-500/10";
 
 function HomePage() {
   const navigate = useNavigate();
@@ -123,19 +123,14 @@ function HomePage() {
   };
 
   return (
-    <div className="pc-home relative flex min-h-screen flex-col bg-[#020617] text-white selection:bg-indigo-500/30 overflow-x-hidden">
-      {/* Background Layer */}
+    <div className="pc-home relative flex min-h-screen flex-col bg-[#0f172a] text-white selection:bg-indigo-500/30 overflow-x-hidden">
+      {/* Background Layer - More solid, less transparent */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-        <img 
-          src={homeHeroImg} 
-          alt="" 
-          className="h-full w-full object-cover object-center scale-100 opacity-20 blur-[0.2px] saturate-[1.1] brightness-[0.7]" 
-          loading="eager"
-          fetchPriority="high"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#020617]/60 via-[#020617]/90 to-[#020617]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(99,102,241,0.15)_0%,transparent_60%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_70%,rgba(251,191,36,0.04)_0%,transparent_60%)]" />
+        <div className="absolute inset-0 bg-[#0f172a]" />
+        <div className="absolute inset-0 opacity-20" 
+             style={{ backgroundImage: `url(${homeHeroImg})`, backgroundSize: 'cover', backgroundPosition: 'center', filter: 'grayscale(0.5) brightness(0.5)' }} />
+        <div className="absolute inset-0 bg-gradient-to-b from-[#0f172a]/80 via-[#0f172a]/95 to-[#0f172a]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(99,102,241,0.1)_0%,transparent_60%)]" />
       </div>
 
       <div className="relative z-10 flex flex-col">
@@ -177,7 +172,7 @@ function HomePage() {
                     onKeyDown={(e) => {
                       if (suggestRef.current?.handleKeyDown(e as any)) return;
                     }}
-                    className="relative flex items-center overflow-hidden rounded-[24px] border border-white/10 bg-white/5 p-1.5 shadow-3xl backdrop-blur-3xl transition-all duration-700 focus-within:border-indigo-500/50 focus-within:ring-[12px] focus-within:ring-indigo-500/5 group-hover:bg-white/[0.08] group-hover:border-white/20"
+                    className="relative flex items-center overflow-hidden rounded-[24px] border border-slate-700 bg-slate-900/80 p-1.5 shadow-2xl transition-all duration-300 focus-within:border-indigo-500 focus-within:ring-4 focus-within:ring-indigo-500/20 group-hover:bg-slate-900 group-hover:border-slate-600"
                   >
                     <div className="flex h-14 w-14 items-center justify-center text-indigo-400"><Search className="h-7 w-7" /></div>
                     <input 
@@ -221,7 +216,7 @@ function HomePage() {
                     whileHover={{ x: 6 }}
                     className="flex items-center gap-4 group cursor-default"
                   >
-                    <div className="flex h-12 w-12 items-center justify-center rounded-[16px] bg-white/5 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] transition-all duration-500">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-[16px] bg-slate-700/50 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white group-hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] transition-all duration-500">
                       <m.Icon className="h-6 w-6" />
                     </div>
                     <div className="flex flex-col">
@@ -239,11 +234,11 @@ function HomePage() {
                 <div className="pt-4 border-t border-white/5 flex items-center justify-between">
                    <div className="flex -space-x-2">
                       {[1,2,3,4,5,6].map(i => (
-                        <div key={i} className="h-6 w-6 rounded-full border-2 border-[#020617] bg-white/10 overflow-hidden">
+                        <div key={i} className="h-6 w-6 rounded-full border-2 border-[#0f172a] bg-slate-700 overflow-hidden">
                           <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${i}`} alt="" />
                         </div>
                       ))}
-                      <div className="h-6 w-6 rounded-full border-2 border-[#020617] bg-primary flex items-center justify-center text-[8px] font-bold">+10</div>
+                      <div className="h-6 w-6 rounded-full border-2 border-[#0f172a] bg-primary flex items-center justify-center text-[8px] font-bold">+10</div>
                    </div>
                    <Button variant="link" className="text-primary font-black text-[10px] uppercase tracking-widest p-0 h-auto">
                      Ver todos <ChevronRight className="ml-1 h-2 w-2" />
@@ -275,16 +270,16 @@ function HomePage() {
                     <button 
                       key={key} 
                       onClick={() => navigate({ to: "/categoria/$slug", params: { slug: key as any } })}
-                      className="group flex items-center gap-3 rounded-[18px] border border-white/5 bg-white/[0.02] p-4 text-left transition-all hover:bg-white/[0.08] hover:border-indigo-500/30 hover:shadow-[0_16px_32px_-8px_rgba(0,0,0,0.3)]"
+                      className="group flex items-center gap-3 rounded-[18px] border border-slate-700 bg-slate-800/50 p-4 text-left transition-all hover:bg-slate-800 hover:border-indigo-500/30 hover:shadow-lg"
                     >
-                      <div className="flex h-10 w-10 items-center justify-center rounded-[12px] bg-white/5 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-500 group-hover:shadow-[0_0_15px_rgba(99,102,241,0.4)]">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-[12px] bg-slate-700/50 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-500 group-hover:shadow-[0_0_15px_rgba(99,102,241,0.4)]">
                         <Icon className="h-5 w-5" />
                       </div>
                       <span className="text-[12px] font-black uppercase tracking-widest text-white/50 group-hover:text-white transition-colors">{label}</span>
                     </button>
                   ))}
                   <button onClick={() => setAllCatsOpen(true)} className="flex items-center gap-3 rounded-[18px] border border-dashed border-white/10 p-4 text-left hover:border-white/30 transition-all group">
-                    <div className="flex h-10 w-10 items-center justify-center rounded-[12px] bg-white/5 text-white/20 group-hover:text-white transition-colors"><Plus className="h-5 w-5" /></div>
+                    <div className="flex h-10 w-10 items-center justify-center rounded-[12px] bg-slate-700/50 text-white/20 group-hover:text-white transition-colors"><Plus className="h-5 w-5" /></div>
                     <span className="text-[12px] font-black uppercase tracking-widest text-white/20 group-hover:text-white">Todas</span>
                   </button>
                 </div>
@@ -324,8 +319,48 @@ function HomePage() {
             </motion.div>
           </div>
 
+          {/* Registered Stores Section */}
+          <section className="mt-20">
+            <h2 className={SECTION_TITLE}>Mercados Cadastrados</h2>
+            <div className={cn(GLASS_CARD, "p-8")}>
+              <div className="flex flex-col md:flex-row items-center justify-between gap-8">
+                <div className="flex-1 space-y-4">
+                  <h3 className="text-3xl font-black text-white tracking-tighter">Transparência e Confiança</h3>
+                  <p className="text-white/40 leading-relaxed max-w-xl text-[15px] font-medium">
+                    Trabalhamos diretamente com os principais estabelecimentos de Feijó para garantir que você tenha acesso a informações precisas e atualizadas. Nossa missão é de utilidade pública: fortalecer o comércio local e o poder de compra do cidadão.
+                  </p>
+                  <div className="flex flex-wrap gap-4 pt-4">
+                    <Button 
+                      onClick={() => navigate({ to: "/estabelecimentos" })}
+                      className="bg-indigo-600 text-white font-black hover:bg-indigo-500 transition-all rounded-xl px-6"
+                    >
+                      Ver Mercados
+                    </Button>
+                    <div className="flex items-center gap-2 text-emerald-400 font-bold text-sm">
+                      <ShieldCheck className="h-5 w-5" />
+                      <span>Dados Auditados</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4 w-full md:w-auto">
+                   {[
+                     { name: "Supermercados", count: stats?.markets || 12 },
+                     { name: "Farmácias", count: 8 },
+                     { name: "Açougues", count: 6 },
+                     { name: "Padarias", count: 5 }
+                   ].map(cat => (
+                     <div key={cat.name} className="bg-slate-700/30 border border-slate-700 p-4 rounded-xl text-center min-w-[120px]">
+                        <div className="text-2xl font-black text-white">{cat.count}</div>
+                        <div className="text-[9px] font-bold text-white/30 uppercase tracking-widest">{cat.name}</div>
+                     </div>
+                   ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* Simple Steps Section */}
-          <section className="mt-16 text-center">
+          <section className="mt-24 text-center">
             <h2 className="text-4xl font-black mb-4 tracking-tighter">Economize em 3 passos</h2>
             <p className="text-white/30 font-medium mb-16 tracking-wide">A tecnologia definitiva para você dominar sua economia diária.</p>
             
@@ -336,7 +371,7 @@ function HomePage() {
                 { icon: ListChecks, title: "Monte sua Lista", desc: "Adicione à sua lista e saiba o valor total antes de sair de casa. Economia garantida." }
               ].map((step, idx) => (
                 <div key={idx} className="flex flex-col items-center gap-4 px-4">
-                  <div className="h-20 w-20 rounded-[24px] bg-white/5 flex items-center justify-center text-indigo-400 mb-6 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-500">
+                  <div className="h-20 w-20 rounded-[24px] bg-slate-800 border border-slate-700 flex items-center justify-center text-indigo-400 mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500">
                     <step.icon className="h-10 w-10" />
                   </div>
                   <h3 className="text-xl font-black mb-2 tracking-tight">{step.title}</h3>
@@ -347,14 +382,14 @@ function HomePage() {
           </section>
 
           {/* Heavy Editorial Panel */}
-          <Suspense fallback={<div className="mt-32 h-[500px] w-full animate-pulse rounded-3xl bg-white/5" />}>
+          <Suspense fallback={<div className="mt-32 h-[500px] w-full animate-pulse rounded-3xl bg-slate-800" />}>
             <section className="mt-32">
               <ExplorePanel />
             </section>
           </Suspense>
         </main>
 
-        <footer className="mt-32 border-t border-white/5 bg-[#020617] px-4 py-12">
+        <footer className="mt-32 border-t border-slate-700 bg-[#0f172a] px-4 py-12">
           <div className="mx-auto max-w-7xl">
             <div className="flex flex-col md:flex-row justify-between items-center gap-8 mb-8">
               <div className="flex flex-col items-center md:items-start gap-2">

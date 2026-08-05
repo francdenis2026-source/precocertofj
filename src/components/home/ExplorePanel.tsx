@@ -89,8 +89,8 @@ function Zone({
 }) {
   return (
     <div
-      className={`relative min-h-0 overflow-hidden rounded-xl border px-3 py-2.5 sm:px-4 sm:py-3 ${className}`}
-      style={{ background: bg, borderColor: `color-mix(in oklab, ${accent} 30%, transparent)` }}
+      className={`relative min-h-0 overflow-hidden rounded-xl border bg-slate-800 px-3 py-2.5 sm:px-4 sm:py-3 ${className}`}
+      style={{ borderColor: "#334155" }}
     >
       <span
         aria-hidden
@@ -116,7 +116,7 @@ function SectionHead({
   accent?: string;
 }) {
   return (
-    <header className={HEAD} style={{ borderColor: `color-mix(in oklab, ${accent ?? "var(--pc-home-onhero-gold)"} 32%, transparent)` }}>
+    <header className={HEAD} style={{ borderColor: "#334155" }}>
       <div className={HEAD_LEFT}>
         <Kicker accent={accent}>{kicker}</Kicker>
         <h3
@@ -174,7 +174,7 @@ const PriceRow = memo(function PriceRow({
             ? `${p.name} — melhor oferta agora, ${brl(p.price)}${hasDrop ? `, queda de ${p.dropPct}% em relação a ${brl(p.previousPrice!)}` : ""}`
             : undefined
         }
-        className={`group relative grid ${ROW_H} grid-cols-[minmax(0,1fr)_auto] items-center gap-3 -mx-2 rounded-md px-2 transition-all duration-200 ease-out hover:bg-[var(--pc-home-onhero-glass)] hover:pl-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--pc-home-onhero-gold)] ${flash ? "pc-live-flash" : ""}`}
+        className={`group relative grid ${ROW_H} grid-cols-[minmax(0,1fr)_auto] items-center gap-3 -mx-2 rounded-md px-2 transition-all duration-200 ease-out hover:bg-slate-700 hover:pl-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 ${flash ? "pc-live-flash" : ""}`}
       >
         <span
           aria-hidden
@@ -218,10 +218,10 @@ const PriceRow = memo(function PriceRow({
                 <span className="mx-1 opacity-60">·</span>
                 <span
                   className={`${tc.eyebrow} rounded-full px-1.5 py-0.5`}
-                  style={{
-                    color: "var(--pc-home-onhero-gold)",
-                    border: "1px solid var(--pc-home-onhero-gold)",
-                  }}
+                    style={{
+                      color: "var(--pc-home-onhero-gold)",
+                      border: "1px solid #334155",
+                    }}
                 >
                   novo
                 </span>
@@ -457,7 +457,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
       {/* ---------- Zona 1: Ao vivo (azul) ---------- */}
       <Zone
         accent={liveAccent}
-        bg="var(--pc-explore-live-bg)"
+        bg="#1e293b"
         className="flex min-w-0 flex-col lg:col-span-7"
       >
         <section aria-labelledby="explore-prices" className="flex min-h-0 flex-1 flex-col">
@@ -510,7 +510,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
 
       {/* ---------- Coluna editorial: Benefícios (verde) + prova social (dourado) ---------- */}
       <div className="grid min-h-0 grid-rows-[auto_minmax(0,1fr)] gap-3 lg:col-span-5 lg:gap-4">
-        <Zone accent={benefitAccent} bg="var(--pc-explore-benefit-bg)">
+        <Zone accent={benefitAccent} bg="#1e293b">
           <section aria-labelledby="explore-benefits">
             <div className={HEAD} style={{ borderColor: `color-mix(in oklab, ${benefitAccent} 32%, transparent)` }}>
               <Kicker accent={benefitAccent}>Benefícios</Kicker>
@@ -544,7 +544,7 @@ export function ExplorePanel({ onNavigate }: { onNavigate?: () => void }) {
           </section>
         </Zone>
 
-        <Zone accent={proofAccent} bg="var(--pc-explore-proof-bg)" className="flex min-h-0 flex-col">
+        <Zone accent={proofAccent} bg="#1e293b" className="flex min-h-0 flex-col">
           <section aria-labelledby="explore-proof" className="flex min-h-0 flex-1 flex-col">
             <div className={HEAD} style={{ borderColor: `color-mix(in oklab, ${proofAccent} 32%, transparent)` }}>
               <Kicker accent={proofAccent}>Prova social</Kicker>
