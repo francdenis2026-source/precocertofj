@@ -176,16 +176,16 @@ export function RecentProductsCarousel() {
                   aria-label={`Ver ${p.displayName}`}
                   className="group/card relative block h-full overflow-hidden rounded-[24px] border border-slate-700 bg-slate-800/50 p-5 shadow-xl transition-all duration-500 hover:-translate-y-2 hover:bg-slate-800 hover:border-indigo-500/40"
                 >
-                  {/* Scanning Effect for "Eyeing the product" feature */}
-                  <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden rounded-[32px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-500">
-                    <div className="animate-scan absolute left-0 right-0 h-0.5 bg-indigo-400/50 shadow-[0_0_15px_rgba(99,102,241,0.8)]" />
+                  {/* Scanning Effect for "Eyeing the product" feature - subtly updated */}
+                  <div className="pointer-events-none absolute inset-0 z-20 overflow-hidden rounded-[24px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-500">
+                    <div className="animate-scan absolute left-0 right-0 h-1 bg-indigo-500 shadow-[0_0_20px_rgba(99,102,241,1)]" />
                   </div>
 
                   {/* Corner Glow */}
                   <div className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-indigo-500/10 blur-[40px] opacity-0 transition-opacity duration-500 group-hover/card:opacity-100" />
 
                   <header className="relative z-10 flex items-center justify-between mb-4">
-                    <span className="inline-flex items-center gap-1.5 rounded-full bg-white/5 px-2.5 py-1 text-[9px] font-black uppercase tracking-widest text-white/40 backdrop-blur">
+                    <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-700/50 px-2.5 py-1 text-[9px] font-black uppercase tracking-widest text-white/40 backdrop-blur-sm">
                       <Clock3 className="h-2.5 w-2.5" strokeWidth={3} />
                       {timeAgo(p.createdAt)}
                     </span>
@@ -196,7 +196,7 @@ export function RecentProductsCarousel() {
                     )}
                   </header>
 
-                  <div className="relative z-10 aspect-square w-full overflow-hidden rounded-2xl bg-white/[0.02] p-4 transition-transform duration-700 group-hover/card:scale-105">
+                  <div className="relative z-10 aspect-square w-full overflow-hidden rounded-2xl bg-slate-900/40 p-4 transition-transform duration-700 group-hover/card:scale-105">
                     <ProductImage
                       src={cmp?.image_url ?? p.imageUrl}
                       alt={p.displayName}
@@ -245,7 +245,7 @@ export function RecentProductsCarousel() {
                         )}
                       </div>
                       
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/5 text-indigo-400 transition-all duration-300 group-hover/card:bg-indigo-500 group-hover/card:text-white group-hover/card:shadow-[0_0_20px_rgba(99,102,241,0.5)]">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-700/50 text-indigo-400 transition-all duration-300 group-hover/card:bg-indigo-500 group-hover/card:text-white group-hover/card:shadow-[0_0_20px_rgba(99,102,241,0.5)]">
                         <ArrowRight className="h-5 w-5" />
                       </div>
                     </div>
