@@ -228,9 +228,10 @@ export function SiteHeader({ variant = "solid", showNav = true, showThemeToggle 
               <label className="sr-only" htmlFor="header-search">Buscar produto</label>
               <div
                 className={dsx(
-                  "flex items-center gap-1.5 rounded-full border px-3 py-1.5",
-                  isOverlay ? "border-on-media-border bg-on-media-surface" : "border-border bg-card",
+                  "flex items-center gap-1.5 rounded-full border px-3 py-1.5 transition-all duration-300 hover:shadow-lg focus-within:ring-2 focus-within:ring-primary/40",
+                  isOverlay ? "border-on-media-border bg-on-media-surface/80 backdrop-blur-md" : "border-border bg-card/80 backdrop-blur-md",
                 )}
+
               >
                 <Search className={dsx("h-4 w-4", isOverlay ? "text-on-media-muted" : "text-muted-foreground")} />
                 <input

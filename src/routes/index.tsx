@@ -123,7 +123,7 @@ const P = {
 };
 const serif = "font-sans";
 
-const TILE = "group flex h-14 w-full min-w-0 items-center gap-3.5 rounded-2xl border border-border/50 bg-card/50 pl-4 pr-5 text-left transition-all hover:bg-card hover:border-primary/30 hover:shadow-xl hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20";
+const TILE = "group flex h-14 w-full min-w-0 items-center gap-3.5 rounded-2xl border border-border/50 bg-card/50 pl-4 pr-5 text-left transition-all duration-500 ease-out hover:bg-card hover:border-primary/40 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:-translate-y-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20";
 const TILE_ICONWRAP = "grid shrink-0 place-items-center rounded-xl h-10 w-10 bg-primary/5 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors";
 const TILE_ICON = "h-5 w-5";
 const TILE_LABEL = "min-w-0 flex-1 truncate text-[15px] font-bold tracking-tight text-foreground/80 group-hover:text-foreground";

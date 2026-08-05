@@ -9,6 +9,14 @@
 
 /* Restore pointer cursor on interactive controls (Tailwind v4 preflight removes it) */
 @layer base {
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
   [role="tab"],
@@ -29,6 +37,12 @@
   button:disabled,
   [aria-disabled="true"] {
     cursor: not-allowed;
+  }
+}
+
+@layer utilities {
+  .sophisticated-scroll {
+    transition: transform 1s cubic-bezier(0.19, 1, 0.22, 1);
   }
 }
 
