@@ -12,7 +12,9 @@ import {
   MousePointer2,
   ListChecks,
   ChevronRight,
-  Plus
+  Plus,
+  ShieldCheck,
+  TrendingDown
 } from "lucide-react";
 
 import { SiteHeader } from "@/components/layout/SiteHeader";
@@ -330,46 +332,39 @@ function HomePage() {
           <section className="mt-20">
             <div className="flex items-center justify-between mb-6">
               <h2 className={SECTION_TITLE}>
-                <svg viewBox="0 0 24 24" className="h-3 w-3 inline align-baseline" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                <ShieldCheck className="h-3 w-3" />
                 Mercados Cadastrados
               </h2>
-              <Link to="/estabelecimentos" className="text-[10px] font-bold uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors">
+              <Link to="/estabelecimentos" className="text-[12px] font-medium uppercase tracking-[0.06em] text-[var(--brand-primary)] hover:text-[var(--brand-primary)]/80 transition-colors">
                 Ver todos os parceiros →
               </Link>
             </div>
             
-            <div className={cn(GLASS_CARD, "p-8 relative group")}>
-              {/* Decorative SVG Pattern */}
-              <div className="absolute top-0 right-0 -mt-10 -mr-10 h-40 w-40 opacity-5 pointer-events-none">
-                <svg viewBox="0 0 100 100" className="h-full w-full text-white fill-current">
-                  <path d="M0 0 L100 100 M100 0 L0 100" stroke="currentColor" strokeWidth="0.5" />
-                </svg>
-              </div>
-
+            <div className={cn(GLASS_CARD, "p-8 relative group bg-[var(--bg-surface)] border-[var(--border-subtle)]")}>
               <div className="flex flex-col gap-10 relative z-10">
                 <div className="flex flex-col md:flex-row items-center justify-between gap-8">
                   <div className="flex-1 space-y-4 text-center md:text-left">
-                    <h3 className="text-3xl font-black tracking-tighter text-white">Transparência e Confiança</h3>
-                    <p className="max-w-xl text-[15px] font-medium text-white/40 leading-relaxed">
+                    <h3 className="text-3xl font-bold tracking-tight text-[var(--text-primary)]">Transparência e Confiança</h3>
+                    <p className="max-w-xl text-[15px] font-normal text-[var(--text-secondary)] leading-relaxed">
                       Trabalhamos diretamente com os principais estabelecimentos de Feijó para garantir acesso a informações precisas. Nossa missão é de utilidade pública: fortalecer o comércio local e o poder de compra do cidadão.
                     </p>
                   </div>
                   <div className="flex items-center gap-6 shrink-0">
                     <div className="flex flex-col items-center">
-                      <span className="text-2xl font-black text-white">{stats?.establishments ?? "0"}</span>
-                      <span className="text-[8px] font-black uppercase tracking-widest text-white/30">Parceiros</span>
+                      <span className="text-2xl font-bold text-[var(--text-primary)]">{stats?.establishments ?? "0"}</span>
+                      <span className="text-[12px] font-medium uppercase tracking-[0.06em] text-[var(--text-tertiary)]">Parceiros</span>
                     </div>
-                    <div className="h-8 w-px bg-white/10" />
+                    <div className="h-8 w-px bg-[var(--border-subtle)]" />
                     <div className="flex flex-col items-center">
-                      <div className="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-500/10 text-emerald-400">
-                        <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                      <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-emerald-500/10 text-emerald-400">
+                        <ShieldCheck className="h-6 w-6" />
                       </div>
-                      <span className="mt-1 text-[8px] font-black uppercase tracking-widest text-emerald-400">Auditado</span>
+                      <span className="mt-1 text-[12px] font-medium uppercase tracking-[0.06em] text-emerald-400">Auditado</span>
                     </div>
                   </div>
                 </div>
 
-                <Suspense fallback={<div className="h-20 w-full animate-pulse bg-white/5 rounded-xl" />}>
+                <Suspense fallback={<div className="h-20 w-full animate-pulse bg-[var(--bg-surface-elevated)] rounded-xl" />}>
                   <RegisteredStoresCarousel />
                 </Suspense>
               </div>
@@ -377,22 +372,26 @@ function HomePage() {
           </section>
 
           {/* Simple Steps Section */}
-          <section className="mt-24 text-center">
-            <h2 className="text-4xl font-black mb-4 tracking-tighter">Economize em 3 passos</h2>
-            <p className="text-white/30 font-medium mb-16 tracking-wide">A tecnologia definitiva para você dominar sua economia diária.</p>
+          <section className="mt-24 text-center relative overflow-hidden py-10">
+            <h2 className="font-['Space_Grotesk'] text-[32px] font-bold mb-4 tracking-tight">Economize em 3 passos</h2>
+            <p className="text-[var(--text-secondary)] font-normal mb-16 tracking-wide">A tecnologia definitiva para você dominar sua economia diária.</p>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="relative grid grid-cols-1 md:grid-cols-3 gap-12">
+              {/* Connecting Dotted Line for Desktop */}
+              <div className="hidden md:block absolute top-10 left-[15%] right-[15%] h-px border-t border-dashed border-[var(--border-subtle)] -z-10" />
+              
               {[
                 { icon: Search, title: "Busque o Produto", desc: "Digite o nome do que você precisa. Nosso sistema varre todos os mercados em segundos." },
-                { icon: (props: any) => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="m3 18 6-6 4 4 8-8"/><path d="M17 6h4v4"/></svg>, title: "Compare e Escolha", desc: "Veja onde está mais barato hoje. Confira o histórico de preços e evite promoções falsas." },
+                { icon: TrendingDown, title: "Compare e Escolha", desc: "Veja onde está mais barato hoje. Confira o histórico de preços e evite promoções falsas." },
                 { icon: ListChecks, title: "Monte sua Lista", desc: "Adicione à sua lista e saiba o valor total antes de sair de casa. Economia garantida." }
               ].map((step, idx) => (
-                <div key={idx} className="flex flex-col items-center gap-4 px-4">
-                  <div className="h-20 w-20 rounded-[24px] bg-slate-800 border border-slate-700 flex items-center justify-center text-indigo-400 mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-all duration-500">
+                <div key={idx} className="relative flex flex-col items-center gap-4 px-4 group">
+                  <span className="absolute -top-6 text-6xl font-bold text-[var(--text-tertiary)] opacity-5 -z-10 select-none">0{idx + 1}</span>
+                  <div className="h-20 w-20 rounded-[12px] bg-[var(--bg-surface)] border border-[var(--border-subtle)] flex items-center justify-center text-[var(--text-secondary)] mb-6 group-hover:bg-[var(--brand-primary)] group-hover:text-white group-hover:border-[var(--brand-primary)] transition-all duration-300">
                     <step.icon className="h-10 w-10" />
                   </div>
-                  <h3 className="text-xl font-black mb-2 tracking-tight">{step.title}</h3>
-                  <p className="text-[13px] text-white/20 leading-relaxed max-w-[280px] font-medium">{step.desc}</p>
+                  <h3 className="text-[18px] font-bold mb-2 tracking-tight text-[var(--text-primary)]">{step.title}</h3>
+                  <p className="text-[15px] text-[var(--text-secondary)] leading-relaxed max-w-[280px] font-normal">{step.desc}</p>
                 </div>
               ))}
             </div>

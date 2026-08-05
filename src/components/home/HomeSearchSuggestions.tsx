@@ -257,14 +257,14 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed z-[80] flex flex-col overflow-hidden rounded-2xl border border-slate-700 shadow-2xl"
+            className="fixed z-[80] flex flex-col overflow-hidden rounded-[12px] border border-[var(--border-subtle)] shadow-2xl"
             style={{
               left: rect.left,
               top: rect.top,
               width: rect.width,
               maxHeight: rect.maxH,
-              background: "#1e293b",
-              color: "#ffffff",
+              background: "var(--bg-surface)",
+              color: "var(--text-primary)",
             }}
           >
 
@@ -420,7 +420,7 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
 
         <div
           className="flex shrink-0 items-center justify-between gap-2 border-t px-3 py-1.5 text-[11px]"
-          style={{ borderColor: "#334155", background: "#0f172a" }}
+          style={{ borderColor: "var(--border-subtle)", background: "var(--bg-base)" }}
         >
 
           <span className="truncate text-muted-foreground">
