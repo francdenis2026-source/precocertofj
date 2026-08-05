@@ -5,6 +5,8 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchPriceSearch, fetchSuggestions } from "@/lib/search-cache";
 import { Search, ArrowRight, TrendingDown, Loader2, CornerDownLeft } from "lucide-react";
+import { cn } from "@/lib/utils";
+
 import {
   suggestProducts,
   type ProductSuggestion,
@@ -237,17 +239,18 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
 
     const panel = (
       <div
-        className="fixed z-[80] flex flex-col overflow-hidden rounded-xl border shadow-2xl"
+        className="fixed z-[80] flex flex-col overflow-hidden rounded-xl border shadow-2xl transition-all duration-300 ease-out"
         style={{
           left: rect?.left ?? 0,
           top: rect?.top ?? 0,
           width: rect?.width ?? 0,
           maxHeight: rect?.maxH ?? 320,
           visibility: rect ? "visible" : "hidden",
-          background: "#ffffff",
-          borderColor: "color-mix(in oklab, #d4a24c 45%, transparent)",
-          color: "#0f172a",
+          background: "var(--card)",
+          borderColor: "var(--primary)",
+          color: "var(--foreground)",
         }}
+
       >
 
         {loading && items.length === 0 ? (
@@ -262,11 +265,12 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             type="button"
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => handlePick(q)}
-            className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-[13px] font-medium hover:bg-slate-50"
+            className="flex w-full items-center gap-2 px-3 py-2.5 text-left text-[13px] font-medium transition-colors hover:bg-primary/10"
           >
-            <Search className="h-4 w-4 text-slate-700" />
+            <Search className="h-4 w-4 text-primary" />
             Nenhum produto com esse nome — ver todos os resultados para “<strong>{q}</strong>”
-            <ArrowRight className="ml-auto h-4 w-4 text-slate-600" />
+            <ArrowRight className="ml-auto h-4 w-4 text-primary" />
+
           </button>
         ) : (
           <ul
@@ -287,10 +291,11 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                   onMouseEnter={() => setActive(i)}
                   onClick={() => handlePick(s.displayName)}
                   className={
-                    "flex w-full items-center gap-2.5 border-l-[3px] px-3 py-2 text-left transition-colors " +
+                    "flex w-full items-center gap-2.5 border-l-[3px] px-3 py-2 text-left transition-all duration-200 " +
                     (active === i
-                      ? "border-l-[#d4a24c] bg-[#0b2444] text-white"
-                      : "border-l-transparent hover:bg-slate-50")
+                      ? "border-l-primary bg-primary text-primary-foreground"
+                      : "border-l-transparent hover:bg-primary/10")
+
                   }
                 >
                   <span
@@ -299,8 +304,9 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                       (active === i
                         ? "border-white/30 bg-white/15"
                         : s.imageUrl
-                          ? "border-slate-200 bg-slate-50"
-                          : "border-[#0b2444] bg-[#0b2444]")
+                          ? "border-border bg-muted"
+                          : "border-primary bg-primary")
+
                     }
                   >
                     {s.imageUrl ? (
@@ -313,8 +319,9 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                     ) : (
                       <span
                         aria-hidden
-                        className="font-condensed text-[13px] font-semibold uppercase leading-none tracking-tight text-[#d4a24c]"
+                        className="font-condensed text-[13px] font-semibold uppercase leading-none tracking-tight text-primary-foreground"
                       >
+
                         {(s.displayName || "?").trim().charAt(0)}
                       </span>
                     )}
@@ -332,7 +339,8 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                     <span
                       className={
                         "mt-0.5 flex items-center gap-1.5 truncate text-[11px] leading-none " +
-                        (active === i ? "text-blue-100" : "text-slate-500")
+                        (active === i ? "text-primary-foreground/80" : "text-muted-foreground")
+
                       }
                     >
                       {s.brand ? <span className="truncate">{s.brand}</span> : null}
@@ -362,25 +370,26 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                         className={
                           "inline-flex items-center gap-1 text-[13px] font-bold tabular-nums " +
                           (blocked ? "select-none blur-sm" : "") +
-                          (active === i ? " text-white" : "")
+                          (active === i ? " text-primary-foreground" : " text-primary")
                         }
-                        style={active === i ? { color: "#ffffff" } : { color: "#0b2444" }}
                       >
                         <TrendingDown
-                          className="h-3.5 w-3.5"
-                          style={active === i ? { color: "#73d9a6" } : { color: "#0ea36b" }}
+                          className={cn("h-3.5 w-3.5", active === i ? "text-primary-foreground" : "text-savings")}
                         />
+
+
                         {BRL(s.minPrice)}
                       </span>
                     ) : (
-                      <span className={active === i ? "text-[11px] text-blue-100" : "text-[11px] text-slate-400"}>—</span>
+                      <span className={active === i ? "text-[11px] text-primary-foreground/60" : "text-[11px] text-muted-foreground/50"}>—</span>
                     )}
                     {s.market ? (
                       <span
                         className={
                           "mt-0.5 max-w-[190px] truncate text-[11px] leading-none " +
                           (blocked ? "select-none blur-sm" : "") +
-                          (active === i ? " text-blue-100" : " text-slate-500")
+                          (active === i ? " text-primary-foreground/70" : " text-muted-foreground")
+
                         }
                       >
                         {s.market}
@@ -395,15 +404,18 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
 
         <div
           className="flex shrink-0 items-center justify-between gap-2 border-t px-3 py-1.5 text-[11px]"
-          style={{ borderColor: "#e2e8f0", background: "#f8fafc" }}
+          style={{ borderColor: "var(--border)", background: "var(--muted)" }}
         >
-          <span className="truncate text-slate-500">
+
+          <span className="truncate text-muted-foreground">
+
             {blocked ? (
               "Cadastre-se para ver preços sem limite."
             ) : (
               <>
-                <kbd className="rounded border border-slate-300 bg-white px-1 font-sans">↑</kbd>{" "}
-                <kbd className="rounded border border-slate-300 bg-white px-1 font-sans">↓</kbd>{" "}
+                <kbd className="rounded border border-border bg-background px-1 font-sans">↑</kbd>{" "}
+                <kbd className="rounded border border-border bg-background px-1 font-sans">↓</kbd>{" "}
+
                 navegar ·{" "}
                 <CornerDownLeft className="inline h-3 w-3 align-[-2px]" aria-hidden /> abrir
               </>
@@ -413,9 +425,10 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             type="button"
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => handlePick(q)}
-            className="inline-flex shrink-0 items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-bold uppercase tracking-wide"
-            style={{ background: "#d4a24c", color: "#0b2444" }}
+            className="inline-flex shrink-0 items-center gap-1 rounded-lg px-2 py-1 text-[11px] font-bold uppercase tracking-wide transition-all hover:scale-105 active:scale-95"
+            style={{ background: "var(--primary)", color: "var(--primary-foreground)" }}
           >
+
             Ver tudo
             <ArrowRight className="h-3 w-3" strokeWidth={2.6} />
           </button>
