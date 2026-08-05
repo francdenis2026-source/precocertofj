@@ -988,14 +988,13 @@ function HomePage() {
         </main>
 
 
-        {/* ================= SEÇÃO: COMO FUNCIONA ================= */}
-        <section className="py-24 bg-card/30">
+        <section className="py-16 bg-card/30">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight mb-4">Economize em 3 passos simples</h2>
               <p className="text-muted-foreground text-lg max-w-2xl mx-auto">A tecnologia que você precisava para nunca mais pagar caro no mercado.</p>
             </div>
-            <div className="grid md:grid-cols-3 gap-12">
+            <div className="grid md:grid-cols-3 gap-8">
               <div className="flex flex-col items-center text-center group">
                 <div className="w-16 h-16 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   <Search className="w-8 h-8" />
@@ -1021,8 +1020,7 @@ function HomePage() {
           </div>
         </section>
 
-        {/* ================= SEÇÃO: DESTAQUES ================= */}
-        <section className="py-24 border-t border-border/50">
+        <section className="py-16 border-t border-border/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
               <div>
@@ -1065,7 +1063,7 @@ function HomePage() {
           </div>
         </section>
         <footer
-          className="shrink-0 border-t px-4 py-8 sm:px-6 lg:px-8 mt-12 bg-white/50 backdrop-blur-sm"
+          className="shrink-0 border-t px-4 py-6 sm:px-6 lg:px-8 mt-6 bg-white/50 backdrop-blur-sm"
         >
           <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-1.5">
             <p className="text-[12.5px] leading-snug sm:text-[13px]" style={{ color: "var(--pc-home-onhero-fg-70)" }}>
