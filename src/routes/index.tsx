@@ -311,12 +311,12 @@ function HomePage() {
                       key={item.label}
                       onClick={() => navigate({ to: item.primary ? "/app" : "/buscar" })}
                       className={cn(
-                        "flex flex-col gap-3 rounded-2xl p-5 transition-all text-left",
-                        item.primary ? "bg-primary text-white shadow-lg shadow-primary/20 hover:scale-105" : "bg-white/[0.03] border border-white/5 hover:bg-white/[0.06]"
+                        "flex flex-col gap-3 rounded-[24px] p-6 transition-all text-left group-step",
+                        item.primary ? "bg-indigo-600 text-white shadow-[0_20px_40px_-10px_rgba(79,70,229,0.4)] hover:scale-105 active:scale-[0.98]" : "bg-white/[0.03] border border-white/5 hover:bg-white/[0.08] hover:border-white/20 active:scale-[0.98]"
                       )}
                     >
                       <item.Icon className={cn("h-6 w-6", item.primary ? "text-white" : "text-primary")} />
-                      <span className="text-xs font-black uppercase tracking-widest">{item.label}</span>
+                      <span className="text-[10px] font-black uppercase tracking-[0.2em]">{item.label}</span>
                     </button>
                   ))}
                 </div>
@@ -326,8 +326,8 @@ function HomePage() {
 
           {/* Simple Steps Section */}
           <section className="mt-24 text-center">
-            <h2 className="text-3xl font-black mb-2">Economize em 3 passos simples</h2>
-            <p className="text-white/40 font-medium mb-12">A tecnologia que você precisava para nunca mais pagar caro no mercado.</p>
+            <h2 className="text-4xl font-black mb-4 tracking-tighter">Economize em 3 passos</h2>
+            <p className="text-white/30 font-medium mb-16 tracking-wide">A tecnologia definitiva para você dominar sua economia diária.</p>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
               {[
@@ -336,11 +336,11 @@ function HomePage() {
                 { icon: ListChecks, title: "Monte sua Lista", desc: "Adicione à sua lista e saiba o valor total antes de sair de casa. Economia garantida." }
               ].map((step, idx) => (
                 <div key={idx} className="flex flex-col items-center gap-4 px-4">
-                  <div className="h-16 w-16 rounded-full bg-primary/10 flex items-center justify-center text-primary mb-2">
-                    <step.icon className="h-8 w-8" />
+                  <div className="h-20 w-20 rounded-[24px] bg-white/5 flex items-center justify-center text-indigo-400 mb-6 group-hover:bg-indigo-500 group-hover:text-white transition-all duration-500">
+                    <step.icon className="h-10 w-10" />
                   </div>
-                  <h3 className="text-lg font-black">{step.title}</h3>
-                  <p className="text-sm text-white/30 leading-relaxed max-w-[280px]">{step.desc}</p>
+                  <h3 className="text-xl font-black mb-2 tracking-tight">{step.title}</h3>
+                  <p className="text-[13px] text-white/20 leading-relaxed max-w-[280px] font-medium">{step.desc}</p>
                 </div>
               ))}
             </div>
