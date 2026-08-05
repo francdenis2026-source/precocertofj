@@ -246,15 +246,14 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -10, scale: 0.98 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
-            className="fixed z-[80] flex flex-col overflow-hidden rounded-2xl border-2 shadow-2xl backdrop-blur-xl"
+            className="fixed z-[80] flex flex-col overflow-hidden rounded-2xl border border-white/10 shadow-2xl backdrop-blur-2xl"
             style={{
               left: rect.left,
               top: rect.top,
               width: rect.width,
               maxHeight: rect.maxH,
-              background: "var(--card)",
-              borderColor: "var(--primary)",
-              color: "var(--foreground)",
+              background: "rgba(15, 23, 42, 0.95)",
+              color: "#ffffff",
             }}
           >
 
@@ -305,28 +304,29 @@ export const HomeSearchSuggestions = React.forwardRef<HomeSearchSuggestionsHandl
                 >
                   <span
                     className={
-                      "grid h-7 w-7 shrink-0 place-items-center overflow-hidden rounded-md border " +
+                      "grid h-8 w-8 shrink-0 place-items-center overflow-hidden rounded-lg border " +
                       (active === i
-                        ? "border-white/30 bg-white/15"
+                        ? "border-white/30 bg-white/15 shadow-[0_0_10px_rgba(255,255,255,0.2)]"
                         : s.imageUrl
-                          ? "border-border bg-muted"
-                          : "border-primary bg-primary")
-
+                          ? "border-white/5 bg-white/5"
+                          : "border-primary/30 bg-primary/10")
                     }
                   >
                     {s.imageUrl ? (
                       <img
                         src={s.imageUrl}
                         alt=""
-                        className="h-full w-full object-cover"
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                         loading="lazy"
                       />
                     ) : (
                       <span
                         aria-hidden
-                        className="font-condensed text-[13px] font-semibold uppercase leading-none tracking-tight text-primary-foreground"
+                        className={
+                          "text-[12px] font-black uppercase leading-none tracking-tight " +
+                          (active === i ? "text-white" : "text-primary")
+                        }
                       >
-
                         {(s.displayName || "?").trim().charAt(0)}
                       </span>
                     )}
