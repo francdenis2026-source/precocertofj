@@ -1,15 +1,22 @@
 @import "tailwindcss";
 
 @theme {
-  --pc-primary-rgb: 99 102 241; /* Indigo-500 */
-  --pc-gold-ink: #fbbf24;      /* Amber-400 */
-  --midnight: #0f172a;         /* Slate-900 - More solid base than 020617 for clarity */
-  --indigo-accent: #4f46e5;
-  --emerald-accent: #10b981;
-  --card-bg: #1e293b;          /* Slate-800 - Solid card background */
-  --border-subtle: #334155;    /* Slate-700 */
-  --pc-store-badge-bg: #1e293b;
-  --pc-store-badge-border: #334155;
+  --pc-primary-rgb: 108 92 231; /* #6C5CE7 */
+  --bg-base: #0B0B14;
+  --bg-surface: #12121F;
+  --bg-surface-elevated: #191929;
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  
+  --brand-primary: #6C5CE7;
+  --brand-glow: rgba(108, 92, 231, 0.2);
+  
+  --success: #22C55E;
+  --danger: #F43F5E;
+  --warning: #F59E0B;
+  
+  --text-primary: #F5F5F7;
+  --text-secondary: rgba(245, 245, 247, 0.6);
+  --text-tertiary: rgba(245, 245, 247, 0.4);
 }
 
 /* Base resets */
@@ -26,9 +33,11 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--midnight);
-  color: white;
-  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
 }
 
 /* Utilities */
