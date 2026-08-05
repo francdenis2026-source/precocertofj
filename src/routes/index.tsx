@@ -1149,20 +1149,22 @@ function HomePage() {
           </div>
         </footer>
       </div>
-      <AllCategoriesDialog open={allCatsOpen} onOpenChange={setAllCatsOpen} />
-      <MetricSpotlightDialog
-        open={spotlight !== null}
-        onOpenChange={(v) => {
-          if (!v) setSpotlight(null);
-        }}
-        kind={spotlight}
-      />
-      <GuestGateDialog
-        open={gateOpen}
-        onOpenChange={setGateOpen}
-        action="search"
-        redirect="/buscar"
-      />
+      <div className="flex flex-col">
+        <AllCategoriesDialog open={allCatsOpen} onOpenChange={setAllCatsOpen} />
+        <MetricSpotlightDialog
+          open={spotlight !== null}
+          onOpenChange={(v) => {
+            if (!v) setSpotlight(null);
+          }}
+          kind={spotlight}
+        />
+        <GuestGateDialog
+          open={gateOpen}
+          onOpenChange={setGateOpen}
+          action="search"
+          redirect="/buscar"
+        />
+      </div>
     </div>
   );
 }
