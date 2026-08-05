@@ -1048,8 +1048,8 @@ function HomePage() {
                     </span>
                   </div>
                   <h4 className="font-bold text-base md:text-lg mb-0.5 md:mb-1 truncate">{p.name}</h4>
-                  <p className="text-[12px] md:text-[13px] text-muted-foreground mb-3 md:mb-4">Melhor preço: <span className="text-foreground font-semibold">{p.price}</span></p>
-                  <div className="flex items-center gap-2 text-[12px] text-muted-foreground pb-4 border-b border-border/50 mb-4">
+                  <p className="text-[11px] md:text-[12px] text-muted-foreground mb-2 md:mb-3">Melhor: <span className="text-foreground font-semibold">{p.price}</span></p>
+                  <div className="flex items-center gap-2 text-[10px] md:text-[11px] text-muted-foreground pb-2 md:pb-3 border-b border-border/50 mb-2 md:mb-3 truncate">
                     <Store className="w-3.5 h-3.5" />
                     {p.store}
                   </div>
