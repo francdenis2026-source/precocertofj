@@ -1148,7 +1148,6 @@ function HomePage() {
             </div>
           </div>
         </footer>
-      </div>
 
       <AllCategoriesDialog open={allCatsOpen} onOpenChange={setAllCatsOpen} />
       <MetricSpotlightDialog
