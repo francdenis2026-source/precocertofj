@@ -1149,7 +1149,9 @@ function HomePage() {
           </div>
         </footer>
       </div>
-      <AllCategoriesDialog open={allCatsOpen} onOpenChange={setAllCatsOpen} />
+      <div className="h-0 w-0 overflow-hidden">
+        <AllCategoriesDialog open={allCatsOpen} onOpenChange={setAllCatsOpen} />
+      </div>
       <MetricSpotlightDialog
         open={spotlight !== null}
         onOpenChange={(v) => {
