@@ -1039,9 +1039,9 @@ function HomePage() {
                 { name: "Óleo de Soja 900ml", savings: "R$ 0,95", price: "R$ 6,30", store: "Varejão do Povo" },
               ].map((p, i) => (
                 <div key={i} className="group bg-card border border-border/50 rounded-2xl p-3 md:p-4 hover:border-primary/50 transition-all hover:shadow-xl min-h-[180px] md:min-h-[200px]">
-                  <div className="flex justify-between items-start mb-4">
-                    <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center">
-                      <Package className="w-6 h-6 text-muted-foreground" />
+                  <div className="flex justify-between items-start mb-2 md:mb-3">
+                    <div className="w-8 h-8 md:w-10 md:h-10 rounded-xl bg-muted flex items-center justify-center">
+                      <Package className="w-4 h-4 md:w-5 md:h-5 text-muted-foreground" />
                     </div>
                     <span className="bg-green-500/10 text-green-600 dark:text-green-400 text-[11px] font-bold px-2 py-1 rounded-lg border border-green-500/20">
                       -{p.savings}
