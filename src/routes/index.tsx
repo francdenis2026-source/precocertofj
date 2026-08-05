@@ -533,7 +533,7 @@ function HomePage() {
 
 
             {/* ---------- Coluna de dados ---------- */}
-            <aside className="order-2 min-w-0 lg:col-span-5" aria-label="Indicadores da plataforma">
+            <aside className="order-2 min-w-0 lg:col-span-5 animate-reveal [animation-delay:150ms]" aria-label="Indicadores da plataforma">
               <div
                 className="rounded-3xl border border-border/50 p-6 backdrop-blur-xl shadow-2xl bg-card/60"
               >
