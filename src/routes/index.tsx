@@ -122,21 +122,15 @@ const P = {
 };
 const serif = "font-sans";
 
-/* Ladrilhos da faixa inferior — layout horizontal (ícone à esquerda do rótulo).
-   A caixa ficou mais baixa e densa: com ícone e texto na mesma linha, a altura
-   antes reservada para o empilhamento virava espaço morto. `clamp(px, vh, px)`
-   segue acompanhando a altura da janela sem cortar o rótulo, e todas as células
-   (categorias e ações) usam a mesma medida para fechar 2 linhas alinhadas. */
-const TILE = "group flex h-[4.5rem] w-full min-w-0 items-center gap-3.5 rounded-2xl border pl-4 pr-5 text-left pc-tile pc-elite-frame transition-all hover:shadow-xl hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2";
-const TILE_ICONWRAP = "grid shrink-0 place-items-center rounded-xl h-11 w-11";
-const TILE_ICON = "h-6 w-6";
-const TILE_LABEL = "min-w-0 flex-1 truncate text-[16px] font-bold leading-none tracking-tight";
+const TILE = "group flex h-14 w-full min-w-0 items-center gap-3.5 rounded-2xl border border-border/50 bg-card/50 pl-4 pr-5 text-left transition-all hover:bg-card hover:border-primary/30 hover:shadow-xl hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20";
+const TILE_ICONWRAP = "grid shrink-0 place-items-center rounded-xl h-10 w-10 bg-primary/5 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors";
+const TILE_ICON = "h-5 w-5";
+const TILE_LABEL = "min-w-0 flex-1 truncate text-[15px] font-bold tracking-tight text-foreground/80 group-hover:text-foreground";
 /* Tokens tipográficos compartilhados da home: um único "eyebrow" (rótulo de
-   seção) e um único estilo de chip, para que hero, painel ao vivo e faixa de
-   buscas em alta tenham exatamente a mesma hierarquia e o mesmo respiro. */
-const EYEBROW = "text-[11px] font-bold uppercase tracking-[0.2em]";
+   seção) e um único estilo de chip. */
+const EYEBROW = "text-[10px] font-bold uppercase tracking-[0.15em] text-muted-foreground/60";
 const CHIP =
-  "inline-flex items-center justify-center rounded-full border px-2.5 py-1 text-[12px] font-medium capitalize pc-tile focus-visible:outline-none focus-visible:ring-2";
+  "inline-flex items-center justify-center rounded-full border border-border bg-card px-2.5 py-1 text-[11.5px] font-semibold text-foreground/70 transition-colors hover:bg-primary/5 hover:text-primary";
 
 
 /**
@@ -743,15 +737,11 @@ function HomePage() {
             {/* Categorias */}
             <nav
               aria-label="Categorias"
-              className="min-w-0 rounded-3xl border p-6 lg:col-span-8 shadow-2xl"
-              style={{
-                background: "rgba(255, 255, 255, 0.95)",
-                borderColor: "rgba(15, 27, 61, 0.08)",
-              }}
+              className="min-w-0 rounded-3xl border border-border/50 p-6 lg:col-span-8 shadow-2xl bg-card/40 backdrop-blur-sm"
             >
               <p
                 className={`${EYEBROW} mb-1.5 px-0.5`}
-                style={{ color: "var(--pc-home-onhero-fg-70, var(--pc-home-onhero-fg-90))" }}
+                style={{ color: "var(--muted-foreground)" }}
               >
                 Categorias
               </p>
@@ -826,13 +816,9 @@ function HomePage() {
             {/* Ações — moldura própria, separada das categorias */}
             <nav
               aria-label="Ações"
-              className="min-w-0 rounded-2xl border p-4 sm:p-5 lg:col-span-4 shadow-xl"
-              style={{
-                background: "rgba(255, 255, 255, 0.95)",
-                borderColor: "rgba(15, 27, 61, 0.12)",
-              }}
+              className="min-w-0 rounded-3xl border border-border/50 p-6 lg:col-span-4 shadow-2xl bg-card/40 backdrop-blur-sm"
             >
-              <p className={`${EYEBROW} mb-1.5 px-0.5`} style={{ color: "var(--pc-home-onhero-gold)" }}>
+              <p className={`${EYEBROW} mb-1.5 px-0.5`}>
                 Ações
               </p>
               <div className="grid min-w-0 grid-cols-4 gap-2 sm:gap-2.5 lg:grid-cols-2">
@@ -847,26 +833,14 @@ function HomePage() {
                       className={TILE}
                       onPointerEnter={preloadExplorePanel}
                       onFocus={preloadExplorePanel}
-                      style={{
-                        background: "white",
-                        borderColor: "rgba(15, 27, 61, 0.12)",
-                        // @ts-expect-error css var
-                        "--tw-ring-color": `color-mix(in oklab, ${P.gold} 70%, transparent)`,
-                      }}
                     >
                       <span
                         className={TILE_ICONWRAP}
-                        style={{
-                          background: `color-mix(in oklab, ${P.gold} 14%, transparent)`,
-                          border: `1px solid color-mix(in oklab, ${P.gold} 28%, transparent)`,
-                        }}
-                        aria-hidden
                       >
-                        <LayoutGrid className={TILE_ICON} style={{ color: "var(--pc-home-onhero-gold)" }} strokeWidth={2.2} aria-hidden />
+                        <LayoutGrid className={TILE_ICON} strokeWidth={2.2} aria-hidden />
                       </span>
                       <span
                         className={TILE_LABEL}
-                        style={{ color: "var(--pc-home-onhero-fg-90)" }}
                       >
                         Explorar
                       </span>

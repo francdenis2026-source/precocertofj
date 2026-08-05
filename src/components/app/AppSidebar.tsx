@@ -353,12 +353,12 @@ export function AppSidebar() {
                   "Console"
                 ) : (
                   <>
-                    Preço<em className="pcsb-wordmark-accent">Certo</em>
+                    PreçoCerto
                   </>
                 )}
               </span>
               <span className="pcsb-kicker">
-                {isAdminArea ? "Administração" : "Feijó · Acre"}
+                {isAdminArea ? "Painel de Controle" : "Acompanhamento Inteligente"}
               </span>
             </span>
           </Link>
