@@ -60,7 +60,7 @@ function HeaderStats({ compact = false }: { compact?: boolean }) {
         to="/app/estabelecimentos"
         title={`${stores.length} estabelecimentos`}
         aria-label={`${stores.length} estabelecimentos`}
-        className="hidden items-center gap-1 rounded-full border border-sky-500/25 bg-sky-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-sky-700 transition-colors hover:bg-sky-500/20 dark:text-sky-300 sm:inline-flex"
+        className="hidden items-center gap-1 rounded-full border border-[var(--brand-primary)]/25 bg-[var(--brand-primary)]/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[var(--brand-primary)] transition-colors hover:bg-[var(--brand-primary)]/20 sm:inline-flex"
       >
         <Store className="h-3 w-3" aria-hidden />
         {stores.length}
@@ -69,7 +69,7 @@ function HeaderStats({ compact = false }: { compact?: boolean }) {
         to="/app/produtos"
         title={`${items.toLocaleString("pt-BR")} itens cadastrados`}
         aria-label={`${items.toLocaleString("pt-BR")} itens cadastrados`}
-        className={"hidden items-center gap-1 rounded-full border border-emerald-500/25 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-emerald-700 transition-colors hover:bg-emerald-500/20 dark:text-emerald-300" + (compact ? " hidden" : " lg:inline-flex")}
+        className={"hidden items-center gap-1 rounded-full border border-[var(--success)]/25 bg-[var(--success)]/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[var(--success)] transition-colors hover:bg-[var(--success)]/20" + (compact ? " hidden" : " lg:inline-flex")}
       >
         <Tags className="h-3 w-3" aria-hidden />
         {items.toLocaleString("pt-BR")}
@@ -79,7 +79,7 @@ function HeaderStats({ compact = false }: { compact?: boolean }) {
         to="/melhores-precos"
         title={`Média de ${avg.toLocaleString("pt-BR")} itens por estabelecimento`}
         className={cn(
-          "items-center gap-1 rounded-full border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-amber-700 transition-colors hover:bg-amber-500/20 dark:text-amber-300",
+          "items-center gap-1 rounded-full border border-[var(--warning)]/30 bg-[var(--warning)]/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.08em] text-[var(--warning)] transition-colors hover:bg-[var(--warning)]/20",
           compact ? "hidden" : "hidden xl:inline-flex",
         )}
       >
@@ -103,7 +103,7 @@ function ScopeNav({ className }: { className?: string }) {
   return (
     <nav
       className={cn(
-        "hidden items-center gap-0.5 rounded-lg border border-border bg-secondary/60 p-0.5 sm:inline-flex",
+        "hidden items-center gap-0.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface-elevated)]/60 p-0.5 sm:inline-flex",
         className,
       )}
       role="group"
@@ -115,8 +115,8 @@ function ScopeNav({ className }: { className?: string }) {
         className={cn(
           "inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[11px] font-semibold transition-colors",
           isHome
-            ? "bg-card text-foreground shadow-sm"
-            : "text-muted-foreground hover:text-foreground",
+            ? "bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-sm"
+            : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]",
         )}
       >
         <Home className="h-3.5 w-3.5" strokeWidth={isHome ? 2.4 : 2} />
@@ -128,8 +128,8 @@ function ScopeNav({ className }: { className?: string }) {
         className={cn(
           "inline-flex items-center gap-1 rounded-md px-2.5 py-1 text-[11px] font-semibold transition-colors",
           isPanel
-            ? "bg-card text-foreground shadow-sm"
-            : "text-muted-foreground hover:text-foreground",
+            ? "bg-[var(--bg-surface)] text-[var(--text-primary)] shadow-sm"
+            : "text-[var(--text-tertiary)] hover:text-[var(--text-primary)]",
         )}
       >
         <LayoutDashboard className="h-3.5 w-3.5" strokeWidth={isPanel ? 2.4 : 2} />
@@ -153,7 +153,7 @@ function AdminSidebarToggle() {
       aria-label={label}
       aria-pressed={!collapsed}
       title={`${label}${isMobile ? "" : " (⌘/Ctrl + B)"}`}
-      className="pc-topnav-item inline-flex h-8 items-center gap-1.5 rounded-full border border-border bg-card px-2 text-[11.5px] font-semibold text-foreground md:px-3"
+      className="pc-topnav-item inline-flex h-8 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 text-[11.5px] font-semibold text-[var(--text-primary)] md:px-3 hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40"
     >
       <Icon className="h-4 w-4" strokeWidth={2.2} />
       <span className="hidden md:inline">{label}</span>
@@ -183,11 +183,11 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
       ref={barRef}
       className={
         isAdminScope
-          ? "sticky top-0 z-30 flex h-9 shrink-0 items-center gap-2 border-b border-border/70 bg-background/92 px-3 backdrop-blur-xl md:h-10 md:px-5"
-          : "pc-appbar sticky top-0 z-30 flex shrink-0 items-center gap-2 border-b border-border/70 bg-background/88 px-3 backdrop-blur-xl md:px-4"
+          ? "sticky top-0 z-30 flex h-9 shrink-0 items-center gap-2 border-b border-[var(--border-subtle)] bg-[var(--bg-base)]/92 px-3 backdrop-blur-xl md:h-10 md:px-5"
+          : "pc-appbar sticky top-0 z-30 flex shrink-0 items-center gap-2 border-b border-[var(--border-subtle)] bg-[var(--bg-base)]/88 px-3 backdrop-blur-xl md:px-4"
       }
     >
-      {isAdminScope ? <AdminSidebarToggle /> : <SidebarTrigger className="text-foreground" />}
+      {isAdminScope ? <AdminSidebarToggle /> : <SidebarTrigger className="text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)] rounded-md" />}
       <div className="hidden h-4 w-px bg-border md:block" />
 
       <Link
@@ -203,7 +203,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
         <span
           data-tone={isAdminScope ? "catalog" : "overview"}
           className={cn(
-            "pc-tone-chip hidden items-center gap-1 rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em]",
+            "pc-tone-chip hidden items-center gap-1 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 py-0.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-[var(--text-secondary)]",
             tight ? "xl:inline-flex" : "md:inline-flex",
           )}
           aria-label={isAdminScope ? "Área administrativa" : "Localização atual"}
@@ -225,12 +225,12 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
                 type="button"
                 aria-label={fullName ? `Conta — ${fullName}` : "Conta"}
                 title={fullName ?? "Conta"}
-                className="group pc-topnav-item ml-auto inline-flex h-7 min-w-0 max-w-[160px] items-center gap-1.5 rounded-full border border-border bg-card pl-1 pr-1.5 text-[11px] font-semibold text-foreground outline-none transition-colors focus-visible:ring-2 focus-visible:ring-brand-gold/70 focus-visible:ring-offset-2 focus-visible:ring-offset-background data-[state=open]:border-brand-gold/50 data-[state=open]:bg-secondary sm:max-w-[180px]"
+                className="group pc-topnav-item ml-auto inline-flex h-7 min-w-0 max-w-[160px] items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] pl-1 pr-1.5 text-[11px] font-semibold text-[var(--text-primary)] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-[var(--brand-primary)]/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--bg-base)] data-[state=open]:border-[var(--brand-primary)]/50 data-[state=open]:bg-[var(--bg-surface-elevated)] sm:max-w-[180px]"
               >
                 {avatarUrl ? (
                   <img src={avatarUrl} alt="" className="h-5 w-5 rounded-full object-cover" />
                 ) : (
-                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-primary/10 text-[10px] font-bold text-primary">
+                  <span className="inline-flex h-5 w-5 items-center justify-center rounded-full bg-[var(--brand-primary)]/10 text-[10px] font-bold text-[var(--brand-primary)]">
                     {initials ?? <User className="h-3 w-3" />}
                   </span>
                 )}
@@ -299,7 +299,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
             to="/app/produtos"
             aria-label="Buscar produtos e preços"
             title="Buscar produtos e preços"
-            className="pc-topnav-item inline-flex h-7 items-center gap-1.5 rounded-full border border-border bg-card px-2 text-[11px] font-semibold text-foreground md:px-2.5"
+            className="pc-topnav-item inline-flex h-7 items-center gap-1.5 rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] px-2 text-[11px] font-semibold text-[var(--text-primary)] md:px-2.5 hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40 transition-colors"
           >
             <Search className="h-3.5 w-3.5" strokeWidth={2.1} aria-hidden />
             <span className={tight ? "hidden xl:inline" : "hidden md:inline"}>Buscar preços</span>
@@ -311,7 +311,7 @@ export function AppHeader({ scope = "app" }: { scope?: "admin" | "app" }) {
           <Link
             to="/cesta"
             aria-label="Cesta"
-            className="pc-topnav-item inline-flex h-7 w-7 items-center justify-center rounded-full border border-border bg-card text-foreground"
+            className="pc-topnav-item inline-flex h-7 w-7 items-center justify-center rounded-full border border-[var(--border-subtle)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:bg-[var(--bg-surface-elevated)] hover:border-[var(--brand-primary)]/40 transition-colors"
           >
             <ShoppingBag className="h-3 w-3" strokeWidth={2} />
           </Link>
