@@ -61,15 +61,11 @@ const emptyAddress: Address = {
   state: "",
 };
 
-// Ocean Modern tokens — alinhados à homepage (navy #0f2b52 + dourado #f5b301).
-const PC_EMERALD_DEEP = "#081b3a";
-const PC_EMERALD = "#0f2b52";
-const PC_EMERALD_LIGHT = "#1e4a85";
-const PC_GOLD = "#f5b301";
-const PC_GOLD_DARK = "#c78d00";
-const PC_CREAM = "#f7f9fc";
-const PC_DISPLAY = "'Fraunces', 'Instrument Serif', ui-serif, Georgia, serif";
-const PC_BODY = "'Figtree', system-ui, sans-serif";
+// Redesign tokens — alinhados à nova identidade (Midnight Navy + Electric Indigo).
+const PC_BRAND = "#6C5CE7";
+const PC_SURFACE = "#12121F";
+const PC_DISPLAY = "'Space Grotesk', system-ui, sans-serif";
+const PC_BODY = "'Inter', system-ui, sans-serif";
 
 
 function LoginPage() {
@@ -298,46 +294,35 @@ function LoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-svh w-full items-center justify-center bg-background px-4 py-4 sm:px-6 sm:py-6">
-      {/* Ambient brand glow — subtle in both themes */}
+    <div className="relative flex min-h-svh w-full items-center justify-center bg-[var(--bg-base)] px-4 py-8 sm:px-6">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 hidden overflow-hidden md:block"
+        className="pointer-events-none absolute inset-0 overflow-hidden"
       >
         <div
-          className="absolute -left-40 -top-40 h-[520px] w-[520px] rounded-full opacity-30 blur-3xl dark:opacity-20"
-          style={{ background: `radial-gradient(closest-side, ${PC_EMERALD}33, transparent)` }}
-        />
-        <div
-          className="absolute -bottom-40 -right-40 h-[520px] w-[520px] rounded-full opacity-25 blur-3xl dark:opacity-20"
-          style={{ background: `radial-gradient(closest-side, ${PC_GOLD}33, transparent)` }}
+          className="absolute -left-40 -top-40 h-[800px] w-[800px] rounded-full opacity-20 blur-[120px]"
+          style={{ background: `radial-gradient(circle, var(--brand-glow), transparent)` }}
         />
       </div>
 
-      {/* Top-right link */}
       <Link
         to="/"
-        className="absolute right-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-full border border-border bg-card/80 px-2.5 py-1 text-[11px] font-semibold text-foreground backdrop-blur transition hover:bg-card sm:right-5 sm:top-5 sm:px-3 sm:py-1.5"
-        style={{ fontFamily: PC_BODY }}
+        className="absolute right-4 top-4 z-20 inline-flex items-center gap-1.5 rounded-lg border border-[var(--border-subtle)] bg-[var(--bg-surface)]/80 px-3 py-1.5 text-[13px] font-medium text-[var(--text-secondary)] backdrop-blur transition hover:bg-[var(--bg-surface-elevated)] hover:text-[var(--text-primary)] sm:right-8 sm:top-8"
       >
         ← Voltar ao site
       </Link>
 
       <motion.div
-        initial={{ opacity: 0, y: 12 }}
+        initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        className="relative z-10 grid w-full max-w-[880px] overflow-hidden rounded-2xl border border-border bg-card text-card-foreground shadow-[0_30px_80px_-30px_rgba(6,20,45,0.35)] sm:rounded-3xl md:h-[560px] md:grid-cols-[minmax(0,4fr)_minmax(0,6fr)] dark:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)]"
+        transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+        className="relative z-10 flex w-full max-w-[1024px] flex-col overflow-hidden rounded-[24px] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-2xl md:h-[640px] md:flex-row"
       >
-        {/* LEFT — Hero unificado (login/cadastro compartilham a mesma arte) */}
-        <div className="hidden md:block">
-          <AuthHero variant="login" />
+        <div className="relative h-[200px] w-full shrink-0 md:h-full md:w-[420px]">
+          <AuthHero variant="login" className="h-full w-full" />
         </div>
 
-
-
-        {/* RIGHT — Auth form */}
-        <div className="flex flex-col p-4 sm:p-5 md:p-6" style={{ fontFamily: PC_BODY }}>
+        <div className="flex flex-1 flex-col overflow-y-auto p-6 sm:p-8 md:p-12">
 
           {/* Mobile-only compact brand row — logomarca oficial */}
           <div className="mb-4 flex items-center gap-2 md:hidden">

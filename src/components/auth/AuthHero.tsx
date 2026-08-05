@@ -108,12 +108,11 @@ const PRESETS: Record<AuthHeroVariant, Preset> = {
 
 // Tokens de tema (referenciados via var() — flipam automaticamente em dark)
 const T = {
-  navy: "var(--pc-home-navy)",
-  navy2: "var(--pc-home-navy-2)",
-  gold: "var(--pc-home-gold)",
-  goldSoft: "var(--pc-home-gold-soft)",
-  onNavy: "var(--pc-home-on-navy)",
-  eyebrow: "var(--pc-eyebrow-on-navy)",
+  navy: "var(--bg-base)",
+  navy2: "var(--bg-surface)",
+  brand: "var(--brand-primary)",
+  onNavy: "var(--text-primary)",
+  eyebrow: "var(--brand-primary)",
   display: "var(--font-display)",
 };
 
@@ -163,8 +162,8 @@ export function AuthHero({
 
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-24 -top-24 h-40 w-40 rounded-full opacity-15 blur-2xl motion-reduce:hidden"
-        style={{ background: T.gold }}
+        className="pointer-events-none absolute -right-24 -top-24 h-40 w-40 rounded-full opacity-20 blur-2xl motion-reduce:hidden"
+        style={{ background: T.brand }}
       />
 
 
@@ -191,8 +190,8 @@ export function AuthHero({
         <span
           className="mt-5 inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.2em] md:mt-8"
           style={{
-            borderColor: `color-mix(in oklab, ${T.gold} 60%, transparent)`,
-            background: `color-mix(in oklab, ${T.navy} 70%, transparent)`,
+            borderColor: `color-mix(in oklab, ${T.brand} 30%, transparent)`,
+            background: `color-mix(in oklab, ${T.brand} 10%, transparent)`,
             color: T.eyebrow,
           }}
         >
@@ -213,10 +212,10 @@ export function AuthHero({
           }}
         >
           {preset.title}{" "}
-          <span className="md:hidden" style={{ color: T.gold, textShadow: preset.photo ? "0 2px 16px rgba(0,0,0,0.85), 0 0 2px rgba(0,0,0,0.7)" : undefined }}>{preset.highlight}</span>
+          <span className="md:hidden" style={{ color: T.brand, textShadow: preset.photo ? "0 2px 16px rgba(108,92,231,0.5)" : undefined }}>{preset.highlight}</span>
           <span className="hidden md:inline">
             <br />
-            <span style={{ color: T.gold, textShadow: preset.photo ? "0 2px 16px rgba(0,0,0,0.85), 0 0 2px rgba(0,0,0,0.7)" : undefined }}>{preset.highlight}</span>
+            <span style={{ color: T.brand, textShadow: preset.photo ? "0 2px 16px rgba(108,92,231,0.5)" : undefined }}>{preset.highlight}</span>
           </span>
         </h2>
 
@@ -254,13 +253,13 @@ export function AuthHero({
           <div
             className="flex items-center gap-3 rounded-xl border px-3.5 py-2.5"
             style={{
-              borderColor: `color-mix(in oklab, ${T.gold} 50%, transparent)`,
-              background: `color-mix(in oklab, ${T.navy2} 60%, transparent)`,
+              borderColor: `color-mix(in oklab, ${T.brand} 30%, transparent)`,
+              background: `color-mix(in oklab, ${T.navy2} 80%, transparent)`,
             }}
           >
             <div
               className="flex h-9 w-9 flex-none items-center justify-center rounded-lg"
-              style={{ background: T.gold, color: T.navy }}
+              style={{ background: T.brand, color: "white" }}
             >
               <TrustIcon className="h-4.5 w-4.5" strokeWidth={2.5} />
             </div>
