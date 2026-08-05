@@ -1048,8 +1048,7 @@ function HomePage() {
 
         {/* ================= RODAPÉ COMPACTO ================= */}
         <footer
-          className="shrink-0 border-t px-4 py-[clamp(0.35rem,1.1vh,0.7rem)] sm:px-6 lg:px-8"
-          style={{ borderColor: "var(--pc-home-onhero-border-soft)" }}
+          className="shrink-0 border-t px-4 py-8 sm:px-6 lg:px-8 mt-12 bg-white/50 backdrop-blur-sm"
         >
           <div className="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-1.5">
             <p className="text-[12.5px] leading-snug sm:text-[13px]" style={{ color: "var(--pc-home-onhero-fg-70)" }}>
