@@ -611,6 +611,15 @@ function HomePage() {
                     </span>
                   </button>
                 ))}
+              </div>
+            </nav>
+            <div className="lg:col-span-4">
+              <PillarLink to="/resgatar" Icon={LineChart} label="Histórico de Preços" />
+              <PillarLink to="/colaborar" Icon={Users} label="Colaborar" />
+              <PillarLink to="/planos" Icon={Sparkles} label="Plus" emphasis />
+            </div>
+          </div>
+        </div>
                 <button
                   type="button"
                   onClick={() => setAllCatsOpen(true)}
